@@ -55,6 +55,7 @@ export type {
   ToolMeta,
   StatusDiscriminant,
   InvokeResult,
+  PaginationEcho,
 } from './types/mcp-protocol-types.js';
 
 export { callTool } from './types/generated/api-schema/mcp-tools/runtime/execute.js';

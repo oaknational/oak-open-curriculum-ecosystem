@@ -14,7 +14,7 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import type { ExtractedThread } from '../extractors/thread-extractor.js';
+import type { ExtractedThread, ThreadUnit } from '../extractors/thread-extractor.js';
 
 import { buildPrerequisiteEdges } from './graph-corpus-edges.js';
 import { generateGraphCorpusData, type GraphCorpusInput } from './graph-corpus-generator.js';
@@ -24,6 +24,7 @@ function makeInput(overrides: Partial<GraphCorpusInput> = {}): GraphCorpusInput 
     priorKnowledge: [],
     threads: [],
     lessons: [],
+    unitLessons: [],
     misconceptions: [],
     keywords: [],
     sourceVersion: '2026-05-21T13:45:16.086Z',
@@ -31,12 +32,13 @@ function makeInput(overrides: Partial<GraphCorpusInput> = {}): GraphCorpusInput 
   };
 }
 
-// Two threads sharing the same consecutive (year-ordered) unit pair.
-const sharedPairUnits = [
+// Two threads sharing the same consecutive (curriculum-ordered) unit pair.
+const sharedPairUnits: readonly ThreadUnit[] = [
   {
     unitSlug: 'shared-a',
     unitTitle: 'Shared A',
-    order: 1,
+    sequenceSlug: 'maths-primary',
+    sequenceIndex: 1,
     subject: 'maths',
     keyStage: 'ks1',
     year: 2,
@@ -44,7 +46,8 @@ const sharedPairUnits = [
   {
     unitSlug: 'shared-b',
     unitTitle: 'Shared B',
-    order: 2,
+    sequenceSlug: 'maths-primary',
+    sequenceIndex: 2,
     subject: 'maths',
     keyStage: 'ks2',
     year: 3,
@@ -73,7 +76,8 @@ const distinctPairThread: ExtractedThread = {
     {
       unitSlug: 'other-a',
       unitTitle: 'Other A',
-      order: 1,
+      sequenceSlug: 'maths-primary',
+      sequenceIndex: 1,
       subject: 'maths',
       keyStage: 'ks1',
       year: 2,
@@ -81,7 +85,8 @@ const distinctPairThread: ExtractedThread = {
     {
       unitSlug: 'other-b',
       unitTitle: 'Other B',
-      order: 2,
+      sequenceSlug: 'maths-primary',
+      sequenceIndex: 2,
       subject: 'maths',
       keyStage: 'ks2',
       year: 3,

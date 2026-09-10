@@ -7,9 +7,12 @@ import { deriveIdentity } from '../../src/core/agent-identity';
 import { planCursorSessionIdentityHook } from '../../src/cursor/oak-session-identity-hook';
 
 describe('agent identity session cache', () => {
-  it('resolves the Cursor hook-emitted cached display name through the CLI', () => {
+  it('re-derives the same identity from the Cursor hook-emitted seed alone (no pinned name)', () => {
+    // The hook emits only the seed (PDR-027, 2026-08-24 amendment); the CLI
+    // must reach the exact identity the hook displayed by derivation,
+    // proving no pinned-name cache is needed for hook/CLI coherence.
     const sessionId = 'cursor-session-cache-seed';
-    const displayName = deriveIdentity(sessionId).displayName;
+    const expected = deriveIdentity(sessionId);
     const plan = planCursorSessionIdentityHook({
       stdinText: JSON.stringify({ session_id: sessionId }),
       environment: { CURSOR_PROJECT_DIR: '/repo', OAK_SKIP_COMPOSER_SESSION_MIRROR: '1' },
@@ -23,12 +26,8 @@ describe('agent identity session cache', () => {
     });
 
     expect(JSON.parse(result.stdout)).toEqual({
-      kind: 'override',
-      namingSchemaVersion: 'override',
-      displayName,
-      slug: deriveIdentity(sessionId, { override: displayName }).slug,
+      ...expected,
       seedDigest: createHash('sha256').update(sessionId).digest('hex'),
-      override: displayName,
     });
   });
 });

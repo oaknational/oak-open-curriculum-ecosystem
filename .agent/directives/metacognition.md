@@ -120,6 +120,14 @@ in a burst (five in one closing stretch, each caught by a guard or a peer, none 
 worked instance 2026-07-06). The felt urge to wrap up is itself the tripwire: slow the last
 moves down, and keep the guards absolute exactly when the drive says skip them.
 
+A beloved principle is itself a bias: a principle that names a failure class primes its
+reader to SEE that class. A CI reflow red pattern-matched elegantly to animation-phase
+overflow under the no-timing-dependence principle, while the suite emulated reduced motion
+and the sway was still; a two-minute probe found the true root (2026-08-18). Measure before
+mechanism, and hardest when the mechanism arrives fluently. The same tell inside a verdict
+is a prediction in a proof's clothing ("Cursor should still complete", 2026-09-01, wrong):
+name a prediction as one and gate it, so being wrong costs nothing.
+
 A standing goal-hook is the same pressure made ambient (owner-ratified 2026-08-07): under any
 goal-hook, boundary rituals — the grounding sentence, the falsifier-check — bind HARDER, not
 looser, and an n=1 session treats the goal as direction, never as permission to skip gates.

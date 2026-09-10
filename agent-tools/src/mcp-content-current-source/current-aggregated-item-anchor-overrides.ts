@@ -15,7 +15,6 @@ const FETCH_EXECUTION = `${SDK_MCP}/aggregated-fetch/execution.ts`;
 const ASSET_DOWNLOAD_DEF = `${SDK_MCP}/aggregated-asset-download/definition.ts`;
 const CURRICULUM_MODEL_DEF = `${SDK_MCP}/aggregated-curriculum-model/definition.ts`;
 const KEYWORD_GRAPH = `${SDK_MCP}/aggregated-keyword-graph.ts`;
-const PRIOR_KNOWLEDGE_GRAPH = `${SDK_MCP}/aggregated-prior-knowledge-graph.ts`;
 const APP_ROOT = 'apps/oak-curriculum-mcp-streamable-http';
 const UNDER_THE_HOOD = `${APP_ROOT}/src/oak-under-the-hood/oak-under-the-hood-tool.ts`;
 const AUTH_ROUTES = `${APP_ROOT}/src/auth-routes.ts`;
@@ -161,11 +160,6 @@ export const CURRENT_AGGREGATED_ITEM_ANCHOR_OVERRIDES = {
   C231: {
     [KEYWORD_GRAPH]: ['title: KEYWORD_GRAPH_TOOL_TITLE,'],
   },
-  C248: {
-    [PRIOR_KNOWLEDGE_GRAPH]: [
-      'Anchor unit slugs (corpus keys, e.g. from search/fetch results). The result is the bounded',
-    ],
-  },
   // MCP-353: the resource_link title occurrence retired with the pointer;
   // the tool title anchors on its shared declaration.
   C372: {
@@ -231,10 +225,13 @@ export const CURRENT_AGGREGATED_ITEM_ANCHOR_OVERRIDES = {
   },
   // MCP-351: the published PRM resource now composes the shared
   // MCP_RESOURCE_PATH constant, so it cannot diverge from the RFC 8707
-  // expected audience. The served document's shape is unchanged.
+  // expected audience.
+  // MCP-655: `authorization_servers` names the upstream authorization
+  // server's issuer instead of this origin, so a PRM-following client holds
+  // the issuer the authorization response's `iss` carries (RFC 9207 §2.4).
   C706: {
     [AUTH_ROUTES]: [
-      'resource: `${selfOrigin}${MCP_RESOURCE_PATH}`,\n      authorization_servers: [selfOrigin],\n      scopes_supported: SCOPES_SUPPORTED,',
+      'resource: `${selfOrigin}${MCP_RESOURCE_PATH}`,\n      authorization_servers: [upstreamMetadata.issuer],\n      scopes_supported: SCOPES_SUPPORTED,',
     ],
   },
 } as const;

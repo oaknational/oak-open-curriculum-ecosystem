@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import type { ToolDescriptor } from '../contract/tool-descriptor.contract.js';
+import { derivePaginationFromLinkHeader } from '../contract/tool-descriptor.contract.js';
 import { UndocumentedResponseError } from '../contract/undocumented-response-error.js';
 import { getResponseDescriptorsByOperationId } from '../../response-map.js';
 import type { OakApiPathBasedClient } from '../../client-types.js';
@@ -121,7 +122,8 @@ export const getKeyStagesSubjectLessons = {
       throw new UndocumentedResponseError(status, 'getKeyStageSubjectLessons-getKeyStageSubjectLessons', documentedStatuses, responseBody);
     }
     const payload = status >= 200 && status < 300 ? response.data : response.error;
-    return { httpStatus: status, payload };
+    const pagination = derivePaginationFromLinkHeader(response.response.headers.get('link'));
+    return { httpStatus: status, payload, pagination };
   },
   toolZodSchema,
   toolInputJsonSchema,

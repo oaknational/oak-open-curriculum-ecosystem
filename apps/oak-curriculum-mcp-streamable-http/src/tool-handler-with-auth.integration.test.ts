@@ -161,7 +161,7 @@ describe('Tool Handler with Auth Integration', () => {
 
   describe('Public tools (noauth)', () => {
     it('should execute public tool without auth check', async () => {
-      const tool = { name: 'get-changelog' } as const;
+      const tool = { name: 'get-rate-limit' } as const;
       const params = {};
       const config = createMockRuntimeConfig();
 
@@ -175,7 +175,7 @@ describe('Tool Handler with Auth Integration', () => {
       });
 
       // Expected behavior:
-      // - Check if tool requires auth (get-changelog does not)
+      // - Check if tool requires auth (get-rate-limit does not)
       // - Execute tool without auth check
       expect(result.isError).toBeUndefined();
       expect(result.content).toBeDefined();

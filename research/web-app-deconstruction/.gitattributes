@@ -1,2 +1,0 @@
-# Preserve raw session snapshots byte-for-byte and keep them out of text diffs.
-/.agent/reports/**/*.snapshot binary

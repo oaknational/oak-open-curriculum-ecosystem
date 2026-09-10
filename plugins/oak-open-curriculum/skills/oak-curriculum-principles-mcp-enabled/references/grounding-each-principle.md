@@ -8,7 +8,7 @@ IDs for `fetch` are prefixed: `lesson:<slug>`, `unit:<slug>`, `thread:<slug>`, `
 
 ## 1. Knowledge and vocabulary rich
 
-**Grounding data.** Oak lessons carry vocabulary _with pupil-facing definitions_, a short list of key learning points, and a single pupil outcome — a concrete model of "rich."
+**Grounding data.** Oak lessons carry vocabulary _with definitions_, a short list of key learning points, and a single learning outcome — a concrete model of "rich."
 
 **Tools.** `get-lessons-summary`, `get-keywords`, `get-units-summary`, `fetch` (`lesson:` / `unit:`).
 
@@ -37,11 +37,11 @@ pupilLessonOutcome: "I can add fractions with the same denominator."
 
 ## 2. Sequenced and coherent
 
-**Grounding data.** ~164 threads, each an _ordered_ set of units that build a concept across years; plus a prior-knowledge graph of unit dependencies. This is the principle's strongest data anchor.
+**Grounding data.** ~164 threads, each an _ordered_ set of units that build a concept across years; plus the prior knowledge each unit states it assumes. This is the principle's strongest data anchor.
 
-**Tools.** `get-threads` (all threads + unit counts), `get-threads-units` (units in a thread), `get-thread-progressions` (one anchored thread's progression; units ordered by teaching year, same-year units unordered), `get-prior-knowledge-graph` (unit prerequisites), `search({ scope: "threads" })`.
+**Tools.** `get-threads` (all threads + unit counts), `get-threads-units` (units in a thread), `get-thread-progressions` (one anchored thread's progression, one run per subject in Oak's curriculum order — years ascending, the subject sequence's unit order within a year), `get-prior-knowledge-graph` (a unit's stated prior knowledge, as sentences), `search({ scope: "threads" })`.
 
-**What to look for.** Where your topic sits in a thread; what Oak places before and after it; whether your sequence respects the same prerequisite order.
+**What to look for.** Where your topic sits in a thread; what Oak places before and after it; whether your sequence respects the same order.
 
 **Real threads to anchor on.** `number` (110 units, Reception→Y11), `geometry-and-measure` (59), `ratio-and-proportion` (18), `exploring-the-gothic` (7), `power-government-and-religion` (23), `empire-persecution-and-resistance` (16), `physical-systems-and-processes` (34).
 
@@ -51,8 +51,8 @@ pupilLessonOutcome: "I can add fractions with the same denominator."
 
 ```text
 search({ query: "fractions", scope: "threads", subject: "maths" })
-get-thread-progressions({ threadSlug })   // the fractions thread, units ordered by teaching year
-get-prior-knowledge-graph({ unitSlugs })   // confirm prerequisites precede dependents
+get-thread-progressions({ threadSlug })   // the fractions thread, units in Oak's curriculum order
+get-prior-knowledge-graph({ unitSlugs })   // what each unit states pupils should already know
 ```
 
 **Use it:** if your unit assumes knowledge that Oak's thread teaches _later_, your sequence has a gap.
@@ -86,7 +86,7 @@ misconceptionsAndCommonMistakes: [
 
 **Tools.** `get-units-summary`, `browse-curriculum` (structure/facets), `get-sequences`, `fetch` (`unit:`).
 
-**What to look for.** The national-curriculum statements Oak's units record, which you can map your own material to; `unitOptions` as a model for offering teacher choice without fragmenting entitlement; how Oak signposts threads so adaptation stays coherent.
+**What to look for.** The national-curriculum statements Oak's units record, which you can map your own material to; `unitOptions` as a model for offering teacher choice without fragmenting entitlement — flexibility as **multiple routes through the same sequence** (e.g. alternative units such as a choice of early civilisation to study), rather than an expectation of re-sequencing; how Oak signposts threads so adaptation stays coherent.
 
 **Example.**
 
@@ -122,7 +122,7 @@ get-threads-units({ thread: "representation-and-identity" })
 
 ## 6. Accessible
 
-**Grounding data.** Lessons carry content guidance and supervision levels; the prior-knowledge graph supports sensible chunking; assets include captioning.
+**Grounding data.** Lessons carry content guidance and supervision levels; each unit's stated prior knowledge supports sensible chunking; assets include captioning.
 
 **Tools.** `get-lessons-summary` (`contentGuidance`, `supervisionLevel`), `get-prior-knowledge-graph`, `get-lessons-assets`.
 

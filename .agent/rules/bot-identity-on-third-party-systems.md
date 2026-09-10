@@ -111,6 +111,13 @@ the first hop. Confirm the id from the API, never from prose:
   pnpm agent-tools merge-bot push
   ```
 
+  A plain `git push` over the machine's SSH key or stored credential is
+  the owner-credential fallback this rule bans, even when every commit is
+  bot-authored: the transport is the identity that displays on the push
+  (self-caught 2026-08-19 after two coordination-branch pushes; every
+  push from that seat went through the front door thereafter). Run it
+  with the primary's built binary from the target worktree.
+
 - **PR creation, PR and issue comments, standalone inline review comments and
   thread replies, thread resolution** — every bot-credential row of the map: a
   minted installation token exported as `GH_TOKEN` for the `gh` invocation.
@@ -146,7 +153,12 @@ the first hop. Confirm the id from the API, never from prose:
      `.user.login` / `.user.type` in the same call and read it before
      proceeding. An empty `GH_TOKEN` is invisible at the call site; the
      echo-back is the only reliable detector, and it converts a silent
-     misattribution into a same-call stop.
+     misattribution into a same-call stop. Sequenced LATE it detects and
+     cures nothing: a PR created under the ambient owner credential was
+     caught by an echo that ran AFTER the write, and the cure was
+     close-and-recreate under the bot (2026-08-18); the tripwire's whole
+     value is before the first write. For an installation token `/user`
+     answers 403 — read the timeline actor instead (2026-09-01).
 
 ## Action (all other systems)
 

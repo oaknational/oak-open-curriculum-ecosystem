@@ -139,8 +139,7 @@ Extract the final assistant text with `jq`:
 
 ```bash
 codex exec --json --ephemeral -C /path/to/repo "Your brief." \
-  | jq -r 'select(.type=="item.completed" and .item.type=="agent_message") | .item.text' \
-  | tail -n 1
+  | jq -rs '[.[] | select(.type=="item.completed" and .item.type=="agent_message") | .item.text] | last'
 ```
 
 For progress visibility while also capturing the last message:

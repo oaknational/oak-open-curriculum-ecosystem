@@ -29,7 +29,7 @@ owner_gates: []
 # owner must clear is its own failure mode. The one gate above is different in
 # kind: it re-opens a RATIFIED kit clause the owner's R14 word now contradicts
 # — precisely the class only he can settle.
-last_updated: 2026-08-13
+last_updated: 2026-08-26
 ---
 
 # The showcase experience — a UX-first public face for the design system
@@ -1362,10 +1362,59 @@ outright. So each clause is re-derived from a real authority or dropped:
   ratified, and the check that catches this is asking *whose word is this?* before
   asking *is it satisfied?*
 
+## Follow-up (2026-08-26): the colour-matrix route's a11y budget, page cost, and proof level
+
+Provenance: owner word, 2026-08-26, during the PR #21 CI drive, on the
+base-red `/tokens/colours` a11y timeouts (verbatim: "it seems like the page
+likely has performance issues but also the test design might need
+addressing, as well as checking exactly what is being proven and a what
+level, see the test strategy document").
+
+What happened. The three `demo-routes-a11y.spec.ts` cases on
+`/tokens/colours` — the light and dark axe scans and the 320px reflow check
+— hit the 30s Playwright per-test cap on CI runners; `main`'s own CI was red
+on this class on 2026-08-17 and 2026-08-23, before PR #21 inherited it.
+Measured 15–20s each PASSING on a warm fast machine, so cold two-core
+runners exceed the cap. Interim cure, landed with this section:
+`test.slow()` on exactly those cases — budget only, every assertion
+unchanged, nothing skipped or disabled.
+
+The follow-up work, investigation-first, three legs:
+
+1. **Page performance.** Profile `/tokens/colours` first-hand — DOM size,
+   render and hydration cost, what the route actually ships. It renders the
+   full colour token grid, the largest DOM in the suite; establish whether
+   the cost is intrinsic to the content or a defect (unvirtualised
+   repetition, unnecessary hydration, an unbounded grid). A visitor-facing
+   page this heavy is a UX problem before it is a test problem — this
+   plan's own frame: the visitors come first.
+2. **Test design.** Each case pays a fresh full page load plus a full-page
+   axe walk, and the axe pair differs only by a theme flip applied after
+   load. Examine page reuse across the theme pair, scoping the axe walk,
+   and the matrix shape — without weakening any assertion
+   (`never-disable-checks`); review lens: test-expert plus
+   accessibility-expert.
+3. **Proof level** (`testing-strategy.md` §Test Types and §Browser Proof
+   Surfaces; R10's general form, "fix things at the lowest level where the
+   fix works and produces the correct outcome"). These are E2E-class
+   browser tests driving the built artefact. State exactly what each case
+   proves and at what level: WCAG 2.2 AA conformance of the token-grid
+   CONTENT may be provable at a lower level (kit/component surfaces —
+   compare the resource-level-then-host split the strategy records for MCP
+   App HTML), with the route-level case proving the integrated page shape
+   rather than re-walking every cell. The accessibility-audit gate stays
+   zero-tolerance and blocking whatever the decomposition.
+
+Exit condition: the `test.slow()` marks are removed or re-justified from
+measurements; the route's cost is characterised with a verdict (intrinsic
+vs defect, cures landed if defect); each case's proof obligation is stated
+at its level against the strategy's taxonomy.
+
 ## Decision log
 
 | Decision | Provenance |
 | --- | --- |
+| The `/tokens/colours` a11y timeouts are cured as budget now (`test.slow()`), investigated next as page performance + test design + proof level | Owner, 2026-08-26 — §Follow-up (2026-08-26) |
 | The tight scope is the delivery frame | Owner, 2026-08-13 (R1) |
 | Narrow-first governs every page and the kit itself | Owner, 2026-08-13 (R3, R4) |
 | Composition demo = one page type recomposed by identity | Owner, 2026-08-13 ~16:4x (R7) |

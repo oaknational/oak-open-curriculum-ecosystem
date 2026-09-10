@@ -25,9 +25,10 @@ export interface SeatSpecifics {
  * is no seat-registry surface.
  *
  * Identity is deliberately absent: the launched session's identity is derived by
- * the platform `SessionStart` hook from the harness `session_id` at launch (see
- * `./launch-command.ts`), so the brief states that rather than printing an
- * authored prediction the session would not honour.
+ * the platform `SessionStart` hook from the PDR-027 seed at launch — the
+ * untagged platform session id on cloud seats, the harness `session_id`
+ * otherwise (see `./launch-command.ts`) — so the brief states that rather
+ * than printing an authored prediction the session would not honour.
  *
  * The brief INVOKES `/oak-start-right-team` rather than restating it: the spawned
  * session grounds itself through that skill, and this brief carries only the
@@ -40,8 +41,9 @@ export function formatSeatBrief(result: SpawnedWorktree, seat: SeatSpecifics): s
     '── Seat brief ──',
     `  worktree: ${result.worktreePath}`,
     `  branch:   ${result.branch}`,
-    '  identity: assigned at launch (the SessionStart hook derives it from the harness',
-    '            session_id; run identity preflight in the session to confirm)',
+    '  identity: assigned at launch (the SessionStart hook derives it from the PDR-027',
+    '            seed — the untagged platform session id on cloud seats, the harness',
+    '            session_id otherwise; run identity preflight in the session to confirm)',
   ];
   if (seat.role !== undefined) {
     lines.push(`  role:     ${seat.role}`);

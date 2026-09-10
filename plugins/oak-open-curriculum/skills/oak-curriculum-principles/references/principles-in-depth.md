@@ -30,7 +30,7 @@ Knowledge plays a foundational role in learning: we build and link new knowledge
 
 Vocabulary deserves a specific spotlight as a high-value form of knowledge. The EEF's 2021 review of the best international evidence recommends extending pupils' vocabulary by **explicitly teaching new words, providing repeated exposure to them, and giving pupils opportunities to use them** (5). The stakes are equity, not just attainment: children with a smaller vocabulary at age five find it harder to acquire new words later, while those with a broad, deep vocabulary pick words up easily. This is the **Matthew Effect** — the word-rich get richer and the word-poor get poorer — and it widens the disadvantage gap unless curriculum design intervenes.
 
-**Design implications.** Specify the substantive knowledge for each unit and lesson. Treat vocabulary as taught content: choose the words deliberately (including high-utility "tier 2" words and subject-specific "tier 3" terms), define them precisely, and plan repeated, spaced encounters across the sequence. Make the implicit explicit. A useful concrete model: Oak lessons carry **keywords with pupil-facing definitions**, a small set of **key learning points**, and a single clear **pupil outcome**.
+**Design implications.** Specify the substantive knowledge for each unit and lesson. Treat vocabulary as taught content: choose the words deliberately (including high-utility "tier 2" words and subject-specific "tier 3" terms), define them precisely, and plan repeated, spaced encounters across the sequence. Make the implicit explicit. A useful concrete model: Oak lessons carry **keywords with definitions**, a small set of **key learning points**, and a single clear **learning outcome**.
 
 ## Sequenced and coherent
 
@@ -48,9 +48,9 @@ Coherence also comes from **threads** — strands that run vertically through a 
 
 Professor Daniel Muijs frames _why_ this matters in three ways: it is a **moral duty** (because the evidence exists and ignoring it shortchanges pupils), a matter of **social justice** (using what works helps close the disadvantage gap), and essential to **the credibility of the profession**. We "stand on the shoulders of giants": there is a wealth of synthesised evidence available — from the Education Endowment Foundation (EEF) in England to the US Institute of Education Sciences (IES) and global projects — plus an active research community.
 
-Importantly, evidence _informs_ professional judgement rather than dictating practice. The same evidence may play out differently in different contexts; the designer's job is to **illustrate how the evidence can be put into practice**, leaving room for teachers to apply it to their own pupils.
+Importantly, evidence _informs_ professional judgement rather than dictating practice. The same evidence may play out differently in different contexts; the designer's job is to **illustrate how the evidence can be put into practice**, leaving room for teachers to apply it to their own pupils. The evidence is also uneven: where it is not available, is poor, or is contradictory, say so, and ground the choice in **best practice and "best bets"** — reasoned professional judgement, transparently labelled as such — rather than overclaiming an evidence base.
 
-**Design implications.** Make the rationale for significant choices explicit. Lean on well-evidenced techniques — retrieval practice, spacing/interleaving, worked examples for novices, dual coding, explicit instruction. Anticipate misconceptions and plan responses: a strong lesson names the common mistakes a topic provokes and how to address them (Oak lessons include a _misconceptions and common mistakes_ field paired with a recommended teacher response). Be willing to say _why not_ as well as _why_.
+**Design implications.** Make the rationale for significant choices explicit. Lean on well-evidenced techniques from the science of learning — retrieval practice, spacing/interleaving, worked examples for novices, dual coding, explicit instruction — and apply cognitive load theory to optimise teacher and pupil cognitive load. Anticipate misconceptions and plan responses: a strong lesson names the common mistakes a topic provokes and how to address them (Oak lessons include a _misconceptions and common mistakes_ field paired with a recommended teacher response). Be willing to say _why not_ as well as _why_.
 
 ## Flexible
 
@@ -58,9 +58,11 @@ Importantly, evidence _informs_ professional judgement rather than dictating pra
 
 A curriculum model can never know a school's pupils or locality — and shouldn't pretend to. Oak's research shows most teachers already either adapt its curricula or learn from them to improve their own (7). So flexibility is a _design property_, not a disclaimer. Two examples: a secondary school in Yorkshire might adapt a coastal unit to use Holderness as a local case study; a primary school in Brighton might add a bespoke unit on George IV to reflect local history.
 
+Note what those examples have in common: they localise the _content_, not the _order_. There are few genuine reasons to adapt a curriculum sequence itself — the careful prerequisite structure is most of what the model is worth — and how much legitimate variation exists differs by subject. Flexibility therefore shows up mostly as **multiple routes through the curriculum**: designed-in choices such as studying the Mayans or the Shang as an early civilisation, where either route serves the same sequence. Re-sequencing should be rare, deliberate, and done with the dependencies in view.
+
 The designer's responsibility is to make adaptation **safe** as well as possible. That means mapping content explicitly to the national curriculum and signposting the threads, so that when a teacher swaps, adds or cuts, they can see what must stay connected to preserve coherence. And it means holding the line that the model is _optional_: _"School leaders and teachers know their pupils best."_
 
-**Design implications.** Build modular content mapped clearly to the national curriculum, with visible thread membership. Offer suggestions, not mandates; distinguish the _core_ from the _adaptable_. Favour a single ambitious pathway with a low floor and high ceiling over separate "easier/harder" versions that fragment the entitlement.
+**Design implications.** Build modular content mapped clearly to the national curriculum, with visible thread membership. Design genuine choice as alternative routes (unit options) through the same sequence. Offer suggestions, not mandates; distinguish the _core_ from the _adaptable_. Favour a single ambitious pathway with a low floor and high ceiling over separate "easier/harder" versions that fragment the entitlement.
 
 ## Diverse
 
@@ -78,7 +80,7 @@ A helpful frame (from Oak's English principles, but general) is **windows and mi
 
 In January 2020 there were 1.37 million pupils with SEND in England's schools — just under **1 in 6** (8). The SEND Code of Practice is explicit that **high-quality teaching is the foundation of special educational provision** (9). The features of high-quality teaching benefit everyone: explicitly linking new content to prior content; chunking new content into appropriately sized blocks; concise verbal explanations with clear supporting visuals and models; checking understanding regularly and responding; and scaffolded practice.
 
-A central, sometimes counter-intuitive, commitment: **wherever possible, all pupils study the same content.** Differentiating by providing different content by ability — for example three worksheets of different difficulty — has generally _not_ been shown to improve attainment (10) and risks pupils acquiring different knowledge, widening the disadvantage gap. The aim is to keep the destination the same and adapt the route. That said, for some pupils a more tailored or specialist approach is genuinely needed, and design should make room for it.
+A central, sometimes counter-intuitive, commitment: **wherever possible, all pupils study the same content.** Differentiating by providing different content by ability — for example three worksheets of different difficulty — has generally _not_ been shown to improve attainment (10); it risks pupils acquiring different knowledge, can widen the disadvantage gap, and lowers expectations. The aim is to keep the destination the same and adapt the route. That said, for some pupils a more tailored or specialist approach is genuinely needed, and design should make room for it.
 
 **Design implications.** Design accessibility in from the start: chunking, dual coding, worked examples, frequent checks for understanding, and scaffolds intended to be _removed_ as independence grows. Follow accessibility guidelines for materials (legible visuals, captioning, manageable cognitive load). Plan for the highest-need pupils without lowering the ceiling.
 
@@ -88,7 +90,7 @@ The principles only make sense alongside a stance about what a shared curriculum
 
 Three consequences worth keeping front of mind:
 
-- **Adaptation is expected and welcomed.** Two teachers taking the same resources and teaching them differently "is to be welcomed and celebrated." Around 46% of primary and 29% of secondary teachers say that starting from scratch is what makes planning hard (11); a strong model removes the blank page, not the professional judgement.
+- **Adaptation is expected and welcomed** — at the level of context, examples and delivery; re-sequencing the curriculum itself is rarely needed. Two teachers taking the same resources and teaching them differently "is to be welcomed and celebrated." Around 46% of primary and 29% of secondary teachers say that starting from scratch is what makes planning hard (11); a strong model removes the blank page, not the professional judgement.
 - **The teacher does the teaching.** _"No slide deck nor sequence can replace the importance of a teacher's relationship with a pupil, nor their craft in skillfully planning and delivering a lesson."_ Design to support that craft, not to replace it.
 - **There is more than one good answer.** Any one model is just one high-quality approach among several. Humility about this is part of the method.
 

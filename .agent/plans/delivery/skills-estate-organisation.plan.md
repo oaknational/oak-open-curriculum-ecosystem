@@ -17,15 +17,8 @@ impact_areas:
   - practice-and-estate
 tickets: []
 depends_on: []
-owner_gates:
-  - awaiting: owner-decision
-    clears_when: >-
-      The owner ratifies the annotated corpus after WS2 is visible for
-      review (visibility-before-validation: WS4's validators land only
-      after that ratification). The structure ruling itself cleared
-      2026-08-08 — see §The ratified structure.
-    expires: 2026-08-23
-last_updated: 2026-08-10
+owner_gates: []
+last_updated: 2026-09-03
 ---
 
 # Skills-estate organisation
@@ -425,3 +418,11 @@ the standing ruling, recorded here as the affected artifact's stamp).
   plan. (The apparent rhyme between concern groups and export
   boundaries is a noted association, not a design input — portability
   is the stratum axis's job.)
+
+## Review dispositions
+
+One dated row per routed finding (PDR-140 ledger surface).
+
+| Date | Source | Finding | Routing |
+| --- | --- | --- | --- |
+| 2026-09-03 | Owner card (the MCP-673 implementing session) | The WS2 annotated corpus, presented for ratification | Ratified — owner verbatim: "Ratify the annotated corpus"; WS4's validators are unblocked; the gate row is removed |

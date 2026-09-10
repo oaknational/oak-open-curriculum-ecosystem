@@ -367,3 +367,145 @@ round-4 work. Expected conflict surfaces: specimen.css (mast block —
 `data-controls` zero-inset vs the narrow static block; both keep),
 demo-routes-a11y.spec.ts (white-labelling cell comment), and
 CompositionStage (the #912 branch does not touch it — clean).
+
+## 2026-08-19 merge drive (Yarrow, ab1066 — owner word: "get all current design work finished and merged"; mid-drive word: "if the PRs are green and clean, they should be merged")
+
+**Merged**: #907 at `c59c1c47c` (after rounds 4–7); #909 at `f2bde54bb`
+(after rounds 3–8). Merge legs moved to this seat under owner-named-executor
+(Director acked, no objection, directed event 4a367102); mechanism:
+`merge-bot merge --pr <n> --expect copilot-pull-request-reviewer` at
+SETTLE-READY — the expected set is declared, not defaulted (the observed
+surface includes the CODEOWNERS humans, who never robo-review; the
+`--expect` declaration is what lets the machinery settle on the reviewer
+actually engaged each round).
+
+**#907 rounds 4–7, one line each**: r4 = conditional-guard class cured at
+source (`assertResolved`, non-nullable `openPickerStage`; round 3's
+rejection premise overturned — `.not.toBeNull()` passes undefined);
+useFramed consolidation discharged; gateway retro pass absorbed
+(ExhibitThemeApplier hydration race → direct read; five guard cells, each
+calibrated red against its reverted cure). r5 = teardown leak + reduced-
+motion staleness + two entity findings (premise REJECTED with transform
+evidence — SWC/esbuild decode JSX attribute entities; edits kept as
+consistency). r6 = the causes-module split with per-subscription callback
+identity (gateway-probed DOM-dedupe theft) and the capture-pair unit test
+taken off the network path. r7 = zero live; ONE CARRIED ITEM below. Sonar
+S6845 ACCEPTED in SonarCloud (issue AaAW0hKcff6KG3E2n-sP) with the WAI
+disposition comment; #912 deletes the line.
+
+**#909 rounds 3–8**: two missed round-3 THREADS surfaced by the state
+machine (the round-3 read had covered only the review body) — tier
+symlink-drop and manifest dereference, cured by promoting the tier reader
+to src with injected filesystem (ADR-168/ADR-078), never-dereferenced
+proven by spy. r5 = the closed shape top-down (tier path lstat-classified;
+dot-filter removed; stray root entries refused). r6 = transient exemption
+binds name AND kind. r7 = parseFailure means parse (read outside the try);
+README exemption sentence re-trued. r8 = zero live; suppressed set
+dispositioned post-merge (below). Every cure red-first or revert-calibrated.
+
+**#912 (open, review-bound)**: ready-for-review at owner word; round 1
+cured at `11691b393` (DOM-true nowrap reach; TokenRows rename; seam focus
+continuity); the focus hold REBUILT TWICE — the layout-effect race lost
+under CI, the focus-in-open version raced the summary click — and stands
+as the render-time seam latch (state, no refs, no effects) at `8b5c0c641`,
+disclosure cells repeated ×4 green. Base folded twice at the stack
+boundary (`82c806f6b`, `b76d60a7d`).
+
+**Carried items (dispositions, not unfinished work)**:
+1. #907 r7 suppressed: `colour-matrix.ts` admits the `filter` family
+   (values like `invert(1)` render as transparent `#00000000` swatches).
+   Verified real. One-line exclusion + cell; rides the next tokens-page
+   touch (natural home: #912 if it takes another round, else a micro-PR).
+2. #909 r8 suppressed: (a) the parseFailure test's title promises content
+   preservation its assertions don't check — strengthen at next oak-eslint
+   touch; (b) the tier README names the tango plan that lands with #908 —
+   cured BY #908's merge (in this drive); (c) the README's DTCG mention
+   needs the upstream link per documentation-hygiene — rides the records
+   parcel.
+3. #907 gateway out-of-scope: `pnpm test` in the showcase printed a Node
+   crash banner behind exit 0 pre-cure — the import-path cure landed in r6;
+   the CLASS (a unit-test import graph doing network IO with a green exit)
+   is a test-estate hygiene candidate for the estate lanes.
+
+**Owner question NOTED (2026-08-19, not acted; answer recorded at his
+word "note the answer")**: which components belong to the showcase vs the
+components library? The decider is the generality-depth gradient plus R16
+(identity is static in real apps; switching is a demo instrument). LIBRARY
+candidates — components whose meaning derives from the KIT'S contract:
+`NarrowDisclosure` (+ its `useMediaQueryMatch`/`useFocusWithin`/seam-latch
+primitives) — the strongest candidate, a general responsive-disclosure
+pattern over kit `details.oak-disclosure`; `useFramed`;
+`holdFrameTheme`/`apply-frame-theme` (really a KIT-runtime concern — one
+theme holder per document — arguably belongs beside `oakThemeStore` in
+oak-design-react); `LabelledSelect` and `IdentityRadioGroup` (kit-markup
+form controls with the 44px floor — the seeds of the "optional React
+component set" the design-system-completion gate names). SHOWCASE-resident
+— exhibition mechanics: the stages (CompositionStage, ExhibitThemeApplier,
+picker-stage), StripControls, ShowcaseBreadcrumbs, the token-reference
+instruments (TokenRows/TokenReference/TokenCells/token-catalogue/
+live-token-values/live-token-causes, colour-matrix), canonical-widths
+(a DDR-009 measurement instrument), and `brand-identity-binding` (the
+runtime identity swap is demo-only under R16, so the binder never
+graduates). Any actual move is owner-gated and coordinates with the
+design-system-completion "full optional React component set" decision.
+
+**Freeze state (handoff, 2026-08-19 ~13:5xZ)**: #908 `727dfc15c` and
+#912 `bbc88f1a2` in quiet windows, all threads resolved, rounds
+requested; #910 `242fd4c52` + the main-fold merge commit (fidelity
+register resolved as a UNION — both branches' appended entries keep, 11
+entries, ids unique) completing in a background task at freeze. The
+#912 seam-focus shape is FINAL after three iterations (ledger above);
+the two rejected shapes are recorded so no successor re-walks them.
+Successor mechanics: harvest any new round body first, deletion sweep,
+then `merge-bot merge --pr <n> --expect copilot-pull-request-reviewer`.
+
+**Late rounds before the handoff cut**: #912 r3 = the 305–320 sticky
+reserve widened to the three-row worst case (probe-measured 144px band
+vs the 128px two-row reserve) with a MEASURED reserve≥height cell at
+both widths, and the strip's open panel gained the no-scroll-box
+invariant (first run without the visually-hidden exclusion flagged the
+1px clips — the exclusion is part of the invariant's definition), tip
+`61c6fdc33`. #908 r3 = the T1d sequencing contradiction CONFIRMED and
+amended: the roster module + proofs land in-node against the tier's
+real contents; the seven showcase surfaces convert ONCE in the
+programme's completing node after the three migrations
+(replace-dont-bridge kept true), tip `5d0957d95`. #910 r2 = the DDR-003
+consequence bullet's drift memorial removed (Provenance keeps history),
+tip `920cd9166` on top of the main fold `5f1efcf20` (register union).
+
+**Final pre-handoff tips** (each = the prior tip + one zero-live round's
+single suppressed truth, cured): #908 `9d811d463` (the readiness
+record's Y1/Y7/D3/D5/D20 discharges re-routed to the completing node,
+following the T1d amendment); #910 `0c30a6932` (the rubric's authority
+stated self-contained per no-moving-targets); #912 `cbdbda76b` (every
+tokens.css no-scroll claim scoped to token content with the wide-rail
+exception named). Fresh rounds requested on all three at the cut; the
+successor merges each at SETTLE-READY after tallying its bound round.
+
+**Post-cut addendum (verify-908's report, delivered after the cut)**:
+the verifier's full report landed late; its edits were already
+harvested first-hand and its three HELD classes were all resolved this
+sitting (P7 inversion; the 2026-08-19 re-ratification stamp; the report
+landed with the node). ONE surfaced survivor remains uncured: plan
+lines ~544-545 — "sequenced after the MCP-613 PR merges (same file
+surface; avoids a self-conflict between two in-flight PRs)" — the
+sequencing is a real invariant, the "two in-flight PRs" phrasing is
+live status (the execution-state class this round cured elsewhere).
+Named next-round candidate on #908: re-word to "sequenced after the
+MCP-613 records pass lands (same file surface — one writer at a time)".
+
+**Design-work audit (2026-08-19 ~15:3xZ, owner word "all design work
+pushed and in a draft or open PR")**: every worktree swept. Current
+lanes exact-match their remotes (#908 `9d811d463`, #910 `0c30a6932`,
+#912 `cbdbda76b`; local "ahead" readings were phantom — merge-bot
+pushes by URL never update local tracking refs). Five old design
+branches are merged-PR residue (#785 #787 #814 #822 #824). Two real
+finds, both dispositioned: the W0.1 census scaffold (cycle plan v2 +
+census types) lived only on the w01-census worktree's disk — preserved
+into the design reports space (the orphan `.ts` fenced verbatim,
+byte-identity verified, disk residue removed after extraction) and
+parked as DRAFT PR #918; and design-plan-truings' staged
+capability-floor report is an EARLIER draft of the version already on
+main (main's copy is strictly richer — the owner-shaping verbatim and
+pinned revision were added in later truing) — superseded residue, left
+in place, no un-landed knowledge.

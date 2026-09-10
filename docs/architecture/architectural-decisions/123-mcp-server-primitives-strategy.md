@@ -21,6 +21,13 @@ Accepted (amended 2026-07-23)
 > detail, or subject + keyStage discovery) is the thread-progression value
 > surface, ordered by teaching year.
 >
+> **Amendment (2026-09-03 — thread sequences in curriculum order).** The
+> thread-progression surface now serves one run per subject in Oak's
+> authored curriculum order (years ascending; within a year, the subject
+> sequence's unit order), replacing the year-only ordering above whose
+> within-year tie-break was alphabetical. Basis: ADR-086 amendment of the
+> same date.
+>
 > **Amendment (2026-06-11 — position-anchored-teaching-continuity, w1-c1).**
 > The Prompts section below was reconciled with the shipped estate, which
 > had drifted: the served set is seven prompts (the table previously listed
@@ -122,7 +129,7 @@ Seven parameterised workflow templates that the user explicitly invokes (slash c
 | `lesson-planning`      | topic, yearGroup                             | Full lesson build: place the lesson, specify knowledge, misconceptions, sequence, assess, resources                          |
 | `explore-curriculum`   | topic, subject?                              | Broad parallel search across lessons/units/threads                                                                           |
 | `learning-progression` | concept, subject                             | Search threads, map progression, identify gaps                                                                               |
-| `curriculum-mapping`   | subject, keyStage, yearGroup?                | Order units from the thread backbone and prerequisites, check national-curriculum coverage                                   |
+| `curriculum-mapping`   | subject, keyStage, yearGroup?                | Order units from the thread backbone and each unit's stated prior knowledge, check national-curriculum coverage              |
 | `adapt-lesson`         | topic, yearGroup                             | Surface pedagogical signals from Oak's graphs, retrieve EEF evidence, present calibrated options                             |
 | `continue-progression` | subject, yearGroup, justCovered, classNotes? | Resolve the class's position, derive the next step from the thread, readiness + misconceptions, chain into `lesson-planning` |
 

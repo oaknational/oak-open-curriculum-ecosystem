@@ -130,8 +130,6 @@ export const REQUEST_PARAMETER_SCHEMAS = {
   "GET:/threads/:threadSlug/units": z.object({
     "threadSlug": z.string(),
   }),
-  "GET:/changelog": z.object({}),
-  "GET:/changelog/latest": z.object({}),
   "GET:/rate-limit": z.object({}),
 } as const;
 

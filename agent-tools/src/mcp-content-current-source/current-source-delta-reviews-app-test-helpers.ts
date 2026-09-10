@@ -45,8 +45,10 @@ export const APP_TEST_HELPERS_DELTA_REVIEWS: Readonly<Record<string, CurrentSour
     '31f49ec350f174012d723eb88b9486086c0bcd82347813b3370082d1033fec8c',
     TEST_ONLY,
   ),
+  // PR #20: copyCommittedRootStatics skips dot-prefixed transients so the
+  // fixture cannot race copy-oak-ds staging/retired dirs (ENOENT class).
   'apps/oak-curriculum-mcp-streamable-http/src/test-helpers/static-root-fixture.ts': excluded(
-    'c015f386674e82f3873ee3706db2a4a7936cab025b4c687455230113b2ff3fd5',
+    '78b57eba221092500c36905578dbd3cfddf1087224ab2d1ab1736914b59a07b8',
     TEST_ONLY,
   ),
   // MCP-411 (ADR-219): the limiter DI fakes deleted with the in-code

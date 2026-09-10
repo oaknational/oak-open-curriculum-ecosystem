@@ -12,8 +12,9 @@ import type { SecurityScheme } from './security-types.js';
  * Determines security scheme for a tool based on MCP security policy.
  *
  * Reads the PUBLIC_TOOLS list and applies:
- * - Tools in PUBLIC_TOOLS: noauth scheme (publicly accessible)
- * - Tools NOT in PUBLIC_TOOLS: DEFAULT_AUTH_SCHEME (requires OAuth)
+ * - Tools in PUBLIC_TOOLS: noauth scheme (no per-tool scope check; the HTTP
+ *   transport still requires a bearer token and returns 401 without one)
+ * - Tools NOT in PUBLIC_TOOLS: DEFAULT_AUTH_SCHEME (requires OAuth scopes)
  *
  * @param toolName - MCP tool name
  * @returns Array of security schemes for this tool
@@ -28,7 +29,7 @@ import type { SecurityScheme } from './security-types.js';
  * @example
  * ```typescript
  * // Public tool
- * const publicSchemes = getSecuritySchemeForTool('get-changelog');
+ * const publicSchemes = getSecuritySchemeForTool('get-rate-limit');
  * // Returns: [{ type: 'noauth' }]
  *
  * // Protected tool

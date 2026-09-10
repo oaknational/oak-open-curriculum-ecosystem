@@ -9,7 +9,7 @@ and
 [PDR-139](../practice-core/decision-records/PDR-139-provider-independent-capability-composition.md)
 
 **Related repository research**: the
-[web-app-deconstruction meta-analysis](../../research/web-app-deconstruction/docs/synthesis/meta-analysis.md)
+[web-app-deconstruction meta-analysis](./innovation-kit/web-app-deconstruction/docs/synthesis/meta-analysis.md)
 independently mapped this report's problem a month earlier — its
 negative-space row "tested semantic portability, exit, restoration and
 retained options" and lens 30 ("adapters do not establish artefact identity

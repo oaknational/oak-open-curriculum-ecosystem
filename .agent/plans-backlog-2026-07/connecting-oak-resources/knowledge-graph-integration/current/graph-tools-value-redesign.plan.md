@@ -268,7 +268,8 @@ All numbers from the seam-analysis report §1.4 (commands recorded there); pinne
 ### prior-knowledge — bounded subgraph (ratified)
 
 1,607 nodes / 3,452 `prerequisiteFor` edges. Depth bounds verified meaningful: depth-2 reaches
-median 5 / p90 9 / max 18 nodes; depth-3 max 40 (2.5% of the graph). **Default depth 2,
+median 5 / p90 9 / max 18 nodes; depth-3 max 40 (2.5% of the graph). (SUPERSEDED 2026-09-03 by MCP-671: `get-prior-knowledge-graph` takes no `depth` and performs
+no traversal — see ADR-195's amendment.) **Default depth 2,
 caller-adjustable** — this is the recorded empirical basis. Two integrity findings the G1
 generator must resolve: the corpus is **not a DAG** (28 self-loops + 4 two-node maths cycles —
 visited-set-safe traversal required, which the landed BFS provides; the self-loops are an

@@ -175,6 +175,12 @@ Over-claim slightly is better than under-claim — the cost of a slightly broad
 claim is a peer pinging you to coordinate; the cost of an under-claim is a
 silent overlap.
 
+**A clean survey is a snapshot, not a lock** (2026-08-19). Between one seat's
+worktree survey and its action, a parallel seat under the same owner word
+preserved and PR'd one of the surveyed trees. Register or broadcast the scope
+BEFORE a sweep starts — not after its first finding — and re-read the surface
+immediately before acting on it.
+
 ## Claim entry schema
 
 The authoritative schema is

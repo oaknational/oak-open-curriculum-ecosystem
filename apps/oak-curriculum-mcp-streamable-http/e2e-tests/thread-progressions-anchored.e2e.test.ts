@@ -7,6 +7,8 @@
  * corpus so the test describes behaviour over any valid corpus.
  */
 
+import assert from 'node:assert/strict';
+
 import { graphCorpus } from '@oaknational/sdk-codegen/graph-corpus';
 import { request, type Response } from '../src/test-helpers/loopback-request.js';
 import { describe, it, expect } from 'vitest';
@@ -35,7 +37,13 @@ const THREAD_ENVELOPE = z.object({
     z.object({
       thread: z.unknown(),
       totalUnits: z.number(),
-      entries: z.array(z.object({ unit: z.unknown(), year: z.number().optional() })),
+      progressions: z.array(
+        z.object({
+          subject: z.string(),
+          totalUnits: z.number(),
+          entries: z.array(z.object({ unit: z.unknown(), year: z.number().optional() })),
+        }),
+      ),
     }),
   ),
   resolvedAnchors: z.array(z.string()),
@@ -53,9 +61,7 @@ const DISCOVERY_ENVELOPE = z.object({
 
 /** A thread slug with at least one placement, chosen deterministically (first emitted sequence). */
 const firstSequence = graphCorpus.sequences.find((sequence) => sequence.placements.length > 0);
-if (firstSequence === undefined) {
-  throw new Error('corpus has no non-empty sequence to anchor the e2e test');
-}
+assert.ok(firstSequence !== undefined, 'corpus has no non-empty sequence to anchor the e2e test');
 const knownThreadSlug: string = firstSequence.threadId.slice(
   firstSequence.threadId.indexOf(':') + 1,
 );
@@ -69,9 +75,10 @@ const placedUnitIds = new Set(
 const sequencedUnit = graphCorpus.nodes.find(
   (node) => node.kind === 'unit' && placedUnitIds.has(node.id),
 );
-if (sequencedUnit === undefined || sequencedUnit.kind !== 'unit') {
-  throw new Error('corpus has no sequenced unit to derive a subject+keyStage anchor');
-}
+assert.ok(
+  sequencedUnit !== undefined && sequencedUnit.kind === 'unit',
+  'corpus has no sequenced unit to derive a subject+keyStage anchor',
+);
 const knownSubjectKeyStage = {
   subject: sequencedUnit.subject,
   keyStage: sequencedUnit.keyStage,
@@ -100,7 +107,7 @@ async function callThreadProgressions(args: unknown): Promise<Response> {
 }
 
 describe('get-thread-progressions anchored tools/call', () => {
-  it('returns one thread’s year-ordered progression: summary + JSON content and structuredContent', async () => {
+  it('returns one thread’s per-subject curriculum-ordered progression: summary + JSON content and structuredContent', async () => {
     const response = await callThreadProgressions({ threadSlug: knownThreadSlug });
 
     expect(response.status).toBe(200);
@@ -115,7 +122,41 @@ describe('get-thread-progressions anchored tools/call', () => {
     expect(structured.resolvedAnchors).toStrictEqual([`thread:${knownThreadSlug}`]);
     expect(structured.unknownAnchors).toStrictEqual([]);
     expect(structured.threads).toHaveLength(1);
-    expect(structured.threads[0]?.entries.length).toBeGreaterThan(0);
+    expect(structured.threads[0]?.progressions.length).toBeGreaterThan(0);
+    expect(structured.threads[0]?.progressions[0]?.entries.length).toBeGreaterThan(0);
+  });
+
+  it('serves a run in the curriculum order, not id order, over the real transport', async () => {
+    // Falsification through the wire: pick a sequence whose curriculum order
+    // provably differs from id order, and prove the served entries reproduce
+    // it. A stray sort anywhere between the view and the envelope would
+    // re-alphabetise this and fail here, invisibly to in-process tests.
+    const disagreeing = graphCorpus.sequences.find((sequence) => {
+      const ids = sequence.placements.map((placement) => placement.unitId);
+      const idSorted = [...ids].sort((a, b) => a.localeCompare(b));
+      return ids.length > 2 && ids.join() !== idSorted.join();
+    });
+    assert.ok(
+      disagreeing !== undefined,
+      'corpus has no sequence whose curriculum order differs from id order',
+    );
+    const slug = disagreeing.threadId.slice(disagreeing.threadId.indexOf(':') + 1);
+
+    const response = await callThreadProgressions({ threadSlug: slug });
+    expect(response.status).toBe(200);
+    const structured = THREAD_ENVELOPE.parse(
+      getStructuredContentData(parseJsonRpcResult(parseSseEnvelope(response.text))),
+    );
+    const run = structured.threads[0]?.progressions.find(
+      (progression) => progression.subject === disagreeing.subject,
+    );
+    const served = (run?.entries ?? []).map(
+      (entry) => z.object({ id: z.string() }).parse(entry.unit).id,
+    );
+    const expected = disagreeing.placements.map((placement) => placement.unitId);
+
+    expect(served).toStrictEqual(expected);
+    expect(served).not.toStrictEqual([...served].sort((a, b) => a.localeCompare(b)));
   });
 
   it('returns bounded discovery descriptors for a subject+keyStage anchor', async () => {

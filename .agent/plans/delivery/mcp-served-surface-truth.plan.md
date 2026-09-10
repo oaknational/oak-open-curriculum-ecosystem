@@ -20,9 +20,10 @@ impact_areas:
   - served-surface
 tickets:
   - MCP-630
+  - MCP-653
 depends_on: []
 owner_gates: []
-last_updated: 2026-08-19
+last_updated: 2026-09-02
 ---
 
 # Served-surface truth: cache refresh, dead tools, dead code, absence pins
@@ -147,3 +148,40 @@ wait for this plan's todo 1.
   by construction.
 - Any change to live tools' response handling — verified unnecessary
   (zero semantic response-schema drift on shared paths, 2026-08-19).
+
+## Amendment 2026-09-02 — the MCP-653 split: dead-tool removal landed ahead of the refresh
+
+Owner word (Luke, 2026-09-02, per the Slack agreement with Aakesh recorded
+on MCP-653: the dead tools blocked the connector's verified status, and the
+cache refresh waits until the repo is public): the two dead changelog tools
+were disabled AHEAD of the cache refresh, in PR #950, via self-retiring
+`DEFERRED_PATHS` entries at the generator — the cache stayed verbatim
+upstream truth, so the schema-drift instrument keeps comparing like with
+like. That landing also carried the blast-radius true-ups this plan
+enumerates (served-surface rows, `PUBLIC_TOOLS`, e2e retargets, the UAT
+step-2.2 reachability probe now `get-rate-limit`, served-tool-table 38) and
+the content-audit re-attestation (rows C491–C498 retired via lineage).
+
+Consequences for this plan's remaining scope:
+
+- **Todo 1 narrows to**: cache refresh 0.7.0 → live + regeneration, DELETING
+  the two `/changelog*` `DEFERRED_PATHS` entries in the same landing —
+  `applyDeferredPaths` throws on paths absent from the document, so codegen
+  fails loud until they retire. The row removals and blast-radius surfaces
+  named in §Mechanism are already true.
+- **Acceptance criterion 1** (cache matches live at landing) binds the
+  refresh landing as written. **Criterion 2** (no phantom tool survives) is
+  already satisfied by the PR #950 landing and re-verifies trivially at the
+  refresh.
+- New with the refresh, verified 2026-09-02 against live 0.11.0: upstream
+  added `limit`/`offset` to the key-stages-subject units and assets paths —
+  two more tools gain pagination; coordinate with the Link-header pagination
+  lane. Prose/example churn across 24 shared operations makes the generated
+  diff noisy but is semantically benign (sampled).
+- **Todo 2 residuals grow**: the inert zodgen changelog special-case (plus
+  dead branches in the emitted rename helper), and
+  `current-source-delta-reviews-app.ts` sitting at exactly 250 lines (the
+  next entry must split it), join `formatData` and the absence-pin ruling.
+
+Sequencing note update: PR #911 remains the dependency for todo 1's
+drift-instrument proof reading only; the removal no longer waits on it.

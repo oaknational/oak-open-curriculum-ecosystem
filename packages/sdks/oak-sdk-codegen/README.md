@@ -135,9 +135,11 @@ alignment with the upstream description rewrite (oak-openapi pull request 269).
 3. **Read the change at source.** `info.version` embeds the upstream deploy's
    commit SHA (`0.7.0-<sha>`). With an `oak-openapi` checkout available,
    `git log <cached-sha>..<live-sha>` names the exact upstream commits. The
-   API's own changelog (`GET /changelog/latest`) records _versioned_ changes
-   only — documentation-only deploys move the build hash without a changelog
-   entry, so an empty changelog delta does not mean an unchanged spec.
+   version string and that commit history are the only change sources — the
+   API's changelog endpoints were removed upstream (404 since spec 0.11.0),
+   and documentation-only deploys move the build hash without any versioned
+   change, so an unchanged `info.version` prefix does not mean an unchanged
+   spec.
 4. **Classify structural drift as additive or consumer-breaking.** Separating
    structural from documentation drift (step 2) is not enough — a structural
    change still divides into two kinds, and the distinction is what a consumer

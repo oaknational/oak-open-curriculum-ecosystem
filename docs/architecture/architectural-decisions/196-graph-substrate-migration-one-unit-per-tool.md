@@ -1,11 +1,12 @@
 # ADR-196: Graph Substrate Migration — One Replacement Unit per Tool
 
-**Status**: Accepted. Owner-ratified 2026-06-02 as the scope clause of
+**Status**: Accepted (amended 2026-09-03 — the G3 delivery bullet corrected).
+Owner-ratified 2026-06-02 as the scope clause of
 `graph-estate-consolidation.plan.md`
 Judgement call 4; executed and validated in full via Track-G of
 `graph-tools-value-redesign.plan.md`
 (2026-06-10/11); recorded as an ADR 2026-06-11.
-**Date**: 2026-06-11
+**Date**: 2026-06-11 (amended 2026-09-03)
 **Related**:
 [ADR-173](173-graph-stack-topology.md) — the graph-stack topology the tools migrate onto
 (`graph-corpus-sdk` as the corpus-adapter layer; real-operations-only query contract);
@@ -39,8 +40,9 @@ Judgement call 4 of the graph-estate consolidation):
    generation time (ADR-031), and the tool's hand-written `types.ts` is deleted in the same unit.
    No hand-maintained type parallel to a generated corpus survives the unit.
 2. **The tool rewrite onto the graph corpus substrate** — bounded, anchored retrieval over the
-   one-graph corpus in `graph-corpus-sdk` (per-view construction, or an ordered corpus projection
-   where sequence order is the value), replacing the whole-corpus return.
+   one-graph corpus in `graph-corpus-sdk` (per-view construction, an ordered corpus projection
+   where sequence order is the value, or a projection of fields the anchor nodes carry),
+   replacing the whole-corpus return.
 3. **That tool's projection-derived `outputSchema`** — the schema authority is derived from the
    migrated tool's real projection of the generated data, never hand-authored and never
    speculative.
@@ -100,14 +102,21 @@ Executed 2026-06-10/11 under `graph-tools-value-redesign.plan.md`, one replaceme
   one-graph corpus emission with materialised kind-qualified ids, the `./graph-corpus` subpath,
   the hand-written prior-knowledge `types.ts` deleted, and the ADR-086 amendment in the same
   commit; PR #161 — the anchored `unitSlug[]` + depth tool, `curriculum://prior-knowledge-graph`
-  removed, prompts anchor-threaded, `eef-revalidation` signal raised.
+  removed, prompts anchor-threaded, `eef-revalidation` signal raised. (The depth-bounded shape
+  this unit shipped was retired on 2026-09-03, when the tool moved to each unit's stated prior
+  knowledge — see ADR-195's MCP-671 amendment. The migration doctrine below is unaffected.)
 - **G2 — misconception**: PR #163 — chain re-projection with the content-hash mint rule, the
   anchored lesson/unit/thread tool, the hand-written misconception `types.ts` deleted,
   `curriculum://misconception-graph` removed, signal raised.
 - **G3 — thread-progressions**: PR #164 — the ordered corpus projection as its own real
   operation, the anchored tool, `curriculum://thread-progressions` removed, the whole-corpus
-  resource factory deleted with its last consumer, signal raised. Follow-on PR #165 cured a
-  falsified within-thread-ordering premise the unit surfaced (year-axis re-chain).
+  resource factory deleted with its last consumer, signal raised. Follow-on PR #165 re-chained
+  the unit on the year axis, holding that the bulk carried no within-year unit order.
+  **Correction (2026-09-03):** that holding was itself refuted — the bulk sequence array
+  carries Oak's authored unit order within each year — and the sequences were re-based on
+  per-subject curriculum order. The original bullet credited PR #165 with curing a premise
+  that was wrong in the other direction; see the ADR-086 amendment of 2026-09-03 for the
+  measurement and MCP-681 for the delivery.
 - **G4 — bounded keywords** (the same unit shape applied to a new tool): PR #158 kept and
   disambiguated the generated live-API `get-keywords` (never replaced); PR #173 landed
   `get-keyword-graph` as one unit — keyword emission into the corpus, the bounded

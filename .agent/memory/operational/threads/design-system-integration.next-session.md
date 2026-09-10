@@ -27,6 +27,7 @@ recompute live state from claims/comms/git at pickup.
 | 2026-08-02 | Corsair hunts Surf | claude-code / claude-fable-5 | `4d3282` | Design-lane successor seat at direct owner word (evening, post-Moss retirement); standby, warm pause — activation gated on the ratified design-system completion plan node + Director/owner word |
 | 2026-08-07 | Civet spins Cavern | claude-code / claude-fable-5 | `054f5e` | Design-lane successor (Saffron→Civet, PDR-063 deliberate succession at owner word, Director ACTIVATE 20:46Z); claim `645b9e0b` adopted 20:46Z after the handoff record read end to end |
 | 2026-08-17 | Yarrow stirs Undergrowth | claude-code / claude-fable-5 | `ab1066` | Critical-analysis sitting + records-truth pass (MCP-613) at direct owner word; claim `645b9e0b` adopted after the winddown record + this record read end to end |
+| 2026-09-02 | Finch calls Pinnacle | claude-code / claude-fable-5 | `c91bd4` | #908 landing seat at direct owner word (merged a8aa13da1); the post-merge Copilot round consolidated through the tango node in the #915 fold; claim `645b9e0b` closed at owner word (no adoption — a fresh claim opens the lane's next pickup) |
 
 ## Board state at writing (recompute, do not trust)
 
@@ -3663,3 +3664,124 @@ artifact, URL in the session wrap-up).
   (5) post-#910 records parcel (showcase cross-ref, S4(b), R4
   attribution, POPPY-1 fold, DDR-009 305px amendment). The wide rail's
   capped nav scroll is the named owner-re-rule residue (PR #912 body).
+
+## Session close 2026-08-19 ~13:5xZ (Yarrow stirs Undergrowth, ab1066 — additive; the MERGE-DRIVE sitting; handoff to a successor at owner word)
+
+- **Owner words this sitting, in order**: (1) "please get all current
+  design work finished and merged and the rest of it safe for later pick
+  up"; (2) "if the PRs are green and clean, they should be merged";
+  (3) the components question — NOTED with its answer, not acted (the
+  answer lives in the pr-round-ledger's 2026-08-19 entry, §Owner
+  question NOTED); (4) "prepare for handoff to a successor, and then
+  stop all processes".
+- **MERGED**: #907 at `c59c1c47c` (rounds 4–7 closed; S6845 ACCEPTED in
+  SonarCloud with the WAI disposition), #909 at `f2bde54bb` (rounds 3–8;
+  the tier reader promoted to src with injected fs, the closed shape
+  proven top-down). Merge mechanism at this seat:
+  `merge-bot merge --pr <n> --expect copilot-pull-request-reviewer` at
+  SETTLE-READY — DECLARE the expected set; the observed default includes
+  the CODEOWNERS humans and never settles. Deletion sweep before every
+  leg (pr-lifecycle §5).
+- **IN REVIEW at freeze** (all threads resolved, rounds requested,
+  worktrees clean unless noted):
+  - **#912** (visual-feedback-round, tip `cbdbda76b` — r3 added the
+    three-row sticky reserve with measured cells and the strip's
+    no-scroll invariant): base=main (stack
+    dissolved; two folds `82c806f6b`/`b76d60a7d`); round-1 cures
+    `11691b393`; the seam focus hold went through THREE shapes — layout
+    effect (lost to CI's focus fixup), focus-in-open (raced the summary
+    click's default action), and the STANDING shape: render-time
+    previous-state latch (wide→narrow) + declarative
+    `summary:not(:focus)` (narrow→wide), both calibrated red-first
+    (`8b5c0c641`, `bbc88f1a2`). Suites 230/41/76. Merge at SETTLE-READY.
+  - **#910** (mcp-613, records truth pass; tip `0c30a6932` — fold
+    `5f1efcf20` LANDED AND PUSHED, r2 removed the DDR-003 drift
+    memorial): round-1 cures `242fd4c52`
+    (the FULL 840 seam — .oak-main map + counter-identity --flow-columns
+    collapse; one story per node; tombstones out). Main folded in with
+    ONE conflict — fidelity-register resolved as a UNION (11 entries,
+    ids unique); the fold commit + push were IN FLIGHT at freeze
+    (background task; if unpushed, the successor re-runs `git commit -F`
+    with the scratchpad message then `merge-bot push` from the
+    worktree). Then round + merge.
+  - **#908** (mcp-615, tango plan node; tip `9d811d463` — r2 three
+    doc-truths `6341a0474`, r3 the T1d convert-once-after-migrations
+    amendment): round-1 cures `727dfc15c` —
+    execution state out of the durable plan; DDR-012 corpus-true; the
+    critical-analysis report LANDED with the node
+    (confidentiality-checked); M1×P7 fixture reconciliation BY
+    INVERSION (constructed contract-complete fixture; the partial pack
+    proves admission REFUSAL); node RE-RATIFIED 2026-08-19 via the
+    owner's card answer routed through the Director (prefix
+    declared+recomputed, MAJOR derivation; provenance-marked
+    construction, defaulted-only upgrades; `oak-design identity
+    create/upgrade` as a design-tier toolkit package). Was
+    SETTLING-QUIET-WINDOW at freeze. Merge at SETTLE-READY.
+- **T1a-ii and T1e are UNBLOCKED** (the card answers above); the plan
+  carries them at the slice rows.
+- **Carried items** (ledger, same entry): colour-matrix filter-family
+  exclusion; parseFailure-test strengthening; DTCG upstream link (records
+  parcel); the wide-rail capped nav scroll = owner re-rule residue.
+- **Post-#910 records parcel** still owed after #910 merges: showcase
+  cross-ref, S4(b), R4 attribution, POPPY-1 fold, DDR-009 305px
+  classic-scrollbar amendment, DTCG upstream link.
+- **Successor resume order**: (1) re-arm per start-right; (2) run the
+  three settle
+  watches (`pr state <n> --expect copilot-pull-request-reviewer`) and
+  fire `merge-bot merge` per PR at SETTLE-READY after the deletion
+  sweep — harvest any new round first (zero-live + suppressed:
+  disposition honestly; the owner's green-and-clean word governs);
+  (4) the post-#910 records parcel; (5) T1a-ii pickup (schema workspace)
+  is the next BUILD slice.
+- **Claim `645b9e0b` retained with a FRESH handoff record** (see
+  handoff_record_path on the claim row).
+
+## Session update 2026-09-02 ~13:xxZ (Finch calls Pinnacle, c91bd4 — additive; #908 MERGED a8aa13da1; the post-merge Copilot finding consolidated through the node at owner word; claim 645b9e0b closed at owner word)
+
+Seat: Finch calls Pinnacle (`c91bd4`, claude-code / claude-fable-5), the #908 landing
+seat and the #915 fold landing seat, at direct owner word; no Director seated.
+
+- **#908 LANDED.** Merged by the owner 2026-09-02T12:19:54Z as `a8aa13da1` on this seat's
+  merged head `5e5ff75f8` (origin/main merged into the branch under the bot; CI 19/19;
+  approval in the owner identity under the standing 2026-08-04 permission after a
+  first-hand read; all ten review threads resolved). The tango-identity-pack node, its
+  readiness record, DDR-012 and the DDR index are on main. The design lane's #908 merge
+  leg named in handoff record `645b9e0b-design-lane-merge-drive-2026-08-19.md` is
+  DISCHARGED.
+- **Post-merge Copilot round (12:24Z on the merged tip).** One inline comment (T2) plus two
+  suppressed comments (§Mechanism identity-№N paragraph; AC2–AC4): the dated T1d
+  amendment of 2026-08-19 defers the seven showcase roster surfaces and the a11y-matrix
+  derivation to the programme's completing node, but four passages still said this node
+  does that work; and that deferral is a scope change the 19 August stamp does not cover.
+  Both points were raised in suppressed form on 19 August (13:59Z and 14:14Z rounds) and
+  never dispositioned; the 19 August cure had updated the readiness record's
+  discharge-route addendum but not the node's own dependent passages.
+- **Owner word, verbatim (2026-09-02, after the harvest):** "fix the issues as part of the
+  915 work. Plan the 915 work before starting". At the plan gate the owner selected, on
+  the question "Consolidating the T1d deferral through the tango node re-scopes T2 and
+  AC4. Which reading do I write into the node?", the option **"Fixture consumer first
+  light"** — in this node Tango renders and is a11y-gated through the T1c static fixture
+  consumer; its showcase-roster arrival and the derived a11y matrix come with the
+  completing node; the node's own clause "Tango never exists in the legacy shape" holds.
+  This entry is the `ratified_where` target for the node's 2026-09-02 re-stamp covering
+  the T1d deferral as ratified scope.
+- **Cure landed in the #915 fold's third commit:** §Mechanism (identity-№N paragraph), AC2,
+  AC4, T2 and the `design-showcase-experience` relationship re-trued to the amendment with
+  dated markers; the two `workspace-reorganisation-programme` references re-pointed to
+  `toolkit-re-architecture` (which supersedes the programme in the same fold);
+  `ratified_where` extended and `last_updated` set to 2026-09-02; the readiness record
+  gains a post-merge review addendum; DDR-012's `informed_by` edges now cite artefacts
+  (the critical-analysis report, the readiness record's 2026-08-18 addendum, PR #908)
+  instead of lifecycle moments. The Copilot thread on #908 is replied to and resolved
+  under the bot once the fold is on main.
+- **Claim 645b9e0b (Yarrow stirs Undergrowth, retained 2026-08-19 for a design successor)
+  CLOSED at this fold** at the owner's plan-gate answer of 2026-09-02; the handoff record
+  stays on disk. The lane's next pickup (T1a-ii onward, per the node) opens at owner
+  word from a fresh claim.
+- **Rounds 3 and 4 on #915 (13:45Z, 13:58Z) and the merge.** Round 3 found the machine-readable
+  stamp behind the prose: `ratified_date` moved to 2026-09-02 (the node's own convention — the
+  field moved 08-17 → 08-19 at the previous re-ratification), §Mechanism item 2 is marked as the
+  end-state architecture with K2 stating what this node lands, and AC3 is narrowed to the derived
+  roster module (the demo's consumption of it is the completing node's work) — commit `475a8193d`.
+  Round 4 raised nothing on this node. #915 merged as `777e9131c` (owner-merged 14:05Z); the #908
+  Copilot thread replied to and resolved under the bot. This node is settled at that head.

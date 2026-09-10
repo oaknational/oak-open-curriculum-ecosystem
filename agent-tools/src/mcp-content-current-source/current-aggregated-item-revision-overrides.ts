@@ -42,6 +42,11 @@ export const CURRENT_AGGREGATED_ITEM_REVISION_OVERRIDES = {
   C224: 'modified',
   C231: 'modified',
   C248: 'modified',
+  // The stated-statements refactor of get-prior-knowledge-graph.
+  C246: 'modified',
+  C247: 'modified',
+  C250: 'modified',
+  C251: 'modified',
   C372: 'modified',
   C374: 'modified',
   C376: 'modified',

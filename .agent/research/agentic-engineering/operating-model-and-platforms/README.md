@@ -43,9 +43,9 @@ research that explains why the portability model looks the way it does.
   with the Matt Pocock C8 candidate), the rest confirmations. Feeds the same
   substrate-learning plan.
 - [agent-skills-addyosmani-survey-2026-08-02.md](../../wider-ecosystem/agent-skills-addyosmani-survey-2026-08-02.md) —
-  third external study (`addyosmani/agent-skills`, MIT), breadth survey
-  followed by a commissioned six-leg detailed scan (see the
-  [detailed-scan plan](../../../plans/delivery/agent-skills-detailed-scan.plan.md));
+  third external study (`addyosmani/agent-skills`, MIT), breadth survey;
+  the commissioned six-leg detailed scan was dropped at the owner's word of
+  2026-09-03 and its plan node archived (`agent-skills-detailed-scan`);
   homed under `wider-ecosystem/`, indexed here so the external-study
   lineage stays discoverable in one place.
 

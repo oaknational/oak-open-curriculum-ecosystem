@@ -9,15 +9,18 @@
  * never computes or decides policy.
  *
  * **Decision Logic (deny-by-default)**:
- * - If `securitySchemes` is absent or empty → `true` (require auth)
- * - If every scheme is `noauth` → `false` (public access)
- * - Otherwise → `true` (auth required)
+ * - If `securitySchemes` is absent or empty → `true` (scope check runs)
+ * - If every scheme is `noauth` → `false` (no per-tool scope check)
+ * - Otherwise → `true` (scope check runs)
  *
- * Only an explicit, non-empty array of all-`noauth` schemes permits
- * unauthenticated access.
+ * Only an explicit, non-empty array of all-`noauth` schemes skips the
+ * per-tool OAuth scope check. This decides the scope check alone: HTTP
+ * bearer authentication has already been enforced at ingress (ADR-113),
+ * so `false` never means anonymous access.
  *
  * @param toolName - Universal tool name (generated or aggregated tool)
- * @returns `true` if tool requires OAuth authentication, `false` if public
+ * @returns `true` if the tool's OAuth scope check runs, `false` if the
+ *   tool skips it (bearer authentication still applies at the transport)
  *
  * @example
  * ```typescript
@@ -25,7 +28,7 @@
  * toolRequiresAuth('get-lessons')  // => true
  *
  * // Generated public tool
- * toolRequiresAuth('get-changelog')  // => false
+ * toolRequiresAuth('get-rate-limit')  // => false
  *
  * // Aggregated OAuth-protected tool
  * toolRequiresAuth('search')  // => true

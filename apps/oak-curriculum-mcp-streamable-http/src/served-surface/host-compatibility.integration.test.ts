@@ -7,7 +7,7 @@
  * what we serve. It supplies no connection facts, so the protocol-negotiation
  * lane is NOT evaluated: a host that cannot initialise against the server's
  * protocol versions is outside this gate's sight. Checking that lane per
- * host is a named follow-up on MCP-605, not a silent assumption here.
+ * host is a named follow-up on MCP-644, not a silent assumption here.
  *
  * Sibling of the other served-surface proofs here: those assert that the
  * surface is internally coherent (advertised widgets are registered, dormant

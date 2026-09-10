@@ -13,6 +13,8 @@ export interface CursorSessionIdentityHookEnvironment {
   readonly CURSOR_PROJECT_DIR?: string;
   readonly CLAUDE_PROJECT_DIR?: string;
   readonly OAK_SKIP_COMPOSER_SESSION_MIRROR?: string;
+  /** Explicit operator display-name override — honoured for rendering only, never written back. */
+  readonly OAK_AGENT_IDENTITY_OVERRIDE?: string;
 }
 
 /**
@@ -58,6 +60,28 @@ interface CursorSessionIdentityHookPlan {
 }
 
 /**
+ * Select the process-environment values the Cursor session identity hook
+ * consumes. The executable adapter MUST build its planner environment
+ * through this function — hand-picking variables at the bin boundary is
+ * the class of defect that silently dropped the remote session id and the
+ * operator override from production hook runs.
+ */
+export function cursorSessionIdentityHookEnvironmentFromProcessEnv(
+  env: NodeJS.ProcessEnv,
+): CursorSessionIdentityHookEnvironment {
+  return {
+    ...(env.CURSOR_PROJECT_DIR === undefined ? {} : { CURSOR_PROJECT_DIR: env.CURSOR_PROJECT_DIR }),
+    ...(env.CLAUDE_PROJECT_DIR === undefined ? {} : { CLAUDE_PROJECT_DIR: env.CLAUDE_PROJECT_DIR }),
+    ...(env.OAK_SKIP_COMPOSER_SESSION_MIRROR === undefined
+      ? {}
+      : { OAK_SKIP_COMPOSER_SESSION_MIRROR: env.OAK_SKIP_COMPOSER_SESSION_MIRROR }),
+    ...(env.OAK_AGENT_IDENTITY_OVERRIDE === undefined
+      ? {}
+      : { OAK_AGENT_IDENTITY_OVERRIDE: env.OAK_AGENT_IDENTITY_OVERRIDE }),
+  };
+}
+
+/**
  * Plan Cursor `sessionStart` output from stdin and injected environment.
  */
 export function planCursorSessionIdentityHook(
@@ -70,12 +94,18 @@ export function planCursorSessionIdentityHook(
 
   const projectDir = resolveProjectDir(input.environment, input.fallbackProjectDir);
   const prefix = sessionIdPrefix(sessionId);
-  const displayName = deriveIdentity(sessionId).displayName;
+  const override = input.environment.OAK_AGENT_IDENTITY_OVERRIDE?.trim();
+  const displayName = deriveIdentity(
+    sessionId,
+    override === undefined || override.length === 0 ? {} : { override },
+  ).displayName;
   const tabHint = `Oak · ${displayName}`;
   const output = {
     env: {
+      // Seed only — a pinned name override lets a later seed change produce
+      // a mixed-provenance identity tuple; the name derives from the live
+      // seed at every point of use (PDR-027, 2026-08-24 amendment).
       PRACTICE_AGENT_SESSION_ID_CURSOR: sessionId,
-      OAK_AGENT_IDENTITY_OVERRIDE: displayName,
     },
     additional_context: identityContext({ displayName, tabHint, prefix }),
     user_message: `${tabHint} — suggested Composer tab title; details in .cursor/${COMPOSER_MIRROR_FILE}`,
@@ -138,7 +168,7 @@ function identityContext(input: {
     '[Practice agent identity]',
     `Deterministic display name for this composer session: ${input.displayName}`,
     `Suggested Composer tab title (Cursor has no hook API to set it automatically): ${input.tabHint}`,
-    `PDR-027 session_id_prefix (first 6 of composer session_id): ${input.prefix}`,
+    `PDR-027 session_id_prefix (first 6 of the PDR-027 seed): ${input.prefix}`,
     'PRACTICE_AGENT_SESSION_ID_CURSOR is set from the composer session_id for hook subprocesses in this session.',
     'From repo root, `pnpm agent-tools:agent-identity --format display` also resolves when PRACTICE_AGENT_SESSION_ID_CURSOR is set in your shell (if Cursor forwards session env to the terminal, it matches).',
   ].join('\n');

@@ -24,7 +24,7 @@ Lineage: extends the `agent-tools mcp-conformance` harness landed under
 MCP-189, which wraps the lockfile-pinned `@mcpjam/cli`. The architecture
 decision — app-side gate placement, the vendor-catalogue oracle, the
 rejected baseline gate — is recorded in
-[ADR-226](../../../docs/architecture/architectural-decisions/226-host-compatibility-per-commit-served-surface-gate.md);
+[ADR-230](../../../docs/architecture/architectural-decisions/230-mcp-apps-widget-compatibility-per-commit-served-surface-gate.md);
 this plan carries the mechanism.
 
 ## Goal
@@ -38,7 +38,10 @@ Scope (review-narrowed 2026-08-18): the gate judges MCP Apps / widget
 compatibility — the tools and widget lanes of the vendor's model, for a host
 that has already connected. It supplies no connection facts, so
 protocol-version negotiation is not evaluated; the per-host protocol check
-is a named follow-up on MCP-605.
+is a named follow-up on MCP-644, which owns the protocol-revision posture.
+That lane also carries a finding from this one: the vendor's compat report
+carries no protocol-revision field, so a capture cannot name the revision it
+tested against from its own bytes.
 
 Stated precisely, because the gate is narrower than "any degradation fails".
 It fails on: a `blocked` or `unknown` verdict in a GATED host (the

@@ -2,13 +2,14 @@
  * Curriculum graph subpath barrel: `@oaknational/graph-corpus-sdk/curriculum`.
  *
  * The generated one-graph corpus (G1a) plus the bounded anchored views over
- * it: `priorKnowledgeSubgraph` (G1b) answers "what is the prior knowledge of
- * these units?" as a depth-bounded predecessor subgraph;
+ * it: `priorKnowledgeStatements` answers "what is the prior knowledge of
+ * these units?" as each unit's stated prior-knowledge statements;
  * `misconceptionsForLessons` / `misconceptionsForUnits` /
  * `misconceptionsForThread` (G2) answer "which misconceptions does this
  * anchor address?" over the thread→unit→lesson→misconception chain;
  * `progressionForThread` / `progressionsForSubjectKeyStage` (G3) answer "how
- * does this thread progress across years?" over the year-ordered sequences;
+ * does this thread progress across years?" over the per-subject,
+ * curriculum-ordered sequences;
  * `keywordsForSubjectKeyStage` (G4b) answers "what is the key vocabulary for
  * this teaching context?" as a bounded frequency-ranked keyword page with
  * lesson decoration.
@@ -23,18 +24,15 @@ export {
   type GraphCorpusNodeId,
   type GraphCorpusSequence,
   type GraphCorpusSequencePlacement,
+  type GraphCorpusUnitLessonRun,
   type GraphCorpusThreadNode,
   type GraphCorpusUnitNode,
 } from './graph-corpus.js';
 
 export {
-  DEFAULT_PREREQUISITE_DEPTH,
-  MAX_PREREQUISITE_DEPTH,
-  createCurriculumPriorKnowledgeView,
-  priorKnowledgeSubgraph,
-  type CurriculumPriorKnowledgeView,
-  type PriorKnowledgeSubgraph,
-} from './prior-knowledge-view.js';
+  priorKnowledgeStatements,
+  type PriorKnowledgeStatements,
+} from './prior-knowledge-statements.js';
 
 export {
   buildCurriculumMisconceptionProjection,
@@ -66,6 +64,7 @@ export {
   progressionForThread,
   progressionsForSubjectKeyStage,
   threadProgressionStats,
+  type SubjectProgression,
   type ThreadDescriptor,
   type ThreadDiscovery,
   type ThreadProgression,

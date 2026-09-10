@@ -41,7 +41,7 @@ export const APP_REGISTRATION_DELTA_REVIEWS: Readonly<Record<string, CurrentSour
   ),
   // MCP-439: the in-memory client harness extracted from the registration
   // proof so the served-tool-table generator observes the same composition
-  // root instead of re-deriving the surface. 2026-08-15 (ADR-226 lane):
+  // root instead of re-deriving the surface. 2026-08-15 (ADR-230 lane):
   // optional getWidgetHtml override so the host-compatibility test injects
   // the real generated widget bytes — the default stub and every other
   // consumer are unchanged; still a harness, registers no governed content.

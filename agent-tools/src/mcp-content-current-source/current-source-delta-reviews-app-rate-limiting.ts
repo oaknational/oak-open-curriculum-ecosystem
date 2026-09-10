@@ -39,7 +39,7 @@ export const APP_RATE_LIMITING_DELTA_REVIEWS: Readonly<Record<string, CurrentSou
     DELETED_SOURCE,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/app/bootstrap-helpers.ts': excluded(
-    '7be12317e396d81f6ba729ecea321750646b91927f52671e0d07d31b4dde7912',
+    'c822d0405b9787892cc1b42dcc1cbdf92d426a9eb65863fcaaafeb79cfb13e27',
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/asset-download/asset-download-route.ts': excluded(

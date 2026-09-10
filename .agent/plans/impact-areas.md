@@ -22,3 +22,4 @@ spans milestones; neither duplicates the other.
 | `content-workspace` | The model-behaviour content workspace and its reviewer-facing views |
 | `practice-and-estate` | The engineering practice, agent estate, and planning estate itself |
 | `design-system` | The Oak Open Curriculum Design System — tokens, themes, identities, class library, the component tier, and its studio sync |
+| `innovation-kit` | The cross-demo composition, assurance, evidence, and reuse substrate that turns Oak capabilities into independent working experiences |

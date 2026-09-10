@@ -3,7 +3,7 @@ boundary: B2-Architecture
 doc_role: index
 authority: adr-navigation
 status: active
-last_reviewed: 2026-04-29
+last_reviewed: 2026-08-30
 ---
 
 # Architectural Decision Records
@@ -432,13 +432,10 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   grammar; strictness preserves the protocol's zero-per-message-ceremony property;
   Proposed 2026-07-20, Decision items 3–4 amended 2026-07-20 per owner ruling)
 - [ADR-215: Top-level `research/` surface for imported research records](215-top-level-research-surface.md)
-  (introduces `research/` as an out-of-band research surface outside the ADR-041 product
-  dependency lattice, which is unchanged; records are imported as public projections
-  preserved byte-faithfully except that private-repo permalinks are reduced to plain-text
-  citations resolved via a stable index in the private source repository; house formatting
-  and analysis are exempted while repository-wide integrity gates still apply; only a
-  record's dependency-free leaf packages register in the workspace; first occupant: the
-  web-app-deconstruction deconstruction study; Proposed 2026-07-20)
+  ← **Superseded by [ADR-226](226-agent-research-surface-for-imported-records.md)**
+  (2026-08-30: the imported record relocated to
+  `.agent/research/innovation-kit/web-app-deconstruction/` and the top-level surface
+  retired with it)
 - [ADR-216: The plan-node estate](216-plan-node-estate.md)
   (three node types — strategic, delivery, runbook — with born-sketch owner
   ratification and delivery state as a Linear projection; supersedes ADR-117's
@@ -480,7 +477,17 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-223: Perishable external-surface claims carry risk-based freshness metadata](223-perishable-claims-carry-risk-based-freshness-metadata.md)
 - [ADR-224: Restricted-lesson exclusion is a documented, configurable switch](224-restricted-lesson-exclusion-configurable-switch.md)
 - [ADR-225: Adopt provider-independent capability composition for runtime services](225-provider-independent-capability-contracts.md) ← **Proposed**
-- [ADR-226: MCP Apps widget compatibility as a per-commit served-surface gate, judged by the vendor's pinned capability catalogue](226-host-compatibility-per-commit-served-surface-gate.md) ← **Proposed**
+- [ADR-226: `.agent/research/` as the research surface for imported records](226-agent-research-surface-for-imported-records.md)
+  (Accepted 2026-08-31; supersedes ADR-215: records enter as faithful public projections —
+  byte-preserved documents, publication presumption with owner-directed withholding,
+  private-permalink reduction with a private-source index, self-contained records, and
+  leaf-package-only workspace registration)
+- [ADR-227: The Oak MCP product is built in its own repository from packages published here](227-oak-product-in-its-own-repository.md)
+  (Accepted 2026-09-03; records the owner's rulings of 2026-09-02 and 2026-09-03 verbatim: two repositories with
+  published `@oaknational` packages as the one boundary; a per-box cut, never a move of today's
+  workspaces; a junior-developer product repository; one version per repository for now; the
+  extraction before the estate-wide seam migration)
+- [ADR-230: MCP Apps widget compatibility as a per-commit served-surface gate, judged by the vendor's pinned capability catalogue](230-mcp-apps-widget-compatibility-per-commit-served-surface-gate.md) ← **Proposed**
 
 ## Key Architectural Decisions
 
@@ -505,7 +512,7 @@ For understanding authentication, authorization, and observability:
 
 - **[ADR-052](052-oauth-2.1-for-mcp-http-authentication.md)** - OAuth 2.1 for MCP HTTP server authentication
 - **[ADR-053](053-clerk-as-identity-provider.md)** - Clerk as Identity Provider and Authorization Server
-- **[ADR-115](115-proxy-oauth-as-for-cursor.md)** - Proxy OAuth AS for Cursor compatibility (transparent passthrough to Clerk; amended 2026-07-26 — transparency scoped against advertised-AS request validation)
+- **[ADR-115](115-proxy-oauth-as-for-cursor.md)** - Proxy OAuth AS for Cursor compatibility (transparent passthrough to Clerk with recorded, dated exceptions; see the ADR's Status block)
 - **[ADR-143](143-coherent-structured-fan-out-for-observability.md)** - Coherent structured fan-out for the Sentry and OpenTelemetry foundation (§6 superseded in part by ADR-160)
 - **[ADR-158](158-multi-layer-security-and-rate-limiting.md)** - Multi-layer security architecture and application rate limiting ← **Superseded by [ADR-219](219-rate-limiting-is-an-edge-concern.md)**
 - **[ADR-219](219-rate-limiting-is-an-edge-concern.md)** - Rate limiting is an edge concern
@@ -644,6 +651,14 @@ Include migration impact if replacing a prior approach.}
   deleted; the number is retired and never reused, so a gap in the ADR
   sequence indicates a withdrawal. The withdrawal and its rationale are
   recoverable from version control; no tombstone is kept in this index.
+
+Before proposing any disposition, read this section and the index's
+precedent rows for the same status. One finding held three wrong sizes in
+one arc — a doctrine-cited "restore as Superseded", a measured downgrade to
+a five-line stub that violated keep-the-file, and the conformant landing (a
+successor ADR plus the full original body under a superseded-by banner),
+which appeared only after every Superseded precedent row had been checked
+(2026-08-31).
 
 ### Creating an ADR
 

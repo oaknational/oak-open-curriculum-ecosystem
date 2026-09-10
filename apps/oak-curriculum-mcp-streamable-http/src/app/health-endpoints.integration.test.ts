@@ -40,10 +40,10 @@ import { createMockRuntimeConfig } from '../test-helpers/auth-error-test-helpers
 describe('health endpoint inside the routed surface (MCP-580)', () => {
   let app: Express;
 
-  /** The only health path the canonical host's monitor can reach. */
+  /** The health path inside the routed surface (MCP-580). */
   const ROUTED_HEALTH = '/mcp/healthz';
 
-  /** The alpha compatibility surface's path. */
+  /** The root-path form every root-served deployment answers. */
   const ROOT_HEALTH = '/healthz';
 
   /** What an external uptime monitor sends; curl's default. */
@@ -127,7 +127,7 @@ describe('health endpoint inside the routed surface (MCP-580)', () => {
     expect(health.body).toEqual(HEALTH_BODY);
   });
 
-  it('keeps the root health path answering for the alpha compatibility surface', async () => {
+  it('keeps the root health path answering for root-served deployments', async () => {
     const res = await request(app).get(ROOT_HEALTH).set('Accept', MONITOR_ACCEPT);
 
     expect(res.status).toBe(200);

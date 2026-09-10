@@ -37,7 +37,7 @@ Decks are the hardest format to make accessible; be deliberate.
   add a solid panel behind text if needed.
 - **Font size.** Generous sizes for projection; don't rely on colour to distinguish content.
 - **One idea per slide; don't overload** — this is both a WCAG cognitive consideration and the
-  pedagogical "accessible" principle (see `oak-curriculum-principles`).
+  educational "accessible" principle (see `oak-curriculum-principles`).
 - **Embedded video/audio** must carry captions/transcripts — see `references/media.md`.
 
 ## PDFs (exported)

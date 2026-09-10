@@ -42,7 +42,7 @@ This server exposes Oak's curriculum through the three MCP primitive types, each
 **Tools** (model-controlled) — currently 37 curriculum tools: 24 generated
 from the OpenAPI schema plus 13 aggregated tools. The aggregated set covers
 search/browse/fetch flows, orientation, the curriculum graph tools
-(`get-thread-progressions` for year-ordered sequences,
+(`get-thread-progressions` for curriculum-ordered sequences,
 `get-prior-knowledge-graph`, `get-misconception-graph`,
 `get-keyword-graph`), EEF evidence, `download-asset`, and
 the MCP App user-search pair (`user-search`, `user-search-query`). The AI
@@ -292,11 +292,15 @@ signing off a release. Replaces the retired `pnpm smoke:remote` harness
 - `GET /.well-known/oauth-protected-resource` returns the canonical resource and authorisation servers
 - 401 responses include a `WWW-Authenticate` header with `resource` and `authorization_uri` to guide clients
 
+### OpenAI domain verification
+
+- `GET /.well-known/openai-apps-challenge` returns the plugin-submission portal's domain-verification token as bare `text/plain` (MCP-700). Not an OAuth surface: public, registered before Clerk middleware, and served in every auth mode. Contract: [OpenAI plugin submission, "Domain verification"](https://developers.openai.com/plugins/deploy/submission), which requires the endpoint to "return only that plugin's verification token".
+
 ### Canonical address
 
 The server normally describes itself from each request's `Host` header. When an
 edge serves it at a different address — Cloudflare serves
-`https://www.thenational.academy/mcp` and overrides the `Host` to the app's own
+`https://mcp.thenational.academy/mcp` and overrides the `Host` to the app's own
 Vercel hostname, which is how Vercel selects the serving project — that
 derivation would advertise the origin hostname instead.
 

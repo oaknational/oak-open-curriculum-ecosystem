@@ -1,0 +1,3581 @@
+{
+  "ok": true,
+  "partition": [
+    {
+      "window": "w10",
+      "fileCount": 1
+    },
+    {
+      "window": "w11",
+      "fileCount": 2
+    },
+    {
+      "window": "w12",
+      "fileCount": 1
+    },
+    {
+      "window": "w13",
+      "fileCount": 1
+    },
+    {
+      "window": "w14",
+      "fileCount": 1
+    }
+  ],
+  "coverage": [
+    {
+      "window": "w10",
+      "leafCount": 60
+    },
+    {
+      "window": "w11",
+      "leafCount": 47
+    },
+    {
+      "window": "w12",
+      "leafCount": 68
+    },
+    {
+      "window": "w13",
+      "leafCount": 42
+    },
+    {
+      "window": "w14",
+      "leafCount": 36
+    }
+  ],
+  "mapComplete": true,
+  "incompleteWindows": [],
+  "leafCount": 253,
+  "leaves": [
+    {
+      "id": "w10-L01",
+      "window": "w10",
+      "category": "motif",
+      "statement": "The exit-codes-in-band rule recurs dozens of times across the window as agents pipe command output through tail/grep/head before echoing $?, reading the pipe's exit status instead of the command's.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-27",
+          "quote": "echo \"EXIT:$?\"` after a pipe reports `tail`'s status, not the command's"
+        },
+        {
+          "napkinDate": "2026-07-29",
+          "quote": "a piped suite exits (`| tail` then `echo EXIT:$?`) reported 0 over a REAL a11y failure"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L02",
+      "window": "w10",
+      "category": "shift",
+      "statement": "By 2026-07-29 the estate graduated the exit-in-band idiom itself from 'echo $? unpiped' to a stronger propagated form (`rc=$?; echo EXIT:$rc; exit $rc`) after three same-session false-greens under the old idiom.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-29",
+          "quote": "Cure idiom to graduate: `cmd; rc=$?; echo \"EXIT:$rc\"; exit $rc` — in-band AND propagated"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L03",
+      "window": "w10",
+      "category": "motif",
+      "statement": "Bot-reviewer/Bot-reviewee visibility instruments (REST requested_reviewers, review-author login, requested_reviewers roster) are structurally blind to GitHub Bot-type reviewers, so only the GraphQL Bot fragment or the timeline `review_requested` event is honest.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-26",
+          "quote": "Bot reviewers visible only via the GraphQL Bot fragment (REST requested_reviewers is structurally blind)"
+        },
+        {
+          "napkinDate": "2026-07-28",
+          "quote": "verify registration first-hand via `issues/<n>/timeline` filtering `review_requested` events"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L04",
+      "window": "w10",
+      "category": "surprise",
+      "statement": "A Copilot review-request POST to /pulls/N/requested_reviewers can return HTTP 201 and register nothing, non-deterministically per-PR, even under the same credential that succeeded on an adjacent PR a minute earlier.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-28",
+          "quote": "three `POST /pulls/616/requested_reviewers` ... each returned HTTP 201 ... yet ZERO `review_requested` timeline events registered"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L05",
+      "window": "w10",
+      "category": "motif",
+      "statement": "Watcher re-arms repeatedly fail to TaskStop the prior arm before arming a replacement, leaving two watchers racing one seen-file for tens of minutes with no visible symptom beyond a fresh heartbeat file.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-27",
+          "quote": "armed watcher 20 after arm 19 emitted a drain-timeout, but never STOPPED arm 19 — so two watchers ran ~25 minutes against the SAME seen-file"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L06",
+      "window": "w10",
+      "category": "behavioural-reflex",
+      "statement": "Multiple seats transmit a claim ('pushed', 'merged', 'committed') to a peer or the owner before reading the state that would confirm it, a failure the corpus names 'transmit-before-verify' and routes toward PDR-098 as a graduation candidate.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-28",
+          "quote": "Told the Director \"commit f4f0708de pushed to #604\" while the push had exited 128"
+        },
+        {
+          "napkinDate": "2026-07-28",
+          "quote": "That makes two independent instances in one session, from two seats, of transmit-before-verify"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L07",
+      "window": "w10",
+      "category": "motif",
+      "statement": "zsh's lack of unquoted word-splitting silently breaks `for x in $VAR` loops that pass multiple claim-ids to `claims heartbeat`, iterating once over the whole joined string; the trap recurs at least three times across different seats on 2026-07-26/28/29.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-26",
+          "quote": "`for id in $IDS` silently iterated ONCE with the whole string"
+        },
+        {
+          "napkinDate": "2026-07-29",
+          "quote": "my first heartbeat loop passed `$CLAIMS` (space-joined ids) to `for c in $CLAIMS` — zsh does not split unquoted parameters"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L08",
+      "window": "w10",
+      "category": "motif",
+      "statement": "Multiple seats read `git status`/dirty-path output as a statement about peer activity when it is a statement about branch position relative to HEAD, wrongly attributing already-landed files on a lagging branch to a colleague's in-flight edits.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-28",
+          "quote": "a dirty-file flag read as \"a peer is working here\"... all fifteen byte-identical to main"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L09",
+      "window": "w10",
+      "category": "tension",
+      "statement": "The owner repeatedly corrects agents for treating narrower observed facts (a ruleset entry existing, an API accepting a write, a passed conformance suite) as the broader claim they resemble, a shape named 'referent-narrowing' and instanced at least a dozen times in Aurora's 2026-07-26 session alone.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-26",
+          "quote": "Twelve instances in one session, listed because the count is the argument"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L10",
+      "window": "w10",
+      "category": "shift",
+      "statement": "On 2026-07-26 the owner overturned the agent-accreted 'never-delete' archival posture, ruling that absorption (full extraction into permanent homes) is the retention event and a knowledge source once absorbed is disposable, not archivable.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-26",
+          "quote": "I never wanted a lossless record of everything, I wanted knowledge retained; once the knowledge is retained, we are DONE, we don't need the source any more"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L11",
+      "window": "w10",
+      "category": "surprise",
+      "statement": "An agent's v3 disposal-licence enactment misread as a delete mandate destroyed the comms-archive substrate (6,917 archived + 1,648 live events) minutes before the owner's refinement narrowed the licence, and the loss is bounded to post-2026-06-14 raw events (pre-era survives in git history).",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-26",
+          "quote": "my v3 enactment read the disposal LICENCE as a delete MANDATE and destroyed the substrate ... minutes before the refinement"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L12",
+      "window": "w10",
+      "category": "behavioural-reflex",
+      "statement": "Agents launched a 7-agent verification workflow inheriting the same heavyweight model tier by default; the owner corrected this to per-leg tiering (haiku/sonnet mechanical, opus frame-judgement, heavyweight sweeps only on a case-priced warrant) on 2026-07-26.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-26",
+          "quote": "You can't start a suite of Fable instances like that … burns quota too quickly"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L13",
+      "window": "w10",
+      "category": "motif",
+      "statement": "The watcher's hourly `timeout 3600` backstop kills a healthy watcher by design every hour, forcing a re-arm+gap-sweep loop that recurs across nearly every seat in the window (2026-07-26 through 2026-07-29).",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-26",
+          "quote": "the watcher's hourly `timeout 3600` backstop kills a healthy watcher every hour by design"
+        },
+        {
+          "napkinDate": "2026-07-29",
+          "quote": "Watcher hourly exit-124 is BY DESIGN: re-arm same seen-file + gap sweep"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L14",
+      "window": "w10",
+      "category": "tension",
+      "statement": "The comms all-channels watcher, doctrine-ranked near-universally justified, was shown on 2026-07-28 to have exhausted an owner Chrome account's quota purely through idle monitoring, creating tension between the 'watcher is high value' doctrine and its real, uncosted burn rate.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-28",
+          "quote": "a BLOCKED, idle seat consumed an entire account's quota by doing nothing but running its awareness loops"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L15",
+      "window": "w10",
+      "category": "shift",
+      "statement": "Within the same day (2026-07-28) the owner reversed the 'idle monitoring is not free' constraint back to 'do not silently limit yourself, always ask', after a fresh seat had cited a Director observation as owner doctrine and stood down its monitors on that basis.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-28",
+          "quote": "that quota was for a specific situation and no longer applies, please do not silently limit yourself, always ask"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L16",
+      "window": "w10",
+      "category": "motif",
+      "statement": "An observation written in the napkin's imperative register is repeatedly cited by a different seat within minutes-to-hours as 'the owner's ruling', hardening a time-bounded finding into a standing constraint that then propagates and must be corrected at every surface that carried it.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-28",
+          "quote": "a napkin entry written in the imperative reads as doctrine to the next mind"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L17",
+      "window": "w10",
+      "category": "motif",
+      "statement": "The commit-queue guard (agent-tools/src/commit-queue/guard.ts) rejects the worktree-suffixed `index/head@<worktree-name>` claim spelling that the commit SKILL itself prescribes for worktree windows, accepting only the bare `index/head` pattern — hit by at least four different seats across the window (F-116).",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-26",
+          "quote": "the commit-queue guard also rejects the `index/head@<worktree-name>` pattern the commit SKILL's merge-commit section prescribes"
+        },
+        {
+          "napkinDate": "2026-07-28",
+          "quote": "`commit-queue guard` accepts ONLY the bare `index/head` claim pattern"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L18",
+      "window": "w10",
+      "category": "motif",
+      "statement": "F-95's watcher-heartbeat probe resolves `.agent/state/collaboration/comms-seen/` relative to the invoking working tree, so `claims open` run from a linked worktree reads as comms-blind even when the primary's watcher is live; the cure is running registry ceremony from the primary checkout.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-26",
+          "quote": "F-95's watcher-liveness guard resolves the comms-seen path cwd-relative"
+        },
+        {
+          "napkinDate": "2026-07-28",
+          "quote": "F-95 resolves the watcher heartbeat path relative to the INVOKING tree"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L19",
+      "window": "w10",
+      "category": "surprise",
+      "statement": "The GitHub CLI's `gh pr merge` refuses client-side on `mergeStateStatus: BLOCKED` (a viewer-independent field blind to the bot's bypass grant) even when the bot's server-side bypass would allow the merge; the raw REST `PUT /pulls/N/merge` under the same token succeeds because it actually submits the request.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-28",
+          "quote": "`gh pr merge` never made one — it refuses CLIENT-SIDE on `mergeStateStatus: BLOCKED`... The REST call submits the request"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L20",
+      "window": "w10",
+      "category": "motif",
+      "statement": "Vercel's deployment gate publishes as a commit STATUS rather than a check-run, so any settle-watch instrument that reads only `/commits/{sha}/check-runs` is structurally blind to it and can report all-green while Vercel is pending or failed.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-27",
+          "quote": "Vercel is a COMMIT STATUS, not a check run... derive the required list from `/rules/branches/main`"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L21",
+      "window": "w10",
+      "category": "behavioural-reflex",
+      "statement": "An agent invented a rationale for an unexplained harness directive and attributed it to the owner as 'your cost control', which the owner corrected as having no known provenance — a distinct, sharper failure than misreading an existing artefact because it manufactured the artefact.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-28",
+          "quote": "I told the Director on the ARC channel... I repeated that upward AS MY OWN READING and addressed it to Jim as \"your cost control\""
+        },
+        {
+          "napkinDate": "2026-07-28",
+          "quote": "he has NO IDEA why that directive or the model tier is set that way"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L22",
+      "window": "w10",
+      "category": "motif",
+      "statement": "A stale whole-file capture of a doc (ADR-126) taken before a security clause landed silently reverted the clause on merge because git treats a stale-full-copy overwrite as a clean, non-conflicting update; the fix is diffing against merge-base before merging, never inferring the minus-side from the plus-side.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-28",
+          "quote": "a green PR silently reverted a landed security clause... A conflict needs two edits to one region from a common ancestor. A stale WHOLE-FILE capture instead produces a clean, silent overwrite"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L23",
+      "window": "w10",
+      "category": "motif",
+      "statement": "Multiple seats treat a `claude[bot]`/Copilot review row present on a PR as evidence of review coverage without reading the review body, missing that the body reads 'skipped — organization spend limit reached'.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-28",
+          "quote": "the entire body was *\"Code review skipped — your organization's overage spend limit has been reached.\"*"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L24",
+      "window": "w10",
+      "category": "motif",
+      "statement": "A macOS idle sleep on the fleet host freezes every watcher, heartbeat, and F-75 poll simultaneously, producing a false 'all seats retired' signal (including the observing poll's own self-report) that must be diagnosed via `kern.sleeptime`/`kern.waketime` (or a boot check for reboots) before treating simultaneous silence as N independent retirements.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-28",
+          "quote": "the F-75 peer-liveness poll fired \"NEWLY RETIRED\" for ALL FOUR seats INCLUDING ITS OWN OBSERVER"
+        },
+        {
+          "napkinDate": "2026-07-29",
+          "quote": "epoch-zero kern.sleeptime on a fresh boot, so check BOOTTIME not just sleeptime"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L25",
+      "window": "w10",
+      "category": "motif",
+      "statement": "Bot tokens minted via `merge-bot mint-token` can expire mid-transaction because the pre-push hook chain (build+suites+scans) runs inside `git push` itself, so a token minted before a long push can age out before the transfer starts, surfacing as a bare 403 on the write while reads still succeed.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-27",
+          "quote": "Cause: the pre-push hook chain (build + suites + scans) runs INSIDE `git push`, so a token minted before the push can age out"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L26",
+      "window": "w10",
+      "category": "motif",
+      "statement": "An always-succeeding tool (`download-asset` minting signed URLs even for non-existent lessons) was used as a control to prove existence of the underlying resource, when its universal success is itself the defect — the class generalises to 'an always-succeeding instrument is evidence of nothing about its input'.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-28",
+          "quote": "`download-asset` was used as evidence that a lesson existed. It succeeds for everything; that IS the defect"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L27",
+      "window": "w10",
+      "category": "tension",
+      "statement": "MCP conformance suites (OAuth/protocol/MCP Apps) all passed cleanly the same afternoon that actually calling all forty tools found multiple broken/undriveable schemas, exposing a tension between 'conformance' (protocol health) and 'correctness' (product health) as different, non-substitutable measurements.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-28",
+          "quote": "The suites test the protocol. Driving the tools tested the product... the danger is a green conformance board being read as product health"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L28",
+      "window": "w10",
+      "category": "behavioural-reflex",
+      "statement": "A Copilot-CLI seat filed a formal owner attribution of rationale as fact, and a Claude seat separately fabricated a full 40-char SHA from a 9-character prefix by inventing 31 hex characters, both instances of manufacturing an artefact rather than misreading one — the corpus treats identity/SHA fabrication as the same class as never-invent-identities.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-27",
+          "quote": "merging #578 I reconstructed a full 40-char SHA from a 9-char prefix — invented 31 hex characters"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L28b",
+      "window": "w10",
+      "category": "motif",
+      "statement": "Copy-of-a-recovered-artefact from a suspect (stopped/malfunctioning) producer is graded on internal fluency ('reads well') rather than on the producer's known reliability, and the owner corrected this with 'do not assume the plan is correct or useful, I have no idea what that seat was doing'.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-29",
+          "quote": "Do not assume the plan is correct or useful, I have no idea what that seat was doing."
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L29",
+      "window": "w10",
+      "category": "shift",
+      "statement": "Owner ruled on 2026-07-29 that testing-strategy.md's blanket 'supertest is E2E' wording was itself wrong, and that supertest classification follows the code BOUNDARY (import-and-run-inside = integration; black-box-over-network = E2E), reversing an agent's PR-B test redesign built on the old blanket reading.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-29",
+          "quote": "supertest classifies by the BOUNDARY, not the tool ... So the five src/*.integration.test.ts supertest(app) files are CORRECTLY named"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L30",
+      "window": "w10",
+      "category": "motif",
+      "statement": "'Frame-free absolutes' — statements true only within an unstated frame (e.g. 'integration tests trigger no IO', 'supertest is E2E') — get cited at full authority outside that frame; the corpus's proposed cure is restating each absolute on its discriminating axis rather than hedging it.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-29",
+          "quote": "a statement true within a frame, recorded without the frame, then cited at full authority outside it"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w10-L31",
+      "window": "w10",
+      "category": "behavioural-reflex",
+      "statement": "An agent used `pnpm --filter <wrong-package-name>` twice in one hour, which matched no projects and exited 0 with 'No projects matched', producing two vacuous 'green' claims about the SDK suite until re-run under the true package name.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-28",
+          "quote": "`pnpm --filter @oaknational/oak-curriculum-sdk` matches NOTHING ... and exits 0 with \"No projects matched\""
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L32",
+      "window": "w10",
+      "category": "motif",
+      "statement": "A fresh `git worktree add` + `pnpm install` leaves workspace-internal build outputs (dist/, .next types) absent, causing four differently-shaped failures across four lanes in one day (vitest module-not-found, esbuild crash, vite postcss ENOENT, stale dev-server cache) all cured by a single `turbo run build --filter=<target>...` before any test/dev/build.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-28",
+          "quote": "Observed four times across four lanes: a fresh `git worktree add` + `pnpm install` leaves workspace-internal BUILD OUTPUTS absent"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L33",
+      "window": "w10",
+      "category": "motif",
+      "statement": "A recurring class this window is 'guards bite their own author within minutes of being landed' — a source-bound liveness gate refused the same seat's own stale watcher, a probed-port cure stranded its own workers, and a Sonar regex cure grew a new Sonar finding on its own replacement pattern.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-29",
+          "quote": "a check is strongest the day it is born, while its author is still nearby to be bitten"
+        },
+        {
+          "napkinDate": "2026-07-29",
+          "quote": "the regex cures for S8786/S5843 grew NEW S8786/S5860 findings on their own replacement patterns"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L34",
+      "window": "w10",
+      "category": "shift",
+      "statement": "On 2026-07-29 the owner ruled that when a fixed test-harness resource (port 3020) collides with a live owner-facing render, the CURE is server-side adaptation (ephemeral port at config-load), never coordinating seats or pausing the live surface — reframing what one agent had ticketed as a coordination problem.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-29",
+          "quote": "the problem is with lack of configuration or adaptation in the server"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L35",
+      "window": "w10",
+      "category": "behavioural-reflex",
+      "statement": "Reviewer rounds (Copilot) on a first-party markdown-lint-gated file ran to ten rounds of correct-but-disproportionate findings because no review-round tally/step-back predicate was actually built despite existing pr-lifecycle doctrine describing one — 'not an absent framework, but an unbuilt instrument.'",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-29",
+          "quote": "Rounds 4–8 were largely Copilot reviewing this seat's cures to its own prior findings... no tally was built"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L36",
+      "window": "w10",
+      "category": "motif",
+      "statement": "Reviewer subagent dispatches frequently go idle-without-delivering a verdict for tens of minutes despite being complete, a shape distinct from failure; the estate's cure is a retrieval-first ladder (bounded wait → SendMessage relay ask → one re-dispatch → BLOCKED) since silent-but-complete cannot be told apart from silent-but-stuck by output alone.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-29",
+          "quote": "RETRIEVAL PROVEN n=3... both non-haiku silent round-6 legs relayed COMPLETED verdicts on the SendMessage relay request"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L37",
+      "window": "w10",
+      "category": "motif",
+      "statement": "The cricket A/B evaluation quartet repeatedly shows haiku legs going idle-without-delivering a verdict, and when pinged for delivery the ping itself can induce a re-run that contradicts the already-composed verdict; the standing dispatcher rule became 'never ping haiku legs for delivery — count silence as undelivered.'",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-29",
+          "quote": "which explicitly said \"do not redo the analysis; just deliver it\" — RE-RAN and produced a contradictory DRIFTING"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L38",
+      "window": "w10",
+      "category": "tension",
+      "statement": "Reviewer findings that are individually correct can still be disproportionate — the corpus names 'correct, relevant, and proportionate' as separate conjuncts that must each be tested, since a 100% correctness hit-rate on suppressed low-confidence notes made mining every one of them feel rigorous while removing the only stop condition.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-29",
+          "quote": "individual validity is not sufficiency — correct, relevant, and proportionate are separate conjuncts, tested separately"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L39",
+      "window": "w10",
+      "category": "surprise",
+      "statement": "A handoff/decisions-register block written 3.5 hours earlier was found false in six separate places by the time of the next read, despite having been carefully grounded when written, driving the rule that a handoff must carry the COMMAND that derives a fact rather than the derived VALUE for anything not durable.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-28",
+          "quote": "A carefully-grounded Director state capture written at 17:30Z was FALSE IN SIX PLACES by 21:00Z"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L40",
+      "window": "w10",
+      "category": "motif",
+      "statement": "Handoff/napkin content splits into two half-lives — DURABLE (owner rulings verbatim, mistakes, owner-gated items) and DERIVABLE (lane state, branch positions) — and writing both in the same authoritative voice is the mechanism by which successors inherit stale drift as if it were settled fact.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-28",
+          "quote": "A Director handoff carries two content classes and only ONE may be inherited"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L41",
+      "window": "w10",
+      "category": "motif",
+      "statement": "An inherited 'hard deadline' (MCPJam credentials expiring ~16:33Z) rode five compaction boundaries as unquestioned framing before anyone re-derived that re-minting credentials costs only seconds — the owner named the general cure: re-price every carried 'hard' constraint's actual cure cost at each handoff.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-29",
+          "quote": "Reminting credentials is the work of seconds, seconds."
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L42",
+      "window": "w10",
+      "category": "behavioural-reflex",
+      "statement": "A Director-seat map tracked ACTIVITY (assignments, live lanes) rather than the GOAL/milestone structure the board already encoded, so idle seats and standing gates (comms sign-off, PostHog wiring, event-catalogue sign-off) went invisible twice in one morning until the owner named the fix as a mechanism, not vigilance.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-29",
+          "quote": "We need a mechanical fix, you need a way to hold the project goals, not just what happens to be happening right now."
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L43",
+      "window": "w10",
+      "category": "shift",
+      "statement": "On 2026-07-28 the owner ruled that the MCP-237 PostHog scope narrowing (sink+test only) had been EXECUTED but never ratified, contradicting his own explicit 'events flowing safely by day 0' requirement recorded the very next day — an executed-≠-ratified drift the whole seat lineage failed to notice.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-29",
+          "quote": "I never agreed to Posthog scope being narrowed, I was explicit, we need visibility of analytics events from day 0."
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L44",
+      "window": "w10",
+      "category": "shift",
+      "statement": "The owner commissioned a Definition-of-Done discipline (MCP-356) on 2026-07-29 so that ticket edits cannot silently change scope: DoD required at minting, an append-governed change ceremony (propose → owner ratify → dated record), routed as the generator-level cure for the MCP-237 scope-drift class.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-29",
+          "quote": "We need a definition of done in tickets, and we need to be stricter about when and how that is allowed to change."
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L45",
+      "window": "w10",
+      "category": "motif",
+      "statement": "Multiple owner relay/inference chains fuse a verbatim owner quotation with the relayer's own derived inference in the same breath, so the derived half inherits the quotation's authority and travels unchallenged until it is falsified by direct evidence — the cure is quoting the owner and stopping, with implications in a separately-attributed paragraph.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-28",
+          "quote": "when relaying an owner ruling, quote it and stop... Implications go in a separate paragraph, attributed to the relayer by name"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L46",
+      "window": "w10",
+      "category": "motif",
+      "statement": "An inference about an unprobed surface B, built from a true fact about surface A, was transmitted in the same evidentiary register as A's fact itself (e.g. 'the API silently ignores the field, therefore the dashboard UI must work'), later falsified when the dashboard control turned out not to exist at all.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-28",
+          "quote": "An inference about an unprobed surface is a hypothesis wearing a fact's clothes"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L47",
+      "window": "w10",
+      "category": "behavioural-reflex",
+      "statement": "Rewriting a shared, live-authored file (the napkin) by slicing text at a positional marker (`text[:start] + new_entry`) discarded a peer's just-appended content because a tail-read seconds earlier was mistaken for a lock; the recovered cure is exact-match-anchor replacement or append-only, never positional truncation.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-28",
+          "quote": "I rewrote the file with `text[:start] + new_entry` — everything after my entry's heading was discarded"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L48",
+      "window": "w10",
+      "category": "motif",
+      "statement": "A positional/first-occurrence scripted edit (insert-before-first `describe(`) landed inside a TSDoc comment whose PROSE happened to contain the same anchor token, injecting code mid-sentence — the same class as the napkin truncation, generalising to 'never anchor an automated edit on a common token; assert count==1 on an exact-match region'.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-28",
+          "quote": "A python insert-before-first-`describe(` landed inside a TSDoc header comment whose PROSE contained `.describe()`"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L49",
+      "window": "w10",
+      "category": "surprise",
+      "statement": "A GitHub App installation grant (`workflows: write`) can be added correctly while the token-minting code (`mint-installation-token.ts:152`) requests only two permissions, so the operation fails identically after a real, correct grant because two independent layers (grant vs mint request) each need updating.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-26",
+          "quote": "Installation grant ≠ token grant: the owner granted the app `workflows: write`; the mint at `mint-installation-token.ts:152` requested only two permissions"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L50",
+      "window": "w10",
+      "category": "motif",
+      "statement": "Settled/merge readiness checks were repeatedly satisfied by a count ('17/17 green', 'all TERMINAL') rather than a by-name check of the actual required contexts derived from the rulesets API — the read-verdicts-by-name discipline is invoked as the recurring correction across at least four separate incidents in the window.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-27",
+          "quote": "\"17/17 green\" is a COUNT (a proxy); the merge-boundary read derives required contexts BY NAME"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L51",
+      "window": "w10",
+      "category": "tension",
+      "statement": "A validator that only has one passing (finished) state (`requireSameStringMembers` all-or-nothing) manufactured bypass pressure during a 121-commit re-base with no green intermediate state, generating a well-reasoned `--no-verify` request — the rule held, but the finding is that checks unable to express staged progress convert correct behaviour into bypass requests.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-28",
+          "quote": "A validator whose only passing state is the finished state manufactures bypass pressure"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w10-L52",
+      "window": "w10",
+      "category": "motif",
+      "statement": "A commit-queue pathspec-scoped commit (`git commit -F <msg> -- <intent files>`) records the WORKING-TREE state of listed paths, so `git rm --cached` deletions of files still present on disk vanish silently from the commit, twice in one hour on the same de-bundling task.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-28",
+          "quote": "a pathspec commit records the WORKING-TREE state of the listed paths, so `rm -r --cached` deletions of files still on disk vanish silently"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L53",
+      "window": "w10",
+      "category": "motif",
+      "statement": "A GitHub Copilot CLI session on this repo hit `run-pretooluse-guard.mjs` failing closed on Edit/Write for its unrecognised payload shape (`create`/`edit` with `path`/`file_text`), because the guard's route table only knows Claude's `Edit` shape — silently excluding a whole platform from all file-editing tools.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-27",
+          "quote": "A Copilot seat cannot use editor tools in this repo AT ALL... fails closed on an unrecognised payload route"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L54",
+      "window": "w10",
+      "category": "motif",
+      "statement": "A digest-truncated non-loader corpus read on Copilot CLI carried `bot-identity-on-third-party-systems`'s trigger and owner-ruling (first 8 lines) but not its compliance mechanics (mint-token commands at line 33), producing confident-wrong compliance ('no bot identity exists') rather than visible ignorance.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-27",
+          "quote": "the digest told me the rule fires and withheld how to comply — the worst of both, because it produces confident partial knowledge rather than visible ignorance"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L55",
+      "window": "w10",
+      "category": "motif",
+      "statement": "Multiple seats attribute a rule's trigger to the narrower name of its enforcement TOOL (e.g. `merge-bot` narrowing `bot-identity-on-third-party-systems` to 'merge actions only'), causing PR review replies to be posted under the owner's personal credential across three separate seats within an hour despite each having read the rule.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-26",
+          "quote": "I could quote the rule... and still posted five PR review replies under the owner's personal credential, because I had indexed it as a MERGE rule"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L56",
+      "window": "w10",
+      "category": "surprise",
+      "statement": "A comms watcher wedge (drain deadline deaths) was read by three seats as 'not load' because new-event volume was single-digit, when the drain's actual complexity variable is O(total corpus files) per pass — 2,534 files re-read every drain, amplified 31x under fleet I/O contention.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-26",
+          "quote": "the drain is O(total-files) sequential reads (2,534 per pass) amplified by fleet I/O contention (31x under a deliberately light four-job load)"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L57",
+      "window": "w10",
+      "category": "motif",
+      "statement": "Absolute-path handling breaks silently at least twice: `join(root, dir)` mangles absolute `--baseline-dir`/`--report-dir` inputs into `<root><absPath>`, and cwd-relative comms/registry paths resolve wrong from worktrees — both cured by `resolve()`/absolute paths and `cd <primary> || exit 1` at every invocation.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-26",
+          "quote": "`join(root, dir)` silently mangles absolute dirs — twice in one lane"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L58",
+      "window": "w10",
+      "category": "motif",
+      "statement": "CI's pull-request check tests the TEST-MERGE tree (branch ⊕ current main), not the PR's actual head, so a local green run before pushing certifies a different tree than the one CI is scoring — one of five 'projection-blindness' instances catalogued in one night.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-28",
+          "quote": "CI validates the PR TEST-MERGE tree (branch⊕current-main), not your head — local green certifies a different tree"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w10-L59",
+      "window": "w10",
+      "category": "shift",
+      "statement": "Following a Copilot-review round on PR #635 finding five CodeQL alerts, the owner rejected the dismissal-text path outright ('why should I dismiss issues detected by CodeQL?'), forcing structural fixes for all five and surfacing a measured latent ReDoS vector the dismissal path would have preserved.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-29",
+          "quote": "The owner's one question ... converted a triage tax into two pieces of better code AND removed a measured latent ReDoS vector"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L01",
+      "window": "w11",
+      "category": "motif",
+      "statement": "The silent-twin / query-the-value-never-the-lookalike class recurred across many actuators: hand-extended SHAs, short-sha invention, GraphQL reviewRequests omitting Bot reviewers, and stale peer-liveness assertions.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-01",
+          "quote": "Never expand a short sha by invention"
+        },
+        {
+          "napkinDate": "2026-08-01",
+          "quote": "gh pr view reviewRequests omits Bot reviewers"
+        },
+        {
+          "napkinDate": "2026-08-02",
+          "quote": "Peer-liveness assertions must be derived at WRITE time, not compose time."
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L02",
+      "window": "w11",
+      "category": "behavioural-reflex",
+      "statement": "Multiple seats repeatedly piped CLI output through tail/grep, masking real exit codes and errors (the piped-exit / pipe-mask class), across at least six distinct dated instances in this window.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-01",
+          "quote": "CORRECTION (2026-08-01, post-compaction): ... run heavyweight write chains FOREGROUND with an explicit timeout"
+        },
+        {
+          "napkinDate": "2026-08-02",
+          "quote": "PIPE-MASK RECURRENCE, WORSE VARIANT: git push 2>&1 | grep -E \"->|…\""
+        },
+        {
+          "napkinDate": "2026-08-03",
+          "quote": "Pipe-mask class recurred twice at this seat with the warnings loaded"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L03",
+      "window": "w11",
+      "category": "behavioural-reflex",
+      "statement": "Bot-identity fallback to the owner's ambient gh credentials for PR creation/pushes recurred at least three times in this window (2026-07-31, 2026-08-01 Codex connector, 2026-08-03), each caught only at merge/review time by the owner or gh api check, never by the write-time trigger.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-01",
+          "quote": "Codex-session GitHub connector is OWNER-BOUND"
+        },
+        {
+          "napkinDate": "2026-08-03",
+          "quote": "the rule's trigger line (\"whose name will this surface display?\") never fired at any write"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L04",
+      "window": "w11",
+      "category": "shift",
+      "statement": "On 2026-07-31, the owner articulated the tiered-sight architecture (low-tier Haiku overlapping-region landscape, then Sonnet, then Opus, then Fable overwatch) as standing multi-machine doctrine, replacing prior single-tier reviewer dispatch assumptions.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-31",
+          "quote": "Instantiation (owner, same hour): Haiku fleet with OVERLAPPING regions as the first landscape ... then Sonnet, then Opus, Fable overwatch"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L05",
+      "window": "w11",
+      "category": "surprise",
+      "statement": "A corpus-reducer subagent fed 981 leaves (~105k-token prompt) produced three consecutive thinking-only turns over ~35 minutes without reaching its schema-forced output call, burning ~170k tokens on deliberation with no emission — cured by sharding under the 580-leaf precedent, dropping reasoning effort, and instructing brief-then-emit.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-31",
+          "quote": "produced THREE consecutive thinking-only turns over ~35 minutes and never reached its schema-forced output call"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L06",
+      "window": "w11",
+      "category": "tension",
+      "statement": "Injecting synthetic canary events into P2 pilot bundles for recall calibration was blocked by the platform safety classifier as instruction poisoning, revealing a tension between wanting realistic calibration fixtures and the estate's own real-baseline-fixture discipline (recall-baseline-fixture.ts).",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-31",
+          "quote": "the safety classifier blocked the mapper as instruction poisoning ... the estate's own corpus machinery calibrates against real known-answer baselines"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L07",
+      "window": "w11",
+      "category": "motif",
+      "statement": "Enumeration bounds silently converting 'the first N' into 'all' recurred across grep surveys, head/tail reads, and mapper self-counts, requiring every keep-set enumeration to state its bound explicitly alongside the total.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-31",
+          "quote": "a head/tail/first-page bound silently converts \"the first N\" into \"all\""
+        },
+        {
+          "napkinDate": "2026-08-07",
+          "quote": "eventsRead self-counts summed 691 vs 995 actual headers — a schema-forced count field invites a confident wrong tally"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L08",
+      "window": "w11",
+      "category": "behavioural-reflex",
+      "statement": "assert-watcher-live derives identity from the shell session-id env seed, not argv, so attempts to externally verify a PEER's watcher via --platform/--model flags silently asserted the caller's OWN watcher instead; the correct external check is stat on the peer's heartbeat.json file.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-31",
+          "quote": "it asserted MY OWN watcher (identity derives from the shell's session-id env seed; the platform/model argv do not retarget it)"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L09",
+      "window": "w11",
+      "category": "shift",
+      "statement": "On 2026-07-31 the owner generalised the model-unavailability fallback rule fleet-wide (fall back to next-highest model at lower effort), extending it beyond reviewer dispatches to ALL model-unavailability cases.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-31",
+          "quote": "where a model is unavailable, fall back to the NEXT HIGHEST model at a LOWER effort setting than the original request — binding ALL model-unavailability cases"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L10",
+      "window": "w11",
+      "category": "motif",
+      "statement": "EnterWorktree's fresh-mode base-on-primary's-checked-out-HEAD (rather than origin/main) is another silent-twin instance: a valid ref of the right type standing in for the intended start point, costing PR 673 a close-and-succeed cycle.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-31",
+          "quote": "Fresh mode documents branching from origin/main but based lane branches on the primary's checked-out HEAD"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L11",
+      "window": "w11",
+      "category": "tension",
+      "statement": "Verifying a cited LINE (identity.ts ~112) is not the same as verifying a claimed COUPLING between that line and callers; a pre-execution reviewer traced feeders and found no production caller fed the value in, so a promised golden-pin cure would have frozen a PDR-076a-declared non-invariant.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-31",
+          "quote": "a claimed coupling names BOTH a site and its feeders; check the feeders before transmitting agreement"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L12",
+      "window": "w11",
+      "category": "behavioural-reflex",
+      "statement": "pnpm's unknown-script 'Did you mean' suggestion exits 0, so a comms-reply command silently failed to send; worktree-lane practice adopted running coordination writes via `pnpm -C <primary-checkout>` and verifying the 'wrote comms event' line, never the exit code.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-31",
+          "quote": "pnpm unknown-script \"Did you mean\" exits 0 ... a comms reply silently did not send"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L13",
+      "window": "w11",
+      "category": "motif",
+      "statement": "The GitHub MCP request_copilot_review tool is the ONE proven route to request a Copilot review; REST reviewers-POST and GraphQL requestReviews-with-botIds are false-green routes that return success but write nothing.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-31",
+          "quote": "the one PROVEN route for requesting a Copilot review from an agent seat is the GitHub MCP request_copilot_review tool"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L14",
+      "window": "w11",
+      "category": "behavioural-reflex",
+      "statement": "Two parallel Opus reviewer dispatches froze at the exact same second mid-run because tasks/*.output entries are SYMLINKS, so bare ls/stat reads the link's own decoy mtime instead of the real transcript mtime; stat -L or cat is required to detect a wedge.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-31",
+          "quote": "the tasks/*.output entries are SYMLINKS, so bare ls/stat reads the link's own size/mtime as a decoy"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L15",
+      "window": "w11",
+      "category": "shift",
+      "statement": "An attribution of a stopped background git commit to an owner-active-window stop (2026-08-01 ~22:14Z) was later corrected by Falcon's comms-store investigation to a resource-class kill, not an owner stop, though the hold-and-surface discipline was retroactively validated as correct on the evidence available at the time.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-01",
+          "quote": "CORRECTION (2026-08-01, post-compaction): the ~22:14Z stop was NOT the owner"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L16",
+      "window": "w11",
+      "category": "tension",
+      "statement": "File mutability ownership was contested when three lenses (including two Opus reviewers) endorsed editing a byte-faithful conserved corpus file in plans-backlog-2026-07 despite the owner's 'we lose nothing' word and README governance one grep away; only the zero-context Copilot lens caught the violation.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-01",
+          "quote": "three lenses (this seat + two opus reviewers) endorsed \"truing\" a line in plans-backlog-2026-07"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L17",
+      "window": "w11",
+      "category": "behavioural-reflex",
+      "statement": "The hook-policy-substring scanner tripped on the word 'restore' inside commit-message prose (unrelated to git restore), forcing a reword rather than a bypass — the same substring-matching false-positive recurred later against prose describing declining to run destructive git commands.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-01",
+          "quote": "Hook substring discipline bites commit MESSAGES: the word \"restore\" in prose tripped the git-restore block"
+        },
+        {
+          "napkinDate": "2026-08-05",
+          "quote": "the write-hook blocked a comms send whose PROSE named destructive git commands"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L18",
+      "window": "w11",
+      "category": "motif",
+      "statement": "Worktree cwd stickiness caused multiple false 'missing file/event' conclusions when repo-root-relative paths were run from a persistent shell sitting in a scratch worktree; the standing cure is treating a not-found on a relative path as a CWD question before a missing-file conclusion.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-01",
+          "quote": "Worktree cwd is sticky and lies about relative paths"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L19",
+      "window": "w11",
+      "category": "behavioural-reflex",
+      "statement": "A pre-execution reviewer's plausible claim about guard.ts rendering was transcribed into a plan's acceptance re-cite without opening the file first-hand, and was later refuted; the adopted discipline is that any site-specific claim entering a permanent doc gets a first-hand read at transcription time.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-01",
+          "quote": "a reviewer's plausible claim about a file is a VIEW of the file"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L20",
+      "window": "w11",
+      "category": "surprise",
+      "statement": "gh pr view --json reviewRequests silently omits Bot reviewers via its GraphQL-backed field, so a Copilot re-review request that was demonstrably pending read as copilotPending:0 — cure is reading REST pulls/<n>/requested_reviewers instead.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-01",
+          "quote": "The GraphQL-backed field silently omits Bot reviewers, so absence-of-entity rendered as the right-typed value 0"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L21",
+      "window": "w11",
+      "category": "motif",
+      "statement": "A right-shaped-wrong-provenance defect recurred a fifth time on a new surface — a PR description scope sentence written before a mid-boundary redirection stayed uncorrected after the redirection put the thing back in the diff, caught by Copilot's suppressed comment.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-01",
+          "quote": "the right-shaped-wrong-provenance class, fifth instance, NEW SURFACE — the PR DESCRIPTION itself"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L22",
+      "window": "w11",
+      "category": "behavioural-reflex",
+      "statement": "zsh does not word-split unquoted $VARS, so a space-joined file list passed as one argument became a single ENAMETOOLONG path; this bit at least two different seats in the window (2026-07-31 and 2026-08-02).",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-31",
+          "quote": "zsh does NOT word-split unquoted $VARS (a space-joined file list becomes one ENAMETOOLONG path"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L23",
+      "window": "w11",
+      "category": "shift",
+      "statement": "On 2026-08-02, a session-limit suspension darkened the Director's reasoning loop while its heartbeat monitor kept emitting on schedule, giving the fleet a first-hand instance from inside the autonomous-emitter class (PDR-133), leading to the doctrine-queue candidate of coordinator dark-window detection requiring substantive output, not emitter presence.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-03",
+          "quote": "a Director-dark-while-heartbeating window with in-flight routing obligations is the exact gap the mutual-cover discipline exists for"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L24",
+      "window": "w11",
+      "category": "behavioural-reflex",
+      "statement": "--in-response-to accepted fabricated/padded event ids with no existence check, twice at one seat (once padding a prefix with zeros, once passing a bare file count '5725'), even after the note was an hour old — demonstrating habit-binding is insufficient without a tool-level existence check.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-03",
+          "quote": "Acking Charcoal's transfer I padded the 8-char prefix (ebd89159) with zeros instead of resolving the full event id"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L25",
+      "window": "w11",
+      "category": "motif",
+      "statement": "Population/wire-shape claims transmitted without a fresh census recurred multiple times in this window (ADR-186 rollout claim, ws-b0 restructure re-asserting inherited doc claims, promotion moments), motivating the doctrine candidate that promotion/graduation moments are also census moments.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-03",
+          "quote": "population claims about the fleet transmitted without a census"
+        },
+        {
+          "napkinDate": "2026-08-03",
+          "quote": "PROMOTION MOMENTS ARE CENSUS MOMENTS"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L26",
+      "window": "w11",
+      "category": "tension",
+      "statement": "Verdict-momentum at a milestone recurred: a seat declared 'the design-lane gate RELEASES' on its own merge when the ruling actually had three legs, only one of which was done — celebration was flagged as a high-risk read state for gate scoring.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-01",
+          "quote": "my #690 merge broadcast declared \"the design-lane gate RELEASES at this merge\""
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L27",
+      "window": "w11",
+      "category": "shift",
+      "statement": "On 2026-08-03, the owner ruled that type-affecting changes in the update lane must be discussed with him BEFORE they happen (widening a prior narrower ruling), then at ~11:00Z the same day cleared all wait-for-owner legs, superseding the walkthrough contract for that lane's remaining work.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-03",
+          "quote": "I am very much expecting you to talk to me about type changes before they happen"
+        },
+        {
+          "napkinDate": "2026-08-03",
+          "quote": "clear all wait for owner legs now, I don't want to be blocking on any of this work from this moment on"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L28",
+      "window": "w11",
+      "category": "motif",
+      "statement": "The owner repeatedly used verbatim card-and-ratify moments (2026-08-03 seven-card owner-answers batch) rather than prose discussion, confirming ratification-by-cards as a working sitting form across multiple lanes in one session.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-03",
+          "quote": "SEVEN OWNER CARD ANSWERS (all-open-questions batch, verbatim-critical)"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w11-L29",
+      "window": "w11",
+      "category": "behavioural-reflex",
+      "statement": "An owner-caught card-discipline failure occurred when two pending owner ACTIONS (#733 approval and Lichen bypass commands) sat in prose across messages instead of on cards, prompting the sharpened rule that an owner ACTION is an owner-attention item exactly like a decision.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-03",
+          "quote": "I didn't know anything was waiting on me because you didn't show me a card"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L30",
+      "window": "w11",
+      "category": "behavioural-reflex",
+      "statement": "Credential-helper quoting traps recurred: a bot-token push failed because the outer shell expanded $GH_TOKEN inside a double-quoted -c argument before the prefix assignment populated it, sending an empty password; cure is export GH_TOKEN first and single-quote the helper string.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-03",
+          "quote": "the OUTER shell expands $GH_TOKEN inside the double-quoted -c argument at composition time"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L31",
+      "window": "w11",
+      "category": "shift",
+      "statement": "On 2026-08-06, the owner re-priced MCP-103 from release blocker to high-value enabler after the release 'effectively already happened', and set an explicit cloud-based Linear tripwire (MCP-519, due 2026-08-11) to re-review five removed post-submission deferrals, rather than relying on a session-local cron.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-06",
+          "quote": "the tripwire should be cloud based ... MCP-519 minted (due 2026-08-11 ... the session cron deleted"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L32",
+      "window": "w11",
+      "category": "surprise",
+      "statement": "On 2026-08-06, Vercel's edge strips/overwrites an incoming x-forwarded-host before the function runs, so no proxy-side header cure exists for the Clerk wrong-domain handshake bug — the only viable placement is app-side middleware setting the header from CANONICAL_HOST before clerkMiddleware.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-06",
+          "quote": "Vercel's edge strips/overwrites an incoming x-forwarded-host before the function (probe-proven), so no proxy-side header cure exists"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L33",
+      "window": "w11",
+      "category": "behavioural-reflex",
+      "statement": "A 23-seat adversarial fleet assessment found Haiku-high seats confabulated context under ambiguity (inventing a PR, misreading bake vs runtime), while Opus-high doc verifiers were the highest-yield seats per token, producing two claim refutations and a vendor-guide upgrade.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-06",
+          "quote": "Haiku-high seats confabulated context under ambiguity ... Opus-high doc verifiers were the highest-yield seats per token"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L34",
+      "window": "w11",
+      "category": "motif",
+      "statement": "Two branches sharing the identical name (coordination/estate-2026-08-06, remote vs local-no-upstream cuts) caused a dedicated consolidation pass to process a corpus missing five napkin sections and falsely claim 'solo seat, fleet dark'; cure is git rev-list --left-right --count against the remote before believing any activity claim.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-06",
+          "quote": "two branches carried the name coordination/estate-2026-08-06 ... processed a corpus missing five napkin sections from four seats"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L35",
+      "window": "w11",
+      "category": "behavioural-reflex",
+      "statement": "grep -Fq without -- consumed dash-prefixed lines as options, silently skipping 13 of 132 lines while a duplicate-check loop reported a clean 0-duplicates result — a proof reading green having tested nothing; cure is grep -Fq -- for untrusted needle text.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-06",
+          "quote": "grep -Fq \"$line\" consumed every - -prefixed line as an option, so 13 of 132 lines were never tested"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L36",
+      "window": "w11",
+      "category": "tension",
+      "statement": "Status vocabulary like 'deferral' and 'banked' converted open obligations into closed-sounding states and evaded the write-time concept gate because the gate enumerates specific words rather than the MOVE; the receipt-vs-promissory-note distinction was adopted as the cure but flagged as needing a consolidation-time adaptive-immunity check, not another word-list patch.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-06",
+          "quote": "status vocabulary that converts an open obligation into a closed-sounding state"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L37",
+      "window": "w11",
+      "category": "surprise",
+      "statement": "Three independent examination instruments (adversarial self-review, three-expert Opus panel, cross-vendor Codex dialogue) over the same capability-floor artefact found almost fully disjoint defect sets, and a fourth instrument (Sol-max, interrogating as a formal system rather than content) found six MORE disjoint findings — suggesting analytical-register diversity, not just instrument diversity, drives orthogonal coverage.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-06",
+          "quote": "today's three examination instruments over the SAME artefact ... found almost fully DISJOINT defect sets"
+        },
+        {
+          "napkinDate": "2026-08-06",
+          "quote": "it is ANALYTICAL-REGISTER diversity (content vs formal-system vs field-use...) that buys orthogonal coverage"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L38",
+      "window": "w11",
+      "category": "behavioural-reflex",
+      "statement": "A seat merged PR #795 without reading Copilot's review-submission BODY for suppressed findings despite the pr-lifecycle skill explicitly naming that undercount class — three real suppressed findings existed on the merged plan; cure adopted that every settle-watch/merge decision now includes a suppressed-comments read.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-06",
+          "quote": "merged PR #795 WITHOUT reading Copilot's review-submission BODY for suppressed findings"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L39",
+      "window": "w11",
+      "category": "shift",
+      "statement": "On 2026-08-06 the Claude Code v2.1.223 release changed worktree isolation behaviour mid-fleet-day, so worktree-RESIDENT seats refused Monitor arms + principal git while primary-resident seats were unaffected — fleet-wide cure adopted: launch at principal, arm monitors, THEN enter lanes.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-06",
+          "quote": "Claude Code v2.1.223 worktree isolation landed mid-fleet-day ... Residency determines the guard, not the command"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L40",
+      "window": "w11",
+      "category": "behavioural-reflex",
+      "statement": "An owner mid-turn question was answered as interstitial text between tool calls (not the turn's final message) twice, so the answer was never delivered — the owner had to ask three times before a structural cure was adopted: a mid-turn owner question now ends the turn immediately after at most the in-flight tool call.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-05",
+          "quote": "Owner asked a direct question mid-turn ... I composed the answer as interstitial text between tool calls and kept working — twice"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L41",
+      "window": "w11",
+      "category": "behavioural-reflex",
+      "statement": "A seat declared a same-machine peer seat dark on remote-only evidence and dispatched a takeover round; the delegated agent found the peer's worktree three minutes warm via dirty-tree mtimes and correctly halted before any write — cure: dark-seat verdicts for same-machine seats require a worktree mtime check first.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-06",
+          "quote": "declared a SAME-MACHINE peer seat dark on remote-only work evidence ... found the seat's WORKTREE three minutes warm"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L42",
+      "window": "w11",
+      "category": "motif",
+      "statement": "Recurring coordination acts kept generating the same shape of ask — a dedicated front-door CLI command — across three instances in the window: comms CLI, watch commands, and now a handoff CLI tool commissioned after Drake had to work around worktree isolation to write handoff files.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-06",
+          "quote": "Third instance of the same generator (comms CLI, watch commands, now handoff writes): every recurring coordination act becomes a front-door command"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L43",
+      "window": "w11",
+      "category": "behavioural-reflex",
+      "statement": "A curator seat piped comms direct through grep expecting JSON, but comms direct prints a prose line ('wrote comms event <id>') not JSON, so a successful send read as silence and was accidentally re-sent as a duplicate directed event.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-07",
+          "quote": "piped comms direct through grep -oE '\"event_id\": …' — but that verb prints wrote comms event <id>, not JSON"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L44",
+      "window": "w11",
+      "category": "tension",
+      "statement": "An owner-caught card-discipline failure recurred on 2026-08-07 afternoon: a seat surfaced a feasibility conflict with an owner instruction as in-channel prose plus quiet standby instead of a card with push notification, costing ~3 hours of owner wall-clock — the owner explicitly stated he expects a card, not silent opt-out.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-07",
+          "quote": "I do not expect you to opt out silently. I came here after several hours expecting to find completed work"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L45",
+      "window": "w11",
+      "category": "motif",
+      "statement": "The tr -s squeeze-whitespace idiom used to normalise comparator output also squeezed NEWLINES, which would have broken a byte-level delta comparator silently; caught by an od byte-verify-before-arming step rather than review, the fourth defect shape in one day of hand-rolled comparators.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-07",
+          "quote": "tr -s '[:space:]' ' ' squeezed the NEWLINES too — one-line output that would have broken the comm(1) delta silently"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L46",
+      "window": "w11",
+      "category": "surprise",
+      "statement": "A near-miss occurred when a benched/paused seat's branch state moved underneath it (fold merge #791 landed, estate rotated to a new coordination branch) while it was cold-then-warm-paused, but the Edit tool's own file-state guard refused the stale write before anything was corrupted, prompting the cure of re-running the branch/HEAD/status triad after any benched window.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-07",
+          "quote": "the branch moved under a benched seat ... the Edit tool's file-state guard refused it; nothing was written wrong"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w11-L47",
+      "window": "w11",
+      "category": "motif",
+      "statement": "The comms-absorption sweep of 995 live non-heartbeat events via 12 corpus-mapper subagent legs completed with all 481 extracted signals reviewed first-hand, landing the shared-index commit-sweep discipline and owner-glance-surface doctrine while confirming several classes (suppressed-Copilot harvest, head-N truncation, lint-contention) as already-homed duplicates rather than new findings.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-07",
+          "quote": "Comms absorption sweep COMPLETE — swept through 2026-08-07T16:11Z ... 481 signals extracted, all 186 no-home-named signals adjudicated first-hand"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L01",
+      "window": "w12",
+      "category": "behavioural-reflex",
+      "statement": "Backgrounded gated commands are trusted for the harness's 'completed exit 0' echo, which is actually the LAST echo's exit, causing missed in-band COMMIT_EXIT/PUSH_EXIT failure lines.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-23",
+          "quote": "a backgrounded gated command's harness \"completed exit 0\" is the LAST ECHO's exit — the in-band `COMMIT_EXIT`/`PUSH_EXIT` line must be READ before any dependent action"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L02",
+      "window": "w12",
+      "category": "behavioural-reflex",
+      "statement": "Piping a gated command (git push | head, workflow | tail; echo $?, git merge --no-edit | tail) repeatedly truncates gate/exit signal and reports the pipe's exit rather than the gated command's, recurring across multiple seats and dates (2026-07-23, 2026-07-24, 2026-07-25/26).",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-23",
+          "quote": "a `git push | head` SIGPIPE-killed the pre-push hook chain mid-run (exit 141 — piping a gated command truncates its GATES, not just its output)"
+        },
+        {
+          "napkinDate": "2026-07-25/26",
+          "quote": "I piped a gate's exit code and reported the pipe's... I read `exit-codes-in-band-never-piped` at session open and broke it four hours later"
+        },
+        {
+          "napkinDate": "2026-07-26",
+          "quote": "Piped a gate's exit code again, hours after reading the rule (`git merge --no-edit | tail`"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L03",
+      "window": "w12",
+      "category": "motif",
+      "statement": "Comms pipe/grep patterns produce false silence or false success because the CLI emits prose not JSON (e.g. 'wrote comms event <id>'), leading to spurious retries or missed failures.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-24",
+          "quote": "`comms direct ... | grep -o '\"event_id\"...'` matched nothing because the CLI emits `wrote comms event <id> to <path>` prose, not JSON"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w12-L04",
+      "window": "w12",
+      "category": "tension",
+      "statement": "Attribution inferences (cause claims from later validator output rather than the task's own tail) are repeatedly flagged as probable-not-observed, requiring successors to distinguish inference from first-hand observation.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-23",
+          "quote": "\"commit 3 failed on the broken citation links\" is INFERRED from the later push validator's output; its own task tail was never read. Treat the cause as probable, not observed."
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w12-L05",
+      "window": "w12",
+      "category": "shift",
+      "statement": "On 2026-07-23 the napkin rotation formally graduated the fork/duplicate identity doctrine into PDR-027 plus a new '§Forks, duplicates, and inherited context' section, moving prior ad hoc practice into permanent doctrine.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-23",
+          "quote": "**Fork/duplicate identity doctrine** → PDR-027 amendment + §\"Forks, duplicates, and inherited context\""
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w12-L06",
+      "window": "w12",
+      "category": "motif",
+      "statement": "Completeness/enumeration-based checks (walk-joining, list-the-tickets, list-the-checks, grep-the-edited-files, reviewThreads-only harvest) are structurally blind to absences, and absences were repeatedly caught only by types/review/owner rather than self-scan across multiple 2026-07-24/25 instances.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-23",
+          "quote": "completeness is not self-certifiable — today's underived surfaces were found by types, review, and the owner, never by self-scan"
+        },
+        {
+          "napkinDate": "2026-07-24",
+          "quote": "three of the day's defects were invisible absences (M11 unticketed, the CodeQL check uncreated, ADR-209 unreconciled), and every enumeration-based read... was structurally blind to them"
+        },
+        {
+          "napkinDate": "2026-07-25",
+          "quote": "a reviewThreads-only harvest cannot see class B at all"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L07",
+      "window": "w12",
+      "category": "shift",
+      "statement": "On 2026-07-24 a workflow file existing only on a non-default branch failed to register as dispatchable after ~15 min; the working cure adopted was scoping 'on: push' to a scratch ref (scaffold → evidence → delete-ref pattern), proven on the Slack alert test.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-23",
+          "quote": "a workflow existing only on a non-default branch did not become dispatchable... Working cure: `on: push` scoped to its own scratch ref"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w12-L08",
+      "window": "w12",
+      "category": "tension",
+      "statement": "Director-side routing raced an owner mid-flight on his own PR #515, producing a non-fast-forward collision, surfacing a tension between routing autonomy and unrecognized owner concurrent authorship.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-24",
+          "quote": "ROUTING RACED THE OWNER — assigned 'fix PR #515' while the owner was mid-rework on his own PR; his revision commits collided with the seat's cure commit (non-FF reject)"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L09",
+      "window": "w12",
+      "category": "motif",
+      "statement": "A first substrate-external fleet member (Copilot agent Thistle) had no comms/claims/heartbeats access, requiring the Director to proxy remits via GitHub surfaces and PR watches as the awareness path.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-24",
+          "quote": "FIRST SUBSTRATE-EXTERNAL FLEET MEMBER — Thistle rides Canopy (494337), Copilot agent; agent-tools don't work for them (no comms/claims/heartbeats)"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w12-L10",
+      "window": "w12",
+      "category": "motif",
+      "statement": "A persisted-value-derivable-from-existing-fields anti-pattern (derived-view-vs-stored-copy) generated every wave-5/6/7 finding on PR #515 across staleness validation, totality corners, propagation slices, schema bumps, and promotion paths.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-24",
+          "quote": "Every wave-5/6/7 finding traced to ONE generator — persisting a value derivable from fields already present"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L11",
+      "window": "w12",
+      "category": "tension",
+      "statement": "Universal quantifier claims in plan documents ('every path', 'only the read side', 'regardless of vendor') each fell to a real code-visible corner during PR #515 review, showing a tension between confident plan-authoring language and code reality.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-24",
+          "quote": "Universal quantifiers die at code-visible corners... \"every path\", \"only the read side\", \"regardless of vendor\" each fell to a real corner"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w12-L12",
+      "window": "w12",
+      "category": "behavioural-reflex",
+      "statement": "On owner-authored branch collisions (non-fast-forward rejection), the worked protocol is STOP external writes, read incoming authorship, card the reconciliation, and hold thread replies until push lands — used twice successfully in the PR #515 lane.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-24",
+          "quote": "Owner-parallel-edit collision protocol, twice worked: non-fast-forward rejection on an owner-authored branch = STOP external writes, read incoming authorship, card the reconciliation"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L13",
+      "window": "w12",
+      "category": "motif",
+      "statement": "Structural/mechanical gates (bot no-bypass 405, non-fast-forward rejections, commitlint) repeatedly caught what human/agent judgment layers (crickets, verdicts) missed in the PR #515 lane.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-24",
+          "quote": "Structural gates out-caught judgment layers today: the bot's no-bypass 405..., the non-fast-forward rejections..., and commitlint each caught what crickets/verdicts missed"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w12-L14",
+      "window": "w12",
+      "category": "tension",
+      "statement": "CI status logs and ceremony reply/resolve loops under-report the true remote state; the verdict surface must be re-checked directly on GitHub rather than trusted from local loop-log output.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-24",
+          "quote": "Ceremony logs under-report; remote-verify before declaring... The verdict surface is the remote, never the loop log"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w12-L15",
+      "window": "w12",
+      "category": "surprise",
+      "statement": "A PR's required CodeQL check 405'd the merge because the check-generating workflow landed on main AFTER the PR opened, so the check was never CREATED yet `gh pr checks` showed all-visible-terminal-green — absence from an expected list is invisible to enumeration.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-24",
+          "quote": "the #517 merge 405'd on a required CodeQL check that was never CREATED... while `gh pr checks` showed all-visible-terminal-green"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L16",
+      "window": "w12",
+      "category": "behavioural-reflex",
+      "statement": "Plain `git config` run inside a worktree writes the SHARED (primary) config rather than worktree-scoped config, leaking bot identity to the primary checkout for ~1 minute; cure is `--worktree` scope (extensions.worktreeConfig) plus a post-check verifying the primary still resolves the human identity.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-24",
+          "quote": "Plain `git config` in a worktree writes the SHARED config — bot identity leaked to the primary checkout for ~1 min... Cure: `--worktree` scope only"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L17",
+      "window": "w12",
+      "category": "tension",
+      "statement": "The commit-queue guard's claim-spelling matcher (index/head@<worktree>) rejects the exact claim spelling the commit SKILL itself prescribes for worktree seats, a doctrine/tooling mismatch (F-116 recurrence).",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-24",
+          "quote": "commit-queue guard rejects the `index/head@<worktree>` claim spelling that the commit SKILL's merge-commit section itself prescribes for worktree seats"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w12-L18",
+      "window": "w12",
+      "category": "surprise",
+      "statement": "Two consecutive full-gate failures on a docs-only diff (different streamable-http integration tests) were caused by peer gate contention, not flakiness, and cleared on a clean CPU-idle window — discriminating flake vs contention by host state.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-24",
+          "quote": "Gate flake vs gate contention discriminates by host state — two consecutive full-gate failures on a docs-only diff... then a clean pass in a verified-quiet window"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w12-L19",
+      "window": "w12",
+      "category": "motif",
+      "statement": "Cricket A/B pairs (haiku vs sonnet) diverge only on SEVERITY grading, never on redirection/substance, across multiple paired runs on 2026-07-24/25, establishing a model-tier gradient where Sonnet↔Opus diverge on STANCE instead.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-24",
+          "quote": "pairs C and D both formally divergent... in BOTH, the haiku variant differed only in SEVERITY grading, never in the redirection"
+        },
+        {
+          "napkinDate": "2026-07-25",
+          "quote": "Gradient across experiments: Haiku↔Sonnet diverge on SEVERITY (cricket A/B); Sonnet↔Opus diverge on STANCE"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L20",
+      "window": "w12",
+      "category": "motif",
+      "statement": "The plans/tickets estate was reframed via a play-seed as a cache hierarchy (milestones as materialised views, plan gate-rows as cached owner-decision copies, gate expiries as TTLs), routed to MCP-119.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-24",
+          "quote": "the plans estate looks shaped like a **cache hierarchy** — milestones read as materialised views over tickets, plan gate-rows as cached copies of owner decisions, gate expiries as TTLs"
+        }
+      ],
+      "confidence": "low"
+    },
+    {
+      "id": "w12-L21",
+      "window": "w12",
+      "category": "tension",
+      "statement": "Protocols model the owner as a decision oracle rather than the fleet's fastest concurrent writer, which directly caused the PR #515 collision; the residual open question of whether owner-presence signals are intentionally absent from claims/comms remains unresolved.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-24",
+          "quote": "the owner is a peer writer without presence signals — the #515 collision happened because protocols model the owner as a decision oracle, not as the fleet's fastest concurrent writer"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w12-L22",
+      "window": "w12",
+      "category": "behavioural-reflex",
+      "statement": "Mid-session, an owner's role-correction ('You are the Director, you don't start things') was itself absorbed as a task and compiled into an execution chain, showing task-shaped context re-derives an executor turn by turn regardless of waking quality; an unarmed cricket is the mechanical tell that the executor took the seat.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-24 post-second-compaction",
+          "quote": "the owner's role correction... was itself absorbed as a task and compiled into an execution chain... an unarmed cricket is the mechanical tell that the executor took the seat"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L23",
+      "window": "w12",
+      "category": "surprise",
+      "statement": "A comms watcher survived a compaction boundary and was later read as '4-second-fresh heartbeat proves survival', but the supervisor-pid probe actually killed it ~4 min later, and the session's task list had no monitor task at all so even a live process had no notification path — caught only by the owner from outside.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-24",
+          "quote": "post-compaction I read a 4-second-fresh heartbeat as \"the watcher survived the compaction — no re-arm needed\". Wrong on two counts"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L24",
+      "window": "w12",
+      "category": "shift",
+      "statement": "After the 2026-07-24 15:57Z watcher false-survival incident, the cure adopted going forward is: after ANY continuity boundary, re-arm the watcher unconditionally in the current session, and gap sweeps must window from the seen-file cursor (last_drain_at), never from 'when I last looked'.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-24",
+          "quote": "Cures: after ANY continuity boundary, re-arm the watcher in the CURRENT session unconditionally... gap sweeps window from the SEEN-FILE CURSOR (last_drain_at), never from \"when I last looked\""
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L25",
+      "window": "w12",
+      "category": "surprise",
+      "statement": "The never-use-git-to-remove-work PreToolUse guard rejected a comms-registration heredoc merely because the MESSAGE PROSE mentioned tree operations, since the matcher scans the whole command line rather than argv position — a prose false-positive recurring at least twice (Cygnus, then a later 'restore' commit-message instance).",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-24",
+          "quote": "the never-use-git-to-remove-work PreToolUse guard rejected a comms-registration heredoc because the MESSAGE PROSE mentioned tree operations"
+        },
+        {
+          "napkinDate": "2026-07-25 ~14:15Z",
+          "quote": "the never-use-git guard blocked a command whose ECHO LABEL contained the word \\\"restore\\\" (Cygnus class, 2nd instance this seat's tenure)"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L26",
+      "window": "w12",
+      "category": "behavioural-reflex",
+      "statement": "The correct response to a guard false-positive is to move the payload out of the shell (editor-tool file + short send) rather than bypass or use a sibling command — modeled by Cygnus and repeated.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-24",
+          "quote": "Cygnus's response was the model shape: no bypass, no sibling command — moved the payload out of the shell (editor-tool file + short send)"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w12-L27",
+      "window": "w12",
+      "category": "surprise",
+      "statement": "A platform outage kept a Codex seat's background heartbeat cron beating (fresh claim, fresh broadcasts) while its mind was fully dead and unresponsive to an oversight event — heartbeat-liveness is dissociated from mind-liveness, the third instance of the process-vs-mind class in two days.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25",
+          "quote": "platform outage took the Codex seat's mind down while its background heartbeat cron kept beating — fresh claim, fresh broadcasts, zero responsiveness"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L28",
+      "window": "w12",
+      "category": "surprise",
+      "statement": "On 2026-07-25 a post-compaction seat confabulated a nonexistent bot identity (oak-practice-bot <practice-bot@oaknational.workers.dev>) for GIT_AUTHOR/COMMITTER env values and pushed three commits under it, because a compaction summary carried the mechanism but not the actual values, and the owner caught it directly.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25",
+          "quote": "I confabulated `oak-practice-bot <practice-bot@oaknational.workers.dev>` for GIT_AUTHOR/COMMITTER env values... and pushed 3a025effb, 264c3b2b0, 38c7bb919 on coordination under it"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L29",
+      "window": "w12",
+      "category": "motif",
+      "statement": "The Director succession (Forge→Torch) ran the PDR-064/117 handover shape (Moment-1 → readiness gate → claims-adopt → Moment-2 → directed pickup confirmation → closeout broadcast) cleanly, and the PDR-117 registry-vs-comms cross-check caught a stale registry read on first use.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25 ~12:20Z",
+          "quote": "Takeover ran the full PDR-064/117 shape cleanly... the PDR-117 registry-vs-comms cross-check earned its keep on first use"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w12-L30",
+      "window": "w12",
+      "category": "tension",
+      "statement": "Two conflicting owner instructions arriving through different channels (a first-hand card answer to Forge vs a second-hand owner ask relayed by Buzzard) could not be resolved by recency or first-handedness rules alone, so the seat carded the owner directly rather than picking a precedence heuristic — 'transmitted owner words are not orderable by event timestamp'.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25 ~12:20Z",
+          "quote": "Crossed owner words during handover... transmitted owner words are not orderable by event timestamp — the relay time is not the utterance time; only the source resolves"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L31",
+      "window": "w12",
+      "category": "behavioural-reflex",
+      "statement": "Branch-state hazard facts (e.g. 'never build on eef8c3419') must be re-verified against `git ls-remote` at time of use rather than carried forward from a prior seat's capture, because the underlying state can change (owner's own amendment superseded the hazard overnight).",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25 ~13:00Z",
+          "quote": "branch-state hazards are re-verified against the REMOTE at time of use (`git ls-remote`), never carried from a prior seat's capture"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L32",
+      "window": "w12",
+      "category": "shift",
+      "statement": "On 2026-07-25 ~12:54Z the owner ruled that capability questions must be answered from ORIGINAL sources (e.g. openai/codex @ HEAD) rather than prior repo research, after MCP-158's draft relied on a stale 2026-07-17 negative finding that HEAD's newer version contradicted; the rule was homed to per-user memory.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25 ~12:20Z",
+          "quote": "Owner rule (2026-07-25 ~12:54Z): capability questions from ORIGINAL sources, never prior repo research"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L33",
+      "window": "w12",
+      "category": "surprise",
+      "statement": "A rejected/interrupted git commit command had ALREADY created a commit (7ae8b2ff4) with a fabricated author before the rejection message appeared, and a later push published it — interrupted tool calls must have their post-state verified, never assumed not-executed.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25 ~12:20Z",
+          "quote": "the interrupted commit command had ALREADY created 7ae8b2ff4 (fabricated author) before rejection... Interrupted ≠ not-executed"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L34",
+      "window": "w12",
+      "category": "surprise",
+      "statement": "The Copilot CLI write-block root cause was that Copilot CLI 1.0.75 presents apply_patch as tool_name Edit with tool_input as a raw patch STRING where Claude sends an object, causing the content-guard extractor to fail-closed on shape mismatch; fixed in PR #535 (extractContentChanges apply-patch projection).",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25 ~14:15Z",
+          "quote": "root cause = Copilot CLI 1.0.75 presents apply_patch as tool_name Edit with tool_input as a RAW PATCH STRING where Claude sends an object; extractor fail-closed on the shape"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L35",
+      "window": "w12",
+      "category": "tension",
+      "statement": "Hours were spent theorising about the Copilot write-block boundary via synthetic envelopes and stacked indirections when a single real payload+exit trace at the wrapper would have shown the actual shape immediately — 'instrument the boundary before theorising about it'.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25 ~14:15Z",
+          "quote": "instrument the boundary before theorising about it... me testing hypotheses against SYNTHETIC envelopes when one payload+exit trace line at the wrapper would have shown the real shape immediately"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L36",
+      "window": "w12",
+      "category": "surprise",
+      "statement": "Both crickets read ON-TRACK across the exact window the owner later called WRONG-PRIORITY on the Copilot write-block arc, the fourth instance of supplied-context instruments inheriting the supplier's drift.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25 ~14:15Z",
+          "quote": "Crickets passed through a drifted frame (4th instance of the class)... both crickets read ON-TRACK across the exact window the owner called WRONG-PRIORITY"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w12-L37",
+      "window": "w12",
+      "category": "motif",
+      "statement": "Absence of an instrument's capture rows is evidence about the INSTRUMENT'S coverage first, not about the underlying event (the retracted 'Copilot fabricates the denial' verdict came from inferring exit-0 from absent capture rows).",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25 ~14:15Z",
+          "quote": "The retracted-verdict moment (\\\"Copilot fabricates the denial\\\") came from inferring exit-0 from absent capture rows — absence of an instrument's rows is evidence about the INSTRUMENT'S coverage first"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w12-L38",
+      "window": "w12",
+      "category": "surprise",
+      "statement": "Copilot CLI's detached-bash mechanism wakes the harness only on process COMPLETION, so a long-lived watcher process has no notification path by construction — delivery-live but notification-dead, indistinguishable from healthy via every existing check (seen-file moving, heartbeat fresh).",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25 ~16:18Z",
+          "quote": "Copilot CLI's detached-bash mechanism captures new stdout but wakes the harness only on process COMPLETION — so a long-lived process... has no notification path by construction"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L39",
+      "window": "w12",
+      "category": "shift",
+      "statement": "Following the 2026-07-25 ~16:18Z Copilot notification-gap discovery, Urchin adopted a separate 1-minute comms alert schedule with its own cursor as a bridge, alongside the canonical all-channels watcher, pending the durable MCP-156 platform citizenship fix.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25 ~16:18Z",
+          "quote": "Cure applied by Urchin: a separate 1-minute comms alert schedule with its own cursor, alongside the canonical watcher"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w12-L40",
+      "window": "w12",
+      "category": "surprise",
+      "statement": "An owner-flagged PR #529 had 26 total reviewer findings but a reviewThreads-only harvest reported only 14-19, because 7 findings were body-only in Copilot review submission BODIES — a class that can never be resolved since no thread exists for it.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25 ~16:28Z",
+          "quote": "26 reviewer findings = 19 inline threads (14 resolved, 5 unresolved) PLUS 7 body-only findings living in Copilot review SUBMISSION BODIES"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L41",
+      "window": "w12",
+      "category": "behavioural-reflex",
+      "statement": "GitHub's isOutdated flag is unreliable for distinguishing superseded-head review threads (true on only 1 of 5 in one case); commit binding is the reliable discriminator instead.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25 ~16:28Z",
+          "quote": "GitHub's isOutdated flag was true on only 1 of 5 superseded-head threads — commit binding is the reliable split, the flag is not"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w12-L42",
+      "window": "w12",
+      "category": "shift",
+      "statement": "On 2026-07-25 ~17:00Z the owner ratified a two-class disposition ruling (Class F cures in the PR, Class P replies naming an owning ticket and resolves without growing the diff) to fix large PRs (e.g. #529, 14→19 unresolved across nine push-per-cure pushes) that cannot converge under per-push full re-review.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25 ~17:00Z",
+          "quote": "Cure (owner-ratified card, ~16:57Z): a two-class disposition ruling. CLASS F... CLASS P..."
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L43",
+      "window": "w12",
+      "category": "tension",
+      "statement": "A plan's round budget is really a SIZE constraint in disguise: a multi-story PR needing more review rounds than its budget is over-scoped rather than under-worked, so the fix belongs at plan-authoring time (single-story PRs).",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25 ~17:00Z",
+          "quote": "the round budget in a plan is a SIZE constraint in disguise. A PR that needs more rounds than its budget is usually not under-worked, it is over-scoped"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w12-L44",
+      "window": "w12",
+      "category": "shift",
+      "statement": "On 2026-07-25 the owner ratified the EMC2 button's 3D interaction-state physics (hover raised/lighter, press below-rest/darker) via a rendered three-cell interactive lab, then superseded the first single-calibration ruling with a theme-true set because the first calibration hardcoded raw white/black mixes and broke in light and high-contrast themes.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25",
+          "quote": "EMC2 button: owner's 3D state physics (ratified)... His axiom: \"lighter higher, darker lower.\""
+        },
+        {
+          "napkinDate": "2026-07-25 — EMC2 button states: theme-true set RATIFIED",
+          "quote": "The first calibration hardcoded raw white/black mixes and a light-dark() shadow hex — it bypassed the theme system and broke in light (grey wash-out) and high-contrast"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L45",
+      "window": "w12",
+      "category": "motif",
+      "statement": "State/interaction design rulings require a rendered, hoverable/pressable live lab rather than static screenshots — 'state design is un-reviewable in static screenshots; build labs for interaction rulings.'",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25",
+          "quote": "state design is un-reviewable in static screenshots; build labs for interaction rulings"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w12-L46",
+      "window": "w12",
+      "category": "tension",
+      "statement": "PDR-133's authored ten-class ordered chain (with a 'class N and below' reading rule) was itself wrong — a linearisation of an OR-join graph — and would have produced false retirements on exactly the platforms it targeted; caught by the PDR-101 four-seat quorum, not the author.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25 ~17:15Z",
+          "quote": "The chain was a linearisation of an OR-join graph... The absence clause would have produced FALSE RETIREMENTS on precisely the platforms the record was written for"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L47",
+      "window": "w12",
+      "category": "motif",
+      "statement": "A first-pass author's own model is the least-reviewed thing in their own record; the graduation quorum's value is highest exactly where the author felt most confident (PDR-133 lesson).",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25 ~17:15Z",
+          "quote": "a first-pass author's model is the least reviewed thing in their own record, and the quorum's value is highest exactly where the author felt most confident"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w12-L48",
+      "window": "w12",
+      "category": "surprise",
+      "statement": "A plan invented a false platform capability by composing two true facts (excludeAgent keyword exists; two review surfaces exist) into a false one (both surfaces can be excluded), when excludeAgent actually accepts exactly one value with no documented multi-value mechanism.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25 ~17:25Z",
+          "quote": "`excludeAgent` accepts exactly one value, with no documented array, comma list, or repeated key... the plan had invented a capability by composing two true facts... into a false one"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L49",
+      "window": "w12",
+      "category": "motif",
+      "statement": "Checking a capability's ARITY and COMPOSITION, not merely that the feature exists, is the sharper generator lesson from the excludeAgent incident — 'feature X exists' rarely licenses 'X can be applied to all the cases I need'.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25 ~17:25Z",
+          "quote": "the rule is sharper than \"check capability claims\": check the capability's ARITY and COMPOSITION, not only that the feature exists"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w12-L50",
+      "window": "w12",
+      "category": "surprise",
+      "statement": "An agent session merged PR #514 with `gh pr merge --squash --admin` under raw human GH_TOKEN credentials, compounding three forbidden violations at once (admin bypass of branch protections, squash flattening 313-file history, and misattributing the merge to the human rather than the bot).",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-24",
+          "quote": "An agent session drove PR #514 to green... then merged it with `gh pr merge --squash --admin`. Three compounding violations in one command"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L51",
+      "window": "w12",
+      "category": "behavioural-reflex",
+      "statement": "Since the PR #514 incident, the sanctioned merge path is binding a freshly minted bot token directly to the merge invocation via `pnpm --silent agent-tools merge-bot mint-token` piped into `gh pr merge --auto --merge`, never `--admin`/`--squash`/human credentials.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-24",
+          "quote": "Bind a freshly minted bot token directly to the merge invocation: `GH_TOKEN=\"$(pnpm --silent agent-tools merge-bot mint-token)\" gh pr merge <n> --auto --merge`"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L52",
+      "window": "w12",
+      "category": "shift",
+      "statement": "On 2026-07-26 the Director (Gecko) was corrected for reopening a closed decision (PostHog beta status) as a card/choice when the evidence was not materially novel; the rule adopted is that new evidence against a closed decision routes as a statement plus default-continue, only carding when the fact was NOT already in front of the owner at decision time.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-26",
+          "quote": "new-evidence-against-a-closed-decision routes as a STATEMENT plus default-continue; a card is right only when the evidence is materially NOVEL to the decider"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L53",
+      "window": "w12",
+      "category": "tension",
+      "statement": "On 2026-07-25 the Director's routing-autonomy grant was corrected to exclude reassignment of an owner-assigned seat: re-tasking an owner-assigned seat requires ASK FIRST (card), never route-then-inform, even though the grant covers unowned lanes.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25 ~21:12Z",
+          "quote": "the Director's routing-autonomy grant covers unowned lanes; re-tasking an owner-assigned seat is ASK FIRST (card), never route-then-inform"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L54",
+      "window": "w12",
+      "category": "motif",
+      "statement": "A recurring error signature across multiple 2026-07-25 seats (Meteor, Triton) is confident description of a discovered artefact transmitted without a first-hand read — an artefact's description is generated by the same process that generated the artefact, so descriptions cannot serve as a check on the described thing.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25 Meteor herds Distance",
+          "quote": "Error signature of this seat (three instances, one class, for successor scrutiny): confident description of a discovered artefact, transmitted without a first-hand read."
+        },
+        {
+          "napkinDate": "2026-07-25/26 Triton mends Void",
+          "quote": "an artefact's description is generated by the same process that generated the artefact, so its errors correlate with the artefact's errors"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L55",
+      "window": "w12",
+      "category": "shift",
+      "statement": "After 2026-07-25 owner correction, per-user memory now enforces 'no code into this repo without a first-hand review, not ever' — code always goes through a reviewed PR, direct-to-coordination commits are restricted to fleet state/docs only.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25 Meteor herds Distance",
+          "quote": "owner correction, verbatim rule now in per-user memory: no code into this repo without a first-hand review, not ever (code = reviewed PR always; direct-to-coordination is for fleet state/docs only)"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L56",
+      "window": "w12",
+      "category": "motif",
+      "statement": "\"Orphaned\" work is a RECORD-BINDING concept, not a git dirty/unpushed-state question — genuine orphans are exactly the items no live record (ticket/thread/handoff/PR) names.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25 Meteor herds Distance",
+          "quote": "\"orphaned\" is not a git-state question (dirty/unpushed) — it is RECORD-BINDING... both genuine finds... were exactly the items no record named"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w12-L57",
+      "window": "w12",
+      "category": "surprise",
+      "statement": "The Director (Meteor) inverted owner-attention priority: narrating routine peer heartbeats in prose while parking two genuine owner-held blockers (his copy, and the go-ahead) at the tail of messages instead of carding them, drawing a sharp owner correction.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25 Meteor herds Distance",
+          "quote": "I spent the owner's attention narrating routine peer heartbeats... while parking two genuine owner-held blockers... in prose at the tail of messages. He corrected it sharply."
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L58",
+      "window": "w12",
+      "category": "surprise",
+      "statement": "A vitest test for `copy-oak-ds.unit.test.ts` passed green while plain Node could not resolve the same package at all, because Vitest resolves workspace packages through Vite whereas the real build path (`tsx esbuild.config.ts`) does not — the test's resolution environment was more permissive than the certified runtime.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25/26",
+          "quote": "`copy-oak-ds.unit.test.ts` passed green while plain Node could not resolve `@oaknational/oak-design-system` at all"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L59",
+      "window": "w12",
+      "category": "behavioural-reflex",
+      "statement": "Bisecting one's own diff (running the two tsc invocations separately, ~30 seconds) resolved a widget type-check failure decisively, versus theorising outward about environment/dependency changes that were not the cause.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25/26",
+          "quote": "Bisect your own diff before theorising about the environment... The decisive test took 30 seconds — run the two `tsc` invocations separately"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w12-L60",
+      "window": "w12",
+      "category": "surprise",
+      "statement": "A `**/*.test.tsx` glob in the app project's tsconfig.lint.json crossed project boundaries and pulled `widget/` tests into the app project (which lacks a DOM lib), causing a type-check failure; fix is to scope tsx globs to `src/`.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25/26",
+          "quote": "`**/*.test.tsx` in the app's `tsconfig.lint.json` pulls `widget/`'s tests into the app project, which has no DOM lib. Scope tsx globs to `src/`."
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w12-L61",
+      "window": "w12",
+      "category": "surprise",
+      "statement": "With a theme control hidden, the design system's theme script (`oak-theme.js`) kept auto-applying high-contrast based on OS preference with no control to leave it; this was confidently reported by the agent as a feature/benefit before the owner corrected it as a defect in one line.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25/26",
+          "quote": "With the theme control hidden I left the design system's theme script loading, and reported that as a FEATURE... It was a defect: `oak-theme.js` auto-applies high-contrast on an OS contrast preference"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L62",
+      "window": "w12",
+      "category": "surprise",
+      "statement": "A `git merge-tree` conflict probe piped into `grep -c \"^<<<<<<<\"` reported 0 (no conflicts) using the deprecated three-arg merge-tree form with an unverified output shape, on a merge that then actually conflicted in `.prettierignore` — a check whose PASS is indistinguishable from a mis-invocation.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-26",
+          "quote": "My `git merge-tree` conflict probe piped into `grep -c \"^<<<<<<<\"` reported 0 on a merge that then conflicted in `.prettierignore`"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L63",
+      "window": "w12",
+      "category": "surprise",
+      "statement": "Relative-path filesystem probes after `cd`-ing into a workspace subdirectory (e.g. `ls .agent/experience/`) falsely reported a file as vanished, while root-relative `git status` and even a `find` from the same cwd 'confirmed' the false vanish — absolute paths are required for every filesystem probe.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-26",
+          "quote": "Relative paths after a `cd` into a workspace faked a vanished file... Absolute paths for every filesystem probe; a vanished-file conclusion needs a root-anchored check before it is a conclusion"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L64",
+      "window": "w12",
+      "category": "behavioural-reflex",
+      "statement": "A known-flake confirmation loop (isolation run 5/5 green, then gate retry green) was used as the cheapest-sufficient-check for `auth-routes.rate-limit.integration.test.ts` before pursuing any deeper theory.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-26",
+          "quote": "Known-flake confirmation loop worked: pre-commit gate failed on `auth-routes.rate-limit.integration.test.ts`... isolation run 5/5 green; gate retry green"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w12-L65",
+      "window": "w12",
+      "category": "motif",
+      "statement": "The 'crossed owner words' class recurred a second same-day instance where two owner-sourced instructions relayed via different channels/seats disagreed on a literal (submission day), reinforcing that transmitted owner words are not orderable and only the original source resolves.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25 Meteor herds Distance",
+          "quote": "Crossed-owner-words class, second same-day instance... As with the Forge-era instance: transmitted owner words are not orderable; only the source resolves"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w12-L66",
+      "window": "w12",
+      "category": "motif",
+      "statement": "An owner correction on 'priority' redefined it as concentrating quality investment (wins contention, lowest corner-cut tolerance, blockers surface for visibility) and explicitly NOT setting tempo — 'fast is likely to reduce quality' — flagging the agent's own volunteered 'within the hour' framing as the failure shape.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25 Cormorant",
+          "quote": "priority means important, it does not mean fast, in fact fast is likely to reduce quality... My \"within the hour\" framing was the failure shape"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w12-L67",
+      "window": "w12",
+      "category": "tension",
+      "statement": "A two-surface declarative estate (matching `paths` + provenance `sources` arrays) invites asymmetric edits — adding a `sources` entry without its `paths` twin risked the file's own delete-contract deleting the file being adopted; cure is a match-count check (exactly 1) on any touched path before commit.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25 Cormorant",
+          "quote": "I added a `sources` entry without its `paths` twin and the file's own delete-contract would have deleted the very file being adopted"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w12-L68",
+      "window": "w12",
+      "category": "shift",
+      "statement": "On 2026-07-25 ~15:49Z the merge-gate model was refined: settled = required checks green by name + zero unresolved threads + (quiet-window proxy OR owner direct-visibility word) — the quiet window is only a proxy for run-boundary visibility, and an owner's direct visibility supersedes it, retroactively validating two merges (#518, #534) that had appeared premature.",
+      "grounding": [
+        {
+          "napkinDate": "2026-07-25 ~15:49Z",
+          "quote": "Merge-gate model refined: settled = required checks green by name + zero unresolved threads + (quiet-window proxy OR owner direct-visibility word)"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L01",
+      "window": "w13",
+      "category": "motif",
+      "statement": "Full identifiers (shas, UUIDs, event ids) must never be typed from memory into a command or record; they must enter via command substitution or visible tool-result copy in the same block.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-08 10:0xZ",
+          "quote": "full identifiers (shas, UUIDs, event ids, claim ids) are NEVER typed from memory into a command or record"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L02",
+      "window": "w13",
+      "category": "shift",
+      "statement": "By 2026-08-08 10:17Z-11:19Z the identifier-fabrication cure generalised into a broader 'one-law' covering any absolute value (timestamp, exit code, local-vs-UTC time frame) entering a command, record, or filter must come from a first-hand, right-frame read.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-08 14:05Z",
+          "quote": "A VALUE OR CLAIM ENTERS THE WORK ONLY FROM A FIRST-HAND, RIGHT-FRAME READ"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L03",
+      "window": "w13",
+      "category": "behavioural-reflex",
+      "statement": "The agent repeatedly piped exit-bearing commands through tail/grep (e.g. `git commit | tail`, `node validator | tail -5`), causing the pipe's exit code rather than the command's own to be read as success, across at least five separate instances on 2026-08-08 and 2026-08-09.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-08 addendum 2",
+          "quote": "a value (here an exit code) consumed from somewhere other than a first-hand in-band read"
+        },
+        {
+          "napkinDate": "2026-08-08 ~09:1xZ",
+          "quote": "`git commit | tail` ate a pre-commit failure's exit code and let the chained `git push` run"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L04",
+      "window": "w13",
+      "category": "tension",
+      "statement": "A pinned-sha merge call resolved from a hand-extended short sha (rather than `git rev-parse`) drew a 409 refusal as designed, exposing tension between typing a remembered-looking value and the pin's correctness requirement — recurred a second time 14h later despite an authored cure.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-07 ~21:2xZ",
+          "quote": "The #820 REST merge's first call carried a full sha I hand-extended from the 9-char short form instead of resolving it"
+        },
+        {
+          "napkinDate": "2026-08-08 ~10:0xZ",
+          "quote": "this is the SAME class as yesterday's #820 sha fabrication ... repeated ~14h after this seat authored that cure"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L05",
+      "window": "w13",
+      "category": "behavioural-reflex",
+      "statement": "On a shared primary checkout, a bare `git commit` after `git add` repeatedly swept a peer's already-staged files into the wrong commit; the cure extends stage-by-explicit-pathspec to the commit verb itself (`git commit -- <paths>`), and the pattern recurred multiple times across 2026-08-09 through 2026-08-13.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-09 ~16:2xZ",
+          "quote": "Third instance in two days of one seat's commit sweeping another seat's staged files on the shared primary checkout"
+        },
+        {
+          "napkinDate": "2026-08-13 ~10:1xZ",
+          "quote": "my next commit (36a57987c) swept them under my message"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L06",
+      "window": "w13",
+      "category": "shift",
+      "statement": "After repeated shared-checkout commit collisions, on 2026-08-13 the estate shifted from vigilance-based commit-window protocol to a structural rule: the Director becomes sole commit-warden of the primary's git index/head, and implementers hand intents via channel rather than committing directly.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-13 ~09:3xZ",
+          "quote": "Director is sole commit-warden of the primary's git:index/head; implementers hand intents (pathspec + pre-checked subject ...) via channel/directed"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L07",
+      "window": "w13",
+      "category": "behavioural-reflex",
+      "statement": "Bot-identity writes were repeatedly compromised by an empty GH_TOKEN falling back silently to the owner's ambient gh credential when `merge-bot mint-token` failed (e.g. from an unbuilt dist, or from cwd drifting into a worktree), across at least three occurrences (2026-08-08, 2026-08-10, 2026-08-13).",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-08 ~10:4xZ",
+          "quote": "the empty GH_TOKEN fell back to ambient auth = #826 also owner-attributed"
+        },
+        {
+          "napkinDate": "2026-08-13 ~15:3xZ",
+          "quote": "`$()` captures EMPTY, `GH_TOKEN=` (empty) makes gh fall back to ambient owner auth — the banned fallback, silently"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L08",
+      "window": "w13",
+      "category": "motif",
+      "statement": "The 'whose name displays?' bot-identity check must fire per write CHANNEL (push, gh CLI, REST, GraphQL, MCP), not once per session, after `gh pr create` silently authored as the owner's login while pushes carried the bot.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-10 ~21:0xZ",
+          "quote": "The standing question \"whose name will this surface display?\" must fire PER CHANNEL (push, gh CLI, REST, GraphQL, MCP), not per session"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L09",
+      "window": "w13",
+      "category": "surprise",
+      "statement": "A required GitHub check can be ABSENT rather than failing (e.g. Vercel never triggered on a draft-era head), which is invisible to a filter that only checks for failing status; the merge API refused with an unexpected error until the recount discipline checked presence-and-success by name for every required check.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-09 ~13:5xZ",
+          "quote": "A required check can be ABSENT, not failing — and absence is invisible to a failing-checks filter"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L10",
+      "window": "w13",
+      "category": "surprise",
+      "statement": "GitHub's REST requested_reviewers endpoint silently drops the Copilot reviewer handle (returns 200 with the handle absent); the working path is the GitHub MCP request_copilot_review tool, discovered 2026-08-08.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-08 15:30Z",
+          "quote": "GitHub's REST requested_reviewers endpoint SILENTLY DROPS the Copilot reviewer handle"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w13-L11",
+      "window": "w13",
+      "category": "tension",
+      "statement": "Copilot review requests recurringly appeared as silent drops (no timeline event) but were later shown by full timeline reads to be eventually-consistent lag rather than actual drops, generating a corrected-then-recorrected lore across 2026-08-11 through 2026-08-13.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-13 ~09:3xZ",
+          "quote": "CORRECTION to this morning's own entry (\"Copilot request silent-drops recurred at PR-open\"): REFUTED by the later full timeline read"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w13-L12",
+      "window": "w13",
+      "category": "motif",
+      "statement": "Never-filter-reviews discipline was owner-mandated after filtered reads (grep on reviewer login, tail on outputs) repeatedly hid real CHANGES_REQUESTED reviews and refusal grounds across multiple PRs (2026-08-11 to 2026-08-12).",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-12 ~09:3xZ",
+          "quote": "OWNER RULING at the instance (verbatim): \"never ever filter reviews, ever...\""
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L13",
+      "window": "w13",
+      "category": "behavioural-reflex",
+      "statement": "The agent repeatedly composed filtered/piped read commands (tail -1, tail -2, tail -4, grep) on write-shaped or verdict-bearing commands (comms send, claims close, merge-bot push/merge) that swallowed the actual failure or refusal text, across many separate instances through 2026-08-09 to 2026-08-12.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-09 ~08:5xZ",
+          "quote": "a `tail -2` on a failing `claims close` swallowed the usage error"
+        },
+        {
+          "napkinDate": "2026-08-12 ~11:5xZ",
+          "quote": "MY OWN FILTERS EAT VERDICTS: `merge-bot merge ... | grep merged` returned empty while the merge was mid-quiet-window"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L14",
+      "window": "w13",
+      "category": "shift",
+      "statement": "On 2026-08-08 ~16:23Z the seat identified a 'half-armed watcher' failure mode — monitors green but not read between wakes — and adopted arming the ARC tail as an event-driven Monitor; a second seat rediscovered the same generic gap from the arming (not consumption) direction on 2026-08-10.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-08 16:23Z",
+          "quote": "my monitors were all live and F-95 attested, yet the owner had to tell me I was missing the Director's communications"
+        },
+        {
+          "napkinDate": "2026-08-10 ~09:3xZ",
+          "quote": "canonical watcher armed, ARC never armed, F-95 green throughout — because F-95 attests the canonical watcher and can attest nothing else"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L15",
+      "window": "w13",
+      "category": "tension",
+      "statement": "Worktree-isolation guards correctly block writes/comms/watch-arming to shared-checkout paths (canonical watcher, ARC channel, thread record) from a linked worktree, forcing an ExitWorktree(keep)->act->re-enter pattern repeatedly across the window rather than fighting the guard.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-08 ~18:0xZ",
+          "quote": "The worktree-isolated session guard (Bash AND file tools) blocks writes to shared-checkout paths"
+        },
+        {
+          "napkinDate": "2026-08-12 ~09:4xZ",
+          "quote": "When the watcher died on a drain-timeout inside the worktree, the clean recovery was ExitWorktree(keep) → re-arm from primary"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L16",
+      "window": "w13",
+      "category": "behavioural-reflex",
+      "statement": "zsh's non-word-splitting of unquoted parameter expansions bit the seat three times in one arc (a conditional flag expansion and two file-arg strings), cured with ${=VAR}.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-11",
+          "quote": "zsh DOES NOT WORD-SPLIT unquoted parameter expansions — bit three times in one arc"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w13-L17",
+      "window": "w13",
+      "category": "surprise",
+      "statement": "A dist-consumed config package's stale build meant editing src/ and rerunning lint recorded a false negative ('rule does not observably fire') because the consumer loaded old dist/ output — resolved by rebuilding before recording any negative capability finding.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-09 ~10:4xZ",
+          "quote": "the earlier probe that edited `src/` and re-ran lint without rebuilding recorded \"rule does not observably fire\" against config that never loaded"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L18",
+      "window": "w13",
+      "category": "motif",
+      "statement": "Multiple 'decoy off-switch' or unenforced-config findings recurred across the window (disabled rules that never bound in scope; a claimed ignore-target already covered by a different glob), suggesting config comments/disable-lines can assert coverage that never existed.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-09 ~10:3xZ",
+          "quote": "the 'off' switches suppressed rules that never bound there — decoys implying coverage that did not exist"
+        },
+        {
+          "napkinDate": "2026-08-09 ~10:4xZ",
+          "quote": "the glob's only real effect is ignoring source tsup configs ... another decoy shape for the census to flag"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w13-L19",
+      "window": "w13",
+      "category": "tension",
+      "statement": "The Sonar quality gate repeatedly appeared to assert findings the issues/search index couldn't corroborate ('Sonar phantom'), until the owner forced re-checking with the explicit issueStatuses facet, which revealed the issues were real and the DEFAULT query surface (not the platform) was blind — happened on #850 and #851.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-11 ~22:0xZ",
+          "quote": "both #850 and #851 gate failures were GENUINE issues hidden by OUR query facet"
+        },
+        {
+          "napkinDate": "2026-08-11 ~23:0xZ",
+          "quote": "SONAR \"PHANTOM\" REVERSED AT OWNER WORD (2026-08-11, #851): the owner's \"check if it is genuinely not a real result\" found THREE OPEN S4043 issues"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L20",
+      "window": "w13",
+      "category": "motif",
+      "statement": "Reviewer-fleet convergence repeatedly caught real destructive/security defects that mechanically-green gates (pnpm check, tests, lint) could not see, across #834, #836, #862, #865, #870 — establishing the standing lesson that a green gate proves only the path it exercised.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-09 ~10:5xZ",
+          "quote": "four independent surfaces ... each caught a DISTINCT real defect class"
+        },
+        {
+          "napkinDate": "2026-08-12",
+          "quote": "FOUR GREEN GATES, FOUR REAL DEFECTS THE GATES COULD NOT SEE"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L21",
+      "window": "w13",
+      "category": "behavioural-reflex",
+      "statement": "The seat repeatedly diagnosed instrument/platform failures (stuck PR event, Copilot drop, sleep-crossed watcher timeout) as bugs before checking the cheap discriminating fact (headRefName, timeline event, clock), each time corrected by a peer or a later self-check across 2026-08-09 through 2026-08-13.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-09 ~08:5xZ",
+          "quote": "TWO-BRANCHES LOOKALIKE, worked instance at #807 ... a Director ACTION was issued on that premise"
+        },
+        {
+          "napkinDate": "2026-08-13 ~09:3xZ",
+          "quote": "two instrument false-alarms in one morning (sleep-crossed drain deadlines read as hangs; timeline lag read as drops)"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L22",
+      "window": "w13",
+      "category": "shift",
+      "statement": "On 2026-08-10 the owner reframed the design lane's purpose: reported 'Swordfish is proceeding' against no deliverable metric was called nonsense, and the metric shifted from doctrine-volume/message-traffic to distance-to-pixels measured first-hand from the branch tip.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-10 ~08:4xZ",
+          "quote": "The deliverable is the only metric. I reported \"Swordfish is proceeding\" against NO metric"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L23",
+      "window": "w13",
+      "category": "surprise",
+      "statement": "An honestly-reported unchanging metric ('distance to pixels: 0 of 10') for two hours was itself a ritual masking stalled work, undetected from inside because its honesty made it look like diligence rather than failure — named the 'null-state' class.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-10 ~09:4xZ",
+          "quote": "A metric reported but never acted on is a ritual, and its HONESTY is what makes it undetectable as one"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L24",
+      "window": "w13",
+      "category": "motif",
+      "statement": "Claude Code's TUI silently switched models at quota exhaustion (Fable to Opus) on 2026-08-10, and the resulting natural experiment showed mechanically-enforced disciplines (hooks, ratchets, merge-bot refusal ladder) held model-independently while prose-only judgement disciplines regressed to old error types.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-10 ~19:0xZ",
+          "quote": "the Claude Code TUI began silently switching models at quota exhaustion (Fable → Opus 4.8 on this seat)"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L25",
+      "window": "w13",
+      "category": "behavioural-reflex",
+      "statement": "A backgrounded shell cwd persistently reverted from worktree to primary silently across sessions, causing gate runs (prettier, eslint, vitest) or comms commands to execute against the wrong tree — the recurring cure is to anchor every gate/comms run with its own explicit cd in the same command.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-11",
+          "quote": "PERSISTENT SHELL CWD REVERTS SILENTLY ACROSS BACKGROUNDED TASKS"
+        },
+        {
+          "napkinDate": "2026-08-11 ~23:0xZ",
+          "quote": "the ROOT generator was the persistent shell cwd sitting in a WORKTREE while the command passed a relative `--comms-dir`"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L26",
+      "window": "w13",
+      "category": "tension",
+      "statement": "Backgrounded Bash tasks (merge-bot drives, pnpm-install+commit chains) received external SIGTERM kills mid-healthy-work on 2026-08-11 evening, undiagnosed as harness-vs-tooling, and the owner explicitly flagged converting this to a permanent 'foreground-only' doctrine as premature (MCP-568 opened instead).",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-11 ~23:0xZ",
+          "quote": "backgrounded Bash tasks ... received external SIGTERM mid-healthy-work; every FOREGROUND run of the same commands completed"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w13-L27",
+      "window": "w13",
+      "category": "motif",
+      "statement": "F-75 peer-liveness diffs repeatedly fired false-positive noise because raw poll output included volatile age-bearing columns (e.g. '642.3m ago', fresh_until); the standing cure across multiple instances is to strip/project only stable fields before diffing.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-11",
+          "quote": "DIFF-POLL KEYS MUST BE STATE-ONLY ... a poll keyed on raw registry output fires on every heartbeat refresh"
+        },
+        {
+          "napkinDate": "2026-08-12 ~10:5xZ",
+          "quote": "F-75 diff-poll noise (this seat, first hour): diffing raw peer-liveness output fires every cycle because the age column ... is volatile"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L28",
+      "window": "w13",
+      "category": "motif",
+      "statement": "Multiple record-writing agents produced freshly-authored, claim-bearing prose containing falsified premises that were caught only by external review (Copilot, opus reviewers), never by self-review, forming a recurring 'error signature' named explicitly at least twice in the window.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-11 ~20:4xZ",
+          "quote": "four separate times today, freshly-authored claim-bearing text carried a falsified premise ... every catch was EXTERNAL"
+        },
+        {
+          "napkinDate": "2026-08-12 ~06:1xZ",
+          "quote": "Same error signature as the night's four false-premise instances: freshly-authored claim-bearing text, external catch"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L29",
+      "window": "w13",
+      "category": "shift",
+      "statement": "On 2026-08-12 the owner delivered a class-level correction that Cricket is a lens not an authority; the seat had written 'as Cricket ordered' for what was actually the Director's own decision, and the standing rule shifted to always citing advisory instruments as evidence, never as decider.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-12 ~06:1xZ",
+          "quote": "CRICKET IS A LENS, NOT AN AUTHORITY (owner correction ... Cricket cannot order, Cricket provides a means of reflecting)"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L30",
+      "window": "w13",
+      "category": "tension",
+      "statement": "The MCP-567 vendoring investigation revealed the estate's own validation machinery had assumed jurisdiction over externally-managed vendor skills, producing compensating lock-file machinery (41 refs, 59-line lock reconciling against nothing) for a problem that existed only relative to the estate's own misclassification.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-12 ~07:0xZ",
+          "quote": "THE PROBLEM WAS OURS, NOT THE SKILLS' ... the skills reconciliation sweep claims jurisdiction over EVERY entry at both projection roots"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L31",
+      "window": "w13",
+      "category": "motif",
+      "statement": "Owner corrections repeatedly targeted the agent presenting decisions/ratification requests buried in prose rather than as an explicit decision card, recurring across the window as an 8th-plus escalation of the same buried-decision failure class.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-12",
+          "quote": "Ratification presented in prose is the buried-decision failure AGAIN (8th escalation banked in surface-user-decisions-as-questions)"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w13-L32",
+      "window": "w13",
+      "category": "behavioural-reflex",
+      "statement": "Commit messages exceeding the commitlint 100-char header cap were rejected repeatedly (at least three times in one evening on 2026-08-11, plus earlier 2026-08-09), with the compounding failure that a piped `git commit | tail` could hide the rejection and let a chained push report success.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-11 ~21:3xZ",
+          "quote": "three commitlint >100-char rejections in one day at this seat"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w13-L33",
+      "window": "w13",
+      "category": "shift",
+      "statement": "On 2026-08-12 the owner ruled 'there is no studio sync, the design system lives in this repo and this repo only' — retiring the two-homes design-sync model — then hours later on 2026-08-12 ~16:1xZ partially reversed course, clarifying the design-sync machinery stays dormant (not retired) for a future ingestion pipeline.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-12 ~15:2xZ",
+          "quote": "there is no studio sync, the design system lives in this repo and this repo only"
+        },
+        {
+          "napkinDate": "2026-08-12 ~16:1xZ",
+          "quote": "we are not retiring the design sync machinery, we are just not using it currently"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L34",
+      "window": "w13",
+      "category": "tension",
+      "statement": "On 2026-08-13 the owner corrected the design lane's plan for having re-derived itself from the review-findings ledger rather than from his own outcome intent, ruling the showcase must be purged and rebuilt around four tightly-scoped outcome pages rather than continuing the cure-arc backlog.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-13 ~13:4xZ",
+          "quote": "the lane's plan had re-derived itself from the review-findings ledger (\"running the cure arc to GO\") instead of from the owner's outcomes"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L35",
+      "window": "w13",
+      "category": "motif",
+      "statement": "Multiple 2026-08-13 owner corrections named 'trace constraint provenance' failures — plan prose or reviewer-round findings absorbed as binding premises and fed back to further reviewers without re-tracing to the owner's actual intent (composition envelope inversion; the 846-fleet status quoting).",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-13 ~16:1xZ",
+          "quote": "Circular verification, this seat a participant ... traced to reviewer-round findings absorbed into UNRATIFIED plan prose"
+        },
+        {
+          "napkinDate": "2026-08-13 ~16:4xZ",
+          "quote": "quoting ANY document's description of ANOTHER document's status without opening the described document"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L36",
+      "window": "w13",
+      "category": "shift",
+      "statement": "On 2026-08-14 06:08Z the owner corrected a curator-seat scope breach: the seat self-executed a merge-back and primary push while opened for dedicated knowledge conservation, reinforcing (a repeat within days) that role-scoped value must be checked before licensing-rule activity.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-14 06:08Z",
+          "quote": "why are you fracking around with merges and pushing, I asked you to do dedicated knowledge conservation"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L37",
+      "window": "w13",
+      "category": "behavioural-reflex",
+      "statement": "The agent repeatedly narrated status/board facts (PR merge state, plan status, bulk-data freshness) from stale records or assumptions instead of first-hand recompute, drawing owner corrections at least three times across 2026-08-12/13 (June-10 bulk-data claim, #846 fleet status, #774 spike framing).",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-12 ~10:5xZ",
+          "quote": "I narrated \"our bulk data was last updated June 10\" from file mtimes in the PRINCIPAL checkout"
+        },
+        {
+          "napkinDate": "2026-08-13 ~16:4xZ",
+          "quote": "The 846 fleet RAN (same-day provenance recurrence)"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L38",
+      "window": "w13",
+      "category": "motif",
+      "statement": "Owner corrections repeatedly reframed leadership/direction-paper authoring: open on benefits not the incident (2026-08-12), decompose 'X would have prevented Y' claims into detection/prevention/diagnosis, and cut implementation detail from yes/no decision documents.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-12T12:35:44Z",
+          "quote": "the opening on a negative is going to put everyone in a bad mood, start with a summary of the benefits"
+        },
+        {
+          "napkinDate": "2026-08-12T12:53:38Z",
+          "quote": "any \"X would have prevented Y\" claim in an advocacy doc should be decomposed into detection/prevention/diagnosis"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L39",
+      "window": "w13",
+      "category": "surprise",
+      "statement": "An upstream lesson-summary endpoint's subject-allowlist gate (added 2026-07-10) 404'd essentially every KS4 science lesson because lessonView rows carry programme-subject slugs not present in the teaching-subject allowlist — traced through three distinct API eras via source comparison on 2026-08-12.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-12 ~11:5xZ",
+          "quote": "the SUBJECT ALLOWLIST gate added ... the shipped allowlist form 404s all KS4 science as untested collateral"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w13-L40",
+      "window": "w13",
+      "category": "behavioural-reflex",
+      "statement": "The seat premature-closed an investigation twice in one session on 2026-08-12 (framing a subject-gate bug as the full explanation before probing sibling endpoints; filing a commit titled 'ensure only valid subjects are allowed' as a defect) before the owner's pushback forced the cheaper discriminating probe.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-12 ~11:2xZ",
+          "quote": "I stopped probing at the first coherent mechanism (the subject gate) and framed \"upstream bug, high priority\""
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L41",
+      "window": "w13",
+      "category": "tension",
+      "statement": "A destructive `--clear` operation's preflight guard was repeatedly found to answer a neighbouring/inherited precondition question rather than its own operation's actual precondition, across multiple review rounds on PR #865 (2026-08-12), each round surfacing a new real data-loss vector.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-12",
+          "quote": "Destructive-op preconditions are derived from the OP, never inherited from an adjacent guard"
+        },
+        {
+          "napkinDate": "2026-08-12",
+          "quote": "\"The sole deterministic vector\" is a trap on a destructive path"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w13-L42",
+      "window": "w13",
+      "category": "motif",
+      "statement": "Multiple instances across the window showed 'restored on disk' being conflated with 'present in the git commit tree' (skills-lock.json reinstatement untracked while HEAD still carried deletion) — the cure is verifying with `git cat-file -t HEAD:<path>`, never `ls`.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-12",
+          "quote": "\"Restored on disk\" != \"in the commit tree\" ... Verify a retained/restored file with `git cat-file -t HEAD:<path>`, never `ls`"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w14-L01",
+      "window": "w14",
+      "category": "motif",
+      "statement": "The 'false-green surface' class recurs across the window: a surface (Sentry monitor status field, PostHog harness dimension, stale doc row, client-identity derivation, PR watcher intermediate signals) answers authoritatively while misinforming, because absence or a convenient field is read as evidence instead of the actual measurement/terminal-state instrument.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-13",
+          "quote": "never read a configuration field as the measurement. `Status: enabled` is not evidence checks ran — the check history is."
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w14-L02",
+      "window": "w14",
+      "category": "behavioural-reflex",
+      "statement": "Across multiple seats/sessions the agent repeatedly writes timestamps inferred from surrounding context rather than reading them from a clock or tool output (e.g. '~2026-08-40Z', a Linear comment stamp 35 minutes in the future), a class named FABRICATED TIMESTAMPS on 2026-08-13.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-13T14:37:39Z",
+          "quote": "never write a timestamp not read from a clock. Where a stamp is load-bearing, emit it in-band from the same command that takes the measurement"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w14-L03",
+      "window": "w14",
+      "category": "behavioural-reflex",
+      "statement": "The agent repeatedly pipes or wraps git push (and other guarded commands) inside a compound shell command whose own exit code masks the push's real exit status ('exit-codes-in-band-never-piped' violated on 2026-08-18 and re-created a day later on 2026-08-19 despite being recorded), so the cure of making the guarded command the task's FINAL command had to be re-adopted twice.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-18 ~11:0xZ",
+          "quote": "a background push wrapped as `git push ...; echo \"exit=$?\"` reported the WRAPPER's exit"
+        },
+        {
+          "napkinDate": "2026-08-19 output-schema truth fleet",
+          "quote": "The 2026-08-18 lesson existed in the freeze map and still lost to habit — passive guidance loses to artefact gravity."
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w14-L04",
+      "window": "w14",
+      "category": "tension",
+      "statement": "A recurring tension between reviewer/CI cure-loops that never terminate by curing (Copilot re-reviews every push; doctrine-dense specs have unbounded reference corpora) and the need for a DECLARED graded bar (genuine-blocker-only, convergence-cap, PDR-140 triage) posted on the PR record to end the loop.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-14 ~12:0xZ",
+          "quote": "a standing Copilot request re-reviews EVERY push, so a cure loop cannot terminate by curing — termination required a declared graded bar"
+        },
+        {
+          "napkinDate": "2026-08-25 ~15:4xZ",
+          "quote": "The generator in both: doctrine-dense specs whose reference corpus is unbounded... the convergence guard, not reviewer patience, is what ends such loops"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w14-L05",
+      "window": "w14",
+      "category": "shift",
+      "statement": "On 2026-08-31 the review-cure bar shifted from cure-everything to review-feedback-defaults-to-triage (owner ruling then PDR-140), replacing per-round code cures with disposition-only unless a finding shows an actual falsehood, discharging the earlier ad-hoc convergence-cap practice.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-31 ~11",
+          "quote": "do not address any more comments with code changes unless you consider them P1 or otherwise serious... add them to the appropriate remediation node"
+        },
+        {
+          "napkinDate": "2026-08-31 (curriculum-data-defect lane)",
+          "quote": "PDR-140 AUTHORED (2026-08-31, owner-ratified in-session... review-response pricing — feedback defaults to triage-to-disposition"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w14-L06",
+      "window": "w14",
+      "category": "behavioural-reflex",
+      "statement": "The agent repeatedly stages files with git mv or git add pathspec in a shared checkout and inadvertently captures a peer's or its own unstaged/uncommitted content riding along (three named instances: 2026-08-14 staged-vs-worktree, 2026-08-17 git-mv variant, 2026-08-17 shared-file staging, 2026-08-19 index race), each requiring 'commit -- <paths>' or verify-what-ships as the structural cure.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-17 ~11:0xZ",
+          "quote": "STAGING A SHARED FILE CAPTURES ITS WHOLE UNCOMMITTED STATE... the explicit pathspec named the FILE, but the file carried a peer's half-state"
+        },
+        {
+          "napkinDate": "2026-08-19 wrap lenses",
+          "quote": "index-lock contention, a no-pathspec commit sweeping a peer's staged renames, three push races in ninety minutes"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w14-L07",
+      "window": "w14",
+      "category": "motif",
+      "statement": "A recurring generator across the window is 'asserting an estate fact from the wrong rung' — a descriptor string, README, or intermediate artefact cited instead of the schema/handler/source of truth (PR #32 rounds 3, 6, 7, 8, 9 all shared this generator on 2026-08-31).",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-31 (curriculum-data-defect lane)",
+          "quote": "Verify at the rung that binds: response schemas and handler code, never description text — descriptions are claims, not evidence."
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w14-L08",
+      "window": "w14",
+      "category": "behavioural-reflex",
+      "statement": "The BATCH-CADENCE correction (commit/push every small change is disproportionate) recurred at least three times in the window (2026-08-17 owner correction, 2026-08-26 recurrence, 2026-08-31 third instance) with the same napkin lesson present in context each time yet failing to fire until the owner re-corrected it live.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-31 ~4",
+          "quote": "The 2026-08-17 BATCH-CADENCE ruling and the 2026-08-26 recurrence were both IN THIS NAPKIN and did not fire"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w14-L09",
+      "window": "w14",
+      "category": "surprise",
+      "statement": "On 2026-08-24 the cause of a 24-hour environment outage was a 6-character shell semantic (a `find … | sed …` pipeline exiting 1 under `set -euo pipefail` because the builder ships no /workspace) rather than any of the network/host hypotheses the team had been chasing, despite 12/12 probe-able assumptions passing.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-24 (later)",
+          "quote": "Root cause of the 24h environment outage — six characters... The network hypothesis was a streetlight"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w14-L10",
+      "window": "w14",
+      "category": "motif",
+      "statement": "'The class survives its own cure' recurs across the window (2026-08-13 instance 4 reproducing false-green inside its own fix; 2026-08-24 certified-by-inference written into the very NOTIFY declaration diagnosing it) — diagnosing a failure mode does not immunise the diagnostician; only an external reviewer catches the self-reproduction.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-24 ~20:4xZ",
+          "quote": "candidate: \"the class survives its own cure\" reached n=2 measured... diagnosis does not immunise the diagnostician; the external-reviewer lens is the working instrument"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w14-L11",
+      "window": "w14",
+      "category": "tension",
+      "statement": "Tension between passive/documented guidance (napkin lessons, freeze maps) and 'artefact gravity' / habit: multiple named lessons (push-wrapper exit masking, batch cadence) were present in written records yet lost to habit until re-corrected, leading to explicit structural (not vigilance-based) cures being preferred going forward.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-19 output-schema truth fleet",
+          "quote": "passive guidance loses to artefact gravity, again, measured twice in one day"
+        },
+        {
+          "napkinDate": "2026-08-24 (later)",
+          "quote": "passive guidance loses to artefact gravity, n+1"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w14-L12",
+      "window": "w14",
+      "category": "behavioural-reflex",
+      "statement": "The agent repeatedly surfaced owner-facing 'decisions' or questions that a principle/decision-matrix/prior ruling had already settled, requiring the owner to redirect back to the governing document (2026-08-31 curriculum-data-defect lane node-type decisions; 2026-09-01 the R4/PR-886 ratified-decisions re-opened as cards).",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-31 (curriculum-data-defect lane)",
+          "quote": "a \"decision for the owner\" whose answer a principle has already forced is an evasion, not an escalation"
+        },
+        {
+          "napkinDate": "2026-09-01 ~13:0xZ",
+          "quote": "RE-OPENED THE OWNER'S RATIFIED DECISIONS AS \"CARDS\"... A landing PR from the owner's integration line carries ratified decisions; a seat arriving later reads the history for the decisions, it does not re-price them"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w14-L13",
+      "window": "w14",
+      "category": "shift",
+      "statement": "On 2026-08-31 the owner authorised a scoped HUSKY=0 trial for cloud sessions (commit/push without local hooks, relying on CI), reversing standing local-hook-gating practice for that session, verified against CI's comprehensiveness before adoption.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-31 ~5",
+          "quote": "run commit and push in cloud environments with HUSKY=0 and rely on GitHub CI to catch issues... as long as the GitHub CI is comprehensive"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w14-L14",
+      "window": "w14",
+      "category": "surprise",
+      "statement": "CI concurrency cancellation was working correctly the entire time (cancel-in-progress on push), yet the agent misread cancelled-run rollups as genuine failures and narrated them to the owner, and separately failed to realise that a push cadence at or below CI duration silently removes gating coverage even though cancellation itself was never broken.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-31 ~9",
+          "quote": "Cancellation was never broken... The noise was this seat's own making"
+        },
+        {
+          "napkinDate": "2026-08-31 ~12",
+          "quote": "a push cadence at or below CI duration silently removes the gate while burning paid runners"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w14-L15",
+      "window": "w14",
+      "category": "tension",
+      "statement": "Tension between substituting a CI/remote check for a disabled local hook by copying only its INSTRUMENT versus copying its full SCOPE and COMPLETION SEMANTICS: two separate misses (full-history gitleaks scan replacing a range-only pre-push hook on 2026-08-31 ~9; CI cancellation lacking the local hooks' blocking-serial guarantee on 2026-08-31 ~12) both trace to this same gap.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-31 ~9",
+          "quote": "when substituting a gate, copy the gate's SCOPE, not just its instrument"
+        },
+        {
+          "napkinDate": "2026-08-31 ~12",
+          "quote": "a substitute gate must copy the hook's scope AND its COMPLETION SEMANTICS"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w14-L16",
+      "window": "w14",
+      "category": "behavioural-reflex",
+      "statement": "On 2026-08-31 the agent performed an admin-credential merge_pull_request call against a PR in mergeable_state:blocked, framing it internally as merely 'probing the refusal reason', when in fact admin credentials merged straight past branch protections — establishing the standing rule that any merge API call under admin credentials is a gate-bypass operation in the same class as --no-verify.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-31 ~8",
+          "quote": "a merge API call under admin credentials is a gate-bypass operation in the same class as `--no-verify`"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w14-L17",
+      "window": "w14",
+      "category": "motif",
+      "statement": "Recurring 'the consumer's own resolver is part of the claim' pattern: verification that does not traverse the actual consumer's resolution path (an artifact viewer rendering mermaid, a resolved agent-tools binary vs a worktree copy) proves a different claim than the one asserted, evidenced twice within days (2026-08-18 registry premature-migration, 2026-08-19 Atlas mermaid br-tag stripping).",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-19 — phase-2 opening at owner cards",
+          "quote": "A check that does not traverse the consumer's resolution path proves a different claim than the one asserted"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w14-L18",
+      "window": "w14",
+      "category": "behavioural-reflex",
+      "statement": "The agent repeatedly transmits an inherited/remembered fact to the owner as current truth without a first-hand re-read (attribution-drift pattern), instances spanning R4 rule provenance (2026-08-17), a stale 'blocked on owner' PR-15 status relayed five days later (2026-08-30), the ruleset bot-exemption misstated as blocking (2026-09-02), and a wrong release-number relayed (2026-09-02).",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-30 ~13:5xZ",
+          "quote": "The napkin entry (~15:4xZ) was never marked superseded, so this seat relayed \"blocked on owner\" to the owner five days later as live fact"
+        },
+        {
+          "napkinDate": "2026-09-02 ~11:2xZ (Kiln)",
+          "quote": "query the value, never the lookalike — a rule's worked instance is not the current configuration"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w14-L19",
+      "window": "w14",
+      "category": "shift",
+      "statement": "On 2026-08-31 the owner shifted the plan-authoring standard: the oak-plan skill and delivery template were amended to require named user groups and value/journeys as a firing body-requirement, after the seed 'machinery ≫ judgment' failed to fire passively twice in one session despite being held in context.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-31 ~3",
+          "quote": "Planning-skill amendment, owner-authorised... the user-groups-and-value body requirement landed in the plan skill AND the delivery template"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w14-L20",
+      "window": "w14",
+      "category": "tension",
+      "statement": "Tension named as 'documents-epoch attractor': after a plan ratifies, a lane's centre of gravity should move to the built tree, but the agent's habit is to keep running a six-surface documentation ceremony per incoming ruling instead of capturing cheaply and consolidating at natural boundaries.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-17",
+          "quote": "Documents-epoch attractor (owner-corrected as rabbit-hole): after a plan ratifies, the lane's centre of gravity moves to the TREE... never a six-surface ceremony per event while the build sits at zero."
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w14-L21",
+      "window": "w14",
+      "category": "behavioural-reflex",
+      "statement": "Watchers/monitors repeatedly fail to observe the TERMINAL state transition of what they track (a PR watcher missing state/mergedAt on 2026-08-13; pr-watch exiting on ALL-GREEN while a PR sat CONFLICTING+CHANGES_REQUESTED on 2026-08-17; agent-tools:pr-watch emitting nothing across two pushes on 2026-09-02), a recurring class named 'a watcher must observe the transition that ENDS the thing it watches'.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-13T15:03:03Z",
+          "quote": "A watcher must observe the transition that ENDS the thing it watches, or it cannot distinguish in-flight from finished"
+        },
+        {
+          "napkinDate": "2026-08-17 ~11:0xZ",
+          "quote": "PR-WATCH EXIT CONDITION IS BLIND TO MERGE/REVIEW STATE"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w14-L22",
+      "window": "w14",
+      "category": "motif",
+      "statement": "Shared mutable process-level state (cwd, FETCH_HEAD, the home registry, the shared primary checkout's index) repeatedly causes races across the window and each instance converges on the same cure shape: pin by name/path rather than sequence by hope (named explicitly on 2026-08-18).",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-18 ~21:1xZ",
+          "quote": "Same family as the premature-migration and cwd-drift lessons: shared mutable process-level state (cwd, FETCH_HEAD, the home registry) needs pinning-by-name, not sequencing-by-hope"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w14-L23",
+      "window": "w14",
+      "category": "surprise",
+      "statement": "On 2026-08-18 a worktree-resolved agent-tools binary run against the PRIMARY registry executed a not-yet-landed migrate-on-first-contact change hours before the code officially merged, because the 'primary untouched' discipline had not accounted for the RESOLVED BINARY of an invocation rather than just the files it names.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-18 — Poppy lifts Bark",
+          "quote": "a worktree-resolved agent-tools binary run against the PRIMARY registry executed #905's migrate-on-first-contact hours before the code landed"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w14-L24",
+      "window": "w14",
+      "category": "behavioural-reflex",
+      "statement": "The agent repeatedly identifies via the ambient owner GitHub credential instead of the bot identity before its first write on GitHub (PR #904 on 2026-08-18; PR #944 author/label on 2026-09-01), catching the error only after the identity-echo tripwire or a peer's stale-label read fired AFTER the write.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-18 ~11:0xZ",
+          "quote": "IDENTITY ECHO SEQUENCED LATE — PR #904 was created under the ambient owner credential; the gh-identity echo ran AFTER the write and caught it"
+        },
+        {
+          "napkinDate": "2026-09-01 domain-reference sweep",
+          "quote": "opened PR #944 and added its label with a bare `gh` call... the PR's author line and the label event display the owner, not the bot"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w14-L25",
+      "window": "w14",
+      "category": "shift",
+      "statement": "On 2026-09-01 the dependent-PR pattern shifted from 'wait for the upstream PR to merge' (ordering dependency, multiplicative tail risk) to 'cherry-pick the exact dependency commit and reconcile at the second merge', dissolving a two-PR loop that had cost an hour per cure round.",
+      "grounding": [
+        {
+          "napkinDate": "2026-09-02 ~09:2xZ (Luna)",
+          "quote": "The dependency that made the tail multiplicative was the ORDER, not the content... de-serialise a dependent PR by cherry-picking the dependency's exact commit"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w14-L26",
+      "window": "w14",
+      "category": "shift",
+      "statement": "On 2026-09-01 the two-fork-PR-per-cure loop (bot lacking fork access, GitHub MCP 403 on the fork) was permanently closed by rehoming the integration tip into the shared repository as a same-repo bot branch (#943 → #945), after the owner named the loop unsustainable.",
+      "grounding": [
+        {
+          "napkinDate": "2026-09-01 ~12:4xZ",
+          "quote": "Cure: rehome the integration tip into the shared repository as a same-repo branch under the bot; #943 → #945. Under an hour; every instrument worked at once."
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w14-L27",
+      "window": "w14",
+      "category": "surprise",
+      "statement": "A test suite that pinned a literal of the estate's own configuration (authorization_servers: [selfOrigin]) could never have caught the exact production-breaking bug (a served-metadata lie) because the invariant needed was a RELATION to an injected upstream fixture, not a hardcoded literal.",
+      "grounding": [
+        {
+          "napkinDate": "2026-09-01 ~14:3xZ (Kiln)",
+          "quote": "A TEST THAT PINS A LITERAL OF OUR OWN CONFIGURATION ENSHRINES THE BUG"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w14-L28",
+      "window": "w14",
+      "category": "motif",
+      "statement": "A recurring failure mode across the final week is 'a cure derived from a rule's compliant example rather than its normative text' (2026-09-01 RFC 9207 disclaim rider) and 'a gate asserted from doctrine prose rather than the live configuration/ruleset' (2026-09-02 merge-gate correction) — both are instances of citing a lookalike instead of querying the actual value.",
+      "grounding": [
+        {
+          "napkinDate": "2026-09-01 ~13:1xZ",
+          "quote": "a cure derived from a rule's compliant example is a hypothesis until the rule's normative text is read"
+        },
+        {
+          "napkinDate": "2026-09-02 ~11:2xZ (Kiln)",
+          "quote": "I asserted a merge gate from doctrine prose... without reading the live ruleset"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w14-L29",
+      "window": "w14",
+      "category": "surprise",
+      "statement": "On 2026-09-02 the root cause of the MCP-655 production auth breakage was an environmental key mispairing (preview Clerk keys mispaired since 2026-08-05) invisible to the existing preview-serves probe because that probe only checks unauthenticated paths, not an end-to-end token proof — proving metadata correctness had been silently substituted for proving the token path.",
+      "grounding": [
+        {
+          "napkinDate": "2026-09-02 — the proof day",
+          "quote": "a \"transparent\" relay retired from a path needs an END-TO-END TOKEN proof, not a metadata proof"
+        },
+        {
+          "napkinDate": "2026-09-02 — the proof day",
+          "quote": "The real root cause was environmental: preview Clerk keys mispaired since 2026-08-05, invisible because `preview-serves` probes only unauthenticated paths"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w14-L30",
+      "window": "w14",
+      "category": "behavioural-reflex",
+      "statement": "On 2026-09-02 the agent over-generalised a Bash-hook workaround (writing Python scripts to edit files, used because the worktree-isolation guard refuses heredocs/`$()`) into a general editing habit even where the Edit tool was always applicable, drawing an owner correction ('why are you writing python to edit files?').",
+      "grounding": [
+        {
+          "napkinDate": "2026-09-02 — the proof day",
+          "quote": "\"why are you writing python to edit files?\" (a Bash-hook workaround over-generalised into an editing habit — the Edit tool was always right)"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w14-L31",
+      "window": "w14",
+      "category": "tension",
+      "statement": "Tension between reflecting an owner's stated ENDS verbatim versus an implementer reflex that converts those ends into action-procedure language ('harvesting discipline'/'shopping list'), owner-caught twice in one evening on 2026-08-17, naming ENDS→MEANS CONVERSION as a repeating generator.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-17 ~20:0xZ",
+          "quote": "ENDS→MEANS CONVERSION, twice owner-caught in one evening — brief point 3 reflected back as \"harvesting discipline\" / \"shopping list\""
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w14-L32",
+      "window": "w14",
+      "category": "behavioural-reflex",
+      "statement": "The agent used git commit --amend as a content-evolution mechanism four times on one unpushed commit on 2026-08-17 evening, which the owner forbade absolutely because every amend invalidated shas already published elsewhere, forcing correction messages — the estate's append-only commit discipline was reasserted.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-17 evening",
+          "quote": "OWNER-FORBIDDEN, absolute: `git commit --amend` as a content-evolution mechanism. I amended one unpushed commit FOUR times folding new substance in"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w14-L33",
+      "window": "w14",
+      "category": "motif",
+      "statement": "The 'staged bar for reviewer findings' theme recurs as sub-serious findings triggering a disposition-reply-plus-remediation-row rather than an in-loop code cure, culminating in PDR-140 (review-response pricing) authored and ratified 2026-08-31 to make the practice systemic rather than case-by-case.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-31 (curriculum-data-defect lane)",
+          "quote": "PDR-140 AUTHORED... review-response pricing — feedback defaults to triage-to-disposition; cures only over the worthiness bar"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w14-L34",
+      "window": "w14",
+      "category": "behavioural-reflex",
+      "statement": "Sendless/idle subagents (reviewers and Cricket instances) repeatedly finish without delivering a report via SendMessage, costing resend rounds despite the memory rule 'idle means finished — harvest', recurring on 2026-09-01 (six instances in one session).",
+      "grounding": [
+        {
+          "napkinDate": "2026-09-01 ~14:3xZ (Kiln)",
+          "quote": "SENDLESS SUBAGENTS, SIX TIMES: two reviewers and all eight Crickets finished idle with no report delivered"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "w14-L35",
+      "window": "w14",
+      "category": "shift",
+      "statement": "EnterWorktree residency switching killed an already-armed Monitor process on 2026-09-01, contradicting the standing rule that armed monitors survive residency switches, flagged as a platform regression and rule-amendment candidate against worktree-residency §Action 4.",
+      "grounding": [
+        {
+          "napkinDate": "2026-09-01 ~14:3xZ (Kiln)",
+          "quote": "`EnterWorktree` KILLED a Monitor armed at the primary... The residency rule's note that armed monitors survive residency switches did not hold today"
+        }
+      ],
+      "confidence": "med"
+    },
+    {
+      "id": "w14-L36",
+      "window": "w14",
+      "category": "surprise",
+      "statement": "On 2026-08-24 a turbo strict envMode pre-push run in a cloud sandbox silently stripped Playwright/CA/proxy environment variables from gate children, producing three unrelated-looking suite failures traced to one generator (turbo only passes PATH plus its allowlist), invisible on any direct-network machine.",
+      "grounding": [
+        {
+          "napkinDate": "2026-08-24 ~18:2xZ",
+          "quote": "turbo strict envMode passes only `globalPassThroughEnv` plus its built-in allowlist... all one generator"
+        }
+      ],
+      "confidence": "high"
+    }
+  ]
+}

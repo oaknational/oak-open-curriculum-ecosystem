@@ -23,7 +23,7 @@ const BASE_HOSTS = ['localhost', '127.0.0.1', '::1'];
 const VERCEL_HOSTS = [
   'example-deployment-9f2c1ab.vercel.example', // VERCEL_URL — regenerated per deployment
   'example-git-main.vercel.example', // VERCEL_BRANCH_URL
-  'curriculum-mcp-alpha.oaknational.dev', // VERCEL_PROJECT_PRODUCTION_URL
+  'example-project.vercel.example', // VERCEL_PROJECT_PRODUCTION_URL
 ];
 
 describe('resolveAllowedHosts', () => {

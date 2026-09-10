@@ -20,14 +20,14 @@ session harvest preceding this record is the napkin entry committed at
   Forward gaze: decides the shape of a runtime-service boundary
   (PostgreSQL, Neon candidate) before any implementation exists.
 - **Web-app deconstruction**
-  ([research/web-app-deconstruction](../../research/web-app-deconstruction/docs/README.md);
+  ([relocated research corpus](./innovation-kit/web-app-deconstruction/docs/README.md);
   corpus pinned to 2026-07-19 snapshots; moved into this repository
   2026-07 with content-only history): backward-and-outward gaze — recovers
   purpose from mechanism in OWA, Oak Components and the
   Database-Tools → API → OCE chain. Its crown deliverable is a basis,
   deliberately not an architecture: seven primitives, seven coordinates,
   and the seam rule in the
-  [meta-analysis](../../research/web-app-deconstruction/docs/synthesis/meta-analysis.md).
+  [meta-analysis](./innovation-kit/web-app-deconstruction/docs/synthesis/meta-analysis.md).
 - **The survey programme** (opener nodes
   [survey-machinery-deconstruction](../plans/delivery/survey-machinery-deconstruction.plan.md)
   and

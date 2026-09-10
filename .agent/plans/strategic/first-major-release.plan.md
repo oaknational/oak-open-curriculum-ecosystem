@@ -20,7 +20,7 @@ gate_expiry_default: P3D
 depends_on: []
 owner_gates: []
 tickets: []
-last_updated: 2026-07-24
+last_updated: 2026-09-01
 ---
 
 # First major release — Oak distribution-ready in AI assistants
@@ -97,6 +97,12 @@ onto this node — one line each, pointers never duplicates.
   keeps serving); the content-negotiation triple proven live in
   production since v1.82.0 is domain-agnostic and serves either. The
   authoritative record is the MCP-122 ticket comment (2026-07-23).
+- 2026-09-01 — D18 resolved (owner word): the canonical address is
+  `mcp.thenational.academy/mcp`, live behind the Cloudflare edge
+  (MCP-172); `www.thenational.academy/mcp` no longer serves (404,
+  probed 2026-09-01). The estate-wide reference sweep rides the
+  MCP-122 lane. The authoritative record is the MCP-122 ticket
+  comment (2026-09-01).
 - 2026-07-23 — Release-flow silent stall (new entry): a ruleset split
   dropped the semantic-release bot's bypass, GH013 blocked the
   version-bump push, and production sat on v1.81.3 silently while main

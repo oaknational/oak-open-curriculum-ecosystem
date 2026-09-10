@@ -11,13 +11,13 @@ description: >-
   alternatives, structure and reading order, colour and contrast (AA 4.5:1, with
   Oak's AAA 7:1 as an additive bar where the Oak brand applies), keyboard and
   target size, captions and transcripts, plain language, resize and reflow, and
-  the WCAG 2.2 additions. Distinct from the pedagogical "accessible" principle
+  the WCAG 2.2 additions. Distinct from the educational "accessible" principle
   in oak-curriculum-principles (SEND/inclusive teaching) — this is
   technical/digital accessibility.
 license: Accessibility guidance synthesised from WCAG 2.2 (W3C). See references/sources.md.
 metadata:
   author: Oak National Academy
-  version: '0.1.0'
+  version: '0.1.1'
 ---
 
 # Oak National Academy: Accessibility
@@ -37,9 +37,9 @@ This skill is the single source of truth for the **digital accessibility** of an
 Oak cares about two different things that share a word:
 
 - **Digital/technical accessibility (this skill).** Can _everyone_, including disabled users and assistive-technology users, perceive and operate the artefact? Measured against WCAG 2.2 AA.
-- **Pedagogical/inclusive accessibility (`oak-curriculum-principles`, principle 6).** Can _all pupils_, especially those with SEND, access the same ambitious content? Achieved through low-floor/high-ceiling design, scaffolding, dual coding.
+- **Educational/inclusive accessibility (`oak-curriculum-principles`, principle 6).** Can _all pupils_, especially those with SEND, access the same ambitious content? Achieved through low-floor/high-ceiling design, scaffolding, dual coding.
 
-They reinforce each other but are not the same check. A lesson can be brilliantly scaffolded (pedagogically accessible) and still fail WCAG (poor contrast, no captions, images with no alt text). **Apply both.** This skill covers the first; pair it with `oak-curriculum-principles` for the second.
+They reinforce each other but are not the same check. A lesson can be brilliantly scaffolded (educationally accessible) and still fail WCAG (poor contrast, no captions, images with no alt text). **Apply both.** This skill covers the first; pair it with `oak-curriculum-principles` for the second.
 
 ## How to use this skill
 
@@ -66,7 +66,7 @@ When a tool can't express a feature (e.g. a slide tool with no real "heading" ro
 
 ## How it pairs with the other skills
 
-- **`oak-curriculum-principles`** holds the _pedagogical_ "accessible" principle — the complementary, non-WCAG sense above.
+- **`oak-curriculum-principles`** holds the _educational_ "accessible" principle — the complementary, non-WCAG sense above.
 
 ## References and assets
 

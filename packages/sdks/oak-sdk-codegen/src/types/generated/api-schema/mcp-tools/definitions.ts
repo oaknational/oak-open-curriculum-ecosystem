@@ -13,8 +13,6 @@
 
 // Import canonical tool descriptors
 
-import { getChangelog } from './tools/get-changelog.js';
-import { getChangelogLatest } from './tools/get-changelog-latest.js';
 import { getKeyStages } from './tools/get-key-stages.js';
 import { getKeyStagesSubjectAssets } from './tools/get-key-stages-subject-assets.js';
 import { getKeyStagesSubjectLessons } from './tools/get-key-stages-subject-lessons.js';
@@ -44,8 +42,6 @@ import { getThreadsUnits } from './tools/get-threads-units.js';
 import { getUnitsSummary } from './tools/get-units-summary.js';
 
 export const MCP_TOOL_ENTRIES = [
-  { name: 'get-changelog', descriptor: getChangelog, operationId: 'changelog-changelog' },
-  { name: 'get-changelog-latest', descriptor: getChangelogLatest, operationId: 'changelog-latest' },
   { name: 'get-key-stages', descriptor: getKeyStages, operationId: 'getKeyStages-getKeyStages' },
   { name: 'get-key-stages-subject-assets', descriptor: getKeyStagesSubjectAssets, operationId: 'getAssets-getSubjectAssets' },
   { name: 'get-key-stages-subject-lessons', descriptor: getKeyStagesSubjectLessons, operationId: 'getKeyStageSubjectLessons-getKeyStageSubjectLessons' },
@@ -76,35 +72,33 @@ export const MCP_TOOL_ENTRIES = [
 ] as const;
 
 const TOOL_ENTRY_BY_NAME = {
-  'get-changelog': MCP_TOOL_ENTRIES[0],
-  'get-changelog-latest': MCP_TOOL_ENTRIES[1],
-  'get-key-stages': MCP_TOOL_ENTRIES[2],
-  'get-key-stages-subject-assets': MCP_TOOL_ENTRIES[3],
-  'get-key-stages-subject-lessons': MCP_TOOL_ENTRIES[4],
-  'get-key-stages-subject-questions': MCP_TOOL_ENTRIES[5],
-  'get-key-stages-subject-units': MCP_TOOL_ENTRIES[6],
-  'get-keywords': MCP_TOOL_ENTRIES[7],
-  'get-lessons-assets': MCP_TOOL_ENTRIES[8],
-  'get-lessons-quiz': MCP_TOOL_ENTRIES[9],
-  'get-lessons-summary': MCP_TOOL_ENTRIES[10],
-  'get-lessons-transcript': MCP_TOOL_ENTRIES[11],
-  'get-programmes': MCP_TOOL_ENTRIES[12],
-  'get-programmes-assets': MCP_TOOL_ENTRIES[13],
-  'get-programmes-questions': MCP_TOOL_ENTRIES[14],
-  'get-programmes-units': MCP_TOOL_ENTRIES[15],
-  'get-rate-limit': MCP_TOOL_ENTRIES[16],
-  'get-sequences': MCP_TOOL_ENTRIES[17],
-  'get-sequences-assets': MCP_TOOL_ENTRIES[18],
-  'get-sequences-questions': MCP_TOOL_ENTRIES[19],
-  'get-sequences-units': MCP_TOOL_ENTRIES[20],
-  'get-subject-detail': MCP_TOOL_ENTRIES[21],
-  'get-subjects': MCP_TOOL_ENTRIES[22],
-  'get-subjects-key-stages': MCP_TOOL_ENTRIES[23],
-  'get-subjects-programmes': MCP_TOOL_ENTRIES[24],
-  'get-subjects-years': MCP_TOOL_ENTRIES[25],
-  'get-threads': MCP_TOOL_ENTRIES[26],
-  'get-threads-units': MCP_TOOL_ENTRIES[27],
-  'get-units-summary': MCP_TOOL_ENTRIES[28],
+  'get-key-stages': MCP_TOOL_ENTRIES[0],
+  'get-key-stages-subject-assets': MCP_TOOL_ENTRIES[1],
+  'get-key-stages-subject-lessons': MCP_TOOL_ENTRIES[2],
+  'get-key-stages-subject-questions': MCP_TOOL_ENTRIES[3],
+  'get-key-stages-subject-units': MCP_TOOL_ENTRIES[4],
+  'get-keywords': MCP_TOOL_ENTRIES[5],
+  'get-lessons-assets': MCP_TOOL_ENTRIES[6],
+  'get-lessons-quiz': MCP_TOOL_ENTRIES[7],
+  'get-lessons-summary': MCP_TOOL_ENTRIES[8],
+  'get-lessons-transcript': MCP_TOOL_ENTRIES[9],
+  'get-programmes': MCP_TOOL_ENTRIES[10],
+  'get-programmes-assets': MCP_TOOL_ENTRIES[11],
+  'get-programmes-questions': MCP_TOOL_ENTRIES[12],
+  'get-programmes-units': MCP_TOOL_ENTRIES[13],
+  'get-rate-limit': MCP_TOOL_ENTRIES[14],
+  'get-sequences': MCP_TOOL_ENTRIES[15],
+  'get-sequences-assets': MCP_TOOL_ENTRIES[16],
+  'get-sequences-questions': MCP_TOOL_ENTRIES[17],
+  'get-sequences-units': MCP_TOOL_ENTRIES[18],
+  'get-subject-detail': MCP_TOOL_ENTRIES[19],
+  'get-subjects': MCP_TOOL_ENTRIES[20],
+  'get-subjects-key-stages': MCP_TOOL_ENTRIES[21],
+  'get-subjects-programmes': MCP_TOOL_ENTRIES[22],
+  'get-subjects-years': MCP_TOOL_ENTRIES[23],
+  'get-threads': MCP_TOOL_ENTRIES[24],
+  'get-threads-units': MCP_TOOL_ENTRIES[25],
+  'get-units-summary': MCP_TOOL_ENTRIES[26],
 } as const;
 
 type ToolEntryByNameMap = typeof TOOL_ENTRY_BY_NAME;
@@ -121,8 +115,6 @@ type ToolNameToOperationIdMap = { readonly [E in ToolEntry as E['name']]: E['ope
 type OperationIdToToolNameMap = Readonly<Record<ToolOperationId, ToolName>>;
 
 export const MCP_TOOL_DESCRIPTORS = {
-  'get-changelog': getChangelog,
-  'get-changelog-latest': getChangelogLatest,
   'get-key-stages': getKeyStages,
   'get-key-stages-subject-assets': getKeyStagesSubjectAssets,
   'get-key-stages-subject-lessons': getKeyStagesSubjectLessons,
@@ -198,8 +190,6 @@ const OPERATION_ID_TO_TOOL_NAME = {
   'getUnits-getUnit': 'get-units-summary',
   'getThreads-getAllThreads': 'get-threads',
   'getThreads-getThreadUnits': 'get-threads-units',
-  'changelog-changelog': 'get-changelog',
-  'changelog-latest': 'get-changelog-latest',
   'getRateLimit-getRateLimit': 'get-rate-limit',
 } as const satisfies OperationIdToToolNameMap;
 
@@ -250,8 +240,6 @@ const TOOL_NAME_TO_OPERATION_ID = {
   'get-units-summary': 'getUnits-getUnit',
   'get-threads': 'getThreads-getAllThreads',
   'get-threads-units': 'getThreads-getThreadUnits',
-  'get-changelog': 'changelog-changelog',
-  'get-changelog-latest': 'changelog-latest',
   'get-rate-limit': 'getRateLimit-getRateLimit',
 } as const satisfies ToolNameToOperationIdMap;
 

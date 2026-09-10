@@ -7,6 +7,7 @@ import {
   type UnknownProperties,
 } from './event-policy-contract.js';
 import { isOakClientFamily, isOakClientProduct, isOakClientSurface } from './client-categories.js';
+import { isOakClientUserAgent } from './client-user-agent.js';
 import {
   commonProperties,
   isSupportedProtocolVersion,
@@ -44,6 +45,17 @@ function readClientCategories(properties: UnknownProperties): ClientCategories |
   return { product, surface };
 }
 
+/**
+ * Carries the rebuilt `$mcp_client_user_agent` through the barrier, and only
+ * that. The property is optional, so a missing value leaves the event intact,
+ * and a value outside the rebuilt grammar drops the PROPERTY, not the event: the
+ * vendor's raw header string, should it ever reach here, still never ships.
+ */
+function clientUserAgentProperty(properties: UnknownProperties): UnknownProperties {
+  const userAgent = readOwn(properties, '$mcp_client_user_agent');
+  return isOakClientUserAgent(userAgent) ? { $mcp_client_user_agent: userAgent } : {};
+}
+
 function normaliseInitializeProperties(
   properties: UnknownProperties,
   snapshot: PolicySnapshot,
@@ -63,6 +75,7 @@ function normaliseInitializeProperties(
 
   return {
     ...commonProperties(snapshot),
+    ...clientUserAgentProperty(properties),
     $mcp_is_error: false,
     oak_client_family: clientFamily,
     oak_client_product: categories.product,
@@ -85,6 +98,7 @@ function normaliseToolsListProperties(
   if (isError) {
     return {
       ...commonProperties(snapshot),
+      ...clientUserAgentProperty(properties),
       $mcp_duration_ms: duration,
       $mcp_is_error: true,
       oak_client_product: categories.product,
@@ -102,6 +116,7 @@ function normaliseToolsListProperties(
 
   return {
     ...commonProperties(snapshot),
+    ...clientUserAgentProperty(properties),
     $mcp_duration_ms: duration,
     $mcp_is_error: false,
     $mcp_listed_tool_names: listedToolNames,
@@ -129,6 +144,7 @@ function normaliseToolCallProperties(
 
   return {
     ...commonProperties(snapshot),
+    ...clientUserAgentProperty(properties),
     $mcp_tool_name: toolName,
     $mcp_duration_ms: duration,
     $mcp_is_error: isError,

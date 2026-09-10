@@ -123,9 +123,26 @@ form to use rather than a bypass:
   push (worked instance, PR #324 arc, 2026-07-08). The cure is splitting
   into unambiguous single-intent calls — never reaching for a
   destructive sibling that happens to pass.
+- A trip-word inside a commit-message HEREDOC trips the same block and
+  the whole compound command is lost (the worktree-destruction guard on
+  the verb for restoring files, inside a message body, 2026-08-31): author
+  commit messages with the file-write tool and keep trigger-adjacent
+  vocabulary out of shell-visible text.
 
 These are refinement candidates for the hook (flag-parsing over
 substring), never bypass justifications — use the safe form.
+
+## Holding-State Vocabulary — Name the Gate, Never the Holding State
+
+The comms concept gate refuses indefinite-deferral vocabulary (the word
+for leaving something in a bay with no reopen condition) and, like the
+substring matcher, cannot see negation: it fired on comms sends twice
+(2026-08-18, 2026-08-19) and on a file write that used the word in
+NEGATION (2026-08-19). The cure that held all three times, and read
+better each time: state the concept positively — name the GATE (the
+reopen condition, the expiry, the owner word that lifts it) — never the
+holding state. The claims surface accepts the same words, so the gate is
+comms- and write-side only; the discipline is the author's.
 
 ## Doctrinal Anchors
 
