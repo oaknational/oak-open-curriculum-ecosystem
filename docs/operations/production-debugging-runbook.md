@@ -2,7 +2,7 @@
 
 This runbook provides step-by-step debugging workflows for the Oak Open Curriculum Ecosystem using Phase 2 observability features (correlation IDs, timing metrics, error enrichment).
 
-**Last Updated**: 2026-09-01  
+**Last Updated**: 2026-09-03  
 **Applies To**: HTTP Server (Vercel), Legacy Stdio Server (local/Claude Desktop)
 
 ## Production Endpoints and Hosts
@@ -125,6 +125,11 @@ run the same query differentially against local and production (e.g. the same
 MCP tool call against `oak-local` and `oak-prod`) — divergence with identical
 code isolates the issue to the deploy/data layer, matching results move
 suspicion back to code.
+
+And before hunting a request through any Oak instrument: **rule out an edge
+block.** A request Cloudflare's WAF refuses never reaches the origin, so it
+appears in no Oak instrument at all — see
+[Scenario 5](#scenario-5-connector-fails-and-nothing-is-in-any-log).
 
 ### Scenario 1: Slow Request Investigation
 
@@ -504,6 +509,72 @@ Document findings:
 - Monitoring: Added alert for rate limit errors
 - Client Action: Retry the request
 ```
+
+### Scenario 5: Connector Fails and Nothing Is in Any Log
+
+**Situation**: A teacher reports the connector failing with an error their
+client cannot explain, and the request is in no Oak instrument — no Sentry
+event, no PostHog event, no Vercel runtime log.
+
+**Nothing is server-side because nothing reached the server.** Cloudflare's
+WAF refuses the request at the edge on `mcp.thenational.academy` and returns
+an Oak-branded HTML page (`<title>Access blocked: Oak National
+Academy</title>`) with status 403 into a JSON-RPC client, which surfaces as an
+opaque connector failure. The only record of it is in Cloudflare's firewall
+events.
+
+**Step 1: confirm the origin was never reached.** The block carries **no
+`x-vercel-id`** header — that absence is the fastest positive identifier.
+`server: cloudflare` and `cf-ray` do **not** discriminate: every response on
+this host carries both, blocked or not (control-probed 2026-09-03).
+
+**Step 2: run the control probe on the identical path.** A WAF block and a
+broken route both return an error; only the pair separates them. The benign
+body must return the route's normal status with `x-vercel-id` present, while
+the reported payload returns 403 without it.
+
+```bash
+# Benign control on the same path — expect the route's normal status
+# (401 unauthenticated) and an x-vercel-id header
+curl -sS -o /dev/null -D - -X POST https://mcp.thenational.academy/mcp \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json, text/event-stream' \
+  --data '{"jsonrpc":"2.0","method":"tools/call","id":"1","params":{"name":"search","arguments":{"query":"photosynthesis lesson for Year 7"}}}' \
+  | grep -iE '^(HTTP/|x-vercel-id)'
+
+# Repeat with the reported payload. 403 and no x-vercel-id is a WAF block;
+# the same status on both is the route, not the edge.
+```
+
+**Step 3: attribute the block in Cloudflare.** Only Cloudflare's firewall
+events name the rule and ruleset, and the `cf-ray` value on the 403 identifies
+the request. Nothing in this repository can make that attribution — do not
+infer a rule from the status code.
+
+**What actually trips it** is a **literal payload string**, not the subject
+matter (measured on `mcp.thenational.academy` 2026-09-03, deterministic over
+repeated runs). Blocked: `' OR 1=1 --`,
+`<script>alert(document.cookie)</script>`, `; cat /etc/passwd`,
+`../../../../etc/passwd`. Passed: every phrasing a teacher would actually
+type, including "explain SQL injection to year 10", "what is cross-site
+scripting? a lesson for KS4", and `DROP TABLE students;`. So a computing
+lesson about security is not itself the trigger — check the exact string
+before assuming the topic caused it.
+
+For orientation, the rule lives in `oaknational/Cloud-Config` at
+`infrastructure/cloudflare/rulesets/firewall_managed_rules.tf`: host-scoped to
+`mcp.thenational.academy`, OWASP Core Ruleset at paranoia level 1,
+`score_threshold = 40`, `action = "block"`. The action is deliberately `block`
+rather than `managed_challenge`, because an MCP client cannot solve an
+interactive challenge and would see one as a hung connection instead of a
+refusal.
+
+The underlying defect — the edge discriminating against curriculum content
+about security topics — is tracked on
+[MCP-665](https://linear.app/oaknational/issue/MCP-665). The durable fix for
+this scenario's blind spot, forwarding firewall events into Sentry via
+Logpush so an edge block lands in an Oak instrument at all, is post-publicity
+and not yet ticketed.
 
 ## Tools and Commands Reference
 
