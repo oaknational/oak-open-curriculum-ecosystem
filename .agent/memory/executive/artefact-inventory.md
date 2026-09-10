@@ -70,7 +70,10 @@ Every active skill spends the finite discovery budget — see the
 budget mechanics under §New Runbook before adding one.
 
 1. **Canonical**: `.agent/skills/<name>/SKILL-CANONICAL.md` (with
-   `classification: active | passive` frontmatter)
+   `classification: active | passive` frontmatter). Optional Agent Skills
+   frontmatter projects to both surfaces — field set in ADR-125's Layer 2
+   adapter table. Quote every `metadata` value (`owned: "true"`): the map
+   is string→string and an unquoted `true` or `1.0` refuses the canonical.
 2. **Adapters (generated)**: `.agents/skills/oak-<name>/SKILL.md` and
    `.claude/skills/oak-<name>/SKILL.md` — emitted by
    `pnpm agent-tools:skills-adapter-generate`; **manual edits forbidden**

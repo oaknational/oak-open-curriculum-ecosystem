@@ -221,6 +221,7 @@ A thin wrapper contains ONLY:
 
 - Platform-specific activation metadata (e.g., Cursor `.mdc` frontmatter with `globs`/`alwaysApply`, Claude YAML frontmatter with `allowed-tools`/`permissionMode`, Gemini TOML `description`)
 - A short description
+- Portable specification frontmatter carried through unchanged in value from the canonical, where the canonical declares it — for skills, the Layer 2 adapter table's spec-portable set (`license`, `compatibility`, `metadata`, `allowed-tools`); see the 2026-09-09 amendment
 - A pointer to the canonical content path
 - Platform-specific invocation syntax where the canonical form cannot express it (e.g., Cursor `@` mentions, Claude `$ARGUMENTS`, Gemini `{{args}}`/`!{...}`/`@{...}`, Cursor Task tool `subagent_type`)
 
@@ -228,8 +229,11 @@ A thin wrapper MUST NOT contain substantive instructions, workflow steps, or log
 
 ### Owned-Skill Naming Convention
 
-Owned skills (`metadata.owned: true` in canonical frontmatter) carry a
-configurable prefix in adapter directories. The source default is
+Every canonical under `.agent/skills/` is a Practice-class skill, and its
+adapter directories carry a configurable prefix. The prefix applies to
+every discovered canonical; it is not selected by a frontmatter flag, and
+`metadata.owned: "true"` — which only some canonicals declare — is
+declared metadata rather than the prefix trigger. The source default is
 empty; the effective prefix `oak-` is passed explicitly via
 `--prefix=oak-` in `package.json` scripts (`pnpm skills:check`).
 Contributors who want a different prefix override at the call site.
@@ -744,6 +748,104 @@ instead of a warning on a zero exit. The Layer 2 wrapper description, the
 prefix paragraph, and structural invariant 5 — which still described the
 abandoned canonicalise-ingested model — were updated to the vendored model
 in the same amendment, so the ADR carries one model for lock entries.
+
+### 2026-09-09 — Spec-portable frontmatter: strict at the parse boundary
+
+The Layer 2 adapter table and
+[PDR-051](../../../.agent/practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md)
+§Frontmatter strategy specify the spec-portable set (`license`,
+`compatibility`, `metadata`, `allowed-tools`) as pass-through content for
+both skill surfaces. This amendment settles the contract questions that
+implementing that pass-through raised. Landed under MCP-706, a leaf of
+MCP-123 P1, whose gap analysis is the 2026-07-23 Agent Skills standard
+alignment exploration report.
+
+**A malformed spec field REFUSES the canonical; it is never dropped.**
+`agent-tools/src/skills-adapter-generate/canonical-frontmatter.ts` is the
+enforced schema SSOT for the SPECIFICATION's field set in a canonical's
+frontmatter — narrower than what `subagents/frontmatter-schema.ts` is for
+sub-agent wrappers (2026-06-28 precedent), which is complete for its
+artefact. Canonical skill frontmatter has a second enforcement home by
+design: `classification` (structural invariant 9) is a non-spec key, so
+the spec schema strips it and `portability:check` asserts it. Do not add a
+non-spec canonical field to the spec schema and believe it enforced.
+A declared field holding a value the specification does not
+admit makes the canonical unparseable, which the generator and the drift
+checker already fail on loudly. Dropping the field instead would publish a
+projection that disagrees with its canonical, invisibly. Every refusal
+names the field and the reason on the operator's own error line.
+
+**`metadata` is string→string.** This is the specification's own
+constraint, verified first-hand against `agentskills.io/specification` on
+2026-09-09 ("A map from string keys to string values") and corroborated
+in-repo by the 2026-07-23 gap analysis. The upstream reading is pinned to
+that date and expires: a later reader re-checks rather than inheriting it.
+The constraint agrees with PDR-051's
+platform-prefixed string-value convention. The consequence is authoring-facing:
+the conforming form of the owned-skill flag is the QUOTED `owned: "true"`, and
+§Owned-Skill Naming Convention is trued to it here. The unquoted rendering in
+the 2026-05-09 amendment above stands as the historical record of what that
+amendment said; YAML reads it as a boolean and the schema refuses it, so the
+quoted form is the one to author.
+
+**The spec-portable values are emitted explicitly QUOTED, and no YAML
+version choice would do instead.** The two resolutions disagree about
+which bare scalars are strings, and each leaves the other's ambiguous
+forms unquoted, so picking a version trades one direction of the hazard
+for the other. Measured both ways on 2026-09-09: emitting under 1.2
+leaves `yes`, `no`, `on`, `off`, `y`, `2026-09-09` and `1:30` bare, which
+a 1.1 consumer (PyYAML, Ruby Psych, `yaml.v2`) reads as booleans, a date
+and the number 90; emitting under 1.1 leaves `0o17` bare, which a 1.2
+consumer reads as 15. Since the surfaces exist for foreign vendors to
+read and their resolution is not ours to know, the emitter quotes the
+values the schema has already proven are strings. That depends on no
+version at all, and it makes these fields byte-faithful to the
+canonical's own quoted authoring form.
+
+`name` and `description` are left to the serialiser: `name` is the
+prefixed lowercase-hyphen id and `description` is required non-empty
+prose, neither of which can be a bare scalar of another type without
+already violating the specification's own field rules — a
+canonical-contract concern, not an emission one.
+
+**A `metadata.claude-*` key passes through as metadata and is NOT
+derived.** The Claude adapter row specifies deriving Claude top-level
+fields from such keys; that derivation is unimplemented. Until it exists,
+declaring one ships an inert `metadata` entry that looks as though it took
+effect. The pass-through does not imply the derivation.
+
+**`metadata` passes to BOTH surfaces in full**, including the
+`.agents/skills/` cross-tool root, so a `metadata.claude-*` key reaches
+the cross-tool adapter too.
+[PDR-051](../../../.agent/practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md)
+§Frontmatter strategy confines platform-specific fields to the native
+adapter; that clause reads on TOP-LEVEL platform fields, not on entries
+inside the spec's own `metadata` map, which is spec-portable in full.
+Nothing diverges today — no canonical declares such a key — and this
+settles the contract for when one does.
+
+**Non-spec canonical keys stay canonical-only, and `classification` stays
+at top level.** `classification` (structural invariant 9), `concern`, and
+`domain` are stripped at the parse and never projected. The gap analysis
+cited above proposed re-homing `classification` under `metadata` so a
+canonical file would itself pass spec validation unmodified; that is
+settled the other way here. A canonical is not a published spec skill —
+`SKILL-CANONICAL.md` is deliberately non-discoverable (§2) — so it owes
+the specification nothing, and the field's conforming home becomes a live
+question only if canonicals are ever published as spec skills directly.
+`concern` and `domain` have the same standing; they are named in this
+ADR's contract for the first time here. Conversely `metadata.owned` now appears on both
+projection surfaces, including the `.agents/skills/` root shared with
+Vendor-class skills; it remains informational, and Practice-class
+membership is still recognised ONLY by the class marker (see §Skill
+classes and validation jurisdiction).
+
+The stub body shape — one title line and the class-marker pointer line — is
+untouched, so a wider frontmatter does not affect class recognition. The
+specification's numeric and format limits (description ≤1024,
+compatibility ≤500, the `name` regex, `name` matches directory) are an
+estate-wide canonical contract check that does not yet exist anywhere;
+this amendment does not create it.
 
 ## References
 

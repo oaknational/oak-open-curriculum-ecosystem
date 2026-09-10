@@ -2,98 +2,15 @@ import { describe, expect, it } from 'vitest';
 
 import { checkAdapters, type CheckerFs } from '../../src/skills-adapter-generate/checker';
 import type { FsRead } from '../../src/skills-adapter-generate/carriage';
+import { type ParsedCanonical } from '../../src/skills-adapter-generate/discovery';
 import {
   adapterTargetPath,
-  buildAdapterFrontmatter,
   discoverCanonicals,
   generateExitCode,
-  parseFrontmatter,
   renderAdapter,
   type AdapterSurface,
   type DiscoveryFs,
-  type ParsedCanonicalSkill,
 } from '../../src/skills-adapter-generate/generator';
-
-const sampleCanonicalSkill = `---
-name: start-right-quick
-classification: active
-description: Apply the repository start-right quick grounding workflow to the active session.
----
-
-# Start Right (Quick)
-
-## Goal
-
-Workflow content here.
-`;
-
-describe('parseFrontmatter', () => {
-  it('extracts name and description from a fenced canonical SKILL, discarding extra keys', () => {
-    const result = parseFrontmatter(sampleCanonicalSkill);
-
-    expect(result).toEqual({
-      name: 'start-right-quick',
-      description:
-        'Apply the repository start-right quick grounding workflow to the active session.',
-    });
-  });
-
-  it('returns undefined when the file lacks a frontmatter fence', () => {
-    const result = parseFrontmatter('# Just a heading\n\nNo frontmatter.');
-
-    expect(result).toBeUndefined();
-  });
-
-  it('returns undefined when frontmatter omits the required description', () => {
-    const result = parseFrontmatter('---\nname: foo\n---\n\nbody');
-
-    expect(result).toBeUndefined();
-  });
-
-  it('handles folded-scalar descriptions', () => {
-    const folded = `---
-name: commit
-description: >-
-  Create a well-formed commit for current changes with conventional
-  message format.
----
-
-body
-`;
-    const result = parseFrontmatter(folded);
-
-    expect(result).toMatchObject({
-      name: 'commit',
-      description:
-        'Create a well-formed commit for current changes with conventional message format.',
-    });
-  });
-});
-
-describe('buildAdapterFrontmatter', () => {
-  it('renames the skill with the configured prefix and preserves the description', () => {
-    const result = buildAdapterFrontmatter(
-      { name: 'go', description: 'Re-ground execution.' },
-      'oak-',
-      'go',
-    );
-
-    expect(result).toEqual({
-      name: 'oak-go',
-      description: 'Re-ground execution.',
-    });
-  });
-
-  it('uses an empty prefix when configured', () => {
-    const result = buildAdapterFrontmatter(
-      { name: 'go', description: 'Re-ground execution.' },
-      '',
-      'go',
-    );
-
-    expect(result).toEqual({ name: 'go', description: 'Re-ground execution.' });
-  });
-});
 
 const encoder = new TextEncoder();
 
@@ -221,7 +138,9 @@ describe('discoverCanonicals', () => {
     const outcome = await discoverCanonicals(repoRoot, asDiscovery(fs));
 
     expect(outcome.canonicals).toEqual([]);
-    expect(outcome.skipped).toEqual(['neither']);
+    expect(outcome.skipped).toHaveLength(1);
+    expect(outcome.skipped[0]?.relativeDir).toBe('neither');
+    expect(outcome.skipped[0]?.reason).toContain('no readable SKILL-CANONICAL.md');
   });
 
   it('skips a concern member directory without a readable canonical', async () => {
@@ -236,7 +155,9 @@ describe('discoverCanonicals', () => {
     const outcome = await discoverCanonicals(repoRoot, asDiscovery(fs));
 
     expect(outcome.canonicals.map((c) => c.id)).toEqual(['good']);
-    expect(outcome.skipped).toEqual(['fam/hollow']);
+    expect(outcome.skipped).toHaveLength(1);
+    expect(outcome.skipped[0]?.relativeDir).toBe('fam/hollow');
+    expect(outcome.skipped[0]?.reason).toContain('no readable SKILL-CANONICAL.md');
   });
 
   it('discovers a domain-tier member under a concern (concern/domain/skill)', async () => {
@@ -296,7 +217,9 @@ describe('discoverCanonicals', () => {
     const outcome = await discoverCanonicals(repoRoot, asDiscovery(fs));
 
     expect(outcome.canonicals.map((c) => c.id)).toEqual(['good']);
-    expect(outcome.skipped).toEqual(['domain-craft/ui-design/hollow']);
+    expect(outcome.skipped).toHaveLength(1);
+    expect(outcome.skipped[0]?.relativeDir).toBe('domain-craft/ui-design/hollow');
+    expect(outcome.skipped[0]?.reason).toContain('no readable SKILL-CANONICAL.md');
   });
 
   it('never walks deeper than the domain tier — a fourth level is content no harness can summon', async () => {
@@ -313,7 +236,9 @@ describe('discoverCanonicals', () => {
     const outcome = await discoverCanonicals(repoRoot, asDiscovery(fs));
 
     expect(outcome.canonicals).toEqual([]);
-    expect(outcome.skipped).toEqual(['fam/dom/too-deep']);
+    expect(outcome.skipped).toHaveLength(1);
+    expect(outcome.skipped[0]?.relativeDir).toBe('fam/dom/too-deep');
+    expect(outcome.skipped[0]?.reason).toContain('no readable SKILL-CANONICAL.md');
   });
 
   it('reports duplicate leaf ids across shapes — the flat adapter namespace must stay injective', async () => {
@@ -342,12 +267,58 @@ describe('discoverCanonicals', () => {
     const outcome = await discoverCanonicals(repoRoot, asDiscovery(fs));
 
     expect(outcome.canonicals).toEqual([]);
-    expect(outcome.skipped).toEqual(['broken']);
+    expect(outcome.skipped).toEqual([
+      { relativeDir: 'broken', reason: 'no YAML frontmatter fence' },
+    ]);
+  });
+
+  it('loses a skill whose frontmatter the specification refuses, and names the field', async () => {
+    // The realistic author error: an unquoted version number, which YAML
+    // reads as a number and the spec's string→string metadata map refuses.
+    // A missing fence would be skipped by a lenient parse too; this fixture
+    // discriminates.
+    const fs = makeTreeFs(
+      new Map([['/repo/.agent/skills', ['broken']]]),
+      new Map([
+        [
+          '/repo/.agent/skills/broken/SKILL-CANONICAL.md',
+          '---\nname: broken\ndescription: A skill.\nmetadata:\n  version: 1.0\n---\n\nbody\n',
+        ],
+      ]),
+    );
+
+    const outcome = await discoverCanonicals(repoRoot, asDiscovery(fs));
+
+    expect(outcome.canonicals).toEqual([]);
+    expect(outcome.skipped).toHaveLength(1);
+    expect(outcome.skipped[0]?.relativeDir).toBe('broken');
+    expect(outcome.skipped[0]?.reason).toContain('metadata.version');
+  });
+
+  it('carries the spec-portable fields through discovery onto the parsed canonical', async () => {
+    const fs = makeTreeFs(
+      new Map([['/repo/.agent/skills', ['carrier']]]),
+      new Map([
+        [
+          '/repo/.agent/skills/carrier/SKILL-CANONICAL.md',
+          '---\nname: carrier\nclassification: active\ndescription: A skill.\ncompatibility: Requires jq.\nmetadata:\n  owned: "true"\n---\n\nbody\n',
+        ],
+      ]),
+    );
+
+    const outcome = await discoverCanonicals(repoRoot, asDiscovery(fs));
+
+    expect(outcome.canonicals[0]?.frontmatter).toEqual({
+      name: 'carrier',
+      description: 'A skill.',
+      compatibility: 'Requires jq.',
+      metadata: { owned: 'true' },
+    });
   });
 });
 
 describe('renderAdapter for concern-tier members', () => {
-  const familyMember: ParsedCanonicalSkill = {
+  const familyMember: ParsedCanonical = {
     id: 'parallax-frame',
     relativeDir: 'cognition/parallax-frame',
     frontmatter: { name: 'parallax-frame', description: 'Frame an inquiry.' },
@@ -387,7 +358,7 @@ describe('checkAdapters over a concern tier', () => {
 describe('checkAdapters', () => {
   const repoRoot = '/repo';
   const prefix = 'oak-';
-  const sampleCanonical: ParsedCanonicalSkill = {
+  const sampleCanonical: ParsedCanonical = {
     id: 'sample',
     relativeDir: 'sample',
     frontmatter: { name: 'sample', description: 'A sample canonical skill.' },
@@ -443,7 +414,9 @@ describe('checkAdapters', () => {
       makeTreeFs(directories, files),
     );
 
-    expect(result.skipped).toEqual(['ghost']);
+    expect(result.skipped).toHaveLength(1);
+    expect(result.skipped[0]?.relativeDir).toBe('ghost');
+    expect(result.skipped[0]?.reason).toContain('no readable SKILL-CANONICAL.md');
   });
 
   it('detects drift in a modified adapter that is still recognisably ours', async () => {
@@ -515,7 +488,7 @@ describe('checkAdapters carriage', () => {
   const repoRoot = '/repo';
   const prefix = 'oak-';
   const canonicalDir = '/repo/.agent/skills/cognition/parallax';
-  const parsedParallax: ParsedCanonicalSkill = {
+  const parsedParallax: ParsedCanonical = {
     id: 'parallax',
     relativeDir: 'cognition/parallax',
     frontmatter: { name: 'x', description: 'A canonical skill.' },
@@ -613,7 +586,7 @@ describe('generateExitCode', () => {
     expect(
       generateExitCode({
         written: ['a'],
-        skipped: ['uncategorised'],
+        skipped: [{ relativeDir: 'uncategorised', reason: 'no readable SKILL-CANONICAL.md' }],
         duplicates: [],
         pruned: [],
         refused: [],

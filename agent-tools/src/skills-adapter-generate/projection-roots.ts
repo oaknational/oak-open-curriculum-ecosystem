@@ -51,7 +51,7 @@ import { PROJECTION_SURFACE_ROOTS, surfaceRootGuardFailure } from './surface-roo
  * skills root read as absent, and acting on the partial set deletes or
  * overwrites legitimate projections. */
 export function isDiscoveryComplete(discovery: {
-  readonly skipped: readonly string[];
+  readonly skipped: readonly unknown[];
   readonly canonicals: readonly unknown[];
 }): boolean {
   return discovery.skipped.length === 0 && discovery.canonicals.length > 0;
