@@ -62,12 +62,12 @@ export function resolveStaticRoot(
  * Vercel), unless an explicit root is injected. That heuristic used to fail
  * open: no candidate meant no mount, and the server came up healthy.
  *
- * The design system and brand artwork are delivered from this directory —
- * including the masthead logo the page references — so failing open costs
- * them silently: a page that returns 200 with a broken image today, and
- * unstyled HTML once the page consumes the stylesheets. A missing copy is a
- * broken deployment, so it is treated as one at boot rather than discovered
- * by a visitor. (The boot-time throw is the deliberate fail-fast exception
+ * The design system and brand artwork are delivered from this directory, so
+ * failing open costs them silently: every asset request 404s while the server
+ * itself reports healthy. A missing copy is a broken deployment, so it is
+ * treated as one at boot rather than discovered by a consumer. (The page that
+ * referenced the masthead logo went on 2026-08-20; the mount outlived it and
+ * its removal is a separately sequenced change.) (The boot-time throw is the deliberate fail-fast exception
  * to the Result pattern: there is no caller above `createApp` to hand a
  * Result to, and a half-booted server is the worse outcome.)
  */
@@ -113,11 +113,14 @@ function mountStaticAssets(app: Express, log: Logger, staticRoot?: string): void
   // `redirect: false` is load-bearing on the routed mount, not hardening.
   // Mounted at `/mcp`, a bare `GET /mcp` arrives as a request for the mount's
   // own directory, and with express.static's default that is a 301 to `/mcp/`,
-  // which would swallow the request before the HTML negotiation and the MCP
-  // protocol legs behind it ever ran. Off, a directory request falls through
-  // to `next()` — so `GET /mcp` still negotiates HTML and `POST /mcp` still
-  // reaches the handler. `mcp-html-negotiation.integration.test.ts` demands
-  // `GET /mcp` return the baked page byte-exactly, so it fails on a 301.
+  // which would swallow the request before the MCP protocol legs behind it
+  // ever ran. Off, a directory request falls through to `next()` — so
+  // `GET /mcp` still reaches the accept gate and `POST /mcp` still reaches the
+  // handler. Pinned by `no-html-surface.integration.test.ts`, which requires
+  // `GET`/`HEAD /mcp` to answer with the gate's typed 406 and `POST /mcp` to
+  // reach the handler; a 301 from this mount fails all of them. (Until
+  // 2026-08-20 the pin was `mcp-html-negotiation.integration.test.ts`,
+  // deleted with the HTML surface it described.)
   //
   // `index: false` is hardening rather than load-bearing: the served root has
   // no `index.html`, so the probe finds nothing today. It is set so that
