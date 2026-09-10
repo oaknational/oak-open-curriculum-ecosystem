@@ -143,6 +143,27 @@ describe('runCompat — a failed run can never read as a pass', () => {
     expect(reason).toContain('INTERNAL_ERROR');
   });
 
+  it('bounds an enormous vendor message — a failure reason is a diagnostic, not a dump', () => {
+    // `code` and `message` are unbounded vendor strings, and this reason rides
+    // to stdout and summary.json. Unbounded, a malformed remote response could
+    // pour the child's whole stream through them; the unparseable path was
+    // already bounded and this one was not (review, 2026-09-10).
+    const flood = 'A'.repeat(200_000);
+    const { io } = fakeIo({
+      exitCode: 1,
+      stdout: '',
+      stderr: JSON.stringify({ error: { code: 'INTERNAL_ERROR', message: flood } }),
+    });
+
+    const reason = runCompat(io, TARGET).failureReasons.join(' ');
+
+    expect(reason.length).toBeLessThan(5_000);
+    expect(reason).toContain('truncated from');
+    // Bounded, not gutted: the vendor's own classification still reaches the
+    // operator.
+    expect(reason).toContain('INTERNAL_ERROR');
+  });
+
   it('names a usage error distinctly, since exit 2 is our argv being wrong, not drift', () => {
     const { io } = fakeIo({
       exitCode: 2,
@@ -248,6 +269,26 @@ describe('runCompat — a capture of a different deployment can never read as th
     expect(outcome.failureReasons.join(' ')).toContain('not the pinned bundled');
     expect(outcome.hosts).toBeUndefined();
     // Retention still happened — the mismatched capture is the evidence.
+    expect(retained).toHaveLength(1);
+  });
+
+  it('fails a capture whose host set drifted from the pin — a SWAP, not a shape error', () => {
+    // Sixteen unique hosts is not the same as the RIGHT sixteen: a report that
+    // drops `claude` for a stranger once passed as usable. The pin used to be
+    // enforced at the schema, which made this a generic parse failure and left
+    // the catalogue diagnosis unreachable; it is judged here now, so the
+    // reason names what actually drifted (review, 2026-09-10).
+    const swapped = OAK_REPORT.replace('"hostId": "claude"', '"hostId": "shiny-new-host"');
+    const { io, retained } = fakeIo({ exitCode: 0, stdout: swapped });
+
+    const outcome = runCompat(io, FIXTURE_TARGET);
+    const reason = outcome.failureReasons.join(' ');
+
+    expect(outcome.verdict).toBe('fail');
+    expect(reason).toContain('not the pinned catalogue');
+    expect(reason).toContain('unexpected shiny-new-host');
+    expect(reason).toContain('missing claude');
+    expect(outcome.hosts).toBeUndefined();
     expect(retained).toHaveLength(1);
   });
 

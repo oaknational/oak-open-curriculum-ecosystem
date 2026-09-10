@@ -20,6 +20,7 @@
 import { isErr, type Result } from '@oaknational/result';
 
 import { boundedExcerpt, redactCredentials } from './bounded-excerpt.js';
+import { describeCatalogueDrift } from './compat-catalogue.js';
 import {
   compatErrorEnvelopeSchema,
   compatReportSchema,
@@ -155,12 +156,17 @@ function describeRunFailure(exitCode: number | undefined, stderr: string): strin
   const kind = describeExitKind(exitCode);
   const parsed = compatErrorEnvelopeSchema.safeParse(safeJsonParse(stderr));
   if (parsed.success) {
-    // Redacted like any other vendor text reaching a failure reason: a parsed
-    // envelope is not safer than a raw stream just because it parsed. A vendor
-    // echoing the failing request puts a live token in `message`.
-    const code = redactCredentials(parsed.data.error.code);
-    const message = redactCredentials(parsed.data.error.message);
-    return `mcpjam compat ${kind}, exit ${String(exitCode ?? 'unknown')}: ${code} — ${message}`;
+    // Through `boundedExcerpt` for BOTH its jobs: it redacts (a parsed envelope
+    // is not safer than a raw stream just because it parsed — a vendor echoing
+    // the failing request puts a live token in `message`) and it BOUNDS. The
+    // envelope's `code` and `message` are unbounded vendor strings, so an
+    // unbounded copy could pour the child's whole stream into stdout and
+    // `summary.json`; the unparseable path below was already bounded and this
+    // one was not (review, 2026-09-10).
+    return `mcpjam compat ${kind}, exit ${String(exitCode ?? 'unknown')}${boundedExcerpt(
+      'vendor error',
+      `${parsed.data.error.code} — ${parsed.data.error.message}`,
+    )}`;
   }
   return `mcpjam compat ${kind}, exit ${String(exitCode ?? 'unknown')}, and its stderr was not a recognised error envelope${boundedExcerpt('stderr', stderr)}`;
 }
@@ -209,15 +215,13 @@ function retainThenParse(
       `mcpjam reported target ${JSON.stringify(redactCredentials(parsed.data.target))} but the run requested ${JSON.stringify(redactCredentials(requestedTarget))} — this capture is of a different deployment; do not read its verdicts as the requested surface's`,
     );
   }
-  // The determinism gate's other half: the argv REQUESTS --offline, this
-  // verifies the vendor honoured it. The schema deliberately parses `live`
-  // (the boundary parses what the vendor says; the gate judges it), so the
-  // judgement lands here, not in the schema.
-  if (parsed.data.catalogSource !== 'bundled') {
-    return refusal(
-      'catalog-mismatch',
-      `mcpjam evaluated against the ${JSON.stringify(parsed.data.catalogSource)} catalogue, not the pinned bundled one — --offline was requested but not honoured, so these verdicts can drift with upstream publishes; do not use this capture`,
-    );
+  // The determinism gate's other half: the argv REQUESTS --offline, and the
+  // pin names which hosts that catalogue carries. `compat-catalogue.ts` owns
+  // both judgements; a drifted catalogue is DIAGNOSED here rather than
+  // dismissed as a malformed document at the schema.
+  const drift = describeCatalogueDrift(parsed.data);
+  if (drift !== undefined) {
+    return refusal('catalog-mismatch', drift);
   }
   return { kind: 'parsed', report: parsed.data, exitCode, retentionReasons, ...retainedPath };
 }

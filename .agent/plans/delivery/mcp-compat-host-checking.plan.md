@@ -69,8 +69,11 @@ one tool serves a widget, and the widget renders in Claude and ChatGPT.
 Two decisions carry it. It uses MCPJam's engine **directly** — their
 documented route for this (changelog 2026-06-26: "the shared
 host-compatibility engine is now importable directly … to build your own
-compatibility checks in CI or custom tooling") — so no server, no network, no
-credentials. And it asks the **composition root**, never the raw tool
+compatibility checks in CI or custom tooling"; upstream docs:
+<https://docs.mcpjam.com/cli> and <https://docs.mcpjam.com/cli/ci> — the
+changelog itself is not shipped in the published packages, so those plus the
+pinned `@mcpjam/sdk@2.4.0` are what a reader can re-derive this from) — so no
+server, no network, no credentials. And it asks the **composition root**, never the raw tool
 registry: an earlier attempt read the registry and evaluated a DORMANT widget
 the server never serves, giving a confident answer about something
 unreachable. Asking the composition root cannot drift from what is served,

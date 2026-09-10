@@ -42,7 +42,10 @@ export function boundedExcerpt(label: string, content: string): string {
  *
  * The pattern set started from the vendor's own `redactSensitiveString`
  * (bundled in `@mcpjam/sdk@2.4.0` `dist/index.js`, a `src/redaction.ts`
- * section marker above it), kept local rather than imported: a dozen lines do
+ * section marker above it; vendor docs at https://docs.mcpjam.com/cli — the
+ * function is not documented publicly, so the bundled dist at the pinned
+ * version is the citable source), kept local rather than imported: a dozen
+ * lines do
  * not justify an `@mcpjam/sdk` edge into agent-tools. It deviates from the
  * vendor's set where review proved the vendor wrong or short — each deviation
  * documented at its pattern. The one key deliberately ABSENT is bare `code`:

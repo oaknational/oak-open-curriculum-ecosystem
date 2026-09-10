@@ -126,35 +126,6 @@ const compatFindingSchema = z
   })
   .strict();
 
-/**
- * The EXACT host ids the catalogue bundled with the pinned SDK carries,
- * read from the retained 2026-08-15 capture. Pinned by name, not by count:
- * review showed a floor-plus-uniqueness rule accepts a swap — a report that
- * drops `claude` and adds a stranger still counts 16 unique. The set belongs
- * to the SDK pin; update it deliberately when the pin moves, exactly as the
- * app's own gate does.
- */
-export const PINNED_CATALOGUE_HOST_IDS = [
-  'agentcore',
-  'chatgpt',
-  'claude',
-  'claude-code',
-  'cline',
-  'codex',
-  'copilot',
-  'cursor',
-  'goose',
-  'mcpjam',
-  'mistral',
-  'n8n',
-  'notion',
-  'perplexity',
-  'slack',
-  'vscode',
-] as const;
-
-const PINNED_HOST_ID_SET: ReadonlySet<string> = new Set(PINNED_CATALOGUE_HOST_IDS);
-
 const compatHostSchema = z
   .object({
     hostId: z.string().min(1),
@@ -172,11 +143,11 @@ const compatHostSchema = z
  * surface at all; that is a property of the CLI, recorded here so a future
  * reader does not go looking for lane data the wrapper could have kept.
  *
- * `hosts` must equal the PINNED catalogue's id set exactly, once each: a
- * document naming fewer, more, or different hosts than the pinned catalogue
- * is a partial or foreign capture, and letting it parse hands the caller a
- * verdict about hosts nobody evaluated. The compat twin of the suites'
- * every-group-carries-a-case refinement.
+ * This boundary judges SHAPE and internal consistency: a capture names at
+ * least one host, never the same host twice, and its summary counts agree
+ * with its own host verdicts. WHICH hosts it must name — the pinned
+ * catalogue's exact set — belongs to the evidence gate, which can tell a
+ * drifted catalogue from a malformed document and say so.
  */
 export const compatReportSchema = z
   .object({
@@ -188,31 +159,47 @@ export const compatReportSchema = z
     // capped tool list, an unreadable widget). Never empty-string entries:
     // an unnamed unknown is indistinguishable from no unknown at all.
     unknownDimensions: z.array(z.string().min(1)),
+    // Counts, not opinions: a negative or fractional tally is a malformed
+    // document, and the cross-check below ties each count to the hosts it
+    // claims to summarise.
     summary: z
       .object({
-        works: z.number(),
-        degraded: z.number(),
-        blocked: z.number(),
-        unknown: z.number(),
+        works: z.number().int().nonnegative(),
+        degraded: z.number().int().nonnegative(),
+        blocked: z.number().int().nonnegative(),
+        unknown: z.number().int().nonnegative(),
       })
       .strict(),
-    // The pinned offline catalogue carries a FIXED, NAMED host set, so a
-    // usable capture names exactly those ids, once each: fewer is an
-    // incomplete capture, a stranger is a different catalogue, and either
-    // read as usable is a verdict about hosts nobody evaluated. Set equality
-    // over the pinned ids — count and uniqueness fall out of it for free.
+    // Structural only: a capture must name at least one host, each once. WHICH
+    // hosts — the pinned catalogue's exact set — is judged in the evidence
+    // gate, not here. Enforcing the pin at the schema made the gate's
+    // `catalog-mismatch` diagnosis unreachable for the very case it exists
+    // for: a live-catalogue report whose host set has drifted failed as a
+    // generic shape error first (review, 2026-09-10).
     hosts: z
       .array(compatHostSchema)
-      .refine(
-        (hosts) =>
-          hosts.length === PINNED_HOST_ID_SET.size &&
-          hosts.every((host) => PINNED_HOST_ID_SET.has(host.hostId)) &&
-          new Set(hosts.map((host) => host.hostId)).size === hosts.length,
-        {
-          message: `a compat capture must name exactly the pinned catalogue's host ids, once each: ${PINNED_CATALOGUE_HOST_IDS.join(', ')} — anything else is a different or partial catalogue, which has no verdict semantics here`,
-        },
-      ),
+      .min(1)
+      .refine((hosts) => new Set(hosts.map((host) => host.hostId)).size === hosts.length, {
+        message: 'a compat capture must not name the same host twice',
+      }),
   })
-  .strict();
+  .strict()
+  // A document that contradicts itself is not evidence. The vendor's summary
+  // is a projection of its own host list, so each count must equal that
+  // verdict's tally — without this a zero-exit report could claim
+  // `blocked: 16` while listing sixteen `works` hosts, and the run would
+  // verdict `pass` and emit the host projection (review, 2026-09-10).
+  .refine(
+    (report) =>
+      (['works', 'degraded', 'blocked', 'unknown'] as const).every(
+        (verdict) =>
+          report.summary[verdict] ===
+          report.hosts.filter((host) => host.verdict === verdict).length,
+      ),
+    {
+      message:
+        "a compat capture's summary counts must equal the tally of its own host verdicts — a report that contradicts itself is not evidence",
+    },
+  );
 
 export type CompatReport = z.infer<typeof compatReportSchema>;

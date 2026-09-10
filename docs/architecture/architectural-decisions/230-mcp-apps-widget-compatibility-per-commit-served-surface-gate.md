@@ -24,7 +24,11 @@ success condition, and until this decision nothing in the repository answered
 it. MCPJam ships two consumption modes for the same host-compatibility
 capability: a CLI (`mcpjam compat`) that needs a running server, and an
 importable engine (`@mcpjam/sdk/host-compat`) documented for building
-compatibility checks into CI. The repository already wraps the vendor's CLI
+compatibility checks into CI ([MCPJam CLI docs](https://docs.mcpjam.com/cli),
+[CI guide](https://docs.mcpjam.com/cli/ci); the importable-engine wording is
+quoted from the vendor's 2026-06-26 changelog, which the published packages
+do not ship, so the durable citation is the docs above plus the pinned
+`@mcpjam/sdk@2.4.0`). The repository already wraps the vendor's CLI
 for conformance suites (MCP-189, under the ADR-159 pattern); that landing
 carried no architecture record, so nothing permanent records MCPJam as a
 compatibility instrument at all. This ADR records the whole posture,

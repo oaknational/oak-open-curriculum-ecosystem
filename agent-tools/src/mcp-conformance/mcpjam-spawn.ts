@@ -7,7 +7,9 @@
  * Bin resolution: the bare `@mcpjam/cli` specifier is resolved with a
  * `createRequire` anchored at the repo root — resolution-only, matching the
  * bootstrap precedent — which today yields `dist/index.js`, the same file the
- * package's `bin` entry names (verified 3.15.2; a future main/bin split would
+ * package's `bin` entry names (re-verified against the currently pinned
+ * `@mcpjam/cli@3.19.0`, 2026-09-10: `main` and `bin.mcpjam` are both
+ * `dist/index.js`; first verified at 3.15.2. A future main/bin split would
  * fail loudly at the parse boundary). The child runs under the current Node
  * executable; no `npx`, no PATH lookup, no install-drift risk.
  */

@@ -30,7 +30,10 @@
  * The engine is MCPJam's, imported directly — their documented route for
  * exactly this (changelog 2026-06-26: "the shared host-compatibility engine
  * is now importable directly … to build your own compatibility checks in CI
- * or custom tooling"). No server process, no network, no credentials.
+ * or custom tooling"; upstream docs at https://docs.mcpjam.com/cli and
+ * https://docs.mcpjam.com/cli/ci — the changelog is not shipped in the
+ * published packages, so those plus the pinned `@mcpjam/sdk@2.4.0` are the
+ * re-derivable source). No server process, no network, no credentials.
  *
  * What this does NOT prove: that the DEPLOYED surface matches this one. That
  * needs a live run against the real deployment, which needs credentials and

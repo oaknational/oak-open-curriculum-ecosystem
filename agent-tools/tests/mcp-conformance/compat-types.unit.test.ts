@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
+import { PINNED_CATALOGUE_HOST_IDS } from '../../src/mcp-conformance/compat-catalogue.js';
 import {
   compatErrorEnvelopeSchema,
   compatReportSchema,
-  PINNED_CATALOGUE_HOST_IDS,
 } from '../../src/mcp-conformance/compat-types.js';
 import { loadCompatReport, loadFixtureRaw } from './test-helpers/fixture-loader.js';
 
@@ -97,27 +97,11 @@ describe('compatErrorEnvelopeSchema — the failure channel is evidence, not pro
 const OAK_CAPTURE = 'compat-local-oak-2026-08-15.json';
 
 /**
- * Every host the pinned offline catalogue carries. A well-formed capture
- * names all of them; a shorter one is an incomplete run, not a small one.
+ * The canonical pinned host ids, imported rather than restated: a second
+ * hand-maintained copy is the drift this contract exists to prevent
+ * (`consolidate-at-second-consumer`; review, 2026-09-10).
  */
-const CATALOGUE_HOST_IDS = [
-  'mcpjam',
-  'claude',
-  'claude-code',
-  'chatgpt',
-  'mistral',
-  'goose',
-  'slack',
-  'cursor',
-  'codex',
-  'copilot',
-  'vscode',
-  'agentcore',
-  'n8n',
-  'perplexity',
-  'cline',
-  'notion',
-];
+const CATALOGUE_HOST_IDS: readonly string[] = PINNED_CATALOGUE_HOST_IDS;
 
 function fullHostList(): Record<string, unknown>[] {
   return CATALOGUE_HOST_IDS.map((hostId) => ({
@@ -223,12 +207,11 @@ describe('compatReportSchema — the verdict document is parsed strictly', () =>
     expect(compatReportSchema.safeParse(report).success).toBe(false);
   });
 
-  it('refuses a PARTIAL capture, not merely an empty one', () => {
-    // The pinned offline catalogue has 16 hosts, so a report naming fewer is
-    // an incomplete capture — and an incomplete capture reported as usable is
-    // a verdict about hosts nobody evaluated. A bare non-empty check let this
-    // through until review caught it: `.min(1)` proves a guard exists, never
-    // that it sits at the right threshold.
+  it('refuses a PARTIAL capture whose summary still counts the hosts it dropped', () => {
+    // A truncated host list leaves the summary describing hosts the document
+    // no longer carries — self-contradiction, caught here. WHICH hosts a
+    // complete capture must name is the evidence gate's judgement, not this
+    // boundary's (see the catalogue-drift case in compat-run).
     expect(compatReportSchema.safeParse(partialReport()).success).toBe(false);
   });
 
@@ -239,31 +222,6 @@ describe('compatReportSchema — the verdict document is parsed strictly', () =>
     report.hosts = fullHostList().concat(fullHostList()[0]);
 
     expect(compatReportSchema.safeParse(report).success).toBe(false);
-  });
-
-  it('refuses a SWAP — sixteen unique hosts is not the same as the RIGHT sixteen', () => {
-    // Review found the earlier floor-plus-uniqueness rule accepted a report
-    // that dropped `claude` and added a stranger: still 16, still unique,
-    // still emitted as usable. Set equality over the pinned ids closes it.
-    const report = minimalReport();
-    const swapped = fullHostList();
-    swapped[CATALOGUE_HOST_IDS.indexOf('claude')] = {
-      hostId: 'shiny-new-host',
-      hostLabel: 'shiny-new-host',
-      verdict: 'works',
-      provenance: 'assumed',
-      findings: [],
-    };
-    report.hosts = swapped;
-
-    expect(compatReportSchema.safeParse(report).success).toBe(false);
-  });
-
-  it('pins the same id set as the schema exports — the two lists cannot drift apart', () => {
-    const byLocale = (a: string, b: string): number => a.localeCompare(b);
-    expect([...PINNED_CATALOGUE_HOST_IDS].sort(byLocale)).toEqual(
-      [...CATALOGUE_HOST_IDS].sort(byLocale),
-    );
   });
 
   it('refuses an unknown top-level key, so a reporter change surfaces loudly', () => {
