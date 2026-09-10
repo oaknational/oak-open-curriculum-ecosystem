@@ -8,6 +8,7 @@
  * @see ADR-086 (`docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md`) for extraction methodology
  */
 import type { Unit } from '../../types/generated/bulk/index.js';
+import { sequenceSubject } from '../reader-utils.js';
 
 /**
  * Extracted NC statement with unit context.
@@ -26,20 +27,6 @@ export interface ExtractedNCStatement {
 }
 
 /**
- * Extracts subject from sequence slug.
- */
-function extractSubject(sequenceSlug: string): string {
-  const parts = sequenceSlug.split('-');
-  if (parts.length >= 2) {
-    const phase = parts.at(-1);
-    if (phase === 'primary' || phase === 'secondary') {
-      return parts.slice(0, -1).join('-');
-    }
-  }
-  return sequenceSlug;
-}
-
-/**
  * Extracts all NC statements from unit data.
  *
  * @param units - Array of units with their sequence slug
@@ -51,7 +38,7 @@ export function extractNCStatements(
   const results: ExtractedNCStatement[] = [];
 
   for (const { unit, sequenceSlug } of units) {
-    const subject = extractSubject(sequenceSlug);
+    const subject = sequenceSubject(sequenceSlug);
 
     for (const statement of unit.nationalCurriculumContent) {
       // Skip empty statements

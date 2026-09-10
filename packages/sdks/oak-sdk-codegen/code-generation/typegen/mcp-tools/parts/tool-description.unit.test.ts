@@ -246,7 +246,11 @@ describe('appendToolEnhancements', () => {
       const result = appendToolEnhancements('Base description', 'get-keywords');
       expect(result).toContain(`at most ${String(limit?.schema?.default)} keywords`);
       expect(result).toContain(`\`limit\` (max ${String(limit?.schema?.maximum)})`);
-      expect(result).toContain(`limit: ${String(limit?.schema?.maximum)}`);
+      // Since the pagination echo (PR 949), the guidance points at the
+      // result's structural signal instead of a blind max-limit page walk.
+      expect(result).toContain('`hasMore`');
+      expect(result).toContain('`nextOffset`');
+      expect(result).not.toContain(`limit: ${String(limit?.schema?.maximum)}`);
     });
   });
 

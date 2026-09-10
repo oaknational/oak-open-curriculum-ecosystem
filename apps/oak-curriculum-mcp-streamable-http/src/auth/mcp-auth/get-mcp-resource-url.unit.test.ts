@@ -24,11 +24,11 @@ describe('getMcpResourceUrl', () => {
   });
 
   it('a configured canonical origin yields the canonical resource', () => {
-    const req = { get: () => 'curriculum-mcp-alpha.oaknational.dev' };
+    const req = { get: () => 'example-project.vercel.example' };
 
-    const result = getMcpResourceUrl(req, [], 'https://www.thenational.academy');
+    const result = getMcpResourceUrl(req, [], 'https://mcp.thenational.academy');
 
-    expect(result).toStrictEqual({ ok: true, value: 'https://www.thenational.academy/mcp' });
+    expect(result).toStrictEqual({ ok: true, value: 'https://mcp.thenational.academy/mcp' });
   });
 
   it('surfaces a host-validation failure as Err for the caller to map to 403', () => {

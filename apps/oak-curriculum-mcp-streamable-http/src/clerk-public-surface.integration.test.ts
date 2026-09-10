@@ -53,7 +53,7 @@ const PROTOCOL_ACCEPT = 'application/json, text/event-stream';
 /** The allow-listed Host these requests arrive on. */
 const SERVED_HOST = 'localhost';
 
-const CANONICAL_HOST = 'www.thenational.academy';
+const CANONICAL_HOST = 'mcp.thenational.academy';
 const CANONICAL_ORIGIN = `https://${CANONICAL_HOST}`;
 
 /**
@@ -280,7 +280,8 @@ describe('case variants of /mcp never reach Clerk either (MCP-518)', () => {
  * route at all. The owner ruling was about the surface, not about one of its
  * URLs, so the fork covers both doors — and it must keep covering `/`: a 404
  * this app decides is a different outcome from a 307 the auth vendor decides,
- * and for the alpha host `/` is the front door a browser actually reaches.
+ * and `/` is a front door a browser actually reaches, on the canonical host
+ * as much as on any other root-served deployment (verified 2026-09-01).
  */
 describe('browser traffic to / never reaches Clerk (MCP-518)', () => {
   it('404s a signed-in browser navigation itself, rather than redirecting it', async () => {

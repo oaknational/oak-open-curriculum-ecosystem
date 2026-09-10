@@ -263,3 +263,4 @@ Practice-Core concept ↔ ADR map):
 | [PDR-137](PDR-137-basis-set-transformation-method.md) | The Basis-Set Transformation Method | Accepted |
 | [PDR-138](PDR-138-visual-verification-for-design-verdicts.md) | Visual Verification for Design Verdicts | Accepted |
 | [PDR-139](PDR-139-provider-independent-capability-composition.md) | Provider-Independent Capability Composition | Proposed |
+| [PDR-140](PDR-140-review-response-pricing.md) | Review Feedback Is Information — the Response Is What Gets Priced | Accepted |

@@ -82,8 +82,6 @@ export const SERVED_SURFACE = {
     'download-asset': 'live',
     'user-search': 'dormant',
     'user-search-query': 'dormant',
-    'get-changelog': 'live',
-    'get-changelog-latest': 'live',
     'get-key-stages': 'live',
     'get-key-stages-subject-assets': 'live',
     'get-key-stages-subject-lessons': 'live',

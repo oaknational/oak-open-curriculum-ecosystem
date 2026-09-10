@@ -1,5 +1,23 @@
 # Oak Open Curriculum Tooling Requirements for Castr
 
+> **Status (2026-08-19, at the ratified `toolkit-re-architecture`
+> node):** this pack is the LIVE consumer contract for the Castr
+> adoption — its substance ages well and steers the future adoption
+> plan's acceptance harness (side-by-side validation per ADR-055).
+> Two truths to hold when picking it up: (1) the OpenAPI fixtures pin
+> a point-in-time upstream snapshot against a spec that ticks ~29
+> times a year — **re-pin the fixtures at validation time**, keeping
+> the original/decorated provenance pairing this pack already models;
+> (2) the adoption is gated on Castr readiness, and that clock is
+> **owner-schedulable** (Castr is the owner's repository and a
+> Practice repo — focus can move to it, or it could move into this
+> monorepo, at the owner's call). Sequencing prose elsewhere
+> (ADR-108's step ordering) is to be amended by the delivery plan
+> `oak-open-curriculum-mcp-extraction` (2026-09-02; the ADR-108
+> amendment is one of that plan's slices, and ADR-108 stands as
+> written until the slice lands); this pack's contract content is not
+> superseded by it.
+
 ## Intent
 
 Provide canonical inputs for validating `@engraph/castr` against a real, schema-first pipeline. These OpenAPI fixtures are the ground truth for the Oak Open Curriculum API: every generated type, validator, and MCP tool ultimately flows from them. The SDK-decorated schema is the input passed to Castr; the original schema is retained for provenance and upstream feedback. OpenAPI 3.0 inputs are preserved alongside OpenAPI 3.1 upgrades used for stricter, fully valid checks. These fixtures define the contract Castr must satisfy for the current systems, not an implementation detail of the harness.

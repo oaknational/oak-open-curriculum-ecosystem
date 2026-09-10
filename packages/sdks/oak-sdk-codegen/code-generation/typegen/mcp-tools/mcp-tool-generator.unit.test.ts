@@ -126,14 +126,14 @@ describe('generateCompleteMcpTools (schema-first execution DAG)', () => {
   });
 
   it('emits noauth scheme for tools in PUBLIC_TOOLS', () => {
-    // Create schema with a tool that will generate 'get-changelog' name
+    // Create schema with a tool that will generate 'get-rate-limit' name
     const schemaWithPublicTool: OpenAPIObject = {
       openapi: '3.0.0',
       info: { title: 'Test', version: '1.0.0' },
       paths: {
-        '/changelog': {
+        '/rate-limit': {
           get: {
-            operationId: 'getChangelog',
+            operationId: 'getRateLimit',
             responses: { '200': { description: 'Success' } },
           },
         },
@@ -141,12 +141,12 @@ describe('generateCompleteMcpTools (schema-first execution DAG)', () => {
     };
 
     const output = generateCompleteMcpTools(schemaWithPublicTool);
-    const changelogToolFile = output.data.tools['get-changelog.ts'];
+    const rateLimitToolFile = output.data.tools['get-rate-limit.ts'];
 
-    expect(changelogToolFile).toBeDefined();
-    expect(changelogToolFile).toContain('securitySchemes:');
-    expect(changelogToolFile).toContain("type: 'noauth'");
-    expect(changelogToolFile).not.toContain("type: 'oauth2'");
+    expect(rateLimitToolFile).toBeDefined();
+    expect(rateLimitToolFile).toContain('securitySchemes:');
+    expect(rateLimitToolFile).toContain("type: 'noauth'");
+    expect(rateLimitToolFile).not.toContain("type: 'oauth2'");
   });
 });
 

@@ -2,11 +2,11 @@
 title: 'Strategy — Diagnosis'
 type: strategy
 status: active
-last_updated: 2026-06-20
+last_updated: 2026-08-30
 derives_from:
   - VISION.md
 governed_by:
-  - .agent/plans/product-development-governance/vision-strategy-and-plan-estate.plan.md
+  - docs/strategy/README.md
 ---
 
 # Diagnosis — the central challenge
@@ -43,4 +43,7 @@ Each stream meets a different edge of the same challenge:
 - **The [tools](stream-engineering-tools.md)** make that rigour something others can build
   on — safely, in the open.
 - **The [framework](stream-agentic-framework.md)** is how we keep pace without trading
-  rigour away: the agent-first capability that makes the other two possible.
+  rigour away: the agent-first capability that makes the other mission-facing streams possible.
+- **The [Innovation Kit](stream-innovation-kit.md)** makes rigorous capability visible and
+  testable before larger commitments: excellent working experiences that expand what people
+  understand is possible, while turning speed into trustworthy evidence rather than spectacle.

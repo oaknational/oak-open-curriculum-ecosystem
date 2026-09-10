@@ -19,14 +19,14 @@ name: CodeQL
 
 on:
   push:
-    branches: [main]
+    branches: [main, engraph]
   pull_request:
-    branches: [main]
+    branches: [main, engraph]
   schedule:
     # Weekly, mirroring the retired default-setup cadence.
     - cron: '31 4 * * 1'
 
-# Cancel superseded runs for the same PR ref; never cancel main-branch runs.
+# Cancel superseded runs for the same PR ref; never cancel push runs on either long-lived branch.
 concurrency:
   group: codeql-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}

@@ -342,7 +342,7 @@ Key changes from the original decision:
 1. **Server role**: No longer "Resource Server only". The server presents itself as its own AS via rewritten metadata, while Clerk remains the real AS behind the proxy.
 2. **Token type**: Clerk issues opaque tokens (`oat_...`) for OAuth access tokens, not JWTs. The proxy relies on this — there is no `iss` claim to validate against AS metadata.
 3. **DCR**: MCP clients (Cursor, Claude) register dynamically with Clerk via the proxy's `/oauth/register` endpoint. This was not anticipated in the original decision.
-4. **Discovery**: AS metadata is fetched from Clerk at startup, validated via Zod, and served with endpoint URLs rewritten to self-origin. The simple `fetch(CLERK_OIDC_DISCOVERY_URL)` pattern in the original Implementation section is superseded.
+4. **Discovery**: AS metadata is fetched from Clerk at startup, validated via Zod, and served with endpoint URLs rewritten to self-origin. The simple `fetch(CLERK_OIDC_DISCOVERY_URL)` pattern in the original Implementation section is superseded. Since 2026-09-01 (MCP-655) the Protected Resource Metadata names Clerk's own `issuer` as the authorisation server, so PRM-following clients discover Clerk directly and the app-origin AS metadata serves origin-discovering clients only; the fetched document's `issuer` must equal the URL it was fetched from (RFC 8414 §3.3) or bootstrap fails (ADR-115 Negative 8).
 
 The proxy is always-on, transparent, and stateless. See [ADR-115](115-proxy-oauth-as-for-cursor.md) for the full decision.
 

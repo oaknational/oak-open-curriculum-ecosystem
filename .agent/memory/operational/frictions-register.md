@@ -3795,3 +3795,30 @@ commit SHA and the closing plan reference.
   exactly as emission does). The curator-pass archive cadence (PDR-094)
   remains the companion pressure valve — ~3,600 live events means the
   archive pass is overdue. Route: agent-tooling backlog.
+
+### F-164 — `pr-watch --watch` is silent across head and check transitions and exits ALL-GREEN on a conflicting, changes-requested PR
+
+- **Observed**: 2026-08-17 (Director seat): `pr-watch 890 --watch` exited
+  on ALL-GREEN (checks passed, threads resolved) while the PR sat
+  CONFLICTING + CHANGES_REQUESTED — the one state where the watch is most
+  wanted. 2026-09-02 (Luna seeks Twilight, 5c0ddc): armed as a Monitor on
+  #945, it emitted nothing across two pushes and a full green check run
+  (~30 minutes); its silence was indistinguishable from "no change", and a
+  60 s `gh pr view` poll emitting only on reviewDecision / mergeStateStatus
+  / head change, terminating on MERGED/CLOSED, caught the owner's merge
+  within a minute.
+- **Expected**: one line per head change and per check-state transition; a
+  heartbeat line at a fixed cadence so a dead watcher is visible; ALL-GREEN
+  requires mergeable plus no standing change-request, or a
+  `--hold-until-merged` mode.
+- **Route**: agent-tooling backlog (the watch-commands node).
+
+### F-165 — `claims open` has no amend verb; a mis-named area path forces close + reopen
+
+- **Observed**: 2026-09-02 (Luna seeks Twilight, 5c0ddc): a claim's areas
+  named a run-record path that broke the archive's filename convention
+  (`YYYY-MM-DD-<target>.md`); the only honest cure was close + reopen,
+  recorded in the closure summary.
+- **Expected**: `claims amend --area` (or an equivalent single-row edit)
+  that preserves the claim id and history.
+- **Route**: agent-tooling backlog.

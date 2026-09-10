@@ -185,6 +185,10 @@ The closed event envelope may contain:
   `oak_client_family` (vendor, from the `initialize` handshake only),
   `oak_client_surface` (form factor) and `oak_client_product` (vendor
   product, derived per request — see the 2026-08-13 Amendment);
+- a rebuilt `$mcp_client_user_agent`: the product spelling from that closed
+  table, an optional major version of at most two digits, and an optional
+  build surface from a closed list, admitted only when re-parsing it
+  reproduces it byte for byte (see the 2026-09-07 Amendment);
 - the PostHog-scoped actor pseudonym; and
 - a trusted protocol-session projection, only after the future proof
   described above exists.
@@ -665,3 +669,114 @@ breakdown is not comparable to a tool-call one.
 Decided by the Director seat under the five Decision Lenses (two independent
 converging runs), 2026-08-13, on the MCP-594 investigation. The event-contract
 surface obligation is MCP-364's.
+
+## Amendment: a rebuilt `$mcp_client_user_agent` so PostHog's harness column resolves (2026-09-07)
+
+The 2026-08-13 amendment recorded that PostHog's built-in `harness` column
+"stays empty by decision", and that emitting the three raw properties it
+resolves from was rejected. This amendment reverses that outcome for ONE of
+the three, `$mcp_client_user_agent`, and only in a rebuilt form; §3's
+"may contain" list gains the matching bullet, which is the allowlist entry
+this section records. The raw values stay excluded for the same reasons as
+before: live `clientInfo.name` values carry per-installation identifiers, and
+the raw user agent and vendor header are unbounded client-controlled strings.
+
+**What changes.** The three automatic events may now carry a
+`$mcp_client_user_agent` rebuilt from three pieces:
+
+- the product token, re-emitted in the spelling observed in live traffic
+  from the same evidence-backed table that derives `oak_client_product`
+  (`Claude-User`, `claude-code`, `codex-mcp-client`). A header naming no
+  product omits the whole property, so the column resolves to "other"
+  exactly as before;
+- an optional major version: `0`, or `1` to `99` with no leading zero, read
+  from the ASCII digits after the product token's `/` and copied from the
+  header. This is the one place client-supplied bytes reach the value, and it
+  is bounded to exactly a hundred distinct values by construction. A longer,
+  zero-padded or non-ASCII digit run — a 16-digit installation id, say —
+  omits the version rather than truncating it, so the slot cannot carry a
+  stable per-installation identifier. The pre-review
+  shape of this amendment allowed a digits-and-dots version of up to sixteen
+  characters, which the same day's security review identified as exactly
+  that channel; the bound is the cure;
+- an optional build surface: the first bracketed segment of the header, when
+  it is in the closed list for THAT product — `cli`, `sdk-ts`,
+  `claude-vscode`, `claude-desktop` for `claude-code`; `chatgpt`, `codex`,
+  `agent builder`, `responses api` for `openai-mcp`; none for any other
+  product, whose PostHog label is an exact token match that a surface would
+  break — and only when a version is present (PostHog reads the product as
+  everything before the first `/`, so without one the bracket would be
+  swallowed into the product token). These lists are the vendor's own
+  vocabulary, taken from its labelling rule (below), not sets observed
+  first-hand in Oak's traffic — only `(cli)` has been — which is a stated
+  exception to the 2026-08-13 amendment's evidence-backed-token constraint,
+  accepted because every member is a fixed string re-emitted from the list
+  and never a forwarded byte.
+
+**The OpenAI row, added ahead of launch.** Oak launches on OpenAI's platform
+in the week of 2026-09-07, and at Luke Arnold's direction the product table
+gains an `openai-mcp` row before the first live OpenAI header has been seen.
+That is a second stated exception to the evidence-backed-token constraint,
+grounded in PostHog's published resolver and its fixtures, which record the
+OpenAI client's shape from PostHog's own traffic: `openai-mcp/<version>` with
+a `(ChatGPT)`, `(Codex)`, `(Agent Builder)` or `(Responses API)` surface. The
+closed product vocabulary gains `chatgpt` and `openai` accordingly: an
+`openai-mcp` header with the `chatgpt` surface is `chatgpt`, with `codex` it
+is `codex` (the same client that also reports as `codex-mcp-client`), and
+otherwise `openai`. The check on this row is the first live OpenAI user agent
+Oak observes after launch, which confirms it or corrects it; the row and its
+surfaces are expected to need adjustment as that telemetry arrives.
+
+**How PostHog labels it.** The labelling rule is open source, in
+PostHog/posthog at commit `b6c6a333` (2026-09-02):
+[`products/mcp_analytics/backend/mcp_harness.py`](https://github.com/PostHog/posthog/blob/b6c6a333056473cc7f20513256b62daeb5c05669/products/mcp_analytics/backend/mcp_harness.py),
+with input-to-label examples in
+[`tests/test_harness_breakdown.py`](https://github.com/PostHog/posthog/blob/b6c6a333056473cc7f20513256b62daeb5c05669/products/mcp_analytics/backend/tests/test_harness_breakdown.py)
+beside it. Its precedence is the vendor header, then a user agent whose
+product is `claude-code` or starts `grok`, then the client name, then any
+other user agent; Oak emits neither a vendor header nor a client name, so
+for Oak's events the user agent resolves. For such an event it takes the
+product token before the first `/` plus the first bracketed segment and
+buckets the pair: `claude-code/2 (cli)` labels "Claude Code",
+`(sdk-ts)` "Claude Agent SDK", `(claude-vscode)` "Claude Code (VS Code)",
+`(claude-desktop)` "Claude Desktop", `Claude-User` "Claude.ai", and
+`codex-mcp-client/0` "OpenAI Codex". The rebuilt shapes above were chosen
+against that rule, and a unit test in the adapter carries a transcription of
+it so a change to the shape is judged against the label it will receive. It
+is Oak's copy of the vendor's rule, not the rule; a vendor change is caught
+by the post-deploy check.
+
+The validator at the final event policy is the derivation itself: a value is
+admitted iff re-parsing it reproduces it byte for byte, so the grammar has one
+home and a new table row cannot drift from the barrier. A mismatch drops the
+property, not the event.
+
+**What this adds to the envelope.** Two facts beyond `oak_client_product`:
+the client software's major version, and a build surface finer than
+`oak_client_surface` (which reads `claude-desktop` as `cli` and `sdk-ts` as
+`sdk`, and cannot tell the VS Code extension from any other `vscode` token).
+Both are properties of the calling software, never of the teacher; both are
+unverified self-declarations under the 2026-08-13 amendment's standing
+constraints and must never gate anything. The guarantee given up is "no
+header version byte ships": the wire test that pinned the full version absent
+now pins the major version present and the full version absent.
+
+**Why.** MCP-574 reads error rates off PostHog's built-in MCP dashboard, whose
+harness breakdown does not read `oak_client_product`. Every call therefore
+showed as "other" there, which was mistaken for an instrumentation defect and
+drew a recommendation to run the vendor's auto-instrumentation wizard — which
+would have shipped the very content §3 excludes. Populating the column from a
+closed reconstruction answers the dashboard without reopening §3.
+
+**What did NOT change.** The raw `$mcp_client_name`, `$mcp_client_version` and
+`$mcp_vendor_client` properties stay excluded: the version FACT ships only as
+the bounded major inside the rebuilt user agent, never the raw
+`clientInfo.version`. `$mcp_resource_read` still carries no client
+attribution. Intent, arguments, responses, error text, and every other §3
+exclusion are untouched.
+
+Directed by Luke Arnold, 2026-09-07 (MCP-687); agent-authored; the version
+bound and the recompute validator follow the same day's pre-PR security and
+code reviews. The acceptance check is an observed breakdown in the live
+project after deploy, which is also the only detector of a later change to
+the vendor's rule.

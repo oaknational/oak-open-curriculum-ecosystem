@@ -6,14 +6,21 @@ go/no-go, rollout safety), see
 
 ## Published Packages
 
-Only `@oaknational/curriculum-sdk` is published to npm. All other
-workspaces have `"private": true` in their `package.json` and are
-not published.
+No package is published to a registry today (`npmPublish: false` on both npm
+plugin entries in `.releaserc.mjs`; `npm view @oaknational/curriculum-sdk`
+returns not-found, checked 2026-09-03). The curriculum SDK
+(`@oaknational/curriculum-sdk`) carries the only publishable manifest in the
+repository. All other workspaces have `"private": true` in their
+`package.json` and are not published. The first live publish, when it
+comes, is one multi-package publish of every publishable workspace at the
+repository's release version, behind per-package finish checks and an
+asserted publish right, with no manual toggle; the plan estate carries its
+mechanism and Linear its schedule.
 
-| Package                       | Scope          | Registry  | Status  |
-| ----------------------------- | -------------- | --------- | ------- |
-| `@oaknational/curriculum-sdk` | `@oaknational` | npmjs.com | Public  |
-| All other workspaces          | n/a            | n/a       | Private |
+| Package                       | Scope          | Registry  | Status                                  |
+| ----------------------------- | -------------- | --------- | --------------------------------------- |
+| `@oaknational/curriculum-sdk` | `@oaknational` | npmjs.com | Publishable manifest; not yet published |
+| All other workspaces          | n/a            | n/a       | Private                                 |
 
 ## Versioning
 
@@ -79,6 +86,15 @@ controls what is packaged.
 ## Operator Runbook
 
 This section provides step-by-step procedures for release operators.
+
+_Dated note, 2026-09-03: the prerequisites and the first-release steps
+below describe the single-package configuration as it stands today, with
+publishing disabled. The first live publish is not a manual toggle of
+`npmPublish`: it lands as one multi-package publish of every publishable
+workspace at the repository's release version, behind per-package finish
+checks and an asserted publish right. Prerequisite 4 and step 2 of the
+first release are superseded by that mechanism and are kept only so the
+current configuration reads true._
 
 ### Prerequisites
 
@@ -154,6 +170,10 @@ Verify:
 
 ### First Real Release
 
+_Dated note, 2026-09-03: these steps describe today's single-package
+configuration; step 2's manual toggle is superseded by the multi-package
+first publish named in the note at the head of this runbook._
+
 1. Confirm the `NPM_TOKEN` secret is set in GitHub repository settings
 2. Set `npmPublish: true` in `.releaserc.mjs`
 3. Commit and push to `main`:
@@ -178,21 +198,33 @@ Verify:
 
 ### Rollback Procedures
 
-#### Unpublishing (within 72 hours)
+No package is published today (2026-09-03), so no published version
+exists to roll back and the unpublish mechanics below are not operable;
+they stay as npm reference. The rollback discipline for published packages
+— forward-fix by a new release, never unpublishing a version consumers may
+already have resolved, with the broken version deprecated so installs
+steer past it — lands with the publish mechanism, which also amends the
+release-process runbook's rollback clause.
 
-npm allows unpublishing within 72 hours of publication. This is a
-last resort for accidental or broken releases:
+#### Unpublishing (npm mechanics, reference only)
+
+Whether a version can be unpublished, and when, is npm's policy, not this
+page's: it depends on the package's age, its public dependants, its download
+volume and its ownership, and the current terms are the
+[npm unpublish policy](https://docs.npmjs.com/policies/unpublish). The
+command, for reference:
 
 ```bash
 npm unpublish @oaknational/curriculum-sdk@VERSION
 ```
 
-After 72 hours, you cannot unpublish. Instead, publish a new patch
-version with the fix.
+This repository does not rely on any unpublish window: from the first
+publish onward the cure for a broken release is a new version carrying the
+fix, with the broken version deprecated.
 
 #### Deprecating a Version
 
-If a version should not be used but cannot be unpublished:
+For any version that should no longer be selected:
 
 ```bash
 npm deprecate @oaknational/curriculum-sdk@VERSION "Known issue: use VERSION instead"
@@ -229,7 +261,7 @@ default `Revert "…"` message (the analyser's built-in
 
 ## Future Work
 
-Publishing additional packages (MCP servers, logger, transport) as
-public npm packages is planned but not yet implemented. See
-`.agent/plans/dev-tooling-and-dev-ai-support/sdk-publishing-and-versioning-plan.md`
-for the full roadmap.
+Publishing every publishable workspace (the MCP-family packages, the
+logger, the transport and the rest) as public npm packages at the
+repository's release version is planned and not yet implemented; the plan
+estate's index points at its mechanism, and Linear carries the schedule.

@@ -13,7 +13,10 @@ description: >-
 
 Cricket is the conscience-check panel: a deliberately varied set of fast second opinions about
 whether the primary agent is doing the right work now. It is useful for priority, framing,
-displacement, invented gates, and proportion. It is not an approval gate.
+displacement, invented gates, and proportion. It is not an approval gate, and it is not a
+lens on METHOD or EVIDENCE PROVENANCE: three ON-TRACK verdicts spanned a window in which
+every owner correction concerned which tool was used and where the evidence had come from
+(2026-09-02) — point that scrutiny at reviewers and first-hand reads, never at the panel.
 
 Typing `$oak-cricket` asks the current seat to run the whole panel for its platform. The invoker
 builds the frame from live context and starts immediately; missing information is labelled

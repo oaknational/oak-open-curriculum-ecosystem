@@ -10,16 +10,18 @@
  * raw client strings from the event envelope.
  */
 
+import {
+  asciiLower,
+  readClientMajorVersion,
+  readFirstBracketedSegment,
+  selectLeadingProduct,
+} from './client-product-selection.js';
 import type {
   ClientIdentityHeaders,
   OakClientFamily,
   OakClientProduct,
   OakClientSurface,
 } from './event-policy-contract.js';
-
-function asciiLower(value: string): string {
-  return value.replaceAll(/[A-Z]/gu, (character) => character.toLowerCase());
-}
 
 function hasClientFamilyPrefix(value: string, prefix: 'chatgpt' | 'claude'): boolean {
   if (!value.startsWith(prefix)) {
@@ -102,76 +104,12 @@ export function isOakClientSurface(value: unknown): value is OakClientSurface {
   );
 }
 
-// Product tokens must stay evidence-backed, and every row here was verified
-// first-hand in Oak's own inbound traffic over the 7 days to 2026-08-13:
-// `Claude-User` (10,045 requests), `claude-code/2.1.x (cli)` (~3,100) and
-// `codex-mcp-client/0.14x (…)` (~230). The correction path for a new client is
-// a token row plus its derivation-table test row — never a widening of the
-// match rule, and never forwarding the raw header value (see OakClientProduct).
-//
-// The residual is deliberately unclaimed rather than guessed: `curl` (291),
-// `node` (249), `python-httpx` (87), browser `Mozilla/*` (74), `Bun` (39) and
-// `directory-admin-dashboard-inspection` (11) are Oak's own probes, smoke tests
-// and the browser widget, not named MCP client products. They belong in
-// 'other', which therefore means genuinely unidentifiable, not merely unread.
-//
-// Longest token, used to bound the compared prefix. Matching is anchored at
-// index 0, so no more of the value can affect the outcome; slicing keeps the
-// cost independent of an attacker-controlled header length.
-const LONGEST_PRODUCT_TOKEN = 32;
-const CLIENT_PRODUCT_TOKEN_RULES: readonly (readonly [string, OakClientProduct])[] = [
-  ['claude-user', 'claude_ai'],
-  ['claude-code', 'claude_code'],
-  ['codex-mcp-client', 'codex'],
-];
-
 /**
- * Matches a product token only as the header's *leading* token.
- *
- * @remarks Deliberately stricter than {@link hasTokenSegment}, which the surface
- * axis uses. A User-Agent names its product first (`claude-code/2.1.226 (cli)`),
- * and a client-controlled string that merely *contains* a product name somewhere
- * is not that product self-declaring — it may be an unrelated client, or a
- * deliberate impersonation. Substring matching also makes the outcome depend on
- * rule order for a value carrying two product names; anchoring removes that
- * ambiguity, so the table's row order carries no meaning.
- *
- * The boundary set omits `-`, which {@link hasClientFamilyPrefix} allows: at
- * product granularity `claude-user` must not claim a hypothetical
- * `claude-user-agent/1.0`, whereas at family granularity `claude` legitimately
- * claims both. `/` and ` ` are the only real delimiters after a UA product token.
- */
-function hasLeadingProductToken(value: string, token: string): boolean {
-  if (!value.startsWith(token)) {
-    return false;
-  }
-
-  const boundary = value.at(token.length);
-  return boundary === undefined || boundary === ' ' || boundary === '/';
-}
-
-function readClientProductToken(value: string): OakClientProduct | undefined {
-  // `asciiLower` folds only [A-Z], so it is length-preserving and the index
-  // arithmetic below cannot be shifted by a case-expanding character. Slicing to
-  // the longest token is behaviour-preserving under leading-token anchoring.
-  const normalised = asciiLower(value.trim().slice(0, LONGEST_PRODUCT_TOKEN + 1));
-  for (const [token, product] of CLIENT_PRODUCT_TOKEN_RULES) {
-    if (hasLeadingProductToken(normalised, token)) {
-      return product;
-    }
-  }
-  return undefined;
-}
-
-function isNonEmptyString(value: unknown): value is string {
-  return typeof value === 'string' && value.trim() !== '';
-}
-
-/**
- * Projects the client-identity headers onto the closed product category. The
- * first value that names a known product wins; a value that names none does not
- * participate, so an unrecognised vendor header falls through to the User-Agent
- * rather than forcing a verdict.
+ * Projects the client-identity headers onto the closed product category, via
+ * the ONE bounded selection in `client-product-selection.ts` that the rebuilt
+ * user agent also derives from, so the two properties always describe the
+ * same header value. The evidence-backed token table and its constraints live
+ * there.
  *
  * @remarks The two negative outcomes are DISTINCT values, and the line between
  * them is **container readability, never value presence**:
@@ -199,16 +137,29 @@ export function normaliseOakClientProduct(headers: ClientIdentityHeaders): OakCl
   if (!headers.readable) {
     return 'unavailable';
   }
-  for (const value of headers.values) {
-    if (!isNonEmptyString(value)) {
-      continue;
+  const selected = selectLeadingProduct(headers);
+  if (selected === undefined) {
+    return 'other';
+  }
+  // OpenAI's one client token serves several products and tells them apart in
+  // its bracketed surface, exactly as PostHog's own rule splits them; any other
+  // token names its product outright. The split is gated on the same version
+  // parse the rebuilt user agent uses, so a value whose surface the user agent
+  // would drop is not refined here either and the two never disagree.
+  const [token] = selected.rule;
+  if (
+    token === 'openai-mcp' &&
+    readClientMajorVersion(selected.normalised.slice(token.length)) !== undefined
+  ) {
+    const surface = readFirstBracketedSegment(selected.normalised);
+    if (surface === 'chatgpt') {
+      return 'chatgpt';
     }
-    const product = readClientProductToken(value);
-    if (product !== undefined) {
-      return product;
+    if (surface === 'codex') {
+      return 'codex';
     }
   }
-  return 'other';
+  return selected.rule[1];
 }
 
 export function isOakClientFamily(value: unknown): value is OakClientFamily {
@@ -217,6 +168,8 @@ export function isOakClientFamily(value: unknown): value is OakClientFamily {
 
 export function isOakClientProduct(value: unknown): value is OakClientProduct {
   return (
+    value === 'chatgpt' ||
+    value === 'openai' ||
     value === 'claude_ai' ||
     value === 'claude_code' ||
     value === 'codex' ||

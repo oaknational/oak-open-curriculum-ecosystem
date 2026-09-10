@@ -1,0 +1,922 @@
+{
+  "ok": true,
+  "leafCount": 253,
+  "candidates": [
+    {
+      "id": "C03",
+      "pattern": "The comms/agent-tools CLI prints prose ('wrote comms event <id>') and pnpm exits 0 on unknown scripts, so grep/JSON-shaped reads of these commands turn successes into false silence and failures into false success.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w12"
+      ],
+      "supportingLeafIds": [
+        "w11-L43",
+        "w11-L12",
+        "w12-L03"
+      ],
+      "groundingCount": 3
+    },
+    {
+      "id": "C07",
+      "pattern": "The `merge-bot mint-token` pipeline fails silently at the write boundary — token ages out inside git push's own pre-push hook chain, $() captures empty and gh falls back to ambient auth, the installation grant outruns the mint request's permission list, and outer-shell quoting empties the credential helper.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10",
+        "w11",
+        "w12",
+        "w13"
+      ],
+      "supportingLeafIds": [
+        "w10-L25",
+        "w10-L49",
+        "w11-L30",
+        "w12-L51",
+        "w13-L07"
+      ],
+      "groundingCount": 5
+    },
+    {
+      "id": "C08",
+      "pattern": "The merge invocation itself is a contested actuator: `gh pr merge` refuses client-side on mergeStateStatus BLOCKED while raw REST PUT under the same bot token succeeds, and --admin/--squash under human credentials is a gate bypass in the same class as --no-verify.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10",
+        "w12",
+        "w14"
+      ],
+      "supportingLeafIds": [
+        "w10-L19",
+        "w12-L50",
+        "w12-L51",
+        "w14-L16"
+      ],
+      "groundingCount": 4
+    },
+    {
+      "id": "C10",
+      "pattern": "Enumeration-based reads (walk-joins, list-the-tickets, head/tail-bounded greps, reviewThreads-only harvests, instrument capture rows) are structurally blind to absences, so missing items are found by types, review or the owner and never by self-scan.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w12"
+      ],
+      "supportingLeafIds": [
+        "w12-L06",
+        "w12-L15",
+        "w12-L37",
+        "w11-L07"
+      ],
+      "groundingCount": 4
+    },
+    {
+      "id": "C16",
+      "pattern": "Repo-root-relative paths resolved against a sticky worktree/shell cwd (F-95 comms-seen probe, join(root,absDir), post-cd `ls`, backgrounded gate runs) produce confident false conclusions about missing files, comms blindness and gate results.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10",
+        "w11",
+        "w12",
+        "w13"
+      ],
+      "supportingLeafIds": [
+        "w10-L18",
+        "w10-L57",
+        "w11-L18",
+        "w12-L63",
+        "w13-L25"
+      ],
+      "groundingCount": 5
+    },
+    {
+      "id": "C17",
+      "pattern": "A worktree-isolation guard regime begins with Claude Code v2.1.223 mid-day 2026-08-06 (w11) and stays active through w13 and w14: worktree-resident seats are refused monitor arms, shared-checkout writes and heredocs, forcing ExitWorktree(keep)->act->re-enter and a Python-editing workaround; no such guard appears in w12 or w10.",
+      "kind": "regime",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w13",
+        "w14"
+      ],
+      "supportingLeafIds": [
+        "w11-L39",
+        "w11-L42",
+        "w13-L15",
+        "w14-L23",
+        "w14-L30",
+        "w14-L35"
+      ],
+      "groundingCount": 6
+    },
+    {
+      "id": "C19",
+      "pattern": "A green gate proves only the path it exercised: MCP conformance suites passed the afternoon forty tools were broken, four green gates hid four real defects, and independent instruments over one artefact return near-disjoint defect sets driven by analytical-register diversity.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10",
+        "w11",
+        "w12",
+        "w13",
+        "w14"
+      ],
+      "supportingLeafIds": [
+        "w10-L27",
+        "w11-L33",
+        "w11-L37",
+        "w12-L13",
+        "w13-L20",
+        "w14-L27"
+      ],
+      "groundingCount": 6
+    },
+    {
+      "id": "C21",
+      "pattern": "A shared-primary-checkout commit regime runs from 2026-08-09 (w13) through 2026-08-19 (w14): bare `git add`/`git commit`/`git mv` repeatedly sweep peers' staged half-states, escalating on 2026-08-13 from pathspec vigilance to the structural rule that the Director is sole commit-warden of the primary's index/head.",
+      "kind": "regime",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w13",
+        "w14"
+      ],
+      "supportingLeafIds": [
+        "w13-L05",
+        "w13-L06",
+        "w14-L06",
+        "w14-L22"
+      ],
+      "groundingCount": 4
+    },
+    {
+      "id": "C22",
+      "pattern": "A pathspec-scoped commit (`git commit -F msg -- <paths>`) records the WORKING-TREE state of the listed paths, so `git rm --cached` deletions of files still on disk vanish silently from the commit.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w10-L52"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C26",
+      "pattern": "The fabricated-value class widens over the corpus: invented bot identity and 31 hex chars of a sha (w12/w10, late July), padded event ids (w11, 2026-08-03), hand-extended shas (w13, 2026-08-07/08) generalising on 2026-08-08 into the one-law that any absolute value enters only from a first-hand right-frame read, then fabricated timestamps (w14, 2026-08-13).",
+      "kind": "trajectory",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w12",
+        "w10",
+        "w11",
+        "w13",
+        "w14"
+      ],
+      "supportingLeafIds": [
+        "w12-L28",
+        "w10-L28",
+        "w11-L24",
+        "w13-L01",
+        "w13-L02",
+        "w13-L04",
+        "w14-L02"
+      ],
+      "groundingCount": 7
+    },
+    {
+      "id": "C27",
+      "pattern": "A right-typed lookalike is substituted for the intended referent — narrower observed fact read as the broader claim, primary HEAD for origin/main, a description string for the schema, a rule's compliant example for its normative text, prior repo research for the original source, single-arity capability read as composable.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10",
+        "w11",
+        "w12",
+        "w14"
+      ],
+      "supportingLeafIds": [
+        "w10-L09",
+        "w11-L01",
+        "w11-L10",
+        "w11-L11",
+        "w11-L21",
+        "w12-L32",
+        "w12-L48",
+        "w12-L49",
+        "w14-L07",
+        "w14-L28"
+      ],
+      "groundingCount": 10
+    },
+    {
+      "id": "C28",
+      "pattern": "Claims ('pushed', 'merged', gate released, fleet population, board status) are transmitted to a peer or the owner before reading the state that would confirm them, and artefact descriptions are relayed without a first-hand read — every catch is external.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10",
+        "w11",
+        "w12",
+        "w13",
+        "w14"
+      ],
+      "supportingLeafIds": [
+        "w10-L06",
+        "w11-L19",
+        "w11-L25",
+        "w11-L26",
+        "w12-L14",
+        "w12-L54",
+        "w13-L28",
+        "w13-L37",
+        "w14-L18"
+      ],
+      "groundingCount": 9
+    },
+    {
+      "id": "C30",
+      "pattern": "The napkin/handoff artefact itself hardens time-bounded observations into doctrine: imperative-register entries are cited as owner rulings hours later, durable and derivable halves are written in one authoritative voice, inherited 'hard' constraints ride compaction boundaries unrepriced, and unsuperseded entries are relayed as live fact days later.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10",
+        "w12",
+        "w14"
+      ],
+      "supportingLeafIds": [
+        "w10-L16",
+        "w10-L30",
+        "w10-L39",
+        "w10-L40",
+        "w10-L41",
+        "w12-L31",
+        "w14-L18"
+      ],
+      "groundingCount": 7
+    },
+    {
+      "id": "C31",
+      "pattern": "Owner rulings are time-bounded and are superseded or reversed within hours to days (never-delete overturned, idle-quota constraint reversed same day, type-change gate widened then cleared, EMC2 calibration superseded, studio-sync retired then un-retired, MCP-103 re-priced, HUSKY=0 authorised), so a carried ruling is a hypothesis until re-checked at source.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10",
+        "w11",
+        "w12",
+        "w13",
+        "w14"
+      ],
+      "supportingLeafIds": [
+        "w10-L10",
+        "w10-L14",
+        "w10-L15",
+        "w10-L29",
+        "w11-L27",
+        "w11-L31",
+        "w12-L44",
+        "w13-L33",
+        "w14-L13"
+      ],
+      "groundingCount": 9
+    },
+    {
+      "id": "C32",
+      "pattern": "Scope drifts by execution without ratification — PostHog narrowing executed but never ratified, plans re-derived from review ledgers instead of owner outcomes, ratified decisions re-opened as cards, ends converted into means — driving the DoD-at-minting ceremony (MCP-356) and the plan-skill user-groups requirement as generator-level cures.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10",
+        "w11",
+        "w13",
+        "w14"
+      ],
+      "supportingLeafIds": [
+        "w10-L43",
+        "w10-L44",
+        "w11-L27",
+        "w13-L34",
+        "w14-L12",
+        "w14-L19",
+        "w14-L31"
+      ],
+      "groundingCount": 7
+    },
+    {
+      "id": "C33",
+      "pattern": "Owner-attention items (decisions AND actions AND feasibility conflicts) are buried in message prose instead of raised on a card, drawing repeated owner corrections and costing hours of wall-clock, while genuine card-and-ratify batches are the working form.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w12",
+        "w13",
+        "w14"
+      ],
+      "supportingLeafIds": [
+        "w11-L28",
+        "w11-L29",
+        "w11-L44",
+        "w12-L52",
+        "w12-L57",
+        "w13-L31",
+        "w14-L12"
+      ],
+      "groundingCount": 7
+    },
+    {
+      "id": "C34",
+      "pattern": "Dispatched subagents (reviewers, Crickets, a 981-leaf corpus reducer) go idle-without-delivering their verdict, indistinguishable from stuck by output alone; cures are the retrieval-first ladder, harvest-on-idle, and never pinging haiku legs (which re-run and contradict themselves).",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10",
+        "w11",
+        "w14"
+      ],
+      "supportingLeafIds": [
+        "w10-L36",
+        "w10-L37",
+        "w11-L05",
+        "w14-L34"
+      ],
+      "groundingCount": 4
+    },
+    {
+      "id": "C35",
+      "pattern": "Model-tier assignment formalises across the corpus: uniform heavyweight fan-out corrected to per-leg tiering (w10, 2026-07-26), the tiered-sight architecture and fleet-wide fallback rule articulated (w11, 2026-07-31), tier-behaviour differences measured (w12 cricket severity/stance gradient; w11 23-seat fleet), then tested by the TUI's silent quota model switch (w13, 2026-08-10).",
+      "kind": "trajectory",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10",
+        "w11",
+        "w12",
+        "w13"
+      ],
+      "supportingLeafIds": [
+        "w10-L12",
+        "w11-L04",
+        "w11-L09",
+        "w11-L33",
+        "w12-L19",
+        "w13-L24"
+      ],
+      "groundingCount": 6
+    },
+    {
+      "id": "C36",
+      "pattern": "The Cricket instrument is repeatedly mistaken for an authority or a health check — it inherits the supplier's drifted frame, reads ON-TRACK across an owner-declared wrong-priority window, and an unarmed cricket is the only mechanical tell that an executor took the Director seat.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w12",
+        "w13"
+      ],
+      "supportingLeafIds": [
+        "w12-L22",
+        "w12-L36",
+        "w13-L29"
+      ],
+      "groundingCount": 3
+    },
+    {
+      "id": "C39",
+      "pattern": "Cross-platform fleet membership (Copilot CLI seats, Codex connector, substrate-external agents) is a live mechanism in w12 and w10 (late July) and w11 (2026-08-01) and then disappears entirely from w13 and w14 (2026-08-07 to 2026-09-02), with no leaf recording its resolution or retirement.",
+      "kind": "absence",
+      "isAbsenceClaim": true,
+      "supportingWindows": [
+        "w12",
+        "w10",
+        "w11",
+        "w13",
+        "w14"
+      ],
+      "supportingLeafIds": [
+        "w10-L53",
+        "w10-L54",
+        "w11-L03",
+        "w12-L09",
+        "w12-L34",
+        "w12-L38"
+      ],
+      "groundingCount": 6
+    },
+    {
+      "id": "C40",
+      "pattern": "The cheapest discriminating probe is deferred in favour of theorising or premature closure — synthetic envelopes instead of one payload trace, network hypotheses instead of a six-character shell semantic, first-coherent-mechanism framings — and is repeatedly forced by an owner or peer pushback.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w12",
+        "w13",
+        "w14"
+      ],
+      "supportingLeafIds": [
+        "w12-L35",
+        "w12-L59",
+        "w12-L64",
+        "w13-L21",
+        "w13-L39",
+        "w13-L40",
+        "w14-L09"
+      ],
+      "groundingCount": 7
+    },
+    {
+      "id": "C41",
+      "pattern": "Cure design shifts from vigilance to structure across the corpus: the owner demands a mechanical fix for goal-tracking (w10, 2026-07-29), the Director becomes structural commit-warden (w13, 2026-08-13), and after 'passive guidance loses to artefact gravity' is measured twice the requirement lands in the plan skill and template itself (w14, 2026-08-19 to 08-31).",
+      "kind": "trajectory",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10",
+        "w13",
+        "w14"
+      ],
+      "supportingLeafIds": [
+        "w10-L42",
+        "w10-L44",
+        "w13-L06",
+        "w14-L08",
+        "w14-L11",
+        "w14-L19"
+      ],
+      "groundingCount": 6
+    },
+    {
+      "id": "C42",
+      "pattern": "A cure reproduces the class it cures — Sonar regex fixes growing new Sonar findings, a liveness gate refusing its own author's watcher, a sha-fabrication cure repeated 14h after being authored by the same seat, certified-by-inference written into the NOTIFY declaration diagnosing it — so only an external lens catches the self-reproduction.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10",
+        "w13",
+        "w14"
+      ],
+      "supportingLeafIds": [
+        "w10-L33",
+        "w13-L04",
+        "w14-L08",
+        "w14-L10"
+      ],
+      "groundingCount": 4
+    },
+    {
+      "id": "C43",
+      "pattern": "Napkin incident entries systematically PRECEDE their graduation into permanent doctrine weeks later, and the graduating quorum catches the first-pass author's own model errors: transmit-before-verify routed toward PDR-098 (w10), fork identity to PDR-027 (w12), PDR-133's chain refuted by four-seat quorum (w12), DoD to MCP-356 (w10), review pricing to PDR-140 (w14).",
+      "kind": "relational-lagged",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w12",
+        "w10",
+        "w11",
+        "w14"
+      ],
+      "supportingLeafIds": [
+        "w10-L06",
+        "w10-L44",
+        "w11-L23",
+        "w12-L05",
+        "w12-L46",
+        "w12-L47",
+        "w14-L05",
+        "w14-L33"
+      ],
+      "groundingCount": 8
+    },
+    {
+      "id": "C44",
+      "pattern": "The Sonar issues/search DEFAULT query facet hides genuine gate findings (three open S4043 issues on #851), so a 'Sonar phantom' verdict was reversed only when the owner forced an explicit issueStatuses facet.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w13"
+      ],
+      "supportingLeafIds": [
+        "w13-L19"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C45",
+      "pattern": "Interaction/state design rulings require a rendered, hoverable, theme-switchable live lab rather than static screenshots — the EMC2 button's first ratified calibration hardcoded raw white/black mixes and broke in light and high-contrast, and a hidden theme control left oak-theme.js auto-applying high-contrast as a reported 'feature'.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w12"
+      ],
+      "supportingLeafIds": [
+        "w12-L44",
+        "w12-L45",
+        "w12-L61"
+      ],
+      "groundingCount": 3
+    },
+    {
+      "id": "C46",
+      "pattern": "The design lane's only metric is distance-to-pixels measured first-hand from the branch tip; an honestly-reported unchanging metric ('0 of 10' for two hours) is itself a ritual whose honesty makes it undetectable from inside, and the plan that re-derived itself from the review ledger was purged by owner ruling.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w13"
+      ],
+      "supportingLeafIds": [
+        "w13-L22",
+        "w13-L23",
+        "w13-L34"
+      ],
+      "groundingCount": 3
+    },
+    {
+      "id": "C47",
+      "pattern": "Design/UI ratification mechanisms (rendered labs, theme-true calibration, distance-to-pixels) run from 2026-07-25 (w12) to 2026-08-13 (w13) and are entirely absent from w14 (2026-08-13 to 2026-09-02), whose leaves carry no design-lane actuator at all.",
+      "kind": "absence",
+      "isAbsenceClaim": true,
+      "supportingWindows": [
+        "w12",
+        "w13",
+        "w14"
+      ],
+      "supportingLeafIds": [
+        "w12-L44",
+        "w12-L45",
+        "w12-L61",
+        "w13-L22",
+        "w13-L34"
+      ],
+      "groundingCount": 5
+    },
+    {
+      "id": "C48",
+      "pattern": "Substituting a remote/CI gate for a local hook copies the instrument but not its SCOPE or COMPLETION SEMANTICS — full-history gitleaks vs range-only pre-push, CI cancellation lacking the hook's blocking-serial guarantee, preview-serves probing only unauthenticated paths while the token path broke.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w14"
+      ],
+      "supportingLeafIds": [
+        "w14-L13",
+        "w14-L14",
+        "w14-L15",
+        "w14-L29"
+      ],
+      "groundingCount": 4
+    },
+    {
+      "id": "C49",
+      "pattern": "Dependent PRs are de-serialised at the end of the corpus by cherry-picking the dependency's exact commit and reconciling at the second merge, and by rehoming a fork tip into the shared repo as a bot branch (#943 to #945), dissolving loops that cost an hour per cure round.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w14"
+      ],
+      "supportingLeafIds": [
+        "w14-L04",
+        "w14-L25",
+        "w14-L26"
+      ],
+      "groundingCount": 3
+    },
+    {
+      "id": "C50",
+      "pattern": "Coordination protocols model the owner as a decision oracle rather than the fleet's fastest concurrent writer, producing the PR #515 non-fast-forward collision, the worked STOP/read-authorship/card protocol, and the ruling that routing autonomy excludes re-tasking an owner-assigned seat or re-opening a closed decision.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w12"
+      ],
+      "supportingLeafIds": [
+        "w12-L08",
+        "w12-L12",
+        "w12-L21",
+        "w12-L52",
+        "w12-L53"
+      ],
+      "groundingCount": 5
+    },
+    {
+      "id": "C52",
+      "pattern": "Destructive-operation preconditions are inherited from an adjacent guard or a two-surface declarative contract rather than derived from the operation itself, so each review round of the --clear guard and the paths/sources twin surfaced a new real data-loss vector.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w12",
+        "w13"
+      ],
+      "supportingLeafIds": [
+        "w12-L67",
+        "w13-L41"
+      ],
+      "groundingCount": 2
+    },
+    {
+      "id": "C53",
+      "pattern": "The dominant failure surface shifts across the timeline from shell/tooling mechanics (pipes, zsh splitting, paths, tokens — dense in w12 and w10, late July) to record-provenance and owner-intent alignment (attribution drift, unratified plan prose, wrong-rung assertions, re-opened ratified decisions — dominant in w13 and w14, mid-August to September).",
+      "kind": "distributional",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w12",
+        "w10",
+        "w11",
+        "w13",
+        "w14"
+      ],
+      "supportingLeafIds": [
+        "w12-L02",
+        "w10-L01",
+        "w10-L07",
+        "w11-L01",
+        "w13-L35",
+        "w13-L37",
+        "w14-L07",
+        "w14-L12",
+        "w14-L18"
+      ],
+      "groundingCount": 9
+    },
+    {
+      "id": "C54",
+      "pattern": "Of the napkin's four declared categories, 'what works' is the thinnest: working practice appears almost exclusively as a cure adopted immediately after the failure that provoked it (collision protocol, PDR-064/117 takeover, known-flake loop, rehoming cure), with essentially no standalone records of a practice succeeding absent an originating mistake.",
+      "kind": "absence",
+      "isAbsenceClaim": true,
+      "supportingWindows": [
+        "w10",
+        "w11",
+        "w12",
+        "w13",
+        "w14"
+      ],
+      "supportingLeafIds": [
+        "w12-L12",
+        "w12-L26",
+        "w12-L29",
+        "w12-L64",
+        "w11-L47",
+        "w13-L20",
+        "w14-L26"
+      ],
+      "groundingCount": 7
+    },
+    {
+      "id": "C55",
+      "pattern": "No leaf records a measurement that a landed cure actually extinguished its class: the corpus counts recurrences after the cure was authored (sha fabrication 14h later, batch-cadence third instance, push-wrapper re-created next day) but never a verified post-cure absence.",
+      "kind": "absence",
+      "isAbsenceClaim": true,
+      "supportingWindows": [
+        "w10",
+        "w13",
+        "w14"
+      ],
+      "supportingLeafIds": [
+        "w10-L02",
+        "w13-L04",
+        "w14-L03",
+        "w14-L08",
+        "w14-L11"
+      ],
+      "groundingCount": 5
+    },
+    {
+      "id": "C56",
+      "pattern": "Verification runs in a circle when reviewer-round findings are absorbed into unratified plan prose and fed back to further reviewers, or one document's description of another's status is quoted without opening the described document.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w13",
+        "w14"
+      ],
+      "supportingLeafIds": [
+        "w13-L34",
+        "w13-L35",
+        "w14-L07"
+      ],
+      "groundingCount": 3
+    },
+    {
+      "id": "C57",
+      "pattern": "Freshly-authored, claim-bearing text carries falsified premises that self-review structurally cannot catch — the catch is always external (Copilot, opus reviewers, the graduation quorum, the owner), and the quorum's value is highest exactly where the author felt most confident.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w12",
+        "w13",
+        "w14"
+      ],
+      "supportingLeafIds": [
+        "w12-L46",
+        "w12-L47",
+        "w12-L54",
+        "w12-L55",
+        "w13-L28"
+      ],
+      "groundingCount": 5
+    },
+    {
+      "id": "C58",
+      "pattern": "The estate manufactures its own problems and then compensates for them — validation machinery claiming jurisdiction over externally-managed vendor skills produced a 59-line lock reconciling against nothing, and CI 'cancellation noise' narrated to the owner was the seat's own push cadence.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w13",
+        "w14"
+      ],
+      "supportingLeafIds": [
+        "w13-L30",
+        "w14-L14"
+      ],
+      "groundingCount": 2
+    },
+    {
+      "id": "C59",
+      "pattern": "Status vocabulary ('deferral', 'banked') converts an open obligation into a closed-sounding state and evades the write-time concept gate because that gate enumerates words rather than the move.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11"
+      ],
+      "supportingLeafIds": [
+        "w11-L36"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C60",
+      "pattern": "Plan-authored universal quantifiers ('every path', 'only the read side') die at code-visible corners, and whole waves of PR #515 review findings trace to one generator — persisting a value derivable from fields already present.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w12"
+      ],
+      "supportingLeafIds": [
+        "w12-L10",
+        "w12-L11"
+      ],
+      "groundingCount": 2
+    },
+    {
+      "id": "C61",
+      "pattern": "Gate failures are discriminated as flake vs peer contention by host state — two consecutive full-gate failures on a docs-only diff cleared in a verified-quiet CPU window, and a 5/5 isolation loop plus gate retry is the cheapest-sufficient known-flake confirmation.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w12"
+      ],
+      "supportingLeafIds": [
+        "w12-L18",
+        "w12-L64"
+      ],
+      "groundingCount": 2
+    },
+    {
+      "id": "C62",
+      "pattern": "Backgrounded shell tasks are an unreliable execution channel: the harness's 'completed exit 0' is the last echo's exit, healthy backgrounded merge/commit chains receive external SIGTERM while identical foreground runs complete, and a stopped background commit was misattributed to an owner stop.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11",
+        "w12",
+        "w13"
+      ],
+      "supportingLeafIds": [
+        "w11-L15",
+        "w12-L01",
+        "w13-L26",
+        "w14-L03"
+      ],
+      "groundingCount": 4
+    },
+    {
+      "id": "C63",
+      "pattern": "Every recurring coordination act converges on a dedicated front-door CLI command — comms CLI, watch commands, and now a handoff CLI commissioned after a seat worked around worktree isolation to write handoff files.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w11"
+      ],
+      "supportingLeafIds": [
+        "w11-L42"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C64",
+      "pattern": "A workflow file existing only on a non-default branch never becomes dispatchable; the working cure is an `on: push` scoped to its own scratch ref (scaffold, evidence, delete-ref).",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w12"
+      ],
+      "supportingLeafIds": [
+        "w12-L07"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C65",
+      "pattern": "An interrupted or rejected tool call may already have executed — a rejected git commit had created 7ae8b2ff4 with a fabricated author before the rejection surfaced, and a later push published it — so interrupted requires a post-state read, never an assumption of non-execution.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w12"
+      ],
+      "supportingLeafIds": [
+        "w12-L33"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C66",
+      "pattern": "When a fixed test-harness resource (port 3020) collides with a live owner-facing render, the owner ruled the cure is server-side adaptation (ephemeral port at config load), never seat coordination or pausing the live surface.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w10-L34"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C67",
+      "pattern": "A validator whose only passing state is the finished state (requireSameStringMembers across a 121-commit rebase) manufactures well-reasoned --no-verify bypass requests — checks that cannot express staged progress convert correct behaviour into bypass pressure.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w10-L51"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C68",
+      "pattern": "The owner rejected the CodeQL dismissal-text path outright on PR #635, forcing structural fixes for all five alerts and surfacing a measured latent ReDoS vector the dismissal path would have preserved.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w10"
+      ],
+      "supportingLeafIds": [
+        "w10-L59"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C69",
+      "pattern": "`git commit --amend` as a content-evolution mechanism was owner-forbidden absolutely after one unpushed commit was amended four times, invalidating shas already published elsewhere.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w14"
+      ],
+      "supportingLeafIds": [
+        "w14-L32"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C70",
+      "pattern": "The documents-epoch attractor: after a plan ratifies, the lane's centre of gravity should move to the built tree, yet the habit is a six-surface documentation ceremony per incoming ruling while the build sits at zero.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w14"
+      ],
+      "supportingLeafIds": [
+        "w14-L20"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C71",
+      "pattern": "The owner redefined 'priority' as concentrated quality investment and explicitly not tempo ('fast is likely to reduce quality'), naming the agent's volunteered 'within the hour' framing as the failure shape.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w12"
+      ],
+      "supportingLeafIds": [
+        "w12-L66"
+      ],
+      "groundingCount": 1
+    },
+    {
+      "id": "C72",
+      "pattern": "Leadership/advocacy documents are shaped by owner correction: open on benefits not the incident, decompose every 'X would have prevented Y' claim into detection/prevention/diagnosis, and cut implementation detail from yes/no decision papers.",
+      "kind": "recurrence",
+      "isAbsenceClaim": false,
+      "supportingWindows": [
+        "w13"
+      ],
+      "supportingLeafIds": [
+        "w13-L38"
+      ],
+      "groundingCount": 1
+    }
+  ]
+}

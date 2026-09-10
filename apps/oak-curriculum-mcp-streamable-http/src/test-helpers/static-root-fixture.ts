@@ -52,7 +52,11 @@ async function copyCommittedRootStatics(destRoot: string): Promise<void> {
   const entries = await readdir(COMMITTED_PUBLIC_ROOT, { withFileTypes: true });
 
   for (const entry of entries) {
-    if (generated.has(entry.name)) {
+    // Dot-prefixed entries are copy-oak-ds's transient staging/retired dirs
+    // (never servable: express.static ignores dotfiles) and can vanish
+    // between readdir and cp when a concurrent build publishes — the ENOENT
+    // race recorded 2026-08-13 and hit again on PR #20's CI.
+    if (generated.has(entry.name) || entry.name.startsWith('.')) {
       continue;
     }
     await cp(

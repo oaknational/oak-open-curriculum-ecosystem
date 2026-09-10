@@ -8,7 +8,7 @@
  * interface configuration never reached. This shim closes that gap.
  *
  * Why configuration must supply these headers here (MCP-517). Behind the
- * Cloudflare edge the app is served at `https://www.thenational.academy/mcp`,
+ * Cloudflare edge the app is served at `https://mcp.thenational.academy/mcp`,
  * but the edge MUST override the Host to the app's own Vercel hostname —
  * that is how Vercel selects the serving project. The honest proxy answer
  * (`trust proxy` plus forwarded headers arriving from the edge) is structurally
@@ -40,18 +40,29 @@
  *    comma-separated value (`getFirstValueFromHeader` in `@clerk/backend`), and
  *    Vercel has already populated `x-forwarded-host` with the deployment
  *    hostname — so appending would silently change nothing.
- * 2. The `Host` header is never touched. The hosting platform routes on it —
- *    it is how the deployment is selected at all, and the edge presents the
- *    deployment hostname while the canonical address deliberately is not one
- *    the platform would resolve — so rewriting Host would make the request
- *    unroutable. (Until 2026-08-20 the stated reason was the app's own
- *    `dnsRebindingProtection`, which read the raw Host; that guard is now
- *    mounted on no route, MCP-650. The behaviour is unchanged and still
- *    required, but the reason is platform routing, not the guard — and it
- *    becomes the guard's again the moment MCP-650 mounts it, whose
- *    allow-list still excludes the canonical address.) Consumers prefer
- *    `x-forwarded-host` over Host, so replacing the forwarded pair
+ * 2. The `Host` header is never touched. It is this app's only first-hand
+ *    record of the hostname the edge actually presented, and with
+ *    `trust proxy` off every Host-derived reader — Express's `req.hostname`
+ *    and `req.protocol`, and `dnsRebindingProtection` once MCP-650 mounts it —
+ *    is entitled to that arrival value rather than a configured substitute.
+ *    This shim's job is to STATE the public origin on the interface
+ *    origin-deriving consumers actually read; rewriting Host would instead
+ *    falsify the arrival record, and buy nothing, because those consumers
+ *    prefer `x-forwarded-host` over Host anyway. Replacing the forwarded pair
  *    suffices.
+ *
+ *    Two reasons previously given here are NOT the reason, and are recorded
+ *    because each reads plausibly. The first was the app's own
+ *    `dnsRebindingProtection` reading the raw Host; that guard is mounted on
+ *    no route today (MCP-650 owns re-mounting it), so it cannot be what makes
+ *    the property load-bearing now. The second was that the canonical address
+ *    is not one the platform would resolve, so an in-app rewrite would leave
+ *    the request unroutable. Measured 2026-09-10, both halves of that are
+ *    false: `mcp.thenational.academy` resolves (Cloudflare anycast) and
+ *    reaches THIS app — `GET /` answers with its own `x-app-version` — and in
+ *    any case the platform has finished routing long before app middleware
+ *    runs, so nothing an app handler writes to Host can affect routing at all.
+ *    The behaviour was always right; only its stated warrant was wrong.
  *
  * Express's own proxy-aware getters (`req.hostname`, `req.protocol`) are
  * unaffected and stay Host-derived — correct and deliberate, because

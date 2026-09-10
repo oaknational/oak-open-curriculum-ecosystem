@@ -78,6 +78,16 @@ exposed an unrelated defect in the same pass — `declare -A` requires bash 4 an
 macOS ships 3.2, which the original had survived only because PR numbers are
 numeric and plain indexed arrays happened to work.
 
+## Sibling: an arrival poll's comparison set holds only the arrival surface
+
+A review-arrival poll keyed on a compound state string tripped "review
+landed" twice against a pre-existing quota-skip entry, because
+`mergeStateStatus` flapping (BLOCKED to UNKNOWN) changed the string while
+no review had arrived; the version keyed on the reviews ARRAY alone held
+(2026-08-18). The general form: an arrival poll compares only the surface
+whose change IS the arrival — anything else in the comparison set
+manufactures arrivals.
+
 ## Relationship to the false-green family
 
 `turbo-cache-false-green` and `zero-match-false-green` both name a *check* that

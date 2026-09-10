@@ -22,8 +22,12 @@ export const SDK_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
   // MCP-365: the generated instructions gained the owner-signed
   // brand-provenance closing paragraph (attribution + non-endorsement per
   // LICENCE-DATA.md); C055 re-anchored on its unchanged routing paragraph.
+  // Stated-statements refactor (MCP-671) and thread sequences in curriculum
+  // order (MCP-681): the server-instructions sequencing sentence (C054) now
+  // names curriculum-ordered thread progressions and each unit's stated
+  // prior knowledge rather than a prior-knowledge graph.
   'packages/sdks/oak-curriculum-sdk/src/mcp/agent-support-tool-metadata.ts': reviewed(
-    '2d86bf6b1cf6241114656a1a2909fbb47ecd0b6f34d5ccd8b9f44c0215301606',
+    '423f78d9882261f797f978ee978a002bfd730f79b2a9a5ae15d71ea09eed54fe',
     ['C049', 'C050', 'C051', 'C052', 'C053', 'C054', 'C055'],
   ),
   // MCP-438: the description's embedded presentation directive (the fonts
@@ -74,20 +78,23 @@ export const SDK_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
       'C232',
     ],
   ),
+  // Misconception ordering (2026-09-04, MCP-682): the description (C234), the
+  // unit-anchor field (C236) and the thread-anchor field (C237) state that
+  // units and lessons come in Oak's authored curriculum order, replacing the
+  // id-sorted edge adjacency both axes had read.
   'packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-misconception-graph.ts': reviewed(
-    'd1890c49b2aede5ea09d7cda118ac83d9471f14ab72d9f7ea9813af5580a5d60',
+    'fe40f12cc14212855bd131cc7a9687a7bbc3f9c8dff590a4242058005e5e8871',
     ['C233', 'C234', 'C235', 'C236', 'C237', 'C238', 'C239', 'C240', 'C241'],
   ),
-  'packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-prior-knowledge-graph.ts': reviewed(
-    'c85f003e69fe7f2a2da22d65f517334351a244d1085d4e989817ecf54246bacd',
-    ['C246', 'C247', 'C248', 'C249', 'C250', 'C251'],
-  ),
   'packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search/tool-definition.ts': reviewed(
-    '592fe681cd227863d083916ad74e380dcfd0e18605d694965232f89f3e078cef',
+    'b2ee07ef1e5550084db0171499306ca06c5ab4bd04bff76a1e6e013ae0a5117b',
     ['C065', 'C066', 'C067', 'C068'],
   ),
+  // Thread sequences in curriculum order (2026-09-03): the description
+  // (C253), the detail-anchor field (C254), and the summary (C258) state
+  // per-subject runs in Oak's curriculum order.
   'packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-thread-progressions.ts': reviewed(
-    '70107401c79893d6f9cbd11d51241376510c7366c8bf67f8c2bf8eb1a02bb52d',
+    'd15d7c6fd2ceaf7c090587673efc6cbdc68286fd32763c22b4be6d48d56991fe',
     ['C252', 'C253', 'C254', 'C255', 'C256', 'C257', 'C258', 'C259', 'C260'],
   ),
   'packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-user-search/tool-definition.ts': reviewed(
@@ -129,8 +136,11 @@ export const SDK_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
     'da82fc8370788eefc4a61b2778b78a2f6b56ec457dec7a146bd50fa774937f65',
     IMPLEMENTATION_ONLY,
   ),
+  // Pagination echo (2026-09-01 payload audit): the generated-tool envelope
+  // now surfaces the upstream Link-header signal beside status and data.
+  // Plumbing only; the served prose the cited items pin is unchanged.
   'packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/executor.ts': reviewed(
-    '97b08a93960272d7b636afcd2e1f9ed76b0512227688912d4135bc9eb90b01da',
+    'c83e633368cd3ccb5791e97dac57e58d586b9afa187a47040173dfd02ca57f03',
     ['C057', 'C058'],
   ),
   // MCP-366: requiresDomainContext removed from the registry-descriptor

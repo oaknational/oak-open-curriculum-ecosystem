@@ -1,17 +1,17 @@
 # Applying the principles when creating
 
-Use this when the task is to **design or write** something new: a curriculum map, a unit, a lesson, an assessment, or a resource. The six principles are the design constraints; this file is the workflow for turning them into a coherent artefact, plus worked examples.
+Use this when the task is to **design or write** something new: a curriculum sequence, a unit, a lesson, an assessment, or a resource. The six principles are the design constraints; this file is the workflow for turning them into a coherent artefact, plus worked examples.
 
 ## Work at the right grain
 
 The principles apply at every level, but they bite differently depending on what you're making. Identify the grain first.
 
-| Grain                       | What it is                                  | Where the principles concentrate                                                                                 |
-| --------------------------- | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| **Curriculum map / scheme** | What is taught, in what order, across years | Sequenced & coherent (threads, prerequisites); diverse (selection); flexible (mapped to the national curriculum) |
-| **Unit**                    | A coherent block of lessons on a topic      | All six; especially sequencing within the unit and its place in a thread                                         |
-| **Lesson**                  | A single teaching session                   | Knowledge & vocabulary rich; evidence-informed (misconceptions, retrieval); accessible                           |
-| **Resource / assessment**   | Slides, worksheet, quiz, task               | Knowledge-rich; accessible (cognitive load); evidence-informed (assessment design)                               |
+| Grain                     | What it is                                  | Where the principles concentrate                                                                                 |
+| ------------------------- | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| **Curriculum sequence**   | What is taught, in what order, across years | Sequenced & coherent (threads, prerequisites); diverse (selection); flexible (mapped to the national curriculum) |
+| **Unit**                  | A coherent block of lessons on a topic      | All six; especially sequencing within the unit and its place in a thread                                         |
+| **Lesson**                | A single teaching session                   | Knowledge & vocabulary rich; evidence-informed (misconceptions, retrieval); accessible                           |
+| **Resource / assessment** | Slides, worksheet, quiz, task               | Knowledge-rich; accessible (cognitive load); evidence-informed (assessment design)                               |
 
 ## A design workflow
 

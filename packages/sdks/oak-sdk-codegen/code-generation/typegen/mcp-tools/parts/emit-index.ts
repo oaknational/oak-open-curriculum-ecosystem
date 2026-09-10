@@ -14,6 +14,7 @@ function buildExports({
   method,
   operationId,
   operation,
+  paginated,
 }: {
   readonly toolName: string;
   readonly descriptorName: string;
@@ -22,6 +23,7 @@ function buildExports({
   readonly method: string;
   readonly operationId: string;
   readonly operation: OperationObject;
+  readonly paginated: boolean;
 }): string {
   // Security metadata from mcp-security-policy.ts (see apply-security-policy.ts for details)
   const securitySchemes = getSecuritySchemeForTool(toolName);
@@ -104,7 +106,12 @@ function buildExports({
     `      throw new UndocumentedResponseError(status, '${operationId}', documentedStatuses, responseBody);`,
     '    }',
     '    const payload = status >= 200 && status < 300 ? response.data : response.error;',
-    '    return { httpStatus: status, payload };',
+    ...(paginated
+      ? [
+          "    const pagination = derivePaginationFromLinkHeader(response.response.headers.get('link'));",
+          '    return { httpStatus: status, payload, pagination };',
+        ]
+      : ['    return { httpStatus: status, payload };']),
     '  },',
     '  toolZodSchema,',
     '  toolInputJsonSchema,',
@@ -186,6 +193,7 @@ export function emitIndex(
   method: string,
   operationId: string,
   operation: OperationObject,
+  paginated = false,
 ): string {
   // Get base description from OpenAPI spec. No prerequisite guidance is
   // appended (MCP-300): orientation guidance lives in the server's
@@ -202,5 +210,6 @@ export function emitIndex(
     method,
     operationId,
     operation,
+    paginated,
   });
 }

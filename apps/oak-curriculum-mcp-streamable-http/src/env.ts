@@ -72,7 +72,7 @@ const BaseEnvSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.shape)
      *
      * Set when an edge serves the app at a canonical address and presents a
      * different Host to the origin (MCP-172: Cloudflare serves
-     * `www.thenational.academy/mcp` with the Host overridden to the app's own
+     * `mcp.thenational.academy/mcp` with the Host overridden to the app's own
      * Vercel hostname). Every self-description surface then names
      * `https://<CANONICAL_HOST>`; absent, the app self-describes per request
      * as before.

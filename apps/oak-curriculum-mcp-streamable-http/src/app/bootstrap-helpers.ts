@@ -20,6 +20,7 @@ export type BootstrapPhaseName =
   | 'createCorsMiddleware'
   | 'createSecurityHeaders'
   | 'fetchUpstreamMetadata'
+  | 'verifyClerkKeyPairing'
   | 'registerPublicOAuthMetadata'
   | 'registerOAuthProxy'
   | 'addNoCacheToErrors'

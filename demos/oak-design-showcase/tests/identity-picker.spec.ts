@@ -19,9 +19,10 @@ import type { Frame, Page } from '@playwright/test';
 
 import { IDENTITY_DEFAULT } from '@oaknational/oak-design-react';
 import { SWITCHBOARD_CANVAS_WIDTH } from '../components/canonical-widths';
+import { SHOWCASE_ORIGIN } from '../tools/showcase-origin';
 import { BASE_IDENTITY, IDENTITIES, IDENTITY_LABELS } from '../components/useIdentity';
 import { MEASUREMENT_WIDTH_VALUES } from '../tools/measurement-widths';
-import { assertOnlyKnownExternalOrigins } from './apply-state';
+import { assertOnlyKnownExternalOrigins, interceptExternalOrigins } from './apply-state';
 import {
   assertResolved,
   chooseThemeAndExpectInEffect,
@@ -168,13 +169,20 @@ test.describe('scaled preview target-size floor', () => {
 test.describe('specimen strip: a return to the applied brand cancels an in-flight swap', () => {
   test('a stale sheet load never retires the current brand', async ({ page }) => {
     const [first, second] = COUNTER_BRANDS;
+    // Hermetic like the rest of the suite: without this, a blocked-egress
+    // host lets the specimen's external font stall the window load event
+    // ~20s (measured on the restricted cloud runner), spending the
+    // constructed race's whole margin inside goto.
+    const aborted = await interceptExternalOrigins(page);
     // Deterministic, not timed: the second brand's sheet is HELD in flight
     // until this test releases it, so the race's ordering is constructed.
+    // Registered after the interceptor so it matches first (last wins) and
+    // origin-anchored so no external URL can ride it past the seal above.
     let release: (() => void) | undefined;
     const held = new Promise<void>((resolve) => {
       release = resolve;
     });
-    await page.route(`**/brands/${second}/brand.css`, async (route) => {
+    await page.route(`${SHOWCASE_ORIGIN}/brands/${second}/brand.css`, async (route) => {
       await held;
       await route.continue();
     });
@@ -182,7 +190,15 @@ test.describe('specimen strip: a return to the applied brand cancels an in-fligh
     await page.getByRole('radio', { name: IDENTITY_LABELS[second] }).check();
     await expect(page.locator(`link[data-oak-brand='${second}']`)).toHaveCount(1);
     await page.getByRole('radio', { name: IDENTITY_LABELS[first] }).check();
+    // The 200 completion pins the removal below to the STALE-ADJUDICATION
+    // branch: a failed load would route through the binder's error handler,
+    // whose cleanup is observationally identical on every other assertion.
+    const staleLoad = page.waitForResponse(
+      (response) =>
+        new URL(response.url()).pathname === `/brands/${second}/brand.css` && response.ok(),
+    );
     release?.();
+    await staleLoad;
     // A POSITIVE post-load signal: the stale branch REMOVES its link, so
     // its disappearance proves the held load resolved and was adjudicated.
     // Pre-cure the link survives applied instead, and this times out red.
@@ -197,6 +213,7 @@ test.describe('specimen strip: a return to the applied brand cancels an in-fligh
     await expect
       .poll(firstSheetDisabled, { message: 'the current brand sheet stays in the cascade' })
       .toBe(false);
+    assertOnlyKnownExternalOrigins(aborted);
   });
 });
 

@@ -248,14 +248,23 @@ This ADR is honest about what it does and does not cover:
    does not trigger the log. The contract is "non-zero exit is
    visible", not "every form of misbehaviour is visible". Output-shape
    validation belongs in the hook protocol layer, not the wrapper.
-   One complementary exit-0 writer exists by design (recorded
-   2026-06-11): the PreToolUse guard shim
-   (`.claude/hooks/run-pretooluse-guard.mjs`) appends its own loud
-   warning line to `.claude/logs/hook-errors.log` when it fails OPEN
-   on an unbuilt guard artefact — an exit-0 allow this wrapper is
-   structurally blind to. The shim writes a deliberately simpler line
-   format; this ADR's fixed block schema governs the wrapper's
-   entries only.
+   Two complementary exit-0 writers exist by design, both for exit-0
+   outcomes this wrapper is structurally blind to, and both writing a
+   deliberately simpler line format than this ADR's fixed block schema
+   (which governs the wrapper's entries only):
+
+   - The PreToolUse guard shim (`.claude/hooks/run-pretooluse-guard.mjs`,
+     recorded 2026-06-11) appends a loud warning line when it fails OPEN
+     on an unbuilt guard artefact — an exit-0 allow.
+   - The SessionStart identity shim
+     (`.claude/hooks/practice-session-identity.mjs`, recorded
+     2026-08-23) appends a
+     `[<ISO timestamp>] practice-session-identity fail-open` line plus
+     the indented diagnostic message when it fails open on a missing
+     adapter artefact, spawn error, signal, or non-zero adapter exit —
+     it exits 0 so its `additionalContext` diagnostic reaches the
+     session, which this wrapper's non-zero-exit contract would
+     swallow.
 
 7. **`mkdir -p` of the log directory runs unconditionally on every
    hook firing.** Idempotent and cheap, but it does mean

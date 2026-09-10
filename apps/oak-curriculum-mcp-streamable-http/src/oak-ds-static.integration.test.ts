@@ -108,10 +108,11 @@ describe('Oak Open Curriculum Design System static serving', () => {
     expect(res.headers['content-type']).toContain('text/css');
   });
 
-  it('still serves the unprefixed paths, so the alpha surface keeps rendering', async () => {
-    // The alpha host serves this app at its own root and is a declared
-    // compatibility surface (MCP-509 acceptance). Retiring the root mount
-    // would break it silently.
+  it('still serves the unprefixed paths, so root-served deployments keep rendering', async () => {
+    // Root-served deployments reach this app at `/` — the canonical host
+    // does (verified 2026-09-01), and the legacy deployment host is a
+    // declared compatibility surface (MCP-509 acceptance). Retiring the root
+    // mount would break those pages silently.
     const res = await request(app).get('/oak-ds/styles.css').set('Host', 'localhost');
 
     expect(res.status).toBe(200);

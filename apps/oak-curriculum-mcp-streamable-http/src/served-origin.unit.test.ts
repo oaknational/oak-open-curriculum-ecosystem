@@ -15,11 +15,11 @@ describe('resolveServedOrigin', () => {
   it('a configured canonical origin wins over every other input', () => {
     expect(
       resolveServedOrigin({
-        canonicalOrigin: 'https://www.thenational.academy',
+        canonicalOrigin: 'https://mcp.thenational.academy',
         displayHostname: 'my-app.vercel.app',
         portEnv: '4000',
       }),
-    ).toBe('https://www.thenational.academy');
+    ).toBe('https://mcp.thenational.academy');
   });
 
   it('a Vercel deployment serves at its display hostname over https', () => {

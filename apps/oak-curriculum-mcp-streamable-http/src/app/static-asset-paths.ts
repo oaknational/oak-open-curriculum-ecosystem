@@ -14,11 +14,12 @@ import { MCP_RESOURCE_PATH } from '../served-origin.js';
  * URL prefix every first-party asset reference sits beneath.
  *
  * @remarks
- * MCP-509. The canonical deployment reaches this app through a Cloudflare
- * origin rule scoped to `/mcp` and `/mcp/*`; a root-relative asset request
- * never arrives here at all, it stays on the main website and gets that
- * site's 404 HTML. So the page's own references must live inside the routed
- * surface, and the static mount must answer there.
+ * MCP-509. Under a path-scoped edge (the release-era `www` rule forwarded
+ * only `/mcp` and `/mcp/*`) a root-relative asset request never arrives here
+ * at all — it stays on the fronting site and gets that site's 404 HTML. So the
+ * page's own references live inside the routed surface, and the static mount
+ * answers there; the canonical `mcp.` host serves the root too, and the page
+ * stays portable across both edge shapes.
  *
  * **Derived, not a fourth copy of `'/mcp'`.** The edge rule is scoped to the
  * path this app publishes as its MCP resource, so that path — not a literal
@@ -58,7 +59,7 @@ import { MCP_RESOURCE_PATH } from '../served-origin.js';
  * the Clerk handshake before ever reaching this mount. That is why these
  * asset prefixes are named in `clerk-skip-surfaces.ts`: the ordering argument
  * above rules out a 401, not a redirect. Both mounted copies of each tree are
- * named there — the routed one and the root one the alpha host serves from.
+ * named there — the routed one and the root one root-served deployments use.
  */
 export const ROUTED_ASSET_BASE = MCP_RESOURCE_PATH;
 

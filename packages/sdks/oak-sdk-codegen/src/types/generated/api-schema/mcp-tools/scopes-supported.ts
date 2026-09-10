@@ -13,7 +13,8 @@
  * @see {@link file://./../../../../../code-generation/typegen/mcp-tools/parts/generate-scopes-supported-file.ts}
  *
  * @remarks
- * Runtime imports this constant to construct RFC 9728 protected resource metadata.
+ * Runtime imports this constant to construct RFC 9728 protected resource metadata
+ * and the `scopes_supported` of the served RFC 8414 authorization-server metadata (MCP-345).
  * Generator reads security policy and emits this constant during sdk-codegen.
  */
 

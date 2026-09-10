@@ -9,10 +9,10 @@ import { readRepoDocument } from '../../src/collaboration-state/test-helpers/rep
  * @remarks
  * MCP-302. `plugins/oak-open-curriculum/.mcp.json` is not repo configuration —
  * it is the binding every installing user receives, so a non-production host
- * there points the public plugin at an invite-only surface. The alpha host is
- * still the correct target for internal development config (`.mcp.json.example`,
- * `.cursor/mcp.json`) and for the recorded conformance fixtures, which is why
- * this guard is scoped to the shipped plugin rather than sweeping the repo.
+ * there points the public plugin at the wrong surface. The recorded
+ * conformance fixtures stay on the hosts they were captured from (dated
+ * captures, provenance-checked by their own suite), which is why this guard
+ * is scoped to the shipped plugin rather than sweeping the repo.
  *
  * The canonical URL is stated literally here on purpose. The app resolves its
  * own origin from the `CANONICAL_HOST` environment variable, so there is no
@@ -26,7 +26,7 @@ import { readRepoDocument } from '../../src/collaboration-state/test-helpers/rep
  * ADR-078 helper-mediated committed-artefact reads.
  */
 
-const CANONICAL_MCP_ENDPOINT = 'https://www.thenational.academy/mcp';
+const CANONICAL_MCP_ENDPOINT = 'https://mcp.thenational.academy/mcp';
 
 const PLUGIN_MCP_CONFIG_PATH = 'plugins/oak-open-curriculum/.mcp.json';
 const MCP_ENABLED_SKILL_PATH =

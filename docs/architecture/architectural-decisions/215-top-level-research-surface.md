@@ -1,10 +1,19 @@
 # ADR-215: Top-Level `research/` Surface for Imported Research Records
 
-- **Status:** Proposed (lands with the web-app-deconstruction import PR; owner
-  ratification via PR review)
+- **Status:** Superseded by
+  [ADR-226](226-agent-research-surface-for-imported-records.md) (2026-08-30)
 - **Date:** 2026-07-20
 - **Relates to:** [ADR-041](041-workspace-structure-option-a.md) (workspace tier
   structure — deliberately unchanged by this ADR)
+
+## Supersession record (2026-08-30)
+
+The imported record relocated to
+[`.agent/research/innovation-kit/web-app-deconstruction/`](../../../.agent/research/innovation-kit/web-app-deconstruction/README.md)
+and the top-level `research/` surface retired with it. ADR-226 carries the live
+surface declaration and the research-import pattern; the corpus README's
+preservation boundary pins the exact pre-relocation record at commit
+`4915fe182`. The original decision text below is retained unchanged.
 
 ## Context
 

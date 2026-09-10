@@ -18,8 +18,8 @@ export interface UnitLessonReference {
   readonly lessonSlug: string;
   /** Lesson title */
   readonly lessonTitle: string;
-  /** Lesson order within unit (if available) */
-  readonly lessonOrder: number | null;
+  /** Authored lesson order within the unit — required by the strict bulk schema, so never absent. */
+  readonly lessonOrder: number;
   /** Publication state */
   readonly state: string;
 }
@@ -82,11 +82,11 @@ export function extractUnitLessons(units: readonly Unit[]): readonly ExtractedUn
   const results: ExtractedUnitLessons[] = [];
 
   for (const unit of units) {
-    const lessons: UnitLessonReference[] = (unit.unitLessons ?? []).map((lesson, index) => ({
+    const lessons: UnitLessonReference[] = unit.unitLessons.map((lesson) => ({
       lessonSlug: lesson.lessonSlug,
       lessonTitle: lesson.lessonTitle,
-      lessonOrder: lesson.lessonOrder ?? index + 1,
-      state: lesson.state ?? 'published',
+      lessonOrder: lesson.lessonOrder,
+      state: lesson.state,
     }));
 
     results.push({

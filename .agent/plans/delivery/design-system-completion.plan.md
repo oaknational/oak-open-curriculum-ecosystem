@@ -26,17 +26,11 @@ depends_on: []
 owner_gates:
   - awaiting: owner-decision
     clears_when: >-
-      The KNOWN-ISSUES item-14 subtree-alias ruling lands before any
-      surface renders a high-contrast or colour-safe subtree (grounds in
-      W0.2); nothing else blocks on it.
-    expires: 2026-08-21
-  - awaiting: owner-decision
-    clears_when: >-
       At W3.0 open the owner confirms the coverage reading of "full
       optional React component set" — full mapping-decision coverage with
       curated component minting (§Decision log, flagged seat reading).
     expires: 2026-09-07
-last_updated: 2026-08-08
+last_updated: 2026-09-03
 ---
 
 # Design-system completion — five demos, identity contract, React tier, the wow bar (v2.2)
@@ -138,9 +132,13 @@ round-1 E63/X4); its premises dissolved when the Linear embargo lifted
 2026-08-06 and the plan-node schema §2026-08-07 amendment, PR #817, removed the
 ticket-existence obligation — ticket minting is optional working practice, and
 the stamp still completes when a fleet round closes clean and the owner's
-implementation word arrives). Gate 1 (item-14): grounds are round-1
-E11/E31/E32, carried in W0.2(b). Gate 2 (the W3.0 coverage card): the seat
-reading it confirms is FR9's — a mapping DECISION per class (including
+implementation word arrives). Dated renumber 2026-09-03: the former gate 1 —
+item 14 — DISCHARGED 2026-09-03 at the owner's card word ("strict everywhere,
+all the time, and long-term architectural excellence, run it through the
+decision matrix via the principles.md file and the cognitive skills"); its
+grounds were round-1 E11/E31/E32, and the ruling with its delivery slice is
+recorded at W0.2(b) and in §Decision log. Gate 1 (the W3.0 coverage card): the
+seat reading it confirms is FR9's — a mapping DECISION per class (including
 no-construct) satisfies "full set" via curated minting; the row is flagged in
 §Decision log until his word.
 
@@ -305,12 +303,35 @@ is split accordingly (§Sequencing, FR4 r3).
   pair count 42 → 43 AND the comparand size 167 → 168 (a typed colour leaf
   joins every composed theme's comparand). The recorded fallback stays: the
   manifest gains a scope field, decided at authoring — never the global
-  `text.link` re-point the manifest cannot scope. Item 14 (subtree dialect-alias breadth) is the frontmatter owner
-  gate with a STATED DEFAULT on expiry (EX40/D16 r3): item 14's own interim
-  rule — subtree HC/colour-safe surfaces use `--surface-decorative-N` roles
-  directly, with the alias-breadth ruling upgrading the surface later rather
-  than gating it; when the ruling is taken it is taken against the POST-axis
-  block set (EX13 r3). New dated triage entry (W0.5 sitting item 6,
+  `text.link` re-point the manifest cannot scope. Item 14 RULED 2026-09-03
+  (owner card word, "strict everywhere, all the time, and long-term
+  architectural excellence, run it through the decision matrix via the
+  principles.md file and the cognitive skills"; lens-resolved the same day at
+  the design-system-expert pass): the stated default on expiry (EX40/D16 r3 —
+  subtree HC/colour-safe surfaces on `--surface-decorative-N` roles directly,
+  the ruling upgrading the surface later) is REFUSED, not renewed. Item 14 was
+  never an alias-breadth choice; it is a missing ENFORCEMENT of the invariant
+  the design system already ruled (`packages/design/oak-design-system/DECISIONS.md`,
+  2026-07-26: a custom property that composes other custom properties is
+  re-declared wherever its inputs are overridden — overriding an input alone
+  never reaches it). The should-be: closure is a CHECKED property of the token
+  surface — for every theme scope, the set of root-declared properties that
+  transitively reference an overridden property and are not re-declared in
+  that scope is EMPTY, checked emit-or-fail over whatever theme blocks exist
+  (taken against the POST-axis block set, EX13 r3, as the check's input).
+  Delivery slice, this story, BLOCKING before any high-contrast or colour-safe
+  subtree renders: (i) the closure check joins the existing design gate suite;
+  (ii) the re-declarations the check demands — at the ruling's reading, 35
+  root properties freeze inside the high-contrast subtree (ten canonical
+  roles, among them `--bg-selected`, `--border-accent`, `--state-selected` and
+  the accent and neutral shadow set) and 13 inside colour-safe; a shipped
+  component paints a selected quiz answer from the frozen `--bg-selected`, and
+  `--surface-red-subtle` freezing over the overridden `--bg-error-subtle` in
+  colour-safe is accessibility-class, so its ONE disposition is FIX; the two
+  hand re-declarations already in `colors_and_type.css` (their comments name
+  the mechanism) are subsumed by the check; the enumerated frozen sets, the
+  evidence anchors and the check's mechanism are recorded in
+  `.agent/reports/design/item-14-closure-residue-2026-09-03.md`. New dated triage entry (W0.5 sitting item 6,
   owner-confirmed 2026-08-06): the creature (EMC²) whitelabel page does not
   honour reduced motion — accessibility-class, so its ONE disposition is
   FIX, BLOCKING wherever that page renders; the cured pair must be
@@ -786,8 +807,9 @@ states (light, dark, high-contrast, colour-safe) remain first-class nameable
 presets, never dissolved into coordinates; forced-colours is an adaptation
 obligation, never a theme; W2's internal sequencing is explicit (L4 r3): W2.0 →
 W2.1 ∥ W2.7 → W2.2 → the rest; NO high-contrast or colour-safe subtree renders
-before the item-14 frontmatter gate clears (L5 r3) — W2.4/W2.5 rendering
-acceptance is blocked on that gate by construction; and the counter-identity
+before the item-14 closure check is green (L5 r3; ruled 2026-09-03, the slice
+at W0.2(b)) — W2.4/W2.5 rendering acceptance is blocked on that check by
+construction; and the counter-identity
 taste anchors exist BEFORE this workstream opens (FR0 r3 — minted at the W0/W1
 pre-read and per-identity owner direction sittings).
 
@@ -816,8 +838,8 @@ pre-read and per-identity owner direction sittings).
 - **W2.4 Theme overlays and axes re-architecture.** Goal: high-contrast and
   colour-safe become identity-supplied and axis-composable (dark ×
   more-contrast resolves; a dark-preferring user is never forced onto a white
-  canvas); the `prefers-contrast` route lands here. Gates: item-14 — rendering
-  blocked until it clears (L5 r3); the re-authored non-default themes take a
+  canvas); the `prefers-contrast` route lands here. Gates: the item-14 closure
+  check green (W0.2(b)) — rendering blocked until it is (L5 r3); the re-authored non-default themes take a
   W0.7-instrument pass (FR2 r3). Depends: W2.1, W2.2. Acceptance shape
   (`repo-safe`): every identity renders its OWN high-contrast and colour-safe
   palettes, gate-proven per W2.5.
@@ -1244,6 +1266,7 @@ occurrence; this log stays the execution-context view.
 | Cost-of-change value-frame: "enabling rapid innovation without compromising quality or stability" — both arms bind in every trade | Owner words 2026-08-03, relayed via Director event 7b00c9e5 |
 | The hub demo's search must WORK wherever the hub is served (live backend configured; the landed implementation is complete and tested — the verified gap is env credentials only, per the demo README) | Owner word 2026-08-05, Director session a0892f: "the search in the hub demo should _work_" |
 | W2.7 tilt values: PDS structural zero; Oak zero on interactive/content-bearing (decoration MAY tilt, structural zero if easier); EMC² leans in incl. ANIMATED tilts demonstrating motion vs no-motion — the former W2.7 off-horizontal session gate discharged | Owner card answer 2026-08-03 ~09:15Z, verbatim in the committed napkin (`b1b5431a7`); trued 2026-08-05 at the handover (Magnetar corroboration, first-hand napkin verification) |
+| Item 14: the stated default REFUSED, not renewed; closure is a CHECKED property of the token surface (every theme scope re-declares each root property that transitively references an overridden one; emit-or-fail) — enforcement of the 2026-07-26 design-system invariant, never an alias-breadth choice; the frontmatter gate discharged, W0.2(b) carries the slice | Owner card word 2026-09-03 ("strict everywhere, all the time, and long-term architectural excellence, run it through the decision matrix via the principles.md file and the cognitive skills"); lens-resolved at the design-system-expert pass the same day |
 
 ## Relationships (the estate edges)
 

@@ -10,16 +10,13 @@ import { PUBLIC_TOOLS, DEFAULT_AUTH_SCHEME } from '../../mcp-security-policy.js'
 describe('getSecuritySchemeForTool', () => {
   describe('tools in PUBLIC_TOOLS', () => {
     it('returns noauth scheme for public tools', () => {
-      // Test with actual PUBLIC_TOOLS entries
-      // PUBLIC_TOOLS currently has: 'get-changelog', 'get-changelog-latest', 'get-rate-limit'
-      if (PUBLIC_TOOLS.length > 0) {
-        const publicToolName = PUBLIC_TOOLS[0];
-        const result = getSecuritySchemeForTool(publicToolName);
+      // The known public tool, named directly: if the policy ever drops
+      // get-rate-limit this proof fails loud instead of silently skipping.
+      const result = getSecuritySchemeForTool('get-rate-limit');
 
-        expect(Array.isArray(result)).toBe(true);
-        expect(result).toHaveLength(1);
-        expect(result[0]).toEqual({ type: 'noauth' });
-      }
+      expect(Array.isArray(result)).toBe(true);
+      expect(result).toHaveLength(1);
+      expect(result[0]).toEqual({ type: 'noauth' });
     });
 
     it('returns noauth scheme for all tools in PUBLIC_TOOLS', () => {
@@ -63,13 +60,10 @@ describe('getSecuritySchemeForTool', () => {
 
   describe('purity', () => {
     it('returns same result for same input (public tool)', () => {
-      if (PUBLIC_TOOLS.length > 0) {
-        const toolName = PUBLIC_TOOLS[0];
-        const result1 = getSecuritySchemeForTool(toolName);
-        const result2 = getSecuritySchemeForTool(toolName);
+      const result1 = getSecuritySchemeForTool('get-rate-limit');
+      const result2 = getSecuritySchemeForTool('get-rate-limit');
 
-        expect(result1).toEqual(result2);
-      }
+      expect(result1).toEqual(result2);
     });
 
     it('returns same result for same input (protected tool)', () => {
@@ -81,7 +75,7 @@ describe('getSecuritySchemeForTool', () => {
     });
 
     it('maintains consistency across multiple calls with different inputs', () => {
-      const publicTool = PUBLIC_TOOLS.length > 0 ? PUBLIC_TOOLS[0] : 'get-changelog';
+      const publicTool = 'get-rate-limit';
       const protectedTool = 'get-lessons';
 
       const publicResult1 = getSecuritySchemeForTool(publicTool);
@@ -96,12 +90,9 @@ describe('getSecuritySchemeForTool', () => {
 
   describe('return type', () => {
     it('always returns array for public tools', () => {
-      if (PUBLIC_TOOLS.length > 0) {
-        const toolName = PUBLIC_TOOLS[0];
-        const result = getSecuritySchemeForTool(toolName);
+      const result = getSecuritySchemeForTool('get-rate-limit');
 
-        expect(Array.isArray(result)).toBe(true);
-      }
+      expect(Array.isArray(result)).toBe(true);
     });
 
     it('always returns array for protected tools', () => {
@@ -112,10 +103,7 @@ describe('getSecuritySchemeForTool', () => {
     });
 
     it('returns array with exactly one element', () => {
-      const publicToolResult =
-        PUBLIC_TOOLS.length > 0
-          ? getSecuritySchemeForTool(PUBLIC_TOOLS[0])
-          : getSecuritySchemeForTool('get-changelog');
+      const publicToolResult = getSecuritySchemeForTool('get-rate-limit');
       const protectedToolResult = getSecuritySchemeForTool('get-lessons');
 
       expect(publicToolResult).toHaveLength(1);

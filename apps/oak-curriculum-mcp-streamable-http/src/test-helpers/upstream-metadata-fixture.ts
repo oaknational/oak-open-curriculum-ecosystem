@@ -6,7 +6,9 @@ import type { UpstreamAuthServerMetadata } from '../oauth-proxy/index.js';
  * Represents what Clerk's `/.well-known/oauth-authorization-server` returns.
  * Tests inject this via `CreateAppOptions.upstreamMetadata` so no network
  * calls to Clerk are needed. The endpoint URLs are Clerk-shaped but never
- * contacted — the proxy rewrites them to self-origin before serving.
+ * contacted — the proxy rewrites them to self-origin before serving. The
+ * `issuer` is served unrewritten as the PRM's `authorization_servers` entry
+ * (MCP-655); the PRM tests assert the served value equals it.
  */
 export const TEST_UPSTREAM_METADATA: UpstreamAuthServerMetadata = {
   issuer: 'https://test-instance.clerk.accounts.dev',

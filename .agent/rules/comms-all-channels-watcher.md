@@ -437,6 +437,14 @@ matched on `addressed_to` where the schema's live field is `to`, making a
 directed wake invisible (the same schema-vs-observed-output discipline as
 the notification-filter paragraph above).
 
+**Probe the monitor's QUERY, not only its filter.** The corpus-test
+discipline extends to the WHOLE poll path: run the monitor's command once
+in the foreground and read a real emission BEFORE arming — a monitor that
+cannot show you one is not armed. A review-round PR watch ran blind for
+two hours because `reviewThreads` is not a `gh pr view` field, every poll
+errored, and `2>/dev/null || continue` swallowed the proof; an unrelated
+wake's cross-check caught it (2026-08-19).
+
 ### No hand-rolled fallback
 
 There is no sanctioned shell reimplementation of `comms watch`. A portable

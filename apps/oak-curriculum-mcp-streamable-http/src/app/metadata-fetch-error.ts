@@ -12,18 +12,24 @@
 export type MetadataFetchError =
   | { readonly type: 'http_error'; readonly message: string }
   | { readonly type: 'invalid_shape'; readonly message: string }
+  | { readonly type: 'issuer_mismatch'; readonly message: string }
   | { readonly type: 'network_error'; readonly message: string }
   | { readonly type: 'timeout'; readonly message: string };
 
 /**
  * Classifies a caught error into a {@link MetadataFetchError} discriminant.
  * Abort errors map to `timeout`, network TypeError to `network_error`,
- * TransientFetchError (5xx) to `http_error`, and everything else to
- * `http_error` or `invalid_shape` based on the message content.
+ * IssuerMismatchError to `issuer_mismatch` (the document's `issuer` is not the
+ * URL it was fetched from — RFC 8414 Section 3.3), TransientFetchError (5xx)
+ * to `http_error`, and everything else to `http_error` or `invalid_shape`
+ * based on the message content.
  */
 export function classifyFetchError(caught: Error): MetadataFetchError {
   if (caught.name === 'AbortError') {
     return { type: 'timeout', message: caught.message };
+  }
+  if (caught.name === 'IssuerMismatchError') {
+    return { type: 'issuer_mismatch', message: caught.message };
   }
   if (caught.name === 'TypeError') {
     return { type: 'network_error', message: caught.message };

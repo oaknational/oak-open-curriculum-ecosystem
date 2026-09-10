@@ -701,8 +701,9 @@ forgotten.
      Sentry-plan ask load-bearing rather than administrative, and it is why the two
      billing limits above are the items gating the only automated detection that
      functions across the owner's 22–31 August absence.
-   - Use `https://www.thenational.academy/mcp/healthz` in **bare form, no trailing
-     slash**. Note the REASON, because this record measured the old one as false: the
+   - Use `https://mcp.thenational.academy/mcp/healthz` in **bare form, no trailing
+     slash** (the canonical host since 2026-09-01; `www…/mcp` now returns 404, so a
+     monitor pointed there fails permanently). Note the REASON, because this record measured the old one as false: the
      "slash form routes through Clerk" caution does **not** reproduce — both forms
      return identical `200` + `no-store`. Use the bare form because the monitor's
      assertion is `status_code > 199 AND < 300`, which cannot distinguish them.

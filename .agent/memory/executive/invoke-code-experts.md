@@ -151,6 +151,38 @@ not patience. Known mechanism (MCP-386, until cured): the Agent tool's
 dark 10/10 while unnamed ones reported; prefer unnamed reviewer dispatches
 while the ticket is open.
 
+Harvest on the FIRST idle: reviewers and Crickets that finished idle with
+no report delivered cost a resend round each (six in one session,
+2026-09-01). Idle-notification results truncate at roughly 4 KB — request
+the tail by SendMessage per truncation; the cap, not the subagent, bounds
+report size. And a subagent stopped mid-report at an owner's "stop all
+processes" may already have written its verdict to the mailbox: read the
+mailbox (or the transcript) once more at resume before declaring a review
+lost — a stopped code-expert's verdict arrived on the first
+post-compaction turn carrying two findings that would have sunk the last
+settlement push (2026-09-01).
+
+## Doctrine and Plan Artefacts Get the Panel Before They Are Public
+
+Measured three times in one window. Two opus adversarial legs on a
+doctrine PR returned 17 findings with near-zero overlap, BOTH
+findings-block-merge, on an artefact that had survived the Director's own
+critical pass with one graded-down finding — a placement claim naming a
+nonexistent workspace tier, an invented constitutional premise, three
+Accepted-ADR collisions (2026-08-14). Three anti-deference reviewers
+refuted a remediation-node verdict on a premise its author could have
+checked (2026-08-31). A four-reviewer pre-landing panel on a new PDR
+caught a ledger with a producer and no consumer, a silently forked tally
+semantics, a false "unchanged" claim about a sibling rule, and a triple
+restatement — at four agents for ~4 minutes wall each, against eleven
+post-push review waves the same morning (2026-08-31). An author's or a
+Director's critical pass is ONE lens; a doctrine record, plan node, or PDR
+gets the panel BEFORE the merge glide or the public push. Point the panel
+at the misinforming-surface class as well
+(`patterns/surface-that-misinforms-without-failing.md`): the seat that
+has just diagnosed the class rebuilds it inside its own cure (two
+independent instances), so the external lens is the working instrument.
+
 ## Reviewer Model Tier
 
 Every expert-reviewer dispatch passes `model: opus` explicitly — reviewer
@@ -195,7 +227,11 @@ claim-bearing text at one seat, with sibling instances at two others
 (a false interval verdict from a mis-stamped record; a stale attribution),
 and every catch was external (Copilot rounds, opus reviewers, a pin's
 409). Process steps mostly self-catch; fresh factual prose mostly does
-not.
+not. The three categories of owner-facing claim where every 2026-09-02
+correction landed — statements about GATES, about WHO ACTS, and about
+WHERE records land — are where a dispatch points that scrutiny first; and
+ask for probes explicitly (a live-browser probe of a load-bearing
+assumption caught a validator-red blocker pre-push, 2026-08-18).
 
 This keeps reintegration cheaper and reduces clarification loops. Mailbox
 delivery alone is not reintegration; the parent lane must absorb the outcome

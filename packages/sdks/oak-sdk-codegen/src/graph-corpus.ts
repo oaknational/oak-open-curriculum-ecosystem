@@ -43,4 +43,5 @@ export type {
   GraphCorpusDroppedDuplicate,
   GraphCorpusSequence,
   GraphCorpusSequencePlacement,
+  GraphCorpusUnitLessonRun,
 } from './generated/vocab/graph-corpus/index.js';

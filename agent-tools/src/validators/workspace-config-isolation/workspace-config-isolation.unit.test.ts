@@ -48,7 +48,7 @@ describe('expandWorkspaceGlobs', () => {
     'packages/design/oak-design-ink/package.json',
     'packages/design/oak-design-react/package.json',
     'packages/design/oak-design-react/src/index.ts',
-    'research/web-app-deconstruction/packages/research-evidence/package.json',
+    'fixtures/nested/packages/tooling/package.json',
   ];
 
   it('keeps literal members and expands star globs to package.json holders', () => {
@@ -66,29 +66,19 @@ describe('expandWorkspaceGlobs', () => {
   });
 
   it('keeps nested members whose parents are not members', () => {
-    const dirs = expandWorkspaceGlobs(
-      ['research/web-app-deconstruction/packages/research-evidence'],
-      tracked,
-    );
+    const dirs = expandWorkspaceGlobs(['fixtures/nested/packages/tooling'], tracked);
 
-    expect(dirs).toEqual(['research/web-app-deconstruction/packages/research-evidence']);
+    expect(dirs).toEqual(['fixtures/nested/packages/tooling']);
   });
 });
 
 describe('resolveOwner', () => {
-  const workspaces = [
-    'agent-tools',
-    'packages/core/result',
-    'research/web-app-deconstruction/packages/research-evidence',
-  ];
+  const workspaces = ['agent-tools', 'packages/core/result', 'fixtures/nested/packages/tooling'];
 
   it('picks the longest matching workspace prefix', () => {
-    expect(
-      resolveOwner(
-        workspaces,
-        'research/web-app-deconstruction/packages/research-evidence/vitest.config.ts',
-      ),
-    ).toBe('research/web-app-deconstruction/packages/research-evidence');
+    expect(resolveOwner(workspaces, 'fixtures/nested/packages/tooling/vitest.config.ts')).toBe(
+      'fixtures/nested/packages/tooling',
+    );
     expect(resolveOwner(workspaces, 'packages/core/result/tsup.config.ts')).toBe(
       'packages/core/result',
     );
@@ -236,28 +226,28 @@ describe('findConfigEscapes — unanalysable constructs fail loud', () => {
 describe('classifyTurboRootInput — the pinned turbo-glob matcher', () => {
   const tracked = [
     'tsconfig.base.json',
-    'research/web-app-deconstruction/pnpm-workspace.yaml',
-    'research/web-app-deconstruction/.github/workflows/research.yml',
-    'research/web-app-deconstruction/packages/research-evidence/lib/cli.ts',
+    'fixtures/nested/pnpm-workspace.yaml',
+    'fixtures/nested/.github/workflows/check.yml',
+    'fixtures/nested/packages/tooling/lib/cli.ts',
     'packages/design/oak-design-system/src/tokens/color.ts',
   ];
 
   it('reports a positive glob with zero tracked matches as dead (the red-proof)', () => {
-    expect(
-      classifyTurboRootInput('$TURBO_ROOT$/research/web-app-deconstruction/**/*.cjs', tracked),
-    ).toEqual({ kind: 'dead' });
+    expect(classifyTurboRootInput('$TURBO_ROOT$/fixtures/nested/**/*.cjs', tracked)).toEqual({
+      kind: 'dead',
+    });
   });
 
   it('matches zero intermediate segments under ** (the turbo.json yaml ruling, dry-run-pinned)', () => {
-    expect(
-      classifyTurboRootInput('$TURBO_ROOT$/research/web-app-deconstruction/**/*.yaml', tracked),
-    ).toEqual({ kind: 'alive' });
+    expect(classifyTurboRootInput('$TURBO_ROOT$/fixtures/nested/**/*.yaml', tracked)).toEqual({
+      kind: 'alive',
+    });
   });
 
   it('matches dot-directory segments (turbo hashes dotfiles; JS glob defaults do not)', () => {
-    expect(
-      classifyTurboRootInput('$TURBO_ROOT$/research/web-app-deconstruction/**/*.yml', tracked),
-    ).toEqual({ kind: 'alive' });
+    expect(classifyTurboRootInput('$TURBO_ROOT$/fixtures/nested/**/*.yml', tracked)).toEqual({
+      kind: 'alive',
+    });
   });
 
   it('matches any depth under a trailing double-star', () => {
@@ -267,17 +257,16 @@ describe('classifyTurboRootInput — the pinned turbo-glob matcher', () => {
   });
 
   it('does not let a single star cross a path separator', () => {
-    expect(classifyTurboRootInput('$TURBO_ROOT$/research/*.ts', tracked)).toEqual({
+    expect(classifyTurboRootInput('$TURBO_ROOT$/fixtures/*.ts', tracked)).toEqual({
       kind: 'dead',
     });
   });
 
   it('treats a literal dot as literal, never regex any-char', () => {
     expect(
-      classifyTurboRootInput(
-        '$TURBO_ROOT$/research/web-app-deconstruction/packages/research-evidence/lib/*.ts',
-        ['research/web-app-deconstruction/packages/research-evidence/lib/cliXts'],
-      ),
+      classifyTurboRootInput('$TURBO_ROOT$/fixtures/nested/packages/tooling/lib/*.ts', [
+        'fixtures/nested/packages/tooling/lib/cliXts',
+      ]),
     ).toEqual({ kind: 'dead' });
   });
 
@@ -304,9 +293,9 @@ describe('classifyTurboRootInput — the pinned turbo-glob matcher', () => {
   });
 
   it('treats a literal naming a tracked DIRECTORY as alive (turbo walks it — probe-measured)', () => {
-    expect(
-      classifyTurboRootInput('$TURBO_ROOT$/research/web-app-deconstruction/packages', tracked),
-    ).toEqual({ kind: 'alive' });
+    expect(classifyTurboRootInput('$TURBO_ROOT$/fixtures/nested/packages', tracked)).toEqual({
+      kind: 'alive',
+    });
     expect(classifyTurboRootInput('$TURBO_ROOT$/missing-directory', tracked)).toEqual({
       kind: 'dead',
     });
@@ -318,16 +307,16 @@ describe('classifyTurboRootInput — the pinned turbo-glob matcher', () => {
   });
 
   it('treats a trailing-slash directory literal like the bare form (turbo walks both — probe-measured)', () => {
-    expect(
-      classifyTurboRootInput('$TURBO_ROOT$/research/web-app-deconstruction/packages/', tracked),
-    ).toEqual({ kind: 'alive' });
+    expect(classifyTurboRootInput('$TURBO_ROOT$/fixtures/nested/packages/', tracked)).toEqual({
+      kind: 'alive',
+    });
     expect(classifyTurboRootInput('$TURBO_ROOT$/missing-directory/', tracked)).toEqual({
       kind: 'dead',
     });
   });
 
   it('refuses embedded double-stars, which turbo normalises rather than treating as two stars', () => {
-    const trailing = classifyTurboRootInput('$TURBO_ROOT$/research/a**', tracked);
+    const trailing = classifyTurboRootInput('$TURBO_ROOT$/fixtures/a**', tracked);
     expect(trailing.kind).toBe('unsupported');
     expect(trailing.kind === 'unsupported' && trailing.reason).toContain('double-star');
 
@@ -368,9 +357,9 @@ describe('classifyTurboRootInput — the pinned turbo-glob matcher', () => {
 describe('classifyTurboRootInput — separator and spelling truth cures (MCP-553)', () => {
   const tracked = [
     'tsconfig.base.json',
-    'research/web-app-deconstruction/pnpm-workspace.yaml',
-    'research/web-app-deconstruction/.github/workflows/research.yml',
-    'research/web-app-deconstruction/packages/research-evidence/lib/cli.ts',
+    'fixtures/nested/pnpm-workspace.yaml',
+    'fixtures/nested/.github/workflows/check.yml',
+    'fixtures/nested/packages/tooling/lib/cli.ts',
     'packages/design/oak-design-system/src/tokens/color.ts',
   ];
 
@@ -426,15 +415,15 @@ describe('classifyTurboRootInput — separator and spelling truth cures (MCP-553
   });
 
   it('treats a trailing dot segment as the directory it follows (turbo walked it — dry-run-pinned)', () => {
-    expect(
-      classifyTurboRootInput('$TURBO_ROOT$/research/web-app-deconstruction/packages/.', tracked),
-    ).toEqual({ kind: 'alive' });
+    expect(classifyTurboRootInput('$TURBO_ROOT$/fixtures/nested/packages/.', tracked)).toEqual({
+      kind: 'alive',
+    });
   });
 
   it('drops trailing separator runs on both arms (directory literal stays alive; the glob gains its match)', () => {
-    expect(
-      classifyTurboRootInput('$TURBO_ROOT$/research/web-app-deconstruction/packages//', tracked),
-    ).toEqual({ kind: 'alive' });
+    expect(classifyTurboRootInput('$TURBO_ROOT$/fixtures/nested/packages//', tracked)).toEqual({
+      kind: 'alive',
+    });
     expect(classifyTurboRootInput('$TURBO_ROOT$/a/*//', ['a/x.ts'])).toEqual({ kind: 'alive' });
   });
 

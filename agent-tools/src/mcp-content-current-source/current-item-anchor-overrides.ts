@@ -10,6 +10,9 @@ import { CURRENT_GENERATED_DESCRIPTION_ANCHOR_OVERRIDES } from './current-genera
 import { CURRENT_GENERATED_ITEM_ANCHOR_OVERRIDES } from './current-generated-item-anchor-overrides.js';
 import { CURRENT_REGISTRATION_ITEM_ANCHOR_OVERRIDES } from './current-registration-item-anchor-overrides.js';
 import { CURRENT_SPEC_REFRESH_ITEM_ANCHOR_OVERRIDES } from './current-spec-refresh-item-anchor-overrides.js';
+import { CURRENT_MISCONCEPTION_ORDER_ITEM_ANCHOR_OVERRIDES } from './current-misconception-order-item-anchor-overrides.js';
+import { CURRENT_THREAD_PROGRESSIONS_ITEM_ANCHOR_OVERRIDES } from './current-thread-progressions-item-anchor-overrides.js';
+import { CURRENT_PRIOR_KNOWLEDGE_ITEM_ANCHOR_OVERRIDES } from './current-prior-knowledge-item-anchor-overrides.js';
 
 const GUIDANCE_ROOT = 'packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources';
 const FIND = `${GUIDANCE_ROOT}/find-lessons.ts`;
@@ -25,6 +28,7 @@ export const CURRENT_ITEM_ANCHOR_OVERRIDES: AnchorOverrides = {
   ...CURRENT_GENERATED_ITEM_ANCHOR_OVERRIDES,
   ...CURRENT_GENERATED_DESCRIPTION_ANCHOR_OVERRIDES,
   ...CURRENT_AGGREGATED_ITEM_ANCHOR_OVERRIDES,
+  ...CURRENT_PRIOR_KNOWLEDGE_ITEM_ANCHOR_OVERRIDES,
   /**
    * The landing page's canonical-URL resolution, promoted to `served-origin.ts`
    * by MCP-351. It is the sole survivor of the landing-page override group,
@@ -230,6 +234,8 @@ export const CURRENT_ITEM_ANCHOR_OVERRIDES: AnchorOverrides = {
   C335: {
     [CONTINUE]: ['Agent guidance: continue the progression'],
   },
+  ...CURRENT_THREAD_PROGRESSIONS_ITEM_ANCHOR_OVERRIDES,
+  ...CURRENT_MISCONCEPTION_ORDER_ITEM_ANCHOR_OVERRIDES,
   ...CURRENT_REGISTRATION_ITEM_ANCHOR_OVERRIDES,
   ...CURRENT_SPEC_REFRESH_ITEM_ANCHOR_OVERRIDES,
   // MCP-353: C413 (the under-the-hood public-allowlist row) retired with the

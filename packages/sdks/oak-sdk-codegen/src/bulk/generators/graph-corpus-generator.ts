@@ -38,12 +38,7 @@
  *
  * @see ADR-086 for the export pattern; ADR-031 for generation-time extraction.
  */
-import {
-  buildContainsLessonEdges,
-  buildContainsUnitEdges,
-  buildLessonAnchoredEdges,
-  buildPrerequisiteEdges,
-} from './graph-corpus-edges.js';
+import { assembleEdges } from './graph-corpus-edge-assembly.js';
 import { buildKeywordNodes, type KeywordBuild } from './graph-corpus-keyword-nodes.js';
 import {
   buildMisconceptionNodes,
@@ -51,6 +46,7 @@ import {
 } from './graph-corpus-misconception-nodes.js';
 import { buildLessonNodes, buildThreadNodes, buildUnitNodes } from './graph-corpus-nodes.js';
 import { buildSequences, type SequenceBuild } from './graph-corpus-sequences.js';
+import { buildUnitLessonRuns, type UnitLessonRunBuild } from './graph-corpus-unit-lesson-runs.js';
 import type {
   GraphCorpus,
   GraphCorpusDroppedEdge,
@@ -87,17 +83,8 @@ export type {
   GraphCorpusInput,
   GraphCorpusSequence,
   GraphCorpusSequencePlacement,
+  GraphCorpusUnitLessonRun,
 } from './graph-corpus-types.js';
-
-/** Sorts edges by (type, source, target) for a deterministic artefact. */
-function sortEdges(edges: readonly GraphCorpusEdge[]): readonly GraphCorpusEdge[] {
-  return [...edges].sort(
-    (a, b) =>
-      a.type.localeCompare(b.type) ||
-      a.source.localeCompare(b.source) ||
-      a.target.localeCompare(b.target),
-  );
-}
 
 /** Counts edges of one type. */
 function countEdges(edges: readonly GraphCorpusEdge[], type: GraphCorpusEdgeType): number {
@@ -117,6 +104,7 @@ interface CorpusAssembly {
   readonly misconceptionBuild: MisconceptionBuild;
   readonly keywordBuild: KeywordBuild;
   readonly sequenceBuild: SequenceBuild;
+  readonly unitLessonRunBuild: UnitLessonRunBuild;
   readonly nodes: readonly GraphCorpusNode[];
   readonly edges: readonly GraphCorpusEdge[];
   readonly droppedEdges: readonly GraphCorpusDroppedEdge[];
@@ -125,26 +113,21 @@ interface CorpusAssembly {
 
 /** Builds the full node and edge sets from the extracted input. */
 function assembleCorpus(input: GraphCorpusInput): CorpusAssembly {
-  const { priorKnowledge, threads, lessons, misconceptions, keywords } = input;
+  const { priorKnowledge, threads, lessons, unitLessons, misconceptions, keywords } = input;
   const unitNodes = buildUnitNodes(priorKnowledge, threads, lessons);
   const threadNodes = buildThreadNodes(threads);
   const lessonNodes = buildLessonNodes(lessons);
   const misconceptionBuild = buildMisconceptionNodes(misconceptions);
   const keywordBuild = buildKeywordNodes(keywords);
 
-  const knownUnitSlugs = new Set(unitNodes.map((node) => node.unitSlug));
-  const knownLessonIds = new Set<GraphCorpusNodeId>(lessonNodes.map((node) => node.id));
-  const prerequisite = buildPrerequisiteEdges(threads, knownUnitSlugs);
-  const addresses = buildLessonAnchoredEdges(
-    misconceptionBuild.edgePairs,
-    'addressesMisconception',
-    knownLessonIds,
+  const edgeAssembly = assembleEdges(
+    input,
+    new Set(unitNodes.map((node) => node.unitSlug)),
+    new Set<GraphCorpusNodeId>(lessonNodes.map((node) => node.id)),
+    misconceptionBuild,
+    keywordBuild,
   );
-  const containsKeyword = buildLessonAnchoredEdges(
-    keywordBuild.edgePairs,
-    'containsKeyword',
-    knownLessonIds,
-  );
+  const { edges } = edgeAssembly;
 
   return {
     unitNodes,
@@ -153,6 +136,9 @@ function assembleCorpus(input: GraphCorpusInput): CorpusAssembly {
     misconceptionBuild,
     keywordBuild,
     sequenceBuild: buildSequences(threads),
+    // Built FROM the edge set, so a run's membership is the edge set's by
+    // construction; `unitLessons` supplies order only.
+    unitLessonRunBuild: buildUnitLessonRuns(edges, unitLessons),
     nodes: [
       ...unitNodes,
       ...threadNodes,
@@ -160,15 +146,9 @@ function assembleCorpus(input: GraphCorpusInput): CorpusAssembly {
       ...misconceptionBuild.nodes,
       ...keywordBuild.nodes,
     ],
-    edges: sortEdges([
-      ...prerequisite.edges,
-      ...buildContainsUnitEdges(threads),
-      ...buildContainsLessonEdges(lessons),
-      ...addresses.edges,
-      ...containsKeyword.edges,
-    ]),
-    droppedEdges: [prerequisite, addresses, containsKeyword].flatMap((build) => build.droppedEdges),
-    collapsedIdenticalPrerequisiteEdges: prerequisite.collapsedIdenticalPrerequisiteEdges,
+    edges,
+    droppedEdges: edgeAssembly.droppedEdges,
+    collapsedIdenticalPrerequisiteEdges: edgeAssembly.collapsedIdenticalPrerequisiteEdges,
   };
 }
 
@@ -200,6 +180,7 @@ function buildStats(assembly: CorpusAssembly): GraphCorpusStats {
     collapsedIdenticalMisconceptions: assembly.misconceptionBuild.collapsedIdentical,
     collapsedIdenticalPlacements: assembly.sequenceBuild.collapsedIdenticalPlacements,
     collapsedIdenticalPrerequisiteEdges: assembly.collapsedIdenticalPrerequisiteEdges,
+    unitsWithoutAuthoredLessonOrder: assembly.unitLessonRunBuild.unitsWithoutAuthoredLessonOrder,
   };
 }
 
@@ -218,20 +199,22 @@ function buildStats(assembly: CorpusAssembly): GraphCorpusStats {
 export function generateGraphCorpusData(input: GraphCorpusInput): GraphCorpus {
   const assembly = assembleCorpus(input);
   return {
-    version: '1.4.0',
+    version: '1.5.0',
     generatedAt: new Date().toISOString(),
     sourceVersion: input.sourceVersion,
     stats: buildStats(assembly),
     nodes: assembly.nodes,
     edges: assembly.edges,
     sequences: assembly.sequenceBuild.sequences,
+    unitLessonRuns: assembly.unitLessonRunBuild.runs,
     droppedEdges: assembly.droppedEdges,
     droppedDuplicates: assembly.misconceptionBuild.droppedDuplicates,
     seeAlso:
       'One bulk curriculum graph surfaced as bounded views. Use the prior-knowledge view ' +
       'for "what comes before" queries; use the misconception view for the ' +
       'thread→unit→lesson→misconception chain; use the thread-progressions view ' +
-      '(sequences) for ordered learning paths; use the keyword view for bounded ' +
+      '(sequences) for ordered learning paths; read unitLessonRuns for a unit’s ' +
+      'lessons in Oak’s authored teaching order; use the keyword view for bounded ' +
       'frequency-ranked vocabulary anchored to lessons.',
   };
 }

@@ -144,6 +144,15 @@ a **named landing owed**, authored at the first liveness question that
 platform raises or at a dated backfill. No platform has a complete
 declaration set yet. Dated observations already on record:
 
+- **Slack Watcher organ (Slack channel + cloud-harness reminder
+  substrate) — full 14-class declaration, 2026-08-24**: recorded
+  skill-locally for operational reading in
+  [`slack-watcher` §6](../../skills/slack-watcher/SKILL-CANONICAL.md#6-liveness-classes--the-pdr-133-declaration-for-this-substrate)
+  (this ledger points, never restates). Headline rows: `NOTIFY`
+  cannot-certify (no dated externally observed wake on record; a
+  self-bind reminder records no run history), proxy = the tenure
+  status message's staleness; `EMIT` = that status message edited
+  every tick. Authored by the 2026-08-24 Watcher estate review.
 - **GitHub Copilot CLI 1.0.75 — `NOTIFY`: cannot-certify** (observed
   first-hand 2026-07-25 by the Copilot seat, surfaced externally by the
   owner; PDR-133's founding instance). The detached-bash primitive wakes the

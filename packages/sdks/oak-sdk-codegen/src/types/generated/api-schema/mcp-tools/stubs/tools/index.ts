@@ -1,6 +1,4 @@
 /* GENERATED FILE - DO NOT EDIT */
-import { stubGetChangelogResponse } from './get-changelog.js';
-import { stubGetChangelogLatestResponse } from './get-changelog-latest.js';
 import { stubGetKeyStagesResponse } from './get-key-stages.js';
 import { stubGetKeyStagesSubjectAssetsResponse } from './get-key-stages-subject-assets.js';
 import { stubGetKeyStagesSubjectLessonsResponse } from './get-key-stages-subject-lessons.js';
@@ -30,8 +28,6 @@ import { stubGetThreadsUnitsResponse } from './get-threads-units.js';
 import { stubGetUnitsSummaryResponse } from './get-units-summary.js';
 
 export const stubbedToolResponses = {
-  'get-changelog': () => stubGetChangelogResponse,
-  'get-changelog-latest': () => stubGetChangelogLatestResponse,
   'get-key-stages': () => stubGetKeyStagesResponse,
   'get-key-stages-subject-assets': () => stubGetKeyStagesSubjectAssetsResponse,
   'get-key-stages-subject-lessons': () => stubGetKeyStagesSubjectLessonsResponse,

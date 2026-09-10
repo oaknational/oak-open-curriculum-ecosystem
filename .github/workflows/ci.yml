@@ -1,7 +1,7 @@
 name: CI
 
-# Quality-gate pipeline for PRs and pushes to main. The work is split into
-# parallel jobs so each gate reports as its own check and superseded PR runs
+# Quality-gate pipeline for PRs targeting main or engraph, and pushes to
+# either branch. Parallel jobs let each gate report independently, while superseded PR runs
 # cancel. A final `run-quality-gates` fan-in job is the single required status
 # check: it fails unless EVERY gate succeeded (so a failed, cancelled, or skipped
 # gate all block), so the branch ruleset and the Release workflow's
@@ -23,17 +23,17 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, engraph]
   pull_request:
-    branches: [main]
+    branches: [main, engraph]
   # Inert: no merge queue is configured (ADR-204), so GitHub never dispatches a
   # `merge_group` event and this trigger is a no-op. Kept as zero-cost readiness
   # should a merge queue ever be reconsidered; do not rely on it to gate.
   merge_group:
 
-# Cancel superseded runs for the same PR ref. Main-branch runs are never
-# cancelled: each commit on main must stay verified and feeds the Release
-# workflow's `workflow_run: [CI]` trigger.
+# Cancel superseded runs for the same PR ref. Push runs on both long-lived
+# branches are never cancelled: each commit must stay verified. Only main feeds
+# the Release workflow because that workflow filters its workflow_run to main.
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
