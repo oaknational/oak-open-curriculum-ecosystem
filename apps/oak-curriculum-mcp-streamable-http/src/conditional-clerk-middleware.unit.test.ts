@@ -38,6 +38,11 @@ describe('shouldSkipClerkMiddleware', () => {
       expect(testShouldSkipClerkMiddleware(req)).toBe(true);
     });
 
+    it('returns true for the robots.txt path (MCP-703)', () => {
+      const req = createMockRequest('/robots.txt', undefined);
+      expect(testShouldSkipClerkMiddleware(req)).toBe(true);
+    });
+
     it('returns true for healthz check path', () => {
       const req = createMockRequest('/healthz', undefined);
       expect(testShouldSkipClerkMiddleware(req)).toBe(true);

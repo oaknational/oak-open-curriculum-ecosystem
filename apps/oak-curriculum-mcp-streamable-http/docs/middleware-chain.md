@@ -56,6 +56,10 @@ For any incoming HTTP request, middleware executes in this order:
    [For GET /.well-known/oauth-authorization-server:]
    9a. Locally-derived AS metadata handler (publicly accessible)
    ↓
+   [For GET /robots.txt:]
+   9a. robots.txt handler (publicly accessible; registered before
+       clerkMiddleware and in every auth mode — MCP-703)
+   ↓
    [For GET /:]
    9a. Landing Page Handler
 ```
@@ -345,6 +349,13 @@ flowchart TD
    - DNS rebinding protection
    - CORS middleware
 
+   **Phase 2.5**: Public pre-auth routes (`setupOAuthAndCaching`), registered
+   BEFORE `clerkMiddleware` so they answer without any auth context
+   - `robots.txt` (`/robots.txt`), in every auth mode — a crawler arrives with
+     no credentials, so a file reachable only through the auth vendor is an
+     unfetchable one (MCP-703)
+   - OAuth metadata endpoints and the `/oauth/*` proxy, when auth is enabled
+
 3. **Phase 3**: Global Auth Context (`setupGlobalAuthContext`)
    - `clerkMiddleware` (registered globally for all routes)
 
@@ -379,6 +390,7 @@ Then, depending on path:
   POST /mcp → Accept header check → MCP readiness → mcpAuthClerk → MCP handler
   GET /mcp → Accept header check → MCP readiness → 405 stream refusal (MCP-545)
   /healthz, /mcp/healthz → Health handler
+  /robots.txt → Crawler-directive handler (public, every auth mode)
   /.well-known/* → OAuth metadata handler
   / → Landing page handler
   /static/* → Static file handler
