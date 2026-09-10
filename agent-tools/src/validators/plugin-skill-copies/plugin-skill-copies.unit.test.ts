@@ -93,104 +93,127 @@ describe('findSkillCopyDrift', () => {
     ]);
   });
 
-  it('accepts a copy-only skill that derives from a same-named directory under the derived root', () => {
-    const reader = memoryReader({
-      'source/alpha': { 'SKILL.md': 'x\n' },
-      'copy/alpha': { 'SKILL.md': 'x\n' },
-      'copy/merged': { 'SKILL.md': 'm\n' },
-      'derived/merged': { 'SKILL.md': 'w\n' },
+  describe('a copy-only skill', () => {
+    it('accepts a copy-only skill that derives from a same-named directory under the derived root', () => {
+      const reader = memoryReader({
+        'source/alpha': { 'SKILL.md': 'x\n' },
+        'copy/alpha': { 'SKILL.md': 'x\n' },
+        'copy/merged': { 'SKILL.md': 'm\n' },
+        'derived/merged': { 'SKILL.md': 'w\n' },
+      });
+
+      const report = findSkillCopyDrift(CHECK, reader);
+
+      expect(report.copyOnly).toStrictEqual(['merged']);
+      expect(report.findings).toStrictEqual([]);
     });
 
-    const report = findSkillCopyDrift(CHECK, reader);
+    it('reports a copy-only skill with no derivation source as a stale copy, so a deleted source skill cannot pass', () => {
+      const reader = memoryReader({
+        'source/alpha': { 'SKILL.md': 'x\n' },
+        'copy/alpha': { 'SKILL.md': 'x\n' },
+        'copy/accessibility': { 'SKILL.md': 'stale\n' },
+      });
 
-    expect(report.copyOnly).toStrictEqual(['merged']);
-    expect(report.findings).toStrictEqual([]);
-  });
+      const report = findSkillCopyDrift(CHECK, reader);
 
-  it('reports a copy-only skill with no derivation source as a stale copy, so a deleted source skill cannot pass', () => {
-    const reader = memoryReader({
-      'source/alpha': { 'SKILL.md': 'x\n' },
-      'copy/alpha': { 'SKILL.md': 'x\n' },
-      'copy/accessibility': { 'SKILL.md': 'stale\n' },
+      expect(report.copyOnly).toStrictEqual(['accessibility']);
+      expect(report.findings).toStrictEqual<SkillCopyFinding[]>([
+        { skill: 'accessibility', relativePath: '.', kind: 'missing-derivation' },
+      ]);
     });
 
-    const report = findSkillCopyDrift(CHECK, reader);
+    it('walks a derived copy-only skill and reports authoring content that must not ship', () => {
+      const reader = memoryReader({
+        'source/alpha': { 'SKILL.md': 'x\n' },
+        'copy/alpha': { 'SKILL.md': 'x\n' },
+        'copy/merged': { 'SKILL.md': 'm\n', 'evals/evals.json': '{}\n', 'references/r.md': 'r\n' },
+        'derived/merged': { 'SKILL.md': 'w\n' },
+      });
 
-    expect(report.copyOnly).toStrictEqual(['accessibility']);
-    expect(report.findings).toStrictEqual<SkillCopyFinding[]>([
-      { skill: 'accessibility', relativePath: '.', kind: 'missing-derivation' },
-    ]);
-  });
-
-  it('walks a derived copy-only skill and reports authoring content that must not ship', () => {
-    const reader = memoryReader({
-      'source/alpha': { 'SKILL.md': 'x\n' },
-      'copy/alpha': { 'SKILL.md': 'x\n' },
-      'copy/merged': { 'SKILL.md': 'm\n', 'evals/evals.json': '{}\n', 'references/r.md': 'r\n' },
-      'derived/merged': { 'SKILL.md': 'w\n' },
+      expect(findSkillCopyDrift(CHECK, reader).findings).toStrictEqual<SkillCopyFinding[]>([
+        { skill: 'merged', relativePath: 'evals/evals.json', kind: 'not-shipped' },
+      ]);
     });
 
-    expect(findSkillCopyDrift(CHECK, reader).findings).toStrictEqual<SkillCopyFinding[]>([
-      { skill: 'merged', relativePath: 'evals/evals.json', kind: 'not-shipped' },
-    ]);
-  });
+    it('walks a derived copy-only skill and reports a symlink inside it', () => {
+      const reader: SkillTreeReader = {
+        listRoot: (root) => ({
+          skills: root === 'source' ? [] : ['merged'],
+          invalid: [],
+          symlinks: [],
+        }),
+        read: () =>
+          new Map<string, SkillEntry>([
+            ['SKILL.md', file('m\n')],
+            ['references/link.md', { kind: 'symlink' }],
+          ]),
+      };
 
-  it('walks a derived copy-only skill and reports a symlink inside it', () => {
-    const reader: SkillTreeReader = {
-      listRoot: (root) => ({
-        skills: root === 'source' ? [] : ['merged'],
-        invalid: [],
-        symlinks: [],
-      }),
-      read: () =>
-        new Map<string, SkillEntry>([
-          ['SKILL.md', file('m\n')],
-          ['references/link.md', { kind: 'symlink' }],
-        ]),
-    };
+      expect(findSkillCopyDrift(CHECK, reader).findings).toStrictEqual<SkillCopyFinding[]>([
+        { skill: 'merged', relativePath: 'references/link.md', kind: 'symlink' },
+      ]);
+    });
 
-    expect(findSkillCopyDrift(CHECK, reader).findings).toStrictEqual<SkillCopyFinding[]>([
-      { skill: 'merged', relativePath: 'references/link.md', kind: 'symlink' },
-    ]);
-  });
+    it('reports a derived copy-only skill whose SKILL.md vanished after listing as not shipped, never as clean', () => {
+      const skillsByRoot: Readonly<Record<string, readonly string[]>> = {
+        source: ['alpha'],
+        copy: ['alpha', 'merged'],
+        derived: ['merged'],
+      };
+      const reader: SkillTreeReader = {
+        listRoot: (root) => ({ skills: skillsByRoot[root] ?? [], invalid: [], symlinks: [] }),
+        read: (skillDir) =>
+          skillDir === 'copy/merged'
+            ? new Map([['references/r.md', file('r\n')]])
+            : new Map([['SKILL.md', file('x\n')]]),
+      };
 
-  it('reports a derived copy-only skill whose SKILL.md vanished after listing as not shipped, never as clean', () => {
-    const skillsByRoot: Readonly<Record<string, readonly string[]>> = {
-      source: ['alpha'],
-      copy: ['alpha', 'merged'],
-      derived: ['merged'],
-    };
-    const reader: SkillTreeReader = {
-      listRoot: (root) => ({ skills: skillsByRoot[root] ?? [], invalid: [], symlinks: [] }),
-      read: (skillDir) =>
-        skillDir.endsWith('/merged')
-          ? new Map([['references/r.md', file('r\n')]])
-          : new Map([['SKILL.md', file('x\n')]]),
-    };
+      expect(findSkillCopyDrift(CHECK, reader).findings).toStrictEqual<SkillCopyFinding[]>([
+        { skill: 'merged', relativePath: '.', kind: 'not-shipped' },
+      ]);
+    });
 
-    expect(findSkillCopyDrift(CHECK, reader).findings).toStrictEqual<SkillCopyFinding[]>([
-      { skill: 'merged', relativePath: '.', kind: 'not-shipped' },
-    ]);
-  });
+    it('reports a derived copy-only skill whose tree cannot be read as missing, never as an empty tree', () => {
+      const skillsByRoot: Readonly<Record<string, readonly string[]>> = {
+        source: ['alpha'],
+        copy: ['alpha', 'merged'],
+        derived: ['merged'],
+      };
+      const reader: SkillTreeReader = {
+        listRoot: (root) => ({ skills: skillsByRoot[root] ?? [], invalid: [], symlinks: [] }),
+        read: (skillDir) =>
+          skillDir === 'copy/merged' ? undefined : new Map([['SKILL.md', file('x\n')]]),
+      };
 
-  it('reports a derived copy-only skill whose tree cannot be read as missing, never as an empty tree', () => {
-    const skillsByRoot: Readonly<Record<string, readonly string[]>> = {
-      source: ['alpha'],
-      copy: ['alpha', 'merged'],
-      derived: ['merged'],
-    };
-    const reader: SkillTreeReader = {
-      listRoot: (root) => ({ skills: skillsByRoot[root] ?? [], invalid: [], symlinks: [] }),
-      read: (skillDir) =>
-        skillDir.endsWith('/merged') ? undefined : new Map([['SKILL.md', file('x\n')]]),
-    };
+      const report = findSkillCopyDrift(CHECK, reader);
 
-    const report = findSkillCopyDrift(CHECK, reader);
+      expect(report.filesCompared).toBe(1);
+      expect(report.findings).toStrictEqual<SkillCopyFinding[]>([
+        { skill: 'merged', relativePath: '.', kind: 'missing-in-copy' },
+      ]);
+    });
 
-    expect(report.filesCompared).toBe(1);
-    expect(report.findings).toStrictEqual<SkillCopyFinding[]>([
-      { skill: 'merged', relativePath: '.', kind: 'missing-in-copy' },
-    ]);
+    it('reports a copy-only skill whose workflow vanished after the root listing as a stale copy', () => {
+      const skillsByRoot: Readonly<Record<string, readonly string[]>> = {
+        source: ['alpha'],
+        copy: ['alpha', 'merged'],
+      };
+      const reader: SkillTreeReader = {
+        // The derived root still lists the workflow; reading it finds nothing.
+        listRoot: (root) => ({
+          skills: root === 'derived' ? ['merged'] : (skillsByRoot[root] ?? []),
+          invalid: [],
+          symlinks: [],
+        }),
+        read: (skillDir) =>
+          skillDir === 'derived/merged' ? undefined : new Map([['SKILL.md', file('x\n')]]),
+      };
+
+      expect(findSkillCopyDrift(CHECK, reader).findings).toStrictEqual<SkillCopyFinding[]>([
+        { skill: 'merged', relativePath: '.', kind: 'missing-derivation' },
+      ]);
+    });
   });
 
   it('reports authoring content in a shared copy as not shipped, not as content the source lacks', () => {

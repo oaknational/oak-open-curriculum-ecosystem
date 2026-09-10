@@ -124,19 +124,26 @@ export function findSkillCopyDrift(
 ): SkillCopyReport {
   const source = reader.listRoot(check.sourceRoot) ?? EMPTY_ROOT;
   const copy = reader.listRoot(check.copyRoot) ?? EMPTY_ROOT;
-  const derived = reader.listRoot(check.derivedRoot) ?? EMPTY_ROOT;
   const sourceSet = new Set(source.skills);
   const copySet = new Set(copy.skills);
-  const derivedSet = new Set(derived.skills);
   const sourceInvalidSet = new Set(source.invalid);
   const sharedSkills = source.skills.filter((skill) => copySet.has(skill)).sort(byText);
   const sourceOnly = source.skills.filter((skill) => !copySet.has(skill)).sort(byText);
   const copyOnly = copy.skills.filter((skill) => !sourceSet.has(skill)).sort(byText);
+  // Whether a workflow derives a copy-only skill is read where it is used, not
+  // taken from a listing of the derived root: a workflow that vanished, or lost
+  // its manifest, after such a listing must not go on legitimising the copy.
+  const derivedCopies = new Set(
+    copyOnly.filter(
+      (skill) =>
+        reader.read(skillPath(check.derivedRoot, skill))?.get(SKILL_MANIFEST)?.kind === 'file',
+    ),
+  );
   // A copy-only skill with no derivation source is a stale copy of a deleted
   // source skill. One already reported as an invalid source directory is not
   // reported twice.
   const staleCopies = copyOnly.filter(
-    (skill) => !derivedSet.has(skill) && !sourceInvalidSet.has(skill),
+    (skill) => !derivedCopies.has(skill) && !sourceInvalidSet.has(skill),
   );
 
   const findings: SkillCopyFinding[] = membershipFindings(source, copy, sourceOnly, staleCopies);
@@ -153,7 +160,7 @@ export function findSkillCopyDrift(
   }
   // Derived copy-only skills have no source to compare against, but they ship,
   // so they are walked for symlinks and authoring-only content all the same.
-  for (const skill of copyOnly.filter((name) => derivedSet.has(name))) {
+  for (const skill of copyOnly.filter((name) => derivedCopies.has(name))) {
     findings.push(
       ...copyOnlyFindings(skill, reader.read(skillPath(check.copyRoot, skill)), check.notShipped),
     );
