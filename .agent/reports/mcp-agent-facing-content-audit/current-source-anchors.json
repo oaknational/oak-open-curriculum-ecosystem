@@ -7952,16 +7952,22 @@
     {
       "auditId": "C408",
       "evidence": {
-        "revision": "unchanged",
+        "revision": "modified",
         "targets": [
           {
             "file": "apps/oak-curriculum-mcp-streamable-http/src/oauth-proxy/oauth-proxy-upstream.ts",
             "anchors": [
               {
-                "tokenCount": 69,
-                "tokenSha256": "c68bbb68bca32a4ad889663a4b52ae9e2c5539bad22a26801ed0929137033b47",
+                "tokenCount": 23,
+                "tokenSha256": "a886694391ea31605b92c6ad4969e420976604f0d2050bd05b3cb53e4eb6d470",
+                "indexToken": "rewriteAuthServerMetadata",
+                "indexOffset": 2
+              },
+              {
+                "tokenCount": 22,
+                "tokenSha256": "175fbd716e67040dfaf53d5129355bfd40c199fa7be44a0fed9d5cde054ed981",
                 "indexToken": "register",
-                "indexOffset": 63
+                "indexOffset": 10
               }
             ]
           }
@@ -13450,10 +13456,10 @@
             "file": "apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts",
             "anchors": [
               {
-                "tokenCount": 21,
-                "tokenSha256": "b61432776ae725e55aba5b336d7f72893a8b0b02a6d5f84f34b94114251e9b92",
-                "indexToken": "servePrm",
-                "indexOffset": 18
+                "tokenCount": 16,
+                "tokenSha256": "36d28bcbb896ad6b2ad7d3ca081110174c4112721171c7aea96458372b0b9c06",
+                "indexToken": "rewriteAuthServerMetadata",
+                "indexOffset": 4
               }
             ]
           }

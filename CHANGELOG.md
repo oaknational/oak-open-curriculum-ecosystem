@@ -1,3 +1,17 @@
+# [1.180.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.179.1...v1.180.0) (2026-09-10)
+
+
+### Features
+
+* **mcp:** serve the OpenAI domain-verification challenge ([a97ea9e](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/a97ea9e71dee321ed9b7686be2dc97707ce6a2c2))
+
+## [1.179.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.179.0...v1.179.1) (2026-09-09)
+
+
+### Bug Fixes
+
+* **mcp-app:** advertise only the granted scopes in the AS metadata (MCP-345) ([4d26b3c](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/4d26b3c23b663806c35dc40db481e9d9a8272a7d))
+
 # [1.179.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.178.6...v1.179.0) (2026-09-09)
 
 
