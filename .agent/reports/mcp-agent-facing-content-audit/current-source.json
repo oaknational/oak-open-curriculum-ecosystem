@@ -27,9 +27,9 @@
     "additionCount": 11,
     "availableCount": 675,
     "retiredCount": 53,
-    "unchangedCount": 472,
+    "unchangedCount": 471,
     "expandedCount": 0,
-    "modifiedCount": 123,
+    "modifiedCount": 124,
     "relocatedCount": 68,
     "addedCount": 12,
     "workspaceScopeInCount": 612,
@@ -5653,9 +5653,9 @@
           "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-misconception-graph.ts"
         ],
         "evidence": {
-          "revision": "unchanged",
+          "revision": "modified",
           "anchorTargetCount": 1,
-          "anchorCount": 1
+          "anchorCount": 2
         }
       },
       "lineage": {

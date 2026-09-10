@@ -487,6 +487,18 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   published `@oaknational` packages as the one boundary; a per-box cut, never a move of today's
   workspaces; a junior-developer product repository; one version per repository for now; the
   extraction before the estate-wide seam migration)
+- [ADR-229: The MCP app stays a legacy-era `2025-11-25` server until the SDK v2 package family is adopted](229-mcp-protocol-revision-legacy-era-until-sdk-v2.md)
+  ← **Proposed** (2026-09-09; the revision posture MCP-644 asked to have scoped: `2026-07-28` is current
+  and makes `server/discover` mandatory for modern-era servers, but `@modelcontextprotocol/sdk@1.x`
+  tops out at `2025-11-25` and will never gain it, so the migration target is the
+  `@modelcontextprotocol/server@2.x` family, which MUST be dual-era and never modern-only because
+  legacy clients have no fall-forward mechanism; a `server/discover` handler on the current line is
+  unreachable behind the transport's version check, and the present refusal code is load-bearing for
+  spec-literal dual-era client fallback because it sits in the spec's legacy error sub-range.
+  **Records an unresolved conflict with ADR-122**, which is Accepted and decides the transport's
+  `Origin` MUST the other way: ADR-122's compensating auth-layer Host check does not run when
+  `CANONICAL_HOST` is set, as it is in production, so MCP-650 is an amendment to ADR-122 rather
+  than a fresh gap. ADR-229 states the conflict and does not settle it)
 - [ADR-230: MCP Apps widget compatibility as a per-commit served-surface gate, judged by the vendor's pinned capability catalogue](230-mcp-apps-widget-compatibility-per-commit-served-surface-gate.md) ← **Proposed**
 
 ## Key Architectural Decisions

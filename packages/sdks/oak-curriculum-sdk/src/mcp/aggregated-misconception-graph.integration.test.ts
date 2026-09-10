@@ -10,8 +10,8 @@
  * (exactly one anchor mode per call; the unit window belongs to the thread
  * anchor), dispatch to the misconception view, and the response shape
  * (summary TextContent + serialised JSON TextContent + structuredContent).
- * The chain retrieval semantics themselves — anchor resolution, id-sorted
- * windows, heavy-tail coverage honesty — are specified by the view's own
+ * The chain retrieval semantics themselves — anchor resolution,
+ * curriculum-ordered windows, heavy-tail coverage honesty — are specified by the view's own
  * tests in `@oaknational/graph-corpus-sdk` and are not re-specified here.
  *
  * Anchor fixtures are chosen deterministically from the corpus so the tests
@@ -122,6 +122,10 @@ describe('GET_MISCONCEPTION_GRAPH_TOOL_DEF', () => {
     expect(GET_MISCONCEPTION_GRAPH_TOOL_DEF.description).toContain('lessonSlugs');
     expect(GET_MISCONCEPTION_GRAPH_TOOL_DEF.description).toContain('unitSlugs');
     expect(GET_MISCONCEPTION_GRAPH_TOOL_DEF.description).toContain('threadSlug');
+    // The ordering basis is a served commitment (MCP-682); a later edit that
+    // drops it must fail here, as the sibling thread-progressions test pins.
+    expect(GET_MISCONCEPTION_GRAPH_TOOL_DEF.description).toContain('authored');
+    expect(GET_MISCONCEPTION_GRAPH_TOOL_DEF.description).toContain('curriculum order');
     expect(GET_MISCONCEPTION_GRAPH_TOOL_DEF.description).not.toContain(
       'Returns the Oak Curriculum misconception graph',
     );

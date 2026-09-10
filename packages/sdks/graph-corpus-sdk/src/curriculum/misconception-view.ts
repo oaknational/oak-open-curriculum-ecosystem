@@ -110,7 +110,11 @@ function lessonEntry(lesson: GraphCorpusLessonNode): LessonMisconceptions {
   return { lesson, misconceptions: projection.misconceptionsByLessonId.get(lesson.id) ?? [] };
 }
 
-/** Builds one unit entry: the unit with every placed lesson and their misconceptions. */
+/**
+ * Builds one unit entry: the unit with every placed lesson and their
+ * misconceptions, the lessons in Oak's authored teaching order (MCP-682 — the
+ * corpus `unitLessonRuns` section, not the id-sorted edge set).
+ */
 function unitEntry(unit: GraphCorpusUnitNode): UnitMisconceptions {
   const lessons = projection.lessonsByUnitId.get(unit.id) ?? [];
   return { unit, lessons: lessons.map(lessonEntry) };
@@ -158,7 +162,8 @@ export function misconceptionsForLessons(
 
 /**
  * Returns the misconceptions for the given anchor units (the core anchor),
- * grouped per placed lesson. A lesson placed in several anchor units appears
+ * grouped per placed lesson, each unit's lessons in Oak's authored teaching
+ * order. A lesson placed in several anchor units appears
  * under each (placement is an edge, not a property). Unknown slugs are
  * reported in `unknownAnchors`.
  *
@@ -174,7 +179,13 @@ export function misconceptionsForUnits(unitSlugs: readonly string[]): UnitMiscon
   return { units, resolvedAnchors: resolved, unknownAnchors: unknown };
 }
 
-/** Builds one thread's windowed entry over the id-sorted unit order. */
+/**
+ * Builds one thread's windowed entry over the thread's units in Oak's
+ * curriculum order — years ascending within each subject, the subject's
+ * authored unit order within a year, one subject's run completed before the
+ * next begins (MCP-682). A page therefore reads as a progression, which is
+ * what a numbered window claims to be.
+ */
 function threadEntry(
   id: GraphCorpusThreadNodeId,
   unitOffset: number,
