@@ -487,6 +487,12 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   published `@oaknational` packages as the one boundary; a per-box cut, never a move of today's
   workspaces; a junior-developer product repository; one version per repository for now; the
   extraction before the estate-wide seam migration)
+- [ADR-228: Agent-web standards — six dispositions, and the standing of a vendor scorecard](228-agent-web-standards-dispositions.md)
+  (Accepted 2026-09-09; adopt ARD at both the v0.91 and predecessor paths, decline A2A on
+  applicability alone, decline WebMCP, DNS-AID and the MCP Server Card — the last on the merits,
+  superseding MCP-346's rationale — and change nothing for `auth.md`; each disposition carries a
+  falsifiable revisit trigger, and `isitagentready.com` is framed as Cloudflare's own product
+  rather than a conformance standard)
 
 ## Key Architectural Decisions
 
