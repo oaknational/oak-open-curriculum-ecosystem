@@ -184,9 +184,13 @@ const config: KnipConfig = {
         'e2e-tests/**/*.ts',
       ],
       project: [
-        // .tsx alongside .ts: the MCP App widget is React, so a .ts-only
-        // glob leaves every component outside knip's graph — and anything
-        // they alone consume reads as an unused export.
+        // .tsx is carried deliberately even though `src/` holds none today.
+        // It did until 2026-08-20, when the server-rendered landing page went;
+        // the widget's React lives under `widget/`, outside this glob. Kept
+        // because the cost of the wider glob is nothing and the cost of the
+        // narrow one is silent: a .ts-only glob leaves any future component
+        // outside knip's graph, and anything it alone consumes then reads as
+        // an unused export.
         'src/**/*.{ts,tsx}',
         'build-scripts/**/*.ts',
         'e2e-tests/**/*.ts',

@@ -11,7 +11,10 @@ import { getScratchStaticRoot } from './test-helpers/static-root-fixture.js';
 const BROWSER_ACCEPT = 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8';
 
 /**
- * This host serves the MCP protocol and its assets. It serves no HTML.
+ * This host serves the MCP protocol and its assets. It serves no HTML over
+ * HTTP — the MCP App widget is HTML, but it reaches a client as an MCP
+ * resource, never as a document this app answers a browser with. That
+ * distinction is the subject: this suite forbids the second, not the first.
  *
  * @remarks
  * Owner instruction, 2026-08-20: `mcp.thenational.academy` becomes ONLY the

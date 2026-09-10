@@ -1,8 +1,9 @@
 /**
  * Playwright configuration for widget-level tests.
  *
- * Separate from `playwright.config.ts` (MCP server landing page tests).
- * The widget Vite dev server requires no MCP server or environment
+ * The only Playwright configuration in this workspace since 2026-08-20, when
+ * `playwright.config.ts` and its landing-page visual suite were removed with
+ * the page. The widget Vite dev server requires no MCP server or environment
  * variables — it is a self-contained React app.
  *
  * The suite's server rides a deterministic per-worktree port derived from

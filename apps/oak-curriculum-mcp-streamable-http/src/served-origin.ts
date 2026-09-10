@@ -1,9 +1,11 @@
 /**
  * Served-origin resolution — the one place that answers "what address is
  * this deployment serving at?" for self-description surfaces that are fixed
- * per deployment: the landing page's og:url and endpoint snippet (baked at
- * build time), the tool-level auth-error resource URL (derived at the
- * composition root), and the registration-proof composition.
+ * per deployment: the MCP Registry entry's endpoint and protected-resource
+ * metadata URLs (`scripts/generate-server-json.ts`), the tool-level
+ * auth-error resource URL (derived at the composition root), and the
+ * registration-proof composition. It also fed the landing page's og:url and
+ * endpoint snippet until that page was removed on 2026-08-20.
  *
  * Precedence, most-authoritative first:
  * 1. The configured canonical origin (`CANONICAL_HOST` resolved by
