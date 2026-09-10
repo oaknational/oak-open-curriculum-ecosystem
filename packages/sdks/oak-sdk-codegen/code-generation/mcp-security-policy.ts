@@ -37,17 +37,26 @@ export const PUBLIC_TOOLS: readonly string[] = [
  * Applied to all tools NOT in PUBLIC_TOOLS list.
  *
  * @remarks
- * **Why `openid` is excluded**: Clerk rejects the `openid` (OIDC) scope for
- * dynamically registered clients (RFC 7591 DCR). Clerk accepts `openid` during
- * client registration but returns `error=invalid_scope` during authorisation.
- * This error is routed via redirect to the client's callback URL (per RFC 6749
- * Section 4.1.2.1), bypassing the server entirely and causing a silent failure
- * in clients like Cursor. MCP only needs an OAuth access token, not an OIDC ID
- * token, so `openid` is not required.
+ * **Why `openid` is excluded**: Oak's policy choice, not a Clerk ceiling. This
+ * is an OAuth 2.1 resource server: it authorises from an access token and reads
+ * no OIDC identity claims, so an ID token buys it nothing. Clerk grants a
+ * dynamically registered client (RFC 7591 DCR) the scopes named in its
+ * registration plus `offline_access`, or the instance default grant when it
+ * names none; a registration that omits `openid` is not granted it (measured
+ * 2026-08-19: `openid email` registered, `email offline_access openid`
+ * granted; ADR-113, Evidence: the DCR grant probe). Oak's default grant
+ * carries no `openid`; a client that requests it outside its grant receives
+ * `error=invalid_scope`, routed via redirect to the client's callback URL (RFC
+ * 6749 Section 4.1.2.1), bypassing the server and failing silently in clients
+ * like Cursor. (Mechanism corrected 2026-09-08, MCP-345; the earlier wording
+ * called it a platform rule.)
  *
- * Because `openid` is not in our PRM `scopes_supported`, compliant clients
- * (RFC 9728) will not request it. The proxy forwards all scopes transparently
- * without filtering.
+ * Because `openid` is not in our PRM `scopes_supported`, clients that choose
+ * their scopes from the PRM (RFC 9728) will not request it; a client may still
+ * ask for scopes of its own. Since MCP-345 the served authorization-server
+ * metadata advertises this same set, so clients that choose scopes from that
+ * document (ChatGPT's plugin portal, measured 2026-09-08) do not request it
+ * either. The proxy still forwards the `scope` a client sends unchanged.
  *
  * @see ADR-113 Troubleshooting section (docs/architecture/architectural-decisions/113-mcp-spec-compliant-auth-for-all-methods.md)
  */
@@ -80,7 +89,9 @@ export function toolRequiresAuth(toolName: string): boolean {
  *
  * @remarks
  * Used to generate RFC 9728 protected resource metadata at
- * `/.well-known/oauth-protected-resource`.
+ * `/.well-known/oauth-protected-resource`, and served as the `scopes_supported`
+ * of the RFC 8414 authorization-server metadata at
+ * `/.well-known/oauth-authorization-server` (MCP-345).
  *
  * **Current approach**: All protected tools share the same scopes.
  * If you need per-tool scope variation (e.g., different scopes for read vs write),

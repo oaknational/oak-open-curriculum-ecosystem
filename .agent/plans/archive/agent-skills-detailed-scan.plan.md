@@ -3,7 +3,7 @@ id: agent-skills-detailed-scan
 node_type: delivery
 name: "Detailed scan of addyosmani/agent-skills — WS0 evidence, adoption shortlist, instrument costing"
 overview: "Six-leg tiered scan of the addyosmani/agent-skills corpus: per-skill quality rubric, licence/provenance/supply-chain review of its executable artefacts, estate dedup matrix, WS0-evidence falsification, and a costed feasibility answer on rebuilding its tier-2 routing eval against our own corpus. Commissioned at owner card 2026-08-02 (full 6-leg scan)."
-status: sketch
+status: archived
 ratified_by: null
 ratified_date: null
 ratified_where: null
@@ -12,23 +12,22 @@ impact_areas:
   - practice-and-estate
 tickets: []
 depends_on: []
-owner_gates:
-  - awaiting: owner-decision
-    clears_when: >-
-      The scan's four decision points return to the owner as settled
-      verdicts with evidence: (1) plugin install yes/no after the
-      security leg; (2) vendored files vs harvested mechanisms per
-      shortlisted skill; (3) whether the WS0 kind-axis evidence stands
-      after the falsification leg; (4) whether to build the
-      routing/collision measurement for our own corpus at the costed
-      price. The commissioning word is on record (owner card,
-      2026-08-02: full 6-leg scan). Ticket mints post-embargo
-      (2026-08-10).
-    expires: 2026-08-23
-last_updated: 2026-08-02
+owner_gates: []
+last_updated: 2026-09-03
 ---
 
 # Detailed scan of `addyosmani/agent-skills`
+
+## Disposition (archived 2026-09-03)
+
+Archived at the owner's card word of 2026-09-03 with two of its four decision points
+settled and the other two lapsed: (1) the pack is never installed as a Claude Code plugin,
+in any environment ("No install, anywhere"); (2) nothing from it is vendored as files —
+mechanisms are harvested and re-authored under this estate's own review ("Harvest
+mechanisms, never vendor"); (3) and (4), the WS0 kind-axis evidence and the routing/collision
+measurement, needed the scan's legs, which never ran after the 2026-08-02 commissioning
+word and are dropped ("Drop the scan: archive the plan"). Anyone who later wants the
+measurement re-commissions it fresh. Nothing below was executed.
 
 **Predecessor:** the broad-and-shallow survey at
 [agent-skills-addyosmani-survey-2026-08-02.md](../../research/wider-ecosystem/agent-skills-addyosmani-survey-2026-08-02.md),

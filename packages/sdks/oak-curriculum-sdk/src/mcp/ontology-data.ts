@@ -139,7 +139,7 @@ export const ontologyData = {
     threadProgressions:
       'Call get-thread-progressions for ordered unit sequences within curriculum threads (instance data)',
     priorKnowledgeGraph:
-      'Call get-prior-knowledge-graph with anchor unit slugs for the bounded prior-knowledge subgraph of those units (dependencies and prior knowledge requirements)',
+      "Call get-prior-knowledge-graph with anchor unit slugs for each unit's stated prior-knowledge statements (what pupils are assumed to know before it)",
   },
 
   curriculumStructure: {
@@ -169,7 +169,7 @@ export const ontologyData = {
     countSummary: `${String(threadProgressionStats.threadCount)} threads across ${String(threadProgressionStats.subjectsCovered.length)} subjects, connecting units into learning progressions`,
     characteristics: [
       'Programme-agnostic: A single thread spans multiple programmes, key stages, and years',
-      'Year-ordered: A thread’s units progress by teaching year (within one year the order is not curricular)',
+      'Curriculum-ordered: A thread’s units follow Oak’s authored curriculum order within each subject — years ascending, and within a year the subject sequence’s unit order; a thread spanning subjects runs separately per subject; at key stage 4 a unit merges its exam-board and tier variants, so a KS4 run is a bias towards the earliest authored position, not any one board’s order',
       'Cross-key-stage: Threads enable tracking progression from early years to GCSE',
       'Primary navigation: Threads are used as filters on the Oak website',
     ],

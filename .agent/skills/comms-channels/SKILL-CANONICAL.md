@@ -48,6 +48,19 @@ below keep the fast lanes from hollowing out the record.
 | A message whose audience is the owner or humans on the Practice Slack channel, or a question to the live Slack Watcher | **Slack-via-Watcher** (the `talk-to-slack-watcher` skill; the channel is the durable substrate on its side of the boundary) |
 | Cross-session narrative continuity, a durable multi-session hand-off, structured evidence for a decision, specialist review, or a question only the owner can answer | **Not a delivery lane** — route per the [canonical card](../../memory/executive/agent-collaboration-channels.md): thread record, decision thread/sidebar, reviewer dispatch, or an owner card |
 
+The test that separates the first row from the next two (owner ruling 2026-09-03, verbatim:
+"for quick questions it makes sense to use the native inter-agent communication, for anything
+that might eventually be or lead to institutional knowledge, the comms and ARC systems are
+appropriate"): ask whether the content could become, or lead to, institutional knowledge. A
+quick question, an ack, a nudge that a record has landed — s2s. A boundary, a split, a
+finding, a ruling relayed, a review row, a landing record, a handover of repo state — ARC or
+the stream, SHA-pinned where it names repo state (behaviour 6), at occurrence (behaviour 2),
+even when a live peer is waiting, because s2s leaves no record any future seat can find. The
+proven shape is both at once: the fact on ARC or the stream, the s2s message pointing at it.
+When in doubt the content is knowledge-bearing. Prediction (PDR-130): with this test loaded, no
+SHA-bearing fact or ruling relay travels s2s-only within the review window; if a later seat has
+to reconstruct one from a peer's transcript, the test is not biting and the s2s row narrows.
+
 The split, in one line each:
 
 - **s2s is the interrupt line.** Seconds latency, wakes the receiver;

@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 import process from 'node:process';
 
+import { fetchWithTimeout } from './fetch-with-timeout.js';
+
 /**
  * Request Runner for Production Build Harness
  *
@@ -45,39 +47,11 @@ function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
 }
 
-function errorName(error: unknown): string {
-  return error instanceof Error ? error.name : 'UnknownError';
-}
-
 function errorStack(error: unknown): string | undefined {
   return error instanceof Error ? error.stack : undefined;
 }
 
 const sleep = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
-
-async function fetchWithTimeout(
-  url: string,
-  options: RequestInit,
-  timeoutMs: number,
-): Promise<Response> {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), timeoutMs);
-
-  try {
-    const response = await fetch(url, {
-      ...options,
-      signal: controller.signal,
-    });
-    clearTimeout(timeout);
-    return response;
-  } catch (error) {
-    clearTimeout(timeout);
-    if (errorName(error) === 'AbortError') {
-      throw new Error(`Request timeout after ${timeoutMs}ms`, { cause: error });
-    }
-    throw error;
-  }
-}
 
 async function waitForHealthCheck(): Promise<true> {
   log.info('Waiting for server health check', {

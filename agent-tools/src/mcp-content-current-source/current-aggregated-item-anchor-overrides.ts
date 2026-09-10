@@ -15,7 +15,6 @@ const FETCH_EXECUTION = `${SDK_MCP}/aggregated-fetch/execution.ts`;
 const ASSET_DOWNLOAD_DEF = `${SDK_MCP}/aggregated-asset-download/definition.ts`;
 const CURRICULUM_MODEL_DEF = `${SDK_MCP}/aggregated-curriculum-model/definition.ts`;
 const KEYWORD_GRAPH = `${SDK_MCP}/aggregated-keyword-graph.ts`;
-const PRIOR_KNOWLEDGE_GRAPH = `${SDK_MCP}/aggregated-prior-knowledge-graph.ts`;
 const APP_ROOT = 'apps/oak-curriculum-mcp-streamable-http';
 const UNDER_THE_HOOD = `${APP_ROOT}/src/oak-under-the-hood/oak-under-the-hood-tool.ts`;
 const AUTH_ROUTES = `${APP_ROOT}/src/auth-routes.ts`;
@@ -104,16 +103,6 @@ export const CURRENT_AGGREGATED_ITEM_ANCHOR_OVERRIDES = {
       'Lesson anchor: lesson slugs (corpus keys). Each lesson carries at most two misconceptions.',
     ],
   },
-  C236: {
-    ['packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-misconception-graph.ts']: [
-      'Unit anchor: unit slugs (corpus keys). Returns each unit with every placed lesson',
-    ],
-  },
-  C237: {
-    ['packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-misconception-graph.ts']: [
-      'Thread anchor: one thread slug (corpus key). Returns a unit-granular window',
-    ],
-  },
   C255: {
     ['packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-thread-progressions.ts']: [
       'Discovery anchor (with keyStage): a subject slug, e.g. "maths". Returns bounded thread descriptors',
@@ -160,11 +149,6 @@ export const CURRENT_AGGREGATED_ITEM_ANCHOR_OVERRIDES = {
   },
   C231: {
     [KEYWORD_GRAPH]: ['title: KEYWORD_GRAPH_TOOL_TITLE,'],
-  },
-  C248: {
-    [PRIOR_KNOWLEDGE_GRAPH]: [
-      'Anchor unit slugs (corpus keys, e.g. from search/fetch results). The result is the bounded',
-    ],
   },
   // MCP-353: the resource_link title occurrence retired with the pointer;
   // the tool title anchors on its shared declaration.

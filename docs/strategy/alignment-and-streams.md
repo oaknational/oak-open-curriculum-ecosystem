@@ -2,7 +2,7 @@
 title: 'Strategy — How we align with Oak, and the streams as a system'
 type: strategy
 status: active
-last_updated: 2026-08-30
+last_updated: 2026-09-03
 derives_from:
   - VISION.md
 governed_by:
@@ -59,6 +59,10 @@ is distinct from the open-ended demo portfolio inside the Innovation Kit stream:
   Kit's working experiences faster and more safely, and it's a value stream others adopt.
 - **The engineering tools are the foundation.** The SDK, semantic search, the curriculum
   graph, and the evidence surfaces are what the app stands on.
+  _Dated note, 2026-09-03 ([ADR-227](../architecture/architectural-decisions/227-oak-product-in-its-own-repository.md)): once
+  that decision executes, the foundation will be published as packages the app's own
+  repository installs, which is how the app will exercise it from there. Nothing is published
+  today._
 - **The app exercises the foundation.** It reaches teachers and provides one implementation
   proof of the system in a teacher-facing channel; value and impact require their own evidence.
 - **The Innovation Kit is the lens and laboratory.** It composes the engine and foundation

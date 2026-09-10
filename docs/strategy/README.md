@@ -3,7 +3,7 @@ title: 'Strategy'
 type: strategy
 doc_role: index
 status: active
-last_updated: 2026-08-30
+last_updated: 2026-09-03
 audience: 'Oak leadership (decide) and the delivery team (build)'
 derives_from:
   - VISION.md
@@ -35,6 +35,14 @@ zooms: the app and the tools serve the mission; the framework is both the engine
 them and a value stream in its own right; and the Innovation Kit exists to turn their latent capability
 into excellent working experiences that expand understanding, generate trustworthy evidence,
 and compound what real use proves reusable.
+
+_Dated line, 2026-09-03 (owner word on the card of that day: "Also state it as the current
+priority"): the repository's current structural commitment, and its current first priority for
+structural work, is the extraction of the MCP app product into its own public repository,
+`oaknational/oak-open-curriculum-mcp`, as thin workspaces over packages published from here —
+the decision recorded in [ADR-227](../architecture/architectural-decisions/227-oak-product-in-its-own-repository.md). The plan
+estate (`.agent/plans/`, its index the entry point) carries the lane whose delivery order puts
+the extraction first._
 
 | Read                                                                           | For                                                                                                                |
 | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |

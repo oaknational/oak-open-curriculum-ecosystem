@@ -3,7 +3,7 @@ id: workspace-taxonomy-landscape-survey
 node_type: delivery
 name: "Workspace taxonomy landscape survey — stochastic search far from the worn path"
 overview: "Industrialise variation over the workspace-taxonomy solution space: many cheap randomised walker agents from de-correlated starting points, an annealing schedule, a quality-diversity archive of distinct viable basins, and a sliding model-tier ladder that zooms into promising regions — the primary search instrument for a target architecture, with no incumbent carrying privileged status."
-status: sketch
+status: archived
 serves: workspace-reorganisation-programme
 impact_areas:
   - practice-and-estate
@@ -12,10 +12,20 @@ depends_on:
   - plan: workspace-classification-census
     kind: beneficial
 owner_gates: []
-last_updated: 2026-08-17
+last_updated: 2026-09-03
 ---
 
 # Workspace taxonomy landscape survey
+
+## Disposition (archived 2026-09-03)
+
+Abandoned, at the owner's word over PR #959's numbered list (MCP-673):
+its instrument — a stochastic search for a target workspace inventory —
+was retired by the successor node's seam decision of 2026-08-19
+(`toolkit-re-architecture`, superseding
+`workspace-reorganisation-programme`, replaced the target inventory and
+the five-root taxonomy with the two-family topology). The `serves` edge
+stays as provenance. Nothing below was executed.
 
 ## Why this node exists
 

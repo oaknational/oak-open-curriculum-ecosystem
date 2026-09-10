@@ -695,7 +695,7 @@ EOF
 RC=$?
 END=$(date +%s)
 ELAPSED=$((END-START))
-tail -5 tmp/commit.log
+cat tmp/commit.log
 SHA=$(git log -1 --format=%h)
 ```
 

@@ -639,6 +639,8 @@ freeze-2 map remains the work queue; item (a) is at the push/PR stage.
 | platform | model | session_id_prefix | agent_name | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
 | claude-code | claude-fable-5 | c28ad9 | Ocelot binds Tunnel | Director — adopted b1d00d68 at Moment 2 `a91c1177` | 2026-08-17 | 2026-08-17 |
+| claude-code | claude-fable-5-1 | 661556 | Chinook seeks Cloud | implementer, lead at n=2 — MCP-673 corpus truing: PR A (#959, owner-word amendments) and PR B (factual true-ups), claim ed9ec042 | 2026-09-03 | 2026-09-03 |
+| claude-code | claude-fable-5-1 | 9e26e6 | Vesta rides Solstice | second seat at n=2 (Chinook seeks Cloud 661556 leads) — MCP-673 corpus truing; boundary set by the lead | 2026-09-03 | 2026-09-03 |
 
 ## 2026-08-17 ~20:0xZ — OVERNIGHT STAND-DOWN (Ocelot binds Tunnel, c28ad9): both lanes down clean; Director down last at owner word
 
@@ -1201,3 +1203,251 @@ direct owner word (no Director seated; the week-sleep ended at owner word 2026-0
   AC3; the toolkit node's `last_updated`). Fresh dependency map at this seat (manifests at
   `777e9131c`): 33 members; the two apps' runtime closure 17 packages, 25 with dev-time
   deps; 8 outside; nothing published — the delivery plan carries the table.
+
+## 2026-09-03 ~10:2xZ — HANDOFF to the implementing session (Finch calls Pinnacle, c91bd4): MCP-661 landed; MCP-673 node on draft PR #959; the next session implements it
+
+- **Objective state.** The owner's three-step objective of 2026-09-02 ("merge 915, then
+  provide a plan, then make sure that the repo strategy is consistent and cohesive around
+  that plan"): step 1 landed (#915, `777e9131c`); step 2 landed (#954, merge `c844bcf60`,
+  released 1.177.1 — the delivery nodes `oak-open-curriculum-mcp-extraction` and
+  `toolkit-publish-mechanism`, both sketches awaiting the owner's ratification; the
+  readiness record with two suites and three PR rounds dispositioned by ID; round-3
+  routings on MCP-661); step 3 is MCP-673, whose delivery node
+  `intent-corpus-truing-around-the-extraction-plan` (third draft, `9aa5e011e`) sits on draft
+  PR #959 under the bot. The owner said the next session is the last of the objective and
+  sized the work at 30 to 90 minutes; the node carries per-todo estimates (85 minutes of
+  authoring plus two gates) and a named drop candidate.
+- **Where the seat-facing state is.** The primary checkout is on
+  `jimcresswell/mcp-673-strategy-corpus-consistency` at `9aa5e011e` = origin, clean, at the
+  owner's word ("We can work in the primary checkout for this one"); the MCP-661 worktree is
+  removed and its branch deleted (merged). Claim `2c11756e` (this seat, the corpus files)
+  closes with this handoff; the next session opens its own. No Director seated; n=1.
+- **Reviews on the node.** Two Opus readiness reviews (assumptions, docs), then an
+  owner-invoked full Cricket suite (eight seats, all ON-TRACK) with an adversarial
+  assumptions review on Fable, two-lens refutation and a cross-examiner, recorded in
+  `.agent/reports/agentic-engineering/cricket-quartet-tally-2026-09-03-mcp-673-intent-corpus-truing.md`.
+  Every accepted finding is cured in the third draft; the rejected ones are named in the
+  tally's adjudication.
+- **Assumptions the next session should investigate before or while executing** (each
+  with its check):
+  1. *Coverage of the sweep.* The pinned scan plus the judged list finds every surface that
+     states a superseded or false-today position. The Fable adversary found two the
+     second draft had missed (the vision; the engineering and SDK pages on publishing).
+     Check: run the pinned scan and, once, the same pattern over `docs/engineering`,
+     `docs/operations`, `packages/**/README.md` and `apps/**/README.md`; read every hit.
+  2. *The registry state.* The node says the curriculum SDK is not on the registry. That
+     was verified by subagents (`npm view @oaknational/curriculum-sdk version` returning
+     not-found), not by this seat. Check first-hand before editing the publishing pages.
+  3. *One word over a numbered list is the owner's act.* The gate rests on the estate's
+     precedent ("Ratify both" over an enumerated scope). Check: the owner's answer form on
+     PR A; if he answers per item, record each; if he declines by number, revert that item
+     before merge.
+  4. *The in-place form for the ratified node.* The schema's "smaller amendments are made
+     in place with dated notes" is read as covering a reversal of the banked delivery
+     order because the outcome and bet are unchanged. Check: the owner may read the
+     ordering item as a scope change; the node's fallback (revert, banked order stands)
+     is written for that.
+  5. *The parent node.* Two Opus reviewers disagreed; the adversary, both refuters and the
+     cross-examiner settled `serves: toolkit-re-architecture` on the lane's own
+     enumeration rule. Check: nothing, unless the owner re-points it.
+  6. *The estimate.* 85 minutes of authoring is this seat's estimate, untested. Check: time
+     T1 and T2; if over pace, take the drop candidate (the three publishing-truth pages to
+     a third small PR).
+  7. *The Atlas amendments block.* No precedent in the file; the form is stated in the
+     node and covered by the owner's word. Check: keep the ruled prose intact; do not
+     touch the diagrams (the seam diagram's text line must stay identical).
+  8. *The extraction plan's ordering thesis is still presented, not ruled.* The truing
+     propagates it as the one decision item on the list. Check: it is marked as such in
+     the PR body; the confirmations cite rulings 2, 3, 5 and 10.
+  9. *The last session.* PR A waits on the owner's word; if he is not live, PR A stays open
+     past the session and "the last session" fails on the calendar, not the work. Check:
+     sequence PR B (no word needed) first when the owner is absent; leave PR A ready.
+  10. *The owner's local-only priority ruling* (2026-09-03) exists only in this seat's local
+      memory at his word and must not reach any repository surface, including the
+      strategy index's reading-path line, which names the structural commitment and
+      nothing about ranking.
+- **What the owner holds.** Ratification of the three sketch nodes (the two from #954, the
+  truing node on #959); the extraction plan's gate 1 (the D0a design record) and gate 2
+  (repository creation; the error-reporting project of the same name in ADR-159/163); the
+  publish node's publish-rights gate; the numbered list on PR A.
+- **Instruments this seat learned this window:** commitlint caps commit subjects and body
+  lines at 100 characters; `git grep -E` does not honour `\b`; the merge tool's review-run
+  liveness probe can fail and exit early — arm a bind-wait around it; Copilot's on-push
+  review does not fire for `.agent` plan paths, request it explicitly.
+
+## 2026-09-03 ~11:5xZ — OBJECTIVE STEP 3 AT THE OWNER'S WORD (Chinook seeks Cloud, 661556, lead at n=2 with Vesta rides Solstice, 9e26e6): PR #959 ratified "all thirteen"; PR #961 open; PR C to follow
+
+- **Objective state.** The owner's three-step objective of 2026-09-02: steps 1 (#915) and 2
+  (#954) landed earlier; step 3 (MCP-673) is on two pull requests plus a closer. PR A (#959,
+  this seat): ADR-227 as the extraction decision's durable home, the ten owner-word
+  amendments of the truing node, and the node itself — ratified at the owner's card word
+  "Ratify all thirteen" (~11:4xZ, no declines); the stamps land in this entry's commit and the
+  bot merges at settled (`merge-bot merge --pr 959 --expect claude`). PR B (#961, Vesta): the
+  eight factual true-ups, open under the bot, its Copilot round being cured, bot-merge at
+  settled. PR C (Vesta, cut from post-merge main after both): archive the completed truing
+  node, point the plan nodes at ADR-227, true the extraction plan's decision-log sentence
+  (the ADR is the home; the log is the contemporaneous capture), carry the second-seat tally.
+  MCP-673 closes at PR C's merge. Nothing else is deferred.
+- **Owner rulings this window, verbatim.** (1) ~09:3xZ: "this session will complete the
+  planning corpus alignment with the priority of splitting out new, thin apps as the plan
+  describes … All of the work needs doing, the target is one hour, we will assess in about 45
+  minutes"; (2) "there are no leftovers, as I said, all of the work needs to be done, that is
+  the invariant"; (3) card: "Extraction first. That change of priority is the point of this
+  planning work"; (4) card: "Also state it as the current priority"; (5) ~10:10Z
+  start-right-team: "Vesta rides Solstice (9e26e6) will join you, making this an n=2 session,
+  you are the lead, split the work as appropriate. All team members should use cognitive and
+  planning skills as appropriate at all times"; (6) to the second seat ~10:1xZ: "plans are not
+  durable, plans are ephemeral … Durable homes for decisions are ADRs"; (7) ~10:30Z: "for quick
+  questions it makes sense to use the native inter-agent communication, for anything that
+  might eventually be or lead to institutional knowledge, the comms and ARC systems are
+  appropriate"; (8) ~10:35Z: "I think we need to stop using tail, it causes this same issue
+  over and over and over"; (9) ~10:42Z: the PR A push tool call refused, then "run a full
+  Cricket suite"; (10) card: "Fold ADR-227 into PR A and re-point"; (11) card: "Ratify all
+  thirteen".
+- **What landed on #959.** 3175e9a30 (the eight surfaces + identity rows); dc65c204f (the
+  second read's two cures: the truing node trued to the card rulings, the alignment note
+  re-formed); 753cdf455 (ADR-227 cherry-picked from Vesta's 2130c0a93; the vision, the three
+  strategy pages, the Atlas block and the strategic node's note cite the ADR — the refusal's
+  reason, found by the adversarial fable Cricket seat and verified against
+  `no-moving-targets-in-permanent-docs` §Citation directionality); this entry's commit (the
+  stamps; ADR Accepted; the thread record; the napkin; the Cricket tally; the ARC channel).
+- **Cricket.** Two owner-invoked suites, eight legs each: this seat's (tally
+  `cricket-quartet-tally-2026-09-03-mcp-673-truing-execution.md`) converged on asking the
+  refusal reason, with the fable adversarial seat supplying the hypothesis that held; Vesta's
+  (tally `…-second-seat.md`) 8/8 ON-TRACK. Both tallies record a haiku procedure seat acting
+  outside its lens.
+- **Instruments learned** (napkin carries the detail): zsh `pipestatus`; pnpm's literal `--`
+  on `check-commit-message` (feed stdin); a wildcard-staging hook false positive on a bare
+  `.`; `git mv` then `git add` of the deleted path refuses; enqueue output swallowed by
+  `tail`; a stale enqueue blocks a peer's guard ("multiple fresh matching intents") until
+  phased `abandoned`; commitlint subject-case rejects an uppercase token after the type;
+  the automatic reviewer that binds a docs-only bot PR is `claude`, Copilot binds late or
+  not at all.
+- **What the owner holds after this.** The extraction plan's gate 1 (the D0a design record)
+  and gate 2 (the repository's creation; the error-reporting project sharing its name,
+  ADR-159/163); the publish node's publish-rights gate. The ordering and the public priority
+  are ruled and landed; no owner item remains on MCP-673.
+- **Claims.** ed9ec042 (this seat, the corpus files) closes at wrap; Vesta's claims cover
+  #961's and PR C's files. The seat chain gains Chinook seeks Cloud (lead) and Vesta rides
+  Solstice (second seat), both 2026-09-03.
+
+## 2026-09-03 ~12:1xZ — COMPACTION BOUNDARY (Chinook seeks Cloud, 661556, lead): rulings landed; three PRs open at green, merge is the next act; Vesta paused at owner word
+
+- **Owner rulings this stretch, verbatim.** "I don't want a third PR. PRs are SLOW. I see no
+  reason the wrap cannot be part of PR B"; "We don't HAVE to do what copilot says, apply some
+  critical awareness and thinking"; "Give me all outstanding owner questions as cards, right
+  now"; "You are the lead, you are responsible for stopping Vesta from being dumb"; cards:
+  merge policy "Change the merge policy instead" (docs-only bot PRs merge at checks-green with
+  threads resolved and the Claude Code Review's standing verdict, no Copilot leg — the merge
+  tool must learn the class, follow-up ticket owed); publish rights "Yes we have the rights, no
+  we do not need them yet…"; skills scan "No install, anywhere" / "Harvest mechanisms, never
+  vendor" / "Drop the scan: archive the plan"; design item 14 "strict everywhere, all the time,
+  and long-term architectural excellence, run it through the decision matrix via the
+  principles.md file and the cognitive skills" (ruling being derived by a design-system-expert
+  subagent, `item14-lenses`; result lands on the design plan's gate — the ONE gate still
+  alerting); liveness "Slack is the right answer, but the config must be left to the person
+  who does the final implementation, not a now thing"; skills estate "Ratify the annotated
+  corpus"; override contingency "Archive the plan"; directions "Ratify the shape and all five
+  triggers"; then "prepare for compaction … wrap then stop all non-agent processes".
+- **PR #959 (this seat)** — tip after this entry's commit; all checks green on the previous
+  tip; Copilot round 1 on ed0f353: two threads, both cured here (the truing node's
+  `last_updated` instruction qualified; the Atlas block's intro no longer names plan ids) and
+  the strategy index no longer names a plan node by id (PDR-105; owner: plans are ephemeral).
+  Carries: ADR-227 Accepted; the ten amendments; the truing node ARCHIVED with its stamps and
+  disposition; the two MCP-661 nodes ratified; the publish node's gate discharged with the
+  owner's words; the skills-scan and override plans archived with dispositions; liveness,
+  skills-estate and directions gates discharged with the owner's words (directions stamped
+  ratified). NEXT ACT: verify checks green by name and zero unresolved threads, then merge as
+  the bot through the sanctioned REST endpoint (the pulls/959/merge endpoint, merge method,
+  sha pinned, under a pull-request-merge token) — the new policy; the merge tool refuses
+  SETTLED-NO-REVIEW by name until it learns the docs-only class.
+- **PR #962 (this seat, consolidation)** — four rule/skill homes plus the merge-policy clause
+  on the pr-lifecycle skill; Copilot round 1: three threads, all cured (the estate's remaining
+  `tail` pipes in codex-helper, complex-merge and the commit skill trued; the strategic-node
+  "exception" removed from the no-moving-targets row; the channels paragraph re-formed to
+  behaviours 2 and 6). Same NEXT ACT as #959.
+- **PR #961 (Vesta, PAUSED at the owner's word after compaction)** — tip 81c21278e, checks
+  green, Copilot round 4 posted 11:37Z (two threads, four suppressed, untouched). Vesta's
+  claim 01e418de stays open, paused not abandoned; her worktree
+  `../oak-open-curriculum-ecosystem-worktrees/mcp-673-true-ups` has nothing uncommitted. The
+  closer folds into #961 at the owner's word: plan-node pointers at ADR-227, the extraction
+  plan's decision-log sentence, Vesta's tally file (untracked in the PRIMARY at
+  `.agent/reports/agentic-engineering/cricket-quartet-tally-2026-09-03-mcp-673-second-seat.md`
+  — do not lose it; it rides #961). Round-4 threads: triage on the merits under the ratchet
+  rule (three look like real false-today claims per Vesta), reply-and-resolve the rest, merge
+  at green as the bot. Whoever resumes first (Vesta at owner word, or this seat taking the
+  index at Vesta's standing offer) does it.
+- **Open follow-ups, owned:** (1) merge tool: accept the docs-only bot class at timeout-settled
+  (ticket to mint at resume, MCP team); (2) the design plan's item-14 gate: land the subagent's
+  ruling (gate row removed or renewed with the precondition); (3) the strategy index still
+  names `innovation-kit` by id — a pre-existing PDR-105 defect to retire in a later true-up;
+  (4) the bot cannot request Copilot (collaborator refusal) — moot under the new policy, noted.
+- **Processes at this boundary:** the two Monitors (ARC tail, comms watch) and no background
+  shells; claim ed9ec042 open; worktrees `mcp-673-consolidation` (mine, #962) and
+  `mcp-673-true-ups` (Vesta) live; the local memory block carries the resume map.
+
+## 2026-09-03 ~12:3xZ — MCP-673 CLOSED (Chinook seeks Cloud, 661556, lead; Vesta rides Solstice, 9e26e6, second seat): three pull requests merged, zero additional; the owner's handoff
+
+- **2026-09-03 ~12:3xZ MCP-673 CLOSED (Chinook seeks Cloud 661556, lead; Vesta rides Solstice
+  9e26e6, second seat).** Owner word 12:0xZ: "I want those three PRs merged, and I want ZERO
+  additional PRs … this is my handoff." #962 merged b3c9742f8 (release 1.178.1 followed); #959
+  merged ec7cb3fa8 (cure tip 0274984f6: the design plan's item-14 gate discharged at the card
+  word, the closure-check ruling and its slice recorded, zero expired gates on live plans); #961
+  merges last — by the lead, REST as the bot, sha pinned, at the owner's later word handing the
+  second seat's tail to the lead ("with this little left the overhead of coordinating two agents
+  is greater than the benefit"). Docs-only bot-PR merge policy lives in pr-lifecycle §5; the
+  merge tool must still learn the class (named follow-up, no ticket minted: tickets mint at owner
+  word). Primary checkout left on the merged #959 branch (never switch the primary); worktrees
+  mcp-673-consolidation and mcp-673-true-ups pruned at close. Linear MCP-673 → Done at the last
+  merge.
+- **The second seat's additions.** #961 carries the eight factual true-ups, four Copilot rounds
+  dispositioned (tally rows 7/5, 3/3, 7/3, 6/4 raised/cure-worthy), and the closer: plain-id
+  pointers at ADR-227 on `public-packages-release`, `toolkit-publish-mechanism` and the
+  extraction plan's decision-log opening (the ADR is the home; the log and this record are the
+  contemporaneous captures), the second-seat Cricket tally, this entry, the handoff record and
+  both seats' formation letters; `origin/main` at ec7cb3fa8 merged in as c0e0aac35, the
+  publish node's frontmatter conflict resolved as the union (the gate row discharged,
+  `last_updated` today). Follow-ups without a carrier until a lane takes them: the publish
+  node's P4 proof row for its runbook leg (MCP-661 comment R4-1, beside R3-1 and R3-2); the
+  strategy index naming `innovation-kit` by id (a pre-existing PDR-105 defect); two seat-state
+  gaps for the consolidation pass — a named PAUSED state for the liveness rule's owner-input
+  clause (claim held, watchers down at owner word, resume only on owner word) and a
+  work-shape trigger for `start-right-team` §6's self-dissolution test (when the remaining work
+  serialises onto one seat, the other proposes its own dissolution before the owner has to).
+  Instruments: the commit-queue ceremony and merge-bot push run cleanly from a linked worktree
+  with the registry at the primary; `gh api --jq` takes no `--arg` (bind inside jq with
+  `. as $x`); an installation token answers 403 on `/user` and 401 on `/app`, neither an
+  identity failure; `git merge-tree --write-tree` predicted the one conflict two hours before
+  the merge. Claim 01e418de is handed to the lead by record-plus-adoption (PDR-063 §Deliberate
+  succession; record at `.agent/state/collaboration/handoffs/`, name prefixed `01e418de-`);
+  worktree `mcp-673-adr` pruned by the second seat (its one commit rode #959 as 753cdf455).
+
+## 2026-09-03 ~13:0xZ — WRAP PR after the close (Chinook seeks Cloud, 661556, solo): the consolidation's carrier, at the owner's card word
+
+- **The instance, recorded plainly.** The owner said three times that #961 was the last pull
+  request and that anything bound for the remote must ride it. The lead launched the wrap
+  workflow while #961 was open and then merged #961 at green (c616a354c, 12:39Z) before the
+  workflow returned, so its consolidation had no carrier. The owner's correction ("how do you
+  expect the workflow results to persist?") and his card word ("One docs-only wrap PR") produced
+  this pull request. The generator: merge-at-green applied as a default without checking that
+  every pending output had a carrier; the cure at the boundary: before merging a PR the owner has
+  named as the last, enumerate every in-flight output that needs the remote and hold the merge
+  until each has ridden or been explicitly released.
+- **What this pull request carries.** The wrap workflow's consolidation entry on the napkin
+  (eight surface readers, three verification lenses per candidate, a free-play harvest and a
+  concept exploration on gate classification); the item-14 closure residue as a repo report
+  (`.agent/reports/design/item-14-closure-residue-2026-09-03.md`: the enumerated frozen sets,
+  evidence anchors, the check's mechanism, and the five open points) with a pointer from the
+  design plan's W0.2(b); this entry. Nothing else. Merged as the bot under pr-lifecycle §5 with
+  no owner action.
+- **Attribution corrected at the wrap.** GitHub records #959 as merged by jimCresswell at
+  12:16:23Z after his APPROVED review; the lead's REST merge call at the same moment returned
+  `merged: true` with the same sha (ec7cb3fa8), so the earlier entries' "REST as the bot" for #959
+  is an inference the API refutes — the owner merged #959 by hand. #962 (b3c9742f8) and #961
+  (c616a354c) are recorded by GitHub as merged by the bot app.
+- **State at this entry.** Linear MCP-673 Done; claims 01e418de and ed9ec042 closed, a new claim
+  for this pull request's files open until its merge; worktrees `mcp-673-consolidation` and
+  `mcp-673-true-ups` pruned; `mcp-673-wrap` (this branch) pruned at its merge; the primary
+  checkout still on the merged #959 branch; the local branch
+  `jimcresswell/mcp-673-adr-oak-product-extraction` left in place (a peer's surface; the owner
+  refused its removal by the lead).

@@ -50,6 +50,14 @@ assistants teachers already choose — ChatGPT, Claude, Copilot, and Gemini, and
 Oak's standards into the tools they already use to plan lessons and prepare. Which
 assistant is the teacher's choice, not ours.
 
+> _Dated note, 2026-09-03: the decision that the MCP app is built in its own public
+> repository, `oaknational/oak-open-curriculum-mcp`, from packages published here is recorded
+> in [ADR-227](docs/architecture/architectural-decisions/227-oak-product-in-its-own-repository.md). Once it executes, the app is
+> delivered from that repository as thin workspaces over published packages; this repository
+> delivers the platform beneath it — the toolkit and Oak's organisation-wide packs — and the
+> app itself until cut-over. The vision is unchanged; only where the app is built from
+> changes._
+
 What comes back is grounded in Oak's sequenced, evidence-informed curriculum, not
 ungrounded invention. We inform the teacher's expert judgement; we never replace
 it. That's how Oak works: the curriculum is optional and fully adaptable, and the

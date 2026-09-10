@@ -11,10 +11,14 @@ overview: >-
   from registry dependencies alone and rarely needing this repository. This
   node delivers the ratified design record, the measuring instruments and
   the one-page delivery node for every later step of the lane.
-status: sketch
-ratified_by: null
-ratified_date: null
-ratified_where: null
+status: ratified
+ratified_by: "Jim Cresswell"
+ratified_date: 2026-09-03
+ratified_where: >-
+  In-session owner decision card at the MCP-673 implementing seat (Chinook seeks Cloud,
+  661556), 2026-09-03 ~11:4xZ, answer verbatim "Ratify all thirteen" over PR #959's
+  numbered list (item 13 names this node); recorded in the pull request body and in the estate-coordination
+  thread record's entry of the same day.
 serves: toolkit-re-architecture
 impact_areas:
   - packaging-and-distribution
@@ -48,7 +52,7 @@ owner_gates:
       or shared; the scaffold step asserts the repository exists at its
       start, and the cut-over step's own node carries the deploy-target gate.
     expires: 2026-09-23
-last_updated: 2026-09-02
+last_updated: 2026-09-03
 ---
 
 # Design the extraction of the MCP app product into oak-open-curriculum-mcp
@@ -867,10 +871,11 @@ Amendments:
 
 ## Decision log
 
-This log is the durable home of the rulings below; the estate-coordination
-thread record
+The durable home of the rulings below is ADR-227 (the Oak MCP product is
+built in its own repository from packages published here), which carries
+them verbatim; this log and the estate-coordination thread record
 (`.agent/memory/operational/threads/estate-coordination.next-session.md`,
-§"2026-09-02 ~13:xxZ — FOLD LANDED") is their contemporaneous capture.
+§"2026-09-02 ~13:xxZ — FOLD LANDED") are their contemporaneous captures.
 
 - **Owner rulings, verbatim (2026-09-02):** (1) "yes the search app is
   effectively part of the MCP app"; (2) "the published packages will be on
@@ -985,6 +990,7 @@ record named under §Evidence; the rows below are the ones routed onward.
 | 2026-09-02 | Readiness suite 2, A2-1, B2-1, W2-3 | The Atlas's lexeme-gate text refuses the curriculum toolkit its domain | A2 carries the Atlas's dated amendment; P4 implements the per-class scope |
 | 2026-09-02 | Readiness suite 2, A2-11, B2-3 | The clock trigger was a conditional; one version hides breaking changes | The clock decision to `public-packages-release` (wager 3); the breaking-change clause into the upstream contract and AC8 |
 | 2026-09-02 | Readiness suite 2, docs verification note | The repository name collides with the error-reporting project name | The owner, at gate 2 |
+| 2026-09-03 | Amendment item A2 (§The lane's steps, Amendments) | A2 — the strategic node's ordering amendment, the Atlas's lexeme-gate amendment, and public-packages-release §Alignment and §Delivery — needed a consolidation carrier so that D0a mints no amendments node of its own. | Routed to MCP-673's corpus-truing delivery plan (`intent-corpus-truing-around-the-extraction-plan`, which enters the corpus with its own pull request): that pull request carries every A2 surface's dated amendment, and the owner's word over its numbered list is A2's stamp — given on 2026-09-03 ("Ratify all thirteen"). A2 closes when that pull request merges; D0a authors no amendments node either way. |
 
 ## Evidence at authoring (2026-09-02, tree at `777e9131c`)
 

@@ -69,6 +69,10 @@ runbooks wherever they live (it carries pointers, not content).
   npm publish procedure for the SDK.
 - [MCP Server UAT Validation Runbook](../../apps/oak-curriculum-mcp-streamable-http/docs/manual-uat-guide.md) —
   whole-server black-box validation before a release / after a deploy.
+- [MCP Registry Publication](../../apps/oak-curriculum-mcp-streamable-http/docs/mcp-registry-publication.md) —
+  compose the `server.json` entry from the deployment, prove it against the served
+  metadata and the registry's validator, and publish once the namespace is chosen
+  (MCP-637).
 - [Search CLI Ingestion Guide](../../apps/oak-search-cli/docs/INGESTION-GUIDE.md) and
   [Ground-Truth Protocol](../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) —
   data-ingest and search-quality run procedures.

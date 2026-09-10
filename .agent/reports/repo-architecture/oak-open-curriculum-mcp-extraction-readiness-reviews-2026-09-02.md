@@ -244,7 +244,8 @@ later finding is dispositioned in a reply and routed, never cured in this pull r
 Presented for the owner's ratification: `oak-open-curriculum-mcp-extraction` as the lane's
 design step (with the lane's steps, slices and criteria banked in it for D0a to project into
 one-page nodes) and the delivery node `toolkit-publish-mechanism`, with every finding of both
-suites and the pull request's first round dispositioned above and the routed ones carried on
-the node's ledger. Beyond ratification the owner holds: the design record D0a will produce
+suites and the pull request's first two review rounds dispositioned above, its third round's three
+findings dispositioned in replies on the pull request and carried on MCP-661, and the routed ones
+carried on the node's ledger. Beyond ratification the owner holds: the design record D0a will produce
 (gate 1); the repository's creation and the name collision (gate 2); the scope's publish rights
 (the publish node's gate); and, on the cut-over node D0a authors, the deploy target.

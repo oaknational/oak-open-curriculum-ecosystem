@@ -56,6 +56,10 @@ For any incoming HTTP request, middleware executes in this order:
    [For GET /.well-known/oauth-authorization-server:]
    9a. Locally-derived AS metadata handler (publicly accessible)
    ↓
+   [For GET /.well-known/openai-apps-challenge:]
+   9a. OpenAI domain-verification challenge handler (publicly accessible;
+       registered before clerkMiddleware and in every auth mode — MCP-700)
+   ↓
    [For GET /:]
    9a. Landing Page Handler
 ```
@@ -106,8 +110,8 @@ sequenceDiagram
         ClerkAuth->>Handler: Pass to health handler
         Handler->>Handler: Return health status
     else Path is /.well-known/*
-        ClerkAuth->>Handler: Pass to OAuth metadata handler
-        Handler->>Handler: Return OAuth metadata
+        ClerkAuth->>Handler: Pass to well-known handler
+        Handler->>Handler: Return OAuth metadata, or the OpenAI challenge token (MCP-700)
     else Path is /
         ClerkAuth->>Handler: Pass to landing page handler
         Handler->>Handler: Return landing page HTML
@@ -345,6 +349,12 @@ flowchart TD
    - DNS rebinding protection
    - CORS middleware
 
+   **Phase 2.5**: Public well-known routes (`setupOAuthAndCaching`), registered
+   BEFORE `clerkMiddleware` so they answer without any auth context
+   - OpenAI domain-verification challenge (`/.well-known/openai-apps-challenge`),
+     in every auth mode (MCP-700)
+   - OAuth metadata endpoints and the `/oauth/*` proxy, when auth is enabled
+
 3. **Phase 3**: Global Auth Context (`setupGlobalAuthContext`)
    - `clerkMiddleware` (registered globally for all routes)
 
@@ -379,6 +389,7 @@ Then, depending on path:
   POST /mcp → Accept header check → MCP readiness → mcpAuthClerk → MCP handler
   GET /mcp → Accept header check → MCP readiness → 405 stream refusal (MCP-545)
   /healthz, /mcp/healthz → Health handler
+  /.well-known/openai-apps-challenge → Domain-verification challenge handler (public, every auth mode)
   /.well-known/* → OAuth metadata handler
   / → Landing page handler
   /static/* → Static file handler

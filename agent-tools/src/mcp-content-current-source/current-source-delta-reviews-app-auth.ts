@@ -53,9 +53,21 @@ export const APP_AUTH_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaR
   // issuer instead of this origin, so a PRM-following client holds the
   // issuer the authorization response's `iss` carries (RFC 9207 §2.4);
   // C705, C707 and C708 are untouched.
+  // MCP-345: the AS metadata route (C707) passes SCOPES_SUPPORTED into the
+  // rewrite, so the served document advertises the PRM's scopes rather than
+  // the upstream list; C705, C706 and C708 are untouched.
   'apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts': reviewed(
-    'ace7a9c10712382d219d986b24696ab94f11ef1717df1654e39244ae8838efad',
+    '346a0daefde383606984aac0c74532752bf47fe9cc05af7fc1af6555203b3a07',
     ['C705', 'C706', 'C707', 'C708'],
+  ),
+  // MCP-345: rewriteAuthServerMetadata (C408) takes the advertised scopes and
+  // states them as scopes_supported instead of passing the upstream list
+  // through; every other field of the served AS metadata is unchanged. The
+  // JSDoc records why (a client choosing scopes from this document requested
+  // an advertised openid that its registered grant, Oak's default, omits).
+  'apps/oak-curriculum-mcp-streamable-http/src/oauth-proxy/oauth-proxy-upstream.ts': reviewed(
+    'fcefa57b4a0e31be024c3182e8141be0c1c77aabe144e2e196d9515b44ebc40a',
+    ['C408'],
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/get-mcp-resource-url.ts': excluded(
     '1bac2a8ec91a09fb51dce02ec3f943bd76c9c3c4ee0097cc9bd318e8b716d2b0',
@@ -103,8 +115,20 @@ export const APP_AUTH_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaR
   // MCP-580 re-review: the health entry is now spread from `HEALTH_PATHS`, so
   // the routed `/mcp/healthz` the canonical host reaches is auth-exempt exactly
   // as the root path already was. Still a routing decision over path literals.
+  //
+  // MCP-700 re-review: the OpenAI domain-verification challenge path joins the
+  // always-skip set, consumed from the route module's exported constant so the
+  // served route and the exemption share one owner. Still a routing decision.
   'apps/oak-curriculum-mcp-streamable-http/src/clerk-skip-surfaces.ts': excluded(
-    'c96fa6a897a638088c9841c8a4dbb85229ae7f800a14ac52c57b25cce91b9203',
+    '0f407e19fe6809aaee469c4154fe311758839e09046026e890b2934343edc41c',
+    IMPLEMENTATION_ONLY,
+  ),
+  // MCP-700: the OpenAI plugin-submission domain-verification challenge. The
+  // body is the portal-issued opaque token served verbatim as text/plain —
+  // vendor-shaped proof of domain control, not Oak-authored agent-facing
+  // content. The contract source and read date are in the module header.
+  'apps/oak-curriculum-mcp-streamable-http/src/openai-domain-verification.ts': excluded(
+    '3233717f514011f4c1534f67dc036a246072ee966a49081773509a44c847d451',
     IMPLEMENTATION_ONLY,
   ),
   // MCP-518: the Clerk conditional now forks on the request's surface before

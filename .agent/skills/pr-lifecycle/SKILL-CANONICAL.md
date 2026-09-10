@@ -677,7 +677,22 @@ deliberately gone — triage binds from wave one. **The step-back trigger is
    review carrying an undispositioned body finding is exactly the case
    the tool cannot see today — including SETTLED-NO-REVIEW, the timeout-settled round
    this SKILL's item 4 anchor describes, which is watch-endable but NEVER
-   merge-eligible. The two non-bot shapes remain: the explicit
+   merge-eligible — EXCEPT for the class the owner ruled on 2026-09-03
+   ("Change the merge policy instead"): a bot-authored pull request that
+   touches only documentation and Practice surfaces merges at checks green
+   by name, zero unresolved threads, every finding dispositioned, with the
+   Claude Code Review's standing verdict and NO Copilot leg expected; for
+   that class a timeout-settled round IS merge-eligible. Grounds: the
+   Claude review posts no review on a clean tip, so the leg never
+   satisfies; the bot cannot request Copilot at all (the API refuses it as a
+   non-collaborator), so every re-request after a tip move needed the
+   owner's own credentials — the fallback the bot-identity rule bans. Until
+   the merge tool learns the class (a named follow-up), the merging seat
+   recomputes that gate by name and lands the merge through the sanctioned
+   REST endpoint as the bot (prediction, PDR-130: every docs-only bot pull
+   request merges within one CI round of green with no owner action; if one
+   waits on a reviewer leg again, the merge tool learns the class). The two
+   non-bot shapes remain: the explicit
    `gh pr merge --merge` command, or ARMING auto-merge — permitted
    exactly and only **at settled-READY under a Director grant**
    (PDR-131, 2026-07-20; arming before settlement remains forbidden —

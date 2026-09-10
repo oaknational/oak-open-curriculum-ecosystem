@@ -18,7 +18,7 @@ discipline held for expensive chains gets skipped.
 - Capture the command's own status in-band, bound directly to it:
 
   ```bash
-  status=0; cmd > tmp/out 2>&1 || status=$?; echo "CMD_EXIT:$status"; tail -20 tmp/out
+  status=0; cmd > tmp/out 2>&1 || status=$?; echo "CMD_EXIT:$status"; cat tmp/out
   ```
 
   The `echo` must bind to the COMMAND's `$?` — redirect first, filter
@@ -41,6 +41,21 @@ discipline held for expensive chains gets skipped.
 - When a command fails, capture the FULL output on that first run —
   `tail -N` on a failure swallows the reason and forces a re-run
   (sibling discipline: capture-expensive-command-output-first-run).
+- **No `tail` or `head` on command output, ever** (owner ruling 2026-09-03,
+  verbatim: "I think we need to stop using tail, it causes this same issue
+  over and over and over"). Truncation is the pipe hazard's twin: it hides
+  the line that names the failure even when the exit is captured
+  correctly. Worked instances the same morning: `enqueue … 2>/dev/null |
+  tail -1` swallowed a schema refusal and fed a pnpm error line to the
+  commit step as the intent id; `| tail -N` on gate output hid the failing
+  validator's line three times in one window. Capture to a file and print
+  the file whole; when the output is genuinely large, read it in full from
+  the file (read-diagnostic-artefacts-in-full) rather than trimming it at
+  the pipe. The capture snippet above prints the whole file for this reason.
+  Prediction (PDR-130): with this clause loaded, no landing step consumes a
+  truncated verdict again within the review window; if a `tail`- or
+  `head`-swallowed failure recurs, promote the clause to a hook policy on
+  the pipe shape.
 - **Propagate as well as print** when a wrapper (harness task, Monitor,
   background shell) will summarise the invocation:
   `cmd; rc=$?; echo "CMD_EXIT:$rc"; exit $rc`. The bare in-band echo

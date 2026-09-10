@@ -198,3 +198,35 @@ routed to rules, skills, the gotchas reference, and the interrupt plan.
   moved", expressed declaratively instead of by timing: `summary:not(:focus)`, the seam's
   previous-state latch, the merge bot's quiet window. A name to use if it recurs; no
   graduation from one association.
+
+## 2026-09-03 wrap (Chinook seeks Cloud, 661556)
+
+- **Skipping a gate relocates its cost; it never removes it.** Commits made with `HUSKY=0`
+  at a compaction boundary (owner-authorised for that instance) pushed a one-line
+  markdown-links failure into a full CI round on the critical path of a three-PR merge
+  train. The cure was one line; the cost was the round. Already homed as
+  `never-disable-checks` / `no-verify-requires-fresh-authorisation`; this is the measured
+  instance, recorded here so the next boundary weighs the round, not the minute.
+- **Before carding an expired owner gate, test whether it is a decision at all.** The
+  design plan's item-14 gate expired in August, alerted at every session start, and was
+  carded as renew / resolve / archive; the expert pass found it was a missing enforcement
+  of an invariant the design system had ruled on 2026-07-26, and the plan's "stated default
+  on expiry" would have shipped the defect. `principles.md` already carries the routing
+  test (a question reaches the owner only when the lenses fail or the decision is
+  constitutively his). Candidate home: a gate-authoring precondition in the plan skill's
+  `owner_gates` bullet — name the standing ruling, ADR or lens that would resolve the
+  gate before writing `awaiting: owner-decision`; if one exists, the plan carries the
+  enforcement story instead of a gate — and the "stated default on expiry" idiom retired
+  with it (it has no schema field and converts owner silence into a shipped decision).
+- **A PR the owner has named as the last carrier is not merge-at-green.** The owner said
+  three times that #961 was the last PR and anything bound for the remote must ride it; the
+  lead merged it at green while a wrap workflow whose output belonged in the repo was still
+  running, and a fourth PR had to be authorised. Cure at the boundary: before merging a PR
+  the owner has named as the last, enumerate every in-flight output that needs the remote
+  and hold the merge until each has ridden or been released by name. Candidate home:
+  `pr-lifecycle` §5 (the merge boundary) or `wrap` step 2 (work safety), one sentence.
+- **Plan archival is a multi-surface move.** The markdown-links validator treats
+  `**/archive/**` as non-live targets, so archiving a plan breaks every inbound link to its
+  old path and a re-point to the archive path is refused too; the cure is plain text naming
+  the archived node. Sweep inbound links before the archiving commit. Candidate home: the
+  plan skill's "Completion and Archival" section, one sentence.

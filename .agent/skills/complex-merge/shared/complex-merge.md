@@ -28,7 +28,7 @@ git fetch origin main
 git merge-base HEAD origin/main
 git rev-list HEAD..origin/main --count   # commits behind
 git rev-list origin/main..HEAD --count   # commits ahead
-git diff --stat HEAD..origin/main | tail -3
+git diff --shortstat HEAD..origin/main   # the summary line, whole
 ```
 
 Record the scale. This determines the level of rigour needed for subsequent

@@ -6,10 +6,14 @@ overview: >-
   Make the existing release workflow publish every workspace whose manifest
   is publishable, at the repository's release version, from a validated tip,
   installable under a real package-store layout — with no human step.
-status: sketch
-ratified_by: null
-ratified_date: null
-ratified_where: null
+status: ratified
+ratified_by: "Jim Cresswell"
+ratified_date: 2026-09-03
+ratified_where: >-
+  In-session owner decision card at the MCP-673 implementing seat (Chinook seeks Cloud,
+  661556), 2026-09-03 ~11:4xZ, answer verbatim "Ratify all thirteen" over PR #959's
+  numbered list (item 13 names this node); recorded in the pull request body and in the estate-coordination
+  thread record's entry of the same day.
 serves: public-packages-release
 impact_areas:
   - packaging-and-distribution
@@ -17,14 +21,8 @@ impact_areas:
 tickets:
   - MCP-661
 depends_on: []
-owner_gates:
-  - awaiting: owner-decision
-    clears_when: >-
-      The owner confirms on the ticket that this repository's release
-      workflow holds publish rights for the @oaknational npm scope, or names
-      who grants them; P4 asserts the right at its start.
-    expires: 2026-09-23
-last_updated: 2026-09-02
+owner_gates: []
+last_updated: 2026-09-03
 ---
 
 # Publish the toolkit from this repository at one version
@@ -38,8 +36,12 @@ a tip whose CI run succeeded, and every published package installs and
 imports under a real pnpm store layout. Nothing publishes today. This is the
 "first-publish behind the manifest gate" step of `public-packages-release`'s
 banked order, deliverable against the single-version estate (the owner's
-ruling for now: one release version per repository), and the mechanism the
-extraction plan `oak-open-curriculum-mcp-extraction` depends on.
+ruling for now, recorded in ADR-227: one release version per repository),
+and the mechanism the extraction plan `oak-open-curriculum-mcp-extraction`
+depends on. ADR-227 is the durable home of the rulings this node executes:
+the boundary between the two repositories is the published `@oaknational`
+packages, code MIT and content OGL, published from here at this
+repository's release version.
 
 ## User groups and value
 
@@ -131,6 +133,12 @@ extraction plan `oak-open-curriculum-mcp-extraction` depends on.
    registry, with no live publish. Proof: AC4; the dry-run listing.
 4. **P4** The first live publish at the next release, after P2 is green
    for every package in the set; asserts publish rights at its start (gate).
+   (Dated addition, 2026-09-03, a factual true-up from the corpus truing's
+   T5: P4 also amends the ratified `release-process` runbook's rollback
+   clause, which today rests on publishing being disabled (`npmPublish:
+   false` in `.releaserc.mjs`), to cover published packages — a published
+   version is never unpublished; the forward path is a new release — with a
+   dated note and the runbook's re-ratification per the plan-node schema.)
    Proof: AC1.
 5. **P5** The consumer note on the release-age floor (the floor stays in
    force for the scope; per-package allow-listing is the exception) in the
@@ -147,3 +155,11 @@ extraction plan `oak-open-curriculum-mcp-extraction` depends on.
   split.
 - A second versioning or publishing tool — admitted only on the evidence the
   strategic node names.
+
+## Review dispositions
+
+One dated row per routed finding (PDR-140 ledger surface).
+
+| Date | Source | Finding | Routing |
+| --- | --- | --- | --- |
+| 2026-09-03 | Owner card (the MCP-673 implementing session) | The publish-rights gate: does the release workflow hold publish rights on the @oaknational scope? | Discharged — owner verbatim: "Yes we have the rights, no we do not need them yet, we are writing a plan, part of implementing the plan will be to make the publish step work in the correct and safe way"; the gate row is removed; P4 still asserts the right at its start |

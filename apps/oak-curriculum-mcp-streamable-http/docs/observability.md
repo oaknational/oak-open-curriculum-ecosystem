@@ -122,9 +122,12 @@ emitted by this app (alongside Sentry's own `trace_id` on the scope):
   requests.
 - **`traceparent`** — W3C Trace Context value, ingested from MCP `_meta`
   on incoming requests when the host supplies it
-  ([MCP `2026-07-28` Release Candidate](https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/),
-  SEP-414). Optional today; may be empty until the MCP `2026-07-28`
-  specification is GA and adopted. Primary cross-system join when
+  ([MCP `2026-07-28`](https://modelcontextprotocol.io/specification/2026-07-28),
+  SEP-414). Optional today, and expected to stay mostly empty: `2026-07-28`
+  is the current revision (read 2026-09-09), but this app implements
+  `2025-11-25` and does not adopt the field's home revision — see
+  [ADR-229](../../../docs/architecture/architectural-decisions/229-mcp-protocol-revision-legacy-era-until-sdk-v2.md).
+  A host may still supply it. Primary cross-system join when
   present (host → MCP → downstream).
 
 Sentry already carries its own `trace_id` on the per-request scope; the

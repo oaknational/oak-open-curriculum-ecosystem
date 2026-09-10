@@ -19,7 +19,7 @@ gate_expiry_default: P21D
 depends_on: []
 owner_gates: []
 tickets: []
-last_updated: 2026-08-26
+last_updated: 2026-09-03
 ---
 
 # Public packages — clock-aligned versioning and automatic publishing
@@ -91,14 +91,18 @@ published with versions a stranger can trust. Three linked wagers:
    that residue's home. As the estate splits along clock groupings,
    versioning groups follow the same seams — one version stream per
    clock-group, lockstep within, independent across — so the grouping
-   decision is made once, structurally, instead of per release.
+   decision is made once, structurally, instead of per release. Until
+   the split, one release version per repository stands: the owner's
+   ruling for now, recorded in ADR-227.
 
 Deliberately not doing: adopting a second versioning/publishing tool
 now; publishing before a package carries a publishable manifest and a
 deliberate licence surface; independent per-package semver ahead of any
 consumer who needs it; re-deciding the repo-split question (that
-decision and its flip condition live with the toolkit re-architecture,
-not here).
+decision is recorded in ADR-227 — the Oak MCP product is built in its
+own repository from the packages this node publishes, the boundary
+being those published packages — and its flip condition lives with the
+toolkit re-architecture, not here).
 
 ## Alignment — the survey line this node rides
 
@@ -108,20 +112,25 @@ remembered. The workspace survey line ran census (owner-carded
 34→66 target rejected as a constraint) → the Oak Toolkit Atlas change
 set (owner-ruled 2026-08-19), whose successor strategic node
 `toolkit-re-architecture` was ratified 2026-08-19 superseding
-`workspace-reorganisation-programme`. At this node's authoring date
-that ratified successor lives on the upstream coordination branch
-`coordination/2026-08-19-1651ad` (draft fold PR oaknational#915) and
-has not yet reached either repository's main line; this fork's estate
-still carries `workspace-reorganisation-programme` as the standing
-programme node. When the successor lands here, this node's clock-group
-wager binds to its seam and carrier contract by name; until then the
-Atlas §8 record is the design authority this node cites.
+`workspace-reorganisation-programme`. That successor landed on this
+repository's main line on 2026-09-02 (fold PR #915, `777e9131c`), and
+this node's clock-group wager binds to its seam and carrier contract
+by name; the Atlas §8 record stays the design authority this node
+cites, read with its dated amendments block. The extraction plan
+`oak-open-curriculum-mcp-extraction` (merged 2026-09-02, PR #954) is
+the lane's design step and names this node's delivery node
+`toolkit-publish-mechanism` as its blocking dependency. (Restated
+2026-09-03, MCP-673; the authoring-date text said the successor had
+not yet reached either repository's main line.)
 
 Sequencing consequence: the version-config refinement (wager 2) is
-independent and can deliver first; publishing (wager 1's proof) waits
-on the seam's manifest gate or a deliberate per-package equivalent;
-clock-group versioning (wager 3) waits on the clock-aligned split
-itself.
+independent and can deliver first; publishing (wager 1's proof)
+proceeds behind the per-package finish checks the extraction plan
+defines (its finish list — the deliberate per-package equivalent of
+the seam's manifest gate), ahead of the estate-wide seam, because the
+strategic node's delivery order now runs the extraction lane first
+(restated 2026-09-03, MCP-673); clock-group versioning (wager 3) waits
+on the clock-aligned split itself.
 
 ## Success looks like
 
@@ -138,10 +147,12 @@ itself.
 - Each public package's version is shared exactly with its clock-group
   and moves independently of other groups; the grouping is documented
   where consumers look (the package READMEs), not only in this estate.
-- The toolkit re-architecture's extraction rehearsal (its rung-2
-  proof: an Oak product workspace built in a fresh repo from registry
-  dependencies alone) consumes versions this pipeline published —
-  publishing is the exercised proof of separability, not a claim.
+- The toolkit re-architecture's rung-2 proof — the extraction itself,
+  `oak-open-curriculum-mcp-extraction`: the Oak MCP product built in
+  its own repository from registry dependencies alone, not a rehearsal
+  (restated 2026-09-03, MCP-673) — consumes versions this pipeline
+  published; publishing is the exercised proof of separability, not a
+  claim.
 - Developer experience stays at today's bar: contributors write
   conventional commits and nothing else; no per-PR release ceremony
   exists.
@@ -155,8 +166,15 @@ itself.
 
 Delivery plans serving this node declare
 `serves: public-packages-release` — enumerate them by search, never by
-a hand-kept list. The banked order from §Alignment: version-config
-refinement first (deliverable against the current single-version
-estate), then first-publish behind the manifest gate, then clock-group
-version streams at the split. Milestones live in Linear as named
-observable states; this node points at them, never mirrors them.
+a hand-kept list. The order from §Alignment (restated 2026-09-03,
+MCP-673): version-config refinement (wager 2) deliverable first or
+alongside, against the current single-version estate; the first
+publish is the delivery node `toolkit-publish-mechanism` — every
+publishable workspace at the repository's release version, behind the
+extraction plan's per-package finish checks; then clock-group version
+streams at the split. The separation of the toolkit's clock from the
+products' clock (wager 3) is this node's decision; the extraction plan
+contributes two observations when they occur — a second app releasing
+from here daily, and a breaking change the product consumes.
+Milestones live in Linear as named observable states; this node points
+at them, never mirrors them.

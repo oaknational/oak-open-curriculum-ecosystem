@@ -16,6 +16,7 @@ import type {
   GraphCorpusNode,
   GraphCorpusNodeId,
   GraphCorpusSequence,
+  GraphCorpusUnitLessonRun,
   GraphCorpusStats,
   GraphCorpusDroppedEdge,
   GraphCorpusDroppedDuplicate,
@@ -91,7 +92,13 @@ interface JsonSequencePlacement {
 
 interface JsonSequence {
   readonly threadId: string;
+  readonly subject: string;
   readonly placements: readonly JsonSequencePlacement[];
+}
+
+interface JsonUnitLessonRun {
+  readonly unitId: string;
+  readonly lessonIds: readonly string[];
 }
 
 interface JsonGraphCorpus {
@@ -102,6 +109,7 @@ interface JsonGraphCorpus {
   readonly nodes: readonly JsonGraphCorpusNode[];
   readonly edges: readonly JsonGraphCorpusEdge[];
   readonly sequences: readonly JsonSequence[];
+  readonly unitLessonRuns: readonly JsonUnitLessonRun[];
   readonly droppedEdges: readonly GraphCorpusDroppedEdge[];
   readonly droppedDuplicates: readonly GraphCorpusDroppedDuplicate[];
   readonly seeAlso: string;
@@ -210,10 +218,19 @@ function toEdge(edge: JsonGraphCorpusEdge): GraphCorpusEdge {
 function toSequence(sequence: JsonSequence): GraphCorpusSequence {
   return {
     threadId: toKindQualifiedId('thread', sequence.threadId),
+    subject: sequence.subject,
     placements: sequence.placements.map((placement) => ({
       unitId: toKindQualifiedId('unit', placement.unitId),
       year: placement.year,
     })),
+  };
+}
+
+/** Narrows one unit-lesson run, validating the kind-qualified unit and lesson ids at load. */
+function toUnitLessonRun(run: JsonUnitLessonRun): GraphCorpusUnitLessonRun {
+  return {
+    unitId: toKindQualifiedId('unit', run.unitId),
+    lessonIds: run.lessonIds.map((lessonId) => toKindQualifiedId('lesson', lessonId)),
   };
 }
 
@@ -226,6 +243,7 @@ function createGraphCorpus(graph: JsonGraphCorpus): GraphCorpus {
     nodes: graph.nodes.map(toNode),
     edges: graph.edges.map(toEdge),
     sequences: graph.sequences.map(toSequence),
+    unitLessonRuns: graph.unitLessonRuns.map(toUnitLessonRun),
     droppedEdges: graph.droppedEdges,
     droppedDuplicates: graph.droppedDuplicates,
     seeAlso: graph.seeAlso,
@@ -271,4 +289,5 @@ export type {
   GraphCorpusDroppedDuplicate,
   GraphCorpusSequence,
   GraphCorpusSequencePlacement,
+  GraphCorpusUnitLessonRun,
 } from './types.js';

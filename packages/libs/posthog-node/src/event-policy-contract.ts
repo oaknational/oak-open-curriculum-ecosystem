@@ -34,13 +34,15 @@ export type OakClientSurface = 'cli' | 'sdk' | 'vscode' | 'web' | 'other';
  * the distinction the error-rate question needs. This axis derives per request
  * from the self-declaring client header, so it is present on every event.
  *
- * Deliberately NOT PostHog's `$mcp_client_name` / `$mcp_client_user_agent` /
- * `$mcp_vendor_client`, which its own `harness` column resolves from. Those
+ * Deliberately NOT PostHog's raw `$mcp_client_name` / `$mcp_client_user_agent`
+ * / `$mcp_vendor_client`, which its own `harness` column resolves from. Those
  * carry raw client-controlled strings, which ADR-218 §3 excludes from the
  * envelope. Live traffic contains opaque per-installation identifiers arriving
  * as `clientInfo.name`, so forwarding the raw value would place a stable
- * per-installation identifier in the analytics envelope. Only the closed
- * category below is ever emitted; the raw string never leaves this process.
+ * per-installation identifier in the analytics envelope. The raw string never
+ * leaves this process. Since MCP-687 the closed category is accompanied by a
+ * `$mcp_client_user_agent` REBUILT from closed pieces (see
+ * `normaliseOakClientUserAgent`) so PostHog's own column resolves too.
  *
  * `other` and `unavailable` are separate members on purpose, and the line between
  * them is **container readability, not value presence**:
@@ -62,7 +64,8 @@ export type OakClientSurface = 'cli' | 'sdk' | 'vscode' | 'web' | 'other';
  * `user-agent: claude-code/…`. It is sound for analytics aggregates and must
  * never gate access, quota, rate limiting, or entitlement.
  */
-export type OakClientProduct = 'claude_ai' | 'claude_code' | 'codex' | 'other' | 'unavailable';
+export type OakClientProduct =
+  'claude_ai' | 'claude_code' | 'codex' | 'chatgpt' | 'openai' | 'other' | 'unavailable';
 export type UnknownProperties = NonNullable<McpCaptureCommon['properties']>;
 
 /**

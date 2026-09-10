@@ -167,6 +167,15 @@ Plans are public-repository artefacts: **mechanism only**. Anything
 internal — dates, vendor detail, organisational specifics — rides the
 linked Linear ticket, never the plan body.
 
+A plan that amends a permanent page (the vision, a strategy page, an
+ADR) never has that page cite the plan: permanent docs cite ADRs, and
+a plan carrying a decision worth a permanent page's note authors or
+names the ADR that records it (`no-moving-targets-in-permanent-docs`
+§Citation directionality). An acceptance criterion that asks a
+permanent page to name a delivery node by id is a moving target at
+authoring time — a truing node's own AC did exactly that on 2026-09-03
+and the owner refused the push that carried it.
+
 A plan that a FRESH session must implement is a self-contained repo
 artefact, never a chat artefact (owner ruling 2026-09-01, verbatim: "it
 must be copied to the repo, so a fresh session can implement it, that

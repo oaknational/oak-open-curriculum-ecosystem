@@ -3,21 +3,25 @@ id: upstream-api-override-contingency
 node_type: delivery
 name: "Upstream API override contingency: self-retiring spec patches"
 overview: "If Aakesh's four upstream spec fixes (MCP-327..330) cannot land before the submission window, patch the spec at sdk-codegen ingest with per-entry pins against the broken upstream fragments — any upstream change to a pinned fragment fails the build until the entry is deleted, so overrides cannot outlive their cures."
-status: sketch
+status: archived
 serves: first-major-release
 impact_areas:
   - served-surface
 tickets:
   - MCP-420
 depends_on: []
-owner_gates:
-  - awaiting: owner-decision
-    clears_when: "The trigger: at the submission form-fill moment with any of MCP-327..330 not Done, the owner (or Matt under the delegation) says execute, naming the entries; the same word rules the named tickets' blockedBy edges off MCP-309 at override-merge"
-    expires: 2026-08-21
-last_updated: 2026-07-31
+owner_gates: []
+last_updated: 2026-09-03
 ---
 
 # Upstream API override contingency — self-retiring spec patches
+
+## Disposition (archived 2026-09-03)
+
+Archived at the owner's card word of 2026-09-03 ("Archive the plan"): the submission moment
+the contingency was armed for passed without the trigger word; the remaining upstream
+defects ride their own tickets (MCP-330 open with its upstream owner at archival; MCP-327
+Done). Nothing was patched locally; no override entry exists.
 
 **Status**: Decision-complete, ARMED-NOT-EXECUTING. Owner-commissioned 2026-07-30 (~11:15Z, submission day):
 "a decision complete plan to cover the scenario where the upstream API fixes can't happen in time,

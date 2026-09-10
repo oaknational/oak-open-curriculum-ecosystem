@@ -3,18 +3,21 @@ id: engineering-directions
 node_type: strategic
 name: "Engineering directions — the owner's broad-direction register"
 overview: "The owner's standing engineering directions as first-class, discoverable records — each with its maturity, falsifier, consumers, prior art, and promotion trigger — so direction lives in the estate, not in anyone's active memory."
-status: sketch
+status: ratified
+ratified_by: "Jim Cresswell"
+ratified_date: 2026-09-03
+ratified_where: >-
+  In-session owner decision card at the MCP-673 implementing seat (Chinook seeks Cloud,
+  661556), 2026-09-03 ~12:0xZ, answer verbatim "Ratify the shape and all five triggers"; recorded on PR #959 and in the
+  estate-coordination thread record's entry of the same day.
 serves: FRAME-1
 impact_areas:
   - practice-and-estate
 gate_expiry_default: P21D
 depends_on: []
-owner_gates:
-  - awaiting: owner-decision
-    clears_when: "The owner ratifies the register's shape and each direction's promotion trigger"
-    expires: 2026-08-28
+owner_gates: []
 tickets: []
-last_updated: 2026-08-06
+last_updated: 2026-09-03
 ---
 
 # Engineering directions — the owner's broad-direction register
