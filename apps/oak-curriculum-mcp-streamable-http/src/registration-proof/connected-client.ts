@@ -43,11 +43,22 @@ function createLogger(): Logger {
   return logger;
 }
 
+export interface ConnectedClientOptions {
+  /**
+   * Override the widget document the composition root serves. The default
+   * stub keeps registration-proof consumers independent of the built bundle;
+   * the host-compatibility test injects the real generated
+   * `WIDGET_HTML_CONTENT` so the engine scans the same bytes a host receives
+   * over the wire (production wires that exact constant).
+   */
+  readonly getWidgetHtml?: () => string;
+}
+
 /** Connects an in-memory MCP client to the real composition root. */
 // observability-emission-exempt: validation harness — the proof and artefact
 // generators run the composition root with a deliberately inert logger so
 // validation runs emit nothing into production observability.
-export async function createConnectedClient(): Promise<Client> {
+export async function createConnectedClient(options?: ConnectedClientOptions): Promise<Client> {
   const observabilityResult = createHttpObservability(runtimeConfig);
   if (!observabilityResult.ok) {
     throw new Error('Could not create inert HTTP observability for registration proof');
@@ -59,7 +70,7 @@ export async function createConnectedClient(): Promise<Client> {
       runtimeConfig,
       observability: observabilityResult.value,
       resourceUrl: resolveServedMcpUrl({}),
-      getWidgetHtml: () => '<html>current-source-validator</html>',
+      getWidgetHtml: options?.getWidgetHtml ?? (() => '<html>current-source-validator</html>'),
     },
     createLogger(),
   );

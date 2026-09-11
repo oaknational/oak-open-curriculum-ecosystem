@@ -14,6 +14,10 @@ import { fileURLToPath } from 'node:url';
 
 import { isJsonObject } from '../../../src/core/json.js';
 import { baselineSchema, type Baseline } from '../../../src/mcp-conformance/baseline-schema.js';
+import {
+  compatReportSchema,
+  type CompatReport,
+} from '../../../src/mcp-conformance/compat-types.js';
 import { mcpjamReportSchema, type McpjamReport } from '../../../src/mcp-conformance/types.js';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -30,6 +34,15 @@ export function loadFixture(name: string): McpjamReport {
 
 export function loadBaseline(name: string): Baseline {
   return baselineSchema.parse(JSON.parse(readFileSync(join(BASELINES, name), 'utf8')));
+}
+
+/**
+ * A retained compat capture, parsed at the real boundary. Parsing INSIDE the
+ * call (never via an intermediate binding) is what keeps `JSON.parse`'s `any`
+ * off the test surface — the same shape `loadFixture` uses above.
+ */
+export function loadCompatReport(name: string): CompatReport {
+  return compatReportSchema.parse(JSON.parse(loadFixtureRaw(name)));
 }
 
 /** Deep, typed clone for in-test mutation of expected-check maps. */

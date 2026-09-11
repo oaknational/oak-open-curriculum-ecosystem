@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join, resolve, sep } from 'node:path';
 
 import { resolveRepoRoot } from '../core/repo-root.js';
+import { redactCredentials } from './bounded-excerpt.js';
 import { type CliState } from './cli-validation.js';
 import { runDrive, type DriveOutcome } from './drive.js';
 import { buildDriveNodeIo, resolveMcpjamVersion } from './drive-node-io.js';
@@ -83,6 +84,24 @@ function allToolsExercised(outcome: DriveOutcome): boolean {
   );
 }
 
+/** The wrapper's aggregate report for a drive run. */
+export interface DriveRunReport {
+  readonly operation: 'drive';
+  readonly target: string;
+  readonly outcome: DriveOutcome;
+}
+
+/**
+ * The report as emitted — a pure projection so its one rule is describable
+ * without the spawn seam: the target is redacted on the way out. The
+ * validator has already refused any credential-bearing target, so this is
+ * defence in depth against a future validation gap, not a live path. The
+ * pack redacts its own copy of the target.
+ */
+export function composeDriveRunReport(target: string, outcome: DriveOutcome): DriveRunReport {
+  return { operation: 'drive', target: redactCredentials(target), outcome };
+}
+
 /**
  * Run the drive operation from validated CLI state. Exits 0 iff the tool
  * list was usable, every advertised tool was exercised successfully, and
@@ -101,7 +120,7 @@ export function runDriveFromCli(state: CliState, target: string): 0 | 1 {
     ...(state.credentialsFile === undefined ? {} : { credentialsFile: state.credentialsFile }),
   });
   const outcome = runDrive(io);
-  const reportJson = `${JSON.stringify({ operation: 'drive', target, outcome }, null, 2)}\n`;
+  const reportJson = `${JSON.stringify(composeDriveRunReport(target, outcome), null, 2)}\n`;
   if (!emitRunReportJson(repoRoot, reportDir, reportJson)) {
     return 1;
   }

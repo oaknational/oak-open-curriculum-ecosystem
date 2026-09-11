@@ -229,7 +229,7 @@ Each a single-story changeset, default budget ≤2 review rounds
     becomes the shipped emission form.
 12. **Wire conformance instrument** — code changeset, after 4–10;
     sequence after PR #895 lands (it owns
-    `registration-proof/connected-client.ts` custody and ADR-226, the
+    `registration-proof/connected-client.ts` custody and ADR-230, the
     per-commit served-surface gate this instrument extends). Land the
     registry-total wire conformance instrument and dormant-activation
     proofs (AC 2, 5) GREEN against the state todos 4–10 reached —

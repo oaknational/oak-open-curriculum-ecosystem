@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { parseJsonText } from '../core/json.js';
 import { parseWithSchema } from '../core/schema-parse.js';
-import { boundedExcerpt } from './bounded-excerpt.js';
+import { boundedExcerpt, redactCredentials } from './bounded-excerpt.js';
 import { deriveExampleArgs, type ExampleToolArgs } from './derive-example-args.js';
 import { type McpjamSpawnResult } from './runner.js';
 
@@ -174,7 +174,9 @@ function obtainToolList(io: DriveIo): { readonly failure?: string; readonly list
   try {
     parsedJson = parseJsonText(spawn.value.stdout, 'mcpjam tools list output');
   } catch (error) {
-    return { failure: error instanceof Error ? error.message : String(error) };
+    // Parse errors embed vendor stdout (a SyntaxError snippet; a Zod issue's
+    // key names) — vendor text, redacted; these ride into the reviewer pack.
+    return { failure: redactCredentials(error instanceof Error ? error.message : String(error)) };
   }
   const listed = parseWithSchema({
     label: 'mcpjam tools list output',
@@ -182,7 +184,7 @@ function obtainToolList(io: DriveIo): { readonly failure?: string; readonly list
     value: parsedJson,
   });
   if (isErr(listed)) {
-    return { failure: listed.error.message };
+    return { failure: redactCredentials(listed.error.message) };
   }
   const unusable = unusableListReason(listed.value);
   if (unusable !== undefined) {
