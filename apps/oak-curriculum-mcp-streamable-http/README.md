@@ -292,6 +292,10 @@ signing off a release. Replaces the retired `pnpm smoke:remote` harness
 - `GET /.well-known/oauth-protected-resource` returns the canonical resource and authorisation servers
 - 401 responses include a `WWW-Authenticate` header with `resource` and `authorization_uri` to guide clients
 
+### OpenAI domain verification
+
+- `GET /.well-known/openai-apps-challenge` returns the plugin-submission portal's domain-verification token as bare `text/plain` (MCP-700). Not an OAuth surface: public, registered before Clerk middleware, and served in every auth mode. Contract: [OpenAI plugin submission, "Domain verification"](https://developers.openai.com/plugins/deploy/submission), which requires the endpoint to "return only that plugin's verification token".
+
 ### Canonical address
 
 The server normally describes itself from each request's `Host` header. When an
@@ -476,6 +480,7 @@ pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:widget:a11y
 ## Detailed Documentation
 
 - [MCP primitives: intention and intended audience](docs/mcp-primitives-intention-and-audience.md) - Internal guide to tool/resource boundaries (zero prompts), control model, and UAT expectations
+- [MCP Registry publication](docs/mcp-registry-publication.md) — how the `server.json` entry is composed from the deployment and proved before publishing, the namespace decision and its ownership proofs, and how the entry stays true
 - [Observability](docs/observability.md) — Sentry instrumentation, per-request span, scope enrichment, redaction barrier, release metadata, source-map upload
 - [Operational Debugging](docs/operational-debugging.md) — request tracing, timing, diagnostics, error debugging, production logging
 - [Widget Rendering](docs/widget-rendering.md) — widget dispatch, rendering architecture, and sandbox details

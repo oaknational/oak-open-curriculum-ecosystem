@@ -1135,3 +1135,33 @@ wording about the split; the seat's resume map.
 
 **Fixed point.** A third pass would only re-find the approximate time labels, the stopped
 workflow's unrun stages and the peer-reported facts already flagged; the recursion closes here.
+
+## 2026-09-09 09:2xZ (Serval weaves Tunnel, 29b9f7) — MCP-700 OpenAI domain-verification challenge
+
+- CONTRACT (developers.openai.com/plugins/deploy/submission, "Domain verification", read
+  2026-09-09): the portal fetches `/.well-known/openai-apps-challenge` on the MCP host and the body
+  must be ONLY the token — no JSON, no list. Method, content type, status and caching are
+  unstated; served as GET 200 `text/plain` bare token. The learn.chatgpt.com submit-plugins address
+  redirects TO developers.openai.com, not the other way round.
+- PLACEMENT: `auth-routes.ts` sits at 250 lines (eslint max-lines), so the challenge lives in its
+  own module `openai-domain-verification.ts`, registered in `setupOAuthAndCaching` BEFORE the
+  auth-mode fork so the route exists with auth disabled too (the local observe-noauth boot proved
+  it). Skip-list entry added in `clerk-skip-surfaces.ts`.
+- FRESH-WORKTREE BOOT: `observe-noauth` needs the ES keys (search CLI env) AND the bulk-derived
+  `oak-sdk-codegen/dist/generated/vocab/graph-corpus/data.json`, which a fresh worktree's codegen
+  does not produce without bulk data; copying that one generated artefact from the primary's dist
+  was enough. A `TypeError … reading 'map'` on the first boot was a race with a concurrent turbo
+  build rewriting dist, not a code defect — the same boot succeeded once the build finished.
+- CONTENT-AUDIT DELTA: a NEW governed source file trips "Reviewed semantic-delta files differ" (file
+  set, before any hash check). Recording the `excluded()` entry with the recomputed semantic hash
+  and running `refresh-mcp-content-current-source-anchors` changed only `current-source-delta-inventory.json`
+  (anchors and current-source.json byte-identical, as no items moved).
+- WORKTREE GUARD: `--env-file="$HOME/…"` on a plain `pnpm exec node` line passes; the same with
+  `${PIPESTATUS[0]}` or `$(...)` is refused. `bash <script>` is refused even for a git-free script,
+  so ceremony wrappers cannot be scripted from a worktree-resident seat here; the watcher was armed
+  from the primary (ExitWorktree keep → Monitor → EnterWorktree) and survived the re-entry.
+- PRE-PUSH SECRET SCAN: gitleaks' `generic-api-key` rule (entropy 4.8) flags the challenge token
+  constant in the module, though not in the test (`\.test\.ts$` is already allowlisted). A public-by-
+  design vendor token needs a named, line-shaped `.gitleaks.toml` allowlist (the Clerk publishable-key
+  precedent), and that allowlist must ride in the SAME PR — the first push attempt failed on it after
+  the commit's whole-tree gate had passed, costing a second ceremony cycle.

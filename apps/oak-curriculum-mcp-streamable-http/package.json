@@ -16,6 +16,7 @@
     "dev:observe:noauth": "pnpm exec tsx operations/development/http-dev.ts observe-noauth",
     "dev:widget": "PORT=5173; PID=$(lsof -ti :$PORT 2>/dev/null); if [ -n \"$PID\" ]; then NAME=$(ps -p $PID -o comm= 2>/dev/null); echo \"Port $PORT blocked by process: PID=$PID command=$NAME\"; echo \"Run: kill $PID\"; exit 1; fi; vite dev --config widget/vite.config.ts",
     "dev:widget-in-host": "bash scripts/dev-widget-in-host.sh",
+    "generate:server-json": "pnpm exec tsx scripts/generate-server-json.ts",
     "generate:tool-table": "pnpm exec tsx scripts/generate-served-tool-table.ts",
     "start": "bash scripts/start-server.sh",
     "prod:harness": "pnpm exec tsx scripts/server-harness.ts",

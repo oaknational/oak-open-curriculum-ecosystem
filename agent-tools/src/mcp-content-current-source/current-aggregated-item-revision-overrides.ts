@@ -22,8 +22,6 @@ export const CURRENT_AGGREGATED_ITEM_REVISION_OVERRIDES = {
   C120: 'modified',
   C256: 'modified',
   C255: 'modified',
-  C237: 'modified',
-  C236: 'modified',
   C235: 'modified',
   C164: 'modified',
   C160: 'modified',

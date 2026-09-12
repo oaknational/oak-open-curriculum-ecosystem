@@ -28,6 +28,13 @@ Accepted (amended 2026-07-23)
 > within-year tie-break was alphabetical. Basis: ADR-086 amendment of the
 > same date.
 >
+> **Amendment (2026-09-04 — misconception surface in curriculum order,
+> MCP-682).** `get-misconception-graph` now windows a thread's units and
+> lists a unit's lessons in the same authored order, from the corpus's
+> ordered sections rather than the id-sorted edge set it had read. No
+> wire-shape change; the ordering basis is stated in the served
+> description. Basis: ADR-086 follow-on of the same date.
+>
 > **Amendment (2026-06-11 — position-anchored-teaching-continuity, w1-c1).**
 > The Prompts section below was reconciled with the shipped estate, which
 > had drifted: the served set is seven prompts (the table previously listed

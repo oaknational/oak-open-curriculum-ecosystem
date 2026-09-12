@@ -1,3 +1,59 @@
+## [1.181.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.181.0...v1.181.1) (2026-09-10)
+
+
+### Bug Fixes
+
+* **mcp:** declare C236/C237 once, correct stale comments, record the per-board caveat (MCP-682) ([e6e0302](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/e6e030254f80dd2f2b2d7518ca8d4619b292044b))
+* **mcp:** disclose the year-less units and correct the ADR's thread count (MCP-682) ([298f8bf](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/298f8bf352941438c29664f70ba3bcc966bfcd49)), closes [#965](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/965)
+* **mcp:** get-misconception-graph serves curriculum order, not the alphabet ([bfab768](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/bfab7686b52020b52a438fcb09f90cc5f7b3e3d3))
+* **mcp:** merge [#965](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/965) and address the get-misconception-graph review (MCP-682) ([5092cfb](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/5092cfbc8e7689bb25d47a02c054ea235359325e))
+* **mcp:** scope served and plugin ordering claims; dedup tests hold on any corpus (MCP-682) ([05701e0](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/05701e07bfc6bd23dd7a67c51b21d9601ced7c14))
+* **mcp:** use unwrapOk in tests, and describe the projection honestly ([f431774](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/f4317741e69e7ed4dd5ad602dc846065f09ee6f8))
+
+# [1.181.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.180.0...v1.181.0) (2026-09-10)
+
+
+### Bug Fixes
+
+* **mcp-http:** read the registry's status, bound both calls, correct the rename claim (MCP-637) ([aa07088](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/aa07088e19b710c842975efd2c37e13a4cefc1c3))
+
+
+### Features
+
+* **mcp-http:** compose and prove the MCP Registry entry, unpublished (MCP-637) ([95a836b](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/95a836be295ffd8da3ffb266ae1a0e1612790692))
+
+# [1.180.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.179.1...v1.180.0) (2026-09-10)
+
+
+### Features
+
+* **mcp:** serve the OpenAI domain-verification challenge ([a97ea9e](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/a97ea9e71dee321ed9b7686be2dc97707ce6a2c2))
+
+## [1.179.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.179.0...v1.179.1) (2026-09-09)
+
+
+### Bug Fixes
+
+* **mcp-app:** advertise only the granted scopes in the AS metadata (MCP-345) ([4d26b3c](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/4d26b3c23b663806c35dc40db481e9d9a8272a7d))
+
+# [1.179.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.178.6...v1.179.0) (2026-09-09)
+
+
+### Bug Fixes
+
+* **posthog-node:** bound the rebuilt user agent's version and recompute its validator (MCP-687) ([377f4ce](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/377f4cedef389f3c68c929520020123512cebd48))
+* **posthog-node:** make the header scan bound real and cite PostHog's rule precisely (MCP-687) ([cdcabfc](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/cdcabfc1c964a10b9b7d3bd853d63b3d39e8f6ab))
+* **posthog-node:** read a truncated bracket as PostHog does and close the surface map (MCP-687) ([fe0f268](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/fe0f26802ad41c1d2d3f977b6f11f8922b4cfcf6))
+* **posthog-node:** rebuild from the versioned header and gate the OpenAI split on it (MCP-687) ([10b50fa](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/10b50faf36eb98ef4b1e32d88011f3d47cc50b24))
+* **posthog-node:** select the client product once for both derivations (MCP-687) ([4236c40](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/4236c402e6a6c7f396ab32ac7f3eddb760ce0a8b))
+* **posthog-node:** shape the rebuilt user agent to PostHog's published harness rule (MCP-687) ([5a1e951](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/5a1e951727d0cf2165690a33d5493ab5754f8d3a))
+
+
+### Features
+
+* **posthog-node:** rebuild a client user agent so PostHog's harness column resolves (MCP-687) ([62a6012](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/62a6012a10c71516b3ce06088c0b04d0b2fb9491))
+* **posthog-node:** recognise the OpenAI client pre-launch and scope surfaces per product (MCP-687) ([aefadc9](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/aefadc96d61bb555d121c141d0d22652c0bcdc97))
+
 ## [1.178.6](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.178.5...v1.178.6) (2026-09-08)
 
 

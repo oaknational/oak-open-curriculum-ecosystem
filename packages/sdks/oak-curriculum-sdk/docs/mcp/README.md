@@ -114,6 +114,6 @@ Runtime uses this metadata to enforce per-tool authorization.
 
 The generator also emits OAuth scopes metadata for RFC 9728 protected resource discovery:
 
-- Generated file: `src/types/generated/api-schema/mcp-tools/generated/data/scopes-supported.ts`
+- Generated file: `src/types/generated/api-schema/mcp-tools/scopes-supported.ts` (in `@oaknational/sdk-codegen`)
 - Exported constant: `SCOPES_SUPPORTED`
-- Runtime imports this to advertise supported scopes to authorization servers
+- Runtime imports this to advertise supported scopes in both OAuth discovery documents it serves (protected-resource metadata, RFC 9728; authorization-server metadata, RFC 8414)
