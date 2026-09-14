@@ -7,6 +7,7 @@
  * explicit exclusion reason says why the change adds no governed content.
  */
 import {
+  CRAWLER_FACING_ONLY,
   excluded,
   IMPLEMENTATION_ONLY,
   reviewed,
@@ -119,8 +120,14 @@ export const APP_AUTH_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaR
   // MCP-700 re-review: the OpenAI domain-verification challenge path joins the
   // always-skip set, consumed from the route module's exported constant so the
   // served route and the exemption share one owner. Still a routing decision.
+  //
+  // MCP-703 re-review: `/robots.txt` joins the same set on the same terms,
+  // consumed from its own route module's exported constant. This hash attests
+  // the merged state carrying BOTH path constants — neither side's reviewed
+  // hash described it, so it is re-reviewed here rather than inherited. Still
+  // a routing decision over path literals; no agent-facing content either way.
   'apps/oak-curriculum-mcp-streamable-http/src/clerk-skip-surfaces.ts': excluded(
-    '0f407e19fe6809aaee469c4154fe311758839e09046026e890b2934343edc41c',
+    '05519704af70c2de6498df2215a2fc5b11f9f45aaf876d2ac37159a8242ff283',
     IMPLEMENTATION_ONLY,
   ),
   // MCP-700: the OpenAI plugin-submission domain-verification challenge. The
@@ -130,6 +137,21 @@ export const APP_AUTH_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaR
   'apps/oak-curriculum-mcp-streamable-http/src/openai-domain-verification.ts': excluded(
     '3233717f514011f4c1534f67dc036a246072ee966a49081773509a44c847d451',
     IMPLEMENTATION_ONLY,
+  ),
+  // MCP-703: the MCP host's `robots.txt`, registered in Phase 2.5 of
+  // `oauth-and-caching-setup.ts` (whose hash moves in the app ledger for that
+  // route composition alone). The served text is Oak-authored, so this is not an
+  // implementation-only change — but its audience is web crawlers, which
+  // never speak MCP, so it reaches no MCP consumer. See CRAWLER_FACING_ONLY
+  // for why that distinction is drawn rather than collapsed.
+  //
+  // MCP-703 re-review (owner ruling 2026-09-14): the served body no longer
+  // names a landing page, and rests the no-sitemap statement on the host being
+  // machine surface. Re-attested rather than inherited because the served text
+  // changed; the audience did not, so the exclusion reason stands.
+  'apps/oak-curriculum-mcp-streamable-http/src/robots-txt.ts': excluded(
+    '7f5b4024d481e07426d52781159ef39e5f5c60fd2e70e35f3cc7da154b070c4a',
+    CRAWLER_FACING_ONLY,
   ),
   // MCP-518: the Clerk conditional now forks on the request's surface before
   // its MCP method, so a browser view of the fully public page — at `/mcp` and
