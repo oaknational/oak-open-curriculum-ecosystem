@@ -21,7 +21,8 @@
 >   that sorts first by code unit. Membership comes from the `containsKeyword` edges, so the rows'
 >   (lesson, keyword) pairs are exactly the edge set. A definition keeps its
 >   authored text with whitespace collapsed, so variants differing only in
->   spacing are one row, and a blank definition is skipped; terms are trimmed
+>   spacing or capitals are one row (keeping the text that sorts first by
+>   code unit), and a blank definition is skipped; terms are trimmed
 >   with case preserved.
 >   This states the rule the ordered sections already follow: an attribute of
 >   a relation that the attribute-less edge set cannot carry, such as
@@ -39,7 +40,7 @@
 >   definitions to MCP clients.
 > - **Counts recomputed at amendment time** from the regenerated
 >   `graph-corpus/data.json` (2026-09-03 bulk snapshot). Node and edge counts,
->   the edges and both ordered sections are unchanged. There are 25,898
+>   the edges and both ordered sections are unchanged. There are 25,846
 >   definition rows covering all 12,204 keywords, with 38,391 lesson entries
 >   over the 38,381 `containsKeyword` pairs; the ten extra entries come from
 >   nine lesson–keyword pairs whose lesson authored more than one definition. `data.json`

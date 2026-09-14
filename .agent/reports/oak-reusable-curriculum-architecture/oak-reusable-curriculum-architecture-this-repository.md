@@ -431,7 +431,7 @@ Public root arrays remain unbounded. Core traversal accepts fractional and
 the MCP input schema already enforces integer depths. `createGraphView` already
 returns every internal edge among members inside its structural bound, so edge
 closure there is not an open defect. Keyword results report totals and
-`hasMore`, but each keyword definition's ten-lesson window has no operation
+`hasMore`, but each keyword definition's three-lesson window has no operation
 anchored by the returned keyword ID to enumerate the remainder.
 
 **Required correction:** define maximum unique-root counts per view, require

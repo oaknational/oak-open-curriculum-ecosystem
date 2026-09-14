@@ -26,7 +26,7 @@ export interface ExtractedKeywordDefinition {
    * definition with different capitals, the casing that sorts first by code unit
    */
   readonly term: string;
-  /** The definition as authored, with whitespace collapsed (never blank) */
+  /** The authored definition: whitespace collapsed, never blank, code-unit-first across capitals */
   readonly definition: string;
   /** The lessons that author this term and definition, sorted */
   readonly lessonSlugs: readonly string[];
@@ -106,7 +106,7 @@ interface KeywordAccumulator {
   subjects: Set<string>;
   firstYear: number;
   lessonSlugs: Set<string>;
-  /** Authored definitions keyed by their text */
+  /** Authored definitions keyed by their lower-cased text */
   definitions: Map<string, { term: string; definition: string; lessonSlugs: Set<string> }>;
 }
 
@@ -114,9 +114,9 @@ interface KeywordAccumulator {
  * Records that a lesson authors this definition for the keyword.
  *
  * @remarks
- * Definitions compare with whitespace collapsed; a blank one is skipped. Terms
- * under one keyword differ only in capitals, so "Addend" and "addend" share a
- * definition, keeping the code-unit-first casing (independent of lesson order).
+ * Definitions compare case-insensitively with whitespace collapsed; a blank one
+ * is skipped. Terms and definitions that differ only in capitals merge, each
+ * keeping its code-unit-first casing (independent of lesson order).
  */
 function addDefinition(
   acc: KeywordAccumulator,
@@ -128,14 +128,14 @@ function addDefinition(
   if (definition === '') {
     return;
   }
-  const existing = acc.definitions.get(definition);
+  const key = definition.toLowerCase();
+  const existing = acc.definitions.get(key);
   if (existing) {
     existing.lessonSlugs.add(lessonSlug);
-    if (term < existing.term) {
-      existing.term = term;
-    }
+    existing.term = term < existing.term ? term : existing.term;
+    existing.definition = definition < existing.definition ? definition : existing.definition;
   } else {
-    acc.definitions.set(definition, { term, definition, lessonSlugs: new Set([lessonSlug]) });
+    acc.definitions.set(key, { term, definition, lessonSlugs: new Set([lessonSlug]) });
   }
 }
 

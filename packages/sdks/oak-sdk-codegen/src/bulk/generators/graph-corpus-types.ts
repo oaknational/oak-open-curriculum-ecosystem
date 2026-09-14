@@ -129,7 +129,10 @@ export interface GraphCorpusKeywordDefinition {
    * definition with different capitals, the casing that sorts first by code unit.
    */
   readonly term: string;
-  /** The definition as authored, with whitespace collapsed (never blank). */
+  /**
+   * The definition as authored, with whitespace collapsed (never blank); when
+   * lessons wrote it with different capitals, the text that sorts first by code unit.
+   */
   readonly definition: string;
   readonly lessonIds: readonly GraphCorpusLessonNodeId[];
 }

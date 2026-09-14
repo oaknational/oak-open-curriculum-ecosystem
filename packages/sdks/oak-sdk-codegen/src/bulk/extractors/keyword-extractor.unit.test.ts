@@ -284,6 +284,31 @@ describe('extractKeywords', () => {
     expect(reversed).toEqual(forward);
   });
 
+  it('merges definitions whose text differs only in capitals, keeping the code-unit-first text', () => {
+    const lessons: readonly Lesson[] = [
+      createLesson({
+        lessonSlug: 'lesson-a',
+        lessonKeywords: [{ keyword: 'acid', description: 'a solution with a pH below 7' }],
+      }),
+      createLesson({
+        lessonSlug: 'lesson-b',
+        lessonKeywords: [{ keyword: 'acid', description: 'A solution with a pH below 7' }],
+      }),
+    ];
+
+    const forward = extractKeywords(lessons);
+    const reversed = extractKeywords([...lessons].reverse());
+
+    expect(forward[0].definitions).toEqual([
+      {
+        term: 'acid',
+        definition: 'A solution with a pH below 7',
+        lessonSlugs: ['lesson-a', 'lesson-b'],
+      },
+    ]);
+    expect(reversed).toEqual(forward);
+  });
+
   it('keeps both definitions when one lesson authors the same keyword twice', () => {
     const lessons: readonly Lesson[] = [
       createLesson({
