@@ -3822,3 +3822,69 @@ commit SHA and the closing plan reference.
 - **Expected**: `claims amend --area` (or an equivalent single-row edit)
   that preserves the claim id and history.
 - **Route**: agent-tooling backlog.
+
+### F-166 — the PDR-078 §4 consumer-absent exemption has no re-arm trigger when fleet composition changes
+
+- **Observed**: 2026-09-03, this seat (Kiln mends Firelight, `3b47e6`,
+  Director). The registry read this claim `stale`
+  (`fresh_until 2026-09-02T20:22:26Z`) for roughly seventeen hours of
+  continuous, comms-visible work. Caught by the INCOMING Director
+  (Civet calls Crypt, `2a5c71`) at its arrival grounding, not by this
+  seat and not by any check this seat ran.
+- **Cause, which is a gap rather than a lapse**: the heartbeat was
+  correctly stood down under the PDR-078 §4 consumer-absent exemption
+  when the only peer (Willow holds Compost, a PR Review Warden) closed
+  out and relinquished its claim. The exemption is sound and the
+  stand-down was right at that moment. But **the exemption has a
+  suspend condition and no resume condition**: nothing in the rule, the
+  tooling, or any check fires when a consumer reappears. The seat that
+  suspends the heartbeat is exactly the seat that will not notice the
+  fleet changing under it, because suspending it removed its own
+  reason to look.
+- **Expected**: a seat holding a claim either emits a heartbeat, or has
+  a live reason not to that is re-evaluated when the fleet changes.
+- **Why it matters more than a stale field looks**: this is the F-92
+  shape (comms live, registry stale) arriving through a *legitimate*
+  exemption rather than through forgetting, which makes it invisible to
+  the F-92 cures. A successor arriving on the registry alone reads a
+  stale row and may take the seat over a live Director — which PDR-117
+  names as the takeover trap. It did not happen here only because the
+  incoming seat cross-checked comms and refused to treat the stale row
+  as licence.
+- **Candidate cures, none built** (route to the agent-tooling backlog,
+  not fixed here): a claims-side check that reports a claim whose
+  `heartbeat_at` has lapsed while its agent is emitting non-heartbeat
+  comms events; or a re-arm prompt on the team-start/closeout events
+  that change fleet size, since those are the exact moments the
+  exemption's premise flips; or making the exemption's suspension carry
+  an explicit resume trigger in the rule text so a seat writes one down
+  when it suspends.
+- **Interim discipline for any seat applying the exemption**: treat a
+  peer's team-start broadcast as a re-arm trigger, and re-check the
+  exemption's premise at every fleet-composition change rather than
+  once at stand-down.
+- **Provenance**: identified by Civet calls Crypt during PDR-064
+  handover grounding and framed by it, correctly, as a tooling gap
+  rather than this seat's lapse. Recorded here at its suggestion.
+- **Adjacent mechanism, observed the same day and cured by the same
+  family of triggers**: a correctly-conducted PDR-064 handover *always*
+  emits heartbeat failures in the window between the successor adopting
+  the claim in place and the predecessor stopping its heartbeat. Once
+  `b5b2744b` belonged to Civet calls Crypt, this seat's comms leg could
+  not succeed by construction — the guard refuses a heartbeat anchored
+  to another seat's claim (PDR-078 §4 / F-73), which is right. Measured
+  twice, at 13:22:25Z and 15:05:36Z, each landing as
+  `HEARTBEAT-COMMS-LEG-FAILED`. The hazard is diagnostic, not
+  operational: a reader seeing those lines without the adjacent Moment 2
+  event diagnoses a dying seat, and the loudest signal in a clean
+  handover is a false alarm. Two candidate cures: have the heartbeat
+  loop detect that its own claim has changed owner and exit reporting
+  `superseded` rather than `failed`; or have Moment 2's adoption stamp
+  the predecessor's loop so the failure text names the successor. Same
+  re-arm/stand-down trigger family as the gap above, so it is recorded
+  here rather than as its own friction.
+- **Id note (2026-09-10)**: filed as F-161 by a seat working a checkout
+  156 commits behind `main`, where F-161 was already taken ("no tool mints
+  the coordination successor-branch name"). Renumbered to F-166 at the
+  convergence merge. The collision is itself an instance of the staleness
+  this register exists to catch.

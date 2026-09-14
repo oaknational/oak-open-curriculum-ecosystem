@@ -98,7 +98,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-068: Per-Index Completion Context Enforcement](068-per-index-completion-context-enforcement.md)
 - [ADR-069: Systematic Ingestion with Progress Tracking](069-systematic-ingestion-progress-tracking.md) ← **Superseded by [ADR-087](087-batch-atomic-ingestion.md)**
 - [ADR-070: SDK Rate Limiting and Exponential Backoff Retry](070-sdk-rate-limiting-and-retry.md)
-- [ADR-071: Widget URI Cache-Busting Simplification](071-widget-uri-cache-busting-simplification.md)
+- [ADR-071: Widget URI Cache-Busting Simplification](071-widget-uri-cache-busting-simplification.md) ← **Superseded by [ADR-141](141-mcp-apps-standard-primary.md)**
 - [ADR-074: Elastic-Native-First Philosophy](074-elastic-native-first-philosophy.md)
 - [ADR-075: Dense Vector Code Removal](075-dense-vector-removal.md) ← **Supersedes ADR-118, 072, 073**
 - [ADR-076: ELSER-Only Embedding Strategy](076-elser-only-embedding-strategy.md)

@@ -20,6 +20,11 @@ export const CURRENT_ITEM_REVISION_OVERRIDES = {
   // MCP-353: C337 and C413 retired with the deleted under-the-hood pointer
   // resource — their revision verdicts now derive from lineage.
   C690: 'unchanged',
+  // MCP-489: the widget description re-anchors on its own line because the
+  // listing config now also carries the widget settings; its text is unchanged.
+  C691: 'unchanged',
+  // MCP-489: same settings values, now served on the resources/list entry too.
+  C692: 'expanded',
   C479: 'modified',
   // MCP-345: the served AS metadata's scopes_supported now states the PRM's
   // advertised set (SCOPES_SUPPORTED) instead of the upstream list, so a

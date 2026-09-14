@@ -35,8 +35,11 @@ export const APP_REGISTRATION_DELTA_REVIEWS: Readonly<Record<string, CurrentSour
     '55e9e1200a4d5ec6b3450bb18123f5369d8a8a647a44d09b38ac848c999fbd9d',
     IMPLEMENTATION_ONLY,
   ),
+  // MCP-489: the widget settings (C692) are now served on the resources/list
+  // entry as well as the content item, with the same values; the name (C690)
+  // and description (C691) are unchanged.
   'apps/oak-curriculum-mcp-streamable-http/src/register-widget-resource.ts': reviewed(
-    '0ddeaa2c8e1938d0be9951b51ccaedea6eb58e77bbb255dd949fb5a1852986c4',
+    '07cf39ca0ec83f7273e723293a671acb2f437da907ddb8d62e57482ac60489d2',
     ['C690', 'C691', 'C692'],
   ),
   // MCP-439: the in-memory client harness extracted from the registration

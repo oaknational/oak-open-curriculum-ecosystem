@@ -114,11 +114,11 @@ value surfaces — a whole-corpus dump has no bounded resource form.
 
 A further resource serves the interactive MCP App widget:
 
-| Resource URI                    | Content              | Priority | Audience  |
-| ------------------------------- | -------------------- | -------- | --------- |
-| `ui://widget/oak-banner-*.html` | React MCP App (HTML) | —        | `["app"]` |
+| Resource                      | Content              | Priority | Audience  |
+| ----------------------------- | -------------------- | -------- | --------- |
+| MCP App widget (`WIDGET_URI`) | React MCP App (HTML) | —        | `["app"]` |
 
-This resource uses `text/html;profile=mcp-app` content type and is registered via `registerAppResource` per [ADR-141](141-mcp-apps-standard-primary.md). CSP declarations for external fonts are included via `_meta.ui.csp.resourceDomains` on the content item.
+This resource uses `text/html;profile=mcp-app` content type and is registered via `registerAppResource` per [ADR-141](141-mcp-apps-standard-primary.md), whose widget URI identity amendment owns its address and settings. CSP declarations for external fonts are included via `_meta.ui.csp.resourceDomains` on the resource listing and the content item.
 
 **Intent**: Clients that support resource auto-injection get orientation data without a tool call.
 

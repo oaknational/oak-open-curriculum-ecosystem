@@ -46,7 +46,7 @@
         "**/scripts/**/*.ts",
         "**/schema-cache/**"
       ],
-      "env": ["SDK_CODEGEN_MODE", "VERCEL", "VERCEL_GIT_COMMIT_SHA", "VERCEL_DEPLOYMENT_ID"],
+      "env": ["SDK_CODEGEN_MODE"],
       "passThroughEnv": ["OAK_API_KEY"]
     },
     "build": {
@@ -86,7 +86,6 @@
       // they must be hash-bearing (a cache hit across deployments would
       // otherwise replay another environment's baked host) AND visible under
       // strict envMode (APP_VERSION_OVERRIDE is in no default passthrough).
-      // Same reasoning as sdk-codegen's env block above.
       //
       // CANONICAL_HOST is the HIGHEST-PRECEDENCE input to that bake and was
       // missing from this list (MCP-516). Both halves of the comment above

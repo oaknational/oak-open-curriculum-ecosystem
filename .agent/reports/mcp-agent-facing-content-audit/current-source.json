@@ -27,8 +27,8 @@
     "additionCount": 11,
     "availableCount": 675,
     "retiredCount": 53,
-    "unchangedCount": 471,
-    "expandedCount": 0,
+    "unchangedCount": 470,
+    "expandedCount": 1,
     "modifiedCount": 124,
     "relocatedCount": 68,
     "addedCount": 12,
@@ -106,7 +106,7 @@
             "docs://oak/guidance/explore-curriculum.md",
             "docs://oak/guidance/find-lessons.md",
             "docs://oak/guidance/learning-progression.md",
-            "ui://widget/oak-curriculum-app-local.html"
+            "ui://widget/oak-curriculum-app-v1.html"
           ],
           "dormant": [
             "docs://oak/guidance/adapt-lesson.md",
@@ -10736,7 +10736,7 @@
         "evidence": {
           "revision": "modified",
           "anchorTargetCount": 1,
-          "anchorCount": 2
+          "anchorCount": 1
         }
       },
       "lineage": {
@@ -15060,7 +15060,7 @@
           "apps/oak-curriculum-mcp-streamable-http/src/register-widget-resource.ts"
         ],
         "evidence": {
-          "revision": "unchanged",
+          "revision": "expanded",
           "anchorTargetCount": 1,
           "anchorCount": 1
         }

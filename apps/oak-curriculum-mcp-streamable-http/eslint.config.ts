@@ -221,20 +221,28 @@ const config = defineConfigArray(
       'scripts/**/*.ts',
     ],
     rules: {
+      // A per-file rule value replaces the inherited one rather than merging,
+      // so the ExportAllDeclaration selector from `recommended` is re-included.
       'no-restricted-syntax': [
         'error',
+        {
+          selector: 'ExportAllDeclaration',
+          message:
+            'Avoid export * from "module" syntax to improve tree shaking. Use named exports instead.',
+        },
         {
           selector:
             'MemberExpression[object.property.name="process"][property.name="env"], MemberExpression[object.name="process"][property.name="env"]',
           message:
             'Avoid using process.env directly. In product code use the runtime config provided by the env library instead. In test code pass simple values directly via DI.',
         },
-        // MCP-187: the widget URI carries a per-build cache-busting hash
+        // MCP-187: the widget URI is one published address with one owner,
         // generated at sdk-codegen time. A hand-frozen `ui://widget/`
-        // literal silently stops matching the generated value on deployed
-        // builds — the widget then advertises but never registers (the
-        // served-surface key froze exactly this way). Import WIDGET_URI
-        // from `@oaknational/curriculum-sdk/public/mcp-tools.js` instead.
+        // literal is a second owner of that contract, free to drift from the
+        // value the tools advertise (the served-surface key froze exactly
+        // this way, so the widget advertised but never registered). Import
+        // WIDGET_URI from `@oaknational/curriculum-sdk/public/mcp-tools.js`
+        // instead.
         // Test files are exempt via this block's ignores (fake widget URIs
         // are legitimate fixtures there).
         // esquery regex delimiters are `/`, so the URI's own slashes MUST use
@@ -243,12 +251,12 @@ const config = defineConfigArray(
         {
           selector: String.raw`Literal[value=/ui:\u002F\u002Fwidget\u002F/]`,
           message:
-            'Hand-frozen widget URI literal: the widget URI is generated per build (MCP-187). Import WIDGET_URI from @oaknational/curriculum-sdk/public/mcp-tools.js.',
+            'Hand-frozen widget URI literal: the widget URI has one generated owner (MCP-187). Import WIDGET_URI from @oaknational/curriculum-sdk/public/mcp-tools.js.',
         },
         {
           selector: String.raw`TemplateElement[value.raw=/ui:\u002F\u002Fwidget\u002F/]`,
           message:
-            'Hand-frozen widget URI in a template literal: the widget URI is generated per build (MCP-187). Import WIDGET_URI from @oaknational/curriculum-sdk/public/mcp-tools.js.',
+            'Hand-frozen widget URI in a template literal: the widget URI has one generated owner (MCP-187). Import WIDGET_URI from @oaknational/curriculum-sdk/public/mcp-tools.js.',
         },
       ],
     },

@@ -9230,15 +9230,9 @@
             "anchors": [
               {
                 "tokenCount": 22,
-                "tokenSha256": "0f3ae1f2beea0b3a7e014699e24f3a042494296db059c1287fb3e609b394b7b5",
+                "tokenSha256": "3318b320c1d843029f9f8add84fbc157edd461874cf0177f9f3f8078f715c631",
                 "indexToken": "BASE_WIDGET_URI",
                 "indexOffset": 2
-              },
-              {
-                "tokenCount": 23,
-                "tokenSha256": "b6bb254ff6a08417e535915cc1927ed5a00d262ca1811c482f21e3684a5f2696",
-                "indexToken": "VERCEL_GIT_COMMIT_SHA",
-                "indexOffset": 14
               }
             ]
           }
@@ -13158,10 +13152,10 @@
             "file": "apps/oak-curriculum-mcp-streamable-http/src/register-widget-resource.ts",
             "anchors": [
               {
-                "tokenCount": 19,
-                "tokenSha256": "1142f901f46388471e8ca01606b2cf04300b9e3987a8535322d86df158d7ce30",
+                "tokenCount": 16,
+                "tokenSha256": "27ce0befbfaa8416c8b190b0a79f446ba3e54f1e9aff7f2b7acb0284b08909fe",
                 "indexToken": "description",
-                "indexOffset": 1
+                "indexOffset": 0
               }
             ]
           }
@@ -13171,14 +13165,14 @@
     {
       "auditId": "C692",
       "evidence": {
-        "revision": "unchanged",
+        "revision": "expanded",
         "targets": [
           {
             "file": "apps/oak-curriculum-mcp-streamable-http/src/register-widget-resource.ts",
             "anchors": [
               {
                 "tokenCount": 45,
-                "tokenSha256": "772859ca83b493ec69d42b21a528da5166532f56ffdccc631beda886414dcb77",
+                "tokenSha256": "ded7ce338951f19723257b46940032aa4a762e178df8914ace415ca2772f57e6",
                 "indexToken": "resourceDomains",
                 "indexOffset": 7
               }

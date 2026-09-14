@@ -230,10 +230,11 @@ export const CURRENT_ITEM_ANCHOR_OVERRIDES: AnchorOverrides = {
   ...CURRENT_SPEC_REFRESH_ITEM_ANCHOR_OVERRIDES,
   // MCP-353: C413 (the under-the-hood public-allowlist row) retired with the
   // deleted resource — no current anchor; the retirement rides the lineage.
+  // MCP-489: the widget address is one fixed published value, the same on
+  // every build.
   C479: {
     'packages/sdks/oak-sdk-codegen/code-generation/typegen/cross-domain-constants.ts': [
-      'export const BASE_WIDGET_URI = `ui://widget/oak-curriculum-app-${resolveWidgetUriSuffix({',
-      'vercel: process.env.VERCEL, gitCommitSha: process.env.VERCEL_GIT_COMMIT_SHA, deploymentId: process.env.VERCEL_DEPLOYMENT_ID',
+      "export const BASE_WIDGET_URI = 'ui://widget/oak-curriculum-app-v1.html';",
     ],
   },
 };

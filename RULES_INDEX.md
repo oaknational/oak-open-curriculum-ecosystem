@@ -176,6 +176,7 @@ start; a situational rule loads at its trigger's moment.
 | `.agent/rules/no-tombstones-for-removed-ideas.md`                          | core           | —                                                                                                  |
 | `.agent/rules/no-unbounded-host-load.md`                                   | core           | —                                                                                                  |
 | `.agent/rules/no-verify-requires-fresh-authorisation.md`                   | core           | —                                                                                                  |
+| `.agent/rules/one-pr-per-leaf-issue.md`                                    | core           | —                                                                                                  |
 | `.agent/rules/no-warning-toleration.md`                                    | core           | —                                                                                                  |
 | `.agent/rules/notion-page-edits-update-ledger.md`                          | situational    | tool:notion                                                                                        |
 | `.agent/rules/oak-chrome-session-is-metered.md`                            | situational    | tool:chrome-browser                                                                                |

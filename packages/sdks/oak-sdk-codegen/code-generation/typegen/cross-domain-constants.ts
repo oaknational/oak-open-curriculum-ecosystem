@@ -1,33 +1,43 @@
-import { resolveWidgetUriSuffix } from './widget-uri-suffix.js';
-
 /**
- * Base widget URI with a deterministic per-build cache-busting suffix.
+ * The published address of the Oak curriculum MCP App widget.
  *
  * Generated at sdk-codegen time so every consumer — the tool definitions
- * advertising `_meta.ui.resourceUri` and the app's served-surface
- * registration — derives from this one constant.
+ * advertising `_meta.ui.resourceUri`, the app's served-surface registration
+ * key, and the auth public-resource allowlist — derives from this one
+ * constant (MCP-187).
  *
- * This module-level binding is the one sanctioned `process.env`
- * composition point for the widget URI; the resolver itself lives
- * environment-free in `widget-uri-suffix.ts` so its unit suite's import
- * graph carries no ambient-state read.
- *
- * URI identity is the only cache-invalidation lever the MCP Apps standard
- * gives a server: hosts MAY prefetch and cache `ui://` resource content,
- * and the standard defines no invalidation, freshness, or versioning
- * mechanism — so a changed URI is what forces hosts to reload the widget
- * bundle instead of serving a stale cached copy.
- *
- * Format: ui://widget/oak-curriculum-app-<suffix>.html
- * Example: ui://widget/oak-curriculum-app-abc12345.html
+ * The address is the same on every build and is a published contract. A
+ * client keeps the address from the tool list it was given, so serving a
+ * different address in its place breaks every client holding an earlier
+ * list, and a published plugin needs a new reviewed version before it sees a
+ * new address. Compatible widget changes ship as content behind this address;
+ * an incompatible change takes the next version segment (`-v2`). The
+ * contract, its evidence, and the procedure for an incompatible change live in
+ * ADR-141 (widget URI identity amendment, MCP-489).
  *
  * @see https://modelcontextprotocol.io/extensions/apps/overview (MCP Apps standard)
  */
-export const BASE_WIDGET_URI = `ui://widget/oak-curriculum-app-${resolveWidgetUriSuffix({
-  vercel: process.env.VERCEL,
-  gitCommitSha: process.env.VERCEL_GIT_COMMIT_SHA,
-  deploymentId: process.env.VERCEL_DEPLOYMENT_ID,
-})}.html`;
+export const BASE_WIDGET_URI = 'ui://widget/oak-curriculum-app-v1.html';
+
+/**
+ * Per-build widget addresses from releases before the address was fixed that
+ * clients may still hold.
+ *
+ * None of them is served. They sit on the auth public-resource allowlist so
+ * that an unauthenticated read of one reaches the server's resource-not-found
+ * error rather than an authentication challenge, which would tell the client
+ * to sign in and retry the same address. The server sends no instruction to
+ * list tools again; recovery is the host's behaviour (ADR-141, widget URI
+ * identity amendment, MCP-489).
+ *
+ * The set is closed: `…-899803c6.html` is release 1.181.1's address, the last
+ * per-build address production served, and `…-5ce56c4b.html` is release
+ * 1.178.6's, held by a ChatGPT desktop connector on 2026-09-10.
+ */
+export const RETIRED_WIDGET_URIS: readonly string[] = [
+  'ui://widget/oak-curriculum-app-899803c6.html',
+  'ui://widget/oak-curriculum-app-5ce56c4b.html',
+];
 
 /**
  * Tools that should advertise a widget UI via `_meta.ui.resourceUri`.

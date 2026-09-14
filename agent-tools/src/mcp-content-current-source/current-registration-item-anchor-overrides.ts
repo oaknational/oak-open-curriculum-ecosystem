@@ -35,6 +35,21 @@ export const CURRENT_REGISTRATION_ITEM_ANCHOR_OVERRIDES: Readonly<
       'registerAppResource(\n    server,\n    WIDGET_RESOURCE_NAME,\n    WIDGET_URI,',
     ],
   },
+  // MCP-489: the listing config now also carries the widget settings, so the
+  // description re-anchors on its own line (content unchanged).
+  C691: {
+    'apps/oak-curriculum-mcp-streamable-http/src/register-widget-resource.ts': [
+      "      description: 'Interactive Oak curriculum MCP App for search and curriculum exploration.',",
+    ],
+  },
+  // MCP-489: the widget settings keep their values, are typed against the MCP
+  // Apps resource metadata, and are now served on the listing as well as the
+  // content item.
+  C692: {
+    'apps/oak-curriculum-mcp-streamable-http/src/register-widget-resource.ts': [
+      "const WIDGET_UI_META = {\n  csp: {\n    resourceDomains: ['https://fonts.googleapis.com', 'https://fonts.gstatic.com'],\n  },\n  prefersBorder: false,\n} satisfies McpUiResourceMeta;",
+    ],
+  },
   // MCP-351: the auth response senders extracted verbatim from mcp-auth.ts to
   // mcp-auth-responses.ts (the middleware file split at its line limit); each
   // relocated row re-anchors on the same body at its new home, now exported.

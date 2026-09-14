@@ -1,3 +1,14 @@
+## [1.181.2](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.181.1...v1.181.2) (2026-09-14)
+
+
+### Bug Fixes
+
+* **lint:** keep the export-all ban in the widget env and literal rule blocks ([31287e6](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/31287e621a9b697bd5d76d820ef1142d06885498))
+* **mcp-app:** close the dynamic-import hole in the typegen guard ([849629d](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/849629d5fafd4c75f6a42ef93dff2e2875c7d4b9))
+* **mcp-app:** close the typegen environment guard and true the retired-address claims ([24a3ad8](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/24a3ad8ef01fe223f95b22d3f1898f5a8e2e21fd))
+* **mcp-app:** serve the widget at one fixed address so connected clients keep working ([79ccc9d](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/79ccc9d1f7f70a969b6ca0d59db289d4e1f49253))
+* **mcp-app:** version the widget address and answer retired addresses with not-found ([2c5640c](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/2c5640cf810587453e8f6203ad112a22647719ff))
+
 ## [1.181.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.181.0...v1.181.1) (2026-09-10)
 
 

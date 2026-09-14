@@ -104,8 +104,10 @@ export const APP_AUTH_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaR
   // MCP-353: the under-the-hood allowlist row (C413) retired with the deleted
   // resource (MCP-242's re-review of the pre-deletion file is superseded by
   // that retirement); the file now composes SDK-owned URI sets only.
+  // MCP-489: the retired widget addresses join the allowlist from the SDK;
+  // still URI sets only, no agent-facing content.
   'apps/oak-curriculum-mcp-streamable-http/src/auth/public-resources.ts': excluded(
-    '75bbea61c4b91c53a1ec93133852f9841844f94eb448973f9bbecfd855239227',
+    'feba3bc1c8e933a2bc991cebadc014d636d54fb39431a0195103873899941ca9',
     IMPLEMENTATION_ONLY,
   ),
   // MCP-518: the public-path sets, and the case-normalisation rule they are

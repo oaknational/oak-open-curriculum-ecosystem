@@ -11,6 +11,10 @@
  * official `Client` + `StreamableHTTPClientTransport` — the same transport
  * mechanism real MCP hosts (Cursor, etc.) use.
  *
+ * The server runs in this process, so these tests prove what generation and
+ * registration put on the wire, not what a deployed build serves; the
+ * post-deploy probes in the UAT guide (rows 10.4 to 10.6) cover that.
+ *
  * @see .agent/plans/sdk-and-mcp-enhancements/active/mcp-app-ui-preview-regression.plan.md
  * @see .agent/memory/active/distilled.md line 151 — "pieces vs composition" gap
  */
@@ -20,11 +24,16 @@ import type { Server } from 'node:http';
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
+import { ErrorCode } from '@modelcontextprotocol/sdk/types.js';
 import {
   createStubbedHttpApp,
   SERVED_SURFACE_WITH_USER_SEARCH_LIVE,
 } from './helpers/create-stubbed-http-app.js';
-import { WIDGET_URI, WIDGET_TOOL_NAMES } from '@oaknational/sdk-codegen/widget-constants';
+import {
+  RETIRED_WIDGET_URIS,
+  WIDGET_URI,
+  WIDGET_TOOL_NAMES,
+} from '@oaknational/sdk-codegen/widget-constants';
 import { RESOURCE_MIME_TYPE } from '@modelcontextprotocol/ext-apps/server';
 
 /**
@@ -124,6 +133,22 @@ describe('MCP App UI Composition (Client SDK)', () => {
     }
   });
 
+  it('advertises the published widget address that clients hold', async () => {
+    // Designed sentinel (testing-strategy, "Prove behaviour, never config or
+    // content"): clients keep the address from the tool list they were given,
+    // so the value served here is a contract, not an implementation detail.
+    const { tools } = await client.listTools();
+    const tool = tools.find((t) => t.name === 'get-curriculum-model');
+    const ui = tool?._meta?.ui;
+
+    expect(
+      typeof ui === 'object' && ui !== null && 'resourceUri' in ui ? ui.resourceUri : undefined,
+      'Serving a different widget address breaks every client holding an earlier tool list, ' +
+        'and a published plugin needs a new reviewed version first. Re-adjudicate against ' +
+        'ADR-141 (widget URI identity amendment, MCP-489) before changing this expectation.',
+    ).toBe('ui://widget/oak-curriculum-app-v1.html');
+  });
+
   it('widget resource returns HTML with MCP App MIME type', async () => {
     const result = await client.readResource({ uri: WIDGET_URI });
 
@@ -136,5 +161,37 @@ describe('MCP App UI Composition (Client SDK)', () => {
       throw new Error('Expected text content from widget resource');
     }
     expect(content.text.length, 'Widget HTML should be non-empty').toBeGreaterThan(0);
+  });
+
+  it('publishes the same widget settings on the resource listing and the served content', async () => {
+    // Designed sentinel: a published plugin's snapshot records these
+    // settings, so changing them is an incompatible change that takes a new
+    // widget address and a new plugin version.
+    const published = {
+      csp: { resourceDomains: ['https://fonts.googleapis.com', 'https://fonts.gstatic.com'] },
+      prefersBorder: false,
+    };
+    const message =
+      'The widget settings are part of its published contract. Re-adjudicate against ADR-141 ' +
+      '(widget URI identity amendment, MCP-489) before changing this expectation.';
+
+    const { resources } = await client.listResources();
+    const listed = resources.find((resource) => resource.uri === WIDGET_URI);
+    const { contents } = await client.readResource({ uri: WIDGET_URI });
+
+    expect(listed?._meta?.ui, message).toEqual(published);
+    expect(contents[0]?._meta?.ui, message).toEqual(published);
+  });
+
+  it('answers a retired widget address with resource-not-found, not an authentication challenge', async () => {
+    expect(RETIRED_WIDGET_URIS.length).toBeGreaterThan(0);
+
+    for (const uri of RETIRED_WIDGET_URIS) {
+      // The MCP SDK answers an unregistered resource with InvalidParams
+      // (-32602); the specification's SHOULD is -32002 (ADR-141).
+      await expect(client.readResource({ uri }), uri).rejects.toMatchObject({
+        code: ErrorCode.InvalidParams,
+      });
+    }
   });
 });

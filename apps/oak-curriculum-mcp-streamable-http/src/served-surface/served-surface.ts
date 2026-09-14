@@ -20,12 +20,11 @@
  * special cases hiding outside it.
  *
  * One key is codegen-derived, not hand-frozen: the widget row is keyed by
- * the imported `WIDGET_URI` constant, whose cache-busting suffix derives
- * from the deployed build's identity — per-commit on git-connected
- * deploys, so it changes with every code change but holds across
- * same-commit redeploys (MCP-187 — a frozen copy of the URI here silently
- * stops matching the generated value on deployed builds, so the widget
- * would advertise but never register). The row's *state* remains a
+ * the imported `WIDGET_URI` constant, the one published widget address (the
+ * same on every build; ADR-141, widget URI identity amendment). A copy of the
+ * address here would be a second owner of that contract, free to drift from
+ * the value the tools advertise (the defect MCP-187 fixed was such a copy: the
+ * widget advertised but never registered). The row's *state* remains a
  * reviewed classification; its *key* must never be re-frozen — the
  * `no-restricted-syntax` ban on `ui://widget/` literals in this app's
  * `eslint.config.ts` enforces this at the lint gate.
@@ -121,7 +120,7 @@ export const SERVED_SURFACE = {
     // OAK_CURRICULUM_MCP_EEF_ENABLED kill-switch's resource leg, superseded
     // by this definition (re-enabling is a reviewed change here).
     'eef://interpretation': 'dormant',
-    // Computed key, never a literal: tracks the generated per-build URI so
+    // Computed key, never a literal: the one published widget address, so
     // gate, registration, and tool advertisement stay one constant (MCP-187).
     [WIDGET_URI]: 'live',
     // Agent guidance documents (decisions register D11 as amended by the

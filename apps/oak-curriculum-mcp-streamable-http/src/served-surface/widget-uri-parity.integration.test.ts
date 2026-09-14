@@ -3,16 +3,14 @@
  * Apps UI via `_meta.ui.resourceUri` must have that URI registered as a
  * resource on the same served surface (MCP-187).
  *
- * Honesty note: this test is GREEN even before the MCP-187 fix on local
- * runs — the bug was environment-shaped (codegen hashes the widget URI on
- * deployed builds only, and tests never set `VERCEL`), so the structural
- * guard against the frozen-key defect is the `no-restricted-syntax` ban
- * on hand-frozen `ui://widget/` literals in this app's `eslint.config.ts`
- * (a re-frozen key is a lint error, not a test failure).
- * Post-fix, advertisement and registration key both dereference the one
- * generated constant, so this parity is environment-independent by
- * construction; the test stands as the forward guard for any future
- * divergence class visible at registration time.
+ * Advertisement and registration key both dereference the one generated
+ * `WIDGET_URI` constant (ADR-141, widget URI identity amendment), so this
+ * parity holds by construction. The
+ * structural guard against a hand-frozen copy of the address is the
+ * `no-restricted-syntax` ban on `ui://widget/` literals in this app's
+ * `eslint.config.ts` (a re-frozen key is a lint error, not a test failure);
+ * this test stands as the forward guard for any divergence visible at
+ * registration time.
  *
  * Deliberate semantics: flipping the widget resource dormant while a
  * widget-advertising tool stays live FAILS this test by design — the

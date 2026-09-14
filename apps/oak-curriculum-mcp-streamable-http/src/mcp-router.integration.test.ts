@@ -10,7 +10,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Request, Response, NextFunction, RequestHandler } from 'express';
 import { createMcpRouter } from './mcp-router.js';
-import { WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools';
+import { RETIRED_WIDGET_URIS, WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools';
 import { createMockExpressRequest, createMockExpressResponse } from './test-helpers/fakes.js';
 
 describe('createMcpRouter (Integration)', () => {
@@ -75,6 +75,17 @@ describe('createMcpRouter (Integration)', () => {
 
       router(req, mockRes, mockNext);
 
+      expect(mockAuthMw).not.toHaveBeenCalled();
+    });
+
+    it('skips auth for retired widget addresses, so the read reaches not-found rather than a challenge', () => {
+      const router = createMcpRouter({ auth: mockAuthMw });
+
+      for (const uri of RETIRED_WIDGET_URIS) {
+        router(createMockRequest({ method: 'resources/read', params: { uri } }), mockRes, mockNext);
+      }
+
+      expect(RETIRED_WIDGET_URIS.length).toBeGreaterThan(0);
       expect(mockAuthMw).not.toHaveBeenCalled();
     });
 

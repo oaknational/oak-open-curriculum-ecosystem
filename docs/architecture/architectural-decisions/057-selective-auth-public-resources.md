@@ -3,7 +3,9 @@
 ## Status
 
 Accepted. Amended 2026-05-10 to clarify that the public-resource bypass is a
-deliberate carve-out, not a precedent for unauthenticated MCP methods.
+deliberate carve-out, not a precedent for unauthenticated MCP methods. Amended
+2026-09-14 (MCP-489) to name the current widget constants and the retired
+widget addresses.
 
 ## Context
 
@@ -11,19 +13,19 @@ ChatGPT makes approximately 60 `resources/read` calls during discovery to fetch 
 
 The resources being fetched are:
 
-- Widget HTML (`ui://widget/oak-json-viewer.html`) - static shell
+- Widget HTML (the MCP App widget at `WIDGET_URI`) - static document
 - Documentation (`docs://oak/*.md`) - static markdown
 
 These resources contain **no user-specific data**:
 
-- Widget HTML is a static shell that loads JS/CSS. User-specific data arrives via `window.openai.toolOutput` at render time.
+- Widget HTML is a static, self-contained app. User-specific data reaches it from tool results through the MCP Apps host at render time.
 - Documentation is static markdown generated at SDK compile time with no user-specific information.
 
 ## Decision
 
 Skip Clerk authentication for `resources/read` requests where the URI matches a known public resource:
 
-1. Widget URI from `AGGREGATED_TOOL_WIDGET_URI`
+1. The widget address, `WIDGET_URI`, and the retired widget addresses, `RETIRED_WIDGET_URIS`, from the SDK (ADR-141). A retired address is not served; listing it lets an unauthenticated read reach the resource-not-found error instead of an authorization challenge.
 2. Documentation URIs from SDK's `DOCUMENTATION_RESOURCES`
 
 Both auth layers are updated:
@@ -31,7 +33,7 @@ Both auth layers are updated:
 - `conditional-clerk-middleware.ts` - skips Clerk context setup (~170ms overhead)
 - `mcp-router.ts` - skips auth middleware
 
-The public resource list is derived from source constants, ensuring synchronisation with registered resources.
+The public resource list is derived from source constants, ensuring synchronisation with registered resources. The retired widget addresses are the one listed set that is deliberately not registered.
 
 This is the only accepted HTTP-auth bypass for MCP JSON-RPC methods. The bypass
 is valid only when all of the following are true:
@@ -76,11 +78,11 @@ Both middleware files import these shared utilities, avoiding code duplication.
 
 ### Neutral
 
-- Public resource list is constructed from source constants (`AGGREGATED_TOOL_WIDGET_URI`, `DOCUMENTATION_RESOURCES`), ensuring automatic synchronisation when resources are registered
+- Public resource list is constructed from source constants (`WIDGET_URI`, `RETIRED_WIDGET_URIS`, `DOCUMENTATION_RESOURCES`, `NAVIGATION_GUIDANCE_URIS`), ensuring automatic synchronisation when resources are registered
 
 ## References
 
-- [OpenAI Apps SDK: Widget Resources](https://platform.openai.com/docs/guides/apps) - Widget resources are static shells
+- [MCP Apps specification](https://github.com/modelcontextprotocol/ext-apps/blob/main/specification/2026-01-26/apps.mdx) - UI resources are static HTML documents a host renders in a sandbox
 - [MCP Spec: Resources](https://modelcontextprotocol.io/specification/2025-06-18/server/resources) - resources/list is discovery (no auth), resources/read follows resource security
 - [ADR-056: Conditional Clerk Middleware for Discovery](./056-conditional-clerk-middleware-for-discovery.md) - Initial discovery method auth bypass
 - Plan 15a: Public Resource Authentication Bypass
