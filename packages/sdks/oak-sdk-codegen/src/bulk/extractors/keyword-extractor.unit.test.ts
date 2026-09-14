@@ -347,18 +347,20 @@ describe('extractKeywords', () => {
     ]);
   });
 
-  it('places the keyword but records no definition when a lesson authors a blank one', () => {
+  it('skips a keyword entry whose definition is blank, so every placement has a definition', () => {
     const lessons: readonly Lesson[] = [
       createLesson({
         lessonSlug: 'lesson-a',
-        lessonKeywords: [{ keyword: 'array', description: '   ' }],
+        lessonKeywords: [
+          { keyword: 'array', description: '   ' },
+          { keyword: 'factor', description: 'A number that divides exactly' },
+        ],
       }),
     ];
 
     const result = extractKeywords(lessons);
 
-    expect(result[0].lessonSlugs).toEqual(['lesson-a']);
-    expect(result[0].definitions).toEqual([]);
+    expect(result.map((keyword) => keyword.term)).toEqual(['factor']);
   });
 
   it('counts a lesson placed in two units once under its definition', () => {

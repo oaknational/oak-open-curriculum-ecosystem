@@ -907,7 +907,7 @@
     },
     {
       "file": "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-keyword-graph.ts",
-      "semanticSha256": "79fec0a0e1af203d5044f967067629f607dcb53c68df44b3742881311e891c3b",
+      "semanticSha256": "39dc2a566f629437db9cb2531926551beb5b373e53734779b082bd221df9ad50",
       "itemIds": [
         "C221",
         "C222",

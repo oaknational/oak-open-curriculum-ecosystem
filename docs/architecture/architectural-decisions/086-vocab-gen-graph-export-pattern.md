@@ -22,7 +22,8 @@
 >   (lesson, keyword) pairs are exactly the edge set. A definition keeps its
 >   authored text with whitespace collapsed, so variants differing only in
 >   spacing or capitals are one row (keeping the text that sorts first by
->   code unit), and a blank definition is skipped; terms are trimmed
+>   code unit), and a keyword entry with a blank definition is skipped whole, so every
+>   placement carries a definition; terms are trimmed
 >   with case preserved.
 >   This states the rule the ordered sections already follow: an attribute of
 >   a relation that the attribute-less edge set cannot carry, such as

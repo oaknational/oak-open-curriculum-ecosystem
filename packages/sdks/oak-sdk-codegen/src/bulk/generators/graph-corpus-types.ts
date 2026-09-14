@@ -100,7 +100,7 @@ export interface GraphCorpusMisconceptionNode {
  * Lean by design: richness arrives via `containsKeyword` edge traversal
  * (keyword→lesson→unit/thread/misconception) on the one-graph substrate,
  * never via a fat node. `term` is the normalised term (the id's suffix); the
- * terms and definitions lessons authored live in `keywordDefinitions`.
+ * terms and definitions authored by lessons live in `keywordDefinitions`.
  * `frequency` is the unique-lesson
  * count; `firstYear` is key-stage-derived (coarse), not placement-year.
  */

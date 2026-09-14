@@ -64,10 +64,11 @@ export const SDK_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
   // Lesson-authored keyword definitions (2026-09-13): the description (C222)
   // says each keyword carries every definition its in-scope lessons authored,
   // naming up to three of its lessons by slug, replacing one corpus-wide
-  // description; it gains the large-payload note browse and search carry and
-  // drops the "token-economical" and unit-navigation claims.
+  // description; it gains the large-payload note browse and search carry,
+  // drops the "token-economical" and unit-navigation claims, and states that
+  // there is no paging past the three-lesson cut.
   'packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-keyword-graph.ts': reviewed(
-    '79fec0a0e1af203d5044f967067629f607dcb53c68df44b3742881311e891c3b',
+    '39dc2a566f629437db9cb2531926551beb5b373e53734779b082bd221df9ad50',
     [
       'C221',
       'C222',

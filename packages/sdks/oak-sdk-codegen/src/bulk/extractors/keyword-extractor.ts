@@ -114,9 +114,9 @@ interface KeywordAccumulator {
  * Records that a lesson authors this definition for the keyword.
  *
  * @remarks
- * Definitions compare case-insensitively with whitespace collapsed; a blank one
- * is skipped. Terms and definitions that differ only in capitals merge, each
- * keeping its code-unit-first casing (independent of lesson order).
+ * Definitions compare case-insensitively with whitespace collapsed. Terms and
+ * definitions that differ only in capitals merge, each keeping its
+ * code-unit-first casing (independent of lesson order).
  */
 function addDefinition(
   acc: KeywordAccumulator,
@@ -125,9 +125,6 @@ function addDefinition(
   lessonSlug: string,
 ): void {
   const definition = authoredDefinition.trim().replaceAll(/\s+/g, ' ');
-  if (definition === '') {
-    return;
-  }
   const key = definition.toLowerCase();
   const existing = acc.definitions.get(key);
   if (existing) {
@@ -211,14 +208,15 @@ export function extractKeywords(lessons: readonly Lesson[]): readonly ExtractedK
 }
 
 /**
- * Processes all keywords from a single lesson.
+ * Processes all keywords from a single lesson. An entry with a blank definition
+ * is skipped whole, so every recorded placement carries a definition.
  */
 function processLessonKeywords(
   lesson: Lesson,
   lessonYear: number,
   keywordMap: Map<string, KeywordAccumulator>,
 ): void {
-  for (const kw of lesson.lessonKeywords) {
+  for (const kw of lesson.lessonKeywords.filter((entry) => entry.description.trim() !== '')) {
     const normalised = normaliseKeyword(kw.keyword);
     let acc = keywordMap.get(normalised);
 
