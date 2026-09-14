@@ -229,7 +229,7 @@ Summary:
   - `CLERK_PUBLISHABLE_KEY` — Clerk publishable key for OAuth
   - `CLERK_SECRET_KEY` — Clerk secret key for auth middleware
 - Optional env:
-  - `ALLOWED_HOSTS` (comma-separated, additive, supports `*` wildcards). Names hosts to allow **in addition to** the Vercel system hostnames and `localhost`/`127.0.0.1`/`::1`; it cannot remove a host from the allow-list. It gates two things: the DNS-rebinding guard on the HTML surfaces (`GET /` and the `/mcp` HTML-negotiation leg), and the Host a request may be self-described from in OAuth metadata and `/mcp` auth challenge/resource URLs. When `CANONICAL_HOST` is set it supersedes that second use entirely — self-description then reads the configured origin and never consults this list. Narrowing self-description is `CANONICAL_HOST`'s job, never this variable's.
+  - `ALLOWED_HOSTS` (comma-separated, additive, supports `*` wildcards). Names hosts to allow **in addition to** the Vercel system hostnames and `localhost`/`127.0.0.1`/`::1`; it cannot remove a host from the allow-list. It gates the Host a request may be self-described from in OAuth metadata and `/mcp` auth challenge/resource URLs. (It also bounds `dnsRebindingProtection`, but that guard is mounted on **no route** since the HTML surfaces were removed on 2026-08-20 — MCP-650 owns remounting it — so setting this variable changes no Host-rejection behaviour today.) When `CANONICAL_HOST` is set it supersedes that second use entirely — self-description then reads the configured origin and never consults this list. Narrowing self-description is `CANONICAL_HOST`'s job, never this variable's.
   - `CANONICAL_HOST` — the address this server is served at when an edge presents a different Host to the origin (see [Canonical address](#canonical-address)). Bare hostname; startup-validated.
   - `LOG_LEVEL` (default `info`, use `debug` for staging)
   - `SENTRY_MODE` — `off` (default), `fixture`, or `sentry`
@@ -444,9 +444,11 @@ This application has comprehensive test coverage across three testing layers:
 
 ### Widget Tests (Playwright)
 
-Widget tests run against the Vite dev server (port 5173), separate from
-the MCP server landing page tests (port 3333). Both light and dark
-themes are tested via Playwright projects with `colorScheme` emulation.
+Widget tests run against the Vite dev server (port 5173). Both light and
+dark themes are tested via Playwright projects with `colorScheme`
+emulation. This workspace has no other Playwright suite: the browser
+suite that ran on port 3333 covered the landing page and went with it on
+2026-08-20.
 
 ```bash
 # Widget visual/structural tests (both themes)
@@ -468,9 +470,9 @@ pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:widget
 # E2E tests (Vitest, requires built artefacts)
 pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e
 
-# MCP server landing page tests (Playwright)
-pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:ui
-pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:a11y
+# Widget browser tests (Playwright)
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:widget:ui
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:widget:a11y
 
 # Widget Playwright tests (separate from server tests)
 pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:widget:ui

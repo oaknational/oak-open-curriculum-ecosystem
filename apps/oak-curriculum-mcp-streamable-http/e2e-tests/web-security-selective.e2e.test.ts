@@ -9,6 +9,7 @@ import {
   createUnauthenticatedMcpAuthClerkDeps,
 } from './helpers/test-config.js';
 import { getScratchStaticRoot } from '../src/test-helpers/static-root-fixture.js';
+import { OAK_DS_MARKER, ROUTED_ASSET_BASE } from '../src/app/static-asset-paths.js';
 
 const mockRuntimeConfig: RuntimeConfig = {
   env: {
@@ -36,26 +37,42 @@ async function createTestApp() {
     runtimeConfig: mockRuntimeConfig,
     observability,
     getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
-    getLandingPageHtml: () =>
-      '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
     upstreamMetadata: TEST_UPSTREAM_METADATA,
     clerkMiddlewareFactory: createNoOpClerkMiddleware(),
     mcpAuthClerkDeps: createUnauthenticatedMcpAuthClerkDeps(),
   });
 }
 
+/** The browser-fetched asset the CORS and helmet cases below ride. */
+const SERVED_ASSET = `${ROUTED_ASSET_BASE}/${OAK_DS_MARKER}`;
+
 /**
  * E2E tests for selective web security application.
  *
  * CORS is applied globally for browser compatibility.
- * DNS rebinding protection is selective by route.
+ *
+ * @remarks
+ * The CORS and helmet cases used `GET /` as their vehicle while it served an
+ * HTML page. Since 2026-08-20 this host serves no HTML, so they ride the
+ * served asset instead — still a browser-fetched, non-JSON response from this
+ * origin, which is what the policies they assert actually govern.
+ *
+ * The eight Host-header cases that sat alongside them are gone from this
+ * file. They exercised `dnsRebindingProtection`, whose only two mounts were
+ * the HTML surfaces; with those gone the guard is mounted on no app route
+ * (MCP-650), so no request through `createTestApp` can reach it. Their
+ * subject moved intact to `src/security-config.integration.test.ts`, which
+ * mounts the guard on its own app. The Host rejections that remain in this
+ * file, under "DNS rebinding protection - selective by route", are a
+ * DIFFERENT mechanism — the auth layer's `deriveSelfOrigin` — and are
+ * untouched.
  */
 describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
-  describe('Landing page (/) - HAS web security', () => {
-    it('applies CORS headers to landing page', async () => {
+  describe('Served asset surface - HAS web security', () => {
+    it('applies CORS headers to a browser-fetched asset', async () => {
       const app = await createTestApp();
       const res = await request(app)
-        .get('/')
+        .get(SERVED_ASSET)
         .set('Host', 'localhost')
         .set('Origin', 'http://example.com');
 
@@ -68,80 +85,12 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
     it('allows any cross-origin request (permissive CORS for OAuth-protected MCP)', async () => {
       const app = await createTestApp();
       const res = await request(app)
-        .get('/')
+        .get(SERVED_ASSET)
         .set('Host', 'localhost')
         .set('Origin', 'http://totally-different.com');
 
       expect(res.headers['access-control-allow-origin']).toBe('http://totally-different.com');
       expect(res.status).toBe(200);
-    });
-
-    it('blocks requests with invalid Host header', async () => {
-      const app = await createTestApp();
-      const res = await request(app).get('/').set('Host', 'evil.com');
-
-      // Should be blocked by DNS rebinding protection
-      expect(res.status).toBe(403);
-      expect(res.body).toHaveProperty('error');
-
-      expect(res.body.error).toContain('host not allowed');
-    });
-
-    it('blocks malformed Host header with userinfo-like syntax', async () => {
-      const app = await createTestApp();
-      const res = await request(app).get('/').set('Host', 'localhost:3333@evil.com');
-
-      expect(res.status).toBe(403);
-      expect(res.body).toHaveProperty('error');
-    });
-
-    it('blocks malformed bracketed Host header', async () => {
-      const app = await createTestApp();
-      const res = await request(app).get('/').set('Host', '[::1]evil');
-
-      expect(res.status).toBe(403);
-      expect(res.body).toHaveProperty('error');
-    });
-
-    it('allows requests with valid Host header', async () => {
-      const app = await createTestApp();
-      const res = await request(app).get('/').set('Host', 'localhost');
-
-      // Should not be blocked (valid host)
-      expect(res.status).toBe(200);
-      expect(res.type).toBe('text/html');
-    });
-
-    it('allows requests with localhost:port Host header', async () => {
-      const app = await createTestApp();
-      const res = await request(app).get('/').set('Host', 'localhost:3333');
-
-      expect(res.status).toBe(200);
-      expect(res.type).toBe('text/html');
-    });
-
-    it('allows requests with 127.0.0.1:port Host header', async () => {
-      const app = await createTestApp();
-      const res = await request(app).get('/').set('Host', '127.0.0.1:3333');
-
-      expect(res.status).toBe(200);
-      expect(res.type).toBe('text/html');
-    });
-
-    it('allows requests with IPv6 [::1]:port Host header', async () => {
-      const app = await createTestApp();
-      const res = await request(app).get('/').set('Host', '[::1]:3333');
-
-      expect(res.status).toBe(200);
-      expect(res.type).toBe('text/html');
-    });
-
-    it('allows requests with IPv6 [::1] Host header (no port)', async () => {
-      const app = await createTestApp();
-      const res = await request(app).get('/').set('Host', '[::1]');
-
-      expect(res.status).toBe(200);
-      expect(res.type).toBe('text/html');
     });
   });
 
@@ -258,10 +207,10 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
   });
 
   describe('CORS behaviour - permissive for all origins', () => {
-    it('landing page reflects any origin (permissive CORS)', async () => {
+    it('the asset surface reflects any origin (permissive CORS)', async () => {
       const app = await createTestApp();
       const res = await request(app)
-        .get('/')
+        .get(SERVED_ASSET)
         .set('Host', 'localhost')
         .set('Origin', 'http://any-origin.com');
 
@@ -285,10 +234,10 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
  * Verifies that security headers are applied to all responses.
  */
 describe('Security Headers (Helmet) - Applied Globally', () => {
-  describe('Landing page (/) - HTML response', () => {
+  describe('Served asset surface - non-JSON response', () => {
     it('has Content-Security-Policy header', async () => {
       const app = await createTestApp();
-      const res = await request(app).get('/').set('Host', 'localhost');
+      const res = await request(app).get(SERVED_ASSET).set('Host', 'localhost');
 
       expect(res.headers['content-security-policy']).toBeDefined();
       expect(res.headers['content-security-policy']).toContain("default-src 'self'");
@@ -296,7 +245,7 @@ describe('Security Headers (Helmet) - Applied Globally', () => {
 
     it('CSP permits the app to serve its own fonts', async () => {
       const app = await createTestApp();
-      const res = await request(app).get('/').set('Host', 'localhost');
+      const res = await request(app).get(SERVED_ASSET).set('Host', 'localhost');
       const csp = res.headers['content-security-policy'];
 
       // The design system is served from this origin, so the policy must
@@ -308,16 +257,16 @@ describe('Security Headers (Helmet) - Applied Globally', () => {
 
     it('CSP allows images from same origin', async () => {
       const app = await createTestApp();
-      const res = await request(app).get('/').set('Host', 'localhost');
+      const res = await request(app).get(SERVED_ASSET).set('Host', 'localhost');
       const csp = res.headers['content-security-policy'];
 
-      // Images can be loaded from same origin (logo is inline SVG)
+      // Images are loaded from this origin only — the served brand artwork.
       expect(csp).toContain("img-src 'self'");
     });
 
     it('CSP allows connections to same origin', async () => {
       const app = await createTestApp();
-      const res = await request(app).get('/').set('Host', 'localhost');
+      const res = await request(app).get(SERVED_ASSET).set('Host', 'localhost');
       const csp = res.headers['content-security-policy'];
 
       // Connections allowed to same origin (no data: URIs needed)
@@ -326,7 +275,7 @@ describe('Security Headers (Helmet) - Applied Globally', () => {
 
     it('CSP allows same-origin and inline scripts for Cloudflare', async () => {
       const app = await createTestApp();
-      const res = await request(app).get('/').set('Host', 'localhost');
+      const res = await request(app).get(SERVED_ASSET).set('Host', 'localhost');
       const csp = res.headers['content-security-policy'];
 
       // Cloudflare injects inline scripts for bot detection that load from /cdn-cgi/
@@ -335,21 +284,21 @@ describe('Security Headers (Helmet) - Applied Globally', () => {
 
     it('has X-Content-Type-Options: nosniff', async () => {
       const app = await createTestApp();
-      const res = await request(app).get('/').set('Host', 'localhost');
+      const res = await request(app).get(SERVED_ASSET).set('Host', 'localhost');
 
       expect(res.headers['x-content-type-options']).toBe('nosniff');
     });
 
     it('has X-Frame-Options: SAMEORIGIN', async () => {
       const app = await createTestApp();
-      const res = await request(app).get('/').set('Host', 'localhost');
+      const res = await request(app).get(SERVED_ASSET).set('Host', 'localhost');
 
       expect(res.headers['x-frame-options']).toBe('SAMEORIGIN');
     });
 
     it('has Strict-Transport-Security header', async () => {
       const app = await createTestApp();
-      const res = await request(app).get('/').set('Host', 'localhost');
+      const res = await request(app).get(SERVED_ASSET).set('Host', 'localhost');
       const hsts = res.headers['strict-transport-security'];
 
       expect(hsts).toBeDefined();
@@ -358,7 +307,7 @@ describe('Security Headers (Helmet) - Applied Globally', () => {
 
     it('does not disclose framework identity via X-Powered-By', async () => {
       const app = await createTestApp();
-      const res = await request(app).get('/').set('Host', 'localhost');
+      const res = await request(app).get(SERVED_ASSET).set('Host', 'localhost');
 
       expect(res.headers['x-powered-by']).toBeUndefined();
     });

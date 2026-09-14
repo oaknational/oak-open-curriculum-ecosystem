@@ -40,11 +40,29 @@
  *    comma-separated value (`getFirstValueFromHeader` in `@clerk/backend`), and
  *    Vercel has already populated `x-forwarded-host` with the deployment
  *    hostname — so appending would silently change nothing.
- * 2. The `Host` header is never touched. `dnsRebindingProtection` validates the
- *    RAW Host against an allow-list that deliberately excludes the canonical
- *    address (the edge presents the deployment hostname), so rewriting Host
- *    would trip the app's own rebinding guard. Consumers prefer
- *    `x-forwarded-host` over Host, so replacing the forwarded pair suffices.
+ * 2. The `Host` header is never touched. It is this app's only first-hand
+ *    record of the hostname the edge actually presented, and with
+ *    `trust proxy` off every Host-derived reader — Express's `req.hostname`
+ *    and `req.protocol`, and `dnsRebindingProtection` once MCP-650 mounts it —
+ *    is entitled to that arrival value rather than a configured substitute.
+ *    This shim's job is to STATE the public origin on the interface
+ *    origin-deriving consumers actually read; rewriting Host would instead
+ *    falsify the arrival record, and buy nothing, because those consumers
+ *    prefer `x-forwarded-host` over Host anyway. Replacing the forwarded pair
+ *    suffices.
+ *
+ *    Two reasons previously given here are NOT the reason, and are recorded
+ *    because each reads plausibly. The first was the app's own
+ *    `dnsRebindingProtection` reading the raw Host; that guard is mounted on
+ *    no route today (MCP-650 owns re-mounting it), so it cannot be what makes
+ *    the property load-bearing now. The second was that the canonical address
+ *    is not one the platform would resolve, so an in-app rewrite would leave
+ *    the request unroutable. Measured 2026-09-10, both halves of that are
+ *    false: `mcp.thenational.academy` resolves (Cloudflare anycast) and
+ *    reaches THIS app — `GET /` answers with its own `x-app-version` — and in
+ *    any case the platform has finished routing long before app middleware
+ *    runs, so nothing an app handler writes to Host can affect routing at all.
+ *    The behaviour was always right; only its stated warrant was wrong.
  *
  * Express's own proxy-aware getters (`req.hostname`, `req.protocol`) are
  * unaffected and stay Host-derived — correct and deliberate, because

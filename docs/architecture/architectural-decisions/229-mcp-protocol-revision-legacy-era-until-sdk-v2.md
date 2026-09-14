@@ -161,11 +161,13 @@ clients locked out.
   returns `401` whether or not the method exists. The `401` is evidence in
   neither direction; the code-level and composition-level measurements
   above are the evidence.
-- `src/landing-page/components/site-chrome.tsx` contains the string
-  `2026-07-28`, which MCP-644 flagged as unresolved. **Resolved: it is a
+- `src/landing-page/components/site-chrome.tsx` contained the string
+  `2026-07-28`, which MCP-644 flagged as unresolved. **Resolved: it was a
   date**, recording when the footer's two legal URLs were verified live. It
-  is not evidence of protocol support. Several other `2026-07-28` strings
-  in the repository are likewise dates or owner-ruling stamps.
+  was not evidence of protocol support. That file was deleted on 2026-08-20
+  with the landing page, so the string is gone; the resolution is kept
+  because the flag is on the record. Several other `2026-07-28` strings in
+  the repository are likewise dates or owner-ruling stamps.
 
 ## Decision
 

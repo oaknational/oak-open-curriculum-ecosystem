@@ -1,40 +1,24 @@
 /**
- * Static content route mounting: landing page and public assets.
+ * Static content route mounting: the public asset trees.
+ *
+ * @remarks
+ * This module used to answer `GET /` with a rendered HTML document as well.
+ * It does not: `mcp.thenational.academy` is the MCP server and nothing else
+ * (owner ruling, 2026-08-20), so `/` has no route here and returns 404. Any
+ * HTML for this product is served by Oak-Web-Application.
  *
  * Extracted from `application.ts` to keep each module under the
  * file-length lint ceiling.
  */
 
 import { static as expressStatic } from 'express';
-import type { Express, RequestHandler } from 'express';
+import type { Express } from 'express';
 import path from 'node:path';
 import fs from 'node:fs';
 import type { Logger } from '@oaknational/logger';
 import { err, ok, type Result } from '@oaknational/result';
 
 import { OAK_ASSETS_MARKER, OAK_DS_MARKER, ROUTED_ASSET_BASE } from './static-asset-paths.js';
-
-function addRootLandingPage(
-  app: Express,
-  dnsRebindingMw: RequestHandler,
-  log: Logger,
-  getLandingPageHtml: () => string,
-): void {
-  app.get('/', dnsRebindingMw, (req, res) => {
-    log.debug('landing.get', { path: req.path, method: req.method });
-    // The baked artefact, rendered once at build time — no React, no
-    // derivation, no per-request render (owner ruling; ADR-217 lineage).
-    //
-    // `Vary: Accept` and `no-store` match what the `/mcp` negotiation sets on
-    // the same document (`mcp-middleware.ts`). Both became load-bearing here
-    // once the public-browser fork reached `/` (MCP-518): whether the auth
-    // vendor runs on this URL — and so whether the response carries its
-    // headers — now depends on `Accept`, and no intermediary may pair one
-    // request's answer with another's.
-    res.vary('Accept');
-    res.type('text/html').set('Cache-Control', 'no-store').send(getLandingPageHtml());
-  });
-}
 
 /** Why a static root could not be resolved. */
 export interface StaticRootError {
@@ -78,12 +62,12 @@ export function resolveStaticRoot(
  * Vercel), unless an explicit root is injected. That heuristic used to fail
  * open: no candidate meant no mount, and the server came up healthy.
  *
- * The design system and brand artwork are delivered from this directory —
- * including the masthead logo the page references — so failing open costs
- * them silently: a page that returns 200 with a broken image today, and
- * unstyled HTML once the page consumes the stylesheets. A missing copy is a
- * broken deployment, so it is treated as one at boot rather than discovered
- * by a visitor. (The boot-time throw is the deliberate fail-fast exception
+ * The design system and brand artwork are delivered from this directory, so
+ * failing open costs them silently: every asset request 404s while the server
+ * itself reports healthy. A missing copy is a broken deployment, so it is
+ * treated as one at boot rather than discovered by a consumer. (The page that
+ * referenced the masthead logo went on 2026-08-20; the mount outlived it and
+ * its removal is a separately sequenced change.) (The boot-time throw is the deliberate fail-fast exception
  * to the Result pattern: there is no caller above `createApp` to hand a
  * Result to, and a half-booted server is the worse outcome.)
  */
@@ -129,11 +113,14 @@ function mountStaticAssets(app: Express, log: Logger, staticRoot?: string): void
   // `redirect: false` is load-bearing on the routed mount, not hardening.
   // Mounted at `/mcp`, a bare `GET /mcp` arrives as a request for the mount's
   // own directory, and with express.static's default that is a 301 to `/mcp/`,
-  // which would swallow the request before the HTML negotiation and the MCP
-  // protocol legs behind it ever ran. Off, a directory request falls through
-  // to `next()` — so `GET /mcp` still negotiates HTML and `POST /mcp` still
-  // reaches the handler. `mcp-html-negotiation.integration.test.ts` demands
-  // `GET /mcp` return the baked page byte-exactly, so it fails on a 301.
+  // which would swallow the request before the MCP protocol legs behind it
+  // ever ran. Off, a directory request falls through to `next()` — so
+  // `GET /mcp` still reaches the accept gate and `POST /mcp` still reaches the
+  // handler. Pinned by `no-html-surface.integration.test.ts`, which requires
+  // `GET`/`HEAD /mcp` to answer with the gate's typed 406 and `POST /mcp` to
+  // reach the handler; a 301 from this mount fails all of them. (Until
+  // 2026-08-20 the pin was `mcp-html-negotiation.integration.test.ts`,
+  // deleted with the HTML surface it described.)
   //
   // `index: false` is hardening rather than load-bearing: the served root has
   // no `index.html`, so the probe finds nothing today. It is set so that
@@ -154,17 +141,13 @@ function mountStaticAssets(app: Express, log: Logger, staticRoot?: string): void
 
 /** What the static-content mount needs from the app's options. */
 export interface StaticContentOptions {
-  /** The baked landing-page document; see `CreateAppOptions.getLandingPageHtml`. */
-  readonly getLandingPageHtml: () => string;
   readonly staticRoot?: string;
 }
 
 export function mountStaticContentRoutes(
   app: Express,
-  dnsRebindingMw: RequestHandler,
   log: Logger,
   options: StaticContentOptions,
 ): void {
-  addRootLandingPage(app, dnsRebindingMw, log, options.getLandingPageHtml);
   mountStaticAssets(app, log, options.staticRoot);
 }

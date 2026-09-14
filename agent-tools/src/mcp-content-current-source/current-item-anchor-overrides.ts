@@ -8,7 +8,6 @@
 import { CURRENT_AGGREGATED_ITEM_ANCHOR_OVERRIDES } from './current-aggregated-item-anchor-overrides.js';
 import { CURRENT_GENERATED_DESCRIPTION_ANCHOR_OVERRIDES } from './current-generated-description-anchor-overrides.js';
 import { CURRENT_GENERATED_ITEM_ANCHOR_OVERRIDES } from './current-generated-item-anchor-overrides.js';
-import { CURRENT_LANDING_ITEM_ANCHOR_OVERRIDES } from './current-landing-item-anchor-overrides.js';
 import { CURRENT_REGISTRATION_ITEM_ANCHOR_OVERRIDES } from './current-registration-item-anchor-overrides.js';
 import { CURRENT_SPEC_REFRESH_ITEM_ANCHOR_OVERRIDES } from './current-spec-refresh-item-anchor-overrides.js';
 import { CURRENT_MISCONCEPTION_ORDER_ITEM_ANCHOR_OVERRIDES } from './current-misconception-order-item-anchor-overrides.js';
@@ -22,6 +21,7 @@ const LEARNING = `${GUIDANCE_ROOT}/learning-progression.ts`;
 const MAPPING = `${GUIDANCE_ROOT}/curriculum-mapping.ts`;
 const ADAPT = `${GUIDANCE_ROOT}/adapt-lesson.ts`;
 const CONTINUE = `${GUIDANCE_ROOT}/continue-progression.ts`;
+const SERVED_ORIGIN = 'apps/oak-curriculum-mcp-streamable-http/src/served-origin.ts';
 type AnchorOverrides = Readonly<Record<string, Readonly<Record<string, readonly string[]>>>>;
 
 export const CURRENT_ITEM_ANCHOR_OVERRIDES: AnchorOverrides = {
@@ -29,6 +29,17 @@ export const CURRENT_ITEM_ANCHOR_OVERRIDES: AnchorOverrides = {
   ...CURRENT_GENERATED_DESCRIPTION_ANCHOR_OVERRIDES,
   ...CURRENT_AGGREGATED_ITEM_ANCHOR_OVERRIDES,
   ...CURRENT_PRIOR_KNOWLEDGE_ITEM_ANCHOR_OVERRIDES,
+  /**
+   * The landing page's canonical-URL resolution, promoted to `served-origin.ts`
+   * by MCP-351. It is the sole survivor of the landing-page override group,
+   * which had its own module until 2026-08-20; the page went and every other
+   * row in that module retired with it, so the one row that outlived the page
+   * lives here rather than in a module named for a surface that no longer
+   * exists.
+   */
+  C355: {
+    [SERVED_ORIGIN]: ['export function resolveServedMcpUrl(inputs: ServedOriginInputs): string {'],
+  },
   C178: {
     [FIND]: [
       'find curriculum lessons on a topic the teacher names, across all subjects and key stages',
@@ -226,7 +237,6 @@ export const CURRENT_ITEM_ANCHOR_OVERRIDES: AnchorOverrides = {
   ...CURRENT_THREAD_PROGRESSIONS_ITEM_ANCHOR_OVERRIDES,
   ...CURRENT_MISCONCEPTION_ORDER_ITEM_ANCHOR_OVERRIDES,
   ...CURRENT_REGISTRATION_ITEM_ANCHOR_OVERRIDES,
-  ...CURRENT_LANDING_ITEM_ANCHOR_OVERRIDES,
   ...CURRENT_SPEC_REFRESH_ITEM_ANCHOR_OVERRIDES,
   // MCP-353: C413 (the under-the-hood public-allowlist row) retired with the
   // deleted resource — no current anchor; the retirement rides the lineage.

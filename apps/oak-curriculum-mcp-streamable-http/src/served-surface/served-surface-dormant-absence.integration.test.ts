@@ -11,6 +11,10 @@
  * (server instructions / context hints) joins the same walk when it
  * lands — add its rendered text as a surface here.
  *
+ * The two landing-page surfaces this walk used to cover left with the page
+ * itself (2026-08-20: this host serves no HTML). The invariant is
+ * unchanged; it now has two fewer places to be violated.
+ *
  * The generated widget content does not enumerate tools or resources
  * (verified 2026-07-23: its only matches are minified-JS tokens), so it
  * carries no surface entry yet; if it ever renders inventory, it joins
@@ -24,10 +28,6 @@
 import { describe, it, expect } from 'vitest';
 import { z } from 'zod';
 import { getCurriculumModelJson } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
-import { renderToStaticMarkup } from 'react-dom/server';
-import { ToolsSection } from '../landing-page/components/tools-section.js';
-import { ResourcesSection } from '../landing-page/components/resources-section.js';
-import { deriveLandingPageViewProps } from '../landing-page/derive-view-props.js';
 import { SERVED_SURFACE } from './served-surface.js';
 import { filterCurriculumModelJson } from './filter-guidance-content.js';
 import { walkCanonicalRegistration } from '../test-helpers/registration-walk.js';
@@ -55,17 +55,6 @@ function walkRegistration(): {
 }
 
 const registration = walkRegistration();
-// Rendered through the build-time derivation, as the baked page is.
-const viewProps = deriveLandingPageViewProps();
-const toolsSectionHtml = renderToStaticMarkup(
-  <ToolsSection
-    aggregatedTools={viewProps.aggregatedTools}
-    generatedTools={viewProps.generatedTools}
-  />,
-);
-const resourcesSectionHtml = renderToStaticMarkup(
-  <ResourcesSection resources={viewProps.resources} />,
-);
 
 /**
  * Structured tool references in the SERVED curriculum-model guidance —
@@ -112,11 +101,6 @@ const TOOL_SURFACES: readonly {
     liveControl: 'search',
   },
   {
-    surface: 'landing-page tools section',
-    presents: (name) => toolsSectionHtml.includes(`<code>${name}</code>`),
-    liveControl: 'search',
-  },
-  {
     surface: 'served guidance content (curriculum-model tool references)',
     presents: (name) => GUIDANCE_TOOL_REFS.has(name),
     liveControl: 'search',
@@ -132,11 +116,6 @@ const RESOURCE_SURFACES: readonly {
   {
     surface: 'MCP registration (resources/list)',
     presents: (uri) => registration.resources.has(uri),
-    liveControl: 'curriculum://model',
-  },
-  {
-    surface: 'landing-page resources section',
-    presents: (uri) => resourcesSectionHtml.includes(uri),
     liveControl: 'curriculum://model',
   },
 ];
