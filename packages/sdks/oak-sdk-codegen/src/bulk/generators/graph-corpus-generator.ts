@@ -34,11 +34,13 @@
  *
  * The module decomposes along build seams: types and id mints in
  * `graph-corpus-types.ts`, node builders in `graph-corpus-nodes.ts`, edge
- * builders in `graph-corpus-edges.ts`; this module assembles the corpus.
+ * builders in `graph-corpus-edges.ts`, keyword definitions in
+ * `graph-corpus-keyword-definitions.ts`; this module assembles the corpus.
  *
  * @see ADR-086 for the export pattern; ADR-031 for generation-time extraction.
  */
 import { assembleEdges } from './graph-corpus-edge-assembly.js';
+import { buildKeywordDefinitions } from './graph-corpus-keyword-definitions.js';
 import { buildKeywordNodes, type KeywordBuild } from './graph-corpus-keyword-nodes.js';
 import {
   buildMisconceptionNodes,
@@ -53,6 +55,7 @@ import type {
   GraphCorpusEdge,
   GraphCorpusEdgeType,
   GraphCorpusInput,
+  GraphCorpusKeywordDefinition,
   GraphCorpusNode,
   GraphCorpusNodeId,
   GraphCorpusStats,
@@ -67,6 +70,7 @@ export type {
   GraphCorpusLessonNode,
   GraphCorpusMisconceptionNode,
   GraphCorpusKeywordNode,
+  GraphCorpusKeywordDefinition,
   GraphCorpusEdge,
   GraphCorpusEdgeType,
   GraphCorpusNodeId,
@@ -105,6 +109,7 @@ interface CorpusAssembly {
   readonly keywordBuild: KeywordBuild;
   readonly sequenceBuild: SequenceBuild;
   readonly unitLessonRunBuild: UnitLessonRunBuild;
+  readonly keywordDefinitions: readonly GraphCorpusKeywordDefinition[];
   readonly nodes: readonly GraphCorpusNode[];
   readonly edges: readonly GraphCorpusEdge[];
   readonly droppedEdges: readonly GraphCorpusDroppedEdge[];
@@ -139,6 +144,8 @@ function assembleCorpus(input: GraphCorpusInput): CorpusAssembly {
     // Built FROM the edge set, so a run's membership is the edge set's by
     // construction; `unitLessons` supplies order only.
     unitLessonRunBuild: buildUnitLessonRuns(edges, unitLessons),
+    // Also built FROM the edge set; `keywords` supplies the authored text.
+    keywordDefinitions: buildKeywordDefinitions(edges, keywords),
     nodes: [
       ...unitNodes,
       ...threadNodes,
@@ -199,7 +206,7 @@ function buildStats(assembly: CorpusAssembly): GraphCorpusStats {
 export function generateGraphCorpusData(input: GraphCorpusInput): GraphCorpus {
   const assembly = assembleCorpus(input);
   return {
-    version: '1.5.0',
+    version: '1.6.0',
     generatedAt: new Date().toISOString(),
     sourceVersion: input.sourceVersion,
     stats: buildStats(assembly),
@@ -207,6 +214,7 @@ export function generateGraphCorpusData(input: GraphCorpusInput): GraphCorpus {
     edges: assembly.edges,
     sequences: assembly.sequenceBuild.sequences,
     unitLessonRuns: assembly.unitLessonRunBuild.runs,
+    keywordDefinitions: assembly.keywordDefinitions,
     droppedEdges: assembly.droppedEdges,
     droppedDuplicates: assembly.misconceptionBuild.droppedDuplicates,
     seeAlso:
@@ -215,6 +223,7 @@ export function generateGraphCorpusData(input: GraphCorpusInput): GraphCorpus {
       'thread→unit→lesson→misconception chain; use the thread-progressions view ' +
       '(sequences) for ordered learning paths; read unitLessonRuns for a unit’s ' +
       'lessons in Oak’s authored teaching order; use the keyword view for bounded ' +
-      'frequency-ranked vocabulary anchored to lessons.',
+      'frequency-ranked vocabulary anchored to lessons; read keywordDefinitions for ' +
+      'the definition each lesson authored for a keyword.',
   };
 }

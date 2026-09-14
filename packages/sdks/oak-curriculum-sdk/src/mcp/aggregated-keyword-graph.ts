@@ -4,7 +4,7 @@
  *
  * The tool is a thin parse-and-dispatch over the keyword view in
  * `@oaknational/graph-corpus-sdk/curriculum` — the view owns the retrieval
- * semantics (in-scope placement ranking, decoration windowing, limit
+ * semantics (in-scope placement ranking, per-definition lesson windowing, limit
  * validation, narrowing); this module owns only the MCP boundary: input
  * validation (`subject` + `keyStage` required together) and the response
  * envelope. There is no whole-corpus path: every call is anchored and
@@ -27,7 +27,7 @@ import type { CallToolResult } from '@modelcontextprotocol/sdk/types';
 import { z } from 'zod';
 import {
   DEFAULT_KEYWORD_LIMIT,
-  KEYWORD_LESSON_DECORATION_LIMIT,
+  KEYWORD_DEFINITION_LESSON_LIMIT,
   MAX_KEYWORD_LIMIT,
   keywordsForSubjectKeyStage,
   type KeywordSubgraph,
@@ -91,13 +91,15 @@ const KEYWORD_GRAPH_TOOL_TITLE = 'Oak Curriculum Keyword Graph';
 /** Tool definition for the anchored get-keyword-graph. */
 export const GET_KEYWORD_GRAPH_TOOL_DEF = {
   title: KEYWORD_GRAPH_TOOL_TITLE,
-  description: `Returns the key vocabulary for one teaching context: a bounded, frequency-ranked page of curriculum keywords, each decorated with its in-scope placing lessons.
+  description: `Returns the key vocabulary for one teaching context: a bounded, frequency-ranked page of curriculum keywords, each with the definitions its in-scope lessons authored.
 
-Every call is anchored by subject + keyStage (both required — corpus keys, e.g. "maths" + "ks2"), narrowable by unitSlugs and/or lessonSlugs. Ranking is by in-scope placement count (how many anchor-matching lessons place the keyword), descending — vocabulary frequent elsewhere in the curriculum never outranks locally relevant vocabulary. Results are bounded top-N (default ${String(DEFAULT_KEYWORD_LIMIT)}, max ${String(MAX_KEYWORD_LIMIT)}) with honest totals (totalMatchingKeywords, hasMore); each entry carries the keyword node (term, description, global frequency = unique placing lessons corpus-wide, coarse firstYear at key-stage granularity: ks1→1, ks2→3, ks3→7, ks4→10) plus up to ${String(KEYWORD_LESSON_DECORATION_LIMIT)} in-scope placing lessons (hasMoreLessons marks the cut) — richness arrives by edge traversal on the curriculum graph, never a flat dump.
+Every call is anchored by subject + keyStage (both required — corpus keys, e.g. "maths" + "ks2"), narrowable by unitSlugs and/or lessonSlugs. Ranking is by in-scope placement count (how many anchor-matching lessons place the keyword), descending — vocabulary frequent elsewhere in the curriculum never outranks locally relevant vocabulary. Results are bounded top-N (default ${String(DEFAULT_KEYWORD_LIMIT)}, max ${String(MAX_KEYWORD_LIMIT)}) with honest totals (totalMatchingKeywords, hasMore); each entry carries the keyword node (term in lower case — each definition carries the term as authored; global frequency = unique placing lessons corpus-wide; coarse firstYear at key-stage granularity: ks1→1, ks2→3, ks3→7, ks4→10) plus its definitions as the in-scope lessons authored them. One term can mean different things in different lessons ("subject" in English grammar is not "subject" in art), so every in-scope definition is listed, most-used first, each with its scopedLessonCount and, as lessonSlugs, up to ${String(KEYWORD_DEFINITION_LESSON_LIMIT)} of the lessons that author it (hasMoreLessons marks the cut; narrow with unitSlugs or lessonSlugs to see the rest).
+
+NOTE: This tool can return a large payload at broad scope and may exceed a host's per-result token limit. Narrow with \`unitSlugs\` or \`lessonSlugs\`, or pass a smaller \`limit\`.
 
 Data is a point-in-time snapshot of the published curriculum (bulk export), not the live API; coverage can lag live content, materially at KS4 while subjects restructure.
 
-When to prefer which keywords tool: get-keywords returns the LIVE keyword set for a key stage + subject — fresh, authoritative at KS4, alphabetical, unranked, and paginated (its description carries the paging guidance; the complete set takes limit: 300 plus offset walking). This tool returns a bounded frequency-ranked subset with lesson connections — token-economical, best for "the most relevant vocabulary for this teaching context" and for navigating from keywords into lessons, units, and the wider curriculum graph.
+When to prefer which keywords tool: get-keywords returns the LIVE keyword set for a key stage + subject — fresh, authoritative at KS4, alphabetical, unranked, and paginated (its description carries the paging guidance; the complete set takes limit: 300 plus offset walking). This tool returns a bounded frequency-ranked subset with the lessons behind each definition — best for "the most relevant vocabulary for this teaching context" and for navigating from keywords into lessons (pass a lessonSlug to the lesson tools, or back here as lessonSlugs to narrow).
 
 Slugs are corpus keys — resolve them first with search, fetch, or browse-curriculum. Unknown unitSlugs/lessonSlugs are reported in the result's unknown-anchor fields, not errored; an unknown subject or keyStage returns a well-formed empty result.
 

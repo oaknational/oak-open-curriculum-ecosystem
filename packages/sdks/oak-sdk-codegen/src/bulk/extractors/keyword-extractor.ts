@@ -5,35 +5,43 @@
  * Extracts and deduplicates all `lessonKeywords` from lesson records,
  * tracking frequency, subject distribution, and first year of introduction.
  * Lessons are visited in deterministic `(lessonSlug, unitSlug)` order, so the
- * first-occurrence fields (`definition`, `displayTerm`) are independent of
- * bulk-file enumeration order (the readdir is unsorted; the graph-corpus
+ * first-occurrence `definition` and the order of `definitions` are independent
+ * of bulk-file enumeration order (the readdir is unsorted; the graph-corpus
  * determinism contract requires order-independent extraction).
  *
  * @example
  * ```ts
  * const keywords = extractKeywords(lessons);
- * console.log(keywords[0]);
- * // { term: 'photosynthesis', displayTerm: 'Photosynthesis', definition: '...',
- * //   frequency: 127, subjects: ['science'], ... }
+ * console.log(keywords[0]); // { term: 'photosynthesis', definitions: [...], ... }
  * ```
  *
  * @see ADR-086 (`docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md`) for extraction methodology
  */
 import type { Lesson } from '../../types/generated/bulk/index.js';
 
+/** One definition of a keyword as lessons authored it, with those lessons. */
+export interface ExtractedKeywordDefinition {
+  /**
+   * The term as authored (trimmed, case preserved); when lessons wrote this
+   * definition with different capitals, the casing that sorts first by code unit
+   */
+  readonly term: string;
+  /** The definition as authored, with whitespace collapsed (never blank) */
+  readonly definition: string;
+  /** The lessons that author this term and definition, sorted */
+  readonly lessonSlugs: readonly string[];
+}
+
 /**
  * Extracted keyword with metadata from vocabulary mining.
  *
  * @remarks
- * Keywords are deduplicated by normalised form (lowercase, trimmed).
- * The definition and display casing are taken from the first occurrence in
- * `(lessonSlug, unitSlug)` order.
+ * Keywords are deduplicated by normalised form (lowercase, trimmed). The
+ * `definition` is the first occurrence in `(lessonSlug, unitSlug)` order.
  */
 export interface ExtractedKeyword {
   /** The vocabulary term (normalised: lowercase, trimmed) */
   readonly term: string;
-  /** The term's first-occurrence casing (trimmed, case preserved) */
-  readonly displayTerm: string;
   /** Definition from first occurrence */
   readonly definition: string;
   /**
@@ -48,6 +56,12 @@ export interface ExtractedKeyword {
   readonly firstYear: number;
   /** All lesson slugs where this keyword appears */
   readonly lessonSlugs: readonly string[];
+  /**
+   * Every distinct authored definition with the lessons that author it, in
+   * first-authoring order. Unlike `definition`, this keeps different
+   * meanings apart: one term can mean different things in different lessons.
+   */
+  readonly definitions: readonly ExtractedKeywordDefinition[];
 }
 
 /**
@@ -87,12 +101,42 @@ export function normaliseKeyword(keyword: string): string {
  * Internal accumulator for building keyword metadata.
  */
 interface KeywordAccumulator {
-  displayTerm: string;
   definition: string;
   frequency: number;
   subjects: Set<string>;
   firstYear: number;
   lessonSlugs: Set<string>;
+  /** Authored definitions keyed by their text */
+  definitions: Map<string, { term: string; definition: string; lessonSlugs: Set<string> }>;
+}
+
+/**
+ * Records that a lesson authors this definition for the keyword.
+ *
+ * @remarks
+ * Definitions compare with whitespace collapsed; a blank one is skipped. Terms
+ * under one keyword differ only in capitals, so "Addend" and "addend" share a
+ * definition, keeping the code-unit-first casing (independent of lesson order).
+ */
+function addDefinition(
+  acc: KeywordAccumulator,
+  term: string,
+  authoredDefinition: string,
+  lessonSlug: string,
+): void {
+  const definition = authoredDefinition.trim().replaceAll(/\s+/g, ' ');
+  if (definition === '') {
+    return;
+  }
+  const existing = acc.definitions.get(definition);
+  if (existing) {
+    existing.lessonSlugs.add(lessonSlug);
+    if (term < existing.term) {
+      existing.term = term;
+    }
+  } else {
+    acc.definitions.set(definition, { term, definition, lessonSlugs: new Set([lessonSlug]) });
+  }
 }
 
 /**
@@ -110,17 +154,16 @@ function updateAccumulator(acc: KeywordAccumulator, lesson: Lesson, lessonYear: 
  */
 function createAccumulator(
   lesson: Lesson,
-  displayTerm: string,
   definition: string,
   lessonYear: number,
 ): KeywordAccumulator {
   return {
-    displayTerm,
     definition,
     frequency: 1,
     subjects: new Set([lesson.subjectSlug]),
     firstYear: lessonYear,
     lessonSlugs: new Set([lesson.lessonSlug]),
+    definitions: new Map(),
   };
 }
 
@@ -130,12 +173,16 @@ function createAccumulator(
 function accumulatorToKeyword(term: string, acc: KeywordAccumulator): ExtractedKeyword {
   return {
     term,
-    displayTerm: acc.displayTerm,
     definition: acc.definition,
     frequency: acc.frequency,
     subjects: [...acc.subjects].sort((a, b) => a.localeCompare(b)),
     firstYear: acc.firstYear,
     lessonSlugs: [...acc.lessonSlugs].sort((a, b) => a.localeCompare(b)),
+    definitions: [...acc.definitions.values()].map((authored) => ({
+      term: authored.term,
+      definition: authored.definition,
+      lessonSlugs: [...authored.lessonSlugs].sort((a, b) => a.localeCompare(b)),
+    })),
   };
 }
 
@@ -173,16 +220,15 @@ function processLessonKeywords(
 ): void {
   for (const kw of lesson.lessonKeywords) {
     const normalised = normaliseKeyword(kw.keyword);
-    const existing = keywordMap.get(normalised);
+    let acc = keywordMap.get(normalised);
 
-    if (existing) {
-      updateAccumulator(existing, lesson, lessonYear);
+    if (acc) {
+      updateAccumulator(acc, lesson, lessonYear);
     } else {
-      keywordMap.set(
-        normalised,
-        createAccumulator(lesson, kw.keyword.trim(), kw.description, lessonYear),
-      );
+      acc = createAccumulator(lesson, kw.description, lessonYear);
+      keywordMap.set(normalised, acc);
     }
+    addDefinition(acc, kw.keyword.trim(), kw.description, lesson.lessonSlug);
   }
 }
 

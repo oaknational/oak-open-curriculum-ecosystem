@@ -1,10 +1,51 @@
 # ADR-086: Vocabulary Mining and Graph Export Pattern
 
-**Status**: Accepted (amended 2026-09-03)  
-**Date**: 2025-12-25 (amended 2026-09-03)  
+**Status**: Accepted (amended 2026-09-13)  
+**Date**: 2025-12-25 (amended 2026-09-13)  
 **Authors**: AI Agent  
 **Deciders**: Engineering Team
 
+> **Amendment (2026-09-13 — a keyword's definitions belong to its lessons).**
+>
+> A keyword node is one term across the whole curriculum, but a definition
+> belongs to the lesson that wrote it. The G4b node carried a single
+> `description`: the definition from whichever lesson sorted first by slug.
+> `get-keyword-graph` served that one text in every scope, so art at KS3
+> defined "subject" as the subject of a verb.
+>
+> - **The node loses `description`, and `term` is the normalised term.** The
+>   first-occurrence display casing was the same arbitrary pick.
+> - **`keywordDefinitions` joins the corpus.** Each row is one distinct
+>   (keyword, authored definition) with the lessons that author it; when
+>   lessons wrote the term with different capitals, the row keeps the casing
+>   that sorts first by code unit. Membership comes from the `containsKeyword` edges, so the rows'
+>   (lesson, keyword) pairs are exactly the edge set. A definition keeps its
+>   authored text with whitespace collapsed, so variants differing only in
+>   spacing are one row, and a blank definition is skipped; terms are trimmed
+>   with case preserved.
+>   This states the rule the ordered sections already follow: an attribute of
+>   a relation that the attribute-less edge set cannot carry, such as
+>   curriculum order or lesson-authored text, lives in a section beside the
+>   edges.
+> - **The keyword view serves definitions per scope.** Each ranked keyword
+>   lists every definition its in-scope lessons authored, most-used first,
+>   each naming up to three of those lessons by slug. The window repeats per
+>   definition, so it is kept small enough that a default call fits a host's
+>   per-result limit. The keyword-level lesson window is removed. Definitions are never windowed, because cutting
+>   one would hide a meaning the scope teaches.
+> - **Not changed here.** The standalone `vocabulary-graph` dataset, the
+>   synonym miner and the analysis report still read the first-occurrence
+>   `definition`. None of them serves
+>   definitions to MCP clients.
+> - **Counts recomputed at amendment time** from the regenerated
+>   `graph-corpus/data.json` (2026-09-03 bulk snapshot). Node and edge counts,
+>   the edges and both ordered sections are unchanged. There are 25,898
+>   definition rows covering all 12,204 keywords, with 38,391 lesson entries
+>   over the 38,381 `containsKeyword` pairs; the ten extra entries come from
+>   nine lesson–keyword pairs whose lesson authored more than one definition. `data.json`
+>   grows from 25.7 MB to 32.1 MB. Corpus version 1.5.0 → 1.6.0, a breaking change
+>   because a node field is removed.
+>
 > **Amendment (2026-09-03 — the corpus carries curriculum order).**
 >
 > The corpus `edges` array is sorted by (type, source, target) for a
