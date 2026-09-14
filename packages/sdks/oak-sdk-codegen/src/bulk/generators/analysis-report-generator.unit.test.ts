@@ -20,30 +20,48 @@ function createTestExtractedData(overrides: Partial<ExtractedData> = {}): Extrac
     keywords: [
       {
         term: 'photosynthesis',
-        displayTerm: 'photosynthesis',
         definition: 'The process by which plants convert light into energy',
         frequency: 15,
         subjects: ['science'],
         firstYear: 3,
         lessonSlugs: ['lesson-1', 'lesson-2'],
+        definitions: [
+          {
+            term: 'photosynthesis',
+            definition: 'The process by which plants convert light into energy',
+            lessonSlugs: ['lesson-1', 'lesson-2'],
+          },
+        ],
       },
       {
         term: 'fraction',
-        displayTerm: 'fraction',
         definition: 'A part of a whole, also known as a rational number',
         frequency: 42,
         subjects: ['maths', 'science'],
         firstYear: 2,
         lessonSlugs: ['lesson-3', 'lesson-4', 'lesson-5'],
+        definitions: [
+          {
+            term: 'fraction',
+            definition: 'A part of a whole, also known as a rational number',
+            lessonSlugs: ['lesson-3', 'lesson-4', 'lesson-5'],
+          },
+        ],
       },
       {
         term: 'equation',
-        displayTerm: 'equation',
         definition: 'A mathematical statement showing equality',
         frequency: 30,
         subjects: ['maths'],
         firstYear: 4,
         lessonSlugs: ['lesson-6'],
+        definitions: [
+          {
+            term: 'equation',
+            definition: 'A mathematical statement showing equality',
+            lessonSlugs: ['lesson-6'],
+          },
+        ],
       },
     ],
     misconceptions: [

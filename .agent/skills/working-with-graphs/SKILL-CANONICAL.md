@@ -72,9 +72,10 @@ Where the contract does carry a window, the window falls on **whole structural m
 **declared as data**, never a silent cut: the misconception thread anchor pages unit-granularly
 (`unitOffset`/`unitLimit`/`totalUnits`/`hasMore` — each returned unit complete with all its
 lessons and their misconceptions); the keyword view returns ranked whole entries with honest
-totals (`totalMatchingKeywords`, `hasMore`) and a declared per-entry lesson decoration window
-(`hasMoreLessons`). Every window is itself complete-within-itself; edges and within-member
-content are never paged.
+totals (`totalMatchingKeywords`, `hasMore`), each carrying every definition its in-scope lessons
+authored — never windowed, because a cut would hide a meaning — with a declared per-definition
+lesson window (`hasMoreLessons`). Every window is itself complete-within-itself; edges and
+within-member content are never paged.
 
 ## Contiguous and Sparse Subgraphs
 
@@ -111,8 +112,10 @@ anchor the next call, so the agent walks the graph across calls instead of needi
 - Discovery → detail: `progressionsForSubjectKeyStage` returns thread **descriptors** (no
   sequences) so the caller finds the `threadSlug` to anchor `progressionForThread` with.
 - Windows carry their continuation: `hasMore` + `unitOffset`/`unitLimit` name the next window;
-  `hasMoreLessons` signals that lesson anchors will retrieve the rest.
-- Every node carries its kind-qualified id (`unit:<slug>`, `lesson:<slug>`, ...), and results
+  `hasMoreLessons` on a keyword definition signals that narrowing with unit or lesson anchors
+  shrinks the scope below the window.
+- Every node carries its kind-qualified id (`unit:<slug>`, `lesson:<slug>`, ...; a keyword
+  definition names its lessons by slug, the key the next call takes), and results
   echo `resolvedAnchors`/`unknownAnchors`, so what was retrieved — and what to anchor next — is
   always first-class data.
 

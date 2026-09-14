@@ -7,8 +7,9 @@
  * 2026-06-23 local UAT with nothing in their descriptions telling the agent to
  * narrow first. These tests assert each carries a hint that names its real
  * narrowing, phrased consistently with the generated-tool note (WS1 cycle 1.1).
- * explore-topic and get-keyword-graph already self-describe their bounds, so a
- * regression guard checks explore keeps documenting its top-5 bound.
+ * get-keyword-graph's hint is asserted with its tool definition. explore-topic
+ * already self-describes its bounds, so a regression guard checks explore keeps
+ * documenting its top-5 bound.
  */
 
 import { describe, expect, it } from 'vitest';
