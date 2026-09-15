@@ -64,7 +64,7 @@ export const APP_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/application.ts': excluded(
-    'f16f8e80a7f92af82f82408e5365e92a6f2758afdd6d2d6d43886a212bb11f67',
+    'c149498ef6da27b2dc709a6336f271726cdf0acbde4b6eaaa954aa1e3a280ea0',
     IMPLEMENTATION_ONLY,
   ),
   // MCP-517: states the configured canonical origin in the forwarded headers

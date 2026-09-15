@@ -292,6 +292,14 @@ signing off a release. Replaces the retired `pnpm smoke:remote` harness
 - `GET /.well-known/oauth-protected-resource` returns the canonical resource and authorisation servers
 - 401 responses include a `WWW-Authenticate` header with `resource` and `authorization_uri` to guide clients
 
+### Agent discovery (`Link` header)
+
+- Every response carries an RFC 8288 `Link` header advertising this host's own description (MCP-734):
+  `</.well-known/oauth-protected-resource>; rel="describedby"; type="application/json"; title="OAuth 2.0 protected resource metadata"`.
+  That document names the MCP endpoint in its `resource` field, so an agent arriving at the bare origin reaches the endpoint in one hop.
+- `describedby` rather than `service-desc`: the metadata describes how this resource is protected, not the service's callable interface, and the weaker registered relation is the one that is true.
+- Set by app-level middleware (`src/app/agent-discovery-link-header.ts`), so it rides every response including 404s and does not depend on any route existing at `/`. The advertised path is derived from `PROTECTED_RESOURCE_METADATA_PREFIX`, and an integration test follows the published target and requires a 200, so the link cannot rot into a 404.
+
 ### OpenAI domain verification
 
 - `GET /.well-known/openai-apps-challenge` returns the plugin-submission portal's domain-verification token as bare `text/plain` (MCP-700). Not an OAuth surface: public, registered before Clerk middleware, and served in every auth mode. Contract: [OpenAI plugin submission, "Domain verification"](https://developers.openai.com/plugins/deploy/submission), which requires the endpoint to "return only that plugin's verification token".

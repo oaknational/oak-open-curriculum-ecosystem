@@ -73,6 +73,17 @@ export const APP_AUTH_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaR
     '1bac2a8ec91a09fb51dce02ec3f943bd76c9c3c4ee0097cc9bd318e8b716d2b0',
     IMPLEMENTATION_ONLY,
   ),
+  // MCP-734: the RFC 8288 `Link` header advertising the protected-resource
+  // metadata. Homed here beside `get-prm-url.ts` — this ledger's declared
+  // scope covers public-resource sets, and that module derives the same PRM
+  // address this header publishes. The only authored token is the link's
+  // `title`, naming the RFC 9728 document it points at; a response header
+  // reaches no MCP consumer in any case, since clients read JSON-RPC from
+  // `/mcp` and never parse this field.
+  'apps/oak-curriculum-mcp-streamable-http/src/app/agent-discovery-link-header.ts': excluded(
+    '672574968333ebb330092cbc84a778a424581d7973026436e656ab406d5c1e72',
+    IMPLEMENTATION_ONLY,
+  ),
   'apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/get-prm-url.ts': excluded(
     'bf56a81ce02610f788fd3ceee1518bc7b6bf9a711d272b6fad6a18fbc78e41b4',
     IMPLEMENTATION_ONLY,

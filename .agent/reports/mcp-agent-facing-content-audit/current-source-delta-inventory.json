@@ -3,6 +3,12 @@
   "baselineCommit": "240a598607b96485f50c0dfd6df154d673a90a25",
   "files": [
     {
+      "file": "apps/oak-curriculum-mcp-streamable-http/src/app/agent-discovery-link-header.ts",
+      "semanticSha256": "672574968333ebb330092cbc84a778a424581d7973026436e656ab406d5c1e72",
+      "itemIds": [],
+      "exclusionReason": "Reviewed engineering implementation change; no new authored agent-facing content."
+    },
+    {
       "file": "apps/oak-curriculum-mcp-streamable-http/src/app/app-version-header.ts",
       "semanticSha256": "9871f2ded345a8785aabf2d70baa2368690e398c3edfae900eca5073ea2c6891",
       "itemIds": [],
@@ -108,7 +114,7 @@
     },
     {
       "file": "apps/oak-curriculum-mcp-streamable-http/src/application.ts",
-      "semanticSha256": "f16f8e80a7f92af82f82408e5365e92a6f2758afdd6d2d6d43886a212bb11f67",
+      "semanticSha256": "c149498ef6da27b2dc709a6336f271726cdf0acbde4b6eaaa954aa1e3a280ea0",
       "itemIds": [],
       "exclusionReason": "Reviewed engineering implementation change; no new authored agent-facing content."
     },

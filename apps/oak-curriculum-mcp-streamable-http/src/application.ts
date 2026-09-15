@@ -10,6 +10,7 @@ import {
 } from './app/bootstrap-helpers.js';
 import { finalizeApp } from './app/bootstrap-finalize.js';
 import { mountAppVersionHeader } from './app/app-version-header.js';
+import { mountAgentDiscoveryLinkHeader } from './app/agent-discovery-link-header.js';
 import { setupSecurityMiddleware } from './app/bootstrap-security.js';
 import { mountStaticContentRoutes } from './app/static-content.js';
 import { initializeCoreEndpoints } from './app/core-endpoints.js';
@@ -92,6 +93,7 @@ function setupPostAuthPhases(deps: SetupPostAuthPhasesDeps): void {
   );
 
   mountAppVersionHeader(app, options.runtimeConfig.version);
+  mountAgentDiscoveryLinkHeader(app);
   mountStaticContentRoutes(app, dnsRebindingMiddleware, log, {
     getLandingPageHtml: options.getLandingPageHtml,
     staticRoot: options.staticRoot,
