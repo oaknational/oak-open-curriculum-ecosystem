@@ -5,7 +5,13 @@ import {
   compatErrorEnvelopeSchema,
   compatReportSchema,
 } from '../../src/mcp-conformance/compat-types.js';
-import { loadCompatReport, loadFixtureRaw } from './test-helpers/fixture-loader.js';
+import {
+  type LooseCompatCapture,
+  loadCompatCaptureLoose,
+  loadCompatReport,
+  loadFixtureRaw,
+} from './test-helpers/fixture-loader.js';
+import { requireDefined } from './test-helpers/guards.js';
 
 /**
  * The compat operation's FAILURE boundary. Unlike the suites — where a failing
@@ -154,15 +160,17 @@ describe('compatReportSchema — the verdict document is parsed strictly', () =>
     expect(report.catalogVersion, 're-capture the fixture with --offline').toBe(0);
   });
 
-  it('carries findings whose capability is present only where the vendor set one', () => {
+  it('carries a capability only on the finding variant that is about one', () => {
     const findings = loadCompatReport(OAK_CAPTURE).hosts.flatMap((host) => host.findings);
     const fallback = findings.find((finding) => finding.code === 'widget_text_fallback');
     const capabilityGap = findings.find((finding) => finding.code === 'capability_unsupported');
 
     // Guard first: with no fallback finding in the capture at all, the
-    // `capability` assertion below would pass vacuously on `undefined`.
+    // property assertion below would pass vacuously on `undefined`. The union
+    // types this — a fallback variant has no `capability` key at all — so the
+    // runtime check is that the parsed object agrees with its type.
     expect(fallback, 'the Oak capture must carry a widget_text_fallback finding').toBeDefined();
-    expect(fallback?.capability).toBeUndefined();
+    expect(fallback).not.toHaveProperty('capability');
     expect(capabilityGap?.capability).toBeDefined();
   });
 
@@ -192,6 +200,7 @@ describe('compatReportSchema — the verdict document is parsed strictly', () =>
             code: 'brand_new_class',
             title: 'x',
             detail: 'y',
+            provenance: 'assumed',
           },
         ],
       },
@@ -245,6 +254,94 @@ describe('compatReportSchema — the verdict document is parsed strictly', () =>
 });
 
 /** One well-formed host; rejection cases spread over it with one bad field. */
+/**
+ * The real capture with ONE finding altered — so the only defect in the
+ * document is the one under test, and the unmodified capture parsing (proved
+ * above) shows that the refusal is the alteration's. `mutate` receives the
+ * first finding carrying `code`.
+ */
+function captureWithFinding(
+  code: string,
+  mutate: (finding: Record<string, unknown>) => void,
+): LooseCompatCapture {
+  const report = loadCompatCaptureLoose(OAK_CAPTURE);
+  const finding = requireDefined(
+    report.hosts.flatMap((host) => host.findings).find((f) => f.code === code),
+    `a ${code} finding in the Oak capture`,
+  );
+  mutate(finding);
+  return report;
+}
+
+describe('compatReportSchema — a finding carries the evidence its code requires', () => {
+  // The CLI passes the engine's findings to stdout unprojected, so the SDK's
+  // discriminated `CompatFinding` union IS the contract. Before this the
+  // shape was flat with the evidence fields optional, and a finding that
+  // named no capability and no tools parsed as a successful capture
+  // (review, 2026-09-15).
+  it('refuses a capability_unsupported finding that names no capability', () => {
+    const report = captureWithFinding('capability_unsupported', (f) => delete f.capability);
+
+    expect(compatReportSchema.safeParse(report).success).toBe(false);
+  });
+
+  it('refuses a capability outside the vendor’s vocabulary, so a moved model stops the run', () => {
+    const report = captureWithFinding('capability_unsupported', (f) => {
+      f.capability = 'teleport';
+    });
+
+    expect(compatReportSchema.safeParse(report).success).toBe(false);
+  });
+
+  it('refuses a widget-lane finding that names no affected tools', () => {
+    const report = captureWithFinding('widget_text_fallback', (f) => delete f.tools);
+
+    expect(compatReportSchema.safeParse(report).success).toBe(false);
+  });
+
+  it('refuses a finding without provenance, which grades how far it can be trusted', () => {
+    const report = captureWithFinding('widget_text_fallback', (f) => delete f.provenance);
+
+    expect(compatReportSchema.safeParse(report).success).toBe(false);
+  });
+
+  it('refuses a finding carrying evidence its code does not define', () => {
+    // `capability` belongs to capability_unsupported alone; on another code it
+    // is an unrecognised key, which the strict variant rejects.
+    const report = captureWithFinding('widget_text_fallback', (f) => {
+      f.capability = 'logging';
+    });
+
+    expect(compatReportSchema.safeParse(report).success).toBe(false);
+  });
+});
+
+describe('compatReportSchema — widget counts are counts', () => {
+  // Both are array lengths in the CLI, and app-only widgets are a subset of
+  // all widgets; a value outside that is a document contradicting itself
+  // (review, 2026-09-15).
+  it('refuses more app-only widgets than widgets', () => {
+    expect(
+      compatReportSchema.safeParse({ ...minimalReport(), widgets: { total: 1, appOnly: 5 } })
+        .success,
+    ).toBe(false);
+  });
+
+  it('refuses a negative widget count', () => {
+    expect(
+      compatReportSchema.safeParse({ ...minimalReport(), widgets: { total: -1, appOnly: 0 } })
+        .success,
+    ).toBe(false);
+  });
+
+  it('refuses a fractional widget count', () => {
+    expect(
+      compatReportSchema.safeParse({ ...minimalReport(), widgets: { total: 1.5, appOnly: 0 } })
+        .success,
+    ).toBe(false);
+  });
+});
+
 function minimalHost(): Record<string, unknown> {
   return {
     hostId: 'claude',

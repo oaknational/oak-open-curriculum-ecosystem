@@ -25,6 +25,8 @@
  */
 import { z } from 'zod';
 
+import { compatFindingSchema, compatProvenanceSchema } from './compat-finding.js';
+
 /**
  * The structured failure envelope `mcpjam` writes to stderr when a compat run
  * cannot produce a report.
@@ -73,59 +75,6 @@ export const compatErrorEnvelopeSchema = z
  */
 const compatVerdictSchema = z.enum(['works', 'degraded', 'blocked', 'unknown']);
 
-/**
- * Where a host-profile fact came from, weakest to strongest as the vendor
- * ranks them (PROVENANCE_RANK in the engine): `assumed` (a default), `probe`
- * (the host's own capability handshake), `vendor-doc` (published
- * documentation), `observed` (a live run).
- *
- * Kept on the parsed surface because it grades how far a verdict can be
- * trusted — the vendor surfaces it so "a verdict never reads as more
- * authoritative than its weakest source", and the wrapper's summary carries
- * it through to the reader for the same reason.
- */
-const compatProvenanceSchema = z.enum(['observed', 'vendor-doc', 'probe', 'assumed']);
-
-/**
- * Which axis a finding belongs to: `apps` (widget rendering AND widget
- * capability use — the engine files `capability_unsupported` here too) or
- * `server` (protocol-level facts, e.g. protocol version).
- */
-const compatLaneSchema = z.enum(['apps', 'server']);
-
-/**
- * The vendor's stable machine key per finding class. Pinned as an enum
- * deliberately, unlike the failure envelope's free-string `code`: a novel
- * finding class changes what the verdict MEANS, so it must stop the run for
- * adjudication rather than flow through as an unrecognised string.
- */
-const compatFindingCodeSchema = z.enum([
-  'app_only_unrenderable',
-  'widget_text_fallback',
-  'capability_unsupported',
-  'protocol_version_mismatch',
-]);
-
-/**
- * One finding. `title`, `detail` and `remediation` are the vendor's own
- * words: parsed so the document round-trips, never compared — the vendor
- * documents them as "default copy, not the contract", and pinning prose
- * would turn a copy edit into a red gate.
- */
-const compatFindingSchema = z
-  .object({
-    lane: compatLaneSchema,
-    severity: z.enum(['blocker', 'degraded', 'info']),
-    code: compatFindingCodeSchema,
-    capability: z.string().min(1).optional(),
-    tools: z.array(z.string().min(1)).optional(),
-    title: z.string(),
-    detail: z.string(),
-    remediation: z.string().optional(),
-    provenance: compatProvenanceSchema.optional(),
-  })
-  .strict();
-
 const compatHostSchema = z
   .object({
     hostId: z.string().min(1),
@@ -154,7 +103,16 @@ export const compatReportSchema = z
     target: z.string().min(1),
     catalogSource: z.enum(['live', 'bundled']),
     catalogVersion: z.number(),
-    widgets: z.object({ total: z.number(), appOnly: z.number() }).strict(),
+    // Counts derived from array lengths in the CLI (`total` sums three widget
+    // lists; `appOnly` is a subset of them), so a negative, fractional, or
+    // subset-larger-than-whole value is a document contradicting itself, not
+    // a surface to report on (review, 2026-09-15).
+    widgets: z
+      .object({ total: z.number().int().nonnegative(), appOnly: z.number().int().nonnegative() })
+      .strict()
+      .refine((widgets) => widgets.appOnly <= widgets.total, {
+        message: 'app-only widgets are a subset of all widgets, so appOnly cannot exceed total',
+      }),
     // Free-form vendor strings naming what the run could not determine (a
     // capped tool list, an unreadable widget). Never empty-string entries:
     // an unnamed unknown is indistinguishable from no unknown at all.

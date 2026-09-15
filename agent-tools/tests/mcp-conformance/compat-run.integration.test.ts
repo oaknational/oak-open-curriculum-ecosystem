@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { composeCompatRunReport } from '../../src/mcp-conformance/compat-cli.js';
 import { composeCompatArgs, type CompatIo } from '../../src/mcp-conformance/compat-evidence.js';
 import { runCompat } from '../../src/mcp-conformance/compat-run.js';
-import { loadFixtureRaw } from './test-helpers/fixture-loader.js';
+import { loadCompatCaptureLoose, loadFixtureRaw } from './test-helpers/fixture-loader.js';
 
 /**
  * The compat operation's evidence gate — the module's whole reason for
@@ -162,6 +162,25 @@ describe('runCompat — a failed run can never read as a pass', () => {
     // Bounded, not gutted: the vendor's own classification still reaches the
     // operator.
     expect(reason).toContain('INTERNAL_ERROR');
+  });
+
+  it('bounds a schema-error diagnostic — Zod reports one issue per malformed entry', () => {
+    // A zero-exit report whose every host is malformed: Zod's message grows
+    // with the number of issues, and unbounded it rode whole onto stdout and
+    // summary.json while its sibling paths were capped (review, 2026-09-15).
+    const flooded = loadCompatCaptureLoose('compat-local-oak-2026-08-15.json');
+    flooded.hosts = Array.from({ length: 3_000 }, (_, i) => ({
+      ...flooded.hosts[0],
+      hostId: `host-${String(i)}`,
+      verdict: 'bogus',
+    }));
+    const { io } = fakeIo({ exitCode: 0, stdout: JSON.stringify(flooded) });
+
+    const reason = runCompat(io, FIXTURE_TARGET).failureReasons.join(' ');
+
+    expect(reason.length).toBeLessThan(5_000);
+    expect(reason).toContain('truncated from');
+    expect(reason).toContain('did not match the expected report shape');
   });
 
   it('names a usage error distinctly, since exit 2 is our argv being wrong, not drift', () => {

@@ -176,13 +176,13 @@ function describeRunFailure(exitCode: number | undefined, stderr: string): strin
  * capture that would explain it — and parsing precedes the target-identity
  * check, because only a parsed report names the target it describes.
  */
-// Redaction notes for the reasons composed below. Unparseable: the Zod
-// message embeds vendor stdout in one narrow way — an unrecognized-keys issue
-// on this .strict() schema echoes the offending KEY names (values are never
-// echoed; verified against the pinned Zod 4, 2026-08-19), and a key name is
-// vendor text. Target-mismatch: the vendor's target is arbitrary
-// server-controlled text; the requested one is already validated
-// credential-free, so its redaction is defence in depth.
+// Notes for the reasons composed below. Unparseable: bounded AND redacted —
+// Zod emits one issue per malformed entry, so over megabytes of stdout the
+// message is unbounded (review, 2026-09-15), and an unrecognized-keys issue
+// on this .strict() schema echoes offending KEY names, which are vendor text
+// (values never; verified against the pinned Zod 4, 2026-08-19). Target-
+// mismatch: the vendor's target is arbitrary server-controlled text; the
+// requested one is already validated credential-free — defence in depth.
 function retainThenParse(
   io: CompatIo,
   stdout: string,
@@ -201,9 +201,10 @@ function retainThenParse(
 
   const parsed = compatReportSchema.safeParse(safeJsonParse(stdout));
   if (!parsed.success) {
+    const shape = boundedExcerpt('schema error', parsed.error.message);
     return refusal(
       'unparseable',
-      `mcpjam compat exited 0 but its stdout did not match the expected report shape: ${redactCredentials(parsed.error.message)}`,
+      `mcpjam compat exited 0 but its stdout did not match the expected report shape${shape}`,
     );
   }
   // The suites' worst-answer guard, applied to compat's single target field:
