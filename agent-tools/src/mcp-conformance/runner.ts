@@ -15,6 +15,7 @@
  */
 import { type Result } from '@oaknational/result';
 
+import { redactCredentials } from './bounded-excerpt.js';
 import { type ConformanceMode, type ConformanceSuite } from './types.js';
 
 /** What a completed child run yields, whatever its exit code. */
@@ -82,7 +83,11 @@ export function findTargetMismatch(
   if (mismatched === undefined) {
     return undefined;
   }
-  return `mcpjam reported target ${JSON.stringify(mismatched)} but the run requested ${JSON.stringify(requestedTarget)} — this capture is of a different deployment; do not verdict it or author a baseline from it`;
+  // Vendor-reported and requested targets both redacted before the reason is
+  // composed — this reason rides onto stdout and into CI job logs (the suites
+  // run unattended in CI), where a server reflecting a credential into its
+  // reported target would otherwise land unmasked.
+  return `mcpjam reported target ${JSON.stringify(redactCredentials(mismatched))} but the run requested ${JSON.stringify(redactCredentials(requestedTarget))} — this capture is of a different deployment; do not verdict it or author a baseline from it`;
 }
 
 /**
@@ -90,10 +95,21 @@ export function findTargetMismatch(
  * differences. An unparseable value falls back to a trimmed literal compare
  * rather than throwing — a malformed target must surface as a mismatch, never
  * as a crash inside the parse boundary.
+ *
+ * Exported at its second consumer: the compat operation's evidence gate runs
+ * the same identity check over its report's single `target` field.
  */
-function canonicalTarget(value: string): string {
+export function canonicalTarget(value: string): string {
   const parsed = URL.parse(value);
-  return parsed === null ? value.trim() : parsed.href.replace(/\/$/u, '');
+  if (parsed === null) {
+    return value.trim();
+  }
+  // Normalise the PATH's trailing slash, not the whole string's: once a query
+  // or fragment follows, the slash is no longer the last character, and
+  // `…/mcp/?page=2` would read as a different deployment from `…/mcp?page=2`
+  // (review, 2026-09-11).
+  parsed.pathname = parsed.pathname.replace(/\/$/u, '');
+  return parsed.href.replace(/\/$/u, '');
 }
 
 /** Inputs to one suite's argv composition. */
