@@ -8,6 +8,7 @@ import {
 } from '../../src/mcp-conformance/io-port.js';
 import { runMcpConformance } from '../../src/mcp-conformance/report.js';
 import {
+  canonicalTarget,
   composeSuiteArgs,
   UNATTENDED_SUITES,
   type McpjamSpawnResult,
@@ -473,6 +474,20 @@ describe('round-8 review cures — report provenance is verified against the req
 
     expect(reasonsOf(protocol)).not.toContain('ya29.SECRET');
     expect(reasonsOf(protocol)).toContain('access_token=[redacted]');
+  });
+
+  it('a trailing path slash is equivalent even when a query or fragment follows', () => {
+    // The slash is only the string's last character when nothing follows it;
+    // normalising the tail missed `…/mcp/?page=2` (review, 2026-09-11).
+    expect(canonicalTarget('https://example.test/mcp/?page=2')).toBe(
+      canonicalTarget('https://example.test/mcp?page=2'),
+    );
+    expect(canonicalTarget('https://example.test/mcp/#x')).toBe(
+      canonicalTarget('https://example.test/mcp#x'),
+    );
+    expect(canonicalTarget('https://example.test/mcp/?page=2')).not.toBe(
+      canonicalTarget('https://example.test/mcp?page=3'),
+    );
   });
 
   it('a trailing slash is not a provenance mismatch', () => {

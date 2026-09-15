@@ -143,6 +143,17 @@ confident answer about something unreachable is worse than no answer.
 Impossible without inverting the dependency direction (ADR-041), and any
 re-derivation drifts from the app by construction.
 
+### One shared copy of the pinned host list
+
+The 16 pinned host ids appear twice: in the app's per-commit gate and in
+`agent-tools`' capture validation. A single shared copy would need either an
+entry point opened in `agent-tools`, which publishes none and which the app
+does not depend on, or a shared artefact wired across the app boundary. Both
+change the repository's dependency shape to save one list. Duplication is
+the chosen cost: the list moves only when the SDK pin moves, which is already
+a deliberate edit, and if the two copies disagree both suites fail loudly.
+Within `agent-tools` there is one copy, which its tests import.
+
 ### Wrapping the CLI for the per-commit check
 
 The CLI mode needs a running server and credentials, which puts it outside

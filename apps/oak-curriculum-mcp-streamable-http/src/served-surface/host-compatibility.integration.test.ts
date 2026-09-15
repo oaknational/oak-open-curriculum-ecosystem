@@ -158,7 +158,10 @@ describe('served surface — the evaluation actually ran', () => {
     //
     // The exact set, not a count: a count passes if one host is swapped for
     // another. The SDK is pinned, so this list changes only when the pin moves
-    // — at which point the change should be read, not absorbed.
+    // — at which point the change should be read, not absorbed. `agent-tools`
+    // holds the same list for capture validation; the two are duplicated on
+    // purpose rather than shared across the app boundary (ADR-230,
+    // §Alternatives rejected), so update both when the pin moves.
     expect([...hosts.map((host) => host.hostId)].sort((a, b) => a.localeCompare(b))).toEqual([
       'agentcore',
       'chatgpt',

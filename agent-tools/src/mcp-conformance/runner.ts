@@ -101,7 +101,15 @@ export function findTargetMismatch(
  */
 export function canonicalTarget(value: string): string {
   const parsed = URL.parse(value);
-  return parsed === null ? value.trim() : parsed.href.replace(/\/$/u, '');
+  if (parsed === null) {
+    return value.trim();
+  }
+  // Normalise the PATH's trailing slash, not the whole string's: once a query
+  // or fragment follows, the slash is no longer the last character, and
+  // `…/mcp/?page=2` would read as a different deployment from `…/mcp?page=2`
+  // (review, 2026-09-11).
+  parsed.pathname = parsed.pathname.replace(/\/$/u, '');
+  return parsed.href.replace(/\/$/u, '');
 }
 
 /** Inputs to one suite's argv composition. */

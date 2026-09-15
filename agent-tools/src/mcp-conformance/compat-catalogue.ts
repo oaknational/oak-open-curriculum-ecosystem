@@ -2,10 +2,13 @@
  * The pinned host catalogue: which hosts a usable compat capture must name,
  * and the judgement of whether a given capture was evaluated against it.
  *
- * Its own module because the pin is a CONTRACT with more than one consumer,
- * and a hand-maintained second copy is exactly the drift it exists to catch
- * (`consolidate-at-second-consumer`). `compat-types.ts` owns the report's
- * SHAPE; this owns which catalogue the report describes.
+ * Its own module so `agent-tools` holds ONE copy of the pin: the schema test
+ * imports it rather than restating it. The app's per-commit gate keeps its own
+ * copy DELIBERATELY — `agent-tools` publishes no entry point and the app does
+ * not depend on it, and duplication was chosen over opening that boundary
+ * (ADR-230, §Alternatives rejected). If the two lists ever disagree, both
+ * suites fail loudly. `compat-types.ts` owns the report's SHAPE; this owns
+ * which catalogue the report describes.
  *
  * The two judgements live together because they are one question asked twice:
  * the report can name the wrong catalogue (`catalogSource`), or name the right
@@ -51,6 +54,14 @@ const PINNED_HOST_IDS: ReadonlySet<string> = new Set(PINNED_CATALOGUE_HOST_IDS);
 export function describeCatalogueDrift(report: CompatReport): string | undefined {
   if (report.catalogSource !== 'bundled') {
     return `mcpjam evaluated against the ${JSON.stringify(report.catalogSource)} catalogue, not the pinned bundled one — --offline was requested but not honoured, so these verdicts can drift with upstream publishes; do not use this capture`;
+  }
+  // The vendor stamps a bundled catalogue as version 0 by construction
+  // (`@mcpjam/cli@3.19.0` dist: `catalogVersion: liveCatalog && catalogResult?.ok
+  // ? catalogResult.version : 0`). A report calling itself bundled with any
+  // other version contradicts itself, so it is not pinned evidence (review,
+  // 2026-09-11).
+  if (report.catalogVersion !== 0) {
+    return `mcpjam reported a bundled catalogue with catalogVersion ${String(report.catalogVersion)}, but the vendor stamps every bundled catalogue as version 0 — the capture contradicts itself; do not use it`;
   }
   const reported = report.hosts.map((host) => host.hostId);
   const drifted = [

@@ -256,6 +256,21 @@ describe('runCompat — a capture of a different deployment can never read as th
     expect(runCompat(io, { target: 'http://localhost:3333/mcp/' }).verdict).toBe('pass');
   });
 
+  it('fails a capture that calls itself bundled but carries a non-zero catalogue version', () => {
+    // The vendor stamps every bundled catalogue as version 0, so this document
+    // contradicts itself and must not pass as pinned evidence (review,
+    // 2026-09-11).
+    const forged = OAK_REPORT.replace('"catalogVersion": 0', '"catalogVersion": 42');
+    const { io, retained } = fakeIo({ exitCode: 0, stdout: forged });
+
+    const outcome = runCompat(io, FIXTURE_TARGET);
+
+    expect(outcome.verdict).toBe('fail');
+    expect(outcome.failureReasons.join(' ')).toContain('catalogVersion 42');
+    expect(outcome.hosts).toBeUndefined();
+    expect(retained).toHaveLength(1);
+  });
+
   it('fails a capture evaluated against the LIVE catalogue — --offline requested is not --offline honoured', () => {
     // The argv asks for the bundled catalogue; this proves the wrapper checks
     // the report's own word for it. A live-catalogue capture's verdicts can
