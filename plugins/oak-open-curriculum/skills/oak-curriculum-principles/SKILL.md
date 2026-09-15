@@ -80,7 +80,7 @@ Each principle below has the same shape: what it means, why it matters, what it 
 
 ### 3. Evidence-informed
 
-**What it means.** Ground design in the best available evidence and the science of learning — what research tells us about how attention, memory and practice turn teaching into durable learning — and make your professional judgements transparent so others can weigh and adapt them.
+**What it means.** Ground design in the best available evidence and the science of learning — retrieval practice, spacing, worked examples, dual coding, cognitive load — and make your professional judgements transparent so others can weigh and adapt them.
 
 **Why it matters.** As Daniel Muijs argues, being evidence-informed is a moral duty (the evidence exists), a matter of social justice (closing the disadvantage gap), and central to the profession's credibility. We "stand on the shoulders of giants" — synthesis bodies like the EEF and IES put usable evidence at our fingertips. Evidence informs judgement; it doesn't replace it. And where the evidence is not available, is poor, or is contradictory, be explicit that you are drawing on best practice and "best bets" — reasoned professional judgement — rather than claiming an evidence base that isn't there.
 
@@ -92,7 +92,7 @@ Each principle below has the same shape: what it means, why it matters, what it 
 
 **What it means.** Build a model that offers **multiple routes through the curriculum** — for example, a choice of studying the Mayans or the Shang as an early civilisation — and that can be adapted safely where a school's context genuinely requires it. A model, not a script; but not an invitation to rearrange it either.
 
-**Why it matters.** A curriculum can never know your pupils or your locality, so adaptation must be safe where it is needed — a coastal unit gains a local case study; a history unit adds local context. Keep it in proportion, though: there are few genuine reasons to adapt a curriculum sequence itself (how few varies by subject), so re-sequencing is the exception, not the norm. Flexibility is more often about designed-in choice — alternative routes through the same coherent curriculum — than about rebuilding the order. Where adaptation is warranted, the designer makes it safe: map explicitly to the national curriculum and signpost threads so adapters can see what must stay connected. The model is _optional, always._
+**Why it matters.** A curriculum can never know your pupils or your locality, so adaptation must be safe where it is needed — a coastal unit gains a local case study; a history unit adds local context. Keep it in proportion, though: there are few genuine reasons to adapt a curriculum sequence itself, so re-sequencing is the exception, not the norm. Flexibility is more often about designed-in choice — alternative routes through the same coherent curriculum — than about rebuilding the order. Where adaptation is warranted, the designer makes it safe: map explicitly to the national curriculum and signpost threads so adapters can see what must stay connected. The model is _optional, always._
 
 **When creating.** Make content modular and clearly mapped to the national curriculum. Signpost the threads each unit serves. Where the subject allows genuine choice, design it in as alternative routes (unit options) through the same sequence. Offer suggestions, not mandates, and mark what is core versus adaptable. Prefer a single ambitious pathway with a low floor and high ceiling over forked "easier/harder" versions.
 
