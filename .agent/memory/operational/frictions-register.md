@@ -2661,6 +2661,42 @@ below is a cross-reference index, not a second source of truth.
   `commit-queue-local-ephemera` / MCP-612.
 - **Target surface**: `agent-tools/src/commit-queue/`.
 
+### F-166 — `spawn` marks `origin/main` as every lane branch's upstream, so a bare push targets `main`
+
+- **Source**: three occurrences across separate sessions. Two on
+  2026-08-20 (the landing-page teardown seat, holding ~5,100 lines of
+  uncommitted deletions with zero commits; and the Cloud-Config seat,
+  which noticed and unset it before its own first push); a third from an
+  earlier session, held in the owner-liaison seat's cross-session notes —
+  same mechanism, different seat and day.
+- **Surface**: `agent-tools/src/spawn/create.ts`, `addSpawnWorktree`.
+- **Observed** (measured, with a control): a freshly spawned lane's
+  branch resolves `@{u}` to `origin/main`. Reproduced first-hand by
+  running `spawn` and reading the new worktree's upstream. Mechanism:
+  the argv was `git worktree add <path> -b <branch> <base>` with `base`
+  defaulting to the remote-tracking ref `origin/main`, and
+  `branch.autoSetupMerge` defaults to `true` — so git marks the
+  remote-tracking ref it was cut from as the new branch's upstream. **A
+  seat that then runs a bare `git push`, which is the ordinary habit,
+  pushes its lane straight onto `main`.**
+- **Why three matters**: two occurrences read as a pattern worth
+  watching; three across sessions read as a footgun with a default that
+  has already been given its chances. The only thing that has ever
+  stopped it is an individual seat inspecting its own upstream — that is
+  vigilance standing in for a guard, which is the shape this estate
+  treats as a defect rather than a discipline problem.
+- **Cure (landed)**: `--no-track` added to the `worktree add` argv, so a
+  spawned lane has no upstream and a bare `git push` fails loud asking
+  for an explicit refspec. Verified against real git with a control: the
+  fixed binary's spawn reports `fatal: no upstream configured`, while a
+  worktree spawned minutes earlier by the unfixed binary reports
+  `origin/main`. Unit-tested for the flag's presence *and* its position
+  before the commit-ish, since after it git parses it as a path operand.
+- **Not cured by this**: worktrees already spawned. Their upstream must
+  be unset by hand (`git branch --unset-upstream`), and any seat resuming
+  in one should check before its first push.
+- **Status**: cured in the same change that recorded this entry.
+
 ## Mitigated / Addressed Frictions
 
 - F-03 — addressed by current CLI validation ordering.
