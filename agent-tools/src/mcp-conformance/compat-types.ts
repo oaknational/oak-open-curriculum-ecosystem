@@ -33,7 +33,9 @@ import { compatFindingSchema, compatProvenanceSchema } from './compat-finding.js
  *
  * This is the wrapper's ONLY evidence on the failure path — stdout is empty —
  * so it is parsed strictly rather than string-matched, and its `code` and
- * `message` are carried verbatim into the run's failure reason.
+ * `message` are carried into the run's failure reason — through
+ * `boundedExcerpt`, so credential shapes are masked and the length is capped,
+ * with the vendor's own classification otherwise untouched.
  *
  * Reporting the vendor's own words matters more here than it first appears:
  * the vendor classifies an authorisation failure as `INTERNAL_ERROR`, not

@@ -225,10 +225,15 @@ describe('compatReportSchema — the verdict document is parsed strictly', () =>
   });
 
   it('refuses a capture naming the same host twice', () => {
-    // Duplicate ids make the summary counts and the host set disagree, and
-    // "which one is the verdict?" has no answer.
+    // "Which one is the verdict?" has no answer. Sixteen entries and an
+    // agreeing summary, with one host REPLACED by a duplicate of another: an
+    // appended seventeenth also broke the summary count, so the summary
+    // refinement alone refused it and this test proved nothing about the
+    // uniqueness check (review, 2026-09-15).
     const report = minimalReport();
-    report.hosts = fullHostList().concat(fullHostList()[0]);
+    const hosts = fullHostList();
+    hosts[1] = { ...hosts[0] };
+    report.hosts = hosts;
 
     expect(compatReportSchema.safeParse(report).success).toBe(false);
   });
