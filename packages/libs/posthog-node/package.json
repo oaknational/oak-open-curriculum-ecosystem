@@ -33,14 +33,15 @@
     "@oaknational/build-metadata": "workspace:*",
     "@oaknational/observability": "workspace:*",
     "@oaknational/result": "workspace:*",
-    "@posthog/mcp": "^0.10.1",
-    "posthog-node": "^5.46.1"
+    "@posthog/mcp": "^0.11.4",
+    "posthog-node": "^5.48.1"
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
+    "@oaknational/workspace-config": "workspace:*",
     "@types/node": "^24.13.3",
-    "eslint": "^10.8.0",
-    "globals": "^17.7.0",
+    "eslint": "^10.8.1",
+    "globals": "^17.9.0",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3",
     "vitest": "^4.1.10"

@@ -43,10 +43,10 @@ For any incoming HTTP request, middleware executes in this order:
    10b. MCP Request Handler (streamableHttpHandlerClerk or raw handler)
    ↓
    [For GET /mcp:]
-   10a. mcpAuthClerk (OAuth token validation) OR bypass (if DANGEROUSLY_DISABLE_AUTH)
-   10b. MCP SSE Handler
+   10a. 405 stream refusal (identity-independent, no auth leg; MCP-545 —
+        the standalone SSE stream is not offered)
    ↓
-   [For GET /healthz:]
+   [For GET /healthz or GET /mcp/healthz:]
    9a. CORS preflight (corsMw)
    9b. Health Check Handler
    ↓
@@ -55,6 +55,14 @@ For any incoming HTTP request, middleware executes in this order:
    ↓
    [For GET /.well-known/oauth-authorization-server:]
    9a. Locally-derived AS metadata handler (publicly accessible)
+   ↓
+   [For GET /.well-known/openai-apps-challenge:]
+   9a. OpenAI domain-verification challenge handler (publicly accessible;
+       registered before clerkMiddleware and in every auth mode — MCP-700)
+   ↓
+   [For GET /robots.txt:]
+   9a. robots.txt handler (publicly accessible; registered before
+       clerkMiddleware and in every auth mode — MCP-703)
    ↓
    [For GET /:]
    9a. Landing Page Handler
@@ -94,19 +102,20 @@ sequenceDiagram
         PathMiddleware->>PathMiddleware: Validate Accept header
         PathMiddleware->>PathMiddleware: Check MCP readiness
 
-        PathMiddleware->>Handler: Pass to route handler
-        alt Auth enabled
+        alt Method is GET
+            PathMiddleware->>Handler: 405 stream refusal (MCP-545, no auth leg)
+        else POST, auth enabled
             Handler->>Handler: Validate OAuth token (mcpAuthClerk)
             Handler->>Handler: Process MCP request
-        else Auth disabled
+        else POST, auth disabled
             Handler->>Handler: Process MCP request (no auth)
         end
-    else Path is /healthz
+    else Path is /healthz or /mcp/healthz
         ClerkAuth->>Handler: Pass to health handler
         Handler->>Handler: Return health status
     else Path is /.well-known/*
-        ClerkAuth->>Handler: Pass to OAuth metadata handler
-        Handler->>Handler: Return OAuth metadata
+        ClerkAuth->>Handler: Pass to well-known handler
+        Handler->>Handler: Return OAuth metadata, or the OpenAI challenge token (MCP-700)
     else Path is /
         ClerkAuth->>Handler: Pass to landing page handler
         Handler->>Handler: Return landing page HTML
@@ -164,7 +173,22 @@ Client Request
 Response
 ```
 
-#### GET /healthz
+#### GET /healthz (and its routed twin GET /mcp/healthz)
+
+Both paths are one handler (`app/health-endpoints.ts`). The routed twin exists
+because the canonical host reaches this app through a Cloudflare origin rule
+scoped to `/mcp` and `/mcp/*` without stripping the prefix: a root-level
+`/healthz` probe on `www` never arrives here, so the only health path an
+external monitor can reach on the canonical surface is `/mcp/healthz`
+(MCP-580). Both skip `clerkMiddleware` (`clerk-skip-surfaces.ts`) and neither
+carries DNS rebinding protection — a liveness probe must not depend on the auth
+vendor or on a Host allowlist.
+
+Registration order is load-bearing for the routed twin: the health routes are
+registered in phase 4, ahead of the phase-6 `/mcp` accept-header gate, which
+matches the whole `/mcp` subtree. Registered after it, `/mcp/healthz` would be
+answered `406` for want of `Accept: text/event-stream` — which is what
+production returned before this route existed.
 
 ```text
 Client Request
@@ -276,7 +300,7 @@ flowchart TD
     SetAuthNull --> RouteCheck{Path?}
 
     RouteCheck -->|/mcp| MCPPath[Accept Header Check]
-    RouteCheck -->|/healthz| HealthHandler[Health Check Handler]
+    RouteCheck -->|/healthz or /mcp/healthz| HealthHandler[Health Check Handler]
     RouteCheck -->|/.well-known/*| OAuthMeta[OAuth Metadata Handler]
     RouteCheck -->|/| Landing[Landing Page Handler]
 
@@ -286,7 +310,10 @@ flowchart TD
 
     ReadyCheck --> ServerReady{Server ready?}
     ServerReady -->|Timeout| Return503[Return 503]
-    ServerReady -->|Yes| AuthMode{Auth enabled?}
+    ServerReady -->|Yes| MethodCheck{Method?}
+
+    MethodCheck -->|GET| Return405[Return 405 + Allow: POST]
+    MethodCheck -->|POST| AuthMode{Auth enabled?}
 
     AuthMode -->|Yes| McpAuth[mcpAuthClerk]
     AuthMode -->|No| RawHandler[Raw MCP Handler]
@@ -326,12 +353,21 @@ flowchart TD
    - DNS rebinding protection
    - CORS middleware
 
+   **Phase 2.5**: Public pre-auth routes (`setupOAuthAndCaching`), registered
+   BEFORE `clerkMiddleware` so they answer without any auth context
+   - OpenAI domain-verification challenge (`/.well-known/openai-apps-challenge`),
+     in every auth mode (MCP-700)
+   - `robots.txt` (`/robots.txt`), in every auth mode — a crawler arrives with
+     no credentials, so a file reachable only through the auth vendor is an
+     unfetchable one (MCP-703)
+   - OAuth metadata endpoints and the `/oauth/*` proxy, when auth is enabled
+
 3. **Phase 3**: Global Auth Context (`setupGlobalAuthContext`)
    - `clerkMiddleware` (registered globally for all routes)
 
 4. **Phase 4**: Core Endpoints (`initializeCoreEndpoints`)
    - MCP server initialization
-   - Health check handlers (`/healthz`)
+   - Health check handlers (`/healthz` and `/mcp/healthz`)
 
 5. **Phase 5**: Static Assets & Landing Page
    - Static file serving (`/public`)
@@ -343,7 +379,8 @@ flowchart TD
 
 7. **Phase 7**: Auth Routes (`setupAuthRoutes`)
    - OAuth metadata endpoints (`/.well-known/*`)
-   - Protected MCP routes (`POST /mcp`, `GET /mcp` with `mcpAuthClerk`)
+   - Protected MCP route (`POST /mcp` with `mcpAuthClerk`) and the
+     identity-independent `GET /mcp` 405 stream refusal (MCP-545)
 
 ### Execution Order (at runtime)
 
@@ -356,8 +393,11 @@ Every request:
 
 Then, depending on path:
 
-  /mcp → Accept header check → MCP readiness → mcpAuthClerk → MCP handler
-  /healthz → Health handler
+  POST /mcp → Accept header check → MCP readiness → mcpAuthClerk → MCP handler
+  GET /mcp → Accept header check → MCP readiness → 405 stream refusal (MCP-545)
+  /healthz, /mcp/healthz → Health handler
+  /robots.txt → Crawler-directive handler (public, every auth mode)
+  /.well-known/openai-apps-challenge → Domain-verification challenge handler (public, every auth mode)
   /.well-known/* → OAuth metadata handler
   / → Landing page handler
   /static/* → Static file handler
@@ -367,7 +407,9 @@ Then, depending on path:
 
 ### Issue: 401 Unauthorized on /mcp
 
-**Symptoms**: POST/GET to `/mcp` returns 401 with `WWW-Authenticate` header
+**Symptoms**: POST to `/mcp` returns 401 with `WWW-Authenticate` header.
+(A protocol GET never draws 401 — it receives the identity-independent
+405 stream refusal, MCP-545.)
 
 **Possible Causes**:
 

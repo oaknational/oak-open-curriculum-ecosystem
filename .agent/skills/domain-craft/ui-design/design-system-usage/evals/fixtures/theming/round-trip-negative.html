@@ -1,0 +1,31 @@
+<!-- NEGATIVE control for ONE boundary: applied-value-never-round-trips must
+     FAIL, while the other two assertions PASS.
+
+     Offers all five and resolves `system` correctly, so the theme set and
+     the write are both conformant. The defect is DDR-003's exact shape: it
+     reads back the APPLIED attribute and stores that as the user's choice.
+     After one OS-driven change, a user who chose "Match my device" has
+     silently been recorded as having chosen "dark". -->
+<select id="theme-choice">
+  <option value="light">Light</option>
+  <option value="dark">Dark</option>
+  <option value="system">Match my device</option>
+  <option value="high-contrast">High contrast</option>
+  <option value="colour-safe">Colour safe</option>
+</select>
+<script>
+  const root = document.documentElement;
+
+  function resolve(choice) {
+    if (choice === 'system') {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    return choice;
+  }
+
+  document.getElementById('theme-choice').addEventListener('change', (event) => {
+    root.setAttribute('data-theme', resolve(event.target.value));
+    const applied = root.getAttribute('data-theme');
+    localStorage.setItem('oak-theme-choice', applied);
+  });
+</script>

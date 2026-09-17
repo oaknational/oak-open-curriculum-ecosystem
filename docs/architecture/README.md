@@ -3,12 +3,12 @@ boundary: B2-Architecture
 doc_role: index
 authority: architecture-navigation
 status: active
-last_reviewed: 2026-05-10
+last_reviewed: 2026-08-02
 ---
 
 # Architecture
 
-**Last Updated**: 2026-05-10
+**Last Updated**: 2026-08-02
 **Status**: Active architectural index
 
 ## Start Here
@@ -36,11 +36,17 @@ block in the ADR index:
 
 ### Core Architecture (Current)
 
+- Foundations-first architecture: the
+  [software projection of the cost-of-change gradient](./foundations-first.md)
+  — how core building blocks, foundational systems, libraries, and products
+  concentrate recurring mechanism and assurance at the lowest coherent layer.
+  The [general pattern](../foundation/cost-of-change-gradient.md) also applies
+  across human-agent systems, inquiry, and the Practice.
 - Standard structure:
   - `apps/` – application runtimes (MCP servers, search CLI)
   - `packages/sdks/` – SDK packages (`@oaknational/curriculum-sdk`, `@oaknational/oak-search-sdk`)
   - `packages/core/` – foundational shared code and provider-neutral primitives (result/env/observability/eslint/openapi adapter)
-  - `packages/libs/` – shared runtime libraries (foundation libs: logger/env-resolution/search-contracts; adapter lib: sentry-node)
+  - `packages/libs/` – shared runtime libraries; the foundation/adapter tier membership is enumerated in [ADR-041](architectural-decisions/041-workspace-structure-option-a.md), the single source for it (this line stopped restating the list after drifting four packages behind it)
 - Boundaries enforced by custom ESLint rules in `packages/core/oak-eslint`
 - Provider composition is app-local (logger/clock/storage/search retrieval), then injected into server/tool layers
 - Apps load runtime config at entry boundaries and inject dependencies (DI) into servers and tools

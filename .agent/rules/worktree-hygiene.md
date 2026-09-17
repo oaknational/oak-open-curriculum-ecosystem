@@ -133,9 +133,29 @@ retired:
 - unique information NOT in `main` and not worth keeping → consciously drop it ("if
   there is no information worth preserving, that is fine").
 
-Destructive removal (`git worktree remove`, branch deletion) is
-owner-authorisation-gated and never removes information not first confirmed in `main` or
-consciously released (`never-use-git-to-remove-work`).
+**Standing prune policy for the proven class** (owner grant 2026-07-21:
+"Pruning worktrees that are provably safe to remove should absolutely be
+standing policy"; widened 2026-08-05: "anything proven on main can be
+deleted, and in fact should be deleted as a standing protocol, to keep the
+local environment tidy, no redundant branches, no redundant worktrees").
+Provably safe = BOTH, proven per item: (a) `git status --porcelain` empty
+in the worktree, and (b) its HEAD an ancestor of a freshly-fetched
+`origin/main` (`git merge-base --is-ancestor`). Items passing both prune
+without a per-item ask: `git worktree remove` (never `--force` — its
+dirty-refusal is a safety net) plus `git worktree prune` for gone
+registrations, and plain branch deletion for proven local branches. A
+content-superseded branch (every file proven present newer on main by
+content comparison, not SHA ancestry) also deletes, with the comparison
+recorded first. Anything failing either proof, the active lanes, and
+platform-managed `.claude/worktrees/*` are NEVER touched. Worked instance:
+2026-07-21, 50 → 9 registrations (37 proven removals + 5 stale prunes),
+zero losses.
+
+Destructive removal OUTSIDE the proven class (`git worktree remove` of
+anything dirty or unmerged, deletion of any branch not ancestor- or
+content-proven) remains owner-authorisation-gated and never removes
+information not first confirmed in `main` or consciously released
+(`never-use-git-to-remove-work`).
 
 A third disposition exists for a branch worth preserving as HISTORY but not landing:
 an **annotated tag** (`git tag -a preserve/<name> <tip> -m "<why kept>"`, pushed)

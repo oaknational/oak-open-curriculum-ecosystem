@@ -66,6 +66,7 @@ const PORTABLE_CORE_PREFIX = '.agent/practice-core/';
 
 const REPO_DOCTRINE_PREFIXES = [
   'docs/architecture/architectural-decisions/',
+  'docs/design/',
   'docs/governance/',
   '.agent/rules/',
   '.agent/directives/',

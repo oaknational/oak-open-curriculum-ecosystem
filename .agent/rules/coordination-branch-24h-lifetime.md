@@ -15,11 +15,18 @@ stamp the lifetime) and at session-open (to check it).
 
 ## Action
 
-1. **Stamp the cut date in the branch name**: `coordination/estate-<YYYY-MM-DD>`.
-   The name is the observable clock — no side-channel state needed
-   (agent-state-observable).
-2. **At session-open on a coordination branch**, read the stamp. The
-   check is UTC-date rollover: a branch whose stamp date is before the
+1. **Stamp the cut date in the branch name**:
+   `coordination/<YYYY-MM-DD>-<sha6>`, minted by the
+   [cut-coordination-branch skill](../skills/cut-coordination-branch/SKILL-CANONICAL.md)'s
+   tool (`agent-tools coordination successor-name`) — never
+   hand-transcribed. The date segment is the observable clock — no
+   side-channel state needed (agent-state-observable); the sha6 segment
+   carries the base-tip lineage (the skill states its exact guarantee).
+2. **At session-open on a coordination branch**, read the stamp — the
+   `<YYYY-MM-DD>` segment between `coordination/` and the trailing
+   `-<sha6>` (older branches may carry legacy forms such as
+   `coordination/estate-<YYYY-MM-DD>`; their date segment is still the
+   stamp). The check is UTC-date rollover: a branch whose stamp date is before the
    current UTC date is DUE — the stricter reading of "at most 24 hours"
    (a branch cut late in the day rotates sooner, never later; a
    date-only stamp cannot express hours, so the day boundary is the

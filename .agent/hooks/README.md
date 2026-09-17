@@ -163,7 +163,7 @@ case (loudly, as above) and fail **closed** whenever a built guard misbehaves.
 | Codex CLI | Stable lifecycle hooks | Soft `SessionStart` identity context in tracked `.codex/config.toml` |
 | Cursor | Not reassessed in this Codex research pass as of 2026-07-25 | Soft `sessionStart` identity context in tracked `.cursor/hooks.json`; no canonical policy activation |
 | Gemini / Antigravity CLI | Not reassessed in this Codex research pass as of 2026-07-25 | No canonical policy activation |
-| GitHub Copilot CLI | Not reassessed in this Codex research pass as of 2026-07-25 | No Copilot-native activation; INHERITS the Claude `PreToolUse` activation and is enforced through the dispatcher's `copilot-compat-string` route (observed live 2026-07-25, CLI 1.0.75) |
+| GitHub Copilot CLI | Not reassessed in this Codex research pass as of 2026-07-25 | No Copilot-native activation; INHERITS the Claude `PreToolUse` activation and is enforced through the dispatcher's `copilot-compat-string` route (live observation recorded in `policy.json`) |
 
 See `.agent/memory/executive/cross-platform-agent-surface-matrix.md` for the
 full local support status. The version-pinned catalogue records the official
@@ -172,11 +172,12 @@ evidence and explicit evidence ceiling behind the Codex row.
 Cursor and Gemini CLI have no canonical policy activation. GitHub Copilot has
 no Copilot-native activation wired, but Copilot CLI inherits the Claude
 `PreToolUse` activation and is enforced through the dispatcher's
-`copilot-compat-string` route (observed live 2026-07-25, CLI 1.0.75).
+`copilot-compat-string` route; the live observation and current pin are recorded
+in `policy.json`.
 
-Codex CLI `0.145.0` documents stable session, subagent, tool/approval,
-compaction, prompt, and stop lifecycle families. The version-pinned event list
-and evidence boundary live in the
+The Codex CLI observation pinned in `policy.json` documents stable session,
+subagent, tool/approval, compaction, prompt, and stop lifecycle families. The
+version-pinned event list and evidence boundary live in the
 [Codex CLI capability catalogue](../reports/agentic-engineering/codex-cli-agentic-capability-catalogue-2026-07-25.md).
 Availability upstream is not activation here. In particular, hosted tools such
 as Web Search are outside the general local-function hook path.
@@ -196,7 +197,39 @@ with a closed `status` vocabulary: `supported` (canonical policy natively
 enforced), `inherited` (enforced through another platform's activation),
 `identity-only` (soft identity/context hook only), and `not-activated` (no
 project activation wired). The runtime reads only `hooks.*`; the portability
-validator and health probe read only `platform_support.claude_code.status`.
+validator and existing health probe read only
+`platform_support.claude_code.status`; `validate-claim-freshness` reads every
+row's freshness fields as described below.
+
+Every `platform_support` row also implements ADR-223's freshness contract:
+
+- `grounded_at` is the row's own first-hand evidence date; it is never the date
+  the metadata was added.
+- `review_by` is after `grounded_at` and no more than this registered surface's
+  30-day fast-referent, high-reliance ceiling.
+- `pin` is a closed declaration. `{ "kind": "pinned", "version": "x.y.z" }`
+  creates a named monitoring obligation using the same bare semantic-version
+  shape that the landing-2 collector extracts.
+  `{ "kind": "not-tracked", "reason": "..." }` records why no version is
+  tracked. A not-tracked row is still date-bounded and reviewable; it is not a
+  permanent exemption. Legacy `pinned_to`, nulls, mixed arms, and extra keys
+  are invalid.
+
+`validate-claim-freshness` enforces that structural contract deterministically
+inside `repo-validators:check`. In MCP-476 landing 1 (PR #745), its successful
+output is a report-only inventory of pinned obligations and not-tracked rows;
+it does not enforce expiry or pin drift. The concrete MCP-476 landing 2 on
+`jimcresswell/mcp-476-claim-freshness-session-instrument` adds the sole
+SessionStart and health-probe consumers for those clock- and
+environment-bearing decisions. Until that successor lands, the estate must not
+claim that invisible freshness decay is prevented. Current pin values and
+not-tracked reasons are canonical only in `policy.json`. Known residual
+version-stamped evidence remains in `.codex/README.md`,
+`agent-tools/docs/agent-identity.md`, the cross-platform surface matrix, and
+`policy.json` row notes. Those passages are dated or consumer-local evidence,
+not alternative current-pin authorities. Landing 2 adds a mirror census that
+allows historical observations but rejects an unqualified current-pin mirror
+when it disagrees with `platform_support.*.pin` or fails to point there.
 
 ## Porting to Native Activation
 

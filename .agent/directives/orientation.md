@@ -31,6 +31,7 @@ for the operational-memory surfaces and authority order within them.
 | **Research** | Default exploratory-synthesis tier and holding bay for un-promoted material | `.agent/research/` (with optional transient `notes/` holding bay) | When investigating a topic, or when authoring fresh material that has not been (and may not be) promoted to reference |
 | **Workflow** | Named rituals and canonical skills | `.agent/skills/`, `.agent/rules/`, `.agent/sub-agents/` | On invocation or trigger |
 | **Platform Adapters** | Thin wrappers pointing back at canonical surfaces | `.cursor/`, `.claude/`, `.gemini/`, `.agents/`, `.codex/` | Platform-specific activation |
+| **Operator-Local Profile** | Machine-local facts about the human at *this* machine: credential bindings, tone of voice, personal operating preferences. Lowest authority; see below | `.agent/operator-local/` (tracked README, untracked `profile.md`) | Session open — grounding, via the shared start-right workflow |
 
 ## Authority Order (for same-scope conflicts)
 
@@ -48,6 +49,33 @@ conflicts, not a gating rule across different-scope claims.
 Doctrine (directives, ADRs, PDRs) sits above these for *governance*
 claims — a plan that contradicts an ADR must yield, unless the plan
 explicitly amends the ADR in the same commit.
+
+### The Operator-Local Profile Tier
+
+The operator-local tier sits **below every tracked surface** in this order. It
+is invisible to every other checkout and to CI, so it can never be the
+authority for anything a second reader must see.
+
+**A local binding or preference cannot override tracked governance.** Where the
+profile conflicts with a directive, ADR, PDR, rule, or an active plan, the
+tracked surface wins and the profile's clause is stale by construction. The
+only thing that displaces tracked governance is a **current owner direction**
+per [Owner Precedence](#owner-precedence) — the owner speaking now, not a local
+note recording something the owner once said. A stale profile clause is cured
+by correcting or graduating it, never by acting on it.
+
+The tier is authoritative on exactly one thing: the machine-local **binding**
+that a tracked surface deliberately declines to name, because naming it would
+be false on another machine (`principles.md` §Any User, Any Machine). Where a
+tracked rule owns the portable mapping and points here for the binding — as
+[`bot-identity-on-third-party-systems`](../rules/bot-identity-on-third-party-systems.md)
+does for which credential performs which action class — the profile supplies
+the binding and nothing else.
+
+A missing profile is the expected condition, not a defect: readers proceed on
+tracked defaults and say nothing. The full contract, including what must never
+be stored there, is
+[`.agent/operator-local/README.md`](../operator-local/README.md).
 
 ## Routing Rule
 
@@ -71,6 +99,10 @@ read-trigger and lifecycle:
   [PDR-032](../practice-core/decision-records/PDR-032-reference-tier-as-curated-library.md)).
 - If it is a **named ritual or command** → skills / commands /
   rules.
+- If it is a **machine-local operator binding or preference** — which
+  credential identity, this operator's tone of voice, personal operating
+  preferences → the operator-local profile, never a tracked surface. If it
+  matters to a second person or to CI, it is doctrine and belongs above.
 
 Content that fits multiple layers lives at the most durable layer and
 is referenced from shallower layers. Directives do not duplicate ADRs;

@@ -128,8 +128,10 @@ describe('createHttpObservability', () => {
     const sdk = createFakeSentrySdk();
     const runtimeConfig = expectRuntimeConfig(
       baseEnv({
-        CLERK_PUBLISHABLE_KEY: 'test-clerk-publishable-key',
-        CLERK_SECRET_KEY: 'test-clerk-secret-key',
+        // Live-realm prefixes: this is a VERCEL_ENV=production fixture, and
+        // Guard 1a now requires pk_live_/sk_live_ keys in production.
+        CLERK_PUBLISHABLE_KEY: 'pk_live_test-clerk-publishable-key',
+        CLERK_SECRET_KEY: 'sk_live_test-clerk-secret-key',
         APP_VERSION_OVERRIDE: '1.2.3',
         SENTRY_MODE: 'sentry',
         SENTRY_DSN: 'https://key@example.ingest.sentry.io/123',

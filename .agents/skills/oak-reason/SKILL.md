@@ -5,4 +5,4 @@ description: Structured outward reasoning for analysis, planning, decisions, dia
 
 # Reason (Cross-tool)
 
-Read and follow `.agent/skills/reason/SKILL-CANONICAL.md`.
+Read and follow `.agent/skills/cognition/reason/SKILL-CANONICAL.md`.

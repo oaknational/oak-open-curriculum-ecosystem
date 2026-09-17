@@ -24,6 +24,91 @@ feedback-mechanism arc, taxonomy work) is retained in git and in the
 work brief and the recent identity stretch, per
 [`continuity-practice.md` §Disposition](../../../directives/continuity-practice.md).
 
+## DEDICATED CONSOLIDATION, NAPKIN-ONLY — EXECUTED (2026-09-02, Kiln holds Slag, 1447f4, curator)
+
+**Step-6a synthesis landed the same day** (owner redirect ~12:1xZ: the seat had read the six
+archives into its own context and compacted; the different approach was the corpus-analysis
+engine, scoped against the 2026-08-07 processed marker). Report:
+`research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-09-02.md`,
+processed marker 2026-09-02; one graduation (`patterns/claim-before-check.md`); the
+interrupt plan's ledger carries the first measured recurrence-despite-home rate (16 of 19
+prior-kept mechanisms recurred within four weeks). The since-marker run recipe is in the
+corpus-analysis runbook. Open at close: the main-merge into `handoff/jim-september` after
+Finch's #915 fold lands is the rotation-versus-appends shape — carry the 2026-08-19 napkin
+additions into the fresh napkin and process them; both napkin and repo-continuity need
+semantic merges. DONE 2026-09-02 ~14:3xZ after #915 landed: merge commit on
+`handoff/jim-september` (the napkin the one conflict; the fold's 156-line delta carried under a
+dated heading and routed into eight homes in the following commit, five items on distilled
+with candidate homes, dispositions on the napkin); branch pushed under the bot. WRAPPED
+2026-09-02 ~14:5xZ: #951 ready, all checks green, the owner merges; any post-merge true-up
+rides #954 at owner word; the seat stayed live only for a local-only data export (MCP-662,
+untracked). The next consolidation session starts from main's fresh napkin and the
+distilled entries' candidate homes (the owner named the distilled pass as the next session). Deep handoff taken at the owner's word ~13:4xZ with the seat kept live: the
+machine-local handoff record is
+`.agent/state/collaboration/handoffs/d88ab157-curator-napkin-only-consolidation-2026-09-02.md`
+(attached to claim d88ab157), the formation letter is
+`.agent/experience/2026-09-02-kiln-holds-slag-the-corpus-i-was-meant-to-query.md`, and the
+napkin's ~13:4xZ entry carries the lens harvest and the loss scan.
+
+Owner-launched consolidate-until-done pass, scoped by owner word to the current napkin and
+the five archived napkins before it: distilled appended to, never curated; every non-napkin
+fitness signal ignored; the comms watermarks left where the 2026-08-14 pass set them. Run
+n=1 on `handoff/jim-september` in the primary checkout (the owner's handoff branch for the
+2026-09-02 uncommitted records; PR #951 the landing surface), under a curator claim on this
+thread; the two claims retained at the 2026-08-19 week-sleep freeze (design lane, Director
+seat) were reported, not archived. Napkin rotated at 3,093 lines
+(`archive/napkin-2026-09-02.md`, cmp-proven) after every behaviour-changing item in the
+2026-08-14 → 2026-09-02 window was read and dispositioned first-hand; the rotation record
+at the top of the fresh napkin lists the homes, and the commits are the record. Five
+pattern files carry the window's named concepts in the pre-SDK concept-node form. The
+step-6a historical synthesis over the six napkins follows in the same session; its report
+in the continuity-memory research lane is the marker for the next "since last marker" pass.
+
+## DEDICATED CONSOLIDATION — EXECUTED (2026-08-14, Quasar wakes Nadir, 0fabcd, curator)
+
+Owner-launched consolidate-until-done pass, run inside a live team window (Director seat
+Smith hunts Obsidian active in the morning; commit-window and expletive-sweep coordination
+on the stream). Napkin rotated at 3,490 lines (`archive/napkin-2026-08-14.md`,
+cmp-proven); pending-graduations and distilled both drained to EMPTY by first-instance
+promotion (homes in the commit records `aba0128dd` / `99e3eb026` / `2633f2fd4`);
+open-questions verified empty. Comms step-3a: 4,420 events archive-moved loss-free under
+the three gates; watermarks extended (non-heartbeat 2026-08-14T06:16:28Z via a full
+in-seat body-read of all 496 post-watermark events; heartbeats 2026-08-12T06:29Z with the
+batch aggregate in the napkin rotation record). Session lesson conserved in the archive's
+06:08Z entry: the owner corrected this seat for self-executing the coordination-branch
+merge-back and push (role-scope breach at a curator seat — licensed-activity class
+recurrence, routed to PDR-098's action-time lane). Live signals left named, not chased:
+director-handoff.md remains its own bounded owner-named sitting; this record's char
+pressure drains at the salvage-plan closure (the 2026-07-02/03 ws1b ledger half of the
+salvage section is conserve-and-delete eligible once the rescue-set workstream completes;
+its rescue-set pointer half stays live intake).
+
+## LONGITUDINAL STEP-6A SYNTHESIS — EXECUTED AND ARCHIVED (2026-08-07/08, Nettle weaves Root, 5cfa11, implementer)
+
+Identity: `Nettle weaves Root` (`claude-code` / `fable-5` / `5cfa11`), implementer,
+first_session 2026-08-07, last_session 2026-08-08. The owner-ratified
+archive-scale synthesis (consolidate-docs step 6a) ran end to end on the
+corpus-analysis engine: 37 napkins since the 2026-05-29 marker → 572 leaves →
+80 candidates → 35 keep / 44 kill / 1 reroute → deterministic close (integrity
+empty, zero recompute diff). Report + **processed marker 2026-08-07**:
+[`historical-napkin-synthesis-2026-08-07.md`](../../../research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-08-07.md).
+Two novel patterns graduated (`tool-default-scan-set-drift`,
+`collaboration-cli-interface-drift`); Choice-B recall MISS dispositioned
+graduate-with-gap-named (dual mechanism, §Recall of the report). Owner
+approved the report and archival 2026-08-08; plan archived at
+`.agent/plans/delivery/archive/longitudinal-napkin-synthesis-2026-08.plan.md`
+(inline path — the link validator's target set excludes archive directories by
+design); MCP-531 Done. **Grounded execution knowledge for the next archive-scale
+runner**: the tooling README launch-card is accurate first-hand (build →
+Workflow → commit per stage); launch seeded artefacts with ABSOLUTE
+scriptPath (the Workflow tool resolves relative paths against the caller's
+cwd); re-freeze the recall fixture from the marker-chain reports covering the
+NEW window before spending (the frozen 18-baseline fixture is calibrated to
+February–June); a banked-verdict pre-filter at validate dispatch is a
+legitimate engine refinement pointer (report §Limitations). **Next safe step
+on this lane**: none — the lane is complete; the next step-6a pass triggers
+per consolidate-docs' own checklist, starting after marker 2026-08-07.
+
 ## SESSION-CLOSE DOCTRINE RE-TRUED — wrap closes every session (2026-07-28, Juniper holds Tendril, 3dfd3b, implementer)
 
 - Owner ruling (verbatim substance): "it was never my intention to use wrap for 'big sessions', it is
@@ -799,6 +884,8 @@ passes) is in git history and the [`curator-passes/`](../curator-passes/) ledger
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Kiln holds Slag` | `claude-code` | `claude-fable-5-1` | `1447f4` | `dedicated consolidation, napkin-only at owner scope (2026-09-02): the 2026-08-14 → 09-02 napkin window drained item by item into permanent homes (five new patterns; rule, skill, directive, runbook and README clauses; distilled appended; PDR-117 register row extended; F-164/F-165) and rotated cmp-proven; then the step-6a historical synthesis over the six napkins (report in the continuity-memory research lane). Worked n=1 on handoff/jim-september in the primary under a curator claim` | 2026-09-02 | 2026-09-02 |
+| `Nettle weaves Root` | `claude-code` | `fable-5` | `5cfa11` | `longitudinal-step-6a-synthesis (plan, run, conservation, archive)` | 2026-08-07 | 2026-08-08 |
 | `Magnetar guards Perigee` | `claude-code` | `fable-5` | `565521` | `dedicated-consolidation + PDR-094 v3/v4 owner-worded correction` | 2026-07-26 | 2026-07-26 |
 | `Moonless Lurking Dusk` | `claude` | `Opus 4.8` | `0641a3` | `dedicated-knowledge-curation` | 2026-06-01 | 2026-06-01 |
 | `Shaded Veiling Mirror` | `codex` | `GPT-5` | `019e88` | `dedicated-curation+closeout` | 2026-06-02 | 2026-06-02 |

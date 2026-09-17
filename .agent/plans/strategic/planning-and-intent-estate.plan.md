@@ -116,11 +116,12 @@ Delivery plans serving this node declare `serves:
 planning-and-intent-estate` — enumerate them by search, never by a
 hand-kept list. Per the owner's tracking ruling (2026-07-31) this
 subtree carries no Linear content. The delivery-ticket gate this node
-carried was RESOLVED at the 2026-07-31 ratification sitting via the
-design-recommended schema amendment (execution-state anchors are
-operator policy, not a public-schema constant — recorded in the
-plan-node schema's dated amendment; the paired validator mechanism
-landed 2026-07-31 as derived anchoring consistency). Sequencing follows the
+carried was RESOLVED at the 2026-07-31 ratification sitting, and the
+question dissolved entirely on 2026-08-07: plan validity is
+repo-internal (the plan-node schema's dated 2026-08-07 amendment) —
+`tickets` is optional visibility metadata everywhere, the validator
+carries no ticket obligation, and no tracking ruling is needed for a
+subtree to be ticketless. Sequencing follows the
 concepts-first order stated in the bet; each delivery plan is a
 single-story step of its lane, sized within its round budget at
 authoring time (PDR-132).

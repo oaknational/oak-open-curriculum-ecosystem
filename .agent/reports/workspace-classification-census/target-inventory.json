@@ -1,0 +1,809 @@
+{
+ "schema_version": "1.0.0",
+ "plan": ".agent/plans/delivery/workspace-classification-census.plan.md",
+ "provenance": "Round-2 consolidation (workflow wf_862b18c7-c13, 2026-08-14) over decomposition-analysis.json; challenger verdicts absorbed.",
+ "status": "historical",
+ "re_graded": "2026-08-17 workspace-basis re-grounding (owner correction): zero deference weight, round-2 cancelled; see decomposition-synthesis.md status header and .agent/research/workspace-basis-regrounding-2026-08-17.md",
+ "counts": {
+  "currentWorkspaces": 34,
+  "targetWorkspaces": 66
+ },
+ "targetInventory": [
+  {
+   "workspace": "packages/codegen/openapi-schema-source",
+   "status": "new",
+   "scope": "Spec acquisition and separation as one capability \u2014 schema fetch/refresh resolution, committed-cache handling, separation/decoration hooks, schema validation, deferred-path exclusion \u2014 parameterised by config so Oak knowledge stays behind as configuration; sole output is the decorated api-schema-sdk.json that every downstream generator and the CI drift check consume, refreshed on the upstream-deploy clock.",
+   "dimension": "lifecycle",
+   "lifecycle": "codegen-time",
+   "movesFrom": [
+    "packages/sdks/oak-sdk-codegen/code-generation/{resolve-schema-source,schema-cache,schema-separation-core,schema-validator,schema-enhancement-404,schema-status-guard,apply-deferred-paths}.ts"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/codegen/openapi-pipeline",
+   "status": "new",
+   "scope": "Vendor-neutral OpenAPI-to-TypeScript/Zod/MCP-descriptor generation machinery, parameterised by a config object (decorators, exclusions, security policy) so it carries zero Oak knowledge; narrowed by the challenger to generation only (parsing/acquisition lives in openapi-schema-source); depends on the existing packages/core/openapi-zod-client-adapter.",
+   "dimension": "oak-vs-reusable",
+   "lifecycle": "codegen-time",
+   "movesFrom": [
+    "packages/sdks/oak-sdk-codegen/code-generation/{codegen-core*.ts,zodgen-core.ts,typegen/{paths,parameters,operations,response-map,validation,error-types,client-types,schema,mcp-tools}}"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/generated/oak-api-artifacts",
+   "status": "new",
+   "scope": "Generated-output-only workspace for the spec-derived artefacts (api-schema types, Zod, MCP descriptors, query-parser/observability/admin types) plus the schema cache \u2014 every file DO-NOT-EDIT, regenerated wholesale on the upstream-spec clock, no hand-written code beyond export barrels.",
+   "dimension": "generated-separation",
+   "lifecycle": "codegen-time",
+   "movesFrom": [
+    "packages/sdks/oak-sdk-codegen/src/types/generated/{api-schema,zod,query-parser,observability,admin}/",
+    "packages/sdks/oak-sdk-codegen/schema-cache/"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/search/oak-search-index-contracts",
+   "status": "new",
+   "scope": "The hand-written search index contract source: field definitions, ES field overrides, analyzer config, and their generators \u2014 changes with index design, not the upstream spec; absorbs the existing packages/libs/search-contracts (field inventory + stage-contract matrix), which already consumes exactly this surface, resolving that package's coupling to the search-cli decomposition.",
+   "dimension": "lifecycle",
+   "lifecycle": "codegen-time",
+   "movesFrom": [
+    "packages/sdks/oak-sdk-codegen/code-generation/typegen/search/ (field-definitions/, es-field-overrides/, es-analyzer-config.ts, generators)",
+    "packages/libs/search-contracts (merged in as the named merge target)"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/generated/oak-search-contract-artifacts",
+   "status": "new",
+   "scope": "Generated-output-only search contract artefacts (index-doc Zod, facets, scopes, requests/responses, suggestions, subject-hierarchy, fixtures, OAK_*_MAPPING es-mappings), regenerated wholesale on the index-design cadence, with a declared dependency on oak-api-artifacts for the KEY_STAGES/SUBJECTS constants the generated requests import.",
+   "dimension": "generated-separation",
+   "lifecycle": "codegen-time",
+   "movesFrom": [
+    "packages/sdks/oak-sdk-codegen/src/types/generated/search/ (including es-mappings/)"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/search/oak-bulk-ingest",
+   "status": "new",
+   "scope": "Hand-written bulk-download reading, strict Zod boundary validation, and extraction machinery for the ingest lifecycle \u2014 reader, processing, restricted-lesson filter, extractors, and the hand-written ADR-222 schema templates; holds no generated output.",
+   "dimension": "lifecycle",
+   "lifecycle": "ingest-time",
+   "movesFrom": [
+    "packages/sdks/oak-sdk-codegen/src/bulk/{reader.ts,processing.ts,restricted-lesson-filter.ts,extractors/}",
+    "packages/sdks/oak-sdk-codegen/code-generation/typegen/bulk/ (schema templates)"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/generated/oak-bulk-artifacts",
+   "status": "new",
+   "scope": "Generated-output-only home for the assembled bulk-download Zod schemas, regenerated on the ADR-222 bulk-schema truing cadence \u2014 thin by design; a generated workspace is an artifact holder, not a capability claim.",
+   "dimension": "generated-separation",
+   "lifecycle": "codegen-time",
+   "movesFrom": [
+    "packages/sdks/oak-sdk-codegen/src/types/generated/bulk/"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/codegen/oak-vocab-mining",
+   "status": "new",
+   "scope": "The data-mining pipeline that turns bulk curriculum data into graph and vocabulary artefacts \u2014 runs on the bulk-data-refresh cadence, entirely separate from spec-refresh codegen.",
+   "dimension": "lifecycle",
+   "lifecycle": "codegen-time",
+   "movesFrom": [
+    "packages/sdks/oak-sdk-codegen/vocab-gen/",
+    "packages/sdks/oak-sdk-codegen/src/bulk/generators/ (graph-corpus-generator, synonym-miner, nc-coverage-generator, vocabulary-graph-generator)"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/generated/oak-curriculum-corpus-data",
+   "status": "new",
+   "scope": "Generated-data-only workspace shipping the mined corpus artefacts (24MB graph corpus, vocabulary graph, NC coverage, mined synonyms) with their typed loaders \u2014 the 24MB data.json no longer rides inside a code workspace, and hand-written views consume it as a dependency, never co-resident.",
+   "dimension": "generated-separation",
+   "lifecycle": "codegen-time",
+   "movesFrom": [
+    "packages/sdks/oak-sdk-codegen/src/generated/vocab/"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/search/oak-curriculum-synonyms",
+   "status": "new",
+   "scope": "The hand-curated per-subject synonym vocabulary and its ES synonym-set and phrase-vocabulary export transforms \u2014 an editorial curation lifecycle distinct from codegen and index design, with two consumer surfaces (ingest-time synonym sets, runtime phrase vocabulary).",
+   "dimension": "lifecycle",
+   "lifecycle": "editorial",
+   "movesFrom": [
+    "packages/sdks/oak-sdk-codegen/src/synonyms/",
+    "packages/sdks/oak-sdk-codegen/src/synonym-export.ts"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/mcp/oak-mcp-tools",
+   "status": "new",
+   "scope": "The MCP product layer \u2014 tool execution dispatch, aggregated composite tools, MCP resources, and agent guidance content (126 files) \u2014 changing with agent-experience design on its own cadence, consumed only by the MCP server app; not subdivided further (one consumer, one cadence, heavy cross-imports).",
+   "dimension": "lifecycle",
+   "lifecycle": "runtime",
+   "movesFrom": [
+    "packages/sdks/oak-curriculum-sdk/src/mcp/",
+    "packages/sdks/oak-curriculum-sdk/src/public/mcp-tools.ts"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/search/oak-search-index-lifecycle",
+   "status": "new",
+   "scope": "The ingest-side ES index lifecycle machinery (leases, versioned indices, promote/rollback, alias swaps, synonym-set provisioning), consumed only by search-cli at ingest time \u2014 promotes the package's existing read/admin subpath seam to a workspace boundary and thins the MCP server's runtime dependency.",
+   "dimension": "lifecycle",
+   "lifecycle": "ingest-time",
+   "movesFrom": [
+    "packages/sdks/oak-search-sdk/src/admin/ (40 files)"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/graph/oak-curriculum-graph-views",
+   "status": "new",
+   "scope": "The Oak curriculum corpus bridge and anchored graph projections (prior-knowledge, misconception, keyword, thread-progression views), consuming corpus data from oak-curriculum-corpus-data as a declared dependency \u2014 moving the views into the data workspace would recreate the banned mixing.",
+   "dimension": "oak-vs-reusable",
+   "lifecycle": "runtime",
+   "movesFrom": [
+    "packages/sdks/graph-corpus-sdk/src/curriculum/ (17 files)"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "mcp-oauth-clerk",
+   "status": "new",
+   "scope": "Reusable OAuth-for-MCP machinery over Clerk \u2014 OAuth proxy handlers, redirect-URI validation, PRM/resource-URL derivation, token verification, conditional Clerk middleware (~3,278 lines, no Oak semantics); the Clerk dependency is the fault line separating it from express-core.",
+   "dimension": "oak-vs-reusable",
+   "lifecycle": "runtime",
+   "movesFrom": [
+    "apps/oak-curriculum-mcp-streamable-http/src/oauth-proxy/*",
+    "apps/oak-curriculum-mcp-streamable-http/src/auth/*",
+    "apps/oak-curriculum-mcp-streamable-http/src/{check-mcp-client-auth,conditional-clerk-middleware,clerk-skip-surfaces}.ts"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "mcp-server-express-core",
+   "status": "new",
+   "scope": "Generic MCP-over-HTTP Express plumbing \u2014 bootstrap, MCP router/handler/middleware, host-header validation, canonical origin/forwarded headers, security headers \u2014 with correlation and response-size observability folded in (span prefix made configurable); no micro-splitting of observability or correlation.",
+   "dimension": "oak-vs-reusable",
+   "lifecycle": "runtime",
+   "movesFrom": [
+    "apps/oak-curriculum-mcp-streamable-http/src/{bootstrap-app,mcp-router,mcp-handler,mcp-middleware,host-header-validation,process-close-owner,html-encoding}.ts",
+    "apps/oak-curriculum-mcp-streamable-http/src/canonical-*.ts",
+    "apps/oak-curriculum-mcp-streamable-http/src/security-*.ts",
+    "apps/oak-curriculum-mcp-streamable-http/src/correlation/",
+    "apps/oak-curriculum-mcp-streamable-http/src/observability/"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "oak-mcp-widget",
+   "status": "new",
+   "scope": "The Oak brand-banner MCP widget as its own workspace: the vite-built React app whose build output IS the embedded-HTML module the server imports as an ordinary dependency \u2014 the second toolchain already exists inside the app, and the committed generated constant leaves the server's src/.",
+   "dimension": "lifecycle",
+   "lifecycle": "build-time",
+   "movesFrom": [
+    "apps/oak-curriculum-mcp-streamable-http/widget/*",
+    "apps/oak-curriculum-mcp-streamable-http/scripts/embed-widget-html.ts",
+    "apps/oak-curriculum-mcp-streamable-http/src/generated/widget-html-content.ts",
+    "apps/oak-curriculum-mcp-streamable-http/tests/widget + playwright.widget.config.ts + vitest.widget.config.ts"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "oak-bulk-data",
+   "status": "new",
+   "scope": "Single-clock bulk-data acquisition workspace: download Oak bulk curriculum data and emit the typed dataset artefacts (slug datasets, Zod schemas, manifest) that ingest and evaluation consume \u2014 acquisition and emission share one freshness event (postbulk:download chains bulk:codegen), with committed generator outputs segregated into a dedicated generated/ directory.",
+   "dimension": "lifecycle",
+   "lifecycle": "ingest-time",
+   "movesFrom": [
+    "apps/oak-search-cli/scripts/download-bulk.ts",
+    "apps/oak-search-cli/bulk-downloads/*",
+    "apps/oak-search-cli/ground-truths/generation/*",
+    "apps/oak-search-cli/ground-truths/generated/*"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "es-ingest-core",
+   "status": "new",
+   "scope": "Reusable Elasticsearch ingest machinery currently wearing an Oak badge: chunked bulk upload with retries, versioned-index metadata/setup, ingestion-error collection, ingest harness \u2014 with the challenger-endorsed caveat that the first cut is conservative about what claims to be generic (curriculum-pattern-config-style files stay Oak-side).",
+   "dimension": "oak-vs-reusable",
+   "lifecycle": "ingest-time",
+   "movesFrom": [
+    "apps/oak-search-cli/src/lib/indexing/{bulk-chunk-uploader,bulk-retry-utils,bulk-action-factory,ingest-harness*,ingestion-error-*,retry/}",
+    "apps/oak-search-cli/src/lib/elasticsearch/{index-meta*,setup/}",
+    "apps/oak-search-cli/src/lib/{elastic-http,es-client}.ts"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "oak-search-ingest",
+   "status": "new",
+   "scope": "Oak curriculum document construction for the search index: bulk transformers, API supplementation, lesson/unit/thread/sequence document builders, semantic-summary generation, KS4 context, and the operational ingest audits \u2014 the Oak-specific half of the ingest pipeline.",
+   "dimension": "lifecycle",
+   "lifecycle": "ingest-time",
+   "movesFrom": [
+    "apps/oak-search-cli/src/adapters/{bulk-*-transformer,bulk-data-adapter,hybrid-data-source,api-supplementation}.ts",
+    "apps/oak-search-cli/src/lib/indexing/{lesson,unit,thread,sequence}-document builders + semantic-summary-generator + ks4-context-*",
+    "apps/oak-search-cli/operations/ingestion/*"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "search-eval-harness",
+   "status": "new",
+   "scope": "Reusable search-evaluation machinery \u2014 MRR/metrics computation, benchmark runners, baseline comparison and reporting \u2014 with corpora and baselines taken as PARAMETERS, never imported; the split's named work item is inverting the existing direct Oak-corpus imports (benchmark-adapters.ts plus 14 benchmark files); evaluation/baselines/ is excluded and moves with the Oak corpus.",
+   "dimension": "oak-vs-reusable",
+   "lifecycle": "test-time",
+   "movesFrom": [
+    "apps/oak-search-cli/evaluation/analysis/benchmark-*.ts",
+    "apps/oak-search-cli/src/lib/search-quality/metrics.ts"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "oak-search-ground-truths",
+   "status": "new",
+   "scope": "The Oak ground-truth corpora as an editorial content workspace \u2014 per-subject entries, sequences/threads/units entries, the archive, and evaluation/baselines/baselines.json (Oak-recorded benchmark data belongs with the Oak corpus, not the reusable harness); warrant is licence/authorship separation (content-OGL vs MIT code) plus an editorial authoring lifecycle, with entries type-checked against oak-bulk-data's slug unions via ordinary dependency; dimension corrected by the challenger from generated-separation (the corpora are handwritten, not generated).",
+   "dimension": "oak-vs-reusable",
+   "lifecycle": "editorial",
+   "movesFrom": [
+    "apps/oak-search-cli/src/lib/search-quality/ground-truth/**",
+    "apps/oak-search-cli/src/lib/search-quality/ground-truth-archive/**",
+    "apps/oak-search-cli/evaluation/baselines/"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/design/design-system-conformance",
+   "status": "new",
+   "scope": "The lint-time consistency validator only: proves oak-design-system's dtcg export is value-consistent with its canonical CSS, invoked from repo-validators:check \u2014 challenger-narrowed so the four-theme dtcg contrast gate (design-system-contrast/expectations/gate-error) stays in oak-design-tokens' build per the ADR-213 \u00a72 amendment 2026-07-20.",
+   "dimension": "lifecycle",
+   "lifecycle": "lint-time",
+   "movesFrom": [
+    "packages/design/oak-design-tokens/scripts/validate-design-system-consistency.ts",
+    "packages/design/oak-design-tokens/src/{design-system-consistency,consistency-css-comparand,consistency-token-index,consistency-value-strings,consistency-values}.ts + unit tests"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/design/oak-design-studio-capture",
+   "status": "new",
+   "scope": "The byte-preserved Claude Design studio capture and provenance tier (467 files, 71% of oak-design-system's tracked files) with its own quality-gate boundary \u2014 the Sonar exclusion already binds exactly this tree; a workspace boundary converts vigilance fences to structure, with the showcase fidelity-capture pairing map and design-sync shipping globs re-pointed.",
+   "dimension": "generated-separation",
+   "lifecycle": "ingest-time",
+   "movesFrom": [
+    "packages/design/oak-design-system/studio-source/**"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/design/oak-theme-runtime",
+   "status": "new",
+   "scope": "The theme-switcher runtime as a built package shipping dist JS + .d.ts, so consumers copy from built dist and the estate's only tracked generated-file class (root oak-theme.js plus two tracked demo copies and three parity gates) dissolves into ordinary build-output consumption; must carry the ADR-213 \u00a73 public-surface amendment in the same change, and lets oak-design-react's hand-maintained contract mirror collapse into a type import.",
+   "dimension": "generated-separation",
+   "lifecycle": "runtime",
+   "movesFrom": [
+    "packages/design/oak-design-system/src/oak-theme.ts + its behaviour and parity tests",
+    "packages/design/oak-design-system/oak-theme.js (tracked root copy, deleted once consumers copy from dist)",
+    "packages/design/oak-design-system build/sync:runtime scripts + tsconfig.build.json"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "demos/oak-curriculum-hub-content",
+   "status": "new",
+   "scope": "The canonical-export content pipeline \u2014 codegen scripts, the zod schemas that are the single source of truth, validated loaders \u2014 challenger-amended so committed generator outputs (oak-course.json, quality-standards.json; 400KB) land in a dedicated generated/ directory, never beside handwritten schema/loader modules; the hub consumes validated data as a workspace dependency.",
+   "dimension": "generated-separation",
+   "lifecycle": "codegen-time",
+   "movesFrom": [
+    "demos/oak-curriculum-hub/scripts/{generate-course,course-extract,generate-quality-standards,generator-cli}.ts",
+    "demos/oak-curriculum-hub/lib/course/{schema.ts,types.ts,load-course.ts,oak-course.json}",
+    "demos/oak-curriculum-hub/lib/blocks/schema.ts",
+    "demos/oak-curriculum-hub/lib/quality-standards-types.ts",
+    "demos/oak-curriculum-hub/lib/data/{load-quality-standards.ts,quality-standards.json}"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "corpus-instruments",
+   "status": "new",
+   "scope": "Campaign and batch analysis instruments with their own build+run lifecycle \u2014 the corpus-analysis and restatement-audit pipelines, the 14-CLI refounding suite, the typescript-estate classification instrument (challenger re-bucketed out of session-ops), and the workflow-build bundling core folded in (all its consumers live here) \u2014 removing fleet-instrument bundling from the every-commit build path.",
+   "dimension": "lifecycle",
+   "lifecycle": "runtime",
+   "movesFrom": [
+    "agent-tools/src/corpus-analysis/",
+    "agent-tools/src/restatement-audit/",
+    "agent-tools/src/refounding/",
+    "agent-tools/src/typescript-estate/",
+    "agent-tools/src/workflow-build/"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "git-lifecycle-guards",
+   "status": "new",
+   "scope": "Everything husky hooks and the commit window consume \u2014 commit-message and skill advisories, push secret scan, encoding check, accidental-major-version guard, commit-queue \u2014 fast, install-time-available, single hook lifecycle.",
+   "dimension": "lifecycle",
+   "lifecycle": "lint-time",
+   "movesFrom": [
+    "agent-tools/src/{commit-advisories,secret-scan,encoding,version-guard,commit-queue}/"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "repo-validators",
+   "status": "new",
+   "scope": "Lint-time verdict producers over repo state \u2014 the 19 validator suites, practice-fitness, repo-check, and the ci checks, plus protocol-wire (its sole importer is the protocol-wire validator); mcp-content-current-source is explicitly EXCLUDED per the challenger (build-graph-coupled Oak content attestation would falsify this workspace's single-lifecycle story) and stays with the Oak agent leaf.",
+   "dimension": "lifecycle",
+   "lifecycle": "lint-time",
+   "movesFrom": [
+    "agent-tools/src/{validators,practice-fitness,repo-check,ci,protocol-wire}/"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "agent-session-ops",
+   "status": "new",
+   "scope": "The portable live-seat runtime capability \u2014 collaboration-state TUI, agent-identity, session-metadata, context-cost, spawn, pr-watch, pr-throughput, merge-bot, codex-exec, plan-state, practice-substrate, hook-policy dispatch, branch-touched-files, and protocol-conformance (runtime importer) \u2014 re-namespaced off the OAK_* env contract; typescript-estate excluded (a corpus instrument), and the Claude/Codex/Cursor platform adapters plus brand marks stay in the Oak agent leaf.",
+   "dimension": "oak-vs-reusable",
+   "lifecycle": "runtime",
+   "movesFrom": [
+    "agent-tools/src/{collaboration-state,core,session-metadata,context-cost,spawn,pr-watch,pr-throughput,merge-bot,codex-exec,plan-state,practice-substrate,hook-policy,branch-touched-files,protocol-conformance}/"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "content-projection-generators",
+   "status": "new",
+   "scope": "Generic codegen-time projection machinery writing committed artefacts, so every tracked generated surface has exactly one declared generator: skills-adapter-generate (the .claude/skills and .agents/skills trees) and the bounded AGENTS.md team-alert projection \u2014 challenger-narrowed to the generic machinery only; the Oak-bound generators (under-the-hood-content-generate, mcp-content-current-source) stay beside the MCP surface they describe in the Oak agent leaf.",
+   "dimension": "generated-separation",
+   "lifecycle": "codegen-time",
+   "movesFrom": [
+    "agent-tools/src/skills-adapter-generate/",
+    "agent-tools/src/codex/team-alert-bootstrap*.ts"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/core/eslint-rules",
+   "status": "new",
+   "scope": "The six repo-agnostic lint rules plus the reappraising-message branded-string machinery and test support \u2014 a plugin any repo could adopt with zero Oak knowledge (verified: no Oak reference in any of the seven files); isolates stable generic rules from the volatile estate policy that churns with every workspace this programme adds.",
+   "dimension": "oak-vs-reusable",
+   "lifecycle": "lint-time",
+   "movesFrom": [
+    "packages/core/oak-eslint/src/rules/{no-throw-statement,no-eslint-disable,no-real-io-in-tests,no-dynamic-import,max-files-per-dir,no-export-trivial-type-aliases}.ts",
+    "packages/core/oak-eslint/src/reappraising-message.ts",
+    "packages/core/oak-eslint/src/test-support/"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/libs/logger-express",
+   "status": "new",
+   "scope": "The Express request/error logging middleware alone, so the express ^5 peer contract stops attaching to six non-HTTP consumers and the framework adapter leaves the browser-safe default entry \u2014 one lifecycle, one consumer (the MCP streamable-http app).",
+   "dimension": "lifecycle",
+   "lifecycle": "runtime",
+   "movesFrom": [
+    "packages/libs/logger/src/express-middleware.ts + integration test (exports removed from src/index.ts and src/node.ts)"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/libs/visual-diff-stats",
+   "status": "new",
+   "scope": "Pure, I/O-free image mathematics \u2014 PNG codec, pixel diffing, windowed rejection statistics, calibration, correlation \u2014 reusable by any visual-comparison consumer; carries the pixelmatch/pngjs dependencies with it.",
+   "dimension": "lifecycle",
+   "lifecycle": "test-time",
+   "movesFrom": [
+    "packages/libs/fidelity-review/src/{png-codec,image-diff,visual-stats,inverse-normal-cdf,visual-calibration,visual-correlation}.ts + tests"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/libs/fidelity-capture",
+   "status": "new",
+   "scope": "Process-and-browser capture orchestration \u2014 dev-server lifecycle, run leases/teardown, capture sessions, settle logic, manifest writing, static-path guards, evidence IO \u2014 challenger-amended to EXCLUDE orchestrator.ts (the pipeline composition root stays with fidelity-review) so the three-way cut is acyclic: stats \u2190 capture \u2190 review.",
+   "dimension": "lifecycle",
+   "lifecycle": "test-time",
+   "movesFrom": [
+    "packages/libs/fidelity-review/src/{capture-session,capture-settle,capture-manifest,capture-flags,dev-server,dev-command,server-identity,run-lease,run-lease-io,run-teardown,static-path-guard,evidence-io}.ts"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/sdks/oak-sdk-codegen",
+   "status": "existing-narrowed",
+   "scope": "Narrowed to Oak codegen configuration and orchestration: schema decorators, excluded paths, MCP security policy, per-tool guidance decoration, and the pipeline orchestration (codegen.ts), with docs generation and the sitemap scanner riding as too-small-to-split riders \u2014 the Oak consumer of openapi-schema-source and openapi-pipeline.",
+   "dimension": "oak-vs-reusable",
+   "lifecycle": "codegen-time",
+   "movesFrom": [],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/sdks/oak-curriculum-sdk",
+   "status": "existing-narrowed",
+   "scope": "The published thin typed client for the Oak Curriculum API \u2014 client factory, middleware, config, response augmentation, validation, URL conveniences (~55 files) \u2014 changing only when the spec or URL conventions change, once the 126-file MCP product layer leaves; external npm consumers and the hub get the thin client only.",
+   "dimension": "lifecycle",
+   "lifecycle": "runtime",
+   "movesFrom": [],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/sdks/oak-search-sdk",
+   "status": "existing-narrowed",
+   "scope": "The runtime retrieval SDK \u2014 read surface, query processing, hybrid retrieval, zero-hit observability, internal ES plumbing (~47 files) \u2014 after the admin/ingest lifecycle leaves; hardcoded oak_* index names remain an accepted Oak-leaf fact, and the generic lease/versioned-index cut stays a recorded seam under consolidate-at-second-consumer.",
+   "dimension": "lifecycle",
+   "lifecycle": "runtime",
+   "movesFrom": [],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/sdks/graph-corpus-sdk",
+   "status": "existing-narrowed",
+   "scope": "The vendor-neutral multi-corpus substrate after the Oak curriculum views leave: the eef-strands data-as-code corpus (ADR-173/179 hand-reviewed snapshot) plus the generic view/result types over graph-core.",
+   "dimension": "oak-vs-reusable",
+   "lifecycle": "runtime",
+   "movesFrom": [],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "apps/oak-curriculum-mcp-streamable-http",
+   "status": "existing-narrowed",
+   "scope": "The Oak MCP server composition leaf: composition root, tool registration/auth wiring, search retrieval factory, and the landing page + bake + design-system asset copy (deliberately retained \u2014 its freshness clock IS the server deploy, cannot-diverge-by-construction), with served-tool-table under a declared generated-doc path.",
+   "dimension": "lifecycle",
+   "lifecycle": "runtime",
+   "movesFrom": [],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "apps/oak-search-cli",
+   "status": "existing-narrowed",
+   "scope": "The thin Oak operator CLI leaf: the oaksearch command shell and registration, the sdk-cache Redis adapter (stays until a second consumer exists), hybrid-search experiment builders, and residual operational commands \u2014 four lifecycles lighter after bulk-data, ingest, eval-harness, and ground-truth splits.",
+   "dimension": "lifecycle",
+   "lifecycle": "runtime",
+   "movesFrom": [],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/design/oak-design-tokens",
+   "status": "existing-narrowed",
+   "scope": "Oak token source JSON, the CSS build, the contrast build gates \u2014 including the four-theme dtcg gate, ratified in-build per ADR-213 \u00a72 amendment \u2014 and the terminal-theme projection (ADR-213's ratified end-state home, absorb rejected); loses only the dtcg-vs-CSS consistency validator suite.",
+   "dimension": "lifecycle",
+   "lifecycle": "codegen-time",
+   "movesFrom": [],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/design/oak-design-system",
+   "status": "existing-narrowed",
+   "scope": "Purely hand-authored brand surfaces \u2014 canonical CSS, fonts, assets, dtcg data (same-commit hand-sync retained; cure is the studio round-trip regenerator, not a seam), docs, and the build:flat concat \u2014 after studio-source and the theme runtime leave; receives the kit-asset parity validator (it owns the single-source contract the repo-scoped manifest proves) and the inline-embed script as a kit export (MCP-382; both demos delete their copies).",
+   "dimension": "generated-separation",
+   "lifecycle": "editorial",
+   "movesFrom": [
+    "demos/oak-design-showcase/tools/{validate-kit-assets,kit-asset-parity}.ts (+ root repo-validators:check wiring)",
+    "demos/oak-design-showcase/lib/inline-script.ts",
+    "demos/oak-curriculum-hub/lib/inline-script.ts"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/libs/logger",
+   "status": "existing-narrowed",
+   "scope": "Structured OTel-compliant log construction, error normalisation, and the Node file sink behind the existing ./node subpath \u2014 one capability with one consumer story (any workspace that logs) once the Express adapter leaves.",
+   "dimension": "lifecycle",
+   "lifecycle": "runtime",
+   "movesFrom": [],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/libs/fidelity-review",
+   "status": "existing-narrowed",
+   "scope": "The contract-and-judgment surface: disposition register schema, pairing schemas, cohort loading, review helpers, HTML report rendering, plus orchestrator.ts as the pipeline composition root (challenger amendment keeping the cut acyclic); absorbs the demos' duplicated harness modules (export-server, register-liveness test \u2014 verified two-comment-line divergence) and the showcase's reusable visual instruments (visual-probe, capture-pair family) whose statistics already live here.",
+   "dimension": "lifecycle",
+   "lifecycle": "test-time",
+   "movesFrom": [
+    "demos/oak-curriculum-hub/tools/export-server.ts + demos/oak-design-showcase/tools/export-server.ts",
+    "demos/oak-curriculum-hub and demos/oak-design-showcase tools/fidelity-register-live.unit.test.ts",
+    "demos/oak-design-showcase/tools/{visual-probe,capture-pair,capture-null,capture-summary,capture-pair-args,measurement-widths}.ts"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/core/env",
+   "status": "existing-narrowed",
+   "scope": "Pure declarative env-contract Zod schemas only, opt-in composed per app \u2014 loses its single file-I/O module (root-package-version.ts to build-metadata); the env-oak-services split rejected as a hollow file-count cut with elasticsearch.ts mis-binned.",
+   "dimension": "lifecycle",
+   "lifecycle": "runtime",
+   "movesFrom": [],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/core/oak-eslint",
+   "status": "existing-narrowed",
+   "scope": "The Oak estate lint policy: boundary.ts workspace inventories, the four Oak/vendor-fence rules, the bundled configs, shared resolver/ignore settings, and the validate-boundaries parity gate \u2014 composing and re-exporting the extracted generic rules package so the 28 consuming workspaces swap one devDependency for one.",
+   "dimension": "oak-vs-reusable",
+   "lifecycle": "lint-time",
+   "movesFrom": [],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/libs/graph-ingest",
+   "status": "existing-narrowed",
+   "scope": "Consolidated single graph package (both challengers ruled the current two zero-consumer packages over-split): working JSON-LD ingestion, turtle parsing, RDF-to-PropertyGraph projection and adjacency merged in from graph-project with its internal sub-path seams preserved, the five empty stub entrypoints deleted per closed-shape; re-split at the ingest/project line when the ADR-221 estate-graph consumer lands and earns the boundary.",
+   "dimension": "lifecycle",
+   "lifecycle": "ingest-time",
+   "movesFrom": [
+    "packages/libs/graph-project (entire package merged in)"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "demos/oak-curriculum-hub",
+   "status": "existing-narrowed",
+   "scope": "The thin demo app leaf \u2014 pages, block components, search and curriculum seams over the SDKs, local Oak-specific tool configs \u2014 after the content pipeline and shared harness modules leave; css-token-parse.ts stays local (css-inspection bundle rejected).",
+   "dimension": "lifecycle",
+   "lifecycle": "runtime",
+   "movesFrom": [],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "demos/oak-design-showcase",
+   "status": "existing-narrowed",
+   "scope": "The thin showcase app leaf \u2014 pages, a11y/UI Playwright suites with their zero-IO calculators kept local (a11y-measurement workspace rejected: second consumer foreseeable, not present), the authored-CSS literal-value gate, and tracked parity-gated kit byte-copies retained deliberately \u2014 after the visual instruments, the repo-scoped parity validator, and inline-script leave.",
+   "dimension": "lifecycle",
+   "lifecycle": "runtime",
+   "movesFrom": [],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "agent-tools",
+   "status": "existing-narrowed",
+   "scope": "The residual Oak agent-platform leaf: install-time bootstrap of the guard closure, the Claude/Codex/Cursor platform adapters with statusline/oak-logo brand marks, the mcp-conformance audit instrument, and the Oak-bound content generators kept beside the MCP surface they describe \u2014 under-the-hood-content-generate now owning its committed output as an exported module (removing the cross-workspace write into the server's src/, drift gate retained) and mcp-content-current-source (build-graph-coupled Oak attestation, excluded from repo-validators by the challenger). Mixed lifecycles remain by explicit justification: Oak-bound platform, bootstrap, and attestation surfaces individually too small to mint.",
+   "dimension": "lifecycle",
+   "lifecycle": "mixed-justified",
+   "movesFrom": [
+    "apps/oak-curriculum-mcp-streamable-http/src/generated/oak-under-the-hood-content.ts (relocated beside its generator)"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/core/build-metadata",
+   "status": "existing-unchanged",
+   "scope": "Deployment/build identity as one capability \u2014 release-name resolution, version/sha resolution, build-info emission \u2014 with the build-time/runtime unification deliberate by design; boundary unchanged but absorbs root-package-version.ts (repo-metadata file I/O whose consumers are runtime-metadata.ts and search-cli's bin via the existing dependency), severing its @oaknational/env edge.",
+   "dimension": "unchanged",
+   "lifecycle": "mixed-justified",
+   "movesFrom": [
+    "packages/core/env/src/root-package-version.ts"
+   ],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/core/openapi-zod-client-adapter",
+   "status": "existing-unchanged",
+   "scope": "The existing generic openapi-zod machinery, unchanged \u2014 openapi-pipeline depends on it rather than absorbing it (challenger: generic openapi-zod machinery remains here).",
+   "dimension": "unchanged",
+   "lifecycle": "codegen-time",
+   "movesFrom": [],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/design/design-tokens-core",
+   "status": "existing-unchanged",
+   "scope": "Pure codegen-time DTCG token library with one consumer and one lifecycle \u2014 no split; the oak-vs-reusable defect (hard-coded --oak- prefix in toCssVariable) is cured by parameterising the prefix in code, not by a workspace seam.",
+   "dimension": "unchanged",
+   "lifecycle": "codegen-time",
+   "movesFrom": [],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/design/oak-design-assets",
+   "status": "existing-unchanged",
+   "scope": "Four-file brand-reserved raster asset workspace \u2014 a deliberate licensing seam isolating Oak marks from MIT code; already the owner's end-state shape, leave alone.",
+   "dimension": "unchanged",
+   "lifecycle": "build-time",
+   "movesFrom": [],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/design/oak-design-ink",
+   "status": "existing-unchanged",
+   "scope": "Oak Ink terminal theming and primitives, zero consumers today \u2014 stays exactly as is; the terminal-theme absorb was rejected (ADR-213 ratifies oak-design-tokens as the projection's home with ink depending on it only), and an ink-primitives-core split waits for a second theme source or consumer.",
+   "dimension": "unchanged",
+   "lifecycle": "runtime",
+   "movesFrom": [],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/design/oak-design-react",
+   "status": "existing-unchanged",
+   "scope": "One-file React theme-store tier per ADR-213 \u00a73 \u2014 no seam to split; its hand-maintained runtime contract mirror collapses into a type import once oak-theme-runtime ships .d.ts.",
+   "dimension": "unchanged",
+   "lifecycle": "runtime",
+   "movesFrom": [],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "research/web-app-deconstruction/packages/research-evidence",
+   "status": "existing-unchanged",
+   "scope": "Read-only research evidence probes plus the record gate \u2014 the estate's model for generated-output discipline (all output stdout or gitignored); no extraction (zero second consumers, and extraction would break the deliberate no-dependency evidence property); the docs-time/test-time mix is genuine but a gate workspace would be ceremony.",
+   "dimension": "unchanged",
+   "lifecycle": "mixed-justified",
+   "movesFrom": [],
+   "challengerBacked": true
+  },
+  {
+   "workspace": "packages/core/graph-core",
+   "status": "existing-unchanged",
+   "scope": "RDF dataset core types \u2014 not indicted by any analysis group; remains the substrate graph-ingest and graph-corpus-sdk build on.",
+   "dimension": "unchanged",
+   "lifecycle": "runtime",
+   "movesFrom": [],
+   "challengerBacked": false
+  },
+  {
+   "workspace": "packages/core/observability",
+   "status": "existing-unchanged",
+   "scope": "Observability core \u2014 not a subject of any analysis group; unchanged.",
+   "dimension": "unchanged",
+   "lifecycle": "runtime",
+   "movesFrom": [],
+   "challengerBacked": false
+  },
+  {
+   "workspace": "packages/core/result",
+   "status": "existing-unchanged",
+   "scope": "Result type core \u2014 not a subject of any analysis group; unchanged.",
+   "dimension": "unchanged",
+   "lifecycle": "runtime",
+   "movesFrom": [],
+   "challengerBacked": false
+  },
+  {
+   "workspace": "packages/core/safe-path",
+   "status": "existing-unchanged",
+   "scope": "Safe-path core \u2014 not a subject of any analysis group; unchanged.",
+   "dimension": "unchanged",
+   "lifecycle": "runtime",
+   "movesFrom": [],
+   "challengerBacked": false
+  },
+  {
+   "workspace": "packages/core/type-helpers",
+   "status": "existing-unchanged",
+   "scope": "Type-helper core \u2014 not a subject of any analysis group; unchanged.",
+   "dimension": "unchanged",
+   "lifecycle": "build-time",
+   "movesFrom": [],
+   "challengerBacked": false
+  },
+  {
+   "workspace": "packages/core/workspace-config",
+   "status": "existing-unchanged",
+   "scope": "Shared vitest/tsup/config presets \u2014 not a subject of any analysis group; unchanged, and the natural home the root config push-downs compose with.",
+   "dimension": "unchanged",
+   "lifecycle": "build-time",
+   "movesFrom": [],
+   "challengerBacked": false
+  },
+  {
+   "workspace": "packages/libs/env-resolution",
+   "status": "existing-unchanged",
+   "scope": "Env resolution over the env schemas \u2014 not a subject of any analysis group; unchanged.",
+   "dimension": "unchanged",
+   "lifecycle": "runtime",
+   "movesFrom": [],
+   "challengerBacked": false
+  },
+  {
+   "workspace": "packages/libs/posthog-node",
+   "status": "existing-unchanged",
+   "scope": "PostHog Node adapter \u2014 not a subject of any analysis group; unchanged.",
+   "dimension": "unchanged",
+   "lifecycle": "runtime",
+   "movesFrom": [],
+   "challengerBacked": false
+  },
+  {
+   "workspace": "packages/libs/sentry-node",
+   "status": "existing-unchanged",
+   "scope": "Sentry Node adapter \u2014 not a subject of any analysis group; unchanged.",
+   "dimension": "unchanged",
+   "lifecycle": "runtime",
+   "movesFrom": [],
+   "challengerBacked": false
+  }
+ ],
+ "generatedSeparationPolicy": [
+  "Tracked generated output consumed across workspace boundaries lives in a generated-only workspace (the packages/generated/* tier): every file DO-NOT-EDIT, regenerated wholesale, no hand-written code beyond export barrels; 'the generator lives next door' is not a carve-out \u2014 the generator workspace writes into the artefact workspace via a declared dependency edge (oak-api-artifacts, oak-search-contract-artifacts, oak-bulk-artifacts, oak-curriculum-corpus-data).",
+  "Tracked generated output whose regeneration is the same freshness event as its in-workspace generator and whose consumers arrive through that workspace's own dependency edge lives in a dedicated generated/ directory inside the workspace, never file-adjacent to handwritten modules (oak-bulk-data's ground-truth artefacts, oak-curriculum-hub-content's committed JSON).",
+  "Artefacts on different regeneration clocks never share a workspace: upstream-spec refresh, index-design change, ADR-222 bulk-schema truing, and bulk-data mining each get their own generated home \u2014 the two-clocks test is what distinguishes a mandatory workspace split from directory hygiene.",
+  "No workspace ever writes committed generated output into another workspace's src/: agent-tools' under-the-hood constant relocates beside its generator as an exported module the server imports, the hardcoded cross-workspace GENERATED_MODULE_PATH is removed, and the existing drift gate is retained.",
+  "Every tracked generated surface has exactly one declared generator with a drift gate; generated regions inside handwritten documents (the AGENTS.md team-alert bootstrap) are bounded and marker-delimited.",
+  "Hand-written views, loaders, and generators over generated data are declared dependants of the generated workspace, never co-resident with the data (oak-curriculum-graph-views vs oak-curriculum-corpus-data; oak-search-index-contracts vs oak-search-contract-artifacts).",
+  "Byte-preserved third-party/studio capture is its own generated class: fenced in a dedicated workspace carrying its own quality-gate boundary (oak-design-studio-capture), converting vigilance fences (README, Sonar exclusion, gitignore re-includes) into structure.",
+  "Where a deliberate, instrument-enforced tracked byte-copy or hand-sync exists, the instrument is the sanctioned mechanism and workspace separation is not forced: the demos' parity-gated public/oak-theme.js copies stay (the validator moves to the workspace owning the single-source contract), and oak-design-system's dtcg hand-sync keeps its same-commit coupling until the studio round-trip regenerator exists.",
+  "Gitignored build output (dist/, .next/, workflow bundles) inside its own workspace remains sanctioned; committed machine-produced INPUT snapshots (schema caches, canonical-url maps) live with the acquisition workspace, not with pipeline code; generated docs get a declared generated-doc path when they cannot move (served-tool-table.md).",
+  "Handwritten editorial content (ground-truth corpora, synonym vocabularies, EEF data-as-code snapshots) is not generated output and is never governed by the generated rule \u2014 it separates on editorial-lifecycle and licence grounds instead (OGL content vs MIT code)."
+ ],
+ "sequencingHints": [
+  "Fix the generators before multiplying workspaces: push turbo.json (504 lines) and knip.config.ts (388 lines) down into per-workspace configs, and split oak-eslint (eslint-rules vs policy) early \u2014 every minted workspace otherwise churns three centralised registries (turbo, knip, boundary.ts inventories + validate-boundaries).",
+  "Codegen chain is strictly ordered: openapi-schema-source first (its api-schema-sdk.json is every generator's input), then openapi-pipeline, then oak-api-artifacts; oak-search-contract-artifacts lands after oak-api-artifacts (declared dependency for KEY_STAGES/SUBJECTS); each generator/artefact pair lands atomically with the generate:clean recovery runbook and drift checks moving with the artefacts.",
+  "Bulk-clock family lands as one coordinated tranche on the bulk-download cadence: oak-bulk-data (CLI acquisition + ground-truth codegen), oak-bulk-ingest, oak-bulk-artifacts, oak-vocab-mining, oak-curriculum-corpus-data \u2014 discharging the src/generated/vocab violation in the same move.",
+  "Independent early wins with no upstream dependency: oak-mcp-widget (self-contained second toolchain), oak-search-index-lifecycle (subpath seam already drawn), the env root-package-version move into build-metadata, logger-express, and the graph-ingest/graph-project merge.",
+  "oak-curriculum-sdk's MCP-layer split (oak-mcp-tools) precedes or accompanies the MCP server splits (mcp-oauth-clerk, mcp-server-express-core) since the server's composition root re-wires against both.",
+  "fidelity-review cuts in dependency order: visual-diff-stats first (pure, dependency-free), then fidelity-capture, then the retained review package absorbs the demos' harness modules and visual instruments \u2014 hub/showcase tool re-pointing rides that last step.",
+  "oak-theme-runtime must carry the ADR-213 \u00a73 public-surface amendment in the same change; it unblocks oak-design-react's contract-mirror collapse and the demos' dist-copy consumption; oak-design-studio-capture re-points the showcase fidelity pairing map and design-sync shipping globs in its landing change.",
+  "search-contracts merges into oak-search-index-contracts BEFORE or WITH the search-cli ingest splits \u2014 stage-contract-matrix.ts hardcodes search-cli internal globs 8 times, so those contract rows are a co-change surface of the CLI decomposition.",
+  "search-eval-harness's landing includes its named work item (inverting the Oak-corpus imports in benchmark-adapters.ts and 14 benchmark files); oak-search-ground-truths (with baselines.json) lands with or before it so the parameterisation has a target.",
+  "agent-tools splits in cost order: git-lifecycle-guards and repo-validators first (removes fleet-instrument build cost from every pre-commit), then corpus-instruments (with workflow-build and typescript-estate folded in), content-projection-generators, and agent-session-ops last (largest surface; needs OAK_* env re-namespacing); the under-the-hood output relocation can ride any early agent-tools change."
+ ],
+ "droppedProposals": [
+  {
+   "proposal": "oak-mcp-landing-page (split the landing page + asset copy out of the MCP server)",
+   "why": "Apps challenger: the bake script's own docstring disproves an independent lifecycle \u2014 'the baked page and the MCP app cannot diverge, by construction'; its inputs are the server deployment's own VERCEL_*/CANONICAL_HOST env so its freshness clock IS the server deploy, and the shared derivations already live in @oaknational/build-metadata; a workspace boundary would replace cannot-diverge-by-construction with a version-lag contract."
+  },
+  {
+   "proposal": "oak-mcp-served-content (workspace for the under-the-hood orientation constant)",
+   "why": "Apps challenger: a workspace for one string constant is a hollow wrapper; the proposal's own 'or relocate' hedge is the correct verdict \u2014 the committed output homes beside its generator in agent-tools as an exported module the server imports, keeping the existing drift gate."
+  },
+  {
+   "proposal": "@oaknational/css-inspection (shared CSS parsing/classification package)",
+   "why": "Demos challenger: verified css-token-parse.ts and css-literal-values.ts share zero code and zero common dependencies, each with exactly one consumer; consolidate-at-second-consumer fires on a second consumer of the SAME code, which does not exist \u2014 a 'CSS parsing' workspace would own two disjoint capabilities grouped by theme: a hollow wrapper."
+  },
+  {
+   "proposal": "@oaknational/a11y-measurement (axe-verdicts + focus-ring-contrast package)",
+   "why": "Demos challenger: the only consumers anywhere are the showcase's own tests \u2014 the hub runs jest-axe but consumes neither file, so the claimed second consumer is foreseeable, not present; the fidelity-review fallback landing was also rejected (WCAG contrast math is not visual-diff statistics and would smudge that package's boundary). Both calculators stay local until a real second consumer exists."
+  },
+  {
+   "proposal": "Terminal-theme projection absorb into oak-design-ink",
+   "why": "Design challenger: inverts ADR-213's ratified end state ('oak-design-tokens shrinks to the terminal-theme projection' with 'oak-design-ink depends on oak-design-tokens only'); mechanically it would mint a raw-token-data export or reach across the workspace boundary into sibling src, to benefit a package with zero consumers; would require an ADR-213 amendment, not a survey-driven reshuffle."
+  },
+  {
+   "proposal": "design-system-conformance wide scope (moving the four-theme dtcg contrast gate out of oak-design-tokens' build)",
+   "why": "Design challenger: contradicts the ADR-213 \u00a72 amendment 2026-07-20, which ratifies the gate INSIDE this build ('that early-warning coupling is the point of the wiring, not an accident'), and at Stage B the gate becomes the build's own input gate \u2014 moved out now, it moves back; the claimed devDependency removal is false while the gate stays. Only the lint-time consistency suite moves."
+  },
+  {
+   "proposal": "packages/core/env-oak-services (Oak-specific env schema package)",
+   "why": "Libs challenger: a hollow file-count split \u2014 the three moved files are tiny declarative objects with the identical lifecycle and consumer story as those left behind (bulk-data.ts is one optional string field), and elasticsearch.ts is mis-binned (generic vendor connectivity, zero Oak coupling, no more Oak-specific than the retained VERCEL_* schemas). If a reusable env core ever leaves the estate, cut then along a corrected line."
+  },
+  {
+   "proposal": "agent-workflow-kit (standalone esbuild workflow bundling core)",
+   "why": "Agent-tools challenger: a hollow wrapper \u2014 src/workflow-build/ is imported ONLY by corpus-analysis and restatement-audit workflows, both moving into corpus-instruments; a workspace whose every consumer lives in one other workspace owns no cross-workspace boundary. Folded into corpus-instruments; extract when a second consuming workspace exists."
+  },
+  {
+   "proposal": "packages/libs/es-index-lifecycle (generic lease/versioned-index ES operations library)",
+   "why": "Analysis flagged it 'do not execute yet' and the challenger endorsed: one consumer in the estate today, so under consolidate-at-second-consumer it is a recorded seam inside oak-search-index-lifecycle, not a workspace."
+  },
+  {
+   "proposal": "oak-openapi-schema (apps-group challenger's coarse spec-clock workspace for oak-sdk-codegen)",
+   "why": "Deduplicated, not rejected on merit: superseded by the codegen-chain challenger's finer, file-verified cut over the same files (openapi-schema-source + openapi-pipeline + generated-only oak-api-artifacts), which additionally honours the owner's parsing-vs-generation separation and the no-generated-beside-handwritten rule that the coarse single workspace would have re-created."
+  },
+  {
+   "proposal": "oak-sdk-codegen src/bulk/** joins oak-bulk-data wholesale (apps-group challenger's one-home-for-the-bulk-clock)",
+   "why": "Deduplicated in favour of the codegen-chain challenger's capability-distinct cut over the same files: acquisition+ground-truth emission (oak-bulk-data), ingest read/validate/extract machinery (oak-bulk-ingest), mining (oak-vocab-mining), and generated-only artefact homes \u2014 all on the shared bulk-download cadence as a coordinated tranche; a single mega-workspace would re-merge distinct capabilities and re-mix generated output with handwritten code."
+  },
+  {
+   "proposal": "repo-validators receives mcp-content-current-source",
+   "why": "Agent-tools challenger: it is 'the heaviest validator, forcing an MCP-app dependency-graph build at lint time' \u2014 build-graph-coupled Oak content attestation would falsify repo-validators' single-lifecycle story on day one; its own scope prose ('Oak-bound, stays beside the MCP surface it describes') is right, so it stays in the Oak agent leaf; the content-projection-generators claim on it is likewise dropped as an oak-vs-reusable mixing."
+  }
+ ],
+ "openQuestionsForOwner": [
+  "Directory taxonomy for the new workspace tiers: the inventory implies packages/codegen/, packages/generated/, packages/search/, packages/mcp/, and packages/graph/ roots, plus homes for the MCP-server extractions (mcp-oauth-clerk, mcp-server-express-core, oak-mcp-widget), the agent-tools splits (corpus-instruments, git-lifecycle-guards, repo-validators, agent-session-ops, content-projection-generators), and whether oak-curriculum-hub-content lives under demos/ or packages/ \u2014 confirm the tier names and placements before the first mint.",
+  "Published-name edges: does the thinned client keep the published @oaknational/curriculum-sdk npm name or rename to oak-api-client (a consumer-facing/semver decision for an externally published package)? Relatedly, which half of the oak-eslint split keeps the published eslint-plugin-standards name, and do the residues oak-sdk-codegen and fidelity-review keep their names after narrowing? Several proposals carry explicit 'working name' flags (design-system-conformance, oak-design-studio-capture, oak-theme-runtime).",
+  "Licence edges: confirm the OGL/MIT boundary for oak-search-ground-truths (the CLI's package.json currently claims MIT alone for content the census flags as dual), the licence of evaluation/baselines.json (recorded benchmark data), and the licence marking for generated workspaces holding OGL-derived curriculum data (oak-curriculum-corpus-data, oak-bulk-artifacts).",
+  "runtime-only-scripts: adopt the optional minimal package.json making it a workspace member that owns its own lint and test surfaces (both analysis and challenger endorse it as sound but explicitly optional \u2014 the current three-file shape is also honest)?",
+  "Ratification costs bundled with two design splits: the oak-theme-runtime split requires an ADR-213 \u00a73 public-surface amendment in the same change, and the studio-capture split re-points capture-contract paths shipped to the Claude Design studio \u2014 confirm you want the ADR amendments raised as part of this programme rather than as separate ratification lanes."
+ ]
+}

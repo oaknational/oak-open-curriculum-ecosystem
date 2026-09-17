@@ -18,6 +18,25 @@ Invoke `clerk-expert` when the change involves:
 - Clerk SDK version upgrades or migration
 - Auth error detection or interception logic touching Clerk error patterns
 
+## Clerk MCP Access Constraint (standing owner grant conditions)
+
+The Clerk MCP access grant carries two binding conditions (owner,
+2026-07-21, granting the access: "it is READ ONLY unless I say otherwise
+and we ONLY EVER touch the MCP app project, not any of the other
+projects"):
+
+- **Every Clerk MCP call is a read.** Any write requires the owner's
+  explicit fresh word naming the write.
+- **Only the MCP app project.** Before ANY call, confirm the target is
+  the MCP app project; if a tool defaults to another project or lists
+  across projects, constrain the call or do not make it.
+
+The Clerk workspace is shared Oak infrastructure — other projects belong
+to other streams and production identity systems, and a write or a
+wrong-project read from an agent is exactly the class of harm the
+estate's authorisation discipline exists to prevent. The constraint
+survives sessions and does not lapse with silence.
+
 ## Non-Goals
 
 Do not invoke `clerk-expert` for:

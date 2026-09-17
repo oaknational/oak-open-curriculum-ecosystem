@@ -176,6 +176,14 @@ the awareness (Director, minimum action).**
 - **Verification honesty.** Distinguishes **RUN-verified** (a gate actually
   exercised the change) from **CONSTRUCTION-verified** (a no-op the gate cannot
   reach); never claims a method verified what it cannot reach.
+- **Declares its own idleness** (owner standing directive, 2026-08-02, verbatim:
+  *"whenever you, or any agent, has downtime, please let the Director know that
+  you are available to help move some of the older PRs, draft or ready, towards
+  merge"*). Downtime is reported, not filled: a waiting seat tells the Director it
+  is available and the Director routes from the live board, oldest-first. This is
+  the honest inverse of a Director filling free seats with surfaced hygiene work —
+  an idle seat that announces itself surfaces the priority question, while one that
+  quietly finds its own work makes busyness read as alignment.
 
 ### The routing contract (Director ↔ Implementer ↔ Owner)
 
@@ -511,3 +519,121 @@ surface-splitting instance classes stop recurring; falsified if a later
 consolidation finds arcs re-fragmented to ticket grain after this date,
 or finds coherence-surface-grain routing producing measurably worse
 contention or seat tenure than the ticket-grain default it replaced.
+
+## Amendment (2026-08-05) — Seat count is a function of parallel work, not of function count
+
+Evidence: a product-submission arc at the host (2026-08-05), retrospected by
+its sitting Director at the arc's close and graduated at the host's
+2026-08-06 dedicated consolidation; the host's records conserve the specifics.
+
+**The function is not the seat.** A Submission-Manager function — tracking the
+submission path, helping the owner on non-code gates, surfacing ownerless
+blockers — delivered real value on this arc: it caught two lapsed gates, drove a
+blocker diagnosis, and off-loaded content work from the Director. But instantiated
+as a **standing seat** alongside a Director (and briefly an endpoint seat) on a
+*small, owner-active* push, it over-instantiated; the owner's word for the result
+was "ridiculous".
+
+The refined doctrine, stated as a test rather than a headcount:
+
+> **The multi-seat model earns its keep on genuine PARALLEL implementer work.**
+> When the critical path narrows to a single owner-gated or infrastructure-gated
+> blocker, there is no parallel work — **fold the functions into fewer seats.**
+
+**Convergence discipline (Director craft).** The over-instantiation was visible as
+a specific shape: three seats all investigating and all broadcasting about ONE
+blocker. When a single blocker pulls multiple seats in, keep **one investigating
+seat plus the Director**, and route the rest away or stand them down. Over-
+broadcast is the Director's own version of this anti-pattern — minimum-action
+means substance only, and a Director narrating a blocker it is not investigating
+is churn wearing a coordination costume.
+
+**The absent damping seat is the anomaly.** On an adjacent day the Director seat
+sat empty for a full working day and no seat flagged the absence. A fleet running
+without its coordination seat should read as an anomaly to surface, not as a quiet
+day — the missing damping seat *is* the signal.
+
+**Two craft lessons the arc paid for, carried here because they are Director-side:**
+
+- **Verify empirically; never bank an inferred hope.** Three reversals in one arc,
+  each an optimistic inference that only the empirical run corrected: a
+  capability read as enabled from a status code whose BODY said it was disabled;
+  "the machinery is proven" from a run that had actually returned a 500; a fault
+  dismissed as an artefact of direct navigation that the in-flow retest showed was
+  real. **Read the body, not the status; the run is the arbiter, not the
+  "should".** (The Practice's enforcement surface for this class is its
+  verification rule — `verify-dont-trust` § Name the Instrument.)
+- **Staging earns its keep, repeatedly.** The owner's prove-on-dev-first ruling,
+  adapted to a preview bound to the production auth realm when the dev instance
+  could not cover the leg, caught a real launch blocker plus two further
+  server-side defects — all before submission, with the production surface
+  untouched. Rehearsal is not ceremony when the rehearsal surface can be bound to
+  the real dependency.
+
+Expected observable effect + falsifier (PDR-130 fast-lane obligation): seat counts
+fall to Director-plus-one when the critical path is a single gated blocker, and the
+all-seats-on-one-blocker shape stops recurring; falsified if a later arc shows a
+folded roster measurably *slower* to clear its blocker than a standing multi-seat
+roster on comparable work, or if the fold leaves a non-code gate ownerless again —
+which would mean the SM function needed its own seat after all and the cost was
+correctly paid.
+
+## Amendment (2026-08-07) — Detecting productive-looking rabbit holes (Director craft)
+
+Owner word (2026-07-25, after one night produced a security engagement
+instead of dep bumps, a cloud-scope platform program instead of a CLI hook
+fix, and a nine-hour zero-commit "review convergence"): "multiple team
+members have gone down productive looking rabbit holes with no actual
+value... you are the Director... you need to be able to spot and review
+and correct such things." Landed from the host's 2026-08-05 vendor-memory
+graduation audit.
+
+**The signature (why they look productive).** Every step is locally
+justified by the previous step's output, so no single step is wrong — the
+error is the integral, not the derivative. The work emits high-quality
+artifacts (evidence chains, plans, reports), and craft masquerades as
+value. Scope regresses to the GENERIC ideal of the work-class (security
+work → what a security team would do; platform work → full platform
+support) instead of the owner's specific want, and the owner's framing
+words inflate ("pressing" → engagement; "first-class" → cloud
+everything). Standard instruments all pass, because conscience checks,
+reviews, and verdicts score against SUPPLIED context — and the supplied
+context inherits the drift: the object can be beautifully scored and
+still be the wrong object.
+
+**The two anchors that do not drift:** the owner's VERBATIM ask, and the
+owner's implied size and cost. Never alignment-check against abstractions
+("citizenship", "quality", "safety") — abstractions admit maximal
+readings; verbatim words do not.
+
+**The five Director mechanisms:**
+
+1. **Size-at-routing** — every assignment states expected size and
+   deliverable type ("30-minute job, one PR, no reports"). Small work
+   especially: that is where creep hides.
+2. **Size echo at pickup** — seats read back size alongside contract; a
+   mis-sized read-back ("multi-week platform program") kills the drift
+   before work starts.
+3. **Deliverable-type check on every seat report** — asked for bumps,
+   received an analysis report plus an owner card: flag it, never admire
+   it. Praise attaches to value-against-ask, never to craft — a Director
+   calling a rabbit hole "exemplary" reinforces it (worked failure: a
+   security-analysis acknowledgement).
+4. **Owner-surprise test on every card** — if the owner must answer a
+   question the original ask never implied, scope has drifted; the card
+   is the tell, not the cure (worked failure: a deployed-env card on a
+   dep-update lane).
+5. **The integral check at cycle boundaries** — not "is every seat busy
+   on its lane" but "what has the owner RECEIVED since last check, and is
+   time-to-value tracking the size stated at routing?" Zero deliverable
+   movement across a boundary means intervene, however healthy the
+   heartbeat label looks (worked failure: nine hours of
+   "review convergence" heartbeats over seven unresolved threads and zero
+   commits, read as "needs nothing from me").
+
+Expected observable effect + falsifier (PDR-130 fast-lane obligation): routing
+events carry size and deliverable type, and integral checks catch
+zero-deliverable windows within one cycle boundary; falsified if a
+rabbit-hole arc recurs that passed all five mechanisms — which would mean
+the detection surface needs an instrument outside the Director's own
+judgment loop.

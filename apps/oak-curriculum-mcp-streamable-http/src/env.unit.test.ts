@@ -190,19 +190,19 @@ describe('Conditional Clerk keys (DANGEROUSLY_DISABLE_AUTH)', () => {
     it('accepts a bare hostname', () => {
       const result = HttpEnvSchema.safeParse({
         ...withClerkKeys,
-        CANONICAL_HOST: 'www.thenational.academy',
+        CANONICAL_HOST: 'mcp.thenational.academy',
       });
 
       expect(result.success).toBe(true);
     });
 
     it.each([
-      ['a port', 'www.thenational.academy:8443'],
-      ['a scheme', 'https://www.thenational.academy'],
-      ['a path', 'www.thenational.academy/mcp'],
-      ['userinfo', 'www.thenational.academy:443@evil.example'],
-      ['a comma-joined pair', 'www.thenational.academy,evil.example'],
-      ['whitespace', 'www.thenational.academy evil.example'],
+      ['a port', 'mcp.thenational.academy:8443'],
+      ['a scheme', 'https://mcp.thenational.academy'],
+      ['a path', 'mcp.thenational.academy/mcp'],
+      ['userinfo', 'mcp.thenational.academy:443@evil.example'],
+      ['a comma-joined pair', 'mcp.thenational.academy,evil.example'],
+      ['whitespace', 'mcp.thenational.academy evil.example'],
       ['an empty value', ''],
       ['a loopback name', 'localhost'],
     ])('rejects %s at startup rather than at request time', (_label, value) => {
@@ -265,6 +265,41 @@ describe('Clerk key-format locality (production)', () => {
     }
     // unset VERCEL_ENV (local, non-Vercel) also passes
     expect(HttpEnvSchema.safeParse(withClerkKeys).success).toBe(true);
+  });
+
+  // Discriminating cases: the guard is a production ALLOWLIST (require
+  // pk_live_/sk_live_), not merely a pk_test_/sk_test_ denylist. A key whose
+  // prefix is neither test nor live — a malformed, staging, or wrong-realm
+  // key — must ALSO fail closed. A denylist keyed on the test prefix would
+  // have let these boot production against a non-live Clerk realm.
+  it('rejects an unknown-prefix publishable key in production (allowlist, not a pk_test_ denylist)', () => {
+    const result = HttpEnvSchema.safeParse({
+      ...baseEnv,
+      CLERK_PUBLISHABLE_KEY: 'pk_foobar_123',
+      CLERK_SECRET_KEY: 'sk_live_123',
+      VERCEL_ENV: 'production',
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const paths = result.error.issues.map((i) => i.path.join('.'));
+      expect(paths).toContain('CLERK_PUBLISHABLE_KEY');
+    }
+  });
+
+  it('rejects an unknown-prefix secret key in production (allowlist, not an sk_test_ denylist)', () => {
+    const result = HttpEnvSchema.safeParse({
+      ...baseEnv,
+      CLERK_PUBLISHABLE_KEY: 'pk_live_123',
+      CLERK_SECRET_KEY: 'sk_staging_123',
+      VERCEL_ENV: 'production',
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const paths = result.error.issues.map((i) => i.path.join('.'));
+      expect(paths).toContain('CLERK_SECRET_KEY');
+    }
   });
 });
 
@@ -547,10 +582,14 @@ describe('PostHog product-analytics selection (OBSERVABILITY_SINKS)', () => {
       (vercelEnv) => {
         const result = HttpEnvSchema.safeParse({
           // Live keys + canonical host so the `production` iteration is a
-          // VALID prod env under Guards 1a (live-realm keys) and 3
-          // (CANONICAL_HOST required); both are also accepted in dev/preview.
+          // VALID prod env across the MCP-143 guard cascade: Guard 1a requires
+          // live-realm keys in production, and Guard 3 requires CANONICAL_HOST
+          // there. Guard 3 arrives with PR-3, so on branches before that this
+          // fixture is forward-compatible with it rather than exercising it —
+          // do not read the mention as evidence the control is already live.
+          // Both values are also accepted in dev/preview.
           ...withLiveClerkKeys,
-          CANONICAL_HOST: 'www.thenational.academy',
+          CANONICAL_HOST: 'mcp.thenational.academy',
           VERCEL_ENV: vercelEnv,
           OBSERVABILITY_SINKS: '["sentry","posthog"]',
           ...validPostHogVars,

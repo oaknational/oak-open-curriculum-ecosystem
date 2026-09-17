@@ -1,0 +1,399 @@
+{
+  "recallIntegrityViolations": [],
+  "recallReport": {
+    "strictOverall": {
+      "numerator": 0,
+      "denominator": 18,
+      "value": 0
+    },
+    "looseOverall": {
+      "numerator": 5,
+      "denominator": 18,
+      "value": 0.2777777777777778
+    },
+    "strictWithinRemit": {
+      "numerator": 0,
+      "denominator": 10,
+      "value": 0
+    },
+    "looseWithinRemit": {
+      "numerator": 4,
+      "denominator": 10,
+      "value": 0.4
+    }
+  },
+  "choiceB": {
+    "gate": {
+      "minStrictWithinRemit": 0.6,
+      "minLooseWithinRemit": 0.85
+    },
+    "pass": false
+  },
+  "mapCoverage": {
+    "medianLeafCount": 47,
+    "underExtracting": []
+  },
+  "temporalCoverage": [
+    {
+      "candidateId": "C17",
+      "kind": "regime",
+      "distinctWindows": 3,
+      "earliest": "w11",
+      "latest": "w14",
+      "suspect": false
+    },
+    {
+      "candidateId": "C21",
+      "kind": "regime",
+      "distinctWindows": 2,
+      "earliest": "w13",
+      "latest": "w14",
+      "suspect": false
+    },
+    {
+      "candidateId": "C26",
+      "kind": "trajectory",
+      "distinctWindows": 5,
+      "earliest": "w10",
+      "latest": "w14",
+      "suspect": false
+    },
+    {
+      "candidateId": "C35",
+      "kind": "trajectory",
+      "distinctWindows": 4,
+      "earliest": "w10",
+      "latest": "w13",
+      "suspect": false
+    },
+    {
+      "candidateId": "C41",
+      "kind": "trajectory",
+      "distinctWindows": 3,
+      "earliest": "w10",
+      "latest": "w14",
+      "suspect": false
+    },
+    {
+      "candidateId": "C43",
+      "kind": "relational-lagged",
+      "distinctWindows": 4,
+      "earliest": "w10",
+      "latest": "w14",
+      "suspect": false
+    },
+    {
+      "candidateId": "C53",
+      "kind": "distributional",
+      "distinctWindows": 5,
+      "earliest": "w10",
+      "latest": "w14",
+      "suspect": false
+    }
+  ],
+  "corroboration": [
+    {
+      "candidateId": "C03",
+      "corroboratedBy": [
+        ".agent/memory/active/patterns/wrapped-exit-codes-false-green.md",
+        ".agent/memory/active/patterns/harness-shell-and-commit-edge-cases.md",
+        ".agent/rules/exit-codes-in-band-never-piped.md"
+      ],
+      "missingClaims": [],
+      "isCorroborated": true
+    },
+    {
+      "candidateId": "C08",
+      "corroboratedBy": [
+        ".agent/memory/active/patterns/read-surface-is-not-decide-surface.md",
+        ".agent/rules/pr-comments-resolve-and-recheck.md"
+      ],
+      "missingClaims": [],
+      "isCorroborated": true
+    },
+    {
+      "candidateId": "C10",
+      "corroboratedBy": [
+        ".agent/memory/active/patterns/scope-bound-negative-existence-claims.md",
+        ".agent/memory/active/patterns/zero-match-false-green.md"
+      ],
+      "missingClaims": [],
+      "isCorroborated": true
+    },
+    {
+      "candidateId": "C16",
+      "corroboratedBy": [
+        ".agent/rules/worktree-residency.md",
+        ".agent/memory/active/patterns/harness-shell-and-commit-edge-cases.md"
+      ],
+      "missingClaims": [],
+      "isCorroborated": true
+    },
+    {
+      "candidateId": "C19",
+      "corroboratedBy": [
+        ".agent/memory/active/patterns/zero-match-false-green.md",
+        ".agent/memory/active/patterns/verification-method-must-answer-the-question.md"
+      ],
+      "missingClaims": [],
+      "isCorroborated": true
+    },
+    {
+      "candidateId": "C26",
+      "corroboratedBy": [
+        ".agent/memory/active/patterns/values-enter-by-first-hand-right-frame-read.md",
+        ".agent/rules/sha-prefix-in-collaboration-content.md"
+      ],
+      "missingClaims": [],
+      "isCorroborated": true
+    },
+    {
+      "candidateId": "C27",
+      "corroboratedBy": [
+        ".agent/memory/active/patterns/query-the-value-never-the-lookalike.md",
+        ".agent/memory/active/patterns/referent-narrowing.md"
+      ],
+      "missingClaims": [],
+      "isCorroborated": true
+    },
+    {
+      "candidateId": "C28",
+      "corroboratedBy": [
+        ".agent/memory/active/patterns/verify-before-propagating.md",
+        ".agent/rules/verify-dont-trust.md"
+      ],
+      "missingClaims": [],
+      "isCorroborated": true
+    },
+    {
+      "candidateId": "C34",
+      "corroboratedBy": [
+        ".agent/rules/silence-is-never-liveness.md",
+        ".agent/memory/active/patterns/observer-must-see-the-terminal-state.md"
+      ],
+      "missingClaims": [],
+      "isCorroborated": true
+    },
+    {
+      "candidateId": "C62",
+      "corroboratedBy": [
+        ".agent/memory/active/patterns/wrapped-exit-codes-false-green.md",
+        ".agent/memory/active/patterns/harness-shell-and-commit-edge-cases.md"
+      ],
+      "missingClaims": [],
+      "isCorroborated": true
+    }
+  ],
+  "dispositionRecompute": {
+    "total": 52,
+    "mismatches": []
+  },
+  "triage": [
+    {
+      "candidateId": "C03",
+      "disposition": "keep",
+      "kind": "recurrence",
+      "distinctWindows": 2,
+      "groundingCount": 3,
+      "path": "quorum-keep",
+      "quorumMargin": 1,
+      "minTestConfidence": "low",
+      "medianTestConfidence": "med",
+      "importance": "high",
+      "recallMatched": true,
+      "novel": false,
+      "longitudinalSuspect": false,
+      "band": "review-first",
+      "reviewFirstTriggers": [
+        "narrow-quorum",
+        "low-confidence-pass"
+      ]
+    },
+    {
+      "candidateId": "C08",
+      "disposition": "keep",
+      "kind": "recurrence",
+      "distinctWindows": 3,
+      "groundingCount": 4,
+      "path": "quorum-keep",
+      "quorumMargin": 3,
+      "minTestConfidence": "med",
+      "medianTestConfidence": "med",
+      "importance": "high",
+      "recallMatched": false,
+      "novel": false,
+      "longitudinalSuspect": false,
+      "band": "moderate",
+      "reviewFirstTriggers": []
+    },
+    {
+      "candidateId": "C10",
+      "disposition": "keep",
+      "kind": "recurrence",
+      "distinctWindows": 2,
+      "groundingCount": 4,
+      "path": "quorum-keep",
+      "quorumMargin": 3,
+      "minTestConfidence": "low",
+      "medianTestConfidence": "med",
+      "importance": "high",
+      "recallMatched": false,
+      "novel": false,
+      "longitudinalSuspect": false,
+      "band": "review-first",
+      "reviewFirstTriggers": [
+        "low-confidence-pass"
+      ]
+    },
+    {
+      "candidateId": "C16",
+      "disposition": "keep",
+      "kind": "recurrence",
+      "distinctWindows": 4,
+      "groundingCount": 5,
+      "path": "quorum-keep",
+      "quorumMargin": 3,
+      "minTestConfidence": "med",
+      "medianTestConfidence": "med",
+      "importance": "high",
+      "recallMatched": false,
+      "novel": false,
+      "longitudinalSuspect": false,
+      "band": "moderate",
+      "reviewFirstTriggers": []
+    },
+    {
+      "candidateId": "C19",
+      "disposition": "keep",
+      "kind": "recurrence",
+      "distinctWindows": 5,
+      "groundingCount": 6,
+      "path": "quorum-keep",
+      "quorumMargin": 1,
+      "minTestConfidence": "low",
+      "medianTestConfidence": "med",
+      "importance": "high",
+      "recallMatched": true,
+      "novel": false,
+      "longitudinalSuspect": false,
+      "band": "review-first",
+      "reviewFirstTriggers": [
+        "narrow-quorum",
+        "low-confidence-pass"
+      ]
+    },
+    {
+      "candidateId": "C26",
+      "disposition": "keep",
+      "kind": "trajectory",
+      "distinctWindows": 5,
+      "groundingCount": 7,
+      "path": "quorum-keep",
+      "quorumMargin": 1,
+      "minTestConfidence": "low",
+      "medianTestConfidence": "med",
+      "importance": "high",
+      "recallMatched": true,
+      "novel": false,
+      "longitudinalSuspect": false,
+      "band": "review-first",
+      "reviewFirstTriggers": [
+        "narrow-quorum",
+        "low-confidence-pass"
+      ]
+    },
+    {
+      "candidateId": "C27",
+      "disposition": "keep",
+      "kind": "recurrence",
+      "distinctWindows": 4,
+      "groundingCount": 10,
+      "path": "quorum-keep",
+      "quorumMargin": 1,
+      "minTestConfidence": "low",
+      "medianTestConfidence": "med",
+      "importance": "high",
+      "recallMatched": false,
+      "novel": false,
+      "longitudinalSuspect": false,
+      "band": "review-first",
+      "reviewFirstTriggers": [
+        "narrow-quorum",
+        "low-confidence-pass"
+      ]
+    },
+    {
+      "candidateId": "C28",
+      "disposition": "keep",
+      "kind": "recurrence",
+      "distinctWindows": 5,
+      "groundingCount": 9,
+      "path": "quorum-keep",
+      "quorumMargin": 3,
+      "minTestConfidence": "med",
+      "medianTestConfidence": "med",
+      "importance": "high",
+      "recallMatched": true,
+      "novel": false,
+      "longitudinalSuspect": false,
+      "band": "moderate",
+      "reviewFirstTriggers": []
+    },
+    {
+      "candidateId": "C34",
+      "disposition": "keep",
+      "kind": "recurrence",
+      "distinctWindows": 3,
+      "groundingCount": 4,
+      "path": "quorum-keep",
+      "quorumMargin": 3,
+      "minTestConfidence": "med",
+      "medianTestConfidence": "med",
+      "importance": "high",
+      "recallMatched": false,
+      "novel": false,
+      "longitudinalSuspect": false,
+      "band": "moderate",
+      "reviewFirstTriggers": []
+    },
+    {
+      "candidateId": "C36",
+      "disposition": "keep",
+      "kind": "recurrence",
+      "distinctWindows": 2,
+      "groundingCount": 3,
+      "path": "quorum-keep",
+      "quorumMargin": 1,
+      "minTestConfidence": "low",
+      "medianTestConfidence": "med",
+      "importance": "high",
+      "recallMatched": false,
+      "novel": true,
+      "longitudinalSuspect": false,
+      "band": "review-first",
+      "reviewFirstTriggers": [
+        "narrow-quorum",
+        "low-confidence-pass"
+      ]
+    },
+    {
+      "candidateId": "C62",
+      "disposition": "keep",
+      "kind": "recurrence",
+      "distinctWindows": 3,
+      "groundingCount": 4,
+      "path": "quorum-keep",
+      "quorumMargin": 3,
+      "minTestConfidence": "low",
+      "medianTestConfidence": "med",
+      "importance": "high",
+      "recallMatched": false,
+      "novel": false,
+      "longitudinalSuspect": false,
+      "band": "review-first",
+      "reviewFirstTriggers": [
+        "low-confidence-pass"
+      ]
+    }
+  ]
+}

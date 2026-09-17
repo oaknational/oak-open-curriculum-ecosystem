@@ -22,7 +22,7 @@ import type {
   ExtractedMisconception,
   ExtractedPriorKnowledge,
 } from '../extractors/index.js';
-import type { ExtractedThread } from '../extractors/thread-extractor.js';
+import type { ExtractedThread, ThreadUnit } from '../extractors/thread-extractor.js';
 
 import {
   generateGraphCorpusData,
@@ -36,6 +36,7 @@ function makeInput(overrides: Partial<GraphCorpusInput> = {}): GraphCorpusInput 
     priorKnowledge: [],
     threads: [],
     lessons: [],
+    unitLessons: [],
     misconceptions: [],
     keywords: [],
     sourceVersion: '2026-05-21T13:45:16.086Z',
@@ -57,7 +58,8 @@ const baseThread: ExtractedThread = {
     {
       unitSlug: 'fractions-year-2',
       unitTitle: 'Fractions Year 2',
-      order: 1,
+      sequenceSlug: 'maths-primary',
+      sequenceIndex: 1,
       subject: 'maths',
       keyStage: 'ks1',
       year: 2,
@@ -65,7 +67,8 @@ const baseThread: ExtractedThread = {
     {
       unitSlug: 'fractions-year-3',
       unitTitle: 'Fractions Year 3',
-      order: 2,
+      sequenceSlug: 'maths-primary',
+      sequenceIndex: 2,
       subject: 'maths',
       keyStage: 'ks2',
       year: 3,
@@ -73,7 +76,8 @@ const baseThread: ExtractedThread = {
     {
       unitSlug: 'fractions-year-4',
       unitTitle: 'Fractions Year 4',
-      order: 3,
+      sequenceSlug: 'maths-primary',
+      sequenceIndex: 3,
       subject: 'maths',
       keyStage: 'ks2',
       year: 4,
@@ -136,7 +140,8 @@ describe('generateGraphCorpusData — G2 stability contract', () => {
           {
             unitSlug: 'fractions-year-4',
             unitTitle: 'Fractions Year 4',
-            order: 1,
+            sequenceSlug: 'maths-primary',
+            sequenceIndex: 1,
             subject: 'maths',
             keyStage: 'ks2',
             year: 4,
@@ -144,7 +149,8 @@ describe('generateGraphCorpusData — G2 stability contract', () => {
           {
             unitSlug: 'algebra-year-5',
             unitTitle: 'Algebra Year 5',
-            order: 2,
+            sequenceSlug: 'maths-primary',
+            sequenceIndex: 2,
             subject: 'maths',
             keyStage: 'ks2',
             year: 5,
@@ -171,10 +177,30 @@ describe('generateGraphCorpusData — G2 stability contract', () => {
         lessonSlugs: ['adding-fractions'],
       };
 
+      // Two programme variants of one unit that DISAGREE on a lesson's
+      // position, so the unitLessonRuns section is exercised by the composite
+      // reversal — not left trivially empty by the makeInput default.
+      const listing = (order: number) => ({
+        unitSlug: secondLesson.unitSlug,
+        unitTitle: secondLesson.unitTitle,
+        year: 4,
+        yearSlug: 'year-4',
+        keyStageSlug: 'ks2',
+        lessonCount: 1,
+        lessons: [
+          {
+            lessonSlug: secondLesson.lessonSlug,
+            lessonTitle: secondLesson.lessonTitle,
+            lessonOrder: order,
+            state: 'published',
+          },
+        ],
+      });
       const forward = makeInput({
         priorKnowledge: [basePriorKnowledge],
         threads: [baseThread, secondThread],
         lessons: [baseLesson, secondLesson],
+        unitLessons: [listing(3), listing(1)],
         misconceptions: [baseMisconception, secondMisconception],
         keywords: [firstKeyword, secondKeyword],
       });
@@ -182,21 +208,21 @@ describe('generateGraphCorpusData — G2 stability contract', () => {
         priorKnowledge: [...forward.priorKnowledge].reverse(),
         threads: [...forward.threads].reverse(),
         lessons: [...forward.lessons].reverse(),
+        unitLessons: [...forward.unitLessons].reverse(),
         misconceptions: [...forward.misconceptions].reverse(),
         keywords: [...forward.keywords].reverse(),
       });
 
-      expect(timeless(generateGraphCorpusData(reversed))).toEqual(
-        timeless(generateGraphCorpusData(forward)),
-      );
+      const forwardCorpus = generateGraphCorpusData(forward);
+      expect(timeless(generateGraphCorpusData(reversed))).toEqual(timeless(forwardCorpus));
+      expect(forwardCorpus.unitLessonRuns).toHaveLength(2);
     });
 
     it('emits an identical corpus when one thread’s unit placements arrive in reversed order', () => {
-      // Placement encounter order must not leak ANYWHERE in the corpus —
-      // sequences AND prerequisiteFor chains share the (year, unitId) total
-      // order (the year-axis re-derivation ruled at the G3 falsification;
-      // the bulk's `unit.threads[].order` is a thread display index and
-      // carries no within-thread ordering).
+      // Placement ENCOUNTER order must not leak anywhere in the corpus —
+      // sequences and prerequisiteFor chains share one ordering basis: each
+      // unit's (year, sequence index) position in its subject's authored
+      // curriculum sequence, which travels on the unit itself.
       const forwardThread: ExtractedThread = baseThread;
       const reversedThread: ExtractedThread = {
         ...baseThread,
@@ -210,10 +236,11 @@ describe('generateGraphCorpusData — G2 stability contract', () => {
       expect(reversed.sequences[0]?.placements.map((p) => p.year)).toEqual([2, 3, 4]);
     });
 
-    it('chains same-year units deterministically by unitId (stated-arbitrary tie-break)', () => {
-      // Within one year the order is not curricular; same-year units still
-      // chain (count preservation — a ruling ground) in unitId order, and the
-      // contract states the arbitrariness rather than implying pedagogy.
+    it('chains same-year units in their subject sequence order, never alphabetically', () => {
+      // Within one year the curriculum still orders units — the bulk sequence
+      // array is Oak's authored order — so same-year units chain by sequence
+      // index, and a slug that sorts first alphabetically stays where the
+      // curriculum put it.
       const sameYearThread: ExtractedThread = {
         slug: 'same-year-thread',
         title: 'Same-year thread',
@@ -223,7 +250,8 @@ describe('generateGraphCorpusData — G2 stability contract', () => {
           {
             unitSlug: 'unit-zebra',
             unitTitle: 'Unit zebra',
-            order: 8,
+            sequenceSlug: 'maths-primary',
+            sequenceIndex: 5,
             subject: 'maths',
             keyStage: 'ks2',
             year: 4,
@@ -231,7 +259,8 @@ describe('generateGraphCorpusData — G2 stability contract', () => {
           {
             unitSlug: 'unit-apple',
             unitTitle: 'Unit apple',
-            order: 8,
+            sequenceSlug: 'maths-primary',
+            sequenceIndex: 9,
             subject: 'maths',
             keyStage: 'ks2',
             year: 4,
@@ -239,7 +268,8 @@ describe('generateGraphCorpusData — G2 stability contract', () => {
           {
             unitSlug: 'unit-final',
             unitTitle: 'Unit final',
-            order: 8,
+            sequenceSlug: 'maths-primary',
+            sequenceIndex: 12,
             subject: 'maths',
             keyStage: 'ks2',
             year: 5,
@@ -249,10 +279,16 @@ describe('generateGraphCorpusData — G2 stability contract', () => {
 
       const result = generateGraphCorpusData(makeInput({ threads: [sameYearThread] }));
 
+      // Edges emit sorted by (type, source, target), so compare the pair set.
       const chain = result.edges
         .filter((edge) => edge.type === 'prerequisiteFor')
-        .map((edge) => `${edge.source}>${edge.target}`);
-      expect(chain).toEqual(['unit:unit-apple>unit:unit-zebra', 'unit:unit-zebra>unit:unit-final']);
+        .map((edge) => `${edge.source}>${edge.target}`)
+        .sort((a, b) => a.localeCompare(b));
+      expect(chain).toEqual(
+        ['unit:unit-zebra>unit:unit-apple', 'unit:unit-apple>unit:unit-final'].sort((a, b) =>
+          a.localeCompare(b),
+        ),
+      );
 
       // Encounter order must not leak into the same-year chain either: the
       // pinned order above holds regardless of placement arrival order.
@@ -262,6 +298,42 @@ describe('generateGraphCorpusData — G2 stability contract', () => {
         }),
       );
       expect(timeless(reversed)).toEqual(timeless(result));
+    });
+
+    it('emits a different artefact when a file’s own within-year order changes (that order is data)', () => {
+      // File-enumeration independence is NOT within-file normalisation: the
+      // bulk sequence array's order within a year is upstream curriculum
+      // data, so swapping two same-year units' sequence positions must
+      // change the emitted sequence.
+      const sameYear = (unitSlug: string, sequenceIndex: number): ThreadUnit => ({
+        unitSlug,
+        unitTitle: unitSlug,
+        sequenceSlug: 'maths-primary',
+        sequenceIndex,
+        subject: 'maths',
+        keyStage: 'ks2',
+        year: 4,
+      });
+      const authored: ExtractedThread = {
+        ...baseThread,
+        units: [sameYear('first-y4', 3), sameYear('second-y4', 8)],
+      };
+      const swapped: ExtractedThread = {
+        ...baseThread,
+        units: [sameYear('first-y4', 8), sameYear('second-y4', 3)],
+      };
+
+      const original = generateGraphCorpusData(makeInput({ threads: [authored] }));
+      const reordered = generateGraphCorpusData(makeInput({ threads: [swapped] }));
+
+      expect(original.sequences[0]?.placements.map((p) => p.unitId)).toEqual([
+        'unit:first-y4',
+        'unit:second-y4',
+      ]);
+      expect(reordered.sequences[0]?.placements.map((p) => p.unitId)).toEqual([
+        'unit:second-y4',
+        'unit:first-y4',
+      ]);
     });
 
     it('emits an identical corpus when same-unit prior-knowledge records arrive in reversed order', () => {

@@ -30,7 +30,7 @@ Grounded in the live consumer: `demos/oak-curriculum-hub` in [oak-open-curriculu
 - [x] Compiler clean; manifest in sync; 4 components, 70 cards, 2 templates.
 - [x] Consumption docs complete: consuming-nextjs.md §1–§9 incl. §5b picks/matrix/version-watch + §7b worked example; three pairing guides; wrapped-widget checklist; console-tui-tones.
 - [x] `LICENCES.md` (third-party + Oak-marks boundary), README file index current.
-- [x] Audits: Oak 32/32, EMC² 32/32 AA ×4 themes; **FDSE v7 full audit re-run July 19: 34/34 AA ×4 themes** (brand-full.css verified loaded in-page); failing-example still fails (negative control).
+- [x] Audits: Oak 32/32, EMC² 32/32 AA ×4 themes; **PDS v7 full audit re-run July 19: 34/34 AA ×4 themes** (brand-full.css verified loaded in-page); failing-example still fails (negative control).
 - [x] `dtcg/` current: no token-value changes since its 1.6.2 spot-fixes (1.6.3–1.7.0 were icons + docs; icon URL tokens deliberately unexported — dtcg/README).
 - [x] `docs/nextjs-theme-mapping.css` extended for the hub: `--color-warning`/`--color-info` + `--shadow-accent-brand`/`--shadow-neutral-brand` aliases (the hub's signature offset shadows re-brand with the tokens).
 - [x] Known bundle note: reveal.js vendor 115KB rides in `_ds_bundle.js` (KNOWN-ISSUES #9) — irrelevant to the hub (it consumes CSS + docs, not the bundle).

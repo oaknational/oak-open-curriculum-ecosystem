@@ -16,7 +16,7 @@ surprises, the session's subjective experience, ADR/PDR candidates
 surfaced during the session, the thread record the session touched.
 Cross-session convergence (pattern extraction, doctrine graduation,
 napkin rotation, fitness management) belongs to
-[`consolidate-docs`](../consolidate-docs/SKILL-CANONICAL.md), which is
+[`consolidate-docs`](../knowledge/consolidate-docs/SKILL-CANONICAL.md), which is
 thread-scoped.
 
 **Governance**: This workflow operationalises
@@ -53,7 +53,7 @@ green. Capture the knowledge at full weight, route it to the right home, and
 let any fitness improvement happen only as the side effect of real curation.
 
 **Relationship to `consolidate-docs`**: this workflow and
-[`consolidate-docs`](../consolidate-docs/SKILL-CANONICAL.md) are one
+[`consolidate-docs`](../knowledge/consolidate-docs/SKILL-CANONICAL.md) are one
 knowledge-flow pair with different cadences. Handoff runs at every
 session close, inside `wrap`, and captures the session's landed outcome,
 live state, and surprises. When a session produces a behaviour-changing lesson that is already
@@ -213,6 +213,16 @@ no retrospective memos; those are close-out work, this skill's §Steps.
    log: per
    [`permanent-doc-is-the-consolidation-record`](../../rules/permanent-doc-is-the-consolidation-record.md)
    the commit and the permanent docs are the record that the session happened.
+   Continuity refreshes ride the next substantive or consolidation commit —
+   never a dedicated handover commit, and never a handover PR (owner ruling
+   2026-07-15, verbatim: "handover commits are not necessary, and handover
+   PRs are banned as a memetic pathogen"; each rotation that mints one
+   breeds review treadmills that outlive their purpose). A seat transfer is
+   fully carried by the untracked handoff record plus comms events. When
+   the owner rules a shared handoff BRANCH for a day's uncommitted records
+   (2026-09-02, `handoff/jim-september`), that branch is the owner's
+   instrument, not a licence for per-seat handover PRs — a seat's own draft
+   continuity PR was withdrawn the same day under this ruling.
    Active plans remain authoritative for scope, sequencing, acceptance criteria,
    and validation.
 
@@ -339,7 +349,7 @@ no retrospective memos; those are close-out work, this skill's §Steps.
    Symmetry note: this auxiliary input is also enumerated in
    [`start-right-quick`](../start-right-quick/shared/start-right.md)
    §4 (own-platform read at session open) and
-   [`consolidate-docs`](../consolidate-docs/SKILL-CANONICAL.md) step 3
+   [`consolidate-docs`](../knowledge/consolidate-docs/SKILL-CANONICAL.md) step 3
    (cross-platform read at thread-scoped depth); session-handoff is
    the session-close edge of the same surface.
 
@@ -709,7 +719,7 @@ no retrospective memos; those are close-out work, this skill's §Steps.
    broken code that then needed a forward revert.
 
 9. **Run the consolidation gate.** Check the trigger checklist in
-   [`consolidate-docs`](../consolidate-docs/SKILL-CANONICAL.md).
+   [`consolidate-docs`](../knowledge/consolidate-docs/SKILL-CANONICAL.md).
 
    - If no trigger fires, set `Deep consolidation status` to
      `not due — <reason>` in `.agent/memory/operational/repo-continuity.md` and stop here.

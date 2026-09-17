@@ -23,12 +23,26 @@ export interface HarvestedReview {
   readonly submittedAt: string;
 }
 
-/** One expected reviewer's leg for the current tip. */
-export interface ReviewerLeg {
-  readonly reviewer: string;
-  readonly state: 'SATISFIED' | 'SKIPPED' | 'OWED';
-  readonly detail: string;
-}
+/**
+ * One expected reviewer's leg for the current tip. A SKIPPED leg carries its
+ * reason STRUCTURALLY — settlement classifies on `skipReason`, never on the
+ * prose `detail` (security D1, 2026-08-06): a quota skip is an owner-ruled
+ * settled state, while a timeout skip means THAT expected reviewer never
+ * reviewed this tip and must never read merge-eligible — other legs in the
+ * same round may well be SATISFIED.
+ */
+export type ReviewerLeg =
+  | {
+      readonly reviewer: string;
+      readonly state: 'SATISFIED' | 'OWED';
+      readonly detail: string;
+    }
+  | {
+      readonly reviewer: string;
+      readonly state: 'SKIPPED';
+      readonly skipReason: 'quota' | 'timeout';
+      readonly detail: string;
+    };
 
 export interface ComputeReviewerLegsInput {
   readonly headRefOid: string;
@@ -133,6 +147,7 @@ function legFor(input: ComputeReviewerLegsInput, reviewer: string): ReviewerLeg 
     return {
       reviewer,
       state: 'SKIPPED',
+      skipReason: 'quota',
       detail: 'tip-bound quota/skip marker (scope-declared; owner ruling 2026-07-21)',
     };
   }
@@ -141,6 +156,7 @@ function legFor(input: ComputeReviewerLegsInput, reviewer: string): ReviewerLeg 
     return {
       reviewer,
       state: 'SKIPPED',
+      skipReason: 'timeout',
       detail: `timeout: no ${unevaluableMarker ? 'substantive ' : ''}tip-bound review one quiet window after checks green (${input.checksGreenAt})`,
     };
   }

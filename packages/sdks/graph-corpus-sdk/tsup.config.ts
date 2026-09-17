@@ -1,4 +1,4 @@
-import { createSdkConfig } from '../../../tsup.config.base.js';
+import { createSdkConfig } from '@oaknational/workspace-config/tsup';
 
 // Entry globs must cover every implementation module of every subpath, not just
 // the barrels: with `bundle: false` (ADR-010) each entry is transpiled 1:1 and

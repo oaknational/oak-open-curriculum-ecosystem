@@ -7,8 +7,8 @@ lineage:
   serves_stream: agentic framework / knowledge-curation discipline
   strategic_choice: the agentic framework is a first-class value stream (FRAME-1)
   derives_from: >-
-    .agent/skills/consolidate-docs/SKILL-CANONICAL.md;
-    .agent/skills/consolidate-until-done/SKILL-CANONICAL.md;
+    .agent/skills/knowledge/consolidate-docs/SKILL-CANONICAL.md;
+    .agent/skills/knowledge/consolidate-until-done/SKILL-CANONICAL.md;
     sibling write-time cure in
     future/continuity-surface-drift-prevention.plan.md
 todos:

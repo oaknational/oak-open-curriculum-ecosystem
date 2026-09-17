@@ -1,0 +1,96 @@
+{
+ "windows": [
+  {
+   "window": "w01",
+   "files": [
+    ".agent/memory/active/archive/napkin-2026-05-31-foamy-docs-consolidation.md",
+    ".agent/memory/active/archive/napkin-2026-06-01-moonless-curation.md",
+    ".agent/memory/active/archive/napkin-2026-06-02-shaded-veiling-curation.md",
+    ".agent/memory/active/archive/napkin-2026-06-03-opalescent-curation.md",
+    ".agent/memory/active/archive/napkin-2026-06-04-arboreal-curation.md",
+    ".agent/memory/active/archive/napkin-2026-06-05-lanternlit-curation.md",
+    ".agent/memory/active/archive/napkin-2026-06-06-starlit-curation.md",
+    ".agent/memory/active/archive/napkin-2026-06-08-ferny-curation.md"
+   ]
+  },
+  {
+   "window": "w02",
+   "files": [
+    ".agent/memory/active/archive/napkin-2026-06-09-fruited-curation.md",
+    ".agent/memory/active/archive/napkin-2026-06-11-arboreal-curation.md",
+    ".agent/memory/active/archive/napkin-2026-06-11-pearly-curation.md",
+    ".agent/memory/active/archive/napkin-2026-06-12-thyme-curation.md",
+    ".agent/memory/active/archive/napkin-2026-06-14-comms-research-closeout.md",
+    ".agent/memory/active/archive/napkin-2026-06-16-dedicated-consolidation-snapper.md",
+    ".agent/memory/active/archive/napkin-2026-06-16-skunk-consolidation.md"
+   ]
+  },
+  {
+   "window": "w03",
+   "files": [
+    ".agent/memory/active/archive/napkin-2026-06-18-sandpiper-consolidation.md",
+    ".agent/memory/active/archive/napkin-2026-06-19-finch-consolidation.md",
+    ".agent/memory/active/archive/napkin-2026-06-21-ferret-consolidation.md",
+    ".agent/memory/active/archive/napkin-2026-06-22-petrel-consolidation.md",
+    ".agent/memory/active/archive/napkin-2026-06-23-narwhal-consolidation.md",
+    ".agent/memory/active/archive/napkin-2026-06-25-zephyr-consolidation.md",
+    ".agent/memory/active/archive/napkin-2026-06-27-hawthorn-consolidation.md"
+   ]
+  },
+  {
+   "window": "w04",
+   "files": [
+    ".agent/memory/active/archive/napkin-2026-06-28-clover-consolidation.md",
+    ".agent/memory/active/archive/napkin-2026-06-29-falcon-consolidation.md",
+    ".agent/memory/active/archive/napkin-2026-06-29-quoll-consolidation.md"
+   ]
+  },
+  {
+   "window": "w05",
+   "files": [
+    ".agent/memory/active/archive/napkin-2026-07-02-rosemary-consolidation.md",
+    ".agent/memory/active/archive/napkin-2026-07-04-otter-tier-e-drain.md",
+    ".agent/memory/active/archive/napkin-2026-07-06-nettle-consolidation.md"
+   ]
+  },
+  {
+   "window": "w06",
+   "files": [
+    ".agent/memory/active/archive/napkin-2026-07-06-zenith-dedicated-consolidation.md",
+    ".agent/memory/active/archive/napkin-2026-07-08-corsair-dedicated-consolidation.md"
+   ]
+  },
+  {
+   "window": "w07",
+   "files": [
+    ".agent/memory/active/archive/napkin-2026-07-14.md"
+   ]
+  },
+  {
+   "window": "w08",
+   "files": [
+    ".agent/memory/active/archive/napkin-2026-07-20.md"
+   ]
+  },
+  {
+   "window": "w09",
+   "files": [
+    ".agent/memory/active/archive/napkin-2026-07-23.md",
+    ".agent/memory/active/archive/napkin-2026-07-26.md"
+   ]
+  },
+  {
+   "window": "w10",
+   "files": [
+    ".agent/memory/active/archive/napkin-2026-07-30.md"
+   ]
+  },
+  {
+   "window": "w11",
+   "files": [
+    ".agent/memory/active/archive/napkin-2026-08-06.md",
+    ".agent/memory/active/archive/napkin-2026-08-07.md"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,59 @@
+/* ============================================================
+   Composition demo parent — layout only, tokens only. Same
+   chrome discipline as the picker: thin bands above, the stage
+   owns the viewport.
+   ============================================================ */
+
+[data-page='composition-demo'] .comp-head {
+  padding-block: var(--inset-s);
+}
+
+[data-page='composition-demo'] .comp-head-line {
+  align-items: baseline;
+}
+
+[data-page='composition-demo'] .comp-lede {
+  max-inline-size: var(--measure-prose);
+  margin: 0;
+}
+
+[data-page='composition-demo'] .comp-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-s) var(--gap-xl);
+  align-items: flex-start;
+  padding-block-end: var(--inset-s);
+}
+
+[data-page='composition-demo'] .comp-status {
+  margin: 0 0 var(--space-8);
+}
+
+/* The exhibit stage: the same ratio discipline as the picker's stage —
+   portrait at base so the demo dominates narrow screenfuls, the screen
+   ratio at wide. */
+[data-page='composition-demo'] .comp-frame-stage {
+  inline-size: 100%;
+  aspect-ratio: 3 / 4;
+  border: var(--border-solid-s) solid var(--border-neutral-lighter);
+  overflow: hidden;
+}
+
+[data-page='composition-demo'] .comp-frame-stage iframe {
+  border: 0;
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+@media (min-width: 960px) {
+  [data-page='composition-demo'] .comp-frame-stage {
+    aspect-ratio: 16 / 10;
+  }
+}
+
+@media (max-height: 500px) {
+  [data-page='composition-demo'] .comp-frame-stage {
+    aspect-ratio: 16 / 10;
+  }
+}

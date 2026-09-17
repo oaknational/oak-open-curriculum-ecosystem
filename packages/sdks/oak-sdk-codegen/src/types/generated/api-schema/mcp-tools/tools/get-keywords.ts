@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import type { ToolDescriptor } from '../contract/tool-descriptor.contract.js';
+import { derivePaginationFromLinkHeader } from '../contract/tool-descriptor.contract.js';
 import { UndocumentedResponseError } from '../contract/undocumented-response-error.js';
 import { getResponseDescriptorsByOperationId } from '../../response-map.js';
 import type { OakApiPathBasedClient } from '../../client-types.js';
@@ -119,7 +120,8 @@ export const getKeywords = {
       throw new UndocumentedResponseError(status, 'getKeywords-getKeywords', documentedStatuses, responseBody);
     }
     const payload = status >= 200 && status < 300 ? response.data : response.error;
-    return { httpStatus: status, payload };
+    const pagination = derivePaginationFromLinkHeader(response.response.headers.get('link'));
+    return { httpStatus: status, payload, pagination };
   },
   toolZodSchema,
   toolInputJsonSchema,
@@ -131,7 +133,7 @@ export const getKeywords = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Keywords by subject and key stage\n\nUse when you want the vocabulary for a key stage, subject, unit, lesson, or phase — e.g. to build a glossary or attach definitions to content. Returns keywords with definition, the subject + key stage they appear in, and the lessons that use them, sorted alphabetically. All filters are optional, but pass at least one of keyStage, subject, unit, lesson, or phase. Request rules: - At least one of subject, keyStage, phase, unit or lesson must be provided - note that they are all the slug form of the values (e.g. \"ks2\" for key stage 2, \"science\" for the science subject, and \"forces-and-magnets\" for the forces and magnets unit), and that casing is important (always lowercase).\n\nWHEN TO PREFER WHICH KEYWORDS TOOL: this tool returns the LIVE keyword set for a key stage + subject — fresh and authoritative (including KS4 during curriculum restructures), alphabetical, unranked, and large at subject scope. For a bounded frequency-ranked subset with lesson connections (token economy + relationship navigation over the curriculum graph), prefer get-keyword-graph, which serves a point-in-time curriculum snapshot.\n\nNOTE: This tool is paginated — the server returns at most 20 keywords unless you pass `limit` (max 300), and nothing in the response indicates that more exist. For the complete set, pass `limit: 300` and increase `offset` by 300 per call until a page returns fewer than 300 keywords.",
+  description: "Keywords by subject and key stage\n\nUse when you want the vocabulary for a key stage, subject, unit, lesson, or phase — e.g. to build a glossary or attach definitions to content. Returns keywords with definition, the subject + key stage they appear in, and the lessons that use them, sorted alphabetically. All filters are optional, but pass at least one of keyStage, subject, unit, lesson, or phase. Request rules: - At least one of subject, keyStage, phase, unit or lesson must be provided - note that they are all the slug form of the values (e.g. \"ks2\" for key stage 2, \"science\" for the science subject, and \"forces-and-magnets\" for the forces and magnets unit), and that casing is important (always lowercase).\n\nWHEN TO PREFER WHICH KEYWORDS TOOL: this tool returns the LIVE keyword set for a key stage + subject — fresh and authoritative (including KS4 during curriculum restructures), alphabetical, unranked, and large at subject scope. For a bounded frequency-ranked subset with lesson connections (token economy + relationship navigation over the curriculum graph), prefer get-keyword-graph, which serves a point-in-time curriculum snapshot.\n\nNOTE: This tool is paginated — the server returns at most 20 keywords unless you pass `limit` (max 300). The result's `pagination` field reports `hasMore` and, when more pages exist, the `nextOffset`/`nextLimit` to pass; follow it until `hasMore` is false. Do not infer completeness by counting items against your limit.",
   path,
   method,
   documentedStatuses,

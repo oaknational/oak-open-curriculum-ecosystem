@@ -2,20 +2,25 @@
 /* Theme + motion controls for the Oak design system in a Next.js app.
    Pairs with public/oak-theme.js loaded via <Script strategy="beforeInteractive">
    (see docs/consuming-nextjs.md §4). Renders after mount: theme state lives in
-   localStorage, so the server must not guess. All five themes are offered —
-   the access themes (high-contrast, colour-safe) are not optional extras. */
+   localStorage, so the server must not guess. "Identity default" is the
+   no-choice state (the page's own face; choosing it calls clear(), which
+   keeps the automatic contrast commitment) and every theme follows — the
+   access themes (high-contrast, colour-safe) are not optional extras. */
 import { useEffect, useState } from 'react';
 
 declare global {
   interface Window {
     oakTheme?: {
-      get(): string; set(t: string): void; themes: string[];
+      get(): string; set(t: string): void; clear(): void;
+      choice(): string | null; themes: string[];
       motion: { get(): string; set(m: string): void; modes: string[] };
     };
   }
 }
 
+const IDENTITY_DEFAULT = 'identity-default';
 const THEME_LABELS: Record<string, string> = {
+  [IDENTITY_DEFAULT]: 'Identity default',
   light: 'Light', dark: 'Dark', system: 'Match device',
   'high-contrast': 'High contrast', 'colour-safe': 'Colour safe',
 };
@@ -28,11 +33,19 @@ export default function ThemeSwitcher() {
   const [motion, setMotion] = useState<string>();
 
   useEffect(() => {
-    setTheme(window.oakTheme?.get() ?? 'light');
+    // choice(), not get(): the control names the person's CHOICE, and the
+    // no-choice state reads as the selectable Identity default.
+    setTheme(window.oakTheme?.choice() ?? IDENTITY_DEFAULT);
     setMotion(window.oakTheme?.motion.get() ?? 'system');
   }, []);
 
   if (theme === undefined) return null; // pre-mount: server HTML stays theme-neutral
+
+  const chooseTheme = (value: string) => {
+    if (value === IDENTITY_DEFAULT) window.oakTheme?.clear();
+    else window.oakTheme?.set(value);
+    setTheme(value);
+  };
 
   return (
     <div className="oak-cluster oak-cluster--s">
@@ -40,9 +53,9 @@ export default function ThemeSwitcher() {
       <select
         className="oak-select" id="oak-theme-select" value={theme}
         style={{ width: 'auto', minHeight: 'var(--size-target-min)' }}
-        onChange={(e) => { window.oakTheme?.set(e.target.value); setTheme(e.target.value); }}
+        onChange={(e) => chooseTheme(e.target.value)}
       >
-        {(window.oakTheme?.themes ?? ['light']).map((t) => (
+        {[IDENTITY_DEFAULT, ...(window.oakTheme?.themes ?? [])].map((t) => (
           <option key={t} value={t}>{THEME_LABELS[t] ?? t}</option>
         ))}
       </select>

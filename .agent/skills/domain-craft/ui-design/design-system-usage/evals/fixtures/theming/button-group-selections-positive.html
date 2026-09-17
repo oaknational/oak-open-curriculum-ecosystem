@@ -1,0 +1,33 @@
+<!-- POSITIVE control for the SELECTION PARSER, pinning a false negative
+     found first-hand in iteration 1.
+
+     A theme switcher does not have to be a <select>. This one offers all
+     five as a button group carrying the value on a custom attribute, which
+     the option-only parser reported as "offered set is empty" — scoring a
+     conforming control as offering nothing at all. All three assertions
+     must PASS here. -->
+<div class="theme-switcher" role="group" aria-label="Theme">
+  <button type="button" data-theme-choice="light" aria-pressed="true">Light</button>
+  <button type="button" data-theme-choice="dark" aria-pressed="false">Dark</button>
+  <button type="button" data-theme-choice="system" aria-pressed="false">Match my device</button>
+  <button type="button" data-theme-choice="high-contrast" aria-pressed="false">High contrast</button>
+  <button type="button" data-theme-choice="colour-safe" aria-pressed="false">Colour safe</button>
+</div>
+<script>
+  const root = document.documentElement;
+
+  function resolve(choice) {
+    if (choice === 'system') {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    return choice;
+  }
+
+  for (const button of document.querySelectorAll('[data-theme-choice]')) {
+    button.addEventListener('click', () => {
+      const choice = button.dataset.themeChoice;
+      localStorage.setItem('oak-theme-choice', choice);
+      root.setAttribute('data-theme', resolve(choice));
+    });
+  }
+</script>

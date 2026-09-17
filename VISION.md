@@ -1,7 +1,7 @@
 ---
 title: Vision
 status: active
-last_reviewed: 2026-06-20
+last_reviewed: 2026-08-30
 ---
 
 # Vision
@@ -50,6 +50,14 @@ assistants teachers already choose — ChatGPT, Claude, Copilot, and Gemini, and
 Oak's standards into the tools they already use to plan lessons and prepare. Which
 assistant is the teacher's choice, not ours.
 
+> _Dated note, 2026-09-03: the decision that the MCP app is built in its own public
+> repository, `oaknational/oak-open-curriculum-mcp`, from packages published here is recorded
+> in [ADR-227](docs/architecture/architectural-decisions/227-oak-product-in-its-own-repository.md). Once it executes, the app is
+> delivered from that repository as thin workspaces over published packages; this repository
+> delivers the platform beneath it — the toolkit and Oak's organisation-wide packs — and the
+> app itself until cut-over. The vision is unchanged; only where the app is built from
+> changes._
+
 What comes back is grounded in Oak's sequenced, evidence-informed curriculum, not
 ungrounded invention. We inform the teacher's expert judgement; we never replace
 it. That's how Oak works: the curriculum is optional and fully adaptable, and the
@@ -91,13 +99,22 @@ We're building capabilities that outlast any single product. Representing knowle
 as graphs is one of them — we apply it across domains, from Oak's curriculum to
 AI-enhanced development and the way we run our own work.
 
-We build those capabilities as a cost-of-change gradient: the core absorbs
-recurring, context-independent mechanics and their assurance burden;
+We build those capabilities as a
+[cost-of-change gradient](docs/foundation/cost-of-change-gradient.md): the core
+absorbs recurring, context-independent mechanics and their assurance burden;
 foundational systems compose them; SDKs and libraries own reusable domain
 capability; products and services express policy, experience, and real human
 need. Supporting the wider ecosystem includes supporting its engineering
 parts — paying the cost of a genuinely shared responsibility once, so product
 effort concentrates where it creates value for people.
+
+The [Oak Innovation Kit](docs/strategy/stream-innovation-kit.md) exists to make those
+capabilities tangible. It is intended to bring Oak's data, tools, design system, and
+agent-first Practice together in
+excellent working experiences that show what is possible, generate trustworthy evidence
+before larger commitments, and let learning compound across deliberately different
+demonstrations. Inspiring and impressing people is valuable here when it opens new
+understanding while remaining technically honest about what has — and has not — been proved.
 
 ## How we achieve this
 

@@ -1,4 +1,4 @@
-import { createAppConfig } from '../../tsup.config.base.js';
+import { createAppConfig } from '@oaknational/workspace-config/tsup';
 
 export default createAppConfig(
   { 'bin/oaksearch': 'bin/oaksearch.ts' },

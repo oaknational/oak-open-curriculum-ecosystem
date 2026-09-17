@@ -402,6 +402,15 @@ load-bearing choice:
     consistency of anchoring within a clone, never conformance to an
     operator's tracking discipline, which stays an overlay-side
     obligation.
+  - **Superseded (2026-08-07, owner-ruled).** The derived-anchoring
+    mechanism itself was removed: no validator obligation may depend
+    on the presence of records in an external service, however
+    derived ("Work does NOT require a Linear ticket to be valid" —
+    ruling carried verbatim in the plan-node schema's §2026-08-07
+    amendment). `tickets` is optional visibility metadata at every
+    level; ticket linkage is operator practice, enforced nowhere in
+    repo conformance. The stratum analysis above stands; its
+    validator realisation does not.
 - **Migration as relocation** — rejected at lens 4: the graph ingests
   artifacts where they live; migration is annotation plus a closed
   ledger, never file movement. The conserved planning corpora stay

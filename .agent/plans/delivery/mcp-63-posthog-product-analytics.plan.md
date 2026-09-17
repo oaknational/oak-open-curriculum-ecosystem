@@ -469,10 +469,18 @@ Event-specific properties are:
 
 | Event | Required properties | Conditional properties |
 | --- | --- | --- |
-| `$mcp_initialize` | `$mcp_is_error: false`, `oak_client_family`, `$mcp_protocol_version` | none |
-| `$mcp_tools_list` | `$mcp_duration_ms`, `$mcp_is_error` | `$mcp_listed_tool_names` on success |
-| `$mcp_tool_call` | `$mcp_tool_name`, `$mcp_duration_ms`, `$mcp_is_error` | none |
+| `$mcp_initialize` | `$mcp_is_error: false`, `oak_client_family`, `oak_client_surface`, `$mcp_protocol_version` | none |
+| `$mcp_tools_list` | `$mcp_duration_ms`, `$mcp_is_error`, `oak_client_surface` | `$mcp_listed_tool_names` on success |
+| `$mcp_tool_call` | `$mcp_tool_name`, `$mcp_duration_ms`, `$mcp_is_error`, `oak_client_surface` | none |
 | `$mcp_resource_read` | `$mcp_resource_name`, `$mcp_duration_ms`, `$mcp_is_error` | none |
+
+`oak_client_surface` (MCP-558) is the closed union
+`cli | sdk | vscode | web | other`, derived inside Oak's boundary from
+the transport request headers (`x-anthropic-client`, then `user-agent`)
+by evidence-backed token matching; unmatched traffic maps to `other`
+and the raw header values are never shipped. Resource reads are
+Oak-constructed at the sink, never pass the transport observer, and
+carry no client surface.
 
 `oak_client_family` is the closed union `chatgpt | claude | other`.
 The transport observer maps only the current

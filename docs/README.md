@@ -3,12 +3,12 @@ boundary: cross-boundary
 doc_role: index
 authority: docs-root-navigation
 status: active
-last_reviewed: 2026-07-28
+last_reviewed: 2026-08-30
 ---
 
 # Documentation for Oak Open Curriculum Ecosystem
 
-**Last Updated**: 2026-07-28
+**Last Updated**: 2026-08-30
 **Status**: Active index
 
 ## Getting Started
@@ -19,14 +19,17 @@ last_reviewed: 2026-07-28
   your machine, reads the live docs, and meets you there
 - **Evaluating the project?** → [VISION.md](../VISION.md) for the
   timeless framing: Oak's open curriculum as AI-native infrastructure across
-  **three co-equal value streams** — the teacher-facing MCP app, engineering
+  **four co-equal value streams** — the teacher-facing MCP app, engineering
   tools for the wider ecosystem (SDK, semantic search, curriculum graph,
-  evidence surfaces), and the agentic-engineering Practice. Then read the
+  evidence surfaces), the agentic-engineering Practice, and the
+  [Oak Innovation Kit](strategy/stream-innovation-kit.md), which is intended to turn shared
+  capability into excellent working experiences and trustworthy evidence. Then read the
   latest snapshot in the [reports surface](../.agent/reports/) and the live
   [high-level plan](../.agent/plans-backlog-2026-07/high-level-plan.md)
 - **Not a developer?** → [Curriculum Guide](domain/curriculum-guide.md) — Oak's curriculum structure in plain language
 - **New to the repo?** → [Root README Quick Start](../README.md#quick-start) for setup, then [CONTRIBUTING.md](../CONTRIBUTING.md) for the development process
 - **A developer working with agents?** → [Working with this Repo for Devs](engineering/working-with-this-repo-for-devs.md) — the practical guide: how you direct the work, what the agents do around you, and what keeps the quality honest
+- **Wondering what a surface or glyph means?** → [Developer Experience](engineering/developer-experience.md) — session surfaces, feedback loops, and the statusline deep-dive
 - **Working with AI?** → Start with the canonical
   [`start-right-quick` shared workflow](../.agent/skills/start-right-quick/shared/start-right.md),
   or invoke the `oak-start-right-quick` platform adapter (`/oak-start-right-quick`
@@ -34,7 +37,7 @@ last_reviewed: 2026-07-28
   read [AGENT.md](../.agent/directives/AGENT.md).
 - **Need an optional map of the wider agentic corpus?** → [Agentic Engineering Research Lanes & Hub](../.agent/research/agentic-engineering/README.md) — concept-and-deep-dive hub linking canon, deep dives, research, evidence, reports, and docs surfaces
 - **Architecture source of truth?** → [ADR index](architecture/architectural-decisions/) — Architectural Decision Records define how the system should work
-- **Browsing by section?** → [Foundation](foundation/README.md) · [Governance](governance/README.md) · [Architecture](architecture/README.md) · [Engineering](engineering/README.md) · [Operations](operations/README.md) · [Domain](domain/README.md)
+- **Browsing by section?** → [Foundation](foundation/README.md) · [Governance](governance/README.md) · [Architecture](architecture/README.md) · [Design](design/README.md) · [Engineering](engineering/README.md) · [Operations](operations/README.md) · [Domain](domain/README.md)
 
 ## Core Documentation
 
@@ -42,6 +45,7 @@ last_reviewed: 2026-07-28
 
 - [OpenAPI Pipeline](architecture/openapi-pipeline.md) - **THE** architecture doc: how types flow from schema
 - [Architecture Decision Records](architecture/architectural-decisions/) — Architectural source of truth (the schema-first generation ADRs below underpin everything in this repo)
+- [Design Decision Records](design/README.md) — Decisions about the design system as a designed artefact, graph-structured with typed edges
 - [ADR-029](architecture/architectural-decisions/029-no-manual-api-data.md) — No manual API data structures
 - [ADR-030](architecture/architectural-decisions/030-sdk-single-source-truth.md) — SDK as single source of truth
 - [ADR-031](architecture/architectural-decisions/031-generation-time-extraction.md) — Generation-time extraction

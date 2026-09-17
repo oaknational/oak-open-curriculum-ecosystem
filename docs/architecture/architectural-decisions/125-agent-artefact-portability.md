@@ -23,6 +23,13 @@ skill-discovery, and MCP surfaces without creating another canonical content
 home. This amendment is architectural authority, not a wired-state claim; the
 cross-platform surface matrix remains the live target-versus-wired record.
 Owner-directed through the first-class Copilot CLI plan estate.
+**Amended**: 2026-09-08 — a second user-facing plugin package,
+`plugins/oak-open-curriculum-chatgpt/` (ChatGPT and Codex), joins
+`plugins/oak-open-curriculum/` (Claude Code); the root
+`.agents/plugins/marketplace.json` is its local-marketplace surface. The
+Claude plugin is the source: shared skills are checked-in copies gated by
+`validate-plugin-skill-copies`, and the two merged skills are the Claude
+workflow+agent pairs folded into single skills. Owner-directed (MCP-692).
 **Related**: [ADR-114 (Layered Sub-agent Prompt Composition)](114-layered-sub-agent-prompt-composition-architecture.md), [ADR-119 (Agentic Engineering Practice)](119-agentic-engineering-practice.md), [ADR-124 (Practice Propagation Model)](124-practice-propagation-model.md), [PDR-009 (Canonical-First Cross-Platform Architecture)](../../../.agent/practice-core/decision-records/PDR-009-canonical-first-cross-platform-architecture.md), [PDR-035 (Agent Work Capabilities Belong to the Practice)](../../../.agent/practice-core/decision-records/PDR-035-agent-work-capabilities-belong-to-the-practice.md), [PDR-051 (Vendor-Agnostic Skills Standardisation)](../../../.agent/practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md), [ADR-165 (Agent Work Practice Phenotype Boundary)](165-agent-work-practice-phenotype-boundary.md)
 
 ## Context
@@ -44,36 +51,36 @@ Extend the three-layer model from ADR-114 to all agent artefact types: skills, c
 
 All substantive workflow content lives under `.agent/`:
 
-| Artefact             | Canonical location                                                                       | Purpose                                                                                                                             |
-| -------------------- | ---------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| Skills               | `.agent/skills/*/SKILL-CANONICAL.md` and supporting `references/`, `scripts/`, `assets/` | Workflow capabilities, both user-invocable (slash) and model-invocable. Custom commands subsumed here per the 2026-05-09 amendment. |
-| Directives           | `.agent/directives/*.md`                                                                 | Policies and principles                                                                                                             |
-| Rules                | `.agent/rules/*.md`                                                                      | Always-applied operational reinforcements                                                                                           |
-| Sub-agent templates  | `.agent/sub-agents/templates/*.md`                                                       | Reviewer prompts (ADR-114)                                                                                                          |
-| Sub-agent personas   | `.agent/sub-agents/components/personas/*.md`                                             | Shared architecture reviewer identity and lens                                                                                      |
-| Sub-agent components | `.agent/sub-agents/components/`                                                          | Reusable behaviours, principles, architecture notes                                                                                 |
-| Plan templates       | `.agent/plans/` (organised by domain)                                                    | Implementation plans, execution tracking                                                                                            |
+| Artefact             | Canonical location                                                                                                                                                                                                                                                                                                              | Purpose                                                                                                                             |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Skills               | `.agent/skills/` canonicals in the three ratified shapes — `<skill-id>/`, `<concern>/<skill-id>/`, and `<concern>/<domain>/<skill-id>/` (owner-ruled 2026-08-10; `skill-tree-walk.ts` is the topology SSOT; adapter surfaces stay flat) — each holding `SKILL-CANONICAL.md` and supporting `references/`, `scripts/`, `assets/` | Workflow capabilities, both user-invocable (slash) and model-invocable. Custom commands subsumed here per the 2026-05-09 amendment. |
+| Directives           | `.agent/directives/*.md`                                                                                                                                                                                                                                                                                                        | Policies and principles                                                                                                             |
+| Rules                | `.agent/rules/*.md`                                                                                                                                                                                                                                                                                                             | Always-applied operational reinforcements                                                                                           |
+| Sub-agent templates  | `.agent/sub-agents/templates/*.md`                                                                                                                                                                                                                                                                                              | Reviewer prompts (ADR-114)                                                                                                          |
+| Sub-agent personas   | `.agent/sub-agents/components/personas/*.md`                                                                                                                                                                                                                                                                                    | Shared architecture reviewer identity and lens                                                                                      |
+| Sub-agent components | `.agent/sub-agents/components/`                                                                                                                                                                                                                                                                                                 | Reusable behaviours, principles, architecture notes                                                                                 |
+| Plan templates       | `.agent/plans/` (organised by domain)                                                                                                                                                                                                                                                                                           | Implementation plans, execution tracking                                                                                            |
 
 Live skill counts surface in the directory listing — counts in this ADR drift; the directory and `pnpm portability:check` are authoritative. The canonical skill body filename is `SKILL-CANONICAL.md` (non-discoverable); discovery filenames (`SKILL.md`) appear only in adapter directories.
 
 ### Layer 2: Platform Adapters (thin wrappers)
 
-Each platform has thin wrappers that reference canonical content. Skill adapters are emitted by the `agent-tools:skills-adapter-generate` CLI; manual edits are forbidden by header comment in every emitted file. Owned skills carry a configurable prefix (default `oak-`) in adapter directories. Vendored external skills (recorded in `skills-lock.json`) are not adapters and are not generated: they live directly in `.agents/skills/` under their upstream names and are never canonicalised (see §Externally installed skills).
+Each platform has thin wrappers that reference canonical content. Skill adapters are emitted by the `agent-tools:skills-adapter-generate` CLI; manual edits are forbidden by header comment in every emitted file. Owned skills carry a REQUIRED prefix (`oak-` in this estate, pinned by the root `pnpm skills:generate` / `pnpm skills:check` scripts; the CLI refuses an unprefixed run) in adapter directories. Vendor-class skills are not adapters and are not generated: they are installed and managed by the external skills machinery, are never canonicalised, and are outside our validation's jurisdiction (see §Skill classes and validation jurisdiction).
 
 #### Cross-tool skill alias (`.agents/`)
 
-| Location                                        | Format                                                                                                                                                                            | Read by                                     |
-| ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
-| `.agents/skills/*/SKILL.md`                     | Generated thin wrapper with spec-portable frontmatter (`name`, `description`, `license`, `compatibility`, `metadata`, `allowed-tools`) -> `.agent/skills/<id>/SKILL-CANONICAL.md` | Cursor, Copilot CLI, Codex, Gemini CLI, Amp |
-| `.agents/skills/*/{references,scripts,assets}/` | Bytewise copies of canonical supporting files                                                                                                                                     | Same                                        |
-| `.agents/rules/*.md`                            | Thin wrapper -> `.agent/rules/`                                                                                                                                                   | Portable rule surface                       |
-| `.agents/agents/README.md`                      | Documents intentional absence of `.agents/` sub-agent wrappers                                                                                                                    | —                                           |
+| Location                                        | Format                                                                                                                                                                                                                                                           | Read by                                     |
+| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| `.agents/skills/*/SKILL.md`                     | Generated thin wrapper with spec-portable frontmatter (`name`, `description`, `license`, `compatibility`, `metadata`, `allowed-tools`) -> the skill's canonical body under `.agent/skills/` (any of the three ratified depths: flat, concern, or concern/domain) | Cursor, Copilot CLI, Codex, Gemini CLI, Amp |
+| `.agents/skills/*/{references,scripts,assets}/` | Bytewise copies of canonical supporting files                                                                                                                                                                                                                    | Same                                        |
+| `.agents/rules/*.md`                            | Thin wrapper -> `.agent/rules/`                                                                                                                                                                                                                                  | Portable rule surface                       |
+| `.agents/agents/README.md`                      | Documents intentional absence of `.agents/` sub-agent wrappers                                                                                                                                                                                                   | —                                           |
 
 #### Claude Code (`.claude/`)
 
 | Location                                        | Format                                                                                                                                                                                                                                                                                                                                                                                                                                                               | Read by            |
 | ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| `.claude/skills/*/SKILL.md`                     | Generated thin wrapper with spec-portable frontmatter PLUS Claude top-level fields (`when_to_use`, `argument-hint`, `arguments`, `disable-model-invocation`, `user-invocable`, `context`, `agent`, `model`) derived from `metadata.claude-*` keys in canonical -> `.agent/skills/<id>/SKILL-CANONICAL.md`                                                                                                                                                            | Claude Code (only) |
+| `.claude/skills/*/SKILL.md`                     | Generated thin wrapper with spec-portable frontmatter PLUS Claude top-level fields (`when_to_use`, `argument-hint`, `arguments`, `disable-model-invocation`, `user-invocable`, `context`, `agent`, `model`) derived from `metadata.claude-*` keys in canonical -> the skill's canonical body under `.agent/skills/` (any of the three ratified depths: flat, concern, or concern/domain)                                                                             | Claude Code (only) |
 | `.claude/skills/*/{references,scripts,assets}/` | Bytewise copies of canonical supporting files                                                                                                                                                                                                                                                                                                                                                                                                                        | Same               |
 | `.claude/rules/*.md`                            | Thin wrappers -> `.agent/rules/`                                                                                                                                                                                                                                                                                                                                                                                                                                     | Claude Code        |
 | `.claude/agents/*.md`                           | Markdown with YAML frontmatter (`name`, `description`, `tools`, `disallowedTools`, `model`, `permissionMode`, `color`). All wrappers require a `color` field and ≥2 `<example>` blocks in `description`; **`model` is optional** — omitted by default so the invoking agent's model is inherited (owner-directed inherit policy, 2026-06-28; the per-platform subagent frontmatter schema `agent-tools/src/validators/subagents/frontmatter-schema.ts` is the SSOT). | Claude Code        |
@@ -221,6 +228,7 @@ A thin wrapper contains ONLY:
 
 - Platform-specific activation metadata (e.g., Cursor `.mdc` frontmatter with `globs`/`alwaysApply`, Claude YAML frontmatter with `allowed-tools`/`permissionMode`, Gemini TOML `description`)
 - A short description
+- Portable specification frontmatter carried through unchanged in value from the canonical, where the canonical declares it — for skills, the Layer 2 adapter table's spec-portable set (`license`, `compatibility`, `metadata`, `allowed-tools`); see the 2026-09-09 amendment
 - A pointer to the canonical content path
 - Platform-specific invocation syntax where the canonical form cannot express it (e.g., Cursor `@` mentions, Claude `$ARGUMENTS`, Gemini `{{args}}`/`!{...}`/`@{...}`, Cursor Task tool `subagent_type`)
 
@@ -228,14 +236,18 @@ A thin wrapper MUST NOT contain substantive instructions, workflow steps, or log
 
 ### Owned-Skill Naming Convention
 
-Owned skills (`metadata.owned: true` in canonical frontmatter) carry a
-configurable prefix in adapter directories. The source default is
+Every canonical under `.agent/skills/` is a Practice-class skill, and its
+adapter directories carry a configurable prefix. The prefix applies to
+every discovered canonical; it is not selected by a frontmatter flag, and
+`metadata.owned: "true"` — which only some canonicals declare — is
+declared metadata rather than the prefix trigger. The source default is
 empty; the effective prefix `oak-` is passed explicitly via
 `--prefix=oak-` in `package.json` scripts (`pnpm skills:check`).
 Contributors who want a different prefix override at the call site.
-Vendored external skills (recorded in `skills-lock.json`) sit outside
-the prefix scheme entirely — they keep their upstream names in
-`.agents/skills/` and have no canonical. The prefix is applied only at
+Vendor-class skills sit outside the prefix scheme entirely — they keep
+their upstream names, have no canonical, and the prefix is never a
+class boundary (membership is recognised by the class marker, see
+§Skill classes and validation jurisdiction). The prefix is applied only at
 adapter emission; canonical identity is unprefixed.
 
 | Platform                 | Invocation                   | Source                             |
@@ -269,7 +281,7 @@ Rules have two conceptually distinct layers:
 
 2. **Activation triggers** (`.cursor/rules/*.mdc`, entry-point chains) — platform-specific mechanisms that determine _when_ and _how_ policies surface during a session. These are not thin wrappers for `principles.md` in the way command wrappers point at commands. They are a separate artefact type: a trigger mechanism that activates specific policies, directives, or skills at the right moment.
 
-Some triggers activate policies from `principles.md` via a canonical rule (e.g., `apply-architectural-principles.mdc` → `.agent/rules/apply-architectural-principles.md` → `principles.md`). Others activate standalone directives (e.g., `invoke-code-experts.mdc` → `.agent/memory/executive/invoke-code-experts.md`). Others activate skills through generated adapters (e.g., `napkin-always-active.mdc` → `.agents/skills/oak-napkin/SKILL.md` backed by `.agent/skills/napkin/SKILL-CANONICAL.md`). The trigger is not the policy — it is the mechanism that surfaces the policy.
+Some triggers activate policies from `principles.md` via a canonical rule (e.g., `apply-architectural-principles.mdc` → `.agent/rules/apply-architectural-principles.md` → `principles.md`). Others activate standalone directives (e.g., `invoke-code-experts.mdc` → `.agent/memory/executive/invoke-code-experts.md`). Others activate skills at their canonical bodies directly (e.g., `napkin-always-active.mdc` → `.agent/skills/knowledge/napkin/SKILL-CANONICAL.md`) — the portability validator requires trigger targets under `.agent/rules/` or `.agent/skills/`; generated adapter files are projections for platform discovery, never trigger targets (trued 2026-08-11 — the prior adapter-target example here contradicted the enforced contract). The trigger is not the policy — it is the mechanism that surfaces the policy.
 
 #### Many-to-One Consolidation Pattern
 
@@ -318,14 +330,14 @@ portable thin-wrapper rule surface for platforms that scan `.agents/` directly.
 
 **Triggers that activate skills or directives:**
 
-| Trigger                          | What it activates                                                                                   |
-| -------------------------------- | --------------------------------------------------------------------------------------------------- |
-| `apply-architectural-principles` | All architectural principles via `.agent/rules/apply-architectural-principles.md`                   |
-| `napkin-always-active`           | `.agents/skills/oak-napkin/SKILL.md` -> `.agent/skills/napkin/SKILL-CANONICAL.md`                   |
-| `use-start-right-skills`         | `.agents/skills/oak-start-right-quick/SKILL.md`, `.agents/skills/oak-start-right-thorough/SKILL.md` |
-| `follow-the-practice`            | Practice reading, which leads to skills                                                             |
-| `invoke-code-experts`            | All registered reviewers via `.agent/memory/executive/invoke-code-experts.md`                       |
-| `lint-after-edit`                | Lint checking (file-scoped to `*.ts`)                                                               |
+| Trigger                          | What it activates                                                                                                                                                       |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `apply-architectural-principles` | All architectural principles via `.agent/rules/apply-architectural-principles.md`                                                                                       |
+| `napkin-always-active`           | `.agent/skills/knowledge/napkin/SKILL-CANONICAL.md` directly (canonical-direct per the trigger contract)                                                                |
+| `use-start-right-skills`         | The three start-right canonicals directly (`.agent/skills/start-right-quick/`, `-thorough/`, `-team/` `SKILL-CANONICAL.md`) — canonical-direct per the trigger contract |
+| `follow-the-practice`            | Practice reading, which leads to skills                                                                                                                                 |
+| `invoke-code-experts`            | All registered reviewers via `.agent/memory/executive/invoke-code-experts.md`                                                                                           |
+| `lint-after-edit`                | Lint checking (file-scoped to `*.ts`)                                                                                                                                   |
 
 #### Trigger Content Contract
 
@@ -345,13 +357,13 @@ A trigger file MUST NOT:
 
 ### Skills Structure Contract (per PDR-051)
 
-1. **One skill, one owner directory**: each skill is rooted at `.agent/skills/<skill-id>/`.
+1. **One skill, one owner directory**: each skill is rooted at one of the three ratified depths — `.agent/skills/<skill-id>/`, `.agent/skills/<concern>/<skill-id>/`, or `.agent/skills/<concern>/<domain>/<skill-id>/` (owner-ruled 2026-08-10; the tree closes at three tiers; `skill-tree-walk.ts` is the topology SSOT; adapter surfaces stay flat).
 2. **Canonical filename**: the canonical body is named `SKILL-CANONICAL.md` — non-discoverable by every documented vendor scanner. Discovery filenames (`SKILL.md`) appear only in adapter directories.
 3. **Stable naming**: paired modes use explicit IDs (`start-right-quick`, `start-right-thorough`).
 4. **Supporting files**: optional `references/`, `scripts/`, `assets/` directories under canonical, copied bytewise into both adapter trees by the generator.
-5. **Owned vs vendored**: every canonical skill under `.agent/skills/` is Oak-authored and Practice-governed. Third-party skills never become canonicals — they are vendored into `.agents/skills/` and recorded in `skills-lock.json` (see §Externally installed skills); the portability validator cross-references lock entries against the adapter tree.
+5. **Practice vs Vendor**: every canonical skill under `.agent/skills/` is Oak-authored and Practice-governed. Third-party skills never become canonicals — they are Vendor-class, managed by the external skills machinery, and invisible to our projection tooling and permission census (see §Skill classes and validation jurisdiction).
 6. **Adapter surfaces**: exactly two — `.agents/skills/` (cross-tool alias, read by Cursor/Copilot CLI/Codex/Gemini/Amp) and `.claude/skills/` (Claude Code only). No other skill adapter surfaces are emitted.
-7. **Generator-mandatory**: adapters are emitted by `agent-tools:skills-adapter-generate`. Manual edits forbidden by header comment in every emitted file; drift gate fails CI on divergence.
+7. **Generator-mandatory**: adapters are emitted by `pnpm skills:generate`. Manual edits forbidden by header comment in every emitted file; drift gate fails CI on divergence.
 8. **No compatibility aliases**: canonical IDs are stable; only the configurable owned-skill prefix is applied at adapter emission.
 9. **Classification**: every canonical `SKILL-CANONICAL.md` MUST include a `classification` field in its YAML frontmatter: `active` (invoked via slash) or `passive` (guidance consumed by workflows or linked from other artefacts).
 10. **Body portability**: a canonical skill body is either **portable** or **repo-bound**. A portable body carries its own content and contains no host specifics — neither repo names nor host _concepts_ ("Practice", "claims", "threads") — and travels between repos by transplantation or seeding (PDR-005), since skills are not Core-plasmid content. A repo-bound body reads the host corpus at runtime and is hydrated canonical content (ADR-165). Both use the identical placement and adapter surfaces above; portability is a body-content discipline the structural drift and wrapper gates cannot detect, so its guard is the PDR-108 three-context test plus a host-concept screen at authoring and review. The portable teaching-surface pattern is [PDR-112](../../../.agent/practice-core/decision-records/PDR-112-teaching-surface-family-across-a-portability-seam.md).
@@ -500,36 +512,83 @@ Copilot load the same canonical rules as every other agent. Modular
 so generated modular projections contain their bounded supplemental context
 and remain governed by disposition and stale-output validation.
 
-### Externally installed skills
+### Skill classes and validation jurisdiction
 
-Third-party skills are never canonicalised into `.agent/skills/` — the
-canonical corpus holds Oak-authored, Practice-governed content only.
-External skill content enters the estate exclusively through the
-external-skill vendoring class: installed under `.agents/skills/<id>/`
-(the cross-tool adapter surface), pinned in `skills-lock.json` (source,
-source type, content hash), with a `.claude/skills/<id>` symlink where
-the Claude surface needs it. Upstream keeps the maintenance burden; the
-lock records provenance and a content hash, and the portability
-validator cross-references lock membership. Two checks are recorded
-here as named gaps, not claimed: nothing recomputes the content hash
-against the vendored tree, and nothing yet reports unlocked full
-content appearing in adapter directories — both are candidate cures on
-the external-skill boundary workstream. This is ADR-189's distribution
-axis read inbound: vendored externals are packaging-tier residents,
-never category members of the Practice-governed core. The adapter
-generator's `--clear` preserves lock-pinned entries (refusing to run
-at all when the lock is unreadable, since generation cannot re-create
-vendored content).
+The estate holds three classes of skills (owner taxonomy, 2026-08-12).
+Class membership derives from each class's own definition — location and
+recorded derivation — never from name matching, because names (the
+generation prefix) are configurable parameters, not class boundaries:
 
-Retaining the vendor-installed source plugin alongside the vendored
-copy is a separate operational decision. The default is to remove or
-disable any plugin whose only remaining purpose is to duplicate the
-vendored skill content. Keep the plugin only when it still supplies a
-distinct runtime capability, update mechanism, or source-of-truth
-refresh path; record that reason beside the artefact inventory or lock
-entry.
+- **Practice skills** — Oak-authored, Practice-governed skills about
+  working with this repository and the Practice. Canonical source:
+  `.agent/skills/`. The adapter generator projects each canonical to
+  `.claude/skills/<prefix><id>` and `.agents/skills/<prefix><id>`; every
+  generated stub records its derivation in its body (the class marker,
+  `agent-tools/src/skills-adapter-generate/adapter-stub.ts`), and that
+  recorded derivation is how our tooling recognises its own projections.
+  Our validation governs this class fully: projection reconciliation,
+  drift checking, frontmatter validation, and the Claude permission
+  census.
+- **Vendor skills** — external skills installed and managed by the
+  external skills machinery (`pnpx skills`), in whatever layout it
+  chooses; its default writes a canonical copy under
+  `.agents/skills/<id>` with a `.claude/skills/<id>` symlink, and
+  project-scope installs are committed with the repository. Our
+  validation has no jurisdiction here: entries not recognisable as
+  Practice projections are never adjudicated, deleted, or censused
+  (testing-strategy.md — never test external functionality that is not
+  under our control). Provenance, updates, and drift are the external
+  machinery's business; building our own oversight of them would
+  recreate the jurisdiction error this section retires. Third-party
+  skills are never canonicalised into `.agent/skills/` — the canonical
+  corpus holds Oak-authored, Practice-governed content only.
+- **User-facing skills** — skills Oak creates, in this or another Oak
+  repository, surfaced to external users via MCP, plugins, or the
+  external skills ecosystem. Current sub-classes: curriculum skills
+  (for teachers) and engineering skills (for ed-tech engineers building
+  on the curriculum SDK). Home today: `plugins/oak-open-curriculum/`
+  (Claude Code) and its ChatGPT/Codex packaging
+  `plugins/oak-open-curriculum-chatgpt/`, the latter listed by the root
+  `.agents/plugins/marketplace.json` (2026-09-08 amendment).
+  These are product deliverables assured under validation-strategy's
+  tiers (teacher-facing content sits at the Critical/Standard tier);
+  they are not repo-projection machinery and the adapter pipeline never
+  touches them.
+
+Three operational bounds keep the jurisdiction honest: (1)
+name-addressed operations (emission, drift checking) REFUSE a foreign
+occupant of an expected projection name rather than adjudicating or
+overwriting it — recovery from a mangled stub or a name collision is a
+human rename or removal, never an automatic write over unproven
+territory; (2) classification reads candidate `SKILL.md` files
+(kind-gated, never through symlinks), so an unreadable entry — even a
+Vendor one — fails our run loudly as cannot-classify rather than being
+guessed either way: a red caused by an unreadable Vendor entry is a
+filesystem-permission problem, not a Practice defect; (3) a
+byte-faithful copy of one of our stubs is indistinguishable from ours —
+the marker records a derivation, not an identity — a recorded bound
+(`agent-tools/src/skills-adapter-generate/adapter-stub.ts`) whose
+closure would need an identity discriminator, a separate design
+decision.
 
 ## Amendments
+
+### 2026-09-08 — Second user-facing plugin package (ChatGPT and Codex)
+
+ChatGPT and Codex read a plugin's `skills/` directory only (observed
+2026-09-07; the package README carries the dated sideload record), so the
+Claude plugin's workflow+agent capabilities cannot ship there unchanged.
+The owner ruled (PR #968, MCP-692) that the ChatGPT/Codex packaging is a
+second checked-in package, `plugins/oak-open-curriculum-chatgpt/` — not a
+restructuring of the Claude plugin, and not a generator output, because
+the adapter pipeline never touches user-facing skills (2026-08-12 above).
+The copies are hand-made; `validate-plugin-skill-copies` keeps them honest
+by recomputing their byte-identity with the Claude source on every run and
+discovering the shared set from the two trees rather than from a list. The root
+`.agents/plugins/marketplace.json` lists the package for Codex local
+marketplaces; it is a product surface, not a Practice projection.
+`plugins/oak-open-curriculum-chatgpt/README.md` is the package's own
+record of what is copied, what is merged, and why.
 
 ### 2026-04-17 — Thin-wrapper scope clarification
 
@@ -553,6 +612,27 @@ wrappers, and made `.agents/rules/` a first-class thin-wrapper rule
 surface. `pnpm portability:check` now validates forward coverage,
 reverse adapter links, wrapper form, `skills-lock.json`, symlink-free
 skill adapters, and Claude tracked permission parity.
+
+### 2026-08-12 — Three skill classes; validation scoped to the Practice class
+
+The former §Externally installed skills described a vendoring class:
+committed external copies pinned in `skills-lock.json`, symlinks
+tolerated through a lock exemption in the reconciliation sweep, and two
+recorded hash-reconciliation gaps. That machinery claimed jurisdiction
+over external skills and defined the external installer's standard
+layout as a defect — violating the testing doctrine's existing
+never-test-external rule. The owner's three-class taxonomy (Practice /
+Vendor / User-facing, now §Skill classes and validation jurisdiction)
+replaces it: OUR lock-reading and validation plumbing is deleted —
+`lock.ts`, the `lockedIds` machinery, the `--clear` lock-awareness the
+2026-08-02 amendment below added, the portability cross-reference, and the
+sweep's lock exemption. `skills-lock.json` itself belongs to the external
+skills tooling and is left untouched: our validation has no jurisdiction
+over it and does not read, validate, or reason about it. The sweep and the
+permission census recognise Practice projections by their recorded
+derivation (the class marker), and everything else at the projection roots
+is out of jurisdiction. Plan:
+`skill-classes-and-validation-jurisdiction` (ratified 2026-08-12).
 
 ### 2026-05-26 — Post-canonicalisation plugin retention
 
@@ -623,7 +703,7 @@ until the directories are removed, their contents are transitional and must not
 be treated as the canonical workflow surface. Canonical command behaviour is
 being subsumed into skills as the unified user-and-model-invokable workflow
 surface. Adapters are emitted by
-`pnpm agent-tools:skills-adapter-generate`; manual edits forbidden by
+`pnpm skills:generate`; manual edits forbidden by
 header comment in every emitted file; `pnpm portability:check` now
 includes a drift gate and the new contract checks. Owned skills carry
 `metadata.owned: true` in canonical frontmatter and a configurable
@@ -695,6 +775,104 @@ instead of a warning on a zero exit. The Layer 2 wrapper description, the
 prefix paragraph, and structural invariant 5 — which still described the
 abandoned canonicalise-ingested model — were updated to the vendored model
 in the same amendment, so the ADR carries one model for lock entries.
+
+### 2026-09-09 — Spec-portable frontmatter: strict at the parse boundary
+
+The Layer 2 adapter table and
+[PDR-051](../../../.agent/practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md)
+§Frontmatter strategy specify the spec-portable set (`license`,
+`compatibility`, `metadata`, `allowed-tools`) as pass-through content for
+both skill surfaces. This amendment settles the contract questions that
+implementing that pass-through raised. Landed under MCP-706, a leaf of
+MCP-123 P1, whose gap analysis is the 2026-07-23 Agent Skills standard
+alignment exploration report.
+
+**A malformed spec field REFUSES the canonical; it is never dropped.**
+`agent-tools/src/skills-adapter-generate/canonical-frontmatter.ts` is the
+enforced schema SSOT for the SPECIFICATION's field set in a canonical's
+frontmatter — narrower than what `subagents/frontmatter-schema.ts` is for
+sub-agent wrappers (2026-06-28 precedent), which is complete for its
+artefact. Canonical skill frontmatter has a second enforcement home by
+design: `classification` (structural invariant 9) is a non-spec key, so
+the spec schema strips it and `portability:check` asserts it. Do not add a
+non-spec canonical field to the spec schema and believe it enforced.
+A declared field holding a value the specification does not
+admit makes the canonical unparseable, which the generator and the drift
+checker already fail on loudly. Dropping the field instead would publish a
+projection that disagrees with its canonical, invisibly. Every refusal
+names the field and the reason on the operator's own error line.
+
+**`metadata` is string→string.** This is the specification's own
+constraint, verified first-hand against `agentskills.io/specification` on
+2026-09-09 ("A map from string keys to string values") and corroborated
+in-repo by the 2026-07-23 gap analysis. The upstream reading is pinned to
+that date and expires: a later reader re-checks rather than inheriting it.
+The constraint agrees with PDR-051's
+platform-prefixed string-value convention. The consequence is authoring-facing:
+the conforming form of the owned-skill flag is the QUOTED `owned: "true"`, and
+§Owned-Skill Naming Convention is trued to it here. The unquoted rendering in
+the 2026-05-09 amendment above stands as the historical record of what that
+amendment said; YAML reads it as a boolean and the schema refuses it, so the
+quoted form is the one to author.
+
+**The spec-portable values are emitted explicitly QUOTED, and no YAML
+version choice would do instead.** The two resolutions disagree about
+which bare scalars are strings, and each leaves the other's ambiguous
+forms unquoted, so picking a version trades one direction of the hazard
+for the other. Measured both ways on 2026-09-09: emitting under 1.2
+leaves `yes`, `no`, `on`, `off`, `y`, `2026-09-09` and `1:30` bare, which
+a 1.1 consumer (PyYAML, Ruby Psych, `yaml.v2`) reads as booleans, a date
+and the number 90; emitting under 1.1 leaves `0o17` bare, which a 1.2
+consumer reads as 15. Since the surfaces exist for foreign vendors to
+read and their resolution is not ours to know, the emitter quotes the
+values the schema has already proven are strings. That depends on no
+version at all, and it makes these fields byte-faithful to the
+canonical's own quoted authoring form.
+
+`name` and `description` are left to the serialiser: `name` is the
+prefixed lowercase-hyphen id and `description` is required non-empty
+prose, neither of which can be a bare scalar of another type without
+already violating the specification's own field rules — a
+canonical-contract concern, not an emission one.
+
+**A `metadata.claude-*` key passes through as metadata and is NOT
+derived.** The Claude adapter row specifies deriving Claude top-level
+fields from such keys; that derivation is unimplemented. Until it exists,
+declaring one ships an inert `metadata` entry that looks as though it took
+effect. The pass-through does not imply the derivation.
+
+**`metadata` passes to BOTH surfaces in full**, including the
+`.agents/skills/` cross-tool root, so a `metadata.claude-*` key reaches
+the cross-tool adapter too.
+[PDR-051](../../../.agent/practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md)
+§Frontmatter strategy confines platform-specific fields to the native
+adapter; that clause reads on TOP-LEVEL platform fields, not on entries
+inside the spec's own `metadata` map, which is spec-portable in full.
+Nothing diverges today — no canonical declares such a key — and this
+settles the contract for when one does.
+
+**Non-spec canonical keys stay canonical-only, and `classification` stays
+at top level.** `classification` (structural invariant 9), `concern`, and
+`domain` are stripped at the parse and never projected. The gap analysis
+cited above proposed re-homing `classification` under `metadata` so a
+canonical file would itself pass spec validation unmodified; that is
+settled the other way here. A canonical is not a published spec skill —
+`SKILL-CANONICAL.md` is deliberately non-discoverable (§2) — so it owes
+the specification nothing, and the field's conforming home becomes a live
+question only if canonicals are ever published as spec skills directly.
+`concern` and `domain` have the same standing; they are named in this
+ADR's contract for the first time here. Conversely `metadata.owned` now appears on both
+projection surfaces, including the `.agents/skills/` root shared with
+Vendor-class skills; it remains informational, and Practice-class
+membership is still recognised ONLY by the class marker (see §Skill
+classes and validation jurisdiction).
+
+The stub body shape — one title line and the class-marker pointer line — is
+untouched, so a wider frontmatter does not affect class recognition. The
+specification's numeric and format limits (description ≤1024,
+compatibility ≤500, the `name` regex, `name` matches directory) are an
+estate-wide canonical contract check that does not yet exist anywhere;
+this amendment does not create it.
 
 ## References
 

@@ -108,6 +108,64 @@ const config = defineConfigArray(
     },
   },
 
+  // MCP-489: the widget address is one published value, the same on every
+  // build (ADR-141, widget URI identity amendment). No typegen source reads
+  // the environment, whichever file a read would move into. Tests run without
+  // deployment variables, so no test sees an address that differs only on a
+  // deployed build; the post-deploy UAT probes are that check.
+  // The four selectors below ban the whole route rather than one spelling of
+  // it: any reference to the identifier `process`, any static import of the
+  // process module, any dynamic `import()`, and any `require()`. Between them
+  // they reject `process.env`, `process['env']`, `process[key]`,
+  // `const {env} = process`, `globalThis.process.env`,
+  // `Reflect.get(process, 'env')`, `import {env} from 'node:process'`,
+  // `import proc from 'process'`, `await import('node:process')` and
+  // `require('node:process')`. An earlier pair of `MemberExpression`
+  // selectors matched only the two dotted spellings, so the rest stayed green
+  // (pull request 978, Copilot review).
+  // `ImportExpression` and `require` are banned outright rather than by
+  // module name, because a computed specifier — `import('node:' + 'proc' +
+  // 'ess')` — defeats any name match. No typegen source loads a module
+  // dynamically, so the whole construct is closed and the residual hole with
+  // it.
+  // A per-file rule value replaces the inherited one rather than merging, so
+  // the ExportAllDeclaration selector from `recommended` is re-included. Test
+  // files keep the test rules' own value.
+  {
+    files: ['code-generation/typegen/**/*.ts'],
+    ignores: ['**/*.test.ts'],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'ExportAllDeclaration',
+          message:
+            'Avoid export * from "module" syntax to improve tree shaking. Use named exports instead.',
+        },
+        {
+          selector: 'ImportDeclaration[source.value=/^(node:)?process$/]',
+          message:
+            'Typegen sources read no environment, so generated constants such as the widget address are the same on every build. Importing the process module is a route to it (ADR-141, widget URI identity amendment, MCP-489).',
+        },
+        {
+          selector: 'ImportExpression',
+          message:
+            'Typegen sources load every module statically, so a dynamic import here would be a route to the environment that no name-matching selector can close (ADR-141, widget URI identity amendment, MCP-489).',
+        },
+        {
+          selector: 'CallExpression[callee.name="require"]',
+          message:
+            'Typegen sources load every module statically, so a require() here would be a route to the environment that no name-matching selector can close (ADR-141, widget URI identity amendment, MCP-489).',
+        },
+        {
+          selector: 'Identifier[name="process"]',
+          message:
+            'Typegen sources read no environment, so generated constants such as the widget address are the same on every build. Every reference to `process` is banned here, computed and destructured access included (ADR-141, widget URI identity amendment, MCP-489).',
+        },
+      ],
+    },
+  },
+
   {
     files: ['code-generation/zodgen-core.ts'],
     rules: {

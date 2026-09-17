@@ -52,9 +52,23 @@
   /* --weight-display: 600;  (heading weight — 800 reads playful, 700 serif-formal) */
 
   /* --- 1b. THE RAMPS — the deepest re-brand level. Faces recolour a brand;
-     RAMPS restructure it. Each type slot is a whole font shorthand —
+     RAMPS restructure it — and the ramp is FLUID BY CONSTRUCTION (the
+     fluidity pillar, 2026-08-13): the display slots --type-heading-1…3 are
+     assembled by the kit from three brand-writable PARTS each —
+     --type-heading-N-min / -max (unitless numbers of rem) and
+     --type-heading-N-leading (a unitless ratio). Set the bounds and the kit
+     derives the whole curve: min renders at a 320px viewport, max from
+     960px up, rem-true under text resize at every width. Weight and family
+     stay on --weight-display / --font-display. Declaring the whole
+     --type-heading-1…3 shorthand instead is the documented OPT-OUT of
+     fluidity (a declared fixed choice — it wins by cascade); NEVER declare
+     both a slot's shorthand and its parts in one sheet — the shorthand wins
+     and the parts become silent dead code (the brand-admission guard
+     rejects that pairing). Choose each -min so the longest hero word fits a
+     320px line in the brand's display face.
+     The remaining slots are whole font shorthands —
      re-point slots to reshape scale, hierarchy and rhythm:
-     --type-heading-1…7, --type-body-1…4, --type-label,
+     --type-heading-4…7, --type-body-1…4, --type-label,
      --type-code-2…4 (the monospace ramp — code surfaces re-point the slots;
      only .oak-code-2-bold still composes from --font-mono, matching every
      other -bold class),
@@ -117,7 +131,7 @@
   /* PAPER RULE: a brand that re-points --bg-primary off white must carry the
      WHOLE elevation family with it — --bg-btn-secondary, --bg-raised,
      --bg-overlay — or secondary plates and modals punch screen-white holes
-     in the page (Freedonia v6 lesson). */
+     in the page (PDS v6 lesson). */
 
   /* --- 5. Buttons ----------------------------------------------
      Tip — derive hovers instead of picking them:
@@ -162,7 +176,7 @@
        --shadow-accent: 0 6px 0 0 var(--color-accent);
        --shadow-accent-raised: 0 9px 0 0 var(--color-accent);
        --shadow-accent-pressed: 0 2px 0 0 var(--color-accent);
-     · Flat (whitelabel/freedonia): none at all — set the five below to none
+     · Flat (whitelabel/pds): none at all — set the five below to none
        and keep --shadow-press as a 1px drop; affordance then comes from
        fills + underlines + the focus ring.
      The FOCUS RING is not on this surface — never restyle it away. */
@@ -198,7 +212,7 @@
 
   /* --- 9. VOICE — the words are brand surface too -----------------
      Each brand's copy register lives in its BRAND.md and is exercised on
-     its proof page (Oak: warm colleague · FDSE: the public record · EMC²:
+     its proof page (Oak: warm colleague · PDS: the public record · EMC²:
      read-aloud bedtime). The byte-identical comparison page deliberately
      stays voice-NEUTRAL: it is the controlled experiment (CSS-only
      distance, a lower bound). Example Front Pages is where voice runs
@@ -248,6 +262,6 @@
   --main-areas: "hero hero" ". results" …;   (whole-template strings)
   --main-columns-narrow: …;     --main-areas-narrow: …;
 }
-   Worked examples: whitelabel/freedonia/brand-full.css (GDS two-thirds
+   Worked examples: whitelabel/pds/brand-full.css (GDS two-thirds
    document, filter panel right) and whitelabel/creature/brand-full.css
    (quest-log shelf). ============================================== */

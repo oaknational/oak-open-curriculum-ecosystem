@@ -5,7 +5,7 @@
  * Uses a JSON-backed loader to avoid monolithic generated TypeScript data files.
  *
  * @generated - DO NOT EDIT
- * Generated at: 2026-08-04T07:45:05.846Z
+ * Generated at: 2026-08-12T10:50:16.231Z
  */
 
 import rawLessonSlugData from './lesson-slugs-by-subject.data.json';
@@ -54,14 +54,14 @@ function getSequenceData(sequenceSlug: string): LessonSlugDatasetSequenceData {
 /**
  * Combined Set of all valid lesson slugs for runtime validation.
  *
- * Total slugs: 13663
+ * Total slugs: 13669
  *
  * @generated
  */
 export const ALL_LESSON_SLUGS: ReadonlySet<string> = new Set(lessonSlugData.allLessonSlugs);
 
 /** Total lessons across all subjects */
-export const TOTAL_LESSON_SLUG_COUNT = 13663 as const;
+export const TOTAL_LESSON_SLUG_COUNT = 13669 as const;
 
 function buildSlugToSubjectMap(): Map<string, string> {
   const map = new Map<string, string>();

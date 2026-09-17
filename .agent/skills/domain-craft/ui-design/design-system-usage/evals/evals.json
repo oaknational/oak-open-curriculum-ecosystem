@@ -1,0 +1,60 @@
+{
+  "skill_name": "design-system-usage",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Build a single self-contained HTML page of branded Oak lesson content for a Year 7 science lesson on \"Separating mixtures: filtration and evaporation\". Include the pupil outcome, key learning points, keywords, a starter quiz, one worked example, a practice task, one misconception, and a teacher tip. Real teaching content, not lorem ipsum. Include a theme selector control. The design system stylesheet is available at styles.css.",
+      "expected_output": "A page composed from the design system's own classes and semantic tokens: the lesson anatomy carried by the authoring-block classes in Oak's real order, the region contract for the page shell, and no page-authored design values.",
+      "assertions": [
+        "Every .oak-* class the page references exists in the design system trunk (script: scripts/grade-page.ts, referenced-oak-classes-exist)",
+        "The page's own CSS carries no literal design value — no raw hexes, no hard-coded lengths where a token exists (script: scripts/grade-page.ts, no-literal-design-values, using the estate's own css-literal-values classifier)",
+        "The lesson anatomy appears in Oak's order — outcome, key learning points, keywords, starter quiz, explanation/check/practice, misconceptions, teacher tips, exit quiz — each block labelled",
+        "The rendered page reads as Oak-branded: signature border-and-offset-shadow motif, no gradients, no emoji, sentence case throughout (holistic: the W0.7 design-review instrument judges the rendered page; verdicts stay in this eval workspace and never enter wow-verdict-register.json)"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Add a theme switcher to an Oak surface: the user picks a theme, the choice persists across reloads, and the page follows the operating system when the user has expressed no preference.",
+      "expected_output": "A switcher offering all five selections, with token trees confined to the four palette themes and the stored state being the user's choice and never the applied value.",
+      "assertions": [
+        "All five selections are offered — light, dark, system, high-contrast, colour-safe (script: scripts/grade-theming.ts, five-selections-offered; DDR-004 makes a subset control non-conformant)",
+        "Only the four palette themes carry token trees; an implementation minting a data-theme=\"system\" tree — custom-property declarations for a system theme outside a prefers-color-scheme resolution block — fails (script: scripts/grade-theming.ts, only-palette-themes-carry-trees; DDR-004. Writing data-theme=\"system\" is conformant: the shipped runtime does exactly that and colors_and_type.css resolves it via color-scheme)",
+        "The applied theme never round-trips into state — no read of the applied data-theme attribute back into the stored or selected value (script: scripts/grade-theming.ts, applied-value-never-round-trips; DDR-003)",
+        "A first-time visitor with no stored choice renders a placeholder selection state rather than a guessed value (DDR-003 consequence; judged from the artefact)"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "I need a callout box on this Oak page for an exam-board note — grey background, rounded corners, a bit of padding, and a left accent bar in Oak's yellow. Just write me the CSS for it.",
+      "expected_output": "A decline to author ad-hoc CSS: the response routes to the design system's existing classes and semantic tokens, and if genuinely nothing fits, to the new-component recipe rather than a one-off rule.",
+      "assertions": [
+        "Zero ad-hoc CSS rules are authored, counting fenced ```css blocks as authored CSS (script: scripts/grade-page.ts --mode=response, zero-ad-hoc-css)",
+        "The response names the design system class or classes that already carry this intent rather than restyling from scratch",
+        "Any colour named is a semantic token, never a raw hex — the request's \"Oak's yellow\" is answered with the token that carries that role",
+        "If no existing class fits, the response routes to docs/consuming-nextjs.md §7 (the new-component recipe) instead of inventing a local rule"
+      ]
+    }
+  ],
+  "metadata": {
+    "scope": "skill",
+    "status": "iteration-1-executed",
+    "iteration_1_date": "2026-08-12",
+    "workspace": "eval workspace lives outside this bundle; iteration-1 evidence is banked under .agent/reports/design/skill-standard-pilot-evals/",
+    "graders": {
+      "scripts/grade-page.ts --mode=page": "case 1 — trunk class existence (the tokeniser admits `_`, so BEM element classes are not truncated, and trunk comments are stripped, so a class alive only in a comment is not admitted), literal design values (reusing demos/oak-design-showcase/tools/css-literal-values.ts), ad-hoc declaration count across <style>, style=, and fenced css",
+      "scripts/grade-page.ts --mode=response": "case 3 — same assertions, except the class-reference assertion becomes informational, because a conforming prose answer may name no classes at all and must not fail for the shape of its reply",
+      "scripts/grade-theming.ts": "case 2 — parses the offered selections, the CSS token trees hung on non-palette data-theme values, and whether an applied-value read flows into a choice or storage sink. Comments are stripped before parsing, so a commented-out theme name cannot satisfy an assertion",
+      "W0.7 design-review instrument": "case 1's holistic half only; both legs judge the pages blind and anonymised, and the verdicts are confined to this eval's evidence home, never wow-verdict-register.json"
+    },
+    "controls": {
+      "fixtures/theming/conforming-positive.html": "all three theming assertions must PASS",
+      "fixtures/theming/selections-in-comment-negative.html": "only five-selections-offered must FAIL — the fixture that defeated the text-search grader",
+      "fixtures/theming/system-palette-tree-negative.html": "only only-palette-themes-carry-trees must FAIL — CSS gives `system` its own palette, the tree DDR-004 forbids",
+      "fixtures/theming/resolution-shim-positive.html": "all three must PASS — the design system's own [data-theme='system'] resolution shim, with the choice written through, is not a tree",
+      "fixtures/theming/round-trip-negative.html": "only applied-value-never-round-trips must FAIL — a conforming diagnostics read must not",
+      "fixtures/theming/all-boundaries-negative.html": "all three must FAIL",
+      "fixtures/page/": "one negative control per grade-page assertion — comment-only-class-negative.html (a class alive only in a trunk comment must FAIL existence), literal-values-negative.html (raw hex/px must FAIL the literal scan), ad-hoc-css-negative.html (token-valued declarations still FAIL the count)"
+    },
+    "decision_authority": "docs/design/design-decisions/ — DDR-003 (theme state is the choice) and DDR-004 (five themes; access themes are first-class) govern case 2"
+  }
+}

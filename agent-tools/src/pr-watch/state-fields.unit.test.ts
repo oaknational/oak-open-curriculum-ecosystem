@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { parseAgentTaskList, parseAgentTaskView } from './agent-task-fields.js';
 import { parseReviewsHarvest, parseStateView, PR_STATE_VIEW_JSON_FIELDS } from './state-fields.js';
+import { stateViewFixture } from './state-view-fixture.js';
 
 /**
  * Boundary parsers for the D1 legs of `pr state`. Fixtures mirror shapes
@@ -10,37 +11,6 @@ import { parseReviewsHarvest, parseStateView, PR_STATE_VIEW_JSON_FIELDS } from '
  * User-shaped review request; CheckRun `name` / StatusContext `context` with
  * CheckRun `completedAt` anchoring checks-green.
  */
-
-function stateViewFixture(): Record<string, unknown> {
-  return {
-    number: 461,
-    url: 'https://github.com/oaknational/oak-open-curriculum-ecosystem/pull/461',
-    state: 'OPEN',
-    isDraft: false,
-    mergeable: 'MERGEABLE',
-    mergeStateStatus: 'BLOCKED',
-    headRefOid: 'f'.repeat(40),
-    statusCheckRollup: [
-      {
-        __typename: 'CheckRun',
-        name: 'secret-scan',
-        status: 'COMPLETED',
-        conclusion: 'SUCCESS',
-        completedAt: '2026-07-21T10:33:35Z',
-      },
-      {
-        __typename: 'CheckRun',
-        name: 'run-quality-gates',
-        status: 'COMPLETED',
-        conclusion: 'SUCCESS',
-        completedAt: '2026-07-21T10:41:02Z',
-      },
-      { __typename: 'StatusContext', context: 'legacy/status', state: 'SUCCESS' },
-    ],
-    autoMergeRequest: null,
-    reviewRequests: [{ __typename: 'User', login: 'jimCresswell' }],
-  };
-}
 
 describe('parseStateView', () => {
   it('carries per-check verdicts BY NAME (CheckRun name, StatusContext context)', () => {
@@ -60,6 +30,7 @@ describe('parseStateView', () => {
         {
           __typename: 'CheckRun',
           name: 'secret-scan',
+          workflowName: 'CI',
           status: 'COMPLETED',
           conclusion: 'SUCCESS',
           completedAt: '2026-07-21T10:33:35Z',
@@ -67,6 +38,7 @@ describe('parseStateView', () => {
         {
           __typename: 'CheckRun',
           name: 'run-quality-gates',
+          workflowName: 'CI',
           status: 'COMPLETED',
           conclusion: 'SUCCESS',
           completedAt: '2026-07-21T10:41:02Z',

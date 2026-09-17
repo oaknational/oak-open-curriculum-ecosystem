@@ -1,7 +1,8 @@
 import type { Result } from '@oaknational/result';
 import { z } from 'zod';
 
-import { parseWithSchema, patternKindSchema } from './judgment-schemas.js';
+import { parseWithSchema } from '../core/schema-parse.js';
+import { patternKindSchema } from './judgment-schemas.js';
 import { corroborationClaimSchema } from './real-world-signal.js';
 
 /**

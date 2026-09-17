@@ -1,0 +1,55 @@
+{
+  "case": "case-3",
+  "responses": {
+    "A": {
+      "criteria": {
+        "reasons_from_purpose": {
+          "score": "adequate",
+          "evidence": "a brand color is exactly the kind of thing worth getting right rather than plausible"
+        },
+        "ranks_rather_than_lists": {
+          "score": "adequate",
+          "evidence": "Pull it from the design system's actual token source (theme/tokens file, CSS custom properties, or the Figma library) and use that value."
+        },
+        "routes_values_to_the_system": {
+          "score": "adequate",
+          "evidence": "the design system's actual token source (theme/tokens file, CSS custom properties, or the Figma library)"
+        },
+        "respects_its_own_boundary": {
+          "score": "strong",
+          "evidence": "I don't have a verified hex value for that — I'd be guessing"
+        },
+        "would_a_designer_act_on_this": {
+          "score": "weak",
+          "evidence": "Pull it from the design system's actual token source"
+        }
+      }
+    },
+    "B": {
+      "criteria": {
+        "reasons_from_purpose": {
+          "score": "strong",
+          "evidence": "the primary button background is a theme-resolving token in the design system, not a static colour, so the actual value depends on which palette/theme is active"
+        },
+        "ranks_rather_than_lists": {
+          "score": "strong",
+          "evidence": "Don't hardcode any of these — use the token/class instead, so it keeps resolving correctly across all four themes"
+        },
+        "routes_values_to_the_system": {
+          "score": "strong",
+          "evidence": "CSS: `background: var(--bg-btn-primary);` (already applied by the `.oak-btn` class)"
+        },
+        "respects_its_own_boundary": {
+          "score": "adequate",
+          "evidence": "- **Light**: `#222222` (`oak-black`)"
+        },
+        "would_a_designer_act_on_this": {
+          "score": "strong",
+          "evidence": "Component: `<OakButton variant=\"primary\">`"
+        }
+      }
+    }
+  },
+  "preference": "B",
+  "why": "Stating the resolved values teaches the token discipline rather than undermining it: the three different values ARE the argument for the token, because a reader who wanted #222222 to paste learns concretely that pasting it goes invisible in dark and wrong in high-contrast, whereas A asserts the discipline without demonstrating it and leaves the user with nothing to act on. Every claim in B verifies first-hand against the design system — colors_and_type.css:313 defines --bg-btn-primary as light-dark(oak-black, oak-white), line 622 overrides it to oak-black-true under [data-theme='high-contrast'], the colour-safe block adds no override, and components.css:283 shows .oak-btn consuming that token — so B is reading the system's existing decision, not inventing or re-picking a token, and it gates its single-literal fallback behind a named legitimate case. A's advantage is only on the boundary criterion, and it wins that partly by accident: its refusal is framed as not knowing (\"I'd be guessing\") rather than as a handover to design-system-usage, and the values were sitting in the repo, so it declines to look rather than declining to invent."
+}

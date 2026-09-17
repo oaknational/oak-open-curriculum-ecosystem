@@ -98,6 +98,27 @@ failure mode this rule prevents.
 | Curator-pass working artefact (load-bearing) | Move to `.agent/state/collaboration/handoffs/` (one-shot transfer) or absorb-by-reference into routed permanent homes and delete (substance distributed). |
 | One-off draft never consumed | Delete the temp file. No substrate to migrate. |
 
+## Safety Asks Bind the Referent Itself
+
+The sibling discipline for owner safety instructions (owner, 2026-08-02:
+"You not following my instructions put work at risk"). A "make X safe" /
+"make sure X is safely pushed" instruction binds the REFERENT the owner
+named, in place — X itself becomes tracked and pushed. The test: *if this
+exact path were deleted right now, is the loss zero?* Copies, branches, and
+snapshots are supplements, never the discharge: an untracked original
+remains exposed to `git clean`, tooling sweeps, and checkout accidents
+regardless of snapshot freshness elsewhere, and every edit after the last
+snapshot is unprotected. Worked instance: verbatim copies of owner
+documents were preserved to a pushed draft-PR branch with zero delta
+verified — while the originals sat untracked on the primary checkout for
+hours until the owner discovered them and had to track, commit, and push
+them himself. The generator was an inference over-extension: "his working
+files, never fold/edit" stretched into "never track" — but tracking is not
+editing. When a don't-touch boundary seems to conflict with a make-it-safe
+instruction, surface the conflict in one sentence at the action moment
+("tracking them in place — say if you'd rather I snapshot instead"), never
+resolve it silently toward the weaker protection.
+
 ## Composition With Other Rules
 
 - **The no-machine-local-paths principle** (principles.md; shapes in

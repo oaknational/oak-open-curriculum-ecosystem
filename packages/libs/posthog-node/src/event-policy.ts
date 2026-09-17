@@ -14,7 +14,8 @@ import {
   type UnknownProperties,
   ACTOR_MARKER,
 } from './event-policy-contract.js';
-import { isUnknownProperties, normaliseOakClientFamily, readOwn } from './event-policy-helpers.js';
+import { normaliseOakClientFamily } from './client-categories.js';
+import { isUnknownProperties, readOwn } from './event-policy-helpers.js';
 import { projectActiveActor } from './active-actor-projection.js';
 import { applyFinalOakEventPolicy } from './final-event-policy.js';
 

@@ -63,6 +63,35 @@ workstream from the [full ADR index](../../../../docs/architecture/architectural
   activity, not a session-open one — see `consolidate-docs`
   step 3.
 
+### 3a. Operator profile (machine-local; absence is normal)
+
+Read the operator profile if this machine has one. It carries facts about the
+human you are working with that cannot be tracked: which credential identity
+performs which action class on third-party systems, their tone-of-voice and
+communication preferences, and personal operating preferences. The contract,
+including what must never be stored there, is
+[`.agent/operator-local/README.md`](../../../operator-local/README.md).
+
+It is machine-local, so it does not travel through git and a linked worktree
+holds no copy. Resolve it in the **primary checkout**:
+
+```bash
+PRIMARY="$(git worktree list --porcelain | head -1 | sed 's/^worktree //')"
+[ -f "$PRIMARY/.agent/operator-local/profile.md" ] \
+  && cat "$PRIMARY/.agent/operator-local/profile.md"
+```
+
+**A missing profile is the expected condition, not a defect** (`principles.md`
+§Any User, Any Machine): proceed on tracked defaults and say nothing. Never
+block, warn, or treat its absence as a gap to fill, and never make a
+correctness property depend on it.
+
+This is a **durable** home, unlike the per-user memory buffer above
+(`per-user-memory-is-a-buffer`) — so when a session learns a stable preference
+that keeps being re-derived, graduating it into the profile is the cure. The
+reverse also holds: a profile entry that turns out to matter to more than one
+person is doctrine, and belongs in a tracked surface instead.
+
 ### 4. Live state (operational memory) — authority order
 
 Read in order; stop at whichever answers your next-step question:
@@ -406,6 +435,20 @@ Apply session priority ordering:
 2. **Unfinished planned work second** — complete in-progress items
 3. **New work last** — only start new items when the above are clear
 
+Research holds a **protected floor** under this ordering (owner standing
+guidance, 2026-07-25, "with some flex"): the full order is bugs >
+features > speculative research, but practice/meta research — the
+improve-how-we-improve loop — keeps a protected minimum share of
+attention, because a pure strict ordering starves the meta-level
+permanently (there is always another feature) and the estate's
+compounding value comes precisely from that loop. The floor is
+protection against starvation, never an escape from the ordering:
+research never jumps the queue past a live bug or a committed feature —
+it just never goes to zero. When every seat has been on bugs/features
+for a sustained stretch, deliberately seat or timebox a research slice
+rather than letting "one more feature" defer it forever. "Some flex"
+means judgment on the boundaries, not suspension of the shape.
+
 ## Guiding Questions
 
 Before diving in, pause and ask:
@@ -422,7 +465,7 @@ Before diving in, pause and ask:
 These questions are **not** session-open-only: re-ask them at every task/pointer
 arrival and before declaring done, not just here.
 
-For analysis-, planning-, or decision-heavy work, [`reason`](../../reason/SKILL-CANONICAL.md)
+For analysis-, planning-, or decision-heavy work, [`reason`](../../cognition/reason/SKILL-CANONICAL.md)
 structures the thinking outward (the pair to `metacognition`'s inward reflection), and the
 [grammar of thinking](../../../reference/grammar-of-thinking.md) is the yardstick for complex
 rewrites and high-stakes planning.

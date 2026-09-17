@@ -69,4 +69,38 @@ export default [
       ],
     },
   },
+  {
+    // The comparability invariant's structural gate (assurance-round
+    // CC-1, 2026-08-09): a capture arm cannot shoot around the one
+    // settle recipe — captureShot/captureElementShot in
+    // @oaknational/fidelity-review/capture-settle are the only
+    // sanctioned shutters, so "every arm settles identically" holds by
+    // construction (two-sided: skipping the settle leaves no way to
+    // shoot). Scoped to the ENUMERATED capture arms — other tools'
+    // interaction waits and measurement shots are not capture evidence.
+    // Rule options REPLACE, never merge, so the ExportAllDeclaration
+    // ban from `recommended` is re-included verbatim.
+    files: [
+      'tools/capture-live-pages.ts',
+      'tools/render-export-targets.ts',
+      'tools/capture-shared.ts',
+      'tools/capture-pair.ts',
+      'tools/capture-null.ts',
+    ],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'ExportAllDeclaration',
+          message:
+            'Avoid export * from "module" syntax to improve tree shaking. Use named exports instead.',
+        },
+        {
+          selector: "CallExpression[callee.property.name='screenshot']",
+          message:
+            'Capture arms shoot through captureShot/captureElementShot (@oaknational/fidelity-review/capture-settle) — the shared settle is the comparability warrant behind every recorded disposition.',
+        },
+      ],
+    },
+  },
 ];

@@ -96,6 +96,7 @@ echo "🔗 Checking for unused code (knip)..."
 if ! pnpm knip:gate; then
   echo "❌ Knip found unused code, or the knip analysis itself crashed!"
   echo "💡 Remove the unused code, register intended entry points in knip.config.ts, or fix the crash above"
+  echo "   (a 'died without a verdict' line above is the crash class, not unused code — F-112 in the frictions register)"
   exit 1
 fi
 

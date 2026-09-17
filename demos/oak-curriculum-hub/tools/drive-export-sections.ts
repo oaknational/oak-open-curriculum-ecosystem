@@ -14,7 +14,6 @@
  *   tsx demos/oak-curriculum-hub/tools/drive-export-sections.ts
  *   (default out: demos/oak-curriculum-hub/demo-evidence/export-sections)
  */
-import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -22,22 +21,25 @@ import { chromium } from '@playwright/test';
 import type { Locator, Page } from '@playwright/test';
 import { ok, err, type Result } from '@oaknational/result';
 
+import {
+  isAllowedRequestUrl,
+  MATCHED_GEOMETRY_SCALE,
+} from '@oaknational/fidelity-review/capture-flags';
+import {
+  captureElementShot,
+  createOriginGuard,
+  settleForCapture,
+} from '@oaknational/fidelity-review/capture-settle';
+import {
+  createCaptureSession,
+  nodeCaptureStageIo,
+  type CaptureSession,
+} from '@oaknational/fidelity-review/orchestrator';
 import { EXPORT_DIR, portOf, serveDir } from './export-server';
-import { runTool } from './support';
+import { runTool } from '@oaknational/fidelity-review/support';
 
 const TOOLS_DIR = path.dirname(fileURLToPath(import.meta.url));
-
-function resolveOutDir(argv: readonly string[]): Result<string, Error> {
-  const outFlag = argv.indexOf('--out');
-  if (outFlag === -1) {
-    return ok(path.resolve(TOOLS_DIR, '..', 'demo-evidence', 'export-sections'));
-  }
-  const value = argv.at(outFlag + 1);
-  if (value === undefined || value === '') {
-    return err(new Error('--out requires a directory argument'));
-  }
-  return ok(path.resolve(value));
-}
+const DEMO_DIR = path.resolve(TOOLS_DIR, '..');
 
 interface SectionTarget {
   module: string;
@@ -69,7 +71,7 @@ async function captureSection(
   page: Page,
   aside: Locator,
   target: SectionTarget,
-  outDir: string,
+  session: CaptureSession,
 ): Promise<boolean> {
   try {
     // Module headers carry aria-expanded (their accessible name is "<n> <title> >"); section
@@ -84,10 +86,15 @@ async function captureSection(
       await page.waitForTimeout(250);
     }
     await aside.locator('button[aria-current]').filter({ hasText: target.section }).first().click();
-    await page.waitForTimeout(700); // section swap + entry animations
-    await page
-      .locator('#main')
-      .screenshot({ path: path.join(outDir, `export-${target.slug}.png`) });
+    await page.waitForTimeout(700); // section swap: give the click's DOM change time to land
+    const staged = session.stage(
+      `demo-evidence/export-sections/export-${target.slug}.png`,
+      await captureElementShot(page, page.locator('#main')),
+    );
+    if (!staged.ok) {
+      process.stderr.write(`FAIL capture ${target.slug}: ${staged.error}\n`);
+      return true;
+    }
     process.stdout.write(`PASS capture: ${target.slug}\n`);
     return false;
   } catch (error) {
@@ -98,7 +105,7 @@ async function captureSection(
 
 /** The bottom prev/next controls treatment: scroll the last-captured section's main to the
  *  bottom, settle, capture. Returns true on failure. */
-async function captureBottomControls(page: Page, outDir: string): Promise<boolean> {
+async function captureBottomControls(page: Page, session: CaptureSession): Promise<boolean> {
   try {
     await page.evaluate(() => {
       const main = document.querySelector('#main');
@@ -107,9 +114,14 @@ async function captureBottomControls(page: Page, outDir: string): Promise<boolea
       }
     });
     await page.waitForTimeout(400);
-    await page
-      .locator('#main')
-      .screenshot({ path: path.join(outDir, 'export-bottom-controls.png') });
+    const staged = session.stage(
+      'demo-evidence/export-sections/export-bottom-controls.png',
+      await captureElementShot(page, page.locator('#main')),
+    );
+    if (!staged.ok) {
+      process.stderr.write(`FAIL capture bottom-controls: ${staged.error}\n`);
+      return true;
+    }
     process.stdout.write('PASS capture: bottom-controls\n');
     return false;
   } catch (error) {
@@ -119,44 +131,58 @@ async function captureBottomControls(page: Page, outDir: string): Promise<boolea
 }
 
 /** Open the export in a fresh browser and capture every target; returns the failure count. */
-async function driveExport(port: number, outDir: string): Promise<number> {
+async function driveExport(port: number, width: number, session: CaptureSession): Promise<number> {
   const browser = await chromium.launch();
+  const base = `http://127.0.0.1:${port}`;
+  const guard = createOriginGuard((url) => isAllowedRequestUrl(url, new URL(base).origin));
   const page = await browser.newPage({
-    viewport: { width: 1440, height: 2200 },
-    deviceScaleFactor: 2,
+    viewport: { width, height: 2200 },
+    deviceScaleFactor: MATCHED_GEOMETRY_SCALE,
   });
-  await page.goto(`http://127.0.0.1:${port}/Oak%20Course.dc.html`, { waitUntil: 'networkidle' });
-  await page.evaluate(async () => {
-    await document.fonts.ready;
-  });
-  await page.waitForTimeout(600);
+  await page.route('**/*', (route) => guard.handleRoute(route));
+  page.on('response', (response) => guard.noteResponseUrl(response.url()));
+  await page.goto(`${base}/Oak%20Course.dc.html`, { waitUntil: 'networkidle' });
+  // The shared settle runs once up front (this arm previously settled
+  // globally WITHOUT the animation kill — a comparability drift);
+  // captureElementShot settles again per shot, so every section shot
+  // fires under the identical recipe.
+  await settleForCapture(page);
 
   const aside = page.locator('aside[aria-label="Course navigation"]');
   let failures = 0;
   for (const target of TARGETS) {
-    if (await captureSection(page, aside, target, outDir)) {
+    if (await captureSection(page, aside, target, session)) {
       failures += 1;
     }
   }
-  if (await captureBottomControls(page, outDir)) {
+  if (await captureBottomControls(page, session)) {
     failures += 1;
   }
 
   await browser.close();
+  for (const violation of guard.violations()) {
+    process.stderr.write(`EGRESS VIOLATION: ${violation}\n`);
+    failures += 1;
+  }
   return failures;
 }
 
-/** Serve the export and capture every section target into `outDir` — the
- *  importable core the fidelity orchestrator composes. Returns the failure
- *  count as a Result value so callers decide the exit semantics. */
-export async function driveExportSections(outDir: string): Promise<Result<number, string>> {
-  fs.mkdirSync(outDir, { recursive: true });
+/** Serve the export and capture every section target through the run's
+ *  session (declared paths under demo-evidence/export-sections/) — the
+ *  importable core the fidelity orchestrator composes. Returns the
+ *  failure count as a Result value so callers decide exit semantics.
+ *  The old `--out` escape is gone: evidence placement is the session's
+ *  staging/promotion contract now, never a caller-chosen directory. */
+export async function driveExportSections(
+  width: number,
+  session: CaptureSession,
+): Promise<Result<number, string>> {
   const server = await serveDir(EXPORT_DIR);
   const portRes = portOf(server);
   if (!portRes.ok) {
     return err(`ERROR: ${portRes.error.message}`);
   }
-  const failures = await driveExport(portRes.value, outDir);
+  const failures = await driveExport(portRes.value, width, session);
   server.close();
   const resultLine = failures === 0 ? 'RESULT: ALL CAPTURED' : `RESULT: ${failures} FAILURES`;
   process.stdout.write(`${resultLine}\n`);
@@ -164,11 +190,18 @@ export async function driveExportSections(outDir: string): Promise<Result<number
 }
 
 async function main(): Promise<Result<void, string>> {
-  const outDirRes = resolveOutDir(process.argv.slice(2));
-  if (!outDirRes.ok) {
-    return err(`ERROR: ${outDirRes.error.message}`);
-  }
-  const failures = await driveExportSections(outDirRes.value);
+  // Diagnostic run: staged only, never promoted (see capture-live-demo).
+  const session = createCaptureSession(
+    nodeCaptureStageIo(DEMO_DIR, `diagnostic-${Date.now()}-${process.pid}`),
+    {
+      base: 'http://127.0.0.1:0',
+      widthCssPx: 1440,
+      deviceScaleFactor: MATCHED_GEOMETRY_SCALE,
+      startedAt: new Date().toISOString(),
+      now: () => new Date().toISOString(),
+    },
+  );
+  const failures = await driveExportSections(1440, session);
   if (!failures.ok) {
     return failures;
   }

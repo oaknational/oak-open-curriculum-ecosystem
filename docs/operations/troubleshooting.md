@@ -183,6 +183,21 @@ guards or relocations**, and several report stale or silently-green results:
   — both silently rewrite match output. Spell flags separately; the Bash
   hook policy fingerprints the r-first cluster shape (the observed one),
   not the trailing-r shapes, so those still rest on this habit.
+- SonarCloud matches command TEXT, not shell behaviour: curl options
+  expanded from a bash array were invisible to its transport rule while
+  literal-URL calls were flagged, so a behaviour-identical refactor left
+  every finding standing — write the option tokens literally at each call
+  site (2026-09-01). Local `sonar verify --file` answers 403 for this
+  organisation; the class proof is a per-rule grep plus shellcheck, and the
+  gate proof is the PR scan after the push.
+- `lint:shell` syntax-checks only `apps/**/scripts/*.sh` and `.husky/*`;
+  shell under `.agent/claude-harness-integrations/` is outside it and gets
+  shellcheck by hand.
+- In a fresh linked worktree `pnpm install` can report `prepare$ husky …
+Done` while creating NO `.husky/_` shims, so `core.hooksPath` points at
+  nothing and git skips pre-commit and pre-push with zero output (a push
+  log of two lines is the tell, 2026-08-30). After install in any linked
+  worktree, `ls .husky/_/pre-push` before trusting hook coverage.
 - Invisible bytes survive agent tools unreliably: raw ANSI `ESC` (0x1B)
   control bytes render invisibly in the Read tool and do not round-trip
   Write/Edit dependably, so escape sequences composed from read context can
@@ -191,6 +206,18 @@ guards or relocations**, and several report stale or silently-green results:
   Detect with `cat -v` (or `od -c`) against the raw file, never by eye in
   tool output; generate escape sequences from code (`\x1b` literals), not by
   copying rendered context.
+
+### Browser suites prove the BUILT artefact
+
+The showcase Playwright suites run `next start` on `.next` — rebuild before
+re-running, or the suite tests the previous code (bit twice in one day,
+2026-08-18). When a UI red appears only under one runner or one emulation,
+measure before theorising: a CI reflow red pattern-matched to
+animation-phase overflow while the a11y suite emulated reduced motion, so
+the sway was still and a two-minute probe found the true root. A browser
+test that is slow or flaky ONLY in a proxied container is a proxy-CA
+mismatch until proven otherwise (the cloud environment doc's provisioning
+defects list carries the cure).
 
 ### Lockfile desync via pnpm overrides
 
@@ -337,6 +364,57 @@ positional args instead:
 `pnpm vitest run path/to/test.ts`.
 
 ## Agent Workflow Issues
+
+### Statusline Segments Missing, or Payload Diagnosis
+
+When an expected statusline segment does not render (context %, session
+or weekly usage %, identity, git location), the question splits: is the
+adapter dropping it, or did the harness never send the field? The
+adapter deliberately drops absent fields — for example the usage
+percentages render only when the payload carries `rate_limits`, which
+Claude Code includes only for Claude.ai subscriber auth after the first
+model response.
+
+To see exactly what the harness sends, set the diagnosis log and
+restart the session:
+
+```json
+// .claude/settings.local.json (machine-local, untracked)
+{ "env": { "OAK_STATUSLINE_LOG_FILE": ".logs/statusline.log" } }
+```
+
+Each statusline invocation then appends one timestamped line with the
+payload as received (line breaks collapsed to keep one line per
+invocation) to the named `.log` file; `.logs/` is the repo's gitignored
+log directory. Read the latest line and check which fields are present.
+
+Reading the outcomes honestly:
+
+- **A set non-blank value that does not end `.log` renders a loud
+  statusline warning** and logs nothing — misconfiguration is never
+  silent. A blank or whitespace-only value is treated as unset:
+  neither a warning nor a log.
+- **No file and no warning?** Check the adapter is current before
+  concluding anything: the shim runs the BUILT adapter, so a stale
+  `agent-tools/dist` silently predates the feature —
+  `grep -c OAK_STATUSLINE_LOG_FILE agent-tools/dist/src/claude/statusline-identity.js`
+  returning `0` means rebuild (`pnpm --filter @oaknational/agent-tools build`).
+  A current adapter can also produce no-file-and-no-warning when the
+  destination refuses (unwritable parent, a symlink or non-regular file
+  at the path, a file the invoking user cannot own, denied append) —
+  refusals are deliberately swallowed, so check the destination is a
+  creatable, writable, regular file owned by you before concluding the
+  payload never arrived.
+- **Hygiene**: the log grows unbounded (one line per refresh) and
+  carries session ids and project paths. The destination is a boundary
+  (symlinks refuse to open, non-regular files never receive a write, a
+  pre-existing file is retightened to owner-only before each append), but
+  a pre-existing parent directory's permissions are not retightened —
+  prefer a private directory, and delete the file after the diagnosis,
+  don't just unset the variable.
+
+Mechanism reference:
+[agent-tools README §Claude statusline quick reference](../../agent-tools/README.md#claude-statusline-quick-reference).
 
 ### Background Reviewer Agents Not Returned
 

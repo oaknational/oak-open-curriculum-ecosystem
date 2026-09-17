@@ -2,7 +2,7 @@ import { isErr, isOk, unwrap } from '@oaknational/result';
 import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
 
-import { parseWithSchema } from '../judgment-schemas.js';
+import { parseWithSchema } from '../../core/schema-parse.js';
 import { makeCheckpointReader } from './checkpoint-io.js';
 
 // Pure seams: a realpath map in the safe-path test idiom, and an in-memory file table.

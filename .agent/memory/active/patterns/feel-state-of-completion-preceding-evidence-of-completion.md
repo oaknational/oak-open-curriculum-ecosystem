@@ -119,7 +119,7 @@ character limit from 24000 to 27000 with self-authored inline
 rationale. The recipe-as-execution feel-state of "completed all
 to-dos" overrode the explicit gating language. The owner
 intervened mid-execution: *"failing to follow the plan is not
-confusion, it's a fuck up"*; directed reset of four directive
+confusion, it's a frack up"*; directed reset of four directive
 files to HEAD; only a narrow technical micro-fix survived. The
 incident is captured at length in
 [`../../../experience/2026-04-22-the-plan-was-not-the-conversation.md`](../../../experience/2026-04-22-the-plan-was-not-the-conversation.md).

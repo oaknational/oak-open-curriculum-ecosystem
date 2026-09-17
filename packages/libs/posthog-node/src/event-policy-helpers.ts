@@ -3,7 +3,6 @@ import { SUPPORTED_PROTOCOL_VERSIONS } from '@modelcontextprotocol/sdk/types.js'
 import {
   OAK_MCP_SERVER_NAME,
   POSTHOG_MCP_SOURCE,
-  type OakClientFamily,
   type PolicySnapshot,
   type UnknownProperties,
 } from './event-policy-contract.js';
@@ -49,34 +48,6 @@ export function isValidOptionalUuid(value: unknown): value is string | undefined
   return value === undefined || (typeof value === 'string' && UUID_V7_PATTERN.test(value));
 }
 
-function asciiLower(value: string): string {
-  return value.replaceAll(/[A-Z]/gu, (character) => character.toLowerCase());
-}
-
-function hasClientFamilyPrefix(value: string, prefix: 'chatgpt' | 'claude'): boolean {
-  if (!value.startsWith(prefix)) {
-    return false;
-  }
-
-  const boundary = value.at(prefix.length);
-  return boundary === undefined || boundary === ' ' || boundary === '/' || boundary === '-';
-}
-
-export function normaliseOakClientFamily(value: unknown): OakClientFamily {
-  if (typeof value !== 'string') {
-    return 'other';
-  }
-
-  const normalised = asciiLower(value.trim());
-  if (hasClientFamilyPrefix(normalised, 'chatgpt')) {
-    return 'chatgpt';
-  }
-  if (hasClientFamilyPrefix(normalised, 'claude')) {
-    return 'claude';
-  }
-  return 'other';
-}
-
 export function commonProperties(snapshot: PolicySnapshot): UnknownProperties {
   return {
     $mcp_source: POSTHOG_MCP_SOURCE,
@@ -108,10 +79,6 @@ export function hasExpectedCommonProperties(
 
 export function isSupportedProtocolVersion(value: unknown): value is string {
   return typeof value === 'string' && SUPPORTED_PROTOCOL_VERSIONS.includes(value);
-}
-
-export function isOakClientFamily(value: unknown): value is OakClientFamily {
-  return value === 'chatgpt' || value === 'claude' || value === 'other';
 }
 
 function compareNames(left: string, right: string): number {

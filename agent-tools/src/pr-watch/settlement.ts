@@ -113,8 +113,28 @@ function settledVerdict(input: {
       evidence: [`quiet window open until more than 10 min after ${anchor}`, ...shared],
     };
   }
-  const quotaSkipped = legs.some((leg) => leg.state === 'SKIPPED' && leg.detail.includes('quota'));
-  if (quotaSkipped) {
+  const skipped = skippedRoundVerdict(legs, shared);
+  if (skipped !== undefined) {
+    return skipped;
+  }
+  return {
+    state: 'SETTLE-READY',
+    evidence: ['every expected reviewer leg settled; quiet window elapsed', ...shared],
+  };
+}
+
+/**
+ * A settled round carrying SKIPPED legs is classified STRUCTURALLY on the
+ * skip reason: quota skips take the owner-ruled QUOTA-SKIPPED state, and
+ * timeout skips take SETTLED-NO-REVIEW — the timeout arm exists so a WATCH
+ * can end rather than hang forever, and must never launder "nobody reviewed"
+ * into merge-eligibility (security D1, 2026-08-06).
+ */
+function skippedRoundVerdict(
+  legs: readonly ReviewerLeg[],
+  shared: readonly string[],
+): PrVerdict | undefined {
+  if (legs.some((leg) => leg.state === 'SKIPPED' && leg.skipReason === 'quota')) {
     return {
       state: 'QUOTA-SKIPPED',
       evidence: [
@@ -123,10 +143,16 @@ function settledVerdict(input: {
       ],
     };
   }
-  return {
-    state: 'SETTLE-READY',
-    evidence: ['every expected reviewer leg settled; quiet window elapsed', ...shared],
-  };
+  if (legs.some((leg) => leg.state === 'SKIPPED' && leg.skipReason === 'timeout')) {
+    return {
+      state: 'SETTLED-NO-REVIEW',
+      evidence: [
+        'round settled by TIMEOUT — an expected reviewer never reviewed this tip; not merge-eligible',
+        ...shared,
+      ],
+    };
+  }
+  return undefined;
 }
 
 // An EMPTY expected set can never settle (SKILL CRITICAL first-round rule: an

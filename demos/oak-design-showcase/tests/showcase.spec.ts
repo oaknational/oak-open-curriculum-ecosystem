@@ -1,9 +1,15 @@
 /**
- * The behaviour half of the showcase's Playwright proof surface (see
- * showcase-a11y.spec.ts for the axe matrix, OS signals and reflow; both
- * run against the BUILT artefact via `pnpm start` — playwright.config.ts):
- * the region contract in effect and the switchboard driving the real
- * runtimes through the real controls.
+ * The behaviour half of the landing's Playwright proof surface (see
+ * showcase-a11y.spec.ts for axe, OS signals and reflow; both run against
+ * the BUILT artefact via `pnpm start` — playwright.config.ts): the region
+ * contract in effect, and the theme/motion runtimes driven by STORED
+ * STATE and OS signals. The landing carries no controls under the
+ * 2026-08-13 tight scope, so these cells drive the runtimes the way a
+ * returning visitor's stored choice and the OS do — pre-paint, without a
+ * control. Control-driven semantics live with the demo routes' own specs
+ * (identity-picker.spec.ts); the per-identity matrix lives in
+ * specimen-a11y.spec.ts; identity-transition proofs live with the
+ * composition route's spec.
  *
  * Hermetic by interception: every cross-origin request is aborted and the
  * aborted origins must stay within the declared third-party set (see
@@ -14,22 +20,13 @@ import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
 
 import {
-  applyIdentity,
-  applyTheme,
   assertOnlyKnownExternalOrigins,
-  measureSwitchboardGeometry,
   openShowcase,
+  reloadWithStoredChoice,
 } from './apply-state';
 
 async function bodyBackground(page: Page): Promise<string> {
   return page.evaluate(() => getComputedStyle(document.body).backgroundColor);
-}
-
-async function headingFontFamily(page: Page): Promise<string | null> {
-  return page.evaluate(() => {
-    const heading = document.querySelector('h1');
-    return heading === null ? null : getComputedStyle(heading).fontFamily;
-  });
 }
 
 test.describe('showcase page structure', () => {
@@ -38,7 +35,10 @@ test.describe('showcase page structure', () => {
     await expect(
       page.getByRole('heading', { level: 1, name: 'Oak Open Curriculum Design System' }),
     ).toBeVisible();
-    for (const region of ['utility', 'masthead', 'main', 'footer']) {
+    // The landing's chrome regions (the utility band left with the
+    // switchboard under the tight scope; the map's universal fallback
+    // stacks whatever regions the markup supplies).
+    for (const region of ['masthead', 'main', 'footer']) {
       await expect(page.locator(`.oak-canvas > [data-region="${region}"]`)).toBeVisible();
     }
     assertOnlyKnownExternalOrigins(aborted);
@@ -62,59 +62,35 @@ test.describe('showcase page structure', () => {
   });
 });
 
-test.describe('theme switching', () => {
-  test('a theme choice applies to the document and restyles the page', async ({ page }) => {
+test.describe('theme runtime from stored state', () => {
+  test('a stored theme choice applies through the pre-paint bootstrap', async ({ page }) => {
     const aborted = await openShowcase(page);
-    const lightBackground = await bodyBackground(page);
-    await applyTheme(page, 'dark');
-    expect(await bodyBackground(page)).not.toBe(lightBackground);
-    assertOnlyKnownExternalOrigins(aborted);
-  });
-
-  test('a theme choice survives reload through the pre-paint bootstrap', async ({ page }) => {
-    const aborted = await openShowcase(page);
-    await applyTheme(page, 'dark');
-    await page.reload();
+    const defaultBackground = await bodyBackground(page);
+    await reloadWithStoredChoice(page, 'oak-theme', 'dark');
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-    assertOnlyKnownExternalOrigins(aborted);
-  });
-});
-
-test.describe('theme no-choice state and motion axis', () => {
-  test('no-choice reads as Page default and the first Light choice bites', async ({ page }) => {
-    const aborted = await openShowcase(page);
-    const themeSelect = page.getByRole('combobox', { name: 'Theme' });
-    // Six runtime states, not five: with nothing chosen the control must
-    // not claim "Light" — under a dark-first brand that misreports the
-    // page AND makes the first click on Light a dead control (a select
-    // fires change only when its value actually changes).
-    await expect(themeSelect).toHaveValue('');
-    await applyIdentity(page, 'creature');
-    await expect(themeSelect).toHaveValue('');
-    const noChoiceBackground = await bodyBackground(page);
-    await applyTheme(page, 'light');
-    expect(await bodyBackground(page)).not.toBe(noChoiceBackground);
+    expect(await bodyBackground(page)).not.toBe(defaultBackground);
     assertOnlyKnownExternalOrigins(aborted);
   });
 
   test('an OS contrast request themes the page without claiming a choice', async ({ page }) => {
     await page.emulateMedia({ contrast: 'more' });
     const aborted = await openShowcase(page);
-    // The runtime's auto path applies high-contrast pre-paint…
+    // The runtime's auto path applies high-contrast pre-paint; the person
+    // has stored no choice (DDR-003: the access route themes the page
+    // without claiming one — the choice semantics themselves are proven
+    // at the picker's control, identity-picker.spec.ts).
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'high-contrast');
-    // …but no explicit choice exists, so the control must read "Page
-    // default" — a claimed value would also make selecting High contrast
-    // a dead first click (no change event on an already-selected value).
-    await expect(page.getByRole('combobox', { name: 'Theme' })).toHaveValue('');
+    const storedChoice = await page.evaluate(() => localStorage.getItem('oak-theme'));
+    expect(storedChoice).toBeNull();
     assertOnlyKnownExternalOrigins(aborted);
   });
 
-  test('a reduced-motion choice collapses the motion tokens', async ({ page }) => {
+  test('a stored reduced-motion choice collapses the motion tokens', async ({ page }) => {
     const aborted = await openShowcase(page, { reducedMotion: false });
     const fullMotion = await page.evaluate(() =>
       getComputedStyle(document.documentElement).getPropertyValue('--motion-quick'),
     );
-    await page.getByRole('combobox', { name: 'Motion' }).selectOption('reduced');
+    await reloadWithStoredChoice(page, 'oak-motion', 'reduced');
     await expect(page.locator('html')).toHaveAttribute('data-motion', 'reduced');
     const reducedMotion = await page.evaluate(() =>
       getComputedStyle(document.documentElement).getPropertyValue('--motion-quick'),
@@ -124,103 +100,15 @@ test.describe('theme no-choice state and motion axis', () => {
   });
 });
 
-test.describe('identity switching', () => {
-  test('a counter-brand loads over the base and re-brands the page', async ({ page }) => {
-    const aborted = await openShowcase(page);
-    const oakHeadingFont = await headingFontFamily(page);
-    expect(oakHeadingFont).not.toBeNull();
-    await applyIdentity(page, 'freedonia');
-    await applyIdentity(page, 'oak');
-    expect(await headingFontFamily(page)).toBe(oakHeadingFont);
-    assertOnlyKnownExternalOrigins(aborted);
-  });
-
-  test('the dark-first counter-brand is dark with no theme chosen', async ({ page }) => {
-    const aborted = await openShowcase(page);
-    await applyIdentity(page, 'creature');
-    // Captured BEFORE any theme interaction — the no-choice premise: the
-    // brand's polarity lever applies because no explicit choice exists.
-    const noChoiceBackground = await bodyBackground(page);
-    await expect(page.locator('html')).not.toHaveAttribute('data-theme');
-    await applyTheme(page, 'dark');
-    const explicitDarkBackground = await bodyBackground(page);
-    await applyTheme(page, 'light');
-    const explicitLightBackground = await bodyBackground(page);
-    expect(noChoiceBackground).toBe(explicitDarkBackground);
-    expect(noChoiceBackground).not.toBe(explicitLightBackground);
-    assertOnlyKnownExternalOrigins(aborted);
-  });
-});
-
-test.describe('counter-brand to counter-brand transition', () => {
-  test('switching between counter-brands never shows the Oak base', async ({ page }) => {
-    const aborted = await openShowcase(page);
-    const oakHeadingFont = await headingFontFamily(page);
-    expect(oakHeadingFont).not.toBeNull();
-    await applyIdentity(page, 'freedonia');
-    // Sample the heading face every frame across the transition: the
-    // in-place href update must never let the page fall back to the Oak
-    // base between two counter-brands. Sampler state rides data attributes
-    // (test-only, removed with the page) so no page-context global exists.
-    await page.evaluate(() => {
-      const root = document.documentElement;
-      root.dataset['headingFaces'] = '[]';
-      delete root.dataset['headingFacesStop'];
-      const sample = (): void => {
-        if (root.dataset['headingFacesStop'] === 'yes') {
-          return;
-        }
-        const heading = document.querySelector('h1');
-        if (heading !== null) {
-          const parsed: unknown = JSON.parse(root.dataset['headingFaces'] ?? '[]');
-          if (Array.isArray(parsed)) {
-            parsed.push(getComputedStyle(heading).fontFamily);
-            root.dataset['headingFaces'] = JSON.stringify(parsed);
-          }
-        }
-        requestAnimationFrame(sample);
-      };
-      sample();
-    });
-    await applyIdentity(page, 'creature');
-    const sampledFaces = await page.evaluate(() => {
-      const root = document.documentElement;
-      root.dataset['headingFacesStop'] = 'yes';
-      const parsed: unknown = JSON.parse(root.dataset['headingFaces'] ?? '[]');
-      return Array.isArray(parsed)
-        ? parsed.filter((face): face is string => typeof face === 'string')
-        : [];
-    });
-    expect(sampledFaces.length).toBeGreaterThan(0);
-    expect(sampledFaces).not.toContain(oakHeadingFont);
-    assertOnlyKnownExternalOrigins(aborted);
-  });
-});
-
-test.describe('pre-hydration shell geometry', () => {
-  // The claim under guard: hydration swaps state, never layout. The shell
-  // (JS disabled = the server render, deterministically pre-hydration) must
-  // occupy exactly the geometry the hydrated switchboard occupies. Widths:
-  // 320 (the original wrap defect), 737/740 (the measured re-wrap band of
-  // the reduced-option shell — a 74px masthead drop), 900 (single row).
-  for (const width of [320, 737, 740, 900]) {
-    test(`the server shell matches the hydrated geometry at ${width}px`, async ({ browser }) => {
-      const shell = await measureSwitchboardGeometry(browser, width, false);
-      const hydrated = await measureSwitchboardGeometry(browser, width, true);
-      expect(shell).toEqual(hydrated);
-    });
-  }
-});
-
 test.describe('system theme follows the device', () => {
   test.use({ colorScheme: 'dark' });
   test('system matches the explicit dark palette under a dark OS, light under light', async ({
     page,
   }) => {
     const aborted = await openShowcase(page);
-    await applyTheme(page, 'dark');
+    await reloadWithStoredChoice(page, 'oak-theme', 'dark');
     const darkBackground = await bodyBackground(page);
-    await applyTheme(page, 'system');
+    await reloadWithStoredChoice(page, 'oak-theme', 'system');
     expect(await bodyBackground(page)).toBe(darkBackground);
     await page.emulateMedia({ colorScheme: 'light' });
     await expect.poll(async () => bodyBackground(page)).not.toBe(darkBackground);

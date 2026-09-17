@@ -38,7 +38,7 @@ function stagedRuntime(input: {
       runCaptured(command, args) {
         capturedCalls.push({ command, args });
         const stdout = args[0] === 'ls-files' ? (input.lsFilesStdout ?? '') : input.stagedStdout;
-        return { status: 0, stdout, stderr: '' };
+        return { status: 0, signal: null, stdout, stderr: '' };
       },
       runInherited(command, args) {
         inheritedCalls.push({ command, args });
@@ -179,7 +179,8 @@ describe('repo-check staged scanners', () => {
 
 describe('repo-check knip gate', () => {
   function knipRuntime(input: {
-    readonly status: number;
+    readonly status: number | null;
+    readonly signal?: NodeJS.Signals | null;
     readonly stdout?: string;
     readonly stderr?: string;
   }): {
@@ -195,7 +196,12 @@ describe('repo-check knip gate', () => {
       runtime: {
         runCaptured(command, args) {
           capturedCalls.push({ command, args });
-          return { status: input.status, stdout: input.stdout ?? '', stderr: input.stderr ?? '' };
+          return {
+            status: input.status,
+            signal: input.signal ?? null,
+            stdout: input.stdout ?? '',
+            stderr: input.stderr ?? '',
+          };
         },
         runInherited(command, args) {
           inheritedCalls.push({ command, args });
@@ -221,6 +227,59 @@ describe('repo-check knip gate', () => {
     const { runtime } = knipRuntime({ status: 1, stdout: 'Unused exports (2)\n' });
 
     await expect(runKnipGate(runtime)).resolves.toBe(1);
+  });
+
+  it('names a signal-killed knip child as a crash class, on the injected diagnostic channel', async () => {
+    // The F-112 push-path instance (2026-08-07): the knip child died with a
+    // null status and empty streams, and diagnosis written to stderr was
+    // itself eaten by the poisoned chain. The crash-class line is therefore
+    // injectable (assertable without global spies) and stdout-bound by
+    // default — the stream that survived.
+    const lines: string[] = [];
+    const { runtime } = knipRuntime({ status: null, signal: 'SIGTERM' });
+
+    await expect(runKnipGate(runtime, (line) => lines.push(line))).resolves.toBe(1);
+
+    expect(lines).toHaveLength(1);
+    expect(lines[0]).toContain('died without a verdict');
+    expect(lines[0]).toContain('status=null');
+    expect(lines[0]).toContain('signal=SIGTERM');
+  });
+
+  it('names a signal-killed knip child even when it spoke first — a partial verdict is not a verdict', async () => {
+    // The realistic kill: knip prints a progress line, then the poisoned
+    // chain (or the OOM killer) takes it. The null status alone must fire
+    // the crash line; this is the test the `status !== null` conjunct bites.
+    const lines: string[] = [];
+    const { runtime } = knipRuntime({
+      status: null,
+      signal: 'SIGKILL',
+      stdout: 'partial verdict\n',
+    });
+
+    await expect(runKnipGate(runtime, (line) => lines.push(line))).resolves.toBe(1);
+
+    expect(lines).toHaveLength(1);
+    expect(lines[0]).toContain('signal=SIGKILL');
+  });
+
+  it('names an empty-output non-zero run as a crash class — knip always prints a verdict', async () => {
+    const lines: string[] = [];
+    const { runtime } = knipRuntime({ status: 1 });
+
+    await expect(runKnipGate(runtime, (line) => lines.push(line))).resolves.toBe(1);
+
+    expect(lines).toHaveLength(1);
+    expect(lines[0]).toContain('died without a verdict');
+  });
+
+  it('keeps real findings off the crash-class channel — a spoken verdict is not a crash', async () => {
+    const lines: string[] = [];
+    const { runtime } = knipRuntime({ status: 1, stdout: 'Unused exports (2)\n' });
+
+    await expect(runKnipGate(runtime, (line) => lines.push(line))).resolves.toBe(1);
+
+    expect(lines).toStrictEqual([]);
   });
 
   it('fails loudly when knip exits 0 after swallowing a config-load crash (F-147)', async () => {

@@ -36,6 +36,9 @@ const oakThemeSource = escapeInlineScript(readFileSync('public/oak-theme.js', 'u
 export const metadata: Metadata = {
   title: 'Curriculum hub — Oak National Academy',
   description: "Search Oak's free, fully sequenced curriculum: lessons, units and threads.",
+  // The fidelity tool's app-identity sentinel (a capture must prove the
+  // answering server IS this app, never a port-squatting neighbour).
+  other: { 'oak-app': 'oak-curriculum-hub' },
 };
 
 // suppressHydrationWarning: the pre-paint script mutates <html> (data-theme /

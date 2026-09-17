@@ -201,6 +201,13 @@ and give a concrete before/after rewrite the calling agent can apply directly.
 - [ ] Plain words over showy ones; jargon and acronyms defined or replaced
 - [ ] Concrete and actionable over abstract and vague
 - [ ] No throat-clearing openings or trailing filler
+- [ ] No rhetorical strengthening past the evidence: a prose improvement
+      that makes a causal or factual claim "punchier" can silently promote
+      it up the reliability ladder — a strengthened claim a named sharp
+      reader could rebut is a weakened document. Flag any edit that
+      strengthens a claim rather than its expression; the fact-safe form
+      names only the safeguards and evidence that actually exist (two
+      worked catches in one paper, 2026-08-12)
 
 ### Layer B — Oak voice (only where `editorial-tone.md` applies)
 

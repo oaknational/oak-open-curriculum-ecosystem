@@ -1,0 +1,72 @@
+{
+  "leg": "design-system-expert",
+  "rubric_revision": "v0",
+  "pages": {
+    "page-A.html": {
+      "verdict": "FAIL",
+      "criteria": {
+        "type scale usage": {
+          "verdict": "FAIL",
+          "note": "Zero occurrences of any oak-heading-* / oak-body-* class, and no .oak-scope on <body> (it carries oak-lesson-page, which the system does not define). The system's native-element defaults are scoped -- :where(.oak-scope) h1 { font: var(--type-heading-2) }, :where(.oak-scope) p { font: var(--type-body-1) } -- so with the scope class absent every heading and paragraph falls to UA sizing: h1 at 2em/32px bold instead of --type-heading-2 (font-size-9, display weight), h2 at 1.5em/24px, p at 1em with 1em margins. The only system rule that reaches the page is html, body { font-family: var(--font-sans) }, so it renders as Lexend at browser sizes: no composite type style is invoked anywhere. The eyebrow (oak-eyebrow), lede (oak-lesson-hero__lede) and meta list resolve to nothing and render identically to body copy, so three distinct textual roles share one style while the scale itself is unused."
+        },
+        "spatial rhythm": {
+          "verdict": "FAIL",
+          "note": "The page declares no CSS of its own and uses none of the spacing primitives (.oak-stack, .oak-cluster, .oak-box, --space-*). Nine <section class=\"oak-card\"> siblings sit flush: <section> carries no UA margin and no gap is set anywhere, so the cards butt border-to-border down the whole page (doubled 2px borders at each seam; each card's --shadow-accent is occluded by the next card's opaque background). Inside the cards, spacing is UA paragraph and list margins (1em). The page's only rhythm is therefore a browser constant no token governs, and it is inconsistent by an order of magnitude between section level (0) and paragraph level (16px)."
+        },
+        "hierarchy": {
+          "verdict": "ITERATE",
+          "note": "Document structure is the page's strongest aspect: one h1, one h2 per section, no skipped or misordered levels, reading order matches DOM order, one primary focus. What does not land is visual prominence. With the type scale unused the h1/h2 separation is the UA 32/24px rather than the system's display scale, and all nine sections -- pupil outcome, keywords, starter quiz, worked example, misconception, and the teacher-tip <aside> -- wear an identical .oak-card face with an identical h2, so nothing signals primary content from supporting aside. The system ships .oak-block + .oak-block-label with role variants (.oak-outcome, .oak-misconception, .oak-teacher-tip, .oak-guidance) that carry precisely that differentiation."
+        },
+        "colour discipline": {
+          "verdict": "FAIL",
+          "note": "No raw literals in source (there is no authored CSS at all), but this criterion judges the rendered effect. Because .oak-scope is absent and .oak-link is never used, :where(.oak-scope) a { color: var(--text-link) } never matches -- every link on the page (logo, five breadcrumb links, footer) renders in UA link blue and visited purple, not a semantic role. The theme <select>, the four Show answer <button>s, the sixteen radio inputs and the three <details>/<summary> disclosures carry no .oak-select/.oak-field/.oak-btn/.oak-radio/.oak-disclosure class, so their colour is browser chrome sitting inside Oak-branded cards. The brand mark is the emoji tree glyph -- a colour outside the token system -- where assets/logo-wide-black.svg and logo-acorn-black.svg ship in the package. Theme correctness (this leg's territory) compounds it: the selector offers 'default' and 'dyslexia-friendly', neither of which is a system theme (the set is light / dark / system / high-contrast / colour-safe), so two of four options are dead controls while two real themes are missing; persistence is hand-rolled under key 'oak-lesson-theme' instead of the shipped oak-theme.js (key 'oak-theme'), so the choice does not interoperate with any other page in the system; the script runs at the end of <body>, so a stored dark or high-contrast choice flashes light on every load; and data-theme is written to <body> rather than <html>, putting composed tokens into the documented subtree alias freeze (KNOWN-ISSUES.md item 14) so high-contrast renders only partially themed."
+        },
+        "composition grammar": {
+          "verdict": "FAIL",
+          "note": "None of the region contract is used: no .oak-canvas, no .oak-main, no .oak-region, no data-page, no data-region. <main class=\"oak-container\"> holds nine sections directly. Beyond the shell an entire parallel vocabulary is invented alongside the one the system already ships for this exact page type: oak-pupil-outcome against .oak-outcome, oak-key-points against .oak-key-learning-points, oak-keyword-list / oak-keyword-list__item against .oak-keywords / .oak-keyword, oak-practice-task against .oak-practice, plus oak-site-header, oak-logo, oak-theme-selector, oak-breadcrumbs, oak-lesson-hero, oak-eyebrow, oak-lesson-meta, oak-site-footer and the whole oak-quiz__* BEM family -- none of which exist in colors_and_type.css or components.css. The classes that do resolve (.oak-container, .oak-card, .oak-quiz, .oak-worked-example, .oak-misconception, .oak-teacher-tip, .oak-skip-link, .oak-visually-hidden) partly land by coincidence: .oak-quiz ol and .oak-worked-example ol happen to match the invented __list and __steps lists. The page links the system and then consumes almost none of it."
+        },
+        "cross-page cohesion": {
+          "verdict": "ITERATE",
+          "note": "Single page, so the across-pages test cannot be run -- that limit is itself the finding. On what is available: two faces for one role within the page. The starter quiz reveals answers with a <button> plus a hidden <p>, while the practice task uses <details>/<summary> -- the same 'reveal the answer' action, two mechanisms and two visual treatments in one view. And because the shell is entirely page-invented and unresolved (oak-site-header, oak-breadcrumbs, oak-site-footer style nothing), there is no shared masthead or footer grammar for a sibling page to cohere with."
+        },
+        "ordered-calm readability": {
+          "verdict": "ITERATE",
+          "note": "The Oak v0 identity bounds hold on their own terms: no overlap, no collage, no rotation, no page-authored motion. What is not calm is density and measure. Nine flush-stacked bordered cards with zero separation read as one undifferentiated wall. Running text is unconstrained inside the 1280px .oak-container (--container-max: var(--space-1280)) at UA 16px with .oak-prose (--measure-prose: 65ch) unused, so lines run past 150 characters on a desktop viewport. Radio groups and native disclosures render as unstyled browser chrome mid-card. On a Year 7 page judged by 'maximise readability for everyone, including those with non-typical neurological makeup', the arrangement is orderly but not readable."
+        }
+      }
+    },
+    "page-B.html": {
+      "verdict": "ITERATE",
+      "criteria": {
+        "type scale usage": {
+          "verdict": "PASS",
+          "note": "Sixteen type-class applications, all from the system's families: .oak-heading-2 on the h1 (which is what :where(.oak-scope) h1 resolves to anyway), .oak-heading-5 on the one h2, .oak-body-2 for running text and lists, .oak-body-2-bold for sub-titles, .oak-body-3 for the live-region feedback and footer, .oak-block-label for the nine section labels. <body class=\"oak-scope\"> is present, so the one unclassed paragraph (inside .oak-outcome) lands on the system rule .oak-outcome p deliberately. No raw font sizing anywhere. One observation: running text is systematically .oak-body-2 (16px) where the scope default for <p> is --type-body-1 (18px) -- a consistent, deliberate density shift, but it compounds the measure finding under criterion 7 for a Year 7 audience."
+        },
+        "spatial rhythm": {
+          "verdict": "PASS",
+          "note": "Spacing comes from the scale throughout: .oak-stack / .oak-stack--s / .oak-cluster--s gaps, padding-block: var(--space-32) on the hero region and var(--space-24) on the rest (lesson-region and --tight), --gap-m and --gap-s in the page glue. Two densities, applied consistently (hero open, remaining regions tight) -- a deliberate change, not drift. Observation: ten inline style attributes do margin work (margin: 0 0 var(--space-8), margin: var(--space-12) 0 0) inside blocks. Values are on-scale so the fail bar is not met, but components.css states 'Gap-based layout primitives -- never space siblings with margins', and an .oak-stack--s inside those blocks carries the same result through the class layer."
+        },
+        "hierarchy": {
+          "verdict": "ITERATE",
+          "note": "One h1, one primary focus, reading order matches visual order, no skipped levels. But the page has exactly one h2 -- 'Keywords' -- while its nine peer sections (pupil outcome, key learning points, starter quiz, worked example, check your understanding, practice, misconception, teacher tip, content guidance) are titled by <span class=\"oak-block-label\">. Two consequences: the document outline understates the page's structure for anyone navigating by headings, and the section-title role is expressed two ways within one view (oak-heading-5 h2 for Keywords, small-caps subdued label for the other nine). Keywords is also the only content group not wrapped in .oak-block, which is what produced the divergence. Wrapping it as a block with a .oak-block-label, or promoting the nine labels to real headings, resolves both at once."
+        },
+        "colour discipline": {
+          "verdict": "PASS",
+          "note": "Zero raw colour literals. Colour arrives through kit classes and semantic roles only: .oak-tag--mint/--aqua/--grey, .oak-card--aqua, and the block variants carrying --color-accent-subtle (.oak-outcome), --bg-warning-subtle (.oak-misconception), --bg-info-subtle (.oak-guidance), --bg-subtle (.oak-teacher-tip, .oak-worked-example), --surface-decorative-4-subtle (.oak-practice). Page glue uses --border-primary, --bg-primary, --bg-subtle, --text-subdued and --filter-icon, each for its meaning. Quiz state is never colour alone: --correct/--incorrect classes plus an icon with alt text plus a role=status message. Theme handling is correct at the mechanism level -- oak-theme.js loaded synchronously in <head> so the attribute lands on <html> before first paint (no theme flash, and no subtree alias freeze per KNOWN-ISSUES item 14), the select offers exactly the system's five themes, and it reflects choice() rather than the applied value. Contrast in a specific rendered cell is not measurable from source; the pairings used here are those pinned in dtcg/contrast-pairings.json, and the page uses no lemon band (KNOWN-ISSUES item 13)."
+        },
+        "composition grammar": {
+          "verdict": "PASS",
+          "note": "The region model is used as documented: .oak-canvas > [data-region=masthead|main|footer], <main class=\"oak-main\"> > [data-region=hero|content|context|cta], all direct children, with a page-type map declared under [data-page='lesson'] and never at :root -- the scoping rule components.css states and KNOWN-ISSUES item 7 repeats. The map places every region the page actually uses. Nothing free-floats; every component sits inside a region inside an .oak-container. Gap against the Oak identity at v0: the masthead carries a subject icon and breadcrumb but no Oak logo or wordmark, and the footer reads 'Built with the Oak Open Curriculum Design System' -- a system credit, not Oak identity -- with no OGL attribution for the curriculum content. The export's own composed pages place the logo asset in both masthead and footer, and logo-wide-black.svg ships in the package. Minor: .oak-region is also applied to <main class=\"oak-main\"> (a canvas region, not a content region -- harmless, it only adds min-width:0 and container-name); data-page='lesson' is declared twice (on <body> and on .oak-canvas); and the masthead icon reinvents .oak-icon inline (style=\"filter: var(--filter-icon)\" with width=\"32\", which hardcodes --size-icon-l's value)."
+        },
+        "cross-page cohesion": {
+          "verdict": "PASS",
+          "note": "Single page, so the across-pages test cannot be exercised -- that limit is the finding, and this verdict covers only internal consistency plus whether a sibling could match. Control faces are consistent per role: .oak-btn and .oak-btn--secondary for the two CTAs with .oak-btn__icon in the documented shape, .oak-quiz-answer plus __key for all four answers, .oak-select inside .oak-field/.oak-select-wrap for the theme control, .oak-link for every link. Nine content sections share one .oak-block plus .oak-block-label grammar. A sibling page could adopt this region map unchanged. One structural caveat for a real page set: the masthead and footer glue is page-private (lesson-masthead, lesson-footer), so cohesion across pages would depend on copying it -- the point at which shell classes should be promoted out of the page."
+        },
+        "ordered-calm readability": {
+          "verdict": "ITERATE",
+          "note": "The Oak v0 stance holds: no overlap, no collage, zero rotation, and no page-authored motion (the only transitions are the kit's own --motion-quick on .oak-btn and .oak-quiz-answer, inherited from the control faces rather than authored here -- a system-level question about Oak's no-motion stance, not a page defect). The blocking readability issue is measure. Every content block sits directly in .oak-container (--container-max: var(--space-1280)) with .oak-body-2 at 16px, so running text spans the full ~1230px column: roughly 150 characters per line on a desktop, about double the readable ceiling, and exactly the case .oak-prose (--measure-prose: 65ch) exists for. The export's own composed page pairs them verbatim (class=\"oak-body-2 oak-prose\"). On a Year 7 lesson judged by 'maximise readability for everyone, including those with non-typical neurological makeup', this is the one item to fix before the page is shown. Minor: the keyword list places a bare em-dash text node between <dt> and <dd> inside the <dl> wrapper div -- invalid dl content and redundant, since .oak-keyword dt/dd { display: inline } already produces the inline pair."
+        }
+      }
+    }
+  }
+}

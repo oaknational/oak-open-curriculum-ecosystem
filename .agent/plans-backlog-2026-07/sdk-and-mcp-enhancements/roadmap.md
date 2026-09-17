@@ -117,7 +117,7 @@ WS3: fresh React MCP App rebuild            ▶ active
   Phase 5: user-search view                 ⏳ pending (post-merge)
   Phase 6b: post-Phase 5 docs/gates         ⏳ pending
 C8: auth metadata invariant hardening       ✓ complete
-Output schemas follow-up                    ⏳ current
+Output schemas follow-up                    ⛔ superseded → .agent/plans/ mcp-output-contracts
 Tool token economy / progressive discovery  📋 future
 Schema resilience + response architecture   ⏳ pending (user-requested, high priority, OQ1 open)
 Upstream API reference metadata             ⏳ pending (user-requested, high priority)
@@ -177,14 +177,15 @@ proceed independently on any branch.
 
 ### Output schema follow-up
 
-[current/output-schemas-for-mcp-tools.plan.md](current/output-schemas-for-mcp-tools.plan.md)
-remains valid follow-on work. Every tool's `outputSchema` is composed by one
-mechanism over its source-derived payload Zod. Serial order (owner-resolved
-2026-06-08): it runs AFTER EEF D6/D7 and the graph-tools migration; a W0 source-Zod
-phase emits any missing payload Zod (search/EEF now, graph-tool Zod gated on
-`graph-tools-value-redesign`), then W1/W2 compose and S0 lands the required field as
-the closing ratchet. W1 (codegen) preparation and test design are not gated and can
-advance earlier.
+Superseded. The June design record is archived at
+`archive/superseded/output-schemas-for-mcp-tools.plan.md`
+— its single-envelope doctrine was falsified against the served wire on
+2026-08-19 (three envelope shapes exist). The owning plans now live in the
+ratified plan estate: the
+[mcp-output-contracts strategic node](../../plans/strategic/mcp-output-contracts.plan.md)
+with the `mcp-served-surface-truth` and
+`mcp-output-contracts-implementation` delivery plans under
+`.agent/plans/delivery/`.
 
 ### Tool token economy and progressive discovery
 

@@ -1,0 +1,78 @@
+schema_version: "parallax/change-proposal/0.1"
+artifact_id: ""
+artifact_type: change-proposal
+artifact_revision: 1
+inquiry_id: ""
+inquiry_revision: 1
+status: provisional
+created_at: ""
+updated_at: ""
+created_by:
+  kind: "agent | human | mixed"
+  identifier: ""
+producing_skill:
+  name: parallax-learn
+  version: "0.1.0"
+execution_context:
+  run_id: ""
+  mode: "native-skill | emulated-reduced | manual"
+  independence: shared-context
+  host: ""
+inputs: []
+permissions_and_scope:
+  requested_operation: propose-behavioural-change
+  task_artifact_writes: false
+  practice_memory_writes: false
+  decision_authority: false
+  external_actions: false
+identity:
+  basis_ids: []
+  scale_regions: []
+  method_pass_ids: []
+  domain_profiles: []
+assumptions: []
+uncertainties: []
+provenance:
+  sources: []
+  transformations: []
+validity_domain:
+  populations: []
+  systems: []
+  contexts: []
+  time_horizons: []
+defeaters: []
+reopen_when: []
+
+proposal_id: ""
+proposal_lifecycle: "proposed | under-evaluation | accepted | rejected | rolled-back"
+problem_pattern: ""
+supporting_cases: []
+dependence_between_cases: ""
+alternative_explanations: []
+proposed_change:
+  affected_surfaces: []
+  smallest_general_change: ""
+  expected_mechanism: ""
+triggering_effects:
+  should_trigger_changes: []
+  should_not_trigger_changes: []
+evaluation:
+  baseline: ""
+  held_out_cases: []
+  regression_suites: []
+  success_criteria: []
+  cost_guardrails: []
+approval:
+  authority: ""
+  required_reviewers: []
+  completed_reviews: []
+  decision: pending
+  decided_by: ""
+  decided_at: ""
+release:
+  target_canonical_surfaces: []
+  proposed_version: ""
+  monitoring: []
+  rollback_rule: ""
+  applied_by: ""
+  applied_at: ""

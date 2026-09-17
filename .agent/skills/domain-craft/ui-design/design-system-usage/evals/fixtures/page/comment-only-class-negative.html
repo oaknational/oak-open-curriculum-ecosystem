@@ -1,0 +1,10 @@
+<!-- NEGATIVE control for ONE boundary: referenced-oak-classes-exist must
+     FAIL, while the other two assertions PASS (this fixture authors no CSS).
+
+     The only class this page references is `oak-mask`, which the design
+     system does NOT define — the name survives solely inside a comment in
+     oak-icons.css recording its removal in 1.6.2. A trunk scanner that
+     reads comments as selectors admits the ghost class and PASSES this
+     page; the grader strips comments before collecting selectors precisely
+     so it cannot. This fixture pins that boundary. -->
+<span class="oak-mask">A class that exists only in a trunk comment</span>

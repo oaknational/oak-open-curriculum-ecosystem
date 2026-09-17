@@ -1,0 +1,72 @@
+{
+  "leg": "accessibility-expert",
+  "rubric_revision": "v0",
+  "pages": {
+    "page-A.html": {
+      "verdict": "FAIL",
+      "criteria": {
+        "type-scale-usage": {
+          "verdict": "FAIL",
+          "note": "No oak-heading-* or oak-body-* class appears anywhere on the page, and body carries class 'oak-lesson-page' rather than 'oak-scope'. The system's native-element typography lives entirely behind :where(.oak-scope) h1/h2/p (colors_and_type.css section 6), so it never applies here. All text therefore renders at UA-default sizing (h1 2em, h2 1.5em, p 1em with ~1.2 line-height); only font-family and colour arrive, via the unscoped 'html, body' base rule. Hierarchy is expressed by browser defaults, not by the scale — the criterion's literal fail condition."
+        },
+        "spatial-rhythm": {
+          "verdict": "FAIL",
+          "note": "No spacing token is referenced anywhere: the page has no <style> block and no inline styles, and 33 of its 42 oak-* classes do not exist in the linked stylesheet (oak-lesson-hero, oak-lesson-meta, oak-key-points, oak-keyword-list, oak-site-header, oak-site-footer, oak-eyebrow, oak-practice-task, all __element classes, etc.). The classes that were to have carried the rhythm resolve to nothing, so actual vertical spacing is the UA default margin cascade (1em / 0.83em / 0.67em) — raw browser constants outside the token scale, and inconsistent between sibling sections by construction."
+        },
+        "hierarchy": {
+          "verdict": "PASS",
+          "note": "The strongest aspect of this page and better than its peer. Complete outline: h1 followed by eight h2s, no skips, no competing primary. Every <section> carries aria-labelledby pointing at its own heading, so each is exposed as a NAMED region landmark; the teacher tip correctly uses <aside> (complementary). Breadcrumb is <nav aria-label=\"Breadcrumb\"> + <ol> + aria-current=\"page\"; quiz options are grouped in <fieldset> with a visually-hidden <legend> per question (.oak-visually-hidden is one of the few classes that does exist). Reading order matches visual order. Caveat, not a fail: because no type-scale class applies, the visual expression of this correct semantic hierarchy is UA-default rather than system-governed."
+        },
+        "colour-discipline": {
+          "verdict": "ITERATE",
+          "note": "No authored raw colour literal (verified: zero hex/rgb/hsl, zero inline styles), and text inherits --text-primary from the base rule, so no computed contrast floor is breached. Three real gaps stop short of the fail conditions. (1) Links opt out of the semantic role: .oak-link is absent and there is no .oak-scope ancestor, so the ':where(.oak-scope) a { color: var(--text-link) }' rule never fires and every link takes the UA colour. It computes 9.40:1 on white — not a 1.4.3 failure — but it is outside the role system, so it ignores the high-contrast theme's deliberate --text-link: oak-navy120 ramp and the colour-safe theme entirely. (2) The logo is an emoji glyph (U+1F333) whose colours are font-supplied and no theme role can adapt or invert. (3) data-theme is set on <body>, which the system permits, but <html> then keeps :root's color-scheme: light; since the whole role tier is built on light-dark() and html's background propagates to the canvas, the canvas stays light in the dark cell (visible at overscroll and any area outside body's box)."
+        },
+        "composition-grammar": {
+          "verdict": "FAIL",
+          "note": "The export's region model is absent: no .oak-canvas, no data-region attributes, no --canvas-areas/--main-areas map, no .oak-scope, and none of the composition primitives (.oak-stack, .oak-cluster). Only .oak-container resolves. The page improvises a private BEM vocabulary (oak-site-header__inner, oak-lesson-hero__lede, oak-quiz__reveal-btn...) precisely where the kit already ships the pattern — including a purpose-built lesson anatomy (.oak-block with .oak-outcome, .oak-key-learning-points, .oak-keywords, .oak-quiz, .oak-worked-example, .oak-misconception, .oak-practice, .oak-teacher-tip, .oak-guidance) that matches this brief section for section. Literal fail condition: regions improvised where a kit pattern exists."
+        },
+        "cross-page-cohesion": {
+          "verdict": "FAIL",
+          "note": "Judged against the system's demonstrated language, with the scope limit noted that only one page per condition was supplied. Nothing here is reproducible across a set: the class vocabulary is private to this file and largely unresolvable, so control faces are whatever the UA draws (native button, select and radios at UA metrics) and rhythm and type are UA defaults. A sibling page built on the kit would share no masthead grammar, no footer grammar and no control face with it. The theme control also diverges from the system's own contract — it offers 'default' and 'dyslexia-friendly', neither of which is in oak-theme.js's THEMES list."
+        },
+        "ordered-calm-readability": {
+          "verdict": "ITERATE",
+          "note": "The explicit fail conditions are all clear: no overlap, no collage, no rotation or tilt, no motion, single ordered column. But the owner's rule is about maximising readability for non-typical neurological makeup, and the render works against exactly that audience. Line-height is the UA default (~1.2, against the system's tokenised 1.5 at --type-body-2). No .oak-prose, so prose runs the full --container-max (1280px) measure — roughly 150 characters per line. The four quiz options are inline <label> elements with no styling, so they flow together on one line as run-together text rather than as a stacked, separable list. Most pointedly, the theme control offers 'Dyslexia friendly', which matches no selector in the stylesheet and no member of THEMES: selecting it changes nothing and reports nothing, while 'colour-safe' — the theme the system actually ships for colour-vision deficiency — is not offered at all. Separately on target size: the native button, select and radios sit below Oak's own documented 44/48px floor (--size-target-min/--size-target), though they are NOT a WCAG 2.2 SC 2.5.8 failure — 2.5.8 is AA at 24x24 CSS px and its User Agent Control exception covers targets the author has not resized, which is the case here. 44x44 is SC 2.5.5 at AAA; Oak's floor is its own, stronger than AA."
+        }
+      }
+    },
+    "page-B.html": {
+      "verdict": "ITERATE",
+      "criteria": {
+        "type-scale-usage": {
+          "verdict": "PASS",
+          "note": "All 43 oak-* classes used resolve in the linked stylesheet. Text runs through the composite styles — oak-heading-2, oak-heading-5, oak-body-2, oak-body-2-bold, oak-body-3 — and body carries .oak-scope, so native elements also pick up the scoped scale defaults. The h1 carrying oak-heading-2 is consistent rather than ad hoc: the system's own ':where(.oak-scope) h1' maps to --type-heading-2. No raw font sizing anywhere. One inconsistency noted under hierarchy rather than here: the section-label role is rendered as --type-label nine times and as oak-heading-5 once."
+        },
+        "spatial-rhythm": {
+          "verdict": "PASS",
+          "note": "Every spacing value resolves to a token, including inside the page-owned <style> block (--space-16/24/32, --gap-s/m, --inset-m via .oak-block) and in all six inline style attributes. Sibling regions separate on a consistent pair of steps (.lesson-region padding-block --space-32, .lesson-region--tight --space-24) and the density change between them is deliberate and named. Component-internal padding comes from the kit's own classes. Mild smell, not a break: six inline margin declarations sit outside the class system even though their values are tokens."
+        },
+        "hierarchy": {
+          "verdict": "ITERATE",
+          "note": "The page's one substantive accessibility gap, and the highest-value fix available on either page. Nine major sections — pupil outcome, key learning points, starter quiz, worked example, check your understanding, practice, misconception, teacher tip, content guidance — are titled with <span class=\"oak-block-label\">, so the entire heading outline is h1 plus a single h2 (Keywords). Heading navigation, a primary screen-reader mode, reaches almost none of the content. The lone h2 compounds it by rendering the same textual role two different ways on one page. The <section data-region=...> elements have no accessible names, so they are generic rather than landmarks, leaving no structural map by either route. Short of FAIL: reading order matches visual order, there is one primary focus, no level is skipped or misordered among the headings present, and all content remains reachable in correct DOM order. Fix is nine spans becoming h2s, not a rebuild."
+        },
+        "colour-discipline": {
+          "verdict": "PASS",
+          "note": "Zero raw literals, verified across markup, the <style> block and all inline attributes — colour arrives only via semantic roles. Roles are used for their meaning (bg-warning-subtle for the misconception, bg-info-subtle for content guidance, decorative surfaces for keywords and practice). Contrast computed for every pairing the page actually renders, in both polarities: block-label --text-subdued on the tinted block fills 6.13-6.69:1 in light and 9.29-11.45:1 in dark; body text 13.88-14.72:1; footer oak-body-3 in --text-subdued on --bg-subtle 6.86:1 light and 13.55:1 dark. All clear 4.5:1 including the small-text cases. State is never colour alone: quiz results pair fill with border colour, an appended icon carrying real alt text ('Correct answer' / 'Incorrect'), and a role=\"status\" aria-live=\"polite\" region with a full sentence of feedback (SC 4.1.3 satisfied without a focus change), and the colour-safe theme re-points --bg-correct/--bg-incorrect to blue/vermilion. Icons are filtered through --filter-icon so they invert with the dark theme."
+        },
+        "composition-grammar": {
+          "verdict": "PASS",
+          "note": "The region contract is followed as written: .oak-canvas > [data-region=masthead|main|footer], and .oak-main > [data-region=hero|content|context|cta] as siblings with no wrapper faking a column. The --main-areas / --main-areas-narrow override is scoped under [data-page='lesson'] and never :root, which is exactly what the contract in components.css demands, and both the wide and narrow maps place every region the page uses. Components sit inside regions throughout; nothing free-floats. The page-owned CSS is composition glue only and copies no design-system rule."
+        },
+        "cross-page-cohesion": {
+          "verdict": "PASS",
+          "note": "Judged against the system's demonstrated language, with the scope limit noted that only one page per condition was supplied. Built wholly from shared kit vocabulary, so masthead, footer, control faces, rhythm and type would be shared with any sibling by construction rather than by convention — the same .oak-btn, .oak-select, .oak-tag and .oak-block faces would recur. The theme control matches the system contract exactly, offering precisely oak-theme.js's THEMES (system, light, dark, high-contrast, colour-safe) and reading back the user's CHOICE via oakTheme.choice(), so an unset control correctly shows 'System'."
+        },
+        "ordered-calm-readability": {
+          "verdict": "PASS",
+          "note": "Single ordered column, no overlap, collage, rotation or tilt. Motion is confined to the system's own micro-transitions carried by .oak-btn / .oak-quiz-answer / .oak-card, which the system collapses under both prefers-reduced-motion and [data-motion='reduced'] — inherited from the identity's kit rather than authored onto the page, so within its stance. Leading is tokenised (--type-body-2 is 16px on 24px, 1.5). oak-theme.js is loaded synchronously in <head>, so a returning dark-theme user gets no light flash before first paint. Targets are generous: .oak-btn and .oak-select at 48px (--size-target) and .oak-quiz-answer at 56px (--size-target-l), comfortably above WCAG 2.2 SC 2.5.8's AA floor of 24x24 CSS px and above Oak's own stronger 44px floor (--size-target-min), which is the system's choice rather than an AA requirement — the 44x44 figure is SC 2.5.5 at AAA. Two non-blocking defects: the keyword list puts bare em-dash text nodes as direct children of dl > div, which permits only dt and dd, so the markup is invalid — note this is no longer a WCAG failure, SC 4.1.1 Parsing having been removed in WCAG 2.2, but it can degrade dl handling in some AT; and prose is not constrained by .oak-prose (--measure-prose 65ch), so it can run toward the 1280px container measure — a caveat shared with the peer page and worth fixing on both."
+        }
+      }
+    }
+  }
+}

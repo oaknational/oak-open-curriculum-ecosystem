@@ -67,7 +67,7 @@ describe('computeReviewerLegs', () => {
       reviewRequests: [],
       now: '2026-07-21T12:06:00Z',
     });
-    expect(legs[0]).toMatchObject({ reviewer: 'claude', state: 'SKIPPED' });
+    expect(legs[0]).toMatchObject({ reviewer: 'claude', state: 'SKIPPED', skipReason: 'quota' });
     expect(legs[0]?.detail).toContain('quota');
   });
 
@@ -98,7 +98,9 @@ describe('computeReviewerLegs', () => {
       reviewRequests: [],
       now: '2026-07-21T12:01:00Z',
     });
-    expect(legs[0]).toMatchObject({ reviewer: 'claude', state: 'SKIPPED' });
+    // skipReason travels STRUCTURALLY — settlement classifies on it, never on
+    // the prose detail (security D1, 2026-08-06).
+    expect(legs[0]).toMatchObject({ reviewer: 'claude', state: 'SKIPPED', skipReason: 'timeout' });
     expect(legs[0]?.detail).toContain('timeout');
   });
 
@@ -219,7 +221,7 @@ describe('mostBlockingLeg', () => {
   it('returns settled when no leg is OWED', () => {
     expect(
       mostBlockingLeg({
-        legs: [{ reviewer: 'claude', state: 'SKIPPED', detail: 'quota' }],
+        legs: [{ reviewer: 'claude', state: 'SKIPPED', skipReason: 'quota', detail: 'quota' }],
         reviewRequests: [],
         liveRunReviewers: [],
         runsReadable: true,

@@ -11,10 +11,11 @@ const config: KnipConfig = {
     // @latest once floated; 3.15.2 pins that dep exactly (2.0.0-beta.4), and
     // the "scoped pnpm override" a prior comment cited no longer exists.
     '@mcpjam/cli',
-    // Stryker mutation testing (invoked via CLI, not imports)
-    '@stryker-mutator/core',
+    // Stryker mutation testing: core and vitest-runner are now referenced by
+    // packages/core/type-helpers/stryker.config.mjs (knip's stryker plugin
+    // resolves them), so only the checker — installed for future typed
+    // mutation runs, referenced by no config yet — still needs the ignore.
     '@stryker-mutator/typescript-checker',
-    '@stryker-mutator/vitest-runner',
     // ESLint ecosystem: consumed transitively via typescript-eslint flat config
     '@typescript-eslint/eslint-plugin',
     '@typescript-eslint/parser',
@@ -22,9 +23,6 @@ const config: KnipConfig = {
     'eslint-plugin-prettier',
     // supertest used in scripts/
     'supertest',
-    // tsup at root provides type resolution for tsup.config.base.ts
-    // (workspace configs import factory functions from the base config)
-    'tsup',
   ],
   ignoreBinaries: [
     // External tools not installed via npm
@@ -95,6 +93,7 @@ const config: KnipConfig = {
         'src/repo-check/repo-check.ts',
         'src/commit-advisories/check-commit-message.ts',
         'src/commit-advisories/check-commit-skill-advisories.ts',
+        'src/workspace-census/cli.ts',
         'src/secret-scan/run-push-secret-scan.ts',
         'src/version-guard/prevent-accidental-major-version.ts',
         'src/validators/fitness-vocabulary/validate-fitness-vocabulary.ts',
@@ -105,9 +104,12 @@ const config: KnipConfig = {
         'src/validators/markdown-links/validate-markdown-links.ts',
         'src/validators/pretooluse-guard-routing/validate-pretooluse-guard-routing.ts',
         'src/validators/policy-reappraisal/validate-policy-reappraisal.ts',
+        'src/validators/claim-freshness/validate-claim-freshness.ts',
+        'src/validators/identity-naming/validate-identity-naming.ts',
         'src/validators/check-ci-parity/validate-check-ci-parity.ts',
         'src/validators/plan-schema/validate-plan-corpus.ts',
         'src/validators/plan-schema/check-plan-gate-drift.ts',
+        'src/validators/workspace-config-isolation/validate-workspace-config-isolation.ts',
         'src/validators/notion-fence/validate-notion-fence.ts',
         'src/validators/reference-direction/validate-reference-direction.ts',
         'src/validators/machine-local-paths/validate-no-machine-local-paths.ts',
@@ -115,6 +117,7 @@ const config: KnipConfig = {
         'src/validators/ratified-lists/validate-ratified-lists.ts',
         'src/validators/portability/validate-portability.ts',
         'src/validators/subagents/validate-subagents.ts',
+        'src/validators/plugin-skill-copies/validate-plugin-skill-copies.ts',
         'src/practice-fitness/validate-practice-fitness.ts',
         'src/ci/ci-schema-drift-check.ts',
         'src/ci/ci-turbo-report.ts',
@@ -149,7 +152,23 @@ const config: KnipConfig = {
         // pattern as corpus-analysis above.
         'src/restatement-audit/workflows/*.workflow.ts',
       ],
-      project: ['src/**/*.{ts,tsx}'],
+      // tests/ is inside the project so tests-only dependencies are traced
+      // (the depcruise red-proof helper imports dependency-cruiser from
+      // tests/test-helpers/ — widened 2026-08-10; test files are entries via
+      // the vitest plugin).
+      project: ['src/**/*.{ts,tsx}', 'tests/**/*.ts'],
+      // TypeScript-estate review instrument (owner-ratified plan
+      // typescript-estate-consolidation-review, staged contract): the module's
+      // exported surface is contract-anchored for slices that are
+      // deliberately HELD (delivery, graph/ownership, candidate assembly,
+      // raw-document composition, CLI wiring), so knip's dead-code model
+      // false-positives on it until those consumers land. Its two real
+      // smokes are invoked through dist by package scripts, which knip
+      // cannot trace. REMOVAL CONDITION: delete this ignore when the estate
+      // run lands (plan §Todos step 8-9); knip then audits the module in
+      // full. Scoped-and-dated per configure-checks-not-blindly-obey; the
+      // module's own tsc/eslint/vitest gates remain fully live.
+      ignore: ['src/typescript-estate/**'],
     },
     'apps/oak-curriculum-mcp-streamable-http': {
       entry: [
@@ -166,9 +185,13 @@ const config: KnipConfig = {
         'e2e-tests/**/*.ts',
       ],
       project: [
-        // .tsx alongside .ts: the landing page is server-rendered React, so a
-        // .ts-only glob leaves every component outside knip's graph — and
-        // anything they alone consume reads as an unused export.
+        // .tsx is carried deliberately even though `src/` holds none today.
+        // It did until 2026-08-20, when the server-rendered landing page went;
+        // the widget's React lives under `widget/`, outside this glob. Kept
+        // because the cost of the wider glob is nothing and the cost of the
+        // narrow one is silent: a .ts-only glob leaves any future component
+        // outside knip's graph, and anything it alone consumes then reads as
+        // an unused export.
         'src/**/*.{ts,tsx}',
         'build-scripts/**/*.ts',
         'e2e-tests/**/*.ts',
@@ -228,6 +251,14 @@ const config: KnipConfig = {
     'packages/core/openapi-zod-client-adapter': {
       project: ['src/**/*.ts'],
     },
+    'packages/core/workspace-config': {
+      // Compiled config package: knip's exports-map auto-detection resolves
+      // each subpath export (there is no barrel by design — a barrel would
+      // drag tsup into every vitest config's module graph), so no explicit
+      // entry list is needed; scoping project to src keeps the package's
+      // own config files out of the unused-file surface.
+      project: ['src/**/*.ts'],
+    },
     'packages/core/observability': {
       project: ['src/**/*.ts'],
     },
@@ -263,6 +294,12 @@ const config: KnipConfig = {
       project: ['src/**/*.ts', 'scripts/**/*.ts'],
     },
     'packages/libs/env-resolution': {
+      project: ['src/**/*.ts'],
+    },
+    'packages/libs/fidelity-review': {
+      // No src/index.ts barrel by design (per-module subpath exports);
+      // knip resolves the dist-pointing subpath exports back to their
+      // sources unaided, so no explicit entries are needed.
       project: ['src/**/*.ts'],
     },
     'packages/libs/graph-ingest': {
@@ -339,17 +376,6 @@ const config: KnipConfig = {
         'src/internal/**/*.ts',
       ],
       project: ['src/**/*.ts'],
-    },
-    // Imported research-evidence tooling (ADR-215). CLI-driven: the scripts are
-    // tsx-invoked entry points and the tests are the other entries; lib is
-    // import-reachable. fixtures/ is illustrative source data, not project code.
-    'research/web-app-deconstruction/packages/research-evidence': {
-      // lib/ is the recomputable-evidence API surface (its exported analysis
-      // functions and result types are the reusable public interface, not all
-      // consumed by this package's own scripts); scripts are the CLI entries and
-      // tests are the other entries.
-      entry: ['lib/**/*.ts', 'scripts/**/*.ts', 'tests/**/*.test.ts', '*.config.ts'],
-      project: ['lib/**/*.ts', 'scripts/**/*.ts', 'tests/**/*.ts'],
     },
   },
 };

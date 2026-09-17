@@ -74,7 +74,7 @@ Each WS exists because a specific failure mode recurred this session. Naming the
 **Files**:
 
 - `.agent/skills/session-handoff/SKILL-CANONICAL.md` — amend step 6b ("Surface ADR/PDR candidates") to add: *"Buffer-shape contract: register entries carry tag header + ≤15 lines of trigger-to-watch-for; doctrine substance drafting happens at the target home (ADR / PDR / rule / distilled.md), not in the buffer entry."*
-- `.agent/skills/consolidate-docs/SKILL-CANONICAL.md` — amend steps 5 and 7a similarly.
+- `.agent/skills/knowledge/consolidate-docs/SKILL-CANONICAL.md` — amend steps 5 and 7a similarly.
 - `.agent/rules/buffer-shape-contract.md` — new rule citing PDR-046 (Layered Knowledge Processing) and PDR-011 (Continuity Surfaces). Body: enumerates the four surface kinds (memory / state / buffer / doctrine); names the per-surface response to fitness pressure; cites the worked 2026-05-17 instance.
 - `RULES_INDEX.md` — add new rule entry.
 
@@ -198,7 +198,7 @@ Owner-direction selects. Suggested order:
 
 - Source distilled entries: `.agent/memory/active/distilled.md` §"Recently Distilled — 2026-05-17 Swift Winging Gust pipeline-reframe" (four sub-entries: surface classification, pipeline back-pressure, cognitive-approach diversity, metacognition two modes, per-user memory is a buffer).
 - Source PDR candidates: `.agent/memory/operational/pending-graduations.md` (five entries 2026-05-17).
-- Source workflows: `.agent/skills/session-handoff/SKILL-CANONICAL.md` step 6; `.agent/skills/consolidate-docs/SKILL-CANONICAL.md` step 3.
+- Source workflows: `.agent/skills/session-handoff/SKILL-CANONICAL.md` step 6; `.agent/skills/knowledge/consolidate-docs/SKILL-CANONICAL.md` step 3.
 - Authority PDRs: PDR-011 (capture → distil → graduate → enforce pipeline), PDR-029 (perturbation mechanism bundle / passive-guidance-loses-to-artefact-gravity), PDR-046 (Layered Knowledge Processing — Preserve First, Restructure Second), PDR-057 (apply-don't-ask / empirical-answerability), PDR-058 (stop-inventing-optionality).
 - Companion ADR: ADR-144 (fitness three-zone model + Loop Health) — amended by WS4.
 - Prior closed plan: `.agent/plans/agentic-engineering-enhancements/current/doctrine-enforcement-quick-wins.plan.md` (COMPLETE) — established the doctrine-enforcement pattern WS1/WS2/WS5 build on.

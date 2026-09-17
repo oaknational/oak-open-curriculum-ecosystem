@@ -17,8 +17,8 @@
 import { appendFileSync, readFileSync } from 'node:fs';
 
 import {
+  claudeSessionIdentityHookEnvironmentFromProcessEnv,
   planClaudeSessionIdentityHook,
-  type ClaudeSessionIdentityHookEnvironment,
 } from '../claude/session-identity-hook.js';
 
 emit();
@@ -27,7 +27,7 @@ function emit(): void {
   const stdinText = readStdin();
   const plan = planClaudeSessionIdentityHook({
     stdinText,
-    environment: hookEnvironment(),
+    environment: claudeSessionIdentityHookEnvironmentFromProcessEnv(process.env),
   });
 
   if (plan.envFileWrite !== undefined) {
@@ -47,11 +47,4 @@ function readStdin(): string {
   } catch {
     return '';
   }
-}
-
-function hookEnvironment(): ClaudeSessionIdentityHookEnvironment {
-  if (process.env.CLAUDE_ENV_FILE === undefined) {
-    return {};
-  }
-  return { CLAUDE_ENV_FILE: process.env.CLAUDE_ENV_FILE };
 }

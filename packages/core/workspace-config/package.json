@@ -1,0 +1,89 @@
+{
+  "name": "@oaknational/workspace-config",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Shared workspace tooling config bases (vitest, vitest e2e, tsup factories, no-network test setup) consumed via declared package dependencies",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    "./vitest": {
+      "types": "./dist/vitest.config.base.d.ts",
+      "import": "./dist/vitest.config.base.js",
+      "default": "./dist/vitest.config.base.js"
+    },
+    "./vitest-e2e": {
+      "types": "./dist/vitest.e2e.config.base.d.ts",
+      "import": "./dist/vitest.e2e.config.base.js",
+      "default": "./dist/vitest.e2e.config.base.js"
+    },
+    "./tsup": {
+      "types": "./dist/tsup.config.base.d.ts",
+      "import": "./dist/tsup.config.base.js",
+      "default": "./dist/tsup.config.base.js"
+    },
+    "./no-network-setup": {
+      "types": "./dist/no-network.setup.d.ts",
+      "import": "./dist/no-network.setup.js",
+      "default": "./dist/no-network.setup.js"
+    }
+  },
+  "peerDependencies": {
+    "tsup": "^8.5.1",
+    "vitest": "^4.1.10"
+  },
+  "peerDependenciesMeta": {
+    "tsup": {
+      "optional": true
+    },
+    "vitest": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.13.3",
+    "eslint": "^10.8.1",
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.66.0",
+    "vitest": "^4.1.10"
+  },
+  "scripts": {
+    "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
+    "clean": "rm -rf dist .turbo",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "type-check": "tsc -p tsconfig.lint.json --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oaknational/oak-open-curriculum-ecosystem.git",
+    "directory": "packages/core/workspace-config"
+  },
+  "bugs": {
+    "url": "https://github.com/oaknational/oak-open-curriculum-ecosystem/issues"
+  },
+  "homepage": "https://github.com/oaknational/oak-open-curriculum-ecosystem/tree/main/packages/core/workspace-config#readme",
+  "keywords": [
+    "config",
+    "vitest",
+    "tsup",
+    "oak",
+    "workspace"
+  ],
+  "author": {
+    "name": "Jim Cresswell",
+    "email": "contact@jimcresswell.net",
+    "url": "https://jimcresswell.net"
+  },
+  "contributors": [
+    {
+      "name": "Oak National Academy",
+      "email": "help@thenational.academy",
+      "url": "https://www.thenational.academy"
+    }
+  ],
+  "license": "MIT"
+}

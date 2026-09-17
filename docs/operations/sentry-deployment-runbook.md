@@ -159,11 +159,17 @@ and ADR-163 disagree, the ADR wins.
    is wired as `ignoreCommand` in the workspace `vercel.json`. It
    cancels production builds that do not advance the root
    `package.json` version beyond the previous successful production
-   deployment.
+   deployment — with one exception: **redeploying the commit already in
+   production is always allowed** (ADR-163 §10, fourth amendment). That
+   is the recovery path when a deployment's environment is wrong rather
+   than its code, and it is the only one available: Instant Rollback
+   re-points domains at an existing build and carries that build's
+   original environment binding with it.
 
 Net effect: Vercel's production Build Command only ever runs on a
-`semantic-release` version-bump commit. Preview builds run on every
-commit pushed to a branch with an open PR.
+`semantic-release` version-bump commit, or on a rebuild of the commit
+already deployed. Preview builds run on every commit pushed to a branch
+with an open PR.
 
 **Inside the Vercel Build Command** (§L-8, 2026-04-21 onwards): Vercel
 runs the workspace's default `build` script (no `vercel.json`

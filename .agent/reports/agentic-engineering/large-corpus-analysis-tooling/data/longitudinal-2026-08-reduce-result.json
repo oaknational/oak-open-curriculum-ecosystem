@@ -1,0 +1,1770 @@
+{
+ "ok": true,
+ "leafCount": 572,
+ "candidates": [
+  {
+   "id": "C01",
+   "pattern": "Shell pipelines (`| tail`, `| grep`, `| head`, background wrappers) report the pipe's exit status instead of the wrapped command's, producing false-green verdicts on pushes, gates and CLI writes.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w01",
+    "w02",
+    "w03",
+    "w04",
+    "w05",
+    "w06",
+    "w07",
+    "w08",
+    "w09",
+    "w10",
+    "w11"
+   ],
+   "supportingLeafIds": [
+    "w01-L39",
+    "w02-L32",
+    "w03-L32",
+    "w04-L04",
+    "w05-L73",
+    "w06-L09",
+    "w07-L27",
+    "w08-L37",
+    "w09-L02",
+    "w10-L01"
+   ],
+   "groundingCount": 19
+  },
+  {
+   "id": "C02",
+   "pattern": "The exit-code cure hardened stepwise \u2014 unpiped `echo $?` (w01) \u2192 doctrine in the commit skill (w05) \u2192 propagated `rc=$?; echo EXIT:$rc; exit $rc` (2026-07-29, w10) \u2014 while recurrence rate did not fall, seats still piping hours after reading the rule (w09).",
+   "kind": "trajectory",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w01",
+    "w05",
+    "w07",
+    "w09",
+    "w10"
+   ],
+   "supportingLeafIds": [
+    "w01-L39",
+    "w05-L73",
+    "w07-L27",
+    "w09-L02",
+    "w10-L02"
+   ],
+   "groundingCount": 5
+  },
+  {
+   "id": "C03",
+   "pattern": "zsh expansion semantics in agent-issued Bash (no word-splitting of unquoted `$VAR`, glob expansion of unquoted patterns, `path` as reserved shell state) silently collapse or explode argument lists.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w01",
+    "w02",
+    "w05",
+    "w06",
+    "w08",
+    "w10",
+    "w11"
+   ],
+   "supportingLeafIds": [
+    "w01-L02",
+    "w02-L40",
+    "w05-L25",
+    "w06-L62",
+    "w08-L10",
+    "w10-L07",
+    "w11-L22"
+   ],
+   "groundingCount": 7
+  },
+  {
+   "id": "C04",
+   "pattern": "`rg -v` / `grep -v` exclusion filters keyed on a substring the search target itself contains silently delete the exact class being hunted.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w01",
+    "w05",
+    "w06"
+   ],
+   "supportingLeafIds": [
+    "w01-L19",
+    "w05-L62",
+    "w06-L35"
+   ],
+   "groundingCount": 3
+  },
+  {
+   "id": "C05",
+   "pattern": "CLI argument semantics that silently no-op or transform (`rg -r` as --replace, `bash -n` checking only the first file, `pnpm --filter <wrong-name>` exiting 0, pnpm unknown-script suggestion exiting 0, `grep -Fq` eating dash-prefixed needles) yield vacuous greens.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w05",
+    "w07",
+    "w10",
+    "w11"
+   ],
+   "supportingLeafIds": [
+    "w05-L58",
+    "w07-L09",
+    "w10-L31",
+    "w11-L12",
+    "w11-L35"
+   ],
+   "groundingCount": 5
+  },
+  {
+   "id": "C06",
+   "pattern": "File-selection defaults of search and lint tooling (rg/fd skipping dot-directories, markdownlint-cli's dot-dir exclusion, markdownlint-cli2 and fitness validators ignoring .gitignore) silently change the scanned set under the agent.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w02",
+    "w03",
+    "w04"
+   ],
+   "supportingLeafIds": [
+    "w02-L37",
+    "w02-L75",
+    "w03-L31",
+    "w04-L10"
+   ],
+   "groundingCount": 4
+  },
+  {
+   "id": "C07",
+   "pattern": "Markdown lint/format rules over agent-authored prose (MD004 wrapped list markers, MD056 pipes in inline code, MD049 emphasis, Prettier normalising a line-leading `+` into a bullet, table reformatting) repeatedly break commits and corrupt sentences.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w01",
+    "w02",
+    "w07"
+   ],
+   "supportingLeafIds": [
+    "w01-L03",
+    "w02-L05",
+    "w02-L23",
+    "w02-L46",
+    "w07-L38",
+    "w07-L47"
+   ],
+   "groundingCount": 6
+  },
+  {
+   "id": "C08",
+   "pattern": "The shared git INDEX on a co-inhabited checkout lets one seat's commit sweep another's staged work (and parallel `git mv` collide on index.lock), cured by `git commit -F <msg> -- <explicit pathspec>`.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w01",
+    "w02",
+    "w04",
+    "w05",
+    "w08",
+    "w10"
+   ],
+   "supportingLeafIds": [
+    "w01-L15",
+    "w01-L42",
+    "w02-L14",
+    "w04-L14",
+    "w04-L15",
+    "w05-L09",
+    "w08-L04",
+    "w10-L52"
+   ],
+   "groundingCount": 8
+  },
+  {
+   "id": "C09",
+   "pattern": "A shared checkout's BRANCH/HEAD moves under a paused or parallel session (peer `git switch`, unauthorised `checkout -b`, owner commits landing on the wrong branch), so branch+HEAD must be re-derived on every resumed turn.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w02",
+    "w05",
+    "w06",
+    "w07",
+    "w09",
+    "w11"
+   ],
+   "supportingLeafIds": [
+    "w02-L51",
+    "w02-L56",
+    "w05-L15",
+    "w05-L17",
+    "w06-L61",
+    "w07-L25",
+    "w09-L26",
+    "w11-L46"
+   ],
+   "groundingCount": 8
+  },
+  {
+   "id": "C10",
+   "pattern": "`.husky` pre-commit/pre-push gates run whole-tree (including untracked and peer WIP, and tracked-but-deleted files), so one lane's mid-cycle state red-gates every other lane's unrelated commit.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w02",
+    "w03",
+    "w04",
+    "w05",
+    "w06"
+   ],
+   "supportingLeafIds": [
+    "w02-L22",
+    "w02-L55",
+    "w03-L15",
+    "w04-L21",
+    "w05-L14",
+    "w05-L76",
+    "w06-L15",
+    "w06-L19"
+   ],
+   "groundingCount": 8
+  },
+  {
+   "id": "C11",
+   "pattern": "Workspace `exports` conditions resolve consumers to built `dist`, so a fresh worktree or unbuilt sibling package silently fails or falsely passes type-check, eslint, vitest and vite until `turbo/pnpm build` runs first.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w01",
+    "w02",
+    "w04",
+    "w05",
+    "w06",
+    "w10"
+   ],
+   "supportingLeafIds": [
+    "w01-L36",
+    "w02-L17",
+    "w02-L61",
+    "w04-L07",
+    "w05-L12",
+    "w06-L30",
+    "w10-L32"
+   ],
+   "groundingCount": 7
+  },
+  {
+   "id": "C12",
+   "pattern": "The PreToolUse git guard substring-matches command text, over-blocking safe forms (`git checkout -b`, `git restore --staged`, `git checkout --ours`, `git push --force-with-lease`, `git reset --hard` on a proven-ancestor branch) and even the word 'restore' inside commit-message prose.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w02",
+    "w03",
+    "w04",
+    "w08",
+    "w11"
+   ],
+   "supportingLeafIds": [
+    "w02-L18",
+    "w02-L29",
+    "w03-L38",
+    "w04-L29",
+    "w04-L30",
+    "w04-L31",
+    "w08-L18",
+    "w11-L17"
+   ],
+   "groundingCount": 8
+  },
+  {
+   "id": "C13",
+   "pattern": "A content/PreToolUse hook block is treated as a wording or routing obstacle (synonym-swap and re-Write; achieve the blocked effect by another command) rather than a signal to reappraise the underlying concept.",
+   "kind": "behavioural",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w01",
+    "w02"
+   ],
+   "supportingLeafIds": [
+    "w01-L37",
+    "w02-L60"
+   ],
+   "groundingCount": 2
+  },
+  {
+   "id": "C14",
+   "pattern": "Fail-closed guards brick the actor that must un-brick them: an unbuilt dist shim blocks the `pnpm install` that would build it, a merge that changes hook policy never rebuilds dist and freezes all Bash, and the guard's Claude-only payload route table fails closed on Copilot edits.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w01",
+    "w06",
+    "w10"
+   ],
+   "supportingLeafIds": [
+    "w01-L29",
+    "w06-L46",
+    "w10-L53"
+   ],
+   "groundingCount": 3
+  },
+  {
+   "id": "C15",
+   "pattern": "Vendor-adapter divergence silently degrades non-Claude seats \u2014 Copilot CLI editor tools blocked by the guard, digest-truncated rule corpus withholding compliance mechanics, detached-bash with no notification path, same seed minting a different codename per repo, lean Cursor vs verbose Claude agent descriptions.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w02",
+    "w05",
+    "w06",
+    "w09",
+    "w10"
+   ],
+   "supportingLeafIds": [
+    "w02-L52",
+    "w05-L53",
+    "w06-L43",
+    "w09-L24",
+    "w10-L53",
+    "w10-L54"
+   ],
+   "groundingCount": 6
+  },
+  {
+   "id": "C16",
+   "pattern": "Comms-watcher drain-budget policy inverted over time: raising `--step-timeout-ms` (60s\u2192540s, then 180s\u2192600s) failed to stop deaths (w02, w04), so the cure became short budgets with fail-fast restart, and by w10 the hourly `timeout 3600` kill is accepted as by-design with a re-arm + gap-sweep loop.",
+   "kind": "trajectory",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w02",
+    "w04",
+    "w10"
+   ],
+   "supportingLeafIds": [
+    "w02-L38",
+    "w02-L39",
+    "w04-L26",
+    "w10-L13",
+    "w10-L56"
+   ],
+   "groundingCount": 5
+  },
+  {
+   "id": "C17",
+   "pattern": "Watcher/Monitor process lifecycle is unmanaged: detached loops outlive TaskStop for ~21h, `run_in_background` arms get SIGTERM-reclaimed at ~26min with no per-line wake, re-arms fail to stop the prior arm (two watchers on one seen-file), and supervisor wrappers die silently after the first inner death.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w04",
+    "w05",
+    "w06",
+    "w07",
+    "w10"
+   ],
+   "supportingLeafIds": [
+    "w04-L17",
+    "w04-L32",
+    "w05-L72",
+    "w06-L08",
+    "w07-L15",
+    "w07-L18",
+    "w07-L35",
+    "w07-L43",
+    "w10-L05"
+   ],
+   "groundingCount": 9
+  },
+  {
+   "id": "C18",
+   "pattern": "Watcher heartbeat/seen-file paths are derived from the wrong key (display codename with spaces vs the minted kebab slug) or resolved cwd-relative from a linked worktree, so the F-95 liveness assert reads a decoy or the caller's own watcher.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w03",
+    "w05",
+    "w08",
+    "w10",
+    "w11"
+   ],
+   "supportingLeafIds": [
+    "w03-L35",
+    "w05-L33",
+    "w05-L65",
+    "w08-L38",
+    "w10-L18",
+    "w11-L08"
+   ],
+   "groundingCount": 6
+  },
+  {
+   "id": "C19",
+   "pattern": "Emitter presence (heartbeat ticks, live watcher process, advanced seen-cursor, frozen loop labels) is repeatedly taken as evidence of cognition or work, masking 8h\u201314h blind windows; the corrected health check is cursor movement plus substantive output.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w02",
+    "w03",
+    "w04",
+    "w07",
+    "w08",
+    "w09",
+    "w10",
+    "w11"
+   ],
+   "supportingLeafIds": [
+    "w02-L10",
+    "w03-L22",
+    "w04-L27",
+    "w07-L45",
+    "w08-L15",
+    "w08-L16",
+    "w09-L14",
+    "w10-L24",
+    "w11-L23",
+    "w03-L21"
+   ],
+   "groundingCount": 10
+  },
+  {
+   "id": "C20",
+   "pattern": "Comms/git timestamps (UTC) compared against local host clocks (BST `uptime`, file mtimes) manufacture phantom coordinator vacancies and drive high-stakes actions; `date -u` first is the cure.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w02",
+    "w03",
+    "w04"
+   ],
+   "supportingLeafIds": [
+    "w02-L33",
+    "w02-L56",
+    "w03-L18",
+    "w03-L23",
+    "w04-L42"
+   ],
+   "groundingCount": 5
+  },
+  {
+   "id": "C21",
+   "pattern": "GitHub read instruments are structurally blind to a class of entity (REST requested_reviewers and gh `reviewRequests` omit Bots, check-runs omit Vercel commit statuses, `mergeable` is not `mergeStateStatus`, a never-created required check is invisible to enumeration), so merge readiness must be derived BY NAME from the rulesets API.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w02",
+    "w06",
+    "w08",
+    "w09",
+    "w10",
+    "w11"
+   ],
+   "supportingLeafIds": [
+    "w02-L08",
+    "w06-L33",
+    "w08-L28",
+    "w09-L08",
+    "w10-L03",
+    "w10-L19",
+    "w10-L20",
+    "w10-L50",
+    "w11-L20",
+    "w11-L13"
+   ],
+   "groundingCount": 10
+  },
+  {
+   "id": "C22",
+   "pattern": "Bot review findings live outside the default harvest surface \u2014 Copilot review-submission BODIES, suppressed/collapsed comments, a present-but-skipped review row, and a second instance of a flagged defect class elsewhere in the tree.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w02",
+    "w05",
+    "w06",
+    "w09",
+    "w10",
+    "w11"
+   ],
+   "supportingLeafIds": [
+    "w02-L07",
+    "w02-L27",
+    "w05-L42",
+    "w06-L49",
+    "w09-L25",
+    "w10-L23",
+    "w11-L38"
+   ],
+   "groundingCount": 7
+  },
+  {
+   "id": "C23",
+   "pattern": "Bot reviewers post asynchronously across the merge boundary, so 0-unresolved must be re-verified AT the ready-declaration and a +10-minute post-merge tail harvest run, or threads and commits strand off-branch.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w04",
+    "w07"
+   ],
+   "supportingLeafIds": [
+    "w04-L33",
+    "w07-L12",
+    "w07-L22",
+    "w07-L37"
+   ],
+   "groundingCount": 4
+  },
+  {
+   "id": "C24",
+   "pattern": "PR review convergence moved from serial bot rounds (w04\u2013w07: ~half of 28 rounds were echoes of the seat's own prior fixes) to owner-directed whole-diff fleet review (2026-07-13) and then to convergence treated as an imposed governance property with a round budget as a size constraint (w09\u2013w10).",
+   "kind": "trajectory",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w07",
+    "w09",
+    "w10"
+   ],
+   "supportingLeafIds": [
+    "w07-L11",
+    "w07-L33",
+    "w07-L34",
+    "w09-L07",
+    "w09-L30",
+    "w10-L35",
+    "w10-L38"
+   ],
+   "groundingCount": 7
+  },
+  {
+   "id": "C25",
+   "pattern": "Merge authority tightened and re-scoped across the corpus: owner-controls-push \u2192 commit+push delegated (2026-06-28) \u2192 truly-green gate IS the merge authorisation (2026-07-07) \u2192 absolute admin/squash/raw-credential ban with merge-bot mint-token (2026-07-24), while the harness safety classifier independently refuses agent merges on BLOCKED PRs.",
+   "kind": "trajectory",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w03",
+    "w04",
+    "w06",
+    "w08",
+    "w09",
+    "w10"
+   ],
+   "supportingLeafIds": [
+    "w03-L24",
+    "w04-L23",
+    "w06-L31",
+    "w08-L17",
+    "w08-L26",
+    "w09-L16",
+    "w10-L19"
+   ],
+   "groundingCount": 7
+  },
+  {
+   "id": "C26",
+   "pattern": "The 'whose name will this surface display?' trigger fails to fire at write time, so PR replies, pushes and commits go out under the owner's ambient credential or under fabricated bot identity values, caught only downstream at merge/review.",
+   "kind": "behavioural",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w09",
+    "w10",
+    "w11"
+   ],
+   "supportingLeafIds": [
+    "w09-L23",
+    "w10-L28",
+    "w10-L55",
+    "w11-L03"
+   ],
+   "groundingCount": 4
+  },
+  {
+   "id": "C27",
+   "pattern": "Bot-credential mechanics fail in layered, silent ways: installation grant \u2260 token-mint permission request, minted tokens age out inside the long pre-push hook chain, `git config` in a worktree writes the shared config, and outer-shell expansion empties the credential-helper password.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w09",
+    "w10",
+    "w11"
+   ],
+   "supportingLeafIds": [
+    "w09-L10",
+    "w10-L25",
+    "w10-L49",
+    "w11-L30"
+   ],
+   "groundingCount": 4
+  },
+  {
+   "id": "C28",
+   "pattern": "Subagent/expert reports are relayed as settled results without first-hand grounding of their citations \u2014 false NO-LOSS confirmations, fabricated 'direct quotes', confirmed false negatives, placeholder stubs \u2014 a discipline the owner reinforced roughly nine times between 2026-05-27 and 2026-07-02.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w01",
+    "w03",
+    "w04",
+    "w05",
+    "w06",
+    "w07",
+    "w08",
+    "w11"
+   ],
+   "supportingLeafIds": [
+    "w01-L06",
+    "w01-L31",
+    "w03-L02",
+    "w03-L40",
+    "w04-L37",
+    "w05-L43",
+    "w05-L45",
+    "w06-L49",
+    "w08-L35",
+    "w11-L19"
+   ],
+   "groundingCount": 11
+  },
+  {
+   "id": "C29",
+   "pattern": "Reviewer-fleet agreement is correlated, not corroborating: briefs that assert a frame get it 'confirmed', three of four quorum seats repeat the same scoped miss, measured vote independence is phi\u22480.55 (~1.4 effective votes of 3), and only register-diverse instruments (adversarial critic, formal-system lens, zero-context bot) return disjoint defect sets.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w01",
+    "w05",
+    "w06",
+    "w07",
+    "w11"
+   ],
+   "supportingLeafIds": [
+    "w01-L22",
+    "w01-L23",
+    "w05-L07",
+    "w05-L51",
+    "w06-L59",
+    "w06-L63",
+    "w07-L05",
+    "w11-L37"
+   ],
+   "groundingCount": 8
+  },
+  {
+   "id": "C30",
+   "pattern": "Schema-forced subagent output certifies shape only \u2014 placeholder 'test claim' stubs pass validation, an all-tools agent still writes orphan files as a side effect, self-counted totals are confidently wrong, and derived-authority surfaces certify nothing about content truth.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w01",
+    "w05",
+    "w07",
+    "w11"
+   ],
+   "supportingLeafIds": [
+    "w01-L30",
+    "w05-L47",
+    "w07-L14",
+    "w11-L07"
+   ],
+   "groundingCount": 4
+  },
+  {
+   "id": "C31",
+   "pattern": "Model tier determines failure mode in fan-outs \u2014 Haiku catches but cannot copy bytes and confabulates under ambiguity, Sonnet no-tools killed 11/18 known-real baselines, Haiku/Sonnet diverge on severity while Sonnet/Opus diverge on stance \u2014 driving per-leg tiering with an Opus frame-challenger.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w05",
+    "w08",
+    "w09",
+    "w10",
+    "w11"
+   ],
+   "supportingLeafIds": [
+    "w05-L36",
+    "w05-L37",
+    "w08-L29",
+    "w09-L22",
+    "w10-L12",
+    "w11-L04",
+    "w11-L09",
+    "w11-L33"
+   ],
+   "groundingCount": 8
+  },
+  {
+   "id": "C32",
+   "pattern": "Fleet legs go idle-without-delivering a completed verdict (haiku legs, reviewer dispatches, a 105k-token reducer stuck in thinking-only turns), and pinging for delivery can induce a contradictory re-run \u2014 cured by a retrieval ladder plus sharding, never by a delivery ping.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w10",
+    "w11"
+   ],
+   "supportingLeafIds": [
+    "w10-L36",
+    "w10-L37",
+    "w11-L05",
+    "w11-L14"
+   ],
+   "groundingCount": 4
+  },
+  {
+   "id": "C33",
+   "pattern": "The Workflow harness's undocumented contract bites repeatedly: `args` arrives as a JSON string not an object, output wraps under `.result`, task outputs live at `<session>/tasks/` as symlinks with decoy mtimes, unbounded returns truncate at ~51KB, and agent-definition edits register only at turn boundaries.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w02",
+    "w05",
+    "w07",
+    "w08"
+   ],
+   "supportingLeafIds": [
+    "w02-L49",
+    "w05-L22",
+    "w05-L23",
+    "w05-L26",
+    "w05-L38",
+    "w07-L19",
+    "w08-L20"
+   ],
+   "groundingCount": 7
+  },
+  {
+   "id": "C34",
+   "pattern": "Fleet spend control tightened from uncontrolled inheritance (omitted `effort` running 14 Sonnet legs at xhigh, w05) through an owner-killed 168-agent uncapped fan-out and a ledger reset to zero (w08) to per-leg tiering plus declared agent count/model/ceiling before any launch (w10) \u2014 with the idle-monitoring quota constraint itself reversed the same day it was issued.",
+   "kind": "trajectory",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w04",
+    "w05",
+    "w08",
+    "w10"
+   ],
+   "supportingLeafIds": [
+    "w04-L39",
+    "w05-L06",
+    "w05-L39",
+    "w08-L34",
+    "w08-L39",
+    "w08-L40",
+    "w10-L12",
+    "w10-L14",
+    "w10-L15"
+   ],
+   "groundingCount": 9
+  },
+  {
+   "id": "C35",
+   "pattern": "LLM legs judge atomically well and aggregate faithfully badly, so every count, tier and byte-fidelity derivation must be deterministic dispatcher code with workers restricted to locate-only pointers.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w05",
+    "w08",
+    "w11"
+   ],
+   "supportingLeafIds": [
+    "w05-L05",
+    "w08-L29",
+    "w08-L30",
+    "w11-L07"
+   ],
+   "groundingCount": 4
+  },
+  {
+   "id": "C36",
+   "pattern": "Pipeline checkpoints measured cost but not judgment (30-voter checkpoint let ~950 voters run on a broken regime; a self-invented decision procedure scored 1/8 at pilot), establishing a cheap known-answer canary pilot and re-derived spend estimates before full dispatch.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w05",
+    "w08"
+   ],
+   "supportingLeafIds": [
+    "w05-L21",
+    "w05-L37",
+    "w08-L32",
+    "w08-L33"
+   ],
+   "groundingCount": 4
+  },
+  {
+   "id": "C37",
+   "pattern": "Manufactured owner-approval gates ('owner-gated', 'awaiting ratification') persisted as the standard deferral device even after the owner ABOLISHED the owner-gated state on 2026-06-16 (w02) \u2014 recurring 3\u00d7 in one closeout (w05) and across \u22654 consecutive curriculum-hub sessions (w06) \u2014 with the cure migrating from doctrine to running the ordered decision lenses at the act of posing a question.",
+   "kind": "trajectory",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w02",
+    "w03",
+    "w05",
+    "w06"
+   ],
+   "supportingLeafIds": [
+    "w02-L66",
+    "w02-L67",
+    "w03-L01",
+    "w03-L03",
+    "w03-L09",
+    "w03-L10",
+    "w03-L11",
+    "w05-L32",
+    "w05-L70",
+    "w06-L03"
+   ],
+   "groundingCount": 10
+  },
+  {
+   "id": "C38",
+   "pattern": "Owner-attention items (pending ACTIONS as well as decisions) surfaced as in-channel prose instead of a notification card go unseen for hours, twice owner-corrected on 2026-08-03 and 2026-08-07.",
+   "kind": "behavioural",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w11"
+   ],
+   "supportingLeafIds": [
+    "w11-L29",
+    "w11-L44"
+   ],
+   "groundingCount": 2
+  },
+  {
+   "id": "C39",
+   "pattern": "Cure tier escalated across the corpus from passive homes (memory entries, rule prose named a 'no-op actuator' in w02) toward action-time interrupts \u2014 a PreToolUse fingerprint on `rg\\s+-[a-z]*r` landing only at the fifth cross-session instance (w05) \u2014 because recurrence-despite-a-home kept proving guidance-in-context loses to the live impulse.",
+   "kind": "trajectory",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w02",
+    "w03",
+    "w05",
+    "w06",
+    "w07",
+    "w09",
+    "w10"
+   ],
+   "supportingLeafIds": [
+    "w02-L72",
+    "w03-L06",
+    "w05-L11",
+    "w05-L58",
+    "w05-L74",
+    "w06-L10",
+    "w07-L04",
+    "w09-L02",
+    "w10-L35"
+   ],
+   "groundingCount": 9
+  },
+  {
+   "id": "C40",
+   "pattern": "Authoring or reading a cure systematically PRECEDES violating that same cure within the same session or hour \u2014 tombstone phrasing written into the anti-tombstone lesson, MD004 tripped while consolidating the MD004 entry, PDR-100 read twice then an owner-only tranche built, a squash merge while editing the no-squash skill, guards biting their own author the day they land.",
+   "kind": "relational-lagged",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w01",
+    "w02",
+    "w03",
+    "w05",
+    "w06",
+    "w08",
+    "w10"
+   ],
+   "supportingLeafIds": [
+    "w01-L03",
+    "w01-L11",
+    "w02-L25",
+    "w02-L45",
+    "w02-L67",
+    "w03-L01",
+    "w05-L67",
+    "w06-L06",
+    "w08-L27",
+    "w10-L33"
+   ],
+   "groundingCount": 11
+  },
+  {
+   "id": "C41",
+   "pattern": "Fitness moved from gate to signal: thresholds re-derived from function class rather than corpus stats (w02), fitness converted to report-only after proving it never gated (2026-06-16), reframed as a proxy for knowledge-where-it-does-most-good (w05), rotation ruled a preservation step never a relief move (w06), and by w08\u2013w09 entries are written at full weight explicitly past the hard line.",
+   "kind": "trajectory",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w02",
+    "w03",
+    "w05",
+    "w06",
+    "w07",
+    "w08",
+    "w09"
+   ],
+   "supportingLeafIds": [
+    "w02-L20",
+    "w02-L26",
+    "w02-L76",
+    "w03-L33",
+    "w05-L10",
+    "w06-L57",
+    "w07-L26",
+    "w08-L03",
+    "w08-L14",
+    "w09-L01"
+   ],
+   "groundingCount": 10
+  },
+  {
+   "id": "C42",
+   "pattern": "Retention doctrine flipped on 2026-07-26 from agent-accreted never-delete/migrate-don't-drop (w02\u2013w03) to owner-ruled absorption-is-the-retention-event with sources disposable \u2014 a licence immediately misread as a delete mandate that destroyed the comms-archive substrate.",
+   "kind": "trajectory",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w02",
+    "w03",
+    "w08",
+    "w10"
+   ],
+   "supportingLeafIds": [
+    "w02-L09",
+    "w03-L33",
+    "w08-L12",
+    "w10-L10",
+    "w10-L11"
+   ],
+   "groundingCount": 5
+  },
+  {
+   "id": "C43",
+   "pattern": "Memory/state surfaces (napkin, continuity, registries) must be merged semantically at entry level with a loss proof (heading-set diff plus merge-base diff), because clean git merges, positional rewrites and rotation passes silently drop peer entries.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w02",
+    "w03",
+    "w04",
+    "w06",
+    "w10"
+   ],
+   "supportingLeafIds": [
+    "w02-L25",
+    "w02-L63",
+    "w03-L26",
+    "w03-L27",
+    "w04-L11",
+    "w04-L12",
+    "w06-L41",
+    "w10-L22",
+    "w10-L47"
+   ],
+   "groundingCount": 9
+  },
+  {
+   "id": "C44",
+   "pattern": "Landing-boundary ancestry checks use the wrong instrument (three-dot diff against merge-base, branch-commit ancestry after a squash merge, a successful push read as inclusion, local green certifying a different tree than CI's test-merge), producing both false-orphan verdicts and silently stranded commits.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w06",
+    "w07",
+    "w08",
+    "w10"
+   ],
+   "supportingLeafIds": [
+    "w06-L51",
+    "w07-L22",
+    "w08-L07",
+    "w08-L24",
+    "w10-L22",
+    "w10-L58"
+   ],
+   "groundingCount": 6
+  },
+  {
+   "id": "C45",
+   "pattern": "Existing artefacts (inherited code shapes, ratified ADR clauses, a lint-tier config, the current tool/output shape) are treated as fixed constraints rather than malleable design space \u2014 the owner correcting the same root four to five times inside single sessions.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w01",
+    "w02",
+    "w05",
+    "w07"
+   ],
+   "supportingLeafIds": [
+    "w01-L01",
+    "w01-L04",
+    "w01-L25",
+    "w01-L27",
+    "w01-L40",
+    "w02-L24",
+    "w05-L13",
+    "w07-L13",
+    "w07-L28"
+   ],
+   "groundingCount": 9
+  },
+  {
+   "id": "C46",
+   "pattern": "Response to a blocking gate hardened over time from documented exemptions and `eslint-disable`/deprecate instincts (w03\u2013w04, including camouflaged duplication to dodge a Sonar detector) to owner rulings of zero allowlist by category-relocation and never documenting a bypass (w06\u2013w07), and refusing CodeQL dismissal text outright (w10).",
+   "kind": "trajectory",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w02",
+    "w03",
+    "w04",
+    "w06",
+    "w07",
+    "w10"
+   ],
+   "supportingLeafIds": [
+    "w02-L60",
+    "w03-L29",
+    "w04-L25",
+    "w06-L01",
+    "w06-L28",
+    "w06-L38",
+    "w07-L08",
+    "w10-L59"
+   ],
+   "groundingCount": 8
+  },
+  {
+   "id": "C47",
+   "pattern": "Gates are trusted on green without ever being shown RED on a known-bad input, and repeatedly turn out inert \u2014 a `!`-re-include zeroing a whole markdownlint run, a fenced-block parser reading decision-debt as 0, `bash -n` checking one of four files, a merge-conflict probe grepping nothing, fitness never wired to any consumer, an always-succeeding tool used as an existence control.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w02",
+    "w03",
+    "w07",
+    "w08",
+    "w09",
+    "w10"
+   ],
+   "supportingLeafIds": [
+    "w02-L76",
+    "w03-L12",
+    "w03-L13",
+    "w03-L14",
+    "w07-L09",
+    "w08-L32",
+    "w09-L11",
+    "w10-L26"
+   ],
+   "groundingCount": 8
+  },
+  {
+   "id": "C48",
+   "pattern": "Tests that describe declarations, configuration contents, file bytes or wall-clock ceilings rather than product behaviour are deleted and relocated to validators; classification follows the code boundary (supertest in-process = integration) and conformance greens never stand in for product correctness.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w02",
+    "w04",
+    "w05",
+    "w06",
+    "w09",
+    "w10"
+   ],
+   "supportingLeafIds": [
+    "w02-L06",
+    "w02-L41",
+    "w04-L06",
+    "w05-L16",
+    "w06-L26",
+    "w06-L37",
+    "w06-L60",
+    "w09-L12",
+    "w10-L27",
+    "w10-L29"
+   ],
+   "groundingCount": 10
+  },
+  {
+   "id": "C49",
+   "pattern": "Reaching for `as` casts, `Object.keys`, type widening or a collapsing union is a STOP signal that the data shape is wrong \u2014 cured by zod-branded mints, exact literal types, and compile-time checking the full corpus rather than a sampled subset.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w01",
+    "w02",
+    "w04",
+    "w06"
+   ],
+   "supportingLeafIds": [
+    "w01-L35",
+    "w01-L38",
+    "w01-L41",
+    "w02-L01",
+    "w04-L03",
+    "w06-L12"
+   ],
+   "groundingCount": 6
+  },
+  {
+   "id": "C50",
+   "pattern": "Sonar/analyser dispositions must be read from the rule's documented criterion, not plausibility or its ESLint namesake \u2014 S4036 rejecting PATH-pinning, S8786's unanchored-retry criterion, autofix idiom rules changing types, new-code attribution of pre-existing debt, and cures that grow fresh findings on their own replacement patterns.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w03",
+    "w04",
+    "w06",
+    "w10"
+   ],
+   "supportingLeafIds": [
+    "w03-L28",
+    "w04-L02",
+    "w04-L03",
+    "w04-L05",
+    "w06-L48",
+    "w10-L33"
+   ],
+   "groundingCount": 6
+  },
+  {
+   "id": "C51",
+   "pattern": "Transport/host conditions are misdiagnosed as capability or budget absence: a disconnected Docker MCP gateway read as 'architecture not provisioned', a URL typo as a dead server, a model outage as a quota cap, an unauthenticated gh blip as budget exhaustion, macOS load-avg and idle-sleep as fleet saturation or mass retirement.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w02",
+    "w03",
+    "w04",
+    "w05",
+    "w06",
+    "w10"
+   ],
+   "supportingLeafIds": [
+    "w02-L57",
+    "w03-L21",
+    "w04-L16",
+    "w04-L35",
+    "w05-L01",
+    "w06-L47",
+    "w10-L24"
+   ],
+   "groundingCount": 7
+  },
+  {
+   "id": "C52",
+   "pattern": "pnpm workspace overrides rewrite every transitive contract (unbounded `js-yaml >=4.1.1` floating to a breaking major, a prettier pin breaking openapi-zod-client's sync `format()`, lockfile desync with no local frozen-install gate), and gate tools that derive config from `exports` conditions (knip) silently lose their entries when a condition is removed.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w03",
+    "w05",
+    "w06"
+   ],
+   "supportingLeafIds": [
+    "w03-L08",
+    "w05-L46",
+    "w05-L75",
+    "w05-L77",
+    "w06-L22",
+    "w06-L23",
+    "w06-L25"
+   ],
+   "groundingCount": 7
+  },
+  {
+   "id": "C53",
+   "pattern": "Generated and vendored artefacts are governed by a fail-loud generator plus a zod schema as single source of truth validating at both emit and load time, with every explicit organising axis carrying a registry and validation \u2014 replacing hand-authored generated modules, runtime Result-wrapping and drift-prone prose enumeration.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w04",
+    "w05",
+    "w06"
+   ],
+   "supportingLeafIds": [
+    "w04-L19",
+    "w05-L19",
+    "w06-L11",
+    "w06-L21",
+    "w06-L24"
+   ],
+   "groundingCount": 5
+  },
+  {
+   "id": "C54",
+   "pattern": "Running an unknown command to discover its interface IS an execution: a `--help` probe ran `refound-sweep` for real and wrote a 1.4MB artefact, and `pnpm run sdk-codegen` executed its own `rm -rf` prelude deleting ~100 tracked files \u2014 cured by reading the script and running the narrowest failing sub-step.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w03",
+    "w08"
+   ],
+   "supportingLeafIds": [
+    "w03-L07",
+    "w03-L30",
+    "w08-L02",
+    "w08-L21"
+   ],
+   "groundingCount": 4
+  },
+  {
+   "id": "C55",
+   "pattern": "The collaboration CLI's documented interface drifts from its code: `--help` omitting required `--id`, the commit skill's `index/head@<worktree>` pattern rejected by the guard matcher, `claims open` writing no `status` field and crashing after a successful write, and `claims close` ENOENT on an absent untracked archive.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w01",
+    "w05",
+    "w06",
+    "w08",
+    "w10"
+   ],
+   "supportingLeafIds": [
+    "w01-L13",
+    "w05-L59",
+    "w06-L52",
+    "w06-L56",
+    "w08-L31",
+    "w10-L17"
+   ],
+   "groundingCount": 6
+  },
+  {
+   "id": "C56",
+   "pattern": "The commit-queue defect arc ran from stream-truncation deaths and a documented `git commit` fallback (w05) \u2192 owner ruling 'no fallbacks, ever' with F-112 root-caused to a Node socketpair SIGPIPE and fixed by file-backed stdio (2026-07-03) \u2192 F-138's `resolveCoordinationHome` reading the primary's index from a worktree, cured by a two-root split at SHA:8c6b1d157 (2026-07-14).",
+   "kind": "trajectory",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w05",
+    "w06",
+    "w07",
+    "w08"
+   ],
+   "supportingLeafIds": [
+    "w05-L55",
+    "w05-L56",
+    "w05-L57",
+    "w05-L64",
+    "w06-L54",
+    "w07-L16",
+    "w07-L40",
+    "w07-L41",
+    "w08-L04"
+   ],
+   "groundingCount": 9
+  },
+  {
+   "id": "C57",
+   "pattern": "The claims registry is an unreliable coordination surface: heartbeat writing is manual, comms-heartbeat and `claims heartbeat` are separate mechanisms, a retained claim vanished from both live and archive files, and parallel work stays invisible until a shared gate fails.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w01",
+    "w02",
+    "w05",
+    "w08"
+   ],
+   "supportingLeafIds": [
+    "w01-L17",
+    "w02-L22",
+    "w05-L33",
+    "w08-L08",
+    "w08-L16"
+   ],
+   "groundingCount": 5
+  },
+  {
+   "id": "C58",
+   "pattern": "Handoff/continuity records rot within minutes-to-hours (a carefully grounded capture false in six places after 3.5h; PR status, worktree state, branch tips, prior 'grants' and inherited 'hard deadlines' all stale), so handoffs must carry the deriving COMMAND for derivable facts and only durable content is inheritable.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w02",
+    "w03",
+    "w05",
+    "w06",
+    "w07",
+    "w08",
+    "w09",
+    "w10",
+    "w11"
+   ],
+   "supportingLeafIds": [
+    "w02-L21",
+    "w03-L19",
+    "w05-L41",
+    "w06-L36",
+    "w06-L53",
+    "w07-L24",
+    "w08-L22",
+    "w10-L39",
+    "w10-L40",
+    "w10-L41"
+   ],
+   "groundingCount": 12
+  },
+  {
+   "id": "C59",
+   "pattern": "Agent-authored text is laundered into owner authority \u2014 a napkin entry in imperative register cited hours later as 'the owner's ruling', an invented rationale relayed upward as 'your cost control', an uncited succession gate, recorded 'granted by user' notes that were never grants, and quotes fused with the relayer's inference.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w02",
+    "w05",
+    "w10"
+   ],
+   "supportingLeafIds": [
+    "w02-L35",
+    "w05-L41",
+    "w10-L15",
+    "w10-L16",
+    "w10-L21",
+    "w10-L45"
+   ],
+   "groundingCount": 6
+  },
+  {
+   "id": "C60",
+   "pattern": "Documents are cited by their name, filename, index line or truncated digest rather than their body \u2014 `consolidate-at-third-consumer` whose H1 says second, a MEMORY.md index summary contradicting the full entry, a discipline mis-cited to ADR-117, a compound claim whose cross-reference was absent.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w03",
+    "w04",
+    "w05",
+    "w06",
+    "w10",
+    "w11"
+   ],
+   "supportingLeafIds": [
+    "w03-L25",
+    "w03-L37",
+    "w04-L24",
+    "w05-L30",
+    "w06-L58",
+    "w10-L54",
+    "w10-L55",
+    "w11-L19"
+   ],
+   "groundingCount": 8
+  },
+  {
+   "id": "C61",
+   "pattern": "Facts are transmitted without their epistemic status, so inferences travel at the authority of observations \u2014 inferred markup labelled first-hand, referent-narrowing (twelve instances in one session), frame-free absolutes cited outside their frame, and an inference about an unprobed surface stated as fact.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w02",
+    "w06",
+    "w07",
+    "w09",
+    "w10"
+   ],
+   "supportingLeafIds": [
+    "w02-L59",
+    "w06-L20",
+    "w07-L29",
+    "w09-L27",
+    "w10-L09",
+    "w10-L30",
+    "w10-L46"
+   ],
+   "groundingCount": 7
+  },
+  {
+   "id": "C62",
+   "pattern": "A negative-existence claim ('no packages/design', 'F-85 untested', 'zero blast radius', 'unmeasured') is only valid if the instrument used could have returned a positive \u2014 src-only searches, `find -maxdepth 2` and dot-dir-skipping greps all produced false-verified negatives.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w03",
+    "w04",
+    "w05",
+    "w06"
+   ],
+   "supportingLeafIds": [
+    "w03-L31",
+    "w04-L37",
+    "w05-L51",
+    "w06-L07"
+   ],
+   "groundingCount": 4
+  },
+  {
+   "id": "C63",
+   "pattern": "Under fluency and completion pressure the agent manufactures artefacts rather than misreading them \u2014 a non-existent key-stage\u2192phase mapping defended in a canonical plan, fabricated 'direct quotes', fabricated bot identity values on three pushed commits, 31 invented hex characters of a SHA.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w01",
+    "w03",
+    "w07",
+    "w09",
+    "w10"
+   ],
+   "supportingLeafIds": [
+    "w01-L21",
+    "w03-L02",
+    "w07-L14",
+    "w09-L23",
+    "w10-L21",
+    "w10-L28"
+   ],
+   "groundingCount": 6
+  },
+  {
+   "id": "C64",
+   "pattern": "Owner rulings arrive embedded inside answers to other questions, get superseded or reversed within hours-to-days, and are executed without being ratified \u2014 so the whole answer must be parsed and current word re-priced rather than prior statements treated as invariants.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w01",
+    "w02",
+    "w08",
+    "w10",
+    "w11"
+   ],
+   "supportingLeafIds": [
+    "w01-L14",
+    "w02-L13",
+    "w02-L19",
+    "w08-L09",
+    "w10-L15",
+    "w11-L27"
+   ],
+   "groundingCount": 6
+  },
+  {
+   "id": "C65",
+   "pattern": "The Director seat drifts out of view-and-direct into executor work, solo archaeology instead of asking, symmetric politeness deadlock, indefinite warm-limbo after naming a successor, and 12h heartbeat-reply-only passivity \u2014 with the owner naming the cure as a goal-holding mechanism, not vigilance.",
+   "kind": "behavioural",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w02",
+    "w03",
+    "w04",
+    "w08",
+    "w09",
+    "w10"
+   ],
+   "supportingLeafIds": [
+    "w02-L47",
+    "w03-L20",
+    "w04-L01",
+    "w04-L34",
+    "w04-L38",
+    "w08-L15",
+    "w09-L20",
+    "w10-L42"
+   ],
+   "groundingCount": 8
+  },
+  {
+   "id": "C66",
+   "pattern": "The identity derivation chain (session seed \u2192 UUID \u2192 display codename \u2192 slug) leaks at its edges: the SessionStart hook unconditionally overwrites an injected seed, the same seed mints different codenames per repo, near-identical codenames collide on one thread, and consumers key off the display name instead of the slug.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w03",
+    "w04",
+    "w05",
+    "w06",
+    "w09",
+    "w11"
+   ],
+   "supportingLeafIds": [
+    "w03-L35",
+    "w04-L41",
+    "w05-L48",
+    "w06-L43",
+    "w06-L55",
+    "w09-L13",
+    "w11-L08"
+   ],
+   "groundingCount": 7
+  },
+  {
+   "id": "C67",
+   "pattern": "Worktree boundaries are semi-permeable in undocumented ways \u2014 tracked `.agent/` state is per-branch and invisible across worktrees, scratchpad dirs are session-scoped, CLI git reads resolve to the coordination home, and Claude Code v2.1.223's isolation change refused Monitor arms for worktree-resident seats mid-fleet-day.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w04",
+    "w06",
+    "w07",
+    "w10",
+    "w11"
+   ],
+   "supportingLeafIds": [
+    "w04-L09",
+    "w06-L27",
+    "w07-L16",
+    "w07-L25",
+    "w10-L18",
+    "w11-L18",
+    "w11-L39",
+    "w11-L42"
+   ],
+   "groundingCount": 8
+  },
+  {
+   "id": "C68",
+   "pattern": "Bash cwd drift (shell cwd resetting to the primary checkout between calls, a `cd` into a subdirectory persisting, Monitor loops capturing cwd at start) breaks repo-root-relative commands and fakes vanished files \u2014 recurring ~7\u00d7 in one session and 10 minutes after its own register entry.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w05",
+    "w06",
+    "w07",
+    "w09",
+    "w10",
+    "w11"
+   ],
+   "supportingLeafIds": [
+    "w05-L74",
+    "w06-L10",
+    "w07-L04",
+    "w09-L34",
+    "w10-L57",
+    "w11-L18"
+   ],
+   "groundingCount": 6
+  },
+  {
+   "id": "C69",
+   "pattern": "The tool layer distorts reads: Bash content-reads of `.agent/memory/` are silently sandbox-blocked returning zero lines, `rg -i` highlighting renders intact bytes as a fake defect, the Write tool embeds literal control bytes, and broad greps truncate at ~66,000 lines.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w04",
+    "w05",
+    "w06",
+    "w07"
+   ],
+   "supportingLeafIds": [
+    "w04-L22",
+    "w05-L24",
+    "w06-L29",
+    "w07-L32"
+   ],
+   "groundingCount": 4
+  },
+  {
+   "id": "C70",
+   "pattern": "Instrument-building and threshold-chasing substitute for moving the goal variable \u2014 the entire decision-debt sensor built while deciding zero of 72 overdue items, recall reified into the milestone, fitness counts led over substance, a Director map tracking activity instead of goals.",
+   "kind": "behavioural",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w02",
+    "w05",
+    "w09",
+    "w10"
+   ],
+   "supportingLeafIds": [
+    "w02-L68",
+    "w05-L10",
+    "w05-L29",
+    "w09-L06",
+    "w10-L42"
+   ],
+   "groundingCount": 5
+  },
+  {
+   "id": "C71",
+   "pattern": "Scope silently drifts between ratification and execution (PostHog narrowed to sink+test contradicting a recorded day-0 requirement; new scope piled onto a plan pending review), driving the commissioned Definition-of-Done discipline with an append-governed change ceremony on 2026-07-29.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w02",
+    "w07",
+    "w10"
+   ],
+   "supportingLeafIds": [
+    "w02-L04",
+    "w02-L24",
+    "w07-L31",
+    "w10-L43",
+    "w10-L44"
+   ],
+   "groundingCount": 5
+  },
+  {
+   "id": "C72",
+   "pattern": "Hitting a structural line/file cap triggers extraction of a real seam rather than incremental trimming \u2014 five instances in one window across create.ts, cli-specs.ts, cli-args.ts and a 700-line test file.",
+   "kind": "behavioural",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w04"
+   ],
+   "supportingLeafIds": [
+    "w04-L28"
+   ],
+   "groundingCount": 1
+  },
+  {
+   "id": "C73",
+   "pattern": "A plan's reference set determines what the executing agent grounds on: the EEF plans cited the registration surface ~21\u00d7 and the execution-dispatch surface zero times (causing an invented bypass model), a research conclusion never crossed threads, and cited capability loci (in-repo skill, `.mcp.json`) were wrong three times.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w01",
+    "w02",
+    "w07"
+   ],
+   "supportingLeafIds": [
+    "w01-L34",
+    "w02-L53",
+    "w07-L23",
+    "w07-L24"
+   ],
+   "groundingCount": 4
+  },
+  {
+   "id": "C74",
+   "pattern": "MCP transport and client surfaces diverge from the spec-valid assumption: Cursor renders only `content` while Claude Code renders only `structuredContent`, the invoker drops HTTP headers killing Link-based pagination, SDK vs ext-apps carrier types differ, and green conformance suites coexist with undriveable tool schemas.",
+   "kind": "recurrence",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w01",
+    "w02",
+    "w05",
+    "w10"
+   ],
+   "supportingLeafIds": [
+    "w01-L35",
+    "w02-L52",
+    "w05-L34",
+    "w10-L27"
+   ],
+   "groundingCount": 4
+  },
+  {
+   "id": "C75",
+   "pattern": "Corpus subject matter migrates over the timeline from product/domain engineering mechanisms (EEF data semantics, MCP tool registration, curriculum content shape) dominant in w01\u2013w02 to fleet-coordination and corpus-analysis meta-infrastructure dominant in w05\u2013w11.",
+   "kind": "distributional",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w01",
+    "w02",
+    "w05",
+    "w08",
+    "w10",
+    "w11"
+   ],
+   "supportingLeafIds": [
+    "w01-L05",
+    "w01-L20",
+    "w01-L34",
+    "w02-L42",
+    "w05-L36",
+    "w08-L34",
+    "w10-L42",
+    "w11-L47"
+   ],
+   "groundingCount": 8
+  },
+  {
+   "id": "C76",
+   "pattern": "Operating scale grows across the corpus from one-or-two agents on a shared checkout (w01\u2013w02) to multi-worktree teams with Directors, claims and watchers (w03\u2013w06) to 18\u2013155-agent adversarial fleets and 23-seat assessments (w07\u2013w11), with each scale step generating its own coordination defect class.",
+   "kind": "trajectory",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w01",
+    "w02",
+    "w04",
+    "w07",
+    "w08",
+    "w10",
+    "w11"
+   ],
+   "supportingLeafIds": [
+    "w01-L15",
+    "w02-L22",
+    "w04-L18",
+    "w07-L34",
+    "w08-L40",
+    "w10-L32",
+    "w11-L33"
+   ],
+   "groundingCount": 7
+  },
+  {
+   "id": "C77",
+   "pattern": "The cures for shared-checkout collisions (explicit-pathspec commits, then migration to linked worktrees, w01\u2013w04) systematically PRECEDE a later family of worktree-boundary defects (F-95 cwd-relative liveness, F-138 coordination-home git reads, per-branch invisible `.agent/` state, v2.1.223 isolation refusals) appearing in w07\u2013w11.",
+   "kind": "relational-lagged",
+   "isAbsenceClaim": false,
+   "supportingWindows": [
+    "w02",
+    "w04",
+    "w07",
+    "w10",
+    "w11"
+   ],
+   "supportingLeafIds": [
+    "w02-L14",
+    "w04-L09",
+    "w04-L15",
+    "w07-L16",
+    "w07-L40",
+    "w10-L18",
+    "w11-L39",
+    "w11-L42"
+   ],
+   "groundingCount": 8
+  },
+  {
+   "id": "C78",
+   "pattern": "Of the napkin's four declared categories, 'what works' is structurally under-represented: positive-confirmation leaves are a small minority and cluster narrowly on validators/schemas catching defects and quorum economics, while mistakes, corrections and surprises saturate every window.",
+   "kind": "absence",
+   "isAbsenceClaim": true,
+   "supportingWindows": [
+    "w02",
+    "w04",
+    "w05",
+    "w06",
+    "w10"
+   ],
+   "supportingLeafIds": [
+    "w02-L14",
+    "w04-L19",
+    "w05-L40",
+    "w05-L64",
+    "w06-L28",
+    "w06-L30",
+    "w06-L59",
+    "w10-L59"
+   ],
+   "groundingCount": 8
+  },
+  {
+   "id": "C79",
+   "pattern": "Essentially no leaf records a lesson sourced from deployed-product or end-user (teacher) feedback; the corpus's mechanisms are internal toolchain and coordination almost exclusively, with release-and-observe and tool-driving named as principles rather than as observed user signal.",
+   "kind": "absence",
+   "isAbsenceClaim": true,
+   "supportingWindows": [
+    "w01",
+    "w02",
+    "w10"
+   ],
+   "supportingLeafIds": [
+    "w01-L20",
+    "w02-L13",
+    "w10-L27"
+   ],
+   "groundingCount": 3
+  },
+  {
+   "id": "C80",
+   "pattern": "Domain-data mechanisms (EEF envelope/answerType semantics, key-stage vs phase fields, MCP registerTool carrier types) are concentrated in w01\u2013w02 and are absent from w07\u2013w11 entirely, where no leaf concerns curriculum or EEF data correctness.",
+   "kind": "absence",
+   "isAbsenceClaim": true,
+   "supportingWindows": [
+    "w01",
+    "w02"
+   ],
+   "supportingLeafIds": [
+    "w01-L05",
+    "w01-L10",
+    "w01-L18",
+    "w01-L21",
+    "w01-L35",
+    "w02-L01",
+    "w02-L42"
+   ],
+   "groundingCount": 7
+  }
+ ]
+}

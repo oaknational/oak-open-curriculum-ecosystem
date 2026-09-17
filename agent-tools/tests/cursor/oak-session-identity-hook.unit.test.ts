@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
 import { deriveIdentity } from '../../src/core/agent-identity';
-import { planCursorSessionIdentityHook } from '../../src/cursor/oak-session-identity-hook';
+import {
+  planCursorSessionIdentityHook,
+  cursorSessionIdentityHookEnvironmentFromProcessEnv,
+} from '../../src/cursor/oak-session-identity-hook';
 
 const projectDir = '/repo';
 const nowIso = '2026-04-27T07:50:41.000Z';
@@ -45,7 +48,6 @@ describe('planCursorSessionIdentityHook', () => {
 
     expect(plan.output.env).toStrictEqual({
       PRACTICE_AGENT_SESSION_ID_CURSOR: sessionId,
-      OAK_AGENT_IDENTITY_OVERRIDE: expectedDisplayName,
     });
     expect(plan.output.additional_context).toContain('[Practice agent identity]');
     expect(plan.output.additional_context).toContain(
@@ -81,8 +83,25 @@ describe('planCursorSessionIdentityHook', () => {
 
     expect(plan.output.env).toStrictEqual({
       PRACTICE_AGENT_SESSION_ID_CURSOR: 'unit-test-hook-seed-xyz',
-      OAK_AGENT_IDENTITY_OVERRIDE: deriveIdentity('unit-test-hook-seed-xyz').displayName,
     });
     expect(plan.mirror).toBeUndefined();
+  });
+});
+
+describe('cursorSessionIdentityHookEnvironmentFromProcessEnv', () => {
+  it('forwards the operator override alongside the project and mirror variables', () => {
+    // Regression: the executable adapter once hand-picked only the
+    // project-directory and mirror-skip variables, so an explicitly set
+    // override never reached hook-time rendering.
+    expect(
+      cursorSessionIdentityHookEnvironmentFromProcessEnv({
+        CURSOR_PROJECT_DIR: '/repo',
+        OAK_AGENT_IDENTITY_OVERRIDE: 'Named By Owner',
+      }),
+    ).toStrictEqual({
+      CURSOR_PROJECT_DIR: '/repo',
+      OAK_AGENT_IDENTITY_OVERRIDE: 'Named By Owner',
+    });
+    expect(cursorSessionIdentityHookEnvironmentFromProcessEnv({})).toStrictEqual({});
   });
 });

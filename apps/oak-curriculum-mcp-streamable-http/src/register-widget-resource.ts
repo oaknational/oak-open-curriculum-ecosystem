@@ -11,6 +11,7 @@
  * @see scripts/embed-widget-html.js — Codegen embed script
  */
 
+import type { McpUiResourceMeta } from '@modelcontextprotocol/ext-apps';
 import { registerAppResource, RESOURCE_MIME_TYPE } from '@modelcontextprotocol/ext-apps/server';
 import { WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
@@ -19,18 +20,24 @@ import { type ResourceRegistrar } from './register-resource-helpers.js';
 /**
  * MCP App UI metadata for the widget resource.
  *
- * Placed on the `contents[]` item per the MCP Apps CSP/CORS specification
- * (content-item `_meta.ui` takes precedence over listing-level config).
- * Google Fonts domains are declared so hosts with CSP enforcement allow
- * the Lexend `@import` request. `prefersBorder: false` because the widget
- * manages its own branded background.
+ * Served on both the `resources/list` entry, the static default a host can
+ * review at connection time, and the `resources/read` content item, which
+ * takes precedence per the MCP Apps specification, so either surface carries
+ * the same settings. Google Fonts domains are declared so hosts with CSP
+ * enforcement allow the Lexend `@import` request. `prefersBorder: false`
+ * because the widget manages its own branded background.
+ *
+ * These settings are part of the widget's published contract: a published
+ * plugin's snapshot records them, so any change here is an incompatible change
+ * that takes a new widget address and a new plugin version (ADR-141, widget URI
+ * identity amendment, MCP-489).
  */
 const WIDGET_UI_META = {
   csp: {
     resourceDomains: ['https://fonts.googleapis.com', 'https://fonts.gstatic.com'],
   },
   prefersBorder: false,
-} as const;
+} satisfies McpUiResourceMeta;
 
 /**
  * Registration name of the MCP App widget resource — the single literal
@@ -59,6 +66,7 @@ export function registerWidgetResource(
     WIDGET_URI,
     {
       description: 'Interactive Oak curriculum MCP App for search and curriculum exploration.',
+      _meta: { ui: WIDGET_UI_META },
     },
     () => ({
       contents: [

@@ -2434,6 +2434,19 @@ below is a cross-reference index, not a second source of truth.
   conserved end-to-end); two real gate failures during landing surfaced with full
   output — the truncation used to swallow exactly these. Queue-workflow commits from
   Claude Code are unblocked, including the memory-drain plan's loop commits.
+- **Second instance (push path), observed and cured 2026-08-07 (Saffron guards
+  Hedgerow)**: `merge-bot push`'s `streamingGitCall` still spawned git with pipe
+  stdio, so the class recurred one wrapper over — reproduced four times first-hand:
+  the pre-push chain's knip child died with empty output at the depcruise→knip
+  handover, an instrumented diagnosis line written to stderr was ITSELF eaten by the
+  poisoned stream, and git's exit code arrived null (reported as `-1`), while the
+  identical hook chain run directly (`sh .husky/pre-push` to a file) passed green.
+  Cure: the runner moved to its shared home `agent-tools/src/core/file-backed-child.ts`
+  (third consumer) and the push executor consumes it; `GitCommandResult` and
+  `RepoCheckCommandResult` now carry the killing signal distinctly; the knip gate
+  prints a crash-class diagnosis line on the SURVIVING stream (stdout) when the child
+  dies without a verdict. Corollary pinned by the eaten-diagnosis observation:
+  diagnosis must never ride only the channel whose failure it reports.
 
 ### F-113 — `commit-queue enqueue`/`guard` usage text omits required `--id`; `guard` error names the claim kind but not the re-enqueue cure
 
@@ -2567,6 +2580,86 @@ below is a cross-reference index, not a second source of truth.
 - **Owner direction status**: standing (record-all-frictions).
 
 ---
+
+### F-161 — no tool mints the coordination successor-branch name
+
+- **Source**: owner question 2026-08-17 ("why is the branch name missing
+  its uuid, are we missing a rule, and tool?") after the Director cut
+  `coordination/estate-2026-08-17` by following the fold skill's literal
+  (wrong-since-birth) name form.
+- **Surface**: coordination-fold ceremony step 9; no agent-tools action
+  exists for it.
+- **Observed**: the convention — `coordination/<utc-date>-<sha6 of the
+  post-fold tip>` — is deliberate owner policy (multi-checkout
+  collision safety on a real repo) and WAS automated as a mechanical
+  recipe (`date -u +%F` + `git rev-parse --short=6 origin/main`), but
+  the recipe was carried in continuity records only; the skill's step 9
+  named a different, wrong form since the skill's birth. Automation
+  that lives outside the doctrine home is invisible to a
+  literal-reading seat — the same failure class as F-162's session
+  (hand-rolling what is already built).
+- **Expected**: the doctrine home carries the automation. Cured
+  same day: the recipe one-liner now lives verbatim in the skill's
+  step 9.
+- **Candidate cure (optional hardening)**: lift the recipe into a named
+  action beside the merge-bot's REST-merge helper (which holds the
+  merge sha at the right moment), so the mint is one command with a
+  typed refusal on a dirty premise.
+- **Target surface**: `.agent/skills/coordination-fold/SKILL-CANONICAL.md`
+  (done); `agent-tools/src/merge-bot/` (optional).
+- **Status**: mitigated 2026-08-17 (recipe in the skill); named action
+  optional.
+
+### F-162 — pr-watch all-green exit ignores merge and review state
+
+- **Source**: Director seat, 2026-08-17, first pr-watch arm after the
+  hand-rolled-watcher correction.
+- **Surface**: `pnpm agent-tools pr-watch <n> --watch`.
+- **Observed**: `pr-watch 890 --watch` exited on ALL GREEN (every check
+  passed, every thread resolved) while the PR stood
+  `merge=CONFLICTING/DIRTY` and `review=CHANGES_REQUESTED` — the state
+  where a watch is most wanted. The watch declared green and ended on a
+  PR that cannot merge.
+- **Expected**: ALL GREEN requires mergeable and no standing
+  change-request; or a `--hold-until-merged` mode that exits only on
+  merged/closed.
+- **Candidate cure**: extend the exit predicate with mergeStateStatus
+  and reviewDecision; keep the current predicate available behind a flag
+  for callers that genuinely only care about checks+threads.
+- **Target surface**: `agent-tools/src/pr-watch/`.
+- **Status**: open.
+
+### F-163 — abandoned commit-queue intents have no drain; active-claims.json is 4.4MB
+
+- **Source**: owner question 2026-08-17 ("why are there 4MB of active
+  claims?").
+- **Surface**: `.agent/state/collaboration/active-claims.json`; the
+  `commit-queue` CLI topic.
+- **Observed** (measured): 4,388,290 bytes, of which 4,338,153 is the
+  `commit_queue` array — 227 entries, 226 `abandoned` (2026-07-03 →
+  2026-08-14, ~19KB each: full staged-file listings and fingerprints
+  ride every entry). Live claims: 4 rows, 3,655 bytes. Claims have an
+  archive surface (`closed-claims.archive.json`, `claims
+  archive-stale`); the queue has NONE — the topic ships
+  enqueue/commit/status/list/show only, so abandoned intents accumulate
+  forever, and every claims/comms CLI invocation re-reads the full file
+  per call.
+- **Expected**: an archive action symmetric with claims —
+  `commit-queue archive [--phase abandoned] [--before <iso>]` moving
+  entries loss-free to a dated archive beside the claims archive, with
+  the same recompute-don't-just-record validation the estate expects.
+- **Candidate cure**: build the action (MCP-609-shape micro-lane:
+  TDD, reviews, small PR); wire the warden-hygiene duty to run it at
+  fold boundaries so the drain is a ceremony step, not vigilance.
+- **Status**: SUPERSEDED same day by the owner's QUEUE-LOCAL ruling
+  (rulings ledger): no archive action — the queue leaves the flat file
+  entirely (per-intent event files like comms, 1-hour TTL, list as a
+  view, machine-local never-in-VC). Interim split executed 2026-08-17
+  (live file 4.4MB→4KB; the legacy blob retained loss-free in the
+  gitignored local archive until the MCP-612 landing's verification
+  read, then owner-disposed); the re-shape is plan
+  `commit-queue-local-ephemera` / MCP-612.
+- **Target surface**: `agent-tools/src/commit-queue/`.
 
 ## Mitigated / Addressed Frictions
 
@@ -3509,3 +3602,289 @@ commit SHA and the closing plan reference.
   for unparseable files; (3) test doctrine: schema-touching changes must
   exercise the old-reader × new-event compat cell (no rebuild-everything
   suite can reach it).
+
+### F-154 — negation-contrast tombstone detection has no enforcement layer (structural form exceeds the innate hook)
+
+- **Source**: Gull lifts Nimbus (`3da0ae`), 2026-08-07 curator pass;
+  Director verdict event 2026-08-07T10:51Z (policy.json probed at the
+  Director seat: zero hits for the tombstone class). Substance carried
+  from `no-tombstones-for-removed-ideas` §Why This Rule Is Strict, whose
+  tracking pointer previously named the pending-graduations register — a
+  drainable buffer — and dangled when the 2026-07-20 drain discharged
+  rows without verifying inbound pointers.
+- **Observed**: the negation-contrast memorial form ("DELETED, not
+  reshaped", "X rather than Y", "built fresh, never a bridge") is a
+  STRUCTURAL pattern — a negation bound to a dead concept — not a fixed
+  literal. A naive literal block on "never" / "rather than" / "instead
+  of" would have an unacceptable false-positive rate, so the write-time
+  innate-immunity hook (`.agent/hooks/policy.json`) carries no entry for
+  the class, and the reflex recurs at write time, including inside
+  tombstone-removal work itself (corpus-proven recursive instances,
+  2026-05→06).
+- **Expected**: an enforcement increment for the structural form — a
+  smarter detector (negation verb within clause distance of a
+  removed-concept referent) or an output-time review pass — plus, at
+  most, a narrow set of genuinely high-signal banner literals in the
+  innate hook.
+- **Candidate cure / promotion trigger**: design the structural detector
+  as agent-tooling work (route: agent-tooling backlog). Promotes to a
+  plan when a seat takes the lane or when a fresh corpus instance shows
+  the reflex landing on a permanent doc despite the rule tier.
+- **Status**: OPEN. The rule's §Why This Rule Is Strict now points here;
+  a future drain of any register this row migrates to re-trues that
+  pointer first (the generator this row's own history proves).
+
+### F-155 — the prose-width hard limit fires on markdown headings, which are structurally unwrappable
+
+- **Source**: Wisteria lifts Verdure (`c4294f`), 2026-08-06 branch reconciliation,
+  first-hand; homed from the napkin at the 2026-08-07 consolidation slice.
+- **Observed**: the fitness prose-width check (100 chars) is applied to markdown
+  HEADINGS. A heading cannot be wrapped — the only compliant fix is rewriting the
+  heading text, so a carried section title over 100 chars has NO compliant
+  lossless fix. Two carried napkin headings from another seat read as hard
+  findings while being faithful verbatim carriage.
+- **Expected**: width discipline on prose lines; headings judged by a rule that
+  acknowledges their unwrappability (a heading carve-out, or a re-title-at-
+  processing convention).
+- **Candidate cure / promotion trigger**: a heading exemption (or separate
+  threshold) in the width check. Promotes when a seat takes the fitness-tooling
+  lane, or when a third faithful-carriage instance reads as a hard finding.
+- **Status**: OPEN. Interim practice: carry foreign headings unaltered; the pass
+  that processes them re-titles or drains them (the 2026-08-06 reconciliation's
+  own convention).
+
+### F-156 — merge-bot merge injects the minted app token into the OAuth-only review-run probe
+
+- **Source**: Civet spins Cavern (`054f5e`), 2026-08-07 ~20:58Z, first live
+  firing of the MCP-508 merge arm (#821/#822 merge attempts), first-hand.
+- **Observed**: `merge-bot merge` wraps EVERY gh invocation in the
+  tokenised executor (`merge.ts` — GH_TOKEN = minted installation token,
+  injected last by design). The review-run liveness probe
+  (`gh agent-task list`, `review-runs.ts`) runs under that same env and
+  gh refuses: "this command requires an OAuth token" — installation tokens
+  cannot use the agent-task surface. The leg degrades typed and
+  `decideMergeAction` refuses with "review-run liveness unavailable"
+  (exit 3). Reproduced: the identical command succeeds under the ambient
+  keyring OAuth auth.
+- **Expected**: reads ride the keyring path, writes ride the minted token
+  (the estate's standing split — handoff §6, bot-identity rules). The
+  liveness probe is a READ; it should execute under the base env, not the
+  tokenised executor.
+- **Candidate cure / promotion trigger**: route the agent-task probe (and
+  any other read-only leg) through the untokenised base executor inside
+  `merge-bot merge`, with a test pinning the env split. Promotes when a
+  seat takes the merge-bot lane (natural window: alongside the #820 F-112
+  cure family, same module). Related-but-distinct design question routed
+  to the owner's morning: whether QUOTA-SKIPPED (owner-ruled settled,
+  2026-07-21) should ever be COMMAND-merge-eligible — tonight it is
+  handled by per-PR Director grants on the manual REST shape, the
+  instrument untouched.
+- **Status**: CURED — PR #823 (merge commit 2fc5eae83, head 89ec41860,
+  2026-08-08): the read path runs on a pinned token-free environment
+  (keyring-deterministic, host pinned, enterprise fallbacks stripped) while
+  the merge PUT keeps the minted token via fetch; the env split is pinned by
+  `readEnv` unit tests AND a real-child contract test that kills the
+  env-drop mutant at the mechanism. The QUOTA-SKIPPED command-mergeability
+  design question remains SEPARATE, on the Director's morning board.
+
+### F-157 — commit-queue inner pathspec commit dropped four staged-new files from a 118-path intent
+
+- **Source**: Wren calls Downdraft (6b29b5) 2026-08-09 ~12:5xZ, PR #836
+  landing; intent `ae26a40a` (registry-verified to contain the four
+  paths); session transcript holds the full sequence.
+- **Observed**: the `commit-queue -- commit` workflow's inner
+  pathspec-scoped `git commit` produced commit `2fa212021` containing 111
+  of the intent's 118 paths — exactly the four staged-new
+  `packages/core/workspace-config/src/*` modules were dropped while their
+  seven staged-new sibling package files (README, configs, manifest)
+  landed. Not gitignored (`git check-ignore` exit 1); present in the
+  enqueue list; `record-staged`/verify raised nothing; workflow exited 0.
+  The tree stayed green (hooks run on the working tree), so the defect
+  was invisible until a content check of the commit itself.
+- **Expected**: the inner commit carries every intent path, or the
+  workflow fails loudly naming the paths it could not commit; exit 0
+  with a partial commit is the worst outcome (a green lie).
+- **Mitigation (applied)**: follow-up commit `39a891df4` landed the four
+  files; standing discipline adopted at this seat — after EVERY
+  commit-queue landing, verify the commit content (`git show --stat`)
+  against the intent, never the exit code alone.
+- **Candidate structural cure**: reproduce with a staged-new-files intent
+  in a scratch repo; suspect the pathspec-argv handling for A-status
+  entries in the spawned `git commit -- <paths>`; then fix the intake or
+  add a post-commit intent-vs-commit diff that fails the workflow on any
+  dropped path. Route: agent-tooling backlog.
+
+### F-158 — full `pnpm check` green minutes before the same tree's pre-commit turbo run found 24 type-check tasks red
+
+- **Source**: Wren calls Downdraft (6b29b5) 2026-08-09 ~12:4xZ, PR #836
+  landing (check task `b77b2u17n` exit 0 at ~12:36Z; commit-hook task
+  `bt8nbsjww` exit 1 at ~12:40Z, 49 cached / 24 type-check misses that
+  then failed with real TS2883 errors, reproduced directly).
+- **Observed**: `pnpm check` (secrets → clean → full turbo suite →
+  validators → knip → depcruise → format) exited 0; nothing edited the
+  worktree afterwards except `git add`; the commit hook's turbo run then
+  cache-missed 24 type-check tasks and failed them. The red was REAL
+  (`pnpm --filter @oaknational/result type-check` reproduced TS2883
+  standalone), meaning the check's green verdict for those tasks was
+  computed against different effective inputs.
+- **Expected**: two turbo runs over an unchanged tree agree; a green
+  full-suite check is trustworthy for the commit that follows it.
+- **Mitigation**: treat the hook as the verdict of record; on any
+  check-vs-hook divergence, reproduce the failing task directly before
+  trusting either.
+- **Candidate structural cure**: diff the two runs' task hash inputs
+  (turbo `--dry=json` env + input capture at both invocation sites —
+  check script vs husky hook environment); suspects are env-var
+  divergence in hashed `env` keys or `$TURBO_DEFAULT$` input-set
+  divergence between invocations. Route: agent-tooling backlog.
+
+### F-159 — Claude Code TUI silently switches session model at quota exhaustion; no resume-time lineage check exists
+
+- **Source**: Director seat (b10c37) 2026-08-10, owner-confirmed: the TUI
+  began switching models when the Fable quota ran out instead of stopping.
+  The Director seat (registry lineage `claude-fable-5`) ran the whole
+  post-compaction day on Opus 4.8; Swordfish's F-92 heartbeat collision
+  the same morning was the same class caught by accident.
+- **Observed**: a seat's session model can differ from its registered
+  lineage with NO surfaced signal. The day's error profile split exactly
+  along the enforcement boundary: every mechanical guard (hooks,
+  ratchets, skills:check, merge-bot refusal ladder, F-95) held
+  model-independently; prose-recorded judgement disciplines
+  (deciding-surface reads, re-read-before-declaring, value-lens-first)
+  regressed to error types not seen for months.
+- **Expected**: a seat knows and surfaces its own model discontinuity at
+  resume, the way the git triad surfaces branch/head state.
+- **Mitigation**: at every resume/start-right, compare the session's
+  declared model against the claims registry row; mismatch = surface
+  loudly to the owner before substantive work.
+- **Candidate structural cure**: a resume-time lineage check in
+  start-right (session model vs `agent_id.model` on held claims), and a
+  graduation sweep over the prose-only judgement disciplines to identify
+  which have earned mechanical enforcement (the day's evidence: prose is
+  vigilance; only enforcement is structure). Route: agent-tooling backlog
+  - PDR-014 graduation pipeline.
+
+### F-160 — comms watcher quiet config dies at the drain-step deadline on a large event directory
+
+- **Observed**: 2026-08-11 ~09:1xZ (this seat, Fable 5): the
+  heartbeat-excluded watcher exited fail-loud with `step "drain"
+  exceeded 60000ms deadline` over a comms directory of ~3,600 event
+  files while several gate suites ran concurrently on the host. This is
+  the same fast-death the 2026-08-10 seat hit twice with the quiet
+  config and recorded cause-unknown before falling back to the noisy
+  full-stream config. The initial read at capture — that the default
+  per-step deadline, not the exclusion mechanism, was the binding
+  constraint — was FALSIFIED the same day by the probes below: 180s
+  died identically while the full stream survived at 60s, isolating
+  the EXCLUSION PATH as the implicated mechanism. Preserved here as
+  falsified history; the probe entries below carry the live cause.
+- **Expected**: a drain pass over the live event directory completes
+  comfortably inside the step deadline at any realistic directory size.
+- **Mitigation attempt FALSIFIED same day**: `--step-timeout-ms 180000`
+  died identically within ~30 minutes (drain exceeded 180s). Deadline
+  size is not the constraint. The discriminating evidence: the
+  FULL-STREAM config drained the same directory all morning on the
+  default 60s deadline with zero deaths; both quiet-config arms died
+  within the hour. The defect lives on the exclusion path — leading
+  hypothesis: excluded events do not durably advance the seen cursor,
+  so each drain rescans a growing heartbeat backlog until the scan
+  outlives any deadline.
+- **Working mitigation**: run the full-stream config (no
+  `--exclude-tag`) and absorb the heartbeat wake noise; ticketed as
+  MCP-548 for a code-level cure (exclusion must advance the cursor
+  exactly as emission does). The curator-pass archive cadence (PDR-094)
+  remains the companion pressure valve — ~3,600 live events means the
+  archive pass is overdue. Route: agent-tooling backlog.
+
+### F-164 — `pr-watch --watch` is silent across head and check transitions and exits ALL-GREEN on a conflicting, changes-requested PR
+
+- **Observed**: 2026-08-17 (Director seat): `pr-watch 890 --watch` exited
+  on ALL-GREEN (checks passed, threads resolved) while the PR sat
+  CONFLICTING + CHANGES_REQUESTED — the one state where the watch is most
+  wanted. 2026-09-02 (Luna seeks Twilight, 5c0ddc): armed as a Monitor on
+  #945, it emitted nothing across two pushes and a full green check run
+  (~30 minutes); its silence was indistinguishable from "no change", and a
+  60 s `gh pr view` poll emitting only on reviewDecision / mergeStateStatus
+  / head change, terminating on MERGED/CLOSED, caught the owner's merge
+  within a minute.
+- **Expected**: one line per head change and per check-state transition; a
+  heartbeat line at a fixed cadence so a dead watcher is visible; ALL-GREEN
+  requires mergeable plus no standing change-request, or a
+  `--hold-until-merged` mode.
+- **Route**: agent-tooling backlog (the watch-commands node).
+
+### F-165 — `claims open` has no amend verb; a mis-named area path forces close + reopen
+
+- **Observed**: 2026-09-02 (Luna seeks Twilight, 5c0ddc): a claim's areas
+  named a run-record path that broke the archive's filename convention
+  (`YYYY-MM-DD-<target>.md`); the only honest cure was close + reopen,
+  recorded in the closure summary.
+- **Expected**: `claims amend --area` (or an equivalent single-row edit)
+  that preserves the claim id and history.
+- **Route**: agent-tooling backlog.
+
+### F-166 — the PDR-078 §4 consumer-absent exemption has no re-arm trigger when fleet composition changes
+
+- **Observed**: 2026-09-03, this seat (Kiln mends Firelight, `3b47e6`,
+  Director). The registry read this claim `stale`
+  (`fresh_until 2026-09-02T20:22:26Z`) for roughly seventeen hours of
+  continuous, comms-visible work. Caught by the INCOMING Director
+  (Civet calls Crypt, `2a5c71`) at its arrival grounding, not by this
+  seat and not by any check this seat ran.
+- **Cause, which is a gap rather than a lapse**: the heartbeat was
+  correctly stood down under the PDR-078 §4 consumer-absent exemption
+  when the only peer (Willow holds Compost, a PR Review Warden) closed
+  out and relinquished its claim. The exemption is sound and the
+  stand-down was right at that moment. But **the exemption has a
+  suspend condition and no resume condition**: nothing in the rule, the
+  tooling, or any check fires when a consumer reappears. The seat that
+  suspends the heartbeat is exactly the seat that will not notice the
+  fleet changing under it, because suspending it removed its own
+  reason to look.
+- **Expected**: a seat holding a claim either emits a heartbeat, or has
+  a live reason not to that is re-evaluated when the fleet changes.
+- **Why it matters more than a stale field looks**: this is the F-92
+  shape (comms live, registry stale) arriving through a *legitimate*
+  exemption rather than through forgetting, which makes it invisible to
+  the F-92 cures. A successor arriving on the registry alone reads a
+  stale row and may take the seat over a live Director — which PDR-117
+  names as the takeover trap. It did not happen here only because the
+  incoming seat cross-checked comms and refused to treat the stale row
+  as licence.
+- **Candidate cures, none built** (route to the agent-tooling backlog,
+  not fixed here): a claims-side check that reports a claim whose
+  `heartbeat_at` has lapsed while its agent is emitting non-heartbeat
+  comms events; or a re-arm prompt on the team-start/closeout events
+  that change fleet size, since those are the exact moments the
+  exemption's premise flips; or making the exemption's suspension carry
+  an explicit resume trigger in the rule text so a seat writes one down
+  when it suspends.
+- **Interim discipline for any seat applying the exemption**: treat a
+  peer's team-start broadcast as a re-arm trigger, and re-check the
+  exemption's premise at every fleet-composition change rather than
+  once at stand-down.
+- **Provenance**: identified by Civet calls Crypt during PDR-064
+  handover grounding and framed by it, correctly, as a tooling gap
+  rather than this seat's lapse. Recorded here at its suggestion.
+- **Adjacent mechanism, observed the same day and cured by the same
+  family of triggers**: a correctly-conducted PDR-064 handover *always*
+  emits heartbeat failures in the window between the successor adopting
+  the claim in place and the predecessor stopping its heartbeat. Once
+  `b5b2744b` belonged to Civet calls Crypt, this seat's comms leg could
+  not succeed by construction — the guard refuses a heartbeat anchored
+  to another seat's claim (PDR-078 §4 / F-73), which is right. Measured
+  twice, at 13:22:25Z and 15:05:36Z, each landing as
+  `HEARTBEAT-COMMS-LEG-FAILED`. The hazard is diagnostic, not
+  operational: a reader seeing those lines without the adjacent Moment 2
+  event diagnoses a dying seat, and the loudest signal in a clean
+  handover is a false alarm. Two candidate cures: have the heartbeat
+  loop detect that its own claim has changed owner and exit reporting
+  `superseded` rather than `failed`; or have Moment 2's adoption stamp
+  the predecessor's loop so the failure text names the successor. Same
+  re-arm/stand-down trigger family as the gap above, so it is recorded
+  here rather than as its own friction.
+- **Id note (2026-09-10)**: filed as F-161 by a seat working a checkout
+  156 commits behind `main`, where F-161 was already taken ("no tool mints
+  the coordination successor-branch name"). Renumbered to F-166 at the
+  convergence merge. The collision is itself an instance of the staleness
+  this register exists to catch.

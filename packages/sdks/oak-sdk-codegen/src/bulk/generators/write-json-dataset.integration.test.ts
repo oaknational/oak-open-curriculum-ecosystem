@@ -27,11 +27,11 @@ const sampleTypesContent = [
 ].join('\n');
 
 const sampleIndexContent = [
-  "import { createRequire } from 'node:module';",
+  "import { readFileSync } from 'node:fs';",
   "import type { TestGraph } from './types.js';",
   '',
-  'const require = createRequire(import.meta.url);',
-  "const data: TestGraph = require('./data.json');",
+  "const dataUrl = new URL('./data.json', import.meta.url);",
+  "const data: TestGraph = JSON.parse(readFileSync(dataUrl, 'utf8'));",
   '',
   'export const testGraph: TestGraph = data;',
   '',
@@ -69,8 +69,10 @@ describe('writeJsonDataset', () => {
       expect(JSON.parse(dataJson)).toStrictEqual(sampleData);
       expect(typesModule).toContain('export interface TestNode');
       expect(typesModule).toContain('export interface TestGraph');
-      expect(indexModule).toContain("import { createRequire } from 'node:module'");
-      expect(indexModule).toContain("const data: TestGraph = require('./data.json')");
+      expect(indexModule).toContain("import { readFileSync } from 'node:fs'");
+      expect(indexModule).toContain(
+        "const data: TestGraph = JSON.parse(readFileSync(dataUrl, 'utf8'))",
+      );
     } finally {
       await rm(tempDir, { recursive: true, force: true });
     }

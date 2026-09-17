@@ -1,0 +1,1 @@
+I don't have a verified hex value for that — I'd be guessing, and a brand color is exactly the kind of thing worth getting right rather than plausible. Pull it from the design system's actual token source (theme/tokens file, CSS custom properties, or the Figma library) and use that value.

@@ -12,7 +12,9 @@ For each thread, open its next-session record at
 - **(b) Add a new identity row** if you are a new identity on this thread
   (new platform, new model, or new `agent_name`). Populate all required
   fields: `agent_name`, `platform`, `model`, `session_id_prefix` (first 6
-  characters of the harness session ID, or `unknown` if not exposed), `role`
+  characters of the PDR-027 seed — the untagged platform session id on
+  cloud seats, the harness session ID otherwise — or `unknown` if not
+  exposed), `role`
   (free-form short label), `first_session` (today's date), `last_session`
   (today's date).
 
@@ -100,7 +102,7 @@ The complementary layers are, per PDR-029's 2026-04-21 Amendment Log
   on any platform performs the same walkthrough by reading the same
   markdown.
 - **Stale-identity audit** — a six-check documentation walkthrough in
-  [`/oak-consolidate-docs § Thread-register freshness`](../skills/consolidate-docs/SKILL-CANONICAL.md#thread-register-freshness)
+  [`/oak-consolidate-docs § Thread-register freshness`](../skills/knowledge/consolidate-docs/SKILL-CANONICAL.md#thread-register-freshness)
   that the agent performs at consolidation time: stale `last_session`,
   orphan threads, missing fields, duplicate identity rows,
   active-threads ↔ next-session-file correspondence, and retired-record
@@ -137,7 +139,7 @@ Per PDR-027 and
 | `agent_name` | Persistent descriptive name for this agent on this thread (owner-assigned or descriptive default). Carries across sessions. |
 | `platform` | `claude-code`, `cursor`, `codex`, `gemini`, etc. |
 | `model` | Canonical model id (e.g. `claude-opus-4-7-1m`). |
-| `session_id_prefix` | First 6 characters of the harness session ID; `unknown` if not exposed. Authored cells carry this bare wire value, never the rendered visual-disambiguator token (`<prefix>-<last 3 of id>`) — a pasted token silently mis-binds the field (PDR-027, 2026-08-01 amendment). |
+| `session_id_prefix` | First 6 characters of the PDR-027 seed (the untagged platform session id on cloud seats; the harness session ID otherwise — 2026-08-24 amendment); `unknown` if not exposed. Authored cells carry this bare wire value, never the rendered visual-disambiguator token (`<prefix>-<last 3 of id>`) — a pasted token silently mis-binds the field (PDR-027, 2026-08-01 amendment). |
 | `role` | Free-form short label (`drafter`, `executor`, `reviewer`, `initiator`, …). |
 | `first_session` | Date identity first touched the thread (YYYY-MM-DD). |
 | `last_session` | Date identity most recently touched the thread (YYYY-MM-DD). |

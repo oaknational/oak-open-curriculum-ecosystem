@@ -24,13 +24,6 @@ export interface CreateAppOptions {
   readonly logger?: Logger;
   /** Returns built widget HTML for the MCP App resource. Prod: codegen constant; tests: trivial fake. (ADR-078) */
   readonly getWidgetHtml: () => string;
-  /**
-   * Returns the baked landing-page document. Prod: boot-read of the build's
-   * artefact (`readBakedLandingPageHtml`); tests: trivial fake. Required so
-   * the request path can never fall back to rendering — the page's content
-   * is fixed at build time by owner ruling. (ADR-078)
-   */
-  readonly getLandingPageHtml: () => string;
   /** Upstream AS metadata for OAuth proxy; provided by tests, fetched at startup in prod. */
   readonly upstreamMetadata?: UpstreamAuthServerMetadata;
   /** Factory for global Clerk middleware (tests inject no-op; prod omits). (ADR-078) */

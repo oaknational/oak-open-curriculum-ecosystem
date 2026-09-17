@@ -1,0 +1,31 @@
+import { defineConfig } from 'vitest/config';
+
+/**
+ * Stryker-only Vitest config for the mutation-testing canary
+ * (`.agent/plans/delivery/mutation-testing-core-canary.plan.md`).
+ *
+ * Mechanical necessity, not a preference: Stryker's sandbox is built by
+ * crawling files at-or-below its working directory only (first-hand
+ * verified against `@stryker-mutator/core`'s `ProjectReader.resolveInputFileNames`,
+ * which calls `crawlDir(process.cwd())` with no option to widen the root).
+ * The workspace's real `vitest.config.ts` imports the shared
+ * `../../../vitest.config.base` three levels up the repo tree — a file
+ * outside any single workspace's sandbox, so it cannot resolve inside one
+ * (see `mutation-evidence/dry-run.log` for the reproduced failure). This
+ * file is a self-contained duplicate of the fields that matter for test
+ * discovery, scoped to this workspace only, so the sandbox never needs
+ * anything outside `packages/core/type-helpers/`.
+ *
+ * `vitest.config.ts` is untouched and keeps importing the shared root
+ * base for every other purpose (`pnpm test`, CI, `pnpm check`). This file
+ * is read by Stryker's vitest runner alone, via `vitest.configFile` in
+ * `stryker.config.ts`.
+ */
+export default defineConfig({
+  test: {
+    globals: true,
+    environment: 'node',
+    include: ['src/**/*.test.ts'],
+    exclude: ['node_modules', 'dist', 'coverage', '**/*.e2e.test.ts', 'stryker-tmp'],
+  },
+});

@@ -5,4 +5,4 @@ description: Size the work and the instrument before shaping either. A pre-decis
 
 # Proportionality (Claude Code)
 
-Read and follow `.agent/skills/proportionality/SKILL-CANONICAL.md`.
+Read and follow `.agent/skills/cognition/proportionality/SKILL-CANONICAL.md`.

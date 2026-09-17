@@ -17,12 +17,8 @@
 import type { Result } from '@oaknational/result';
 import { z } from 'zod';
 
-import {
-  candidateSchema,
-  leafSignalSchema,
-  parseWithSchema,
-  voterOutcomeSchema,
-} from '../judgment-schemas.js';
+import { parseWithSchema } from '../../core/schema-parse.js';
+import { candidateSchema, leafSignalSchema, voterOutcomeSchema } from '../judgment-schemas.js';
 import { metaOutputSchema } from '../recall-schemas.js';
 
 const nonEmptyString = z.string().min(1);

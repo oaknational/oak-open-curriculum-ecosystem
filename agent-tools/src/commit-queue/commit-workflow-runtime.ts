@@ -9,7 +9,7 @@
  * Advisory polarity is preserved by construction: the advisory
  * orchestrator's stdout/stderr are conserved in full and replayed to
  * the caller's terminal on completion (file-capture-and-replay in
- * `runInheritedProcess` — never live Node pipes, which poison the
+ * `runFileBackedChild` — never live Node pipes, which poison the
  * spawned git's hook chain; F-112), and the workflow does not change
  * its path on non-zero advisory exit. The blocking authority remains
  * `.husky/pre-commit` + `.husky/commit-msg`. See PDR-053 and ADR-176.
@@ -28,7 +28,7 @@ import {
 } from './commit-workflow.js';
 import { getStagedBundle } from './git.js';
 import { type CommitWorkflowPathspec } from './pathspec.js';
-import { runInheritedProcess } from './process.js';
+import { runFileBackedChild } from '../core/file-backed-child.js';
 import { readRegistry, updateRegistry } from './registry.js';
 
 const ADVISORY_BANNER = '[ADVISORY ONLY — NOT A COMMIT GATE]';
@@ -89,7 +89,7 @@ async function runAdvisoryOrchestrator(
   input: CommitWorkflowRuntimeInput,
 ): Promise<CommitWorkflowProcessResult> {
   process.stderr.write(`${ADVISORY_BANNER}\n`);
-  return runInheritedProcess({
+  return runFileBackedChild({
     command: 'pnpm',
     args: ['agent-tools:check-commit-skill-advisories', '-F', input.messageFilePath],
     cwd: input.gitRoot,
@@ -99,7 +99,7 @@ async function runAdvisoryOrchestrator(
 async function runGitCommit(
   input: CommitWorkflowRuntimeInput & { readonly pathspec: CommitWorkflowPathspec },
 ): Promise<CommitWorkflowGitCommitResult> {
-  const commit = await runInheritedProcess({
+  const commit = await runFileBackedChild({
     command: resolveTrustedGit(),
     args: ['commit', '-F', input.messageFilePath, '--', ...input.pathspec],
     cwd: input.gitRoot,

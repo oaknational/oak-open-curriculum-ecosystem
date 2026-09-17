@@ -5,4 +5,4 @@ description: "Enter a body of material — research, code, transcripts, a day's 
 
 # Free Play (Claude Code)
 
-Read and follow `.agent/skills/free-play/SKILL-CANONICAL.md`.
+Read and follow `.agent/skills/cognition/free-play/SKILL-CANONICAL.md`.

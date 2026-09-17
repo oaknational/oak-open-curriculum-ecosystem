@@ -1,0 +1,185 @@
+{
+ "generated": "2026-08-17",
+ "purpose": "Light re-integration pass (owner-ratified): one blind opus classifier places the 16 collision-free re-run designs into both reducers' published descriptor spaces, evidence-quoted per axis, contested rows flagged. Spend: 131,370 subagent tokens, 5.7 min.",
+ "classification": {
+  "placements": [
+   {
+    "id": "04d9aa",
+    "xPathLoad": "path-null",
+    "xAssurance": "reproduced",
+    "yPathSemantics": "flat-namespace",
+    "yCustody": "excluded",
+    "yFeedback": "rule-static",
+    "evidence": "pathLoad(path-null): \"The directory identifies only the unit; it conveys no class, layer, domain, lifecycle, or status.\" | assurance(reproduced): \"CI rejects tracked generated paths and verifies checksums/artifact provenance\" plus \"Third-party preserved inputs are byte-checked.\" | pathSemantics(flat-namespace): \"Use a single flat unit namespace: `units/<owner>--<subject>--<contract>/`\" | custody(excluded): \"Generated outputs are never tracked: generators publish to an artifact store/cache\" | feedback(rule-static): \"An estate validator reads every manifest, the pnpm/Turbo graph, tracked-file state, licences, and artifact references.\"",
+    "contested": false,
+    "matchesDominantTieredShape": false
+   },
+   {
+    "id": "1f76be",
+    "xPathLoad": "path-light",
+    "xAssurance": "recomputed",
+    "yPathSemantics": "axis-rooted",
+    "yCustody": "committed-verified",
+    "yFeedback": "rule-static",
+    "evidence": "pathLoad(path-light, 2 axes — app-vs-package kind, and role): \"apps/web for the product surface; packages/<domain> for reusable product capabilities\" | assurance(recomputed): \"Derived dependency graph plus package manifest dependencies. Enforce via cycle detection and an allowlist of role-level edges in CI.\" | pathSemantics(axis-rooted): \"Top-level directory: packages/{domain,platform,tooling}.\" | custody(committed-verified, by default only): the row states NO generated-byte rule anywhere; nearest touch is \"packages/tooling for build, test, lint, and repository automation\" — nothing is banned from VCS and nothing is regenerate-verified | feedback(rule-static): \"Enforce through a dependency-graph check that forbids deep imports and flags packages with only one consumer for maintainer review, without requiring their immediate merger.\" CONTESTED: (a) custody is unoccupied in the text — committed-verified is the least-wrong forced read, not an evidenced one; (b) pathSemantics straddles axis-rooted and incumbent-tuned because the apps/packages tiering it proposes is also the conventional incumbent shape for this tiny estate; (c) the single-consumer flag is a graph-derived merge proposal, edging toward telemetry-governed/self-correcting, but it names no metric threshold, history window, or cadence, so it stays rule-static/recomputed.",
+    "contested": true,
+    "matchesDominantTieredShape": false
+   },
+   {
+    "id": "2c0527",
+    "xPathLoad": "path-null",
+    "xAssurance": "reproduced",
+    "yPathSemantics": "flat-namespace",
+    "yCustody": "excluded",
+    "yFeedback": "rule-static",
+    "evidence": "pathLoad(path-null): \"Adopt a flat workspace namespace: `units/<unit-id>/package.json`, with no category-bearing parent directories.\" | assurance(reproduced): \"A third-party-pinned material unit with immutable digest and no-edit enforcement\" over a base of \"`graphLayer` is recomputed on every validation run from declared runtime imports\" | pathSemantics(flat-namespace): \"A directory establishes only the unit boundary.\" | custody(excluded): \"No machine-regenerated artefact is version controlled.\" | feedback(rule-static): \"a workspace validator rejects category-bearing workspace paths, duplicate unit IDs, undeclared cross-unit imports, generated files tracked by Git\"",
+    "contested": false,
+    "matchesDominantTieredShape": false
+   },
+   {
+    "id": "4658a7",
+    "xPathLoad": "path-heavy",
+    "xAssurance": "reproduced",
+    "yPathSemantics": "taxonomic-zones",
+    "yCustody": "committed-verified",
+    "yFeedback": "rule-static",
+    "evidence": "pathLoad(path-heavy — tier + audience + rights/provenance): \"Use a shallow workspace of independently coherent packages, with only two internal levels: `packages/<domain>/<unit>/`\" with zones incl. \"`packages/content/*` (licensed reference data and protected assets)\" and \"`packages/evidence/*` (non-shipping studies)\" | assurance(reproduced): \"CI rejects hand-edits to protected outputs and verifies regeneration where reproducible\" | pathSemantics(taxonomic-zones): \"`packages/foundation/*` (small cross-estate primitives), `packages/platform/*` (generic integrations and machinery)\" | custody(committed-verified): \"directory convention: `generated/<event>` and `vendor/<source>`\" — generated material lives tracked \"beneath the unit that owns its publication or consumption contract\" | feedback(rule-static): \"enforcement: affected-unit calculation, CI matrix, and ownership/review rules\"",
+    "contested": false,
+    "matchesDominantTieredShape": true
+   },
+   {
+    "id": "4df21f",
+    "xPathLoad": "path-null",
+    "xAssurance": "reproduced",
+    "yPathSemantics": "flat-namespace",
+    "yCustody": "committed-verified",
+    "yFeedback": "rule-static",
+    "evidence": "pathLoad(path-null): \"`units/<capability-slug>` is the sole directory-level classification\" | assurance(reproduced): \"require declared producers and reproducibility/freshness checks for fetched/generated artefacts\" | pathSemantics(flat-namespace): \"every independently owned code unit lives at `units/<capability-slug>/`\" | custody(committed-verified): \"Every tracked non-code or generated file matches exactly one artefact record.\" with `oak.artifacts[]` authority/producer/refresh records | feedback(rule-static): \"A validator compares declared artifacts, exports, task outputs, external sources, licences, and dependency edges with repository facts.\"",
+    "contested": false,
+    "matchesDominantTieredShape": false
+   },
+   {
+    "id": "5b9029",
+    "xPathLoad": "path-null",
+    "xAssurance": "reproduced",
+    "yPathSemantics": "flat-namespace",
+    "yCustody": "committed-verified",
+    "yFeedback": "rule-static",
+    "evidence": "pathLoad(path-null): \"`src`, `generated`, and `dist` are technical locations only, not organisational classifications.\" | assurance(reproduced): \"`oakUnit.lifecycle` with trigger, producer, schedule, and output digest fields\" plus \"generated-file attestations\" | pathSemantics(flat-namespace): \"Use one flat physical namespace: `units/<unit-id>/`.\" | custody(committed-verified): generated distributables are tracked sibling units — \"`units/curriculum-types`\", \"`units/design-token-css`\" — governed by \"`oakUnit.provenance`, `oakUnit.mutationPolicy`, and generated-file attestations\" | feedback(rule-static): \"an import-boundary rule and manifest-schema check run in CI and commit-time validation\"",
+    "contested": false,
+    "matchesDominantTieredShape": false
+   },
+   {
+    "id": "63d907",
+    "xPathLoad": "path-heavy",
+    "xAssurance": "reproduced",
+    "yPathSemantics": "taxonomic-zones",
+    "yCustody": "committed-verified",
+    "yFeedback": "rule-static",
+    "evidence": "pathLoad(path-heavy — audience + generality + provenance/rights roots): \"apps/<product>/ — supported deployable products; demos/<demo>/\" and \"materials/<owner>/<material>/ — non-code data and assets, each with its own provenance/rights declaration.\" | assurance(reproduced): \"CI checks regenerated output matches declared inputs\" | pathSemantics(taxonomic-zones): \"packages/platform/<capability>/ — domain-neutral primitives; packages/domains/<domain>/<capability>/\" | custody(committed-verified): \"Turbo outputs/inputs plus oak.artifactOwner and consumer artifact-consumption declaration.\" | feedback(rule-static): \"policy tests enforce support, release, risk, provenance, licensing, and artifact-embedding constraints\"",
+    "contested": false,
+    "matchesDominantTieredShape": true
+   },
+   {
+    "id": "64ee76",
+    "xPathLoad": "path-heavy",
+    "xAssurance": "reproduced",
+    "yPathSemantics": "taxonomic-zones",
+    "yCustody": "committed-verified",
+    "yFeedback": "rule-static",
+    "evidence": "pathLoad(path-heavy): \"Keep the physical tree domain-first, with neutral unit names: `units/<domain>/<capability>/`\" where the domain vocabulary carries audience, tier and provenance at once — \"`units/research/<study>`, and `units/brand/<asset-set>`\", \"`units/generation/curriculum-types`\", \"`units/demos/<demo>`\" | assurance(reproduced): \"CI validates ... snapshot hashes, generated-file provenance and freshness\" plus \"expected reproducibility\" | pathSemantics(taxonomic-zones): \"`units/foundation/errors`, `units/security/path-safety`, ... `units/operations/<capability>`\" | custody(committed-verified): \"vendor bytes are hash-locked and never hand-edited\" and generated units are tracked units recording \"source units, event class, recipe\" | feedback(rule-static): \"Graph-derived reports identify fan-in, public surface size, cycles, undeclared imports, and candidates that have become accidental shared platforms. They do not redefine ownership or licensing.\" CONTESTED: the whole taxonomy is compressed into one deliberately \"domain-first\" segment, so a stricter counter could read it as a single path axis (path-light/axis-rooted); the fan-in/accidental-shared-platform report also brushes boundary feedback, but it is static graph structure with no metric, threshold or cadence, so it stays rule-static.",
+    "contested": true,
+    "matchesDominantTieredShape": true
+   },
+   {
+    "id": "836273",
+    "xPathLoad": "path-heavy",
+    "xAssurance": "self-correcting",
+    "yPathSemantics": "taxonomic-zones",
+    "yCustody": "durability-split",
+    "yFeedback": "telemetry-governed",
+    "evidence": "pathLoad(path-heavy): \"apps/product/{curriculum-mcp-server,search-cli,<supported-app>}\", \"datasets/snapshots/<source-contract>\", \"assets/brand/<asset-set>\" — role, audience, origin and rights all in the tree | assurance(self-correcting, over a reproduced base): base is \"Separate checks enforce path/manifest agreement, licence homogeneity, public exports, deterministic generation, snapshot provenance, vendor checksums\"; the history rung is \"Graph fan-in, fan-out, strongly connected components, artefact propagation, and repeated multi-unit changes are review signals\" | pathSemantics(taxonomic-zones): \"Directories carry coarse form; manifests carry orthogonal policy.\" | custody(durability-split): \"Untracked, disposable build output is not a unit. A generated output becomes a unit when it is tracked, published, embedded elsewhere, refreshed independently, or consumed by more than its producer.\" | feedback(telemetry-governed): \"Graph and change-coupling reports for review\" as the carrier of \"Boundary evolution\". CONTESTED: the change-coupling instrument is named and standing, but the row explicitly refuses automation — \"they do not automatically rewrite semantic boundaries\" — and names no threshold or cadence, so a stricter reducer would land rule-static/reproduced.",
+    "contested": true,
+    "matchesDominantTieredShape": false
+   },
+   {
+    "id": "9076cd",
+    "xPathLoad": "path-null",
+    "xAssurance": "reproduced",
+    "yPathSemantics": "flat-namespace",
+    "yCustody": "excluded",
+    "yFeedback": "rule-static",
+    "evidence": "pathLoad(path-null): \"Use one flat address space: `units/<unit-id>/`, with no subgroup directories and no classification encoded by path.\" | assurance(reproduced): \"external artifact store, deployment manifest, and CI digest verification\" | pathSemantics(flat-namespace, files-only variant): \"Every unit root contains a machine-readable `unit.json`\" with \"flat, role-prefixed files such as `api-*.ts`, `impl-*.ts`\" | custody(excluded): \"No generated artefact is tracked: rebuild outputs go to a content-addressed external build store or deployment artifact store\" | feedback(rule-static): \"commit-time guards run the fast subset and CI runs the complete graph, provenance, licence, and regeneration checks\"",
+    "contested": false,
+    "matchesDominantTieredShape": false
+   },
+   {
+    "id": "bea367",
+    "xPathLoad": "path-null",
+    "xAssurance": "self-correcting",
+    "yPathSemantics": "flat-namespace",
+    "yCustody": "committed-verified",
+    "yFeedback": "telemetry-governed",
+    "evidence": "pathLoad(path-null, classification in name-grammar tokens): \"every unit is one directory directly under the repository root\" and \"Names are `kind--domain--purpose`\" | assurance(self-correcting): \"scheduled graph analysis flags high co-change pairs without `atomicWith`\" on top of \"CI regenerates or verifies declared outputs\" | pathSemantics(flat-namespace): \"No nested source folders: source files sit in their unit directory\" | custody(committed-verified): \"hashes/signatures verify vendor and byte-preserved files\" with tracked `gen--<domain>--<artifact>` units | feedback(telemetry-governed): \"Derived dependency and VCS co-change graph\" — \"Frequent graph co-change across units creates a merge/split recommendation\"",
+    "contested": false,
+    "matchesDominantTieredShape": false
+   },
+   {
+    "id": "c5fc6b",
+    "xPathLoad": "path-null",
+    "xAssurance": "reproduced",
+    "yPathSemantics": "flat-namespace",
+    "yCustody": "committed-verified",
+    "yFeedback": "rule-static",
+    "evidence": "pathLoad(path-null): \"no organisational category directories and no nested `src/` or `tests/` directories\" | assurance(reproduced): \"A checker verifies protected paths, generator reproducibility/freshness, and that each generated unit has exactly one declared producer.\" | pathSemantics(flat-namespace, files-only variant): \"Every unit is a single directory directly under the repository root, named `<kind>-<capability>`\" | custody(committed-verified): tracked `generated-*` units carrying \"`estate.provenance` (`authored`, `generated`, or `preserved`) plus `producer`, `trigger`, and `refresh` fields\" | feedback(rule-static): \"Required machine checks are one `validate-unit-estate` program plus dependency-cruiser/TypeScript resolution\"",
+    "contested": false,
+    "matchesDominantTieredShape": false
+   },
+   {
+    "id": "ce2a08",
+    "xPathLoad": "path-heavy",
+    "xAssurance": "reproduced",
+    "yPathSemantics": "no-layout",
+    "yCustody": "committed-verified",
+    "yFeedback": "rule-static",
+    "evidence": "pathLoad(path-heavy, of the projection): \"The resulting directory layout is only a projection of this graph—e.g. `products/`, `capabilities/`, `adapters/`, `contracts/`, `generated/`, `content/`, and `brand/`\" — role, provenance and rights roots together | assurance(reproduced): \"emit generated artefacts to a clearly marked generated package or directory with regeneration checks\" and \"generated-output freshness checks, provenance/refresh validation for data\" | pathSemantics(no-layout): \"Organise the estate as a governed product graph, not primarily as a taxonomy or directory tree\" ... \"rather than the organisation itself\" | custody(committed-verified): the same \"clearly marked generated package or directory with regeneration checks\" — tracked and regenerate-guarded, nothing banned from VCS | feedback(rule-static): \"workspace dependency constraints (including forbidden imports and cycle detection)\". CONTESTED: reducer X offers no no-layout value, so the row is forced onto its disclaimed projection; read as organisation the tree is path-heavy, read as the row intends it carries nothing at all.",
+    "contested": true,
+    "matchesDominantTieredShape": false
+   },
+   {
+    "id": "e3d65e",
+    "xPathLoad": "path-null",
+    "xAssurance": "reproduced",
+    "yPathSemantics": "flat-namespace",
+    "yCustody": "committed-verified",
+    "yFeedback": "rule-static",
+    "evidence": "pathLoad(path-null): \"Use one directory-level classification only: **unit membership**.\" | assurance(reproduced): \"formatter/pre-commit and CI compare/rebuild/hash enforcement\" | pathSemantics(flat-namespace): \"Directories mean nothing else: not domain, generation, audience, licence, deployability, or quality.\" | custody(committed-verified): \"any generated/imported/output bytes may be inside the owning unit only when declared by manifest path rules\", guarded by the compare/rebuild/hash check | feedback(rule-static): \"CI calculates forward dependants and required checks\" — boundary change runs through \"Manifest `migration`; graph-diff report and expiry enforcement\", i.e. declared rules, no measured signal",
+    "contested": false,
+    "matchesDominantTieredShape": false
+   },
+   {
+    "id": "f1f216",
+    "xPathLoad": "path-null",
+    "xAssurance": "reproduced",
+    "yPathSemantics": "flat-namespace",
+    "yCustody": "committed-verified",
+    "yFeedback": "rule-static",
+    "evidence": "pathLoad(path-null, role carried by name grammar): \"Use a flat package estate: every unit is a single root-level directory, with no nested directories anywhere.\" and \"Root names use `<role>-<subject>`\" | assurance(reproduced): \"a build-contract check that rebuilds producers, compares declared artifact hashes\" | pathSemantics(flat-namespace, files-only variant): \"Enforce with a filesystem-depth check rejecting directories below depth one\" | custody(committed-verified): \"a provenance check that verifies generated-file headers/lock metadata, rejects edits to preserved files, requires generators for generated units\" | feedback(rule-static): \"Enforce with a policy check that selects required CI checks by role\"",
+    "contested": false,
+    "matchesDominantTieredShape": false
+   },
+   {
+    "id": "sol-seeded",
+    "xPathLoad": "path-light",
+    "xAssurance": "reproduced",
+    "yPathSemantics": "axis-rooted",
+    "yCustody": "durability-split",
+    "yFeedback": "rule-static",
+    "evidence": "pathLoad(path-light — one axis under a universal `units/` partition): \"The physical layout uses only consumption form as its primary axis\" | assurance(reproduced): the validator \"rejects ... hand edits to machine-owned bytes, unreproducible outputs, vendor hash drift\" | pathSemantics(axis-rooted): \"units/programs/<domain-capability-role> ... units/libraries/ ... units/data/ ... units/assets/\" with everything else in \"an estateUnit record containing capability, human owner, custody, renewal, visibility, delivery, support, execution, assurance\" | custody(durability-split): \"A tracked generated output consumed by another unit is separate from its producer. Ordinary untracked build output remains an implementation detail.\" | feedback(rule-static): \"A fast affected-subgraph check serves commit-time use; full CI checks the whole graph.\" CONTESTED: custody straddles durability-split and committed-verified — the consumption test decides tracked vs untracked, yet tracked asset units (\"units/assets/interactive-widget-bundle with custody built\") are hash-and-reproducibility guarded, and the row's own notes name the unresolved question: \"which fetched and generated artefacts must be committed for clean/offline reproducibility, and which should live in a content-addressed artefact store?\"",
+    "contested": true,
+    "matchesDominantTieredShape": false
+   }
+  ],
+  "notes": "SPACE OCCUPANCY (16 rows)\n\nReducer X — pathLoad x assurance:\n- path-null: 9 (04d9aa, 2c0527, 4df21f, 5b9029, 9076cd, bea367, c5fc6b, e3d65e, f1f216)\n- path-heavy: 5 (4658a7, 63d907, 64ee76, 836273, ce2a08)\n- path-light: 2 (1f76be decoy, sol-seeded)\n- assurance: reproduced 13, self-correcting 2 (836273, bea367), recomputed 1 (1f76be decoy). `stated` stays unoccupied, consistent with the prior corpus.\n\nReducer Y:\n- pathSemantics: flat-namespace 9, taxonomic-zones 4, axis-rooted 2, no-layout 1 (ce2a08), incumbent-tuned 0.\n- custody: committed-verified 11, excluded 3 (04d9aa, 2c0527, 9076cd), durability-split 2 (836273, sol-seeded).\n- feedback: rule-static 14, telemetry-governed 2 (bea367, 836273).\n\nDOMINANT TIERED SHAPE: 3 rows match on both readings — 4658a7, 63d907, 64ee76. 836273 is path-heavy/taxonomic-zones but fails on custody (durability-split) and feedback (telemetry-governed); ce2a08 fails on Y (no-layout). The bulk of this batch is the flat/manifest-led family, not the tiered family.\n\nCROSS-READING COHERENCE: the two spaces agree closely. Every path-null row reads flat-namespace; every path-heavy row reads taxonomic-zones except ce2a08 (which X cannot express as no-layout); both path-light rows read axis-rooted. The only structural disagreement the two spaces produce is at ce2a08, and it is an artefact of X lacking a no-layout value.\n\nDECOY (1f76be): classified the same way, and it lands where its tiny estate would predict — two path axes (apps-vs-packages kind, plus the domain/platform/tooling role), a derived-import dependency check as its only reconstructed fact, and no generated-byte policy at all. It is the single `recomputed` row and the only row whose custody value is forced rather than evidenced.\n\nFREE-FORM (ce2a08): no-layout is the honest Y value — the row explicitly demotes the tree to \\\"only a projection of this graph\\\". It still names regeneration checks and provenance validation, so it is not weak on assurance; it simply declines to carry organisation in paths. Its X placement is the one genuinely forced value in this batch.\n\nCONTESTED ROWS (5): 1f76be (custody unevidenced; axis-rooted vs incumbent-tuned; single-consumer flag brushes telemetry), 64ee76 (a heterogeneous taxonomy compressed into one \\\"domain-first\\\" segment — path-heavy by content, path-light by segment count), 836273 (change-coupling reports named as a standing carrier but explicitly non-automatic, no threshold/cadence), ce2a08 (X has no no-layout value), sol-seeded (durability-split vs committed-verified, with the commit-vs-artefact-store question named as unanswered in its own notes).\n\nBOUNDARY CALL APPLIED CONSISTENTLY: static graph structure (fan-in, fan-out, cycles, SCCs, single-consumer, \\\"accidental shared platform\\\" candidates) was read as recomputed/rule-static, not as telemetry. Only signals measured over history or the build graph with a named cadence or metric — bea367's \\\"scheduled graph analysis flags high co-change pairs\\\" and 836273's change-coupling / repeated-multi-unit-change reports — were promoted to self-correcting / telemetry-governed. Applying the looser reading would have swept roughly half the batch into telemetry and destroyed the axis's discrimination."
+ }
+}

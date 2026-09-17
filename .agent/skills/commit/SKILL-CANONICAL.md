@@ -71,6 +71,28 @@ Commit-attempt logging is currently paused. Do not call or recreate a root
 owner re-enables commit-attempt logging, route the implementation through a
 workspace-owned tool surface and document the new command here.
 
+## Cadence Gate — Is This Parcel's Sitting Over?
+
+Owner-ratified, three corrections in a fortnight (2026-08-17
+"BATCH-CADENCE"; 2026-08-26; 2026-08-31, verbatim core: committing "takes
+nearly 15 minutes, if you commit every change then we are limiting
+ourselves to four or five changes per hour... a massive waste of
+tokens"). The ruling sat in the napkin each time and did not fire at the
+reach-for-commit moment; this section is its firing surface.
+
+Before drafting a message, answer one question: **is this parcel's
+sitting over?** Parcels accumulate in the working tree across a sitting;
+ONE commit ceremony lands at the safety boundary (a session close, a
+handoff or freeze, a merge-readiness point, a review round's settlement
+push); push once per boundary. Small commits stay small — the cure is
+cadence, never squashed scope — and adjacent small parcels batch into one
+cycle. The stop-hook's uncommitted-changes nag is not a commit trigger; a
+review round is not a safety boundary; freezes and handoffs are never left
+unpushed. Under relocated gates (`HUSKY=0` cloud sessions) the same ruling
+covers PUSHES: the minimum spacing is a genuine required-check conclusion
+on the previous head, and a rollup on a superseded head is never reported
+(`cloud-environment.md` §Push cadence).
+
 ## Before You Draft — Load the Live Constraints
 
 Run these steps **before** formulating the commit message.
@@ -120,10 +142,41 @@ Run these steps **before** formulating the commit message.
    `pull request 170` or move the reference to the real footer. Em-dashes
    and bullet shapes are innocent.
 
+   **Second shape, created by WRAPPING (bisected 2026-08-05):** a body line
+   that BEGINS `<word>:` — one ordinary word plus a colon — also parses as a
+   footer token and fires the same rule. This one is nastier than the
+   `token #ref` shape for three reasons: the wrap creates it rather than
+   anything you wrote (the same sentence on one line is fine); any plausible
+   mid-sentence word triggers it (`fixed:`, `note:`, `result:`, `evidence:`,
+   `cure:`), so a 100-char wrap can push one to a line start; and it only
+   WARNS, so the commit lands and `check-commit-message` exits 0 on it — you
+   discover it in the hook output of a commit that has already succeeded.
+   **Cure: after wrapping a body, scan line STARTS for `^\w+:` and reword or
+   rewrap.** `no-warning-toleration` has no carve-out for "it only warned", so
+   an unpushed commit carrying it is amended (which the safety rules permit)
+   — but read the amend precondition below before doing so: a pushed commit is
+   never amended to clear a cosmetic warning, and one seat inverted exactly
+   that proportion under this pressure. The permission is that narrow: a
+   cosmetic message cure on an UNPUSHED commit. `--amend` as a
+   content-evolution mechanism is owner-forbidden, absolute (2026-08-17): a
+   seat amended one unpushed commit four times folding new substance in, and
+   every amend invalidated shas already published to a ticket, the comms
+   stream and a rapid channel, manufacturing its own correction churn.
+   Commits only append; the PR body maps the trail once at open. A "one
+   clean commit" aesthetic is a squash instinct in a never-squash estate.
+
    **The `commit-msg` hook is the real gate — do not test the checker.** The
    `.husky/commit-msg` hook runs commitlint on every commit unconditionally; the
    pre-draft `check-commit-message` script is an optional convenience to catch a
-   format slip ~30s earlier, not a gate. **Never run a per-commit negative
+   format slip ~30s earlier, not a gate. **Exception — sessions committing
+   under a standing owner hook-policy ruling (e.g. `HUSKY=0` cloud agent
+   sessions per the ruling recorded in
+   `no-verify-requires-fresh-authorisation`):** there the hooks do not run, so
+   the ruling's operational surface (this repo: the cloud-environment doc's
+   "blocking in-session substitute set") is the gate — every check it
+   enumerates is BLOCKING per commit, with exit codes read in-band (never
+   through a pipe). That enumeration is the single source of truth for what
+   substitutes for the hooks; do not work from a remembered subset of it. **Never run a per-commit negative
    control** (a deliberately-bad message to "prove the checker is live") — that
    tests the tool, not your message, and has no bridge to landing a conforming
    commit. If you run the checker, trust its exit code; if a given invocation
@@ -296,6 +349,11 @@ direct CLI commands for inspection and recovery.
 
    ```bash
    MSGFILE="$(mktemp -t "commit-msg-<intent-id>")"
+   # Under a standing hook-policy ruling (hooks skipped), use instead:
+   #   MSGFILE="$(git rev-parse --absolute-git-dir)/COMMIT_MSG_<intent-id>"
+   # — the major-version guard in the blocking substitute set only accepts
+   # files under the real git directory, and the SAME file must feed both
+   # substitute checks and this commit command.
    # write the drafted message to "$MSGFILE", then:
    pnpm agent-tools:commit-queue -- commit \
      --intent-id "<intent-id>" \
@@ -462,6 +520,19 @@ catastrophic shape. A foreign lock means another agent is mid-commit:
 The `commit_queue`, `git:index/head` active claim, and shared-log entry are
 the coordination surfaces; the lock file is never one of them.
 
+**A free lock is not a free index.** On a shared checkout `git commit`
+releases `index.lock` BEFORE its pre-commit hook runs on an as-is commit
+and RE-READS the index (and `MERGE_HEAD`) after the hook returns, so a
+clean tree and a free lock at T say nothing about the index at T+ε.
+Worked instance (2026-08-19): a peer's `git merge` wrote its result into
+the index while the first seat's hook was running; the peer's own commit
+stopped at commitlint, leaving `MERGE_HEAD`; the first seat's docs commit
+then landed as a two-parent merge under the docs message — content and
+ancestry correct, attribution unmarked, and no undo attempted because
+the index-reset family is banned. The cure is structural, not a further
+naming discipline: per-seat worktrees for coordination writes (PDR-117),
+or the commit-warden singleton owning `git:index/head`.
+
 ## Process
 
 Before opening the four-move protocol above:
@@ -567,10 +638,14 @@ layer.)
 (observed 2026-06-17) was FIXED at `b2ae96898` per F-112: the mechanism was
 a Node child-stdio socketpair on the spawned git's stderr poisoning the hook
 chain (hook shell SIGPIPE at the handover; `set -e` silent exit 1); the
-workflow's `runInheritedProcess` now gives children file-backed stdio and
-replays the conserved output on completion, reporting exit code and signal
-distinctly. The workflow is the proper path and works from Claude Code.
-A plain `git commit` typed at a direct terminal is unaffected.
+workflow's child runner (now `runFileBackedChild`) gives children
+file-backed stdio and replays the conserved output on completion,
+reporting exit code and signal distinctly. The workflow is the proper path and works from Claude Code.
+A plain `git commit` typed at a direct terminal is unaffected. The same
+class hit `merge-bot push` on 2026-08-07 (its git child was still on pipe
+stdio) and was cured the same way: the runner now lives at its shared home
+`agent-tools/src/core/file-backed-child.ts` and the push executor runs
+through it — the F-112 register entry carries the push-path instance.
 
 **Observation (active 2026-04-23, Cursor)**: when `git commit` is invoked from
 the Cursor Shell tool with stdout/stderr streaming live, the pre-commit
@@ -620,7 +695,7 @@ EOF
 RC=$?
 END=$(date +%s)
 ELAPSED=$((END-START))
-tail -5 tmp/commit.log
+cat tmp/commit.log
 SHA=$(git log -1 --format=%h)
 ```
 
@@ -667,7 +742,21 @@ Additional prohibitions:
   Branch first; if commits are already stranded on local `main`, fetch,
   preserve them on a branch, and re-home `main` to `origin/main`.
 - **Never** force-push to `main` / `master`.
-- **Never** amend commits already pushed to remote.
+- **Never** amend commits already pushed to remote. The precondition needs one
+  extra clause, because the plain form does not hold under backgrounding: the
+  question is not "has this been pushed?" but **"has this been pushed — as of
+  now, with nothing in flight that could change the answer?"** Read the remote
+  ref at the instant of the amend, not before the reasoning that leads to it,
+  AND confirm no push, background task, or other seat's operation is running
+  against that ref. Worked instance 2026-08-05: a seat read the remote ref, got
+  a correct "not pushed" answer, and amended — while its own backgrounded
+  commit-and-push task was still in flight and landed in between. The push was
+  then correctly refused as non-fast-forward, so nothing was lost, and the
+  reconciliation was cheap only because the amend had changed the message alone;
+  an amend that also touched content would have left divergent content with no
+  clean pointer move available. The general shape is the pattern
+  `observation-that-does-not-bear-on-the-claim` § the race; the operative
+  discipline is that an in-flight task's partial log is never a completed result.
 - If a pre-commit or commit-msg hook fails, **fix the underlying issue** — no
   shortcuts, no hook bypassing.
 
@@ -784,10 +873,9 @@ For this owned skill the generated adapters currently live at:
 - `.claude/skills/oak-commit/SKILL.md` — Claude Code adapter.
 
 The retired custom-command and per-platform skill directories are not valid
-homes for this workflow. Regenerate adapters **from the repo root** with
-`node agent-tools/dist/src/bin/skills-adapter-generate.js --prefix=oak-`
-(after `pnpm agent-tools:build`) and verify with `pnpm skills:check` or
-`pnpm portability:check` after canonical changes. The filtered form
-(`pnpm --filter @oaknational/agent-tools skills-adapter-generate`) fails —
-the generator scans `.agent/skills` relative to its cwd, which the filtered
-run sets to `agent-tools/` (verified 2026-07-02).
+homes for this workflow. Regenerate adapters with `pnpm skills:generate`
+(the root script — it builds first and pins the estate's required
+`--prefix=oak-`) and verify with `pnpm skills:check` or
+`pnpm portability:check` after canonical changes. The workspace-filtered
+form now also works (its script anchors at the repo root and pins the
+prefix; the 2026-07-02 wrong-cwd failure is cured at the script).

@@ -1,6 +1,6 @@
 import { mergeConfig } from 'vitest/config';
 
-import { baseTestConfig } from '../../../vitest.config.base';
+import { baseTestConfig } from '@oaknational/workspace-config/vitest';
 
 /**
  * The theme runtime is a browser pre-paint script (document.documentElement,

@@ -63,14 +63,15 @@
     "@oaknational/graph-core": "workspace:*",
     "@oaknational/result": "workspace:*",
     "jsonld": "^9.0.0",
-    "n3": "^2.1.1"
+    "n3": "^2.2.0"
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
+    "@oaknational/workspace-config": "workspace:*",
     "@types/jsonld": "^1.5.15",
     "@types/n3": "^1.26.1",
     "@types/node": "^24.13.3",
-    "eslint": "^10.8.0",
+    "eslint": "^10.8.1",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3",
     "vitest": "^4.1.10"

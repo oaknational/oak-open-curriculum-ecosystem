@@ -1,5 +1,7 @@
 export interface RepoCheckCommandResult {
   readonly status: number | null;
+  /** The killing signal when `status` is null — named so a signal death is diagnosable (F-112). */
+  readonly signal: NodeJS.Signals | null;
   readonly stdout: string;
   readonly stderr: string;
 }

@@ -5,4 +5,4 @@ description: Run a persistent dedicated Oak knowledge-curation goal until every 
 
 # Consolidate Until Done (Claude Code)
 
-Read and follow `.agent/skills/consolidate-until-done/SKILL-CANONICAL.md`.
+Read and follow `.agent/skills/knowledge/consolidate-until-done/SKILL-CANONICAL.md`.

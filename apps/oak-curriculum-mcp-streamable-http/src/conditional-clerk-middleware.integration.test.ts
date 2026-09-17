@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Request, Response, NextFunction, RequestHandler } from 'express';
 import { createConditionalClerkMiddleware } from './conditional-clerk-middleware.js';
+import { ROUTED_HEALTH_PATH } from './app/health-paths.js';
 import { WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools';
 import {
   createFakeLogger,
@@ -122,6 +123,35 @@ describe('createConditionalClerkMiddleware (Integration)', () => {
     it('skips clerkMiddleware for /healthz', () => {
       const conditionalMw = createConditionalClerkMiddleware(mockClerkMw, mockLogger);
       const req = createMockRequest('/healthz', undefined);
+
+      conditionalMw(req, mockRes, mockNext);
+
+      expect(mockClerkMw).not.toHaveBeenCalled();
+      expect(mockNext).toHaveBeenCalled();
+    });
+
+    // The routed twin (MCP-580). It shares the `/mcp` prefix but not the MCP
+    // surface's auth contract: it is the health path a path-scoped edge can
+    // reach (the canonical host serves both forms), so if it ran through
+    // Clerk the probe that measures the real surface behind such an edge
+    // would poll the auth vendor forever.
+    //
+    // Shaped as the poll actually arrives — a GET — rather than through the
+    // POST default the cases above use, because the predicate forks on method
+    // and a POST would decide a different question. No Accept is set, which is
+    // equivalent to a monitor's `*/*` here: wildcards never select the HTML leg
+    // (`requestsHtmlDocument`), so both shapes reach the path comparison the same way.
+    //
+    // The predicate is only half the proof — it cannot show the vendor never
+    // ran in the assembled chain. The composed complement is in
+    // `clerk-public-surface.integration.test.ts`.
+    it('skips clerkMiddleware for a monitor-shaped poll of the routed health path', () => {
+      const conditionalMw = createConditionalClerkMiddleware(mockClerkMw, mockLogger);
+      const req = createMockExpressRequest({
+        path: ROUTED_HEALTH_PATH,
+        body: {},
+        method: 'GET',
+      });
 
       conditionalMw(req, mockRes, mockNext);
 

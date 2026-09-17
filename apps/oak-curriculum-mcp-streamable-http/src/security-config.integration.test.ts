@@ -1,0 +1,115 @@
+import express from 'express';
+import { describe, it, expect } from 'vitest';
+
+import { request } from './test-helpers/loopback-request.js';
+import { createFakeLogger } from './test-helpers/fakes.js';
+import { createMockRuntimeConfig } from './test-helpers/auth-error-test-helpers.js';
+import { createSecurityConfig } from './security-config.js';
+import { dnsRebindingProtection } from './security.js';
+
+/**
+ * MCP-634, at the scale the outage would have shown.
+ *
+ * The unit tests describe what `resolveAllowedHosts` returns. This file
+ * describes what the guard then DOES with it: the whole point of the change is
+ * that a host named in `ALLOWED_HOSTS` and a host the platform supplies are
+ * both admitted by the same running allow-list, and that a host in neither is
+ * still refused.
+ *
+ * Since 2026-08-20 this is also the guard's ONLY home. `dnsRebindingProtection`
+ * was mounted on the two HTML surfaces (`GET /` and the `/mcp`
+ * HTML-negotiation leg) and nowhere else; both left when this host became the
+ * MCP server and nothing else, so the guard is mounted on no app route and
+ * MCP-650 owns giving it one. The malformed-Host and IPv6 cases below moved
+ * here from `e2e-tests/web-security-selective.e2e.test.ts`, where the vehicle
+ * was the deleted page: their subject was always this guard, so they follow it
+ * rather than dying with the URL that used to exercise it.
+ */
+
+/** The platform-supplied deployment host (`VERCEL_PROJECT_PRODUCTION_URL`-class). */
+const PLATFORM_HOST = 'example-project.vercel.example';
+/** The custom domain named in ALLOWED_HOSTS — the canonical address. */
+const CONFIGURED_HOST = 'mcp.thenational.academy';
+
+function createGuardedApp(): ReturnType<typeof express> {
+  const runtimeConfig = createMockRuntimeConfig({
+    env: { ALLOWED_HOSTS: CONFIGURED_HOST },
+    vercelHostnames: [PLATFORM_HOST],
+  });
+  const { allowedHosts } = createSecurityConfig(runtimeConfig);
+
+  const app = express();
+  app.use(dnsRebindingProtection(createFakeLogger(), allowedHosts));
+  app.get('/', (_req, res) => {
+    res.status(200).send('served');
+  });
+  return app;
+}
+
+describe('dnsRebindingProtection with an additive ALLOWED_HOSTS', () => {
+  it('admits the host named in ALLOWED_HOSTS', async () => {
+    const response = await request(createGuardedApp()).get('/').set('Host', CONFIGURED_HOST);
+
+    expect(response.status).toBe(200);
+  });
+
+  /**
+   * The assertion that would have been red before the change. Naming the new
+   * custom domain used to REPLACE the platform-derived list, so this host —
+   * the one production actually answers on — would have started returning 403
+   * on the next deployment.
+   */
+  it('still admits the platform-derived host that was already serving', async () => {
+    const response = await request(createGuardedApp()).get('/').set('Host', PLATFORM_HOST);
+
+    expect(response.status).toBe(200);
+  });
+
+  it('still admits the loopback address the local harnesses use', async () => {
+    const response = await request(createGuardedApp()).get('/').set('Host', 'localhost');
+
+    expect(response.status).toBe(200);
+  });
+
+  /** The control: widening the list must not stop the guard discriminating. */
+  it('still refuses a host in neither the configured nor the derived set', async () => {
+    const response = await request(createGuardedApp()).get('/').set('Host', 'evil.example');
+
+    expect(response.status).toBe(403);
+    expect(response.body).toEqual({ error: 'Forbidden: host not allowed: evil.example' });
+  });
+});
+
+/**
+ * Host VALUES the guard must judge correctly, whatever the allow-list says.
+ *
+ * @remarks
+ * A port must not defeat the comparison, an IPv6 literal must survive its
+ * brackets, and a value shaped to smuggle an allowed host past a naive
+ * substring check must be refused. Moved from
+ * `e2e-tests/web-security-selective.e2e.test.ts`, whose vehicle was the
+ * removed HTML page.
+ */
+describe('dnsRebindingProtection judges the Host value, not its spelling', () => {
+  it.each([
+    ['a bare allowed hostname', 'localhost'],
+    ['an allowed hostname with a port', 'localhost:3333'],
+    ['an allowed IPv4 literal with a port', '127.0.0.1:3333'],
+    ['a bracketed IPv6 literal with a port', '[::1]:3333'],
+    ['a bracketed IPv6 literal with no port', '[::1]'],
+  ])('admits %s', async (_label, host) => {
+    const response = await request(createGuardedApp()).get('/').set('Host', host);
+
+    expect(response.status).toBe(200);
+  });
+
+  it.each([
+    ['userinfo-like syntax hiding a foreign host', 'localhost:3333@evil.example'],
+    ['a bracketed value with trailing junk', '[::1]evil'],
+  ])('refuses %s', async (_label, host) => {
+    const response = await request(createGuardedApp()).get('/').set('Host', host);
+
+    expect(response.status).toBe(403);
+    expect(response.body).toHaveProperty('error');
+  });
+});

@@ -1,15 +1,21 @@
 /**
  * Security middleware bootstrap for the Express application.
  *
- * Configures CORS (global), DNS rebinding protection (landing page only),
- * and security headers (CSP, X-Content-Type-Options, etc.) as instrumented
- * bootstrap phases.
+ * Configures CORS (global) and security headers (CSP,
+ * X-Content-Type-Options, etc.) as instrumented bootstrap phases.
+ *
+ * @remarks
+ * It used to construct `dnsRebindingProtection` here too and hand it back
+ * for selective mounting. The only two routes that ever mounted it were the
+ * HTML surfaces (`GET /` and the `/mcp` HTML-negotiation leg), and both left
+ * on 2026-08-20. The guard itself is deliberately retained in `security.ts`
+ * — see the retention note there and MCP-650.
  */
 
-import type { Express, RequestHandler } from 'express';
+import type { Express } from 'express';
 import type { Logger, PhasedTimer } from '@oaknational/logger';
 
-import { createCorsMiddleware, dnsRebindingProtection } from '../security.js';
+import { createCorsMiddleware } from '../security.js';
 import { createSecurityHeadersMiddleware } from '../security-headers.js';
 import { createSecurityConfig } from '../security-config.js';
 import type { RuntimeConfig } from '../runtime-config.js';
@@ -19,22 +25,16 @@ import type { HttpObservability } from '../observability/http-observability.js';
 /**
  * Sets up security middleware for the Express application.
  *
- * Creates and applies CORS (global, all origins), DNS rebinding protection
- * (for landing page only — returned for later use), and security headers
- * (CSP, X-Content-Type-Options, etc.).
+ * Creates and applies CORS (global, all origins) and security headers (CSP,
+ * X-Content-Type-Options, etc.).
  *
  * CORS is unconditionally permissive because security is enforced by OAuth
- * authentication, not by origin restrictions. DNS rebinding protection is
- * only needed on the landing page (`/`), so it is returned for selective
- * application.
+ * authentication, not by origin restrictions.
  *
- * `dnsRebindingProtection` deliberately keeps validating the RAW Host: it is
- * the control that stops a rebound DNS name reaching the HTML surfaces, and a
- * configured canonical origin (which governs self-description only) must
- * never relax it.
- *
- * @returns DNS rebinding middleware, resolved allowed hosts, and the
- *   configured canonical origin when the app is served at an edge address
+ * @returns The resolved allowed hosts, and the configured canonical origin
+ *   when the app is served at an edge address. `allowedHosts` is still
+ *   load-bearing: the auth layer derives this server's self-origin from it
+ *   (`host-validation-error.ts`).
  */
 export function setupSecurityMiddleware(
   app: Express,
@@ -44,7 +44,6 @@ export function setupSecurityMiddleware(
   appId: number,
   observability?: Pick<HttpObservability, 'withSpan' | 'withSpanSync'>,
 ): {
-  dnsRebindingMiddleware: RequestHandler;
   allowedHosts: readonly string[];
   canonicalOrigin?: string;
 } {
@@ -56,15 +55,6 @@ export function setupSecurityMiddleware(
     'createCorsMiddleware',
     appId,
     () => createCorsMiddleware(securityConfig.mode),
-    observability,
-  );
-
-  const dnsRebindingMiddleware = runBootstrapPhase(
-    log,
-    timer,
-    'createDnsRebindingMiddleware',
-    appId,
-    () => dnsRebindingProtection(log, securityConfig.allowedHosts),
     observability,
   );
 
@@ -84,7 +74,6 @@ export function setupSecurityMiddleware(
   );
 
   return {
-    dnsRebindingMiddleware,
     allowedHosts: securityConfig.allowedHosts,
     ...(securityConfig.canonicalOrigin ? { canonicalOrigin: securityConfig.canonicalOrigin } : {}),
   };

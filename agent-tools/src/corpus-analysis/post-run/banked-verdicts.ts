@@ -2,11 +2,8 @@ import type { Result } from '@oaknational/result';
 import { z } from 'zod';
 
 import { finaliseQuorum } from '../aggregation-adjudication.js';
-import {
-  adversaryLensSchema,
-  adversaryVerdictSchema,
-  parseWithSchema,
-} from '../judgment-schemas.js';
+import { parseWithSchema } from '../../core/schema-parse.js';
+import { adversaryLensSchema, adversaryVerdictSchema } from '../judgment-schemas.js';
 import type { AdversaryVerdict } from '../judgment-schemas.js';
 
 /**

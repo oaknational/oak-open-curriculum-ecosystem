@@ -1,0 +1,120 @@
+{
+  "name": "@oaknational/fidelity-review",
+  "version": "0.0.0-development",
+  "private": true,
+  "description": "Shared fidelity capture/diff/report core for the demo apps: image diffing, dev-server lifecycle, static-path guards, report rendering, and the disposition register schema",
+  "type": "module",
+  "exports": {
+    "./support": {
+      "types": "./dist/support.d.ts",
+      "import": "./dist/support.js",
+      "default": "./dist/support.js"
+    },
+    "./dev-server": {
+      "types": "./dist/dev-server.d.ts",
+      "import": "./dist/dev-server.js",
+      "default": "./dist/dev-server.js"
+    },
+    "./static-path-guard": {
+      "types": "./dist/static-path-guard.d.ts",
+      "import": "./dist/static-path-guard.js",
+      "default": "./dist/static-path-guard.js"
+    },
+    "./capture-flags": {
+      "types": "./dist/capture-flags.d.ts",
+      "import": "./dist/capture-flags.js",
+      "default": "./dist/capture-flags.js"
+    },
+    "./register": {
+      "types": "./dist/register.d.ts",
+      "import": "./dist/register.js",
+      "default": "./dist/register.js"
+    },
+    "./pairing-schema": {
+      "types": "./dist/pairing-schema.d.ts",
+      "import": "./dist/pairing-schema.js",
+      "default": "./dist/pairing-schema.js"
+    },
+    "./capture-manifest": {
+      "types": "./dist/capture-manifest.d.ts",
+      "import": "./dist/capture-manifest.js",
+      "default": "./dist/capture-manifest.js"
+    },
+    "./capture-settle": {
+      "types": "./dist/capture-settle.d.ts",
+      "import": "./dist/capture-settle.js",
+      "default": "./dist/capture-settle.js"
+    },
+    "./orchestrator": {
+      "types": "./dist/orchestrator.d.ts",
+      "import": "./dist/orchestrator.js",
+      "default": "./dist/orchestrator.js"
+    },
+    "./visual-stats": {
+      "types": "./dist/visual-stats.d.ts",
+      "import": "./dist/visual-stats.js",
+      "default": "./dist/visual-stats.js"
+    },
+    "./png-codec": {
+      "types": "./dist/png-codec.d.ts",
+      "import": "./dist/png-codec.js",
+      "default": "./dist/png-codec.js"
+    },
+    "./visual-calibration": {
+      "types": "./dist/visual-calibration.d.ts",
+      "import": "./dist/visual-calibration.js",
+      "default": "./dist/visual-calibration.js"
+    },
+    "./visual-correlation": {
+      "types": "./dist/visual-correlation.d.ts",
+      "import": "./dist/visual-correlation.js",
+      "default": "./dist/visual-correlation.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "test:coverage": "vitest run --coverage",
+    "type-check": "tsc -p tsconfig.lint.json --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "clean": "rm -rf dist .turbo"
+  },
+  "dependencies": {
+    "@oaknational/result": "workspace:*",
+    "pixelmatch": "^7.2.0",
+    "pngjs": "^7.0.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@oaknational/eslint-plugin-standards": "workspace:*",
+    "@oaknational/workspace-config": "workspace:*",
+    "@types/jest-axe": "^3.5.9",
+    "@types/node": "^24.13.3",
+    "@types/pngjs": "^6.0.5",
+    "eslint": "^10.8.1",
+    "globals": "^17.9.0",
+    "happy-dom": "^20.11.2",
+    "jest-axe": "^11.0.0",
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.10"
+  },
+  "engines": {
+    "node": "24.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oaknational/oak-open-curriculum-ecosystem.git",
+    "directory": "packages/libs/fidelity-review"
+  },
+  "bugs": {
+    "url": "https://github.com/oaknational/oak-open-curriculum-ecosystem/issues"
+  },
+  "homepage": "https://github.com/oaknational/oak-open-curriculum-ecosystem/tree/main/packages/libs/fidelity-review#readme",
+  "license": "MIT"
+}

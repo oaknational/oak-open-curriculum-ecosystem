@@ -50,6 +50,25 @@ also carries `heartbeat` still emits); excluded events never consume
 the `--max-events-per-drain` batch bound and never count toward the
 watcher's `emitted_count`.
 
+**The proven standby/quiet-pause configuration** (owner-priced 2026-08-02: a
+warm-paused seat's full watcher was delivering ~15 empty heartbeat ticks per hour
+into context, and the owner asked for "just enough for the Director to wake
+you"). The shape that satisfied both this rule and the economy:
+
+- `comms watch --exclude-tag heartbeat` — `directed` and `group` always surface
+  whatever their tags, so an activation still arrives instantly; and
+- the mandatory F-75 pairing run as a **diff-only anomaly poll**: peer-liveness
+  every ~10 minutes with its **baseline seeded at arm time**, so already-retired
+  seats never emit and only *newly* degraded peers do.
+
+Measured result: zero empty ticks, and a directed activation reached the seat
+immediately. Falsifier for the configuration: a quiet-configured standby that
+misses coordination a full watcher would have delivered — the exposure is
+heartbeat-borne information only, which the poll covers by construction. Reserve-
+seat freshness is load-bearing economics, not a nicety: a standby that burns
+context on a heartbeat firehose shortens the very tenure the bench exists to
+extend.
+
 **Excluding `heartbeat` MANDATORILY pairs with the F-75
 `comms peer-liveness` poll** (see
 [`liveness-heartbeat-cron` §Surfacing peer heartbeat-silence](liveness-heartbeat-cron.md))
@@ -161,6 +180,26 @@ watcher there — `pnpm` resolves the wrong workspace, verify-deps churns
 whatever tree it lands in, and the "watcher" watches nothing (worked
 instance 2026-07-20: a re-arm from a scratchpad clone auto-installed the
 clone and observed zero events).
+
+### Worktree residency blocks the arm — arm from the primary, before EnterWorktree
+
+Platform worktree isolation (Claude Code `EnterWorktree`) makes the PRIMARY
+coordination home non-writable from a worktree-resident session and refuses
+compound arm commands it cannot prove stay inside the worktree ("This
+session is isolated in the worktree …" — the refusal recorded in-repo
+2026-08-06 in the mutation-evidence mechanics report; three seats hit it
+independently 2026-08-13 and first read it as a fleet regression). The
+watcher, the F-75 poll, and the heartbeat loop therefore arm while the
+session is PRIMARY-resident — at session open, before any `EnterWorktree`
+— and persist across later residency switches (armed monitors keep
+running; a full worktree lane phase can run under a primary-armed
+watcher). A session already worktree-resident that needs an arm exits to
+the primary first (`ExitWorktree` action keep), arms, and re-enters.
+Worktree-resident sessions route primary-surface WRITES (comms sends, ARC
+channel entries, shared memory files) through the commit-warden's intent
+surface or a cross-session send — the same isolation refuses those writes
+directly, by design, and the refusal is the platform's, not this repo's
+hook policy.
 
 **After arming the watcher, run ONE foreground comms sweep covering the
 window from BEFORE session open.** An event landing between session-open
@@ -398,6 +437,14 @@ matched on `addressed_to` where the schema's live field is `to`, making a
 directed wake invisible (the same schema-vs-observed-output discipline as
 the notification-filter paragraph above).
 
+**Probe the monitor's QUERY, not only its filter.** The corpus-test
+discipline extends to the WHOLE poll path: run the monitor's command once
+in the foreground and read a real emission BEFORE arming — a monitor that
+cannot show you one is not armed. A review-round PR watch ran blind for
+two hours because `reviewThreads` is not a `gh pr view` field, every poll
+errored, and `2>/dev/null || continue` swallowed the proof; an unrelated
+wake's cross-check caught it (2026-08-19).
+
 ### No hand-rolled fallback
 
 There is no sanctioned shell reimplementation of `comms watch`. A portable
@@ -529,6 +576,11 @@ naming the rule; the substance lives here for two reasons:
   `behaviour-note`, `heartbeat`).
 - [`use-built-agent-tools-cli`](use-built-agent-tools-cli.md) — governs
   the CLI surface this rule invokes.
+- [`use-monitor-for-event-driven-wake` §A File-Emitting Watcher Is
+  Half-Armed Without a Read Path](use-monitor-for-event-driven-wake.md#a-file-emitting-watcher-is-half-armed-without-a-read-path)
+  — an emit-to-file watcher satisfies no watcher obligation without a wake
+  mechanism or a declared read cadence; enumerate the surfaces that can
+  carry direction to the seat as the arming checklist.
 - [`directed-routing-requires-absorption-ack`](directed-routing-requires-absorption-ack.md)
   — the `ABSORB`-class sibling: this rule's checks stop at `DELIVERY`;
   absorption evidence comes from the ack convention that rule owns.

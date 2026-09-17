@@ -85,6 +85,21 @@ export const TOKEN_SCOPES = {
   },
 
   /**
+   * The MERGE act alone: what the settlement-gated `merge-bot merge` command
+   * mints. A merge needs neither `workflows` — the pull-request-work note
+   * above carries the live provenance (PR #557, four workflow files in the
+   * diff, merged on `pull_requests` + `contents`) — nor anything wider, and
+   * `workflows: write` is the repository's highest-value write: it must not
+   * sit in process memory for a 50-minute poll budget that never uses it
+   * (security D3, 2026-08-06). `pull-request-work` remains the scope for the
+   * update-branch/push callers that genuinely need `workflows`.
+   */
+  'pull-request-merge': {
+    pull_requests: 'write',
+    contents: 'write',
+  },
+
+  /**
    * Reading code-scanning alerts, so an agent adjudicating review findings can
    * see them first-hand instead of inferring their state.
    *

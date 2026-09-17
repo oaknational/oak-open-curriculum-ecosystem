@@ -58,7 +58,10 @@ seam, extract a pure function, inject a dependency).
    directly; they do not route through loaders that read disk.
 8. **Any in-process test spawns a child process, fork, or
    test-authored worker.** Covered by `testing-strategy.md §No
-   process spawning in in-process tests`.
+   process spawning in in-process tests`, which also carries the ONE
+   named sanctioned shape (the spawn-topology contract test,
+   recorded 2026-08-07 with the F-112 push-path landing) — the
+   directive is the authority; this item only points at it.
 9. **Any test makes a real network call beyond its tier's protocol
    channel.** Two channels are calling mechanics, not violations:
    an E2E test's exchange with the separately running system under

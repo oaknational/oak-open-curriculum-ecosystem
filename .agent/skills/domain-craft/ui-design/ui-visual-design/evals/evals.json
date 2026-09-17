@@ -1,0 +1,62 @@
+{
+  "skill_name": "ui-visual-design",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Here is a unit landing page for teachers browsing a Year 8 history unit. It has a hero, a unit summary, a lesson list, a downloads panel, and a related-units strip. Everything is currently the same visual weight and the page reads as a wall. Compose it so a teacher scanning for one thing finds it, and show me the result as a rendered page using the Oak design system.",
+      "expected_output": "A rendered page with one unmistakable primary element, grouping that matches meaning, and every value taken from the design system \u2014 plus a stated rationale for what was ranked where.",
+      "assertions": [
+        "Exactly one element is treated as primary; the rest are visibly ranked beneath it (holistic: the W0.7 design-review instrument judges the rendered page; verdicts stay in the eval workspace and never enter wow-verdict-register.json)",
+        "Grouping is carried by spacing ratios rather than added borders or card backgrounds where spacing would do",
+        "Every value used comes from the design system's tokens, classes, and spacing scale \u2014 the response invents no visual value (script: scripts/grade-no-invented-values.ts, three independent arms)",
+        "The rationale names what the screen is for and what the reader should do next, and ranks against that rather than against appearance"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Critique this control: a rounded pill that turns from grey to green when a lesson is marked complete, 32px tall, with the label inside at 11px. It animates the colour change over 600ms. Tell me what is wrong with it.",
+      "expected_output": "A critique that identifies the colour-only state, the sub-44px target, the type size, and the over-long motion, and routes each to the design system's existing answer rather than proposing bespoke values.",
+      "assertions": [
+        "The colour-only state change is named as a defect, with the fix being an additional non-colour channel rather than a different colour pair",
+        "The target size is called out against the 44px floor",
+        "The 600ms duration is called out against the system's 120/200ms, with the reason (motion explains a change; it does not decorate)",
+        "The critique proposes no bespoke hex, size, or duration \u2014 every remedy points at a system value or class (script: scripts/grade-no-invented-values.ts; the size and duration arms are context-aware, so quoting the artefact under critique is not scored as inventing)",
+        "The response does not present WCAG conformance judgment as its own verdict; where conformance is at stake it routes to the accessibility reviewer",
+        "Blind transcript judge (judge/rubric.md): the critique reasons from purpose, ranks defects by cost to the user, routes values to the system, and stays inside the skill's boundary"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "What hex should I use for the primary button background? Just give me the value.",
+      "expected_output": "A decline to supply a raw value, routing to the semantic token that carries the intent and to design-system-usage for finding it.",
+      "assertions": [
+        "No hex value is supplied (script: scripts/grade-no-invented-values.ts)",
+        "The response names the semantic token role rather than a literal, and routes to design-system-usage",
+        "The skill does not manufacture visual-design judgment when the request is a value lookup",
+        "Blind transcript judge (judge/rubric.md): the refusal routes somewhere the user can act on"
+      ]
+    }
+  ],
+  "metadata": {
+    "scope": "skill",
+    "status": "iteration-1-executed",
+    "iteration_1_date": "2026-08-12",
+    "workspace": "eval workspace lives outside this bundle; iteration-1 evidence is banked under .agent/reports/design/skill-standard-pilot-evals/",
+    "graders": {
+      "scripts/grade-no-invented-values.ts": "cases 1-3, the non-render half. THREE INDEPENDENT ARMS, reported separately so each is provable alone: authored CSS (via the estate's css-literal-values classifier, over <style>, style= and fenced ```css), prose (bare hexes and proposed durations, with every authored-CSS form stripped from the input first), and bespoke size proposals (context-aware: a value counts only when prescriptive language introduces it and it is not one of the estate's documented values)",
+      "judge/rubric.md": "the blind transcript judge the plan requires for non-render outputs. Two responses per case, anonymised and order-varied, scored on five criteria with quoted evidence; 'no meaningful difference' is a valid verdict. Verdicts stay in the eval evidence home",
+      "W0.7 design-review instrument": "case 1's rendered-page half only; two opus legs judge the pages blind and anonymised. Verdicts never enter wow-verdict-register.json"
+    },
+    "decision_authority": "docs/design/design-decisions/ \u2014 DDR-003 and DDR-004 govern the theming constraint the entry states",
+    "controls": {
+      "fixtures/css-only-negative.md": "only the authored-CSS arm may FAIL",
+      "fixtures/prose-only-negative.md": "only the prose arm may FAIL",
+      "fixtures/size-only-negative.md": "only the size arm may FAIL",
+      "fixtures/size-proposal-forms-negative.md": "only the size arm may FAIL \u2014 trailing prescriptions ('48px would work better', '48px instead', 'is the right call') and the 'recommend' lead-in, the forms the lead-in-only detector missed",
+      "fixtures/legitimate-references-positive.md": "all three arms must PASS \u2014 a critique must be able to quote the values it is criticising and cite the estate's documented values without being scored as inventing them",
+      "fixtures/word-boundary-positive.md": "all three arms must PASS \u2014 quotes whose adjacent words contain a lead-in as a substring ('because'/'paused' carry 'use', 'offset' carries 'set', 'entry' carries 'try'), pinning the detector's word-boundary anchors"
+    },
+    "status_basis": "Set from the evidence. All three cases ran both legs and were graded by script AND blind judge; case 1's rendered pages were additionally reviewed by two W0.7 instrument legs. Evidence bundle: .agent/reports/design/skill-standard-pilot-evals/s4-iteration-1/",
+    "iteration_1_evidence": ".agent/reports/design/skill-standard-pilot-evals/s4-iteration-1/"
+  }
+}

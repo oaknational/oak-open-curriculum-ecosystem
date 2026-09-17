@@ -246,7 +246,7 @@ Documentation-shaped workstream. Practice Core surface (`consolidate-docs/SKILL-
 
 **File scope**:
 
-- `.agent/skills/consolidate-docs/SKILL-CANONICAL.md` (MODIFIED)
+- `.agent/skills/knowledge/consolidate-docs/SKILL-CANONICAL.md` (MODIFIED)
 
 **Edits**:
 
@@ -258,7 +258,7 @@ Documentation-shaped workstream. Practice Core surface (`consolidate-docs/SKILL-
 
 **Acceptance**:
 
-1. No calendar-cutoff language remains in the touched sections (`rg -n "older than seven days|7-day|7d cutoff" .agent/skills/consolidate-docs/SKILL-CANONICAL.md` returns zero hits in updated sections)
+1. No calendar-cutoff language remains in the touched sections (`rg -n "older than seven days|7-day|7d cutoff" .agent/skills/knowledge/consolidate-docs/SKILL-CANONICAL.md` returns zero hits in updated sections)
 2. SKILL §3a cites the landed CLI command by exact name
 3. PDR-080 referenced in §3 or §3a
 
@@ -501,7 +501,7 @@ Before marking this plan READY FOR EXECUTION:
 | ws1-cycle-1 done | unit | `pnpm --filter @oaknational/agent-tools test` exits 0 with `binCounts` tests passing |
 | ws1-cycle-2 done | unit | `validateThresholds` test cases pass |
 | ws1-cycle-3 done | integration | CLI invocation against fixture dir reports correct counts; `--help` lists flags |
-| ws2-cycle-1 done | non-code | `rg "PDR-080" .agent/skills/consolidate-docs/SKILL-CANONICAL.md` returns hits; calendar-cutoff hits zero in touched sections |
+| ws2-cycle-1 done | non-code | `rg "PDR-080" .agent/skills/knowledge/consolidate-docs/SKILL-CANONICAL.md` returns hits; calendar-cutoff hits zero in touched sections |
 | ws2-cycle-2 done | non-code | Disposition log committed; every grep hit has a recorded disposition |
 | ws2-cycle-3 done | non-code | Reviewer transcript ids in commit body; both reviewers RATIFY |
 | ws3-cycle-1 done | non-code | All cited PDRs exist; README row renders |

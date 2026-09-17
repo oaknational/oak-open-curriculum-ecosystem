@@ -28,6 +28,8 @@ Many Sonar operations support branch- or pull-request-specific analysis. When wo
 
 After fixing issues in code, the Sonar server will not reflect the change until the next scan completes. Do not attempt to verify a fix via `search_sonar_issues_in_projects` immediately after editing; either wait for the next pushed scan, or use local lint / test gates to confirm the fix's effect at the source level.
 
+At any measures-vs-index divergence (the quality gate scores findings the issue search returns zero rows for), query with the EXPLICIT `issueStatuses=OPEN,CONFIRMED,...` facet before concluding the index is blind: the default `issues/search` facet (and `resolved=false`) can return zero while the wider facet names the gate's exact findings with rule and line (worked instance 2026-08-11, PRs #850/#851 — two seats' zero-index reads were a query-surface artefact; the per-file measure names the file, the facet names the rule and line, and the "phantom finding" verdict reversed at the owner's check-again word).
+
 ## Per-finding investigation discipline
 
 The cardinal anti-pattern with Sonar is the rule-level disable (a `sonar.issue.ignore.multicriteria` block — a sonar-scanner-CLI feature this repo does not use, and which SonarCloud automatic analysis ignores). Each rule fires at distinct sites with distinct contexts; the disposition right for one site can be wrong for another. Per `principles.md` §Code Quality "NEVER disable any quality gates", per-rule disables are forbidden in this repo; dispositions are made per-site, server-side. This repo has no `sonar-project.properties`.

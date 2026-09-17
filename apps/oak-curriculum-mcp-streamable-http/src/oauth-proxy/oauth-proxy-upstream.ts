@@ -2,8 +2,12 @@
  * Pure functions supporting the OAuth proxy passthrough layer.
  *
  * These functions handle URL derivation, metadata rewriting, and error
- * formatting. None perform I/O. They exist to support the transparent
- * proxy — not to add validation or security logic of their own.
+ * formatting. None perform I/O. For forwarded OAuth messages (register,
+ * authorize, token) they support a transparent proxy and add no validation or
+ * security logic of their own. The served AS metadata document is different:
+ * it is the proxy's own self-description, and {@link rewriteAuthServerMetadata}
+ * deliberately states Oak's advertised scopes in it (MCP-345) rather than
+ * passing the upstream list through.
  *
  * @see docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md
  */
@@ -16,8 +20,9 @@ import { z } from 'zod';
  *
  * Used at the system boundary when fetching metadata from upstream Clerk.
  * The four endpoint fields are rewritten by {@link rewriteAuthServerMetadata}
- * to point to the local proxy origin. Capability fields are passed through
- * unchanged from the upstream AS.
+ * to point to the local proxy origin, and `scopes_supported` is replaced by
+ * the scopes this resource advertises (MCP-345). Every other capability field
+ * is passed through unchanged from the upstream AS.
  */
 const upstreamAuthServerMetadataSchema = z.object({
   issuer: z.string(),
@@ -120,20 +125,38 @@ export function formatProxyErrorResponse(
 }
 
 /**
- * Rewrites upstream AS metadata endpoint URLs to point to the local proxy.
+ * Rewrites upstream AS metadata into the proxy authorization server's own
+ * self-description (RFC 8414); the protected resource's self-description is
+ * the PRM, served separately.
  *
  * Replaces `issuer`, `authorization_endpoint`, `token_endpoint`, and
- * `registration_endpoint` with proxy URLs on the local origin. All
- * capability fields including `scopes_supported` are passed through
- * unchanged from the upstream AS.
+ * `registration_endpoint` with proxy URLs on the local origin, and states
+ * `scopes_supported` as the scopes this resource advertises — the same set
+ * the protected-resource metadata publishes — rather than the upstream AS's
+ * full list. Every other capability field passes through unchanged.
+ *
+ * @remarks
+ * The invariant this keeps (MCP-345): the two discovery documents this
+ * resource serves advertise the same scopes, so a client that derives its
+ * request from either asks only for what the resource requires. Clerk's own
+ * list names scopes Oak's default client grant does not carry, `openid` among
+ * them, and a client that requests one of those is refused at sign-in; which
+ * clients derive scopes from this document, and the measurement behind it,
+ * are recorded in ADR-113 (Troubleshooting, resolution 3), not here.
+ * This document is the proxy's self-description, already rewritten field by
+ * field; it is not a forwarded OAuth message, so ADR-115's transparent
+ * passthrough rule does not reach it.
  *
  * @param upstreamMetadata - The original AS metadata from Clerk
  * @param localOrigin - The proxy's origin, e.g. `http://localhost:3333`
- * @returns Rewritten metadata with proxy endpoint URLs
+ * @param advertisedScopes - The scopes to advertise as `scopes_supported`; the
+ *   route passes the PRM's set
+ * @returns Rewritten metadata with proxy endpoint URLs and advertised scopes
  */
 export function rewriteAuthServerMetadata(
   upstreamMetadata: UpstreamAuthServerMetadata,
   localOrigin: string,
+  advertisedScopes: readonly string[],
 ): UpstreamAuthServerMetadata {
   return {
     ...upstreamMetadata,
@@ -141,5 +164,6 @@ export function rewriteAuthServerMetadata(
     authorization_endpoint: `${localOrigin}/oauth/authorize`,
     token_endpoint: `${localOrigin}/oauth/token`,
     registration_endpoint: `${localOrigin}/oauth/register`,
+    scopes_supported: [...advertisedScopes],
   };
 }

@@ -44,7 +44,7 @@ describe('LabelledSelect', () => {
 });
 
 describe('LabelledSelect placeholder', () => {
-  it('shows the placeholder for the empty no-choice sentinel without making it choosable', () => {
+  it('shows the placeholder for the empty no-knowledge sentinel without making it choosable', () => {
     render(
       <LabelledSelect
         id="probe"
@@ -52,14 +52,14 @@ describe('LabelledSelect placeholder', () => {
         value=""
         options={OPTIONS}
         labels={LABELS}
-        placeholderLabel="Page default"
+        placeholderLabel="—"
         onChange={() => undefined}
       />,
     );
     const select = screen.getByRole('combobox', { name: 'Probe' });
     expect(select).toHaveProperty('value', '');
     const placeholder = select.querySelector('option[value=""]');
-    expect(placeholder?.textContent).toBe('Page default');
+    expect(placeholder?.textContent).toBe('—');
     expect(placeholder?.hasAttribute('disabled')).toBe(true);
   });
 });

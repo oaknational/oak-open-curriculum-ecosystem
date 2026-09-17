@@ -25,14 +25,16 @@ import {
  * out of the install lifecycle — enforced by the `validate-lifecycle-scripts`
  * validator.
  *
- * agent-tools imports the workspace packages listed in `WORKSPACE_DEP_DIRS`
+ * agent-tools imports the workspace packages listed in `WORKSPACE_DEPS`
  * (`@oaknational/result`, `@oaknational/safe-path`, `@oaknational/type-helpers`)
  * whose exports resolve to built `dist` only — there is no source-pointing
- * export condition. On a fresh checkout (Vercel, CI, a new worktree)
- * `postinstall` runs before any orchestrated build, so this bootstrap first
- * builds that closure with each package's own toolchain (`tsup` for JS,
- * `tsc --emitDeclarationOnly` for types), skipping any dep whose built `dist`
- * is already current for its `src`.
+ * export condition. Their `tsup.config.ts` files in turn import
+ * `@oaknational/workspace-config/tsup`, also dist-resolved, so the config-base
+ * package is part of the same install-time closure. On a fresh checkout
+ * (Vercel, CI, a new worktree) `postinstall` runs before any orchestrated
+ * build, so this bootstrap first builds that closure with each package's own
+ * toolchain (`tsup` for JS, `tsc --emitDeclarationOnly` for types), skipping
+ * any dep whose built `dist` is already current for its `src`.
  *
  * `typescript` is a direct dependency of agent-tools, so it is present in dev
  * and `--prod` installs alike; a missing compiler therefore signals a corrupt
@@ -45,18 +47,41 @@ import {
 const repoRoot = resolveRepoRoot(import.meta.url);
 const agentToolsDir = path.join(repoRoot, 'agent-tools');
 
+/** One install-time build target: its directory and the dist artifacts witnessing a completed build. */
+interface WorkspaceDep {
+  /** Repo-relative directory of the workspace package. */
+  readonly dir: string;
+  /** Witness artifact names under `dist/` — one bundler output, one declaration output. */
+  readonly distArtifacts: readonly string[];
+}
+
+/** The witness pair for a leaf package whose build emits a `dist/index.*` barrel. */
+const LEAF_DIST_ARTIFACTS = ['index.js', 'index.d.ts'] as const;
+
 /**
  * The workspace packages agent-tools' own build depends on, in build order.
- * Leaf packages only (none has runtime workspace deps of its own). A new agent-tools
- * workspace dependency MUST be added here or every cold `pnpm install` (CI, fresh
- * clones) fails its postinstall typecheck on the missing `dist` — warm local workspaces
- * mask the gap (the PR #393 install/secret-scan/run-quality-gates failure, 2026-07-16).
+ * `@oaknational/workspace-config` builds first: every other dep's
+ * `tsup.config.ts` imports `@oaknational/workspace-config/tsup`, which
+ * resolves to built `dist` only, so on a cold checkout its `dist` must exist
+ * before any dep's tsup run bundles its config — and it can hold position 0
+ * because it has zero internal workspace dependencies by design. The rest are
+ * the leaf packages agent-tools imports; none has runtime workspace deps of
+ * its own. A new agent-tools workspace dependency — or a new install-time
+ * config dependency — MUST be added here or every cold `pnpm install` (CI,
+ * fresh clones, Vercel) fails its postinstall on the missing `dist`; warm
+ * local workspaces mask the gap (the PR #393 install/secret-scan/
+ * run-quality-gates failure, 2026-07-16; the identical PR #836 failure via
+ * the config-import path, 2026-08-09).
  */
-const WORKSPACE_DEP_DIRS = [
-  'packages/core/result',
-  'packages/core/safe-path',
-  'packages/core/type-helpers',
-] as const;
+const WORKSPACE_DEPS: readonly WorkspaceDep[] = [
+  {
+    dir: 'packages/core/workspace-config',
+    distArtifacts: ['tsup.config.base.js', 'tsup.config.base.d.ts'],
+  },
+  { dir: 'packages/core/result', distArtifacts: LEAF_DIST_ARTIFACTS },
+  { dir: 'packages/core/safe-path', distArtifacts: LEAF_DIST_ARTIFACTS },
+  { dir: 'packages/core/type-helpers', distArtifacts: LEAF_DIST_ARTIFACTS },
+];
 
 /** Set the executable bit on every compiled CLI entry, mirroring the build script. */
 function markExecutableArtifacts(): void {
@@ -104,10 +129,11 @@ function runStep(label: string, binPath: string, args: readonly string[], cwd: s
  * against the stale `.d.ts` and bricks the fail-open guards (MCP-472). See
  * {@link workspaceDepDistIsStale}.
  */
-function buildWorkspaceDep(depRelDir: string, tscBin: string): void {
+function buildWorkspaceDep(dep: WorkspaceDep, tscBin: string): void {
+  const depRelDir = dep.dir;
   const depDir = path.join(repoRoot, depRelDir);
   const depName = path.basename(depRelDir);
-  if (!workspaceDepDistIsStale(depDir, productionWorkspaceDepFsIo)) {
+  if (!workspaceDepDistIsStale(depDir, dep.distArtifacts, productionWorkspaceDepFsIo)) {
     return;
   }
   const depRequire = createRequire(path.join(depDir, 'package.json'));
@@ -157,8 +183,8 @@ function main(): void {
     process.exit(1);
   }
 
-  for (const depRelDir of WORKSPACE_DEP_DIRS) {
-    buildWorkspaceDep(depRelDir, tscBin);
+  for (const dep of WORKSPACE_DEPS) {
+    buildWorkspaceDep(dep, tscBin);
   }
 
   const result = spawnSync(

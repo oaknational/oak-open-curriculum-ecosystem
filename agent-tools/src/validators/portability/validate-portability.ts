@@ -21,12 +21,10 @@ import { fileURLToPath } from 'node:url';
 import { isJsonObject } from '../../core/json.js';
 import { resolveRepoRoot } from '../../core/repo-root.js';
 import {
+  collectCanonicalSkillPaths,
   getClaudeHookPortabilityIssues,
   getReviewerAdapterParityIssues,
   getRulesIndexPortabilityIssues,
-  getSkillPermissionIssues,
-  getSkillsLockCrossReferenceIssues,
-  getSkillsLockEntries,
   CLAUDE_SETTINGS_PATH,
   HOOK_POLICY_PATH,
   RULES_INDEX_PATH,
@@ -44,26 +42,28 @@ import {
   stripFrontmatter,
   writeText,
 } from './portability-fs.js';
+import { practiceSkillPermissionIssues } from './skill-census.js';
 import { reportPortabilityValidation } from './portability-report.js';
 
 const repoRoot = resolveRepoRoot(import.meta.url);
-const SKILLS_LOCK_PATH = 'skills-lock.json';
 const fixMode = process.argv.includes('--fix');
 const writtenWrappers: string[] = [];
 const issues: string[] = [];
 
-const canonicalSkillDirs = await listSubdirs(repoRoot, '.agent/skills');
-for (const skillDir of canonicalSkillDirs) {
-  const skillPath = `.agent/skills/${skillDir}/SKILL-CANONICAL.md`;
-  if (!(await exists(repoRoot, skillPath))) {
-    continue;
-  }
+const { canonicalPaths: discoveredCanonicalPaths } = await collectCanonicalSkillPaths({
+  listSubdirs: (relPath) => listSubdirs(repoRoot, relPath),
+  exists: (relPath) => exists(repoRoot, relPath),
+});
+const validatedCanonicalPaths: string[] = [];
+
+async function validateCanonicalFrontmatter(skillPath: string): Promise<void> {
   const content = await readText(repoRoot, skillPath);
   const frontmatter = extractFrontmatter(content);
   if (!frontmatter) {
     issues.push(`${skillPath}: missing YAML frontmatter block`);
-    continue;
+    return;
   }
+  validatedCanonicalPaths.push(skillPath);
   const classification = getFrontmatterValue(frontmatter, 'classification');
   if (!classification) {
     issues.push(`${skillPath}: missing required 'classification' frontmatter`);
@@ -72,6 +72,16 @@ for (const skillDir of canonicalSkillDirs) {
       `${skillPath}: 'classification' must be 'active' or 'passive', got '${classification}'`,
     );
   }
+}
+
+// The ratified skills-estate shape is three tiers, closed: flat
+// (`<id>/`), concern member (`<concern>/<id>/`), and domain member
+// (`<concern>/<domain>/<id>/`, owner-ruled 2026-08-10). The shared walker
+// owns the traversal so this validator and the lock cross-reference see
+// the same corpus; entries with no canonical at any tier are the adapter
+// checker's loud-skip territory, not this validator's.
+for (const skillPath of discoveredCanonicalPaths) {
+  await validateCanonicalFrontmatter(skillPath);
 }
 
 const CANONICAL_RULE_OR_SKILL_PATTERN = /\.agent\/rules\/|\.agent\/skills\//;
@@ -140,19 +150,6 @@ for (const ruleFile of [...cursorRules, ...claudeRules, ...agentsRules]) {
   }
 }
 
-if (await exists(repoRoot, SKILLS_LOCK_PATH)) {
-  try {
-    const lockedSkills = getSkillsLockEntries(await readJson(repoRoot, SKILLS_LOCK_PATH));
-    issues.push(
-      ...getSkillsLockCrossReferenceIssues(lockedSkills, canonicalSkillDirs, SKILLS_LOCK_PATH),
-    );
-  } catch (error) {
-    issues.push(
-      `${SKILLS_LOCK_PATH}: validation failed: ${error instanceof Error ? error.message : 'Unknown skills-lock failure.'}`,
-    );
-  }
-}
-
 const rulesIndexState = await readOptionalText(repoRoot, RULES_INDEX_PATH);
 for (const issue of getRulesIndexPortabilityIssues({
   canonicalRuleFiles: canonicalRules,
@@ -190,14 +187,7 @@ if (await exists(repoRoot, CLAUDE_SETTINGS_PATH)) {
         ? claudeSettings['permissions']['allow']
         : [];
     const permissions = allowList.filter((e): e is string => typeof e === 'string');
-    const claudeSkillDirs = await listSubdirs(repoRoot, '.claude/skills');
-    for (const issue of getSkillPermissionIssues({
-      claudeCommandFiles: [],
-      claudeSkillDirs,
-      claudeSettingsPermissions: permissions,
-    })) {
-      issues.push(issue);
-    }
+    issues.push(...(await practiceSkillPermissionIssues(repoRoot, permissions)));
   } catch (error) {
     issues.push(
       `Skill permission validation failed: ${error instanceof Error ? error.message : 'Unknown skill permission check failure.'}`,
@@ -205,7 +195,7 @@ if (await exists(repoRoot, CLAUDE_SETTINGS_PATH)) {
   }
 }
 
-const stats = `${canonicalSkillDirs.length} canonical skills, ${canonicalRules.length} canonical rules, ${canonicalAgentNames.length} reviewer adapters, ${cursorRules.length} Cursor triggers, ${claudeRules.length} Claude rules, ${agentsRules.length} .agents rules`;
+const stats = `${validatedCanonicalPaths.length} canonical skills, ${canonicalRules.length} canonical rules, ${canonicalAgentNames.length} reviewer adapters, ${cursorRules.length} Cursor triggers, ${claudeRules.length} Claude rules, ${agentsRules.length} .agents rules`;
 
 export { reportPortabilityValidation } from './portability-report.js';
 

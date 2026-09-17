@@ -20,8 +20,9 @@ serves: <strategic node id>
 impact_areas:
   - <area from impact-areas.md>
 tickets:
-  - <Linear issue ID, e.g. MCP-000 — required before ratification;
-    execution state lives there, never here>
+  - <Linear issue ID, e.g. MCP-000 — optional, always (2026-08-07
+    amendment); a thin visibility pointer when the operator's tracker
+    holds the work — execution state lives there, never here>
 depends_on: []
 # depends_on:
 #   - plan: <plan-id>
@@ -41,6 +42,14 @@ last_updated: <YYYY-MM-DD>
 
 <What is true when this lands that is not true now — one short
 paragraph.>
+
+## User groups and value
+
+<Who experiences or consumes this outcome, and what each group gets, in
+experience terms. Innovation work may declare offered or hypothesised
+value with an honest claim boundary — proving a pre-existing need is not
+required. Where genuinely nobody experiences the outcome directly, say
+so in one line and name where the value routes.>
 
 ## Mechanism
 

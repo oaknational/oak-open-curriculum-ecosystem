@@ -3,4 +3,4 @@ description: Read the napkin at session start and write to it continuously.
 alwaysApply: true
 ---
 
-Read and follow `.agent/skills/napkin/SKILL.md`.
+Read and follow `.agent/skills/knowledge/napkin/SKILL-CANONICAL.md`.

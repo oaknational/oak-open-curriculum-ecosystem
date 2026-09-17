@@ -36,13 +36,13 @@ edits within an already-landed home.
 Verbatim: "no skills should be vendored, we have Oak skills, we have
 skills installed with `npx skills add` or `pnpm skills add` that is
 it." Exactly two legitimate skill channels exist: **Oak-authored
-skills in-repo**, and **installer-managed skills** via
-`npx skills add` / `pnpm skills add`, whose record is
-`skills-lock.json`. Content copied into the estate outside those
-channels is out-of-policy: it is removed or re-homed through the
-installer, never grandfathered. Installer-managed payloads are not
-locally patched (a local edit breaks the lock's content hash and
-forks unmanaged content) — defects route upstream. This ruling bounds
+skills in-repo**, and **installer-managed Vendor skills** via
+`pnpx skills add`, whose lifecycle (provenance, updates, drift)
+belongs to the external skills machinery. Content copied into the
+estate outside those channels is out-of-policy: it is removed or
+re-homed through the installer, never grandfathered. Installer-managed
+payloads are not locally patched (a local edit forks unmanaged
+content) — defects route upstream. This ruling bounds
 SOURCES; it does not waive
 [`third-party-skills-require-security-review`](third-party-skills-require-security-review.md),
 which still fires at every adoption moment.
@@ -121,8 +121,8 @@ while the procedure's substance homes in the skill.
 
 7. **Owned or installer-managed.** External capability arrives only
    through the installer channel (§Source channels) into the adapter
-   tier (`.claude/skills/`, `.agents/skills/`) under
-   `skills-lock.json`, never into the canonical corpus. The
+   tier (`.claude/skills/`, `.agents/skills/`) in the installer's own
+   layout, never into the canonical corpus. The
    adoption gate applies:
    [third-party-skills-require-security-review](third-party-skills-require-security-review.md)
    for the security review, and

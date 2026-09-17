@@ -13,7 +13,7 @@ Oak-authored code in this workspace is covered by the repository's MIT licence (
 | Lexend (variable)      | Oak baseline (`colors_and_type.css`, local `fonts/Lexend-VariableFont_wght.ttf`)                      | Google Fonts                                                                       | SIL OFL 1.1 |
 | Roboto Mono (variable) | Code contexts — `--font-mono` (`colors_and_type.css`, local `fonts/RobotoMono-VariableFont_wght.ttf`) | Google Fonts ([googlefonts/RobotoMono](https://github.com/googlefonts/RobotoMono)) | SIL OFL 1.1 |
 | Nunito · Baloo 2       | EMC² counter-brand (`whitelabel/creature/brand-a.css`, Google Fonts CSS2 API)                         | Google Fonts                                                                       | SIL OFL 1.1 |
-| Public Sans            | FDSE counter-brand (`whitelabel/freedonia/brand-a.css`, Google Fonts CSS2 API)                        | USWDS / Google Fonts                                                               | SIL OFL 1.1 |
+| Public Sans            | PDS counter-brand (`whitelabel/pds/brand-a.css`, Google Fonts CSS2 API)                               | USWDS / Google Fonts                                                               | SIL OFL 1.1 |
 
 Both locally shipped faces travel with their verbatim upstream copyright notice + full OFL text (`fonts/Lexend-OFL.txt` — including its Reserved Font Name clause — and `fonts/RobotoMono-OFL.txt`), satisfying OFL 1.1 condition 2 for every redistributed copy; `fonts/*` is on the package exports map, so the notices ship wherever the fonts do.
 
@@ -23,7 +23,7 @@ Both locally shipped faces travel with their verbatim upstream copyright notice 
 | ------------------------ | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | ---------------------------------- |
 | Oak official icon SVGs   | Oak (`assets/icons/*.svg`, `--i-*`/`--ic-*` maps in `oak-icons.css`)                                                  | oaknational (mirrors oak-components OakIcon set) | **Oak marks — not MIT**; see below |
 | Material Symbols Rounded | EMC² (`whitelabel/creature/icons.css` font + `brand-full.css` SVG URLs, `@material-symbols/svg-600@0.19.0`, jsDelivr) | Google                                           | Apache 2.0                         |
-| Bootstrap Icons          | FDSE (`whitelabel/freedonia/icons.css` + `brand-full.css` SVG URLs, `bootstrap-icons@1.11.3`, jsDelivr)               | The Bootstrap Authors                            | MIT                                |
+| Bootstrap Icons          | PDS (`whitelabel/pds/icons.css` + `brand-full.css` SVG URLs, `bootstrap-icons@1.11.3`, jsDelivr)                      | The Bootstrap Authors                            | MIT                                |
 
 ## Vendored & CDN-loaded code
 
@@ -42,7 +42,7 @@ Both locally shipped faces travel with their verbatim upstream copyright notice 
 
 ## Influence without trade dress
 
-FDSE v7 takes the GDS visual _grammar_ (colour values, type scale, spacing) as a fictional proof. Deliberately NOT taken: the crown, GDS Transport typeface, or GOV.UK header trade dress. govuk-frontend (MIT) was studied for maturity practices (DECISIONS), not copied.
+PDS v7 takes the GDS visual _grammar_ (colour values, type scale, spacing) as a fictional proof. Deliberately NOT taken: the crown, GDS Transport typeface, or GOV.UK header trade dress. govuk-frontend (MIT) was studied for maturity practices (DECISIONS), not copied.
 
 ## Oak marks (not open-licensed)
 

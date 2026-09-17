@@ -39,3 +39,30 @@ claim, a "was this ever run?" question), re-run the task with `--force` or via
 the authoritative hook, never from cache. Cache-input correctness lives in
 `docs/engineering/build-system.md`; the operator quick list is
 `docs/operations/troubleshooting.md` §Cache false-greens.
+
+## Recurrence, 2026-08-13 — this pattern did not fire, and that is the finding
+
+A Director seat ran `pnpm install && pnpm build` at the repo root in a fresh
+worktree, read **exit 0**, and reported the worktree fixed. A *direct* build of
+the failing package then failed. Turbo cache had satisfied the task without
+executing it: the root build's success was a replay, exactly as this pattern
+says.
+
+The seat had not read this file. It went on to describe the incident to the
+owner as a newly-discovered class.
+
+**Why the recurrence matters more than the instance.** This pattern is stable,
+well-scoped, and names the exact trap. It still did not reach the moment of use,
+because a `patterns/` file is passive guidance and loses to whatever the agent is
+already doing (`passive-guidance-loses-to-artefact-gravity` — which also did not
+fire). Recurrence despite a correct home is evidence about the *mechanism*, not
+about the lesson: the lesson is fine, the delivery is not.
+
+Routed as recurrence evidence to the doctrine-traction lane (PDR-098's empty
+quadrant) rather than being silently absorbed, because deleting the duplicate
+discards the one signal that forces the mechanism decision.
+
+**The sharpened operational form, for whoever does reach this file:** a cached
+success is a claim about a past tree. To make it evidence about the present one,
+run the task directly, or compare against a control that must fail. `exit 0` from
+an aggregate runner says nothing about which member tasks actually executed.

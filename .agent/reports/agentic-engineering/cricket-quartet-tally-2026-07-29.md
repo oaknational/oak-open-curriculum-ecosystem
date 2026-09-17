@@ -22,12 +22,12 @@ runs; comms events are transport — this file is the storage.
 
 ## Configuration (at the quartet's minting)
 
-| Seat | Agent | Model | Effort | Template |
-| --- | --- | --- | --- | --- |
-| A | `cricket-fable` | Fable | low | judgement (`cricket.md`) |
-| B | `cricket-opus` | Opus | medium | judgement (`cricket.md`) |
-| C | `cricket` | Sonnet | high | judgement (`cricket.md`) |
-| D | `cricket-haiku` | Haiku | xhigh | compiled procedure (`cricket-haiku.md`) |
+| Seat | Agent           | Model  | Effort | Template                                |
+| ---- | --------------- | ------ | ------ | --------------------------------------- |
+| A    | `cricket-fable` | Fable  | low    | judgement (`cricket.md`)                |
+| B    | `cricket-opus`  | Opus   | medium | judgement (`cricket.md`)                |
+| C    | `cricket`       | Sonnet | high   | judgement (`cricket.md`)                |
+| D    | `cricket-haiku` | Haiku  | xhigh  | compiled procedure (`cricket-haiku.md`) |
 
 The effort inversion (capability descends as reasoning effort ascends) is the
 experiment's design: it probes whether reasoning effort substitutes for model
@@ -57,40 +57,40 @@ agreement is the strong signal.
 Verdict key: ON = ON-TRACK, DR = DRIFTING, WP = WRONG-PRIORITY. One row per quartet
 (two rows per cricket moment: n = normal stance, a = adversarial stance).
 
-| # | Seat, moment (event) | Stance | A (Fable-low) | B (Opus-med) | C (Sonnet-high) | D (Haiku-xhigh) | Divergent? |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | Director Bora binds Thermal (258cbb), round 7 — post-Moment-2 takeover boundary, ~21:15Z | n | ON | ON | ON† | — undelivered | no |
-| 2 | same moment | a | ON | ON† | DR — refuted | — undelivered | yes → adjudicated at the seat |
-| 3 | Director Bora binds Thermal (258cbb), round 8 — second cycle boundary, ~22:57Z | n | ON | ON | ON | — undelivered | no |
-| 4 | same moment | a | ON | ON† | DR — declined on the stated ledger | — undelivered | yes → adjudicated at the seat |
-| 5 | Director Bora binds Thermal (258cbb), round 9 — third cycle boundary, ~00:15Z (30 Jul) | n | ON | DR — correct, absorbed | ON | — undelivered | yes → absorbed at the seat |
-| 6 | same moment | a | ON | DR — correct, absorbed | DR† — correct, absorbed | — undelivered | yes → absorbed at the seat |
-| 7 | Director Bora binds Thermal (258cbb), round 10 — overnight watch boundary, ~02:00Z (30 Jul) | n | ON† | ON† | ON† | — undelivered | no |
-| 8 | same moment | a | ON | DR† — correct at compose, CURED pre-retrieval | ON | — undelivered | yes → absorbed at the seat |
-| 9 | Implementer Thyme weaves Hedgerow (762020), post-merge-hold hourly boundary, ~03:16Z (30 Jul) | n | ON | DR — split: declined / absorbed | ON | WP — absorbed as the carrier ask | yes → routed to Director (68a5fb7e) |
-| 10 | same moment | a | ON | ON | ON | ON | no |
-| 11 | Director Bora binds Thermal (258cbb), round 11 — deep overnight watch, ~03:30Z (30 Jul) | n | ON | ON† | ON | — undelivered | no |
-| 12 | same moment | a | ON | DR† — declined on mechanism, ownership gap absorbed | ON | — undelivered | yes → adjudicated at the seat |
-| 13 | Implementer Thyme weaves Hedgerow (762020), owner-return boundary (~06:00Z "read Altair's handoff"), ~06:01Z (30 Jul) | n | ON | — undelivered (529 ×2) | ON | ON | no (among delivered) |
-| 14 | same moment | a | ON | — undelivered (529 ×2) | ON | ON | no (among delivered) |
-| 15 | Director Bora binds Thermal (258cbb), round 12 — SUCCESSION boundary (wrap), ~06:10Z (30 Jul) | n | ON | ON† | ON | — undelivered (INLINE arm) | no |
-| 16 | same moment | a | ON | — unretrieved at close (relay asked) | ON | — undelivered (INLINE arm) | no (among delivered) |
-| 17 | Director Falcon hunts Flight (52841f), round 13 — SUCCESSION boundary (Moment-2 seated), ~06:21Z (30 Jul) | n | ON | ON† | ON | DR — UNNAMED arm, DELIVERED; frame-legibility, absorbed | yes → adjudicated at the seat |
-| 18 | same moment | a | ON | ON† | ON | DR — UNNAMED arm, DELIVERED; convergent MCP-398 gate-naming, absorbed | yes → adjudicated at the seat |
-| 19 | Implementer Inferno weaves Kindling (3d8c87), fixes-lane-end/seat-disposition boundary, ~17:50Z (30 Jul) — LEGACY seat names, 3/4 template-less (post-ruling-39 path break) | n | ON ("SOUND") | ON — invert closeout order: owner report first, teardown on word; anchor claim not this lane's evidence | ON | ON — all 5 PASS | no on verdict; B's sequencing redirection adopted |
-| 20 | same moment, ~17:54Z — NEW #654 roles (judgement-low/med/high, procedure-xhigh), zero template failures | a | ON | DR — "hold awaiting owner word" is an uncited gate; offer freed capacity for routing | ON — verify nothing rides the anchor claim first | ON — PDR-078 §4 flagged unverified (verified real at the seat post-hoc) | yes → routed to Director (directed event ~18:00Z) + owner card; Director ruled no-new-lane (Matt's conn), owner card ruled "Retire now" |
-| 21 | Implementer Moss calls Loam (79b433), MCP-145 slice-2b landing boundary, ~09:19Z (1 Aug) — first rows under the usage-recording convention | n | ON (30,527 tok, 23s) | ON (31,425 tok, 34s) | ON (31,205 tok, 58s) | ON (23,153 tok, 82s) | no |
-| 22 | same moment, ~09:21Z | a | ON (29,810 tok, 14s) | ON (30,281 tok, 31s) | ON (33,973 tok, 53s) | ON (23,057 tok, 133s) | no |
-| 23 | Implementer Moss calls Loam (79b433), MCP-145 slice-2c pre-commit boundary, ~10:55Z (1 Aug) | n | ON (30,248 tok, 13s) | ON (30,218 tok, 20s) | ON (32,327 tok, 27s) | ON (23,290 tok, 80s) | no |
-| 24 | same moment, ~10:58Z | a | ON (30,275 tok, 13s) | ON — redirection adopted: PR body names the 2d scoping item explicitly (31,724 tok, 32s) | ON (33,034 tok, 35s) | DR — gates-citation hygiene on the frame's prettier/knip pre-check (23,374 tok, 151s) | yes → adjudicated at the seat, split routed to Director |
-| 25 | Implementer Moss calls Loam (79b433), MCP-145 slice-2d pre-commit boundary, ~12:24Z (1 Aug) | n | ON (30,414 tok, 14s) | ON (30,387 tok, 14s) | ON (32,776 tok, 32s) | ON (28,679 tok, 91s) | no |
-| 26 | same moment, ~12:26Z | a | ON (30,458 tok, 15s) | ON — redirection adopted: heartbeat-subject carrier named in plan Revision 4 (30,834 tok, 29s) | ON (31,922 tok, 43s) | ON (23,000 tok, 98s) | no |
-| 27 | Implementer Moss calls Loam (79b433), MCP-145 slice-3 pre-commit boundary, ~14:37Z (1 Aug) | n | ON (30,257 tok, 14s) | ON — redirection: verify the two Director-routed questions cannot bind the diff (discharged by construction: worst case is a file rename) (30,677 tok, 23s) | ON (35,440 tok, 50s) | DR — proportion: boundary-crossing gate/review claims lack in-frame evidence (23,396 tok, 122s) | yes → adjudicated at the seat (substance unanimous: displacement+gates PASS on all eight legs; the evidence exists first-hand in-session), split routed to Director in the ARC landing entry |
-| 28 | same moment, ~14:39Z | a | ON (30,295 tok, 14s) | ON (30,265 tok, 15s) | ON (35,146 tok, 60s) | DR — same proportion axis as 27-n (23,290 tok, 188s) | yes → same adjudication |
-| 29 | Implementer Moss calls Loam (79b433), MCP-145 WS-B decision-2 pre-commit boundary, ~18:49Z (1 Aug) | n | ON (30,498 tok, 13s) | ON (30,923 tok, 19s) | ON (31,228 tok, 36s) | ON (30,360 tok, 108s) | no |
-| 30 | same moment, ~18:52Z | a | ON (30,533 tok, 15s) | ON — redirection adopted: WS-A opens in parallel once the PR is pushed and Copilot requested, never serialised behind the settle watch (30,896 tok, 25s) | ON (34,190 tok, 47s) | DR — proportion: the frame-evidence class again, gate/measure claims asserted without quoted outputs (23,460 tok, 135s) | yes → adjudicated at the seat, split routed to Director (directed event 02b23b5c); reporting-layer cure applied (the PR body and landing report quote verification outputs) |
-| 31 | Implementer Moss calls Loam (79b433), MCP-145 WS-A pre-commit boundary, ~19:36Z (1 Aug) — frame quotes verification outputs per the row-30 cure | n | ON (30,331 tok, 17s) | ON — redirection adopted: with #697 merged, fold the plan archive flip into the WS-A PR via an ADDITIVE merge of main (rebase hook-denied; merge is the sanctioned shape) — one merge cycle instead of two (30,725 tok, 22s) | ON (31,755 tok, 22s) | ON (22,925 tok, 70s) | no |
-| 32 | same moment, ~19:43Z | a | ON (30,412 tok, 16s) | ON — redirection declined with reason: the ARC verdict report's reader exists by construction (the Director consumes the lane channel), so the closeout is not unconsumed ceremony (30,395 tok, 19s) | ON (34,227 tok, 48s) | ON — UNGROUNDED: none (23,055 tok, 60s) | no |
+| #   | Seat, moment (event)                                                                                                                                                        | Stance | A (Fable-low)        | B (Opus-med)                                                                                                                                                                                                                 | C (Sonnet-high)                                  | D (Haiku-xhigh)                                                                                                         | Divergent?                                                                                                                                                                                   |
+| --- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Director Bora binds Thermal (258cbb), round 7 — post-Moment-2 takeover boundary, ~21:15Z                                                                                    | n      | ON                   | ON                                                                                                                                                                                                                           | ON†                                              | — undelivered                                                                                                           | no                                                                                                                                                                                           |
+| 2   | same moment                                                                                                                                                                 | a      | ON                   | ON†                                                                                                                                                                                                                          | DR — refuted                                     | — undelivered                                                                                                           | yes → adjudicated at the seat                                                                                                                                                                |
+| 3   | Director Bora binds Thermal (258cbb), round 8 — second cycle boundary, ~22:57Z                                                                                              | n      | ON                   | ON                                                                                                                                                                                                                           | ON                                               | — undelivered                                                                                                           | no                                                                                                                                                                                           |
+| 4   | same moment                                                                                                                                                                 | a      | ON                   | ON†                                                                                                                                                                                                                          | DR — declined on the stated ledger               | — undelivered                                                                                                           | yes → adjudicated at the seat                                                                                                                                                                |
+| 5   | Director Bora binds Thermal (258cbb), round 9 — third cycle boundary, ~00:15Z (30 Jul)                                                                                      | n      | ON                   | DR — correct, absorbed                                                                                                                                                                                                       | ON                                               | — undelivered                                                                                                           | yes → absorbed at the seat                                                                                                                                                                   |
+| 6   | same moment                                                                                                                                                                 | a      | ON                   | DR — correct, absorbed                                                                                                                                                                                                       | DR† — correct, absorbed                          | — undelivered                                                                                                           | yes → absorbed at the seat                                                                                                                                                                   |
+| 7   | Director Bora binds Thermal (258cbb), round 10 — overnight watch boundary, ~02:00Z (30 Jul)                                                                                 | n      | ON†                  | ON†                                                                                                                                                                                                                          | ON†                                              | — undelivered                                                                                                           | no                                                                                                                                                                                           |
+| 8   | same moment                                                                                                                                                                 | a      | ON                   | DR† — correct at compose, CURED pre-retrieval                                                                                                                                                                                | ON                                               | — undelivered                                                                                                           | yes → absorbed at the seat                                                                                                                                                                   |
+| 9   | Implementer Thyme weaves Hedgerow (762020), post-merge-hold hourly boundary, ~03:16Z (30 Jul)                                                                               | n      | ON                   | DR — split: declined / absorbed                                                                                                                                                                                              | ON                                               | WP — absorbed as the carrier ask                                                                                        | yes → routed to Director (68a5fb7e)                                                                                                                                                          |
+| 10  | same moment                                                                                                                                                                 | a      | ON                   | ON                                                                                                                                                                                                                           | ON                                               | ON                                                                                                                      | no                                                                                                                                                                                           |
+| 11  | Director Bora binds Thermal (258cbb), round 11 — deep overnight watch, ~03:30Z (30 Jul)                                                                                     | n      | ON                   | ON†                                                                                                                                                                                                                          | ON                                               | — undelivered                                                                                                           | no                                                                                                                                                                                           |
+| 12  | same moment                                                                                                                                                                 | a      | ON                   | DR† — declined on mechanism, ownership gap absorbed                                                                                                                                                                          | ON                                               | — undelivered                                                                                                           | yes → adjudicated at the seat                                                                                                                                                                |
+| 13  | Implementer Thyme weaves Hedgerow (762020), owner-return boundary (~06:00Z "read Altair's handoff"), ~06:01Z (30 Jul)                                                       | n      | ON                   | — undelivered (529 ×2)                                                                                                                                                                                                       | ON                                               | ON                                                                                                                      | no (among delivered)                                                                                                                                                                         |
+| 14  | same moment                                                                                                                                                                 | a      | ON                   | — undelivered (529 ×2)                                                                                                                                                                                                       | ON                                               | ON                                                                                                                      | no (among delivered)                                                                                                                                                                         |
+| 15  | Director Bora binds Thermal (258cbb), round 12 — SUCCESSION boundary (wrap), ~06:10Z (30 Jul)                                                                               | n      | ON                   | ON†                                                                                                                                                                                                                          | ON                                               | — undelivered (INLINE arm)                                                                                              | no                                                                                                                                                                                           |
+| 16  | same moment                                                                                                                                                                 | a      | ON                   | — unretrieved at close (relay asked)                                                                                                                                                                                         | ON                                               | — undelivered (INLINE arm)                                                                                              | no (among delivered)                                                                                                                                                                         |
+| 17  | Director Falcon hunts Flight (52841f), round 13 — SUCCESSION boundary (Moment-2 seated), ~06:21Z (30 Jul)                                                                   | n      | ON                   | ON†                                                                                                                                                                                                                          | ON                                               | DR — UNNAMED arm, DELIVERED; frame-legibility, absorbed                                                                 | yes → adjudicated at the seat                                                                                                                                                                |
+| 18  | same moment                                                                                                                                                                 | a      | ON                   | ON†                                                                                                                                                                                                                          | ON                                               | DR — UNNAMED arm, DELIVERED; convergent MCP-398 gate-naming, absorbed                                                   | yes → adjudicated at the seat                                                                                                                                                                |
+| 19  | Implementer Inferno weaves Kindling (3d8c87), fixes-lane-end/seat-disposition boundary, ~17:50Z (30 Jul) — LEGACY seat names, 3/4 template-less (post-ruling-39 path break) | n      | ON ("SOUND")         | ON — invert closeout order: owner report first, teardown on word; anchor claim not this lane's evidence                                                                                                                      | ON                                               | ON — all 5 PASS                                                                                                         | no on verdict; B's sequencing redirection adopted                                                                                                                                            |
+| 20  | same moment, ~17:54Z — NEW #654 roles (judgement-low/med/high, procedure-xhigh), zero template failures                                                                     | a      | ON                   | DR — "hold awaiting owner word" is an uncited gate; offer freed capacity for routing                                                                                                                                         | ON — verify nothing rides the anchor claim first | ON — PDR-078 §4 flagged unverified (verified real at the seat post-hoc)                                                 | yes → routed to Director (directed event ~18:00Z) + owner card; Director ruled no-new-lane (Matt's conn), owner card ruled "Retire now"                                                      |
+| 21  | Implementer Moss calls Loam (79b433), MCP-145 slice-2b landing boundary, ~09:19Z (1 Aug) — first rows under the usage-recording convention                                  | n      | ON (30,527 tok, 23s) | ON (31,425 tok, 34s)                                                                                                                                                                                                         | ON (31,205 tok, 58s)                             | ON (23,153 tok, 82s)                                                                                                    | no                                                                                                                                                                                           |
+| 22  | same moment, ~09:21Z                                                                                                                                                        | a      | ON (29,810 tok, 14s) | ON (30,281 tok, 31s)                                                                                                                                                                                                         | ON (33,973 tok, 53s)                             | ON (23,057 tok, 133s)                                                                                                   | no                                                                                                                                                                                           |
+| 23  | Implementer Moss calls Loam (79b433), MCP-145 slice-2c pre-commit boundary, ~10:55Z (1 Aug)                                                                                 | n      | ON (30,248 tok, 13s) | ON (30,218 tok, 20s)                                                                                                                                                                                                         | ON (32,327 tok, 27s)                             | ON (23,290 tok, 80s)                                                                                                    | no                                                                                                                                                                                           |
+| 24  | same moment, ~10:58Z                                                                                                                                                        | a      | ON (30,275 tok, 13s) | ON — redirection adopted: PR body names the 2d scoping item explicitly (31,724 tok, 32s)                                                                                                                                     | ON (33,034 tok, 35s)                             | DR — gates-citation hygiene on the frame's prettier/knip pre-check (23,374 tok, 151s)                                   | yes → adjudicated at the seat, split routed to Director                                                                                                                                      |
+| 25  | Implementer Moss calls Loam (79b433), MCP-145 slice-2d pre-commit boundary, ~12:24Z (1 Aug)                                                                                 | n      | ON (30,414 tok, 14s) | ON (30,387 tok, 14s)                                                                                                                                                                                                         | ON (32,776 tok, 32s)                             | ON (28,679 tok, 91s)                                                                                                    | no                                                                                                                                                                                           |
+| 26  | same moment, ~12:26Z                                                                                                                                                        | a      | ON (30,458 tok, 15s) | ON — redirection adopted: heartbeat-subject carrier named in plan Revision 4 (30,834 tok, 29s)                                                                                                                               | ON (31,922 tok, 43s)                             | ON (23,000 tok, 98s)                                                                                                    | no                                                                                                                                                                                           |
+| 27  | Implementer Moss calls Loam (79b433), MCP-145 slice-3 pre-commit boundary, ~14:37Z (1 Aug)                                                                                  | n      | ON (30,257 tok, 14s) | ON — redirection: verify the two Director-routed questions cannot bind the diff (discharged by construction: worst case is a file rename) (30,677 tok, 23s)                                                                  | ON (35,440 tok, 50s)                             | DR — proportion: boundary-crossing gate/review claims lack in-frame evidence (23,396 tok, 122s)                         | yes → adjudicated at the seat (substance unanimous: displacement+gates PASS on all eight legs; the evidence exists first-hand in-session), split routed to Director in the ARC landing entry |
+| 28  | same moment, ~14:39Z                                                                                                                                                        | a      | ON (30,295 tok, 14s) | ON (30,265 tok, 15s)                                                                                                                                                                                                         | ON (35,146 tok, 60s)                             | DR — same proportion axis as 27-n (23,290 tok, 188s)                                                                    | yes → same adjudication                                                                                                                                                                      |
+| 29  | Implementer Moss calls Loam (79b433), MCP-145 WS-B decision-2 pre-commit boundary, ~18:49Z (1 Aug)                                                                          | n      | ON (30,498 tok, 13s) | ON (30,923 tok, 19s)                                                                                                                                                                                                         | ON (31,228 tok, 36s)                             | ON (30,360 tok, 108s)                                                                                                   | no                                                                                                                                                                                           |
+| 30  | same moment, ~18:52Z                                                                                                                                                        | a      | ON (30,533 tok, 15s) | ON — redirection adopted: WS-A opens in parallel once the PR is pushed and Copilot requested, never serialised behind the settle watch (30,896 tok, 25s)                                                                     | ON (34,190 tok, 47s)                             | DR — proportion: the frame-evidence class again, gate/measure claims asserted without quoted outputs (23,460 tok, 135s) | yes → adjudicated at the seat, split routed to Director (directed event 02b23b5c); reporting-layer cure applied (the PR body and landing report quote verification outputs)                  |
+| 31  | Implementer Moss calls Loam (79b433), MCP-145 WS-A pre-commit boundary, ~19:36Z (1 Aug) — frame quotes verification outputs per the row-30 cure                             | n      | ON (30,331 tok, 17s) | ON — redirection adopted: with #697 merged, fold the plan archive flip into the WS-A PR via an ADDITIVE merge of main (rebase hook-denied; merge is the sanctioned shape) — one merge cycle instead of two (30,725 tok, 22s) | ON (31,755 tok, 22s)                             | ON (22,925 tok, 70s)                                                                                                    | no                                                                                                                                                                                           |
+| 32  | same moment, ~19:43Z                                                                                                                                                        | a      | ON (30,412 tok, 16s) | ON — redirection declined with reason: the ARC verdict report's reader exists by construction (the Director consumes the lane channel), so the closeout is not unconsumed ceremony (30,395 tok, 19s)                         | ON (34,227 tok, 48s)                             | ON — UNGROUNDED: none (23,055 tok, 60s)                                                                                 | no                                                                                                                                                                                           |
 
 ### 2026-08-01 axis notes (~12:30Z, Moss calls Loam, 79b433 — slice-2d pre-commit boundary)
 
@@ -404,16 +404,16 @@ Frame: skills-estate-organisation WS0, movement 1 closed, crossing to movement 2
 (problem space + homonymy test). Panel: Claude quartet, both stances, identical
 file-supplied frame (stance line only changed).
 
-| Role | Stance | Verdict | Tokens | Seconds | Tools |
-| --- | --- | --- | --- | --- | --- |
-| judgement-low (fable/low) | normal | ON-TRACK | 29,425 | 15.6 | 2 |
-| judgement-medium (opus/medium) | normal | ON-TRACK +redirect | 30,740 | 36.4 | 3 |
-| judgement-high (sonnet/high) | normal | ON-TRACK | 30,521 | 45.8 | 3 |
-| procedure-xhigh (haiku/xhigh) | normal | ON-TRACK | 22,456 | 55.7 | 3 |
-| judgement-low (fable/low) | adversarial | ON-TRACK | 29,474 | 16.1 | 2 |
-| judgement-medium (opus/medium) | adversarial | ON-TRACK +redirect | 29,869 | 30.2 | 3 |
-| judgement-high (sonnet/high) | adversarial | ON-TRACK | 33,947 | 58.3 | 3 |
-| procedure-xhigh (haiku/xhigh) | adversarial | DRIFTING | 22,275 | 96.3 | 2 |
+| Role                           | Stance      | Verdict            | Tokens | Seconds | Tools |
+| ------------------------------ | ----------- | ------------------ | ------ | ------- | ----- |
+| judgement-low (fable/low)      | normal      | ON-TRACK           | 29,425 | 15.6    | 2     |
+| judgement-medium (opus/medium) | normal      | ON-TRACK +redirect | 30,740 | 36.4    | 3     |
+| judgement-high (sonnet/high)   | normal      | ON-TRACK           | 30,521 | 45.8    | 3     |
+| procedure-xhigh (haiku/xhigh)  | normal      | ON-TRACK           | 22,456 | 55.7    | 3     |
+| judgement-low (fable/low)      | adversarial | ON-TRACK           | 29,474 | 16.1    | 2     |
+| judgement-medium (opus/medium) | adversarial | ON-TRACK +redirect | 29,869 | 30.2    | 3     |
+| judgement-high (sonnet/high)   | adversarial | ON-TRACK           | 33,947 | 58.3    | 3     |
+| procedure-xhigh (haiku/xhigh)  | adversarial | DRIFTING           | 22,275 | 96.3    | 2     |
 
 Split 7-1. Axis notes:
 
@@ -440,16 +440,16 @@ changed), dispatched in one parallel wave beside two expert reviews
 (assumptions-expert on opus; opus frame-challenger) at the movement-4
 boundary of the skills-estate-organisation WS0.
 
-| Role | Stance | Verdict | Tokens | Seconds | Tools |
-| --- | --- | --- | --- | --- | --- |
-| judgement-low (fable/low) | normal | ON-TRACK +redirect | n/o | ~65 | — |
-| judgement-medium (opus/medium) | normal | ON-TRACK +redirect | n/o | ~61 | — |
-| judgement-high (sonnet/high) | normal | ON-TRACK | n/o | ~75 | — |
-| procedure-xhigh (haiku/xhigh) | normal | ON-TRACK | n/o | ~74 | — |
-| judgement-low (fable/low) | adversarial | ON-TRACK +redirect | n/o | ~78 | — |
-| judgement-medium (opus/medium) | adversarial | ON-TRACK +redirect | n/o | ~67 | — |
-| judgement-high (sonnet/high) | adversarial | ON-TRACK | n/o | ~98 | — |
-| procedure-xhigh (haiku/xhigh) | adversarial | DRIFTING | n/o | ~163 | — |
+| Role                           | Stance      | Verdict            | Tokens | Seconds | Tools |
+| ------------------------------ | ----------- | ------------------ | ------ | ------- | ----- |
+| judgement-low (fable/low)      | normal      | ON-TRACK +redirect | n/o    | ~65     | —     |
+| judgement-medium (opus/medium) | normal      | ON-TRACK +redirect | n/o    | ~61     | —     |
+| judgement-high (sonnet/high)   | normal      | ON-TRACK           | n/o    | ~75     | —     |
+| procedure-xhigh (haiku/xhigh)  | normal      | ON-TRACK           | n/o    | ~74     | —     |
+| judgement-low (fable/low)      | adversarial | ON-TRACK +redirect | n/o    | ~78     | —     |
+| judgement-medium (opus/medium) | adversarial | ON-TRACK +redirect | n/o    | ~67     | —     |
+| judgement-high (sonnet/high)   | adversarial | ON-TRACK           | n/o    | ~98     | —     |
+| procedure-xhigh (haiku/xhigh)  | adversarial | DRIFTING           | n/o    | ~163    | —     |
 
 Split 7-1. Instrument notes FIRST (this run changed the measurement
 substrate): legs were dispatched as named session teammates and
@@ -498,3 +498,400 @@ Axis notes:
   — the cricket panel checks direction, the expert reviews check the
   artefact, and this run is clean evidence the two instrument classes
   are not substitutes.
+
+## Run: 2026-08-06 ~09:23Z — owner-called full suite at the merge-bot merge slice-1 review boundary (Drake spins Obsidian, 46636e)
+
+Owner word: "Please state what you are working towards, and what value
+that provides, and then invoke a full Cricket suite." Moment: slice 1
+(MCP-508, draft PR #790) built through six landings, three Opus expert
+reviewers in flight, ready flip held for their adjudication.
+
+| Role                           | Stance      | Verdict                | Tokens (out) | Seconds | Tools         |
+| ------------------------------ | ----------- | ---------------------- | ------------ | ------- | ------------- |
+| judgement-low (fable/low)      | normal      | ON-TRACK +redirect     | 6177         | ~55     | 0             |
+| judgement-medium (opus/medium) | normal      | ON-TRACK +redirect     | 3428         | ~66     | 0             |
+| judgement-high (sonnet/high)   | normal      | ON-TRACK               | 8544         | ~120    | 0             |
+| procedure-xhigh (haiku/xhigh)  | normal      | ON-TRACK               | 8708         | ~143    | 0             |
+| judgement-low (fable/low)      | adversarial | ON-TRACK +redirect     | 8903         | ~78     | 0             |
+| judgement-medium (opus/medium) | adversarial | ON-TRACK +redirect     | 3373         | ~77     | 0             |
+| judgement-high (sonnet/high)   | adversarial | ON-TRACK (conditional) | 13728        | ~110    | 0             |
+| procedure-xhigh (haiku/xhigh)  | adversarial | ON-TRACK               | 38455        | ~535    | several Reads |
+
+UNANIMOUS 8-0 ON-TRACK — no split to route. Instrument note (improves
+on the 2026-08-05 n/o run): legs again dispatched as named teammates
+whose mailbox carries no telemetry AND whose Read-only toolset cannot
+SendMessage a report; the dispatching seat harvested verdicts and
+OUTPUT-token counts directly from the per-leg transcripts under the
+projects directory — workable, but the task-notification dispatch path
+remains the cleaner instrument. Seconds derived dispatch-to-idle (±10s).
+
+Axis notes:
+
+- **Convergent redirection, four legs across both stances (fable both
+  stances, opus both stances): push landings 4–6 to the draft PR NOW —
+  three commits machine-local violate the owner's "utterly resumable"
+  word, and pushing the same commits the reviewers are reading
+  invalidates nothing.** EXECUTED at 09:29Z (PUSH-OK, full pre-push
+  chain green) before the eighth leg had reported.
+- The adversarial legs' strongest constructed cases (review-spend
+  proportionality, idle-seat sequencing, seat-level poll-classification
+  authority, scope creep) all died against evidence: standing rules
+  (reviewer-subagents-on-opus, pre-execution review), the recorded
+  build order, and owner-originated provenance for each scope delta.
+- The sonnet-adversarial conditional: if the reviewer battery ran past
+  a normal adjudication cycle with nothing else visible, start #734 in
+  parallel. Not triggered — the battery returned inside the cycle.
+- Calibration: the two prior DRIFTING dissents came from
+  procedure-xhigh adversarial on frame-provenance gaps; this frame
+  carried commit SHAs, event IDs, and verbatim owner words inline, and
+  the same cell returned a clean all-PASS table — consistent with the
+  frame-completeness sensitivity hypothesis, now with a positive case.
+
+## Run 2026-08-06 ~06:20Z — extraction-pilot Cricket moment 1: plan node landed (PR #786), before census (Drake spins Obsidian, 46636e)
+The shared-construct-extraction-pilot node's first named conscience
+moment: fired after the plan node landed on PR #786, before any census
+work, per the node's own §Conscience checks. Full two-quartet suite;
+legs dispatched via the task-notification path, so per-leg telemetry is
+real (tokens from harness usage counters, seconds from duration_ms).
+
+| Role | Stance | Verdict | Tokens | Seconds | Tools |
+| --- | --- | --- | --- | --- | --- |
+| judgement-low (fable/low) | normal | ON-TRACK +redirect | 28,846 | 19 | 1 |
+| judgement-medium (opus/medium) | normal | DRIFTING | 28,852 | 17 | 1 |
+| judgement-high (sonnet/high) | normal | DRIFTING | 34,136 | 62 | 2 |
+| procedure-xhigh (haiku/xhigh) | normal | ON-TRACK | 29,707 | 113 | 2 |
+| judgement-low (fable/low) | adversarial | ON-TRACK +redirect | 28,846 | 20 | 1 |
+| judgement-medium (opus/medium) | adversarial | DRIFTING | 30,677 | 41 | 2 |
+| judgement-high (sonnet/high) | adversarial | DRIFTING | 38,039 | 109 | 2 |
+| procedure-xhigh (haiku/xhigh) | adversarial | ON-TRACK | 22,061 | 106 | 2 |
+
+Split 4-4, and cleanly dimensional: all four DRIFTING verdicts came
+from the judgement-medium (opus) and judgement-high (sonnet) cells in
+both stances; both fable and both haiku cells returned ON-TRACK. All
+four DRIFTING legs converged on ONE redirect axis — do not hold the
+census behind hygiene slices 2b/2c; 2a is endorsed by every leg.
+
+Adjudication at the seat (grounded in the landed node text):
+
+- **"Census-behind-Cricket is an invented gate": REJECTED.** The gate
+  is plan-named — the node's §Conscience checks reads "(1) after the
+  plan node lands, before the census". The adversarial-medium leg's
+  own UNGROUNDED conceded this resolution. The gate is now discharged
+  by this very run.
+- **"2b/2c must not gate the census": ACCEPTED — and it is what the
+  plan already says.** The session-plan execution notes make Step 1
+  and 2a/2b/2c mutually independent; the strict ordering is 3→4→5
+  only. The DRIFTING verdicts caught a serialisation implied by the
+  frame's NEXT wording, not by the plan. Cure adopted: with moment 1
+  discharged, the census starts next, with 2b/2c as parallel slices.
+- **"2b has no extraction-chain consumer": PARTIALLY REJECTED.** The
+  node names 2b's consumers (§6 encoding proposals as design input;
+  the scaffolding finding as candidate evidence) — but they bind at
+  census/design time, so the timing half of the objection stands and
+  is absorbed by the same cure.
+- **Calibration note for the effort-inversion hypothesis**: the split
+  tracked the judgement-capability axis, not the stance axis — the
+  opus/sonnet judgement cells challenged the frame's sequencing claim
+  against the quoted principle, while fable-low and haiku-procedure
+  accepted the frame's own gate citation as sufficient. The frame
+  under-supplied the plan's execution-note sequencing (mutual
+  independence of the hygiene slices), and the higher-effort
+  judgement cells were the ones that noticed the gap — same class as
+  the 2026-08-02 provenance finding: frame incompleteness, surfaced
+  by different cells this time.
+
+Split routed to the sitting Director (Petrel holds Turbulence) with
+complete verdicts and this adjudication, per §Adjudicate the panel.
+
+## Run 2026-08-06 ~06:58Z — extraction-pilot Cricket moment 2: contract freeze, before build (Drake spins Obsidian, 46636e)
+The pilot node's second named moment: fired on the frozen extraction
+contract (census event d0368b2a — five duplication classes, ten-gate
+assessment, placement verdict deviating from the plan's packages/libs
+default on gate evidence). Full two-quartet suite via the
+task-notification path; real per-leg telemetry.
+
+| Role | Stance | Verdict | Tokens | Seconds | Tools |
+| --- | --- | --- | --- | --- | --- |
+| judgement-low (fable/low) | normal | ON-TRACK | 29,005 | 16 | 1 |
+| judgement-medium (opus/medium) | normal | ON-TRACK +redirect | 29,461 | 39 | 2 |
+| judgement-high (sonnet/high) | normal | ON-TRACK | 30,248 | 26 | 2 |
+| procedure-xhigh (haiku/xhigh) | normal | ON-TRACK | 22,409 | 56 | 2 |
+| judgement-low (fable/low) | adversarial | ON-TRACK | 29,113 | 15 | 1 |
+| judgement-medium (opus/medium) | adversarial | ON-TRACK +redirect | 30,520 | 33 | 2 |
+| judgement-high (sonnet/high) | adversarial | ON-TRACK +redirect | 32,583 | 46 | 2 |
+| procedure-xhigh (haiku/xhigh) | adversarial | ON-TRACK | 22,157 | 102 | 2 |
+
+Split 8-0 — the first unanimous panel of the pilot (M1 split 4-4 on
+the capability axis; the M1 cure — grounding the sequencing claims in
+the plan's own text and carding the deviation — removed exactly the
+gap the M1 DRIFTING cells caught, and this frame carried that
+grounding from the start).
+
+Redirects, all ADOPTED: (1) start the opener slice (Class 1 + Class 3,
+placement-independent) in parallel with the ARC adjudication rather
+than behind it (both medium-adversarial and high-adversarial); (2)
+tighten the byte-equality wording where the contract text travels
+next — "zero byte-identical FILE pairs" coexists with "code-equal
+run-data.ts (docblock-only diff)" and "byte-duplicate deriveInlined
+FUNCTION BODY"; the extraction-PR text states the granularity
+explicitly (medium-adversarial); (3) card the placement fork as a
+verdict-shaped single ask carrying the reversibility fact
+(medium-normal; delivered to the Director on the ARC channel before
+the panel closed).
+
+Owner-gate interleave worth recording: the owner's PR #786
+ratification card answer ("Ratified — stamp and merge") arrived
+mid-panel via the Director — the stamp commit executed between the
+waves without perturbing the frame (the panel judges the census/build
+question, which the ratification does not move).
+
+## Run 2026-08-06 ~08:16Z — owner-called full review, two-lane seat state (Drake spins Obsidian, 46636e)
+Owner-called ("Time for a full Cricket review"), not a plan-named
+moment: the frame covered both lanes at the seat — the frozen
+extraction pilot and the tooling lane mid-slice-1-design. Full
+two-quartet suite via the task-notification path; real telemetry.
+
+| Role | Stance | Verdict | Tokens | Seconds | Tools |
+| --- | --- | --- | --- | --- | --- |
+| judgement-low (fable/low) | normal | ON-TRACK +redirect | 28,885 | 17 | 1 |
+| judgement-medium (opus/medium) | normal | ON-TRACK +redirect | 29,261 | 22 | 2 |
+| judgement-high (sonnet/high) | normal | ON-TRACK | 32,629 | 46 | 2 |
+| procedure-xhigh (haiku/xhigh) | normal | ON-TRACK | 22,286 | 74 | 2 |
+| judgement-low (fable/low) | adversarial | ON-TRACK +redirect | 28,879 | 13 | 1 |
+| judgement-medium (opus/medium) | adversarial | DRIFTING | 29,795 | 25 | 2 |
+| judgement-high (sonnet/high) | adversarial | ON-TRACK +redirect | 36,226 | 85 | 2 |
+| procedure-xhigh (haiku/xhigh) | adversarial | ON-TRACK | 22,561 | 75 | 2 |
+
+Split 7-1, with FIVE of eight legs converging on one axis: the #734
+cure list (Director review of record) sat at NEXT position 3, un-read
+and un-sized — "an unsized item cannot be ordered", and the seat had
+absorbed the owner's deferral-tripwire correction the same hour, so
+an un-sized deferral was exactly the fresh lesson's shape. The
+DRIFTING leg (adversarial-medium) made that self-contradiction its
+verdict.
+
+Adjudication at the seat: the finding was CORRECT at frame time and
+was DISCHARGED MID-PANEL — the redirect from the first two normal
+legs was executed between the waves (the #734 review read
+first-hand: security-cure substance UPHELD; changes-required = Sonar
+new-code gate ERROR, ~24 mechanical smell cures in the corpus files,
+sized at roughly a sitting). Priced ordering, adopted: slice 1 first
+(owner ordering word), the Sonar cure round at slice 1's merge
+boundary, slice 1.5 after. The adversarial-high leg's unresolved
+question (is the cure list inside the pilot freeze?) is answered from
+the record: the review landed AFTER the freeze event and the Director
+queued it to this lane explicitly — lane work, not frozen-pilot work.
+
+Calibration notes: (1) mid-panel discharge produces a stale-referent
+DRIFTING — the panel judged the frame, not the live seat; the
+verdict's substance transfers as confirmation the discharge was
+right, not as live drift. (2) The effort-inversion pattern recurred
+softly: the opus cell carried the sharpest formulation of the real
+finding in both stances; the fable/haiku cells passed the frame in
+both.
+
+## Run 2026-08-07 ~20:51-20:55Z — Civet spins Cavern (054f5e), design-lane pickup merge boundary
+
+**Moment**: first major decision point of the Civet design-lane tenure (owner word,
+2026-08-07 in-session: "full Cricket suite at all major decision points"). Formed
+intent checked: merge #821/#822 (docs-only, green, settled) now; dispatch an
+in-session opus code-expert review of #820 (source; all automated reviewers
+credit-starved) before its merge; SLOWLY pace. Platform panel (Claude):
+judgement-low/medium/high + procedure-xhigh, both stances — eight legs.
+
+**Verdicts**: 7× ON-TRACK, 1× WRONG-PRIORITY (procedure-xhigh adversarial) —
+NON-UNANIMOUS → routed to the Director (Plover lifts Troposphere b10c37) per the
+standing contract. The dissent's case: delaying #820 reorders the handoff
+instruction ("merge at full condition" names no review leg); the reviewed-PR rule
+was cited in prose, not by file id; a self-commissioned review risks rubber-stamp.
+All eight legs (dissent included) endorse merging #821/#822 immediately.
+
+**Per-leg telemetry** (subagent tokens / wall ms):
+
+| Leg | Stance | Verdict | Tokens | ms |
+| --- | --- | --- | --- | --- |
+| judgement-low | normal | ON-TRACK | 29,529 | 15,777 |
+| judgement-low | adversarial | ON-TRACK | 29,596 | 17,626 |
+| judgement-medium | normal | ON-TRACK | 29,541 | 20,644 |
+| judgement-medium | adversarial | ON-TRACK | 30,025 | 35,359 |
+| judgement-high | normal | ON-TRACK | 30,697 | 37,629 |
+| judgement-high | adversarial | ON-TRACK | 30,893 | 47,707 |
+| procedure-xhigh | normal | ON-TRACK | 23,022 | 155,949 |
+| procedure-xhigh | adversarial | WRONG-PRIORITY | 22,651 | 101,194 |
+
+Total ≈ 225,954 subagent tokens; wall ≈ 4 min (parallel).
+
+**Panel value realised before any verdict landed**: the medium-normal leg's
+don't-serialise redirect and the medium-adversarial leg's pre-commit-the-bar
+redirect were both executed mid-panel (review dispatched in background; the #820
+disposition rule written and timestamped BEFORE the review dispatch — scratchpad
+`pr-820-disposition-rule.md`). The low-adversarial suppressed-Copilot re-check ran
+and came back clean (only the overage notice exists). The high-adversarial
+housekeeping check on #821 ran and confirmed dated gate-discharge records only.
+
+**Calibration notes**: (1) the effort-inversion pattern recurred — the compiled
+procedure (xhigh) produced both the slowest legs and the only dissent, and the
+dissent's Q3 hinges on a fact the judgement legs verified from memory (the rule's
+existence) while the procedure leg correctly refused to trust an unnamed citation:
+the dissent is partly a FRAME-SUPPLY defect (the invoker cited the rule in prose
+without its file/memory id), the pair-era frame-provenance cure applying again.
+(2) Adjudication inputs routed with the panel, not self-ruled: the exact phrasing
+"code enters via reviewed PR" lives in owner-word per-user memory (not an
+`.agent/rules/` file), while the always-applied tier carries `invoke-code-experts`
+and the estate's own `merge-bot merge` REQUIRES a declared `--expect` reviewer set
+— the instrument itself encodes reviewer settlement inside "full condition".
+
+**Outcome (appended 2026-08-07 ~21:28Z per the Director's loop-closure
+addition)**: the routed 7:1 run RESOLVED. Director adjudication adopted the
+seat's recommendation (review-before-merge for the source PR under the
+pre-committed rule); the opus code-expert review returned APPROVE with zero
+blocking findings (seven non-blocking, dispositioned on the PR); #821/#822
+merged under per-PR grants at recomputed boundaries (735c5a330, c45fcf087);
+#820 merged at 21:27Z (merge commit 658f6c844) after a secret-scan
+network-flake re-fire, a SETTLED-NO-REVIEW stop-and-route, and an explicit
+Director RE-GRANT on verified byte-identity. Wall-clock, panel-launch to
+#820 merged: ~36 minutes, of which ~10 was the deliberately-matured quiet
+window. The dissenting leg's practical residue — the review rule's citation
+must carry its file/memory id in the frame — is adopted as standing frame
+practice for future runs.
+
+## Run: 2026-08-07 ~21:3xZ — Nettle weaves Root (5cfa11), longitudinal-run close (MCP-531)
+
+Moment: the conservation/close boundary of the longitudinal napkin synthesis —
+close-now vs re-run on the Choice-B recall MISS, plus the C06/C55 novelty calls
+and same-night plan archival. Full quartet, both stances, all eight parallel.
+
+| Leg | Stance | Verdict | Tokens | Runtime (ms) |
+| --- | --- | --- | ---: | ---: |
+| judgement-low | normal | ON-TRACK | 29,076 | 14,114 |
+| judgement-low | adversarial | ON-TRACK | 29,022 | 19,909 |
+| judgement-medium | normal | ON-TRACK | 29,582 | 19,849 |
+| judgement-medium | adversarial | DRIFTING | 29,580 | 24,250 |
+| judgement-high | normal | ON-TRACK | 36,629 | 53,126 |
+| judgement-high | adversarial | DRIFTING | 33,411 | 47,129 |
+| procedure-xhigh | normal | ON-TRACK | 37,165 | 75,259 |
+| procedure-xhigh | adversarial | ON-TRACK | 24,980 | 148,401 |
+
+Total ≈ 249,445 subagent tokens; wall ≈ 2.5 min (parallel). Tally 6:2,
+non-unanimous → routed to the Director with resolution attached.
+
+**Outcome (recorded at occurrence)**: both DRIFTING redirections were executed
+BEFORE the synthesis report finalised — (1) the voter-verdict hand-check on the
+miss-carrying kills (C39/C40/C65 unanimous four-conjunct kills; C58 consistent
+not-artefact kill) reworded the Choice-B verdict from "fixture aged" alone to
+the dual fixture-age + adversary-de-duplication reading; (2) C55 was verified
+against the F-73/F-89/F-116 register rows and C06 against the sibling pattern
+files before either pattern was created; (3) the plan stays LIVE tonight — no
+archival — preserving the owner's morning checkpoint. The adversarial-stance
+legs again produced all the dissent and all the executed value; the normal
+legs converged fast. Effort inversion recurred in the opposite direction from
+the #820 run: here procedure-xhigh (both stances) endorsed while
+judgement-high adversarial dissented on verification depth.
+
+## Run: 2026-08-08 ~09:5xZ — Civet spins Cavern (054f5e), Act-1 combined-window sitting plan
+
+Moment: the pre-authoring gate of the unsealed a729c466 combined window (owner
+work-word 2026-08-08; Director ROUTE b7e4b897). Decision under check: the
+sitting plan — one docs PR off main (nine cures class-wide + the confirmed
+W0.5 fold + the round-2 durable record + §Review truing), pre-authoring
+enumeration workflow, seat-authored edits, adversarial class-completeness +
+same-reviewer opus delta-verify, Copilot requested at open, clean close →
+Director cards the implementation word. Full quartet, both stances, all eight
+parallel.
+
+| Leg | Stance | Verdict | Tokens | Runtime (ms) |
+| --- | --- | --- | ---: | ---: |
+| judgement-low | normal | ON-TRACK | 30,419 | 20,478 |
+| judgement-low | adversarial | ON-TRACK | 29,904 | 19,133 |
+| judgement-medium | normal | ON-TRACK | 30,585 | 56,318 |
+| judgement-medium | adversarial | DRIFTING | 30,396 | 31,434 |
+| judgement-high | normal | ON-TRACK | 35,056 | 62,512 |
+| judgement-high | adversarial | DRIFTING | 38,027 | 98,188 |
+| procedure-xhigh | normal | ON-TRACK | 23,125 | 57,762 |
+| procedure-xhigh | adversarial | DRIFTING | 22,954 | 167,248 |
+
+Total ≈ 240,466 subagent tokens; wall ≈ 2.8 min (parallel). Tally 5:3,
+non-unanimous → routed to the Director with resolution attached. The three
+dissents are all adversarial-stance and all provenance-class — each names a
+citation the FRAME did not carry rather than a defect in the decision: (1)
+Lighthouse CI budgets "uncited" — the mandate itself names them verbatim
+("all ten items, three instruments incl. Lighthouse CI budgets", a729c466 /
+0d5afca6); (2) the two pointer stories "unprovenanced" — the owner's own
+confirmed ledger words ("named story", item 7; "Needs its story minted",
+item 9); (3) Copilot-on-docs "ungated" — resolved as a selective request,
+bonus-never-condition (the 2b4e5ce6 foundation ruling scopes source PRs;
+docs-only selectivity stands). Two adversarial redirections adopted as
+standing practice for the window regardless: the round-2 record is
+SELF-CONTAINED (cites PR #784 by number only, never by unmerged file path),
+and the record home is the plan-review directory on main (the round-1
+re-review record's landed home; #784 carries sitting records — a different
+artefact class, so no pattern fork exists). The frame-provenance lesson from
+the 2026-08-07 run recurred exactly: adversarial dissent concentrates where
+the frame cites a ruling without its event id.
+
+**Outcome (recorded 2026-08-08 10:17Z, clock read first-hand)**: Director
+adjudication (directed event 10:03:08Z) — ALL THREE dissents DISSOLVE, each
+on primary-source evidence re-verified first-hand at the Director's seat;
+PROCEED ruled for the Act-1 sitting carrying the two adopted redirections
+(self-contained round-2 record citing PR #784 by number; Copilot as
+selective bonus-never-condition). Dissent-class per dissenting leg (the
+Director's pattern-note, adopted as a standing tally column from this row
+on): jmed-a provenance/frame-omitted; jhigh-a provenance/frame-omitted;
+pxhigh-a provenance/frame-omitted. Header timestamp above corrected from
+"~11:0xZ" at occurrence — the seat wrote an assumed clock value instead of
+reading `date -u`; the same not-read-first-hand generator as the two
+identifier fabrications, now cured as one class in the napkin.
+
+## Run 2026-08-08 ~14:54–14:58Z — W0.7 v0 sitting-open frame (Civet spins Cavern, 054f5e)
+
+Moment: first-light sitting-open after the owner's four-PR sweep completed
+(#829 merged at the granted pin). Frame: open W0.7 v0 now as two
+single-story PRs (PR-A rubric v0 + wow-verdict register mint with same-PR
+schema test, seeded with the migrated 2026-08-05 Verdict-1 row; PR-B blind
+three-leg graded calibration), homed at
+`packages/design/oak-design-system/design-review/`.
+
+| Leg | Stance | Verdict | Seconds | Output tokens | Dissent class |
+| --- | --- | --- | --- | --- | --- |
+| judgement-low | normal | ON-TRACK | 79 | 6074 | — |
+| judgement-medium | normal | ON-TRACK | 77 | 5567 | — |
+| judgement-high | normal | ON-TRACK | 105 | 9724 | — |
+| procedure-xhigh | normal | DRIFTING | 135 | 11007 | specification/frame-underspecified |
+| judgement-low | adversarial | ON-TRACK | 98 | 6453 | — |
+| judgement-medium | adversarial | DRIFTING | 77 | 5182 | source-misread/artefact-class |
+| judgement-high | adversarial | ON-TRACK | 164 | 15033 | — |
+| procedure-xhigh | adversarial | ON-TRACK | 62 | 4836 | — |
+
+Tally 6:2, non-unanimous → routed to the Director with resolutions
+attached. (1) procedure-normal's DRIFTING names three clarity gaps (leg
+orchestration method, minting-record location, fixture-corpus enumeration)
+and says itself "not blockers (the shape is sound)" — DISCHARGED at
+occurrence by a clarification note appended to the frame naming all three
+(subagent-dispatch orchestration transcribed into the committed calibration
+record; `design-review/records/2026-08-08-register-minting.md`; the
+enumerated v0 corpus with per-fixture rationale and the item-7 scope
+boundary). (2) judgement-medium-adversarial's DRIFTING claims
+under-migration (ledger items 2/6/7 as unmigrated page-verdicts) — it
+conflates the record's two artefact classes: the sitting record's own
+minting contract says "every VERDICT ROW below migrates into that register
+… and tweak entries feed W0.5's intake surface", exactly one `## Verdict`
+heading exists (showcase root FAIL), and the ledger items were folded into
+the plan at #828. Redirections adopted regardless: the full corpus
+enumeration (judgement-low-normal) and a census-derivation note
+(judgement-high-adversarial): the v0 must-pass list is the export's own
+closed three-file set under `studio-source/`, never a seat-authored sample;
+the census-derivation chain binds the rebuilt demo's sitemap-derived page
+lists, and W0.1's census later confirms the correspondence — stated in the
+minting record.
+
+**Outcome (recorded 2026-08-08 15:07Z, clock read first-hand in the same block; the first write said 15:09Z — an authored guess corrected at occurrence)**: Director
+ruling (directed event `0cfdd701`, 14:59:31Z) — PROCEED at the frame; both
+dissent resolutions verified first-hand at the Director's seat before
+ruling (dissent 2 DISSOLVED on the merged record's own minting contract,
+re-read at ruling time; dissent 1 DISCHARGED by the frame's clarification
+note, non-blocking by its own words). ONE TIGHTENING adopted into the
+rubric at minting: EVERY expert-reviewer leg dispatches on opus (the
+standing reviewer-dispatch word covers the accessibility-expert leg as
+well; fallback UP in capability at lower effort, never down). Both
+adopted redirections affirmed; two single-story PRs at PDR-132 budgets;
+grants at full condition.

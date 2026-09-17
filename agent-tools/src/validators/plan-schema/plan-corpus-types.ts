@@ -5,7 +5,7 @@
  *
  * @remarks
  * Homed here at the second consumer: the finding-mechanism modules
- * (`plan-execution-anchors.ts`, `plan-gate-drift.ts`) and the corpus
+ * (`plan-gate-drift.ts`) and the corpus
  * helpers all need these shapes, and leaving them in the helpers put a
  * cycle in the module graph. `plan-node-schema.ts` stays the public
  * contract transcription and deliberately knows nothing about file

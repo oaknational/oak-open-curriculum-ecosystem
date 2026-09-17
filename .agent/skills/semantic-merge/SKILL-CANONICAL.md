@@ -90,7 +90,11 @@ per class:
   set-diff proof plus exact line arithmetic (base + mine-appends + theirs-appends =
   merged line count); no hand-splicing needed for this class. The arithmetic proof applies
   to the RAW `--union` output, before any same-lesson dedup pass — deduplication breaks the
-  arithmetic by design.
+  arithmetic by design. **A rotation on one side and appends on the other is this class's
+  most dangerous shape** (worked, 2026-08-06 branch reconciliation): neither side's change
+  is wrong, so a line-merge resolves confidently either way. The safe order is to prove the
+  DRAIN lossless first — `cmp` the archive's head against the pre-rotation file — after
+  which the rotation stands and only the un-homed appends need carrying across.
 - **`index-narrative-tables`** (e.g. `repo-continuity.md`): a compact index of
   per-session / per-thread entries plus tables. Merge = UNION of entries, grouped by
   session, most-recent-session first; keep tables intact (never split a row); and
@@ -171,6 +175,18 @@ side is ever dropped to fit a structure or a limit.**
    move rides back in (worked instance: a `current/` plan link re-introduced after the
    `active/` move). Run `validate-markdown-links` scoped to the merged file, or `test -f`
    each relative target the union (re-)introduced.
+10. **Second reader, from the object store.** A second seat reads the merge commit with
+    `git show <sha>:<file>` (no tree access needed) and re-runs the proofs independently:
+    markers count; heading set-diff of EACH clean side against the result; "result lines
+    outside main ∪ ours" (nothing invented); "main lines absent from the result" read line
+    by line; the era witness; `git diff --stat <side> <result> -- <files that should equal
+    that side>`. Both the tool and the merger can be confident and wrong (above): the
+    second read found one factual cure (a release number) and three dropped facts that git
+    and the merger had both read as clean, inside a minute (2026-09-02). For a ROTATED
+    append-only surface met at a fold, add the archive-coverage check: diff the incoming
+    side's entry HEADINGS against the rotation archive, content-grep before declaring a gap
+    (113 of 116 covered, one under its trued heading), and carry only the genuinely absent
+    entries under a dated union note (2026-08-17).
 
 ## Mechanics that respect the repo rules
 

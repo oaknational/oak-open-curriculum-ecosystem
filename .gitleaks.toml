@@ -97,6 +97,20 @@ paths = ['''^\.agent/reports/mcp-agent-facing-content-audit/current-source-ancho
 regexTarget = "line"
 regexes = ['''^\s*"indexToken"\s*:\s*"(?:ineffectiveness|pupil_premium_rates_2024_25)"\s*,?\s*$''']
 
+# The OpenAI plugin-submission domain-verification token (MCP-700) is public
+# by design: the portal fetches it from the MCP host over HTTPS and compares
+# it; holding the value grants nothing. Like the Clerk publishable keys above,
+# it lives in source. The exception is pinned to the one module and the one
+# constant-assignment line shape, so nothing else on that path is exempt. The
+# value itself is deliberately not repeated here: a second copy of the token
+# reads as a hard-coded secret to SonarCloud (S6418) and would fail its gate.
+[[allowlists]]
+description = "OpenAI domain-verification challenge token is public by design (MCP-700)"
+condition = "AND"
+paths = ['''^apps/oak-curriculum-mcp-streamable-http/src/openai-domain-verification\.ts$''']
+regexTarget = "line"
+regexes = ['''^\s*const OPENAI_APPS_CHALLENGE_TOKEN = '[A-Za-z0-9_-]{20,64}';\s*$''']
+
 
 [[rules]]
 id = "oak-api-key-uuid"

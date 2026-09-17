@@ -1,0 +1,10 @@
+# Everything in here is machine-local and ignored by default.
+# This file exists so the ignore holds even before the root .gitignore is read,
+# and so a new operator profile can never be committed by accident.
+
+*
+
+# Exceptions — the tracked stubs that declare the contract.
+
+!.gitignore
+!README.md

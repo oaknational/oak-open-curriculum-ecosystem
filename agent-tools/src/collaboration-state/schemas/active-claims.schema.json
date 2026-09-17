@@ -259,7 +259,7 @@
         },
         "session_id_prefix": {
           "type": "string",
-          "description": "First 6 characters of the harness session ID; 'unknown' if not exposed."
+          "description": "First 6 characters of the PDR-027 seed (the untagged platform session id on cloud seats; the harness session id otherwise); 'unknown' if not exposed."
         },
         "id": {
           "type": "string",

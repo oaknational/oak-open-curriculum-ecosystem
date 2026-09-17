@@ -17,6 +17,16 @@ export async function createRedisClient(url: string): Promise<Redis | null> {
       maxRetriesPerRequest: 3,
       retryStrategy: (times) => (times > 3 ? null : Math.min(times * 200, 1000)),
       lazyConnect: true,
+      // ioredis 6 defaults to RESP3 and, on a server that cannot speak it,
+      // auto-falls back to RESP2 (its connection handler catches NOPROTO /
+      // unknown-command HELLO and retries — verified in 6.0.0's
+      // event_handler). The pin therefore prevents no failure; it keeps the
+      // wire behaviour DETERMINISTIC across the major: v5 semantics verbatim,
+      // no negotiate-then-fallback dance whose outcome depends on the
+      // deployed server. Lift by adopting RESP3 deliberately, with the
+      // deployed server version verified >= 6 and the reply-shape surface
+      // re-checked.
+      protocol: 2,
     });
     await client.connect();
     await client.ping();

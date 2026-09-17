@@ -22,7 +22,7 @@ import process from 'node:process';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { mergeConfig } from 'vitest/config';
-import { baseE2EConfig } from '../../vitest.e2e.config.base';
+import { baseE2EConfig } from '@oaknational/workspace-config/vitest-e2e';
 import { loadSmokeTestEnv, type SearchCliSmokeEnv } from './smoke-test-env.js';
 
 const thisDir = dirname(fileURLToPath(import.meta.url));

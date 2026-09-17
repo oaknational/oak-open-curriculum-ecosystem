@@ -1,0 +1,294 @@
+{
+  "schema_version": "parallax/experimental-design/0.1",
+  "artifact_id": "TODO: stable artifact identifier",
+  "artifact_type": "experimental-design",
+  "artifact_revision": 1,
+  "inquiry_id": "TODO: stable inquiry identifier",
+  "inquiry_revision": 1,
+  "status": "provisional",
+  "lifecycle_state": "draft",
+  "protocol_revision": 1,
+  "created_at": "TODO: ISO-8601 timestamp",
+  "created_by": {
+    "kind": "agent-or-human",
+    "identifier": "TODO: explicit identifier when available"
+  },
+  "producing_skill": {
+    "name": "parallax-design-experiment",
+    "version": "0.1.0"
+  },
+  "execution_context": {
+    "run_id": "TODO: host run or session identifier",
+    "mode": "direct",
+    "host": "TODO: embedding host identifier",
+    "independence": "shared-context"
+  },
+  "inputs": [],
+  "permissions_and_scope": {
+    "permitted_operations": [
+      "design",
+      "critique",
+      "analysis",
+      "world-return"
+    ],
+    "excluded_operations": [
+      "participant-exposure",
+      "data-collection",
+      "execution"
+    ],
+    "authority_source": "TODO: user or host authority for this artifact's scope"
+  },
+  "identity": {
+    "basis_ids": [
+      "TODO: basis identifier"
+    ],
+    "scale_regions": [
+      "TODO: scale-region-unit",
+      "TODO: scale-region-time"
+    ],
+    "method_pass_ids": [
+      "TODO: method-pass identifier"
+    ],
+    "domain_profiles": [
+      "TODO: applicable domain profile"
+    ]
+  },
+  "assumptions": [],
+  "uncertainties": [],
+  "provenance": {
+    "sources": [],
+    "transformations": []
+  },
+  "validity_domain": "TODO: populations, settings, implementations and periods covered",
+  "defeaters": [
+    "TODO: observation that defeats a material interpretation"
+  ],
+  "reopen_when": [
+    "TODO: condition that creates a new inquiry revision"
+  ],
+  "readiness": {
+    "nonblocking_gaps": [],
+    "rationale": null
+  },
+  "composition": {
+    "mode": "standalone-general",
+    "template_ref": "assets/experiment-plan.template.json",
+    "composition_contract_ref": "references/composition-contract.md",
+    "shared_field_authority": "this-artifact",
+    "product_overlay_artifact_refs": [],
+    "consistency_checks": [
+      "identity-and-revisions",
+      "decision-claim-estimand",
+      "scale-bridges-and-crosswalks",
+      "world-return"
+    ]
+  },
+  "decision_context": {
+    "decision": "TODO: decision this evidence will inform",
+    "action_if_supported": "TODO: candidate action",
+    "action_if_not_supported": "TODO: alternative action",
+    "value_constraints": [
+      "TODO: rights, ethics, cost or policy constraint that evidence cannot decide"
+    ]
+  },
+  "claim": {
+    "question_type": "causal",
+    "hypothesis": "TODO: intervention-effect claim",
+    "theory_of_change": "TODO: proposed mechanism",
+    "alternatives": [
+      "No consequential effect",
+      "TODO: serious non-null alternative mechanism"
+    ],
+    "defeaters": [
+      "TODO: observation undermining the preferred explanation"
+    ]
+  },
+  "estimand": {
+    "population": "TODO: target population and setting",
+    "conditions": [
+      "TODO: control or comparison condition",
+      "TODO: intervention condition"
+    ],
+    "outcome": "TODO: outcome and observation time",
+    "summary_measure": "TODO: contrast or summary",
+    "intercurrent_events": [
+      {
+        "event": "TODO: non-adherence, partial exposure or competing event",
+        "strategy": "TODO: how the estimand treats this event"
+      }
+    ]
+  },
+  "scale_context": [
+    {
+      "scale_region_id": "TODO: scale-region-unit",
+      "dimension": "unit",
+      "assignment": "TODO: assignment unit",
+      "intervention": "TODO: intervention unit",
+      "measurement": "TODO: measurement unit",
+      "analysis": "TODO: analysis and dependence unit",
+      "inference": "TODO: target population",
+      "world_return": "TODO: implemented service or system"
+    },
+    {
+      "scale_region_id": "TODO: scale-region-time",
+      "dimension": "time",
+      "assignment": "TODO: assignment time",
+      "intervention": "TODO: exposure period",
+      "measurement": "TODO: follow-up window",
+      "analysis": "TODO: frozen dataset date",
+      "inference": "TODO: validity period",
+      "world_return": "TODO: short- and long-term monitoring windows"
+    }
+  ],
+  "bridge_claims": [
+    {
+      "from": "TODO: experimental outcome at measurement scale",
+      "to": "TODO: decision or outcome at implementation scale",
+      "relationship": "TODO: mechanism or transformation",
+      "assumptions": [
+        "TODO: transport or implementation assumption"
+      ],
+      "supporting_evidence": [],
+      "challenging_evidence": [],
+      "uncertainty": "high",
+      "validity_domain": "TODO: where the bridge may hold",
+      "reopen_when": "TODO: observation invalidating the bridge"
+    }
+  ],
+  "crosswalk_claims": [],
+  "design": {
+    "family": "individually-randomised-parallel",
+    "experimental_unit": "TODO: experimental unit",
+    "allocation": "TODO: generation, ratio, blocking or stratification",
+    "control": "TODO: control condition and rationale",
+    "blinding": "TODO: who is blinded or why infeasible",
+    "clustering": "none-expected",
+    "cluster_design": null,
+    "adaptation": {
+      "enabled": false,
+      "rules": "not-applicable",
+      "simulation_plan": "not-applicable"
+    },
+    "counterdesign": "TODO: strongest alternative design and why not selected",
+    "identification_assumptions": [
+      "TODO: exchangeability, interference, consistency, timing or model assumption"
+    ]
+  },
+  "measurement": {
+    "primary_outcomes": [
+      {
+        "name": "TODO: primary outcome",
+        "construct": "TODO: intended construct",
+        "operational_definition": "TODO: instrument, aggregation and timing",
+        "validity_evidence": "TODO: evidence or open question"
+      }
+    ],
+    "secondary_outcomes": [],
+    "harms_and_guardrails": [
+      "TODO: harm or guardrail measure"
+    ],
+    "fidelity_checks": [
+      "TODO: delivery or manipulation check"
+    ],
+    "data_quality_checks": [
+      "TODO: calibration, missingness, range or provenance check"
+    ]
+  },
+  "precision": {
+    "target_effect_range": "TODO: smallest effect of interest and plausible range",
+    "criterion": "TODO: interval-width, power, expected-information or decision criterion",
+    "assumptions": {
+      "baseline_or_variance": "TODO: estimate, source and uncertainty",
+      "error_or_probability": "TODO: alpha and power or alternative decision probability",
+      "attrition_and_noncompliance": "TODO: assumptions",
+      "multiplicity_and_looks": "TODO: planned adjustment"
+    },
+    "sensitivity_scenarios": [
+      {
+        "label": "pessimistic",
+        "parameters": "TODO: pessimistic parameter set"
+      },
+      {
+        "label": "central",
+        "parameters": "TODO: central parameter set"
+      },
+      {
+        "label": "optimistic",
+        "parameters": "TODO: optimistic parameter set"
+      }
+    ],
+    "simulation": "TODO: whether simulation is required and how it will be verified"
+  },
+  "analysis": {
+    "analysis_population": "TODO: population aligned with estimand",
+    "primary_estimator": "TODO: model, contrast and uncertainty interval",
+    "multiplicity_policy": "TODO: claim family and policy",
+    "sequential_policy": "fixed-horizon-unless-prospectively-replaced",
+    "missing_data": "TODO: assumptions and handling",
+    "sensitivity_analyses": [
+      "TODO: assumption-targeted sensitivity analysis"
+    ],
+    "heterogeneity": "TODO: prespecified analyses and status",
+    "diagnostics": [
+      "TODO: model, randomisation or residual check"
+    ]
+  },
+  "ethics": {
+    "review_required": "TODO: applicable review and jurisdiction",
+    "approval_status": "not-reviewed",
+    "consent_or_basis": "TODO: consent process or justified basis",
+    "risks": [
+      "TODO: foreseeable burden or harm"
+    ],
+    "protections": [
+      "TODO: privacy, accessibility, safeguarding or harm control"
+    ],
+    "stop_rules": [
+      "TODO: harm, futility or integrity stop rule"
+    ]
+  },
+  "preregistration": {
+    "status": "not-reviewed",
+    "location": null,
+    "locked_at": null,
+    "not_required_rationale": null,
+    "amendment_policy": "Preserve and timestamp every amendment with outcome-visibility state"
+  },
+  "execution": {
+    "owner": "TODO: owner assigned before ready-to-run",
+    "fidelity_monitoring": "TODO: delivery and contamination checks",
+    "deviation_log": "TODO: artifact location",
+    "reproducibility": "TODO: code, environment, versions, seeds and data provenance"
+  },
+  "world_return": {
+    "predictions": [
+      "TODO: consequence expected if interpretation is correct"
+    ],
+    "observation_windows": [
+      "TODO: immediate window",
+      "TODO: delayed window"
+    ],
+    "owner": "TODO: owner assigned before ready-to-run",
+    "measures": [
+      "TODO: experimental, implementation and ultimate outcome measure"
+    ],
+    "thresholds": [
+      "TODO: practical success, harm and failure threshold"
+    ],
+    "reopen_conditions": [
+      "TODO: outcome that reopens the inquiry"
+    ]
+  },
+  "critique": {
+    "failure_modes": [
+      "TODO: strongest bias or implementation-failure explanation"
+    ],
+    "independent_audit": "TODO: required, recommended or not proportionate with rationale",
+    "unresolved_conflicts": []
+  },
+  "practice_handoff": {
+    "learning_signal": "none-yet",
+    "proposed_destination": "none-yet",
+    "status": "not-written"
+  }
+}

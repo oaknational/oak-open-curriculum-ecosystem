@@ -40,7 +40,7 @@ import {
   resolveRoutes,
   resolveWidth,
 } from './measure-checks';
-import { describeThrown, runTool, stripTrailing } from './support';
+import { describeThrown, runTool, stripTrailing } from '@oaknational/fidelity-review/support';
 
 const TOOLS_DIR = path.dirname(fileURLToPath(import.meta.url));
 const OUT_DIR = path.resolve(TOOLS_DIR, '..', 'demo-evidence');

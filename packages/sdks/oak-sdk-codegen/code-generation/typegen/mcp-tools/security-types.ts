@@ -5,9 +5,10 @@
  * and consumed by runtime authorization logic.
  *
  * @remarks
- * Security schemes determine whether a tool requires OAuth authentication:
- * - NoAuthScheme: Tool is publicly accessible
- * - OAuth2Scheme: Tool requires OAuth 2.1 authentication
+ * Security schemes determine a tool's per-tool OAuth scope requirement:
+ * - NoAuthScheme: no per-tool scope check (the HTTP transport still
+ *   requires a bearer token for every tool call)
+ * - OAuth2Scheme: Tool requires OAuth 2.1 authentication with the listed scopes
  *
  * The SecurityScheme union type allows tools to specify their auth requirements.
  */
@@ -21,7 +22,8 @@ export type SecuritySchemeType = 'noauth' | 'oauth2';
  * Constant for the noauth security scheme type.
  *
  * Use this constant instead of the magic string 'noauth' for type-safe
- * comparisons when determining if a tool requires authentication.
+ * comparisons when determining whether a tool carries a per-tool scope
+ * requirement.
  *
  * @example
  * ```typescript
@@ -31,10 +33,11 @@ export type SecuritySchemeType = 'noauth' | 'oauth2';
 export const NOAUTH_SCHEME_TYPE = 'noauth' as const satisfies SecuritySchemeType;
 
 /**
- * No authentication required.
+ * No per-tool OAuth scope requirement.
  *
- * Tools with this scheme can be called without a Bearer token.
- * Typically used for public metadata or discovery endpoints.
+ * Tools with this scheme skip the per-tool scope check; the HTTP transport
+ * still requires a bearer token for every tool call. Typically used for
+ * metadata or discovery tools with no scope-gated content.
  *
  * @example
  * ```typescript

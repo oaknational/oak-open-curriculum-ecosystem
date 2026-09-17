@@ -15,6 +15,7 @@ import {
   extractPriorKnowledge,
   extractTeacherTips,
   extractThreads,
+  extractUnitLessons,
   type ExtractedKeyword,
   type ExtractedLearningPoint,
   type ExtractedLesson,
@@ -23,6 +24,7 @@ import {
   type ExtractedPriorKnowledge,
   type ExtractedTeacherTip,
   type ExtractedThread,
+  type ExtractedUnitLessons,
 } from './extractors/index.js';
 import type { Lesson, Unit } from './lib/index.js';
 
@@ -73,6 +75,8 @@ export interface ExtractedData {
   readonly ncStatements: readonly ExtractedNCStatement[];
   /** Thread progressions with ordered units */
   readonly threads: readonly ExtractedThread[];
+  /** Per-unit lesson listings (one entry per programme variant) with authored lesson order */
+  readonly unitLessons: readonly ExtractedUnitLessons[];
 }
 
 /**
@@ -127,6 +131,7 @@ function runExtractors(
   const priorKnowledge = extractPriorKnowledge(units);
   const ncStatements = extractNCStatements(units);
   const threads = extractThreads(units);
+  const unitLessons = extractUnitLessons(units.map((entry) => entry.unit));
 
   return {
     stats: {
@@ -147,6 +152,7 @@ function runExtractors(
       priorKnowledge,
       ncStatements,
       threads,
+      unitLessons,
     },
   };
 }

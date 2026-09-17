@@ -43,8 +43,9 @@
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
+    "@oaknational/workspace-config": "workspace:*",
     "@types/node": "^24.13.3",
-    "eslint": "^10.8.0",
+    "eslint": "^10.8.1",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3",
     "vitest": "^4.1.10"

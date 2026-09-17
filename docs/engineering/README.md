@@ -14,6 +14,7 @@ This directory contains engineering workflow and implementation documentation fo
 
 - [Root README Quick Start](../../README.md#quick-start) - Architecture, setup, and key commands for new developers
 - [Working with this Repo for Devs](./working-with-this-repo-for-devs.md) - The practical guide for developers: how you direct the work, what the agents do around you, and what keeps the quality honest
+- [Developer Experience](./developer-experience.md) - The surfaces and feedback loops a developer works through, including the statusline deep-dive
 - [Sibling Repositories](./sibling-repos.md) - Related Oak repos a teammate may need to clone
 - [MCP Servers for Contributors](./mcp-servers-for-contributors.md) - Sanctioned MCP server set for AI coding agents
 - [Tooling](./tooling.md) - Development tools, versions, and setup instructions

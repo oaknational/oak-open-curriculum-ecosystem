@@ -1,0 +1,21 @@
+{
+  "artefact": ".agent/reports/design/skill-standard-pilot-evals/iteration-1/artefacts/case-a-without-skill.html",
+  "mode": "page",
+  "assertions": {
+    "referenced-oak-classes-exist": {
+      "pass": false,
+      "binding": true,
+      "evidence": "42 referenced, 34 not in the trunk: oak-lesson-page, oak-site-header, oak-site-header__inner, oak-logo, oak-logo__mark, oak-logo__text, oak-theme-selector, oak-theme-selector__label, oak-theme-selector__select, oak-breadcrumbs"
+    },
+    "no-literal-design-values": {
+      "pass": true,
+      "binding": true,
+      "evidence": "authored CSS carries no literal design values"
+    },
+    "zero-ad-hoc-css": {
+      "pass": true,
+      "binding": true,
+      "evidence": "0 authored declaration(s) across <style>, style=, and fenced css"
+    }
+  }
+}

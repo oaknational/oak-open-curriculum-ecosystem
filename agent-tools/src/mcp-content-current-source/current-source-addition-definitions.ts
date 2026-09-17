@@ -1,39 +1,24 @@
-import type { SourceLocus } from './current-source-model.js';
+import { SERVER_INSTRUCTIONS_ADDITIONS } from './current-source-additions-server-instructions.js';
 import {
   contentsAnchor,
   metadataAnchor,
   sharedEnvelopeAnchor,
   structuralAnchor,
-  type ReviewedAdditionAnchor,
+  type CurrentSourceAdditionDefinition,
 } from './current-source-addition-anchor-helpers.js';
 
-export type { ReviewedAdditionAnchor } from './current-source-addition-anchor-helpers.js';
+export type {
+  CurrentSourceAdditionDefinition,
+  ReviewedAdditionAnchor,
+} from './current-source-addition-anchor-helpers.js';
 
 const SERVED_SURFACE =
   'apps/oak-curriculum-mcp-streamable-http/src/served-surface/served-surface.ts';
 const UNDER_THE_HOOD_CONTENT =
   'apps/oak-curriculum-mcp-streamable-http/src/generated/oak-under-the-hood-content.ts';
 const EXCLUDED_PATHS = 'packages/sdks/oak-sdk-codegen/code-generation/excluded-paths.ts';
-const AGENT_SUPPORT_METADATA =
-  'packages/sdks/oak-curriculum-sdk/src/mcp/agent-support-tool-metadata.ts';
 const GUIDANCE_ROOT = 'packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources';
 const GUIDANCE_CATALOGUE = `${GUIDANCE_ROOT}/agent-guidance-resources.ts`;
-
-export interface CurrentSourceAdditionDefinition {
-  readonly id: string;
-  readonly title: string;
-  readonly reviewDomain: string;
-  readonly impactTier: 'high-impact' | 'simple-config';
-  readonly behaviouralIntent: string;
-  readonly workspaceScope: 'in' | 'out-upstream-api';
-  readonly sourceLocus: SourceLocus;
-  readonly file: string;
-  readonly reviewedAnchors: readonly ReviewedAdditionAnchor[];
-  readonly registration?: {
-    readonly state: 'live' | 'dormant';
-    readonly selector: string;
-  };
-}
 
 function guidanceMetadataAddition(input: {
   readonly id: string;
@@ -41,7 +26,9 @@ function guidanceMetadataAddition(input: {
   readonly slug: string;
   readonly state: 'live' | 'dormant';
   readonly provenance?: string;
+  readonly lastModified?: string;
 }): CurrentSourceAdditionDefinition {
+  const lastModified = input.lastModified ?? '2026-07-23T00:00:00Z';
   const uri = `docs://oak/guidance/${input.slug}.md`;
   return {
     id: input.id,
@@ -65,11 +52,7 @@ function guidanceMetadataAddition(input: {
         'annotations',
         '{"priority":0.4,"audience":["assistant"]}',
       ),
-      contentsAnchor(
-        "lastModified: '2026-07-23T00:00:00Z'",
-        '_meta.lastModified',
-        '2026-07-23T00:00:00Z',
-      ),
+      contentsAnchor(`lastModified: '${lastModified}'`, '_meta.lastModified', lastModified),
       ...(input.provenance === undefined ? [] : [structuralAnchor(input.provenance)]),
     ],
     registration: { state: input.state, selector: uri },
@@ -108,13 +91,13 @@ export const CURRENT_SOURCE_ADDITION_DEFINITIONS: readonly CurrentSourceAddition
     reviewDomain: 'engineering-structural',
     impactTier: 'high-impact',
     behaviouralIntent:
-      'Temporarily exclude the check-restricted API family from generated schemas and MCP tools until MCP-214 lifts the deferral.',
+      'Exclude paths whole-pipeline from generated schemas and MCP tools: the check-restricted family until MCP-214 lifts the deferral, and the upstream-removed changelog pair until the MCP-630 schema-cache refresh erases them (MCP-653).',
     workspaceScope: 'in',
     sourceLocus: 'this-repo',
     file: EXCLUDED_PATHS,
     reviewedAnchors: [
       structuralAnchor(
-        "export const DEFERRED_PATHS: readonly DeferredPathEntry[] = [\n  { path: '/key-stages/{keyStage}/subject/{subject}/check-restricted', ticket: 'MCP-214' },\n  { path: '/lessons/check-restricted', ticket: 'MCP-214' },\n];",
+        "export const DEFERRED_PATHS: readonly DeferredPathEntry[] = [\n  { path: '/key-stages/{keyStage}/subject/{subject}/check-restricted', ticket: 'MCP-214' },\n  { path: '/lessons/check-restricted', ticket: 'MCP-214' },\n  { path: '/changelog', ticket: 'MCP-630' },\n  { path: '/changelog/latest', ticket: 'MCP-630' },\n];",
       ),
     ],
   },
@@ -134,12 +117,16 @@ export const CURRENT_SOURCE_ADDITION_DEFINITIONS: readonly CurrentSourceAddition
     id: 'A005',
     title: 'Learning progression guidance resource identity and metadata',
     slug: 'learning-progression',
+    // Substantively revised for the stated-statements contract (MCP-671).
+    lastModified: '2026-09-02T00:00:00Z',
     state: 'live',
   }),
   guidanceMetadataAddition({
     id: 'A006',
     title: 'Curriculum mapping guidance resource identity, metadata, and provenance',
     slug: 'curriculum-mapping',
+    // Substantively revised for the stated-statements contract (MCP-671).
+    lastModified: '2026-09-02T00:00:00Z',
     state: 'dormant',
     provenance:
       "provenance:\n      'Derived from the oak-curriculum-mapper skill (oaknational/oak-skills); keep the two in step.'",
@@ -148,6 +135,8 @@ export const CURRENT_SOURCE_ADDITION_DEFINITIONS: readonly CurrentSourceAddition
     id: 'A007',
     title: 'Adapt lesson guidance resource identity and metadata',
     slug: 'adapt-lesson',
+    // Substantively revised for the stated-statements contract (MCP-671).
+    lastModified: '2026-09-02T00:00:00Z',
     state: 'dormant',
   }),
   guidanceMetadataAddition({
@@ -211,25 +200,5 @@ export const CURRENT_SOURCE_ADDITION_DEFINITIONS: readonly CurrentSourceAddition
     file: UNDER_THE_HOOD_CONTENT,
     reviewedAnchors: [structuralAnchor('export const OAK_UNDER_THE_HOOD_ORIENTATION =')],
   },
-  {
-    id: 'A011',
-    title: 'Server instructions brand ownership and non-endorsement paragraph',
-    reviewDomain: 'owner-signed-copy',
-    impactTier: 'high-impact',
-    behaviouralIntent:
-      'Close the generated server instructions with the owner-signed brand-provenance ' +
-      'guidance (MCP-365): the OGL v3.0 attribution statement from LICENCE-DATA.md for ' +
-      'reused curriculum content, no Oak branding on derived content, no implied Oak ' +
-      'creation or endorsement. The expert-authored Brand Usage guidance document ' +
-      '(MCP-102 pipeline) is the full form that later deepens or supersedes this ' +
-      'paragraph — evolve the two together, never separately.',
-    workspaceScope: 'in',
-    sourceLocus: 'this-repo',
-    file: AGENT_SUPPORT_METADATA,
-    reviewedAnchors: [
-      structuralAnchor(
-        'Oak brand and content provenance: Oak National Academy owns the Oak brand and brand elements. When you reuse Oak\'s curriculum content, attribute it ("Contains public sector information licensed under the Open Government Licence v3.0."). When you create content derived from Oak\'s resources, we request that it adheres to the same high design standards as Oak — but it must not use the Oak branding, and it must never present itself as Oak-created or Oak-endorsed.',
-      ),
-    ],
-  },
+  ...SERVER_INSTRUCTIONS_ADDITIONS,
 ];

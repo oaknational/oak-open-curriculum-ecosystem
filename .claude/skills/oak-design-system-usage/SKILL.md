@@ -5,4 +5,4 @@ description: Build well-branded, accessible (WCAG 2.2 AA), themable interfaces a
 
 # Design System Usage (Claude Code)
 
-Read and follow `.agent/skills/design-system-usage/SKILL-CANONICAL.md`.
+Read and follow `.agent/skills/domain-craft/ui-design/design-system-usage/SKILL-CANONICAL.md`.

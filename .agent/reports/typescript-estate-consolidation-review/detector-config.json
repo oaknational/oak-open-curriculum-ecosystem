@@ -1,0 +1,747 @@
+{
+  "schemaVersion": "2.0.0",
+  "contractRevision": "2.6",
+  "reviewId": "typescript-estate-consolidation-review",
+  "calibrationBaseCommit": "7ea6ba55b16988cfb0cdcb0f485db32f71777628",
+  "frozenAt": "2026-08-03T00:47:05Z",
+  "refreezeReason": "No estate result exists. Revisions 1 through 2.5 and their independently reviewed causes remain recorded in the knowledge-safety and calibration records. Revision 2.5 froze workspace attribution, provenance classification, and role classification while leaving module declarations, module resolution, delivery, graph assembly, candidate synthesis, and the estate run held. The first implementation gateway then proved that the unknown-provenance sentence contradicted the frozen precedence: unreadable source with generated-path or generated-header evidence is generated-declared-unconfirmed rather than unknown. Revision 2.6 changes only that sentence and the identities that bind the contract bytes. The implementation gate, TypeScript denominator, detector thresholds, candidates, dispositions, and proof boundaries are unchanged; schemaVersion remains the document-family version 2.0.0.",
+  "sourceExtensions": [".ts", ".tsx"],
+  "implementationGate": {
+    "estateRun": "prohibited-until-contract-held-slices-empty-and-built-smoke-passes",
+    "contractReadySlices": [
+      "git-pinned-source-snapshot",
+      "pinned-auxiliary-blob-access",
+      "canonical-output-foundations",
+      "construct-counting",
+      "type-truth-counting",
+      "schema-shape-observation",
+      "region-repetition",
+      "workspace-attribution",
+      "provenance-classification",
+      "role-classification"
+    ],
+    "contractHeldSlices": [
+      "module-declaration-extraction",
+      "module-resolution",
+      "delivery-classification",
+      "graph-and-ownership-assembly",
+      "candidate-synthesis"
+    ],
+    "releaseRule": "A contract-held slice may not be implemented or emit observations until a later independently reviewed pre-run revision makes its transformation total. The estate run remains prohibited until this list is empty, integration is complete, and the external built smoke passes."
+  },
+  "snapshot": {
+    "source": "git-tree",
+    "defaultRef": "HEAD",
+    "commitResolution": "git --no-replace-objects --no-lazy-fetch -C <canonical-repo-root> rev-parse --verify --end-of-options <ref>^{commit}; <ref> is one non-empty argv value and no user-controlled byte is parsed as an option",
+    "treeResolution": "git --no-replace-objects --no-lazy-fetch -C <canonical-repo-root> rev-parse --verify --end-of-options <commit>^{tree}",
+    "pathEnumeration": "git --no-replace-objects --no-lazy-fetch -C <canonical-repo-root> ls-tree -r -z --long <commit>; parse every NUL-delimited record as bytes, fatally UTF-8 decode and round-trip each path, retain one complete path-ordered whole-tree index, then derive the TypeScript denominator from paths ending exactly in .ts or .tsx. Do not pass a TypeScript pathspec. Duplicate paths, invalid tree framing, or invalid path encoding fail the complete run. Retain unsupported TypeScript tree modes in the denominator with read status unsupported-mode.",
+    "contentRead": "git --no-replace-objects --no-lazy-fetch -C <canonical-repo-root> show <commit>:<repo-relative-path> with commit and path combined as one argv value beginning with the resolved hexadecimal commit; one invocation per regular TypeScript blob. Any nonzero status, signal, spawn error, output truncation, byte-read error, or missing object fails the whole run before publication. A successful byte read that fails fatal UTF-8 decoding is retained as invalid-utf8 with known byte facts and no AST analysis. For valid UTF-8, lineCount is exactly TypeScript SourceFile.getLineStarts().length from the same parsed source; empty source therefore has lineCount 1. An unsupported tree mode is retained as unsupported-mode without invoking content read.",
+    "auxiliaryContentRead": "Run-scoped on-demand access accepts only an exact validated path from the retained whole-tree index and reads bytes only from the resolved commit through the same scrubbed Git context. A missing path or a tree entry other than a 100644 or 100755 blob with a non-null declared size returns a typed auxiliary-read refusal without spawning Git. A TypeScript-denominator path reuses its already captured source bytes or typed source-read state and is never read or charged again. Every regular non-TypeScript path is checked against maxAuxiliaryBlobBytesPerFile and the remaining maxTotalAuxiliaryBlobBytes before git show <commit>:<path>; a nonzero status, signal, spawn error, output truncation, byte-read error, missing object, or declared-size mismatch fails the complete run. The first successful unique path read is cached and charged by exact returned byte length; later requests return the same cached bytes without another Git invocation or charge. The boundary returns bytes and content identity only; UTF-8, JSON, JSONC, YAML, or other interpretation belongs to later contract-ready transformations. No live-filesystem fallback exists.",
+    "auxiliaryReadLedger": "Emit exactly one auxiliaryReads record for each successful unique regular non-TypeScript blob read, ordered by path under the frozen comparison. Each record copies the indexed tree entry and exact byteCount and SHA-256 of the cached bytes. TypeScript-source reuse, missing paths, nonregular paths, and refused reads produce no auxiliaryReads record. Semantic validation recomputes uniqueness, order, regular-mode membership, declared-size equality, digest equality from the cached bytes, and the run-wide charged-byte sum.",
+    "gitExecutable": "absolute path resolved by agent-tools trusted-git policy",
+    "gitEnvironment": "Only PATH, HOME, LANG, LC_*, and GIT_NO_LAZY_FETCH=1 are passed. Every other inherited GIT_* variable is absent; a missing promised object is a typed fatal snapshot failure and never causes network access.",
+    "repositoryAnchoring": "invokingGitRoot is the realpath of the single absolute path printed by trusted git -C <caller-cwd> rev-parse --show-toplevel under the same scrubbed Git environment. All later snapshot invocations use -C invokingGitRoot. Output containment also uses invokingGitRoot. It is independent of executingCheckoutRoot and the two roots may intentionally differ, including in the built smoke fixture.",
+    "replacementObjects": false,
+    "filesystemSourceReads": false,
+    "missingObjectBehaviour": "fail-complete-run"
+  },
+  "moduleResolution": {
+    "declarationAndResolutionAreSeparate": true,
+    "typecheckProjectSelection": "Nearest ancestor tsconfig.json present in the pinned Git tree; fall back to the root tsconfig.json; if neither exists, retain no typecheck-project membership observation.",
+    "emittingProjectSelection": "Within the registered workspace root, prefer tsconfig.build.json, then another package-manifest build-script-referenced tsconfig whose parsed noEmit is false. A bundler-configured workspace records the bundler config separately and does not pretend that the typecheck tsconfig emits. If no emitting project is evidenced, retain not-probed rather than false.",
+    "relativeAndPathAliasResolver": "TypeScript resolveModuleName using compiler options parsed from the selected pinned-tree tsconfig and a virtual ModuleResolutionHost backed only by pinned-tree paths and bytes.",
+    "nodeBuiltinResolver": "Classify before every other literal branch using this syntax-only identity predicate; do not consult Node isBuiltin, builtinModules, installed modules, or runtime membership. A node-builtin identity is node: followed by one or more slash-delimited segments, each matching [A-Za-z0-9_][A-Za-z0-9._-]* and neither single-dot nor double-dot. Empty segments, NUL, backslash, percent, query, fragment, or another colon reject classification. Every specifier matching this grammar is accepted and emitted unchanged, including a syntactically valid name unknown to the executing Node runtime. Invalid node: forms are unresolved-literal and never passed to package-name resolution.",
+    "workspaceAttribution": {
+      "manifestPath": "pnpm-workspace.yaml",
+      "manifestTreeRequirement": "The exact manifestPath must exist in the retained whole-tree index as a 100644 or 100755 blob with a non-null declared size. Missing or nonregular input fails the complete run.",
+      "utf8Decoding": "Fatal UTF-8 decoding of the exact pinned auxiliary bytes; invalid input fails the complete run.",
+      "yamlParser": {
+        "package": "yaml",
+        "version": "2.9.0",
+        "entrypoint": "parseAllDocuments",
+        "options": {
+          "version": "1.2",
+          "schema": "core",
+          "strict": true,
+          "uniqueKeys": true,
+          "stringKeys": false,
+          "merge": false,
+          "resolveKnownTags": false,
+          "customTags": [],
+          "intAsBigInt": false,
+          "prettyErrors": false,
+          "logLevel": "silent"
+        }
+      },
+      "documentRule": "Exactly one YAML document is required. Any parser warning or error fails the complete run. Before value extraction, reject every directive, anchor, alias, explicit tag, and mapping key whose resolved string is << anywhere in the document.",
+      "rootRule": "The document root must be a mapping containing exactly one decoded key equal to packages. Other root keys are ignored only after complete-document syntax and duplicate-key validation.",
+      "packagesRule": "packages must resolve to a sequence and every item must already be a JavaScript string; scalar coercion is prohibited. Decoded package patterns are preserved in declared order and duplicates fail the complete run.",
+      "patternGrammar": "A supported pattern is a non-empty, non-absolute, forward-slash path with no trailing slash. Every segment is either exactly * or a literal segment. Literal segments must not be empty, . or .. and must contain no NUL, backslash, *, ?, [, ], {, }, or !. The * segment matches exactly one path segment. Matching is exact-case with no Unicode normalisation. Unsupported syntax fails the complete run; overlapping patterns form a set union and a pattern matching zero manifests is valid.",
+      "candidateManifestRule": "Candidate manifests are retained whole-tree paths whose basename is exactly package.json and whose parent is non-root. Only candidate parents matched by a declared pattern are considered; every matched manifest must be a 100644 or 100755 blob with non-null declared size.",
+      "packageJsonRule": "Decode matched manifest bytes as fatal UTF-8 and parse with native JSON.parse. The result must be a non-null, non-array object. After strict JSON parsing, TypeScript 6.0.3 parseJsonText is used only to detect duplicate decoded property keys at every object depth; any parse diagnostic or duplicate key fails the complete run.",
+      "packageNamePattern": "^(?:[A-Za-z0-9_~-][A-Za-z0-9._~-]*|@[A-Za-z0-9_~-][A-Za-z0-9._~-]*/[A-Za-z0-9_~-][A-Za-z0-9._~-]*)$",
+      "packageNameRule": "The top-level name property must be a JavaScript string matching packageNamePattern under the u flag. Admitted workspace names must be unique.",
+      "attributionRule": "A TypeScript file belongs to the containing admitted workspace root with the greatest path-segment depth. Equal-depth ambiguity fails the complete run. Files outside every admitted root have workspace null; the repository root is never a workspace candidate.",
+      "dependencyRule": "Do not use glob libraries, transitive YAML parsers, live filesystem reads, installed package metadata, or Unicode or case normalisation. All bytes and paths come only from the pinned snapshot substrate."
+    },
+    "workspacePackageResolver": "For a bare specifier whose package name exactly matches the name of an admitted pnpm workspace manifest, emit the package name plus unchanged subpath as workspace-package identity; do not invent a source file target. Tracked manifests outside workspace membership never satisfy this branch.",
+    "externalPackageResolver": "After node builtin, relative/path-alias, and exact admitted-workspace-name branches, a bare package specifier is valid only under this grammar. Split on / with no empty, single-dot, or double-dot segment. An unscoped package name is one segment matching [A-Za-z0-9_~-][A-Za-z0-9._~-]*. A scoped name is exactly an initial @scope segment matching @[A-Za-z0-9_~-][A-Za-z0-9._~-]* plus a second name segment matching the unscoped rule. Every remaining subpath segment matches [A-Za-z0-9_@+.,=~-]+. The complete specifier must be non-empty and contain no NUL, backslash, colon, percent, query, or fragment; leading dot, slash, or # is invalid. Emit package name plus unchanged subpath or . as external-package identity. Invalid forms are unresolved-literal, not external. This is identity classification, not installed-package resolution.",
+    "nonLiteralResolver": "Emit unresolved-nonliteral with no target.",
+    "resolvedFileContainment": "A TypeScript-resolved file target is accepted only when it canonicalises lexically to a tracked regular file in the pinned tree; otherwise emit unresolved-literal.",
+    "resolverVersion": "typescript-6.0.3"
+  },
+  "detectors": [
+    {
+      "id": "tracked-ts-census",
+      "version": "3",
+      "purpose": "Derive the immutable TypeScript and TSX denominator from Git.",
+      "countingUnit": "unique tracked repo-relative path",
+      "calibrationStatus": "admitted",
+      "falsifier": "A recomputation at the same commit yields a missing, duplicate, extra, or differently ordered path.",
+      "unresolvedBehaviour": "Refuse a coverage claim."
+    },
+    {
+      "id": "role-signals",
+      "version": "2",
+      "purpose": "Attach overlapping source-role signals without reducing a file to its folder name.",
+      "countingUnit": "role signal per file",
+      "calibrationStatus": "admitted-pending-held-out",
+      "falsifier": "A calibrated archetype file cannot express all observed roles, or a role is asserted without a matching source or path observation.",
+      "unresolvedBehaviour": "Every readable file receives all matching roles and then implementation-source when no specific role matched. An unreadable or unsupported entry receives any safely decidable path/provenance roles and receives unknown only when none match; unknown never applies to readable source. Refuse publication if any file lacks a role."
+    },
+    {
+      "id": "provenance-signals",
+      "version": "3",
+      "purpose": "Distinguish authored source, generated carriers, and imported material without using prose embedded in generator strings as a generated banner. Generator and façade responsibilities are independent role signals.",
+      "countingUnit": "one final provenance classification per file",
+      "calibrationStatus": "admitted-pending-held-out",
+      "falsifier": "Path or leading-comment banner evidence alone is promoted to generated-confirmed, a known producer-output lineage is classified as authored, or banner text inside a string or non-leading comment classifies a generator as generated output.",
+      "unresolvedBehaviour": "Use generated-declared-unconfirmed or unknown; never infer an authority."
+    },
+    {
+      "id": "delivery-signals",
+      "version": "2",
+      "purpose": "Record independent compiler, build, package, entry, registration, operator, and reference reachability observations.",
+      "countingUnit": "independently evidenced present, absent, not-probed, or ambiguous state per delivery dimension per file",
+      "calibrationStatus": "admitted-pending-held-out",
+      "falsifier": "Compiler inclusion is treated as runtime reachability, or an unmodelled dynamic, filesystem, or string entry is reported resolved.",
+      "unresolvedBehaviour": "Use not-probed or ambiguous for the affected dimension. Never encode absence when no absence proof ran."
+    },
+    {
+      "id": "static-module-edges",
+      "version": "2",
+      "purpose": "Extract import, import-equals, re-export, dynamic-import, and eligible CommonJS require declarations, then separately resolve literals to pinned-tree files or package identities.",
+      "countingUnit": "source declaration to literal module specifier",
+      "calibrationStatus": "admitted-pending-held-out",
+      "falsifier": "A non-literal dynamic import is called resolved, a resolved file is absent from the pinned regular-file tree, or a resolution lacks its selected config and resolver evidence.",
+      "unresolvedBehaviour": "Preserve the declaration and emit an explicit unresolved resolution with no target."
+    },
+    {
+      "id": "construct-frequency",
+      "version": "3",
+      "purpose": "Count separately ranked runtime-value structures, erased type-model structures, and algorithmic operations through the TypeScript AST.",
+      "countingUnit": "matching AST occurrence",
+      "calibrationStatus": "admitted-pending-held-out",
+      "falsifier": "A hand-counted calibration fixture disagrees, or control-flow syntax is presented as a named algorithm without the report's boundary definition.",
+      "unresolvedBehaviour": "Report a parse diagnostic and exclude only the unreadable file's construct counts, never the file from coverage."
+    },
+    {
+      "id": "type-truth-boundary-signals",
+      "version": "1",
+      "purpose": "Count explicit type assertions, any and unknown syntax, non-null assertions, TypeScript suppression directives, Record<string, unknown>, and z.unknown() without treating their presence alone as a defect.",
+      "countingUnit": "typed boundary signal occurrence",
+      "calibrationStatus": "admitted-pending-held-out",
+      "falsifier": "A discriminating fixture cannot separate as const from a type assertion, a comment-like string from a suppression directive, or unknown from any.",
+      "unresolvedBehaviour": "Preserve parse/read unavailability and emit no signal for the unavailable file."
+    },
+    {
+      "id": "schema-authority-shadow",
+      "version": "1",
+      "purpose": "Surface exact property-key-set matches between an authored interface, type literal, or z.object shape and a generated-confirmed type shape so a human can test whether authored validation or types shadow generated authority.",
+      "countingUnit": "cross-provenance property-key fingerprint with at least three statically named properties",
+      "calibrationStatus": "admitted-pending-held-out",
+      "falsifier": "Computed keys, spreads, type semantics, optionality, or refinements are claimed equivalent; or a key-set match is presented as authority proof rather than a candidate signal.",
+      "unresolvedBehaviour": "Preserve the unmatched or unsupported shape record; never manufacture equivalence or authority."
+    },
+    {
+      "id": "exact-region-clone",
+      "version": "2",
+      "purpose": "Find repeated implementation and type-space regions after trivia-only normalisation.",
+      "countingUnit": "eligible configured AST region fingerprint shared by at least two files",
+      "calibrationStatus": "admitted-pending-held-out",
+      "falsifier": "Normalisation changes identifiers, literals, operator kinds, or statement order, or reports a region below the frozen size floor.",
+      "unresolvedBehaviour": "Emit no clone signal for an unparseable region."
+    },
+    {
+      "id": "structural-region-similarity",
+      "version": "2",
+      "purpose": "Surface possible repeated mechanisms by comparing bounded implementation, schema-object, and type-space AST shapes.",
+      "countingUnit": "structural fingerprint shared by at least two files",
+      "calibrationStatus": "admitted-pending-held-out",
+      "falsifier": "Held-out review finds less than 70 percent of sampled signals are the same responsibility and mechanism, or the detector requires threshold tuning after seeing final results. Purposeful similarity is a negative judgement, not an accepted signal.",
+      "unresolvedBehaviour": "Reject the detector and preserve its rejected output; do not use its signals for candidates."
+    },
+    {
+      "id": "path-cochange",
+      "version": "1",
+      "purpose": "Corroborate repeated-mechanism candidates with rename-aware historical co-change.",
+      "countingUnit": "path pair with support and Jaccard coefficient",
+      "calibrationStatus": "admitted-pending-held-out",
+      "falsifier": "Generated mass-update commits dominate a pair without being separately labelled, raw history is unavailable, or rename normalisation cannot be traced to raw rows.",
+      "unresolvedBehaviour": "Omit the corroboration and retain the raw history gap; never infer independence."
+    }
+  ],
+  "generatedOutputRules": [
+    {
+      "id": "sdk-codegen-api-and-runtime",
+      "pathPrefix": "packages/sdks/oak-sdk-codegen/src/types/generated/",
+      "producerEvidence": [
+        "packages/sdks/oak-sdk-codegen/code-generation/codegen.ts",
+        "packages/sdks/oak-sdk-codegen/code-generation/codegen-core.ts",
+        "packages/sdks/oak-sdk-codegen/code-generation/zodgen.ts",
+        "packages/sdks/oak-sdk-codegen/code-generation/bulkgen.ts"
+      ]
+    },
+    {
+      "id": "sdk-codegen-vocabulary",
+      "pathPrefix": "packages/sdks/oak-sdk-codegen/src/generated/vocab/",
+      "producerEvidence": [
+        "packages/sdks/oak-sdk-codegen/vocab-gen/run-vocab-gen.ts"
+      ]
+    },
+    {
+      "id": "search-cli-ground-truths",
+      "pathPrefix": "apps/oak-search-cli/ground-truths/generated/",
+      "producerEvidence": [
+        "apps/oak-search-cli/ground-truths/generation/generate-ground-truth-types.ts",
+        "apps/oak-search-cli/ground-truths/generation/schema-emitter.ts",
+        "apps/oak-search-cli/ground-truths/generation/type-emitter.ts"
+      ]
+    },
+    {
+      "id": "mcp-app-embedded-content",
+      "pathPrefix": "apps/oak-curriculum-mcp-streamable-http/src/generated/",
+      "producerEvidence": [
+        "apps/oak-curriculum-mcp-streamable-http/scripts/embed-widget-html.ts",
+        "agent-tools/src/bin/under-the-hood-content-generate.ts"
+      ]
+    }
+  ],
+  "generatedOutputRuleSemantics": {
+    "ruleIdentity": "Every id is unique and matches lower-case kebab-case.",
+    "prefixForm": "Every pathPrefix is a normalised non-root repo-relative directory prefix with a trailing slash, no empty, single-dot, or double-dot segment, no NUL or backslash, and no Unicode or case normalisation.",
+    "prefixSeparation": "No two pathPrefix values are equal. For every distinct pair a and b, neither a.startsWith(b) nor b.startsWith(a) is true. A TypeScript path therefore matches at most one generated-output rule.",
+    "producerEvidence": "Every producerEvidence array is non-empty and contains unique exact repo-relative paths. Every named path must be present in the retained whole-tree index as a 100644 or 100755 blob with a non-null declared size before provenance classification begins.",
+    "failureBehaviour": "A duplicate id, malformed or overlapping prefix, duplicate producer-evidence path, or absent or nonregular producer-evidence path fails the complete run."
+  },
+  "vocabularies": {
+    "roles": ["test-spec-support-fixture", "generator", "generated-contract-data-carrier", "build-time-producer", "cli-hook-operator", "tsx-syntax-source", "api-facade", "config-setup", "declaration", "research-evidence-template", "implementation-source", "unknown"],
+    "provenance": ["authored", "generated-confirmed", "generated-declared-unconfirmed", "imported", "unknown"],
+    "deliveryDimensions": ["typecheckProjectIncluded", "emittingProjectIncluded", "buildEmitted", "packageExported", "executableEntry", "runtimeRegistered", "operatorInvoked", "filesystemOrStringLoaded", "verificationOnly", "repositoryReferenceOnly"],
+    "deliveryStates": ["present", "absent", "not-probed", "ambiguous"]
+  },
+  "provenanceClassification": {
+    "generatedPathMatchers": [
+      {
+        "id": "generated-directory-segment",
+        "kind": "complete-path-segment",
+        "values": ["generated", "__generated__"]
+      },
+      {
+        "id": "generated-ts-basename-suffix",
+        "kind": "basename-suffix",
+        "values": [".generated.ts", ".generated.tsx"]
+      }
+    ],
+    "generatedHeaderMatchers": [
+      {
+        "id": "leading-generated-banner",
+        "source": "(?:auto[- ]?generated|generated file|do not edit)",
+        "flags": "iu",
+        "commentRangeSelection": "Use TypeScript 6.0.3 getLeadingCommentRanges(sourceText, 0). Only those ranges are searchable; strings, templates, regular-expression literals, and comments after the first non-trivia token are excluded.",
+        "matchSelection": "Search selected comment substrings in ascending range order and retain the earliest match by zero-based UTF-16 start offset for this matcher.",
+        "offsetRule": "startOffset and endOffset are the exact zero-based half-open UTF-16 offsets of the matched substring in the complete source text."
+      }
+    ],
+    "importedReferencePathRules": [],
+    "pathMatcherSemantics": "Match against the exact case-sensitive repo-relative path with no Unicode normalisation. complete-path-segment compares whole non-empty slash-delimited segments; basename-suffix compares the final slash-delimited basename with String.prototype.endsWith. Emit one generated-path signal for a matcher when any of its values matches, even when several values of that matcher match.",
+    "signalCollection": "Evaluate every generated path matcher, every generated header matcher available for readable source, every matching confirmed producer-output rule, and every configured imported-reference-path rule independently. Emit at most one signal per matcher or rule identity for a file, but retain signals that lose final-classification precedence.",
+    "signalDeduplication": "Deduplicate only structurally identical signals: all discriminant-specific fields and all ordered evidence paths or offsets must be equal. Sort producerEvidencePaths by frozen UTF-16 comparison before identity or output comparison.",
+    "signalOrdering": "Sort by kind, then matcherId or ruleId, then evidencePath with absent before present, then startOffset and endOffset with absent before present, then the lexicographically compared producerEvidencePaths sequence. All string comparisons use the frozen UTF-16 ordering.",
+    "generatedConfirmed": "A path matches exactly one generatedOutputRules pathPrefix and every named producerEvidence path is present in the pinned tree. Record a producer-output-rule signal. The rule is review-scoped lineage evidence, not a general generated-directory convention.",
+    "generatedDeclaredUnconfirmed": "No confirmed rule determines the final classification and at least one configured generated-path or generated-header signal exists. All such signals remain in provenanceSignals even when another classification wins.",
+    "imported": "Only an explicit imported-reference-path rule added before the run may produce imported. This freeze declares no such path rule, so no file is automatically classified imported.",
+    "authored": "The source is readable and neither a generated nor imported rule matches. A generator is authored source unless it is independently an output of a confirmed generator.",
+    "unknown": "The source is unreadable, invalid UTF-8, or an unsupported tree mode, and no producer-output, generated-path, generated-header, or imported-reference signal establishes a higher-precedence provenance.",
+    "precedence": ["generated-confirmed", "generated-declared-unconfirmed", "imported", "authored", "unknown"]
+  },
+  "roleRules": [
+    {
+      "role": "test-spec-support-fixture",
+      "match": "all",
+      "pathRegexes": [
+        "(?:^|/)[^/]+\\.(?:test|spec|stories|fixture|fixtures|mock|mocks)\\.tsx?$",
+        "(?:^|/)(?:__tests__|__mocks__|tests?|test-helpers?|test-support|fixtures?|smoke-tests|e2e-tests|e2e|testing)/",
+        "(?:^|/)(?:vitest|jest)\\.setup\\.tsx?$"
+      ]
+    },
+    {
+      "role": "generator",
+      "match": "all",
+      "pathRegexes": ["(?:^|/)(?:code-generation|vocab-gen)/", "(?:^|/)[^/]*(?:generate|generator)[^/]*\\.tsx?$"]
+    },
+    {
+      "role": "generated-contract-data-carrier",
+      "match": "all",
+      "provenanceValues": ["generated-confirmed", "generated-declared-unconfirmed"]
+    },
+    {
+      "role": "build-time-producer",
+      "match": "all",
+      "pathRegexes": ["(?:^|/)build-scripts/", "(?:^|/)[^/]*build[^/]*\\.tsx?$", "(?:^|/)(?:tsup|vite)\\.config\\.ts$"]
+    },
+    {
+      "role": "cli-hook-operator",
+      "match": "all",
+      "pathRegexes": ["(?:^|/)(?:bin|operations|scripts)/", "(?:^|/)[^/]*(?:cli|hook)[^/]*\\.tsx?$"]
+    },
+    {
+      "role": "tsx-syntax-source",
+      "match": "all",
+      "pathRegexes": ["\\.tsx$"]
+    },
+    {
+      "role": "api-facade",
+      "match": "all",
+      "pathRegexes": ["(?:^|/)index\\.tsx?$"],
+      "sourcePredicates": ["contains-export-declaration"]
+    },
+    {
+      "role": "config-setup",
+      "match": "all",
+      "pathRegexes": ["(?:^|/)[^/]+\\.config\\.tsx?$", "(?:^|/)[^/]*setup[^/]*\\.tsx?$", "(?:^|/)config/"]
+    },
+    {
+      "role": "declaration",
+      "match": "all",
+      "pathRegexes": ["\\.d\\.ts$"]
+    },
+    {
+      "role": "research-evidence-template",
+      "match": "all",
+      "pathRegexes": ["^research/", "^\\.agent/research/", "^\\.agents/"]
+    },
+    {
+      "role": "implementation-source",
+      "match": "all",
+      "fallback": "readable-with-no-other-role"
+    },
+    {
+      "role": "unknown",
+      "match": "all",
+      "fallback": "unreadable-invalid-utf8-or-unsupported-mode"
+    }
+  ],
+  "roleSemantics": {
+    "pathRegexCompilation": "Compile every configured pathRegex once before file classification with new RegExp(source, 'u'). Match against the exact case-sensitive repo-relative path. Any invalid expression fails the complete run.",
+    "ruleUniqueness": "Every role appears in exactly one rule. Every pathRegexes, provenanceValues, and sourcePredicates array contains unique values.",
+    "withinFamily": "or",
+    "acrossPopulatedFamilies": "and",
+    "selectorEvaluation": "Evaluate every non-fallback selector rule independently. A populated family matches when any configured value matches; the selector matches only when every populated family matches. Unpopulated families impose no condition.",
+    "sourcePredicateAvailability": "Source predicates are available for parsed and parsed-with-diagnostics source and unavailable for invalid-utf8 or unsupported-mode source. An unavailable populated source-predicate family makes that selector rule not match; it is not an error and is never inferred from text.",
+    "fallbackEvaluation": "Evaluate no fallback until all selector rules finish. When at least one selector matched, apply no fallback. Otherwise assign implementation-source exactly for readable parsed or parsed-with-diagnostics source, and assign unknown exactly for invalid-utf8 or unsupported-mode source.",
+    "roleOutput": "Treat roles as a set, require at least one role, then emit unique values sorted by ascending JavaScript UTF-16 code-unit comparison.",
+    "semanticBoundary": "A role is a source-responsibility signal, not a runtime-delivery claim; in particular tsx-syntax-source does not mean browser UI or executable entry."
+  },
+  "sourcePredicateDefinitions": {
+    "contains-export-declaration": "True exactly when the SourceFile has a top-level ExportDeclaration, ExportAssignment, or a top-level declaration whose modifier list contains ExportKeyword or DefaultKeyword. Export-like text in comments, strings, nested declarations, or identifier names does not match."
+  },
+  "deliveryClassification": {
+    "stateVocabulary": ["present", "absent", "not-probed", "ambiguous"],
+    "typecheckProjectIncluded": "Present or absent only after the selected pinned-tree typecheck config is parsed and membership checked; not-probed when no config or readable source is available.",
+    "emittingProjectIncluded": "Present or absent only after a pinned-tree emitting tsconfig or bundler input denominator is identified and checked. A noEmit typecheck project cannot satisfy this dimension.",
+    "buildEmitted": "Not-probed in raw extraction unless an executable build proof records the output relation. A later proof may establish present or absent.",
+    "packageExported": "Present or absent only when a registered workspace export map and its exact source-to-packed-target mapping have been exhaustively inspected; otherwise not-probed or ambiguous.",
+    "executableEntry": "Present or absent only against an exhaustively parsed registered-workspace bin and executable-entry denominator; script text alone is supporting evidence, not reachability proof.",
+    "runtimeRegistered": "Present only for a frozen syntactic registration observation or executable runtime proof; absent only after a named registration denominator was exhaustively probed; otherwise not-probed or ambiguous.",
+    "operatorInvoked": "Present or absent only from an executable operator proof; package script strings alone leave this not-probed.",
+    "filesystemOrStringLoaded": "Present only for an exact literal target resolved from a frozen filesystem or string-loader call pattern or executable proof; dynamic targets are ambiguous and uninspected paths are not-probed.",
+    "verificationOnly": "Present for test-spec-support-fixture or declaration roles unless contradictory delivery evidence exists, in which case ambiguous. Absent only when an emitting-project or executable delivery observation is present and no verification role matches. Otherwise not-probed.",
+    "repositoryReferenceOnly": "Present for research-evidence-template with no contradictory delivery observation; absent only when an emitting-project or executable delivery observation is present; otherwise not-probed or ambiguous.",
+    "absenceRule": "No dimension may be absent merely because its positive detector found no match. Every absent value cites an exhaustively evaluated denominator; unsupported dimensions are not-probed."
+  },
+  "constructs": {
+    "runtimeValueStructures": [
+      { "id": "object-literal", "astKinds": ["ObjectLiteralExpression"], "namedReferences": [] },
+      { "id": "array-literal", "astKinds": ["ArrayLiteralExpression"], "namedReferences": [] },
+      { "id": "class-declaration", "astKinds": ["ClassDeclaration", "ClassExpression"], "namedReferences": [] },
+      { "id": "enum-declaration", "astKinds": ["EnumDeclaration"], "namedReferences": [] },
+      { "id": "map-construction", "astKinds": ["NewExpression"], "namedReferences": ["Map"] },
+      { "id": "set-construction", "astKinds": ["NewExpression"], "namedReferences": ["Set"] },
+      { "id": "weak-map-construction", "astKinds": ["NewExpression"], "namedReferences": ["WeakMap"] },
+      { "id": "weak-set-construction", "astKinds": ["NewExpression"], "namedReferences": ["WeakSet"] },
+      { "id": "typed-array-construction", "astKinds": ["NewExpression"], "namedReferences": ["ArrayBuffer", "DataView", "Int8Array", "Uint8Array", "Uint8ClampedArray", "Int16Array", "Uint16Array", "Int32Array", "Uint32Array", "Float32Array", "Float64Array", "BigInt64Array", "BigUint64Array"] },
+      { "id": "buffer-construction", "astKinds": ["CallExpression"], "namedReferences": ["Buffer.from", "Buffer.alloc", "Buffer.allocUnsafe"] },
+      { "id": "url-search-params-construction", "astKinds": ["NewExpression"], "namedReferences": ["URLSearchParams"] },
+      { "id": "headers-construction", "astKinds": ["NewExpression"], "namedReferences": ["Headers"] },
+      { "id": "date-construction", "astKinds": ["NewExpression"], "namedReferences": ["Date"] },
+      { "id": "url-construction", "astKinds": ["NewExpression"], "namedReferences": ["URL"] },
+      { "id": "regular-expression-literal", "astKinds": ["RegularExpressionLiteral"], "namedReferences": [] },
+      { "id": "promise-construction", "astKinds": ["NewExpression"], "namedReferences": ["Promise"] },
+      { "id": "error-construction", "astKinds": ["NewExpression"], "namedReferences": ["Error", "TypeError", "RangeError", "SyntaxError", "URIError", "EvalError", "AggregateError"] },
+      { "id": "form-data-construction", "astKinds": ["NewExpression"], "namedReferences": ["FormData"] },
+      { "id": "request-construction", "astKinds": ["NewExpression"], "namedReferences": ["Request"] },
+      { "id": "response-construction", "astKinds": ["NewExpression"], "namedReferences": ["Response"] }
+    ],
+    "typeModelStructures": [
+      { "id": "interface-declaration", "astKinds": ["InterfaceDeclaration"], "namedReferences": [] },
+      { "id": "type-literal", "astKinds": ["TypeLiteral"], "namedReferences": [] },
+      { "id": "union-type", "astKinds": ["UnionType"], "namedReferences": [] },
+      { "id": "intersection-type", "astKinds": ["IntersectionType"], "namedReferences": [] },
+      { "id": "tuple-type", "astKinds": ["TupleType"], "namedReferences": [] },
+      { "id": "mapped-type", "astKinds": ["MappedType"], "namedReferences": [] },
+      { "id": "conditional-type", "astKinds": ["ConditionalType"], "namedReferences": [] },
+      { "id": "indexed-access-type", "astKinds": ["IndexedAccessType"], "namedReferences": [] },
+      { "id": "array-type", "astKinds": ["ArrayType"], "namedReferences": [] },
+      { "id": "function-type", "astKinds": ["FunctionType"], "namedReferences": [] },
+      { "id": "record-type", "astKinds": ["TypeReference"], "namedReferences": ["Record"] },
+      { "id": "map-type", "astKinds": ["TypeReference"], "namedReferences": ["Map", "ReadonlyMap", "WeakMap"] },
+      { "id": "set-type", "astKinds": ["TypeReference"], "namedReferences": ["Set", "ReadonlySet", "WeakSet"] },
+      { "id": "result-type", "astKinds": ["TypeReference"], "namedReferences": ["Result"] },
+      { "id": "template-literal-type", "astKinds": ["TemplateLiteralType"], "namedReferences": [] },
+      { "id": "type-predicate", "astKinds": ["TypePredicate"], "namedReferences": [] }
+    ],
+    "algorithms": [
+      { "id": "iteration", "astKinds": ["ForStatement", "ForOfStatement", "ForInStatement", "WhileStatement", "DoStatement"], "callNames": ["forEach"] },
+      { "id": "map-transform", "astKinds": [], "callNames": ["map"] },
+      { "id": "filter-selection", "astKinds": [], "callNames": ["filter"] },
+      { "id": "reduce-fold", "astKinds": [], "callNames": ["reduce", "reduceRight"] },
+      { "id": "search", "astKinds": [], "callNames": ["find", "findIndex", "findLast", "findLastIndex", "includes", "indexOf", "lastIndexOf"] },
+      { "id": "sort", "astKinds": [], "callNames": ["sort", "toSorted"] },
+      { "id": "predicate-quantification", "astKinds": [], "callNames": ["some", "every"] },
+      { "id": "flat-map", "astKinds": [], "callNames": ["flatMap"] },
+      { "id": "grouping-indexing", "astKinds": [], "callNames": ["groupBy", "keyBy", "indexBy", "fromEntries"] },
+      { "id": "parsing-validation", "astKinds": [], "callNames": ["parse", "parseAsync", "safeParse", "safeParseAsync"] },
+      { "id": "merge-copy", "astKinds": [], "callNames": ["assign", "structuredClone"] },
+      { "id": "sequence-slicing", "astKinds": [], "callNames": ["slice", "splice", "toSpliced", "chunk", "partition"] },
+      { "id": "serialisation", "astKinds": [], "callNames": ["stringify", "serialize", "deserialize"] },
+      { "id": "pattern-matching", "astKinds": [], "callNames": ["match", "matchAll", "test"] }
+    ],
+    "namedReferenceMatch": "For TypeReference and NewExpression, match only an unqualified Identifier with the exact case-sensitive configured text. For configured CallExpression runtime structures, match only a non-optional PropertyAccessExpression whose unqualified Identifier receiver and terminal Identifier form the exact configured text such as Buffer.from. Element access, optional access, aliases, qualified names, and symbol resolution do not match.",
+    "callNameMatch": "For algorithm CallExpression nodes, match an Identifier expression or the terminal Identifier of a PropertyAccessExpression exactly and case-sensitively; the receiver and optional-access state do not affect this terminal-name observation. Element access and non-Identifier terminal names do not match.",
+    "astKindCount": "Traverse every recovered TypeScript AST node in pre-order with forEachChild, including files marked parsed-with-diagnostics. Within one definition, a node counts once when its SyntaxKind is configured and, when namedReferences is non-empty, its exact configured name also matches. Definitions are disjoint where a runtime construction and a type reference would otherwise double-count: map-construction counts only NewExpression while map-type counts only TypeReference. Algorithm astKinds and named calls are alternatives within one definition and one node contributes at most once to that definition. Parser recovery is observed rather than silently excluded; parse diagnostics remain explicit.",
+    "rankingBoundary": "Rank runtime-value structures, erased type-model structures, and algorithmic operations in three separate tables. Each table selects the ten highest non-verification counts from a frozen universe larger than ten, orders ties by id, and reports every provenance bucket plus verification-only and non-verification totals. The tables are syntax/operation frequency, not abstract complexity or runtime frequency.",
+    "algorithmBoundary": "Counts predeclared algorithmic operations evidenced by syntax or named calls. It does not rename generic conditionals, branching, or all function calls as algorithms."
+  },
+  "repetition": {
+    "minimumAstNodes": 24,
+    "minimumTokens": 40,
+    "minimumFiles": 2,
+    "eligibility": "Enumerate configured region AST nodes in source pre-order across every parsed and parsed-with-diagnostics file. maxAnalysedRegions counts every configured region encountered before either size floor and fails the complete run when exceeded. A region is fingerprinted only when nodeCount >= minimumAstNodes AND tokenCount >= minimumTokens. A group is emitted only when its members span at least minimumFiles distinct repo-relative paths. Multiple eligible occurrences from one file remain in an emitted group when the group also meets that distinct-path floor; a same-file-only group is never emitted. Recovered AST regions in parsed-with-diagnostics files are analysed by the same rules and retain the file's parse diagnostics.",
+    "regionAstKinds": ["FunctionDeclaration", "FunctionExpression", "ArrowFunction", "MethodDeclaration", "GetAccessor", "SetAccessor", "Constructor", "ClassDeclaration", "InterfaceDeclaration", "TypeAliasDeclaration", "TypeLiteral", "ObjectLiteralExpression"],
+    "candidateEligibility": "Clone groups are complete descriptive evidence for every provenance and role. candidate-eligible is a pre-held-out population label only: it means every member file has verificationOnly absent. Any group containing verificationOnly present, ambiguous, or not-probed is verification-observation-only and remains only in raw clone observations. Held-out acceptedDetectorIds separately determines whether a candidate-eligible detector may support candidate synthesis; raw candidateEligibility never asserts detector admission. No shared test builder or hoisted test description may be proposed by this review.",
+    "nodeCount": "Pre-order count of the region root and descendants visited by TypeScript forEachChild; tokens are excluded.",
+    "tokenCount": "Scan sourceFile.text.slice(node.getStart(sourceFile, false), node.getEnd()) with TypeScript createScanner using sourceFile.languageVersion, skipTrivia=true, and JSX language variant for .tsx or Standard for .ts; count every token except EndOfFileToken. getStart excludes leading trivia and getEnd excludes trailing trivia.",
+    "exactEncodingVersion": "typescript-printer-trivia-free-v1",
+    "exactNormalisation": "TypeScript createPrinter with removeComments=true and LineFeed prints the complete configured region node. Hash the printer output exactly; do not apply a whitespace regex because that would alter whitespace inside string and template literals. Identifiers, literal contents, operators, and statement order remain.",
+    "exactFingerprint": "SHA-256 of UTF-8 exactEncodingVersion, NUL, SyntaxKind name, NUL, normalised text.",
+    "structuralEncodingVersion": "typescript-getchildren-kinds-v1",
+    "structuralNormalisation": "Pre-order SyntaxKind-name sequence beginning with the configured region root, then recursively every child returned by getChildren(sourceFile) in API order. Include operator and punctuation token kinds. Identifier spellings and string, numeric, bigint, regex, and template literal values are omitted because only their SyntaxKind names are encoded.",
+    "structuralFingerprint": "SHA-256 of UTF-8 structuralEncodingVersion, NUL, SyntaxKind names joined by comma.",
+    "memberIdentity": "repo-relative path; root SyntaxKind name; zero-based UTF-16 startOffset exactly node.getStart(sourceFile, false); zero-based exclusive UTF-16 endOffset exactly node.getEnd(); one-based start line containing startOffset; one-based inclusive end line containing max(startOffset, endOffset - 1); optional declared name; node count; token count; and fingerprint; no source snippet. The name is the node's own static Identifier decoded text, StringLiteral decoded text, NumericLiteral exact source token text, the literal constructor for Constructor, and null for anonymous nodes; it is never inferred from a parent binding. Distinct configured region occurrences must have distinct path, startOffset, endOffset, and kind tuples; a collision fails the complete run.",
+    "groupOrdering": "Emit cloneAnalyses first for exact-region-clone and then structural-region-similarity. Within each analysis, sort members by path, startOffset, endOffset, kind, then name with null before strings; sort every complete group by fingerprint. Emit every group or fail the complete run; partial and truncated clone analyses are invalid."
+  },
+  "typeTruthSignals": {
+    "typeAssertion": "Count every AsExpression except one whose type is an unqualified TypeReference named const with no type arguments, plus every TypeAssertionExpression; count one per AST node.",
+    "anyKeyword": "Count every AnyKeyword node for which TypeScript isTypeNode is true; expression identifiers spelled any do not match.",
+    "unknownKeyword": "Count every UnknownKeyword node for which TypeScript isTypeNode is true; expression identifiers spelled unknown do not match.",
+    "nonNullAssertion": "NonNullExpression nodes.",
+    "typescriptSuppression": "Enumerate TypeScript single-line and multi-line comment trivia exactly once. Remove only the opening/closing comment markers, trim leading whitespace, and count the comment once when the remaining text matches ^@ts-(expect-error|ignore|nocheck)(?:\\s|:|$). @ts-nocheck counts only when that comment ends at or before the first non-trivia token; @ts-expect-error and @ts-ignore may occur anywhere. A block comment follows the same first-text rule; interior leading * is not removed. Strings, regexes, and template contents are never comment trivia.",
+    "recordStringUnknown": "TypeReference Record with exactly two type arguments where the first is StringKeyword and the second is UnknownKeyword.",
+    "zodUnknown": "CallExpression with zero type arguments, zero value arguments, and no optional access whose expression is a PropertyAccessExpression with exact unqualified Identifier receiver z and terminal Identifier unknown.",
+    "interpretation": "These are boundary observations, not automatic defects. A candidate requires authority, consumer, and preservation evidence. Map configuration fields to output ids exactly as follows: typeAssertion to type-assertion, anyKeyword to any-keyword, unknownKeyword to unknown-keyword, nonNullAssertion to non-null-assertion, typescriptSuppression to typescript-suppression, recordStringUnknown to record-string-unknown, and zodUnknown to zod-unknown. Per-file and total records use TYPE_TRUTH_IDS vocabulary order."
+  },
+  "graphObservation": {
+    "nodeKinds": ["file", "package", "workspace", "command", "artefact", "registration", "external-contract"],
+    "edgeKinds": ["import", "re-export", "export-map", "generation", "script", "filesystem-read", "filesystem-write", "build", "runtime-registration"],
+    "producers": {
+      "import": "AST import, import-equals, literal dynamic-import, or literal CommonJS require declaration plus its module-resolution record. A CommonJS require counts only when its identifier is the top-level binding initialised by createRequire(import.meta.url), or the unshadowed ambient require identifier.",
+      "re-export": "AST export declaration with a module specifier plus its module-resolution record.",
+      "export-map": "Registered workspace package.json exports entries parsed from the pinned tree; source and target artefacts remain distinct.",
+      "generation": "Frozen generatedOutputRules producerEvidence-to-output-prefix relations plus exact package-script generator command observations.",
+      "script": "Pinned registered-workspace package.json script name and literal command string, represented as package-to-command observation without claiming execution.",
+      "filesystem-read": "CallExpression matching the frozen terminal names readFile, readFileSync, createReadStream, or open with a statically resolvable first string argument.",
+      "filesystem-write": "CallExpression matching the frozen terminal names writeFile, writeFileSync, appendFile, appendFileSync, createWriteStream, or rename with a statically resolvable target argument.",
+      "build": "Pinned emitting-project membership, project references, bundler input, or package build-script relation; each edge identifies which observation produced it.",
+      "runtime-registration": "CallExpression matching the exact configured registration names registerTool, registerResource, registerAppResource, setRequestHandler, use, or command. The first three are the pinned MCP registration APIs; use and command retain the separately observed Express and Commander registration forms. The static graph status is always ambiguous. Executable proof is recorded separately and never mutates, replaces, or upgrades the raw graph edge."
+    },
+    "producerTokens": {
+      "import": ["import:es-import", "import:import-equals", "import:dynamic-import", "import:commonjs-require"],
+      "re-export": ["re-export:export-declaration"],
+      "export-map": ["export-map:package-exports"],
+      "generation": ["generation:generated-output-rule", "generation:generator-script"],
+      "script": ["script:package-script"],
+      "filesystem-read": ["filesystem-read:readFile", "filesystem-read:readFileSync", "filesystem-read:createReadStream", "filesystem-read:open"],
+      "filesystem-write": ["filesystem-write:writeFile", "filesystem-write:writeFileSync", "filesystem-write:appendFile", "filesystem-write:appendFileSync", "filesystem-write:createWriteStream", "filesystem-write:rename"],
+      "build": ["build:emitting-project-membership", "build:project-reference", "build:bundler-input", "build:package-build-script"],
+      "runtime-registration": ["runtime-registration:registerTool", "runtime-registration:registerResource", "runtime-registration:registerAppResource", "runtime-registration:setRequestHandler", "runtime-registration:use", "runtime-registration:command"]
+    },
+    "endpointConstruction": {
+      "import:es-import": "Source is file=[module declaration source path]. For resolved-file target is file=[resolution.target]; for node-builtin target is external-contract=[node-builtin,resolution.target]; for workspace-package or external-package split resolution.target into packageName (@scope/name uses the first two slash components, unscoped uses the first) and subpath (the unchanged remainder or .), then target is package=[workspace|external,packageName,subpath]. Unresolved-literal and unresolved-nonliteral emit no edge. Emitted status is observed and evidencePaths is [source path].",
+      "import:import-equals": "Source is file=[module declaration source path]. For resolved-file target is file=[resolution.target]; for node-builtin target is external-contract=[node-builtin,resolution.target]; for workspace-package or external-package split resolution.target into packageName (@scope/name uses the first two slash components, unscoped uses the first) and subpath (the unchanged remainder or .), then target is package=[workspace|external,packageName,subpath]. Unresolved-literal and unresolved-nonliteral emit no edge. Emitted status is observed and evidencePaths is [source path].",
+      "import:dynamic-import": "Source is file=[module declaration source path]. For resolved-file target is file=[resolution.target]; for node-builtin target is external-contract=[node-builtin,resolution.target]; for workspace-package or external-package split resolution.target into packageName (@scope/name uses the first two slash components, unscoped uses the first) and subpath (the unchanged remainder or .), then target is package=[workspace|external,packageName,subpath]. Unresolved-literal and unresolved-nonliteral emit no edge. Emitted status is observed and evidencePaths is [source path].",
+      "import:commonjs-require": "Source is file=[module declaration source path]. For resolved-file target is file=[resolution.target]; for node-builtin target is external-contract=[node-builtin,resolution.target]; for workspace-package or external-package split resolution.target into packageName (@scope/name uses the first two slash components, unscoped uses the first) and subpath (the unchanged remainder or .), then target is package=[workspace|external,packageName,subpath]. Unresolved-literal and unresolved-nonliteral emit no edge. Emitted status is observed and evidencePaths is [source path].",
+      "re-export:export-declaration": "Source is file=[module declaration source path]. For resolved-file target is file=[resolution.target]; for node-builtin target is external-contract=[node-builtin,resolution.target]; for workspace-package or external-package split resolution.target into packageName (@scope/name uses the first two slash components, unscoped uses the first) and subpath (the unchanged remainder or .), then target is package=[workspace|external,packageName,subpath]. Unresolved-literal and unresolved-nonliteral emit no edge. Emitted status is observed and evidencePaths is [source path].",
+      "export-map:package-exports": "For every string leaf visited by ascending-UTF-16 object-key traversal of one admitted workspace manifest exports value, source is package=[workspace,manifest name,export key or . when exports is a root condition map]. Build a JSON Pointer from exports through the leaf, escaping ~ as ~0 and / as ~1. If the target is a relative non-pattern string beginning ./ whose workspace-root-relative POSIX path is a pinned regular blob, target is artefact=[repo-path,resolved path] and status is observed; otherwise target is external-contract=[package-export-target,JSON.stringify([manifest path,JSON Pointer,exact target])] using compact JSON array encoding and status is ambiguous. evidencePaths is [manifest path].",
+      "generation:generated-output-rule": "For each producerEvidence entry of each generatedOutputRule whose path is a pinned TypeScript file, source is file=[producerEvidence path]. If the rule pathPrefix has a non-empty pinned regular-blob member set, target is artefact=[repo-prefix,normalised trailing-slash pathPrefix,recomputed member-set digest], status is observed, and evidencePaths is [producerEvidence path]. An empty member set emits no node and no edge.",
+      "generation:generator-script": "Inspect admitted workspace scripts whose name has a colon-delimited segment equal to generate or codegen, contains a segment ending -gen, or whose literal command contains an exact generatedOutputRules producerEvidence path. Split the literal command only on ASCII whitespace; quoting, escapes, substitutions, and shell operators are not interpreted. For every token ending .ts or .tsx that resolves POSIX-lexically within the workspace root to a pinned regular TypeScript file and either equals producerEvidence or has the generator role, source is command=[manifest path,script name,literal command], target is file=[resolved token path], status is observed, and evidencePaths is [manifest path]. Zero matching entrypoint tokens emit no generation edge.",
+      "script:package-script": "For every literal script entry in every admitted workspace manifest, source is workspace=[workspace root,manifest path,manifest name or <unnamed>], target is command=[manifest path,script name,literal command], status is observed, and evidencePaths is [manifest path].",
+      "filesystem-read:readFile": "The target argument is argument zero. It must be a StringLiteral or NoSubstitutionTemplateLiteral with no NUL or backslash. A value beginning ./ or ../ resolves POSIX-lexically from the source file directory; another relative value resolves from repository root. A contained pinned regular blob yields source file=[source path], target artefact=[repo-path,resolved path], status observed. An absolute value or a value normalising outside the repository yields target external-contract=[filesystem-read-path,exact literal], status ambiguous. A contained non-member yields external-contract=[filesystem-read-path,normalised repo path], status ambiguous. evidencePaths is [source path]. Any other argument emits no edge.",
+      "filesystem-read:readFileSync": "The target argument is argument zero. It must be a StringLiteral or NoSubstitutionTemplateLiteral with no NUL or backslash. A value beginning ./ or ../ resolves POSIX-lexically from the source file directory; another relative value resolves from repository root. A contained pinned regular blob yields source file=[source path], target artefact=[repo-path,resolved path], status observed. An absolute value or a value normalising outside the repository yields target external-contract=[filesystem-read-path,exact literal], status ambiguous. A contained non-member yields external-contract=[filesystem-read-path,normalised repo path], status ambiguous. evidencePaths is [source path]. Any other argument emits no edge.",
+      "filesystem-read:createReadStream": "The target argument is argument zero. It must be a StringLiteral or NoSubstitutionTemplateLiteral with no NUL or backslash. A value beginning ./ or ../ resolves POSIX-lexically from the source file directory; another relative value resolves from repository root. A contained pinned regular blob yields source file=[source path], target artefact=[repo-path,resolved path], status observed. An absolute value or a value normalising outside the repository yields target external-contract=[filesystem-read-path,exact literal], status ambiguous. A contained non-member yields external-contract=[filesystem-read-path,normalised repo path], status ambiguous. evidencePaths is [source path]. Any other argument emits no edge.",
+      "filesystem-read:open": "The target argument is argument zero. It must be a StringLiteral or NoSubstitutionTemplateLiteral with no NUL or backslash. A value beginning ./ or ../ resolves POSIX-lexically from the source file directory; another relative value resolves from repository root. A contained pinned regular blob yields source file=[source path], target artefact=[repo-path,resolved path], status observed. An absolute value or a value normalising outside the repository yields target external-contract=[filesystem-read-path,exact literal], status ambiguous. A contained non-member yields external-contract=[filesystem-read-path,normalised repo path], status ambiguous. evidencePaths is [source path]. Any other argument emits no edge.",
+      "filesystem-write:writeFile": "The target argument is argument zero. It must be a StringLiteral or NoSubstitutionTemplateLiteral with no NUL or backslash. Resolve relative values exactly as filesystem-read. A contained pinned regular blob yields source file=[source path], target artefact=[repo-path,resolved path], status observed. A contained non-member yields external-contract=[filesystem-write-path,normalised repo path], status ambiguous; an absolute or escaping value yields external-contract=[filesystem-write-path,exact literal], status ambiguous. evidencePaths is [source path]. Any other argument emits no edge.",
+      "filesystem-write:writeFileSync": "The target argument is argument zero. It must be a StringLiteral or NoSubstitutionTemplateLiteral with no NUL or backslash. Resolve relative values exactly as filesystem-read. A contained pinned regular blob yields source file=[source path], target artefact=[repo-path,resolved path], status observed. A contained non-member yields external-contract=[filesystem-write-path,normalised repo path], status ambiguous; an absolute or escaping value yields external-contract=[filesystem-write-path,exact literal], status ambiguous. evidencePaths is [source path]. Any other argument emits no edge.",
+      "filesystem-write:appendFile": "The target argument is argument zero. It must be a StringLiteral or NoSubstitutionTemplateLiteral with no NUL or backslash. Resolve relative values exactly as filesystem-read. A contained pinned regular blob yields source file=[source path], target artefact=[repo-path,resolved path], status observed. A contained non-member yields external-contract=[filesystem-write-path,normalised repo path], status ambiguous; an absolute or escaping value yields external-contract=[filesystem-write-path,exact literal], status ambiguous. evidencePaths is [source path]. Any other argument emits no edge.",
+      "filesystem-write:appendFileSync": "The target argument is argument zero. It must be a StringLiteral or NoSubstitutionTemplateLiteral with no NUL or backslash. Resolve relative values exactly as filesystem-read. A contained pinned regular blob yields source file=[source path], target artefact=[repo-path,resolved path], status observed. A contained non-member yields external-contract=[filesystem-write-path,normalised repo path], status ambiguous; an absolute or escaping value yields external-contract=[filesystem-write-path,exact literal], status ambiguous. evidencePaths is [source path]. Any other argument emits no edge.",
+      "filesystem-write:createWriteStream": "The target argument is argument zero. It must be a StringLiteral or NoSubstitutionTemplateLiteral with no NUL or backslash. Resolve relative values exactly as filesystem-read. A contained pinned regular blob yields source file=[source path], target artefact=[repo-path,resolved path], status observed. A contained non-member yields external-contract=[filesystem-write-path,normalised repo path], status ambiguous; an absolute or escaping value yields external-contract=[filesystem-write-path,exact literal], status ambiguous. evidencePaths is [source path]. Any other argument emits no edge.",
+      "filesystem-write:rename": "The target argument is argument one. It must be a StringLiteral or NoSubstitutionTemplateLiteral with no NUL or backslash. Resolve relative values exactly as filesystem-read. A contained pinned regular blob yields source file=[source path], target artefact=[repo-path,resolved path], status observed. A contained non-member yields external-contract=[filesystem-write-path,normalised repo path], status ambiguous; an absolute or escaping value yields external-contract=[filesystem-write-path,exact literal], status ambiguous. evidencePaths is [source path]. Any other argument emits no edge.",
+      "build:emitting-project-membership": "For every pinned TypeScript file admitted by the exact file set of its selected emitting project, source is artefact=[repo-path,emitting config path], target is file=[member path], status is observed, and evidencePaths is [emitting config path,member path] in ascending UTF-16 order.",
+      "build:project-reference": "For every selected pinned tsconfig reference path, source is artefact=[repo-path,referring config path] and target is artefact=[repo-path,resolved referenced config path]. Both must be pinned regular blobs; otherwise no edge is emitted and the config diagnostic is retained. Emitted status is observed and evidencePaths contains both config paths in ascending UTF-16 order.",
+      "build:bundler-input": "For each literal bundler input resolved POSIX-lexically within the repository, source is file=[pinned TypeScript bundler config path]. A pinned TypeScript input target is file=[input path]; another pinned regular input is artefact=[repo-path,input path]; a contained non-member is external-contract=[bundler-input,normalised repo path]. Pinned targets have status observed, non-members ambiguous, evidencePaths is [bundler config path], and nonliteral, absolute, backslash, or escaping inputs emit no edge.",
+      "build:package-build-script": "For each admitted workspace script named build or beginning build:, source is command=[manifest path,script name,literal command]. If that workspace has one selected emitting config, target is artefact=[repo-path,emitting config path], status is observed, and evidencePaths is [manifest path,emitting config path] in ascending UTF-16 order. Without a selected emitting config no package-build-script edge is emitted.",
+      "runtime-registration:registerTool": "Source is file=[source path]; target is registration=[source path,one-based CallExpression start line,registerTool,literal target or <dynamic>]. The literal target is argument zero only when it is a non-empty StringLiteral or NoSubstitutionTemplateLiteral; otherwise it is <dynamic>. status is ambiguous and evidencePaths is [source path].",
+      "runtime-registration:registerResource": "Source is file=[source path]; target is registration=[source path,one-based CallExpression start line,registerResource,literal target or <dynamic>]. The literal target is argument zero only when it is a non-empty StringLiteral or NoSubstitutionTemplateLiteral; otherwise it is <dynamic>. status is ambiguous and evidencePaths is [source path].",
+      "runtime-registration:registerAppResource": "Source is file=[source path]; target is registration=[source path,one-based CallExpression start line,registerAppResource,literal target or <dynamic>]. The literal target is argument one only when it is a non-empty StringLiteral or NoSubstitutionTemplateLiteral; otherwise it is <dynamic>. status is ambiguous and evidencePaths is [source path].",
+      "runtime-registration:setRequestHandler": "Source is file=[source path]; target is registration=[source path,one-based CallExpression start line,setRequestHandler,literal target or <dynamic>]. The literal target is argument zero only when it is a non-empty StringLiteral or NoSubstitutionTemplateLiteral; otherwise it is <dynamic>. status is ambiguous and evidencePaths is [source path].",
+      "runtime-registration:use": "Source is file=[source path]; target is registration=[source path,one-based CallExpression start line,use,literal target or <dynamic>]. The literal target is argument zero only when it is a non-empty StringLiteral or NoSubstitutionTemplateLiteral; otherwise it is <dynamic>. status is ambiguous and evidencePaths is [source path].",
+      "runtime-registration:command": "Source is file=[source path]; target is registration=[source path,one-based CallExpression start line,command,literal target or <dynamic>]. The literal target is argument zero only when it is a non-empty StringLiteral or NoSubstitutionTemplateLiteral; otherwise it is <dynamic>. status is ambiguous and evidencePaths is [source path]."
+    },
+    "nodeIdentity": "Every node carries non-empty identityComponents selected by kind: file=[repo path]; workspace=[root, manifest path, package name or <unnamed>]; package=[workspace|external, package name, subpath or .]; command=[manifest path, script name, literal command]; artefact=[repo-path, repo path] for one tracked regular blob, [repo-prefix, normalised trailing-slash prefix, member-set digest] for a non-empty aggregate, or [external-input, canonical identifier] for an unavailable external input; registration=[source path, one-based start line in decimal, terminal call name, literal target or <dynamic>]; external-contract=[contract kind, canonical identifier]. A tracked regular blob has tree type blob and mode 100644 or 100755. A repo-prefix aggregate is emitted only for one or more matching blobs; an empty member set emits no node. Its digest frames every member using UTF-8 domain typescript-estate-artefact-prefix-v1 then NUL and, in ascending path order, each member's repo path, mode, object id, and decimal size as unsigned 64-bit big-endian byte length plus exact bytes. Components contain no NUL and retain exact case. The id is node:<kind>:<sha256>, where SHA-256 frames UTF-8 domain typescript-estate-graph-node-v1 then NUL, kind then NUL, then each component with that length framing. label is exactly identityComponents joined by ' :: '. path is the concrete repo path only for file and repo-path artefact nodes, otherwise null. Equal ids are one node; an id collision with unequal kind/components fails the run.",
+    "edgeIdentity": "Start from one producer observation per relationship occurrence. producer is exactly one token from producerTokens[kind]; no other spelling is valid. The identity tuple is [kind, source node id, target node id, producer, status]. The id is edge:<kind>:<sha256>, using UTF-8 domain typescript-estate-graph-edge-v1 then NUL and the same unsigned-64-bit length framing for each tuple component. Collapse observations only when the complete tuple is equal; occurrenceCount is the exact number collapsed and evidencePaths is the ascending-UTF-16 unique union. Different status or producer remains a distinct edge. Equal ids with unequal tuples fail the run. Edges are emitted once, ordered by id.",
+    "archetypeSelectorResolution": "For every configured chain and stage, recompute the stage node from its exact selector in this order: semanticAuthority, generator, generatedCarrier, runtimeOwner, composition, remediationLocus. file selects the sole file node whose identityComponents is [value]. artefact selects the sole artefact node whose identityComponents is [repo-path,value]. workspace selects the sole workspace node whose package-name component equals value. artefact-prefix normalises value to one trailing slash and collects every pinned blob with mode 100644 or 100755 under it. An empty collection emits no aggregate node and therefore selector-zero; a non-empty collection selects the sole repo-prefix aggregate node whose prefix and recomputed member-set digest match. A selector with exactly one match emits that node id. Zero or multiple matches emits null and exactly one missingEvidence token <stage>:selector-zero:<kind>:<value> or <stage>:selector-multiple:<kind>:<value>; tokens follow that stage order. Chain id equals archetype. derivedFromEdgeIndexes is the ascending unique list of edges whose source and target are both non-null selected stage nodes, plus runtime-registration edges whose source is the selected composition node. For the openapi-curriculum-sdk-mcp and tsx-bundle-served-ui archetypes, at least one such composition registration edge is mandatory. Any other stage id, missing-evidence set, or edge-index set rejects the run.",
+    "ownershipChains": "The extractor emits the four calibrated archetype chains from frozen stage selectors and graph observations. Each stage is a node id or null with explicit missing evidence. It performs no traversal or generic graph projection.",
+    "foundationBoundary": "Serialising review-specific nodes, edges, and four chains is permitted. Reusable adjacency, traversal, projection, query, storage, or ontology capability remains with the ADR-173, ADR-179, and ADR-221 graph stack."
+  },
+  "archetypeChains": [
+    {
+      "id": "openapi-curriculum-sdk-mcp",
+      "semanticAuthority": { "kind": "artefact", "value": "packages/sdks/oak-sdk-codegen/schema-cache/api-schema-original.json" },
+      "generator": { "kind": "file", "value": "packages/sdks/oak-sdk-codegen/code-generation/codegen.ts" },
+      "generatedCarrier": { "kind": "artefact-prefix", "value": "packages/sdks/oak-sdk-codegen/src/types/generated/" },
+      "runtimeOwner": { "kind": "workspace", "value": "@oaknational/curriculum-sdk" },
+      "composition": { "kind": "file", "value": "apps/oak-curriculum-mcp-streamable-http/src/handlers.ts" },
+      "remediationLocus": { "kind": "file", "value": "packages/sdks/oak-sdk-codegen/code-generation/codegen.ts" }
+    },
+    {
+      "id": "bulk-vocabulary-search-consumer",
+      "semanticAuthority": { "kind": "artefact-prefix", "value": "apps/oak-search-cli/bulk-downloads/" },
+      "generator": { "kind": "file", "value": "packages/sdks/oak-sdk-codegen/vocab-gen/run-vocab-gen.ts" },
+      "generatedCarrier": { "kind": "artefact-prefix", "value": "packages/sdks/oak-sdk-codegen/src/generated/vocab/" },
+      "runtimeOwner": { "kind": "workspace", "value": "@oaknational/oak-search-sdk" },
+      "composition": { "kind": "file", "value": "packages/sdks/oak-search-sdk/src/retrieval/query-processing/detect-curriculum-phrases.ts" },
+      "remediationLocus": { "kind": "file", "value": "packages/sdks/oak-sdk-codegen/vocab-gen/run-vocab-gen.ts" }
+    },
+    {
+      "id": "agent-tools-dist-cli-hook",
+      "semanticAuthority": { "kind": "artefact-prefix", "value": "agent-tools/src/" },
+      "generator": { "kind": "artefact", "value": "agent-tools/tsconfig.build.json" },
+      "generatedCarrier": { "kind": "artefact-prefix", "value": "agent-tools/dist/" },
+      "runtimeOwner": { "kind": "workspace", "value": "@oaknational/agent-tools" },
+      "composition": { "kind": "file", "value": "agent-tools/src/bin/agent-tools.ts" },
+      "remediationLocus": { "kind": "artefact-prefix", "value": "agent-tools/src/" }
+    },
+    {
+      "id": "tsx-bundle-served-ui",
+      "semanticAuthority": { "kind": "file", "value": "apps/oak-curriculum-mcp-streamable-http/widget/src/main.tsx" },
+      "generator": { "kind": "file", "value": "apps/oak-curriculum-mcp-streamable-http/widget/vite.config.ts" },
+      "generatedCarrier": { "kind": "file", "value": "apps/oak-curriculum-mcp-streamable-http/src/generated/widget-html-content.ts" },
+      "runtimeOwner": { "kind": "workspace", "value": "@oaknational/oak-curriculum-mcp-streamable-http" },
+      "composition": { "kind": "file", "value": "apps/oak-curriculum-mcp-streamable-http/src/register-widget-resource.ts" },
+      "remediationLocus": { "kind": "file", "value": "apps/oak-curriculum-mcp-streamable-http/widget/src/main.tsx" }
+    }
+  ],
+  "placementConformance": {
+    "graphStackRoots": ["agent-graphs/practice-graph", "packages/core/graph-core", "packages/libs/graph-enhance", "packages/libs/graph-future", "packages/libs/graph-ingest", "packages/libs/graph-project", "packages/libs/graph-validate", "packages/sdks/graph-corpus-sdk", "packages/sdks/graph-knowledge-sdk"],
+    "requiredAdrIds": ["ADR-173", "ADR-179", "ADR-221"],
+    "rule": "Every resolved candidate and every proposal uses a structured intervention locus that resolves to a pinned existing path, admitted workspace, frozen generator, semantic authority, consumer-local owner, or explicitly new-home proposal. Any locus at or crossing graphStackRoots requires a compliant ADR-173/179/221 assessment with cited evidence; unknown or non-compliant placement is excluded from proposals. New-home proposals require owner ratification and cannot be represented as an existing canonical home.",
+    "semanticValidation": "Existing paths must be pinned-tree paths, workspace names must be admitted pnpm workspaces, generator paths must be frozen producerEvidence paths, and proposal loci must equal the referenced candidate locus. Every existing and future ADR-173 topology root plus ADR-221 graph-knowledge-sdk is listed explicitly; creation under a future root is treated as crossing the fence, never not-applicable."
+  },
+  "proofEnvironmentPolicy": {
+    "policyId": "proof-env-v1",
+    "recordedValueNames": ["CI", "NODE_ENV", "TZ", "LANG", "LC_ALL", "GIT_NO_LAZY_FETCH"],
+    "secretPresenceNames": ["OAK_API_KEY", "GITHUB_TOKEN", "GH_TOKEN", "LINEAR_API_KEY", "NOTION_TOKEN", "POSTHOG_API_KEY", "SENTRY_AUTH_TOKEN", "NPM_TOKEN", "NODE_AUTH_TOKEN", "npm_config__authToken", "AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_SESSION_TOKEN", "AZURE_CLIENT_SECRET", "GOOGLE_APPLICATION_CREDENTIALS"],
+    "childEnvironment": "Proof subprocesses inherit no environment entries. The harness constructs a minimal child environment with CI=true, TZ=UTC, LANG=C, LC_ALL=C, GIT_NO_LAZY_FETCH=1, an explicit trusted executable search path, a fresh run-scoped HOME/XDG_CONFIG_HOME/npm_config_cache, and npm_config_userconfig pointing at a freshly created empty file. NODE_ENV is selected by the frozen generation-proof profile: production for tsx-bundle-served-ui run-one and run-two, test for every other proof command. Every exact name in secretPresenceNames is explicitly absent. The harness records boolean assertions, never their values or machine-local paths.",
+    "networkPolicy": "Lockfile resolution and package fetch are the only network-permitted phases and run credential-free with strict minimum release age. Install is --offline with the reviewed frozen lockfile. Export exercise runs under an OS network-deny sandbox; if a deny mechanism and a failing network canary cannot be proved, the proof is blocked and cannot pass.",
+    "rule": "Command records may contain values only for recordedValueNames. NODE_ENV must equal the profile selected by generationProof.environmentProfiles from the parent proof id and stage. Every declared secret-bearing name is required under secretEnvironmentPresence with value false. Their values and all unknown environment names are forbidden. PATH, HOME, checkout paths, and inherited unbounded environment output are never committed. Each command record cites an environment assertion and phase-specific network-isolation artefact."
+  },
+  "generationProof": {
+    "stages": ["materialise-input", "run-one", "clean-output", "run-two", "byte-compare"],
+    "environmentProfiles": {
+      "defaultNodeEnv": "test",
+      "productionBundleProofId": "tsx-bundle-served-ui",
+      "productionBundleStages": ["run-one", "run-two"],
+      "productionBundleNodeEnv": "production"
+    },
+    "networkPolicy": "Every generator execution is offline in the scrubbed proof environment. Materialised input bytes and their digest are identical for both runs; clean-output removes only a run-scoped temporary output tree.",
+    "stoppedProofs": "Failed or blocked proofs retain every completed stage plus stoppedAt and blockingEvidence; the first failed or blocked stage is named, all later stages are not-run, and no later command, digest, output, or diff is invented."
+  },
+  "packedSdkConsumerProof": {
+    "stages": ["pack", "lockfile-resolve", "lockfile-review", "package-fetch", "offline-install", "export-exercise"],
+    "packageManager": "pnpm",
+    "lockfileResolve": "Run with CI=true, --lockfile-only, --config.minimumReleaseAge=1440, --config.minimumReleaseAgeStrict=true, and --ignore-scripts in the scrubbed environment.",
+    "packageFetch": "After human lockfile review and hash capture, fetch the frozen production closure with scripts disabled in the scrubbed network-permitted environment.",
+    "offlineInstall": "Install with CI=true, --offline, --frozen-lockfile, the same strict release-age flags, and --ignore-scripts.",
+    "packedMemberPathPolicy": "Inspect the raw tarball named by pnpm pack, not dry-run display paths. Consider only regular-file members. Each raw member name must be valid UTF-8, contain no NUL or backslash, and begin exactly package/. Strip that prefix; require a non-empty POSIX remainder whose slash-delimited segments are all non-empty and are neither the exact single-dot segment nor the exact double-dot segment. The canonical member path is ./ plus the unchanged segments joined by /. Reject absolute names, any other root prefix, normalisation collisions, or duplicate canonical member paths. Sort canonical paths by ascending UTF-16 code-unit order.",
+    "typeOnlyConditionNames": ["types"],
+    "runtimeConditionRule": "A condition is type-only if and only if its exact condition name is types. Every other condition name, including default, import, require, node, browser, and future names, is runtime-required. For each concrete subpath, requiredRuntimeConditions is exactly the ascending-UTF-16 set difference conditions keys minus typeOnlyConditionNames; every exportResult.runtimeRequired equals membership in that set.",
+    "exportExercise": "Derive the complete concrete subpath/condition denominator from the packed package exports map and the canonical sorted regular-member list produced by packedMemberPathPolicy. Every export target must begin exactly ./; remove that required prefix before all further validation, require the remainder to be non-empty, contain no NUL or backslash and at most one * character, and split only that remainder on /. Every remainder segment must be non-empty and its exact value must be neither the single-dot segment nor the double-dot segment. A literal export key emits its declared condition/target pairs only when each canonical target is an exact canonical member. For a key and target that each contain exactly one *, split the canonical target into prefix and suffix, match every canonical regular member with both, use the intervening bytes as the substitution, replace the key's * with that exact substitution, and emit the concrete subpath/condition/target pair. Reject zero or multiple * characters on either side of a pattern pair, a pattern target with no matching canonical member, duplicate subpath/condition pairs, pairs resolving to different targets, or an emitted target absent from the canonical member list. Sort by concrete subpath then condition in ascending UTF-16 order. requiredRuntimeConditions and runtimeRequired are derived only by runtimeConditionRule. Every runtime-required condition must resolve and execute under the network-deny sandbox; type-only conditions are resolved but not executed. A passed proof has exactly one result for every concrete denominator condition and no required runtime result other than resolved-and-exercised.",
+    "stoppedProofs": "Failed or blocked proofs retain every completed stage plus stoppedAt and blockingEvidence; they never invent later commands, hashes, tarballs, lockfiles, or closure artefacts. Semantic validation cross-checks the recorded argv and environment against the phase policy rather than trusting asserted install-policy constants."
+  },
+  "schemaShapeFingerprint": {
+    "minimumUniqueProperties": 3,
+    "unsupportedReasonOrder": ["computed-property-name", "interface-heritage", "index-signature", "call-signature", "construct-signature", "spread-assignment", "unsupported-member-kind", "zod-argument-count", "zod-non-object-argument"],
+    "eligibility": "Enumerate candidate nodes in recovered AST pre-order across every parsed and parsed-with-diagnostics file. Candidates are InterfaceDeclaration, TypeLiteralNode, and syntax-only non-optional z.object CallExpression nodes. Interface and type-literal keys come from PropertySignature and MethodSignature names. z.object is recognised without symbol resolution; exactly one ObjectLiteralExpression argument contributes PropertyAssignment, ShorthandPropertyAssignment, MethodDeclaration, GetAccessor, and SetAccessor names. Identifier and StringLiteral names use decoded text; NumericLiteral names use exact source token text. A ComputedPropertyName always adds computed-property-name and contributes a key only when its expression is StringLiteral, NoSubstitutionTemplateLiteral, or NumericLiteral under the same text rules. Interface heritage adds interface-heritage; IndexSignature, CallSignature, ConstructSignature, SpreadAssignment, an unrecognised member, wrong z.object argument count, or non-object argument adds respectively index-signature, call-signature, construct-signature, spread-assignment, unsupported-member-kind, zod-argument-count, or zod-non-object-argument. Reasons form this closed vocabulary, are unique, and use the listed order. Interface name is its Identifier; a TypeLiteral name is its direct TypeAliasDeclaration Identifier or null; a z.object name is its direct VariableDeclaration Identifier or null. Deduplicate keys. startLine is the one-based line containing node.getStart(sourceFile, false); endLine is the one-based inclusive line containing max(node.getStart(sourceFile, false), node.getEnd() - 1). A candidate with no unsupported reason and at least three unique keys is complete-static-key-set and fingerprinted. A candidate with no unsupported reason and fewer than three unique keys is below the detector floor and omitted. Any candidate with an unsupported reason is preserved regardless of key count with unsupported-computed-spread-or-complex, the visible keys, null fingerprint, and all reasons.",
+    "ordering": "Within a shape, unique property names sort by ascending UTF-8 byte sequence and unsupported reasons use the closed eligibility order. Per-file shapes sort by startLine, endLine, kind, then name with null before strings under UTF-16 comparison. Match every authored endpoint to every generated-confirmed endpoint sharing one fingerprint; a hash collision with unequal property-name arrays fails the run. Other provenances do not enter matches. Emit the complete authored/generated Cartesian pairs ordered by fingerprint, authored path/startLine, then generated path/startLine.",
+    "framing": "SHA-256 over UTF-8 domain tag typescript-estate-schema-shape-v1 followed by NUL, then for each property: unsigned 64-bit big-endian byte length and exact UTF-8 bytes. There is no separator or terminal after the final framed property."
+  },
+  "testAndProofPlacement": {
+    "atomicLanding": "Implement each extractor behaviour Red-first with its adjacent in-process unit description, then make that pair Green in the same landing. Product implementation without its describing test is invalid.",
+    "inProcessTests": "Tests use injected in-memory Git, clock, identity, filesystem, and process adapters. They do not read .agent/**, spawn Git or other processes, inspect the live environment, use the network, or conditionally register or skip tests.",
+    "realContentBackstop": "At least one pinned real-source excerpt per construct family is copied into a source fixture with source path and blob SHA-256 and hand-counted expectations. The test imports fixture data; it does not read the live repository or .agent/**.",
+    "builtSmoke": "After build, an unconditional external smoke command, outside Vitest, executes the unified CLI from executingCheckoutRoot against a deterministic temporary invokingGitRoot and proves the built implementation-identity gate plus fixed raw output. The roots intentionally differ in this proof. It may use process and filesystem boundaries because it is an explicit smoke proof, never an in-process test.",
+    "reviewProofs": "Generation, packed-consumer, evidence-closure, report-structure, reproduction, and drift proofs are explicit manifest commands outside the test runner. Lane selection never becomes describe.runIf, test.skip, network-probe skipping, or machine-varying test registration."
+  },
+  "resourceLimits": {
+    "strategy": "Complete deterministic output only. maxTrackedPaths applies to every ls-tree record before TypeScript suffix filtering. maxTreeListingBytes and maxGitStderrBytes apply per Git invocation. maxSourceBytesPerFile applies to every regular TypeScript blob and maxTotalSourceBytes is their run-wide byte sum, including bytes later classified invalid-utf8; unsupported modes add zero. maxAuxiliaryBlobBytesPerFile applies before each regular non-TypeScript auxiliary read and maxTotalAuxiliaryBlobBytes is the run-wide sum of successful unique auxiliary reads; cache hits and TypeScript-source reuse add zero. At the pinned calibration commit, 423 regular JSON/YAML blobs total 51,646,582 bytes and the largest is 25,026,134 bytes, so the frozen auxiliary limits are the next binary capacities above those observations. maxAnalysedRegions is the run-wide count of configured region nodes before size floors. maxModuleDeclarations and maxDiagnostics are run-wide emitted-record counts across all files and diagnostic subjects. maxSerializedOutputBytes applies to the exact canonical bytes. No unstated derived cap may truncate shapes, matches, groups, graph observations, or AST traversal: another resource or memory failure fails the complete run. Exceeding any limit fails before publication; no partial JSON is renamed into place.",
+    "maxTrackedPaths": 25000,
+    "maxTreeListingBytes": 67108864,
+    "maxGitStderrBytes": 1048576,
+    "maxTotalSourceBytes": 134217728,
+    "maxSourceBytesPerFile": 8388608,
+    "maxTotalAuxiliaryBlobBytes": 67108864,
+    "maxAuxiliaryBlobBytesPerFile": 33554432,
+    "maxAnalysedRegions": 250000,
+    "maxModuleDeclarations": 250000,
+    "maxDiagnostics": 50000,
+    "maxSerializedOutputBytes": 134217728,
+    "analysisConcurrency": 1
+  },
+  "outputWrite": {
+    "cliContract": "--out names a directory contained by invokingGitRoot; the fixed artefact name is raw-extraction.json. No output path is resolved relative to executingCheckoutRoot.",
+    "containment": "Resolve the target against invokingGitRoot through core/flag-path-resolve, then reuse refounding canonicaliseOutDir, recheckOutDirContainment, and createWriteDirSegments before the write and immediately before rename.",
+    "publication": "Refuse a symlink target; create an exclusive same-directory temporary file with wx, write and fsync it, recheck containment, then atomically rename to raw-extraction.json.",
+    "failureBehaviour": "Remove only the run's temporary file. Preserve any prior successful raw-extraction.json unchanged on validation, limit, write, or rename failure."
+  },
+  "ordering": {
+    "comparison": "Ascending JavaScript UTF-16 code-unit comparison with no locale or host collation.",
+    "files": "path",
+    "auxiliaryReads": "path",
+    "roles": "role",
+    "provenanceSignals": "kind, matcherId or ruleId, evidencePath with absent before present, startOffset and endOffset with absent before present, then producerEvidencePaths as an already UTF-16-sorted sequence",
+    "constructDefinitionsAndTotals": "class, id",
+    "constructCounts": "same class, id order as construct definitions, represented by id",
+    "typeTruthCounts": "TYPE_TRUTH_IDS vocabulary order for per-file counts and totals",
+    "moduleDeclarations": "startLine, endLine, kind, specifier with null before strings",
+    "schemaShapes": "within each file: startLine, endLine, kind, name with null before strings; cross-file endpoints additionally use path first",
+    "schemaShapeMatches": "fingerprint, authored path/startLine, generated path/startLine",
+    "cloneAnalyses": "exact-region-clone, then structural-region-similarity",
+    "cloneMembers": "path, startOffset, endOffset, kind, name with null before strings",
+    "cloneGroups": "fingerprint",
+    "graphNodes": "id",
+    "graphEdges": "id",
+    "ownershipChains": "id",
+    "diagnostics": "subjectKind, path, relatedPath with absent before present, stage, code, message"
+  },
+  "semanticValidation": {
+    "timing": "Run after strict JSON-schema validation and before canonical serialisation or any temporary-file creation. Failure rejects the whole run.",
+    "fileCoverage": "File paths are unique and exactly ordered; denominator equals files.length; denominator equals readable plus invalidUtf8 plus unsupportedModes; parsed equals readable; parsedWithDiagnostics is at most parsed.",
+    "auxiliaryReadIntegrity": "Auxiliary-read paths are unique and exactly ordered, each path names a retained whole-tree 100644 or 100755 blob outside the TypeScript denominator with non-null declared size, and the emitted tree entry equals the indexed entry. For each record, byteCount equals the indexed size and the cached byte length, contentSha256 equals the cached-byte digest, and all byteCounts sum to at most maxTotalAuxiliaryBlobBytes. Every successful unique non-TypeScript auxiliary read has exactly one record and no refused, missing, unsupported, cached-repeat, or TypeScript-reuse request creates another record.",
+    "classificationAndDeliveryCoverage": "Reparse the pinned workspace manifest and every admitted pinned package manifest under the frozen workspaceAttribution rules. Every workspace is null or equals the unique deepest admitted containing root; roots and names are unique and every non-null root, name, and manifestPath exactly matches its admitted manifest. Re-run generated-output preflight and every configured provenance matcher or rule. The provenance-signal array is exactly the structurally unique frozen-order result: generated-path and generated-header evidencePath equals the containing file path; every header range is non-empty, in bounds, and exactly the earliest selected match; every producer-output signal names its matching rule and exact UTF-16-sorted producerEvidencePaths; no imported signal exists without a configured matching rule. Recompute final provenance from the complete retained signal set and frozen precedence. Precompile every role regex, re-evaluate every selector independently, and then the exclusive fallback. Every file has at least one unique UTF-16-ordered role from the frozen vocabulary and no unearned role. Every delivery dimension has one frozen state and exactly one same-state delivery signal; absent states cite an exhaustively evaluated denominator and no not-probed value may support delete, keep, or proposal eligibility. Recompute each vector from its signals.",
+    "constructCoverage": "Configured construct ids are unique across their declared classes. Output has exactly one definition and one total per configured construct ordered by class then id. Every parsed and parsed-with-diagnostics file has exactly one construct count in that definition order and one type-truth count in TYPE_TRUTH_IDS order; every non-parsed file has zero counts. Recompute all counts from the same recovered AST and comment trivia.",
+    "cloneCoverage": "Output has exactly one analysis for exact-region-clone followed by exactly one for structural-region-similarity. Re-enumerate configured regions including parsed-with-diagnostics files; recompute counts, exact UTF-16 offsets, source line boundaries, declared names, encodings, fingerprints, candidateEligibility, and every group. The path/startOffset/endOffset/kind occurrence tuple is unique across configured regions, fingerprints and complete member identities are unique and ordered, every member meets both size floors, emitted groups span minimumFiles distinct file paths, and a fingerprint collision with unequal normalised encodings fails the run.",
+    "referenceIntegrity": "Every file and typescript-source diagnostic path is in the TypeScript denominator. Every auxiliary-blob diagnostic path is the successfully read initiating blob and is present in auxiliaryReads; relatedPath is absent or one safe normalised repo-relative target. Direct auxiliary-read refusals and failures are typed internal results or fatal run failures, never published diagnostics and never diagnostic subjects. No diagnostic from a contract-held producer slice may be emitted. Every clone member path is parsed. Every resolved-file target and resolution configPath is a pinned-tree regular path; every workspace-package configPath belongs to an admitted workspace package.json. Recompute every graph node id, label, and path from its kind-specific identity components and every edge source, target, status, evidencePaths, and id from the exact endpointConstruction recipe for its producer; the endpointConstruction keys exactly equal the producer-token union. Node and edge ids are unique, every edge endpoint resolves, occurrenceCount and evidence-path aggregation equal the underlying producer observations, and no recipe-ineligible edge exists. Recompute every ownership-chain stage from the exact configured selector, including non-empty prefix aggregation; chain ids, zero/multiple missing-evidence tokens, mandatory MCP composition-registration evidence, and derived edge indexes must equal that recomputation, with exactly one distinct chain for each configured archetype. The derived evidence graph arrays are an exact value copy of the raw graph arrays. All declarations, shapes, matches, graph observations, and diagnostics follow the frozen ordering.",
+    "heldOutAuditClosure": "Every selected classification path has exactly one correct-classification or incorrect-classification judgement and lists every detector whose expected signal was missed. rejectedDetectorIds is exactly the union of repetition detectors with a zero denominator or precision below 70 percent, detectors appearing in missedDetectorIds on more than one path within any classification stratum, and detectors blocked by an unmet positive control; acceptedDetectorIds is the complementary frozen detector universe.",
+    "executableProofClosure": "Generation and packed-consumer stages occur exactly once in frozen order. A passed or completed proof has every required non-null artefact, command, and successful stage; a stopped proof names the first failed or blocked stage, marks all later stages not-run, and omits all later artefacts. Packed-consumer argv is cross-checked against lockfile, fetch, offline-install, script, release-age, and CI policy; raw tar members are canonicalised exactly by packedMemberPathPolicy, wildcard exports are expanded only against those canonical regular members, result subpath/condition pairs exactly equal the concrete export denominator and are unique, requiredRuntimeConditions is exactly every condition except types, runtimeRequired equals that membership, and every required runtime result is resolved-and-exercised. Every command environment and phase network policy equals proof-env-v1, including NODE_ENV=production only for tsx-bundle-served-ui run-one and run-two and NODE_ENV=test otherwise.",
+    "candidateAndProposalClosure": "A candidate may reference only files whose verificationOnly state is absent; verification, ambiguous-verification, and unprobed groups remain raw observations and never candidate rows. An undetermined candidate must have decisionRelevant=false; any decisionRelevant undetermined row rejects completion. proposalEligible candidates have no exclusion reasons, a proposal disposition, and compliant or not-applicable placement. Every other candidate has at least one exact exclusion reason. Proposal candidate ids are unique, exist, are eligible, and have the identical structured intervention locus and placement conformance. Every evidence gap must have completionBlocking=false; a true value rejects completion rather than publishing a complete review.",
+    "totals": "Recompute construct totals and type-truth totals from per-file counts. For each construct, provenance buckets use the file's exact provenance; verificationOnly receives files whose verificationOnly delivery state is present, nonVerification receives absent, and verificationUnresolved receives ambiguous or not-probed. The five provenance buckets sum to total independently from the three verification buckets, which also sum to total. Type-truth totals contain id and total count only. Require exact equality and recompute pathsSha256 from the ordered denominator.",
+    "pathsSha256": "SHA-256 over the UTF-8 domain tag typescript-estate-paths-v1 followed by NUL, then each already validated ordered denominator path as an unsigned 64-bit big-endian UTF-8 byte length followed by its exact UTF-8 bytes. There is no separator or terminal byte after the final framed path."
+  },
+  "implementationIdentity": {
+    "domain": "Define executingCheckoutRoot solely from the canonical realpath of the executing identity module file URL: it must have the exact repo-relative suffix agent-tools/dist/src/typescript-estate/implementation-identity.js, be a real regular .js leaf, and have no symlink path component below the derived root. executingDistRoot is exactly executingCheckoutRoot/agent-tools/dist and owns the local executable closure; executingCheckoutRoot owns agent-tools/package.json and pnpm-lock.yaml. Neither root is derived from invokingGitRoot, and they may intentionally differ. Start closure at executingDistRoot/src/bin/agent-tools.js. Parse each included .js byte sequence with the reported TypeScript version as JavaScript with zero parse diagnostics and collect module specifiers from ImportDeclaration, ExportDeclaration, and import() calls. A non-literal import() refuses identity. Classify literal specifiers in this order: ./ or ../ is local; a literal accepted byte-for-byte by the exact syntax-only moduleResolution.nodeBuiltinResolver predicate is external without consulting runtime membership; a literal accepted by the exact moduleResolution.externalPackageResolver grammar is external; every other form refuses. For a local specifier require no NUL, backslash, query, or fragment, resolve POSIX-lexically from the importer, require containment in executingDistRoot, include exact bytes, and recurse when the target ends .js. Before and after every identity read, lstat every component below executingCheckoutRoot and reject a symlink or non-directory ancestor; require candidate realpath to equal its lexical path and remain under the owning root; open the leaf O_RDONLY|O_NOFOLLOW, fstat it as regular, read from that descriptor, then repeat the component and realpath checks before accepting bytes. Apply the same read rule to the executing identity module, entrypoint, every recursive member, agent-tools/package.json, and pnpm-lock.yaml. Missing, drifting, escaping, unreadable, nonregular, or invalid-JavaScript members refuse identity. The manifest and lock represent declared external dependencies; installed external package bytes and the Node runtime are not byte-proved and the report must not claim otherwise.",
+    "ordering": "Repo-relative paths sorted by ascending UTF-8 byte sequence.",
+    "framing": "SHA-256 over UTF-8 domain tag typescript-estate-implementation-v1 followed by NUL, then for each file: unsigned 64-bit big-endian path-byte length, path UTF-8 bytes, unsigned 64-bit big-endian content length, and exact file bytes.",
+    "reportedMembers": "Emit every derived local closure member plus agent-tools/package.json and pnpm-lock.yaml exactly once, with repo-relative path, byte count, and individual SHA-256 alongside aggregate implementationSha256. Also emit exact Node and TypeScript versions. Semantic validation reruns closure discovery and requires the ordered emitted member paths and bytes to equal it exactly."
+  },
+  "serialisation": {
+    "canonicalJsonVersion": "lexicographic-object-keys-v1",
+    "objectKeys": "Recursively sort object keys by ascending JavaScript UTF-16 code-unit comparison. Preserve already validated array order.",
+    "encoding": "JSON.stringify with two-space indentation, LF line endings, UTF-8 encoding, and exactly one terminal LF. Reject non-finite numbers and undefined values before serialisation.",
+    "publication": "Validate strict schema and semantic invariants on the in-memory value, canonicalise once, enforce maxSerializedOutputBytes on the exact UTF-8 bytes, then pass those same bytes to atomic publication."
+  },
+  "heldOutAudit": {
+    "classificationSelection": "Before the full detector run, assign tracked paths to the first matching classification stratum and order each stratum by SHA-256(seed, NUL, repo-relative path). Freeze the first perStratum paths. Every selected path receives exactly one manual correct-or-incorrect classification judgement plus an explicit list of every detector whose expected signal was missed.",
+    "repetitionSelection": "Separately preselect only paths whose frozen verificationOnly state is absent, using generated-non-verification and authored-non-verification strata. For each repetition detector, judge every qualifying all-non-verification group intersecting this sample; no verification group enters the precision denominator or candidate population.",
+    "seed": "typescript-estate-review-held-out-v3",
+    "perStratum": 10,
+    "strata": [
+      {
+        "id": "generated-non-verification-path",
+        "membership": "Path is under one generatedOutputRules pathPrefix and verificationOnly is absent. Included in both classification and repetition samples."
+      },
+      {
+        "id": "verification-path",
+        "membership": "Path has verificationOnly present or ambiguous and is not in generated-non-verification-path. Included only in the classification sample."
+      },
+      {
+        "id": "authored-non-verification-path",
+        "membership": "Path has authored provenance and verificationOnly absent. Included in both classification and repetition samples."
+      },
+      {
+        "id": "unresolved-delivery-path",
+        "membership": "Path is in no earlier stratum because verificationOnly is not-probed. Included only in the classification sample and never in candidate support."
+      }
+    ],
+    "positiveControls": [
+      {
+        "path": "packages/sdks/oak-sdk-codegen/code-generation/codegen.ts",
+        "expectedObservations": ["role:generator", "module-declarations:min-1"]
+      },
+      {
+        "path": "packages/sdks/oak-curriculum-sdk/src/index.ts",
+        "expectedObservations": ["provenance:authored", "module-declarations:min-1"]
+      },
+      {
+        "path": "packages/sdks/graph-corpus-sdk/src/curriculum/index.ts",
+        "expectedObservations": ["provenance:authored", "module-declarations:min-1"]
+      },
+      {
+        "path": "agent-tools/src/bin/agent-tools-cli.ts",
+        "expectedObservations": ["role:cli-hook-operator", "module-declarations:min-1"]
+      },
+      {
+        "path": "apps/oak-curriculum-mcp-streamable-http/widget/src/main.tsx",
+        "expectedObservations": ["role:tsx-syntax-source", "module-declarations:min-1"]
+      },
+      {
+        "path": "apps/oak-curriculum-mcp-streamable-http/src/generated/widget-html-content.ts",
+        "expectedObservations": ["provenance:generated-confirmed", "provenance-signal:producer-output-rule"]
+      },
+      {
+        "path": "apps/oak-curriculum-mcp-streamable-http/src/handlers.ts",
+        "expectedObservations": ["runtime-registration:registerTool"]
+      },
+      {
+        "path": "apps/oak-curriculum-mcp-streamable-http/src/resource-registrations.ts",
+        "expectedObservations": ["runtime-registration:registerResource"]
+      },
+      {
+        "path": "apps/oak-curriculum-mcp-streamable-http/src/register-widget-resource.ts",
+        "expectedObservations": ["runtime-registration:registerAppResource"]
+      }
+    ],
+    "classificationJudgements": ["correct-classification", "incorrect-classification"],
+    "repetitionJudgements": ["same-responsibility-and-mechanism", "purposeful-similarity-different-responsibility", "detector-noise"],
+    "acceptance": "For each repetition detector, the precision denominator is every qualifying all-non-verification group intersecting the separate repetition sample. A zero-group denominator is inconclusive and rejects that detector from candidate support. Otherwise at least 70 percent must be same-responsibility-and-mechanism; purposeful similarity and detector noise both count against precision. Recall is not advisory: more than one missed signal in any classification stratum rejects the affected detector until the pre-run contract is refrozen. Every selected path, every qualifying group, and every positive-control expectation is represented explicitly in evidence; an unmet control blocks the affected detector or archetype assertion."
+  }
+}

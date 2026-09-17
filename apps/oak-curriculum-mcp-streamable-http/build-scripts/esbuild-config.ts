@@ -12,9 +12,10 @@
  *
  * Build-contract invariants previously encoded by
  * `tsup.config.base.ts → createAppConfig(...)` and the app's
- * `tsup.config.ts`. Both files are deleted by this lane (§L-8 WS2.3);
- * `tsup.config.base.ts` survives at the repo root for other apps and
- * libraries that have not migrated to esbuild.
+ * `tsup.config.ts`. Both files were deleted by that lane (§L-8
+ * WS2.3); the shared tsup factories now live in
+ * `@oaknational/workspace-config/tsup` for the apps and libraries
+ * that have not migrated to esbuild.
  *
  * Deliberate divergence from the tsup baseline:
  *
@@ -71,11 +72,6 @@ export function createMcpEsbuildOptions(
     target: 'es2022',
     sourcemap: 'external',
     packages: 'external',
-    // The baked landing page is imported as a string by the deploy graph
-    // (`src/app/landing-page-baked.ts`): `text` inlines it at bundle time,
-    // so the deployed function carries the page with no runtime filesystem
-    // dependency (the function environment has no `.generated/` artefact).
-    loader: { '.html': 'text' },
     outdir: 'dist',
   };
 }

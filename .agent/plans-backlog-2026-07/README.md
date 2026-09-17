@@ -192,7 +192,7 @@ When adding, promoting, or retiring plan work:
    treated as executable until promoted.
 6. Before archiving, extract settled durable documentation to ADRs, `/docs/`,
    collection READMEs, or other permanent homes, then apply
-   [consolidate-docs](../skills/consolidate-docs/SKILL-CANONICAL.md).
+   [consolidate-docs](../skills/knowledge/consolidate-docs/SKILL-CANONICAL.md).
 
 ---
 

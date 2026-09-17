@@ -8,6 +8,13 @@
     "OAK_API_KEY",
     "LOG_LEVEL",
     "OAK_API_URL",
+    // Machine-local browser-store location (cloud images preset
+    // /opt/pw-browsers; unset locally). Passed through — never hashed — so
+    // Playwright inside test:ui/e2e tasks resolves the same store the
+    // session installed into; hashing it (globalEnv) would needlessly split
+    // the remote cache between local and cloud runs over a path that never
+    // enters any output (browser SEMANTICS are pinned by the lockfile).
+    "PLAYWRIGHT_BROWSERS_PATH",
     "CLERK_PUBLISHABLE_KEY",
     "CLERK_SECRET_KEY",
     "DANGEROUSLY_DISABLE_AUTH",
@@ -39,7 +46,7 @@
         "**/scripts/**/*.ts",
         "**/schema-cache/**"
       ],
-      "env": ["SDK_CODEGEN_MODE", "VERCEL", "VERCEL_GIT_COMMIT_SHA", "VERCEL_DEPLOYMENT_ID"],
+      "env": ["SDK_CODEGEN_MODE"],
       "passThroughEnv": ["OAK_API_KEY"]
     },
     "build": {
@@ -49,7 +56,6 @@
       "inputs": [
         "$TURBO_DEFAULT$",
         "$TURBO_ROOT$/tsconfig.base.json",
-        "$TURBO_ROOT$/tsup.config.base.ts",
         "tsconfig.json",
         "tsconfig.build.json",
         "tsup.config.ts",
@@ -65,7 +71,6 @@
       "inputs": [
         "$TURBO_DEFAULT$",
         "$TURBO_ROOT$/tsconfig.base.json",
-        "$TURBO_ROOT$/tsup.config.base.ts",
         "tsconfig.json",
         "tsconfig.build.json",
         "tsup.config.ts",
@@ -77,31 +82,36 @@
     "@oaknational/oak-curriculum-mcp-streamable-http#build": {
       "dependsOn": ["^build"],
       "cache": true,
-      // The bake writes these values into .generated/landing-page.html, so
-      // they must be hash-bearing (a cache hit across deployments would
-      // otherwise replay another environment's baked host) AND visible under
-      // strict envMode (APP_VERSION_OVERRIDE is in no default passthrough).
-      // Same reasoning as sdk-codegen's env block above.
-      "env": ["VERCEL_ENV", "VERCEL_URL", "VERCEL_PROJECT_PRODUCTION_URL", "APP_VERSION_OVERRIDE"],
-      "outputs": [
-        "dist/**",
-        ".tsup/**",
-        ".generated/**",
-        "public/oak-ds/**",
-        "public/oak-assets/**"
-      ],
+      // Hash-bearing AND visible under strict envMode (APP_VERSION_OVERRIDE
+      // is in no default passthrough). Same reasoning as sdk-codegen's env
+      // block above: the Sentry release identity these feed is stamped into
+      // the bundle at build time, so a cache hit that replayed another
+      // environment's value would misattribute every event (ADR-163).
+      //
+      // Three variables left this list on 2026-08-20 with the landing-page
+      // bake that read them: CANONICAL_HOST, VERCEL_URL and
+      // VERCEL_PROJECT_PRODUCTION_URL. They were here because the bake wrote
+      // the served page's own origin into the artefact, and MCP-516 is why
+      // CANONICAL_HOST in particular was load-bearing: it was set correctly
+      // two days before the defect surfaced, but the task hash did not change
+      // when it was added, so a cached bake made without it was replayed —
+      // and under strict envMode the bake could not read it anyway, falling
+      // through to VERCEL_PROJECT_PRODUCTION_URL, which WAS declared. The
+      // canonical host served a page describing itself as another deployment.
+      // Nothing in the build reads any of the three now; the runtime reads
+      // CANONICAL_HOST from the environment per request, which was never this
+      // task's concern.
+      "env": ["VERCEL_ENV", "APP_VERSION_OVERRIDE"],
+      "outputs": ["dist/**", ".tsup/**", "public/oak-ds/**", "public/oak-assets/**"],
       "inputs": [
         "$TURBO_DEFAULT$",
         "$TURBO_ROOT$/tsconfig.base.json",
-        "$TURBO_ROOT$/tsup.config.base.ts",
-        // The bake stamps the root package version into the page's
-        // app-version meta (ROOT_PACKAGE_VERSION fallback), so a release
-        // bump must invalidate this task or a cache hit replays the
-        // previous release's version into the artefact.
+        // The build stamps the root package version into the app's build
+        // identity, so a release bump must invalidate this task or a cache
+        // hit replays the previous release's version into the artefact.
         "$TURBO_ROOT$/package.json",
         "tsconfig.json",
         "tsconfig.build.json",
-        "tsup.config.ts",
         "src/**/*.ts",
         "!src/**/*.test.ts",
         "!src/**/*.spec.ts",
@@ -128,32 +138,19 @@
       "dependsOn": ["build"],
       "cache": true,
       "outputs": [],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        "src/**/*.ts",
-        "oak-theme.js",
-        "vitest.config.ts",
-        "$TURBO_ROOT$/vitest.config.base.ts"
-      ]
+      "inputs": ["$TURBO_DEFAULT$", "src/**/*.ts", "oak-theme.js", "vitest.config.ts"]
     },
     "@oaknational/oak-curriculum-mcp-streamable-http#test": {
       // Own `build` (which already implies ^build): suites that construct
-      // the app read the copied design system under public/ at boot, and
-      // src/server.ts's boot-read needs the baked landing-page artefact
-      // under .generated/ — the build is both trees' sole writer, and a
-      // cache hit restores them. The design-system hash legs live on
-      // #build and fold into this task's hash through the dependency, so a
-      // design-system-only edit re-runs these suites rather than replaying
-      // a stale green verdict.
+      // the app read the copied design system under public/ at boot — the
+      // build is that tree's sole writer, and a cache hit restores it. The
+      // design-system hash legs live on #build and fold into this task's
+      // hash through the dependency, so a design-system-only edit re-runs
+      // these suites rather than replaying a stale green verdict.
       "dependsOn": ["build"],
       "cache": true,
       "outputs": [],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        "**/*.ts",
-        "vitest.config.ts",
-        "$TURBO_ROOT$/vitest.config.base.ts"
-      ]
+      "inputs": ["$TURBO_DEFAULT$", "**/*.ts", "vitest.config.ts"]
     },
     "@oaknational/oak-curriculum-hub#build": {
       "dependsOn": ["^build"],
@@ -162,7 +159,8 @@
       "inputs": ["$TURBO_DEFAULT$", "!.next/**", "$TURBO_ROOT$/tsconfig.base.json"]
     },
     "@oaknational/oak-curriculum-hub#type-check": {
-      "dependsOn": ["^build"],
+      // tsconfig includes .next/types/** which this package's own `next build` generates.
+      "dependsOn": ["build", "^build"],
       "cache": true,
       "outputs": [],
       "inputs": ["$TURBO_DEFAULT$", "!.next/**", "$TURBO_ROOT$/tsconfig.base.json"]
@@ -185,7 +183,8 @@
       "inputs": ["$TURBO_DEFAULT$", "!.next/**", "$TURBO_ROOT$/tsconfig.base.json"]
     },
     "@oaknational/oak-design-showcase#type-check": {
-      "dependsOn": ["^build"],
+      // tsconfig includes .next/types/** which this package's own `next build` generates.
+      "dependsOn": ["build", "^build"],
       "cache": true,
       "outputs": [],
       "inputs": ["$TURBO_DEFAULT$", "!.next/**", "$TURBO_ROOT$/tsconfig.base.json"]
@@ -218,13 +217,7 @@
       "dependsOn": ["^build"],
       "cache": true,
       "outputs": [],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        "src/**/*.ts",
-        "src/**/*.json",
-        "vitest.config.ts",
-        "$TURBO_ROOT$/vitest.config.base.ts"
-      ]
+      "inputs": ["$TURBO_DEFAULT$", "src/**/*.ts", "src/**/*.json", "vitest.config.ts"]
     },
     "@oaknational/oak-design-tokens#type-check": {
       "dependsOn": ["^build"],
@@ -271,13 +264,7 @@
       "dependsOn": ["^build", "sdk-codegen"],
       "cache": true,
       "outputs": [],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        "**/*.ts",
-        "vitest.config.ts",
-        "$TURBO_ROOT$/vitest.config.ts",
-        "$TURBO_ROOT$/vitest.config.base.ts"
-      ]
+      "inputs": ["$TURBO_DEFAULT$", "**/*.ts", "vitest.config.ts"]
     },
     "@oaknational/sdk-codegen#type-check": {
       "dependsOn": ["^build", "sdk-codegen"],
@@ -364,12 +351,48 @@
       "dependsOn": ["^build"],
       "cache": true,
       "outputs": [],
+      "inputs": ["$TURBO_DEFAULT$", "**/*.ts", "vitest.config.ts"]
+    },
+    "@oaknational/agent-tools#lint": {
+      // smoke-tests consume this package's own dist by design (built-form smokes), and lint is type-aware over the tsconfig that includes them.
+      "dependsOn": ["build", "^build"],
+      "cache": true,
+      "outputs": [],
       "inputs": [
         "$TURBO_DEFAULT$",
-        "**/*.ts",
-        "vitest.config.ts",
-        "$TURBO_ROOT$/vitest.config.ts",
-        "$TURBO_ROOT$/vitest.config.base.ts"
+        "$TURBO_ROOT$/eslint.config.ts",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "eslint.config.ts",
+        "tsconfig.lint.json",
+        "**/*.ts"
+      ]
+    },
+    "@oaknational/agent-tools#lint:fix": {
+      // Same constraint as #lint: the fix pass is type-aware over tsconfig.lint.json, which includes the dist-consuming smoke-tests.
+      "dependsOn": ["build", "^build"],
+      "cache": false,
+      "outputs": [],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/eslint.config.ts",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "eslint.config.ts",
+        "tsconfig.lint.json",
+        "**/*.ts"
+      ]
+    },
+    "@oaknational/agent-tools#type-check": {
+      // smoke-tests consume this package's own dist by design (../dist/src imports only exist after this package's own build).
+      "dependsOn": ["build", "^build"],
+      "cache": true,
+      "outputs": [],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "tsconfig.json",
+        "tsconfig.build.json",
+        "tsconfig.lint.json",
+        "**/*.ts"
       ]
     },
     "@oaknational/agent-tools#test": {
@@ -380,31 +403,7 @@
         "$TURBO_DEFAULT$",
         "**/*.ts",
         "vitest.config.ts",
-        "$TURBO_ROOT$/vitest.config.ts",
-        "$TURBO_ROOT$/vitest.config.base.ts",
         "$TURBO_ROOT$/runtime-only-scripts/**"
-      ]
-    },
-    "@oaknational/research-evidence#test": {
-      "dependsOn": ["^build"],
-      "cache": true,
-      "outputs": [],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        "**/*.ts",
-        "vitest.config.ts",
-        "$TURBO_ROOT$/vitest.config.ts",
-        "$TURBO_ROOT$/vitest.config.base.ts",
-        "$TURBO_ROOT$/research/web-app-deconstruction/**/*.md",
-        "$TURBO_ROOT$/research/web-app-deconstruction/**/*.json",
-        "$TURBO_ROOT$/research/web-app-deconstruction/**/*.yaml",
-        "$TURBO_ROOT$/research/web-app-deconstruction/**/*.yml",
-        "$TURBO_ROOT$/research/web-app-deconstruction/**/*.js",
-        "$TURBO_ROOT$/research/web-app-deconstruction/**/*.cjs",
-        "$TURBO_ROOT$/research/web-app-deconstruction/**/*.mjs",
-        "$TURBO_ROOT$/research/web-app-deconstruction/**/*.ts",
-        "$TURBO_ROOT$/research/web-app-deconstruction/**/*.tsx",
-        "!$TURBO_ROOT$/research/web-app-deconstruction/**/node_modules/**"
       ]
     },
     "mutate": {
@@ -415,9 +414,7 @@
         "$TURBO_DEFAULT$",
         "**/*.ts",
         "vitest.config.ts",
-        "$TURBO_ROOT$/vitest.config.ts",
-        "$TURBO_ROOT$/vitest.config.base.ts",
-        "stryker.config.ts",
+        "stryker.config.mjs",
         "$TURBO_ROOT$/stryker.config.base.ts"
       ]
     },
@@ -425,25 +422,13 @@
       "dependsOn": ["^build"],
       "cache": true,
       "outputs": [],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        "widget/**/*.ts",
-        "widget/**/*.tsx",
-        "vitest.widget.config.ts",
-        "$TURBO_ROOT$/vitest.config.base.ts"
-      ]
+      "inputs": ["$TURBO_DEFAULT$", "widget/**/*.ts", "widget/**/*.tsx", "vitest.widget.config.ts"]
     },
     "test:e2e": {
       "dependsOn": ["build"],
       "outputs": [],
       "cache": true,
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        "e2e-tests/**/*.ts",
-        "vitest.e2e.config.ts",
-        "$TURBO_ROOT$/vitest.e2e.config.base.ts",
-        "$TURBO_ROOT$/test.setup.no-network.ts"
-      ]
+      "inputs": ["$TURBO_DEFAULT$", "e2e-tests/**/*.ts", "vitest.e2e.config.ts"]
     },
     "@oaknational/agent-tools#test:e2e": {
       "dependsOn": ["build"],
@@ -453,8 +438,6 @@
         "$TURBO_DEFAULT$",
         "e2e-tests/**/*.ts",
         "vitest.e2e.config.ts",
-        "$TURBO_ROOT$/vitest.e2e.config.base.ts",
-        "$TURBO_ROOT$/test.setup.no-network.ts",
         "$TURBO_ROOT$/.codex/hooks/practice-session-identity.mjs",
         "$TURBO_ROOT$/package.json",
         "$TURBO_ROOT$/runtime-only-scripts/**"

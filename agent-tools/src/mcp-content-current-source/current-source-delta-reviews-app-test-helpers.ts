@@ -16,8 +16,10 @@ import {
 } from './current-source-delta-review-helpers.js';
 
 export const APP_TEST_HELPERS_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview>> = {
+  // MCP-634: gains an optional `vercelHostnames` override so security-config
+  // tests can exercise the deployed shape.
   'apps/oak-curriculum-mcp-streamable-http/src/test-helpers/auth-error-test-helpers.ts': excluded(
-    '1f09358427ac9ca4f2f0027636515abcfd123c64ae6bf468574c8d767fcccd6c',
+    '5537dc8b2ec64452aae002e87f455e39e8664e8c3353709f5d2001608c3f93d6',
     TEST_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/test-helpers/fakes-mcp-server.ts': excluded(
@@ -43,8 +45,10 @@ export const APP_TEST_HELPERS_DELTA_REVIEWS: Readonly<Record<string, CurrentSour
     '31f49ec350f174012d723eb88b9486086c0bcd82347813b3370082d1033fec8c',
     TEST_ONLY,
   ),
+  // PR #20: copyCommittedRootStatics skips dot-prefixed transients so the
+  // fixture cannot race copy-oak-ds staging/retired dirs (ENOENT class).
   'apps/oak-curriculum-mcp-streamable-http/src/test-helpers/static-root-fixture.ts': excluded(
-    '6350420bb5d4e36cbca9264a0a7b704ebb3dd6ce57027e6073bc60f007447a8d',
+    '78b57eba221092500c36905578dbd3cfddf1087224ab2d1ab1736914b59a07b8',
     TEST_ONLY,
   ),
   // MCP-411 (ADR-219): the limiter DI fakes deleted with the in-code

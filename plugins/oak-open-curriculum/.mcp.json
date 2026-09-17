@@ -1,8 +1,8 @@
 {
   "mcpServers": {
-    "oak-curriculum": {
+    "oak-open-curriculum": {
       "type": "http",
-      "url": "https://curriculum-mcp-alpha.oaknational.dev/mcp"
+      "url": "https://mcp.thenational.academy/mcp"
     }
   }
 }

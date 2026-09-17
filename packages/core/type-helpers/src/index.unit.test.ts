@@ -32,6 +32,13 @@ describe('typeSafeKeys', () => {
     const keys = typeSafeKeys(sample);
     expect(keys).toEqual(['a', 'b', 'c']);
   });
+
+  it('returns own keys only, excluding inherited enumerable properties', () => {
+    const withInherited: { readonly own: 1 } = { own: 1 };
+    Object.setPrototypeOf(withInherited, { inherited: 'from-prototype' });
+
+    expect(typeSafeKeys(withInherited)).toEqual(['own']);
+  });
 });
 
 describe('typeSafeValues', () => {

@@ -1,1 +1,1 @@
-export { baseTestConfig as default } from '../../../vitest.config.base';
+export { baseTestConfig as default } from '@oaknational/workspace-config/vitest';

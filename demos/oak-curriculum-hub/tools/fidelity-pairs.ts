@@ -10,6 +10,7 @@
  * fidelity-register.json (owner-editable); this module only declares what is
  * comparable and how.
  */
+import { buildPairingMapSchema } from '@oaknational/fidelity-review/pairing-schema';
 import { z } from 'zod';
 
 /**
@@ -31,7 +32,7 @@ const PairKindSchema = z.enum([
 ]);
 
 const PairSchema = z
-  .object({
+  .strictObject({
     /** Stable pair identifier — the disposition register keys findings on it. */
     id: z.string().regex(/^[a-z0-9-]+$/),
     kind: PairKindSchema,
@@ -55,21 +56,10 @@ const PairSchema = z
     message: 'section-element pairs need the sectionId their deep link drives',
   });
 
-export const PairingMapSchema = z
-  .object({
-    version: z.literal(1),
-    pairs: z.array(PairSchema).min(1),
-    /** Routes with no canonical target — absence is a recorded fact. */
-    exemptSurfaces: z.array(
-      z.object({
-        route: z.string().min(1),
-        reason: z.string().min(1),
-      }),
-    ),
-  })
-  .refine((map) => new Set(map.pairs.map((pair) => pair.id)).size === map.pairs.length, {
-    message: 'pair ids must be unique',
-  });
+/** The shared map-level wrapper around this app's own pair schema —
+ *  version literal, non-empty pairs, recorded exempt surfaces, unique
+ *  pair ids (the fidelity-review package's pairing-schema module). */
+export const PairingMapSchema = buildPairingMapSchema(PairSchema);
 
 export type FidelityPair = z.infer<typeof PairSchema>;
 export type PairingMap = z.infer<typeof PairingMapSchema>;

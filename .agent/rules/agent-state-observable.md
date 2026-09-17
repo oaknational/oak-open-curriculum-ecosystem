@@ -37,6 +37,19 @@ When agent A has dispatched a sub-agent (code-expert, type-expert, etc.) and the
 
 When agent A has surfaced an owner-class question via `AskUserQuestion` or directed comms and is waiting on response, A emits a brief broadcast naming the question, the surface (chat / directed comms), and the expected continuation.
 
+### The owner's glance surfaces (owner-worded, 2026-07-31 and 2026-08-01)
+
+The owner is an observer of agent state too, and his named glance
+surfaces are the **harness TODO list** and the **heartbeat cycle
+label**. Seats maintain a live harness TODO list and move it — and the
+heartbeat `--current-cycle-label` — at REAL phase transitions within a
+slice (build / review-round / PR-open / settled), not once per slice:
+a surface frozen for hours reads as no progress regardless of the work
+underneath. Owner's framing, verbatim substance: the per-session
+glance surface is the harness todo list, "and ours are empty or
+stale"; the ask is visibility, explicitly not speed
+(`no-speed-pressure` still governs pace).
+
 ### Holding the gate-runner role
 
 Per the check-singleton-per-window invariant: when agent A is running `pnpm check` (or another whole-repo gate sweep), A emits a broadcast naming the gate, the started-at timestamp, and the expected finish window. Other agents observe and do not start a parallel run.

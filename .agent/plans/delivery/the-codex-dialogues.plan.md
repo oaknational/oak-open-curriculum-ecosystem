@@ -3,33 +3,29 @@ id: the-codex-dialogues
 node_type: delivery
 name: "The Codex dialogues — direct cross-vendor reflective dialogue for a live seat"
 overview: "A live Claude seat opens a bounded multi-turn reflective dialogue with a Codex interlocutor over a direct MCP connection to a read-only-defaulted codex mcp-server (a launch default, not an enforced cap — the restriction is skill discipline); one structured close record per dialogue — emitted as a comms event and conserved in the tracked trial tally — is the analysis record. First step toward invoking third-party agents as ordinary in-session capability."
-status: sketch
-ratified_by: null
-ratified_date: null
-ratified_where: null
+status: ratified
+ratified_by: 'Jim Cresswell'
+ratified_date: 2026-08-01
+ratified_where: 'Decision cards, Director session 52841f, 2026-08-01 (recorded in §Direction and in the former mechanical gate below); stamp completed 2026-08-07 when the ticket-existence obligation was removed (plan-node schema §2026-08-07 amendment, PR #817)'
 serves: agent-platform-citizenship
 impact_areas:
   - practice-and-estate
 tickets: []
 depends_on: []
-owner_gates:
-  - awaiting: external-input
-    clears_when: >-
-      MECHANICAL ONLY — the substance is RATIFIED by owner word 2026-08-01
-      (decision cards, Director session 52841f): the direct-first v1
-      shape, the close-event record, the theory-of-change structures,
-      and the trial values — with the concrete decision rule inscribed
-      in §Theory of change item 2 (12 dialogues or 14 days, whichever
-      first; fewer than 3 position-changed closes fires the two-armed
-      falsifier review) — are all his word, alongside the serves
-      correction and the agent-platform-citizenship widening. This gate
-      clears when the plan's ticket mints — the anchored subtree
-      requires one at status ratified, and Linear is embargoed until
-      2026-08-10 08:00 London — at which point status flips to ratified
-      with the 2026-08-01 word as its record. No decision re-opens; the
-      gate awaits the external condition only.
-    expires: 2026-08-15
-last_updated: 2026-08-01
+owner_gates: []
+# The former mechanical gate (its record, conserved): the substance was
+# RATIFIED by owner word 2026-08-01 (decision cards, Director session
+# 52841f) — the direct-first v1 shape, the close-event record, the
+# theory-of-change structures, and the trial values, with the concrete
+# decision rule inscribed in §Theory of change item 2 (12 dialogues or
+# 14 days, whichever first; fewer than 3 position-changed closes fires
+# the two-armed falsifier review), alongside the serves correction and
+# the agent-platform-citizenship widening. The gate held ONLY the
+# ticket mint (the removed anchoring rule + the since-lifted Linear
+# embargo); both premises dissolved, so the stamp completed 2026-08-07
+# with the 2026-08-01 word as its record. A visibility ticket may still
+# be minted as working practice.
+last_updated: 2026-08-07
 ---
 
 # The Codex dialogues — direct cross-vendor reflective dialogue for a live seat
@@ -414,14 +410,12 @@ the tools), so the probe is the durable contract evidence.
 
 ## Delivery
 
-Ticket first, embargo-aware, and binding at RATIFICATION: this plan
-serves `agent-platform-citizenship`, an anchored subtree (the strategic
-node names MCP-150/154/155/156), so the anchoring-consistency validator
-requires a ratified delivery plan here to name a ticket — ratification
-itself, not just implementation, needs one. Linear is out of bounds until 2026-08-10
-08:00 London (owner ruling 2026-08-01; exceptions are one-off owner
-statements only), so the plan stays `sketch` until the embargo lifts or
-an owner one-off mints the ticket; `tickets: []` stands meanwhile.
+Tickets are optional visibility metadata (plan-node schema §2026-08-07
+amendment: plan validity is repo-internal — the former
+anchoring-consistency rule is removed, and the 2026-08-01 Linear
+embargo lifted 2026-08-06). `tickets: []` is a valid resting state at
+every status; when this lane's work is tracked in Oak's Linear, mint a
+thin pointer ticket as working practice and name it here.
 
 - PR 1 (single story): the `.mcp.json` registration, the canonical
   skill + generated adapters, the runnable probe script with its

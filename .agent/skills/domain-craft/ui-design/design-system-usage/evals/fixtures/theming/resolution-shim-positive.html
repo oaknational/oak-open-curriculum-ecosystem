@@ -1,0 +1,50 @@
+<!-- POSITIVE control for the CSS arm, pinning the false positive that
+     nearly published a wrong finding.
+
+     `[data-theme='system']` appearing in CSS is NOT automatically a defect.
+     The design system's own stylesheet carries exactly the rules below: a
+     `color-scheme` declaration so the browser resolves, and icon filters
+     inside a `prefers-color-scheme` media block. That is the resolution
+     MECHANISM DDR-004 requires, not a fifth palette.
+
+     An earlier version of grade-theming.ts matched any `data-theme='x'`
+     text, so it read these copied design-system rules as an implementation
+     "minting a system tree" and flagged a conforming artefact. The script
+     below writes the `system` choice through to data-theme — exactly what
+     the shipped runtime (oak-theme.js) does — so the copied shim is
+     reachable. All three assertions must PASS here.
+
+     Compare with system-palette-tree-negative.html, which gives `system`
+     its own palette — the tree DDR-004 forbids. -->
+<select id="theme-choice">
+  <option value="light">Light</option>
+  <option value="dark">Dark</option>
+  <option value="system">Match my device</option>
+  <option value="high-contrast">High contrast</option>
+  <option value="colour-safe">Colour safe</option>
+</select>
+<style>
+  :root[data-theme='light'] {
+    color-scheme: light;
+  }
+  :root[data-theme='dark'] {
+    color-scheme: dark;
+  }
+  :root[data-theme='system'] {
+    color-scheme: light dark;
+  }
+  @media (prefers-color-scheme: dark) {
+    [data-theme='system'],
+    :root[data-theme='system'] {
+      --filter-icon: invert(1);
+    }
+  }
+</style>
+<script>
+  const root = document.documentElement;
+  document.getElementById('theme-choice').addEventListener('change', (event) => {
+    const choice = event.target.value;
+    localStorage.setItem('oak-theme-choice', choice);
+    root.setAttribute('data-theme', choice);
+  });
+</script>

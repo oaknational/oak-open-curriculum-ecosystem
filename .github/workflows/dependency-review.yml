@@ -4,7 +4,7 @@ name: Dependency Review
 # against the GitHub Advisory Database and fails on high+ severity. Today such
 # vulnerabilities are only caught post-merge by Dependabot alerts.
 #
-# ADVISORY by design — NOT a required status check in the main ruleset (ADR-204),
+# ADVISORY by design — NOT a required status check (ADR-204),
 # so it surfaces findings (and a PR comment on failure) without blocking merge.
 #
 # It calls GitHub's OWN dependency-graph API via the run's GITHUB_TOKEN on the
@@ -16,7 +16,7 @@ name: Dependency Review
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, engraph]
 
 # Cancel superseded runs for the same PR ref. A per-workflow group (not shared
 # with CI) so this advisory gate runs in parallel with the CI workflow rather

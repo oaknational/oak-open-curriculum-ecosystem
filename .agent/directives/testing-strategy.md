@@ -115,6 +115,42 @@ Formal home: [`validation-strategy.md`](validation-strategy.md) (seeded
   silent on upstream content drift (trigger artefact: the MCP-462
   differential examples test that replaced three value-pinned
   tests).
+- **Pinning an absence is not proof** (owner doctrine 2026-08-19,
+  verbatim: "tests should prove behaviour, not configuration, pinning
+  a lack of something does not provide value"): an assertion that a
+  field, property, or capability is ABSENT from a configuration or
+  registration object (`not.toHaveProperty`, negative config pins)
+  proves no behaviour and blocks the surface's deliberate evolution.
+  The designed-sentinel carve-out does not extend to absence — a
+  sentinel attaches a named decision to a VALUE changing, never to a
+  key not existing. A deliberate absence is recorded in the owning
+  ADR or plan; where the absence has observable consequences, prove
+  those consequences behaviourally through the public boundary.
+  Negative-space tests that DRIVE the boundary and observe an
+  outcome (a guard refusing an activation, an error path's observable
+  result) are behaviour proofs, not absence pins — the discriminator
+  is whether the test exercises behaviour or inspects configuration.
+  (Trigger instance: an integration test pinning
+  `not.toHaveProperty('outputSchema')` on a captured registration
+  config.)
+- **Assert relations to injected inputs, never literals of our own
+  configuration** (owner doctrine 2026-08-26, verbatim core: "tests
+  are for proving product behaviour not configuration"): a design
+  decision written as a literal cannot catch its own mistake — three
+  PRM tests pinned `authorization_servers: [selfOrigin]` and so could
+  never have caught the served-metadata lie that broke production,
+  while the same invariant written as a RELATION to the injected
+  upstream fixture ("the issuer a client holds equals the `iss` it
+  will receive") discriminated, and its mutation checks bit exactly as
+  enumerated (2026-09-01, MCP-655). Two corollaries: a cure with NO
+  observable behaviour cannot have a behavioural test, and that
+  absence is the sign to drop the cure or record it in the owning ADR
+  with an owner-held proof; and a configuration property (a build
+  tool's env passthrough, a package manager's default resolution) is
+  proven by exercising its own boundary once at cure time and
+  guaranteed by construction (declarative config, fail-fast hook,
+  preflight probe) — never narrated as proven by a product suite
+  passing over it.
 - **No useless tests** - Each test must prove something useful
   about the product code. If a test is only testing the test or
   mocks, delete it.
@@ -188,6 +224,20 @@ Formal home: [`validation-strategy.md`](validation-strategy.md) (seeded
   violates the principle of using the right tool for the job. Use
   the right tool: ESLint for boundary enforcement, Playwright for
   browser testing, vitest for runtime logic.
+  ONE named sanctioned shape (recorded 2026-08-07 with the F-112
+  push-path landing; the shape the F-112 commit-path cure
+  established — see the `file-backed-stdio-for-spawned-gate-children`
+  pattern): a SPAWN-TOPOLOGY CONTRACT test — where the behaviour
+  under test IS a real child's stdio topology or exit/signal
+  fidelity and no DI seam below it can carry the proof (a fake would
+  model libuv engine semantics, the "double models the engine"
+  trap) — may spawn a bounded, deterministic, synthetic child
+  (`node -e`, literal env, no shell), homed in the workspace's
+  integration-test directory, kept apart from the seam-shaped suite
+  (worked instance: `agent-tools/tests/`). The seam-shaped remainder
+  of any such suite stays spawn-free via ADR-078 injection;
+  composition with real binaries belongs at smoke tier.
+  `test-immediate-fails.md` item 8 points here.
 
 - **No reading the `.agent/` knowledge substrate in tests** - Tests MUST
   NOT read from `.agent/**/*` for any reason (owner doctrine 2026-06-22,
@@ -212,6 +262,18 @@ The same disease in existing suites: DECORATIVE assertions — asserted
 values that never enter the exercised run — read as coverage while proving
 nothing (a privacy-surface review found six under a README claiming the
 behaviour was tested); the mutation check exposes them identically.
+
+Two guard shapes that read as biting and do not. **A poll on an absence
+passes before the event lands**: `expect.poll` returns on its first pass,
+so "the stale marker is absent" was true BEFORE the held response resolved
+and the test could not fail on its own bug; regression guards wait on a
+POSITIVE post-event signal (the stale link's REMOVAL), and the calibration
+is red-proof — revert the cure in place, rebuild, watch the exact assertion
+time out, restore byte-identical (2026-08-18). **A repro must fail for the
+RIGHT reason**: a crash-window fixture that crashed at the pre-read was
+green by accident; the cure landed the failure inside the true window and
+pinned the matcher to the window's own signature (`EACCES` at the queue
+path) so a too-early failure cannot green it vacuously (2026-08-18).
 
 ### Test doubles model the boundary, never the engine
 
@@ -603,16 +665,18 @@ running under `pnpm test`, CI timeouts that don't reproduce
 locally).
 
 - **Pattern 1 (preferred)**: Import and re-export
-  `baseTestConfig` from `vitest.config.base.ts` at the repo root.
-  Adjust the relative path per workspace depth.
+  `baseTestConfig` from `@oaknational/workspace-config/vitest` (a
+  declared `workspace:*` devDependency — never a relative path out
+  of the workspace).
 - **Pattern 2 (custom)**: Define a workspace-specific config.
   Non-negotiable: `exclude` MUST contain `'**/*.e2e.test.ts'`.
   `include` SHOULD use explicit conventions (`*.unit.test.ts`,
   `*.integration.test.ts`) not broad `*.test.ts` globs.
 
 Workspaces with `*.e2e.test.ts` files MUST also have
-`vitest.e2e.config.ts` (extending `vitest.e2e.config.base.ts` or
-workspace-specific) and a `test:e2e` script in `package.json`.
+`vitest.e2e.config.ts` (extending `baseE2EConfig` from
+`@oaknational/workspace-config/vitest-e2e`, or workspace-specific)
+and a `test:e2e` script in `package.json`.
 
 ## Test Assertion Placement
 

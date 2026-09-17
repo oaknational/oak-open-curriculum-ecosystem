@@ -32,6 +32,34 @@ curation practice that keeps it navigable by someone who did not write it.
   PROPOSE-AND-AGREE with the owner, in prose — never set unilaterally, never dangled
   (`milestones-propose-agree-never-dangle`).
 
+## The repo holds the knowledge; the ticket holds the work
+
+Owner ruling, 2026-07-31, verbatim substance: *"all long-term important
+information from both runs is recorded in the repo, not just in tickets; the MCP
+Linear project should only contain information relevant to the imminent
+submissions; general work and knowledge stays in the repo."*
+
+The split is by **lifetime and audience**, not by convenience:
+
+- **Repo** — anything whose value outlives the ticket: doctrine, rationale,
+  mechanisms, worked instances, evidence a successor needs. Its homes are the
+  ordinary ones (ADR / PDR / rule / pattern / governance doc / thread record).
+- **Ticket** — the work item: scope, sequencing, blocking posture, and pointers
+  into the repo homes above.
+
+Two consequences that bite in practice. A **delivery-scoped project** (a
+submission, a release) carries only what is relevant to that delivery; general
+engineering knowledge that happens to be discovered inside it is re-homed to the
+repo and the ticket keeps a pointer — a ticket is not a filing cabinet, and a
+project scoped to a deadline is not an archive. And the ticket tracker is an
+**external system**, so anything load-bearing that lives only there is outside
+every repo continuity, review, and consolidation surface: if it matters after the
+ticket closes, it is not recorded until it is in the repo.
+
+This composes with § Scoping's *pointers, never specs* — same discipline, one
+layer out: the ticket points at the evidence, and the evidence lives where it will
+still be found.
+
 ## Relationships — edges are authored, not implied
 
 - **Sequencing lives in blockedBy edges, not in description prose.** Deferred work is legitimate

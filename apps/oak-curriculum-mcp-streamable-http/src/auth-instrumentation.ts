@@ -3,6 +3,8 @@ import type { Logger } from '@oaknational/logger';
 
 type AuthSetupStep =
   | 'auth.disabled.register'
+  | 'canonicalForwardedHeaders.create'
+  | 'canonicalForwardedHeaders.install'
   | 'clerkMiddleware.create'
   | 'clerkMiddleware.install'
   | 'conditionalClerkMiddleware.create'

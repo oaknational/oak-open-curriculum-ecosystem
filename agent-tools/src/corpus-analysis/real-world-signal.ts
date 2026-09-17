@@ -1,7 +1,7 @@
 import type { Result } from '@oaknational/result';
 import { z } from 'zod';
 
-import { parseWithSchema } from './judgment-schemas.js';
+import { parseWithSchema } from '../core/schema-parse.js';
 
 /**
  * Real-world-signal close for the large-corpus-analysis method (v2 design change 4).
