@@ -50,6 +50,7 @@ export const APP_AUTH_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaR
   // refusal; its body mirrors the SDK's own refusal idiom verbatim (a
   // vendor-shaped wire error, no new Oak-authored agent-facing copy) and
   // the C705–C708 metadata rows are untouched by the delta.
+  //
   // MCP-655: the PRM (C706) names the upstream authorization server's
   // issuer instead of this origin, so a PRM-following client holds the
   // issuer the authorization response's `iss` carries (RFC 9207 §2.4);
@@ -61,8 +62,14 @@ export const APP_AUTH_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaR
   // `PROTECTED_RESOURCE_METADATA_PREFIX` (served-origin.ts) instead of
   // restating the path — same routes, same served documents, no content row
   // moves.
+  // MCP-413 re-review: both 2xx metadata documents now leave through
+  // `sendDiscoveryDocument`. The C705–C708 documents are byte-identical to the
+  // pre-change render; what is new is a response HEADER (`Cache-Control`, gated
+  // on a configured canonical origin) and, paired with it, suppression of the
+  // client-supplied `X-Correlation-ID` echo on a storable response. The 403
+  // host-validation branch is deliberately left out of both.
   'apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts': reviewed(
-    'ef2c82b62f2a6fbc3e8cee07350e5ce30ac4afdf0a676cd2be06c5ffabe71c96',
+    '3abdb00fec96e6ecd5cd80ecb7fbb9a3950e6c60a5d9fd1684198aa2577fd09c',
     ['C705', 'C706', 'C707', 'C708'],
   ),
   // MCP-345: rewriteAuthServerMetadata (C408) takes the advertised scopes and
@@ -177,6 +184,15 @@ export const APP_AUTH_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaR
   // and every MCP protocol request still reaches Clerk unchanged.
   'apps/oak-curriculum-mcp-streamable-http/src/conditional-clerk-middleware.ts': excluded(
     '075f96234f69d44fa7429d3d818bf5520f1bd9f54737342cd40805063cd36de4',
+    IMPLEMENTATION_ONLY,
+  ),
+  // MCP-413: what a discovery document is, and the caching policy it is
+  // published under — a line-limit split out of `auth-routes.ts`. Two closed
+  // document shapes plus one `Cache-Control` value and the sender that applies
+  // it. Serves no authored agent-facing content and changes no document body;
+  // the C705–C708 rows stay with the handlers in `auth-routes.ts`.
+  'apps/oak-curriculum-mcp-streamable-http/src/discovery-cache-policy.ts': excluded(
+    'ed311edff6b8a89837ba1b747969f00668f676ffa71a19f9459d6f37f66e2aa9',
     IMPLEMENTATION_ONLY,
   ),
   // MCP-517: mounts the canonical-forwarded-headers shim immediately ahead of
