@@ -20,7 +20,6 @@ import { setupExpressErrorHandler } from '@sentry/node';
 import type { ProductAnalyticsRuntime } from '@oaknational/observability';
 
 import { WIDGET_HTML_CONTENT } from './generated/widget-html-content.js';
-import { BAKED_LANDING_PAGE_HTML } from './app/landing-page-baked.js';
 import { createApp } from './application.js';
 import {
   composeProductAnalyticsRuntime,
@@ -139,10 +138,6 @@ async function loadConfiguredApp(): Promise<NodeRequestHandler> {
     transportObserver: analytics.transportObserver,
     productAnalyticsSink: analytics.sink,
     getWidgetHtml: () => WIDGET_HTML_CONTENT,
-    // The page ships INSIDE this bundle (esbuild text loader): the deploy
-    // filesystem has no .generated/ artefact, so a runtime read is not an
-    // option at this boundary — see src/app/landing-page-baked.ts.
-    getLandingPageHtml: () => BAKED_LANDING_PAGE_HTML,
     setupSentryErrorHandler:
       runtimeConfig.env.SENTRY_MODE === 'sentry' ? setupExpressErrorHandler : undefined,
   });

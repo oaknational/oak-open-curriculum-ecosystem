@@ -9,7 +9,11 @@ amended 2026-05-31 to record the dissolution of `agent-tools/scripts/` — the
 the shell-scope exception from Husky-entry-points-only to
 shell-where-it-significantly-reduces-effort (§Shell-scope exception).
 Amended 2026-08-03 to authorise the repository-root package's pre-install
-runtime tier and its constrained test seam (§4–5).
+runtime tier and its constrained test seam (§4–5); amended 2026-08-04 to
+true §5's coverage claim to the estate's measured configuration and to add
+the `runtime-only-scripts/` structural exception — tests for pre-install
+scripts live in `build-scripts/`, because the promote-to-`src/` cure is
+unavailable to a file that cannot import or build (§4 reference tree, §5).
 **Date**: 2026-04-29
 **Related**:
 [ADR-150](150-continuity-surfaces-session-handoff-and-surprise-pipeline.md) —
@@ -214,9 +218,20 @@ The original application-workspace reference instance is:
 apps/oak-curriculum-mcp-streamable-http/runtime-only-scripts/
 ├── README.md                                           # documents the constraint
 ├── vercel-ignore-production-non-release-build.mjs      # the script itself
-├── vercel-ignore-production-non-release-build.d.mts    # types for the .mjs
-└── vercel-ignore-production-non-release-build.unit.test.mjs
+└── vercel-ignore-production-non-release-build.d.mts    # types for the .mjs
+
+apps/oak-curriculum-mcp-streamable-http/build-scripts/
+└── vercel-ignore-production-non-release-build.unit.test.mjs   # the tests
 ```
+
+The tests sit in `build-scripts/`, not beside the script. Until
+2026-08-04 this tree showed them inside `runtime-only-scripts/`, and
+because no workspace's vitest globs cover that directory (§5), **that
+suite had never run once** — a comprehensive body of assertions about the
+gate guarding every production deploy, silently collecting no results. The
+directory that makes the pre-install constraint visible is the same
+directory that makes tests invisible; keeping the two concerns in one
+place hid the second behind the first.
 
 ESLint and TypeScript treat `runtime-only-scripts/` as a tooling tier
 with relaxed structural rules (matching the existing
@@ -227,9 +242,24 @@ access.
 ### 5. Scripts are outside the unit-test surface — complexity requiring unit tests forces promotion to `src/`
 
 Rule 3 gives workspace scripts _type-check_ coverage, but scripts are
-deliberately **outside the unit-test surface**: the vitest include globs cover
+deliberately **outside the unit-test surface**. This is strategy, not a gap.
+
+**Trued 2026-08-04 — the surface is opt-in per workspace, not a blanket
+"never".** This section previously asserted that the include globs "cover
 `src/**` and `tests/**`, never `scripts/**` (nor `build-scripts/**` /
-`runtime-only-scripts/**`). This is strategy, not a gap.
+`runtime-only-scripts/**`)". Measured against the estate, that was false in
+both directions:
+
+| Directory                 | Actual coverage                                                                                                                                                        |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `scripts/**`              | never covered — the forcing function below governs, unchanged                                                                                                          |
+| `runtime-only-scripts/**` | never covered, in **any** workspace                                                                                                                                    |
+| `build-scripts/**`        | **covered where a workspace opts in** — `apps/oak-curriculum-mcp-streamable-http` (`.ts` and `.mjs`, plus `operations/**`) and `packages/core/build-metadata` (`.mjs`) |
+
+Multiple workspaces carry test files under those directories, and the MCP app
+alone collects a substantial suite from `build-scripts/`. A doctrine that says
+"never" while those tests demonstrably run is not protecting the forcing
+function — it is training readers to disbelieve the section.
 
 The exclusion is a **forcing function**. A script is thin glue — orchestration
 over already-checked library code. If a script grows complex enough to warrant
@@ -241,10 +271,29 @@ surface into `scripts/`."
 
 Consequences:
 
-- A `*.test.ts` / `*.spec.ts` file appearing under a `scripts/` or
-  `build-scripts/` directory is itself a promote-to-`src/` signal, **not** a
-  vitest-include wiring bug. Such a test does not run by design; it must not be
-  "fixed" by widening the include globs.
+- A `*.test.ts` / `*.spec.ts` file appearing under a `scripts/` directory is
+  itself a promote-to-`src/` signal, **not** a vitest-include wiring bug. Such
+  a test does not run by design; it must not be "fixed" by widening the include
+  globs. The same reading applies to a test found under `build-scripts/` in a
+  workspace that has **not** opted that directory into its globs.
+- **The `runtime-only-scripts/` structural exception (added 2026-08-04).** For
+  a §4 file the promote-to-`src/` cure is _unavailable by construction_: the
+  script must run before `pnpm install`, so it cannot import from `src/`, cannot
+  be built, and cannot be reduced to a thin caller over a checked module. There
+  is nothing to promote it to. The forcing function has no force here — it can
+  only forbid, never redirect.
+
+  So for `runtime-only-scripts/` files only: **the tests live in the workspace's
+  `build-scripts/` directory, and that workspace opts `build-scripts/**/*.unit.test.mjs`
+  into its vitest globs.** The script keeps the constrained directory that makes
+  its pre-install nature visible; its tests keep a directory where they actually
+  execute. Do **not** place them beside the script — `runtime-only-scripts/**` is
+  covered by no workspace's globs, so a test there is silently inert.
+
+  This exception is narrow by construction: it is available only to files that
+  genuinely cannot be built or import a dependency. A script that _could_ be
+  TypeScript does not qualify, and §4 already forbids it from living there.
+
 - The vitest include globs are not widened to cover `scripts/**`. Widening them
   would defeat the forcing function and pull thin glue into the checked surface
   where it does not belong.
@@ -330,13 +379,19 @@ required JS compiled from TS; ESM only, no CJS; this shell scope) is
 
 ### Carried forward
 
-- **Test config coupling**: 19 workspaces' `vitest.config.ts` files
-  import from `../../../vitest.config.base.ts`. This is the same
-  shape as the workspace-to-root-script ban but for **configs**,
-  not **scripts**. Whether configs are subject to the same ban is
-  an open question; this ADR does not resolve it. A separate plan
-  (`config-architecture-standardisation-plan.md`)
-  carries it.
+- **Test config coupling** — RESOLVED 2026-08-09: workspace config
+  files importing root bases by relative path (`vitest.config.ts` →
+  `../../../vitest.config.base.ts` and siblings) ARE subject to the
+  same ban as workspace-to-root scripts. The bases moved into
+  `@oaknational/workspace-config`, consumed via declared
+  `workspace:*` dependencies, with the boundary enforced by the
+  dependency-cruiser rules in `.dependency-cruiser.mjs` (owner ruling
+  2026-08-10: dependency checks run on a dependency resolver) plus
+  `validate-workspace-config-isolation` for the resolver-invisible
+  legs. See
+  `.agent/plans/delivery/workspace-config-isolation.plan.md` (which
+  supersedes the config-architecture-standardisation pointer this
+  entry previously carried).
 - **`oak-eslint` build pattern**: this commit aligned `oak-eslint`
   to the repo-wide `tsup && tsc --emitDeclarationOnly --project
 tsconfig.build.json` pattern. The choice of `tsup` for JS emit
@@ -364,7 +419,8 @@ tsconfig.build.json` pattern. The choice of `tsup` for JS emit
 ## Future Work
 
 1. Resolve the `vitest.config.base.ts` coupling under the same
-   architectural lens (see Carried forward).
+   architectural lens — DONE 2026-08-09; see Carried forward's
+   resolution note and the History entry.
 2. Extract the workspace-script-ban into a portable Practice-Core
    doctrine if a second repo adopting the practice surfaces the
    same pattern. Currently this ADR is local to this monorepo.
@@ -411,6 +467,43 @@ tsconfig.build.json` pattern. The choice of `tsup` for JS emit
   `vitest.config.base.ts` include line makes it discoverable at the point of
   confusion; Future Work #4 notes a possible mechanical check. Captured per
   ADR-150's surprise pipeline on two-instance recurrence.
+
+- **2026-08-04** — trued §5's coverage claim and added the
+  `runtime-only-scripts/` structural exception (§4 reference tree, §5).
+  Found while curing MCP-479: the Vercel `ignoreCommand` guard's extensive
+  suite lived beside the script in `runtime-only-scripts/`, exactly as §4's
+  canonical tree depicted — and had **never run once**, because no workspace's
+  vitest globs cover that directory. The gate decides whether every production
+  deploy proceeds.
+
+  Checking the globs to fix it surfaced the second half: §5's claim that they
+  "never" cover `build-scripts/**` was false in two workspaces
+  (`apps/oak-curriculum-mcp-streamable-http`, `packages/core/build-metadata`),
+  each collecting a substantial body of tests from that directory.
+
+  Both halves are the same defect — an ADR asserting a configuration fact
+  instead of deriving it, so the doc and the globs drifted apart without
+  anything failing. §5's forcing function is untouched and still governs
+  `scripts/**`; what changed is that the section now describes the estate that
+  exists. The narrow exception is justified structurally rather than by
+  precedent: a §4 file cannot import from `src/` or be built, so
+  promote-to-`src/` — §5's only prescribed cure — does not exist for it, and a
+  rule that can forbid but not redirect produces silently dead tests.
+
+  Reviewer credit: Matt (`mantagen`) rejected an earlier attempt to fix this by
+  updating the `runtime-only-scripts/README.md` alone, on the grounds that a
+  README cannot amend an accepted ADR. He was right, and the fuller defect only
+  surfaced because the amendment was written where the rule actually lives.
+
+- **2026-08-09** — the Carried-forward config-coupling question
+  resolved: the root config bases (vitest, vitest e2e, tsup, and the
+  no-network setup) moved into `@oaknational/workspace-config`,
+  consumed via declared `workspace:*` dependencies and enforced by
+  the dependency-cruiser boundary rules plus the
+  `validate-workspace-config-isolation` validator's resolver-invisible
+  legs (the enforcement split of the 2026-08-10 right-tool ruling). The
+  §5 pointer comment on the vitest include globs moved with the base
+  file into the package unchanged.
 
 - **2026-07-06** — widened the shell-scope exception by owner directive: from
   "the only `.sh` exception is the Husky entry points" to "shell is permitted

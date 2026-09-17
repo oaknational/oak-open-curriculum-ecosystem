@@ -1,0 +1,33 @@
+$ stryker run
+21:34:25 (18197) INFO ProjectReader Found 1 of 27 file(s) to be mutated.
+21:34:25 (18197) INFO ProjectReader Found 1 test file(s) matching --testFiles patterns.
+21:34:25 (18197) INFO Instrumenter Instrumented 1 source file(s) with 18 mutant(s)
+21:34:25 (18197) INFO ConcurrencyTokenProvider Creating 13 test runner process(es).
+21:34:26 (18197) INFO BroadcastReporter Detected that current console does not support the "progress" reporter, downgrading to "progress-append-only" reporter
+21:34:26 (18197) INFO DryRunExecutor Starting initial test run (vitest test runner with "perTest" coverage analysis). This may take a while.
+21:34:26 (18197) INFO DryRunExecutor Initial test run succeeded. Ran 11 tests in 0 seconds (net 2.0102489999999307 ms, overhead 119.98975100000007 ms).
+
+All tests/index.unit.test.ts
+  ✓ typeSafeKeys returns keys preserving literal types (killed 6)
+  ✓ typeSafeKeys returns own keys only, excluding inherited enumerable properties (killed 1)
+  ✓ typeSafeValues returns values preserving types (killed 3)
+  ✓ typeSafeEntries returns [key, value] tuples (killed 4)
+  ~ typeSafeEntries supports ordinary interface-shaped objects without exposing symbol keys (covered 11)
+  ✓ typeSafeGet retrieves a typed value by key (killed 1)
+  ✓ typeSafeSet sets a value at a typed key (killed 1)
+  ✓ typeSafeHas returns true for existing keys (killed 1)
+  ~ typeSafeHas returns false for missing keys (covered 1)
+  ✓ typeSafeHasOwn returns true for own properties (killed 1)
+  ~ typeSafeHasOwn returns false for inherited properties (covered 1)
+
+Ran 1.06 tests per mutant on average.
+----------|------------------|----------|-----------|------------|----------|----------|
+          | % Mutation score |          |           |            |          |          |
+File      |  total | covered | # killed | # timeout | # survived | # no cov | # errors |
+----------|--------|---------|----------|-----------|------------|----------|----------|
+All files | 100.00 |  100.00 |       18 |         0 |          0 |        0 |        0 |
+ index.ts | 100.00 |  100.00 |       18 |         0 |          0 |        0 |        0 |
+----------|--------|---------|----------|-----------|------------|----------|----------|
+21:34:27 (18197) INFO JsonReporter Your report can be found at: file://<repo-root>/packages/core/type-helpers/mutation-evidence/report.json
+21:34:27 (18197) INFO HtmlReporter Your report can be found at: file://<repo-root>/packages/core/type-helpers/mutation-evidence/report.html
+21:34:27 (18197) INFO MutationTestExecutor Done in 1 second.

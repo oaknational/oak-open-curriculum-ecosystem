@@ -209,6 +209,7 @@ THEM"*.
 | "Cite the post-mortem incident" | bare SHA in prose | Date + a one-line summary; full SHA in the napkin archive |
 | "Pin the version" | "v3.7.2 introduces…" | "the version that introduced X (see `package.json`)" |
 | "Reference a commit for historical context" | bare backticked SHA | Add the explicit `(historical reference)` marker on the same line, so the citation is a deliberate audit trail |
+| "Point the vision or a strategy page at the plan that carries a decision" | a dated note naming a delivery-plan id or a ticket | Name the ADR that records the decision (author it first if none exists — "durable homes for decisions are ADRs", owner 2026-09-03) and describe the lane, never a plan node of any type by id — an existing citation of one on a permanent page is a defect to retire, not a precedent (PDR-105 §Axis 1). Worked instance 2026-09-03: a corpus-truing pull request's notes on the vision and three strategy pages cited a delivery plan and a ticket; the owner refused the push, an adversarial review found the rule, and the cure was an ADR folded into the same pull request with every permanent page re-pointed at it. Prediction (PDR-130): no new plan-node id lands on a permanent page within the review window and the pre-existing strategy-index citation is retired at its true-up; if one lands, `validate-reference-direction` extends to plan ids on permanent pages |
 
 ## Doctrinal Anchors
 

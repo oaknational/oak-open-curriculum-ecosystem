@@ -19,14 +19,14 @@ describe('resolveCanonicalOrigin', () => {
   });
 
   it('builds an https origin from the configured host', () => {
-    expect(resolveCanonicalOrigin('www.thenational.academy')).toBe(
-      'https://www.thenational.academy',
+    expect(resolveCanonicalOrigin('mcp.thenational.academy')).toBe(
+      'https://mcp.thenational.academy',
     );
   });
 
   it('lowercases the configured host so origins compare byte-identically', () => {
-    expect(resolveCanonicalOrigin('WWW.ThenationaL.Academy')).toBe(
-      'https://www.thenational.academy',
+    expect(resolveCanonicalOrigin('MCP.ThenationaL.Academy')).toBe(
+      'https://mcp.thenational.academy',
     );
   });
 });

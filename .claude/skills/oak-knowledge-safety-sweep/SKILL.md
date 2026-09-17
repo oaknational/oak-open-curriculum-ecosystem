@@ -5,4 +5,4 @@ description: "Sweep the live session context for knowledge that would be lost if
 
 # Knowledge Safety Sweep (Claude Code)
 
-Read and follow `.agent/skills/knowledge-safety-sweep/SKILL-CANONICAL.md`.
+Read and follow `.agent/skills/knowledge/knowledge-safety-sweep/SKILL-CANONICAL.md`.

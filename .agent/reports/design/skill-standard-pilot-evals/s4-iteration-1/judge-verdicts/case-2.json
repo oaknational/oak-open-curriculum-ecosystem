@@ -1,0 +1,55 @@
+{
+  "case": "case-2",
+  "responses": {
+    "A": {
+      "criteria": {
+        "Reasons from purpose": {
+          "score": "strong",
+          "evidence": "**What's it for, and is the signal legible?** It's a completion status. The only person who reliably reads \"complete\" here is someone with full colour vision, in good lighting, looking at a screen with accurate colour rendering."
+        },
+        "Ranks rather than lists": {
+          "score": "strong",
+          "evidence": "The core problem is that the whole control's meaning lives in one channel: colour. ... That's not a nice-to-have fix, it's the control failing at the one job it has."
+        },
+        "Routes values to the system": {
+          "score": "strong",
+          "evidence": "Take the type scale from the system rather than picking a pixel number that felt right for the space available ... the system's motion vocabulary runs 120/200ms"
+        },
+        "Respects its own boundary": {
+          "score": "adequate",
+          "evidence": "at 32px tall it's well under the ≥44px hit-area floor"
+        },
+        "Would a designer act on this?": {
+          "score": "strong",
+          "evidence": "add a non-colour signal for the state (icon or label text change, your call which reads better at this size), confirm whether it's tappable and size it to 44px if so ... pull the label size from the system's type scale rather than 11px, and pull the transition duration from the system's 120/200ms rather than 600ms."
+        }
+      }
+    },
+    "B": {
+      "criteria": {
+        "Reasons from purpose": {
+          "score": "adequate",
+          "evidence": "Here's what I'd push back on, roughly in order of how much it matters:"
+        },
+        "Ranks rather than lists": {
+          "score": "strong",
+          "evidence": "If I had to prioritise fixes: add a non-colour indicator (icon) first, fix the touch target and label size second, verify contrast in both states third, then tighten the animation timing and add motion/state-semantics polish once the core control is solid."
+        },
+        "Routes values to the system": {
+          "score": "absent",
+          "evidence": "commercial practice generally starts around 12-13px minimum, with 14-16px preferred for anything that needs to be read reliably"
+        },
+        "Respects its own boundary": {
+          "score": "weak",
+          "evidence": "This is also just a WCAG \"Use of Color\" violation on its face (success criterion 1.4.1) — state needs a second channel."
+        },
+        "Would a designer act on this?": {
+          "score": "adequate",
+          "evidence": "Typical UI colour/opacity transitions land in the 150-300ms range; something that's meant to read as instant confirmation ... starts to feel laggy or uncertain past about 300-400ms"
+        }
+      }
+    }
+  },
+  "preference": "A",
+  "why": "A opens from what the control is FOR and surfaces the one unresolved question that changes the requirement rather than the styling (\"If tapping the pill is what marks the lesson complete, it's an interactive control ... Which is it? That decision changes the sizing requirement\"), and every number it reaches for is routed back to the system's own scale, motion vocabulary, and ≥44px target floor — which I verified against the design system (--motion-quick 120ms / --motion-base 200ms, --size-target-min: 44px). B ranks its findings explicitly and lands one insight A misses (grey reads as \"disabled\", not \"not yet done\"), but it substitutes third-party numbers for the system's — \"12-13px minimum\", \"150-300ms range\", \"Apple HIG ~44px, Material ~48px\" — so a designer acting on it would ship off-system values, and it repeatedly issues conformance verdicts (SC 1.4.1, 4.5:1, aria-pressed, prefers-reduced-motion) that belong to the accessibility reviewer, without ever routing them there. Correctness is not the separator here: B's WCAG citations are accurate; the separator is that A stays in its lane and hands the values back to the system while B answers a different seat's question with numbers of its own."
+}

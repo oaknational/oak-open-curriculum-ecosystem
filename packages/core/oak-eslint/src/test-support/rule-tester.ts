@@ -1,8 +1,6 @@
-import { createRequire } from 'node:module';
+import * as tsParser from '@typescript-eslint/parser';
 import { RuleTester } from '@typescript-eslint/rule-tester';
 import { afterAll, describe, it } from 'vitest';
-
-const require = createRequire(import.meta.url);
 
 RuleTester.afterAll = afterAll;
 RuleTester.describe = describe;
@@ -12,7 +10,7 @@ export const ruleTester = new RuleTester({
   languageOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
-    parser: require('@typescript-eslint/parser'),
+    parser: tsParser,
   },
   linterOptions: {
     reportUnusedDisableDirectives: 'off',

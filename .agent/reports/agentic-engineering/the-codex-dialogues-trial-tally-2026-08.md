@@ -54,3 +54,33 @@ dialogue_id=dlg-20260802-close-schema; question_class=design-fork; turn_count=3;
   surface existed (the compose-order violation the SKILL's field rules
   now name as the worked instance). The resolved durable ref is
   <https://github.com/oaknational/oak-open-curriculum-ecosystem/pull/713#issuecomment-5158174931>.
+
+### dlg-20260806-flor (trial dialogue 3, closed 2026-08-06T09:15Z)
+
+Consensus-check over the capability-floor foundational structure after a
+same-vendor adversarial debate had converged; the foreign prior refused
+ratification as written and forced seven structural additions (whole-floor
+witness tuple, anti-evasion set closure, staleness downgrade, continuous
+domestic renewal, fail-closed binding semantics, error-bounded proxies,
+amendment anti-erosion). Both sides moved; closed at stabilisation in
+three exchanges.
+
+```text
+close_schema=1; dialogue_id=dlg-20260806-flor; question_class=consensus-check; turn_count=3; stop_reason=stabilised; outcome=position-changed; prior_confidence=high; harness_version=claude-code 2.1.223; codex_cli_version=0.146.0; synthesis_ref=.agent/reports/design/oak-components-capability-floor-shaping-debate-2026-08-06.md;
+```
+
+### dlg-20260806-solm (trial dialogue 4, closed 2026-08-06T11:02Z)
+
+Owner-ordered consensus-check on the RATIFIED capability-floor mandate
+at maximum interlocutor effort (`gpt-5.6-sol`, effort `max` via the
+ambient Codex config — first max-effort dialogue of the trial). Six
+structural findings; the seat's high-confidence "execution-ready"
+prior refuted — two cures are SEMANTIC amendments (the MEETS-FLOOR
+conformance predicate, witness defeasibility) now routed for owner
+ratification as v2 floor semantics, four are staged additions behind
+fail-closed absent-instrument entries. Closed at stabilisation in
+three exchanges with an agreed staging shape.
+
+```text
+close_schema=1; dialogue_id=dlg-20260806-solm; question_class=consensus-check; turn_count=3; stop_reason=stabilised; outcome=position-changed; prior_confidence=high; harness_version=claude-code 2.1.223; codex_cli_version=0.146.1; synthesis_ref=.agent/reports/design/oak-components-capability-floor-shaping-debate-2026-08-06.md;
+```

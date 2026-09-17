@@ -1,5 +1,5 @@
 import { defineConfig, mergeConfig } from 'vitest/config';
-import { baseTestConfig } from '../../../vitest.config.base';
+import { baseTestConfig } from '@oaknational/workspace-config/vitest';
 
 export default mergeConfig(
   baseTestConfig,

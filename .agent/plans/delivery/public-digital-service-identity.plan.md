@@ -12,14 +12,16 @@ impact_areas:
   - design-system
 tickets: []
 depends_on: []
-owner_gates:
-  - awaiting: external-input
-    clears_when: >-
-      Ticket mint at the Linear embargo's end (08:00 Europe/London
-      2026-08-10) fills the tickets field; substance is the owner's
-      2026-08-03 instruction, quoted verbatim in §Direction.
-    expires: 2026-08-17
-last_updated: 2026-08-03
+owner_gates: []
+# The former mechanical gate (its record, conserved): it held ONLY the
+# tickets field — substance is the owner's 2026-08-03 instruction,
+# quoted verbatim in §Direction, with the ratification stamp complete
+# since 2026-08-03. Both premises dissolved (embargo lifted 2026-08-06;
+# ticket-existence obligation removed by the plan-node schema
+# §2026-08-07 amendment, PR #817), so the gate DISCHARGED 2026-08-07
+# with tickets left [] — a visibility ticket remains optional working
+# practice.
+last_updated: 2026-08-07
 ---
 
 # Public Digital Service identity — total naming replacement

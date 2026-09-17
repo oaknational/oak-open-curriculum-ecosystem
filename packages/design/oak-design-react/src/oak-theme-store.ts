@@ -11,16 +11,19 @@
  * `data-theme`, so the applied attribute cannot distinguish an explicit
  * choice from an OS-triggered default. The store reads the runtime's
  * `choice()` accessor — the kit contract for exactly this distinction
- * (MCP-388) — and renders '' when no explicit choice exists.
+ * (MCP-388) — and names the no-choice state IDENTITY_DEFAULT (DDR-003
+ * dated amendment 2026-08-11): the identity's own default is real design
+ * intent, selectable and honest, so the control never needs a placeholder
+ * and its first real click always fires.
  *
- * The store deliberately carries NO contrast-media mirror: under the choice
- * model the OS-contrast route changes only the APPLIED theme (the kit's
- * auto() path writes the attribute without touching choice()), so no
- * exposed snapshot can change and a re-notification would always bail out
- * of useSyncExternalStore. The hub's old mirror existed because its store
- * exposed the applied theme — the conflation the choice model cures. An
- * applied-theme surface (and its mirror) can land at first materialised
- * need as its own accessor.
+ * The store deliberately carries NO contrast-media mirror: the OS-contrast
+ * route changes only the APPLIED theme (the kit's auto() path writes the
+ * attribute without touching choice()), so no exposed snapshot can change
+ * and a re-notification would always bail out of useSyncExternalStore.
+ * The hub's old mirror existed because its store exposed the applied
+ * theme — the conflation the choice model cures. An applied-theme surface
+ * (and its mirror) can land at first materialised need as its own
+ * accessor.
  *
  * The store is a factory (`createOakThemeStore`) with the runtime resolver
  * injected, so tests build a store over a simple fake instead of mutating
@@ -38,18 +41,27 @@
 
 export type OakThemeName = 'light' | 'dark' | 'system' | 'high-contrast' | 'colour-safe';
 export type OakMotionMode = 'system' | 'reduced' | 'full';
-/** The theme snapshot: an explicitly chosen theme, or '' when no explicit
- *  choice exists — the state where a brand's polarity default (or the OS
- *  contrast route) governs. A select pinned to a real value in that state
- *  would misreport the page AND make the first click on that value a dead
- *  control (selects only fire change when the value actually changes). */
-export type OakThemeSnapshot = OakThemeName | '';
+/** The control value naming the no-choice state (DDR-003 dated amendment
+ *  2026-08-11): the page shows its IDENTITY's own default — no data-theme
+ *  attribute, a brand's polarity lever free to govern. Selectable:
+ *  choosing it CLEARS the stored choice (the runtime's clear(), which
+ *  keeps the automatic contrast commitment). It is a control value of
+ *  THIS layer, never a theme — it must not reach localStorage or
+ *  data-theme, so it is not a member of the runtime's themes list. */
+export const IDENTITY_DEFAULT = 'identity-default';
+/** The theme snapshot: an explicitly chosen theme, or IDENTITY_DEFAULT
+ *  when no explicit choice exists. The sentinel is a real, selectable
+ *  option (never a placeholder), so the control reads honestly in the
+ *  no-choice state AND every first click on a real theme fires a change
+ *  event by construction. */
+export type OakThemeSnapshot = OakThemeName | typeof IDENTITY_DEFAULT;
 
 /** The oakTheme runtime's public API, re-declared verbatim from
  *  `oak-design-system/src/oak-theme.ts` (contract-only edge — see the
  *  module docblock). */
 export interface OakThemeRuntime {
   set(t: OakThemeName): void;
+  clear(): void;
   get(): OakThemeName;
   choice(): OakThemeName | null;
   themes: OakThemeName[];
@@ -71,7 +83,7 @@ export interface OakThemeStore {
   getServerSnapshot(): undefined;
   setTheme(theme: string): void;
   setMotion(mode: string): void;
-  themeOptions(): OakThemeName[] | undefined;
+  themeOptions(): OakThemeSnapshot[] | undefined;
   motionOptions(): OakMotionMode[] | undefined;
 }
 
@@ -85,11 +97,22 @@ function createSetters(
   return {
     setTheme: (theme: string): void => {
       const runtime = resolveRuntime();
-      const next = runtime?.themes.find((t) => t === theme);
+      if (runtime === undefined) {
+        return;
+      }
+      // Choosing the identity default is a CLEAR, never a set: the
+      // sentinel must not reach the runtime's membership path, and the
+      // runtime's clear() keeps the automatic contrast commitment.
+      if (theme === IDENTITY_DEFAULT) {
+        runtime.clear();
+        emit();
+        return;
+      }
+      const next = runtime.themes.find((t) => t === theme);
       if (next === undefined) {
         return;
       }
-      runtime?.set(next);
+      runtime.set(next);
       emit();
     },
     setMotion: (mode: string): void => {
@@ -120,18 +143,16 @@ export function createOakThemeStore(
         listeners.delete(listener);
       };
     },
-    // Theme reads the CHOICE model through the runtime's own accessor. The
-    // result is two-level by design: undefined = no runtime (the demos'
-    // hydration gate), '' = runtime present but no explicit choice. The kit
-    // returns null for no-choice; '' is this store's select-shaped spelling.
-    // Motion needs no such split: the runtime's 'system' IS its no-choice
-    // semantic (no attribute set).
+    // Theme reads the CHOICE through the runtime's choice() accessor, with
+    // the no-choice state named honestly as the identity default (DDR-003
+    // dated amendment 2026-08-11). undefined = no runtime (the demos'
+    // hydration gate) — a DIFFERENT state from no-choice, and the two must
+    // never collapse: no-runtime renders the consumers' placeholder shell,
+    // no-choice renders the selectable Identity default. Motion needs no
+    // sentinel: 'system' IS its no-choice semantic.
     getTheme: () => {
       const runtime = resolveRuntime();
-      if (runtime === undefined) {
-        return undefined;
-      }
-      return runtime.choice() ?? '';
+      return runtime === undefined ? undefined : (runtime.choice() ?? IDENTITY_DEFAULT);
     },
     getMotion: () => resolveRuntime()?.motion.get() ?? undefined,
     getServerSnapshot: () => undefined,
@@ -140,7 +161,12 @@ export function createOakThemeStore(
     // (theme/motion defined ⇒ runtime present); pre-hydration placeholders
     // carry their own static option shapes. An absent runtime reads
     // undefined — the store fabricates no option values it cannot back.
-    themeOptions: () => resolveRuntime()?.themes,
+    // Identity default LEADS the offered list: it is the no-choice default
+    // (DDR-003 amendment), so it reads first and the real themes follow.
+    themeOptions: () => {
+      const runtime = resolveRuntime();
+      return runtime === undefined ? undefined : [IDENTITY_DEFAULT, ...runtime.themes];
+    },
     motionOptions: () => resolveRuntime()?.motion.modes,
   };
 }

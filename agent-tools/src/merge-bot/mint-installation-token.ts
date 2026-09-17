@@ -82,7 +82,32 @@ export function signAppJwt(input: {
   return `${header}.${payload}.${signature}`;
 }
 
-async function readJsonBody(
+/**
+ * Result-translating request SEND — the one boundary where a rejected fetch
+ * CALL becomes a value. A DNS failure, connection reset, or TLS refusal never
+ * answers a status: it rejects the promise, and an escaping throw is
+ * invisible to the type system and lands on the CLI's usage-error exit path,
+ * telling an operator they typed something wrong when the network broke.
+ */
+export async function sendGithubRequest(
+  fetchImpl: GithubApiFetch,
+  url: string,
+  init: Parameters<GithubApiFetch>[1],
+  label: string,
+): Promise<Result<Awaited<ReturnType<GithubApiFetch>>, Error>> {
+  try {
+    return ok(await fetchImpl(url, init));
+  } catch (cause) {
+    return err(
+      new Error(
+        `${label} request failed: ${cause instanceof Error ? cause.message : String(cause)}`,
+      ),
+    );
+  }
+}
+
+/** Result-translating body read — the one boundary where a response body's rejection becomes a value. */
+export async function readJsonBody(
   response: { readonly json: () => Promise<unknown> },
   label: string,
 ): Promise<Result<unknown, Error>> {
@@ -135,10 +160,16 @@ export async function resolveInstallationId(input: {
   readonly fetchImpl: GithubApiFetch;
 }): Promise<Result<number, Error>> {
   const base = input.apiBaseUrl ?? 'https://api.github.com';
-  const response = await input.fetchImpl(
+  const sent = await sendGithubRequest(
+    input.fetchImpl,
     `${base}/repos/${input.owner}/${input.repo}/installation`,
     { method: 'GET', headers: githubHeaders(input.appJwt) },
+    'GET /repos/{owner}/{repo}/installation',
   );
+  if (!sent.ok) {
+    return sent;
+  }
+  const response = sent.value;
   if (response.status !== 200) {
     return err(
       new Error(
@@ -180,7 +211,8 @@ export async function mintInstallationToken(input: {
   readonly fetchImpl: GithubApiFetch;
 }): Promise<Result<{ token: string; expiresAt: string }, Error>> {
   const base = input.apiBaseUrl ?? 'https://api.github.com';
-  const response = await input.fetchImpl(
+  const sent = await sendGithubRequest(
+    input.fetchImpl,
     `${base}/app/installations/${String(input.installationId)}/access_tokens`,
     {
       method: 'POST',
@@ -190,7 +222,12 @@ export async function mintInstallationToken(input: {
         permissions: input.permissions,
       }),
     },
+    'POST /app/installations/{id}/access_tokens',
   );
+  if (!sent.ok) {
+    return sent;
+  }
+  const response = sent.value;
   if (response.status !== 201) {
     const detail = await githubErrorDetail(response);
     return err(

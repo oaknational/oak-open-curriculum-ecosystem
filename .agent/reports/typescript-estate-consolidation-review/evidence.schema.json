@@ -1,0 +1,952 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "evidence.schema.json",
+  "title": "TypeScript estate consolidation review evidence",
+  "description": "Derived, reproducible evidence for the owner-ratified TypeScript estate consolidation review. This document is not an architectural authority or remediation registry.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "reviewId",
+    "snapshot",
+    "rawExtraction",
+    "coverage",
+    "graph",
+    "detectors",
+    "history",
+    "counterfactuals",
+    "generationProofs",
+    "packedSdkConsumer",
+    "candidates",
+    "topTen",
+    "proposals",
+    "evidenceGaps",
+    "reproduction",
+    "drift"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "2.0.0" },
+    "reviewId": { "const": "typescript-estate-consolidation-review" },
+    "snapshot": { "$ref": "#/$defs/snapshot" },
+    "rawExtraction": { "$ref": "#/$defs/evidenceRef" },
+    "coverage": { "$ref": "#/$defs/coverage" },
+    "graph": { "$ref": "#/$defs/graph" },
+    "detectors": { "$ref": "#/$defs/detectors" },
+    "history": { "$ref": "#/$defs/history" },
+    "counterfactuals": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": { "$ref": "#/$defs/counterfactual" }
+    },
+    "generationProofs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/generationProof" }
+    },
+    "packedSdkConsumer": { "$ref": "#/$defs/packedSdkConsumer" },
+    "candidates": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/candidate" }
+    },
+    "topTen": { "$ref": "#/$defs/topTen" },
+    "proposals": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/proposal" }
+    },
+    "evidenceGaps": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/evidenceGap" }
+    },
+    "reproduction": { "$ref": "#/$defs/reproduction" },
+    "drift": { "$ref": "#/$defs/drift" }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "gitSha": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40,64}$"
+    },
+    "repoPath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "confidence": {
+      "enum": ["high", "medium", "low"]
+    },
+    "evidenceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artefact", "kind"],
+      "properties": {
+        "artefact": { "$ref": "#/$defs/repoPath" },
+        "kind": {
+          "enum": [
+            "raw-observation",
+            "normalised-observation",
+            "executable-proof",
+            "source-location"
+          ]
+        },
+        "pointer": { "type": "string" },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "commandRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["argv", "cwd", "exitCode", "stdoutArtefact", "stderrArtefact", "environmentPolicyId", "environment", "secretEnvironmentPresence", "executionEnvironmentAssertions", "networkPolicy", "networkPolicyEvidence"],
+      "properties": {
+        "argv": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "cwd": { "$ref": "#/$defs/repoPath" },
+        "exitCode": { "type": "integer" },
+        "stdoutArtefact": { "$ref": "#/$defs/repoPath" },
+        "stderrArtefact": { "$ref": "#/$defs/repoPath" },
+        "environmentPolicyId": { "const": "proof-env-v1" },
+        "environment": {
+          "type": "object",
+          "description": "Only allowlisted variables that materially affect the proof.",
+          "required": ["CI", "NODE_ENV", "TZ", "LANG", "LC_ALL", "GIT_NO_LAZY_FETCH"],
+          "propertyNames": { "enum": ["CI", "NODE_ENV", "TZ", "LANG", "LC_ALL", "GIT_NO_LAZY_FETCH"] },
+          "additionalProperties": false,
+          "properties": {
+            "CI": { "const": "true" },
+            "NODE_ENV": { "enum": ["test", "production"] },
+            "TZ": { "const": "UTC" },
+            "LANG": { "const": "C" },
+            "LC_ALL": { "const": "C" },
+            "GIT_NO_LAZY_FETCH": { "const": "1" }
+          }
+        },
+        "secretEnvironmentPresence": {
+          "type": "object",
+          "required": ["OAK_API_KEY", "GITHUB_TOKEN", "GH_TOKEN", "LINEAR_API_KEY", "NOTION_TOKEN", "POSTHOG_API_KEY", "SENTRY_AUTH_TOKEN", "NPM_TOKEN", "NODE_AUTH_TOKEN", "npm_config__authToken", "AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_SESSION_TOKEN", "AZURE_CLIENT_SECRET", "GOOGLE_APPLICATION_CREDENTIALS"],
+          "propertyNames": { "enum": ["OAK_API_KEY", "GITHUB_TOKEN", "GH_TOKEN", "LINEAR_API_KEY", "NOTION_TOKEN", "POSTHOG_API_KEY", "SENTRY_AUTH_TOKEN", "NPM_TOKEN", "NODE_AUTH_TOKEN", "npm_config__authToken", "AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_SESSION_TOKEN", "AZURE_CLIENT_SECRET", "GOOGLE_APPLICATION_CREDENTIALS"] },
+          "additionalProperties": false,
+          "properties": {
+            "OAK_API_KEY": { "const": false },
+            "GITHUB_TOKEN": { "const": false },
+            "GH_TOKEN": { "const": false },
+            "LINEAR_API_KEY": { "const": false },
+            "NOTION_TOKEN": { "const": false },
+            "POSTHOG_API_KEY": { "const": false },
+            "SENTRY_AUTH_TOKEN": { "const": false },
+            "NPM_TOKEN": { "const": false },
+            "NODE_AUTH_TOKEN": { "const": false },
+            "npm_config__authToken": { "const": false },
+            "AWS_ACCESS_KEY_ID": { "const": false },
+            "AWS_SECRET_ACCESS_KEY": { "const": false },
+            "AWS_SESSION_TOKEN": { "const": false },
+            "AZURE_CLIENT_SECRET": { "const": false },
+            "GOOGLE_APPLICATION_CREDENTIALS": { "const": false }
+          }
+        },
+        "executionEnvironmentAssertions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["inheritedEnvironmentEmpty", "ciTrue", "runScopedHome", "emptyUserConfig", "secretValuesAbsent", "evidence"],
+          "properties": {
+            "inheritedEnvironmentEmpty": { "const": true },
+            "ciTrue": { "const": true },
+            "runScopedHome": { "const": true },
+            "emptyUserConfig": { "const": true },
+            "secretValuesAbsent": { "const": true },
+            "evidence": { "$ref": "#/$defs/evidenceRef" }
+          }
+        },
+        "networkPolicy": { "enum": ["network-permitted-secretless", "offline", "offline-sandbox"] },
+        "networkPolicyEvidence": { "$ref": "#/$defs/evidenceRef" }
+      }
+    },
+    "snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "commit",
+        "tree",
+        "ref",
+        "capturedAt",
+        "nodeVersion",
+        "pnpmVersion",
+        "lockfileSha256",
+        "trackedFileListSha256",
+        "detectorConfigSha256"
+      ],
+      "properties": {
+        "commit": { "$ref": "#/$defs/gitSha" },
+        "tree": { "$ref": "#/$defs/gitSha" },
+        "ref": { "$ref": "#/$defs/nonEmptyString" },
+        "capturedAt": { "type": "string", "format": "date-time" },
+        "nodeVersion": { "$ref": "#/$defs/nonEmptyString" },
+        "pnpmVersion": { "$ref": "#/$defs/nonEmptyString" },
+        "lockfileSha256": { "$ref": "#/$defs/sha256" },
+        "trackedFileListSha256": { "$ref": "#/$defs/sha256" },
+        "detectorConfigSha256": { "$ref": "#/$defs/sha256" },
+        "dirtyState": { "enum": ["clean", "dirty"] },
+        "dirtyPaths": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/repoPath" },
+          "uniqueItems": true
+        }
+      }
+    },
+    "fileRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "extension",
+        "availability",
+        "lineCount",
+        "byteCount",
+        "workspace",
+        "roles",
+        "provenance",
+        "delivery",
+        "confidence",
+        "evidence"
+      ],
+      "properties": {
+        "path": { "$ref": "#/$defs/repoPath" },
+        "extension": { "enum": [".ts", ".tsx"] },
+        "availability": { "enum": ["read", "invalid-utf8", "unsupported-mode"] },
+        "lineCount": { "type": ["integer", "null"], "minimum": 0 },
+        "byteCount": { "type": ["integer", "null"], "minimum": 0 },
+        "workspace": { "type": ["string", "null"] },
+        "roles": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "implementation-source",
+              "api-facade",
+              "generated-contract-data-carrier",
+              "generator",
+              "build-time-producer",
+              "cli-hook-operator",
+              "tsx-syntax-source",
+              "test-spec-support-fixture",
+              "config-setup",
+              "declaration",
+              "research-evidence-template",
+              "unknown"
+            ]
+          }
+        },
+        "provenance": {
+          "enum": [
+            "authored",
+            "generated-confirmed",
+            "generated-declared-unconfirmed",
+            "imported",
+            "unknown"
+          ]
+        },
+        "delivery": {
+          "$ref": "#/$defs/deliveryVector"
+        },
+        "confidence": { "$ref": "#/$defs/confidence" },
+        "ambiguity": { "type": "string" },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/evidenceRef" }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "type": "object",
+            "properties": { "availability": { "const": "read" } },
+            "required": ["availability"]
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "lineCount": { "type": "integer", "minimum": 0 },
+              "byteCount": { "type": "integer", "minimum": 0 }
+            }
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": { "availability": { "const": "invalid-utf8" } },
+            "required": ["availability"]
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "lineCount": { "type": "null" },
+              "byteCount": { "type": "integer", "minimum": 0 }
+            }
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": { "availability": { "const": "unsupported-mode" } },
+            "required": ["availability"]
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "lineCount": { "type": "null" },
+              "byteCount": { "type": "null" }
+            }
+          }
+        }
+      ]
+    },
+    "deliveryVector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "typecheckProjectIncluded",
+        "emittingProjectIncluded",
+        "buildEmitted",
+        "packageExported",
+        "executableEntry",
+        "runtimeRegistered",
+        "operatorInvoked",
+        "filesystemOrStringLoaded",
+        "verificationOnly",
+        "repositoryReferenceOnly"
+      ],
+      "properties": {
+        "typecheckProjectIncluded": { "$ref": "#/$defs/deliveryState" },
+        "emittingProjectIncluded": { "$ref": "#/$defs/deliveryState" },
+        "buildEmitted": { "$ref": "#/$defs/deliveryState" },
+        "packageExported": { "$ref": "#/$defs/deliveryState" },
+        "executableEntry": { "$ref": "#/$defs/deliveryState" },
+        "runtimeRegistered": { "$ref": "#/$defs/deliveryState" },
+        "operatorInvoked": { "$ref": "#/$defs/deliveryState" },
+        "filesystemOrStringLoaded": { "$ref": "#/$defs/deliveryState" },
+        "verificationOnly": { "$ref": "#/$defs/deliveryState" },
+        "repositoryReferenceOnly": { "$ref": "#/$defs/deliveryState" }
+      }
+    },
+    "deliveryState": { "enum": ["present", "absent", "not-probed", "ambiguous"] },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["denominator", "classified", "files"],
+      "properties": {
+        "denominator": { "type": "integer", "minimum": 0 },
+        "classified": { "type": "integer", "minimum": 0 },
+        "files": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/fileRecord" }
+        }
+      }
+    },
+    "graphNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "identityComponents", "label", "path"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^node:(?:file|package|workspace|command|artefact|registration|external-contract):[a-f0-9]{64}$" },
+        "kind": {
+          "enum": ["file", "package", "workspace", "command", "artefact", "registration", "external-contract"]
+        },
+        "identityComponents": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/nonEmptyString" } },
+        "label": { "$ref": "#/$defs/nonEmptyString" },
+        "path": { "anyOf": [{ "$ref": "#/$defs/repoPath" }, { "type": "null" }] }
+      }
+    },
+    "graphEdge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "source", "target", "kind", "status", "producer", "occurrenceCount", "evidencePaths"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^edge:(?:import|re-export|export-map|generation|script|filesystem-read|filesystem-write|build|runtime-registration):[a-f0-9]{64}$" },
+        "source": { "type": "string", "pattern": "^node:(?:file|package|workspace|command|artefact|registration|external-contract):[a-f0-9]{64}$" },
+        "target": { "type": "string", "pattern": "^node:(?:file|package|workspace|command|artefact|registration|external-contract):[a-f0-9]{64}$" },
+        "kind": {
+          "enum": ["import", "re-export", "export-map", "generation", "script", "filesystem-read", "filesystem-write", "build", "runtime-registration"]
+        },
+        "status": { "enum": ["observed", "ambiguous"] },
+        "producer": { "enum": ["import:es-import", "import:import-equals", "import:dynamic-import", "import:commonjs-require", "re-export:export-declaration", "export-map:package-exports", "generation:generated-output-rule", "generation:generator-script", "script:package-script", "filesystem-read:readFile", "filesystem-read:readFileSync", "filesystem-read:createReadStream", "filesystem-read:open", "filesystem-write:writeFile", "filesystem-write:writeFileSync", "filesystem-write:appendFile", "filesystem-write:appendFileSync", "filesystem-write:createWriteStream", "filesystem-write:rename", "build:emitting-project-membership", "build:project-reference", "build:bundler-input", "build:package-build-script", "runtime-registration:registerTool", "runtime-registration:registerResource", "runtime-registration:registerAppResource", "runtime-registration:setRequestHandler", "runtime-registration:use", "runtime-registration:command"] },
+        "occurrenceCount": { "type": "integer", "minimum": 1 },
+        "evidencePaths": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/repoPath" } }
+      }
+    },
+    "ownershipChain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "archetype", "semanticAuthority", "generator", "generatedCarrier", "runtimeOwner", "composition", "remediationLocus", "missingEvidence", "derivedFromEdgeIndexes"],
+      "properties": {
+        "id": { "enum": ["openapi-curriculum-sdk-mcp", "bulk-vocabulary-search-consumer", "agent-tools-dist-cli-hook", "tsx-bundle-served-ui"] },
+        "archetype": {
+          "enum": ["openapi-curriculum-sdk-mcp", "bulk-vocabulary-search-consumer", "agent-tools-dist-cli-hook", "tsx-bundle-served-ui"]
+        },
+        "semanticAuthority": { "anyOf": [{ "type": "string", "pattern": "^node:" }, { "type": "null" }] },
+        "generator": { "anyOf": [{ "type": "string", "pattern": "^node:" }, { "type": "null" }] },
+        "generatedCarrier": { "anyOf": [{ "type": "string", "pattern": "^node:" }, { "type": "null" }] },
+        "runtimeOwner": { "anyOf": [{ "type": "string", "pattern": "^node:" }, { "type": "null" }] },
+        "composition": { "anyOf": [{ "type": "string", "pattern": "^node:" }, { "type": "null" }] },
+        "remediationLocus": { "anyOf": [{ "type": "string", "pattern": "^node:" }, { "type": "null" }] },
+        "missingEvidence": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(?:semanticAuthority|generator|generatedCarrier|runtimeOwner|composition|remediationLocus):selector-(?:zero|multiple):(?:file|artefact|artefact-prefix|workspace):.+$"
+          }
+        },
+        "derivedFromEdgeIndexes": {
+          "type": "array",
+          "items": { "type": "integer", "minimum": 0 },
+          "uniqueItems": true
+        }
+      }
+    },
+    "graph": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceGraph", "derivation", "nodes", "edges", "ownershipChains"],
+      "properties": {
+        "sourceGraph": { "$ref": "#/$defs/evidenceRef" },
+        "derivation": { "const": "identity-copy-from-raw-extraction-v2" },
+        "nodes": { "type": "array", "items": { "$ref": "#/$defs/graphNode" } },
+        "edges": { "type": "array", "items": { "$ref": "#/$defs/graphEdge" } },
+        "ownershipChains": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": { "$ref": "#/$defs/ownershipChain" },
+          "allOf": [
+            { "contains": { "type": "object", "properties": { "archetype": { "const": "openapi-curriculum-sdk-mcp" } }, "required": ["archetype"] }, "minContains": 1, "maxContains": 1 },
+            { "contains": { "type": "object", "properties": { "archetype": { "const": "bulk-vocabulary-search-consumer" } }, "required": ["archetype"] }, "minContains": 1, "maxContains": 1 },
+            { "contains": { "type": "object", "properties": { "archetype": { "const": "agent-tools-dist-cli-hook" } }, "required": ["archetype"] }, "minContains": 1, "maxContains": 1 },
+            { "contains": { "type": "object", "properties": { "archetype": { "const": "tsx-bundle-served-ui" } }, "required": ["archetype"] }, "minContains": 1, "maxContains": 1 }
+          ]
+        }
+      }
+    },
+    "detector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "purpose", "countingUnit", "configurationSha256", "status"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "version": { "$ref": "#/$defs/nonEmptyString" },
+        "purpose": { "$ref": "#/$defs/nonEmptyString" },
+        "countingUnit": { "$ref": "#/$defs/nonEmptyString" },
+        "configurationSha256": { "$ref": "#/$defs/sha256" },
+        "status": { "enum": ["accepted", "rejected"] },
+        "rejectionReason": { "type": "string" }
+      }
+    },
+    "signal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "detectorId", "paths", "summary", "epistemicStatus", "confidence", "derivedFrom"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "detectorId": { "$ref": "#/$defs/nonEmptyString" },
+        "paths": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/repoPath" },
+          "uniqueItems": true
+        },
+        "summary": { "$ref": "#/$defs/nonEmptyString" },
+        "epistemicStatus": { "const": "inference" },
+        "confidence": { "$ref": "#/$defs/confidence" },
+        "derivedFrom": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/evidenceRef" }
+        }
+      }
+    },
+    "heldOutAudit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["classificationSelectionMethod", "repetitionSelectionMethod", "classificationPathJudgements", "repetitionGroupJudgements", "positiveControlOutcomes", "acceptedDetectorIds", "rejectedDetectorIds"],
+      "properties": {
+        "classificationSelectionMethod": { "$ref": "#/$defs/nonEmptyString" },
+        "repetitionSelectionMethod": { "$ref": "#/$defs/nonEmptyString" },
+        "classificationPathJudgements": { "type": "array", "items": { "$ref": "#/$defs/classificationPathJudgement" } },
+        "repetitionGroupJudgements": { "type": "array", "items": { "$ref": "#/$defs/repetitionGroupJudgement" } },
+        "positiveControlOutcomes": { "type": "array", "items": { "$ref": "#/$defs/positiveControlOutcome" } },
+        "acceptedDetectorIds": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyString" } },
+        "rejectedDetectorIds": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyString" } }
+      }
+    },
+    "classificationPathJudgement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "stratum", "judgement", "missedDetectorIds", "evidence"],
+      "properties": {
+        "path": { "$ref": "#/$defs/repoPath" },
+        "stratum": { "$ref": "#/$defs/nonEmptyString" },
+        "judgement": { "enum": ["correct-classification", "incorrect-classification"] },
+        "missedDetectorIds": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyString" }, "uniqueItems": true },
+        "evidence": { "$ref": "#/$defs/evidenceRef" }
+      }
+    },
+    "repetitionGroupJudgement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["detectorId", "fingerprint", "selectedMemberPaths", "judgement", "candidateEligible", "evidence"],
+      "properties": {
+        "detectorId": { "enum": ["exact-region-clone", "structural-region-similarity"] },
+        "fingerprint": { "$ref": "#/$defs/sha256" },
+        "selectedMemberPaths": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/repoPath" }, "uniqueItems": true },
+        "judgement": { "enum": ["same-responsibility-and-mechanism", "purposeful-similarity-different-responsibility", "detector-noise"] },
+        "candidateEligible": { "const": true },
+        "evidence": { "$ref": "#/$defs/evidenceRef" }
+      }
+    },
+    "positiveControlOutcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "expectation", "met", "affectedDetectorIds", "evidence"],
+      "properties": {
+        "path": { "$ref": "#/$defs/repoPath" },
+        "expectation": { "$ref": "#/$defs/nonEmptyString" },
+        "met": { "type": "boolean" },
+        "affectedDetectorIds": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/nonEmptyString" }, "uniqueItems": true },
+        "evidence": { "$ref": "#/$defs/evidenceRef" }
+      }
+    },
+    "detectors": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["frozenAt", "configurationSha256", "universe", "signals", "heldOutAudit"],
+      "properties": {
+        "frozenAt": { "type": "string", "format": "date-time" },
+        "configurationSha256": { "$ref": "#/$defs/sha256" },
+        "universe": { "type": "array", "items": { "$ref": "#/$defs/detector" } },
+        "signals": { "type": "array", "items": { "$ref": "#/$defs/signal" } },
+        "heldOutAudit": { "$ref": "#/$defs/heldOutAudit" }
+      }
+    },
+    "history": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["raw", "normalised", "normalisationMethod"],
+      "properties": {
+        "raw": { "$ref": "#/$defs/evidenceRef" },
+        "normalised": { "$ref": "#/$defs/evidenceRef" },
+        "normalisationMethod": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "counterfactual": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "prediction", "observation", "status", "evidence"],
+      "properties": {
+        "id": {
+          "enum": ["openapi-type", "bulk-vocabulary-input", "curriculum-sdk-export", "agent-tools-contract", "core-library-contract", "tsx-design-component"]
+        },
+        "prediction": { "$ref": "#/$defs/nonEmptyString" },
+        "observation": { "$ref": "#/$defs/nonEmptyString" },
+        "status": { "enum": ["confirmed", "partially-confirmed", "refuted", "blocked"] },
+        "evidence": { "type": "array", "items": { "$ref": "#/$defs/evidenceRef" } }
+      }
+    },
+    "generationProof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "authority", "generator", "status", "stages", "stoppedAt", "blockingEvidence"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "authority": { "$ref": "#/$defs/nonEmptyString" },
+        "generator": { "$ref": "#/$defs/nonEmptyString" },
+        "networkMode": { "const": "offline" },
+        "inputSha256": { "anyOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
+        "runOne": { "anyOf": [{ "$ref": "#/$defs/commandRecord" }, { "type": "null" }] },
+        "runTwo": { "anyOf": [{ "$ref": "#/$defs/commandRecord" }, { "type": "null" }] },
+        "byteDiff": { "anyOf": [{ "$ref": "#/$defs/evidenceRef" }, { "type": "null" }] },
+        "status": { "enum": ["identical", "different", "blocked"] },
+        "stages": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/proofStage" } },
+        "stoppedAt": { "type": ["string", "null"] },
+        "blockingEvidence": { "type": "array", "items": { "$ref": "#/$defs/evidenceRef" } }
+      },
+      "allOf": [
+        {
+          "if": { "type": "object", "properties": { "status": { "enum": ["identical", "different"] } }, "required": ["status"] },
+          "then": {
+            "type": "object",
+            "required": ["networkMode", "inputSha256", "runOne", "runTwo", "byteDiff"],
+            "properties": {
+              "networkMode": { "const": "offline" },
+              "inputSha256": { "$ref": "#/$defs/sha256" },
+              "runOne": { "$ref": "#/$defs/commandRecord" },
+              "runTwo": { "$ref": "#/$defs/commandRecord" },
+              "byteDiff": { "$ref": "#/$defs/evidenceRef" },
+              "stoppedAt": { "type": "null" },
+              "blockingEvidence": { "type": "array", "maxItems": 0 }
+            }
+          },
+          "else": {
+            "type": "object",
+            "properties": {
+              "stoppedAt": { "$ref": "#/$defs/nonEmptyString" },
+              "blockingEvidence": { "type": "array", "minItems": 1 }
+            }
+          }
+        }
+      ]
+    },
+    "proofStage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "status", "command", "evidence"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "status": { "enum": ["passed", "failed", "blocked", "not-run"] },
+        "command": { "anyOf": [{ "$ref": "#/$defs/commandRecord" }, { "type": "null" }] },
+        "evidence": { "type": "array", "items": { "$ref": "#/$defs/evidenceRef" } }
+      }
+    },
+    "packedSdkConsumer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nodeVersion", "packageManager", "installPolicy", "status", "stages", "stoppedAt", "blockingEvidence"],
+      "properties": {
+        "nodeVersion": { "$ref": "#/$defs/nonEmptyString" },
+        "packageTarballSha256": { "anyOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
+        "packageManager": { "const": "pnpm" },
+        "installPolicy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["minimumReleaseAgeMinutes", "minimumReleaseAgeStrict", "ignoreScripts", "installLockfileMode"],
+          "properties": {
+            "minimumReleaseAgeMinutes": { "const": 1440 },
+            "minimumReleaseAgeStrict": { "const": true },
+            "ignoreScripts": { "const": true },
+            "installLockfileMode": { "const": "frozen" }
+          }
+        },
+        "exportMapSource": { "anyOf": [{ "$ref": "#/$defs/repoPath" }, { "type": "null" }] },
+        "exportMapSha256": { "anyOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
+        "exportDenominator": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/exportSurface" }
+        },
+        "exportResults": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/exportResult" }
+        },
+        "pack": { "anyOf": [{ "$ref": "#/$defs/commandRecord" }, { "type": "null" }] },
+        "lockfileResolve": { "anyOf": [{ "$ref": "#/$defs/commandRecord" }, { "type": "null" }] },
+        "consumerLockfile": { "anyOf": [{ "$ref": "#/$defs/evidenceRef" }, { "type": "null" }] },
+        "packageFetch": { "anyOf": [{ "$ref": "#/$defs/commandRecord" }, { "type": "null" }] },
+        "install": { "anyOf": [{ "$ref": "#/$defs/commandRecord" }, { "type": "null" }] },
+        "exercise": { "anyOf": [{ "$ref": "#/$defs/commandRecord" }, { "type": "null" }] },
+        "dependencyClosure": { "anyOf": [{ "$ref": "#/$defs/evidenceRef" }, { "type": "null" }] },
+        "status": { "enum": ["passed", "failed", "blocked"] },
+        "stages": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/proofStage" } },
+        "stoppedAt": { "type": ["string", "null"] },
+        "blockingEvidence": { "type": "array", "items": { "$ref": "#/$defs/evidenceRef" } }
+      },
+      "allOf": [
+        {
+          "if": { "type": "object", "properties": { "status": { "const": "passed" } }, "required": ["status"] },
+          "then": {
+            "type": "object",
+            "required": ["packageTarballSha256", "exportMapSource", "exportMapSha256", "exportDenominator", "exportResults", "pack", "lockfileResolve", "consumerLockfile", "packageFetch", "install", "exercise", "dependencyClosure"],
+            "properties": {
+              "packageTarballSha256": { "$ref": "#/$defs/sha256" },
+              "exportMapSource": { "$ref": "#/$defs/repoPath" },
+              "exportMapSha256": { "$ref": "#/$defs/sha256" },
+              "exportDenominator": { "type": "array", "minItems": 1 },
+              "exportResults": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/passedExportResult" } },
+              "pack": { "$ref": "#/$defs/commandRecord" },
+              "lockfileResolve": { "$ref": "#/$defs/commandRecord" },
+              "consumerLockfile": { "$ref": "#/$defs/evidenceRef" },
+              "packageFetch": { "$ref": "#/$defs/commandRecord" },
+              "install": { "$ref": "#/$defs/commandRecord" },
+              "exercise": { "$ref": "#/$defs/commandRecord" },
+              "dependencyClosure": { "$ref": "#/$defs/evidenceRef" },
+              "stoppedAt": { "type": "null" },
+              "blockingEvidence": { "type": "array", "maxItems": 0 }
+            }
+          },
+          "else": {
+            "type": "object",
+            "properties": {
+              "stoppedAt": { "$ref": "#/$defs/nonEmptyString" },
+              "blockingEvidence": { "type": "array", "minItems": 1 }
+            }
+          }
+        }
+      ]
+    },
+    "exportSurface": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["subpath", "conditions", "requiredRuntimeConditions"],
+      "properties": {
+        "subpath": { "$ref": "#/$defs/nonEmptyString" },
+        "conditions": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": { "$ref": "#/$defs/repoPath" }
+        },
+        "requiredRuntimeConditions": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/nonEmptyString" } }
+      }
+    },
+    "exportResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["subpath", "condition", "runtimeRequired", "status", "resolvedTarget", "evidence"],
+      "properties": {
+        "subpath": { "$ref": "#/$defs/nonEmptyString" },
+        "condition": { "$ref": "#/$defs/nonEmptyString" },
+        "runtimeRequired": { "type": "boolean" },
+        "status": { "enum": ["resolved-and-exercised", "resolved-not-exercised", "failed", "blocked"] },
+        "resolvedTarget": { "type": ["string", "null"] },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/evidenceRef" }
+        }
+      }
+    },
+    "passedExportResult": {
+      "allOf": [
+        { "$ref": "#/$defs/exportResult" },
+        {
+          "if": { "type": "object", "properties": { "runtimeRequired": { "const": true } }, "required": ["runtimeRequired"] },
+          "then": { "type": "object", "properties": { "status": { "const": "resolved-and-exercised" }, "resolvedTarget": { "$ref": "#/$defs/nonEmptyString" } } },
+          "else": { "type": "object", "properties": { "status": { "const": "resolved-not-exercised" }, "resolvedTarget": { "$ref": "#/$defs/nonEmptyString" } } }
+        }
+      ]
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "paths", "verificationScope", "disposition", "decisionRelevant", "proposalEligible", "proposalExclusionReasons", "canonicalForm", "placementAction", "interventionLocus", "placementConformance", "supportingEvidence", "opposingEvidence", "confidence", "beneficiaryEffect", "proofArtefacts", "missingEvidence"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "title": { "$ref": "#/$defs/nonEmptyString" },
+        "paths": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/repoPath" }, "uniqueItems": true },
+        "verificationScope": { "const": "production" },
+        "disposition": { "enum": ["generate", "share", "inline", "delete", "reroute", "keep", "undetermined"] },
+        "decisionRelevant": { "type": "boolean" },
+        "proposalEligible": { "type": "boolean" },
+        "proposalExclusionReasons": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "enum": ["not-proposed", "missing-evidence", "placement-nonconformant"] }
+        },
+        "canonicalForm": { "anyOf": [{ "$ref": "#/$defs/nonEmptyString" }, { "type": "null" }] },
+        "placementAction": { "anyOf": [{ "$ref": "#/$defs/nonEmptyString" }, { "type": "null" }] },
+        "interventionLocus": { "anyOf": [{ "$ref": "#/$defs/interventionLocus" }, { "type": "null" }] },
+        "placementConformance": { "anyOf": [{ "$ref": "#/$defs/placementConformance" }, { "type": "null" }] },
+        "supportingEvidence": { "type": "array", "items": { "$ref": "#/$defs/evidenceRef" } },
+        "opposingEvidence": { "type": "array", "items": { "$ref": "#/$defs/evidenceRef" } },
+        "confidence": { "$ref": "#/$defs/confidence" },
+        "beneficiaryEffect": { "$ref": "#/$defs/nonEmptyString" },
+        "proofArtefacts": { "type": "array", "items": { "$ref": "#/$defs/evidenceRef" } },
+        "losingCondition": { "type": "string" },
+        "missingEvidence": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyString" } }
+      },
+      "allOf": [
+        {
+          "if": { "type": "object", "properties": { "disposition": { "const": "undetermined" } }, "required": ["disposition"] },
+          "then": {
+            "type": "object",
+            "properties": {
+              "missingEvidence": { "type": "array", "minItems": 1 },
+              "decisionRelevant": { "const": false },
+              "proposalEligible": { "const": false },
+              "proposalExclusionReasons": { "type": "array", "contains": { "const": "missing-evidence" } },
+              "canonicalForm": { "type": "null" },
+              "placementAction": { "type": "null" },
+              "interventionLocus": { "type": "null" },
+              "placementConformance": { "type": "null" }
+            }
+          },
+          "else": {
+            "type": "object",
+            "properties": {
+              "missingEvidence": { "type": "array", "maxItems": 0 },
+              "canonicalForm": { "$ref": "#/$defs/nonEmptyString" },
+              "placementAction": { "$ref": "#/$defs/nonEmptyString" },
+              "interventionLocus": { "$ref": "#/$defs/interventionLocus" },
+              "placementConformance": { "$ref": "#/$defs/placementConformance" }
+            }
+          }
+        },
+        {
+          "if": { "type": "object", "properties": { "disposition": { "const": "keep" } }, "required": ["disposition"] },
+          "then": {
+            "type": "object",
+            "required": ["losingCondition"],
+            "properties": {
+              "losingCondition": { "$ref": "#/$defs/nonEmptyString" },
+              "proposalEligible": { "const": false },
+              "proposalExclusionReasons": { "type": "array", "contains": { "const": "not-proposed" } }
+            }
+          }
+        },
+        {
+          "if": { "type": "object", "properties": { "proposalEligible": { "const": true } }, "required": ["proposalEligible"] },
+          "then": {
+            "type": "object",
+            "properties": {
+              "disposition": { "enum": ["generate", "share", "inline", "delete", "reroute"] },
+              "proposalExclusionReasons": { "type": "array", "maxItems": 0 },
+              "placementConformance": {
+                "allOf": [
+                  { "$ref": "#/$defs/placementConformance" },
+                  { "type": "object", "properties": { "status": { "enum": ["compliant", "not-applicable"] } } }
+                ]
+              }
+            }
+          },
+          "else": { "type": "object", "properties": { "proposalExclusionReasons": { "type": "array", "minItems": 1 } } }
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "placementConformance": {
+                "type": "object",
+                "properties": { "status": { "enum": ["non-compliant", "undetermined"] } },
+                "required": ["status"]
+              }
+            },
+            "required": ["placementConformance"]
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "proposalEligible": { "const": false },
+              "proposalExclusionReasons": { "type": "array", "contains": { "const": "placement-nonconformant" } }
+            }
+          }
+        }
+      ]
+    },
+    "interventionLocus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "value"],
+      "properties": {
+        "kind": { "enum": ["existing-path", "existing-workspace", "generator", "semantic-authority", "consumer-local", "new-home-proposal"] },
+        "value": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "placementConformance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "relevantAdrIds", "ownerRatificationRequired", "rationale", "evidence"],
+      "properties": {
+        "status": { "enum": ["compliant", "not-applicable", "non-compliant", "undetermined"] },
+        "relevantAdrIds": { "type": "array", "uniqueItems": true, "items": { "enum": ["ADR-173", "ADR-179", "ADR-221"] } },
+        "ownerRatificationRequired": { "type": "boolean" },
+        "rationale": { "$ref": "#/$defs/nonEmptyString" },
+        "evidence": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/evidenceRef" } }
+      }
+    },
+    "rankedConstruct": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rank", "name", "class", "definition", "countingUnit", "totalCount", "authoredCount", "generatedConfirmedCount", "generatedDeclaredUnconfirmedCount", "importedCount", "unknownCount", "verificationOnlyCount", "nonVerificationCount", "verificationUnresolvedCount", "evidence"],
+      "properties": {
+        "rank": { "type": "integer", "minimum": 1, "maximum": 10 },
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "class": { "enum": ["runtime-value-structure", "type-model-structure", "algorithmic-operation"] },
+        "definition": { "$ref": "#/$defs/nonEmptyString" },
+        "countingUnit": { "$ref": "#/$defs/nonEmptyString" },
+        "totalCount": { "type": "integer", "minimum": 0 },
+        "authoredCount": { "type": "integer", "minimum": 0 },
+        "generatedConfirmedCount": { "type": "integer", "minimum": 0 },
+        "generatedDeclaredUnconfirmedCount": { "type": "integer", "minimum": 0 },
+        "importedCount": { "type": "integer", "minimum": 0 },
+        "unknownCount": { "type": "integer", "minimum": 0 },
+        "verificationOnlyCount": { "type": "integer", "minimum": 0 },
+        "nonVerificationCount": { "type": "integer", "minimum": 0 },
+        "verificationUnresolvedCount": { "type": "integer", "minimum": 0 },
+        "evidence": { "type": "array", "items": { "$ref": "#/$defs/evidenceRef" } }
+      }
+    },
+    "topTen": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["runtimeValueStructures", "typeModelStructures", "algorithms", "rankingBoundary", "algorithmBoundary"],
+      "properties": {
+        "runtimeValueStructures": { "type": "array", "minItems": 10, "maxItems": 10, "items": { "$ref": "#/$defs/rankedConstruct" } },
+        "typeModelStructures": { "type": "array", "minItems": 10, "maxItems": 10, "items": { "$ref": "#/$defs/rankedConstruct" } },
+        "algorithms": { "type": "array", "minItems": 10, "maxItems": 10, "items": { "$ref": "#/$defs/rankedConstruct" } },
+        "rankingBoundary": { "$ref": "#/$defs/nonEmptyString" },
+        "algorithmBoundary": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "proposal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "problem", "candidateIds", "beneficiary", "interventionLocus", "placementConformance", "scope", "acceptanceProof", "losingCondition", "sequencing"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "title": { "$ref": "#/$defs/nonEmptyString" },
+        "problem": { "$ref": "#/$defs/nonEmptyString" },
+        "candidateIds": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/nonEmptyString" } },
+        "beneficiary": { "$ref": "#/$defs/nonEmptyString" },
+        "interventionLocus": { "$ref": "#/$defs/interventionLocus" },
+        "placementConformance": { "$ref": "#/$defs/placementConformance" },
+        "scope": { "$ref": "#/$defs/nonEmptyString" },
+        "acceptanceProof": { "$ref": "#/$defs/nonEmptyString" },
+        "losingCondition": { "$ref": "#/$defs/nonEmptyString" },
+        "sequencing": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "evidenceGap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "missingEvidence", "unavailability", "affectedConclusions", "resolutionRoute", "completionBlocking"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "missingEvidence": { "$ref": "#/$defs/nonEmptyString" },
+        "unavailability": { "$ref": "#/$defs/nonEmptyString" },
+        "affectedConclusions": { "$ref": "#/$defs/nonEmptyString" },
+        "resolutionRoute": { "$ref": "#/$defs/nonEmptyString" },
+        "completionBlocking": { "const": false }
+      }
+    },
+    "reproduction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["secondWorktreeCommit", "manifestComparison", "rawHashComparison", "normalisedComparison", "status"],
+      "properties": {
+        "secondWorktreeCommit": { "$ref": "#/$defs/gitSha" },
+        "manifestComparison": { "$ref": "#/$defs/evidenceRef" },
+        "rawHashComparison": { "$ref": "#/$defs/evidenceRef" },
+        "normalisedComparison": { "$ref": "#/$defs/evidenceRef" },
+        "status": { "enum": ["reproduced", "different", "blocked"] }
+      }
+    },
+    "drift": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["snapshotCommit", "finalCommit", "typescriptRelevantChanges", "affectedProofsRerun", "conclusionsChanged", "evidence"],
+      "properties": {
+        "snapshotCommit": { "$ref": "#/$defs/gitSha" },
+        "finalCommit": { "$ref": "#/$defs/gitSha" },
+        "typescriptRelevantChanges": { "type": "array", "items": { "$ref": "#/$defs/repoPath" } },
+        "affectedProofsRerun": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyString" } },
+        "conclusionsChanged": { "type": "boolean" },
+        "evidence": { "type": "array", "items": { "$ref": "#/$defs/evidenceRef" } }
+      }
+    }
+  }
+}

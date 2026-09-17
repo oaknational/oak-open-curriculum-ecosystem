@@ -81,8 +81,32 @@ literal — a naive literal block on "never" / "rather than" / "instead of"
 would have an unacceptable false-positive rate. The hook can carry only a
 narrow set of genuinely high-signal banner literals; the structural form
 needs a smarter detector or an output-time review pass. That enforcement
-increment is tracked in
-[`pending-graduations.md`](../memory/operational/pending-graduations.md).
+increment is tracked as **F-154** in the
+[frictions register](../memory/operational/frictions-register.md).
+
+## Corrected Directions: Re-True the Artifacts, Harvest the Facts
+
+The active-sweep extension of this rule for owner corrections (owner,
+2026-07-25: "don't preserve wrong directions just because they happened,
+equally, don't throw away useful work"). Conservation doctrine protects
+bytes and knowledge — it was never meant to protect STEERING, but artifact
+gravity makes it do so by default: a corrected direction's tickets,
+contracts, plan text, and records keep steering future seats toward the
+corrected-away framing until someone actively re-trues them. The opposite
+failure is the pendulum: a correction arrives and the whole detour's output
+is discarded, including facts that were expensively verified and remain
+true regardless of the framing that found them.
+
+Every owner correction fires a two-list sweep, immediately, as part of
+absorbing it:
+
+1. **RESIDUE** — which artifacts (tickets, plan text, queues, records,
+   maps) still encode the old direction? Re-true or supersede them NOW, in
+   place, history in git — never leave a stale description loud because
+   rewriting feels like erasing.
+2. **HARVEST** — which outputs of the detour are facts or work that stay
+   true under the new direction? Name their home in the new direction's
+   artifacts so they survive the framing's death.
 
 ## Related
 

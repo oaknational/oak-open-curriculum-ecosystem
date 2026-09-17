@@ -1,5 +1,10 @@
 {
   "mcpServers": {
+    "codex": {
+      "type": "stdio",
+      "command": "codex",
+      "args": ["mcp-server", "-c", "sandbox_mode=read-only", "-c", "approval_policy=never"]
+    },
     "next-devtools": {
       "command": "npx",
       "args": ["-y", "next-devtools-mcp@latest"]
@@ -20,7 +25,7 @@
     },
     "oak-prod": {
       "type": "http",
-      "url": "https://curriculum-mcp-alpha.oaknational.dev/mcp"
+      "url": "https://mcp.thenational.academy/mcp"
     },
     "claude-design": {
       "type": "http",

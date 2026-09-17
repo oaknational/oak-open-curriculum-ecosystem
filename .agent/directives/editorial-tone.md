@@ -2,7 +2,7 @@
 title: Editorial Tone of Voice
 type: directive
 status: active
-last_updated: 2026-07-04
+last_updated: 2026-08-11
 ---
 
 # Editorial Tone of Voice
@@ -95,6 +95,21 @@ The audiences this repository writes for:
 Add others as a document needs them. The voice qualities and anti-patterns hold
 across every audience; only the emphasis and the entry point change.
 
+## The first paragraph stands alone
+
+Many readers read only the first paragraph — and they're typically the least
+technical stakeholders the document serves. Write the opening paragraph as the
+whole story in miniature: what happened, why it matters, what comes next. A
+reader who stops there leaves correctly informed, just less precisely; every
+section after it is elaboration for readers who continue.
+
+Two consequences:
+
+- The document's single most important claim goes in the first paragraph, in
+  plain words — never introduced for the first time below a later heading.
+- Calibrate the first paragraph to the least technical audience the document
+  serves; the technical registers get their depth in the sections that follow.
+
 ## The strategic frame — imply, never state
 
 Oak's strategy stands on three pillars: **supporting schools, supporting
@@ -170,15 +185,17 @@ Run before publishing:
 1. **You-count vs we-count** — more "we"s than "you"s? Flip what carries meaning
    (teacher-facing copy especially).
 2. **First-sentence test** — does it do work, or set it up? Cut setup.
-3. **Read aloud** — anything you wouldn't say? Rewrite.
-4. **Cut adverbs** — "really", "very", "actually" are usually deletable.
-5. **Contractions** — "we are" → "we're"; "do not" → "don't".
-6. **Jargon scan** — define or replace specialist terms and acronyms.
-7. **British English scan** — no "math", no "students" for pupils, "-ise" not
+3. **First-paragraph test** — would a reader who stops after paragraph one
+   leave with the whole story? If not, rewrite the opening.
+4. **Read aloud** — anything you wouldn't say? Rewrite.
+5. **Cut adverbs** — "really", "very", "actually" are usually deletable.
+6. **Contractions** — "we are" → "we're"; "do not" → "don't".
+7. **Jargon scan** — define or replace specialist terms and acronyms.
+8. **British English scan** — no "math", no "students" for pupils, "-ise" not
    "-ize".
-8. **Word-count test** — could you cut 20% without losing meaning? Cut it.
-9. **The "Oak" hunt** — any "Oak" that should be "we"?
-10. **CTA verbs** — "Explore", "Browse", "Try", "See"; never "Click here",
+9. **Word-count test** — could you cut 20% without losing meaning? Cut it.
+10. **The "Oak" hunt** — any "Oak" that should be "we"?
+11. **CTA verbs** — "Explore", "Browse", "Try", "See"; never "Click here",
     "Read more".
 
 ## Authority

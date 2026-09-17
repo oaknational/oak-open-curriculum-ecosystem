@@ -1,0 +1,6 @@
+css-only-negative.md                    FAIL:no-invented-values-in-authored-css  PASS:no-invented-values-in-prose  PASS:no-bespoke-size-proposals
+prose-only-negative.md                  PASS:no-invented-values-in-authored-css  FAIL:no-invented-values-in-prose  PASS:no-bespoke-size-proposals
+size-only-negative.md                   PASS:no-invented-values-in-authored-css  PASS:no-invented-values-in-prose  FAIL:no-bespoke-size-proposals
+size-proposal-forms-negative.md         PASS:no-invented-values-in-authored-css  PASS:no-invented-values-in-prose  FAIL:no-bespoke-size-proposals
+legitimate-references-positive.md       PASS:no-invented-values-in-authored-css  PASS:no-invented-values-in-prose  PASS:no-bespoke-size-proposals
+word-boundary-positive.md               PASS:no-invented-values-in-authored-css  PASS:no-invented-values-in-prose  PASS:no-bespoke-size-proposals

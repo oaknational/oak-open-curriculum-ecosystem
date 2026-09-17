@@ -16,10 +16,10 @@ import { MCP_RESOURCE_PATH } from '../../served-origin.js';
  * match the `resource` parameter used during OAuth token acquisition and
  * the `aud` claim in the resulting JWT — which is why the path is the
  * fixed {@link MCP_RESOURCE_PATH}, exactly what the published PRM document
- * advertises. `req.originalUrl` is deliberately not used: it carries query
- * strings (`GET /mcp?method=…` is a supported request shape) that the
- * advertised resource does not, and RFC 8707 §2 says resource URIs SHOULD
- * NOT include a query component.
+ * advertises. `req.originalUrl` is deliberately not used: it can carry
+ * query components (clients may append query strings to `POST /mcp`
+ * requests) that the advertised resource does not, and RFC 8707 §2 says
+ * resource URIs SHOULD NOT include a query component.
  *
  * The origin comes from {@link deriveSelfOrigin}: canonical origin first,
  * else allowlist-validated Host with the loopback scheme rule. The

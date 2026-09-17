@@ -34,7 +34,11 @@ scope):
 3. **Could it be simpler without compromising functionality or quality?** — the
    [§First Question](#first-question).
 4. **Would it be simpler if the system changed?** Ask whether moving the system
-   dissolves the problem, rather than solving it inside the current shape.
+   dissolves the problem, rather than solving it inside the current shape. A
+   classification instrument is often a symptom of the system it grades: a
+   census existed because the tree did not sort, and asking this question of
+   each of its findings flipped four of five proposed changes from standing
+   activities into constructed properties (2026-08-19).
 5. **Optimise for user value.**
 
 A question arriving as an either/or is usually a false frame (owner standing
@@ -54,7 +58,7 @@ and the highest levels of software engineering excellence.
 ### Concept Exploration — the pre-decision workflow
 
 The lenses resolve formed questions. Invoke the
-[`concept-exploration`](../skills/concept-exploration/SKILL-CANONICAL.md) skill before committing
+[`concept-exploration`](../skills/cognition/concept-exploration/SKILL-CANONICAL.md) skill before committing
 to an option list, including when an early list exists but may foreclose the real question. It
 alternates `metacognition` and `reason`, then feeds its warranted, falsifiable synthesis into the
 lenses above.
@@ -62,7 +66,7 @@ lenses above.
 ### Proportionality — the pre-decision sizing gate
 
 The lenses resolve **shape**, never size. The
-[`proportionality`](../skills/proportionality/SKILL-CANONICAL.md) skill is the paired
+[`proportionality`](../skills/cognition/proportionality/SKILL-CANONICAL.md) skill is the paired
 pre-decision gate — right SIZE of question, right instrument weight, right LEVEL to answer it —
 bounding scope, instrument weight and attention cost ONLY, never correctness, strictness or
 architectural quality. A gate, not a sixth lens; the skill carries why, and the domain
@@ -73,6 +77,16 @@ instruments it cites are the operational detail.
 Always apply the first question; **Ask: could it be simpler *without
 compromising quality or value*?**. The answer will often be no, that is fine,
 but bring real critical thinking to the question each time.
+
+### Ends Before Means, Front of Chain First
+
+The what, the why, and the why-now are established in CONVERSATION with the
+owner before building ANY structure. Probing artefacts, code, or deployments
+to derive the purpose is still means-side work — the front of the chain is
+the owner's stated end, and every elaboration boundary re-asks whether the
+work is still denominated in that end rather than in the means built so far
+(owner teaching 2026-07-2x, graduated 2026-08-14; the companion rule is
+[`re-apply-first-question-at-elaboration-boundaries`](../rules/re-apply-first-question-at-elaboration-boundaries.md)).
 
 ## Strict and Complete
 
@@ -203,6 +217,16 @@ workspace. The framework defines the contract; the consumer provides
 the specifics. The test: "Could a non-Oak consumer use this component
 unchanged?" If not, extract the Oak-specific parts.
 
+The licence map is this same split made legible (owner doctrine
+2026-08-02): keeping the Oak-specific instance thin — ideally
+configuration passed to a general framework — is what keeps the
+externally-constrained surface absolutely minimal, because the
+permissively-licensed framework is the surface others may take and
+the reserved remainder (the Oak brand) stays small only while the
+architecture keeps it extractable. A component whose licence cannot
+be named in one word is one where general mechanism and Oak identity
+cohabit.
+
 ### Context Specificity Gradient
 
 Every capability decomposes by context specificity. Push functionality
@@ -210,12 +234,33 @@ to the lowest general layer that preserves architectural excellence;
 keep the highest-specificity layer as thin as possible, preferably
 configuration only.
 
+The WHY of the gradient: the deeper the layer, the more general it must
+be, because everything above stands on it — and the investment bar rises
+with depth for the same reason (a deep layer is expensive to change and
+its defects propagate everywhere). Generality is demonstrated, never
+asserted: a counter-instance (one consumer the "general" layer cannot
+serve unchanged) is a falsifier against generality-by-assertion, not an
+exception to accommodate.
+
+The gradient runs below the repo boundary (owner-directed 2026-08-19):
+the lowest general layer may be the ecosystem itself. Where a finished
+canonical form already exists — an industry contract, a mature library —
+adopt it behind a thin conformance check rather than re-derive it
+in-estate; own only concepts with no external canonical form, or small
+enough that a finished owned module costs less than curating a
+dependency. Both directions stay falsifiable by measured cost. A thin
+highest-specificity layer is also a detachable one (owner-directed
+2026-08-19): an Oak product surface built as configuration, styling, and
+experience tuning on general machinery can be handed off to a product
+squad — extracted to its own home — without dragging the lever machinery
+its tuning turns.
+
 Agent-work capabilities (collaboration, coordination, work management,
 direction, lifecycle, identity, claims, handoff, review routing, and adjacent
 concerns) are Practice-owned by default; host-local tooling implements them.
-For product/tooling code, the scale is: many-repo capability -> repo-generic
-layer -> purpose-specific reusable tool -> thin Oak-wide wrapper -> narrow
-Oak-domain wrapper.
+For product/tooling code, the scale is: ecosystem-canonical form -> many-repo
+capability -> repo-generic layer -> purpose-specific reusable tool -> thin
+Oak-wide wrapper -> narrow Oak-domain wrapper.
 
 Oak-specific state is a pressure signal. Keep it minimal; generated state
 beats authored state. Hand-rolled types beside generated SDK outputs mean
@@ -393,10 +438,17 @@ Use the right tool for the job:
   `docs/agent-guidance/archive/sentry-guidance.md`)
 
 All workspace tooling configuration MUST follow the canonical
-patterns defined in the base configs at the repo root. Workspace
-configs extend base configs — they do not replace them. This applies
-to `vitest.config.ts`, `tsconfig.json`, `eslint.config.ts`, and all
-other tooling. Deviations cause silent quality-gate leaks (e.g. E2E
+patterns exported by `@oaknational/workspace-config`, consumed as a
+declared `workspace:*` dependency — never by a relative path that
+leaves the workspace (static imports and undeclared dependencies are
+enforced by the dependency-cruiser boundary rules;
+`validate-workspace-config-isolation` owns the resolver-invisible
+legs). Workspace configs extend the
+shared bases — they do not replace them. This applies to
+`vitest.config.ts`, `tsup.config.ts`, and all other tooling;
+`tsconfig.json` `extends` chains are the one root-anchored
+convention that remains (an `extends` reference is not a module
+import). Deviations cause silent quality-gate leaks (e.g. E2E
 tests running under `pnpm test`, disabled lint rules, weakened
 type-checking). See [Testing Strategy: Canonical Vitest
 Configuration][vitest-config] for vitest-specific patterns. E2E

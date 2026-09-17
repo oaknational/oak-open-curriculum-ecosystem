@@ -1,0 +1,17 @@
+{
+  "artefact": "demos/oak-curriculum-hub/components/ThemeSwitcher.tsx",
+  "assertions": {
+    "five-selections-offered": {
+      "pass": true,
+      "evidence": "offers colour-safe, dark, high-contrast, light, system"
+    },
+    "only-palette-themes-carry-trees": {
+      "pass": true,
+      "evidence": "no non-palette data-theme value carries a token tree in the authored CSS"
+    },
+    "applied-value-never-round-trips": {
+      "pass": true,
+      "evidence": "no read of the applied attribute reaches a choice or storage sink"
+    }
+  }
+}

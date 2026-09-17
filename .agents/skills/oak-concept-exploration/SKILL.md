@@ -5,4 +5,4 @@ description: Explore an unshaped concept, phenomenon, recurring incident class, 
 
 # Concept Exploration (Cross-tool)
 
-Read and follow `.agent/skills/concept-exploration/SKILL-CANONICAL.md`.
+Read and follow `.agent/skills/cognition/concept-exploration/SKILL-CANONICAL.md`.

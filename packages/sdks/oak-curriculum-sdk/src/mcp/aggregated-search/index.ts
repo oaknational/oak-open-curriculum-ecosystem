@@ -1,9 +1,10 @@
 /**
- * SDK-backed search tool for semantic curriculum search.
+ * SDK-backed search tool for hybrid curriculum search.
  *
  * This module provides the search tool backed by the Search SDK,
- * offering 4-way RRF semantic search across all four Elasticsearch
- * indexes (lessons, units, threads, sequences) plus typeahead suggestions.
+ * offering hybrid BM25 + ELSER RRF retrieval across all four Elasticsearch
+ * indexes — four-way RRF for lessons and units, two-way RRF for threads and
+ * sequences — plus lexical typeahead suggestions.
  *
  * ## Directory Structure
  *

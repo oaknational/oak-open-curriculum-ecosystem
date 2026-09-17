@@ -49,6 +49,7 @@ sources without turning research notes into a second canon.
 
 | Lane | Best for | Starting points |
 | --- | --- | --- |
+| [concept-intake/README.md](./concept-intake/README.md) | Mixed-authority concept inventory and unratified candidate intake; normative status comes from canonical sources | significant ideas catalogue, dated weekly intake |
 | [operating-model-and-platforms/README.md](./operating-model-and-platforms/README.md) | Workbench model, platform surfaces, portability context | workbench topology, surface matrix, adapter formats |
 | [governance-planes-and-supervision/README.md](./governance-planes-and-supervision/README.md) | Repo governance planes, trust boundaries, runtime supervision | governance-plane note, mechanism-gap baseline, promoted synthesis |
 | [reviewer-systems-and-discoverability/README.md](./reviewer-systems-and-discoverability/README.md) | Reviewer gateway, discoverability, onboarding path | reviewer-gateway plan, staged reviewer notes, onboarding review |
@@ -105,6 +106,9 @@ sources without turning research notes into a second canon.
   — focused research note on `start-right-team`, emergent temporary
   responsibilities, team handoff routing, and the proposed action-trace
   surface.
+- [minimal-peer-comms-protocol-n3-2026-07-20.md](./minimal-peer-comms-protocol-n3-2026-07-20.md)
+  — historical analysis/example of a three-agent peer protocol retained from
+  the deconstruction corpus; explicitly not active Practice doctrine.
 
 ## Human-Facing Discovery Surfaces
 

@@ -9,116 +9,27 @@
  * pattern set + exclusions are single-sourced from the `machine-local-path`
  * `preToolUseContent` scoped block in `.agent/hooks/policy.json` — the same block
  * the PreToolUse write-hook uses — so the gate and the write-time guard never
- * drift.
+ * drift. The tracked-file listing and the binary/generated skip policy are
+ * likewise single-sourced, from `core/tracked-file-scan`, shared with the
+ * identity-naming gate.
  *
  * Wired into root `repo-validators:check`, which runs in the pre-commit hook AND
  * in CI via `pnpm check`. Exit 0 = clean; exit 1 = at least one machine-local
- * path found; exit 2 = the policy block is missing (misconfiguration).
+ * path found; exit 2 = refusal — the policy block is missing, or a tracked file
+ * could not be read (the scan never silently skips a tracked file).
  *
  * @packageDocumentation
  */
 
-import { execFileSync } from 'node:child_process';
-import { readFileSync, readlinkSync } from 'node:fs';
-import path from 'node:path';
-
 import { resolveRepoRoot } from '../../core/repo-root.js';
 import { writeErrorLine, writeLine } from '../../core/terminal-output.js';
-import { resolveTrustedGit } from '../../core/trusted-git.js';
+import { listTrackedFiles, readScanFiles } from '../../core/tracked-file-scan.js';
 import { loadScopedContentBlocks } from '../../hook-policy/policy-loader.js';
 
 import {
   scanForMachineLocalPaths,
   selectMachineLocalBlock,
-  type ScanFile,
 } from './validate-no-machine-local-paths-helpers.js';
-
-/** Null byte: the `git ls-files -z` record separator, and the binary-content marker. */
-const NUL = '\u0000';
-
-/**
- * File extensions that are genuinely binary — not worth scanning as text. SVG is
- * deliberately NOT here: it is plain text and can embed a machine-local path in
- * metadata, so it is scanned like any other text file.
- */
-const SKIP_EXTENSIONS = new Set([
-  '.png',
-  '.jpg',
-  '.jpeg',
-  '.gif',
-  '.ico',
-  '.pdf',
-  '.woff',
-  '.woff2',
-  '.ttf',
-  '.eot',
-  '.map',
-  '.lock',
-]);
-
-/** Specific large generated files with no human-authored paths to police. */
-const SKIP_FILES = new Set(['pnpm-lock.yaml']);
-
-/** List every tracked file, NUL-delimited so paths with spaces survive. */
-function listTrackedFiles(repoRoot: string): string[] {
-  const stdout = execFileSync(resolveTrustedGit(), ['ls-files', '-z'], {
-    cwd: repoRoot,
-    encoding: 'utf8',
-    maxBuffer: 64 * 1024 * 1024,
-  });
-  return stdout.split(NUL).filter((entry) => entry.length > 0);
-}
-
-/** Read the scannable text files, skipping binary/generated content. */
-/**
- * Read a tracked path's scannable text: a symlink's link text, else the
- * file content. `readlink` doubles as the symlink test (EINVAL on a
- * regular file), so there is no stat-then-read race window.
- */
-function readLinkTextOrFile(absolute: string): string {
-  try {
-    return readlinkSync(absolute);
-  } catch {
-    return readFileSync(absolute, 'utf8');
-  }
-}
-
-function readScanFiles(repoRoot: string, relativePaths: readonly string[]): ScanFile[] {
-  const files: ScanFile[] = [];
-  for (const relativePath of relativePaths) {
-    if (SKIP_FILES.has(path.basename(relativePath))) {
-      continue;
-    }
-    if (SKIP_EXTENSIONS.has(path.extname(relativePath))) {
-      continue;
-    }
-    let content: string;
-    try {
-      // A tracked symlink's scannable content IS its link text (what git
-      // stores): an absolute target into a home directory is exactly the
-      // machine-local-path class this validator exists to catch, while
-      // following the link would double-scan (or EISDIR on) the target,
-      // which is scanned under its own tracked path. The read itself is
-      // the symlink test (readlink EINVALs on regular files) — no
-      // check-then-use window (CodeQL js/file-system-race).
-      content = readLinkTextOrFile(path.join(repoRoot, relativePath));
-    } catch (error) {
-      // Fail loud: a tracked file the validator cannot read could hide a
-      // machine-local path, so silently skipping it would be a green-gate
-      // bypass. Surface it instead of continuing.
-      throw new Error(
-        `Cannot read tracked file '${relativePath}' for the machine-local-path scan. ` +
-          `Fix the file or its permissions — the scan must not skip a tracked file.`,
-        { cause: error },
-      );
-    }
-    if (content.includes(NUL)) {
-      continue;
-    }
-    files.push({ path: relativePath, content });
-  }
-  return files;
-}
 
 const repoRoot = resolveRepoRoot(import.meta.url);
 const block = selectMachineLocalBlock(await loadScopedContentBlocks());
@@ -130,7 +41,20 @@ if (block === undefined) {
   process.exit(2);
 }
 
-const files = readScanFiles(repoRoot, listTrackedFiles(repoRoot));
+const scan = readScanFiles(repoRoot, listTrackedFiles(repoRoot));
+if (!scan.ok) {
+  // Fail loud: a tracked file the validator cannot read could hide a
+  // machine-local path, so silently skipping it would be a green-gate
+  // bypass. Refuse the scan instead of continuing.
+  writeErrorLine(
+    `validate-no-machine-local-paths: cannot read tracked file '${scan.error.relativePath}' — ` +
+      `fix the file or its permissions; the scan must not skip a tracked file ` +
+      `(${String(scan.error.cause)})`,
+  );
+  process.exit(2);
+}
+
+const files = scan.value;
 const hits = scanForMachineLocalPaths(files, block);
 
 if (hits.length === 0) {

@@ -10,7 +10,8 @@
    3. COMPONENT   --btn-* --input-* … (see components.css) —
       per-part decisions, composed from roles + scales. Shared by
       the CSS class library AND the compiled React components.
-   Themes: (default light) · data-theme="dark" · "system" (follows OS)
+   Themes: (default: the identity's own polarity — no attribute)
+           · data-theme="system" (follow OS) · "light" · "dark"
            · "high-contrast" · "colour-safe" (colour-vision-deficiency)
    Apply data-theme to <html> or any subtree; oak-theme.js persists it.
    WCAG 2.2 AA throughout.
@@ -272,7 +273,15 @@
    white-label override surface (see brand.css). Themes and re-brands
    override ONLY canonical roles, never the aliases in 2b. */
 :root {
-  color-scheme: light; /* default: light. data-theme switches below. */
+  /* Default: the IDENTITY's own polarity (DDR-003 dated amendment
+     2026-08-11 — the person's choice wins, and the identity speaks first
+     when the person is silent). With no data-theme the page shows its
+     identity default: light here for the base kit, and a brand may
+     re-polarise via brand.css (the polarity lever). Every explicit choice
+     below carries a :root[data-theme] guard so the person always beats
+     the lever — data-theme="system" is a PERSON's choice to follow the
+     OS, never the page's own state. */
+  color-scheme: light;
 
   --text-primary: light-dark(var(--oak-black), var(--oak-white));
   --text-subdued: light-dark(var(--oak-grey60), var(--oak-grey30));
@@ -462,9 +471,57 @@
      slots (--type-body-3/4, --type-label, --type-code-4) floor at 12px and
      carry a CONDITION rather than a size — short scanned strings only, never
      running prose, never --weight-light on a pastel fill. */
-  --type-heading-1: var(--weight-display) var(--font-size-10)/var(--leading-64) var(--font-display); /* @kind font */
-  --type-heading-2: var(--weight-display) var(--font-size-9)/var(--leading-56) var(--font-display); /* @kind font */
-  --type-heading-3: var(--weight-display) var(--font-size-8)/var(--leading-48) var(--font-display); /* @kind font */
+  /* FLUID DISPLAY SLOTS (heading-1..3) — the fluidity pillar, tranche 1.
+     Each fluid slot is assembled from three brand-writable PARTS: unitless
+     rem bounds (min/max) and a unitless leading ratio. The kit derives the
+     whole curve from the bounds — the ramp runs 320px..960px and sits at
+     max from 960px up; both bounds stay rem-true under text resize. A brand
+     re-points the parts to reshape the ramp (see brand.css §1b); declaring
+     the whole slot instead is the documented opt-out of fluidity — never
+     declare both. Floors are fit-derived: the longest hero word fits a
+     320px line in the identity's own display face (proof: the rendered fit
+     cell in the showcase suite). heading-4..7 are declared fixed — at or
+     near body scale, nothing to gain (the fixed-point register in the
+     governing plan). */
+  --type-heading-1-min: 2.5; /* @kind other */
+  --type-heading-1-max: 3.5; /* @kind other */
+  --type-heading-1-leading: 1.1429; /* @kind other */
+  --type-heading-2-min: 2; /* @kind other */
+  --type-heading-2-max: 3; /* @kind other */
+  --type-heading-2-leading: 1.1667; /* @kind other */
+  --type-heading-3-min: 1.5; /* @kind other */
+  --type-heading-3-max: 2.5; /* @kind other */
+  --type-heading-3-leading: 1.2; /* @kind other */
+  --type-heading-1: var(--weight-display)
+    clamp(
+      calc(var(--type-heading-1-min) * 1rem),
+      calc(
+        var(--type-heading-1-min) * 1rem + (var(--type-heading-1-max) - var(--type-heading-1-min)) *
+          (100vw - 20rem) / 40
+      ),
+      calc(var(--type-heading-1-max) * 1rem)
+    )/var(--type-heading-1-leading)
+    var(--font-display); /* @kind font */
+  --type-heading-2: var(--weight-display)
+    clamp(
+      calc(var(--type-heading-2-min) * 1rem),
+      calc(
+        var(--type-heading-2-min) * 1rem + (var(--type-heading-2-max) - var(--type-heading-2-min)) *
+          (100vw - 20rem) / 40
+      ),
+      calc(var(--type-heading-2-max) * 1rem)
+    )/var(--type-heading-2-leading)
+    var(--font-display); /* @kind font */
+  --type-heading-3: var(--weight-display)
+    clamp(
+      calc(var(--type-heading-3-min) * 1rem),
+      calc(
+        var(--type-heading-3-min) * 1rem + (var(--type-heading-3-max) - var(--type-heading-3-min)) *
+          (100vw - 20rem) / 40
+      ),
+      calc(var(--type-heading-3-max) * 1rem)
+    )/var(--type-heading-3-leading)
+    var(--font-display); /* @kind font */
   --type-heading-4: var(--weight-display) var(--font-size-7)/var(--leading-40) var(--font-display); /* @kind font */
   --type-heading-5: var(--weight-display) var(--font-size-6)/var(--leading-32) var(--font-display); /* @kind font */
   --type-heading-6: var(--weight-display) var(--font-size-5)/var(--leading-24) var(--font-display); /* @kind font */
@@ -702,6 +759,27 @@
   --border-error: var(--oak-ci-vermilion);
   --border-brand: var(--oak-ci-blue);
   --border-warning: var(--oak-ci-ochre);
+
+  /* Decoratives flatten to neutral (owner ruling 2026-08-10: colour-safe
+     is a DISTINCT maximum-legibility mode, never a light lookalike).
+     Under colour-vision deficiency, ambient hue is noise that camouflages
+     meaning-bearing colour — with the decorative surfaces neutral, the
+     only hue left on the page IS meaning (status, links, focus), and text
+     sits on maximum-contrast ground. Subdued text strengthens for the
+     same reason. Decoratives never carry meaning, so nothing is lost. */
+  --surface-decorative-1: var(--oak-grey20);
+  --surface-decorative-1-soft: var(--oak-grey10);
+  --surface-decorative-1-subtle: var(--oak-grey10);
+  --surface-decorative-2: var(--oak-grey20);
+  --surface-decorative-2-soft: var(--oak-grey10);
+  --surface-decorative-2-subtle: var(--oak-grey10);
+  --surface-decorative-3: var(--oak-grey20);
+  --surface-decorative-3-soft: var(--oak-grey10);
+  --surface-decorative-3-subtle: var(--oak-grey10);
+  --surface-decorative-4: var(--oak-grey20);
+  --surface-decorative-4-soft: var(--oak-grey10);
+  --surface-decorative-4-subtle: var(--oak-grey10);
+  --text-subdued: var(--oak-grey70);
 }
 
 /* ---------- 4. BASE ---------- */

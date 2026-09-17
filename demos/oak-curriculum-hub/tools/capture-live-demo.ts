@@ -20,7 +20,7 @@
  * "did it produce a non-blank capture", enforced live on every run.
  *
  * §D GEOMETRY: the viewport width is the CSS LAYOUT width (heading wrap, max-widths, breakpoints).
- * The PNG pixel dimensions are width × deviceScaleFactor (2). Compare wrap/layout against a
+ * The PNG pixel dimensions are width × deviceScaleFactor (MATCHED_GEOMETRY_SCALE). Compare wrap/layout against a
  * canonical target only with both captures' CSS width + dSF known; never compare raw pixel dims.
  *
  * PLACEMENT: a workspace-internal dev tool of @oaknational/oak-curriculum-hub — `tsx` and
@@ -39,7 +39,6 @@
  *   # direct form, from the repo root:
  *   BASE_URL=http://localhost:3011 tsx demos/oak-curriculum-hub/tools/capture-live-demo.ts
  */
-import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -48,34 +47,36 @@ import type { Page } from '@playwright/test';
 import { ok, err, type Result } from '@oaknational/result';
 
 import {
+  isAllowedRequestUrl,
   isSuspect,
-  isUnhydrated,
+  MATCHED_GEOMETRY_SCALE,
   resolveBase,
-  resolveRoutes,
   resolveWidth,
+} from '@oaknational/fidelity-review/capture-flags';
+import {
+  captureShot,
+  createOriginGuard,
+  settleForCapture,
+} from '@oaknational/fidelity-review/capture-settle';
+import {
+  createCaptureSession,
+  nodeCaptureStageIo,
+  type CaptureSession,
+} from '@oaknational/fidelity-review/orchestrator';
+import { assertServerUp } from '@oaknational/fidelity-review/dev-server';
+import { describeThrown, runTool } from '@oaknational/fidelity-review/support';
+
+import {
+  APP_SENTINEL,
+  DEFAULT_BASE,
+  isUnhydrated,
+  resolveRoutes,
   routeToBase,
+  SERVER_HINT,
 } from './capture-checks';
-import { describeThrown, runTool } from './support';
 
 const TOOLS_DIR = path.dirname(fileURLToPath(import.meta.url));
-const OUT_DIR = path.resolve(TOOLS_DIR, '..', 'demo-evidence');
-
-export async function assertServerUp(base: string): Promise<Result<number, Error>> {
-  try {
-    const res = await fetch(base, { method: 'GET' });
-    // any HTTP response (even a 404 for '/') proves something is listening
-    return ok(res.status);
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    return err(
-      new Error(
-        `no demo server reachable at ${base}. Start it first (from the app dir: pnpm dev -> :3010) ` +
-          `and coordinate the port with the styling lane, or pass --base <url>. cause: ${message}`,
-        { cause: error },
-      ),
-    );
-  }
-}
+const DEMO_DIR = path.resolve(TOOLS_DIR, '..');
 
 function verdictFor(blank: boolean, unhydrated: boolean): string {
   if (blank) {
@@ -88,18 +89,22 @@ function verdictFor(blank: boolean, unhydrated: boolean): string {
 }
 
 /** Capture one route (full-page + above-the-fold PNGs); returns true when the capture is bad. */
-async function captureRoute(page: Page, base: string, route: string): Promise<boolean> {
+async function captureRoute(
+  page: Page,
+  base: string,
+  route: string,
+  session: CaptureSession,
+): Promise<boolean> {
   const outBase = routeToBase(route);
   // domcontentloaded, NOT networkidle — next dev's HMR websocket keeps the network busy forever.
   const resp = await page.goto(`${base}${route}`, {
     waitUntil: 'domcontentloaded',
     timeout: 60000,
   });
-  await page.evaluate(async () => {
-    await document.fonts.ready;
-  });
-  await page.addStyleTag({ content: '*{animation:none!important;transition:none!important}' });
-  await page.waitForTimeout(2000); // settle: hydration + font swap + late layout
+  // The shared settle runs once so the measurement reads a settled
+  // page; captureShot settles again per shot (idempotent), so the
+  // shutter can never fire unsettled.
+  await settleForCapture(page);
   const m = await page.evaluate(() => ({
     h: document.body.scrollHeight,
     len: document.body.innerText.length,
@@ -114,19 +119,30 @@ async function captureRoute(page: Page, base: string, route: string): Promise<bo
   process.stdout.write(
     `${route}: HTTP=${status} bodyH=${m.h} textLen=${m.len} hidden=${m.hidden} -> ${verdictFor(blank, unhydrated)}\n`,
   );
-  await page.screenshot({ path: path.join(OUT_DIR, `${outBase}-live.png`), fullPage: true });
-  await page.screenshot({
-    path: path.join(OUT_DIR, `${outBase}-live-abovefold.png`),
-    fullPage: false,
-  });
-  process.stdout.write(`  wrote ${outBase}-live.png + ${outBase}-live-abovefold.png\n`);
+  const full = session.stage(
+    `demo-evidence/${outBase}-live.png`,
+    await captureShot(page, { fullPage: true }),
+  );
+  const fold = session.stage(
+    `demo-evidence/${outBase}-live-abovefold.png`,
+    await captureShot(page, { fullPage: false }),
+  );
+  if (!full.ok) {
+    process.stdout.write(`  STAGE FAIL ${outBase}: ${full.error}\n`);
+    return true;
+  }
+  if (!fold.ok) {
+    process.stdout.write(`  STAGE FAIL ${outBase}: ${fold.error}\n`);
+    return true;
+  }
+  process.stdout.write(`  staged ${outBase}-live.png + ${outBase}-live-abovefold.png\n`);
   return blank || unhydrated;
 }
 
 function logRunHeader(base: string, width: number, routes: readonly string[]): void {
   process.stdout.write(`live demo base = ${base}\n`);
   process.stdout.write(
-    `viewport CSS width = ${width}px (deviceScaleFactor 2 -> ${width * 2}px PNGs)\n`,
+    `viewport CSS width = ${width}px (deviceScaleFactor ${MATCHED_GEOMETRY_SCALE} -> ${width * MATCHED_GEOMETRY_SCALE}px PNGs)\n`,
   );
   process.stdout.write(`routes = ${routes.join(', ')}\n`);
 }
@@ -136,17 +152,28 @@ export async function runCaptures(
   base: string,
   width: number,
   routes: readonly string[],
+  session: CaptureSession,
 ): Promise<boolean> {
   const browser = await chromium.launch({ headless: true });
-  const ctx = await browser.newContext({ viewport: { width, height: 1000 }, deviceScaleFactor: 2 });
-  const page = await ctx.newPage();
+  const guard = createOriginGuard((url) => isAllowedRequestUrl(url, new URL(base).origin));
   let suspect = false;
   try {
+    const ctx = await browser.newContext({
+      viewport: { width, height: 1000 },
+      deviceScaleFactor: MATCHED_GEOMETRY_SCALE,
+    });
+    await ctx.route('**/*', (route) => guard.handleRoute(route));
+    const page = await ctx.newPage();
+    page.on('response', (response) => guard.noteResponseUrl(response.url()));
     for (const route of routes) {
-      suspect = (await captureRoute(page, base, route)) || suspect;
+      suspect = (await captureRoute(page, base, route, session)) || suspect;
     }
   } finally {
     await browser.close();
+  }
+  for (const violation of guard.violations()) {
+    process.stdout.write(`EGRESS VIOLATION: ${violation}\n`);
+    suspect = true;
   }
   return suspect;
 }
@@ -157,17 +184,33 @@ async function main(): Promise<Result<void, string>> {
   if (!widthRes.ok) {
     return err(`CAPTURE FAIL: ${describeThrown(widthRes.error)}`);
   }
-  const base = resolveBase(argv, process.env);
+  const baseRes = resolveBase(argv, process.env, DEFAULT_BASE);
+  if (!baseRes.ok) {
+    return err(`CAPTURE FAIL: ${describeThrown(baseRes.error)}`);
+  }
+  const base = baseRes.value;
   const routes = resolveRoutes(argv);
 
-  const up = await assertServerUp(base);
+  const up = await assertServerUp(base, SERVER_HINT, APP_SENTINEL);
   if (!up.ok) {
-    return err(`CAPTURE FAIL: ${describeThrown(up.error)}`);
+    return err(`CAPTURE FAIL: ${up.error}`);
   }
-  fs.mkdirSync(OUT_DIR, { recursive: true });
   logRunHeader(base, widthRes.value, routes);
 
-  const suspect = await runCaptures(base, widthRes.value, routes);
+  // Direct invocation is a DIAGNOSTIC run: shots stage under
+  // demo-evidence/.staging/ and are never promoted — canonical evidence
+  // and its manifest change only through the full tool:fidelity run.
+  const session = createCaptureSession(
+    nodeCaptureStageIo(DEMO_DIR, `diagnostic-${Date.now()}-${process.pid}`),
+    {
+      base,
+      widthCssPx: widthRes.value,
+      deviceScaleFactor: MATCHED_GEOMETRY_SCALE,
+      startedAt: new Date().toISOString(),
+      now: () => new Date().toISOString(),
+    },
+  );
+  const suspect = await runCaptures(base, widthRes.value, routes, session);
   if (suspect) {
     return err(
       'CAPTURE SUSPECT: a target looked blank/placeholder — investigate before trusting the PNGs',

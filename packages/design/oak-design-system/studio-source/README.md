@@ -9,8 +9,17 @@ None of it is used as production code in this repository:
 
 - nothing here is on the package export surface (`package.json` `exports`
   names only the root consumable files);
-- nothing here is served, imported, or executed by any app, demo, or tool in
-  this repo;
+- nothing here is imported or executed by any app or demo in this repo, and
+  no app serves this tree. The ONE sanctioned consumer (ratified in the
+  `identity-switchboard-first-pixels` plan node, 2026-08-09: "capture
+  tooling only — nothing app-serves the fenced tree") is the
+  design-showcase fidelity capture (`demos/oak-design-showcase/tools/`),
+  which serves this tree read-only on an ephemeral localhost port for the
+  seconds of a capture run and renders it headlessly as the diff target.
+  That consumption pins `whitelabel/specimen.html`, the `whitelabel/`
+  brand directories, and `Identity Switchboard.html` as CAPTURE CONTRACT —
+  a rename or restructure of those files breaks `tool:fidelity` loudly and
+  must update the showcase pairing map in the same change;
 - these files render live on the **Claude Design studio surface** (their
   relative references resolve against the studio's layout, not this
   directory) — in-repo they are sources and fidelity targets.

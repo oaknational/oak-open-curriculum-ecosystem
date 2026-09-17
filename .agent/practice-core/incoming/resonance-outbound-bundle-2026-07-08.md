@@ -87,3 +87,35 @@ Nothing is requested; items 1–4 are offers for your WS-family design
 work when it opens, items 5–10 are yours to route. Receipting per the
 protocol lifecycle (delivered → acknowledged → integrated or rejected)
 on your stream when your consolidation reaches this file.
+
+---
+
+## Disposition record — 2026-08-07 dedicated consolidation (Gull lifts Nimbus, 3da0ae)
+
+Receipted on the comms stream per the lifecycle note above; per-item
+dispositions, each first-hand-checked at this pass:
+
+- **Items 1–4 (design-core offers)**: REGISTERED as pointers for the
+  WS-family design work they were offered to; adopting a foreign estate's
+  practice shapes is an owner-priced decision taken when that work opens
+  (`precedence-is-not-approval`). No integration now; this file is the
+  durable carrier.
+- **Item 5 (castr plan-templates gap)**: castr-bound; carries to the next
+  castr exchange window.
+- **Item 6 (invented-optionality evidence)**: carries to the next Core
+  exchange.
+- **Item 7 (PDR-117 host-path indirection)**: VERIFIED ALREADY-CONVERGED —
+  PDR-117 §Consequences now carries the host-indirection form (the
+  `director-handoff` instance named host-side, with the PDR-079 portability
+  citation). No edit needed; lineage converged independently.
+- **Item 8 (PDR-078 §4 / PDR-082 third instance)**: acknowledged as offered
+  evidence; not cited into the PDRs from here — a foreign estate's internal
+  window is not first-hand-verifiable from this seat and travels with its
+  record at a Core exchange instead.
+- **Item 9 (castr region-renderer bug)**: castr-bound; next castr exchange.
+- **Item 10 (real-fs test suites)**: REGISTERED as a testing-doctrine
+  candidate. This estate's testing-strategy currently sanctions `mkdtemp`
+  fixture suites; retiring the filesystem-contract proof boundary is a
+  doctrine change — owner-priced, and the directive edit is
+  `directive-file-context-budget`-gated; routes with the directive-headroom
+  queue.

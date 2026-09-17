@@ -32,20 +32,37 @@ everything else still binds. (Trued 2026-07-31 — this doc previously
 claimed the bot had no bypass at all, which contradicted the live ruleset
 split and the standing no-approving-review practice.)
 
+**The sanctioned bot-merge path is the front-door command** (MCP-508):
+
 ```bash
-token=$(pnpm --silent agent-tools merge-bot mint-token --scope pull-request-work) || exit 1
-GH_TOKEN="$token" gh pr merge <n> --auto --merge
+pnpm agent-tools merge-bot merge --pr <n> --expect <reviewer>
 ```
 
-**Bot merges at settled run through the REST endpoint, not the `gh pr
-merge` client.** Client-side `gh pr merge` refuses on a
+It mints its own least-privilege token (`pull-request-merge`), reads the
+settlement verdict, and merges ONLY on SETTLE-READY — merge-commit method
+always, the VERDICTED tip's sha pinned in the call (a moved tip answers
+409), refusing by verdict name on everything else with exit 3. `--expect`
+is required: source it from the repository's automatic-review
+configuration; a defaulted set never merges. `merge-bot merge --help`
+carries the full contract.
+
+**Why the REST endpoint, not the `gh pr merge` client** (the command does
+this for you): client-side `gh pr merge` refuses on a
 BLOCKED/viewer-independent mergeability state, and GitHub auto-merge does
 NOT apply ruleset bypass grants — yet the bot's code-owner-gate bypass IS
-honoured at the REST layer. So at genuinely-settled the bot merges via
+honoured at the REST layer. So at genuinely-settled the command merges via
 `PUT /repos/{owner}/{repo}/pulls/{n}/merge` (merge-commit method, never
-squash), re-counting unresolved threads INSIDE the same command sequence —
-after the head check, before the REST call — because a bot review can land
-in the seconds between (caught twice in forty minutes, #570/#574).
+squash), recomputing the whole settlement verdict — checks, threads,
+per-reviewer legs, quiet window — inside the same invocation, because a
+bot review can land in the seconds between (caught twice in forty
+minutes, #570/#574).
+
+For the OTHER bot writes (pushes, PR create/edit, comments, review
+replies, thread resolution, update-branch), mint a token and use it:
+
+```bash
+token=$(pnpm --silent agent-tools merge-bot mint-token --scope pull-request-work) || exit 1
+```
 
 **Assign the token first; never use the `GH_TOKEN=$(…) gh …` prefix form.** A
 prefix substitution cannot fail fast: if the mint fails for any reason — a bad
@@ -67,10 +84,11 @@ scope the silent one — which is how a read-only need came to be served by a
 three-write token (MCP-385). The scopes, and the evidence for each member,
 are defined in `agent-tools/src/merge-bot/token-scopes.ts`:
 
-| scope                  | permissions                                                   | for                                                                                  |
-| ---------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| `pull-request-work`    | `pull_requests: write`, `contents: write`, `workflows: write` | merge, update-branch, push, PR create/edit, comment, review reply, thread resolution |
-| `code-scanning-alerts` | `security_events: read`                                       | reading code-scanning alerts                                                         |
+| scope                  | permissions                                                   | for                                                                           |
+| ---------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| `pull-request-work`    | `pull_requests: write`, `contents: write`, `workflows: write` | update-branch, push, PR create/edit, comment, review reply, thread resolution |
+| `pull-request-merge`   | `pull_requests: write`, `contents: write`                     | the merge act alone (what `merge-bot merge` mints itself)                     |
+| `code-scanning-alerts` | `security_events: read`                                       | reading code-scanning alerts                                                  |
 
 That table is a **mirror**, kept inline because a reader choosing a scope
 needs the read/write levels in front of them. `token-scopes.ts` is
@@ -225,8 +243,20 @@ stdout only (expiry to stderr) so command substitution never leaks extras.
 that output is as sensitive as the token itself and must not be pasted
 anywhere the plain form would be safe.
 
-Tokens belong in the environment, never in a URL. Pushes use a
-credential-helper that reads `GH_TOKEN` (see
-[`bot-identity-on-third-party-systems`](../../.agent/rules/bot-identity-on-third-party-systems.md)) —
-a token baked into a remote URL is visible in the process list to anything
-that can read it.
+Tokens never ride a URL or argv — both are visible in the process list to
+anything that can read it — and the push keeps them out of the child
+environment too: git exports that environment to the whole pre-push hook
+chain, and an env dump there must never print a live token. The
+front-door push carries this discipline as behaviour:
+
+```bash
+pnpm agent-tools merge-bot push
+```
+
+It mints its own token, resolves the current branch from git itself,
+writes the token to a 0600 file in a private directory that lives exactly
+as long as the transfer, and hands the transfer to the git binary with a
+static credential helper reading that file — the child environment names
+only the file's path. Never argv, no force flags, no `--no-verify`, and
+pushes to the default branch refuse by name (see
+[`bot-identity-on-third-party-systems`](../../.agent/rules/bot-identity-on-third-party-systems.md)).

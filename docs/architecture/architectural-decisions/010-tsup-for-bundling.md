@@ -2,7 +2,9 @@
 
 ## Status
 
-Revised (2026-04-14) — composable base config added
+Revised (2026-08-09) — base config moved into
+`@oaknational/workspace-config`; previously revised (2026-04-14) —
+composable base config added
 
 ## Context
 
@@ -121,3 +123,23 @@ Workspace configs become 2-5 line imports from the base.
 Decision shaped by Betty (cohesion/change-cost), Barney
 (simplification — 3 factories not 4), Fred (boundary discipline),
 and assumptions-expert (proportionality — tracks are independent).
+
+## Revision: Base Config Moved Into a Package (2026-08-09)
+
+The root `tsup.config.base.ts` (with the vitest bases and the
+no-network test setup) moved into `@oaknational/workspace-config`,
+consumed via declared `workspace:*` dependencies as
+`@oaknational/workspace-config/tsup`. The factory API is unchanged.
+The root-relative import convention this ADR's 2026-04-14 revision
+established was the violation class that broke any consumer copying a
+workspace subtree (Stryker's sandbox first) and was invisible to lint;
+the boundary is now enforced by the dependency-cruiser rules (static
+imports and undeclared dependencies) plus
+`validate-workspace-config-isolation` (the resolver-invisible legs).
+The `$TURBO_ROOT$/tsup.config.base.ts` inputs this ADR added are
+DELETED, not re-pointed: consumers reach the package through
+`dependsOn: ["^build"]`, which folds its build hash into every
+consumer task — a root input tracking package source while consumers
+read `dist/` would drift. See
+`.agent/plans/delivery/workspace-config-isolation.plan.md` for the
+evidence and the full mechanism.

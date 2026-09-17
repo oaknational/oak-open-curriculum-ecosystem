@@ -1,0 +1,17 @@
+{
+  "artefact": ".agent/reports/design/skill-standard-pilot-evals/iteration-1/artefacts/case-b-without-skill.html",
+  "assertions": {
+    "five-selections-offered": {
+      "pass": false,
+      "evidence": "offered set is dark, light, system; missing high-contrast, colour-safe (DDR-004: a subset control is non-conformant)"
+    },
+    "only-palette-themes-carry-trees": {
+      "pass": true,
+      "evidence": "no non-palette data-theme value carries a token tree in the authored CSS"
+    },
+    "applied-value-never-round-trips": {
+      "pass": true,
+      "evidence": "no read of the applied attribute reaches a choice or storage sink"
+    }
+  }
+}

@@ -187,6 +187,12 @@ the special case. Run both unless that exemption applies.
    your identity in place (never a duplicate row, never a hand-edit); the
    retiring agent records the pointer with `claims set-handoff --active
    <active-claims-path> --claim-id <id> --path <record>`.
+   **An adopted claim gets its PREMISE recomputed at adoption, not just its
+   ownership**: verify first-hand that the work the claim names is still
+   live and undone before continuing it (worked instance 2026-08-13: a
+   claim adopted at succession survived three freeze blocks while its
+   premise — a PDR to author — had completed nine days earlier as PDR-136;
+   the stale-held claim is the registry's cousin of a stale board reading).
    **If a coordinator pre-positioning event is already in the comms
    stream naming this agent as the incoming coordinator** (PDR-064
    Moment 1), the team-start broadcast in move 3 may declare

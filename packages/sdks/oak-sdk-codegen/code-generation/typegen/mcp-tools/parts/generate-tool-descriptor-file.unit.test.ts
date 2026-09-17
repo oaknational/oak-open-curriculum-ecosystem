@@ -14,24 +14,24 @@ describe('generateToolDescriptorFile', () => {
     const generated = generateToolDescriptorFile();
 
     expect(generated).toContain(
-      "import type {\n  SecurityScheme,\n  SourceAttribution,\n  ToolAnnotations,\n  ToolMeta,\n  StatusDiscriminant,\n  InvokeResult,\n} from '../../../../mcp-protocol-types.js';",
+      "import type {\n  SecurityScheme,\n  ToolAnnotations,\n  ToolMeta,\n  StatusDiscriminant,\n  InvokeResult,\n} from '../../../../mcp-protocol-types.js';",
     );
   });
 
-  it('imports DOCUMENTED_ERROR_PREFIX value from mcp-protocol-types', () => {
+  it('re-exports values directly with export-from, never import-then-export', () => {
     const generated = generateToolDescriptorFile();
 
     expect(generated).toContain(
-      "import { DOCUMENTED_ERROR_PREFIX } from '../../../../mcp-protocol-types.js';",
+      "export { DOCUMENTED_ERROR_PREFIX, derivePaginationFromLinkHeader } from '../../../../mcp-protocol-types.js';",
     );
+    expect(generated).not.toContain('import { DOCUMENTED_ERROR_PREFIX');
   });
 
-  it('re-exports all imported non-API-derived types', () => {
+  it('re-exports all non-API-derived types with export-type-from', () => {
     const generated = generateToolDescriptorFile();
 
-    expect(generated).toContain('export { DOCUMENTED_ERROR_PREFIX };');
     expect(generated).toContain(
-      'export type { SecurityScheme, SourceAttribution, ToolAnnotations, ToolMeta, StatusDiscriminant, InvokeResult };',
+      "export type { SecurityScheme, SourceAttribution, ToolAnnotations, ToolMeta, StatusDiscriminant, InvokeResult, PaginationEcho } from '../../../../mcp-protocol-types.js';",
     );
   });
 

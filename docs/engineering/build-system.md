@@ -55,19 +55,24 @@ codegen died, cascading 30 tasks.
 
 npm dependencies are updated by **agent-run sweeps**, not by Dependabot.
 `.github/dependabot.yml` covers github-actions only: Dependabot regenerates the
-whole lockfile per PR with its own resolver, pulling in transitives published
-within the last 24 hours, which trips `minimumReleaseAge: 1440` at CI install
-and makes every npm-ecosystem PR unmergeable. A local `pnpm` sweep cannot hit
-that failure, because pnpm's own resolver enforces the floor at resolution
-time. Dependabot vulnerability **alerts** stay on — they are a repo setting,
-not part of this file.
+whole lockfile per PR with its own resolver invocation — which, if that
+invocation does not honour the age floor, pulls in transitives published
+within the last 24 hours. `minimumReleaseAge: 1440` is enforced at
+RESOLUTION time only — a frozen-lockfile CI install does not re-check release
+ages (verified 2026-08-11, pnpm 11.20) — so the regeneration step is where the
+24h floor either binds or silently does not, and whether Dependabot's own
+invocation honours the setting is version-dependent and unestablished here.
+Agent-run local sweeps keep the floor deterministically live, because pnpm's
+own resolver applies it. Dependabot vulnerability **alerts** stay on — they
+are a repo setting, not part of this file.
 
 Two majors are held deliberately. A sweep must not cross either, and
 `pnpm -r up --latest` crosses both:
 
 - **`typescript` stays on 6.x.** The binding blocker is the type-aware lint
-  stack: every published `typescript-eslint`, including the newest 8.65.1
-  alphas, declares `typescript: ">=4.8.4 <6.1.0"`. Nothing admits TS 7, so
+  stack: every published `typescript-eslint`, including 8.66.0 (installed
+  by the 2026-08-11 wave; peer range registry-verified), declares
+  `typescript: ">=4.8.4 <6.1.0"`. Nothing admits TS 7, so
   adopting it would run type-aware linting across all 28 packages on an
   unsupported compiler — and the only way to make that pass is to switch the
   layer off, which

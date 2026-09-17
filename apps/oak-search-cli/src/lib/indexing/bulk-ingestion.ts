@@ -47,6 +47,14 @@ export interface BulkIngestionOptions {
   readonly indexes?: readonly SearchIndexKind[];
 
   readonly resolveIndex?: IndexResolverFn;
+
+  /**
+   * If true, retain restricted lessons in the index instead of excluding them.
+   * Default (undefined/false) excludes, reproducing the standing behaviour —
+   * the documented, configurable restricted-exclusion switch (owner ruling
+   * 2026-08-12).
+   */
+  readonly includeRestricted?: boolean;
 }
 
 /**
@@ -91,6 +99,24 @@ function logFilesLoaded(total: number, filtered: number, filter?: readonly strin
 }
 
 /**
+ * Applies the restricted-lesson exclusion switch (default exclude; owner ruling
+ * 2026-08-12, ADR-224) and reports the outcome. Provenance and revisit
+ * condition live on the SDK's restricted-lesson-filter.
+ */
+function excludeRestrictedForIngest(
+  files: readonly BulkFileResult[],
+  includeRestricted: boolean | undefined,
+): ReturnType<typeof excludeRestrictedLessons> {
+  const result = excludeRestrictedLessons(files, { includeRestricted });
+  ingestLogger.info('Restricted-lesson exclusion applied at ingest', {
+    includeRestricted: includeRestricted === true,
+    restrictedLessonsExcluded: result.restrictedLessonsExcluded,
+    decision: 'MCP-204 filter-at-ingest, configurable (owner ruling 2026-08-12)',
+  });
+  return result;
+}
+
+/**
  * Fetches and unwraps category data at the orchestrator boundary.
  *
  * @remarks
@@ -121,7 +147,7 @@ export async function prepareBulkIngestion(
   options: BulkIngestionOptions,
   deps: BulkIngestionDeps = defaultBulkIngestionDeps,
 ): Promise<BulkIngestionResult> {
-  const { bulkDir, client, subjectFilter, indexes = [], resolveIndex } = options;
+  const { bulkDir, client, subjectFilter, indexes = [], resolveIndex, includeRestricted } = options;
   ingestLogger.info('Starting bulk ingestion preparation', {
     bulkDir,
     indexes: indexes.length > 0 ? indexes : 'all',
@@ -131,13 +157,10 @@ export async function prepareBulkIngestion(
   const filteredFiles = filterBySubject(allFiles, subjectFilter);
   logFilesLoaded(allFiles.length, filteredFiles.length, subjectFilter);
 
-  // Restricted lessons never enter any ingestion phase (MCP-204 decision —
-  // provenance and revisit condition live on the SDK's restricted-lesson-filter)
-  const { files: ingestFiles, restrictedLessonsExcluded } = excludeRestrictedLessons(filteredFiles);
-  ingestLogger.info('Restricted lessons excluded at ingest', {
-    restrictedLessonsExcluded,
-    decision: 'MCP-204 filter-at-ingest; revisit post-submission',
-  });
+  const { files: ingestFiles, restrictedLessonsExcluded } = excludeRestrictedForIngest(
+    filteredFiles,
+    includeRestricted,
+  );
 
   const bulkDownloadFiles = ingestFiles.map((f) => f.data);
   const sequenceSlugs = bulkDownloadFiles.map((f) => f.sequenceSlug);

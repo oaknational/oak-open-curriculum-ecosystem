@@ -48,7 +48,7 @@
 
 import { fileURLToPath } from 'node:url';
 
-import { runInheritedProcess } from '../commit-queue/process.js';
+import { runFileBackedChild } from '../core/file-backed-child.js';
 
 const ADVISORY_BANNER = '[ADVISORY ONLY — NOT A COMMIT GATE]';
 
@@ -143,19 +143,19 @@ async function main(forwardedArgs: readonly string[]): Promise<number> {
 
   const result = await runCommitSkillAdvisories({
     fitnessCheck: async () =>
-      runInheritedProcess({
+      runFileBackedChild({
         command: 'pnpm',
         args: ['practice:fitness:strict-hard'],
         cwd: repoRoot,
       }),
     vocabularyCheck: async () =>
-      runInheritedProcess({
+      runFileBackedChild({
         command: 'pnpm',
         args: ['practice:vocabulary'],
         cwd: repoRoot,
       }),
     messageCheck: async () =>
-      runInheritedProcess({
+      runFileBackedChild({
         command: 'pnpm',
         args: ['agent-tools:check-commit-message', ...forwardedArgs],
         cwd: repoRoot,

@@ -10,13 +10,22 @@ import {
   type ScanFile,
 } from './validate-no-machine-local-paths-helpers.js';
 
-/** Load the live machine-local block so the controls run against the real pattern set. */
-async function loadBlock(): Promise<ScopedContentBlockGroup> {
-  const block = selectMachineLocalBlock(await loadScopedContentBlocks());
-  if (block === undefined) {
-    throw new Error('machine-local-path block missing from .agent/hooks/policy.json');
-  }
-  return block;
+/**
+ * An inert stand-in used ONLY when the live block is absent: its pattern can
+ * never match, so every dependent live-set test fails visibly alongside the
+ * existence guard below — absence is loud, and no helper throws
+ * (no-throw-statement).
+ */
+const INERT_BLOCK: ScopedContentBlockGroup = {
+  concept: 'machine-local-path-missing',
+  patterns: ['(?!never-matches)$never'],
+  include_paths: ['**'],
+  citation: 'placeholder — the existence guard test reds when this is in use',
+};
+
+/** The live machine-local block, or the inert stand-in when absent. */
+async function loadBlockOrInert(): Promise<ScopedContentBlockGroup> {
+  return selectMachineLocalBlock(await loadScopedContentBlocks()) ?? INERT_BLOCK;
 }
 
 describe('findMachineLocalPathHits', () => {
@@ -36,8 +45,12 @@ describe('findMachineLocalPathHits', () => {
 });
 
 describe('machine-local-path patterns (live policy.json set)', () => {
+  it('the live machine-local-path block exists in policy.json', async () => {
+    expect(selectMachineLocalBlock(await loadScopedContentBlocks())).toBeDefined();
+  });
+
   it('flags user-home and machine-temp absolute paths (positive controls)', async () => {
-    const block = await loadBlock();
+    const block = await loadBlockOrInert();
     const positives = [
       '/Users/alice/code/oak',
       '/home/user/project',
@@ -53,7 +66,7 @@ describe('machine-local-path patterns (live policy.json set)', () => {
   });
 
   it('does NOT flag portable system paths, placeholders, or repo-relative paths (negative controls)', async () => {
-    const block = await loadBlock();
+    const block = await loadBlockOrInert();
     const negatives = [
       '/usr/bin/git', // the S4036 fix — must never be flagged
       '/opt/homebrew/bin/git',
@@ -73,7 +86,7 @@ describe('machine-local-path patterns (live policy.json set)', () => {
 
 describe('scanForMachineLocalPaths', () => {
   it('flags an in-scope file but skips a file matched by exclude_paths', async () => {
-    const block = await loadBlock();
+    const block = await loadBlockOrInert();
     const files: ScanFile[] = [
       { path: 'docs/example.md', content: 'path: /Users/alice/x' },
       {

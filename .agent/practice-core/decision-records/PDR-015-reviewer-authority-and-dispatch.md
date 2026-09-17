@@ -26,6 +26,35 @@ against each other).
 
 ## Amendment Log
 
+- **2026-08-07 amendment (third) — tier calibration from the
+  2026-08-06 MCP-517/518 fleet (Gull lifts Nimbus / claude-code /
+  claude-fable-5; continuity-memory-and-knowledge-flow thread;
+  landing first-hand fleet-ops evidence from the napkin corpus at the
+  dedicated consolidation).** Low-tier finder legs confabulate under
+  ambiguity, so their findings and confidence labels require
+  line-item verification; high-tier doc-verifier legs measured
+  highest yield per token. New bullet in §Dispatch model floor.
+
+- **2026-08-07 amendment (second) — prior-art before design review;
+  plans of consequence get a tiered fleet review (Gull lifts Nimbus /
+  claude-code / claude-fable-5; continuity-memory-and-knowledge-flow
+  thread; landing two owner-endorsed 2026-07-31 candidates from the
+  napkin corpus at the dedicated consolidation).** A design brief's
+  first line is the plan-corpus prior-art search result; a plan of
+  consequence gets a tiered fleet review before execution. New
+  §Prior-art and plan-of-consequence dispatch disciplines sub-section.
+
+- **2026-08-07 amendment — dispatch model floor and unavailability
+  fallback (Gull lifts Nimbus / claude-code / claude-fable-5;
+  continuity-memory-and-knowledge-flow thread; landing two standing
+  owner rulings from the 2026-08-05 vendor-memory graduation audit,
+  owner word of 2026-07-26 and 2026-07-31).** Expert reviewer
+  dispatches pass a high-capability model explicitly (the estate's
+  current reviewer default: `model: "opus"`), and any
+  model-unavailability fallback goes UP in capability at lower effort,
+  never down. New §Dispatch model floor and unavailability fallback
+  sub-section in the Decision area.
+
 - **2026-05-14 amendment — audit-shape surface framing for parallel
   reviewer dispatch (Riverine Swimming Hull / claude-code /
   claude-opus-4-7-1m; agentic-engineering-enhancements thread;
@@ -462,6 +491,84 @@ The corollary for plan WS0 dispatch: expect **concrete cycle-shape
 correctives** from each reviewer, not just nudges. Each reviewer's
 absence is a specific gap in the audit-shape coverage, not a
 generic loss of redundancy.
+
+### Dispatch model floor and unavailability fallback (2026-08-07 amendment)
+
+Reviewer verdicts steer dispositions and merges, so the owner prices
+reviewer quality above reviewer cost (owner word, 2026-07-26: "next
+time you run reviewers, please make them Opus"). Two dispatch-time
+disciplines follow:
+
+- **Model floor.** Every expert reviewer dispatch (code, config, test,
+  type, security, MCP experts and similar) passes a high-capability
+  model explicitly — in this estate's current tiering,
+  `model: "opus"` — rather than inheriting the agent definition's
+  default. Bulk mechanical fan-outs (classification sweeps, corpus
+  maps) stay tier-per-leg; an owner-priced fleet shape is owner word
+  and overrides. A reviewer or adjudication leg may run on a
+  higher-than-default tier where its judgment weight warrants (owner,
+  2026-08-06).
+- **Fallback goes UP, never down** (owner word, 2026-07-31: "when a
+  model is unavailable, please fall back to a more capable model,
+  potentially at a lower effort setting to keep execution time
+  similar"; generalised same day to ALL model-unavailability cases).
+  On a dispatch failure caused by model unavailability: retry once
+  briefly, then re-dispatch on the next MORE capable model with
+  effort reduced a notch. Capability floors are quality floors;
+  effort is the knob that keeps wall-clock comparable. Edge cases
+  resolve toward intent: already top tier → stay, reduce effort; no
+  lower effort exists → next-highest at its lowest; a
+  platform-internal non-selectable model → short-cadence retry while
+  keeping unblocked surfaces moving. Never fall back to a less
+  capable tier, never silently drop the dispatch, and critically
+  assess fallback output like any substitute.
+- **Tier calibration, first-hand (2026-08-06 MCP-517/518 adversarial
+  fleet, 23 seats over the Clerk wrong-domain diagnosis; full run
+  record:
+  `.agent/reports/agentic-engineering/fleet-topology-adversarial-review-2026-08-06.md`).**
+  Two
+  measured behaviours refine tier-per-leg dispatch. Low-tier finder
+  seats (haiku-high) confabulated context under ambiguity — one
+  invented a PR, one misread bake vs runtime — so a low-tier leg's
+  findings, INCLUDING its own confidence labels, require line-item
+  verification before acceptance; the tier buys coverage, never
+  trust. High-tier vendor-doc verifiers (opus-high) were the fleet's
+  highest-yield seats per token: both claim refutations and the
+  vendor-guide upgrade that settled the diagnosis came from the six
+  doc-verifier seats. Where a fleet budget forces a choice, fund the
+  verification legs at high tier before widening the finder pool —
+  the same atomic-judgment/verification split
+  [PDR-122](PDR-122-agentic-judgment-pipelines.md) prescribes for
+  judgment pipelines.
+
+### Prior-art and plan-of-consequence dispatch disciplines (2026-08-07 amendment)
+
+Two dispatch-time disciplines from the 2026-07-31 worked evidence:
+
+- **A design brief opens with the plan-corpus prior-art search
+  result as its first line.** A multi-perspective design review (3
+  fleet seats, 2 high-tier reviewers, a conscience octet) invented
+  six candidates for a shape whose superior answer already sat
+  owner-accepted in the plan corpus — both independent high-tier
+  lenses found it, but by luck of good reviewers, not by process; a
+  two-minute grep of `.agent/plans/` before authoring the brief
+  would have reframed the whole review as "enrich the accepted
+  design". Honest accounting: this is cost-REDUCTION, not
+  waste-elimination — the duplicated day also produced finds a
+  prior-art-first brief would likely not have surfaced. The
+  record-first discipline that already fires for owner rulings fires
+  for design priors too.
+- **A plan of consequence gets a tiered fleet review before
+  execution** (owner-endorsed in-session, 2026-07-31). The worked
+  topology — low/middle/high tiers plus experts plus a
+  frame-challenger, 31 agents over a Director-authored plan — caught
+  23 blocking defects including the author's own shallow grounding,
+  for one fleet run. Prediction (PDR-130 fast-lane line): a plan of
+  consequence reviewed this way before execution avoids its class of
+  wrong-thing-built; falsified if a fleet-passed plan still fails at
+  execution on a defect class the topology claims to catch.
+  "Consequence" is judged by blast radius (multi-seat execution,
+  owner-visible surfaces, hard-to-reverse moves), not by page count.
 
 ## Rationale
 

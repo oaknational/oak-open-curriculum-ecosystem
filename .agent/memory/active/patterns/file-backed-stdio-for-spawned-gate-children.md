@@ -3,7 +3,7 @@ name: "File-Backed Stdio for Spawned Gate-Running Children"
 polarity: pattern
 use_this_when: "Spawning git commit or any hook/gate-running child from Node and its output truncates or the chain dies silently mid-hook"
 category: code
-proven_in: "agent-tools/src/commit-queue/process.ts"
+proven_in: "agent-tools/src/core/file-backed-child.ts"
 proven_date: 2026-07-03
 barrier:
   broadly_applicable: true
@@ -62,15 +62,29 @@ streaming.
 
 ## Evidence
 
-The implementation is `runInheritedProcess` in
-`agent-tools/src/commit-queue/process.ts`, pinned by the invariant tests in
-`agent-tools/tests/commit-queue.process.integration.test.ts` (the
-no-pipes/no-sockets guard, high-volume stderr conservation, mixed-stream
-fidelity, signal fidelity). The frictions register's F-112 entry carries
-the historical proof chain and closing commits. Proven end-to-end by the
-repaired workflow landing the repo's own previously-blocked commits; two
-mid-landing real gate failures (Prettier, knip) surfaced with full output
-conserved — the exact class the truncation used to swallow. Diagnostic
-method that pinned it: file-based trace markers plus signal traps inside
-the hook (immune to stream loss) and a probe triangle (no-git /
-both-piped / full-inherit).
+The implementation is `runFileBackedChild` in
+`agent-tools/src/core/file-backed-child.ts` (moved to its shared `core/`
+home and renamed from `runInheritedProcess` 2026-08-07 when the third
+consumer arrived — the old name collided with repo-check's genuinely
+stdio-inheriting runner and contradicted the mechanism), pinned by the invariant
+tests in `agent-tools/tests/core.file-backed-child.integration.test.ts`
+(the no-pipes/no-sockets guard, high-volume stderr conservation,
+mixed-stream fidelity, signal fidelity). The frictions register's F-112
+entry carries the historical proof chain and closing commits. Proven
+end-to-end by the repaired workflow landing the repo's own
+previously-blocked commits; two mid-landing real gate failures (Prettier,
+knip) surfaced with full output conserved — the exact class the truncation
+used to swallow. Diagnostic method that pinned it: file-based trace
+markers plus signal traps inside the hook (immune to stream loss) and a
+probe triangle (no-git / both-piped / full-inherit).
+
+Second worked instance (2026-08-07): `merge-bot push` spawned git with
+pipe stdio — the pre-push chain's knip child died without a verdict, a
+diagnosis line written to stderr was itself eaten by the poisoned stream,
+and git's exit arrived null, while the identical hook chain run directly
+passed green. Cured by consuming this pattern's runner at the push
+executor (`agent-tools/src/merge-bot/git-executor.ts`). The instance adds
+a corollary worth repeating: **diagnosis must never ride only the channel
+whose failure it reports** — under this failure stderr is the casualty, so
+crash-class diagnosis lines print to the surviving stream (see
+`repo-check` knip-gate).

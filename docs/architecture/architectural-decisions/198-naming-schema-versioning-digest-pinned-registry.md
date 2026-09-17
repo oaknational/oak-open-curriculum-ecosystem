@@ -9,7 +9,9 @@ leaves untouched).
 
 ## Context
 
-Agent display names are a deterministic projection of the harness session id:
+Agent display names are a deterministic projection of the PDR-027 seed (the
+harness session id on CLI seats; the untagged platform session id on cloud
+seats — PDR-027, 2026-08-24 amendment):
 SHA-256 of the seed routes through curated wordlists. The projection function
 (wordlists + template + casing) previously existed in exactly one unversioned
 form (adjective–participle–noun over six themed groups). Any wordlist edit

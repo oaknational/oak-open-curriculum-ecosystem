@@ -2,39 +2,55 @@
  * Graph-corpus emitted types (G1a + G2 + G4b) — the single source of truth.
  *
  * @remarks
- * These interfaces define the emitted graph-corpus dataset: kind-discriminated
- * nodes with kind-qualified ids, the typed edge vocabulary, integrity and
- * dedup provenance, stats, and the generator input. The emitted `types.ts`
- * re-exports them (via the generator module), so no hand-maintained type runs
- * parallel to the generated corpus (Decision A / ADR-031).
+ * The corpus's core vocabulary: kind-discriminated nodes, the typed edge
+ * vocabulary, integrity and dedup provenance, stats, and the generator input.
+ * Two neighbours own the rest and this module re-exports both, so consumers
+ * still see one surface — node identity lives in `graph-corpus-node-ids.ts`
+ * (the foundation both this module and the ordered sections build on), and
+ * the ordered projections live in `graph-corpus-ordered-sections.ts`. The
+ * emitted `types.ts` re-exports them (via the generator module), so no
+ * hand-maintained type runs parallel to the generated corpus (Decision A /
+ * ADR-031).
  */
-import { normaliseKeyword } from '../extractors/keyword-extractor.js';
+import type {
+  GraphCorpusKeywordNodeId,
+  GraphCorpusLessonNodeId,
+  GraphCorpusMisconceptionNodeId,
+  GraphCorpusNodeId,
+  GraphCorpusThreadNodeId,
+  GraphCorpusUnitNodeId,
+} from './graph-corpus-node-ids.js';
+import type {
+  GraphCorpusSequence,
+  GraphCorpusUnitLessonRun,
+} from './graph-corpus-ordered-sections.js';
 import type {
   ExtractedKeyword,
   ExtractedLesson,
   ExtractedMisconception,
   ExtractedPriorKnowledge,
+  ExtractedUnitLessons,
 } from '../extractors/index.js';
 import type { ExtractedThread } from '../extractors/thread-extractor.js';
 
-/** A kind-qualified unit node id. */
-export type GraphCorpusUnitNodeId = `unit:${string}`;
-/** A kind-qualified thread node id. */
-export type GraphCorpusThreadNodeId = `thread:${string}`;
-/** A kind-qualified lesson node id. */
-export type GraphCorpusLessonNodeId = `lesson:${string}`;
-/** A kind-qualified misconception node id (content-hash mint). */
-export type GraphCorpusMisconceptionNodeId = `misconception:${string}`;
-/** A kind-qualified keyword node id (normalised-term mint, lc+trim). */
-export type GraphCorpusKeywordNodeId = `keyword:${string}`;
+export {
+  keywordNodeId,
+  lessonNodeId,
+  threadNodeId,
+  unitNodeId,
+  type GraphCorpusKeywordNodeId,
+  type GraphCorpusLessonNodeId,
+  type GraphCorpusMisconceptionNodeId,
+  type GraphCorpusNodeId,
+  type GraphCorpusThreadNodeId,
+  type GraphCorpusUnitNodeId,
+} from './graph-corpus-node-ids.js';
 
-/** A kind-qualified graph-corpus node id. */
-export type GraphCorpusNodeId =
-  | GraphCorpusUnitNodeId
-  | GraphCorpusThreadNodeId
-  | GraphCorpusLessonNodeId
-  | GraphCorpusMisconceptionNodeId
-  | GraphCorpusKeywordNodeId;
+export type {
+  GraphCorpusSequence,
+  GraphCorpusSequencePlacement,
+  GraphCorpusUnitLessonRun,
+} from './graph-corpus-ordered-sections.js';
 
 /** A unit node in the graph corpus. */
 export interface GraphCorpusUnitNode {
@@ -140,30 +156,6 @@ export interface GraphCorpusDroppedDuplicate {
   readonly reason: string;
 }
 
-/**
- * One unit's placement in a thread's year-ordered sequence (G3).
- *
- * @remarks
- * The bulk exports no authoritative within-thread unit ordering
- * (`unit.threads[].order` is the THREAD's display index, constant per
- * thread); the progression axis is the placement's teaching YEAR — the axis
- * the thread concept itself advertises (`firstYear`→`lastYear`). Ordering
- * cannot ride the attribute-less corpus edges, so placements are emitted as
- * the ordered projection's source. A unit may recur in one sequence at
- * distinct years (a revisited concept); within one year the order is not
- * curricular and ties break deterministically by unitId.
- */
-export interface GraphCorpusSequencePlacement {
-  readonly unitId: GraphCorpusUnitNodeId;
-  readonly year: number | undefined;
-}
-
-/** One thread's year-ordered unit sequence (year ascending, year-less last, then unitId). */
-export interface GraphCorpusSequence {
-  readonly threadId: GraphCorpusThreadNodeId;
-  readonly placements: readonly GraphCorpusSequencePlacement[];
-}
-
 /** Per-kind node counts. */
 export interface GraphCorpusNodeKindCounts {
   readonly unit: number;
@@ -196,6 +188,8 @@ export interface GraphCorpusStats {
   readonly collapsedIdenticalPlacements: number;
   /** Identical (source, target) prerequisiteFor occurrences collapsed beyond the first. */
   readonly collapsedIdenticalPrerequisiteEdges: number;
+  /** Units whose lessons carry no authored position, so their run falls back to id order. */
+  readonly unitsWithoutAuthoredLessonOrder: number;
 }
 
 /** The graph corpus: one identity space surfaced through bounded views. */
@@ -207,6 +201,7 @@ export interface GraphCorpus {
   readonly nodes: readonly GraphCorpusNode[];
   readonly edges: readonly GraphCorpusEdge[];
   readonly sequences: readonly GraphCorpusSequence[];
+  readonly unitLessonRuns: readonly GraphCorpusUnitLessonRun[];
   readonly droppedEdges: readonly GraphCorpusDroppedEdge[];
   readonly droppedDuplicates: readonly GraphCorpusDroppedDuplicate[];
   readonly seeAlso: string;
@@ -217,32 +212,13 @@ export interface GraphCorpusInput {
   readonly priorKnowledge: readonly ExtractedPriorKnowledge[];
   readonly threads: readonly ExtractedThread[];
   readonly lessons: readonly ExtractedLesson[];
+  /**
+   * Per-unit lesson listings, one entry per programme variant — the authored
+   * lesson order that {@link GraphCorpusUnitLessonRun} projects. Ordering only;
+   * the `containsLesson` edge set is built from `lessons` and is unaffected.
+   */
+  readonly unitLessons: readonly ExtractedUnitLessons[];
   readonly misconceptions: readonly ExtractedMisconception[];
   readonly keywords: readonly ExtractedKeyword[];
   readonly sourceVersion: string;
-}
-/** Mints the kind-qualified id for a unit node. */
-export function unitNodeId(unitSlug: string): GraphCorpusUnitNodeId {
-  return `unit:${unitSlug}`;
-}
-
-/** Mints the kind-qualified id for a thread node. */
-export function threadNodeId(threadSlug: string): GraphCorpusThreadNodeId {
-  return `thread:${threadSlug}`;
-}
-
-/** Mints the kind-qualified id for a lesson node. */
-export function lessonNodeId(lessonSlug: string): GraphCorpusLessonNodeId {
-  return `lesson:${lessonSlug}`;
-}
-
-/**
- * Mints the kind-qualified id for a keyword node from the term.
- *
- * @remarks
- * Normalises internally (lc+trim via {@link normaliseKeyword}), so the mint
- * is stable for raw and already-normalised inputs alike.
- */
-export function keywordNodeId(term: string): GraphCorpusKeywordNodeId {
-  return `keyword:${normaliseKeyword(term)}`;
 }

@@ -1,9 +1,11 @@
 /**
  * Served-origin resolution — the one place that answers "what address is
  * this deployment serving at?" for self-description surfaces that are fixed
- * per deployment: the landing page's og:url and endpoint snippet (baked at
- * build time), the tool-level auth-error resource URL (derived at the
- * composition root), and the registration-proof composition.
+ * per deployment: the MCP Registry entry's endpoint and protected-resource
+ * metadata URLs (`scripts/generate-server-json.ts`), the tool-level
+ * auth-error resource URL (derived at the composition root), and the
+ * registration-proof composition. It also fed the landing page's og:url and
+ * endpoint snippet until that page was removed on 2026-08-20.
  *
  * Precedence, most-authoritative first:
  * 1. The configured canonical origin (`CANONICAL_HOST` resolved by
@@ -43,7 +45,7 @@ export const DEFAULT_LOCAL_PORT = '3333';
  */
 export interface ServedOriginInputs {
   /**
-   * Configured canonical origin (e.g. `https://www.thenational.academy`),
+   * Configured canonical origin (e.g. `https://mcp.thenational.academy`),
    * or `undefined` when no canonical host is configured.
    */
   readonly canonicalOrigin?: string;
@@ -62,8 +64,8 @@ export interface ServedOriginInputs {
  *
  * @example
  * ```typescript
- * resolveServedOrigin({ canonicalOrigin: 'https://www.thenational.academy' });
- * // 'https://www.thenational.academy'
+ * resolveServedOrigin({ canonicalOrigin: 'https://mcp.thenational.academy' });
+ * // 'https://mcp.thenational.academy'
  * resolveServedOrigin({ displayHostname: 'my-app.vercel.app' });
  * // 'https://my-app.vercel.app'
  * resolveServedOrigin({ portEnv: '4000' }); // 'http://localhost:4000'
@@ -87,4 +89,37 @@ export function resolveServedOrigin(inputs: ServedOriginInputs): string {
  */
 export function resolveServedMcpUrl(inputs: ServedOriginInputs): string {
   return `${resolveServedOrigin(inputs)}${MCP_RESOURCE_PATH}`;
+}
+
+/**
+ * The well-known prefix protected-resource metadata is published beneath.
+ *
+ * Exported again for MCP-734: `auth-routes.ts` mounts both PRM routes from
+ * this constant, and `agent-discovery-link-header.ts` advertises the same
+ * prefix in the origin's `Link` header, so a single literal governs every
+ * reader instead of each restating the path and risking drift. It was
+ * briefly module-local between 2026-08-20 (when the landing page's link
+ * assertions — its only other reader — were removed) and this reopening.
+ */
+export const PROTECTED_RESOURCE_METADATA_PREFIX = '/.well-known/oauth-protected-resource';
+
+/**
+ * Resolves the absolute URL of the served protected-resource metadata.
+ *
+ * @remarks
+ * MCP-511. The **path-qualified** form, per RFC 9728 §3.1: the resource path
+ * is appended to the well-known prefix, so a resource at `/mcp` publishes its
+ * metadata at `/.well-known/oauth-protected-resource/mcp`.
+ *
+ * The app answers the unqualified path too (see `auth-routes.ts`) as a
+ * compatibility alias: the same handler serves both, so the documents are
+ * identical, and both routes serve on the canonical deployment (verified
+ * 2026-09-01: the canonical host fronts this app at its root as well as under
+ * `/mcp*`). The path-qualified form is the one RFC 9728 §3.1 derives for a
+ * resource at `/mcp` and the one that survives a path-scoped edge, so anything
+ * that hands a human or a client a metadata URL uses this one; the alias
+ * answers clients that construct the unqualified path themselves.
+ */
+export function resolveServedPrmUrl(inputs: ServedOriginInputs): string {
+  return `${resolveServedOrigin(inputs)}${PROTECTED_RESOURCE_METADATA_PREFIX}${MCP_RESOURCE_PATH}`;
 }

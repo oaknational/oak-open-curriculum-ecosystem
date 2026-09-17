@@ -1,0 +1,55 @@
+{
+  "case": "case-1",
+  "responses": {
+    "A": {
+      "criteria": {
+        "reasons-from-purpose": {
+          "score": "strong",
+          "evidence": "A unit landing page exists mainly so a teacher can get into a lesson. This is the block most visits are *for*"
+        },
+        "ranks-rather-than-lists": {
+          "score": "strong",
+          "evidence": "No full-bleed image, no stacked sub-copy — a big hero would out-rank the lesson list it's supposed to introduce."
+        },
+        "routes-values-to-the-system": {
+          "score": "weak",
+          "evidence": "it gets the biggest column (2fr of a 2fr/1fr grid on wide screens)"
+        },
+        "respects-its-own-boundary": {
+          "score": "adequate",
+          "evidence": "rendered as a horizontally scrolling strip of small cards on a muted background"
+        },
+        "would-a-designer-act-on-this": {
+          "score": "strong",
+          "evidence": "Removing any one signal should still leave the ranking legible from the others."
+        }
+      }
+    },
+    "B": {
+      "criteria": {
+        "reasons-from-purpose": {
+          "score": "strong",
+          "evidence": "what is this screen for, and what must the reader do next — resolves to: **confirm this is the right unit, then get into a lesson.**"
+        },
+        "ranks-rather-than-lists": {
+          "score": "strong",
+          "evidence": "Two full-weight CTAs would have put two elements in competition for primacy in the same view; only one gets the primary button treatment."
+        },
+        "routes-values-to-the-system": {
+          "score": "strong",
+          "evidence": "given the system's neutral grey card shadow (`oak-card--grey-shadow`) instead of the accent shadow the lesson cards use"
+        },
+        "respects-its-own-boundary": {
+          "score": "strong",
+          "evidence": "The design-system-usage skill explicitly allows minting a new page type when the shipped one doesn't fit"
+        },
+        "would-a-designer-act-on-this": {
+          "score": "strong",
+          "evidence": "a smaller heading *class* (`oak-heading-5` vs the list's `oak-heading-3`) and positioned *after* the lesson list rather than before it"
+        }
+      }
+    }
+  },
+  "preference": "B",
+  "why": "Both open from what the page is for and both establish a genuine rank rather than a list, so on the two heavily-weighted criteria they are level — A's numbered primary/secondary/tertiary tiers and its 'removing any one signal should still leave the ranking legible' redundancy test are as good as anything in B. The separation is criterion 3: A carries its whole hierarchy in self-invented values ('2fr of a 2fr/1fr grid', 'a muted background', 'a small uppercase label') that route nowhere, while every value B reaches for is a real, checkable design-system class or token (oak-heading-3, oak-card-link, oak-card--grey-shadow, oak-card--flat, --bg-subtle) — I verified these exist in components.css and colors_and_type.css, and B's account of the shipped [data-page='unit'] facets/results map is accurate. B also routes its one out-of-lane decision explicitly to design-system-usage, where A simply makes layout calls in place; the margin is real but narrower than the score sheet alone suggests."
+}

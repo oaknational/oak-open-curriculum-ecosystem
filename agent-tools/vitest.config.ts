@@ -1,3 +1,3 @@
-import { baseTestConfig } from '../vitest.config.base';
+import { baseTestConfig } from '@oaknational/workspace-config/vitest';
 
 export default baseTestConfig;

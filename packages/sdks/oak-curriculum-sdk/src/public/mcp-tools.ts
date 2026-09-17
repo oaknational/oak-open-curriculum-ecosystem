@@ -105,7 +105,7 @@ export {
 
 export { SERVER_INSTRUCTIONS } from '../mcp/orientation-guidance.js';
 
-export { WIDGET_URI } from '../mcp/widget-constants.js';
+export { WIDGET_URI, RETIRED_WIDGET_URIS } from '../mcp/widget-constants.js';
 // Ontology data (single source of truth for domain knowledge)
 export { ontologyData } from '../mcp/ontology-data.js';
 export type { OntologyData } from '../mcp/ontology-data.js';

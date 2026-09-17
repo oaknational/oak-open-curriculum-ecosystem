@@ -5,4 +5,4 @@ description: Run a deep post-mortem on a completed arc — a merged PR series, a
 
 # Retrospective (Cross-tool)
 
-Read and follow `.agent/skills/retrospective/SKILL-CANONICAL.md`.
+Read and follow `.agent/skills/cognition/retrospective/SKILL-CANONICAL.md`.

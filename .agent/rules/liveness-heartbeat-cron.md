@@ -117,6 +117,36 @@ instance 2026-07-15: a Director seat read continuously live on the
 comms stream while its claim read stale for ~15 hours, peer-caught at
 succession). Neither surface alone is liveness: the comms stream is
 authoritative for intent, the registry check for age.
+
+**Both commands have REQUIRED arguments that the ellipsis above hides** — each
+fails loud, and arming the loop cost one seat two re-arms discovering them
+(2026-08-02, first-hand):
+
+- `comms send --tag heartbeat` requires the four typed state arguments
+  `--claim-id`, `--intent-id`, `--branch`, `--current-cycle-label`; the heartbeat
+  body is composed from them, so none is optional. It **also requires `--title`**,
+  which the heartbeat-mode help text does not list among the mode's requirements
+  (2026-08-06, first-hand: a third re-arm).
+- `claims heartbeat` requires an explicit `--now <iso>`. It has **no F-89-style
+  current-time default**, unlike `claims open` — the asymmetry between the two
+  commands is the trap.
+- `claims heartbeat` takes **ONLY** `--active`, `--claim-id`, `--now`. It
+  **REJECTS `--platform` and `--model`** (exit 2, `unknown option`), unlike every
+  sibling `claims`/`comms` command that requires them. So the ellipsis cuts BOTH
+  ways: it hides required arguments on one command and forbidden ones on the
+  other, and filling it by analogy with the siblings is the failure (2026-08-06,
+  first-hand: a Director loop whose comms leg ran green while its registry leg
+  failed every tick — the F-92 shape the loop exists to prevent, caught only
+  because the loop emitted its failures instead of swallowing them).
+
+**Make the loop emit its own failures.** A heartbeat loop that swallows stderr on
+both legs cannot report a half-dead heartbeat: the comms stream reads live while
+the registry silently staleness-expires. The canonical invocation's `|| echo` on
+each leg is load-bearing, not decoration — it is what turns F-92 from a
+succession-time discovery into a first-tick one. After arming, RECOMPUTE the
+result rather than trusting the exit code: read `heartbeat_at` back off the claim
+row and confirm it advanced.
+
 Platform-specific shapes:
 
 - **Claude Code**: the `Monitor` tool with `persistent: true` and a
@@ -167,8 +197,9 @@ failure instance from the 2026-06-11 team window:
   that outlives the end event can emit a stale "active" heartbeat after
   peers have already read the stand-down.
 - **One timestamp per tick.** Derive a single timestamp per tick and pass
-  it to both `--now` and `--created-at`; two `$(date)` calls can race a
-  second boundary and the CLI rejects the resulting created_at-in-future
+  it to every consumer in the tick (the `--now` option on both `comms send`
+  and `claims heartbeat`); two `$(date)` calls can race a second boundary
+  and the CLI rejects the resulting created_at-in-future
   (worked instance 2026-06-11).
 - **Failures report with captured stderr.** A loop that swallows stderr
   makes its own failures undiagnosable (worked instance: a transient emit
@@ -225,6 +256,19 @@ active-on-lane. Direct ping with a one-cadence reply window; if silent,
 broadcast takeover or route-adjustment intent before acting. See
 PDR-078 §6.
 
+**Coordinator dark-window check** (fourth autonomous-emitter instance,
+experienced from inside, 2026-08-0x): a session-limit suspension
+darkened a Director seat's reasoning loop overnight while its heartbeat
+monitor kept emitting on schedule — the fleet read the Director as live
+for hours. When the DIRECTOR/coordinator seat holds any open routing
+obligation, peers apply the stall diagnostic above TO THAT SEAT on a
+bounded cadence: require SUBSTANTIVE Director output (a routing event,
+an adjudication, an absorption ack — not emitter presence) within a
+small number of hours of any open obligation, and fire the
+ping-before-escalate path on silence. This is the §Mutual cover
+discipline (the detector cannot detect itself) extended from
+watcher-file staleness to substantive-output staleness.
+
 **The autonomous-emitter generator** (three instances, 2026-07-20/21):
 heartbeat loops run in the platform's background-task layer,
 independent of the reasoning loop — a SUSPENDED harness (or a seat
@@ -255,6 +299,16 @@ check activity via `gh` — not only comms and local git. An agent can be
 comms-silent yet substantively active on a PR; a takeover fired on
 comms-evidence alone reads an active seat as stalled (two worked
 instances, 2026-06-10/11; owner-approved 2026-06-11).
+
+For a SAME-MACHINE seat the decisive cheap instrument is the seat's own
+worktree: dirty-tree state plus file mtimes. Any dark-seat verdict about
+a same-machine seat requires that worktree mtime check FIRST — remote
+surfaces and comms can both read silent while the worktree is minutes
+warm with cures in flight (worked instance 2026-08-06 ~13:04Z: a
+takeover round dispatched on remote-only evidence was halted by the
+delegated agent finding the "dark" seat's worktree three minutes warm;
+the halt discipline — no-risk-of-loss, consult before racing a dirty
+tree — is the pattern to repeat).
 
 ### Surfacing peer heartbeat-silence (F-75)
 

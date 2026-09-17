@@ -15,6 +15,7 @@ Accepted
 - [ADR-031: Generation-Time Extraction](031-generation-time-extraction.md)
 - [ADR-046: OpenAI Connector Facades in Streamable HTTP](046-openai-connector-facades-in-streamable-http.md) (superseded by this ADR)
 - [ADR-061: Widget CTA System](061-widget-cta-system.md) (superseded; CTA system deleted as part of this migration)
+- [ADR-071: Widget URI Cache-Busting Simplification](071-widget-uri-cache-busting-simplification.md) (superseded by this ADR)
 
 ## Context
 
@@ -103,7 +104,131 @@ Specifically:
   codegen. `registerAppTool` auto-populates it at registration time for backward
   compatibility.
 
-## Amendment — widget URI identity and cache-busting (2026-07-26, MCP-187)
+## Amendment — widget URI identity
+
+Recorded 2026-07-26 (MCP-187); revised 2026-09-12 (MCP-489). The heading
+carries no date, so a citation of it survives the next revision; the
+pre-revision text is kept below under "Superseded amendment".
+
+`WIDGET_URI` is the published address `ui://widget/oak-curriculum-app-v1.html`,
+the same on every build.
+
+- **One owner.** The address is generated at sdk-codegen time from
+  `cross-domain-constants.ts`. Every consumer — the tool
+  `_meta.ui.resourceUri` advertisement, the served-surface registration key,
+  and the auth public-resource allowlist — derives from that one constant;
+  hand-frozen copies are banned by an ESLint `no-restricted-syntax` rule in
+  the HTTP app (MCP-187, pull request 571). No source under
+  `code-generation/typegen/` reads the environment, enforced by a
+  `no-restricted-syntax` rule on that directory. Tests run in one process
+  without deployment variables, so none can observe an address that differs
+  only on a deployed build; the post-deploy probes in the HTTP app's UAT
+  guide (rows 10.4 to 10.6) are the check for a deployed build.
+- **A published contract.** When a plugin's MCP endpoint is scanned for
+  submission, OpenAI stores the discovered metadata with that version: "The
+  published plugin uses this metadata snapshot while tool calls and UI
+  resources continue to use your live MCP server." Tool `_meta` fields
+  "(including UI resource references and visibility)" and the "UI resource
+  URI or linked resource metadata, including content security policy (CSP)
+  settings" change only through a new reviewed version; "Until then, users
+  continue to use the currently published snapshot" ([OpenAI, MCP server
+  review requirements](https://developers.openai.com/plugins/deploy/app-review),
+  read 2026-09-12). Developer-mode connectors and other MCP clients also keep
+  the tool list they were given until they list tools again. The MCP SDK
+  declares the `resources.listChanged` capability for every server that
+  registers a resource, but this server runs stateless, with no session over
+  which to send that notification, so no client is told the list changed.
+  The server therefore answers at this one address on every build, and a
+  submission is scanned only from a deployment that already serves this
+  address and the widget's final settings.
+- **Two `_meta.ui` objects.** The tool's `_meta.ui` carries `resourceUri` and
+  `visibility`. The widget resource's `_meta.ui` carries the widget's
+  settings: `csp` (`connectDomains`, `resourceDomains`, `frameDomains`,
+  `baseUriDomains`), `permissions`, `domain` and `prefersBorder`. The widget
+  serves its settings on both its `resources/list` entry and its
+  `resources/read` content item, so a host or a submission scan reading
+  either surface sees the same values; the composition e2e test pins them.
+- **Compatible changes ship behind the same address.** A content update
+  served from the same published UI resource URI needs no new version "if the
+  URI and published contract remain compatible", and "ChatGPT may continue
+  serving cached resource contents for up to one hour" (review requirements).
+  A change is compatible when both `_meta.ui` objects stay byte-identical and
+  the set of tool-result fields the widget reads does not grow. Every other
+  change is incompatible.
+- **Incompatible changes take the next version.** OpenAI's guidance is to
+  "Treat the resource URI as a cache key. When you make a breaking change to
+  the HTML, JavaScript, or CSS, publish a new URI and update every tool that
+  references it" ([OpenAI, Add UI to your MCP
+  server](https://developers.openai.com/plugins/build/chatgpt-ui), read
+  2026-09-14), because "serving incompatible content at or removing content
+  from a published UI resource URI can break the current version as soon as
+  the server change deploys" (review requirements). The next address is
+  `ui://widget/oak-curriculum-app-v2.html`, then `-v3`, and a published plugin
+  sees it only through a new reviewed version. The tools advertise only the
+  newest address. Every earlier address that a published version can still
+  reference keeps answering, each with one generated owner. By default an
+  earlier address serves a small document telling the user the panel is out
+  of date and to reconnect, not a frozen copy of the widget: the widget is a
+  committed constant of about 650 KB, and each frozen copy would ride in every
+  bundle for as long as its version can be used. The code holds one served
+  address today — one constant, one served-surface row, one allowlist entry —
+  so that plural shape is built before the first incompatible change.
+- **The address lives as long as its versions.** Once a published version
+  references an address, the server keeps answering at it for as long as
+  that version can be used. Client tool lists never expire, so retiring an
+  address is always a deliberate break for any client still holding it.
+- **Retired per-build addresses.** Before this revision every release
+  advertised its own address, and a client may still hold one. None is
+  served. `RETIRED_WIDGET_URIS` puts two on the public-resource allowlist:
+  release 1.181.1's `ui://widget/oak-curriculum-app-899803c6.html`, the last
+  per-build address production served, and release 1.178.6's
+  `ui://widget/oak-curriculum-app-5ce56c4b.html`, held by a ChatGPT desktop
+  connector on 2026-09-10. An unauthenticated read of either reaches
+  not-found rather than an authentication challenge. That is the whole of
+  what the allowlist entry buys: the client is told the address does not
+  exist instead of being told to sign in and retry the same address. Nothing
+  in the protocol makes a missing-resource error an instruction to list tools
+  again, and this server sends no such instruction, so what a client does
+  next is the host's behaviour, not a contract Oak can rely on. A signed-in
+  read of any earlier per-build address gets the same not-found error.
+  Recovery needs a fresh `tools/list`; reconnecting recovers only when the
+  host lists tools as it reconnects.
+- **Not found is `-32602`.** The MCP specification says servers SHOULD return
+  `-32002` for a missing resource. The MCP SDK throws
+  `ErrorCode.InvalidParams`, which serialises as `-32602`, for a resource it
+  does not hold. The code is hardcoded upstream and this server does not
+  override it, so the deviation from the specification's SHOULD is an
+  upstream constraint, and Oak's tests and UAT rows expect `-32602`.
+- **Staleness is the accepted cost.** The [MCP Apps
+  specification](https://github.com/modelcontextprotocol/ext-apps/blob/main/specification/2026-01-26/apps.mdx)
+  (2026-01-26) lets hosts "prefetch and cache UI resource content" and gives
+  an app no way to invalidate that cache. Core MCP defines
+  `resources/subscribe` and `notifications/resources/updated`, but a
+  stateless server has no session to send them on. A host that caches may
+  therefore show earlier widget content after a compatible change until its
+  cache expires.
+- **History.** Before this revision the address carried a per-build suffix —
+  a timestamp hash (ADR-071), then from 2026-07-26 a hash of the commit SHA
+  (the superseded amendment below) — so every release retired the address the
+  previous release advertised, even though the widget bytes did not change
+  between 2026-07-30 and this revision. Production showed the failure twice:
+  a client holding a `resources/list` across the 1.148.0 deploy read
+  "Resource not found" (UAT 2026-08-04, finding F2), and on 2026-09-10 a
+  ChatGPT desktop connector holding release 1.178.6's address showed a
+  resource-not-found error in place of the `get-curriculum-model` widget
+  while production served release 1.181.1 (MCP-489).
+
+Source of truth:
+`packages/sdks/oak-sdk-codegen/code-generation/typegen/cross-domain-constants.ts`;
+`BASE_WIDGET_URI` and `RETIRED_WIDGET_URIS` are pinned by designed sentinels in
+`cross-domain-constants.unit.test.ts`, whose failure messages name the
+decision a change must re-adjudicate.
+
+## Superseded amendment — widget URI identity and cache-busting (2026-07-26, MCP-187)
+
+> Superseded on 2026-09-12 by the MCP-489 amendment above. The pre-amendment
+> text below is preserved as historical record of the per-build widget
+> address.
 
 The MCP Apps standard permits hosts to prefetch and cache `ui://` resource
 content and defines no invalidation, freshness, or versioning mechanism, so

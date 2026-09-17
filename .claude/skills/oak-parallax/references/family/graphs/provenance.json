@@ -1,0 +1,30 @@
+{
+  "graph_id": "parallax-provenance-v0.1",
+  "title": "Illustrative append-only provenance DAG",
+  "description": "Artifact ancestry across a reopening. Prior revisions remain addressable and are superseded rather than erased.",
+  "graph_type": "provenance-dag-template",
+  "version": "0.1.0",
+  "acyclic": true,
+  "nodes": [
+    { "id": "charter-r1", "label": "Inquiry Charter r1", "type": "artifact-revision" },
+    { "id": "frames-r1", "label": "Frame Set r1", "type": "artifact-revision" },
+    { "id": "design-r1", "label": "Inquiry Design r1", "type": "artifact-revision" },
+    { "id": "synthesis-r1", "label": "Synthesis r1", "type": "artifact-revision" },
+    { "id": "outcome-r1", "label": "Outcome Event r1", "type": "event" },
+    { "id": "reopen-r2", "label": "Reopen Event creating r2", "type": "event" },
+    { "id": "charter-r2", "label": "Inquiry Charter r2", "type": "artifact-revision" },
+    { "id": "frames-r2", "label": "Frame Set r2", "type": "artifact-revision" }
+  ],
+  "edges": [
+    { "from": "charter-r1", "to": "frames-r1", "type": "derived-into" },
+    { "from": "frames-r1", "to": "design-r1", "type": "derived-into" },
+    { "from": "design-r1", "to": "synthesis-r1", "type": "derived-into" },
+    { "from": "synthesis-r1", "to": "outcome-r1", "type": "monitored-as" },
+    { "from": "outcome-r1", "to": "reopen-r2", "type": "triggers" },
+    { "from": "reopen-r2", "to": "charter-r2", "type": "creates-revision" },
+    { "from": "charter-r1", "to": "charter-r2", "type": "superseded-by" },
+    { "from": "charter-r2", "to": "frames-r2", "type": "derived-into" },
+    { "from": "frames-r1", "to": "frames-r2", "type": "superseded-by" }
+  ]
+}
+

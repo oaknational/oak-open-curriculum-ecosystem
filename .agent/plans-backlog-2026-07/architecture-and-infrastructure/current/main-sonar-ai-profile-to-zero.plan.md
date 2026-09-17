@@ -369,7 +369,7 @@ S8786 sites: `codegen-core.ts` 183-187 (gen source), `path-utils.ts` 9,24
 | `typescript:S3358` | 4 | MAJOR | nested ternary (was 6; remaining: hand-written `logger/error-normalisation.ts:85,88` + generated `mcp-tools/…/get-sequences-{assets,questions}.ts` → FIX-GEN) |
 | `typescript:S6564` | 4 | MAJOR | redundant type alias |
 | `typescript:S4144` | 3 | MAJOR | identical bodies — verify not a copy-paste bug |
-| `typescript:S4624` | 1 | MAJOR | nested template literals (was 3; remaining: `render-prompts-section.ts:36`) |
+| `typescript:S4624` | 1 | MAJOR | nested template literals (was 3; remaining: `render-prompts-section.ts:36`). Local-parity residue recorded from PR #745 (2026-08-11): Sonar blocked a new S4624 site that the local remediation rules did not catch; Phase 4 must add equivalent local detection or explicitly document Sonar-only ownership before closure. |
 | `typescript:S4782` | 3 | MAJOR | redundant `undefined`+`?` |
 | `typescript:S6661` | 2 | MAJOR | object spread over `Object.assign` |
 | `typescript:S3923` | 1 | MAJOR | dead conditional — possible latent bug |

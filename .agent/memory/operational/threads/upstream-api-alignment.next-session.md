@@ -5,6 +5,228 @@ upstream Oak API + bulk export, and establish a repeatable, observable alignment
 Trigger instance (2026-06-30/07-01): upstream added a `programmes` resource family (5 GET
 endpoints + 5 schemas).
 
+## THREAD SEQUENCES IN CURRICULUM ORDER — pushed as PR #965 (MCP-681), in review, awaiting the owner's word to merge (Bora binds Feather 4a2292, 2026-09-03; updated 2026-09-07)
+
+Owner-found defect, owner-directed cure. Branch
+`fix/thread-progressions-curriculum-order` in worktree `thread-sequence-order`,
+cut from `origin/main` `83611f5db`. Claim `8f0ef420` (this thread); lane-open
+comms event `c0b23c22`. Pushed at the owner's word on 2026-09-04 as PR #965 under ticket MCP-681 (In Review); #966 (MCP-682) stacks on it; #958 (MCP-671) merged first and main is merged in. **The owner gates the merge.**
+
+**The defect.** The graph corpus sorted each thread's placements by
+`(year, unitId)`, so within a year the served progression was alphabetical by
+slug: 3,588 of 3,973 placements (90.3%) sat in a multi-unit same-year group, and
+the served `get-thread-progressions` description told agents "within one year the
+order is not curricular". The generator's narrow claim was true —
+`unit.threads[].order` is the thread's display index, constant per thread
+(re-verified across all 160 threads) — but its conclusion was a category error.
+A thread is a TAG; a tag needs no order of its own when the thing it tags is
+already ordered. Owner's framing: "threads are a categorising mechanism and
+within threads the same unit order as the whole set is still coherent."
+
+**What the bulk actually carries** (first-hand, 2026-09-03, fresh 32-file
+download): the `sequence` array does NOT group years — years interleave
+(maths-primary opens 5, 6, 4, 2, 1, 3) and it is not sorted by within-programme
+rank either (26 of 32 files fail that). What holds is narrower and sufficient:
+WITHIN a year the array order IS Oak's authored `unitOrder`, verified against the
+live REST API for 160 of 166 programme-years. The six misses are KS4 years where
+several programmes (tiers, exam subjects) share one array, plus one PE all-years
+pair. So the ordering key is `(year, sequenceSlug, sequenceIndex)`, year-less
+last — not the pure "filter the ordered array" model the lane started from.
+
+**The shape now served.** One sequence per `(thread, subject)`, each in that
+subject's curriculum order. `GraphCorpusSequence` gains `subject`; corpus version
+1.4.0 → 1.5.0; 199 sequences over 160 threads. A thread spanning subjects (21 of
+160; 17 are the MFL grammar/skill threads shared by French, German and Spanish)
+returns parallel per-subject runs, never an interleaved chain — Oak authors no
+order across subjects. `ThreadProgression` gains `progressions[]` (one
+`SubjectProgression` per subject) in place of the flat `entries[]`.
+
+**Retracted wording** at every site that claimed within-year units are unordered
+or that the axis is the teaching year alone: the sequence/type/edge generator
+docs, the projection and view, the served tool description and its field
+descriptions, the tool-guidance data and workflows, the ontology thread
+characteristics, the server instructions, two guidance resources, the served tool
+table, both app and repo READMEs, the UAT guide, the working-with-graphs skill,
+two curriculum plugin references, and ADR-086 (amended, with recomputed counts),
+ADR-123 and ADR-196 (amendment notes).
+
+**Verification.** All affected package suites green (sdk-codegen 207,
+graph-corpus-sdk 102, curriculum-sdk 768, the app's thread e2e 4). Content audit
+refreshed and validating (728 items). Live tool exercised across seven anchor
+shapes — single-subject primary→secondary, a 3-language MFL thread, art +
+design-technology, a 3-subject sustainability thread, the RE/Spanish slug
+collision, discovery, and an unknown anchor — plus a PE thread carrying
+"All years" units, which now sort after the year-placed ones.
+
+**Open at handoff.** (a) PR SIZE: 60 files (≈49 authored) — far past the ~5/10/20
+band; the core is genuinely indivisible (the corpus shape forces the SDK, the
+tool, and every doc that describes it, and a split would leave misleading docs
+between landings), but the owner rules whether it lands as one PR. (b) Two
+apparent upstream slug collisions the new shape makes visible rather than hides:
+one Spanish unit tagged `meaning-and-purpose` (otherwise RE) and one English unit
+tagged `nouns-and-determiners` (otherwise MFL) — bug-report candidates, not cured
+here. (c) `/threads/{slug}/units` advertises a `unitOrder` its payload omits, and
+returns a non-curricular order — an upstream defect worth its own report.
+(d) `prerequisiteFor` inherits the new run order but is retiring on MCP-671;
+untouched here beyond that.
+
+## MCP-590 IN FLIGHT — slice 1 shipped as PR #871; slices 2/3 mapped (Wren calls Downdraft 6b29b5, 2026-08-12 ~18:5xZ)
+
+> **SUPERSEDED / SEAT CLOSED (2026-08-13):** the owner carded this lane to the
+> Director (**Plover lifts Troposphere**), who ADOPTED Wren's claim (now
+> `2d76cc84`) and has driven #871 on to tip `4083977bd` — folding in the
+> 2026-08-13 owner ruling that index families stay consistent (`includeRestricted`
+> is now REJECTED for index-producing runs via `enforceRestrictedInclusionBoundary`,
+> ADR-224). The **authoritative** MCP-590 resume map is now
+> `director-handoff §COMPACTION FREEZE 10` (tip `b32ac02f8`): #871 frozen
+> mid-round-7; first resume act = the vocab-gen restricted-inclusion guard cure
+> (committed generated-corpus exposure), then recount + bot REST merge under the
+> owner's standing word; then slice-2 error-envelope PR, slice-3 operational
+> rebuild, demo-default flip. **Wren calls Downdraft (6b29b5) is CLOSED** — no
+> active claim, all processes stopped, worktree `mcp-590-restricted-switch` left
+> for the Director's drive. The block below is Wren's historical snapshot at the
+> slice-1 push; the slice-2 error-envelope probe finding it records still stands.
+
+Ticket **MCP-590** (MCP team, First Major Release project, related MCP-204/MCP-100)
+realises the ratified Bucket-1 plan. Worked in worktree
+`.claude/worktrees/mcp-590-restricted-switch` (branch
+`jimcresswell/mcp-590-restricted-exclusion-switch`, off origin/main `d105b4ab2`),
+KEPT on disk for slices 2/3.
+
+- **Slice 1 — configurable restricted-exclusion switch (default exclude): SHIPPED
+  to review as PR #871** (head `4314a0c05`, jimbot label, Copilot requested;
+  MCP-590 → In Review). `includeRestricted?: boolean` (default false = exclude,
+  byte-for-byte preserving) on `excludeRestrictedLessons`, threaded through both
+  exclusion call sites + the SDK lifecycle service (the `runIngestAndVerify`
+  option-narrowing was a silent-drop point — found by full-path tracing, fixed,
+  now pinned by a forwarding regression test) + CLI `--include-restricted` on
+  `versioned-ingest` and `stage`. ADR-224. Two opus reviewers cleared:
+  test-expert PASS (2 coverage gaps closed — `toBulkDataInputs` toggle +
+  `createPipelineConfig` default/override); code-expert APPROVE (threading
+  complete every hop, default preserved, no other drop site; sandbox `es:ingest`
+  `ingest-harness-batch` is the superseded non-filter path). `pnpm check` green.
+  **NEXT: reviewer/Copilot convergence → Director-side bot REST merge (never squash).**
+- **Slice 2 — MCP error envelope: pickup-verification SETTLED (mcp-expert probe,
+  first-hand against the SDK).** `structuredContent` DOES survive on an
+  `isError:true` CallToolResult — spec 2025-06-18 places no mutual exclusion; SDK
+  `@modelcontextprotocol/sdk@1.30.0` sends the result as-is (base looseObject,
+  passthrough), and `validateToolOutput` (server/mcp.js:186-195) never validates
+  structuredContent on error (`if(result.isError) return`) with NO outputSchema
+  declared in-repo. `formatError` (universal-tool-shared.ts:107-110) RETURNS an
+  error (not throw), so the SDK throw-path `createToolError` never fires — the
+  drop of `code` is ours to fix. BUILD: `formatError` emits
+  `{ content: [humanText, jsonEnvelopeText], isError: true, structuredContent: { error: { code, message, upstreamMessage } } }`
+  — nest under `error` (future success-outputSchema safe); MIRROR the JSON into
+  `content[1]` because `content` is the only channel guaranteed surfaced on error.
+  NOT `_meta` (repo documents it widget-only, "Model never sees _meta"). Callers:
+  `formatError` + `universal-tools/executor.ts:55` + `aggregated-fetch/execution.ts:112`.
+  Then contract-pin the upstream vocab (brittle `data.cause.includes('blocked')`
+  at `classify-error-response.ts:83`).
+- **Slice 3 — rebuild + promote** from the fresh 2026-08-12 bundle
+  (`apps/oak-search-cli/bulk-downloads/`) via `admin versioned-ingest` (or
+  `stage`→`promote`). Owner-carded alias swap (MCP-153 precedent); confirm
+  rshe-pshe presence.
+
+Claim (upstream-api-alignment thread; areas sdk-codegen/bulk + vocab-gen +
+search-cli indexing/admin) OPEN. Comms watcher was stopped at the compaction
+freeze — re-arm at resume. The block below is the pre-implementation pickup record.
+
+## BUCKET-1 RATIFIED, BUCKETS 2/3 SKETCHES — 2026-08-12 ~17:3xZ (owner decision card; Wren calls Downdraft 6b29b5)
+
+The three Bucket plans were authored, validated (`validate-plan-corpus` OK),
+assumptions-expert-reviewed (READY-WITH-NOTES, all 11 notes folded), and
+presented to the owner as a ratification card. **Owner answer: "Ratify Bucket 1
+only."**
+
+- **`lesson-search-freshness-and-error-envelope` (Bucket 1): RATIFIED** (status
+  ratified; `ratified_by: Jim Cresswell`, `ratified_date: 2026-08-12`,
+  `ratified_where` points here). Decision-complete, no open owner gates; a seat
+  (TBD) picks it up nowish. Encodes the owner rulings below: restricted-exclusion
+  as a documented configurable switch (default exclude); structured
+  `{code, message, upstreamMessage}` MCP error envelope; error-vocabulary contract
+  tests; no fallback.
+- **`lesson-retrieval-boundary-differentiation` (Bucket 2) and
+  `lesson-search-index-automation` (Bucket 3): remain SKETCHES** (unratified) — to
+  be ratified later, closer to their pickup (owner's explicit choice to keep the
+  future roadmap provisional). Both serve `first-major-release` and depend on
+  Bucket 1 (Bucket 2 blocking, Bucket 3 beneficial).
+- **PICKUP = THIS SEAT (Wren calls Downdraft 6b29b5)** — owner card 2026-08-12
+  ~17:3xZ: "This seat picks it up." **POST-COMPACTION RESUME TASK: implement
+  Bucket 1** in a fresh worktree; first slice = the documented, configurable
+  restricted-exclusion switch (default exclude). **Machinery verified first-hand
+  2026-08-12 (do NOT re-derive):**
+  - Restricted filter is HARDCODED —
+    `packages/sdks/oak-sdk-codegen/src/bulk/restricted-lesson-filter.ts`
+    (`excludeRestrictedLessons` / `excludeRestrictedLessonsFromFile`, no param),
+    unconditional at the TWO exclusion sites
+    `apps/oak-search-cli/src/lib/indexing/bulk-ingestion.ts:136` and
+    `packages/sdks/oak-sdk-codegen/vocab-gen/vocab-gen.ts:176`; the `admin verify`
+    expected-count is DERIVED (`run-versioned-ingest.ts:78-79`), tracks the switch.
+    Pinning test: `restricted-lesson-exclusion.integration.test.ts`.
+  - MCP error `code` dropped at `formatError`
+    (`packages/sdks/oak-curriculum-sdk/src/mcp/universal-tool-shared.ts:107`); two
+    callers `universal-tools/executor.ts:55` + `aggregated-fetch/execution.ts:112`;
+    the `structuredContent` channel exists (SDK 1.30.0, already used on the SUCCESS
+    path). Classifier `classify-error-response.ts` (brittle
+    `data.cause.includes('blocked')` at :83 is the unpinned contract surface).
+  - Rebuild uses `admin versioned-ingest` (or `admin stage` → `admin promote`),
+    NOT the stale `INGESTION-GUIDE.md`; bundle at `apps/oak-search-cli/bulk-downloads/`
+    (manifest `downloadedAt` 2026-08-12T10:50Z, restricted flags present).
+  - The plan body carries the four ACs + the one pickup-verification (does the
+    transport carry `structuredContent` on `isError:true`, and do clients read it
+    on error results — probe before committing the shape). Doc the choice in a
+    short ADR (ADR-093/140 neighbours), not the runbook.
+
+## OWNER RULINGS + POST-COMPACTION TASK 2026-08-12 ~14:4xZ — MCP lesson-retrieval (relayed via Wren calls Downdraft 6b29b5 at the #865 wrap)
+
+Skua binds Vortex's MCP lesson-retrieval investigation
+(`.agent/reports/mcp-lesson-retrieval-gap-analysis-2026-08-12.md`) reached the
+owner, who ruled via decision cards. The "missing vs not allowed" frame is the
+upstream response convention (404 = missing / unknown slug; 400 plus a "not
+available" message = not-allowed / copyright-restricted; a deliberate anti-leak
+policy — status conflated, message-differentiated; realised fully only on
+`/assets`).
+
+**RULINGS (2026-08-12):**
+
+- **Index inclusion policy: KEEP RESTRICTED LESSONS OUT — for now.** Document the
+  choice; make it CONFIGURABLE so it is cheap to revisit. The Bucket-1 index
+  rebuild proceeds with restricted EXCLUDED behind a documented config switch,
+  not a hard exclusion.
+- **Degraded-summary fallback (Bucket 3 candidate): DROP IT.** No fallback ever;
+  the MCP layer only explains unavailability and points at the website.
+- **Reporter reply + API-team items: NOTE, MAKE DISCOVERABLE, BACKLOG.** Do NOT
+  send the reporter reply or raise API-team items yet. Keep the findings
+  discoverable (Skua's report is the record); start compiling a BACKLOG for WHEN
+  THE API CODE MOVES into the repo (ties to the upstream-API-as-workspace RFC).
+  Backlog items: transcript-500 and quiz-silent-empty unknown-slug defects; the
+  KS4-science summary collateral (era-2 subject gate 404s every KS4-science-only
+  lesson); optional message-differentiation and spec-enumeration; the OWA/Hasura
+  view-history data question.
+- **#865 bar (separate lane): ACCEPT the residual** — recorded in
+  `workspace-config-isolation.next-session.md`, not this lane.
+
+**POST-COMPACTION TASK (owner, ordered AFTER the compaction):** produce a
+**DECISION-COMPLETE PLAN for Bucket 1**, to be picked up NOWISH by a seat (TBD),
+PLUS follow-on future plans for Buckets 2 and 3. Source: Skua's report §"What the
+MCP layer CAN handle".
+
+- **Bucket 1 (decision-complete, nowish):** (1) rebuild the search index from the
+  fresh 2026-08-12 bundle with restricted EXCLUDED behind a documented config
+  switch (owner ruling) — restores ogl-compatible freshness and is the falsifier
+  for the unproven 2026-07-27 drop; (2) preserve error structure through the MCP
+  envelope (`{code, message, upstreamMessage}`; the SDK's
+  `classify-error-response.ts` already classifies, the MCP result flattens it to
+  prose); (3) contract-pin the upstream error vocabulary (rides with 2).
+- **Bucket 2 (follow-on plan):** `fetch` 404 enrichment via the check-restricted
+  oracle; a coherence canary (`probe-lesson-availability.ts` is its seed).
+- **Bucket 3 (follow-on plan):** automatic index updates (scheduled
+  download/ingest/alias-swap plus a reconciliation gate and a vintage stamp). NO
+  degraded fallback (dropped by ruling).
+
+Skua binds Vortex (the investigator) closed out; the picking-up seat is TBD,
+owner-assigned. This block is the discoverable pickup for that seat.
+
 ## Participating agent identities (PDR-027)
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
@@ -180,3 +402,72 @@ report §4. The day's incident record (pnpm store-binding; two stacked
 workarounds; owner rulings) lives in the napkin 2026-08-04 entries,
 MCP-498 (rewritten), and the comms stream; a retrospective is proposed
 at owner word.
+
+## 2026-08-03 ~08:45Z — BINDING lane constraint (owner word, verbatim-critical; Magnetar binds Oblivion, 74d914)
+
+Owner, on the spec-alignment findings: "please be very careful before chasing
+any type issues, there are correct and non-trivial approaches here, and I
+will work with you to identify and apply them." BINDING on the lane: the
+type-layer legs (the z.toJSONSchema examples round-trip contract, the
+KeywordsResponseSchema promotion's generated types, anything in the zod/
+openapi-zod-client-adapter layer) are OWNER-COLLABORATIVE — identified and
+applied WITH him, never autonomously cured. The non-type legs (override
+re-evaluation needs the live-API semantics probe first; served-tool-table
+artefact regen) wait for routing. The probe worktree (upstream-spec-probe,
+refreshed cache + regen uncommitted) is the lane's opening state; this
+constraint rides any routing brief VERBATIM. (Homed from the napkin at the
+2026-08-07 consolidation; the constraint was captured 2026-08-03 and had no
+thread-record presence until now.)
+
+## 2026-08-12T12:24:52Z — owner-private direction paper delivered (Foundry tracks Shimmer, ead103)
+
+An owner-directed leadership direction paper was drafted, peer-reviewed
+(four ARC review rounds with Skua binds Vortex, fact-safety FINAL
+12:24Z, plus two independent prose-expert passes), revised through six
+owner-directed rounds, and delivered to `.agent/reference-local/`
+(gitignored; the owner holds it). The owner classified the paper's
+content PRIVATE (2026-08-12): tracked surfaces carry generic lessons
+only (napkin, this record); the collaboration dialogue and reviews are
+conserved beside the paper in reference-local. OPEN owner question
+(non-blocking, routed to Jim by Skua): does the internal decision-paper
+class sit inside editorial-tone.md's contractions-always scope? Whichever
+way, the answer belongs in editorial-tone.md's scope list.
+
+## 2026-08-12T12:30:26Z — contractions question DISCHARGED (owner ruling; Foundry tracks Shimmer, ead103)
+
+Owner, 2026-08-12, verbatim: "contractions are fine, but editorial flow is
+more important". Applied to the paper as a flow-first pass (contractions
+where they ease reading; emphatic uncontracted forms kept for weight).
+The paper (reference-local, owner-private) is final. Curation candidate
+for the next editorial-tone.md touch: add a
+scope-list clause for the internal decision-paper class recording this
+ruling (flow governs; contractions permitted, not mandated), so the next
+author doesn't have to ask — the reviewer's original suggestion, now with
+the owner's answer to encode.
+
+## 2026-08-12T12:33Z — lesson-retrieval analysis lane CLOSED (Skua binds Vortex, 027610, claude-code/claude-fable-5)
+
+Owner-directed analysis of a third-party bug report, complete. The
+authoritative record is
+`.agent/reports/mcp-lesson-retrieval-gap-analysis-2026-08-12.md` (landed in
+this closeout's docs commit): three findings — the upstream subject-gate
+collateral (all KS4-science-only lesson summaries 404 since PR #309,
+2026-07-22; intent evidence says financial-education blocking, collateral
+unadjudicated), the restricted-content availability semantics (the
+reporter's 8 = 8/8 restricted; the search-index gap = the restricted class,
+34/34 in science), and undifferentiated summary-404 semantics (the
+response-code convention — 404 missing / 400+"not available" restricted —
+is realised fully only on /assets; /quiz silent-200-empty and /transcript
+500 mishandle the missing half). Our-side work is bucketed in the report
+(Now / Next / Invest); the bucket-1 index rebuild is gated on ONE owner
+decision — whether restricted lessons' metadata is indexed (recommended
+yes, flagged). Upstream items are held as questions-with-evidence, not
+filed bugs, per owner scepticism: the KS4 collateral question, the
+transcript-500 + quiz-silent-empty defects, optional message-differentiation
+restoration and spec vocabulary enumeration. The reporter reply is
+sketched in the report. Principal-checkout bulk data refreshed 2026-08-12
+at owner word (34 files, rshe-pshe new, schema unchanged, type-check
+green); the probe script `apps/oak-search-cli/scripts/probe-lesson-availability.ts`
+demonstrates the three availability classes in one run. Both lane claims
+released at close; no work in flight; next actions are all owner-decision-
+gated and enumerated in the report's routing section.

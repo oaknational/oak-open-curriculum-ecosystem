@@ -5,8 +5,8 @@ programmes:
 overview: "Strategic umbrella for separating Oak-specific surfaces from generic foundations across all affected workspaces, with public rename scope included."
 todos:
   - id: workspace-classification-matrix
-    content: "Complete and keep current the authoritative workspace classification matrix, including leakage types, target states, and tranche ownership."
-    status: pending
+    content: "SUPERSEDED 2026-08-14: the workspace-classification-census delivered the authoritative matrix (.agent/reports/workspace-classification-census/matrix.md, instrument-validated). Keeping it current is census re-run work, not this brief."
+    status: completed
   - id: tranche-1-platform-runtime
     content: "Promote the platform/runtime tranche covering env contracts, env resolution, observability, logger, Sentry wrappers, and neutral runtime defaults."
     status: pending
@@ -122,8 +122,14 @@ wrapper.
 
 ## Authoritative Workspace Classification Matrix
 
-This matrix is the authoritative inventory for the programme. Every promotion
-decision starts here.
+> **SUPERSEDED (2026-08-14).** The authoritative matrix now lives at
+> `.agent/reports/workspace-classification-census/matrix.md`, rendered from
+> validated row data by the committed census instrument
+> (`pnpm agent-tools:workspace-census`). That census's delta section names
+> every subject whose classification changed, appeared, or disappeared
+> relative to the 2026-04-28 table below, which is retained as the
+> historical baseline the delta is computed against. Every promotion
+> decision starts from the census matrix, not this table.
 
 | Workspace | Classification | Oak-specific elements today | Target state | Tranche |
 |---|---|---|---|---|

@@ -12,6 +12,15 @@ gate in its full configured state — or, when scope genuinely justifies
 it, the work is escalated to a dedicated plan that owns the fix while
 the gate remains active and blocking.**
 
+This rule binds the **agent** absolutely. The **owner** may change
+gate policy by a recorded standing ruling — named session class,
+substitute gates carrying every check at the original gate's scope,
+and a reopen condition — per PDR-025 §Gate binding and policy
+authority (the single home of that authority model). Within a
+recorded ruling's exact scope the ruling is the governing policy;
+everywhere else this rule stands unchanged, and an agent never
+initiates, proposes, or widens such a ruling.
+
 The forbidden shape: turn the gate off, do the work, turn the gate
 back on. This is the `gate-off-fix-gate-on` anti-pattern. It surfaces
 in many disguises:

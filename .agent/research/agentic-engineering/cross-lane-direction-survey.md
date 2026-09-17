@@ -386,7 +386,7 @@ and entering the interop layer.
   vocabulary-alignment pass (no behaviour change) on
   [continuity-memory-and-knowledge-flow/README.md](./continuity-memory-and-knowledge-flow/README.md)
   and the
-  [napkin SKILL.md](../../skills/napkin/SKILL-CANONICAL.md) /
+  [napkin SKILL.md](../../skills/knowledge/napkin/SKILL-CANONICAL.md) /
   distilled surfaces. Not blocking.
 - **Protocol-layer durability is a watchlist item, not a near-term
   adoption target.** The continuity lane's existing surfaces are

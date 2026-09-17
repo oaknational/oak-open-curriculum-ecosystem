@@ -127,7 +127,7 @@ The review also searched for implementation evidence including `@linear/sdk`, `L
 ### 1.2 Reasoning method
 
 This report applies the five outward moves from
-[`oak-reason`](../skills/reason/SKILL-CANONICAL.md):
+[`oak-reason`](../skills/cognition/reason/SKILL-CANONICAL.md):
 
 1. name the kind of problem;
 2. frame the problem rather than presuppose a solution;
@@ -136,7 +136,7 @@ This report applies the five outward moves from
 5. stress-test for premature solutions, hidden values, abstraction drift, and local optimisation.
 
 It also applies the inward questions from
-[`oak-metacognition`](../skills/metacognition/SKILL-CANONICAL.md) and the
+[`oak-metacognition`](../skills/cognition/metacognition/SKILL-CANONICAL.md) and the
 [metacognition directive](../directives/metacognition.md):
 
 - what shape was inherited;
@@ -1256,8 +1256,8 @@ planning ceremony.
 
 ### Reasoning and governance
 
-- [`oak-reason`](../skills/reason/SKILL-CANONICAL.md)
-- [`oak-metacognition`](../skills/metacognition/SKILL-CANONICAL.md)
+- [`oak-reason`](../skills/cognition/reason/SKILL-CANONICAL.md)
+- [`oak-metacognition`](../skills/cognition/metacognition/SKILL-CANONICAL.md)
 - [Metacognition directive](../directives/metacognition.md)
 - [Principles and decision lenses](../directives/principles.md)
 

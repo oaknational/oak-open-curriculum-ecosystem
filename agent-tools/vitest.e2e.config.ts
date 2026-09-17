@@ -1,5 +1,5 @@
 import { mergeConfig } from 'vitest/config';
-import { baseE2EConfig } from '../vitest.e2e.config.base';
+import { baseE2EConfig } from '@oaknational/workspace-config/vitest-e2e';
 
 /**
  * E2E test configuration for agent-tools.

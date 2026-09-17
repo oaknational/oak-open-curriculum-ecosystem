@@ -1,0 +1,17 @@
+{
+  "artefact": ".agent/reports/design/skill-standard-pilot-evals/s4-iteration-1/artefacts/case-1-with-skill.html",
+  "assertions": {
+    "no-invented-values-in-authored-css": {
+      "pass": false,
+      "evidence": "3: 20ch, 60ch, repeat(auto-fit, minmax(min(240px, 100%), 1fr))"
+    },
+    "no-invented-values-in-prose": {
+      "pass": true,
+      "evidence": "prose states no bare hex or non-system duration"
+    },
+    "no-bespoke-size-proposals": {
+      "pass": true,
+      "evidence": "no size proposed outside the documented values"
+    }
+  }
+}

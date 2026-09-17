@@ -22,12 +22,19 @@ const EVENT_UUID = '0199e8f0-8abc-7def-8abc-123456789abc';
 const SERVED_TOOL_NAMES = ['search', 'browse'] as const;
 const SERVED_RESOURCE_NAMES = ['lesson-guide', 'quiz-results'] as const;
 
-const COMMON_PROPERTIES = {
+// Resource reads are Oak-constructed at the sink and never pass the transport
+// observer, so their envelope carries no observer-derived client surface.
+const RESOURCE_COMMON_PROPERTIES = {
   $mcp_source: 'posthog_mcp_analytics',
   $mcp_server_name: SERVER_NAME,
   $mcp_server_version: SERVER_VERSION,
   oak_environment: RELEASE.environment,
   oak_release: RELEASE.value,
+} as const;
+const COMMON_PROPERTIES = {
+  ...RESOURCE_COMMON_PROPERTIES,
+  oak_client_product: 'other',
+  oak_client_surface: 'other',
 } as const;
 
 function authenticatedExtra(userId: unknown = ACTOR_ID): Record<string, unknown> {
@@ -97,6 +104,19 @@ function nodeEvent(event: string, properties: Readonly<Record<string, unknown>>)
     event,
     properties: {
       ...COMMON_PROPERTIES,
+      ...properties,
+    },
+    timestamp: NODE_TIMESTAMP,
+    uuid: EVENT_UUID,
+  };
+}
+
+function resourceReadEvent(properties: Readonly<Record<string, unknown>>): EventMessage {
+  return {
+    distinctId: DISTINCT_ID,
+    event: '$mcp_resource_read',
+    properties: {
+      ...RESOURCE_COMMON_PROPERTIES,
       ...properties,
     },
     timestamp: NODE_TIMESTAMP,
@@ -304,6 +324,27 @@ describe('finalOakEventPolicy integration', () => {
     }
   });
 
+  it('carries a rebuilt $mcp_client_user_agent and drops one outside its grammar (MCP-687)', () => {
+    const { policies } = createSubject();
+    const base = { $mcp_tool_name: 'search', $mcp_duration_ms: 13, $mcp_is_error: false };
+
+    const rebuilt = policies.finalOakEventPolicy(
+      nodeEvent('$mcp_tool_call', { ...base, $mcp_client_user_agent: 'claude-code/2 (cli)' }),
+    );
+    expect(rebuilt).toStrictEqual(
+      nodeEvent('$mcp_tool_call', { $mcp_client_user_agent: 'claude-code/2 (cli)', ...base }),
+    );
+
+    const raw = policies.finalOakEventPolicy(
+      nodeEvent('$mcp_tool_call', {
+        ...base,
+        $mcp_client_user_agent: `claude-code/2.1.226 (cli) ${ACTOR_ID}`,
+      }),
+    );
+    expect(raw).toStrictEqual(nodeEvent('$mcp_tool_call', base));
+    expect(JSON.stringify(raw)).not.toContain(ACTOR_ID);
+  });
+
   it('accepts the closed unknown tool value produced by the instrumentation policy', () => {
     const { policies } = createSubject();
     const input = nodeEvent('$mcp_tool_call', {
@@ -317,12 +358,12 @@ describe('finalOakEventPolicy integration', () => {
 
   it('accepts a canonical resource read and drops an unknown resource name', () => {
     const { policies } = createSubject();
-    const canonical = nodeEvent('$mcp_resource_read', {
+    const canonical = resourceReadEvent({
       $mcp_resource_name: 'lesson-guide',
       $mcp_duration_ms: 21,
       $mcp_is_error: false,
     });
-    const unknown = nodeEvent('$mcp_resource_read', {
+    const unknown = resourceReadEvent({
       $mcp_resource_name: 'private-resource',
       $mcp_duration_ms: 21,
       $mcp_is_error: false,
@@ -439,7 +480,7 @@ describe('policy configuration snapshots', () => {
       return nodeEvent('$mcp_tool_call', toolProperties(toolName));
     }
     function resourceEvent(resourceName: string): EventMessage {
-      return nodeEvent('$mcp_resource_read', {
+      return resourceReadEvent({
         $mcp_resource_name: resourceName,
         $mcp_duration_ms: 1,
         $mcp_is_error: false,

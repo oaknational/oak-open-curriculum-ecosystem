@@ -3,30 +3,25 @@ id: arc-colour-statusline
 node_type: delivery
 name: "ARC-colour statusline — per-channel identity-coloured feather badges"
 overview: "Replace the statusline's single binary ArcAngel wing with per-channel truecolor feather badges derived from parsed channel content (colour index, roster, cross-host and invalid states), plus the usage-gauge model-row placement — the castr-pinned estate brought into oak as one coherent delivery: grammar, palette, session shape, renderer, colour-assignment reporter, corpus validator, and channel-open convention."
-status: sketch
-ratified_by: null
-ratified_date: null
-ratified_where: null
-# Owner ratification GIVEN 2026-08-03 (card at the Director seat, the
-# all-open-questions batch); the frontmatter stamp completes at ticket mint
-# (embargo lift 2026-08-10) because the corpus validator binds
-# ratified-in-anchored-subtree to a named ticket, and only the update lane
-# mints tickets before the lift (owner ruling, same day).
+status: ratified
+ratified_by: 'Jim Cresswell'
+ratified_date: 2026-08-03
+ratified_where: 'Owner ratification card at the Director seat, the all-open-questions batch, 2026-08-03 (recorded in §Direction); stamp completed 2026-08-07 when the ticket-existence obligation was removed (plan-node schema §2026-08-07 amendment, PR #817)'
 serves: agent-platform-citizenship
 impact_areas:
   - practice-and-estate
 tickets: []
 depends_on: []
-owner_gates:
-  - awaiting: external-input
-    clears_when: >-
-      Ticket mint at the Linear embargo's end (08:00 Europe/London
-      2026-08-10). The SUBSTANCE is owner-ratified (direction 2026-07-20;
-      re-asked and re-affirmed 2026-08-03, both recorded in §Direction);
-      this gate holds only the tickets field and does not gate execution
-      routing.
-    expires: 2026-08-17
-last_updated: 2026-08-03
+owner_gates: []
+# The former mechanical gate (its record, conserved): the SUBSTANCE was
+# owner-ratified (direction 2026-07-20; re-asked and re-affirmed
+# 2026-08-03, both recorded in §Direction); the gate held only the
+# tickets field pending ticket mint at the embargo's end. Both premises
+# dissolved (embargo lifted 2026-08-06; ticket-existence obligation
+# removed by the plan-node schema §2026-08-07 amendment, PR #817), so
+# the stamp completed 2026-08-07. A visibility ticket may still be
+# minted as working practice.
+last_updated: 2026-08-07
 ---
 
 # ARC-colour statusline — per-channel identity-coloured feather badges
@@ -317,8 +312,14 @@ budget with tally-stop.
   seat (Magnetar binds Oblivion, 74d914); all §Ground-truth items verified
   first-hand on the day.
 - 2026-08-03 (later, RATIFICATION): the owner ratified this node at a card
-  (the all-open-questions batch, Director seat). The frontmatter stamp
-  completes at the ticket mint when the Linear embargo lifts (2026-08-10)
-  — the validator's ratified-means-ticketed obligation composes with the
-  owner's only-the-update-lane-mints ruling; execution proceeds on the
+  (the all-open-questions batch, Director seat). The entry's original
+  stamp-completion condition — the ticket mint at the Linear embargo's end
+  (2026-08-10) under the validator's ratified-means-ticketed obligation —
+  is superseded by the 2026-08-07 entry below; execution proceeded on the
   ratification meanwhile (ws-b0 already merged at the full condition).
+- 2026-08-07 (STAMP COMPLETION): both premises of the 2026-08-03 entry's
+  condition dissolved — the Linear embargo lifted 2026-08-06 and the
+  ticket-existence obligation was removed by the plan-node schema
+  §2026-08-07 amendment (PR #817) — so the frontmatter stamp completed
+  2026-08-07 on the 2026-08-03 ratification word. A visibility ticket
+  remains optional working practice.

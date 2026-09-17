@@ -25,6 +25,7 @@ import {
 const DEP_DIR = '/repo/packages/core/result';
 const SRC_DIR = path.join(DEP_DIR, 'src');
 const NESTED_DIR = path.join(SRC_DIR, 'nested');
+const LEAF_ARTIFACTS = ['index.js', 'index.d.ts'] as const;
 const DIST_JS = path.join(DEP_DIR, 'dist', 'index.js');
 const DIST_DTS = path.join(DEP_DIR, 'dist', 'index.d.ts');
 const SRC_INDEX = path.join(SRC_DIR, 'index.ts');
@@ -65,23 +66,31 @@ describe('workspaceDepDistIsStale', () => {
       dirEntries: { [SRC_DIR]: [file('index.ts')] },
     });
 
-    expect(workspaceDepDistIsStale(DEP_DIR, io)).toBe(true);
+    expect(workspaceDepDistIsStale(DEP_DIR, LEAF_ARTIFACTS, io)).toBe(true);
   });
 
   it('is not stale when both dist artifacts are newer than every source, so a warm checkout skips', () => {
-    expect(workspaceDepDistIsStale(DEP_DIR, fakeIo(flatTree(200, 200, 100)))).toBe(false);
+    expect(workspaceDepDistIsStale(DEP_DIR, LEAF_ARTIFACTS, fakeIo(flatTree(200, 200, 100)))).toBe(
+      false,
+    );
   });
 
   it('is stale when a source file is newer than the built dist (the MCP-472 warm-pull bug)', () => {
-    expect(workspaceDepDistIsStale(DEP_DIR, fakeIo(flatTree(100, 100, 200)))).toBe(true);
+    expect(workspaceDepDistIsStale(DEP_DIR, LEAF_ARTIFACTS, fakeIo(flatTree(100, 100, 200)))).toBe(
+      true,
+    );
   });
 
   it('treats an equal mtime as current, so an untouched warm checkout skips', () => {
-    expect(workspaceDepDistIsStale(DEP_DIR, fakeIo(flatTree(150, 150, 150)))).toBe(false);
+    expect(workspaceDepDistIsStale(DEP_DIR, LEAF_ARTIFACTS, fakeIo(flatTree(150, 150, 150)))).toBe(
+      false,
+    );
   });
 
   it('rebuilds when any one dist artifact is older than source, even if another is newer', () => {
-    expect(workspaceDepDistIsStale(DEP_DIR, fakeIo(flatTree(300, 100, 150)))).toBe(true);
+    expect(workspaceDepDistIsStale(DEP_DIR, LEAF_ARTIFACTS, fakeIo(flatTree(300, 100, 150)))).toBe(
+      true,
+    );
   });
 
   it('recurses into nested src subdirectories to find the newest source', () => {
@@ -93,7 +102,7 @@ describe('workspaceDepDistIsStale', () => {
       },
     });
 
-    expect(workspaceDepDistIsStale(DEP_DIR, io)).toBe(true);
+    expect(workspaceDepDistIsStale(DEP_DIR, LEAF_ARTIFACTS, io)).toBe(true);
   });
 
   it('is not stale when src has no files even though dist is present', () => {
@@ -102,13 +111,13 @@ describe('workspaceDepDistIsStale', () => {
       dirEntries: { [SRC_DIR]: [] },
     });
 
-    expect(workspaceDepDistIsStale(DEP_DIR, io)).toBe(false);
+    expect(workspaceDepDistIsStale(DEP_DIR, LEAF_ARTIFACTS, io)).toBe(false);
   });
 
   it('is not stale when the src directory is absent entirely', () => {
     const io = fakeIo({ fileMtimes: { [DIST_JS]: 150, [DIST_DTS]: 150 }, dirEntries: {} });
 
-    expect(workspaceDepDistIsStale(DEP_DIR, io)).toBe(false);
+    expect(workspaceDepDistIsStale(DEP_DIR, LEAF_ARTIFACTS, io)).toBe(false);
   });
 
   it('ignores a listed source file that has since vanished rather than treating it as newest', () => {
@@ -119,6 +128,55 @@ describe('workspaceDepDistIsStale', () => {
       dirEntries: { [SRC_DIR]: [file('index.ts'), file('vanished.ts')] },
     });
 
-    expect(workspaceDepDistIsStale(DEP_DIR, io)).toBe(false);
+    expect(workspaceDepDistIsStale(DEP_DIR, LEAF_ARTIFACTS, io)).toBe(false);
+  });
+
+  it('is stale when only a build-config input changed (the warm-pull build-config case)', () => {
+    const io = fakeIo({
+      fileMtimes: {
+        [DIST_JS]: 150,
+        [DIST_DTS]: 150,
+        [SRC_INDEX]: 100,
+        [path.join(DEP_DIR, 'tsup.config.ts')]: 200,
+      },
+      dirEntries: { [SRC_DIR]: [file('index.ts')] },
+    });
+
+    expect(workspaceDepDistIsStale(DEP_DIR, LEAF_ARTIFACTS, io)).toBe(true);
+  });
+
+  it('skips when the build-config inputs are older than the built dist', () => {
+    const io = fakeIo({
+      fileMtimes: {
+        [DIST_JS]: 150,
+        [DIST_DTS]: 150,
+        [SRC_INDEX]: 100,
+        [path.join(DEP_DIR, 'tsup.config.ts')]: 90,
+        [path.join(DEP_DIR, 'tsconfig.build.json')]: 80,
+      },
+      dirEntries: { [SRC_DIR]: [file('index.ts')] },
+    });
+
+    expect(workspaceDepDistIsStale(DEP_DIR, LEAF_ARTIFACTS, io)).toBe(false);
+  });
+
+  it('witnesses the dep’s own artifact names, so a no-barrel config package skips when warm', () => {
+    // A dep with named entries and no dist/index.js (the workspace-config shape):
+    // judged against its own witness pair it reads current, where the leaf pair
+    // would misread it as permanently stale and rebuild on every warm install.
+    const configDepDir = '/repo/packages/core/workspace-config';
+    const configArtifacts = ['tsup.config.base.js', 'tsup.config.base.d.ts'] as const;
+    const configSrcDir = path.join(configDepDir, 'src');
+    const io = fakeIo({
+      fileMtimes: {
+        [path.join(configDepDir, 'dist', 'tsup.config.base.js')]: 200,
+        [path.join(configDepDir, 'dist', 'tsup.config.base.d.ts')]: 200,
+        [path.join(configSrcDir, 'tsup.config.base.ts')]: 100,
+      },
+      dirEntries: { [configSrcDir]: [file('tsup.config.base.ts')] },
+    });
+
+    expect(workspaceDepDistIsStale(configDepDir, configArtifacts, io)).toBe(false);
+    expect(workspaceDepDistIsStale(configDepDir, LEAF_ARTIFACTS, io)).toBe(true);
   });
 });

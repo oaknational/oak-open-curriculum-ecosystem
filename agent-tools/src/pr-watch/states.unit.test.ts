@@ -71,11 +71,58 @@ describe('PR_VERDICT_STATES', () => {
         'BEHIND-BASE',
         'ARMED-BEHIND-RED',
         'QUOTA-SKIPPED',
+        'SETTLED-NO-REVIEW',
         'MERGED',
         'CLOSED',
         'CONFLICT-DIRTY',
       ].sort(byLocale),
     );
+  });
+});
+
+describe('computePrVerdict — the timeout-skip settled round (security D1, 2026-08-06)', () => {
+  // The timeout arm exists so a WATCH can end rather than hang forever; it
+  // must never launder "nobody reviewed" into merge-eligibility. A round
+  // settled by timeout-skips gets its own typed state, mirroring the
+  // QUOTA-SKIPPED carve-out.
+  it('a round settled ONLY by timeout-skips reads SETTLED-NO-REVIEW, never SETTLE-READY', () => {
+    const verdict = computePrVerdict(settledReading({ reviews: [] }), LATE_NOW);
+
+    expect(verdict.state).toBe('SETTLED-NO-REVIEW');
+    expect(verdict.evidence.join('\n')).toContain(COPILOT);
+  });
+
+  it('an outwaited LIVE review run still refuses — liveness stops mattering for wait, not for merge-eligibility', () => {
+    const verdict = computePrVerdict(
+      settledReading({
+        reviews: [],
+        reviewRequests: [COPILOT],
+        reviewRuns: {
+          kind: 'read',
+          runs: [
+            {
+              id: 'run-1',
+              name: 'copilot review',
+              createdAt: '2026-07-21T12:01:00Z',
+              completedAt: null,
+            },
+          ],
+        },
+      }),
+      LATE_NOW,
+    );
+
+    expect(verdict.state).toBe('SETTLED-NO-REVIEW');
+  });
+
+  it('one SATISFIED leg does not launder another reviewer timing out unreviewed', () => {
+    const verdict = computePrVerdict(
+      settledReading({ expectedReviewers: [COPILOT, 'second-reviewer'] }),
+      LATE_NOW,
+    );
+
+    expect(verdict.state).toBe('SETTLED-NO-REVIEW');
+    expect(verdict.evidence.join('\n')).toContain('second-reviewer');
   });
 });
 
@@ -226,7 +273,9 @@ describe('computePrVerdict — per-reviewer legs (the collapsed-legs r2 class)',
     expect(verdict.state).toBe('SILENT-WAIT-NO-REVIEWER');
   });
 
-  it('an empty commitOid never proves tip binding; the leg settles via the checks-green timeout', () => {
+  it('an empty commitOid never proves tip binding; the timeout settles the WATCH but the round is not merge-eligible', () => {
+    // Until the security D1 cure (2026-08-06) this round read SETTLE-READY —
+    // the exact hole: a timeout-settled round has no proven tip-bound review.
     const verdict = computePrVerdict(
       settledReading({
         reviews: [
@@ -241,7 +290,7 @@ describe('computePrVerdict — per-reviewer legs (the collapsed-legs r2 class)',
       }),
       LATE_NOW,
     );
-    expect(verdict.state).toBe('SETTLE-READY');
+    expect(verdict.state).toBe('SETTLED-NO-REVIEW');
     expect(verdict.evidence.join('\n')).toContain('timeout');
   });
 });

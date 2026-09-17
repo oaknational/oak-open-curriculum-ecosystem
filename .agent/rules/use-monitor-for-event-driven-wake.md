@@ -114,6 +114,25 @@ Monitor:
    user prompt; if it does not, the filter is wrong, the source is not
    flushing line-buffered, or the host notification path is unproved.
 
+## A File-Emitting Watcher Is Half-Armed Without a Read Path
+
+A watcher that EMITS to a file (a buffered tail, an output-file monitor, any
+emit-to-disk shape) is only half of an instrument: nothing makes the seat
+READ the buffer between wakes, so directed routings can sit unread for tens
+of minutes while every liveness check reads green — awareness is
+CONSUMPTION, not process existence (worked instance 2026-08-08: an ARC
+opener and an ADOPT ruling sat ~25 minutes in a file-emitting watcher
+buffer, owner-flagged). Arming such a watcher REQUIRES pairing it with
+either a wake mechanism (the Monitor primitive whose events create agent
+turns — the preferred cure and this rule's invariant) or an explicit
+declared read cadence (e.g. a per-turn-boundary buffer sweep). A
+file-emitting watcher with neither is half-armed and does not satisfy any
+watcher obligation. The sibling arming-direction failure (a green liveness
+check on ONE surface read as visibility across ALL surfaces) is recorded at
+[`comms-all-channels-watcher`](comms-all-channels-watcher.md) — enumerate
+the surfaces that can carry direction to the seat as the arming checklist,
+never "is my watcher green?".
+
 <!-- CODEX_TEAM_ALERT_BOOTSTRAP_SOURCE_START -->
 ## Codex team-session alert bootstrap
 

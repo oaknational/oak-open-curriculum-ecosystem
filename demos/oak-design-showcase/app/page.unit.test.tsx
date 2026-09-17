@@ -12,12 +12,12 @@ describe('showcase page', () => {
     expect(screen.queryByRole('contentinfo')).not.toBeNull();
   });
 
-  it('offers the identity control independent of the theme runtime', () => {
+  it('offers both demo doors as links', () => {
     render(<ShowcasePage />);
-    // No runtime exists in this environment: the identity axis must work
-    // regardless. The placeholder-shell contracts live in
-    // Switchboard.unit.test.tsx (one proof per state); the served page is
-    // Playwright's to prove.
-    expect(screen.queryByRole('combobox', { name: 'Identity' })).not.toBeNull();
+    // The landing's contract is the two doors (tight scope, owner
+    // 2026-08-13): the switching demo and the composition demo. The
+    // demos' own behaviour is each route's spec to prove.
+    expect(screen.queryByRole('link', { name: /switching demo/i })).not.toBeNull();
+    expect(screen.queryByRole('link', { name: /composition demo/i })).not.toBeNull();
   });
 });

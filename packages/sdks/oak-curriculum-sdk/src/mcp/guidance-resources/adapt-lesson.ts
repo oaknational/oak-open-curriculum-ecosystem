@@ -18,7 +18,7 @@ export const ADAPT_LESSON_GUIDANCE: AgentGuidanceResource = {
     'Workflow guidance for the assistant: adapt an Oak lesson grounded in EEF Teaching and Learning Toolkit evidence, presenting evidence-calibrated options with caveats and attribution intact.',
   mimeType: 'text/markdown',
   annotations: { priority: 0.4, audience: ['assistant'] },
-  lastModified: '2026-07-23T00:00:00Z',
+  lastModified: '2026-09-02T00:00:00Z',
 };
 
 export const ADAPT_LESSON_GUIDANCE_MARKDOWN = `# Adapt a lesson with EEF evidence — agent workflow guidance
@@ -46,7 +46,7 @@ guidance. MCP tool names may appear prefixed
    that lesson; read them alongside the quiz and transcript. For the
    prerequisite gaps, take the unit slug of the same lesson and call
    \`get-prior-knowledge-graph({ unitSlugs: ["<unit-slug-from-step-1>"] })\`
-   — it returns the bounded prior-knowledge subgraph for that unit.
+   — it returns the unit's stated prior knowledge (the assumed statements).
 3. Name the pedagogical move each signal raises (this is your reasoning,
    not EEF data). Pick the real EEF strands for those moves from the
    strand index in the \`eef://interpretation\` resource — convert your

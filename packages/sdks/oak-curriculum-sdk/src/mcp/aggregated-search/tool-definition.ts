@@ -2,9 +2,11 @@
  * Tool definition and input schema for the SDK-backed search tool.
  *
  * This tool replaces the REST-based `search` tool with direct Elasticsearch
- * access via the Search SDK, providing 4-way RRF ranking, ELSER semantic
- * search, and access to all four indexes (lessons, units, threads, sequences)
- * plus typeahead suggestions.
+ * access via the Search SDK. Retrieval is hybrid BM25 + ELSER RRF across all
+ * four indexes: four-way RRF (content and structure) for lessons and units,
+ * two-way RRF for threads and sequences. The `suggest` scope is lexical
+ * typeahead (completion plus `bool_prefix`) and requires a subject or key
+ * stage filter.
  *
  * The description includes comprehensive NL-to-structured mapping examples
  * per ADR-107 (NL interpretation at MCP boundary).
@@ -22,7 +24,7 @@ import { SCOPES_SUPPORTED } from '../scopes-supported.js';
  */
 export const SEARCH_TOOL_DEF = {
   title: 'Search Curriculum',
-  description: `Search Oak's curriculum using semantic search across all four content indexes.
+  description: `Hybrid lexical and semantic search across lessons, units, threads and sequences, plus lexical typeahead suggestions (scoped)
 
 Required parameters: \`scope\` (which index to search) and \`query\` (your search query). For \`threads\` scope, \`query\` may be omitted if \`subject\` or \`keyStage\` is provided.
 
@@ -60,7 +62,7 @@ SCOPE LIMITATIONS:
 - "threads" can omit query when subject or keyStage is provided, returning all matching threads sorted by unit count.
 CROSS-TOOL WORKFLOWS:
 - For lesson planning: search(scope: 'lessons') → fetch(lesson:slug) for full details
-- For prerequisites: search(scope: 'threads') → get-prior-knowledge-graph with the found unit slugs for dependencies
+- For prior knowledge: search(scope: 'threads') → get-prior-knowledge-graph with the found unit slugs for their stated prior knowledge
 - For progressions: search(scope: 'threads') → get-thread-progressions for ordered units
 
 NOTE: This tool can return a large payload at broad scope and may exceed a host's per-result token limit. Broad scopes such as \`sequences\` are largest; pass \`size\` to cap results and \`from\` to page.`,

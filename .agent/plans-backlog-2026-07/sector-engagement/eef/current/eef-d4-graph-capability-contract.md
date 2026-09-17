@@ -86,7 +86,9 @@ information. Parameterising graph-core over `TNodeId`/`TEdgeType` is therefore t
 in the substrate (ADR-179): the generality is forced by one real consumer plus the
 substrate boundary, not opened speculatively. PDR-058 §Surface 2 (design
 optionality) tests whether a concrete second instantiation is nameable in scope —
-it is: the **prerequisite / prior-knowledge graph** (`get-prior-knowledge-graph`:
+it is: the **prerequisite / prior-knowledge graph** (SUPERSEDED 2026-09-03 by MCP-671 — the
+tool now serves each unit's stated prior-knowledge statements and no `prerequisiteFor` edges;
+see ADR-195's amendment. As ratified it read: `get-prior-knowledge-graph`:
 1,607 `unitSlug`-keyed unit nodes + 3,452 typed `prerequisiteFor` edges — a DAG,
 verified this session) binds the same generic with distinct `TNodeId`/`TEdgeType`
 (owner-confirmed 2026-06-04: the redesigned prerequisite **and** misconception

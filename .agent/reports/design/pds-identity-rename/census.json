@@ -1,0 +1,329 @@
+{
+  "$comment": "Ratchet contract for the PDS identity replacement (plan public-digital-service-identity, owner-ratified 2026-08-03). Validated by validate-identity-naming: live per-file/kind/variant counts must equal these rows exactly; removals update this file in the same change. Per-site mapping semantics live in the plan D1 table. Emptied and deleted at the final landing (strict mode).",
+  "generated": "2026-08-13",
+  "entries": [
+    {
+      "file": ".agent/collaboration/rapid-comms/2026-07-24-design-lane-cormorant-turns-offing-forge-rides-brimstone.md",
+      "kind": "content",
+      "countByVariant": {
+        "name": 1,
+        "initialismUpper": 0,
+        "initialismLower": 0
+      },
+      "breakdown": [
+        {
+          "mappingRole": "d1-table",
+          "contextKind": "mixed",
+          "dispositionClass": "record-head-note",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "file": ".agent/memory/operational/director-handoff.md",
+      "kind": "content",
+      "countByVariant": {
+        "name": 2,
+        "initialismUpper": 0,
+        "initialismLower": 0
+      },
+      "breakdown": [
+        {
+          "mappingRole": "d1-table",
+          "contextKind": "mixed",
+          "dispositionClass": "record-head-note",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "file": ".agent/plans/delivery/design-system-completion.plan.md",
+      "kind": "content",
+      "countByVariant": {
+        "name": 2,
+        "initialismUpper": 0,
+        "initialismLower": 0
+      },
+      "breakdown": [
+        {
+          "mappingRole": "d1-table",
+          "contextKind": "mixed",
+          "dispositionClass": "rename-in-place",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "file": ".agent/reports/agentic-engineering/comms-corpus-knowledge-transfer/data/p6-machine-local-sweep-2026-07-31.json",
+      "kind": "content",
+      "countByVariant": {
+        "name": 1,
+        "initialismUpper": 0,
+        "initialismLower": 0
+      },
+      "breakdown": [
+        {
+          "mappingRole": "d1-table",
+          "contextKind": "mixed",
+          "dispositionClass": "record-substitution-only",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "file": ".agent/reports/design-system-estate-2026-07-23.md",
+      "kind": "content",
+      "countByVariant": {
+        "name": 2,
+        "initialismUpper": 0,
+        "initialismLower": 0
+      },
+      "breakdown": [
+        {
+          "mappingRole": "d1-table",
+          "contextKind": "mixed",
+          "dispositionClass": "record-head-note",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "file": ".agent/reports/design/aip-137-stage-a-import-verification-2026-07-19.md",
+      "kind": "content",
+      "countByVariant": {
+        "name": 1,
+        "initialismUpper": 0,
+        "initialismLower": 0
+      },
+      "breakdown": [
+        {
+          "mappingRole": "d1-table",
+          "contextKind": "mixed",
+          "dispositionClass": "record-head-note",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "file": ".agent/reports/design/plan-review-2026-08-02/adjudication.md",
+      "kind": "content",
+      "countByVariant": {
+        "name": 2,
+        "initialismUpper": 0,
+        "initialismLower": 0
+      },
+      "breakdown": [
+        {
+          "mappingRole": "d1-table",
+          "contextKind": "mixed",
+          "dispositionClass": "record-head-note",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "file": ".agent/reports/design/plan-review-2026-08-02/dispositions.v2.md",
+      "kind": "content",
+      "countByVariant": {
+        "name": 1,
+        "initialismUpper": 0,
+        "initialismLower": 0
+      },
+      "breakdown": [
+        {
+          "mappingRole": "d1-table",
+          "contextKind": "mixed",
+          "dispositionClass": "record-head-note",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "file": ".agent/reports/design/plan-review-2026-08-02/findings.v1.json",
+      "kind": "content",
+      "countByVariant": {
+        "name": 41,
+        "initialismUpper": 0,
+        "initialismLower": 0
+      },
+      "breakdown": [
+        {
+          "mappingRole": "d1-table",
+          "contextKind": "mixed",
+          "dispositionClass": "record-substitution-only",
+          "count": 41
+        }
+      ]
+    },
+    {
+      "file": ".agent/reports/design/plan-review-2026-08-02/findings.v2.json",
+      "kind": "content",
+      "countByVariant": {
+        "name": 16,
+        "initialismUpper": 0,
+        "initialismLower": 0
+      },
+      "breakdown": [
+        {
+          "mappingRole": "d1-table",
+          "contextKind": "mixed",
+          "dispositionClass": "record-substitution-only",
+          "count": 16
+        }
+      ]
+    },
+    {
+      "file": ".agent/reports/impeccable-style-design-review-2026-07-24.md",
+      "kind": "content",
+      "countByVariant": {
+        "name": 2,
+        "initialismUpper": 0,
+        "initialismLower": 0
+      },
+      "breakdown": [
+        {
+          "mappingRole": "d1-table",
+          "contextKind": "mixed",
+          "dispositionClass": "record-head-note",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "file": ".agent/reports/mcp-137-divergence-ledger.md",
+      "kind": "content",
+      "countByVariant": {
+        "name": 1,
+        "initialismUpper": 0,
+        "initialismLower": 0
+      },
+      "breakdown": [
+        {
+          "mappingRole": "d1-table",
+          "contextKind": "mixed",
+          "dispositionClass": "record-head-note",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "file": ".agent/skills/domain-craft/ui-design/design-system-usage/SKILL-CANONICAL.md",
+      "kind": "content",
+      "countByVariant": {
+        "name": 1,
+        "initialismUpper": 0,
+        "initialismLower": 0
+      },
+      "breakdown": [
+        {
+          "mappingRole": "d1-table",
+          "contextKind": "mixed",
+          "dispositionClass": "rename-in-place",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "file": ".agent/collaboration/rapid-comms/2026-08-03-pds-identity-magnetar-binds-oblivion-corsair-hunts-surf.md",
+      "kind": "content",
+      "countByVariant": {
+        "name": 5,
+        "initialismUpper": 0,
+        "initialismLower": 0
+      },
+      "breakdown": [
+        {
+          "mappingRole": "d1-table",
+          "contextKind": "mixed",
+          "dispositionClass": "record-head-note",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "file": ".agent/memory/operational/threads/design-system-integration.next-session.md",
+      "kind": "content",
+      "countByVariant": {
+        "name": 0,
+        "initialismUpper": 1,
+        "initialismLower": 0
+      },
+      "breakdown": [
+        {
+          "mappingRole": "d1-table",
+          "contextKind": "mixed",
+          "dispositionClass": "record-head-note",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "file": ".agent/plans/delivery/public-digital-service-identity.plan.md",
+      "kind": "content",
+      "countByVariant": {
+        "name": 14,
+        "initialismUpper": 11,
+        "initialismLower": 9
+      },
+      "breakdown": [
+        {
+          "mappingRole": "d1-table",
+          "contextKind": "mixed",
+          "dispositionClass": "rename-in-place",
+          "count": 34
+        }
+      ]
+    },
+    {
+      "file": ".agent/reports/design/design-lane-handover-2026-08-05-magnetar-director-emeritus.md",
+      "kind": "content",
+      "countByVariant": {
+        "name": 1,
+        "initialismUpper": 0,
+        "initialismLower": 0
+      },
+      "breakdown": [
+        {
+          "mappingRole": "d1-table",
+          "contextKind": "mixed",
+          "dispositionClass": "record-head-note",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "file": ".agent/reports/design/plan-review-2026-08-02/findings.v3.json",
+      "kind": "content",
+      "countByVariant": {
+        "name": 13,
+        "initialismUpper": 0,
+        "initialismLower": 0
+      },
+      "breakdown": [
+        {
+          "mappingRole": "d1-table",
+          "contextKind": "mixed",
+          "dispositionClass": "record-substitution-only",
+          "count": 13
+        }
+      ]
+    },
+    {
+      "file": ".agent/reports/design/plan-review-2026-08-02/v2.1-far-horizon-mechanism.md",
+      "kind": "content",
+      "countByVariant": {
+        "name": 1,
+        "initialismUpper": 0,
+        "initialismLower": 0
+      },
+      "breakdown": [
+        {
+          "mappingRole": "d1-table",
+          "contextKind": "mixed",
+          "dispositionClass": "record-head-note",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

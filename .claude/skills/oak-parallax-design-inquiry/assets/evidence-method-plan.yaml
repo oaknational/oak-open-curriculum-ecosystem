@@ -1,0 +1,87 @@
+schema_version: "parallax/evidence-method-plan/0.1"
+artifact_id: ""
+artifact_type: evidence-method-plan
+artifact_revision: 1
+inquiry_id: ""
+inquiry_revision: 1
+status: provisional
+created_at: ""
+updated_at: ""
+created_by:
+  kind: "agent | human | mixed"
+  identifier: ""
+producing_skill:
+  name: parallax-design-inquiry
+  version: "0.1.0"
+execution_context:
+  run_id: ""
+  mode: "native-skill | emulated-reduced | manual"
+  independence: shared-context
+  host: ""
+inputs: []
+permissions_and_scope:
+  requested_operation: inquiry-design
+  task_artifact_writes: false
+  practice_memory_writes: false
+  decision_authority: false
+  external_actions: false
+identity:
+  basis_ids: []
+  scale_regions: []
+  method_pass_ids: []
+  domain_profiles: []
+assumptions: []
+uncertainties: []
+provenance:
+  sources: []
+  transformations: []
+validity_domain:
+  populations: []
+  systems: []
+  contexts: []
+  time_horizons: []
+defeaters: []
+reopen_when: []
+
+purpose: ""
+claim_types: []
+alternatives: []
+critical_functions: []
+discriminating_consequences: []
+method_passes:
+  - method_pass_id: "pass-a"
+    basis_id: ""
+    scale_region: {}
+    domain_profiles: []
+    claim_ids: []
+    critical_functions: []
+    method: ""
+    warrant_supplied: []
+    characteristic_errors: []
+    inputs: []
+    outputs: []
+    dependencies: []
+    constraints: []
+    success_conditions: []
+    failure_conditions: []
+    abort_conditions: []
+    escalation_conditions: []
+bridge_claims: []
+crosswalk_claims: []
+coverage_gaps: []
+execution_edges: []
+synthesis_contract: []
+stopping_conditions: []
+world_return:
+  owner: ""
+  review_cadence: ""
+  baseline: []
+  observations: []
+  observation_scale: {}
+  consequence_scale: {}
+  monitoring_scale: {}
+  horizons: []
+  thresholds: []
+  defeaters: []
+  reopening_conditions: []
+missing_context: []

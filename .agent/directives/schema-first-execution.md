@@ -41,6 +41,29 @@ widen unions. The generator is the single source of truth.
    `src/mcp/execute-tool-call.ts`) simply call the generated helpers,
    adding repository-specific error mapping if necessary.
 
+## Output Contracts
+
+The same flow governs what tools EMIT, not only what they accept. A
+served tool's output contract — the `outputSchema` it declares and the
+`structuredContent` that schema validates — is:
+
+- **Source-derived** — composed mechanically from the schema that owns
+  the payload (a generated response descriptor, a corpus-derived Zod,
+  a bulk-schema writer), never hand-authored per tool.
+- **Wire-true** — it models the SERVED result after every runtime
+  transform (envelope composition, served-boundary filters,
+  serialisation lowering), not an internal shape. A contract derived
+  from the raw upstream response describes the wrong object.
+- **Registration-real** — the value handed to the SDK is what the
+  registration API actually accepts (a runtime Zod shape at the
+  current SDK version), and conformance is proven on the wire
+  (`tools/list` output and real call results), never on a registration
+  config object the wire may silently diverge from.
+
+Hand-authoring a per-tool output shape, or forwarding an internal
+schema representation to the wire unverified, is the same class of
+violation as the input-side practices below.
+
 ## Prohibited Practices
 
 - Hand-authoring helper functions that widen types (returning

@@ -9,7 +9,8 @@ import { describe, expect, it } from 'vitest';
 
 import { bulkDownloadFileSchema, type BulkFileResult } from '../src/bulk.js';
 import { createLessonInput, createUnitInput, type LessonInput } from '../src/bulk/test-fixtures.js';
-import { toBulkDataInputs } from './vocab-gen.js';
+import { runPipeline } from './vocab-gen.js';
+import { toBulkDataInputs } from './vocab-gen-inputs.js';
 import { createPipelineConfig, type PipelineResult } from './vocab-gen-config.js';
 import { formatPipelineResult } from './vocab-gen-format.js';
 
@@ -71,6 +72,27 @@ describe('toBulkDataInputs', () => {
     expect(result.inputs[0]?.sequenceSlug).toBe('maths-primary');
     expect(result.restrictedLessonsExcluded).toBe(0);
   });
+
+  it('retains restricted lessons and their unit references when includeRestricted is true', () => {
+    const files = [
+      createFileResult([
+        createLessonInput({ lessonSlug: 'kept-lesson' }),
+        createLessonInput({ lessonSlug: 'hidden-lesson', restricted: true }),
+      ]),
+    ];
+
+    const result = toBulkDataInputs(files, { includeRestricted: true });
+
+    expect(result.inputs[0]?.lessons.map((l) => l.lessonSlug)).toEqual([
+      'kept-lesson',
+      'hidden-lesson',
+    ]);
+    expect(result.inputs[0]?.units[0]?.unitLessons.map((l) => l.lessonSlug)).toEqual([
+      'kept-lesson',
+      'hidden-lesson',
+    ]);
+    expect(result.restrictedLessonsExcluded).toBe(0);
+  });
 });
 
 describe('createPipelineConfig', () => {
@@ -84,6 +106,7 @@ describe('createPipelineConfig', () => {
     expect(config.outputPath).toBe('/path/to/output');
     expect(config.dryRun).toBe(false);
     expect(config.verbose).toBe(false);
+    expect(config.includeRestricted).toBe(false);
   });
 
   it('overrides defaults with provided options', () => {
@@ -92,10 +115,12 @@ describe('createPipelineConfig', () => {
       outputPath: '/path/to/output',
       dryRun: true,
       verbose: true,
+      includeRestricted: true,
     });
 
     expect(config.dryRun).toBe(true);
     expect(config.verbose).toBe(true);
+    expect(config.includeRestricted).toBe(true);
   });
 });
 
@@ -116,6 +141,20 @@ describe('formatPipelineResult', () => {
     outputFiles: [],
     durationMs: 5000,
     ...overrides,
+  });
+
+  it('renders a failed result as the failure, never as a zeroed clean run', () => {
+    const formatted = formatPipelineResult(
+      createResult({
+        success: false,
+        error: 'includeRestricted is not permitted for corpus-producing runs (ADR-224).',
+      }),
+    );
+
+    expect(formatted).toContain('Pipeline failed:');
+    expect(formatted).toContain('ADR-224');
+    expect(formatted).not.toContain('Files processed');
+    expect(formatted).not.toContain('restricted lessons excluded');
   });
 
   it('reports the restricted-lesson exclusion with its decision provenance', () => {
@@ -167,4 +206,62 @@ describe('formatPipelineResult', () => {
     expect(formatted).toContain('file1.ts');
     expect(formatted).toContain('file2.ts');
   });
+});
+
+describe('runPipeline restricted-lesson exclusion policy (ADR-224)', () => {
+  const files = [
+    createFileResult([
+      createLessonInput({
+        lessonSlug: 'open-lesson',
+        lessonKeywords: [{ keyword: 'photosynthesis', description: 'How plants make food' }],
+      }),
+      createLessonInput({
+        lessonSlug: 'hidden-lesson',
+        restricted: true,
+        lessonKeywords: [{ keyword: 'restricted-osmosis', description: 'Movement of water' }],
+      }),
+    ]),
+  ];
+  const readAllBulkFiles = async () => files;
+
+  it('excludes restricted lessons by default: only the open lesson feeds extraction', async () => {
+    const config = createPipelineConfig({
+      bulkDataPath: '/fixtures/bulk-data',
+      outputPath: '/fixtures/vocab-out',
+      dryRun: true,
+    });
+
+    const result = await runPipeline(config, undefined, { readAllBulkFiles });
+
+    expect(result.success).toBe(true);
+    expect(result.uniqueKeywords).toBe(1);
+    expect(result.totalLessons).toBe(1);
+    expect(result.restrictedLessonsExcluded).toBe(1);
+  });
+
+  it.each([[false], [true]])(
+    'rejects includeRestricted before any bulk data is read (dryRun: %s) — the generated corpus is committed and MCP-consumed',
+    async (dryRun) => {
+      const readPaths: string[] = [];
+      const recordingRead = async (bulkDataPath: string) => {
+        readPaths.push(bulkDataPath);
+        return files;
+      };
+      const config = createPipelineConfig({
+        bulkDataPath: '/fixtures/bulk-data',
+        outputPath: '/fixtures/vocab-out',
+        dryRun,
+        includeRestricted: true,
+      });
+
+      const result = await runPipeline(config, undefined, { readAllBulkFiles: recordingRead });
+
+      expect(result.success).toBe(false);
+      const message = result.error ?? '';
+      expect(message).toContain('ADR-224');
+      expect(message).toContain('labelled-serving');
+      expect(result.outputFiles).toHaveLength(0);
+      expect(readPaths).toHaveLength(0);
+    },
+  );
 });

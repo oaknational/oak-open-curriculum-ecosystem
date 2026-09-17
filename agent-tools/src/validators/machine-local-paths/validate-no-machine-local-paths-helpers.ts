@@ -22,8 +22,16 @@
  * @packageDocumentation
  */
 
+import { type ScanFile } from '../../core/tracked-file-scan.js';
 import { isPathInScope } from '../../hook-policy/matchers.js';
 import { type ScopedContentBlockGroup } from '../../hook-policy/types.js';
+
+/**
+ * A file to scan: its repo-relative path and full text content. Owned by
+ * `core/tracked-file-scan` (the reader that produces them) and re-exported
+ * here so this module's consumers keep one import site for the scan surface.
+ */
+export type { ScanFile };
 
 /** A single machine-local path occurrence. */
 export interface MachineLocalPathHit {
@@ -31,12 +39,6 @@ export interface MachineLocalPathHit {
   readonly line: number;
   readonly column: number;
   readonly text: string;
-}
-
-/** A file to scan: its repo-relative path and full text content. */
-export interface ScanFile {
-  readonly path: string;
-  readonly content: string;
 }
 
 /** The policy concept name for the machine-local-path block. */

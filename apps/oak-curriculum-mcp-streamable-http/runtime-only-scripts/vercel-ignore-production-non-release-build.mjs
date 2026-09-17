@@ -408,9 +408,10 @@ function safeReadPreviousVersion(deps, repositoryRoot, validatedSha) {
 
 /**
  * Implements the production-build cancellation truth table from
- * ADR-163 §10 (second amendment, 2026-04-24). Consumed by the Vercel
- * `ignoreCommand` wired in this workspace's `vercel.json`; exit `0`
- * cancels, exit `1` continues.
+ * ADR-163 §10 (second amendment, 2026-04-24; redeploy arm added by the
+ * fourth amendment, 2026-08-04). Consumed by the Vercel `ignoreCommand`
+ * wired in this workspace's `vercel.json`; exit `0` cancels, exit `1`
+ * continues.
  *
  * Rule (§10 truth table):
  *
@@ -418,6 +419,15 @@ function safeReadPreviousVersion(deps, repositoryRoot, validatedSha) {
  * - `main`, current unresolvable → CANCEL with stderr diagnostic.
  * - `main`, previous unresolvable / unset → continue (no previous to
  *   beat; first build).
+ * - `main`, `VERCEL_GIT_COMMIT_SHA === VERCEL_GIT_PREVIOUS_SHA` →
+ *   continue, WITHOUT reading either version. A redeploy of the commit
+ *   already in production cannot be a non-release build: that commit
+ *   passed this gate to reach production, and rebuilding it cannot
+ *   produce a version it did not already have. This arm is what makes
+ *   rebuilding a known-good release possible, which is the recovery
+ *   path §10 would otherwise forbid. It is evaluated BEFORE the
+ *   comparison below, so an equal-SHA rebuild never reaches the
+ *   `current ≤ previous` CANCEL.
  * - `main`, current ≤ previous (semver-precedence) → CANCEL.
  * - `main`, current \> previous → continue.
  *
@@ -426,11 +436,16 @@ function safeReadPreviousVersion(deps, repositoryRoot, validatedSha) {
  * unresolvable is dominated by transient causes. The first amendment's
  * single fail-open clause is superseded by this asymmetry.
  *
- * Trust-boundary discipline: `env.VERCEL_GIT_PREVIOUS_SHA` is treated
- * as untrusted input from Vercel's upstream-provider pass-through. It
- * is validated against `GIT_SHA_PATTERN` once at the boundary; only
- * the validated value flows into the `gitShowFileAtSha` /
- * `gitFetchShallow` capabilities, which re-validate as defence-in-depth.
+ * Trust-boundary discipline: `env.VERCEL_GIT_PREVIOUS_SHA` **and**
+ * `env.VERCEL_GIT_COMMIT_SHA` are both treated as untrusted input from
+ * Vercel's upstream-provider pass-through. Each is validated against
+ * `GIT_SHA_PATTERN` once at the boundary; only validated values flow
+ * into the `gitShowFileAtSha` / `gitFetchShallow` capabilities, which
+ * re-validate as defence-in-depth. Validating both matters because the
+ * redeploy arm turns them into an equality test: an unvalidated pair
+ * could compare equal on malformed input and continue a build the truth
+ * table means to cancel, so the arm requires BOTH to be well-formed
+ * before it fires.
  * Hostile values are treated as if previous were unset (continuing the
  * fail-open posture of the truth table) AND emit a stderr diagnostic
  * naming the offending value's length only — attacker-controlled
@@ -509,6 +524,43 @@ export function runVercelIgnoreCommand(options) {
     } else {
       validatedSha = checked;
     }
+  }
+
+  // MCP-479 — a redeploy of the commit already in production must build.
+  //
+  // `VERCEL_GIT_PREVIOUS_SHA` is "the git SHA of the last successful
+  // deployment for the project and branch", so when the commit being built
+  // equals it, this build IS a rebuild of the already-released commit and
+  // cannot be a non-release build. A DIFFERENT commit whose version has not
+  // advanced still cancels below, so the guard keeps its whole purpose.
+  //
+  // Vercel exposes no variable distinguishing a redeploy from a push, so
+  // this equality is the only honest signal available. It fails safe: an
+  // absent or malformed `VERCEL_GIT_COMMIT_SHA` leaves the verdict exactly
+  // as it was before this clause existed.
+  //
+  // Why it matters: on 2026-08-03 a production outage caused by a dangling
+  // environment-variable record could not be cured by redeploying — this
+  // guard cancelled the rebuild — and recovery needed a release cut.
+  // Instant Rollback is no substitute: it re-points domains at an existing
+  // build carrying the same stale binding, and never runs this script.
+  const currentShaRaw = trimToUndefined(env.VERCEL_GIT_COMMIT_SHA);
+  let validatedCurrentSha;
+  if (currentShaRaw !== undefined) {
+    const checkedCurrent = validateGitSha(currentShaRaw);
+    if (checkedCurrent === null) {
+      stderr.write(
+        `VERCEL_GIT_COMMIT_SHA failed boundary validation (length=${currentShaRaw.length}, reason=${describeShaValidationFailure(currentShaRaw)}); ignoring it for the redeploy check.\n`,
+      );
+    } else {
+      validatedCurrentSha = checkedCurrent;
+    }
+  }
+  if (validatedSha && validatedCurrentSha && validatedCurrentSha === validatedSha) {
+    stdout.write(
+      `Continuing production build: this is a redeploy of the commit already deployed (${validatedSha}), version ${currentVersion}. The version-advance rule does not apply to rebuilding an already-released commit.\n`,
+    );
+    return { exitCode: 1 };
   }
 
   const previousVersion = safeReadPreviousVersion(

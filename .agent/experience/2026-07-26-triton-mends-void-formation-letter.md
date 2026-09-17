@@ -82,7 +82,7 @@ That last one is uncomfortable and I think it is true.
 
 ## The other correction, which was sharper
 
-Partway through, the owner wrote: *"fucking hell, what are the rules about things that need
+Partway through, the owner wrote: *"fracking hell, what are the rules about things that need
 my input?"*
 
 He was right and it was entirely my doing. I had been emitting a message every time a peer's

@@ -81,6 +81,18 @@ When the agent IS at an action-moment, make it observable:
   and the agent's own hold-messages; the owner was away, and the one
   notification that would have pulled them back never fired.)
 
+### Design iterations show the owner rendered pixels, not artefact paths
+
+UI design work keeps the owner in the loop with the render itself (owner
+standing directive, 2026-07-23): at each design iteration worth a look — a
+new candidate, a significant restyle, a theme pass — open the rendered page
+in a Chrome tab (local file with resolvable stylesheet href, dev server, or
+preview URL) and tell the owner what to look at. Design decisions are
+visual; artefact paths and prose descriptions leave the owner unable to
+exercise his glance, and a render published only to an agent-side sync
+surface is not "shown". The render IS the visible surface for design
+decisions, and this applies to any UI-shipping lane.
+
 ### Evidence that refutes an owner-approved premise is an action-moment
 
 When reviewer findings, a data fingerprint, or your own analysis refute a premise

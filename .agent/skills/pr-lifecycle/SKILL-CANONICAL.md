@@ -93,7 +93,11 @@ into the permanent record):
    resolving it solo is how approved versions get silently reverted.
 2. **Tree and gates**: working tree clean; a successful push already ran the
    full pre-push gate suite, so a clean push IS the local-green proof — do not
-   re-run gates just to re-confirm it.
+   re-run gates just to re-confirm it. When several branches need pushing,
+   push them as ONE multi-ref command (`git push origin refA refB refC`) —
+   the pre-push gate chain runs once per push invocation, not per ref, so N
+   separate pushes pay the ~3-minute suite N times for the same tree
+   (first-hand, 2026-08-06).
 3. **Worktree PRs**: a worktree's branch should have carried a draft PR from
    its first commit (`worktree-hygiene` §1); this skill takes it to ready.
 4. **Scope the PR for review, not for tidiness**: an artefact that invites
@@ -114,7 +118,7 @@ into the permanent record):
    changeset crossing the PDR's warning thresholds is re-examined for
    hidden second stories NOW — at open, splitting is cheap; over budget,
    it is expensive. The general form of this check is the
-   [`proportionality`](../proportionality/SKILL-CANONICAL.md) gate's SCOPE
+   [`proportionality`](../cognition/proportionality/SKILL-CANONICAL.md) gate's SCOPE
    axis; run it here when the changeset's size is genuinely in question,
    and note that its LEVEL axis also applies at open — a question standing
    owner word already answers is not an escalation.
@@ -140,7 +144,12 @@ ruleset does NOT bind `.design-sync/`, `.agent/plans/`, or
 fired), so absence there is configuration, not a skipped reviewer; and a
 claude[bot] review SKIP is a spend-limit signature, not a blocker — an
 organisation review-overage exhaustion is a capability ceiling to note,
-never a gate to wait on.
+never a gate to wait on. Request mechanics (first-hand 2026-08-08,
+PRs #829/#830): GitHub's REST `requested_reviewers` endpoint SILENTLY
+DROPS the Copilot handle — 200 response, no error, handle absent from
+the resulting request — so request Copilot through the GitHub MCP
+`request_copilot_review` tool (or the web UI), never the bare REST
+endpoint, and verify the reviewer actually appears on the PR.
 
 ### Title and description are CLAIMS about the diff — derive them from it
 
@@ -255,6 +264,27 @@ surfaces. Partial reads produce false "no problems" verdicts:
   new defects, three of those in hardening no ticket asked for — before
   this ruling landed). Underlying principles:
   `concept-exploration` §Loop Dynamics; sizing gate: `proportionality`.
+- **A sampling finder has no fixed point — cure the CLASS, not the instance.**
+  A bot reviewer over a large, dense diff *samples* it differently each pass
+  rather than converging: measured suppressed-finding counts across one arc ran
+  5, 5, 2, 4, 3, 3, and round 10 flagged two surfaces that had been unchanged
+  since round 1. Waiting for such a loop to reach zero is waiting on a process
+  that has no zero. Two moves end it:
+  - **The class-kill.** When a finder lands one instance per round of the same
+    shape, stop curing instances and close the family in one move — a single
+    exact-set assertion ended a presence-only family that had recurred for three
+    consecutive rounds.
+  - **Tally-then-step-back at ~4 settled rounds**, with the materiality line
+    stated: cure correctness-class findings, disposition polish with a verified
+    failure scenario, make every item visibly adjudicated on the PR, and give any
+    routed residue a named carrier. Convergence then means *the loop closed
+    honestly*, not *the finder went quiet*.
+- **A growing round is a routing failure.** If the surface under review expands
+  between rounds, the loop cannot converge by construction — freeze the text and
+  route the additions, rather than reviewing a moving target (worked instance: a
+  design plan whose three full-depth rounds ran 98 → 112 → 113 findings while the
+  text doubled, because each cure added reviewable mass; the cure was partitioning
+  by horizon, not more rounds).
 - Order by blocking force and risk, not by tool order; root causes before
   echoes.
 - Sonar findings keep their per-site channel: **owner-dispositioned with
@@ -279,6 +309,16 @@ surfaces. Partial reads produce false "no problems" verdicts:
   irrelevant. "This predates my change" / "nothing new since T" is not
   addressed, and a fresh finding introduced by the fix commit itself is an
   open finding, never a side-tangent.
+- **Bot lanes on prose-class changesets read this phase through
+  PDR-140** (the state machine's firing-gate block): state 2's
+  "address, fixed at source" lands via the worthiness bar and batched
+  settlement pushes, state 3's ticket leg carries the durable ledger
+  write, and the timestamp clause composes with PDR-140's below-bar
+  age-out (the finding is still triaged; only settlement accounting is
+  untouched). Two distinct triage layers exist and both bind: this
+  phase's three-way ruling (owner, 2026-07-27) decides each finding's
+  terminal state; PDR-140 and `review-feedback-defaults-to-triage`
+  decide when and how a state-2 cure lands. Human lanes are unchanged.
 - Sonar reflects fixes only after the next pushed scan — verify fixes with
   local gates at source; never poll Sonar immediately after an edit.
 - Diagnose a failed CI run from the failed **step name**
@@ -362,6 +402,36 @@ Phases 5–7 drive one coupled loop over review rounds. The contract lives
 here, once; the phases reference it. Amendments land in this section, never
 as phase-local restatements.
 
+**Response pricing — the intake contract
+([PDR-140](../../practice-core/decision-records/PDR-140-review-response-pricing.md),
+owner-ratified 2026-08-31; prose-class changesets).** Before the first
+review wave, the opening working notes declare the intake contract:
+artefact class, next verification point, the worthiness-bar reading
+that follows from those two, and the settlement-push budget. Thereafter
+triage per PDR-140 and
+[`review-feedback-defaults-to-triage`](../../rules/review-feedback-defaults-to-triage.md)
+(on mixed changesets, the prose findings take this contract; code
+findings keep the machine's existing behaviour):
+disposition-and-route (with the durable ledger write) or
+reject-with-rationale is the default, cures batch into settlement
+pushes, and bot lanes batch while human reviewers keep this machine's
+existing small/large ask dispositions. PDR-140 owns the clauses; this
+block is the firing gate, and the tally (item 2) plus the declaration
+are built at PR-open, never reconstructed mid-loop. **Tally semantics
+under triage**: the tally keeps counting RAISED findings per settled
+round (it measures the sampler); the step-back arms and the
+terminal-success state (item 2) read the CURE-WORTHY count — findings
+that cleared the bar; and the generator classification runs over each
+settlement round's FULL raised set, dispositioned findings included —
+an accumulated disposition set that jointly changes what gets built
+escalates to a class assessment even at a cure-worthy count of zero.
+The settlement clock is the countdown to the next batched settlement
+push; pushes changing no reviewed content (a CI cure, a sync) sit
+outside the budget and never carry cures. In-loop, this machine is
+sufficient by design (PDR-140 clause 8): needing an out-of-band
+cognitive-skill invocation to correct a running loop is a defect
+against this skill — file it as one.
+
 1. **The compound read.** One GraphQL selection is the BASELINE compound
    state — it answers most PR-state questions, but two inputs come from
    elsewhere and are added on top of it: the reviewer-leg SATISFIED verdict
@@ -386,7 +456,16 @@ as phase-local restatements.
    reconstruct round history — rows vanish from the connection whenever a
    reviewer posts again.
 2. **The tally store.** One row per settled round, `{round commit SHA,
-   count of findings in reviews bound to that commit}`, PERSISTED in the
+   raised count, cure-worthy count}` — the raised count is every finding
+   in reviews bound to that commit (the sampler record); the cure-worthy
+   count is the subset that cleared the PDR-140 worthiness bar, and it
+   is the count `c[n]`, the terminal-zero test, and both step-back arms
+   read (a round can settle at raised > 0, cure-worthy = 0: that IS the
+   terminal success state under triage). In lanes PDR-140 excludes
+   (code-class changesets; human and code findings of mixed ones) no
+   routing disposition exists — every verified-correct finding is
+   cure-worthy by definition — so the two counts coincide there and the
+   pre-PDR-140 reading of `c[n]` is unchanged. Rows are PERSISTED in the
    shepherd's working notes and built from the Phase 3 full harvest — each
    review thread's originating review carries its commit binding
    (`comments.nodes[0].pullRequestReview.commit.oid`). Findings are counted
@@ -428,12 +507,19 @@ as phase-local restatements.
    2026-07-16 — on #390 a review for `861bb8924` arrived after `783c567af`
    was pushed; arrival-order tallying charges findings to the wrong round
    and can falsely trigger, or mask, non-convergence). Convergence is the
-   per-round count strictly decreasing. Born-sketch PLAN PRs carry an owner
-convergence-cap ruling (2026-07-25): after round 4, further reviewer waves
-DISPOSITION to named homes rather than editing plan text — unless a finding
-shows an actual falsehood in the plan; merge at any settle-green tip whose
-deltas are cap-dispositions or falsehood-cures; hard-stop only for new
-owner parameters. **The step-back trigger is
+   per-round count strictly decreasing (under PDR-140 triage, read on
+   the cure-worthy count per the firing-gate block above). The
+born-sketch plan-PR convergence cap (owner ruling 2026-07-25) is
+subsumed by PDR-140's intake contract. The cap's terms — after round 4,
+disposition to named homes unless a finding shows an actual falsehood;
+merge at any settle-green tip whose deltas are cap-dispositions or
+falsehood-cures; hard-stop only for new owner parameters — now read
+through the bar: for plan-class artefacts the verification point is
+pickup, so a falsehood earns a cure only if it would mislead before
+pickup (PR #32, 2026-08-31: reading every technical falsehood as
+cure-worthy ran the loop to eleven waves; the bar reading is what lets
+the loop terminate). The cap's four-round full-engagement grace is
+deliberately gone — triage binds from wave one. **The step-back trigger is
    mechanical, with the exact predicate `c[n] >= c[n-1] AND
    c[n-1] >= c[n-2]` (two consecutive non-decreasing transitions across
    three settled counts) OR 4 total settled rounds in the epoch — and
@@ -501,7 +587,12 @@ owner parameters. **The step-back trigger is
    ignoring, not dispositioning. The durable lesson sits upstream: a round
    budget is a SIZE constraint in disguise (PDR-132 binds it at authoring
    time; single-story PRs are the generator fix) — this ruling is the
-   in-flight recovery, never a licence to open multi-story PRs.
+   in-flight recovery, never a licence to open multi-story PRs. A cure
+   that ADDS surface (a promoted module, a new file) is authoring, and
+   the budget re-binds at that moment: budget the promotion as a new
+   changeset, or expect the ratchet to run again over the new surface
+   (2026-08-19: rounds 3–8 on one PR each found real holes in code born
+   in round 3's cure).
 3. **Reviewer-leg states**, computed per (reviewer, tip): **SATISFIED** —
    ANY harvested review by the reviewer binds to the current tip (the
    Phase 3 harvest is the source; the compound read's `latestReviews` alone
@@ -555,7 +646,9 @@ owner parameters. **The step-back trigger is
 4. **Round settled; merge-ready.** A round is SETTLED when every expected
    reviewer leg reads SATISFIED or SKIPPED for the current tip AND a quiet
    window LONGER than the async lag has elapsed since the latest review
-   binding to the tip — never since the push (>10 min; 12 used on #330)
+   binding to the tip — never since the push, and a disposition-only
+   pass anchors the window exactly as a push does (>10 min; 12 used on
+   #330)
    (round-3 correction, 2026-07-16: without the skip clause a timed-out
    reviewer stays bound to an older commit and the settled state is
    unreachable). **The quiet window is a PROXY for review-run-boundary
@@ -565,10 +658,41 @@ owner parameters. **The step-back trigger is
    breach** (owner word 2026-07-25; #518 and #534 were owner-merged inside
    the window, correctly). Agents keep the proxy. On a tip where every leg settled via SKIPPED (no review
    ever bound to the tip), the quiet window anchors on the checks-green
-   window from item 3. MERGE-READY is a settled round that landed zero new
-   findings, plus every Phase 7 gate leg.
-5. **The merge boundary.** Merging takes exactly two sanctioned shapes,
-   both issued at a freshly RECOMPUTED full gate: the explicit
+   window from item 3. MERGE-READY is a settled round with zero
+   UNDISPOSITIONED findings and a cure-worthy count of zero (item 2's
+   semantics under PDR-140: a round whose raised findings are all
+   validly dispositioned-with-resolution is merge-ready without another
+   push — the pre-triage "zero new findings" reading recreated the
+   cycle PDR-140 retires), plus every Phase 7 gate leg.
+5. **The merge boundary.** Merging takes exactly three sanctioned shapes,
+   all issued at a freshly RECOMPUTED full gate. For BOT merges the front
+   door is `pnpm agent-tools merge-bot merge --pr <n> --expect <reviewer>`
+   (MCP-508): it recomputes the LEG-DRIVEN settlement verdict itself,
+   merges only on SETTLE-READY with the verdicted tip's sha pinned, and
+   refuses by verdict name — but it does NOT yet consume the tally or
+   disposition state, so the zero-undispositioned and cure-worthy-zero
+   legs above are the MERGING SEAT'S own recomputation at the boundary
+   until the tool learns them (named follow-up on PDR-140: pass
+   machine-readable disposition state into the verdict); a summary-only
+   review carrying an undispositioned body finding is exactly the case
+   the tool cannot see today — including SETTLED-NO-REVIEW, the timeout-settled round
+   this SKILL's item 4 anchor describes, which is watch-endable but NEVER
+   merge-eligible — EXCEPT for the class the owner ruled on 2026-09-03
+   ("Change the merge policy instead"): a bot-authored pull request that
+   touches only documentation and Practice surfaces merges at checks green
+   by name, zero unresolved threads, every finding dispositioned, with the
+   Claude Code Review's standing verdict and NO Copilot leg expected; for
+   that class a timeout-settled round IS merge-eligible. Grounds: the
+   Claude review posts no review on a clean tip, so the leg never
+   satisfies; the bot cannot request Copilot at all (the API refuses it as a
+   non-collaborator), so every re-request after a tip move needed the
+   owner's own credentials — the fallback the bot-identity rule bans. Until
+   the merge tool learns the class (a named follow-up), the merging seat
+   recomputes that gate by name and lands the merge through the sanctioned
+   REST endpoint as the bot (prediction, PDR-130: every docs-only bot pull
+   request merges within one CI round of green with no owner action; if one
+   waits on a reviewer leg again, the merge tool learns the class). The two
+   non-bot shapes remain: the explicit
    `gh pr merge --merge` command, or ARMING auto-merge — permitted
    exactly and only **at settled-READY under a Director grant**
    (PDR-131, 2026-07-20; arming before settlement remains forbidden —
@@ -585,12 +709,16 @@ owner parameters. **The step-back trigger is
    fires. The recomputed full gate:
    the round reads SETTLED per item 4 for the current tip; zero unresolved
    threads;
-   a finding count of ZERO on BOTH tally surfaces (threads AND review
-   bodies, item 2 — zero unresolved threads alone can coexist with a
-   non-zero body tally) AND zero NEWLY HARVESTED findings regardless of
+   zero UNDISPOSITIONED findings on BOTH tally surfaces (threads AND
+   review bodies, item 2 — zero unresolved threads alone can coexist
+   with an undispositioned body tally) and a cure-worthy count of ZERO
+   (item 2's PDR-140 semantics: a finding validly
+   dispositioned-with-resolution does not block the gate; an
+   undispositioned or cure-worthy one always does) AND zero NEWLY
+   HARVESTED undispositioned findings regardless of
    which round they bucket to (an out-of-order summary-only review bound
    to an older tip lands late: it buckets to its own prior round yet still
-   blocks THIS merge moment); **every REQUIRED check from the base branch's
+   blocks THIS merge moment until dispositioned); **every REQUIRED check from the base branch's
    ruleset PRESENT in the tip's check list BY NAME and green — an
    expected-but-never-created check is simply absent from `gh pr checks`,
    so an all-visible-terminal-green read looks settled while the merge
@@ -610,8 +738,10 @@ owner parameters. **The step-back trigger is
    between eligible PRs is free; quality binds at settled-READY, and the
    2026-07-20 cascade — eleven settled+green PRs landing in ~6 minutes,
    gate green, every Phase-8 clean — is the measured evidence) — only
-   on the item-4 settled verdict — zero threads AND zero body-tally
-   findings on the tip, every expected reviewer leg SATISFIED/SKIPPED,
+   on the item-4 settled verdict — zero threads AND zero
+   undispositioned body-tally findings on the tip with a cure-worthy
+   count of zero (item 2's PDR-140 semantics), every expected reviewer
+   leg SATISFIED/SKIPPED,
    a full quiet window since the latest tip-bound review, checks green —
    because a grant is read downstream as authorisation-to-act-now, and
    "the executing seat will recompute" is hope, not a gate, under grant
@@ -729,7 +859,7 @@ owner parameters. **The step-back trigger is
   trigger fires: **STOP
   fix-pushing.** Step back and run concept exploration over the FULL finding
   corpus for the shared generator, paired with the
-  [`proportionality`](../proportionality/SKILL-CANONICAL.md) gate over the PR
+  [`proportionality`](../cognition/proportionality/SKILL-CANONICAL.md) gate over the PR
   itself — the exploration finds the generator, the gate asks whether the
   changeset, the review instrument, or the seat answering is the wrong size,
   which is the question a corpus read alone does not pose. Fix the CLASS in
@@ -773,7 +903,13 @@ are EVENT-released, never timer-released (adjudicated 2026-07-30): a
 zero-cost hold (waiting on a named arrival, an obsolescence check, a cost
 change) releases the moment its event fires — a hold that would release "in
 a while" is an invented gate; and a hold placed for a composing review
-covers only SUBSTANTIVE changes, never docs/comment-only deltas. Then:
+covers only SUBSTANTIVE changes, never docs/comment-only deltas.
+**Every premise the merge decision rests on must be ON THE PR RECORD before
+the merge fires** — a review verdict, adjudication, or eligibility ground
+that lives only in a session is invisible to the morning reader and to any
+future audit; post it as a PR comment first (worked instance 2026-08-07:
+a grant was withheld until the in-session code-expert adjudication was
+posted, then fired within the minute — fully auditable). Then:
 
 - **`mergeable` means POSSIBLE to merge; it does NOT mean READY to merge**
   (owner, 2026-07-08). GitHub's `mergeable: MERGEABLE` asserts only
@@ -831,21 +967,49 @@ covers only SUBSTANTIVE changes, never docs/comment-only deltas. Then:
   owner grant or the owner's own merge — the gate opens the button, the
   boundary says who may press it). `--admin` is FORBIDDEN: it bypasses the
   gate instead of satisfying it. Proven twice 2026-07-06 (#306, #305 both merged cleanly
-  once threads resolved). Notify the owner at this action moment (send the
+  once threads resolved). The same class wears an API coat: a merge call
+  (REST, or a GitHub connector's merge tool) issued under the owner's ADMIN
+  credential against `mergeable_state: blocked` is not a probe of the refusal
+  reason — under admin credentials there is no probe, it merges past the
+  protections (worked instance 2026-08-31, a fork PR with a required review
+  and fifteen unresolved threads; owner correction, verbatim: "I am an admin,
+  you use my credentials, you bypassed the checks"). "Merge it now"
+  authorises a merge THROUGH the protections, never past them; only fresh,
+  explicit, per-instance owner authorisation naming the bypass is the
+  exception. Notify the owner at this action moment (send the
   notification; never suppress it on inferred presence —
   `owner-attention-at-action-moments`).
+- **A cancelled run is not a conclusion.** CI's concurrency group cancels the
+  in-flight run on every push, so a rollup on a superseded head reading
+  `failure` or `cancelled` is the superseding push's own cancellation, never a
+  verdict to diagnose or report (check the head sha before reading any
+  result); the merge-deciding evidence is the required check reaching a
+  genuine conclusion on the CURRENT head, and no push lands on a branch whose
+  merge-deciding run is in flight (owner-corrected 2026-08-31 after eight
+  consecutive runs were cancelled inside one review loop).
 - `BLOCKED` normally means the gate is genuinely unsatisfied — unresolved
   threads, a failing or pending check, or a genuinely required review that
   has not landed — with two known divergences from the full gate: the
   never-fires case above (PR #391: a required context nothing posts holds
   `BLOCKED` at green-everything) and the converse CLEAN-with-OWED-reviewer
   case (state machine item 3). It never means "any agent merge is
-  prohibited". The required-review leg is author-dependent (verified
-  2026-06-24): a
-  bot-authored PR shows `BLOCKED` until the code-owner approval lands; a PR
+  prohibited". The required-review leg is author-dependent, and its live
+  configuration is the RULESET, never a paragraph's memory of it: since the
+  owner's 2026-07-21 ruling, ruleset 19395183 ("Code-owner review gate
+  (bot-exempt by owner ruling 2026-07-21)") exempts bot-authored PRs from the
+  code-owner review requirement, so a bot-authored PR waits on no owner
+  approval click — the review legs that bind it are the settlement machine's
+  own (a requested reviewer must bind the tip; merge-bot's
+  `SILENT-WAIT-NO-REVIEWER` is that leg, not a missing approval). A PR
   authored under the owner's own auth shows `CLEAN` and merges directly —
   GitHub auto-satisfies the code-owner requirement when the author IS the
-  sole code owner, and forbids self-approval.
+  sole code owner, and forbids self-approval. Read the live ruleset before
+  asserting the gate to anyone: on 2026-09-02 two seats relayed a stale
+  version of this leg to the owner as a live blocker, one from doctrine
+  prose and one from an inherited lane record (owner correction, verbatim:
+  "I think the bot is on the bypass list") — a rule's worked instance is
+  never the current configuration (`query-the-value-never-the-lookalike`),
+  and the ruleset's own title carried the fact.
 - **The truly-green gate authorises merge-READINESS, not every merge**
   (worked instance PR #323, 2026-07-08): a PR the agent AUTHORED in-session
   whose reviews are the agent's own sub-agents sits behind a second,

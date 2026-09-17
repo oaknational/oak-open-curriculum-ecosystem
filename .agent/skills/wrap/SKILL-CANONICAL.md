@@ -47,16 +47,24 @@ Every session closes with wrap, ordinary or deep (owner ruling 2026-07-28)
   only its context holds.
 
 For a mid-session capture WITHOUT closing, summon
-[`knowledge-safety-sweep`](../knowledge-safety-sweep/SKILL-CANONICAL.md)
+[`knowledge-safety-sweep`](../knowledge/knowledge-safety-sweep/SKILL-CANONICAL.md)
 directly instead — the seat stays live there; wrap is for ends. A
 mid-cycle retirement under budget pressure additionally follows PDR-063's
 five-step protocol; wrap supplies the depth of the record it freezes.
 
+A freeze order binds until the owner discharges it. After "prepare for
+compaction and stop all processes", the owner's follow-on questions reopen
+analysis, never spend: answering is always in order, STARTING anything — a
+fleet, a monitor, a subagent — is gated until the compaction lands (owner
+correction 2026-08-17, verbatim: "nope, you have to compact first"). Never
+launch a long fleet into a context about to compact; its harvest lands in
+the thin post-compaction window.
+
 ## The Programme
 
 1. **Enter the modes.** Genuinely enter
-   [`metacognition`](../metacognition/SKILL-CANONICAL.md) (retrospective
-   mode) and [`reason`](../reason/SKILL-CANONICAL.md) — the whole wrap is
+   [`metacognition`](../cognition/metacognition/SKILL-CANONICAL.md) (retrospective
+   mode) and [`reason`](../cognition/reason/SKILL-CANONICAL.md) — the whole wrap is
    these modes wearing a sequence, and every claim below carries its
    warrant.
 2. **Verify work safety with evidence.** WORK IS SAFE only when committed
@@ -71,11 +79,11 @@ five-step protocol; wrap supplies the depth of the record it freezes.
    context scan, in lock-step with knowledge-safety-sweep's discipline).
 4. **Consolidate, conditionally.** If session-handoff's consolidation gate
    fires, summon
-   [`consolidate-docs`](../consolidate-docs/SKILL-CANONICAL.md); the
+   [`consolidate-docs`](../knowledge/consolidate-docs/SKILL-CANONICAL.md); the
    trigger checklist is that skill's own — wrap adds no second judgement.
 5. **Check the arc.** If this session closed a significant arc (cost,
    length, or shape that surprised anyone), offer the owner a
-   [`retrospective`](../retrospective/SKILL-CANONICAL.md) — routed, not
+   [`retrospective`](../cognition/retrospective/SKILL-CANONICAL.md) — routed, not
    auto-run. If the session graduated anything, confirm each graduation
    carries its PDR-130 prediction line.
 6. **Run the metaloss recursion (owned here).** The loss scan is itself an

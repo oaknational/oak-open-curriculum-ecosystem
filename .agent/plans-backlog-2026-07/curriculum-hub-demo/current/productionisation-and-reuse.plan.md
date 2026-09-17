@@ -154,11 +154,13 @@ working first realisation in the demo — the fidelity review (`tool:fidelity`: 
 dev-server lifecycle + both capture arms + pixelmatch triage + a side-by-side report) with the
 **divergence register BUILT** as `demos/oak-curriculum-hub/fidelity-register.json`
 (zod-validated; dispositions fix/deliberate/investigate/matched/superseded; keys stable across
-export refreshes) and the workflow carried by the `fidelity-review` skill
-(`.agent/skills/fidelity-review/SKILL-CANONICAL.md`). Stage 2's reader consumes that register;
-stage 5 generalises the demo's `tools/image-diff.ts`; stage 6's runbook extends the skill. The
-playbook §"Fidelity review and the divergence register" carries the porting method. WS2
-activation lifts these into the dedicated tooling workspace rather than re-deriving them.
+export refreshes) and the workflow carried by the `claude-design-pipeline` skill
+(`.agent/skills/domain-craft/ui-design/claude-design-pipeline/SKILL-CANONICAL.md`). Stage 2's reader consumes that register;
+stage 5 generalises the demo's `tools/image-diff.ts` (correction 2026-08-09: this
+generalisation landed early — the diff core and the shared fidelity machinery now live in
+`packages/libs/fidelity-review`, a foundation lib per ADR-041's dated amendment, consolidated
+at the second consumer's arrival rather than at WS2 activation); stage 6's runbook extends the
+skill. The playbook §"Fidelity review and the divergence register" carries the porting method.
 
 1. **Census/currency tool** — per-page block/section/qs counts, data hashes, asset inventory
    (mechanises the stale-bundle-trap cure). TDD against the committed export snapshot.

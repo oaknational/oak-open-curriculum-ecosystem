@@ -25,13 +25,16 @@
     "lint:fix": "eslint --fix .",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "mutate": "stryker run"
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
+    "@oaknational/workspace-config": "workspace:*",
+    "@stryker-mutator/api": "^9.6.1",
     "@types/node": "^24.13.3",
-    "eslint": "^10.8.0",
-    "globals": "^17.7.0",
+    "eslint": "^10.8.1",
+    "globals": "^17.9.0",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3",
     "vitest": "^4.1.10"

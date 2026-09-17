@@ -25,8 +25,10 @@ export const APP_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
     '35db06b7e8a8eef7d9c768aa76addc8e99fa36dc2b974ef18e3e173404735293',
     IMPLEMENTATION_ONLY,
   ),
+  // Landing-page removal: the DNS-rebinding phase leaves with the two HTML
+  // routes that were its only mounts; the guard itself stays (MCP-650).
   'apps/oak-curriculum-mcp-streamable-http/src/app/bootstrap-security.ts': excluded(
-    'dc2928ae4481038f30a4d19abc3c81747cf73f37b1711b284acdc568e59f8d02',
+    '9d3b247805f703945dac223b22e03b504a562fe87a2429de98cf55dad7040398',
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/app/core-endpoints.ts': reviewed(
@@ -34,19 +36,11 @@ export const APP_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
     ['C323', 'C324'],
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/app/create-app-options.ts': excluded(
-    '9be38b5d3ef623e943a6ddff0d0d008acfeee81c2e53f34173b45f80886b1522',
-    IMPLEMENTATION_ONLY,
-  ),
-  'apps/oak-curriculum-mcp-streamable-http/src/app/landing-page-artefact.ts': excluded(
-    'e62f6c8466af6c86bf6eba00b7d1c3085d0032d0f4ce4c0a821e6fe76d33f08e',
-    IMPLEMENTATION_ONLY,
-  ),
-  'apps/oak-curriculum-mcp-streamable-http/src/app/landing-page-baked.ts': excluded(
-    '2a1b210c2232d07408a1a1730c315b0c33ce77346beff3210ee56d2ed2098fc5',
+    '700bcb3634c1cd293504b8dbeadb08b3168ded35f037420474509059801c4623',
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/app/oauth-and-caching-setup.ts': excluded(
-    '98eed582f23cb0bba00b08099e3c1c16000b3e3e649fd22ea723a91348924689',
+    'e80ebf58048e988851e94c59029c64a89449a1ca2bbd169ca39066893a9b7971',
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/app/orchestration.ts': excluded(
@@ -54,15 +48,27 @@ export const APP_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/app/static-asset-paths.ts': excluded(
-    '75ec72e78389124bcb0f7e881e0ae45f8ce0e0df1b4e5f1ef035e9a77e842c03',
+    'ff135d5160da12e36b0f4ae6f7acd42e61748d3f21315e2bb0b7a75474197bfe',
     IMPLEMENTATION_ONLY,
   ),
+  // Landing-page removal: `addRootLandingPage` is gone, so `GET /` has no
+  // route; the module mounts the asset trees and nothing else. It authored
+  // nothing — the document came through the seam, its items retire by lineage.
   'apps/oak-curriculum-mcp-streamable-http/src/app/static-content.ts': excluded(
-    '17ed6c9d1d12ef8bbd0b953c3a0b52213867066699100632b548962b1c055299',
+    '09817477965c485c539f219148228b4c63ed217b5ceabde063ca1f40c43007cf',
     IMPLEMENTATION_ONLY,
   ),
+  // Landing-page removal (MCP-650) leaves the root with no HTML route; MCP-734
+  // adds only the agent-discovery Link header mount on top of that state.
   'apps/oak-curriculum-mcp-streamable-http/src/application.ts': excluded(
-    'f16f8e80a7f92af82f82408e5365e92a6f2758afdd6d2d6d43886a212bb11f67',
+    'a27c4a1656d579495e0f302d96c7d4a3813a6f34ca8ab5b44c1800c243c6e565',
+    IMPLEMENTATION_ONLY,
+  ),
+  // MCP-517: states the configured canonical origin in the forwarded headers
+  // origin-deriving middleware reads. Request plumbing only — it authors no
+  // served text and reaches no MCP consumer's content.
+  'apps/oak-curriculum-mcp-streamable-http/src/canonical-forwarded-headers.ts': excluded(
+    '8bc762cc936a9cc86a398a6f2009700f8c1a196977dabd6fe56ecad7076321fd',
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/canonical-origin.ts': excluded(
@@ -74,23 +80,23 @@ export const APP_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/env-clerk-guards.ts': excluded(
-    '2b01858817bf453e3464e1d0f20f496db9dc8232ce392dcc97732a8babbca43c',
+    '1df214b868c3fc4330531836e0eb4e9532d0b5c5ccae63745f1f8e5d26a5240e',
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/env-product-analytics.ts': excluded(
     '8a67d2cb8ce836a2b2c34bb7782d8b0bee67dadf437ba9e0a60b0be0baf62a36',
     IMPLEMENTATION_ONLY,
   ),
+  // MCP-143 pull request 759: Guard 1b's auth-valve condition restated as its
+  // allowed set negated (isLocalRun) for reviewer clarity. Behaviour-identical
+  // refactor of a startup validation rule; disposition unchanged — no authored
+  // agent-facing content reaches an MCP consumer from this file.
   'apps/oak-curriculum-mcp-streamable-http/src/env.ts': excluded(
     '2981fdaead59c6fd462bbaa23304a9c2f548c053bd03c44a0189a77195d58a17',
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/feature-flags.ts': excluded(
     '0078dfaf0635235210ac1be277692f97d6b87a1e6e7c49ac7f6169c87bbb17aa',
-    IMPLEMENTATION_ONLY,
-  ),
-  'apps/oak-curriculum-mcp-streamable-http/src/global-auth-context.ts': excluded(
-    'abf76079eb95ec82cd430e6cc523bbb0f7656c346d8fbb37a0bf4dae29330a86',
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/generated/oak-under-the-hood-content.ts': reviewed(
@@ -123,15 +129,18 @@ export const APP_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
     ['C702', 'C703', 'C704'],
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/index.ts': excluded(
-    '895ee6647d2eab509c63d8384643b35dd354cbfec0b97fb9699667a91dbbc281',
+    'fcb60a07cc4572584fc33fb59cdb8a2a89ec0999a4c0e2da49699e08fa25d8b4',
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/logging/index.ts': excluded(
     '2cfad19d9ebd98c1c417b7641c651ae271e399a3448d1b26fbc7da1bd11e6d2f',
     IMPLEMENTATION_ONLY,
   ),
+  // Landing-page removal: `createMcpHtmlNegotiation` is deleted and
+  // `selectsHtmlLeg` becomes `requestsHtmlDocument` — no HTML leg to select,
+  // only a browser shape for the auth fork. The gate's 406s are unchanged.
   'apps/oak-curriculum-mcp-streamable-http/src/mcp-middleware.ts': excluded(
-    '330e97824013a4fd69bfc0c259ba7fb977e1127f11359d597a333c8d58428250',
+    '3d6f6322b7cc7872e5b8a911c98023f4aad82bb5b3fe5fcb7f95f80d6ca643e6',
     IMPLEMENTATION_ONLY,
   ),
   // MCP-353 (§2.F cure): the fetch trigger, canonical URL, and resource_link
@@ -179,7 +188,7 @@ export const APP_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/security-config.ts': excluded(
-    'df1573e40a58a0957ffce6c145f29b19951e28c7bf90a6772ddb736033e03b50',
+    '5ffd8c944b7485aa399b8c317db92acfb636b40e1ae4963f8dd028dcf33e4f19',
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/security-headers.ts': excluded(
@@ -189,8 +198,13 @@ export const APP_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
   // MCP-351: the landing page's canonical-URL resolution promoted here as the
   // one per-deployment self-description derivation; C355's endpoint URL
   // strings relocated with it.
+  // MCP-511: adds `resolveServedPrmUrl` and the well-known prefix, making this
+  // the one home for both self-descriptions — endpoint and PRM URL. C355
+  // re-anchors on the same endpoint construction; a derived address, no new text.
+  // Re-attested 2026-09-10: the prefix goes module-local, then MCP-734
+  // re-exports it so auth-routes.ts shares the literal; no address moves.
   'apps/oak-curriculum-mcp-streamable-http/src/served-origin.ts': reviewed(
-    '0cc2add70d350afd3957791b29b4663bc4cc56813e6e6865c4d4900977cb4b70',
+    '24c3c95488ee833c38c519badc175eab7d37406fd7276b7014013eee4aa61bee',
     ['C355'],
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/served-surface/filter-guidance-content.ts': excluded(
@@ -198,7 +212,7 @@ export const APP_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/served-surface/served-surface.ts': reviewed(
-    '15c76f4100bec4a96aa51d7b082262b02043666b8fb74a3cf2d1b6250ad09efb',
+    '052f0d2ec448f8b8c3eb7d98eb044a60baf74db34be3931451028cca889a1edd',
     ['A001'],
   ),
   // MCP-243: HTTP server bootstrap wiring the close funnel into every exit
@@ -208,7 +222,7 @@ export const APP_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/server.ts': excluded(
-    '54f8c8f08eddc4f862d3cb66382db80ce07c15ea1822d91cab6e97a0767ddcbe',
+    'd7d4bfeb091da36ad241cda8682b45d35e18c33a568082e7fb78371280bcdbe4',
     IMPLEMENTATION_ONLY,
   ),
   // MCP-403 review round: check-then-patch guard on the fetch sentinel so a

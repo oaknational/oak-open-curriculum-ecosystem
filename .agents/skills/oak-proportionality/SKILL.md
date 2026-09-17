@@ -5,4 +5,4 @@ description: Size the work and the instrument before shaping either. A pre-decis
 
 # Proportionality (Cross-tool)
 
-Read and follow `.agent/skills/proportionality/SKILL-CANONICAL.md`.
+Read and follow `.agent/skills/cognition/proportionality/SKILL-CANONICAL.md`.

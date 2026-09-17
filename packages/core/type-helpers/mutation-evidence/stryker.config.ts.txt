@@ -1,0 +1,55 @@
+import type { PartialStrykerOptions } from '@stryker-mutator/api/core';
+
+/**
+ * Stryker mutation-testing config for `@oaknational/type-helpers` — the
+ * first mutation-testing canary
+ * (`.agent/plans/delivery/mutation-testing-core-canary.plan.md`).
+ *
+ * Report-only: `thresholds.break` stays `null`. Nothing here gates CI,
+ * `pnpm check`, or any other quality gate — see the plan's "Design
+ * constraint" and "Out of scope" sections.
+ *
+ * `buildCommand` (root `stryker.config.base.ts` sets `'pnpm build'`) is
+ * deliberately NOT inherited. The `@stryker-mutator/vitest-runner` runs
+ * Vitest directly against TypeScript source, so a repository build before
+ * each mutant run duplicates compile work the test runner already does.
+ * See `mutation-evidence/dry-run.log` for the observed dry run without it.
+ *
+ * `vitest.configFile` points at `vitest.config.stryker.ts`, a
+ * self-contained duplicate of this workspace's real `vitest.config.ts`
+ * (see that file's own docstring). Stryker's sandbox only ever contains
+ * this workspace's directory tree; the real `vitest.config.ts` imports a
+ * repo-root shared base three levels up, which cannot resolve inside the
+ * sandbox. `mutation-evidence/dry-run.log` records the reproduced failure
+ * with the real config and the working dry run with this one.
+ */
+const config: PartialStrykerOptions = {
+  packageManager: 'pnpm',
+  testRunner: 'vitest',
+  plugins: ['@stryker-mutator/vitest-runner'],
+  coverageAnalysis: 'perTest',
+  vitest: { configFile: 'vitest.config.stryker.ts' },
+
+  // Production mutation surface: authored source only. Test files are
+  // excluded by extension; `dist/` is build output and is never under
+  // `src/`, so it is structurally out of this glob already.
+  mutate: ['src/**/*.ts', '!src/**/*.test.ts'],
+
+  // Explicit unit + integration test selection per the Oak test-scope
+  // contract (unit/integration/E2E). E2E tests must never enter a
+  // mutation run; this list has no `*.e2e.test.ts` member.
+  testFiles: ['src/**/*.unit.test.ts', 'src/**/*.integration.test.ts'],
+
+  // A bad glob must fail loudly, never report a false "success".
+  allowEmpty: false,
+
+  reporters: ['html', 'clear-text', 'progress', 'json'],
+  htmlReporter: { fileName: 'mutation-evidence/report.html' },
+  jsonReporter: { fileName: 'mutation-evidence/report.json' },
+
+  // Mutation score is evidence, never a gate (owner doctrine, plan
+  // "Design constraint"). No threshold breaks the command.
+  thresholds: { break: null },
+};
+
+export default config;

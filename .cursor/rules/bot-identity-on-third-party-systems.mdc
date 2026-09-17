@@ -1,5 +1,5 @@
 ---
-description: Bot identity on third-party systems. Owner ruling — wherever a bot identity exists to represent us (GitHub jimbot-oakington-iii, a Linear agent actor, ...), every agent action on that system MUST use it: commits, PR creation, comments, pushes, merges. Falling back to the owner's credentials without user-instigated permission is never permitted; a bot capability gap is a blocker to surface, never a licence.
+description: Bot identity on third-party systems. Owner ruling — wherever a bot identity exists to represent us (GitHub jimbot-oakington-iii, a Linear agent actor, ...), every agent WRITE on that system MUST use it: commits, pushes, PR creation, PR and issue comments, standalone inline review comments and replies, merges, thread resolutions, label and state edits. The rule's action map (owner ruling 2026-08-17) carries the only exceptions, exhaustively: a pull-request review submitted through the reviews endpoint — APPROVE, REQUEST_CHANGES or COMMENT state, including its body and any inline comments in the same call — and a Copilot review request, both under the operator's own credential, because only a human credential discharges a code-owner review gate. Every other fallback to owner credentials without user-instigated permission is never permitted; a bot capability gap is a blocker to surface, never a licence.
 alwaysApply: true
 ---
 

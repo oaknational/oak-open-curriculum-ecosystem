@@ -258,3 +258,9 @@ Practice-Core concept ↔ ADR map):
 | [PDR-132](PDR-132-changeset-health-round-budgets-bind-at-authoring-time.md) | Changeset Health — Round Budgets Bind at Authoring Time | Accepted |
 | [PDR-133](PDR-133-liveness-classes-and-platform-declaration.md) | Liveness Classes and the Platform Liveness Declaration | Proposed |
 | [PDR-134](PDR-134-knowledge-strata-carriers-and-the-concept-layer.md) | Knowledge Strata, Carriers, and the Concept Layer | Accepted |
+| [PDR-135](PDR-135-cost-of-change-gradient.md) | The Cost-of-Change Gradient — General Mechanism Below, Specific Value Above | Proposed |
+| [PDR-136](PDR-136-quality-gates-are-a-registered-corpus.md) | Quality Gates Are a Registered Corpus | Accepted |
+| [PDR-137](PDR-137-basis-set-transformation-method.md) | The Basis-Set Transformation Method | Accepted |
+| [PDR-138](PDR-138-visual-verification-for-design-verdicts.md) | Visual Verification for Design Verdicts | Accepted |
+| [PDR-139](PDR-139-provider-independent-capability-composition.md) | Provider-Independent Capability Composition | Proposed |
+| [PDR-140](PDR-140-review-response-pricing.md) | Review Feedback Is Information — the Response Is What Gets Priced | Accepted |

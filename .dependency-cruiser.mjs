@@ -69,6 +69,11 @@ export default {
           'graph-corpus-sdk/src/(eef-strands|threads)/index\\.ts$',
           // Closed PostHog adapter entry point consumed via package.json "exports"
           'posthog-node/src/index\\.ts$',
+          // workspace-config subpath-export module consumed via package.json
+          // "exports" (./vitest-e2e). Its moved-in siblings are already
+          // covered by the vitest.config/tsup.config/.setup. patterns above;
+          // this is the one filename those patterns miss.
+          'workspace-config/src/vitest\\.e2e\\.config\\.base\\.ts$',
           // SDK and TypeDoc entry points consumed via tsup + typedoc.json
           'oak-curriculum-sdk/src/types/(schema-bridge|public-types)\\.ts$',
         ],
@@ -133,9 +138,16 @@ export default {
     {
       name: 'no-libs-to-sdks',
       severity: 'error',
-      comment: 'Libs packages must not import from SDK packages.',
+      comment:
+        'Libs packages must not import from SDK packages. One recorded pre-existing exception: ' +
+        'search-contracts/src/field-inventory.ts imports @oaknational/sdk-codegen/search (a ' +
+        'declared workspace dep that was invisible to this rule while dist paths were excluded ' +
+        'from the graph; surfaced 2026-08-10 when the exclusion lifted). Its cure — inverting ' +
+        'the dependency or re-homing the contract — is Director-routed, not silently absorbed; ' +
+        'the exemption dies with that cure.',
       from: {
         path: '^packages/libs/',
+        pathNot: ['^packages/libs/search-contracts/src/field-inventory\\.ts$'],
       },
       to: {
         path: '^packages/sdks/',
@@ -198,10 +210,98 @@ export default {
         path: '(^|/)\\.agent/',
       },
     },
-    /* Cross-package src/ imports are already enforced by the ESLint
-       boundary rules in @oaknational/eslint-plugin-standards. Depcruise
-       regex does not support backreferences needed for same-package
-       exclusion, so this rule is deferred to the ESLint layer. */
+    {
+      name: 'workspace-config-containment',
+      severity: 'error',
+      comment:
+        'Workspaces must never import from outside of themselves except via explicit ' +
+        'package.json dependencies (owner rule, workspace-config-isolation plan). A workspace ' +
+        'tooling config file reaching another workspace or a repo-root file by relative path is ' +
+        'the violation class that hid for months behind lint ignores; shared config lives in ' +
+        "@oaknational/workspace-config. The $1 backreference scopes the rule to each file's own " +
+        'workspace (probe-verified on dependency-cruiser 18.1.0, 2026-08-10). npm/core targets ' +
+        'are exempt here — they are the sanctioned declared-dependency path, and undeclared ones ' +
+        "are the next rule's finding, never a second containment hit.",
+      from: {
+        path: '^(packages/[^/]+/[^/]+|apps/[^/]+|demos/[^/]+|agent-tools)/(?:vitest|tsup|eslint|stryker)[.\\w-]*\\.config\\.(?:ts|mts|cts|js|mjs|cjs)$',
+      },
+      to: {
+        pathNot: ['^$1/'],
+        dependencyTypesNot: [
+          'core',
+          'npm',
+          'npm-dev',
+          'npm-peer',
+          'npm-optional',
+          'npm-bundled',
+          // Sanctioned workspace:* imports resolve through pnpm's symlink to
+          // the real packages/*/dist path and classify as `undetermined`
+          // (measured 2026-08-10); unresolvable/undeclared specifiers are the
+          // phantom rule's finding, not a second containment hit.
+          'undetermined',
+          'unknown',
+          'npm-no-pkg',
+          'npm-unknown',
+        ],
+      },
+    },
+    {
+      name: 'workspace-config-no-phantom-deps',
+      severity: 'error',
+      comment:
+        'A config file may only import packages its own workspace declares: an unresolvable or ' +
+        'undeclared specifier means a copied config without its workspace:* line, which dies on ' +
+        'clean installs and inside per-workspace tool sandboxes (the Stryker instance that ' +
+        'motivated the isolation plan).',
+      from: {
+        path: '^(?:packages/[^/]+/[^/]+|apps/[^/]+|demos/[^/]+|agent-tools)/(?:vitest|tsup|eslint|stryker)[.\\w-]*\\.config\\.(?:ts|mts|cts|js|mjs|cjs)$',
+      },
+      to: {
+        // `undetermined` is deliberately absent: sanctioned workspace:*
+        // imports classify as `undetermined` under pnpm real-path
+        // resolution (measured 2026-08-10). A copied config without its
+        // dependency line resolves through the root node_modules as
+        // `npm-no-pkg`, or nowhere as `unknown` — those are the finding.
+        dependencyTypes: ['unknown', 'npm-no-pkg', 'npm-unknown'],
+      },
+    },
+    {
+      name: 'no-commonjs-require',
+      severity: 'error',
+      comment:
+        'Owner ruling 2026-08-09: zero require statements in this strictly-ESM repo — presence ' +
+        'is the finding, no containment analysis applies. Covers require() calls (however the ' +
+        'binding was obtained), AMD require, and TS import-equals. `exotic-require` types would ' +
+        'need options.exoticRequireStrings and are deliberately not listed while that option ' +
+        'is unset.',
+      from: {},
+      to: {
+        dependencyTypes: ['require', 'amd-require', 'import-equals'],
+      },
+    },
+    {
+      name: 'no-dynamic-import',
+      severity: 'error',
+      comment:
+        'Owner ruling 2026-08-09: dynamic imports are strongly discouraged — error severity, ' +
+        'with a narrow named per-site exemption set (each site added to from.pathNot with its ' +
+        'warrant; the set is empty today). The syntactic estate bar for LINTED files is the ' +
+        'live @oaknational/no-dynamic-import ESLint rule (error, literal and non-literal ' +
+        'alike); this rule adds resolution-level coverage, notably for config files the lint ' +
+        'surface does not reach yet (isolation plan todo 2). Probe-verified limitation: a ' +
+        'non-literal import(expr) produces no edge here — config files get the bespoke ' +
+        'refusal channel in validate-workspace-config-isolation.',
+      from: {},
+      to: {
+        dependencyTypes: ['dynamic-import'],
+      },
+    },
+    /* Cross-package src/ imports are enforced by the ESLint boundary rules
+       in @oaknational/eslint-plugin-standards. Depcruise DOES support the
+       $1 backreference such a rule would need (probe-verified on 18.1.0,
+       2026-08-10 — an earlier note here claimed otherwise); the src rule
+       stays at the ESLint layer because it already enforces there, and
+       migrating it is its own decision, not a by-product of this one. */
   ],
   options: {
     doNotFollow: {
@@ -212,8 +312,6 @@ export default {
     },
     exclude: {
       path: [
-        'node_modules',
-        'dist',
         // Next.js build output — same build-output class as `dist` (owner-ratified 2026-07-02)
         '\\.next/',
         '\\.turbo',

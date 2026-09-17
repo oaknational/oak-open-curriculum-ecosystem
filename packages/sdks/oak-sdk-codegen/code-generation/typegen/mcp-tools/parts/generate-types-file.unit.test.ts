@@ -28,6 +28,14 @@ describe('generateTypesFile', () => {
     );
   });
 
+  it('carries the optional pagination echo on ToolResultForName', () => {
+    const generated = generateTypesFile();
+    expect(generated).toContain(
+      "import type { PaginationEcho } from '../contract/tool-descriptor.contract.js';",
+    );
+    expect(generated).toContain('readonly pagination?: PaginationEcho;');
+  });
+
   it('does not derive ToolArgsMap from nested invoke parameters', () => {
     const generated = generateTypesFile();
     expect(generated).not.toContain('ToolInvokeParametersMap[TName][1]');

@@ -54,7 +54,7 @@ No phase is complete until update handling is recorded for:
 3. any additionally impacted ADRs, `/docs/` pages, and README files
 
 Also apply:
-[`oak-consolidate-docs`](../../skills/consolidate-docs/SKILL-CANONICAL.md)
+[`oak-consolidate-docs`](../../skills/knowledge/consolidate-docs/SKILL-CANONICAL.md)
 
 ## Milestone Alignment
 

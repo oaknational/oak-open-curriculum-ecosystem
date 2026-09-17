@@ -1,0 +1,10 @@
+23:19:18 (29947) WARN ProjectReader Glob pattern "src/**/*.integration.test.ts" did not match any test files.
+23:19:18 (29947) INFO ProjectReader Found 1 of 17 file(s) to be mutated.
+23:19:18 (29947) INFO ProjectReader Found 1 test file(s) matching --testFiles patterns.
+23:19:18 (29947) INFO Instrumenter Instrumented 1 source file(s) with 18 mutant(s)
+23:19:18 (29947) INFO ConcurrencyTokenProvider Creating 13 test runner process(es).
+23:19:18 (29947) INFO BroadcastReporter Detected that current console does not support the "progress" reporter, downgrading to "progress-append-only" reporter
+23:19:18 (29947) INFO DryRunExecutor Note: running the dry-run only. No mutations will be tested.
+23:19:18 (29947) INFO DryRunExecutor Starting initial test run (vitest test runner with "perTest" coverage analysis). This may take a while.
+23:19:18 (29947) INFO DryRunExecutor Initial test run succeeded. Ran 10 tests in 0 seconds (net 1.783042000000023 ms, overhead 102.21695799999998 ms).
+23:19:18 (29947) INFO MutationTestExecutor The dry-run has been completed successfully. No mutations have been executed.

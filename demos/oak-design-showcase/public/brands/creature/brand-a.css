@@ -17,6 +17,12 @@
   --surface-decorative-2: light-dark(#aedff7, #1f4a63);
   --surface-decorative-2-soft: light-dark(#d3effb, #1c3a4d);
   --surface-decorative-2-subtle: light-dark(#e9f7fd, #1b2f3d);
+  /* Status surface: the kit's light info surface survives into this
+     dark-first brand's default otherwise (measured 1.12:1 with the brand's
+     near-white text — the specimen matrix's finding, 2026-08-10). Reuses
+     the brand's own audited aqua pair. */
+  --bg-info-subtle: light-dark(#e9f7fd, #1b2f3d);
+  --bg-warning-subtle: light-dark(#fff9e5, #3f2c19);
   --surface-decorative-3: light-dark(#ffe8a0, #6d4715);
   --surface-decorative-3-soft: light-dark(#fff3cc, #54371a);
   --surface-decorative-3-subtle: light-dark(#fff9e5, #3f2c19);

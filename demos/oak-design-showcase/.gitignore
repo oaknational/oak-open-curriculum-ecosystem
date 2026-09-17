@@ -7,3 +7,7 @@ node_modules/
 next-env.d.ts
 test-results/
 playwright-report/
+
+# Fidelity-review evidence is regenerable tool output (tools/fidelity-review.ts
+# recreates the capture set and report on demand).
+demo-evidence/

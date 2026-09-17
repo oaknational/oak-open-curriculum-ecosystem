@@ -9,8 +9,9 @@
  * Design bindings, all from the ratified contract:
  *
  * - Three node types (`strategic | delivery | runbook`); no `kind`
- *   axis and no frontmatter execution state — execution lives in
- *   Linear via the `tickets` edge, never here.
+ *   axis and no frontmatter execution state — when the operator's
+ *   tracker holds the work, execution state lives there via the
+ *   optional `tickets` edge; it never lives here.
  * - `status` carries ratification state ONLY
  *   (`sketch | ratified | archived | superseded`): every plan is born
  *   `sketch` and governs no work until its stamp
@@ -23,14 +24,11 @@
  *   constant.
  *
  * Cross-FILE rules (serves resolution, `impact_areas` registry
- * membership, `depends_on` resolution, corpus non-emptiness, and the
- * execution-anchor consistency rule in `plan-execution-anchors.ts`)
+ * membership, `depends_on` resolution, and corpus non-emptiness)
  * compose in the corpus helpers — this module owns single-file shape
- * only.
- * The ticket requirement in particular is corpus-level by necessity:
- * it binds only within anchored subtrees, which is a `serves`-edge
- * question no single-file refinement can answer (dated amendment
- * 2026-07-31; ADR-221 lens 4).
+ * only. `tickets` is optional visibility metadata at every level:
+ * plan validity is repo-internal (owner ruling 2026-08-07 — a repo
+ * obligation must never depend on records in an external service).
  *
  * @packageDocumentation
  */

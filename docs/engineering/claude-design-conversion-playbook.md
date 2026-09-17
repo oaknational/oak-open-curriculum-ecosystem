@@ -8,7 +8,22 @@ programme that owns the forward automation of this playbook is
 [`productionisation-and-reuse.plan.md`](../../.agent/plans-backlog-2026-07/curriculum-hub-demo/current/productionisation-and-reuse.plan.md)
 (WS2).
 
-## The one governing rule
+## The two governing rules
+
+**The spec is the surface, never the source** (owner-ruled 2026-08-10).
+The export defines what the converted app LOOKS LIKE and DOES — appearance
+and behaviour, at every canonical width, in every identity and theme. It
+defines nothing about how the app is BUILT. Its markup, its inline hacks,
+and its bundled demo components are out of bounds as source, however
+right their names look: the app is built from the design system's
+documented components and the repo's own patterns, and a real component is
+built properly under the component gate, never conjured to match a name in
+the export. The export's TEXT CONTENT is part of appearance and carries
+over exactly. Differences are the exception, not the output: page chrome
+and the demo's selector controls may differ; everything else that differs
+carries a disposition in the fidelity register. This is the pipeline's
+whole value — the result looks amazing _because it looks the same_, and
+underneath it is nothing like the demo.
 
 **The converted app is ordinary repo code from day one.** It is subject to the
 same rules as everything else: strict TypeScript extending
@@ -25,6 +40,35 @@ The first conversion accumulated exemptions (prettier/markdownlint/knip
 ignores, per-path ESLint rule-offs, scanner-scope debates) precisely because
 the "temporary demo" frame survived in config comments after the tier had been
 ratified first-class. Do not let that frame in the door.
+
+## Reference first
+
+**And visual first** (owner directive, 2026-08-10): every comparison
+against the reference includes a rendered-image pair at matched canonical
+widths, looked at with eyes — computed-style probes corroborate and
+localise but never substitute (the probe-said-match-while-pixels-differed
+incident is recorded in the reference-first rule).
+
+Before anything is built against the export, RENDER the export and look
+at it (the `render-the-reference-before-reproducing` rule fires on all of
+this pipeline's work; this section is its application here):
+
+1. Serve the export demo statically and open its pages — the finished
+   thing is the specification, and no amount of reading its source
+   substitutes for seeing it.
+2. Capture the reference set with Playwright — full-page and fold, per
+   identity — at the canonical measurement widths
+   ([DDR-009](../design/design-decisions/009-measurement-happens-at-canonical-widths.md);
+   the values live beside the fidelity tooling in
+   `tools/measurement-widths.ts`). The capture tooling refuses free-hand
+   widths, so a comparison outside the canonical set cannot be produced.
+3. Every fidelity claim thereafter cites the captured reference, and the
+   reference-vs-rebuild comparison runs from the first buildable slice —
+   never only at the end.
+
+Playwright is the standard instrument throughout this pipeline: reference
+capture, live capture, behavioural probes, and the accessibility cells all
+run on it.
 
 ## Target structure
 
@@ -135,8 +179,10 @@ re-runs the extractors and diffs as _data_.
 
 ## Verification tooling pattern
 
-Conversion needs evidence tools; conversion #1's set is the template
-(`demos/oak-curriculum-hub/tools/`): render the export's target pages over
+Conversion needs evidence tools; the shared core lives in
+`@oaknational/fidelity-review` and conversion #1's app-local set is the
+worked example (`demos/oak-curriculum-hub/tools/`): render the export's
+target pages over
 local HTTP (canonical render targets), capture the live app at matched
 geometry (§D fidelity), a 320px two-state reflow gate (WCAG 1.4.10 — measure
 the no-JS SSR state AND the hydrated state; hydration honesty: click until
@@ -147,7 +193,7 @@ config with a provenance citation, not carried as extra vendor files).
 
 ## Fidelity review and the divergence register
 
-Comparison is a workflow, not a gate. One orchestrator
+Comparison is a workflow, not a gate. One command
 (`tool:fidelity` in conversion #1) serves the canonical export, ensures the
 dev server (attach when up, spawn with bounded ready-wait and process-group
 teardown when free), captures both sides at matched geometry, perceptually
@@ -172,11 +218,17 @@ Three rules make it honest:
   pipeline's diff stage reads so ratified divergences are not re-flagged on
   a refresh (productionisation plan WS2 stage 2).
 - **The workflow is skill-carried**: the
-  [`fidelity-review` skill](../../.agent/skills/fidelity-review/SKILL-CANONICAL.md)
+  [`claude-design-pipeline` skill](../../.agent/skills/domain-craft/ui-design/claude-design-pipeline/SKILL-CANONICAL.md)
   owns the review loop (run → read report highest-ratio-first → judge →
-  record → re-run `--report-only`); this playbook owns the porting method
-  (copy the pairing-map + capture-arms + diff-core + report + register
-  pattern into the new conversion's `tools/`).
+  record → re-run `--report-only`); this playbook owns the porting method:
+  compose `@oaknational/fidelity-review` (`packages/libs/fidelity-review`,
+  consolidated at its second consumer 2026-08-09 — its README's §Modules
+  is the authoritative enumeration), and author only the app-local parts
+  in the new conversion's `tools/` — the app's own PAIR schema wrapped
+  with the package's `buildPairingMapSchema`, capture arms, export
+  server, default base and `SERVER_HINT`, and a `tools/fidelity-review.ts`
+  composing the package's `/orchestrator` with only paths, capture arms,
+  and `main` of its own.
 
 ## Accessibility bar
 

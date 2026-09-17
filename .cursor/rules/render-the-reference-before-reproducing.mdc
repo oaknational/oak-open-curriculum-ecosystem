@@ -1,0 +1,7 @@
+---
+description: Any work whose acceptance is "matches a reference" opens by rendering the reference and capturing it at the canonical measurement widths (DDR-009); every fidelity claim cites the captured reference, and comparison runs from the first buildable slice, never only at the end.
+globs: 'apps/**/*.{ts,tsx,css,html},demos/**/*.{ts,tsx,css,html},packages/design/**,docs/design/**'
+alwaysApply: false
+---
+
+Read and follow `.agent/rules/render-the-reference-before-reproducing.md`.

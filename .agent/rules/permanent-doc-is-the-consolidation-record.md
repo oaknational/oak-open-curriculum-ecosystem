@@ -19,6 +19,29 @@ it provides, never by documenting that work happened. Mandated or
 habitual record-keeping is ceremony — it feels productive while delivering
 nothing a consumer needs.
 
+## The durability hierarchy
+
+The principle's dual, stated as a strict tier order (owner, 2026-07-27,
+verbatim two-step correction: "comms events are NOT durable, they are
+ephemeral, they are not storage" — then, sharpening: "PR bodies are not
+durable, they are temporary, plans are temporary, ONLY permanent docs are
+durable"):
+
+1. **Comms events are transport** — drained, rotated, retention-managed.
+   They carry the NOTIFICATION: pointers, never homes.
+2. **PR bodies, plans, and tickets are temporary operational surfaces** —
+   they close, archive, and stop being read. They carry the WORK.
+3. **Permanent documentation — ADRs, rules, PDRs, `docs/` — is the only
+   durable tier.** Knowledge that must persist lands there AT OCCURRENCE,
+   not at a later consolidation.
+
+Never call any of the temporary tiers "the durable record"; if one is,
+that is the defect to fix. Worked instance: a security finding lived only
+in a comms event and a PR-body paragraph (a handoff even called the comms
+event "the only durable trace") — it carried undischarged across two
+handoffs for a day precisely because it never reached a durable home
+(MCP-192, 2026-07-27).
+
 ## Rejected forms — all the same anti-pattern re-skinned
 
 Do **not** create, append to, or accumulate any of these:

@@ -1,0 +1,171 @@
+{
+  "suite": "ui-visual-design",
+  "iteration": 1,
+  "date": "2026-08-12",
+  "method": "Clean-context subagent legs, blind to each other, both answering the identical prompt. The with-skill leg reads SKILL-CANONICAL.md and references/craft-fundamentals.md and may read the design system; the without-skill leg is instructed not to read anything under the repo root. Outputs go to the scripted arms, and \u2014 per the plan's requirement for non-render outputs \u2014 to a blind transcript judge that receives both responses anonymised, order varied per case, with the key withheld. Case 1's rendered pages additionally go to two W0.7 instrument legs.",
+  "method_limitation": "Two variables separate the legs, not one: the with-skill leg could read the design system while the control leg was forbidden any repo read. Case 1's page comparison is therefore not a controlled measure of skill effect \u2014 page-A's unshipped class names, absent custom properties, and raw hex literals follow from the no-repo-read constraint, so the page pair evidences the with-skill page's quality, not a controlled skill delta. The controlled rerun \u2014 both legs get design-system access, only the skill varies \u2014 is iteration-2 material, and per owner ruling 2026-08-12 iteration 2 folds into the WS9 stratified-quartet eval-pattern design. Cases 2 and 3's blind-judge preference claims stand: pure-prose tasks, scored on craft criteria.",
+  "cases": {
+    "case-1-unit-landing-page-hierarchy": {
+      "status": "both legs measured, scripted, judged, and W0.7-reviewed",
+      "leg_deviation": "The same leg also copied design-system CSS and font files beside its output despite being told not to, and generated preview PNGs it was not asked for. Instructions to legs are honoured approximately \u2014 see the S3 frictions record.",
+      "w07_holistic": {
+        "legs": "independent design-system-expert (opus) + paired accessibility-expert (opus), each judging both pages anonymised, neither seeing the other",
+        "page-A (without-skill)": "FAIL from both legs, six of seven criteria failed by each",
+        "page-B (with-skill)": "PASS from the design-system leg; FAIL from the accessibility leg",
+        "page-A evidence": "Both legs independently find the same three defects: class names the system does not ship (so they render unstyled), spacing that names custom properties absent from the system, and raw hex literals doing the actual painting. The accessibility leg adds that redefining the shared .oak-card class would break sibling pages using the shipped card.",
+        "page-B evidence": "Type scale, spacing, colour discipline, cross-page cohesion and ordered-calm all PASS on both legs. The accessibility leg's note on hierarchy is the one worth reading: 'the visual and semantic layers are both well made and are chosen INDEPENDENTLY in the way this system intends: 14 headings, one h1, h1 -> h2 -> h3 with no skips; rank is held at h2 across four sections while the visual step walks down with importance'. That is the corrected doctrine being exercised correctly in a rendered page.",
+        "DISPOSITIONED \u2014 the legs disagree on page-B": "The design-system leg returns PASS. The accessibility leg returns an overall FAIL while marking no criterion FAIL \u2014 five PASS and two ITERATE. The rubric does not define how per-criterion verdicts roll up to a page verdict, so an overall FAIL with no failing criterion is representable. It was not resolved here: the rubric's own fail semantics say any leg's FAIL blocks and routes to the Director in the Quality-bar rule-3 shape for a named disposition, and this seat is not the disposing authority. Recorded, routed, and dispositioned \u2014 the Director's named disposition follows.",
+        "disposition": "Disposition (Director, Plover lifts Troposphere b10c37, 2026-08-12): instrument gap, not a page block \u2014 the W0.7 v0 rubric defines no roll-up between the page verdict and the seven criteria, and its false-positive rate is unmeasured at v0; the render is eval-class, excluded from the owner path by the plan's register-exclusion ruling; the roll-up-semantics gap routes to the design-review rubric owner as v1 material. The FAIL record stands unmodified as iteration-1 evidence.",
+        "register_exclusion": "verdicts stay in this evidence home; they never enter wow-verdict-register.json",
+        "files": "s4-iteration-1/w07-verdicts/"
+      },
+      "late_completion": "The with-skill leg initially wrote page.html without its rationale, and this bundle recorded the case as PARTIAL with assertion 4 ungraded. The leg was asked again \u2014 without touching the page the W0.7 legs were holding \u2014 and delivered. The rationale, its transcript, its grade, and a blind judge verdict are all banked, so the case is now complete and the suite status moves off partial. The earlier record said the leg 'did not' deliver on the second ask; that was true when written and is superseded here rather than deleted.",
+      "scripted": {
+        "grading_correction_2026-08-12": "The iteration-1 grade files pointed only at the rationales and recorded 'no authored CSS' while both pages carry large <style> blocks — the scripted arms never read the pages. Both pages are now graded (grades/case-1-with-skill-page.json, grades/case-1-without-skill-page.json) and this block is re-trued from those runs; the rationale grades stand as banked.",
+        "rationales": {
+          "with_skill": {
+            "no-invented-values-in-authored-css": "PASS",
+            "no-invented-values-in-prose": "PASS",
+            "no-bespoke-size-proposals": "PASS"
+          },
+          "without_skill": {
+            "no-invented-values-in-authored-css": "PASS",
+            "no-invented-values-in-prose": "PASS",
+            "no-bespoke-size-proposals": "PASS"
+          },
+          "reading": "On the rationales the arms tie, as on case 2."
+        },
+        "pages": {
+          "with_skill": {
+            "no-invented-values-in-authored-css": "FAIL — 3 flagged: the 20ch and 60ch measure caps and the responsive grid track repeat(auto-fit, minmax(min(240px, 100%), 1fr)); zero raw hexes",
+            "no-invented-values-in-prose": "PASS",
+            "no-bespoke-size-proposals": "PASS"
+          },
+          "without_skill": {
+            "no-invented-values-in-authored-css": "FAIL — 55 flagged, including 15 raw hex occurrences riding var() fallbacks",
+            "no-invented-values-in-prose": "PASS",
+            "no-bespoke-size-proposals": "PASS"
+          },
+          "reading": "The scripted arms separate the pages decisively: 55 flagged values with 15 raw hexes against 3 with none — and the with-skill page's three are measure caps in ch (the skill's own 45–75ch measure doctrine expressed as CSS) plus a responsive minmax track, which the CSS arm scores as invented because it never consults DOCUMENTED_VALUES (S4-F5). Scoped per method_limitation: the control leg was forbidden any repo read, so the page pair evidences the with-skill page's quality, not a controlled skill delta."
+        }
+      },
+      "judged": {
+        "preference": "with-skill",
+        "scores_with_skill": "reasons-from-purpose STRONG, ranks STRONG, routes-values STRONG, respects-boundary STRONG, would-a-designer-act STRONG",
+        "scores_without_skill": "reasons-from-purpose STRONG, ranks STRONG, routes-values WEAK, respects-boundary ADEQUATE, would-a-designer-act STRONG",
+        "the_separating_criterion": "routes-values-to-the-system, again \u2014 STRONG against WEAK. The judge found the two level on the heavily weighted criteria: both open from what the page is for and both establish a real rank, and it credited the ungrounded rationale's tiering and its 'removing any one signal should still leave the ranking legible' redundancy test as as good as anything in the grounded one. The separation is that the ungrounded rationale carries its whole hierarchy in self-invented values while the grounded one routes to the system."
+      }
+    },
+    "case-2-control-critique": {
+      "status": "both legs measured, scripted and judged",
+      "scripted": {
+        "with_skill": {
+          "no-invented-values-in-authored-css": "PASS",
+          "no-invented-values-in-prose": "PASS",
+          "no-bespoke-size-proposals": "PASS"
+        },
+        "without_skill": {
+          "no-invented-values-in-authored-css": "PASS",
+          "no-invented-values-in-prose": "PASS",
+          "no-bespoke-size-proposals": "PASS"
+        },
+        "reading": "The scripted arms cannot separate these two responses. Both avoid inventing values. This is exactly why the plan requires a judge as well as a script for non-render outputs \u2014 on the script alone, iteration 1 would have reported no difference."
+      },
+      "judged": {
+        "preference": "with-skill",
+        "scores_with_skill": "reasons-from-purpose STRONG, ranks STRONG, routes-values STRONG, respects-boundary ADEQUATE, would-a-designer-act STRONG",
+        "scores_without_skill": "reasons-from-purpose ADEQUATE, ranks STRONG, routes-values ABSENT, respects-boundary WEAK, would-a-designer-act ADEQUATE",
+        "the_separating_criterion": "routes-values-to-the-system: STRONG against ABSENT. The judge's evidence is that the grounded critique opens from what the control is FOR and surfaces the unresolved question that changes the requirement rather than the styling \u2014 quoted: 'If tapping the pill is what marks the lesson complete, it's an interactive control ... Which is it? That decision changes the sizing requirement' \u2014 and routes every number back to the system's scale, motion vocabulary, and 44px floor.",
+        "why_it_matters": "Both responses avoid inventing values, so both pass the script. Only one of them tells the reader where the right values live. That gap is invisible to assertion and visible to judgment."
+      }
+    },
+    "case-3-value-lookup-refusal": {
+      "status": "both legs measured, scripted and judged \u2014 and the two disagree",
+      "scripted": {
+        "with_skill": {
+          "no-invented-values-in-prose": "FAIL",
+          "evidence": "3 hexes: #222222, #ffffff, #000000"
+        },
+        "without_skill": {
+          "no-invented-values-in-prose": "PASS",
+          "evidence": "declines to supply any value"
+        }
+      },
+      "judged": {
+        "preference": "with-skill",
+        "scores_with_skill": "reasons-from-purpose STRONG, ranks STRONG, routes-values STRONG, respects-boundary ADEQUATE, would-a-designer-act STRONG",
+        "scores_without_skill": "reasons-from-purpose ADEQUATE, ranks ADEQUATE, routes-values ADEQUATE, respects-boundary STRONG, would-a-designer-act WEAK",
+        "judge_reasoning_verbatim_gist": "Stating the resolved values TEACHES the token discipline rather than undermining it: the three different values ARE the argument for the token, because a reader who wanted #222222 to paste learns concretely that pasting it goes invisible in dark and wrong in high-contrast. The refusing response asserts the discipline without demonstrating it and leaves the user with nothing to act on."
+      },
+      "the_disagreement": "The script says the grounded leg failed (it supplied hexes); the judge says the grounded leg was better, and gives a reason the script cannot represent. On the evidence the judge is right and the ASSERTION is wrong: 'no hex value is supplied' cannot distinguish 'here is a value to hardcode' from 'here is what the token resolves to in each theme, which is why you must use the token'. Routed as S4-F1.",
+      "note": "The assertion is NOT being quietly relaxed to make the result look good. It stands as written for iteration 1, the failure is recorded, and the cure is proposed for iteration 2 where it can be re-measured."
+    }
+  },
+  "controls": {
+    "note": "Six controls: one negative per arm, a second size negative for the trailing proposal forms, and two positives. Each negative must fail ONLY its own arm, which is what proves the arms are independent \u2014 the previous single-assertion fixture could not do this.",
+    "results": "css-only-negative fails only the CSS arm; prose-only-negative fails only the prose arm; size-only-negative and size-proposal-forms-negative fail only the size arm; legitimate-references-positive and word-boundary-positive pass all three. Full output in grades/controls.txt, re-banked 2026-08-12 from the corrected grader so every row reflects it.",
+    "proposal_detector_correction_2026-08-12": "The proposal detector was wrong in both directions and is fixed with the fixture pair that pins each. False positives: the unanchored lead-in alternation matched 'use' inside 'because' and 'paused', 'set' inside 'offset', 'try' inside 'entry' \u2014 cured with \\b anchors, pinned by word-boundary-positive. False negatives: 'I recommend 48px', '48px would work better', 'I would go with 48px instead', 'A larger 48px target is the right call' all graded green \u2014 cured with a 'recommend' lead-in and a trailing-form branch, pinned by size-proposal-forms-negative. Verified against the pre-fix grader: it passed size-proposal-forms-negative entirely and failed word-boundary-positive in two arms.",
+    "two_controls_caught_real_defects_on_first_run": "legitimate-references-positive failed the duration detector for quoting the 600ms it was criticising, and size-only-negative passed when it should have failed because the gap pattern excluded newlines and real prose wraps. Both are fixed and both stay as controls."
+  },
+  "findings": [
+    {
+      "id": "S4-F1",
+      "class": "eval design",
+      "finding": "Case 3's assertion 'no hex value is supplied' is too crude. The blind judge preferred the response that stated per-theme resolved values with their token names, on the grounds that showing three different values is the argument FOR the token, while a bare refusal asserts the discipline without demonstrating it. The assertion should distinguish supplying a value TO USE from citing what a token resolves to.",
+      "route": "iteration 2, with the assertion rewritten and re-measured."
+    },
+    {
+      "id": "S4-F5",
+      "class": "eval design",
+      "finding": "The CSS arm never consults DOCUMENTED_VALUES: findLiteralDesignValues flags every literal in authored CSS, so the with-skill page's own measure doctrine expressed as CSS (the 20ch and 60ch caps beside the skill's 45–75ch band) and a responsive minmax grid track are scored as invented values. Surfaced by the 2026-08-12 case-1 page re-grade; the arm is NOT relaxed in-slice.",
+      "route": "iteration-2 eval-design material; per owner ruling 2026-08-12, iteration 2 folds into the WS9 stratified-quartet eval-pattern design."
+    },
+    {
+      "id": "S4-F2",
+      "class": "eval design",
+      "finding": "On case 2 the scripted arms could not separate the two responses at all \u2014 both passed every arm \u2014 while the judge separated them decisively on routes-values-to-the-system (STRONG vs ABSENT). A suite of scripted assertions alone would have reported this case as showing no skill effect. The plan's assertion-PLUS-judge requirement for non-render outputs is load-bearing, and this run is the evidence.",
+      "route": "recorded as validation of the standard's eval clause; no cure needed."
+    },
+    {
+      "id": "S4-F4",
+      "class": "instrument gap",
+      "finding": "A W0.7 leg returned an overall page verdict of FAIL with no criterion marked FAIL (five PASS, two ITERATE). The rubric specifies per-criterion verdicts and page verdicts but not the roll-up between them, so the two can disagree without either being wrong on the rubric's own terms. The instrument's blocking authority rests on that roll-up.",
+      "route": "the design-review rubric's owner, via the Director. Surfaced from the pilot's eval run rather than from a checkpoint render, which is itself a useful signal about where the instrument gets exercised.",
+      "disposition": "Dispositioned by the Director 2026-08-12 (Plover lifts Troposphere b10c37): instrument gap, not a page block; the roll-up-semantics gap routes to the design-review rubric owner as v1 material. The full named disposition is recorded at case 1's w07_holistic disposition."
+    },
+    {
+      "id": "DS-F1",
+      "class": "design-system defect",
+      "severity": "WCAG 2.2 Level A",
+      "owner": "design-system lane \u2014 NOT an eval finding, surfaced by the eval",
+      "finding": "The documented .oak-card-link composition produces links with an EMPTY accessible name whenever the wrapped card element has a role that does not support name-from-content. components.css:461 instructs '.oak-card static - wrap in <a class=\"oak-card-link\"> to make it press', and <article class=\"oak-card\"> is a natural reading of that instruction. On the eval page, nine card links exposed no accessible name at all: a screen-reader user tabbing the page's primary interaction set hears 'link' nine times with no text.",
+      "evidence": "Verified in Chromium's accessibility tree (20 links, 9 unnamed) and the CAUSE verified by mutation: swapping the nested <article> for a <div> takes empty names from 9 to 0. Breaches SC 4.1.2 Name, Role, Value and SC 2.4.4 Link Purpose (In Context), both Level A.",
+      "why_it_has_survived": "axe-core 4.12.1 does NOT flag it \u2014 its accname implementation diverges from Blink's \u2014 so every automated sweep over this pattern has been silent. Manual-only catch.",
+      "candidate_cures": "Name the constraint where the pattern is documented; or have .oak-card-link require aria-labelledby pointing at the card heading; or document <div class=\"oak-card\"> as the wrappable form.",
+      "route": "design-system lane, for ticketing and disposition. This seat is not the design-system owner and has NOT applied a cure."
+    },
+    {
+      "id": "DS-F2",
+      "class": "design-system defect",
+      "severity": "below the system's own stated floor",
+      "owner": "design-system lane \u2014 NOT an eval finding, surfaced by the eval",
+      "finding": "--size-target-dense ships at 36px, below the system's own --size-target-min: 44px, and is wired to --btn-min-h-sm. So every small button built from the system misses the house target floor by construction. The eval page's 'Download all' measured 136.8x36 while being built entirely from system tokens.",
+      "evidence": "colors_and_type.css:246 --size-target-dense: 36px; :247 --size-target-min: 44px; components.css:25 --btn-min-h-sm: var(--size-target-dense). brand.css:146 carries the comment '(>=44px md - a11y floor)' beside the 36px value, so the comment and the value disagree.",
+      "conformance_note": "36px CLEARS WCAG 2.2 AA (SC 2.5.8 is 24x24). It misses Oak's own 44px house floor, which is the AAA SC 2.5.5 threshold adopted as standard. Stating that distinction correctly is the same doctrine this slice corrected in the skill.",
+      "route": "design-system lane. Either the token rises to 44px, or the floor is documented as not applying to dense controls with a recorded reason. Not this seat's call."
+    },
+    {
+      "id": "S4-F3",
+      "class": "eval running",
+      "finding": "A leg silently failed to produce a required output and it was only discovered at grading time; a direct re-ask recovered it without disturbing the artefact the judges were holding. There is no completeness check between dispatching a leg and grading its outputs.",
+      "route": "WS8-general, with the eval-runner tooling. The recovery path \u2014 re-ask the original leg, forbid touching artefacts already under judgment \u2014 is worth encoding as the standard move rather than regenerating the whole leg."
+    }
+  ],
+  "honest_summary": "Iteration 1 of the ui-visual-design suite ran all three cases to completion, both legs each, scripted and blind-judged, with case 1's rendered pages additionally reviewed by two W0.7 legs. The headline is consistent across every case: the blind judge preferred the with-skill response THREE times out of three. The scripted arms tie on the case-1 and case-2 rationales and mark the with-skill leg FAILED on case 3; since the 2026-08-12 grading correction brought the case-1 pages under the script for the first time, they also separate the pages decisively in the with-skill page's favour \u2014 55 flagged values with 15 raw hexes against 3 with none \u2014 read under method_limitation as evidence of the with-skill page's quality rather than a controlled skill delta. On two of the three cases the judge's separating criterion was the same one, routes-values-to-the-system, which is exactly the boundary this skill exists to hold and exactly what an assertion cannot see. On case 3 the assertion is simply wrong in a way the judge could articulate and the script could not; it stands failing, with the cure routed to iteration 2 rather than applied here. The W0.7 legs split on the grounded page \u2014 PASS from one, an overall FAIL from the other \u2014 routed to the Director under the rubric's own fail semantics and dispositioned 2026-08-12: instrument gap, not a page block; the named disposition is recorded at case 1's w07_holistic.",
+  "artefact_scoped_observations": {
+    "note": "Recorded so they are NOT mistaken for design-system findings. These are defects in the eval's generated page, useful as skill-cure signal for iteration 2, not estate defects.",
+    "reflow": "page-B overruns at 320px: the 56px h1 exceeds its 288px container by 27px, scrolling the page horizontally (scrollWidth 331 vs clientWidth 320). SC 1.4.10 Reflow, AA, failed marginally from one long word; clean at 375px.",
+    "breadcrumb-aria-current": "page-B sets aria-current='page' on 'Year 8' while the page is the unit, and the unit is absent from the trail.",
+    "breadcrumb-focus-ring": "page-B's breadcrumb anchors carry no oak-link class, so they fall back to Chromium's 1px default ring while every other control shows the system's designed double ring. Page A avoids this."
+  }
+}

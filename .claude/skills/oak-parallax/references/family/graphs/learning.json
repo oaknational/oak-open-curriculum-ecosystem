@@ -1,0 +1,34 @@
+{
+  "graph_id": "parallax-learning-v0.1",
+  "title": "Object, method, and learning-policy feedback graph",
+  "description": "Conceptual feedback across L0, L1, and L2. Operational executions create immutable events and versions rather than overwriting prior nodes.",
+  "graph_type": "learning-feedback",
+  "version": "0.1.0",
+  "nodes": [
+    { "id": "inquiry", "label": "Object-level inquiry L0", "type": "learning-level" },
+    { "id": "decision", "label": "Decision or intervention", "type": "action" },
+    { "id": "outcome", "label": "Observed outcome portfolio", "type": "evidence" },
+    { "id": "method-review", "label": "Method and routing review L1", "type": "learning-level" },
+    { "id": "policy-review", "label": "Learning-policy review L2", "type": "learning-level" },
+    { "id": "signal", "label": "Learning Signal", "type": "artifact" },
+    { "id": "proposal", "label": "Improvement Proposal", "type": "artifact" },
+    { "id": "evaluation", "label": "Baseline and regression evaluation", "type": "governance" },
+    { "id": "approval", "label": "Practice review and approval", "type": "governance" },
+    { "id": "skill-version", "label": "New canonical skill or policy version", "type": "version" },
+    { "id": "future-inquiry", "label": "Future object-level inquiry", "type": "learning-level" }
+  ],
+  "edges": [
+    { "from": "inquiry", "to": "decision", "type": "informs" },
+    { "from": "decision", "to": "outcome", "type": "observed-as" },
+    { "from": "outcome", "to": "method-review", "type": "informs" },
+    { "from": "method-review", "to": "signal", "type": "produces" },
+    { "from": "signal", "to": "proposal", "type": "distilled-into", "guard": "Cross-case support or justified severe exception exists" },
+    { "from": "proposal", "to": "evaluation", "type": "tested-by" },
+    { "from": "evaluation", "to": "approval", "type": "reviewed-by" },
+    { "from": "approval", "to": "skill-version", "type": "authorises", "guard": "Benefits exceed regressions and cost" },
+    { "from": "skill-version", "to": "future-inquiry", "type": "governs" },
+    { "from": "future-inquiry", "to": "policy-review", "type": "informs", "guard": "Later outcomes can test the learning-policy change" },
+    { "from": "policy-review", "to": "signal", "type": "produces" }
+  ]
+}
+

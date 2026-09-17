@@ -29,7 +29,7 @@ non-convergence had no observable surface. A doctrine gap and a non-application 
 from inside the loop, and only reading the governing skill distinguishes them.
 
 What survived: **proportionality**, which had no general home and is now
-[`.agent/skills/proportionality/SKILL-CANONICAL.md`](../skills/proportionality/SKILL-CANONICAL.md),
+[`.agent/skills/cognition/proportionality/SKILL-CANONICAL.md`](../skills/cognition/proportionality/SKILL-CANONICAL.md),
 wired into `concept-exploration`, `pr-lifecycle` and the `principles.md` matrix. The owner then
 generalised the rest directly into `concept-exploration` §Loop Dynamics (owner-ratified
 2026-07-27), binding every iterative loop rather than review rounds alone.

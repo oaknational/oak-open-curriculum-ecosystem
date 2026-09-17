@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "page": "/",
+      "demo": "oak-design-showcase",
+      "verdict": "FAIL",
+      "qualitiesJudged": ["content-relevance", "styling-delivery"],
+      "cellsCovered": [{ "identity": "oak", "theme": "light" }],
+      "ownerStatementDate": "2026-08-05",
+      "rowClass": "pre-read",
+      "source": ".agent/reports/design/design-sitting-records-2026-08-05.md §Verdict 1 — owner verbatim via Director relay (comms event 2026-08-05T14:56:30Z); migrated at the register's minting (design-review/records/2026-08-08-register-minting.md)"
+    }
+  ]
+}

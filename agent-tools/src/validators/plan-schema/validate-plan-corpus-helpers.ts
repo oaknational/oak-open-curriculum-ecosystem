@@ -9,10 +9,13 @@
  * resolves against the published choice registry; a delivery plan's or
  * runbook's `serves` resolves against the strategic nodes actually in
  * the corpus; `depends_on` edges and `impact_areas` members resolve or
- * the corpus fails; an empty corpus is a failure, never a vacuous
- * green; and ratified delivery plans satisfy execution-anchor
- * consistency (the rule, its derivation, and its deliberate limit
- * live in `plan-execution-anchors.ts`).
+ * the corpus fails; and an empty corpus is a failure, never a vacuous
+ * green. Plan validity is repo-internal by design (owner ruling
+ * 2026-08-07, verbatim: "Work does NOT require a Linear ticket to be
+ * valid, that would tie the repo validity to the existence of Linear,
+ * and how would that work for a different checkout in a different
+ * org? It wouldn't.") — `tickets` is optional visibility metadata,
+ * never an existence obligation.
  *
  * Subtree resolution needs no recursion, by validation rather than by
  * luck: a strategic node's `serves` must resolve against the published
@@ -29,7 +32,6 @@ import { parse as parseYaml } from 'yaml';
 import { isJsonObject } from '../../core/json.js';
 import { extractFrontmatter } from '../portability/portability-fs.js';
 import { type ParsedPlanFile, type PlanConformanceFailure } from './plan-corpus-types.js';
-import { anchoringEvidence, executionAnchorMessages } from './plan-execution-anchors.js';
 import { type ChoiceRegistry } from './plan-corpus-registries.js';
 import { planNodeSchema, type PlanNode } from './plan-node-schema.js';
 
@@ -67,8 +69,7 @@ export function validatePlanFile(
  * Corpus-level rules over the file-level-valid plans: non-emptiness,
  * id uniqueness, `serves` resolution (strategic → published choice
  * registry; delivery/runbook → a strategic node in the corpus),
- * `impact_areas` registry membership, `depends_on` resolution, and
- * execution-anchor consistency for ratified delivery plans.
+ * `impact_areas` registry membership, and `depends_on` resolution.
  *
  * @returns Path-anchored failures; empty means the corpus coheres.
  */
@@ -89,7 +90,6 @@ export function validateCorpus(
   const strategicIds = new Set(
     files.filter((file) => file.node.node_type === 'strategic').map((file) => file.node.id),
   );
-  const anchors = anchoringEvidence(files);
   const failures: PlanConformanceFailure[] = [];
   for (const file of files) {
     const messages = [
@@ -97,7 +97,6 @@ export function validateCorpus(
       ...servesMessages(file.node, choices, strategicIds),
       ...impactAreaMessages(file.node, impactAreas),
       ...dependsOnMessages(file.node, allIds),
-      ...executionAnchorMessages(file.node, anchors),
     ];
     if (messages.length > 0) {
       failures.push({ path: file.path, messages });

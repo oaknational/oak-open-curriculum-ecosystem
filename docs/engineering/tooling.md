@@ -1,6 +1,11 @@
 # Tooling
 
-All tooling MUST use the latest versions, use `pnpm outdated` to check for updates.
+All tooling MUST use the latest versions. `pnpm outdated` is the first-pass
+check — but it computes its "latest" under the workspace's
+`minimumReleaseAge` floor, so an age-floored release's row reads current
+there (verified 2026-08-11, pnpm 11.20). The exhaustive currency check is
+registry reads — `pnpm view <pkg> version` / `pnpm view <pkg> time` — per
+the update-dependencies skill's age-floor census.
 
 > `pnpm outdated` / `pnpm -r outdated` (the repo's `outdated` script) exits with a
 > non-zero code when it finds outdated packages. That is the command's normal
@@ -51,8 +56,8 @@ the command is missing.
 
 ## Publishing
 
-- [npm](https://www.npmjs.com) - Packages are published to npm with semantic versions.
-- [semantic-release](https://github.com/semantic-release/semantic-release) - Semantic Release is used to AUTOMATICALLY publish packages to npm.
+- [npm](https://www.npmjs.com) - The target registry for public packages. Nothing is published today (`npmPublish: false` in `.releaserc.mjs`); the first publish lands as one multi-package publish at the repository's release version, never a manual toggle.
+- [semantic-release](https://github.com/semantic-release/semantic-release) - Versions, tags and GitHub releases are minted automatically on merge to `main`; npm publishing is disabled until that first publish.
 
 ## TSDoc Compliance
 

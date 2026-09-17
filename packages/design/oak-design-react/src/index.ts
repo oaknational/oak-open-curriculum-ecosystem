@@ -1,4 +1,4 @@
-export { createOakThemeStore, oakThemeStore } from './oak-theme-store.js';
+export { createOakThemeStore, IDENTITY_DEFAULT, oakThemeStore } from './oak-theme-store.js';
 export type {
   OakMotionMode,
   OakThemeName,

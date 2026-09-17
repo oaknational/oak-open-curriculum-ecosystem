@@ -7,6 +7,7 @@ import {
   runCommitQueueCli,
 } from '../commit-queue/index.js';
 import { runContextCostCli } from '../context-cost/cli.js';
+import { runCoordinationCli } from '../coordination/cli.js';
 import { repoRoot } from '../core/runtime.js';
 import { runMergeBotCli } from '../merge-bot/cli.js';
 import { runPrWatchCli } from '../pr-watch/cli.js';
@@ -91,6 +92,16 @@ export async function runContextCostTopic(
   });
 }
 
+export function runCoordinationTopic(
+  input: AgentToolsCliInput,
+  args: readonly string[],
+): AgentToolsCliResult {
+  const stdout = new OutputBuffer();
+  const stderr = new OutputBuffer();
+  const exitCode = runCoordinationCli({ args, cwd: input.cwd, stdout, stderr });
+  return { exitCode, stdout: stdout.text(), stderr: stderr.text() };
+}
+
 export async function runSessionMetadataTopic(
   input: AgentToolsCliInput,
   args: readonly string[],
@@ -149,7 +160,12 @@ export async function runMergeBotTopic(
   input: AgentToolsCliInput,
   args: readonly string[],
 ): Promise<AgentToolsCliResult> {
-  const stdout = new OutputBuffer();
+  // A caller-supplied live stdout streams mid-run (the merge poll emits
+  // progress lines); the buffer serves callers without one. Text travels
+  // through exactly ONE of the two — the bin edge prints result.stdout after
+  // the run, so returning buffered text AND writing live would double-print.
+  const buffer = new OutputBuffer();
+  const stdout = input.stdout ?? buffer;
   const stderr = new OutputBuffer();
   // The authority file lives at the INVOKING repo's root, not the cwd — a
   // subdirectory invocation must still find it, and a cwd inside another
@@ -162,7 +178,7 @@ export async function runMergeBotTopic(
     return { exitCode: 2, stdout: '', stderr: `merge-bot: ${message}\n` };
   }
   const exitCode = await runMergeBotCli({ args, env: input.env, repoRoot: root, stdout, stderr });
-  return { exitCode, stdout: stdout.text(), stderr: stderr.text() };
+  return { exitCode, stdout: buffer.text(), stderr: stderr.text() };
 }
 
 export function runSpawnTopic(

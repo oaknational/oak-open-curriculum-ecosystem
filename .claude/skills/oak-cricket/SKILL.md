@@ -5,4 +5,4 @@ description: Invoke the platform Cricket panel for a fast second opinion on whet
 
 # Cricket (Claude Code)
 
-Read and follow `.agent/skills/cricket/SKILL-CANONICAL.md`.
+Read and follow `.agent/skills/cognition/cricket/SKILL-CANONICAL.md`.

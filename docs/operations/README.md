@@ -3,7 +3,7 @@ boundary: B4-Engineering-Operations
 doc_role: index
 authority: operations-navigation
 status: active
-last_reviewed: 2026-03-12
+last_reviewed: 2026-08-11
 ---
 
 # Operations Documentation
@@ -55,6 +55,8 @@ runbooks wherever they live (it carries pointers, not content).
   serverless index update/validation/promote procedure (ADR-130).
 - [Production Debugging Runbook](./production-debugging-runbook.md) — incident-response
   diagnostics for the MCP servers.
+- [Environment Variables Reference](./environment-variables.md) — the variable
+  reference and the procedure for changing a deployment environment safely.
 - [Sentry Deployment Runbook](./sentry-deployment-runbook.md) — enable live error
   capture and tracing, with rollback.
 - [Milestone Release Runbook](../engineering/milestone-release-runbook.md) — R0–R5
@@ -67,6 +69,10 @@ runbooks wherever they live (it carries pointers, not content).
   npm publish procedure for the SDK.
 - [MCP Server UAT Validation Runbook](../../apps/oak-curriculum-mcp-streamable-http/docs/manual-uat-guide.md) —
   whole-server black-box validation before a release / after a deploy.
+- [MCP Registry Publication](../../apps/oak-curriculum-mcp-streamable-http/docs/mcp-registry-publication.md) —
+  compose the `server.json` entry from the deployment, prove it against the served
+  metadata and the registry's validator, and publish once the namespace is chosen
+  (MCP-637).
 - [Search CLI Ingestion Guide](../../apps/oak-search-cli/docs/INGESTION-GUIDE.md) and
   [Ground-Truth Protocol](../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) —
   data-ingest and search-quality run procedures.
@@ -78,7 +84,9 @@ the quality-gate coverage matrix
 ([ADR-121](../architecture/architectural-decisions/121-quality-gate-surfaces.md)).
 
 **Delivered as skills (invocable runbooks):** `oak-gates`, `oak-commit`,
-`oak-semantic-merge`, the `oak-start-right` family — the skill is the runbook's
+`oak-semantic-merge`, the `oak-start-right` family,
+`oak-update-dependencies` (the dependency-update sweep: advisory cures,
+outdated waves, override floors) — the skill is the runbook's
 invocation packaging.
 
 ## Relationship to Engineering Docs

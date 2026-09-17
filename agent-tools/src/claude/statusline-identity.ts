@@ -10,7 +10,9 @@
  * checkout with linked worktrees — the shared coordination branch on its own row.
  *
  * The logo style is read from `OAK_STATUSLINE_LOGO` (`braille-sharp` default;
- * `braille`/`quad`/`sextant` alternatives; `none` for the two-line layout). The
+ * `braille`/`quad`/`sextant` alternatives; `none` for the two-line layout).
+ * Setting `OAK_STATUSLINE_LOG_FILE` to a `*.log` path appends each invocation's
+ * raw stdin payload there for diagnosis (see `statusline-debug-log.ts`). The
  * agent-identity name (PDR-027) comes from the built `agent-identity` CLI. Git
  * facts come from {@link gatherGitFacts} against the working directory in the
  * payload; the session-shape glyphs from two cheap reads of the primary
@@ -37,10 +39,10 @@ import { sessionIdPrefix } from '../collaboration-state/identity.js';
 import { parseCollaborationRegistry } from '../collaboration-state/state-parsers.js';
 import { type CollaborationRegistry } from '../collaboration-state/types.js';
 import { resolveLogoStyle } from './oak-logo.js';
-import { BOLD, RED, RESET } from './statusline-ansi.js';
+import { appendDebugLogEntry } from './statusline-debug-log.js';
+import { emitStatusline, type RenderInputs } from './statusline-emit.js';
 import { createFsFrameStore, LOGO_FRAME_STATE_DIR } from './statusline-frame-store.js';
 import { gatherGitFacts } from './statusline-git-io.js';
-import { planStatuslineExecution, type StatuslinePlan } from './statusline-identity-input.js';
 import { isMotionDisabled, readAndAdvanceFrame } from './statusline-logo-cycle.js';
 import { renderStatusline } from './statusline-render.js';
 import { gatherOwnerJobs } from './statusline-owner-jobs-io.js';
@@ -58,24 +60,20 @@ process.stdin.on('data', (chunk) => {
   stdinBuffer += chunk;
 });
 process.stdin.on('end', () => {
-  emitStatusline(stdinBuffer);
+  // The composition contracts (log-before-planning; warning before every
+  // outcome) live and are tested in statusline-emit.ts; this bin only
+  // composes the real deps.
+  process.stdout.write(
+    emitStatusline(stdinBuffer, {
+      env: process.env,
+      nowIso: () => new Date().toISOString(),
+      appendEntry: appendDebugLogEntry,
+      render: renderFromInputs,
+    }),
+  );
 });
 
-function emitStatusline(rawJson: string): void {
-  const plan: StatuslinePlan = planStatuslineExecution(rawJson);
-  if (plan.kind === 'noop') {
-    return;
-  }
-  try {
-    process.stdout.write(renderFromInputs(plan.inputs));
-  } catch (cause) {
-    // Fail loud, never blank: an unexpected fault renders a visible token so the
-    // issue is seen, rather than crashing the adapter to an empty statusline.
-    process.stdout.write(`${RED}${BOLD}⚠ statusline: ${String(cause)}${RESET}`);
-  }
-}
-
-function renderFromInputs(inputs: Extract<StatuslinePlan, { kind: 'render' }>['inputs']): string {
+function renderFromInputs(inputs: RenderInputs): string {
   const cwd = inputs.cwd ?? process.cwd();
   const identity = deriveIdentity(inputs.seed);
   const git = gatherGitFacts(cwd);

@@ -449,6 +449,40 @@ bundle, run `record-staged` once and do not re-stage that file afterwards.
 registry after that changes the payload being verified and `verify-staged`
 reports the recursion with corrective guidance.
 
+## Claude statusline quick reference
+
+The Claude Code statusline is rendered by the built adapter
+`dist/src/claude/statusline-identity.js`, invoked via the project shim
+`.claude/scripts/statusline-identity.mjs` (configured in
+`.claude/settings.json` `statusLine`). It reads the JSON payload Claude
+Code passes on stdin and renders identity, coordination glyphs, model,
+context/usage percentages, and git location. Environment controls:
+
+- `OAK_STATUSLINE_LOGO` — logo style: `braille-sharp` (default),
+  `braille-sharp-compact`, `braille`, `quad`, `sextant`, or `none`
+  (hides the logo column; every present row still renders).
+- `OAK_STATUSLINE_MOTION` — set to `off`, `static`, `none`, or
+  `reduce` (case-insensitive) to disable the logo animation cycle;
+  other values leave motion on.
+- `OAK_STATUSLINE_LOG_FILE` — diagnosis logging: set to a path ending
+  `.log` and the adapter appends one timestamped line per invocation
+  carrying the stdin payload as received — terminal line breaks
+  stripped, interior line breaks collapsed to spaces, every other
+  byte preserved (malformed and noop payloads included); unset or
+  blank means no logging; any other non-`.log` value renders a loud
+  statusline warning, including on payloads that otherwise render
+  nothing. The
+  destination is a boundary: symlinks refuse to open, non-regular files
+  never receive a write, and a pre-existing file is retightened to
+  owner-only before each append. Write refusals are swallowed — the
+  statusline never breaks for its own
+  diagnostics. The log grows unbounded and carries session ids and
+  paths: delete it after the diagnosis.
+  Set it per-machine in `.claude/settings.local.json` under `env` (e.g.
+  `".logs/statusline.log"` — the repo's gitignored log directory) and
+  restart the session; usage-segment diagnosis walkthrough:
+  [troubleshooting §Statusline segments missing](../docs/operations/troubleshooting.md#statusline-segments-missing-or-payload-diagnosis).
+
 ## `claude-agent-ops` quick reference
 
 - `status [--watch]` — list known background agents and their current phase

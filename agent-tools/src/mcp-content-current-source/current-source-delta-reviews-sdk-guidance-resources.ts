@@ -19,13 +19,16 @@ export const SDK_GUIDANCE_RESOURCES_DELTA_REVIEWS: Readonly<
   Record<string, CurrentSourceDeltaReview>
 > = {
   'packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/adapt-lesson.ts': reviewed(
-    'c23235066b550162a954fe38c402e630b9bc908854623a23daff99e02b04e694',
+    'f719c1a74b527b70b4954b8224aec1d38ebd343e65910284aa2d30657be1fd86',
     ['A007', 'C183', 'C187', 'C188', 'C202', 'C205', 'C206', 'C207', 'C208', 'C209', 'C334'],
   ),
   'packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/agent-guidance-resources.ts':
     reviewed('b72948f5ade5d279b502b43ae5970439985c3d69fcfdab763f865c4bb6156f3a', ['A009']),
+  // Thread sequences in curriculum order (2026-09-03): step 2 names the
+  // per-subject curriculum-ordered progression; the anchored rows are
+  // unchanged.
   'packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/continue-progression.ts': reviewed(
-    'd49dc9764828029247ba20261bce0c5c3f39b6e552ebe632458fe0fd3f979e16',
+    '9ea922d4da51b9c879be5ff1a29776b114a174a6879e217b396341bb0720535e',
     [
       'A008',
       'C184',
@@ -42,7 +45,7 @@ export const SDK_GUIDANCE_RESOURCES_DELTA_REVIEWS: Readonly<
     ],
   ),
   'packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/curriculum-mapping.ts': reviewed(
-    '002ece2ea42677b6b6105f29f68aefdabeea3f8c0a74cc2e1fccfc2524c6588f',
+    'cee1117cddb526cb4d14a16cd62b34e100cc079c1d174ab1464ab75157bfc571',
     [
       'A006',
       'C182',
@@ -68,8 +71,11 @@ export const SDK_GUIDANCE_RESOURCES_DELTA_REVIEWS: Readonly<
   ),
   'packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/guidance-resource-types.ts':
     excluded('76cf0bd8b14bad736906a9874e1f3211993d5759d658d0eb6bf144e026cd1723', TYPE_ONLY),
+  // Thread sequences in curriculum order (2026-09-03): step 2 names the
+  // per-subject curriculum-ordered progression; the anchored rows are
+  // unchanged.
   'packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/learning-progression.ts': reviewed(
-    'fbd5b1c00d1880414394e10c769bd4cfdd8377dea4bf71f16bc0093d81def371',
+    'd219784edc89eea8fb1e6387d7552bedbc972fe221a38f47deb435b90f656368',
     ['A005', 'C181', 'C191', 'C192', 'C200', 'C205', 'C332'],
   ),
 };

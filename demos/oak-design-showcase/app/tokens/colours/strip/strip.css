@@ -1,0 +1,66 @@
+/* ============================================================
+   Colour strip — one cell of the matrix.
+
+   Deliberately tiny. This route is framed fifteen times, so every
+   rule here is paid for fifteen times over: no page chrome, no
+   container, no headings, just rows. The one thing it must do
+   well is fit a hundred and sixty-nine colours into a frame a
+   person can scan beside two siblings.
+
+   The swatch paints through `--tok`, which the generated
+   token-vars sheet points at each row's own token. The strip
+   declares its own paint rather than borrowing the reference
+   page's, because that sheet's rules are scoped to that page and
+   carry its layout with them.
+   ============================================================ */
+
+[data-page='colour-strip'] {
+  min-block-size: 0;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+[data-page='colour-strip'] .strip-rows {
+  list-style: none;
+  margin: 0;
+  padding: var(--space-8);
+  display: grid;
+  gap: var(--space-2);
+}
+
+/* Swatch, name, value. The two text columns share the row 2:1 rather
+   than the value being content-sized: a functional value with no hex
+   form (a color-mix token resolves to a long oklab() string) would
+   otherwise take its full unwrapped width and crush the name column to
+   zero — measured: a 0px-wide, 440px-tall name that neither a reader
+   nor axe could see. Both text columns give by wrapping, never by
+   vanishing. */
+[data-page='colour-strip'] .strip-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 2fr) minmax(0, 1fr);
+  gap: var(--space-8);
+  align-items: center;
+}
+
+[data-page='colour-strip'] .strip-swatch {
+  inline-size: var(--space-24);
+  block-size: var(--space-16);
+  border: var(--border-solid-s) solid var(--border-neutral);
+  border-radius: var(--radius-xs);
+  background-color: var(--tok);
+}
+
+/* An identifier breaks rather than pushing the row out of the
+   frame: a cell that scrolls sideways cannot be compared with the
+   cell beside it. */
+[data-page='colour-strip'] .strip-name {
+  overflow-wrap: anywhere;
+}
+
+[data-page='colour-strip'] .strip-value {
+  color: var(--text-subdued);
+  overflow-wrap: anywhere;
+  /* Values keep hugging the row end as they did when the column was
+     content-sized, so the scan rhythm survives the 2:1 split. */
+  text-align: end;
+}

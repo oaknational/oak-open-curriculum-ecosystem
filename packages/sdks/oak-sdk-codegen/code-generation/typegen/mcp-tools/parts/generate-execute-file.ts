@@ -33,10 +33,19 @@ function toolNameToInvocationFunctionName(toolName: string): string {
   return `invoke${identifier.charAt(0).toUpperCase()}${identifier.slice(1)}Tool`;
 }
 
-function emitToolInvocationFunctions(names: readonly string[]): string {
+function emitToolInvocationFunctions(
+  names: readonly string[],
+  paginatedToolNames: ReadonlySet<string>,
+): string {
   return names
     .map((toolName) => {
       const functionName = toolNameToInvocationFunctionName(toolName);
+      // Only paginated tools' invoke results carry the pagination echo, and
+      // each descriptor's invoke return type is inferred from its literal —
+      // touching the field on a non-paginated tool is a compile error.
+      const returnLine = paginatedToolNames.has(toolName)
+        ? '  return { status: validation.status, data: validation.data, pagination: invokeResult.pagination };'
+        : '  return { status: validation.status, data: validation.data };';
       return [
         `async function ${functionName}(`,
         `  client: ToolClientForName<'${toolName}'>,`,
@@ -65,14 +74,17 @@ function emitToolInvocationFunctions(names: readonly string[]): string {
         '      },',
         '    });',
         '  }',
-        '  return { status: validation.status, data: validation.data };',
+        returnLine,
         '}',
       ].join('\n');
     })
     .join('\n\n');
 }
 
-export function generateExecuteFile(toolNames: string[]): string {
+export function generateExecuteFile(
+  toolNames: string[],
+  paginatedToolNames: ReadonlySet<string>,
+): string {
   const names = toolNames.slice().toSorted(compareCodeUnits);
   const switchCases = names
     .map((toolName) => {
@@ -95,7 +107,7 @@ export function generateExecuteFile(toolNames: string[]): string {
     '  return toolNames.map((name) => getToolFromToolName(name));',
     '}',
     '',
-    emitToolInvocationFunctions(names),
+    emitToolInvocationFunctions(names, paginatedToolNames),
     '',
     'async function invokeToolByName<TName extends ToolName>(',
     '  name: TName,',

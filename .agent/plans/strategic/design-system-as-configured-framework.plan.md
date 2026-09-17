@@ -3,10 +3,10 @@ id: design-system-as-configured-framework
 node_type: strategic
 name: "The design system as a configured framework"
 overview: "The Oak Open Curriculum Design System as a layered, identity-agnostic framework in which Oak itself is configuration: general mechanism below, identity data above, with the constrained (non-MIT) surface kept structurally minimal. Professional-designer visual quality is the acceptance bar for every surface that presents the system."
-status: sketch
-ratified_by: null
-ratified_date: null
-ratified_where: null
+status: ratified
+ratified_by: "Jim Cresswell (owner)"
+ratified_date: 2026-08-05
+ratified_where: "Owner word, Director session Petrel holds Turbulence (a0892f), 2026-08-05: 'Strategic node ratified' — given in the design-lane reopening sitting with the fix-all-known-issues instruction"
 serves: TOOLS-2
 impact_areas:
   - design-system
@@ -14,7 +14,7 @@ gate_expiry_default: P21D
 depends_on: []
 owner_gates: []
 tickets: []
-last_updated: 2026-08-03
+last_updated: 2026-08-05
 ---
 
 # The design system as a configured framework
@@ -76,6 +76,17 @@ design operable by non-designers and agents (values are data, constraints enforc
 the demos as the falsifier suite — every demo exists to prove a named property of
 this kernel, and a demo with no property to prove is scope without warrant.
 
+## Decision records
+
+The decisions this node narrates are recorded canonically in the
+[Design Decision Record corpus](../../../docs/design/README.md)
+(founded 2026-08-07, MCP-527): the kernel's configured-framework thesis is
+[DDR-001](../../../docs/design/design-decisions/001-the-design-system-is-a-configured-framework.md);
+the licensing split is
+[DDR-005](../../../docs/design/design-decisions/005-licence-follows-provenance.md).
+Plans cite DDRs — never the reverse; this node remains the ratified
+narrative home the DDRs cite as provenance (PR #782).
+
 ## Why strategic
 
 The identity-as-configuration thesis is the same split the licensing model makes legible
@@ -83,8 +94,9 @@ The identity-as-configuration thesis is the same split the licensing model makes
 argument and the constraint-surface argument are one architecture seen from two sides —
 the open-by-default bet this node serves (TOOLS-2); the demos it powers are the visual
 front door of the MCP-app strand (APP-1), which consumes this strand's outcome without
-owning it. (Serves edge re-pointed APP-1 → TOOLS-2, 2026-08-02, v1-review finding E65:
-the node's own argument makes the choice.)
+owning it. (Serves edge re-pointed APP-1 → TOOLS-2, 2026-08-02, v1-review finding E65 —
+`.agent/reports/design/plan-review-2026-08-02/findings.v1.json`, array-index convention
+per that ledger's preamble: the node's own argument makes the choice.)
 Every delivery decision in this strand resolves against the kernel above: mechanism
 generalises downward, identity thins upward, and quality claims become structural
 (schemas, gates, generated documentation) rather than remembered.

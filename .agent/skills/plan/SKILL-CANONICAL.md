@@ -52,7 +52,7 @@ runs in CI and at pre-commit.
    already names a solution ("we need X") has skipped the framing. For
    complex plans, rewrites, or high-stakes work, read the
    [grammar of thinking](../../reference/grammar-of-thinking.md) as the
-   yardstick, and use [`reason`](../reason/SKILL-CANONICAL.md) to structure
+   yardstick, and use [`reason`](../cognition/reason/SKILL-CANONICAL.md) to structure
    the framing before committing to plan shape.
 
 2. Read the directives:
@@ -110,8 +110,10 @@ is not ratified.
   hand-kept list.
 - `impact_areas` — the product areas the plan changes, drawn from the
   closed, additive [registry](../../plans/impact-areas.md).
-- `tickets` — every delivery plan names at least one Linear ticket (the
-  delivery-state edge; ticket-first per `linear-ticket-first`).
+- `tickets` — optional visibility metadata, always (plan-node schema
+  §2026-08-07 amendment: validity is repo-internal, never dependent on
+  an external service). When the operator's tracker holds the work,
+  name it as a thin pointer (ticket-first as working practice).
 - `depends_on` — each dependency classified `blocking` or `beneficial`;
   for each `beneficial` dependency, the body states the minimum
   shippable shape without it.
@@ -125,21 +127,63 @@ is not ratified.
 Every non-trivial plan MUST define:
 
 1. **Goal** — the user-impact outcome sought.
-2. **Mechanism** — why the named means produce that outcome.
-3. **Acceptance criteria, each with a proof** — outcome-measuring, not
+2. **User groups and value** — the groups who will experience or consume
+   the outcome (end users — including deliberately proxy ones with an
+   honest claim boundary, stakeholders and audiences, developers and
+   agents, operators), and for each group the value provided, stated in
+   experience terms. Pure innovation is often not meeting a pre-existing
+   need, so proving a pre-existing need in advance is not required where
+   the work's purpose is to reveal possibility: declared offered or
+   hypothesised value (possibility, comprehension, inspiration) with an
+   honest claim boundary satisfies this requirement (owner ruling,
+   2026-08-31; worked instance: the semantic-search-showcase plan, whose
+   first sketch met every then-current requirement while missing its
+   users). Falsifier: if this section fills with interchangeable
+   boilerplate rather than decision-bearing content, the requirement has
+   become ceremony and must be reshaped, not deleted silently.
+3. **Mechanism** — why the named means produce that outcome.
+4. **Acceptance criteria, each with a proof** — outcome-measuring, not
    activity-measuring, and each proof typed (`repo-safe` for
    test/CI-provable, `owner-held` for the owner's confirming act).
-4. **Out of scope** — what the plan explicitly will not do (YAGNI).
-5. **Todos** — sliced at pickup by the implementer, each slice a
+5. **Out of scope** — what the plan explicitly will not do (YAGNI).
+6. **Todos** — sliced at pickup by the implementer, each slice a
    single-story PR within its round budget
    ([PDR-132](../../practice-core/decision-records/PDR-132-changeset-health-round-budgets-bind-at-authoring-time.md):
    round budgets bind at authoring time; slicing at plan time is free,
    slicing at the first over-budget review round is the measured
-   expensive path).
+   expensive path). Slicing at pickup CONSUMES the plan's disposition
+   ledger
+   ([PDR-140](../../practice-core/decision-records/PDR-140-review-response-pricing.md)):
+   the canonical ledger surface is a `## Review dispositions` section
+   in the plan file itself — one dated row per routed finding, naming
+   the source PR, the finding in one line, and the routing rationale —
+   with the plan's linked ticket as the carrier only when the ticket
+   exists and the disposition says so. At pickup the implementer
+   enumerates that section (and the named ticket, when cited), reading
+   and dispositioning every row before implementation begins; an
+   absent section means an empty ledger, never an unchecked one.
 
 Plans are public-repository artefacts: **mechanism only**. Anything
 internal — dates, vendor detail, organisational specifics — rides the
 linked Linear ticket, never the plan body.
+
+A plan that amends a permanent page (the vision, a strategy page, an
+ADR) never has that page cite the plan: permanent docs cite ADRs, and
+a plan carrying a decision worth a permanent page's note authors or
+names the ADR that records it (`no-moving-targets-in-permanent-docs`
+§Citation directionality). An acceptance criterion that asks a
+permanent page to name a delivery node by id is a moving target at
+authoring time — a truing node's own AC did exactly that on 2026-09-03
+and the owner refused the push that carried it.
+
+A plan that a FRESH session must implement is a self-contained repo
+artefact, never a chat artefact (owner ruling 2026-09-01, verbatim: "it
+must be copied to the repo, so a fresh session can implement it, that
+means it needs to be self contained and not rely on hidden context"):
+mechanism, exact files, tests, any registry ceremony, sequence and proofs
+in the node; dates, versions and deployment URLs on the ticket; the
+seat-facing state (branch, worktree, uncommitted edits) on the thread
+record — three homes, no hidden context.
 
 ## Authoring Disciplines (unchanged by estate structure)
 

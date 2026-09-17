@@ -10,8 +10,8 @@ import { z } from 'zod';
  * call site inspects, never an invisible throw (ADR-088 / the Result
  * discipline). Hoisted from `corpus-analysis/judgment-schemas.ts` when the
  * refounding modules became the second consumer
- * (`consolidate-at-second-consumer`); `judgment-schemas` re-exports it so its
- * existing consumers are unchanged.
+ * (`consolidate-at-second-consumer`); every consumer imports it directly from
+ * this owning home.
  *
  * @packageDocumentation
  */

@@ -51,7 +51,7 @@ Two consequences are load-bearing:
 | `ratified_where` | string | when `status: ratified` | A resolvable pointer to where the word lives (register entry, ticket comment, dated sitting record) |
 | `serves` | node or choice id | strategic + delivery; optional runbook | Exactly one edge up: strategic → a published strategic-choice ID; delivery/runbook → a strategic node id |
 | `impact_areas` | list from the registry | all | Which product areas this plan changes — [`impact-areas.md`](impact-areas.md), closed and additive |
-| `tickets` | list of Linear issue IDs | required on a ratified delivery plan in an anchored subtree (see the 2026-07-31 delivery-ticket amendment below); optional otherwise | The Linear projection anchor — execution state lives there |
+| `tickets` | list of Linear issue IDs | optional, always (see the 2026-08-07 plan-validity amendment below) | Visibility metadata only — when Oak's Linear tracks the work, the linkage projects it there; validity never depends on it |
 | `depends_on` | list of `{ plan, kind: blocking \| beneficial }` | optional | A `blocking` edge clears when its target archives |
 | `owner_gates` | list of `{ awaiting, clears_when, expires }` | optional | See gates below |
 | `superseded_by` | node id | when `status: superseded` | No plan leaves the estate without naming its successor |
@@ -104,6 +104,19 @@ its delivery timescales — that fact lives in the node, not here.)
 
 ## Per-type contracts
 
+Common to **every** plan type (owner ruling 2026-08-31): the body names
+its **user groups and value** — who experiences or consumes the outcome
+and what each group gets, in experience terms; the plan skill carries
+the full requirement, including the innovation clause (offered or
+hypothesised value with an honest claim boundary satisfies it — advance
+need-proof is not required) and the one-line routing form for outcomes
+nobody experiences directly. The three authoring templates each carry
+the matching section. The requirement binds plans authored or
+materially amended from the ruling date onward; the pre-existing estate
+is not retroactively invalidated — each earlier plan gains the section
+at its next material amendment, never by bulk retrofit (the
+dated-amendment discipline above).
+
 ### Strategic
 
 The why and the what: the outcome sought, the bet it rests on, what
@@ -122,6 +135,7 @@ onto the plan estate and the schedule. The body carries (PDR-018:
 narrative in the body, never frontmatter):
 
 - **Goal** — what is true when this lands that is not true now.
+- **User groups and value** — the common requirement above, in full.
 - **Mechanism** — how, briefly.
 - **Acceptance criteria — each with a proof, required.** A proof names
   its evidence class: `repo-safe` (a test, validator, or CI check —
@@ -154,8 +168,7 @@ of Oak's strategy stays on internal surfaces.
 The estate validator (re-cut to this contract in its own lane,
 red-first) refuses: an incomplete ratification stamp on a `ratified`
 plan; open-enum drift; an `impact_areas` entry absent from the
-registry; a ratified delivery plan without a ticket in an ANCHORED
-subtree (see the 2026-07-31 delivery-ticket amendment below); a gate without an
+registry; a gate without an
 absolute expiry; `superseded` without `superseded_by`; and an empty corpus
 (zero plans is a failure, never a vacuous green).
 
@@ -169,30 +182,20 @@ gate rows change. It never blocks commits or CI; the conformance
 validator above stays a deterministic function of repo content, with no
 clock input.
 
-**Dated amendment (2026-07-31, owner-ratified at the knowledge-estate
-sitting; ADR-221 lens-4 resolution)**: the delivery-ticket requirement
-is **operator policy, not a public-schema constant** — an
-execution-state anchor is an operator-overlay binding under PDR-134's
-strata, so the requirement binds only within subtrees the operator
-tracks. A strategic node whose subtree the owner has ruled untracked
-(first instance: `planning-and-intent-estate`, ruling 2026-07-31)
-carries no ticket obligation for its delivery plans. The validator
-enforces this as DERIVED anchoring consistency (landed 2026-07-31):
-a subtree is anchored when its strategic node, or any plan serving
-it, names at least one ticket, and only then must a ratified
-delivery plan name one — no tracking declaration is a schema field
-and the validator binds to none, because any such record is
-operator-stratum content, and in the public base it would be left
-standing by an overlay strip (PDR-134 §1: operator knowledge lives
-in private homes; §6: the strip test). Stated
-limit, deliberate: the rule enforces consistency of anchoring over
-the clone's own files, never conformance to an operator's tracking
-ruling — an all-ticketless subtree reads as unanchored by
-construction, and the operator's tracking discipline is an
-overlay-side obligation. Witnesses are live plans only (`sketch`,
-`ratified`): de-anchoring a subtree is the dated, reviewable act of
-archiving or superseding its last live ticketed plan — the guard
-never lifts through silence, it lifts through a visible diff.
+**Dated amendment (2026-08-07, owner-ruled): plan validity is
+repo-internal.** The owner's verbatim ruling: "Work does NOT require a
+Linear ticket to be valid, that would tie the repo validity to the
+existence of Linear, and how would that work for a different checkout
+in a different org? It wouldn't." This supersedes the 2026-07-31
+delivery-ticket amendment and its derived-anchoring mechanism entirely
+(git history holds the superseded text): no validator obligation may
+depend on the presence of records in an external service, however the
+obligation is derived. `tickets` is optional visibility metadata at
+every status and in every subtree. Ticket-linkage discipline for work
+Oak's Linear tracks is operator PRACTICE (thin pointer tickets, PR
+linkage — Linear is a visibility surface, the repo is the record,
+owner rulings 2026-08-07), carried by working habit and review, never
+by repo conformance.
 
 ## Relationship to ADR-200 (dated 2026-07-22)
 

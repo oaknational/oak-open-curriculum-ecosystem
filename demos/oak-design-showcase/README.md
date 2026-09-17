@@ -36,17 +36,18 @@ switchboard drives three axes:
   high-contrast / colour-safe) through the kit's `oak-theme.js` runtime,
   inlined pre-paint in `app/layout.tsx` so a stored choice applies before
   first paint. A theme choice persists (localStorage, the runtime's
-  contract). Until a choice is made the control reads "Page default" — the
-  state where a brand's own polarity governs (EMC² is dark-first). High
-  contrast also has an OS-level route with no control interaction — a
-  `prefers-contrast: more` request applies it without claiming a choice;
-  colour safe is control-only. With
+  contract). Until a choice is made the control reads "Identity default" —
+  the selectable no-choice state where the identity's own polarity governs
+  (EMC² is dark-first), and choosing it clears a stored choice (DDR-003
+  dated amendment 2026-08-11). High contrast also has an OS-level route
+  with no control interaction — a `prefers-contrast: more` request applies
+  it without claiming a choice; colour safe is control-only. With
   JavaScript disabled, reduced motion and forced colors still work at the
   CSS level, but the high-contrast and colour-safe themes have no route —
   they need the runtime.
 - **Motion** — the orthogonal motion axis (match-device / reduced / full),
   same runtime.
-- **Identity** — Oak, plus the kit's two counter-brands (Freedonia DSE and
+- **Identity** — Oak, plus the kit's two counter-brands (Public Digital Service and
   EMC²), by swapping a `brand.css` link loaded after every bundled sheet so
   the brand wins the cascade at equal specificity.
 
@@ -77,7 +78,7 @@ single entry point and the source of truth for sheet composition and order.
 Fonts are the kit's own self-hosted faces — no `next/font`, no network at
 build. Page markup uses `.oak-*` classes and token roles only; the
 page-level hook rules in `globals.css` (for example `.mast`, which
-Freedonia's expression layer restyles into the GDS masthead grammar)
+PDS's expression layer restyles into the GDS masthead grammar)
 compose token roles and keywords exclusively. The utility bar deliberately
 is not an inverted band: controls on inverted surfaces need the kit's
 inverted focus ring, and a brand that re-polarises the band has no token
@@ -137,3 +138,90 @@ design system. Enforced by instrument, not review vigilance:
   (`prefers-contrast: more` auto-selecting high-contrast; forced colors),
   and keyboard focus visibility in both polarities. The `system`-follows-
   device ride itself is a behaviour test in the UI suite.
+
+  The suite is fully green: the six pds specimen cells that were declared
+  known-red on 2026-08-13 (inverted masthead ink on a non-inverted surface,
+  exactly 1:1) were cured the same day at the cascade generator — the page
+  sheet had declared the masthead surface at higher specificity than the
+  hook-clean contract brand expression layers assume (`specimen.css`, the
+  `.mast` split carries the record). Any red is new information.
+
+## Rendering and test gotchas (proven in this workspace)
+
+Each of these cost a real investigation in the 2026-08-18/19 review
+rounds; the cure is stated so the next round does not re-derive it.
+
+- **Cross-realm `instanceof`**: a frame's elements are instances of the
+  FRAME's classes, so a parent-realm `instanceof HTMLElement` silently
+  rejects every cross-document node. Null-check typed `querySelector`
+  results instead.
+- **`light-dark()` resolves at the DECLARING element**: a subtree
+  `data-theme` cannot flip `:root`-declared tokens; theme the document
+  root (the composition exhibit's applier pattern).
+- **Focus-scroll is the "scroll reset"**: focusing an offscreen control
+  scrolls it into view, so arrow-key radio groups at the top of the page
+  reset the scroll unless the control bar is sticky (always in view means
+  no jump); residual drift is scroll anchoring doing its job.
+- **React-owned nodes are never removed**: a server-rendered `<link>` is
+  React's — retire it with `disabled = true`, never `.remove()` (React
+  restores hoistables). React 19 hoists stylesheets only under a
+  `precedence` prop; otherwise they render in place in the body. And "a
+  request is not application": the binder stamps
+  `data-oak-brand-applied` at swap completion because DOM presence is not
+  cascade state (`link.sheet` mints ~135 ms before load).
+- **Playwright proves the BUILT artefact**: the suites run `next start` on
+  `.next` — rebuild before re-running or you test the previous code.
+- **Auto-margin grid items shrink to fit**: a grid item with
+  `margin-inline: auto` does not stretch to its track; `/tokens` had only
+  ever looked right by accident.
+- **The layout viewport is not the visual viewport**: macOS overlay
+  scrollbars leave `clientWidth` at 320 while Linux classic scrollbars
+  narrow it (~305), so an SC 1.4.10 pass at exactly 320 with zero slack is
+  a latent CI red. Probe BELOW the boundary and measure the floor.
+- **A scroll container must be the containing block for its own
+  absolutely positioned descendants** (`position: relative` on the
+  scroller), or their static positions ride the content past the clip
+  and tax the document's scroll width (two instances: a 228 px sideways
+  scroll, then a 312 px floor from visually-hidden helpers).
+- **`overflow-x: auto` computes the unspecified axis to `auto`**: a
+  "horizontal-only" scroller picked up ~3 px of rounded-border scroll
+  slack vertically and axe rightly demanded keyboard access to it. Close
+  the artifact axis explicitly (`overflow: auto hidden`) when height is
+  content-driven; a scroll container's contract names both axes.
+- **Decorative motion must be overflow-closed**: a transformed box extends
+  scrollable overflow, so plate inset must be at least the translate
+  amplitude or SC 1.4.10 becomes a function of animation phase.
+- **Content-sized columns plus `nowrap` crush siblings**: a `color-mix`
+  token resolves to a long `oklab()` string with no hex form; the strip's
+  auto value column took ~250 px of a 288 px frame and the name column
+  went 0 px wide by 440 px tall. Bounded tracks that give by wrapping (a
+  2:1 `fr` split), never by vanishing.
+- **Sonar duplicate-selector findings can be live bugs**: a second `.mast`
+  block silently overrode the strip-offset declaration to 0 (the later
+  block wins). Merging to one block is correctness work.
+- **One document, one holder**: two well-meaning theme holds on the same
+  root correct each other forever; ownership is decided by context
+  (standalone: the page holds itself; framed: the parent holds). The
+  showcase applies context-decides-the-owner three ways — theme mode,
+  breadcrumbs, holds.
+- **Three stacked cures on one element is a solution-class signal**:
+  containing-block positioning, an artifact-axis close, and measured
+  conditional focusability on `tok-scroll` are each correct; their
+  accumulation is the trigger for a design look at "every family is its
+  own scroll container" BEFORE a fourth cure lands.
+
+## Fidelity review
+
+- `pnpm tool:fidelity` — captures the Claude Design canonical export (served
+  over the studio overlay: `studio-source/` falling back to the
+  design-system package root for kit CSS, fonts and assets) and the running
+  showcase at matched geometry (1440 CSS px, 2x scale), perceptually diffs
+  every declared pair, and writes the review surface to
+  `demo-evidence/fidelity-report/index.html` beside the disposition register
+  (`fidelity-register.json`). Diff magnitude never gates: non-zero exit
+  means a mechanical failure only. Flags: `--base <url>`, `--width <px>`,
+  `--report-only`, `--keep-server`. Until the `/identity-switchboard` routes
+  land, a FULL run fails at the live-capture arm (the routes 404 and the
+  blank self-check refuses them — by design); use `--report-only` to build
+  the report from whatever evidence exists, which shows the live side as
+  missing.

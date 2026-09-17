@@ -21,10 +21,35 @@ It complements, rather than replaces:
 
 ### Proposal syntheses
 
-Proposal-status, **explicitly non-doctrine**: these two documents propose and
-argue; they do not decide anything. Their analysis-and-integration was routed
-2026-08-02.
+Proposal-status, **explicitly non-doctrine**: these documents propose and
+argue; they do not decide anything.
 
+- [practice-operational-system-diagnosis-and-outcome-portfolio-2026-08-04.md](./practice-operational-system-diagnosis-and-outcome-portfolio-2026-08-04.md)
+  — diagnosis of the Practice as an operational system, concentrating on
+  authority transitions, causal lineage, reconciliation, durability, extension,
+  decision-bearing observability, subtractive outcomes, and deliberate refusals
+- [practice-regulation-extension-and-semantic-projection-2026-08-04.md](./practice-regulation-extension-and-semantic-projection-2026-08-04.md)
+  — deeper tranche on regulators across timescales, causal scale-shift and
+  damping, deterministic effect shells around probabilistic agency,
+  multi-dimensional extension trust and revocation, and semantic registries
+  whose projection and completeness contracts remain distinct from event
+  occurrence or decision authority
+- [intelligence-of-inhibition-operational-eligibility-2026-08-04.md](./intelligence-of-inhibition-operational-eligibility-2026-08-04.md)
+  — separate companion synthesis on operational eligibility and intelligent
+  non-action: how the Practice can distinguish pausing, waiting, suppression,
+  quarantine, cancellation, revocation, retirement, refusal, and restoration;
+  localise failure across operation, attempt, actor, obligation, generator,
+  host, and governing design; combine state, events, schemas, validators,
+  judgement, authority, actuators, reconciliation, time, and regulator
+  retirement without creating a central controller
+- [governed-context-and-causal-participation-2026-08-04.md](./governed-context-and-causal-participation-2026-08-04.md)
+  — opportunity synthesis treating context construction as a governed causal
+  transition rather than neutral retrieval; separates existence, epistemic
+  status, access, disclosure, operational eligibility, action authority,
+  liveness, and retention, and proposes typed lineage, candidate transitions,
+  policy-carrying projections, revocation and reconciliation, protected
+  alternatives, and bounded federation without one global graph or central
+  controller
 - [governed-forgetting-and-temporally-governed-authority-2026-08-02.md](./governed-forgetting-and-temporally-governed-authority-2026-08-02.md)
   — cross-disciplinary synthesis of how retained history can lose operational
   eligibility without losing evidence, with current-Practice mapping, worked

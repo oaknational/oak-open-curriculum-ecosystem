@@ -1,0 +1,44 @@
+$ stryker run
+09:19:02 (57624) WARN ProjectReader Glob pattern "src/**/*.integration.test.ts" did not match any test files.
+09:19:02 (57624) INFO ProjectReader Found 1 of 25 file(s) to be mutated.
+09:19:02 (57624) INFO ProjectReader Found 1 test file(s) matching --testFiles patterns.
+09:19:02 (57624) INFO Instrumenter Instrumented 1 source file(s) with 18 mutant(s)
+09:19:02 (57624) INFO ConcurrencyTokenProvider Creating 13 test runner process(es).
+09:19:03 (57624) INFO BroadcastReporter Detected that current console does not support the "progress" reporter, downgrading to "progress-append-only" reporter
+09:19:03 (57624) INFO DryRunExecutor Starting initial test run (vitest test runner with "perTest" coverage analysis). This may take a while.
+09:19:03 (57624) INFO DryRunExecutor Initial test run succeeded. Ran 10 tests in 0 seconds (net 1.8737500000000296 ms, overhead 116.12624999999997 ms).
+
+All tests/index.unit.test.ts
+  ✓ typeSafeKeys returns keys preserving literal types (killed 6)
+  ✓ typeSafeValues returns values preserving types (killed 3)
+  ✓ typeSafeEntries returns [key, value] tuples (killed 4)
+  ~ typeSafeEntries supports ordinary interface-shaped objects without exposing symbol keys (covered 11)
+  ✓ typeSafeGet retrieves a typed value by key (killed 1)
+  ✓ typeSafeSet sets a value at a typed key (killed 1)
+  ✓ typeSafeHas returns true for existing keys (killed 1)
+  ~ typeSafeHas returns false for missing keys (covered 1)
+  ✓ typeSafeHasOwn returns true for own properties (killed 1)
+  ~ typeSafeHasOwn returns false for inherited properties (covered 1)
+
+[Survived] ConditionalExpression
+src/index.ts:21:9
+-       if (isOwnStringKey(obj, key)) {
++       if (true) {
+Tests ran:
+    typeSafeKeys returns keys preserving literal types
+    typeSafeValues returns values preserving types
+    typeSafeEntries returns [key, value] tuples
+  and 1 more test!
+
+
+Ran 1.17 tests per mutant on average.
+----------|------------------|----------|-----------|------------|----------|----------|
+          | % Mutation score |          |           |            |          |          |
+File      |  total | covered | # killed | # timeout | # survived | # no cov | # errors |
+----------|--------|---------|----------|-----------|------------|----------|----------|
+All files |  94.44 |   94.44 |       17 |         0 |          1 |        0 |        0 |
+ index.ts |  94.44 |   94.44 |       17 |         0 |          1 |        0 |        0 |
+----------|--------|---------|----------|-----------|------------|----------|----------|
+09:19:04 (57624) INFO JsonReporter Your report can be found at: file://<repo-root>/packages/core/type-helpers/mutation-evidence/report.json
+09:19:04 (57624) INFO HtmlReporter Your report can be found at: file://<repo-root>/packages/core/type-helpers/mutation-evidence/report.html
+09:19:04 (57624) INFO MutationTestExecutor Done in 1 second.

@@ -31,7 +31,7 @@ No phase can be marked complete until documentation updates are handled for:
 
 Record updates (or no-change rationale) in a collection-local
 the collection's documentation-sync-log in `.agent/memory/operational/documentation-sync-logs/`.
-Apply the [`consolidate-docs`](../../skills/consolidate-docs/SKILL-CANONICAL.md) skill before closing major phases.
+Apply the [`consolidate-docs`](../../skills/knowledge/consolidate-docs/SKILL-CANONICAL.md) skill before closing major phases.
 
 ---
 

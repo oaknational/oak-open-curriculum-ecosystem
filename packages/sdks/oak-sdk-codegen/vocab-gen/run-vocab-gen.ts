@@ -127,12 +127,13 @@ async function main(): Promise<void> {
   logger.info('Processing bulk download files...');
 
   const result = await runPipeline(config, logger);
-  logger.info(formatPipelineResult(result));
 
   if (!result.success) {
-    logger.error(`Pipeline failed: ${result.error ?? 'unknown'}`);
+    logger.error(formatPipelineResult(result));
     process.exit(1);
   }
+
+  logger.info(formatPipelineResult(result));
 
   logger.info('Pipeline completed successfully.');
 }

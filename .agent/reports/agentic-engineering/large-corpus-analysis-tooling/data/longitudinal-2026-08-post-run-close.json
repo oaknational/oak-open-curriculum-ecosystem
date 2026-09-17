@@ -1,0 +1,1130 @@
+{
+ "recallIntegrityViolations": [],
+ "recallReport": {
+  "strictOverall": {
+   "numerator": 2,
+   "denominator": 18,
+   "value": 0.1111111111111111
+  },
+  "looseOverall": {
+   "numerator": 13,
+   "denominator": 18,
+   "value": 0.7222222222222222
+  },
+  "strictWithinRemit": {
+   "numerator": 2,
+   "denominator": 10,
+   "value": 0.2
+  },
+  "looseWithinRemit": {
+   "numerator": 6,
+   "denominator": 10,
+   "value": 0.6
+  }
+ },
+ "choiceB": {
+  "gate": {
+   "minStrictWithinRemit": 0.6,
+   "minLooseWithinRemit": 0.85
+  },
+  "pass": false
+ },
+ "mapCoverage": {
+  "medianLeafCount": 47,
+  "underExtracting": []
+ },
+ "temporalCoverage": [
+  {
+   "candidateId": "C02",
+   "kind": "trajectory",
+   "distinctWindows": 5,
+   "earliest": "w01",
+   "latest": "w10",
+   "suspect": false
+  },
+  {
+   "candidateId": "C16",
+   "kind": "trajectory",
+   "distinctWindows": 3,
+   "earliest": "w02",
+   "latest": "w10",
+   "suspect": false
+  },
+  {
+   "candidateId": "C24",
+   "kind": "trajectory",
+   "distinctWindows": 3,
+   "earliest": "w07",
+   "latest": "w10",
+   "suspect": false
+  },
+  {
+   "candidateId": "C25",
+   "kind": "trajectory",
+   "distinctWindows": 6,
+   "earliest": "w03",
+   "latest": "w10",
+   "suspect": false
+  },
+  {
+   "candidateId": "C34",
+   "kind": "trajectory",
+   "distinctWindows": 4,
+   "earliest": "w04",
+   "latest": "w10",
+   "suspect": false
+  },
+  {
+   "candidateId": "C37",
+   "kind": "trajectory",
+   "distinctWindows": 4,
+   "earliest": "w02",
+   "latest": "w06",
+   "suspect": false
+  },
+  {
+   "candidateId": "C39",
+   "kind": "trajectory",
+   "distinctWindows": 7,
+   "earliest": "w02",
+   "latest": "w10",
+   "suspect": false
+  },
+  {
+   "candidateId": "C40",
+   "kind": "relational-lagged",
+   "distinctWindows": 7,
+   "earliest": "w01",
+   "latest": "w10",
+   "suspect": false
+  },
+  {
+   "candidateId": "C41",
+   "kind": "trajectory",
+   "distinctWindows": 7,
+   "earliest": "w02",
+   "latest": "w09",
+   "suspect": false
+  },
+  {
+   "candidateId": "C42",
+   "kind": "trajectory",
+   "distinctWindows": 4,
+   "earliest": "w02",
+   "latest": "w10",
+   "suspect": false
+  },
+  {
+   "candidateId": "C46",
+   "kind": "trajectory",
+   "distinctWindows": 6,
+   "earliest": "w02",
+   "latest": "w10",
+   "suspect": false
+  },
+  {
+   "candidateId": "C56",
+   "kind": "trajectory",
+   "distinctWindows": 4,
+   "earliest": "w05",
+   "latest": "w08",
+   "suspect": false
+  },
+  {
+   "candidateId": "C75",
+   "kind": "distributional",
+   "distinctWindows": 6,
+   "earliest": "w01",
+   "latest": "w11",
+   "suspect": false
+  },
+  {
+   "candidateId": "C76",
+   "kind": "trajectory",
+   "distinctWindows": 7,
+   "earliest": "w01",
+   "latest": "w11",
+   "suspect": false
+  },
+  {
+   "candidateId": "C77",
+   "kind": "relational-lagged",
+   "distinctWindows": 5,
+   "earliest": "w02",
+   "latest": "w11",
+   "suspect": false
+  }
+ ],
+ "corroboration": [
+  {
+   "candidateId": "C01",
+   "corroboratedBy": [
+    ".agent/memory/active/patterns/wrapped-exit-codes-false-green.md",
+    ".agent/rules/exit-codes-in-band-never-piped.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C02",
+   "corroboratedBy": [
+    ".agent/rules/exit-codes-in-band-never-piped.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C03",
+   "corroboratedBy": [
+    ".agent/memory/active/patterns/harness-shell-and-commit-edge-cases.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C04",
+   "corroboratedBy": [
+    ".agent/memory/active/patterns/zero-match-false-green.md",
+    ".agent/memory/active/patterns/audit-sweep-filters-against-live-referent.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C08",
+   "corroboratedBy": [
+    ".agent/rules/stage-by-explicit-pathspec.md",
+    ".agent/memory/active/patterns/stage-what-you-commit.md",
+    ".agent/memory/active/patterns/commit-window-discipline-under-parallel-agents.md",
+    ".agent/memory/active/patterns/peer-commit-absorption-third-direction.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C10",
+   "corroboratedBy": [
+    ".agent/memory/active/patterns/whole-tree-gate-red-on-untouched-files.md",
+    ".agent/memory/active/patterns/untracked-wip-whole-tree-lint-blocker.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C11",
+   "corroboratedBy": [
+    ".agent/rules/use-built-agent-tools-cli.md",
+    ".agent/rules/worktree-hygiene.md",
+    ".agent/memory/active/patterns/plain-node-built-artifact-proof.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C12",
+   "corroboratedBy": [
+    ".agent/rules/hook-policy-substring-discipline.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C17",
+   "corroboratedBy": [
+    ".agent/rules/use-monitor-for-event-driven-wake.md",
+    ".agent/rules/check-singleton-per-window.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C18",
+   "corroboratedBy": [
+    ".agent/rules/liveness-heartbeat-cron.md",
+    ".agent/memory/active/patterns/query-the-value-never-the-lookalike.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C19",
+   "corroboratedBy": [
+    ".agent/rules/silence-is-never-liveness.md",
+    ".agent/rules/liveness-heartbeat-cron.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C20",
+   "corroboratedBy": [
+    ".agent/rules/liveness-heartbeat-cron.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C21",
+   "corroboratedBy": [
+    ".agent/memory/active/patterns/referent-narrowing.md",
+    ".agent/rules/pr-comments-resolve-and-recheck.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C22",
+   "corroboratedBy": [
+    ".agent/rules/pr-comments-resolve-and-recheck.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C23",
+   "corroboratedBy": [
+    ".agent/rules/pr-comments-resolve-and-recheck.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C24",
+   "corroboratedBy": [
+    ".agent/rules/pr-comments-resolve-and-recheck.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C25",
+   "corroboratedBy": [
+    ".agent/memory/active/patterns/pr-monitor-to-merge.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C26",
+   "corroboratedBy": [
+    ".agent/rules/bot-identity-on-third-party-systems.md",
+    ".agent/rules/identify-as-agent-under-shared-credentials.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C28",
+   "corroboratedBy": [
+    ".agent/rules/verify-dont-trust.md",
+    ".agent/memory/active/patterns/verify-before-propagating.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C35",
+   "corroboratedBy": [
+    ".agent/memory/active/patterns/offload-breadth-keep-verdict-and-loss-scan.md",
+    ".agent/memory/active/patterns/fan-out-verify-gatekeeper-execute.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C36",
+   "corroboratedBy": [
+    ".agent/memory/active/patterns/llm-fleet-task-design-point-and-pilot.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C41",
+   "corroboratedBy": [
+    ".agent/rules/knowledge-preservation-over-fitness-warnings.md",
+    ".agent/memory/active/patterns/substance-before-fitness.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C42",
+   "corroboratedBy": [
+    ".agent/rules/permanent-doc-is-the-consolidation-record.md",
+    ".agent/memory/active/patterns/atomic-relocation-of-shared-substrate.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C43",
+   "corroboratedBy": [
+    ".agent/rules/permanent-doc-is-the-consolidation-record.md",
+    ".agent/memory/active/patterns/offload-breadth-keep-verdict-and-loss-scan.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C44",
+   "corroboratedBy": [
+    ".agent/rules/continuity-surface-commits-as-orphans.md",
+    ".agent/memory/active/patterns/verification-method-must-answer-the-question.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C46",
+   "corroboratedBy": [
+    ".agent/rules/never-disable-checks.md",
+    ".agent/rules/no-warning-toleration.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C47",
+   "corroboratedBy": [
+    ".agent/rules/validators-must-recompute-not-just-record.md",
+    ".agent/memory/active/patterns/zero-match-false-green.md",
+    ".agent/memory/active/patterns/green-parts-red-composition.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C48",
+   "corroboratedBy": [
+    ".agent/memory/active/patterns/circular-test-justification.md",
+    ".agent/memory/active/patterns/dont-test-sdk-internals.md",
+    ".agent/memory/active/patterns/test-claim-assertion-parity.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C50",
+   "corroboratedBy": [
+    ".agent/rules/sonarqube-mcp-instructions.md",
+    ".agent/rules/never-disable-checks.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C51",
+   "corroboratedBy": [
+    ".agent/memory/active/patterns/probe-deployed-surfaces-before-planning.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C53",
+   "corroboratedBy": [
+    ".agent/rules/generator-first-mindset.md",
+    ".agent/rules/strict-validation-at-boundary.md",
+    ".agent/memory/active/patterns/multi-layer-schema-sync.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C57",
+   "corroboratedBy": [
+    ".agent/rules/respect-active-agent-claims.md",
+    ".agent/memory/active/patterns/live-claim-respect-and-self-start.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C59",
+   "corroboratedBy": [
+    ".agent/memory/active/patterns/frozen-text-false-authority.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  },
+  {
+   "candidateId": "C62",
+   "corroboratedBy": [
+    ".agent/memory/active/patterns/scope-bound-negative-existence-claims.md"
+   ],
+   "missingClaims": [],
+   "isCorroborated": true
+  }
+ ],
+ "dispositionRecompute": {
+  "total": 80,
+  "mismatches": []
+ },
+ "triage": [
+  {
+   "candidateId": "C01",
+   "disposition": "keep",
+   "kind": "recurrence",
+   "distinctWindows": 11,
+   "groundingCount": 19,
+   "path": "quorum-keep",
+   "quorumMargin": 3,
+   "minTestConfidence": "med",
+   "medianTestConfidence": "high",
+   "importance": "high",
+   "recallMatched": false,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "moderate",
+   "reviewFirstTriggers": []
+  },
+  {
+   "candidateId": "C02",
+   "disposition": "keep",
+   "kind": "trajectory",
+   "distinctWindows": 5,
+   "groundingCount": 5,
+   "path": "quorum-keep",
+   "quorumMargin": 3,
+   "minTestConfidence": "med",
+   "medianTestConfidence": "med",
+   "importance": "high",
+   "recallMatched": true,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "moderate",
+   "reviewFirstTriggers": []
+  },
+  {
+   "candidateId": "C03",
+   "disposition": "keep",
+   "kind": "recurrence",
+   "distinctWindows": 7,
+   "groundingCount": 7,
+   "path": "quorum-keep",
+   "quorumMargin": 1,
+   "minTestConfidence": "med",
+   "medianTestConfidence": "med",
+   "importance": "high",
+   "recallMatched": false,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "review-first",
+   "reviewFirstTriggers": [
+    "narrow-quorum"
+   ]
+  },
+  {
+   "candidateId": "C04",
+   "disposition": "keep",
+   "kind": "recurrence",
+   "distinctWindows": 3,
+   "groundingCount": 3,
+   "path": "quorum-keep",
+   "quorumMargin": 1,
+   "minTestConfidence": "low",
+   "medianTestConfidence": "med",
+   "importance": "med",
+   "recallMatched": false,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "review-first",
+   "reviewFirstTriggers": [
+    "narrow-quorum",
+    "low-confidence-pass"
+   ]
+  },
+  {
+   "candidateId": "C06",
+   "disposition": "reroute",
+   "kind": "recurrence",
+   "distinctWindows": 3,
+   "groundingCount": 4,
+   "path": "quorum-reroute",
+   "quorumMargin": 0,
+   "minTestConfidence": "low",
+   "medianTestConfidence": "med",
+   "importance": "high",
+   "recallMatched": false,
+   "novel": true,
+   "longitudinalSuspect": false,
+   "band": "review-first",
+   "reviewFirstTriggers": [
+    "low-confidence-pass",
+    "reroute"
+   ]
+  },
+  {
+   "candidateId": "C08",
+   "disposition": "keep",
+   "kind": "recurrence",
+   "distinctWindows": 6,
+   "groundingCount": 8,
+   "path": "quorum-keep",
+   "quorumMargin": 3,
+   "minTestConfidence": "low",
+   "medianTestConfidence": "med",
+   "importance": "high",
+   "recallMatched": true,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "review-first",
+   "reviewFirstTriggers": [
+    "low-confidence-pass"
+   ]
+  },
+  {
+   "candidateId": "C10",
+   "disposition": "keep",
+   "kind": "recurrence",
+   "distinctWindows": 5,
+   "groundingCount": 8,
+   "path": "quorum-keep",
+   "quorumMargin": 3,
+   "minTestConfidence": "med",
+   "medianTestConfidence": "med",
+   "importance": "high",
+   "recallMatched": true,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "moderate",
+   "reviewFirstTriggers": []
+  },
+  {
+   "candidateId": "C11",
+   "disposition": "keep",
+   "kind": "recurrence",
+   "distinctWindows": 6,
+   "groundingCount": 7,
+   "path": "quorum-keep",
+   "quorumMargin": 3,
+   "minTestConfidence": "med",
+   "medianTestConfidence": "med",
+   "importance": "high",
+   "recallMatched": false,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "moderate",
+   "reviewFirstTriggers": []
+  },
+  {
+   "candidateId": "C12",
+   "disposition": "keep",
+   "kind": "recurrence",
+   "distinctWindows": 5,
+   "groundingCount": 8,
+   "path": "quorum-keep",
+   "quorumMargin": 3,
+   "minTestConfidence": "med",
+   "medianTestConfidence": "high",
+   "importance": "high",
+   "recallMatched": false,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "moderate",
+   "reviewFirstTriggers": []
+  },
+  {
+   "candidateId": "C17",
+   "disposition": "keep",
+   "kind": "recurrence",
+   "distinctWindows": 5,
+   "groundingCount": 9,
+   "path": "quorum-keep",
+   "quorumMargin": 3,
+   "minTestConfidence": "med",
+   "medianTestConfidence": "med",
+   "importance": "high",
+   "recallMatched": true,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "moderate",
+   "reviewFirstTriggers": []
+  },
+  {
+   "candidateId": "C18",
+   "disposition": "keep",
+   "kind": "recurrence",
+   "distinctWindows": 5,
+   "groundingCount": 6,
+   "path": "quorum-keep",
+   "quorumMargin": 3,
+   "minTestConfidence": "low",
+   "medianTestConfidence": "med",
+   "importance": "high",
+   "recallMatched": true,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "review-first",
+   "reviewFirstTriggers": [
+    "low-confidence-pass"
+   ]
+  },
+  {
+   "candidateId": "C19",
+   "disposition": "keep",
+   "kind": "recurrence",
+   "distinctWindows": 8,
+   "groundingCount": 10,
+   "path": "quorum-keep",
+   "quorumMargin": 3,
+   "minTestConfidence": "med",
+   "medianTestConfidence": "med",
+   "importance": "high",
+   "recallMatched": false,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "moderate",
+   "reviewFirstTriggers": []
+  },
+  {
+   "candidateId": "C20",
+   "disposition": "keep",
+   "kind": "recurrence",
+   "distinctWindows": 3,
+   "groundingCount": 5,
+   "path": "quorum-keep",
+   "quorumMargin": 3,
+   "minTestConfidence": "med",
+   "medianTestConfidence": "med",
+   "importance": "high",
+   "recallMatched": false,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "moderate",
+   "reviewFirstTriggers": []
+  },
+  {
+   "candidateId": "C21",
+   "disposition": "keep",
+   "kind": "recurrence",
+   "distinctWindows": 6,
+   "groundingCount": 10,
+   "path": "quorum-keep",
+   "quorumMargin": 3,
+   "minTestConfidence": "med",
+   "medianTestConfidence": "med",
+   "importance": "high",
+   "recallMatched": false,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "moderate",
+   "reviewFirstTriggers": []
+  },
+  {
+   "candidateId": "C22",
+   "disposition": "keep",
+   "kind": "recurrence",
+   "distinctWindows": 6,
+   "groundingCount": 7,
+   "path": "quorum-keep",
+   "quorumMargin": 3,
+   "minTestConfidence": "low",
+   "medianTestConfidence": "med",
+   "importance": "high",
+   "recallMatched": false,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "review-first",
+   "reviewFirstTriggers": [
+    "low-confidence-pass"
+   ]
+  },
+  {
+   "candidateId": "C23",
+   "disposition": "keep",
+   "kind": "recurrence",
+   "distinctWindows": 2,
+   "groundingCount": 4,
+   "path": "quorum-keep",
+   "quorumMargin": 1,
+   "minTestConfidence": "low",
+   "medianTestConfidence": "med",
+   "importance": "high",
+   "recallMatched": false,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "review-first",
+   "reviewFirstTriggers": [
+    "narrow-quorum",
+    "low-confidence-pass"
+   ]
+  },
+  {
+   "candidateId": "C24",
+   "disposition": "keep",
+   "kind": "trajectory",
+   "distinctWindows": 3,
+   "groundingCount": 7,
+   "path": "quorum-keep",
+   "quorumMargin": 1,
+   "minTestConfidence": "low",
+   "medianTestConfidence": "med",
+   "importance": "med",
+   "recallMatched": true,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "review-first",
+   "reviewFirstTriggers": [
+    "narrow-quorum",
+    "low-confidence-pass"
+   ]
+  },
+  {
+   "candidateId": "C25",
+   "disposition": "keep",
+   "kind": "trajectory",
+   "distinctWindows": 6,
+   "groundingCount": 7,
+   "path": "quorum-keep",
+   "quorumMargin": 1,
+   "minTestConfidence": "low",
+   "medianTestConfidence": "med",
+   "importance": "high",
+   "recallMatched": false,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "review-first",
+   "reviewFirstTriggers": [
+    "narrow-quorum",
+    "low-confidence-pass"
+   ]
+  },
+  {
+   "candidateId": "C26",
+   "disposition": "keep",
+   "kind": "behavioural",
+   "distinctWindows": 3,
+   "groundingCount": 4,
+   "path": "quorum-keep",
+   "quorumMargin": 3,
+   "minTestConfidence": "low",
+   "medianTestConfidence": "med",
+   "importance": "high",
+   "recallMatched": false,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "review-first",
+   "reviewFirstTriggers": [
+    "low-confidence-pass"
+   ]
+  },
+  {
+   "candidateId": "C28",
+   "disposition": "keep",
+   "kind": "recurrence",
+   "distinctWindows": 8,
+   "groundingCount": 11,
+   "path": "quorum-keep",
+   "quorumMargin": 3,
+   "minTestConfidence": "med",
+   "medianTestConfidence": "med",
+   "importance": "high",
+   "recallMatched": false,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "moderate",
+   "reviewFirstTriggers": []
+  },
+  {
+   "candidateId": "C35",
+   "disposition": "keep",
+   "kind": "recurrence",
+   "distinctWindows": 3,
+   "groundingCount": 4,
+   "path": "quorum-keep",
+   "quorumMargin": 3,
+   "minTestConfidence": "med",
+   "medianTestConfidence": "med",
+   "importance": "high",
+   "recallMatched": false,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "moderate",
+   "reviewFirstTriggers": []
+  },
+  {
+   "candidateId": "C36",
+   "disposition": "keep",
+   "kind": "recurrence",
+   "distinctWindows": 2,
+   "groundingCount": 4,
+   "path": "quorum-keep",
+   "quorumMargin": 3,
+   "minTestConfidence": "med",
+   "medianTestConfidence": "med",
+   "importance": "high",
+   "recallMatched": false,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "moderate",
+   "reviewFirstTriggers": []
+  },
+  {
+   "candidateId": "C41",
+   "disposition": "keep",
+   "kind": "trajectory",
+   "distinctWindows": 7,
+   "groundingCount": 10,
+   "path": "quorum-keep",
+   "quorumMargin": 3,
+   "minTestConfidence": "low",
+   "medianTestConfidence": "med",
+   "importance": "high",
+   "recallMatched": false,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "review-first",
+   "reviewFirstTriggers": [
+    "low-confidence-pass"
+   ]
+  },
+  {
+   "candidateId": "C42",
+   "disposition": "keep",
+   "kind": "trajectory",
+   "distinctWindows": 4,
+   "groundingCount": 5,
+   "path": "quorum-keep",
+   "quorumMargin": 1,
+   "minTestConfidence": "med",
+   "medianTestConfidence": "med",
+   "importance": "high",
+   "recallMatched": false,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "review-first",
+   "reviewFirstTriggers": [
+    "narrow-quorum"
+   ]
+  },
+  {
+   "candidateId": "C43",
+   "disposition": "keep",
+   "kind": "recurrence",
+   "distinctWindows": 5,
+   "groundingCount": 9,
+   "path": "quorum-keep",
+   "quorumMargin": 3,
+   "minTestConfidence": "med",
+   "medianTestConfidence": "med",
+   "importance": "high",
+   "recallMatched": false,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "moderate",
+   "reviewFirstTriggers": []
+  },
+  {
+   "candidateId": "C44",
+   "disposition": "keep",
+   "kind": "recurrence",
+   "distinctWindows": 4,
+   "groundingCount": 6,
+   "path": "quorum-keep",
+   "quorumMargin": 3,
+   "minTestConfidence": "med",
+   "medianTestConfidence": "med",
+   "importance": "high",
+   "recallMatched": true,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "moderate",
+   "reviewFirstTriggers": []
+  },
+  {
+   "candidateId": "C46",
+   "disposition": "keep",
+   "kind": "trajectory",
+   "distinctWindows": 6,
+   "groundingCount": 8,
+   "path": "quorum-keep",
+   "quorumMargin": 1,
+   "minTestConfidence": "low",
+   "medianTestConfidence": "med",
+   "importance": "med",
+   "recallMatched": false,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "review-first",
+   "reviewFirstTriggers": [
+    "narrow-quorum",
+    "low-confidence-pass"
+   ]
+  },
+  {
+   "candidateId": "C47",
+   "disposition": "keep",
+   "kind": "recurrence",
+   "distinctWindows": 6,
+   "groundingCount": 8,
+   "path": "quorum-keep",
+   "quorumMargin": 1,
+   "minTestConfidence": "med",
+   "medianTestConfidence": "med",
+   "importance": "high",
+   "recallMatched": false,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "review-first",
+   "reviewFirstTriggers": [
+    "narrow-quorum"
+   ]
+  },
+  {
+   "candidateId": "C48",
+   "disposition": "keep",
+   "kind": "recurrence",
+   "distinctWindows": 6,
+   "groundingCount": 10,
+   "path": "quorum-keep",
+   "quorumMargin": 1,
+   "minTestConfidence": "low",
+   "medianTestConfidence": "med",
+   "importance": "high",
+   "recallMatched": false,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "review-first",
+   "reviewFirstTriggers": [
+    "narrow-quorum",
+    "low-confidence-pass"
+   ]
+  },
+  {
+   "candidateId": "C50",
+   "disposition": "keep",
+   "kind": "recurrence",
+   "distinctWindows": 4,
+   "groundingCount": 6,
+   "path": "quorum-keep",
+   "quorumMargin": 3,
+   "minTestConfidence": "low",
+   "medianTestConfidence": "med",
+   "importance": "high",
+   "recallMatched": false,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "review-first",
+   "reviewFirstTriggers": [
+    "low-confidence-pass"
+   ]
+  },
+  {
+   "candidateId": "C51",
+   "disposition": "keep",
+   "kind": "recurrence",
+   "distinctWindows": 6,
+   "groundingCount": 7,
+   "path": "quorum-keep",
+   "quorumMargin": 1,
+   "minTestConfidence": "low",
+   "medianTestConfidence": "med",
+   "importance": "high",
+   "recallMatched": false,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "review-first",
+   "reviewFirstTriggers": [
+    "narrow-quorum",
+    "low-confidence-pass"
+   ]
+  },
+  {
+   "candidateId": "C53",
+   "disposition": "keep",
+   "kind": "recurrence",
+   "distinctWindows": 3,
+   "groundingCount": 5,
+   "path": "quorum-keep",
+   "quorumMargin": 1,
+   "minTestConfidence": "low",
+   "medianTestConfidence": "med",
+   "importance": "high",
+   "recallMatched": false,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "review-first",
+   "reviewFirstTriggers": [
+    "narrow-quorum",
+    "low-confidence-pass"
+   ]
+  },
+  {
+   "candidateId": "C55",
+   "disposition": "keep",
+   "kind": "recurrence",
+   "distinctWindows": 5,
+   "groundingCount": 6,
+   "path": "quorum-keep",
+   "quorumMargin": 1,
+   "minTestConfidence": "low",
+   "medianTestConfidence": "med",
+   "importance": "high",
+   "recallMatched": true,
+   "novel": true,
+   "longitudinalSuspect": false,
+   "band": "review-first",
+   "reviewFirstTriggers": [
+    "narrow-quorum",
+    "low-confidence-pass"
+   ]
+  },
+  {
+   "candidateId": "C57",
+   "disposition": "keep",
+   "kind": "recurrence",
+   "distinctWindows": 4,
+   "groundingCount": 5,
+   "path": "quorum-keep",
+   "quorumMargin": 3,
+   "minTestConfidence": "low",
+   "medianTestConfidence": "med",
+   "importance": "high",
+   "recallMatched": true,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "review-first",
+   "reviewFirstTriggers": [
+    "low-confidence-pass"
+   ]
+  },
+  {
+   "candidateId": "C59",
+   "disposition": "keep",
+   "kind": "recurrence",
+   "distinctWindows": 3,
+   "groundingCount": 6,
+   "path": "quorum-keep",
+   "quorumMargin": 3,
+   "minTestConfidence": "med",
+   "medianTestConfidence": "med",
+   "importance": "high",
+   "recallMatched": true,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "moderate",
+   "reviewFirstTriggers": []
+  },
+  {
+   "candidateId": "C62",
+   "disposition": "keep",
+   "kind": "recurrence",
+   "distinctWindows": 4,
+   "groundingCount": 4,
+   "path": "quorum-keep",
+   "quorumMargin": 1,
+   "minTestConfidence": "med",
+   "medianTestConfidence": "med",
+   "importance": "high",
+   "recallMatched": false,
+   "novel": false,
+   "longitudinalSuspect": false,
+   "band": "review-first",
+   "reviewFirstTriggers": [
+    "narrow-quorum"
+   ]
+  }
+ ]
+}

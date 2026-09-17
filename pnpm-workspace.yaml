@@ -16,8 +16,14 @@ packages:
   - packages/core/result
   - packages/core/safe-path
   - packages/core/type-helpers
+  - packages/core/workspace-config
   - packages/design/*
+  # Identity-pack tier: data-only identity workspaces (no scripts; shape
+  # checked by oak-eslint's validate-boundaries tier leg). See
+  # packages/design/identities/README.md.
+  - packages/design/identities/*
   - packages/libs/env-resolution
+  - packages/libs/fidelity-review
   - packages/libs/graph-ingest
   - packages/libs/graph-project
   - packages/libs/logger
@@ -28,22 +34,24 @@ packages:
   - packages/sdks/oak-curriculum-sdk
   - packages/sdks/oak-sdk-codegen
   - packages/sdks/oak-search-sdk
-  # Research record imported (content only, no git history) from the private
-  # web-app-deconstruction repo (ADR-215). Only its evidence package is a
-  # workspace member, so OCE's turbo type-check/lint/test gate its TypeScript;
-  # the record root keeps its original standalone harness and is not itself
-  # registered (its package.json wraps a nested turbo).
-  - research/web-app-deconstruction/packages/research-evidence
-
-# Supply-chain hardening: refuse to install any package version younger than 24h
-# (1440 min), so a freshly-published compromised release ages — giving the
-# ecosystem time to detect and yank it — before it can enter the tree. pnpm's
-# default is 0 (no floor); this line introduces the floor. Setting the key
-# explicitly also auto-enables minimumReleaseAgeStrict, so a too-young version is
-# refused (or prompts on an interactive TTY), not silently downgraded. Applies to
-# all (incl. transitive) deps at resolution time; frozen-lockfile installs (CI)
-# are unaffected. Allow-list a genuinely-needed young package via
-# minimumReleaseAgeExclude.
+# Supply-chain hardening: exclude any package version younger than 24h
+# (1440 min) from resolution, so a freshly-published compromised release ages —
+# giving the ecosystem time to detect and yank it — before it can enter the
+# tree. pnpm's default is 0 (no floor); this line introduces the floor.
+# Mechanism, verified first-hand 2026-08-11 on pnpm 11.20 — two outcomes:
+# when the requested range admits an older mature version, the resolver
+# SILENTLY picks the newest version older than the floor (exit 0, no
+# warning, no prompt) — a just-published release simply stays out of
+# resolution until it ages past the floor. The exclusion is INVISIBLE to
+# `pnpm outdated` too: its "latest" is computed under the same floor, so
+# age-floored rows read current — surface them from publish-date reads
+# (`pnpm view <pkg> time`), never from outdated's silence. When NOTHING
+# mature satisfies the request (an exact pin to a too-young version),
+# pnpm instead refuses loudly with ERR_PNPM_NO_MATURE_MATCHING_VERSION,
+# naming each too-young package.
+# Applies to all (incl. transitive) deps at resolution time; frozen-lockfile
+# installs (CI) are unaffected. Allow-list a genuinely-needed young package
+# via minimumReleaseAgeExclude.
 minimumReleaseAge: 1440
 
 allowBuilds:
@@ -60,6 +68,31 @@ peerDependencyRules:
     eslint-plugin-react>eslint: '10'
     eslint-plugin-react-hooks>eslint: '10'
 overrides:
+  # Security floor, added 2026-08-11 (MCP-549 wave): three HIGH undici
+  # WebSocket-client advisories — invalid server_max_window_bits unhandled
+  # exception and permessage-deflate unbounded memory (both patched in
+  # 6.24.0), fragment-count DoS (patched in 6.27.0) — with NO patched 5.x
+  # release. The @ai-sdk provider fleet reaches undici ^5.29.0 through
+  # @ai-sdk/provider-utils 3.x/4.x under @mcpjam/sdk (dev-only MCP
+  # debugging instrument; the resolution entered with @mcpjam/cli 3.19.0
+  # in this wave). Demonstrated necessity: no version move escapes —
+  # cli 3.15.2→3.20.0 and sdk 2.3.0→3.0.0 all pin the provider fleet on
+  # provider-utils 3.x, and provider-utils 3.0.31 AND 4.0.42 both declare
+  # undici ^5.29.0 (provider-utils 5.x rides undici ^7.28.0, but the
+  # fleet declares ^3 and does not admit it). Parent-scoped so ONLY the
+  # provider-utils consumers cross to 6.x — the @actions and @elastic
+  # chains keep their own already-patched lines — and bounded <7 at the
+  # nearest patched major. The cross beyond the declared ^5 is verified
+  # by booting the mcpjam instrument on the new resolution (MCP-381
+  # prior art: a forced version in this chain broke that boot). Remove
+  # when the @ai-sdk provider fleet reaches provider-utils >=5.
+  # Parent-qualified per consumed line (provider-utils 3.x and 4.x both
+  # declare undici ^5.29.0): an unqualified parent selector would bind
+  # EVERY provider-utils generation — including a future v5, whose
+  # patched undici ^7.28.0 the <7 bound would force DOWN to 6.x
+  # mid-transition. Qualified floors leave a v5 arrival untouched.
+  '@ai-sdk/provider-utils@3>undici': '>=6.27.0 <7'
+  '@ai-sdk/provider-utils@4>undici': '>=6.27.0 <7'
   # Pin @types/node to the Node 24 LTS line across the whole tree, including
   # transitive peers (vite/vitest pull @types/node@26 as an optional peer).
   # Matches engines.node 24.x and keeps every workspace — including those that
@@ -68,57 +101,107 @@ overrides:
   # (docs/engineering/build-system.md §Dependency updates).
   '@types/node': '^24.13.3'
   axios: '>=1.15.1'
-  # Security floor, raised 2026-07-25: DoS via unbounded expansion length
-  # causing an out-of-memory abort (high; patched in 5.0.8). Advisory was
-  # published while this sweep was in flight — the 5.0.5 floor already here was
-  # for an earlier finding. Reaches the tree through glob/minimatch tooling
-  # chains; no production reachability established, patched because the fix is
-  # a one-line floor. Left unbounded: 5.x is the current line.
-  brace-expansion: '>=5.0.8'
+  # Security floor, raised 2026-07-25 and again 2026-08-11 (MCP-549).
+  # Originally 5.0.5 for an earlier finding; then 5.0.8 for a DoS via
+  # unbounded expansion length (out-of-memory abort, high); now 5.0.9 for
+  # the quadratic-expansion advisory — the whole tree already resolves 5.x
+  # under this floor, so no major cross occurs. Reaches the tree through
+  # glob/minimatch tooling chains; no production reachability established.
+  # Bounded below 6 pre-emptively (no 6.x published at 2026-08-11): an
+  # open floor admits the next major the day it ships, so the bound is
+  # structural rather than conditional on watching the registry.
+  # Remove when every dependent's declared floor reaches >=5.0.9.
+  brace-expansion: '>=5.0.9 <6'
   csstype: '>=3.2.3'
-  esbuild: '>=0.28.1'
+  # Floor kept aligned with the manifests' esbuild ranges (^0.28.2 as of
+  # 2026-08-11, per lockfile-rebuild-survivability §override-alignment).
+  # Bounded to the 0.28 line: esbuild is 0.x (minors are breaking lines)
+  # and the override REWRITES the direct dependents' recorded ranges, so
+  # an open floor would discard the manifests' caret bound and admit
+  # 0.29/1.x on rebuild unreviewed. Move floor and bound together with
+  # the manifests at the next esbuild raise.
+  esbuild: '>=0.28.2 <0.29'
   # Security floor: host confusion via a literal backslash in fast-uri's URI
-  # parser (high; patched in 3.1.4). Reaches the tree only through SDK and dev
-  # tooling chains. Bounded below 4 deliberately — 4.x is published, and an
-  # open floor would silently adopt a major nobody asked for. Raise the bound
-  # when a consumer actually needs fast-uri 4.
-  fast-uri: '>=3.1.4 <4'
+  # parser (high; patched in 3.1.4); a second host-confusion advisory via a
+  # backslash authority introducer patched in 3.1.5 (raised 2026-08-11,
+  # MCP-549). PRODUCTION-REACHABLE: @modelcontextprotocol/sdk declares ajv,
+  # and ajv declares fast-uri, so the chain reaches the shipped MCP app —
+  # dev tooling chains (eslint/stryker/codegen) reach it too. Bounded below
+  # 4 deliberately — 4.x is published, and an open floor would silently
+  # adopt a major nobody asked for. Raise the bound when a consumer actually
+  # needs fast-uri 4. Remove when ajv's declared fast-uri floor is >=3.1.5.
+  fast-uri: '>=3.1.5 <4'
   file-type: '>=21.3.2'
   follow-redirects: '>=1.15.12'
-  hono: '>=4.12.25'
+  # Security floor, raised 2026-08-11 (MCP-549): three advisories patched in
+  # 4.12.34 — memo() cross-user SSR retention, language-middleware DoS, CORS
+  # ReDoS. PRODUCTION-REACHABLE: @modelcontextprotocol/sdk declares hono
+  # ^4.11.4 as a real dependency and the shipped MCP app declares that SDK;
+  # @clerk/mcp-tools consumes it too. Bounded below 5 deliberately: this
+  # override REWRITES dependents' recorded ranges in the lockfile (including
+  # @hono/node-server's hono peer range), so an open floor would adopt a
+  # future hono 5 unreviewed AND silence the peer conflict that should block
+  # it. Raise the bound when @modelcontextprotocol/sdk admits hono 5. Remove
+  # when the SDK's and @clerk/mcp-tools' declared hono floors are >=4.12.34.
+  hono: '>=4.12.34 <5'
   # Security floor: unauthenticated memory-leak DoS in the Hono Node adapter
   # (patched in 2.0.10). PRODUCTION-REACHABLE, unlike most entries here:
   # @modelcontextprotocol/sdk's StreamableHTTPServerTransport imports
   # getRequestListener from this package and constructs one per request, so it
   # sits on the hot path of every /mcp call even though no repo source imports
   # Hono. Bounded below 3 deliberately — the previous open '>=1.19.10' floor is
-  # why 2.x was adopted at all (the SDK asks only for ^1.19.9), and the bound
-  # stops the next major arriving unreviewed. Raise it when the SDK does.
+  # why 2.x was adopted at all (the SDK asked only for ^1.19.9 then; as of SDK
+  # 1.30.0 it declares ^1.19.9 || ^2.0.5), and the bound stops the next major
+  # arriving unreviewed. Raise the bound when the SDK admits a newer major.
   '@hono/node-server': '>=2.0.10 <3'
+  # Security floor, added 2026-08-11 (MCP-549): leading-zero octet decode →
+  # SSRF/trust-boundary bypass (high; patched in 10.3.1), plus two moderate
+  # special-use misclassification advisories (patched by 10.2.2).
+  # Production dependency; runtime reachability unestablished — the SDK
+  # imports express-rate-limit only in its OAuth auth handlers, which this
+  # app bypasses (Clerk OAuth proxy), and volumetric control sits at the
+  # edge (ADR-219). express-rate-limit declares ip-address
+  # ^10.2.0. The range admits the patch, but the lockfile is derived
+  # (lockfile-rebuild-survivability): a good version recorded there is not a
+  # constraint, so the CVE floor earns the override. Bounded below 11
+  # pre-emptively (no 11.x published at 2026-08-11) — an open floor
+  # admits the next major the day it ships. Drop the floor when
+  # express-rate-limit's own declared floor exceeds 10.3.1.
+  ip-address: '>=10.3.1 <11'
   'js-cookie': '>=3.0.7'
-  js-yaml: '>=4.1.1 <5.0.0'
+  # Security floor, raised 2026-08-11 (MCP-549): quadratic CPU consumption in
+  # !!omap resolution (high; CVE-2026-59870; patched in 4.3.1). Dev/tooling
+  # chains only (openapi-zod-client-adapter and siblings). Bounded below 5 —
+  # 5.x is published, and an open floor would adopt it unreviewed. Raise the
+  # bound when a consumer actually needs js-yaml 5. Remove when every
+  # dependent's declared floor reaches >=4.3.1.
+  js-yaml: '>=4.3.1 <5'
   # Security floor: quadratic-complexity ReDoS via the mailto: matcher in
   # linkify-it (high; patched in 5.0.2). Arrives transitively through markdown
   # tooling. Bounded below 6 for the same reason as fast-uri: 6.x exists and an
   # open floor would take it. Raise the bound when markdown-it moves.
   linkify-it: '>=5.0.2 <6'
   markdown-it: '>=14.1.2'
+  # Security floor, added 2026-08-11 (MCP-549): infinite loop on a zero-size
+  # generator (high; patched in 3.3.17 on the 3.x line). Reached via postcss
+  # chains, direct and transitive — a direct postcss bump left transitive
+  # postcss nodes carrying the vulnerable pin, so the floor is the tree-wide
+  # mover. Bounded below 4 deliberately: consumers declare ^3.x, and an
+  # unbounded floor would coerce them onto nanoid's ESM-only later majors.
+  # Remove when postcss's declared nanoid floor is >=3.3.17.
+  nanoid: '>=3.3.17 <4'
   picomatch: '>=4.0.4'
   # Security floor, raised 2026-07-25. Originally for next's nested postcss
   # 8.4.31 (GHSA-qx2v-qp2m-jg93, XSS via unescaped </style> in stringify
   # output; patched in 8.5.10); now also covers path traversal in previous
   # source-map auto-loading (high; patched in 8.5.18). Build-time surface only.
-  # Left unbounded: 8.x is the current line, so there is no major to guard
-  # against yet — add a bound if 9.x ships.
-  postcss: '>=8.5.18'
+  # Bounded below 9 pre-emptively (no 9.x published at 2026-08-11) — an
+  # open floor admits the next major the day it ships. Raised 2026-08-11 to 8.5.26 to
+  # keep the override aligned with the three direct manifests' ^8.5.26
+  # (lockfile-rebuild-survivability §override-alignment) — no new postcss
+  # advisory at this raise. Remove when next's nested postcss floor and the
+  # direct manifests all clear the newest patched line.
+  postcss: '>=8.5.26 <9'
   qs: '>=6.15.2'
   rollup: '>=4.59.0'
-  # Security floor: sharp inherits libvips CVEs below 0.35.0 (high;
-  # CVE-2026-33327 and siblings). Reached only through Next's image
-  # optimiser, and next caps optionalDependencies.sharp at ^0.34.5 through
-  # 16.2.11, so this floor deliberately exceeds the range Next itself tests
-  # against — the image path is exercised on the bump to prove it. sharp is
-  # 0.x, so a future 0.36 is a breaking line: re-verify the image path when
-  # it arrives. Drop this floor once next's own range admits >=0.35.
-  sharp: '>=0.35.0'
   sucrase: '>=3.35.1'

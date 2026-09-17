@@ -100,11 +100,21 @@ packages/sdks/oak-sdk-codegen/reference/*.json
 .agent/reference-local/**/*
 !.agent/reference-local/.gitignore
 
+# Operator profile: machine-local facts about the human at this checkout —
+# identity/credential bindings, tone of voice, personal operating preferences.
+# Absence is the expected condition on any other machine; nothing may depend on
+# it. The two stubs are tracked and declare the contract.
+# See .agent/operator-local/README.md
+.agent/operator-local/**/*
+!.agent/operator-local/.gitignore
+!.agent/operator-local/README.md
+
 # Logs
 *.log
 .logs/*
 !.logs/.gitignore
 logs/
+*.har
 # Operational diagnostic traces (see
 # .agent/memory/operational/diagnostics/README.md) — tracked so
 # patterns are visible across sessions and machines.
@@ -298,6 +308,11 @@ packages/sdks/oak-sdk-codegen/code-generation/utils/ingest-pipeline.md
 demos/oak-curriculum-hub/claude-design-canonical-export/
 demos/oak-curriculum-hub/demo-evidence/
 
+# Design-showcase fidelity evidence is likewise regenerable tool output
+# (demos/oak-design-showcase/tools/fidelity-review.ts recreates it on demand);
+# mirrored here for the same root-level-tools reason as the hub block above.
+demos/oak-design-showcase/demo-evidence/
+
 # Unsealed audit canary keys: NEVER in git history (standing owner constraint,
 # 2026-07-16). Mechanical enforcement added after PR #404, whose commit
 # 5612ae244 DID put the two s2 keys into reachable PR history (the PR closed
@@ -339,3 +354,4 @@ packages/design/oak-design-system/.sync-staging/
 # in packages/design/oak-design-system — un-tracked 2026-07-28, MCP-333, with
 # the bytes preserved in the branch history that merged via PR #569)
 packages/design/oak-open-curriculum-design-system-tna-24072026-1141/
+.env*

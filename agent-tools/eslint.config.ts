@@ -39,6 +39,29 @@ const config = defineConfigArray(
     },
   },
   {
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: [
+      'src/**/*.test.{ts,tsx}',
+      'src/**/*.spec.{ts,tsx}',
+      'src/**/__tests__/**/*.{ts,tsx}',
+      'src/typescript-estate/file-classification.ts',
+    ],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['**/file-classification-engine.js'],
+              message:
+                'The prepared classification engine is restricted to its validated facade and colocated tests.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     files: ['eslint.config.ts', 'vitest.config.ts'],
     languageOptions: {
       parserOptions: {

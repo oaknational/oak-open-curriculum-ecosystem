@@ -286,3 +286,78 @@ copies"* — settle it as:
   environment vs app config) and its auditability; the run-token read
   verification; ADR-204's prose-vs-live divergences (route to owner as a
   QUESTION — the strict-policy setting may be deliberate, not drift).
+
+## Execution plan (imported 2026-08-04 from the owner-approved native plan)
+
+Imported at the owner's word from `~/.claude/plans/unified-wondering-popcorn.md`
+(now marked superseded there); this node is the durable home. Decisions below
+were taken with evidence in that plan; D7 has since been superseded (see
+§Tier-2 shape superseded above).
+
+### Decisions (D1–D10)
+
+| # | Decision |
+|---|---|
+| D1 | zod is the schema; no JSON Schema file. `agent-tools/src/quality-gate-ledger/ledger-schema.ts`, types via `z.infer`, parsed through the existing `parseWithSchema`. The one surface using a separate JSON Schema file (collaboration-state) carries three representations of one shape and flags the drift as an open gap — a defect not to reproduce. |
+| D2 | The derived half is generated, committed, and byte-compared — reusing the `under-the-hood-content-generate` generator shape (`renderFromRepo` + `GeneratorFileIo` + bytewise compare), already wired as a `repo-validators:check` leg. |
+| D3 | Two files: `.agent/quality-gates/gates.authored.yaml` (hand-edited judgement) and `.agent/quality-gates/gates.derived.json` (generated, committed, so gate appearance/disappearance shows in PR diffs). |
+| D4 | Reachability is graph reachability from a blocking surface, recomputed over root + workspace `package.json` scripts (recursing through `&&` chains and aggregates), `turbo.json` tasks, `.husky/*`, ALL `.github/workflows/*.yml`, and vitest include/exclude globs. Fixes the parity guard's aggregate blind spot and its `ci.yml` hard-pin. |
+| D5 | Bidirectional failure: derived drift fails; a derived gate with no authored entry fails; an authored entry matching no derived gate fails. |
+| D6 | `scope:` is a top-level authored key and the final PR deletes it — with the schema amended to FORBID it, so the scaffolding cannot return. |
+| D7 | **SUPERSEDED** (2026-08-04, owner-directed discussion): the original `verified_at`/`verify_within` tier-2 shape is replaced by the no-stored-observation reconciler design recorded in §Tier-2 shape superseded. |
+| D8 | `validate-check-ci-parity` is retired, not kept; its structural-equivalence exception becomes an authored ledger field. Parity becomes a derived property of D4's graph. |
+| D9 | ADR-121's matrix becomes a generated block between sentinel comments; the rest of ADR-121 (surface definitions, design principles) survives as authored judgement. |
+| D10 | The architecture decision lands as ADR-224 (222 highest on main at authoring; 223 reserved by PR #745). |
+
+### Record corrections carried
+
+- MCP-498: DISCHARGED — root-caused 2026-08-04 (PNPM_HOME store rebinding;
+  CI=true ruled a bypass) and rewritten; the ticket carries the record.
+- D14 precision: 22 test files sit under script directories; 21 are matched by
+  some glob and exactly one was orphaned (the Vercel guard suite, since moved
+  and running via PR #751's branch).
+- D15: `.agent/skills/gates/SKILL-CANONICAL.md` hand-lists a check sequence
+  already drifted from the live scripts. D16: `docs/engineering/workflow.md`
+  points at a build-system quick-reference table that does not exist and names
+  retired smoke tests. Both are hand-maintained duplicates for step 6's
+  disposition pass.
+
+### Phase 1 slicing (steps 3–6, six single-story PRs)
+
+1. **PR-1 — ADR-224** (step 3): artefact, derived/authored split, recompute
+   contract, tier model, supersession of ADR-121's matrix. The ADR index has no
+   validator — a phase-2 candidate finding.
+2. **PR-2 — schema, generator, checker + the pre-commit scope** (step 4):
+   `agent-tools/src/quality-gate-ledger/`, wired as a `repo-validators:check`
+   leg; `scope: [pre-commit]` with authored entries complete for that surface.
+3. **PR-3 — widen to pre-push.**
+4. **PR-4 — widen to CI (all workflows); retire `validate-check-ci-parity`.**
+   The PR where CodeQL first becomes register-visible.
+5. **PR-5 — widen to turbo-buried gates + test-file reachability + tier 2**
+   (per the superseded-D7 replacement design).
+6. **PR-6 — remove the scaffolding** (step 6): delete `scope:`, schema forbids
+   it, ADR-121 matrix becomes generated, all sixteen disagreement dispositions
+   land. The phase-1 finish line.
+
+### Phases 2–3 (separate nodes, blocking on phase 1)
+
+- Phase 2: `quality-gate-defect-cures.plan.md` — cure what the register
+  exposes (false-green `skills:check`, fourteen wired-to-nothing gates,
+  `practice:vocabulary` run by nothing, three non-blocking gates inside
+  blocking surfaces). Needs a ticket at creation.
+- Phase 3: `gate-feedback-contract.plan.md` (MCP-492) — every gate we author
+  names the exact failure and cure at instance scale; the register's
+  `output_quality` field selects the emitters to fix.
+
+### Verification and falsifiers
+
+Red-first unit tests on the pure helpers (no-entry gate fails; orphaned entry
+fails; schema violation fails; derived drift fails); the register's own
+validator has an entry (self-test); regeneration is byte-identical
+(conservation); hand-breaking one `repo-validators` leaf fails the register
+where the retired parity guard reported OK (the strictly-stronger proof);
+ADR-121 regeneration byte-for-byte. Owner-held: the sixteen dispositions read
+and confirmed; one worked failure routing a reader into the register.
+Falsifiers: unresolvable reachability → a narrower register that says so;
+no failure ever routing a reader in → drop to a bare register; authored half
+restating the derived half → derived-only plus a cure-pointer field.

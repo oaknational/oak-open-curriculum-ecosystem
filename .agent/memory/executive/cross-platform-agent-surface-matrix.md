@@ -144,6 +144,15 @@ a **named landing owed**, authored at the first liveness question that
 platform raises or at a dated backfill. No platform has a complete
 declaration set yet. Dated observations already on record:
 
+- **Slack Watcher organ (Slack channel + cloud-harness reminder
+  substrate) — full 14-class declaration, 2026-08-24**: recorded
+  skill-locally for operational reading in
+  [`slack-watcher` §6](../../skills/slack-watcher/SKILL-CANONICAL.md#6-liveness-classes--the-pdr-133-declaration-for-this-substrate)
+  (this ledger points, never restates). Headline rows: `NOTIFY`
+  cannot-certify (no dated externally observed wake on record; a
+  self-bind reminder records no run history), proxy = the tenure
+  status message's staleness; `EMIT` = that status message edited
+  every tick. Authored by the 2026-08-24 Watcher estate review.
 - **GitHub Copilot CLI 1.0.75 — `NOTIFY`: cannot-certify** (observed
   first-hand 2026-07-25 by the Copilot seat, surfaced externally by the
   owner; PDR-133's founding instance). The detached-bash primitive wakes the
@@ -282,6 +291,10 @@ Failure semantics:
   `pnpm portability:check`, rather than frozen counts here, are authoritative.
 - Antigravity plugins can bundle skills, agents, rules, MCP definitions, and
   hooks, but plugin bundle support is not the same as repo-local wiring.
+- User-facing plugin packages under `plugins/` (Claude Code, and ChatGPT/Codex
+  via the root `.agents/plugins/marketplace.json`) are product deliverables,
+  not adapter families; ADR-125 §Skill classes and validation jurisdiction and
+  the ChatGPT/Codex package README govern them (2026-09-08).
 - Tracked project platform config is part of the agentic system contract;
   local overrides are additive where the platform supports them.
 - Unsupported states are written down explicitly rather than inferred

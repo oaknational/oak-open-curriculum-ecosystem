@@ -57,9 +57,15 @@ Restricting origins therefore adds configuration surface without any security be
 ### Origin/Host validation is scoped to where it adds security
 
 A hostile website can drive a browser to reach a private MCP server, so
-Origin/Host validation matters on surfaces that have no other boundary: the
-unauthenticated landing page and Host-sensitive metadata derivation, where the
-standalone DNS-rebinding middleware applies it. The authenticated `/mcp`
+Origin/Host validation matters on surfaces that have no other boundary.
+
+**Amendment 2026-09-10.** The two surfaces that carried the standalone
+DNS-rebinding middleware were the unauthenticated landing page and the `/mcp`
+HTML-negotiation leg, and both were removed on 2026-08-20 when this app stopped
+serving HTML. The middleware is retained and tested but **mounted on no route**;
+MCP-650 owns remounting it on `POST /mcp`. Until then the only Host controls are
+the Cloudflare and Vercel edges. Host-sensitive metadata derivation is still
+bounded by the allow-list, and by `CANONICAL_HOST` where it is set. The authenticated `/mcp`
 endpoint is Host-validated in the auth layer (a disallowed Host is rejected with
 `403` before authentication) and bounded by the Bearer token, which a
 cross-origin browser cannot attach or replay (see "CORS adds no security for

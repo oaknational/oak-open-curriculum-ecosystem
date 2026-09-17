@@ -77,7 +77,7 @@ const BaseEnvSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.shape)
      *
      * Set when an edge serves the app at a canonical address and presents a
      * different Host to the origin (MCP-172: Cloudflare serves
-     * `www.thenational.academy/mcp` with the Host overridden to the app's own
+     * `mcp.thenational.academy/mcp` with the Host overridden to the app's own
      * Vercel hostname). Every self-description surface then names
      * `https://<CANONICAL_HOST>`; absent, the app self-describes per request
      * as before.
@@ -142,7 +142,9 @@ function refineProductionSafety(data: ProductionSafetyData, ctx: z.RefinementCtx
   // run may use the valve. `isDeployedEnvironment` also catches a Vercel
   // deploy that lost VERCEL_ENV, so the valve cannot be smuggled onto a
   // deployment by dropping that one variable. This makes misconfiguration a
-  // hard startup failure rather than a silent bypass.
+  // hard startup failure rather than a silent bypass. The classification is
+  // shared with `refineClerkKeyLocality` and `refineCanonicalHostRequired`
+  // (via `isDeployedProduction`) so it cannot drift between guards.
   if (data.DANGEROUSLY_DISABLE_AUTH === 'true' && isDeployedEnvironment(data)) {
     ctx.addIssue({
       code: 'custom',

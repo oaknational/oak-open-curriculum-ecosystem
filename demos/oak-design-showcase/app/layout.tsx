@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   title: 'Design showcase — Oak Open Curriculum Design System',
   description:
     'Live one-page showcase of the Oak Open Curriculum Design System: tokens, components, identity and theme switching.',
+  // The fidelity tool's app-identity sentinel (a capture must prove the
+  // answering server IS this app, never a port-squatting neighbour).
+  other: { 'oak-app': 'oak-design-showcase' },
 };
 
 // The design system's theme/motion state owner, inlined pre-paint (kit docs

@@ -215,6 +215,89 @@ the sentence, observable to you as you write and to a reader as they read. Gate
 on the artefact the fluent claim omits, not on the feeling you hoped to notice.
 The smoother and more convenient the claim, the harder the citation is owed.
 
+## Name the Instrument
+
+The sibling of *Citation or Silence* one step over: that section gates a claim
+about **current state** on a source you read; this one gates a claim about **how
+something works, how big it is, or how bad it is** on the instrument that
+measured it.
+
+> Before a claim about a mechanism, a size, or a severity reaches a durable
+> surface or a colleague, **name the instrument that proved it.** If the answer
+> is "reasoning", it is not proven yet.
+
+Four points, each paid for in this estate:
+
+- **"I ran the command myself" is not the check.** First-hand is about whether
+  the evidence supports the claim, not about who ran the command — running it
+  makes interpretation *feel* like observation. The full failure shape, its seven
+  variants and its two-arm cure are the pattern
+  `observation-that-does-not-bear-on-the-claim`; the free arm is *ask whether
+  anything you already know contradicts the claim* before hunting for a test.
+- **Restore access rather than reasoning around its absence.** When the
+  authoritative surface (runtime logs, the code, the vendor doc) is unreadable,
+  say so and fix that first. Thirty seconds restoring an instrument beats thirty
+  minutes theorising without one — measured, on consecutive days, at one seat:
+  logs unreadable produced a thirty-minute wrong theory and a release cut on it;
+  every check reachable killed every wrong claim within minutes.
+- **This applies to bad news exactly as to good.** Unmeasured estimates skew
+  **pessimistic**, because a summary is cheaper than the thing and drops the
+  reasons something might be fine — hunk headers instead of a real merge, an
+  isolated repro instead of the real invocation, a bulk listing instead of a
+  per-item query. A reviewer who raises three false alarms is a reviewer whose
+  fourth finding gets discounted.
+- **Cost, not correctness, decides whether a check runs.** A check that exists
+  but costs "remember at the right moment" is not a mechanism. The design
+  consequence — make falsification cheap and make its absence loud — is the
+  pattern `falsification-cost-determines-claim-quality`.
+
+The personal form, at the moment of wanting to assert: not *"am I confident?"*
+but **"what is the cheapest thing that would prove me wrong, and have I run
+it?"**
+
+**The fire-signal is vocabulary.** *Impossible, never, cannot, always, static,
+already handled, nothing else, only* — writing one of those words about a
+system IS the trigger to stop and run the single cheapest check that would
+prove it wrong: a grep, a config read, one API call. The diagnosis behind the
+class is not carelessness about checked facts — it is converting "I have not
+checked" into a confident claim, because a confident claim reads as finished
+work. Three instances in one lane in one day (2026-07-29), two caught by
+others: a "structurally impossible" header with an unchecked third
+interpolation path; a log line ruled "legitimately static" without opening the
+config that ran it in production; a "the bot cannot (403)" owner card whose
+cause was three lines of our own token-minting code, falsifiable by one grep.
+Verdicts-not-hedges licenses committing to a judgement; it never licenses
+skipping the check that would falsify it.
+
+Four sharpenings from one window (2026-08-18 → 19): **a number in evidence
+owes its procedure** — a banked "227 of 1287" grep matched no stated
+method (136, 126 or 550 under three plausible readings) and was restated
+with the method visible; **when the claim is about what a system EMITS,
+observe the emission** — a plan's envelope doctrine survived every document
+check and died on one live `tools/call` (three envelope shapes, not one);
+**a universal negative needs its published enumeration** — "no
+registration site carries X" is evidence only when the leg lists the sites
+it searched; and **a reviewer is rejected only against the primary source**
+— a re-derivation from memory with a wrong region order nearly rejected a
+CORRECT finding, and the falsifier for any reject-verdict is the artefact's
+own tuple. Ask for probes explicitly in reviewer dispatches: a gateway that
+verified its browser assumptions in a live Chromium caught a validator-red
+blocker pre-push that reasoning would have approved.
+
+**"Verified real" is not "verified terminal".** The sharper variant (owner,
+twice in one session, 2026-07-29): the constraint is genuine and the error is
+treating it as final. After confirming a blocker, ask the distinct question
+*what would make this not block?* and cost the answer before reporting the
+block — a report that names only who else must act is the tell. Its
+second-order failure is the expensive one: an accepted false constraint sends
+you shopping for ways *around* the wall instead of through it, up to and
+including offering to weaken a control (`principles.md` §Architectural
+Excellence names presenting the cheap cure as an option as itself the failure
+mode). When an instrument refuses you, find out why before designing around
+it. And a suppression that must be re-applied after every refactor (a
+dismissal, an ignore entry) is a defect report about the code, not the tool —
+the repetition is the evidence.
+
 ## Claims Crossing Boundaries Carry Their Derivation
 
 The transmitting-side dual of `patterns/referent-narrowing.md` (which governs
@@ -251,6 +334,26 @@ whoever owns that surface**, never as a finding. Attribution is also the
 containment when verification fails — a finding recorded under its true
 observer's name has a one-comment blast radius; one absorbed as your own
 becomes a premise others act on.
+
+**Verify at the rung that binds.** Descriptions are claims, not evidence:
+an endpoint's description string, a README, a plan sentence, a view named
+in a schema doc, a review bot's summary table — each sits BELOW the surface
+that binds (the response schema and handler code, the contract file, the
+deployed migration, the review threads themselves). One lane paid four
+times in one day (2026-08-31): an "unpublished" verdict generalised from
+the bulk schema to the whole API; a cure sourced from an endpoint's
+description while its schema returned two fields; a view cited as
+"materialised for the API" that the estate's own research had recorded as
+undeployed; a bot's "Completed" summary read as "no findings" over fifteen
+unharvested review threads. Sibling instances the same week: four false
+plan rows written from a README instead of the mapper source; a merge gate
+asserted from doctrine prose while the live ruleset's NAME carried the
+fact. Three corollaries: an absence proven on ONE surface licenses a claim
+about that surface only (sweep the endpoint inventory before writing "the
+API does not serve X"); before citing an estate artefact by name, search
+the estate's own research corpus for it (deployment status lives there);
+and a shared dirty checkout is a working surface, never a state authority
+— classify "already done" from the file at the branch base (2026-09-01).
 
 The **change-at-a-distance** facet: the world can move underneath a standing
 artefact with no claim transmitted at all (a dependency override changing
@@ -312,6 +415,24 @@ surface. The consumer side of the same discipline: a load-bearing, cheap-to-
 check briefing fact gets verified first-hand BEFORE building on it, not at
 verification time (a 10-second `curl` beats a parser built on a relayed
 vocabulary).
+
+## Probe the Deployment Before Planning About It
+
+Artefact grounding (docs, ADRs, code, plan shape) and artefact-shaped review
+compose into a **collective blind spot**: everything cross-checks
+consistently against everything except the running system. Before authoring
+OR adjudicating any plan about a deployed surface, probe the deployment
+first-hand — metadata endpoints, challenge shape, health endpoints, env
+reality — and put the probe output in the plan's evidence base. A
+"sound" adjudication verdict on a deployed-surface plan requires the probe
+too, not just shape-reading. Worked instance (2026-07-21, MCP-67): a
+promotion plan and its owner card asked domain/staging questions the live
+alpha deployment already answered — thirty seconds of curl would have
+reframed the plan from greenfield ceremony to an upstream realm swap, and
+two expert reviewer rounds plus a Director post-landing read all shared the
+blind spot, because every one of them verified artefacts. Owner cards
+authored from artefact-only grounding waste the owner's attention on
+questions the running system answers.
 
 ## Calibrate Verification to Stakes
 
@@ -376,6 +497,21 @@ in sync and one fetch would have shown it).
   first — a `clean` / `rm -rf` prelude on a command that may crash deletes
   tracked artefacts (a diagnostic `sdk-codegen` once deleted ~100 tracked files
   this way).
+- A proof loop whose probe consumes its own input as options — `grep -Fq "$line"`
+  ate every `-`-prefixed needle as a flag, so 13 of 132 lines were never tested
+  while the loop reported a clean zero-duplicates result (2026-08-06). Use
+  `grep -Fq -- "$needle"` whenever the needle is untrusted text; a proof can
+  read green having tested nothing.
+- `git rev-parse` without `--verify` echoes the ref NAME on a missing ref — two
+  false verdicts in one day (a "fabricated" verdict against a correct reviewer
+  claim; branch-existence checks reading as DIVERGES). `git rev-parse --verify
+  --quiet` or nothing (2026-08-05).
+- A "matched nothing" identity verdict scoped to the surfaces searched — a
+  post-compaction seat declared its own pre-compaction subagent an unregistered
+  peer because the search covered claims/comms only, where subagents correctly
+  never register (2026-08-06). An identity search's negative is only as wide as
+  its surface set; post-compaction, add the session's own spawn history before
+  declaring a peer unknown.
 
 ## Timestamp-Zone Discipline
 

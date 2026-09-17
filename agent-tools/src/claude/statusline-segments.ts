@@ -28,7 +28,7 @@ export interface StatuslineParts {
   /** Deterministic agent-identity display name (PDR-027). */
   readonly identity: string | undefined;
   /**
-   * The session_id_prefix (first 6 of the session id, PDR-027) rendered beside
+   * The session_id_prefix (first 6 of the PDR-027 seed) rendered beside
    * the name. Names are per-estate derivations — one agent can carry a
    * different name per repo — so the prefix is the cross-repo join key
    * (inter-Practice protocol, identity-display clause). Absent renders as

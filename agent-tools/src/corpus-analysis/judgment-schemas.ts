@@ -170,14 +170,6 @@ export const voterOutcomeSchema = z.discriminatedUnion('status', [
 ]);
 export type VoterOutcome = z.infer<typeof voterOutcomeSchema>;
 
-/**
- * The strict-parse boundary helper, re-exported for this module's existing
- * consumers (`./recall-schemas.ts` and the post-run/stage-io readers). The
- * implementation lives in `core/schema-parse.ts`, hoisted there when the
- * refounding modules became its second consumer.
- */
-export { parseWithSchema };
-
 export const parseLeafSignal = (value: unknown): Result<LeafSignal, Error> =>
   parseWithSchema({ label: 'leaf signal', schema: leafSignalSchema, value });
 

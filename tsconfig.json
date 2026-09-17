@@ -4,6 +4,6 @@
   "compilerOptions": {
     "rootDir": "."
   },
-  "include": ["*.config.ts", "*.config.base.ts", "stryker.config.mjs"],
-  "exclude": ["node_modules", "dist", "reference/**"]
+  "include": ["*.config.ts", "*.config.base.ts"],
+  "exclude": ["node_modules", "dist"]
 }

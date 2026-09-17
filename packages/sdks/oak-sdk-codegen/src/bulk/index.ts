@@ -117,9 +117,15 @@ export type { BulkFileResult, SubjectPhase } from './reader.js';
 // Restricted-lesson filter (MCP-204 decision — see module TSDoc)
 // ============================================================================
 
-export { excludeRestrictedLessons } from './restricted-lesson-filter.js';
+export {
+  excludeRestrictedLessons,
+  isRestrictedInclusionBarred,
+} from './restricted-lesson-filter.js';
 
-export type { RestrictedLessonFilesResult } from './restricted-lesson-filter.js';
+export type {
+  RestrictedLessonExclusionOptions,
+  RestrictedLessonFilesResult,
+} from './restricted-lesson-filter.js';
 
 // ============================================================================
 // Extractors

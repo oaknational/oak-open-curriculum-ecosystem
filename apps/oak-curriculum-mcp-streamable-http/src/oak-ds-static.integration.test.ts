@@ -10,7 +10,7 @@ import {
 } from './test-helpers/static-root-fixture.js';
 import { createFakeHttpObservability } from './test-helpers/observability-fakes.js';
 import { createMockRuntimeConfig } from './test-helpers/auth-error-test-helpers.js';
-import { renderLandingPageHtml } from './landing-page/index.js';
+import { ROUTED_ASSET_BASE } from './app/static-asset-paths.js';
 
 /**
  * The design system reaches the browser as ordinary static assets.
@@ -38,8 +38,6 @@ describe('Oak Open Curriculum Design System static serving', () => {
       }),
       observability: createFakeHttpObservability(),
       getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
-      getLandingPageHtml: () =>
-        '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
       staticRoot: scratchRoot,
     });
   });
@@ -86,32 +84,38 @@ describe('Oak Open Curriculum Design System static serving', () => {
     expect(res.status).toBe(200);
   });
 
-  it('serves every asset the rendered page references from /oak-ds or /oak-assets', async () => {
-    // The CSS closure test covers what the stylesheets reach. This covers the
-    // other half — assets named only in markup — by asking the page itself
-    // what it references, so the masthead logo's `img src` (moved to the
-    // assets package in this change) cannot drift from the served path, and
-    // a new markup-referenced asset cannot be added without being served.
-    // The scrape accepts an absolute origin prefix so ABSOLUTE references —
-    // og:image is emitted absolute for crawlers — are covered too, not just
-    // root-relative ones: this test's name promises the whole rendered page.
-    const html = renderLandingPageHtml();
-    const referenced = [
-      ...new Set(
-        [...html.matchAll(/"(?:https?:\/\/[^"/]+)?(\/oak-(?:ds|assets)\/[^"]+)"/g)].map(
-          (match) => match[1],
-        ),
-      ),
-    ];
+  it('serves the routed asset paths ahead of the MCP accept-header gate', async () => {
+    // `/mcp/*` also carries the MCP accept-header gate, which requires
+    // `text/event-stream`. A browser asking for a stylesheet sends
+    // `Accept: text/css,*/*;q=0.1` and would get a 406, so assets survive
+    // only because the static mount is registered first. Reordering the two
+    // would break the page while leaving every MCP request correct, and this
+    // is what makes that visible.
+    //
+    // Clerk is deliberately NOT named here. An earlier version of this test
+    // claimed to prove an unauthenticated asset GET is not a 401, which it
+    // never did: the suite builds the app with `dangerouslyDisableAuth`, so
+    // Clerk is not installed at all. Nor could any ordering produce that
+    // 401 — Clerk's context middleware runs before this mount and only
+    // attaches context, and its enforcement binds the exact `/mcp` routes,
+    // which no asset path matches.
+    const res = await request(app)
+      .get(`${ROUTED_ASSET_BASE}/oak-ds/styles.css`)
+      .set('Host', 'localhost')
+      .set('Accept', 'text/css,*/*;q=0.1');
 
-    expect(referenced.length).toBeGreaterThan(0);
+    expect(res.status).toBe(200);
+    expect(res.headers['content-type']).toContain('text/css');
+  });
 
-    for (const assetPath of referenced) {
-      const res = await request(app)
-        .get(assetPath ?? '')
-        .set('Host', 'localhost');
-      expect(res.status, assetPath).toBe(200);
-    }
+  it('still serves the unprefixed paths, so root-served deployments keep rendering', async () => {
+    // Root-served deployments reach this app at `/` — the canonical host
+    // does (verified 2026-09-01), and the legacy deployment host is a
+    // declared compatibility surface (MCP-509 acceptance). Retiring the root
+    // mount would break those pages silently.
+    const res = await request(app).get('/oak-ds/styles.css').set('Host', 'localhost');
+
+    expect(res.status).toBe(200);
   });
 
   it('refuses to construct the app when the static root lacks the copied assets', async () => {
@@ -125,8 +129,6 @@ describe('Oak Open Curriculum Design System static serving', () => {
           }),
           observability: createFakeHttpObservability(),
           getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
-          getLandingPageHtml: () =>
-            '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
           staticRoot: emptyRoot,
         }),
       ).rejects.toThrow(/missing .*oak-ds/);

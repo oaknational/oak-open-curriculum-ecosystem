@@ -3,7 +3,7 @@ boundary: B0-Foundation
 doc_role: index
 authority: foundation-navigation
 status: active
-last_reviewed: 2026-07-28
+last_reviewed: 2026-08-02
 ---
 
 # Foundation Documentation
@@ -17,6 +17,9 @@ it is built**.
 
 ## Contents
 
+- [The Cost-of-Change Gradient](./cost-of-change-gradient.md) — a named,
+  multi-scale systems pattern for placing general mechanism, shared assurance,
+  specific context, and world-facing value at their coherent levels.
 - [How the Agentic Engineering System Works](./agentic-engineering-system.md) —
   the **how**: an engineering-lens explanation of the Practice for human
   readers.
@@ -50,6 +53,7 @@ Adjacent surfaces (not part of this boundary):
 2. **Contributing?** Use the root [README.md](../../README.md) for setup and
    the [CONTRIBUTING.md](../../CONTRIBUTING.md) for the development process.
 3. **Understanding the engineering approach?** Read
+   [The Cost-of-Change Gradient](./cost-of-change-gradient.md), then
    [How the Agentic Engineering System Works](./agentic-engineering-system.md).
 4. **Working as an agent?** Begin with `start-right-quick` and the
    [Practice Index](../../.agent/practice-index.md).

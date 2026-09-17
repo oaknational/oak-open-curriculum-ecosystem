@@ -1,0 +1,350 @@
+{
+ "ok": true,
+ "meta": {
+  "recallMatches": [
+   {
+    "baselineId": "capture-does-not-cure",
+    "verdict": "partial",
+    "matchedCandidateId": "C02",
+    "note": "C02 records the exact evidence (seats still piping hours after reading the exit-code rule, recurrence rate flat across three cure generations) but frames it as one mechanism's cure trajectory, never generalising to the claim that declarative capture cannot inhibit and only an action-time structural interrupt has traction \u2014 the candidates that did state it generally (C39, C40) were killed."
+   },
+   {
+    "baselineId": "inherited-state-is-a-hypothesis",
+    "verdict": "missed",
+    "note": "The candidate that carried this whole baseline (C58, handoff/continuity records rot within minutes-to-hours, derivable facts need their deriving command) was killed, and no kept candidate asserts that inherited thread records describe past disk state rather than current truth."
+   },
+   {
+    "baselineId": "coordinator-amplifies-unseen-defect",
+    "verdict": "missed",
+    "note": "C65 held the coordinator-role failure family and was killed; the kept set evidences the shared-resource hazards a coordinator writes into (C08, C10) but never states that the coordinator is itself subject to the gates and races it manages, and never names the under-write inverse."
+   },
+   {
+    "baselineId": "commit-window-single-agent-assumption",
+    "verdict": "subsumes",
+    "matchedCandidateId": "C08",
+    "note": "C08 covers the observable \u2014 concurrent staging on a co-inhabited checkout letting one seat's commit sweep another's work \u2014 and extends it with index.lock collisions on parallel `git mv` and the explicit-pathspec cure, though it frames the defect as the shared index rather than as the commit-window protocol's single-owner assumption."
+   },
+   {
+    "baselineId": "repo-wide-autofix-sweep-footgun",
+    "verdict": "partial",
+    "matchedCandidateId": "C10",
+    "note": "C10 captures the whole-tree scope of the .husky pre-commit gate over untracked and peer WIP, but omits the specific footgun that repo-wide auto-fix WRITES its output back and pre-commit then promotes peer-owned files into the staged set \u2014 the format/markdownlint half of that mechanism sat in the killed C07."
+   },
+   {
+    "baselineId": "cron-template-overrides-owner-direction",
+    "verdict": "missed",
+    "note": "No kept candidate touches cron prompt-body semantics; the scheduling-adjacent findings (C17 watcher lifecycle, C19 emitter presence) concern process mortality and liveness inference, not a template silently overriding owner pause/stop direction each cycle."
+   },
+   {
+    "baselineId": "compaction-is-a-checkpoint",
+    "verdict": "partial",
+    "matchedCandidateId": "C17",
+    "note": "C17 establishes that monitor and watcher arms do not survive (SIGTERM reclamation, failed re-arms, silently dead supervisors), which is the mechanical half, but the run never identifies compaction as the checkpoint boundary requiring re-verification of watcher, cron, staged set and claims."
+   },
+   {
+    "baselineId": "peer-primary-topology-regime",
+    "verdict": "partial",
+    "matchedCandidateId": "C10",
+    "note": "The contention costs the baseline predicts are all present across kept findings (shared gates in C10, shared index in C08, shared dist in C11), but no candidate names peer-primary as a distinct operating regime whose cost is resource contention rather than coordination protocol \u2014 C76, the nearest topology framing, was killed."
+   },
+   {
+    "baselineId": "claims-open-minimum-field-silent-reject",
+    "verdict": "subsumes",
+    "matchedCandidateId": "C55",
+    "note": "C55 names `claims open` writing no status field and crashing after a successful write, and generalises the baseline into a documented-interface-vs-code drift class at the collaboration CLI boundary (including `--help` omitting required `--id`)."
+   },
+   {
+    "baselineId": "completion-language-overload",
+    "verdict": "partial",
+    "matchedCandidateId": "C44",
+    "note": "C44 addresses only the slice-landed determination (wrong ancestry instruments producing false-orphan verdicts and stranded commits); the four-way conflation of landed / claim-closed / workstream-accepted / user-value-delivered and the demand for an explicit closeout verdict are absent from the kept set."
+   },
+   {
+    "baselineId": "commit-editmsg-single-writer",
+    "verdict": "partial",
+    "matchedCandidateId": "C08",
+    "note": "C08 lands squarely in the same single-writer family and its stated cure `git commit -F <msg> -- <pathspec>` is precisely the COMMIT_EDITMSG mitigation, but the run never isolates .git/COMMIT_EDITMSG as its own shared single-writer surface during handover."
+   },
+   {
+    "baselineId": "record-staged-full-index-fingerprint",
+    "verdict": "partial",
+    "matchedCandidateId": "C08",
+    "note": "C08 reproduces the consequence (peer-staged content riding into an unrelated commit) at the index level, while the specific commit-queue mechanism \u2014 record-staged fingerprinting the full index instead of the declared intent.files \u2014 lived in the killed commit-queue arc C56."
+   },
+   {
+    "baselineId": "identity-tuple-insufficiency",
+    "verdict": "partial",
+    "matchedCandidateId": "C18",
+    "note": "C18 refines one downstream consequence of the identity-key problem (heartbeat paths keyed on display codename instead of the minted slug, so liveness asserts read a decoy) but not the routing-tuple's inability to distinguish one renamed session from three; the derivation-chain candidate C66 was killed."
+   },
+   {
+    "baselineId": "presence-vs-ownership-collapse",
+    "verdict": "partial",
+    "matchedCandidateId": "C57",
+    "note": "C57 establishes the claims registry as an unreliable coordination surface, but the specific collapse \u2014 a team-start template's Claimed paths field turning presence announcement into a herd claim event \u2014 is not present in any kept candidate."
+   },
+   {
+    "baselineId": "skill-invocation-not-owner-direction",
+    "verdict": "partial",
+    "matchedCandidateId": "C59",
+    "note": "C59 covers the same laundering family (agent-authored napkin prose later cited as the owner's ruling, 'granted by user' notes that were never grants) but its instances are all text-provenance; the harness-invocation trigger \u2014 being handed a skill read as standing owner instruction \u2014 is never named."
+   },
+   {
+    "baselineId": "reviewer-pre-execution-catch",
+    "verdict": "missed",
+    "note": "The kept review findings are post-hoc (C24 PR-round convergence, C28 grounding relayed reviewer claims, C47 inert gates); the positive mechanism \u2014 a pre-execution reviewer catching what the author cannot see because the reviewer lacks the author's prior-context rationalisation \u2014 is absent, and the candidate that noticed register-diversity as the working ingredient (C29) was killed."
+   },
+   {
+    "baselineId": "reviewer-cycle-split-on-convergence",
+    "verdict": "partial",
+    "matchedCandidateId": "C24",
+    "note": "C24 reaches the adjacent ruling \u2014 convergence as an imposed governance property with a round budget acting as a size constraint \u2014 but stops short of the operative response, scope-narrowing a blocked cycle into a successor cycle rather than carrying known-bad scope forward."
+   }
+  ],
+  "corroborationClaims": [
+   {
+    "candidateId": "C01",
+    "claimedHomePaths": [
+     ".agent/memory/active/patterns/wrapped-exit-codes-false-green.md",
+     ".agent/rules/exit-codes-in-band-never-piped.md"
+    ]
+   },
+   {
+    "candidateId": "C02",
+    "claimedHomePaths": [
+     ".agent/rules/exit-codes-in-band-never-piped.md"
+    ]
+   },
+   {
+    "candidateId": "C03",
+    "claimedHomePaths": [
+     ".agent/memory/active/patterns/harness-shell-and-commit-edge-cases.md"
+    ]
+   },
+   {
+    "candidateId": "C04",
+    "claimedHomePaths": [
+     ".agent/memory/active/patterns/zero-match-false-green.md",
+     ".agent/memory/active/patterns/audit-sweep-filters-against-live-referent.md"
+    ]
+   },
+   {
+    "candidateId": "C08",
+    "claimedHomePaths": [
+     ".agent/rules/stage-by-explicit-pathspec.md",
+     ".agent/memory/active/patterns/stage-what-you-commit.md",
+     ".agent/memory/active/patterns/commit-window-discipline-under-parallel-agents.md",
+     ".agent/memory/active/patterns/peer-commit-absorption-third-direction.md"
+    ]
+   },
+   {
+    "candidateId": "C10",
+    "claimedHomePaths": [
+     ".agent/memory/active/patterns/whole-tree-gate-red-on-untouched-files.md",
+     ".agent/memory/active/patterns/untracked-wip-whole-tree-lint-blocker.md"
+    ]
+   },
+   {
+    "candidateId": "C11",
+    "claimedHomePaths": [
+     ".agent/rules/use-built-agent-tools-cli.md",
+     ".agent/rules/worktree-hygiene.md",
+     ".agent/memory/active/patterns/plain-node-built-artifact-proof.md"
+    ]
+   },
+   {
+    "candidateId": "C12",
+    "claimedHomePaths": [
+     ".agent/rules/hook-policy-substring-discipline.md"
+    ]
+   },
+   {
+    "candidateId": "C17",
+    "claimedHomePaths": [
+     ".agent/rules/use-monitor-for-event-driven-wake.md",
+     ".agent/rules/check-singleton-per-window.md"
+    ]
+   },
+   {
+    "candidateId": "C18",
+    "claimedHomePaths": [
+     ".agent/rules/liveness-heartbeat-cron.md",
+     ".agent/memory/active/patterns/query-the-value-never-the-lookalike.md"
+    ]
+   },
+   {
+    "candidateId": "C19",
+    "claimedHomePaths": [
+     ".agent/rules/silence-is-never-liveness.md",
+     ".agent/rules/liveness-heartbeat-cron.md"
+    ]
+   },
+   {
+    "candidateId": "C20",
+    "claimedHomePaths": [
+     ".agent/rules/liveness-heartbeat-cron.md"
+    ]
+   },
+   {
+    "candidateId": "C21",
+    "claimedHomePaths": [
+     ".agent/memory/active/patterns/referent-narrowing.md",
+     ".agent/rules/pr-comments-resolve-and-recheck.md"
+    ]
+   },
+   {
+    "candidateId": "C22",
+    "claimedHomePaths": [
+     ".agent/rules/pr-comments-resolve-and-recheck.md"
+    ]
+   },
+   {
+    "candidateId": "C23",
+    "claimedHomePaths": [
+     ".agent/rules/pr-comments-resolve-and-recheck.md"
+    ]
+   },
+   {
+    "candidateId": "C24",
+    "claimedHomePaths": [
+     ".agent/rules/pr-comments-resolve-and-recheck.md"
+    ]
+   },
+   {
+    "candidateId": "C25",
+    "claimedHomePaths": [
+     ".agent/memory/active/patterns/pr-monitor-to-merge.md"
+    ]
+   },
+   {
+    "candidateId": "C26",
+    "claimedHomePaths": [
+     ".agent/rules/bot-identity-on-third-party-systems.md",
+     ".agent/rules/identify-as-agent-under-shared-credentials.md"
+    ]
+   },
+   {
+    "candidateId": "C28",
+    "claimedHomePaths": [
+     ".agent/rules/verify-dont-trust.md",
+     ".agent/memory/active/patterns/verify-before-propagating.md"
+    ]
+   },
+   {
+    "candidateId": "C35",
+    "claimedHomePaths": [
+     ".agent/memory/active/patterns/offload-breadth-keep-verdict-and-loss-scan.md",
+     ".agent/memory/active/patterns/fan-out-verify-gatekeeper-execute.md"
+    ]
+   },
+   {
+    "candidateId": "C36",
+    "claimedHomePaths": [
+     ".agent/memory/active/patterns/llm-fleet-task-design-point-and-pilot.md"
+    ]
+   },
+   {
+    "candidateId": "C41",
+    "claimedHomePaths": [
+     ".agent/rules/knowledge-preservation-over-fitness-warnings.md",
+     ".agent/memory/active/patterns/substance-before-fitness.md"
+    ]
+   },
+   {
+    "candidateId": "C42",
+    "claimedHomePaths": [
+     ".agent/rules/permanent-doc-is-the-consolidation-record.md",
+     ".agent/memory/active/patterns/atomic-relocation-of-shared-substrate.md"
+    ]
+   },
+   {
+    "candidateId": "C43",
+    "claimedHomePaths": [
+     ".agent/rules/permanent-doc-is-the-consolidation-record.md",
+     ".agent/memory/active/patterns/offload-breadth-keep-verdict-and-loss-scan.md"
+    ]
+   },
+   {
+    "candidateId": "C44",
+    "claimedHomePaths": [
+     ".agent/rules/continuity-surface-commits-as-orphans.md",
+     ".agent/memory/active/patterns/verification-method-must-answer-the-question.md"
+    ]
+   },
+   {
+    "candidateId": "C46",
+    "claimedHomePaths": [
+     ".agent/rules/never-disable-checks.md",
+     ".agent/rules/no-warning-toleration.md"
+    ]
+   },
+   {
+    "candidateId": "C47",
+    "claimedHomePaths": [
+     ".agent/rules/validators-must-recompute-not-just-record.md",
+     ".agent/memory/active/patterns/zero-match-false-green.md",
+     ".agent/memory/active/patterns/green-parts-red-composition.md"
+    ]
+   },
+   {
+    "candidateId": "C48",
+    "claimedHomePaths": [
+     ".agent/memory/active/patterns/circular-test-justification.md",
+     ".agent/memory/active/patterns/dont-test-sdk-internals.md",
+     ".agent/memory/active/patterns/test-claim-assertion-parity.md"
+    ]
+   },
+   {
+    "candidateId": "C50",
+    "claimedHomePaths": [
+     ".agent/rules/sonarqube-mcp-instructions.md",
+     ".agent/rules/never-disable-checks.md"
+    ]
+   },
+   {
+    "candidateId": "C51",
+    "claimedHomePaths": [
+     ".agent/memory/active/patterns/probe-deployed-surfaces-before-planning.md"
+    ]
+   },
+   {
+    "candidateId": "C53",
+    "claimedHomePaths": [
+     ".agent/rules/generator-first-mindset.md",
+     ".agent/rules/strict-validation-at-boundary.md",
+     ".agent/memory/active/patterns/multi-layer-schema-sync.md"
+    ]
+   },
+   {
+    "candidateId": "C57",
+    "claimedHomePaths": [
+     ".agent/rules/respect-active-agent-claims.md",
+     ".agent/memory/active/patterns/live-claim-respect-and-self-start.md"
+    ]
+   },
+   {
+    "candidateId": "C59",
+    "claimedHomePaths": [
+     ".agent/memory/active/patterns/frozen-text-false-authority.md"
+    ]
+   },
+   {
+    "candidateId": "C62",
+    "claimedHomePaths": [
+     ".agent/memory/active/patterns/scope-bound-negative-existence-claims.md"
+    ]
+   }
+  ],
+  "discountNote": "Read this run's recall as an upper bound on mechanism coverage and a lower bound on behavioural coverage, for two structural reasons. First, disposition rather than discovery is what lost most baselines: the candidates that carried inherited-state-is-a-hypothesis (C58), capture-does-not-cure in its general form (C39, C40), the coordinator-role failure family (C65), the identity-derivation chain (C66) and branch/HEAD re-derivation (C09) were all authored by the run and then killed, so the pipeline demonstrably SAW this material and discarded it \u2014 a synthesis judged only on findings understates what the corpus pass actually surfaced, while a synthesis judged on findings is the honest measure of what a downstream consumer receives. Second, the candidate grain is systematically coarser than the baselines: single candidates bundle whole defect families (C08 carries index sweeps, index.lock races and the pathspec cure at once), so most non-missed verdicts are family-level overlaps rather than the specific named defect, and a match should not be read as the baseline being recoverable from the candidate text alone. A third, milder caveat: a large majority of the kept candidates I could corroborate already have durable homes on disk, so agreement with the baselines partly reflects both artefacts drawing on the same already-consolidated corpus rather than independent re-derivation.",
+  "synthesisNotes": [
+   "Recall is band-selective, not uniformly thin. The mechanical/tooling band \u2014 shared git index, whole-tree gates, watcher and heartbeat liveness, CLI and exit-code semantics, negative-existence instruments \u2014 comes back reliably and often at equal or finer grain. The behavioural, session-lifecycle and governance band \u2014 capture not curing, inherited state as hypothesis, coordinator self-amplification, cron templates overriding owner direction, presence collapsing into ownership \u2014 is where every clean miss sits.",
+   "The kill filter, not the discovery stage, is the dominant loss channel. For at least four baselines the run produced a candidate that would have matched at subsumes or equal and then dispositioned it away. Any tuning effort aimed at the discovery prompt would be aimed at the wrong stage; the disposition criteria are what need re-examination.",
+   "Session-lifecycle boundaries are an outright blind spot in the findings. C17 establishes that monitor arms die, get reclaimed and fail to re-arm, but nothing in the kept set connects that mortality to a boundary event (compaction, cron fire, handover) at which the agent must re-verify watcher, cron, staged set and claims. The run has the facts and lacks the frame.",
+   "The strongest re-finds are where a candidate generalises a baseline into a class with a stated cure: C55 turns the claims-open silent reject into documented-interface-vs-code drift across the collaboration CLI, and C08 turns the commit-window assumption into shared-index contention with an explicit-pathspec remedy. These are the candidates worth promoting, because they are strictly more useful than the baseline they cover.",
+   "Trajectory candidates carry most of the run's incremental value. C02, C24, C25, C41, C42 and C46 each narrate an arc (cure hardening, review convergence, merge authority, fitness gate-to-signal, retention flip, bypass response) that no single baseline states, and these are the least likely to be reconstructible from the existing on-disk homes.",
+   "Positive 'what works' patterns are under-recovered, and the run diagnosed this about itself before discarding the diagnosis. The reviewer-pre-execution-catch baseline is a mechanism claim about why a control works; the only kept candidates in that territory (C28, C36, C47) are all failure-side. The killed absence claim C78 stated exactly this structural under-representation, so the run detected the gap and then dropped the detection.",
+   "Where a matched candidate already has a durable home, the recall signal is weaker than it looks; where a matched candidate has no home I could verify \u2014 notably the trajectory findings and C55's CLI-drift class \u2014 the match represents genuinely unconsolidated knowledge and is the higher-priority landing target.",
+   "Several baselines are recoverable only by composing multiple kept candidates (peer-primary topology from C08 plus C10 plus C11; completion-language overload from C44 plus C19). A consumer reading candidates one at a time will not perform that composition, which is an argument for the meta stage emitting the composed statements rather than trusting downstream assembly."
+  ]
+ }
+}

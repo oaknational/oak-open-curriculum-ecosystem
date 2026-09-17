@@ -1,7 +1,7 @@
 import { parsePrTarget, type PrTarget } from './gh.js';
 import { readPrStateReading } from './state-gh.js';
 import { computePrVerdict } from './states.js';
-import type { PrStateReading } from './state-types.js';
+import { PR_VERDICT_STATES, type PrStateReading } from './state-types.js';
 
 /**
  * CLI for the `pr` topic. D1 ships one action — `pr state <n>` — the
@@ -191,11 +191,9 @@ function usage(): string {
     'Resolves the pr-lifecycle compound read (checks BY NAME, review threads, auto-merge',
     'intent, per-reviewer legs over the FULL review harvest, agent-task review-run',
     'liveness, the >10 min quiet window) to ONE verdict from a closed state set:',
-    'SETTLE-READY | SETTLING-QUIET-WINDOW | WAITING-REVIEW-RUN-LIVE |',
-    'SILENT-WAIT-NO-REVIEWER | SILENT-WAIT-RUN-DEAD | SILENT-WAIT-RUNS-UNREADABLE |',
-    'CHECKS-RUNNING | CHECKS-RED |',
-    'THREADS-OPEN | BEHIND-BASE | ARMED-BEHIND-RED | QUOTA-SKIPPED | MERGED | CLOSED |',
-    'CONFLICT-DIRTY.',
+    // Derived, never transcribed: the set changes as a reviewed contract
+    // change and this text must not drift behind it.
+    `${PR_VERDICT_STATES.join(' | ')}.`,
     '--expect declares the expected reviewer set (repeatable; SKILL: sourced from the',
     "repository's automatic-review configuration). Undeclared, it defaults to the",
     'observed surface and the verdict says so. Read-only: never arms, merges, or',

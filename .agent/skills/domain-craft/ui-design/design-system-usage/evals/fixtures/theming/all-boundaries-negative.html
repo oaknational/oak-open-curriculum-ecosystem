@@ -1,0 +1,32 @@
+<!-- Negative control for eval case (b). Every assertion in
+     scripts/grade-theming.ts must FAIL on this file. It exists so a green
+     grader run is evidence of conformance rather than evidence of a grader
+     that cannot tell the difference — the spec's "too-easy assertion" test.
+
+     Three deliberate defects:
+       1. offers only light and dark (DDR-004: a subset control is
+          non-conformant);
+       2. gives `system` its own token tree in authored CSS (DDR-004:
+          system resolves, it has no tree);
+       3. reads the applied attribute back into stored state (DDR-003 — the
+          exact conflation that record was written to forbid). -->
+<select id="theme">
+  <option value="light">Light</option>
+  <option value="dark">Dark</option>
+</select>
+<style>
+  /* Defect 2: a token tree minted for a value that resolves. */
+  :root[data-theme='system'] {
+    --text-primary: #222222;
+    --bg-primary: #f5f5f5;
+  }
+</style>
+<script>
+  const root = document.documentElement;
+  document.getElementById('theme').addEventListener('change', (event) => {
+    root.setAttribute('data-theme', event.target.value);
+  });
+  // Defect 3: the applied value read back as if it were the user's choice.
+  const stored = root.getAttribute('data-theme');
+  localStorage.setItem('oak-theme-choice', stored);
+</script>

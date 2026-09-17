@@ -160,7 +160,7 @@ requirements live in
 [invoke-code-experts.md](../memory/executive/invoke-code-experts.md).
 
 For a fast second opinion on whether the current work is the right work, invoke
-[`$oak-cricket`](../skills/cricket/SKILL-CANONICAL.md). Cricket is a
+[`$oak-cricket`](../skills/cognition/cricket/SKILL-CANONICAL.md). Cricket is a
 priority-and-framing conscience check, never a substitute for an artefact reviewer.
 
 Agent workflow CLIs live in [agent-tools](../../agent-tools/README.md). Use
@@ -274,3 +274,13 @@ pnpm practice:fitness:informational
 pnpm practice:vocabulary
 pnpm check
 ```
+
+## Claude cloud environment
+
+Cloud (claude.ai) sessions for this repo run in the shared "Practice Repos"
+environment: a universal setup script plus a per-repo session hook at
+`.agent/setup/cloud-session-setup.sh`. The script
+`.agent/claude-harness-integrations/cloud-environment-setup.sh` is the
+environment script's source of truth — edit it, never the claude.ai dialog
+directly — and `.agent/claude-harness-integrations/cloud-environment.md`
+is the operating doc to read before changing anything.
