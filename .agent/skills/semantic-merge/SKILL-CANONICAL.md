@@ -175,6 +175,18 @@ side is ever dropped to fit a structure or a limit.**
    move rides back in (worked instance: a `current/` plan link re-introduced after the
    `active/` move). Run `validate-markdown-links` scoped to the merged file, or `test -f`
    each relative target the union (re-)introduced.
+10. **Second reader, from the object store.** A second seat reads the merge commit with
+    `git show <sha>:<file>` (no tree access needed) and re-runs the proofs independently:
+    markers count; heading set-diff of EACH clean side against the result; "result lines
+    outside main ∪ ours" (nothing invented); "main lines absent from the result" read line
+    by line; the era witness; `git diff --stat <side> <result> -- <files that should equal
+    that side>`. Both the tool and the merger can be confident and wrong (above): the
+    second read found one factual cure (a release number) and three dropped facts that git
+    and the merger had both read as clean, inside a minute (2026-09-02). For a ROTATED
+    append-only surface met at a fold, add the archive-coverage check: diff the incoming
+    side's entry HEADINGS against the rotation archive, content-grep before declaring a gap
+    (113 of 116 covered, one under its trued heading), and carry only the genuinely absent
+    entries under a dated union note (2026-08-17).
 
 ## Mechanics that respect the repo rules
 

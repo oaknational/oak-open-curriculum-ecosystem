@@ -1,5 +1,5 @@
 # Default ownership for the entire repository.
-* @jimCresswell @mantagen
+* @jimCresswell @mantagen @luke-arnold-oak
 
 # Explicitly protect repository governance files.
 /.github/CODEOWNERS @jimCresswell @mantagen

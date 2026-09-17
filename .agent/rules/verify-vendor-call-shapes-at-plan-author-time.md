@@ -66,6 +66,18 @@ function signature.
   excluded) — the keyword accepts exactly one value. "Feature X exists"
   almost never licenses "X applies to all the cases I need"; read the
   mechanism's shape, not its headline.
+- **A cure derived from a specification's compliant EXAMPLE is a
+  hypothesis until the specification's NORMATIVE text is read** (worked
+  instance 2026-09-01, MCP-655): a client refused an OAuth response for
+  an RFC 9207 issuer mismatch; the first cure disclaimed the capability
+  flag in the served metadata, with red-then-green tests, minutes from
+  commit. Fetching RFC 9207 §2.4 showed the client "MUST extract the
+  value of the `iss` parameter … if the parameter is present" and
+  compare it regardless of the flag — the disclaim was honest and would
+  have fixed no user, and the planned falsifier (deploy and try) would
+  have cost a release cycle to learn what one fetch taught. Read the
+  MUST/SHOULD text of the clause the cure relies on before the cure is
+  built.
 
 ## Related Surfaces
 

@@ -34,13 +34,6 @@ packages:
   - packages/sdks/oak-curriculum-sdk
   - packages/sdks/oak-sdk-codegen
   - packages/sdks/oak-search-sdk
-  # Research record imported (content only, no git history) from the private
-  # web-app-deconstruction repo (ADR-215). Only its evidence package is a
-  # workspace member, so OCE's turbo type-check/lint/test gate its TypeScript;
-  # the record root keeps its original standalone harness and is not itself
-  # registered (its package.json wraps a nested turbo).
-  - research/web-app-deconstruction/packages/research-evidence
-
 # Supply-chain hardening: exclude any package version younger than 24h
 # (1440 min) from resolution, so a freshly-published compromised release ages —
 # giving the ecosystem time to detect and yank it — before it can enter the

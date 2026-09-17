@@ -269,6 +269,21 @@ cause was three lines of our own token-minting code, falsifiable by one grep.
 Verdicts-not-hedges licenses committing to a judgement; it never licenses
 skipping the check that would falsify it.
 
+Four sharpenings from one window (2026-08-18 → 19): **a number in evidence
+owes its procedure** — a banked "227 of 1287" grep matched no stated
+method (136, 126 or 550 under three plausible readings) and was restated
+with the method visible; **when the claim is about what a system EMITS,
+observe the emission** — a plan's envelope doctrine survived every document
+check and died on one live `tools/call` (three envelope shapes, not one);
+**a universal negative needs its published enumeration** — "no
+registration site carries X" is evidence only when the leg lists the sites
+it searched; and **a reviewer is rejected only against the primary source**
+— a re-derivation from memory with a wrong region order nearly rejected a
+CORRECT finding, and the falsifier for any reject-verdict is the artefact's
+own tuple. Ask for probes explicitly in reviewer dispatches: a gateway that
+verified its browser assumptions in a live Chromium caught a validator-red
+blocker pre-push that reasoning would have approved.
+
 **"Verified real" is not "verified terminal".** The sharper variant (owner,
 twice in one session, 2026-07-29): the constraint is genuine and the error is
 treating it as final. After confirming a blocker, ask the distinct question
@@ -319,6 +334,26 @@ whoever owns that surface**, never as a finding. Attribution is also the
 containment when verification fails — a finding recorded under its true
 observer's name has a one-comment blast radius; one absorbed as your own
 becomes a premise others act on.
+
+**Verify at the rung that binds.** Descriptions are claims, not evidence:
+an endpoint's description string, a README, a plan sentence, a view named
+in a schema doc, a review bot's summary table — each sits BELOW the surface
+that binds (the response schema and handler code, the contract file, the
+deployed migration, the review threads themselves). One lane paid four
+times in one day (2026-08-31): an "unpublished" verdict generalised from
+the bulk schema to the whole API; a cure sourced from an endpoint's
+description while its schema returned two fields; a view cited as
+"materialised for the API" that the estate's own research had recorded as
+undeployed; a bot's "Completed" summary read as "no findings" over fifteen
+unharvested review threads. Sibling instances the same week: four false
+plan rows written from a README instead of the mapper source; a merge gate
+asserted from doctrine prose while the live ruleset's NAME carried the
+fact. Three corollaries: an absence proven on ONE surface licenses a claim
+about that surface only (sweep the endpoint inventory before writing "the
+API does not serve X"); before citing an estate artefact by name, search
+the estate's own research corpus for it (deployment status lives there);
+and a shared dirty checkout is a working surface, never a state authority
+— classify "already done" from the file at the branch base (2026-09-01).
 
 The **change-at-a-distance** facet: the world can move underneath a standing
 artefact with no claim transmitted at all (a dependency override changing

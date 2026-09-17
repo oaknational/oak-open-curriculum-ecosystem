@@ -107,7 +107,8 @@
     "ci-turbo-report": "cd .. && pnpm exec tsx agent-tools/src/ci/ci-turbo-report.ts",
     "pr-throughput": "cd .. && pnpm exec tsx agent-tools/src/pr-throughput/cli.ts",
     "under-the-hood-content-generate": "tsx src/bin/under-the-hood-content-generate.ts",
-    "validate-under-the-hood-content": "cd .. && pnpm exec tsx agent-tools/src/bin/under-the-hood-content-generate.ts --check"
+    "validate-under-the-hood-content": "cd .. && pnpm exec tsx agent-tools/src/bin/under-the-hood-content-generate.ts --check",
+    "validate-plugin-skill-copies": "cd .. && pnpm exec tsx agent-tools/src/validators/plugin-skill-copies/validate-plugin-skill-copies.ts"
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",

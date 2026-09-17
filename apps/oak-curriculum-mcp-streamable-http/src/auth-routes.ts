@@ -11,7 +11,7 @@ import type { McpServerFactory } from './mcp-request-context.js';
 import { rewriteAuthServerMetadata, type UpstreamAuthServerMetadata } from './oauth-proxy/index.js';
 import type { HttpObservability } from './observability/http-observability.js';
 import { deriveSelfOrigin, hostValidationErrorMessage } from './host-validation-error.js';
-import { MCP_RESOURCE_PATH } from './served-origin.js';
+import { MCP_RESOURCE_PATH, PROTECTED_RESOURCE_METADATA_PREFIX } from './served-origin.js';
 
 /**
  * Refuses the standalone GET SSE stream with the spec-mandated 405 (MCP-545).
@@ -79,8 +79,11 @@ function registerUnauthenticatedRoutes(
  * edge (ADR-219).
  *
  * @param upstreamMetadata - Upstream AS metadata, fetched from Clerk and
- *   injected by the caller. Endpoint URLs are rewritten per-request to
- *   point to this server's origin; capability fields are passed through.
+ *   injected by the caller. The PRM names its `issuer` as the authorization
+ *   server; the AS metadata served at this origin has its endpoint URLs
+ *   rewritten per-request to this server's origin and its `scopes_supported`
+ *   set to `SCOPES_SUPPORTED` (MCP-345), with every other capability field
+ *   passed through.
  */
 export function registerPublicOAuthMetadataEndpoints(
   app: Express,
@@ -102,17 +105,24 @@ export function registerPublicOAuthMetadataEndpoints(
       return;
     }
     const selfOrigin = originResult.value;
+    // The authorization server a PRM-following client is sent to is the
+    // upstream itself: the client records this issuer and compares it with
+    // the `iss` on the authorization response (RFC 9207 Section 2.4), and the
+    // upstream is the party that redirects back, so only its own issuer can
+    // match. The rewritten AS metadata and the /oauth/* proxy at this origin
+    // remain for clients that discover the AS from the resource origin
+    // (ADR-115; MCP-655).
     res.json({
       // The published resource and the RFC 8707 expected audience share
       // MCP_RESOURCE_PATH so they can never diverge (MCP-351).
       resource: `${selfOrigin}${MCP_RESOURCE_PATH}`,
-      authorization_servers: [selfOrigin],
+      authorization_servers: [upstreamMetadata.issuer],
       scopes_supported: SCOPES_SUPPORTED,
     });
   };
 
-  app.get('/.well-known/oauth-protected-resource', servePrm);
-  app.get('/.well-known/oauth-protected-resource/mcp', servePrm);
+  app.get(PROTECTED_RESOURCE_METADATA_PREFIX, servePrm);
+  app.get(`${PROTECTED_RESOURCE_METADATA_PREFIX}${MCP_RESOURCE_PATH}`, servePrm);
 
   app.get('/.well-known/oauth-authorization-server', (req, res) => {
     const originResult = deriveSelfOrigin(req, allowedHosts, canonicalOrigin);
@@ -122,7 +132,10 @@ export function registerPublicOAuthMetadataEndpoints(
       res.status(403).json({ error: 'forbidden', error_description: msg });
       return;
     }
-    res.json(rewriteAuthServerMetadata(upstreamMetadata, originResult.value));
+    // The AS metadata advertises the same scopes as the PRM above, so both
+    // discovery documents name the set this resource requires; a client may
+    // still add scopes of its own, and the proxy forwards them (MCP-345).
+    res.json(rewriteAuthServerMetadata(upstreamMetadata, originResult.value, SCOPES_SUPPORTED));
   });
 
   if (runtimeConfig.useStubTools) {

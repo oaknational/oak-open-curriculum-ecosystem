@@ -22,19 +22,19 @@
     ]
   },
   "summary": {
-    "itemCount": 728,
+    "itemCount": 729,
     "baselineItemCount": 717,
-    "additionCount": 11,
-    "availableCount": 684,
-    "retiredCount": 44,
-    "unchangedCount": 496,
-    "expandedCount": 0,
-    "modifiedCount": 108,
-    "relocatedCount": 68,
-    "addedCount": 12,
-    "workspaceScopeInCount": 612,
+    "additionCount": 12,
+    "availableCount": 652,
+    "retiredCount": 77,
+    "unchangedCount": 470,
+    "expandedCount": 1,
+    "modifiedCount": 123,
+    "relocatedCount": 45,
+    "addedCount": 13,
+    "workspaceScopeInCount": 613,
     "workspaceScopeOutUpstreamApiCount": 116,
-    "workspaceAuthorityCount": 601,
+    "workspaceAuthorityCount": 602,
     "upstreamApiAuthorityCount": 116,
     "upstreamSkillsAuthorityCount": 2,
     "externalThirdPartyAuthorityCount": 9,
@@ -58,8 +58,6 @@
             "download-asset",
             "explore-topic",
             "fetch",
-            "get-changelog",
-            "get-changelog-latest",
             "get-curriculum-model",
             "get-key-stages",
             "get-key-stages-subject-assets",
@@ -108,7 +106,7 @@
             "docs://oak/guidance/explore-curriculum.md",
             "docs://oak/guidance/find-lessons.md",
             "docs://oak/guidance/learning-progression.md",
-            "ui://widget/oak-curriculum-app-local.html"
+            "ui://widget/oak-curriculum-app-v1.html"
           ],
           "dormant": [
             "docs://oak/guidance/adapt-lesson.md",
@@ -506,9 +504,9 @@
           "packages/sdks/oak-curriculum-sdk/src/mcp/tool-guidance-data.ts"
         ],
         "evidence": {
-          "revision": "unchanged",
+          "revision": "modified",
           "anchorTargetCount": 1,
-          "anchorCount": 1
+          "anchorCount": 2
         }
       },
       "lineage": {
@@ -571,7 +569,7 @@
         "evidence": {
           "revision": "unchanged",
           "anchorTargetCount": 1,
-          "anchorCount": 1
+          "anchorCount": 6
         }
       },
       "lineage": {
@@ -1031,9 +1029,9 @@
           "packages/sdks/oak-curriculum-sdk/src/mcp/tool-guidance-workflows.ts"
         ],
         "evidence": {
-          "revision": "unchanged",
+          "revision": "modified",
           "anchorTargetCount": 1,
-          "anchorCount": 1
+          "anchorCount": 4
         }
       },
       "lineage": {
@@ -1220,7 +1218,7 @@
           "packages/sdks/oak-curriculum-sdk/src/mcp/agent-support-tool-metadata.ts"
         ],
         "evidence": {
-          "revision": "unchanged",
+          "revision": "modified",
           "anchorTargetCount": 1,
           "anchorCount": 1
         }
@@ -5655,9 +5653,9 @@
           "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-misconception-graph.ts"
         ],
         "evidence": {
-          "revision": "unchanged",
+          "revision": "modified",
           "anchorTargetCount": 1,
-          "anchorCount": 1
+          "anchorCount": 2
         }
       },
       "lineage": {
@@ -5907,7 +5905,7 @@
           "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-prior-knowledge-graph.ts"
         ],
         "evidence": {
-          "revision": "unchanged",
+          "revision": "modified",
           "anchorTargetCount": 1,
           "anchorCount": 1
         }
@@ -5928,9 +5926,9 @@
           "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-prior-knowledge-graph.ts"
         ],
         "evidence": {
-          "revision": "unchanged",
+          "revision": "modified",
           "anchorTargetCount": 1,
-          "anchorCount": 1
+          "anchorCount": 2
         }
       },
       "lineage": {
@@ -5965,18 +5963,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-prior-knowledge-graph.ts"
-        ],
-        "evidence": {
-          "revision": "unchanged",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "retained",
+        "disposition": "retired",
         "baselineFile": "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-prior-knowledge-graph.ts"
       },
       "registrations": []
@@ -5991,7 +5982,7 @@
           "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-prior-knowledge-graph.ts"
         ],
         "evidence": {
-          "revision": "unchanged",
+          "revision": "modified",
           "anchorTargetCount": 1,
           "anchorCount": 1
         }
@@ -6012,9 +6003,9 @@
           "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-prior-knowledge-graph.ts"
         ],
         "evidence": {
-          "revision": "unchanged",
+          "revision": "modified",
           "anchorTargetCount": 1,
-          "anchorCount": 2
+          "anchorCount": 1
         }
       },
       "lineage": {
@@ -6054,9 +6045,9 @@
           "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-thread-progressions.ts"
         ],
         "evidence": {
-          "revision": "unchanged",
+          "revision": "modified",
           "anchorTargetCount": 1,
-          "anchorCount": 1
+          "anchorCount": 3
         }
       },
       "lineage": {
@@ -6075,7 +6066,7 @@
           "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-thread-progressions.ts"
         ],
         "evidence": {
-          "revision": "unchanged",
+          "revision": "modified",
           "anchorTargetCount": 1,
           "anchorCount": 1
         }
@@ -6159,9 +6150,9 @@
           "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-thread-progressions.ts"
         ],
         "evidence": {
-          "revision": "unchanged",
+          "revision": "modified",
           "anchorTargetCount": 1,
-          "anchorCount": 1
+          "anchorCount": 2
         }
       },
       "lineage": {
@@ -6831,9 +6822,9 @@
           "packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts"
         ],
         "evidence": {
-          "revision": "unchanged",
+          "revision": "modified",
           "anchorTargetCount": 1,
-          "anchorCount": 1
+          "anchorCount": 2
         }
       },
       "lineage": {
@@ -6873,7 +6864,7 @@
           "packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts"
         ],
         "evidence": {
-          "revision": "unchanged",
+          "revision": "modified",
           "anchorTargetCount": 1,
           "anchorCount": 1
         }
@@ -7958,18 +7949,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/landing-page-document.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/html-head.ts"
       },
       "registrations": []
@@ -7993,18 +7977,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/page-sections.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-landing-page.ts"
       },
       "registrations": []
@@ -8014,18 +7991,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/page-sections.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-landing-page.ts"
       },
       "registrations": []
@@ -8035,18 +8005,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/page-sections.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-landing-page.ts"
       },
       "registrations": []
@@ -8056,18 +8019,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/page-sections.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-landing-page.ts"
       },
       "registrations": []
@@ -8077,18 +8033,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/page-sections.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-landing-page.ts"
       },
       "registrations": []
@@ -8098,18 +8047,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/page-sections.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-landing-page.ts"
       },
       "registrations": []
@@ -8119,18 +8061,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/page-sections.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-landing-page.ts"
       },
       "registrations": []
@@ -8140,18 +8075,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/page-sections.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-landing-page.ts"
       },
       "registrations": []
@@ -8161,18 +8089,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/page-sections.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 2
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-landing-page.ts"
       },
       "registrations": []
@@ -8182,18 +8103,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/page-sections.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 2
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-landing-page.ts"
       },
       "registrations": []
@@ -8203,18 +8117,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/landing-page-document.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-landing-page.ts"
       },
       "registrations": []
@@ -8224,18 +8131,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/create-snippet.ts"
-        ],
-        "evidence": {
-          "revision": "modified",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "retained",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/create-snippet.ts"
       },
       "registrations": []
@@ -8280,19 +8180,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/resources-section.tsx",
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/tools-section.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 2,
-          "anchorCount": 2
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "split",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-prompts-section.ts"
       },
       "registrations": []
@@ -8330,18 +8222,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/resources-section.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-resources-section.ts"
       },
       "registrations": []
@@ -8351,18 +8236,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/resources-section.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-resources-section.ts"
       },
       "registrations": []
@@ -8372,18 +8250,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/tools-section.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-tools-section.ts"
       },
       "registrations": []
@@ -8393,18 +8264,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/tools-section.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-tools-section.ts"
       },
       "registrations": []
@@ -8414,18 +8278,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/tools-section.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-tools-section.ts"
       },
       "registrations": []
@@ -8435,18 +8292,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/tools-section.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-tools-section.ts"
       },
       "registrations": []
@@ -8456,18 +8306,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/tools-section.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-tools-section.ts"
       },
       "registrations": []
@@ -8477,18 +8320,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/tools-section.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-tools-section.ts"
       },
       "registrations": []
@@ -8498,18 +8334,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/tools-section.tsx"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-tools-section.ts"
       },
       "registrations": []
@@ -8519,18 +8348,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "apps/oak-curriculum-mcp-streamable-http/src/landing-page/derive-view-props.ts"
-        ],
-        "evidence": {
-          "revision": "relocated",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "relocated",
+        "disposition": "retired",
         "baselineFile": "apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-tools-section.ts"
       },
       "registrations": []
@@ -9294,9 +9116,9 @@
           "apps/oak-curriculum-mcp-streamable-http/src/oauth-proxy/oauth-proxy-upstream.ts"
         ],
         "evidence": {
-          "revision": "unchanged",
+          "revision": "modified",
           "anchorTargetCount": 1,
-          "anchorCount": 1
+          "anchorCount": 2
         }
       },
       "lineage": {
@@ -10745,7 +10567,7 @@
         "evidence": {
           "revision": "modified",
           "anchorTargetCount": 1,
-          "anchorCount": 2
+          "anchorCount": 1
         }
       },
       "lineage": {
@@ -10990,18 +10812,11 @@
       "authority": "upstream-api",
       "workspaceScope": "out-upstream-api",
       "source": {
-        "state": "available",
-        "files": [
-          "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-changelog-latest.ts"
-        ],
-        "evidence": {
-          "revision": "unchanged",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "retained",
+        "disposition": "retired",
         "baselineFile": "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-changelog-latest.ts"
       },
       "registrations": []
@@ -11011,18 +10826,11 @@
       "authority": "upstream-api",
       "workspaceScope": "out-upstream-api",
       "source": {
-        "state": "available",
-        "files": [
-          "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-changelog-latest.ts"
-        ],
-        "evidence": {
-          "revision": "unchanged",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "retained",
+        "disposition": "retired",
         "baselineFile": "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-changelog-latest.ts"
       },
       "registrations": []
@@ -11032,18 +10840,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-changelog-latest.ts"
-        ],
-        "evidence": {
-          "revision": "unchanged",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "retained",
+        "disposition": "retired",
         "baselineFile": "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-changelog-latest.ts"
       },
       "registrations": []
@@ -11053,18 +10854,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-changelog-latest.ts"
-        ],
-        "evidence": {
-          "revision": "unchanged",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "retained",
+        "disposition": "retired",
         "baselineFile": "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-changelog-latest.ts"
       },
       "registrations": []
@@ -11074,18 +10868,11 @@
       "authority": "upstream-api",
       "workspaceScope": "out-upstream-api",
       "source": {
-        "state": "available",
-        "files": [
-          "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-changelog.ts"
-        ],
-        "evidence": {
-          "revision": "unchanged",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "retained",
+        "disposition": "retired",
         "baselineFile": "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-changelog.ts"
       },
       "registrations": []
@@ -11095,18 +10882,11 @@
       "authority": "upstream-api",
       "workspaceScope": "out-upstream-api",
       "source": {
-        "state": "available",
-        "files": [
-          "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-changelog.ts"
-        ],
-        "evidence": {
-          "revision": "unchanged",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "retained",
+        "disposition": "retired",
         "baselineFile": "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-changelog.ts"
       },
       "registrations": []
@@ -11116,18 +10896,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-changelog.ts"
-        ],
-        "evidence": {
-          "revision": "unchanged",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "retained",
+        "disposition": "retired",
         "baselineFile": "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-changelog.ts"
       },
       "registrations": []
@@ -11137,18 +10910,11 @@
       "authority": "workspace",
       "workspaceScope": "in",
       "source": {
-        "state": "available",
-        "files": [
-          "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-changelog.ts"
-        ],
-        "evidence": {
-          "revision": "unchanged",
-          "anchorTargetCount": 1,
-          "anchorCount": 1
-        }
+        "state": "retired",
+        "files": []
       },
       "lineage": {
-        "disposition": "retained",
+        "disposition": "retired",
         "baselineFile": "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-changelog.ts"
       },
       "registrations": []
@@ -14810,9 +14576,9 @@
           "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/definitions.ts"
         ],
         "evidence": {
-          "revision": "unchanged",
+          "revision": "modified",
           "anchorTargetCount": 1,
-          "anchorCount": 4
+          "anchorCount": 1
         }
       },
       "lineage": {
@@ -14831,9 +14597,9 @@
           "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/definitions.ts"
         ],
         "evidence": {
-          "revision": "unchanged",
+          "revision": "modified",
           "anchorTargetCount": 1,
-          "anchorCount": 3
+          "anchorCount": 1
         }
       },
       "lineage": {
@@ -15125,7 +14891,7 @@
           "apps/oak-curriculum-mcp-streamable-http/src/register-widget-resource.ts"
         ],
         "evidence": {
-          "revision": "unchanged",
+          "revision": "expanded",
           "anchorTargetCount": 1,
           "anchorCount": 1
         }
@@ -15712,7 +15478,7 @@
         "title": "Deferred upstream API paths",
         "reviewDomain": "engineering-structural",
         "impactTier": "high-impact",
-        "behaviouralIntent": "Temporarily exclude the check-restricted API family from generated schemas and MCP tools until MCP-214 lifts the deferral."
+        "behaviouralIntent": "Exclude paths whole-pipeline from generated schemas and MCP tools: the check-restricted family until MCP-214 lifts the deferral, and the upstream-removed changelog pair until the MCP-630 schema-cache refresh erases them (MCP-653)."
       }
     },
     {
@@ -16235,6 +16001,33 @@
         "reviewDomain": "owner-signed-copy",
         "impactTier": "high-impact",
         "behaviouralIntent": "Close the generated server instructions with the owner-signed brand-provenance guidance (MCP-365): the OGL v3.0 attribution statement from LICENCE-DATA.md for reused curriculum content, no Oak branding on derived content, no implied Oak creation or endorsement. The expert-authored Brand Usage guidance document (MCP-102 pipeline) is the full form that later deepens or supersedes this paragraph — evolve the two together, never separately."
+      }
+    },
+    {
+      "id": "A012",
+      "authority": "workspace",
+      "workspaceScope": "in",
+      "source": {
+        "state": "available",
+        "files": [
+          "packages/sdks/oak-curriculum-sdk/src/mcp/agent-support-tool-metadata.ts"
+        ],
+        "evidence": {
+          "revision": "added",
+          "anchorTargetCount": 1,
+          "anchorCount": 1
+        }
+      },
+      "lineage": {
+        "disposition": "added",
+        "addedAfterBaselineCommit": "240a598607b96485f50c0dfd6df154d673a90a25"
+      },
+      "registrations": [],
+      "reviewContext": {
+        "title": "Server instructions pointer to Oak's other agent-facing surfaces",
+        "reviewDomain": "agent-facing-routing-copy",
+        "impactTier": "high-impact",
+        "behaviouralIntent": "Route an arriving agent to the Oak surfaces this server does not cover (MCP-421): whole-catalogue bulk export via the Oak Open API's RFC 9727 catalogue, and Oak's site index for agents. Stated as a capability boundary rather than as a parallel route, so the paragraph does not read as an invitation to leave the authorisation-bound MCP surface for equivalent data."
       }
     }
   ],

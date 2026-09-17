@@ -21,6 +21,20 @@ Accepted (amended 2026-07-23)
 > detail, or subject + keyStage discovery) is the thread-progression value
 > surface, ordered by teaching year.
 >
+> **Amendment (2026-09-03 — thread sequences in curriculum order).** The
+> thread-progression surface now serves one run per subject in Oak's
+> authored curriculum order (years ascending; within a year, the subject
+> sequence's unit order), replacing the year-only ordering above whose
+> within-year tie-break was alphabetical. Basis: ADR-086 amendment of the
+> same date.
+>
+> **Amendment (2026-09-04 — misconception surface in curriculum order,
+> MCP-682).** `get-misconception-graph` now windows a thread's units and
+> lists a unit's lessons in the same authored order, from the corpus's
+> ordered sections rather than the id-sorted edge set it had read. No
+> wire-shape change; the ordering basis is stated in the served
+> description. Basis: ADR-086 follow-on of the same date.
+>
 > **Amendment (2026-06-11 — position-anchored-teaching-continuity, w1-c1).**
 > The Prompts section below was reconciled with the shipped estate, which
 > had drifted: the served set is seven prompts (the table previously listed
@@ -100,11 +114,11 @@ value surfaces — a whole-corpus dump has no bounded resource form.
 
 A further resource serves the interactive MCP App widget:
 
-| Resource URI                    | Content              | Priority | Audience  |
-| ------------------------------- | -------------------- | -------- | --------- |
-| `ui://widget/oak-banner-*.html` | React MCP App (HTML) | —        | `["app"]` |
+| Resource                      | Content              | Priority | Audience  |
+| ----------------------------- | -------------------- | -------- | --------- |
+| MCP App widget (`WIDGET_URI`) | React MCP App (HTML) | —        | `["app"]` |
 
-This resource uses `text/html;profile=mcp-app` content type and is registered via `registerAppResource` per [ADR-141](141-mcp-apps-standard-primary.md). CSP declarations for external fonts are included via `_meta.ui.csp.resourceDomains` on the content item.
+This resource uses `text/html;profile=mcp-app` content type and is registered via `registerAppResource` per [ADR-141](141-mcp-apps-standard-primary.md), whose widget URI identity amendment owns its address and settings. CSP declarations for external fonts are included via `_meta.ui.csp.resourceDomains` on the resource listing and the content item.
 
 **Intent**: Clients that support resource auto-injection get orientation data without a tool call.
 
@@ -122,7 +136,7 @@ Seven parameterised workflow templates that the user explicitly invokes (slash c
 | `lesson-planning`      | topic, yearGroup                             | Full lesson build: place the lesson, specify knowledge, misconceptions, sequence, assess, resources                          |
 | `explore-curriculum`   | topic, subject?                              | Broad parallel search across lessons/units/threads                                                                           |
 | `learning-progression` | concept, subject                             | Search threads, map progression, identify gaps                                                                               |
-| `curriculum-mapping`   | subject, keyStage, yearGroup?                | Order units from the thread backbone and prerequisites, check national-curriculum coverage                                   |
+| `curriculum-mapping`   | subject, keyStage, yearGroup?                | Order units from the thread backbone and each unit's stated prior knowledge, check national-curriculum coverage              |
 | `adapt-lesson`         | topic, yearGroup                             | Surface pedagogical signals from Oak's graphs, retrieve EEF evidence, present calibrated options                             |
 | `continue-progression` | subject, yearGroup, justCovered, classNotes? | Resolve the class's position, derive the next step from the thread, readiness + misconceptions, chain into `lesson-planning` |
 

@@ -27,6 +27,35 @@ describe('agent identity CLI planning', () => {
     });
   });
 
+  it('resolves the stripped cloud platform session id when no Practice seed is set', () => {
+    const result = runAgentIdentityCli({
+      argv: ['--format', 'json'],
+      env: {
+        CLAUDE_CODE_REMOTE_SESSION_ID: 'cse_01FV6rZz5BjSkApAUL6FAj72',
+      },
+    });
+
+    expect(result.exitCode).toBe(0);
+    expect(JSON.parse(result.stdout)).toMatchObject({
+      seedDigest: createHash('sha256').update('01FV6rZz5BjSkApAUL6FAj72').digest('hex'),
+    });
+  });
+
+  it('lets PRACTICE_AGENT_SESSION_ID_CLAUDE outrank the ambient platform session id', () => {
+    const result = runAgentIdentityCli({
+      argv: ['--format', 'json'],
+      env: {
+        PRACTICE_AGENT_SESSION_ID_CLAUDE: 'claude-seed',
+        CLAUDE_CODE_REMOTE_SESSION_ID: 'cse_01FV6rZz5BjSkApAUL6FAj72',
+      },
+    });
+
+    expect(result.exitCode).toBe(0);
+    expect(JSON.parse(result.stdout)).toMatchObject({
+      seedDigest: createHash('sha256').update('claude-seed').digest('hex'),
+    });
+  });
+
   it('prefers PRACTICE_AGENT_SESSION_ID_CLAUDE over the other Practice and harness vars', () => {
     const result = runAgentIdentityCli({
       argv: ['--format', 'json'],

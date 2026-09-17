@@ -18,66 +18,6 @@ export function listAllToolDescriptors(): readonly ToolDescriptorForName<ToolNam
   return toolNames.map((name) => getToolFromToolName(name));
 }
 
-async function invokeGetChangelogTool(
-  client: ToolClientForName<'get-changelog'>,
-  rawArgs: unknown,
-): Promise<ToolResultForName<'get-changelog'>> {
-  const descriptor: ToolDescriptorForName<'get-changelog'> = getToolEntryFromToolName('get-changelog').descriptor;
-  const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
-  if (!parsed.success) {
-    throw new TypeError(descriptor.describeToolArgs());
-  }
-  const flatArgs = parsed.data;
-  const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-  const invokeResult = await descriptor.invoke(client, nestedArgs);
-  if (invokeResult.httpStatus >= 400) {
-    throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
-      cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
-    });
-  }
-  const validation = descriptor.validateOutput(invokeResult.payload);
-  if (!validation.ok) {
-    throw new TypeError('Output validation error: ' + validation.message, {
-      cause: {
-        raw: invokeResult.payload,
-        issues: validation.issues,
-        attemptedStatuses: validation.attemptedStatuses,
-      },
-    });
-  }
-  return { status: validation.status, data: validation.data };
-}
-
-async function invokeGetChangelogLatestTool(
-  client: ToolClientForName<'get-changelog-latest'>,
-  rawArgs: unknown,
-): Promise<ToolResultForName<'get-changelog-latest'>> {
-  const descriptor: ToolDescriptorForName<'get-changelog-latest'> = getToolEntryFromToolName('get-changelog-latest').descriptor;
-  const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
-  if (!parsed.success) {
-    throw new TypeError(descriptor.describeToolArgs());
-  }
-  const flatArgs = parsed.data;
-  const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
-  const invokeResult = await descriptor.invoke(client, nestedArgs);
-  if (invokeResult.httpStatus >= 400) {
-    throw new TypeError(DOCUMENTED_ERROR_PREFIX + String(invokeResult.httpStatus), {
-      cause: { httpStatus: invokeResult.httpStatus, payload: invokeResult.payload },
-    });
-  }
-  const validation = descriptor.validateOutput(invokeResult.payload);
-  if (!validation.ok) {
-    throw new TypeError('Output validation error: ' + validation.message, {
-      cause: {
-        raw: invokeResult.payload,
-        issues: validation.issues,
-        attemptedStatuses: validation.attemptedStatuses,
-      },
-    });
-  }
-  return { status: validation.status, data: validation.data };
-}
-
 async function invokeGetKeyStagesTool(
   client: ToolClientForName<'get-key-stages'>,
   rawArgs: unknown,
@@ -165,7 +105,7 @@ async function invokeGetKeyStagesSubjectLessonsTool(
       },
     });
   }
-  return { status: validation.status, data: validation.data };
+  return { status: validation.status, data: validation.data, pagination: invokeResult.pagination };
 }
 
 async function invokeGetKeyStagesSubjectQuestionsTool(
@@ -195,7 +135,7 @@ async function invokeGetKeyStagesSubjectQuestionsTool(
       },
     });
   }
-  return { status: validation.status, data: validation.data };
+  return { status: validation.status, data: validation.data, pagination: invokeResult.pagination };
 }
 
 async function invokeGetKeyStagesSubjectUnitsTool(
@@ -255,7 +195,7 @@ async function invokeGetKeywordsTool(
       },
     });
   }
-  return { status: validation.status, data: validation.data };
+  return { status: validation.status, data: validation.data, pagination: invokeResult.pagination };
 }
 
 async function invokeGetLessonsAssetsTool(
@@ -435,7 +375,7 @@ async function invokeGetProgrammesAssetsTool(
       },
     });
   }
-  return { status: validation.status, data: validation.data };
+  return { status: validation.status, data: validation.data, pagination: invokeResult.pagination };
 }
 
 async function invokeGetProgrammesQuestionsTool(
@@ -465,7 +405,7 @@ async function invokeGetProgrammesQuestionsTool(
       },
     });
   }
-  return { status: validation.status, data: validation.data };
+  return { status: validation.status, data: validation.data, pagination: invokeResult.pagination };
 }
 
 async function invokeGetProgrammesUnitsTool(
@@ -615,7 +555,7 @@ async function invokeGetSequencesQuestionsTool(
       },
     });
   }
-  return { status: validation.status, data: validation.data };
+  return { status: validation.status, data: validation.data, pagination: invokeResult.pagination };
 }
 
 async function invokeGetSequencesUnitsTool(
@@ -894,10 +834,6 @@ async function invokeToolByName<TName extends ToolName>(
   rawArgs: unknown,
 ): Promise<ToolResultForName<ToolName>> {
   switch (name) {
-    case 'get-changelog':
-      return invokeGetChangelogTool(client, rawArgs);
-    case 'get-changelog-latest':
-      return invokeGetChangelogLatestTool(client, rawArgs);
     case 'get-key-stages':
       return invokeGetKeyStagesTool(client, rawArgs);
     case 'get-key-stages-subject-assets':
@@ -957,18 +893,6 @@ async function invokeToolByName<TName extends ToolName>(
   }
 }
 
-export function callTool(
-  name: 'get-changelog',
-  client: ToolClientForName<'get-changelog'>,
-  rawArgs: ToolArgsForName<'get-changelog'>,
-  logger?: Logger,
-): Promise<ToolResultForName<'get-changelog'>>;
-export function callTool(
-  name: 'get-changelog-latest',
-  client: ToolClientForName<'get-changelog-latest'>,
-  rawArgs: ToolArgsForName<'get-changelog-latest'>,
-  logger?: Logger,
-): Promise<ToolResultForName<'get-changelog-latest'>>;
 export function callTool(
   name: 'get-key-stages',
   client: ToolClientForName<'get-key-stages'>,

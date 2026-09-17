@@ -1,11 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    // The landing page is server-rendered React (`react-dom/server`), so the
-    // app's own source now carries .tsx alongside the widget's.
-    "jsx": "react-jsx"
-  },
   "include": [
     // No bare `**/*.test.ts`: the directory globs above already cover their
     // own tests, and an unscoped glob reaches into widget/, whose tests are
@@ -13,11 +8,6 @@
     // membership type-checks them once WITHOUT lib.dom.
     "operations/**/*.ts",
     "src/**/*.ts",
-    "src/**/*.tsx",
-    // Ambient declarations ride .d.mts: the repo-root gitignore excludes
-    // every **/*.d.ts, so committed declarations use the .mts flavour
-    // (same convention as runtime-only-scripts below).
-    "src/**/*.d.mts",
     "scripts/**/*.ts",
     "build-scripts/**/*.ts",
     "runtime-only-scripts/**/*.d.mts",

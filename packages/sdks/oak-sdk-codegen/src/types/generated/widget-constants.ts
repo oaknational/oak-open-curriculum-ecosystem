@@ -1,8 +1,8 @@
 /**
  * GENERATED FILE - DO NOT EDIT
- * 
+ *
  * Widget URI constants generated from sdk-codegen cross-domain constants.
- * 
+ *
  * @see code-generation/typegen/cross-domain-constants.ts - Single source of truth
  */
 
@@ -12,23 +12,28 @@
  * This app renders tool output with Oak branding, logo, and styling.
  * All UI-bearing tools reference this URI in their `_meta.ui.resourceUri` field (ADR-141).
  *
- * **Cache-Busting Strategy**: The URI carries a deterministic per-build hash
- * derived at sdk-codegen time from the build identifier (git commit SHA on
- * commit-identified deployed builds; the per-deployment ID on non-git
- * deploys; the literal `local` in local dev). A code change yields a
- * new URI — the only cache-invalidation lever the MCP Apps standard gives a
- * server (hosts MAY cache `ui://` content with no invalidation mechanism).
- * Same-code redeploys keep the same URI on the commit-SHA path; on the
- * deployment-ID fallback the URI changes with every deploy, because each
- * deployment mints a fresh ID.
- *
- * **Format**: `ui://widget/oak-curriculum-app-<hash>.html`
- * **Example**: `ui://widget/oak-curriculum-app-abc12345.html`
+ * **Published address**: the URI is the same on every build. Clients keep the
+ * address from the tool list they were given, so compatible widget changes
+ * ship as content behind it; an incompatible change takes the next version
+ * segment and is a published-contract change (ADR-141, widget URI identity
+ * amendment; MCP-489).
  *
  * @see code-generation/typegen/cross-domain-constants.ts - Source of truth
  * @see https://modelcontextprotocol.io/extensions/apps/overview (MCP Apps standard)
  */
-export const WIDGET_URI = "ui://widget/oak-curriculum-app-local.html" as const;
+export const WIDGET_URI = "ui://widget/oak-curriculum-app-v1.html" as const;
+
+/**
+ * Widget addresses from releases before the address was fixed.
+ *
+ * Not served. Listed on the auth public-resource allowlist so that an
+ * unauthenticated read reaches the resource-not-found error rather than an
+ * authentication challenge. The server sends no instruction to list tools
+ * again (ADR-141, widget URI identity amendment; MCP-489).
+ *
+ * @see code-generation/typegen/cross-domain-constants.ts - Source of truth
+ */
+export const RETIRED_WIDGET_URIS: readonly string[] = ["ui://widget/oak-curriculum-app-899803c6.html","ui://widget/oak-curriculum-app-5ce56c4b.html"];
 
 /**
  * Tools that advertise a widget UI via `_meta.ui.resourceUri`.

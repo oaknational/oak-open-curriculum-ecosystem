@@ -1311,56 +1311,6 @@
       ]
     },
     {
-      "dirPath": "research/web-app-deconstruction",
-      "publishedName": null,
-      "disposition": "classified",
-      "classification": "oak-leaf",
-      "evidence": [
-        {
-          "kind": "static-structure",
-          "pointer": "research/web-app-deconstruction/package.json description: \"...with a particular focus on what makes an Oak web app\" (name @oaknational/web-app-deconstruction, private, license MIT)"
-        },
-        {
-          "kind": "doctrine-record",
-          "pointer": "research/web-app-deconstruction/README.md \u00a7\"Publication and private-source citations\": \"the public projection of a research record whose full-fidelity master lives in Oak's private web-app-deconstruction repository\" (private-link reduction ratified as ADR-215 Decision 4, cited in packages/research-evidence/README.md)"
-        },
-        {
-          "kind": "consumer-topology",
-          "pointer": "facts.json internalDependents=[] for research/web-app-deconstruction; research/web-app-deconstruction/pnpm-workspace.yaml header marks the standalone manifest \"HISTORICAL ... NOT installable in the OCE projection\" \u2014 nothing in the OCE graph consumes the root"
-        }
-      ],
-      "targetState": "Keep as the public projection of Oak's private research record; not an extraction candidate.",
-      "tranche": "none-assigned",
-      "licence": [
-        "code-mit"
-      ]
-    },
-    {
-      "dirPath": "research/web-app-deconstruction/packages/research-evidence",
-      "publishedName": "@oaknational/research-evidence",
-      "disposition": "classified",
-      "classification": "oak-leaf",
-      "evidence": [
-        {
-          "kind": "static-structure",
-          "pointer": "research/web-app-deconstruction/packages/research-evidence/scripts/component-boundary-inventory.ts:103 const DIRECT_PACKAGE = '@oaknational/oak-components'; and lib/pinned-source-links.ts:6 regex enumerating oaknational/(Database-Tools|Oak-Web-Application|oak-components|oak-openapi|oak-open-curriculum-ecosystem) permalinks; lib/cli.ts:15-16 sibling-checkout defaults 'Oak-Web-Application'/'oak-components'"
-        },
-        {
-          "kind": "doctrine-record",
-          "pointer": "research/web-app-deconstruction/packages/research-evidence/README.md:3-5 declared purpose: \"makes quantitative OWA, Oak Components, Database-Tools, oak-openapi and OCE evidence repeatable without changing any source repository\""
-        },
-        {
-          "kind": "emitted-surface",
-          "pointer": "research/web-app-deconstruction/packages/research-evidence/scripts/openapi-oce-contract-comparison.ts:175-176 injects OAK_GRAPHQL_HOST / OAK_GRAPHQL_SECRET into the pinned provider-route import environment at runtime; every probe emits JSON asserting Oak repository package identities (e.g. scripts/oce-inventory.ts:20 expectedPackage '@oaknational/open-curriculum-ecosystem')"
-        }
-      ],
-      "targetState": "Retain as the Oak-estate measurement harness inside the research projection; no extraction.",
-      "tranche": "none-assigned",
-      "licence": [
-        "code-mit"
-      ]
-    },
-    {
       "dirPath": "runtime-only-scripts",
       "publishedName": null,
       "disposition": "classified",

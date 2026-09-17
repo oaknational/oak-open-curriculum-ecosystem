@@ -109,7 +109,8 @@ function createTestExtractedData(overrides: Partial<ExtractedData> = {}): Extrac
           {
             unitSlug: 'plants-unit',
             unitTitle: 'Plants Unit',
-            order: 1,
+            sequenceSlug: 'maths-primary',
+            sequenceIndex: 1,
             subject: 'science',
             keyStage: 'ks2',
             year: 3,

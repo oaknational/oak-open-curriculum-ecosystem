@@ -7,6 +7,7 @@
  * explicit exclusion reason says why the change adds no governed content.
  */
 import {
+  CRAWLER_FACING_ONLY,
   excluded,
   IMPLEMENTATION_ONLY,
   reviewed,
@@ -21,18 +22,71 @@ export const APP_AUTH_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaR
     'edb46bf7322dd0396c25ac7b4e254fb8bb94dc92f579b9a0c6666a5cc3569ea1',
     IMPLEMENTATION_ONLY,
   ),
+  // MCP-655: the upstream OAuth-metadata fetch now requires the document's
+  // `issuer` to equal the base URL it was fetched from (RFC 8414 §3.3) —
+  // the value the PRM publishes as the authorization server — and
+  // classifies the mismatch as `issuer_mismatch`. Boot-time boundary
+  // validation only; serves no agent-facing content. Homed here, with the
+  // auth surface it guards, because the app map sits at its line limit.
+  'apps/oak-curriculum-mcp-streamable-http/src/app/metadata-fetch-error.ts': excluded(
+    'cf2cfb9f0f7763e5657ed2c2379196e4e27cd152b6914700fa245e48e7de924a',
+    IMPLEMENTATION_ONLY,
+  ),
+  'apps/oak-curriculum-mcp-streamable-http/src/app/upstream-metadata-fetch.ts': excluded(
+    '06e90c915721be676bb603c583bfc020fb57a0b1490754350a0de5f73c1d47b6',
+    IMPLEMENTATION_ONLY,
+  ),
+  // MCP-655: the Clerk key-pairing guard — the secret key must belong to the
+  // instance the publishable key names (a shared JWKS `kid`), or bootstrap
+  // fails instead of every sign-in being refused after it succeeds. Boot-time
+  // boundary validation only; serves no agent-facing content.
+  'apps/oak-curriculum-mcp-streamable-http/src/app/clerk-key-pairing.ts': excluded(
+    '916664a0ff27167375629179970db20207357d8f9d2a739a2264b2f0703ba754',
+    IMPLEMENTATION_ONLY,
+  ),
   // MCP-351: the published PRM resource composes the shared
   // MCP_RESOURCE_PATH constant; the served document is byte-identical.
   // MCP-545: both GET /mcp mounts now serve the 405 standalone-stream
   // refusal; its body mirrors the SDK's own refusal idiom verbatim (a
   // vendor-shaped wire error, no new Oak-authored agent-facing copy) and
   // the C705–C708 metadata rows are untouched by the delta.
+  // MCP-655: the PRM (C706) names the upstream authorization server's
+  // issuer instead of this origin, so a PRM-following client holds the
+  // issuer the authorization response's `iss` carries (RFC 9207 §2.4);
+  // C705, C707 and C708 are untouched.
+  // MCP-345: the AS metadata route (C707) passes SCOPES_SUPPORTED into the
+  // rewrite, so the served document advertises the PRM's scopes rather than
+  // the upstream list; C705, C706 and C708 are untouched.
+  // MCP-734: the two PRM route literals now read from the re-exported
+  // `PROTECTED_RESOURCE_METADATA_PREFIX` (served-origin.ts) instead of
+  // restating the path — same routes, same served documents, no content row
+  // moves.
   'apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts': reviewed(
-    'd19554a15174e8472540b189b4f17e089c9d489f0ebeb455984253e6644b36f1',
+    'ef2c82b62f2a6fbc3e8cee07350e5ce30ac4afdf0a676cd2be06c5ffabe71c96',
     ['C705', 'C706', 'C707', 'C708'],
+  ),
+  // MCP-345: rewriteAuthServerMetadata (C408) takes the advertised scopes and
+  // states them as scopes_supported instead of passing the upstream list
+  // through; every other field of the served AS metadata is unchanged. The
+  // JSDoc records why (a client choosing scopes from this document requested
+  // an advertised openid that its registered grant, Oak's default, omits).
+  'apps/oak-curriculum-mcp-streamable-http/src/oauth-proxy/oauth-proxy-upstream.ts': reviewed(
+    'fcefa57b4a0e31be024c3182e8141be0c1c77aabe144e2e196d9515b44ebc40a',
+    ['C408'],
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/get-mcp-resource-url.ts': excluded(
     '1bac2a8ec91a09fb51dce02ec3f943bd76c9c3c4ee0097cc9bd318e8b716d2b0',
+    IMPLEMENTATION_ONLY,
+  ),
+  // MCP-734: the RFC 8288 `Link` header advertising the protected-resource
+  // metadata. Homed here beside `get-prm-url.ts` — this ledger's declared
+  // scope covers public-resource sets, and that module derives the same PRM
+  // address this header publishes. The only authored token is the link's
+  // `title`, naming the RFC 9728 document it points at; a response header
+  // reaches no MCP consumer in any case, since clients read JSON-RPC from
+  // `/mcp` and never parse this field.
+  'apps/oak-curriculum-mcp-streamable-http/src/app/agent-discovery-link-header.ts': excluded(
+    '672574968333ebb330092cbc84a778a424581d7973026436e656ab406d5c1e72',
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/get-prm-url.ts': excluded(
@@ -66,8 +120,10 @@ export const APP_AUTH_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaR
   // MCP-353: the under-the-hood allowlist row (C413) retired with the deleted
   // resource (MCP-242's re-review of the pre-deletion file is superseded by
   // that retirement); the file now composes SDK-owned URI sets only.
+  // MCP-489: the retired widget addresses join the allowlist from the SDK;
+  // still URI sets only, no agent-facing content.
   'apps/oak-curriculum-mcp-streamable-http/src/auth/public-resources.ts': excluded(
-    '75bbea61c4b91c53a1ec93133852f9841844f94eb448973f9bbecfd855239227',
+    'feba3bc1c8e933a2bc991cebadc014d636d54fb39431a0195103873899941ca9',
     IMPLEMENTATION_ONLY,
   ),
   // MCP-518: the public-path sets, and the case-normalisation rule they are
@@ -77,9 +133,42 @@ export const APP_AUTH_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaR
   // MCP-580 re-review: the health entry is now spread from `HEALTH_PATHS`, so
   // the routed `/mcp/healthz` the canonical host reaches is auth-exempt exactly
   // as the root path already was. Still a routing decision over path literals.
+  //
+  // MCP-700 re-review: the OpenAI domain-verification challenge path joins the
+  // always-skip set, consumed from the route module's exported constant so the
+  // served route and the exemption share one owner. Still a routing decision.
+  //
+  // MCP-703 re-review: `/robots.txt` joins the same set on the same terms,
+  // consumed from its own route module's exported constant. This hash attests
+  // the merged state carrying BOTH path constants — neither side's reviewed
+  // hash described it, so it is re-reviewed here rather than inherited. Still
+  // a routing decision over path literals; no agent-facing content either way.
   'apps/oak-curriculum-mcp-streamable-http/src/clerk-skip-surfaces.ts': excluded(
-    'c96fa6a897a638088c9841c8a4dbb85229ae7f800a14ac52c57b25cce91b9203',
+    '05519704af70c2de6498df2215a2fc5b11f9f45aaf876d2ac37159a8242ff283',
     IMPLEMENTATION_ONLY,
+  ),
+  // MCP-700: the OpenAI plugin-submission domain-verification challenge. The
+  // body is the portal-issued opaque token served verbatim as text/plain —
+  // vendor-shaped proof of domain control, not Oak-authored agent-facing
+  // content. The contract source and read date are in the module header.
+  'apps/oak-curriculum-mcp-streamable-http/src/openai-domain-verification.ts': excluded(
+    '3233717f514011f4c1534f67dc036a246072ee966a49081773509a44c847d451',
+    IMPLEMENTATION_ONLY,
+  ),
+  // MCP-703: the MCP host's `robots.txt`, registered in Phase 2.5 of
+  // `oauth-and-caching-setup.ts` (whose hash moves in the app ledger for that
+  // route composition alone). The served text is Oak-authored, so this is not an
+  // implementation-only change — but its audience is web crawlers, which
+  // never speak MCP, so it reaches no MCP consumer. See CRAWLER_FACING_ONLY
+  // for why that distinction is drawn rather than collapsed.
+  //
+  // MCP-703 re-review (owner ruling 2026-09-14): the served body no longer
+  // names a landing page, and rests the no-sitemap statement on the host being
+  // machine surface. Re-attested rather than inherited because the served text
+  // changed; the audience did not, so the exclusion reason stands.
+  'apps/oak-curriculum-mcp-streamable-http/src/robots-txt.ts': excluded(
+    '7f5b4024d481e07426d52781159ef39e5f5c60fd2e70e35f3cc7da154b070c4a',
+    CRAWLER_FACING_ONLY,
   ),
   // MCP-518: the Clerk conditional now forks on the request's surface before
   // its MCP method, so a browser view of the fully public page — at `/mcp` and
@@ -97,11 +186,16 @@ export const APP_AUTH_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaR
     '8b2b566c8acc474aae9191216f8154a1d31ccae70f2d0bc585a157fdcc8c481c',
     IMPLEMENTATION_ONLY,
   ),
-  // MCP-518: the surface-fork predicate, composing the negotiation's own
-  // selectsHtmlLeg with the auth vendor's document-navigation eligibility.
-  // A routing decision over method and negotiation headers; serves nothing.
+  // MCP-518: the surface-fork predicate, composing the browser-shape predicate
+  // with the auth vendor's document-navigation eligibility. A routing decision
+  // over method and negotiation headers; serves nothing.
+  //
+  // 2026-08-20 landing-page removal: renamed consumer (requestsHtmlDocument)
+  // and re-grounded prose. The fork's SUBJECT is unchanged and deliberately
+  // retained — the vendor's handshake redirect fires on a document navigation
+  // whether or not this host has a document to serve.
   'apps/oak-curriculum-mcp-streamable-http/src/mcp-public-browser-leg.ts': excluded(
-    '959581bc8a8ca60e63e6badef9a0d74914a3b8bf6108f9640ef6d55deb2d3ffb',
+    '6804fbf21a771b6238e8c7de50e3b8b7ec8808557997ae2cfd8dd865fd9f567e',
     IMPLEMENTATION_ONLY,
   ),
 };

@@ -3,12 +3,12 @@ boundary: B2-Architecture
 doc_role: index
 authority: design-decision-navigation
 status: active
-last_reviewed: 2026-08-07
+last_reviewed: 2026-08-19
 ---
 
 # Design Decision Records (DDRs)
 
-**Last Updated**: 2026-08-07
+**Last Updated**: 2026-08-19
 **Status**: Active design-decision index
 
 > **Navigation**: [Docs Home](../README.md) |
@@ -97,19 +97,20 @@ edges:
 
 ## Index
 
-| DDR                                                                                  | Title                                              | Status   |
-| ------------------------------------------------------------------------------------ | -------------------------------------------------- | -------- |
-| [DDR-001](design-decisions/001-the-design-system-is-a-configured-framework.md)       | The design system is a configured framework        | ratified |
-| [DDR-002](design-decisions/002-css-first-with-one-shipped-behaviour.md)              | CSS-first, with one shipped behaviour              | ratified |
-| [DDR-003](design-decisions/003-theme-state-is-the-choice-never-the-applied-value.md) | Theme state is the choice, never the applied value | accepted |
-| [DDR-004](design-decisions/004-five-themes-access-themes-are-first-class.md)         | Five themes; access themes are first-class         | accepted |
-| [DDR-005](design-decisions/005-licence-follows-provenance.md)                        | Licence follows provenance                         | ratified |
-| [DDR-006](design-decisions/006-oak-components-is-reference-never-dependency.md)      | Oak Components is reference, never dependency      | ratified |
-| [DDR-007](design-decisions/007-palette-values-derive-never-copy.md)                  | Palette values derive, never copy                  | ratified |
-| [DDR-008](design-decisions/008-floor-conformance-is-a-closed-predicate.md)           | Floor conformance is a closed predicate            | accepted |
-| [DDR-009](design-decisions/009-measurement-happens-at-canonical-widths.md)           | Measurement happens at canonical widths            | accepted |
-| [DDR-010](design-decisions/010-comparison-is-visual-first.md)                        | Comparison is visual first, statistics direct it   | accepted |
-| [DDR-011](design-decisions/011-design-verdicts-are-proven-on-rendered-pixels.md)     | Design verdicts are proven on rendered pixels      | accepted |
+| DDR                                                                                            | Title                                                        | Status   |
+| ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------ | -------- |
+| [DDR-001](design-decisions/001-the-design-system-is-a-configured-framework.md)                 | The design system is a configured framework                  | ratified |
+| [DDR-002](design-decisions/002-css-first-with-one-shipped-behaviour.md)                        | CSS-first, with one shipped behaviour                        | ratified |
+| [DDR-003](design-decisions/003-theme-state-is-the-choice-never-the-applied-value.md)           | Theme state is the choice, never the applied value           | accepted |
+| [DDR-004](design-decisions/004-five-themes-access-themes-are-first-class.md)                   | Five themes; access themes are first-class                   | accepted |
+| [DDR-005](design-decisions/005-licence-follows-provenance.md)                                  | Licence follows provenance                                   | ratified |
+| [DDR-006](design-decisions/006-oak-components-is-reference-never-dependency.md)                | Oak Components is reference, never dependency                | ratified |
+| [DDR-007](design-decisions/007-palette-values-derive-never-copy.md)                            | Palette values derive, never copy                            | ratified |
+| [DDR-008](design-decisions/008-floor-conformance-is-a-closed-predicate.md)                     | Floor conformance is a closed predicate                      | accepted |
+| [DDR-009](design-decisions/009-measurement-happens-at-canonical-widths.md)                     | Measurement happens at canonical widths                      | accepted |
+| [DDR-010](design-decisions/010-comparison-is-visual-first.md)                                  | Comparison is visual first, statistics direct it             | accepted |
+| [DDR-011](design-decisions/011-design-verdicts-are-proven-on-rendered-pixels.md)               | Design verdicts are proven on rendered pixels                | accepted |
+| [DDR-012](design-decisions/012-identities-are-self-contained-the-contract-is-the-invariant.md) | Identities are self-contained; the contract is the invariant | ratified |
 
 ```mermaid
 graph TD
@@ -124,6 +125,7 @@ graph TD
   DDR009["DDR-009 canonical measurement widths"]
   DDR010["DDR-010 comparison is visual first"]
   DDR011["DDR-011 verdicts proven on rendered pixels"]
+  DDR012["DDR-012 identities self-contained, contract invariant"]
   DDR002 -->|depends_on| DDR001
   DDR003 -->|depends_on| DDR002
   DDR004 -->|depends_on| DDR002
@@ -133,6 +135,8 @@ graph TD
   DDR008 -->|depends_on| DDR001
   DDR008 -->|depends_on| DDR006
   DDR009 -->|depends_on| DDR001
+  DDR012 -->|depends_on| DDR001
+  DDR012 -->|depends_on| DDR007
   DDR010 -->|depends_on| DDR009
   DDR011 -->|depends_on| DDR009
 ```

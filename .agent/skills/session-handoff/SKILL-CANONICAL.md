@@ -213,6 +213,16 @@ no retrospective memos; those are close-out work, this skill's §Steps.
    log: per
    [`permanent-doc-is-the-consolidation-record`](../../rules/permanent-doc-is-the-consolidation-record.md)
    the commit and the permanent docs are the record that the session happened.
+   Continuity refreshes ride the next substantive or consolidation commit —
+   never a dedicated handover commit, and never a handover PR (owner ruling
+   2026-07-15, verbatim: "handover commits are not necessary, and handover
+   PRs are banned as a memetic pathogen"; each rotation that mints one
+   breeds review treadmills that outlive their purpose). A seat transfer is
+   fully carried by the untracked handoff record plus comms events. When
+   the owner rules a shared handoff BRANCH for a day's uncommitted records
+   (2026-09-02, `handoff/jim-september`), that branch is the owner's
+   instrument, not a licence for per-seat handover PRs — a seat's own draft
+   continuity PR was withdrawn the same day under this ruling.
    Active plans remain authoritative for scope, sequencing, acceptance criteria,
    and validation.
 

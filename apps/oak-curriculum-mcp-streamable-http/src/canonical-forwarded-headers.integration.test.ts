@@ -38,14 +38,14 @@ import { createMockRuntimeConfig } from './test-helpers/auth-error-test-helpers.
 import { TEST_UPSTREAM_METADATA } from './test-helpers/upstream-metadata-fixture.js';
 import { getScratchStaticRoot } from './test-helpers/static-root-fixture.js';
 
-const CANONICAL_HOST = 'www.thenational.academy';
+const CANONICAL_HOST = 'mcp.thenational.academy';
 
 /**
  * What Vercel's edge has ALREADY written into `x-forwarded-host` by the time the
  * app runs — the deployment hostname the Cloudflare origin rule must present so
  * Vercel selects this project. The value the fix has to displace.
  */
-const DEPLOYMENT_HOST = 'curriculum-mcp-alpha.oaknational.dev';
+const DEPLOYMENT_HOST = 'example-project.vercel.example';
 
 /**
  * An allow-listed Host (`BASE_HOSTS`), so the DNS-rebinding guard is satisfied
@@ -100,8 +100,6 @@ async function assembleApp(
     runtimeConfig: createMockRuntimeConfig({ env }),
     observability: createFakeHttpObservability(),
     getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
-    getLandingPageHtml: () =>
-      '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
     upstreamMetadata: TEST_UPSTREAM_METADATA,
     clerkMiddlewareFactory: () => clerkMiddleware,
   });
@@ -146,13 +144,21 @@ async function observeAtClerk(
 }
 
 /**
- * The status a browser document GET of the public page receives through the
- * whole assembly, with the shim mounted ahead of everything.
+ * The status a browser document GET of `/mcp` receives through the whole
+ * assembly, with the shim mounted ahead of everything.
+ *
+ * @remarks
+ * The shim rewrites forwarded headers on every request, so it sits in front
+ * of a request class it must not disturb. This measures that class end to
+ * end. It used to be the served page's 200; since 2026-08-20 the app serves
+ * no HTML and the same request draws the protocol gate's 406 — a different
+ * number for the same property, that the shim changes the request's
+ * self-description and nothing else about its handling.
  *
  * @param env - Env overrides for the app under test
  * @param sentHeaders - Headers the request arrives with
  */
-async function pageStatus(
+async function browserGetStatus(
   env: Record<string, string>,
   sentHeaders: Readonly<Record<string, string>>,
 ): Promise<number> {
@@ -197,15 +203,16 @@ describe('canonical origin in forwarded headers (MCP-517)', () => {
       // against the session's authorised party is exact — so a case difference
       // between this header and `resolveCanonicalOrigin`'s output would refuse
       // the refresh.
-      const headers = await headersAfterShim('WWW.Thenational.Academy', EDGE_SUPPLIED_HEADERS);
+      const headers = await headersAfterShim('MCP.Thenational.Academy', EDGE_SUPPLIED_HEADERS);
 
       expect(headers['x-forwarded-host']).toBe(CANONICAL_HOST);
     });
 
     it('never modifies Host, which the DNS-rebinding guard judges', async () => {
-      // The rebinding allow-list deliberately excludes the canonical address —
-      // the edge never presents it — so rewriting Host would trip the app's own
-      // guard.
+      // This test's allow-list deliberately excludes the canonical address
+      // (production names it via ALLOWED_HOSTS since MCP-634) — the edge
+      // never presents it as Host — so rewriting Host here would trip the
+      // app's own guard.
       const headers = await headersAfterShim(CANONICAL_HOST, EDGE_SUPPLIED_HEADERS);
 
       expect(headers.host).toBe(REQUEST_HOST);
@@ -247,8 +254,10 @@ describe('canonical origin in forwarded headers (MCP-517)', () => {
       expect(headers['x-forwarded-proto']).toBe('https');
     });
 
-    it('serves the page as normal, so the rebinding guard downstream still passes', async () => {
-      expect(await pageStatus({ CANONICAL_HOST }, EDGE_SUPPLIED_HEADERS)).toBe(200);
+    it('leaves a browser GET with the answer it would have had anyway', async () => {
+      // 406 from the protocol gate, unchanged by the shim: the rewrite is
+      // confined to self-description and touches no routing decision.
+      expect(await browserGetStatus({ CANONICAL_HOST }, EDGE_SUPPLIED_HEADERS)).toBe(406);
     });
 
     it('mounts nothing without CANONICAL_HOST, so Clerk keeps per-request derivation', async () => {

@@ -28,6 +28,28 @@ A record's REGISTER encodes its authority, and readers obey the register
   check WHOSE word it is — provenance of authority, not just of facts.
   A napkin entry is evidence of what one mind concluded at one moment;
   only an owner ruling — quoted, dated, attributable — is authority.
+  When a record and your own durable memory disagree, the disagreement
+  IS the finding: a seat transmitted an inherited record's contrary
+  sentence about a merge gate over its own memory of the owner's ruling
+  without reconciling the pair (2026-09-02); read the source before
+  repeating either.
+- **The register binds WITHIN a paragraph, not only per record.** A
+  paragraph headed "owner ruling" accreted four review-derived sentences
+  under that heading across cure rounds (PR #886, 2026-08-14) —
+  review-channel content wearing owner authority skipped the design
+  check. Cure: authority-split inside the paragraph, review-derived
+  content labelled as reviewed-at-acceptance. The mechanical check: **an
+  owner-attributed clause is a verbatim quote or a marked seat reading —
+  nothing between.**
+- **A rule that needs repeated shrinking corrections was never
+  grounded.** When a constraint contracts correction by correction (a
+  full prohibition, then a may-share residue, then coincidence-not-concept,
+  then void-from-birth — one identities row, 2026-08-13 → 17), the
+  signature says the constraint had no author's word behind it; trace its
+  provenance at the FIRST correction, never the fourth. Agent-inscribed
+  mechanics acquire rule-force with nobody's word behind them by the same
+  route (an amend-as-evolution habit that invalidated published shas four
+  times in one evening, 2026-08-17).
 
 Before enacting the irreversible part of any correction, restate the
 policy back to its giver first (the three minutes this costs is nothing;

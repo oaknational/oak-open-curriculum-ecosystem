@@ -52,6 +52,14 @@ directly instead — the seat stays live there; wrap is for ends. A
 mid-cycle retirement under budget pressure additionally follows PDR-063's
 five-step protocol; wrap supplies the depth of the record it freezes.
 
+A freeze order binds until the owner discharges it. After "prepare for
+compaction and stop all processes", the owner's follow-on questions reopen
+analysis, never spend: answering is always in order, STARTING anything — a
+fleet, a monitor, a subagent — is gated until the compaction lands (owner
+correction 2026-08-17, verbatim: "nope, you have to compact first"). Never
+launch a long fleet into a context about to compact; its harvest lands in
+the thin post-compaction window.
+
 ## The Programme
 
 1. **Enter the modes.** Genuinely enter

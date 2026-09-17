@@ -1,8 +1,8 @@
 ---
 id: mcp-122-domain-move
 node_type: delivery
-name: "Domain move: the release serves at www.thenational.academy/mcp"
-overview: "One canonical path on Oak's main domain serves MCP clients, SSE streams, and human visitors by content negotiation, proxied to the app's existing origin — final before the store listing submits."
+name: "Domain move: the release serves at mcp.thenational.academy/mcp"
+overview: "One canonical address on a dedicated Oak subdomain serves MCP clients, SSE streams, and human visitors by content negotiation, fronted by the Cloudflare edge over the app's existing origin — final before the store listing submits."
 status: sketch
 ratified_by: null
 ratified_date: null
@@ -15,59 +15,56 @@ impact_areas:
 tickets:
   - MCP-122
 depends_on: []
-owner_gates:
-  - awaiting: owner-decision
-    clears_when: "Edge mechanism chosen (zone-level IaC route vs main-site platform rewrite) and the owning team engaged with a dated change window; the gate re-prices when the domain-move lane opens"
-    expires: 2026-08-31
-last_updated: 2026-08-02
+owner_gates: []
+last_updated: 2026-09-01
 ---
 
-# Domain move: `www.thenational.academy/mcp`
+# Domain move: `mcp.thenational.academy/mcp`
 
 ## Goal
 
-The app is reached at `https://www.thenational.academy/mcp` — the same
+The app is reached at `https://mcp.thenational.academy/mcp` — the same
 URL serving MCP protocol traffic, SSE streams, and a human-readable
 page by content negotiation — with the app's own origin untouched
-behind a proxy, the existing alpha endpoint alive through a deprecation
+behind the edge, the earlier alpha endpoint alive through a deprecation
 window, and the domain final **before** the store listing submits
 (MCP-122 blocks MCP-106). Probed facts grounding this plan are recorded
-on the ticket; the four load-bearing ones are in §Mechanism.
+on the ticket; the load-bearing ones are in §Mechanism.
 
 ## Mechanism
 
 **One path, three behaviours** (owner-set, do-not-re-decide): requests
 are told apart by method + Content-Type + Accept together — POST with a
 JSON body is MCP; GET accepting `text/event-stream` is the SSE leg; GET
-accepting `text/html` is a person and receives the human page. Probed:
-today the app returns 406 to a browser-shaped GET on `/mcp`, so the
-triple is app code this plan adds, not just edge routing.
+accepting `text/html` is a person and receives the human page. The
+triple is app code, not edge routing — live in production since
+v1.82.0 and domain-agnostic.
 
-**Edge**: the main domain fronts the app by proxy, two candidate
-mechanisms (the owner gate chooses): a zone-level edge route managed as
-infrastructure-as-code in the owning repository, or a platform-level
-rewrite in the main site's own hosting configuration. Either forwards
-`/mcp`, the path-scoped RFC 9728 metadata
-(`/.well-known/oauth-protected-resource/mcp`), and any further
-well-known the OAuth walk proves necessary. The main site's application
-code is untouched in both.
+**Edge**: a dedicated subdomain, `mcp.thenational.academy`, fronts the
+app through the Cloudflare edge (MCP-172), which presents the app's own
+Vercel hostname as the Host so Vercel selects the serving project. The
+whole app is served at that host — the root and `/mcp*`, both RFC 9728
+metadata forms, and the OAuth authorization-server metadata (verified
+live 2026-09-01). The main website's namespace and application code
+are untouched.
 
 **Self-description**: the app derives its resource and metadata URLs
-from the request Host; behind either proxy the origin's own hostname
-arrives instead. The app therefore gains a canonical-public-origin
-configuration (reading the forwarded-host chain only when explicitly
-enabled), so PRM documents, resource URLs, and OAuth resource
-indicators state the canonical domain wherever the app is fronted.
+from the request Host; behind the edge the origin's own hostname
+arrives instead. The app therefore carries a canonical-public-origin
+configuration (`CANONICAL_HOST`, a bare hostname validated at startup;
+never a request header), so PRM documents, resource URLs, OAuth
+resource indicators, and the `WWW-Authenticate` challenge state the
+canonical origin wherever the app is fronted.
 
 **Assets stay home**: signed asset-download URLs (5-minute TTL, never
 bookmarked) remain on the app's own origin — the smallest correct
-shape; nothing under the main domain's namespace beyond `/mcp*` and its
-well-known is claimed.
+shape; nothing under the main website's namespace is claimed.
 
-**Transition**: the current endpoint remains live through a deprecation
-window serving its existing traffic; existing connectors continue to
-work and re-point on their own clock. MCP clients follow redirects
-unevenly, so the old endpoint serves rather than bounces.
+**Transition**: the earlier alpha endpoint remains live through a
+deprecation window serving its existing traffic and self-describing the
+canonical resource; existing connectors continue to work and re-point
+on their own clock. MCP clients follow redirects unevenly, so the old
+endpoint serves rather than bounces.
 
 ## Acceptance (falsifiable)
 
@@ -77,9 +74,9 @@ unevenly, so the old endpoint serves rather than bounces.
 2. **The negotiation triple on one path** — `repo-safe`: a three-way
    test proves POST json → MCP, GET event-stream → SSE, GET html →
    human page, and non-matching requests still refuse with 406.
-3. **Live on the main domain** — `owner-held`: the owner (or a named
-   verifier) walks MCP connect, OAuth sign-in, and a browser visit at
-   `www.thenational.academy/mcp`; the walk is recorded on MCP-122.
+3. **Live on the canonical domain** — `owner-held`: the owner (or a
+   named verifier) walks MCP connect, OAuth sign-in, and a browser visit
+   at `mcp.thenational.academy/mcp`; the walk is recorded on MCP-122.
 4. **Old endpoint unbroken** — `owner-held`: an existing alpha
    connector completes a session during the deprecation window;
    recorded on MCP-122.
@@ -95,19 +92,18 @@ Each a single-story PR, default round budget:
    red-first (AC1).
 2. `negotiation-triple` — the html leg on `/mcp`, preserving the MCP
    and SSE contracts, red-first (AC2).
-3. `edge-change` — the chosen mechanism's reviewed change in its owning
-   surface; starts when the owner gate clears (AC3).
+3. `edge-change` — the Cloudflare edge fronting `mcp.thenational.academy`
+   over the app's origin (MCP-172), live (AC3).
 4. `transition-and-conformance` — deprecation-window posture, connector
    verification, conformance re-point (AC4, AC5).
 
 ## Decision gates (dated)
 
-- **Edge mechanism + owning-team engagement** — asked 2026-07-23,
-  needed by 2026-07-26 (the release-node P3D tempo; the engagement is
-  the schedule risk, not the code). The in-plan fallback if neither
-  mechanism can move at release pace: `mcp.thenational.academy`
-  (DNS-only, no main-domain edge coupling) — the owner decides at the
-  sitting.
+- **Edge mechanism** — asked 2026-07-23 with two main-domain candidates
+  and a named dedicated-subdomain fallback; resolved at owner word
+  2026-09-01: the dedicated subdomain `mcp.thenational.academy`, fronted
+  by the Cloudflare edge. The authoritative record is the MCP-122
+  ticket comment (2026-09-01).
 
 ## Dated notes
 
@@ -119,6 +115,22 @@ Each a single-story PR, default round budget:
   submission-conn handover; the gate's expiry is renewed and the
   decision re-prices from current facts when the domain-move lane
   opens. All probed facts and dates in this plan are as of 2026-07-23.
+- **2026-09-01** — Re-trued to the delivered design at owner word: the
+  plan's 2026-07-23 goal named the main domain
+  (`www.thenational.academy/mcp`) with the dedicated subdomain as the
+  in-plan fallback; the fallback is what shipped. The canonical address
+  is `mcp.thenational.academy/mcp`, served behind the Cloudflare edge
+  (MCP-172) with `CANONICAL_HOST` naming it. Probed 2026-09-01: the
+  canonical host serves MCP, the browser page, and both PRM forms at
+  root and `/mcp*`; `www.thenational.academy/mcp` returns 404; the
+  earlier alpha endpoint still serves and self-describes the canonical
+  origin. The edge-mechanism gate is discharged by the live edge and
+  its row removed. The estate-wide reference sweep (PR #944) re-points
+  MCP server references to the canonical address and retires
+  `oaknational.dev` mentions from live surfaces. Slices 1–3 are landed;
+  slice 4's conformance re-point rides PR #944 and its owner-held walks
+  (AC3, AC4) are recorded on the ticket when done. The authoritative
+  record is the MCP-122 ticket comment (2026-09-01).
 
 ## Out of scope
 

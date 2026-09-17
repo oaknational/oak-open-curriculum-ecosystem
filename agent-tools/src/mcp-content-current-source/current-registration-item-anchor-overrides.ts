@@ -10,6 +10,9 @@ const RESOURCE_REGISTRATIONS =
   'apps/oak-curriculum-mcp-streamable-http/src/resource-registrations.ts';
 const MCP_AUTH_RESPONSES =
   'apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/mcp-auth-responses.ts';
+const OAUTH_PROXY_UPSTREAM =
+  'apps/oak-curriculum-mcp-streamable-http/src/oauth-proxy/oauth-proxy-upstream.ts';
+const AUTH_ROUTES = 'apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts';
 
 export const CURRENT_REGISTRATION_ITEM_ANCHOR_OVERRIDES: Readonly<
   Record<string, Readonly<Record<string, readonly string[]>>>
@@ -30,6 +33,21 @@ export const CURRENT_REGISTRATION_ITEM_ANCHOR_OVERRIDES: Readonly<
     'apps/oak-curriculum-mcp-streamable-http/src/register-widget-resource.ts': [
       "export const WIDGET_RESOURCE_NAME = 'Oak Curriculum App';",
       'registerAppResource(\n    server,\n    WIDGET_RESOURCE_NAME,\n    WIDGET_URI,',
+    ],
+  },
+  // MCP-489: the listing config now also carries the widget settings, so the
+  // description re-anchors on its own line (content unchanged).
+  C691: {
+    'apps/oak-curriculum-mcp-streamable-http/src/register-widget-resource.ts': [
+      "      description: 'Interactive Oak curriculum MCP App for search and curriculum exploration.',",
+    ],
+  },
+  // MCP-489: the widget settings keep their values, are typed against the MCP
+  // Apps resource metadata, and are now served on the listing as well as the
+  // content item.
+  C692: {
+    'apps/oak-curriculum-mcp-streamable-http/src/register-widget-resource.ts': [
+      "const WIDGET_UI_META = {\n  csp: {\n    resourceDomains: ['https://fonts.googleapis.com', 'https://fonts.gstatic.com'],\n  },\n  prefersBorder: false,\n} satisfies McpUiResourceMeta;",
     ],
   },
   // MCP-351: the auth response senders extracted verbatim from mcp-auth.ts to
@@ -66,5 +84,19 @@ export const CURRENT_REGISTRATION_ITEM_ANCHOR_OVERRIDES: Readonly<
   },
   C400: {
     [MCP_AUTH_RESPONSES]: ["res.status(403).json({ error: 'Forbidden' });"],
+  },
+  // MCP-345: the AS metadata rewrite takes the advertised scopes and states
+  // them as scopes_supported, so the served document names the PRM's set
+  // rather than the upstream list; the route passes SCOPES_SUPPORTED.
+  C408: {
+    [OAUTH_PROXY_UPSTREAM]: [
+      'export function rewriteAuthServerMetadata(\n  upstreamMetadata: UpstreamAuthServerMetadata,\n  localOrigin: string,\n  advertisedScopes: readonly string[],\n): UpstreamAuthServerMetadata {',
+      'registration_endpoint: `${localOrigin}/oauth/register`,\n    scopes_supported: [...advertisedScopes],',
+    ],
+  },
+  C707: {
+    [AUTH_ROUTES]: [
+      'res.json(rewriteAuthServerMetadata(upstreamMetadata, originResult.value, SCOPES_SUPPORTED));',
+    ],
   },
 };

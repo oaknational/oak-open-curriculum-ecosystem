@@ -9,9 +9,8 @@ goal, an absolute minimum we cannot fall below, and not even a complete
 minimum, there will be other areas where a high floor is simply
 required."
 
-**Source**: the source-backed study *Oak Components — anatomy, intent
-and evolution* (`research/web-app-deconstruction/docs/`
-`current-state/oak-components-anatomy-intent-and-evolution.md`;
+**Source**: the source-backed study
+[Oak Components — anatomy, intent and evolution](../../research/innovation-kit/web-app-deconstruction/docs/current-state/oak-components-anatomy-intent-and-evolution.md);
 research snapshot 2026-08-03, package v3.4.0; landed on `main` via
 PR #737, merge commit `67d23056e` — the pinned source revision for
 this extraction) — covering the Oak

@@ -2,25 +2,28 @@
 
 This runbook provides step-by-step debugging workflows for the Oak Open Curriculum Ecosystem using Phase 2 observability features (correlation IDs, timing metrics, error enrichment).
 
-**Last Updated**: 2026-08-07  
+**Last Updated**: 2026-09-14  
 **Applies To**: HTTP Server (Vercel), Legacy Stdio Server (local/Claude Desktop)
 
 ## Production Endpoints and Hosts
 
-- **The canonical client URL is `https://www.thenational.academy/mcp` —
-  permanently** (owner ruling, 2026-08-07: "www…/mcp is now and forever the
-  canonical url"). Clients, connector configs, and documentation point here;
-  never re-point a client at a legacy host.
-- `curriculum-mcp-alpha.oaknational.dev` is a legacy compatibility host;
-  whether it continues to serve is an open owner choice, and the ruling binds
-  the client/production URL and self-description only.
-- The OAuth protected-resource metadata self-describes the canonical host on
-  BOTH hosts (verified in production 2026-08-07), so a client holding an
-  alpha-era resource binding refuses to present its token per RFC 8707 —
-  correct client conduct, not a server defect. The cure is re-registering the
-  client against the canonical URL, never loosening resource validation.
-- Known residue: the root protected-resource-metadata path is unrouted
-  (MCP-347).
+- **The canonical client URL is `https://mcp.thenational.academy/mcp`**
+  (owner word recorded verbatim on the MCP-122 ticket comment of 2026-09-01;
+  supersedes the 2026-08-07 `www…/mcp` ruling). Clients, connector configs,
+  and documentation point here; never re-point a client at a legacy host.
+- `www.thenational.academy/mcp` no longer reaches the app (404, verified
+  2026-09-01); any earlier compatibility host is out of the reference set.
+  The ruling binds the client/production URL and self-description only.
+- The OAuth protected-resource metadata self-describes the canonical origin —
+  on the canonical host and on the earlier deployment host, which still
+  serves and advertises the canonical resource (both verified in production
+  2026-09-01). A client holding a resource binding from an earlier address
+  therefore refuses to present its token per RFC 8707 — correct client
+  conduct, not a server defect. The cure is re-registering the client against
+  the canonical URL, never loosening resource validation.
+- The root protected-resource-metadata path routes and names the canonical
+  resource (verified in production 2026-09-01; the earlier unrouted residue
+  was tracked as MCP-347).
 
 ## Overview of Observability Features
 
@@ -122,6 +125,11 @@ run the same query differentially against local and production (e.g. the same
 MCP tool call against `oak-local` and `oak-prod`) — divergence with identical
 code isolates the issue to the deploy/data layer, matching results move
 suspicion back to code.
+
+And before hunting a request through any Oak instrument: **rule out an edge
+block.** A request Cloudflare's WAF refuses never reaches the origin, so it
+appears in no Oak instrument at all — see
+[Scenario 5](#scenario-5-connector-fails-and-nothing-is-in-any-log).
 
 ### Scenario 1: Slow Request Investigation
 
@@ -502,6 +510,102 @@ Document findings:
 - Client Action: Retry the request
 ```
 
+### Scenario 5: Connector Fails and Nothing Is in Any Log
+
+**Situation**: A teacher reports the connector failing with an error their
+client cannot explain, and the request is in no Oak instrument — no Sentry
+event, no PostHog event, no Vercel runtime log.
+
+**Nothing is server-side because nothing reached the server.** Cloudflare's
+WAF refuses the request at the edge on `mcp.thenational.academy` and returns
+an Oak-branded HTML page (`<title>Access blocked: Oak National
+Academy</title>`) with status 403 into a JSON-RPC client, which surfaces as an
+opaque connector failure. The only record of it is in Cloudflare's firewall
+events.
+
+**Step 1: confirm the origin was never reached.** The block carries **no
+`x-vercel-id`** header — that absence is the fastest positive identifier.
+`server: cloudflare` and `cf-ray` do **not** discriminate: every response on
+this host carries both, blocked or not (control-probed 2026-09-03).
+
+**Step 2: run the control probe on the identical path.** A WAF block and a
+broken route both return an error; only the pair separates them. The benign
+body must return the route's normal status with `x-vercel-id` present, while
+the reported payload returns 403 without it.
+
+```bash
+# Benign control on the same path — expect the route's normal status
+# (401 unauthenticated) and an x-vercel-id header
+curl -sS -o /dev/null -D - -X POST https://mcp.thenational.academy/mcp \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json, text/event-stream' \
+  --data '{"jsonrpc":"2.0","method":"tools/call","id":"1","params":{"name":"search","arguments":{"query":"photosynthesis lesson for Year 7"}}}' \
+  | grep -iE '^(HTTP/|x-vercel-id)'
+
+# Repeat with the reported payload. 403 and no x-vercel-id is a WAF block;
+# the same status on both is the route, not the edge.
+```
+
+**Step 3: attribute the block in Cloudflare.** Cloudflare's firewall
+events name the rule and ruleset, and the `cf-ray` value on the 403 identifies
+the request. Nothing in this repository can make that attribution — do not
+infer a rule from the status code.
+
+**What actually trips it** is a **literal payload string**, not the subject
+matter (measured on `mcp.thenational.academy` 2026-09-03, deterministic over
+repeated runs). Blocked: `' OR 1=1 --`,
+`<script>alert(document.cookie)</script>`, `; cat /etc/passwd`,
+`../../../../etc/passwd`. Passed: every phrasing a teacher would actually
+type, including "explain SQL injection to year 10", "what is cross-site
+scripting? a lesson for KS4", and `DROP TABLE students;`. So a computing
+lesson about security is not itself the trigger — check the exact string
+before assuming the topic caused it.
+
+For orientation, the zone's WAF lives in `oaknational/Cloud-Config` under
+`infrastructure/cloudflare/rulesets/`, and **no rule there is scoped to this
+host** (read on `main` 2026-09-14). `firewall_managed_rules.tf` deploys the
+OWASP Core Ruleset zone-wide across `thenational.academy` — `kind = "zone"`,
+`expression = "true"` — at paranoia level 1, with levels 2 to 4 explicitly
+disabled, and overrides the Inbound Anomaly Score Exceeded rule to
+`score_threshold = 40` and `action = "managed_challenge"`.
+`firewall_rules.tf` names no MCP host at all; its `block` rules are zone-wide
+and match on the URI (`.sql`, `__proto__`, `/xmlrpc.php`), none of which the
+payloads above touch. The only host-scoped MCP rule in the whole repository is
+the `/oauth/register` rate limit in `rate_limits.tf`, and that returns 429,
+not 403.
+
+**So the Terraform does not account for the 403, and you should not try to
+make it.** The managed-ruleset resource also declares a first `execute` rule
+as an empty placeholder under `lifecycle { ignore_changes = [rules[0]] }`,
+deliberately outside Terraform's control — so the file cannot tell you
+everything the managed phase runs. Step 3 is not a formality; read the
+firewall event.
+
+A `block`-over-`managed_challenge` rationale for this host does exist in
+Cloud-Config, but as an **aspiration, not a deployment**: the `mcp` DNS-record
+comment in `misc/dns_records.tf` records that a non-browser MCP client cannot
+solve a challenge and that "that action should be block on this scope", and
+`rate_limits.tf` reasons the same way for its own rule. Nothing in the
+repository implements it for the WAF. Do not read that comment as a
+description of what is deployed.
+
+The underlying defect — the edge matching literal attack syntax, which a
+genuine code sample in a computing lesson can carry — is tracked on
+[MCP-665](https://linear.app/oaknational/issue/MCP-665). That ticket predates
+the measurement above and still frames the defect as discrimination against
+security topics; scope the fix to signature matching, not to allow-listing
+subject matter. The durable fix for this scenario's blind spot — a
+`firewall_events` Logpush job feeding an instrument this team watches — is
+post-publicity and not yet ticketed.
+
+The blind spot is narrower than "no instrument at all", though.
+`misc/logpush.tf` in Cloud-Config already declares an enabled `http_requests`
+Logpush job on this zone carrying `WAFAction`, `WAFRuleID`, `WAFRuleMessage`,
+`FirewallMatchesActions`, `FirewallMatchesRuleIDs` and `RayID` to Datadog,
+sampled at `0.3`. It is not a surface this team watches and a given block may
+fall outside the sample, so it does not replace Step 3 — but check it before
+concluding the request left no trace anywhere.
+
 ## Tools and Commands Reference
 
 ### Vercel Log Access
@@ -516,6 +620,35 @@ filtering — and deployment build logs). The Vercel CLI is forbidden — see
 grep '"level":"error"' logs.txt | jq .
 grep '"correlationId":"req_123"' logs.txt | jq .
 ```
+
+### Clerk instance identification
+
+When a token path fails while metadata looks right, identify WHICH Clerk
+instance each side is bound to before theorising (a preview environment
+ran with mispaired publishable and secret keys for weeks, invisible because
+the unauthenticated probes never exercised the token path; found
+2026-09-02, guarded at bootstrap since). Three facts that make the check
+one command each, without exposing a key:
+
+- A JWKS `kid` IS the instance id — the frontend API and the backend API
+  agree on it, so the `kid` in a served JWKS names the instance behind a
+  publishable key.
+- `clerk api /instance` identifies the instance a secret key belongs to
+  without printing the key.
+- The backend verify endpoint answers `404 not found` for a VALID key of
+  ANOTHER instance and `clerk_key_invalid` for a malformed key — the two
+  failures are distinguishable, so a 404 on a known-good key is the
+  mispairing signature.
+
+A "transparent" relay retired from a path needs an END-TO-END token proof,
+never a metadata proof: the metadata was correct while every token was
+refused.
+
+Two evidence traps from the same investigation: `vercel env pull` writes the
+literal placeholder `[SENSITIVE]` for sensitive variables, so any pairing
+"proof" built on that file proves nothing (one was withdrawn); and full-text
+runtime-log queries match loosely — a "28 signed-in" count assembled from a
+substring query was noise. Count from a structured field, or not at all.
 
 ### grep Patterns for Stdio Logs
 

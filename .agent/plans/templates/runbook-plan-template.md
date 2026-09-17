@@ -29,6 +29,12 @@ last_updated: <YYYY-MM-DD>
 
 <The trigger or cadence.>
 
+## User groups and value
+
+<Who runs this and who benefits when it runs, in experience terms —
+usually one or two lines for a runbook. Where the value routes
+elsewhere (a system, a downstream consumer), name it.>
+
 ## Preconditions
 
 <What must already be true before step 1 — each item checkable, with

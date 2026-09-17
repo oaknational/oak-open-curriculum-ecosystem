@@ -1,9 +1,18 @@
 /**
- * Reviewed post-baseline semantic deltas — Landing-page and widget governed sources (the MCP-128 React rebuild era).
+ * Reviewed post-baseline semantic deltas — retired landing-page sources and
+ * the widget's governed sources.
  *
  * Every entry is a compliance review act: the semantic hash pins the exact
  * reviewed state; item ids cite the audit rows the file carries, or one
  * explicit exclusion reason says why the change adds no governed content.
+ *
+ * The landing page itself was removed on 2026-08-20 (owner instruction:
+ * `mcp.thenational.academy` is the MCP server and nothing else), so every
+ * landing entry here is now a `DELETED_SOURCE` tombstone carrying its
+ * baseline-content hash. The React-era component files that were ADDED after
+ * the baseline carry no entry at all: added-then-deleted files leave the
+ * baseline diff entirely, so a review key for one would be an orphan the
+ * membership check rejects.
  */
 import {
   DELETED_SOURCE,
@@ -14,78 +23,17 @@ import {
 } from './current-source-delta-review-helpers.js';
 
 export const APP_LANDING_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview>> = {
-  'apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/design-system-refs.ts':
-    excluded(
-      'b0a04c5a2aef2dc8295a5317e6f8cfc6448c2f5f91e12e00bd06bb3a5f3feb22',
-      IMPLEMENTATION_ONLY,
-    ),
-  // MCP-511: the protected-resource metadata URL now arrives through the
-  // view-props seam and is passed to ConnectSection. Prop plumbing only —
-  // C341 (page title) and C353 (app-version meta) are unchanged.
-  'apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/landing-page-document.tsx':
-    reviewed('df935e7db27b730c57fbb55bed5a802dc0e9cbbfcd2d085c8e4385f1697b84dc', ['C341', 'C353']),
-  // MCP-516: two access claims were restated because Clerk moved to production
-  // and sign-in is open to anyone with an Oak account. C343's status tag reads
-  // "Public Beta" (was "Invite Only Private Beta") and C349's sentence names
-  // the account rather than an invitation. Both are owner-authored wordings
-  // replacing statements that had become false; the dispositions are unchanged
-  // and the anchors are re-pointed at the new verbatim text.
-  //
-  // MCP-511 (still current): the OAuth link's href moved from the unqualified
-  // well-known path to the derived path-qualified metadata URL. A destination
-  // address, not agent-facing or user-facing TEXT — the link's own label
-  // ("OAuth 2.1 authorisation") is unchanged.
-  'apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/page-sections.tsx': reviewed(
-    'b36fa7dc1d53e4386c16aa20bdd446da3440c2ad529f5712f52ccea13aef497e',
-    ['C343', 'C344', 'C345', 'C346', 'C347', 'C348', 'C349', 'C350', 'C351', 'C352'],
-  ),
-  'apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/resources-section.tsx':
-    reviewed('eeb707b5df366897049e0599b65abb41cdacec4e102a4a6b37687fa7094088c5', [
-      'C357',
-      'C360',
-      'C361',
-    ]),
-  'apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/site-chrome.tsx': excluded(
-    '112bc8e8fa31768b6a90496e4ff5e60d51e6b85758700d9f9c843cafb342a735',
-    IMPLEMENTATION_ONLY,
-  ),
-  'apps/oak-curriculum-mcp-streamable-http/src/landing-page/components/tools-section.tsx': reviewed(
-    'df1dc60bea02eb3c0ff243c7a3dcee632610adaf2c241e2f9531a2e33fb49d7a',
-    ['C357', 'C362', 'C363', 'C364', 'C365', 'C366', 'C367', 'C368'],
-  ),
-  // MCP-536: the snippet's MCP server key is renamed `oak-curriculum` →
-  // `oak-open-curriculum` to match the plugin's own name, by owner decision. The
-  // published surface is Oak's OPEN curriculum (OGL-licensed), not its
-  // copyrighted material, so the key now names the thing accurately. C354 is
-  // otherwise unchanged: same template, same interpolated endpoint.
-  'apps/oak-curriculum-mcp-streamable-http/src/landing-page/create-snippet.ts': reviewed(
-    'f564b6889d1841cb5187f3772443db5806a36c8c261a63816d862c6561a09073',
-    ['C354'],
-  ),
-  // MCP-351: the bake now calls the shared served-origin module; the derived
-  // view-props values are unchanged.
-  // MCP-511: one further derived value — the path-qualified protected-resource
-  // metadata URL, from the same served-origin module. C369's content is
-  // unchanged; this adds a derived address, not copy.
-  'apps/oak-curriculum-mcp-streamable-http/src/landing-page/derive-view-props.ts': reviewed(
-    '034d095e165d480945ae09da1e24d9b934b120078888e8167c082821f0bbccca',
-    ['C369'],
+  'apps/oak-curriculum-mcp-streamable-http/src/landing-page/create-snippet.ts': excluded(
+    '99d81650fd174e889196cc299b26425d57ea49bf66b5232c119aac67b052a043',
+    DELETED_SOURCE,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/landing-page/index.ts': excluded(
-    '5440a4e6a5395f51973cd475d8fcaf65d75fcb8d2eff0590aa36d4f179192fe4',
-    IMPLEMENTATION_ONLY,
-  ),
-  'apps/oak-curriculum-mcp-streamable-http/src/landing-page/render-landing-page.tsx': excluded(
-    'c8ae88ca78a96601ac77e78b4b969141026496b3bc57ad64c6ead3151ba11207',
-    IMPLEMENTATION_ONLY,
+    '5d95221119ef9b2601ae67767705d38a7c191730bc2d805ea9da9afd7a088e35',
+    DELETED_SOURCE,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/landing-page/resolve-canonical-url.ts': excluded(
     'f7677fe63b8f9c48949e694a344be5fb7330c0a00e614093e7794c4edee66dbc',
     DELETED_SOURCE,
-  ),
-  'apps/oak-curriculum-mcp-streamable-http/src/landing-page/view-props.ts': excluded(
-    '3010afc5fd0454c0009a014c68669109b4bc208e86cb9bcc11b04b1b85d9eb00',
-    IMPLEMENTATION_ONLY,
   ),
   // MCP-434: safe-area insets moved from inline padding to composed
   // custom properties; the governed text nodes (disclaimer, hidden h1,

@@ -35,11 +35,6 @@ export default {
           'src/types/generated/',
           // Ground truths (data files)
           'ground-truths/',
-          // Research-deconstruction baseline fixtures: standalone input
-          // material for the web-app-deconstruction study, not modules
-          // (in scope since the research workspaces joined the cruise,
-          // 2026-08-10 — same class as ground-truths/).
-          'research-evidence/fixtures/',
           // Intentional off-graph analysis documentation
           'bucket-c-analysis\\.ts',
           // Test files are standalone entry points (Vitest + Playwright)
@@ -228,7 +223,7 @@ export default {
         'are exempt here — they are the sanctioned declared-dependency path, and undeclared ones ' +
         "are the next rule's finding, never a second containment hit.",
       from: {
-        path: '^(packages/[^/]+/[^/]+|apps/[^/]+|demos/[^/]+|agent-tools|research/web-app-deconstruction/packages/[^/]+)/(?:vitest|tsup|eslint|stryker)[.\\w-]*\\.config\\.(?:ts|mts|cts|js|mjs|cjs)$',
+        path: '^(packages/[^/]+/[^/]+|apps/[^/]+|demos/[^/]+|agent-tools)/(?:vitest|tsup|eslint|stryker)[.\\w-]*\\.config\\.(?:ts|mts|cts|js|mjs|cjs)$',
       },
       to: {
         pathNot: ['^$1/'],
@@ -259,7 +254,7 @@ export default {
         'clean installs and inside per-workspace tool sandboxes (the Stryker instance that ' +
         'motivated the isolation plan).',
       from: {
-        path: '^(?:packages/[^/]+/[^/]+|apps/[^/]+|demos/[^/]+|agent-tools|research/web-app-deconstruction/packages/[^/]+)/(?:vitest|tsup|eslint|stryker)[.\\w-]*\\.config\\.(?:ts|mts|cts|js|mjs|cjs)$',
+        path: '^(?:packages/[^/]+/[^/]+|apps/[^/]+|demos/[^/]+|agent-tools)/(?:vitest|tsup|eslint|stryker)[.\\w-]*\\.config\\.(?:ts|mts|cts|js|mjs|cjs)$',
       },
       to: {
         // `undetermined` is deliberately absent: sanctioned workspace:*
