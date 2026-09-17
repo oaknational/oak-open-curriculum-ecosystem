@@ -208,7 +208,7 @@
     },
     {
       "file": "apps/oak-curriculum-mcp-streamable-http/src/env-clerk-guards.ts",
-      "semanticSha256": "fceb09166d44b587a2093664fd9595c3a9741662ad5efb3efd197ce59e083274",
+      "semanticSha256": "570adc7e832e018e76186969252eece8b54e9eec59b690c4733c732d64cd9b1f",
       "itemIds": [],
       "exclusionReason": "Reviewed engineering implementation change; no new authored agent-facing content."
     },
@@ -220,7 +220,7 @@
     },
     {
       "file": "apps/oak-curriculum-mcp-streamable-http/src/env.ts",
-      "semanticSha256": "0537f72528f0ae1c0de9ff41f1e43e99b16fdc5a26890885bee7d6f16288723b",
+      "semanticSha256": "cc2dbdb547fdb068c6992b137174e81434d757315c1d7daeddd650d40160c45b",
       "itemIds": [],
       "exclusionReason": "Reviewed engineering implementation change; no new authored agent-facing content."
     },
