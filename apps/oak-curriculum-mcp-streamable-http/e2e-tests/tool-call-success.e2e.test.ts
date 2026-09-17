@@ -70,8 +70,6 @@ async function executeToolCall(): Promise<{
     runtimeConfig,
     observability: createMockObservability(runtimeConfig),
     getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
-    getLandingPageHtml: () =>
-      '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
   });
   const response = await request(app)
     .post('/mcp')

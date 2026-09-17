@@ -1,0 +1,22 @@
+{
+ "windows": [
+  {
+   "window": "w12",
+   "files": [
+    ".agent/memory/active/archive/napkin-2026-07-26.md"
+   ]
+  },
+  {
+   "window": "w13",
+   "files": [
+    ".agent/memory/active/archive/napkin-2026-08-14.md"
+   ]
+  },
+  {
+   "window": "w14",
+   "files": [
+    ".agent/memory/active/archive/napkin-2026-09-02.md"
+   ]
+  }
+ ]
+}

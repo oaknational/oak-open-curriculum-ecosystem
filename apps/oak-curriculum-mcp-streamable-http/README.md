@@ -42,7 +42,7 @@ This server exposes Oak's curriculum through the three MCP primitive types, each
 **Tools** (model-controlled) — currently 37 curriculum tools: 24 generated
 from the OpenAPI schema plus 13 aggregated tools. The aggregated set covers
 search/browse/fetch flows, orientation, the curriculum graph tools
-(`get-thread-progressions` for year-ordered sequences,
+(`get-thread-progressions` for curriculum-ordered sequences,
 `get-prior-knowledge-graph`, `get-misconception-graph`,
 `get-keyword-graph`), EEF evidence, `download-asset`, and
 the MCP App user-search pair (`user-search`, `user-search-query`). The AI
@@ -229,7 +229,7 @@ Summary:
   - `CLERK_PUBLISHABLE_KEY` — Clerk publishable key for OAuth
   - `CLERK_SECRET_KEY` — Clerk secret key for auth middleware
 - Optional env:
-  - `ALLOWED_HOSTS` (comma-separated, additive, supports `*` wildcards). Names hosts to allow **in addition to** the Vercel system hostnames and `localhost`/`127.0.0.1`/`::1`; it cannot remove a host from the allow-list. It gates two things: the DNS-rebinding guard on the HTML surfaces (`GET /` and the `/mcp` HTML-negotiation leg), and the Host a request may be self-described from in OAuth metadata and `/mcp` auth challenge/resource URLs. When `CANONICAL_HOST` is set it supersedes that second use entirely — self-description then reads the configured origin and never consults this list. Narrowing self-description is `CANONICAL_HOST`'s job, never this variable's.
+  - `ALLOWED_HOSTS` (comma-separated, additive, supports `*` wildcards). Names hosts to allow **in addition to** the Vercel system hostnames and `localhost`/`127.0.0.1`/`::1`; it cannot remove a host from the allow-list. It gates the Host a request may be self-described from in OAuth metadata and `/mcp` auth challenge/resource URLs. (It also bounds `dnsRebindingProtection`, but that guard is mounted on **no route** since the HTML surfaces were removed on 2026-08-20 — MCP-650 owns remounting it — so setting this variable changes no Host-rejection behaviour today.) When `CANONICAL_HOST` is set it supersedes that second use entirely — self-description then reads the configured origin and never consults this list. Narrowing self-description is `CANONICAL_HOST`'s job, never this variable's.
   - `CANONICAL_HOST` — the address this server is served at when an edge presents a different Host to the origin (see [Canonical address](#canonical-address)). Bare hostname; startup-validated.
   - `LOG_LEVEL` (default `info`, use `debug` for staging)
   - `SENTRY_MODE` — `off` (default), `fixture`, or `sentry`
@@ -292,11 +292,47 @@ signing off a release. Replaces the retired `pnpm smoke:remote` harness
 - `GET /.well-known/oauth-protected-resource` returns the canonical resource and authorisation servers
 - 401 responses include a `WWW-Authenticate` header with `resource` and `authorization_uri` to guide clients
 
+### Agent discovery (`Link` header)
+
+- Every response carries an RFC 8288 `Link` header advertising this host's own description (MCP-734):
+  `</.well-known/oauth-protected-resource>; rel="describedby"; type="application/json"; title="OAuth 2.0 protected resource metadata"`.
+  That document names the MCP endpoint in its `resource` field, so an agent arriving at the bare origin reaches the endpoint in one hop.
+- `describedby` rather than `service-desc`: the metadata describes how this resource is protected, not the service's callable interface, and the weaker registered relation is the one that is true.
+- Set by app-level middleware (`src/app/agent-discovery-link-header.ts`), so it rides every response including 404s and does not depend on any route existing at `/`. The advertised path is derived from `PROTECTED_RESOURCE_METADATA_PREFIX`, and an integration test follows the published target and requires a 200, so the link cannot rot into a 404.
+
+### OpenAI domain verification
+
+- `GET /.well-known/openai-apps-challenge` returns the plugin-submission portal's domain-verification token as bare `text/plain` (MCP-700). Not an OAuth surface: public, registered before Clerk middleware, and served in every auth mode. Contract: [OpenAI plugin submission, "Domain verification"](https://developers.openai.com/plugins/deploy/submission), which requires the endpoint to "return only that plugin's verification token".
+
+### Crawler directives
+
+- `GET /robots.txt` returns this host's crawler directives as `text/plain` (MCP-703). Public,
+  registered before Clerk middleware, and served in every auth mode — a crawler arrives with no
+  credentials, so a file reachable only through the auth vendor is an unfetchable one.
+- The body is not a copy of `www`'s. This host is a machine surface — the MCP endpoint, its
+  OAuth authorisation proxy and the discovery documents — with no crawlable page set to
+  enumerate, so it names **no sitemap**; `/.well-known/` is explicitly `Allow`ed so the discovery
+  documents stay fetchable under RFC 9309 §2.2.2's longest-match rule; and only the authorisation
+  endpoints, the signed expiring asset URLs and the liveness probes are disallowed. It names no
+  origin, so it is identical on every host this app answers on, and it names no page, so it does
+  not go stale when the served page set changes.
+- This meets the `robots.txt` half of agent-readiness baseline `AR-A6`. **On the sitemap half,
+  this host is a named `AR-A6` exception: a machine surface has no crawlable page set to
+  enumerate, so a `Sitemap:` directive would advertise a document that does not exist.**
+  **Decided by the repo owner on 2026-09-14** (MCP-703, PR #972), on the ground that this host is
+  machine surface rather than on how many pages it serves — so the exception counts no pages, and
+  holds whether or not a page describes the machine surfaces. Revisit it if this host ever grows
+  a crawlable page set.
+- Content Signals values (`search`, `ai-input`, `ai-train`) are deliberately absent: that is
+  `AR-A7`, an editorial and legal decision about values, undecided for this host. `open-api`
+  already publishes its own set, so cross-host consistency belongs to that decision rather than
+  to this baseline file.
+
 ### Canonical address
 
 The server normally describes itself from each request's `Host` header. When an
 edge serves it at a different address — Cloudflare serves
-`https://www.thenational.academy/mcp` and overrides the `Host` to the app's own
+`https://mcp.thenational.academy/mcp` and overrides the `Host` to the app's own
 Vercel hostname, which is how Vercel selects the serving project — that
 derivation would advertise the origin hostname instead.
 
@@ -440,9 +476,11 @@ This application has comprehensive test coverage across three testing layers:
 
 ### Widget Tests (Playwright)
 
-Widget tests run against the Vite dev server (port 5173), separate from
-the MCP server landing page tests (port 3333). Both light and dark
-themes are tested via Playwright projects with `colorScheme` emulation.
+Widget tests run against the Vite dev server (port 5173). Both light and
+dark themes are tested via Playwright projects with `colorScheme`
+emulation. This workspace has no other Playwright suite: the browser
+suite that ran on port 3333 covered the landing page and went with it on
+2026-08-20.
 
 ```bash
 # Widget visual/structural tests (both themes)
@@ -464,9 +502,9 @@ pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:widget
 # E2E tests (Vitest, requires built artefacts)
 pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e
 
-# MCP server landing page tests (Playwright)
-pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:ui
-pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:a11y
+# Widget browser tests (Playwright)
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:widget:ui
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:widget:a11y
 
 # Widget Playwright tests (separate from server tests)
 pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:widget:ui
@@ -476,6 +514,7 @@ pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:widget:a11y
 ## Detailed Documentation
 
 - [MCP primitives: intention and intended audience](docs/mcp-primitives-intention-and-audience.md) - Internal guide to tool/resource boundaries (zero prompts), control model, and UAT expectations
+- [MCP Registry publication](docs/mcp-registry-publication.md) — how the `server.json` entry is composed from the deployment and proved before publishing, the namespace decision and its ownership proofs, and how the entry stays true
 - [Observability](docs/observability.md) — Sentry instrumentation, per-request span, scope enrichment, redaction barrier, release metadata, source-map upload
 - [Operational Debugging](docs/operational-debugging.md) — request tracing, timing, diagnostics, error debugging, production logging
 - [Widget Rendering](docs/widget-rendering.md) — widget dispatch, rendering architecture, and sandbox details

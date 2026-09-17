@@ -24,6 +24,46 @@ feedback-mechanism arc, taxonomy work) is retained in git and in the
 work brief and the recent identity stretch, per
 [`continuity-practice.md` §Disposition](../../../directives/continuity-practice.md).
 
+## DEDICATED CONSOLIDATION, NAPKIN-ONLY — EXECUTED (2026-09-02, Kiln holds Slag, 1447f4, curator)
+
+**Step-6a synthesis landed the same day** (owner redirect ~12:1xZ: the seat had read the six
+archives into its own context and compacted; the different approach was the corpus-analysis
+engine, scoped against the 2026-08-07 processed marker). Report:
+`research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-09-02.md`,
+processed marker 2026-09-02; one graduation (`patterns/claim-before-check.md`); the
+interrupt plan's ledger carries the first measured recurrence-despite-home rate (16 of 19
+prior-kept mechanisms recurred within four weeks). The since-marker run recipe is in the
+corpus-analysis runbook. Open at close: the main-merge into `handoff/jim-september` after
+Finch's #915 fold lands is the rotation-versus-appends shape — carry the 2026-08-19 napkin
+additions into the fresh napkin and process them; both napkin and repo-continuity need
+semantic merges. DONE 2026-09-02 ~14:3xZ after #915 landed: merge commit on
+`handoff/jim-september` (the napkin the one conflict; the fold's 156-line delta carried under a
+dated heading and routed into eight homes in the following commit, five items on distilled
+with candidate homes, dispositions on the napkin); branch pushed under the bot. WRAPPED
+2026-09-02 ~14:5xZ: #951 ready, all checks green, the owner merges; any post-merge true-up
+rides #954 at owner word; the seat stayed live only for a local-only data export (MCP-662,
+untracked). The next consolidation session starts from main's fresh napkin and the
+distilled entries' candidate homes (the owner named the distilled pass as the next session). Deep handoff taken at the owner's word ~13:4xZ with the seat kept live: the
+machine-local handoff record is
+`.agent/state/collaboration/handoffs/d88ab157-curator-napkin-only-consolidation-2026-09-02.md`
+(attached to claim d88ab157), the formation letter is
+`.agent/experience/2026-09-02-kiln-holds-slag-the-corpus-i-was-meant-to-query.md`, and the
+napkin's ~13:4xZ entry carries the lens harvest and the loss scan.
+
+Owner-launched consolidate-until-done pass, scoped by owner word to the current napkin and
+the five archived napkins before it: distilled appended to, never curated; every non-napkin
+fitness signal ignored; the comms watermarks left where the 2026-08-14 pass set them. Run
+n=1 on `handoff/jim-september` in the primary checkout (the owner's handoff branch for the
+2026-09-02 uncommitted records; PR #951 the landing surface), under a curator claim on this
+thread; the two claims retained at the 2026-08-19 week-sleep freeze (design lane, Director
+seat) were reported, not archived. Napkin rotated at 3,093 lines
+(`archive/napkin-2026-09-02.md`, cmp-proven) after every behaviour-changing item in the
+2026-08-14 → 2026-09-02 window was read and dispositioned first-hand; the rotation record
+at the top of the fresh napkin lists the homes, and the commits are the record. Five
+pattern files carry the window's named concepts in the pre-SDK concept-node form. The
+step-6a historical synthesis over the six napkins follows in the same session; its report
+in the continuity-memory research lane is the marker for the next "since last marker" pass.
+
 ## DEDICATED CONSOLIDATION — EXECUTED (2026-08-14, Quasar wakes Nadir, 0fabcd, curator)
 
 Owner-launched consolidate-until-done pass, run inside a live team window (Director seat
@@ -844,6 +884,7 @@ passes) is in git history and the [`curator-passes/`](../curator-passes/) ledger
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
+| `Kiln holds Slag` | `claude-code` | `claude-fable-5-1` | `1447f4` | `dedicated consolidation, napkin-only at owner scope (2026-09-02): the 2026-08-14 → 09-02 napkin window drained item by item into permanent homes (five new patterns; rule, skill, directive, runbook and README clauses; distilled appended; PDR-117 register row extended; F-164/F-165) and rotated cmp-proven; then the step-6a historical synthesis over the six napkins (report in the continuity-memory research lane). Worked n=1 on handoff/jim-september in the primary under a curator claim` | 2026-09-02 | 2026-09-02 |
 | `Nettle weaves Root` | `claude-code` | `fable-5` | `5cfa11` | `longitudinal-step-6a-synthesis (plan, run, conservation, archive)` | 2026-08-07 | 2026-08-08 |
 | `Magnetar guards Perigee` | `claude-code` | `fable-5` | `565521` | `dedicated-consolidation + PDR-094 v3/v4 owner-worded correction` | 2026-07-26 | 2026-07-26 |
 | `Moonless Lurking Dusk` | `claude` | `Opus 4.8` | `0641a3` | `dedicated-knowledge-curation` | 2026-06-01 | 2026-06-01 |

@@ -40,10 +40,10 @@ import { createMockRuntimeConfig } from '../test-helpers/auth-error-test-helpers
 describe('health endpoint inside the routed surface (MCP-580)', () => {
   let app: Express;
 
-  /** The only health path the canonical host's monitor can reach. */
+  /** The health path inside the routed surface (MCP-580). */
   const ROUTED_HEALTH = '/mcp/healthz';
 
-  /** The alpha compatibility surface's path. */
+  /** The root-path form every root-served deployment answers. */
   const ROOT_HEALTH = '/healthz';
 
   /** What an external uptime monitor sends; curl's default. */
@@ -67,7 +67,6 @@ describe('health endpoint inside the routed surface (MCP-580)', () => {
       }),
       observability: createFakeHttpObservability(),
       getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
-      getLandingPageHtml: () => '<!doctype html><html lang="en-GB"><body>page</body></html>',
     });
   });
 
@@ -108,26 +107,28 @@ describe('health endpoint inside the routed surface (MCP-580)', () => {
     expect(gated.body).toEqual({ error: 'Accept header must include text/event-stream' });
   });
 
-  it('is not captured by the /mcp landing-page negotiation that still answers its own path', async () => {
-    // Some uptime services probe with a browser Accept, and the negotiation
-    // would hand them the page: HTML satisfies a bare status-code check while
-    // saying nothing at all about this process. The sibling `/mcp` proves the
-    // negotiation is mounted and answering, so the JSON below is the health
-    // route winning rather than the negotiation being absent.
-    const negotiated = await request(app)
+  it('answers a browser-shaped probe with health JSON, where the sibling path refuses', async () => {
+    // Some uptime services probe with a browser Accept. Until 2026-08-20 the
+    // `/mcp` HTML negotiation would hand them a page, which satisfies a bare
+    // status-code check while saying nothing about this process; now the same
+    // Accept draws the protocol gate's 406. Either way the hazard is the
+    // health route being shadowed by whatever answers `/mcp` for browsers, so
+    // the sibling probe stays as the CONTROL: it proves something is mounted
+    // and answering on `/mcp` under this Accept, which makes the JSON below
+    // the health route winning rather than the control being absent.
+    const sibling = await request(app)
       .get('/mcp')
       .set('Host', 'localhost')
       .set('Accept', BROWSER_ACCEPT);
     const health = await request(app).get(ROUTED_HEALTH).set('Accept', BROWSER_ACCEPT);
 
-    expect(negotiated.status).toBe(200);
-    expect(negotiated.headers['content-type']).toMatch(/text\/html/);
+    expect(sibling.status).toBe(406);
     expect(health.status).toBe(200);
     expect(health.headers['content-type']).toMatch(/application\/json/);
     expect(health.body).toEqual(HEALTH_BODY);
   });
 
-  it('keeps the root health path answering for the alpha compatibility surface', async () => {
+  it('keeps the root health path answering for root-served deployments', async () => {
     const res = await request(app).get(ROOT_HEALTH).set('Accept', MONITOR_ACCEPT);
 
     expect(res.status).toBe(200);

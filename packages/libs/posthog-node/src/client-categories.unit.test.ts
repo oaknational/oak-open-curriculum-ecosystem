@@ -94,6 +94,21 @@ describe('normaliseOakClientProduct', () => {
     ],
     ['the Claude Code CLI (~3,100 requests)', ['claude-code/2.1.226 (cli)'], 'claude_code'],
     ['the Codex MCP client (~230 requests)', ['codex-mcp-client/0.147.0-alpha.6.5'], 'codex'],
+    // The OpenAI rows come from PostHog's published resolver fixtures, added
+    // ahead of Oak's OpenAI launch; the first live OpenAI header confirms them.
+    [
+      'ChatGPT via the OpenAI client (PostHog fixture shape)',
+      ['openai-mcp/1.0.0 (ChatGPT)'],
+      'chatgpt',
+    ],
+    ['Codex via the OpenAI client (PostHog fixture shape)', ['openai-mcp/1.0.0 (Codex)'], 'codex'],
+    ['the OpenAI client with no surface (PostHog fixture)', ['openai-mcp/1.0.0'], 'openai'],
+    ['the OpenAI client on another surface', ['openai-mcp/1.0.0 (Agent Builder)'], 'openai'],
+    // The split is gated on the same version parse the rebuilt user agent uses,
+    // so a malformed version leaves the vendor-level product, matching the label.
+    ['the OpenAI client with a three-digit major', ['openai-mcp/100 (ChatGPT)'], 'openai'],
+    ['the OpenAI client with no version', ['openai-mcp (ChatGPT)'], 'openai'],
+    ['the OpenAI client with a zero-padded major', ['openai-mcp/01 (Codex)'], 'openai'],
   ])('attributes %s to its product', (_label, headerValues, expected) => {
     expect(normaliseOakClientProduct(readable(...headerValues))).toBe(expected);
   });
@@ -221,14 +236,18 @@ describe('normaliseOakClientProduct', () => {
       normaliseOakClientProduct(readable('Claude-User')),
       normaliseOakClientProduct(readable('claude-code/2.1.226 (cli)')),
       normaliseOakClientProduct(readable('codex-mcp-client/0.147.0')),
+      normaliseOakClientProduct(readable('openai-mcp/1.0.0 (ChatGPT)')),
+      normaliseOakClientProduct(readable('openai-mcp/1.0.0')),
       normaliseOakClientProduct(readable('python-httpx/0.28.1')),
       normaliseOakClientProduct(UNREADABLE),
     ]);
 
     expect([...derived].sort(compareProducts)).toStrictEqual([
+      'chatgpt',
       'claude_ai',
       'claude_code',
       'codex',
+      'openai',
       'other',
       'unavailable',
     ]);
@@ -236,9 +255,12 @@ describe('normaliseOakClientProduct', () => {
 });
 
 describe('isOakClientProduct', () => {
-  it.each(['claude_ai', 'claude_code', 'codex', 'other', 'unavailable'])('accepts %s', (value) => {
-    expect(isOakClientProduct(value)).toBe(true);
-  });
+  it.each(['claude_ai', 'claude_code', 'codex', 'chatgpt', 'openai', 'other', 'unavailable'])(
+    'accepts %s',
+    (value) => {
+      expect(isOakClientProduct(value)).toBe(true);
+    },
+  );
 
   it.each([
     ['a surface-axis value', 'cli'],

@@ -3,7 +3,8 @@ id: workspace-reorganisation-programme
 node_type: strategic
 name: "Workspace reorganisation programme — one lifecycle per workspace, generated output separated"
 overview: "Reorganise the estate from 34 workspaces to the census round-2 target inventory (~66): scopes narrowed to one lifecycle and one capability each, reusable machinery freed from Oak leaves, and generated output never co-resident with hand-written code."
-status: ratified
+status: superseded
+superseded_by: toolkit-re-architecture
 ratified_by: "Jim Cresswell"
 ratified_date: 2026-08-14
 ratified_where: "Owner decision card direct to the lane seat (Nautilus calls Plankton, c6d48b), 2026-08-14 ~15:4xZ, answer verbatim 'Ratify' — card text and answer recorded in this repo's session lineage and mirrored on the survey-lane ARC channel entry of the same hour"
@@ -16,7 +17,7 @@ depends_on:
     kind: beneficial
 owner_gates: []
 tickets: []
-last_updated: 2026-08-14
+last_updated: 2026-08-19
 ---
 
 # Workspace reorganisation programme

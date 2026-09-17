@@ -146,6 +146,70 @@ design system. Enforced by instrument, not review vigilance:
   hook-clean contract brand expression layers assume (`specimen.css`, the
   `.mast` split carries the record). Any red is new information.
 
+## Rendering and test gotchas (proven in this workspace)
+
+Each of these cost a real investigation in the 2026-08-18/19 review
+rounds; the cure is stated so the next round does not re-derive it.
+
+- **Cross-realm `instanceof`**: a frame's elements are instances of the
+  FRAME's classes, so a parent-realm `instanceof HTMLElement` silently
+  rejects every cross-document node. Null-check typed `querySelector`
+  results instead.
+- **`light-dark()` resolves at the DECLARING element**: a subtree
+  `data-theme` cannot flip `:root`-declared tokens; theme the document
+  root (the composition exhibit's applier pattern).
+- **Focus-scroll is the "scroll reset"**: focusing an offscreen control
+  scrolls it into view, so arrow-key radio groups at the top of the page
+  reset the scroll unless the control bar is sticky (always in view means
+  no jump); residual drift is scroll anchoring doing its job.
+- **React-owned nodes are never removed**: a server-rendered `<link>` is
+  React's — retire it with `disabled = true`, never `.remove()` (React
+  restores hoistables). React 19 hoists stylesheets only under a
+  `precedence` prop; otherwise they render in place in the body. And "a
+  request is not application": the binder stamps
+  `data-oak-brand-applied` at swap completion because DOM presence is not
+  cascade state (`link.sheet` mints ~135 ms before load).
+- **Playwright proves the BUILT artefact**: the suites run `next start` on
+  `.next` — rebuild before re-running or you test the previous code.
+- **Auto-margin grid items shrink to fit**: a grid item with
+  `margin-inline: auto` does not stretch to its track; `/tokens` had only
+  ever looked right by accident.
+- **The layout viewport is not the visual viewport**: macOS overlay
+  scrollbars leave `clientWidth` at 320 while Linux classic scrollbars
+  narrow it (~305), so an SC 1.4.10 pass at exactly 320 with zero slack is
+  a latent CI red. Probe BELOW the boundary and measure the floor.
+- **A scroll container must be the containing block for its own
+  absolutely positioned descendants** (`position: relative` on the
+  scroller), or their static positions ride the content past the clip
+  and tax the document's scroll width (two instances: a 228 px sideways
+  scroll, then a 312 px floor from visually-hidden helpers).
+- **`overflow-x: auto` computes the unspecified axis to `auto`**: a
+  "horizontal-only" scroller picked up ~3 px of rounded-border scroll
+  slack vertically and axe rightly demanded keyboard access to it. Close
+  the artifact axis explicitly (`overflow: auto hidden`) when height is
+  content-driven; a scroll container's contract names both axes.
+- **Decorative motion must be overflow-closed**: a transformed box extends
+  scrollable overflow, so plate inset must be at least the translate
+  amplitude or SC 1.4.10 becomes a function of animation phase.
+- **Content-sized columns plus `nowrap` crush siblings**: a `color-mix`
+  token resolves to a long `oklab()` string with no hex form; the strip's
+  auto value column took ~250 px of a 288 px frame and the name column
+  went 0 px wide by 440 px tall. Bounded tracks that give by wrapping (a
+  2:1 `fr` split), never by vanishing.
+- **Sonar duplicate-selector findings can be live bugs**: a second `.mast`
+  block silently overrode the strip-offset declaration to 0 (the later
+  block wins). Merging to one block is correctness work.
+- **One document, one holder**: two well-meaning theme holds on the same
+  root correct each other forever; ownership is decided by context
+  (standalone: the page holds itself; framed: the parent holds). The
+  showcase applies context-decides-the-owner three ways — theme mode,
+  breadcrumbs, holds.
+- **Three stacked cures on one element is a solution-class signal**:
+  containing-block positioning, an artifact-axis close, and measured
+  conditional focusability on `tok-scroll` are each correct; their
+  accumulation is the trigger for a design look at "every family is its
+  own scroll container" BEFORE a fourth cure lands.
+
 ## Fidelity review
 
 - `pnpm tool:fidelity` — captures the Claude Design canonical export (served

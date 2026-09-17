@@ -1,0 +1,5680 @@
+{
+  "ok": true,
+  "validateComplete": true,
+  "resolvedCandidateIds": [
+    "C03",
+    "C07",
+    "C08",
+    "C10",
+    "C16",
+    "C17",
+    "C19",
+    "C21",
+    "C22",
+    "C26",
+    "C27",
+    "C28",
+    "C30",
+    "C31",
+    "C32",
+    "C33",
+    "C34",
+    "C35",
+    "C36",
+    "C39",
+    "C40",
+    "C41",
+    "C42",
+    "C43",
+    "C44",
+    "C45",
+    "C46",
+    "C47",
+    "C48",
+    "C49",
+    "C50",
+    "C52",
+    "C53",
+    "C54",
+    "C55",
+    "C56",
+    "C57",
+    "C58",
+    "C59",
+    "C60",
+    "C61",
+    "C62",
+    "C63",
+    "C64",
+    "C65",
+    "C66",
+    "C67",
+    "C68",
+    "C69",
+    "C70",
+    "C71",
+    "C72"
+  ],
+  "incompleteCandidateIds": [],
+  "missingCandidateIds": [],
+  "dispositions": [
+    {
+      "candidateId": "C03",
+      "disposition": "keep",
+      "reason": null
+    },
+    {
+      "candidateId": "C07",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C08",
+      "disposition": "keep",
+      "reason": null
+    },
+    {
+      "candidateId": "C10",
+      "disposition": "keep",
+      "reason": null
+    },
+    {
+      "candidateId": "C16",
+      "disposition": "keep",
+      "reason": null
+    },
+    {
+      "candidateId": "C17",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C19",
+      "disposition": "keep",
+      "reason": null
+    },
+    {
+      "candidateId": "C21",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C22",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C26",
+      "disposition": "keep",
+      "reason": null
+    },
+    {
+      "candidateId": "C27",
+      "disposition": "keep",
+      "reason": null
+    },
+    {
+      "candidateId": "C28",
+      "disposition": "keep",
+      "reason": null
+    },
+    {
+      "candidateId": "C30",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C31",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C32",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C33",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C34",
+      "disposition": "keep",
+      "reason": null
+    },
+    {
+      "candidateId": "C35",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C36",
+      "disposition": "keep",
+      "reason": null
+    },
+    {
+      "candidateId": "C39",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C40",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C41",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C42",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C43",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C44",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C45",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C46",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C47",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C48",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C49",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C50",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C52",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C53",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C54",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C55",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C56",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C57",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C58",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C59",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C60",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C61",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C62",
+      "disposition": "keep",
+      "reason": null
+    },
+    {
+      "candidateId": "C63",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C64",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C65",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C66",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C67",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C68",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C69",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C70",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C71",
+      "disposition": "kill",
+      "reason": null
+    },
+    {
+      "candidateId": "C72",
+      "disposition": "kill",
+      "reason": null
+    }
+  ],
+  "voterOutcomes": [
+    {
+      "status": "adjudicated",
+      "candidateId": "C03",
+      "voterId": "C03:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "low"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C03",
+      "voterId": "C03:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "importance": "high",
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C03",
+      "voterId": "C03:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C03",
+      "voterId": "C03:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "low"
+        },
+        "importance": "med",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C07",
+      "voterId": "C07:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "high"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C07",
+      "voterId": "C07:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "low"
+        },
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C07",
+      "voterId": "C07:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C07",
+      "voterId": "C07:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "importance": "high",
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C08",
+      "voterId": "C08:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C08",
+      "voterId": "C08:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C08",
+      "voterId": "C08:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C08",
+      "voterId": "C08:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C10",
+      "voterId": "C10:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "low"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C10",
+      "voterId": "C10:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C10",
+      "voterId": "C10:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "importance": "high",
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C10",
+      "voterId": "C10:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C16",
+      "voterId": "C16:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "importance": "high",
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "high"
+        }
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C16",
+      "voterId": "C16:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C16",
+      "voterId": "C16:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C16",
+      "voterId": "C16:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "importance": "high",
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C17",
+      "voterId": "C17:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C17",
+      "voterId": "C17:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "low"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "importance": "med",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C17",
+      "voterId": "C17:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "low"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C17",
+      "voterId": "C17:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "importance": "med",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C19",
+      "voterId": "C19:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C19",
+      "voterId": "C19:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "low"
+        },
+        "importance": "high",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C19",
+      "voterId": "C19:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "low"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C19",
+      "voterId": "C19:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C21",
+      "voterId": "C21:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C21",
+      "voterId": "C21:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C21",
+      "voterId": "C21:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "importance": "med",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C21",
+      "voterId": "C21:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C22",
+      "voterId": "C22:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "med"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C22",
+      "voterId": "C22:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C22",
+      "voterId": "C22:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C22",
+      "voterId": "C22:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "importance": "med",
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C26",
+      "voterId": "C26:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C26",
+      "voterId": "C26:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C26",
+      "voterId": "C26:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C26",
+      "voterId": "C26:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "low"
+        },
+        "importance": "high",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C27",
+      "voterId": "C27:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "low"
+        },
+        "importance": "high"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C27",
+      "voterId": "C27:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C27",
+      "voterId": "C27:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "low"
+        },
+        "importance": "high",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C27",
+      "voterId": "C27:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C28",
+      "voterId": "C28:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "importance": "high",
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "high"
+        }
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C28",
+      "voterId": "C28:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "importance": "high",
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C28",
+      "voterId": "C28:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C28",
+      "voterId": "C28:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C30",
+      "voterId": "C30:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "low"
+        },
+        "importance": "high"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C30",
+      "voterId": "C30:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C30",
+      "voterId": "C30:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C30",
+      "voterId": "C30:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "importance": "high",
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C31",
+      "voterId": "C31:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        }
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C31",
+      "voterId": "C31:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C31",
+      "voterId": "C31:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C31",
+      "voterId": "C31:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "low",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C32",
+      "voterId": "C32:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "high"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C32",
+      "voterId": "C32:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "low"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "low"
+        },
+        "importance": "high",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C32",
+      "voterId": "C32:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C32",
+      "voterId": "C32:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C33",
+      "voterId": "C33:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "high"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C33",
+      "voterId": "C33:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "low"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C33",
+      "voterId": "C33:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C33",
+      "voterId": "C33:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C34",
+      "voterId": "C34:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C34",
+      "voterId": "C34:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "importance": "high",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C34",
+      "voterId": "C34:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C34",
+      "voterId": "C34:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "importance": "high",
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C35",
+      "voterId": "C35:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C35",
+      "voterId": "C35:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C35",
+      "voterId": "C35:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "low"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C35",
+      "voterId": "C35:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "importance": "med",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C36",
+      "voterId": "C36:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "low"
+        },
+        "importance": "med"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C36",
+      "voterId": "C36:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "low"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C36",
+      "voterId": "C36:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C36",
+      "voterId": "C36:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "importance": "high",
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C39",
+      "voterId": "C39:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C39",
+      "voterId": "C39:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C39",
+      "voterId": "C39:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "low",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C39",
+      "voterId": "C39:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C40",
+      "voterId": "C40:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "low"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "low"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "high"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C40",
+      "voterId": "C40:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C40",
+      "voterId": "C40:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C40",
+      "voterId": "C40:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C41",
+      "voterId": "C41:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "importance": "med"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C41",
+      "voterId": "C41:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C41",
+      "voterId": "C41:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C41",
+      "voterId": "C41:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C42",
+      "voterId": "C42:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C42",
+      "voterId": "C42:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "low"
+        },
+        "importance": "high",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C42",
+      "voterId": "C42:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C42",
+      "voterId": "C42:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "importance": "high",
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C43",
+      "voterId": "C43:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "low"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C43",
+      "voterId": "C43:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "importance": "low",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C43",
+      "voterId": "C43:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C43",
+      "voterId": "C43:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "importance": "med",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C44",
+      "voterId": "C44:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C44",
+      "voterId": "C44:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C44",
+      "voterId": "C44:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C44",
+      "voterId": "C44:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C45",
+      "voterId": "C45:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C45",
+      "voterId": "C45:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C45",
+      "voterId": "C45:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "importance": "med",
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C45",
+      "voterId": "C45:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "low",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C46",
+      "voterId": "C46:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "importance": "med"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C46",
+      "voterId": "C46:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "low",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C46",
+      "voterId": "C46:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "low"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C46",
+      "voterId": "C46:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "importance": "low",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C47",
+      "voterId": "C47:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "low"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C47",
+      "voterId": "C47:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "importance": "low",
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C47",
+      "voterId": "C47:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C47",
+      "voterId": "C47:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "low",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C48",
+      "voterId": "C48:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "high"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C48",
+      "voterId": "C48:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C48",
+      "voterId": "C48:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "low"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C48",
+      "voterId": "C48:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C49",
+      "voterId": "C49:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C49",
+      "voterId": "C49:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "importance": "low",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C49",
+      "voterId": "C49:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "low"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C49",
+      "voterId": "C49:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C50",
+      "voterId": "C50:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "low"
+        },
+        "importance": "high"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C50",
+      "voterId": "C50:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C50",
+      "voterId": "C50:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "importance": "high",
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C50",
+      "voterId": "C50:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "importance": "med",
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C52",
+      "voterId": "C52:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C52",
+      "voterId": "C52:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "low"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C52",
+      "voterId": "C52:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C52",
+      "voterId": "C52:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C53",
+      "voterId": "C53:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "low"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C53",
+      "voterId": "C53:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C53",
+      "voterId": "C53:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "low"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C53",
+      "voterId": "C53:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C54",
+      "voterId": "C54:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "low"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C54",
+      "voterId": "C54:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C54",
+      "voterId": "C54:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "low",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C54",
+      "voterId": "C54:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C55",
+      "voterId": "C55:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "high"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C55",
+      "voterId": "C55:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "low"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "low"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C55",
+      "voterId": "C55:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "importance": "med",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C55",
+      "voterId": "C55:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "importance": "med",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C56",
+      "voterId": "C56:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C56",
+      "voterId": "C56:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "low"
+        },
+        "importance": "med",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C56",
+      "voterId": "C56:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C56",
+      "voterId": "C56:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "notArtefact": {
+          "pass": true,
+          "confidence": "low"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C57",
+      "voterId": "C57:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "high"
+        }
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C57",
+      "voterId": "C57:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "low"
+        },
+        "importance": "high",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C57",
+      "voterId": "C57:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "low"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C57",
+      "voterId": "C57:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "low"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C58",
+      "voterId": "C58:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C58",
+      "voterId": "C58:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C58",
+      "voterId": "C58:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C58",
+      "voterId": "C58:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "low",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C59",
+      "voterId": "C59:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "low"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "importance": "med"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C59",
+      "voterId": "C59:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "low",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C59",
+      "voterId": "C59:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C59",
+      "voterId": "C59:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "importance": "med",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C60",
+      "voterId": "C60:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C60",
+      "voterId": "C60:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "importance": "med",
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C60",
+      "voterId": "C60:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C60",
+      "voterId": "C60:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C61",
+      "voterId": "C61:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "low"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C61",
+      "voterId": "C61:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "low"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C61",
+      "voterId": "C61:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C61",
+      "voterId": "C61:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "low"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "low",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C62",
+      "voterId": "C62:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C62",
+      "voterId": "C62:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C62",
+      "voterId": "C62:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "importance": "high",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C62",
+      "voterId": "C62:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "notArtefact": {
+          "pass": true,
+          "confidence": "low"
+        },
+        "survivesNull": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C63",
+      "voterId": "C63:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "low"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C63",
+      "voterId": "C63:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "low",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C63",
+      "voterId": "C63:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "low",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C63",
+      "voterId": "C63:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "low",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C64",
+      "voterId": "C64:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "low"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C64",
+      "voterId": "C64:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "low",
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C64",
+      "voterId": "C64:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "importance": "low",
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C64",
+      "voterId": "C64:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "low",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C65",
+      "voterId": "C65:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "low"
+        },
+        "importance": "high"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C65",
+      "voterId": "C65:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C65",
+      "voterId": "C65:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C65",
+      "voterId": "C65:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "importance": "high",
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C66",
+      "voterId": "C66:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "low"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "importance": "med",
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "high"
+        }
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C66",
+      "voterId": "C66:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "low",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C66",
+      "voterId": "C66:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "importance": "low",
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C66",
+      "voterId": "C66:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "low",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C67",
+      "voterId": "C67:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        }
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C67",
+      "voterId": "C67:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "low",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C67",
+      "voterId": "C67:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "low",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C67",
+      "voterId": "C67:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C68",
+      "voterId": "C68:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C68",
+      "voterId": "C68:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "low"
+        },
+        "importance": "med",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C68",
+      "voterId": "C68:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C68",
+      "voterId": "C68:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "low"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "low",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C69",
+      "voterId": "C69:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "low"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C69",
+      "voterId": "C69:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C69",
+      "voterId": "C69:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C69",
+      "voterId": "C69:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "importance": "med",
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C70",
+      "voterId": "C70:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "importance": "low",
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        }
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C70",
+      "voterId": "C70:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "importance": "low",
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C70",
+      "voterId": "C70:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "low",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C70",
+      "voterId": "C70:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "low",
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C71",
+      "voterId": "C71:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "importance": "high",
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        }
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C71",
+      "voterId": "C71:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C71",
+      "voterId": "C71:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "high",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C71",
+      "voterId": "C71:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": true,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": true,
+          "confidence": "high"
+        },
+        "importance": "med",
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "lens": "null-reproduction"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C72",
+      "voterId": "C72:tier-0:r0:0",
+      "tier": "tier-0",
+      "verdict": {
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "low"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C72",
+      "voterId": "C72:tier-2:r1:0",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "low",
+        "lens": "correctness-grounding"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C72",
+      "voterId": "C72:tier-2:r1:1",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "high"
+        },
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "low",
+        "lens": "base-rate"
+      }
+    },
+    {
+      "status": "adjudicated",
+      "candidateId": "C72",
+      "voterId": "C72:tier-2:r1:2",
+      "tier": "tier-2",
+      "verdict": {
+        "baseRateHolds": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "grounded": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "importance": "med",
+        "notArtefact": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "survivesNull": {
+          "pass": false,
+          "confidence": "med"
+        },
+        "lens": "null-reproduction"
+      }
+    }
+  ]
+}

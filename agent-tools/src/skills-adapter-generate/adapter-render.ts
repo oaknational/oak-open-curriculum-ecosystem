@@ -7,18 +7,87 @@
  */
 import { join } from 'node:path';
 
-import { stringify as stringifyYaml } from 'yaml';
+import { Document, isMap, isScalar, Scalar } from 'yaml';
 
 import { adapterStubPointerLine } from './adapter-stub.js';
-import type { CanonicalFrontmatter, ParsedCanonical } from './discovery.js';
+import {
+  specPortableFrontmatter,
+  type CanonicalFrontmatter,
+  type SpecPortableFrontmatter,
+} from './canonical-frontmatter.js';
+import type { ParsedCanonical } from './discovery.js';
 
 const ADAPTER_FILENAME = 'SKILL.md';
 
 export type AdapterSurface = 'claude' | 'agents';
 
-interface AdapterFrontmatter {
+interface AdapterFrontmatter extends SpecPortableFrontmatter {
   readonly name: string;
   readonly description: string;
+}
+
+/**
+ * The two keys left to the serialiser's own quoting judgement. Everything
+ * else in the emitted frontmatter — the whole spec-portable set — is
+ * force-quoted by {@link quoteEmittedStrings}.
+ *
+ * `name` is the prefixed lowercase-hyphen id and `description` is required
+ * non-empty prose whose inner quotes would be escaped for no gain. Neither
+ * can be a bare scalar of another type without already violating the
+ * specification's own field rules — a canonical-contract check (`name`
+ * regex, description limits) that does not exist yet, not an emission
+ * concern. Stating the rule as an EXEMPTION rather than a key list is
+ * deliberate: a spec-portable field added to the schema later is quoted
+ * automatically instead of silently missing from a second list.
+ */
+const SERIALISER_QUOTED_KEYS: readonly string[] = ['name', 'description'];
+
+const YAML_EMIT_OPTIONS = { lineWidth: 0 } as const;
+
+/**
+ * Force double-quoted emission for every string value the schema has
+ * already proven is a string.
+ *
+ * No choice of YAML version delivers this, because the two resolutions
+ * disagree about which bare scalars are strings and each leaves the
+ * other's ambiguous forms unquoted. Measured against this workspace's
+ * `yaml` on 2026-09-09: emitting under 1.2 leaves `yes`, `no`, `on`,
+ * `off`, `y`, `2026-09-09` and `1:30` bare, which a 1.1 consumer (PyYAML,
+ * Ruby Psych, `yaml.v2`) reads as booleans, a date and the number 90;
+ * emitting under 1.1 leaves `0o17` bare, which a 1.2 consumer reads as
+ * the number 15. Picking a version trades one direction of the hazard for
+ * the other, and the surfaces exist for foreign vendors whose resolution
+ * is not ours to know.
+ *
+ * Quoting closes both directions at once, depends on no version, and
+ * makes these fields byte-faithful to the canonical's own quoted
+ * authoring form — so `version: "0.1.0"` projects as it was written. The
+ * one nested level is the specification's `metadata` map, whose VALUES
+ * are the string→string payload.
+ */
+function quoteEmittedStrings(doc: Document): void {
+  const contents: unknown = doc.contents;
+  if (!isMap(contents)) {
+    return;
+  }
+  for (const pair of contents.items) {
+    const key: unknown = isScalar(pair.key) ? pair.key.value : undefined;
+    if (typeof key !== 'string' || SERIALISER_QUOTED_KEYS.includes(key)) {
+      continue;
+    }
+    const value: unknown = pair.value;
+    if (isMap(value)) {
+      value.items.forEach((entry) => quoteStringScalar(entry.value));
+      continue;
+    }
+    quoteStringScalar(value);
+  }
+}
+
+function quoteStringScalar(node: unknown): void {
+  if (isScalar(node) && typeof node.value === 'string') {
+    node.type = Scalar.QUOTE_DOUBLE;
+  }
 }
 
 export function renderAdapter(
@@ -34,7 +103,9 @@ export function renderAdapter(
     surfaceLabel,
     parsed.canonicalFilename,
   );
-  const yamlBlock = stringifyYaml(frontmatter, { lineWidth: 0 }).trimEnd();
+  const doc = new Document(frontmatter);
+  quoteEmittedStrings(doc);
+  const yamlBlock = doc.toString(YAML_EMIT_OPTIONS).trimEnd();
   return `---\n${yamlBlock}\n---\n\n${body.trimStart()}`;
 }
 
@@ -51,6 +122,21 @@ export function adapterTargetPath(
 /**
  * Construct the adapter frontmatter from the canonical's frontmatter.
  * Always renames the skill: `<prefix><id>`. Description is preserved.
+ *
+ * The `name` is the ONLY field the adapter rewrites — the projection name
+ * carries the owned-skill prefix while canonical identity stays unprefixed.
+ * Every spec-portable optional field (`license`, `compatibility`,
+ * `metadata`, `allowed-tools`) passes through per ADR-125's adapter table,
+ * in the specification's own field order, so a canonical's environment
+ * requirements and metadata reach the surfaces vendors actually read.
+ * Non-spec canonical keys (`classification`, `concern`, `domain`) are
+ * canonical-only and never projected.
+ *
+ * The frontmatter is re-serialised rather than copied, so what is
+ * guaranteed is that the projection RE-PARSES to the canonical's values.
+ * For the spec-portable fields that guarantee holds under any YAML
+ * resolution, because their values are emitted explicitly quoted — see
+ * {@link quoteEmittedStrings} for why no choice of version delivers it.
  */
 export function buildAdapterFrontmatter(
   canonical: CanonicalFrontmatter,
@@ -60,6 +146,7 @@ export function buildAdapterFrontmatter(
   return {
     name: `${prefix}${id}`,
     description: canonical.description,
+    ...specPortableFrontmatter(canonical),
   };
 }
 

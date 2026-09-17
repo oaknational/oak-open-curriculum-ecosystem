@@ -91,17 +91,6 @@ apps/oak-curriculum-mcp-streamable-http/.generated/
 # Design-system import staging (untracked studio export bundle — ADR-213)
 packages/design/design-import/
 
-# Imported research record (ADR-215). The Markdown research documents and the
-# operational surfaces are preserved byte-for-byte and carry their own formatting
-# discipline, so OCE house style does not reformat them. The record's TypeScript
-# tooling is NOT exempt — it is formatted and gated like any OCE code.
-research/web-app-deconstruction/**/*.md
-research/web-app-deconstruction/.agent/
-# Next.js component fixtures are measurement SAMPLES the runtime probe copies
-# as data into a temporary app — evidence content by role (ADR-215 Decision 3),
-# in the byte-faithful documents class, not the gated tooling-code class.
-research/web-app-deconstruction/packages/research-evidence/fixtures/
-
 # MCP-137 preservation tier (byte-preserved capture folders — pure copies from
 # their sources, never reformatted; see the adjacent PRESERVATION-README.md.
 # The manifest .tsv is derived data in the same byte-faithful class.)

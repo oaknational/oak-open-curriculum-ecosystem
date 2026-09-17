@@ -26,7 +26,7 @@ todos:
 
 # Codex MCP Server Compatibility
 
-**Last Updated**: 2026-04-16
+**Last Updated**: 2026-09-08
 **Status**: Strategic brief — not yet executable
 **Lane**: `future/`
 
@@ -57,6 +57,9 @@ Known live-session evidence as of 2026-04-16:
      `openid`.
    - AS metadata `scopes_supported` is passed through from upstream Clerk and
      includes `openid`.
+   - 2026-09-08: the H1+H2 mitigation below (align AS metadata
+     `scopes_supported` with the PRM) landed via MCP-345 — see ADR-113
+     resolution 3. The split no longer exists.
 6. The OAuth proxy forwards `/oauth/authorize` query parameters transparently,
    including `scope`, so a client-requested `openid` reaches Clerk unchanged.
 
@@ -69,6 +72,30 @@ The intent of this plan is to isolate whether Codex support requires:
 
 This plan is decision-shaping only. It does not authorise implementation while
 the Sentry evidence lane is still open.
+
+## Findings Update (2026-09-08)
+
+MCP-345 landed the H1+H2 mitigation (ADR-113 resolution 3), which changes the
+2026-04-16 findings below as follows:
+
+1. **Metadata inconsistency resolved**: PRM and served AS metadata now
+   advertise the same `scopes_supported` (`SCOPES_SUPPORTED`); the
+   integration and e2e suites assert it on the same app.
+2. **Clerk scope enforcement confirmed, mechanism refined**: Clerk grants a
+   DCR client its registered scopes plus `offline_access`, or the instance
+   default grant when it names none; Oak's default carries no `openid`
+   (ADR-113, Evidence: the DCR grant probe, measured 2026-08-19). A client
+   that asks for it outside its grant is refused (`invalid_scope`), measured
+   again on 2026-09-08 with OpenAI's plugin portal.
+3. **Proxy transparency unchanged for messages, not for self-description**:
+   the proxy still forwards client scope input unchanged; the served AS
+   metadata is the proxy's own document and states the advertised set.
+4. **Policy comment corrected**: it now says clients that derive their
+   request from the PRM will not ask for `openid`, and that a client may add
+   scopes of its own.
+
+The todos above remain open only for the Codex-specific evidence capture
+(H3/H4); the metadata-alignment slice is done.
 
 ## Findings Update (2026-04-16)
 

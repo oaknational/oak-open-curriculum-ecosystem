@@ -8,6 +8,7 @@
  * @see ADR-086 (`docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md`) for extraction methodology
  */
 import type { Unit } from '../../types/generated/bulk/index.js';
+import { sequenceSubject } from '../reader-utils.js';
 
 /**
  * Extracted prior knowledge requirement with unit context.
@@ -38,26 +39,6 @@ function extractYear(unit: Unit): number | undefined {
 }
 
 /**
- * Extracts subject from sequence slug (format: "subject-phase").
- *
- * @remarks
- * Sequence slug format is typically "subject-phase" e.g., "maths-primary".
- * We extract the subject portion by removing the phase suffix.
- */
-function extractSubject(sequenceSlug: string): string {
-  // Sequence slug format is typically "subject-phase" e.g., "maths-primary"
-  const parts = sequenceSlug.split('-');
-  // Remove 'primary' or 'secondary' suffix to get subject
-  if (parts.length >= 2) {
-    const phase = parts.at(-1);
-    if (phase === 'primary' || phase === 'secondary') {
-      return parts.slice(0, -1).join('-');
-    }
-  }
-  return sequenceSlug;
-}
-
-/**
  * Extracts all prior knowledge requirements from unit data.
  *
  * @param units - Array of units with their sequence slug
@@ -69,7 +50,7 @@ export function extractPriorKnowledge(
   const results: ExtractedPriorKnowledge[] = [];
 
   for (const { unit, sequenceSlug } of units) {
-    const subject = extractSubject(sequenceSlug);
+    const subject = sequenceSubject(sequenceSlug);
 
     for (const requirement of unit.priorKnowledgeRequirements) {
       // Skip empty requirements

@@ -438,6 +438,10 @@ direction this architecture is chosen to enable.
   (`stream-mcp-app` / `stream-engineering-tools` / `stream-agentic-framework`) derive **top-down** from
   vision/strategy and are **already specified** — the new corpus organises `thread → plan` _under_ the given
   streams; it does **not** derive or author streams bottom-up from the plan corpus (owner, 2026-06-22).
+  **Dated amendment (owner, 2026-08-30):** the owner declared the Oak Innovation Kit the
+  fourth top-down stream. The current strategy publishes it in `stream-innovation-kit` with
+  an initial `KIT-*` family. The stream set changed; this authoring-direction decision did
+  not.
 - **Idea identity minting** — how stable, IRI-able `id`s are assigned at harvest (slug / content-hash /
   sequential) so they survive re-harvest and map to RDF subject IRIs. Load-bearing for frontmatter
   references and for de-duplication.

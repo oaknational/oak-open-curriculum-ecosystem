@@ -72,11 +72,12 @@ describe('SERVED_SURFACE.resources', () => {
   });
 
   it('serves the widget resource live under the generated WIDGET_URI (reviewed-change tripwire)', () => {
-    // Green by local-value coincidence even against a frozen key — the
-    // structural guard for the MCP-187 re-freeze class is the
-    // no-restricted-syntax ban on `ui://widget/` literals in this app's
-    // eslint.config.ts; this pin documents the reviewed classification
-    // through the same gate registration uses.
+    // A hand-frozen key would equal the one published address today, so this
+    // cannot catch a second owner of it — the structural guard for the
+    // MCP-187 re-freeze class is the no-restricted-syntax ban on
+    // `ui://widget/` literals in this app's eslint.config.ts; this pin
+    // documents the reviewed classification through the same gate
+    // registration uses.
     expect(isResourceLive(SERVED_SURFACE, WIDGET_URI)).toBe(true);
   });
 });

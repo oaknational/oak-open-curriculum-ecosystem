@@ -18,9 +18,9 @@ import type { HttpObservability } from '../observability/http-observability.js';
 export type BootstrapPhaseName =
   | 'setupBaseMiddleware'
   | 'createCorsMiddleware'
-  | 'createDnsRebindingMiddleware'
   | 'createSecurityHeaders'
   | 'fetchUpstreamMetadata'
+  | 'verifyClerkKeyPairing'
   | 'registerPublicOAuthMetadata'
   | 'registerOAuthProxy'
   | 'addNoCacheToErrors'

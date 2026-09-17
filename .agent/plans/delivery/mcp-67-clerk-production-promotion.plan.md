@@ -14,7 +14,7 @@ tickets:
   - MCP-67
 depends_on: []
 owner_gates: []
-last_updated: 2026-07-31
+last_updated: 2026-09-01
 ---
 
 # Clerk production promotion
@@ -64,10 +64,12 @@ added or changed:
   reconciling the advertised and requested scope sets (decide at
   Card 1 which is right; the code follows the card).
 - **Register movement since the ledger**: D18 ratifies the dedicated
-  production instance (the V0's D0 recommendation is now doctrine) and
-  holds V1 on the current URL; MCP-122 (in flight) may mint
-  `www.thenational.academy/mcp` as the canonical address — hence the
-  named domain gate above. This plan never re-decides the origin.
+  production instance (the V0's D0 recommendation is now doctrine).
+  The canonical address is `https://mcp.thenational.academy/mcp`
+  (MCP-122; owner word recorded on the MCP-122 ticket comment of
+  2026-09-01), and the Clerk resource indicators, allowed origins, and
+  redirect URLs this plan configures name that origin. This plan never
+  re-decides the origin.
 
 ## Mechanism
 

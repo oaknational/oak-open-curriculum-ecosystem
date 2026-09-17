@@ -515,7 +515,10 @@ detailed solutions. Quick fixes:
 ## Release Process
 
 Semantic-release handles automated releases: PRs merged to `main` trigger
-version bumps, GitHub releases, and npm publishing based on commit types.
+version bumps and GitHub releases based on commit types. No package is
+published to a registry today (`npmPublish: false` in `.releaserc.mjs`); see
+[Release and Publishing](docs/engineering/release-and-publishing.md) for the
+present state and the publish mechanism that will change it.
 
 ## Security
 

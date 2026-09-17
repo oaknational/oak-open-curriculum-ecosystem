@@ -484,6 +484,16 @@ describe('registerAllResources registers the widget resource', () => {
     expect(getTextContent(resource?.contents[0])).toBe(TEST_WIDGET_HTML);
     expect(widgetHtmlReadCount).toBe(1);
   });
+
+  it('offers the same widget settings on the listing and the served content', async () => {
+    registerAllResources(server, options);
+    await flush();
+
+    const listed = registeredResources.get(WIDGET_URI)?.metadata._meta?.ui;
+    const served = (await readResource(WIDGET_URI)).contents[0]?._meta?.ui;
+    expect(listed).toBeDefined();
+    expect(listed).toEqual(served);
+  });
 });
 
 describe('registerAllResources matches the served-surface definition (drift guard)', () => {

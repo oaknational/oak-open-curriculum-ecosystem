@@ -191,6 +191,48 @@ describe('createUniversalToolExecutor', () => {
     expect(payload).toEqual({ status: 200, data: { status: 'ok' } });
   });
 
+  it('surfaces the pagination echo of a paginated tool result to the agent', async () => {
+    const executeMcpTool = vi.fn().mockResolvedValue(
+      ok({
+        status: 200,
+        data: [{ lessonSlug: 'lesson-one' }],
+        pagination: { hasMore: true, nextOffset: 20, nextLimit: 20 },
+      }),
+    );
+    const callUniversalTool = createUniversalToolExecutor({
+      executeMcpTool,
+      searchRetrieval: createStubSearchRetrieval(),
+      generatedTools: registry,
+    });
+
+    const result = await callUniversalTool(SAMPLE_MCP_TOOL_NAME, {});
+
+    const payload = parseTextContent(result);
+    expect(payload).toEqual({
+      status: 200,
+      data: [{ lessonSlug: 'lesson-one' }],
+      pagination: { hasMore: true, nextOffset: 20, nextLimit: 20 },
+    });
+    expect(result.structuredContent).toMatchObject({
+      pagination: { hasMore: true, nextOffset: 20, nextLimit: 20 },
+    });
+  });
+
+  it('keeps non-paginated tool results free of a pagination field', async () => {
+    const executeMcpTool = vi.fn().mockResolvedValue(ok({ status: 200, data: { status: 'ok' } }));
+    const callUniversalTool = createUniversalToolExecutor({
+      executeMcpTool,
+      searchRetrieval: createStubSearchRetrieval(),
+      generatedTools: registry,
+    });
+
+    const result = await callUniversalTool(SAMPLE_MCP_TOOL_NAME, {});
+
+    const payload = parseTextContent(result);
+    expect(payload).not.toHaveProperty('pagination');
+    expect(result.structuredContent).not.toHaveProperty('pagination');
+  });
+
   it('uses the shared title-resolution rule for summaries and widget metadata', async () => {
     const annotations = sampleDescriptor.annotations;
 

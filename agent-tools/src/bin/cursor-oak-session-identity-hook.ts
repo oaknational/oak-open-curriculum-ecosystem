@@ -3,12 +3,12 @@ import { readFileSync, writeFileSync } from 'node:fs';
 
 import {
   planCursorSessionIdentityHook,
-  type CursorSessionIdentityHookEnvironment,
+  cursorSessionIdentityHookEnvironmentFromProcessEnv,
 } from '../cursor/oak-session-identity-hook.js';
 
 const plan = planCursorSessionIdentityHook({
   stdinText: readFileSync(0, 'utf8'),
-  environment: processEnvironment(),
+  environment: cursorSessionIdentityHookEnvironmentFromProcessEnv(process.env),
   fallbackProjectDir: process.cwd(),
   nowIso: new Date().toISOString(),
 });
@@ -22,17 +22,3 @@ if (plan.mirror !== undefined) {
 }
 
 process.stdout.write(`${JSON.stringify(plan.output)}\n`);
-
-function processEnvironment(): CursorSessionIdentityHookEnvironment {
-  return {
-    ...(process.env.CURSOR_PROJECT_DIR === undefined
-      ? {}
-      : { CURSOR_PROJECT_DIR: process.env.CURSOR_PROJECT_DIR }),
-    ...(process.env.CLAUDE_PROJECT_DIR === undefined
-      ? {}
-      : { CLAUDE_PROJECT_DIR: process.env.CLAUDE_PROJECT_DIR }),
-    ...(process.env.OAK_SKIP_COMPOSER_SESSION_MIRROR === undefined
-      ? {}
-      : { OAK_SKIP_COMPOSER_SESSION_MIRROR: process.env.OAK_SKIP_COMPOSER_SESSION_MIRROR }),
-  };
-}

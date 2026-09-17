@@ -104,8 +104,10 @@ at the top. Fields:
 
 - `platform` — e.g. `claude-code`, `cursor`, `codex`, `gemini`.
 - `model` — canonical model id (e.g. `claude-opus-4-7-1m`).
-- `session_id_prefix` — first 6 characters of the harness session
-  ID, if available; `unknown` otherwise.
+- `session_id_prefix` — first 6 characters of the PDR-027 seed (the
+  untagged platform session id on cloud seats; the harness session id
+  otherwise — PDR-027, 2026-08-24 amendment), if available; `unknown`
+  otherwise.
 - `agent_name` — optional persistent name for the agent-on-this-
   thread; chosen by the owner or a descriptive default. The name
   carries across sessions so a resuming agent can take the existing

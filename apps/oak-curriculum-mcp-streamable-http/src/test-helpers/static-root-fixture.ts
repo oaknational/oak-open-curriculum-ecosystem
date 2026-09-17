@@ -35,11 +35,12 @@ const COMMITTED_PUBLIC_ROOT = fileURLToPath(new URL('../../public', import.meta.
  *
  * @remarks
  * MCP-509 follow-up. `copyOakDs` generates `oak-ds/` and `oak-assets/`, which
- * is why those two are gitignored — but `favicons/*` and `landing-page.css`
- * are committed files that no copy step produces. A scratch root holding only
- * the generated trees therefore cannot answer for them, so no test could
- * prove the page's favicon and stylesheet references are actually served.
- * They are exactly the two families that reached production broken.
+ * is why those two are gitignored — but `favicons/*` are committed files that
+ * no copy step produces. A scratch root holding only the generated trees
+ * therefore cannot answer for them, so no test could prove those references
+ * are actually served. Favicons and `landing-page.css` were exactly the two
+ * families that reached production broken; the stylesheet was deleted on
+ * 2026-08-20 with the page, and the favicons remain committed statics.
  *
  * Enumerated rather than listed by name: a newly committed root static is
  * carried automatically, so coverage cannot silently fall behind the tree.
@@ -52,7 +53,11 @@ async function copyCommittedRootStatics(destRoot: string): Promise<void> {
   const entries = await readdir(COMMITTED_PUBLIC_ROOT, { withFileTypes: true });
 
   for (const entry of entries) {
-    if (generated.has(entry.name)) {
+    // Dot-prefixed entries are copy-oak-ds's transient staging/retired dirs
+    // (never servable: express.static ignores dotfiles) and can vanish
+    // between readdir and cp when a concurrent build publishes — the ENOENT
+    // race recorded 2026-08-13 and hit again on PR #20's CI.
+    if (generated.has(entry.name) || entry.name.startsWith('.')) {
       continue;
     }
     await cp(

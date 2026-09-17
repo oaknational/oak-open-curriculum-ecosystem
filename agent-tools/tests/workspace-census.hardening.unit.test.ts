@@ -12,9 +12,9 @@ import {
   type CensusSubject,
 } from '../src/workspace-census/index.js';
 
-const RESEARCH_MEMBER = {
-  name: '@oaknational/research-evidence',
-  path: 'research/web-app-deconstruction/packages/research-evidence',
+const NESTED_MEMBER = {
+  name: '@fixture/nested-tooling',
+  path: 'fixtures/nested/packages/tooling',
 } as const;
 
 function judgedRow(overrides: Partial<CensusRow> = {}): CensusRow {
@@ -43,23 +43,23 @@ const AGENT_TOOLS_SUBJECT: CensusSubject = {
 describe('deriveSubjects — partially covered top segments keep their code root', () => {
   it('mints a code-root for a segment holding code outside its nested subject', () => {
     const subjects = deriveSubjects({
-      members: [RESEARCH_MEMBER],
+      members: [NESTED_MEMBER],
       trackedFiles: [
-        'research/web-app-deconstruction/packages/research-evidence/src/probe.ts',
-        'research/other-study/tool.ts',
+        'fixtures/nested/packages/tooling/src/probe.ts',
+        'fixtures/other-study/tool.ts',
       ],
     });
-    const research = subjects.find((subject) => subject.dirPath === 'research');
-    expect(research).toBeDefined();
-    expect(research?.sources).toContain('code-root');
+    const fixtures = subjects.find((subject) => subject.dirPath === 'fixtures');
+    expect(fixtures).toBeDefined();
+    expect(fixtures?.sources).toContain('code-root');
   });
 
   it('still skips a segment whose code files all sit inside covering subjects', () => {
     const subjects = deriveSubjects({
-      members: [RESEARCH_MEMBER],
-      trackedFiles: ['research/web-app-deconstruction/packages/research-evidence/src/probe.ts'],
+      members: [NESTED_MEMBER],
+      trackedFiles: ['fixtures/nested/packages/tooling/src/probe.ts'],
     });
-    expect(subjects.find((subject) => subject.dirPath === 'research')).toBeUndefined();
+    expect(subjects.find((subject) => subject.dirPath === 'fixtures')).toBeUndefined();
   });
 });
 

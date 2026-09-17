@@ -107,6 +107,29 @@ describe('emitIndex (invoke wrapper emission)', () => {
     expect(code).not.toContain('return payload;');
   });
 
+  it('non-paginated operations carry no pagination echo', () => {
+    const operation: OperationObject = {
+      responses: { '200': { description: 'ok' } },
+    };
+    const code = emitIndex('get-subjects', '/subjects', 'GET', 'op-plain-list', operation);
+
+    expect(code).not.toContain('derivePaginationFromLinkHeader');
+    expect(code).not.toContain('pagination');
+  });
+
+  it('paginated operations derive the pagination echo from the Link header', () => {
+    const operation: OperationObject = {
+      responses: { '200': { description: 'ok' } },
+    };
+    const code = emitIndex('get-keywords', '/keywords', 'GET', 'op-paginated', operation, true);
+
+    expect(code).toContain(
+      "const pagination = derivePaginationFromLinkHeader(response.response.headers.get('link'));",
+    );
+    expect(code).toContain('return { httpStatus: status, payload, pagination };');
+    expect(code).not.toContain('return { httpStatus: status, payload };');
+  });
+
   it('emits zero non-const type assertions anywhere in output', () => {
     const operation: OperationObject = {
       responses: {
@@ -147,14 +170,14 @@ describe('emitIndex (invoke wrapper emission)', () => {
   });
 
   it('emits noauth scheme for PUBLIC_TOOLS', () => {
-    const toolName = 'get-changelog'; // In PUBLIC_TOOLS
-    const path = '/changelog';
+    const toolName = 'get-rate-limit'; // In PUBLIC_TOOLS
+    const path = '/rate-limit';
     const method = 'GET';
     const operation: OperationObject = {
       responses: { '200': { description: 'ok' } },
     };
 
-    const code = emitIndex(toolName, path, method, 'getChangelog', operation);
+    const code = emitIndex(toolName, path, method, 'getRateLimit', operation);
 
     expect(code).toContain('securitySchemes:');
     expect(code).toContain("{ type: 'noauth' }");
@@ -175,9 +198,9 @@ describe('emitIndex (invoke wrapper emission)', () => {
         responses: { '200': { description: 'ok' } },
       },
     );
-    const publicCode = emitIndex('get-changelog', '/changelog', 'GET', 'getChangelog', {
-      summary: 'API Changelog',
-      description: 'History of significant changes to the API.',
+    const publicCode = emitIndex('get-rate-limit', '/rate-limit', 'GET', 'getRateLimit', {
+      summary: 'Rate limit status',
+      description: 'Current rate-limit window for the authenticated principal.',
       responses: { '200': { description: 'ok' } },
     });
 
@@ -187,8 +210,8 @@ describe('emitIndex (invoke wrapper emission)', () => {
     }
     expect(protectedCode).toContain('Lesson summary');
     expect(protectedCode).toContain('This tool returns a summary');
-    expect(publicCode).toContain('API Changelog');
-    expect(publicCode).toContain('History of significant changes');
+    expect(publicCode).toContain('Rate limit status');
+    expect(publicCode).toContain('Current rate-limit window');
   });
 
   it('emits requiresDomainContext: true for protected tools', () => {
@@ -207,14 +230,14 @@ describe('emitIndex (invoke wrapper emission)', () => {
   });
 
   it('emits requiresDomainContext: false for noauth tools', () => {
-    const toolName = 'get-changelog'; // In PUBLIC_TOOLS - noauth
-    const path = '/changelog';
+    const toolName = 'get-rate-limit'; // In PUBLIC_TOOLS - noauth
+    const path = '/rate-limit';
     const method = 'GET';
     const operation: OperationObject = {
       responses: { '200': { description: 'ok' } },
     };
 
-    const code = emitIndex(toolName, path, method, 'getChangelog', operation);
+    const code = emitIndex(toolName, path, method, 'getRateLimit', operation);
 
     // Emitted to satisfy the descriptor contract; no runtime consumer
     // reads the field (retirement tracked as MCP-375).

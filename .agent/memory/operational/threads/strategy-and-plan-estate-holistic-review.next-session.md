@@ -6,9 +6,14 @@ serves: **the repository is moving from an important experiment to an important
 product** (owner, 2026-06-17). The relationship between the layers is
 **informational dependence, not execution order** (owner, 2026-06-18):
 
+> **Dated strategy amendment (owner, 2026-08-30):** the Oak Innovation Kit is the
+> fourth value stream and `innovation-kit` is a distinct first-class strategic node.
+> This supersedes this thread's earlier three-stream count; the diagram below is trued
+> to four without changing the informational dependency direction or the two-part vision.
+
 ```text
 Oak's strategy → our vision → our strategy → our planning
-(we align, not fulfil)   (3 streams)   (cohesive system)   (the estate)
+(we align, not fulfil)   (4 streams)   (cohesive system)   (the estate)
 ```
 
 Each arrow means *what must be known to author the next layer correctly*. Bodies are

@@ -56,6 +56,36 @@ tree:
    (2026-08-02 instance: a contract violation rode two commits on
    origin).
 
+## The Index Is What Ships — Verify It, and Re-stage After Every Cure
+
+The pre-commit gate reads the WORKING TREE; the commit captures the
+INDEX. Four seats paid for that gap in one window (2026-08-14 →
+2026-09-02): a `git mv` staged the pre-cure blobs and left later
+Edit-tool edits unstaged at the destination paths, so the first commit
+shipped stale archive copies and thread replies cited cures the commit
+did not contain (2026-08-14; the `git mv` variant again on 2026-08-17);
+a ratification stamp edited after one parcel was omitted from the next
+parcel's pathspec, so pushed records referenced a stamp that had not
+shipped (2026-08-24); a markdownlint cure applied AFTER `git add` passed
+the hook and went red in CI (2026-09-02, PR #946). The discipline:
+
+1. **Every cure is followed by its own `git add <path>`** before
+   `git commit` — a fix applied to the working tree after staging ships
+   nothing.
+2. **`git mv` is not `git add` for unstaged content**: edit-then-mv needs
+   a follow-up `git add` on the destination paths (or mv first, edit
+   after). The porcelain `RM` row says exactly this; read the M column.
+3. **Verify the surface that SHIPS, never the convenient one**:
+   `git show <sha>:<path>` (or the staged diff) is the proof a cure
+   landed; a grep of the working tree is not.
+4. **On a shared live file, read `git diff -- <file>` BEFORE `git add`**:
+   staging a file captures its WHOLE uncommitted state, so a one-token
+   lint rewrap staged a peer's in-flight edits with it (2026-08-17; cured
+   by surfacing the sweep on the stream, never by reverting it). Staging
+   by hunk is not available to pathspec adds — when the file carries a
+   peer's mid-edit state, wait or coordinate; a lint cure is never urgent
+   enough to skip the read.
+
 ## Why
 
 Wildcard staging silently bundles unrelated work into a single commit.

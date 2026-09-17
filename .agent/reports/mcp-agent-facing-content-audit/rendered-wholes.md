@@ -2,7 +2,7 @@
 
 Companion to `report.md` / `registry.json`. Where the registry lists a cohesive delivered surface as separate authored fragments, this file shows the **assembled whole** — rendered directly from the built SDK, so it is **exact** for deterministic content and marked with `{{placeholder}}` where a value is supplied at runtime (a user prompt argument, or interpolated curriculum data). Regenerate with `render-wholes.mjs`.
 
-Rendered: 2026-08-03 — the render is exact for the SDK build it ran against and goes stale as the SDK moves; this date is the staleness signal.
+Rendered: 2026-08-20 — the render is exact for the SDK build it ran against and goes stale as the SDK moves; this date is the staleness signal.
 
 
 ## 1. Server instructions — delivered once at connection
@@ -26,6 +26,8 @@ Oak's curriculum is fully sequenced: year-ordered progressions, prior-knowledge,
 
 For questions that are not about curriculum content — about the mechanisms by which the content is delivered, about this MCP app or its associated services, or about the repository itself — use the oak-under-the-hood tool to orient yourself to the Oak Open Curriculum Ecosystem.
 
+For whole-catalogue bulk export, which this server does not offer, use the Oak Open API: https://open-api.thenational.academy/.well-known/api-catalog. Oak's index for agents is https://www.thenational.academy/llms.txt.
+
 Oak brand and content provenance: Oak National Academy owns the Oak brand and brand elements. When you reuse Oak's curriculum content, attribute it ("Contains public sector information licensed under the Open Government Licence v3.0."). When you create content derived from Oak's resources, we request that it adheres to the same high design standards as Oak — but it must not use the Oak branding, and it must never present itself as Oak-created or Oak-endorsed.
 ```
 
@@ -47,7 +49,7 @@ Exact. Each is the full `title` + `description` (as authored; routing cross-refe
 ### `search` — Search Curriculum
 
 ```text
-Search Oak's curriculum using semantic search across all four content indexes.
+Hybrid lexical and semantic search across lessons, units, threads and sequences, plus lexical typeahead suggestions (scoped)
 
 Required parameters: `scope` (which index to search) and `query` (your search query). For `threads` scope, `query` may be omitted if `subject` or `keyStage` is provided.
 
@@ -257,7 +259,7 @@ Every call is anchored by subject + keyStage (both required — corpus keys, e.g
 
 Data is a point-in-time snapshot of the published curriculum (bulk export), not the live API; coverage can lag live content, materially at KS4 while subjects restructure.
 
-When to prefer which keywords tool: get-keywords returns the LIVE full keyword set for a key stage + subject — fresh, authoritative at KS4, alphabetical, unranked, and large. This tool returns a bounded frequency-ranked subset with lesson connections — token-economical, best for "the most relevant vocabulary for this teaching context" and for navigating from keywords into lessons, units, and the wider curriculum graph.
+When to prefer which keywords tool: get-keywords returns the LIVE keyword set for a key stage + subject — fresh, authoritative at KS4, alphabetical, unranked, and paginated (its description carries the paging guidance; the complete set takes limit: 300 plus offset walking). This tool returns a bounded frequency-ranked subset with lesson connections — token-economical, best for "the most relevant vocabulary for this teaching context" and for navigating from keywords into lessons, units, and the wider curriculum graph.
 
 Slugs are corpus keys — resolve them first with search, fetch, or browse-curriculum. Unknown unitSlugs/lessonSlugs are reported in the result's unknown-anchor fields, not errored; an unknown subject or keyStage returns a well-formed empty result.
 
@@ -266,7 +268,7 @@ Use this to answer questions like:
 - "Which keywords matter most in this unit?" (narrow with unitSlugs)
 - "What terms does this lesson rely on?" (narrow with lessonSlugs)
 
-Complements get-keywords (live full set), get-misconception-graph, get-prior-knowledge-graph, and get-thread-progressions on the same curriculum graph.
+Complements get-keywords (live set, paginated), get-misconception-graph, get-prior-knowledge-graph, and get-thread-progressions on the same curriculum graph.
 ```
 
 Parameters:
@@ -530,7 +532,7 @@ NOTE: This tool can return a large payload at broad scope and may exceed a host'
 Parameters:
   - keyStage: Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase [enum: ks1, ks2, ks3, ks4]
   - subject: Subject slug to search by, e.g. 'science' - note that casing is important here (always lowercase) [enum: art, citizenship, computing, cooking-nutrition, design-technology, english, french, geography, german, history, maths, music, physical-education, religious-education, rshe-pshe, science, spanish]
-  - type (optional): Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/assets/{type} endpoint [enum: slideDeck, exitQuiz, exitQuizAnswers, starterQuiz, starterQuizAnswers, supplementaryResource, video, worksheet, worksheetAnswers]
+  - type (optional): Use this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/assets/{type} endpoint [enum: slideDeck, exitQuiz, exitQuizAnswers, starterQuiz, starterQuizAnswers, supplementaryResource, video, worksheet, worksheetAnswers]
   - unit (optional): Optional unit slug to additionally filter by
 
 Annotations: readOnly=true destructive=false idempotent=true openWorld=false
@@ -583,7 +585,7 @@ Use when you want a flat list of every unit with published lessons in a key stag
 Parameters:
   - keyStage: Key stage slug to filter by, e.g. 'ks2' [enum: ks1, ks2, ks3, ks4]
   - subject: Subject slug to search by, e.g. 'science' - note that casing is important here (always lowercase) [enum: art, citizenship, computing, cooking-nutrition, design-technology, english, french, geography, german, history, maths, music, physical-education, religious-education, rshe-pshe, science, spanish]
-  - examBoard (optional): (no description) [enum: aqa, edexcel, eduqas, ocr, wjec, edexcelb]
+  - examBoard (optional): Optional exam board slug to filter units by, e.g. 'aqa'. Only meaningful at KS4 where subjects are broken down by exam board. [enum: aqa, edexcel, eduqas, ocr, wjec, edexcelb]
 
 Annotations: readOnly=true destructive=false idempotent=true openWorld=false
 Security: oauth2 (scopes: email)
@@ -593,17 +595,21 @@ Security: oauth2 (scopes: email)
 ```text
 Keywords by subject and key stage
 
-Use when you want the vocabulary for a key stage, subject, unit, lesson, or phase — e.g. to build a glossary or attach definitions to content. Returns keywords with definition, the subject + key stage they appear in, and the lessons that use them, sorted alphabetically. All filters are optional, but pass at least one of keyStage, subject, unit, lesson, or phase.
+Use when you want the vocabulary for a key stage, subject, unit, lesson, or phase — e.g. to build a glossary or attach definitions to content. Returns keywords with definition, the subject + key stage they appear in, and the lessons that use them, sorted alphabetically. All filters are optional, but pass at least one of keyStage, subject, unit, lesson, or phase. Request rules: - At least one of subject, keyStage, phase, unit or lesson must be provided - note that they are all the slug form of the values (e.g. "ks2" for key stage 2, "science" for the science subject, and "forces-and-magnets" for the forces and magnets unit), and that casing is important (always lowercase).
 
-WHEN TO PREFER WHICH KEYWORDS TOOL: this tool returns the LIVE full keyword set for a key stage + subject — fresh and authoritative (including KS4 during curriculum restructures), alphabetical, unranked, and large at subject scope. For a bounded frequency-ranked subset with lesson connections (token economy + relationship navigation over the curriculum graph), prefer get-keyword-graph, which serves a point-in-time curriculum snapshot.
+WHEN TO PREFER WHICH KEYWORDS TOOL: this tool returns the LIVE keyword set for a key stage + subject — fresh and authoritative (including KS4 during curriculum restructures), alphabetical, unranked, and large at subject scope. For a bounded frequency-ranked subset with lesson connections (token economy + relationship navigation over the curriculum graph), prefer get-keyword-graph, which serves a point-in-time curriculum snapshot.
+
+NOTE: This tool is paginated — the server returns at most 20 keywords unless you pass `limit` (max 300), and nothing in the response indicates that more exist. For the complete set, pass `limit: 300` and increase `offset` by 300 per call until a page returns fewer than 300 keywords.
 ```
 
 Parameters:
-  - subject (optional): (no description) [enum: art, citizenship, computing, cooking-nutrition, design-technology, english, french, geography, german, history, maths, music, physical-education, religious-education, rshe-pshe, science, spanish]
-  - keyStage (optional): (no description) [enum: ks1, ks2, ks3, ks4]
-  - phase (optional): (no description) [enum: primary, secondary]
-  - unit (optional): (no description)
-  - lesson (optional): (no description)
+  - subject (optional): Subject slug to search by, e.g. 'science' - note that casing is important here (always lowercase) [enum: art, citizenship, computing, cooking-nutrition, design-technology, english, french, geography, german, history, maths, music, physical-education, religious-education, rshe-pshe, science, spanish]
+  - keyStage (optional): Key stage slug to filter by, e.g. 'ks2' [enum: ks1, ks2, ks3, ks4]
+  - phase (optional): Phase to filter by, e.g. 'primary' or 'secondary'. Cannot be combined with keyStage. [enum: primary, secondary]
+  - unit (optional): Unit slug to search by, e.g. 'forces-and-magnets' - note that casing is important here (always lowercase)
+  - lesson (optional): Lesson slug to search by, e.g. 'animating-text' - note that casing is important here (always lowercase)
+  - offset (optional): If limiting results returned, this allows you to return the next set of results, starting at the given offset point
+  - limit (optional): Limit the number of keywords, e.g. return a maximum of 300 keywords
 
 Annotations: readOnly=true destructive=false idempotent=true openWorld=false
 Security: oauth2 (scopes: email)
@@ -620,7 +626,9 @@ NOTE: The asset `url` fields returned by this tool are authenticated API endpoin
 
 Parameters:
   - lesson: The lesson slug identifier
-  - type (optional): Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/assets/{type} endpoint [enum: slideDeck, exitQuiz, exitQuizAnswers, starterQuiz, starterQuizAnswers, supplementaryResource, video, worksheet, worksheetAnswers]
+  - type (optional): Optional asset type specifier
+
+Available values: slideDeck, exitQuiz, exitQuizAnswers, starterQuiz, starterQuizAnswers, supplementaryResource, video, worksheet, worksheetAnswers [enum: slideDeck, exitQuiz, exitQuizAnswers, starterQuiz, starterQuizAnswers, supplementaryResource, video, worksheet, worksheetAnswers]
 
 Annotations: readOnly=true destructive=false idempotent=true openWorld=false
 Security: oauth2 (scopes: email)
@@ -698,7 +706,7 @@ Parameters:
   - programme: The programme slug identifier
   - offset (optional): If limiting results returned, this allows you to return the next set of results, starting at the given offset point
   - limit (optional): Limit the number of lessons, e.g. return a maximum of 300 lessons
-  - type (optional): Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/assets/{type} endpoint [enum: slideDeck, exitQuiz, exitQuizAnswers, starterQuiz, starterQuizAnswers, supplementaryResource, video, worksheet, worksheetAnswers]
+  - type (optional): Use this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/assets/{type} endpoint [enum: slideDeck, exitQuiz, exitQuizAnswers, starterQuiz, starterQuizAnswers, supplementaryResource, video, worksheet, worksheetAnswers]
 
 Annotations: readOnly=true destructive=false idempotent=true openWorld=false
 Security: oauth2 (scopes: email)
@@ -914,7 +922,7 @@ Use when you want every unit in a thread. A thread is an attribute on a unit tha
 ```
 
 Parameters:
-  - thread: (no description)
+  - thread: The thread identifier for a given unit
 
 Annotations: readOnly=true destructive=false idempotent=true openWorld=false
 Security: oauth2 (scopes: email)
@@ -929,10 +937,10 @@ Use when you have a unit slug and need the unit summary: title, description, key
 
 Parameters:
   - unit: The unit slug
-  - examBoard (optional): (no description) [enum: aqa, edexcel, eduqas, ocr, wjec, edexcelb]
-  - pathway (optional): (no description) [enum: core, gcse]
-  - tier (optional): (no description) [enum: core, foundation, higher]
-  - childSubject (optional): (no description) [enum: biology, chemistry, combined-science, physics]
+  - examBoard (optional): Optional exam board slug to narrow the unit to a specific programme variant, e.g. 'aqa'. [enum: aqa, edexcel, eduqas, ocr, wjec, edexcelb]
+  - pathway (optional): Optional pathway slug to narrow the unit to a specific programme variant, e.g. 'gcse'. [enum: core, gcse]
+  - tier (optional): Optional tier slug to narrow the unit to a specific programme variant, e.g. 'foundation'. [enum: core, foundation, higher]
+  - childSubject (optional): Optional science child subject slug to narrow the unit to a specific programme variant. Only available for science units, e.g. 'biology'. [enum: biology, chemistry, combined-science, physics]
 
 Annotations: readOnly=true destructive=false idempotent=true openWorld=false
 Security: oauth2 (scopes: email)

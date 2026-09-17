@@ -2,7 +2,7 @@
 
 ## Status
 
-Superseded by [ADR-141](141-mcp-apps-standard-primary.md). The MCP Apps resource registration model (`registerAppResource` with `RESOURCE_MIME_TYPE` and a generated `WIDGET_URI`) replaced the filename-hash cache-busting scheme described below. The `oak-json-viewer-<hash>.html` pattern and `openai/outputTemplate` key no longer exist, and the `Date.now()` hash source in this record is dead: the live cache-busting contract (deterministic per-commit suffix) is defined by ADR-141 §"Amendment — widget URI identity and cache-busting (2026-07-26, MCP-187)".
+Superseded by [ADR-141](141-mcp-apps-standard-primary.md). The MCP Apps resource registration model (`registerAppResource` with `RESOURCE_MIME_TYPE` and a generated `WIDGET_URI`) replaced the filename-hash cache-busting scheme described below. The `oak-json-viewer-<hash>.html` pattern and `openai/outputTemplate` key no longer exist, and the `Date.now()` hash source in this record is dead. The live contract is one fixed widget address, defined by ADR-141 §"Amendment — widget URI identity". This record's trade-off that a URI changing on every build is harmless because "ChatGPT handles this gracefully" was falsified in production: clients holding an earlier build's tool or resource list read "Resource not found" (MCP-489).
 
 ## Context
 

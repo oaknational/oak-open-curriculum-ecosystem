@@ -11,6 +11,7 @@ export function agentIdentityCliEnvironmentFromProcessEnv(
       'PRACTICE_AGENT_SESSION_ID_CLAUDE',
       env.PRACTICE_AGENT_SESSION_ID_CLAUDE,
     ),
+    ...optionalEnvironmentValue('CLAUDE_CODE_REMOTE_SESSION_ID', env.CLAUDE_CODE_REMOTE_SESSION_ID),
     ...optionalEnvironmentValue(
       'PRACTICE_AGENT_SESSION_ID_CURSOR',
       env.PRACTICE_AGENT_SESSION_ID_CURSOR,

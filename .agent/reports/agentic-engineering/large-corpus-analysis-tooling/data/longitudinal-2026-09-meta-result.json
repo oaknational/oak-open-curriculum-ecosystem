@@ -1,0 +1,186 @@
+{
+  "ok": true,
+  "meta": {
+    "recallMatches": [
+      {
+        "baselineId": "capture-does-not-cure",
+        "verdict": "partial",
+        "matchedCandidateId": "C26",
+        "note": "C26's trajectory carries the evidence (fabricated timestamps in w14 after the 2026-08-08 one-law was authored) but stops at the widening of one class and never states the general point that declarative capture supplies no procedural inhibition."
+      },
+      {
+        "baselineId": "inherited-state-is-a-hypothesis",
+        "verdict": "partial",
+        "matchedCandidateId": "C28",
+        "note": "C28 covers the transmit side (claims and artefact descriptions relayed without a first-hand read, every catch external) but frames it as outgoing assertion rather than as inherited records describing past disk state."
+      },
+      {
+        "baselineId": "coordinator-amplifies-unseen-defect",
+        "verdict": "missed",
+        "note": "No kept finding addresses the coordinator writing artefacts subject to the gates and races it manages, nor the over-write/under-write inverse pair."
+      },
+      {
+        "baselineId": "commit-window-single-agent-assumption",
+        "verdict": "missed",
+        "note": "The commit-window ownership assumption appears only inside killed candidates (C21, C65), so the run did not surface it as a finding."
+      },
+      {
+        "baselineId": "repo-wide-autofix-sweep-footgun",
+        "verdict": "missed",
+        "note": "Peer-file absorption via repo-wide auto-fix in pre-commit is present in the corpus but lives entirely in the killed C21, leaving no finding-level match."
+      },
+      {
+        "baselineId": "cron-template-overrides-owner-direction",
+        "verdict": "missed",
+        "note": "No kept finding touches cron prompt bodies firing ahead of owner direction and silently overriding a pause or hold."
+      },
+      {
+        "baselineId": "compaction-is-a-checkpoint",
+        "verdict": "missed",
+        "note": "The one candidate mentioning constraints riding compaction boundaries (C30) was killed; no kept finding requires post-compaction re-verification of watcher, cron, staged set and claims."
+      },
+      {
+        "baselineId": "peer-primary-topology-regime",
+        "verdict": "missed",
+        "note": "Both regime candidates (C17, C21) were killed, so the run's finding set names no operating topology and no shared-resource-contention cost."
+      },
+      {
+        "baselineId": "claims-open-minimum-field-silent-reject",
+        "verdict": "partial",
+        "matchedCandidateId": "C03",
+        "note": "C03 is the same family — an agent-tools CLI boundary whose output shape turns failures into false success — but names prose output and pnpm's exit-0-on-unknown-script, not the missing-required-flag silent reject at `claims open`."
+      },
+      {
+        "baselineId": "re-run-git-status-post-gate",
+        "verdict": "partial",
+        "matchedCandidateId": "C28",
+        "note": "C28 covers the false-clean assertion as a claim made before reading confirming state, but omits the specific mechanism that the gate run itself widens the diff surface while it executes."
+      },
+      {
+        "baselineId": "completion-language-overload",
+        "verdict": "missed",
+        "note": "The nearest candidate (C59, status vocabulary closing an open obligation) was killed, and no kept finding distinguishes slice-landed from claim-closed from workstream-accepted from value-delivered."
+      },
+      {
+        "baselineId": "commit-editmsg-single-writer",
+        "verdict": "missed",
+        "note": "No kept finding names COMMIT_EDITMSG or any single-writer git file as a wrong-attribution vector during handover."
+      },
+      {
+        "baselineId": "record-staged-full-index-fingerprint",
+        "verdict": "missed",
+        "note": "The commit-queue fingerprinting defect is absent from the kept set; the adjacent index-sweep material sits in the killed C21."
+      },
+      {
+        "baselineId": "identity-tuple-insufficiency",
+        "verdict": "missed",
+        "note": "No kept finding examines the routing tuple's inability to distinguish one renamed session from several distinct sessions."
+      },
+      {
+        "baselineId": "presence-vs-ownership-collapse",
+        "verdict": "missed",
+        "note": "No kept finding treats the team-start template's claimed-paths field or the collapse of rendezvous into a herd claim event."
+      },
+      {
+        "baselineId": "skill-invocation-not-owner-direction",
+        "verdict": "missed",
+        "note": "Owner-direction standing is touched only by killed candidates (C31, C33); no kept finding rules that a handed skill is not a standing instruction."
+      },
+      {
+        "baselineId": "reviewer-pre-execution-catch",
+        "verdict": "partial",
+        "matchedCandidateId": "C19",
+        "note": "C19 supplies both halves of the setup — green gates certify only the exercised path, and independent instruments over one artefact return near-disjoint defect sets — but attributes the divergence to analytical-register diversity rather than to the reviewer's freedom from the author's prior-context rationalisation."
+      },
+      {
+        "baselineId": "reviewer-cycle-split-on-convergence",
+        "verdict": "missed",
+        "note": "No kept finding prescribes scope-narrowing to a successor cycle when reviewers converge on blocking a planned cycle."
+      }
+    ],
+    "corroborationClaims": [
+      {
+        "candidateId": "C03",
+        "claimedHomePaths": [
+          ".agent/memory/active/patterns/wrapped-exit-codes-false-green.md",
+          ".agent/memory/active/patterns/harness-shell-and-commit-edge-cases.md",
+          ".agent/rules/exit-codes-in-band-never-piped.md"
+        ]
+      },
+      {
+        "candidateId": "C08",
+        "claimedHomePaths": [
+          ".agent/memory/active/patterns/read-surface-is-not-decide-surface.md",
+          ".agent/rules/pr-comments-resolve-and-recheck.md"
+        ]
+      },
+      {
+        "candidateId": "C10",
+        "claimedHomePaths": [
+          ".agent/memory/active/patterns/scope-bound-negative-existence-claims.md",
+          ".agent/memory/active/patterns/zero-match-false-green.md"
+        ]
+      },
+      {
+        "candidateId": "C16",
+        "claimedHomePaths": [
+          ".agent/rules/worktree-residency.md",
+          ".agent/memory/active/patterns/harness-shell-and-commit-edge-cases.md"
+        ]
+      },
+      {
+        "candidateId": "C19",
+        "claimedHomePaths": [
+          ".agent/memory/active/patterns/zero-match-false-green.md",
+          ".agent/memory/active/patterns/verification-method-must-answer-the-question.md"
+        ]
+      },
+      {
+        "candidateId": "C26",
+        "claimedHomePaths": [
+          ".agent/memory/active/patterns/values-enter-by-first-hand-right-frame-read.md",
+          ".agent/rules/sha-prefix-in-collaboration-content.md"
+        ]
+      },
+      {
+        "candidateId": "C27",
+        "claimedHomePaths": [
+          ".agent/memory/active/patterns/query-the-value-never-the-lookalike.md",
+          ".agent/memory/active/patterns/referent-narrowing.md"
+        ]
+      },
+      {
+        "candidateId": "C28",
+        "claimedHomePaths": [
+          ".agent/memory/active/patterns/verify-before-propagating.md",
+          ".agent/rules/verify-dont-trust.md"
+        ]
+      },
+      {
+        "candidateId": "C34",
+        "claimedHomePaths": [
+          ".agent/rules/silence-is-never-liveness.md",
+          ".agent/memory/active/patterns/observer-must-see-the-terminal-state.md"
+        ]
+      },
+      {
+        "candidateId": "C62",
+        "claimedHomePaths": [
+          ".agent/memory/active/patterns/wrapped-exit-codes-false-green.md",
+          ".agent/memory/active/patterns/harness-shell-and-commit-edge-cases.md"
+        ]
+      }
+    ],
+    "discountNote": "This calibration measures the run's DISPOSITION policy at least as much as its detection: the material behind several baselines (multi-agent index sweeps, napkin-hardened inherited constraints, cures reproducing their own class, self-review's structural blind spot) demonstrably reached candidate form and was then killed, so those baselines read as missed at the finding level while the corpus evidence was in fact surfaced upstream. The surviving finding set is also uniformly broad multi-window recurrence, which biases matching toward loose class-level overlap rather than mechanism-level re-finding, so treat every 'partial' here as a statement about grain mismatch, not about evidence quality — and treat the missed verdicts on the governance and identity families as the only ones that indicate genuine non-detection.",
+    "synthesisNotes": [
+      "The kept set collapses onto a single axis: instrument-trust failure (C03, C10, C16, C19, C26, C27, C28, C62) — a read or verdict taken from a surface that cannot carry the claim. That axis is precisely the best-graduated region of the estate, so the run's strongest output is confirmation of doctrine that already exists on disk.",
+      "The multi-agent index and commit-mechanics family (commit-window ownership, autofix sweep, COMMIT_EDITMSG, record-staged fingerprinting) is uniformly unmatched at finding level, yet all four have close relatives among killed candidates C21, C22 and C65 — this is a disposition outcome, not a detection gap, and it is the single largest systematic loss in the run.",
+      "The governance, identity and closeout family (completion-language overload, identity-tuple insufficiency, presence-vs-ownership collapse, skill-invocation-is-not-direction, reviewer cycle-splitting) has no analogue anywhere in the kept set at any grain. This is a true blind spot: the run reads mechanics well and reads role, standing and vocabulary poorly.",
+      "Every non-missed verdict came out 'partial' and none came out 'refines' or 'subsumes' cleanly. The run trades named mechanism for class generality, which is exactly the inverse of the trade the hand-authored baselines made — a synthesis stage consuming these findings will get breadth and lose the actionable trigger conditions.",
+      "Corroboration density is high: nine of eleven kept candidates already have verified homes under .agent/memory/active/patterns/ or .agent/rules/, several of which (values-enter-by-first-hand-right-frame-read, wrapped-exit-codes-false-green, scope-bound-negative-existence-claims) state the candidate more sharply than the candidate states itself.",
+      "C36 (the Cricket instrument mistaken for an authority or a health check) has no home under patterns/ or rules/ — it lives only in the skill canonical file and per-user memory — making it the clearest graduation candidate this run produced.",
+      "Baseline capture-does-not-cure is the diagnostic case: C26 contains the raw evidence (a fabrication instance postdating the law that forbade it by weeks) but never draws the inference that holding a rule does not inhibit the act. The run reliably assembles timelines and reliably fails to convert them into a mechanism claim.",
+      "C08 is the one kept finding that names a contested actuator rather than a misread instrument, and its home (read-surface-is-not-decide-surface) already records the gh-versus-REST split — the novel half is the equivalence it draws between --admin/--squash under human credentials and --no-verify, which no on-disk home currently states."
+    ]
+  }
+}

@@ -31,6 +31,15 @@ question is the residue of a verified record gap, and new evidence against
 a settled decision is a statement plus default-continue
 (`present-verdicts-not-menus` §Closed decisions), not a reopened card.
 
+**A card built on a premise the seat knows is unverified is void.** Naming
+the verification as pending inside the recommendation is worse than
+omitting it — it advertises that the question was put before the reading
+was done (owner rejection 2026-08-31, verbatim: "Asking this question
+before looking at the OWA code is a waste of time"; the premise was an
+absence inferred from URL helpers, never from the product's code). Read
+the source that the premise rests on first; a question is the residue of a
+verified gap, never the substitute for reading.
+
 ## Two Structural Guards
 
 Both guards are non-negotiable. A version of this rule that lacks

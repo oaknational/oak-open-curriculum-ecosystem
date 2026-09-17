@@ -12,11 +12,8 @@ tickets:
 depends_on:
   - plan: boot-failure-observability
     kind: beneficial
-owner_gates:
-  - awaiting: owner-decision
-    clears_when: 'The owner names the alert destination that reliably interrupts.'
-    expires: 2026-08-31
-last_updated: 2026-08-11
+owner_gates: []
+last_updated: 2026-09-03
 ---
 
 # Detection: externally operated production checks notify within five minutes
@@ -198,3 +195,11 @@ The shipped recovery arm is preserved in the archived
 *Authored by Birch holds Seedling (e48fe2, agent), 2026-08-03. Amended
 2026-08-09 per the adjudicated 2026-08-05 eleven-expert review
 (`deploy-reliability-corpus-amendment`, rows 24–30 and 35).*
+
+## Review dispositions
+
+One dated row per routed finding (PDR-140 ledger surface).
+
+| Date | Source | Finding | Routing |
+| --- | --- | --- | --- |
+| 2026-09-03 | Owner card (the MCP-673 implementing session) | The alert destination that reliably interrupts | Named — owner verbatim: "Slack is the right answer, but the config must be left to the person who does the final implementation, not a now thing": the Practice Slack channel is the destination; its configuration is the implementer's at pickup; the gate row is removed |

@@ -1,7 +1,6 @@
-import type { RequestHandler } from 'express';
 import type { Logger, PhasedTimer } from '@oaknational/logger';
 import { setupAuthRoutes } from './auth-routes.js';
-import { createEnsureMcpAcceptHeader, createMcpHtmlNegotiation } from './mcp-middleware.js';
+import { createEnsureMcpAcceptHeader } from './mcp-middleware.js';
 import {
   runBootstrapPhase,
   setupBaseMiddleware,
@@ -10,6 +9,7 @@ import {
 } from './app/bootstrap-helpers.js';
 import { finalizeApp } from './app/bootstrap-finalize.js';
 import { mountAppVersionHeader } from './app/app-version-header.js';
+import { mountAgentDiscoveryLinkHeader } from './app/agent-discovery-link-header.js';
 import { setupSecurityMiddleware } from './app/bootstrap-security.js';
 import { mountStaticContentRoutes } from './app/static-content.js';
 import { initializeCoreEndpoints } from './app/core-endpoints.js';
@@ -27,7 +27,6 @@ function setupPreAuthPhases(
   bootstrapTimer: PhasedTimer,
   appId: number,
 ): {
-  dnsRebindingMiddleware: RequestHandler;
   allowedHosts: readonly string[];
   canonicalOrigin?: string;
 } {
@@ -60,7 +59,6 @@ interface SetupPostAuthPhasesDeps {
   readonly appId: number;
   readonly allowedHosts: readonly string[];
   readonly canonicalOrigin?: string;
-  readonly dnsRebindingMiddleware: RequestHandler;
 }
 
 /**
@@ -79,7 +77,6 @@ function deriveResourceUrl(options: CreateAppOptions, canonicalOrigin?: string):
 
 function setupPostAuthPhases(deps: SetupPostAuthPhasesDeps): void {
   const { app, options, log, bootstrapTimer, appId, allowedHosts, canonicalOrigin } = deps;
-  const { dnsRebindingMiddleware } = deps;
 
   const resourceUrl = deriveResourceUrl(options, canonicalOrigin);
   const { mcpFactory } = runBootstrapPhase(
@@ -92,20 +89,10 @@ function setupPostAuthPhases(deps: SetupPostAuthPhasesDeps): void {
   );
 
   mountAppVersionHeader(app, options.runtimeConfig.version);
-  mountStaticContentRoutes(app, dnsRebindingMiddleware, log, {
-    getLandingPageHtml: options.getLandingPageHtml,
+  mountAgentDiscoveryLinkHeader(app);
+  mountStaticContentRoutes(app, log, {
     staticRoot: options.staticRoot,
   });
-  app.use(
-    '/mcp',
-    createMcpHtmlNegotiation({
-      log,
-      // The same baked artefact the root serves — a string seam, never
-      // res.sendFile, so the negotiation's pinned headers (no-store) hold.
-      renderHtml: options.getLandingPageHtml,
-      dnsRebindingMiddleware,
-    }),
-  );
   app.use('/mcp', createEnsureMcpAcceptHeader(log));
 
   runBootstrapPhase(
@@ -138,7 +125,7 @@ export async function createApp(options: CreateAppOptions): Promise<ExpressWithA
     options.logger ?? options.observability.createLogger({ name: 'streamable-http:app-instance' });
   const { app, timer: bootstrapTimer, appId } = initializeAppInstance(log);
 
-  const { dnsRebindingMiddleware, allowedHosts, canonicalOrigin } = setupPreAuthPhases(
+  const { allowedHosts, canonicalOrigin } = setupPreAuthPhases(
     app,
     options,
     log,
@@ -167,7 +154,6 @@ export async function createApp(options: CreateAppOptions): Promise<ExpressWithA
     appId,
     allowedHosts,
     canonicalOrigin,
-    dnsRebindingMiddleware,
   });
 
   finalizeApp({ app, options, log, appId, bootstrapTimer });

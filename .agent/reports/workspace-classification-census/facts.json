@@ -19,11 +19,11 @@
       "sourceDependencies": [],
       "turboTasks": [],
       "fileProfile": {
-        "trackedFiles": 439,
+        "trackedFiles": 440,
         "codeFiles": 8
       },
       "oakMarkers": {
-        "oakInDocs": 6527,
+        "oakInDocs": 6640,
         "oakInSource": 60,
         "cssOakVariables": 10,
         "dottedOakNamespaces": 0,
@@ -38,15 +38,15 @@
       "sourceDependencies": [],
       "turboTasks": [],
       "fileProfile": {
-        "trackedFiles": 4513,
-        "codeFiles": 36
+        "trackedFiles": 4660,
+        "codeFiles": 42
       },
       "oakMarkers": {
-        "oakInDocs": 32636,
-        "oakInSource": 209,
+        "oakInDocs": 38068,
+        "oakInSource": 232,
         "cssOakVariables": 518,
         "dottedOakNamespaces": 0,
-        "oakEnvKeys": 813
+        "oakEnvKeys": 822
       }
     },
     {
@@ -57,11 +57,11 @@
       "sourceDependencies": [],
       "turboTasks": [],
       "fileProfile": {
-        "trackedFiles": 299,
+        "trackedFiles": 304,
         "codeFiles": 9
       },
       "oakMarkers": {
-        "oakInDocs": 122,
+        "oakInDocs": 125,
         "oakInSource": 0,
         "cssOakVariables": 0,
         "dottedOakNamespaces": 0,
@@ -101,11 +101,11 @@
       "sourceDependencies": [],
       "turboTasks": [],
       "fileProfile": {
-        "trackedFiles": 299,
+        "trackedFiles": 304,
         "codeFiles": 11
       },
       "oakMarkers": {
-        "oakInDocs": 126,
+        "oakInDocs": 129,
         "oakInSource": 1,
         "cssOakVariables": 0,
         "dottedOakNamespaces": 0,
@@ -139,7 +139,7 @@
       "sourceDependencies": [],
       "turboTasks": [],
       "fileProfile": {
-        "trackedFiles": 190,
+        "trackedFiles": 192,
         "codeFiles": 3
       },
       "oakMarkers": {
@@ -201,15 +201,15 @@
         "type-check"
       ],
       "fileProfile": {
-        "trackedFiles": 1332,
-        "codeFiles": 1296
+        "trackedFiles": 1342,
+        "codeFiles": 1306
       },
       "oakMarkers": {
-        "oakInDocs": 57,
-        "oakInSource": 1699,
+        "oakInDocs": 52,
+        "oakInSource": 1715,
         "cssOakVariables": 1,
         "dottedOakNamespaces": 6,
-        "oakEnvKeys": 163
+        "oakEnvKeys": 168
       }
     },
     {
@@ -265,12 +265,12 @@
         "type-check"
       ],
       "fileProfile": {
-        "trackedFiles": 394,
-        "codeFiles": 341
+        "trackedFiles": 395,
+        "codeFiles": 342
       },
       "oakMarkers": {
-        "oakInDocs": 222,
-        "oakInSource": 1515,
+        "oakInDocs": 221,
+        "oakInSource": 1517,
         "cssOakVariables": 535,
         "dottedOakNamespaces": 63,
         "oakEnvKeys": 218
@@ -406,6 +406,7 @@
         "packages/core/result",
         "packages/core/type-helpers",
         "packages/design/oak-design-react",
+        "packages/design/oak-design-system",
         "packages/libs/fidelity-review"
       ],
       "turboTasks": [
@@ -415,14 +416,14 @@
         "type-check"
       ],
       "fileProfile": {
-        "trackedFiles": 96,
-        "codeFiles": 81
+        "trackedFiles": 150,
+        "codeFiles": 130
       },
       "oakMarkers": {
         "oakInDocs": 17,
-        "oakInSource": 584,
-        "cssOakVariables": 10,
-        "dottedOakNamespaces": 0,
+        "oakInSource": 796,
+        "cssOakVariables": 26,
+        "dottedOakNamespaces": 9,
         "oakEnvKeys": 0
       }
     },
@@ -594,7 +595,6 @@
         "@oaknational/open-curriculum-ecosystem",
         "@oaknational/openapi-zod-client-adapter",
         "@oaknational/posthog-node",
-        "@oaknational/research-evidence",
         "@oaknational/result",
         "@oaknational/safe-path",
         "@oaknational/sdk-codegen",
@@ -613,12 +613,12 @@
         "type-check"
       ],
       "fileProfile": {
-        "trackedFiles": 51,
-        "codeFiles": 45
+        "trackedFiles": 55,
+        "codeFiles": 49
       },
       "oakMarkers": {
         "oakInDocs": 14,
-        "oakInSource": 535,
+        "oakInSource": 556,
         "cssOakVariables": 0,
         "dottedOakNamespaces": 0,
         "oakEnvKeys": 2
@@ -887,7 +887,6 @@
         "@oaknational/observability",
         "@oaknational/openapi-zod-client-adapter",
         "@oaknational/posthog-node",
-        "@oaknational/research-evidence",
         "@oaknational/result",
         "@oaknational/safe-path",
         "@oaknational/sdk-codegen",
@@ -1708,67 +1707,6 @@
         "cssOakVariables": 0,
         "dottedOakNamespaces": 0,
         "oakEnvKeys": 0
-      }
-    },
-    {
-      "dirPath": "research/web-app-deconstruction",
-      "publishedName": null,
-      "manifest": {
-        "name": "@oaknational/web-app-deconstruction",
-        "isPrivate": true,
-        "licence": "MIT",
-        "hasExports": false,
-        "internalDependencies": []
-      },
-      "internalDependents": [],
-      "sourceDependencies": [],
-      "turboTasks": [],
-      "fileProfile": {
-        "trackedFiles": 101,
-        "codeFiles": 0
-      },
-      "oakMarkers": {
-        "oakInDocs": 5231,
-        "oakInSource": 0,
-        "cssOakVariables": 0,
-        "dottedOakNamespaces": 0,
-        "oakEnvKeys": 11
-      }
-    },
-    {
-      "dirPath": "research/web-app-deconstruction/packages/research-evidence",
-      "publishedName": "@oaknational/research-evidence",
-      "manifest": {
-        "name": "@oaknational/research-evidence",
-        "isPrivate": true,
-        "licence": null,
-        "hasExports": false,
-        "internalDependencies": [
-          "@oaknational/eslint-plugin-standards",
-          "@oaknational/workspace-config"
-        ]
-      },
-      "internalDependents": [],
-      "sourceDependencies": [
-        "packages/core/oak-eslint",
-        "packages/core/workspace-config"
-      ],
-      "turboTasks": [
-        "build",
-        "lint",
-        "test",
-        "type-check"
-      ],
-      "fileProfile": {
-        "trackedFiles": 40,
-        "codeFiles": 35
-      },
-      "oakMarkers": {
-        "oakInDocs": 29,
-        "oakInSource": 232,
-        "cssOakVariables": 5,
-        "dottedOakNamespaces": 0,
-        "oakEnvKeys": 2
       }
     },
     {

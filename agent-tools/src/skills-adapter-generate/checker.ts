@@ -25,6 +25,7 @@ import {
 } from './carriage.js';
 import { classifyEmissionTarget, foreignTargetRefusal } from './emission-target.js';
 import { allSurfaceRootFailures } from './surface-roots.js';
+import { type ParsedCanonical, type SkippedDirectory } from './discovery.js';
 import {
   adapterTargetPath,
   discoverCanonicals,
@@ -32,7 +33,6 @@ import {
   type AdapterSurface,
   type DiscoveryFs,
   type GeneratorOptions,
-  type ParsedCanonicalSkill,
 } from './generator.js';
 import { findStaleProjectionEntries, isDiscoveryComplete } from './projection-roots.js';
 
@@ -54,7 +54,7 @@ export interface CheckOutcome {
    * directory is content no harness can summon, and a checker that stays
    * green over it certifies an incomplete corpus (worked instance: nine
    * canonicals sat unsummonable on main behind a green `--check`). */
-  readonly skipped: readonly string[];
+  readonly skipped: readonly SkippedDirectory[];
   /** Refusals — canonical-side symlinks and seam read failures. A failing
    * state that also means the other streams are not a complete verdict:
    * the checker refuses to certify what it could not fully observe. */
@@ -201,7 +201,7 @@ function refusedOutcome(
 }
 
 async function checkOneCanonical(
-  parsed: ParsedCanonicalSkill,
+  parsed: ParsedCanonical,
   options: GeneratorOptions,
   fs: CheckerFs,
   streams: CheckStreams,

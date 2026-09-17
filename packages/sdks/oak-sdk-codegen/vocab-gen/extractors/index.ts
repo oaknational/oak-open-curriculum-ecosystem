@@ -23,6 +23,11 @@ export {
   type ExtractedLesson,
 } from '../../src/bulk/extractors/lesson-extractor.js';
 export {
+  extractUnitLessons,
+  type ExtractedUnitLessons,
+  type UnitLessonReference,
+} from '../../src/bulk/extractors/unit-lesson-extractor.js';
+export {
   extractMisconceptions,
   type ExtractedMisconception,
 } from '../../src/bulk/extractors/misconception-extractor.js';

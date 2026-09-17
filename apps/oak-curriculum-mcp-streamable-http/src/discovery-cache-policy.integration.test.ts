@@ -25,8 +25,6 @@ describe('Discovery metadata caching policy (Integration)', () => {
       runtimeConfig: createMockRuntimeConfig({ env }),
       observability: createFakeHttpObservability(),
       getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
-      getLandingPageHtml: () =>
-        '<!doctype html><html lang="en-GB"><body>test landing page</body></html>',
       upstreamMetadata: TEST_UPSTREAM_METADATA,
     });
 

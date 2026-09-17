@@ -20,6 +20,8 @@
 
 import { MCP_RESOURCE_PATH } from './served-origin.js';
 import { HEALTH_PATHS } from './app/health-paths.js';
+import { OPENAI_APPS_CHALLENGE_PATH } from './openai-domain-verification.js';
+import { ROBOTS_TXT_PATH } from './robots-txt.js';
 import {
   OAK_ASSETS_PUBLIC_DIRNAME,
   OAK_DS_PUBLIC_DIRNAME,
@@ -32,12 +34,12 @@ import {
  *
  * @remarks
  * The health paths are spread from {@link HEALTH_PATHS} rather than listed,
- * because there are now two of them (MCP-580) and only the routed one is
- * reachable on the canonical host. Naming the root one alone would leave the
- * canonical probe — the only probe that measures the surface users actually
- * hit — running through the auth vendor on every poll: a needless dependency
- * inside a liveness check, and the handshake-redirect exposure the root path
- * was exempted from in the first place. Composing from the constant means a
+ * because there are two of them (MCP-580): the routed one is the only one a
+ * path-scoped edge forwards (the release-era `www` rule sent only `/mcp*`),
+ * and the canonical host serves both. Naming the root one alone would leave
+ * the routed probe running through the auth vendor on every poll: a needless
+ * dependency inside a liveness check, and the handshake-redirect exposure the
+ * root path was exempted from in the first place. Composing from the constant means a
  * change to the served health layout moves the skip with it instead of leaving
  * a stale literal behind.
  */
@@ -46,6 +48,8 @@ export const CLERK_SKIP_PATHS: ReadonlySet<string> = new Set([
   '/.well-known/oauth-protected-resource/mcp',
   '/.well-known/oauth-authorization-server',
   '/.well-known/openid-configuration',
+  OPENAI_APPS_CHALLENGE_PATH,
+  ROBOTS_TXT_PATH,
   ...HEALTH_PATHS,
   '/oauth/authorize',
   '/oauth/token',
@@ -58,18 +62,21 @@ export const CLERK_SKIP_PATHS: ReadonlySet<string> = new Set([
  * @remarks
  * Asset download routes are self-authenticating via HMAC signature (ADR-126).
  *
- * The design-system and brand trees are the public landing page's own
- * subresources (MCP-518). They are static files with no session-dependent
- * content, and they sit under the routed base only because the edge forwards
- * `/mcp*` and nothing else — a shared prefix, never a shared auth contract.
- * Composed from the same constants the static mount and the page's markup
- * use, so a change to the served layout moves the skip with it instead of
- * leaving a stale literal behind.
+ * The design-system and brand trees are public static files (MCP-518) with no
+ * session-dependent content, and they sit under the routed base so a
+ * path-scoped edge (the release-era `www` rule forwarded `/mcp*` and nothing
+ * else) can reach them — a shared prefix, never a shared auth contract. They
+ * were the landing page's own subresources until 2026-08-20; the mount
+ * outlived the page and its removal is a separately sequenced change.
+ * Composed from the same constants the static mount uses, so a change to the
+ * served layout moves the skip with it instead of leaving a stale literal
+ * behind.
  *
  * Both trees appear twice because `static-content.ts` mounts one handler at
- * two prefixes: the routed base the canonical host reaches, and the app root
- * the alpha host serves from. Naming only the routed copy would leave the
- * alpha host's page fetching its own stylesheet through the auth vendor.
+ * two prefixes: the routed base and the app root — the canonical host serves
+ * both (verified 2026-09-01), and root-served deployments use the root one.
+ * Naming only the routed copy would leave a root-served consumer fetching an
+ * asset through the auth vendor.
  */
 export const CLERK_SKIP_PREFIXES: readonly string[] = [
   '/assets/download/',
@@ -80,14 +87,18 @@ export const CLERK_SKIP_PREFIXES: readonly string[] = [
 ];
 
 /**
- * Paths at which the fully public baked page is served.
+ * Paths whose browser traffic is unconditionally public (MCP-518).
  *
  * @remarks
- * Two, not one: `static-content.ts` answers `GET /` with the same
- * `getLandingPageHtml()` artefact the `/mcp` negotiation serves. The owner
- * ruling is about the page, not about one of its URLs, so the fork has to
- * cover both or the defect simply moves to the other door — which for the
- * alpha host is its front one.
+ * Both doors, not one. Until 2026-08-20 these served the same baked page and
+ * the name meant it literally; now `/` has no route and `/mcp` answers a
+ * browser with the protocol gate's 406. The set survives the page because the
+ * owner ruling was about the surface, not about one of its URLs: whatever
+ * this app answers with, it must be THIS app answering. Left to the auth
+ * vendor, either door draws a handshake redirect instead — and on a
+ * root-served deployment, the canonical host included, `/` is the front one,
+ * so covering only `/mcp` would move the defect rather than close it. Pinned
+ * by `clerk-public-surface.integration.test.ts`.
  */
 const PUBLIC_PAGE_PATHS: ReadonlySet<string> = new Set(['/', MCP_RESOURCE_PATH]);
 

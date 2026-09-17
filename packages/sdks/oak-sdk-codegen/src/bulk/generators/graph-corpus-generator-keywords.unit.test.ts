@@ -26,6 +26,7 @@ function makeInput(overrides: Partial<GraphCorpusInput> = {}): GraphCorpusInput 
     priorKnowledge: [],
     threads: [],
     lessons: [],
+    unitLessons: [],
     misconceptions: [],
     keywords: [],
     sourceVersion: '2026-05-21T13:45:16.086Z',
