@@ -95,6 +95,7 @@ export type {
   RestrictedLessonExclusionOptions,
   RestrictedLessonFilesResult,
   ExtractedKeyword,
+  ExtractedKeywordDefinition,
   ExtractedMisconception,
   ExtractedPriorKnowledge,
   ExtractedNCStatement,

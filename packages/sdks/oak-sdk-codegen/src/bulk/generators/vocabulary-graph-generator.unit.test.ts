@@ -22,12 +22,18 @@ import {
 function createKeyword(overrides: Partial<ExtractedKeyword> = {}): ExtractedKeyword {
   return {
     term: 'photosynthesis',
-    displayTerm: 'photosynthesis',
     definition: 'The process by which plants convert light into energy',
     frequency: 15,
     subjects: ['science'],
     firstYear: 3,
     lessonSlugs: ['lesson-1', 'lesson-2'],
+    definitions: [
+      {
+        term: 'photosynthesis',
+        definition: 'The process by which plants convert light into energy',
+        lessonSlugs: ['lesson-1', 'lesson-2'],
+      },
+    ],
     ...overrides,
   };
 }
