@@ -3,7 +3,7 @@
 Versions are the plugin manifest version. The Claude Code plugin and the
 ChatGPT/Codex package are cut from the same source at the same version.
 
-## 0.1.2 — unreleased (PR #968)
+## 0.1.2 — 2026-09-17 (repo release v1.182.0)
 
 - Adds the ChatGPT/Codex package: the same skills, with the two workflows
   packaged as skills.
