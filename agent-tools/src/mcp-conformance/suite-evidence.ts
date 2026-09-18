@@ -12,7 +12,7 @@
 import { err, isErr, type Result } from '@oaknational/result';
 
 import { parseWithSchema } from '../core/schema-parse.js';
-import { boundedExcerpt } from './bounded-excerpt.js';
+import { boundedExcerpt, redactCredentials } from './bounded-excerpt.js';
 import { type McpConformanceIo, type McpConformanceRunInput } from './io-port.js';
 import { composeSuiteArgs, findTargetMismatch, SUITE_REPORT_KIND } from './runner.js';
 import { composeEvidence, type EvidenceFields } from './suite-outcome.js';
@@ -158,7 +158,11 @@ export function gatherSuiteEvidence(
     const retainedNote = retention.ok ? ` — raw output retained at ${retention.reportedPath}` : '';
     return {
       kind: 'unparseable',
-      reason: `${parsed.error.message}${retainedNote}${boundedExcerpt('mcpjam stderr', spawn.value.stderr)}`,
+      // The parse error embeds vendor stdout: a JSON.parse SyntaxError quotes
+      // the snippet it choked on, and a Zod unrecognized-keys issue echoes the
+      // offending key. Vendor text, so redacted like every other string
+      // reaching a reason — this one rides to stdout and CI job logs.
+      reason: `${redactCredentials(parsed.error.message)}${retainedNote}${boundedExcerpt('mcpjam stderr', spawn.value.stderr)}`,
       retentionReasons,
       evidence,
     };
