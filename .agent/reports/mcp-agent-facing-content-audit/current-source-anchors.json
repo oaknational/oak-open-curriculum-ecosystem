@@ -1309,8 +1309,8 @@
               {
                 "tokenCount": 54,
                 "tokenSha256": "5da449089956eb5841722c00289ecd4b9da4dac80d27349b65198c25e9dec1ea",
-                "indexToken": "stage",
-                "indexOffset": 24
+                "indexToken": "ks1",
+                "indexOffset": 26
               }
             ]
           }
@@ -1415,16 +1415,16 @@
     {
       "auditId": "C078",
       "evidence": {
-        "revision": "unchanged",
+        "revision": "modified",
         "targets": [
           {
             "file": "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search/flat-zod-schema.ts",
             "anchors": [
               {
-                "tokenCount": 74,
-                "tokenSha256": "b694f9880d1e8cc0111c1cc9dcbe6eafec7ff091cbc12a715e5f636c1d57c072",
-                "indexToken": "union",
-                "indexOffset": 4
+                "tokenCount": 59,
+                "tokenSha256": "0d583d6488e36c18c8605f7c24aac211a386ad06370d8a66476d3dad9af591b2",
+                "indexToken": "including",
+                "indexOffset": 22
               }
             ]
           }

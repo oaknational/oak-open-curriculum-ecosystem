@@ -47,6 +47,7 @@ export function buildUnitFilters(params: SearchUnitsParams): QueryContainer[] {
   const filters: QueryContainer[] = [];
   addSubjectFilter(filters, params.subject, params.keyStage);
   addKeyStageFilter(filters, params.keyStage);
+  addTermsFilter(filters, 'years', params.year);
   if (typeof params.minLessons === 'number') {
     filters.push({ range: { lesson_count: { gte: params.minLessons } } });
   }

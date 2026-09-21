@@ -78,7 +78,9 @@ export const SEARCH_INPUT_SCHEMA = {
   year: z
     .union([z.string(), z.number().int().min(1).max(11)])
     .optional()
-    .describe('Filter by year group number. Lessons scope only.')
+    .describe(
+      "Filter by year group number. Lessons and units scopes. Filters exactly, so content pitched one year either side — including across a key stage boundary — is excluded; omit it, or search the adjacent year too, when a year group is the teacher's intended pitch rather than a hard limit.",
+    )
     .meta({ examples: ['3', '7', 10] }),
   threadSlug: z
     .string()

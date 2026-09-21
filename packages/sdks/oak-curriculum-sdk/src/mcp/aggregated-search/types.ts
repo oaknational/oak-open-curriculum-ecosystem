@@ -83,7 +83,7 @@ export interface SearchSdkArgs {
   /** Filter by exam board. Lessons only. */
   readonly examBoard?: string;
 
-  /** Filter by year group (e.g. '3', '7'). Lessons only. */
+  /** Filter by year group (e.g. '3', '7'). Lessons and units. */
   readonly year?: string;
 
   /** Filter by curriculum thread slug. Lessons only. */

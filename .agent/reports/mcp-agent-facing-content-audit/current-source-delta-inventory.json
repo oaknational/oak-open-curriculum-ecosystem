@@ -871,8 +871,14 @@
       ]
     },
     {
+      "file": "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search/execution.ts",
+      "semanticSha256": "51f9c5ea1cda45b23dcb019f5ede5bda8468af257b5dcd2a900a4b06594dd38c",
+      "itemIds": [],
+      "exclusionReason": "Reviewed engineering implementation change; no new authored agent-facing content."
+    },
+    {
       "file": "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search/flat-zod-schema.ts",
-      "semanticSha256": "08abd4d8b30890ee797d2c67e0ae7ad092f27a4fe82b92c28457449af004e984",
+      "semanticSha256": "b2c1cde0cd1450b482a0f6fd962711535a0f02b9d424e12cfb7a16dfeb8bea1b",
       "itemIds": [
         "C069",
         "C070",
@@ -894,7 +900,7 @@
     },
     {
       "file": "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search/tool-definition.ts",
-      "semanticSha256": "b2ee07ef1e5550084db0171499306ca06c5ab4bd04bff76a1e6e013ae0a5117b",
+      "semanticSha256": "80caab09f96c7403e072126f20ae77ebdcda3fa74d1f9bd12071f74f3e31aa31",
       "itemIds": [
         "C065",
         "C066",
@@ -1150,6 +1156,12 @@
       "semanticSha256": "2868c68e526f5d137fdec81722731059369a3005e33973940ae48c88da5a283b",
       "itemIds": [],
       "exclusionReason": "Governed source deleted from the tree; the baseline-content hash is the tombstone and item lineage records each item retirement or relocation."
+    },
+    {
+      "file": "packages/sdks/oak-curriculum-sdk/src/mcp/search-retrieval-types.ts",
+      "semanticSha256": "060dbb80726cd17d7941a659e5cf7e24606738e8020d6112a328d46c229d975e",
+      "itemIds": [],
+      "exclusionReason": "Type-only change; no authored agent-facing content."
     },
     {
       "file": "packages/sdks/oak-curriculum-sdk/src/mcp/test-helpers/advertised-examples.ts",
@@ -1831,6 +1843,12 @@
         "C675",
         "C676"
       ]
+    },
+    {
+      "file": "packages/sdks/oak-search-sdk/src/retrieval/rrf-query-helpers.ts",
+      "semanticSha256": "f67b477a99f9a320320e0d31f80446de9dd0ce0f729ba3b6077be0723acd4a42",
+      "itemIds": [],
+      "exclusionReason": "Reviewed engineering implementation change; no new authored agent-facing content."
     }
   ]
 }

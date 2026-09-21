@@ -256,6 +256,20 @@ describe('runSearchSdkTool', () => {
       );
     });
 
+    it('passes year through to unit search', async () => {
+      const retrieval = createFakeRetrieval();
+      const deps = createDeps(retrieval);
+      const args: SearchSdkArgs = {
+        query: 'prayer',
+        scope: 'units',
+        year: '2',
+      };
+
+      await runSearchSdkTool(args, deps);
+
+      expect(retrieval.searchUnits).toHaveBeenCalledWith(expect.objectContaining({ year: '2' }));
+    });
+
     it('passes sequence-specific filters', async () => {
       const retrieval = createFakeRetrieval();
       const deps = createDeps(retrieval);

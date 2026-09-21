@@ -8,6 +8,7 @@
 
 const SDK_MCP = 'packages/sdks/oak-curriculum-sdk/src/mcp';
 const SEARCH_DEF = `${SDK_MCP}/aggregated-search/tool-definition.ts`;
+const SEARCH_SCHEMA = `${SDK_MCP}/aggregated-search/flat-zod-schema.ts`;
 const EXPLORE_DEF = `${SDK_MCP}/aggregated-explore/tool-definition.ts`;
 const USER_SEARCH_DEF = `${SDK_MCP}/aggregated-user-search/tool-definition.ts`;
 const BROWSE_DEF = `${SDK_MCP}/aggregated-browse/tool-definition.ts`;
@@ -52,6 +53,14 @@ export const CURRENT_AGGREGATED_ITEM_ANCHOR_OVERRIDES = {
   C066: {
     [SEARCH_DEF]: [
       'description: `Hybrid lexical and semantic search across lessons, units, threads and sequences,',
+    ],
+  },
+  // MCP-755: `year` now applies to the units scope as well as lessons, and
+  // states what an exact age filter excludes, because a unit pitched one year
+  // either side of the year asked for was silently unreachable.
+  C078: {
+    [SEARCH_SCHEMA]: [
+      "Filter by year group number. Lessons and units scopes. Filters exactly, so content pitched one year either side — including across a key stage boundary — is excluded; omit it, or search the adjacent year too, when a year group is the teacher's intended pitch rather than a hard limit.",
     ],
   },
   C067: {
