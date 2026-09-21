@@ -878,7 +878,7 @@
     },
     {
       "file": "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search/flat-zod-schema.ts",
-      "semanticSha256": "b2c1cde0cd1450b482a0f6fd962711535a0f02b9d424e12cfb7a16dfeb8bea1b",
+      "semanticSha256": "67c2f82c74a2a9d8dfb889907eac9bdf890425a1a2c27c70f0903aeeeeefc82c",
       "itemIds": [
         "C069",
         "C070",
@@ -907,6 +907,18 @@
         "C067",
         "C068"
       ]
+    },
+    {
+      "file": "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search/validation.ts",
+      "semanticSha256": "053f3e0e0e0befe942973669f903852ab236b2cb65ea0ef642b680f18676fd77",
+      "itemIds": [],
+      "exclusionReason": "Reviewed engineering implementation change; no new authored agent-facing content."
+    },
+    {
+      "file": "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search/year-filter-schema.ts",
+      "semanticSha256": "a3937e516879022c415f9b4e4caeaea74e638e7083f7cb25f30666d35bac6b4e",
+      "itemIds": [],
+      "exclusionReason": "Reviewed engineering implementation change; no new authored agent-facing content."
     },
     {
       "file": "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-thread-progressions.ts",

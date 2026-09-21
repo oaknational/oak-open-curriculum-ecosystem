@@ -251,6 +251,25 @@ describe('validateSearchSdkArgs', () => {
       expect(result.ok).toBe(false);
     });
 
+    // A year filter is exact, so an unconstrained string reaches the index as a
+    // term that matches nothing and returns an empty result with no error.
+    it.each([['12'], ['0'], ['3.5'], ['banana'], ['02'], [' 3'], ['']])(
+      'rejects year string %p',
+      (year) => {
+        const result = validateSearchSdkArgs({ query: 'test', scope: 'lessons', year });
+        expect(result.ok).toBe(false);
+      },
+    );
+
+    it.each([['1'], ['7'], ['11']])('accepts year string %p', (year) => {
+      const result = validateSearchSdkArgs({ query: 'test', scope: 'lessons', year });
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.year).toBe(year);
+      }
+    });
+
     it('rejects unknown properties', () => {
       const result = validateSearchSdkArgs({
         query: 'test',

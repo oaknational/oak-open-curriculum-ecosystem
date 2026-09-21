@@ -25,11 +25,13 @@ const TOOL_DEFINITION = `${AGGREGATED_SEARCH}/tool-definition.ts`;
 const EXECUTION = `${AGGREGATED_SEARCH}/execution.ts`;
 const SEARCH_RETRIEVAL_TYPES = 'packages/sdks/oak-curriculum-sdk/src/mcp/search-retrieval-types.ts';
 const RRF_QUERY_HELPERS = 'packages/sdks/oak-search-sdk/src/retrieval/rrf-query-helpers.ts';
+const VALIDATION = `${AGGREGATED_SEARCH}/validation.ts`;
+const YEAR_FILTER_SCHEMA = `${AGGREGATED_SEARCH}/year-filter-schema.ts`;
 
 export const SEARCH_YEAR_FILTER_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview>> =
   {
     [FLAT_ZOD_SCHEMA]: reviewed(
-      'b2c1cde0cd1450b482a0f6fd962711535a0f02b9d424e12cfb7a16dfeb8bea1b',
+      '67c2f82c74a2a9d8dfb889907eac9bdf890425a1a2c27c70f0903aeeeeefc82c',
       [
         'C069',
         'C070',
@@ -63,6 +65,17 @@ export const SEARCH_YEAR_FILTER_DELTA_REVIEWS: Readonly<Record<string, CurrentSo
     ),
     [RRF_QUERY_HELPERS]: excluded(
       'f67b477a99f9a320320e0d31f80446de9dd0ce0f729ba3b6077be0723acd4a42',
+      IMPLEMENTATION_ONLY,
+    ),
+    // The year filter's accepted shape, shared by the registration and runtime
+    // schemas so the two cannot diverge. Input validation, not authored text:
+    // the served description of `year` is C078, reviewed at FLAT_ZOD_SCHEMA.
+    [YEAR_FILTER_SCHEMA]: excluded(
+      'a3937e516879022c415f9b4e4caeaea74e638e7083f7cb25f30666d35bac6b4e',
+      IMPLEMENTATION_ONLY,
+    ),
+    [VALIDATION]: excluded(
+      '053f3e0e0e0befe942973669f903852ab236b2cb65ea0ef642b680f18676fd77',
       IMPLEMENTATION_ONLY,
     ),
   };
