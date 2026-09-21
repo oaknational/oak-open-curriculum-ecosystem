@@ -916,7 +916,7 @@
     },
     {
       "file": "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search/year-filter-schema.ts",
-      "semanticSha256": "a3937e516879022c415f9b4e4caeaea74e638e7083f7cb25f30666d35bac6b4e",
+      "semanticSha256": "5ec3365a88fb342221551d34a26e33489af33bae5f3708c3a64c0c5a17f51e6b",
       "itemIds": [],
       "exclusionReason": "Reviewed engineering implementation change; no new authored agent-facing content."
     },
@@ -1858,7 +1858,7 @@
     },
     {
       "file": "packages/sdks/oak-search-sdk/src/retrieval/rrf-query-helpers.ts",
-      "semanticSha256": "f67b477a99f9a320320e0d31f80446de9dd0ce0f729ba3b6077be0723acd4a42",
+      "semanticSha256": "d3b187c29af0b7b5dbeffe306fb5db66aaebf5b0f42178b0b7aad73d794f03d2",
       "itemIds": [],
       "exclusionReason": "Reviewed engineering implementation change; no new authored agent-facing content."
     }

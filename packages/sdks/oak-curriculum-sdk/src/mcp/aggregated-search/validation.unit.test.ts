@@ -261,13 +261,13 @@ describe('validateSearchSdkArgs', () => {
       },
     );
 
-    it.each([['1'], ['7'], ['11']])('accepts year string %p', (year) => {
+    it.each([['1'], ['7'], ['11'], ['all-years']])('accepts year string %p', (year) => {
       const result = validateSearchSdkArgs({ query: 'test', scope: 'lessons', year });
 
-      expect(result.ok).toBe(true);
-      if (result.ok) {
-        expect(result.value.year).toBe(year);
-      }
+      expect(result, `year ${year} must validate`).toMatchObject({
+        ok: true,
+        value: { year },
+      });
     });
 
     it('rejects unknown properties', () => {

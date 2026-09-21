@@ -61,6 +61,14 @@ describe('unit search year filter', () => {
     expect(request).toContain('{"terms":{"years":["3"]}}');
   });
 
+  // Lesson documents carry the slug `all-years`; unit rollups carry the title
+  // `All years`. One filter value has to match both representations.
+  it('matches both indexed forms of all-years', async () => {
+    const request = await unitSearchRequestJson({ query: 'swimming', year: 'all-years' });
+
+    expect(request).toContain('{"terms":{"years":["all-years","All years"]}}');
+  });
+
   it('sends no years filter when year is omitted', async () => {
     const request = await unitSearchRequestJson({ query: 'prayer', keyStage: 'ks2' });
 

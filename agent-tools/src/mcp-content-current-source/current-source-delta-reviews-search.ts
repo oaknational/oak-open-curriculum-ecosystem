@@ -64,14 +64,14 @@ export const SEARCH_YEAR_FILTER_DELTA_REVIEWS: Readonly<Record<string, CurrentSo
       TYPE_ONLY,
     ),
     [RRF_QUERY_HELPERS]: excluded(
-      'f67b477a99f9a320320e0d31f80446de9dd0ce0f729ba3b6077be0723acd4a42',
+      'd3b187c29af0b7b5dbeffe306fb5db66aaebf5b0f42178b0b7aad73d794f03d2',
       IMPLEMENTATION_ONLY,
     ),
     // The year filter's accepted shape, shared by the registration and runtime
     // schemas so the two cannot diverge. Input validation, not authored text:
     // the served description of `year` is C078, reviewed at FLAT_ZOD_SCHEMA.
     [YEAR_FILTER_SCHEMA]: excluded(
-      'a3937e516879022c415f9b4e4caeaea74e638e7083f7cb25f30666d35bac6b4e',
+      '5ec3365a88fb342221551d34a26e33489af33bae5f3708c3a64c0c5a17f51e6b',
       IMPLEMENTATION_ONLY,
     ),
     [VALIDATION]: excluded(
