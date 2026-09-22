@@ -22,6 +22,7 @@ import { MCP_RESOURCE_PATH } from './served-origin.js';
 import { HEALTH_PATHS } from './app/health-paths.js';
 import { OPENAI_APPS_CHALLENGE_PATH } from './openai-domain-verification.js';
 import { ROBOTS_TXT_PATH } from './robots-txt.js';
+import { AUTH_MD_PATH } from './auth-md.js';
 import {
   OAK_ASSETS_PUBLIC_DIRNAME,
   OAK_DS_PUBLIC_DIRNAME,
@@ -50,6 +51,7 @@ export const CLERK_SKIP_PATHS: ReadonlySet<string> = new Set([
   '/.well-known/openid-configuration',
   OPENAI_APPS_CHALLENGE_PATH,
   ROBOTS_TXT_PATH,
+  AUTH_MD_PATH,
   ...HEALTH_PATHS,
   '/oauth/authorize',
   '/oauth/token',

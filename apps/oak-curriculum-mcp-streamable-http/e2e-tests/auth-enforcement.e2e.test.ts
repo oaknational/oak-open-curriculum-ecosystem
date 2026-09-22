@@ -83,6 +83,14 @@ function requireRecord(value: unknown, message: string): Record<string, unknown>
   return value;
 }
 
+function requireString(value: unknown, message: string): string {
+  if (typeof value !== 'string') {
+    throw new Error(message);
+  }
+
+  return value;
+}
+
 interface AuthServerMetadata {
   issuer: string;
   authorization_endpoint: string;
@@ -335,6 +343,31 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
       expect(as.scopes_supported).toEqual([...SCOPES_SUPPORTED]);
       expect(as.scopes_supported).not.toEqual(TEST_UPSTREAM_METADATA.scopes_supported);
       expect(as.scopes_supported).toEqual(prm.scopes_supported);
+    });
+
+    it('AS metadata additively advertises agent_auth.skill, and the pointer resolves (MCP-759)', async () => {
+      const app = await createAuthApp();
+      const asRes = await request(app).get('/.well-known/oauth-authorization-server');
+
+      expect(asRes.status).toBe(200);
+      const as = requireRecord(asRes.body, 'Expected auth server metadata body');
+      const agentAuth = requireRecord(as.agent_auth, 'Expected an agent_auth block');
+
+      const skillUrl = requireString(agentAuth.skill, 'Expected agent_auth.skill to be a string');
+      expect(skillUrl).toMatch(/^http:\/\/127\.0\.0\.1:\d+\/auth\.md$/);
+
+      // A Link pointing at a 404 is worse than no Link at all
+      // (agent-discovery-link-header.ts's own principle) — the same bar
+      // applies to agent_auth.skill.
+      const authMdRes = await request(app).get(new URL(skillUrl).pathname);
+      expect(authMdRes.status).toBe(200);
+      expect(authMdRes.type).toBe('text/markdown');
+
+      // Additive means every field already pinned above is unaffected by
+      // agent_auth's presence.
+      expect(as.issuer).toMatch(/^http:\/\/127\.0\.0\.1:\d+$/);
+      expect(as.registration_endpoint).toMatch(/^http:\/\/127\.0\.0\.1:\d+\/oauth\/register$/);
+      expect(as.scopes_supported).toEqual([...SCOPES_SUPPORTED]);
     });
   });
 

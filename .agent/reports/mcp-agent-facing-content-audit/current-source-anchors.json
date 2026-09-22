@@ -7486,15 +7486,15 @@
             "anchors": [
               {
                 "tokenCount": 23,
-                "tokenSha256": "a886694391ea31605b92c6ad4969e420976604f0d2050bd05b3cb53e4eb6d470",
-                "indexToken": "rewriteAuthServerMetadata",
-                "indexOffset": 2
+                "tokenSha256": "c55c07097334aae67b58f5b7810a025e30500d6e5dc548d39f7bddf06d665920",
+                "indexToken": "RewrittenAuthServerMetadata",
+                "indexOffset": 21
               },
               {
-                "tokenCount": 22,
-                "tokenSha256": "175fbd716e67040dfaf53d5129355bfd40c199fa7be44a0fed9d5cde054ed981",
-                "indexToken": "register",
-                "indexOffset": 10
+                "tokenCount": 39,
+                "tokenSha256": "3581fa21ae13d0ab09a5a0e3758054a1cd2c9001b4000941996ffcb7a4f6b628",
+                "indexToken": "AUTH_MD_PATH",
+                "indexOffset": 34
               }
             ]
           }

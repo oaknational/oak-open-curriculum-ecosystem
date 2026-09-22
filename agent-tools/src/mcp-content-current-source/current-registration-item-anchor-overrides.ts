@@ -88,10 +88,12 @@ export const CURRENT_REGISTRATION_ITEM_ANCHOR_OVERRIDES: Readonly<
   // MCP-345: the AS metadata rewrite takes the advertised scopes and states
   // them as scopes_supported, so the served document names the PRM's set
   // rather than the upstream list; the route passes SCOPES_SUPPORTED.
+  // MCP-759: the same rewrite additively carries agent_auth.skill, pointing
+  // at this server's own /auth.md — never the upstream's origin.
   C408: {
     [OAUTH_PROXY_UPSTREAM]: [
-      'export function rewriteAuthServerMetadata(\n  upstreamMetadata: UpstreamAuthServerMetadata,\n  localOrigin: string,\n  advertisedScopes: readonly string[],\n): UpstreamAuthServerMetadata {',
-      'registration_endpoint: `${localOrigin}/oauth/register`,\n    scopes_supported: [...advertisedScopes],',
+      'export function rewriteAuthServerMetadata(\n  upstreamMetadata: UpstreamAuthServerMetadata,\n  localOrigin: string,\n  advertisedScopes: readonly string[],\n): RewrittenAuthServerMetadata {',
+      'registration_endpoint: `${localOrigin}/oauth/register`,\n    scopes_supported: [...advertisedScopes],\n    agent_auth: { skill: `${localOrigin}${AUTH_MD_PATH}` },',
     ],
   },
   C707: {

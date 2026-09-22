@@ -14,6 +14,7 @@
 
 import { generateClerkProtectedResourceMetadata } from '@clerk/mcp-tools/server';
 import { z } from 'zod';
+import { AUTH_MD_PATH } from '../auth-md.js';
 
 /**
  * Zod schema for RFC 8414 Authorization Server metadata as served by Clerk.
@@ -38,9 +39,38 @@ const upstreamAuthServerMetadataSchema = z.object({
   introspection_endpoint: z.string().optional(),
   userinfo_endpoint: z.string().optional(),
   jwks_uri: z.string().optional(),
+  device_authorization_endpoint: z.string().optional(),
 });
 
 export type UpstreamAuthServerMetadata = z.infer<typeof upstreamAuthServerMetadataSchema>;
+
+/**
+ * The `agent_auth` block this server's AS metadata carries (MCP-759).
+ *
+ * Additive per RFC 8414 Section 2 ("Additional authorization server metadata
+ * parameters MAY also be used"). Deliberately narrower than the shape
+ * https://github.com/workos/auth.md describes: `identity_endpoint`,
+ * `claim_endpoint`, `events_endpoint`, `identity_types_supported`, and
+ * `identity_assertion` are omitted because this server implements none of
+ * the identity/claim ceremony they describe — see `auth-md.ts` for the
+ * full reasoning and the standard OAuth 2.1 flow this server offers
+ * instead. `skill` is the one field every publisher of the shape is
+ * expected to carry: a pointer to the human/agent-readable document.
+ *
+ * Not exported: nothing outside this module needs the type by name —
+ * {@link rewriteAuthServerMetadata}'s callers consume the value
+ * structurally, the same way they already do for
+ * {@link UpstreamAuthServerMetadata}'s other fields.
+ */
+interface AgentAuthMetadata {
+  /** Absolute URL of this server's `/auth.md` document, on `localOrigin`. */
+  readonly skill: string;
+}
+
+/** {@link UpstreamAuthServerMetadata} plus this server's own `agent_auth` block. */
+type RewrittenAuthServerMetadata = UpstreamAuthServerMetadata & {
+  readonly agent_auth: AgentAuthMetadata;
+};
 
 /** OAuth 2.0 error response per RFC 6749 Section 5.2. */
 interface OAuthErrorResponse {
@@ -147,17 +177,24 @@ export function formatProxyErrorResponse(
  * field; it is not a forwarded OAuth message, so ADR-115's transparent
  * passthrough rule does not reach it.
  *
+ * Also adds `agent_auth` (MCP-759): an additive RFC 8414 Section 2 field,
+ * never subtracting from or altering any field above. `agent_auth.skill`
+ * points at this server's own `/auth.md` on `localOrigin` — never a
+ * placeholder, and never the upstream's origin, since `/auth.md` is this
+ * server's route, not Clerk's.
+ *
  * @param upstreamMetadata - The original AS metadata from Clerk
  * @param localOrigin - The proxy's origin, e.g. `http://localhost:3333`
  * @param advertisedScopes - The scopes to advertise as `scopes_supported`; the
  *   route passes the PRM's set
- * @returns Rewritten metadata with proxy endpoint URLs and advertised scopes
+ * @returns Rewritten metadata with proxy endpoint URLs, advertised scopes,
+ *   and the additive `agent_auth` block
  */
 export function rewriteAuthServerMetadata(
   upstreamMetadata: UpstreamAuthServerMetadata,
   localOrigin: string,
   advertisedScopes: readonly string[],
-): UpstreamAuthServerMetadata {
+): RewrittenAuthServerMetadata {
   return {
     ...upstreamMetadata,
     issuer: localOrigin,
@@ -165,5 +202,6 @@ export function rewriteAuthServerMetadata(
     token_endpoint: `${localOrigin}/oauth/token`,
     registration_endpoint: `${localOrigin}/oauth/register`,
     scopes_supported: [...advertisedScopes],
+    agent_auth: { skill: `${localOrigin}${AUTH_MD_PATH}` },
   };
 }

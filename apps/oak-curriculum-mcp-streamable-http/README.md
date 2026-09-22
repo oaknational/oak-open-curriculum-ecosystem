@@ -300,6 +300,12 @@ signing off a release. Replaces the retired `pnpm smoke:remote` harness
 - `describedby` rather than `service-desc`: the metadata describes how this resource is protected, not the service's callable interface, and the weaker registered relation is the one that is true.
 - Set by app-level middleware (`src/app/agent-discovery-link-header.ts`), so it rides every response including 404s and does not depend on any route existing at `/`. The advertised path is derived from `PROTECTED_RESOURCE_METADATA_PREFIX`, and an integration test follows the published target and requires a 200, so the link cannot rot into a 404.
 
+### Agent registration (`agent_auth` + `/auth.md`)
+
+- `GET /.well-known/oauth-authorization-server` additively carries an `agent_auth` block (RFC 8414 Section 2; MCP-759): `{ "agent_auth": { "skill": "<self-origin>/auth.md" } }`, following the bootstrap shape published at [`workos/auth.md`](https://github.com/workos/auth.md).
+- `GET /auth.md` is served at the service root (`src/auth-md.ts`), public in every auth mode, and documents the registration flow this server actually offers an autonomous agent: RFC 8414/RFC 9728 discovery, open RFC 7591 dynamic client registration at `/oauth/register`, and a standard Authorization Code + PKCE grant at `/oauth/authorize` / `/oauth/token` (ADR-052, ADR-115, ADR-142).
+- The `agent_auth` block is deliberately partial. `identity_endpoint`, `claim_endpoint`, `events_endpoint`, `identity_types_supported`, and `identity_assertion` — the fuller agent-identity registration and claim-ceremony shape the WorkOS profile describes — are omitted because this server runs none of that ceremony; naming an endpoint this server would 404 on is worse than an absent field. `/auth.md` states this explicitly, so a client that arrived expecting the full shape is redirected to the flow this server actually supports rather than left to guess.
+
 ### OpenAI domain verification
 
 - `GET /.well-known/openai-apps-challenge` returns the plugin-submission portal's domain-verification token as bare `text/plain` (MCP-700). Not an OAuth surface: public, registered before Clerk middleware, and served in every auth mode. Contract: [OpenAI plugin submission, "Domain verification"](https://developers.openai.com/plugins/deploy/submission), which requires the endpoint to "return only that plugin's verification token".

@@ -190,6 +190,7 @@ describe('rewriteAuthServerMetadata', () => {
       introspection_endpoint: `${TEST_FAPI_BASE_URL}/oauth/token_info`,
       userinfo_endpoint: `${TEST_FAPI_BASE_URL}/oauth/userinfo`,
       jwks_uri: `${TEST_FAPI_BASE_URL}/.well-known/jwks.json`,
+      device_authorization_endpoint: `${TEST_FAPI_BASE_URL}/oauth/device_authorization`,
     };
     const result = rewriteAuthServerMetadata(
       metadataWithExtras,
@@ -200,6 +201,9 @@ describe('rewriteAuthServerMetadata', () => {
     expect(result.introspection_endpoint).toBe(`${TEST_FAPI_BASE_URL}/oauth/token_info`);
     expect(result.userinfo_endpoint).toBe(`${TEST_FAPI_BASE_URL}/oauth/userinfo`);
     expect(result.jwks_uri).toBe(`${TEST_FAPI_BASE_URL}/.well-known/jwks.json`);
+    expect(result.device_authorization_endpoint).toBe(
+      `${TEST_FAPI_BASE_URL}/oauth/device_authorization`,
+    );
   });
 
   it('omits non-proxied endpoints when not present in upstream', () => {
@@ -212,6 +216,55 @@ describe('rewriteAuthServerMetadata', () => {
     expect(result.introspection_endpoint).toBeUndefined();
     expect(result.userinfo_endpoint).toBeUndefined();
     expect(result.jwks_uri).toBeUndefined();
+    expect(result.device_authorization_endpoint).toBeUndefined();
+  });
+
+  describe('agent_auth (MCP-759)', () => {
+    it('adds an agent_auth.skill pointing at /auth.md on the local origin', () => {
+      const result = rewriteAuthServerMetadata(
+        TEST_UPSTREAM_METADATA,
+        'https://mcp.thenational.academy',
+        ADVERTISED_SCOPES,
+      );
+      expect(result.agent_auth).toStrictEqual({
+        skill: 'https://mcp.thenational.academy/auth.md',
+      });
+    });
+
+    it('points at the given local origin, never the upstream origin', () => {
+      const result = rewriteAuthServerMetadata(
+        TEST_UPSTREAM_METADATA,
+        'http://localhost:3333',
+        ADVERTISED_SCOPES,
+      );
+      expect(result.agent_auth.skill).toBe('http://localhost:3333/auth.md');
+      expect(result.agent_auth.skill).not.toContain('clerk');
+    });
+
+    it('is additive: every field this suite already pins stays exactly as before', () => {
+      const result = rewriteAuthServerMetadata(
+        TEST_UPSTREAM_METADATA,
+        'https://mcp.thenational.academy',
+        ADVERTISED_SCOPES,
+      );
+      expect(result.issuer).toBe('https://mcp.thenational.academy');
+      expect(result.authorization_endpoint).toBe('https://mcp.thenational.academy/oauth/authorize');
+      expect(result.token_endpoint).toBe('https://mcp.thenational.academy/oauth/token');
+      expect(result.registration_endpoint).toBe('https://mcp.thenational.academy/oauth/register');
+      expect(result.scopes_supported).toStrictEqual(ADVERTISED_SCOPES);
+      expect(result.token_endpoint_auth_methods_supported).toStrictEqual([
+        'client_secret_basic',
+        'none',
+        'client_secret_post',
+      ]);
+      expect(result.response_types_supported).toStrictEqual(['code']);
+      expect(result.grant_types_supported).toStrictEqual(['authorization_code', 'refresh_token']);
+      expect(result.code_challenge_methods_supported).toStrictEqual(['S256']);
+      // The added key is exactly one, over and above the upstream shape.
+      expect(new Set(Object.keys(result))).toStrictEqual(
+        new Set([...Object.keys(TEST_UPSTREAM_METADATA), 'agent_auth']),
+      );
+    });
   });
 });
 
@@ -225,6 +278,7 @@ describe('isUpstreamAuthServerMetadata', () => {
       ...TEST_UPSTREAM_METADATA,
       revocation_endpoint: `${TEST_FAPI_BASE_URL}/oauth/token/revoke`,
       jwks_uri: `${TEST_FAPI_BASE_URL}/.well-known/jwks.json`,
+      device_authorization_endpoint: `${TEST_FAPI_BASE_URL}/oauth/device_authorization`,
     };
     expect(isUpstreamAuthServerMetadata(withOptionals)).toBe(true);
   });

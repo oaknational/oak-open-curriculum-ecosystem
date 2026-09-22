@@ -70,8 +70,15 @@ export const APP_AUTH_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaR
   // through; every other field of the served AS metadata is unchanged. The
   // JSDoc records why (a client choosing scopes from this document requested
   // an advertised openid that its registered grant, Oak's default, omits).
+  // MCP-759 re-review: the same rewrite additively carries
+  // `agent_auth: { skill }`, pointing at this server's own `/auth.md`
+  // (excluded above, CRAWLER_FACING_ONLY) — C408's served claim about
+  // scopes_supported is untouched by the addition. Also adds
+  // `device_authorization_endpoint` to the boundary-validation schema, a
+  // type-only completeness fix (Clerk's AS metadata already carries the
+  // field; the schema previously omitted its declaration).
   'apps/oak-curriculum-mcp-streamable-http/src/oauth-proxy/oauth-proxy-upstream.ts': reviewed(
-    'fcefa57b4a0e31be024c3182e8141be0c1c77aabe144e2e196d9515b44ebc40a',
+    '03f3a68d850a4df0f042c8d17d41608f4920e1f00251b6f1db15fa58eea1d924',
     ['C408'],
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/get-mcp-resource-url.ts': excluded(
@@ -143,8 +150,12 @@ export const APP_AUTH_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaR
   // the merged state carrying BOTH path constants — neither side's reviewed
   // hash described it, so it is re-reviewed here rather than inherited. Still
   // a routing decision over path literals; no agent-facing content either way.
+  //
+  // MCP-759 re-review: `/auth.md` joins the same set on the same terms,
+  // consumed from its own route module's `AUTH_MD_PATH` constant. Still a
+  // routing decision over path literals; no agent-facing content either way.
   'apps/oak-curriculum-mcp-streamable-http/src/clerk-skip-surfaces.ts': excluded(
-    '05519704af70c2de6498df2215a2fc5b11f9f45aaf876d2ac37159a8242ff283',
+    'a1e2c3d99ad4dd37a87ee51047462a4ced932f7149a9b7659f90725c6df3109d',
     IMPLEMENTATION_ONLY,
   ),
   // MCP-700: the OpenAI plugin-submission domain-verification challenge. The
@@ -168,6 +179,14 @@ export const APP_AUTH_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaR
   // changed; the audience did not, so the exclusion reason stands.
   'apps/oak-curriculum-mcp-streamable-http/src/robots-txt.ts': excluded(
     '7f5b4024d481e07426d52781159ef39e5f5c60fd2e70e35f3cc7da154b070c4a',
+    CRAWLER_FACING_ONLY,
+  ),
+  // MCP-759: `/auth.md` agent-registration guidance, the same shape as
+  // `robots-txt.ts` above — Oak-authored content served at the HTTP edge to
+  // an unauthenticated fetcher performing OAuth discovery, which never
+  // speaks MCP to reach it, so it carries no audited MCP-consumer item.
+  'apps/oak-curriculum-mcp-streamable-http/src/auth-md.ts': excluded(
+    'dacd7781e6e3860d3183fc82fbc70ee78c54c8527af4a1fefe5e8932ab7f97da',
     CRAWLER_FACING_ONLY,
   ),
   // MCP-518: the Clerk conditional now forks on the request's surface before

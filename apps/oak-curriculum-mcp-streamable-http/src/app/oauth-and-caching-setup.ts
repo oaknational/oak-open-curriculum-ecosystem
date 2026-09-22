@@ -3,6 +3,7 @@ import type { Logger, PhasedTimer } from '@oaknational/logger';
 import { registerPublicOAuthMetadataEndpoints } from '../auth-routes.js';
 import { registerOpenAiDomainVerificationChallenge } from '../openai-domain-verification.js';
 import { registerRobotsTxt } from '../robots-txt.js';
+import { registerAuthMd } from '../auth-md.js';
 import type { RuntimeConfig } from '../runtime-config.js';
 import { runBootstrapPhase, runAsyncBootstrapPhase } from './bootstrap-helpers.js';
 import {
@@ -176,6 +177,11 @@ export async function setupOAuthAndCaching(
   // (MCP-703). Not an OAuth surface, so it does not sit behind the
   // auth-enabled branch below.
   registerRobotsTxt(app, log);
+  // Public in every auth mode: an agent reading its own registration
+  // instructions cannot yet hold the token clerkMiddleware would demand
+  // (MCP-759). Not an OAuth surface itself — it describes one — so it does
+  // not sit behind the auth-enabled branch below either.
+  registerAuthMd(app, log);
 
   if (!runtimeConfig.dangerouslyDisableAuth) {
     const { upstreamBaseUrl, upstreamMetadata } = await resolveUpstreamMetadata(

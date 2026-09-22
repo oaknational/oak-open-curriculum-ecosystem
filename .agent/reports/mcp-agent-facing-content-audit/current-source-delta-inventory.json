@@ -72,7 +72,7 @@
     },
     {
       "file": "apps/oak-curriculum-mcp-streamable-http/src/app/oauth-and-caching-setup.ts",
-      "semanticSha256": "e80ebf58048e988851e94c59029c64a89449a1ca2bbd169ca39066893a9b7971",
+      "semanticSha256": "05927f2d27238711f6ba34a5f2aa89d5ae72e099d81f31693cd3778c47ae8cd4",
       "itemIds": [],
       "exclusionReason": "Reviewed engineering implementation change; no new authored agent-facing content."
     },
@@ -117,6 +117,12 @@
       "semanticSha256": "edb46bf7322dd0396c25ac7b4e254fb8bb94dc92f579b9a0c6666a5cc3569ea1",
       "itemIds": [],
       "exclusionReason": "Reviewed engineering implementation change; no new authored agent-facing content."
+    },
+    {
+      "file": "apps/oak-curriculum-mcp-streamable-http/src/auth-md.ts",
+      "semanticSha256": "dacd7781e6e3860d3183fc82fbc70ee78c54c8527af4a1fefe5e8932ab7f97da",
+      "itemIds": [],
+      "exclusionReason": "Crawler-directive content served at the HTTP edge; authored, but addressed to fetchers that never speak MCP, so it reaches no MCP consumer."
     },
     {
       "file": "apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts",
@@ -190,7 +196,7 @@
     },
     {
       "file": "apps/oak-curriculum-mcp-streamable-http/src/clerk-skip-surfaces.ts",
-      "semanticSha256": "05519704af70c2de6498df2215a2fc5b11f9f45aaf876d2ac37159a8242ff283",
+      "semanticSha256": "a1e2c3d99ad4dd37a87ee51047462a4ced932f7149a9b7659f90725c6df3109d",
       "itemIds": [],
       "exclusionReason": "Reviewed engineering implementation change; no new authored agent-facing content."
     },
@@ -425,7 +431,7 @@
     },
     {
       "file": "apps/oak-curriculum-mcp-streamable-http/src/oauth-proxy/oauth-proxy-upstream.ts",
-      "semanticSha256": "fcefa57b4a0e31be024c3182e8141be0c1c77aabe144e2e196d9515b44ebc40a",
+      "semanticSha256": "03f3a68d850a4df0f042c8d17d41608f4920e1f00251b6f1db15fa58eea1d924",
       "itemIds": [
         "C408"
       ]
