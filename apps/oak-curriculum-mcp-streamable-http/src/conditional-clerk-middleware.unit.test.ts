@@ -48,6 +48,11 @@ describe('shouldSkipClerkMiddleware', () => {
       expect(testShouldSkipClerkMiddleware(req)).toBe(true);
     });
 
+    it('returns true for the auth.md path (MCP-759)', () => {
+      const req = createMockRequest('/auth.md', undefined);
+      expect(testShouldSkipClerkMiddleware(req)).toBe(true);
+    });
+
     it('returns true for healthz check path', () => {
       const req = createMockRequest('/healthz', undefined);
       expect(testShouldSkipClerkMiddleware(req)).toBe(true);

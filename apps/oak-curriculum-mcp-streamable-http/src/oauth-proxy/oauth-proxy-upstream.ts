@@ -57,6 +57,18 @@ export type UpstreamAuthServerMetadata = z.infer<typeof upstreamAuthServerMetada
  * instead. `skill` is the one field every publisher of the shape is
  * expected to carry: a pointer to the human/agent-readable document.
  *
+ * Deliberate override, not a merge (review finding, 2026-09-22): the object
+ * spread in {@link rewriteAuthServerMetadata} places this key AFTER
+ * `...upstreamMetadata`, so if Clerk ever published its own `agent_auth`
+ * key, this server's value would replace it rather than merge with it —
+ * the same disposition `scopes_supported` already carries on this same
+ * spread (MCP-345, ADR-113 resolution 3), for the same reason: this
+ * document is the proxy's OWN self-description, not a forwarded upstream
+ * message, so ADR-115's transparent-passthrough rule does not reach it.
+ * Clerk does not today publish `agent_auth` — `upstreamAuthServerMetadataSchema`
+ * above has no such field — so this is a stated policy for a field that
+ * does not yet collide, not a currently-observed overwrite.
+ *
  * Not exported: nothing outside this module needs the type by name —
  * {@link rewriteAuthServerMetadata}'s callers consume the value
  * structurally, the same way they already do for

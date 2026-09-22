@@ -22,6 +22,20 @@
  * worse than an absent field — the same principle
  * `agent-discovery-link-header.ts` states for `api-catalog`.
  *
+ * ## Who actually reaches this document
+ *
+ * A client that follows the published `agent_auth` shape's own Step 1b to
+ * the letter — fetch AS metadata from the PRM's `authorization_servers[0]`
+ * — reaches Clerk's metadata directly (ADR-115's MCP-655 amendment: the PRM
+ * names the upstream issuer, not this origin) and never sees `agent_auth`
+ * at all. This document is reachable only by a client that separately
+ * fetches THIS origin's own `/.well-known/oauth-authorization-server` — an
+ * established population (ADR-113's 2026-02-20 amendment; ADR-115's
+ * MCP-345 resolution), narrower than every client of this server, and
+ * self-consistent by construction: reaching `agent_auth.skill` at all
+ * already means that fetch happened. See ADR-115 §Metadata Rewriting for
+ * the full audience-scope note.
+ *
  * ## Why the body carries no absolute URLs for another origin
  *
  * `robots-txt.ts` names no origin at all, because its directives are
