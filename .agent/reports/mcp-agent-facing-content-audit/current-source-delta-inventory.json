@@ -120,7 +120,7 @@
     },
     {
       "file": "apps/oak-curriculum-mcp-streamable-http/src/auth-md.ts",
-      "semanticSha256": "dacd7781e6e3860d3183fc82fbc70ee78c54c8527af4a1fefe5e8932ab7f97da",
+      "semanticSha256": "9db0dd7224ff89e830cd3e1bde7c511003d2d473fe3d72061a02aa6f1627814b",
       "itemIds": [],
       "exclusionReason": "Crawler-directive content served at the HTTP edge; authored, but addressed to fetchers that never speak MCP, so it reaches no MCP consumer."
     },

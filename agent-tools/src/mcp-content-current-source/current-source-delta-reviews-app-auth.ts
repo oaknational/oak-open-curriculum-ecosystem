@@ -185,8 +185,13 @@ export const APP_AUTH_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaR
   // `robots-txt.ts` above — Oak-authored content served at the HTTP edge to
   // an unauthenticated fetcher performing OAuth discovery, which never
   // speaks MCP to reach it, so it carries no audited MCP-consumer item.
+  // Copilot round 2 re-review: the served body now discloses that this
+  // origin's own authorize/token proxy fails RFC 9207 for a validating
+  // client (ADR-115 "Negative 8", pre-existing and unfixed by this ticket)
+  // and names the upstream's own AS metadata as the correct path for one.
+  // Audience and classification are unchanged.
   'apps/oak-curriculum-mcp-streamable-http/src/auth-md.ts': excluded(
-    'dacd7781e6e3860d3183fc82fbc70ee78c54c8527af4a1fefe5e8932ab7f97da',
+    '9db0dd7224ff89e830cd3e1bde7c511003d2d473fe3d72061a02aa6f1627814b',
     CRAWLER_FACING_ONLY,
   ),
   // MCP-518: the Clerk conditional now forks on the request's surface before

@@ -38,11 +38,19 @@ steps below are that flow.
   own authorization-server metadata. \`authorization_endpoint\`,
   \`token_endpoint\`, and \`registration_endpoint\` are on THIS origin (a
   same-origin proxy in front of the upstream identity provider, kept for
-  client compatibility). Every other endpoint field — \`revocation_endpoint\`,
-  \`device_authorization_endpoint\`, \`jwks_uri\`, and any others the response
-  carries — passes through from the upstream provider unchanged, where
-  present: read them from the response rather than assuming a hostname; they
-  differ between this server's local, preview, and production environments.
+  client compatibility) — **read the RFC 9207 note in Step 3 before using
+  \`authorization_endpoint\`/\`token_endpoint\` from this document if you
+  validate the authorization response's \`iss\`.** Every other endpoint
+  field — \`revocation_endpoint\`, \`device_authorization_endpoint\`,
+  \`jwks_uri\`, and any others the response carries — passes through from
+  the upstream provider unchanged, where present: read them from the
+  response rather than assuming a hostname; they differ between this
+  server's local, preview, and production environments.
+- \`authorization_servers[0]\` in the \`/.well-known/oauth-protected-resource\`
+  response above names the upstream identity provider's own issuer.
+  Fetching \`<that issuer>/.well-known/oauth-authorization-server\` gets you
+  the upstream's own AS metadata directly — the document a client that
+  validates \`iss\` should use for Step 3 and Step 4, per the note there.
 
 ## Step 2 — Register a client (RFC 7591)
 
@@ -54,8 +62,25 @@ client is the only registration this server has.
 
 ## Step 3 — Authorize a real user (Authorization Code + PKCE)
 
-Direct the user's own browser to \`GET /oauth/authorize\` with the standard
-\`response_type=code\`, \`client_id\`, \`redirect_uri\`, \`code_challenge\`, and
+**RFC 9207 note, read before you pick an authorize endpoint.** This
+origin's own AS metadata (Step 1) names \`issuer\` as this origin, but the
+authorization response this origin's \`/oauth/authorize\` proxy relays
+actually carries the upstream identity provider's own \`iss\` — a real,
+already-documented mismatch (not introduced or fixed by this document; see
+ADR-115 "Negative 8"). If you validate the authorization response's \`iss\`
+against the issuer you recorded (RFC 9207 §2.4), do **not** record this
+origin as that issuer and do not use this origin's \`/oauth/authorize\` /
+\`/oauth/token\` for this step or Step 4: use the upstream's own AS metadata
+and endpoints instead — the ones named by \`authorization_servers[0]\` in
+Step 1's protected-resource response. The \`client_id\` from Step 2 works
+against either origin, since \`/oauth/register\` forwards to the same
+upstream registration. If you do not validate \`iss\` (or cannot reach the
+upstream directly), this origin's \`/oauth/authorize\` below works as a
+same-origin compatibility path.
+
+Direct the user's own browser to \`GET /oauth/authorize\` (on whichever
+origin Step 1 above led you to) with the standard \`response_type=code\`,
+\`client_id\`, \`redirect_uri\`, \`code_challenge\`, and
 \`code_challenge_method=S256\` parameters. The user authenticates at the
 upstream identity provider and is redirected back to your \`redirect_uri\`
 with an authorization code. This server issues no access token itself: it
@@ -65,9 +90,9 @@ refresh.
 
 ## Step 4 — Exchange the code
 
-\`POST /oauth/token\` with the standard \`authorization_code\` grant, and later
-\`refresh_token\` once you hold one (see \`grant_types_supported\` in the Step 1
-response).
+\`POST /oauth/token\` (same origin choice as Step 3 — see its RFC 9207 note)
+with the standard \`authorization_code\` grant, and later \`refresh_token\`
+once you hold one (see \`grant_types_supported\` in the Step 1 response).
 
 ## Step 5 — Call the MCP endpoint
 
@@ -162,6 +187,22 @@ describe('/auth.md (Integration)', () => {
     expect(res.text).toContain('claim_endpoint');
     expect(res.text).toContain('events_endpoint');
     expect(res.text).toContain('https://github.com/workos/auth.md');
+  });
+
+  it('discloses that this origin fails RFC 9207 and names the correct path for a validating client (Copilot round 2, MCP-759)', async () => {
+    const app = await createTestApp();
+
+    const res = await request(app).get(AUTH_MD_PATH);
+
+    // The mismatch itself, and the ADR that already documents it — never
+    // silently routing a validating client through a leg known to fail.
+    expect(res.text).toContain('RFC 9207');
+    expect(res.text).toContain('Negative 8');
+    expect(res.text).toContain("validate the authorization response's `iss`");
+    // The escape hatch: the PRM's authorization_servers[0] leads to the
+    // upstream's own AS metadata and endpoints, bypassing this origin's proxy.
+    expect(res.text).toContain('authorization_servers[0]');
+    expect(res.text).toContain('do **not** record this');
   });
 
   it('names no hostname belonging to the upstream identity provider', async () => {
