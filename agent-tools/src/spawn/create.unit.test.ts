@@ -61,6 +61,7 @@ describe('createSpawnWorktree', () => {
         args: [
           'worktree',
           'add',
+          '--no-track',
           '/workspace/oak-spawn-flow',
           '-b',
           'feat/spawn-flow',
@@ -291,6 +292,45 @@ describe('createSpawnWorktree', () => {
       ['worktree', 'list'],
       ['worktree', 'add'],
     ]);
+  });
+
+  it('creates the lane branch with no upstream, so a bare push cannot reach the base branch', () => {
+    // The state described is "this branch has no upstream", not "the argv contains a
+    // flag". It is asserted through the argv because that is the only observable the
+    // injected runner exposes; the behaviour it stands for is that `git push` with no
+    // refspec fails loud instead of pushing the lane onto `main`.
+    //
+    // Without `--no-track` this is not a style preference but a live footgun: the
+    // default base is a remote-tracking ref and `branch.autoSetupMerge` defaults to
+    // `true`, so git marks `origin/main` as the upstream of every spawned lane. At
+    // least three seats across separate sessions have been caught by it (F-166), one
+    // of them holding several thousand lines of uncommitted deletions.
+    const calls: string[][] = [];
+    const runGit: SpawnGitRunner = (args) => {
+      calls.push([...args]);
+      return args[1] === 'list' ? ok('') : ok('');
+    };
+
+    const result = createSpawnWorktree({
+      slug: 'spawn-flow',
+      type: 'feat',
+      base: 'origin/main',
+      coordinationHome: HOME,
+      runGit,
+    });
+
+    expect(isErr(result)).toBe(false);
+
+    const addCall = calls.find((args) => args[0] === 'worktree' && args[1] === 'add');
+    expect(addCall).toBeDefined();
+    expect(addCall).toContain('--no-track');
+
+    // Order matters to git: the flag must precede the commit-ish it is suppressing
+    // tracking for, or it is parsed as a path operand.
+    const flagIndex = addCall?.indexOf('--no-track') ?? -1;
+    const baseIndex = addCall?.indexOf('origin/main') ?? -1;
+    expect(flagIndex).toBeGreaterThan(-1);
+    expect(baseIndex).toBeGreaterThan(flagIndex);
   });
 
   it('returns err, naming the branch, base, and worktree path, when git fails', () => {
