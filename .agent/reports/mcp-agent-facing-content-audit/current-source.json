@@ -27,9 +27,9 @@
     "additionCount": 12,
     "availableCount": 652,
     "retiredCount": 77,
-    "unchangedCount": 470,
+    "unchangedCount": 469,
     "expandedCount": 1,
-    "modifiedCount": 123,
+    "modifiedCount": 124,
     "relocatedCount": 45,
     "addedCount": 13,
     "workspaceScopeInCount": 613,
@@ -1708,7 +1708,7 @@
           "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search/flat-zod-schema.ts"
         ],
         "evidence": {
-          "revision": "unchanged",
+          "revision": "modified",
           "anchorTargetCount": 1,
           "anchorCount": 1
         }
