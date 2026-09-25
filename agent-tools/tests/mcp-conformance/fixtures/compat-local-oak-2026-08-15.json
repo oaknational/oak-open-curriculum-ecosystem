@@ -1,0 +1,369 @@
+{
+  "target": "http://localhost:3333/mcp",
+  "catalogSource": "bundled",
+  "catalogVersion": 0,
+  "widgets": { "total": 1, "appOnly": 0 },
+  "unknownDimensions": [],
+  "summary": { "works": 2, "degraded": 14, "blocked": 0, "unknown": 0 },
+  "hosts": [
+    {
+      "hostId": "mcpjam",
+      "hostLabel": "MCPJam",
+      "verdict": "works",
+      "provenance": "assumed",
+      "findings": []
+    },
+    {
+      "hostId": "claude",
+      "hostLabel": "Claude",
+      "verdict": "works",
+      "provenance": "assumed",
+      "findings": []
+    },
+    {
+      "hostId": "claude-code",
+      "hostLabel": "Claude Code",
+      "verdict": "degraded",
+      "provenance": "vendor-doc",
+      "findings": [
+        {
+          "lane": "apps",
+          "severity": "degraded",
+          "code": "widget_text_fallback",
+          "tools": ["get-curriculum-model"],
+          "title": "Interactive view unavailable",
+          "detail": "`get-curriculum-model` provides an interactive view. Claude Code shows the plain-text result instead.",
+          "provenance": "vendor-doc"
+        }
+      ]
+    },
+    {
+      "hostId": "chatgpt",
+      "hostLabel": "ChatGPT",
+      "verdict": "degraded",
+      "provenance": "vendor-doc",
+      "findings": [
+        {
+          "lane": "apps",
+          "severity": "degraded",
+          "code": "capability_unsupported",
+          "capability": "downloadFile",
+          "tools": ["get-curriculum-model"],
+          "title": "File downloads unavailable",
+          "detail": "This widget downloads files. ChatGPT does not support file downloads.",
+          "provenance": "vendor-doc"
+        }
+      ]
+    },
+    {
+      "hostId": "mistral",
+      "hostLabel": "Mistral",
+      "verdict": "degraded",
+      "provenance": "probe",
+      "findings": [
+        {
+          "lane": "apps",
+          "severity": "degraded",
+          "code": "capability_unsupported",
+          "capability": "downloadFile",
+          "tools": ["get-curriculum-model"],
+          "title": "File downloads unavailable",
+          "detail": "This widget downloads files. Mistral does not support file downloads.",
+          "provenance": "probe"
+        }
+      ]
+    },
+    {
+      "hostId": "goose",
+      "hostLabel": "Goose",
+      "verdict": "degraded",
+      "provenance": "probe",
+      "findings": [
+        {
+          "lane": "apps",
+          "severity": "degraded",
+          "code": "capability_unsupported",
+          "capability": "serverTools",
+          "tools": ["get-curriculum-model"],
+          "title": "Interactive tool calls unavailable",
+          "detail": "This widget uses interactive tool calls. Goose does not support them.",
+          "provenance": "probe"
+        },
+        {
+          "lane": "apps",
+          "severity": "degraded",
+          "code": "capability_unsupported",
+          "capability": "serverResources",
+          "tools": ["get-curriculum-model"],
+          "title": "Resource reads unavailable",
+          "detail": "This widget reads additional resources. Goose does not support resource reads.",
+          "provenance": "probe"
+        },
+        {
+          "lane": "apps",
+          "severity": "degraded",
+          "code": "capability_unsupported",
+          "capability": "message",
+          "tools": ["get-curriculum-model"],
+          "title": "Follow-up messages unavailable",
+          "detail": "This widget sends follow-up messages. Goose does not support them.",
+          "provenance": "probe"
+        },
+        {
+          "lane": "apps",
+          "severity": "degraded",
+          "code": "capability_unsupported",
+          "capability": "updateModelContext",
+          "tools": ["get-curriculum-model"],
+          "title": "Model context updates unavailable",
+          "detail": "This widget updates the model context. Goose does not support model context updates.",
+          "provenance": "probe"
+        },
+        {
+          "lane": "apps",
+          "severity": "degraded",
+          "code": "capability_unsupported",
+          "capability": "downloadFile",
+          "tools": ["get-curriculum-model"],
+          "title": "File downloads unavailable",
+          "detail": "This widget downloads files. Goose does not support file downloads.",
+          "provenance": "probe"
+        },
+        {
+          "lane": "apps",
+          "severity": "info",
+          "code": "capability_unsupported",
+          "capability": "logging",
+          "tools": ["get-curriculum-model"],
+          "title": "Widget logs unavailable",
+          "detail": "This widget sends logs. Goose does not support them.",
+          "provenance": "probe"
+        }
+      ]
+    },
+    {
+      "hostId": "slack",
+      "hostLabel": "Slackbot",
+      "verdict": "degraded",
+      "provenance": "probe",
+      "findings": [
+        {
+          "lane": "apps",
+          "severity": "degraded",
+          "code": "capability_unsupported",
+          "capability": "message",
+          "tools": ["get-curriculum-model"],
+          "title": "Follow-up messages unavailable",
+          "detail": "This widget sends follow-up messages. Slackbot does not support them.",
+          "provenance": "probe"
+        },
+        {
+          "lane": "apps",
+          "severity": "degraded",
+          "code": "capability_unsupported",
+          "capability": "updateModelContext",
+          "tools": ["get-curriculum-model"],
+          "title": "Model context updates unavailable",
+          "detail": "This widget updates the model context. Slackbot does not support model context updates.",
+          "provenance": "probe"
+        },
+        {
+          "lane": "apps",
+          "severity": "degraded",
+          "code": "capability_unsupported",
+          "capability": "downloadFile",
+          "tools": ["get-curriculum-model"],
+          "title": "File downloads unavailable",
+          "detail": "This widget downloads files. Slackbot does not support file downloads.",
+          "provenance": "probe"
+        }
+      ]
+    },
+    {
+      "hostId": "cursor",
+      "hostLabel": "Cursor",
+      "verdict": "degraded",
+      "provenance": "probe",
+      "findings": [
+        {
+          "lane": "apps",
+          "severity": "degraded",
+          "code": "capability_unsupported",
+          "capability": "message",
+          "tools": ["get-curriculum-model"],
+          "title": "Follow-up messages unavailable",
+          "detail": "This widget sends follow-up messages. Cursor does not support them.",
+          "provenance": "probe"
+        },
+        {
+          "lane": "apps",
+          "severity": "degraded",
+          "code": "capability_unsupported",
+          "capability": "updateModelContext",
+          "tools": ["get-curriculum-model"],
+          "title": "Model context updates unavailable",
+          "detail": "This widget updates the model context. Cursor does not support model context updates.",
+          "provenance": "probe"
+        }
+      ]
+    },
+    {
+      "hostId": "codex",
+      "hostLabel": "Codex",
+      "verdict": "degraded",
+      "provenance": "assumed",
+      "findings": [
+        {
+          "lane": "apps",
+          "severity": "degraded",
+          "code": "widget_text_fallback",
+          "tools": ["get-curriculum-model"],
+          "title": "Interactive view unavailable",
+          "detail": "`get-curriculum-model` provides an interactive view. Codex shows the plain-text result instead.",
+          "provenance": "assumed"
+        }
+      ]
+    },
+    {
+      "hostId": "copilot",
+      "hostLabel": "Copilot",
+      "verdict": "degraded",
+      "provenance": "vendor-doc",
+      "findings": [
+        {
+          "lane": "apps",
+          "severity": "degraded",
+          "code": "capability_unsupported",
+          "capability": "serverResources",
+          "tools": ["get-curriculum-model"],
+          "title": "Resource reads unavailable",
+          "detail": "This widget reads additional resources. Copilot does not support resource reads.",
+          "provenance": "vendor-doc"
+        },
+        {
+          "lane": "apps",
+          "severity": "degraded",
+          "code": "capability_unsupported",
+          "capability": "downloadFile",
+          "tools": ["get-curriculum-model"],
+          "title": "File downloads unavailable",
+          "detail": "This widget downloads files. Copilot does not support file downloads.",
+          "provenance": "vendor-doc"
+        },
+        {
+          "lane": "apps",
+          "severity": "info",
+          "code": "capability_unsupported",
+          "capability": "logging",
+          "tools": ["get-curriculum-model"],
+          "title": "Widget logs unavailable",
+          "detail": "This widget sends logs. Copilot does not support them.",
+          "provenance": "vendor-doc"
+        }
+      ]
+    },
+    {
+      "hostId": "vscode",
+      "hostLabel": "VS Code",
+      "verdict": "degraded",
+      "provenance": "probe",
+      "findings": [
+        {
+          "lane": "apps",
+          "severity": "degraded",
+          "code": "capability_unsupported",
+          "capability": "message",
+          "tools": ["get-curriculum-model"],
+          "title": "Follow-up messages unavailable",
+          "detail": "This widget sends follow-up messages. VS Code does not support them.",
+          "provenance": "probe"
+        }
+      ]
+    },
+    {
+      "hostId": "agentcore",
+      "hostLabel": "AgentCore",
+      "verdict": "degraded",
+      "provenance": "vendor-doc",
+      "findings": [
+        {
+          "lane": "apps",
+          "severity": "degraded",
+          "code": "widget_text_fallback",
+          "tools": ["get-curriculum-model"],
+          "title": "Interactive view unavailable",
+          "detail": "`get-curriculum-model` provides an interactive view. AgentCore shows the plain-text result instead.",
+          "provenance": "vendor-doc"
+        }
+      ]
+    },
+    {
+      "hostId": "n8n",
+      "hostLabel": "n8n",
+      "verdict": "degraded",
+      "provenance": "probe",
+      "findings": [
+        {
+          "lane": "apps",
+          "severity": "degraded",
+          "code": "widget_text_fallback",
+          "tools": ["get-curriculum-model"],
+          "title": "Interactive view unavailable",
+          "detail": "`get-curriculum-model` provides an interactive view. n8n shows the plain-text result instead.",
+          "provenance": "probe"
+        }
+      ]
+    },
+    {
+      "hostId": "perplexity",
+      "hostLabel": "Perplexity",
+      "verdict": "degraded",
+      "provenance": "probe",
+      "findings": [
+        {
+          "lane": "apps",
+          "severity": "degraded",
+          "code": "widget_text_fallback",
+          "tools": ["get-curriculum-model"],
+          "title": "Interactive view unavailable",
+          "detail": "`get-curriculum-model` provides an interactive view. Perplexity shows the plain-text result instead.",
+          "provenance": "probe"
+        }
+      ]
+    },
+    {
+      "hostId": "cline",
+      "hostLabel": "Cline",
+      "verdict": "degraded",
+      "provenance": "probe",
+      "findings": [
+        {
+          "lane": "apps",
+          "severity": "degraded",
+          "code": "widget_text_fallback",
+          "tools": ["get-curriculum-model"],
+          "title": "Interactive view unavailable",
+          "detail": "`get-curriculum-model` provides an interactive view. Cline shows the plain-text result instead.",
+          "provenance": "probe"
+        }
+      ]
+    },
+    {
+      "hostId": "notion",
+      "hostLabel": "Notion",
+      "verdict": "degraded",
+      "provenance": "probe",
+      "findings": [
+        {
+          "lane": "apps",
+          "severity": "degraded",
+          "code": "widget_text_fallback",
+          "tools": ["get-curriculum-model"],
+          "title": "Interactive view unavailable",
+          "detail": "`get-curriculum-model` provides an interactive view. Notion shows the plain-text result instead.",
+          "provenance": "probe"
+        }
+      ]
+    }
+  ]
+}

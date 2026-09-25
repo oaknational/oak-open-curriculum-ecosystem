@@ -18,7 +18,7 @@ export const HELP_TEXT = `Usage: pnpm -s mcp:conformance --target <url> [options
 appends to stdout when a failing run exits 1)
 
 Runs MCPJam conformance suites (lockfile-installed @mcpjam/cli) against a
-deployed MCP surface. Three operations:
+deployed MCP surface. Four operations:
 
 VERDICT (default): each suite is compared BY NAME against its committed
 baseline — pass requires a usable baseline, retained raw evidence, no
@@ -44,15 +44,49 @@ written. Only tools advertising readOnlyHint: true are invoked. Takes
 no --suite/--unattended (it enumerates from the server); needs
 --credentials-file against an authed surface.
 
+COMPAT (--compat): CAPTURES a per-host MCP Apps / WIDGET compatibility report
+for the DEPLOYED surface — each catalogue host's verdict (works | degraded |
+blocked | unknown) on the tools-and-widget lanes, and the provenance grading
+how far that verdict can be trusted. SCOPE: the evaluation supplies no
+connection facts, so protocol-version negotiation is NOT judged — a host
+unable to initialise against the server is outside this capture's sight.
+Pins --offline (the catalogue bundled with the resolved SDK) so the only
+varying input is Oak's own surface, and --no-telemetry. ATTENDED ONLY:
+reading the tool surface needs the authed surface, so it takes
+--credentials-file and no --unattended, and takes no --suite (it evaluates
+hosts, not suites) and no --seed/--baseline-dir (it keeps no baseline at
+all — the per-commit test is the gate; this route only captures).
+
+It reports; it does not judge. The per-commit GATE is a separate, cheaper
+thing — an in-repo test that evaluates the served surface directly with no
+server (apps/oak-curriculum-mcp-streamable-http/src/served-surface/
+host-compatibility.integration.test.ts). This route exists to prove what the
+DEPLOYMENT actually serves, which is the one question that test cannot
+answer.
+
+NOTE on compat exit semantics. The inversion is in the MCPJam CHILD, not in
+this wrapper: a failed child writes NOTHING to stdout and puts a structured
+error envelope on stderr (exit 1 operational, 2 usage), where a failing suite
+would still emit its full report. That is why compat carries its own evidence
+gate — reusing the suites' would read a failed run as a passing one. This
+wrapper always emits its own aggregate JSON to stdout and to summary.json,
+whatever the outcome; read its "verdict" field, never stdout's emptiness.
+
 The wrapper's aggregate report goes to stdout AND <report-dir>/summary.json.
 
-Examples (verdict, seed, then drive):
+Examples (verdict, seed, drive, then compat):
   pnpm -s mcp:conformance --target https://mcp.example.test/mcp --unattended
   pnpm -s mcp:conformance --target https://mcp.example.test/mcp --unattended --seed
   pnpm -s mcp:conformance --target https://mcp.example.test/mcp --drive --credentials-file tmp/creds.json
+  pnpm -s mcp:conformance --target https://mcp.example.test/mcp --compat --credentials-file tmp/creds.json
 
 Options:
-  --target <url>             MCP server URL (required), e.g. https://<host>/mcp
+  --target <url>             MCP server URL (required), e.g. https://<host>/mcp.
+                             Must carry no credential: userinfo (user:pass@)
+                             and credential query/fragment params
+                             (access_token, token, api_key, …) are refused,
+                             because every operation echoes the target into
+                             its report. Authenticate via --credentials-file.
   --unattended               Headless credential-free plan (protocol + oauth DCR
                              discovery legs); forbids --credentials-file
   --seed                     Capture-only operation (no baseline verdicts)
@@ -64,6 +98,11 @@ Options:
   --baseline-dir <path>      Baseline dir (default: the committed baselines)
   --drive                    Drive operation: exercise every advertised tool,
                              render the reviewer pack
+  --compat                   Compat operation: capture per-host MCP Apps/widget
+                             compatibility verdicts for the deployed surface
+                             (protocol negotiation not judged). Reports; does
+                             not judge. Attended only; takes no
+                             --suite/--unattended/--seed
   --pack-out <path>          Reviewer-pack output path (drive only; default
                              <report-dir>/reviewer-pack.md)
   --preamble-file <path>     JSON with the pack's owner-approved preamble
