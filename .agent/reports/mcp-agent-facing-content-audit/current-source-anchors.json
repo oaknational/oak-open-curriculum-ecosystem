@@ -12977,10 +12977,10 @@
             "file": "apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts",
             "anchors": [
               {
-                "tokenCount": 16,
-                "tokenSha256": "36d28bcbb896ad6b2ad7d3ca081110174c4112721171c7aea96458372b0b9c06",
-                "indexToken": "rewriteAuthServerMetadata",
-                "indexOffset": 4
+                "tokenCount": 9,
+                "tokenSha256": "2d78f06c5c87a977b79b4e9de1ec27a11146685e15a552b1875d4540b510c93a",
+                "indexToken": "document",
+                "indexOffset": 6
               }
             ]
           }
