@@ -10,6 +10,7 @@ export interface CliState {
   unattended: boolean;
   seed: boolean;
   drive: boolean;
+  compat: boolean;
   target: string | undefined;
   suites: ConformanceSuite[];
   credentialsFile: string | undefined;
@@ -52,6 +53,58 @@ function validateDriveUsage(state: CliState): string | undefined {
 }
 
 /**
+ * The compat operation's rules. Compat evaluates the served tool surface
+ * against a host catalogue, so the suites' vocabulary does not apply to it —
+ * and unlike the suites it has no unattended plan at all, because it cannot
+ * reach the tool list without the authed surface. It DOES take
+ * `--credentials-file` (that is how it reaches the surface). It takes no
+ * `--seed`: seeding authors a suite baseline, and compat keeps no baseline —
+ * accepting the flag would silently ignore it.
+ */
+function validateCompatUsage(state: CliState): string | undefined {
+  if (!state.compat) {
+    return undefined;
+  }
+  if (state.drive) {
+    return '--compat and --drive are different operations — pick one';
+  }
+  if (state.suites.length > 0) {
+    return '--compat evaluates the served surface against the host catalogue — drop --suite';
+  }
+  if (state.unattended) {
+    return '--compat has no unattended mode (reading the tool surface needs the authed surface) — drop --unattended';
+  }
+  if (state.seed) {
+    return '--compat keeps no baseline to seed — drop --seed';
+  }
+  if (state.baselineDir !== undefined) {
+    return '--compat keeps no baseline to read — drop --baseline-dir';
+  }
+  return undefined;
+}
+
+/**
+ * A credentialed run against a cleartext target puts the access token on the
+ * wire. Loopback is exempt — local capture against a dev server is the
+ * documented workflow, and those bytes never leave the machine.
+ *
+ * Lives in the COMMON checks because the exposure is credential-scoped, not
+ * operation-scoped: drive and the authed suites carry the same token as
+ * compat. (Review found the earlier compat-only placement left
+ * `--drive --credentials-file` against `http://` unrefused.) The caller has
+ * already established the target parses as an http(s) URL.
+ */
+function validateTransportSecurity(parsedTarget: URL, state: CliState): string | undefined {
+  if (state.credentialsFile === undefined || parsedTarget.protocol === 'https:') {
+    return undefined;
+  }
+  const loopback = ['localhost', '127.0.0.1', '::1', '[::1]'].includes(parsedTarget.hostname);
+  return loopback
+    ? undefined
+    : '--credentials-file with a non-https --target would send the token in clear — use https (loopback targets are exempt)';
+}
+
+/**
  * The credentials-file rules, separated from the structural checks: the
  * unattended plan is credential-free, and the oauth suite never consumes
  * credentials (its argv carries no --credentials-file; the suite drives
@@ -72,12 +125,8 @@ function validateCredentialsUsage(state: CliState): string | undefined {
   return undefined;
 }
 
-/**
- * Validates the scanned CLI state, returning the bare refusal reason (no
- * usage text — the bin appends its help text at the print site) or
- * undefined when the state is runnable.
- */
-export function validateCliState(state: CliState): string | undefined {
+/** The checks every operation shares: suite parsing, duplicates, target. */
+function validateCommonUsage(state: CliState): string | undefined {
   if (state.suiteErrors.length > 0) {
     return state.suiteErrors.join('; ');
   }
@@ -88,11 +137,104 @@ export function validateCliState(state: CliState): string | undefined {
   if (state.target === undefined || state.target.trim() === '') {
     return '--target is required';
   }
+  return validateTarget(state.target, state);
+}
+
+/**
+ * The target checks, in dependency order: it must parse, it must be http(s),
+ * it must carry no credential, and a credentialed run must not put the token
+ * on a cleartext wire.
+ *
+ * FAILS CLOSED on a target that does not parse or is not http(s), for every
+ * operation. Every operation hands the target to `mcpjam --url`, which speaks
+ * HTTP — there is no legitimate non-URL or non-http(s) target — and a
+ * validator that waves through what it cannot inspect is no validator: review
+ * showed the earlier fail-open let a scheme-typo target smuggle `?token=` past
+ * every guard, and a `user:secret@host` target parse as protocol `user:`.
+ * Refusing both classes outright deletes the residual the emit sites'
+ * redaction previously had to justify itself against.
+ */
+function validateTarget(target: string, state: CliState): string | undefined {
+  const parsed = URL.parse(target);
+  if (parsed === null) {
+    return '--target must be a valid http(s) URL — this target does not parse as a URL';
+  }
+  if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') {
+    return `--target must be an http(s) URL — got protocol ${JSON.stringify(parsed.protocol)}`;
+  }
+  if (parsed.username !== '' || parsed.password !== '') {
+    return '--target must not embed credentials (user:password@) — the target is echoed into reports; pass credentials via --credentials-file';
+  }
+  const credentialRefusal = refuseCredentialParams(target);
+  if (credentialRefusal !== undefined) {
+    return credentialRefusal;
+  }
+  return validateTransportSecurity(parsed, state);
+}
+
+/**
+ * Scans in RAW and PERCENT-DECODED form: `access%5Ftoken=` is
+ * `access_token=` after the single decode a URL consumer applies, and a
+ * raw-only scan waved it through (review, 2026-08-30). A target whose
+ * encoding does not decode cannot be inspected, so it is refused — the same
+ * fail-closed rule as an unparseable target.
+ */
+function refuseCredentialParams(target: string): string | undefined {
+  let decoded: string;
+  try {
+    decoded = decodeURIComponent(target);
+  } catch {
+    return '--target carries invalid percent-encoding, so it cannot be inspected for embedded credentials — refused; fix the encoding';
+  }
+  if (
+    TARGET_CREDENTIAL_PARAM_PATTERN.test(target) ||
+    TARGET_CREDENTIAL_PARAM_PATTERN.test(decoded)
+  ) {
+    return '--target must not carry credentials in its query or fragment (access_token, token, code, …) — the target is echoed into reports; pass credentials via --credentials-file';
+  }
+  return undefined;
+}
+
+/**
+ * Credential-parameter names scanned for over the RAW target string, not the
+ * parsed structure: review showed a fragment carrying its own `?`
+ * (`#/cb?code=…`, the SPA OAuth-callback shape) makes `URLSearchParams` read
+ * the key as `/cb?code` and slip a structural check. A raw scan cannot be
+ * misled by structure.
+ *
+ * Deliberately BROADER than the redactor's key set in `bounded-excerpt.ts`:
+ * this pattern REJECTS a target rather than masking display text, so `token`
+ * and bare `code` are safe to name here (no legitimate Oak target carries
+ * them as parameters) even though the redactor omits them to avoid masking
+ * error/status codes. A target that authenticates via `?api_key=` in its
+ * URL — some third-party MCP hosts do — is refused by design; this CLI
+ * targets Oak's own surface. The raw scan intentionally OVER-refuses: a
+ * `code=`/`token=` substring anywhere in the target (a path segment, a
+ * `promo-code=` param) is refused too — a loud false refusal over a silent
+ * credential echo, accepted as a residual.
+ */
+const TARGET_CREDENTIAL_PARAM_PATTERN =
+  /\b(?:access_token|refresh_token|client_secret|id_token|code|code_verifier|token|api_key|apikey|accessToken|refreshToken|clientSecret|idToken|codeVerifier)=/iu;
+
+/**
+ * Validates the scanned CLI state, returning the bare refusal reason (no
+ * usage text — the bin appends its help text at the print site) or
+ * undefined when the state is runnable.
+ */
+export function validateCliState(state: CliState): string | undefined {
+  const commonRefusal = validateCommonUsage(state);
+  if (commonRefusal !== undefined) {
+    return commonRefusal;
+  }
+  const compatRefusal = validateCompatUsage(state);
+  if (compatRefusal !== undefined) {
+    return compatRefusal;
+  }
   const driveRefusal = validateDriveUsage(state);
   if (driveRefusal !== undefined) {
     return driveRefusal;
   }
-  // Drive consumes credentials directly on every call; the suites' rules
-  // (unattended-forbids, oauth-only-drops) are not its rules.
-  return state.drive ? undefined : validateCredentialsUsage(state);
+  // Drive and compat consume credentials directly; the suites' rules
+  // (unattended-forbids, oauth-only-drops) are not their rules.
+  return state.drive || state.compat ? undefined : validateCredentialsUsage(state);
 }

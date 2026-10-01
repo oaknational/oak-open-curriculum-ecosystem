@@ -158,6 +158,42 @@ check(
   driveWithSeed.stderr.slice(0, 200),
 );
 
+// Compat-operation flag wiring: the same argv-table proof as the drive pair
+// above. A miswired `--compat` handler (landing on `drive`, say) produces a
+// DIFFERENT refusal string here while every state-literal unit test stays
+// green, because nothing else exercises the real argv table.
+const compatWithUnattended = spawnSync(
+  process.execPath,
+  [BIN, '--target', 'https://x.test/mcp', '--compat', '--unattended'],
+  { cwd: REPO_ROOT, encoding: 'utf8' },
+);
+check(
+  'compat with unattended exit code',
+  compatWithUnattended.status === 2,
+  `expected 2, got ${String(compatWithUnattended.status)}`,
+);
+check(
+  'compat with unattended guidance on stderr',
+  compatWithUnattended.stderr.includes('--compat has no unattended mode'),
+  compatWithUnattended.stderr.slice(0, 200),
+);
+
+const compatWithSuite = spawnSync(
+  process.execPath,
+  [BIN, '--target', 'https://x.test/mcp', '--compat', '--suite', 'protocol'],
+  { cwd: REPO_ROOT, encoding: 'utf8' },
+);
+check(
+  'compat with suite exit code',
+  compatWithSuite.status === 2,
+  `expected 2, got ${String(compatWithSuite.status)}`,
+);
+check(
+  'compat with suite guidance on stderr',
+  compatWithSuite.stderr.includes('drop --suite'),
+  compatWithSuite.stderr.slice(0, 200),
+);
+
 if (failures.length > 0) {
   process.stderr.write(`SMOKE FAILED (mcp-conformance-cli):\n${failures.join('\n')}\n`);
   process.exit(1);

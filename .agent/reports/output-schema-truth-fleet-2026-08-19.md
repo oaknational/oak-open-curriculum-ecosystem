@@ -187,7 +187,7 @@ authoring; the stale "remains gated" prose was the contradiction).
 The error-envelope plan is INDEPENDENT-BENEFICIAL, recommended first
 (isError early-return verified at the installed SDK; adjacent functions
 in one file are custody, not coupling). PR #895 owns the
-registration-proof instrument custody (`connected-client.ts`, ADR-226)
+registration-proof instrument custody (`connected-client.ts`, ADR-230)
 that the conformance ratchet extends — WITH/soft-BEFORE. The v2 SDK
 spike (MCP-506, sketch) must not open mid-carrier-landing.
 

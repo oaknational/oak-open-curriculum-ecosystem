@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { composeDriveRunReport } from '../../src/mcp-conformance/drive-cli.js';
 import {
   PLACEHOLDER_PREAMBLE,
   renderReviewerPack,
@@ -61,6 +62,19 @@ describe('renderReviewerPack — the walkthrough is a traceable projection of on
     expect(pack).toContain('### get-curriculum-model');
     expect(pack).toContain('### download-asset');
     expect(pack).toContain('### get-keyword-graph');
+  });
+
+  it('redacts a credential carried in the target — the pack is a shareable document', () => {
+    // The validator refuses every credential-bearing target, so this belt is
+    // defence in depth against a future validation gap in the pack header.
+    const pack = renderReviewerPack({
+      target: 'ht!tp://user:s3cret@mcp.example.test/mcp',
+      preamble: PREAMBLE,
+      outcome: OUTCOME,
+      provenance: PROVENANCE,
+    });
+    expect(pack).not.toContain('s3cret');
+    expect(pack).toContain('//[redacted]@mcp.example.test/mcp');
   });
 
   it('names its own provenance: when it ran, with what instrument, and where the evidence lives', () => {
@@ -145,5 +159,19 @@ describe('reviewerPackPreambleSchema — the preamble file boundary refuses quie
   it('refuses a whitespace-only note — visually blank copy is blank copy', () => {
     const result = reviewerPackPreambleSchema.safeParse({ ...PREAMBLE, connectionNote: '   ' });
     expect(result.success).toBe(false);
+  });
+});
+
+describe('composeDriveRunReport — the drive JSON report redacts its target', () => {
+  it('carries a clean target verbatim', () => {
+    expect(composeDriveRunReport(TARGET, OUTCOME).target).toBe(TARGET);
+  });
+
+  it('masks a credential in the target — the report rides to stdout and summary.json', () => {
+    const report = composeDriveRunReport('https://h/mcp?access_token=ya29.SECRET', OUTCOME);
+
+    expect(report.target).not.toContain('ya29.SECRET');
+    expect(report.target).toBe('https://h/mcp?access_token=[redacted]');
+    expect(report.operation).toBe('drive');
   });
 });
