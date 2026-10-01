@@ -68,6 +68,7 @@ export interface SearchLessonsParams extends SearchParamsBase {
 export interface SearchUnitsParams extends SearchParamsBase {
   readonly highlight?: boolean;
   readonly minLessons?: number;
+  readonly year?: string;
 }
 
 /** Parameters for sequence search. */

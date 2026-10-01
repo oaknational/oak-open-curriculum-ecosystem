@@ -14,6 +14,7 @@
 import { z } from 'zod';
 import { KEY_STAGES, SUBJECTS } from '@oaknational/sdk-codegen/api-schema';
 import { SEARCH_SCOPES } from './types.js';
+import { YEAR_FILTER_SCHEMA } from './year-filter-schema.js';
 
 // `satisfies` (not a type annotation) keeps the per-field Zod types visible
 // to consumers — the coherence tests read `.meta()` off each field — while
@@ -75,10 +76,10 @@ export const SEARCH_INPUT_SCHEMA = {
       "Filter to lessons offered by this exam board. Exam board is a programme-factor on the lesson's units; matching a lesson means at least one of its unit entries is tagged with this exam board. Lessons scope only.",
     )
     .meta({ examples: ['aqa', 'edexcel', 'ocr'] }),
-  year: z
-    .union([z.string(), z.number().int().min(1).max(11)])
-    .optional()
-    .describe('Filter by year group number. Lessons scope only.')
+  year: YEAR_FILTER_SCHEMA.optional()
+    .describe(
+      "Filter by year group number. Lessons and units scopes. Filters exactly, so content pitched one year either side — including across a key stage boundary — is excluded; omit it, or search the adjacent year too, when a year group is the teacher's intended pitch rather than a hard limit.",
+    )
     .meta({ examples: ['3', '7', 10] }),
   threadSlug: z
     .string()

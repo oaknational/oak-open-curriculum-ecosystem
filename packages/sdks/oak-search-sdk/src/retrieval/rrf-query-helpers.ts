@@ -32,7 +32,7 @@ export function buildLessonFilters(params: SearchLessonsParams): QueryContainer[
   addTermsFilter(filters, 'exam_boards', params.examBoard);
   addTermsFilter(filters, 'exam_subjects', params.examSubject);
   addTermsFilter(filters, 'ks4_options', params.ks4Option);
-  addTermsFilter(filters, 'years', params.year);
+  addYearFilter(filters, params.year);
   addTermFilter(filters, 'thread_slugs', params.threadSlug);
   return filters;
 }
@@ -47,6 +47,7 @@ export function buildUnitFilters(params: SearchUnitsParams): QueryContainer[] {
   const filters: QueryContainer[] = [];
   addSubjectFilter(filters, params.subject, params.keyStage);
   addKeyStageFilter(filters, params.keyStage);
+  addYearFilter(filters, params.year);
   if (typeof params.minLessons === 'number') {
     filters.push({ range: { lesson_count: { gte: params.minLessons } } });
   }
@@ -102,6 +103,24 @@ function addTermsFilter(filters: QueryContainer[], field: string, value: string 
   if (value) {
     filters.push({ terms: { [field]: [value] } });
   }
+}
+
+/**
+ * The indexed representations of content Oak places at no single year group:
+ * lesson documents carry the slug, unit rollups carry the title. One filter
+ * value has to match both, or a year search finds the lessons and misses their
+ * units (MCP-755).
+ */
+const ALL_YEARS_TERMS = ['all-years', 'All years'] as const;
+
+/** Add the year filter, expanding `all-years` to both indexed forms. */
+function addYearFilter(filters: QueryContainer[], year: string | undefined): void {
+  if (!year) {
+    return;
+  }
+  filters.push({
+    terms: { years: year === 'all-years' ? [...ALL_YEARS_TERMS] : [year] },
+  });
 }
 
 /** Add tier filter when tier is present (matches tier or tiers field). */
