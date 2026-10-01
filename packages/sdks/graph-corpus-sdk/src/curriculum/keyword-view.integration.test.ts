@@ -9,23 +9,27 @@
  * anchor-matching lessons place the keyword), descending, with the
  * kind-qualified keyword id as the deterministic tie-break. Results are
  * bounded top-N ({@link DEFAULT_KEYWORD_LIMIT} default,
- * {@link MAX_KEYWORD_LIMIT} ceiling) with honest totals, and each entry is
- * decorated with its in-scope placing lessons (id-sorted, windowed at
- * {@link KEYWORD_LESSON_DECORATION_LIMIT} — richness via edge traversal,
- * never a fat node). These tests exercise the REAL corpus and check results
- * against a separately-computed reference adjacency built here from
- * `graphCorpus.edges` (same corpus source, deliberately simpler accumulation
- * than the projection's), plus implementation-independent ordering and
- * boundedness invariants — the invariants, not the reference counts, are the
- * assertions that survive an equivalent reimplementation.
+ * {@link MAX_KEYWORD_LIMIT} ceiling) with honest totals, and each entry
+ * carries every definition its in-scope lessons author, each naming those
+ * lessons by slug (slug-sorted, windowed at
+ * {@link KEYWORD_DEFINITION_LESSON_LIMIT}). These tests exercise the REAL
+ * corpus and check results against reference indexes built here from
+ * `graphCorpus.edges` and `graphCorpus.keywordDefinitions` (same corpus
+ * source), plus implementation-independent ordering and boundedness
+ * invariants — the invariants, not the reference counts, are the assertions
+ * that survive an equivalent reimplementation.
  */
 import { unwrapErr } from '@oaknational/result';
-import { graphCorpus, type GraphCorpusNode } from '@oaknational/sdk-codegen/graph-corpus';
+import {
+  graphCorpus,
+  type GraphCorpusKeywordDefinition,
+  type GraphCorpusNode,
+} from '@oaknational/sdk-codegen/graph-corpus';
 import { describe, expect, it } from 'vitest';
 
+import { KEYWORD_DEFINITION_LESSON_LIMIT } from './keyword-definitions.js';
 import {
   DEFAULT_KEYWORD_LIMIT,
-  KEYWORD_LESSON_DECORATION_LIMIT,
   MAX_KEYWORD_LIMIT,
   keywordsForSubjectKeyStage,
 } from './keyword-view.js';
@@ -74,6 +78,20 @@ const lessonIdsByUnitId = (() => {
     targets.sort((a, b) => a.localeCompare(b));
   }
   return adjacency;
+})();
+
+/** Reference definition rows: keyword id → its lesson-authored definitions (from keywordDefinitions). */
+const definitionRowsByKeywordId = (() => {
+  const rows = new Map<string, GraphCorpusKeywordDefinition[]>();
+  for (const row of graphCorpus.keywordDefinitions) {
+    const existing = rows.get(row.keywordId);
+    if (existing) {
+      existing.push(row);
+    } else {
+      rows.set(row.keywordId, [row]);
+    }
+  }
+  return rows;
 })();
 
 /** Reference in-scope keyword counts for a subject+keyStage: keyword id → placing-lesson count. */
@@ -179,20 +197,72 @@ describe('keyword view — bounded anchored frequency-ranked retrieval', () => {
     }
   });
 
-  it('decorates each keyword with its in-scope placing lessons, id-sorted and windowed', () => {
+  it('serves exactly the definitions its in-scope lessons author, never another scope’s', () => {
+    // The R1 defect: one definition per term, taken from whichever lesson
+    // sorted first corpus-wide, was served in every scope.
+    const inRichScope = (lessonId: string): boolean => {
+      const lesson = lessonNodesById.get(lessonId);
+      return (
+        lesson?.kind === 'lesson' &&
+        lesson.subject === richAnchor.subject &&
+        lesson.keyStage === richAnchor.keyStage
+      );
+    };
+    const result = keywordsForSubjectKeyStage(richAnchor.subject, richAnchor.keyStage, {
+      limit: MAX_KEYWORD_LIMIT,
+    });
+
+    const { keywords } = unwrapOk(result);
+    // The check only discriminates if some keyword here has several definitions.
+    expect(keywords.some((entry) => entry.definitions.length > 1)).toBe(true);
+    for (const entry of keywords) {
+      const expected = (definitionRowsByKeywordId.get(entry.keyword.id) ?? [])
+        .map((row) => ({
+          term: row.term,
+          definition: row.definition,
+          scopedLessonCount: row.lessonIds.filter(inRichScope).length,
+        }))
+        .filter((row) => row.scopedLessonCount > 0);
+      const served = entry.definitions.map(({ term, definition, scopedLessonCount }) => ({
+        term,
+        definition,
+        scopedLessonCount,
+      }));
+      expect(served).toHaveLength(expected.length);
+      expect(served).toStrictEqual(expect.arrayContaining(expected));
+      const counts = served.map((definition) => definition.scopedLessonCount);
+      expect(counts).toStrictEqual([...counts].sort((a, b) => b - a));
+    }
+  });
+
+  it('names the in-scope lessons that author each definition, slug-sorted and windowed', () => {
     const result = keywordsForSubjectKeyStage(richAnchor.subject, richAnchor.keyStage);
 
     const top = required(unwrapOk(result).keywords[0], 'rich anchor returned no keywords');
-    expect(top.lessons).toHaveLength(
-      Math.min(top.scopedLessonCount, KEYWORD_LESSON_DECORATION_LIMIT),
-    );
-    expect(top.hasMoreLessons).toBe(top.scopedLessonCount > KEYWORD_LESSON_DECORATION_LIMIT);
-    const ids = top.lessons.map((lesson) => lesson.id);
-    expect(ids).toStrictEqual([...ids].sort((a, b) => a.localeCompare(b)));
-    for (const lesson of top.lessons) {
-      expect(lesson.subject).toBe(richAnchor.subject);
-      expect(lesson.keyStage).toBe(richAnchor.keyStage);
-      expect(keywordIdsByLessonId.get(lesson.id)).toContain(top.keyword.id);
+    expect(top.definitions.length).toBeGreaterThan(0);
+    for (const definition of top.definitions) {
+      const row = required(
+        definitionRowsByKeywordId
+          .get(top.keyword.id)
+          ?.find((r) => r.term === definition.term && r.definition === definition.definition),
+        'served definition has no corpus row',
+      );
+      expect(definition.lessonSlugs).toHaveLength(
+        Math.min(definition.scopedLessonCount, KEYWORD_DEFINITION_LESSON_LIMIT),
+      );
+      expect(definition.hasMoreLessons).toBe(
+        definition.scopedLessonCount > KEYWORD_DEFINITION_LESSON_LIMIT,
+      );
+      expect(definition.lessonSlugs).toStrictEqual(
+        [...definition.lessonSlugs].sort((a, b) => a.localeCompare(b)),
+      );
+      for (const lessonSlug of definition.lessonSlugs) {
+        expect(lessonNodesById.get(`lesson:${lessonSlug}`)).toMatchObject({
+          subject: richAnchor.subject,
+          keyStage: richAnchor.keyStage,
+        });
+        expect(row.lessonIds).toContain(`lesson:${lessonSlug}`);
+      }
     }
   });
 
@@ -240,16 +310,18 @@ describe('keyword view — bounded anchored frequency-ranked retrieval', () => {
     expect(value.keywords.length).toBeGreaterThan(0);
     const unitLessonIds = new Set(lessonIdsByUnitId.get(keywordedUnit) ?? []);
     for (const entry of value.keywords) {
-      // Count fidelity: the scoped count is bounded by the unit's lesson set,
-      // and below the decoration window it must equal the visible (all
-      // in-unit) lessons — an out-of-unit lesson inflating the count would
-      // break this without needing a recomputed reference.
+      // Count fidelity: the scoped counts are bounded by the unit's lesson
+      // set, and below the lesson window a definition's count must equal its
+      // visible (all in-unit) lessons — an out-of-unit lesson inflating a
+      // count would break this without needing a recomputed reference.
       expect(entry.scopedLessonCount).toBeLessThanOrEqual(unitLessonIds.size);
-      expect(entry.lessons).toHaveLength(
-        Math.min(entry.scopedLessonCount, KEYWORD_LESSON_DECORATION_LIMIT),
-      );
-      for (const lesson of entry.lessons) {
-        expect(unitLessonIds.has(lesson.id)).toBe(true);
+      for (const definition of entry.definitions) {
+        expect(definition.lessonSlugs).toHaveLength(
+          Math.min(definition.scopedLessonCount, KEYWORD_DEFINITION_LESSON_LIMIT),
+        );
+        for (const lessonSlug of definition.lessonSlugs) {
+          expect(unitLessonIds.has(`lesson:${lessonSlug}`)).toBe(true);
+        }
       }
     }
   });
@@ -280,7 +352,13 @@ describe('keyword view — bounded anchored frequency-ranked retrieval', () => {
     for (const entry of value.keywords) {
       expect(referenceKeywords).toContain(entry.keyword.id);
       expect(entry.scopedLessonCount).toBe(1);
-      expect(entry.lessons.map((lesson) => lesson.id)).toStrictEqual([keywordedLesson]);
+      const authoredHere = (definitionRowsByKeywordId.get(entry.keyword.id) ?? []).filter((row) =>
+        row.lessonIds.some((lessonId) => lessonId === keywordedLesson),
+      );
+      expect(entry.definitions).toHaveLength(authoredHere.length);
+      for (const definition of entry.definitions) {
+        expect(definition.lessonSlugs).toStrictEqual([bareSlug(keywordedLesson)]);
+      }
     }
   });
 

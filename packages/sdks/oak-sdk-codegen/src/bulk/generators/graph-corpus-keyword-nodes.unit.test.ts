@@ -4,11 +4,13 @@
  * @remarks
  * TDD: these tests specify the keyword half of the emitted corpus — lean
  * keyword nodes minted as `keyword:<normalised-term>` (lc+trim) carrying the
- * first-occurrence display casing, the bulk description, the unique-lesson
- * frequency, the key-stage-derived firstYear, and the subject distribution;
- * plus the lesson→keyword edge endpoints (one per unique lesson placement).
- * Richness arrives via edge traversal on the one-graph substrate, never via
- * a fat node (plan `graph-tools-value-redesign`, deliverable G4b).
+ * normalised term, the unique-lesson frequency, the key-stage-derived
+ * firstYear, and the subject distribution; plus the lesson→keyword edge
+ * endpoints (one per unique lesson placement). The node carries no
+ * definition: a definition belongs to the lessons that author it
+ * (`keywordDefinitions`). Richness arrives via edge traversal on the
+ * one-graph substrate, never via a fat node (plan `graph-tools-value-redesign`,
+ * deliverable G4b).
  */
 import { describe, expect, it } from 'vitest';
 
@@ -19,12 +21,18 @@ import { buildKeywordNodes } from './graph-corpus-keyword-nodes.js';
 function makeKeyword(overrides: Partial<ExtractedKeyword> = {}): ExtractedKeyword {
   return {
     term: 'photosynthesis',
-    displayTerm: 'Photosynthesis',
     definition: 'The process plants use to make food from light.',
     frequency: 2,
     subjects: ['science'],
     firstYear: 7,
     lessonSlugs: ['plants-make-food', 'leaf-structure'],
+    definitions: [
+      {
+        term: 'Photosynthesis',
+        definition: 'The process plants use to make food from light.',
+        lessonSlugs: ['leaf-structure', 'plants-make-food'],
+      },
+    ],
     ...overrides,
   };
 }
@@ -37,8 +45,7 @@ describe('buildKeywordNodes', () => {
     expect(build.nodes[0]).toEqual({
       kind: 'keyword',
       id: 'keyword:photosynthesis',
-      term: 'Photosynthesis',
-      description: 'The process plants use to make food from light.',
+      term: 'photosynthesis',
       frequency: 2,
       firstYear: 7,
       subjects: ['science'],
@@ -58,9 +65,9 @@ describe('buildKeywordNodes', () => {
 
   it('emits keyword nodes id-sorted (deterministic artefact order)', () => {
     const build = buildKeywordNodes([
-      makeKeyword({ term: 'zygote', displayTerm: 'Zygote', lessonSlugs: ['cells'] }),
-      makeKeyword({ term: 'allele', displayTerm: 'Allele', lessonSlugs: ['genes'] }),
-      makeKeyword({ term: 'mitosis', displayTerm: 'Mitosis', lessonSlugs: ['cells'] }),
+      makeKeyword({ term: 'zygote', lessonSlugs: ['cells'] }),
+      makeKeyword({ term: 'allele', lessonSlugs: ['genes'] }),
+      makeKeyword({ term: 'mitosis', lessonSlugs: ['cells'] }),
     ]);
 
     expect(build.nodes.map((node) => node.id)).toEqual([

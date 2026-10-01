@@ -27,12 +27,12 @@ function createKeyword(
 ): ExtractedKeyword {
   return {
     term,
-    displayTerm: term,
     definition,
     frequency: 10,
     subjects,
     firstYear: 3,
     lessonSlugs: ['lesson-1'],
+    definitions: [{ term, definition, lessonSlugs: ['lesson-1'] }],
   };
 }
 

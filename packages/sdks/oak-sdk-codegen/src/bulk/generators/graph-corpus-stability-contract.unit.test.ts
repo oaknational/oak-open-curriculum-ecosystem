@@ -160,21 +160,33 @@ describe('generateGraphCorpusData — G2 stability contract', () => {
 
       const firstKeyword: ExtractedKeyword = {
         term: 'denominator',
-        displayTerm: 'Denominator',
         definition: 'The number below the line in a fraction.',
         frequency: 1,
         subjects: ['maths'],
         firstYear: 3,
         lessonSlugs: ['comparing-fractions'],
+        definitions: [
+          {
+            term: 'Denominator',
+            definition: 'The number below the line in a fraction.',
+            lessonSlugs: ['comparing-fractions'],
+          },
+        ],
       };
       const secondKeyword: ExtractedKeyword = {
         term: 'numerator',
-        displayTerm: 'Numerator',
         definition: 'The number above the line in a fraction.',
         frequency: 1,
         subjects: ['maths'],
         firstYear: 3,
         lessonSlugs: ['adding-fractions'],
+        definitions: [
+          {
+            term: 'Numerator',
+            definition: 'The number above the line in a fraction.',
+            lessonSlugs: ['adding-fractions'],
+          },
+        ],
       };
 
       // Two programme variants of one unit that DISAGREE on a lesson's

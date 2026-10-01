@@ -13,6 +13,7 @@ import type {
   GraphCorpus,
   GraphCorpusEdge,
   GraphCorpusEdgeType,
+  GraphCorpusKeywordDefinition,
   GraphCorpusNode,
   GraphCorpusNodeId,
   GraphCorpusSequence,
@@ -66,7 +67,6 @@ interface JsonKeywordNode {
   readonly kind: 'keyword';
   readonly id: string;
   readonly term: string;
-  readonly description: string;
   readonly frequency: number;
   readonly firstYear: number;
   readonly subjects: readonly string[];
@@ -101,6 +101,13 @@ interface JsonUnitLessonRun {
   readonly lessonIds: readonly string[];
 }
 
+interface JsonKeywordDefinition {
+  readonly keywordId: string;
+  readonly term: string;
+  readonly definition: string;
+  readonly lessonIds: readonly string[];
+}
+
 interface JsonGraphCorpus {
   readonly version: string;
   readonly generatedAt: string;
@@ -110,6 +117,7 @@ interface JsonGraphCorpus {
   readonly edges: readonly JsonGraphCorpusEdge[];
   readonly sequences: readonly JsonSequence[];
   readonly unitLessonRuns: readonly JsonUnitLessonRun[];
+  readonly keywordDefinitions: readonly JsonKeywordDefinition[];
   readonly droppedEdges: readonly GraphCorpusDroppedEdge[];
   readonly droppedDuplicates: readonly GraphCorpusDroppedDuplicate[];
   readonly seeAlso: string;
@@ -185,7 +193,6 @@ function toNode(node: JsonGraphCorpusNode): GraphCorpusNode {
         kind: 'keyword',
         id: toKindQualifiedId('keyword', node.id),
         term: node.term,
-        description: node.description,
         frequency: node.frequency,
         firstYear: node.firstYear,
         subjects: node.subjects,
@@ -234,6 +241,16 @@ function toUnitLessonRun(run: JsonUnitLessonRun): GraphCorpusUnitLessonRun {
   };
 }
 
+/** Narrows one keyword definition, validating the kind-qualified keyword and lesson ids at load. */
+function toKeywordDefinition(row: JsonKeywordDefinition): GraphCorpusKeywordDefinition {
+  return {
+    keywordId: toKindQualifiedId('keyword', row.keywordId),
+    term: row.term,
+    definition: row.definition,
+    lessonIds: row.lessonIds.map((lessonId) => toKindQualifiedId('lesson', lessonId)),
+  };
+}
+
 function createGraphCorpus(graph: JsonGraphCorpus): GraphCorpus {
   return {
     version: graph.version,
@@ -244,6 +261,7 @@ function createGraphCorpus(graph: JsonGraphCorpus): GraphCorpus {
     edges: graph.edges.map(toEdge),
     sequences: graph.sequences.map(toSequence),
     unitLessonRuns: graph.unitLessonRuns.map(toUnitLessonRun),
+    keywordDefinitions: graph.keywordDefinitions.map(toKeywordDefinition),
     droppedEdges: graph.droppedEdges,
     droppedDuplicates: graph.droppedDuplicates,
     seeAlso: graph.seeAlso,
@@ -274,6 +292,7 @@ export type {
   GraphCorpusLessonNode,
   GraphCorpusMisconceptionNode,
   GraphCorpusKeywordNode,
+  GraphCorpusKeywordDefinition,
   GraphCorpusEdge,
   GraphCorpusEdgeType,
   GraphCorpusNodeId,

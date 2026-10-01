@@ -6,12 +6,15 @@
  * Indexes lessons, units, and keywords by id and materialises the two
  * adjacencies the keyword view traverses: lesson→keywords (from
  * `containsKeyword` edges) and unit→lessons (from `containsLesson` edges,
- * for unit-anchored narrowing). Constructed once at module load by the view
- * module (the EEF precedent); exported for the startup-cost proof.
+ * for unit-anchored narrowing), plus each keyword's lesson-authored
+ * definitions (from `keywordDefinitions`). Constructed once at module load by
+ * the view module (the EEF precedent); exported for the startup-cost proof.
  */
 import {
   graphCorpus,
+  type GraphCorpusKeywordDefinition,
   type GraphCorpusKeywordNode,
+  type GraphCorpusKeywordNodeId,
   type GraphCorpusLessonNode,
   type GraphCorpusNodeId,
   type GraphCorpusUnitNode,
@@ -19,12 +22,34 @@ import {
 
 import { buildEdgeAdjacency } from './projection-helpers.js';
 
-/** The keyword view's per-kind node indexes plus its two traversal adjacencies. */
+/** The keyword view's per-kind node indexes, its two traversal adjacencies, and the definitions. */
 export interface CurriculumKeywordProjection {
   readonly lessonsById: ReadonlyMap<GraphCorpusNodeId, GraphCorpusLessonNode>;
   readonly unitsById: ReadonlyMap<GraphCorpusNodeId, GraphCorpusUnitNode>;
   readonly keywordsByLessonId: ReadonlyMap<GraphCorpusNodeId, readonly GraphCorpusKeywordNode[]>;
   readonly lessonsByUnitId: ReadonlyMap<GraphCorpusNodeId, readonly GraphCorpusLessonNode[]>;
+  /** Each keyword's definition rows, in corpus order. */
+  readonly definitionsByKeywordId: ReadonlyMap<
+    GraphCorpusKeywordNodeId,
+    readonly GraphCorpusKeywordDefinition[]
+  >;
+}
+
+/** Groups the corpus's definition rows under their keyword, keeping corpus order. */
+function groupDefinitions(): ReadonlyMap<
+  GraphCorpusKeywordNodeId,
+  readonly GraphCorpusKeywordDefinition[]
+> {
+  const byKeyword = new Map<GraphCorpusKeywordNodeId, GraphCorpusKeywordDefinition[]>();
+  for (const row of graphCorpus.keywordDefinitions) {
+    const existing = byKeyword.get(row.keywordId);
+    if (existing) {
+      existing.push(row);
+    } else {
+      byKeyword.set(row.keywordId, [row]);
+    }
+  }
+  return byKeyword;
 }
 
 /**
@@ -71,5 +96,6 @@ export function buildCurriculumKeywordProjection(): CurriculumKeywordProjection 
     unitsById,
     keywordsByLessonId: buildAdjacency('containsKeyword', keywordsById),
     lessonsByUnitId: buildAdjacency('containsLesson', lessonsById),
+    definitionsByKeywordId: groupDefinitions(),
   };
 }

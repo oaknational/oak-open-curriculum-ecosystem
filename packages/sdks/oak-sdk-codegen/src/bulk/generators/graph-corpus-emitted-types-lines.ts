@@ -27,6 +27,7 @@ export const graphCorpusTypesModuleLines: readonly string[] = [
   '  GraphCorpusLessonNode,',
   '  GraphCorpusMisconceptionNode,',
   '  GraphCorpusKeywordNode,',
+  '  GraphCorpusKeywordDefinition,',
   '  GraphCorpusEdge,',
   '  GraphCorpusEdgeType,',
   '  GraphCorpusNodeId,',
