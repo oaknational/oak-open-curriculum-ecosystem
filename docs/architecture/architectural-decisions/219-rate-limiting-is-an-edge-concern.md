@@ -2,7 +2,9 @@
 
 ## Status
 
-**Accepted** (2026-07-30)
+**Accepted** (2026-07-30); amended 2026-08-21 — the Context's "every
+served domain" premise narrowed to proxied domains only, see the
+Amendment at the end
 
 **Supersedes**: [ADR-158](158-multi-layer-security-and-rate-limiting.md)
 (Multi-Layer Security Architecture and Application Rate Limiting)
@@ -18,8 +20,11 @@ defence layer, in answer to CodeQL `js/missing-rate-limiting`. Three facts
 remove its basis.
 
 1. **The edge owns volumetric control.** Cloudflare and Vercel carry the
-   traffic controls for every served domain. Their strength per domain is an
+   traffic controls for a served domain, and their strength per domain is an
    edge-configuration decision, made and reviewed where the control lives.
+   **This holds per domain, not universally — see the amendment of 2026-08-21
+   below. It was originally written as "every served domain", which is not
+   true of an unproxied one.**
 
 2. **The upstream quota threat does not exist.** The Oak Open Curriculum API
    rate-limits per key, but this service's key is exempt as an internal
@@ -64,7 +69,8 @@ and it is falsified the moment the edge stops carrying the control.
   second copy of the control to drift against it.
 - Edge configuration is load-bearing: if it is weakened or removed for a
   served domain, nothing in the application compensates, and this decision's
-  premise is falsified.
+  premise is falsified **for that domain** (scope narrowed in place — see the
+  amendment of 2026-08-21).
 - This server no longer emits 429 of its own; a 429 reaching a client
   originates at the edge or upstream.
 - `js/missing-rate-limiting` will re-fire on new routes. Each occurrence is
@@ -93,3 +99,103 @@ and it is falsified the moment the edge stops carrying the control.
 - ADR-158 is superseded but stays readable: its threat model, key-extraction
   analysis and §Honest Limitations are the record of what was built and what
   it could not do.
+
+## Amendment — 2026-08-21: the every-served-domain premise holds only for a proxied domain
+
+The Context above originally claimed the edge carries traffic controls for
+**every** served domain. **Cloudflare's WAF and rate-limiting rules are in path
+only for a _proxied_ domain.** Two lines of accepted text are narrowed in place
+and marked as narrowed: Context point 1, and the load-bearing §Consequences
+bullet on edge configuration. This amendment records the measurement behind the
+narrowing and what follows from it. Where it quotes either line below, it quotes
+the original wording.
+
+Measured 2026-08-20 at ~12:25Z, each host against a proxied control:
+
+| Host                                   | `server` header | `cf-ray` | Verdict         |
+| -------------------------------------- | --------------- | -------- | --------------- |
+| `www.thenational.academy`              | `cloudflare`    | present  | Proxied         |
+| `mcp.thenational.academy`              | `cloudflare`    | present  | Proxied         |
+| `curriculum-mcp-alpha.oaknational.dev` | `Vercel`        | absent   | **Not proxied** |
+
+So for `curriculum-mcp-alpha.oaknational.dev` the Cloudflare controls this ADR
+names as the control's home are demonstrably not in path, and the application
+ships no limiter to compensate.
+
+**This is not the falsification clause firing.** §Decision's clause is a
+cessation clause — the dismissal "is falsified the moment the edge **stops**
+carrying the control" — and §Consequences conditions on edge configuration
+being "weakened or removed". Neither describes this host: no cessation of edge
+control is recorded for it, yet the premise does not hold for it. The clause as
+written covers only a domain that loses its edge protection, not one that is
+unproxied without ever having been un-proxied — which is itself a gap in the
+original record.
+
+**Scope of the claim, stated precisely.** Vercel's own platform DDoS baseline
+remains in path for that host, so the absence is of one layer, not of all
+volumetric protection: _the Cloudflare layer this ADR names as the control's
+home is absent for that domain._ Vercel project firewall rules are not readable
+from the repository, so no claim is made about them either way.
+
+**What the measurement does and does not establish.** A header read is
+point-in-time: it establishes each host's proxy state at ~12:25Z on 2026-08-20
+and nothing about its history. That the alpha host's premise was inaccurate
+when written, rather than broken by a later change, is an **inference** from the
+absence of any recorded change to its proxy state — not a measurement. No claim
+is made here about when `mcp.thenational.academy` became proxied.
+
+**What is affected, stated as a class rather than a list.** The affected
+population is the open, growing class named in §Consequences: every
+`js/missing-rate-limiting` disposition on this server's route registrations that
+rests on this ADR's edge premise — whether its comment records that premise or
+the premise is the only control the comment can have meant. On an unproxied host
+the
+**Cloudflare limb** of that rationale is unsupported; the Vercel limb, where a
+dismissal names it, still holds. The class is deliberately **not** enumerated
+exhaustively here — it grows with each new route, so a frozen list in this ADR
+would go stale silently.
+
+Dated exemplars, measured 2026-08-21 per alert (state read from `fixed_at`, not
+from a list filter — a dismissed alert whose instance later disappears keeps
+`state: dismissed` and gains a `fixed_at`):
+
+- **Alert #5** (`auth-routes.ts:117`, dismissed 2026-07-30, still present on
+  current code) is the clearest in-class case: it records this ADR's premise
+  verbatim — "the app is behind Cloudflare, which provides rate-limiting, and
+  is also hosted on Vercel which enforces bot and DoS protection".
+- **Alerts #8** (`oauth-proxy-routes.ts:72`) and **#65** (`auth-routes.ts:160`),
+  both dismissed 2026-03-31 and both still present, record only "already
+  protected". The in-process limiter did not exist on that date — it landed
+  2026-04-28 and left 2026-07-30 — so "already protected" cannot have meant it.
+  **Inference, labelled:** the edge is the only control it can have meant, which
+  places these two inside the class; their comments do not say so.
+- **Alert #90** (`bootstrap-helpers.ts:165`, dismissed 2026-05-22, still
+  present) is outside the class: its rationale is misclassification —
+  cross-cutting middleware, not a route handler.
+- The dismissals that named the in-process limiter explicitly ("DI-injected per
+  ADR-078", 2026-06-23) were all resolved when that limiter was removed, and
+  **#230** — which recorded the edge premise alongside #5 — was resolved
+  2026-08-12. Resolved alerts are history, not live exposure.
+
+**A second population cites this ADR as an abuse bound without carrying a rule
+disposition.** `/assets/download/:lesson/:type` is the sharpest such case: its
+docstring records that abuse is bounded by this ADR's edge controls _and_ that
+the service's Oak API key is exempt from upstream per-key rate limiting
+(Context point 2). On an unproxied host the capability stays bounded by its
+HMAC signature and 5-minute TTL while the Cloudflare limb of the volumetric
+bound the docstring names is absent. It is a citation, not a dismissal: as
+measured 2026-08-21, that path carried no code-scanning alert of any rule in any
+state. The two populations are distinct and fail differently.
+
+**The residual risk is recorded here, NOT accepted.** Accepting it, or proxying
+the host, is an owner decision and has not been made. This amendment removes a
+false statement from the record; it does not settle what to do about the
+condition the statement was hiding.
+
+_Provenance: a retrospective `security-expert` review of pull request 920
+(2026-08-20) surfaced that the premise did not hold for one served host. The
+per-host proxy states were
+measured first-hand on 2026-08-20 at ~12:25Z, each against a proxied control.
+The alert states, dismissal rationales and the limiter's landing and removal
+dates were measured first-hand on 2026-08-21 against the repository's
+code-scanning alert set and git history._
