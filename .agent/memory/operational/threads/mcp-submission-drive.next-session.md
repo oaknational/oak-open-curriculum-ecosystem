@@ -771,3 +771,22 @@ forgotten.
 | Dormouse turns Footfall | claude | claude-opus-5[1m] | a54547 | director | 2026-08-17 | 2026-08-18 |
 | Sloop spins Spray | copilot | GPT-5.6 Sol | c42e7e | pr-review-warden | 2026-08-18 | 2026-08-18 |
 | Raven turns Nocturne | claude | Opus-5 | 0aad1a | liaison | 2026-08-18 | 2026-08-18 |
+| Herring seeks Harbour | claude-code | claude-opus-5 | 75bb85 | director (seated on `estate-coordination`, working this thread's substance directly) | 2026-09-16 | 2026-09-22 |
+
+## 2026-09-22 — Six-day Director tenure on `estate-coordination` worked this thread directly (Herring seeks Harbour, `75bb85`)
+
+Not a dedicated seat on this thread — the Director seat on `estate-coordination` did substantive `mcp-submission-drive` work across the same tenure: cleared most of the inherited PR queue (ten PRs merged, four closed as dead — the exact numbers are on `director-handoff.md`), caught and fixed a ~20-hour silent main breakage plus an independent PR-local break, homed the `oak-search-cli` lint-ban loss and minted MCP-752 for a served-content URL-allowlist bypass. Full detail on `director-handoff.md`'s CURRENT HANDOFF STATE.
+
+**MCP-597 / MCP-614 status at hand-off — IN FLUX, do not trust this entry alone.** The owner reported
+mid-wrap ("ps i've set up the uptime alerting") having configured uptime monitoring himself, but did not
+confirm which provider or whether a non-empty check-history window has elapsed — MCP-597's own acceptance
+criteria explicitly requires that proof, because the original defect was a monitor reading `disabled`-
+but-`ok` for a week with nobody noticing. **Verify the provider and a real check history first-hand
+before closing either ticket** — this landing target from the row above is very likely near-resolved but
+is NOT yet confirmed closed.
+
+Also still open, not this seat's to close: MCP-665 (live WAF block on curriculum content, needs Cloudflare
+dashboard access to name the rule from 5 ray IDs), MCP-517 (root cause structurally gone, just needs
+closing), PR #761/#772's three real CHANGES_REQUESTED security findings, MCP-596 (OWA nav-dropdown, no
+owner), MCP-480/#969 (real failing CI, untouched 2+ weeks), and the four probe-created OAuth clients still
+live in production Clerk (no Clerk access from this machine to even attempt).

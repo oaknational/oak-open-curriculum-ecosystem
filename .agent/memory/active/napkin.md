@@ -1304,3 +1304,84 @@ lesson, inherited from two predecessors and re-earned anyway.
   design vendor token needs a named, line-shaped `.gitleaks.toml` allowlist (the Clerk publishable-key
   precedent), and that allowlist must ride in the SAME PR — the first push attempt failed on it after
   the commit's whole-tree gate had passed, costing a second ceremony cycle.
+
+## 2026-09-16 ~13:4xZ (Herring seeks Harbour, 75bb85, Director from cold) — the finding #978 left homeless, re-measured on merged main
+
+Peregrine hunts Bluff (`55d88c`) verified this on 2026-09-14 and routed it to the owner as a
+leaf-ticket candidate, warning in comms `39c4d2fa` that it "will be lost when that branch merges
+unless it is homed now". **#978 merged that afternoon and nothing homed it.** It was in no napkin,
+no frictions-register entry and no Linear ticket when this seat looked. Conserved here so the next
+loss is not silent.
+
+- RE-MEASURED FIRST-HAND ON MERGED MAIN, with a control, not adopted from the predecessor's
+  transcript. `eslint --print-config` resolves `no-restricted-syntax` to **1** selector for
+  `apps/oak-search-cli/src/lib/elastic-http.unit.test.ts` (`process.env` only) against **4** for the
+  control `apps/oak-curriculum-mcp-streamable-http/src/served-surface/served-surface.unit.test.ts`
+  (`ExportAllDeclaration`, `process.env`, `process.cwd`, non-literal-`listen()` port). The control is
+  what makes it readable: a sibling's test files get four bans, this one gets one.
+- MECHANISM: a per-file `no-restricted-syntax` value REPLACES the inherited array rather than merging.
+  `apps/oak-search-cli/eslint.config.ts`'s final block matches `**/*.ts` and sits AFTER the
+  `...testRules` block, so it wipes the test bans too.
+- THE TWO HALVES ARE NOT EQUALLY SERIOUS. The `export *` loss is arguably intended — the generated
+  barrel carries a written waiver — and the defect there is only that the exception was taken by
+  silent erasure instead of a scoped disable. **The test half has no waiver and nobody chose it**: a
+  `process.cwd()` read or a hard-coded port ships green in `oak-search-cli` where the identical line
+  reddens in every sibling. A gate reporting success while enforcing less than its siblings.
+- THIS IS THE THIRD INSTANCE. #978 hit the same shape and repaired two configs without sweeping for
+  others. The durable cure is construction, not a fourth hand-repair: export the selector array from
+  `packages/core/oak-eslint/src/shared.ts` as a named constant and have every per-file block spread
+  it. The comment at `shared.ts:141-143` has now failed three times — passive guidance losing to
+  artefact gravity, exactly as the pattern file predicts.
+- NOT MINTED AS A TICKET BY THIS SEAT, deliberately: tickets are minted at owner word
+  (`linear-mcp-team-and-project-hygiene`, owner ruling 2026-08-31), and Linear was searched first —
+  no existing ticket covers it. Recommendation is with the owner.
+
+### The seat lesson underneath it
+
+**"Routed to the owner" is not a home.** Peregrine did everything right at the moment of discovery —
+measured it with a control, named the disposition, refused to act unilaterally — and the finding
+still evaporated, because the only record was a comms event and the session that would have carried
+it died before its next boundary. A finding parked on an owner decision needs a durable repo home AT
+THE MOMENT IT IS PARKED, not at the seat's closeout, because the seat may not reach one.
+
+## 2026-09-22 (Herring seeks Harbour, 75bb85, Director wind-down) — four surprises from a six-day tenure, not yet captured
+
+- ROOT CAUSE OF THE #972-ON-#928 SILENT MAIN BREAK, AND IT WILL RECUR: this repo's branch ruleset has
+  `strict_required_status_checks_policy: false` (GitHub's literal name for "require branches to be up
+  to date before merging"). A stale-but-green PR can merge on a two-day-old check run without GitHub
+  forcing an "Update branch" + re-run first — so a merge with ZERO textual conflict can still ship a
+  real `pnpm type-check` break when the two branches touch unrelated files that reference the same
+  removed API. Confirmed via `git log` timestamps (the PR's last main-sync predated the conflicting
+  merge by two days) and the ruleset API directly, not inferred. **It recurred identically on five more
+  PRs** (#761, #772, #925, #983, #926) as each was synced with main in turn — same fix each time, same
+  cause. Flipping the setting to `true` would have refused every one of these merges until re-synced,
+  catching the break before main, not after. Recommended to the owner, not actioned — a repo-settings
+  change is his call.
+- THE EMGEEBOT BOT KEY IS ABSENT AS A WHOLE DIRECTORY, NOT A MISSING FILE: `~/.config/jimbot-oakington-
+  iii/` does not exist on this machine at all (confirmed with `ls`, not just a failed mint). The only
+  trace the app was ever used here is a cached GitHub avatar icon inside VS Code's own extension
+  storage — proving the App (ID `4352989`) is real and configured correctly elsewhere, and this machine
+  specifically was never provisioned. `docs/engineering/merge-bot.md` documents that the `.pem` is a
+  per-machine secret, generated once from GitHub's App settings and copied by hand — it deliberately
+  never lives in the repo and never syncs. Every write this tenure made (pushes, PR comments, reviews)
+  fell back to the operator's own `mantagen` credential, disclosed each time. Fix is two commands
+  (mkdir + place the `.pem` + chmod 600), either from an existing copy or a freshly generated key —
+  generating fresh does not invalidate any other machine's copy.
+- OAK-COMPONENTS ICONS ARE BAKED-FILL SVGs SERVED FROM CLOUDINARY, NOT INLINE/currentColor: `OakIcon`
+  wraps `OakImage`, which renders an `<img src=cloudinary-url>`, not inline SVG markup — so an icon's
+  colour cannot be changed with ordinary CSS `color`/`fill`. The design system's own cure is a CSS
+  `filter:` recipe keyed by UI-role token (`$colorFilter="text-inverted"` etc, resolved via
+  `oakColorFilterTokens` in `styles/theme/color.js` — each entry is a hand-tuned `invert()/sepia()/hue-
+  rotate()` chain calibrated to turn a specific baked colour into a specific target colour). Found by
+  reading the compiled `dist/npm/es` source directly (no raw SVGs exist in the installed package to
+  grep), not by guessing from the component's public API surface. Confirmed a real defect this way
+  (the "ai" icon's fill is hardcoded `#222222`, invisible on `bg-inverted`) and the fix (`$colorFilter`)
+  with a live before/after Playwright capture, not just code reading.
+- `sonar.cpd.exclusions` IS THE RIGHT LEVER FOR "THIS DUPLICATION IS INTENTIONAL, DON'T FLAG IT" — AND
+  THIS REPO (OWA) ALREADY HAS THE EXACT PRECEDENT: before reaching for a refactor or a NOSONAR comment,
+  check `sonar-project.properties` — OWA's already carries a `cpd.exclusions` entry with its own
+  hand-written reason comment for a different case (`src/pages/pupils/**/lessons/**`, "same UI/UX
+  across canonical, browse, preview, and shared-variant routes"). Adding a new entry with a one-line
+  reason, in the same comment block, is the established mechanism — not a new pattern, not a
+  workaround. Used at the owner's explicit word ("if it's copy that will soon migrate to Sanity, I'd
+  rather override it") rather than unilaterally.

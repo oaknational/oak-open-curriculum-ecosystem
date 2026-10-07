@@ -262,7 +262,292 @@ first-hand as of 2026-06-25.
 
 ## CURRENT HANDOFF STATE
 
-> # §SEAT LIVE — Kestrel weaves Downdraft (`24c921`, claude-opus-5), took the seat from cold 2026-09-13
+> # §SEAT LIVE — Skylark turns Flight (`d67362`, claude-sonnet-5), took the seat cold 2026-09-22 at owner word
+>
+> **Readiness gate, mechanically checked before claiming:** `claims active-agents` shows zero fresh
+> rows — only two stale historical claims (Kestrel weaves Downdraft `c70f8b64`, stale since 2026-09-14;
+> Peregrine hunts Bluff `89afb998`, stale since 2026-09-16). Herring seeks Harbour's own claim
+> (`bcd6c8bc`) is already closed, exactly as its wind-down block below says. Genuine solo takeover,
+> confirmed rather than assumed. Opened claim `b6a19d8a-6694-4f59-866c-b7817c3af16c` on
+> `estate-coordination`, role director; broadcast the Moment-2 acknowledgement (`e093eec2`).
+>
+> **Heartbeat: suspended under the PDR-078 §4 / `liveness-heartbeat-cron.md` consumer-absent
+> exemption** — the same mechanical check that grounds the takeover also shows no consuming peer on
+> the registry. Will arm the moment a peer appears. **Comms watcher: not stood up as a standing
+> background process this tenure** — a judgement call, not a silent narrowing: the platform's Monitor
+> primitive here hard-caps at 30 minutes (no true `persistent: true` shape available), and the same
+> zero-peer registry state that grounds the heartbeat exemption means there is currently no
+> awareness consumer either. Checking the comms stream and registry manually at each return to the
+> seat and before any authority action, rather than re-arming a 30-minute watcher on a loop for no
+> live audience. Re-arm properly the moment a peer's claim appears.
+>
+> **Picked up carrying two threads, not yet worked in depth this session:**
+>
+> 1. Everything in Herring's wind-down block immediately below — still fully current, nothing in it
+>    has been actioned yet by this seat. Read it as the live pickup list, not history.
+> 2. **New owner-directed work, outside the residue list**: MG asked directly (not via this file) to
+>    take ownership of `oaknational/Oak-Web-Application` PR #4459 (Linear MCP-596 — the OWA nav
+>    dropdown item Herring's block below names as "no owner, no lane"). Dispatched a general-purpose
+>    agent into a fresh worktree (sibling checkout `owa-mcp-596-ai-experiments-nav`, branch
+>    `feat/add-ai-experiments-to-owa-nav`, same-repo not a fork) to merge in `main`, resolve the
+>    conflicts, fix a confirmed real drift (the PR still targets a `/mcp` route; the landing page it
+>    depends on shipped at `/ai-plugin` instead back in early September), run the full quality gate,
+>    and push — not to merge it itself. Result not yet back at this write.
+>
+> ---
+>
+> # §SUPERSEDED HISTORY — Herring seeks Harbour (`75bb85`), seat held 2026-09-16 to 2026-09-22 (wind-down block)
+>
+> ---
+>
+> # §SEAT WOUND DOWN AT OWNER WORD, 2026-09-22 (Herring seeks Harbour, `75bb85`, claude-opus-5)
+>
+> **No successor pre-positioned — this is a cold handoff, same as this seat's own start.** Owner word,
+> verbatim: _"do a wrap up the session so that I can start a new director in a new seat."_ No live claim
+> to hand to; whoever reads this next takes the seat from cold via _How to take the Director seat_ above.
+> This seat never ran a heartbeat (PDR-117: no audience for one — no peer agents were live at any point
+> in this six-day tenure), so the readiness gate's mechanical liveness check will correctly show nothing
+> fresh. My own claim (`bcd6c8bc-8a7a-4061-b4c3-49df17e14b24`, thread `estate-coordination`) is closed at
+> this wind-down.
+>
+> ## What this seat actually did (2026-09-16 → 2026-09-22, six sessions of live work)
+>
+> **Cleared the inherited queue.** At take-over, ~18 PRs on `oak-open-curriculum-ecosystem` referencing
+> Linear tickets were open, several stale 30-40+ days. Triaged and closed four as genuinely dead —
+> **#913, #932, #936** (referenced tickets already Done, no leaf ticket of their own, unaddressed
+> CHANGES_REQUESTED that would never get answered) and **#921** (a one-time-cutover runbook for a
+> migration that already happened months ago). Landed the rest: **#928, #935, #972, #975, #976** merged
+> by the owner directly on 2026-09-16-17 following this seat's triage table; **#925, #983, #923, #926**
+> made genuinely mergeable (real conflicts resolved, not just rebased) by dispatched agents and then
+> merged; **#987** — a same-day emergency fix this seat authored itself — merged.
+>
+> **Two production-class bugs caught mid-flow, neither would have been caught by CI:**
+>
+> 1. **Main was silently broken** for ~20 hours (2026-09-16 evening → 2026-09-17 morning). #972 merged
+>    on top of #928 (a landing-page teardown) with **zero textual git conflict** but a real
+>    `pnpm type-check` break — #928 deleted `getLandingPageHtml` from `CreateAppOptions`, #972's own test
+>    still referenced it, and neither branch touched the other's files so git never flagged it. Root
+>    cause traced precisely: this repo's branch protection has `strict_required_status_checks_policy:
+>    false` — a stale-but-green PR can merge without GitHub forcing an "Update branch" + re-run first.
+>    **That setting is still `false`.** Recommend flipping it to `true`; I raised it, did not action it
+>    unilaterally. Fixed via #987 (merged). The identical break then recurred on **#761, #772, #925,
+>    #983, #926** as each was merged with main in turn (same root cause, same fix each time) — this is
+>    now a known, well-understood class, not a mystery, but it will keep recurring on every stale branch
+>    until the setting changes or the remaining stale branches (#761, #772, #867, and any successor to
+>    #923) are synced.
+> 2. **#983's own code had an independent, unrelated break**, invisible to git and only caught by
+>    `pnpm build`: it imported a constant that a _different_ intervening commit had made module-private
+>    after its only prior reader (the landing page) was removed. Fixed in the same pass.
+>
+> **One real gap found and homed, illustrating a lesson worth carrying forward.** Peregrine hunts Bluff
+> (the seat before Kestrel, before this one) verified a real defect on 2026-09-14 — `oak-search-cli` test
+> files silently lost two lint bans via the same override-by-replacement class #978 fixed twice — and
+> explicitly warned in its own comms event that the finding "will be lost when that branch merges unless
+> it is homed now." **It merged, and nothing homed it.** This seat re-verified the finding first-hand on
+> merged main (control probe: 1 selector resolved vs 4 on a sibling) and conserved it in the napkin
+> — **still not a Linear ticket**, deliberately (tickets mint at owner word, per the 2026-08-31 ruling).
+> **The lesson: "routed to the owner" is not a home** — a finding awaiting an owner decision still needs
+> a durable repo home the moment it is routed, because the routing seat may not reach its own closeout.
+>
+> **A second real bug caught the same way, and this time ticketed**: PR #935 (MCP-651) landed a code
+> comment describing a genuine tokeniser bypass (a disallowed URL glued directly onto an allowed one,
+> with no separating character, slips the served-content URL allowlist) with no ticket behind it. Minted
+> **MCP-752** and linked it bidirectionally to the merged PR, specifically so it doesn't repeat the
+> Peregrine-finding loss above.
+>
+> **Two GitHub reviews and one code fix in the sibling `Oak-Web-Application` repo**, at owner request:
+>
+> - **PR #4536** (`/ai-plugin` copy update) — driven end to end from a Figma reference the owner linked.
+>   Rendered the Figma node as an image and actually looked at it (not just extracted text) before
+>   building; found and fixed the live rebuild's copy/structure against it via a real dev-server-blocked
+>   workaround (this checkout's `pnpm dev` needs live Sanity/1Password secrets neither of us has here —
+>   used the repo's own existing Storybook story for the same view instead, a legitimate isolated render,
+>   not a mock). **A genuine SonarQube finding** (28.6% new-code duplication) was confirmed real by
+>   reading the flagged code, then excluded via `sonar.cpd.exclusions` at the owner's explicit word
+>   ("if it's copy that will soon migrate to Sanity, I'd rather override it") — using the exact
+>   precedent already in that file's own comment block, not a new mechanism. **A live UI bug the owner
+>   spotted by eye** (the ChatGPT tile's sparkle icon invisible on Chrome) was root-caused to the shared
+>   icon SVG's hardcoded `#222222` fill (not `currentColor`) disappearing against the tile's dark
+>   `bg-inverted` background, and fixed with `OakIcon`'s own `$colorFilter="text-inverted"` prop — a
+>   mechanism the design system already ships for exactly this, found by reading `oak-components`'
+>   compiled source rather than guessing. Verified with real before/after Playwright screenshots both
+>   times, not just code review — the earlier of the two PR passes had skipped that and was caught by
+>   this seat re-checking its own dispatched agent's report against the actual subagent transcript.
+> - Reviews posted on `oak-open-curriculum-ecosystem` **#986, #982, #925, #990** (code-quality, concise,
+>   calibrated against the owner's own tone) — all found genuinely clean or with only minor non-blocking
+>   notes; none needed changes.
+>
+> ## A correction caught only at wind-down — read this before repeating the mistake it names
+>
+> **The claim "every write this tenure made had to fall back to `mantagen`" is FALSE, and this seat only
+> found that out at its own wrap.** The SHARED `jimbot-oakington-iii` bot key
+> (`~/.config/jimbot-oakington-iii/private-key.pem`, App ID `4352989`, `.github/merge-bot.json`) is
+> genuinely absent on this machine — confirmed the whole directory doesn't exist, not just the file. But
+> this seat's **own persistent per-user memory already documented a second, working, PERSONAL bot
+> credential** (`emgeebot-oakenfold[bot]`, a DIFFERENT GitHub App, App ID `4482842`,
+> `~/.config/emgeebot-oakenfold/private-key.pem`) — and this seat never checked its own memory for it,
+> so every write this tenure made on `oak-open-curriculum-ecosystem` (PR closes, comments, reviews,
+> pushes) landed under `mantagen` when most of them could have gone under emgeebot instead. **Verified
+> working at this wrap**: `pnpm agent-tools merge-bot mint-token --scope pull-request-work --app-id
+> 4482842 --private-key-path ~/.config/emgeebot-oakenfold/private-key.pem --repo
+> oaknational/oak-open-curriculum-ecosystem` mints a real token, and a live test comment on #761
+> (`issuecomment-5777555493`) posted and verified as `emgeebot-oakenfold[bot]`, type `Bot`.
+>
+> **Scope of the miss, checked precisely rather than assumed**: this personal app is installed on
+> `oak-open-curriculum-ecosystem` only — confirmed by testing the same mint against `Oak-Web-Application`
+> and getting an empty token. So the `Oak-Web-Application` writes this tenure made (PR #4536, its Sonar
+> exclusion, its icon fix) had no bot alternative and `mantagen` was genuinely the only option there —
+> that part stands uncorrected because there is nothing to correct. The miss is scoped to this repo.
+>
+> **Not retroactively re-authored**: dozens of already-merged/closed PR comments and reviews on this
+> repo carry `mantagen` where they could have carried `emgeebot-oakenfold[bot]`. Re-doing that history
+> now would be pure identity tidiness on closed work, not a functional fix — left as-is; the correction
+> is for what happens next, not what already landed. **The shared jimbot key gap is still real and still
+> the owner's to fix** (two-option fix given directly to him, App ID `4352989`, not yet actioned) — this
+> correction adds a second, working, narrower-scope option for this repo specifically, it does not
+> replace the jimbot fix.
+>
+> The mistake itself is now the Nth instance of a class this seat's own memory file already tracks and
+> names explicitly: _"an index entry that leads with an absence propagates as a blocker."_ Recorded as a
+> fresh instance there too, so the next seat inherits the corrected framing rather than repeating this
+> one.
+>
+> ## Genuinely open, not this seat's to close
+>
+> - **MCP-665** (Urgent) — Cloudflare WAF blocks curriculum lessons _about_ SQL injection/path traversal
+>   at the edge, live in production today. Needs someone with Cloudflare dashboard access to name the
+>   exact rule from 5 named ray IDs in the ticket — about a minute of work, owner-only.
+> - **MCP-614 / MCP-597** (both Urgent) — the production-monitoring pair. **In flux at this exact
+>   wind-down**: the owner just reported ("ps i've set up the uptime alerting") setting up monitoring
+>   himself, mid-wrap, but did not yet confirm which provider or whether a check-history window has
+>   elapsed — MCP-597's own acceptance criteria explicitly warns "enabling is not evidence" (the
+>   original defect was a monitor reading `disabled`-but-`ok` for a week). **Do not close either ticket
+>   on the strength of this note alone — verify the provider and a real non-empty check history
+>   first-hand before marking Done.**
+> - **MCP-517** (Urgent, In Review) — root cause confirmed structurally gone (the host it depended on was
+>   deleted weeks ago). Nothing to fix; just needs someone to close it. Sitting un-closed since the
+>   2026-09-03 re-scope.
+> - **PR #761 / #772** (MCP-143 Clerk guards) — mechanically merge-clean now, but #761 carries three
+>   genuinely unaddressed CHANGES_REQUESTED findings that are real security/design calls (production-
+>   detection independence, preview claiming prod OAuth identity, a wrongly-framed e2e assertion) — not
+>   mechanical work, needs a security-literate decision.
+> - **MCP-596** (High) — the OWA nav-dropdown launch item has no owner and no lane in a repo this project
+>   doesn't touch. Still genuinely open per the ticket's own text.
+> - **MCP-480 / PR #969** — real failing CI (`browser-tests`, `run-quality-gates`), untouched 2+ weeks.
+>   Straightforward engineering, not yet picked up.
+> - **Four probe-created OAuth clients live in production Clerk** (`client_name:
+>   probe-mcp674-recheck`, `client_secret_expires_at: 0`) — carried undischarged across at least three
+>   prior Director tenures now. No Clerk CLI or secret key exists on this machine to even attempt it;
+>   genuinely owner-only.
+> - **Two expired plan owner-decision gates** (`design-system-completion`, `external-skills-library-
+>   review-framework`) — the session-start hook will keep reporting these every session until renewed,
+>   resolved, or archived.
+>
+> ## Live state at wind-down
+>
+> No other agent claim exists on `active-claims.json` as of this write. The primary checkout carries
+> **three uncommitted files** — this refresh, a napkin append, and (about to be added) a
+> `repo-continuity.md` refresh — deliberately uncommitted per this brief's own rule against a dedicated
+> handover commit or PR; they ride the next substantive commit. They are fully merged-into-main at the
+> base (this branch's own commits are already an ancestor of `origin/main`), so applying them is a clean
+> two/three-file add with no conflict risk. `git status` on the primary checkout surfaces them
+> immediately to whoever opens this repo next.
+
+---
+
+> # §SUPERSEDED HISTORY — Herring seeks Harbour (`75bb85`), seat held 2026-09-16 to 2026-09-22 (pickup-narrative block)
+
+---
+
+> # §SEAT LIVE — Herring seeks Harbour (`75bb85`, claude-opus-5), took the seat from cold 2026-09-16 ~13:4xZ
+>
+> **Taken at owner word** ("pick up where last director left off … it was interrupted"). Claim
+> `estate-coordination`, role `director`, opened 13:43:27Z. Comms watcher armed as move 1 and
+> confirmed with `assert-watcher-live` before the claim, per the standing rule.
+>
+> ## Read this before Kestrel's block below — TWO seats sat between it and this one
+>
+> Kestrel's block below is marked §SUPERSEDED HISTORY by this seat; it said §SEAT LIVE until now, and
+> two Directors sat after it wrote that. Kestrel stood down explicitly on
+> 2026-09-14 (Moment 1, `5025b402`) naming **Peregrine hunts Bluff** (`55d88c`) successor, which took
+> the seat at 10:18:46Z (Moment 2, `b49662a7`). **Peregrine never refreshed this section and never
+> wrote a napkin entry** — it was interrupted. Treat Kestrel's block as history, not state.
+>
+> ## How this seat established Peregrine was gone, stated so it is reusable
+>
+> The registry said `stale` for both seats — but Kestrel's own recorded lesson is that a registry row
+> cannot distinguish "recently written" from "currently held", in EITHER direction. What settled it
+> was the **process table plus the comms stream, read together**:
+>
+> - `claims active-agents --now <utc>`: Peregrine's claim `89afb998` `stale`, `fresh_until`
+>   `2026-09-16T00:57:36Z`; Kestrel's `c70f8b64` `stale` since 2026-09-14.
+> - The only `claude` process on the host was this session's own supervisor, 78090, 71 seconds old —
+>   resolved from the shell's **ppid chain**, never off a `ps` listing (Kestrel's supervisor-pid
+>   lesson, which cost it a watcher armed against an unrelated session).
+> - Peregrine's last heartbeat: `2026-09-15T20:57:46Z`, then nothing. A seat that stops mid-cadence
+>   with no Moment 1 was interrupted; a seat that stands down says so.
+>
+> ## Peregrine's lane: COMPLETE, and this is the good news
+>
+> **The owner's named task discharged before the interruption.** The PR #978 review of record was
+> posted as `emgeebot-oakenfold[bot]` at 2026-09-14T10:31:25Z; an implementer (Ketch turns Trench)
+> answered the Copilot findings through 14:10Z; **#978 merged at 16:05Z and shipped in v1.181.2.**
+> Peregrine's widget-address finding (`9d5e6de2` — a retired address answers with an auth challenge,
+> not a not-found, so the PR's "reconnect fixes it" note was wrong on the half users try first) was
+> absorbed into the PR before merge: see `2c5640cf8` and `24a3ad8ef`. Nothing is owed on #978.
+>
+> **The bottleneck Peregrine named to the owner also moved.** It reported twelve PRs green,
+> thread-clean and blocked solely on a code-owner approval. The owner merged five of them himself on
+> 2026-09-14 at 16:29–16:30Z — #931, #934, #947, #955, #963.
+>
+> ## What was genuinely lost, and is now recovered
+>
+> Peregrine's SECOND verified finding (`39c4d2fa`) was homed nowhere. It warned the finding "will be
+> lost when that branch merges unless it is homed now"; #978 merged that afternoon and nothing homed
+> it — not a napkin entry, not a frictions-register row, not a Linear ticket. **This seat re-measured
+> it first-hand on merged main with a control and conserved it in the napkin** (2026-09-16 entry):
+> `oak-search-cli` test files resolve ONE `no-restricted-syntax` selector where a sibling control
+> resolves FOUR, so the `process.cwd` hermeticity ban and the non-literal-port ban are silently
+> absent there. Third instance of the override-by-replacement class. Not minted as a ticket — tickets
+> are minted at owner word — and Linear was searched first; nothing covers it.
+>
+> **The transferable lesson: "routed to the owner" is not a home.** Peregrine did everything right at
+> the moment of discovery and the finding still evaporated, because its only record was a comms event
+> and the seat died before its next boundary. Park a finding on an owner decision AND give it a
+> durable repo home in the same move.
+>
+> ## Owner-gated, carried, NOT discharged — unchanged since Kestrel, and now ~2 weeks old
+>
+> - **Four probe-created OAuth clients are live in the production Clerk IdP**, each with
+>   `client_secret_expires_at: 0`. Find by `client_name: "probe-mcp674-recheck"`. **This seat tried
+>   the read rather than re-filing the task** — there is no `clerk` CLI on this host and no
+>   `CLERK_SECRET_KEY` in the local env, so it is genuinely not verifiable from inside the repo and
+>   genuinely needs the owner. Still the highest-priority residue.
+> - **The codeql-action pair** is committed-ready in `oak-codeql-action-4-37-9-pair` (`2875e65d4`,
+>   tag `v4.37.9` → `cdf488f5…`). Needs a leaf ticket and overrides the "Dependabot owns
+>   github-actions bumps" doctrine, because Dependabot's split can never go green. **Live and
+>   pressing: #979 and #981 are that split, open right now.** Put to the owner twice; unanswered.
+> - **The one-implementer-at-a-time ruling (3 Sep)** — unanswered across three seats. Both Kestrel
+>   and Peregrine stayed serial in its absence, with ~10 disjoint lanes waiting.
+> - **Two expired plan owner-decision gates** — `design-system-completion` (expired 2026-09-07) and
+>   `external-skills-library-review-framework` (expired 2026-09-06). The session-start hook reports
+>   them every session and will keep doing so until the rows change.
+>
+> ## Live state at handoff
+>
+> - **No other agent is live.** No competing claim, no live process, no heartbeat but this seat's.
+> - **Humans are working the repo right now** — Luke Arnold has #985, #984, #982, #968, #895 open and
+>   was moving MCP tickets today. Route around that lane, never through it.
+> - **#983** (MCP-734 agent-discovery Link header) is Peregrine's last lane: pushed, clean, 1 ahead
+>   of main and 0 behind, every check green except a duplicated CodeQL run, `mergeable_state=blocked`
+>   on code-owner approval. It is the one piece of its work still in flight.
+> - Working tree clean at seat-take; the current branch `docs/one-pr-per-leaf-issue` **is already
+>   merged** (#955), so it is not a place to land new commits. The napkin entry above is written
+>   locally and batches into the next substantive PR, per this brief's handover-artefact rule.
+
+---
+
+> # §SUPERSEDED HISTORY — Kestrel weaves Downdraft (`24c921`), seat held 2026-09-13 to 2026-09-14
 >
 > **Two Directors sat between Civet's block below and this one without refreshing this section.**
 > Mackerel rides Brine (`529615`) recorded its tenure only in comms (`1feda95d`); Sloop spins

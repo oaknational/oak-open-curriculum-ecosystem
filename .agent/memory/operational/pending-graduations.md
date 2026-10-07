@@ -116,6 +116,21 @@ debt register, 2026-07-08).
 
 <!-- New pending-graduation capture appends below as inline-bracket entries. -->
 
+- **A green, textually-clean merge is not proof of a correct result when branch protection allows a stale merge**
+  `[captured: 2026-09-22 |
+  source: napkin 2026-09-22 Herring seeks Harbour entry, six recurrences in one repo in one week
+  (#972-on-#928, then #761/#772/#925/#983/#926 repeating identically) |
+  target: pattern (candidate name: stale-merge-silent-break) |
+  trigger: a second, distinct repo hitting the same class after this repo's own
+  strict_required_status_checks_policy:false root cause is fixed or documented, OR a curator judging
+  the six same-repo recurrences already sufficient |
+  size: small — one pattern file naming the mechanism (two branches independently touch a
+  since-removed/changed API, neither touches the other's files, so git reports zero conflict; the
+  merge result is broken only at build/type-check, never at the git layer) and the two structural
+  cures (require re-sync before merge; or full build/type-check the merge result before trusting
+  "clean") |
+  status: pending]`
+
 <!-- Register drained to empty at the 2026-08-14 dedicated consolidation (Quasar
 wakes Nadir, the fresh directive-headroom seat all five rows were gated on):
 ends-before-means graduated to principles.md §Ends Before Means, Front of Chain

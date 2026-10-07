@@ -182,7 +182,10 @@ first principles (see "How to use this framework").
 
 ### B3. Compliance & legal (several statutory)
 
-- **Concern (target-grounded).** UK GDPR + **DPIA** (Clerk + PostHog + Sentry);
+- **Concern (target-grounded).** UK GDPR + **DPIA updates, per provider** (Oak does DPIAs
+  per third-party SaaS, not one cross-provider document — Clerk's own DPIA needs an update
+  for its new OAuth-authorisation-server-for-MCP role; PostHog's and Sentry's own DPIAs may
+  separately need their MCP-specific flows added);
   **DSAR/deletion runbook**; processor agreements; **ICO Children's Code**
   (assume in-scope per the three structural facts); **public-sector
   accessibility duties** (WCAG 2.1 AA + accessibility statement by law; Oak's

@@ -641,6 +641,7 @@ freeze-2 map remains the work queue; item (a) is at the push/PR stage.
 | claude-code | claude-fable-5 | c28ad9 | Ocelot binds Tunnel | Director — adopted b1d00d68 at Moment 2 `a91c1177` | 2026-08-17 | 2026-08-17 |
 | claude-code | claude-fable-5-1 | 661556 | Chinook seeks Cloud | implementer, lead at n=2 — MCP-673 corpus truing: PR A (#959, owner-word amendments) and PR B (factual true-ups), claim ed9ec042 | 2026-09-03 | 2026-09-03 |
 | claude-code | claude-fable-5-1 | 9e26e6 | Vesta rides Solstice | second seat at n=2 (Chinook seeks Cloud 661556 leads) — MCP-673 corpus truing; boundary set by the lead | 2026-09-03 | 2026-09-03 |
+| claude-code | claude-opus-5 | 75bb85 | Herring seeks Harbour | Director — took the seat cold at owner word after Peregrine hunts Bluff (55d88c) was interrupted; full tenure detail on `director-handoff.md`'s CURRENT HANDOFF STATE, this row is the identity pointer only | 2026-09-16 | 2026-09-22 |
 
 ## 2026-08-17 ~20:0xZ — OVERNIGHT STAND-DOWN (Ocelot binds Tunnel, c28ad9): both lanes down clean; Director down last at owner word
 
@@ -1451,3 +1452,17 @@ direct owner word (no Director seated; the week-sleep ended at owner word 2026-0
   checkout still on the merged #959 branch; the local branch
   `jimcresswell/mcp-673-adr-oak-product-extraction` left in place (a peer's surface; the owner
   refused its removal by the lead).
+
+## 2026-09-22 — WRAP at owner word (Herring seeks Harbour, `75bb85`): seat wound down cold, no successor pre-positioned
+
+Six sessions of live Director work (2026-09-16 → 2026-09-22): cleared an inherited ~18-PR queue on
+`oak-open-curriculum-ecosystem` (4 closed as dead, ~10 landed), caught and fixed two production-class
+bugs neither would have been caught by CI (a `strict_required_status_checks_policy: false`-enabled
+silent main breakage, and an independent module-privacy break on #983), homed one real orphaned finding
+(the `oak-search-cli` lint-ban loss) and one new one (MCP-752, a served-content URL-allowlist tokeniser
+bypass), and did two GitHub reviews plus one Figma-driven copy PR with a real UI-bug fix in the sibling
+`Oak-Web-Application` repo. Full detail, the still-open items, and the persistent emgeebot-key
+environment gap are all on `director-handoff.md`'s CURRENT HANDOFF STATE — that is the pickup surface,
+this entry is the pointer. Claim `bcd6c8bc-8a7a-4061-b4c3-49df17e14b24` closed at this wind-down. Owner
+word verbatim: "do a wrap up the session so that I can start a new director in a new seat" — cold
+handoff, same shape as this seat's own start.
