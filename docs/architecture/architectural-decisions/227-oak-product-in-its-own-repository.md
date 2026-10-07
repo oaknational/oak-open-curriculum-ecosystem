@@ -4,7 +4,16 @@
   the numbered list of the pull request that landed it, item 1). This record
   carries rulings the owner gave on 2026-09-02 and 2026-09-03, quoted in full
   below. Nothing in it is validated by a built consumer yet — see
-  §Consequences, validation maturity.
+  §Consequences, validation maturity. **Amended 2026-10-07 (pending
+  ratification):**
+  [ADR-231](231-five-repository-topology-product-search-plugins-skills.md),
+  Proposed, would supersede ruling 1 (the search instance no longer shares
+  this repository's name or repository — it would become `oak-semantic-search`,
+  a sibling repository with its own consumers) and amend ruling 6 (agent
+  tooling would gain a second, cross-repository home, `oak-engineering-skills`,
+  alongside staying available here). The repository name this ADR fixed,
+  `oak-open-curriculum-mcp`, is unaffected either way — ADR-231 narrows its
+  contents, not its identity.
 - **Date:** 2026-09-03
 - **Related:** [ADR-041](041-workspace-structure-option-a.md) — the workspace
   tiers of this repository, which stay for everything that remains;

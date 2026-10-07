@@ -44,6 +44,14 @@ the decision recorded in [ADR-227](../architecture/architectural-decisions/227-o
 estate (`.agent/plans/`, its index the entry point) carries the lane whose delivery order puts
 the extraction first._
 
+_Amended 2026-10-07: the repository shape above is superseded in part by
+[ADR-231](../architecture/architectural-decisions/231-five-repository-topology-product-search-plugins-skills.md),
+an owner-directed five-repository topology. `oak-open-curriculum-mcp` narrows to the MCP
+server alone; search splits out as its own repository, `oak-semantic-search`, shared with
+OWA, the API, and Aila; and the AI-assistant plugin bundle's permanent home is the public
+`oaknational/oak-ai-plugins` repository, created ahead of this extraction. The current
+first priority for structural work is unchanged; the target shape it builds toward is not._
+
 | Read                                                                           | For                                                                                                                |
 | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
 | [Diagnosis](diagnosis.md)                                                      | the central challenge, and the edge each stream faces                                                              |

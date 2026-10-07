@@ -33,6 +33,14 @@ teacher's choice of platform, so support extends to any popular assistant, even-
 > delivered from that repository as thin workspaces over published packages; this repository
 > delivers the platform beneath it — the toolkit and Oak's organisation-wide packs — and the
 > app itself until cut-over. The stream's bets and keystones are unchanged._
+>
+> _Amended 2026-10-07: the two-repository shape above is superseded in part by
+> [ADR-231](../architecture/architectural-decisions/231-five-repository-topology-product-search-plugins-skills.md),
+> an owner-directed five-repository topology. The MCP app's search instance splits out as
+> its own repository, `oak-semantic-search`, shared with OWA, the API, and Aila; the
+> AI-assistant plugin bundle's permanent home is the public `oaknational/oak-ai-plugins`
+> repository, created ahead of this extraction. `oak-open-curriculum-mcp` keeps its name,
+> narrowed to the MCP server itself. The stream's bets and keystones are unchanged._
 
 ## How we win
 

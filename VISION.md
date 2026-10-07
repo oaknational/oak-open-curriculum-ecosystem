@@ -57,6 +57,15 @@ assistant is the teacher's choice, not ours.
 > delivers the platform beneath it — the toolkit and Oak's organisation-wide packs — and the
 > app itself until cut-over. The vision is unchanged; only where the app is built from
 > changes._
+>
+> _Amended 2026-10-07: the two-repository shape above is superseded in part by
+> [ADR-231](docs/architecture/architectural-decisions/231-five-repository-topology-product-search-plugins-skills.md),
+> an owner-directed five-repository topology. The MCP app's search instance splits out
+> as its own repository, `oak-semantic-search`, shared with OWA, the API, and Aila; the
+> AI-assistant plugin bundle's permanent home is the public `oaknational/oak-ai-plugins`
+> repository, created ahead of this extraction. `oak-open-curriculum-mcp` keeps its name,
+> narrowed to the MCP server itself. The vision is unchanged; only where the pieces are
+> built from changes further._
 
 What comes back is grounded in Oak's sequenced, evidence-informed curriculum, not
 ungrounded invention. We inform the teacher's expert judgement; we never replace

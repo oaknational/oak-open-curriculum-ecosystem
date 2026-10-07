@@ -3,7 +3,7 @@ boundary: B2-Architecture
 doc_role: index
 authority: adr-navigation
 status: active
-last_reviewed: 2026-08-30
+last_reviewed: 2026-10-07
 ---
 
 # Architectural Decision Records
@@ -26,6 +26,11 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 3. [ADR-031](031-generation-time-extraction.md) — Generation-time extraction
 4. [ADR-048](048-shared-parse-schema-helper.md) — Shared parsing helper pattern
 5. [ADR-107](107-deterministic-sdk-nl-in-mcp-boundary.md) — Deterministic SDK / NL-in-MCP boundary
+
+Wondering which repository a given piece of work actually belongs in? This
+repository is mid-split into five: see [ADR-227](227-oak-product-in-its-own-repository.md)
+and [ADR-231](231-five-repository-topology-product-search-plugins-skills.md)
+for where things live and where they're moving to.
 
 ## Index
 
@@ -486,7 +491,9 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   (Accepted 2026-09-03; records the owner's rulings of 2026-09-02 and 2026-09-03 verbatim: two repositories with
   published `@oaknational` packages as the one boundary; a per-box cut, never a move of today's
   workspaces; a junior-developer product repository; one version per repository for now; the
-  extraction before the estate-wide seam migration)
+  extraction before the estate-wide seam migration) ← **Amended by [ADR-231](231-five-repository-topology-product-search-plugins-skills.md)**
+  (ruling 1 superseded — search is a sibling repository, not bundled; ruling 6 amended — a second,
+  cross-repository agent-tooling home added)
 - [ADR-229: The MCP app stays a legacy-era `2025-11-25` server until the SDK v2 package family is adopted](229-mcp-protocol-revision-legacy-era-until-sdk-v2.md)
   ← **Proposed** (2026-09-09; the revision posture MCP-644 asked to have scoped: `2026-07-28` is current
   and makes `server/discover` mandatory for modern-era servers, but `@modelcontextprotocol/sdk@1.x`
@@ -499,6 +506,22 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   `Origin` MUST the other way: ADR-122's compensating auth-layer Host check does not run when
   `CANONICAL_HOST` is set, as it is in production, so MCP-650 is an amendment to ADR-122 rather
   than a fresh gap. ADR-229 states the conflict and does not settle it)
+- [ADR-230: One Canonical Source for Curriculum-Assistance Skills, Sub-Agents, and Plugins Across Repositories](230-curriculum-capability-canonical-source-across-repos.md)
+  (Proposed 2026-09-22; `oak-skills` stays the canonical private authoring source for the curriculum-assistance
+  corpus, this repository becomes a generated consumer rather than a hand-copier, sub-agents become a
+  first-class generated artefact type, and six generation targets are named across ChatGPT, Claude,
+  Gemini, and Microsoft 365 Copilot; ratification is conditioned on three named dependencies — the
+  product-surface question, the stakeholder-lifecycle model, and whether eval needs co-located content)
+  ← **Amended by [ADR-231](231-five-repository-topology-product-search-plugins-skills.md)**
+  (Decision item 4 superseded — the plugin bundle's permanent home is `oak-ai-plugins`, not
+  `oak-open-curriculum-mcp`)
+- [ADR-231: Five Independent Repositories — Product, Search, Plugins, and Skills Each Stand Alone](231-five-repository-topology-product-search-plugins-skills.md)
+  (Proposed 2026-10-07; owner-directed five-repository topology: `oak-open-curriculum-mcp` narrows to the
+  MCP server alone, `oak-semantic-search` splits off as a shared capability consumed by OWA/MCP/API/Aila,
+  `oak-ai-plugins` (public, already created) is the published-plugin repository with eval evidence on its
+  CI, a private skills-experimentation repository replaces any path to `oak-skills` going public, and
+  `oak-engineering-skills` (private) generalises agentic-engineering Practice standards beyond this
+  repository; supersedes ADR-227 ruling 1 and ADR-230 item 4, amends ADR-227 ruling 6)
 
 ## Key Architectural Decisions
 
