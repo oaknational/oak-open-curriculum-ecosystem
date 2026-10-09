@@ -5,6 +5,16 @@ ChatGPT/Codex package are cut from the same source at the same version.
 Each entry is dated when it is written; oaknational/oak-ai-plugins records
 the oak-open-curriculum-ecosystem release that shipped it.
 
+## 0.1.7 — 2026-10-09
+
+- The ChatGPT/Codex package declares the Oak National Academy MCP connection
+  in `.mcp.json`, referenced by its plugin manifest. The server identifier is
+  `oak-national-academy` and its URL is `https://mcp.thenational.academy/mcp`.
+- Packaging guidance follows OpenAI's current complete-plugin ZIP submission
+  format and describes authentication and imported-package desktop restrictions.
+- Removes the ChatGPT/Codex package configuration test suite. Functional
+  verification targets successful authenticated curriculum retrieval.
+
 ## 0.1.6 — 2026-10-01
 
 - The Claude plugin README says who the plugin is for and the DfE standards it

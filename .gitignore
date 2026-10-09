@@ -27,6 +27,7 @@ ONBOARDING.md
 .mcp.json
 # Plugin-shipped MCP configs are tracked release artefacts, not local config.
 !claude/plugins/*/.mcp.json
+!chatgpt/plugins/oak-national-academy/.mcp.json
 
 # Platform settings: project config is tracked, local overrides are not.
 # Project settings define the agentic system contract (skill permissions,
