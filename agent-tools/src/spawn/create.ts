@@ -46,6 +46,16 @@ const defaultRunGit: SpawnGitRunner = (args, cwd) => realGitRunner(args, cwd);
  * a Result (ADR-088) that names the branch, base, and path. Extracted from
  * {@link createSpawnWorktree} so the latter stays within the per-function line
  * budget while reading as validate → derive → detect → add.
+ *
+ * @remarks
+ * `--no-track` is load-bearing safety, not tidiness. The default base is a
+ * remote-tracking ref (`origin/main`), and `branch.autoSetupMerge` defaults to
+ * `true`, so `-b <branch> origin/main` silently marks `origin/main` as the new
+ * branch's upstream. A seat that then runs a bare `git push` — the ordinary
+ * habit — pushes its lane straight onto `main`. That has caught at least three
+ * seats across separate sessions (F-166); the only thing that ever stopped it
+ * was an individual seat noticing its own upstream. With no upstream set, the
+ * same bare push fails loud and asks for an explicit refspec instead.
  */
 function addSpawnWorktree(
   runGit: SpawnGitRunner,
@@ -53,7 +63,7 @@ function addSpawnWorktree(
   worktree: SpawnedWorktree,
 ): Result<SpawnedWorktree, Error> {
   const added = runGit(
-    ['worktree', 'add', worktree.worktreePath, '-b', worktree.branch, worktree.base],
+    ['worktree', 'add', '--no-track', worktree.worktreePath, '-b', worktree.branch, worktree.base],
     coordinationHome,
   );
   if (isErr(added)) {
