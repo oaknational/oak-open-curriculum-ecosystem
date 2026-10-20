@@ -25,6 +25,12 @@ This runbook provides step-by-step debugging workflows for the Oak Open Curricul
   resource (verified in production 2026-09-01; the earlier unrouted residue
   was tracked as MCP-347).
 
+The full deployed topology behind these endpoints — every hostname that
+answers, which of them Cloudflare fronts, what the edge does to each, and the
+services behind the app — is measured in
+[MCP Runtime Topology](../architecture/mcp-runtime-topology.md). The list above
+is the client-facing subset and the owner ruling that governs it.
+
 ## Overview of Observability Features
 
 The Oak MCP servers include comprehensive instrumentation for production debugging:
