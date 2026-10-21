@@ -85,6 +85,26 @@ describe('buildUnitFilters', () => {
     expect(filters).toContainEqual({ term: { subject_parent: 'science' } });
   });
 
+  it('includes years terms filter when year is provided', () => {
+    const filters = buildUnitFilters({
+      query: 'prayer',
+      year: '2',
+    });
+
+    expect(filters).toContainEqual({ terms: { years: ['2'] } });
+  });
+
+  it('filters by year alongside a key stage', () => {
+    const filters = buildUnitFilters({
+      query: 'fractions',
+      keyStage: 'ks2',
+      year: '3',
+    });
+
+    expect(filters).toContainEqual({ term: { key_stage: 'ks2' } });
+    expect(filters).toContainEqual({ terms: { years: ['3'] } });
+  });
+
   it('returns an empty filter list when no optional filters are provided', () => {
     const filters = buildUnitFilters({
       query: 'fractions',

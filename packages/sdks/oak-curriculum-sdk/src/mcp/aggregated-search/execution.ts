@@ -56,6 +56,7 @@ function buildUnitsParams(args: SearchSdkArgs): SearchUnitsParams {
     from: args.from,
     highlight: args.highlight,
     minLessons: args.minLessons,
+    year: args.year,
   };
 }
 

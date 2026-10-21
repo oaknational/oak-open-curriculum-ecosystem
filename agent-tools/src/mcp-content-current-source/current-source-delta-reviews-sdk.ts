@@ -97,10 +97,6 @@ export const SDK_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
     'fe40f12cc14212855bd131cc7a9687a7bbc3f9c8dff590a4242058005e5e8871',
     ['C233', 'C234', 'C235', 'C236', 'C237', 'C238', 'C239', 'C240', 'C241'],
   ),
-  'packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search/tool-definition.ts': reviewed(
-    'b2ee07ef1e5550084db0171499306ca06c5ab4bd04bff76a1e6e013ae0a5117b',
-    ['C065', 'C066', 'C067', 'C068'],
-  ),
   // Thread sequences in curriculum order (2026-09-03): the description
   // (C253), the detail-anchor field (C254), and the summary (C258) state
   // per-subject runs in Oak's curriculum order.
@@ -207,27 +203,6 @@ export const SDK_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
   'packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-fetch/flat-zod-schema.ts': reviewed(
     '5044b06ba31c104a3f1a76d43dc5d0ce5e5cb0c1a5b1e557017c9e2bdd8333c0',
     ['C160'],
-  ),
-  'packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search/flat-zod-schema.ts': reviewed(
-    '08abd4d8b30890ee797d2c67e0ae7ad092f27a4fe82b92c28457449af004e984',
-    [
-      'C069',
-      'C070',
-      'C071',
-      'C072',
-      'C073',
-      'C074',
-      'C075',
-      'C076',
-      'C077',
-      'C078',
-      'C079',
-      'C080',
-      'C081',
-      'C082',
-      'C083',
-      'C084',
-    ],
   ),
   'packages/sdks/oak-curriculum-sdk/src/mcp/test-helpers/advertised-examples.ts': excluded(
     '41be855cff939c4a7f95b36bdc2e3d1fecceecdb0a425b791d4d9af7da766d3a',

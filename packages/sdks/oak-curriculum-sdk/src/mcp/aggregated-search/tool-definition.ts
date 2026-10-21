@@ -54,6 +54,7 @@ NATURAL LANGUAGE MAPPING EXAMPLES:
 - "What maths threads are there?" → scope: 'threads', subject: 'maths' (no query needed — returns all maths threads sorted by size)
 - "Show me secondary science programmes" → scope: 'sequences', query: 'science', keyStage: 'ks3'
 - "Find lessons on the Romans for Year 3" → scope: 'lessons', query: 'Romans', year: '3'
+- "What units are there on prayer for Year 3?" → scope: 'units', query: 'prayer', year: '3' — then repeat with year: '2' and year: '4', because the unit a teacher can use is often pitched one year either side, including across a key stage boundary
 - "KS4 higher tier maths on trigonometry" → scope: 'lessons', query: 'trigonometry', keyStage: 'ks4', tier: 'higher'
 
 SCOPE LIMITATIONS:
