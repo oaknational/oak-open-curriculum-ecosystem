@@ -129,12 +129,12 @@ export const CURRENT_AGGREGATED_ITEM_ANCHOR_OVERRIDES = {
       "securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }] as const,",
     ],
   },
-  // MCP-462: the description's get-keywords references dropped "full" —
-  // the keywords endpoint is now server-paginated, so "full keyword set"
-  // was no longer accurate; this item re-pins on its unchanged opening line.
+  // Keyword definitions are lesson-authored (2026-09-13): the opening line now
+  // says each keyword carries the definitions its in-scope lessons authored,
+  // replacing the single corpus-wide description and keyword-level lessons.
   C222: {
     [KEYWORD_GRAPH]: [
-      'Returns the key vocabulary for one teaching context: a bounded, frequency-ranked page of curriculum keywords, each decorated with its in-scope placing lessons.',
+      'Returns the key vocabulary for one teaching context: a bounded, frequency-ranked page of curriculum keywords, each with the definitions its in-scope lessons authored.',
     ],
   },
   C223: {

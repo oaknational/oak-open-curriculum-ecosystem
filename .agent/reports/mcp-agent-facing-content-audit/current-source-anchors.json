@@ -4580,10 +4580,10 @@
             "file": "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-keyword-graph.ts",
             "anchors": [
               {
-                "tokenCount": 30,
-                "tokenSha256": "2b84e2c605965671f695b37858424b0d34b3246f2eaea697615bcbb505d7624f",
-                "indexToken": "decorated",
-                "indexOffset": 21
+                "tokenCount": 31,
+                "tokenSha256": "6629bdf33be582f381980e91e678c85819c5b3014cf7976922d7ed73c29c7621",
+                "indexToken": "Returns",
+                "indexOffset": 0
               }
             ]
           }

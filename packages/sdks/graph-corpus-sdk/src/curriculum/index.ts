@@ -11,8 +11,8 @@
  * does this thread progress across years?" over the per-subject,
  * curriculum-ordered sequences;
  * `keywordsForSubjectKeyStage` (G4b) answers "what is the key vocabulary for
- * this teaching context?" as a bounded frequency-ranked keyword page with
- * lesson decoration.
+ * this teaching context?" as a bounded frequency-ranked keyword page, each
+ * keyword carrying the definitions its in-scope lessons authored.
  */
 
 export {
@@ -79,11 +79,14 @@ export {
 } from './keyword-projection.js';
 
 export {
+  KEYWORD_DEFINITION_LESSON_LIMIT,
+  type KeywordDefinitionLessons,
+} from './keyword-definitions.js';
+export {
   DEFAULT_KEYWORD_LIMIT,
-  KEYWORD_LESSON_DECORATION_LIMIT,
   MAX_KEYWORD_LIMIT,
   keywordsForSubjectKeyStage,
-  type KeywordLessons,
+  type RankedKeyword,
   type KeywordLimitInvalid,
   type KeywordRetrievalOptions,
   type KeywordSubgraph,

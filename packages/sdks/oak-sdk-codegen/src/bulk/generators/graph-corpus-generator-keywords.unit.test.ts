@@ -5,11 +5,12 @@
  * TDD: these tests specify the keyword half of the emitted graph-corpus
  * dataset at the generator surface (plan `graph-tools-value-redesign`,
  * deliverable G4b): lean `keyword` nodes minted as
- * `keyword:<normalised-term>` carrying first-occurrence display casing, plus
- * lesson→keyword `containsKeyword` edges — one per unique lesson placement,
- * with unresolvable lessons dropping their edge into `droppedEdges`
- * provenance (zero dangling endpoints by construction). The keyword node
- * builder's own shape contract lives in
+ * `keyword:<normalised-term>`, lesson→keyword `containsKeyword` edges — one
+ * per unique lesson placement, with unresolvable lessons dropping their edge
+ * into `droppedEdges` provenance (zero dangling endpoints by construction) —
+ * and the `keywordDefinitions` section, which gives each placement the
+ * definition its lesson authored rather than one definition per term. The
+ * keyword node builder's own shape contract lives in
  * `graph-corpus-keyword-nodes.unit.test.ts`; the corpus-wide stats and
  * integrity describes live in `graph-corpus-generator.unit.test.ts`.
  *
@@ -45,12 +46,18 @@ const baseLesson: ExtractedLesson = {
 
 const baseKeyword: ExtractedKeyword = {
   term: 'denominator',
-  displayTerm: 'Denominator',
   definition: 'The number below the line in a fraction.',
   frequency: 1,
   subjects: ['maths'],
   firstYear: 3,
   lessonSlugs: ['comparing-fractions'],
+  definitions: [
+    {
+      term: 'Denominator',
+      definition: 'The number below the line in a fraction.',
+      lessonSlugs: ['comparing-fractions'],
+    },
+  ],
 };
 
 describe('generateGraphCorpusData — keyword kind and lesson→keyword placement (G4b)', () => {
@@ -59,15 +66,14 @@ describe('generateGraphCorpusData — keyword kind and lesson→keyword placemen
     keywords: [baseKeyword],
   });
 
-  it('emits a lean keyword node with the normalised-term mint and display casing', () => {
+  it('emits a lean keyword node termed by its normalised term', () => {
     const result = generateGraphCorpusData(keywordInput);
 
     const keyword = result.nodes.find((n) => n.kind === 'keyword');
     expect(keyword).toEqual({
       kind: 'keyword',
       id: 'keyword:denominator',
-      term: 'Denominator',
-      description: 'The number below the line in a fraction.',
+      term: 'denominator',
       frequency: 1,
       firstYear: 3,
       subjects: ['maths'],
@@ -91,6 +97,9 @@ describe('generateGraphCorpusData — keyword kind and lesson→keyword placemen
     const orphan: ExtractedKeyword = {
       ...baseKeyword,
       lessonSlugs: ['no-such-lesson'],
+      definitions: [
+        { term: 'Denominator', definition: 'Bottom number', lessonSlugs: ['no-such-lesson'] },
+      ],
     };
 
     const result = generateGraphCorpusData(makeInput({ keywords: [orphan] }));
@@ -126,6 +135,82 @@ describe('generateGraphCorpusData — keyword kind and lesson→keyword placemen
     expect(edges.map((e) => e.source).sort((a, b) => a.localeCompare(b))).toEqual([
       'lesson:adding-fractions',
       'lesson:comparing-fractions',
+    ]);
+  });
+});
+
+describe('generateGraphCorpusData — lesson-authored keyword definitions', () => {
+  const addingLesson: ExtractedLesson = {
+    ...baseLesson,
+    lessonSlug: 'adding-fractions',
+    lessonTitle: 'Adding fractions',
+  };
+
+  it('emits each authored definition with its own lessons, sorted by keyword, term, then definition', () => {
+    const twoSenses: ExtractedKeyword = {
+      ...baseKeyword,
+      lessonSlugs: ['adding-fractions', 'comparing-fractions'],
+      definitions: [
+        {
+          term: 'denominator',
+          definition: 'How many equal parts the whole is split into.',
+          lessonSlugs: ['adding-fractions'],
+        },
+        {
+          term: 'Denominator',
+          definition: 'The number below the line in a fraction.',
+          lessonSlugs: ['comparing-fractions'],
+        },
+      ],
+    };
+
+    const result = generateGraphCorpusData(
+      makeInput({ lessons: [baseLesson, addingLesson], keywords: [twoSenses] }),
+    );
+
+    expect(result.keywordDefinitions).toEqual([
+      {
+        keywordId: 'keyword:denominator',
+        term: 'Denominator',
+        definition: 'The number below the line in a fraction.',
+        lessonIds: ['lesson:comparing-fractions'],
+      },
+      {
+        keywordId: 'keyword:denominator',
+        term: 'denominator',
+        definition: 'How many equal parts the whole is split into.',
+        lessonIds: ['lesson:adding-fractions'],
+      },
+    ]);
+  });
+
+  it('places a definition only in lessons that have a containsKeyword edge to its keyword', () => {
+    // Membership is the edge set's: a lesson whose edge was dropped cannot
+    // carry a definition, and a definition left with no lesson is not emitted.
+    const partlyOrphaned: ExtractedKeyword = {
+      ...baseKeyword,
+      lessonSlugs: ['comparing-fractions', 'no-such-lesson'],
+      definitions: [
+        {
+          term: 'Denominator',
+          definition: 'The number below the line in a fraction.',
+          lessonSlugs: ['comparing-fractions', 'no-such-lesson'],
+        },
+        { term: 'denominator', definition: 'Bottom number', lessonSlugs: ['no-such-lesson'] },
+      ],
+    };
+
+    const result = generateGraphCorpusData(
+      makeInput({ lessons: [baseLesson], keywords: [partlyOrphaned] }),
+    );
+
+    expect(result.keywordDefinitions).toEqual([
+      {
+        keywordId: 'keyword:denominator',
+        term: 'Denominator',
+        definition: 'The number below the line in a fraction.',
+        lessonIds: ['lesson:comparing-fractions'],
+      },
     ]);
   });
 });

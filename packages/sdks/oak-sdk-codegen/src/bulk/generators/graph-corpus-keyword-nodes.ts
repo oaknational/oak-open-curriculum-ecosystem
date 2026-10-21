@@ -1,9 +1,10 @@
 /**
  * Graph-corpus keyword node builder (G4b): lean keyword nodes minted as
- * `keyword:<normalised-term>` with the first-occurrence display casing, the
- * unique-lesson frequency, and the lesson→keyword edge endpoints. Split from
- * the unit/thread/lesson builders in `graph-corpus-nodes.ts` along the same
- * seam as the misconception builder.
+ * `keyword:<normalised-term>` with the normalised term, the unique-lesson
+ * frequency, and the lesson→keyword edge endpoints. A node carries no
+ * definition — lessons author those (`graph-corpus-keyword-definitions.ts`).
+ * Split from the unit/thread/lesson builders in `graph-corpus-nodes.ts` along
+ * the same seam as the misconception builder.
  */
 import type { ExtractedKeyword } from '../extractors/index.js';
 
@@ -36,8 +37,7 @@ export function buildKeywordNodes(keywords: readonly ExtractedKeyword[]): Keywor
     .map((keyword): GraphCorpusKeywordNode => ({
       kind: 'keyword',
       id: keywordNodeId(keyword.term),
-      term: keyword.displayTerm,
-      description: keyword.definition,
+      term: keyword.term,
       frequency: keyword.lessonSlugs.length,
       firstYear: keyword.firstYear,
       subjects: keyword.subjects,

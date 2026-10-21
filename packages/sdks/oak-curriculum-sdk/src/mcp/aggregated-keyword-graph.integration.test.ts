@@ -11,7 +11,7 @@
  * `lessonSlugs` narrowing; optional `limit`), dispatch to the keyword view,
  * and the response shape (summary TextContent + serialised JSON TextContent +
  * structuredContent). The retrieval semantics themselves — scoped-count
- * ranking, decoration windowing, limit validation, narrowing — are specified
+ * ranking, per-definition lesson windowing, limit validation, narrowing — are specified
  * by the view's own tests in `@oaknational/graph-corpus-sdk` and are not
  * re-specified here.
  *
@@ -72,8 +72,15 @@ const KEYWORD_ENVELOPE = z.object({
         frequency: z.number(),
       }),
       scopedLessonCount: z.number(),
-      lessons: z.array(z.object({ id: z.string() })),
-      hasMoreLessons: z.boolean(),
+      definitions: z.array(
+        z.object({
+          term: z.string(),
+          definition: z.string(),
+          scopedLessonCount: z.number(),
+          lessonSlugs: z.array(z.string()),
+          hasMoreLessons: z.boolean(),
+        }),
+      ),
     }),
   ),
   totalMatchingKeywords: z.number(),
@@ -94,8 +101,20 @@ describe('GET_KEYWORD_GRAPH_TOOL_DEF', () => {
     expect(GET_KEYWORD_GRAPH_TOOL_DEF.description).toContain('rank');
   });
 
+  it('names the per-definition fields an agent reads', () => {
+    expect(GET_KEYWORD_GRAPH_TOOL_DEF.description).toContain('definitions');
+    expect(GET_KEYWORD_GRAPH_TOOL_DEF.description).toContain('lessonSlugs');
+    expect(GET_KEYWORD_GRAPH_TOOL_DEF.description).toContain('hasMoreLessons');
+  });
+
   it('states the snapshot semantics honestly', () => {
     expect(GET_KEYWORD_GRAPH_TOOL_DEF.description).toContain('snapshot');
+  });
+
+  it('carries the large-payload hint, naming its narrowing', () => {
+    expect(GET_KEYWORD_GRAPH_TOOL_DEF.description).toContain('large payload at broad scope');
+    expect(GET_KEYWORD_GRAPH_TOOL_DEF.description).toContain('`unitSlugs`');
+    expect(GET_KEYWORD_GRAPH_TOOL_DEF.description).toContain('`lessonSlugs`');
   });
 
   it('states the firstYear key-stage coarseness', () => {
@@ -167,6 +186,13 @@ describe('runKeywordGraphTool — anchored retrieval envelope', () => {
     expect(envelope.keywords.length).toBeGreaterThan(0);
     expect(envelope.keywords.length).toBeLessThanOrEqual(envelope.limit);
     expect(envelope.totalMatchingKeywords).toBeGreaterThanOrEqual(envelope.keywords.length);
+    // Every placed keyword carries an authored definition, and every definition names a lesson.
+    for (const entry of envelope.keywords) {
+      expect(entry.definitions.length).toBeGreaterThan(0);
+      for (const definition of entry.definitions) {
+        expect(definition.lessonSlugs.length).toBeGreaterThan(0);
+      }
+    }
   });
 
   it('propagates an explicit limit into the envelope', () => {

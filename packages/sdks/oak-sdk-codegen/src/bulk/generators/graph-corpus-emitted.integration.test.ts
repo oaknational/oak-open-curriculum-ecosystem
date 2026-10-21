@@ -60,8 +60,22 @@ describe('committed graph corpus (G2 + G4b real-corpus count guards)', () => {
   // are the guards the second-round test audit found missing: the synthetic
   // fixtures prove the rules, but nothing had pinned their outcome on the
   // committed corpus.
-  it('emits corpus version 1.5.0 (the ordered-sections shape)', () => {
-    expect(graphCorpus.version).toBe('1.5.0');
+  it('emits corpus version 1.6.0 (lesson-authored keyword definitions)', () => {
+    expect(graphCorpus.version).toBe('1.6.0');
+  });
+
+  it('defines exactly the (lesson, keyword) pairs the containsKeyword edges place — membership is the edge set', () => {
+    const edgePairs = new Set(
+      graphCorpus.edges
+        .filter((e) => e.type === 'containsKeyword')
+        .map((e) => `${e.source}→${e.target}`),
+    );
+    const definedPairs = new Set(
+      graphCorpus.keywordDefinitions.flatMap((row) =>
+        row.lessonIds.map((lessonId) => `${lessonId}→${row.keywordId}`),
+      ),
+    );
+    expect(definedPairs).toEqual(edgePairs);
   });
 
   it('emits exactly one unit-lesson run per unit that places lessons — no more, no fewer', () => {

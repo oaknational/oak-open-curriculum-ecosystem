@@ -144,6 +144,7 @@ export {
 
 export type {
   ExtractedKeyword,
+  ExtractedKeywordDefinition,
   ExtractedMisconception,
   ExtractedPriorKnowledge,
   ExtractedNCStatement,

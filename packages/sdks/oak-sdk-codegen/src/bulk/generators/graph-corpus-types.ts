@@ -99,18 +99,42 @@ export interface GraphCorpusMisconceptionNode {
  * @remarks
  * Lean by design: richness arrives via `containsKeyword` edge traversal
  * (keyword→lesson→unit/thread/misconception) on the one-graph substrate,
- * never via a fat node. `term` carries the first-occurrence display casing;
- * the normalised form lives in the id. `frequency` is the unique-lesson
+ * never via a fat node. `term` is the normalised term (the id's suffix); the
+ * terms and definitions authored by lessons live in `keywordDefinitions`.
+ * `frequency` is the unique-lesson
  * count; `firstYear` is key-stage-derived (coarse), not placement-year.
  */
 export interface GraphCorpusKeywordNode {
   readonly kind: 'keyword';
   readonly id: GraphCorpusKeywordNodeId;
   readonly term: string;
-  readonly description: string;
   readonly frequency: number;
   readonly firstYear: number;
   readonly subjects: readonly string[];
+}
+
+/**
+ * One definition of a keyword as lessons authored it, with those lessons.
+ *
+ * @remarks
+ * A section beside the edge set, not a keyword node field: a term's meaning
+ * belongs to the lesson that defines it ("subject" in English grammar is not
+ * "subject" in art), and a `containsKeyword` edge cannot carry text. Its
+ * (lesson, keyword) pairs are exactly the `containsKeyword` edge set.
+ */
+export interface GraphCorpusKeywordDefinition {
+  readonly keywordId: GraphCorpusKeywordNodeId;
+  /**
+   * The term as authored (trimmed, case preserved); when lessons wrote this
+   * definition with different capitals, the casing that sorts first by code unit.
+   */
+  readonly term: string;
+  /**
+   * The definition as authored, with whitespace collapsed (never blank); when
+   * lessons wrote it with different capitals, the text that sorts first by code unit.
+   */
+  readonly definition: string;
+  readonly lessonIds: readonly GraphCorpusLessonNodeId[];
 }
 
 /** Any node in the graph corpus (discriminated on `kind`). */
@@ -202,6 +226,7 @@ export interface GraphCorpus {
   readonly edges: readonly GraphCorpusEdge[];
   readonly sequences: readonly GraphCorpusSequence[];
   readonly unitLessonRuns: readonly GraphCorpusUnitLessonRun[];
+  readonly keywordDefinitions: readonly GraphCorpusKeywordDefinition[];
   readonly droppedEdges: readonly GraphCorpusDroppedEdge[];
   readonly droppedDuplicates: readonly GraphCorpusDroppedDuplicate[];
   readonly seeAlso: string;

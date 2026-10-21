@@ -30,6 +30,7 @@ export type {
   GraphCorpusLessonNode,
   GraphCorpusMisconceptionNode,
   GraphCorpusKeywordNode,
+  GraphCorpusKeywordDefinition,
   GraphCorpusEdge,
   GraphCorpusEdgeType,
   GraphCorpusNodeId,
