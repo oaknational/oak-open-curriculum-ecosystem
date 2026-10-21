@@ -20,6 +20,7 @@
  * verdict is `pass`. The per-suite pipelines live in `run-suite.ts`; the
  * IO ports in `io-port.ts`; outcome composition in `suite-outcome.ts`.
  */
+import { redactCredentials } from './bounded-excerpt.js';
 import { type McpConformanceIo, type McpConformanceRunInput } from './io-port.js';
 import { runSeedSuites, runVerdictSuites } from './run-suite.js';
 import { type ConformanceRunReport } from './types.js';
@@ -40,7 +41,11 @@ export function runMcpConformance(
     report: {
       schema_version: '1.0.0',
       operation: input.operation,
-      target: input.target,
+      // Redacted on the way out, like every target an operation emits. The
+      // validator has already refused any credential-bearing target, so this
+      // is defence in depth against a future validation gap — this report
+      // rides to stdout and into CI job logs.
+      target: redactCredentials(input.target),
       mode: input.mode,
       suites,
       verdict,

@@ -13,6 +13,7 @@ import { scanArgs, type FlagHandler, type ValueHandler } from '../core/cli-arg-p
 import { HELP_TEXT } from './mcp-conformance-help.js';
 import { resolveRepoRoot } from '../core/repo-root.js';
 import { validateCliState, type CliState } from '../mcp-conformance/cli-validation.js';
+import { runCompatFromCli } from '../mcp-conformance/compat-cli.js';
 import { emitRunReportJson, runDriveFromCli } from '../mcp-conformance/drive-cli.js';
 import { loadBaselines, type BaselineRead } from '../mcp-conformance/load-baselines.js';
 import { buildMcpConformanceNodeIo, defaultReportDir } from '../mcp-conformance/node-io.js';
@@ -31,6 +32,7 @@ const INITIAL_STATE: CliState = {
   unattended: false,
   seed: false,
   drive: false,
+  compat: false,
   target: undefined,
   suites: [],
   credentialsFile: undefined,
@@ -56,6 +58,9 @@ const CLI_FLAGS: Readonly<Record<string, FlagHandler<CliState>>> = {
   },
   '--drive': (state) => {
     state.drive = true;
+  },
+  '--compat': (state) => {
+    state.compat = true;
   },
 };
 
@@ -180,9 +185,24 @@ function main(): void {
     process.exitCode = 2;
     return;
   }
-  process.exitCode = scanned.state.drive
-    ? runDriveFromCli(scanned.state, scanned.state.target)
-    : runFromCli(scanned.state, scanned.state.target);
+  process.exitCode = selectOperation(scanned.state, scanned.state.target);
+}
+
+/**
+ * Operation dispatch: compat, drive, or the default suite route (verdict,
+ * with --seed as its authoring mode). Compat is a sibling of drive rather
+ * than a fourth suite: its report schema, failure channel and exit semantics
+ * are inverted relative to the suites (see `compat-run.ts`), so it carries
+ * its own gate rather than bending the suites'.
+ */
+function selectOperation(state: CliState, target: string): 0 | 1 {
+  if (state.compat) {
+    return runCompatFromCli(state, target);
+  }
+  if (state.drive) {
+    return runDriveFromCli(state, target);
+  }
+  return runFromCli(state, target);
 }
 
 main();
