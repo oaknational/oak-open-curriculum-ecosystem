@@ -1,0 +1,6 @@
+{
+  "error": {
+    "code": "INTERNAL_ERROR",
+    "message": "Authentication failed for MCP server \"__cli__\": Streamable HTTP error: Version negotiation failed: the server requires authorization (HTTP 401). SSE error: SSE error: Non-200 status code (405)"
+  }
+}

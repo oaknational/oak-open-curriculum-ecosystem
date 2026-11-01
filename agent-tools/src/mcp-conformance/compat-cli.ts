@@ -1,0 +1,72 @@
+/**
+ * CLI orchestration for the compat operation — the sibling of `drive-cli.ts`,
+ * so the bin keeps only the argv scan, validation, and the operation branch.
+ *
+ * Shares the suites' spawn seam, owner-only retention, and the single
+ * report-emission contract (`emitRunReportJson`), so output and failure
+ * semantics cannot drift between operations.
+ */
+import { resolveRepoRoot } from '../core/repo-root.js';
+import { redactCredentials } from './bounded-excerpt.js';
+import { type CliState } from './cli-validation.js';
+import { type CompatIo } from './compat-evidence.js';
+import { runCompat, type CompatOutcome } from './compat-run.js';
+import { emitRunReportJson } from './drive-cli.js';
+import { buildMcpjamRunner } from './mcpjam-spawn.js';
+import { defaultReportDir, writeUnder } from './node-io.js';
+
+/** Compat's IO: the shared spawn seam plus single-artefact retention. */
+function buildCompatIo(repoRoot: string, reportDir: string): CompatIo {
+  return {
+    runMcpjam: buildMcpjamRunner(repoRoot),
+    retainRawReport: (content) => writeUnder(repoRoot, reportDir, 'compat.json', content),
+  };
+}
+
+/** The wrapper's aggregate report for a compat run. */
+export interface CompatRunReport {
+  readonly schema_version: '1.0.0';
+  readonly operation: 'compat';
+  readonly target: string;
+  readonly outcome: CompatOutcome;
+}
+
+/**
+ * The report as emitted — a pure projection, separated from the IO so the
+ * one rule it carries is describable in a test without a spawn seam.
+ *
+ * The rule: the target is redacted on the way out. The validator has
+ * already refused any credential-bearing target, so this is defence in depth
+ * against a future validation gap — it is still echoed here, to stdout.
+ */
+export function composeCompatRunReport(target: string, outcome: CompatOutcome): CompatRunReport {
+  return {
+    schema_version: '1.0.0',
+    operation: 'compat',
+    target: redactCredentials(target),
+    outcome,
+  };
+}
+
+/**
+ * Run the compat capture from validated CLI state.
+ *
+ * Exits 0 when the run produced a parseable report and both documented
+ * outputs landed — the raw capture and the summary. The report is for a
+ * human to read; this command does not judge it.
+ */
+export function runCompatFromCli(state: CliState, target: string): 0 | 1 {
+  const repoRoot = resolveRepoRoot(import.meta.url, { projectDir: undefined });
+  const reportDir = state.reportDir ?? defaultReportDir();
+
+  const outcome = runCompat(buildCompatIo(repoRoot, reportDir), {
+    target,
+    ...(state.credentialsFile === undefined ? {} : { credentialsFile: state.credentialsFile }),
+  });
+
+  const report = composeCompatRunReport(target, outcome);
+  if (!emitRunReportJson(repoRoot, reportDir, `${JSON.stringify(report, null, 2)}\n`)) {
+    return 1;
+  }
+  return outcome.verdict === 'pass' ? 0 : 1;
+}
