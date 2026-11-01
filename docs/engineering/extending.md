@@ -106,10 +106,9 @@ Rules, skills, commands, and sub-agents follow the three-layer artefact model
 — step-by-step recipes for each artefact type, plus the platform-adapter
 parity required to keep `pnpm portability:check` green.
 
-User-facing plugin packages under `plugins/` are outside this recipe: they are
-product deliverables (ADR-125 §Skill classes and validation jurisdiction), and the ChatGPT/Codex package
-README (`chatgpt/plugins/oak-national-academy/README.md`) records how a shared
-skill is copied there and gated.
+User-facing plugin packages are outside this recipe: they are product
+deliverables (ADR-125 §Skill classes and validation jurisdiction), built and
+released in [oaknational/oak-ai-plugins](https://github.com/oaknational/oak-ai-plugins).
 
 **Always create the canonical file first** under `.agent/`, then add platform
 adapters, then run `pnpm portability:check`. Every canonical rule must cite

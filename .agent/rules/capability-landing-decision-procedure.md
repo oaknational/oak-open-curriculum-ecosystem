@@ -69,7 +69,7 @@ while the procedure's substance homes in the skill.
    future mechanisms, not about pedagogy or Oak content (owner
    partition, 2026-08-02). Curriculum- and teacher-facing capability
    is a separate domain, audience, and delivery mechanism (first
-   version: `.claude-plugin/marketplace.json`). A capability that
+   version: plugins released from oaknational/oak-ai-plugins). A capability that
    fits no existing audience set does not stretch one — a new set
    lands deliberately, recorded in the audience-set registry in
    [the Practice skills corpus README](../skills/README.md).
