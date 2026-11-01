@@ -71,8 +71,8 @@ async function readAreaLedger(
   let text: string;
   try {
     text = await readFile(path.join(outDirAbs, LEDGER_DIR_SEGMENT, basename), 'utf8');
-  } catch (cause: unknown) {
-    if (cause instanceof Error && 'code' in cause && cause.code === 'ENOENT') {
+  } catch (error: unknown) {
+    if (error instanceof Error && 'code' in error && error.code === 'ENOENT') {
       return err(
         new Error(
           `area '${area}' is not yet tiled: no ledger file at ${label} — an ABSENT ledger is a ` +
@@ -80,7 +80,7 @@ async function readAreaLedger(
         ),
       );
     }
-    const message = cause instanceof Error ? cause.message : String(cause);
+    const message = error instanceof Error ? error.message : String(error);
     return err(new Error(`cannot read ${label}: ${message}`));
   }
   return parseLedgerJsonl(label, text);

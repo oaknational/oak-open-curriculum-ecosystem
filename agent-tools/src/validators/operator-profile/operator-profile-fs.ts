@@ -48,8 +48,8 @@ export async function presence(
       return ok('symlink');
     }
     return ok(stats.isDirectory() ? 'directory' : 'not-a-directory');
-  } catch (cause) {
-    const code = errorCode(cause);
+  } catch (error) {
+    const code = errorCode(error);
     if (code === 'ENOENT') {
       return ok('absent');
     }
@@ -125,8 +125,8 @@ export async function listEntries(
     return ok(
       entries.map((entry) => ({ relPath: `${prefix}${entry.name}`, kind: entryKind(entry.type) })),
     );
-  } catch (cause) {
-    return err(`cannot list ${dir} (${errorCode(cause)})`);
+  } catch (error) {
+    return err(`cannot list ${dir} (${errorCode(error)})`);
   }
 }
 

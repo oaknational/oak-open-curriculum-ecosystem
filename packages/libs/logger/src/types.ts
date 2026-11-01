@@ -5,8 +5,6 @@
 import type { JsonObject, JsonValue } from '@oaknational/observability';
 import type { LogLevel } from './log-levels.js';
 
-export type { LogLevel };
-
 /**
  * Resource attributes for service identification.
  *
@@ -140,3 +138,5 @@ export interface LoggerOptions {
   name?: string;
   context?: LogContextInput;
 }
+
+export type { LogLevel } from './log-levels.js';

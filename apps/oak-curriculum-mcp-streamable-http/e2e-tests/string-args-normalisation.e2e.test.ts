@@ -179,7 +179,7 @@ describe('HTTP boundary argument validation', () => {
     const payload = parseToolSuccessPayload(result);
     expect(payload.status).toBe(200);
     if (!Array.isArray(payload.data)) {
-      throw new Error('Tool payload data must be an array');
+      throw new TypeError('Tool payload data must be an array');
     }
     expect(payload.data).toHaveLength(1);
     expect(payload.data[0]).toHaveProperty('oakUrl');

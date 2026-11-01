@@ -40,7 +40,7 @@ function createSuccessResponse(): Response {
 function getRequestInput(fetchMock: ReturnType<typeof vi.fn<FetchFn>>, callIndex = 0): Request {
   const [request] = fetchMock.mock.calls[callIndex] ?? [];
   if (!(request instanceof Request)) {
-    throw new Error('Expected middleware to invoke fetch with a Request');
+    throw new TypeError('Expected middleware to invoke fetch with a Request');
   }
   return request;
 }

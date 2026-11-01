@@ -1,3 +1,4 @@
+import { typeSafeIncludes } from '@oaknational/type-helpers';
 import { join } from 'node:path';
 import { err, ok, type Result } from '@oaknational/result';
 
@@ -152,7 +153,7 @@ export function formatLogTimestamp(date: Date): string {
 }
 
 function isHttpDevMode(input: string): input is HttpDevMode {
-  return HTTP_DEV_MODES.some((mode) => mode === input);
+  return typeSafeIncludes(HTTP_DEV_MODES, input);
 }
 
 function resolveServerEnv(parentEnv: NodeJS.ProcessEnv, mode: HttpDevMode): NodeJS.ProcessEnv {

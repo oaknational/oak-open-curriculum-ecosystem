@@ -157,7 +157,7 @@ function makeWriteFs(
   const liveOthers = new Set([...(options.others ?? [])].map(posixPath));
   const log = options.operationLog;
   const readFs = (): CarriageReadFs =>
-    makeReadFs(files, { ...options, others: new Set([...liveOthers]) });
+    makeReadFs(files, { ...options, others: new Set(liveOthers) });
   return {
     async listSubdirectoryNames(path) {
       return readFs().listSubdirectoryNames(path);
@@ -203,7 +203,7 @@ function makeWriteFs(
     async removeEntryRecursive(path) {
       const posix = posixPath(path);
       log?.push(`remove-recursive:${posix}`);
-      for (const filePath of [...files.keys()]) {
+      for (const filePath of files.keys()) {
         if (filePath === posix || filePath.startsWith(`${posix}/`)) {
           files.delete(filePath);
         }

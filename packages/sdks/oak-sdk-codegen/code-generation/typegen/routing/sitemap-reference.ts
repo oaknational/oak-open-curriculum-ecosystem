@@ -55,22 +55,22 @@ export function loadSitemapReference(refPath: string): Result<SitemapScanOutput,
   let raw: string;
   try {
     raw = readFileSync(refPath, 'utf-8');
-  } catch (e) {
+  } catch (error) {
     return err({
       kind: 'file_not_found',
       path: refPath,
-      cause: e instanceof Error ? e.message : String(e),
+      cause: error instanceof Error ? error.message : String(error),
     });
   }
 
   let parsed: unknown;
   try {
     parsed = JSON.parse(raw);
-  } catch (e) {
+  } catch (error) {
     return err({
       kind: 'invalid_json',
       path: refPath,
-      cause: e instanceof Error ? e.message : String(e),
+      cause: error instanceof Error ? error.message : String(error),
     });
   }
 

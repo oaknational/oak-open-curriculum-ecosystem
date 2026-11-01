@@ -3,6 +3,7 @@
  * scoped directories, this module says what each entry must be.
  */
 
+import { typeSafeIncludes } from '@oaknational/type-helpers';
 import { type ProfileDocumentExpectation } from './operator-profile-document.js';
 import { machineKeyFromRelPath, scopeKeyFromRelPath } from './operator-profile-keys.js';
 import { INDEX_FILE_NAME, MACHINES_DIR_NAME, SCOPES_DIR_NAME } from './operator-profile-schema.js';
@@ -40,11 +41,11 @@ const SCOPED_DIRS = [SCOPES_DIR_NAME, MACHINES_DIR_NAME] as const;
 
 /** Zero-widening membership: the literal vocabulary decides, never a `string` view of it. */
 function isGitFurniture(relPath: string): relPath is (typeof GIT_FURNITURE)[number] {
-  return GIT_FURNITURE.some((name) => name === relPath);
+  return typeSafeIncludes(GIT_FURNITURE, relPath);
 }
 
 function isScopedDir(relPath: string): relPath is (typeof SCOPED_DIRS)[number] {
-  return SCOPED_DIRS.some((name) => name === relPath);
+  return typeSafeIncludes(SCOPED_DIRS, relPath);
 }
 
 type EntryClass =

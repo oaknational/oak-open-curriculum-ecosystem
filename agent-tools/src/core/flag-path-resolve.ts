@@ -67,8 +67,8 @@ export function resolveReadPathWithinRepo(
         options.realpath === undefined ? {} : { realpath: options.realpath },
       ),
     );
-  } catch (cause: unknown) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return err(new Error(message));
   }
 }
@@ -103,8 +103,8 @@ export function resolveWriteTargetWithinRepo(
   try {
     assertPathWithinBase(nearestExistingAncestor(targetAbs), repoRoot);
     return ok(targetAbs);
-  } catch (cause: unknown) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return err(new Error(message));
   }
 }

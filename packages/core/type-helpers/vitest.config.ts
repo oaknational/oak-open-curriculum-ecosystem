@@ -1,3 +1,1 @@
-import { baseTestConfig } from '@oaknational/workspace-config/vitest';
-
-export default baseTestConfig;
+export { baseTestConfig as default } from '@oaknational/workspace-config/vitest';

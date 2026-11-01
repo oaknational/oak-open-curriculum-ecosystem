@@ -24,8 +24,8 @@ function parseInventoryLine(line: string, lineNumber: number): Result<InventoryR
   let json: unknown;
   try {
     json = JSON.parse(line);
-  } catch (cause: unknown) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return err(
       new Error(`${INVENTORY_BASENAME} line ${String(lineNumber)} is not valid JSON: ${message}`),
     );
@@ -47,8 +47,8 @@ export async function readInventoryRecords(
   let text: string;
   try {
     text = await readFile(inventoryAbsPath, 'utf8');
-  } catch (cause: unknown) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return err(new Error(`cannot read ${INVENTORY_BASENAME} at '${inventoryAbsPath}': ${message}`));
   }
   const records: InventoryRecord[] = [];

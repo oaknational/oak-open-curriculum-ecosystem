@@ -107,8 +107,8 @@ export function compileFamilySchemas(
     const manifest = ajv.compile<FamilyManifest>(schemaDocument);
     const host = ajv.compile<HostValues>({ $ref: `${schemaId}${HOST_VALUES_POINTER}` });
     return ok({ manifest, host });
-  } catch (failure) {
-    return err(failureAsError(failure, 'the family conformance schema compile'));
+  } catch (error) {
+    return err(failureAsError(error, 'the family conformance schema compile'));
   }
 }
 

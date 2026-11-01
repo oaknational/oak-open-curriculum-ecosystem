@@ -26,8 +26,6 @@
 
 import { type ScanFile } from '../../core/tracked-file-scan.js';
 
-export type { ScanFile };
-
 /** The Core's directory, with its trailing separator. */
 const CORE_PREFIX = '.agent/practice-core/';
 
@@ -76,3 +74,5 @@ export function findCoreCitations(files: readonly ScanFile[]): CoreCitation[] {
     findAdrCitations(file.content).map((citation) => ({ file: file.path, ...citation })),
   );
 }
+
+export type { ScanFile } from '../../core/tracked-file-scan.js';

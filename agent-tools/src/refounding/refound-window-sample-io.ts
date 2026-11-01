@@ -36,8 +36,8 @@ import { parseJsonDocument, renderJsonArtefact, sha256Hex } from './refounding-a
 async function readTextFile(label: string, absPath: string): Promise<Result<string, Error>> {
   try {
     return ok(await readFile(absPath, 'utf8'));
-  } catch (cause: unknown) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return err(new Error(`cannot read ${label} at '${absPath}': ${message}`));
   }
 }
@@ -55,8 +55,8 @@ export async function readSweepHits(
   let bytes: Buffer;
   try {
     bytes = await readFile(hitsAbsPath);
-  } catch (cause: unknown) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return err(new Error(`cannot read sweep hits at '${hitsAbsPath}': ${message}`));
   }
   const actualSha256 = sha256Hex(bytes);
@@ -149,8 +149,8 @@ export async function readBoundRule(
   let liveBytes: Buffer;
   try {
     liveBytes = await readRuleBytes(ruleAbsPath);
-  } catch (cause: unknown) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return err(new Error(`cannot read freeze rule at '${ruleAbsPath}': ${message}`));
   }
   const ruleJson = parseJsonDocument('freeze rule', liveBytes.toString('utf8'));
@@ -242,9 +242,9 @@ export async function writeManifest(
     await writeArtefact(tempAbsPath, renderJsonArtefact(manifest));
     await rename(tempAbsPath, manifestAbsPath);
     return ok(manifest);
-  } catch (cause: unknown) {
+  } catch (error: unknown) {
     await rm(tempAbsPath, { force: true }).catch(() => undefined);
-    const message = cause instanceof Error ? cause.message : String(cause);
+    const message = error instanceof Error ? error.message : String(error);
     return err(new Error(`window-sample artefact write failed: ${message}`));
   }
 }

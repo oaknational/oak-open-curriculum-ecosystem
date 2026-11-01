@@ -13,7 +13,6 @@ import type { LogLevel } from './log-levels';
 import type { LogContext, NormalizedError, OtelLogRecord, ResourceAttributes } from './types';
 
 // Re-export OtelLogRecord for API continuity (consumed by index.ts, node.ts, test-helpers)
-export type { OtelLogRecord };
 
 /**
  * OpenTelemetry severity number mapping
@@ -167,3 +166,5 @@ export function formatOtelLogRecord(options: FormatOtelLogRecordOptions): OtelLo
     ...traceFields,
   };
 }
+
+export type { OtelLogRecord } from './types';

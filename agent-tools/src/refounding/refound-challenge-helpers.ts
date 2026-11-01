@@ -38,9 +38,9 @@ function parseLedgerLine(line: string, lineNumber: number): Result<ChallengeLedg
   let json: unknown;
   try {
     json = JSON.parse(line);
-  } catch (cause: unknown) {
+  } catch (error: unknown) {
     return err(
-      new Error(`ledger line ${String(lineNumber)} is not valid JSON: ${asMessage(cause)}`),
+      new Error(`ledger line ${String(lineNumber)} is not valid JSON: ${asMessage(error)}`),
     );
   }
   const row = parseChallengeLedgerRow(json);
@@ -57,8 +57,8 @@ async function readLedgerRows(
   let text: string;
   try {
     text = await readFile(ledgerAbsPath, 'utf8');
-  } catch (cause: unknown) {
-    return err(new Error(`cannot read ledger at '${ledgerAbsPath}': ${asMessage(cause)}`));
+  } catch (error: unknown) {
+    return err(new Error(`cannot read ledger at '${ledgerAbsPath}': ${asMessage(error)}`));
   }
   const rows: ChallengeLedgerRow[] = [];
   const seen = new Set<string>();
@@ -200,8 +200,8 @@ async function writePlantArtefacts(input: {
   try {
     await mkdir(path.dirname(streamAbsPath), { recursive: true });
     await mkdir(path.dirname(input.keysOutAbsPath), { recursive: true });
-  } catch (cause: unknown) {
-    return err(new Error(`challenge artefact write failed: ${asMessage(cause)}`));
+  } catch (error: unknown) {
+    return err(new Error(`challenge artefact write failed: ${asMessage(error)}`));
   }
   const written = await writeArtefactSet([
     { absPath: streamAbsPath, content: renderJsonlArtefact(input.streamRows) },

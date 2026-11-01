@@ -159,11 +159,11 @@ function extractSourceExcludes(client: Client): readonly string[] {
   }
   const excludes: unknown = source.excludes;
   if (!Array.isArray(excludes)) {
-    throw new Error('Expected _source.excludes to be an array');
+    throw new TypeError('Expected _source.excludes to be an array');
   }
   return excludes.map((field) => {
     if (typeof field !== 'string') {
-      throw new Error(`Expected _source.excludes entries to be strings, got ${typeof field}`);
+      throw new TypeError(`Expected _source.excludes entries to be strings, got ${typeof field}`);
     }
     return field;
   });

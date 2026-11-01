@@ -1,5 +1,5 @@
 import { readFile } from 'node:fs/promises';
-import { typeSafeGet, typeSafeHasOwn } from '@oaknational/type-helpers';
+import { typeSafeGet, typeSafeHasOwn, typeSafeIncludes } from '@oaknational/type-helpers';
 import { z } from 'zod';
 import type { GapLedger, GapLedgerFieldEntry } from './field-readback-audit-types.js';
 
@@ -40,7 +40,7 @@ const SUPPORTED_READBACK_STATUSES = [
 export type ReadbackStatus = (typeof SUPPORTED_READBACK_STATUSES)[number];
 
 function isReadbackStatus(status: string): status is ReadbackStatus {
-  return SUPPORTED_READBACK_STATUSES.some((value) => value === status);
+  return typeSafeIncludes(SUPPORTED_READBACK_STATUSES, status);
 }
 
 /**

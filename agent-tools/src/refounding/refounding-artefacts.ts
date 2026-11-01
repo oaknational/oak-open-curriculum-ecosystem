@@ -121,8 +121,8 @@ export const parseFreezeIdentityProof = (value: unknown): Result<FreezeIdentityP
 export function parseJsonDocument(label: string, text: string): Result<unknown, Error> {
   try {
     return ok(JSON.parse(text));
-  } catch (cause: unknown) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return err(new Error(`${label} is not valid JSON: ${message}`));
   }
 }

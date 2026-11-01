@@ -93,8 +93,8 @@ const spawnGit: GitSpawner = (gitBinAbsPath, args) =>
 function resolveGitBinary(exists: PathExists | undefined): Result<string, Error> {
   try {
     return ok(resolveTrustedGit(exists));
-  } catch (cause: unknown) {
-    return err(new Error(cause instanceof Error ? cause.message : String(cause)));
+  } catch (error: unknown) {
+    return err(new Error(error instanceof Error ? error.message : String(error)));
   }
 }
 

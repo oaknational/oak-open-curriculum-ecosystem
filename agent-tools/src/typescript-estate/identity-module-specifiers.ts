@@ -143,13 +143,13 @@ function decodeJavaScript(repoPath: string, bytes: Uint8Array): Result<string, E
             `identity member '${repoPath}' failed UTF-8 round trip`,
           ),
         );
-  } catch (cause: unknown) {
+  } catch (error: unknown) {
     return err(
       new EstateReviewError(
         'IDENTITY_INVALID',
         `identity member '${repoPath}' is not valid UTF-8`,
         {
-          cause,
+          cause: error,
         },
       ),
     );

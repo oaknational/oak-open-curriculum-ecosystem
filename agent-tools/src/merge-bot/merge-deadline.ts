@@ -1,6 +1,6 @@
 import { err, type Result } from '@oaknational/result';
 
-import { deadlinePassed, tokenDeadlineFrom, type TokenDeadline } from './token-deadline.js';
+import { tokenDeadlineFrom, type TokenDeadline } from './token-deadline.js';
 
 /**
  * The WALL-CLOCK bound on the merge poll loop, derived from the MINTED
@@ -32,8 +32,6 @@ export function mergeDeadlineFrom(tokenExpiresAt: string): Result<MergeDeadline,
     : err(new Error(`${deadline.error.message} — refusing to poll without a wall-clock deadline`));
 }
 
-export { deadlinePassed };
-
 /** The stop message: names the deadline AND the token expiry it was derived from. */
 export function deadlineMessage(nowIso: string, deadline: MergeDeadline): string {
   return (
@@ -41,3 +39,5 @@ export function deadlineMessage(nowIso: string, deadline: MergeDeadline): string
     `${deadline.tokenExpiresAt}) — stopping rather than firing a merge call that could straddle token expiry`
   );
 }
+
+export { deadlinePassed } from './token-deadline.js';

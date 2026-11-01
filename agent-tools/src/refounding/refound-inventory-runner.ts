@@ -72,8 +72,8 @@ export async function scanTreeInventory(input: {
     let bytes: Buffer;
     try {
       bytes = await readFile(path.join(input.rootAbs, relPath));
-    } catch (cause: unknown) {
-      const message = cause instanceof Error ? cause.message : String(cause);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
       return err(new Error(`cannot read frozen file '${relPath}': ${message}`));
     }
     const fileRecords = buildInventoryRecords(relPath, bytes);

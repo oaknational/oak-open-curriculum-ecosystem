@@ -82,11 +82,11 @@ async function readBodyAsText(
 ): Promise<string | undefined> {
   try {
     return await response.text();
-  } catch (e: unknown) {
+  } catch (error: unknown) {
     log.warn('oauth-proxy.upstream.body-read-error', {
       ...context,
       upstreamStatus: response.status,
-      error: e instanceof Error ? e.message : String(e),
+      error: error instanceof Error ? error.message : String(error),
     });
     return undefined;
   }

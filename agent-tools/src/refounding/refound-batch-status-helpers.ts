@@ -242,8 +242,8 @@ export async function runBatchStatus(input: {
       renderJsonArtefact(runState),
       'utf8',
     );
-  } catch (cause: unknown) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return err(new Error(`run-state cache write failed: ${message}`));
   }
   return ok(runState);

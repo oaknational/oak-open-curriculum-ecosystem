@@ -241,7 +241,7 @@ async function main(): Promise<void> {
   }
 }
 
-main().catch((e) => {
-  console.error('Fatal:', e);
+main().catch((error) => {
+  console.error('Fatal:', error);
   process.exit(1);
 });

@@ -45,7 +45,7 @@ function extractWwwAuthHeader(result: { _meta?: Record<string, unknown> }): stri
   }
   const first: unknown = wwwAuth[0];
   if (typeof first !== 'string') {
-    throw new Error('Expected first www_authenticate header to be a string');
+    throw new TypeError('Expected first www_authenticate header to be a string');
   }
   return first;
 }

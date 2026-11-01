@@ -72,15 +72,15 @@ async function readLiveIdentities(input: {
     let liveAbsPath: string;
     try {
       liveAbsPath = assertPathWithinBase(path.join(input.repoRoot, sourcePath), input.repoRoot);
-    } catch (cause: unknown) {
-      const message = cause instanceof Error ? cause.message : String(cause);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
       return err(new Error(`live in-set path '${sourcePath}' escapes the repository: ${message}`));
     }
     let bytes: Buffer;
     try {
       bytes = await readFile(liveAbsPath);
-    } catch (cause: unknown) {
-      const message = cause instanceof Error ? cause.message : String(cause);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
       return err(new Error(`cannot read live in-set file '${sourcePath}': ${message}`));
     }
     identities.push({ sourcePath, frozenPath, sha256: sha256Hex(bytes) });
@@ -224,8 +224,8 @@ async function writeArrivalsReport(
   try {
     await writeFile(path.join(outDirAbs, ARRIVALS_BASENAME), renderJsonArtefact(report), 'utf8');
     return ok(undefined);
-  } catch (cause: unknown) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return err(new Error(`arrivals report write failed: ${message}`));
   }
 }

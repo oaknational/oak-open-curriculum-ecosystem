@@ -91,8 +91,8 @@ export async function scanSweepFiles(input: {
     let bytes: Buffer;
     try {
       bytes = await readFile(path.join(input.rootAbs, relPath));
-    } catch (cause: unknown) {
-      const message = cause instanceof Error ? cause.message : String(cause);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
       return err(new Error(`cannot read sweep surface '${relPath}': ${message}`));
     }
     if (classifyInventoryMode(relPath, bytes) === 'opaque') {
@@ -138,8 +138,8 @@ export async function runSweep(input: {
   try {
     await mkdir(path.dirname(hitsAbsPath), { recursive: true });
     await writeFile(hitsAbsPath, renderJsonlArtefact(scan.value.hits), 'utf8');
-  } catch (cause: unknown) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return err(new Error(`sweep artefact write failed: ${message}`));
   }
   return ok({ scannedFiles: scan.value.scannedFiles, hits: scan.value.hits.length });

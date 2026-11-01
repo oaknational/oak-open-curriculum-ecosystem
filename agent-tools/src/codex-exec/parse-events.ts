@@ -73,11 +73,11 @@ const UNUSED_ITEM_TYPES: readonly UnusedItemType[] = ['reasoning', 'todo_list', 
  * unexpected at every stage, so a prohibited call that starts and never
  * completes still counts.
  */
-const KNOWN_ITEM_TYPES: readonly string[] = [
+const KNOWN_ITEM_TYPES: ReadonlySet<string> = new Set([
   'agent_message',
   'command_execution',
   ...UNUSED_ITEM_TYPES,
-];
+]);
 
 function readItemType(item: JsonValue | undefined): string | undefined {
   if (!isJsonObject(item)) {
@@ -92,7 +92,7 @@ function parseItemProgress(event: JsonObject): CodexExecEvent | undefined {
   if (itemType === undefined) {
     return undefined;
   }
-  return KNOWN_ITEM_TYPES.includes(itemType)
+  return KNOWN_ITEM_TYPES.has(itemType)
     ? { kind: 'item-progress' }
     : { kind: 'unexpected-item', itemType };
 }

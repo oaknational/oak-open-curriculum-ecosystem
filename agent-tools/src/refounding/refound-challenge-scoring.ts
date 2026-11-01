@@ -36,14 +36,14 @@ async function readJsonFile<TValue>(
   let bytes: Buffer;
   try {
     bytes = await readFile(absPath);
-  } catch (cause: unknown) {
-    return err(new Error(`cannot read ${label} at '${absPath}': ${asMessage(cause)}`));
+  } catch (error: unknown) {
+    return err(new Error(`cannot read ${label} at '${absPath}': ${asMessage(error)}`));
   }
   let json: unknown;
   try {
     json = JSON.parse(bytes.toString('utf8'));
-  } catch (cause: unknown) {
-    return err(new Error(`${label} is not valid JSON: ${asMessage(cause)}`));
+  } catch (error: unknown) {
+    return err(new Error(`${label} is not valid JSON: ${asMessage(error)}`));
   }
   const parsed = parse(json);
   if (isErr(parsed)) {
@@ -68,8 +68,8 @@ export async function runChallengeSeal(input: {
   try {
     await mkdir(path.dirname(input.commitmentAbsPath), { recursive: true });
     await writeFile(input.commitmentAbsPath, renderJsonArtefact(commitment), 'utf8');
-  } catch (cause: unknown) {
-    return err(new Error(`commitment write failed: ${asMessage(cause)}`));
+  } catch (error: unknown) {
+    return err(new Error(`commitment write failed: ${asMessage(error)}`));
   }
   return ok({ keySetSha256: commitment.keySetSha256 });
 }

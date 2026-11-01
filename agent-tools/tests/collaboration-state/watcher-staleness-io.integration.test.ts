@@ -61,7 +61,7 @@ describe('productionWatcherStalenessIo', () => {
     // is the one code the adapter maps to 'missing' instead of throwing.
     const failure: unknown = await productionWatcherStalenessIo.statMtimeMs(loop).then(
       () => undefined,
-      (cause: unknown) => cause,
+      (error: unknown) => error,
     );
     expect(failure).toBeInstanceOf(Error);
     const code = failure instanceof Error && 'code' in failure ? failure.code : undefined;

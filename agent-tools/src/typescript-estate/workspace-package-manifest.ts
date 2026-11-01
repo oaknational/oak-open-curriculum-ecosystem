@@ -21,10 +21,10 @@ export function compileWorkspacePackageNamePattern(
 ): Result<RegExp, EstateReviewError> {
   try {
     return ok(new RegExp(config.packageNamePattern, 'u'));
-  } catch (cause: unknown) {
+  } catch (error: unknown) {
     return err(
       new EstateReviewError('CONFIG_INVALID', 'workspace package-name grammar is invalid', {
-        cause,
+        cause: error,
       }),
     );
   }
@@ -74,10 +74,10 @@ function parseStrictJson(path: RepoPath, source: string): Result<unknown, Estate
   try {
     const value: unknown = JSON.parse(source);
     return ok(value);
-  } catch (cause: unknown) {
+  } catch (error: unknown) {
     return err(
       new EstateReviewError('SNAPSHOT_INVALID', `workspace package manifest '${path}' is invalid`, {
-        cause,
+        cause: error,
       }),
     );
   }

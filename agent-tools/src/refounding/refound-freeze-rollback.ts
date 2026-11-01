@@ -52,9 +52,9 @@ async function cleanupPartialFreeze(
       await rm(path.join(outDirAbs, IDENTITY_PROOF_SEGMENT), { force: true });
     }
     return ok(undefined);
-  } catch (cause: unknown) {
+  } catch (error: unknown) {
     await writePartialMarker(frozenRootAbs);
-    return err(new Error(asMessage(cause)));
+    return err(new Error(asMessage(error)));
   }
 }
 

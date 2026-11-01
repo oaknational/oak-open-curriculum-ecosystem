@@ -97,8 +97,8 @@ export async function createCollaborationJsonSchemaValidator(
       let value: unknown;
       try {
         value = JSON.parse(text);
-      } catch (failure) {
-        return err(failureAsError(failure, 'the collaboration schema-validation JSON boundary'));
+      } catch (error) {
+        return err(failureAsError(error, 'the collaboration schema-validation JSON boundary'));
       }
       const validate = ajv.getSchema(schemaId);
       if (validate === undefined) {

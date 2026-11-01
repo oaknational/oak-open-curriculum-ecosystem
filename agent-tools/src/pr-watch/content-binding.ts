@@ -174,9 +174,9 @@ export function unboundNote<Review extends Reviewed>(
   head: BindingHead,
   awaitsRound: (review: Review) => boolean,
 ): string {
-  const earlier = reviews
-    .filter((review) => review.commitOid !== '' && review.commitOid !== head.headRefOid)
-    .at(-1);
+  const earlier = reviews.findLast(
+    (review) => review.commitOid !== '' && review.commitOid !== head.headRefOid,
+  );
   if (earlier === undefined) {
     return '';
   }

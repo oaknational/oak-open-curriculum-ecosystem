@@ -72,8 +72,8 @@ async function main(): Promise<void> {
   let markdown: string;
   try {
     markdown = await readFile(path.join(repoRoot, PACKET_REL), 'utf8');
-  } catch (cause: unknown) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     writeErrorLine(`validate-ratified-lists: cannot read ${PACKET_REL}: ${message}`);
     process.exitCode = 1;
     return;

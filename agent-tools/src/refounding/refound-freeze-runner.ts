@@ -88,8 +88,8 @@ async function copyInSet(
         inventoryMode: classifyInventoryMode(frozenPath, sourceBytes),
       });
     }
-  } catch (cause: unknown) {
-    return err(new Error(`freeze copy phase failed: ${asMessage(cause)}`));
+  } catch (error: unknown) {
+    return err(new Error(`freeze copy phase failed: ${asMessage(error)}`));
   }
   return ok(stats);
 }
@@ -119,8 +119,8 @@ async function buildIdentityProof(
         mismatches.push(stat.path);
       }
     }
-  } catch (cause: unknown) {
-    return err(new Error(`freeze self-check could not re-read a copy: ${asMessage(cause)}`));
+  } catch (error: unknown) {
+    return err(new Error(`freeze self-check could not re-read a copy: ${asMessage(error)}`));
   }
   if (mismatches.length > 0) {
     return err(
@@ -157,8 +157,8 @@ async function writeArtefacts(
     await mkdir(path.dirname(proofAbsPath), { recursive: true });
     wrote.identityProof = true;
     await writeFile(proofAbsPath, renderJsonArtefact(input.identityEntries), 'utf8');
-  } catch (cause: unknown) {
-    return err(new Error(`freeze artefact write failed: ${asMessage(cause)}`));
+  } catch (error: unknown) {
+    return err(new Error(`freeze artefact write failed: ${asMessage(error)}`));
   }
   return ok(undefined);
 }

@@ -51,8 +51,8 @@ function refuse(reason: string): number {
 async function loadBlocks(): Promise<readonly ScopedContentBlockGroup[] | undefined> {
   try {
     return await loadScopedContentBlocks();
-  } catch (cause) {
-    writeErrorLine(`${NAME}: cannot load .agent/hooks/policy.json (${String(cause)})`);
+  } catch (error) {
+    writeErrorLine(`${NAME}: cannot load .agent/hooks/policy.json (${String(error)})`);
     return undefined;
   }
 }

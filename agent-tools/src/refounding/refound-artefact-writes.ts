@@ -73,19 +73,19 @@ export async function writeArtefactSet(
     try {
       await writeFile(write.absPath, write.content, 'utf8');
       written.push(write.absPath);
-    } catch (cause: unknown) {
+    } catch (error: unknown) {
       const stubborn = await rollBackAttempted(written, write.absPath);
       if (stubborn.length > 0) {
         return err(
           new Error(
-            `artefact write failed (${asMessage(cause)}); rollback incomplete — remove ` +
+            `artefact write failed (${asMessage(error)}); rollback incomplete — remove ` +
               `manually: ${stubborn.join(', ')}`,
           ),
         );
       }
       return err(
         new Error(
-          `artefact write failed (${asMessage(cause)}); the partial set was rolled back — ` +
+          `artefact write failed (${asMessage(error)}); the partial set was rolled back — ` +
             'nothing of this run remains',
         ),
       );

@@ -67,10 +67,10 @@ function parseDocuments(
         logLevel: options.logLevel,
       }),
     );
-  } catch (cause: unknown) {
+  } catch (error: unknown) {
     return err(
       new EstateReviewError('SNAPSHOT_INVALID', 'workspace manifest YAML parsing failed', {
-        cause,
+        cause: error,
       }),
     );
   }

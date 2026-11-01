@@ -147,8 +147,8 @@ export function parseLedgerJsonl(label: string, text: string): Result<readonly L
     let json: unknown;
     try {
       json = JSON.parse(line);
-    } catch (cause: unknown) {
-      const message = cause instanceof Error ? cause.message : String(cause);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
       return err(new Error(`${label} line ${String(index + 1)} is not valid JSON: ${message}`));
     }
     const row = parseLedgerRow(json);

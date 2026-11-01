@@ -166,7 +166,7 @@ async function investigate(): Promise<void> {
   console.log(`Report written to: ${reportPath}`);
 }
 
-investigate().catch((e: unknown) => {
-  console.error('Failed:', e);
+investigate().catch((error: unknown) => {
+  console.error('Failed:', error);
   process.exit(1);
 });

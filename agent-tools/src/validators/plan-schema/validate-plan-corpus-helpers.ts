@@ -226,9 +226,9 @@ function parseFrontmatterMapping(content: string): Result<unknown, string> {
   let parsed: unknown;
   try {
     parsed = parseYaml(frontmatter);
-  } catch (cause) {
+  } catch (error) {
     return err(
-      `frontmatter is not parseable YAML: ${cause instanceof Error ? cause.message : String(cause)}`,
+      `frontmatter is not parseable YAML: ${error instanceof Error ? error.message : String(error)}`,
     );
   }
   if (!isJsonObject(parsed)) {

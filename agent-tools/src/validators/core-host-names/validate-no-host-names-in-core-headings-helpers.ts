@@ -38,8 +38,6 @@ import { type ScanFile } from '../../core/tracked-file-scan.js';
 
 import { atxHeadings } from './markdown-headings.js';
 
-export type { ScanFile };
-
 /** The Core's directory, with its trailing separator. */
 const CORE_PREFIX = '.agent/practice-core/';
 
@@ -212,3 +210,5 @@ export function scanCoreHeadings(
 ): HostNameHeadingHit[] {
   return files.flatMap((file) => findHostNameHeadingHits(file.path, file.content, needles));
 }
+
+export type { ScanFile } from '../../core/tracked-file-scan.js';

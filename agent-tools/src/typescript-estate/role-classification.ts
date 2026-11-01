@@ -94,12 +94,12 @@ function compileSelector(rule: RoleSelectorRule): CompiledSelectorRule | EstateR
 function compilePathRegexes(rule: RoleSelectorRule): readonly RegExp[] | EstateReviewError {
   try {
     return (rule.pathRegexes ?? []).map((source) => new RegExp(source, 'u'));
-  } catch (cause: unknown) {
+  } catch (error: unknown) {
     return new EstateReviewError(
       'CONFIG_INVALID',
       `role '${rule.role}' has an invalid path regex`,
       {
-        cause,
+        cause: error,
       },
     );
   }

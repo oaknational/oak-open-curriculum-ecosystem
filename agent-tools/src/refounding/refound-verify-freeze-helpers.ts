@@ -61,8 +61,8 @@ export async function readDenominator(outDirAbs: string): Promise<Result<Denomin
   let text: string;
   try {
     text = await readFile(denominatorAbsPath, 'utf8');
-  } catch (cause: unknown) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return err(new Error(`cannot read denominator at '${denominatorAbsPath}': ${message}`));
   }
   const json = parseJsonDocument('denominator', text);
@@ -222,11 +222,11 @@ async function checkFrozenFiles(
       // Defence-in-depth: re-anchor within the frozen root before reading.
       const copyAbsPath = assertPathWithinBase(path.join(frozenRootAbs, file.path), frozenRootAbs);
       copyBytes = await readFile(copyAbsPath);
-    } catch (cause: unknown) {
-      if (isFileMissingError(cause)) {
+    } catch (error: unknown) {
+      if (isFileMissingError(error)) {
         violations.push({ kind: 'missing', path: file.path });
       } else {
-        const detail = cause instanceof Error ? cause.message : String(cause);
+        const detail = error instanceof Error ? error.message : String(error);
         violations.push({ kind: 'unreadable', path: file.path, detail });
       }
       continue;

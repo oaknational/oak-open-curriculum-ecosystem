@@ -104,8 +104,8 @@ export async function computeResidue(input: {
     let bytes: Buffer;
     try {
       bytes = await readFile(path.join(input.rootAbs, relPath));
-    } catch (cause: unknown) {
-      const message = cause instanceof Error ? cause.message : String(cause);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
       return err(new Error(`cannot read frozen file '${relPath}': ${message}`));
     }
     const lineTexts = splitLineBytes(bytes).map((raw) => Buffer.from(raw).toString('utf8'));
@@ -199,8 +199,8 @@ export async function runResidue(input: {
       renderJsonArtefact(report.value),
       'utf8',
     );
-  } catch (cause: unknown) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return err(new Error(`residue artefact write failed: ${message}`));
   }
   return ok({

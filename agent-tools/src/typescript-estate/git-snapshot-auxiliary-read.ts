@@ -120,10 +120,10 @@ class RunScopedAuxiliaryBlobReader implements GitSnapshotAuxiliaryReader {
     let fetched: Result<Uint8Array, EstateReviewError>;
     try {
       fetched = this.#pinnedBlobs.read(path, maxBytes);
-    } catch (cause: unknown) {
+    } catch (error: unknown) {
       return err(
         new EstateReviewError('SOURCE_READ_FAILED', `Git auxiliary blob read '${path}' threw`, {
-          cause,
+          cause: error,
         }),
       );
     }

@@ -59,15 +59,15 @@ async function readMappingTable(
   let raw: string;
   try {
     raw = await readFile(mappingAbsPath, 'utf8');
-  } catch (cause: unknown) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return err(new Error(`cannot read status-mapping table: ${message}`));
   }
   let document: unknown;
   try {
     document = JSON.parse(raw);
-  } catch (cause: unknown) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return err(new Error(`status-mapping table is not valid JSON: ${message}`));
   }
   return parseStatusMappingTable(document);
@@ -88,14 +88,14 @@ async function readFrozenFileBytes(
   let frozenAbsPath: string;
   try {
     frozenAbsPath = assertPathWithinBase(path.join(frozenRootAbs, frozenPath), frozenRootAbs);
-  } catch (cause: unknown) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return err(new Error(`frozen path '${frozenPath}' escapes the frozen tree: ${message}`));
   }
   try {
     return ok(await readFile(frozenAbsPath));
-  } catch (cause: unknown) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return err(new Error(`cannot read frozen file '${frozenPath}': ${message}`));
   }
 }

@@ -397,7 +397,7 @@ describe('reconciliation binding: the local strict schema honours the wire contr
   function requiredOf(def: { [key: string]: unknown }): readonly string[] {
     const required = def['required'];
     if (!Array.isArray(required)) {
-      throw new Error('no required array');
+      throw new TypeError('no required array');
     }
     return required.filter((entry): entry is string => typeof entry === 'string');
   }

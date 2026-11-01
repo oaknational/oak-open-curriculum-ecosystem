@@ -99,11 +99,11 @@ async function readBody(
   const read = readFileImpl ?? ((file: string) => readFile(file, 'utf8'));
   try {
     return ok(await read(path));
-  } catch (cause) {
+  } catch (error) {
     return err(
       new Error(
-        `cannot read ${printable(path)}: ${cause instanceof Error ? cause.message : String(cause)}`,
-        { cause },
+        `cannot read ${printable(path)}: ${error instanceof Error ? error.message : String(error)}`,
+        { cause: error },
       ),
     );
   }

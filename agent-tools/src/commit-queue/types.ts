@@ -18,8 +18,6 @@ export type CommitQueuePhase = (typeof COMMIT_QUEUE_PHASES)[number];
 export type CommitQueueEntryStatus = (typeof COMMIT_QUEUE_ENTRY_STATUSES)[number];
 import { type JsonObject } from '../core/json.js';
 
-export type { JsonObject };
-
 /**
  * Agent identity on active CLAIMS — the PDR-076a read shape. `id` is
  * optional: legacy id-less rows are legal, preserved on write-back, and
@@ -234,3 +232,5 @@ function allPhaseSet(): ReadonlySet<string> {
 function statusSet(): ReadonlySet<string> {
   return new Set<CommitQueueEntryStatus>(COMMIT_QUEUE_ENTRY_STATUSES);
 }
+
+export type { JsonObject } from '../core/json.js';

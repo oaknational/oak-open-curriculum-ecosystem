@@ -74,8 +74,8 @@ export async function readRule(ruleAbsPath: string): Promise<Result<FreezeRule, 
   let text: string;
   try {
     text = await readFile(ruleAbsPath, 'utf8');
-  } catch (cause: unknown) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return err(new Error(`cannot read freeze rule at '${ruleAbsPath}': ${message}`));
   }
   const json = parseJsonDocument('freeze rule', text);

@@ -37,8 +37,8 @@ async function writeTranscript(
     await mkdir(path.dirname(transcriptAbs), { recursive: true });
     await writeFile(transcriptAbs, buildDiscriminationTranscript(outcome), 'utf8');
     return ok(undefined);
-  } catch (cause: unknown) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return err(new Error(`transcript write failed: ${message}`));
   }
 }

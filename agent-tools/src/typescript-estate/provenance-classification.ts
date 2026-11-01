@@ -71,9 +71,9 @@ function compileHeaderMatcher(
       id: configured.id,
       pattern: new RegExp(configured.source, configured.flags),
     };
-  } catch (cause: unknown) {
+  } catch (error: unknown) {
     return new EstateReviewError('CONFIG_INVALID', 'generated-header matcher is invalid', {
-      cause,
+      cause: error,
     });
   }
 }

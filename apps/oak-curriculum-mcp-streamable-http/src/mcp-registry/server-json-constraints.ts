@@ -69,7 +69,7 @@ const PUBLISHABLE_ENDPOINT_PATTERN = /^https:\/\/[^\s]+$/;
  * inventing a stricter local rule would refuse documents the registry would
  * take.
  */
-const LOOPBACK_ENDPOINT_HOSTNAMES: readonly string[] = ['localhost', '127.0.0.1'];
+const LOOPBACK_ENDPOINT_HOSTNAMES: ReadonlySet<string> = new Set(['localhost', '127.0.0.1']);
 
 /** Whether a URL's host is one the registry refuses as a remote. */
 function hasLoopbackHost(rawUrl: string): boolean {
@@ -80,7 +80,7 @@ function hasLoopbackHost(rawUrl: string): boolean {
     // Unparseable URLs are the scheme constraint's to refuse, not this one's.
     return false;
   }
-  return LOOPBACK_ENDPOINT_HOSTNAMES.includes(hostname) || hostname.endsWith('.localhost');
+  return LOOPBACK_ENDPOINT_HOSTNAMES.has(hostname) || hostname.endsWith('.localhost');
 }
 
 /** Composes the registry name from its two halves. */

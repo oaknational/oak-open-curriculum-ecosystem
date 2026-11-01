@@ -51,11 +51,11 @@ export function loadMergeBotRepoConfig(input: {
   let raw: string;
   try {
     raw = read(configPath);
-  } catch (cause) {
+  } catch (error) {
     return err(
       new Error(
-        `merge-bot config not readable at ${MERGE_BOT_CONFIG_RELATIVE_PATH} (per-checkout, never tracked): copy ${MERGE_BOT_CONFIG_EXAMPLE_RELATIVE_PATH} to ${MERGE_BOT_CONFIG_RELATIVE_PATH} at this clone's primary checkout and name this clone's app; cause: ${cause instanceof Error ? cause.message : String(cause)}`,
-        { cause },
+        `merge-bot config not readable at ${MERGE_BOT_CONFIG_RELATIVE_PATH} (per-checkout, never tracked): copy ${MERGE_BOT_CONFIG_EXAMPLE_RELATIVE_PATH} to ${MERGE_BOT_CONFIG_RELATIVE_PATH} at this clone's primary checkout and name this clone's app; cause: ${error instanceof Error ? error.message : String(error)}`,
+        { cause: error },
       ),
     );
   }

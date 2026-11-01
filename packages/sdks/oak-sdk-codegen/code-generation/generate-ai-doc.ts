@@ -98,12 +98,12 @@ async function readTypedocProject(typedocJsonPath: string): Promise<TDProject> {
   }
   try {
     return parseTDProject(json);
-  } catch (err: unknown) {
-    if (err instanceof ZodError) {
-      const details = formatZodIssues(err.issues);
-      throw new Error('TypeDoc JSON validation failed:\n' + details, { cause: err });
+  } catch (error: unknown) {
+    if (error instanceof ZodError) {
+      const details = formatZodIssues(error.issues);
+      throw new Error('TypeDoc JSON validation failed:\n' + details, { cause: error });
     }
-    throw err instanceof Error ? err : new Error(String(err));
+    throw error instanceof Error ? error : new Error(String(error));
   }
 }
 
@@ -195,8 +195,8 @@ async function main(): Promise<void> {
   await fs.writeFile(outPath, content, 'utf8');
 }
 
-main().catch((err: unknown) => {
-  const message = err instanceof Error ? err.message : String(err);
-  logger.error(message, normalizeError(err));
+main().catch((error: unknown) => {
+  const message = error instanceof Error ? error.message : String(error);
+  logger.error(message, normalizeError(error));
   process.exitCode = 1;
 });

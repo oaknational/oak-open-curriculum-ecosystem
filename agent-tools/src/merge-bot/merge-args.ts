@@ -71,9 +71,9 @@ function recordUnavailable(state: CollectedMergeFlags, value: string): Result<un
   try {
     state.unavailable.push(parseUnavailableFlag(value));
     return ok(undefined);
-  } catch (cause) {
+  } catch (error) {
     return err(
-      new Error(`${cause instanceof Error ? cause.message : String(cause)}\n${MERGE_USAGE}`),
+      new Error(`${error instanceof Error ? error.message : String(error)}\n${MERGE_USAGE}`),
     );
   }
 }

@@ -159,7 +159,7 @@ describe('suggest', () => {
     const boolQuery = calls[0]?.query?.bool;
     const mustArray = boolQuery?.must;
     if (!Array.isArray(mustArray)) {
-      throw new Error('Expected must to be an array');
+      throw new TypeError('Expected must to be an array');
     }
     return mustArray[0]?.multi_match;
   }

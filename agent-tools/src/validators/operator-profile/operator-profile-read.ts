@@ -84,8 +84,8 @@ export async function readDocument(
   let opened: DocumentHandle;
   try {
     opened = await openDocument(absolute, NO_FOLLOW_READ_FLAGS);
-  } catch (cause) {
-    return err(unreadable(cause));
+  } catch (error) {
+    return err(unreadable(error));
   }
   let text: string;
   try {
@@ -94,14 +94,14 @@ export async function readDocument(
       return err(withCloseFailure(identity, await closeAfterFailure(opened)));
     }
     text = await opened.readFile('utf8');
-  } catch (cause) {
-    return err(withCloseFailure(unreadable(cause), await closeAfterFailure(opened)));
+  } catch (error) {
+    return err(withCloseFailure(unreadable(error), await closeAfterFailure(opened)));
   }
   try {
     await opened.close();
-  } catch (cause) {
+  } catch (error) {
     return err(
-      `cannot close the document after reading it (${errorCode(cause)}) — the text read is discarded, never trusted`,
+      `cannot close the document after reading it (${errorCode(error)}) — the text read is discarded, never trusted`,
     );
   }
   return ok(text);
@@ -142,8 +142,8 @@ async function closeAfterFailure(handle: DocumentHandle): Promise<string | null>
   try {
     await handle.close();
     return null;
-  } catch (cause) {
-    return errorCode(cause);
+  } catch (error) {
+    return errorCode(error);
   }
 }
 

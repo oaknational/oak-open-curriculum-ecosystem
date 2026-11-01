@@ -48,7 +48,7 @@ const GIT_SHA_PATTERN = /^[0-9a-f]{7,40}$/iu;
 
 export function trimToUndefined(value: string | undefined): string | undefined {
   const trimmed = value?.trim();
-  return trimmed ? trimmed : undefined;
+  return trimmed || undefined;
 }
 
 function isValidGitSha(value: string): boolean {

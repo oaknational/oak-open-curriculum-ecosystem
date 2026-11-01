@@ -62,7 +62,7 @@ function getBoolFilterClauses(filterClause: unknown): readonly unknown[] {
   }
   const clauses = boolClause.filter;
   if (!Array.isArray(clauses)) {
-    throw new Error('Expected bool.filter clause in sequence request');
+    throw new TypeError('Expected bool.filter clause in sequence request');
   }
   return clauses;
 }

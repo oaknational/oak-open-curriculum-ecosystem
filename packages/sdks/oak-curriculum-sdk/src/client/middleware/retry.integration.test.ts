@@ -275,8 +275,8 @@ describe('retry middleware integration', () => {
 
       // Create promise and immediately capture any rejection
       let caughtError: Error | null = null;
-      const resultPromise = wrappedFetch('http://test.local/test').catch((e: Error) => {
-        caughtError = e;
+      const resultPromise = wrappedFetch('http://test.local/test').catch((error: Error) => {
+        caughtError = error;
       });
 
       // Run all timers to completion
@@ -314,8 +314,8 @@ describe('retry middleware integration', () => {
 
       // Create promise and immediately capture any rejection
       let caughtError: Error | null = null;
-      const resultPromise = wrappedFetch('http://test.local/test').catch((e: Error) => {
-        caughtError = e;
+      const resultPromise = wrappedFetch('http://test.local/test').catch((error: Error) => {
+        caughtError = error;
       });
 
       // Run all timers to completion

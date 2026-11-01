@@ -12,6 +12,7 @@
  * @packageDocumentation
  */
 
+import { typeSafeIncludes } from '@oaknational/type-helpers';
 import { extractFrontmatter, getFrontmatterValue } from '../portability/portability-fs.js';
 
 /** The README whose Pattern Index section this module owns. */
@@ -25,7 +26,7 @@ const PATTERN_LAYERS = ['general', 'family', 'contextual'] as const;
 type PatternLayer = (typeof PATTERN_LAYERS)[number];
 
 function isPatternLayer(value: string): value is PatternLayer {
-  return PATTERN_LAYERS.some((layer) => layer === value);
+  return typeSafeIncludes(PATTERN_LAYERS, value);
 }
 
 /** A single indexable pattern, distilled from one file's frontmatter. */

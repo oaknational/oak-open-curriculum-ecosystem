@@ -107,8 +107,8 @@ export function parseDiscriminationTranscript(text: string): Result<PlantOrphanO
   let document: unknown;
   try {
     document = JSON.parse(machineBlock);
-  } catch (cause: unknown) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return err(new Error(`transcript outcome block is not valid JSON: ${message}`));
   }
   const outcome = parseWithSchema({

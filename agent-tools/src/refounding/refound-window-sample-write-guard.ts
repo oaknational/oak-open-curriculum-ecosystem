@@ -92,8 +92,8 @@ export function canonicaliseOutDir(
       expectedAnchorReal: realpathSync(anchorAbs),
       absentSegments: path.relative(anchorAbs, outDirAbs),
     });
-  } catch (cause: unknown) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return err(new Error(`cannot canonicalise out dir '${outDirAbs}': ${message}`));
   }
 }
@@ -116,8 +116,8 @@ export function recheckOutDirContainment(target: ManifestWriteTarget): Result<un
   let anchorReal: string;
   try {
     anchorReal = realpathSync(target.anchorAbs);
-  } catch (cause: unknown) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return err(
       new Error(`cannot re-canonicalise out dir anchor '${target.anchorAbs}': ${message}`),
     );
@@ -192,18 +192,18 @@ function writeFailed(cause: unknown): Result<undefined, Error> {
 function createRealDirSegment(dirAbs: string): Result<undefined, Error> {
   try {
     mkdirSync(dirAbs);
-  } catch (cause: unknown) {
-    if (!isEexist(cause)) {
-      return writeFailed(cause);
+  } catch (error: unknown) {
+    if (!isEexist(error)) {
+      return writeFailed(error);
     }
   }
   let stat: Stats | undefined;
   try {
     stat = lstatSync(dirAbs, { throwIfNoEntry: false });
-  } catch (cause: unknown) {
-    return writeFailed(cause);
+  } catch (error: unknown) {
+    return writeFailed(error);
   }
-  if (stat === undefined || !stat.isDirectory()) {
+  if (!stat?.isDirectory()) {
     return err(
       new Error(
         `write path segment '${dirAbs}' is not a real directory — a planted symlink or ` +

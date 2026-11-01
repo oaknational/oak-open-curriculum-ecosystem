@@ -111,19 +111,19 @@ export function resolveCoordinationHome(
   let porcelain: string;
   try {
     porcelain = runGit(['worktree', 'list', '--porcelain'], cwd);
-  } catch (cause) {
+  } catch (error) {
     // A resolver refusal is its own diagnosis — git never ran, so "not inside
     // a git working tree" would be a false statement about a true repository
     // (observed 2026-08-11 on Windows: the POSIX-only allowlist refused and
     // this wrapper rebranded it, exactly the pnpm-path misleading-error
     // precedent).
-    if (cause instanceof TrustedGitResolutionError) {
-      throw cause;
+    if (error instanceof TrustedGitResolutionError) {
+      throw error;
     }
     throw new Error(
       `Unable to resolve the collaboration home: '${cwd}' is not inside a git working tree. ` +
         `Run from inside the repository, or pass an explicit --repo-root <path>.`,
-      { cause },
+      { cause: error },
     );
   }
 

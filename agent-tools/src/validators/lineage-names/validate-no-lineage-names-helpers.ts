@@ -35,8 +35,6 @@ import { type ScanFile } from '../../core/tracked-file-scan.js';
 import { isPathInScope } from '../../hook-policy/path-scope.js';
 import { type ScopedContentBlockGroup } from '../../hook-policy/types.js';
 
-export type { ScanFile };
-
 /** A single lineage-name occurrence. */
 export interface LineageNameHit {
   readonly file: string;
@@ -153,3 +151,5 @@ export function scanForLineageNames(
   }
   return hits;
 }
+
+export type { ScanFile } from '../../core/tracked-file-scan.js';

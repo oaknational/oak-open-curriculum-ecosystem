@@ -105,10 +105,10 @@ function readHarvest<Parsed>(input: {
         `api graphql ${input.label}`,
       ),
     );
-  } catch (cause) {
+  } catch (error) {
     throw new Error(
       `PR #${input.prNumber}: ${input.label} harvest failed — does the PR exist and is it accessible?`,
-      { cause },
+      { cause: error },
     );
   }
 }

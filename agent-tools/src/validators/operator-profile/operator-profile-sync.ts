@@ -15,6 +15,7 @@
  * The root is `${PRACTICE_HOME:-~/.practice}/profile` or `--root <dir>`.
  */
 
+import { typeSafeIncludes } from '@oaknational/type-helpers';
 import { homedir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 
@@ -54,7 +55,7 @@ type Option = (typeof OPTIONS)[Command['kind']][number];
 
 /** Zero-widening membership: the literal grammar decides, never a `string` view of it. */
 function isOption(kind: Command['kind'], flag: string): flag is Option {
-  return OPTIONS[kind].some((option) => option === flag);
+  return typeSafeIncludes(OPTIONS[kind], flag);
 }
 
 /**

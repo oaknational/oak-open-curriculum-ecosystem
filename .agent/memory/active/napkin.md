@@ -1085,3 +1085,24 @@ the owner wants it kept).
 - **Friction**: the worktree Bash guard refused heredoc-bearing commands in `pr-357` that it had
   allowed in another worktree minutes earlier ("too complex to verify"); the Write tool and a plain
   python call were the route. One instance; the trigger not identified.
+
+## 2026-11-01 — Smelter herds Basalt (871ba4): the autofix pass and its two true breakages
+
+- **`unicorn/prefer-export-from` emits `export { type X } from './y.js'`, and esbuild keeps that
+  as a side-effect import of `./y.js`.** A type-only re-export in `gazetteer.ts` became that form,
+  pulled `gazetteer-schema.ts` and so Zod 4 into every restatement-audit workflow bundle (570 KB
+  against 22 KB), and the harness emitter's `meta`-binding check caught Zod's own `meta()`. The
+  erased form is `export type { X } from './y.js'`; the fixer's 13 sibling conversions were
+  changed to it in the same pass. Lesson: after any autofix pass, diff for `^export { .*type` and
+  convert; the lint gate does not see bundle contents.
+- **`unicorn/prefer-includes` converts the `.some((x) => x === value)` type guard into
+  `.includes(value)`, which does not type-check against an `as const` tuple.** Nine sites, the
+  class the removed config comment had named. Cure at the second consumer, not nine local
+  patches: `typeSafeIncludes(values, value): value is T` in `@oaknational/type-helpers`, body
+  `new Set<unknown>(values).has(value)`, no assertion, trips neither `prefer-includes` nor
+  `prefer-set-has`.
+- **Three autofixable-looking classes did not fix:** `sonarjs/concise-regex`,
+  `sonarjs/prefer-regexp-exec`, `sonarjs/no-redundant-optional` (type-aware sonarjs rules; their
+  fixers did not run under `lint:fix`). They sit in the hand-fix remainder.
+- **Estimates were over-padded twice** (one hour for a ten-minute edit; two days for one). Size
+  the work from the edit, and give the gate and CI wait separately.

@@ -10,7 +10,7 @@
  */
 
 /** commitlint's strict-mode lint verdicts: 2 for warnings, 3 for errors. */
-const COMMITLINT_VIOLATION_STATUSES: readonly number[] = [2, 3];
+const COMMITLINT_VIOLATION_STATUSES: ReadonlySet<number> = new Set([2, 3]);
 
 /**
  * This tool's exit code for a commitlint exit status.
@@ -28,7 +28,7 @@ export function exitCodeForCommitlintStatus(status: number | null): 0 | 1 | 2 {
   if (status === 0) {
     return 0;
   }
-  return status !== null && COMMITLINT_VIOLATION_STATUSES.includes(status) ? 1 : 2;
+  return status !== null && COMMITLINT_VIOLATION_STATUSES.has(status) ? 1 : 2;
 }
 
 /**

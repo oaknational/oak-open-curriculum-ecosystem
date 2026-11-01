@@ -63,7 +63,7 @@ export function resolveCodexAgentConfigFilePath(configFile: string): string {
 function parseTomlBasicString(rawValue: string): string {
   const parsedValue: unknown = JSON.parse(`"${rawValue}"`);
   if (typeof parsedValue !== 'string') {
-    throw new Error('Expected TOML basic string value to parse as a string.');
+    throw new TypeError('Expected TOML basic string value to parse as a string.');
   }
 
   return parsedValue;

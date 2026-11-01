@@ -52,6 +52,20 @@ const TYPED_RULES_OFF = {
   '@typescript-eslint/consistent-type-exports': 'off',
   'sonarjs/no-alphabetical-sort': 'off',
   'sonarjs/void-use': 'off',
+  '@typescript-eslint/prefer-optional-chain': 'off',
+  '@typescript-eslint/prefer-nullish-coalescing': 'off',
+  '@typescript-eslint/no-base-to-string': 'off',
+  '@typescript-eslint/no-redundant-type-constituents': 'off',
+  'sonarjs/concise-regex': 'off',
+  'sonarjs/prefer-regexp-exec': 'off',
+  'sonarjs/no-redundant-optional': 'off',
+  'sonarjs/no-selector-parameter': 'off',
+  'sonarjs/regex-complexity': 'off',
+  'sonarjs/no-misleading-array-reverse': 'off',
+  // Not a typed rule: it resolves the fixture's path against the package on
+  // disk to find the test framework, which an in-memory fixture path cannot
+  // satisfy.
+  'sonarjs/prefer-specific-assertions': 'off',
 } as const;
 
 const TYPED_RULES_OVERRIDE: TSESLint.FlatConfig.Config = {

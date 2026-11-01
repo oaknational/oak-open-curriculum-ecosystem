@@ -108,8 +108,8 @@ async function writeLedgers(input: {
 }): Promise<Result<DefaultLedgerSummary, Error>> {
   try {
     await mkdir(input.ledgerDirAbs, { recursive: true });
-  } catch (cause: unknown) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return err(new Error(`default-ledger write failed: ${message}`));
   }
   let rowCount = 0;

@@ -160,9 +160,11 @@ async function proveCommitLandsOnWorktreeBranch(): Promise<void> {
     // advisory pass — and that MUST NOT gate the commit (PDR-053 / ADR-176
     // advisory polarity).
     assertAdvisoryFailureStreams(committed, head);
-    const committedPaths = git(fixture.linked, 'ls-tree', '-r', '--name-only', 'HEAD').split('\n');
-    assert.ok(committedPaths.includes(RENAME_DESTINATION));
-    assert.equal(committedPaths.includes(RENAME_SOURCE), false);
+    const committedPaths = new Set(
+      git(fixture.linked, 'ls-tree', '-r', '--name-only', 'HEAD').split('\n'),
+    );
+    assert.ok(committedPaths.has(RENAME_DESTINATION));
+    assert.equal(committedPaths.has(RENAME_SOURCE), false);
     assert.equal(git(fixture.linked, 'status', '--short'), '');
 
     // The primary checkout's HEAD is untouched — the inner commit landed

@@ -66,11 +66,11 @@ export interface NumberedAmendment {
 async function listAmendmentEntries(amendmentsDirAbs: string): Promise<Result<string[], Error>> {
   try {
     return ok(await readdir(amendmentsDirAbs));
-  } catch (cause: unknown) {
-    if (cause instanceof Error && 'code' in cause && cause.code === 'ENOENT') {
+  } catch (error: unknown) {
+    if (error instanceof Error && 'code' in error && error.code === 'ENOENT') {
       return ok([]);
     }
-    const message = cause instanceof Error ? cause.message : String(cause);
+    const message = error instanceof Error ? error.message : String(error);
     return err(new Error(`cannot read amendments directory '${amendmentsDirAbs}': ${message}`));
   }
 }
@@ -104,8 +104,8 @@ async function readAmendmentDocument(
   let text: string;
   try {
     text = await readFile(path.join(amendmentsDirAbs, name), 'utf8');
-  } catch (cause: unknown) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return err(new Error(`cannot read amendment '${name}': ${message}`));
   }
   const json = parseJsonDocument(name, text);

@@ -6,11 +6,10 @@ import {
 import {
   ensureLedgerStatusResolved,
   ensureStatusListedInLedger,
-  parseLedger,
   parseReadbackStatus,
   resolveFieldAlias,
 } from './field-readback-audit-ledger.js';
-import { createElasticsearchDeps } from './field-readback-audit-elasticsearch-deps.js';
+
 import type {
   GapLedger,
   GapLedgerFieldEntry,
@@ -24,14 +23,6 @@ import type {
  * - `parseLedger` for ledger parsing and validation.
  * - `createElasticsearchDeps` for Elasticsearch-backed read dependencies.
  */
-export { parseLedger, createElasticsearchDeps };
-export type {
-  GapLedger,
-  GapLedgerFieldEntry,
-  ReadbackAuditDependencies,
-  ReadbackAuditEntry,
-  ReadbackAuditResult,
-};
 
 async function readCountsWithRetry(
   indexName: string,
@@ -149,3 +140,13 @@ export async function runFieldReadbackAudit(
     failures,
   };
 }
+
+export { parseLedger } from './field-readback-audit-ledger.js';
+export { createElasticsearchDeps } from './field-readback-audit-elasticsearch-deps.js';
+export {
+  type GapLedger,
+  type GapLedgerFieldEntry,
+  type ReadbackAuditDependencies,
+  type ReadbackAuditEntry,
+  type ReadbackAuditResult,
+} from './field-readback-audit-types.js';

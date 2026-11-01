@@ -171,8 +171,10 @@ function readAndRenderMember(
 ): Result<string, EstateReviewError> {
   try {
     return renderJson(typeSafeGet(value, key), depth + 1, ancestors, location);
-  } catch (cause: unknown) {
-    return err(new EstateReviewError('VALIDATION_FAILED', `${location} cannot be read`, { cause }));
+  } catch (error: unknown) {
+    return err(
+      new EstateReviewError('VALIDATION_FAILED', `${location} cannot be read`, { cause: error }),
+    );
   }
 }
 
@@ -204,9 +206,11 @@ function invokeRenderer(
 ): Result<string, EstateReviewError> {
   try {
     return operation();
-  } catch (cause: unknown) {
+  } catch (error: unknown) {
     return err(
-      new EstateReviewError('VALIDATION_FAILED', 'canonical JSON serialisation failed', { cause }),
+      new EstateReviewError('VALIDATION_FAILED', 'canonical JSON serialisation failed', {
+        cause: error,
+      }),
     );
   }
 }

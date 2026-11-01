@@ -218,8 +218,8 @@ export async function runMergeBotTopic(
   let root: string;
   try {
     root = input.repoRoot ?? repoRoot();
-  } catch (cause) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
     return { exitCode: 2, stdout: '', stderr: `merge-bot: ${message}\n` };
   }
   const exitCode = await runMergeBotCli({

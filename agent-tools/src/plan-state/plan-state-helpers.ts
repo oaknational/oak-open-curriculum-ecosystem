@@ -95,8 +95,8 @@ async function readRepoFile(flagPath: string): Promise<Result<string, Error>> {
   }
   try {
     return ok(await readFile(resolved.value, 'utf8'));
-  } catch (cause: unknown) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return err(new Error(`cannot read '${flagPath}': ${message}`));
   }
 }
@@ -213,9 +213,9 @@ export async function writeReportIfRequested(
     await writeFile(temp, serialisePlanStateReport(report), 'utf8');
     await rename(temp, target.value);
     return ok(null);
-  } catch (cause: unknown) {
+  } catch (error: unknown) {
     await rm(temp, { force: true }).catch(() => undefined);
-    const message = cause instanceof Error ? cause.message : String(cause);
+    const message = error instanceof Error ? error.message : String(error);
     return err(new Error(`cannot write report '${args.reportPath}': ${message}`));
   }
 }

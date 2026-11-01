@@ -138,8 +138,8 @@ async function main(): Promise<void> {
   logger.info('Pipeline completed successfully.');
 }
 
-main().catch((err: unknown) => {
-  const message = err instanceof Error ? err.message : String(err);
-  logger.error(`Fatal error: ${message}`, normalizeError(err));
+main().catch((error: unknown) => {
+  const message = error instanceof Error ? error.message : String(error);
+  logger.error(`Fatal error: ${message}`, normalizeError(error));
   process.exit(1);
 });
