@@ -25,4 +25,4 @@ landing procedure, as a new row here.
 | Audience set | Audience | Home | Delivery mechanism |
 | --- | --- | --- | --- |
 | Practice skills corpus | agents and humans building this repository and its mechanisms | `.agent/skills/` | generated platform adapters (`.claude/skills/`, `.agents/skills/`) |
-| Curriculum and teacher skills | teachers and other users of Oak curriculum content | `.claude-plugin/marketplace.json` | Claude plugin marketplace |
+| Curriculum and teacher skills | teachers and other users of Oak curriculum content | oaknational/oak-ai-plugins | Claude and ChatGPT plugins |

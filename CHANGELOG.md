@@ -1,3 +1,17 @@
+## [1.186.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.186.0...v1.186.1) (2026-10-21)
+
+# [1.186.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.185.6...v1.186.0) (2026-10-19)
+
+
+### Bug Fixes
+
+* **plugins:** describe the 1.1.0 changes in the ChatGPT release notes (MCP-766) ([eed4075](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/eed40755c61dfdfbe93866135fa246bae452e1d6))
+
+
+### Features
+
+* **plugins:** make the ChatGPT package pass OpenAI's ZIP upload checks (MCP-766) ([fa3bce5](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/fa3bce5b6af42b97c287f6feec6619cc0352b101))
+
 ## [1.185.6](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.185.5...v1.185.6) (2026-10-01)
 
 ## [1.185.5](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.185.4...v1.185.5) (2026-10-01)

@@ -35,6 +35,10 @@ workflow+agent pairs folded into single skills. Owner-directed (MCP-692).
 and `chatgpt/plugins/oak-national-academy/`, replacing the two `plugins/`
 folders above. The plugin, its MCP server key and the package are all named
 `oak-national-academy`. Owner-directed (MCP-763).
+**Amended**: 2026-10-21 — the user-facing plugin packages moved to
+oaknational/oak-ai-plugins, which builds, checks and releases them from 1.1.1.
+Their folders, both root marketplace files and `validate-plugin-skill-copies`
+are removed from this repository. Owner-directed (MCP-773, MCP-774).
 **Related**: [ADR-114 (Layered Sub-agent Prompt Composition)](114-layered-sub-agent-prompt-composition-architecture.md), [ADR-119 (Agentic Engineering Practice)](119-agentic-engineering-practice.md), [ADR-124 (Practice Propagation Model)](124-practice-propagation-model.md), [PDR-009 (Canonical-First Cross-Platform Architecture)](../../../.agent/practice-core/decision-records/PDR-009-canonical-first-cross-platform-architecture.md), [PDR-035 (Agent Work Capabilities Belong to the Practice)](../../../.agent/practice-core/decision-records/PDR-035-agent-work-capabilities-belong-to-the-practice.md), [PDR-051 (Vendor-Agnostic Skills Standardisation)](../../../.agent/practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md), [ADR-165 (Agent Work Practice Phenotype Boundary)](165-agent-work-practice-phenotype-boundary.md)
 
 ## Context
@@ -551,10 +555,10 @@ generation prefix) are configurable parameters, not class boundaries:
   repository, surfaced to external users via MCP, plugins, or the
   external skills ecosystem. Current sub-classes: curriculum skills
   (for teachers) and engineering skills (for ed-tech engineers building
-  on the curriculum SDK). Home today: `claude/plugins/oak-national-academy/`
-  (Claude Code) and its ChatGPT/Codex packaging
-  `chatgpt/plugins/oak-national-academy/`, the latter listed by the root
-  `.agents/plugins/marketplace.json` (2026-09-08 and 2026-09-30 amendments).
+  on the curriculum SDK). Home: oaknational/oak-ai-plugins, which holds
+  the Claude Code plugin and its ChatGPT/Codex packaging (2026-10-21
+  amendment); versions up to 1.1.0 are in this repository's history at
+  release v1.186.0.
   These are product deliverables assured under validation-strategy's
   tiers (teacher-facing content sits at the Critical/Standard tier);
   they are not repo-projection machinery and the adapter pipeline never
@@ -577,6 +581,16 @@ closure would need an identity discriminator, a separate design
 decision.
 
 ## Amendments
+
+### 2026-10-21 — Plugins move to oak-ai-plugins
+
+The owner moved the user-facing plugins to oaknational/oak-ai-plugins, which
+builds, checks and releases them from 1.1.1 (MCP-773, MCP-774). The
+skill-copy validator and the plugin tests were ported to that repository's CI,
+and its sync from this repository was retired. This repository's plugin
+folders, its two root marketplace files and `validate-plugin-skill-copies`
+are removed; the last versions, with the skill evals, are at release
+v1.186.0. The sections below keep the paths they were written with.
 
 ### 2026-09-30 — Provider folders and one plugin name
 
