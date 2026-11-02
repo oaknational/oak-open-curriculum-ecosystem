@@ -66,9 +66,21 @@ export function logLevelToSeverityText(level: LogLevel): string {
 }
 
 /**
+ * The width of an OpenTelemetry TraceId in hex characters (128 bits).
+ *
+ * @see https://opentelemetry.io/docs/specs/otel/logs/data-model/#field-traceid
+ */
+const TRACE_ID_HEX_LENGTH = 32;
+
+/**
  * Convert a correlation ID to an OpenTelemetry TraceId
  *
- * Uses MD5 hash to create a consistent 32-character hex string from the correlation ID.
+ * The TraceId is the first 32 hex characters of SHA-256 over the correlation
+ * ID: stable for one input, and the width the data model gives a TraceId. It
+ * is a fallback used per log record only when no active span exists, and the
+ * correlation ID is not a secret; SHA-256 is still used because the estate
+ * carries one hash algorithm everywhere a hash is derived (the S4790 class in
+ * `docs/governance/sonar-disposition-policy.md`).
  *
  * @param correlationId - The correlation ID to convert
  * @returns 32-character hex TraceId, or undefined if no correlationId provided
@@ -78,9 +90,7 @@ export function correlationIdToTraceId(correlationId: string | undefined): strin
     return undefined;
   }
 
-  // MD5 produces 128-bit (16-byte) hash, which is 32 hex characters
-  const hash = createHash('md5').update(correlationId).digest('hex');
-  return hash;
+  return createHash('sha256').update(correlationId).digest('hex').slice(0, TRACE_ID_HEX_LENGTH);
 }
 
 /**

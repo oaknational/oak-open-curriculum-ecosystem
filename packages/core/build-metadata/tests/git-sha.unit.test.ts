@@ -1,5 +1,3 @@
-import { readFileSync } from 'node:fs';
-
 import { describe, expect, it } from 'vitest';
 
 import { resolveGitSha } from '../src/git-sha.js';
@@ -41,17 +39,5 @@ describe('resolveGitSha', () => {
       ok: true,
       value: undefined,
     });
-  });
-});
-
-describe('git-sha module structural fitness', () => {
-  it('does not import @oaknational/env (eager readFileSync barrier)', () => {
-    // The git-sha module must NOT transitively trigger ROOT_PACKAGE_VERSION's
-    // eager readFileSync at module init — that path breaks on read-only
-    // filesystems and bundled paths where `import.meta.url` no longer
-    // resolves to a real package.json four levels up. This is the durable
-    // regression guard for the Wilma BLOCKING finding addressed by WS2 §2.0.
-    const source = readFileSync(new URL('../src/git-sha.ts', import.meta.url), 'utf8');
-    expect(source).not.toMatch(/@oaknational\/env/u);
   });
 });

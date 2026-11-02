@@ -24,11 +24,11 @@
  */
 
 export { findRepoRoot, findAppRoot } from './repo-root.js';
-export type { PathExists } from './repo-root.js';
 
 export { resolveEnv } from './resolve-env.js';
 export type { ResolveEnvOptions } from './resolve-env.js';
 export type {
+  EnvFileSystem,
   EnvKeyDiagnostic,
   EnvResolutionError,
   EnvResolveErr,
@@ -36,4 +36,5 @@ export type {
   EnvResolveResult,
   EnvWarning,
   ObservabilitySinksEmptyInPreviewWarning,
+  PathExists,
 } from './types.js';

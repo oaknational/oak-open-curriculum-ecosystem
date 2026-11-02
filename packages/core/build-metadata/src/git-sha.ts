@@ -1,5 +1,7 @@
 import { err, ok, type Result } from '@oaknational/result';
 
+import { trimToUndefined } from './trim-to-undefined.js';
+
 export type GitShaSource = 'GIT_SHA_OVERRIDE' | 'VERCEL_GIT_COMMIT_SHA';
 
 /**
@@ -45,11 +47,6 @@ export interface ResolveGitShaInput {
 export const NO_DIAGNOSTICS: [] = [];
 
 const GIT_SHA_PATTERN = /^[0-9a-f]{7,40}$/iu;
-
-export function trimToUndefined(value: string | undefined): string | undefined {
-  const trimmed = value?.trim();
-  return trimmed || undefined;
-}
 
 function isValidGitSha(value: string): boolean {
   return GIT_SHA_PATTERN.test(value);

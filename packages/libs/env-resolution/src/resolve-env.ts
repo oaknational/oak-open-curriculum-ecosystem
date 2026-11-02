@@ -16,7 +16,13 @@
 
 import type { z } from 'zod';
 import { loadEnvFileLayers } from './env-file-layers.js';
-import type { EnvKeyDiagnostic, EnvResolutionError, EnvResolveResult } from './types.js';
+import { nodeEnvFileSystem } from './env-file-system.js';
+import type {
+  EnvFileSystem,
+  EnvKeyDiagnostic,
+  EnvResolutionError,
+  EnvResolveResult,
+} from './types.js';
 
 /** The options every resolution carries: the schema and the process environment. */
 interface ResolveEnvCommonOptions<TSchema extends z.ZodType> {
@@ -42,6 +48,12 @@ export type ResolveEnvOptions<TSchema extends z.ZodType> =
       readonly envFiles?: 'discover';
       /** Directory from which to begin searching for the monorepo root */
       readonly startDir: string;
+      /**
+       * The filesystem the root markers and `.env` files are read through:
+       * the real one by default; a caller composes another to prove
+       * resolution without a disk.
+       */
+      readonly fileSystem?: EnvFileSystem;
     })
   | (ResolveEnvCommonOptions<TSchema> & { readonly envFiles: 'none' });
 
@@ -188,7 +200,8 @@ function buildEnvResolutionError(
  *
  * @typeParam TSchema - Zod schema type
  * @param options - Pipeline options: schema, processEnv, and either
- *   `startDir` (env-file discovery) or `envFiles: 'none'`
+ *   `startDir` (env-file discovery, through `fileSystem` when given) or
+ *   `envFiles: 'none'`
  * @returns `EnvResolveResult` — `\{ ok: true, value, warnings \}` on
  *   success (warnings is empty today; populated by the schema layer in
  *   WS3 of the observability multi-sink + fixtures plan), or
@@ -202,7 +215,10 @@ export function resolveEnv<TSchema extends z.ZodType>(
   options: ResolveEnvOptions<TSchema>,
 ): EnvResolveResult<z.infer<TSchema>> {
   const { schema, processEnv } = options;
-  const fileLayers = options.envFiles === 'none' ? {} : loadEnvFileLayers(options.startDir);
+  const fileLayers =
+    options.envFiles === 'none'
+      ? {}
+      : loadEnvFileLayers(options.startDir, options.fileSystem ?? nodeEnvFileSystem);
   const merged: Record<string, string | undefined> = { ...fileLayers, ...processEnv };
 
   const parsed = schema.safeParse(merged);

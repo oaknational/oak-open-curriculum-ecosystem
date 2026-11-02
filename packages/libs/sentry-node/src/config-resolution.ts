@@ -5,9 +5,9 @@ import {
   resolveRelease,
   type ReleaseError,
   type ResolvedRelease,
+  trimToUndefined,
 } from '@oaknational/build-metadata';
 import { err, ok, type Result } from '@oaknational/result';
-import { trimToUndefined } from './config-parsing.js';
 import type {
   GitShaSource,
   ObservabilityConfigError,

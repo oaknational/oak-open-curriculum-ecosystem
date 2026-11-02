@@ -44,17 +44,15 @@ export { UnifiedLogger } from './unified-logger.js';
 export { buildResourceAttributes, getDeploymentEnvironment } from './resource-attributes.js';
 
 /**
- * Adapt Node.js WriteStream to SimpleWriteStream interface
+ * Adapt a Node.js `WriteStream` to the `SimpleWriteStream` port.
+ *
+ * @remarks The adapter writes UTF-8. The port hands it pre-formatted log
+ * lines and names no encoding; the choice is this adapter's alone.
  */
 function adaptWriteStream(stream: NodeWriteStream): SimpleWriteStream {
   return {
-    write: (chunk: string, encoding?: string, cb?: (error?: Error | null) => void): boolean => {
-      const bufferEncoding = encoding === 'utf8' || encoding === 'utf-8' ? 'utf8' : 'utf8';
-      if (cb) {
-        return stream.write(chunk, bufferEncoding, cb);
-      }
-      return stream.write(chunk, bufferEncoding);
-    },
+    write: (chunk: string, cb?: (error?: Error | null) => void): boolean =>
+      stream.write(chunk, 'utf8', cb),
     end: (cb?: () => void): SimpleWriteStream => {
       stream.end(cb);
       return adaptWriteStream(stream);
