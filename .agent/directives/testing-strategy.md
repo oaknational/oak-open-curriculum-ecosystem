@@ -33,6 +33,11 @@ would falsify the guard, prove the test bites) is in
 ## Philosophy
 
 - ALWAYS test behaviour, NEVER test implementation
+- **Tests are held to the same standard as every other line of code, if
+  anything a higher one.** A good test is the living description of intent
+  and correctness; product code may change freely and be accepted while it
+  satisfies a well-written test (owner, 2026-11-01). Every rule, lint gate
+  and review lens that binds product code binds test code identically.
 - **Tests prove the behaviour of product code, and must never be used to
   constrain configuration or implementation** (owner, 2026-09-24,
   verbatim: "tests prove behaviour of product code, they must never, ever
@@ -71,9 +76,9 @@ would falsify the guard, prove the test bites) is in
   written first in the same way)
 - Prefer unit tests over integration tests
 - Prefer integration tests over E2E checks
-- **Tests never, under any circumstances, use or create IO.** Every test of
-  every kind, every helper a test imports, and the product code a test runs:
-  no filesystem, no network, no
+- **In-process tests never, under any circumstances, use or create IO other
+  than stdio.** Every unit and integration test, every helper such a test
+  imports, and the product code it runs: no filesystem, no network, no
   socket (loopback included), no process spawn, no clock, no environment
   read. This is an absolute invariant, not a matter of degree (owner,
   2026-09-14 and 2026-09-15); a test that uses or creates IO is an error
@@ -83,14 +88,24 @@ would falsify the guard, prove the test bites) is in
   an agent having broken the rule before is not permission to break it again,
   and a seat refutes such a precedent claim itself, never routing it upward
   as a question for the owner.
-  What a test cannot prove without IO is not a test's to prove. It is proven
-  by non-test validation kept to a minimum, which never alters the code or
-  triggers a build (a validator script's own self-proof, run by a CI-gated
-  task; [validation-strategy.md](validation-strategy.md) §Validators), or by
-  an observation made once at cure time and recorded (§Right tool there).
+  **Out-of-process tests run against a test instance of one of our systems
+  and may use IO**, and still use fakes where a fake is the better
+  instrument: to avoid a slow operation, or in place of a real database
+  connection (owner, 2026-11-01, verbatim: "ANY in-process test is forbidden
+  from using IO, other than stdio. Out-of-process tests running against a
+  test instance of one of our systems are allowed IO, but may still use fakes
+  as appropriate to e.g. avoid slow operations or to use a fake database
+  connection"). The process boundary, never the file's name or directory,
+  decides which tier a test is in.
+  What an in-process test cannot prove without IO is proven by an
+  out-of-process test against a test instance. A validator script is the
+  instrument only where no test can make the proof, which is basically never
+  ([validation-strategy.md](validation-strategy.md) §Validators), or an
+  observation made once at cure time and recorded (§Right tool there).
   Existing code that breaks the invariant is a defect: it is cured by
-  injection or moved to validation, never exempted, and its presence
-  licenses nothing.
+  injection, or by moving the proof to the out-of-process tier where the
+  running system is the subject, never exempted, and its presence licenses
+  nothing.
 - NEVER create complex mocks, use simple mocks passed as arguments
   to the function under test. Complex mocks result in testing the
   mocks, and indicate that product code needs refactoring and
@@ -389,7 +404,7 @@ not on error-shape absence.
   `*.integration.test.ts`.
 - System: a complete running system driven over its protocol channel; the
   host names its systems and their channels (P11; §This host's bindings).
-  Systems have E2E checks (validation, not tests; see §Out-of-process
+  Systems have E2E checks (out-of-process tests; see §Out-of-process
   checks).
 
 ### Test Types
@@ -422,16 +437,19 @@ about testing CODE, not testing RUNNING SYSTEMS.
 
 #### Out-of-process checks
 
-Out-of-process checks validate a running _system_: the check and the
+Out-of-process checks prove a running _system_: the check and the
 system run in _separate processes_. Driving a system over a protocol
 channel, booting a built artefact, opening a socket, reading a
-filesystem: each is IO, so an out-of-process check is not a test and
-never lives in the in-process test run. It is a **validation surface**
-([validation-strategy.md](validation-strategy.md)): a validator script
-with its own minimal self-proof, reachable from a CI-gated task, or an
-observation recorded once. They are slower and less specific in the
-causes of issues, and cast a wider net. The scope words stay, because
-the questions they name stay:
+filesystem: each is IO, which is why none of them lives in the
+in-process test run. An **E2E check is an out-of-process test**: it runs
+under the test runner against a test instance of one of our systems
+(owner, 2026-11-01: if it uses Vitest, it is a test), is held to every
+standard an in-process test is, and uses fakes where they are the better
+instrument. A **smoke check is a validator**: a script with its own
+minimal self-proof, reachable from a CI-gated task
+([validation-strategy.md](validation-strategy.md)). Both are slower and
+less specific in the causes of issues than in-process tests, and cast a
+wider net. The scope words stay, because the questions they name stay:
 
 - **E2E check**: proves a running system's behaviour over its protocol
   channel (stdio for a CLI, HTTP for a server, the browser for a UI; the
@@ -533,10 +551,10 @@ infrastructure.
 
 ### Smoke Checks — Artefact Viability
 
-Smoke checks are validators, never tests: booting an artefact is
-process and filesystem IO. The files and directories still named
-"smoke tests" are history; each is run by a CI-gated task, never by the
-test runner's in-process suites. As validators they start the fewest
+Smoke checks are validators, never tests: they are scripts, run by a
+CI-gated task and never by the test runner, and they prove the shipped
+artefact's form rather than a system's behaviour. The files and
+directories still named "smoke tests" are history. As validators they start the fewest
 processes, never alter the code and never build: a smoke reads the artefact
 a separate step built ([validation-strategy.md](validation-strategy.md)
 §Validators).
@@ -631,9 +649,8 @@ Constraints:
 ## TDD at All Levels
 
 TDD applies to unit tests, integration tests and E2E checks. An E2E
-check is a validation surface, not a test (§Out-of-process checks);
-the cycle discipline applies to it unchanged, so "test" in this section
-reads "test or check" at the E2E level. Each level describes its own
+check is an out-of-process test (§Out-of-process checks) and the cycle
+discipline applies to it unchanged. Each level describes its own
 scope of behaviour, and we need a description at every level to fully
 describe the working system that delivers value:
 

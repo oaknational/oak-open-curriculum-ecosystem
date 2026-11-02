@@ -32,10 +32,12 @@ suites in this repository produce real experience to write from.
 ## The spine: test / evaluate / assure
 
 - **Test** — _deterministic_. Proves code does what its spec says. Binary,
-  reproducible; unit of truth is the assertion, and a test uses no IO.
-  [testing-strategy.md](testing-strategy.md) defines the tests, and the E2E and
-  smoke checks beside them, which are validation surfaces. Mutation checks (§Prove the guard
-  bites, below) are the meta-quality layer that makes test coverage meaningful.
+  reproducible; unit of truth is the assertion. An in-process test uses no IO
+  other than stdio; an out-of-process test (an E2E check) runs against a test
+  instance of one of our systems and may. [testing-strategy.md](testing-strategy.md)
+  defines both tiers, and the smoke checks beside them, which are validators.
+  Mutation checks (§Prove the guard bites, below) are the meta-quality layer that
+  makes test coverage meaningful.
 - **Evaluate** — _probabilistic_. Measures the value and reliability of a
   judgement-laden capability across realistic inputs, graded relative to a
   baseline. Unit of truth is a graded outcome over a corpus plus a with/without
@@ -237,9 +239,9 @@ canonical run order lives in the
 4. **Static analysis** (knip, dependency-cruiser) — unused code, exports and
    dependencies; circular dependencies; layer violations. Linting enforces _what
    you should do_; static analysis detects _what you forgot to clean up_.
-5. **Testing and checks** — the test suite proves product behaviour at every
-   level, with no IO; the E2E and smoke checks are validation checks of the
-   running system and its shipped form.
+5. **Testing and checks** — the in-process suites prove product behaviour with
+   no IO other than stdio; the out-of-process E2E tests prove a test instance of
+   the running system; the smoke checks are validators of its shipped form.
 6. **Mutation checks** (§Prove the guard bites) — test-suite effectiveness: proves
    tests detect real faults, not merely exercise code paths.
 7. **Build** — every derived surface compiles from its one authority.
@@ -339,7 +341,13 @@ processes. I don't want excuses or carve outs, we have these rules for a reason"
 "validation scripts can start real processes, but they are to be kept to a MINIMUM, and they
 are FORBIDDEN from altering the code or triggering builds".
 
-- **Tests** use no IO and start no process, with no exception
+- **A validator is a script, never a test-runner file, and it exists only where a properly
+  isolated test cannot make the proof, which is basically never** (owner, 2026-11-01, verbatim:
+  "If it uses Vitest, it's a test, custom validators use scripts and should be kept to a
+  minimum, only used when a properly isolated test cannot make the proof we require, which is
+  basically never"). A file under the test runner is a test and is held to the test rules.
+- **In-process tests** use no IO other than stdio and start no process, with no exception;
+  **out-of-process tests** run against a test instance of one of our systems
   ([testing-strategy.md](testing-strategy.md) §Philosophy).
 - **A validator** may start real processes, and starts only the fewest its property needs.
 - **A validator never alters the code**: no formatter or fixer in its writing mode, no repair,
