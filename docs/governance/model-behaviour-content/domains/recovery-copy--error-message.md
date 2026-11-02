@@ -322,10 +322,8 @@ return { ok: false, message: firstIssue?.message ?? 'Invalid search input' };
 
 ```text
 error: `${scopeName} search failed: ${result.error?.message ?? 'unknown error'}`,
-    };
-  } catch (thrown: unknown) {
-    const message = thrown instanceof Error ? thrown.message : 'unknown error';
-    return { ok: false, error: `${scopeName} search error: ${message}` };
+
+return { ok: false, error: `${scopeName} search error: ${message}` };
 ```
 
 **What it is for:** Reports a single scope's failure ('\<Scope\> search failed/error: \<message\>') so the agent knows which scope degraded while others still returned (partial-success path).
@@ -1463,19 +1461,8 @@ let json: unknown;
 
 ```text
 function formatZodIssues(issues: ZodIssueType[]): string {
-  return issues.map((i) => `- ${i.path.join('.') || '<root>'}: ${i.message}`).join('\n');
-}
 
-try {
-    return parseTDProject(json);
-  } catch (err: unknown) {
-    if (err instanceof ZodError) {
-      throw new Error('TypeDoc JSON validation failed:\n' + formatZodIssues(err.issues), {
-        cause: err,
-      });
-    }
-    throw err instanceof Error ? err : new Error(String(err));
-  }
+throw new Error('TypeDoc JSON validation failed:\n' + formatZodIssues(error.issues), {
 ```
 
 **What it is for:** Build-time failure listing each Zod validation issue as '- \<path\>: \<message\>' under a 'TypeDoc JSON validation failed:' heading, guiding the developer to the offending fields.

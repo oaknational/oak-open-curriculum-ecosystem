@@ -2048,10 +2048,16 @@
             "file": "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-explore/execution.ts",
             "anchors": [
               {
-                "tokenCount": 76,
-                "tokenSha256": "0661578e084183b317a0340fc0b54254ed8e72e3b2564547316a10030e8c63ca",
-                "indexToken": "instanceof",
-                "indexOffset": 41
+                "tokenCount": 27,
+                "tokenSha256": "b1b75c1d60bbdb5faacb4a7eba3059ab729d5c6e78c63eeea92ec964ec8b8ba7",
+                "indexToken": "failed",
+                "indexOffset": 8
+              },
+              {
+                "tokenCount": 23,
+                "tokenSha256": "204b0929ffcb32beef2ba441d11b1f50e424a0cfd1c6b0a99292a8bb00f27d6e",
+                "indexToken": "false",
+                "indexOffset": 4
               }
             ]
           }
@@ -7738,16 +7744,16 @@
             "file": "packages/sdks/oak-sdk-codegen/code-generation/generate-markdown-docs.ts",
             "anchors": [
               {
-                "tokenCount": 63,
-                "tokenSha256": "025a3c2744397529924382cab86e378cb4d38d3dbab9f80233842319c9c52347",
-                "indexToken": "root",
-                "indexOffset": 40
+                "tokenCount": 12,
+                "tokenSha256": "c85db0763601894cf333ecbe4a1fa907b4230fa5df895e00d2a5b2dd3deda605",
+                "indexToken": "formatZodIssues",
+                "indexOffset": 1
               },
               {
-                "tokenCount": 70,
-                "tokenSha256": "7a1470e0dec8dda6b67c1a85d66c1861b4c8c3a444752a4eb78322fd3715fd5c",
+                "tokenCount": 22,
+                "tokenSha256": "7d34744e4fa317c2234232cec9708bfa5a611e3974e60379dc135286d4c17e5f",
                 "indexToken": "failed",
-                "indexOffset": 31
+                "indexOffset": 8
               }
             ]
           }

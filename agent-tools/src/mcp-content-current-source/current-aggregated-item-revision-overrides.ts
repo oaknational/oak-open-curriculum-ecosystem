@@ -63,4 +63,9 @@ export const CURRENT_AGGREGATED_ITEM_REVISION_OVERRIDES = {
   // unchanged.
   C708: 'modified',
   C717: 'added',
+  // 2026-11-01 lint pass: the catch parameter inside each baseline fragment was
+  // renamed to `error`; the served wording is byte-identical, so the truthful
+  // verdict is unchanged.
+  C111: 'unchanged',
+  C426: 'unchanged',
 } as const;
