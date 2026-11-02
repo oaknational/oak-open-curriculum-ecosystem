@@ -1275,4 +1275,10 @@ the owner wants it kept).
 - **The two expired owner gates** (`semantic-search-showcase` and
   `warranted-means-in-the-operating-environment`) fired at this session's open as at every open
   since 2026-10-10 and 2026-10-11; surfaced to him in this wrap's report; no decision yet.
+- **The per-checkout bot config was gone from the primary at this wrap** (`.github/merge-bot.json`,
+  untracked, present on 2026-10-29 when this seat last pushed as the bot); every bot write refuses
+  without it. Restored from grounded values (the slug from the key's directory and the operator
+  profile, the app id from GitHub's public app record, the repository from the origin remote) as
+  the documented per-clone setup step. One instance; the cause is not known; the directory's
+  mtime of 14:10 on 2026-11-02 is the only trace.
 - A third pass would only re-find these; the recursion closes here.
