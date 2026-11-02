@@ -255,9 +255,12 @@ const oakRecommendedConfig: TSESLint.FlatConfig.Config = {
     // Quality: no warning toleration, never disable checks, fix things). The
     // structural exemptions (`**/test-helpers/**`, `**/test-fakes/**`,
     // `**/vitest.*.config.ts`, `**/vitest.setup.ts`) are hardcoded inside the
-    // rule. Per `.agent/rules/never-disable-checks.md`, per-file
-    // `eslint-disable` comments to bypass this rule are FORBIDDEN; a test that
-    // does real IO is migrated to a fake or moved to the integration category.
+    // rule, and the rule stops at the in-process tiers: an E2E check
+    // (`*.e2e.test.ts`) is an out-of-process test whose IO is its nature
+    // (testing-strategy.md §Out-of-process checks). Per
+    // `.agent/rules/never-disable-checks.md`, per-file `eslint-disable`
+    // comments to bypass this rule are FORBIDDEN; an in-process test that does
+    // real IO takes an injected port and a fake.
     '@oaknational/no-real-io-in-tests': 'error',
   },
 };
