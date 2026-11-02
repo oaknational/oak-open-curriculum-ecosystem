@@ -54,14 +54,14 @@ const baseAuthEnabledEnv: AuthEnabledRuntimeConfig['env'] = {
   OAK_API_KEY: 'test',
   CLERK_PUBLISHABLE_KEY: 'pk_test',
   CLERK_SECRET_KEY: 'sk_test',
-  ELASTICSEARCH_URL: 'http://fake:9200',
+  ELASTICSEARCH_URL: 'https://fake:9200',
   ELASTICSEARCH_API_KEY: 'fake-key',
   SENTRY_MODE: 'off',
 };
 
 const baseAuthDisabledEnv: AuthDisabledRuntimeConfig['env'] = {
   OAK_API_KEY: 'test',
-  ELASTICSEARCH_URL: 'http://fake:9200',
+  ELASTICSEARCH_URL: 'https://fake:9200',
   ELASTICSEARCH_API_KEY: 'fake-key',
   SENTRY_MODE: 'off',
 };

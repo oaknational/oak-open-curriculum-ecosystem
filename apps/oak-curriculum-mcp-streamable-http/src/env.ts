@@ -204,9 +204,6 @@ export type AuthEnabledEnv = Env & {
   readonly CLERK_SECRET_KEY: string;
 };
 
-/** Environment with auth disabled — Clerk keys may be absent */
-export type AuthDisabledEnv = Env;
-
 export type Env = z.input<typeof BaseEnvSchema>;
 
 /** The parsed shape the validation pipeline produces (post-transform). */

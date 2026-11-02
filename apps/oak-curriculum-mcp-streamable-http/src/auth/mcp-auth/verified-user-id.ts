@@ -28,5 +28,5 @@ import { authInfoExtraSchema } from './auth-info-schema.js';
 export function verifiedUserIdFrom(authInfo: AuthInfo | undefined): string | undefined {
   const parsed = authInfoExtraSchema.safeParse(authInfo?.extra);
   const userId = parsed.success ? parsed.data.userId : undefined;
-  return userId || undefined;
+  return userId === '' ? undefined : userId;
 }

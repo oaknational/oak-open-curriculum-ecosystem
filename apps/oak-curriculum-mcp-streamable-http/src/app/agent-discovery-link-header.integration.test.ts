@@ -61,23 +61,23 @@ const baseOptions = async () => ({
   upstreamMetadata: TEST_UPSTREAM_METADATA,
 });
 
+/** The production shape: auth enabled, so the OAuth metadata is mounted. */
+const createAuthEnabledApp = async () =>
+  await createApp({
+    ...(await baseOptions()),
+    runtimeConfig: createMockRuntimeConfig({ env: { ALLOWED_HOSTS } }),
+  });
+
+const createAuthDisabledApp = async () =>
+  await createApp({
+    ...(await baseOptions()),
+    runtimeConfig: createMockRuntimeConfig({
+      dangerouslyDisableAuth: true,
+      env: { ALLOWED_HOSTS },
+    }),
+  });
+
 describe('agent-discovery Link header (Integration)', () => {
-  /** The production shape: auth enabled, so the OAuth metadata is mounted. */
-  const createAuthEnabledApp = async () =>
-    await createApp({
-      ...(await baseOptions()),
-      runtimeConfig: createMockRuntimeConfig({ env: { ALLOWED_HOSTS } }),
-    });
-
-  const createAuthDisabledApp = async () =>
-    await createApp({
-      ...(await baseOptions()),
-      runtimeConfig: createMockRuntimeConfig({
-        dangerouslyDisableAuth: true,
-        env: { ALLOWED_HOSTS },
-      }),
-    });
-
   it('advertises the protected-resource metadata with a describedby relation on the root', async () => {
     const app = await createAuthEnabledApp();
 

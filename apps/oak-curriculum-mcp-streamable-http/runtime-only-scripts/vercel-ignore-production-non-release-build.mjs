@@ -12,13 +12,18 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 // precedence rules. Build-metadata is ignored in precedence per the spec.
 //
 // @see ../../../../packages/core/build-metadata/src/semver.ts —
-// canonical npm-`semver`-backed implementation. The two implementations
-// MUST stay byte-equivalent on the regex pattern and behaviour-equivalent
-// on validity + ≤ comparison; the parity test at
-// `packages/core/build-metadata/tests/semver-parity.test.ts` is the
-// anti-drift gate.
-const SEMVER_PATTERN =
-  /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
+// canonical npm-`semver`-backed implementation. The pattern below is the
+// canonical module's, composed from the same two named parts so each part is
+// read on its own (semver §2 numeric identifiers; §9 and §10 dot-separated
+// identifiers). The two implementations MUST stay byte-equivalent on the
+// pattern source and behaviour-equivalent on validity + ≤ comparison; the
+// parity test at `packages/core/build-metadata/tests/semver-parity.test.ts`
+// is the anti-drift gate.
+const NUMERIC_IDENTIFIER = String.raw`(0|[1-9]\d*)`;
+const DOT_SEPARATED_IDENTIFIERS = String.raw`[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*`;
+const SEMVER_PATTERN = new RegExp(
+  String.raw`^${NUMERIC_IDENTIFIER}\.${NUMERIC_IDENTIFIER}\.${NUMERIC_IDENTIFIER}(?:-(${DOT_SEPARATED_IDENTIFIERS}))?(?:\+${DOT_SEPARATED_IDENTIFIERS})?$`,
+);
 
 function parseSemver(version) {
   const match = SEMVER_PATTERN.exec(version);

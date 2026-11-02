@@ -9,28 +9,29 @@ import { mountNotFound, notFoundHandler, type RefusalResponse } from './not-foun
  * the app's loopback suite and is recorded on the pull request, never
  * re-proven by a test.
  */
-describe('the not-found refusal', () => {
-  function recordingResponse(): RefusalResponse & {
-    readonly statuses: number[];
-    readonly bodies: unknown[];
-  } {
-    const statuses: number[] = [];
-    const bodies: unknown[] = [];
-    return {
-      statuses,
-      bodies,
-      status(code: number) {
-        statuses.push(code);
-        return {
-          json(body: unknown) {
-            bodies.push(body);
-            return undefined;
-          },
-        };
-      },
-    };
-  }
+/** A refusal response that records every status and JSON body it is given. */
+function recordingResponse(): RefusalResponse & {
+  readonly statuses: number[];
+  readonly bodies: unknown[];
+} {
+  const statuses: number[] = [];
+  const bodies: unknown[] = [];
+  return {
+    statuses,
+    bodies,
+    status(code: number) {
+      statuses.push(code);
+      return {
+        json(body: unknown) {
+          bodies.push(body);
+          return undefined;
+        },
+      };
+    },
+  };
+}
 
+describe('the not-found refusal', () => {
   it('answers a request that reached the end of the chain with 404 and the refusal shape as JSON', () => {
     const res = recordingResponse();
 

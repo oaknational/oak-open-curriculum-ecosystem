@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { fetchUpstreamMetadata, type FetchFn } from './oauth-and-caching-setup.js';
 import type { HttpObservability, HttpSpanHandle } from '../observability/http-observability.js';
+import { fetchThatRejectsOnAbort } from '../test-helpers/fetch-fakes.js';
 
 function createFakeFetch(response: { ok: boolean; status: number; body: unknown }): FetchFn {
   return () =>
@@ -171,17 +172,14 @@ describe('fetchUpstreamMetadata', () => {
   });
 
   it('returns err with timeout when fetch is aborted', async () => {
-    const hangingFetch: FetchFn = (_url, init) =>
-      new Promise((_resolve, reject) => {
-        init?.signal?.addEventListener('abort', () => {
-          const abortError = new DOMException('The operation was aborted', 'AbortError');
-          reject(abortError);
-        });
-      });
-    const result = await fetchUpstreamMetadata('https://clerk.example.com', hangingFetch, {
-      timeoutMs: 50,
-      maxRetries: 1,
-    });
+    const result = await fetchUpstreamMetadata(
+      'https://clerk.example.com',
+      fetchThatRejectsOnAbort,
+      {
+        timeoutMs: 50,
+        maxRetries: 1,
+      },
+    );
 
     expect(result.ok).toBe(false);
     if (!result.ok) {

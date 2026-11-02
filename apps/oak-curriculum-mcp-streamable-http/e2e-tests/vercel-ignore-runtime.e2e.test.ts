@@ -62,9 +62,10 @@ describe('gitShowFileAtSha — runtime contract under scrubbedGitEnv', () => {
   });
 });
 
-describe('resolveTrustedGitBinary — both platform families, provable from any host', () => {
-  const presentEverywhere = (): boolean => true;
+/** A probe that reports every candidate path present. */
+const presentEverywhere = (): boolean => true;
 
+describe('resolveTrustedGitBinary — both platform families, provable from any host', () => {
   it('resolves the Vercel runtime pin on a POSIX host', () => {
     expect(resolveTrustedGitBinary(presentEverywhere, 'linux')).toBe('/usr/bin/git');
   });

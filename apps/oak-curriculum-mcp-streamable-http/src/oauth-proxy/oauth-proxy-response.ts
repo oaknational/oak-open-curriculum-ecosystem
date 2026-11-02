@@ -171,15 +171,15 @@ function mapNonJsonErrorResponse(
 const MAX_DESCRIPTION_LENGTH = 256;
 const ASCII_DEL_CODEPOINT = 0x7f;
 const ASCII_SPACE_CODEPOINT = 0x20;
+
+/** True for a C0 control character or DEL: the code points RFC 6749 §5.2 keeps out of `error_description`. */
+function isControlCharacter(character: string): boolean {
+  const code = character.codePointAt(0);
+  return code !== undefined && (code < ASCII_SPACE_CODEPOINT || code === ASCII_DEL_CODEPOINT);
+}
+
 function sanitiseErrorDescription(raw: string): string {
-  const stripped = Array.from(raw)
-    .map((ch) => {
-      const code = ch.charCodeAt(0);
-      if (code < ASCII_SPACE_CODEPOINT || code === ASCII_DEL_CODEPOINT) {
-        return ' ';
-      }
-      return ch;
-    })
+  const stripped = Array.from(raw, (character) => (isControlCharacter(character) ? ' ' : character))
     .join('')
     .replaceAll(/\s+/g, ' ')
     .trim();
