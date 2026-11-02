@@ -1151,9 +1151,12 @@ the owner wants it kept).
 - **Before a red-first test, read what the pattern feeds.** The plan named "the innermost
   parenthetical capture" for a synonym regex; a lane asserted an extracted synonym the generator
   never produced (the pattern only feeds a count). The reshaped test asserts the count.
-- **A generator-first cure can reach a published surface.** Renaming the generated root types
-  (`paths` → `Paths`, `components` → `Components`) renamed re-exports of the published curriculum
-  SDK: a breaking change, marked with `!` and a `BREAKING CHANGE` footer, not folded into a fix.
+- **A hook-bypassed series lets a major-version marker through.** I marked the generated root-type
+  rename (`paths` → `Paths`) as a breaking change; the owner's word: not a major version, no consumer
+  of the repository is affected. The accidental-major-version guard would have refused the marker,
+  but that commit ran with the hooks off. In a bypassed series, run the guard by hand on every
+  message (`prevent-accidental-major-version`, on a path under `.git/`), and read a type rename of
+  a package nobody outside the repo consumes as a fix.
 - **A tracked file removed with `rm` is still in the index**, and the tracked-file validators read
   `git ls-files` and refuse a path they cannot open. Record the deletion (`git rm`) before running
   `docs-validators:check`.
@@ -1171,3 +1174,8 @@ the owner wants it kept).
   and expect the content audit to ask for a reviewed re-anchor whenever a refactor moves anchored
   text: the headings it renders were unchanged, so the verdict was `unchanged`, as for the other
   pure re-anchors.
+- **Stage new files before running the gate.** The tracked-file gates (`prettier-tracked`, the
+  machine-local-path and other validators) read `git ls-files`, so a new module that is still
+  untracked is invisible to them: three green `pnpm check` runs passed nine unformatted new files,
+  which the first hooked commit's fixer then re-wrapped. `git add` the new files by pathspec, then
+  run the gate, then commit.
