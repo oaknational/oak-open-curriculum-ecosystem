@@ -473,8 +473,10 @@ async function main(): Promise<void> {
 // template literal gets wrong for paths with spaces or non-ASCII characters.
 const isMainModule = import.meta.url === pathToFileURL(process.argv[1] ?? '').href;
 if (isMainModule) {
-  main().catch((error) => {
+  try {
+    await main();
+  } catch (error: unknown) {
     console.error('Unexpected error:', error);
     process.exit(1);
-  });
+  }
 }

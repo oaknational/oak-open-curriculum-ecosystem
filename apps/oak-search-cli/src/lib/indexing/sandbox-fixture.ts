@@ -7,6 +7,10 @@
  */
 
 import type { OakClient } from '../../adapters/oak-adapter';
+import {
+  disconnectWithoutConnection,
+  reportNoCacheStats,
+} from '../../adapters/no-cache-client-methods';
 import { isLessonSummary, isUnitSummary } from '../../types/oak';
 import { loadSandboxFixtureData, type FixtureData } from './sandbox-fixture-data';
 import { ok, err } from '@oaknational/result';
@@ -61,9 +65,9 @@ function createFixtureClient(data: FixtureData): OakClient {
     getLessonsByKeyStageAndSubject: makeFixtureLessonsByKeyStageAndSubjectFn(data),
     // Subject assets - return lessons with mock video assets
     getSubjectAssets: makeFixtureSubjectAssetsFn(data),
-    // Cache methods (no-op for fixture client)
-    getCacheStats: () => ({ hits: 0, misses: 0, connected: false }),
-    disconnect: async () => {},
+    // Cache methods of a client with no cache
+    getCacheStats: reportNoCacheStats,
+    disconnect: disconnectWithoutConnection,
   };
 }
 

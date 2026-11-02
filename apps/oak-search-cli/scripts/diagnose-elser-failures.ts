@@ -22,7 +22,7 @@ import {
   MAX_CHUNK_SIZE_BYTES,
   DEFAULT_CHUNK_DELAY_MS,
 } from '../src/lib/indexing/bulk-chunk-utils';
-import { processChunk, computeErrorDistribution } from '../src/lib/diagnostics';
+import { buildDiagnosticReport, processChunk } from '../src/lib/diagnostics';
 import type {
   DiagnosticReport,
   ChunkStats,
@@ -112,49 +112,11 @@ async function prepareBulkOperations(
   return { ops, oakClient };
 }
 
-/** Build the diagnostic report. */
-function buildReport(
-  runId: string,
-  startTime: Date,
-  endTime: Date,
-  limit: number | undefined,
-  subject: string | undefined,
-  totalDocs: number,
-  chunks: number,
-  failures: DocumentFailure[],
-  successes: DocumentSuccess[],
-  chunkStats: ChunkStats[],
-): DiagnosticReport {
-  return {
-    runId,
-    startTime: startTime.toISOString(),
-    endTime: endTime.toISOString(),
-    configuration: {
-      maxChunkSizeBytes: MAX_CHUNK_SIZE_BYTES,
-      chunkDelayMs: DEFAULT_CHUNK_DELAY_MS,
-      documentLimit: limit,
-      subjectFilter: subject,
-    },
-    summary: {
-      totalDocuments: totalDocs,
-      totalSuccess: successes.length,
-      totalFailures: failures.length,
-      successRate: totalDocs > 0 ? successes.length / totalDocs : 0,
-      chunksProcessed: chunks,
-      totalDurationMs: endTime.getTime() - startTime.getTime(),
-    },
-    errorDistribution: computeErrorDistribution(failures),
-    chunkStats,
-    failures,
-    sampleSuccesses: successes.slice(0, 100),
-  };
-}
-
 /** Process all chunks and collect results. */
 async function processAllChunks(esClient: Client, chunks: BulkOperationEntry[][]) {
-  const allFailures: DocumentFailure[] = [];
-  const allSuccesses: DocumentSuccess[] = [];
-  const allChunkStats: ChunkStats[] = [];
+  const failures: DocumentFailure[] = [];
+  const successes: DocumentSuccess[] = [];
+  const chunkStats: ChunkStats[] = [];
 
   for (let i = 0; i < chunks.length; i++) {
     const chunk = chunks[i];
@@ -163,9 +125,9 @@ async function processAllChunks(esClient: Client, chunks: BulkOperationEntry[][]
     }
     process.stdout.write(`Chunk ${i + 1}/${chunks.length}... `);
     const result = await processChunk(esClient, chunk, i);
-    allChunkStats.push(result.stats);
-    allFailures.push(...result.failures);
-    allSuccesses.push(...result.successes);
+    chunkStats.push(result.stats);
+    failures.push(...result.failures);
+    successes.push(...result.successes);
     console.log(
       `${result.stats.successCount}/${result.stats.documentCount} in ${result.stats.durationMs}ms`,
     );
@@ -174,7 +136,7 @@ async function processAllChunks(esClient: Client, chunks: BulkOperationEntry[][]
     }
   }
 
-  return { allFailures, allSuccesses, allChunkStats };
+  return { failures, successes, chunkStats };
 }
 
 /** Save report to file. */
@@ -221,19 +183,21 @@ async function main(): Promise<void> {
   console.log(`Loaded ${files.length} files, ${totalDocuments} documents, ${chunks.length} chunks`);
 
   try {
-    const { allFailures, allSuccesses, allChunkStats } = await processAllChunks(esClient, chunks);
-    const report = buildReport(
+    const processed = await processAllChunks(esClient, chunks);
+    const report = buildDiagnosticReport({
       runId,
       startTime,
-      new Date(),
-      limit,
-      subject,
+      endTime: new Date(),
+      configuration: {
+        maxChunkSizeBytes: MAX_CHUNK_SIZE_BYTES,
+        chunkDelayMs: DEFAULT_CHUNK_DELAY_MS,
+        documentLimit: limit,
+        subjectFilter: subject,
+      },
       totalDocuments,
-      chunks.length,
-      allFailures,
-      allSuccesses,
-      allChunkStats,
-    );
+      chunksProcessed: chunks.length,
+      ...processed,
+    });
     printAndSaveReport(report, join(__dirname, '..', 'diagnostics'));
   } finally {
     await oakClient.disconnect();
@@ -241,7 +205,9 @@ async function main(): Promise<void> {
   }
 }
 
-main().catch((error) => {
+try {
+  await main();
+} catch (error: unknown) {
   console.error('Fatal:', error);
   process.exit(1);
-});
+}

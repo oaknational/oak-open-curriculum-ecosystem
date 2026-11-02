@@ -20,7 +20,7 @@ import type {
 
 /**
  * Re-exported readback audit entry points:
- * - `parseLedger` for ledger parsing and validation.
+ * - `createLedgerParser` for ledger parsing and validation over an injected reader.
  * - `createElasticsearchDeps` for Elasticsearch-backed read dependencies.
  */
 
@@ -141,7 +141,7 @@ export async function runFieldReadbackAudit(
   };
 }
 
-export { parseLedger } from './field-readback-audit-ledger.js';
+export { createLedgerParser, type ReadTextFile } from './field-readback-audit-ledger.js';
 export { createElasticsearchDeps } from './field-readback-audit-elasticsearch-deps.js';
 export {
   type GapLedger,

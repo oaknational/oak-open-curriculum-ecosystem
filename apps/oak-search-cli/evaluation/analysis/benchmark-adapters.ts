@@ -13,7 +13,6 @@ import {
   LESSON_GROUND_TRUTHS,
   CROSS_SUBJECT_LESSON_GROUND_TRUTHS,
   type LessonGroundTruth,
-  type CrossSubjectLessonGroundTruth,
 } from '../../src/lib/search-quality/ground-truth/index.js';
 import {
   UNIT_GROUND_TRUTHS,
@@ -32,13 +31,12 @@ import type { Phase } from '../../src/lib/search-quality/ground-truth-archive/re
 import type { GroundTruthEntry } from './benchmark-entry-runner.js';
 
 /**
- * Common fields shared by all ground truth types.
+ * The query fields every ground truth carries, whatever its scope.
  *
- * Every scope-specific ground truth (Lesson, Unit, Thread, Sequence)
- * has these fields. The generic adapter functions operate on this shape.
+ * Cross-subject lesson ground truths carry exactly these; the scoped
+ * ground truths add a subject.
  */
-interface GroundTruthBase {
-  readonly subject: AllSubjectSlug;
+interface GroundTruthQueryFields {
   readonly query: string;
   readonly expectedRelevance: Readonly<Record<string, number>>;
   readonly description: string;
@@ -46,15 +44,25 @@ interface GroundTruthBase {
 }
 
 /**
- * Convert any ground truth entry to a GroundTruthQuery.
+ * Common fields shared by all scoped ground truth types.
  *
- * Maps the common fields and defaults category to 'basic'.
+ * Every scope-specific ground truth (Lesson, Unit, Thread, Sequence)
+ * has these fields. The generic grouping adapter operates on this shape.
+ */
+interface GroundTruthBase extends GroundTruthQueryFields {
+  readonly subject: AllSubjectSlug;
+}
+
+/**
+ * Convert any ground truth to a GroundTruthQuery.
+ *
+ * Maps the query fields and defaults category to 'basic'.
  * The `keyStage` field is passed through when present.
  *
- * @param gt - Any ground truth entry with the base fields
+ * @param gt - Any ground truth carrying the query fields
  * @returns Ground truth query for the benchmark entry runner
  */
-function toGroundTruthQuery(gt: GroundTruthBase): GroundTruthQuery {
+function toGroundTruthQuery(gt: GroundTruthQueryFields): GroundTruthQuery {
   return {
     query: gt.query,
     expectedRelevance: gt.expectedRelevance,
@@ -162,22 +170,6 @@ export function getSequenceGroundTruthEntries(): readonly GroundTruthEntry[] {
 }
 
 /**
- * Convert a cross-subject ground truth to a GroundTruthQuery.
- *
- * @param gt - Cross-subject ground truth entry
- * @returns Ground truth query for the benchmark entry runner
- */
-function crossSubjectToQuery(gt: CrossSubjectLessonGroundTruth): GroundTruthQuery {
-  return {
-    query: gt.query,
-    expectedRelevance: gt.expectedRelevance,
-    category: 'basic',
-    description: gt.description,
-    keyStage: gt.keyStage,
-  };
-}
-
-/**
  * Get all cross-subject lesson ground truth entries for benchmarking.
  *
  * Cross-subject entries have no subject or phase filter and are mapped
@@ -191,6 +183,6 @@ export function getCrossSubjectGroundTruthEntries(): readonly GroundTruthEntry[]
   return CROSS_SUBJECT_LESSON_GROUND_TRUTHS.map((gt) => ({
     subject: gt.subject,
     phase: gt.phase,
-    queries: [crossSubjectToQuery(gt)],
+    queries: [toGroundTruthQuery(gt)],
   }));
 }

@@ -55,6 +55,16 @@ function stubIndexResolver(): string {
 
 const testConfig: SearchSdkConfig = { indexTarget: 'primary', indexVersion: 'v1' };
 
+/** The `multi_match` clause of the first recorded bool-prefix request. */
+function extractMultiMatch(calls: EsSearchRequest[]) {
+  const boolQuery = calls[0]?.query?.bool;
+  const mustArray = boolQuery?.must;
+  if (!Array.isArray(mustArray)) {
+    throw new TypeError('Expected must to be an array');
+  }
+  return mustArray[0]?.multi_match;
+}
+
 describe('suggest', () => {
   describe('completion query contexts', () => {
     it('includes contexts in ES completion query when subject and keyStage provided', async () => {
@@ -154,15 +164,6 @@ describe('suggest', () => {
       }
     });
   });
-
-  function extractMultiMatch(calls: EsSearchRequest[]) {
-    const boolQuery = calls[0]?.query?.bool;
-    const mustArray = boolQuery?.must;
-    if (!Array.isArray(mustArray)) {
-      throw new TypeError('Expected must to be an array');
-    }
-    return mustArray[0]?.multi_match;
-  }
 
   describe('bool_prefix fallback', () => {
     it('runs bool_prefix query when completion returns fewer than limit results', async () => {

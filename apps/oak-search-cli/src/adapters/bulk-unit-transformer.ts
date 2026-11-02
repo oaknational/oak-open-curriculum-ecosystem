@@ -55,6 +55,14 @@ export interface BulkToESUnitParams {
   readonly categoryMap?: CategoryMap;
 }
 
+/**
+ * Enrichment text, or `undefined` when the bulk field is absent or empty:
+ * an empty description or rationale is no enrichment.
+ */
+function enrichmentText(value: string | undefined): string | undefined {
+  return value === undefined || value.length === 0 ? undefined : value;
+}
+
 /** Extract thread information from bulk unit */
 function extractThreadInfoFromBulk(unit: Unit) {
   if (unit.threads.length === 0) {
@@ -121,8 +129,8 @@ function extractUnitParamsFromBulk(params: BulkToESUnitParams): CreateUnitDocPar
     threadInfo: extractThreadInfoFromBulk(unit),
     enrichment: {
       unit_topics: unitTopics,
-      description: unit.description || undefined,
-      why_this_why_now: unit.whyThisWhyNow || undefined,
+      description: enrichmentText(unit.description),
+      why_this_why_now: enrichmentText(unit.whyThisWhyNow),
       prior_knowledge_requirements:
         unit.priorKnowledgeRequirements.length > 0 ? unit.priorKnowledgeRequirements : undefined,
       national_curriculum_content:

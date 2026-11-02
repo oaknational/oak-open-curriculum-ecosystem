@@ -212,7 +212,9 @@ async function main(): Promise<void> {
   await analyseReport(report, bulkDir, safeReportPath);
 }
 
-main().catch((error) => {
+try {
+  await main();
+} catch (error: unknown) {
   console.error('Fatal:', error);
   process.exit(1);
-});
+}

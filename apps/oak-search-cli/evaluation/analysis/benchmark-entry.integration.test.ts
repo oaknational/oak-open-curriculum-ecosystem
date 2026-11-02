@@ -84,13 +84,12 @@ function createSequentialMockSearchFn(
   });
 }
 
-describe('benchmarkEntry', () => {
-  const createTestEntry = (queries: GroundTruthEntry['queries']): GroundTruthEntry => ({
-    subject: 'maths',
-    phase: 'secondary',
-    queries,
-  });
+/** A maths/secondary ground-truth entry carrying the given queries. */
+function createMathsSecondaryEntry(queries: GroundTruthEntry['queries']): GroundTruthEntry {
+  return { subject: 'maths', phase: 'secondary', queries };
+}
 
+describe('benchmarkEntry', () => {
   describe('result aggregation', () => {
     it('calculates average MRR across all queries', async () => {
       // Two queries: first has MRR 1.0, second has MRR 0.5
@@ -99,7 +98,7 @@ describe('benchmarkEntry', () => {
         ['wrong', 'slug-b'], // Second query: match at position 2 → MRR 0.5
       ]);
 
-      const entry = createTestEntry([
+      const entry = createMathsSecondaryEntry([
         {
           query: 'query 1',
           expectedRelevance: { 'slug-a': 3 },
@@ -129,7 +128,7 @@ describe('benchmarkEntry', () => {
         ['slug-c'], // Hit
       ]);
 
-      const entry = createTestEntry([
+      const entry = createMathsSecondaryEntry([
         {
           query: 'query 1',
           expectedRelevance: { 'slug-a': 3 },
@@ -187,7 +186,7 @@ describe('benchmarkEntry', () => {
     it('uses phase filter when query has no keyStage', async () => {
       const mockSearch = createMockSearchFn(['slug']);
 
-      const entry = createTestEntry([
+      const entry = createMathsSecondaryEntry([
         {
           query: 'general secondary query',
           expectedRelevance: { slug: 3 },
