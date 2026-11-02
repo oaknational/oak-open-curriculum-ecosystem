@@ -16,6 +16,7 @@ import { dirname, join, resolve, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { normalizeError } from '@oaknational/logger';
 import { createCodegenLogger } from './create-codegen-logger.js';
+import { extractRelativeLinkTargets } from './lib/index-links.js';
 
 const logger = createCodegenLogger('verify-docs');
 
@@ -52,10 +53,7 @@ async function computeExpectedMdFromIndex(
   const expected = new Set<string>();
   await guard('Index links', async () => {
     const content = await fs.readFile(mdIndex, 'utf8');
-    const linkRe = /\[[^\]]+\]\(\.\/([^)]+)\)/g; // matches (./filename)
-    let match: RegExpExecArray | null;
-    while ((match = linkRe.exec(content)) !== null) {
-      const rel = match[1];
+    for (const rel of extractRelativeLinkTargets(content)) {
       expected.add(join(dirname(mdIndex), rel));
     }
   });

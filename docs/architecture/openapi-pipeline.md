@@ -131,8 +131,8 @@ Our approach:
 
 ```typescript
 // Generated from schema — always correct
-import type { components } from '@oaknational/curriculum-sdk';
-type KeyStageData = components['schemas']['KeyStageData'];
+import type { Components } from '@oaknational/curriculum-sdk';
+type KeyStageData = Components['schemas']['KeyStageData'];
 // TypeScript enforces what the API actually returns
 ```
 
@@ -207,10 +207,10 @@ for (const tool of MCP_TOOLS) {
 Applications import generated types:
 
 ```typescript
-import type { components } from '@oaknational/curriculum-sdk';
+import type { Components } from '@oaknational/curriculum-sdk';
 import { parseWithCurriculumSchema } from '@oaknational/curriculum-sdk';
 
-type KeyStageData = components['schemas']['KeyStageData'];
+type KeyStageData = Components['schemas']['KeyStageData'];
 
 // Types and validators already exist — generated from the OpenAPI schema
 const result = parseWithCurriculumSchema(response, 'KeyStageData');

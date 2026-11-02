@@ -32,7 +32,10 @@ const LESSONS_PATH = '/key-stages/{keyStage}/subject/{subject}/lessons';
 /** The generator routes only path and query parameters into the flat schema. */
 const FLAT_SCHEMA_PARAM_LOCATIONS: ReadonlySet<string> = new Set(['path', 'query']);
 
-function isPrimitive(value: unknown): value is string | number | boolean {
+/** The example values the generator carries into the flat schema. */
+type PrimitiveExample = string | number | boolean;
+
+function isPrimitive(value: unknown): value is PrimitiveExample {
   return typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean';
 }
 
@@ -43,8 +46,8 @@ function isPrimitive(value: unknown): value is string | number | boolean {
  */
 function expectedExamples(
   parameters: readonly SchemaCacheParam[],
-): Record<string, readonly [string | number | boolean]> {
-  const expected: Record<string, readonly [string | number | boolean]> = {};
+): Record<string, readonly [PrimitiveExample]> {
+  const expected: Record<string, readonly [PrimitiveExample]> = {};
   for (const param of parameters) {
     if (!FLAT_SCHEMA_PARAM_LOCATIONS.has(param.in ?? '')) {
       continue;

@@ -141,8 +141,10 @@ async function main(): Promise<void> {
   await writeIndex(outDir, presentKinds);
 }
 
-main().catch((error: unknown) => {
+try {
+  await main();
+} catch (error: unknown) {
   const message = error instanceof Error ? error.message : String(error);
   logger.error(message, normalizeError(error));
   process.exitCode = 1;
-});
+}

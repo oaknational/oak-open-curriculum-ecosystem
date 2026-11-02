@@ -268,8 +268,10 @@ describe('serializeMinedSynonyms', () => {
     // (every character class round-trips); the concrete expected line is:
     //   "o'clock\\path": ["back\\slash", "it's"],
     const entryLine = serialized.split('\n').find((line) => line.includes("o'clock"));
-    expect(entryLine).toBe(
-      `  ${JSON.stringify(String.raw`o'clock\path`)}: [${JSON.stringify(String.raw`back\slash`)}, ${JSON.stringify("it's")}],`,
+    const expectedKey = JSON.stringify(String.raw`o'clock\path`);
+    const expectedValues = [JSON.stringify(String.raw`back\slash`), JSON.stringify("it's")].join(
+      ', ',
     );
+    expect(entryLine).toBe(`  ${expectedKey}: [${expectedValues}],`);
   });
 });

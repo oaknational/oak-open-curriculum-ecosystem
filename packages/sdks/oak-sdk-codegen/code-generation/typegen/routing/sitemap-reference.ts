@@ -1,5 +1,5 @@
-import { readFileSync } from 'node:fs';
 import { err, ok, type Result } from '@oaknational/result';
+import type { FileSystemPort } from '../../../src/io/file-system-port.js';
 import type { SitemapScanOutput } from '../../sitemap-scanner-types.js';
 
 /** Typed error for loading `canonical-url-map.json`. */
@@ -46,15 +46,19 @@ function hasSortedTeacherPaths(paths: readonly string[]): boolean {
 }
 
 /**
- * Load and validate the sitemap reference map from disk.
+ * Load and validate the sitemap reference map.
  *
  * @param refPath - Absolute path to `canonical-url-map.json`
+ * @param fs - The file system to read through
  * @returns Ok with the parsed output, or Err with a typed `SitemapRefError`
  */
-export function loadSitemapReference(refPath: string): Result<SitemapScanOutput, SitemapRefError> {
+export async function loadSitemapReference(
+  refPath: string,
+  fs: FileSystemPort,
+): Promise<Result<SitemapScanOutput, SitemapRefError>> {
   let raw: string;
   try {
-    raw = readFileSync(refPath, 'utf-8');
+    raw = await fs.readFile(refPath);
   } catch (error) {
     return err({
       kind: 'file_not_found',

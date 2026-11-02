@@ -141,12 +141,10 @@ export type { SearchUnitResult } from './responses.units.js';
 export type { SearchSequenceResult } from './responses.sequences.js';
 export type { SearchMultiScopeBucket } from './responses.multi.js';
 
-export type {
-  SearchLessonsResponse,
-  SearchUnitsResponse,
-  SearchSequencesResponse,
-  SearchMultiScopeResponse,
-};
+export type { SearchLessonsResponse } from './responses.lessons.js';
+export type { SearchUnitsResponse } from './responses.units.js';
+export type { SearchSequencesResponse } from './responses.sequences.js';
+export type { SearchMultiScopeResponse } from './responses.multi.js';
 `
   );
 }

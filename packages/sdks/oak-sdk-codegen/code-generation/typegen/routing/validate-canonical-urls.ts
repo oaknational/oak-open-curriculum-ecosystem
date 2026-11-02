@@ -16,6 +16,7 @@
  */
 
 import { ok, type Result } from '@oaknational/result';
+import type { FileSystemPort } from '../../../src/io/file-system-port.js';
 import { loadSitemapReference } from './sitemap-reference.js';
 import type { SitemapRefError } from './sitemap-reference.js';
 import { binarySearchSortedPaths } from './teacher-path-lookups.js';
@@ -96,13 +97,15 @@ export interface SitemapValidationReport {
  * validate those URLs against reference `teacherPaths`.
  *
  * @param refPath - Path to `canonical-url-map.json`
+ * @param fs - The file system to read the reference through
  * @returns Ok with a validation report, or Err if the reference file
  *   cannot be loaded
  */
-export function runSitemapValidation(
+export async function runSitemapValidation(
   refPath: string,
-): Result<SitemapValidationReport, SitemapRefError> {
-  const loaded = loadSitemapReference(refPath);
+  fs: FileSystemPort,
+): Promise<Result<SitemapValidationReport, SitemapRefError>> {
+  const loaded = await loadSitemapReference(refPath, fs);
   if (!loaded.ok) {
     return loaded;
   }

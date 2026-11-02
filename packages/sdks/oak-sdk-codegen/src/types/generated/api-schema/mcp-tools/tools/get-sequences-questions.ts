@@ -67,7 +67,7 @@ export function transformFlatToNestedArgs(flatArgs: z.infer<typeof toolMcpFlatIn
       sequence: flatArgs.sequence,
     },
     query: {
-      year: flatArgs.year === 'all-years' ? undefined : flatArgs.year === undefined ? undefined : Number(flatArgs.year),
+      year: flatArgs.year === undefined || flatArgs.year === 'all-years' ? undefined : Number(flatArgs.year),
       offset: flatArgs.offset,
       limit: flatArgs.limit,
       filter: flatArgs.filter,

@@ -107,26 +107,30 @@ async function readTypedocProject(typedocJsonPath: string): Promise<TDProject> {
   }
 }
 
+/** Section headings by TypeDoc reflection kind. */
+const KIND_HEADINGS: Readonly<Record<string, string>> = {
+  Class: 'Classes',
+  'Type alias': 'Type Aliases',
+  Variable: 'Variables',
+  Function: 'Functions',
+  Interface: 'Interfaces',
+  Enum: 'Enums',
+  Namespace: 'Namespaces',
+  Reference: 'References',
+};
+
+/** The section heading for a reflection kind; an unlisted kind takes a regular plural. */
+function pluraliseKind(kind: string): string {
+  return KIND_HEADINGS[kind] ?? (kind.endsWith('s') ? kind : `${kind}s`);
+}
+
 function renderSections(grouped: Map<string, TDReflection[]>): string[] {
   const sections: string[] = [];
-  const plural = (k: string): string => {
-    const map: Record<string, string> = {
-      Class: 'Classes',
-      'Type alias': 'Type Aliases',
-      Variable: 'Variables',
-      Function: 'Functions',
-      Interface: 'Interfaces',
-      Enum: 'Enums',
-      Namespace: 'Namespaces',
-      Reference: 'References',
-    };
-    return map[k] ?? (k.endsWith('s') ? k : `${k}s`);
-  };
   for (const [kind, items] of grouped) {
     if (items.length === 0) {
       continue;
     }
-    sections.push(`## ${plural(kind)}`);
+    sections.push(`## ${pluraliseKind(kind)}`);
     for (const r of items) {
       sections.push(renderReflection(r));
     }
@@ -195,8 +199,10 @@ async function main(): Promise<void> {
   await fs.writeFile(outPath, content, 'utf8');
 }
 
-main().catch((error: unknown) => {
+try {
+  await main();
+} catch (error: unknown) {
   const message = error instanceof Error ? error.message : String(error);
   logger.error(message, normalizeError(error));
   process.exitCode = 1;
-});
+}

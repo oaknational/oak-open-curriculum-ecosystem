@@ -43,13 +43,13 @@ import { generateAdminStreamFixtureModules } from './typegen/admin/generate-admi
 import { generateQueryParserModules } from './typegen/query-parser/generate-query-parser.js';
 import { generateSdkErrorTypes } from './typegen/error-types/index.js';
 import { generateClientTypes } from './typegen/client-types/generate-client-types.js';
+import { hoistRepeatedUnions } from './typegen/openapi-ts/hoist-repeated-unions.js';
+import { postProcessTypesSource } from './typegen/openapi-ts/post-process-types-source.js';
+import { renameRootTypes } from './typegen/openapi-ts/rename-root-types.js';
 import { getEndpointDefinitions } from './adapter/index.js';
 import { ensurePathsOnSchema } from './codegen-core-helpers.js';
-import {
-  calculateSdkSchemaPath,
-  outputGeneratedFiles,
-  writeSdkSchemaFile,
-} from './codegen-core-file-operations.js';
+import { outputGeneratedFiles } from './codegen-core-file-operations.js';
+import type { FileSystemPort } from '../src/io/file-system-port.js';
 
 /**
  * Create a map of filenames to their content
@@ -141,65 +141,29 @@ export function generatePathParametersContent(
 }
 
 /**
- * Escape TSDoc-unsafe characters inside a doc comment body.
+ * Generates every schema artefact into the output directory.
  *
- * Braces, angle brackets, and literal backslash-n sequences that appear in
- * generated OpenAPI descriptions/examples break the TSDoc parser. This
- * function escapes them while preserving valid inline tags.
+ * @remarks
+ * openapi-typescript receives the SDK schema as the same serialised JSON the
+ * file map writes to `api-schema-sdk.json`, so the two never diverge and no
+ * read-back from disk is needed; its output is byte-identical to the file
+ * route (verified against the committed schema, 2026-11-02).
+ *
+ * @param baseSchema - The schema as fetched upstream, written verbatim
+ * @param sdkSchema - The SDK-decorated schema every generator derives from
+ * @param outDirectory - Absolute output directory
+ * @param fs - The file system to write through
  */
-const PLACEHOLDER_PREFIX = '___TSDOC_SAFE_';
-const PLACEHOLDER_SUFFIX = '___';
-
-function escapeTsDocUnsafeChars(docBody: string): string {
-  // Protect complete valid TSDoc inline tags with placeholders before escaping
-  const placeholders: string[] = [];
-  let withPlaceholders = docBody.replaceAll(/\{@(?:link|inheritDoc)\s[^}]*\}/g, (match) => {
-    placeholders.push(match);
-    return `${PLACEHOLDER_PREFIX}${String(placeholders.length - 1)}${PLACEHOLDER_SUFFIX}`;
-  });
-
-  withPlaceholders = withPlaceholders
-    // Escape remaining braces
-    .replaceAll('{', String.raw`\{`)
-    .replaceAll('}', String.raw`\}`)
-    // Escape angle brackets (HTML-like syntax)
-    .replaceAll('<', String.raw`\<`)
-    .replaceAll('>', String.raw`\>`)
-    // Escape literal \n sequences (not real newlines) that appear in VTT examples
-    .replaceAll(String.raw`\n`, String.raw`\\n`);
-
-  // Restore valid inline tags
-  const pattern = new RegExp(String.raw`${PLACEHOLDER_PREFIX}(\d+)${PLACEHOLDER_SUFFIX}`, 'g');
-  return withPlaceholders.replaceAll(pattern, (_, idx) => placeholders[Number(idx)] ?? '');
-}
-
-export function postProcessTypesSource(source: string): string {
-  return (
-    source
-      .replaceAll('\u00A0', ' ')
-      .replaceAll(/headers: \{\n\s*\[name: string\]: unknown;\n\s*\};/g, 'headers?: never;')
-      // Strip non-standard JSDoc tags emitted by openapiTS
-      .replaceAll(/\/\*\*\s*@description\s+/g, '/** ')
-      .replaceAll(/^(\s*\*)\s*@description\s+/gm, '$1 ')
-      .replaceAll(/^(\s*\*)\s*@constant\s*$/gm, '')
-      .replaceAll(/^\s*\/\*\*\s*@constant\s*\*\/\s*$/gm, '')
-      .replaceAll(/^(\s*\*)\s*@enum\s+\{[^}]*\}\s*$/gm, '')
-      .replaceAll(/^\s*\/\*\*\s*@enum\s+\{[^}]*\}\s*\*\/\s*$/gm, '')
-      // Escape TSDoc-unsafe characters within doc comments only
-      .replaceAll(/\/\*\*[\s\S]*?\*\//g, (match) => escapeTsDocUnsafeChars(match))
-  );
-}
-
 export async function generateSchemaArtifacts(
   baseSchema: OpenAPIObject,
   sdkSchema: OpenAPIObject,
   outDirectory: string,
+  fs: FileSystemPort,
 ): Promise<void> {
-  // Generate TypeScript types from original schema
-  const sdkSchemaPath = calculateSdkSchemaPath(outDirectory);
-  writeSdkSchemaFile(outDirectory, sdkSchema, sdkSchemaPath);
-  const ast = await openapiTS(new URL(`file://${sdkSchemaPath}`));
-  const tsTypesContent = postProcessTypesSource(astToString(ast));
+  const ast = await openapiTS(Buffer.from(generateJsonContent(sdkSchema)));
+  const tsTypesContent = hoistRepeatedUnions(
+    renameRootTypes(postProcessTypesSource(astToString(ast))),
+  );
 
   // Extract path parameters and valid combinations from original schema
   const { parameters, validCombinations } = extractPathParameters(sdkSchema);
@@ -234,5 +198,5 @@ export async function generateSchemaArtifacts(
     requestValidatorContent,
   );
 
-  outputGeneratedFiles(outDirectory, fileMap, sdkSchema, sdkSchemaPath);
+  await outputGeneratedFiles(outDirectory, fileMap, sdkSchema, fs);
 }
