@@ -25,6 +25,28 @@ describe('resolveDebugLogConfig', () => {
     });
   });
 
+  it('resolves a relative path against CLAUDE_PROJECT_DIR, never the working directory', () => {
+    // The harness runs the statusline with the session's current directory as
+    // cwd, which moves with the session; a cwd-relative log once landed inside
+    // the skills tree and the adapter generator refused the directory.
+    expect(
+      resolveDebugLogConfig({
+        PRACTICE_STATUSLINE_LOG_FILE: '.logs/statusline.log',
+        CLAUDE_PROJECT_DIR: '/repo',
+      }),
+    ).toEqual({ kind: 'enabled', path: '/repo/.logs/statusline.log' });
+  });
+
+  it('resolves invalid, with a renderable warning, for a relative path when CLAUDE_PROJECT_DIR is unset', () => {
+    expect(resolveDebugLogConfig({ PRACTICE_STATUSLINE_LOG_FILE: '.logs/statusline.log' })).toEqual(
+      {
+        kind: 'invalid',
+        warning:
+          'PRACTICE_STATUSLINE_LOG_FILE is relative but CLAUDE_PROJECT_DIR is unset — name an absolute *.log path; logging disabled',
+      },
+    );
+  });
+
   it('trims surrounding whitespace from the value — a padded shell export must not leak into the path', () => {
     // Untrimmed, '  /tmp/x.log' has dirname '  /tmp' and mkdir would create a
     // directory literally named with a leading space, relative to the cwd.

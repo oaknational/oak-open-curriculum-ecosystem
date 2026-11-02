@@ -11,6 +11,12 @@
  * other bytes, including internal whitespace, are preserved. When unset,
  * behaviour is byte-identical to before this module existed.
  *
+ * The path is absolute, or relative to the project directory the harness
+ * names in `CLAUDE_PROJECT_DIR`. It is never relative to the statusline's own
+ * working directory: that is the session's, it moves with the session, and a
+ * cwd-relative log once landed inside the skills tree, where the adapter
+ * generator refused the directory.
+ *
  * Failure posture is split the same way as the adapter's own segments:
  *
  * - **A set-but-invalid value is a misconfiguration and fails LOUD.** An
@@ -43,6 +49,7 @@
  * @packageDocumentation
  */
 
+import path from 'node:path';
 import { appendOwnerOnly } from '../core/owner-only-append.js';
 import { nodeOwnerOnlyAppendFs, type OwnerOnlyAppendFs } from '../core/owner-only-append-fs.js';
 
@@ -57,19 +64,26 @@ export type DebugLogConfig =
   | { readonly kind: 'enabled'; readonly path: string }
   | { readonly kind: 'invalid'; readonly warning: string };
 
+/** The trimmed value, or `undefined` for an unset or blank one. */
+function trimmedOrUndefined(value: string | undefined): string | undefined {
+  const trimmed = value?.trim();
+  return trimmed === undefined || trimmed.length === 0 ? undefined : trimmed;
+}
+
 /**
  * Resolve the debug-log configuration from the environment.
  *
  * @param env - The environment map (pass `process.env`).
  * @returns `disabled` when the variable is unset or blank; `enabled` with the
- * trimmed path when it ends `.log`; `invalid` with a renderable warning for
- * any other set value.
+ * trimmed path when it ends `.log`, a relative path resolved against
+ * `CLAUDE_PROJECT_DIR`; `invalid` with a renderable warning for any other set
+ * value, and for a relative path when no project directory is set.
  */
 export function resolveDebugLogConfig(
   env: Readonly<Record<string, string | undefined>>,
 ): DebugLogConfig {
-  const value = env.PRACTICE_STATUSLINE_LOG_FILE?.trim();
-  if (value === undefined || value.length === 0) {
+  const value = trimmedOrUndefined(env.PRACTICE_STATUSLINE_LOG_FILE);
+  if (value === undefined) {
     return { kind: 'disabled' };
   }
   if (!value.endsWith('.log')) {
@@ -78,7 +92,18 @@ export function resolveDebugLogConfig(
       warning: 'PRACTICE_STATUSLINE_LOG_FILE must name a *.log path — logging disabled',
     };
   }
-  return { kind: 'enabled', path: value };
+  if (path.isAbsolute(value)) {
+    return { kind: 'enabled', path: value };
+  }
+  const projectDir = trimmedOrUndefined(env.CLAUDE_PROJECT_DIR);
+  if (projectDir === undefined) {
+    return {
+      kind: 'invalid',
+      warning:
+        'PRACTICE_STATUSLINE_LOG_FILE is relative but CLAUDE_PROJECT_DIR is unset — name an absolute *.log path; logging disabled',
+    };
+  }
+  return { kind: 'enabled', path: path.resolve(projectDir, value) };
 }
 
 /**
