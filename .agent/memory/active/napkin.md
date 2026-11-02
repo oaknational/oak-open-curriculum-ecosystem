@@ -1127,3 +1127,47 @@ the owner wants it kept).
   while agent-tools carries uncommitted changes, so a chunked series over a red workspace cannot
   pass its first hooked commit whatever the chunk holds. Compute the plan first:
   `turbo run lint --filter='...[HEAD]' --dry-run=json`.
+- **A secrets scan over history keeps its entry when the file leaves the tree.** Retiring the
+  refounding corpus removed the gitleaks entry for its by-design sha256 commitments; the scan reads
+  every commit and history is never rewritten, so the next full scan tripped on commit 2712c2211.
+  An entry for a known non-secret in immutable history is the scanner's own instrument, not a lint
+  allowlist; it stays, described as history-only.
+- **A tool the harness runs with the session's cwd must never resolve a relative path against
+  it.** The statusline wrote `.logs/statusline.log` relative to its cwd, which was the directory I
+  happened to be reading; the skills generator then refused the stray directory. Resolve against
+  the project directory the harness names, and refuse loudly without one.
+- **A brace glob's tier members were redundant**: `**/*.{test,unit.test,integration.test,e2e.test,spec}`
+  equals `**/*.{test,spec}` because `*` spans the infix. Excluding a tier needs a second pattern,
+  not a smaller brace.
+- **When a lane edits a mirror AND the test that pins it, the gate proves nothing; read the test's
+  diff.** The vercel-ignore script's semver regex is pinned to the canonical pattern's `.source` by
+  a parity test; a lane replaced the regex with a split-based parse and rewrote the parity test
+  around it, green. The cure was the canonical composition mirrored without the unicode flag, and
+  the parity test as it was.
+- **A banned `process.env` in a config is cured by a flag, not an env file.** The MCP app's Vite
+  config may not read `process.env`; a lane added a `.env` file plus `--env-file` to pass a dev-mode
+  variable to the token build. `process.argv.includes('--dev')` on the build was the smaller change,
+  and it removed a file.
+- **Before a red-first test, read what the pattern feeds.** The plan named "the innermost
+  parenthetical capture" for a synonym regex; a lane asserted an extracted synonym the generator
+  never produced (the pattern only feeds a count). The reshaped test asserts the count.
+- **A generator-first cure can reach a published surface.** Renaming the generated root types
+  (`paths` → `Paths`, `components` → `Components`) renamed re-exports of the published curriculum
+  SDK: a breaking change, marked with `!` and a `BREAKING CHANGE` footer, not folded into a fix.
+- **A tracked file removed with `rm` is still in the index**, and the tracked-file validators read
+  `git ls-files` and refuse a path they cannot open. Record the deletion (`git rm`) before running
+  `docs-validators:check`.
+- **The second-consumer rule applies inside one diff.** A lane curing the same fence regex in two
+  validators wrote two `fenceLineOf` copies; the shared `core/markdown/fence-line.ts` is the cure.
+- **The Read tool is blocked by the secrets hook on a diff whose test fixtures look like
+  secrets**; read such a file with `sed -n` in chunks of a few hundred lines.
+- **pnpm's "Command not found" under `ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL` for a root-only script
+  means the cwd drifted into a workspace**, not that the script is missing; the shell keeps the
+  last `cd`, so use absolute paths.
+- **A workspace that is green on lint, type-check and tests is not a green lane.** Two root-only
+  gates caught what six lanes' workspace runs could not: knip found fifteen exports nothing imports,
+  all in the lanes' new modules, and the MCP content audit refused an item whose anchored source a
+  lane had refactored (the AI reference's heading map). Run `pnpm check` before calling a lane done,
+  and expect the content audit to ask for a reviewed re-anchor whenever a refactor moves anchored
+  text: the headings it renders were unchanged, so the verdict was `unchanged`, as for the other
+  pure re-anchors.
