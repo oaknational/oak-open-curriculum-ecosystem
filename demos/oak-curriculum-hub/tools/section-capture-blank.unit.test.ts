@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { sectionCaptureLooksBlank } from './capture-live-sections';
+import { sectionCaptureLooksBlank } from './section-capture-blank';
 
 describe('sectionCaptureLooksBlank', () => {
   it('accepts a rendered content region', () => {
