@@ -117,3 +117,18 @@ regex = '''OAK_API_KEY=[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{
 id = "notion-api-key-ntn-format"
 description = "Detect Notion API keys with ntn_ prefix"
 regex = '''NOTION_API_KEY=ntn_[A-Za-z0-9_-]{20,}'''
+
+# The plan-corpus refounding programme (retired 2026-11-02) published sha256
+# digests BY DESIGN in its challenge commitments (hash-commit-then-reveal: the
+# committed digest must be public for the later reveal to be verifiable; it is
+# a commitment, not a credential). The files are gone from the tree, but the
+# scan reads every commit, and history is never rewritten, so the entry stays,
+# scoped to that directory and the exact committed field shape so a real key
+# anywhere else still trips the scan. Owner-authorised (Director-session
+# decision card, 2026-07-16; PR #390 carries the provenance).
+[[allowlists]]
+description = "Retired refounding challenge commitments published sha256 digests by design (history only)"
+condition = "AND"
+paths = ['''^\.agent/plans-refounding/challenge/[^/]+\.json$''']
+regexTarget = "line"
+regexes = ['''^\s*"keySetSha256"\s*:\s*"[0-9a-fA-F]{64}"\s*,?\s*$''']
