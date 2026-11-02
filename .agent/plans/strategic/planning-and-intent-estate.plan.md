@@ -14,7 +14,7 @@ gate_expiry_default: P21D
 depends_on: []
 owner_gates: []
 tickets: []
-last_updated: 2026-07-31
+last_updated: 2026-11-01
 ---
 
 # Planning and intent estate — one governed knowledge graph
@@ -79,9 +79,7 @@ migration is annotation plus a closed ledger, never relocation.
 The migration orders concepts-first (owner direction 2026-07-31,
 in-session): the shared vocabulary is harvested and ratified before
 document dispositions, so the ledger can cite concepts and the overlap
-map between conserved plans writes itself. The paused refounding
-programme's instruments — denominator, freeze rule, conservation
-chain — are harvested as the ledger's own tooling.
+map between conserved plans writes itself.
 
 ## Success looks like
 

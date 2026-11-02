@@ -19,7 +19,7 @@ depends_on:
   - plan: code-quality-binding-per-checkout
     kind: beneficial
 owner_gates: []
-last_updated: 2026-10-28
+last_updated: 2026-11-01
 ---
 
 # Code-quality analyser security and reliability findings to zero, and held there by the lint gate
@@ -88,15 +88,14 @@ Dynamics: work the story does not require is routed to a named home, never absor
   the shared lint config's activation comment points at a plan directory that no longer exists.
   Misleading docs are blocking (`principles.md` §Code Quality), so each is corrected in the unit
   that already edits its file (units 4 and 11).
-- Ten code-fence detectors in agent-tools disagree. Three track the CommonMark closer rule
+- Nine code-fence detectors in agent-tools disagree. Three track the CommonMark closer rule
   (`validators/core-host-names/markdown-headings.ts`, `validators/plan-schema/yaml-fence-blocks.ts`,
-  `subagent-declarations/system-prompt-block.ts`); seven toggle on any fence-like line
+  `subagent-declarations/system-prompt-block.ts`); six toggle on any fence-like line
   (`validators/cited-paths/extract-path-citations.ts`, `validators/cited-scripts/extract-script-citations.ts`,
   `validators/markdown-links/validate-markdown-links-helpers.ts:72`,
   `practice-fitness/markdown.ts`, `practice-fitness/item-count.ts`'s strip regex,
-  `refounding/refound-inventory-nets.ts` (backticks only), `hook-policy/matchers.ts:73` (backticks
-  only)). Two of the three CommonMark fence patterns are analyser findings and take one shared
-  helper (unit 8); the seven toggling detectors are no finding's site, and moving them would change
+  `hook-policy/matchers.ts:73` (backticks only)). Two of the three CommonMark fence patterns are analyser findings and take one shared
+  helper (unit 8); the six toggling detectors are no finding's site, and moving them would change
   their behaviour on nested, longer and tilde fences. Routed: §Out of scope.
 - `isSignedSelfReply` (`pr-watch/reviewer-legs.ts:107`) reads only the body's last line, so any
   commenter can sign as a seat, and pr-tally would read such a comment as the seat's disposition,
@@ -320,7 +319,7 @@ parallel. Re-estimate at each merge; past twenty-six seat-hours, stop and reshap
   file (PDR-141).
 - The other delivery nodes that still serve the retired Reliable Atoms node: they belong to other
   lanes; only `code-scanning-alerts-to-zero`, which unit 0 amends anyway, is re-pointed here.
-- Bringing the seven toggling fence detectors onto the fence-line helper: no finding names them, and
+- Bringing the six toggling fence detectors onto the fence-line helper: no finding names them, and
   the move changes their behaviour on nested, longer and tilde fences over the tracked corpus. The
   observation stands in §Problem; each detector comes onto the helper at its next edit, where
   `consolidate-at-second-consumer` fires, and a seat that wants them moved sooner opens that as its
