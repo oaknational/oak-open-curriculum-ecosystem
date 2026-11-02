@@ -114,18 +114,20 @@ try {
     fail(pnpm.error.message);
   }
 
-  const install = spawnSync(
-    pnpm.value,
-    ['install', '--offline', '--ignore-workspace', '--reporter=silent'],
-    {
-      cwd: fixtureRoot,
-      encoding: 'utf8',
-      // The install root has no `packageManager`, so there is nothing for
-      // corepack to resolve either; `COREPACK_ENABLE_PROJECT_SPEC=0` keeps that
-      // path inert regardless of the ambient corepack state.
-      env: { ...process.env, COREPACK_ENABLE_PROJECT_SPEC: '0' },
-    },
-  );
+  // No `--reporter=silent`, and the guard's words are read from stdout and
+  // stderr together: pnpm decides where a lifecycle script's output goes. pnpm
+  // 11 passes the guard's stderr through as stderr; pnpm 12 relays it on stdout
+  // and `--reporter=silent` drops it entirely. The fixture root has no
+  // `packageManager`, so whichever pnpm `resolvePnpm` finds runs the install
+  // itself, and the proof has to hold on either major.
+  const install = spawnSync(pnpm.value, ['install', '--offline', '--ignore-workspace'], {
+    cwd: fixtureRoot,
+    encoding: 'utf8',
+    // The install root has no `packageManager`, so there is nothing for
+    // corepack to resolve either; `COREPACK_ENABLE_PROJECT_SPEC=0` keeps that
+    // path inert regardless of the ambient corepack state.
+    env: { ...process.env, COREPACK_ENABLE_PROJECT_SPEC: '0' },
+  });
 
   if (install.error !== undefined) {
     fail(`could not start pnpm: ${install.error.message}`);
@@ -135,11 +137,12 @@ try {
       `mismatched install must exit 1, got ${String(install.status)}\n${install.stdout}${install.stderr}`,
     );
   }
-  if (!install.stderr.includes('does not match the pinned pnpm 99.1.2')) {
-    fail(`mismatched install did not report the version mismatch:\n${install.stderr}`);
+  const installOutput = `${install.stdout}${install.stderr}`;
+  if (!installOutput.includes('does not match the pinned pnpm 99.1.2')) {
+    fail(`mismatched install did not report the version mismatch:\n${installOutput}`);
   }
-  if (!install.stderr.includes('corepack enable')) {
-    fail(`mismatched install did not report the Corepack remedy:\n${install.stderr}`);
+  if (!installOutput.includes('corepack enable')) {
+    fail(`mismatched install did not report the Corepack remedy:\n${installOutput}`);
   }
 
   const finalLockfile = readFileSync(join(fixtureRoot, 'pnpm-lock.yaml'), 'utf8');
