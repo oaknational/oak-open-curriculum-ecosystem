@@ -85,7 +85,7 @@ function geminiFieldsOf(spec: AdapterSpec): GeminiFields {
  */
 export function renderGeminiAdapter(path: string, spec: AdapterSpec): Result<string, string> {
   const gemini = geminiFieldsOf(spec);
-  if (gemini.tools !== undefined && gemini.tools.length === 0) {
+  if (gemini.tools?.length === 0) {
     return err(
       `${path}: the declaration's Gemini tools are the empty list, and this estate's adapter body is the pointer to the template, which a no-tools agent cannot read; leave gemini out of the role's platforms, or wait for the inlined-body form; refusing to render it`,
     );

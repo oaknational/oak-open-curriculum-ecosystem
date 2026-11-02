@@ -6,7 +6,7 @@ import type {
 } from './analysis-model.js';
 import type { FileRecord, TreeEntry } from './file-model.js';
 import type { GraphObservations } from './graph-model.js';
-import type { NonEmptyReadonlyArray, RepoPath, Sha256 } from './scalar-model.js';
+import type { NonEmptyReadonlyArray } from './scalar-model.js';
 
 export interface SnapshotRecord {
   readonly inputRef: string;
@@ -16,14 +16,14 @@ export interface SnapshotRecord {
 }
 
 export interface ImplementationFile {
-  readonly path: RepoPath;
+  readonly path: string;
   readonly byteCount: number;
-  readonly sha256: Sha256;
+  readonly sha256: string;
 }
 
 export interface ExtractorIdentity {
   readonly implementationVersion: '2.0.0';
-  readonly implementationSha256: Sha256;
+  readonly implementationSha256: string;
   readonly implementationFiles: NonEmptyReadonlyArray<ImplementationFile>;
   readonly nodeVersion: string;
   readonly typescriptVersion: string;
@@ -37,18 +37,18 @@ export interface CoverageRecord {
   readonly parsedWithDiagnostics: number;
   readonly invalidUtf8: number;
   readonly unsupportedModes: number;
-  readonly pathsSha256: Sha256;
+  readonly pathsSha256: string;
 }
 
 export interface AuxiliaryReadRecord {
-  readonly path: RepoPath;
+  readonly path: string;
   readonly treeEntry: TreeEntry & {
     readonly mode: '100644' | '100755';
     readonly type: 'blob';
     readonly size: number;
   };
   readonly byteCount: number;
-  readonly contentSha256: Sha256;
+  readonly contentSha256: string;
 }
 
 export interface ConstructTotal {
@@ -72,7 +72,7 @@ export interface ConstructDefinitionsRecord {
 
 export interface TypeScriptSourceDiagnosticRecord {
   readonly subjectKind: 'typescript-source';
-  readonly path: RepoPath;
+  readonly path: string;
   readonly stage: 'read' | 'parse' | 'classify' | 'analyse';
   readonly code: string;
   readonly message: string;
@@ -80,8 +80,8 @@ export interface TypeScriptSourceDiagnosticRecord {
 
 export interface AuxiliaryBlobDiagnosticRecord {
   readonly subjectKind: 'auxiliary-blob';
-  readonly path: RepoPath;
-  readonly relatedPath: RepoPath | null;
+  readonly path: string;
+  readonly relatedPath: string | null;
   readonly stage: 'auxiliary-parse' | 'auxiliary-resolve';
   readonly code: string;
   readonly message: string;
@@ -93,10 +93,10 @@ export interface RawExtractionDocument {
   readonly schemaVersion: '2.0.0';
   readonly snapshot: SnapshotRecord;
   readonly detectorConfig: {
-    readonly path: RepoPath;
+    readonly path: string;
     readonly schemaVersion: '2.0.0';
     readonly contractRevision: '2.6';
-    readonly sha256: Sha256;
+    readonly sha256: string;
   };
   readonly extractor: ExtractorIdentity;
   readonly completeness: 'complete';

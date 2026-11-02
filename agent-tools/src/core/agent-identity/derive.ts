@@ -191,8 +191,11 @@ function capitalise(value: string): string {
 }
 
 function slugifyDisplayName(displayName: string): string {
-  return displayName
-    .toLowerCase()
-    .replaceAll(/[^a-z0-9]+/gu, '-')
-    .replaceAll(/^-+|-+$/gu, '');
+  return (
+    displayName
+      .toLowerCase()
+      .replaceAll(/[^a-z0-9]+/gu, '-')
+      // The collapse above leaves at most one hyphen at each end.
+      .replaceAll(/^-|-$/gu, '')
+  );
 }

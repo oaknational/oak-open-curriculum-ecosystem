@@ -2,8 +2,11 @@ import { describe, expect, it } from 'vitest';
 
 import { declaredAdaptersFrom } from './declared-adapters.js';
 
-const role = (name: string, platforms?: string): string =>
-  `---\ndescription: ${name} reviews.\n${platforms === undefined ? '' : `platforms:\n${platforms}`}---\n\n## Delegation Triggers\n`;
+/** A role template whose frontmatter declares the given platforms block, or none. */
+const role = (name: string, platforms?: string): string => {
+  const platformsBlock = platforms === undefined ? '' : `platforms:\n${platforms}`;
+  return `---\ndescription: ${name} reviews.\n${platformsBlock}---\n\n## Delegation Triggers\n`;
+};
 
 describe('declaredAdaptersFrom', () => {
   it('reduces a role to every surface and a declared subset to that subset, in template order', () => {

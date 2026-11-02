@@ -15,6 +15,12 @@ function observedRefusalOutput(): string {
 }
 
 const NONCE = 'nonce-4e21';
+/** The command line every refusal fixture names, carrying the nonce so a match is never incidental. */
+const REFUSED_COMMAND_LINE = `git push ${NONCE}`;
+/** The justification the refusal fixtures carry alongside the command line. */
+const REFUSAL_JUSTIFICATION = `because ${NONCE}`;
+/** A double quote as Rust's Debug formatting escapes it inside a quoted string. */
+const DEBUG_ESCAPED_QUOTE = String.raw`\"`;
 const COMPLETED = 'Script completed\nWall time 0.1 seconds\nOutput:\n';
 const FAILED = 'Script failed\nWall time 0.0 seconds\nOutput:\n';
 const TERMINATED = 'Script terminated\nWall time 3.0 seconds\nOutput:\n';
@@ -33,8 +39,10 @@ const SETTLED = [
 /** The router's rendering of a refusal, as the code-mode wrapper appends it after `Script error:`. */
 function debugRejected(commandLine: string, justification: string): string {
   const message = `\`${commandLine}\` rejected: ${justification}`;
-  const literal = JSON.stringify(message);
-  return `exec_command failed: CreateProcess { message: "Rejected(${literal.replaceAll('\\', '\\\\').replaceAll('"', String.raw`\"`)})" }`;
+  const literal = JSON.stringify(message)
+    .replaceAll('\\', '\\\\')
+    .replaceAll('"', DEBUG_ESCAPED_QUOTE);
+  return `exec_command failed: CreateProcess { message: "Rejected(${literal})" }`;
 }
 
 describe('readHarnessText reads a refusal by the exec policy', () => {
@@ -57,25 +65,25 @@ describe('readHarnessText reads a refusal by the exec policy', () => {
       carry: (text: string): unknown => JSON.stringify([{ type: 'input_text', text }]),
     },
   ])('reads a code-mode refusal from $name carrier', ({ carry }) => {
-    const text = `${FAILED}Script error:\n${debugRejected(`git push ${NONCE}`, `because ${NONCE}`)}`;
+    const text = `${FAILED}Script error:\n${debugRejected(REFUSED_COMMAND_LINE, REFUSAL_JUSTIFICATION)}`;
     const read = readHarnessText(carry(text), 'code-mode');
     assert(read.kind === 'text');
-    expect(read.refusal).toStrictEqual({ commandLine: `git push ${NONCE}` });
+    expect(read.refusal).toStrictEqual({ commandLine: REFUSED_COMMAND_LINE });
   });
 
   it('reads a function-tool refusal from offset 0, in the bare and the rendered forms', () => {
     const bare = readHarnessText(
-      `\`git push ${NONCE}\` rejected: because ${NONCE}`,
+      `\`${REFUSED_COMMAND_LINE}\` rejected: ${REFUSAL_JUSTIFICATION}`,
       'function-tool',
     );
     const rendered = readHarnessText(
-      debugRejected(`git push ${NONCE}`, `because ${NONCE}`),
+      debugRejected(REFUSED_COMMAND_LINE, REFUSAL_JUSTIFICATION),
       'function-tool',
     );
     for (const read of [bare, rendered]) {
       assert(read.kind === 'text');
       expect(read.status).toBe('none');
-      expect(read.refusal?.commandLine).toBe(`git push ${NONCE}`);
+      expect(read.refusal?.commandLine).toBe(REFUSED_COMMAND_LINE);
     }
   });
 
@@ -89,7 +97,7 @@ describe('readHarnessText reads a refusal by the exec policy', () => {
     { name: 'a completed preamble', text: `${COMPLETED}{"exit_code":0}` },
     {
       name: 'a failed preamble with a refusal after its Script error line',
-      text: `${FAILED}Script error:\n${debugRejected(`git push ${NONCE}`, NONCE)}`,
+      text: `${FAILED}Script error:\n${debugRejected(REFUSED_COMMAND_LINE, NONCE)}`,
     },
   ])(
     'reads a function-tool output that opens with $name as text with no wrapper and no refusal',
@@ -104,7 +112,7 @@ describe('readHarnessText reads a refusal by the exec policy', () => {
   it.each(SETTLED)(
     'never reads the program’s own text: the same words under a $wrapper wrapper ($name) are no refusal',
     ({ wrapper, preamble, lead }) => {
-      const printed = `${preamble}${lead}${debugRejected(`git push ${NONCE}`, NONCE)}`;
+      const printed = `${preamble}${lead}${debugRejected(REFUSED_COMMAND_LINE, NONCE)}`;
       const read = readHarnessText(printed, 'code-mode');
       assert(read.kind === 'text');
       expect(read.status).toBe(wrapper);
@@ -113,7 +121,7 @@ describe('readHarnessText reads a refusal by the exec policy', () => {
   );
 
   it('anchors after the last Script error line, not the first thing that looks like one', () => {
-    const program = `Script error:\n${debugRejected(`git push ${NONCE}`, NONCE)}\n`;
+    const program = `Script error:\n${debugRejected(REFUSED_COMMAND_LINE, NONCE)}\n`;
     const harness = `Script error:\nTypeError: ${NONCE}`;
     const read = readHarnessText(`${FAILED}${program}${harness}`, 'code-mode');
     assert(read.kind === 'text');

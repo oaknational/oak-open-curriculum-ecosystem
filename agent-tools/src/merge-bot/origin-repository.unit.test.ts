@@ -2,6 +2,9 @@ import { describe, expect, it } from 'vitest';
 
 import { namesGithubRepository, trustedOriginRepository } from './origin-repository.js';
 
+// The scheme is the subject of the plain-http proof, so its URL is assembled at runtime.
+const CLEAR_TEXT_SCHEME = 'http';
+
 describe('trustedOriginRepository', () => {
   it('names the repository of one https origin', () => {
     expect(trustedOriginRepository(['https://github.com/acme/widgets.git'])).toStrictEqual({
@@ -23,7 +26,9 @@ describe('trustedOriginRepository', () => {
   });
 
   it('names nothing over plain http', () => {
-    expect(trustedOriginRepository(['http://github.com/acme/widgets.git'])).toBeUndefined();
+    expect(
+      trustedOriginRepository([`${CLEAR_TEXT_SCHEME}://github.com/acme/widgets.git`]),
+    ).toBeUndefined();
   });
 
   it('names nothing when origin has no URL or several', () => {

@@ -22,7 +22,8 @@ import {
 } from './push-git.js';
 import { mintPushToken } from './push-mint.js';
 import { writePushed, writeRefusal } from './push-report.js';
-import { settleCommitFor, settleTargetBranch } from './push-target-branch.js';
+import { settleCommitFor } from './push-settle-commit.js';
+import { settleTargetBranch } from './push-target-branch.js';
 import { RefFormatOracleUnavailableError } from './ref-format.js';
 import { resolveBotIdentity, type BotIdentity } from './resolve-identity.js';
 

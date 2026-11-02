@@ -114,7 +114,7 @@ async function proveTheCommandLineTruthSet(): Promise<void> {
   const unknown = await runCli(['acquire']);
   assert.notEqual(unknown.status, 0);
   assert.match(unknown.stderr, /Usage:/u);
-  assert.doesNotMatch(unknown.stderr, /^\s+at /mu);
+  assert.doesNotMatch(unknown.stderr, /^[ \t]+at /mu);
 
   // A harmless payload: were the marker ever ignored, this would still only print a version.
   const nested = await runCli(['run', 'pnpm', '--version'], { [GATE_SLOT_HELD_ENV]: '31918' });

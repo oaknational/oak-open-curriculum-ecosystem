@@ -157,7 +157,7 @@ function requireKnownOverrideIds<T>(
   const unknownOverrides = typeSafeKeys(overrides).filter((id) => !knownIds.has(id));
   if (unknownOverrides.length > 0) {
     throw new Error(
-      `${label} contain unknown audit ids: ${unknownOverrides.sort(alphabetical).join(', ')}`,
+      `${label} contain unknown audit ids: ${unknownOverrides.toSorted(alphabetical).join(', ')}`,
     );
   }
 }
@@ -175,7 +175,7 @@ function validateManifestOverrides(input: AnchorManifestInput): void {
   );
   if (revisionWithoutOverrides.length > 0) {
     throw new Error(
-      `Revision-overridden current audit ids have no reviewed anchor override: ${revisionWithoutOverrides.sort(alphabetical).join(', ')}`,
+      `Revision-overridden current audit ids have no reviewed anchor override: ${revisionWithoutOverrides.toSorted(alphabetical).join(', ')}`,
     );
   }
   const samePathOverridesWithoutRevision = input.rows

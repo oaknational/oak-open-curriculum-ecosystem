@@ -146,7 +146,7 @@ const MAX_INVOCATION_CANDIDATES = 8;
  */
 function isSubcommandOf(words: readonly ShellWord[], index: number): boolean {
   const previous = index > 0 ? findCommandTable(basename(words[index - 1]?.text ?? '')) : undefined;
-  return previous !== undefined && previous.subcommands.some((table) => table.words.length > 0);
+  return previous?.subcommands.some((table) => table.words.length > 0) ?? false;
 }
 
 /**

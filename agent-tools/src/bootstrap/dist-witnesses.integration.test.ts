@@ -5,14 +5,15 @@ import { describe, expect, it } from 'vitest';
 import { type WorkspaceDepFsIo } from './bootstrap-helpers.js';
 import { missingDistArtifacts } from './dist-witnesses.js';
 
+/** A seam over files that exist at the given paths; every other path reads missing. */
+const filesAt = (paths: readonly string[]): WorkspaceDepFsIo => ({
+  statMtimeMs: (filePath) => (paths.includes(filePath) ? 1 : 'missing'),
+  dirExists: () => false,
+  readDirEntries: () => [],
+});
+
 describe('missingDistArtifacts', () => {
   const depDir = '/repo/packages/core/config';
-  /** A seam over files that exist at the given paths; every other path reads missing. */
-  const filesAt = (paths: readonly string[]): WorkspaceDepFsIo => ({
-    statMtimeMs: (filePath) => (paths.includes(filePath) ? 1 : 'missing'),
-    dirExists: () => false,
-    readDirEntries: () => [],
-  });
 
   it('names each witness a finished build did not write, in declaration order', () => {
     const io = filesAt([join(depDir, 'dist', 'tsup.base.js')]);

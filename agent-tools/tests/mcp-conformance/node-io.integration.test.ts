@@ -346,6 +346,11 @@ describe('retainRawReport — verbatim retention with caller-shaped paths', () =
   });
 });
 
+/** A module resolver that cannot find the mcpjam CLI, as Node reports it. */
+const absentMcpjamResolver = (): string => {
+  throw new Error("Cannot find module '@mcpjam/cli'");
+};
+
 // The resolve-and-spawn happy path is deliberately NOT proven here: test code
 // must not spawn child processes (testing-strategy §Rules), and the real bin
 // under the real install is exercised live by the scheduled unattended CI
@@ -357,15 +362,12 @@ describe('runMcpjam — bin-resolution failure is loud and spawn-free', () => {
     // so calling the real one here would have been filesystem access even
     // though no path in the call names a file — the quiet kind this file must
     // not perform, and the reason it is a seam.
-    const absent = (): string => {
-      throw new Error("Cannot find module '@mcpjam/cli'");
-    };
     const io = buildMcpConformanceNodeIo(
       resolve('/no-such-root'),
       'tmp/unused',
       undefined,
       POSIX,
-      absent,
+      absentMcpjamResolver,
     );
 
     const error = unwrapErr(io.runMcpjam(['--version']));

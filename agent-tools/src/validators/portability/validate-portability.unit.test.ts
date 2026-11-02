@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import type { FsRead } from '../../skills-adapter-generate/carriage-fs.js';
 
+import type { SkillsWalkFs } from './skills-walk.js';
 import {
   CLAUDE_HOOK_COMMAND,
   CLAUDE_SETTINGS_PATH,
@@ -41,6 +42,23 @@ invoked through the verdict shim \`.claude/hooks/run-pretooluse-guard.mjs\`.
 
 override | prune | block
 `;
+
+/** A skills-walk filesystem fake over a literal directory tree and the canonical files present. */
+const fakeWalkFs = (
+  dirs: ReadonlyMap<string, readonly string[]>,
+  canonicals: ReadonlySet<string>,
+): SkillsWalkFs => ({
+  async listSubdirs(relPath: string) {
+    return dirs.get(relPath) ?? [];
+  },
+  async exists(relPath: string) {
+    return canonicals.has(relPath);
+  },
+});
+
+/** A derived skill stub's text: its front matter, title and pointer to the canonical skill. */
+const skillStubText = (title: string, pointer: string): string =>
+  `---\nname: x\ndescription: y\n---\n\n# ${title} (Claude Code)\n\nRead and follow \`.agent/skills/${pointer}\`.\n`;
 
 describe('isClaudeHookWired', () => {
   it('matches Bash PreToolUse command hooks', () => {
@@ -299,20 +317,8 @@ describe('getSkillPermissionIssues', () => {
 });
 
 describe('collectCanonicalSkillPaths', () => {
-  const makeWalkFs = (
-    dirs: ReadonlyMap<string, readonly string[]>,
-    canonicals: ReadonlySet<string>,
-  ) => ({
-    async listSubdirs(relPath: string) {
-      return dirs.get(relPath) ?? [];
-    },
-    async exists(relPath: string) {
-      return canonicals.has(relPath);
-    },
-  });
-
   it('collects flat, concern-tier, and domain-tier canonicals', async () => {
-    const fs = makeWalkFs(
+    const fs = fakeWalkFs(
       new Map([
         ['.agent/skills', ['flat-one', 'cognition', 'domain-craft']],
         ['.agent/skills/cognition', ['reason']],
@@ -336,7 +342,7 @@ describe('collectCanonicalSkillPaths', () => {
   });
 
   it('never walks a fourth level — the tree closes at the domain tier', async () => {
-    const fs = makeWalkFs(
+    const fs = fakeWalkFs(
       new Map([
         ['.agent/skills', ['fam']],
         ['.agent/skills/fam', ['dom']],
@@ -356,11 +362,9 @@ describe('selectPracticeSkillDirs', () => {
   // The fake models skill-permission-checks' documented reader semantics:
   // resolves `<dirName>/SKILL.md`, returns its text, or undefined when the
   // file is absent (or, in the real reader, not a regular file).
-  const stub = (title: string, pointer: string): string =>
-    `---\nname: x\ndescription: y\n---\n\n# ${title} (Claude Code)\n\nRead and follow \`.agent/skills/${pointer}\`.\n`;
   const stubs = new Map<string, string>([
-    ['oak-commit', stub('Commit', 'commit/SKILL-CANONICAL.md')],
-    ['legacy-reason', stub('Reason', 'cognition/reason/SKILL-CANONICAL.md')],
+    ['oak-commit', skillStubText('Commit', 'commit/SKILL-CANONICAL.md')],
+    ['legacy-reason', skillStubText('Reason', 'cognition/reason/SKILL-CANONICAL.md')],
     ['clerk', '# Clerk\n\nVendor skill body — no derivation marker.\n'],
     ['oak-mystery', '# Mystery\n\nForeign skill with a coincidental prefix.\n'],
   ]);

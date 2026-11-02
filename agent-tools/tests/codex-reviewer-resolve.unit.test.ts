@@ -1,58 +1,44 @@
-import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { afterEach, describe, expect, it } from 'vitest';
+
+import { describe, expect, it } from 'vitest';
+
 import {
   formatHumanReadableAgent,
   formatResolutionFailure,
 } from '../src/bin/codex-reviewer-resolve';
 import type { CodexProjectAgent } from '../src/core/codex-project-agents';
+import { inMemorySyncFileSystem } from '../src/core/test-helpers/in-memory-sync-file-system';
 
-const tempRoots: string[] = [];
+const ROOT = join('/', 'repo');
 
-function createTempRepoRoot(): string {
-  const repoRoot = mkdtempSync(join(tmpdir(), 'codex-reviewer-resolve-'));
-  tempRoots.push(repoRoot);
-  return repoRoot;
-}
-
-afterEach(() => {
-  for (const repoRoot of tempRoots) {
-    rmSync(repoRoot, { recursive: true, force: true });
-  }
-  tempRoots.length = 0;
-});
+/** A repository whose Codex registry holds the given text. */
+const repoWithRegistry = (registry: string) =>
+  inMemorySyncFileSystem({ files: { [join(ROOT, '.codex', 'config.toml')]: registry } });
 
 describe('formatResolutionFailure', () => {
   it('adds available agents when the registry can still be enumerated', () => {
-    const repoRoot = createTempRepoRoot();
-    mkdirSync(join(repoRoot, '.codex'), { recursive: true });
-    writeFileSync(
-      join(repoRoot, '.codex', 'config.toml'),
-      `[agents."code-expert"]
+    const repo = repoWithRegistry(`[agents."code-expert"]
 description = "Gateway reviewer."
 config_file = "agents/code-expert.toml"
-`,
-      'utf8',
-    );
+`);
 
-    expect(formatResolutionFailure(repoRoot, 'Broken adapter.')).toContain(
+    expect(formatResolutionFailure(ROOT, 'Broken adapter.', repo)).toContain(
       'Available agents: code-expert',
     );
   });
 
   it('falls back to the original error when the registry itself cannot be parsed', () => {
-    const repoRoot = createTempRepoRoot();
-    mkdirSync(join(repoRoot, '.codex'), { recursive: true });
-    writeFileSync(
-      join(repoRoot, '.codex', 'config.toml'),
-      `[agents."code-expert"]
+    const repo = repoWithRegistry(`[agents."code-expert"]
 config_file = "agents/code-expert.toml"
-`,
-      'utf8',
-    );
+`);
 
-    expect(formatResolutionFailure(repoRoot, 'Original failure.')).toBe('Original failure.');
+    expect(formatResolutionFailure(ROOT, 'Original failure.', repo)).toBe('Original failure.');
+  });
+
+  it('falls back to the original error when there is no registry at all', () => {
+    expect(formatResolutionFailure(ROOT, 'Original failure.', inMemorySyncFileSystem({}))).toBe(
+      'Original failure.',
+    );
   });
 });
 

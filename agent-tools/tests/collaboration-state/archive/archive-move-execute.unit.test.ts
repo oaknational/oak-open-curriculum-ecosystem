@@ -103,6 +103,18 @@ const passProvenance = (
     violations: [],
   });
 
+/** A provenance check that reports the given event as cited but uncovered, so the gate re-blocks it. */
+const flaggingViolation =
+  (violator: string) =>
+  (candidates: readonly string[]): Result<ProvenanceCheckReport, ProvenanceScanError> =>
+    ok({
+      knownCount: candidates.length,
+      citedEventIds: [violator],
+      coveredEventIds: [],
+      candidateCount: candidates.length,
+      violations: [violator],
+    });
+
 function request(ledgerIds: string[]): ArchiveMovePlanRequest {
   const ledger = new Map<string, LedgerEntry>(
     ledgerIds.map((id) => [id, { disposition: 'routine', bodyReadConfirmed: false }]),
@@ -179,15 +191,7 @@ describe('executeArchiveMove — fail-closed', () => {
   it('does not move an event the provenance gate re-blocks', () => {
     const events = [pastCoordinationEvent('aaaaaaaa')];
     const { io, state } = fakeExecuteIo(events);
-    const flag = (candidates: readonly string[]) =>
-      ok({
-        knownCount: candidates.length,
-        citedEventIds: ['aaaaaaaa'],
-        coveredEventIds: [],
-        candidateCount: candidates.length,
-        violations: ['aaaaaaaa'],
-      });
-    const result = executeArchiveMove(request(['aaaaaaaa']), io, flag);
+    const result = executeArchiveMove(request(['aaaaaaaa']), io, flaggingViolation('aaaaaaaa'));
 
     expect(result.ok).toBe(true);
     if (!result.ok) {

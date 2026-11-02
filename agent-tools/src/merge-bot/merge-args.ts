@@ -219,8 +219,12 @@ function requireExpectedSet(
   return ok(expected);
 }
 
+/** A login as compared: without case, and without the `[bot]` suffix that names the same account. */
+function bareLogin(login: string): string {
+  return login.toLowerCase().replace(/\[bot\]$/u, '');
+}
+
 // Logins compare without case, and a `[bot]` suffix names the same account.
 function sameLogin(left: string, right: string): boolean {
-  const bare = (login: string) => login.toLowerCase().replace(/\[bot\]$/u, '');
-  return bare(left) === bare(right);
+  return bareLogin(left) === bareLogin(right);
 }

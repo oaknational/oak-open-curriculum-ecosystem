@@ -182,9 +182,13 @@ export function harness(runnerExit = 0): Harness {
   return { files, modes, runs, removed, seams };
 }
 
+/** The refusal every seam of {@link refusingSeams} answers with. */
+function refused<T>(): Result<T, Error> {
+  return err(new Error('must not run'));
+}
+
 /** Seams that refuse every effect; a caller that touches none of them proves it by exiting 0. */
 export function refusingSeams(): SkillEvalsSeams {
-  const refused = <T>(): Result<T, Error> => err(new Error('must not run'));
   return {
     readText: refused,
     listFiles: refused,

@@ -36,7 +36,7 @@ type PlainBaseRef = string & { readonly [plainBaseBrand]: true };
 const FULL_OID = /^[0-9a-f]{40}$/u;
 // Path segments of letters, digits, dot, underscore and hyphen: never a `..`
 // or a leading hyphen that could read as a flag or a range.
-const BASE_REF = /^[A-Za-z0-9_][A-Za-z0-9._-]*(?:\/[A-Za-z0-9_][A-Za-z0-9._-]*)*$/u;
+const BASE_REF = /^\w[\w.-]*(?:\/\w[\w.-]*)*$/u;
 
 function isCommitOid(value: string): value is CommitOid {
   return FULL_OID.test(value);
@@ -190,8 +190,7 @@ export const gitPatchIdOf: PatchIdOf = (diff) => {
     timeout: PATCH_ID_BACKSTOP_MS,
   });
   if (result.error !== undefined) {
-    const error: { code?: string | undefined; message: string } = result.error;
-    return unproven(describeSpawnFailure('git patch-id', error, PATCH_ID_BACKSTOP_MS));
+    return unproven(describeSpawnFailure('git patch-id', result.error, PATCH_ID_BACKSTOP_MS));
   }
   return result.status === 0
     ? idFromOutput(result.stdout)
@@ -200,7 +199,8 @@ export const gitPatchIdOf: PatchIdOf = (diff) => {
 
 function exitReason(status: number | null, stderr: string): string {
   const detail = stderr.trim().split('\n')[0] ?? '';
-  return `git patch-id exited ${String(status)}${detail === '' ? '' : `: ${detail}`}`;
+  const detailSuffix = detail === '' ? '' : `: ${detail}`;
+  return `git patch-id exited ${String(status)}${detailSuffix}`;
 }
 
 // One diff hashes to one line, the id and forty zeros for the missing

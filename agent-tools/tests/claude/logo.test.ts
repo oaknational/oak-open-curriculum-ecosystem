@@ -5,6 +5,10 @@ import {
   resolveLogoStyle,
 } from '../../src/claude/logo';
 
+/** The display width of each row, counted in code points. */
+const codePointWidths = (rows: readonly string[]): readonly number[] =>
+  rows.map((row) => [...row].length);
+
 describe('LOGO_ROWS', () => {
   it('renders the default braille-sharp as five rows and every other style as four', () => {
     expect(LOGO_ROWS['braille-sharp']).toHaveLength(5);
@@ -39,11 +43,9 @@ describe('BRAILLE_SHARP_FRAMES', () => {
     // Column alignment behaviour: whichever frame is selected, the segments to the
     // right stay aligned. Derived from frame 0, not pinned to specific dimensions.
     const [first, ...rest] = BRAILLE_SHARP_FRAMES;
-    const width = (rows: readonly string[]): readonly number[] =>
-      rows.map((row) => [...row].length);
     for (const frame of rest) {
       expect(frame).toHaveLength(first.length);
-      expect(width(frame)).toEqual(width(first));
+      expect(codePointWidths(frame)).toEqual(codePointWidths(first));
     }
   });
 });

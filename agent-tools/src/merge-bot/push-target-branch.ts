@@ -5,11 +5,12 @@ import { DEFAULT_BRANCH_NAMES } from './branch-arg.js';
 import type { GitCommandResult } from './git-executor.js';
 import { namesGithubRepository, trustedOriginRepository } from './origin-repository.js';
 import { describeGitChildEnd, type PushGitReads } from './push-git.js';
+import { currentBranchFrom } from './push-settle-commit.js';
 import type { BotIdentity } from './resolve-identity.js';
 
 /**
- * Which branch `merge-bot push` writes, which it refuses, and which commit it
- * writes there. Changes reach a
+ * Which branch `merge-bot push` writes and which it refuses (the commit it
+ * writes there is settled in `push-settle-commit.ts`). Changes reach a
  * default branch through a pull request, never a direct push: `main` and
  * `master` refuse by name, and so does the repository's own default branch,
  * read from `refs/remotes/origin/HEAD`, which a clone sets and every worktree
@@ -80,19 +81,6 @@ function notCheckedOut(named: string | undefined, current: string | undefined): 
   return `--branch "${printable(named)}" is not the branch HEAD is on (${onHead}); the push writes HEAD's commit under the name given, so check "${printable(named)}" out, or run the push from its worktree`;
 }
 
-/** The branch HEAD is on, or undefined for a detached HEAD. */
-function currentBranchFrom(result: GitCommandResult): Result<string | undefined, Error> {
-  if (result.status !== 0) {
-    return err(
-      new Error(
-        `cannot read the current branch (git branch ${describeGitChildEnd(result)}): ${result.stderr.trim()}`,
-      ),
-    );
-  }
-  const branch = result.stdout.trim();
-  return ok(branch === '' ? undefined : branch);
-}
-
 /** The failure for origin's URL read, never echoing the URL, which can carry a credential. */
 function originReadFailure(result: GitCommandResult, cure: string): Error {
   return result.status === NO_SUCH_REMOTE_STATUS && result.signal === null
@@ -141,61 +129,6 @@ function defaultBranchFrom(result: GitCommandResult): Result<string, Error> {
     : err(
         new Error(
           `cannot read the default branch: refs/remotes/origin/HEAD does not name an origin branch; ${SET_HEAD_CURE}`,
-        ),
-      );
-}
-
-/** A full object name: SHA-1 (40 hex digits) or SHA-256 (64). */
-const OBJECT_NAME = /^[0-9a-f]{40}(?:[0-9a-f]{24})?$/u;
-
-/**
- * Settle the commit a push writes: the one HEAD names, read once before the
- * mint, so every attempt pushes the same commit however long the retry waits.
- *
- * @param read - git's answer naming HEAD's commit (`rev-parse --verify HEAD^{commit}`).
- * @returns The commit's full object name, or the failure naming the cure.
- */
-export function settleCommit(read: GitCommandResult): Result<string, Error> {
-  const name = read.stdout.trim();
-  return read.status === 0 && OBJECT_NAME.test(name)
-    ? ok(name)
-    : err(
-        new Error(
-          `cannot settle the commit HEAD names (git rev-parse ${describeGitChildEnd(read)}, answering ${JSON.stringify(name)}); check out a branch with a commit and push again`,
-        ),
-      );
-}
-
-/**
- * Settle the commit for a settled branch, as one snapshot of HEAD. The branch
- * is read first and the commit last, with origin's reads between; a checkout
- * that changed branch in that interval would pair the first branch with the
- * second branch's commit. So the branch is read again after the commit, and
- * a different answer fails the push before the mint. A named branch is
- * HEAD's branch too, settled so by {@link settleTargetBranch}, and is asked
- * the same.
- *
- * @param branch - The settled target branch.
- * @param reads - git's answers naming HEAD's commit and its branch.
- * @returns The commit's full object name, or the failure naming the cure.
- */
-export async function settleCommitFor(
-  branch: string,
-  reads: Pick<PushGitReads, 'headCommit' | 'currentBranch'>,
-): Promise<Result<string, Error>> {
-  const commit = settleCommit(await reads.headCommit());
-  if (!commit.ok) {
-    return commit;
-  }
-  const now = currentBranchFrom(await reads.currentBranch());
-  if (!now.ok) {
-    return now;
-  }
-  return now.value === branch
-    ? commit
-    : err(
-        new Error(
-          `HEAD moved from branch "${printable(branch)}" to ${now.value === undefined ? 'no branch' : `"${printable(now.value)}"`} while the push settled its target; nothing was minted or pushed; run the push again`,
         ),
       );
 }

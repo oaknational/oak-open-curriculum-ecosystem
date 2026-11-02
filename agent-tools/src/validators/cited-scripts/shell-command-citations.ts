@@ -20,7 +20,7 @@ const HINT_COMMANDS: ReadonlySet<string> = new Set(['echo', 'printf']);
 /** Shells whose `-c` argument is a command line of its own. */
 const SHELLS: ReadonlySet<string> = new Set(['sh', 'bash', 'zsh']);
 /** A short-option cluster that carries `-c` (`-c`, `-lc`, `-ec`). */
-const SHELL_COMMAND_FLAG = /^-[A-Za-z]*c[A-Za-z]*$/;
+const SHELL_COMMAND_FLAG = /^-[A-Za-bd-z]*c[A-Za-z]*$/;
 /** A variable assignment ahead of a command's name (`CI=1 pnpm …`). */
 const ASSIGNMENT = /^[A-Za-z_]\w*=/;
 /** Reserved words and `!` that can stand ahead of a command's name (`if bash -c …`, `then pnpm …`). */

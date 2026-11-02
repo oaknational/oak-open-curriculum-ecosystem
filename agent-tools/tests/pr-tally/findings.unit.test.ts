@@ -131,7 +131,8 @@ describe('Codex items are read by their fixed parts', () => {
    * asserted (testing-strategy, no wall-clock ceilings in gated tests).
    */
   it('reads a badge line of 512 sub closers and 262,144 spaces as no item', () => {
-    const line = `**<sub><sub>![P1 Badge](u)</sub></sub>${`</sub></sub>${' '.repeat(512)}`.repeat(512)}`;
+    const closersThenSpaces = `</sub></sub>${' '.repeat(512)}`;
+    const line = `**<sub><sub>![P1 Badge](u)</sub></sub>${closersThenSpaces.repeat(512)}`;
     expect(extractBodyFindings({ author: CODEX, body: line })).toStrictEqual(none);
   });
 });

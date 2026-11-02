@@ -7,7 +7,7 @@
  * are told apart by the code. Pure: no IO, no clock.
  */
 export interface SpawnFailure {
-  readonly code?: string | undefined;
+  readonly code?: string;
   readonly message: string;
 }
 

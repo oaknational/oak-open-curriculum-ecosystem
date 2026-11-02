@@ -1,3 +1,5 @@
+import assert from 'node:assert/strict';
+
 import { err, ok } from '@oaknational/result';
 import { describe, expect, it } from 'vitest';
 
@@ -43,6 +45,13 @@ function makeFetchPort(input: {
   return { fetchImpl, calls };
 }
 
+/** The JSON body a recorded call sent, asserted to be the string the port serialises. */
+function jsonBodyOf(call: { url: string; init?: RequestInit } | undefined): unknown {
+  const body = call?.init?.body;
+  assert(typeof body === 'string', 'the recorded call carries a string body');
+  return JSON.parse(body);
+}
+
 describe('runMergeExecution', () => {
   it('merges a settled tip with the merge-commit method and the verdicted sha in the body', async () => {
     // Quiet window: reading time 08:05, now 09:00 — comfortably elapsed.
@@ -62,8 +71,7 @@ describe('runMergeExecution', () => {
     const mergeCall = calls.find((call) => call.url.endsWith('/pulls/42/merge'));
     expect(mergeCall).toBeDefined();
     expect(mergeCall?.init?.method).toBe('PUT');
-    const body: unknown = JSON.parse(String(mergeCall?.init?.body));
-    expect(body).toEqual({ merge_method: 'merge', sha: HEAD_OID });
+    expect(jsonBodyOf(mergeCall)).toEqual({ merge_method: 'merge', sha: HEAD_OID });
   });
 
   it('refuses a non-settled verdict by name and never calls the merge endpoint', async () => {
@@ -480,7 +488,7 @@ describe('runMergeExecution — what is owed is read from the review configurati
       }
     }
     const mergeCall = calls.find((call) => call.url.endsWith('/pulls/42/merge'));
-    expect(JSON.parse(String(mergeCall?.init?.body))).toEqual({
+    expect(jsonBodyOf(mergeCall)).toEqual({
       merge_method: 'merge',
       sha: HEAD_OID,
     });

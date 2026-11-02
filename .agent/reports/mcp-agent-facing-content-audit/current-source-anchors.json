@@ -8851,10 +8851,10 @@
             "file": "packages/sdks/oak-sdk-codegen/code-generation/generate-ai-doc.ts",
             "anchors": [
               {
-                "tokenCount": 203,
-                "tokenSha256": "a41447af6a980e07a066affd52fcd45ed5be4024f8b97ef8b42116606eaf8562",
+                "tokenCount": 128,
+                "tokenSha256": "621c2719f7be61e08a4625bc8cb4c1387ec8787f0f2835ee96e3ee3a3c94295e",
                 "indexToken": "Interfaces",
-                "indexOffset": 84
+                "indexOffset": 45
               }
             ]
           }

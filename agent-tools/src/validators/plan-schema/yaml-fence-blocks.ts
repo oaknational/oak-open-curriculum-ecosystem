@@ -42,6 +42,8 @@
  * @packageDocumentation
  */
 
+import { closesFence, fenceOpenerOf } from '../../core/markdown/fence-line.js';
+
 /** An open code fence: what will close it, and whether its content is YAML. */
 interface OpenFence {
   /** The run of backticks or tildes that opened it; the closer matches or exceeds it. */
@@ -51,8 +53,6 @@ interface OpenFence {
   /** Whether the info string names YAML, under either of its two spellings. */
   readonly isYaml: boolean;
 }
-
-const FENCE_LINE = /^(?<indent> {0,3})(?<delimiter>`{3,}|~{3,})[ \t]*(?<info>.*)$/u;
 
 /** The two info strings that name YAML; both are ordinary and both must be read. */
 const YAML_INFO_STRINGS = new Set(['yaml', 'yml']);
@@ -70,33 +70,17 @@ function languageOf(info: string): string {
   );
 }
 
-/** A fence opener, or `undefined` when the line is not one. */
+/** A fence opener, or `undefined` when the line is not one (inline code included). */
 function openFenceAt(line: string): OpenFence | undefined {
-  const groups = FENCE_LINE.exec(line)?.groups;
-  if (groups === undefined) {
-    return undefined;
-  }
-  const { indent = '', delimiter = '', info = '' } = groups;
-  // CommonMark: a backtick fence's info string may not itself contain a
-  // backtick, which is what keeps inline code from opening a block.
-  if (delimiter.startsWith('`') && info.includes('`')) {
+  const fence = fenceOpenerOf(line);
+  if (fence === undefined) {
     return undefined;
   }
   return {
-    delimiter,
-    indent: indent.length,
-    isYaml: YAML_INFO_STRINGS.has(languageOf(info)),
+    delimiter: fence.delimiter,
+    indent: fence.indent.length,
+    isYaml: YAML_INFO_STRINGS.has(languageOf(fence.info)),
   };
-}
-
-/** Whether `line` closes `open`: same character, no shorter, nothing but the run. */
-function closesFence(line: string, open: OpenFence): boolean {
-  const groups = FENCE_LINE.exec(line)?.groups;
-  if (groups === undefined || groups.info !== '') {
-    return false;
-  }
-  const delimiter = groups.delimiter ?? '';
-  return delimiter[0] === open.delimiter[0] && delimiter.length >= open.delimiter.length;
 }
 
 /** How many of the first `limit` characters of `line` are spaces. */
@@ -118,7 +102,7 @@ export function yamlFencedBlocks(content: string): string[] {
     if (open === undefined) {
       open = openFenceAt(line);
       current = [];
-    } else if (closesFence(line, open)) {
+    } else if (closesFence(open.delimiter, line)) {
       if (open.isYaml) {
         blocks.push(`${current.join('\n')}\n`);
       }

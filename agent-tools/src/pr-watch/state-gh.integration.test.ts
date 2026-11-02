@@ -57,6 +57,30 @@ function makeExecutor(script: ExecutorScript, calls: string[][]): GhCommandExecu
   };
 }
 
+/**
+ * Serves one oid per `pr view` call (last oid repeats), so a push landing
+ * between the view snapshot and the later legs is reproducible.
+ */
+function movingTipExecutor(oids: readonly string[], calls: string[][]): GhCommandExecutor {
+  let viewCall = 0;
+  return (_file, args) => {
+    calls.push([...args]);
+    if (args[0] === 'pr') {
+      const oid = oids[Math.min(viewCall, oids.length - 1)] ?? HEAD;
+      viewCall += 1;
+      return viewPayload(oid);
+    }
+    const query = args.find((arg) => arg.startsWith('query='));
+    if (args[0] === 'api' && query !== undefined) {
+      return graphqlPayload(query);
+    }
+    if (args[0] === 'agent-task') {
+      return agentTaskResponse({}, args);
+    }
+    throw new Error(`unexpected gh argv: ${args.join(' ')}`);
+  };
+}
+
 const ghSeam = { ghPath: '/usr/bin/gh', exists: () => true, patchIdOf: textHasher };
 
 describe('readPrStateReading', () => {
@@ -575,28 +599,6 @@ describe('readPrStateReading', () => {
 
 describe('readPrStateReading — tip consistency (r4 regression)', () => {
   const NEW_HEAD = 'e'.repeat(40);
-
-  // Serves one oid per `pr view` call (last oid repeats), so a push landing
-  // between the view snapshot and the later legs is reproducible.
-  function movingTipExecutor(oids: readonly string[], calls: string[][]): GhCommandExecutor {
-    let viewCall = 0;
-    return (_file, args) => {
-      calls.push([...args]);
-      if (args[0] === 'pr') {
-        const oid = oids[Math.min(viewCall, oids.length - 1)] ?? HEAD;
-        viewCall += 1;
-        return viewPayload(oid);
-      }
-      const query = args.find((arg) => arg.startsWith('query='));
-      if (args[0] === 'api' && query !== undefined) {
-        return graphqlPayload(query);
-      }
-      if (args[0] === 'agent-task') {
-        return agentTaskResponse({}, args);
-      }
-      throw new Error(`unexpected gh argv: ${args.join(' ')}`);
-    };
-  }
 
   it('one mid-read push retries the legs and binds the reading to the fresh tip', () => {
     const calls: string[][] = [];

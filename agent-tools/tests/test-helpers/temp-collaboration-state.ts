@@ -42,6 +42,10 @@ export async function ensureDirectory(path: string): Promise<void> {
   await mkdir(path, { recursive: true });
 }
 
+export async function removeFile(path: string): Promise<void> {
+  await rm(path);
+}
+
 /**
  * Plant a name that a directory listing returns but whose read ENOENTs — a
  * dangling symlink. The deterministic stand-in for a file deleted between

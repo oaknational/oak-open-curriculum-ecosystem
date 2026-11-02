@@ -59,7 +59,7 @@ export interface ReadPrStateOptions {
   /** Hashes a diff to its patch-id; the trusted git's `patch-id` by default. */
   readonly patchIdOf?: PatchIdOf;
   /** Vendors declared unavailable (`--unavailable`), the bot that may declare, and the clock. */
-  readonly unavailable?: UnavailableInput | undefined;
+  readonly unavailable?: UnavailableInput;
 }
 
 // `mergeable: UNKNOWN` means GitHub has not computed mergeability yet — a
@@ -199,7 +199,7 @@ export function readPrStateReading(options: ReadPrStateOptions): PrStateReading 
         // The base branch's configuration, from the view the reading composes from.
         reviewConfiguration: readReviewConfigurationLeg({ run, gh, repo, view: confirm }),
         declared: options.expectedReviewers ?? null,
-        unavailable: options.unavailable,
+        ...(options.unavailable === undefined ? {} : { unavailable: options.unavailable }),
         readContent: contentReaderFor({ run, gh, repo, view: confirm, patchIdOf }),
       });
     }

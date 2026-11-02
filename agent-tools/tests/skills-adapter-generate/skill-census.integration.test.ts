@@ -17,6 +17,9 @@ import {
 const stub = (title: string, pointer: string): string =>
   `---\nname: x\ndescription: y\n---\n\n# ${title} (Claude Code)\n\n${adapterStubPointerLine(pointer)}\n`;
 
+/** A real-path resolver that answers every path as itself, so the root guard passes. */
+const passesRootGuard = async (path: string) => ({ kind: 'ok', value: path }) as const;
+
 afterEach(() => {
   cleanupSandboxes();
 });
@@ -83,8 +86,6 @@ describe('practiceSkillPermissionIssues over a real filesystem', () => {
 });
 
 describe('practiceSkillPermissionIssues fail-closed on unreadable state (injected seam)', () => {
-  const passesRootGuard = async (p: string) => ({ kind: 'ok', value: p }) as const;
-
   it('reports a root-listing failure as an issue, never a silent "no Practice skills"', async () => {
     const fs: CensusFs = {
       async listSubdirectoryNames() {

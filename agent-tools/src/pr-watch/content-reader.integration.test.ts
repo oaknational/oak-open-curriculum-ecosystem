@@ -23,12 +23,9 @@ const DIFF_MEDIA = 'Accept: application/vnd.github.diff';
 
 function github(
   diffs: ReadonlyMap<string, string>,
-  held: { readonly repository: string; readonly base: string } = {
-    repository: 'owner/name',
-    base: 'engraph',
-  },
+  { repository = 'owner/name', base = 'engraph' }: { repository?: string; base?: string } = {},
 ): GhCommandExecutor {
-  const prefix = `repos/${held.repository}/compare/refs/heads/${held.base}...`;
+  const prefix = `repos/${repository}/compare/refs/heads/${base}...`;
   return (_file, args) => {
     const endpoint = args.find((arg) => arg.startsWith(prefix));
     const diff = endpoint === undefined ? undefined : diffs.get(endpoint.slice(prefix.length));
@@ -42,7 +39,7 @@ function github(
 function read(
   run: GhCommandExecutor,
   reviewedOids: readonly string[],
-  overrides: { readonly base?: string; readonly repo?: string | undefined } = {},
+  overrides: Partial<Pick<Parameters<typeof readContentLeg>[0], 'base' | 'repo'>> = {},
 ): ContentLeg {
   return readContentLeg({
     run,

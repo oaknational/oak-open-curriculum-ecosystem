@@ -200,10 +200,9 @@ async function pollUntilActionable(context: {
       expectedReviewers: parsed.expect,
       nowIso: at,
       // Each poll judges the declarations at its own clock.
-      unavailable:
-        context.poster === null
-          ? undefined
-          : { declarations: parsed.unavailable, poster: context.poster, now: at },
+      ...(context.poster === null
+        ? {}
+        : { unavailable: { declarations: parsed.unavailable, poster: context.poster, now: at } }),
       seams,
     });
     const retry = retryLabel(outcome, poll, parsed.maxPolls);

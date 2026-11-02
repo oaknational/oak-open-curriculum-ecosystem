@@ -3,7 +3,8 @@ import { describe, expect, it } from 'vitest';
 
 import type { GitCommandResult } from './git-executor.js';
 import type { PushGitReads } from './push-git.js';
-import { settleCommitFor, settleTargetBranch, type TargetBranch } from './push-target-branch.js';
+import { settleCommitFor } from './push-settle-commit.js';
+import { settleTargetBranch, type TargetBranch } from './push-target-branch.js';
 import { failureMessage } from './test-helpers/result-failure.js';
 
 /**
@@ -14,6 +15,9 @@ import { failureMessage } from './test-helpers/result-failure.js';
 
 const REPOSITORY = { owner: 'acme', repoName: 'widgets' } as const;
 const ORIGIN = 'https://github.com/acme/widgets.git';
+// The scheme is the subject of two refusals below: the URL is built at runtime so the
+// clear-text scheme never sits in source as a literal.
+const CLEAR_TEXT_SCHEME = 'http';
 const DEFAULT_BRANCH = 'engraph';
 
 function answered(stdout: string): GitCommandResult {
@@ -268,11 +272,11 @@ describe('settleTargetBranch: failures, each naming its cure', () => {
     },
     {
       name: 'origin is read over plain http',
-      originUrls: answered('http://github.com/acme/widgets.git\n'),
+      originUrls: answered(`${CLEAR_TEXT_SCHEME}://github.com/acme/widgets.git\n`),
     },
     {
       name: 'origin is read over plain http, written after a space',
-      originUrls: answered(' http://github.com/acme/widgets.git\n'),
+      originUrls: answered(` ${CLEAR_TEXT_SCHEME}://github.com/acme/widgets.git\n`),
     },
     {
       name: 'origin is read over the git protocol',

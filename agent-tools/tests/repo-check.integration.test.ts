@@ -27,7 +27,7 @@ interface CommandCall {
  * git's `-z` record separator, built without a string escape: a `\\0` directly
  * before a digit would read as an octal escape, which the language forbids.
  */
-const NUL = String.fromCharCode(0);
+const NUL = String.fromCodePoint(0);
 
 /** A captured git answer: what the fake returns for one exact argv. */
 interface GitAnswer {
@@ -83,6 +83,49 @@ function gateRuntime(input: {
       },
     },
   };
+}
+
+/** A fake runtime answering every captured run with the given result and every inherited run with exit 0. */
+function knipRuntime(input: {
+  readonly status: number | null;
+  readonly signal?: NodeJS.Signals | null;
+  readonly stdout?: string;
+  readonly stderr?: string;
+}): {
+  readonly capturedCalls: readonly CommandCall[];
+  readonly inheritedCalls: readonly CommandCall[];
+  readonly runtime: RepoCheckRuntime;
+} {
+  const capturedCalls: CommandCall[] = [];
+  const inheritedCalls: CommandCall[] = [];
+  return {
+    capturedCalls,
+    inheritedCalls,
+    runtime: {
+      runCaptured(command, args) {
+        capturedCalls.push({ command, args });
+        return {
+          status: input.status,
+          signal: input.signal ?? null,
+          stdout: input.stdout ?? '',
+          stderr: input.stderr ?? '',
+        };
+      },
+      runInherited(command, args) {
+        inheritedCalls.push({ command, args });
+        return Promise.resolve(0);
+      },
+    },
+  };
+}
+
+/** The check legs a manifest's scripts declare, thrown on a refusal. */
+function legsOf(manifestScripts: Readonly<Record<string, string>>) {
+  const result = readCheckLegs(manifestScripts);
+  if (!result.ok) {
+    throw result.error;
+  }
+  return result.value;
 }
 
 describe('repo-check staged scanners', () => {
@@ -252,39 +295,6 @@ describe('repo-check tracked tree', () => {
 });
 
 describe('repo-check knip gate', () => {
-  function knipRuntime(input: {
-    readonly status: number | null;
-    readonly signal?: NodeJS.Signals | null;
-    readonly stdout?: string;
-    readonly stderr?: string;
-  }): {
-    readonly capturedCalls: readonly CommandCall[];
-    readonly inheritedCalls: readonly CommandCall[];
-    readonly runtime: RepoCheckRuntime;
-  } {
-    const capturedCalls: CommandCall[] = [];
-    const inheritedCalls: CommandCall[] = [];
-    return {
-      capturedCalls,
-      inheritedCalls,
-      runtime: {
-        runCaptured(command, args) {
-          capturedCalls.push({ command, args });
-          return {
-            status: input.status,
-            signal: input.signal ?? null,
-            stdout: input.stdout ?? '',
-            stderr: input.stderr ?? '',
-          };
-        },
-        runInherited(command, args) {
-          inheritedCalls.push({ command, args });
-          return Promise.resolve(0);
-        },
-      },
-    };
-  }
-
   it('runs knip captured (never inherited) so crash signatures stay inspectable, passing a clean run through with exit 0', async () => {
     const { capturedCalls, inheritedCalls, runtime } = knipRuntime({
       status: 0,
@@ -432,13 +442,6 @@ describe('repo-check profile artifact helpers', () => {
     knip: 'knip',
     depcruise: 'depcruise agent-tools tooling jcdotnet',
   };
-  function legsOf(manifestScripts: Readonly<Record<string, string>>) {
-    const result = readCheckLegs(manifestScripts);
-    if (!result.ok) {
-      throw result.error;
-    }
-    return result.value;
-  }
   const legs = legsOf(scripts);
   const checkEcho = `$ ${scripts.check}`;
   const formatStart = '$ pnpm agent-tools:repo-check prettier-tracked';

@@ -51,6 +51,11 @@ function otherAgentEvent(eventId: string): CommsEvent {
   };
 }
 
+/** A heartbeat-tagged event from another agent: the canonical exclusion's subject. */
+function heartbeatEvent(eventId: string): CommsEvent {
+  return { ...otherAgentEvent(eventId), tags: ['heartbeat'] };
+}
+
 /** Capture stdout for a runtime — `watchComms` refuses to run without one. */
 function captureStdout(runtime: ReturnType<typeof createFakeCollaborationRuntime>['runtime']): {
   readonly runtime: typeof runtime;
@@ -295,10 +300,6 @@ describe('watchComms — supervisor-death detection (F-101 refined-(i) kill-tree
 });
 
 describe('watchComms — sanctioned --exclude-tag boundary (F-146)', () => {
-  function heartbeatEvent(eventId: string): CommsEvent {
-    return { ...otherAgentEvent(eventId), tags: ['heartbeat'] };
-  }
-
   const BASE_OPTIONS: Record<string, string> = {
     'comms-dir': COMMS_DIR,
     'seen-file': SEEN_FILE,

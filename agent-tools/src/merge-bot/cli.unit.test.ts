@@ -27,17 +27,16 @@ function capture(): { text: () => string; sink: Pick<NodeJS.WriteStream, 'write'
   };
 }
 
-function happyFetch(): GithubApiFetch {
-  return (url) => {
-    if (url.endsWith('/installation')) {
-      return Promise.resolve({ status: 200, json: () => Promise.resolve({ id: 55 }) });
-    }
-    return Promise.resolve({
-      status: 201,
-      json: () => Promise.resolve({ token: 'ghs_tok', expires_at: '2026-07-21T08:00:00Z' }),
-    });
-  };
-}
+/** A GitHub API fake that answers the installation read and the token mint as GitHub does on success. */
+const happyFetch: GithubApiFetch = (url) => {
+  if (url.endsWith('/installation')) {
+    return Promise.resolve({ status: 200, json: () => Promise.resolve({ id: 55 }) });
+  }
+  return Promise.resolve({
+    status: 201,
+    json: () => Promise.resolve({ token: 'ghs_tok', expires_at: '2026-07-21T08:00:00Z' }),
+  });
+};
 
 function runWith(overrides: Partial<MergeBotCliInput> & { args: readonly string[] }): {
   exit: Promise<number>;
@@ -50,7 +49,7 @@ function runWith(overrides: Partial<MergeBotCliInput> & { args: readonly string[
     env: {},
     stdout: out.sink,
     stderr: errSink.sink,
-    fetchImpl: happyFetch(),
+    fetchImpl: happyFetch,
     readFileImpl: () => Promise.resolve(privateKey),
     readConfigFileImpl: () => {
       throw new Error('ENOENT (no repo config in this test)');
@@ -65,40 +64,40 @@ function runWith(overrides: Partial<MergeBotCliInput> & { args: readonly string[
   return { exit, out: out.text, errText: errSink.text };
 }
 
-describe('runMergeBotCli mint-token --scope', () => {
-  /** The mint body the CLI actually put on the wire for a given scope. */
-  async function mintedPermissionsFor(scope: string): Promise<unknown> {
-    const calls: { url: string; body?: string }[] = [];
-    const run = runWith({
-      args: [
-        'mint-token',
-        '--scope',
-        scope,
-        '--app-id',
-        '1',
-        '--private-key-path',
-        '/k.pem',
-        '--repo',
-        'o/r',
-      ],
-      fetchImpl: (url, init) => {
-        calls.push({ url, body: init.body });
-        return Promise.resolve({
-          status: url.endsWith('/installation') ? 200 : 201,
-          json: () =>
-            Promise.resolve(
-              url.endsWith('/installation')
-                ? { id: 987 }
-                : { token: 'ghs_abc', expires_at: '2026-07-21T07:30:00Z' },
-            ),
-        });
-      },
-    });
-    expect(await run.exit).toBe(0);
-    const mint = calls.find((call) => call.url.endsWith('/access_tokens'));
-    return JSON.parse(mint?.body ?? '{}').permissions;
-  }
+/** The mint body the CLI actually put on the wire for a given scope. */
+async function mintedPermissionsFor(scope: string): Promise<unknown> {
+  const calls: { url: string; body?: string }[] = [];
+  const run = runWith({
+    args: [
+      'mint-token',
+      '--scope',
+      scope,
+      '--app-id',
+      '1',
+      '--private-key-path',
+      '/k.pem',
+      '--repo',
+      'o/r',
+    ],
+    fetchImpl: (url, init) => {
+      calls.push({ url, body: init.body });
+      return Promise.resolve({
+        status: url.endsWith('/installation') ? 200 : 201,
+        json: () =>
+          Promise.resolve(
+            url.endsWith('/installation')
+              ? { id: 987 }
+              : { token: 'ghs_abc', expires_at: '2026-07-21T07:30:00Z' },
+          ),
+      });
+    },
+  });
+  expect(await run.exit).toBe(0);
+  const mint = calls.find((call) => call.url.endsWith('/access_tokens'));
+  return JSON.parse(mint?.body ?? '{}').permissions;
+}
 
+describe('runMergeBotCli mint-token --scope', () => {
   // The ENGINE: whatever the flag names is what reaches the wire. Generic over
   // the table, so a scope added later arrives with coverage rather than
   // silently without it — and it transcribes nothing, so it is not the table

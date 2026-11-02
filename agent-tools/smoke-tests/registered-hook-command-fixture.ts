@@ -184,11 +184,12 @@ export async function proveUnquotedPathSplits(command: string): Promise<void> {
       input: '',
       stdio: 'pipe',
     });
+    const spawnFailure = result.error === undefined ? '' : ` (${result.error.message})`;
     assert.equal(
       result.status,
       COMMAND_NOT_FOUND,
       `the command with its quotes removed ended ${String(result.status ?? result.signal)}` +
-        `${result.error === undefined ? '' : ` (${result.error.message})`}: ${result.stderr}`,
+        `${spawnFailure}: ${result.stderr}`,
     );
     const splitAt = project.slice(0, project.indexOf(' '));
     assert.ok(

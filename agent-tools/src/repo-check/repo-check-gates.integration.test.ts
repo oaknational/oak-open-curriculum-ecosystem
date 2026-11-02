@@ -40,6 +40,10 @@ function runtimeOver(input: {
   };
 }
 
+/** A runtime tracking `a.md` and `bad.md`, with `bad.md` gone from the working tree and the deletion unstaged. */
+const lostFileRuntime = (): RepoCheckRuntime =>
+  runtimeOver({ tracked: passed('a.md\u0000bad.md\u0000'), gone: 'bad.md\u0000' });
+
 /** A NUL-separated listing of `count` Markdown paths of about a hundred bytes each. */
 function largeListing(count: number): string {
   return Array.from(
@@ -108,12 +112,10 @@ describe('the tracked gates', () => {
 
   it('refuse a check over a tracked file gone from the working tree with the change unstaged', async () => {
     // `git add bad.md; rm bad.md`: the index, and so a commit and CI, still carry bad.md.
-    const lost = (): RepoCheckRuntime =>
-      runtimeOver({ tracked: passed('a.md\u0000bad.md\u0000'), gone: 'bad.md\u0000' });
-    await expect(runPrettierTracked('check', lost())).resolves.toBe(1);
-    await expect(runMarkdownlintTracked('check', lost())).resolves.toBe(1);
-    await expect(runPrettierTracked('write', lost())).resolves.toBe(0);
-    await expect(runMarkdownlintTracked('fix', lost())).resolves.toBe(0);
+    await expect(runPrettierTracked('check', lostFileRuntime())).resolves.toBe(1);
+    await expect(runMarkdownlintTracked('check', lostFileRuntime())).resolves.toBe(1);
+    await expect(runPrettierTracked('write', lostFileRuntime())).resolves.toBe(0);
+    await expect(runMarkdownlintTracked('fix', lostFileRuntime())).resolves.toBe(0);
   });
 
   it('check on past a lost file the gate never reads: a symlink entry, or a non-Markdown file for markdownlint', async () => {

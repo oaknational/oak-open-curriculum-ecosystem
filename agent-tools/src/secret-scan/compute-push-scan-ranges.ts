@@ -133,10 +133,8 @@ export function computePushScanRanges(input: ComputePushScanRangesInput): string
   // from cannot scope anything, so it falls back to the unscoped set rather
   // than building a glob that silently matches nothing.
   const scopes = scopingRemoteNames(input);
-  const notAlreadyPushed =
-    scopes.length === 0
-      ? UNSCOPED_EXCLUSION
-      : `--not ${scopes.map((name) => `--remotes=${name}`).join(' ')}`;
+  const remoteGlobs = scopes.map((name) => `--remotes=${name}`).join(' ');
+  const notAlreadyPushed = scopes.length === 0 ? UNSCOPED_EXCLUSION : `--not ${remoteGlobs}`;
 
   const ranges: string[] = [];
   for (const refLine of refLines) {

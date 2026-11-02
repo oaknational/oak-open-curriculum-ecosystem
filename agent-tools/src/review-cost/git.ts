@@ -91,8 +91,7 @@ export function isSyncPush(
 ): boolean {
   const parents = mergeParents(localSha, run);
   return (
-    parents !== undefined &&
-    parents.first === remoteSha &&
+    parents?.first === remoteSha &&
     gitHolds(['merge-base', '--is-ancestor', parents.second, baseRefOid], run) &&
     isBaseSync(localSha, run)
   );

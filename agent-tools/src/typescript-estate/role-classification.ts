@@ -11,11 +11,11 @@ import {
 import type { RoleRule, RoleSelectorRule } from './config-classification-model.js';
 import { EstateReviewError } from './errors.js';
 import { ROLE_VALUES, type FileRole, type Provenance } from './file-vocabulary.js';
-import type { NonEmptyReadonlyArray, RepoPath } from './scalar-model.js';
+import type { NonEmptyReadonlyArray } from './scalar-model.js';
 import { compareUtf16 } from './utf16-order.js';
 
 export interface RoleClassificationInput {
-  readonly path: RepoPath;
+  readonly path: string;
   readonly provenance: Provenance;
   /** Parsed source, including parsed-with-diagnostics, or null when unreadable. */
   readonly sourceFile: SourceFile | null;

@@ -1,4 +1,3 @@
-import { mkdir, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
@@ -12,8 +11,10 @@ import {
   readSurfaceText,
 } from '../../src/collaboration-state/state-integrity-surfaces';
 import {
+  ensureDirectory,
   makeTempCollaborationRepo,
   removeDirectory,
+  removeFile,
   writeJson,
   writeText,
 } from '../test-helpers/temp-collaboration-state';
@@ -62,7 +63,7 @@ describe('collaboration state integrity validator', () => {
     // message verbatim (anchored — a wrapping slip would prefix it).
     const repoRoot = await makeTempCollaborationRepo();
     try {
-      await mkdir(join(repoRoot, '.agent/state/collaboration/commit-queue'), { recursive: true });
+      await ensureDirectory(join(repoRoot, '.agent/state/collaboration/commit-queue'));
       await writeJson(
         join(
           repoRoot,
@@ -111,7 +112,7 @@ describe('collaboration state integrity validator', () => {
     // satisfies its schema and its contract parser exactly.
     const repoRoot = await makeTempCollaborationRepo();
     try {
-      await mkdir(join(repoRoot, '.agent/state/collaboration/commit-queue'), { recursive: true });
+      await ensureDirectory(join(repoRoot, '.agent/state/collaboration/commit-queue'));
       await writeJson(
         join(
           repoRoot,
@@ -162,7 +163,7 @@ describe('collaboration state integrity validator', () => {
     // must recompute the same relation rather than record two valid strings.
     const repoRoot = await makeTempCollaborationRepo();
     try {
-      await mkdir(join(repoRoot, '.agent/state/collaboration/commit-queue'), { recursive: true });
+      await ensureDirectory(join(repoRoot, '.agent/state/collaboration/commit-queue'));
       await writeJson(
         join(
           repoRoot,
@@ -210,7 +211,7 @@ describe('collaboration state integrity validator', () => {
     const repoRoot = await makeTempCollaborationRepo();
     try {
       const queueDir = join(repoRoot, '.agent/state/collaboration/commit-queue');
-      await mkdir(queueDir, { recursive: true });
+      await ensureDirectory(queueDir);
       const intentPath = join(queueDir, '66666666-6666-4666-8666-666666666666.json');
       await writeText(intentPath, '{}');
 
@@ -219,7 +220,7 @@ describe('collaboration state integrity validator', () => {
       );
       expect(intentSurfaces.map((surface) => surface.optionalWhenAbsent)).toStrictEqual([true]);
 
-      await rm(intentPath);
+      await removeFile(intentPath);
       for (const surface of intentSurfaces) {
         expect(await readSurfaceText(surface)).toBeUndefined();
       }
@@ -289,8 +290,8 @@ describe('collaboration state integrity validator', () => {
       // or closed-claims.archive.json. That absence is the clean state, not an
       // integrity fault — the validator must not crash on any of them.
       await removeDirectory(join(repoRoot, '.agent/state/collaboration/comms'));
-      await rm(join(repoRoot, '.agent/state/collaboration/active-claims.json'));
-      await rm(join(repoRoot, '.agent/state/collaboration/closed-claims.archive.json'));
+      await removeFile(join(repoRoot, '.agent/state/collaboration/active-claims.json'));
+      await removeFile(join(repoRoot, '.agent/state/collaboration/closed-claims.archive.json'));
 
       const report = await validateCollaborationStateIntegrity({
         repoRoot,
@@ -313,7 +314,7 @@ describe('collaboration state integrity validator', () => {
     const coordinationHome = await makeTempCollaborationRepo();
     try {
       const queueDir = join(coordinationHome, '.agent/state/collaboration/commit-queue');
-      await mkdir(queueDir, { recursive: true });
+      await ensureDirectory(queueDir);
       const corruptPath = join(queueDir, 'deadbeef-dead-4dea-8dea-deadbeefdead.json');
       await writeText(corruptPath, '{ "intent_id": "unterminated');
 

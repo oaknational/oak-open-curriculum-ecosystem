@@ -19,7 +19,6 @@ import type {
   SnapshotSource,
   TrackedTreeEntry,
 } from './git-snapshot-model.js';
-import type { RepoPath } from './scalar-model.js';
 import { compareUtf16 } from './utf16-order.js';
 
 interface CreateAuxiliaryReaderInput {
@@ -45,9 +44,9 @@ export function createAuxiliaryBlobReader(
 }
 
 class RunScopedAuxiliaryBlobReader implements GitSnapshotAuxiliaryReader {
-  readonly #treeEntries: ReadonlyMap<RepoPath, TrackedTreeEntry>;
-  readonly #typescriptPaths: ReadonlySet<RepoPath>;
-  readonly #typescriptBytes: ReadonlyMap<RepoPath, CapturedAuxiliarySource>;
+  readonly #treeEntries: ReadonlyMap<string, TrackedTreeEntry>;
+  readonly #typescriptPaths: ReadonlySet<string>;
+  readonly #typescriptBytes: ReadonlyMap<string, CapturedAuxiliarySource>;
   readonly #limits: GitSnapshotLimits;
   readonly #pinnedBlobs: PinnedBlobReadPort;
   #state: AuxiliaryBlobCacheState = { entries: [], chargedBytes: 0, terminalError: null };
@@ -65,7 +64,7 @@ class RunScopedAuxiliaryBlobReader implements GitSnapshotAuxiliaryReader {
     this.#pinnedBlobs = input.pinnedBlobs;
   }
 
-  read(path: RepoPath): Result<AuxiliaryBlobRead, EstateReviewError | AuxiliaryBlobReadRefusal> {
+  read(path: string): Result<AuxiliaryBlobRead, EstateReviewError | AuxiliaryBlobReadRefusal> {
     const decision = decideAuxiliaryBlobRead({
       path,
       trackedEntry: this.#treeEntries.get(path)?.treeEntry,
@@ -116,7 +115,7 @@ class RunScopedAuxiliaryBlobReader implements GitSnapshotAuxiliaryReader {
   }
 
   /** A throwing port implementation still lands as a typed source-read failure. */
-  #fetchPinned(path: RepoPath, maxBytes: number): Result<Uint8Array, EstateReviewError> {
+  #fetchPinned(path: string, maxBytes: number): Result<Uint8Array, EstateReviewError> {
     let fetched: Result<Uint8Array, EstateReviewError>;
     try {
       fetched = this.#pinnedBlobs.read(path, maxBytes);
@@ -167,8 +166,8 @@ function settledDecisionResult(
 
 function captureSourceBytes(
   sources: readonly SnapshotSource[],
-): ReadonlyMap<RepoPath, CapturedAuxiliarySource> {
-  const captured = new Map<RepoPath, CapturedAuxiliarySource>();
+): ReadonlyMap<string, CapturedAuxiliarySource> {
+  const captured = new Map<string, CapturedAuxiliarySource>();
   for (const source of sources) {
     if ('bytes' in source) {
       captured.set(source.path, {

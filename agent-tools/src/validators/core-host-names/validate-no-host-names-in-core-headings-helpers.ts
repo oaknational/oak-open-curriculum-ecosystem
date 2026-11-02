@@ -47,8 +47,8 @@ export const CHANGELOG_PATH = `${CORE_PREFIX}CHANGELOG.md`;
 /** The provenance file whose `repo:` fields name every repository in the chain. */
 export const PROVENANCE_PATH = `${CORE_PREFIX}provenance.yml`;
 
-/** A `repo:` line of the provenance file: the field, then the name, optionally quoted. */
-const PROVENANCE_REPO_LINE = /^\s*-?\s*repo:\s*(?:'([^']*)'|"([^"]*)"|(\S+))\s*$/u;
+/** The field of a `repo:` line of the provenance file; its value follows and is read in code. */
+const PROVENANCE_REPO_FIELD = /^\s*(?:-\s*)?repo:/u;
 
 /** A changelog entry heading: the level-two hashes, then the bracketed repository tag. */
 const CHANGELOG_TAG_LINE = /^## \[([^\]]+)\]/u;
@@ -91,10 +91,31 @@ function uniqueNames(names: readonly string[]): string[] {
   return unique;
 }
 
-/** The repository a provenance line's `repo:` field names, or undefined for any other line. */
+/** The span inside a value quoted with `quote` and holding no other such quote, or undefined. */
+function quotedSpan(value: string, quote: string): string | undefined {
+  if (value.length < 2 || !value.startsWith(quote) || !value.endsWith(quote)) {
+    return undefined;
+  }
+  const inner = value.slice(1, -1);
+  return inner.includes(quote) ? undefined : inner;
+}
+
+/**
+ * The repository a provenance line's `repo:` field names, or undefined for
+ * any other line: the value is one single- or double-quoted span, or one
+ * token free of whitespace, with nothing but whitespace after it.
+ */
 function provenanceRepoOf(line: string): string | undefined {
-  const match = PROVENANCE_REPO_LINE.exec(line);
-  return match?.[1] ?? match?.[2] ?? match?.[3];
+  const field = PROVENANCE_REPO_FIELD.exec(line);
+  if (field === null) {
+    return undefined;
+  }
+  const value = line.slice(field[0].length).trim();
+  const quoted = quotedSpan(value, "'") ?? quotedSpan(value, '"');
+  if (quoted !== undefined) {
+    return quoted;
+  }
+  return value !== '' && !/\s/u.test(value) ? value : undefined;
 }
 
 /**

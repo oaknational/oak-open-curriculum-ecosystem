@@ -1,7 +1,7 @@
 import { execFileSync } from 'node:child_process';
-import { statSync } from 'node:fs';
 import { isAbsolute, join } from 'node:path';
 
+import { nodeSyncFileSystem } from '../core/sync-file-system.js';
 import { resolveTrustedGit, TrustedGitResolutionError } from '../core/trusted-git.js';
 
 /** Runs a git subcommand from `cwd` and returns stdout; throws on non-zero exit. */
@@ -39,17 +39,12 @@ export interface ResolveCoordinationHomeOptions {
 export const COLLABORATION_SUBSTRATE_REL = '.agent/state/collaboration';
 
 /**
- * The resolver's own directory probe, exported so consumers that certify the
- * resolver (the protocol-conformance detector) probe with EXACTLY the same
- * semantics — a file at the substrate path is not a directory.
+ * The resolver's own directory probe: the shared file-system port's, which
+ * the protocol-conformance detector that certifies the resolver probes with
+ * too, so both read EXACTLY the same semantics — a file at the substrate
+ * path is not a directory.
  */
-export const defaultDirectoryExists = (path: string): boolean => {
-  try {
-    return statSync(path).isDirectory();
-  } catch {
-    return false;
-  }
-};
+const defaultDirectoryExists = nodeSyncFileSystem.isDirectory;
 
 export const defaultRunGit: GitRunner = (args, cwd) =>
   // Execute git by its ABSOLUTE path (resolveTrustedGit) so a writable PATH

@@ -112,9 +112,12 @@ export function mintAnswering(token: string = TOKEN, expiresAt: string = EXPIRES
   return () => Promise.resolve(ok({ token, expiresAt, installationId: 55 }));
 }
 
+/** The mint's constant refusal. */
+const mintRefusal: PushMint = () => Promise.resolve(err(new Error('the mint is unavailable')));
+
 /** A mint that fails, a constant. */
 export function mintFailing(): PushMint {
-  return () => Promise.resolve(err(new Error('the mint is unavailable')));
+  return mintRefusal;
 }
 
 export const BASE_ENV = { PATH: '/usr/bin', HOME: '/test-home' } as const;

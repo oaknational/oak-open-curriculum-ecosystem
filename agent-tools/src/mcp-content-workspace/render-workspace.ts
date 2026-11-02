@@ -22,10 +22,11 @@ import { renderDomainPages } from './render-domain-index.js';
 import { renderIndexPage } from './render-index-page.js';
 import { renderServedSurfacePage, renderUnrenderedPage } from './render-auxiliary-pages.js';
 import { itemsInDomain, orderedDomains } from './workspace-counts.js';
+import { trimEndWhile } from '../core/trim-end-while.js';
 
 /** A page body ending in exactly one newline, as the Markdown gate requires. */
 function page(path: string, content: string): WorkspacePage {
-  return { path, content: `${content.replace(/\n+$/, '')}\n` };
+  return { path, content: `${trimEndWhile(content, (character) => character === '\n')}\n` };
 }
 
 /** Every page of the workspace, in a stable order. */

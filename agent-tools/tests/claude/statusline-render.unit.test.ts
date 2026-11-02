@@ -35,8 +35,12 @@ const lineWith = (out: string, needle: string): string =>
 const lineIndexOf = (out: string, needle: string): number =>
   out.split('\n').findIndex((line) => line.includes(needle));
 /** Strip ANSI colour codes to assert on the visible text, not the colouring. */
-const ANSI_CODE = new RegExp(String.raw`${String.fromCharCode(27)}\[[0-9;]*m`, 'g');
+const ANSI_CODE = new RegExp(String.raw`${String.fromCodePoint(27)}\[[0-9;]*m`, 'g');
 const stripAnsi = (text: string): string => text.replaceAll(ANSI_CODE, '');
+
+/** The first rendered row of the braille-sharp layout at the given logo frame. */
+const firstRowAtFrame = (logoFrame: number | undefined): string =>
+  renderStatusline({ ...base, dir: 'repo' }, { logo: 'braille-sharp', logoFrame }).split('\n')[0];
 
 describe('renderStatusline — usage on the model row', () => {
   // Usage reads beside WHAT is doing the work (owner direction 2026-07-20,
@@ -381,14 +385,10 @@ describe('renderStatusline — Oak logo column mechanism', () => {
   });
 
   it('selects the braille-sharp frame named by logoFrame, defaulting to and wrapping at frame 0', () => {
-    const firstRow = (logoFrame: number | undefined): string =>
-      renderStatusline({ ...base, dir: 'repo' }, { logo: 'braille-sharp', logoFrame }).split(
-        '\n',
-      )[0];
-    expect(firstRow(undefined)).toContain(BRAILLE_SHARP_FRAMES[0][0]);
-    expect(firstRow(1)).toContain(BRAILLE_SHARP_FRAMES[1][0]);
-    expect(firstRow(3)).toContain(BRAILLE_SHARP_FRAMES[3][0]);
-    expect(firstRow(4)).toContain(BRAILLE_SHARP_FRAMES[0][0]);
+    expect(firstRowAtFrame(undefined)).toContain(BRAILLE_SHARP_FRAMES[0][0]);
+    expect(firstRowAtFrame(1)).toContain(BRAILLE_SHARP_FRAMES[1][0]);
+    expect(firstRowAtFrame(3)).toContain(BRAILLE_SHARP_FRAMES[3][0]);
+    expect(firstRowAtFrame(4)).toContain(BRAILLE_SHARP_FRAMES[0][0]);
   });
 });
 

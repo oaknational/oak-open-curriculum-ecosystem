@@ -57,7 +57,7 @@ export interface MergeExecutionInput {
   /** DECLARED expected reviewer set — required; empty only when declared `none` (expect-flag.ts). */
   readonly expectedReviewers: readonly string[];
   readonly nowIso: string;
-  readonly unavailable?: UnavailableInput | undefined;
+  readonly unavailable?: UnavailableInput;
   readonly seams: MergeExecutionSeams;
 }
 
@@ -107,7 +107,7 @@ export async function runMergeExecution(
     target: target.value,
     ghPath: input.seams.ghPath,
     expectedReviewers: input.expectedReviewers,
-    unavailable: input.unavailable,
+    ...(input.unavailable === undefined ? {} : { unavailable: input.unavailable }),
   });
   if (!reading.ok) {
     return reading;

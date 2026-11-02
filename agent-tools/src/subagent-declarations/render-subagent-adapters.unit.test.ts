@@ -241,6 +241,18 @@ function textsOf(declarations: readonly (RoleDeclaration | FanOutDeclaration)[])
   return new Map(rendered.ok ? rendered.value.map((entry) => [entry.path, entry.text]) : []);
 }
 
+/** The description line of alpha's Cursor adapter rendered with the given description. */
+const cursorDescriptionLine = (description: string): string | undefined =>
+  textsOf([{ ...ALPHA, platforms: ['cursor'], description }])
+    .get('.cursor/agents/alpha.md')
+    ?.split('\n')[2];
+
+/** The front matter of alpha's Claude adapter rendered with the given Claude fields. */
+const claudeFrontMatter = (claude: RoleDeclaration['claude']): string | undefined =>
+  textsOf([{ ...ALPHA, platforms: ['claude'], claude }])
+    .get('.claude/agents/alpha.md')
+    ?.split('\n---\n')[0];
+
 describe('renderSubagentAdapters', () => {
   it('renders a standard role on the four surfaces from the defaults, an apostrophe putting the description in double quotes as the formatter keeps it', () => {
     const texts = textsOf([ALPHA]);
@@ -279,16 +291,12 @@ describe('renderSubagentAdapters', () => {
   });
 
   it('quotes a description as the formatter keeps it: single quotes with the apostrophe doubled when a double quote is present, else double quotes for an apostrophe, else single', () => {
-    const line = (description: string): string | undefined =>
-      textsOf([{ ...ALPHA, platforms: ['cursor'], description }])
-        .get('.cursor/agents/alpha.md')
-        ?.split('\n')[2];
-    expect(line('Plain.')).toBe("description: 'Plain.'");
-    expect(line('Says "hi".')).toBe(`description: 'Says "hi".'`);
-    expect(line(`It's`)).toBe(`description: "It's"`);
-    expect(line(`It's "so".`)).toBe(`description: 'It''s "so".'`);
-    expect(line(`It's 'so' "x".`)).toBe(`description: 'It''s ''so'' "x".'`);
-    expect(line(String.raw`C:\it's`)).toBe(String.raw`description: "C:\\it's"`);
+    expect(cursorDescriptionLine('Plain.')).toBe("description: 'Plain.'");
+    expect(cursorDescriptionLine('Says "hi".')).toBe(`description: 'Says "hi".'`);
+    expect(cursorDescriptionLine(`It's`)).toBe(`description: "It's"`);
+    expect(cursorDescriptionLine(`It's "so".`)).toBe(`description: 'It''s "so".'`);
+    expect(cursorDescriptionLine(`It's 'so' "x".`)).toBe(`description: 'It''s ''so'' "x".'`);
+    expect(cursorDescriptionLine(String.raw`C:\it's`)).toBe(String.raw`description: "C:\\it's"`);
   });
 
   it("renders a zero-tool role's Claude adapter with the null-value tools field, the turn bound, and the System prompt block inline in place of the pointer, no default filled; its Cursor adapter still points to the template", () => {
@@ -381,11 +389,9 @@ describe('renderSubagentAdapters', () => {
   });
 
   it('serialises every Claude field value as a YAML scalar: plain where YAML reads it plain, else quoted by the measured rule (a comment marker, a mapping separator, a leading indicator)', () => {
-    const fields = (claude: RoleDeclaration['claude']): string | undefined =>
-      textsOf([{ ...ALPHA, platforms: ['claude'], claude }])
-        .get('.claude/agents/alpha.md')
-        ?.split('\n---\n')[0];
-    expect(fields({ tools: 'foo # bar', color: 'a: b', model: '- x', effort: 'high' })).toBe(
+    expect(
+      claudeFrontMatter({ tools: 'foo # bar', color: 'a: b', model: '- x', effort: 'high' }),
+    ).toBe(
       [
         '---',
         'name: alpha',

@@ -50,7 +50,7 @@ export interface CredentialVocabulary {
 const CREDENTIAL_VOCABULARY: CredentialVocabulary = {
   tokenShapes: [
     /\b(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9]{20,}/,
-    /github_pat_[A-Za-z0-9_]{20,}/,
+    /github_pat_\w{20,}/,
     /\bsk-[A-Za-z0-9_-]{16,}/,
     /\bxox[abpr]-[A-Za-z0-9-]{10,}/,
     /-----BEGIN [A-Z ]*PRIVATE KEY-----/,
@@ -161,7 +161,7 @@ function bindsCredential(plain: string, vocabulary: CredentialVocabulary): boole
  */
 function isLabelOnly(plain: string, vocabulary: CredentialVocabulary): boolean {
   const bound = binding(plain);
-  if (bound === undefined || bound.value !== '') {
+  if (bound?.value !== '') {
     return false;
   }
   return isOneOf(vocabulary.labels, bound.name) || isOneOf(vocabulary.bearerLabels, bound.name);

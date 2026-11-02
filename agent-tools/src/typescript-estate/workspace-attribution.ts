@@ -2,10 +2,9 @@ import { err, ok, type Result } from '@oaknational/result';
 
 import { EstateReviewError } from './errors.js';
 import type { WorkspaceRecord } from './file-model.js';
-import type { RepoPath } from './scalar-model.js';
 
 export function attributeWorkspace(
-  path: RepoPath,
+  path: string,
   workspaces: readonly WorkspaceRecord[],
 ): Result<WorkspaceRecord | null, EstateReviewError> {
   let selected: WorkspaceRecord | null = null;
