@@ -22,7 +22,7 @@ on the default branch.
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
-| Smelter herds Basalt | claude-code | claude-fable-5-1 | 871ba4 | solo seat (its own Director): the analyser triage and plan, the drain of the open pull requests, the merge-bot write command; delegated three bounded implementer agents and one security read in-session | 2026-10-27 | 2026-10-27 |
+| Smelter herds Basalt | claude-code | claude-fable-5-1 | 871ba4 | solo seat (its own Director): the analyser triage and plan, the drain of the open pull requests, the merge-bot write command; delegated three bounded implementer agents and one security read in-session; then the analyser plan's remainder as one lint pull request, six lane agents' cures verified and corrected by the seat (2026-11-01 to 2026-11-02) | 2026-10-27 | 2026-11-02 |
 
 ## Lane state at 2026-10-27 (the owner's compaction word; the 2026-10-28 state below supersedes it where they differ)
 
@@ -289,3 +289,63 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
   gate on the primary takes a line to the other seat first (Smelter's word, taken up).
 - **Next for this thread**: nothing routed here remains for the writes lane; the other routed items
   of 2026-10-28 keep their homes above; the analyser plan's units continue in their node's order.
+
+## Lane state (2026-11-02 14:5xZ, the wrap at the owner's word: the lint lane put down)
+
+- **The lane's shape, by the owner's word.** The analyser plan's remainder (units 2 to 14, the lock
+  of unit 12 included) is ONE pull request, not thirteen or seventeen ("17 PRs what lol? No. 1
+  PR."), on the branch `fix/stricter_linting`, cut from `origin/engraph` in the primary checkout and
+  committed as a series of chunks with the hooks off between the first and the last commit (his
+  authorisation of 2026-11-02 for that series alone; each bypassed commit body carries the note).
+  Nothing of it is pushed and no pull request is open: the plan sequences the push after the two
+  items still to land, and his word on the push has not been given. Until the push the series
+  exists on this machine alone, so his rule of 2026-10-19 (safe only when pushed and in a pull
+  request) is not yet met for it.
+- **What the series holds.** The plan node is the authority, each item by status
+  (`.agent/plans/delivery/quality-analyser-security-reliability-to-zero.plan.md`, §Todos; the same
+  bytes on this branch since this wrap). In short: the six analyser twins at `error` in the shared
+  config with a pathogen fixture per rule; every analyser site cured at its root (the generator,
+  one fence model, the parsers, the cryptographic sources); the testing directive's product
+  standard and its IO split by process tier; `no-real-io-in-tests` scoped to the in-process tiers;
+  the agent-tools `SyncFileSystem` port and its in-memory fake in place of the disk in nine tests;
+  the content audit's per-file review ledger dropped at his word ("The change carries the what,
+  the commit carries the why"), its item anchors kept as the instrument; the refounding instruments
+  retired; the SDK generator's pascal-cased root types and the shared union aliases named by the
+  innermost property most sites share (not a major version, his word); the knip and content-audit
+  cures the root-only gates asked for. The full gate read green on the committed tree before this
+  wrap.
+- **Still to land, in this pull request, before the push** (the plan's items 13 and 14, neither
+  begun): the skill eval scripts' seven super-linear patterns moved into the showcase tools module
+  (`demos/oak-design-showcase/tools/`), and the specimen's scroll region made a tab stop only while
+  it scrolls (`resources.tsx`: a ResizeObserver, three Playwright tests). Then his word on the
+  push; the pull request opened by the bot (`merge-bot pull-request open`), one story; the door.
+- **How the series was verified.** Six lane agents wrote the cures in parallel on 2026-11-01; this
+  seat read every lane diff in full on 2026-11-02 and corrected what was wrong (the semver mirror
+  and the parity test rewritten around it; an env file where a build flag served; a red-first test
+  asserting output the generator never produced; the codegen's named imports; a rename miss; the
+  `url()` walk), then cured what the root-only gates found (knip's fifteen unused exports; the
+  content audit's re-anchor of item C484). The debt each lane left is a disposition row on the
+  plan node: nine test helpers still read the disk for about thirty-one in-process tests;
+  twenty-five loopback e2e tests in the MCP app; five in-memory file-system fakes of differing
+  shapes; the fence model on two of three CommonMark detectors and none of the seven toggling ones.
+- **Rulings of the lane, each applied in the series.** Tests are held to the product standard; an
+  in-process test uses no IO beyond stdio, an out-of-process test against a test instance may (the
+  testing directive). No allowlists, no warnings: problems are fixed. Generated code is fixed in
+  the generator. A type rename in a package no consumer outside the repository reads is a fix,
+  never a major version. Standing practice is cited from the principles, never by quoting him.
+- **The records' divergence the fold seat meets.** The lint branch carries the napkin sections of
+  2026-11-01 and 2026-11-02 and the rewritten plan node; both are mirrored on this coordination
+  branch at this wrap. At the lint pull request's merge the coordination side of the napkin is the
+  superset (it also holds the evening of 2026-10-28 and 2026-10-29); keep it. The plan node is the
+  same bytes on both.
+- **One reading flagged as the seat's, not his.** "Nothing pushed" was read from "make the
+  commits" and from the plan's sequencing of the push after items 13 and 14; he gave no verbatim
+  word against a push. Whether the pull request opens now as a draft, for safety under his rule of
+  2026-10-19, with the two items landing on it afterwards, is his call and is put to him in the
+  wrap report.
+- **The analyser's own reading** (criterion 1) is taken after the pull request merges and the
+  analyser has analysed the default branch; nothing has been read from it since the lane began.
+- **Resume order for the next seat on this lane.** Read the plan node's §Todos and §Review
+  dispositions; read the napkin sections of 2026-11-01 and 2026-11-02; run the full gate on the
+  branch to confirm green; land items 13 and 14 red-first with the hooks on (the authorisation for
+  hooks off was for the series of 2026-11-02 and is spent); then the push at his word.

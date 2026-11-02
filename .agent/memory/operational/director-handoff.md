@@ -318,6 +318,19 @@ on `claims open` exist since PR #225: frictions F-94 and F-95.)
 
 ## CURRENT HANDOFF STATE
 
+**§STATE, 2026-11-02 14:5xZ (Smelter herds Basalt, `871ba4`, the n=1 seat, at the owner's word to put
+the lint lane down; this block adds to the 2026-10-28 block below).** The analyser plan's remainder
+(units 2 to 14) is one lint pull request at his word ("No. 1 PR."), its series committed on the
+primary's lint branch with the full gate green and unpushed; two plan items (13, 14) still to land
+before the push, and the push itself at his word. moved for teachers: nothing / moved for the
+Practice: the six analyser twins locked at `error`, every analyser site cured at its root, tests held
+to the product standard with IO split by process tier, the content audit's per-file ledger dropped at
+his word. The drain thread record carries the resume order. The mis-pushed remote tip the block below
+names was cured on 2026-10-29 without force (the thread record's 2026-10-29 state). This coordination
+branch's fold is decided by the work on it (records only since 2026-10-29), at the next Director's DUE
+check, not inside this wrap. Two owner gates stand expired (`semantic-search-showcase`,
+`warranted-means-in-the-operating-environment`); the session-open alert repeats until his word.
+
 **§STATE, 2026-10-28 16:2xZ (Smelter herds Basalt, `871ba4`, the n=1 seat, post-fold; this block
 adds to the 2026-10-05 blocks below).** The coordination branch `2026-10-16-f1e9d3` folded as #360 at
 `SHA:32c907304` (16:12:48Z, the door with `--expect none` after the estate's reviews; one Codex round at

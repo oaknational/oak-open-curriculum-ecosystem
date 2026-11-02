@@ -235,6 +235,24 @@ principles §Code Quality (the cure stops recurrence; 2026-10-14) with the owner
 the wrap and consolidate-until-done skills; the settlement, blame-referent, signal and clocked-obligations rows
 stand to their review dates with today's evidence logged in their prediction cells. -->
 
+- **The change carries the what, the commit carries the why; a review ledger exists only where it
+  proves what the diff and the commit cannot**
+  `[captured: 2026-11-02 | source: the owner's word of 2026-11-02 in the session of Smelter herds
+  Basalt (871ba4), the napkin block "a ledger that justifies every change is the policy, not the
+  hash" | target: principles.md, the Code Quality section: one clause that no per-change
+  justification ledger is kept, that an anchor on the governed text (or its like) is the instrument
+  where one is needed, and that a review ledger is kept only where it proves what the diff and the
+  commit cannot | trigger: the lint pull request from the branch fix/stricter_linting merges,
+  which puts the content audit's dropped ledger on the default branch | size: one clause |
+  status: pending]`
+
+  Verbatim: "We do not need to justify evert change, the change carries the what, the commit carries
+  the why. Major decisions belong in ADRs and PDRs" and, on the audit's hash, "why are you using
+  hashes? Git shows us what changed". The content audit's per-file review ledger (about 4,700
+  lines, an entry per change to each of about 270 governed files since a July baseline, pinned by
+  a 130-line AST hash) was dropped in the lint lane; its item anchors stayed, and they are the
+  instrument: served text moves, the validator refuses until the item is reviewed again.
+
 ## Slow lane (PDR-130 — constitutional-class concepts, decided at their review date)
 
 Rows here are live deliverables under a named review gate, NOT decision-debt:
