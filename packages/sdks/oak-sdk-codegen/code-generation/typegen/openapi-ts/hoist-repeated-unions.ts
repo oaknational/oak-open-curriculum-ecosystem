@@ -14,7 +14,18 @@
  * union after the property most of its sites share.
  */
 
-import { ScriptKind, ScriptTarget, SyntaxKind, createSourceFile, forEachChild, isInterfaceDeclaration, isLiteralTypeNode, isParenthesizedTypeNode, isTypeAliasDeclaration, isUnionTypeNode } from 'typescript';
+import {
+  ScriptKind,
+  ScriptTarget,
+  SyntaxKind,
+  createSourceFile,
+  forEachChild,
+  isInterfaceDeclaration,
+  isLiteralTypeNode,
+  isParenthesizedTypeNode,
+  isTypeAliasDeclaration,
+  isUnionTypeNode,
+} from 'typescript';
 import type { Node, SourceFile, UnionTypeNode } from 'typescript';
 
 import { applySourceEdits, editedSlice, type SourceEdit } from './source-edits.js';
@@ -32,9 +43,8 @@ interface UnionGroup {
 function isNullableUnion(union: UnionTypeNode): boolean {
   const valueMembers = union.types.filter(
     (member) =>
-      !(
-        isLiteralTypeNode(member) && member.literal.kind === SyntaxKind.NullKeyword
-      ) && member.kind !== SyntaxKind.UndefinedKeyword,
+      !(isLiteralTypeNode(member) && member.literal.kind === SyntaxKind.NullKeyword) &&
+      member.kind !== SyntaxKind.UndefinedKeyword,
   );
   return valueMembers.length === 1;
 }

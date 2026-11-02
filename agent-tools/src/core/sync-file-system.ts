@@ -6,14 +6,7 @@
  * (`test-helpers/in-memory-sync-file-system.ts`) rather than a disk, and the
  * bins keep wiring nothing.
  */
-import {
-  existsSync,
-  lstatSync,
-  readdirSync,
-  readFileSync,
-  realpathSync,
-  statSync,
-} from 'node:fs';
+import { existsSync, lstatSync, readdirSync, readFileSync, realpathSync, statSync } from 'node:fs';
 
 export interface SyncFileSystem {
   /** Whether a path exists, following symbolic links as `existsSync` does. */

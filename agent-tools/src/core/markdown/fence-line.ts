@@ -57,5 +57,7 @@ export function closesFence(delimiter: string, line: string): boolean {
   if (fence?.info !== '') {
     return false;
   }
-  return fence.delimiter.charAt(0) === delimiter.charAt(0) && fence.delimiter.length >= delimiter.length;
+  return (
+    fence.delimiter.charAt(0) === delimiter.charAt(0) && fence.delimiter.length >= delimiter.length
+  );
 }

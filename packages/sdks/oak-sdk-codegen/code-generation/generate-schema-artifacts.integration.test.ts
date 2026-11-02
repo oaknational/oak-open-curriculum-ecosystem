@@ -87,7 +87,7 @@ describe('generateSchemaArtifacts', () => {
     const pathParameters = fileOrThrow(fs, 'path-parameters.ts');
     expect(pathParameters).toContain('export const PATHS');
     expect(pathParameters).toContain('export function');
-    expect(pathParameters).toContain("import type { Paths } from");
+    expect(pathParameters).toContain('import type { Paths } from');
   });
 
   it('carries a parameterised path and its enum values into the path parameters module', async () => {

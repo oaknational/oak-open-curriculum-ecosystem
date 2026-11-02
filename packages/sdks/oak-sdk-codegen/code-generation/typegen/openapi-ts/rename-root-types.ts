@@ -11,7 +11,16 @@
  * were.
  */
 
-import { ScriptKind, ScriptTarget, createSourceFile, forEachChild, isIdentifier, isInterfaceDeclaration, isTypeAliasDeclaration, isTypeReferenceNode } from 'typescript';
+import {
+  ScriptKind,
+  ScriptTarget,
+  createSourceFile,
+  forEachChild,
+  isIdentifier,
+  isInterfaceDeclaration,
+  isTypeAliasDeclaration,
+  isTypeReferenceNode,
+} from 'typescript';
 import type { Identifier, Node, SourceFile } from 'typescript';
 
 import { applySourceEdits, type SourceEdit } from './source-edits.js';

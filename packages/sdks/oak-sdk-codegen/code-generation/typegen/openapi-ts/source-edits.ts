@@ -50,7 +50,10 @@ export function editedSlice(
   edits: readonly SourceEdit[],
 ): string {
   const inner = edits
-    .filter((edit) => edit.start >= start && edit.end <= end && !(edit.start === start && edit.end === end))
+    .filter(
+      (edit) =>
+        edit.start >= start && edit.end <= end && !(edit.start === start && edit.end === end),
+    )
     .map((edit) => ({ ...edit, start: edit.start - start, end: edit.end - start }));
   return applySourceEdits(source.slice(start, end), inner);
 }

@@ -8,7 +8,8 @@ const KEY_STAGES = '"ks1" | "ks2" | "ks3" | "ks4"';
 function componentsWith(propertyName: string, type: string, count: number): string {
   const schemas = Array.from(
     { length: count },
-    (_, index) => `        Schema${String(index)}: {\n            ${propertyName}: ${type};\n        };`,
+    (_, index) =>
+      `        Schema${String(index)}: {\n            ${propertyName}: ${type};\n        };`,
   );
   return ['export interface Components {', '    schemas: {', ...schemas, '    };', '}'].join('\n');
 }
@@ -25,7 +26,9 @@ describe('hoistRepeatedUnions', () => {
   it('prepends the alias block before the first declaration', () => {
     const output = hoistRepeatedUnions(componentsWith('keyStage', KEY_STAGES, 3));
 
-    expect(output.indexOf('type KeyStage =')).toBeLessThan(output.indexOf('export interface Components'));
+    expect(output.indexOf('type KeyStage =')).toBeLessThan(
+      output.indexOf('export interface Components'),
+    );
   });
 
   it('leaves a union that recurs only twice inline', () => {
@@ -139,7 +142,8 @@ describe('hoistRepeatedUnions', () => {
   });
 
   it('names tied sites by the trailing words their property names share', () => {
-    const question = '{\n                kind: "text";\n            } | {\n                kind: "image";\n            } | {\n                kind: "none";\n            }';
+    const question =
+      '{\n                kind: "text";\n            } | {\n                kind: "image";\n            } | {\n                kind: "none";\n            }';
     const source = [
       'export interface Components {',
       '    schemas: {',
@@ -158,12 +162,13 @@ describe('hoistRepeatedUnions', () => {
     expect(output.match(/exitQuiz: QuizItem\[\];/g)).toHaveLength(2);
   });
 
-  it('keeps the first site\'s name when tied property names share no words', () => {
+  it("keeps the first site's name when tied property names share no words", () => {
     const source = [
       'export interface Components {',
       '    schemas: {',
       ...['A', 'B'].map(
-        (name) => `        ${name}: {\n            phase: ${KEY_STAGES};\n            band: ${KEY_STAGES};\n        };`,
+        (name) =>
+          `        ${name}: {\n            phase: ${KEY_STAGES};\n            band: ${KEY_STAGES};\n        };`,
       ),
       '    };',
       '}',
@@ -193,7 +198,7 @@ describe('hoistRepeatedUnions', () => {
     expect(output).toContain('type UnitSlug = "p" | "q" | "r";');
   });
 
-  it('avoids the names of the module\'s existing declarations', () => {
+  it("avoids the names of the module's existing declarations", () => {
     const source = [
       'export interface KeyStage {\n    label: string;\n}',
       componentsWith('keyStage', KEY_STAGES, 3),

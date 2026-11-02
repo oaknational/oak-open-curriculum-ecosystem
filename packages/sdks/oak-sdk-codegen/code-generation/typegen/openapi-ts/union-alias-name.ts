@@ -18,7 +18,15 @@
  * The rule is mechanical so the same schema always yields the same names.
  */
 
-import { isArrayTypeNode, isIdentifier, isInterfaceDeclaration, isParenthesizedTypeNode, isPropertySignature, isSourceFile, isTypeAliasDeclaration } from 'typescript';
+import {
+  isArrayTypeNode,
+  isIdentifier,
+  isInterfaceDeclaration,
+  isParenthesizedTypeNode,
+  isPropertySignature,
+  isSourceFile,
+  isTypeAliasDeclaration,
+} from 'typescript';
 import type { Node, PropertySignature, UnionTypeNode } from 'typescript';
 
 /** Property names that organise the document rather than name a value. */

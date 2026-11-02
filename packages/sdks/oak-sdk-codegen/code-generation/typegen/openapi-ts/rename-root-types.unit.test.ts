@@ -38,7 +38,9 @@ describe('renameRootTypes', () => {
     expect(output).toContain('export interface Components {');
     expect(output).toContain('export type $Defs = Record<string, never>;');
     expect(output).toContain('export interface Operations {');
-    expect(output).not.toMatch(/^export (?:interface|type) (?:paths|webhooks|components|\$defs|operations)\b/m);
+    expect(output).not.toMatch(
+      /^export (?:interface|type) (?:paths|webhooks|components|\$defs|operations)\b/m,
+    );
   });
 
   it('renames every type reference to a root type, nested indexed accesses included', () => {
