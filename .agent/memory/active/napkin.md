@@ -1106,3 +1106,24 @@ the owner wants it kept).
   fixers did not run under `lint:fix`). They sit in the hand-fix remainder.
 - **Estimates were over-padded twice** (one hour for a ten-minute edit; two days for one). Size
   the work from the edit, and give the gate and CI wait separately.
+
+## 2026-11-02 — Smelter herds Basalt (871ba4): a ledger that justifies every change is the policy, not the hash
+
+- **"The change carries the what, the commit carries the why. Major decisions belong in ADRs and
+  PDRs"** (owner, 2026-11-02). The content audit kept a ledger demanding an entry for every change
+  to one of ~270 governed files since the July baseline, pinned by a 130-line AST hash. I read the
+  hash as the malignancy and replaced it with git's blob id, which kept the policy and grew the fix
+  from ten entries to forty and three module splits. The owner's question "why are you using
+  hashes? Git shows us what changed" was about the ledger: a per-file justification duplicates the
+  diff and the commit message. The ledger went (about 4,700 lines); the item anchors stay, and they
+  are the instrument: served text moves, the validator refuses until the item is reviewed again.
+  Ask of any review ledger: what does it prove that the diff and the commit do not?
+- **A stop under "minimal, else stop" is about the size of the edit, not about later rework.** I
+  stopped on ten missing entries because six of the files change again in the next lane; the gate
+  was red in the tree and the entries were ten lines. The right move was the entries, now (and the
+  right move after that was questioning the ledger, which the owner did).
+- **The commit hook lints workspaces by turbo's `...[HEAD]`, which reads the WORKING TREE against
+  HEAD, dependents included.** A hooked commit of three directive files still lints agent-tools
+  while agent-tools carries uncommitted changes, so a chunked series over a red workspace cannot
+  pass its first hooked commit whatever the chunk holds. Compute the plan first:
+  `turbo run lint --filter='...[HEAD]' --dry-run=json`.
