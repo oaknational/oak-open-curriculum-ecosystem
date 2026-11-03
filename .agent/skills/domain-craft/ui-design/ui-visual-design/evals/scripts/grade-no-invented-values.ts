@@ -36,6 +36,10 @@
  */
 import { readFileSync } from 'node:fs';
 
+import {
+  cssFenceBodies,
+  withoutCssFences,
+} from '../../../../../../../demos/oak-design-showcase/tools/css-fences.js';
 import { findLiteralDesignValues } from '../../../../../../../demos/oak-design-showcase/tools/css-literal-values.js';
 
 /**
@@ -94,16 +98,14 @@ function authoredCssParts(text: string): readonly string[] {
   for (const style of text.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/gi)) parts.push(style[1]);
   for (const inline of text.matchAll(/style\s*=\s*["']([^"']*)["']/g))
     parts.push(`.inline-style-attribute { ${inline[1]} }`);
-  for (const fence of text.matchAll(/```(?:css|CSS)\s*\n([\s\S]*?)```/g)) parts.push(fence[1]);
+  parts.push(...cssFenceBodies(text));
   return parts;
 }
 
 /** The response in its own voice: every authored-CSS form removed. */
 function proseOnly(text: string): string {
-  return text
-    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, ' ')
-    .replace(/```(?:css|CSS)\s*\n[\s\S]*?```/g, ' ')
-    .replace(/style\s*=\s*["'][^"']*["']/g, ' ');
+  const withoutStyleBlocks = text.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, ' ');
+  return withoutCssFences(withoutStyleBlocks, ' ').replace(/style\s*=\s*["'][^"']*["']/g, ' ');
 }
 
 /**
