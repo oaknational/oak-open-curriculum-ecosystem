@@ -431,7 +431,7 @@ mark; they license none now):
   `allowBuilds` map in `pnpm-workspace.yaml`
   ([pnpm settings: `allowBuilds`](https://pnpm.io/settings#allowbuilds)).
 - The repo pins that pnpm version authoritatively: root `package.json`
-  `packageManager` field (currently `pnpm@11.8.0`) drives every CI site
+  `packageManager` field drives every CI site
   via `pnpm/action-setup` as an **exact version pin**. The field also
   carries a `+sha512` integrity suffix, but the pinned action strips it
   before `pnpm self-update` (`readTargetVersion`'s split on `+`), so CI
@@ -442,7 +442,12 @@ mark; they license none now):
   (`pnpm-workspace.yaml`, any `.npmrc`) and is not passed on the flagged
   CI invocation — the setting bypasses the allowlist wholesale, so its
   absence is a criterion, not an assumption (verified absent in this
-  repo's tracked config, 2026-07-20).
+  repo's tracked config, 2026-07-20). From pnpm 12, the `permissions`
+  setting's `build` capability works like `allowBuilds` and takes
+  precedence over it, so `permissions` grants `build` only to the
+  reviewed allowlist entries below, or to none (verified 2026-11-03: it
+  holds no `build` grant; its one entry denies the agent skill `dotenv`
+  ships).
 - Every allowlist entry is a **reviewed, build-requiring package** (the
   current six: `@clerk/shared`, `@sentry/cli`, `esbuild`,
   `unrs-resolver`, `core-js`, `sharp` — see
