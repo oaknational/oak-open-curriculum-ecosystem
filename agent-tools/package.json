@@ -107,7 +107,7 @@
     "globals": "^17.9.0",
     "ink-testing-library": "^4.0.0",
     "tsx": "^4.23.12",
-    "vitest": "^4.1.10"
+    "vitest": "^5.0.5"
   },
   "dependencies": {
     "@oaknational/result": "workspace:*",

@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, cleanup } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
-import { axe, toHaveNoViolations } from 'jest-axe';
+import { axe } from 'jest-axe';
 
 import { courseFixture } from '@/components/course/course-shell.test-fixtures';
 import { CourseShell } from '@/components/course/CourseShell';
@@ -11,12 +11,14 @@ import { HubResultsView } from '@/components/HubResults';
 import SiteNav from '@/components/SiteNav';
 import type { SearchResults } from '@/lib/search-types';
 
-expect.extend(toHaveNoViolations);
 afterEach(cleanup);
 
-// colour-contrast needs a canvas jsdom does not provide; every palette pair on these
-// surfaces is contrast-verified by reviewer recompute (§E ledger) — a documented scope
-// bound, not a silent cap. All other WCAG 2.x axe rules run.
+// jest-axe turns off axe-core's whole colour category (color-contrast,
+// color-contrast-enhanced and link-in-text-block), because happy-dom has no canvas or
+// layout; the entry below restates the first. Every palette pair on these surfaces is
+// contrast-verified by reviewer recompute (§E ledger). link-in-text-block (WCAG 1.4.1,
+// links told apart by colour alone) has no check here — a documented scope bound, not
+// a silent cap. All other WCAG 2.x axe rules run.
 const axeOptions = { rules: { 'color-contrast': { enabled: false } } };
 
 const results: SearchResults = {
@@ -72,12 +74,12 @@ describe('axe backstop — the demo surfaces render with no WCAG violations (DoD
     ['Curriculum results (error)', () => <ShowcaseResults state={{ status: 'error' }} />] as const,
   ])('%s has no axe violations', async (_name, make) => {
     const { container } = render(make());
-    expect(await axe(container, axeOptions)).toHaveNoViolations();
+    expect((await axe(container, axeOptions)).violations).toStrictEqual([]);
   });
 
   it('SiteNav with the disclosure menu open has no axe violations', async () => {
     const { container } = render(<SiteNav />);
     fireEvent.click(screen.getByRole('button', { name: 'Hub sections' }));
-    expect(await axe(container, axeOptions)).toHaveNoViolations();
+    expect((await axe(container, axeOptions)).violations).toStrictEqual([]);
   });
 });

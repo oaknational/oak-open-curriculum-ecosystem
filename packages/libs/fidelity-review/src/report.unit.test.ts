@@ -2,16 +2,17 @@
 /// <reference lib="dom" />
 /* The package suite runs under the base node environment; this file alone
  * needs a DOM (runtime via the pragma above, types via the lib reference)
- * because the renderer's output carries a WCAG 2.2 AA claim proven with
- * jest-axe against the parsed document. KNOWN SCOPE: a lib reference is
+ * because the renderer's output carries a WCAG 2.2 AA claim, checked here with
+ * jest-axe against the parsed document. jest-axe turns off axe-core's colour
+ * category (color-contrast, color-contrast-enhanced, link-in-text-block), so
+ * colour contrast and colour-only link distinction are outside this check.
+ * KNOWN SCOPE: a lib reference is
  * program-wide (lib files declare globals), so lint/type-check would not
  * catch a src module reaching for a DOM global — the build program
  * (tsconfig.build.json excludes tests, so no DOM lib) rejects it, and CI
  * runs the build as its own job. */
-import { axe, toHaveNoViolations } from 'jest-axe';
+import { axe } from 'jest-axe';
 import { describe, expect, it } from 'vitest';
-
-expect.extend(toHaveNoViolations);
 
 import type { FidelityPair, PairingMap } from './pairing-types';
 import type { FidelityRegister } from './register';
@@ -189,7 +190,7 @@ describe('renderReportHtml', () => {
     container.innerHTML = html;
     document.body.append(container);
 
-    expect(await axe(container)).toHaveNoViolations();
+    expect((await axe(container)).violations).toStrictEqual([]);
 
     container.remove();
   });

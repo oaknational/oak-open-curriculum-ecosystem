@@ -238,8 +238,6 @@ const config: KnipConfig = {
         'evaluation/**/*.ts',
       ],
       ignoreDependencies: [
-        // Used via CLI tooling, not direct imports
-        'vite-tsconfig-paths',
         // prettier is needed for eslint-plugin-prettier
         'prettier',
       ],

@@ -11,7 +11,7 @@
  * (no-global-state-in-tests / ADR-078) — nothing here touches `window`.
  */
 import { render, screen, fireEvent } from '@testing-library/react';
-import { axe, toHaveNoViolations } from 'jest-axe';
+import { axe } from 'jest-axe';
 import { describe, expect, it, vi } from 'vitest';
 
 import { createOakThemeStore, IDENTITY_DEFAULT } from '@oaknational/oak-design-react';
@@ -19,9 +19,9 @@ import type { OakMotionMode, OakThemeName, OakThemeRuntime } from '@oaknational/
 
 import ThemeSwitcher from './ThemeSwitcher';
 
-expect.extend(toHaveNoViolations);
-
-// colour-contrast needs a canvas happy-dom does not provide; the per-theme
+// jest-axe turns off axe-core's whole colour category (color-contrast,
+// color-contrast-enhanced and link-in-text-block), because happy-dom has no
+// canvas or layout; the entry below restates the first. The per-theme
 // contrast surface is computed against the kit's contrast manifest instead
 // (the PR3 token-level gate + the §7 audit-in-CI slice) — a documented scope
 // bound, not a silent cap.
@@ -82,7 +82,7 @@ describe('ThemeSwitcher rendering contract', () => {
     // semantic.
     expect(themeValues).toEqual([IDENTITY_DEFAULT, ...runtime.themes]);
     expect(motionValues).toEqual(MODES);
-    expect(await axe(container, axeOptions)).toHaveNoViolations();
+    expect((await axe(container, axeOptions)).violations).toStrictEqual([]);
   });
 
   it('renders nothing when the oak-theme runtime is absent (theme-neutral HTML)', () => {
