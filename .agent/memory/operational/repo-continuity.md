@@ -80,7 +80,7 @@ forward-asks remain.
   the extraction plan's two went with its supersession, so the session-open alert reads four here only
   until this branch takes engraph's merge); the plans index and the 2026-09-06 archive move still disagree
   on a superseded node's place (§Next Safe Steps). The fixes with a home: the merge tool's Copilot leg per
-  pull request (the register; pull request 358, the records-class door and the fold clock, open); the commit
+  pull request (the register; pull request 358, the records-class door and the fold clock, merged `e22ba04c6` on 2026-10-27); the commit
   queue's `complete` accepting a refused intent (F-297); the plan-schema owner gates under PDR-100 (the
   register). The graduations: the register's six entries, every one due. The surfaces touching the
   curriculum infrastructure consumer, his to plan and left as merged with the validators green: the
@@ -90,7 +90,7 @@ forward-asks remain.
   seven points of the ADR-233 analysis are now in the thread record from the transcript, point 5 (no
   verbatim owner word in ADR-233) found undispositioned and listed beside 1, 2, 3 and 7 for the session. The
   records ride this coordination branch's draft at the owner's word of 2026-10-17 that every pushed branch
-  rides a pull request; the fold is at his word, not this wrap's. The napkin's rotation by proof is
+  rides a pull request; a fold runs when useful, never by the clock alone (the owner, 2026-10-19), and this branch folded on 2026-10-28 as 360. The napkin's rotation by proof is
   unblocked (the reviewer seat's block was committed on 2026-10-17); the consolidation gate reads due and
   unbounded for this close, a curator seat's after the partial plans by his ordering.
 
@@ -402,6 +402,7 @@ each thread record; this table is the repo-level index.
 | Thread | Purpose | Record | Latest identity |
 | --- | --- | --- | --- |
 | `oce-rearchitecting-programme` | The review, correction and merge of pull request #356 (the retained-framework rearchitecting programme, ADR-233) and the integration of that planning body with the estate's nodes, architecture documents and directives; opened 2026-10-13 at the owner's word. The owner's rulings, the discovery and the resume order live in the record. | [record](threads/oce-rearchitecting-programme.next-session.md) | claude-code / claude-fable-5-1 / Walrus seeks Maelstrom (9585cc) / reviewer at n=1, the lane closed and wrapped / 2026-10-19 |
+| `open-pull-requests-to-zero` | Land or close every open pull request through the door after a full-surface harvest and a usefulness verdict, then the merge-bot's missing writes, then the analyser plan's units; the drain complete 2026-10-28 (362, 358, 363, 360, 364 merged; 357, 361 closed); 366 (unit 0), 368, 369 (unit 1), 370, 371 (the bot's writes command) and 372 landed; the plan's remainder (units 2 to 14) landed as one lint pull request, 375 (`4adcfc069`, 2026-11-03), and the analyser's filter on `engraph` read zero after it; the Oak 1.186.4 sync landed as 376 (`71e727ec5`). The lane's state is in the record. | [record](threads/open-pull-requests-to-zero.next-session.md) | claude-code / claude-opus-5-5 / Sandpiper guards Wind (690653) / the solo seat, 375 and 376 merged and the lane's claim closed / 2026-11-03 ← claude-code / claude-fable-5-1 / Smelter herds Basalt (871ba4) / the solo seat, wrapped at the owner's word / 2026-11-02 |
 | `estate-coordination` | The Director lane's thread record (founded 2026-08-13): journal, board, seat chain; `director-handoff.md` keeps the Brief and the live snapshot. Live state, the boundaries since 2026-09-03 (the Engraph fork; lead/support split) and the owner's standing open-PR-count goal live in the record. | [record](threads/estate-coordination.next-session.md) | claude-code / claude-fable-5-1 / Crucible binds Slag (7b999c) / the Director across both estates, paused at the owner's compaction word / 2026-10-03, claude-code / claude-opus-5-5 / Marten mends Shadow (74fc02) / this estate's exchange seat, stopped at rest at the owner's word / 2026-09-25, claude-code / claude-opus-5 then claude-fable-5-1, then claude-opus-5-5 from 2026-09-23 / Zephyr guards Leeward (281e44) / curator, sole operator until 2026-09-17 15:31Z, then at n = 2 with Dynamo turns Temper (2a4c8a, the Oak integration lane) — #145 landed, the 2026-09-14 branch folded, #147 landed on premises (`0bd321131`), #149 landed (`514bfc06a`), the deep retrospective landed (`940c019a6`), the 2026-09-15 branch folded as #150 (`a07940ac9`), the 2026-09-16 branch as #152 (`cd847a2b3`) and the 2026-09-17 branch as #153 (`SHA:b5b0e70cd`), its successor as #155 (`SHA:65a929d9a`) and the 2026-09-19 branch as #156 (`SHA:44729c98c`) inside the owner-directed consolidation, then the 2026-09-20 branch as #159 (`SHA:efb2942e9`) and the three 2026-09-21 branches as #169, #170 and #171 (the live branch is named once, in Next Safe Steps below, never in this row); from 2026-09-21 09:2xZ at n = 2 with the guest exchange seat Brazier spins Temper (c70341) for the three-estate Practice exchange / 2026-09-21 ← claude-code / claude-fable-5-1 / Flounder turns Estuary (c5cc2c) / lead at n=2 with Buzzard lifts Eyrie (326bcb) in support from ~19:3xZ; earlier solo implementer — owner rulings landed (merge-bot config per-checkout; green-and-clean merges without waiting) / 2026-09-03 ← claude-code / claude-fable-5-1 / Chinook seeks Cloud (661556) / lead at n=2 with Vesta rides Solstice (9e26e6), then solo for the wrap / 2026-09-03 |
 | `open-surface-zero` | Oldest-first disposition and merging of Jim-owned open PRs; every feedback surface harvested, all checks green, then immediate merge. 2026-09-01: the fork-line integration landing (#943 → rehomed as #945) runs on this thread | [record](threads/open-surface-zero.next-session.md) | claude-code / claude-fable-5 / Luna seeks Twilight (5c0ddc) / driver — #943 Sonar-gate cure landed via the fork, rehomed as #945 at owner word, driving to the bot merge / 2026-09-01 (prior: codex / GPT-5 / Smith holds Temper (019fef) — #745/#746/#852 merged / 2026-08-11) |
 | `design-system-integration` | AIP-137: the Claude-Design-exported design system as a first-class integrated system (ADR-213 — repo home + studio seat, bidirectional sync); kit landing, contrast gate, hub migration, studio sync-back. Lane state, owner rulings and the fidelity register live in the record. | [record](threads/design-system-integration.next-session.md) | claude-code / claude-fable-5-1 / Flounder turns Estuary (c5cc2c) / lead seat — PR #41 (MCP-613 records-truth pass) landed SHA:8b2b5ee03; the seven-item records residue is on the thread record §2026-09-05; claim b627b5af closed; the lane's next pickup (T1a-ii, or the residue) opens from a fresh claim / 2026-09-05 (seat chain: thread record) |
@@ -531,14 +532,15 @@ each with its measure:
 1. The partial plans. The programme's fifteen `oce-*` sketches and its strategic node (every one
    `status: sketch`, `last_updated: 2026-10-10`) read against the merged ADR-233 and the seven points in the
    thread record `oce-rearchitecting-programme`; the two nodes with expired owner gates
-   (`semantic-search-showcase`, `warranted-means-in-the-operating-environment`) decided under PDR-100 with
-   the register's owner-gate entry; the three superseded nodes placed as the plans index says (§"Plans
+   (`semantic-search-showcase`, `warranted-means-in-the-operating-environment`) are decided: archived at
+   the owner's word of 2026-11-03; the three superseded nodes placed as the plans index says (§"Plans
    estate — superseded-node placement to re-true" below); the other thirty-five sketches read for a
-   supersession or a stamp, not planned. This coordination branch takes engraph's merge first: the
-   programme's files are on engraph since 2026-10-17 and not on this branch.
+   supersession or a stamp, not planned. The programme's files reached the coordination branch with the default branch's
+   merge at its fold (`0d8b234af`, 2026-10-28).
 2. The fixes. The merge tool's Copilot leg per pull request (the register entry's standard: one Copilot
-   review per non-trivial pull request satisfies the leg; pull request 358 is open with the records-class
-   door and the fold clock, another seat's lane); `commit-queue complete` refusing an intent that never
+   review per non-trivial pull request satisfies the leg, read since 2026-10-27 under the owner's word
+   that a pull-request review is requested only for a stated reason; pull request 358 merged `e22ba04c6`
+   on 2026-10-27 with the records-class door and the fold clock); `commit-queue complete` refusing an intent that never
    reached a commit (F-297); the carries in the 2026-10-16 state above (the bot token's 403 refusals, the
    profanity tooling parity, the `--fail-if-no-match` aliases).
 3. The graduations. The register's six due entries, each with its target named; the napkin's rotation by

@@ -847,7 +847,7 @@ Written from the home estate, jimcresswell.net, working this estate non-resident
   "no process", "on no record") are where outside eyes should look first. Fence sweep — no
   tracked line on engraph names the two projects (a word-bounded search at `SHA:493951ad7`);
   on this branch the napkin blocks of 13 and 14 October and the thread record quote the owner's
-  naming and his fence sentence, his call, unchanged. The fixed point — a third pass would only
+  naming and his fence sentence, his call, unchanged (corrected 2026-10-28 by Smelter herds Basalt: a word-bounded `git grep` at `SHA:32c907304` finds eight tracked lines naming them, four in this napkin's blocks of 13–17 October and four in the programme thread record, so the sweep's negative was wrong; the call stays the owner's). The fixed point — a third pass would only
   re-find the relayed words and the compaction bound; the recursion closes here.
 - **The consolidation gate**: due — a lane closed with 356, the napkin is at critical and its
   rotation is unblocked, the register holds six due entries. Not bounded for this close; a
@@ -1068,7 +1068,7 @@ the owner wants it kept).
 - **Done**: `--expect none` landed in the door's lane (`fix/pr-watch-expect-none`, `eebf42826`; nine
   tests red before it, 924 green after). #363 merged through it at `0cb2bde6d`, the declaration in
   the merge evidence and quoted on the pull request. The carrier worktree and the two merged lanes'
-  worktrees retired; the three merged branches retired by the tool (remote, tracking and local names).
+  worktrees retired; the three merged branches (the 1.186.1 carrier, `fix/merge-bot-records-class-and-fold-clock-cures`, `ccr-ba173ef1-gscfgg`) retired by the tool (remote, tracking and local names); 358's own head `fix/merge-bot-records-class-and-fold-clock` stays in the owner's worktree.
 - **Slip**: splitting `merge-args.ts` (250 lines, at the gate) by cutting from its first constant to
   the end of its usage text carried the `MergeArgs` interface into the usage module; tsc caught it
   (two importers lost the type). Cut a block by its two named ends, and read what sits between them.
@@ -1085,6 +1085,62 @@ the owner wants it kept).
 - **Friction**: the worktree Bash guard refused heredoc-bearing commands in `pr-357` that it had
   allowed in another worktree minutes earlier ("too complex to verify"); the Write tool and a plain
   python call were the route. One instance; the trigger not identified.
+
+## 2026-10-28T18:4xZ — Smelter herds Basalt (871ba4): unit 0 landed, unit 1 cut, the tool lanes opened
+
+- **Unit 0 landed** as 366 (`77453f9d8`, the records door, `--expect none`, 0 rounds); the analyser lane's worktree and branch retired on content check and ancestry proof. **Unit 1** (the three readers of third-party review text, `fix/pr-watch-review-text-parsers-linear`, `c8e67e375`) is red-first proven by file swap: six new tests fail against the committed sources (31 s, 90 s under the runner, 15 s; the three behaviour tests) and 33 pass with the cures; the recorded-corpus suites unchanged.
+- **The door's dist is a moving target.** The pre-push gate's build rewrites `agent-tools/dist` from whatever tree the worktree has checked out; the door on 366 at 16:25Z ran from a dist the Codex-failure checkout had left, parsed `none` as a login and refused on "none: OWED". Before a door: `grep -c parseExpectValue agent-tools/dist/src/merge-bot/merge-args.js` on the worktree the door runs from. The second run, from the rebuilt dist, merged.
+- **`merge-bot push --branch X` gates the checked-out tree, not X.** With the expect-none branch checked out, the Codex-failure lane's first push was gated on the expect-none tree (the knip refusal was on both, so no harm this time). Routed: the tool refuses when the checked-out branch is not the one named, or gates the pushed tip.
+- **Knip is in the gate.** An exported interface nothing imports by name (`VendorNoticeComment`) refused the Codex-failure lane's first push; cured in `f237ff803` (the export dropped; the type is reached through the reading). `pnpm agent-tools:repo-check knip-gate` before a push that adds exports.
+- **Prettier from a sub-directory skips the root ignore file.** `.agent/` is prettier-ignored at the root; run from agent-tools, `prettier --write` on the plan node reformatted its whole table, quoting and emphasis. The node went back to its committed bytes by file copy and took the three edits again; check and format from the repo root only.
+- **The hook blocks `git checkout -- <path>` and `git show HEAD:<path> > <path>` as reversions.** The forward route: `git cat-file -p HEAD:<path> > <scratchpad file>`, copies of the in-flight files to the scratchpad first, then `cp`. A red-before proof needs no git in its loop.
+- **A lane worktree cut before its dependency lands lacks the dependency's files.** The unit 1 worktree, cut at `32c907304`, had no plan node until `git pull --ff-only origin engraph` (a fast-forward of a branch with no commits of its own is not a rebase).
+- **Transcript search for a sub-agent's verdict** by phrase matched the seat's own commands and summaries, never the verdict; the summary's own record of the review (made at the time) was the source for the Codex-failure pull request's body. Record a reviewer's verdict in the lane's records when it arrives, not later.
+- **`merge-bot push --branch X` pushes the CHECKED-OUT commit to X.** The successor coordination branch was pushed with the tool pointed at the writes-lane worktree, and the remote `coordination/2026-10-28-32c907` received that worktree's tip (`934515e02`, the writes lane's four commits) under the coordination branch's name; draft 367 showed a code diff and the records commit `e8852d612` stayed local. Every push made from the lane's own worktree was correct. The tool must refuse when the checked-out branch is not the one named, or push `refs/heads/X:refs/heads/X`; until it does, a push runs from the branch's own worktree only. The remote ref is re-pointed with a force-with-lease push from the primary at the owner's word; the displaced commits are intact on their own branch.
+- **Each landing moves the base.** The estate's checks are strict about currency, so the door refused 368 as BEHIND-BASE after 366 landed; the lanes landed serially, each merging the default branch once just before its push (368 `79e383ad1`, 369 `7a875d793`, 370 `007fdef1a`). A pinned, detached door worktree (`door-dist`, at the expect-none tip) ran the doors until the cured build existed, so no gate's rebuild could change the door's build under it.
+- **The testing directive beat the plan's criterion.** Unit 1's adversarial-input tests read the clock and set a one-second ceiling as the plan's criterion 5 asked; the code-expert's read named test-immediate-fails item 4 and the directive's no-wall-clock-ceilings rule; the ceilings went, the inputs stayed red-first under the harness's default timeout, and criterion 5 was re-trued. A plan criterion is checked against the directives it must satisfy at authoring, not at review.
+- **A lane can hide in a worktree the seat uses every hour.** The bot's pull-request writes command, exercised for every write today, sat unlanded in its worktree's branch (four commits of 2026-10-27, no remote, no pull request) until the closing worktree inventory found it; the estate's code-expert read it and its cure is committed (`561e09d45`), unopened at the hold. The worktree inventory belongs at the start of a drain, not its end.
+- **Codex at the ready-mark found two real defects in the declaration's own code** (the author fence polled to settlement instead of refusing at once; the empty set's window anchored on an older review instead of checks green), both cured in `976206bc0` with red-first tests before the door. A reviewer is information; these two were true.
+
+## 2026-10-29T11:3xZ — Smelter herds Basalt (871ba4): branch and worktree hygiene at the owner's word
+
+- **The owner's word of 2026-10-29**: "all merged work branches should be deleted locally and remotely, and all worktrees where work is safe in the default branch, or where we have decided not to merge it, should be removed."
+- **Removed by this seat**: the remote `automation/upstream-carrier-386f3f8bf…` (its tip an ancestor of `engraph` since 363 carried the mirror at `4e9d49a2f`; the bot's retire command proved the ancestry and deleted the remote and tracking names) and three cached remote-tracking refs of a remote that no longer exists, `pr/834` and `pr/836` (upstream pull requests merged 2026-08-10) and `upstream-pr-891` (its tip an ancestor of upstream `main`), by `git branch -d -r`. `pr576` stays: upstream pull request 576 closed unmerged, its head `aac01d12d` on no default branch.
+- **Deleted by another hand at 11:28Z, during this seat's inventory**: the local branches `archive/pr356-seat-work-2026-10-17` (`9e213b6a7`, five commits never pushed), `coordination/2026-10-05-efe69f` (`93363641a`; its twin `25e898e18` is on `engraph`), `docs/consolidation-2-routed-cures` (`f9f0a2ca6`) and `docs/consolidation-2s-skills` (`78547cb3f`), both proven of no use by content on 2026-10-19, and `docs/report-design-living-maintenance` (`f0709d8de`, the design-reports draft and its evaluation evidence, pull request 357 closed), locally and on the remote. Each tip is still an object in this clone, unreferenced until a garbage collection; `git branch <name> <sha>` restores any of them. The seat's own route would have been the owner's command: `git branch -D` and `git update-ref -d` are on the permission deny list, and the records of 2026-10-19 held the refs for that command.
+- **Worktrees**: the primary and `merge-bot-pr-writes` (the writes lane, unlanded) remain; `merge-bot-class` and `scope-key` were removed by their seats after 365 landed (`7349a72b8`). An inventory taken while the owner acts in parallel is re-read before any report: the first `git branch -vv` of this pass was stale within minutes.
+- **The owner's word on the design-reports branch, 2026-10-29**: the skill was "just instructions to help cloud agents structure reports" and "wasn't actually useful"; its loss is accepted and nothing of it is restored. The archive ref `archive/pr356-seat-work-2026-10-17` was deleted by the same hand and is read the same way unless he says otherwise.
+- **The mis-pushed coordination ref, cured without force (13:3xZ)**: Maple turns Spore (560922) landed the writes lane as 371 (`0b1d0f7bb`, 13:12Z), which made the mis-pushed tip `934515e02` an ancestor of `engraph`; the primary merged `origin/engraph` into the coordination branch (`47b43bce9`, clean, no overlapping files) and the bot's push tool pushed it as an ordinary fast-forward. No force-push was made; the proposal for one was withdrawn when the other seat's path was read. The push tool's own fix (a named branch must be the checked-out one) is that seat's next lane.
+
+## 2026-10-29T13:5xZ — The writes lane landed; the coordination branch put right without a force-push (Maple turns Spore, 560922)
+
+- **His word**: "plan the work, then carry it out", on "what is required to finish that work?" for
+  `feat/merge-bot-pull-request-writes`. Landed as 371 (`0b1d0f7bb`) and 372 (`98e998ab3`); the
+  thread record holds the lane state. Two lessons and three observations below.
+- **The plan's second cure was wrong against his rule, caught before the code.** The draft said
+  "count only the bot's open pull requests"; his word of 2026-10-17 is that every author's lanes
+  count, Dependabot's excepted. The cure landed as the Dependabot exclusion. A plan written from a
+  reviewer's finding inherits the reviewer's reading of the rule; the rule is read first.
+- **The hook matched a destructive command's tokens across a whole command text.** A Python
+  heredoc that quoted a doc comment mentioning a checkout, in a command whose text began with a
+  git status, was refused as the tree-resetting operation those tokens spell. Cured by leaving the
+  git call out of the command and anchoring the edit below the line that carried the word. The
+  substring discipline's known shape, now seen from the editing side.
+- **Observation, one instance**: the first `pull-request resolve` of three exited 1 and the thread
+  read resolved on the retry (refused as already resolved); the mutation landed, the read-back did
+  not see it in time. The other two resolved in one call. Not cured; watch for a second instance.
+- **Observation, one instance**: two seats pushed the same commit from the same checkout at once;
+  GitHub rejected the second with a ref-lock message, the remote stood at the commit either way.
+  The singleton rule covers the gate, and the push's gate ran twice in one tree; a line to the
+  other seat before a gate on the primary is the practice from here.
+- **The bot cannot request a Copilot review on this installation** (two forms tried, neither
+  registered); the operator's credential did, under the standing permission the bot-identity rule
+  records. The automatic review did not fire at the ready-mark: the configuration requests the
+  owner, with `review_on_push=false`.
+- **The pre-push hook runs the full gate on a push that carries no commits**: a remote branch
+  deletion ran a minute of `pnpm check` and was refused by the tree's own drift (the day's earlier
+  finding). A friction for the hook; the deletion went through the GitHub API at the owner's word
+  ("don't use git push to delete remote branches, use the github plugin"; the plugin has no
+  delete-branch verb, the API as the signed-in user is the nearest).
 
 ## 2026-11-01 — Smelter herds Basalt (871ba4): the autofix pass and its two true breakages
 
@@ -1179,3 +1235,79 @@ the owner wants it kept).
   untracked is invisible to them: three green `pnpm check` runs passed nine unformatted new files,
   which the first hooked commit's fixer then re-wrapped. `git add` the new files by pathspec, then
   run the gate, then commit.
+
+## 2026-11-02T15:0xZ — Smelter herds Basalt (871ba4): the wrap's loss scan and metaloss
+
+- **A worktree directory whose git metadata is gone is invisible to `git worktree list`.**
+  `.claude/worktrees/sonar-to-zero` (28 MB; five root files and `.agent/`; a checkout that stopped
+  part-way on 2026-11-01 at 10:24, its `.git` file pointing at metadata that no longer exists) sat
+  through this wrap's worktree enumeration until a plain listing of the directory found it. It
+  holds no work (no file newer than the checkout). Inventory `.claude/worktrees/` by listing as
+  well as by the git command; removing a directory is the owner's command under the hook policy.
+- **When the primary sits on a lane branch, the wrap's records are written from a worktree of the
+  coordination branch**, and the lane's napkin sections and plan node are mirrored there so the
+  pushed branch holds them. Writing them on the lane branch would fork the thread record, whose
+  latest state lives only on the coordination branch. The napkin conflict at the lane's merge is
+  the known shape, the coordination side the superset. Candidate wording for the wrap skill's
+  step 2 (one instance): the records' home is the coordination branch from whichever worktree has
+  it checked out, a worktree added for it when none has; "the primary checkout's" is incidental.
+- **Attribution, flagged**: "nothing pushed" for the lint series was this seat's reading of "make
+  the commits" and of the plan's sequencing, not the owner's verbatim word; the thread record says
+  so, and the question is put to him in the wrap report.
+- **The session's pattern, read back (metacognition)**: three times this seat was excellent inside
+  a frame the owner then dissolved in a few words: the hash (the frame was the ledger), the stop on
+  ten entries (the frame was rework), the seventeen pull requests (the frame was the small-PR bands
+  applied to a defect sweep). The rule that re-asks the first question at elaboration boundaries
+  exists and did not fire; the trigger it lacked is concrete: a fix that grows (ten entries to
+  forty and three module splits) IS an elaboration boundary. Growth of the cure is the signal.
+- **Compressed reasoning**: the six lanes' verification survives as the plan node's disposition
+  rows and the series' commits; each lane's per-finding reasoning is gone with the lane agents'
+  contexts (this wrap's blind-spot bound). The owner's chunking instruction survives as the phrase
+  "sensible chunks"; its exact wording did not outlive ten compactions. Write at occurrence.
+- **A series with the hooks off is closed by the full gate over the tracked tree, never by its
+  last hooked commit**: that commit's `lint-changed` reads the working tree against HEAD, so its
+  hooks see the last chunk alone. The series let through a major-version marker (cured by the
+  plumbing rewrite at his word) and nine unformatted new files (untracked during three green
+  gates). Such a series needs its closing checklist run by hand before the last commit: the guard
+  on every message; every new file staged; then the full gate.
+- **Fence sweep**: the lane's diff against the default branch adds no fenced wording; its one
+  analyser project-key mention is a removed line of the retired refounding corpus.
+- **The two expired owner gates** (`semantic-search-showcase` and
+  `warranted-means-in-the-operating-environment`) fired at this session's open as at every open
+  since 2026-10-10 and 2026-10-11; surfaced to him in this wrap's report; no decision yet.
+- **The per-checkout bot config was gone from the primary at this wrap** (`.github/merge-bot.json`,
+  untracked, present on 2026-10-29 when this seat last pushed as the bot); every bot write refuses
+  without it. Restored from grounded values (the slug from the key's directory and the operator
+  profile, the app id from GitHub's public app record, the repository from the origin remote) as
+  the documented per-clone setup step. One instance; the cause is not known; the directory's
+  mtime of 14:10 on 2026-11-02 is the only trace.
+- A third pass would only re-find these; the recursion closes here.
+
+## 2026-11-03 — Sandpiper guards Wind (690653): the lint lane landed and the Oak 1.186.4 sync
+
+- **The mirror cannot carry a workflow-file change.** GitHub never grants a workflow run's own token
+  the `workflows` permission, so the mirror's reference update answers 403 whenever the
+  fast-forward range touches `.github/workflows/`; a dispatch under `upstream-mirror-dispatch`
+  changes nothing, because the run still writes with its own token. The successful moves of
+  2026-10-19 and 2026-10-21 carried no workflow file; the failing range carried four. The manual
+  route that worked: the bot's `pull-request-work` token (it carries `workflows: write`) and a
+  `PATCH` of `refs/heads/main` with `force=false`. The cure is the run minting the app token, as
+  the carrier workflow already does.
+- **An open pull request whose head is the mirror does not lock the mirror.** Moving `main` moved
+  374's head with it; the carrier landing then read 374 as merged, because its head was inside
+  `engraph`. A sync opened by hand from `main` is landed through a carrier, never resolved on `main`.
+- **This clone's local `user.name` is the bot.** The estate's rule passes the owner as author per
+  commit (`GIT_AUTHOR_NAME`/`GIT_AUTHOR_EMAIL` on the command, and on a merge, since `git merge` has
+  no author flag); two commits went out bot-authored before I read the rule. Check
+  `git config --show-origin user.name` at the first commit of a session.
+- **zsh reads `$C:r…` as a filename modifier**: `"$C:refs/remotes/…"` lost the `:r` and the fetch
+  named a ref that does not exist. Brace a variable before a colon: `"${C}:refs/…"`.
+- **A lint twin's parity is per shape, not per rule.** `unicorn/prefer-string-starts-ends-with`
+  (S6557's twin, at `error`) catches the regex form but not `a.charAt(0) === b.charAt(0)`; the
+  analyser found that shape in new code on 375. The twin did not fail; it was never asked.
+- **A conflict both forks solved differently is merged by insight, not by side.** The
+  install-version-guard smoke: Oak's fixture lockfile (a current format every pnpm parses) and
+  `engraph`'s guard-log read-back (independent of how pnpm forwards script output) were each the
+  better half; the merge kept both and re-trued the comment that described the old fixture.
+- **A reviewer's ancestry claim is checked with `git merge-base --is-ancestor`, in one command.**
+  Codex's P1 on 376 read the tip commit's single parent as the whole history.

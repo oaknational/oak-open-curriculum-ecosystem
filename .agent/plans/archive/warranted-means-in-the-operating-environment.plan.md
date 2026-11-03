@@ -3,7 +3,7 @@ id: warranted-means-in-the-operating-environment
 node_type: delivery
 name: "Warranted means in the operating environment"
 overview: "Find out whether the git file monitor that blocked the estate's ceremonies is one instance or a class of unwarranted ambient means, by one bounded enumeration, and put the verdict to the owner."
-status: ratified
+status: archived
 ratified_by: "Jim Cresswell (owner)"
 ratified_date: 2026-09-20
 ratified_where: "Owner card answer of 2026-09-20 ~13:35Z in the session of Dynamo turns Temper (2a4c8a): the card \"Which of these do you ratify now?\" with all four options selected, among them this node's; recorded in that seat's handoff record and on the pull request that carries this stamp"
@@ -18,10 +18,17 @@ owner_gates:
       The owner answers the one card that mechanism step 3 puts after the enumeration's count
       exists: nothing further, or the environment contract and the warrant clause.
     expires: 2026-10-11
-last_updated: 2026-09-20
+last_updated: 2026-11-03
 ---
 
 # Warranted means in the operating environment
+
+## Outcome (2026-11-03) — archived at the owner's word, the gate unanswered
+
+The owner gate above expired on 2026-10-11 with no decision. Archived at the owner's word of
+2026-11-03, verbatim: "archive both decisions, if they are important they will come up again". The
+plan is a record of the question as it stood; if the class it names recurs, the work starts from a
+new decision, not from this node.
 
 ## Goal
 

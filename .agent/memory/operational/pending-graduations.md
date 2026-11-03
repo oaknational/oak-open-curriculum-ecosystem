@@ -163,7 +163,7 @@ byte-identical.
 - **A clean and green pull request merges by the door; the merge is never at the owner's word**
   `[captured: 2026-10-17 | source: the owner's word of 2026-10-17 to Walrus seeks Maelstrom
   (9585cc), verbatim in the napkin block of 2026-10-17T14-15Z | target:
-  .agent/skills/pr-lifecycle/SKILL-CANONICAL.md, the merge step, one sentence with the owner's
+  .agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md, the merge step, one sentence with the owner's
   line verbatim; any thread record or plan that says "merge at the owner's word" re-trued at its
   next touch | trigger: the next doctrine pull request from the default branch | size: one
   sentence | status: due]`
@@ -175,7 +175,7 @@ byte-identical.
 - **An ADR numbering clash is settled by the Oak branch's numbering; Engraph renumbers**
   `[captured: 2026-10-17 | source: the owner's word of 2026-10-17 to Walrus seeks Maelstrom
   (9585cc), verbatim in the napkin block of 2026-10-17T14-15Z | target:
-  .agent/skills/cross-fork-integration/SKILL-CANONICAL.md, its numbering-collision step, with the
+  .agent/skills/change-custody/cross-fork-integration/SKILL-CANONICAL.md, its numbering-collision step, with the
   owner's line verbatim; docs/architecture/architectural-decisions/README.md, the authoring
   guidance, one sentence | trigger: the next doctrine pull request from the default branch | size:
   two sentences | status: due]`
@@ -202,9 +202,9 @@ byte-identical.
   `[captured: 2026-10-17 | source: the owner's word of 2026-10-17 to Walrus seeks Maelstrom
   (9585cc), verbatim in the napkin block of 2026-10-17T14-15Z; relayed on the comms stream the same
   hour | target: the merge tool's owed-ness derivation (agent-tools pr-watch) and
-  .agent/skills/pr-lifecycle/SKILL-CANONICAL.md where it describes what a tip is owed; the fix is
+  .agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md where it describes what a tip is owed; the fix is
   the merge-tool lane's, in both estates | trigger: the merge-tool lane's next pickup | size: a
-  tooling fix with its tests, routed | status: due]`
+  tooling fix with its tests, routed | status: superseded 2026-10-28: the owner's word of 2026-10-27/28 (a pull-request review is requested only for a stated reason; the one question is whether the work needs a review to be safe and effective) is on the default branch in pr-lifecycle §Phase 2, and the owed-ness derivation landed in 359]`
 
   Verbatim: "I have changed the github copilot configuration to trigger once per PR, that
   invalidates some assumptions in the merge tool. Because the assumptions coupled the tool to a
@@ -234,6 +234,24 @@ carried, their concepts being doctrine since 2026-10-08 in the rule permanent-do
 principles §Code Quality (the cure stops recurrence; 2026-10-14) with the owner's correction-cure instances in
 the wrap and consolidate-until-done skills; the settlement, blame-referent, signal and clocked-obligations rows
 stand to their review dates with today's evidence logged in their prediction cells. -->
+
+- **The change carries the what, the commit carries the why; a review ledger exists only where it
+  proves what the diff and the commit cannot**
+  `[captured: 2026-11-02 | source: the owner's word of 2026-11-02 in the session of Smelter herds
+  Basalt (871ba4), the napkin block "a ledger that justifies every change is the policy, not the
+  hash" | target: principles.md, the Code Quality section: one clause that no per-change
+  justification ledger is kept, that an anchor on the governed text (or its like) is the instrument
+  where one is needed, and that a review ledger is kept only where it proves what the diff and the
+  commit cannot | trigger: the lint pull request from the branch fix/stricter_linting merges,
+  which puts the content audit's dropped ledger on the default branch (fired 2026-11-03: 375
+  merged at 4adcfc069) | size: one clause | status: due]`
+
+  Verbatim: "We do not need to justify evert change, the change carries the what, the commit carries
+  the why. Major decisions belong in ADRs and PDRs" and, on the audit's hash, "why are you using
+  hashes? Git shows us what changed". The content audit's per-file review ledger (about 4,700
+  lines, an entry per change to each of about 270 governed files since a July baseline, pinned by
+  a 130-line AST hash) was dropped in the lint lane; its item anchors stayed, and they are the
+  instrument: served text moves, the validator refuses until the item is reviewed again.
 
 ## Slow lane (PDR-130 — constitutional-class concepts, decided at their review date)
 

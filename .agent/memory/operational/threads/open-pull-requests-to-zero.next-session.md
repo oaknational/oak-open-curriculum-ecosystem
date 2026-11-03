@@ -15,16 +15,17 @@ the writes it lacked; then start the analyser plan's units. Owning plans:
 `.agent/plans/delivery/open-pull-requests-to-zero.plan.md`
 (the drain and the tool) and
 `.agent/plans/delivery/quality-analyser-security-reliability-to-zero.plan.md`
-(the analyser findings, after the drain). Both nodes are sketch on the lane branch below, not yet
-on the default branch.
+(the analyser findings, after the drain). Both nodes are on the default branch: the drain's node at
+`status: sketch`, the analyser's ratified on 2026-11-03 (375).
 
 ## Participating agent identities (PDR-027)
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
-| Smelter herds Basalt | claude-code | claude-fable-5-1 | 871ba4 | solo seat (its own Director): the analyser triage and plan, the drain of the open pull requests, the merge-bot write command; delegated three bounded implementer agents and one security read in-session | 2026-10-27 | 2026-10-27 |
+| Smelter herds Basalt | claude-code | claude-fable-5-1 | 871ba4 | solo seat (its own Director): the analyser triage and plan, the drain of the open pull requests, the merge-bot write command; delegated three bounded implementer agents and one security read in-session; then the analyser plan's remainder as one lint pull request, six lane agents' cures verified and corrected by the seat (2026-11-01 to 2026-11-02) | 2026-10-27 | 2026-11-02 |
+| Sandpiper guards Wind | claude-code | claude-opus-5-5 | 690653 | solo seat (its own Director), implementer on the lint lane: assessed the unpushed series, pushed it, landed items 13 and 14 and merged 375; archived the two expired-gate plans; ran the Oak 1.186.4 sync through carrier 376 (2026-11-03) | 2026-11-03 | 2026-11-03 |
 
-## Lane state (2026-10-27, written at the owner's compaction word)
+## Lane state at 2026-10-27 (the owner's compaction word; the 2026-10-28 state below supersedes it where they differ)
 
 The owner's words that govern this thread, in order: "Make sure that your intended work is fully
 recorded in a plan, then start merging the open PRs, draft and non-draft, keep it all minimal
@@ -106,19 +107,16 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
 
 ## Next safe step
 
-1. Read ahead/behind on every branch above first-hand before any act (a background push launched
-   before the compaction reports to nobody); read the three agents' commits from their branches,
-   not from memory, and check the task list for agents still alive.
-2. If the owner has merged #362 or spoken on the limit: open the pr-watch cure's pull request first
-   (`merge-bot pull-request open --wip-limit <the owner's number>`), land it through the door, then
-   the tool's pull request, then #358 and #363 through the door, then the analyser plan's units 1,
-   0, 2 to 12 in that order.
-3. If not: wait on the owner; nothing else opens. The round-two dispositions on #358 can be posted
-   once the cure commit exists (they are outward acts of the seat's initiative, so after the
-   compaction freeze lifts).
-4. Worktree hygiene at the end: `pr-362`, `pr-357`, `pr-358`, `carrier-363`,
-   `merge-bot-pr-writes`, `pr-watch-codex-failure` are this session's; each is retired by content
-   check when its branch has landed, never by force.
+1. Read `git status --branch` on the primary and `gh pr list` first-hand before any act.
+2. The analyser plan is complete: units 0 and 1 landed as 366 and 369, the two tool lanes as 368 and
+   370, and units 2 to 14 as 375. Criterion 1 read zero on 2026-11-03 (comms event `7af7c09a`).
+3. The mirror workflow's cure is its own lane, at the owner's word of 2026-11-03 ("coordinate
+   please"). It lands before Oak's workflow-linter lane merges on Oak `main`, as agreed with Elder
+   rides Topsoil (65857c) on the comms stream (event `2dd20168` and that seat's acceptance).
+4. The follow-up lanes the fold of 360's reviews routed, none opened yet: the review-cost gate's hold
+   (the hook's guidance lines dead under `sh -e`, the hold counting reviewed rounds where PDR-140 says
+   pushes, the unrounded crossing test and its duplicated loop) and the comms write path (a render
+   that fails after the write; renders published out of order).
 
 ## Updates after the compaction word
 
@@ -194,12 +192,221 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
   judgement that upstream's own release, read first-hand in the sweep, needed no pull-request review
   (the owner's one question of 2026-10-28). `--expect none` is new: lane `fix/pr-watch-expect-none`
   (`eebf42826`, stacked on the Codex-failure cure `1c86925b5`), both unopened as pull requests.
-- **#360** (this coordination branch's fold): the primary's records committed, the default branch
-  merged in at `0cb2bde6d` (two record conflicts resolved by concept), the source portion under the
-  estate's code-expert read; the body to be corrected (code-class, not records-class), then the
-  ready-mark and the door.
-- **The sub-agent correction** (the owner, 2026-10-28): lane
-  `docs/subagent-reviewers-distinct-from-pr-reviewers` (`7c4ea2343`), a records pull request for the
-  records door once its push passes the gate.
+- **#360** (the coordination branch `coordination/2026-10-16-f1e9d3`): folded 2026-10-28 16:12Z as
+  `32c907304` by the door with `--expect none`, after the estate's code-expert read of its source
+  (four findings routed to two follow-up lanes) and a records pass (sixteen findings: two cured before
+  the push, the rest in the successor's first records commit); one Codex round at the ready-mark, its
+  two P2 findings the same two defects, routed. Successor `coordination/2026-10-28-32c907`.
+- **The sub-agent correction** (the owner, 2026-10-28): landed as 364 (`efff8050f`, the records door,
+  15:48Z); its six review findings cured on the fold before its push.
 - **Next**: the analyser plan's unit 0 (its lane holds the two nodes and the drain ledger), then
   unit 1 (the three parsers of third-party review text).
+
+## Lane state (2026-10-28 18:4xZ, at the owner's word to stop the sub-agents and review)
+
+- **Landed since the fold**, each through the door with `--expect none`, no requested vendor round,
+  each lane merging the default branch once before its push: 366 (the analyser plan's unit 0: the
+  `maintenance` strategic node, the analyser delivery node, `code-scanning-alerts-to-zero`
+  re-pointed, the drain ledger; `77453f9d8`, the records door), 368 (the Codex failed-run cure with
+  the row-grammar fence and the knip fix; `79e383ad1`), 369 (unit 1: the three readers of
+  third-party review text in linear forms, a new `pr-tally/disposition-line.ts`, red-first by file
+  swap, the estate's code-expert's test finding cured before the push; `7a875d793`), 370 (`--expect
+  none`, the empty-set declaration, after the estate's code-expert and security-expert reads; one
+  Codex round at the ready-mark, its two P2 findings verified and cured in `976206bc0`;
+  `007fdef1a`).
+- **Committed, unopened**: the bot's pull-request writes command and the dispatch-workflow verb on
+  `feat/merge-bot-pull-request-writes` (worktree `merge-bot-pr-writes`), found unlanded at the
+  closing inventory, read by the estate's code-expert, its `comment` verb now confirming a pull
+  request (`561e09d45`); it merges the default branch, pushes from its own worktree, opens and takes
+  the door next.
+- **Wrong on the remote**: `coordination/2026-10-28-32c907` holds the writes lane's tip
+  (`934515e02`) because the push tool sent the checked-out commit of the worktree it ran from under
+  the named branch; the records commits (`e8852d612` and this one) are local on the primary. The
+  cure is a force-with-lease push of the primary's tip from the primary, at the owner's word, and a
+  tool fix so `merge-bot push --branch X` refuses when X is not checked out.
+  (Cured 2026-10-29 13:3xZ without force: the writes lane landed as 371, `0b1d0f7bb`, making the
+  mis-pushed tip an ancestor of `engraph`; the coordination branch merged `origin/engraph` and
+  pushed as a fast-forward, `47b43bce9`. The tool fix is Maple turns Spore's next lane.)
+- **Retired** on content check and ancestry proof: the branches and worktrees of 366, 368, 369 and
+  370. Open and another seat's: 365.
+- **Routed, each with a home on this record and the pull-request bodies**: the push tool's named
+  branch versus checked-out commit; the review-cost gate's hold (the hook's guidance lines dead under
+  `sh -e`; the hold counting reviewed rounds where PDR-140 says pushes; the unrounded crossing test;
+  the duplicated loop); the comms write path (a render that fails after the write; renders published
+  out of order); the writes command's conversation verbs minting the wide `pull-request-work` scope
+  where `pull_requests: write` alone would do, its WIP count counting every author's open pull
+  requests, its thread refusal comparing the number without the repository, the hoisted GraphQL
+  error path's bare status, and tests asserting request order and count; the expect-none
+  declaration's optional `expectedReviewers?` carrying two meanings, the door's merge record living
+  on stdout alone, `is_bot` as a second leg, the app slug unchecked against the signing App; the
+  Codex cure's review-object body as the proof of the declaration and the older-commit test gap.
+- **Next for the analyser plan**: units 2 to 14 in the node's order, each from a worktree cut after
+  its dependency lands; the owner's ratifying stamp on the two nodes born sketch.
+
+## Lane state (2026-10-29 13:5xZ, the writes lane and the push fix landed at the owner's word; Maple turns Spore, 560922)
+
+- **The owner's words, verbatim, in order.** "feat/merge-bot-pull-request-writes what is required
+  to finish that work?"; then "yes please, plan the work, then carry it out" (the team, plan and
+  reason skills invoked). The plan's verdict, approved: land the lane first, then put the
+  coordination branch right by merging its remote tip once the lane is on `engraph`, with no
+  force-push.
+- **Todo 6 of the node is done.** 6a: pull request 371 (`feat/merge-bot-pull-request-writes`),
+  merged at `0b1d0f7bb` (13:12Z) through the door, carries the command (`open`, `comment`,
+  `reply`, `resolve`, `ready`, `close`, `dispatch-workflow`) with the five routed findings cured
+  (the node's ledger has a row per finding), the analyser's three findings on its new code cured
+  (a `/tmp` fixture path read as a publicly writable directory; a digit class; a nested template),
+  and the one Copilot review's three findings cured (the branch encoded in the branches path and
+  the head query as the required-contexts reader encodes a ref; the file path through `printable`
+  before stderr; the action description naming the per-verb scopes). 6b: pull request 372
+  (`fix/merge-bot-push-named-branch-must-be-checked-out`), merged at `98e998ab3`: `merge-bot
+  push --branch X` refuses when X is not the branch HEAD is on, before origin is read and before
+  any mint; the real-git smoke settles HEAD's own branch by name. Both branches retired through
+  the bot, both worktrees removed; the claim closed.
+- **The narrow scope, proved by use.** `pull-request-conversation` (`pull_requests: write` alone)
+  carried 371's own comments, ready-mark, three replies and four thread resolutions, the GraphQL
+  mutations included; `open` stayed on `pull-request-work`. The MCP-391 question is closed by the
+  pull request's own timeline. One observation, not a finding: the first `resolve` of the three
+  exited 1 while the thread read resolved on the next call, which refused it as already resolved;
+  the other two resolved in one call.
+- **Reviews.** No automatic review fired at the ready-mark (the configuration requested the owner;
+  `review_on_push=false`). One Copilot review was requested on 371 with its reason on the pull
+  request, through the operator's credential under the standing permission, since the bot's own
+  request did not register on this installation (the timeline carries the owner's request, not
+  the bot's). Its three findings were cured in one settlement push; the door then read the
+  Copilot leg OWED on the new tip, and the seat declared the set empty (`--expect none`) with the
+  judgement on the pull request: the tip carried the cures alone, gated and tested. 372 merged
+  under the same declaration with no review, by the seat's judgement for a change of that size
+  with red-first tests.
+- **The coordination branch.** GitHub closed draft 367 at 371's merge, since 371's merge made the
+  mis-pushed head part of `engraph`; Smelter herds Basalt merged `engraph` into the local branch
+  (`47b43bce9`), recorded the cure (`4eeb612df`) and opened the replacement draft, pull request
+  373, as the bot with the new command. Two seats pushed the same commit from the same checkout at
+  once; the second push was rejected by the ref lock, which is the harmless shape of that race,
+  and both gates ran in one tree at the same time, which the singleton rule forbids: from here a
+  gate on the primary takes a line to the other seat first (Smelter's word, taken up).
+- **Next for this thread**: nothing routed here remains for the writes lane; the other routed items
+  of 2026-10-28 keep their homes above; the analyser plan's units continue in their node's order.
+
+## Lane state (2026-11-02 14:5xZ, the wrap at the owner's word: the lint lane put down)
+
+- **The lane's shape, by the owner's word.** The analyser plan's remainder (units 2 to 14, the lock
+  of unit 12 included) is ONE pull request, not thirteen or seventeen ("17 PRs what lol? No. 1
+  PR."), on the branch `fix/stricter_linting`, cut from `origin/engraph` in the primary checkout and
+  committed as a series of chunks with the hooks off between the first and the last commit (his
+  authorisation of 2026-11-02 for that series alone; each bypassed commit body carries the note).
+  Nothing of it is pushed and no pull request is open: the plan sequences the push after the two
+  items still to land, and his word on the push has not been given. Until the push the series
+  exists on this machine alone, so his rule of 2026-10-19 (safe only when pushed and in a pull
+  request) is not yet met for it.
+- **What the series holds.** The plan node is the authority, each item by status
+  (`.agent/plans/delivery/quality-analyser-security-reliability-to-zero.plan.md`, §Todos; the same
+  bytes on this branch since this wrap). In short: the six analyser twins at `error` in the shared
+  config with a pathogen fixture per rule; every analyser site cured at its root (the generator,
+  one fence model, the parsers, the cryptographic sources); the testing directive's product
+  standard and its IO split by process tier; `no-real-io-in-tests` scoped to the in-process tiers;
+  the agent-tools `SyncFileSystem` port and its in-memory fake in place of the disk in nine tests;
+  the content audit's per-file review ledger dropped at his word ("The change carries the what,
+  the commit carries the why"), its item anchors kept as the instrument; the refounding instruments
+  retired; the SDK generator's pascal-cased root types and the shared union aliases named by the
+  innermost property most sites share (not a major version, his word); the knip and content-audit
+  cures the root-only gates asked for. The full gate read green on the committed tree before this
+  wrap.
+- **Still to land, in this pull request, before the push** (the plan's items 13 and 14, neither
+  begun): the skill eval scripts' seven super-linear patterns moved into the showcase tools module
+  (`demos/oak-design-showcase/tools/`), and the specimen's scroll region made a tab stop only while
+  it scrolls (`resources.tsx`: a ResizeObserver, three Playwright tests). Then his word on the
+  push; the pull request opened by the bot (`merge-bot pull-request open`), one story; the door.
+- **How the series was verified.** Six lane agents wrote the cures in parallel on 2026-11-01; this
+  seat read every lane diff in full on 2026-11-02 and corrected what was wrong (the semver mirror
+  and the parity test rewritten around it; an env file where a build flag served; a red-first test
+  asserting output the generator never produced; the codegen's named imports; a rename miss; the
+  `url()` walk), then cured what the root-only gates found (knip's fifteen unused exports; the
+  content audit's re-anchor of item C484). The debt each lane left is a disposition row on the
+  plan node: nine test helpers still read the disk for about thirty-one in-process tests;
+  twenty-five loopback e2e tests in the MCP app; five in-memory file-system fakes of differing
+  shapes; the fence model on two of three CommonMark detectors and none of the seven toggling ones.
+- **Rulings of the lane, each applied in the series.** Tests are held to the product standard; an
+  in-process test uses no IO beyond stdio, an out-of-process test against a test instance may (the
+  testing directive). No allowlists, no warnings: problems are fixed. Generated code is fixed in
+  the generator. A type rename in a package no consumer outside the repository reads is a fix,
+  never a major version. Standing practice is cited from the principles, never by quoting him.
+- **The records' divergence the fold seat meets.** The lint branch carries the napkin sections of
+  2026-11-01 and 2026-11-02 and the rewritten plan node; both are mirrored on this coordination
+  branch at this wrap. At the lint pull request's merge the coordination side of the napkin is the
+  superset (it also holds the evening of 2026-10-28 and 2026-10-29); keep it. The plan node is the
+  same bytes on both.
+- **One reading flagged as the seat's, not his.** "Nothing pushed" was read from "make the
+  commits" and from the plan's sequencing of the push after items 13 and 14; he gave no verbatim
+  word against a push. Whether the pull request opens now as a draft, for safety under his rule of
+  2026-10-19, with the two items landing on it afterwards, is his call and is put to him in the
+  wrap report.
+- **The analyser's own reading** (criterion 1) is taken after the pull request merges and the
+  analyser has analysed the default branch; nothing has been read from it since the lane began.
+- **Resume order for the next seat on this lane.** Read the plan node's §Todos and §Review
+  dispositions; read the napkin sections of 2026-11-01 and 2026-11-02; run the full gate on the
+  branch to confirm green; land items 13 and 14 red-first with the hooks on (the authorisation for
+  hooks off was for the series of 2026-11-02 and is spent); then the push at his word.
+
+## Lane state (2026-11-03 ~12:3xZ, the series pushed at the owner's word; Sandpiper guards Wind, 690653)
+
+- **The owner's words of 2026-11-03, verbatim, answering the session's assessment.** On the
+  refounding removal the series carries (`13be1c97f`, 846 files, about 253,000 lines, outside the
+  plan node's items and amending the ratified `planning-and-intent-estate` node): "yes we are
+  retiring that plan, we will do _something_ to bring the plan estate into an organised form, but I
+  don't know what yet". On the push: "yes, push". On the pnpm upgrade found uncommitted in the
+  primary: "the upgrade is mine, it can go in any PR, it makes very little difference, Elder rides
+  Topsoil is currently adding it to the Oak branch". On the two expired owner gates: "archive both
+  decisions, if they are important they will come up again".
+- **Pushed and in a pull request.** The upgrade committed with the hooks on (`56eb08a72`, pnpm
+  12.17.0); the branch pushed by the bot with the full pre-push gate green (every turbo task
+  successful; the tree clean after the gate's SDK regeneration); draft pull request 375 opened by
+  the bot, its body naming the retirement and the content-audit ledger as removals, with the
+  owner's word on the first. The series now meets his rule of 2026-10-19 for safety; it is not
+  complete until merged. The retirement rides this pull request; a split was the seat's
+  recommendation, not taken up in his answer, and is his to ask for.
+- **Still to land on 375, before ready**: the plan's items 13 and 14, unchanged from the block
+  above; then `engraph` merged in once pull request 374 (the owner's upstream sync: happy-dom 21,
+  minimatch 11, Next 16.4.3) has landed. A merge preview shows no conflict this branch adds; 374's
+  one conflict (`install-version-guard.smoke.ts`) is its own against `engraph`.
+- **The plan node and the `maintenance` node are still `sketch`**; the node's own sequencing has
+  them stamped on his word before the push. The push went at his direct word; the stamp is still
+  his to give before the merge.
+- **The two expired-gate plans archived** on this coordination branch (`semantic-search-showcase`,
+  `warranted-means-in-the-operating-environment`, each with an outcome note quoting his word); the
+  session-open drift alert reads the primary checkout and stops once this branch folds.
+
+## Lane state (2026-11-03 ~15:0xZ, the lint lane complete and the sync landed; Sandpiper guards Wind, 690653)
+
+- **The owner's word, verbatim.** "13 approved, 14 approved, plans agreed, merge agreed, I do want
+  you to also merge 374, and then to check if Engraph main is up to date with Oak main and sync from
+  Oak main to Engraph main, and then merge from Engraph main to Engraph engraph".
+- **The sync.** Oak `main` stood at release 1.186.4 (`52e7f3bed`), six commits past Engraph `main`.
+  The mirror workflow had failed every scheduled run since 2026-11-02 with HTTP 403 at its reference
+  update, and a dispatch under `upstream-mirror-dispatch` failed the same way (run 41643954178): the
+  range carried four workflow-file changes, which a run's own token may never write; the two
+  successful moves before it carried none (a side seat's note, checked first-hand). The mirror was
+  fast-forwarded as the bot under `pull-request-work` (`PATCH` of the reference, `force=false`). The
+  carrier workflow then opened pull request 376; `engraph` merged into it at `7ef74522a` with four
+  conflicts resolved (setup-node at v7.1.0, pnpm 12.17.0, the lockfile reconciled and the rebuild
+  test passed, the install-version-guard smoke keeping both forks' pnpm 12 fixes) and one premise
+  re-true (`.agent/reference/tooling.md`). It merged by the door at `71e727ec5`; 374, whose head is
+  the mirror, read as merged at the same moment. One Codex P1 on the carrier (that the advertised
+  mirror commit was not an ancestor) was rejected on the branch's own history and resolved.
+- **Pull request 375 merged** by the door at `4adcfc069`: items 13 (`css-fences.ts`,
+  `css-declarations.ts`, `theme-markup.ts` in the showcase tools; each grader's output over its
+  fixtures byte-identical) and 14 (`TableScrollRegion.tsx`; red first; the specimen accessibility
+  spec 26 of 26), both plan nodes ratified, `engraph` merged in cleanly, a Windows fixture cure
+  (three in-memory trees rooted at a resolved path), and the analyser's one new issue on the pull
+  request (S6557 in `fence-line.ts`) cured; the analyser then read zero issues on the pull request.
+  The branch is retired and the claim closed.
+- **Identity, recorded as a miss.** This clone's local config names the bot as `user.name`; the
+  estate's rule passes the owner as author per commit. Two commits on 375 (`56eb08a72`,
+  `9b4270e4e`) carry the bot as author; every later commit and merge passed the owner.
+- **The mirror workflow's cure** (mint the app token in the run, as `upstream-carrier.yml` does) was
+  put to the owner; at ~16:2xZ the owner's word was "coordinate please", and the sequencing with
+  Oak's workflow-linter lane is in Next safe step 3. Until the cure lands, any Oak change to a
+  workflow file stalls the mirror, and the fast-forward above is the manual route.
+- **Criterion 1 read at ~16:17Z**: zero in the plan's filter on `engraph`, from the analyser's
+  analysis at 14:47:26Z, after 375 merged at 14:46:50Z (its check run on `4adcfc069` green at
+  14:53:35Z). One issue stays open outside the filter: S6822, RELIABILITY LOW, at
+  `TokenRows.tsx:107`, a deliberate `role="list"`. Recorded on comms event `7af7c09a`.

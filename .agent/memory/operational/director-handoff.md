@@ -318,6 +318,50 @@ on `claims open` exist since PR #225: frictions F-94 and F-95.)
 
 ## CURRENT HANDOFF STATE
 
+**§STATE, 2026-11-03 15:0xZ (Sandpiper guards Wind, `690653`, the n=1 seat at the owner's word;
+this block supersedes the 2026-11-02 block below where they differ).** The lint lane is complete:
+pull request 375 merged by the door at `4adcfc069` (items 13 and 14 landed, the analyser plan and
+the `maintenance` node ratified at his word "plans agreed", the analyser's one new issue on the
+pull request cured), its branch retired, the claim closed. The sync is complete at his word: Oak
+`main` (release 1.186.4) fast-forwarded into Engraph `main` as the bot, carried into `engraph` by
+pull request 376 (merged at `71e727ec5`), which also closed pull request 374 as merged. The
+analyser plan's criterion 1 read zero on `engraph` after 375 (comms event `7af7c09a`). The mirror
+workflow fails whenever the fast-forward carries a workflow-file change (its run token may never
+write those); its cure, minting the app token in the run as the carrier workflow does, is its own
+lane at his word of ~16:2xZ ("coordinate please"), landing before Oak's workflow-linter lane merges,
+as agreed with Elder rides Topsoil (65857c) on the comms stream. The thread record
+`open-pull-requests-to-zero` carries the detail.
+
+**§STATE, 2026-11-02 14:5xZ (Smelter herds Basalt, `871ba4`, the n=1 seat, at the owner's word to put
+the lint lane down; this block adds to the 2026-10-28 block below).** The analyser plan's remainder
+(units 2 to 14) is one lint pull request at his word ("No. 1 PR."), its series committed on the
+primary's lint branch with the full gate green and unpushed; two plan items (13, 14) still to land
+before the push, and the push itself at his word. moved for teachers: nothing / moved for the
+Practice: the six analyser twins locked at `error`, every analyser site cured at its root, tests held
+to the product standard with IO split by process tier, the content audit's per-file ledger dropped at
+his word. The drain thread record carries the resume order. The mis-pushed remote tip the block below
+names was cured on 2026-10-29 without force (the thread record's 2026-10-29 state). This coordination
+branch's fold is decided by the work on it (records only since 2026-10-29), at the next Director's DUE
+check, not inside this wrap. The two expired owner gates (`semantic-search-showcase`,
+`warranted-means-in-the-operating-environment`) are discharged: both plans archived at his word of
+2026-11-03 ("archive both decisions, if they are important they will come up again"), on this
+branch; the session-open alert reads the primary checkout, so it stops once this branch folds and
+the primary's branch takes the default branch.
+
+**§STATE, 2026-10-28 16:2xZ (Smelter herds Basalt, `871ba4`, the n=1 seat, post-fold; this block
+adds to the 2026-10-05 blocks below).** The coordination branch `2026-10-16-f1e9d3` folded as #360 at
+`SHA:32c907304` (16:12:48Z, the door with `--expect none` after the estate's reviews; one Codex round at
+the ready-mark, two P2 findings routed); the successor `coordination/2026-10-28-32c907` carries the
+records from here, this commit its first. moved for teachers: nothing / moved for the Practice: every
+open pull request of 2026-10-27 landed or closed (362, 358, 363, 360 merged; 357, 361 closed), the
+sub-agent reviewer documents restored (364), the door takes an explicit empty set. Landed after this block was first
+written: 366 (unit 0), 368 (the Codex cure), 369 (unit 1), 370 (`--expect none`), each by the door
+with an empty declared set and no requested vendor round. Held at the owner's word of ~18:35Z: the
+remote coordination branch carries the wrong tip (the push tool sent the checked-out commit of
+another worktree under this branch's name) and is re-pointed from the primary on his word; the
+bot's writes command is committed on its lane and unopened. Left: the analyser plan's units 2 to 14
+and the follow-up lanes the reviews routed (the drain thread record lists them).
+
 **§STATE, 2026-10-05 17:3xZ (Sycamore holds Spore, `18d874`, the n=1 seat, the compaction boundary
 at the owner's word; this block adds to the 17:2xZ block below).** The work is finished and the
 terminal acts ran: closeouts on both comms logs, the claim closed in the sibling's registry, the
