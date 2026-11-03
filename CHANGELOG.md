@@ -1,3 +1,10 @@
+## [1.186.3](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.186.2...v1.186.3) (2026-11-03)
+
+
+### Bug Fixes
+
+* **deps:** clear open security advisories and move turbo off eMudhra roots ([3f0720c](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/3f0720c68646ccd9a58e75b89747de49e9198700))
+
 ## [1.186.2](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.186.1...v1.186.2) (2026-11-01)
 
 ## [1.186.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.186.0...v1.186.1) (2026-10-21)
