@@ -323,8 +323,10 @@ supersedes the 15:0xZ block below where they differ).** The coordination branch 
 folded as 373 at `6f2d08552` (16:48:13Z, the door with `--expect none`; one unrequested Codex round,
 two records findings cured; fold-clock merged +26.3 min). The successor is
 `coordination/2026-11-03-6f2d08`; the folded branch is retired on all three names. The mirror
-workflow's cure is its own lane at his word ("go ahead with all three, and do fix the mirror"),
-and no Oak lane waits on it. moved for teachers: nothing / moved for the Practice: the
+workflow's cure landed at his word ("go ahead with all three, and do fix the mirror") as 378 at
+`8fc338d84`: the run's own token stays the writer, and only its exact workflow-file refusal mints
+the bot's App token. Run 41686089225 moved `main` to `0c841ed7f` by the run's own token, and no
+workflow started on `main`. No Oak lane waited on it. moved for teachers: nothing / moved for the Practice: the
 analyser's security and reliability list on `engraph` reads zero and is held at commit time (375),
 and the fork carries Oak 1.186.4 (376).
 
