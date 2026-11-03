@@ -65,9 +65,13 @@ export function shellcheckInstallerEnv(
  */
 export function shellcheckProvisionWarning(outcome: TscSpawnOutcome): string | null {
   const verdict = interpretSpawnOutcome(INSTALLER, outcome);
-  return verdict.failed
-    ? `[bootstrap-agent-tools] the pinned shellcheck was not installed (${verdict.reason ?? `${INSTALLER} failed`}); ` +
-        'the install goes on, and the shell lint gate asks for it at the first commit: ' +
-        'run .agent/setup/install-shellcheck.sh'
-    : null;
+  if (!verdict.failed) {
+    return null;
+  }
+  const reason = verdict.reason ?? `${INSTALLER} failed`;
+  return (
+    `[bootstrap-agent-tools] the pinned shellcheck was not installed (${reason}); ` +
+    'the install goes on, and the shell lint gate asks for it at the first commit: ' +
+    'run .agent/setup/install-shellcheck.sh'
+  );
 }

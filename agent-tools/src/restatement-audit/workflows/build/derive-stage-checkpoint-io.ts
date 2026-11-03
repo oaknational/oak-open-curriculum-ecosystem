@@ -39,11 +39,11 @@ async function readJson(
   try {
     const raw = await readFile(safePath.value, 'utf8');
     return ok(JSON.parse(raw));
-  } catch (cause) {
+  } catch (error) {
     return err(
       new Error(
-        `Cannot read checkpoint ${filePath}: ${cause instanceof Error ? cause.message : String(cause)}`,
-        { cause },
+        `Cannot read checkpoint ${filePath}: ${error instanceof Error ? error.message : String(error)}`,
+        { cause: error },
       ),
     );
   }

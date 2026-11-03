@@ -44,9 +44,6 @@ domain-specific flows:
 agent-tools/
 ├─ src/bin/        # CLI entrypoints
 ├─ src/core/       # Shared runtime/session helpers
-├─ src/refounding/ # Plan-corpus refounding instrument (run-scoped; owned by
-│                  # the plan-corpus-refounding plan + G1 packet; invoked via
-│                  # package scripts, no root aliases)
 ├─ tests/          # Shared test fakes and existing co-located coverage
 ├─ e2e-tests/      # E2E suites
 └─ smoke-tests/    # Running-command smoke checks; test:e2e runs every *.smoke.ts

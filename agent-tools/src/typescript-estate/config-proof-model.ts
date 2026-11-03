@@ -1,7 +1,7 @@
-import type { NonEmptyReadonlyArray, RepoPath } from './scalar-model.js';
+import type { NonEmptyReadonlyArray } from './scalar-model.js';
 
 export interface PlacementConformanceConfig {
-  readonly graphStackRoots: NonEmptyReadonlyArray<RepoPath>;
+  readonly graphStackRoots: NonEmptyReadonlyArray<string>;
   readonly requiredAdrIds: readonly ['ADR-173', 'ADR-179', 'ADR-221'];
   readonly rule: string;
   readonly semanticValidation: string;
@@ -183,7 +183,7 @@ export interface HeldOutAuditConfig {
   readonly perStratum: number;
   readonly strata: NonEmptyReadonlyArray<{ readonly id: string; readonly membership: string }>;
   readonly positiveControls: NonEmptyReadonlyArray<{
-    readonly path: RepoPath;
+    readonly path: string;
     readonly expectedObservations: NonEmptyReadonlyArray<string>;
   }>;
   readonly classificationJudgements: readonly [

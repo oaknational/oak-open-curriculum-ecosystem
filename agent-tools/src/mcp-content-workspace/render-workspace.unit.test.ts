@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import type { WorkspaceInputs, WorkspaceItem, WorkspacePage } from './content-workspace-model.js';
 import { renderItem } from './render-item.js';
 import { renderDomainPages } from './render-domain-index.js';
-import { orphanedPages, stalePages } from './render-workspace.js';
+import { orphanedPages, renderWorkspace, stalePages } from './render-workspace.js';
 import { renderServedSurfacePage } from './render-auxiliary-pages.js';
 import { domainCounts } from './workspace-counts.js';
 
@@ -281,5 +281,21 @@ describe('renderServedSurfacePage', () => {
     });
 
     expect(page).toContain('No registration root was observed');
+  });
+});
+
+describe('renderWorkspace', () => {
+  it('ends every page in exactly one newline, as the Markdown gate requires', () => {
+    const inputs: WorkspaceInputs = {
+      registry: { meta: { upstream_pointers: {} }, items: [] },
+      current: { provenance: { baselineCommit: 'abc123' }, items: [], registrationRoots: [] },
+      sourceText: new Map(),
+      anchorsById: new Map(),
+      additionTextById: new Map(),
+    };
+    const pages = renderWorkspace(inputs);
+    expect(pages.length).toBeGreaterThan(0);
+    expect(pages.filter((page) => !page.content.endsWith('\n'))).toStrictEqual([]);
+    expect(pages.filter((page) => page.content.endsWith('\n\n'))).toStrictEqual([]);
   });
 });

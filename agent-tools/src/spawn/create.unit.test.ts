@@ -23,6 +23,10 @@ interface GitCall {
   readonly cwd: string;
 }
 
+/** A git runner whose every call fails as git does when the branch already exists. */
+const failingGit: SpawnGitRunner = () =>
+  err(new Error('fatal: a branch named "feat/spawn-flow" already exists'));
+
 /**
  * A recording {@link SpawnGitRunner} fake — the injected seam for these unit tests.
  *
@@ -298,15 +302,12 @@ describe('createSpawnWorktree', () => {
   });
 
   it('returns err, naming the branch, base, and worktree path, when git fails', () => {
-    const failing: SpawnGitRunner = () =>
-      err(new Error('fatal: a branch named "feat/spawn-flow" already exists'));
-
     const result = createSpawnWorktree({
       slug: 'spawn-flow',
       type: 'feat',
       base: 'origin/main',
       coordinationHome: HOME,
-      runGit: failing,
+      runGit: failingGit,
     });
 
     expect(isErr(result)).toBe(true);

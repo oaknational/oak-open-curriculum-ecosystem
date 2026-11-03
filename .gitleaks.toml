@@ -64,21 +64,6 @@ regexes = ['''^\s*oak_openapi: [0-9a-f]{40}$''']
 description = "Wide-sweep commit (SHA:1ea4e2e15e1abc4ac2790d3e01632e6622f8ed8a) pre-dates SHA-prefix rule"
 commits = ["1ea4e2e15e1abc4ac2790d3e01632e6622f8ed8a"]
 
-# Refounding challenge commitments publish sha256 digests BY DESIGN
-# (hash-commit-then-reveal: the committed digest must be public for the
-# later reveal to be verifiable — it is a commitment, not a credential).
-# Scoped to the challenge directory and the exact committed field shape so
-# real keys elsewhere still trip the scan. Owner-authorised
-# (Director-session decision card, 2026-07-16); cure drafted by the r2
-# seat — full provenance in PR #390 and its review threads (the drafting
-# record is an untracked coordination artefact by design).
-[[allowlists]]
-description = "Refounding challenge commitments publish sha256 digests by design"
-condition = "AND"
-paths = ['''^\.agent/plans-refounding/challenge/[^/]+\.json$''']
-regexTarget = "line"
-regexes = ['''^\s*"keySetSha256"\s*:\s*"[0-9a-fA-F]{64}"\s*,?\s*$''']
-
 # MCP-103 anchors publish SHA-256 audit digests by design. Keep the exception
 # constrained to the generated ledger and the complete digest-field line shape;
 # source-derived index tokens remain subject to every gitleaks rule. The one
@@ -132,3 +117,18 @@ regex = '''OAK_API_KEY=[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{
 id = "notion-api-key-ntn-format"
 description = "Detect Notion API keys with ntn_ prefix"
 regex = '''NOTION_API_KEY=ntn_[A-Za-z0-9_-]{20,}'''
+
+# The plan-corpus refounding programme (retired 2026-11-02) published sha256
+# digests BY DESIGN in its challenge commitments (hash-commit-then-reveal: the
+# committed digest must be public for the later reveal to be verifiable; it is
+# a commitment, not a credential). The files are gone from the tree, but the
+# scan reads every commit, and history is never rewritten, so the entry stays,
+# scoped to that directory and the exact committed field shape so a real key
+# anywhere else still trips the scan. Owner-authorised (Director-session
+# decision card, 2026-07-16; PR #390 carries the provenance).
+[[allowlists]]
+description = "Retired refounding challenge commitments published sha256 digests by design (history only)"
+condition = "AND"
+paths = ['''^\.agent/plans-refounding/challenge/[^/]+\.json$''']
+regexTarget = "line"
+regexes = ['''^\s*"keySetSha256"\s*:\s*"[0-9a-fA-F]{64}"\s*,?\s*$''']

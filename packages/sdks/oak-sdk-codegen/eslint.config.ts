@@ -238,13 +238,6 @@ const config = defineConfigArray(
       curly: 'off',
     },
   },
-
-  {
-    files: ['e2e-tests/**/*.ts'],
-    rules: {
-      'no-console': 'off',
-    },
-  },
 );
 
 export default config;

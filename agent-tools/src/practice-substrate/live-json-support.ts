@@ -62,7 +62,7 @@ export function validateWithAjv(
   value: unknown,
 ): readonly SubstrateFinding[] {
   const validate = ajv.getSchema(schemaId);
-  if (validate !== undefined && validate(value)) {
+  if (validate?.(value)) {
     return [];
   }
 

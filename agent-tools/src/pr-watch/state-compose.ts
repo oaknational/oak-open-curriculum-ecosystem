@@ -46,7 +46,7 @@ export interface ComposeReadingInput {
    */
   readonly declared: readonly string[] | null;
   /** Vendors declared unavailable (`--unavailable`); none when absent. */
-  readonly unavailable?: UnavailableInput | undefined;
+  readonly unavailable?: UnavailableInput;
   readonly readContent: (reviewedOids: readonly string[]) => ContentLeg;
 }
 

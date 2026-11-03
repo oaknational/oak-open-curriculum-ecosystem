@@ -19,6 +19,10 @@ import type {
 import type { RateLimitTracker } from '@oaknational/curriculum-sdk';
 import { ok } from '@oaknational/result';
 import { createSubjectDetail } from '../test-helpers/mock-oak-client';
+import {
+  disconnectWithoutConnection,
+  reportNoCacheStats,
+} from '../adapters/no-cache-client-methods';
 
 /** Minimal valid SearchLessonSummary for mock client (tests do not inspect fields). */
 function minimalLessonSummary(): SearchLessonSummary {
@@ -90,8 +94,8 @@ function createMinimalMockClient(): OakClient {
     getLessonsByKeyStageAndSubject: async () => ok([]),
     getSubjectAssets: async () => ok([]),
     rateLimitTracker,
-    getCacheStats: () => ({ hits: 0, misses: 0, connected: false }),
-    disconnect: async () => Promise.resolve(),
+    getCacheStats: reportNoCacheStats,
+    disconnect: disconnectWithoutConnection,
   };
 }
 

@@ -69,6 +69,10 @@ function resolveScript(read: unknown, mutation: unknown): GithubScript {
 
 const RESOLVED_ANSWER = { data: { resolveReviewThread: { thread: { isResolved: true } } } };
 
+/** A GitHub answering 502 with a body that is not JSON, as its HTML error page does. */
+const nonJsonBadGateway: GithubApiFetch = () =>
+  Promise.resolve({ status: 502, json: () => Promise.reject(new Error('Unexpected token <')) });
+
 describe('resolveReviewThread', () => {
   it('reads the thread, then resolves it by its node id', async () => {
     const github = scriptedGithub(resolveScript(threadNode(42, false), RESOLVED_ANSWER));
@@ -161,10 +165,7 @@ describe('resolveReviewThread', () => {
   });
 
   it('fails naming the status when a non-200 answer carries no JSON body', async () => {
-    const html: GithubApiFetch = () =>
-      Promise.resolve({ status: 502, json: () => Promise.reject(new Error('Unexpected token <')) });
-
-    const result = await resolveReviewThread(html, TOKEN, REPO, 42, THREAD);
+    const result = await resolveReviewThread(nonJsonBadGateway, TOKEN, REPO, 42, THREAD);
 
     expect(failureMessage(result)).toContain('502');
     expect(failureMessage(result)).toContain('non-JSON');

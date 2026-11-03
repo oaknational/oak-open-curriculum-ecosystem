@@ -16,7 +16,7 @@ const mockRuntimeConfig: RuntimeConfig = {
     OAK_API_KEY: 'mock-oak-key',
     CLERK_PUBLISHABLE_KEY: 'pk_test_mock',
     CLERK_SECRET_KEY: 'sk_test_mock',
-    ELASTICSEARCH_URL: 'http://fake-es:9200',
+    ELASTICSEARCH_URL: 'https://fake-es:9200',
     ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
     ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
     SENTRY_MODE: 'off',
@@ -87,9 +87,9 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
       const res = await request(app)
         .get(SERVED_ASSET)
         .set('Host', 'localhost')
-        .set('Origin', 'http://totally-different.com');
+        .set('Origin', 'https://totally-different.com');
 
-      expect(res.headers['access-control-allow-origin']).toBe('http://totally-different.com');
+      expect(res.headers['access-control-allow-origin']).toBe('https://totally-different.com');
       expect(res.status).toBe(200);
     });
   });
@@ -212,9 +212,9 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
       const res = await request(app)
         .get(SERVED_ASSET)
         .set('Host', 'localhost')
-        .set('Origin', 'http://any-origin.com');
+        .set('Origin', 'https://any-origin.com');
 
-      expect(res.headers['access-control-allow-origin']).toBe('http://any-origin.com');
+      expect(res.headers['access-control-allow-origin']).toBe('https://any-origin.com');
       expect(res.status).toBe(200);
     });
 

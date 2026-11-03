@@ -40,7 +40,7 @@ describe('png codec', () => {
     const cropped = cropToHeight(rgba, 2, 3, 2);
     expect(cropped.ok).toBe(true);
     if (cropped.ok) {
-      expect(cropped.value.length).toBe(2 * 2 * 4);
+      expect(cropped.value).toHaveLength(2 * 2 * 4);
       expect(Array.from(cropped.value)).toEqual(Array.from(rgba.slice(0, 16)));
     }
     expect(cropToHeight(rgba, 2, 3, 4).ok).toBe(false);

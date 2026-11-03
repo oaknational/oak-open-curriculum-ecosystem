@@ -40,8 +40,8 @@ export async function readJsonFile(
   let text: string;
   try {
     text = await fs.readFile(path.join(repoRoot, relPath), 'utf8');
-  } catch (failure) {
-    const reason = failureAsError(failure, `reading ${relPath}`).message;
+  } catch (error) {
+    const reason = failureAsError(error, `reading ${relPath}`).message;
     return err(new Error(`${relPath} is unreadable: ${reason}`));
   }
   return parseJsonTextResult(text, relPath);
@@ -53,8 +53,8 @@ async function readOptionalBytes(
 ): Promise<Result<Uint8Array | undefined, Error>> {
   try {
     return ok(new Uint8Array(await fs.readFile(path.join(repoRoot, relPath))));
-  } catch (failure) {
-    const absence = classifyOptionalReadFailure(relPath, failure);
+  } catch (error) {
+    const absence = classifyOptionalReadFailure(relPath, error);
     return absence.ok ? ok(undefined) : absence;
   }
 }
@@ -101,8 +101,8 @@ async function presentRootFiles(
       try {
         await fs.access(path.join(repoRoot, name));
         return ok('present');
-      } catch (failure) {
-        return classifyOptionalReadFailure(name, failure);
+      } catch (error) {
+        return classifyOptionalReadFailure(name, error);
       }
     }),
   );

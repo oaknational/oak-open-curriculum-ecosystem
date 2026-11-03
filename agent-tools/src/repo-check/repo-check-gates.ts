@@ -99,15 +99,16 @@ export function lostFilesRefusal(lost: readonly string[]): string {
 }
 
 /**
- * Plan a gate's runs, unless it is a check over a file it cannot read. A check
+ * Plan a check's runs, unless it is over a file it cannot read. A check
  * covers every regular file the index names, each read as the working tree
  * holds it, as every leg of the gate reads the working tree; a named file with
  * nothing to read is refused by name rather than passed without it. A symlink
  * is neither checked nor refused: the tools read a link's target under its
- * real path. A repair proves nothing, so it skips them.
+ * real path. A repair proves nothing, so it plans its runs directly and skips
+ * them.
  */
-function planUnlessLost(isCheck: boolean, lost: readonly string[], plan: () => GatePlan): GatePlan {
-  return isCheck && lost.length > 0 ? err(lostFilesRefusal(lost)) : plan();
+function planUnlessLost(lost: readonly string[], plan: () => GatePlan): GatePlan {
+  return lost.length > 0 ? err(lostFilesRefusal(lost)) : plan();
 }
 
 /** Read the tracked tree, plan the gate's runs over it, and run them. */
@@ -139,11 +140,10 @@ export async function runPrettierTracked(
   runtime: RepoCheckRuntime = defaultRuntime,
   platform: NodeJS.Platform = process.platform,
 ): Promise<number> {
-  return runTrackedGate(runtime, 'prettier-tracked', (reading) =>
-    planUnlessLost(mode === 'check', unstagedLoss(reading), () =>
-      ok(trackedPrettierRuns(mode, reading, argvBudgetBytes(platform))),
-    ),
-  );
+  return runTrackedGate(runtime, 'prettier-tracked', (reading) => {
+    const runs = (): GatePlan => ok(trackedPrettierRuns(mode, reading, argvBudgetBytes(platform)));
+    return mode === 'check' ? planUnlessLost(unstagedLoss(reading), runs) : runs();
+  });
 }
 
 /**
@@ -155,14 +155,15 @@ export async function runMarkdownlintTracked(
   runtime: RepoCheckRuntime = defaultRuntime,
   platform: NodeJS.Platform = process.platform,
 ): Promise<number> {
-  return runTrackedGate(runtime, 'markdownlint-tracked', (reading) =>
-    planUnlessLost(mode === 'check', markdownOnly(unstagedLoss(reading)), () => {
+  return runTrackedGate(runtime, 'markdownlint-tracked', (reading) => {
+    const runs = (): GatePlan => {
       const globbed = globSignificantPaths(markdownOnly(trackedCheckFiles(reading)));
       return globbed.length > 0
         ? err(
             `markdownlint-cli2 reads each path as a glob, so these tracked files would be skipped, not linted: ${globbed.join(', ')}`,
           )
         : ok(trackedMarkdownlintRuns(mode, reading, argvBudgetBytes(platform)));
-    }),
-  );
+    };
+    return mode === 'check' ? planUnlessLost(markdownOnly(unstagedLoss(reading)), runs) : runs();
+  });
 }

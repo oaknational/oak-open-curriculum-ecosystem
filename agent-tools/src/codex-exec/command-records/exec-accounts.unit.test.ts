@@ -161,7 +161,7 @@ describe('readCommandRecords accounts for every exec call of a turn', () => {
   it('reads a function-tool exec refusal and a refused write_stdin as refused', () => {
     const records = execRecords();
     const calls = execCalls(records).length;
-    const [start] = records.filter(
+    const start = records.find(
       (record) => record.type === 'event_msg' && record.payload['type'] === 'task_started',
     );
     assert(start);

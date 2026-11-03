@@ -13,6 +13,28 @@ import {
 } from './test-helpers/records-class-port.js';
 
 /**
+ * The bot's own pull request settled — the review bound to the tip, the
+ * quiet window elapsed — with the required contexts green by name.
+ */
+const botSettledReading = (): PrStateReading =>
+  settledReading({
+    author: 'app/acme-bot',
+    namedChecks: [
+      { name: 'run-quality-gates', bucket: 'passed' },
+      { name: 'CodeQL', bucket: 'passed' },
+    ],
+    checks: { total: 2, passed: 2, failed: 0, pending: 0 },
+  });
+
+/** The same settled pull request on a tip where one required context has no check run yet. */
+const botSettledUnreportedReading = (): PrStateReading =>
+  settledReading({
+    author: 'app/acme-bot',
+    namedChecks: [{ name: 'CodeQL', bucket: 'passed' }],
+    checks: { total: 1, passed: 1, failed: 0, pending: 0 },
+  });
+
+/**
  * The settled verdict at the execution level: the verdict alone merges and
  * the class is never read, but a GitHub App's pull request proves the base
  * branch's required contexts by name before the PUT — the ladder settles on
@@ -21,28 +43,6 @@ import {
  * settled pull request reads nothing and merges as before.
  */
 describe('runMergeExecution — the settled verdict proves the required contexts', () => {
-  /**
-   * The bot's own pull request settled — the review bound to the tip, the
-   * quiet window elapsed — with the required contexts green by name.
-   */
-  const botSettledReading = (): PrStateReading =>
-    settledReading({
-      author: 'app/acme-bot',
-      namedChecks: [
-        { name: 'run-quality-gates', bucket: 'passed' },
-        { name: 'CodeQL', bucket: 'passed' },
-      ],
-      checks: { total: 2, passed: 2, failed: 0, pending: 0 },
-    });
-
-  /** The same settled pull request on a tip where one required context has no check run yet. */
-  const botSettledUnreportedReading = (): PrStateReading =>
-    settledReading({
-      author: 'app/acme-bot',
-      namedChecks: [{ name: 'CodeQL', bucket: 'passed' }],
-      checks: { total: 1, passed: 1, failed: 0, pending: 0 },
-    });
-
   it('merges a bot-authored settled pull request once its required contexts are green by name, reading no files', async () => {
     // A files read would surface as a reading failure, so the merge proves none happened.
     const { fetchImpl } = makeClassPort(CODE_FILES, { failing: '/pulls/42/files' });

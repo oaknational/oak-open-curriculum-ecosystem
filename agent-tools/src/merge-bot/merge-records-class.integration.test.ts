@@ -15,6 +15,51 @@ import {
 const makeReading = settledReading;
 
 /**
+ * The bot's own pull request (the ruling's class), the vendor leg owed: no
+ * review binds the tip, and the required contexts went green by name two
+ * minutes ago.
+ */
+const owedLegReading = (): PrStateReading =>
+  makeReading({
+    author: 'app/acme-bot',
+    reviews: [],
+    checksGreenAt: '2026-08-06T08:58:00Z',
+    namedChecks: [
+      { name: 'run-quality-gates', bucket: 'passed' },
+      { name: 'CodeQL', bucket: 'passed' },
+    ],
+    checks: { total: 2, passed: 2, failed: 0, pending: 0 },
+  });
+
+/**
+ * The same owed leg on a tip that has reported only a check the rules do
+ * not name: no check run exists yet for either required context, so the
+ * verdict ladder reads every reported check green.
+ */
+const requiredUnreportedReading = (): PrStateReading =>
+  makeReading({
+    author: 'app/acme-bot',
+    reviews: [],
+    checksGreenAt: '2026-08-06T08:58:00Z',
+    namedChecks: [{ name: 'lint', bucket: 'passed' }],
+    checks: { total: 1, passed: 1, failed: 0, pending: 0 },
+  });
+
+/** The real fold shape: required checks green, the vendor's own review run still pending. */
+const vendorRunPendingReading = (): PrStateReading =>
+  makeReading({
+    author: 'app/acme-bot',
+    reviews: [],
+    checksGreenAt: null,
+    namedChecks: [
+      { name: 'run-quality-gates', bucket: 'passed' },
+      { name: 'CodeQL', bucket: 'passed' },
+      { name: 'copilot-pull-request-reviewer', bucket: 'pending' },
+    ],
+    checks: { total: 3, passed: 2, failed: 0, pending: 1 },
+  });
+
+/**
  * The records class at the execution level: the class is read from the diff
  * only on a verdict where it decides, a records fold merges while its vendor
  * leg is still owed once the required contexts are green by name, a code diff
@@ -23,51 +68,6 @@ const makeReading = settledReading;
  * (`merge-records-settled.integration.test.ts`).
  */
 describe('runMergeExecution — the records class (the owner ruling of 2026-09-03)', () => {
-  /**
-   * The bot's own pull request (the ruling's class), the vendor leg owed: no
-   * review binds the tip, and the required contexts went green by name two
-   * minutes ago.
-   */
-  const owedLegReading = (): PrStateReading =>
-    makeReading({
-      author: 'app/acme-bot',
-      reviews: [],
-      checksGreenAt: '2026-08-06T08:58:00Z',
-      namedChecks: [
-        { name: 'run-quality-gates', bucket: 'passed' },
-        { name: 'CodeQL', bucket: 'passed' },
-      ],
-      checks: { total: 2, passed: 2, failed: 0, pending: 0 },
-    });
-
-  /**
-   * The same owed leg on a tip that has reported only a check the rules do
-   * not name: no check run exists yet for either required context, so the
-   * verdict ladder reads every reported check green.
-   */
-  const requiredUnreportedReading = (): PrStateReading =>
-    makeReading({
-      author: 'app/acme-bot',
-      reviews: [],
-      checksGreenAt: '2026-08-06T08:58:00Z',
-      namedChecks: [{ name: 'lint', bucket: 'passed' }],
-      checks: { total: 1, passed: 1, failed: 0, pending: 0 },
-    });
-
-  /** The real fold shape: required checks green, the vendor's own review run still pending. */
-  const vendorRunPendingReading = (): PrStateReading =>
-    makeReading({
-      author: 'app/acme-bot',
-      reviews: [],
-      checksGreenAt: null,
-      namedChecks: [
-        { name: 'run-quality-gates', bucket: 'passed' },
-        { name: 'CodeQL', bucket: 'passed' },
-        { name: 'copilot-pull-request-reviewer', bucket: 'pending' },
-      ],
-      checks: { total: 3, passed: 2, failed: 0, pending: 1 },
-    });
-
   it('merges a records fold at checks green while the vendor leg is still owed, naming the ground', async () => {
     const { fetchImpl, calls } = makeClassPort(RECORDS_FILES);
 

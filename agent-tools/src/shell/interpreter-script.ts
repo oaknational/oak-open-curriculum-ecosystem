@@ -90,7 +90,7 @@ export function interpreterScriptWords(words: readonly ShellWord[]): readonly Sh
 }
 
 /** The ssh options that take a value, so the word after one of them is not the host. */
-const SSH_VALUE_OPTIONS: ReadonlySet<string> = new Set([...'BbcDEeFIiJLlmOoPpQRSWw']);
+const SSH_VALUE_OPTIONS: ReadonlySet<string> = new Set('BbcDEeFIiJLlmOoPpQRSWw');
 const SSH_CLUSTER = /^-[A-Za-z0-9]+$/u;
 
 /** Whether an ssh option word takes the next word as its value: the cluster's first option that takes a value is its last letter. An earlier one takes the rest of the word as its value (`-p22`, `-ljoe`), so nothing more is taken. */

@@ -31,6 +31,14 @@ function filesPort(pages: readonly unknown[]): { fetchImpl: GithubApiFetch; urls
   return { fetchImpl, urls };
 }
 
+/** A fetch port answering every request 404 Not Found. */
+const notFoundPort: GithubApiFetch = () =>
+  Promise.resolve({ status: 404, json: () => Promise.resolve({ message: 'Not Found' }) });
+
+/** A fetch port answering 200 with a body that is not a files page. */
+const unexpectedBodyPort: GithubApiFetch = () =>
+  Promise.resolve({ status: 200, json: () => Promise.resolve({ unexpected: true }) });
+
 describe('listChangedPaths', () => {
   it('reads one short page and stops', async () => {
     const { fetchImpl, urls } = filesPort([[{ filename: 'README.md' }, { filename: 'docs/a.md' }]]);
@@ -59,10 +67,7 @@ describe('listChangedPaths', () => {
   });
 
   it('reports a non-200 answer as an error naming the page', async () => {
-    const fetchImpl: GithubApiFetch = () =>
-      Promise.resolve({ status: 404, json: () => Promise.resolve({ message: 'Not Found' }) });
-
-    const paths = await listChangedPaths(fetchImpl, 'token', target);
+    const paths = await listChangedPaths(notFoundPort, 'token', target);
 
     expect(paths.ok).toBe(false);
     if (!paths.ok) {
@@ -72,10 +77,7 @@ describe('listChangedPaths', () => {
   });
 
   it('refuses a body that is not a files page', async () => {
-    const fetchImpl: GithubApiFetch = () =>
-      Promise.resolve({ status: 200, json: () => Promise.resolve({ unexpected: true }) });
-
-    const paths = await listChangedPaths(fetchImpl, 'token', target);
+    const paths = await listChangedPaths(unexpectedBodyPort, 'token', target);
 
     expect(paths.ok).toBe(false);
   });

@@ -101,7 +101,7 @@ describe('generateZodSchemas', () => {
 
     const [, content] = fakeIO.writeFileSyncSpy.mock.lastCall ?? [];
     if (typeof content !== 'string') {
-      throw new Error('Content is not a string');
+      throw new TypeError('Content is not a string');
     }
     const endpointsIndex = content.indexOf('export const endpoints:');
     const curriculumIndex = content.indexOf(

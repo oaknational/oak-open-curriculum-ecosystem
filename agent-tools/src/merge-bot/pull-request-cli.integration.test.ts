@@ -35,6 +35,11 @@ const { privateKey } = generateKeyPairSync('rsa', {
 
 const COMMENT = ['comment', '--pr', '42', '--body-file', BODY_FILE];
 
+/** A config-file read that fails as a missing merge-bot.json does. */
+const unreadableConfig = (): string => {
+  throw new Error('ENOENT: no merge-bot.json');
+};
+
 describe('merge-bot pull-request, front door', () => {
   it.each([['--help'], ['-h'], ['comment', '--help'], ['open', '-h']])(
     'prints its usage on %j and exits 0, minting nothing',
@@ -71,12 +76,9 @@ describe('merge-bot pull-request, front door', () => {
   });
 
   it('exits 2, minting nothing, when the bot identity cannot be read', async () => {
-    const unreadable = (): string => {
-      throw new Error('ENOENT: no merge-bot.json');
-    };
     const run = await runPullRequest(COMMENT, {
       mint: MINT_UNREACHED,
-      readConfigFileImpl: unreadable,
+      readConfigFileImpl: unreadableConfig,
     });
 
     expect(run.exit).toBe(2);

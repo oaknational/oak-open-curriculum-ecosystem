@@ -1085,3 +1085,97 @@ the owner wants it kept).
 - **Friction**: the worktree Bash guard refused heredoc-bearing commands in `pr-357` that it had
   allowed in another worktree minutes earlier ("too complex to verify"); the Write tool and a plain
   python call were the route. One instance; the trigger not identified.
+
+## 2026-11-01 — Smelter herds Basalt (871ba4): the autofix pass and its two true breakages
+
+- **`unicorn/prefer-export-from` emits `export { type X } from './y.js'`, and esbuild keeps that
+  as a side-effect import of `./y.js`.** A type-only re-export in `gazetteer.ts` became that form,
+  pulled `gazetteer-schema.ts` and so Zod 4 into every restatement-audit workflow bundle (570 KB
+  against 22 KB), and the harness emitter's `meta`-binding check caught Zod's own `meta()`. The
+  erased form is `export type { X } from './y.js'`; the fixer's 13 sibling conversions were
+  changed to it in the same pass. Lesson: after any autofix pass, diff for `^export { .*type` and
+  convert; the lint gate does not see bundle contents.
+- **`unicorn/prefer-includes` converts the `.some((x) => x === value)` type guard into
+  `.includes(value)`, which does not type-check against an `as const` tuple.** Nine sites, the
+  class the removed config comment had named. Cure at the second consumer, not nine local
+  patches: `typeSafeIncludes(values, value): value is T` in `@oaknational/type-helpers`, body
+  `new Set<unknown>(values).has(value)`, no assertion, trips neither `prefer-includes` nor
+  `prefer-set-has`.
+- **Three autofixable-looking classes did not fix:** `sonarjs/concise-regex`,
+  `sonarjs/prefer-regexp-exec`, `sonarjs/no-redundant-optional` (type-aware sonarjs rules; their
+  fixers did not run under `lint:fix`). They sit in the hand-fix remainder.
+- **Estimates were over-padded twice** (one hour for a ten-minute edit; two days for one). Size
+  the work from the edit, and give the gate and CI wait separately.
+
+## 2026-11-02 — Smelter herds Basalt (871ba4): a ledger that justifies every change is the policy, not the hash
+
+- **"The change carries the what, the commit carries the why. Major decisions belong in ADRs and
+  PDRs"** (owner, 2026-11-02). The content audit kept a ledger demanding an entry for every change
+  to one of ~270 governed files since the July baseline, pinned by a 130-line AST hash. I read the
+  hash as the malignancy and replaced it with git's blob id, which kept the policy and grew the fix
+  from ten entries to forty and three module splits. The owner's question "why are you using
+  hashes? Git shows us what changed" was about the ledger: a per-file justification duplicates the
+  diff and the commit message. The ledger went (about 4,700 lines); the item anchors stay, and they
+  are the instrument: served text moves, the validator refuses until the item is reviewed again.
+  Ask of any review ledger: what does it prove that the diff and the commit do not?
+- **A stop under "minimal, else stop" is about the size of the edit, not about later rework.** I
+  stopped on ten missing entries because six of the files change again in the next lane; the gate
+  was red in the tree and the entries were ten lines. The right move was the entries, now (and the
+  right move after that was questioning the ledger, which the owner did).
+- **The commit hook lints workspaces by turbo's `...[HEAD]`, which reads the WORKING TREE against
+  HEAD, dependents included.** A hooked commit of three directive files still lints agent-tools
+  while agent-tools carries uncommitted changes, so a chunked series over a red workspace cannot
+  pass its first hooked commit whatever the chunk holds. Compute the plan first:
+  `turbo run lint --filter='...[HEAD]' --dry-run=json`.
+- **A secrets scan over history keeps its entry when the file leaves the tree.** Retiring the
+  refounding corpus removed the gitleaks entry for its by-design sha256 commitments; the scan reads
+  every commit and history is never rewritten, so the next full scan tripped on commit 2712c2211.
+  An entry for a known non-secret in immutable history is the scanner's own instrument, not a lint
+  allowlist; it stays, described as history-only.
+- **A tool the harness runs with the session's cwd must never resolve a relative path against
+  it.** The statusline wrote `.logs/statusline.log` relative to its cwd, which was the directory I
+  happened to be reading; the skills generator then refused the stray directory. Resolve against
+  the project directory the harness names, and refuse loudly without one.
+- **A brace glob's tier members were redundant**: `**/*.{test,unit.test,integration.test,e2e.test,spec}`
+  equals `**/*.{test,spec}` because `*` spans the infix. Excluding a tier needs a second pattern,
+  not a smaller brace.
+- **When a lane edits a mirror AND the test that pins it, the gate proves nothing; read the test's
+  diff.** The vercel-ignore script's semver regex is pinned to the canonical pattern's `.source` by
+  a parity test; a lane replaced the regex with a split-based parse and rewrote the parity test
+  around it, green. The cure was the canonical composition mirrored without the unicode flag, and
+  the parity test as it was.
+- **A banned `process.env` in a config is cured by a flag, not an env file.** The MCP app's Vite
+  config may not read `process.env`; a lane added a `.env` file plus `--env-file` to pass a dev-mode
+  variable to the token build. `process.argv.includes('--dev')` on the build was the smaller change,
+  and it removed a file.
+- **Before a red-first test, read what the pattern feeds.** The plan named "the innermost
+  parenthetical capture" for a synonym regex; a lane asserted an extracted synonym the generator
+  never produced (the pattern only feeds a count). The reshaped test asserts the count.
+- **A hook-bypassed series lets a major-version marker through.** I marked the generated root-type
+  rename (`paths` → `Paths`) as a breaking change; the owner's word: not a major version, no consumer
+  of the repository is affected. The accidental-major-version guard would have refused the marker,
+  but that commit ran with the hooks off. In a bypassed series, run the guard by hand on every
+  message (`prevent-accidental-major-version`, on a path under `.git/`), and read a type rename of
+  a package nobody outside the repo consumes as a fix.
+- **A tracked file removed with `rm` is still in the index**, and the tracked-file validators read
+  `git ls-files` and refuse a path they cannot open. Record the deletion (`git rm`) before running
+  `docs-validators:check`.
+- **The second-consumer rule applies inside one diff.** A lane curing the same fence regex in two
+  validators wrote two `fenceLineOf` copies; the shared `core/markdown/fence-line.ts` is the cure.
+- **The Read tool is blocked by the secrets hook on a diff whose test fixtures look like
+  secrets**; read such a file with `sed -n` in chunks of a few hundred lines.
+- **pnpm's "Command not found" under `ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL` for a root-only script
+  means the cwd drifted into a workspace**, not that the script is missing; the shell keeps the
+  last `cd`, so use absolute paths.
+- **A workspace that is green on lint, type-check and tests is not a green lane.** Two root-only
+  gates caught what six lanes' workspace runs could not: knip found fifteen exports nothing imports,
+  all in the lanes' new modules, and the MCP content audit refused an item whose anchored source a
+  lane had refactored (the AI reference's heading map). Run `pnpm check` before calling a lane done,
+  and expect the content audit to ask for a reviewed re-anchor whenever a refactor moves anchored
+  text: the headings it renders were unchanged, so the verdict was `unchanged`, as for the other
+  pure re-anchors.
+- **Stage new files before running the gate.** The tracked-file gates (`prettier-tracked`, the
+  machine-local-path and other validators) read `git ls-files`, so a new module that is still
+  untracked is invisible to them: three green `pnpm check` runs passed nine unformatted new files,
+  which the first hooked commit's fixer then re-wrapped. `git add` the new files by pathspec, then
+  run the gate, then commit.

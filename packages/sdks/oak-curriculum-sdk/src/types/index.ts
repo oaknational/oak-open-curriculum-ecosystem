@@ -3,7 +3,7 @@
  */
 
 // Re-export generated types
-export type { paths, components } from '@oaknational/sdk-codegen/api-schema';
+export type { Paths, Components } from '@oaknational/sdk-codegen/api-schema';
 
 // Re-export path operations - Note: PATH_OPERATIONS is the const, PathOperation is the type
 export { PATH_OPERATIONS, OPERATIONS_BY_ID } from '@oaknational/sdk-codegen/api-schema';

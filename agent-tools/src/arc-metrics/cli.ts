@@ -178,8 +178,8 @@ async function list(
       return { ok: false, exitCode: 2, error: `no such project directory: ${directory}` };
     }
     return { ok: true, paths: paths ?? [] };
-  } catch (cause) {
-    return { ok: false, exitCode: 1, error: `failed to list ${directory}: ${describe(cause)}` };
+  } catch (error) {
+    return { ok: false, exitCode: 1, error: `failed to list ${directory}: ${describe(error)}` };
   }
 }
 
@@ -197,8 +197,8 @@ async function aggregate(
       gapSeconds,
     });
     return { ok: true, session };
-  } catch (cause) {
-    return { ok: false, exitCode: 1, error: `failed to read ${path}: ${describe(cause)}` };
+  } catch (error) {
+    return { ok: false, exitCode: 1, error: `failed to read ${path}: ${describe(error)}` };
   }
 }
 

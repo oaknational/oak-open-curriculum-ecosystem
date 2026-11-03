@@ -8,24 +8,25 @@
 
 import { buildCurrentSourceTruthSet } from './build-current-source-truth-set.js';
 
-describe('buildCurrentSourceTruthSet', () => {
-  const evidence = (file: string, revision: 'unchanged' | 'modified' | 'relocated') => ({
-    revision,
-    targets: [
-      {
-        file,
-        anchors: [
-          {
-            tokenCount: 1,
-            tokenSha256: 'fixture-anchor',
-            indexToken: 'fixture',
-            indexOffset: 0,
-          },
-        ],
-      },
-    ],
-  });
+/** Current-source evidence for one file at the given revision, anchored once. */
+const evidence = (file: string, revision: 'unchanged' | 'modified' | 'relocated') => ({
+  revision,
+  targets: [
+    {
+      file,
+      anchors: [
+        {
+          tokenCount: 1,
+          tokenSha256: 'fixture-anchor',
+          indexToken: 'fixture',
+          indexOffset: 0,
+        },
+      ],
+    },
+  ],
+});
 
+describe('buildCurrentSourceTruthSet', () => {
   it('accounts for every audit row without conflating custody, lifecycle, or registration', () => {
     const truthSet = buildCurrentSourceTruthSet({
       provenance: {

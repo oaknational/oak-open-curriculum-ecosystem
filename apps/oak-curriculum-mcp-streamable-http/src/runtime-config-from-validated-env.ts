@@ -1,5 +1,5 @@
 import { err, ok, type Result } from '@oaknational/result';
-import { HttpEnvSchema, type AuthDisabledEnv, type Env, type ValidatedHttpEnv } from './env.js';
+import { HttpEnvSchema, type Env, type ValidatedHttpEnv } from './env.js';
 import { resolveOptInFlag } from './feature-flags.js';
 import {
   resolveProductAnalyticsConfig,
@@ -98,7 +98,7 @@ function createAuthEnabledConfig(
 }
 
 function createAuthDisabledConfig(
-  env: AuthDisabledEnv,
+  env: Env,
   shared: SharedRuntimeFields,
 ): AuthDisabledRuntimeConfig {
   return {

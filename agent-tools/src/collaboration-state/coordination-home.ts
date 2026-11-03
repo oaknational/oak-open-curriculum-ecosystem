@@ -1,7 +1,7 @@
 import { execFileSync } from 'node:child_process';
-import { statSync } from 'node:fs';
 import { isAbsolute, join } from 'node:path';
 
+import { nodeSyncFileSystem } from '../core/sync-file-system.js';
 import { resolveTrustedGit, TrustedGitResolutionError } from '../core/trusted-git.js';
 
 /** Runs a git subcommand from `cwd` and returns stdout; throws on non-zero exit. */
@@ -39,17 +39,12 @@ export interface ResolveCoordinationHomeOptions {
 export const COLLABORATION_SUBSTRATE_REL = '.agent/state/collaboration';
 
 /**
- * The resolver's own directory probe, exported so consumers that certify the
- * resolver (the protocol-conformance detector) probe with EXACTLY the same
- * semantics — a file at the substrate path is not a directory.
+ * The resolver's own directory probe: the shared file-system port's, which
+ * the protocol-conformance detector that certifies the resolver probes with
+ * too, so both read EXACTLY the same semantics — a file at the substrate
+ * path is not a directory.
  */
-export const defaultDirectoryExists = (path: string): boolean => {
-  try {
-    return statSync(path).isDirectory();
-  } catch {
-    return false;
-  }
-};
+const defaultDirectoryExists = nodeSyncFileSystem.isDirectory;
 
 export const defaultRunGit: GitRunner = (args, cwd) =>
   // Execute git by its ABSOLUTE path (resolveTrustedGit) so a writable PATH
@@ -111,19 +106,19 @@ export function resolveCoordinationHome(
   let porcelain: string;
   try {
     porcelain = runGit(['worktree', 'list', '--porcelain'], cwd);
-  } catch (cause) {
+  } catch (error) {
     // A resolver refusal is its own diagnosis — git never ran, so "not inside
     // a git working tree" would be a false statement about a true repository
     // (observed 2026-08-11 on Windows: the POSIX-only allowlist refused and
     // this wrapper rebranded it, exactly the pnpm-path misleading-error
     // precedent).
-    if (cause instanceof TrustedGitResolutionError) {
-      throw cause;
+    if (error instanceof TrustedGitResolutionError) {
+      throw error;
     }
     throw new Error(
       `Unable to resolve the collaboration home: '${cwd}' is not inside a git working tree. ` +
         `Run from inside the repository, or pass an explicit --repo-root <path>.`,
-      { cause },
+      { cause: error },
     );
   }
 

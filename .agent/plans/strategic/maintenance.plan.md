@@ -3,10 +3,10 @@ id: maintenance
 node_type: strategic
 name: "Maintenance — known defects are fixed, and stay fixed"
 overview: "The resting branch carries no known analyser finding: every one is fixed in the tree, and the class behind it is held by a gate where one exists."
-status: sketch
-ratified_by: null
-ratified_date: null
-ratified_where: null
+status: ratified
+ratified_by: "Jim Cresswell (owner)"
+ratified_date: 2026-11-03
+ratified_where: "The owner's word of 2026-11-03 in the session of Sandpiper guards Wind (690653), answering which plans pull request 375 serves: \"plans agreed\""
 serves: TOOLS-1
 impact_areas:
   - practice-and-estate
@@ -14,7 +14,7 @@ gate_expiry_default: P21D
 depends_on: []
 owner_gates: []
 tickets: []
-last_updated: 2026-10-27
+last_updated: 2026-11-03
 ---
 
 # Maintenance — known defects are fixed, and stay fixed

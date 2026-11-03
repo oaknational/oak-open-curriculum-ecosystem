@@ -125,8 +125,8 @@ export async function generateTeamAlertBootstrap(
 
   try {
     await io.writeAgents(repoRoot, rendered.value.rendered);
-  } catch (cause: unknown) {
-    return err(new Error(`Cannot write ${AGENTS_PATH}`, { cause: errorFrom(cause) }));
+  } catch (error: unknown) {
+    return err(new Error(`Cannot write ${AGENTS_PATH}`, { cause: errorFrom(error) }));
   }
   return ok(join(repoRoot, AGENTS_PATH));
 }
@@ -177,8 +177,8 @@ async function readRequiredText(
   try {
     const result = await read();
     return isErr(result) ? err(new Error(`Cannot read ${label}`, { cause: result.error })) : result;
-  } catch (cause: unknown) {
-    return err(new Error(`Cannot read ${label}`, { cause: errorFrom(cause) }));
+  } catch (error: unknown) {
+    return err(new Error(`Cannot read ${label}`, { cause: errorFrom(error) }));
   }
 }
 
@@ -188,8 +188,8 @@ async function readNodeText(path: string): Promise<Result<string, Error>> {
     // projection equality judge CONTENT — the projection itself is composed
     // and written LF regardless.
     return ok(toLfText(await readFile(path, 'utf8')));
-  } catch (cause: unknown) {
-    return err(errorFrom(cause));
+  } catch (error: unknown) {
+    return err(errorFrom(error));
   }
 }
 

@@ -80,15 +80,13 @@ function threadRefusal(
   pr: number,
   thread: string,
 ): string | undefined {
-  if (node === null || node.__typename !== 'PullRequestReviewThread') {
+  if (node?.__typename !== 'PullRequestReviewThread') {
     return `"${thread}" does not name a review thread`;
   }
   const expected = `${repo.owner}/${repo.repoName}`;
   const on = node.pullRequest;
   const elsewhere =
-    on === undefined ||
-    on.number !== pr ||
-    on.repository.nameWithOwner.toLowerCase() !== expected.toLowerCase();
+    on?.number !== pr || on.repository.nameWithOwner.toLowerCase() !== expected.toLowerCase();
   if (elsewhere) {
     const where = on === undefined ? '?' : pullRequestName(on.repository.nameWithOwner, on.number);
     return `thread "${thread}" is on pull request ${where}, not ${pullRequestName(expected, pr)}`;

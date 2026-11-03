@@ -129,6 +129,7 @@ Set per-machine in `.claude/settings.local.json` under `env`:
   `reduce` (case-insensitive) to disable the logo animation cycle;
   other values leave motion on.
 - `PRACTICE_STATUSLINE_LOG_FILE` — the diagnosis log: a path ending `.log`
+  (absolute, or relative to the project directory in `CLAUDE_PROJECT_DIR`)
   makes the adapter append one timestamped line per invocation carrying
   the stdin payload as received (terminal line breaks stripped, interior
   line breaks collapsed to spaces, every other byte preserved); unset

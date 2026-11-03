@@ -1,21 +1,15 @@
 /**
- * ELSER diagnostics module.
- *
+ * ELSER diagnostics module: the chunk runner, its document outcomes and the
+ * report built from them.
  */
 
 export type {
   DocumentFailure,
   DocumentSuccess,
   ChunkStats,
-  ChunkProcessingResult,
-  DiagnosticConfig,
-  DiagnosticSummary,
   DiagnosticReport,
 } from './elser-diagnostic-types';
 
-export {
-  processChunk,
-  computeErrorDistribution,
-  extractDocumentId,
-  DetailedBulkResponseSchema,
-} from './elser-diagnostic-runner';
+export { processChunk } from './elser-diagnostic-runner';
+
+export { buildDiagnosticReport } from './elser-diagnostic-report';

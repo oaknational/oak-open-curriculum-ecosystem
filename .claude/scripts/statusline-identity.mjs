@@ -33,8 +33,13 @@ if (!existsSync(adapterPath)) {
   process.exit(0);
 }
 
+// The adapter resolves a relative PRACTICE_STATUSLINE_LOG_FILE against the
+// project directory, never its working directory (which is the session's and
+// moves), so the project directory travels with it whichever harness version
+// launched this shim.
 const child = spawn(process.execPath, [adapterPath], {
   stdio: 'inherit',
+  env: { ...process.env, CLAUDE_PROJECT_DIR: repoRoot },
 });
 
 child.on('error', () => {

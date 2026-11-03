@@ -98,7 +98,7 @@ function staleContractResult(lastRefreshed: string, ageDays: number): HealthChec
 }
 
 function readContinuityLastRefreshed(contractText: string): string | null {
-  const match = contractText.match(/\*\*Last refreshed\*\*:\s*([0-9]{4}-[0-9]{2}-[0-9]{2})/);
+  const match = /\*\*Last refreshed\*\*:\s*(\d{4}-\d{2}-\d{2})/u.exec(contractText);
   if (match?.[1]) {
     return match[1];
   }

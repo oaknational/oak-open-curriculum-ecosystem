@@ -26,10 +26,10 @@ export function parseFlags<const T extends ParseArgsConfig>(
 ): Result<ReturnType<typeof parseArgs<T>>['values'], Error> {
   try {
     return ok(parseArgs(config).values);
-  } catch (cause) {
-    if (isInputRefusal(cause)) {
-      return err(new Error(`Invalid flags: ${cause.message}`, { cause }));
+  } catch (error) {
+    if (isInputRefusal(error)) {
+      return err(new Error(`Invalid flags: ${error.message}`, { cause: error }));
     }
-    throw cause;
+    throw error;
   }
 }

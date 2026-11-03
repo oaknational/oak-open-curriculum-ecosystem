@@ -19,6 +19,7 @@
     "dev:widget-in-host": "bash scripts/dev-widget-in-host.sh",
     "generate:server-json": "pnpm exec tsx scripts/generate-server-json.ts",
     "generate:tool-table": "pnpm exec tsx scripts/generate-served-tool-table.ts",
+    "validate-served-tool-table": "pnpm exec tsx scripts/generate-served-tool-table.ts --check",
     "start": "bash scripts/start-server.sh",
     "prod:harness": "pnpm exec tsx scripts/server-harness.ts",
     "prod:requests": "pnpm exec tsx scripts/run-requests.ts",

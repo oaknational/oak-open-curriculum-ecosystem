@@ -140,9 +140,10 @@ describe('planClaudeSessionIdentityHook', () => {
       environment: { CLAUDE_ENV_FILE: 'mem://claude-env-file-quote' },
     });
 
+    const shellQuotedSessionId = String.raw`'it'\''s-a-session-seed'`;
     expect(plan.envFileWrite).toStrictEqual({
       absolutePath: 'mem://claude-env-file-quote',
-      appendLine: `export PRACTICE_AGENT_SESSION_ID_CLAUDE=${String.raw`'it'\''s-a-session-seed'`}\n`,
+      appendLine: `export PRACTICE_AGENT_SESSION_ID_CLAUDE=${shellQuotedSessionId}\n`,
     });
   });
 

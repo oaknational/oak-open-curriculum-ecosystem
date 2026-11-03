@@ -41,6 +41,18 @@ const LATER_FILE: GraphNode = {
   path: 'z.ts',
 };
 
+/** An observed import edge from IMPORT_SOURCE to IMPORT_TARGET, seen at the given evidence path. */
+function observation(evidencePath: string): GraphEdgeObservation {
+  return {
+    source: IMPORT_SOURCE,
+    target: IMPORT_TARGET,
+    kind: 'import',
+    status: 'observed',
+    producer: 'import:es-import',
+    evidencePath,
+  };
+}
+
 describe('createGraphNode', () => {
   it('derives the exact domain-separated file identity', () => {
     expect(unwrapOrThrow(createGraphNode({ kind: 'file', path: 'apps/a.ts' }))).toEqual({
@@ -152,17 +164,6 @@ describe('createGraphNode', () => {
 });
 
 describe('aggregateGraphEdges', () => {
-  function observation(evidencePath: string): GraphEdgeObservation {
-    return {
-      source: IMPORT_SOURCE,
-      target: IMPORT_TARGET,
-      kind: 'import',
-      status: 'observed',
-      producer: 'import:es-import',
-      evidencePath,
-    };
-  }
-
   it('collapses only the complete edge tuple and preserves occurrence and evidence unions', () => {
     expect(
       unwrapOrThrow(

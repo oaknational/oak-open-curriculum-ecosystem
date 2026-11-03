@@ -38,11 +38,8 @@ const maxDirectoryFilesRead = 200;
 const maxFileBytesRead = 256 * 1024;
 export function repoRoot(): string {
   try {
-    // Absolute-path git via the trusted resolver (S4036) — this was the last
-    // VIA-SHELL git call in agent-tools, migrated 2026-08-12. Two by-name
-    // (shell-free) `spawnSync('git', …)` sites remain as recorded S4036
-    // follow-ups, deliberately NOT migrated in that pass: `runGit` below and
-    // `commit-advisories/check-commit-message.ts`'s repo-root lookup.
+    // Absolute-path git via the trusted resolver (S4036): a by-name spawn
+    // resolves through PATH, which a writable entry can shadow.
     return execFileSync(resolveTrustedGit(), ['rev-parse', '--show-toplevel'], {
       encoding: 'utf8',
     }).trim();
@@ -110,7 +107,7 @@ export function subagentSummaries(sessionDir: string): SubagentSummary[] {
   }
   const result: SubagentSummary[] = [];
   const metaFiles = readdirSync(subagentsDir).filter((name) => name.endsWith('.meta.json'));
-  for (const metaFile of metaFiles.sort((a, b) => a.localeCompare(b))) {
+  for (const metaFile of metaFiles.toSorted((a, b) => a.localeCompare(b))) {
     const agentId = metaFile.replace('.meta.json', '');
     if (shouldSkipCompactAgent(agentId)) {
       continue;
@@ -138,8 +135,19 @@ export function targetNeedles(root: string, targetFile: string): string[] {
   }
   return [...values];
 }
+/**
+ * Run a git subcommand in `repoPath` and return its trimmed stdout, or the
+ * empty string when git does not answer: a non-zero exit, or no trusted git
+ * binary at all (the same answer the by-name spawn gave for a missing git).
+ */
 export function runGit(repoPath: string, args: string[]): string {
-  const result = spawnSync('git', ['-C', repoPath, ...args], {
+  let git: string;
+  try {
+    git = resolveTrustedGit();
+  } catch {
+    return '';
+  }
+  const result = spawnSync(git, ['-C', repoPath, ...args], {
     encoding: 'utf8',
     stdio: ['ignore', 'pipe', 'ignore'],
   });

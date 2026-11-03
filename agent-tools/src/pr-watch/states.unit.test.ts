@@ -12,9 +12,11 @@ import { computePrVerdict } from './states.js';
  * min quiet window, and the latestReviews backwards-pointer.
  */
 
+/** A locale ordering of state names, so two listings compare independent of declaration order. */
+const byLocale = (left: string, right: string): number => left.localeCompare(right);
+
 describe('PR_VERDICT_STATES', () => {
   it('is the closed set from the plan plus the typed extensions', () => {
-    const byLocale = (left: string, right: string): number => left.localeCompare(right);
     expect([...PR_VERDICT_STATES].sort(byLocale)).toEqual(
       [
         'SETTLE-READY',

@@ -790,18 +790,25 @@ test-type taxonomy, full rules, examples, and recipes, see
 
 Universal testing principles:
 
+- tests are held to the same standard as product code, if anything a higher one:
+  a good test is the living description of intent and correctness, and product
+  code may change and be accepted while it satisfies a well-written test (owner,
+  2026-11-01);
 - use TDD at every affected test level;
 - test behaviour through public interfaces, not implementation details;
 - assert effects, not internal constants or configuration collections;
 - each proof happens once and must prove product code;
 - unit tests are pure, in-process, and mock-free;
 - integration tests import code directly and use only simple DI fakes;
-- tests never use or create IO, of any kind, at any level, and no helper a test
-  imports does (owner, 2026-09-14: an absolute invariant); what needs a running
-  system, a filesystem or a process is a validation surface, never a test
+- in-process tests never use or create IO other than stdio, at any level, and no
+  helper such a test imports does (owner, 2026-09-14: an absolute invariant);
+  what needs a running system is an out-of-process test against a test instance
+  of one of our systems, which may use IO and still uses fakes where they are
+  the better instrument (owner, 2026-11-01); a validator script is the
+  instrument only where no test can make the proof, which is basically never
   ([testing-strategy.md](testing-strategy.md) §Philosophy;
   [validation-strategy.md](validation-strategy.md));
-- E2E checks prove running-system behaviour, as validation surfaces;
+- E2E checks prove running-system behaviour, as out-of-process tests;
 - smoke checks prove the built artefact is viable in its shipped form (invoked as
   production invokes it, no loaders), as validators reachable from a CI-gated
   task; every built binary carries at least one — new ones at landing, the

@@ -16,6 +16,7 @@ import { dirname, join, resolve, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { normalizeError } from '@oaknational/logger';
 import { createCodegenLogger } from './create-codegen-logger.js';
+import { extractRelativeLinkTargets } from './lib/index-links.js';
 
 const logger = createCodegenLogger('verify-docs');
 
@@ -33,9 +34,9 @@ async function mustExistNonEmpty(path: string): Promise<void> {
     if (size <= 0) {
       throw new Error('Empty file: ' + path);
     }
-  } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : String(err);
-    throw new Error(`Missing or empty: ${path} — ${msg}`, { cause: err });
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : String(error);
+    throw new Error(`Missing or empty: ${path} — ${msg}`, { cause: error });
   }
 }
 
@@ -52,10 +53,7 @@ async function computeExpectedMdFromIndex(
   const expected = new Set<string>();
   await guard('Index links', async () => {
     const content = await fs.readFile(mdIndex, 'utf8');
-    const linkRe = /\[[^\]]+\]\(\.\/([^)]+)\)/g; // matches (./filename)
-    let match: RegExpExecArray | null;
-    while ((match = linkRe.exec(content)) !== null) {
-      const rel = match[1];
+    for (const rel of extractRelativeLinkTargets(content)) {
       expected.add(join(dirname(mdIndex), rel));
     }
   });
@@ -76,16 +74,16 @@ async function verifyTypedocJson(path: string): Promise<void> {
   let raw: string;
   try {
     raw = await fs.readFile(path, 'utf8');
-  } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : String(err);
-    throw new Error(`Cannot read typedoc.json at ${path} — ${msg}`, { cause: err });
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : String(error);
+    throw new Error(`Cannot read typedoc.json at ${path} — ${msg}`, { cause: error });
   }
   let json: unknown;
   try {
     json = JSON.parse(raw);
-  } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : String(err);
-    throw new Error(`typedoc.json is not valid JSON — ${msg}`, { cause: err });
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : String(error);
+    throw new Error(`typedoc.json is not valid JSON — ${msg}`, { cause: error });
   }
   if (!hasChildren(json) || !Array.isArray(json.children) || json.children.length === 0) {
     throw new Error('typedoc.json has no top-level children');
@@ -116,10 +114,10 @@ async function main(): Promise<void> {
     try {
       await f();
       logger.info(`OK   ${label}`);
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : String(err);
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : String(error);
       failures.push(label + ': ' + msg);
-      logger.error(`FAIL ${label} - ${msg}`, normalizeError(err));
+      logger.error(`FAIL ${label} - ${msg}`, normalizeError(error));
     }
   }
 
@@ -141,8 +139,8 @@ async function main(): Promise<void> {
 
 try {
   await main();
-} catch (err: unknown) {
-  const message = err instanceof Error ? err.message : String(err);
-  logger.error(message, normalizeError(err));
+} catch (error: unknown) {
+  const message = error instanceof Error ? error.message : String(error);
+  logger.error(message, normalizeError(error));
   process.exitCode = 1;
 }

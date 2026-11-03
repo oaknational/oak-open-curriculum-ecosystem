@@ -66,11 +66,11 @@ function parseFrontmatterMapping(frontmatter: string): Result<unknown, string> {
   let parsed: unknown;
   try {
     parsed = parseYaml(frontmatter);
-  } catch (cause) {
+  } catch (error) {
     // Content-free on purpose: a YAML parser's message can quote the
     // offending source, and the source may be the credential this
     // validator exists to keep out of every output.
-    const name = cause instanceof Error ? cause.name : 'error';
+    const name = error instanceof Error ? error.name : 'error';
     return err(`frontmatter is not parseable YAML (${name}); the block's text is not echoed`);
   }
   return isJsonObject(parsed) ? ok(parsed) : err('frontmatter is not a YAML mapping');

@@ -1,14 +1,15 @@
-import { existsSync, lstatSync } from 'node:fs';
 import path from 'node:path';
 
 import { err, ok, type Result } from '@oaknational/result';
 import { assertPathWithinBase } from '@oaknational/safe-path';
 
+import { nodeSyncFileSystem, type SyncFileSystem } from './sync-file-system.js';
+
 /**
  * Flag-path resolution for agent-tools CLIs: constrain caller-supplied
  * paths to the repository with read/write-appropriate canonicalisation.
- * Born in the refounding CLIs; consolidated here at the third consumer
- * (refounding, plan-state, restatement-audit).
+ * Born in the plan-corpus refounding CLIs (retired 2026-11-01) and consolidated
+ * here at their third consumer; used by restatement-audit, merge-bot and spawn.
  *
  * Read targets must already exist, so they canonicalise with
  * {@link assertPathWithinBase} directly — `realpathSync` resolves `..` AND
@@ -24,13 +25,23 @@ import { assertPathWithinBase } from '@oaknational/safe-path';
  * or write could follow it. Directory creation stays deferred to each
  * tool's write phase, after every refusal has passed.
  *
+ * Both resolvers probe the file system through {@link PathProbe}, the
+ * process's own by default; the probe carries no write, so resolution cannot
+ * create anything, and the refusals are proved over an in-memory tree.
+ *
  * @packageDocumentation
  */
 
-/** Deepest ancestor of `absPath` (possibly itself) that exists on disk. */
-export function nearestExistingAncestor(absPath: string): string {
+/** The three probes write-target resolution is made of. */
+export type PathProbe = Pick<SyncFileSystem, 'exists' | 'isSymbolicLink' | 'realpath'>;
+
+/** Deepest ancestor of `absPath` (possibly itself) that exists. */
+export function nearestExistingAncestor(
+  absPath: string,
+  exists: PathProbe['exists'] = nodeSyncFileSystem.exists,
+): string {
   let dir = absPath;
-  while (!existsSync(dir)) {
+  while (!exists(dir)) {
     const parent = path.dirname(dir);
     if (parent === dir) {
       return dir;
@@ -67,8 +78,8 @@ export function resolveReadPathWithinRepo(
         options.realpath === undefined ? {} : { realpath: options.realpath },
       ),
     );
-  } catch (cause: unknown) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return err(new Error(message));
   }
 }
@@ -81,18 +92,18 @@ export function resolveReadPathWithinRepo(
 export function resolveWriteTargetWithinRepo(
   repoRoot: string,
   flagPath: string,
+  probe: PathProbe = nodeSyncFileSystem,
 ): Result<string, Error> {
   const targetAbs = path.resolve(repoRoot, flagPath);
   if (targetAbs !== repoRoot && !targetAbs.startsWith(`${repoRoot}${path.sep}`)) {
     return err(new Error(`'${flagPath}' resolves outside the repository`));
   }
   // Dangling-symlink write bypass (security-expert, R0b gateway 2026-07-07):
-  // `existsSync` FOLLOWS symlinks, so a dangling link at the target reports
+  // `exists` FOLLOWS symlinks, so a dangling link at the target reports
   // "absent", the ancestor walk skips over it, and a later write would
   // create the file at the link's destination -- possibly outside the repo.
   // An existing symlink is realpath-checked below; the dangling case refuses.
-  const targetStat = lstatSync(targetAbs, { throwIfNoEntry: false });
-  if (targetStat?.isSymbolicLink() === true && !existsSync(targetAbs)) {
+  if (probe.isSymbolicLink(targetAbs) && !probe.exists(targetAbs)) {
     return err(
       new Error(
         `'${flagPath}' is a dangling symlink -- a write would follow it to an unverifiable ` +
@@ -101,10 +112,12 @@ export function resolveWriteTargetWithinRepo(
     );
   }
   try {
-    assertPathWithinBase(nearestExistingAncestor(targetAbs), repoRoot);
+    assertPathWithinBase(nearestExistingAncestor(targetAbs, probe.exists), repoRoot, {
+      realpath: probe.realpath,
+    });
     return ok(targetAbs);
-  } catch (cause: unknown) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return err(new Error(message));
   }
 }

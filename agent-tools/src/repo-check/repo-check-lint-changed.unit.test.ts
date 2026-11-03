@@ -39,7 +39,7 @@ describe('plannedTaskCount', () => {
 });
 
 /** The escape character that opens an SGR colour sequence. */
-const ESC = String.fromCharCode(0x1b);
+const ESC = String.fromCodePoint(0x1b);
 
 describe('dryRunDiagnostics', () => {
   it.each([

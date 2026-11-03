@@ -28,6 +28,14 @@ function baseline(id: string, population: Baseline['population']): Baseline {
   };
 }
 
+/** A recall report whose within-remit fractions carry the given strict and loose values. */
+const reportAt = (strict: number, loose: number): RecallReport => ({
+  strictOverall: { numerator: 0, denominator: 0, value: 0 },
+  looseOverall: { numerator: 0, denominator: 0, value: 0 },
+  strictWithinRemit: { numerator: 0, denominator: 10, value: strict },
+  looseWithinRemit: { numerator: 0, denominator: 10, value: loose },
+});
+
 describe('countReFoundBaselines', () => {
   it('counts 5 strict of 10 re-found (the exact judgment the v1 meta agent got wrong)', () => {
     // The v1 run: 10 re-found (loose), of which 5 strict. The meta agent reported 0.72;
@@ -127,12 +135,6 @@ describe('recallReport', () => {
 describe('meetsGraduateGate', () => {
   // Choice B (owner-confirmed 2026-06-29): strict within-remit >= 0.6 AND lenient >= 0.85.
   const choiceB: GraduateGate = { minStrictWithinRemit: 0.6, minLooseWithinRemit: 0.85 };
-  const reportAt = (strict: number, loose: number): RecallReport => ({
-    strictOverall: { numerator: 0, denominator: 0, value: 0 },
-    looseOverall: { numerator: 0, denominator: 0, value: 0 },
-    strictWithinRemit: { numerator: 0, denominator: 10, value: strict },
-    looseWithinRemit: { numerator: 0, denominator: 10, value: loose },
-  });
 
   it('graduates only when both the strict and lenient floors are cleared', () => {
     expect(meetsGraduateGate(reportAt(0.7, 0.9), choiceB)).toBe(true);

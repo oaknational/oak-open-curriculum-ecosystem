@@ -16,6 +16,8 @@
 
 import posix from 'node:path/posix';
 
+import { stripLinkTitle } from '../../core/strip-link-title.js';
+
 import {
   isStableAddressedState,
   isStableIndex,
@@ -136,7 +138,7 @@ export function extractReferences(sourcePath: string, content: string): Extracte
     const pattern = new RegExp(linkPatternSource, 'g');
     while ((match = pattern.exec(lineText)) !== null) {
       // Strip any markdown link title (`path "Title"`) before resolving.
-      const rawTarget = (match[1] ?? match[2] ?? '').replace(/\s+"[^"]*"$/, '').trim();
+      const rawTarget = stripLinkTitle(match[1] ?? match[2] ?? '').trim();
       if (!isRepoPathReference(rawTarget)) {
         continue;
       }

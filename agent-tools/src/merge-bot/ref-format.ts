@@ -48,9 +48,9 @@ export function realRefFormatOracle(exists?: PathExists): Result<RefFormatOracle
   let gitPath: string;
   try {
     gitPath = exists === undefined ? resolveTrustedGit() : resolveTrustedGit(exists);
-  } catch (cause) {
+  } catch (error) {
     return err(
-      new RefFormatOracleUnavailableError(cause instanceof Error ? cause.message : String(cause)),
+      new RefFormatOracleUnavailableError(error instanceof Error ? error.message : String(error)),
     );
   }
   return ok((fullRefName) => {

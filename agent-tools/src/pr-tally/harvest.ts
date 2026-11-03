@@ -14,7 +14,8 @@ import { z } from 'zod';
  *
  * @remarks
  * This module does no IO. The recording query is in the fixtures README;
- * the command that runs it lands with the node's todo 2.
+ * the command that runs it is the pr-tally delivery node's second unit, which
+ * has not landed.
  */
 
 const pageInfoSchema = z.object({

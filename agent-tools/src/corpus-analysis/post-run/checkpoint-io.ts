@@ -44,12 +44,12 @@ export function makeCheckpointReader(
     try {
       const safePath = assertPathWithinBase(filePath, repoRoot, options);
       return parse(JSON.parse(await readTextFile(safePath)));
-    } catch (cause) {
+    } catch (error) {
       return err(
         new Error(
-          `Cannot read checkpoint ${filePath}: ${cause instanceof Error ? cause.message : String(cause)}`,
+          `Cannot read checkpoint ${filePath}: ${error instanceof Error ? error.message : String(error)}`,
           {
-            cause,
+            cause: error,
           },
         ),
       );

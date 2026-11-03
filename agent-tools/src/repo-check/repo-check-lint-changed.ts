@@ -85,8 +85,8 @@ export function plannedTaskCount(dryRunJson: string): number {
   let parsed: unknown;
   try {
     parsed = JSON.parse(dryRunJson);
-  } catch (cause) {
-    throw new Error('the turbo dry run did not print a JSON plan', { cause });
+  } catch (error) {
+    throw new Error('the turbo dry run did not print a JSON plan', { cause: error });
   }
   const plan = dryRunPlanSchema.safeParse(parsed);
   if (!plan.success) {

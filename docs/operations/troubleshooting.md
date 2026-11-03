@@ -447,7 +447,10 @@ restart the session:
 Each statusline invocation then appends one timestamped line with the
 payload as received (line breaks collapsed to keep one line per
 invocation) to the named `.log` file; `.logs/` is the repo's gitignored
-log directory. Read the latest line and check which fields are present.
+log directory. A relative path resolves against the project directory
+(`CLAUDE_PROJECT_DIR`, which the launcher sets), never the statusline's
+working directory: that is the session's, and it moves with the session.
+Read the latest line and check which fields are present.
 
 Reading the outcomes honestly:
 

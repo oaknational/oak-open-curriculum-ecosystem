@@ -3,10 +3,10 @@ id: quality-analyser-security-reliability-to-zero
 node_type: delivery
 name: "Code-quality analyser security and reliability findings to zero, and held there by the lint gate"
 overview: "Every open BLOCKER, HIGH or MEDIUM security or reliability issue the code-quality analyser reports on the resting branch is FIXED in the tree, and the six analyser rules with a lint twin are locked at error so the class cannot regrow: thirteen single-story pull requests, landed one at a time under the work-in-progress limit."
-status: sketch
-ratified_by: null
-ratified_date: null
-ratified_where: null
+status: ratified
+ratified_by: "Jim Cresswell (owner)"
+ratified_date: 2026-11-03
+ratified_where: "The owner's word of 2026-11-03 in the session of Sandpiper guards Wind (690653), answering which plans pull request 375 serves: \"plans agreed\"; items 13 and 14 approved in the same message"
 serves: maintenance
 impact_areas:
   - practice-and-estate
@@ -19,7 +19,7 @@ depends_on:
   - plan: code-quality-binding-per-checkout
     kind: beneficial
 owner_gates: []
-last_updated: 2026-10-28
+last_updated: 2026-11-03
 ---
 
 # Code-quality analyser security and reliability findings to zero, and held there by the lint gate
@@ -33,7 +33,7 @@ CONFIRMED, reads zero. It stays there because the commit-time lint gate refuses 
 specimen's keyboard tests and the analyser's own pull-request analysis. Every finding is FIXED in
 the tree (owner ruling 2026-09-08, verbatim: "We don't dismiss issues, we fix them."). The
 observations the triage made beside the findings are triaged, never absorbed: two misleading
-documentation lines are corrected in the units that already edit their files, and the rest are
+documentation lines are corrected beside the cures that already edit their files, and the rest are
 routed to named homes (§Out of scope).
 
 ## User groups and value
@@ -44,7 +44,7 @@ routed to named homes (§Out of scope).
   created on 2026-09-12, 09-29, 10-03 and 10-05. With the twins at error a seat meets the defect at
   its own commit, in its own diff, instead of inheriting it months later.
 - **Seats driving pull requests.** The review-cost gate runs on every push and parses review bodies;
-  after unit 1 no review body can slow a push by seconds.
+  once the parsers are cured no review body can slow a push by seconds.
 - **Consumers of the MCP server's logs and traces.** Correlation ids and trace ids come from a
   cryptographic source and a current hash.
 - **Keyboard users of the design showcase.** The specimen's data table is a tab stop exactly when
@@ -87,16 +87,15 @@ Dynamics: work the story does not require is routed to a named home, never absor
   `createMcpAuthClerk(logger)`, a signature that no longer exists (`allowedHosts` is required), and
   the shared lint config's activation comment points at a plan directory that no longer exists.
   Misleading docs are blocking (`principles.md` §Code Quality), so each is corrected in the unit
-  that already edits its file (units 4 and 11).
-- Ten code-fence detectors in agent-tools disagree. Three track the CommonMark closer rule
+  that already edits its file.
+- Nine code-fence detectors in agent-tools disagree. Three track the CommonMark closer rule
   (`validators/core-host-names/markdown-headings.ts`, `validators/plan-schema/yaml-fence-blocks.ts`,
-  `subagent-declarations/system-prompt-block.ts`); seven toggle on any fence-like line
+  `subagent-declarations/system-prompt-block.ts`); six toggle on any fence-like line
   (`validators/cited-paths/extract-path-citations.ts`, `validators/cited-scripts/extract-script-citations.ts`,
   `validators/markdown-links/validate-markdown-links-helpers.ts:72`,
   `practice-fitness/markdown.ts`, `practice-fitness/item-count.ts`'s strip regex,
-  `refounding/refound-inventory-nets.ts` (backticks only), `hook-policy/matchers.ts:73` (backticks
-  only)). Two of the three CommonMark fence patterns are analyser findings and take one shared
-  helper (unit 8); the seven toggling detectors are no finding's site, and moving them would change
+  `hook-policy/matchers.ts:73` (backticks only)). Two of the three CommonMark fence patterns are analyser findings and take one shared
+  helper; the six toggling detectors are no finding's site, and moving them would change
   their behaviour on nested, longer and tilde fences. Routed: §Out of scope.
 - `isSignedSelfReply` (`pr-watch/reviewer-legs.ts:107`) reads only the body's last line, so any
   commenter can sign as a seat, and pr-tally would read such a comment as the seat's disposition,
@@ -135,13 +134,14 @@ error.
   `tabIndex` from observed overflow rather than a constant: WCAG 2.1.1 holds at narrow widths, and
   the tab stop goes where nothing scrolls.
 - **The lock.** The six twins go to `error` in `packages/core/oak-eslint/src/configs/recommended.ts`
-  in the unit that lands after every cure, with one pathogen fixture per rule, so the commit hook
-  (changed workspaces) and `pnpm check` (all workspaces) refuse the class from then on.
+  at the head of the series, with one pathogen fixture per rule, so the commit hook (changed
+  workspaces) and `pnpm check` (all workspaces) refuse the class from then on and the cures land
+  against a red gate in the same pull request.
 
 Named behaviour changes (each red-first): nested curly quotes mark only the inner span, and a disposition line with an empty item or a
-Codex badge line with no heading makes no finding (unit 1);
-trace-id values change (unit 2); the parenthetical synonym capture is the innermost span (unit 5);
-inline-link alt text cannot contain `[` (unit 7); no tab stop where nothing scrolls (unit 12).
+Codex badge line with no heading makes no finding; trace-id values change; the parenthetical
+synonym pattern counts the innermost span; inline-link alt text cannot contain `[`; no tab stop
+where nothing scrolls.
 
 Why this produces the outcome: each finding is cured at its root (the generator, the shared helper,
 the parser), so a sibling rule cannot re-trip the site, and the twins turn "zero" into an invariant
@@ -151,13 +151,13 @@ Warrants and their falsifiers:
 
 - *The twins have parity with the analyser.* Warrant: one in-memory run in which every analyser site
   was among the twins' hits (one observation, against the analyser's own list). Falsifier: a finding
-  of one of the six rules appears on the resting branch, in a linted workspace, after unit 11 has
+  of one of the six rules appears on the resting branch, in a linted workspace, after the pull request has
   merged; the parity claim is then wrong for that shape, and the site is cured and the shape recorded
   in the disposition policy.
 - *No consumer depends on the trace id's MD5 value.* Warrant: the derived trace id is a fallback,
   used per log record only when no active span exists, from a per-request correlation id
   (`otel-format.ts:111-126`). Falsifier: a test or a stored fixture pins an MD5-derived trace id; it
-  is then re-derived in unit 2, not kept.
+  is then re-derived, not kept.
 
 ## Acceptance criteria (each with a proof — required)
 
@@ -167,120 +167,125 @@ Warrants and their falsifiers:
    lane's closing comms event.
 2. The six twins are at `error` in the shared config, each with a pathogen fixture that surfaces its
    error, and the aggregate gate is green with them on. Proof: `repo-safe` — the new
-   `packages/core/oak-eslint/src/configs/recommended.unit.test.ts` and `pnpm check` on unit 11's
-   pull request.
+   `packages/core/oak-eslint/src/configs/recommended.unit.test.ts` and `pnpm check` on the pull
+   request.
 3. No file a workspace lints breaks a twin, and the skill eval scripts' formerly flagged patterns
-   live in the showcase's linted tools module. Proof: `repo-safe` — the lint gate on unit 11; unit
-   10's diff and the tools module's unit tests.
+   live in the showcase's linted tools module. Proof: `repo-safe` — the lint gate on the pull
+   request and the tools module's unit tests.
 4. Every cured site's behaviour is pinned by a test that passes before and after its cure, except
    the named behaviour changes, each pinned by a test that is red before its cure; the pr-tally
    recorded-corpus suites are unchanged; the regenerated SDK output is byte-identical. Proof:
    `repo-safe` — the tests named in each unit; `git diff --exit-code` over
-   `packages/sdks/oak-sdk-codegen/src/types/generated` after `pnpm sdk-codegen`, in unit 5's body.
+   `packages/sdks/oak-sdk-codegen/src/types/generated` after `pnpm sdk-codegen`, on the pull request.
 5. The skip-marker, disposition-line and Codex-item parsers each classify an adversarial body as a
    plain assertion, with no clock read and no wall-clock ceiling (the testing directive: a finite
    ceiling in a gated test is deleted, never raised); each input is sized so the current regex takes
    past the harness's default timeout on the authoring host (measured once, and recorded in the
    test's TSDoc), so each test is red before its cure, and the cured reader answers in
-   milliseconds. Proof: `repo-safe` — unit 1's tests.
+   milliseconds. Proof: `repo-safe` — the parsers' tests.
 6. The correlation id carries a 6-hex cryptographic part; the trace id is 32 hex, stable for one
-   input, and equal to a pinned SHA-256 vector. Proof: `repo-safe` — unit 2's tests.
-7. The three CommonMark fence detectors use the one helper, and each detector's output over the
-   tracked corpus before and after is identical. Proof: `repo-safe` — unit 8's tests and its
-   corpus diff, recorded in the unit's pull request.
+   input, and equal to a pinned SHA-256 vector. Proof: `repo-safe` — the correlation and trace tests.
+7. The CommonMark fence detectors that read a fence's info string use the one helper, and each
+   detector's output over the tracked corpus before and after is identical. Proof: `repo-safe` —
+   the helper's tests and the validators' own, which pin the headings and YAML blocks they read.
 8. The specimen's lesson-breakdown region is a tab stop exactly while its table overflows (present
    at 320px, absent at 1280px), keyboard scrolling works at 320px, and the specimen's accessibility
    matrix and 320px reflow cells stay green. Proof: `repo-safe` —
-   `pnpm --filter @oaknational/oak-design-showcase test:a11y` with unit 12's three tests.
+   `pnpm --filter @oaknational/oak-design-showcase test:a11y` with the specimen's three tests.
 9. `code-scanning-alerts-to-zero` no longer carries the pseudo-random and weak-hash sites in any
-   section, and `pr-tally`'s ledger names unit 1 and carries the author check as its own. Proof:
-   `repo-safe` — both nodes' text after unit 0.
+   section, and `pr-tally`'s ledger names the parser cures and carries the author check as its own.
+   Proof: `repo-safe` — both nodes' text.
 
 ## Todos
 
-Thirteen single-story pull requests, each inside the small-PR bands (about five files, ten at most)
-and the default round budget of two (PDR-132); each opens with the round tally declared in a
-working-notes comment, and each opens only under `pr-lifecycle`'s work-in-progress limit (the
-reservation posted on the coordination stream, the open count read first-hand from the forge with
-the coordination pull request excluded). Each unit cuts its own worktree from the default branch and
-re-derives its premises at pickup: the coordination branch carries review-cost changes not yet on
-the default branch, so unit 1 re-reads the push path first.
+One pull request from the branch `fix/stricter_linting`, cut from the default branch (the owner's
+word, 2026-11-02: one pull request, never a series of them). The cures land as local commits in
+sensible chunks, one per workspace; the series' first and last commits run the hooks and the others
+are committed with the hooks bypassed under that word, each saying so in its body, with the
+major-version guard run by hand over every message. The whole gate, `pnpm check`, is green on the
+tree before the push. The work, by item; every item is in the tree:
 
-0. **Records.** Land this node and the `maintenance` strategic node it serves (both born sketch,
-   stamped ratified on the owner's word before the first push, the word quoted on the pull
-   request). In `code-scanning-alerts-to-zero`, re-point `serves` from the retired Reliable Atoms
-   node to `maintenance`, and move the pseudo-random and weak-hash sites here in every section that
-   carries them: its user groups, the S2245 and S4790 rows of its problem table, its mechanism
-   bullets, its criterion 2 and its unit 1, with a dated review-dispositions row. In `pr-tally`'s
-   review dispositions, a row naming unit 1 (its two body parsers) and carrying the signature's
-   missing author check as that node's own work, to land before pr-tally's command. Four files.
-1. **Parsers of third-party review text.** `pr-watch/skip-markers.ts:20` → `“[^“”\n]*”` in the curly
+1. **The lock.** The six twins at `error` in `recommended.ts`, at the head of the series with the
+   autofixable twins applied across the estate; `recommended.unit.test.ts` with one pathogen fixture
+   per rule, in the shape of `strict.unit.test.ts` and over the fixture linter the two tests share;
+   the activation comment re-pointed at `docs/governance/sonar-disposition-policy.md`; the policy's
+   S8786, S2245, S4790, S2310, S3923 and S7737 classes record their commit-time twin.
+2. **Parsers of third-party review text.** `pr-watch/skip-markers.ts:20` → `“[^“”\n]*”` in the curly
    branch; `pr-tally/dispositions.ts:40` → a field-wise parse that checks the bullet and bold label,
    splits the rest on the `·` separator, and reads the head SHA, the review id, the anchor (path and
    line split at `lastIndexOf(':')`) and the text; `pr-tally/findings.ts:35` → a string parse (badge
    prefix, first `</sub></sub>`, trailing `**`). Tests per criterion 5; the recorded-corpus suites
-   unchanged. About six files. The first unit landed: the live exposure.
-2. **Request correlation and trace identity.** `correlation/index.ts` (`randomBytes(3)`),
-   `logger/src/otel-format.ts` (SHA-256, the first 32 hex). Tests per criterion 6. Four files.
-3. **Retry jitter from the cryptographic source.** `sitemap-scanner.ts:125`
+   unchanged.
+3. **Request correlation and trace identity.** `correlation/index.ts` (`randomBytes(3)`),
+   `logger/src/otel-format.ts` (SHA-256, the first 32 hex). Tests per criterion 6.
+4. **Retry jitter from the cryptographic source.** `sitemap-scanner.ts:125`
    (`baseDelay * 2 ** attempt + randomInt(baseDelay)`), `bulk-chunk-utils.ts:183`
    (`randomInt(Math.max(1, Math.floor(exponentialDelay)))`, the same range). The existing bound
-   tests hold. Four files.
-4. **Clarity cures.** `logger/src/node.ts:52` (the ternary removed; the adapter writes UTF-8, said in
+   tests hold.
+5. **Clarity cures.** `logger/src/node.ts:52` (the ternary removed; the adapter writes UTF-8, said in
    its TSDoc); `field-readback-audit-cli.ts:140` (`while` with an explicit cursor);
    `process-runner.ts:20` and `mcp-auth-clerk.ts:65` (destructured defaults); the two test-file
    object defaults (`pr-watch/content-reader.integration.test.ts:26`,
    `practice-fitness/decision-debt-report.unit.test.ts:9`); the identical-branch helper in
    `document-transform-helpers.unit.test.ts:132` (collapses to `(year) => [String(year)]`); the
-   `mcp-router.ts` TSDoc examples given `allowedHosts`. Eight files.
-5. **The SDK generator's regexes.** `codegen-core.ts:183–187` (`[ \t]` for `\s` at the line-start and
-   line-end positions under the `m` flag), `verify-docs.ts:55` (`\[[^\][]+\]\(\.\/([^()]+)\)`),
-   `analysis-report-generator.ts:123` (`\(([^()]+)\)`). A characterisation test for
-   `postProcessTypesSource` over every JSDoc shape it rewrites, written first and green on the
-   current code; a red-first unit test pinning the innermost-parenthetical capture; regeneration
-   byte-identical (criterion 4). About five files.
-6. **Trailing-run trims and slugs.** A string-operation `trimEndWhile(text, predicate)` in
+   `mcp-router.ts` TSDoc examples given `allowedHosts`.
+6. **The SDK generator.** Its regexes take their linear forms in the generator (`codegen-core.ts`,
+   `verify-docs.ts`, `analysis-report-generator.ts`), with a characterisation test over every JSDoc
+   shape the TSDoc post-processor rewrites and a red-first test of the parenthetical count; the
+   generated root types take PascalCase names and each union of three or more members that recurs at
+   three or more sites is declared once, named after the property most of its sites share; the
+   generator's file access goes through a port with an in-memory fake, so its tests read no disk;
+   regeneration from the tracked schema is byte-stable (criterion 4).
+7. **Trailing-run trims and slugs.** A string-operation `trimEndWhile(text, predicate)` in
    `agent-tools/src/core/` with its unit test, used by `extract-path-citations.ts:53` and `:116`,
    `mcp-content-workspace/render-workspace.ts:28` and `practice-fitness/item-count.ts:123`;
    `core/agent-identity/derive.ts:197` and search-cli `reference-document-builders.ts:178` take
-   `/^-|-$/g` (the collapse before each leaves runs of one). About eight files.
-7. **Link, flag, field and alt-text parsers.** A shared `stripLinkTitle(target)` (the title is the
+   `/^-|-$/g` (the collapse before each leaves runs of one).
+8. **Link, flag, field and alt-text parsers.** A shared `stripLinkTitle(target)` (the title is the
    last whitespace-preceded quoted span, found from the end) used by
    `validate-markdown-links-helpers.ts:141` and `validate-reference-direction-helpers.ts:139`;
    `shell-command-citations.ts:23` → `/^-[A-Za-bd-z]*c[A-Za-z]*$/`; the provenance repo line
    (`validate-no-host-names-in-core-headings-helpers.ts:53`) → `^\s*(?:-\s*)?repo:`;
-   `practice-fitness/markdown.ts:108` → `[^\][]*` in the alt text. About seven files.
-8. **One fence-line helper.** `agent-tools/src/core/markdown/fence-line.ts` (string operations: up
-   to three spaces of indent, a run of three or more backticks or tildes, the info string; a closer
-   is the same character, at least as long, with nothing after) with its unit test, adopted by
-   `markdown-headings.ts`, `yaml-fence-blocks.ts` and `system-prompt-block.ts`;
-   `markdown-headings.ts` also takes the ATX form `^ {0,3}(#{1,6})[ \t]+([^ \t].*)?$`. No behaviour
-   change; the corpus diff per criterion 7. About seven files.
-9. **Regexes in test files.** `spawn/cli.unit.test.ts:345` (`/^[ \t]*Director: forged/mu`),
-   `tests/health-probe.unit.test.ts:156` (`/\b[a-z]+-consolidate-docs/u`),
-   `tests/mcp-conformance/render-reviewer-pack.unit.test.ts:122` (`\[[^\][]*…\]`),
-   `tests/skills/plugin-listing-invariants.integration.test.ts:74` (match every link with
-   `\[([^\][]*)\]\(([^()]*)\)`, then filter labels for "privacy"),
-   `build-scripts/copy-oak-ds.integration.test.ts:66` (`url\(([^)]*)\)`, then trim and unquote in
-   code), `components/framework/framework-animation.test.ts:51` (`/\d\.\d{3}/`),
-   `code-generation/typegen/search/completion-context-alignment.unit.test.ts:47` and
-   `code-generation/typegen/search/field-alignment.unit.test.ts:31` (`^[ \t]+`), and
-   `smoke-tests/gate-slot-cli.smoke.ts:117` (`/^[ \t]+at /mu`). Nine files.
-10. **The skill eval scripts' patterns move into the showcase tools module.** The CSS-fence walker
-    (a line walk, used by `grade-page.ts` and `grade-no-invented-values.ts`), the declaration test
-    (`/[a-z-]\s*:/i`), the attribute and custom-property patterns (lookbehind-started) and the
-    theme-rule walk (split on braces) from `grade-theming.ts` land in
-    `demos/oak-design-showcase/tools/`, beside `css-literal-values.ts` that both scripts already
-    import, each with a unit test; the three scripts import them. Each script's grade over its own
-    fixtures is unchanged. About six files.
-11. **The lock.** The six twins at `error` in `recommended.ts`; the new `recommended.unit.test.ts`
-    with one pathogen fixture per rule, in the shape of `strict.unit.test.ts`; the activation
-    comment re-pointed at `docs/governance/sonar-disposition-policy.md`; the policy's S8786, S2245,
-    S4790, S2310, S3923 and S7737 classes record their commit-time twin. After units 1–10 have
-    merged. Sites added since `493951ad7` surface at this unit's push gate: up to five are cured in
-    this unit; more insert a unit 10b before it. About four files.
-12. **The specimen's scroll region is a tab stop only while it scrolls.** A small client component
-    wraps the lesson-breakdown `<section>` (the named region kept): a `ResizeObserver` on both the
+   `practice-fitness/markdown.ts:108` → `[^\][]*` in the alt text.
+9. **One fence-line helper.** `agent-tools/src/core/markdown/fence-line.ts` (the run matched, the
+   info string read in code; a closer is the same character, at least as long, with nothing after)
+   with its unit test, adopted by `markdown-headings.ts` and `yaml-fence-blocks.ts`;
+   `markdown-headings.ts` also takes the ATX form `^ {0,3}(#{1,6})[ \t]+([^ \t].*)?$`.
+   `system-prompt-block.ts` keeps its two simpler patterns, which no finding names, and comes onto
+   the helper at its next edit. No behaviour change (criterion 7).
+10. **Regexes in test files.** `spawn/cli.unit.test.ts:345` (`/^[ \t]*Director: forged/mu`),
+    `tests/health-probe.unit.test.ts:156` (`/\b[a-z]+-consolidate-docs/u`),
+    `tests/mcp-conformance/render-reviewer-pack.unit.test.ts:122` (`\[[^\][]*…\]`),
+    `tests/skills/plugin-listing-invariants.integration.test.ts:74` (match every link with
+    `\[([^\][]*)\]\(([^()]*)\)`, then filter labels for "privacy"),
+    `build-scripts/copy-oak-ds.integration.test.ts:66` (`url\(([^)]*)\)`, then trim and unquote in
+    code), `components/framework/framework-animation.test.ts:51` (`/\d\.\d{3}/`),
+    `code-generation/typegen/search/completion-context-alignment.unit.test.ts:47` and
+    `code-generation/typegen/search/field-alignment.unit.test.ts:31` (`^[ \t]+`), and
+    `smoke-tests/gate-slot-cli.smoke.ts:117` (`/^[ \t]+at /mu`).
+11. **Tests off the disk.** Every in-process test that read a real file system directly takes an
+    in-memory fake through a port: the generator's `FileSystemPort`, agent-tools' `SyncFileSystem`
+    and its watcher-staleness binding, the search CLI's file reader; the `no-real-io-in-tests` rule is
+    scoped to the in-process tiers. The helper-mediated reads that remain are the debt the review
+    dispositions name, for a node of their own.
+12. **Records.** This node and the `maintenance` node it serves, both still `sketch` awaiting the
+    owner's stamp; `code-scanning-alerts-to-zero` re-pointed from the retired Reliable Atoms node to
+    `maintenance`, with the pseudo-random and weak-hash sites moved here in every section that
+    carried them; `pr-tally`'s review dispositions carry the parser row and the author check as that
+    node's own work; the content audit's item C484 re-anchored on the heading map the generator cure
+    hoisted.
+13. **The skill eval scripts' patterns move into the showcase tools module.** The CSS-fence scan
+    (by string offsets, the old pattern's extent kept exactly; used by `grade-page.ts` and
+    `grade-no-invented-values.ts`) in `css-fences.ts`; the declaration test (`/[a-z-]\s*:/i`) and the
+    custom-property test (lookbehind-started; `x--a:` is no longer read as a custom property, the
+    one named behaviour change) in `css-declarations.ts`; the attribute pattern (lookbehind-started)
+    and the theme-rule walk (over braces, returning the offset the grader's media-block check reads)
+    from `grade-theming.ts` in `theme-markup.ts`; all in `demos/oak-design-showcase/tools/`, beside
+    `css-literal-values.ts`, each with a unit test; the three scripts import them. Each script's
+    grade over its own fixtures is byte-identical before and after.
+14. **The specimen's scroll region is a tab stop only while it scrolls.** A small
+    client component wraps the lesson-breakdown `<section>` (the named region kept): a
+    `ResizeObserver` on both the
     section and the table (a web font widens the table without resizing the section) sets a state
     value used as `tabIndex={scrollTabIndex}`: `0` while the content overflows, absent otherwise,
     and kept while the region holds focus so a resize never drops focus to the body. No inline
@@ -291,24 +296,18 @@ the default branch, so unit 1 re-reads the push path first.
     pressing ArrowRight moves `scrollLeft` above zero. The alternatives were ruled out on evidence:
     fitting the table at 320px is infeasible (about 250px of minimum content against 208px before
     any cell padding, in the tightest identity), and a stacked narrow layout loses table semantics
-    on older WebKit and changes the design system for four rows. About four files.
+    on older WebKit and changes the design system for four rows.
 
-Order: the merge-bot command that opens a draft pull request as the bot lands first, in its own
-pull request (the owner's word, 2026-10-27: build the agent tool first), because every unit's pull
-request opens through it; then 1 (the live exposure, the first defect fix), then 0 (the records, as
-their own pull request per `pr-lifecycle` §Phase 1), then 2 (the server-side change); units 3–10 and 12 have no
-file dependency on one another and follow in any order; 11 after 1–10. A seat the owner names alone
-holds one open pull request at a time (`pr-lifecycle` §The work-in-progress limit), so the thirteen
-land in sequence at about one seat-hour each including review: about thirteen seat-hours.
-Implementer seats the owner adds raise the limit to their number and run the independent units in
-parallel. Re-estimate at each merge; past twenty-six seat-hours, stop and reshape.
+Items 13 and 14 are the analyser's only findings outside the lint twins' reach: the eval scripts
+sit outside every workspace, and S6845 has no twin. Both landed in this pull request on 2026-11-03
+(the component as `TableScrollRegion.tsx`, its tests red first against the constant tab stop).
 
 ## Out of scope
 
 - The nine LOW-impact security findings (six S4036, three S5332) and every CodeQL class: outside the
   owner's filter, and already units 4 and 5 (and the CodeQL units) of `code-scanning-alerts-to-zero`.
 - Maintainability-only findings: the analyser's quality-profile backlog, not this filter.
-- Linting the skill eval scripts themselves: they sit outside every workspace by design; unit 10
+- Linting the skill eval scripts themselves: they sit outside every workspace by design; this plan
   moves their flagged patterns into a linted module.
 - The runtime-only scripts' separate lint config (`eslint.runtime-only.config.mjs`, core rules only):
   the analyser reports no finding there.
@@ -319,8 +318,8 @@ parallel. Re-estimate at each merge; past twenty-six seat-hours, stop and reshap
   pull request). Without it the closing seat reads the project from the operator profile's repo scope
   file (PDR-141).
 - The other delivery nodes that still serve the retired Reliable Atoms node: they belong to other
-  lanes; only `code-scanning-alerts-to-zero`, which unit 0 amends anyway, is re-pointed here.
-- Bringing the seven toggling fence detectors onto the fence-line helper: no finding names them, and
+  lanes; only `code-scanning-alerts-to-zero`, which this plan amends anyway, is re-pointed here.
+- Bringing the six toggling fence detectors onto the fence-line helper: no finding names them, and
   the move changes their behaviour on nested, longer and tilde fences over the tracked corpus. The
   observation stands in §Problem; each detector comes onto the helper at its next edit, where
   `consolidate-at-second-consumer` fires, and a seat that wants them moved sooner opens that as its
@@ -345,13 +344,13 @@ parallel. Re-estimate at each merge; past twenty-six seat-hours, stop and reshap
   keys from its own issue query; `randomBytes`, `randomInt` and `createHash('sha256')` are
   `node:crypto`'s current API.
 - **Optionality surface.** Every site names its cure and its single fallback (the string
-  operation); every unit names its files and order; the scroll region's cure was chosen by the
-  decision lenses on an accessibility review's evidence (unit 12), so no choice is left open.
+  operation); every item names its files; the scroll region's cure was chosen by the decision
+  lenses on an accessibility review's evidence, so no choice is left open.
 - **Record consumer.** The lane's closing comms event is the only accounting surface; criterion 1's
-  reading is its consumer. Unit 0's ledger rows are read by those nodes' next pickups.
+  reading is its consumer. The records item's ledger rows are read by those nodes' next pickups.
 - **Rules tier.** Fix-only (the one-outcome rule and its single CodeQL exception, untouched); checks
-  are never disabled, rules only added; generated code is fixed at the generator; small pull
-  requests; TDD for refactoring; one helper at the second consumer (`trimEndWhile`,
+  are never disabled, rules only added; generated code is fixed at the generator; one pull request
+  of chunked commits (the owner's word, 2026-11-02); TDD for refactoring; one helper at the second consumer (`trimEndWhile`,
   `stripLinkTitle`, the fence-line helper, the eval patterns in the shared tools module); adjacent
   observations routed, never absorbed (`concept-exploration` §Loop Dynamics, `proportionality`);
   one open pull request at a time (`pr-lifecycle` §The work-in-progress limit).
@@ -381,3 +380,8 @@ One row per finding; "applied" means folded into this node before ratification.
 | 2026-10-27 | Cricket pair on the rechecked plan (both stances: ON-TRACK, frame NARROWED) | The order put four record files ahead of the live exposure under a one-pull-request limit, against the owner's "fixing issues, not ceremony"; the plan did not carry the owner's order that the bot's pull-request-opening command lands first; the solo limit, and the counting of the owner's own open pull requests toward it, were readings the owner should see stated in one line. | Applied: unit 1 leads and unit 0 follows as its own pull request; the tool dependency is named in the order; both readings are stated to the owner in the recheck report. |
 | 2026-10-28 | Unit 1 authoring (Smelter herds Basalt, 871ba4) | The one-regex readers of the disposition line and the Codex item accepted a whitespace-only item and a whitespace-only heading as findings with an empty key: an accident of the patterns' backtracking, not the intake contract's shape. | Applied: the field readers require the item and the heading; both shapes are red-first tests in unit 1 and named with the unit's behaviour changes. |
 | 2026-10-28 | Code-expert read of unit 1 (CHANGES REQUIRED on the tests; the readers approved as written) | The three adversarial-input tests read the clock (`performance.now()`) and set a one-second ceiling, which test-immediate-fails item 4 and the testing directive's no-wall-clock-ceilings rule forbid in a gated test; criterion 5 had asked for exactly that. | Applied: the clock reads and ceilings deleted, the inputs kept as plain classification assertions red before the cure under the harness's default timeout, criterion 5 re-worded; two parity notes recorded as information (the old review field admitted the separator; the old item swallowed a separator before prose), both outside the contract and stricter now. |
+| 2026-11-02 | Owner, mid-execution | The analyser backlog is driven to zero in ONE pull request on a branch cut from the default branch, as a series of local commits in sensible chunks with only the first and last commit hooked; "we do not do warnings, we fix problems"; no allowlists; test code is held to the product standard; an in-process test may use no IO other than stdio, an out-of-process test against a test instance may. | Applied: the numbered units collapsed into one pull request; the `no-real-io-in-tests` rule scoped to the in-process tiers; the testing directive carries the two rulings. |
+| 2026-11-02 | Lane verification (Smelter herds Basalt, 871ba4), reading every lane diff in full | A lane rewrote the vercel-ignore script's semver regex as a split-based parse and the parity test around it; a lane passed a dev flag to the token build through an env file because the Vite config may not read `process.env`; a red-first test asserted a synonym extraction the generator never performed; the generated root-type rename reached the published SDK's re-exports; two copies of a fence-line reader landed in one diff. | Applied: the canonical semver composition mirrored and the parity test restored; a `--dev` argument on the token build; the test reshaped to the count the pattern feeds; the renamed re-exports named in the commit body (the owner's word: no major version, since no consumer of the repository is affected); one `core/markdown/fence-line.ts` adopted by the two validators. |
+| 2026-11-02 | Lane verification, the real-IO rule over agent-tools | Nine in-process tests read a real file system directly; the modules behind them probed `node:fs` inline. | Applied: one `SyncFileSystem` port in agent-tools core with the node default and an in-memory fake, taken by the flag-path resolver, the Codex registry and resolver, the protocol-conformance adapter, the agent index and the watcher-staleness binding; the nine tests replaced by in-memory unit tests, the source-tree grep guard deleted. Debt recorded, not cured: nine test helpers still read a real file system for about thirty-one in-process tests; the MCP app holds twenty-five in-process loopback end-to-end tests; the build-metadata runtime test reads disk at import. A follow-on lane. |
+| 2026-11-02 | Lane verification, consolidation | In-memory file-system fakes now exist in env-resolution, codegen, search-cli and agent-tools (three async, one sync), with differing shapes; the fence model is adopted by two of the three CommonMark detectors and none of the seven toggling ones (units 8, 9a, 9b). | Routed: a named consolidation lane for the fakes; units 8 (system-prompt-block), 9a and 9b stay as written. |
+| 2026-11-02 | The full repository gate over the verified tree | Knip reported fifteen exports nothing imports, all in the lanes' new modules; the MCP content audit refused item C484 because a lane hoisted the AI reference's heading map out of the function its anchor covered; six files were unformatted. | Applied: the exports dropped or the barrel trimmed; C484 re-anchored on the hoisted map with the `unchanged` verdict (the rendered headings are the same) and the guidance-resource anchor overrides moved into their own module so the registry fits its line limit; the files formatted. The side agent's note on the hoisted union names was checked and cured in the generator: a union is named after the property most of its sites share, ties by the words the tied names share (`Subject`, `QuizItem`), no name map. |

@@ -3,6 +3,12 @@ import { describe, expect, it } from 'vitest';
 
 import { resolveTrustedShell } from './trusted-shell.js';
 
+/** An existence probe under which every candidate path holds a shell. */
+const everyPathExists = (): boolean => true;
+
+/** An existence probe under which no candidate path holds a shell. */
+const noPathExists = (): boolean => false;
+
 describe('resolveTrustedShell', () => {
   it.each([
     ['linux', '/bin/sh'],
@@ -26,15 +32,13 @@ describe('resolveTrustedShell', () => {
     ['linux', '/usr/bin/sh'],
     ['win32', String.raw`C:\Program Files\Git\usr\bin\sh.exe`],
   ] as const)('on %s prefers the earliest trusted path when several hold sh', (platform, first) => {
-    const exists = (): boolean => true;
-    const shell = resolveTrustedShell(exists, platform);
+    const shell = resolveTrustedShell(everyPathExists, platform);
 
     expect(isOk(shell) && shell.value).toBe(first);
   });
 
   it('returns err naming every searched path when no shell exists', () => {
-    const exists = (): boolean => false;
-    const shell = resolveTrustedShell(exists, 'darwin');
+    const shell = resolveTrustedShell(noPathExists, 'darwin');
 
     expect(isErr(shell) && shell.error.message).toMatch(/\/usr\/bin\/sh, \/bin\/sh/);
   });

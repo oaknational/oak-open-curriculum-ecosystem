@@ -97,8 +97,10 @@ b"`),
 
   it('decodes ANSI-C escapes in a $-quoted span', () => {
     expect(texts(String.raw`printf $'a\tb\x41\101\''`)).toStrictEqual([['printf', "a\tbAA'"]]);
+    // `\q` names no ANSI-C escape, so its backslash survives the decode.
+    const unknownEscape = String.raw`\q`;
     expect(texts(String.raw`printf $'\u0041\U00000042\cA\q'`)).toStrictEqual([
-      ['printf', `AB${String.fromCodePoint(1)}${String.raw`\q`}`],
+      ['printf', `AB${String.fromCodePoint(1)}${unknownEscape}`],
     ]);
     expect(texts(String.raw`bash -c $'echo start\nrm -rf x'`)).toStrictEqual([
       ['bash', '-c', 'echo start\nrm -rf x'],

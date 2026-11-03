@@ -1,31 +1,40 @@
-import { describe, it, expect, afterEach } from 'vitest';
-import { mkdtempSync, rmSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { tmpdir } from 'node:os';
-import { fileURLToPath } from 'node:url';
+import { join, sep } from 'node:path';
+import { describe, expect, it } from 'vitest';
 import { findRepoRoot } from '../src/repo-root.js';
+import { createInMemoryFileSystem } from './test-helpers/in-memory-file-system.js';
+
+const REPO_ROOT = join(sep, 'work', 'repo');
+const PACKAGE_DIR = join(REPO_ROOT, 'packages', 'libs', 'env-resolution');
+const START_DIR = join(PACKAGE_DIR, 'tests');
 
 describe('findRepoRoot', () => {
-  it('returns a directory path (non-empty) for current repo', () => {
-    const startDir = dirname(fileURLToPath(import.meta.url));
-    const root = findRepoRoot(startDir);
-    if (root === undefined) {
-      throw new Error('Expected findRepoRoot to return a path when run inside the monorepo');
-    }
-    expect(root.length).toBeGreaterThan(1);
+  it('finds the directory holding pnpm-workspace.yaml above a nested start', () => {
+    const fileSystem = createInMemoryFileSystem({
+      [join(REPO_ROOT, 'pnpm-workspace.yaml')]: 'packages: []',
+    });
+
+    expect(findRepoRoot(START_DIR, fileSystem.exists)).toBe(REPO_ROOT);
   });
 
-  describe('when no repo markers exist', () => {
-    let tempDir: string;
+  it('falls back to the directory holding .git when no workspace manifest exists', () => {
+    const fileSystem = createInMemoryFileSystem({ [join(REPO_ROOT, '.git')]: '' });
 
-    afterEach(() => {
-      rmSync(tempDir, { recursive: true, force: true });
+    expect(findRepoRoot(START_DIR, fileSystem.exists)).toBe(REPO_ROOT);
+  });
+
+  it('prefers the workspace manifest over a .git nearer the start', () => {
+    // A nested checkout with its own .git must not shadow the monorepo root.
+    const fileSystem = createInMemoryFileSystem({
+      [join(REPO_ROOT, 'pnpm-workspace.yaml')]: 'packages: []',
+      [join(PACKAGE_DIR, '.git')]: '',
     });
 
-    it('returns undefined instead of throwing', () => {
-      tempDir = mkdtempSync(join(tmpdir(), 'no-repo-root-'));
-      const result = findRepoRoot(tempDir);
-      expect(result).toBeUndefined();
-    });
+    expect(findRepoRoot(START_DIR, fileSystem.exists)).toBe(REPO_ROOT);
+  });
+
+  it('returns undefined instead of throwing when no repo markers exist', () => {
+    const fileSystem = createInMemoryFileSystem({});
+
+    expect(findRepoRoot(START_DIR, fileSystem.exists)).toBeUndefined();
   });
 });

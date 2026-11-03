@@ -1,11 +1,13 @@
 #!/usr/bin/env node
 import { fileURLToPath } from 'node:url';
+import type { RepoFiles } from '../core/codex-project-agent-registry.js';
 import type { CodexProjectAgent } from '../core/codex-project-agents.js';
 import {
   listCodexProjectAgentNames,
   resolveCodexProjectAgent,
 } from '../core/codex-project-agents.js';
 import { repoRoot } from '../core/runtime.js';
+import { nodeSyncFileSystem } from '../core/sync-file-system.js';
 import { writeErrorLine, writeLine } from '../core/terminal-output.js';
 
 const HELP_TEXT = `Usage: codex-reviewer-resolve <agent-name> [--json]
@@ -58,9 +60,13 @@ function resolveAndPrintAgent(root: string, agentName: string, jsonOutput: boole
   }
 }
 
-export function formatResolutionFailure(root: string, message: string): string {
+export function formatResolutionFailure(
+  root: string,
+  message: string,
+  files: RepoFiles = nodeSyncFileSystem,
+): string {
   try {
-    const availableAgents = listCodexProjectAgentNames(root);
+    const availableAgents = listCodexProjectAgentNames(root, files);
     if (availableAgents.length === 0) {
       return message;
     }

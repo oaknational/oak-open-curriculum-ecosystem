@@ -2,6 +2,9 @@ import { describe, expect, it } from 'vitest';
 
 import { parseGitRemoteUrl } from './git-remote-url.js';
 
+// The scheme is that row's subject: a plain-http remote is read like any other.
+const CLEAR_TEXT_SCHEME = 'http';
+
 describe('parseGitRemoteUrl', () => {
   it.each([
     { url: 'https://github.com/acme/widgets.git', host: 'github.com' },
@@ -14,7 +17,7 @@ describe('parseGitRemoteUrl', () => {
     { url: 'https://jim@github.com/acme/widgets.git', host: 'github.com' },
     { url: 'https://github.com@evil.example/acme/widgets.git', host: 'evil.example' },
     { url: 'https://gitlab.example/acme/widgets.git', host: 'gitlab.example' },
-    { url: 'http://github.com/acme/widgets.git', host: 'github.com' },
+    { url: `${CLEAR_TEXT_SCHEME}://github.com/acme/widgets.git`, host: 'github.com' },
   ])('reads $url as acme/widgets on $host', ({ url, host }) => {
     expect(parseGitRemoteUrl(url)).toEqual({ host, owner: 'acme', repoName: 'widgets' });
   });

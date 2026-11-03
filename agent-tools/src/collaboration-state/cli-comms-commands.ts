@@ -66,8 +66,8 @@ export async function resolveCommsBody(
   if (filePath !== undefined) {
     try {
       return await io.readTextFile(filePath);
-    } catch (cause) {
-      throw new Error(`--body-file path is unreadable: ${filePath}`, { cause });
+    } catch (error) {
+      throw new Error(`--body-file path is unreadable: ${filePath}`, { cause: error });
     }
   }
   if (inline === undefined) {

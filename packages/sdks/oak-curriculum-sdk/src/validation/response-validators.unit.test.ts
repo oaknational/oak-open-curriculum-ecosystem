@@ -7,6 +7,31 @@ import { describe, it, expect } from 'vitest';
 import { validateCurriculumResponse } from './curriculum-response-validators.js';
 import { lessonSummarySchema, type SearchLessonSummary } from '../public/search.js';
 
+/** A schema-valid lesson summary; `overrides` vary the field under test. */
+function buildLessonSummaryResponse(
+  overrides: Partial<SearchLessonSummary> = {},
+): SearchLessonSummary {
+  return lessonSummarySchema.parse({
+    lessonTitle: 'Introduction to Algebra',
+    units: [{ unitSlug: 'algebra-basics', unitTitle: 'Algebra Basics' }],
+    subjectSlug: 'maths',
+    subjectTitle: 'Mathematics',
+    keyStageSlug: 'ks3',
+    keyStageTitle: 'Key Stage 3',
+    lessonKeywords: [],
+    keyLearningPoints: [],
+    misconceptionsAndCommonMistakes: [],
+    teacherTips: [],
+    contentGuidance: null,
+    supervisionLevel: null,
+    downloadsAvailable: false,
+    canonicalUrl:
+      'https://www.thenational.academy/teachers/programmes/maths-secondary-ks3/units/algebra-basics/lessons/introduction-to-algebra',
+    oakUrl: 'https://www.thenational.academy/teachers/lessons/introduction-to-algebra',
+    ...overrides,
+  });
+}
+
 describe('validateCurriculumResponse', () => {
   describe('for GET /lessons/{lesson}/transcript response', () => {
     const path = '/lessons/{lesson}/transcript';
@@ -98,30 +123,6 @@ describe('validateCurriculumResponse', () => {
     const path = '/lessons/{lesson}/summary';
     const method = 'get';
     const statusCode = 200;
-
-    function buildLessonSummaryResponse(
-      overrides: Partial<SearchLessonSummary> = {},
-    ): SearchLessonSummary {
-      return lessonSummarySchema.parse({
-        lessonTitle: 'Introduction to Algebra',
-        units: [{ unitSlug: 'algebra-basics', unitTitle: 'Algebra Basics' }],
-        subjectSlug: 'maths',
-        subjectTitle: 'Mathematics',
-        keyStageSlug: 'ks3',
-        keyStageTitle: 'Key Stage 3',
-        lessonKeywords: [],
-        keyLearningPoints: [],
-        misconceptionsAndCommonMistakes: [],
-        teacherTips: [],
-        contentGuidance: null,
-        supervisionLevel: null,
-        downloadsAvailable: false,
-        canonicalUrl:
-          'https://www.thenational.academy/teachers/programmes/maths-secondary-ks3/units/algebra-basics/lessons/introduction-to-algebra',
-        oakUrl: 'https://www.thenational.academy/teachers/lessons/introduction-to-algebra',
-        ...overrides,
-      });
-    }
 
     it('should validate valid lesson summary response without augmenting it', () => {
       const response = buildLessonSummaryResponse({

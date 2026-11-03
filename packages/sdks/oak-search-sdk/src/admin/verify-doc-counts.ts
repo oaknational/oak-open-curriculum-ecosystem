@@ -20,8 +20,6 @@ import type {
 import { SEARCH_INDEX_KINDS, type IndexResolverFn } from '../internal/index-resolver.js';
 import { isMissingIndexError } from './es-error-guards.js';
 
-export type { DocCountExpectations, DocCountVerification, IndexDocCountStatus };
-
 // ---------------------------------------------------------------------------
 // Implementation
 // ---------------------------------------------------------------------------
@@ -134,3 +132,9 @@ export async function verifyDocCounts(
     });
   }
 }
+
+export {
+  type DocCountExpectations,
+  type DocCountVerification,
+  type IndexDocCountStatus,
+} from '../types/admin-types.js';

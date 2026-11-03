@@ -153,7 +153,7 @@ describe('practice box health', () => {
   it('names the consolidate-docs skill by its canonical id, with no adapter prefix', () => {
     const details = evaluatePracticeBoxState(1).details.join('\n');
     expect(details).toContain('the consolidate-docs skill');
-    expect(details).not.toMatch(/[a-z]+-consolidate-docs/u);
+    expect(details).not.toMatch(/\b[a-z]+-consolidate-docs/u);
   });
 });
 

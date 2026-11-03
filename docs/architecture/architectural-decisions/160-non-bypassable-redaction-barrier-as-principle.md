@@ -129,9 +129,9 @@ is Node-only (depends on `@sentry/node` types). Satisfying this ADR
 for the browser side requires the value-level redaction primitives
 to be available in a browser-safe package. They live in
 `@oaknational/observability`, which is browser-safe by construction
-(zero `@sentry/*` imports; zero `node:*` imports; enforced by a
-`no-node-only-imports` structural test co-located with the
-primitives). Both the Node adapter (`@oaknational/sentry-node`)
+(zero `@sentry/*` imports; zero `node:*` imports; enforced by the
+dependency-cruiser rules `observability-no-node-core-modules` and
+`observability-no-sentry`). Both the Node adapter (`@oaknational/sentry-node`)
 and the future browser adapter compose these primitives directly.
 Failure to preserve the browser-safe boundary would force the
 widget to re-implement the redaction policy, violating this ADR's
@@ -228,8 +228,8 @@ Both questions originally raised at drafting have been resolved in the
   they composed over, and delete the transitional workspace entirely. See
   the 2026-04-19 history entry below for the full resolution. Browser
   safety (zero `@sentry/*`, zero Node-only imports in
-  `@oaknational/observability`) is preserved by the `no-node-only-imports`
-  structural test co-located with the primitives.
+  `@oaknational/observability`) is preserved by the dependency-cruiser rules
+  `observability-no-node-core-modules` and `observability-no-sentry`.
 - **Conformance-test location — RESOLVED as per-consuming-workspace.**
   Each consumer (Node adapter in `packages/libs/sentry-node/`; future
   browser adapter in the widget package) owns its own conformance test
@@ -280,8 +280,9 @@ The first Node-side conformance test is
   flattens the adapter dependency graph from `sentry-node →
 telemetry-redaction-core → observability` to `sentry-node →
 observability`, and (d) preserves browser-safety via a
-  `no-node-only-imports` structural test inside
-  `@oaknational/observability`. The closure principle of this ADR is
+  pair of dependency-cruiser rules (`observability-no-node-core-modules`,
+  `observability-no-sentry`) over `@oaknational/observability`. The closure
+  principle of this ADR is
   unaffected: every fan-out path still applies the redaction policy
   before any sink reaches the network.
 - **2026-04-19** — Identity-envelope policy ruling deferred to a
@@ -312,3 +313,9 @@ observability`, and (d) preserves browser-safety via a
   closure rule with explicit lawful basis and data-subject-rights
   propagation). The ADR text and closure principle remain in force
   unchanged.
+- **2026-11-02** — The browser-safety boundary moves from the
+  `no-node-only-imports` structural test (an in-process test that read its
+  own source tree) to the two dependency-cruiser rules named above; an
+  in-process test uses no IO
+  ([testing-strategy.md](../../../.agent/directives/testing-strategy.md)),
+  and a structural rule is the instrument for a structural invariant.

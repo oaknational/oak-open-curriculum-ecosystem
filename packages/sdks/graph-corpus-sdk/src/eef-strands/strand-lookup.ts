@@ -8,6 +8,7 @@
  * type-predicate. They live in this gate-checked module as derived logic; the
  * raw data lives in the duplication-excluded `*.external-data.ts` snapshot.
  */
+import { typeSafeIncludes } from '@oaknational/type-helpers';
 import { EEF_TOOLKIT_DATA } from './eef-toolkit.external-data.js';
 
 /** The whole toolkit snapshot's static type, inferred from the `as const` literal. */
@@ -99,11 +100,10 @@ export const EEF_STRAND_IDS: readonly EefStrandId[] = EEF_TOOLKIT_DATA.strands.m
  * @returns `true` iff `value` is a string that is a real corpus strand id.
  */
 export function isValidStrandKey(value: unknown): value is EefStrandId {
-  // `.some` with an explicit `===`, not `.includes(value)`: `includes` expects
-  // an `EefStrandId` argument, so passing `unknown` would not typecheck without
-  // an `as` cast — the one widening this module exists to avoid. The predicate
-  // form compares `unknown` against each exactly-typed id soundly.
-  return EEF_STRAND_IDS.some((id) => id === value);
+  // `typeSafeIncludes`, not `.includes(value)`: `includes` expects an
+  // `EefStrandId` argument, so passing `unknown` would not typecheck without an
+  // `as` cast — the one widening this module exists to avoid.
+  return typeSafeIncludes(EEF_STRAND_IDS, value);
 }
 
 /**

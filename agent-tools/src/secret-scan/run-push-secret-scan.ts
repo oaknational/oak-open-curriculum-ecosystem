@@ -16,6 +16,7 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 import { resolveTrustedGit } from '../core/trusted-git.js';
+import { resolveTrustedGitleaks } from '../core/trusted-gitleaks.js';
 import {
   computePushScanRanges,
   degradedScanWarning,
@@ -134,10 +135,20 @@ export function runPushSecretScan(
   return allClean ? 0 : 1;
 }
 
-/** Scan one range with gitleaks; its own output is inherited to the terminal. */
-function scanRangeWithGitleaks(range: string): boolean {
+/**
+ * The scanner over one range, running `gitleaks` by the absolute path the
+ * trusted resolver found (a by-name spawn resolves through PATH, which a
+ * writable entry can shadow: SonarCloud S4036); its own output is inherited
+ * to the terminal.
+ */
+function scanRangeWithGitleaks(gitleaks: string): (range: string) => boolean {
+  return (range) => scanRange(gitleaks, range);
+}
+
+/** One gitleaks run over `range`: true when clean, false on a leak or a launch failure. */
+function scanRange(gitleaks: string, range: string): boolean {
   const result = spawnSync(
-    'gitleaks',
+    gitleaks,
     ['detect', '--redact=100', '--source', '.', `--log-opts=${range}`],
     {
       stdio: ['ignore', 'inherit', 'inherit'],
@@ -163,7 +174,14 @@ if (process.argv[1] === currentFilePath) {
     (path) => readFileSync(path, 'utf8'),
     readConfiguredRemotes(),
   );
+  const gitleaks = resolveTrustedGitleaks();
+  if (!gitleaks.ok) {
+    process.stderr.write(`${gitleaks.error.message}\n`);
+    process.exit(1);
+  }
   process.exit(
-    runPushSecretScan(args, scanRangeWithGitleaks, (message) => process.stderr.write(message)),
+    runPushSecretScan(args, scanRangeWithGitleaks(gitleaks.value), (message) =>
+      process.stderr.write(message),
+    ),
   );
 }

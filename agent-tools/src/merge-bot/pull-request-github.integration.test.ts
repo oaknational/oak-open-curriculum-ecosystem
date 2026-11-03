@@ -27,18 +27,23 @@ const REPO = { owner: 'acme', repoName: 'widgets' };
 const API = 'https://api.github.com/repos/acme/widgets';
 const TOKEN = 'ghs_pull_request_token';
 
-describe('commentOnPullRequest', () => {
-  /** The pull request read the verb probes first, then the comment write. */
-  const commentScript =
-    (post: { status: number; body: unknown } | undefined): GithubScript =>
-    (request) => {
-      const line = `${request.method} ${request.url}`;
-      if (line === `GET ${API}/pulls/42`) {
-        return { status: 200, body: pullRequest('open') };
-      }
-      return line === `POST ${API}/issues/42/comments` ? post : undefined;
-    };
+/** GitHub's REST reading of pull request 42. */
+function pullRequest(state: 'open' | 'closed'): unknown {
+  return { number: 42, node_id: 'PR_kwDOXyz', state, draft: false };
+}
 
+/** A script answering the pull request read the verb probes first, then the comment write. */
+function commentScript(post: { status: number; body: unknown } | undefined): GithubScript {
+  return (request) => {
+    const line = `${request.method} ${request.url}`;
+    if (line === `GET ${API}/pulls/42`) {
+      return { status: 200, body: pullRequest('open') };
+    }
+    return line === `POST ${API}/issues/42/comments` ? post : undefined;
+  };
+}
+
+describe('commentOnPullRequest', () => {
   it('POSTs the body verbatim as an issue comment and reads back the id and URL', async () => {
     const github = scriptedGithub(
       commentScript({
@@ -124,15 +129,13 @@ describe('replyToReviewComment', () => {
   });
 });
 
-/** GitHub's REST reading of pull request 42. */
-function pullRequest(state: 'open' | 'closed'): unknown {
-  return { number: 42, node_id: 'PR_kwDOXyz', state, draft: false };
-}
-
-/** A script answering the pull request read, the reason comment and the close PATCH. */
+/**
+ * A script answering the pull request read, the reason comment and the close
+ * PATCH; the PATCH answers as an accepted close unless a field says otherwise.
+ */
 function closeScript(
   read: unknown,
-  patch: { status: number; body: unknown } = { status: 200, body: { state: 'closed' } },
+  { status = 200, body = { state: 'closed' } }: { status?: number; body?: unknown } = {},
 ): GithubScript {
   return (request) => {
     const line = `${request.method} ${request.url}`;
@@ -142,7 +145,7 @@ function closeScript(
     if (line === `POST ${API}/issues/42/comments`) {
       return { status: 201, body: { id: 9003, html_url: `${API}/pull/42#issuecomment-9003` } };
     }
-    return line === `PATCH ${API}/pulls/42` ? patch : undefined;
+    return line === `PATCH ${API}/pulls/42` ? { status, body } : undefined;
   };
 }
 

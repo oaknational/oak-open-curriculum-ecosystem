@@ -12,6 +12,9 @@ import { gitFake, REFUSED_PUSH, runPush, tokenStoreFake } from './test-helpers/p
  * a run of attempts is `push-attempts.integration.test.ts`'s.
  */
 
+/** A git executor that answers every command with the captured refusal, never streaming. */
+const capturedRefusalExecutor: GitExecutor = () => REFUSED_PUSH;
+
 describe('merge-bot push retry', () => {
   it('reports a push GitHub refused on every attempt as an operational failure, nothing on stdout, the refusal shown', async () => {
     const run = runPush({ args: ['--json'], git: gitFake(REFUSED_PUSH) });
@@ -23,8 +26,7 @@ describe('merge-bot push retry', () => {
   });
 
   it('tries again a refusal the executor captured instead of streaming', async () => {
-    const gitExecutor: GitExecutor = () => REFUSED_PUSH;
-    const run = runPush({ git: { gitExecutor, calls: [] } });
+    const run = runPush({ git: { gitExecutor: capturedRefusalExecutor, calls: [] } });
 
     expect(await run.exit).toBe(1);
     expect(run.errText()).toContain('trying again with the same token');

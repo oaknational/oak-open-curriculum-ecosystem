@@ -32,14 +32,14 @@ function hasInlineDefaultFunctionExport(bundleSource: string): boolean {
 }
 
 function findDefaultExportBinding(bundleSource: string): string | null {
-  const reExportMatch = bundleSource.match(
-    /export\s*\{[^}]*?\b([A-Za-z_$][\w$]*)\s+as\s+default\b[^}]*\}/m,
+  const reExportMatch = /export\s*\{[^}]*?\b([A-Za-z_$][\w$]*)\s+as\s+default\b[^}]*\}/m.exec(
+    bundleSource,
   );
   if (reExportMatch?.[1]) {
     return reExportMatch[1];
   }
 
-  const directExportMatch = bundleSource.match(/export\s+default\s+([A-Za-z_$][\w$]*)\s*;/m);
+  const directExportMatch = /export\s+default\s+([A-Za-z_$][\w$]*)\s*;/m.exec(bundleSource);
   return directExportMatch?.[1] ?? null;
 }
 
@@ -77,7 +77,7 @@ function isFunctionBinding(
     String.raw`(?:^|\n)\s*(?:const|let|var)\s+${escapedIdentifier}\s*=\s*([A-Za-z_$][\w$]*)\s*;`,
     'm',
   );
-  const aliasMatch = bundleSource.match(aliasPattern);
+  const aliasMatch = aliasPattern.exec(bundleSource);
   if (!aliasMatch?.[1]) {
     return false;
   }

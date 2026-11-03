@@ -17,8 +17,6 @@
 
 import { extractPathCitations } from './extract-path-citations.js';
 
-export { extractPathCitations };
-
 /** A citation whose target does not exist. */
 export interface MissingPathFinding {
   /** Repo-relative path to the file containing the finding. */
@@ -98,3 +96,5 @@ function missingCitationsInFile(
       target: citation.target,
     }));
 }
+
+export { extractPathCitations } from './extract-path-citations.js';

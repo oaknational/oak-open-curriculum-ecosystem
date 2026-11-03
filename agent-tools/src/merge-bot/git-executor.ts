@@ -190,11 +190,11 @@ function fileBackedGitCall(
         stdout: '',
         stderr: '',
       }),
-      (cause: unknown) => ({
+      (error: unknown) => ({
         status: -1,
         signal: null,
         stdout: '',
-        stderr: `cannot run git: ${cause instanceof Error ? cause.message : String(cause)}`,
+        stderr: `cannot run git: ${error instanceof Error ? error.message : String(error)}`,
       }),
     );
 }

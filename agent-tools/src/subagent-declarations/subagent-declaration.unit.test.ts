@@ -3,6 +3,28 @@ import { describe, expect, it } from 'vitest';
 
 import { parseSubagentDeclaration } from './subagent-declaration.js';
 
+/** The voter role, a zero-tool system-prompt agent, declaring the given Claude turn bound. */
+const voterWithTurns = (maxTurns: number) =>
+  parseSubagentDeclaration('voter', {
+    description: 'Voter judges.',
+    claude: { tools: 'none', maxTurns, body: 'system-prompt' },
+  });
+
+/** The alpha role declaring the given Gemini description. */
+const alphaWithGeminiDescription = (description: string) =>
+  parseSubagentDeclaration('alpha', {
+    description: 'Alpha reviews a.',
+    gemini: { description },
+  });
+
+/** The refusal the voter role gets for the given Claude block. */
+const voterRefusalFor = (claude: Record<string, unknown>) =>
+  unwrapErr(parseSubagentDeclaration('voter', { description: 'Voter.', claude }));
+
+/** The refusal the mapper role gets for the given Claude block. */
+const mapperRefusalFor = (claude: Record<string, unknown>) =>
+  unwrapErr(parseSubagentDeclaration('mapper', { description: 'Mapper.', claude }));
+
 describe('parseSubagentDeclaration', () => {
   it('reads a role of one description as a role with no platform blocks', () => {
     expect(parseSubagentDeclaration('alpha', { description: 'Alpha reviews a.' })).toStrictEqual({
@@ -136,14 +158,9 @@ describe('parseSubagentDeclaration', () => {
   });
 
   it('reads a Claude turn bound as a positive whole number, refusing zero and a fraction', () => {
-    const withTurns = (maxTurns: number) =>
-      parseSubagentDeclaration('voter', {
-        description: 'Voter judges.',
-        claude: { tools: 'none', maxTurns, body: 'system-prompt' },
-      });
-    expect(withTurns(4)).toMatchObject({ ok: true, value: { claude: { maxTurns: 4 } } });
+    expect(voterWithTurns(4)).toMatchObject({ ok: true, value: { claude: { maxTurns: 4 } } });
     for (const refused of [0, 2.5]) {
-      expect(unwrapErr(withTurns(refused))).toMatch(/^voter: claude\.maxTurns: /u);
+      expect(unwrapErr(voterWithTurns(refused))).toMatch(/^voter: claude\.maxTurns: /u);
     }
   });
 
@@ -157,29 +174,26 @@ describe('parseSubagentDeclaration', () => {
   });
 
   it('reads a Gemini description, the sentence the Gemini adapter carries in place of the role description, refusing one that is not a single line', () => {
-    const withGemini = (description: string) =>
-      parseSubagentDeclaration('alpha', {
-        description: 'Alpha reviews a.',
-        gemini: { description },
-      });
-    expect(withGemini('Alpha on Gemini.')).toMatchObject({
+    expect(alphaWithGeminiDescription('Alpha on Gemini.')).toMatchObject({
       ok: true,
       value: { gemini: { description: 'Alpha on Gemini.' } },
     });
-    expect(unwrapErr(withGemini('Alpha\non Gemini.'))).toMatch(/^alpha: gemini\.description: /u);
+    expect(unwrapErr(alphaWithGeminiDescription('Alpha\non Gemini.'))).toMatch(
+      /^alpha: gemini\.description: /u,
+    );
   });
 
   it('refuses a zero-tool Claude block that names a tool, pads the word, keeps a deny list, or keeps the pointer body a no-tools agent cannot follow, naming the field that breaks it', () => {
-    const refusal = (claude: Record<string, unknown>) =>
-      unwrapErr(parseSubagentDeclaration('voter', { description: 'Voter.', claude }));
-    expect(refusal({ tools: 'none, Read', body: 'system-prompt' })).toMatch(
+    expect(voterRefusalFor({ tools: 'none, Read', body: 'system-prompt' })).toMatch(
       /^voter: claude\.tools: /u,
     );
-    expect(refusal({ tools: ' none ', body: 'system-prompt' })).toMatch(/^voter: claude\.tools: /u);
-    expect(refusal({ tools: 'none', disallowedTools: 'Write', body: 'system-prompt' })).toMatch(
-      /^voter: claude\.disallowedTools: /u,
+    expect(voterRefusalFor({ tools: ' none ', body: 'system-prompt' })).toMatch(
+      /^voter: claude\.tools: /u,
     );
-    expect(refusal({ tools: 'none' })).toMatch(/^voter: claude\.body: /u);
+    expect(
+      voterRefusalFor({ tools: 'none', disallowedTools: 'Write', body: 'system-prompt' }),
+    ).toMatch(/^voter: claude\.disallowedTools: /u);
+    expect(voterRefusalFor({ tools: 'none' })).toMatch(/^voter: claude\.body: /u);
   });
 
   it('refuses a zero-tool fan-out variant at its tools: a variant points to its template, which a zero-tool agent cannot read', () => {
@@ -194,15 +208,13 @@ describe('parseSubagentDeclaration', () => {
   });
 
   it('refuses a System prompt body without its tools declared, or with a pointer tail or a note, and in a fan-out variant, naming the field that breaks it', () => {
-    const refusal = (claude: Record<string, unknown>) =>
-      unwrapErr(parseSubagentDeclaration('mapper', { description: 'Mapper.', claude }));
-    expect(refusal({ body: 'system-prompt' })).toMatch(/^mapper: claude\.tools: /u);
-    expect(refusal({ tools: 'Read', body: 'system-prompt', pointerTail: ', then stop.' })).toMatch(
-      /^mapper: claude\.pointerTail: /u,
-    );
-    expect(refusal({ tools: 'Read', body: 'system-prompt', note: 'Report only.' })).toMatch(
-      /^mapper: claude\.note: /u,
-    );
+    expect(mapperRefusalFor({ body: 'system-prompt' })).toMatch(/^mapper: claude\.tools: /u);
+    expect(
+      mapperRefusalFor({ tools: 'Read', body: 'system-prompt', pointerTail: ', then stop.' }),
+    ).toMatch(/^mapper: claude\.pointerTail: /u);
+    expect(
+      mapperRefusalFor({ tools: 'Read', body: 'system-prompt', note: 'Report only.' }),
+    ).toMatch(/^mapper: claude\.note: /u);
     const variant = { name: 'cricket-high', platforms: ['claude'], description: 'High.' };
     expect(
       unwrapErr(

@@ -15,15 +15,18 @@ import {
 } from './generator.js';
 import { syntheticCanonical } from './test-helpers/synthetic-canonical.js';
 
-function readsCanonicalOnly(): GeneratorFileIo['readTextFile'] {
-  return (path: string) =>
-    Promise.resolve(path.endsWith('SKILL-CANONICAL.md') ? syntheticCanonical() : undefined);
-}
+/** A reader that serves the synthetic canonical and nothing else. */
+const readsCanonicalOnly: GeneratorFileIo['readTextFile'] = (path: string) =>
+  Promise.resolve(path.endsWith('SKILL-CANONICAL.md') ? syntheticCanonical() : undefined);
+
+/** A writer that refuses every write, so a check that writes is caught. */
+const neverWrites: GeneratorFileIo['writeTextFile'] = () =>
+  Promise.reject(new Error('check must not write'));
 
 describe('generateContentModule (integration)', () => {
   it('surfaces a filesystem write failure as Err, never a rejection', async () => {
     const io: GeneratorFileIo = {
-      readTextFile: readsCanonicalOnly(),
+      readTextFile: readsCanonicalOnly,
       writeTextFile: () => Promise.reject(new Error('EACCES: permission denied')),
     };
     const result = await generateContentModule('/repo', io);
@@ -35,7 +38,7 @@ describe('generateContentModule (integration)', () => {
   it('writes the rendered module for a classified canonical', async () => {
     const written = new Map<string, string>();
     const io: GeneratorFileIo = {
-      readTextFile: readsCanonicalOnly(),
+      readTextFile: readsCanonicalOnly,
       writeTextFile: (path: string, content: string) => {
         written.set(path, content);
         return Promise.resolve();
@@ -47,22 +50,20 @@ describe('generateContentModule (integration)', () => {
   });
 });
 
+/** A file IO serving the synthetic canonical, the given committed module text for every other read, and no writes. */
+function ioWithCommittedModule(committed: string | undefined): GeneratorFileIo {
+  return {
+    readTextFile: (path: string) => {
+      if (path.endsWith('SKILL-CANONICAL.md')) {
+        return Promise.resolve(syntheticCanonical());
+      }
+      return Promise.resolve(committed);
+    },
+    writeTextFile: neverWrites,
+  };
+}
+
 describe('checkContentModule (integration)', () => {
-  const neverWrites: GeneratorFileIo['writeTextFile'] = () =>
-    Promise.reject(new Error('check must not write'));
-
-  function ioWithCommittedModule(committed: string | undefined): GeneratorFileIo {
-    return {
-      readTextFile: (path: string) => {
-        if (path.endsWith('SKILL-CANONICAL.md')) {
-          return Promise.resolve(syntheticCanonical());
-        }
-        return Promise.resolve(committed);
-      },
-      writeTextFile: neverWrites,
-    };
-  }
-
   it('reports up to date when the committed module matches the regeneration', async () => {
     const expected = await generateExpectedModule();
     const outcome = await checkContentModule('/repo', ioWithCommittedModule(expected));

@@ -37,7 +37,19 @@ export const MCP_RESOURCE_PATH = '/mcp';
  * on and the port it self-describes as can never diverge — both treat an
  * empty `PORT` as absent.
  */
-export const DEFAULT_LOCAL_PORT = '3333';
+const DEFAULT_LOCAL_PORT = '3333';
+
+/**
+ * The local-development listen port as a string: `portEnv` when it is set and
+ * non-empty, else {@link DEFAULT_LOCAL_PORT}. `PORT` is typed as an optional
+ * string and arrives EMPTY as well as absent from some hosts; both mean "not
+ * configured". This one reading is shared by the listener (`resolvePort` in
+ * `server-runtime.ts`) and the self-described origin below, so the port the
+ * server listens on and the port it advertises cannot diverge.
+ */
+export function resolveLocalPort(portEnv: string | undefined): string {
+  return portEnv !== undefined && portEnv.length > 0 ? portEnv : DEFAULT_LOCAL_PORT;
+}
 
 /**
  * Inputs for {@link resolveServedOrigin}. All optional: an empty object is
@@ -79,8 +91,7 @@ export function resolveServedOrigin(inputs: ServedOriginInputs): string {
   if (inputs.displayHostname && inputs.displayHostname.length > 0) {
     return `https://${inputs.displayHostname}`;
   }
-  const port = inputs.portEnv && inputs.portEnv.length > 0 ? inputs.portEnv : DEFAULT_LOCAL_PORT;
-  return `http://localhost:${port}`;
+  return `http://localhost:${resolveLocalPort(inputs.portEnv)}`;
 }
 
 /**

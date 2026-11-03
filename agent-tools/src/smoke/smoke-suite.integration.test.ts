@@ -2,6 +2,10 @@ import { describe, expect, it } from 'vitest';
 
 import { runSmokeSuite, type SmokeEnd } from './smoke-suite.js';
 
+/** A smoke runner whose every smoke ends killed by SIGTERM. */
+const killedBySignal = (): Promise<SmokeEnd> =>
+  Promise.resolve({ status: null, signal: 'SIGTERM' });
+
 /**
  * The suite runs every smoke, one after another, whatever the earlier ones
  * ended with, and its verdict is the conjunction of every run. The runner of
@@ -26,9 +30,7 @@ describe('runSmokeSuite', () => {
   });
 
   it('carries a smoke killed by a signal into the report by its signal', async () => {
-    const killed = (): Promise<SmokeEnd> => Promise.resolve({ status: null, signal: 'SIGTERM' });
-
-    const summary = await runSmokeSuite(['a.smoke.ts'], killed);
+    const summary = await runSmokeSuite(['a.smoke.ts'], killedBySignal);
 
     const line = summary.lines.find((candidate) => candidate.includes('a.smoke.ts'));
     expect(line).toContain('SIGTERM');

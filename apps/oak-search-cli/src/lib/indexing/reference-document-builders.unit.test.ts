@@ -128,6 +128,18 @@ describe('createGlossaryDocument', () => {
     expect(doc.term_slug).toBe('pythagoras-theorem');
   });
 
+  it('trims the hyphens left by leading and trailing punctuation from the slug', () => {
+    const doc = createGlossaryDocument({ ...baseParams, term: '  (Ratio & proportion)!  ' });
+
+    expect(doc.term_slug).toBe('ratio-proportion');
+  });
+
+  it('slugs a term made only of punctuation to the empty string', () => {
+    const doc = createGlossaryDocument({ ...baseParams, term: '***' });
+
+    expect(doc.term_slug).toBe('');
+  });
+
   it('should handle terms without definitions', () => {
     const doc = createGlossaryDocument({
       ...baseParams,

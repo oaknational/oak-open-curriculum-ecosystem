@@ -17,8 +17,6 @@ import type {
   IdentityPathObservation,
 } from './identity-secure-read-model.js';
 
-export type { IdentityPathApi };
-
 /**
  * Collect and validate one immutable no-symlink path observation, returning
  * the validated LEAF node identity. When `expected` is supplied (the
@@ -229,7 +227,9 @@ function identityComponentPaths(
 function invoke<T>(operation: () => Result<T, Error>): Result<T, Error> {
   try {
     return operation();
-  } catch (cause: unknown) {
-    return err(cause instanceof Error ? cause : new Error(String(cause)));
+  } catch (error: unknown) {
+    return err(error instanceof Error ? error : new Error(String(error)));
   }
 }
+
+export type { IdentityPathApi } from './identity-path-flavour.js';

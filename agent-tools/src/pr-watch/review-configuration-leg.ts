@@ -51,10 +51,10 @@ export function readReviewConfigurationLeg(input: {
     const rules = Array.isArray(pages) ? pages.flat(1) : pages;
     const parsed = parseReviewConfiguration(rules);
     return parsed.ok ? parsed.value : { kind: 'unread', reason: parsed.error.message };
-  } catch (cause) {
+  } catch (error) {
     return {
       kind: 'unread',
-      reason: `branch rules read failed: ${cause instanceof Error ? cause.message : String(cause)}`,
+      reason: `branch rules read failed: ${error instanceof Error ? error.message : String(error)}`,
     };
   }
 }

@@ -101,7 +101,7 @@ export async function workState(
   const nowIso = nowFromOptions(options);
   const nowMs = Date.parse(nowIso);
   if (Number.isNaN(nowMs)) {
-    throw new Error(`--now must be an ISO-8601 timestamp (got: ${nowIso})`);
+    throw new TypeError(`--now must be an ISO-8601 timestamp (got: ${nowIso})`);
   }
 
   const registry = unwrapOrThrow(await io.readActiveClaimsFile(activePath));

@@ -71,13 +71,13 @@ export function readNestedString(value: unknown, path: readonly string[]): strin
 }
 
 export function readFrontmatterValue(content: string, key: string): string | null {
-  const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---/u);
+  const match = /^---\r?\n([\s\S]*?)\r?\n---/u.exec(content);
   if (!match?.[1]) {
     return null;
   }
 
   const escapedKey = key.replaceAll(/[.*+?^${}()|[\]\\]/gu, String.raw`\$&`);
-  const valueMatch = match[1].match(new RegExp(String.raw`^${escapedKey}:\s*(.+)$`, 'mu'));
+  const valueMatch = new RegExp(String.raw`^${escapedKey}:\s*(.+)$`, 'mu').exec(match[1]);
   return valueMatch?.[1]?.trim().replaceAll(/^['"]|['"]$/gu, '') ?? null;
 }
 

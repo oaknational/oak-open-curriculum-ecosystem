@@ -64,11 +64,8 @@ per-artefact dispositions in
 [`.agent/plans-v0-sketch-2026-07-21/`](../plans-v0-sketch-2026-07-21/DISPOSITIONS.md);
 the conserved pre-reset estate, untouched in
 [`.agent/plans-backlog-2026-07/`](../plans-backlog-2026-07/BACKLOG.md);
-the archive tier of the generation before it, in
-`.agent/plans-old-archive/`; and the paused plan-corpus refounding
-programme's working corpus and instruments, in
-`.agent/plans-refounding/` (its controlling plan lives in the backlog's
-product-development-governance collection). Their incremental
+and the archive tier of the generation before it, in
+`.agent/plans-old-archive/`. Their incremental
 absorption is governed by the
 [`planning-and-intent-estate`](strategic/planning-and-intent-estate.plan.md)
 strategic node.

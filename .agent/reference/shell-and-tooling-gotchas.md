@@ -241,9 +241,7 @@ Director's landing record of 2026-09-06, event f05a54da).
   breaking two more packages on the 30th). The cheapest durable state is
   not having the override.
 - **Grepping a shipped binary needs `LC_ALL=C`** or grep reports a false
-  "binary file matches" zero-hit read; registry semantic hashes are
-  computable via a temp tsx file inside the package dir importing
-  `./semantic-source-sha256.js`; and a newline-joined variable passed to
+  "binary file matches" zero-hit read; and a newline-joined variable passed to
   git reads as ONE pathspec — use `xargs`, and verify with a staged-count
   check.
 - **Operational signatures worth knowing** (2026-07-30): a model tier can
@@ -444,12 +442,11 @@ Director's landing record of 2026-09-06, event f05a54da).
 - **The reference-direction validator refuses a directive that links into
   `.agent/memory/**`** (patterns included; the #59 cure commit's hook,
   2026-09-06): doctrine names a pattern in backticks, never as a link.
-- **A lane touching a `DELTA_SCOPE_PATHS` entry of the MCP current-source ledger runs
-  `validate-mcp-content-current-source` as a lane gate before the ceremony** (2026-09-06):
-  package gates never invoke it, so the pre-commit hook was the first place it fired and it
-  refused the projection's first commit outright ("Reviewed semantic-delta files differ",
-  eleven files). Cure shape: one review-ledger file per concern with an `excluded(...)`
-  disposition and the semantic hash for each affected file, wired into the aggregator, then
+- **A lane touching a governed source of the MCP content audit (the MCP app, the SDK's
+  `mcp` tree, codegen) runs `validate-mcp-content-current-source` as a lane gate before the
+  ceremony** (2026-09-06): package gates never invoke it, so it first fired on the push and
+  refused the projection's first commit outright. Cure shape: a reviewed anchor override and a
+  revision verdict for each item whose content-bearing text moved, then
   `refresh-mcp-content-current-source-anchors`.
 - **The pre-push turbo step can replay a cached agent-tools test pass when only a root
   file changed** (2026-09-07): `tests/rules/rules-index-classification.unit.test.ts` reads

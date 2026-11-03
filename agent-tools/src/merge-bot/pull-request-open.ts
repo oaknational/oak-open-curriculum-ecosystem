@@ -98,12 +98,13 @@ async function openPullRequestWithHead(
   repo: BotRepository,
   branch: string,
 ): Promise<Result<number | undefined, Error>> {
+  const head = encodeURIComponent(`${repo.owner}:${branch}`);
   const listed = await restJson(
     fetchImpl,
     token,
     {
       method: 'GET',
-      path: `${repoPath(repo)}/pulls?state=open&head=${encodeURIComponent(`${repo.owner}:${branch}`)}&per_page=1`,
+      path: `${repoPath(repo)}/pulls?state=open&head=${head}&per_page=1`,
       label: 'GET /repos/{owner}/{repo}/pulls?head=',
     },
     200,

@@ -46,10 +46,10 @@ function signJwtResult(
 ): Result<string, Error> {
   try {
     return ok(signAppJwt({ appId, privateKeyPem, nowEpochSeconds }));
-  } catch (cause) {
+  } catch (error) {
     return err(
       new Error(
-        `cannot sign the app JWT (is the PEM a valid private key?): ${cause instanceof Error ? cause.message : String(cause)}`,
+        `cannot sign the app JWT (is the PEM a valid private key?): ${error instanceof Error ? error.message : String(error)}`,
       ),
     );
   }
@@ -62,10 +62,10 @@ async function readKeyResult(
   const readKey = readFileImpl ?? ((path: string) => readFile(path, 'utf8'));
   try {
     return ok(await readKey(keyPath));
-  } catch (cause) {
+  } catch (error) {
     return err(
       new Error(
-        `cannot read private key at ${keyPath}: ${cause instanceof Error ? cause.message : String(cause)}`,
+        `cannot read private key at ${keyPath}: ${error instanceof Error ? error.message : String(error)}`,
       ),
     );
   }

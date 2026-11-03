@@ -25,15 +25,21 @@
 import { describe, expect, it } from 'vitest';
 
 import { ok } from '@oaknational/result';
-import { isLessThanOrEqual, isValidSemver } from '../src/semver.js';
+import { isLessThanOrEqual, isValidSemver, SEMVER_PATTERN } from '../src/semver.js';
 
 // --- Inline copies of vercel-ignore-production-non-release-build.mjs helpers ---
 // Mirror of `vercel-ignore-production-non-release-build.mjs` parseSemver,
 // isValidSemver, comparePrereleaseIdentifiers, comparePrereleaseArrays,
-// isLessThanOrEqual. Keep byte-equivalent to the script.
+// isLessThanOrEqual. Keep the helpers byte-equivalent to the script. The
+// pattern's source is the script's literal character for character; it is
+// composed here from the same two named parts as the canonical module, and
+// the regex-parity case below holds the two sources equal.
 
-const INLINE_SEMVER_PATTERN =
-  /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
+const INLINE_NUMERIC_IDENTIFIER = String.raw`(0|[1-9]\d*)`;
+const INLINE_DOT_SEPARATED_IDENTIFIERS = String.raw`[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*`;
+const INLINE_SEMVER_PATTERN = new RegExp(
+  String.raw`^${INLINE_NUMERIC_IDENTIFIER}\.${INLINE_NUMERIC_IDENTIFIER}\.${INLINE_NUMERIC_IDENTIFIER}(?:-(${INLINE_DOT_SEPARATED_IDENTIFIERS}))?(?:\+${INLINE_DOT_SEPARATED_IDENTIFIERS})?$`,
+);
 
 interface InlineParsed {
   major: number;
@@ -210,14 +216,14 @@ describe('semver parity (canonical npm-backed vs inline regex copies)', () => {
   });
 
   describe('regex parity', () => {
-    it('canonical SEMVER_PATTERN source matches the inline INLINE_SEMVER_PATTERN source modulo the unicode flag', () => {
+    it('the inline pattern has the canonical SEMVER_PATTERN source, differing only by the unicode flag', () => {
       // The canonical regex carries the `u` flag (per the build-metadata
       // module's strictness); the inline copy in the pre-`pnpm install`
       // script omits it (Node accepts both for this pattern, and the
-      // script avoids any flag the runtime might not recognise). Strip
-      // the flag from the canonical, then assert source equality.
-      const canonicalSource = String.raw`/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/`;
-      expect(`/${INLINE_SEMVER_PATTERN.source}/`).toBe(canonicalSource);
+      // script avoids any flag the runtime might not recognise).
+      expect(INLINE_SEMVER_PATTERN.source).toBe(SEMVER_PATTERN.source);
+      expect(INLINE_SEMVER_PATTERN.flags).toBe('');
+      expect(SEMVER_PATTERN.flags).toBe('u');
     });
   });
 });

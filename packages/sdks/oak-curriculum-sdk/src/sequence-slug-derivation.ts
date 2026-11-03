@@ -17,7 +17,7 @@
  * (e.g. `science-secondary-aqa`) which the reverse functions handle correctly.
  */
 
-const VALID_PHASES: readonly string[] = ['primary', 'secondary'];
+const VALID_PHASES: ReadonlySet<string> = new Set(['primary', 'secondary']);
 
 type CanonicalPhaseSlug = 'primary' | 'secondary';
 
@@ -144,5 +144,5 @@ function isValidPhase(value: string | undefined): value is CanonicalPhaseSlug {
   if (value === undefined) {
     return false;
   }
-  return VALID_PHASES.includes(value);
+  return VALID_PHASES.has(value);
 }

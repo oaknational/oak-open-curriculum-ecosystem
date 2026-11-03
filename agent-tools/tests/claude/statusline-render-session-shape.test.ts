@@ -23,6 +23,9 @@ const SOLO = '\u{1F9CD}';
 const OBSERVING = `${DIM}\u{1F440}${RESET}`;
 const FEATHER = '\u{1FAB6}';
 
+/** A logo row as the four-row layout paints it, in the Oak mark's green. */
+const markRow = (row: string): string => `${GREEN}${row}${RESET}`;
+
 function parts(sessionShape: SessionShape | undefined): StatuslineParts {
   return {
     identity: 'Monsoon guards Cirrus',
@@ -173,7 +176,6 @@ describe('renderStatusline — session-shape indicators', () => {
 
 describe('renderStatusline — session-shape indicators in the four-row layout', () => {
   const SEXTANT = LOGO_ROWS.sextant;
-  const mark = (row: string): string => `${GREEN}${row}${RESET}`;
   const GAP = '  ';
 
   it('trails the indicators and demark on the identity row (full combo)', () => {
@@ -184,26 +186,26 @@ describe('renderStatusline — session-shape indicators in the four-row layout',
     // model and context now share row 1, so the bare-dir πρ location lands on
     // row 2 (identity, empty model+context row, location) rather than row 3.
     expect(out.split('\n').slice(0, 4)).toEqual([
-      `${mark(SEXTANT[0])}${GAP}${IDENTITY} ${COMPASS}${SEP}${FAMILY} ${FEATHER}`,
-      mark(SEXTANT[1]),
-      `${mark(SEXTANT[2])}${GAP}${PLACE}`,
-      mark(SEXTANT[3]),
+      `${markRow(SEXTANT[0])}${GAP}${IDENTITY} ${COMPASS}${SEP}${FAMILY} ${FEATHER}`,
+      markRow(SEXTANT[1]),
+      `${markRow(SEXTANT[2])}${GAP}${PLACE}`,
+      markRow(SEXTANT[3]),
     ]);
   });
 
   it('shows the peer icon on the identity row with no demark for a peer window', () => {
     const out = renderStatusline(parts(shape({ teamShape: 'peer' })), { logo: 'sextant' });
-    expect(out.split('\n')[0]).toBe(`${mark(SEXTANT[0])}${GAP}${IDENTITY}${SEP}${PEER}`);
+    expect(out.split('\n')[0]).toBe(`${markRow(SEXTANT[0])}${GAP}${IDENTITY}${SEP}${PEER}`);
   });
 
   it('shows the solo marker on the identity row for a confident solo session', () => {
     const out = renderStatusline(parts(shape({})), { logo: 'sextant' });
-    expect(out.split('\n')[0]).toBe(`${mark(SEXTANT[0])}${GAP}${IDENTITY}${SEP}${SOLO}`);
+    expect(out.split('\n')[0]).toBe(`${markRow(SEXTANT[0])}${GAP}${IDENTITY}${SEP}${SOLO}`);
   });
 
   it('leaves the identity row bare of indicators for an unknown shape', () => {
     const out = renderStatusline(parts(shape({ teamShape: 'unknown' })), { logo: 'sextant' });
-    expect(out.split('\n')[0]).toBe(`${mark(SEXTANT[0])}${GAP}${IDENTITY}`);
+    expect(out.split('\n')[0]).toBe(`${markRow(SEXTANT[0])}${GAP}${IDENTITY}`);
   });
 
   it('renders the team icon alone on the identity row when identity is unavailable', () => {
@@ -211,6 +213,6 @@ describe('renderStatusline — session-shape indicators in the four-row layout',
       { ...parts(shape({ teamShape: 'peer' })), identity: undefined },
       { logo: 'sextant' },
     );
-    expect(out.split('\n')[0]).toBe(`${mark(SEXTANT[0])}${GAP}${PEER}`);
+    expect(out.split('\n')[0]).toBe(`${markRow(SEXTANT[0])}${GAP}${PEER}`);
   });
 });

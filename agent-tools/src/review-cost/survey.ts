@@ -45,8 +45,8 @@ function priceRow(
         ghPath: input.ghPath,
       }),
     };
-  } catch (cause) {
-    return { ...pull, error: cause instanceof Error ? cause.message : String(cause) };
+  } catch (error) {
+    return { ...pull, error: error instanceof Error ? error.message : String(error) };
   }
 }
 

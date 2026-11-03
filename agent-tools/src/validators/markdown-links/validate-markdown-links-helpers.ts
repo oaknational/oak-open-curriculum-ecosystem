@@ -18,6 +18,8 @@
 
 import posix from 'node:path/posix';
 
+import { stripLinkTitle } from '../../core/strip-link-title.js';
+
 import type { ExtractedLink } from './validate-markdown-links-types.js';
 
 // Re-exported so consumers (and tests) resolve the data shapes from the
@@ -138,7 +140,7 @@ function isInternalLinkTarget(target: string): boolean {
  */
 export function resolveLinkTarget(sourcePath: string, rawTarget: string): string | null {
   // Strip a markdown link title (`path "Title"`), then the fragment.
-  const withoutTitle = rawTarget.replace(/\s+"[^"]*"$/, '').trim();
+  const withoutTitle = stripLinkTitle(rawTarget).trim();
   const withoutAngles = withoutTitle.replace(/^<(.+)>$/, '$1');
   const withoutFragment = withoutAngles.split('#')[0];
   if (withoutFragment === '') {

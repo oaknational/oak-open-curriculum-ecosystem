@@ -78,7 +78,7 @@ function firstForeignTailLine(tail: readonly string[]): string | undefined {
       continue;
     }
     const pattern = BLOCK_LINES[due];
-    if (pattern === undefined || !pattern.test(line)) {
+    if (!pattern?.test(line)) {
       return line;
     }
     header = due === 0 ? line : header;
