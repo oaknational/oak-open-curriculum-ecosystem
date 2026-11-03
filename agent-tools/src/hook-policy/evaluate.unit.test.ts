@@ -97,6 +97,70 @@ describe('evaluateContentChanges', () => {
     }
   });
 
+  it('reads a root-anchored exclude against an absolute path through the repo root', () => {
+    const anchored: ScopedContentBlockGroup = {
+      ...SCOPED_GROUP,
+      include_paths: [''],
+      exclude_paths: ['./docs/exempt/'],
+    };
+    const change = (filePath: string) => [
+      { newContent: 'section removed for brevity here', priorContent: '', filePath },
+    ];
+    const scope = { repoRoot: '/repo' };
+    expect(evaluateContentChanges(change('/repo/docs/exempt/x.md'), [], [anchored], scope)).toEqual(
+      {
+        kind: 'allow',
+      },
+    );
+    expect(
+      evaluateContentChanges(change('/repo/nested/docs/exempt/x.md'), [], [anchored], scope).kind,
+    ).toBe('deny-scoped-block');
+    // A relative path the hook could not place against a working directory claims no exemption.
+    expect(
+      evaluateContentChanges(change('docs/exempt/x.md'), [], [anchored], {
+        ...scope,
+        relativeIsRepoRelative: false,
+      }).kind,
+    ).toBe('deny-scoped-block');
+    // Without the root, an absolute path cannot claim a root-anchored exemption.
+    expect(evaluateContentChanges(change('/repo/docs/exempt/x.md'), [], [anchored]).kind).toBe(
+      'deny-scoped-block',
+    );
+  });
+
+  it('drops a block that exempts other repositories only for a change in another repository', () => {
+    const ownOnly: ScopedContentBlockGroup = { ...SCOPED_GROUP, excludes_other_repositories: true };
+    const change = (inOtherRepository: boolean) => [
+      {
+        newContent: 'section removed for brevity here',
+        priorContent: '',
+        filePath: 'docs/example.md',
+        inOtherRepository,
+      },
+    ];
+    expect(evaluateContentChanges(change(true), [], [ownOnly])).toEqual({ kind: 'allow' });
+    expect(evaluateContentChanges(change(false), [], [ownOnly]).kind).toBe('deny-scoped-block');
+    // A block without the flag applies in every repository.
+    expect(evaluateContentChanges(change(true), [], [SCOPED_GROUP]).kind).toBe('deny-scoped-block');
+  });
+
+  it('keeps the flat pattern layer for a change in another repository', () => {
+    const decision = evaluateContentChanges(
+      [
+        {
+          newContent: 'now with OWNER-ONLY-MARKER added',
+          priorContent: '',
+          filePath: 'docs/example.md',
+          inOtherRepository: true,
+        },
+      ],
+      ['OWNER-ONLY-MARKER'],
+      [{ ...SCOPED_GROUP, excludes_other_repositories: true }],
+    );
+
+    expect(decision).toEqual({ kind: 'deny-content-pattern', pattern: 'OWNER-ONLY-MARKER' });
+  });
+
   it('returns allow when the scoped group path scope excludes the change', () => {
     const decision = evaluateContentChanges(
       [

@@ -1,0 +1,9 @@
+[
+  { "query": "Plan the delivery of this approved feature across the next two sprints.", "should_trigger": true },
+  { "query": "Sequence the implementation of the settled contract and its tests.", "should_trigger": true },
+  { "query": "Turn this ratified scope into an executable plan with its acceptance and validation.", "should_trigger": true },
+  { "query": "Who could use this feature and is its value claim justified?", "should_trigger": false },
+  { "query": "Define what this component must do, preserve and permit.", "should_trigger": false },
+  { "query": "Does the evidence justify calling this revision ready for production?", "should_trigger": false },
+  { "query": "Can the API's subject slugs and the partner tool's taxonomy be relied on together?", "should_trigger": false }
+]

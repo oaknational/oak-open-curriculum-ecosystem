@@ -307,7 +307,7 @@ sessions pass each required touch point:
 
 - **Session entry**: every execution session opens with `start-right-quick` (or
   `start-right-thorough` for the heavier sittings), reading active claims, recent comms, and the
-  [`mcp-agent-facing-content` thread record](../../../memory/operational/threads/mcp-agent-facing-content.next-session.md).
+  [`mcp-agent-facing-content` thread record](../../../memory/operational/threads/paused/mcp-agent-facing-content.next-session.md).
 - **Work-shape declaration**: this plan IS the work-shape artefact (executable plan in `current/`).
 - **Pre-edit coordination**: the executing seat consults the active-claims registry, registers an
   active claim over the touched areas before any edit, and leaves an observable artefact proving

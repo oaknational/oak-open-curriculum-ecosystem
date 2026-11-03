@@ -1,5 +1,5 @@
 /**
- * Optional statusline payload logging, enabled by `OAK_STATUSLINE_LOG_FILE`.
+ * Optional statusline payload logging, enabled by `PRACTICE_STATUSLINE_LOG_FILE`.
  *
  * @remarks
  * Diagnostic instrument for the statusline's one blind spot: the adapter can
@@ -20,64 +20,31 @@
  * - **Write failures are swallowed.** The statusline is a soft surface — its
  *   own diagnostics must never blank or break it. This is the same documented
  *   posture as the frame store (`statusline-frame-store.ts`), and the narrow
- *   sanctioned exception to the Result-pattern rule: fire-and-forget I/O at
- *   the adapter boundary, where there is no caller to hand a Result to.
+ *   sanctioned exception to the Result-pattern rule: the append returns a
+ *   Result, and this fire-and-forget adapter boundary discards it, because
+ *   there is no caller to hand it to.
  *
  * Destinations are `*.log` only — an environment variable that drives a file
- * append deserves a small blast radius. The log directory and file are
- * created private to the user (0o700 / 0o600), and the destination is
+ * append deserves a small blast radius. The append itself is the shared
+ * owner-only append (`core/owner-only-append.ts`). The log directory and file
+ * are created private to the user (0o700 / 0o600), and the destination is
  * treated as a boundary: symlinks refuse to open, non-regular files
- * (FIFOs, devices) never receive a write, and a pre-existing file is
- * retightened to owner-only before each append — a file the invoking user
- * cannot own refuses rather than leaks. A pre-existing PARENT DIRECTORY's
- * permissions are still not retightened (mkdir's mode applies at creation
- * only), and the payload carries session ids and project paths — prefer a
- * private directory and delete the log after diagnosis.
+ * (FIFOs, devices) never receive a write, a file another user owns or with a
+ * second hard link refuses rather than leaks (so a root-run statusline will
+ * not append to another user's log), and a pre-existing file of the user's
+ * own is retightened to owner-only before each append. On a platform without
+ * POSIX ownership (native Windows) nothing is written: modes cannot make a
+ * file owner-only there, so the append refuses. A directory the path
+ * names that already exists keeps its permissions (mkdir's mode applies at
+ * creation only; the statusline never re-modes a directory a user names, so
+ * a log under `/tmp` works), and the payload carries session ids and project
+ * paths — prefer a private directory and delete the log after diagnosis.
  *
  * @packageDocumentation
  */
 
-import {
-  closeSync,
-  constants,
-  fchmodSync,
-  fstatSync,
-  mkdirSync,
-  openSync,
-  writeSync,
-} from 'node:fs';
-import { dirname } from 'node:path';
-
-/**
- * The narrow descriptor-level filesystem surface {@link appendDebugLogEntry}
- * needs, injectable for tests (ADR-078). `fstatSync` is typed to the one
- * question asked of it so fakes need no `Stats` construction.
- */
-export interface DebugLogFs {
-  mkdirSync(path: string, options: { recursive: true; mode: number }): void;
-  openSync(path: string, flags: number, mode: number): number;
-  fstatSync(fd: number): { isFile(): boolean };
-  fchmodSync(fd: number, mode: number): void;
-  writeSync(fd: number, data: Buffer, offset: number, length: number): number;
-  closeSync(fd: number): void;
-}
-
-const realFs: DebugLogFs = { mkdirSync, openSync, fstatSync, fchmodSync, writeSync, closeSync };
-
-/**
- * The destination-boundary contract, as flags: write-only append,
- * create-if-absent at 0o600, `O_NOFOLLOW` so a pre-placed symlink at the
- * destination refuses to open (ELOOP), and `O_NONBLOCK` so a reader-less
- * FIFO named `*.log` fails fast (ENXIO) instead of hanging the adapter
- * before the soft-failure catch can run. Regular-file writes are
- * unaffected by the nonblocking flag.
- */
-export const DEBUG_LOG_OPEN_FLAGS: number =
-  constants.O_WRONLY |
-  constants.O_APPEND |
-  constants.O_CREAT |
-  constants.O_NOFOLLOW |
-  constants.O_NONBLOCK;
+import { appendOwnerOnly } from '../core/owner-only-append.js';
+import { nodeOwnerOnlyAppendFs, type OwnerOnlyAppendFs } from '../core/owner-only-append-fs.js';
 
 /**
  * The resolved logging configuration: `disabled` (unset or blank — silent),
@@ -101,14 +68,14 @@ export type DebugLogConfig =
 export function resolveDebugLogConfig(
   env: Readonly<Record<string, string | undefined>>,
 ): DebugLogConfig {
-  const value = env.OAK_STATUSLINE_LOG_FILE?.trim();
+  const value = env.PRACTICE_STATUSLINE_LOG_FILE?.trim();
   if (value === undefined || value.length === 0) {
     return { kind: 'disabled' };
   }
   if (!value.endsWith('.log')) {
     return {
       kind: 'invalid',
-      warning: 'OAK_STATUSLINE_LOG_FILE must name a *.log path — logging disabled',
+      warning: 'PRACTICE_STATUSLINE_LOG_FILE must name a *.log path — logging disabled',
     };
   }
   return { kind: 'enabled', path: value };
@@ -140,23 +107,8 @@ export function invalidConfigWarningLine(
 }
 
 /**
- * Write the whole buffer through possibly-short writes, resuming from the
- * reported offset (the writeAll shape, `atomic-publication-node.ts`); a
- * zero-byte result abandons the entry rather than spinning.
- */
-function writeAllBytes(fs: DebugLogFs, fd: number, bytes: Buffer): void {
-  let written = 0;
-  while (written < bytes.length) {
-    const consumed = fs.writeSync(fd, bytes, written, bytes.length - written);
-    if (consumed <= 0) {
-      return;
-    }
-    written += consumed;
-  }
-}
-
-/**
- * Append one timestamped payload line to the debug log, soft-failing.
+ * The debug-log line for one payload: the timestamp, a space, the payload,
+ * a newline.
  *
  * @remarks
  * Terminal line breaks are stripped (the harness newline-terminates its
@@ -165,12 +117,28 @@ function writeAllBytes(fs: DebugLogFs, fd: number, bytes: Buffer): void {
  * and trailing spaces or tabs, are preserved so the logged payload stays
  * faithful to what arrived.
  *
- * The destination is opened through {@link DEBUG_LOG_OPEN_FLAGS} (no
- * symlink following, no FIFO hang) and the write happens only when the
- * opened descriptor is a regular file that could be retightened to
- * owner-only — a destination the invoking user does not own refuses
- * rather than leaks. Any filesystem refusal is swallowed — see the module
- * remarks for the split failure posture.
+ * @param rawPayload - The stdin payload as received, pre-parse.
+ * @param nowIso - The invocation timestamp.
+ * @returns The newline-terminated line.
+ */
+export function debugLogLine(rawPayload: string, nowIso: string): string {
+  let payloadEnd = rawPayload.length;
+  while (payloadEnd > 0 && '\r\n'.includes(rawPayload.charAt(payloadEnd - 1))) {
+    payloadEnd -= 1;
+  }
+  return `${nowIso} ${rawPayload.slice(0, payloadEnd).replaceAll(/[\r\n]+/gu, ' ')}\n`;
+}
+
+/**
+ * Append one timestamped payload line to the debug log, soft-failing.
+ *
+ * @remarks
+ * The line is {@link debugLogLine}'s. It goes through {@link appendOwnerOnly},
+ * which creates an absent directory at 0o700, leaves an existing one as it
+ * was, holds the file at 0o600, and refuses a symlink at the destination, a
+ * non-regular file, a file another user owns, a file with a second hard
+ * link, and any write on a platform without POSIX ownership. Its outcome is
+ * discarded — see the module remarks for the split failure posture.
  *
  * @param logPath - The `*.log` destination from {@link resolveDebugLogConfig}.
  * @param rawPayload - The stdin payload as received, pre-parse.
@@ -182,26 +150,8 @@ export function appendDebugLogEntry(
   logPath: string,
   rawPayload: string,
   nowIso: string,
-  fs: DebugLogFs = realFs,
+  fs: OwnerOnlyAppendFs = nodeOwnerOnlyAppendFs,
 ): void {
-  let payloadEnd = rawPayload.length;
-  while (payloadEnd > 0 && '\r\n'.includes(rawPayload.charAt(payloadEnd - 1))) {
-    payloadEnd -= 1;
-  }
-  const line = `${nowIso} ${rawPayload.slice(0, payloadEnd).replaceAll(/[\r\n]+/gu, ' ')}\n`;
-  try {
-    fs.mkdirSync(dirname(logPath), { recursive: true, mode: 0o700 });
-    const fd = fs.openSync(logPath, DEBUG_LOG_OPEN_FLAGS, 0o600);
-    try {
-      if (!fs.fstatSync(fd).isFile()) {
-        return;
-      }
-      fs.fchmodSync(fd, 0o600);
-      writeAllBytes(fs, fd, Buffer.from(line, 'utf8'));
-    } finally {
-      fs.closeSync(fd);
-    }
-  } catch {
-    // Soft surface: the statusline never breaks for its own logging.
-  }
+  // Soft surface: the statusline never breaks for its own logging.
+  appendOwnerOnly(logPath, debugLogLine(rawPayload, nowIso), fs);
 }

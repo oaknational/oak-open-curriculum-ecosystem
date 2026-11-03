@@ -1,6 +1,7 @@
 ---
 description: Use Result<T, E> for error handling. Never throw exceptions.
 globs: '**/*.{ts,tsx,mts}'
+alwaysApply: false
 ---
 
 Read and follow `.agent/rules/use-result-pattern.md`.

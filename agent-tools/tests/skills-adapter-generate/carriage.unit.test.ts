@@ -1,3 +1,5 @@
+import { sep } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -17,6 +19,49 @@ function bytes(text: string): Uint8Array {
 
 const ok = <T>(value: T): FsRead<T> => ({ kind: 'ok', value });
 
+// The product joins with the HOST separator (correct for real fs access);
+// these fakes are keyed and asserted in POSIX form for readability, so
+// lookups, recorded writes, and reported paths all normalise first.
+const posixPath = (hostPath: string): string => hostPath.split(sep).join('/');
+
+/** Re-key a fixture map into POSIX form so host-joined and literal keys meet. */
+const posixKeyed = <V>(entries: ReadonlyMap<string, V>): ReadonlyMap<string, V> =>
+  new Map([...entries].map(([key, value]) => [posixPath(key), value]));
+
+/** Re-key a fixture set into POSIX form. */
+const posixKeyedSet = (entries: ReadonlySet<string>): ReadonlySet<string> =>
+  new Set([...entries].map(posixPath));
+
+/** Normalise product-reported paths (and messages naming them) to POSIX form. */
+const posixStrings = (values: readonly string[]): string[] => values.map(posixPath);
+
+const posixCheck = (
+  result: Awaited<ReturnType<typeof checkCarriage>>,
+): Awaited<ReturnType<typeof checkCarriage>> => ({
+  ...result,
+  missing: posixStrings(result.missing),
+  drifted: posixStrings(result.drifted),
+  orphaned: posixStrings(result.orphaned),
+  refused: posixStrings(result.refused),
+});
+
+const posixSync = (
+  outcome: Awaited<ReturnType<typeof syncCarriage>>,
+): Awaited<ReturnType<typeof syncCarriage>> => ({
+  ...outcome,
+  carried: posixStrings(outcome.carried),
+  pruned: posixStrings(outcome.pruned),
+  refused: posixStrings(outcome.refused),
+});
+
+const posixCarried = (
+  carried: Awaited<ReturnType<typeof collectCarriedFiles>>,
+): Awaited<ReturnType<typeof collectCarriedFiles>> => ({
+  ...carried,
+  files: posixStrings(carried.files),
+  refused: posixStrings(carried.refused),
+});
+
 /** Optional fixture facets beyond the flat byte map. */
 interface FsFixtureOptions {
   /** Absolute paths listed as non-regular entries (symlinks etc.). */
@@ -34,13 +79,14 @@ function makeReadFs(
   files: ReadonlyMap<string, Uint8Array>,
   options: FsFixtureOptions = {},
 ): CarriageReadFs {
-  const others = options.others ?? new Set<string>();
-  const executables = options.executables ?? new Set<string>();
+  const byPath = posixKeyed(files);
+  const others = posixKeyedSet(options.others ?? new Set<string>());
+  const executables = posixKeyedSet(options.executables ?? new Set<string>());
   return {
     async listSubdirectoryNames(path) {
       const names = new Set<string>();
-      const prefix = `${path}/`;
-      for (const entryPath of [...files.keys(), ...others]) {
+      const prefix = `${posixPath(path)}/`;
+      for (const entryPath of [...byPath.keys(), ...others]) {
         if (!entryPath.startsWith(prefix)) {
           continue;
         }
@@ -54,8 +100,8 @@ function makeReadFs(
     },
     async listFileNames(path) {
       const names: string[] = [];
-      const prefix = `${path}/`;
-      for (const filePath of files.keys()) {
+      const prefix = `${posixPath(path)}/`;
+      for (const filePath of byPath.keys()) {
         if (filePath.startsWith(prefix) && !filePath.slice(prefix.length).includes('/')) {
           names.push(filePath.slice(prefix.length));
         }
@@ -64,7 +110,7 @@ function makeReadFs(
     },
     async listOtherEntryNames(path) {
       const names: string[] = [];
-      const prefix = `${path}/`;
+      const prefix = `${posixPath(path)}/`;
       for (const entryPath of others) {
         if (entryPath.startsWith(prefix) && !entryPath.slice(prefix.length).includes('/')) {
           names.push(entryPath.slice(prefix.length));
@@ -73,26 +119,28 @@ function makeReadFs(
       return ok(names);
     },
     async readFileBytesOrUndefined(path) {
-      return ok(files.get(path));
+      return ok(byPath.get(posixPath(path)));
     },
     async entryKind(path) {
       // Flat-map semantics: a file key is a regular file, a declared
       // "other" is a non-regular entry, an implied ancestor is a
       // directory, anything else is absent.
-      if (files.has(path)) {
+      const posix = posixPath(path);
+      if (byPath.has(posix)) {
         return ok('file' as const);
       }
-      if (others.has(path)) {
+      if (others.has(posix)) {
         return ok('other' as const);
       }
-      const prefix = `${path}/`;
-      const isDirectory = [...files.keys(), ...others].some((entryPath) =>
+      const prefix = `${posix}/`;
+      const isDirectory = [...byPath.keys(), ...others].some((entryPath) =>
         entryPath.startsWith(prefix),
       );
       return ok(isDirectory ? ('directory' as const) : ('absent' as const));
     },
     async isExecutableOrUndefined(path) {
-      return ok(files.has(path) ? executables.has(path) : undefined);
+      const posix = posixPath(path);
+      return ok(byPath.has(posix) ? executables.has(posix) : undefined);
     },
     async resolveRealPath(path) {
       return ok(path); // the flat-map fixture holds no symlinked ancestors
@@ -106,7 +154,7 @@ function makeWriteFs(
   files: Map<string, Uint8Array>,
   options: FsFixtureOptions & { readonly operationLog?: string[] } = {},
 ): CarriageWriteFs {
-  const liveOthers = new Set(options.others ?? []);
+  const liveOthers = new Set([...(options.others ?? [])].map(posixPath));
   const log = options.operationLog;
   const readFs = (): CarriageReadFs =>
     makeReadFs(files, { ...options, others: new Set([...liveOthers]) });
@@ -121,7 +169,7 @@ function makeWriteFs(
       return readFs().listOtherEntryNames(path);
     },
     async readFileBytesOrUndefined(path) {
-      return ok(files.get(path));
+      return ok(files.get(posixPath(path)));
     },
     async entryKind(path) {
       return readFs().entryKind(path);
@@ -133,28 +181,34 @@ function makeWriteFs(
       return ok(path);
     },
     async copyFileWithParents(sourcePath, targetPath) {
-      log?.push(`copy:${targetPath}`);
+      // Writes land POSIX-keyed so the test's post-state map reads stay in
+      // the fixtures' own key form.
+      const source = posixPath(sourcePath);
+      const target = posixPath(targetPath);
+      log?.push(`copy:${target}`);
       // A missing source is a fixture defect; plant a loud sentinel so the
       // test's byte assertions fail visibly rather than throwing here.
-      files.set(targetPath, files.get(sourcePath) ?? bytes(`FIXTURE-MISSING:${sourcePath}`));
+      files.set(target, files.get(source) ?? bytes(`FIXTURE-MISSING:${source}`));
     },
     async removeFile(path) {
-      log?.push(`remove:${path}`);
-      files.delete(path);
-      liveOthers.delete(path);
+      const posix = posixPath(path);
+      log?.push(`remove:${posix}`);
+      files.delete(posix);
+      liveOthers.delete(posix);
     },
     async removeDirectoryIfEmpty() {
       // Derived listings cannot hold an empty directory; real-fs empty-dir
       // cleanup is proven in the integration suite.
     },
     async removeEntryRecursive(path) {
-      log?.push(`remove-recursive:${path}`);
+      const posix = posixPath(path);
+      log?.push(`remove-recursive:${posix}`);
       for (const filePath of [...files.keys()]) {
-        if (filePath === path || filePath.startsWith(`${path}/`)) {
+        if (filePath === posix || filePath.startsWith(`${posix}/`)) {
           files.delete(filePath);
         }
       }
-      liveOthers.delete(path);
+      liveOthers.delete(posix);
     },
   };
 }
@@ -173,7 +227,7 @@ describe('collectCarriedFiles', () => {
       ]),
     );
 
-    const carried = await collectCarriedFiles(canonicalDir, fs);
+    const carried = posixCarried(await collectCarriedFiles(canonicalDir, fs));
 
     expect(carried.refused).toEqual([]);
     expect(carried.files).toEqual([
@@ -187,7 +241,7 @@ describe('collectCarriedFiles', () => {
   it('returns an empty list for a skill with no supporting directories', async () => {
     const fs = makeReadFs(new Map([[`${canonicalDir}/SKILL-CANONICAL.md`, bytes('canonical')]]));
 
-    const carried = await collectCarriedFiles(canonicalDir, fs);
+    const carried = posixCarried(await collectCarriedFiles(canonicalDir, fs));
 
     expect(carried).toEqual({ files: [], refused: [] });
   });
@@ -202,7 +256,7 @@ describe('collectCarriedFiles', () => {
       ]),
     );
 
-    const carried = await collectCarriedFiles(canonicalDir, fs);
+    const carried = posixCarried(await collectCarriedFiles(canonicalDir, fs));
 
     expect(carried.files).toEqual(['references/kept.md']);
   });
@@ -212,7 +266,7 @@ describe('collectCarriedFiles', () => {
       others: new Set([`${canonicalDir}/references/smuggled.md`]),
     });
 
-    const carried = await collectCarriedFiles(canonicalDir, fs);
+    const carried = posixCarried(await collectCarriedFiles(canonicalDir, fs));
 
     expect(carried.files).toEqual(['references/real.md']);
     expect(carried.refused).toHaveLength(1);
@@ -234,7 +288,7 @@ describe('checkCarriage', () => {
       ]),
     );
 
-    const result = await checkCarriage(canonicalDir, adapterDir, fs);
+    const result = posixCheck(await checkCarriage(canonicalDir, adapterDir, fs));
 
     expect(result).toEqual({
       missing: [],
@@ -253,7 +307,7 @@ describe('checkCarriage', () => {
       ]),
     );
 
-    const result = await checkCarriage(canonicalDir, adapterDir, fs);
+    const result = posixCheck(await checkCarriage(canonicalDir, adapterDir, fs));
 
     expect(result.missing).toEqual([`${adapterDir}/references/a.md`]);
     expect(result.drifted).toEqual([]);
@@ -268,7 +322,7 @@ describe('checkCarriage', () => {
       ]),
     );
 
-    const result = await checkCarriage(canonicalDir, adapterDir, fs);
+    const result = posixCheck(await checkCarriage(canonicalDir, adapterDir, fs));
 
     expect(result.drifted).toEqual([`${adapterDir}/references/a.md`]);
     expect(result.missing).toEqual([]);
@@ -283,7 +337,7 @@ describe('checkCarriage', () => {
       ]),
     );
 
-    const result = await checkCarriage(canonicalDir, adapterDir, fs);
+    const result = posixCheck(await checkCarriage(canonicalDir, adapterDir, fs));
 
     expect(result.drifted).toEqual([`${adapterDir}/references/a.md`]);
   });
@@ -298,7 +352,7 @@ describe('checkCarriage', () => {
       ]),
     );
 
-    const result = await checkCarriage(canonicalDir, adapterDir, fs);
+    const result = posixCheck(await checkCarriage(canonicalDir, adapterDir, fs));
 
     expect(result.orphaned).toEqual([`${adapterDir}/references/deleted-upstream.md`]);
     expect(result.drifted).toEqual([]);
@@ -313,7 +367,7 @@ describe('checkCarriage', () => {
       ]),
     );
 
-    const result = await checkCarriage(canonicalDir, adapterDir, fs);
+    const result = posixCheck(await checkCarriage(canonicalDir, adapterDir, fs));
 
     expect(result.orphaned).toEqual([`${adapterDir}/evals/evals.json`]);
   });
@@ -321,7 +375,7 @@ describe('checkCarriage', () => {
   it('never counts the adapter SKILL.md itself as an orphan', async () => {
     const fs = makeReadFs(new Map([[`${adapterDir}/SKILL.md`, bytes('adapter')]]));
 
-    const result = await checkCarriage(canonicalDir, adapterDir, fs);
+    const result = posixCheck(await checkCarriage(canonicalDir, adapterDir, fs));
 
     expect(result).toEqual({
       missing: [],
@@ -342,7 +396,7 @@ describe('checkCarriage', () => {
       { others: new Set([`${adapterDir}/references/link-to-elsewhere`]) },
     );
 
-    const result = await checkCarriage(canonicalDir, adapterDir, fs);
+    const result = posixCheck(await checkCarriage(canonicalDir, adapterDir, fs));
 
     expect(result.orphaned).toEqual([`${adapterDir}/references/link-to-elsewhere`]);
   });
@@ -355,7 +409,7 @@ describe('checkCarriage', () => {
       },
     };
 
-    const result = await checkCarriage(canonicalDir, adapterDir, failing);
+    const result = posixCheck(await checkCarriage(canonicalDir, adapterDir, failing));
 
     expect(result.refused.some((message) => message.includes('EACCES'))).toBe(true);
   });
@@ -370,7 +424,7 @@ describe('checkCarriage', () => {
       { executables: new Set([`${canonicalDir}/scripts/tool.py`]) },
     );
 
-    const result = await checkCarriage(canonicalDir, adapterDir, fs);
+    const result = posixCheck(await checkCarriage(canonicalDir, adapterDir, fs));
 
     expect(result.drifted).toEqual([`${adapterDir}/scripts/tool.py`]);
   });
@@ -387,7 +441,7 @@ describe('checkCarriage', () => {
       },
     );
 
-    const result = await checkCarriage(canonicalDir, adapterDir, fs);
+    const result = posixCheck(await checkCarriage(canonicalDir, adapterDir, fs));
 
     expect(result.drifted).toEqual([]);
   });
@@ -404,7 +458,7 @@ describe('syncCarriage', () => {
       [`${adapterDir}/SKILL.md`, bytes('adapter')],
     ]);
 
-    const outcome = await syncCarriage(canonicalDir, adapterDir, makeWriteFs(files));
+    const outcome = posixSync(await syncCarriage(canonicalDir, adapterDir, makeWriteFs(files)));
 
     expect(outcome.carried).toEqual([
       `${adapterDir}/references/a.md`,
@@ -437,7 +491,7 @@ describe('syncCarriage', () => {
       [`${adapterDir}/evals/evals.json`, bytes('never carried')],
     ]);
 
-    const outcome = await syncCarriage(canonicalDir, adapterDir, makeWriteFs(files));
+    const outcome = posixSync(await syncCarriage(canonicalDir, adapterDir, makeWriteFs(files)));
 
     expect(outcome.pruned).toEqual([
       `${adapterDir}/evals/evals.json`,
@@ -452,7 +506,7 @@ describe('syncCarriage', () => {
   it('carries nothing and prunes nothing for a skill with no supporting content', async () => {
     const files = new Map([[`${adapterDir}/SKILL.md`, bytes('adapter')]]);
 
-    const outcome = await syncCarriage(canonicalDir, adapterDir, makeWriteFs(files));
+    const outcome = posixSync(await syncCarriage(canonicalDir, adapterDir, makeWriteFs(files)));
 
     expect(outcome).toEqual({ carried: [], pruned: [], refused: [] });
   });
@@ -484,7 +538,7 @@ describe('syncCarriage', () => {
       operationLog,
     });
 
-    const outcome = await syncCarriage(canonicalDir, adapterDir, fs);
+    const outcome = posixSync(await syncCarriage(canonicalDir, adapterDir, fs));
 
     expect(outcome.pruned).toEqual([`${adapterDir}/scripts/tool.py`]);
     expect(operationLog).toEqual([
@@ -505,7 +559,7 @@ describe('syncCarriage', () => {
       operationLog,
     });
 
-    const outcome = await syncCarriage(canonicalDir, adapterDir, fs);
+    const outcome = posixSync(await syncCarriage(canonicalDir, adapterDir, fs));
 
     expect(outcome.carried).toEqual([]);
     expect(outcome.pruned).toEqual([]);
@@ -528,7 +582,7 @@ describe('syncCarriage', () => {
       },
     };
 
-    const outcome = await syncCarriage(canonicalDir, adapterDir, fs);
+    const outcome = posixSync(await syncCarriage(canonicalDir, adapterDir, fs));
 
     expect(outcome.refused.some((message) => message.includes('EIO'))).toBe(true);
     expect(outcome.pruned).toEqual([]);

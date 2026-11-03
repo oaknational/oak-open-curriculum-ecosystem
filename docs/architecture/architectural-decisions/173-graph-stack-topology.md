@@ -10,9 +10,19 @@ NC-boundary amendment 2026-05-10; reviewer-absorption amendment
 correction 2026-06-01; post-acceptance hygiene 2026-06-01 (stale
 pre-promotion sections cleared; Inc.3 adapter-sequencing retired).
 
+**2026-09-08 implementation-origin amendment**:
+[ADR-230](230-own-built-algorithm-and-data-structure-foundations.md) governs
+new and deliberately reconstructed algorithm and data-structure mechanisms:
+own authored Reliable Atoms and compositions, informed by openly licensed
+references and independently qualified. This amendment refines this record's
+implementation-origin scope. The existing topology, selected RDF profile,
+transport discipline and corpus-source authorities below continue to govern
+the graph stack; integration of new foundations preserves those contracts.
+
 **Date**: 2026-05-07; amended 2026-05-10; amended 2026-05-11; amended 2026-05-21;
 amended 2026-06-01; amended 2026-07-05 (§The estate is plural by design —
-owner-corrected doctrine, 2026-06-22: graphs are a method, not one artefact)
+owner-corrected doctrine, 2026-06-22: graphs are a method, not one artefact);
+amended 2026-09-08 (implementation origin — ADR-230)
 
 **2026-05-11 amendment summary** (Flamebright Burning Lava session,
 reviewer absorption against architecture-expert-betty,

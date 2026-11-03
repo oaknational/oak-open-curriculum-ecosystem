@@ -431,3 +431,182 @@ describe('loadCorpus — corpus discovery', () => {
     ]);
   });
 });
+
+describe('validatePlanFile — fenced yaml must parse', () => {
+  const FENCE = '`'.repeat(3);
+  const FRONTMATTER = [
+    '---',
+    'id: pins-a-workflow',
+    'node_type: delivery',
+    'name: "Pins a workflow file"',
+    'overview: "A node whose fenced yaml is the file a seat copies verbatim."',
+    'status: sketch',
+    'serves: some-strategic-node',
+    'impact_areas:',
+    '  - practice-and-estate',
+    'last_updated: 2026-09-11',
+    '---',
+    '',
+  ];
+
+  function nodeWithRunLine(runLine: string): string {
+    return [
+      ...FRONTMATTER,
+      `${FENCE}yaml`,
+      'name: Upstream mirror',
+      'jobs:',
+      '  mirror:',
+      '    steps:',
+      '      - name: Report in sync',
+      runLine,
+      FENCE,
+      '',
+    ].join('\n');
+  }
+
+  it('accepts a node whose fenced yaml parses', () => {
+    const outcome = validatePlanFile(
+      '.agent/plans/delivery/pins.plan.md',
+      nodeWithRunLine('        run: |\n          echo "In sync: nothing to do."'),
+    );
+
+    expect(isOk(outcome)).toBe(true);
+  });
+
+  it('rejects the exact shape that pinned a non-loading workflow on 2026-09-11', () => {
+    // A single-line `run:` value carrying a colon-space inside a plain scalar.
+    // Two owner-ratified nodes pinned this; neither workflow could have loaded,
+    // and only a seat that chose to run a parser caught it.
+    const outcome = validatePlanFile(
+      '.agent/plans/delivery/pins.plan.md',
+      nodeWithRunLine('        run: echo "In sync: main equals the parent."'),
+    );
+
+    expect(isErr(outcome)).toBe(true);
+    if (isErr(outcome)) {
+      expect(outcome.error.messages.join(' ')).toContain('fenced yaml block 1 does not parse');
+    }
+  });
+
+  /**
+   * The same broken `run:` line, inside every other ordinary Markdown fence an
+   * author reaches for. Each is legal Markdown rendering a YAML block, so a
+   * check reading one literal spelling hands back the false green it exists to
+   * remove.
+   */
+  const BODY = [
+    'name: Upstream mirror',
+    'jobs:',
+    '  mirror:',
+    '    steps:',
+    '      - name: Report in sync',
+    '        run: echo "In sync: main equals the parent."',
+  ];
+  const TILDE = '~'.repeat(3);
+  const LONG_FENCE = '`'.repeat(4);
+
+  const otherFenceSpellings: readonly (readonly [string, readonly string[]])[] = [
+    ['the yml info string', [`${FENCE}yml`, ...BODY, FENCE]],
+    ['a tilde fence', [`${TILDE}yaml`, ...BODY, TILDE]],
+    ['an indented fence', [`   ${FENCE}yaml`, ...BODY.map((line) => `   ${line}`), `   ${FENCE}`]],
+    ['a four-backtick fence', [`${LONG_FENCE}yaml`, ...BODY, LONG_FENCE]],
+    ['an info string carrying a title', [`${FENCE}yaml title="ci.yml"`, ...BODY, FENCE]],
+  ];
+
+  for (const [spelling, lines] of otherFenceSpellings) {
+    it(`reads ${spelling} as a yaml block, so the same defect cannot pass under it`, () => {
+      const outcome = validatePlanFile(
+        '.agent/plans/delivery/pins.plan.md',
+        [...FRONTMATTER, ...lines, ''].join('\n'),
+      );
+
+      expect(isErr(outcome)).toBe(true);
+      if (isErr(outcome)) {
+        expect(outcome.error.messages.join(' ')).toContain('fenced yaml block 1 does not parse');
+      }
+    });
+  }
+
+  /**
+   * Blocks OUTSIDE the contract. A pinned file goes in a top-level fence; a
+   * YAML block nested in a blockquote or a list item is illustrative prose,
+   * not a file a seat copies, so it is neither read nor refused. These cases
+   * put that boundary on the record as a decision rather than an accident — an
+   * earlier form of this check refused them, which took five review rounds and
+   * produced two false positives on valid documents before it turned out the
+   * CLAIM was the defect, not the coverage.
+   */
+  const nestedBlocks: readonly (readonly [string, readonly string[]])[] = [
+    ['a blockquote', [`> ${FENCE}yaml`, ...BODY.map((line) => `> ${line}`), `> ${FENCE}`]],
+    ['a bullet-list marker', [`- ${FENCE}yaml`, ...BODY.map((l) => `  ${l}`), `  ${FENCE}`]],
+    ['an ordered-list marker', [`1. ${TILDE}yml`, ...BODY.map((l) => `   ${l}`), `   ${TILDE}`]],
+    [
+      'a list inside a blockquote',
+      [`> - ${FENCE}yaml`, ...BODY.map((l) => `>   ${l}`), `>   ${FENCE}`],
+    ],
+    // CommonMark reads a four-space-indented line at top level as an indented
+    // CODE block, so its text is literal and not a fence at all. Telling that
+    // apart from a fence indented inside a list item needs container state,
+    // which is why guessing was the wrong move (Copilot, round 7).
+    ['a four-space indent', [`    ${FENCE}yaml`, ...BODY.map((l) => `    ${l}`), `    ${FENCE}`]],
+  ];
+
+  for (const [container, lines] of nestedBlocks) {
+    it(`neither reads nor refuses a yaml block inside ${container}`, () => {
+      const outcome = validatePlanFile(
+        '.agent/plans/delivery/pins.plan.md',
+        [...FRONTMATTER, ...lines, ''].join('\n'),
+      );
+
+      expect(isOk(outcome)).toBe(true);
+    });
+  }
+
+  const proseMentioningAFence: readonly (readonly [string, string])[] = [
+    ['a sentence', `Pin the workflow in a ${FENCE}yaml block at the top level.`],
+    ['a dated line', `2026-09-11: ${FENCE}yaml is the required spelling.`],
+    ['a list item of prose', `- see the ${FENCE}yaml example above`],
+  ];
+
+  for (const [shape, line] of proseMentioningAFence) {
+    it(`leaves ${shape} that merely mentions a fence alone`, () => {
+      const outcome = validatePlanFile(
+        '.agent/plans/delivery/pins.plan.md',
+        [...FRONTMATTER, line, ''].join('\n'),
+      );
+
+      expect(isOk(outcome)).toBe(true);
+    });
+  }
+
+  it('a non-yaml fence is left alone — the check reads YAML blocks, not every block', () => {
+    const outcome = validatePlanFile(
+      '.agent/plans/delivery/pins.plan.md',
+      [...FRONTMATTER, `${FENCE}bash`, 'echo "In sync: not yaml at all"', FENCE, ''].join('\n'),
+    );
+
+    expect(isOk(outcome)).toBe(true);
+  });
+
+  it('a fence nested inside a longer fence does not close it, so the outer block parses as one', () => {
+    // A node pinning a file that itself contains a fence must open a longer
+    // run. Treating the inner fence as the closer would slice the block in two
+    // and parse a fragment.
+    const outcome = validatePlanFile(
+      '.agent/plans/delivery/pins.plan.md',
+      [
+        ...FRONTMATTER,
+        `${LONG_FENCE}yaml`,
+        'name: Upstream mirror',
+        'description: |',
+        `  ${FENCE}`,
+        '  an embedded fence',
+        `  ${FENCE}`,
+        LONG_FENCE,
+        '',
+      ].join('\n'),
+    );
+
+    expect(isOk(outcome)).toBe(true);
+  });
+});

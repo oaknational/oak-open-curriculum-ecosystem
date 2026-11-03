@@ -1,6 +1,7 @@
 ---
 description: Update generator templates and rerun pnpm sdk-codegen. Generator is source of truth.
 globs: '**/*.{ts,tsx,mts}'
+alwaysApply: false
 ---
 
 Read and follow `.agent/rules/generator-first-mindset.md`.

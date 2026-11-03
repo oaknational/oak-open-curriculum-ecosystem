@@ -15,15 +15,17 @@
  *
  * Wired into root `repo-validators:check`, which runs in the pre-commit hook AND
  * in CI via `pnpm check`. Exit 0 = clean; exit 1 = at least one machine-local
- * path found; exit 2 = refusal — the policy block is missing, or a tracked file
- * could not be read (the scan never silently skips a tracked file).
+ * path found; exit 2 = refusal — the policy block is missing, git could not list
+ * the tracked files, or a tracked file could not be read (the scan never
+ * silently skips a tracked file).
  *
  * @packageDocumentation
  */
 
 import { resolveRepoRoot } from '../../core/repo-root.js';
 import { writeErrorLine, writeLine } from '../../core/terminal-output.js';
-import { listTrackedFiles, readScanFiles } from '../../core/tracked-file-scan.js';
+import { describeGitReadFailure, listTrackedFiles } from '../../core/repository-paths.js';
+import { readScanFiles } from '../../core/tracked-file-scan.js';
 import { loadScopedContentBlocks } from '../../hook-policy/policy-loader.js';
 
 import {
@@ -41,7 +43,18 @@ if (block === undefined) {
   process.exit(2);
 }
 
-const scan = readScanFiles(repoRoot, listTrackedFiles(repoRoot));
+const listing = listTrackedFiles(repoRoot);
+if (!listing.ok) {
+  // The same refusal as an unreadable tracked file: a scan over a listing git
+  // could not give would pass over files it never saw.
+  writeErrorLine(
+    `validate-no-machine-local-paths: cannot list tracked files — ` +
+      describeGitReadFailure(listing.error),
+  );
+  process.exit(2);
+}
+
+const scan = readScanFiles(repoRoot, listing.value);
 if (!scan.ok) {
   // Fail loud: a tracked file the validator cannot read could hide a
   // machine-local path, so silently skipping it would be a green-gate

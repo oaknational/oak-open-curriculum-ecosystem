@@ -55,6 +55,14 @@ const config = defineConfigArray(
   },
   configs.strict,
   {
+    // The owner's ruling of 2026-09-08 on `no-throw-statement`: off where the
+    // throw debt lives (this workspace), error everywhere else and in every new
+    // workspace; the migration waits for the merge-back into the upstream. The
+    // ruling is quoted in the plugin's configs/recommended.ts; the
+    // no-throw-remediation plan owns the migration.
+    rules: { '@oaknational/no-throw-statement': 'off' },
+  },
+  {
     files: ['**/*.js', '**/*.mjs'],
     languageOptions: {
       ecmaVersion: 'latest',
@@ -164,6 +172,11 @@ const config = defineConfigArray(
       // The rest of the gate logic stays in pure helpers under
       // build-scripts/sentry-configured-build-gate.ts.
       'build-scripts/run-sentry-configured-build.ts',
+      // Repo-owned deploy-config validation gate (MCP-475): reads
+      // process.env once at the build's composition root and hands it to
+      // `runDeployConfigValidation`, which filters it to the validated
+      // surface; the decision logic stays in build-scripts/validate-deploy-config.ts.
+      'build-scripts/run-validate-deploy-config.ts',
       // Workspace tooling scripts (dev/test harness CLIs, e.g.
       // `run-requests.ts`, `server-harness.ts`, `embed-widget-html.ts`).
       // These are not product code — they read env vars at startup as

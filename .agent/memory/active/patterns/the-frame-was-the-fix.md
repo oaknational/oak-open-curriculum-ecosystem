@@ -3,6 +3,7 @@ name: The Frame Was the Fix
 polarity: anti-pattern
 use_this_when: Reaching for the obvious / mechanical / enforcement-shaped tool to address a failure mode (locks, refusals, mechanical gates, hardening against review findings); or absorbing reviewer findings as binding work-items by default; or feeling that fixing the visible surface will close the issue
 category: process
+layer: general
 proven_in: .agent/experience/ (six cross-experience instances across five sessions in five days, 2026-04-21 through 2026-04-25; cross-experience scan during 2026-04-25 Jazzy consolidate-docs reached the conclusion; 2026-04-25 Jiggly Pebble consolidate-docs reached the same conclusion adding a frame-held variant)
 proven_date: 2026-04-25
 related_pdr: PDR-015

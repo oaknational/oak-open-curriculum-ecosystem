@@ -132,3 +132,13 @@ expired owner gates surface as drift but no instrument compares
 `expires` to the clock, and the schema document claims a
 sensitivity-vocabulary tripwire that is not implemented. Closing them
 is exactly this node's thesis applied to itself.
+
+**Standing owner instruction (2026-08-02, restated at an archival on
+2026-09-08).** No external skills library review starts without the
+owner's express word ("Do not start the larger review without my say
+so"). The framework node that would have governed one is archived
+(`external-skills-library-review-framework`, in `archive/`, at the
+owner's word "Archive"); any such review begins as a new sketch under
+this node, authored at that word and ratified separately by the owner
+after reading it — the authorising word starts the authoring, never
+the governing.

@@ -34,6 +34,48 @@ import { extractFrontmatter } from '../portability/portability-fs.js';
 import { type ParsedPlanFile, type PlanConformanceFailure } from './plan-corpus-types.js';
 import { type ChoiceRegistry } from './plan-corpus-registries.js';
 import { planNodeSchema, type PlanNode } from './plan-node-schema.js';
+import { yamlFencedBlocks } from './yaml-fence-blocks.js';
+
+/**
+ * Every fenced YAML block in a plan node must PARSE.
+ *
+ * @remarks
+ * A delivery node that pins a file's text is a specification a seat copies
+ * verbatim, and the copy is only as good as the pinned text. On 2026-09-11 two
+ * owner-RATIFIED nodes pinned GitHub Actions workflows whose single-line `run:`
+ * values carried a colon-space inside a plain scalar; neither file parsed, so
+ * neither workflow could have loaded, and the defect survived ratification, an
+ * assumptions review, and a landing. It was caught only because the executing
+ * seat happened to run a parser before copying.
+ *
+ * "Happened to" is the part this check removes. The gate now reads the pinned
+ * text the way the platform will, so a seat — at any capability — inherits a
+ * node whose fenced YAML is known to parse rather than one it must think to
+ * verify.
+ *
+ * Scope is deliberately narrow twice over. PARSEABILITY, not schema conformance:
+ * whether a workflow's keys are the right keys is the reviewer's question, and
+ * whether the bytes are YAML at all is mechanical. And TOP-LEVEL fences, which
+ * is where a pinned file goes — a YAML block nested in a blockquote or a list
+ * item is illustrative prose rather than a file a seat copies, so it is out of
+ * scope by the same reasoning rather than by an admitted gap.
+ */
+function yamlFenceFailures(content: string): string[] {
+  const messages: string[] = [];
+  let index = 0;
+  for (const block of yamlFencedBlocks(content)) {
+    index += 1;
+    try {
+      parseYaml(block);
+    } catch (error) {
+      const reason = error instanceof Error ? error.message.split('\n')[0] : String(error);
+      messages.push(
+        `fenced yaml block ${String(index)} does not parse: ${reason ?? 'unknown parse error'}`,
+      );
+    }
+  }
+  return messages;
+}
 
 /**
  * Validate one `*.plan.md` file's frontmatter against the plan-node
@@ -54,13 +96,20 @@ export function validatePlanFile(
     return err({ path, messages: [mapping.error] });
   }
   const result = planNodeSchema.safeParse(mapping.value);
+  const fenceMessages = yamlFenceFailures(content);
   if (!result.success) {
     return err({
       path,
-      messages: result.error.issues.map(
-        (issue) => `${issue.path.map(String).join('.') || '(root)'}: ${issue.message}`,
-      ),
+      messages: [
+        ...result.error.issues.map(
+          (issue) => `${issue.path.map(String).join('.') || '(root)'}: ${issue.message}`,
+        ),
+        ...fenceMessages,
+      ],
     });
+  }
+  if (fenceMessages.length > 0) {
+    return err({ path, messages: fenceMessages });
   }
   return ok(result.data);
 }

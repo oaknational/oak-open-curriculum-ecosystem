@@ -3,6 +3,7 @@ import { Readable } from 'node:stream';
 import { err, ok } from '@oaknational/result';
 import { describe, expect, it } from 'vitest';
 
+import { ARC_METRICS_HELP_TEXT } from '../src/arc-metrics/cli-options';
 import { runAgentToolsCli } from '../src/bin/agent-tools-cli';
 
 describe('agent-tools unified CLI', () => {
@@ -36,7 +37,7 @@ describe('agent-tools unified CLI', () => {
       repoRoot: '/repo',
       readCommitQueueRegistry: async () =>
         ok({
-          schema_version: '1.3.0',
+          schema_version: '1.4.0',
           claims: [],
           commit_queue: [],
         }),
@@ -106,6 +107,16 @@ describe('agent-tools unified CLI', () => {
     expect(result.stdout).toContain('coordination successor-name [--base <ref>]');
   });
 
+  it('dispatches arc-metrics through the single entrypoint to its own help', async () => {
+    const result = await runAgentToolsCli({
+      argv: ['arc-metrics', '--help'],
+      env: {},
+      cwd: '/repo',
+    });
+
+    expect(result).toEqual({ exitCode: 0, stdout: `${ARC_METRICS_HELP_TEXT}\n`, stderr: '' });
+  });
+
   it('uses one error shape for unknown topics', async () => {
     const result = await runAgentToolsCli({
       argv: ['unknown-topic'],
@@ -121,6 +132,7 @@ describe('agent-tools unified CLI', () => {
         '',
         'Topics:',
         '  agent-identity',
+        '  arc-metrics',
         '  collaboration-state',
         '  commit-queue',
         '  branch-touched-files',
@@ -131,6 +143,8 @@ describe('agent-tools unified CLI', () => {
         '  merge-bot',
         '  pr',
         '  pr-watch',
+        '  review-cost',
+        '  skill-evals',
         '  spawn',
         '',
         'Error: unknown topic: unknown-topic',
@@ -156,6 +170,7 @@ describe('agent-tools unified CLI', () => {
           '',
           'Topics:',
           '  agent-identity',
+          '  arc-metrics',
           '  collaboration-state',
           '  commit-queue',
           '  branch-touched-files',
@@ -166,6 +181,8 @@ describe('agent-tools unified CLI', () => {
           '  merge-bot',
           '  pr',
           '  pr-watch',
+          '  review-cost',
+          '  skill-evals',
           '  spawn',
           '',
           `Error: unknown topic: ${protoKey}`,

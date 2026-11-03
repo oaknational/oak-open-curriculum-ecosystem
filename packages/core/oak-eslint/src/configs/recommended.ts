@@ -20,8 +20,8 @@ import { oakPlugin } from '../plugin.js';
  * `require-observability-emission` is registered here (rule available)
  * but not activated in the recommended rule set. Per ADR-162 Phase 5
  * acceptance, each `apps/*` and `packages/sdks/*` workspace enables the
- * rule at `warn` in its own flat config. Preset-level activation is
- * deliberately avoided so the rule never fires outside its intended scope.
+ * rule in its own flat config. Preset-level activation is deliberately
+ * avoided so the rule never fires outside its intended scope.
  */
 /**
  * Restricted types shared between recommended and strict configs.
@@ -197,35 +197,36 @@ const oakRecommendedConfig: TSESLint.FlatConfig.Config = {
   },
   rules: {
     '@oaknational/no-eslint-disable': 'error',
+    '@oaknational/no-conditional-tests': 'error',
     '@oaknational/no-dynamic-import': 'error',
     // Architectural boundary: application code must not READ the `.agent/`
     // knowledge substrate at runtime (fs reads / `new URL` into `.agent/`).
     // agent-tools/ (the substrate operator) is exempt inside the rule. The
     // companion IMPORT boundary is enforced by the depcruise
-    // `no-import-from-agent-substrate` forbidden rule. Wired at `warn` per the
-    // new-ESLint-rule convention (the existing-violation surface is empty —
-    // the gap-ledger reader was deleted — so escalation to `error` is a
-    // separate, immediately-safe decision). Doctrine: owner 2026-06-22,
-    // .agent/directives/testing-strategy.md.
-    '@oaknational/no-agent-substrate-access': 'warn',
-    // New rule (2026-06-14): bans `throw` in favour of the Result pattern
-    // (ADR-088 / use-result-pattern). Wired at `warn` first per the
-    // no-warning-toleration §"Scope and exceptions" rule-authoring nuance — the
-    // existing-throw surface (notably workspaces that predate Result adoption
-    // here, such as agent-tools) is captured at `warn` while the throw→Result
-    // retrofit lane migrates it and the false-positive profile (test files,
-    // sanctioned boundary throws) is designed. PROMOTION POINT TO `error`: the
-    // completion of that retrofit lane, at which point the no-warning-toleration
-    // zero-warning regime applies unchanged. This rule must NOT be used to claim
-    // green quality gates until promotion.
-    '@oaknational/no-throw-statement': 'warn',
-    // Severity is `warn` during the rule's development phase per the general
-    // principle that new ESLint rules wire at `warn` first to avoid blocking
-    // unrelated work in the monorepo while the rule is iterated and the
-    // existing-violation surface is captured. Escalation to `error` (and the
-    // no-warning-toleration regime) is a separate, deliberate decision once
-    // the rule is stable and every existing violation is either on the frozen
-    // allowlist or migrated away.
+    // `no-import-from-agent-substrate` forbidden rule. Strict (PDR-126): the
+    // rule's violation surface measured empty across every lint workspace on
+    // 2026-09-25, so it sits at `error` with nothing behind it. Doctrine: owner
+    // 2026-06-22, .agent/directives/testing-strategy.md.
+    '@oaknational/no-agent-substrate-access': 'error',
+    // Bans `throw` in favour of the Result pattern (ADR-088 /
+    // use-result-pattern). The owner's ruling of 2026-09-08 on the rule's
+    // warning surface (sixteen workspaces held throw debt when this landed):
+    // "Turn the rule off for now, we can't fix it without creating
+    // incredible churn, so that needs to wait until the Engraph fork is merged
+    // back into the upstream. However, in any workspace with no current
+    // warnings and in any new workspace, leave it on as an error." So the
+    // preset says `error`, every workspace that holds throw debt turns the rule
+    // `off` in its own flat config citing this ruling, and there is no warn
+    // tier (PDR-126). The migration lane (the no-throw-remediation plan under
+    // .agent/plans-backlog-2026-07/) waits for the merge-back.
+    '@oaknational/no-throw-statement': 'error',
+    // Transition debt, not a design (PDR-126 §4): this rule sits at `warn` over
+    // a frozen violation allowlist, the shape PDR-126 forbids for a new gate.
+    // The no-io-test-boundary-and-di-recovery plan (under
+    // .agent/plans-backlog-2026-07/architecture-and-infrastructure/) owns
+    // bringing it to `error` in one landing by migrating or category-moving
+    // every listed file; until then the allowlist below is that plan's
+    // inventory, and this warn tier licenses no other warn-tier landing.
     //
     // The `allowlistPathShapes` entries below are a frozen historical-violation
     // inventory captured at the moment this rule went live. The structural
@@ -249,6 +250,11 @@ const oakRecommendedConfig: TSESLint.FlatConfig.Config = {
           // mkdtemp temp trees; a fake fs would make the mutation proofs
           // theatre. The refounding module retires with the run (F1 §5), and
           // that plan's closure removes these entries.
+          '**/agent-tools/src/collaboration-state/coordination-home-consolidation.integration.test.ts',
+          '**/agent-tools/src/core/flag-path-resolve.integration.test.ts',
+          '**/agent-tools/tests/collaboration-state/state-integrity.integration.test.ts',
+          '**/agent-tools/tests/collaboration-state/watcher-staleness-io.integration.test.ts',
+          '**/agent-tools/tests/protocol-conformance/node-io.integration.test.ts',
           '**/agent-tools/src/refounding/refound-freeze.integration.test.ts',
           '**/agent-tools/src/refounding/refound-verify-freeze.integration.test.ts',
           '**/agent-tools/src/refounding/refound-inventory.integration.test.ts',

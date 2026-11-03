@@ -3,6 +3,7 @@ name: "An Indiscriminate-Rule Warning Count Is Cause-Classes, Not N Problems"
 polarity: pattern
 use_this_when: "A broad or indiscriminate lint/analysis rule reports a large count (hundreds/thousands of warnings) and you are deciding how to remediate."
 category: process
+layer: general
 proven_in: "~1000 no-throw ESLint warnings reshaped to ~6 cause-classes; per-site labels proved unreliable (3 mislabels in one session) (2026-06-19, Siren mends Rudder)"
 proven_date: 2026-06-19
 barrier:

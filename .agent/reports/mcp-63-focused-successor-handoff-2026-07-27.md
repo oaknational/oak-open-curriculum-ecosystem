@@ -275,3 +275,9 @@ closed without merging, MCP63's acceptance evidence is current, and the final
 built application proves the ratified privacy and lifecycle contract. A useful
 partial slice is not completion.
 
+
+_Record locations, 2026-09-06: of the thread records named above by their paths of the
+time, those the 2026-09-06 consolidation paused moved under
+`.agent/memory/operational/threads/paused/` (the threads README's lifecycle layout; the
+paused index in `repo-continuity.md` names each); a record still active keeps its root path
+under `.agent/memory/operational/threads/`; the paths here are the historical ones._

@@ -23,6 +23,14 @@ component library (the shape of its reference sources, Oak Components and
 OWA). The strategic question was whether value ships as hand-made artefacts
 or as configuration of a general system.
 
+The full name is load-bearing. Oak already has an official "Oak Design
+System" — a separate organisational asset living largely in Figma — and
+this repository's system is the **Oak Open Curriculum Design System**,
+repo-scoped (owner, 2026-07-23: "just for this repo for now"). No surface
+— documentation, design-studio projects, tickets, stakeholder text — may
+call the repository system "the Oak Design System" or claim it is the
+organisation's; the package directory name is a path, not a claim.
+
 ## Decision
 
 The design system is a **configured framework**: a general, portable system

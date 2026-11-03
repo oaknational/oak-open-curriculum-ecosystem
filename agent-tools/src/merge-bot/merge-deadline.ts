@@ -1,8 +1,10 @@
-import { err, ok, type Result } from '@oaknational/result';
+import { err, type Result } from '@oaknational/result';
+
+import { deadlinePassed, tokenDeadlineFrom, type TokenDeadline } from './token-deadline.js';
 
 /**
  * The WALL-CLOCK bound on the merge poll loop, derived from the MINTED
- * token's own expiry.
+ * token's own expiry (`token-deadline.ts` holds the derivation).
  *
  * `merge-args.ts` bounds `--interval x --max-polls` at parse time, but that
  * budget counts only SLEEP: request time is unbounded, so a run of slow
@@ -15,13 +17,8 @@ import { err, ok, type Result } from '@oaknational/result';
 /** Five minutes: room for a whole read → verdict → PUT round to complete. */
 const SAFETY_MARGIN_MS = 5 * 60 * 1000;
 
-export interface MergeDeadline {
-  /** The last instant a merge execution may start (ISO). */
-  readonly atIso: string;
-  readonly atEpochMs: number;
-  /** The minted token's own stated expiry — reported alongside the deadline. */
-  readonly tokenExpiresAt: string;
-}
+/** The last instant a merge execution may start. */
+export type MergeDeadline = TokenDeadline;
 
 /**
  * Derive the deadline from the minted token's expiry. An unparseable expiry
@@ -29,22 +26,13 @@ export interface MergeDeadline {
  * regardless is exactly the failure this exists to prevent.
  */
 export function mergeDeadlineFrom(tokenExpiresAt: string): Result<MergeDeadline, Error> {
-  const expiryEpochMs = Date.parse(tokenExpiresAt);
-  if (Number.isNaN(expiryEpochMs)) {
-    return err(
-      new Error(
-        `the minted token's expiry "${tokenExpiresAt}" is not a parseable timestamp — refusing to poll without a wall-clock deadline`,
-      ),
-    );
-  }
-  const atEpochMs = expiryEpochMs - SAFETY_MARGIN_MS;
-  return ok({ atEpochMs, atIso: new Date(atEpochMs).toISOString(), tokenExpiresAt });
+  const deadline = tokenDeadlineFrom(tokenExpiresAt, SAFETY_MARGIN_MS);
+  return deadline.ok
+    ? deadline
+    : err(new Error(`${deadline.error.message} — refusing to poll without a wall-clock deadline`));
 }
 
-/** Whether `nowIso` has passed the deadline. */
-export function deadlinePassed(nowIso: string, deadline: MergeDeadline): boolean {
-  return Date.parse(nowIso) > deadline.atEpochMs;
-}
+export { deadlinePassed };
 
 /** The stop message: names the deadline AND the token expiry it was derived from. */
 export function deadlineMessage(nowIso: string, deadline: MergeDeadline): string {

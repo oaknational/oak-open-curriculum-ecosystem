@@ -1,10 +1,11 @@
 import { err, ok } from '@oaknational/result';
 import { describe, expect, it } from 'vitest';
 
-import type { PrStateReading } from '../pr-watch/state-types.js';
 import type { GithubApiFetch } from './mint-installation-token.js';
 import { ReadingUnavailableError, runMergeExecution, type MergeExecutionInput } from './merge.js';
+import { makeInput } from './test-helpers/merge-execution-input.js';
 import { settledReading, SETTLED_HEAD_OID } from './test-helpers/pr-state-reading.js';
+import { CODE_FILES, makeClassPort } from './test-helpers/records-class-port.js';
 
 /**
  * Integration over injected ports (constant fakes, no process, no network):
@@ -40,28 +41,6 @@ function makeFetchPort(input: {
     };
   };
   return { fetchImpl, calls };
-}
-
-function makeInput(
-  reading: PrStateReading,
-  fetchImpl: GithubApiFetch,
-  overrides: Partial<MergeExecutionInput> = {},
-): MergeExecutionInput {
-  return {
-    identity: { appId: '1', keyPath: '/dev/null', owner: 'acme', repoName: 'widgets' },
-    prNumber: 42,
-    expectedReviewers: ['copilot-pull-request-reviewer'],
-    nowIso: '2026-08-06T09:00:00Z',
-    seams: {
-      mint: () =>
-        Promise.resolve(
-          ok({ token: 'test-token-value', expiresAt: '2026-08-06T10:00:00Z', installationId: 7 }),
-        ),
-      readReading: () => ok(reading),
-      fetchImpl,
-    },
-    ...overrides,
-  };
 }
 
 describe('runMergeExecution', () => {
@@ -109,6 +88,28 @@ describe('runMergeExecution', () => {
       }
     }
     expect(calls.some((call) => call.url.endsWith('/pulls/42/merge'))).toBe(false);
+  });
+
+  it('refuses a tip whose only review is a vendor error review: the vendor could not review', async () => {
+    const { fetchImpl } = makeFetchPort({});
+    const reading = makeReading({
+      reviews: [
+        {
+          author: 'copilot-pull-request-reviewer',
+          state: 'COMMENTED',
+          body: 'Copilot encountered an error and was unable to review this pull request. You can try again by re-requesting a review.',
+          commitOid: HEAD_OID,
+          submittedAt: '2026-08-06T08:05:00Z',
+        },
+      ],
+    });
+
+    const outcome = await runMergeExecution(makeInput(reading, fetchImpl));
+
+    expect(outcome).toMatchObject({
+      ok: true,
+      value: { kind: 'refused', verdictState: 'SETTLED-NO-REVIEW' },
+    });
   });
 
   it('refuses loudly when the settings read omits allow_merge_commit, and never merges', async () => {
@@ -386,5 +387,128 @@ describe('runMergeExecution — target grammar (security H2)', () => {
       expect(outcome.error.message).toContain('grammar');
     }
     expect(calls.some((call) => call.url.endsWith('/merge'))).toBe(false);
+  });
+});
+
+describe('runMergeExecution — a set declared empty (the owner, 2026-10-27)', () => {
+  it('merges a tip whose expected set was declared none, the evidence naming the declaration', async () => {
+    // The seat judged this work needs no pull-request review to be safe and
+    // effective and declared so; the door reads the declaration, waits out
+    // the quiet window from checks green (08:00 against 09:00) and merges,
+    // carrying the judgement in the merge record.
+    // A bot-authored tip proves the required contexts by name before the PUT,
+    // so the port serves the base branch's rules; the diff is code-class.
+    const { fetchImpl, calls } = makeClassPort(CODE_FILES);
+    const declaredNone = makeReading({
+      author: 'app/acme-bot',
+      expectedReviewers: [],
+      expectedDeclared: true,
+      reviews: [],
+      namedChecks: [
+        { name: 'run-quality-gates', bucket: 'passed' },
+        { name: 'CodeQL', bucket: 'passed' },
+      ],
+      checks: { total: 2, passed: 2, failed: 0, pending: 0 },
+    });
+
+    const outcome = await runMergeExecution(
+      makeInput(declaredNone, fetchImpl, { expectedReviewers: [] }),
+    );
+
+    expect(outcome.ok).toBe(true);
+    if (outcome.ok) {
+      expect(outcome.value.kind).toBe('merged');
+      if (outcome.value.kind === 'merged') {
+        expect(outcome.value.evidence.join('\n')).toContain('--expect none');
+      }
+    }
+    expect(calls.some((call) => call.url.endsWith('/pulls/42/merge'))).toBe(true);
+  });
+
+  it("refuses a person's pull request on a set declared none: reviewed, never merged on an empty set", async () => {
+    const { fetchImpl, calls } = makeFetchPort({});
+    const personsPr = makeReading({
+      author: 'jimcresswell',
+      expectedReviewers: [],
+      expectedDeclared: true,
+      reviews: [],
+    });
+
+    const outcome = await runMergeExecution(
+      makeInput(personsPr, fetchImpl, { expectedReviewers: [] }),
+    );
+
+    expect(outcome.ok).toBe(true);
+    if (outcome.ok) {
+      expect(outcome.value.kind).toBe('refused');
+      if (outcome.value.kind === 'refused') {
+        expect(outcome.value.reason).toContain('--expect none');
+        expect(outcome.value.reason).toContain('2026-09-03');
+      }
+    }
+    expect(calls.some((call) => call.url.endsWith('/pulls/42/merge'))).toBe(false);
+  });
+});
+
+describe('runMergeExecution — what is owed is read from the review configuration (the owner, 2026-10-16)', () => {
+  const OLD_TIP = 'b'.repeat(40);
+  const reviewedAnEarlierTip = makeReading({
+    reviewConfiguration: { kind: 'configured', reviewOnPush: false, reviewDraft: false },
+    reviews: [
+      {
+        author: 'copilot-pull-request-reviewer',
+        state: 'COMMENTED',
+        body: 'review round complete',
+        commitOid: OLD_TIP,
+        submittedAt: '2026-08-06T07:05:00Z',
+      },
+    ],
+  });
+
+  it('merges a later tip the base branch does not review: the vendor reviewed an earlier tip, nothing is requested', async () => {
+    const { fetchImpl, calls } = makeFetchPort({});
+
+    const outcome = await runMergeExecution(makeInput(reviewedAnEarlierTip, fetchImpl));
+
+    expect(outcome.ok).toBe(true);
+    if (outcome.ok) {
+      expect(outcome.value.kind).toBe('merged');
+      if (outcome.value.kind === 'merged') {
+        const evidence = outcome.value.evidence.join('\n');
+        expect(evidence).toContain('review_on_push=false');
+        expect(evidence).toContain('copilot-pull-request-reviewer: UNOWED');
+      }
+    }
+    const mergeCall = calls.find((call) => call.url.endsWith('/pulls/42/merge'));
+    expect(JSON.parse(String(mergeCall?.init?.body))).toEqual({
+      merge_method: 'merge',
+      sha: HEAD_OID,
+    });
+  });
+
+  it('a request made by hand on that tip makes the leg owed again: the round is in flight, never merged', async () => {
+    const { fetchImpl, calls } = makeFetchPort({});
+    // Checks green five minutes ago: inside the checks-green window, so the
+    // request is the round in flight, not a leg the timeout ended.
+    const requested = makeReading({
+      ...reviewedAnEarlierTip,
+      checksGreenAt: '2026-08-06T08:55:00Z',
+      reviewRequests: ['copilot-pull-request-reviewer'],
+    });
+
+    const outcome = await runMergeExecution(makeInput(requested, fetchImpl));
+
+    expect(outcome.ok).toBe(true);
+    if (outcome.ok) {
+      expect(outcome.value.kind).toBe('refused');
+      if (outcome.value.kind === 'refused') {
+        // This estate reads a request with no live run observed as a dead run; the
+        // point here is that the leg reads OWED again and nothing merges.
+        expect(outcome.value.verdictState).toBe('SILENT-WAIT-RUN-DEAD');
+        // The leg itself reads OWED (the request made it so), not UNOWED held by the round.
+        expect(outcome.value.evidence.join('\n')).toContain('copilot-pull-request-reviewer: OWED');
+      }
+    }
+    expect(calls.some((call) => call.url.endsWith('/pulls/42/merge'))).toBe(false);
   });
 });

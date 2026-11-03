@@ -7,18 +7,23 @@ import { parseWithSchema } from '../core/schema-parse.js';
 import { err, type Result } from '@oaknational/result';
 
 /**
- * Repo-owned merge-bot identity (AIP-158, owner ruling 2026-07-21: "the
- * generalisation from that bot to the repo's merge bot needs to happen in
- * config in the repo").
+ * Per-checkout merge-bot identity (AIP-158; owner ruling 2026-07-21 put the
+ * bot's identity in config so no seat carries it as session memory; owner
+ * ruling 2026-09-03 took that config OUT of version control — each clone
+ * names its own app, so the file is per-checkout and never tracked).
  *
- * `.github/merge-bot.json` names WHICH GitHub App is this repo's merge bot,
- * so no seat carries the mapping as session memory. The private key is the
- * one thing that stays machine-local by design; its default location is
- * DERIVED from the config (`~/.config/<appSlug>/private-key.pem`), so the
- * repo never records a machine path (principles.md §No machine-local paths).
+ * `.github/merge-bot.json` names WHICH GitHub App is this clone's merge bot.
+ * It is gitignored; the tracked surface is `.github/merge-bot.json.example`,
+ * the template a fresh clone copies and fills in. Callers resolve the file at
+ * the clone's PRIMARY checkout (`resolve-identity.ts`), so every linked
+ * worktree reads the one copy and no worktree carries a stale duplicate. The
+ * private key stays machine-local by design; its default location is DERIVED
+ * from the config (`~/.config/<appSlug>/private-key.pem`), so nothing in the
+ * repo records a machine path (principles.md §No machine-local paths).
  */
 
-const MERGE_BOT_CONFIG_RELATIVE_PATH = path.join('.github', 'merge-bot.json');
+export const MERGE_BOT_CONFIG_RELATIVE_PATH = path.join('.github', 'merge-bot.json');
+const MERGE_BOT_CONFIG_EXAMPLE_RELATIVE_PATH = path.join('.github', 'merge-bot.json.example');
 
 const MERGE_BOT_CONFIG_SCHEMA = z
   .object({
@@ -32,7 +37,11 @@ const MERGE_BOT_CONFIG_SCHEMA = z
 
 export type MergeBotRepoConfig = z.output<typeof MERGE_BOT_CONFIG_SCHEMA>;
 
-/** Read and strictly validate `.github/merge-bot.json` under `repoRoot`. */
+/**
+ * Read and strictly validate `.github/merge-bot.json` under `repoRoot` (the
+ * clone's primary checkout; see `resolve-identity.ts`). An unreadable file
+ * names the template to copy, because on a fresh clone that is the fix.
+ */
 export function loadMergeBotRepoConfig(input: {
   readonly repoRoot: string;
   readonly readFileImpl?: (filePath: string) => string;
@@ -45,7 +54,8 @@ export function loadMergeBotRepoConfig(input: {
   } catch (cause) {
     return err(
       new Error(
-        `merge-bot repo config not readable at ${MERGE_BOT_CONFIG_RELATIVE_PATH}: ${cause instanceof Error ? cause.message : String(cause)}`,
+        `merge-bot config not readable at ${MERGE_BOT_CONFIG_RELATIVE_PATH} (per-checkout, never tracked): copy ${MERGE_BOT_CONFIG_EXAMPLE_RELATIVE_PATH} to ${MERGE_BOT_CONFIG_RELATIVE_PATH} at this clone's primary checkout and name this clone's app; cause: ${cause instanceof Error ? cause.message : String(cause)}`,
+        { cause },
       ),
     );
   }

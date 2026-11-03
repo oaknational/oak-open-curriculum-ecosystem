@@ -9,7 +9,7 @@ todos:
     content: "Phase 0: Complete ESLint strict baseline."
     status: pending
   - id: p3-phase1-max-files
-    content: "Phase 1: Ratify or reject canonical delegation to the proposed report-only architectural-fitness workstream before wiring max-files-per-dir."
+    content: "Phase 1: max-files-per-dir is never wired — owner ruled 2026-09-14 that the ESLint rule is deleted and directory cardinality is a blocking repository validator for the Reliable Atoms workspace class (ADR-166 §Amendment 2026-09-14); the estate-wide report-only delegation remains unratified."
     status: pending
   - id: p3-phase2-boundaries
     content: "Phase 2: Record canonical delegation for developer-experience execution owners."

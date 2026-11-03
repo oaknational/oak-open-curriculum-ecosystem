@@ -13,6 +13,12 @@
 // `.markdownlintignore` did. The `.agent/**/*.md` glob is retained for clarity
 // even though `**/*.md` already covers it.
 //
+// The gates do not read `globs`: the root gates (`markdownlint-check:root`,
+// `markdownlint:root`) and the pre-commit leg pass git's own file list with
+// `--no-globs` (agent-tools repo-check), so `globs` scopes only a bare
+// `markdownlint-cli2` run from the root. `ignores` and `gitignore` apply to
+// every run, the gates' included.
+//
 // HARD RULE: never add an `ignores` entry beginning with `!` or `#`. In cli2
 // v0.22.x such an entry silently zeroes the entire run to "0 error(s)" (a
 // false-green gate), not a re-include. Express exclusions positively only.
@@ -68,6 +74,7 @@
     ".agent/collaboration/rapid-comms/.starless-notice-body.md",
     "**/test-results/**",
     "**/test-artifacts/**",
+    "**/evals/results/**",
     ".stryker-tmp/**",
   ],
   // Lint scope = tracked repo files: gitignored content (untracked vendor

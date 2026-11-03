@@ -9,7 +9,7 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { OAK_LOGO_ROWS } from '../../src/claude/oak-logo';
+import { LOGO_ROWS } from '../../src/claude/logo';
 import { CYAN, DIM, GREEN, MAGENTA, RESET } from '../../src/claude/statusline-ansi';
 import { renderStatusline, type StatuslineParts } from '../../src/claude/statusline-render';
 import { type SessionShape } from '../../src/claude/statusline-session-shape';
@@ -172,7 +172,7 @@ describe('renderStatusline — session-shape indicators', () => {
 });
 
 describe('renderStatusline — session-shape indicators in the four-row layout', () => {
-  const SEXTANT = OAK_LOGO_ROWS.sextant;
+  const SEXTANT = LOGO_ROWS.sextant;
   const mark = (row: string): string => `${GREEN}${row}${RESET}`;
   const GAP = '  ';
 

@@ -12,30 +12,34 @@ description: >-
 
 # Visual comparison
 
-The method is DDR-010's
-([docs/design/design-decisions/010-comparison-is-visual-first.md](../../../../../docs/design/design-decisions/010-comparison-is-visual-first.md)):
+The method (OCE's design decision DDR-010, comparison is visual-first):
 comparison is VISUAL FIRST — rendered images, looked at — with windowed
 statistics directing the looking and computed styles corroborating causes.
 Never conclude "matches" from markup, styling, or computed styles alone.
+
+## The instrument
+
+OCE: the design showcase's pair capture, with its two-root overlay server
+(`demos/oak-design-showcase/tools/export-server.ts`) serving a Claude Design
+export styled; the tool refuses free-hand widths (DDR-009):
+
+```bash
+cd demos/oak-design-showcase
+pnpm exec tsx tools/capture-pair.ts \
+  --left <rebuild-url> --right <reference-url> \
+  --width 1280 --out <dir> --tag <name>
+```
 
 ## Procedure
 
 1. **Render both sides first** (the
    [`render-the-reference-before-reproducing`](../../../../rules/render-the-reference-before-reproducing.md)
-   rule): the reference must be served STYLED — for the Claude Design
-   export use the two-root overlay server
-   (`demos/oak-design-showcase/tools/export-server.ts`); a single-root
-   static serve renders it unstyled and silently poisons every capture.
-2. **Capture the pair at one canonical width** (DDR-009; the tool
-   refuses free-hand widths):
-
-   ```bash
-   cd demos/oak-design-showcase
-   pnpm exec tsx tools/capture-pair.ts \
-     --left <rebuild-url> --right <reference-url> \
-     --width 1280 --out <dir> --tag <name>
-   ```
-
+   rule): the reference must be served STYLED — a Claude Design export
+   needs a server that overlays its two roots; a single-root static serve
+   renders it unstyled and silently poisons every capture.
+2. **Capture the pair at one canonical width** (the design system's
+   canonical widths; a tool refuses free-hand widths) with the host's
+   instrument (§The instrument).
 3. **Read the stats summary**: start at the printed
    `first-rejecting-row` and read top-down — one vertical offset makes
    everything below it reject, so the deepest-red window is rarely the

@@ -12,7 +12,7 @@ todos:
     content: "Complete ESLint strict enforcement (Phase 0): resolve remaining lint errors."
     status: pending
   - id: baseline-lint-rules
-    content: "Ratify or reject the 2026-07-15 report-only architectural-fitness proposal before any max-files-per-dir export or wiring."
+    content: "Owner ruled 2026-09-14: no max-files-per-dir export or wiring ever — the ESLint rule is deleted; directory cardinality is a blocking repository validator for the Reliable Atoms workspace class (ADR-166 §Amendment 2026-09-14); the estate-wide report-only proposal of 2026-07-15 remains unratified."
     status: pending
   - id: boundary-configuration
     content: "Configure boundary enforcement per the canonical import matrix (ADR-041). (Execution delegated to devx strictness convergence.)"

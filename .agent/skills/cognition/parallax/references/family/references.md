@@ -86,13 +86,17 @@ This is a representative foundation, not a claim that Parallax is derivable from
 
 ## Embedding Practice and memory
 
-- Oak National Academy, [`.agent` Practice root](https://github.com/oaknational/oak-open-curriculum-ecosystem/tree/main/.agent)
-- Oak National Academy, [Practice memory model](https://github.com/oaknational/oak-open-curriculum-ecosystem/blob/main/.agent/memory/README.md)
-- Oak National Academy, [Continuity Practice](https://github.com/oaknational/oak-open-curriculum-ecosystem/blob/main/.agent/directives/continuity-practice.md)
-- Oak National Academy, [PDR-051: vendor-agnostic skills standardisation](https://github.com/oaknational/oak-open-curriculum-ecosystem/blob/main/.agent/practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md)
-- Oak National Academy, [PDR-119: agent memory as an event graph with renderers](https://github.com/oaknational/oak-open-curriculum-ecosystem/blob/main/.agent/practice-core/decision-records/PDR-119-agent-memory-as-an-event-graph-with-renderers.md)
-- Oak National Academy, [ADR-125: agent artefact portability](https://github.com/oaknational/oak-open-curriculum-ecosystem/blob/main/docs/architecture/architectural-decisions/125-agent-artefact-portability.md)
-- Oak National Academy, [ADR-131: self-reinforcing improvement loop](https://github.com/oaknational/oak-open-curriculum-ecosystem/blob/main/docs/architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md)
+- This Practice, the `.agent` Practice root: `.agent/README.md` (repository-relative paths
+  here, never relative links: this file is copied byte for byte into every generated skill
+  adapter, where a relative link that leaves the skill directory resolves nowhere)
+- This Practice, the Practice memory model: `.agent/memory/README.md`
+- This Practice, the Continuity Practice: `.agent/directives/continuity-practice.md`
+- This Practice, PDR-051, vendor-agnostic skills standardisation:
+  `.agent/practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md`
+- This Practice, PDR-119, agent memory as an event graph with renderers:
+  `.agent/practice-core/decision-records/PDR-119-agent-memory-as-an-event-graph-with-renderers.md`
+- OCE, ADR-125: agent artefact portability (a host record in OCE's decision-record directory)
+- OCE, ADR-131: self-reinforcing improvement loop (a host record in OCE's decision-record directory)
 
 ## Citation and extension policy
 

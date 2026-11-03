@@ -110,7 +110,7 @@ export const SDK_CODEGEN_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDel
     ),
   'packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/build-zod-type.ts':
     excluded(
-      '3fd17c0fa37d9f59b4ee037db515f6f43c4cfc8313a819fe73b6bbd401ef241b',
+      'e872e876127569b3c8e40e7288ca759a05808700fb995246e3be3737a415308d',
       IMPLEMENTATION_ONLY,
     ),
   'packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/json-schema-types.ts':

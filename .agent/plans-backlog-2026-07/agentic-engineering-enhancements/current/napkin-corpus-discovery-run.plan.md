@@ -33,7 +33,7 @@ todos:
     depends_on: [full-discovery-run]
     closure: "RAN during salvage ws1 (2026-07-02, Rosemary stirs Bracken): the corroboration cwd defect fixed first (e18516265, 0/18 -> 18/18), then the deterministic driver produced the salvage tier table (A18/B8/C18/D18/E187, residual 0) — the recall report and gate evaluation are in the discovery/salvage report; the FAILED gate routed the arc to salvage rather than graduation."
   - id: discovery-artefacts
-    content: "Substance report (napkin-discovery-pass-1-2026-06-29.md shape) WITH novelty stratification — separate the novel-and-uncorroborated kept candidates (the actual discovery yield) from those re-confirming existing homes. Plus a curator-pass run-record (2026-06-29-wren-napkin-discovery-pass.md metadata shape)."
+    content: "Substance report (napkin-discovery-pass-1-2026-06-29.md shape) WITH novelty stratification — separate the novel-and-uncorroborated kept candidates (the actual discovery yield) from those re-confirming existing homes. Plus the commits that homed it; the per-pass record this todo named (the 2026-06-29 metadata shape) is retired, 2026-09-26."
     status: done
     depends_on: [post-run-driver]
     closure: "DELIVERED as the salvage report with novelty stratification plus the committed tier table (discovery-run-salvage-report-2026-07-02.md and data/discovery-run-salvage-tiers-2026-07-02.json)."
@@ -97,7 +97,8 @@ recall as calibration — the plan layer had drifted; this plan restores that fr
 
 The full napkin corpus's understanding, discovered and conserved: every kept/rerouted candidate —
 recurring mechanisms **and** grounded longitudinal patterns — homed via `consolidate-until-done`. A
-substance report + curator-pass run-record capture the discovery; the Choice-B recall verdict (strict
+substance report + the commits that homed it capture the discovery (the record
+`permanent-doc-is-the-consolidation-record` names); the Choice-B recall verdict (strict
 ≥ 0.6 AND lenient ≥ 0.85) confirms the instrument was trustworthy. **Conservation of the findings is
 the success criterion; recall is the credibility check on it.**
 
@@ -159,7 +160,7 @@ graduate-or-decide reads recall as confidence-in-the-instrument.
 | orchestration TDD | unit | paired red→green tests for resume-skip / completeness / hard-abort / calibration; `pnpm agent-tools:test` |
 | probe gate | value-proxy | inspection of reduce candidates vs the 5 baselines + a longitudinal split + broad-cluster floor |
 | full run trustworthy | integration | driver report: integrity empty, recall, Choice B, coverage, recompute diff = 0 |
-| discovery conserved | non-code | substance report + curator-pass record; conservation buffer; `consolidate-until-done` run-record; `distilled.md` empty/gated |
+| discovery conserved | non-code | substance report + the commits that homed it; conservation buffer; `distilled.md` empty/gated |
 
 ## Prerequisites
 
@@ -247,7 +248,8 @@ back into the same machinery.
 ## Lifecycle triggers
 
 Per [`lifecycle-triggers`](../../../plans/templates/components/lifecycle-triggers.md): session-open grounding
-reads this plan + the v2 rerun result report + PDR-122; the full run emits a curator-pass run-record;
+reads this plan + the v2 rerun result report + PDR-122; the full run's record is the commits that
+home its substance;
 completion runs the learning loop above and sweeps the discoverability surfaces (this README row, the
 thread record, the reference hub).
 

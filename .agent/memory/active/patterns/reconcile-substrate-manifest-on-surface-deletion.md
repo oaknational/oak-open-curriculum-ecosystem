@@ -3,6 +3,7 @@ name: "Deleting an Operational Memory/State Surface → Reconcile the Substrate-
 polarity: pattern
 use_this_when: "Retiring or deleting an operational memory or state surface (a directory, register, or convention) that may have a contract entry in the PDR-049/050 substrate manifest."
 category: agent
+layer: general
 proven_in: ".agent/memory/executive/memory-state-substrate-contracts.manifest.json — tracks/ + workstreams/ deletion, 2026-06-19 (Drake lifts Obsidian)."
 proven_date: 2026-06-19
 barrier:

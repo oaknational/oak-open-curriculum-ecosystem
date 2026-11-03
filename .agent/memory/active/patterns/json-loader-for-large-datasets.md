@@ -3,6 +3,7 @@ name: "JSON loader for large generated datasets"
 polarity: pattern
 use_this_when: "A generated dataset exceeds TypeScript's max-lines threshold or literal-type serialisation limits"
 category: code
+layer: family
 proven_in: "packages/sdks/oak-sdk-codegen/src/bulk/generators/write-json-dataset.ts"
 proven_date: 2026-03-29
 barrier:

@@ -2,8 +2,13 @@ import { unwrapOrThrow, type Result } from '@oaknational/result';
 
 import { assertNoLiveIdentityRoutingCollision } from './active-agents.js';
 import { required, type Options } from './cli-options.js';
+import { commitQueueDirForActivePath, readCommitQueueEntries } from './commit-queue-store.js';
 import { readActiveClaimsFile } from './state-io.js';
-import { type CollaborationAgentId, type CollaborationRegistry } from './types.js';
+import {
+  type CollaborationAgentId,
+  type CollaborationCommitQueueEntry,
+  type CollaborationRegistry,
+} from './types.js';
 
 interface IdentityWriteGuardInput {
   readonly options: Options;
@@ -13,6 +18,20 @@ interface IdentityWriteGuardInput {
   readonly readActiveClaimsFile?: (
     activePath: string,
   ) => Promise<Result<CollaborationRegistry, Error>>;
+  readonly readCommitQueueEntries?: (input: {
+    readonly queueDir: string;
+    readonly nowIso: string;
+  }) => Promise<readonly CollaborationCommitQueueEntry[]>;
+}
+
+/**
+ * The one guarded snapshot an identity-writing command reads: the claims
+ * registry plus the live per-intent queue entries beside it, taken together
+ * so the collision guard and any downstream derivation see the same state.
+ */
+export interface IdentityWriteRegistrySnapshot {
+  readonly registry: CollaborationRegistry;
+  readonly commitQueue: readonly CollaborationCommitQueueEntry[];
 }
 
 /**
@@ -24,18 +43,25 @@ interface IdentityWriteGuardInput {
  */
 export async function registryForIdentityWrite(
   input: IdentityWriteGuardInput,
-): Promise<CollaborationRegistry> {
+): Promise<IdentityWriteRegistrySnapshot> {
   const readActive = input.readActiveClaimsFile ?? readActiveClaimsFile;
-  const registry = unwrapOrThrow(await readActive(required(input.options, 'active')));
+  const readQueue = input.readCommitQueueEntries ?? readCommitQueueEntries;
+  const activePath = required(input.options, 'active');
+  const registry = unwrapOrThrow(await readActive(activePath));
+  const commitQueue = await readQueue({
+    queueDir: commitQueueDirForActivePath(activePath),
+    nowIso: input.nowIso,
+  });
 
   assertNoLiveIdentityRoutingCollision({
     registry,
+    commitQueue,
     nowIso: input.nowIso,
     agentId: input.agentId,
     surface: input.surface,
   });
 
-  return registry;
+  return { registry, commitQueue };
 }
 
 /**

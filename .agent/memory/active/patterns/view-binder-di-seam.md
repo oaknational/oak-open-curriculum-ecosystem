@@ -3,6 +3,7 @@ name: "Views Take State as Props; a Two-Line Binder Owns the Hook"
 polarity: pattern
 use_this_when: "A React component both fetches/derives async state (via a hook) and renders it — and its tests are reaching for vi.mock, module mocking, or fetch stubbing to control what renders."
 category: testing
+layer: family
 proven_in: "curriculum-hub-demo 2026-07-02: three test-expert rulings converged in one day — the search-core DI extraction (ruled house doctrine), HubResultsView (the vi.mock shape ruled BLOCKING with proof the mock was not load-bearing under the hook's debounce), use-curriculum-search's injectable fetchFn (abort-lifecycle tests). The jest-axe suite then consumed the same seams to render 8 surface states mock-free — the pattern paid twice (testability + a11y-audit surface)."
 proven_date: 2026-07-06
 barrier:

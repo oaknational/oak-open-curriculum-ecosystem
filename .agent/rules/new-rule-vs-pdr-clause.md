@@ -1,3 +1,8 @@
+---
+classification: core
+description: "When authoring new doctrine substance, classify it as new rule, PDR clause amendment, or new PDR before writing the first line. Prefer the lowest-cost route in order: existing PDR clause > new rule > new PDR."
+---
+
 # New Rule vs PDR Clause vs New PDR
 
 When new doctrine substance arrives at write time, route it to the home that
@@ -35,7 +40,10 @@ matching home; do not duplicate across multiple homes.
    it. Add the clause inside the PDR's Decision section under a new
    numbered heading, update the PDR's Revision history, and add a
    Falsifiability axis if the new clause is falsifiable independently of
-   the rest.
+   the rest. A reading of an owner's word that changes what a Core record
+   decides lands here, as an amendment of that record, dated and quoting the
+   word, never as a rule sentence that contradicts the record while the
+   record stands (2026-10-03).
 
 3. **New portable Practice contract → new PDR.**
    Use when the substance is a load-bearing contract with portable scope
@@ -66,6 +74,51 @@ are the cheapest home (no governance/contract obligations); a new PDR
 is appropriate only when no other home can encode the substance because
 the substance is structural contract rather than per-session discipline
 or multi-instance cure.
+
+## Scope the substance to the circumstance before choosing a home
+
+A correction is evidence about one situation's structural shape, and the
+cure is the move that makes the next EQUIVALENT decision right. Before the
+classifier runs, write (a) the exact circumstance, (b) what was actually
+wrong, (c) the specific cure, and scope "how to apply" to the circumstance
+class the owner named. Universal never-rules minted from one instance carry
+costs the instance never priced — ceremony, refusals of legitimate moves,
+waiting on peers who do not exist — and drift the Practice. Owner,
+2026-09-02, verbatim: "you are over generalising from single instances of
+corrections in specific circumstances", rejecting within a minute three
+never-rules ("seats may be live without comms presence", "never any cwd =
+primary", "never use nested worktrees") minted from two corrections whose
+causes were specific: a stale-stream liveness reading (the seat's later
+compaction-freeze event had revoked its closeout), and lane work planned
+from a nested checkout with the primary as cwd. The instance-scoped cures
+were the substance: read the stream to its END before a liveness statement;
+land a lane from its own sibling worktree; keep long event bodies out of
+shell heredocs.
+
+An amendment to a rule that operationalises a decision record is written
+with that record open. Second instance, 2026-09-19 to 2026-09-20: from one
+incident (six directives read during a fold's waits) a seat added "the read
+is budgeted too" to `directive-file-context-budget` without reading PDR-052,
+which lists "Reading a directive as input to other work" as outside
+directive-file work; the next day the seat declined a directive read the
+owner's own skill directed, citing its clause, and carried the same gate onto
+memory files it never named. Owner, verbatim: "you are taking the 30% too
+literally and too strictly, if I give you a skill to read then read it". The
+instance-scoped cure was the substance: read the meter again before the
+first directive edit.
+
+Then apply the structure test before writing the lesson down at all (owner
+reframing, 2026-09-11: "you've described mechanical fixes, but what you have
+implemented is prose … We are using lower powered models now, so we need to
+rely more on the structure of the Practice than we have been doing"): **could
+a lower-powered seat comply without recalling this lesson?** If not, the
+lesson is unfinished — find the gate, the validator, the seam or the template
+field that makes compliance the default and build that. The worked
+conversions: a conditional test skip → a lint rule that names the conditional
+APIs, with the identical probe as its negative control; a plan node pinning
+text that does not run → the corpus validator parsing every fenced block;
+tests reaching for the filesystem → the injected ops seam. A lesson that can
+only be recalled is the weak form.
 
 ## Worked Instance
 

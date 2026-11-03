@@ -7,6 +7,7 @@ import {
   type CollaborationAgentId,
   type CollaborationAgentIdWrite,
   collaborationAgentIdWriteSchema,
+  type CollaborationCommitQueueEntry,
   type CollaborationRegistry,
   uuidV5Schema,
   type UuidV5,
@@ -31,6 +32,7 @@ import {
 export function recipientAgent(
   options: Options,
   registry: CollaborationRegistry,
+  commitQueue: readonly CollaborationCommitQueueEntry[],
   nowIso: string,
 ): CollaborationAgentIdWrite {
   const toId = unwrapOrThrow(validatedRecipientId(nonEmptyRequired(options, 'to-id')));
@@ -39,6 +41,7 @@ export function recipientAgent(
       toId,
       suppliedPrefix: nonEmptyOptional(options, 'to-session-prefix'),
       registry,
+      commitQueue,
       nowIso,
     }),
   );
@@ -91,12 +94,13 @@ interface RecipientPrefixEvidence {
 // disagreement evidence cannot be half-used independently.
 function livePrefixEvidence(
   registry: CollaborationRegistry,
+  commitQueue: readonly CollaborationCommitQueueEntry[],
   nowIso: string,
   toId: UuidV5,
 ): RecipientPrefixEvidence {
   return {
     derivable: prefixesForId(liveClaimIdentities(registry.claims, nowIso), toId),
-    all: prefixesForId(liveAgentIdentities(registry, nowIso), toId),
+    all: prefixesForId(liveAgentIdentities(registry, commitQueue, nowIso), toId),
   };
 }
 
@@ -104,9 +108,10 @@ function resolvedRecipientPrefix(input: {
   readonly toId: UuidV5;
   readonly suppliedPrefix: string | undefined;
   readonly registry: CollaborationRegistry;
+  readonly commitQueue: readonly CollaborationCommitQueueEntry[];
   readonly nowIso: string;
 }): Result<string, Error> {
-  const evidence = livePrefixEvidence(input.registry, input.nowIso, input.toId);
+  const evidence = livePrefixEvidence(input.registry, input.commitQueue, input.nowIso, input.toId);
   if (evidence.all.length > 1) {
     return disagreementResolution(input.toId, input.suppliedPrefix, evidence.all);
   }

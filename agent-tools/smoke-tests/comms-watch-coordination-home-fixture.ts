@@ -8,7 +8,7 @@ import { ACTIVE_CLAIMS_SCHEMA_VERSION } from '../src/collaboration-state/types';
 import { resolveTrustedGit } from '../src/core/trusted-git';
 
 export const AGENT_NAME = 'Europa stirs Void';
-export const SESSION_ID = '019fad-mcp360-smoke';
+const SESSION_ID = '019fad-mcp360-smoke';
 export const EVENT_ID = '10000000-0000-4000-8000-000000000360';
 export const EVENT_TITLE = 'MCP-360 primary-home smoke event';
 
@@ -65,7 +65,6 @@ function eventFixture(nowIso: string): unknown {
 function registryFixture(nowIso: string): unknown {
   return {
     schema_version: ACTIVE_CLAIMS_SCHEMA_VERSION,
-    commit_queue: [],
     claims: [
       {
         claim_id: 'aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee',
@@ -117,7 +116,7 @@ export function agentEnvironment(): NodeJS.ProcessEnv {
   delete env.conversationId;
   delete env.ANTIGRAVITY_SOURCE_METADATA;
   delete env.PRACTICE_COORDINATION_HOME;
-  env.OAK_AGENT_IDENTITY_OVERRIDE = AGENT_NAME;
+  env.PRACTICE_AGENT_IDENTITY_OVERRIDE = AGENT_NAME;
   env.PRACTICE_AGENT_SESSION_ID_CODEX = SESSION_ID;
   return env;
 }

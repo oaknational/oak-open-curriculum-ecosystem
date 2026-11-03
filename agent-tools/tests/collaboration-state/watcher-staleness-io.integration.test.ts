@@ -4,7 +4,7 @@
  * and the literal `'missing'` for an absent one (never throwing on ENOENT), and
  * `readTextFile` returns the file contents.
  */
-import { mkdtemp, writeFile } from 'node:fs/promises';
+import { mkdtemp, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -48,14 +48,24 @@ describe('productionWatcherStalenessIo', () => {
   });
 
   it('rethrows a non-ENOENT stat error rather than reporting it as missing', async () => {
-    // Statting THROUGH a regular file yields ENOTDIR (not ENOENT): the file
-    // exists but the path is unusable, so the adapter must fail loud, not
-    // masquerade as a watcher that was never started.
-    const file = join(dir, 'not-a-dir');
-    await writeFile(file, 'x', 'utf8');
+    // Statting a self-referential link yields ELOOP (not ENOENT) on every
+    // platform: the path exists but is unusable, so the adapter must fail
+    // loud, not masquerade as a watcher that was never started. Created as a
+    // 'junction' so no privilege is needed on Windows; the type argument is
+    // ignored on POSIX, and lstat-style loop detection fires either way.
+    const loop = join(dir, 'loop');
+    await symlink(loop, loop, 'junction');
 
-    await expect(
-      productionWatcherStalenessIo.statMtimeMs(join(file, 'child.json')),
-    ).rejects.toThrow();
+    // Pin the rethrow class, not just "it threw": the escaping error must be
+    // an errno-carrying failure that is NOT the missing-file class — ENOENT
+    // is the one code the adapter maps to 'missing' instead of throwing.
+    const failure: unknown = await productionWatcherStalenessIo.statMtimeMs(loop).then(
+      () => undefined,
+      (cause: unknown) => cause,
+    );
+    expect(failure).toBeInstanceOf(Error);
+    const code = failure instanceof Error && 'code' in failure ? failure.code : undefined;
+    expect(code).toBeDefined();
+    expect(code).not.toBe('ENOENT');
   });
 });

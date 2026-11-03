@@ -1,5 +1,16 @@
 import { type CommitQueueCliOptions } from './types.js';
 
+/**
+ * The per-command option allowlist.
+ *
+ * `--now` is a READ-command view clock and this table is what keeps it one:
+ * it appears only on `guard`, `status`, `list`, and `show`. The write
+ * commands take their clock from the CLI's own wall-clock default, so a
+ * caller cannot date a store write. `registry.ts` closes the same leak
+ * structurally on the read path (the legacy migration takes the wall clock
+ * inline), and these two are the whole defence — adding `now` to a write
+ * command's set reopens it.
+ */
 const ALLOWED_OPTIONS: ReadonlyMap<string, ReadonlySet<string>> = new Map([
   [
     'enqueue',
@@ -13,7 +24,6 @@ const ALLOWED_OPTIONS: ReadonlyMap<string, ReadonlySet<string>> = new Map([
       'commit-subject',
       'file',
       'intent-id',
-      'ttl-seconds',
       'registry',
     ]),
   ],

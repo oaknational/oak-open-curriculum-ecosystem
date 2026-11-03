@@ -1,5 +1,5 @@
 name = "design-system-expert"
-description = "Design token and visual consistency specialist for both read-only review and active-workflow planning around DTCG JSON, CSS custom properties, three-tier token model, and theming in UI-shipping workspaces."
+description = "Design token and visual consistency specialist for both read-only review and active-workflow planning around the host's token model, CSS custom properties, tier discipline, and theming in UI-shipping workspaces."
 model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 approval_policy = "never"

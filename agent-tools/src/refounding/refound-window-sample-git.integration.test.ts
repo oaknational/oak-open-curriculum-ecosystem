@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { unwrap, unwrapErr } from '@oaknational/result';
 
+import { resolveTrustedGit } from '../core/trusted-git.js';
 import {
   buildScrubbedGitEnv,
   makeGitByteSource,
@@ -22,8 +23,13 @@ import { type ByteSource } from './refound-window-sample-universe.js';
 const BASE = 'ab'.repeat(20);
 const REPO_ROOT = '/repo';
 
-/** With an all-true probe the trusted allowlist resolves its first entry. */
-const TRUSTED_GIT = '/usr/bin/git';
+/**
+ * With an all-true probe the trusted allowlist resolves its first entry for
+ * the running platform (the entry itself is proven per-platform in
+ * `core/trusted-git.unit.test.ts`); what THIS suite proves is that the byte
+ * source forwards that resolved binary to the spawner unchanged.
+ */
+const TRUSTED_GIT = resolveTrustedGit(() => true);
 
 interface RecordedCall {
   readonly file: string;

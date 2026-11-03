@@ -4,20 +4,20 @@
   "$merge_class": "index-narrative-tables",
   "title": "Active Agent Claims Registry",
   "description": "Live, signal-like registry of which agents are currently working on which areas of the repo. Advisory, not enforcing. Claims inform agent judgement; the protocol does not refuse entry to claimed areas. Governed by .agent/directives/agent-collaboration.md.",
-  "$comment_compatibility": "Latest-only runtime support (owner ruling 2026-08-01): the runtime registry parsers pin exactly one schema_version and hard-reject any other, older or newer, with an actionable error. The schema_version enum lists every version this schema file validates in non-runtime flows (the consolidate-docs § 7e schema-validation step and substrate validation) - a wider set than the runtime pin. Schema evolution lands as a coordinated schema_version bump that moves this schema, the parsers, and every writer together. additionalProperties is set to false on the authored shape: it constrains agents who are AUTHORING entries against this schema (use only the named fields; new fields require the coordinated bump), and constrains the consolidate-docs § 7e schema-validation step. A separate runtime multi-writer contract holds alongside the version pin: concurrent-peer claim-row preservation - claim rows are spread on read-modify-write write-back so another live writer's row content survives. Within the collaboration-state parser, commit-queue intent rows reconstruct field-by-field under the exact-version pin (registry-entry-parser.ts documents the deliberate asymmetry with the claim-row spread; the commit-queue module's own registry writer spreads whole records). Claim closure metadata is defined here so closed-claims.schema.json can reuse the claim contract without duplicating agent identity or area shapes; closure remains a semantic anomaly in active-claims.json and is required only by closed-claims.schema.json.",
+  "$comment_compatibility": "Latest-only runtime support (owner ruling 2026-08-01): the runtime registry parsers pin exactly one schema_version and hard-reject any other, older or newer, with an actionable error. The schema_version enum lists every version this schema file validates in non-runtime flows (the consolidate-docs § 7e schema-validation step and substrate validation) - a wider set than the runtime pin. Schema evolution lands as a coordinated schema_version bump that moves this schema, the parsers, and every writer together. additionalProperties is set to false on the authored shape: it constrains agents who are AUTHORING entries against this schema (use only the named fields; new fields require the coordinated bump), and constrains the consolidate-docs § 7e schema-validation step. A separate runtime multi-writer contract holds alongside the version pin: concurrent-peer claim-row preservation - claim rows are spread on read-modify-write write-back so another live writer's row content survives. Commit-queue intent rows live outside this file since 1.4.0 (per-intent files under commit-queue/, validated by commit-queue-intent.schema.json and reconstructed field-by-field by registry-entry-parser.ts); the `$defs/intent_to_commit` queue-entry def below remains for validating pre-1.4.0 files in non-runtime flows (distinct from the claim-level legacy pointer string, which can appear on 1.4.0 rows written before the MCP-612 cure), and the runtime readers migrate such files once on first contact. Claim closure metadata is defined here so closed-claims.schema.json can reuse the claim contract without duplicating agent identity or area shapes; closure remains a semantic anomaly in active-claims.json and is required only by closed-claims.schema.json.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "commit_queue", "claims"],
+  "required": ["schema_version", "claims"],
   "properties": {
     "schema_version": {
       "type": "string",
-      "enum": ["1.1.0", "1.2.0", "1.3.0"],
-      "description": "Semantic version of this registry schema. Version 1.1.0 adds closure metadata definitions for closed-claims reuse while keeping active entries advisory. Version 1.2.0 adds the git area kind for short-lived commit-window claims. Version 1.3.0 adds the ordered advisory commit_queue for staged-bundle ownership."
+      "enum": ["1.1.0", "1.2.0", "1.3.0", "1.4.0"],
+      "description": "Semantic version of this registry schema. Version 1.1.0 adds closure metadata definitions for closed-claims reuse while keeping active entries advisory. Version 1.2.0 adds the git area kind for short-lived commit-window claims. Version 1.3.0 adds the ordered advisory commit_queue for staged-bundle ownership. Version 1.4.0 removes commit_queue: the queue is machine-local ephemera in per-intent files under .agent/state/collaboration/commit-queue/ (owner ruling 2026-08-17, QUEUE-LOCAL; see commit-queue-intent.schema.json), and the claims file carries claims only."
     },
     "commit_queue": {
       "type": "array",
-      "$comment_provenance": "Observed + owner-directed. PDR-029 Class A.3 queue artefact for staged-bundle ownership.",
-      "description": "Ordered advisory FIFO queue for commit-window ownership. Array order is the queue order; this is not a mechanical lock. Successful commits remove their queue entry.",
+      "$comment_provenance": "Observed + owner-directed. PDR-029 Class A.3 queue artefact for staged-bundle ownership. Legacy at 1.4.0: present only in pre-1.4.0 files, which the runtime readers migrate once into the per-intent store.",
+      "description": "Ordered advisory FIFO queue for commit-window ownership, in registry versions up to 1.3.0 only. Array order is the queue order; this is not a mechanical lock. Successful commits remove their queue entry.",
       "items": {
         "$ref": "#/$defs/intent_to_commit"
       }
@@ -31,6 +31,26 @@
     }
   },
   "allOf": [
+    {
+      "if": {
+        "properties": {
+          "schema_version": { "enum": ["1.1.0", "1.2.0", "1.3.0"] }
+        }
+      },
+      "then": {
+        "required": ["commit_queue"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "schema_version": { "const": "1.4.0" }
+        }
+      },
+      "then": {
+        "not": { "required": ["commit_queue"] }
+      }
+    },
     {
       "if": {
         "properties": {
@@ -127,8 +147,8 @@
         "intent_to_commit": {
           "type": "string",
           "format": "uuid",
-          "$comment_provenance": "First-principles. Convenience pointer; the root commit_queue remains authoritative for queue ordering and lifecycle.",
-          "description": "Optional pointer to this claim's current entry in the root commit_queue. The queue owns ordering and lifecycle."
+          "$comment_provenance": "First-principles. Formerly a convenience pointer duplicating the store entry's claim_id linkage; no longer written since the MCP-612 crash-atomicity cure (a claims-file pointer to a store file could strand if a write died between the two).",
+          "description": "Legacy-preserved pointer no longer written by any live writer: queue linkage is the store entry's claim_id. Present only on rows written before the MCP-612 cure; preserved via the claim-row spread contract until the claim closes."
         },
         "archived_at": {
           "type": "string",

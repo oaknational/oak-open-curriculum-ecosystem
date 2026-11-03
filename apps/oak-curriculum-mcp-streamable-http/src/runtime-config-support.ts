@@ -53,15 +53,23 @@ export type RuntimeConfig = AuthEnabledRuntimeConfig | AuthDisabledRuntimeConfig
 export interface ConfigError {
   readonly message: string;
   readonly diagnostics: EnvResolutionError['diagnostics'];
+  /**
+   * The variable names the schema refused, when the error came from env
+   * resolution — a value-free rendering surface for boundaries (the build
+   * gate) that must never echo a supplied value.
+   */
+  readonly failingKeys?: readonly string[];
 }
 
 /**
- * Options for loading runtime configuration.
+ * Options for loading runtime configuration: the process environment and
+ * where `.env` files come from — discovered walking up from `startDir`
+ * (the server entrypoints) or not read at all (`envFiles: 'none'`: the
+ * deploy-config gate, which must see exactly what the platform injects).
  */
-export interface LoadRuntimeConfigOptions {
+export type LoadRuntimeConfigOptions = {
   readonly processEnv: Readonly<Record<string, string | undefined>>;
-  readonly startDir: string;
-}
+} & ({ readonly envFiles?: 'discover'; readonly startDir: string } | { readonly envFiles: 'none' });
 
 export interface SharedRuntimeFields {
   readonly useStubTools: boolean;

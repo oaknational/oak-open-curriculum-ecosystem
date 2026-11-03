@@ -3,6 +3,7 @@ name: "Respect Live Claims; Self-Start Once the Baton Is Yours"
 polarity: pattern
 use_this_when: "Deciding whether to begin work under a goal/Stop-hook pressure when another agent holds a claim, or whether to wait for an explicit 'go' once a goal has been handed to you."
 category: process
+layer: general
 proven_in: "Snapper binds Coral (2026-06-15→16) nearly barged a 'stale'-labelled but live claim under Stop-hook pressure; Rigel binds Meridian converted a handed, grounded goal into a permission checkpoint instead of self-starting."
 proven_date: 2026-06-16
 barrier:

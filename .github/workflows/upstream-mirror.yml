@@ -1,0 +1,114 @@
+name: Upstream mirror
+
+# Keeps this repository's mirror branch identical to its parent's default
+# branch by moving one reference; it never creates a commit. Off by default:
+# the job runs only where the repository variable UPSTREAM_MIRROR_ENABLED is
+# the string 'true', so a copy of this file that reaches the parent by a
+# merge-back is inert there (a skipped job per slot, zero minutes, no write).
+# No repository, organisation or branch is named here: the parent and its
+# default branch are read from the API at run time, and the mirror branch is
+# by construction this repository's branch of the same name. The parent reads
+# use the run's own token, which works because the parent is public.
+#
+#   identical         — one log line, exit 0.
+#   ahead             — the parent is ahead: fast-forward the mirror by a
+#                       reference update with force=false (never a merge).
+#   behind / diverged — the mirror carries commits the parent lacks: the run
+#                       fails; nothing is written.
+#
+# The compare endpoint reports status, ahead_by and behind_by from the HEAD
+# side, so `ahead` means the PARENT is ahead and `behind` means THIS mirror
+# is ahead.
+#
+# A dispatched run's own token is capped at the permissions of the token that
+# dispatched it, in addition to the job's own `permissions:` block: a dispatch
+# under a token carrying `actions: write` alone ran the compare and then
+# failed the reference update with 403 (run 35240876819, 2026-09-17), while
+# the same step succeeds on every scheduled run. Dispatch with a token that
+# also carries `contents: write` (in this estate, the bot's
+# `upstream-mirror-dispatch` scope, named for this act).
+
+on:
+  schedule:
+    # Every six hours, Monday to Friday, UTC.
+    - cron: '0 0,6,12,18 * * 1-5'
+  workflow_dispatch:
+
+concurrency:
+  group: upstream-mirror
+  cancel-in-progress: false
+
+permissions: {}
+
+jobs:
+  mirror:
+    name: Fast-forward the mirror branch to the parent's default branch
+    if: vars.UPSTREAM_MIRROR_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Read the parent and compare the mirror branch with its default branch
+        id: compare
+        run: |
+          set -euo pipefail
+          repo="$(gh api "repos/${GITHUB_REPOSITORY}")"
+          if [ "$(jq -r '.fork' <<<"$repo")" != "true" ]; then
+            echo "::notice title=Not a fork::${GITHUB_REPOSITORY} has no parent; nothing to mirror."
+            echo "status=not-a-fork" >>"$GITHUB_OUTPUT"
+            exit 0
+          fi
+          parent="$(jq -r '.parent.full_name' <<<"$repo")"
+          parent_branch="$(jq -r '.parent.default_branch' <<<"$repo")"
+          # The mirror is this repository's branch of the parent's default name.
+          MIRROR_BRANCH="$parent_branch"
+          comparison="$(gh api \
+            "repos/${GITHUB_REPOSITORY}/compare/${MIRROR_BRANCH}...${parent%%/*}:${parent##*/}:${parent_branch}")"
+          status="$(jq -r '.status' <<<"$comparison")"
+          parent_tip="$(gh api "repos/${parent}/branches/${parent_branch}" --jq '.commit.sha')"
+          {
+            echo "status=${status}"
+            echo "mirror_branch=${MIRROR_BRANCH}"
+            echo "parent=${parent}"
+            echo "parent_branch=${parent_branch}"
+            echo "parent_tip=${parent_tip}"
+            echo "parent_ahead_by=$(jq -r '.ahead_by' <<<"$comparison")"
+            echo "mirror_ahead_by=$(jq -r '.behind_by' <<<"$comparison")"
+          } >>"$GITHUB_OUTPUT"
+          echo "compare ${MIRROR_BRANCH}...${parent}:${parent_branch} => ${status}"
+
+      - name: Fail when the mirror branch carries commits the parent lacks
+        if: steps.compare.outputs.status == 'behind' || steps.compare.outputs.status == 'diverged'
+        env:
+          MIRROR_BRANCH: ${{ steps.compare.outputs.mirror_branch }}
+          PARENT: ${{ steps.compare.outputs.parent }}
+          PARENT_BRANCH: ${{ steps.compare.outputs.parent_branch }}
+          MIRROR_AHEAD_BY: ${{ steps.compare.outputs.mirror_ahead_by }}
+        run: |
+          set -euo pipefail
+          echo "::error title=Mirror branch is ahead of the parent::${MIRROR_AHEAD_BY} commit(s) on ${GITHUB_REPOSITORY}@${MIRROR_BRANCH} are not on ${PARENT}@${PARENT_BRANCH}. The mirror branch follows the parent and carries no work of its own. Compare: https://github.com/${PARENT}/compare/${PARENT_BRANCH}...${GITHUB_REPOSITORY_OWNER}:${GITHUB_REPOSITORY#*/}:${MIRROR_BRANCH}"
+          exit 1
+
+      - name: Fast-forward the mirror branch to the parent's tip
+        if: steps.compare.outputs.status == 'ahead'
+        env:
+          MIRROR_BRANCH: ${{ steps.compare.outputs.mirror_branch }}
+          PARENT_TIP: ${{ steps.compare.outputs.parent_tip }}
+          PARENT_AHEAD_BY: ${{ steps.compare.outputs.parent_ahead_by }}
+        run: |
+          set -euo pipefail
+          # force=false makes the platform refuse anything but a fast-forward,
+          # so a commit landing on the mirror between the compare and this
+          # update answers 422 and nothing is written.
+          moved="$(gh api --method PATCH "repos/${GITHUB_REPOSITORY}/git/refs/heads/${MIRROR_BRANCH}" \
+            -f "sha=${PARENT_TIP}" -F force=false --jq '.object.sha')"
+          echo "::notice title=Mirror fast-forwarded::${MIRROR_BRANCH} moved to ${moved} (${PARENT_AHEAD_BY} commit(s))."
+
+      - name: Report in sync
+        if: steps.compare.outputs.status == 'identical'
+        env:
+          MIRROR_BRANCH: ${{ steps.compare.outputs.mirror_branch }}
+        run: |
+          echo "In sync: ${MIRROR_BRANCH} equals the parent's default branch. No action taken."

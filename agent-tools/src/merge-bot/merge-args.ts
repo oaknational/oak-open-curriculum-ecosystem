@@ -1,6 +1,18 @@
 import { err, ok, type Result } from '@oaknational/result';
 
-import { SETTLEMENT_WAIT_STATES } from './merge-decision.js';
+import type { UnavailableDeclaration } from '../pr-watch/declared-unavailable.js';
+import {
+  declaredExpectedSet,
+  parseExpectValue,
+  type ExpectValue,
+} from '../pr-watch/expect-flag.js';
+import { parseUnavailableFlag } from '../pr-watch/unavailable-flag.js';
+import {
+  DEFAULT_INTERVAL_SECONDS,
+  DEFAULT_MAX_POLLS,
+  MAX_BUDGET_SECONDS,
+  MERGE_USAGE,
+} from './merge-usage.js';
 
 /**
  * The argv contract for `merge-bot merge`. Split from `merge-cli.ts` to keep
@@ -8,45 +20,16 @@ import { SETTLEMENT_WAIT_STATES } from './merge-decision.js';
  * `resolve-config.ts` records for mint-token).
  */
 
-const DEFAULT_INTERVAL_SECONDS = 30;
-const DEFAULT_MAX_POLLS = 90;
-/** 50 minutes: the whole budget must end well inside GitHub's one-hour installation-token TTL. */
-const MAX_BUDGET_SECONDS = 3000;
-
 export interface MergeArgs {
   readonly prNumber: number;
-  /** The DECLARED expected reviewer set — required; a defaulted set never merges. */
+  /** The DECLARED expected reviewer set — required; empty only when declared `none`. */
   readonly expect: readonly string[];
   readonly json: boolean;
   readonly intervalSeconds: number;
   readonly maxPolls: number;
+  /** Vendors declared unavailable (`--unavailable`), each an expected reviewer. */
+  readonly unavailable: readonly UnavailableDeclaration[];
 }
-
-export const MERGE_USAGE = `merge-bot merge --pr <number> --expect <reviewer> [--expect <reviewer> ...] [--json] [--interval <seconds>] [--max-polls <n>]
-  Merges the PR via the sanctioned REST path when — and only when — the
-  settlement verdict is SETTLE-READY: merge-commit method always (refusing
-  when repo settings disallow merge commits, never a squash fallback), the
-  VERDICTED tip's sha in the body (a moved tip answers 409 — an operational
-  failure, exit 1 — never an unverdicted merge). Wait-class verdicts
-  (${SETTLEMENT_WAIT_STATES.join(', ')}) poll under ONE minted
-  token (default ${DEFAULT_INTERVAL_SECONDS}s x ${DEFAULT_MAX_POLLS} polls; --interval x --max-polls must not exceed
-  ${MAX_BUDGET_SECONDS}s, keeping the whole budget inside GitHub's one-hour
-  installation-token TTL); every other verdict is an immediate typed
-  refusal, and an exhausted poll budget also exits 3, reporting the last
-  verdict. That budget counts SLEEP alone, so polling ALSO stops (exit 1,
-  naming the deadline) once the wall clock reaches five minutes before the
-  minted token's own stated expiry — no merge call is ever fired in a round
-  that could straddle it.
-  --expect declares the expected reviewer set (repeatable; REQUIRED here —
-  source it from the repository's automatic-review configuration; a
-  defaulted or blank set never merges).
-  --json puts EXACTLY the outcome object on stdout; progress moves to
-  stderr.
-  Exit map: 0 merged, 1 operational failure, 2 usage, 3 typed refusal —
-  an already-MERGED PR exits 3.
-  The pr-lifecycle merge-base deletion sweep is NOT discharged by this
-  command — run it against the branch before merging.
-`;
 
 const SINGLE_FLAGS = ['--pr', '--interval', '--max-polls'] as const;
 type SingleFlag = (typeof SINGLE_FLAGS)[number];
@@ -77,18 +60,22 @@ function requirePositiveInt(flag: string, value: string): Result<number, Error> 
   return ok(parsed);
 }
 
-/**
- * GitHub login grammar plus the app `[bot]` suffix. A blank or garbage
- * `--expect` value would satisfy the declared-set gate while naming a
- * reviewer that can never be OWED — the one-token way around the
- * settlement guarantee (security D4).
- */
-const EXPECT_GRAMMAR = /^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})?(?:\[bot\])?$/u;
-
 interface CollectedMergeFlags {
   readonly singles: Partial<Record<SingleFlag, number>>;
-  readonly expect: string[];
+  readonly expect: ExpectValue[];
+  readonly unavailable: UnavailableDeclaration[];
   json: boolean;
+}
+
+function recordUnavailable(state: CollectedMergeFlags, value: string): Result<undefined, Error> {
+  try {
+    state.unavailable.push(parseUnavailableFlag(value));
+    return ok(undefined);
+  } catch (cause) {
+    return err(
+      new Error(`${cause instanceof Error ? cause.message : String(cause)}\n${MERGE_USAGE}`),
+    );
+  }
 }
 
 function recordSingle(
@@ -109,29 +96,47 @@ function recordSingle(
   return ok(undefined);
 }
 
+// The grammar (a login, or the reserved `none`) is expect-flag.ts's: security
+// D4's garbage-login hole is closed there for both commands that declare a set.
+function recordExpect(state: CollectedMergeFlags, value: string): Result<undefined, Error> {
+  const parsed = parseExpectValue(value);
+  if (!parsed.ok) {
+    return err(new Error(`${parsed.error.message}\n${MERGE_USAGE}`));
+  }
+  state.expect.push(parsed.value);
+  return ok(undefined);
+}
+
+// A Map, so an argv token named like an object's own property (`toString`,
+// `__proto__`) finds no handler and is refused as an unknown flag.
+const LIST_FLAGS: ReadonlyMap<
+  string,
+  (state: CollectedMergeFlags, value: string) => Result<undefined, Error>
+> = new Map([
+  ['--expect', recordExpect],
+  ['--unavailable', recordUnavailable],
+]);
+
 function consumeValueFlag(
   state: CollectedMergeFlags,
   flag: string,
   value: string | undefined,
 ): Result<undefined, Error> {
-  if (flag !== '--expect' && !isSingleFlag(flag)) {
+  const listFlag = LIST_FLAGS.get(flag);
+  if (listFlag === undefined && !isSingleFlag(flag)) {
     return err(new Error(`unknown flag "${flag}"\n${MERGE_USAGE}`));
   }
   if (value === undefined || value.startsWith('--')) {
     return err(new Error(`${flag} needs a value\n${MERGE_USAGE}`));
   }
-  if (flag === '--expect') {
-    if (!EXPECT_GRAMMAR.test(value)) {
-      return err(new Error(`--expect must be a GitHub login (got "${value}")\n${MERGE_USAGE}`));
-    }
-    state.expect.push(value);
-    return ok(undefined);
+  if (listFlag !== undefined) {
+    return listFlag(state, value);
   }
-  return recordSingle(state.singles, flag, value);
+  return isSingleFlag(flag) ? recordSingle(state.singles, flag, value) : ok(undefined);
 }
 
 function collectMergeFlags(rest: readonly string[]): Result<CollectedMergeFlags, Error> {
-  const state: CollectedMergeFlags = { singles: {}, expect: [], json: false };
+  const state: CollectedMergeFlags = { singles: {}, expect: [], unavailable: [], json: false };
   for (let index = 0; index < rest.length; index += 1) {
     const flag = rest[index] ?? '';
     if (flag === '--json') {
@@ -152,19 +157,14 @@ export function parseMergeArgs(rest: readonly string[]): Result<MergeArgs, Error
   if (!collected.ok) {
     return collected;
   }
-  const { singles, expect, json } = collected.value;
+  const { singles, expect, unavailable, json } = collected.value;
   const prNumber = singles['--pr'];
   if (prNumber === undefined) {
     return err(new Error(`--pr is required\n${MERGE_USAGE}`));
   }
-  if (expect.length === 0) {
-    return err(
-      new Error(
-        '--expect is required at least once: declare the expected reviewer set from the ' +
-          'repository automatic-review configuration. A defaulted (observed) set can omit a ' +
-          'configured-but-never-requested reviewer, so it cannot back an irreversible merge.',
-      ),
-    );
+  const expected = requireExpectedSet(expect, unavailable);
+  if (!expected.ok) {
+    return expected;
   }
   const intervalSeconds = singles['--interval'] ?? DEFAULT_INTERVAL_SECONDS;
   const maxPolls = singles['--max-polls'] ?? DEFAULT_MAX_POLLS;
@@ -178,5 +178,49 @@ export function parseMergeArgs(rest: readonly string[]): Result<MergeArgs, Error
       ),
     );
   }
-  return ok({ prNumber, expect, json, intervalSeconds, maxPolls });
+  return ok({ prNumber, expect: expected.value, json, intervalSeconds, maxPolls, unavailable });
+}
+
+/**
+ * The declared set the door merges on: `none` is the empty set, an undeclared
+ * set is refused (a defaulted set can omit a configured-but-never-requested
+ * reviewer, so it cannot back an irreversible merge), and a vendor declared
+ * unavailable must be a declared reviewer.
+ */
+function requireExpectedSet(
+  expect: readonly ExpectValue[],
+  unavailable: readonly UnavailableDeclaration[],
+): Result<readonly string[], Error> {
+  const declared = declaredExpectedSet(expect);
+  if (!declared.ok) {
+    return err(new Error(`${declared.error.message}\n${MERGE_USAGE}`));
+  }
+  if (declared.value === null) {
+    return err(
+      new Error(
+        '--expect is required at least once: declare the expected reviewer set from the ' +
+          'repository automatic-review configuration, or none when the work needs no review. ' +
+          'A defaulted (observed) set can omit a configured-but-never-requested reviewer, so ' +
+          'it cannot back an irreversible merge.',
+      ),
+    );
+  }
+  const expected = declared.value;
+  const unexpected = unavailable.find(
+    (declaration) => !expected.some((login) => sameLogin(login, declaration.login)),
+  );
+  if (unexpected !== undefined) {
+    return err(
+      new Error(
+        `--unavailable names ${unexpected.login}, which no --expect declares\n${MERGE_USAGE}`,
+      ),
+    );
+  }
+  return ok(expected);
+}
+
+// Logins compare without case, and a `[bot]` suffix names the same account.
+function sameLogin(left: string, right: string): boolean {
+  const bare = (login: string) => login.toLowerCase().replace(/\[bot\]$/u, '');
+  return bare(left) === bare(right);
 }

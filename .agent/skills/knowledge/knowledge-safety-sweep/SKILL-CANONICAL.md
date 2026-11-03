@@ -16,7 +16,7 @@ description: >-
 exploration) and [`consolidate-docs`](../consolidate-docs/SKILL-CANONICAL.md) (its conservation
 discipline) into a standalone, mid-session invocable. Imported and adapted 2026-07-20 from the
 Resonance estate (a private sibling Practice repo — no public upstream URL exists; source
-repo-relative path `.agent/skills/knowledge-safety-sweep/SKILL-CANONICAL.md`; AIP-142;
+repo-relative path `.agent/skills/knowledge/knowledge-safety-sweep/SKILL-CANONICAL.md`; AIP-142;
 PDR-125 exchange). The seat stays LIVE throughout: no claim
 disposition, no monitor stand-down, no closeout broadcast. This estate's conservation doctrine
 (`knowledge-preservation-over-fitness-warnings`; PDR-046 preserve-first) is the governing
@@ -28,8 +28,8 @@ temporary surfaces.
 ## Trigger
 
 - The owner asks for a knowledge safety sweep (or equivalent: "what would be lost?").
-- Context budget approaches a compaction or retirement boundary and the seat is NOT closing
-  (a closing seat runs `wrap`; a budget-triggered retirement runs PDR-063).
+- A compaction or an owner-called handoff approaches and the seat is NOT closing
+  (a closing seat runs `wrap`; an owner-called mid-cycle handoff runs PDR-063).
 - A risky operation is imminent (host change, large refactor of memory surfaces, an operation
   that could kill the session).
 - A knowledge-heavy arc completes mid-session (a design settled in chat, an owner ruling given

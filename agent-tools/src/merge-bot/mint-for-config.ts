@@ -2,6 +2,7 @@ import { readFile } from 'node:fs/promises';
 
 import { err, ok, type Result } from '@oaknational/result';
 
+import { realFetch } from './github-fetch.js';
 import {
   mintInstallationToken,
   resolveInstallationId,
@@ -36,13 +37,6 @@ export interface MintedToken {
   readonly token: string;
   readonly expiresAt: string;
   readonly installationId: number;
-}
-
-function realFetch(): GithubApiFetch {
-  return async (url, init) => {
-    const response = await fetch(url, init);
-    return { status: response.status, json: () => response.json() };
-  };
 }
 
 function signJwtResult(

@@ -40,6 +40,16 @@ export function nearestExistingAncestor(absPath: string): string {
   return dir;
 }
 
+/** Canonicaliser seam for {@link resolveReadPathWithinRepo} (ADR-078). */
+export interface ReadPathOptions {
+  /**
+   * Canonicalises a path to its real, symlink-resolved form. Defaults to the
+   * `assertPathWithinBase` default (`realpathSync`); tests inject a pure
+   * function to prove containment refusals with literal fixtures and no IO.
+   */
+  readonly realpath?: (path: string) => string;
+}
+
 /**
  * Resolve a flag path the tool will READ, constrained to the repository.
  * Returns the canonical (symlink-resolved) path; a missing path refuses.
@@ -47,9 +57,16 @@ export function nearestExistingAncestor(absPath: string): string {
 export function resolveReadPathWithinRepo(
   repoRoot: string,
   flagPath: string,
+  options: ReadPathOptions = {},
 ): Result<string, Error> {
   try {
-    return ok(assertPathWithinBase(path.resolve(repoRoot, flagPath), repoRoot));
+    return ok(
+      assertPathWithinBase(
+        path.resolve(repoRoot, flagPath),
+        repoRoot,
+        options.realpath === undefined ? {} : { realpath: options.realpath },
+      ),
+    );
   } catch (cause: unknown) {
     const message = cause instanceof Error ? cause.message : String(cause);
     return err(new Error(message));

@@ -178,7 +178,7 @@
     "**/generated/**/*"
   ],
   "typescript.tsdk": "node_modules/typescript/lib",
-  "prettier.configPath": ".prettierrc.json",
+  "prettier.configPath": "prettier.config.ts",
   "editor.formatOnSave": true,
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"

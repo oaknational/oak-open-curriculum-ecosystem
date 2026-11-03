@@ -3,6 +3,7 @@ name: migrate-dont-drop-on-deletion
 use_this_when: "About to delete a directory or collection (a staging/holding pen, a 'to-supersede' area, a cleanup) — verify per-file whether each item is live forward-intent (migrate to its value-home) or genuinely spent (drop); on any judgment call, migrate, because deletion is the only irreversible move."
 polarity: pattern
 category: process
+layer: general
 status: emerging
 discovered: 2026-06-08
 proven_by: "Starless Prowling Veil, graph-estate consolidation: a 'to be synthesised / superseded' holding pen had silently absorbed live forward-intent from an adjacent collection, then its own framing presented everything in it as disposable. Per-file conservation review separated live intent (restored to its value-home) from spent working-out (whose conclusions were already homed); a repo-wide ref sweep caught companion links orphaned by deleting part of a coherent set."

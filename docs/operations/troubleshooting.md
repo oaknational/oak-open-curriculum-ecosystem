@@ -190,9 +190,20 @@ guards or relocations**, and several report stale or silently-green results:
   site (2026-09-01). Local `sonar verify --file` answers 403 for this
   organisation; the class proof is a per-rule grep plus shellcheck, and the
   gate proof is the PR scan after the push.
-- `lint:shell` syntax-checks only `apps/**/scripts/*.sh` and `.husky/*`;
-  shell under `.agent/claude-harness-integrations/` is outside it and gets
-  shellcheck by hand.
+- `lint:shell` runs the shellcheck `.agent/setup/install-shellcheck.sh`
+  pins over every tracked shell script outside the vendored skills
+  `skills-lock.json` names. When it cannot run that version, run the
+  installer: it puts the binary in the ignored `.tools/bin`, which the gate
+  reads before `PATH`. `.tools/bin` is per checkout, so a new linked
+  worktree uses the shellcheck on `PATH` until the installer runs there, and
+  an upgrade past the pin on `PATH` fails every checkout without its own
+  `.tools/bin` at once.
+- `lint:shell` runs at pre-commit and reads the whole tracked tree, so an
+  unrelated tracked shell script deleted with the change unstaged, or
+  another agent's unfinished shell edit, refuses the commit. Stage your own
+  change; never restore another agent's work to clear it. Whether a deleted
+  file is a shell script is read from the index, so a deleted file of any
+  other kind refuses nothing.
 - In a fresh linked worktree `pnpm install` can report `prepare$ husky …
 Done` while creating NO `.husky/_` shims, so `core.hooksPath` points at
   nothing and git skips pre-commit and pre-push with zero output (a push
@@ -262,14 +273,20 @@ When diagnosing a gate discrepancy, **never trust a cached result** — re-run
 the task with `--force` (or via the authoritative hook) before concluding
 anything. See also `docs/engineering/build-system.md` on cache inputs.
 
+A happy-dom unit suite loads stylesheet links for real unless told otherwise: "happy-dom loads a
+stylesheet link for real by default, so the live-token-causes test's fake href fires an unawaited
+fetch to localhost:3000 whose refusal lands as an unhandled error at random"; the showcase vitest
+config sets disableCSSFileLoading and a new happy-dom suite does the same (the Director's lane
+record of 2026-09-08, event 283a6660).
+
 ## Quick Fixes
 
-| Symptom                                                 | Fix                                                             |
-| ------------------------------------------------------- | --------------------------------------------------------------- |
-| `pnpm publish --dry-run` fails with uncommitted changes | Add `--no-git-checks` flag                                      |
-| `pnpm benchmark` not found                              | The command is `pnpm benchmark` (not `pnpm eval:benchmark`)     |
-| E2E `tool-examples-metadata` flaky                      | SSE payload timing issue — retry once before investigating      |
-| Test upstream API status codes                          | `curl -s -w "\n%{http_code}" <url>` to see both body and status |
+| Symptom                                                 | Fix                                                                                     |
+| ------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `pnpm publish --dry-run` fails with uncommitted changes | Add `--no-git-checks` flag                                                              |
+| `benchmark` script not found at the root                | It lives in the search CLI workspace: `pnpm --filter @oaknational/search-cli benchmark` |
+| E2E `tool-examples-metadata` flaky                      | SSE payload timing issue — retry once before investigating                              |
+| Test upstream API status codes                          | `curl -s -w "\n%{http_code}" <url>` to see both body and status                         |
 
 ## Quality Gate Failures
 
@@ -295,6 +312,50 @@ Each gate may fix issues for subsequent gates (e.g.
 Check CI logs for "cache hit, replaying logs" — stale remote
 Turbo cache. Ensure `turbo.json` `inputs` use `**/*.ts` not
 directory enumeration.
+
+A build that fetches Google Fonts at build time depends on the network in CI: the hub demo build
+failed twice on 2026-09-24 with "Module not found: Can't resolve
+'@vercel/turbopack-next/internal/font/google/font'" and passed on re-run; "If your pull request's CI
+goes red with this message, rerun it rather than debugging your change"; "The cure belongs to
+whoever owns the hub demo's build" (Marten mends Shadow's record of 2026-09-24, event a0920f55).
+
+### CI job red with ENOENT on a tsup bundled config, no test failed
+
+A build-versus-lint race on the runner, not a defect in the branch: ESLint in
+`@oaknational/eslint-plugin-standards` (`packages/core/oak-eslint`, whose `lint`
+is `eslint .`) can read tsup's transient `tsup.config.bundled_*.mjs` after tsup
+has removed it, so the job fails with ENOENT while every test passes. The
+discriminator: the failing step is lint, the path it names is a
+`tsup.config.bundled_*.mjs` file, and the same job passes on re-run with no
+tree change; a real lint failure names a source file and fails again. Remedy:
+re-run the failed job as the bot under the merge-bot's `workflow-dispatch` scope
+(`docs/engineering/merge-bot.md`); a chain waiting on the PR resumes when the
+re-run clears.
+The structural cure is in the package, not the branch: exclude
+`**/tsup.config.bundled_*.mjs` from its lint inputs or order lint after build in
+the job.
+
+A sibling runner-side signature: the secret-scan job failing on a curl
+connection reset while a local gitleaks run over the whole history reports no
+leaks. Re-run the job; a real finding names a commit and a rule, a reset names
+neither.
+
+### CI job cancelled at its timeout inside a late step
+
+A static-checks job can be cancelled at its ten-minute budget inside "Run
+workspace-owned repo validators". The budget is the JOB's, not the step's
+(`timeout-minutes` sits on the job in `.github/workflows/ci.yml`), and that
+step is the ninth in the job: a full-history checkout, the setup action's
+install from the restored store, and six check steps (formatting, Markdown, two
+lints, sub-agent validation, portability validation) all draw on the same ten
+minutes, so the cancelled step is only where the clock ran out. Diagnose from the run's per-step
+timings against a warm run's: every step slow says runner or cold caches, and
+a re-run passes; one step slow says that step, and if the branch changed the
+validator behind it, run the validator locally on the branch before
+re-running. Sibling: a browser suite timing out at 30 s on a runner where the
+whole suite took several minutes against tens of seconds locally. Neither
+names the branch by itself; when the slow window recurs with every step slow,
+the budget is a card, not a code change.
 
 ### Pre-Commit Hook Output Too Large
 
@@ -380,7 +441,7 @@ restart the session:
 
 ```json
 // .claude/settings.local.json (machine-local, untracked)
-{ "env": { "OAK_STATUSLINE_LOG_FILE": ".logs/statusline.log" } }
+{ "env": { "PRACTICE_STATUSLINE_LOG_FILE": ".logs/statusline.log" } }
 ```
 
 Each statusline invocation then appends one timestamped line with the
@@ -397,14 +458,16 @@ Reading the outcomes honestly:
 - **No file and no warning?** Check the adapter is current before
   concluding anything: the shim runs the BUILT adapter, so a stale
   `agent-tools/dist` silently predates the feature —
-  `grep -c OAK_STATUSLINE_LOG_FILE agent-tools/dist/src/claude/statusline-identity.js`
+  `grep -c PRACTICE_STATUSLINE_LOG_FILE agent-tools/dist/src/claude/statusline-identity.js`
   returning `0` means rebuild (`pnpm --filter @oaknational/agent-tools build`).
   A current adapter can also produce no-file-and-no-warning when the
   destination refuses (unwritable parent, a symlink or non-regular file
-  at the path, a file the invoking user cannot own, denied append) —
-  refusals are deliberately swallowed, so check the destination is a
-  creatable, writable, regular file owned by you before concluding the
-  payload never arrived.
+  at the path, a file the invoking user cannot own, denied append) or
+  the platform has no POSIX ownership (native Windows, where the log is
+  never written: run under WSL, with the log on WSL's own filesystem,
+  not under `/mnt/c`) — refusals are deliberately
+  swallowed, so check the destination is a creatable, writable, regular
+  file owned by you before concluding the payload never arrived.
 - **Hygiene**: the log grows unbounded (one line per refresh) and
   carries session ids and project paths. The destination is a boundary
   (symlinks refuse to open, non-regular files never receive a write, a

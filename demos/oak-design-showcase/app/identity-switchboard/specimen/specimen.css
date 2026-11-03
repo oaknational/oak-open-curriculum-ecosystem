@@ -17,15 +17,16 @@
    cure is the .foot pattern: every control on the inverted surface rides
    the kit's inverted family, including the focus ring.
 
-   The strip is also STICKY with its real controls (owner word
-   2026-08-18): radios lead, the theme select gathers right — the cure
-   for the arrow-key scroll reset (focusing an offscreen radio scrolls it
-   into view; a control that is always in view never needs the scroll).
-   Sticky forces ONE known row: the controls never wrap (in-container
-   horizontal scroll is the very-narrow escape), so the mast below can
-   stack its own stickiness under a stable strip height. The separator is
-   guaranteed here structurally (owner point: it vanished on PDS and at
-   narrow when it rode identity re-pointing alone). */
+   The strip is also STICKY with its real controls at the WIDE band
+   (owner word 2026-08-18): radios lead, the theme select gathers right.
+   Sticky there rides ONE known row, so the mast below can stack its own
+   stickiness under a stable strip height. Below the seam the controls
+   ride a disclosure instead (the same day's item 4) and the strip's
+   height is disclosure-driven, so strip and mast both follow the flow —
+   the narrow block at the end of this file carries that band's rules
+   and the reasoning. The separator is guaranteed here structurally
+   (owner point: it vanished on PDS and at narrow when it rode identity
+   re-pointing alone). */
 [data-page='unit'] .util {
   background: var(--bg-inverted);
   color: var(--text-inverted);
@@ -47,7 +48,8 @@
    radios all sit on this band. */
 [data-page='unit'] .util a,
 [data-page='unit'] .util .oak-select,
-[data-page='unit'] .util .oak-radio {
+[data-page='unit'] .util .oak-radio,
+[data-page='unit'] .util summary {
   --focus-ring: var(--focus-ring-inverted);
 }
 
@@ -74,11 +76,12 @@
 }
 
 /* Theme label sits LEFT of its select (owner point 2): the labelled
-   cluster must not wrap inside the one-row strip — and neither may the
-   crumbs, whose internal wrapping at 320px once grew the strip past the
-   mast's sticky offset and slid the mast over the radios (the reflow
-   cell's bgOverlap catch). One row, in-container scroll at the floor. */
-[data-page='unit'] .strip-controls > .oak-cluster,
+   cluster must not wrap internally, and neither may the crumbs. The
+   cluster sits INSIDE the mounted disclosure at every width (dissolution
+   is a box-tree fact; selectors follow the DOM), so the reach is through
+   .strip-disclosure — a bare child combinator on .strip-controls misses
+   it and the wide one-row strip could wrap to two (review round 1). */
+[data-page='unit'] .strip-disclosure > .oak-cluster,
 [data-page='unit'] .strip-controls .showcase-crumbs {
   flex-wrap: nowrap;
 }
@@ -93,6 +96,21 @@
   flex: 0 0 auto;
 }
 
+/* The two sticky bars' heights, derived once from the tokens that build
+   them and read by the masthead's sticky offset AND the page's 2.4.11
+   reserve, so the two cannot drift (a hand-summed offset was two rules
+   short of the rendered row — the strip's tallest control is the theme
+   select, the target height plus its two rules). */
+html {
+  --specimen-strip-row: calc(var(--size-target) + var(--border-solid-s) * 2);
+  --specimen-strip-height: calc(
+    var(--specimen-strip-row) + var(--space-16) + var(--border-solid-s)
+  );
+  --specimen-mast-height: calc(
+    var(--space-16) * 2 + var(--size-target) + var(--border-solid-m) * 3
+  );
+}
+
 /* Sticky masthead, as the reference has it — stacking BELOW the strip:
    its offset is one strip row at the kit's target height plus the strip's
    block padding and rule (a second .mast block once re-declared
@@ -104,7 +122,7 @@
    dominate the screen. */
 [data-page='unit'] .mast {
   position: sticky;
-  inset-block-start: calc(var(--size-target) + var(--space-16) + var(--border-solid-s));
+  inset-block-start: var(--specimen-strip-height);
   z-index: var(--layer-sticky);
 }
 
@@ -114,6 +132,50 @@
    (review round 3). */
 [data-page='unit'][data-controls='none'] .mast {
   inset-block-start: 0;
+}
+
+/* --- Narrow: the strip's controls disclose instead of scroll ---
+   (this seam is DISCLOSURE_WIDE_QUERY in components/canonical-widths.ts;
+   the two must not drift) */
+
+@media (max-width: 959px) {
+  /* The CONTROLS' one-row in-strip scroll is replaced by the controls
+     disclosure (owner ruling 2026-08-18), so the band may wrap: crumbs
+     line, then the disclosure line, then — open — the stacked controls,
+     everything visible. The crumb line keeps its own nowrap scroll
+     container (`.util-inner` above): a long trail still scrolls in its
+     row, by design, and is outside this claim. */
+  [data-page='unit'] .strip-controls {
+    flex-wrap: wrap;
+  }
+
+  /* The strip's stickiness follows the flow below the seam. The sticky
+     word (owner, 2026-08-18) cured the one-row shape's arrow-key scroll
+     reset — an OFFSCREEN radio scrolling into view — and the disclosure
+     (the same day's item 4) removes the offscreen radio entirely, so the
+     cure's reason dissolves here; kept sticky, an OPEN panel would pin
+     most of a phone screen over the content it controls. */
+  [data-page='unit'] .util {
+    position: static;
+  }
+
+  /* The open panel takes the band's full width and stacks its control
+     groups in block flow. */
+  [data-page='unit'] .strip-disclosure {
+    flex: 1 0 100%;
+  }
+
+  [data-page='unit'] .strip-disclosure > :not(summary) {
+    margin-block-start: var(--space-8);
+  }
+
+  /* The mast's sticky offset is the arithmetic of a ONE-ROW strip; below
+     the seam the strip's height is disclosure-driven (two lines closed on
+     a full page, more open), so the mast follows the flow instead of
+     computing an offset it cannot know. */
+  [data-page='unit'] .mast {
+    position: static;
+  }
 }
 
 /* The kit's .oak-choice pins --text-primary, and the crumb pattern pins
@@ -160,11 +222,18 @@
   border-block-end: var(--border-solid-m) solid var(--border-primary);
 }
 
-/* Focus-not-obscured (2.4.11): the masthead's own height, derived from
-   the tokens that build it — block padding both sides plus the control
-   row's target height. */
-html {
-  scroll-padding-block-start: calc(var(--space-16) * 2 + var(--size-target));
+/* Focus-not-obscured (2.4.11): above the seam BOTH bars stick — the
+   strip at the top edge and the masthead beneath it — so the reserve is
+   their stacked height, the two named bar heights above (the mast's
+   tallest control is the search input: the target height plus its two
+   rules, then the mast's own rule). Proven by the switchboard spec,
+   which measures the rendered stack against this value. Scoped to the band where anything actually sticks: below the
+   seam both the strip and the mast follow the flow, so a reserve there
+   would push focused controls AWAY from a bar that is not one. */
+@media (min-width: 960px) {
+  html {
+    scroll-padding-block-start: calc(var(--specimen-strip-height) + var(--specimen-mast-height));
+  }
 }
 
 /* Kit documented constant: short-viewport 500px max-height (components.css

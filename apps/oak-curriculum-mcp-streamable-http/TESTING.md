@@ -38,6 +38,10 @@
 - Run: `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e`.
 - Key files: `auth-enforcement.e2e.test.ts`, `auth-bypass.e2e.test.ts`, `tool-call-envelope.e2e.test.ts`, `server.e2e.test.ts`.
 
+The E2E suite never reaches the real identity provider: "The e2e suite must never contact Clerk";
+every issuer check reads the injected upstream metadata, "assert on the injected fixture issuer"
+(the lane handover constraint of 2026-09-01, event 5dbec23b).
+
 ## Fixture Catalogue
 
 - `src/test-fixtures/auth-scenarios.ts` – immutable map of valid/invalid tokens, headers, and enforcement expectations. Update via TDD alongside schema changes.

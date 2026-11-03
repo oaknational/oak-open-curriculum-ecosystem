@@ -1,4 +1,5 @@
 import { existsSync, lstatSync, readFileSync, statSync } from 'node:fs';
+import { parseJsonLine } from './parse-json-line.js';
 import { writeErrorLine } from './terminal-output.js';
 
 interface JsonCandidate {
@@ -112,14 +113,6 @@ function appendBlockEvent(events: AgentEvents, block: unknown): void {
     return;
   }
   events.bashCommands.push(block.input.command);
-}
-
-function parseJsonLine(line: string): unknown {
-  try {
-    return JSON.parse(line);
-  } catch {
-    return null;
-  }
 }
 
 function isJson(value: unknown): value is JsonCandidate {

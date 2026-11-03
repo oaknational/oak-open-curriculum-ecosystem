@@ -2,6 +2,13 @@ import path from 'node:path';
 
 import { err, isErr, ok, type Result } from '@oaknational/result';
 
+import {
+  comparablePath,
+  fullyQualifiedForFlavour,
+  hasDotSegments,
+  isWithin,
+  type IdentityPathApi,
+} from './identity-path-flavour.js';
 import type {
   ContainedIdentityRead,
   IdentityFileKind,
@@ -9,6 +16,8 @@ import type {
   IdentityNodeObservation,
   IdentityPathObservation,
 } from './identity-secure-read-model.js';
+
+export type { IdentityPathApi };
 
 /**
  * Collect and validate one immutable no-symlink path observation, returning
@@ -20,12 +29,13 @@ export function observeAndValidateIdentityPath<Handle>(
   fileSystem: IdentityFileSystemPort<Handle>,
   input: ContainedIdentityRead,
   expected?: IdentityNodeObservation,
+  pathApi: IdentityPathApi = path,
 ): Result<IdentityNodeObservation, Error> {
-  const observed = observeIdentityPath(fileSystem, input);
+  const observed = observeIdentityPath(fileSystem, input, pathApi);
   if (isErr(observed)) {
     return observed;
   }
-  const valid = validateIdentityPathObservation(input, observed.value);
+  const valid = validateIdentityPathObservation(input, observed.value, pathApi);
   if (isErr(valid)) {
     return valid;
   }
@@ -52,23 +62,50 @@ function leafIdentityFrom(
     : ok(identity);
 }
 
-/** Validate lexical roots before any injected filesystem operation is consulted. */
+/**
+ * Validate lexical roots before any injected filesystem operation is
+ * consulted.
+ *
+ * @remarks
+ * Three rules, all lexical:
+ *
+ * 1. **Absolute** — chain root, owner root, and member path must be fully
+ *    qualified: POSIX-absolute on the posix flavour; on win32,
+ *    drive-qualified (`C:\…`) — rooted drive-relative paths (`\x`, resolved
+ *    against the process's current drive) and UNC shares are refused (see
+ *    {@link fullyQualifiedWin32}).
+ * 2. **No dot segments** — a `..` through a symlinked component would be
+ *    collapsed lexically by the normalised comparisons downstream, letting
+ *    the observed component chain skip the very component the no-symlink
+ *    sweep exists to inspect (2026-08-12 security review). Dot segments are
+ *    refused outright, never resolved.
+ * 3. **Member inside owner** — the owner root must sit within the chain
+ *    root, and the member path strictly within the owner root.
+ *
+ * Precondition: callers hold fully RESOLVED paths — there is no legitimate
+ * relative, dot-segment, or drive-relative input.
+ */
 export function validateIdentityContainment(
   input: ContainedIdentityRead,
+  pathApi: IdentityPathApi = path,
 ): Result<undefined, Error> {
-  if (
-    !path.isAbsolute(input.chainRoot) ||
-    !path.isAbsolute(input.ownerRoot) ||
-    !path.isAbsolute(input.path)
-  ) {
-    return err(new Error('identity roots and member path must be absolute'));
+  const inputs = [input.chainRoot, input.ownerRoot, input.path];
+  if (!inputs.every((value) => fullyQualifiedForFlavour(value, pathApi))) {
+    return err(new Error('identity roots and member path must be fully qualified absolute paths'));
   }
-  if (!isWithin(input.chainRoot, input.ownerRoot)) {
+  if (inputs.some((value) => hasDotSegments(value))) {
+    return err(new Error('identity roots and member path must not contain "." or ".." segments'));
+  }
+  if (!isWithin(input.chainRoot, input.ownerRoot, pathApi)) {
     return err(
       new Error(`identity owner root '${input.ownerRoot}' escapes chain root '${input.chainRoot}'`),
     );
   }
-  return input.path === input.ownerRoot || !isWithin(input.ownerRoot, input.path)
+  // "Strictly within" judges the comparable form: on win32 a case-only or
+  // separator-only variant of the owner root itself is still the owner root,
+  // not a member inside it.
+  return comparablePath(input.path, pathApi) === comparablePath(input.ownerRoot, pathApi) ||
+    !isWithin(input.ownerRoot, input.path, pathApi)
     ? err(new Error(`identity member '${input.path}' escapes owning root '${input.ownerRoot}'`))
     : ok(undefined);
 }
@@ -77,21 +114,28 @@ export function validateIdentityContainment(
 export function validateIdentityPathObservation(
   input: ContainedIdentityRead,
   observation: IdentityPathObservation,
+  pathApi: IdentityPathApi = path,
 ): Result<undefined, Error> {
-  const coherent = validateIdentityContainment(input);
+  const coherent = validateIdentityContainment(input, pathApi);
   if (isErr(coherent)) {
     return coherent;
   }
-  const expectedPaths = identityComponentPaths(input);
+  const expectedPaths = identityComponentPaths(input, pathApi);
   if (observation.components.length !== expectedPaths.length) {
     return err(new Error(`identity path observation for '${input.path}' is incomplete`));
   }
-  const components = validateObservedComponents(input.path, expectedPaths, observation.components);
+  const components = validateObservedComponents(
+    input.path,
+    expectedPaths,
+    observation.components,
+    pathApi,
+  );
   if (isErr(components)) {
     return components;
   }
-  return observation.canonicalPath === input.path &&
-    isWithin(input.ownerRoot, observation.canonicalPath)
+  return comparablePath(observation.canonicalPath, pathApi) ===
+    comparablePath(input.path, pathApi) &&
+    isWithin(input.ownerRoot, observation.canonicalPath, pathApi)
     ? ok(undefined)
     : err(
         new Error(
@@ -104,10 +148,17 @@ function validateObservedComponents(
   memberPath: string,
   expectedPaths: readonly string[],
   components: IdentityPathObservation['components'],
+  pathApi: IdentityPathApi,
 ): Result<undefined, Error> {
   for (const [index, expectedPath] of expectedPaths.entries()) {
     const component = components[index];
-    if (component?.path !== expectedPath) {
+    // Comparable-form comparison for the same reason as isWithin: separator
+    // form (and, on win32, letter case) is not identity — the expected chain
+    // is host-joined while the observed one echoes the caller's form.
+    if (
+      component === undefined ||
+      comparablePath(component.path, pathApi) !== comparablePath(expectedPath, pathApi)
+    ) {
       return err(new Error(`identity path observation for '${memberPath}' is reordered`));
     }
     const expectedKind: IdentityFileKind =
@@ -136,13 +187,14 @@ function validateComponentKind(
 function observeIdentityPath<Handle>(
   fileSystem: IdentityFileSystemPort<Handle>,
   input: ContainedIdentityRead,
+  pathApi: IdentityPathApi,
 ): Result<IdentityPathObservation, Error> {
-  const coherent = validateIdentityContainment(input);
+  const coherent = validateIdentityContainment(input, pathApi);
   if (isErr(coherent)) {
     return coherent;
   }
   const components = [];
-  for (const componentPath of identityComponentPaths(input)) {
+  for (const componentPath of identityComponentPaths(input, pathApi)) {
     const inspected = invoke(() => fileSystem.lstat(componentPath));
     if (isErr(inspected)) {
       return err(
@@ -164,15 +216,14 @@ function observeIdentityPath<Handle>(
     : ok({ components, canonicalPath: canonical.value });
 }
 
-function identityComponentPaths(input: ContainedIdentityRead): readonly string[] {
-  const segments = path.relative(input.chainRoot, input.path).split(path.sep);
+function identityComponentPaths(
+  input: ContainedIdentityRead,
+  pathApi: IdentityPathApi,
+): readonly string[] {
+  const segments = pathApi.relative(input.chainRoot, input.path).split(pathApi.sep);
   return segments.map((_segment, index) =>
-    path.join(input.chainRoot, ...segments.slice(0, index + 1)),
+    pathApi.join(input.chainRoot, ...segments.slice(0, index + 1)),
   );
-}
-
-function isWithin(base: string, candidate: string): boolean {
-  return candidate === base || candidate.startsWith(`${base}${path.sep}`);
 }
 
 function invoke<T>(operation: () => Result<T, Error>): Result<T, Error> {

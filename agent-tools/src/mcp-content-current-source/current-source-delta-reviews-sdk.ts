@@ -69,7 +69,7 @@ export const SDK_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
     ['C100', 'C101', 'C102', 'C103', 'C104', 'C105'],
   ),
   'packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-fetch/execution.ts': reviewed(
-    '56b062278ecd92c465eacaf96bdf787e2a5b23b10f92a6a9f143485462319550',
+    'fc8390ebf293ea96e8d3240bfaba3b21493f3f6aa5f16e62a048ab46bb005362',
     ['C151', 'C152', 'C153', 'C154', 'C155', 'C156', 'C157', 'C158', 'C159'],
   ),
   'packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-keyword-graph.ts': reviewed(
@@ -230,7 +230,7 @@ export const SDK_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
     ],
   ),
   'packages/sdks/oak-curriculum-sdk/src/mcp/test-helpers/advertised-examples.ts': excluded(
-    '41be855cff939c4a7f95b36bdc2e3d1fecceecdb0a425b791d4d9af7da766d3a',
+    '2125f30ea7eb7f29b8b0dfa565954cfdcc8d573313a9324d38a6935b038bb5bb',
     TEST_ONLY,
   ),
   // MCP-489: the public re-export now also carries RETIRED_WIDGET_URIS for the

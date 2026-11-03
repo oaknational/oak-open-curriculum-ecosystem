@@ -8,11 +8,12 @@ import { createMessage, type RuleWithReappraisingMessages } from '../reappraisin
  * ESLint rule banning real IO in test files.
  *
  * @remarks
- * Tests must use injected fakes per ADR-078 (dependency injection for
- * testability). Real IO surfaces — filesystem, child processes, worker
- * threads, network sockets, the live `process` global, and non-localhost
- * `fetch` — must not appear in `*.test.ts` / `*.spec.ts` files outside the
- * structural path-shape allowlist.
+ * Tests must use injected fakes (dependency injection for testability; see
+ * `.agent/rules/test-immediate-fails.md`). Real IO
+ * surfaces — filesystem, child processes, worker threads, network sockets,
+ * the live `process` global, and non-localhost `fetch` — must not appear in
+ * `*.test.ts` / `*.spec.ts` files outside the structural path-shape
+ * allowlist.
  *
  * Detection covers all import forms (static `ImportDeclaration`, dynamic
  * `await import(...)`, and CommonJS `require(...)`) for both unprefixed
@@ -25,9 +26,8 @@ import { createMessage, type RuleWithReappraisingMessages } from '../reappraisin
  * The structural allowlist is hardcoded into the rule because the
  * directory shapes (`**\/test-helpers/**`, `**\/test-fakes/**`) and the
  * Vitest config files (`vitest.config.ts`, `vitest.*.config.ts`,
- * `vitest.setup.ts`) are stable repo-wide contracts. Per-config additions
- * (a frozen historical-violation inventory at branch-merge time) flow in
- * via the `allowlistPathShapes` option.
+ * `vitest.setup.ts`) are stable repo-wide contracts. Per-config path
+ * shapes flow in via the `allowlistPathShapes` option.
  *
  * Type-only imports (`import type { Stats } from 'node:fs'`) do not
  * execute IO and are not reported.
@@ -68,11 +68,10 @@ export interface NoRealIoInTestsOptions {
    * Per-config additional allowlist path-shape patterns (minimatch globs).
    *
    * @remarks
-   * The historical real-IO inventory is frozen into this option as a
-   * path snapshot at branch-merge time. The structural defaults
-   * (`**\/test-helpers/**`, `**\/test-fakes/**`, `vitest.config.ts`,
-   * `vitest.*.config.ts`, `vitest.setup.ts`) are hardcoded and are not
-   * removable through this option.
+   * The consuming config records each entry's reason beside it. The
+   * structural defaults (`**\/test-helpers/**`, `**\/test-fakes/**`,
+   * `vitest.config.ts`, `vitest.*.config.ts`, `vitest.setup.ts`) are
+   * hardcoded and are not removable through this option.
    */
   readonly allowlistPathShapes?: readonly string[];
 }
@@ -185,7 +184,7 @@ const noRealIoInTestsRule: RuleWithReappraisingMessages<MessageId, [NoRealIoInTe
     type: 'problem',
     docs: {
       description:
-        'Ban real IO in test files. Tests must inject fakes per ADR-078; real fs / child_process / worker_threads / network / process / non-localhost fetch are forbidden in *.test.ts and *.spec.ts files outside the structural path-shape allowlist.',
+        'Ban real IO in test files. Tests must inject fakes; real fs / child_process / worker_threads / network / process / non-localhost fetch are forbidden in *.test.ts and *.spec.ts files outside the structural path-shape allowlist.',
     },
     schema: [
       {
@@ -203,23 +202,23 @@ const noRealIoInTestsRule: RuleWithReappraisingMessages<MessageId, [NoRealIoInTe
       bannedModuleStaticImport: createMessage({
         prohibition: 'Real-IO module "{{specifier}}" must not be imported in test files.',
         reappraisal:
-          'Inject a fake from a test-helpers/ or test-fakes/ surface instead. See .agent/rules/test-immediate-fails.md and ADR-078.',
+          'Inject a fake from a test-helpers/ or test-fakes/ surface instead. See .agent/rules/test-immediate-fails.md.',
       }),
       bannedModuleDynamicImport: createMessage({
         prohibition:
           'Real-IO module "{{specifier}}" must not be dynamically imported in test files.',
         reappraisal:
-          'Inject a fake from a test-helpers/ or test-fakes/ surface instead. See .agent/rules/test-immediate-fails.md and ADR-078.',
+          'Inject a fake from a test-helpers/ or test-fakes/ surface instead. See .agent/rules/test-immediate-fails.md.',
       }),
       bannedModuleRequire: createMessage({
         prohibition: 'Real-IO module "{{specifier}}" must not be required in test files.',
         reappraisal:
-          'Inject a fake from a test-helpers/ or test-fakes/ surface instead. See .agent/rules/test-immediate-fails.md and ADR-078.',
+          'Inject a fake from a test-helpers/ or test-fakes/ surface instead. See .agent/rules/test-immediate-fails.md.',
       }),
       processEnvAccess: createMessage({
         prohibition: 'Tests must not read or write process.env.',
         reappraisal:
-          'Pass literal inputs via dependency injection (ADR-078). See .agent/rules/test-immediate-fails.md.',
+          'Pass literal inputs via dependency injection. See .agent/rules/test-immediate-fails.md.',
       }),
       processCwdCall: createMessage({
         prohibition: 'Tests must not call process.cwd().',
@@ -228,7 +227,7 @@ const noRealIoInTestsRule: RuleWithReappraisingMessages<MessageId, [NoRealIoInTe
       }),
       processChdirCall: createMessage({
         prohibition:
-          'Tests must not call process.chdir() — mutating the working directory is shared global state forbidden by ADR-078.',
+          'Tests must not call process.chdir() — mutating the working directory is shared global state, forbidden by .agent/rules/no-global-state-in-tests.md.',
         reappraisal:
           'Inject a path resolver or pass explicit paths instead. See .agent/rules/test-immediate-fails.md.',
       }),

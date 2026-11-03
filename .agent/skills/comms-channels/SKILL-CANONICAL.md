@@ -41,8 +41,8 @@ below keep the fast lanes from hollowing out the record.
 
 | You are sending… | Channel |
 | --- | --- |
-| A time-critical unblocking ping, short question, ack, or "look at the stream/ARC" nudge to a LIVE Claude seat | **s2s** (`SendMessage`) |
-| Rapid, high-bandwidth LIVE dialogue with a named collaborator where latency dominates — a standalone file-backed sidebar whose substance is conserved at close | **ARC** (rapid-comms channel file) |
+| A time-critical unblocking ping, short question, ack, or "look at the stream/ARC" nudge to a LIVE Claude seat, and the back-and-forth of dialogue between two live Claude seats that s2s reaches | **s2s** (`SendMessage`) |
+| LIVE dialogue with a named collaborator that s2s cannot carry (a pair that includes a non-Claude seat, or seats s2s cannot reach) or whose transcript is itself the record — a standalone file-backed sidebar whose substance is conserved at close | **ARC** (rapid-comms channel file) |
 | The discovery narrative and notification the estate's record must carry: routing, liveness, broadcasts — anything a resume's gap sweep must find, anything an absent or FUTURE agent needs to notice | **The stream** (comms events CLI) |
 | Canonical STATE, which the stream announces but never stores: an active work claim (the claims CLI → `active-claims.json`, with a stream announcement where required), a structured async decision (`conversations/`), an unresolved owner-facing case (conversation + `escalations/`) | **The state surface + a stream event** |
 | A message whose audience is the owner or humans on the Practice Slack channel, or a question to the live Slack Watcher | **Slack-via-Watcher** (the `talk-to-slack-watcher` skill; the channel is the durable substrate on its side of the boundary) |
@@ -61,6 +61,25 @@ When in doubt the content is knowledge-bearing. Prediction (PDR-130): with this 
 SHA-bearing fact or ruling relay travels s2s-only within the review window; if a later seat has
 to reconstruct one from a peer's transcript, the test is not biting and the s2s row narrows.
 
+The cost side of the same choice (owner direction 2026-09-13, verbatim: "native s2s comms are
+much, much faster and cheaper and efficient that Practice comms for communication, Practice
+comms on the other hand preserve history and knowledge and institutional understanding which
+is bought with expensive ceremony, Arc channel comms are in-between but really only have the
+advantage in n=2 sessions. So, when do we use native comms and when Practice comms? Optimise
+for efficiency where appropriate but make sure that we do not lose the history of _why_ we do
+things"). Before a send, name the message's **audience** (the one live peer, or also a third
+seat, the owner, or a successor who was not there), its **lifetime** (spent once acted on, or
+to be found later) and its **consumer** (a mechanism that reads it: the claims registry, the
+commit queue, the liveness poll). A message with one reader, no life past the moment and no
+consumer, between two live Claude seats, is s2s; sent as a stream event it reaches every
+watching seat's context for a signal one seat needed. The same message to a non-Claude seat,
+which has no s2s, goes where that seat reads (§Non-Claude seats are first-class). A message with a wider audience, a longer life or a consumer goes where that
+audience or mechanism reads, at occurrence (behaviour 2). Two sends that look like dialogue
+are knowledge-bearing: the reason an idea was rejected, and a lane assignment, whose first act
+on receipt is the claim. The `channel-by-audience-lifetime-and-consumer` rule names the three
+selectors; this paragraph keeps this skill's timing (at occurrence) where that rule says "at the
+moment it is acted on".
+
 The split, in one line each:
 
 - **s2s is the interrupt line.** Seconds latency, wakes the receiver;
@@ -73,7 +92,8 @@ The split, in one line each:
   agent that writes files. Operationally a standalone file-backed
   sidebar (the ARC reference's own relationship clause): choose a
   decision thread when the exchange must be durable and structured
-  from the start; choose ARC when latency and bandwidth dominate.
+  from the start; choose ARC when s2s cannot reach both seats or the
+  transcript is itself the record.
 - **The stream is the record of transport** and the only surface that
   reaches agents who are not there yet. Registry-integrated identity,
   tags and threading, watcher-observable. It is notification and
@@ -96,6 +116,15 @@ The split, in one line each:
   estate-side. Relay egress (asking the Watcher to post on your
   behalf) is by policy owner-mediated: the Watcher drafts and
   notifies the owner, never posts autonomously for another agent.
+
+A ruling another seat must cite is an event on the stream; a direct message may carry it as
+the tap on the shoulder (the mirroring obligation below), never as its only copy. A ruling
+sent by direct message alone could not be found on either stream by the seat that had to
+cite it, which then waited on a relay (2026-09-29). The ruling lands in its canonical home
+where one exists (the registry, a conversation, the attention surface), and the stream event
+is its citable copy. A peer's bare name from the session listing may not resolve for
+`SendMessage`; reply with the socket path carried in the incoming message's sender attribute,
+which always does (2026-10-02).
 
 ## The behaviours
 
@@ -143,6 +172,21 @@ The split, in one line each:
 6. **Pin repo state exactly.** An s2s or ARC message referencing repo
    state carries the `SHA:` prefix discipline — the channel may be
    ephemeral but its claims get acted on.
+
+The test for a peer message is usefulness to the receiver: it changes what they
+would do, or tells them something the artefact does not already show. The owner,
+2026-09-24, verbatim: "do you really need to spend time and tokens informing
+another agent that a file got bigger? … tools like git don't need 'telling'",
+then "it is also reasonable to send information to a fellow agent, sometimes
+that is important and is neither a question not a request, but it should be
+useful information". Git and the file already record edits to a shared file.
+A Director that posts nothing on the canonical stream holds no id there, so
+`comms direct` cannot reach it: the question goes as a narrative event (the
+record) plus a native message (the delivery) (2026-09-24).
+
+Before writing an awaiting-direction status, read what arrived since your last read (the watcher
+stream, or `comms list --since <last read>`). A status ping written blind can cross a directed
+assignment already sent to you and forces a corrective round trip (OCE friction F-24, settled 2026-05-26).
 
 ## Non-Claude seats are first-class
 

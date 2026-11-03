@@ -17,15 +17,16 @@ export interface CheckpointReaderOptions extends AssertPathWithinBaseOptions {
 }
 
 /**
- * Make a checkpoint reader anchored at the given repo root, for a post-run driver.
+ * Make a checkpoint reader anchored at the given repo root, for a corpus driver.
  *
  * @remarks
  * Checkpoint envelopes are committed repo artefacts; anchoring the flag-supplied path
  * inside the repo root blocks `../` traversal and symlink escapes from a faulty CLI
  * invocation (tssecurity:S8707). A RELATIVE flag path resolves against the invocation
  * working directory (documented driver usage: the agent-tools workspace) before the
- * containment check. Shared by the post-run and salvage drivers — the boundary
- * behaviour (anchor, read, strict parse, typed failure) must be identical across both.
+ * containment check. Shared by the post-run and salvage drivers and the run-artefact
+ * builder — the boundary behaviour (anchor, read, strict parse, typed failure) must be
+ * identical across the three.
  */
 export function makeCheckpointReader(
   repoRoot: string,

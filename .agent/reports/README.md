@@ -36,14 +36,56 @@ This makes the report's intent inspectable rather than asking a reviewer to
 infer it from the prose. It does not pre-decide the review verdict or replace
 the report's evidence. A substantive review grounds its findings against the
 declared contract; stylistic preference alone is not a contract failure.
+A census report's reproduction block carries what a re-run needs: the cohort list (each
+directory enumerated by hand), the window and how membership is decided, the depth limit,
+the prefix-to-canonical mapping, and the aggregation that turns rows into the table's
+numbers, with every path written so the shell expands it. The 2026-09-03 skill-usage census
+learned each of these in review — a tilde inside quotes did not expand, and a pattern
+matching one nesting depth missed two deeper directories and changed twelve rows.
 
 ## Current Structure
+
+- [public-service-ai-tuition/pr-66-review-2026-09-06.md](./public-service-ai-tuition/pr-66-review-2026-09-06.md)
+  — dated review of PR 66: faithful transfer, source authority, integration,
+  evidence qualifications and seven bounded findings; the PR's landing is the owner's
+- [public-service-ai-tuition/pr-66-independent-review-2026-09-06.md](./public-service-ai-tuition/pr-66-independent-review-2026-09-06.md)
+  — independent review of PR 66 (the ADR-226 tuition import) from a second model
+  lineage: external-link census, conformance of tracked executable content,
+  scanner controls, authority sourcing, a mapping of the published review's
+  findings, and the owner's decisions with factors; every count names its command
+- [public-service-ai-tuition/oak-curriculum-infrastructure-delta-2026-09-08.md](./public-service-ai-tuition/oak-curriculum-infrastructure-delta-2026-09-08.md)
+  — report of the state on 2026-09-08: upstream OCE `1.178.6`, this line's
+  `1.178.5` boundary at that date and Curriculum API `0.11.1`, with semantic, reproducibility,
+  deployment and impact limits kept explicit
+- [user-value/user-value-specification-pr-relationships-2026-09-26.md](./user-value/user-value-specification-pr-relationships-2026-09-26.md)
+  — dated analysis, written on the non-executing host that drafted the `user-value` skill, of
+  how that skill, the specification-framework proposal and the pull request's changed
+  elements relate: ownership, scale and meaning bridges, evidence limits and the completion
+  the successor took on; its CI and blob citations are of the head it reviewed, superseded
+  at landing; revision 2 records the later owner ratification, expanded acceptance criteria
+  and reconciled projection/intake state
+- [practice-exchange/goal-one-residue-census-2026-09-28.md](./practice-exchange/goal-one-residue-census-2026-09-28.md)
+  — the first act of goal one's close charter: one line per owed J row, the batch-six triage's
+  BRING items minus the landings, read first-hand at both estates on 2026-09-28; the residue
+  count is dated in its Recounts section.
 
 - `oak-ecosystem-progress-*` — the progress-report family: point-in-time
   syntheses of where the whole effort stands, for readers who ask "where is it
   now?". Resolve the newest by the date in the filename — and where several
   share a date, the root `README.md`'s progress pointer names the canonical
   one; never assume a remembered filename is the latest
+- [spotify-portal-ai-plugins-exploration-2026-09-12.md](./spotify-portal-ai-plugins-exploration-2026-09-12.md)
+  — first-hand exploration of Spotify's `portal-ai-plugins` repository at `3c24ca3`: what it
+  is (a portal plugin of six Markdown skills plus three host manifests over one external CLI,
+  and a second plugin, shunt, that ships hooks, scripts, skills and evals; authored in a
+  six-day window), how it is built (one canonical skills directory behind thin per-host
+  manifests; a second plugin, shunt, layering PreToolUse hooks over named-argument scripts
+  over judgement-only skills), and what value it enables for each of four user groups by what
+  mechanism. Separates the subject's own assertions from what was checked: the published
+  token-savings table is arithmetically sound but **not reproducible from the repository** —
+  its scenarios name 4,014 and 7,408 lines where the committed fixtures hold 602 and 90 — and
+  a coverage gap in the Bash hook's allow conditions is derived from source. Nothing in the
+  subject was executed; the questions it raises for this estate are named, not answered
 - [upstream-and-bulk-alignment-concept-exploration-2026-07-26.md](./upstream-and-bulk-alignment-concept-exploration-2026-07-26.md)
   — fleet-verified concept exploration for MCP-152/MCP-153: the spec delta
   reclassified as shape-novelty (first POST/requestBody/map response the

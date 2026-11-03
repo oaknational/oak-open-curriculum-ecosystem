@@ -1,8 +1,13 @@
+---
+classification: core
+description: Warnings are never tolerated, never deferred, never silenced — anywhere in any system the repo influences (build, quality gates, runtime, monitoring).
+---
+
 # No Warning Toleration
 
 Operationalises [`principles.md` §Code Quality](../directives/principles.md)
-and [ADR-163 (Sentry release / commits / deploy linkage)](../../docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md)
-§6/§7 (entry-point boundary discipline + non-deferrable-warnings amendment).
+and the owner ruling of 2026-09-12 for this repository: no errors and no
+warnings of any kind, in any gate.
 
 Pattern reference:
 `acknowledged-warnings-deferred-to-the-stage-they-explode-in`
@@ -15,16 +20,28 @@ Pattern reference:
 In every system this repository can influence — build pipelines,
 quality gates, runtime instrumentation, monitoring, vendor SDK
 plugins, lint, type-check, test runners, dependency-cruiser, CI,
-pre-commit hooks, Vercel build output, Sentry runtime — a
+pre-commit hooks, the hosting platform's build output, runtime logs — a
 **warning is the cheap, early version of the failure it names.**
 
 A signal is information about an architectural tension — before any
 response, interrogate what produced it (a bug, a half-finished change, a
 misplaced abstraction, a leaky boundary), and cross-check where else the
-same shape appears un-flagged. Where a reasoned false-positive dismissal
-is genuinely warranted, prefer per-site dismissal with rationale over a
-rule-level disable — per-site forces a fresh interrogation when the shape
-recurs.
+same shape appears un-flagged. For an analyser finding (Sonar, CodeQL)
+there is no dismissal route, since the owner's 2026-09-08 ruling ("We
+don't dismiss issues, we fix them"): the finding is cured at source under
+the one-outcome rule in `docs/governance/sonar-disposition-policy.md`. The
+single exception to cure-at-source is the CodeQL query `js/missing-rate-limiting`, excluded permanently by the
+tracked `query-filters` entry in `.github/codeql/codeql-config.yml` (owner,
+2026-09-17, verbatim: "a permanent exclusion is allowed, but ONLY for that
+one issue"). ADR-219 is its ground: rate limiting is an edge concern, and
+the MCP server's route registrations carry comments citing it. The exclusion
+removes the query for every file the analysis scans, so a new HTTP route
+anywhere raises no alert; ADR-219's edge rule, not the analyser, is the
+control for it. No other query id or finding class is excluded, filtered or
+dismissed by any route, and an agent never dismisses an alert. Where a warning from another
+system can only be suppressed, suppress per site with rationale, never by
+a rule-level disable — per-site forces a fresh interrogation when the
+shape recurs.
 
 If a system we control emits a warning, the rule is:
 
@@ -38,11 +55,13 @@ If a system we control emits a warning, the rule is:
    blocking failure is handled: stop, fix, prove fixed, proceed.
 3. **If a third-party system (vendor SDK, CI runner, hosting
    platform) emits a warning the repo cannot suppress at source**,
-   capture it as a structured signal — Sentry breadcrumb tagged
-   `vendor.warning`, OpenTelemetry log event with severity
-   `WARN`, or CI annotation — and triage it during the next
-   session. Recurring vendor warnings are a Sentry uptime/issue
-   signal candidate, not background noise.
+   capture it as a structured signal — a CI annotation or a napkin
+   entry naming the source — and triage it during the next session.
+   Recurring vendor warnings are a dependency-currency signal, not
+   background noise.
+
+Any failed check is a real failure. No category of expected failure exists for a check or a
+workflow job (the owner's direction): a check that is allowed to fail is repaired or removed.
 
 ## Forbidden
 
@@ -59,6 +78,43 @@ If a system we control emits a warning, the rule is:
   ordering. They are equally blocking; the only legitimate
   hierarchy is *root-cause depth*, not severity label.
 
+## Problem-hiding patterns
+
+Fix the problem named by a gate; do not silence the signal that names it.
+An unused symbol is a useful entropy signal; suppressing it preserves the
+entropy while removing the alarm. Two recurring unused-code patterns are
+forbidden because they hide dead state:
+
+- **`void <expr>` to silence unused-variable lint.** `void` discards a
+  value in expression position, but the unused binding remains. If a
+  destructure produces a value you do not need, restructure the code so
+  the value is not produced; if a parameter is unused, remove it from the
+  signature; if a returned value is unused, do not bind it.
+- **Underscore-prefixing unused identifiers.** Renaming `foo` to `_foo` is
+  not a TypeScript language feature; it is an ESLint convention that
+  suppresses `@typescript-eslint/no-unused-vars`. The variable is still
+  bound and the dead state is still present.
+
+Both are instances of the broader rule: fix it or delete it. Adapters,
+compatibility layers and half measures are problem-hiding patterns when
+their purpose is to make old or dead shapes appear acceptable. Investigate
+the root cause before choosing a cure: often the missing wiring is the bug
+(use it), or the dead branch is the bug (remove it); where retention is
+genuinely justified, document the explicit architectural tension (for
+example conformance to a generated signature) rather than renaming. When
+a reviewer, sub-agent or auto-fix suggests the underscore rename, push
+back — the auto-fix is the wrong shape for this codebase.
+
+Concrete cures: when a destructure-rest produces an unused capture, build
+the fixture positively (set the omitted field to `undefined` if the type
+permits, or construct a minimal valid fixture by hand) rather than adding
+an `omitProperty` helper; when a framework signature forces an unused
+position, first ask whether the function is at the wrong abstraction
+layer — use the parameter, remove the position, or fix the layer, never
+add a shim; when a value-bind exists only to satisfy a type checker, use
+`satisfies` directly on the value. Existing `void <unused>` or `_foo`
+usages are remediation candidates, not licence to add new ones.
+
 ## Required
 
 - Every build script and every quality-gate command MUST treat
@@ -73,13 +129,9 @@ If a system we control emits a warning, the rule is:
     infrastructure assertion).
   - depcruise / knip / typedoc: zero warnings — escalate to
     error-level in their configs.
-  - Sentry runtime: warnings emitted via `Sentry.captureMessage`
-    at `warning` level or via `console.warn` MUST be visible
-    in dashboard surfaces and routed to triage.
 - Every monitoring surface MUST treat repeated warnings as a
-  signal — Sentry Uptime monitor assertions, alert rules on
-  `level:warning` events, and routine triage of the `warning`
-  severity bucket alongside `error`.
+  signal — the hosting platform's build and runtime logs included — and route them
+  to triage alongside errors.
 - Every PR description that mentions "build successful" or
   "quality gates green" MUST be falsifiable: a warning surfaced
   by any gate but not blocking the gate is a falsification of
@@ -147,6 +199,22 @@ file: an `ignores` entry must never begin with `!` or `#` — in
 markdownlint-cli2 such an entry silently zeroes the whole run to a
 false-green, so exclusions are expressed positively only.
 
+The root Markdown gate lints tracked files only (`repo-check markdownlint-tracked`), so a gitignored
+transient under `.agent/state/` can never block a push; lint scope follows the tracked surface,
+never the filesystem glob (OCE friction F-103, settled 2026-09-27). The same holds for every
+validator of an AUTHORED repository surface (Markdown, links, lint, docs): its universe is the
+tracked tree (`git ls-files`), never a disk walk; a link validator that walked a gitignored
+session directory refused commits on scratch copies (OCE F-295, 2026-10-02), so the lesson
+written once for the Markdown gate binds each later such validator at its second consumer.
+The clause binds; it does not describe every validator yet: in this estate the
+fitness-vocabulary walker reads directories (`walk.ts`, `readdir`) and the Markdown-links
+validator collects `**/*.md` by glob with the tracked set used for target checks only
+(read 2026-10-03), so each is a cure owed under this clause, never a licence for the next
+validator to walk the disk.
+State-integrity validators of the live tier (collaboration state, the practice substrate's
+instance JSON) read their untracked state by design (`important-state-not-in-temp-files`) and
+are outside this clause.
+
 ## Scope and exceptions
 
 There are no exceptions to "fix or escalate". There is one
@@ -169,24 +237,18 @@ permitted response is:
 
 This is the only legitimate shape; "I'll get to it" is not.
 
-There is one bounded rule-authoring nuance for custom ESLint rules:
-a newly authored rule may begin at `warn` while the rule's matching
-logic, false-positive profile, autofix behaviour, and existing
-violation surface are still being designed. That warning state is not
-a toleration state. The authoring lane must name the promotion point
-to `error`, and the rule must not be used to claim green quality gates
-until either all warnings are fixed or the rule has become an error
-with a blocking migration plan. Once the rule is part of the normal
-gate surface, this rule's zero-warning requirement applies unchanged.
+A newly authored ESLint rule lands at `error`, with its existing
+violations fixed in the landing that introduces it
+([PDR-126](../practice-core/decision-records/PDR-126-gates-land-strict-in-one-landing.md):
+gates land strict, in one landing). `warn` is not a staging level: every
+ESLint script runs with `--max-warnings 0`, so a rule left at `warn` fails
+lint the moment it fires.
 
 ## Reviewer cadence
 
 - `code-expert` enforces the rule on every PR that touches
   build scripts, quality-gate config, or vendor plugin
   integrations.
-- `sentry-expert` enforces the monitoring half of the rule
-  on every PR that touches Sentry init, uptime monitor config,
-  alert rules, or breadcrumb policy.
 - `release-readiness-expert` enforces the rule at PR-ready
   gate: any warning surfaced by any gate is an automatic
   no-go.

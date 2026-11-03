@@ -3,6 +3,7 @@ name: The One-Clause-of-Many Truing Trap
 polarity: anti-pattern
 use_this_when: About to true a stale fact that lives inside a large record (a table cell, a multi-sentence paragraph, an identity column) — before declaring the truing done, check whether the old state is asserted anywhere else in the same record
 category: process
+layer: general
 proven_in: .agent/memory/active/napkin.md (two rounds, 2026-07-08)
 proven_date: 2026-07-08
 barrier:

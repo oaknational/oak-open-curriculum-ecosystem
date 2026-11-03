@@ -1,3 +1,4 @@
+import { typeSafeKeys } from '@oaknational/type-helpers';
 import { z } from 'zod';
 import {
   BuildEnvSchema,
@@ -220,3 +221,14 @@ export function parseCsv(value: string | undefined): string[] | undefined {
     .map((s) => s.trim())
     .filter((s) => s.length > 0);
 }
+
+/**
+ * The variable names the HTTP env schema validates — the deploy-config
+ * gate's filter and pass-through surface (MCP-475): the gate process sees
+ * exactly these and nothing more, and the build orchestration passes
+ * exactly these through to it. Derived from the schema so the two cannot
+ * drift; the gate's contract test holds the orchestration side in step.
+ */
+export const HTTP_ENV_KEYS: readonly string[] = typeSafeKeys(BaseEnvSchema.shape).sort(
+  (left, right) => left.localeCompare(right),
+);

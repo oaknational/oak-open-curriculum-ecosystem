@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "claudeVersion": "2.1.283",
+  "startedAt": "2026-09-27T11:44:17.899Z",
+  "durationSeconds": 42,
+  "costUsd": 0.1837436,
+  "partial": false,
+  "suite": {
+    "root": "<plugin>",
+    "ablation": "with-without",
+    "judgeModel": "sonnet",
+    "caseFilter": "case-01",
+    "threshold": 0,
+    "concurrency": 1,
+    "plugins": [
+      {
+        "name": "oak-assess-specification-evals",
+        "version": "0.0.0",
+        "path": "<plugin>"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "name": "case-01",
+      "dir": "evals/case-01",
+      "source": "mixed",
+      "promptMarkdown": "Assess this specification (revision 1) of parentIndex(i) for a binary heap in an array with the root at 0, for reliance by the heap's sift-up operation (implementation): 'parentIndex(i) returns floor((i-1)/2) for i >= 1; callers must not call it with i = 0 and its result there is unspecified; pure, no allocation; evidence: the property test parent_of_child_is_self, which checks parentIndex(2p+1) == p and parentIndex(2p+2) == p for every parent p in 0..10000, and the heap's sift-up tests, which check i > 0 before every call and pass.' Is it ready?",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: Ready for the named use, without ceremony: the obligation, its condition (i >= 1), the obligation on callers not to pass 0 (shown kept by the sift-up tests), and the evidence (a property test over a declared finite domain including the root's children, plus the consumer's own tests) are identified and sufficient for implementation reliance; no condition and no repair loop for a one-line function. Notes that would not change the consumer's use (the finite domain is stated; integer division agrees with floor for i >= 1) are acceptable and do not make the disposition conditional.\n\nAssertions:\n1. The disposition is ready for the named use and the assessment does not manufacture findings or conditions to seem thorough; a one-line settled function with passing consumer tests is passed without a repair loop\n2. The finite property-test domain is recognised as a stated limit, not treated as proof over all integers, and not treated as a blocker for this use\n3. The i = 0 obligation is read as a caller obligation that the sift-up tests are stated to keep, not as a defect",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: Ready for the named use, without ceremony: the obligation, its condition (i >= 1), the obligation on callers not to pass 0 (shown kept by the sift-up tests), and the evidence (a property test over a declared finite domain including the root's children, plus the consumer's own tests) are identified and sufficient for implementation reliance; no condition and no repair loop for a one-line function. Notes that would not change the consumer's use (the finite domain is stated; integer division agrees with floor for i >= 1) are acceptable and do not make the disposition conditional.\n\nAssertions:\n1. The disposition is ready for the named use and the assessment does not manufacture findings or conditions to seem thorough; a one-line settled function with passing consumer tests is passed without a repair loop\n2. The finite property-test domain is recognised as a stated limit, not treated as proof over all integers, and not treated as a blocker for this use\n3. The i = 0 obligation is read as a caller obligation that the sift-up tests are stated to keep, not as a defect",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-assess-specification|oak-specify)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-assess-specification(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 3,
+            "costUsd": 0.10505800000000001,
+            "judgeCostUsd": 0.008682,
+            "durationSeconds": 21,
+            "startedAt": "2026-09-27T11:44:17.940Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "**Yes, it's ready for sift-up to rely on.** It has no blocking findings and no conditions.\n\n**What I assessed:** revision 1 of the `parentIndex(i)` spec, as the text you gave me, for use by the heap's sift-up. I didn't look at any code or run the tests. I'm taking your word that the tests pass, and I'm not an independent reviewer of this work. The heap's owner makes the final call.\n\n**What sift-up needs from `parentIndex`:**\n1. For every index sift-up can reach (i ≥ 1), it returns the correct parent.\n2. The spec rules out i = 0, and sift-up never passes it.\n3. It has no side effects that would matter inside the loop.\n\n**Check against each need:**\n\n| Need | Status |\n|---|---|\n| Correct parent for i ≥ 1 | **Met.** The test covers parents 0..10000, so it checks every child index from 1 to 20002 exactly (each i ≥ 1 is 2p+1 or 2p+2 for exactly one p). The test uses the child formulas, not the function's own formula, so it isn't just repeating the code. Beyond 20002 you're relying on the formula itself, which is simple and fine: with i ≥ 1, `(i-1)/2` can't overflow and is never negative, so floor and truncating division give the same answer. |\n| i = 0 excluded | **Met.** The spec says not to call it with 0 and leaves the result undefined there. Sift-up's `i > 0` check is exactly that rule, and its passing tests show the two agree. |\n| Pure, no allocation | **Not tested, but fine.** No test checks this. For one line of integer arithmetic, reading the code is enough, so this doesn't need to hold anything up. |\n\n**Findings:**\n- **Nothing blocking.** Nothing is missing, over-claimed, mislabelled or out of date for this use.\n- **Note, not a condition:** leaving i = 0 undefined is safe only because the one caller checks `i > 0`. Any other caller would need the same check.\n\n**Next step:** the heap's owner can accept it as it stands.\n\n**Assess again if:** there's a new revision, `parentIndex` gets a caller other than sift-up, sift-up drops its `i > 0` check, or the index type changes (for example to one where `i-1` could wrap)."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 0.5,
+            "passed": false,
+            "turns": 1,
+            "costUsd": 0.07868560000000001,
+            "judgeCostUsd": 0.008928,
+            "durationSeconds": 21,
+            "startedAt": "2026-09-27T11:44:38.554Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL FAIL FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  false,
+                  false
+                ],
+                "evidence": "## Yes, it's ready for sift-up to rely on\n\nThe spec promises what sift-up needs, the precondition matches how sift-up calls it, and the evidence tests the right property.\n\n**Why it holds up:**\n\n- **The contract fits the caller.** Sift-up only asks for the parent of a node that isn't the root. The loop guard `i > 0` means the one case the spec leaves unspecified (`i = 0`) is never reached. Leaving `i = 0` unspecified is fine. Sift-up has no use for a result there, so no one should come to depend on one.\n- **The formula is right for a heap rooted at 0.** Children of `p` sit at `2p+1` and `2p+2`, and `floor((i-1)/2)` maps both back to `p`. For `i >= 1`, `i-1` is never negative. So truncating and flooring division give the same answer, and a `(i-1) >> 1` implementation is also safe. `i-1` can't overflow either.\n- **The test checks what sift-up actually uses.** Sift-up's correctness depends on \"the parent of my child is me\". `parent_of_child_is_self` checks exactly that. Every `i >= 1` is either `2p+1` or `2p+2` for `p = floor((i-1)/2)`, so testing parents `0..10000` covers every index from 1 to 20002 exhaustively. That's more than a sample.\n\n**Small points, none of them blocking:**\n\n1. **The tests stop at index 20002.** Real heaps can be larger. With a closed-form one-liner that's a small risk, and reading the code closes it. If you want test support too, add a few spot checks near the top of the index type's range, such as `i = MAX` and `i = MAX - 1`.\n2. **\"Pure, no allocation\" rests on reading the code, not on the tests.** That's fine for a function this small, but the spec should say it was verified by inspection, not imply the tests show it.\n3. **The wording of the sift-up evidence is slightly off.** Tests don't \"check `i > 0` before every call\". The sift-up code does, and the passing tests exercise it. It's also evidence that the caller meets the precondition, not evidence that `parentIndex` is correct. It belongs in the assessment, just under that label. Consider rewording it to: \"sift-up's loop guards `i > 0`, confirmed by inspection; sift-up tests pass.\"\n\nNone of these change the verdict. Sift-up can rely on revision 1 as written."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 0.5,
+        "passRateWithout": 0,
+        "delta": 0.5
+      }
+    }
+  ],
+  "aggregates": {
+    "casesTotal": 1,
+    "casesPassed": 1,
+    "overallScore": 1,
+    "overallPassRate": 1,
+    "meanDelta": 0.5
+  }
+}

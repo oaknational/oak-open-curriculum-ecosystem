@@ -1,18 +1,20 @@
 import { spawnSync } from 'node:child_process';
-import { chmodSync, existsSync, readFileSync, readdirSync } from 'node:fs';
+import { chmodSync, existsSync, readdirSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 
 import { resolveRepoRoot } from '../core/repo-root.js';
 import { writeLine, writeErrorLine } from '../core/terminal-output.js';
 
-import { productionWorkspaceDepFsIo } from './bootstrap-helpers-io.js';
+import { interpretTscOutcome } from './bootstrap-helpers.js';
+import { BUILD_RECIPE, buildWorkspaceDep } from './closure-member-build.js';
+import { readWorkspaceManifests, readWorkspacePatterns } from './install-time-closure-io.js';
+import { type InstallTimeDep, installTimeClosure } from './install-time-closure.js';
 import {
-  binPathFromManifest,
-  interpretSpawnOutcome,
-  interpretTscOutcome,
-  workspaceDepDistIsStale,
-} from './bootstrap-helpers.js';
+  shellcheckInstallerEnv,
+  shellcheckProvisionSkip,
+  shellcheckProvisionWarning,
+} from './shellcheck-provision.js';
 
 /**
  * Install-time bootstrap, run by the root `postinstall` via `tsx`.
@@ -25,16 +27,17 @@ import {
  * out of the install lifecycle — enforced by the `validate-lifecycle-scripts`
  * validator.
  *
- * agent-tools imports the workspace packages listed in `WORKSPACE_DEPS`
- * (`@oaknational/result`, `@oaknational/safe-path`, `@oaknational/type-helpers`)
- * whose exports resolve to built `dist` only — there is no source-pointing
- * export condition. Their `tsup.config.ts` files in turn import
- * `@oaknational/workspace-config/tsup`, also dist-resolved, so the config-base
- * package is part of the same install-time closure. On a fresh checkout
- * (Vercel, CI, a new worktree) `postinstall` runs before any orchestrated
- * build, so this bootstrap first builds that closure with each package's own
- * toolchain (`tsup` for JS, `tsc --emitDeclarationOnly` for types), skipping
- * any dep whose built `dist` is already current for its `src`.
+ * agent-tools reaches workspace packages whose entry points name built output
+ * under `dist` — there is no source-pointing export condition: the packages it
+ * imports, the ESLint plugin its lint config imports, and the config-base
+ * package whose `tsup` base their build configs import. Which packages those
+ * are is derived from the workspace manifests at run time
+ * (`install-time-closure.ts`), never listed here. On a fresh checkout (Vercel,
+ * CI, a new worktree) `postinstall` runs before any orchestrated build, so this
+ * bootstrap first builds that closure in dependency order with each package's
+ * own toolchain (`tsup` for JS, `tsc --emitDeclarationOnly` for types),
+ * skipping any dep whose built `dist` is already current for its `src`, and so
+ * ESLint's config, which imports the plugin, loads after `pnpm install` alone.
  *
  * `typescript` is a direct dependency of agent-tools, so it is present in dev
  * and `--prod` installs alike; a missing compiler therefore signals a corrupt
@@ -45,43 +48,33 @@ import {
  */
 
 const repoRoot = resolveRepoRoot(import.meta.url);
-const agentToolsDir = path.join(repoRoot, 'agent-tools');
-
-/** One install-time build target: its directory and the dist artifacts witnessing a completed build. */
-interface WorkspaceDep {
-  /** Repo-relative directory of the workspace package. */
-  readonly dir: string;
-  /** Witness artifact names under `dist/` — one bundler output, one declaration output. */
-  readonly distArtifacts: readonly string[];
-}
-
-/** The witness pair for a leaf package whose build emits a `dist/index.*` barrel. */
-const LEAF_DIST_ARTIFACTS = ['index.js', 'index.d.ts'] as const;
+/** Repo-relative directory of agent-tools: the package running this bootstrap, and the closure's root. */
+const AGENT_TOOLS_DIR = 'agent-tools';
+const agentToolsDir = path.join(repoRoot, AGENT_TOOLS_DIR);
 
 /**
- * The workspace packages agent-tools' own build depends on, in build order.
- * `@oaknational/workspace-config` builds first: every other dep's
- * `tsup.config.ts` imports `@oaknational/workspace-config/tsup`, which
- * resolves to built `dist` only, so on a cold checkout its `dist` must exist
- * before any dep's tsup run bundles its config — and it can hold position 0
- * because it has zero internal workspace dependencies by design. The rest are
- * the leaf packages agent-tools imports; none has runtime workspace deps of
- * its own. A new agent-tools workspace dependency — or a new install-time
- * config dependency — MUST be added here or every cold `pnpm install` (CI,
- * fresh clones, Vercel) fails its postinstall on the missing `dist`; warm
- * local workspaces mask the gap (the PR #393 install/secret-scan/
- * run-quality-gates failure, 2026-07-16; the identical PR #836 failure via
- * the config-import path, 2026-08-09).
+ * The workspace packages built before agent-tools, derived from the workspace
+ * manifests: every package agent-tools reaches whose entry points name built
+ * output under `dist`, in dependency order (`install-time-closure.ts`).
+ * Computed, never kept: a new agent-tools workspace dependency, or a new
+ * dependency of one of those, joins the closure without an edit here. The
+ * incidents the hand-kept list caused are recorded in that module's TSDoc.
+ * Exits loudly, naming the cause, when a read or the derivation refuses.
  */
-const WORKSPACE_DEPS: readonly WorkspaceDep[] = [
-  {
-    dir: 'packages/core/workspace-config',
-    distArtifacts: ['tsup.config.base.js', 'tsup.config.base.d.ts'],
-  },
-  { dir: 'packages/core/result', distArtifacts: LEAF_DIST_ARTIFACTS },
-  { dir: 'packages/core/safe-path', distArtifacts: LEAF_DIST_ARTIFACTS },
-  { dir: 'packages/core/type-helpers', distArtifacts: LEAF_DIST_ARTIFACTS },
-];
+function readInstallTimeClosure(): readonly InstallTimeDep[] {
+  const patterns = readWorkspacePatterns(repoRoot);
+  const manifests = patterns.ok ? readWorkspaceManifests(repoRoot, patterns.value) : patterns;
+  const closure = manifests.ok
+    ? installTimeClosure(manifests.value, { rootDir: AGENT_TOOLS_DIR, buildRecipe: BUILD_RECIPE })
+    : manifests;
+  if (!closure.ok) {
+    writeErrorLine(
+      `[bootstrap-agent-tools] cannot derive the install-time closure: ${closure.error}`,
+    );
+    process.exit(1);
+  }
+  return closure.value;
+}
 
 /** Set the executable bit on every compiled CLI entry, mirroring the build script. */
 function markExecutableArtifacts(): void {
@@ -105,63 +98,31 @@ function markExecutableArtifacts(): void {
   }
 }
 
-/** Run one build step under the current node binary, exiting loudly on failure. */
-function runStep(label: string, binPath: string, args: readonly string[], cwd: string): void {
-  const result = spawnSync(process.execPath, [binPath, ...args], { cwd, stdio: 'inherit' });
-  const verdict = interpretSpawnOutcome(label, {
+/**
+ * Install the pinned shellcheck the shell lint gate runs, unless another
+ * surface owns it here (`shellcheck-provision.ts`). The installer streams its
+ * own output and is a no-op on the present pin; a failure warns and the
+ * install goes on, since the gate itself refuses without the pin.
+ */
+function provisionShellcheck(): void {
+  const skip = shellcheckProvisionSkip(process.env);
+  if (skip !== null) {
+    writeLine(`[bootstrap-agent-tools] shellcheck left to ${skip}`);
+    return;
+  }
+  const result = spawnSync(path.join(repoRoot, '.agent', 'setup', 'install-shellcheck.sh'), [], {
+    cwd: repoRoot,
+    env: shellcheckInstallerEnv(process.env),
+    stdio: 'inherit',
+  });
+  const warning = shellcheckProvisionWarning({
     error: result.error,
     signal: result.signal,
     status: result.status,
   });
-  if (verdict.failed) {
-    const reason = verdict.reason ?? `${label} failed`;
-    writeErrorLine(`[bootstrap-agent-tools] ${reason}`);
-    process.exit(verdict.exitCode);
+  if (warning !== null) {
+    writeErrorLine(warning);
   }
-}
-
-/**
- * Build one workspace dep with its own toolchain (tsup JS + tsc declarations),
- * unless its built `dist` is already current for the present `src`.
- *
- * Rebuilds on staleness, not mere absence: a warm checkout that pulls new leaf
- * source over an old `dist` must rebuild, or agent-tools' own `tsc` fails
- * against the stale `.d.ts` and bricks the fail-open guards (MCP-472). See
- * {@link workspaceDepDistIsStale}.
- */
-function buildWorkspaceDep(dep: WorkspaceDep, tscBin: string): void {
-  const depRelDir = dep.dir;
-  const depDir = path.join(repoRoot, depRelDir);
-  const depName = path.basename(depRelDir);
-  if (!workspaceDepDistIsStale(depDir, dep.distArtifacts, productionWorkspaceDepFsIo)) {
-    return;
-  }
-  const depRequire = createRequire(path.join(depDir, 'package.json'));
-  let tsupManifestPath: string;
-  try {
-    tsupManifestPath = depRequire.resolve('tsup/package.json');
-  } catch {
-    writeErrorLine(
-      `[bootstrap-agent-tools] cannot resolve "tsup" from ${depRelDir} — the install looks incomplete.`,
-    );
-    process.exit(1);
-  }
-  const tsupManifest: unknown = JSON.parse(readFileSync(tsupManifestPath, 'utf8'));
-  const tsupBin = binPathFromManifest(path.dirname(tsupManifestPath), tsupManifest, 'tsup');
-  if (tsupBin === undefined) {
-    writeErrorLine(
-      `[bootstrap-agent-tools] the resolved tsup manifest for ${depRelDir} has no usable bin entry.`,
-    );
-    process.exit(1);
-  }
-  runStep(`tsup (${depName})`, tsupBin, [], depDir);
-  runStep(
-    `tsc declarations (${depName})`,
-    tscBin,
-    ['--emitDeclarationOnly', '--project', path.join(depDir, 'tsconfig.build.json')],
-    depDir,
-  );
-  writeLine(`[bootstrap-agent-tools] built ${depRelDir}/dist`);
 }
 
 function main(): void {
@@ -183,8 +144,8 @@ function main(): void {
     process.exit(1);
   }
 
-  for (const dep of WORKSPACE_DEPS) {
-    buildWorkspaceDep(dep, tscBin);
+  for (const dep of readInstallTimeClosure()) {
+    buildWorkspaceDep(dep, repoRoot, tscBin);
   }
 
   const result = spawnSync(
@@ -204,6 +165,7 @@ function main(): void {
 
   markExecutableArtifacts();
   writeLine('[bootstrap-agent-tools] built agent-tools/dist');
+  provisionShellcheck();
 }
 
 main();

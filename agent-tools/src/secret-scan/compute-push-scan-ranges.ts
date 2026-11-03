@@ -11,6 +11,7 @@
  * logic is unit-tested directly; the thin `run-push-secret-scan.ts` CLI reads
  * the real inputs and runs gitleaks over the ranges it returns.
  */
+import { parseGitRemoteUrl, type GitRemoteRepository } from '../core/git-remote-url.js';
 
 /**
  * An all-zero object id marks an absent ref end: a zero `local_sha` is a ref
@@ -21,11 +22,26 @@ const isZeroObjectId = (objectId: string): boolean => /^0+$/.test(objectId);
 
 /**
  * The UNSCOPED exclusion set — "not reachable from any remote-tracking ref".
- * Every incremental range is scoped to one destination remote
+ * Every incremental range is scoped to the destination's remotes
  * (`--not --remotes=<name>`); this bare form is the fallback, and it walks a
  * superset of history whose size is bounded by nothing.
  */
 const UNSCOPED_EXCLUSION = '--not --remotes';
+
+/**
+ * A configured remote as git knows it: the name `git remote` lists, and the
+ * one URL git FETCHES from, as `git remote get-url <name>` prints it with
+ * `insteadOf` rewriting applied — the first `remote.<name>.url`; any further
+ * `url` values and every `pushurl` are never fetched from. The fetch URL alone,
+ * because the remote-tracking refs the exclusion walks are populated by
+ * fetching: a triangular remote (fetch from one repository, push to another)
+ * holds the first repository's commits under its name, not the second's.
+ * `undefined` when git could not say, so the remote scopes by name only.
+ */
+export interface ConfiguredRemote {
+  readonly name: string;
+  readonly fetchUrl: string | undefined;
+}
 
 export interface ComputePushScanRangesInput {
   /**
@@ -42,22 +58,56 @@ export interface ComputePushScanRangesInput {
    */
   remoteName: string;
   /**
-   * The repository's configured remote names (`git remote`). The destination
-   * is scopable only if it appears here: `--remotes=<glob>` is matched against
-   * `refs/remotes/*`, so a destination that names no remote produces a glob
-   * matching nothing — an exclusion set that excludes nothing.
+   * The repository's configured remotes with the URL each fetches from. The
+   * destination is scopable only through them: `--remotes=<glob>` is matched
+   * against `refs/remotes/*`, so a destination that names no remote produces
+   * a glob matching nothing — an exclusion set that excludes nothing.
    */
-  configuredRemotes: readonly string[];
+  configuredRemotes: readonly ConfiguredRemote[];
+}
+
+/** Whether two remote URLs name one repository: host, owner and name, case aside. */
+function sameRepository(left: GitRemoteRepository, right: GitRemoteRepository): boolean {
+  return (
+    left.host.toLowerCase() === right.host.toLowerCase() &&
+    left.owner.toLowerCase() === right.owner.toLowerCase() &&
+    left.repoName.toLowerCase() === right.repoName.toLowerCase()
+  );
+}
+
+/** Whether a configured remote fetches from the repository the destination names. */
+function fetchesFrom(remote: ConfiguredRemote, destination: GitRemoteRepository): boolean {
+  const repository = remote.fetchUrl === undefined ? undefined : parseGitRemoteUrl(remote.fetchUrl);
+  return repository !== undefined && sameRepository(repository, destination);
 }
 
 /**
- * Whether the destination can scope the exclusion — i.e. whether it names a
- * remote that HAS remote-tracking refs. Decided by membership, never by the
- * destination's spelling: a filesystem-path destination carries neither
- * `://` nor `@`, so any URL-shaped heuristic would wave it through.
+ * The remotes whose tracking refs hold what is already on the destination. A
+ * configured NAME counts by membership and is itself. A URL counts by parsing
+ * it to a host repository (`https://`, `ssh://` or `user@host:` form) and
+ * matching that against the URL each remote fetches from: every remote that fetches
+ * from the same repository (`merge-bot push` pushes to the configured
+ * repository's URL, which origin fetches from, so its pushes scope to origin).
+ * Anything else scopes nothing: a filesystem path or a `file://` URL parses
+ * to no host repository, and an unknown repository matches no remote.
  */
-function isScopableRemote({ remoteName, configuredRemotes }: ComputePushScanRangesInput): boolean {
-  return remoteName !== '' && configuredRemotes.includes(remoteName);
+function scopingRemoteNames({
+  remoteName,
+  configuredRemotes,
+}: ComputePushScanRangesInput): readonly string[] {
+  if (remoteName === '') {
+    return [];
+  }
+  if (configuredRemotes.some((remote) => remote.name === remoteName)) {
+    return [remoteName];
+  }
+  const destination = parseGitRemoteUrl(remoteName);
+  if (destination === undefined) {
+    return [];
+  }
+  return configuredRemotes
+    .filter((remote) => fetchesFrom(remote, destination))
+    .map((remote) => remote.name);
 }
 
 /**
@@ -77,14 +127,16 @@ export function computePushScanRanges(input: ComputePushScanRangesInput): string
     return [`HEAD ${UNSCOPED_EXCLUSION}`];
   }
 
-  // Exclude commits already on the DESTINATION remote, scoped by its name, so a
-  // first push of existing commits to a *second* remote still scans them. A
-  // destination that names no configured remote cannot scope anything, so it
-  // falls back to the unscoped set rather than building a glob that silently
-  // matches nothing.
-  const notAlreadyPushed = isScopableRemote(input)
-    ? `--not --remotes=${input.remoteName}`
-    : UNSCOPED_EXCLUSION;
+  // Exclude commits already on the DESTINATION, scoped by the remotes that
+  // fetch from it, so a first push of existing commits to a *second*
+  // repository still scans them. A destination no configured remote fetches
+  // from cannot scope anything, so it falls back to the unscoped set rather
+  // than building a glob that silently matches nothing.
+  const scopes = scopingRemoteNames(input);
+  const notAlreadyPushed =
+    scopes.length === 0
+      ? UNSCOPED_EXCLUSION
+      : `--not ${scopes.map((name) => `--remotes=${name}`).join(' ')}`;
 
   const ranges: string[] = [];
   for (const refLine of refLines) {
@@ -109,8 +161,8 @@ export function computePushScanRanges(input: ComputePushScanRangesInput): string
 /**
  * The loud half of the degradation (R6): this scan exists to walk only the
  * commits being pushed, and two inputs cost it that guarantee — a run git
- * supplied no ref lines for, and a destination that names no configured
- * remote. Either way the exclusion stops being scoped to where the commits
+ * supplied no ref lines for, and a destination no configured remote fetches
+ * from. Either way the exclusion stops being scoped to where the commits
  * are going, and with no remote-tracking refs at all it is the whole history.
  *
  * Derived from the ranges the caller is ACTUALLY about to scan, never from a
@@ -133,7 +185,7 @@ export function degradedScanWarning(
   const cause =
     input.refsText.trim() === ''
       ? 'git supplied no ref lines, so there is no pushed range to scan and the whole local history stands in for one'
-      : `the push destination "${input.remoteName}" is not a configured remote, so it has no remote-tracking refs to scope the exclusion against`;
+      : `the push destination "${input.remoteName}" is not a configured remote and names no host repository (https://, ssh:// or user@host: form) that a configured remote fetches from, so it has no remote-tracking refs to scope the exclusion against`;
   return (
     `secret scan: DEGRADED — the scan is no longer scoped to the push destination.\n` +
     `  Cause: ${cause}.\n` +
@@ -141,6 +193,7 @@ export function degradedScanWarning(
     `destination, so commits already pushed elsewhere go unscanned; with no ` +
     `remote-tracking refs at all this walks the entire history. Findings stay correct.\n` +
     `  Fix: push to a NAMED remote (git remote add <name> <url>, then git push <name>) ` +
-    `to restore the destination-scoped range.\n`
+    `so the range is scoped to the destination again; a URL scopes only when it names ` +
+    `a host repository a configured remote fetches from.\n`
   );
 }

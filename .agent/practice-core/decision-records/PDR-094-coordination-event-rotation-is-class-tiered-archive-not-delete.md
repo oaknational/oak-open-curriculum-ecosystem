@@ -75,7 +75,7 @@ and — *"I am happy for events to be archived, in order to ENABLE future
 mining, but not as a mechanism for hedging: we do the full extraction,
 then we archive in case a future technology or additional resource
 changes things materially. We never treat it as a safety mechanism to
-enable 'I will do it later', or 'it's okay to half-arse this because
+enable 'I will do it later', or 'it's okay to [skimp on] this because
 it's safe'."* The extraction bar is therefore identical whether or not
 an archive exists; the archive carries **no curation obligation, no
 deferral licence, and no safety-net status** — it is cheap optionality

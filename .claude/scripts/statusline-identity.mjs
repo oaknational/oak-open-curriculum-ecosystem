@@ -11,7 +11,7 @@
  * child exit) results in exit 0 with no stdout, so the statusline never
  * disrupts the session.
  *
- * Diagnosis: set `OAK_STATUSLINE_LOG_FILE=/path/to/statusline.log` (must end
+ * Diagnosis: set `PRACTICE_STATUSLINE_LOG_FILE=/path/to/statusline.log` (must end
  * `.log`) before launching the session and the adapter appends each
  * invocation's raw stdin payload there, one timestamped line per
  * invocation (malformed and noop payloads included).

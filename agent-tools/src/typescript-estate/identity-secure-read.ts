@@ -3,6 +3,7 @@ import { err, isErr, type Result } from '@oaknational/result';
 import {
   observeAndValidateIdentityPath,
   validateIdentityContainment,
+  type IdentityPathApi,
 } from './identity-path-observation.js';
 import type {
   ContainedIdentityRead,
@@ -12,6 +13,7 @@ import type {
   IdentitySecureFilePort,
 } from './identity-secure-read-model.js';
 export { validateIdentityPathObservation } from './identity-path-observation.js';
+export type { IdentityPathApi } from './identity-path-observation.js';
 export type {
   ContainedIdentityRead,
   IdentityFileKind,
@@ -26,15 +28,17 @@ export type {
 /** Bind low-level filesystem operations to the two named path-validation phases. */
 export function createIdentitySecureFilePort<Handle>(
   fileSystem: IdentityFileSystemPort<Handle>,
+  pathApi?: IdentityPathApi,
 ): IdentitySecureFilePort<Handle> {
   return {
     canonicalRealpath: (pathValue) => invoke(() => fileSystem.realpath(pathValue)),
-    validateBeforeOpen: (input) => observeAndValidateIdentityPath(fileSystem, input),
+    validateBeforeOpen: (input) =>
+      observeAndValidateIdentityPath(fileSystem, input, undefined, pathApi),
     openNoFollow: (pathValue) => invoke(() => fileSystem.openReadNoFollow(pathValue)),
     readRegularDescriptor: (input, handle, expected) =>
       readRegularDescriptor(fileSystem, input, handle, expected),
     validateBeforeAccept: (input, expected) => {
-      const revalidated = observeAndValidateIdentityPath(fileSystem, input, expected);
+      const revalidated = observeAndValidateIdentityPath(fileSystem, input, expected, pathApi);
       return isErr(revalidated) ? revalidated : { ok: true, value: undefined };
     },
     close: (handle) => invoke(() => fileSystem.close(handle)),
@@ -47,18 +51,20 @@ export function createIdentitySecureFilePort<Handle>(
  */
 export function createSecureIdentityReadPort<Handle>(
   operations: IdentitySecureFilePort<Handle>,
+  pathApi?: IdentityPathApi,
 ): IdentityReadPort {
   return {
     canonicalRealpath: (pathValue) => invoke(() => operations.canonicalRealpath(pathValue)),
-    readRegularFileNoFollow: (input) => secureRead(operations, input),
+    readRegularFileNoFollow: (input) => secureRead(operations, input, pathApi),
   };
 }
 
 function secureRead<Handle>(
   operations: IdentitySecureFilePort<Handle>,
   input: ContainedIdentityRead,
+  pathApi?: IdentityPathApi,
 ): Result<Uint8Array, Error> {
-  const coherent = validateIdentityContainment(input);
+  const coherent = validateIdentityContainment(input, pathApi);
   if (isErr(coherent)) {
     return coherent;
   }

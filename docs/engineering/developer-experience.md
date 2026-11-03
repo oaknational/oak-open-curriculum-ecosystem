@@ -121,14 +121,14 @@ placeholders (a genuine `0` is a value and renders as `0%`):
 
 Set per-machine in `.claude/settings.local.json` under `env`:
 
-- `OAK_STATUSLINE_LOGO` — logo style: `braille-sharp` (default),
+- `PRACTICE_STATUSLINE_LOGO` — logo style: `braille-sharp` (default),
   `braille-sharp-compact`, `braille`, `quad`, `sextant`, or `none` to
   hide the logo column (the identity, model/usage, and location rows
   all still render).
-- `OAK_STATUSLINE_MOTION` — set to `off`, `static`, `none`, or
+- `PRACTICE_STATUSLINE_MOTION` — set to `off`, `static`, `none`, or
   `reduce` (case-insensitive) to disable the logo animation cycle;
   other values leave motion on.
-- `OAK_STATUSLINE_LOG_FILE` — the diagnosis log: a path ending `.log`
+- `PRACTICE_STATUSLINE_LOG_FILE` — the diagnosis log: a path ending `.log`
   makes the adapter append one timestamped line per invocation carrying
   the stdin payload as received (terminal line breaks stripped, interior
   line breaks collapsed to spaces, every other byte preserved); unset

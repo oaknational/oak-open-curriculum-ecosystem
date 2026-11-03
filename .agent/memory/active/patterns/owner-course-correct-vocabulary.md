@@ -2,6 +2,7 @@
 name: Owner Course-Correct Vocabulary
 use_this_when: Receiving an owner message that contains a course-correct token, or noticing a self-trigger phrase in your own draft prose; both signal a re-grounding moment that maps to a specific canonical doctrine surface.
 category: agent
+layer: contextual
 polarity: pattern
 proven_in: 2026-05-10 Claude insight report (`.agent/reference-local/claude-insight-reports/2026-05-10-full-corpus/`) §08-communication-style.md (owner-side corpus) and §06-frictions-and-anti-patterns.md + §09-agent-action-rules.md (agent-side self-triggers); patterns originally surfaced as enforced rules and feedback memories before consolidation here.
 proven_date: 2026-05-10

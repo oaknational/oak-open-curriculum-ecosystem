@@ -1,5 +1,5 @@
 ---
-description: Arming a long-running process whose output lines should wake the agent — comms watchers (comms watch), build/test streams, file-system watchers, tail-of-log surfaces: on Monitor-capable hosts arm Monitor with persistent true, pipe-less for the comms CLI; on Codex use the relay-child composition. Never Bash run_in_background here — it delivers no notifications, so the agent must poll. Not for one-shot wait-until-complete (Bash background is right) or periodic checks with no stream to notify from. Failure shape: a wrong grep anchor silently swallowing every event while the watcher looks healthy.
+description: "Arming a long-running process whose output lines should wake the agent — comms watchers (comms watch), build/test streams, file-system watchers, tail-of-log surfaces: on Monitor-capable hosts arm Monitor with persistent true, pipe-less for the comms CLI; on Codex use the relay-child composition. Never Bash run_in_background here — it delivers no notifications, so the agent must poll. A one-shot wait-until-complete is a Monitor too on Monitor-capable hosts (the owner's word of 2026-10-02), printing its exit line and ending; not for periodic checks with no stream to notify from. Failure shape: a wrong grep anchor silently swallowing every event while the watcher looks healthy."
 alwaysApply: false
 ---
 

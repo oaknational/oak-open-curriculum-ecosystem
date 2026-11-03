@@ -1,4 +1,8 @@
+import { join } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
+
+import { TrustedGitResolutionError } from '../core/trusted-git.js';
 
 import { type GitRunner, resolveCoordinationHome } from './coordination-home.js';
 
@@ -51,11 +55,30 @@ describe('resolveCoordinationHome', () => {
       /returned no worktree/u,
     );
   });
+
+  it('lets a trusted-git RESOLUTION refusal pass through as its own diagnosis', () => {
+    // git never ran, so "not inside a git working tree" would be a false
+    // statement about a true repository (the 2026-08-11 Windows instance of
+    // the misleading-error class): the resolver's typed refusal — and its
+    // actionable remedy — must reach the reader unrebranded.
+    const resolverRefuses: GitRunner = () => {
+      throw new TrustedGitResolutionError('No trusted git binary found. Searched: …');
+    };
+    expect(() => resolveCoordinationHome(PRIMARY, { runGit: resolverRefuses })).toThrow(
+      /No trusted git binary found/u,
+    );
+    expect(() => resolveCoordinationHome(PRIMARY, { runGit: resolverRefuses })).not.toThrow(
+      /not inside a git working tree/u,
+    );
+  });
 });
 
 describe('resolveCoordinationHome — PRACTICE_COORDINATION_HOME override (inter-Practice WS1)', () => {
   const DECLARED = '/workspace/other-practice';
-  const DECLARED_SUBSTRATE = '/workspace/other-practice/.agent/state/collaboration';
+  // Derived with the same platform join the resolver uses, so the fake
+  // recognises the probed path on every host (a hard-coded POSIX join fails
+  // the probe on Windows, where join produces backslashes).
+  const DECLARED_SUBSTRATE = join(DECLARED, '.agent/state/collaboration');
 
   // Pure existence fake: only the listed directories exist.
   const dirsPresent =

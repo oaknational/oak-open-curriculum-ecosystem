@@ -19,7 +19,7 @@
  * canonical filename (`SKILL-CANONICAL.md`) — a stub pointing anywhere else is
  * a foreign document we never wrote. One NAMED BOUND is
  * inherent to content-based membership: a byte-faithful copy of one of
- * our stubs (e.g. an Oak-published projection re-installed here by the
+ * our stubs (e.g. an upstream-published projection re-installed here by the
  * external machinery) is indistinguishable from ours — the marker records
  * a derivation, not an identity. Closing that would need an identity
  * discriminator and is a recorded design decision, not this module's job.

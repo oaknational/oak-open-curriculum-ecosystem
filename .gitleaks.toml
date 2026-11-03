@@ -112,6 +112,17 @@ regexTarget = "line"
 regexes = ['''^\s*const OPENAI_APPS_CHALLENGE_TOKEN = '[A-Za-z0-9_-]{20,64}';\s*$''']
 
 
+# The imported tuition record names the MCP/Marketplace product surface in
+# ordinary prose after "terminal access,". The generic API-key rule mistakes
+# that product label for a credential. Preserve the source bytes and constrain
+# the correction to this exact non-secret token in this exact imported file.
+[[allowlists]]
+description = "Tuition research names MCP/Marketplace as a product surface"
+condition = "AND"
+paths = ['''^\.agent/research/public-service-ai-tuition/08-oce-audit-and-engineering-findings\.md$''']
+regexTarget = "secret"
+regexes = ['''^MCP/Marketplace$''']
+
 [[rules]]
 id = "oak-api-key-uuid"
 description = "Detect UUID-style OAK_API_KEY assignments"

@@ -8,8 +8,10 @@
 import assert from 'node:assert/strict';
 import { spawn, spawnSync, type ChildProcess, type SpawnSyncReturns } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
+import { availableParallelism, loadavg } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { describeSpawnFailure } from '../src/core/spawn-failure';
 
 import {
   AGENT_NAME,
@@ -23,6 +25,23 @@ import {
 
 const AGENT_TOOLS_ROOT = fileURLToPath(new URL('..', import.meta.url));
 const BIN = join(AGENT_TOOLS_ROOT, 'dist', 'src', 'bin', 'agent-tools.js');
+
+/**
+ * A hang backstop, not a speed assertion: above the watcher's own worst
+ * self-exit (two 60 s step timeouts), so only a real hang trips it. The
+ * bound never reads the host; the failure message reports host load only
+ * as a diagnostic.
+ */
+const WATCHER_HANG_BACKSTOP_MS = 180_000;
+
+function hostDetail(): string {
+  const load = loadavg()[0]?.toFixed(2) ?? 'unknown';
+  return `(host one-minute load ${load}, ${String(availableParallelism())} cores)`;
+}
+
+function backstopMessage(what: string): string {
+  return `${what} within the ${String(WATCHER_HANG_BACKSTOP_MS)} ms hang backstop ${hostDetail()}`;
+}
 
 interface WatcherHarness {
   readonly supervisor: ChildProcess;
@@ -43,8 +62,8 @@ function waitForExit(child: ChildProcess, label: string): Promise<number | null>
   }
   return new Promise((resolve, reject) => {
     const timeout = setTimeout(() => {
-      reject(new Error(`${label} did not exit within 10 seconds`));
-    }, 10_000);
+      reject(new Error(backstopMessage(`${label} did not exit`)));
+    }, WATCHER_HANG_BACKSTOP_MS);
     child.once('close', (code) => {
       clearTimeout(timeout);
       resolve(code);
@@ -91,7 +110,7 @@ function startWatcher(fixture: Fixture, env: NodeJS.ProcessEnv): WatcherHarness 
 }
 
 async function waitForWatcherProof(harness: WatcherHarness, fixture: Fixture): Promise<void> {
-  const deadline = Date.now() + 10_000;
+  const deadline = Date.now() + WATCHER_HANG_BACKSTOP_MS;
   while (Date.now() < deadline) {
     if (
       harness.stdout().includes(EVENT_TITLE) &&
@@ -107,7 +126,9 @@ async function waitForWatcherProof(harness: WatcherHarness, fixture: Fixture): P
     );
     await delay(25);
   }
-  assert.fail(`watcher proof timed out\n${harness.stdout()}\n${harness.stderr()}`);
+  assert.fail(
+    `${backstopMessage('watcher proof did not arrive')}\n${harness.stdout()}\n${harness.stderr()}`,
+  );
 }
 
 function runCli(
@@ -115,11 +136,20 @@ function runCli(
   env: NodeJS.ProcessEnv,
   args: readonly string[],
 ): SpawnSyncReturns<string> {
-  return spawnSync(process.execPath, [BIN, 'collaboration-state', '--', ...args], {
+  const result = spawnSync(process.execPath, [BIN, 'collaboration-state', '--', ...args], {
     cwd: fixture.linked,
     env,
     encoding: 'utf8',
+    timeout: WATCHER_HANG_BACKSTOP_MS,
   });
+  if (result.error !== undefined) {
+    const what = `collaboration-state ${args.slice(0, 2).join(' ')}`;
+    const error: { code?: string | undefined; message: string } = result.error;
+    assert.fail(
+      `${describeSpawnFailure(what, error, WATCHER_HANG_BACKSTOP_MS)} ${hostDetail()}\n${result.stderr}`,
+    );
+  }
+  return result;
 }
 
 function provePrimaryState(fixture: Fixture): void {

@@ -24,10 +24,13 @@ describe('findAppRoot', () => {
   });
 
   it('returns undefined when no package.json is found', () => {
-    const noMarker = mkdtempSync(join(tmpdir(), 'no-pkg-'));
-    cleanup = () => rmSync(noMarker, { recursive: true, force: true });
-
-    const result = findAppRoot(noMarker);
+    // The walk above any real fixture is uncontrollable by construction (a
+    // stray package.json anywhere in the temp directory's real ancestry —
+    // common under a Windows user profile — would be found), so the
+    // not-found walk is proven through the existence seam over a literal
+    // start directory: the contract is that the walk terminates at the
+    // filesystem root and reports undefined.
+    const result = findAppRoot(join(tmpdir(), 'no-pkg-anywhere'), () => false);
 
     expect(result).toBeUndefined();
   });

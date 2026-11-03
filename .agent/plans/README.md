@@ -3,8 +3,11 @@
 The repository's home for **intent and mechanism**: why each piece of
 work exists, how it is done, what proves it done, and who ratified it.
 Everything that moves with the schedule lives in Linear and is pointed
-at, never mirrored — the full contract is the
-[plan-node schema](plan-node-schema.md).
+at, never mirrored; the state of any instance of the code — a deployment,
+a dashboard, a console — is that system's own record, never this corpus's,
+which records the desired outcome and its owner-held proof (the
+repository attests completion only up to its own boundary) — the full
+contract is the [plan-node schema](plan-node-schema.md).
 
 Three plan types: **strategic** (the outcome and the bet — long-lived,
 few), **delivery** (one step of a lane — short-lived, archived at
@@ -20,12 +23,19 @@ complete owner-ratification stamp (`ratified_by` + `ratified_date` +
 `ratified_where`). Executed is not ratified; the stamp is the
 difference, and the estate validator enforces it.
 
-_Reading path (2026-09-03, MCP-673): start at the strategy index
-([`docs/strategy/README.md`](../../docs/strategy/README.md)) for the
-repository's strategic commitments. The extraction of the MCP app
-product into its own public repository is designed by the delivery plan
-`oak-open-curriculum-mcp-extraction`, which serves the strategic node
-`toolkit-re-architecture`. This index is the mechanism's home._
+This corpus is the work surface (owner ruling 2026-09-08, verbatim: "we
+have an entire, sophisticated, in-repo planning system with multiple
+layers of discoverability!"): a lane pointer a seat would leave for a
+successor becomes a delivery node or a unit inside an existing node here,
+and an owner decision becomes a gate row here — never a board in prose, a
+register file, or a queue surface such as repository issues.
+
+_Current OCE read path (10 October 2026): start with the
+[programme route](../reports/repo-architecture/oce-rearchitecting/README.md), then
+the linked permanent architecture and native bounded nodes. The older
+`toolkit-re-architecture` and `oak-open-curriculum-mcp-extraction` records are
+superseded history. The strategy index remains the home of wider commitments;
+new detailed OCE nodes remain sketches until properly ratified._
 
 ## Layout
 

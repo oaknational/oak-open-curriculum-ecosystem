@@ -356,3 +356,9 @@ INDEXING.md pointer discipline may suffice).
   `semantic-search/future/02-schema-authority-and-codegen/bulk-schema-driven-code-generation.md`
   (now known to describe a schema that was never true of the payload — period piece);
   ADR-093; ADR-067 (derivation claim does not hold); ADR-109; ADR-130; PDR-126.
+
+_Record locations, 2026-09-06: of the thread records named above by their paths of the
+time, those the 2026-09-06 consolidation paused moved under
+`.agent/memory/operational/threads/paused/` (the threads README's lifecycle layout; the
+paused index in `repo-continuity.md` names each); a record still active keeps its root path
+under `.agent/memory/operational/threads/`; the paths here are the historical ones._

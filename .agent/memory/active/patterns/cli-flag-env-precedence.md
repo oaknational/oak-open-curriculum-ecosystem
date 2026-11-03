@@ -3,6 +3,7 @@ name: "CLI Flag Over Env Precedence"
 polarity: pattern
 use_this_when: "A CLI command accepts both explicit flags and environment defaults for the same setting, and hidden defaults previously caused ambiguous behaviour."
 category: code
+layer: general
 proven_in: "apps/oak-search-cli/src/cli/shared/resolve-bulk-dir.ts"
 proven_date: 2026-03-11
 barrier:

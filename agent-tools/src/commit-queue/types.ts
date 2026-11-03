@@ -9,7 +9,9 @@ import { type ACTIVE_CLAIMS_SCHEMA_VERSION } from '../collaboration-state/types.
 
 const ACTIVE_COMMIT_QUEUE_PHASES = ['queued', 'staging', 'pre_commit'] as const;
 const COMMIT_QUEUE_PHASES = [...ACTIVE_COMMIT_QUEUE_PHASES, 'abandoned'] as const;
-const COMMIT_QUEUE_ENTRY_STATUSES = ['active', 'expired', 'abandoned'] as const;
+// No `expired` status: the per-intent store reads a TTL-expired file as
+// absent (QUEUE-LOCAL, 2026-08-17), so no read view can ever classify one.
+const COMMIT_QUEUE_ENTRY_STATUSES = ['active', 'abandoned'] as const;
 
 type ActiveCommitQueuePhase = (typeof ACTIVE_COMMIT_QUEUE_PHASES)[number];
 export type CommitQueuePhase = (typeof COMMIT_QUEUE_PHASES)[number];
@@ -41,9 +43,15 @@ interface CommitQueueClaimArea extends JsonObject {
 }
 
 /**
- * Advisory queue entry describing one intended commit bundle.
+ * An advisory queue entry before the queue's order key is assigned.
+ *
+ * `queued_seq` cannot be known outside the claims-file transaction lock —
+ * it is derived from the live queue — so `createIntent` builds this draft
+ * at the CLI boundary and `enqueueCommitIntent` completes it inside the
+ * transform. Mutually assignable with
+ * `CollaborationCommitQueueEntryDraft`, the store's half of the same split.
  */
-export interface CommitIntent extends JsonObject {
+export interface CommitIntentDraft extends JsonObject {
   readonly intent_id: string;
   readonly claim_id: string;
   /**
@@ -76,23 +84,43 @@ export interface CommitIntent extends JsonObject {
 }
 
 /**
+ * Advisory queue entry describing one intended commit bundle, order key
+ * included. See `CollaborationCommitQueueEntry.queued_seq` for what that
+ * key means and why the queue cannot order on `queued_at`; the two types
+ * must stay mutually assignable (`registry.ts` spreads store entries here).
+ */
+export interface CommitIntent extends CommitIntentDraft {
+  readonly queued_seq: number;
+}
+
+/**
  * Active claim shape required by the queue helper.
  */
 export interface CommitQueueClaim extends JsonObject {
   readonly claim_id: string;
   readonly agent_id?: CommitQueueClaimAgentId;
   readonly areas?: readonly CommitQueueClaimArea[];
-  readonly intent_to_commit?: string;
 }
 
 /**
- * Collaboration registry subset required by the queue helper. The version
- * field is pinned to the same constant as the full registry type.
+ * The claims FILE's shape as the queue helper reads it (claims only since
+ * registry schema 1.4.0). The version field is pinned to the same constant
+ * as the full registry type.
  */
-export interface CommitQueueRegistry extends JsonObject {
+export interface CommitQueueClaimsFile extends JsonObject {
   readonly schema_version: typeof ACTIVE_CLAIMS_SCHEMA_VERSION;
-  readonly commit_queue: readonly CommitIntent[];
   readonly claims: readonly CommitQueueClaim[];
+}
+
+/**
+ * The composed in-memory registry the queue commands operate on: the claims
+ * file plus the live entries of the machine-local per-intent store
+ * (`.agent/state/collaboration/commit-queue/<intent-id>.json`). Only
+ * `registry.ts` composes and decomposes this shape; `commit_queue` never
+ * serialises back into the claims file.
+ */
+export interface CommitQueueRegistry extends CommitQueueClaimsFile {
+  readonly commit_queue: readonly CommitIntent[];
 }
 
 /**

@@ -26,8 +26,8 @@ by that gate regardless of this aggregate.
 
 ## Source and provenance
 
-- Primary source: the WS2 corpus survey
-  [`2026-06-12-ws2-corpus-survey.md`](../reports/agentic-engineering/2026-06-12-ws2-corpus-survey.md),
+- Primary source: the WS2 corpus survey (an OCE report of 2026-06-12, in that
+  estate's `.agent/reports/agentic-engineering/`),
   §"Liveness substrate statistics", §"Convention-emergence timeline", and the
   cross-section figures (first-hand verified during WS2).
 - Volume figures refreshed first-hand 2026-06-14 by `jq` over the live corpus
@@ -82,6 +82,41 @@ by that gate regardless of this aggregate.
   and **titled** (2,577) populations differ.
 - Title-genre dialect: one agent (Ferny Spreading Blossom, 25 events) used their
   own name as the title prefix.
+
+## Window 2026-08-14 → 2026-09-25 (first-hand recount, 2026-09-25)
+
+Recounted at the 2026-09-25 dedicated consolidation over the live corpus before the
+heartbeat archive move of that pass (`jq` over `tags`, per-seat inter-event deltas in
+Python; the raw series was not kept).
+
+| Figure | 2026-09-25 |
+| --- | ---: |
+| Events in the stream and the archive together (2026-08-14T06:38:22Z → 2026-09-25T11:17:35Z) | 4,844 |
+| Heartbeat-tagged events | 3,559 |
+| Non-heartbeat events | 1,285 |
+| Seats emitting tagged heartbeats | 25 |
+
+- One window and one population: the four figures above come from one count over the
+  stream and the archive together, heartbeat meaning the tag, recomputed 2026-09-25 16:1xZ
+  after a fold review found the earlier row's parts not summing to its total. The earlier
+  row counted the live stream alone at 11:25Z, a snapshot the harness's 48-hour heartbeat
+  archiving and the day's sweep have since moved, so it cannot be re-taken; the consolidation
+  pass's 1,266 non-heartbeat corpus was that live selection at 11:17Z. The share is higher than
+  the live-only reading because archived heartbeats are in the population.
+- **Tagged share ≈ 73 %** of the stream and the archive together (3,559 / 4,844), up from 47 % at the
+  2026-06-14 refresh: the multi-seat days of 2026-09-06 to 10 and 2026-09-24 each ran
+  four to eight seats at once.
+- **Median inter-event delta 241 to 244 s for thirteen of the fifteen seats** (the PDR-078
+  4-minute contract), with p90 at 242 to 253 s. Two seats differ: Luna stirs Radiance
+  (01a0d3, a Codex seat) at a median of 404 s and p90 of 558 s over 86 events; Sandpiper
+  weaves Updraft (a96287) at 212 s over five events.
+- **Each seat's largest gap is a single interval**, from 4 minutes (Blazar lifts Corona,
+  Zephyr guards Leeward, Cricket weaves Burrow) to 42.6 hours (Altair spins Umbra); the
+  seats' own records name pauses and compactions in those spans, which this recount did
+  not verify gap by gap.
+- Longest-running seats by span: Altair spins Umbra 62.5 h (282 events), Juno seeks
+  Apogee and Flounder turns Estuary 38.6 h (300 and 227), Finch binds Sundog 22.8 h (264),
+  Swallow holds Drift 21.7 h (71, across two rests), Marten mends Shadow 20.9 h (319).
 
 ## What this artefact licenses — and what it does NOT preserve
 

@@ -25,6 +25,9 @@ export interface ParsedJsonText {
   readonly findings: readonly SubstrateFinding[];
 }
 
+/** The one capability of an Ajv instance that validation uses: a compiled schema by its id. */
+export type SchemaLookup = Pick<Ajv, 'getSchema'>;
+
 export async function collaborationAjv(repoRoot: string): Promise<Ajv> {
   const ajv = new Ajv({ allErrors: true, strict: false, validateFormats: false });
   for (const path of [
@@ -52,7 +55,7 @@ export function parseJsonText(surface: string, path: string, text: string): Pars
 }
 
 export function validateWithAjv(
-  ajv: Ajv,
+  ajv: SchemaLookup,
   schemaId: string,
   surface: string,
   path: string,

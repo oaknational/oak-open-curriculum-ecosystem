@@ -87,7 +87,7 @@ describe('generated toolMcpFlatInputSchema .meta() round-trip', () => {
     // a passing state.
     expect(Object.keys(expected).length).toBeGreaterThan(0);
 
-    const actual = examplesByField(z.toJSONSchema(toolMcpFlatInputSchema));
+    const actual = examplesByField(z.toJSONSchema(toolMcpFlatInputSchema, { io: 'input' }));
     expect(actual).toEqual(expected);
   });
 });

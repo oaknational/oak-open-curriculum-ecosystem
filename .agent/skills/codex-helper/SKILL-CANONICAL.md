@@ -18,9 +18,9 @@ and ephemeral mode.
 
 ## When to Use Each Template
 
-| Template | Use when |
-| --- | --- |
-| **Brief / one-shot** | Task is self-contained, needs no repo memory, completes in under ~60 s |
+| Template             | Use when                                                                                                |
+| -------------------- | ------------------------------------------------------------------------------------------------------- |
+| **Brief / one-shot** | Task is self-contained, needs no repo memory, completes in under ~60 s                                  |
 | **Grounded session** | Task touches repo state, shared files, or active claims; grounding catches collisions before edits land |
 
 ## Brief Session Template (no grounding)
@@ -160,11 +160,11 @@ cat tmp/result.txt
 
 ## Choosing a Sandbox Mode
 
-| Mode | Meaning | Use for |
-| --- | --- | --- |
-| `read-only` | Agent can read but not write | Analysis, review, Q&A — **default** |
-| `workspace-write` | Agent can write within the working root | Editing tasks |
-| `danger-full-access` | No sandbox, no approvals | Only in externally sandboxed CI; requires owner authorisation |
+| Mode                 | Meaning                                 | Use for                                                       |
+| -------------------- | --------------------------------------- | ------------------------------------------------------------- |
+| `read-only`          | Agent can read but not write            | Analysis, review, Q&A — **default**                           |
+| `workspace-write`    | Agent can write within the working root | Editing tasks                                                 |
+| `danger-full-access` | No sandbox, no approvals                | Only in externally sandboxed CI; requires owner authorisation |
 
 Always start at `read-only`. Promote to `workspace-write` only when the task must
 write files. `danger-full-access` requires explicit owner authorisation per invocation.
@@ -172,11 +172,13 @@ write files. `danger-full-access` requires explicit owner authorisation per invo
 ## agent-tools:codex-exec CLI
 
 `pnpm agent-tools:codex-exec` exposes `last-message`, which extracts the
-final assistant text from a JSONL stream.
+final assistant text from a JSONL stream, and `command-records`, which
+summarises what a seat's rollout says the harness ran (OCE's ADR-180 §2).
 
 A richer wrapper (a `run` subcommand with built-in timeout, sandbox flag
-forwarding, and streaming progress) is under design in the
-[codex-exec CLI deep-dive strategic plan](../../plans-backlog-2026-07/agentic-engineering-enhancements/future/codex-exec-cli-deep-dive.plan.md).
+forwarding, and streaming progress) is under design in OCE's codex-exec CLI
+deep-dive strategic plan (a node of its 2026-07 plan backlog, agentic-engineering
+enhancements, future).
 Until that plan promotes, use raw `codex exec` for invocation and pipe the
 output through `last-message` for extraction.
 

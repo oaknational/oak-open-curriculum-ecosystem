@@ -1,3 +1,19 @@
+---
+description: Specialist for designing and reviewing ground truth queries for the Oak semantic search service. Use when creating new ground truths, reviewing existing queries for phrasing or category accuracy, or exploring bulk curriculum data to identify candidate lessons. Applies the known-answer-first methodology and teacher-perspective query design rules.
+platforms:
+  - cursor
+  - claude
+  - codex
+claude:
+  color: cyan
+  note: Design, review, and report only. Do not modify files.
+cursor:
+  description: Specialist for designing ground truth queries for the Oak semantic search service. Use when creating new ground truths, redesigning existing queries, reviewing existing queries, or exploring curriculum content for GT development. Understands teacher search behaviour and known-answer-first methodology.
+  note: Work in design/review mode unless explicitly asked to implement code changes.
+codex:
+  description: Ground truth query designer for semantic search evaluation.
+---
+
 ## Delegation Triggers
 
 Invoke this agent whenever work touches the Oak semantic search ground truth dataset — designing new queries, reviewing existing ones for phrasing or category accuracy, auditing ground truth coverage for a subject-phase, or exploring bulk curriculum data to identify candidate lessons. It is the only agent that understands the known-answer-first methodology and the teacher-perspective query design rules.

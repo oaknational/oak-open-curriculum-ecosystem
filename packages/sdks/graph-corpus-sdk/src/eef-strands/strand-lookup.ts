@@ -152,3 +152,22 @@ export function strandById<const Id extends EefStrandId>(id: Id): EefStrandById[
   }
   return found;
 }
+
+/**
+ * The string keys of every member of a union of object types. `keyof` over a
+ * union yields only the keys every member shares, so a union of strand shapes
+ * loses every optional section under plain `keyof`; this distributes first.
+ */
+export type KeysOfUnion<T> = T extends unknown ? Extract<keyof T, string> : never;
+
+/**
+ * The strand union members that carry a given key, and so the exact type of
+ * that section across the strands that have it. `Extract` selects exactly the
+ * members with the key; the constraint rejects a key no strand carries rather
+ * than resolving it silently to `never`. A union `K` selects the members that
+ * carry every key in it, not any.
+ */
+export type StrandCarrying<K extends KeysOfUnion<EefStrand>> = Extract<
+  EefStrand,
+  Record<K, unknown>
+>;

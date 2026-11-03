@@ -16,7 +16,6 @@ import {
 import {
   type CollaborationClaim,
   type CollaborationRegistry,
-  uuidV5Schema,
 } from '../../src/collaboration-state/types';
 
 const NOW = '2026-06-12T12:00:00Z';
@@ -44,7 +43,7 @@ function claim(
 }
 
 function registry(claims: readonly CollaborationClaim[]): CollaborationRegistry {
-  return { schema_version: '1.3.0', commit_queue: [], claims };
+  return { schema_version: '1.4.0', claims };
 }
 
 function arc(name: string, mtimeIso: string): ExperimentsEntry {
@@ -218,37 +217,13 @@ describe('resolveSessionShape — team shape', () => {
     expect(shape.teamShape).toBe('solo');
   });
 
-  it('resolves the same shape regardless of commit_queue content', () => {
-    const queued: CollaborationRegistry = {
-      schema_version: '1.3.0',
-      commit_queue: [
-        {
-          intent_id: '99999999-9999-4999-8999-999999999999',
-          claim_id: '11111111-1111-4111-8111-111111111111',
-          agent_id: {
-            agent_name: 'Fern lifts Mulch',
-            platform: 'claude-code',
-            model: 'Fable 5',
-            session_id_prefix: 'fernli',
-            id: uuidV5Schema.parse('7d9f5a3c-2b41-5e86-9c07-1f4a8d62b395'),
-          },
-          files: ['agent-tools/src/claude/statusline-render.ts'],
-          commit_subject: 'feat: fixture queue entry',
-          queued_at: FRESH,
-          updated_at: FRESH,
-          expires_at: '2026-06-12T12:30:00Z',
-          phase: 'queued',
-        },
-      ],
-      claims: [
-        claim({ agent_name: 'Monsoon guards Cirrus' }),
-        claim({ agent_name: 'Fern lifts Mulch' }),
-      ],
-    };
-
+  it('resolves peer from two fresh claims (queue state lives outside the claims file since 1.4.0)', () => {
     const shape = resolveSessionShape({
       ownAgentName: 'Monsoon guards Cirrus',
-      registry: queued,
+      registry: registry([
+        claim({ agent_name: 'Monsoon guards Cirrus' }),
+        claim({ agent_name: 'Fern lifts Mulch' }),
+      ]),
       experimentsListing: [],
       nowIso: NOW,
     });

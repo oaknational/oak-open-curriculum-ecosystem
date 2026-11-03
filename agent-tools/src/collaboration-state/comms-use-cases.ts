@@ -1,3 +1,5 @@
+import { dirname, join } from 'node:path';
+
 import { formatAgent, sameAgentRoutingKey } from './active-agent-routing.js';
 import { renderSharedCommsLog } from './comms.js';
 import {
@@ -67,16 +69,37 @@ export function createDirectedCommsMessage(input: {
   return input.tags !== undefined && input.tags.length > 0 ? { ...base, tags: input.tags } : base;
 }
 
+/** The shared comms log's file name; the log lives beside the comms directory it renders. */
+const SHARED_COMMS_LOG_FILE_NAME = 'shared-comms-log.md';
+
+/**
+ * The shared comms log's path for a comms directory: the sibling file the
+ * substrate manifest declares (`collaboration-shared-comms-log`), so every
+ * writer and the explicit render agree on one target.
+ */
+export function sharedCommsLogPathFor(commsDir: string): string {
+  return join(dirname(commsDir), SHARED_COMMS_LOG_FILE_NAME);
+}
+
+/**
+ * Write one comms event, read the store back to confirm it landed, then
+ * render the shared log from that same read through `output`. The render is
+ * part of the write, so the generated log can never fall behind the events
+ * it is a view of; the substrate check's drift finding is then only ever a
+ * hand edit of the log.
+ */
 export async function writeCommsEventWithReadback(input: {
   readonly event: CommsEvent;
   readonly nowIso: string;
   readonly store: CommsEventStore;
+  readonly output: CommsTextOutput;
 }): Promise<CommsEvent> {
   await input.store.write(input.event, input.nowIso);
   const written = await input.store.read();
   if (!written.some((event) => event.event_id === input.event.event_id)) {
     throw new Error(`comms event readback failed for ${input.event.event_id}`);
   }
+  await input.output.writeText(renderSharedCommsLog({ events: written }));
 
   return input.event;
 }

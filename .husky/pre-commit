@@ -1,102 +1,41 @@
 #!/usr/bin/env sh
 
-# Refuse plain and --amend commits on main; mechanics and residual-vector
-# notes live in the shared guard (never-commit-to-main rule). git invokes
-# pre-commit only for `git commit` — merge and sequencer paths are guarded
-# by pre-merge-commit and prepare-commit-msg.
+# Light pre-commit (the owner's ruling of 2026-09-12, the TypeScript family's
+# convention by the owner's card answer of 2026-10-04: light commit, full
+# push). The branch guard refuses plain and --amend commits on a default
+# branch; merge and sequencer paths are guarded by pre-merge-commit and
+# prepare-commit-msg. Mechanics live in the shared guard (never-commit-to-main
+# rule). The agent-tools aliases carry --fail-if-no-match: pnpm exits 0
+# without running anything when a filter matches no project.
 GUARD_BRANCH=""
 GUARD_HINT="Move to a branch first: git switch -c <branch> (staged changes travel with you)."
 . .husky/refuse-commit-on-main.sh
 
-# Disable turbo TUI
 export TURBO_UI=0
-
-echo "🔍 Running pre-commit checks..."
+. .husky/turbo-remote-cache-notice.sh
 
 echo "📝 Checking formatting on staged files..."
 if ! pnpm agent-tools:repo-check prettier-staged; then
-  echo "❌ Formatting issues found!"
-  echo "💡 Run 'pnpm format:root' to fix formatting issues, then stage the changes"
+  echo "❌ Formatting issues found! Run 'pnpm format:root', then stage the changes."
   exit 1
 fi
 
 echo "🔍 Running markdownlint on staged Markdown files..."
 if ! pnpm agent-tools:repo-check markdownlint-staged; then
-  echo "❌ Markdownlint issues found!"
-  echo "💡 Run 'pnpm markdownlint:root' to fix markdown issues, then stage the changes"
+  echo "❌ Markdownlint issues found! Run 'pnpm markdownlint:root', then stage the changes."
   exit 1
 fi
 
-echo "🧭 Running workspace-owned repo validators..."
-if ! pnpm repo-validators:check; then
-  echo "❌ Repo validator checks failed!"
-  exit 1
-fi
-
-echo "🐚 Linting shell scripts..."
-if ! pnpm lint:shell; then
-  echo "❌ Shell lint failed!"
-  exit 1
-fi
-
-echo "🧪 Running build, type-check, lint, and unit tests..."
-# Gate output is teed to a gitignored log so a one-off failure (e.g. a
-# flake) stays characterisable after a re-run instead of evaporating
-# with the terminal scroll. The status protocol is FAIL-CLOSED and
-# set-e-safe: a pipeline reports only tee's exit, the hook runs under
-# set -e (a bare failing command aborts the group before any capture),
-# and a missing status file must read as failure - so the status is
-# pre-truncated, written via && / || (which set -e tolerates), and an
-# absent or empty read defaults to failure.
-mkdir -p .turbo
-: > .turbo/last-gate.status
-# git exports repo-discovery env to hooks: GIT_DIR (in a linked worktree it
-# points at .git/worktrees/<name>) and GIT_INDEX_FILE — which during a real
-# commit is a TRANSIENT LOCK FILE (index.lock; next-index-<pid>.lock for
-# --only commits) that git renames or deletes as the commit completes. A
-# build tool's children must not inherit repo-discovery env pointing at
-# another process's transient state: turbo 2.10.6 died on GIT_DIR here
-# ("I/O error: Is a directory", os error 21 — intermittent and state-
-# dependent; dated account on MCP-414), and any turbo-spawned child reading
-# the inherited GIT_INDEX_FILE races the commit's lock-file lifecycle.
-# Unset the trio for the turbo child ONLY — turbo re-derives the repo from
-# cwd, correct in every checkout shape. The narrow scope is LOAD-BEARING:
-# the staged-file gates above (prettier-staged, markdownlint-staged) read
-# the exported GIT_INDEX_FILE to see the staged set, so hoisting this
-# unset to the top of the hook would empty their file lists and fail open.
-# GIT_WORK_TREE rides along: set without GIT_DIR it would break discovery.
-# No gate is narrowed: the same tasks run in the same order.
-{
-  env -u GIT_DIR -u GIT_INDEX_FILE -u GIT_WORK_TREE \
-    pnpm turbo run --continue --output-logs=errors-only build type-check lint test \
-    && echo 0 > .turbo/last-gate.status \
-    || echo 1 > .turbo/last-gate.status
-} 2>&1 | tee .turbo/last-gate.log
-gate_status="$(cat .turbo/last-gate.status 2>/dev/null || echo 1)"
-if [ "$gate_status" != "0" ]; then
-  echo "❌ Build, type-check, lint, or unit tests failed! (full output: .turbo/last-gate.log)"
-  exit 1
-fi
-
-echo "🧱 Checking dependency boundaries (depcruise)..."
-# Runs AFTER the Turbo build for the same reason as knip below: depcruise
-# resolves package exports through built dist outputs, so a fresh checkout
-# would fail or cruise an incomplete graph before the build has run.
-if ! pnpm depcruise; then
-  echo "❌ Dependency-boundary violations found!"
-  exit 1
-fi
-
-echo "🔗 Checking for unused code (knip)..."
-# knip:gate (repo-check knip-gate) also fails when knip exits 0 after a
-# swallowed config-load crash — a crashed analysis can never read as a pass (F-147).
-# Runs AFTER the Turbo build: knip loads packages whose exports resolve to
-# generated dist files, so a fresh checkout would fail closed here before
-# the build has run (CI restores build outputs before knip for the same reason).
-if ! pnpm knip:gate; then
-  echo "❌ Knip found unused code, or the knip analysis itself crashed!"
-  echo "💡 Remove the unused code, register intended entry points in knip.config.ts, or fix the crash above"
-  echo "   (a 'died without a verdict' line above is the crash class, not unused code — F-112 in the frictions register)"
+echo "🔍 Linting workspaces changed since HEAD..."
+# git exports GIT_DIR / GIT_INDEX_FILE (a transient lock file during a real
+# commit) to hooks; turbo's children must not inherit them. Unset for the
+# lint step only — the staged-file gates above need GIT_INDEX_FILE. The step
+# runs turbo lint with --filter="...[HEAD]" and skips the run when turbo plans
+# no task for that scope, so a commit that changes no workspace ends without
+# turbo's empty-run warning (repo-check-lint-changed.ts carries the reasoning).
+if ! env -u GIT_DIR -u GIT_INDEX_FILE -u GIT_WORK_TREE \
+  pnpm agent-tools:repo-check lint-changed; then
+  echo "❌ Lint failed!"
   exit 1
 fi
 

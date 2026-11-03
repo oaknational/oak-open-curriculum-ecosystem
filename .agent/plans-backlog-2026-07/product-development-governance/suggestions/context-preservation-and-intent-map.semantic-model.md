@@ -13,7 +13,7 @@ related:
   - service-authority-and-operating-contexts.semantic-model.md
   - ../vision-strategy-and-plan-estate.plan.md
   - ../../high-level-plan.md
-  - ../../../memory/operational/threads/strategy-and-plan-estate-holistic-review.next-session.md
+  - ../../../memory/operational/threads/paused/strategy-and-plan-estate-holistic-review.next-session.md
   - ../../../../VISION.md
   - ../../../../docs/strategy/
 source_threads:
@@ -406,7 +406,7 @@ Future agents should be able to recover the model by reading:
    service/agent operating-context model.
 5. `.agent/plans/context-preservation-and-intent-map.semantic-model.md` — this
    preservation map.
-6. `.agent/memory/operational/threads/strategy-and-plan-estate-holistic-review.next-session.md`
+6. `.agent/memory/operational/threads/paused/strategy-and-plan-estate-holistic-review.next-session.md`
    — current pickup surface, not scope authority.
 7. `docs/strategy/` once authored — strategy corpus and measures.
 8. `.agent/reports/archive/plan-estate-survey-2026-06-15/README.md` — dated

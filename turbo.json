@@ -2,7 +2,11 @@
   "$schema": "https://turborepo.com/schema.json",
   "ui": "tui",
   "remoteCache": {
-    "enabled": true
+    "enabled": true,
+    // The team that holds the cache: turbo's lowest-priority team source
+    // (TURBO_TEAM in the environment, a `turbo link` config and a Vercel
+    // build's own credentials all outrank it), so a clone needs no link.
+    "teamSlug": "engraph"
   },
   "globalPassThroughEnv": [
     "OAK_API_KEY",
@@ -31,7 +35,8 @@
     "SENTRY_TRACES_SAMPLE_RATE",
     "TEST_ERROR_SECRET",
     "VERCEL_GIT_REPO_OWNER",
-    "VERCEL_GIT_REPO_SLUG"
+    "VERCEL_GIT_REPO_SLUG",
+    "PRACTICE_GATE_SLOT_HELD"
   ],
   "globalDependencies": ["**/.env.*local", "tsconfig.base.json"],
   "tasks": {
@@ -79,8 +84,65 @@
         "!src/**/*.spec.ts"
       ]
     },
-    "@oaknational/oak-curriculum-mcp-streamable-http#build": {
+    "@oaknational/oak-curriculum-mcp-streamable-http#deploy-config-gate": {
+      // MCP-475: the deploy-config gate runs on EVERY build, including a
+      // same-commit redeploy that replays the cached build task — a cache hit
+      // would otherwise skip the one step that turns an invalid deploy
+      // environment red. Never cached, no outputs; the build task depends on
+      // it. The validated surface is passed THROUGH (visible under strict
+      // envMode, never hashed — pass-through does not enter the task hash);
+      // the gate's contract test holds this list in lockstep with the HTTP
+      // env schema (HTTP_ENV_KEYS), so a schema addition reddens here. It
+      // imports the server's runtime-config composition, so it runs after
+      // the workspace packages that composition imports are built.
       "dependsOn": ["^build"],
+      "cache": false,
+      "outputs": [],
+      "passThroughEnv": [
+        "ALLOWED_HOSTS",
+        "APP_VERSION_OVERRIDE",
+        "CANONICAL_HOST",
+        "CLERK_PUBLISHABLE_KEY",
+        "CLERK_SECRET_KEY",
+        "DANGEROUSLY_DISABLE_AUTH",
+        "ELASTICSEARCH_API_KEY",
+        "ELASTICSEARCH_URL",
+        "ENVIRONMENT_OVERRIDE",
+        "GIT_SHA_OVERRIDE",
+        "LOG_LEVEL",
+        "NODE_ENV",
+        "OAK_API_BASE_URL",
+        "OAK_API_KEY",
+        "OAK_CURRICULUM_MCP_USE_STUB_TOOLS",
+        "OBSERVABILITY_SINKS",
+        "PORT",
+        "POSTHOG_CAPTURE_MODE",
+        "POSTHOG_HOST",
+        "POSTHOG_PROJECT_API_KEY",
+        "POSTHOG_PSEUDONYM_ACTIVE_KEY_ID",
+        "POSTHOG_PSEUDONYM_KEYRING",
+        "REMOTE_MCP_MODE",
+        "SENTRY_DEBUG",
+        "SENTRY_DSN",
+        "SENTRY_ENABLE_LOGS",
+        "SENTRY_ENVIRONMENT_OVERRIDE",
+        "SENTRY_MODE",
+        "SENTRY_RELEASE_OVERRIDE",
+        "SENTRY_SEND_DEFAULT_PII",
+        "SENTRY_TRACES_SAMPLE_RATE",
+        "TEST_ERROR_SECRET",
+        "VERCEL",
+        "VERCEL_BRANCH_URL",
+        "VERCEL_ENV",
+        "VERCEL_GIT_COMMIT_REF",
+        "VERCEL_GIT_COMMIT_SHA",
+        "VERCEL_GIT_PREVIOUS_SHA",
+        "VERCEL_PROJECT_PRODUCTION_URL",
+        "VERCEL_URL"
+      ]
+    },
+    "@oaknational/oak-curriculum-mcp-streamable-http#build": {
+      "dependsOn": ["^build", "deploy-config-gate"],
       "cache": true,
       // Hash-bearing AND visible under strict envMode (APP_VERSION_OVERRIDE
       // is in no default passthrough). Same reasoning as sdk-codegen's env
@@ -403,7 +465,8 @@
         "$TURBO_DEFAULT$",
         "**/*.ts",
         "vitest.config.ts",
-        "$TURBO_ROOT$/runtime-only-scripts/**"
+        "$TURBO_ROOT$/runtime-only-scripts/**",
+        "$TURBO_ROOT$/.agent/hooks/policy.json"
       ]
     },
     "mutate": {
@@ -439,7 +502,21 @@
         "e2e-tests/**/*.ts",
         "vitest.e2e.config.ts",
         "$TURBO_ROOT$/.codex/hooks/practice-session-identity.mjs",
+        "$TURBO_ROOT$/AGENTS.md",
+        "$TURBO_ROOT$/.agent/hooks/policy.json",
+        "$TURBO_ROOT$/.agent/practice-core/protocol.json",
+        "$TURBO_ROOT$/.agent/practice-core/schemas/inter-practice-wire.schema.json",
+        "$TURBO_ROOT$/.agent/practice-core/schemas/operator-profile.schema.json",
+        "$TURBO_ROOT$/.agent/reports/typescript-estate-consolidation-review/detector-config.json",
+        "$TURBO_ROOT$/.agent/reports/typescript-estate-consolidation-review/detector-config.schema.json",
+        "$TURBO_ROOT$/.agent/state/collaboration/.gitignore",
+        "$TURBO_ROOT$/.gitignore",
+        "$TURBO_ROOT$/.claude/settings.json",
+        "$TURBO_ROOT$/.claude/hooks/_lib/log-hook-errors.sh",
+        "$TURBO_ROOT$/.claude/hooks/sonar-secrets/**",
+        "$TURBO_ROOT$/.husky/refuse-commit-on-main.sh",
         "$TURBO_ROOT$/package.json",
+        "$TURBO_ROOT$/pnpm-workspace.yaml",
         "$TURBO_ROOT$/runtime-only-scripts/**"
       ]
     },

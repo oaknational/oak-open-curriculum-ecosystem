@@ -320,7 +320,8 @@
             "append-only-structured-by-claim_id",
             "append-only-structured-by-entry_id",
             "append-only-structured-by-escalation_id",
-            "mostly-append-register"
+            "mostly-append-register",
+            "machine-local-ephemera"
           ]
         },
         "schema_or_parser": {

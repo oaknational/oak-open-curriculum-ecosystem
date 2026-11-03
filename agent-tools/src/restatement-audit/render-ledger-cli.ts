@@ -15,7 +15,6 @@
 
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { parseArgs } from 'node:util';
 
 import { err, ok, type Result } from '@oaknational/result';
 
@@ -23,6 +22,7 @@ import {
   resolveReadPathWithinRepo,
   resolveWriteTargetWithinRepo,
 } from '../core/flag-path-resolve.js';
+import { parseFlags } from '../core/parse-flags.js';
 import { resolveRepoRoot } from '../core/repo-root.js';
 import type { LedgerRow } from './ledger-rows.js';
 import { renderLedgerJson, renderLedgerMarkdown } from './render-ledger.js';
@@ -68,26 +68,21 @@ interface CliFlags {
 }
 
 function parseCliFlags(): Result<CliFlags, Error> {
-  try {
-    const { values } = parseArgs({
-      options: {
-        'meta-result': { type: 'string' },
-        'out-dir': { type: 'string' },
-      },
-    });
-    const metaResultPath = values['meta-result'];
-    const outDir = values['out-dir'];
-    if (metaResultPath === undefined || outDir === undefined) {
-      return err(new Error('Missing required flag(s): --meta-result and --out-dir are REQUIRED.'));
-    }
-    return ok({ metaResultPath, outDir });
-  } catch (cause) {
-    return err(
-      new Error(`Invalid flags: ${cause instanceof Error ? cause.message : String(cause)}`, {
-        cause,
-      }),
-    );
+  const flags = parseFlags({
+    options: {
+      'meta-result': { type: 'string' },
+      'out-dir': { type: 'string' },
+    },
+  });
+  if (!flags.ok) {
+    return flags;
   }
+  const metaResultPath = flags.value['meta-result'];
+  const outDir = flags.value['out-dir'];
+  if (metaResultPath === undefined || outDir === undefined) {
+    return err(new Error('Missing required flag(s): --meta-result and --out-dir are REQUIRED.'));
+  }
+  return ok({ metaResultPath, outDir });
 }
 
 /** Read + JSON-parse the checkpoint behind a controlled boundary — never a raw stack. */

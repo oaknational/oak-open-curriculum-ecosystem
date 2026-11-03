@@ -3,6 +3,7 @@ name: "SDK-Owned Retriever Delegation"
 polarity: pattern
 use_this_when: "An app-layer module builds an Elasticsearch retriever shape that the SDK already owns as a shared capability."
 category: architecture
+layer: contextual
 proven_in: "apps/oak-search-cli/src/lib/hybrid-search/rrf-query-builders.ts"
 proven_date: 2026-03-23
 barrier:

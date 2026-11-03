@@ -66,9 +66,9 @@ function applyValueOption(
     case '--es-url':
       result.esUrlOverride = nextArg;
       return true;
+    default:
+      return false;
   }
-
-  return false;
 }
 
 function parseArgs(args: string[]): CliArgs {

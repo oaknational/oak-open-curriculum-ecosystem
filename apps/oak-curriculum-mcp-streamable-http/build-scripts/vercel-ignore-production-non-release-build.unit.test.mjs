@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -33,7 +35,10 @@ import {
  */
 
 const REPOSITORY_ROOT = '/repo';
-const ROOT_PACKAGE_JSON_PATH = '/repo/package.json';
+// Host form of the root package.json path: the command resolves it against
+// the repository root, so the fake's guard must expect the host-joined form
+// (drive-prefixed backslash path on Windows, `/repo/package.json` on POSIX).
+const ROOT_PACKAGE_JSON_PATH = path.resolve(REPOSITORY_ROOT, 'package.json');
 const VALID_SHA = 'a'.repeat(40);
 const VALID_SHA_OTHER = 'b1'.repeat(20);
 
@@ -145,7 +150,7 @@ describe('validateGitSha — trust-boundary input gate', () => {
 });
 
 describe('scrubbedGitEnv — defence-in-depth env construction', () => {
-  it('does NOT include PATH — the production capabilities invoke git via the absolute GIT_BINARY path so PATH never participates in binary lookup (closes S4036)', () => {
+  it('does NOT include PATH — the production capabilities invoke git via a fixed absolute path so PATH never participates in binary lookup (closes S4036)', () => {
     const env = scrubbedGitEnv();
     expect(env.PATH).toBeUndefined();
   });

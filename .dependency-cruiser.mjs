@@ -201,6 +201,31 @@ export default {
       },
     },
     {
+      name: 'no-bootstrap-to-workspace-packages',
+      severity: 'error',
+      comment:
+        'The postinstall bootstrap (agent-tools/src/bootstrap/) runs before any workspace package ' +
+        'is built, and builds the packages agent-tools reaches. An import from a workspace package ' +
+        'there resolves to a dist that a cold install has not written yet, so every fresh checkout ' +
+        'fails its postinstall while warm local builds hide it. Keep local copies (ClosureResult ' +
+        'and recordEntries) instead; the module TSDoc in install-time-closure.ts says why. ' +
+        'Type-only imports count too, even through a local module: tsx erases them, but a ' +
+        'reachable rule matches on path alone, so a needed type is copied locally as well.',
+      from: {
+        path: '^agent-tools/src/bootstrap/',
+        // Test files are never loaded at install time.
+        pathNot: ['\\.(test|spec)\\.(ts|js)$'],
+      },
+      to: {
+        // Reachable, not only direct: a workspace import in a module the
+        // bootstrap imports (core/repo-root, core/terminal-output) fails the
+        // install the same way. `^@oaknational/` covers an unbuilt tree, where
+        // the specifier resolves to no path.
+        path: '^(?:packages|apps|demos)/|^@oaknational/',
+        reachable: true,
+      },
+    },
+    {
       name: 'no-import-from-agent-substrate',
       severity: 'error',
       comment:
@@ -308,7 +333,11 @@ export default {
       // `.agent/` is kept visible (not excluded) so the
       // `no-import-from-agent-substrate` forbidden rule can see an import edge
       // into the substrate, but its internals are never followed/analysed.
-      path: ['node_modules', 'dist', '.turbo', '\\.agent/'],
+      // `dist` and `.turbo` are anchored to a directory: bare, `dist` also
+      // matches a source file such as `dist-witnesses.ts`, and `.turbo` (its `.`
+      // any character) one such as `turbo-glob.ts`, whose imports would then go
+      // unchecked.
+      path: ['node_modules', '(^|/)dist/', '(^|/)\\.turbo/', '\\.agent/'],
     },
     exclude: {
       path: [

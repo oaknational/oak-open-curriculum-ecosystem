@@ -6,6 +6,9 @@ name: CI
 # check: it fails unless EVERY gate succeeded (so a failed, cancelled, or skipped
 # gate all block), so the branch ruleset and the Release workflow's
 # `workflow_run: [CI]` trigger need no change while every split job is blocking.
+# The one deliberate exception is the advisory `schema-drift` pair below: they
+# sit outside the fan-in by design (a stale schema cache is a signal, never a
+# gate — ADR-121 §Rationale for exclusions), so their rows never block merge.
 #
 # Caching strategy (avoids a cold-cache network stampede): the `install` job
 # performs the one network install on a changed lockfile and populates the pnpm
@@ -16,6 +19,8 @@ name: CI
 #   secret-scan        — no pnpm install (gitleaks binary); runs from t=0 in parallel
 #   install            — warms the pnpm store cache
 #     static-checks    — needs install (no build): format, markdown, shell, validators
+#     schema-drift     — needs install (no build): ADVISORY, outside the fan-in
+#       schema-drift-status — needs schema-drift: ADVISORY, publishes the commit status
 #     build            — needs install: warms the Turbo remote cache
 #       unit-tests     — needs build: type-check, lint, unit tests
 #       knip-depcruise — needs build: unused-code + dependency-direction checks
@@ -39,10 +44,12 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 # Permissions are declared per job (least privilege; Sonar githubactions:S8264):
-# the checkout jobs get `contents: read`, the aggregator needs none.
-env:
-  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-  TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+# the checkout jobs get `contents: read`, the aggregator needs none. The jobs
+# that run turbo also take `id-token: write`: the Turbo remote cache is reached
+# by GitHub OIDC (the setup-turborepo-remote-cache-action exchanges the job's
+# OIDC token for a short-lived Vercel token, sets TURBO_TOKEN and TURBO_TEAM for
+# the following steps, and revokes the token when the job ends), so no
+# long-lived TURBO_TOKEN secret is read here.
 
 jobs:
   # Branch + tag secret scan. Independent of Node/pnpm, so it runs from t=0 in
@@ -122,6 +129,11 @@ jobs:
         run: pnpm markdownlint-check:root
       - name: Lint runtime-only scripts
         run: pnpm lint:runtime-only
+      # The installer puts the pinned shellcheck in the checkout's .tools/bin,
+      # which the gate runs in preference to any shellcheck the image ships;
+      # the gate prints the version and the binary it ran.
+      - name: Install pinned shellcheck
+        run: ./.agent/setup/install-shellcheck.sh
       - name: Lint shell scripts
         run: pnpm lint:shell
       - name: Validate sub-agents
@@ -130,6 +142,8 @@ jobs:
         run: pnpm portability:check
       - name: Run workspace-owned repo validators
         run: pnpm repo-validators:check
+      - name: Docs validators
+        run: pnpm docs-validators:check
       # Both legs self-build agent-tools, so they run here without the
       # build job. Until AIP-165, skills:check ran only in `pnpm check`
       # and encoding:check only there and at pre-push — neither was
@@ -145,20 +159,136 @@ jobs:
     name: build
     permissions:
       contents: read
+      id-token: write
     needs: install
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/setup
+      - name: Turbo remote cache by OIDC
+        id: turbo-remote-cache
+        # The step runs only where an OIDC token can exist and a team is named:
+        # a fork's or Dependabot's pull request has no usable token, and a fork
+        # or a clone without the TURBO_TEAM repository variable names no team.
+        # It never fails the job either: the cache is a speed-up, not a gate,
+        # so a refused exchange shows as this step's own red mark and turbo
+        # runs on its local cache. The next step says so in either case.
+        if: vars.TURBO_TEAM != '' && github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+        continue-on-error: true
+        uses: vercel/setup-turborepo-remote-cache-action@49d7b1b46ba4c9251e1977986bfe18336feabc8f # v1.1.0
+        with:
+          team: ${{ vars.TURBO_TEAM }}
+      - name: Turbo remote cache not in use
+        if: steps.turbo-remote-cache.outcome != 'success'
+        run: >-
+          echo "::notice title=Turbo remote cache::Not in use for this run
+          (${{ steps.turbo-remote-cache.outcome }}); turbo uses its local cache.
+          To share a cache, configure an optional remote Turbo cache: a TURBO_TEAM
+          repository variable and a Vercel OIDC policy for this repository
+          (docs/engineering/build-system.md, Caching)."
       - name: Build (sdk-codegen + build)
         run: pnpm exec turbo run sdk-codegen build --continue --log-order=grouped --summarize
       - name: Report Turbo summary
         if: always()
         run: pnpm --filter @oaknational/agent-tools ci-turbo-report >> "$GITHUB_STEP_SUMMARY"
+
+  # Advisory schema-drift signal, split so the status-writing token never
+  # shares a job with PR-controlled code. `schema-drift` computes the verdict
+  # under `contents: read` — it needs no orchestrated build (tsx runs it from
+  # source over a committed file + a public fetch; the dist-only core packages
+  # it imports are built by the root postinstall bootstrap that the setup
+  # action's install runs) — and hands the description up as a job output.
+  # `schema-drift-status` publishes it under `statuses: write` with NO checkout
+  # and NO install, the shape preview-serves.yml uses for the same reason: a
+  # job that checks out and installs the PR head runs PR code (postinstall
+  # scripts, the script itself), and PR code beside a status token could mint
+  # an Actions-attributed status for a required context. The boundary this
+  # draws is against installed and fetched code, not against a collaborator
+  # with push rights: a `pull_request` run takes its workflow definition from
+  # the PR merge ref, so anyone who can push a branch here can already declare
+  # any permission the workflow can — that is the repository's trust model,
+  # not a gap this split can close. Both job rows appear in the PR checks
+  # list; the commit status carries the version verdict. Neither job is in
+  # the `run-quality-gates` fan-in: advisory by design.
+  schema-drift:
+    name: schema-drift
+    permissions:
+      contents: read
+    needs: install
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      description: ${{ steps.drift.outputs.description }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # No git write follows the checkout, so the read token has no reason
+          # to sit in .git/config beside PR-run code (release.yml does the same).
+          persist-credentials: false
+      - uses: ./.github/actions/setup
       - name: Check schema cache drift (advisory)
-        if: always()
-        run: pnpm --filter @oaknational/agent-tools ci-schema-drift-check
+        id: drift
+        # Stream contract: stdout is the step-summary markdown; the
+        # `::warning`/`::notice` workflow commands ride stderr so this
+        # redirect cannot swallow them; the status description rides
+        # $GITHUB_OUTPUT and is re-exported above as the job output.
+        run: pnpm --filter @oaknational/agent-tools ci-schema-drift-check >> "$GITHUB_STEP_SUMMARY"
+
+  schema-drift-status:
+    name: schema-drift-status
+    # `always()` first: a bare condition implies `success()` over `needs`, so a
+    # failed or cancelled compute job would skip this one and the "no verdict"
+    # fallback below could never publish — the missing-status class this signal
+    # exists to remove. Then the repository test: a PR whose head lives in
+    # another repository carries a read-only token regardless of the
+    # permissions block, so skipping structurally beats a misleading failure
+    # notice on every such run (the annotation and step summary still render
+    # there). The test is "same repository as this one", never
+    # `head.repo.fork`: when the repository running the workflow is itself a
+    # fork, every one of its own PRs reads `fork: true` and the status would
+    # never publish (observed on run 33619051950). Dependabot's own PRs live
+    # in this repository but run with a read-only token, so they skip too.
+    if: always() && github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+    permissions:
+      statuses: write
+    needs: schema-drift
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Publish informational commit status
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # PR events target the PR HEAD sha so the status lands on the PR's
+          # checks surface; pushes target the pushed sha. Note the compute
+          # job checks out the PR MERGE ref, so the verdict describes the
+          # merge result attributed to the head SHA — the more useful reading.
+          DRIFT_STATUS_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          DRIFT_DESCRIPTION: ${{ needs.schema-drift.outputs.description }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          publish() {
+            gh api "repos/${GITHUB_REPOSITORY}/statuses/${DRIFT_STATUS_SHA}" \
+              -f state=success \
+              -f context='schema-drift (advisory)' \
+              -f description="${DRIFT_DESCRIPTION:-Schema drift check produced no verdict}" \
+              -f target_url="${RUN_URL}" >/dev/null
+          }
+          for attempt in 1 2 3; do
+            if publish; then
+              exit 0
+            fi
+            if [ "${attempt}" -lt 3 ]; then
+              echo "::notice::Schema drift status publish attempt ${attempt} failed; retrying." >&2
+              sleep 5
+            fi
+          done
+          # A publish that never lands must be visible: this job is outside the
+          # required fan-in, so its red row surfaces the failure without
+          # blocking merge, where a green row would hide the absent status.
+          echo "::error::Schema drift status not published after 3 attempts." >&2
+          exit 1
 
   # Type-check, ESLint, and unit tests. Turbo restores the build outputs from
   # the remote cache warmed by `build`.
@@ -166,12 +296,34 @@ jobs:
     name: unit-tests
     permissions:
       contents: read
+      id-token: write
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/setup
+      - name: Turbo remote cache by OIDC
+        id: turbo-remote-cache
+        # The step runs only where an OIDC token can exist and a team is named:
+        # a fork's or Dependabot's pull request has no usable token, and a fork
+        # or a clone without the TURBO_TEAM repository variable names no team.
+        # It never fails the job either: the cache is a speed-up, not a gate,
+        # so a refused exchange shows as this step's own red mark and turbo
+        # runs on its local cache. The next step says so in either case.
+        if: vars.TURBO_TEAM != '' && github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+        continue-on-error: true
+        uses: vercel/setup-turborepo-remote-cache-action@49d7b1b46ba4c9251e1977986bfe18336feabc8f # v1.1.0
+        with:
+          team: ${{ vars.TURBO_TEAM }}
+      - name: Turbo remote cache not in use
+        if: steps.turbo-remote-cache.outcome != 'success'
+        run: >-
+          echo "::notice title=Turbo remote cache::Not in use for this run
+          (${{ steps.turbo-remote-cache.outcome }}); turbo uses its local cache.
+          To share a cache, configure an optional remote Turbo cache: a TURBO_TEAM
+          repository variable and a Vercel OIDC policy for this repository
+          (docs/engineering/build-system.md, Caching)."
       - name: Type-check, lint, unit tests
         run: pnpm exec turbo run type-check lint test --continue --log-order=grouped --summarize
       - name: Report Turbo summary
@@ -184,12 +336,34 @@ jobs:
     name: knip-depcruise
     permissions:
       contents: read
+      id-token: write
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/setup
+      - name: Turbo remote cache by OIDC
+        id: turbo-remote-cache
+        # The step runs only where an OIDC token can exist and a team is named:
+        # a fork's or Dependabot's pull request has no usable token, and a fork
+        # or a clone without the TURBO_TEAM repository variable names no team.
+        # It never fails the job either: the cache is a speed-up, not a gate,
+        # so a refused exchange shows as this step's own red mark and turbo
+        # runs on its local cache. The next step says so in either case.
+        if: vars.TURBO_TEAM != '' && github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+        continue-on-error: true
+        uses: vercel/setup-turborepo-remote-cache-action@49d7b1b46ba4c9251e1977986bfe18336feabc8f # v1.1.0
+        with:
+          team: ${{ vars.TURBO_TEAM }}
+      - name: Turbo remote cache not in use
+        if: steps.turbo-remote-cache.outcome != 'success'
+        run: >-
+          echo "::notice title=Turbo remote cache::Not in use for this run
+          (${{ steps.turbo-remote-cache.outcome }}); turbo uses its local cache.
+          To share a cache, configure an optional remote Turbo cache: a TURBO_TEAM
+          repository variable and a Vercel OIDC policy for this repository
+          (docs/engineering/build-system.md, Caching)."
       - name: Restore build outputs
         run: pnpm exec turbo run sdk-codegen build --continue --log-order=grouped
       - name: Run knip gate (unused code detection; crash-as-pass guarded)
@@ -205,12 +379,34 @@ jobs:
     name: browser-tests
     permissions:
       contents: read
+      id-token: write
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/setup
+      - name: Turbo remote cache by OIDC
+        id: turbo-remote-cache
+        # The step runs only where an OIDC token can exist and a team is named:
+        # a fork's or Dependabot's pull request has no usable token, and a fork
+        # or a clone without the TURBO_TEAM repository variable names no team.
+        # It never fails the job either: the cache is a speed-up, not a gate,
+        # so a refused exchange shows as this step's own red mark and turbo
+        # runs on its local cache. The next step says so in either case.
+        if: vars.TURBO_TEAM != '' && github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+        continue-on-error: true
+        uses: vercel/setup-turborepo-remote-cache-action@49d7b1b46ba4c9251e1977986bfe18336feabc8f # v1.1.0
+        with:
+          team: ${{ vars.TURBO_TEAM }}
+      - name: Turbo remote cache not in use
+        if: steps.turbo-remote-cache.outcome != 'success'
+        run: >-
+          echo "::notice title=Turbo remote cache::Not in use for this run
+          (${{ steps.turbo-remote-cache.outcome }}); turbo uses its local cache.
+          To share a cache, configure an optional remote Turbo cache: a TURBO_TEAM
+          repository variable and a Vercel OIDC policy for this repository
+          (docs/engineering/build-system.md, Caching)."
       - name: Resolve Playwright version
         id: pw
         run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
@@ -235,9 +431,64 @@ jobs:
         if: always()
         run: pnpm --filter @oaknational/agent-tools ci-turbo-report >> "$GITHUB_STEP_SUMMARY"
 
-  # Single required status check: fans in every gate above and fails unless every
+  # The basic native-Windows leg the owner's 2026-08-18 tier ruling requires
+  # (POSIX and WSL first-class; native Windows a non-vital goal proven by CI,
+  # never assumed). It installs the workspace and runs the agent-tools unit
+  # tests on a Windows runner — the surface the native-Windows changeset
+  # (upstream PR #891, carried by the fork) makes work: path separators and
+  # drive letters, trusted git and gh resolution, LF normalisation, pnpm
+  # resolution for spawned processes. Required since the family's one CI shape
+  # (2026-10-05): it is in run-quality-gates' needs list like every job, so a
+  # failure here blocks the merge; the step summary and the checks tab carry
+  # the signal the ruling asks for.
+  windows-basic:
+    name: windows-basic
+    permissions:
+      contents: read
+      id-token: write
+    runs-on: windows-latest
+    timeout-minutes: 30
+    env:
+      # Advisory leg: it reads the shared Turbo cache and never writes it.
+      TURBO_REMOTE_CACHE_READ_ONLY: 'true'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: ./.github/actions/setup
+      - name: Turbo remote cache by OIDC
+        id: turbo-remote-cache
+        # The step runs only where an OIDC token can exist and a team is named:
+        # a fork's or Dependabot's pull request has no usable token, and a fork
+        # or a clone without the TURBO_TEAM repository variable names no team.
+        # It never fails the job either: the cache is a speed-up, not a gate,
+        # so a refused exchange shows as this step's own red mark and turbo
+        # runs on its local cache. The next step says so in either case.
+        if: vars.TURBO_TEAM != '' && github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+        continue-on-error: true
+        uses: vercel/setup-turborepo-remote-cache-action@49d7b1b46ba4c9251e1977986bfe18336feabc8f # v1.1.0
+        with:
+          team: ${{ vars.TURBO_TEAM }}
+      - name: Turbo remote cache not in use
+        if: steps.turbo-remote-cache.outcome != 'success'
+        run: >-
+          echo "::notice title=Turbo remote cache::Not in use for this run
+          (${{ steps.turbo-remote-cache.outcome }}); turbo uses its local cache.
+          To share a cache, configure an optional remote Turbo cache: a TURBO_TEAM
+          repository variable and a Vercel OIDC policy for this repository
+          (docs/engineering/build-system.md, Caching)."
+      - name: Build agent-tools and its dependencies
+        shell: bash
+        run: pnpm exec turbo run build --filter=@oaknational/agent-tools... --output-logs=errors-only
+      - name: Unit-test agent-tools
+        shell: bash
+        run: pnpm --filter @oaknational/agent-tools test
+
+  # Single required status check: fans in every job above (the family
+  # contract: one required context fed by every job) and fails unless every
   # one succeeded — failed, cancelled, AND skipped results all block (fail-closed,
-  # so adding an `if:` guard to a gate later cannot silently bypass it). Reusing
+  # so adding an `if:` guard to a gate later cannot silently bypass it), with one
+  # named exception: `schema-drift-status` skips by its own design on a fork's or
+  # Dependabot's pull request (a read-only token cannot write a commit status),
+  # and only under exactly that condition is its skipped result accepted. Reusing
   # the existing `run-quality-gates` context keeps the branch ruleset unchanged
   # while each split job blocks merge.
   run-quality-gates:
@@ -248,9 +499,12 @@ jobs:
       - install
       - static-checks
       - build
+      - schema-drift
+      - schema-drift-status
       - unit-tests
       - knip-depcruise
       - browser-tests
+      - windows-basic
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -262,10 +516,24 @@ jobs:
       - name: Verify every quality gate passed
         env:
           RESULTS: ${{ join(needs.*.result, ',') }}
+          # The one by-design skip: mirrors the `if` on schema-drift-status, so a
+          # skipped result is accepted only where that job's own condition
+          # excluded it, never because a gate grew an `if:` guard.
+          DRIFT_STATUS_RESULT: ${{ needs.schema-drift-status.result }}
+          DRIFT_STATUS_SKIPS_BY_DESIGN: ${{ github.actor == 'dependabot[bot]' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) }}
         run: |
           echo "Gate results: $RESULTS"
+          skips_allowed=0
+          if [ "$DRIFT_STATUS_RESULT" = "skipped" ] && [ "$DRIFT_STATUS_SKIPS_BY_DESIGN" = "true" ]; then
+            echo "schema-drift-status skipped by design on this pull request (no commit status on a read-only token)."
+            skips_allowed=1
+          fi
           IFS=',' read -ra results <<< "$RESULTS"
           for result in "${results[@]}"; do
+            if [ "$result" = "skipped" ] && [ "$skips_allowed" -gt 0 ]; then
+              skips_allowed=$((skips_allowed - 1))
+              continue
+            fi
             if [ "$result" != "success" ]; then
               echo "::error::Quality gate result '$result' is not 'success' — blocking merge."
               exit 1

@@ -60,7 +60,7 @@ describe('practiceSkillPermissionIssues over a real filesystem', () => {
       stub('External', 'external/SKILL-CANONICAL.md'),
     );
     removeRepoPath(root, '.claude/skills');
-    symlinkRepoPath(root, '.claude/skills', `${outside}/skills`);
+    symlinkRepoPath(root, '.claude/skills', `${outside}/skills`, 'dir');
 
     const issues = await practiceSkillPermissionIssues(root, []);
 

@@ -116,6 +116,35 @@ practice.md:
       incoming from agent-collaboration
 
 practice-lineage.md:
+  - id: 3f6c2c1e-9b7d-4c0a-8a1e-5d2b7e4f9a61
+    repo: jimcresswell.net
+    date: 2026-09-21
+    purpose: >-
+      Practice exchange, first inbound landing: PDR-141 and the
+      operator-profile schema taken from OCE at the head named in
+      the exchange register, with the host's enforcement validator bound to
+      the contract and the checkout-local profile tier retired.
+  - id: 7360db7b-0576-434d-a3ae-997ef1a1e786
+    repo: jimcresswell.net
+    date: 2026-09-14
+    purpose: >-
+      Transplant closure: the eight ratified closure items of the
+      practice-completion node landed over 2026-09-13 to 14 in thirty-three
+      pull requests; the record is compiled in the transplant reports index
+      (what, how, why, how-faster). The OCE head read for the pending
+      two-way exchange is recorded in that node's delivery events, not here.
+  - id: 8dad8236-9bd3-451a-b807-d32677b5472c
+    repo: jimcresswell.net
+    date: 2026-09-12
+    purpose: >-
+      Lineage transplant: the OCE Practice lineage (this provenance chain)
+      replaced the jimcresswell.net chain that grew cold-start on 2026-04-03
+      and ran to PDR-030. The previous chain and trinity are retained in git
+      history at main (d0159a4); the 2026-09-13 loss-scan dispositioned every
+      archived file and the archive was deleted. The
+      three-zone fitness model the local validators depend on is already
+      carried by this file's Fitness Functions section, so no local section
+      was merged. Owner ruling 2026-09-12.
   - id: dbface3d-e4a8-4a6d-bb1b-5028c2e3b830
     repo: oak-open-curriculum-ecosystem
     date: 2026-06-21

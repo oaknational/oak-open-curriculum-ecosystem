@@ -53,13 +53,17 @@ if (!result.ok) {
 }
 ```
 
+Pass `envFiles: 'none'` instead of `startDir` to validate `processEnv` alone
+— no root discovery, no `.env` file read — for a deployment rehearsal that
+must see exactly what the platform injects.
+
 ### Contract types
 
-| Type                         | Purpose                                      |
-| ---------------------------- | -------------------------------------------- |
-| `ResolveEnvOptions<TSchema>` | Input: `{ schema, processEnv, startDir }`    |
-| `EnvResolutionError`         | Error: `{ message, diagnostics, zodIssues }` |
-| `EnvKeyDiagnostic`           | Per-key: `{ key: string, present: boolean }` |
+| Type                         | Purpose                                                                                 |
+| ---------------------------- | --------------------------------------------------------------------------------------- |
+| `ResolveEnvOptions<TSchema>` | Input: `{ schema, processEnv, startDir }` or `{ schema, processEnv, envFiles: 'none' }` |
+| `EnvResolutionError`         | Error: `{ message, diagnostics, zodIssues }`                                            |
+| `EnvKeyDiagnostic`           | Per-key: `{ key: string, present: boolean }`                                            |
 
 ## findRepoRoot
 

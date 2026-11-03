@@ -1,0 +1,166 @@
+[
+  {
+    "type": "session_meta",
+    "payload": {
+      "id": "00000001-0000-4000-8000-000000010000"
+    }
+  },
+  {
+    "type": "event_msg",
+    "payload": {
+      "type": "task_started",
+      "turn_id": "00000002-1111-4000-8000-000000020000"
+    }
+  },
+  {
+    "type": "response_item",
+    "payload": {
+      "type": "message"
+    }
+  },
+  {
+    "type": "response_item",
+    "payload": {
+      "type": "message"
+    }
+  },
+  {
+    "type": "response_item",
+    "payload": {
+      "type": "message"
+    }
+  },
+  {
+    "type": "response_item",
+    "payload": {
+      "type": "message"
+    }
+  },
+  {
+    "type": "world_state",
+    "payload": {}
+  },
+  {
+    "type": "turn_context",
+    "payload": {
+      "turn_id": "00000002-1111-4000-8000-000000020000"
+    }
+  },
+  {
+    "type": "response_item",
+    "payload": {
+      "type": "message"
+    }
+  },
+  {
+    "type": "response_item",
+    "payload": {
+      "type": "message"
+    }
+  },
+  {
+    "type": "event_msg",
+    "payload": {
+      "type": "item_completed",
+      "turn_id": "00000002-1111-4000-8000-000000020000",
+      "thread_id": "00000001-0000-4000-8000-000000010000",
+      "item": {
+        "type": "UserMessage"
+      }
+    }
+  },
+  {
+    "type": "event_msg",
+    "payload": {
+      "type": "item_completed",
+      "turn_id": "00000002-1111-4000-8000-000000020000",
+      "thread_id": "00000001-0000-4000-8000-000000010000",
+      "item": {
+        "type": "Reasoning"
+      }
+    }
+  },
+  {
+    "type": "response_item",
+    "payload": {
+      "type": "reasoning"
+    }
+  },
+  {
+    "type": "response_item",
+    "payload": {
+      "type": "custom_tool_call",
+      "call_id": "00000003-2222-4000-8000-000000030000",
+      "name": "exec"
+    }
+  },
+  {
+    "type": "token_usage_record",
+    "payload": {}
+  },
+  {
+    "type": "response_item",
+    "payload": {
+      "type": "custom_tool_call_output",
+      "call_id": "00000003-2222-4000-8000-000000030000",
+      "output": "Script failed\nWall time 0.0 seconds\nOutput:\nScript error:\nexec_command failed: CreateProcess { message: \"Rejected(\\\"`/bin/zsh -lc 'git push origin HEAD'` rejected: Push with `pnpm agent-tools merge-bot push --branch <branch>`, which refuses force and default branches.\\\")\" }"
+    }
+  },
+  {
+    "type": "event_msg",
+    "payload": {
+      "type": "token_count"
+    }
+  },
+  {
+    "type": "event_msg",
+    "payload": {
+      "type": "item_completed",
+      "turn_id": "00000002-1111-4000-8000-000000020000",
+      "thread_id": "00000001-0000-4000-8000-000000010000",
+      "item": {
+        "type": "Reasoning"
+      }
+    }
+  },
+  {
+    "type": "response_item",
+    "payload": {
+      "type": "reasoning"
+    }
+  },
+  {
+    "type": "event_msg",
+    "payload": {
+      "type": "item_completed",
+      "turn_id": "00000002-1111-4000-8000-000000020000",
+      "thread_id": "00000001-0000-4000-8000-000000010000",
+      "item": {
+        "type": "AgentMessage"
+      }
+    }
+  },
+  {
+    "type": "response_item",
+    "payload": {
+      "type": "message"
+    }
+  },
+  {
+    "type": "token_usage_record",
+    "payload": {}
+  },
+  {
+    "type": "event_msg",
+    "payload": {
+      "type": "token_count"
+    }
+  },
+  {
+    "type": "event_msg",
+    "payload": {
+      "type": "task_complete",
+      "turn_id": "00000002-1111-4000-8000-000000020000"
+    }
+  }
+]

@@ -5,7 +5,8 @@
   "type": "module",
   "main": "dist/server.js",
   "scripts": {
-    "build": "pnpm exec tsx esbuild.config.ts",
+    "build": "pnpm run deploy-config-gate && pnpm exec tsx esbuild.config.ts",
+    "deploy-config-gate": "pnpm exec tsx build-scripts/run-validate-deploy-config.ts",
     "build:sentry:configured": "pnpm exec tsx build-scripts/run-sentry-configured-build.ts",
     "build:widget": "vite build --config widget/vite.config.ts && pnpm exec tsx scripts/embed-widget-html.ts",
     "clean": "rm -rf dist .turbo .widget-build public/oak-ds public/oak-assets public/.oak-*",

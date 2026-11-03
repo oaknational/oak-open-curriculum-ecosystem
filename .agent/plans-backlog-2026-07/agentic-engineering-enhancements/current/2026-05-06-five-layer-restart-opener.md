@@ -345,7 +345,7 @@ every Practice-bearing repo with directive files.
 4. The newly-authored host pattern at
    `.agent/memory/active/patterns/eager-rounding-off-on-partial-structures.md`
    — applies if any enforcer-firing situation arises this session.
-5. The freshly-amended `.agent/skills/commit/SKILL.md § Quality
+5. The freshly-amended `.agent/skills/change-custody/commit/SKILL-CANONICAL.md § Quality
    Gates Are Always Blocking; the Orchestrator Is Advisory` — applies
    to every commit attempt.
 6. The freshly-amended `.agent/rules/stage-by-explicit-pathspec.md

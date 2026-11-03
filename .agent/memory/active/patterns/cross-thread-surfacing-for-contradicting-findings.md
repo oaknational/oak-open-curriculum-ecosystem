@@ -3,6 +3,7 @@ name: "Research That Contradicts Another Thread's Decision Needs an Explicit Cro
 polarity: pattern
 use_this_when: "A piece of research, a report, or a finding in one thread reaches a conclusion that contradicts or bears on a pending/ratified decision living in a DIFFERENT thread."
 category: process
+layer: general
 proven_in: "The structuredContent-only rediscovery: a finding filed in one thread did not flow into the sibling decision thread for ~ten days because no one carried it across."
 proven_date: 2026-06-16
 barrier:

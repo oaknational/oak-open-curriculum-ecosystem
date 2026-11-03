@@ -1,3 +1,5 @@
+import { join } from 'node:path';
+
 import { describe, expect, it, vi } from 'vitest';
 
 import { discoverSessionsWithFs, formatTimestamp } from '../src/core/runtime';
@@ -26,8 +28,10 @@ describe('runtime integration', () => {
     const brokenSessionId = '9c4b0f24-4769-48ec-b8c3-c95d59f9b29e';
     const expectedTimestampMs = Date.UTC(2024, 0, 2, 3, 4, 5);
     const escapedRoot = root.replaceAll('/', '-');
-    const sessionPath = `${projectsRoot}/${escapedRoot}/${sessionId}`;
-    const brokenPath = `${projectsRoot}/${escapedRoot}/${brokenSessionId}`;
+    // The product host-joins these paths before handing them to the fs and the
+    // error line, so the fake's keys and the expectation derive the same form.
+    const sessionPath = join(projectsRoot, escapedRoot, sessionId);
+    const brokenPath = join(projectsRoot, escapedRoot, brokenSessionId);
 
     const stderrWrite = vi.spyOn(process.stderr, 'write').mockImplementation(() => true);
     try {

@@ -3,6 +3,7 @@ name: "A Freshly-Landed Enforcement Gate's First Burndown Is Doctrine Co-Design,
 polarity: pattern
 use_this_when: "Burning down the violations a newly-landed enforcement gate (validator, lint rule, scanner) reports for the first time — the impulse is to 'watch the count fall to zero', but the first burndown is where the gate's doctrine meets reality."
 category: process
+layer: general
 proven_in: "PDR-105 validate-reference-direction first burndown (~197 wrong-direction references) — 2026-06-19 (Tulip spins Xylem)."
 proven_date: 2026-06-19
 barrier:

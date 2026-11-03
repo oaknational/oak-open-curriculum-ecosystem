@@ -56,7 +56,13 @@ seat-scoped conservation.
    number from its source at writing time (and state sets as open sets
    with exemplars, per `no-moving-targets-in-permanent-docs`
    §Authoring-Time Open-Set Clause — a retrospective is itself a prose
-   artefact entering review).
+   artefact entering review). Before choosing the reading method for a
+   whole-corpus retrospective, find the last run of the same task class in
+   the napkin archives and the corpus-analysis records, and read how it went:
+   a 2026-09-16 retrospective chose whole-file reading from the prompt's words
+   and met the owner's 2026-09-02 correction of that exact shape ("you used up
+   the entire context window reading huge, old napkins") 600 KB in. Write the
+   analysis to a ledger on disk as each window is read.
 3. **Build the causal stack, ordered by depth.** Technical root, process
    root, meta root — each layer with its evidence, each answering "why was
    the layer above possible?". Stop at the layer where the next "why"

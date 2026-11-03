@@ -1,37 +1,26 @@
-import { spawn, spawnSync, type SpawnSyncReturns } from 'node:child_process';
+import { spawn, spawnSync, type ChildProcess, type SpawnSyncReturns } from 'node:child_process';
 
 import { writeErrorLine } from '../core/terminal-output.js';
 import { resolveTrustedGit } from '../core/trusted-git.js';
+import { childEnvironment } from '../spawn/child-environment.js';
 import { resolvePnpm } from '../spawn/pnpm-path.js';
+import { signalProcessGroup, type SignalOutcome } from '../spawn/process-group.js';
 
 import type { RepoCheckRuntime } from './repo-check-types.js';
 
 /**
- * Environment for spawning the RESOLVED standalone pnpm. The corepack
- * variables inherited from an outer corepack-shimmed pnpm chain must be
- * stripped: under `COREPACK_ROOT` the standalone binary refuses to
- * self-switch to the repo's pinned `packageManager` version and fails the
- * devEngines pin (observed first-hand: an 11.9.0 standalone refusing the
- * 11.8.0 pin inside a hook chain); without them it self-switches per the pin.
- */
-function pnpmSpawnEnvironment(): NodeJS.ProcessEnv {
-  const environment = { ...process.env };
-  delete environment.COREPACK_ROOT;
-  delete environment.COREPACK_ENABLE_AUTO_PIN;
-  delete environment.COREPACK_ENABLE_DOWNLOAD_PROMPT;
-  return environment;
-}
-
-/**
- * Resolve `pnpm` to its trusted absolute path at this real I/O edge — the
- * agent-tools invariant (see `spawn/pnpm-path.ts`): bare `pnpm` never reaches
- * spawn, so a writable PATH entry cannot shadow it. Other commands pass
- * through unchanged; injected fake runtimes never hit this edge. Returns the
+ * Resolve `pnpm` to its trusted launchable invocation (an executable file
+ * plus leading arguments — the file may be the running Node binary when the
+ * resolved pnpm is a JS entry point) at this real I/O edge — the agent-tools
+ * invariant (see `spawn/pnpm-path.ts`): bare `pnpm` never reaches spawn, so
+ * a writable PATH entry cannot shadow it. Other commands pass through
+ * unchanged; injected fake runtimes never hit this edge. Returns the
  * resolution error message alongside the command when pnpm is not found, so
  * callers fail loudly through their normal non-zero paths (never a throw).
  */
 function trustedSpawnTarget(command: string): {
   readonly command: string;
+  readonly leadingArgs?: readonly string[];
   readonly environment?: NodeJS.ProcessEnv;
   readonly error?: string;
 } {
@@ -42,7 +31,11 @@ function trustedSpawnTarget(command: string): {
       return { command, error: resolved.error.message };
     }
 
-    return { command: resolved.value, environment: pnpmSpawnEnvironment() };
+    return {
+      command: resolved.value.file,
+      leadingArgs: resolved.value.leadingArgs,
+      environment: resolved.value.env,
+    };
   }
 
   if (command === 'git') {
@@ -65,22 +58,94 @@ function trustedGitTarget(command: string): { readonly command: string; readonly
   }
 }
 
-export function runInheritedProcess(command: string, args: readonly string[]): Promise<number> {
+/** How an inherited-stdio child ended: an exit status, or the signal that killed it. */
+export interface InheritedProcessEnd {
+  readonly status: number | null;
+  readonly signal: NodeJS.Signals | null;
+}
+
+/** How {@link spawnInheritedProcess} starts its child. */
+export interface InheritedProcessOptions {
+  /** The child's working directory; defaults to this process's. */
+  readonly cwd?: string;
+  /** Variables set over the environment the child would otherwise get. */
+  readonly extraEnv?: Readonly<Record<string, string>>;
+  /**
+   * Start the child as the leader of its own process group (and session),
+   * and hand `onSpawn` a kill for the whole group once it is spawned, so the
+   * caller can forward signals to it, bound its lifetime and sweep it. A
+   * signal sent to one pid reaches only that process: the pnpm launcher on
+   * this estate's hosts is a shell script that runs pnpm without exec, so a
+   * gate's real work sits two levels below it. The kill returns the kernel's
+   * answer. The child also leaves the controlling terminal, so a terminal's
+   * Ctrl-C reaches it only through the caller.
+   */
+  readonly processGroup?: {
+    readonly onSpawn: (killGroup: (signal: NodeJS.Signals) => SignalOutcome) => void;
+  };
+}
+
+/**
+ * Spawn a trusted command with inherited stdio and report how it ended.
+ *
+ * A signal death is reported as such (`status` null, `signal` named), never
+ * folded into an exit code: a gate that says "exit 1" for a child the OOM
+ * killer took misclassifies a crash as a finding (F-112). A launch failure,
+ * whether spawn reports it or throws it, is written to stderr and reported as
+ * status 1.
+ *
+ * @param command - The command; `pnpm` and `git` resolve to their trusted binaries.
+ * @param args - Arguments.
+ * @param options - The child's working directory, extra environment, group and kill seam.
+ */
+export function spawnInheritedProcess(
+  command: string,
+  args: readonly string[],
+  options: InheritedProcessOptions = {},
+): Promise<InheritedProcessEnd> {
   const trusted = trustedSpawnTarget(command);
 
   if (trusted.error !== undefined) {
     writeErrorLine(`${command}: ${trusted.error}`);
-    return Promise.resolve(1);
+    return Promise.resolve({ status: 1, signal: null });
   }
 
   return new Promise((resolve) => {
-    const child = spawn(trusted.command, args, { stdio: 'inherit', env: trusted.environment });
-    child.on('close', (code) => resolve(code ?? 1));
+    let child: ChildProcess;
+    try {
+      child = spawn(trusted.command, [...(trusted.leadingArgs ?? []), ...args], {
+        stdio: 'inherit',
+        env: childEnvironment({
+          pnpm: trusted.environment !== undefined,
+          ambient: process.env,
+          extra: options.extraEnv,
+          platform: process.platform,
+        }),
+        cwd: options.cwd,
+        detached: options.processGroup !== undefined,
+      });
+    } catch (error: unknown) {
+      writeErrorLine(`${command}: ${error instanceof Error ? error.message : String(error)}`);
+      resolve({ status: 1, signal: null });
+      return;
+    }
+    const leader = child.pid;
+    options.processGroup?.onSpawn((signal) => signalProcessGroup(leader, signal));
+    child.on('close', (status, signal) => resolve({ status, signal }));
     child.on('error', (error) => {
       writeErrorLine(`${command}: ${error.message}`);
-      resolve(1);
+      resolve({ status: 1, signal: null });
     });
   });
+}
+
+/** Spawn with inherited stdio and reduce the end to an exit code (a signal death reads as 1). */
+export async function runInheritedProcess(
+  command: string,
+  args: readonly string[],
+): Promise<number> {
+  const end = await spawnInheritedProcess(command, args);
+  return end.status ?? 1;
 }
 
 export function runCapturedProcess(
@@ -102,7 +167,7 @@ export function runCapturedProcess(
 
   return normaliseSpawnResult(
     command,
-    spawnSync(trusted.command, args, {
+    spawnSync(trusted.command, [...(trusted.leadingArgs ?? []), ...args], {
       encoding: 'utf8',
       maxBuffer: 1024 * 1024 * 50,
       env: trusted.environment,

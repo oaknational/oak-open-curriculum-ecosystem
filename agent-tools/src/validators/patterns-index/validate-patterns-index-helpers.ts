@@ -20,6 +20,14 @@ export const PATTERNS_README = 'README.md';
 /** Heading that opens the generated section; everything from here to EOF is owned. */
 const PATTERN_INDEX_HEADING = '## Pattern Index';
 
+/** The Practice layer a pattern is placed in (PDR-143 §Decision); every pattern declares one. */
+const PATTERN_LAYERS = ['general', 'family', 'contextual'] as const;
+type PatternLayer = (typeof PATTERN_LAYERS)[number];
+
+function isPatternLayer(value: string): value is PatternLayer {
+  return PATTERN_LAYERS.some((layer) => layer === value);
+}
+
 /** A single indexable pattern, distilled from one file's frontmatter. */
 export interface PatternEntry {
   readonly filename: string;
@@ -28,6 +36,8 @@ export interface PatternEntry {
   /** The `use_this_when` hint, when the file declares one (optional in the corpus). */
   readonly useThisWhen?: string;
   readonly isAntiPattern: boolean;
+  /** The Practice layer the pattern is placed in. */
+  readonly layer: PatternLayer;
 }
 
 /** A pattern file that could not be indexed (missing/invalid frontmatter). */
@@ -59,14 +69,14 @@ const CATEGORY_ORDER: readonly string[] = [
 export function categoryLabel(category: string): string {
   return category
     .split('-')
-    .map((part) => (part.length === 0 ? part : part[0].toUpperCase() + part.slice(1)))
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join(' ');
 }
 
 /** The document's first H1 heading text, or `null` when there is none. */
 function firstH1(content: string): string | null {
-  const match = /^# (.+)$/m.exec(content);
-  return match ? match[1].trim() : null;
+  const heading = /^# (.+)$/m.exec(content)?.[1];
+  return heading === undefined ? null : heading.trim();
 }
 
 /**
@@ -99,12 +109,23 @@ export function parsePatternEntry(
   }
   const useThisWhen = getFrontmatterValue(frontmatter, 'use_this_when');
   const polarity = getFrontmatterValue(frontmatter, 'polarity');
+  const layer = getFrontmatterValue(frontmatter, 'layer');
+  if (layer === '') {
+    return { filename, reason: 'missing frontmatter key: layer' };
+  }
+  if (!isPatternLayer(layer)) {
+    return {
+      filename,
+      reason: `unknown layer "${layer}" (expected one of ${PATTERN_LAYERS.join(', ')})`,
+    };
+  }
   return {
     filename,
     name: resolveName(frontmatter, content, filename),
     category,
     useThisWhen: useThisWhen === '' ? undefined : useThisWhen,
     isAntiPattern: polarity === 'anti-pattern',
+    layer,
   };
 }
 
@@ -117,9 +138,10 @@ function orderedCategories(present: ReadonlySet<string>): string[] {
   return [...known, ...extra];
 }
 
-/** Render one entry line in the index's house format. */
+/** Render one entry line in the index's house format: polarity and layer tags, then the hint. */
 function renderEntryLine(entry: PatternEntry): string {
-  const anti = entry.isAntiPattern ? ' *(anti-pattern)*' : '';
+  const tags = [...(entry.isAntiPattern ? ['anti-pattern'] : []), entry.layer];
+  const anti = ` *(${tags.join(', ')})*`;
   const link = `→ [${entry.filename}](${entry.filename})`;
   if (entry.useThisWhen === undefined) {
     return `- **${entry.name}**${anti} ${link}`;
@@ -147,7 +169,11 @@ export function renderPatternIndex(entries: readonly PatternEntry[]): string {
     const lines = group.map(renderEntryLine).join('\n');
     return `### ${categoryLabel(category)} (${String(group.length)})\n\n${lines}`;
   });
-  return `${PATTERN_INDEX_HEADING}\n\n${sections.join('\n\n')}\n`;
+  const body =
+    sections.length === 0
+      ? '*No repo-local pattern instances yet; the index fills as pattern files are authored here.*'
+      : sections.join('\n\n');
+  return `${PATTERN_INDEX_HEADING}\n\n${body}\n`;
 }
 
 /**

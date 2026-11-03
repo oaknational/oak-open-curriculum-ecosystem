@@ -146,7 +146,7 @@ Block Kit (suggested prompts, mrkdwn) is not React, so v1 is React/Next-componen
 
 ### 1. Ask Oisín
 
-**Grounding.** Oisín reads the OCE repo live. It attaches the official remote GitHub MCP server as a read-only tool set and lets the model fetch what each question needs: it starts from `.agent/skills/under-the-hood/SKILL-CANONICAL.md` and follows it, then reads the specific `.agent/` directives, decision records (PDRs/ADRs), `principles.md`, and planning docs the question calls for. Nothing is baked into the deploy, so every answer reflects the current `main`. It does not touch the Oak Curriculum MCP.
+**Grounding.** Oisín reads the OCE repo live. It attaches the official remote GitHub MCP server as a read-only tool set and lets the model fetch what each question needs: it starts from `.agent/skills/orientation/under-the-hood/SKILL-CANONICAL.md` and follows it, then reads the specific `.agent/` directives, decision records (PDRs/ADRs), `principles.md`, and planning docs the question calls for. Nothing is baked into the deploy, so every answer reflects the current `main`. It does not touch the Oak Curriculum MCP.
 
 **Oak skills.** The LLM reads Oak skills live from `oaknational/oak-skills`, primarily `oak-tone-of-voice`: make the reader the subject not Oak, use first and second person and contractions, put the point first in plain words. `oak-skills` is a **private** repo (verified 2026-07-08), so Oisín's PAT selects it — **owner ruling 2026-07-08** (the make-public and mirror-into-OCE alternatives were considered and declined for v1); the PAT's read access to the public OCE repo is implicit.
 
@@ -303,7 +303,7 @@ const INSTRUCTIONS = `You are Ask Oisín (@ask-oisin), a bot — an assistant, n
 National Academy's internal staff. You answer questions about the PROJECT: the Open Curriculum
 Ecosystem repo, its approaches, the Practice, strategy, vision, and current planning state.
 Read the repo LIVE with the GitHub tools — nothing is baked in. Start from
-.agent/skills/under-the-hood/SKILL-CANONICAL.md and follow it, then read the specific .agent/
+.agent/skills/orientation/under-the-hood/SKILL-CANONICAL.md and follow it, then read the specific .agent/
 directives, decision records (PDRs/ADRs), principles.md, and planning docs the question needs.
 Cite the repo path you used. For Oak's voice, read oak-tone-of-voice from the oak-skills repo.
 If a question is really about curriculum CONTENT, say so and explain that curriculum answers are

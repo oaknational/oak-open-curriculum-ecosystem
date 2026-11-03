@@ -8,6 +8,14 @@ ratification commit)
 
 **Date**: 2026-07-31
 
+**2026-09-08 semantic amendment**: content identity, assertion occurrence,
+mounting and evaluation have separate contracts. Canonical fingerprints support
+content comparison; persistent records preserve independently governed acts and
+occurrences. Set inclusion supplies the mounting law, while query behaviour,
+constraint preservation and termination carry their own stated premises. This
+amendment preserves the files-authoritative estate and named-graph boundary
+(owner-directed reconciliation of 2026-09-08, recorded in ADR-230 §Context).
+
 **Refines**: [ADR-200](200-intent-as-a-living-idea-graph.md) (intent as
 a living idea-graph) and
 [ADR-216](216-plan-node-estate.md) (the plan-node estate). ADR-216
@@ -159,6 +167,22 @@ first-hand 2026-07-31 against its working copy: base IRI
 scheme is confirmed against the upstream at a pinned revision before
 `graph-knowledge-sdk` lands — a named obligation of that increment.
 
+**Statement content and assertion occurrences.** RDF dataset membership uses
+structural quad equality. Two authored assertion records can refer to the same
+quad content while retaining distinct persistent identifiers, provenance and
+lifecycles. A source occurrence also has an explicit identity when its separate
+position or history matters. The authored files carry those records and their
+content mappings so a rebuild preserves them. A dataset's set of quads alone
+cannot recover repeated assertion acts from repeated equal input quads.
+
+Canonicalisation compares a named content domain: a dataset, or an explicitly
+selected subdataset with its graph names, blank-node scope and term profile.
+[RDFC-1.0](https://www.w3.org/TR/2024/REC-rdf-canon-20240521/) supplies canonical
+dataset serialisation for its admitted model. A digest identifies a candidate
+content match; equality checks compare the canonical bytes within that profile
+and handle hash collisions explicitly. Persistent entity, assertion and
+occurrence identifiers retain the meanings assigned by their own contracts.
+
 **Referential stability and version pinning.** A published IRI, once
 referenced from any home, resolves forever — supersession chains,
 never removal (PDR-134 §2). And each home's graphs declare the
@@ -198,15 +222,21 @@ generalisation follows: entitlement may become a lattice rather than a
 chain (incomparable per-team overlays) with no design change — the
 poset machinery already carries it.
 
-**Union semantics and constraint scope.** Statement union is monotone,
-so a mounted overlay extends but can never falsify public knowledge —
-readers with more entitlement see strictly more, never different,
-truth (a structural guarantee of the data model, claimed here as a
-design property). Closed-world constraints are not automatically
-union-stable, so every constraint declares a scope: **home-local**
-(checked at that home's rebuild) or **union-scoped** (checked at
-mount); an overlay violating a union-scoped constraint fails its own
-mount and never the public base.
+**Union semantics and constraint scope.** Mounting preserves each admitted
+home's statements and takes their set union under declared graph-name and
+blank-node identity scopes. This guarantees set inclusion. An added home
+removes no quad already admitted, and queries over the enlarged dataset can
+change their results: counts, absence tests, selected values and contradiction
+reports each follow their query contract. Public projections select the public
+graph set explicitly; the clone test checks their independence from private
+overlays.
+
+Every constraint declares a scope: **home-local** (checked at that home's
+rebuild) or **union-scoped** (checked at mount). Validation includes the declared
+target selection and entailment profile. An overlay violating a union-scoped
+constraint fails its own mount and leaves the public base unchanged. Semantic
+monotonicity is a property to establish for the particular interpretation or
+query; it is separate from dataset union and access entitlement.
 
 ### 5. Vocabularies: reuse W3C, in the sibling ontology's image
 
@@ -291,11 +321,11 @@ possible):
   canonical form changed without a dated amendment note is a flag. The
   amendment discipline stops depending on author memory.
 - **Preservation-class check on constraint scopes**: whether a
-  constraint survives union is largely visible in its syntactic shape
-  (existential-positive shapes are mount-safe; universal and counting
-  shapes are not) — so a counting constraint declared home-local-only
-  is itself a validator finding, and the scope declarations of §4 are
-  checkable rather than trusted.
+  constraint survives a mount is checked against its actual scope, target
+  selection, entailment and permitted added statements. A home-local
+  cardinality rule can be valid for its own home. A claim that a rule survives
+  union carries its additional premises and discriminating examples, including
+  new targets and changed counts; syntax alone is insufficient.
 - **Match-edge provenance shape**: every `closeMatch`/`exactMatch`
   carries who asserted it, when, and on what evidence — sameness is
   always evidence-carrying (PDR-134 §The unifying schema).
@@ -306,23 +336,27 @@ possible):
 
 ## Mathematical grounding (dated 2026-07-31, owner-requested)
 
-Each load-bearing shape here is deliberately standard mathematics, so
-implementations inherit proven algorithms and the falsifiers have
-names:
+The mathematical models identify reusable mechanisms and proof obligations.
+Their guarantees apply under the named premises; each implementation and
+composition establishes that it meets them:
 
-- **Ontology/instance** is the description-logic theory/model split —
-  the source of decidable validation.
-- **The direction law** is stratification in the logic-programming
-  sense: order-respecting references, validity preserved under
-  restriction to down-sets (the strip tests), termination of cross-home
-  resolution for free.
+- **Ontology/instance** separates a theory from its data. The selected
+  language fragment, constraint profile and evaluation bounds determine the
+  validation guarantee.
+- **The direction law** orders reference levels. Stripping to an authorised down-set
+  preserves the admitted reference direction. References within a stratum can
+  still form cycles; resolution and recursive query evaluation have explicit
+  finite-input, visited-state or resource-bound contracts, with their failure
+  and termination behaviour checked separately.
 - **Homes and mounting** are restriction-and-union over the entitlement
   order (presheaf-shaped): a reader's world is the union over their
-  down-set, and union monotonicity is what makes overlays unable to
-  falsify public knowledge (§4).
+  down-set. Dataset inclusion, public-projection independence and semantic
+  query monotonicity have the distinct obligations stated in §4.
 - **Canonicalisation** (RDFC-1.0) picks canonical representatives of
-  graph-isomorphism orbits — deterministic diffs, and canonical-form
-  hash equality as statement-level identity.
+  the admitted dataset-isomorphism classes. Content comparison uses the
+  profile and collision discipline in §3; persistent assertion and source
+  occurrence records preserve the identities that the content comparison
+  does not encode.
 - **The PROV spine** is a labelled transition system carrying both
   modalities — realised traces and unrealised plans — in one
   structure; the drift projections (§Consequences) are its fixed
@@ -330,11 +364,11 @@ names:
 - **Cross-instance alignment** is the institutions shape (networks of
   theories joined by alignment morphisms), which is why alignment
   graphs are first-class with their own home (PDR-134 §5).
-- **The unifying schema** (PDR-134): every law here is monotonicity of
-  a flow over a declared order — generality, time, epistemic
-  provenance, entitlement — so `graph-validate`'s core can be one
-  order-checking engine instantiated per axis rather than a zoo of
-  bespoke validators.
+- **The unifying schema** (PDR-134) identifies declared orders over
+  generality, time, epistemic provenance and entitlement. Reusable order
+  checks can serve those axes. Each axis retains its own relation and laws;
+  composition qualification also checks the semantic, lifecycle and
+  provenance obligations that order compliance alone cannot establish.
 - **Evidence-carrying equivalence**: merging by match edges with
   provenance rather than collapse is the setoid discipline — identity
   as asserted, composable evidence — which is the same mathematics as
@@ -482,12 +516,10 @@ they execute in the ratification commit, not before):
 - The paused refounding programme's instruments (denominator, freeze
   rule, conservation chain) are harvested as migration tooling by the
   strategic plan that executes this decision.
-- Three guarantees come free from the mathematics and are claimed as
-  design properties: **statement-level deduplication** beneath the
-  concept level (canonical-form hash equality is identity up to
-  isomorphism); **standing drift projections** from the PROV shape
-  (plans never used, activities without plans, entities without
-  provenance — the abandoned-intent, unplanned-work, and
-  orphan-knowledge detectors are fixed queries); and **no authority
-  feedback loops** (computed confidence never feeds authored status,
-  so the epistemics cannot self-reinforce).
+- Content comparison supports deduplication within its declared equivalence
+  domain while independently governed assertion and occurrence records retain
+  their identities. Standing PROV drift projections can identify plans never
+  used, activities without plans and entities without recorded provenance under
+  their declared query scope. The authority boundary keeps computed confidence
+  separate from authored status. Each of these design guarantees carries the
+  identity, query and write-boundary checks needed to establish it.

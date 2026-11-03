@@ -3,6 +3,7 @@ name: "Templates Can Institutionalise Failure Modes; Doctrine and Template Updat
 polarity: anti-pattern
 use_this_when: "Sharpening a doctrine, principle, or rule that flows through templates, scaffolds, or generators that produce future plans or artefacts"
 category: process
+layer: general
 proven_in: ".agent/plans/templates/feature-workstream-template.md and .agent/directives/tdd-phases.md (TDD-as-pairs sharpening 2026-05-03)"
 proven_date: 2026-05-03
 barrier:

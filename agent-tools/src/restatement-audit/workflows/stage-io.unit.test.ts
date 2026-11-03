@@ -119,6 +119,12 @@ describe('run-data parsers', () => {
     expect(isErr(parseMapRunData({ windows: [], gazetteer }))).toBe(true);
   });
 
+  it('parseMapRunData refuses a partition window whose file names a place outside the repository', () => {
+    expect(
+      isErr(parseMapRunData({ windows: [{ window: 'W01', files: ['../secrets.md'] }], gazetteer })),
+    ).toBe(true);
+  });
+
   it('parsePartitionFile accepts ONLY the closed canonical shape — a typo like "windwos" or a stray key fails loudly', () => {
     const windows = [{ window: 'W01', files: ['a.md'] }];
     expect(isOk(parsePartitionFile({ windows }))).toBe(true);

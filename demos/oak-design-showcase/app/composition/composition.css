@@ -18,9 +18,13 @@
 }
 
 [data-page='composition-demo'] .comp-controls {
+  /* One control group per ROW, deliberately (owner feedback 2026-08-18:
+     the layout and theme groups ran together). The old wrapping cluster
+     stacked them only as an accident of width — wrap is arrangement by
+     coincidence, and at wider viewports the groups sat inline again. */
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--gap-s) var(--gap-xl);
+  flex-direction: column;
+  gap: var(--gap-m);
   align-items: flex-start;
   padding-block-end: var(--inset-s);
 }

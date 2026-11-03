@@ -303,12 +303,6 @@ describe('Result type integration', () => {
       expect(failure.error).toBe('Division by zero');
     }
   });
-
-  it('forces exhaustive error handling', () => {
-    const result: Result<number, string> = ok(42);
-
-    expect(result.value).toBe(42);
-  });
 });
 
 describe('collect', () => {

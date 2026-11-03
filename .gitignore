@@ -26,19 +26,32 @@ ONBOARDING.md
 # Local MCP server config
 .mcp.json
 
+# Repo-scoped tool binaries: .agent/setup/install-shellcheck.sh installs the
+# pinned shellcheck here, and the lint:shell gate runs it before any on PATH.
+# No trailing slash, so a `.tools` symlink is ignored too.
+.tools
+
 # Platform settings: project config is tracked, local overrides are not.
 # Project settings define the agentic system contract (skill permissions,
 # hooks, plugin state) and must work on fresh checkout.
 # Local settings contain user-specific paths and one-off permissions.
 .claude/settings.local.json
 .github/copilot/settings.local.json
+# Merge-bot identity is per-checkout (each clone names its own GitHub App) and
+# never tracked; the tracked template is .github/merge-bot.json.example.
+.github/merge-bot.json
 .cursor/settings.local.json
 # Cursor sessionStart hook: human-readable mirror (gitignored; not committed)
 .cursor/oak-composer-session.local.json
 .gemini/settings.local.json
 
-# Claude agent worktrees (transient, machine-local)
-.claude/worktrees/
+# Agent worktrees nested in the checkout (owner ruling 2026-09-30): every
+# lane lives under .claude/worktrees/<lane>, ignored here and by every root
+# check tool; only the placeholder .gitignore inside it is tracked (the
+# contents pattern, not the directory: git cannot re-include a file under an
+# ignored directory).
+.claude/worktrees/**/*
+!.claude/worktrees/.gitignore
 
 # Claude hook error log (machine-local; created on demand by .claude/hooks/_lib/log-hook-errors.sh)
 .claude/logs/
@@ -293,7 +306,7 @@ vite.config.ts.timestamp-*
 packages/sdks/oak-sdk-codegen/code-generation/utils/ingest-pipeline.md
 
 # Personal onboarding walkthrough state (individual-scoped, never shared;
-# one checkout = one individual — see .agent/skills/under-the-hood/SKILL-CANONICAL.md)
+# one checkout = one individual — see .agent/skills/orientation/under-the-hood/SKILL-CANONICAL.md)
 .agent/state/onboarding/
 
 # Curriculum-hub vendor reference material is untracked inside the workspace —
@@ -353,3 +366,7 @@ packages/design/oak-design-system/.sync-staging/
 # the bytes preserved in the branch history that merged via PR #569)
 packages/design/oak-open-curriculum-design-system-tna-24072026-1141/
 .env*
+
+# Ecosystem visitors: satellite repositories checked out under this tree, each with its
+# own git history and remote; never part of this tree.
+/visitors/

@@ -9,9 +9,9 @@ import {
 import {
   findAddedBlockedContent,
   findAddedScopedBlock,
-  isPathInScope,
   lineIsPredominantlyCodeShaped,
 } from '../../src/hook-policy/matchers.js';
+import { isPathInScope } from '../../src/hook-policy/path-scope.js';
 import {
   parseBlockedContentPolicy,
   parseScopedContentBlocks,
@@ -542,7 +542,7 @@ describe('parseScopedContentBlocks', () => {
     ).toThrow('hooks.preToolUseContent.scoped_blocks was malformed');
   });
 
-  it('accepts a regex group with excludes_inline_code and excludes_lines_with', () => {
+  it('keeps every group-level exclusion of a regex group through parsing', () => {
     const regexGroup = {
       concept: 'sha-in-permanent-doc',
       patterns: [String.raw`\b[a-f0-9]{7,40}\b`],
@@ -550,6 +550,7 @@ describe('parseScopedContentBlocks', () => {
       include_paths: ['docs/architecture/architectural-decisions/'],
       excludes_inline_code: true,
       excludes_lines_with: ['(historical reference)'],
+      excludes_other_repositories: true,
       citation: 'distilled.md §Moving targets do not belong in permanent docs',
     };
     expect(

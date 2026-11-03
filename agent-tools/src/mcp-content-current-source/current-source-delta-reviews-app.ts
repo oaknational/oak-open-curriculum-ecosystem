@@ -22,7 +22,7 @@ export const APP_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/app/bootstrap-finalize.ts': excluded(
-    '35db06b7e8a8eef7d9c768aa76addc8e99fa36dc2b974ef18e3e173404735293',
+    '1b00309dc856dd1a04a86144771fafd5587e280f09a064a80c396aba1350166b',
     IMPLEMENTATION_ONLY,
   ),
   // Landing-page removal: the DNS-rebinding phase leaves with the two HTML
@@ -76,7 +76,7 @@ export const APP_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/compose-product-analytics-runtime.ts': excluded(
-    'df0cfab0201177986caa0454d94407077f5930f45a8e34d6d15f6ea4b625b35b',
+    '8bcb76a70eeea86ca61785cc8d8356a97ef99088d75705934b3220c7bfd08fca',
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/env-clerk-guards.ts': excluded(
@@ -92,7 +92,7 @@ export const APP_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
   // refactor of a startup validation rule; disposition unchanged — no authored
   // agent-facing content reaches an MCP consumer from this file.
   'apps/oak-curriculum-mcp-streamable-http/src/env.ts': excluded(
-    '0537f72528f0ae1c0de9ff41f1e43e99b16fdc5a26890885bee7d6f16288723b',
+    '245b6c38115a8d51b938600a6e5a06b2d6519a68a677e08af7af6eeadf22d6aa',
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/feature-flags.ts': excluded(
@@ -172,19 +172,19 @@ export const APP_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/product-analytics-config.ts': excluded(
-    '19d598ca413c7eeb9e509ddc38d44e006b761f8654c0a7e641b68b232d7c8610',
+    'acf0514a156b306d043efe49e2f23cd6b4db9e68a6456461c4cf0afb2375d73d',
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/runtime-config-from-validated-env.ts': excluded(
-    '1b0a02d27b6f29e88a0cc9c4aa5576ee72bbf0770f44a56ccab423668acb1043',
+    '2778049b88b9d21ade05d98c8e7138adc46bcd64bf88151cf3e53426b3342675',
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/runtime-config-support.ts': excluded(
-    '4b9051b733ea0e6cef7e072352c597117d24b330c3df3697978332bf0c6af4f3',
+    'cab5bc9f248d8eb9f34a21e940e53edc97fa01d7ae767f8b50b4f955f4c3169b',
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/runtime-config.ts': excluded(
-    'd0efa55d83f113991bacb5f629c918067ae1907665b4df12670ccae605c603da',
+    '5f14fbc2372b85d7d0b39c834139a20e51a805a2fe3e6e65c092676b8e209988',
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/security-config.ts': excluded(

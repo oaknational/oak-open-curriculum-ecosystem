@@ -3,7 +3,11 @@ import {
   type DeriveIdentityOptions,
   type IdentityResult,
 } from '../core/agent-identity/index.js';
-import { stripSessionIdTagIfPresent } from '../core/agent-identity/session-seed.js';
+import { resolveCollaborationSeed } from '../collaboration-state/collaboration-seed.js';
+import {
+  gatedClaudeSeedsPresent,
+  gatedSeedsSentence,
+} from '../collaboration-state/platform-gate.js';
 import {
   parseAgentIdentityArgs,
   type AgentIdentityFormat,
@@ -27,6 +31,8 @@ export interface AgentIdentityCliEnvironment {
   readonly PRACTICE_AGENT_SESSION_ID_CLAUDE?: string;
   /** Cloud-seat platform session id (`cse_`-tagged); untagged payload is the PDR-027 seed there. */
   readonly CLAUDE_CODE_REMOTE_SESSION_ID?: string;
+  /** Claude Code CLI session id, exported into every Bash tool shell; equals the SessionStart seed. */
+  readonly CLAUDE_CODE_SESSION_ID?: string;
   /** Cursor composer session id, written by the Practice Cursor `sessionStart` hook. */
   readonly PRACTICE_AGENT_SESSION_ID_CURSOR?: string;
   /** Antigravity/Gemini conversation id surfaced through the Practice seed convention. */
@@ -40,7 +46,7 @@ export interface AgentIdentityCliEnvironment {
   /** Antigravity per-tool-call metadata JSON; `conversationId` is stable. */
   readonly ANTIGRAVITY_SOURCE_METADATA?: string;
   /** Operator-provided display-name override. */
-  readonly OAK_AGENT_IDENTITY_OVERRIDE?: string;
+  readonly PRACTICE_AGENT_IDENTITY_OVERRIDE?: string;
 }
 
 /**
@@ -68,7 +74,7 @@ export interface AgentIdentityCliResult {
 /**
  * Help text printed by `agent-identity --help`.
  */
-export const HELP_TEXT = `Usage: agent-identity [--seed <seed>] [--format <kebab|display|json>] [--help]
+export const HELP_TEXT = `Usage: agent-identity [--seed <seed>] [--platform <label>] [--format <kebab|display|json>] [--help]
 
   --seed <seed>       Stable seed. If omitted, uses (in order)
                       $PRACTICE_AGENT_SESSION_ID_CLAUDE,
@@ -76,12 +82,23 @@ export const HELP_TEXT = `Usage: agent-identity [--seed <seed>] [--format <kebab
                       $PRACTICE_AGENT_SESSION_ID_GEMINI,
                       $PRACTICE_AGENT_SESSION_ID_CODEX,
                       $CLAUDE_CODE_REMOTE_SESSION_ID (cloud seats; type tag stripped),
+                      $CLAUDE_CODE_SESSION_ID (Claude Code CLI shells),
                       then platform-native stable fallbacks:
                       $CODEX_THREAD_ID (Codex) and Antigravity conversationId.
+  --platform <label>  Seat platform (claude-code, cursor, codex, gemini). Required
+                      unless --seed is given: the three Claude seeds
+                      ($PRACTICE_AGENT_SESSION_ID_CLAUDE, $CLAUDE_CODE_REMOTE_SESSION_ID,
+                      $CLAUDE_CODE_SESSION_ID) count only on a Claude platform.
   --format <fmt>      Output format. kebab (default) | display | json.
   --help              Print help and exit 0.
 
-Override: $OAK_AGENT_IDENTITY_OVERRIDE bypasses wordlist derivation.`;
+Override: $PRACTICE_AGENT_IDENTITY_OVERRIDE bypasses wordlist derivation.`;
+
+/**
+ * The bad-usage message when neither `--seed` nor `--platform` is given.
+ */
+export const MISSING_PLATFORM_MESSAGE =
+  "missing --platform; without --seed the CLI must know the seat's platform (claude-code, cursor, codex or gemini), since the three Claude seeds count only on a Claude platform: pass --platform <label> or --seed <seed>";
 
 /**
  * Execute the CLI as a pure function.
@@ -98,13 +115,13 @@ export function runAgentIdentityCli(input: AgentIdentityCliInput): AgentIdentity
     return successResult(`${HELP_TEXT}\n`);
   }
 
-  const seed = resolveSeed(parsed.value.seed, input.env);
+  const seed = resolveSeed(parsed.value.seed, input.env, parsed.value.platform);
   if (seed.kind === 'error') {
     return errorResult(seed.message);
   }
 
   try {
-    const override = nonEmptyEnvironmentValue(input.env.OAK_AGENT_IDENTITY_OVERRIDE);
+    const override = nonEmptyEnvironmentValue(input.env.PRACTICE_AGENT_IDENTITY_OVERRIDE);
 
     return successResult(
       renderIdentityResult(
@@ -127,41 +144,34 @@ function deriveOptions(override: string | undefined): DeriveIdentityOptions {
   };
 }
 
-function resolveSeed(seed: string | undefined, env: AgentIdentityCliEnvironment): SeedResult {
-  const resolvedSeed = firstSeed([
-    nonEmptyEnvironmentValue(seed),
-    nonEmptyEnvironmentValue(env.PRACTICE_AGENT_SESSION_ID_CLAUDE),
-    nonEmptyEnvironmentValue(env.PRACTICE_AGENT_SESSION_ID_CURSOR),
-    nonEmptyEnvironmentValue(env.PRACTICE_AGENT_SESSION_ID_GEMINI),
-    nonEmptyEnvironmentValue(env.PRACTICE_AGENT_SESSION_ID_CODEX),
-    stripSessionIdTagIfPresent(env.CLAUDE_CODE_REMOTE_SESSION_ID),
-    nonEmptyEnvironmentValue(env.CODEX_THREAD_ID),
-    nonEmptyEnvironmentValue(env.conversationId),
-    antigravitySourceMetadataConversationId(env.ANTIGRAVITY_SOURCE_METADATA),
-  ]);
-
-  if (resolvedSeed === undefined) {
-    return {
-      kind: 'error',
-      message:
-        'missing seed; pass --seed or set PRACTICE_AGENT_SESSION_ID_CLAUDE, PRACTICE_AGENT_SESSION_ID_CURSOR, PRACTICE_AGENT_SESSION_ID_GEMINI, PRACTICE_AGENT_SESSION_ID_CODEX, CODEX_THREAD_ID, or Antigravity conversationId',
-    };
+function resolveSeed(
+  seed: string | undefined,
+  env: AgentIdentityCliEnvironment,
+  platform: string | undefined,
+): SeedResult {
+  const explicit = nonEmptyEnvironmentValue(seed);
+  if (explicit !== undefined) {
+    return { kind: 'ok', value: explicit };
   }
-
-  return {
-    kind: 'ok',
-    value: resolvedSeed,
-  };
+  // The platform gate: the three Claude seeds count only on a Claude platform.
+  // Without --seed the CLI must be told the seat's platform; it never infers
+  // one from the ambient environment, which is the leak the gate closes. The
+  // precedence itself is the collaboration seed's, read once for both CLIs.
+  if (platform === undefined) {
+    return { kind: 'error', message: MISSING_PLATFORM_MESSAGE };
+  }
+  const resolved = resolveCollaborationSeed(env, platform);
+  if (resolved === undefined) {
+    return { kind: 'error', message: missingSeedMessage(env, platform) };
+  }
+  return { kind: 'ok', value: resolved.value };
 }
 
-function firstSeed(candidates: readonly (string | undefined)[]): string | undefined {
-  for (const candidate of candidates) {
-    if (candidate !== undefined) {
-      return candidate;
-    }
-  }
-
-  return undefined;
+function missingSeedMessage(env: AgentIdentityCliEnvironment, platform: string): string {
+  return (
+    'missing seed; pass --seed or set PRACTICE_AGENT_SESSION_ID_CLAUDE, PRACTICE_AGENT_SESSION_ID_CURSOR, PRACTICE_AGENT_SESSION_ID_GEMINI, PRACTICE_AGENT_SESSION_ID_CODEX, CODEX_THREAD_ID, or Antigravity conversationId' +
+    gatedSeedsSentence(gatedClaudeSeedsPresent(env, platform), platform)
+  );
 }
 
 function renderIdentityResult(result: IdentityResult, format: AgentIdentityFormat): string {
@@ -172,29 +182,6 @@ function renderIdentityResult(result: IdentityResult, format: AgentIdentityForma
     return `${JSON.stringify(result, null, 2)}\n`;
   }
   return `${result.slug}\n`;
-}
-
-function antigravitySourceMetadataConversationId(value: string | undefined): string | undefined {
-  const trimmed = nonEmptyEnvironmentValue(value);
-  if (trimmed === undefined) {
-    return undefined;
-  }
-
-  try {
-    const parsed: unknown = JSON.parse(trimmed);
-    if (
-      typeof parsed === 'object' &&
-      parsed !== null &&
-      'conversationId' in parsed &&
-      typeof parsed.conversationId === 'string'
-    ) {
-      return nonEmptyEnvironmentValue(parsed.conversationId);
-    }
-  } catch {
-    return undefined;
-  }
-
-  return undefined;
 }
 
 function nonEmptyEnvironmentValue(value: string | undefined): string | undefined {

@@ -122,6 +122,35 @@ describe('resolveEnv', () => {
     cleanup?.();
   });
 
+  describe("envFiles: 'none'", () => {
+    it('validates the process environment alone: a key the process does not carry is absent', () => {
+      const result = resolveEnv({
+        schema: TestSchema,
+        processEnv: { FOO: 'from_process' },
+        envFiles: 'none',
+      });
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error.message).toContain('Failing keys: BAR');
+        expect(result.error.diagnostics).toContainEqual({ key: 'BAR', present: false });
+      }
+    });
+
+    it('accepts a process environment that carries every required key', () => {
+      const result = resolveEnv({
+        schema: TestSchema,
+        processEnv: { FOO: 'from_process', BAR: 'from_process' },
+        envFiles: 'none',
+      });
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value).toEqual({ FOO: 'from_process', BAR: 'from_process' });
+      }
+    });
+  });
+
   describe('source hierarchy', () => {
     it('loads values from .env', () => {
       const tree = createTestTree('FOO=from_dotenv\nBAR=from_dotenv');

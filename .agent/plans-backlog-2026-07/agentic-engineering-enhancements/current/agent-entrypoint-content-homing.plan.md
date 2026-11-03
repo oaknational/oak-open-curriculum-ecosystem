@@ -151,7 +151,7 @@ Likely target homes:
 | Agent tool command catalogue | `agent-tools/README.md` |
 | Artefact authoring and adapter architecture | `.agent/memory/executive/artefact-inventory.md`, `docs/engineering/extending.md`, ADR-125 |
 | Development command list | `docs/engineering/build-system.md` |
-| Commit mechanics | `.agent/skills/commit/SKILL.md` |
+| Commit mechanics | `.agent/skills/change-custody/commit/SKILL-CANONICAL.md` |
 | Repo package topology | root README or `docs/architecture/README.md` |
 | Memory and pattern detail | `.agent/directives/orientation.md`, memory READMEs, patterns README |
 | Essential links | AGENT keeps short trigger-based index |

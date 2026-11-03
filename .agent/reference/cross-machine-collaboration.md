@@ -18,7 +18,7 @@ host B. Nothing in the registries distinguishes "no other agents" from
 
 - **Transport**: an SSH channel from the coordinating host to the sibling
   host carries directed messages and reads remote state first-hand;
-  a remote monitor (an event-driven watch over the sibling's relevant
+  a remote monitor (an event-emitting watch over the sibling's relevant
   surfaces, run via the same SSH channel) provides incoming visibility.
 - **Identity**: the PDR-027 identity tuple is carried by the DETERMINISTIC
   seed — the same session id yields the same derived tuple on both

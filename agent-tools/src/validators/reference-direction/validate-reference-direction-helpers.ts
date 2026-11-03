@@ -115,7 +115,10 @@ export function classifyLayer(repoRelPath: string): ArtefactLayer {
  * them would flag ~1000
  * legitimate concept-names across policed doctrine — a gate-bricking false-positive
  * storm — so the validator polices only resolvable markdown-link references. Do not
- * "widen" extraction to backticks without first revisiting that convention.
+ * "widen" extraction to backticks without first revisiting that convention. One
+ * written name is not safe: an ADR identifier inside the portable Core names a record
+ * that is absent wherever the Core arrives. The sibling `validate-core-adr-citations`
+ * polices it, written in prose or in backticks, and refuses every citation.
  */
 export function extractReferences(sourcePath: string, content: string): ExtractedReference[] {
   const sourceDir = posix.dirname(sourcePath.replace(/^\.\//, ''));

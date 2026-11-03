@@ -4,6 +4,7 @@ import path from 'node:path';
 
 import { err, flatMap, isErr, ok, type Result } from '@oaknational/result';
 
+import { toGitPath } from '../core/git-relative-path.js';
 import { parseFreezeRule, type FreezeRule } from './freeze-rule-schema.js';
 import { parseSweepHit, type SweepHit } from './refound-sweep-model.js';
 import {
@@ -179,7 +180,7 @@ function verifyRuleBinding(
   liveBytes: Buffer,
   source: ByteSource,
 ): Result<undefined, Error> {
-  const ruleRelPath = path.relative(repoRoot, ruleAbsPath);
+  const ruleRelPath = toGitPath(path.relative(repoRoot, ruleAbsPath));
   const baseBytes = source.readBytes(ruleRelPath);
   if (isErr(baseBytes)) {
     return err(
@@ -192,9 +193,8 @@ function verifyRuleBinding(
   if (!liveBytes.equals(Buffer.from(baseBytes.value))) {
     return err(
       new Error(
-        `freeze rule '${ruleRelPath}' differs from the rule at the pinned base — a rule ` +
-          'swap can reshape the sealed sample while passing every count; halting with ' +
-          'nothing written',
+        `freeze rule '${ruleRelPath}' differs from the rule at the pinned base — a rule swap ` +
+          'can reshape the sealed sample while passing every count; halting with nothing written',
       ),
     );
   }

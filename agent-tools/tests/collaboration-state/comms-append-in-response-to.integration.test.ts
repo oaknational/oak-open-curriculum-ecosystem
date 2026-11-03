@@ -24,13 +24,13 @@ const senderWithId = deriveCollaborationIdentity({
   platform: sender.platform,
   model: sender.model,
   env: {
-    OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+    PRACTICE_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
     PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
   },
 }).agentId;
 
 const senderEnv = {
-  OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+  PRACTICE_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
   PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
 };
 
@@ -149,8 +149,6 @@ describe('collaboration-state comms append --in-response-to (F-77)', () => {
         'state/active-claims.json',
         '--comms-dir',
         commsDir,
-        '--output',
-        'state/shared-log.md',
         '--now',
         '2026-05-24T10:18:00Z',
         '--title',

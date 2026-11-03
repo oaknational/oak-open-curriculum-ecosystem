@@ -11,8 +11,6 @@ export const CLAUDE_HOOK_COMMAND =
  * have to reproduce exactly.
  */
 export const CLAUDE_HOOK_ARTEFACT = 'agent-tools/dist/src/hook-policy/pre-tool-use-dispatch.js';
-export const CURSOR_AGENTS_DIR = '.cursor/agents';
-export const CLAUDE_AGENTS_DIR = '.claude/agents';
 export const CODEX_AGENTS_DIR = '.codex/agents';
 export const HOOK_POLICY_PATH = '.agent/hooks/policy.json';
 export const CLAUDE_SETTINGS_PATH = '.claude/settings.json';

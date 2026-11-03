@@ -20,3 +20,11 @@ practice.
 - [analysis evidence lane](../../../analysis/README.md)
 - [hub README](../README.md)
 
+## Pass records
+
+- [consolidation-2026-09-25/](consolidation-2026-09-25/) — the dedicated consolidation of
+  2026-09-25: the napkin and comms decision tables (the split method's reduced analyses; every
+  move-bearing claim is verified at source before use) and the six-file doctrine patch owed to a
+  lane branch. The analyst outputs and briefs sit in the ignored instance tier
+  `.agent/state/collaboration/comms-analysis-2026-09-25/`.
+

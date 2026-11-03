@@ -2,8 +2,8 @@ import { ok, type Result } from '@oaknational/result';
 
 import type { ReadPrStateOptions } from '../pr-watch/state-gh.js';
 import type { PrStateReading } from '../pr-watch/state-types.js';
-import { MERGE_USAGE, parseMergeArgs, type MergeArgs } from './merge-args.js';
-import { verdictAwaitsSettlement } from './merge-decision.js';
+import { parseMergeArgs, type MergeArgs } from './merge-args.js';
+import { MERGE_USAGE } from './merge-usage.js';
 import {
   deadlineMessage,
   deadlinePassed,
@@ -16,6 +16,7 @@ import { mintForConfig, type MintedToken, type MintSeams } from './mint-for-conf
 import type { GithubApiFetch } from './mint-installation-token.js';
 import {
   resolveBotIdentity,
+  resolveMergeBotAppSlug,
   type BotIdentity,
   type MergeBotResolveInput,
 } from './resolve-identity.js';
@@ -85,22 +86,42 @@ export async function runMergeAction(
     input.stderr.write(`merge-bot merge: ${parsed.error.message}\n`);
     return 2;
   }
-  const identity = resolveBotIdentity({}, input.identityInput);
-  if (!identity.ok) {
-    input.stderr.write(`merge-bot merge: ${identity.error.message}\n`);
+  const bot = resolveBot(parsed.value, input.identityInput);
+  if (!bot.ok) {
+    input.stderr.write(`merge-bot merge: ${bot.error.message}\n`);
     return 2;
   }
   input.stderr.write(SWEEP_NOTE);
-  const run = await mintWithDeadline(identity.value, input);
+  const run = await mintWithDeadline(bot.value.identity, input);
   if (!run.ok) {
     input.stderr.write(`merge-bot merge: ${run.error.message}\n`);
     return 1;
   }
-  return pollUntilActionable({
-    parsed: parsed.value,
+  return pollUntilActionable({ parsed: parsed.value, ...bot.value, run: run.value, input });
+}
+
+// The identity and the bot's login (its app slug): the records door admits
+// only the bot's own pull requests (merge-records-checks.ts), and a
+// declaration stands only as the bot's own comment (declared-unavailable.ts).
+function resolveBot(
+  parsed: MergeArgs,
+  identityInput: MergeBotResolveInput,
+): Result<
+  { readonly identity: BotIdentity; readonly appSlug: string; readonly poster: string | null },
+  Error
+> {
+  const identity = resolveBotIdentity({}, identityInput);
+  if (!identity.ok) {
+    return identity;
+  }
+  const appSlug = resolveMergeBotAppSlug(identityInput);
+  if (!appSlug.ok) {
+    return appSlug;
+  }
+  return ok({
     identity: identity.value,
-    run: run.value,
-    input,
+    appSlug: appSlug.value,
+    poster: parsed.unavailable.length === 0 ? null : appSlug.value,
   });
 }
 
@@ -147,6 +168,8 @@ function executionSeams(
 async function pollUntilActionable(context: {
   readonly parsed: MergeArgs;
   readonly identity: BotIdentity;
+  readonly appSlug: string;
+  readonly poster: string | null;
   readonly run: MintedRun;
   readonly input: MergeActionInput;
 }): Promise<number> {
@@ -172,9 +195,15 @@ async function pollUntilActionable(context: {
     }
     const outcome = await runMergeExecution({
       identity: context.identity,
+      appSlug: context.appSlug,
       prNumber: parsed.prNumber,
       expectedReviewers: parsed.expect,
       nowIso: at,
+      // Each poll judges the declarations at its own clock.
+      unavailable:
+        context.poster === null
+          ? undefined
+          : { declarations: parsed.unavailable, poster: context.poster, now: at },
       seams,
     });
     const retry = retryLabel(outcome, poll, parsed.maxPolls);
@@ -188,10 +217,12 @@ async function pollUntilActionable(context: {
 
 /**
  * Whether this poll outcome is worth another poll, and the progress label if
- * so. Two retryable shapes: a wait-class verdict (it resolves by time), and a
- * failed READING after a working first poll (a transient — a FIRST-poll
- * failure is a broken environment and fails fast). Everything else lands on
- * a terminal path.
+ * so. Two retryable shapes: a refusal the decision marked as awaiting
+ * settlement (the verdict's own wait state, which resolves by time; a
+ * terminal refusal such as the author fence under an empty set never polls),
+ * and a failed READING after a working first poll (a transient — a
+ * FIRST-poll failure is a broken environment and fails fast). Everything
+ * else lands on a terminal path.
  */
 function retryLabel(
   outcome: Awaited<ReturnType<typeof runMergeExecution>>,
@@ -206,7 +237,7 @@ function retryLabel(
       ? `reading unavailable (${outcome.error.message})`
       : undefined;
   }
-  return outcome.value.kind === 'refused' && verdictAwaitsSettlement(outcome.value.verdictState)
+  return outcome.value.kind === 'refused' && outcome.value.awaitsSettlement
     ? outcome.value.verdictState
     : undefined;
 }

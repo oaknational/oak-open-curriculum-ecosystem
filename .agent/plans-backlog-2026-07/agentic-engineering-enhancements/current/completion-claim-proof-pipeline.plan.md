@@ -193,7 +193,7 @@ preference.
 
 **Candidate surfaces**:
 
-- `.agent/skills/plan/SKILL-CANONICAL.md`
+- `.agent/skills/planning/plan/SKILL-CANONICAL.md`
 - `.agents/skills/jc-plan/SKILL.md` if adapter wording needs refresh
 - `.agent/plans/templates/feature-workstream-template.md`
 - `.agent/plans/templates/components/tdd-phases.md`

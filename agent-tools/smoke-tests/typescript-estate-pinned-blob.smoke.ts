@@ -1,10 +1,11 @@
 import { spawnSync } from 'node:child_process';
-import { existsSync, mkdtempSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 
 import { unwrapErr, unwrapOrThrow } from '@oaknational/result';
 
+import { resolveTrustedGit } from '../dist/src/core/trusted-git.js';
 import { gitEnvironment } from '../dist/src/typescript-estate/git-snapshot-process.js';
 import { createPinnedGitBlobPort } from '../dist/src/typescript-estate/git-snapshot-pinned-blob.js';
 import type { GitContext } from '../dist/src/typescript-estate/git-snapshot-model.js';
@@ -13,6 +14,8 @@ import type {
   ProcessPort,
   ProcessResult,
 } from '../dist/src/typescript-estate/ports.js';
+
+import { trustedShellPath } from './trusted-shell-directories';
 
 /**
  * Built-form smoke for the commit-bound pinned-blob adapter (handoff step 4):
@@ -28,25 +31,20 @@ function fail(message: string): never {
 }
 
 /**
- * Fixed, root-owned directories. Every child process this smoke starts
- * resolves its `git` binary inside this list and runs with the list as its
- * entire PATH, so no writable directory on the ambient PATH can shadow the
- * executable the smoke means to exercise.
+ * Every child process this smoke starts runs with a fixed, root-owned
+ * directory list as its entire PATH, so no writable directory on the ambient
+ * PATH can shadow the executables the smoke means to exercise.
  */
-const TRUSTED_BIN_DIRECTORIES: readonly string[] = ['/usr/bin', '/bin', '/usr/local/bin'];
-const PINNED_PATH = TRUSTED_BIN_DIRECTORIES.join(path.delimiter);
+const PINNED_PATH = trustedShellPath();
 
-function trustedExecutable(name: string): string {
-  for (const directory of TRUSTED_BIN_DIRECTORIES) {
-    const candidate = path.join(directory, name);
-    if (existsSync(candidate)) {
-      return candidate;
-    }
-  }
-  return fail(`'${name}' is absent from every trusted directory (${PINNED_PATH})`);
-}
-
-const GIT_EXECUTABLE = trustedExecutable('git');
+/**
+ * `git` comes from the estate's own platform-partitioned allowlist rather
+ * than a second list maintained here: the resolver already refuses anything
+ * outside fixed absolute locations, and a duplicate list is a second thing to
+ * keep true (its POSIX-only predecessor made this smoke unrunnable on
+ * Windows).
+ */
+const GIT_EXECUTABLE = resolveTrustedGit();
 
 const realProcessPort: ProcessPort = {
   run(input: ProcessInvocation): ProcessResult {

@@ -22,8 +22,8 @@ owner_gates:
     clears_when: >-
       The owner reviews this plan shape and the Stage-0 composition declaration (proposition,
       claim boundary, activated and omitted capabilities, decision-budget seed) and says build.
-    expires: 2026-09-21
-last_updated: 2026-08-31
+    expires: 2026-10-10
+last_updated: 2026-09-08
 ---
 
 # Semantic-search showcase
@@ -54,7 +54,8 @@ now" at the decision round, napkin entry "~7"). The plan then changed materially
 PR #28 review-finding cures (linkability rewritten around result-carried URLs, criterion
 re-scoping, evidence taxonomy, extraction-as-outcome), so per the plan schema's scope-change
 rule it returns to `sketch` until the owner re-ratifies the amended shape — the intended
-moment is the joint Stage-0/definition review.
+moment is the Stage-0 owner review (this node's gate; the definition node it once paired
+with was ratified separately on 2026-09-08).
 
 ## Goal
 
@@ -93,8 +94,9 @@ link.
 Dependency note (minimum shippable shape without the `beneficial` definition-plan edge): if
 the definition corpus is not yet owner-accepted, Stage 0 instantiates the composition
 declaration, decision budget and ledger entry from the proposed corpus as-is, marked
-provisional; the joint review gate is where amendment risk lands, and no other part of this
-plan consumes the definition. The edge stays `beneficial` because that shape ships.
+provisional; the Stage-0 review gate is where amendment risk lands, and no other part of this
+plan consumes the definition (the definition node was ratified on 2026-09-08, so this note
+now describes only the shape that shipped before that word). The edge stays `beneficial` because that shape ships.
 
 ## User groups and key journeys
 
@@ -197,7 +199,7 @@ does not replace it.
 | Design language | Oak Design System — demonstrated; both consumption paths proven (Tailwind-mapped, plain-CSS) | None blocking | Path choice is a decision-budget entry, not a fork |
 | Composition declaration and profile | Proposed only (definition corpus) | No concrete record instrument exists | First instantiation of the record interfaces — the Kit's first real declaration artefact |
 | Decision-budget record | Proposed only | No instrument | Lightweight Kit-owned record format, seeded here |
-| Evidence-ledger entry | Proposed only (strategy names the minimum fields) | Ledger absent | First entry authored by this demo, to the strategy's minimum record shape. Named readers and the decisions the reading changes: the joint owner review (Stage-0/definition gate verdict) and the next demo's Stage 0 (its reuse choices). Completion is criterion 6's proof — a completed record, never a write-only stub |
+| Evidence-ledger entry | Proposed only (strategy names the minimum fields) | Ledger absent | First entry authored by this demo, to the strategy's minimum record shape. Named readers and the decisions the reading changes: the Stage-0 owner review (this node's gate verdict) and the next demo's Stage 0 (its reuse choices). Completion is criterion 6's proof — a completed record, never a write-only stub |
 | Observability for a public read-only demo | Reusable observability/logger packages; zero-hit recording in the search SDK | Whole-Kit health contracts absent — not activated by this profile | Register only if build observes recurring burden |
 | Typed environment and bindings | `@oaknational/env` + `env-resolution` | Provider composition and capability discovery absent (evidence row) | Candidate seam; confirm through the decision budget rather than pre-build |
 | Deployment of a public demo | App-specific Vercel path (MCP app) exists | No demo-tier host/release profile | Candidate seam, observed at the deploy slice |
@@ -240,7 +242,7 @@ retuning, no new search features, no admin surfaces.
    by build evidence; new gaps appended; each gap carrying a disposition routed to its
    legitimate owner (Kit-placement inquiry, owning stream, or demo-local). The ledger entry
    is a completed record to the strategy's minimum shape, read by its named readers (the
-   joint owner review; the next demo's Stage 0) — a write-only stub fails this criterion.
+   Stage-0 owner review; the next demo's Stage 0) — a write-only stub fails this criterion.
    Proof: **repo-safe** for the register and the completed entry; **owner-held** for
    placement rulings.
 7. **Public-surface-only consumption held.** No deep imports into SDK internals or admin
@@ -334,3 +336,8 @@ Slices at pickup, each a single-story PR within the default round budget (PDR-13
   contain is known first-hand. The demo never surfaces those edges.
 - Search-relevance retuning or provider changes; findings about search quality route to the
   search-owning stream.
+
+## Amendment (2026-09-08, owner-ruled)
+
+The owner gate is renewed to 2026-10-10 at the owner's card answer of 2026-09-08 (renew). The
+definition node it once paired with was ratified the same day; this review stands alone.

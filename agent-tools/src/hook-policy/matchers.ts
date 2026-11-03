@@ -1,3 +1,4 @@
+import { isPathInScope, type PathScopeOptions } from './path-scope.js';
 import type { ScopedContentBlockGroup } from './types.js';
 
 /**
@@ -145,41 +146,6 @@ export function findAddedBlockedContent(
 }
 
 /**
- * Match a single path-scope entry against a file path.
- *
- * Entries beginning with `**\/*` (no space) are treated as a suffix match
- * (e.g. `**\/*.plan.md` matches any path ending in `.plan.md`). All other
- * entries are treated as substring matches against the file path, which
- * works equivalently for absolute and relative forms because the path
- * always contains its own directory prefix.
- */
-function matchesPathScope(filePath: string, scope: string): boolean {
-  if (scope.startsWith('**/*')) {
-    return filePath.endsWith(scope.slice(4));
-  }
-  return filePath.includes(scope);
-}
-
-/**
- * Determine whether a file path is in scope for a `ScopedContentBlockGroup` —
- * matches at least one include and no excludes.
- */
-export function isPathInScope(
-  filePath: string | undefined,
-  includePaths: readonly string[],
-  excludePaths: readonly string[] = [],
-): boolean {
-  if (filePath === undefined) {
-    return false;
-  }
-  const matchesInclude = includePaths.some((scope) => matchesPathScope(filePath, scope));
-  if (!matchesInclude) {
-    return false;
-  }
-  return !excludePaths.some((scope) => matchesPathScope(filePath, scope));
-}
-
-/**
  * A scoped-block match: the group whose scope matched, plus the actual text
  * that fired. The deny builder uses the group for the concept, citation, and
  * reappraisal direction, and `matchedText` to name the exact offending text:
@@ -224,15 +190,19 @@ export function findScopedBlockInText(
  * the group's include/exclude paths. Groups and the patterns within each
  * group are checked in declaration order; the first match wins. `kind` and
  * the `excludes_*` options are applied at group level to every pattern.
+ * `scope` carries the path-scoping seams (the repo root that anchors the
+ * groups' root-anchored scopes for the hook's absolute paths, what a relative
+ * path means).
  */
 export function findAddedScopedBlock(
   newContent: string,
   priorContent: string,
   filePath: string | undefined,
   groups: readonly ScopedContentBlockGroup[],
+  scope: PathScopeOptions = {},
 ): ScopedBlockMatch | null {
   for (const group of groups) {
-    if (!isPathInScope(filePath, group.include_paths, group.exclude_paths)) {
+    if (!isPathInScope(filePath, group.include_paths, group.exclude_paths, scope)) {
       continue;
     }
     for (const pattern of group.patterns) {

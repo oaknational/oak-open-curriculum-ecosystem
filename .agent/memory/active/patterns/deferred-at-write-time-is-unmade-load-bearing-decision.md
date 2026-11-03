@@ -3,6 +3,7 @@ name: "Deferred-at-Write-Time Is an Unmade Load-Bearing Decision"
 polarity: anti-pattern
 use_this_when: A plan or design defers a substantive decision to implementation time ("decide at write time", "the cycle author chooses", "TBD in the implementation slice") — check whether the deferral is real flexibility or a load-bearing decision the plan owner has declined to make
 category: process
+layer: general
 proven_in: ".agent/memory/active/distilled.md § Multi-Reviewer Dispatch Discipline (2026-05-09 napkin rotation)"
 proven_date: 2026-05-09
 barrier:

@@ -40,7 +40,7 @@ export class RefFormatOracleUnavailableError extends Error {}
  * shorthand against a repository, which a name being validated must not get).
  *
  * The binary is resolved ONCE, here, and its throw translated at this one
- * boundary (ADR-088, the pattern `resolveGitContext` uses): resolving inside
+ * boundary (the Result pattern, the pattern `resolveGitContext` uses): resolving inside
  * the returned closure would let the throw escape through whatever
  * Result-typed function later asks the question.
  */

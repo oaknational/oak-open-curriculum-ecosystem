@@ -39,19 +39,33 @@ function stripProductAnalyticsInputs<TEnv extends Env>(parsed: TEnv): TEnv {
   return env;
 }
 
+/** The variable names a schema refusal concerns — a value-free diagnostic surface. */
+function refusedKeys(issues: readonly { readonly path: readonly PropertyKey[] }[]): string[] {
+  return [
+    ...new Set(
+      issues
+        .map((issue) => issue.path[0])
+        .filter((segment): segment is string => typeof segment === 'string'),
+    ),
+  ];
+}
+
 function resolveSharedRuntimeFields(env: Env): Result<SharedRuntimeFields, ConfigError> {
   const versionResult = resolveApplicationVersion({
     APP_VERSION_OVERRIDE: env.APP_VERSION_OVERRIDE,
   });
 
   if (!versionResult.ok) {
-    return versionResult;
+    return err({ ...versionResult.error, failingKeys: ['APP_VERSION_OVERRIDE'] });
   }
 
   const gitShaResult = resolveGitSha(env);
 
   if (!gitShaResult.ok) {
-    return gitShaResult;
+    return err({
+      ...gitShaResult.error,
+      failingKeys: ['GIT_SHA_OVERRIDE', 'VERCEL_GIT_COMMIT_SHA'],
+    });
   }
 
   const vercelHostnames = [env.VERCEL_URL, env.VERCEL_BRANCH_URL, env.VERCEL_PROJECT_PRODUCTION_URL]
@@ -127,6 +141,7 @@ export function composeLoadedRuntimeFromValidatedEnv(
     return err({
       message: parsedEnv.error.message,
       diagnostics: [],
+      failingKeys: refusedKeys(parsedEnv.error.issues),
     });
   }
 
@@ -161,6 +176,7 @@ export function createRuntimeConfigFromValidatedEnv(
     return err({
       message: parsedEnv.error.message,
       diagnostics: [],
+      failingKeys: refusedKeys(parsedEnv.error.issues),
     });
   }
 
@@ -190,6 +206,7 @@ function buildRuntimeConfigFromParsed(
     return err({
       message: 'Clerk keys are required when auth is enabled but were not found after validation',
       diagnostics: [],
+      failingKeys: ['CLERK_PUBLISHABLE_KEY', 'CLERK_SECRET_KEY'],
     });
   }
 

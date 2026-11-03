@@ -4,6 +4,7 @@ import { unwrapOrThrow } from '@oaknational/result';
 
 import { activeAgentReports } from './active-agents.js';
 import { claimReport, sameAgent } from './claim-reports.js';
+import { commitQueueDirForActivePath, readCommitQueueEntries } from './commit-queue-store.js';
 import { cliIo, type CliRuntime } from './cli-runtime.js';
 import { resolveIdentity } from './cli-identity.js';
 import { optional, required, type Options } from './cli-options.js';
@@ -62,13 +63,19 @@ export async function statusClaims(options: Options): Promise<string> {
 }
 
 export async function activeAgents(options: Options): Promise<string> {
-  const registry = unwrapOrThrow(await readActiveClaimsFile(required(options, 'active')));
+  const activePath = required(options, 'active');
+  const registry = unwrapOrThrow(await readActiveClaimsFile(activePath));
+  const nowIso = nowFromOptions(options);
+  const commitQueue = await readCommitQueueEntries({
+    queueDir: commitQueueDirForActivePath(activePath),
+    nowIso,
+  });
   const closedPath = optional(options, 'closed');
   const closedArchive =
     closedPath === undefined ? undefined : unwrapOrThrow(await readClosedClaimsFile(closedPath));
 
   return `${JSON.stringify(
-    activeAgentReports(registry, nowFromOptions(options), closedArchive),
+    activeAgentReports(registry, commitQueue, nowIso, closedArchive),
     null,
     2,
   )}\n`;
@@ -98,6 +105,10 @@ export async function workState(
   }
 
   const registry = unwrapOrThrow(await io.readActiveClaimsFile(activePath));
+  const commitQueue = await io.readCommitQueueEntries({
+    queueDir: commitQueueDirForActivePath(activePath),
+    nowIso,
+  });
   const closedPath = optional(options, 'closed');
   const closedArchive =
     closedPath === undefined ? undefined : unwrapOrThrow(await io.readClosedClaimsFile(closedPath));
@@ -109,7 +120,7 @@ export async function workState(
   const rows = projectWorkState({
     worktrees,
     events,
-    activeAgents: activeAgentReports(registry, nowIso, closedArchive),
+    activeAgents: activeAgentReports(registry, commitQueue, nowIso, closedArchive),
     nowMs,
   });
 

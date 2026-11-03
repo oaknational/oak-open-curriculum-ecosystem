@@ -1,6 +1,6 @@
-import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, readdir, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import {
@@ -38,6 +38,19 @@ export async function writeJson(path: string, value: unknown): Promise<void> {
   await writeText(path, `${JSON.stringify(value, null, 2)}\n`);
 }
 
+export async function ensureDirectory(path: string): Promise<void> {
+  await mkdir(path, { recursive: true });
+}
+
+/**
+ * Plant a name that a directory listing returns but whose read ENOENTs — a
+ * dangling symlink. The deterministic stand-in for a file deleted between
+ * enumeration and read by a concurrent writer.
+ */
+export async function createDanglingSymlink(linkPath: string): Promise<void> {
+  await symlink(join(dirname(linkPath), 'deleted-between-listing-and-read'), linkPath);
+}
+
 export async function makeTempCollaborationRepo(
   options: { readonly seedCommsEvent?: boolean } = {},
 ): Promise<string> {
@@ -52,6 +65,7 @@ export async function makeTempCollaborationRepo(
     'active-claims.schema.json',
     'closed-claims.schema.json',
     'comms-event.schema.json',
+    'commit-queue-intent.schema.json',
     'conversation.schema.json',
     'escalation.schema.json',
   ]) {
@@ -63,7 +77,6 @@ export async function makeTempCollaborationRepo(
 
   await writeJson(join(collaborationRoot, 'active-claims.json'), {
     schema_version: ACTIVE_CLAIMS_SCHEMA_VERSION,
-    commit_queue: [],
     claims: [],
   });
   await writeJson(join(collaborationRoot, 'closed-claims.archive.json'), {

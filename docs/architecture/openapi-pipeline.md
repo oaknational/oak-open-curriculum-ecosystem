@@ -1,12 +1,26 @@
 # The OpenAPI-First Pipeline
 
-**Last Updated**: 2026-04-26
+**Last Updated**: 2026-10-17
 
 **Status**: Active architecture reference
 
 ## Consumer data boundary (this monorepo)
 
 Code in **oak-open-curriculum-ecosystem** — SDK, MCP servers, search CLI, scripts, and agent workflows — must obtain curriculum and related data **only through the published Oak Open Curriculum HTTP API** (the contract published at `https://open-api.thenational.academy/api/v0/swagger.json` and materialised in codegen). **Do not** connect directly to Hasura, PostgreSQL, materialised view names, Elasticsearch indices, or any other internal Oak data or analytics systems from this repository. Naming or discussing implementation details (e.g. materialised view identifiers in public API or upstream service code) in reports or research is for **context and diagnosis**, not a pattern to replicate at the consumer boundary. The service that _implements_ the public API (for example, `oak-openapi` talking to a GraphQL layer) is upstream of this monorepo’s consumer contract.
+
+Two recorded sources sit beside the API under their own decision records: the bulk
+download and its published JSON Schema
+([ADR-222](architectural-decisions/222-bulk-schema-contract-interim-truing-then-derivation.md)),
+and the [Oak Curriculum Ontology](https://github.com/oaknational/oak-curriculum-ontology),
+read from its public GitHub repository at a pinned revision
+([ADR-157](architectural-decisions/157-multi-source-open-education-integration.md);
+[ADR-173](architectural-decisions/173-graph-stack-topology.md)). Asset files come only
+through the API's documented asset endpoints, never from the raw CDN (the
+[`source-curriculum-content-via-api-not-cdn`](../../.agent/rules/source-curriculum-content-via-api-not-cdn.md)
+rule).
+
+The owner restated the boundary on 2026-10-13, verbatim: "all Oak systems are no go",
+"GitHub is read only", and everything else stays off limits "unless I say otherwise".
 
 ## Problem Statement
 
@@ -381,13 +395,17 @@ The architectural decisions that define this pipeline have documented trade-offs
 
 ### Planned Migration: Castr
 
-The current `openapi-zod-client` + adapter pipeline is planned for replacement
-by Castr, which will produce Zod v4 output directly, eliminating the
-transformation layer entirely. Prerequisites: SDK workspace separation (in
-progress), side-by-side validation, then adapter removal. See
-[ADR-055](./architectural-decisions/055-zod-version-boundaries.md),
-[ADR-108](./architectural-decisions/108-sdk-workspace-decomposition.md), and
-the [Castr plan](../../.agent/plans-backlog-2026-07/sector-engagement/castr/README.md).
+The intended Castr replacement covers `openapi-zod-client`, its adapter and
+`openapi-typescript` once every consumed output and supported profile is
+qualified. `openapi-fetch` remains. Castr's destination specification is still
+a draft awaiting source-owned ratification; integration is not implemented.
+The [current integrity and Castr specification](oce-integrity-and-castr.md)
+owns the complete boundary, including approval/readiness, model construction,
+independent semantic fixtures, profile mismatches, output coverage and
+retirement evidence. Side-by-side agreement alone cannot establish fidelity.
+[ADR-055](./architectural-decisions/055-zod-version-boundaries.md) and
+[ADR-108](./architectural-decisions/108-sdk-workspace-decomposition.md) retain
+their historical context.
 
 ## Key Takeaway
 

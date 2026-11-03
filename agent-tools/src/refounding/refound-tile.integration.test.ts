@@ -33,7 +33,14 @@ import { runTile } from './refound-tile-helpers.js';
 const tempRoots: string[] = [];
 
 afterEach(async () => {
-  await Promise.all(tempRoots.splice(0).map((root) => rm(root, { recursive: true, force: true })));
+  // maxRetries: Windows briefly holds child handles (indexer, Defender)
+  // after writes, so an immediate recursive rmdir can fail ENOTEMPTY —
+  // Node's own retry knob exists for exactly this platform behaviour.
+  await Promise.all(
+    tempRoots
+      .splice(0)
+      .map((root) => rm(root, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 })),
+  );
 });
 
 const cleanScan: SecretScan = () => Promise.resolve(ok(undefined));

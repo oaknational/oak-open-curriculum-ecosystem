@@ -1,125 +1,41 @@
 import assert from 'node:assert/strict';
-import { execFileSync } from 'node:child_process';
-import { existsSync, realpathSync } from 'node:fs';
-import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
+import type { SpawnSyncReturns } from 'node:child_process';
+import { existsSync } from 'node:fs';
+import { rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-import { unwrapOrThrow } from '@oaknational/result';
-
-import { runAgentToolsCli } from '../src/bin/agent-tools-cli';
-import type { CommitIntent, CommitQueueRegistry } from '../src/commit-queue';
-import { readRegistry } from '../src/commit-queue/registry';
-import { uuidV5Schema } from '../src/collaboration-state/agent-id';
-import { resolveTrustedGit } from '../src/core/trusted-git';
-
+import {
+  BIN,
+  COMMIT_SUBJECT,
+  INTENT_ID,
+  REGISTRY_REL,
+  RENAME_DESTINATION,
+  RENAME_SOURCE,
+  git,
+  makeFixture,
+  readPrimaryIntent,
+  runCommitQueue,
+  streams,
+} from './commit-queue-worktree-fixture';
 /**
- * F-138 regression smoke — the commit-queue two-root split and changed-endpoint identity.
- *
- * Real scratch primary + linked worktree: a rename traverses both changed
- * endpoints, registry state stays at the coordination home, an underivable
- * git root refuses loudly. Real IO makes this a smoke; `test:e2e` gates it.
+ * F-138 regression smoke — the commit-queue two-root split and
+ * changed-endpoint identity. Real scratch primary + linked worktree: a
+ * rename traverses both changed endpoints, registry state stays at the
+ * coordination home, an underivable git root refuses loudly. Each proof runs
+ * the built CLI as a child with every stream captured and pinned, so what the
+ * command prints is asserted and never reaches the gate log. `test:e2e` gates
+ * it.
  */
-
-const CLAIM_ID = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
-const INTENT_ID = '11111111-1111-4111-8111-111111111111';
-const RENAME_SOURCE = 'notes/current.md';
-const RENAME_DESTINATION = 'notes/active.md';
-const COMMIT_SUBJECT = 'feat(f138): stage from the linked worktree';
-const REGISTRY_REL = '.agent/state/collaboration/active-claims.json';
-
-const agentId = {
-  agent_name: 'Prismatic Waxing Constellation',
-  platform: 'claude-code',
-  model: 'test-model',
-  session_id_prefix: '019f00',
-  id: uuidV5Schema.parse('e2e793c7-923e-5baa-97f0-2bedfb9b6b50'),
-};
-
-function seedRegistry(): CommitQueueRegistry {
-  return {
-    schema_version: '1.3.0',
-    claims: [
-      {
-        claim_id: CLAIM_ID,
-        agent_id: agentId,
-        thread: 'agent-tooling',
-        areas: [{ kind: 'files', patterns: ['notes/**'] }],
-        claimed_at: '2026-07-14T00:00:00Z',
-        intent: 'F-138 linked-worktree regression fixture.',
-        intent_to_commit: INTENT_ID,
-      },
-    ],
-    commit_queue: [
-      {
-        intent_id: INTENT_ID,
-        claim_id: CLAIM_ID,
-        agent_id: agentId,
-        files: [RENAME_SOURCE, RENAME_DESTINATION],
-        commit_subject: COMMIT_SUBJECT,
-        queued_at: '2026-07-14T00:00:00Z',
-        updated_at: '2026-07-14T00:00:00Z',
-        expires_at: '2099-01-01T00:00:00Z',
-        phase: 'staging',
-      },
-    ],
-  };
-}
-
-function git(cwd: string, ...args: readonly string[]): string {
-  return execFileSync(resolveTrustedGit(), [...args], { cwd, encoding: 'utf8' });
-}
-
-interface WorktreeFixture {
-  /** Temp parent directory holding both checkouts; removed after each test. */
-  readonly root: string;
-  /** The primary checkout — the coordination home holding the registry. */
-  readonly primary: string;
-  /** The linked worktree the ceremony is invoked from. */
-  readonly linked: string;
-}
-
-async function makeFixture(): Promise<WorktreeFixture> {
-  const root = realpathSync(await mkdtemp(join(tmpdir(), 'oak-f138-')));
-  const primary = join(root, 'primary');
-  await mkdir(primary, { recursive: true });
-  git(primary, 'init', '--initial-branch=main');
-  git(primary, 'config', 'user.email', 'f138-regression@test.invalid');
-  git(primary, 'config', 'user.name', 'F138 Regression');
-  git(primary, 'config', 'commit.gpgsign', 'false');
-  await mkdir(join(primary, 'notes'), { recursive: true });
-  await writeFile(join(primary, 'README.md'), 'seed\n');
-  await writeFile(join(primary, RENAME_SOURCE), '# move me atomically\n');
-  git(primary, 'add', 'README.md', RENAME_SOURCE);
-  git(primary, 'commit', '-m', 'chore: seed');
-
-  const linked = join(root, 'linked');
-  git(primary, 'worktree', 'add', linked, '-b', 'lane/f138');
-
-  const collaborationDir = join(primary, '.agent/state/collaboration');
-  await mkdir(collaborationDir, { recursive: true });
-  await writeFile(join(primary, REGISTRY_REL), `${JSON.stringify(seedRegistry(), null, 2)}\n`);
-
-  return { root, primary, linked };
-}
-
-async function readPrimaryIntent(fixture: WorktreeFixture): Promise<CommitIntent | undefined> {
-  const registry = unwrapOrThrow(await readRegistry(join(fixture.primary, REGISTRY_REL)));
-  return registry.commit_queue.find((entry) => entry.intent_id === INTENT_ID);
-}
 
 async function proveRecordStagedUsesWorktreeIndex(): Promise<void> {
   const fixture = await makeFixture();
   try {
     git(fixture.linked, 'mv', RENAME_SOURCE, RENAME_DESTINATION);
 
-    const result = await runAgentToolsCli({
-      argv: ['commit-queue', 'record-staged', '--intent-id', INTENT_ID],
-      env: {},
-      cwd: fixture.linked,
-    });
+    const result = runCommitQueue(fixture.linked, ['record-staged', '--intent-id', INTENT_ID]);
 
-    assert.equal(result.exitCode, 0);
+    assert.equal(result.status, 0, streams(result));
+    assert.equal(result.stdout, '');
     assert.equal(result.stderr, '');
 
     const intent = await readPrimaryIntent(fixture);
@@ -140,30 +56,82 @@ async function proveVerifyStagedUsesWorktreeIndex(): Promise<void> {
   try {
     git(fixture.linked, 'mv', RENAME_SOURCE, RENAME_DESTINATION);
 
-    const recorded = await runAgentToolsCli({
-      argv: ['commit-queue', 'record-staged', '--intent-id', INTENT_ID],
-      env: {},
-      cwd: fixture.linked,
-    });
-    assert.equal(recorded.exitCode, 0);
+    const recorded = runCommitQueue(fixture.linked, ['record-staged', '--intent-id', INTENT_ID]);
+    assert.equal(recorded.status, 0, streams(recorded));
+    const recordedIntent = await readPrimaryIntent(fixture);
+    assert.ok(
+      recordedIntent?.staged_bundle_fingerprint,
+      `the record step wrote no intent with a staged fingerprint:\n${streams(recorded)}`,
+    );
 
-    const verified = await runAgentToolsCli({
-      argv: [
-        'commit-queue',
-        'verify-staged',
-        '--intent-id',
-        INTENT_ID,
-        '--commit-subject',
-        COMMIT_SUBJECT,
-      ],
-      env: {},
-      cwd: fixture.linked,
-    });
+    const verified = runCommitQueue(fixture.linked, [
+      'verify-staged',
+      '--intent-id',
+      INTENT_ID,
+      '--commit-subject',
+      COMMIT_SUBJECT,
+    ]);
 
-    assert.equal(verified.exitCode, 0);
+    assert.equal(verified.status, 0, streams(verified));
+    // Verification reads the same worktree index the record step fingerprinted.
+    assert.equal(verified.stdout, `${recordedIntent.staged_bundle_fingerprint}\n`);
+    assert.equal(verified.stderr, '');
   } finally {
     await rm(fixture.root, { recursive: true, force: true });
   }
+}
+
+/**
+ * The whole of a commit's stderr when the advisory pass failed: the advisory
+ * banner, then whatever the advisory child and the inner `git commit` wrote to
+ * stderr (the `children` group, zero or more lines), then the notice that the
+ * commit landed at `head` with a non-zero advisory exit recorded. The wording
+ * after the dash is free.
+ */
+function advisoryFailureStderr(head: string): RegExp {
+  return new RegExp(
+    String.raw`^\[ADVISORY ONLY — NOT A COMMIT GATE\]\n` +
+      String.raw`(?<children>(?:[^\n]*\n)*)` +
+      String.raw`commit landed at ${head} \(intent ${INTENT_ID}\); ` +
+      String.raw`advisory orchestrator exit [1-9]\d* — [^\n]*\n$`,
+  );
+}
+
+/**
+ * Both streams of a commit whose advisory pass failed, every line accounted
+ * for. This repository's own lines are pinned by their own text: the banner
+ * whole, the notice up to its dash with any non-zero exit, and the sha as the
+ * last stdout line. The advisory child is the host's pnpm, which can only
+ * fail in the scratch repository, and how it fails belongs to its version:
+ * pnpm 11 prints one line on stdout, pnpm 12 prints a block on stderr. Its
+ * text is pinned by where it may sit and by its presence, never by its
+ * wording: on stdout only before git's commit summary, on stderr only between
+ * the banner and the notice (where the inner `git commit`'s own stderr also
+ * lands), and at least one non-empty line across the two. git's summary is
+ * pinned the same way: a first line naming the commit subject, then only
+ * git's indented detail lines before the sha. This does not prove the
+ * advisory child's working directory or arguments.
+ */
+function assertAdvisoryFailureStreams(committed: SpawnSyncReturns<string>, head: string): void {
+  const stderr = advisoryFailureStderr(head).exec(committed.stderr);
+  assert.ok(
+    stderr?.groups,
+    `stderr is the banner, the children's stderr, the notice:\n${streams(committed)}`,
+  );
+  const lines = committed.stdout.split('\n');
+  assert.deepEqual(lines.slice(-2), [head, ''], `the sha ends stdout:\n${streams(committed)}`);
+  const summaryAt = lines.findIndex((line) => line.includes(COMMIT_SUBJECT));
+  assert.ok(summaryAt >= 0, `git's commit summary names the subject:\n${streams(committed)}`);
+  assert.deepEqual(
+    lines.slice(summaryAt + 1, -2).filter((line) => !/^ \S/.test(line)),
+    [],
+    `only git's indented detail lines sit between its summary and the sha:\n${streams(committed)}`,
+  );
+  const childLines = [...lines.slice(0, summaryAt), ...stderr.groups.children.split('\n')];
+  assert.ok(
+    childLines.some((line) => line.trim().length > 0),
+    `the advisory child wrote at least one line; none means no pnpm ran:\n${streams(committed)}`,
+  );
 }
 
 async function proveCommitLandsOnWorktreeBranch(): Promise<void> {
@@ -172,30 +140,26 @@ async function proveCommitLandsOnWorktreeBranch(): Promise<void> {
     git(fixture.linked, 'mv', RENAME_SOURCE, RENAME_DESTINATION);
     const primaryHeadBefore = git(fixture.primary, 'rev-parse', 'HEAD').trim();
 
-    const recorded = await runAgentToolsCli({
-      argv: ['commit-queue', 'record-staged', '--intent-id', INTENT_ID],
-      env: {},
-      cwd: fixture.linked,
-    });
-    assert.equal(recorded.exitCode, 0);
+    const recorded = runCommitQueue(fixture.linked, ['record-staged', '--intent-id', INTENT_ID]);
+    assert.equal(recorded.status, 0, streams(recorded));
 
     const messageFilePath = join(fixture.root, 'commit-message.txt');
     await writeFile(messageFilePath, COMMIT_SUBJECT + '\n');
 
-    const committed = await runAgentToolsCli({
-      argv: ['commit-queue', 'commit', '--intent-id', INTENT_ID, '--message-file', messageFilePath],
-      env: {},
-      cwd: fixture.linked,
-    });
+    const committed = runCommitQueue(fixture.linked, [
+      'commit',
+      '--intent-id',
+      INTENT_ID,
+      '--message-file',
+      messageFilePath,
+    ]);
 
-    assert.equal(committed.exitCode, 0);
-    // The scratch repo has no advisory-orchestrator script, so the
-    // advisory pass fails — and MUST NOT gate the commit (PDR-053 /
-    // ADR-176 advisory polarity). The surfaced notice describes that
-    // deliberately exercised state.
-    assert.match(committed.stderr, /advisory orchestrator exit/);
-    const reportedSha = committed.stdout.trim();
-    assert.equal(git(fixture.linked, 'rev-parse', 'HEAD').trim(), reportedSha);
+    assert.equal(committed.status, 0, streams(committed));
+    const head = git(fixture.linked, 'rev-parse', 'HEAD').trim();
+    // The scratch repo has no package manifest, so the host's pnpm fails the
+    // advisory pass — and that MUST NOT gate the commit (PDR-053 / ADR-176
+    // advisory polarity).
+    assertAdvisoryFailureStreams(committed, head);
     const committedPaths = git(fixture.linked, 'ls-tree', '-r', '--name-only', 'HEAD').split('\n');
     assert.ok(committedPaths.includes(RENAME_DESTINATION));
     assert.equal(committedPaths.includes(RENAME_SOURCE), false);
@@ -215,18 +179,28 @@ async function proveCommitLandsOnWorktreeBranch(): Promise<void> {
 async function proveMissingGitRootRefusesLoudly(): Promise<void> {
   const fixture = await makeFixture();
   try {
-    const outside = join(fixture.root, 'outside');
-    await mkdir(outside, { recursive: true });
+    // The primary's git directory is inside the repository, so the
+    // coordination home still resolves through git, but it is not inside a
+    // working tree, so no invoking git root is derivable. The built CLI takes
+    // no registry-root flag, and from a directory outside every repository the
+    // command would refuse earlier, at the coordination home, never reaching
+    // the guard this proof exists for.
+    const gitDir = join(fixture.primary, '.git');
 
-    const result = await runAgentToolsCli({
-      argv: ['commit-queue', 'record-staged', '--intent-id', INTENT_ID],
-      env: {},
-      cwd: outside,
-      repoRoot: fixture.primary,
-    });
+    const result = runCommitQueue(gitDir, ['record-staged', '--intent-id', INTENT_ID]);
 
-    assert.equal(result.exitCode, 2);
-    assert.match(result.stderr, /not inside a git working tree/);
+    assert.equal(result.status, 2, streams(result));
+    assert.equal(result.stdout, '');
+    // The whole of stderr: git's own refusal (git's words, which a localised
+    // git translates), then the guard's own line, last.
+    assert.match(
+      result.stderr,
+      /^(?:[^\n]*\n)*Unable to resolve the invoking git worktree root: [^\n]*no fallback to the coordination home[^\n]*\n$/,
+    );
+    assert.ok(
+      result.stderr.includes(`'${gitDir}' is not inside a git working tree`),
+      streams(result),
+    );
 
     // No silent fallback: the intent survives untouched — neither
     // fingerprinted against the coordination home's own index nor
@@ -241,6 +215,7 @@ async function proveMissingGitRootRefusesLoudly(): Promise<void> {
   }
 }
 
+assert.equal(existsSync(BIN), true, `built CLI missing at ${BIN}; build agent-tools first`);
 await proveRecordStagedUsesWorktreeIndex();
 await proveVerifyStagedUsesWorktreeIndex();
 await proveCommitLandsOnWorktreeBranch();

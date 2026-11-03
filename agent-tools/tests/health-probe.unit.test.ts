@@ -32,37 +32,67 @@ const documentedSurfaceMatrix = [
   'override prune block',
 ].join('\n');
 
-const sharedCricketAgentNames = [
-  'cricket-judgement-low',
-  'cricket-judgement-medium',
-  'cricket-procedure-xhigh',
-];
-const claudeCursorCricketAgentNames = [...sharedCricketAgentNames, 'cricket-judgement-high'];
+const declared = [
+  { name: 'code-expert', platforms: ['cursor', 'claude', 'codex', 'gemini'] },
+  { name: 'cricket-judgement-high', platforms: ['cursor', 'claude'] },
+] as const;
+const everywhere = ['code-expert', 'cricket-judgement-high'];
 
 describe('reviewer adapter parity health', () => {
-  it('accepts the Claude and Cursor only high-judgement Cricket seat', () => {
+  it('passes when every adapter is present exactly where its declaration names it', () => {
     const result = evaluateReviewerAdapterParityFromInputs({
-      cursorAgents: claudeCursorCricketAgentNames,
-      claudeAgents: claudeCursorCricketAgentNames,
-      codexAgents: sharedCricketAgentNames,
+      declared,
+      present: {
+        cursor: everywhere,
+        claude: everywhere,
+        codex: ['code-expert'],
+        gemini: ['code-expert'],
+      },
     });
 
-    expect(result).toMatchObject({
-      status: 'pass',
-      details: [],
-    });
+    expect(result).toMatchObject({ status: 'pass', details: [] });
+    expect(result.summary).toBe(
+      '2 declared reviewer adapters are aligned across their declared platform surfaces.',
+    );
   });
 
-  it('rejects a fake Codex adapter for the unsupported high-judgement seat', () => {
+  it('reports an adapter on a surface its declaration does not name, and one no declaration renders', () => {
     const result = evaluateReviewerAdapterParityFromInputs({
-      cursorAgents: claudeCursorCricketAgentNames,
-      claudeAgents: claudeCursorCricketAgentNames,
-      codexAgents: [...sharedCricketAgentNames, 'cricket-judgement-high'],
+      declared,
+      present: {
+        cursor: everywhere,
+        claude: everywhere,
+        codex: ['code-expert', 'cricket-judgement-high'],
+        gemini: ['code-expert', 'hand-authored'],
+      },
     });
 
     expect(result).toMatchObject({
       status: 'fail',
-      details: ['Codex has unsupported reviewer adapter cricket-judgement-high.'],
+      details: [
+        'Codex has unsupported reviewer adapter cricket-judgement-high.',
+        'Gemini has unsupported reviewer adapter hand-authored.',
+      ],
+    });
+  });
+
+  it('reports a declared adapter missing from a surface its declaration names', () => {
+    const result = evaluateReviewerAdapterParityFromInputs({
+      declared,
+      present: {
+        cursor: everywhere,
+        claude: ['code-expert'],
+        codex: ['code-expert'],
+        gemini: [],
+      },
+    });
+
+    expect(result).toMatchObject({
+      status: 'fail',
+      details: [
+        'Claude Code is missing reviewer adapter cricket-judgement-high.',
+        'Gemini is missing reviewer adapter code-expert.',
+      ],
     });
   });
 });
@@ -119,6 +149,12 @@ describe('practice box health', () => {
       summary: '2 incoming Practice artefacts are waiting for integration.',
     });
   });
+
+  it('names the consolidate-docs skill by its canonical id, with no adapter prefix', () => {
+    const details = evaluatePracticeBoxState(1).details.join('\n');
+    expect(details).toContain('the consolidate-docs skill');
+    expect(details).not.toMatch(/[a-z]+-consolidate-docs/u);
+  });
 });
 
 describe('health report formatting', () => {
@@ -139,7 +175,7 @@ describe('health report formatting', () => {
           label: 'Practice box state',
           status: 'warn',
           summary: 'Incoming artefacts are waiting.',
-          details: ['Use oak-consolidate-docs.'],
+          details: ['Use the consolidate-docs skill.'],
         },
       ],
     };
@@ -150,6 +186,6 @@ describe('health report formatting', () => {
     expect(output).toContain('Summary');
     expect(output).toContain('Practice box state');
     expect(output).toContain('Details');
-    expect(output).toContain('Use oak-consolidate-docs.');
+    expect(output).toContain('Use the consolidate-docs skill.');
   });
 });

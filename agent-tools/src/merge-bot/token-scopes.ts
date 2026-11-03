@@ -1,4 +1,6 @@
-import { typeSafeHasOwn, typeSafeKeys } from '@oaknational/type-helpers';
+import { typeSafeEntries, typeSafeHasOwn, typeSafeKeys } from '@oaknational/type-helpers';
+
+import { BRANCH_TOKEN_SCOPES } from './branch-token-scopes.js';
 
 /**
  * The bot token's permission policy: which GitHub App permissions each kind of
@@ -52,8 +54,9 @@ type TokenPermissionSet = Readonly<Record<string, PermissionLevel>>;
 
 export const TOKEN_SCOPES = {
   /**
-   * Everything the bot does to land and review code: merge, update-branch,
-   * push, PR create/edit, comment, review reply, thread resolution.
+   * Everything the bot does to land code and open or edit a pull request:
+   * merge, update-branch, push, PR create/edit. The writes on a pull
+   * request's conversation are `pull-request-conversation` below.
    *
    * Named for the whole span deliberately — an earlier draft called this
    * `code-landing`, which excludes members it grants.
@@ -69,19 +72,33 @@ export const TOKEN_SCOPES = {
    * distinction is the likely mechanism; the two observations are the
    * evidence, and only they are relied on here.
    *
-   * WIDER THAN MOST OF ITS USES, knowingly. Per GitHub's endpoint→permission
-   * metadata, the conversation half of this span — comments, review replies,
-   * PR create/edit, reviewer requests — needs `pull_requests: write` ALONE;
-   * only merge, push and update-branch need the other two. Splitting it is
-   * MCP-391, gated on establishing what the GraphQL `resolveReviewThread`
-   * mutation requires, which the REST metadata does not cover. Until then
-   * this set is the honest one for the span as named, not the minimal one
-   * for each member of it.
+   * WIDER THAN SOME OF ITS USES, knowingly. Per GitHub's endpoint→permission
+   * metadata, PR create/edit and reviewer requests need `pull_requests: write`
+   * alone; only merge, push and update-branch need the other two. The
+   * conversation writes — comments, review replies, thread resolution, the
+   * ready mark, the close — are `pull-request-conversation` below since
+   * 2026-10-29: the MCP-391 split, made at the review of the writes command
+   * and proved on that command's own pull request. This set stays the honest
+   * one for the span as named.
    */
   'pull-request-work': {
     pull_requests: 'write',
     contents: 'write',
     workflows: 'write',
+  },
+
+  /**
+   * The bot's writes on a pull request's CONVERSATION — an issue comment, a
+   * review reply, a thread resolution, the ready mark, the close — each of
+   * which needs `pull_requests: write` alone: the REST calls by GitHub's
+   * endpoint→permission metadata, the two GraphQL mutations by the same
+   * permission on the pull request they mutate. What `merge-bot pull-request`
+   * mints for those verbs: a comment has no business holding contents and
+   * workflows write for its one call. `open` stays on `pull-request-work`,
+   * since its branch read needs `contents`.
+   */
+  'pull-request-conversation': {
+    pull_requests: 'write',
   },
 
   /**
@@ -119,6 +136,81 @@ export const TOKEN_SCOPES = {
   'code-scanning-alerts': {
     security_events: 'read',
   },
+
+  /**
+   * Dispatching a workflow run — the `actions/workflows/.../dispatches` POST —
+   * and reading the runs that result.
+   *
+   * Separate from `pull-request-work` deliberately. That scope already carries
+   * `workflows: write`, which governs CHANGING workflow FILES, and the two are
+   * easy to conflate: a token that may edit `.github/workflows/**` has no
+   * business also starting arbitrary runs for the fifty-minute life of a merge
+   * poll, and a seat that needs one dispatch has no business holding contents
+   * write. GitHub keeps them as separate permissions and so does this table.
+   * NOT for the upstream mirror: its run writes with the dispatcher's
+   * ceiling, so a dispatch under this scope fails its reference update (run
+   * 35240876819, 2026-09-17) — mint `upstream-mirror-dispatch` for that one
+   * workflow. This scope stays actions-only for the carrier dispatch and for
+   * re-running a failed job (two re-runs on 2026-09-12, CodeQL run
+   * 34748348080 and CI run 34748348052, both green on the second attempt; a
+   * re-run keeps the original run's context, so the cap below does not
+   * apply to it).
+   *
+   * ## Provenance, 2026-09-11
+   *
+   * Recorded because a seat got this wrong and the wrong answer reached a plan
+   * node and a thread record. `gh workflow run` under a `pull-request-work`
+   * token answers 403 `Resource not accessible by integration`, and that was
+   * read as the bot APP lacking the permission — so the first dispatch of the
+   * two upstream sync workflows was written up as an owner-only act. It is not:
+   * the installation holds `actions: write` (read from
+   * `GET /orgs/{org}/installations`), and the 403 was this table having no
+   * scope that requests it. The header above says exactly this — an ungranted
+   * permission fails the MINT with 422, so a 403 is always a wrong-scope
+   * symptom — and the seat had read that line and still mis-attributed the
+   * failure. Verify a capability against the grant, never against one token's
+   * refusal.
+   */
+  'workflow-dispatch': {
+    actions: 'write',
+  },
+
+  /**
+   * Dispatching the upstream-mirror workflow, whose RUN moves the mirror
+   * branch. `contents: write` is here for that run, not for the dispatch call.
+   *
+   * ## Provenance, 2026-09-17: the dispatched run inherits this token's ceiling
+   *
+   * A workflow run that the bot dispatches gets a `GITHUB_TOKEN` capped at the
+   * permissions of the token that dispatched it, in addition to the job's own
+   * `permissions:` block. GitHub's token documentation, read 2026-09-17,
+   * states no such rule; the measurement is the warrant. Observed on the
+   * upstream-mirror workflow:
+   * every scheduled run fast-forwards the mirror branch (run 35212280055 moved
+   * 57 commits at 10:47Z), and the first bot-dispatched run that reached the
+   * same `PATCH git/refs` step (run 35240876819, dispatched under
+   * `workflow-dispatch`, which carries `actions: write` alone) answered 403
+   * `Resource not accessible by integration` at that step while its read
+   * steps succeeded; `main` carries no ruleset and no branch protection, and
+   * the job declares `contents: write`. Under a token carrying both
+   * permissions, run 35241924531 fast-forwarded `main` by 19 commits.
+   *
+   * The MIRROR writes through the run's own token by design (its node's
+   * decision 7: a reference the run token moves triggers no workflow, which
+   * keeps CI off the mirror branch), so the token that dispatches it must
+   * carry what the run writes with. The CARRIER workflow writes through an
+   * App token it mints in the run, so its dispatch needs nothing beyond
+   * `actions` and stays on `workflow-dispatch`. Named for the act that
+   * writes, so no other dispatch holds a push-capable token for an hour it
+   * never uses.
+   */
+  'upstream-mirror-dispatch': {
+    actions: 'write',
+    contents: 'write',
+  },
+
+  /** The branch acts (`merge-bot retire`): their rows and provenance are `branch-token-scopes.ts`. */
+  ...BRANCH_TOKEN_SCOPES,
 } as const satisfies Readonly<Record<string, TokenPermissionSet>>;
 
 /** The closed set of scope names, derived so there is one source. */
@@ -144,7 +236,11 @@ export function isTokenScopeName(value: string): value is TokenScopeName {
   return typeSafeHasOwn(TOKEN_SCOPES, value);
 }
 
-/** The permission names a scope grants, for usage text. */
-export function permissionNamesFor(scope: TokenScopeName): readonly string[] {
-  return typeSafeKeys(TOKEN_SCOPES[scope]);
+/**
+ * The permissions a scope grants, each with its level (`contents: read`),
+ * for usage text: two scopes can share a permission name at different
+ * levels, so a name alone does not say which one writes.
+ */
+export function permissionLevelsFor(scope: TokenScopeName): readonly string[] {
+  return typeSafeEntries(TOKEN_SCOPES[scope]).map(([name, level]) => `${name}: ${level}`);
 }

@@ -22,23 +22,31 @@ pnpm agent-tools:build
 node agent-tools/dist/src/bin/agent-identity.js --seed example-session-id-001 --format display
 ```
 
-If `--seed` is omitted, the CLI reads (in order)
+If `--seed` is omitted, `--platform <label>` is required (`claude-code`,
+`cursor`, `codex` or `gemini`) and the CLI reads (in order)
 `PRACTICE_AGENT_SESSION_ID_CLAUDE`,
 `PRACTICE_AGENT_SESSION_ID_CURSOR`,
 `PRACTICE_AGENT_SESSION_ID_GEMINI`,
 `PRACTICE_AGENT_SESSION_ID_CODEX`,
-then the harness-native `CODEX_THREAD_ID`, then Antigravity's stable
-`conversationId` surfaces (`conversationId` or
-`ANTIGRAVITY_SOURCE_METADATA.conversationId`). If none is set, it exits with
-code `2`. There is no personal-email fallback; hashing `git config user.email`
-would silently use a personal identifier and could collapse concurrent
-same-machine agents into one identity.
+then `CLAUDE_CODE_REMOTE_SESSION_ID` (cloud seats, type tag stripped), then
+`CLAUDE_CODE_SESSION_ID` (Claude Code CLI shells), then the harness-native
+`CODEX_THREAD_ID`, then Antigravity's stable `conversationId` surfaces
+(`conversationId` or `ANTIGRAVITY_SOURCE_METADATA.conversationId`). The three
+Claude seeds count only on a Claude platform: Claude Code exports its session
+id into every Bash shell and its `SessionStart` hook appends the Practice seed
+to the env file every later shell reads, so a Codex or Cursor seat opened from
+a Claude shell would otherwise take the Claude seat's identity. On another
+platform the missing-seed error names any Claude seed that was set but did
+not count. If no seed resolves, the CLI exits with code `2`. There is no
+personal-email fallback; hashing `git config user.email` would silently use a
+personal identifier and could collapse concurrent same-machine agents into
+one identity.
 
 The `PRACTICE_AGENT_SESSION_ID_*` variables are written into the platform's
 session-scoped environment by the corresponding platform hook (see
 **Platform Wrapper Status** below). The platform suffix matches the platform
-that set the variable; the CLI does not care which one is present, only that
-exactly one of them resolves to a non-empty seed.
+that set the variable; the CLI reads the seat's platform from `--platform`,
+never from which variables happen to be present.
 
 ## Identity, Statusline, And Title
 
@@ -93,7 +101,7 @@ and `seedDigest`.
 Resolved-name override:
 
 ```bash
-OAK_AGENT_IDENTITY_OVERRIDE="Frolicking Toast" \
+PRACTICE_AGENT_IDENTITY_OVERRIDE="Frolicking Toast" \
   node agent-tools/dist/src/bin/agent-identity.js --seed any --format display
 ```
 
@@ -177,14 +185,14 @@ owner-visible session URL join on one key. CLI seats keep the harness
 ambient platform id — they are the operator's stated contract.
 
 The earlier session-level name cache (hooks storing the derived name in
-`OAK_AGENT_IDENTITY_OVERRIDE`) is retired by the PDR-027 2026-08-24
+`PRACTICE_AGENT_IDENTITY_OVERRIDE`) is retired by the PDR-027 2026-08-24
 amendment: a pinned name surviving a seed change produced a
 mixed-provenance identity tuple (measured in the castr estate,
 2026-08-24). The rename risk it guarded against is cured structurally by
 the digest-pinned naming-schema registry — wordlist edits require a new
 schema version, and identity rows carry `naming_schema_version`.
 
-When both a session seed and `OAK_AGENT_IDENTITY_OVERRIDE` are present, the CLI
+When both a session seed and `PRACTICE_AGENT_IDENTITY_OVERRIDE` are present, the CLI
 uses the seed for `seedDigest` and the override for `displayName` and `slug`.
 The JSON result is `kind: "override"` because the name no longer claims derived
 word slots. The override alone does not satisfy the seed requirement.
@@ -250,7 +258,7 @@ The wiring after activation is:
 
 The adapter is a soft surface: missing input, missing build artefact,
 unparseable JSON, or any spawn failure exits 0 with empty stdout. The
-`OAK_AGENT_IDENTITY_OVERRIDE` env var still bypasses derivation when present.
+`PRACTICE_AGENT_IDENTITY_OVERRIDE` env var still bypasses derivation when present.
 
 ### Claude Code statusline wiring
 
@@ -289,7 +297,7 @@ see step 3). The wiring is:
 The adapter is a soft surface: missing or unparseable stdin exits 0 with an
 empty `{}` on stdout. Missing-build and spawn failures never reach the
 adapter — the shim in front of it handles those loudly (see the Claude Code
-`SessionStart` wiring below). The `OAK_AGENT_IDENTITY_OVERRIDE` env var
+`SessionStart` wiring below). The `PRACTICE_AGENT_IDENTITY_OVERRIDE` env var
 still bypasses derivation when present.
 
 Session-id seeds produce deterministic session display identities. Persistent
@@ -330,7 +338,7 @@ session or resumes one. The harness pipes a JSON object on stdin containing
    carries the agent identity row and a non-binding `/rename` suggestion.
 4. Subsequent Bash tool calls in the session see
    `$PRACTICE_AGENT_SESSION_ID_CLAUDE`, so any tool using CLI identity
-   resolution (e.g. `pnpm agent-tools:agent-identity --format display`)
+   resolution (e.g. `pnpm agent-tools:agent-identity --platform <label> --format display`)
    re-derives the same session identity from the seed without `--seed` —
    no cached name is involved.
 
@@ -338,24 +346,28 @@ The hook remains a soft surface for the session — every failure path exits
 0 — but shim failures are loud, not silent: the diagnostic payload above
 replaces the former empty `{}`. Only missing or unparseable stdin that
 reaches the adapter still yields the adapter's own empty `{}`. The
-`OAK_AGENT_IDENTITY_OVERRIDE` env var still bypasses derivation when
+`PRACTICE_AGENT_IDENTITY_OVERRIDE` env var still bypasses derivation when
 present.
 
 ### Codex thread-id wiring
 
 Codex exposes the active thread id to shell commands as `CODEX_THREAD_ID`.
-For this platform, running the built CLI without `--seed` is sufficient when
-that environment variable is present:
+For this platform, running the built CLI with `--platform codex` and without
+`--seed` is sufficient when that environment variable is present; the
+platform flag keeps a Codex seat opened from a Claude shell on its own thread
+id:
 
 ```bash
-node agent-tools/dist/src/bin/agent-identity.js --format display
+node agent-tools/dist/src/bin/agent-identity.js --platform codex --format display
 ```
 
 The current seed precedence keeps explicit and platform-specific sources
 predictable: `--seed`, then `PRACTICE_AGENT_SESSION_ID_CLAUDE`, then
 `PRACTICE_AGENT_SESSION_ID_CURSOR`, then `PRACTICE_AGENT_SESSION_ID_GEMINI`,
-then `PRACTICE_AGENT_SESSION_ID_CODEX`, then the harness-native
-`CODEX_THREAD_ID`, then Antigravity's stable `conversationId` surfaces.
+then `PRACTICE_AGENT_SESSION_ID_CODEX`, then `CLAUDE_CODE_REMOTE_SESSION_ID`,
+then `CLAUDE_CODE_SESSION_ID`, then the harness-native `CODEX_THREAD_ID`, then
+Antigravity's stable `conversationId` surfaces; the three Claude seeds count
+only on a Claude platform.
 
 ### Codex `SessionStart` wiring
 

@@ -1,0 +1,12 @@
+[
+  { "query": "Does the evidence we have justify shipping revision 4 to production?", "should_trigger": true },
+  { "query": "Is this specification ready for the integration team to build against?", "should_trigger": true },
+  { "query": "Review this readiness label: the authors say the record is independently verified.", "should_trigger": true },
+  { "query": "Our test evidence is from the previous revision; can we still rely on it for this one?", "should_trigger": true },
+  { "query": "Judge whether this outcome claim is supported by the evidence attached to the specification.", "should_trigger": true },
+  { "query": "Write the specification for this new component.", "should_trigger": false },
+  { "query": "Fix the obligations in this record so it passes review.", "should_trigger": false },
+  { "query": "Can these two services be relied on together?", "should_trigger": false },
+  { "query": "Audit whether this investigation's conclusion is supported by its sources before publication.", "should_trigger": false },
+  { "query": "Implement the settled contract and its tests.", "should_trigger": false }
+]

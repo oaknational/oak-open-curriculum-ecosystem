@@ -35,8 +35,8 @@ accelerates channel 2, never substitutes for any surface here), **ARC**
 (rapid-comms channel files — operationally a standalone
 file-backed sidebar beside channel 4: choose a decision thread when the
 exchange must be durable and structured from the start, ARC when
-latency and bandwidth dominate and the substance is conserved at
-close), and **Slack-via-Watcher** (the
+s2s cannot reach both seats or the transcript is itself the record,
+and the substance is conserved at close), and **Slack-via-Watcher** (the
 [`talk-to-slack-watcher`](../../skills/talk-to-slack-watcher/SKILL-CANONICAL.md)
 skill — the human-native bridge for traffic whose audience is the
 owner or humans on the Practice Slack channel; minutes latency at the
@@ -133,7 +133,7 @@ with the platform's task intake.
 
 | Surface | Watch for | Route |
 | --- | --- | --- |
-| Git index / `HEAD` | `git add -A`, bare `git commit`, or peer-staged files getting absorbed into a bundle | Use the commit skill, `commit_queue`, short-lived `git:index/head` claim, and explicit pathspec staging and commit |
+| Git index / `HEAD` | `git add -A`, bare `git commit`, or peer-staged files getting absorbed into a bundle | Use the commit skill, the advisory commit queue, short-lived `git:index/head` claim, and explicit pathspec staging and commit |
 | Whole-tree hooks | Hook failure on files outside the staged bundle | Fix minor style/format issues immediately; route substantial failures as the next named work item, not as a hook bypass |
 | Shared `.agent` state | Treating active claims as commit blockers or leaving current-session state as residue | Land current-session `.agent` state that belongs to the bundle; re-read peer claims after helper-mediated state writes |
 | PR closeout | Inferring reviewer-comment state from green checks | Harvest and classify comments, review summaries, and thread state separately from gates |
@@ -156,7 +156,7 @@ as `Codex` / `unknown`.
   full working model and forward references.
 - [`use-agent-comms-log.md`](../../rules/use-agent-comms-log.md) —
   shared-communication-log usage discipline.
-- [`collaboration-state-write-safety.plan.md`](../../plans-backlog-2026-07/agent-tooling/current/collaboration-state-write-safety.plan.md)
+- `collaboration-state-write-safety.plan.md`
   — current write-safety implementation plan and CLI contract.
 - [`respect-active-agent-claims.md`](../../rules/respect-active-agent-claims.md)
   — area-consultation tripwire.

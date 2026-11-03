@@ -4,6 +4,7 @@ name: "Tool Output Framing Bias"
 polarity: anti-pattern
 use_this_when: "building a plan from a single tool run and the tool's groupings, counts, or categories are being adopted as plan structure without independent verification"
 category: process
+layer: general
 proven_in: ".agent/plans/architecture-and-infrastructure/current/depcruise-triage-and-remediation.plan.md"
 proven_date: 2026-04-12
 barrier:

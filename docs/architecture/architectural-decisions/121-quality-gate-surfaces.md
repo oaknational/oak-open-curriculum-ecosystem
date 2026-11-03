@@ -2,7 +2,7 @@
 
 **Status**: Accepted
 **Date**: 2026-02-25
-**Updated**: 2026-07-15
+**Updated**: 2026-09-29
 **Related**: [ADR-013 (Husky and lint-staged)](013-husky-and-lint-staged.md), [ADR-043 (Type Generation in Build and CI)](043-codegen-in-build-and-ci.md), [ADR-111 (Secret Scanning Quality Gate)](111-secret-scanning-quality-gate.md), [ADR-147 (Browser Accessibility)](147-browser-accessibility-as-blocking-quality-gate.md), [ADR-161 (Network-Free PR Checks)](161-network-free-pr-check-ci-boundary.md), [ADR-174 (Dependency Vulnerability Scanning)](174-dependency-vulnerability-scanning-quality-gate.md), [ADR-204 (Merge-Gate Strategy)](204-merge-gate-strategy-require-up-to-date-not-merge-queue.md)
 
 ## Context
@@ -69,8 +69,25 @@ or configuration issue, never a missing check.
 | test:a11y         | --         | --       | Yes         | Yes                           |
 | SonarCloud        | --         | --       | PR analysis | --                            |
 | dependency-review | --         | --       | PR advisory | --                            |
+| schema-drift      | --         | advisory | advisory    | --                            |
 
 ### Rationale for exclusions
+
+- **The schema-cache drift signal is advisory on every surface, by design.**
+  `ci-schema-drift-check` compares the committed OpenAPI schema cache with the
+  live upstream spec and renders one verdict onto the step summary, a
+  `::warning` annotation, and an informational commit status
+  (`schema-drift (advisory)`); pre-push runs it under `|| true`, and in CI the
+  `schema-drift` / `schema-drift-status` pair sits outside the
+  `run-quality-gates` fan-in, so no PR or push check depends on the upstream
+  fetch (ADR-161's boundary holds: a stale cache is a signal to refresh, never
+  a merge gate). Two consequences are recorded rather than solved here: the
+  check-CI parity validator's premise that every `ci.yml` job gates merge is
+  no longer literally true (it collects every `run:` scalar without a job
+  filter; no false pass exists today because the drift check is not a `check`
+  leg), and PR-watch tooling that treats any red or pending row as blocking
+  will read a red advisory row the same way. Both are named follow-ups on the
+  landing pull request.
 
 - **Pre-commit catches what it cheaply can; it excludes only the genuinely
   expensive or network-bound surfaces** (secret scanning and the heavier
@@ -124,6 +141,35 @@ Full-history scanning (`secrets:scan:all`) is retained as a bootstrap
 and audit action. It is idempotent after the first clean run — unless
 someone rewrites history (which is prohibited), re-scanning full history
 adds no enforcement value. It is not part of any routine gate surface.
+
+### Pinned system binaries
+
+Two gates run a system binary, not a package dependency: `secrets:scan` runs
+gitleaks and `lint:shell` runs shellcheck. CI installs each at a pinned version
+and checks the sha256 of its release asset before extracting it, so the gate
+runs the binary the repository chose:
+
+- `secret-scan` installs gitleaks, its digest inline in
+  `.github/workflows/ci.yml`.
+- `static-checks` runs `.agent/setup/install-shellcheck.sh`, which holds a
+  digest for each host it supports.
+
+Locally, a contributor installs gitleaks as a prerequisite (README). The
+shellcheck installer writes the ignored `.tools/bin` of each checkout, which
+the gate runs before `PATH`, and the root `postinstall` bootstrap runs it
+when `pnpm install` installs a checkout outside CI and Vercel, warning rather
+than failing the install when it cannot. The bootstrap takes pnpm's dependency
+bin directories off the installer's `PATH`, so no dependency bin runs in place
+of a tool it calls. The installer pins each host's binary by sha256 as well as
+its archive: it does nothing when `.tools/bin` already holds that binary, and
+runs nothing there before checking it. A run that does not end in the pin
+leaves no binary there. The gate asks the binary it runs for
+its version and fails, naming the installer, when it is not the pin.
+
+These downloads provision a tool before a check runs; neither is a check that
+reaches a network to prove its claim, and the content pin fixes what they
+deliver. ADR-161 §Provisioning is not a check, amended in lockstep, records why
+such a step sits outside its boundary.
 
 ### Design principles
 
@@ -227,13 +273,19 @@ type-check lint test test:e2e test:ui`), then `depcruise`,
   change): `secret-scan` (pinned, checksummed
   gitleaks binary — no Docker fallback), `install` (warms the pnpm store cache so
   downstream jobs install offline), `static-checks` (`format-check:root`,
-  `markdownlint-check:root`, `lint:shell`, `subagents:check`, `portability:check`,
+  `markdownlint-check:root`, `lint:runtime-only`, `lint:shell` after the pinned
+  shellcheck install (§Pinned system binaries), `subagents:check`, `portability:check`,
   `repo-validators:check`, `skills:check`, `encoding:check`), `build` (`sdk-codegen` + `build`, warms the Turbo
   remote cache), `unit-tests` (`type-check`, `lint`, `test`), `knip-depcruise`
   (`knip:gate`, `depcruise`),
   and `browser-tests` (the Playwright suites, with the browser download cached and
   keyed on the Playwright version). The check set is unchanged from the prior single-job
-  workflow — only the structure, caching, and gitleaks provisioning changed.
+  workflow — only the structure, caching, and gitleaks provisioning changed. Two
+  advisory jobs sit outside the fan-in by design: `schema-drift` (the upstream
+  schema-cache drift verdict, computed under `contents: read`) and
+  `schema-drift-status` (its informational commit status, published under
+  `statuses: write` from a job that checks out and installs nothing, so no
+  PR-controlled code ever runs beside the status token).
 - `pnpm check` runs the broadest verify-only set after a clean rebuild.
 - `pnpm check:docs` runs root Prettier and Markdownlint checks plus the
   documentation-specific reference-direction, machine-local-path, internal-link,
@@ -268,3 +320,6 @@ type-check lint test test:e2e test:ui`), then `depcruise`,
 | 2026-07-15 | Added the focused, verify-only `pnpm check:docs` aggregate for general documentation work. It composes root Prettier and Markdownlint checks with the documentation validator collection, while builds, product tests, browser suites, specialised-surface validators, and informational fitness reports remain outside this focused boundary. Reconciled adjacent stale `pnpm check` claims with executable truth: the full check uses verify-only format, Markdown, and lint commands and has no `doc-gen` stage.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | 2026-07-15 | Expanded internal-link validation from Markdown-file targets to every internal file and directory target, and made tracked-source to untracked-target references blocking under PDR-105's availability invariant. Removed checkout-local collaboration state from the stable-address allowlist and repaired the live documentation estate.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | 2026-07-20 | knip invocation replaced by `pnpm knip:gate` (`repo-check knip-gate`) on all four surfaces (pre-commit, pre-push, CI `knip-depcruise` job, `pnpm check`). knip exits 0 after a swallowed per-workspace config-load crash (F-147), so a crashed analysis could read as a pass; the gate wrapper re-runs knip, detects the crash-class output, and fails. The check SET is unchanged — this hardens the existing knip row's invocation.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| 2026-09-04 | Added the `schema-drift` row (pre-push advisory under `\|\| true`; CI advisory) and recorded the advisory pair `schema-drift` / `schema-drift-status` as the first `ci.yml` jobs deliberately outside the `run-quality-gates` fan-in (MCP-626: the drift verdict now renders on the step summary, a warning annotation, and an informational commit status published from a job that runs no PR-controlled code). Named two consequences as follow-ups: the check-CI parity validator's every-job-gates premise, and PR-watch tooling reading an advisory red row as blocking. The gate SET is unchanged.                                                                                                                                                                                                                                                                                                                                                                                               |
+| 2026-09-28 | `lint:shell` became the pinned shellcheck gate (`repo-check shellcheck-tracked`) over every tracked shell script outside the vendored skills `skills-lock.json` pins, and CI's `static-checks` installs the pin by sha256 before it runs (the gate landed with its installer and CI step; this entry records it). Added §Pinned system binaries: the pattern the gitleaks and shellcheck gates share, and ADR-161 amended in lockstep (§Provisioning is not a check) to record why their downloads sit outside its boundary. Named `lint:runtime-only` in the CI bullet, where static-checks already ran it. The gate SET is unchanged.                                                                                                                                                                                                                                                                                                                                                                 |
+| 2026-09-29 | The root `postinstall` bootstrap runs `.agent/setup/install-shellcheck.sh` when `pnpm install` installs a checkout outside CI and Vercel, so a new checkout or worktree has the pinned shellcheck whichever setup path its reader followed. The installer does nothing when `.tools/bin` holds the pinned binary, known by its sha256, runs nothing there before checking it, and leaves no binary there from a run that does not end in the pin; the bootstrap takes pnpm's dependency bin directories off its `PATH`; a failed download warns and the install goes on, since the gate still refuses without the pin. CI keeps its explicit static-checks step, and the other CI jobs download nothing. The gate SET is unchanged.                                                                                                                                                                                                                                                                     |

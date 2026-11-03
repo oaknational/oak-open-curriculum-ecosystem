@@ -2,6 +2,7 @@
 name: "A Scripted Transform Is All-or-Nothing, With Asserts at the End"
 polarity: pattern
 category: process
+layer: general
 use_this_when: "A change must be scripted rather than made with the Edit tool — a multi-site rewrite, a regex sweep, a batch of anchored replacements — and a partial application would leave the tree in a state nobody intended."
 proven_in: "An all-or-nothing edit script (asserts before one write) converted a stale-anchor failure into ZERO damage during a PR-886 cure batch (2026-08-14); a survey lane adopted assert-on-anchor for every scripted replace after two silent no-ops surfaced only at gates the same day (2026-08-14); a Sonar-cure parcel's regex sweep over-reached twice in one hour — converting lines it had itself inserted and grep character classes, then splitting two already-quoted strings — and the end-of-script asserts refused the first write outright while shellcheck named the second, with pre-transform copies restoring both in one command (2026-09-01). Conserved in .agent/memory/active/archive/napkin-2026-09-02.md."
 proven_date: 2026-08-14

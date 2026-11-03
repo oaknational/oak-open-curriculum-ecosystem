@@ -1,6 +1,6 @@
 # Research Documents Index
 
-**Last Updated**: 30 August 2026
+**Last Updated**: 22 October 2026
 **Purpose**: Permanent record of research, discoveries, and insights  
 **Maintained By**: AI agents and human collaborators
 
@@ -21,8 +21,44 @@
 **Key principle**: When a plan discovers something valuable, that discovery should be recorded in research. Plans can be archived; research persists.
 
 ---
+An ADR-226-class multi-file markdown import forms one link-closed component under
+`validate-markdown-links` (broken-link class `tracked-source-to-untracked-target`): no subset
+of its prose is committable alone, locally or as stacked PRs. Only members carrying no
+outbound relative links — assets, scanner config, an index row, a review using absolute
+permalinks — stand independently (907 of 16,235 lines on the 2026-09-06 import). Such an
+import is atomic under the estate's gates — "split it into smaller PRs" is not available —
+and only its link-free members are a valid partial-review surface for size-capped tools.
+
+A research package imported from outside the repository keeps the exact original bytes
+(an archive) beside its readable Markdown projections, and a manifest records each file's
+source and projection hashes, the source revision, the archive's identity, every link
+transformation, and the authority boundary: skills, directives and code copied inside a
+package are frozen evidence, never active instructions. Projections are not claimed
+byte-identical: reformatting (a footnote rewritten to the repository validator's multiline
+form, line endings normalised) is listed in the manifest. The worked instance is
+[`agent-capacities-2026-09-09/`](agent-capacities-2026-09-09/README.md).
 
 ## Research by Topic
+
+### Cognitive systems and structured thinking
+
+| Document | Purpose | Key insights |
+| --- | --- | --- |
+| [The foundations of experimental design](cognitive-systems/structured-thinking/experimental-design-foundations.md) | Six principles with sources: an answerable question, a fair comparison, meaningful measurement, informative evidence, an honest test, a claim within the evidence; a ten-item planning record | Fairness and informativeness are separate requirements; the independent unit is what was assigned, never what produced a row; the important rules are set before the result is seen |
+| [Five foundations of statistical rigour](cognitive-systems/structured-thinking/statistical-rigour-foundations.md) | Meaning, data generation, comparison and conditioning, uncertainty, error control and correction — with the five-sentence compact form for any important quantitative claim | A number is only as useful as its connection to the question; more rows do not repair bias or dependence; a claim's strength matches the evidence, and the procedure must give error a fair chance to show. The always-loaded form is the rule `one-instance-is-an-observation` |
+
+### Adaptive capacities and agent coordination
+
+| Document | Purpose | Key insights |
+| --- | --- | --- |
+| [Adaptive capacities research package](agent-capacities-2026-09-09/README.md) | Self-contained literature review, framework, editable comparison matrix, twelve experimental families and exact source archive | Distinguish capacities, mechanisms, authority and outcomes across biological, computational and institutional arrangements; proposals remain unratified research |
+
+### Graph foundations and algorithms
+
+| Document | Purpose | Key insights |
+| --- | --- | --- |
+| [TypeScript graph foundations research](typescript-graph-foundations-2026-09-07/README.md) | Dated comparison of models, TypeScript libraries, capabilities and proposed OCE outcomes, with reproducible probes and recorded evidence | Select foundations by semantics, assurance and lifecycle value; current OCE choices carry no preservation requirement. Recommendations remain research proposals. |
+| [Reliable Atoms workspace shape exploration](reliable-atoms-workspace-shape-exploration-2026-09-14.md) | Concept exploration behind the owner's 2026-09-14 ruling: a declared workspace class for atoms, a blocking directory-cardinality validator, stricter tiers; the warrant home for the programme's bar element 10 | The class is a design target shaped to its parameters, never calibrated against workspaces outside it; repository shape is a validator's subject, not an ESLint rule's or a test's; the estate-wide report-only signal question is untouched |
 
 ### ✨ Oak Innovation Kit & demonstrations
 
@@ -33,6 +69,12 @@ idea-to-evidence path, and exercised-reuse discipline. Strategy authority remain
 | Document | Purpose | Key insights |
 | --- | --- | --- |
 | [innovation-kit/README.md](innovation-kit/README.md) | Local entry point for the proposed definition, dated evidence, worked scenarios, bounded investigations and historical deconstruction | The Kit as the governed, portable part of a complete product-creation system; fast and good through governed compression, explicit obligations, truthful operation and stewardship |
+
+### Public-service AI tuition
+
+| Document | Purpose | Key insights |
+| --- | --- | --- |
+| [public-service-ai-tuition/README.md](public-service-ai-tuition/README.md) | Entry point for the 17-file reconstructed tuition research collection; [AUTHORITY.md](public-service-ai-tuition/AUTHORITY.md) states what placement confers, the owner's rulings and the deltas from the imported bytes; qualified by two dated reviews, the [author-lineage review](../reports/public-service-ai-tuition/pr-66-review-2026-09-06.md) (R1 to R7) and the [independent review](../reports/public-service-ai-tuition/pr-66-independent-review-2026-09-06.md) (F1 to F9), and by the [8 September Oak curriculum-infrastructure delta](../reports/public-service-ai-tuition/oak-curriculum-infrastructure-delta-2026-09-08.md) | Service and educational design, learner profiles, inclusion, evaluation, capability proofs, engineering findings, public infrastructure and comparative research, with historical source bytes and current-state boundaries preserved |
 
 ### 🔍 Semantic Search & Elasticsearch
 
@@ -119,6 +161,9 @@ developer-experience inputs used to improve Oak's agentic engineering system.
 | [graphify-oak-practice-analysis.md](graphify-oak-practice-analysis.md) | Derived graph memory exploration | Navigation layer over the practice estate, explicit attribution requirement |
 | [mcp_agent_guidance_provision.md](mcp_agent_guidance_provision.md) | MCP help-surface design | Start-here resources, help tools, and prompt-oriented discoverability |
 | [openai_claude_gemini_apps_sdk_comparison.md](openai_claude_gemini_apps_sdk_comparison.md) | Cross-vendor app surface comparison | Host/UI surface differences around MCP and embedded experiences |
+| [user-value-method-review-2026-09-26.md](user-value-method-review-2026-09-26.md) | Framing and correction record of the `user-value` skill | The service-first framing corrected to use value across levels; three complementary bases with their bridges and crosswalks; two fresh-context exercises of the earlier draft and the limits of what they show |
+| [comprehensive-specification-framework-2026-09-26.md](comprehensive-specification-framework-2026-09-26.md) | Comprehensive specification framework and ratified three-skill delivery scope | Common records, profiles, connection contracts, evidence and change; Appendix E requires complete skill implementation and evals in PR #250; effectiveness remains provisional |
+| [practice-nature-and-lights-on-comparison-2026-10-22.md](practice-nature-and-lights-on-comparison-2026-10-22.md) | The nature of the Practice read through PDR-143's five layers, a reviewed read of Gojko Adzic's lights-on software factory boilerplate, and a concept-level comparison | The Practice is nine systems at once (constitution, learning loop, species, family contract, organisation, epistemology, enforced doctrine, multi-vendor substrate, product); lights-on is one deterministic family-level mechanism with reproduced fail-open defects in its regulator; five concepts OCE could take, led by run records derived from per-position agent schemas |
 
 ### 🔐 Authentication & Security
 
@@ -146,6 +191,7 @@ Research on code quality, testing, and architecture.
 | **[error_handling/](error_handling/)** | Error handling patterns | |
 | [deep-reflection-schema-first-and-findings.md](deep-reflection-schema-first-and-findings.md) | Schema-first insights | Cardinal rule learnings |
 | [provider-independent-capability-architecture.md](provider-independent-capability-architecture.md) | Provider-independent capabilities and storage options | Semantic capability contracts, explicit omission, provider bindings, and behaviour/state portability |
+| [typescript-data-structures-and-algorithms-2026-09-07.md](typescript-data-structures-and-algorithms-2026-09-07.md) | Non-graph TypeScript data structures and algorithms | Native facilities, ecosystem candidates and open research questions; no dependency selection |
 | [vi-mock-audit-report.md](vi-mock-audit-report.md) | Vitest mock audit | |
 | [zod3-zod4-openapi-implementation-plan.md](zod3-zod4-openapi-implementation-plan.md) | Zod migration | |
 
@@ -170,6 +216,40 @@ Research on API structure and data analysis.
 | [approaches-to-knowledge-strategic-report.md](approaches-to-knowledge-strategic-report.md) | Knowledge strategy | |
 
 ---
+
+## Recent Additions (2026-10-22)
+
+- [The nature of the Practice, a review of lights-on, and their comparison](practice-nature-and-lights-on-comparison-2026-10-22.md):
+  the Practice read through its layers and the systems it is at once, a reproduced review of the
+  lights-on software factory, and a concept-level comparison closing with the concepts each could
+  take from the other.
+
+## Recent Additions (2026-09-09)
+
+- [Adaptive capacities research package](agent-capacities-2026-09-09/README.md):
+  the complete 9 September review and experimental programme, with readable
+  projections, exact archived source bytes and an explicit import-authority boundary.
+
+## Recent Additions (2026-09-08)
+
+- [Oak curriculum infrastructure delta](../reports/public-service-ai-tuition/oak-curriculum-infrastructure-delta-2026-09-08.md):
+  supplement on the state on 2026-09-08: upstream OCE `1.178.6`, this line's
+  `1.178.5` boundary at that date and Curriculum API `0.11.1`; preserves open consumer,
+  reproducibility, deployment and impact gaps without rewriting the imported collection.
+
+## Recent Additions (2026-09-07)
+
+- [TypeScript data structures and algorithms](typescript-data-structures-and-algorithms-2026-09-07.md):
+  research on the non-graph primitives available to TypeScript — the general tier of the
+  foundations inquiry; its graph tier landed as the
+  [TypeScript graph foundations research](typescript-graph-foundations-2026-09-07/README.md)
+  (PR 72), whose section 12 hands this survey eleven graph-specific contracts.
+
+## Recent Additions (2026-09-06)
+
+| Document | Summary |
+| --- | --- |
+| [public-service-ai-tuition/README.md](public-service-ai-tuition/README.md) | Faithful import of the completed 6 September 2026 reconstruction: README, 13 substantive chapters and three assets. Historical probe files retain their pinned reproduction context; this import does not refresh their runtime findings or ratify the proposed work programme. |
 
 ## Recent Additions (2026-08-30)
 

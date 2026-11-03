@@ -14,6 +14,7 @@ export const SCHEMA_FILENAMES = [
   'active-claims.schema.json',
   'closed-claims.schema.json',
   'comms-event.schema.json',
+  'commit-queue-intent.schema.json',
   'conversation.schema.json',
   'escalation.schema.json',
 ] as const;
@@ -136,6 +137,9 @@ function collaborationJsonSchemaId(filePath: string): string {
   const directory = basename(dirname(filePath));
   if (directory === 'comms') {
     return 'comms-event.schema.json';
+  }
+  if (directory === 'commit-queue') {
+    return 'commit-queue-intent.schema.json';
   }
   if (directory === 'conversations') {
     return 'conversation.schema.json';

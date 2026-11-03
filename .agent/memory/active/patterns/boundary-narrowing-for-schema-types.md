@@ -3,6 +3,7 @@ name: "Boundary Narrowing for Schema Types"
 polarity: pattern
 use_this_when: "a schema type is optional but at a specific call site the value is known to exist, and a non-null assertion or runtime throw is tempting"
 category: code
+layer: family
 proven_in: "packages/sdks/oak-curriculum-sdk/src/bulk/generators/helpers.ts"
 proven_date: 2026-04-01
 barrier:

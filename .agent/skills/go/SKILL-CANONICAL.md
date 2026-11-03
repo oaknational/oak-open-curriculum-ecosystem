@@ -14,7 +14,9 @@ Load `.agent/skills/go/shared/go.md` and enforce its ACTION/REVIEW/GROUNDING cad
 
 1. Read `.agent/skills/go/shared/go.md`.
 2. Follow the grounding step: read `.agent/skills/start-right-quick/shared/start-right.md` and all linked directives.
-3. Identify and state the current plan and its intent.
+3. Read the session-continuation prompt under `.agent/prompts/` when one exists and bears on the
+   active workstream; then identify and state the current plan and its intent. If the plan,
+   prompt, and continuity surfaces disagree, reconcile them before editing.
 4. Structure the todo list with atomic, actionable tasks following the cadence:
    - Every task prefixed with `ACTION:` followed immediately by a `REVIEW:` item.
    - Periodic `QUALITY-GATE:` items to run quality gates.

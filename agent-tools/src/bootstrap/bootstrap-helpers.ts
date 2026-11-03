@@ -1,9 +1,10 @@
 /**
  * Pure decision logic for the agent-tools install bootstrap.
  *
- * The runtime that resolves `tsc`, spawns it, and sets executable bits lives in
- * `bootstrap.ts`; this module isolates the part that must never get the
- * fail-open semantics wrong, so it can be unit-tested in isolation.
+ * The runtime that resolves `tsc` and `tsup`, spawns them, and sets executable
+ * bits lives in `bootstrap.ts` and `closure-member-build.ts`; this module
+ * isolates the part that must never get the fail-open semantics wrong, so it
+ * can be unit-tested in isolation.
  *
  * @packageDocumentation
  */

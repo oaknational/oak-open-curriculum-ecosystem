@@ -8,7 +8,7 @@
   integration, not vendoring; §2 amended 2026-07-19 — overlay completeness model and
   colour-value grammar, evidence-driven; §2 amended 2026-07-20 — dual-gate window,
   comparand filter, fixpoint resolution, ratified gate levels (PR3 cycle 3); §3 amended
-  2026-07-23 — the owned React component tier (owner substance at the sitting); AIP-137.
+  2026-07-23 — the owned React component tier (owner substance at the sitting); AIP-137; §3 amended 2026-09-05 — the region contract's first shipped binding named.
 - **Supersedes in part:** [ADR-148](148-design-token-architecture.md) §Source Format (the
   source-of-truth direction only; the three-tier model, contrast gate, and delivery format
   stand)
@@ -429,9 +429,11 @@ work uses semantic utilities or `.oak-*` classes, and the component-level arbitr
 
 **Page composition** follows the region contract from the composition doctrine
 (one-html-many-css-compositions.md): page shells are sibling regions with stable identities;
-composition is theme CSS, never markup churn. The contract currently binds no shipped
-surface; its first named binding is the hub shell at the hub's convergence lane (until then
-it is recorded as future-surfaces doctrine — owner fork if that binding should differ).
+composition is theme CSS, never markup churn. The contract's first shipped binding is
+the showcase's composition demonstration (landed 2026-08-18): `demos/oak-design-showcase/app/composition`
+and its frame route `/composition/frame` render `.oak-region` boxes under `.oak-main` once, in
+one order, and re-arrange them by composition map — theme CSS, never markup churn. The hub shell
+binds at the hub's convergence lane (owner fork if that binding should differ).
 
 ### 4. Dependency direction (recorded in the ADR-041 amendment)
 

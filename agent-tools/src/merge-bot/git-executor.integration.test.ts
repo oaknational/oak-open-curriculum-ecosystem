@@ -4,7 +4,7 @@ import type { FileBackedChildOptions, FileBackedChildResult } from '../core/file
 import { realGitExecutor } from './git-executor.js';
 
 /**
- * The push executor over an injected runner (ADR-078): arm selection,
+ * The push executor over an injected runner (the injected-seams rule): arm selection,
  * option forwarding, replay-sink wiring, and result mapping — spawn-free,
  * per the in-process tier rules. The runner's file-backed mechanism (the
  * F-112 no-pipes contract) is proven where it is real, in
@@ -67,7 +67,7 @@ describe('realGitExecutor arm selection and runner wiring (F-112 cure seam)', ()
     expect(result.signal).toBe('SIGTERM');
   });
 
-  it('answers a runner rejection as a value, never a throw (ADR-088)', async () => {
+  it('answers a runner rejection as a value, never a throw (the Result pattern)', async () => {
     const runner = (): Promise<FileBackedChildResult> => Promise.reject(new Error('spawn ENOENT'));
     const result = await realGitExecutor(runner)('/no/such/git', [], {
       cwd: '/repo',
@@ -81,6 +81,21 @@ describe('realGitExecutor arm selection and runner wiring (F-112 cure seam)', ()
       stdout: '',
       stderr: 'cannot run git: spawn ENOENT',
     });
+  });
+
+  it('bridges timeoutMs to the runner as a defined abortSignal on the file-backed arm', async () => {
+    const fake = runnerFake({ exitCode: 0, signal: null, stderr: '' });
+    await realGitExecutor(fake.runner)('/usr/bin/git', ['push'], {
+      cwd: '/repo',
+      env: {},
+      timeoutMs: 60000,
+      onOutput: () => undefined,
+    });
+
+    // Without the abort bridge, timeoutMs would be a silently dropped option
+    // on this arm; the runner must receive a live signal to honour it.
+    expect(fake.calls).toHaveLength(1);
+    expect(fake.calls[0]?.abortSignal).toBeDefined();
   });
 
   it('keeps a sinkless call on the capturing arm: the runner is never invoked', async () => {

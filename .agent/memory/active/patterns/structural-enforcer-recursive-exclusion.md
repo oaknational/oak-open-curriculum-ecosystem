@@ -4,6 +4,7 @@ name: "Structural Enforcer Recursive Exclusion"
 polarity: anti-pattern
 use_this_when: "Designing a structural enforcer (hook, scanner, lint rule, regex matcher) that scans for a pathogen — vocabulary, file shape, prohibited construct, code smell — across a path scope; the cataloguing documents and tests inside that scope will trip the enforcer on themselves unless explicitly excluded."
 category: agent
+layer: general
 proven_in: ".agent/hooks/policy.json (preToolUseContent.scoped_blocks)"
 proven_date: 2026-05-04
 barrier:
@@ -16,6 +17,8 @@ barrier:
 > **POLARITY: ANTI-PATTERN.** This entry names a *failure mode to avoid*, not a shape to repeat. The name is the diagnostic: when the failure mode is about to fire, recognising the shape is the first move in not repeating it.
 >
 > See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
+
+Imported from OCE at pin `e477e62f7` on 2026-09-13 (practice-completion todo 1). The worked instances and measurements are OCE's; local divergence is recorded where it exists.
 
 # Structural Enforcer Recursive Exclusion
 

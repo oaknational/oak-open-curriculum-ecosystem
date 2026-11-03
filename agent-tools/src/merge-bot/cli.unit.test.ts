@@ -1,3 +1,5 @@
+import { join } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import { runMergeBotCli, type MergeBotCliInput } from './cli.js';
@@ -54,6 +56,9 @@ function runWith(overrides: Partial<MergeBotCliInput> & { args: readonly string[
       throw new Error('ENOENT (no repo config in this test)');
     },
     repoRoot: '/repo',
+    // The clone's primary checkout, as git would report it from '/repo'.
+    runGitImpl: () =>
+      'worktree /repo\nHEAD 0000000000000000000000000000000000000000\nbranch refs/heads/main\n\n',
     nowEpochSeconds: () => 1_800_000_000,
     ...overrides,
   });
@@ -115,17 +120,54 @@ describe('runMergeBotCli mint-token --scope', () => {
     });
   });
 
-  it('lists every scope and its permissions in the usage text', async () => {
+  it('still puts actions write, and nothing more, on the wire for a workflow dispatch', async () => {
+    // A LITERAL for the same reason as the row above. `actions: write` is fixed
+    // externally by GitHub: it is what the workflow-dispatch endpoint requires,
+    // and a 403 reading exactly `Resource not accessible by integration` on
+    // `POST .../dispatches` was the observed symptom of its absence
+    // (2026-09-11). The exact set matters as much as the member: this scope
+    // dispatches the carrier and re-runs failed jobs, neither of which writes,
+    // so a contents permission creeping in here would hand every such act a
+    // push-capable token it never uses. The generic test compares the minted
+    // payload against the table, so a typo or a downgrade to `read` in the
+    // TABLE would satisfy it — the two would agree on the wrong thing, and
+    // only a live dispatch would find out.
+    expect(await mintedPermissionsFor('workflow-dispatch')).toEqual({ actions: 'write' });
+  });
+
+  it('still puts actions and contents write on the wire for the mirror dispatch', async () => {
+    // A LITERAL for the same reason. Each member has a named fixer outside
+    // this table: `actions: write` is what GitHub's dispatch endpoint
+    // requires; `contents: write` is what the dispatched mirror job's own
+    // `permissions:` block declares (its node's decision 7) combined with
+    // GitHub's cap on a dispatched run — its `GITHUB_TOKEN` cannot exceed the
+    // dispatching token's permissions. Measured: the mirror's fast-forward
+    // answered 403 under `workflow-dispatch` (run 35240876819, 2026-09-17)
+    // while every scheduled run of the same step succeeded, and succeeded
+    // under this permission set (run 35241924531). A change to that job's
+    // permissions is this value's re-adjudication point; a downgrade of either
+    // member in the TABLE would pass the generic test and fail only at the
+    // next live mirror dispatch.
+    expect(await mintedPermissionsFor('upstream-mirror-dispatch')).toEqual({
+      actions: 'write',
+      contents: 'write',
+    });
+  });
+
+  it('lists every scope with each permission at its level in the usage text', async () => {
     // USAGE is the discovery surface for a newly-required flag, and its list
     // is derived — this proves the derivation renders, not that a literal
-    // matches.
+    // matches. The level is on the scope's own line: two scopes share
+    // `contents` at read and at write, so a name alone would not say which
+    // one writes.
     const run = runWith({ args: ['--help'] });
 
     expect(await run.exit).toBe(0);
+    const lines = run.out().split('\n');
     for (const scope of TOKEN_SCOPE_NAMES) {
-      expect(run.out()).toContain(scope);
-      for (const permission of Object.keys(TOKEN_SCOPES[scope])) {
-        expect(run.out()).toContain(permission);
+      const line = lines.find((text) => text.startsWith(`    ${scope}: `)) ?? '';
+      for (const [permission, level] of Object.entries(TOKEN_SCOPES[scope])) {
+        expect(line).toContain(`${permission}: ${level}`);
       }
     }
   });
@@ -207,10 +249,55 @@ describe('runMergeBotCli mint-token', () => {
     });
   });
 
-  it('fails loudly, naming the authority, when the repo config is unreadable and no override given', async () => {
+  it('fails loudly, naming the authority and the template, when the repo config is unreadable and no override given', async () => {
     const run = runWith({ args: ['mint-token', '--scope', 'pull-request-work'] });
     expect(await run.exit).toBe(2);
     expect(run.errText()).toContain('.github/merge-bot.json is the single authority');
+    expect(run.errText()).toContain(join('.github', 'merge-bot.json.example'));
+    expect(run.out()).toBe('');
+  });
+
+  it("resolves the config at the clone's primary checkout, starting from the invoking root, so every linked worktree reads the one copy", async () => {
+    const configReads: string[] = [];
+    const gitCwds: string[] = [];
+    const run = runWith({
+      args: ['mint-token', '--scope', 'pull-request-work'],
+      env: { HOME: '/test-home' },
+      repoRoot: '/primary-worktrees/lane',
+      runGitImpl: (_args, cwd) => {
+        gitCwds.push(cwd);
+        return [
+          'worktree /primary',
+          'HEAD 0000000000000000000000000000000000000000',
+          'branch refs/heads/main',
+          '',
+          'worktree /primary-worktrees/lane',
+          'HEAD 1111111111111111111111111111111111111111',
+          'branch refs/heads/lane',
+          '',
+        ].join('\n');
+      },
+      readConfigFileImpl: (filePath) => {
+        configReads.push(filePath);
+        return JSON.stringify({ appSlug: 'jimbot-oakington-iii', appId: '4352989', repo: 'o/r' });
+      },
+    });
+    expect(await run.exit).toBe(0);
+    expect(gitCwds).toEqual(['/primary-worktrees/lane']);
+    expect(configReads).toEqual([join('/primary', '.github', 'merge-bot.json')]);
+  });
+
+  it('fails with exit 2 naming the primary checkout, with guidance every action can follow, when git cannot locate it', async () => {
+    const run = runWith({
+      args: ['mint-token', '--scope', 'pull-request-work'],
+      runGitImpl: () => {
+        throw new Error('fatal: not a git repository');
+      },
+    });
+    expect(await run.exit).toBe(2);
+    expect(run.errText()).toContain('primary checkout');
+    expect(run.errText()).toContain('not a git repository');
+    expect(run.errText()).toContain('run from inside the clone');
     expect(run.out()).toBe('');
   });
 
@@ -223,7 +310,7 @@ describe('runMergeBotCli mint-token', () => {
         JSON.stringify({
           appSlug: 'jimbot-oakington-iii',
           appId: '4352989',
-          repo: 'oaknational/oak-open-curriculum-ecosystem',
+          repo: 'acme/widgets',
         }),
       readFileImpl: (path: string) => {
         keyReads.push(path);
@@ -232,7 +319,11 @@ describe('runMergeBotCli mint-token', () => {
     });
     expect(await run.exit).toBe(0);
     expect(run.out()).toBe('ghs_tok\n');
-    expect(keyReads).toEqual(['/test-home/.config/jimbot-oakington-iii/private-key.pem']);
+    // The product derives a host-joined key path; the expectation derives the
+    // same host form so the assertion holds on every platform.
+    expect(keyReads).toEqual([
+      join('/test-home', '.config', 'jimbot-oakington-iii', 'private-key.pem'),
+    ]);
   });
 
   it('honours explicit flag overrides above the repo config', async () => {

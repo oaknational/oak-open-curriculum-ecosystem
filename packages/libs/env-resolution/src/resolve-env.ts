@@ -14,39 +14,36 @@
  * @see ../../../.agent/plans/observability/current/observability-multi-sink-and-fixtures-shape.plan.md
  */
 
-import { existsSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
-import { parse as dotenvParse } from 'dotenv';
 import type { z } from 'zod';
-import { findRepoRoot, findAppRoot } from './repo-root.js';
+import { loadEnvFileLayers } from './env-file-layers.js';
 import type { EnvKeyDiagnostic, EnvResolutionError, EnvResolveResult } from './types.js';
 
-/**
- * Options for the environment resolution pipeline.
- *
- * @typeParam TSchema - Zod schema type describing the expected env shape
- */
-export interface ResolveEnvOptions<TSchema extends z.ZodType> {
+/** The options every resolution carries: the schema and the process environment. */
+interface ResolveEnvCommonOptions<TSchema extends z.ZodType> {
   /** Zod schema that defines the required and optional env vars */
   readonly schema: TSchema;
   /** The process environment object (typically `process.env`) */
   readonly processEnv: Readonly<Record<string, string | undefined>>;
-  /** Directory from which to begin searching for the monorepo root */
-  readonly startDir: string;
 }
 
 /**
- * Parses a `.env` file into a key-value record without mutating `process.env`.
+ * Options for the environment resolution pipeline — one of two closed
+ * shapes. `envFiles: 'discover'` (the default) walks up from `startDir`
+ * for the repository and app roots and layers their `.env` files under
+ * `processEnv`. `envFiles: 'none'` validates `processEnv` alone and reads
+ * no filesystem at all: the shape for a deployment rehearsal that must see
+ * exactly what the platform injects, with no local file able to change
+ * the verdict.
  *
- * @param filePath - Absolute path to the `.env` file
- * @returns Parsed key-value pairs, or empty object if the file does not exist
+ * @typeParam TSchema - Zod schema type describing the expected env shape
  */
-function parseEnvFile(filePath: string): Record<string, string> {
-  if (!existsSync(filePath)) {
-    return {};
-  }
-  return dotenvParse(readFileSync(filePath, 'utf-8'));
-}
+export type ResolveEnvOptions<TSchema extends z.ZodType> =
+  | (ResolveEnvCommonOptions<TSchema> & {
+      readonly envFiles?: 'discover';
+      /** Directory from which to begin searching for the monorepo root */
+      readonly startDir: string;
+    })
+  | (ResolveEnvCommonOptions<TSchema> & { readonly envFiles: 'none' });
 
 /**
  * Extracts the top-level keys that a Zod schema expects.
@@ -186,9 +183,12 @@ function buildEnvResolutionError(
  * In serverless environments (Vercel, etc.) where no filesystem markers
  * exist, both root finders return `undefined` and the hierarchy collapses
  * to `processEnv` only.
+ * `envFiles: 'none'` asks for that collapse explicitly: no discovery, no
+ * file read, `processEnv` validated alone.
  *
  * @typeParam TSchema - Zod schema type
- * @param options - Pipeline options: schema, processEnv, startDir
+ * @param options - Pipeline options: schema, processEnv, and either
+ *   `startDir` (env-file discovery) or `envFiles: 'none'`
  * @returns `EnvResolveResult` — `\{ ok: true, value, warnings \}` on
  *   success (warnings is empty today; populated by the schema layer in
  *   WS3 of the observability multi-sink + fixtures plan), or
@@ -201,25 +201,9 @@ function buildEnvResolutionError(
 export function resolveEnv<TSchema extends z.ZodType>(
   options: ResolveEnvOptions<TSchema>,
 ): EnvResolveResult<z.infer<TSchema>> {
-  const { schema, processEnv, startDir } = options;
-
-  const repoRoot = findRepoRoot(startDir);
-  const appRoot = findAppRoot(startDir);
-
-  const repoDotEnv = repoRoot ? parseEnvFile(join(repoRoot, '.env')) : {};
-  const repoDotEnvLocal = repoRoot ? parseEnvFile(join(repoRoot, '.env.local')) : {};
-
-  const appIsDistinct = appRoot !== undefined && appRoot !== repoRoot;
-  const appDotEnv = appIsDistinct ? parseEnvFile(join(appRoot, '.env')) : {};
-  const appDotEnvLocal = appIsDistinct ? parseEnvFile(join(appRoot, '.env.local')) : {};
-
-  const merged: Record<string, string | undefined> = {
-    ...repoDotEnv,
-    ...repoDotEnvLocal,
-    ...appDotEnv,
-    ...appDotEnvLocal,
-    ...processEnv,
-  };
+  const { schema, processEnv } = options;
+  const fileLayers = options.envFiles === 'none' ? {} : loadEnvFileLayers(options.startDir);
+  const merged: Record<string, string | undefined> = { ...fileLayers, ...processEnv };
 
   const parsed = schema.safeParse(merged);
   const schemaKeys = extractSchemaKeys(schema);

@@ -17,8 +17,17 @@
  *
  * Exit codes:
  *   0  message conforms to the active commitlint config
- *   1  message violates the active commitlint config
- *   2  invalid usage / unreadable input
+ *   1  message violates the active commitlint config, by an error OR a warning
+ *   2  invalid usage / unreadable input, or commitlint gave no verdict (it did
+ *      not run, or exited with a status that is not a lint result)
+ *
+ * Warnings are violations. commitlint runs in strict mode here and in
+ * `.husky/commit-msg`, because a warning that passes is a warning that ships.
+ * The preset rates two rules as warnings, `body-leading-blank` and
+ * `footer-leading-blank`; the second fires when a wrapped body line begins `word: `, the
+ * preset rates it a warning, and messages carrying it were committed and pushed
+ * while this tool and the hook both answered 0 (2026-09-19, twice in an hour,
+ * with the trap already documented in the commit skill).
  *
  * The TypeScript port of the former `scripts/check-commit-message.sh`,
  * promoted to `src/` under ADR-168 §3 (workspace scripts are TypeScript) and
@@ -31,6 +40,10 @@ import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+import { resolvePnpm } from '../spawn/pnpm-path.js';
+
+import { commitlintArgs, exitCodeForCommitlintStatus } from './commitlint-verdict.js';
 
 const USAGE = `Usage: pnpm agent-tools:check-commit-message [-m <msg>]... [-F <file>]
 
@@ -46,7 +59,8 @@ Message intake (mirrors \`git commit\`):
 \`-m\` and \`-F\` are mutually exclusive (matches \`git commit\`).
 
 Exit codes:
-  0  conforms; 1  violates; 2  invalid usage.`;
+  0  conforms; 1  violates (a commitlint warning is a violation);
+  2  invalid usage, unreadable input, or no commitlint verdict.`;
 
 /** Parsed command-line intent, or a usage error to report on stderr. */
 export type ParsedArgs =
@@ -177,11 +191,23 @@ function runCommitlint(message: string): number {
   const messageFile = join(dir, 'COMMIT_EDITMSG');
   try {
     writeFileSync(messageFile, message);
-    const result = spawnSync('pnpm', ['exec', 'commitlint', '--edit', messageFile], {
-      cwd: repoRoot,
-      stdio: 'inherit',
-    });
-    return result.status ?? 2;
+    // Bare 'pnpm' never reaches spawn (the agent-tools invariant, and on
+    // Windows a shell-less by-name spawn cannot resolve the .cmd shim).
+    const pnpm = resolvePnpm(process.env);
+    if (!pnpm.ok) {
+      process.stderr.write(`${pnpm.error.message}\n`);
+      return 2;
+    }
+    const result = spawnSync(
+      pnpm.value.file,
+      [...pnpm.value.leadingArgs, ...commitlintArgs(messageFile)],
+      {
+        cwd: repoRoot,
+        stdio: 'inherit',
+        env: pnpm.value.env,
+      },
+    );
+    return exitCodeForCommitlintStatus(result.status);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

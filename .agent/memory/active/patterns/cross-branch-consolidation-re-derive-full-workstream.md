@@ -3,6 +3,7 @@ name: cross-branch-consolidation-re-derive-full-workstream
 use_this_when: "Consolidating a lane or workstream from one branch onto another — drive completeness from the workstream's full definition (code plus the activating skills, rules, tests, and lessons), not just the source files you copied across."
 polarity: pattern
 category: process
+layer: general
 status: emerging
 discovered: 2026-06-13
 proven_by: "Skylark wakes Summit consolidating the statusline WS1 lane onto feat/comms-research. `git show <branch>:<file> > <file>` carried the CODE but stranded the doctrine that ACTIVATES it — the --role skill amendment (without which the role/director indicators never light up; the feature ships inert), the check-singleton 'cure landed' update, and the WS1 mechanism lessons all stayed on the source branch. A half-landing that surfaced only on the owner's 'anything orphaned?' probe."

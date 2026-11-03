@@ -94,7 +94,9 @@ describe('resolveWriteTargetWithinRepo', () => {
   it('refuses a dangling symlink at the target (write would follow it blind)', async () => {
     const dir = await makeRepoRoot();
     const target = path.join(dir, 'plan-state.v1.report.json');
-    await symlink(path.join(dir, 'no-such-destination.json'), target);
+    // 'junction' is ignored on POSIX and unprivileged on Windows; lstat still
+    // sees a symlink, and the dangling refusal under test is type-agnostic.
+    await symlink(path.join(dir, 'no-such-destination.json'), target, 'junction');
     const resolved = resolveWriteTargetWithinRepo(dir, 'plan-state.v1.report.json');
     expect(resolved.ok).toBe(false);
     if (!resolved.ok) {
@@ -114,7 +116,9 @@ describe('resolveWriteTargetWithinRepo', () => {
   it('refuses an existing ancestor that symlinks outside the repo', async () => {
     const root = await makeRepoRoot();
     const outside = await makeRepoRoot();
-    await symlink(outside, path.join(root, 'link'));
+    // 'junction' is ignored on POSIX and unprivileged on Windows; lstat still
+    // sees a symlink at the directory ancestor.
+    await symlink(outside, path.join(root, 'link'), 'junction');
     const resolved = resolveWriteTargetWithinRepo(root, 'link/new-dir/new.txt');
     expect(resolved.ok).toBe(false);
     if (!resolved.ok) {
