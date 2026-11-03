@@ -111,12 +111,13 @@ describe('Codex subagent helper coverage', () => {
       content: 'name = "unterminated',
     });
 
+    // The issue is scoped to the file and names the parse failure; the
+    // parser's own excerpt layout (caret column) is smol-toml's, not ours.
     expect(result).toStrictEqual({
       issues: [
-        `.codex/agents/broken-expert.toml: invalid TOML: Invalid TOML document: unfinished string
-
-1:  name = "unterminated
-            ^`,
+        expect.stringMatching(
+          /^\.codex\/agents\/broken-expert\.toml: invalid TOML: Invalid TOML document: unfinished string\n/u,
+        ),
       ],
       templatePaths: [],
       canonicalPaths: [],
