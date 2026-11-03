@@ -110,9 +110,12 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
 1. Read `git status --branch` on the primary and `gh pr list` first-hand before any act.
 2. The analyser plan is complete: units 0 and 1 landed as 366 and 369, the two tool lanes as 368 and
    370, and units 2 to 14 as 375. Criterion 1 read zero on 2026-11-03 (comms event `7af7c09a`).
-3. The mirror workflow's cure is its own lane, at the owner's word of 2026-11-03 ("coordinate
-   please"). It lands before Oak's workflow-linter lane merges on Oak `main`, as agreed with Elder
-   rides Topsoil (65857c) on the comms stream (event `2dd20168` and that seat's acceptance).
+3. The mirror workflow's cure is its own lane, at the owner's word of 2026-11-03 ("do fix the
+   mirror"): the job mints the bot's app token for its reference update. No Oak lane waits on it
+   (event `8bafd3c2` withdrew the sequencing of `2dd20168`). A move of `main` by any token but the
+   run's own is a push, so Oak's push workflows can run on Engraph `main` after it. That is
+   accepted and not suppressed: the owner's word is that the mirror's job is only to copy, Oak owns
+   its code's state, and the carrier pull request runs Engraph's checks.
 4. The follow-up lanes the fold of 360's reviews routed, none opened yet: the review-cost gate's hold
    (the hook's guidance lines dead under `sh -e`, the hold counting reviewed rounds where PDR-140 says
    pushes, the unrounded crossing test and its duplicated loop) and the comms write path (a render

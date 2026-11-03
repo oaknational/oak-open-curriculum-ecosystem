@@ -1311,3 +1311,29 @@ the owner wants it kept).
   better half; the merge kept both and re-trued the comment that described the old fixture.
 - **A reviewer's ancestry claim is checked with `git merge-base --is-ancestor`, in one command.**
   Codex's P1 on 376 read the tip commit's single parent as the whole history.
+
+## 2026-11-03T17:0xZ — Sandpiper guards Wind (690653): the fold of 373, and a mirror is only a copy
+
+- **The fold skipped its records pass and paid for it.** No read-only pass over the fold's records
+  ran before the ready-mark (the fold skill's precondition 3). Codex's two findings were records
+  that 375's merge had made stale; their cure push cost a second CI run, and the fold took 26.3
+  minutes against the owner's ten. The pass runs beside the opening push's gate, at no wall cost.
+- **`comms reply` answers directed events only.** On a broadcast it refuses ("directed message not
+  found") and writes nothing; `comms append --in-response-to <id>` threads a reply to any kind.
+- **zsh does not word-split a variable.** Paths held in one variable reached prettier and
+  markdownlint as a single argument; markdownlint linted zero files and exited 0. List the paths
+  literally, and read the "Linting: N files" line before trusting a green.
+- **A side note's alarm, tested and found harmless, collapses; it does not become a design
+  refinement.** A side agent said the mirror fix's app token would start Oak's workflows on Engraph
+  `main` with access to Engraph's secrets. First-hand, a workflow receives only the secrets it
+  names (Oak's name only `TURBO_TOKEN`, which Engraph lacks), Release fails at its token mint for
+  want of `RELEASE_APP_*`, and the repository is public. I still proposed narrowing the fix. The
+  owner, verbatim: "why would we want our mirror to run CI? It's a _mirror_, it is the
+  responsibility of Oak to make sure that there code is in a proper state, our job is to mirror it,
+  when we merge Engraph main into Engraph engraph via a PR all normal checks will run. Do we have
+  any real problems, or was this just ceremony?" The one real problem was the mirror's 403.
+- **The fork never makes upstream wait.** At "coordinate please" I asked the Oak seat to hold its
+  workflow-linter lane until Engraph's mirror was fixed and to post its linter versions; both were
+  withdrawn the same hour (`8bafd3c2`). An Oak merge is never gated on an Engraph surface; whatever
+  an Oak change breaks in Engraph is cured on Engraph's side, at the sync. Nor did the fix's worth
+  turn on how often the mirror stalls: "it doesn't matter what dependabot does".

@@ -318,6 +318,16 @@ on `claims open` exist since PR #225: frictions F-94 and F-95.)
 
 ## CURRENT HANDOFF STATE
 
+**§STATE, 2026-11-03 17:0xZ (Sandpiper guards Wind, `690653`, the n=1 seat; post-fold; this block
+supersedes the 15:0xZ block below where they differ).** The coordination branch `2026-10-28-32c907`
+folded as 373 at `6f2d08552` (16:48:13Z, the door with `--expect none`; one unrequested Codex round,
+two records findings cured; fold-clock merged +26.3 min). The successor is
+`coordination/2026-11-03-6f2d08`; the folded branch is retired on all three names. The mirror
+workflow's cure is its own lane at his word ("go ahead with all three, and do fix the mirror"),
+and no Oak lane waits on it. moved for teachers: nothing / moved for the Practice: the
+analyser's security and reliability list on `engraph` reads zero and is held at commit time (375),
+and the fork carries Oak 1.186.4 (376).
+
 **§STATE, 2026-11-03 15:0xZ (Sandpiper guards Wind, `690653`, the n=1 seat at the owner's word;
 this block supersedes the 2026-11-02 block below where they differ).** The lint lane is complete:
 pull request 375 merged by the door at `4adcfc069` (items 13 and 14 landed, the analyser plan and
