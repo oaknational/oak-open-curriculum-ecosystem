@@ -3,6 +3,6 @@
   "extends": "../../../tsconfig.base.json",
   // The theme runtime is browser code; the base config's lib is ES2023-only.
   "compilerOptions": { "lib": ["ES2023", "DOM"] },
-  "include": ["src/**/*.ts", "**/*.test.ts", "*.config.ts"],
+  "include": ["src/**/*.ts", "**/*.test.ts", "*.config.ts", "*.config.mts"],
   "exclude": ["node_modules", "dist"]
 }
