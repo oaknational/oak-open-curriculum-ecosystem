@@ -1282,3 +1282,32 @@ the owner wants it kept).
   the documented per-clone setup step. One instance; the cause is not known; the directory's
   mtime of 14:10 on 2026-11-02 is the only trace.
 - A third pass would only re-find these; the recursion closes here.
+
+## 2026-11-03 — Sandpiper guards Wind (690653): the lint lane landed and the Oak 1.186.4 sync
+
+- **The mirror cannot carry a workflow-file change.** GitHub never grants a workflow run's own token
+  the `workflows` permission, so the mirror's reference update answers 403 whenever the
+  fast-forward range touches `.github/workflows/`; a dispatch under `upstream-mirror-dispatch`
+  changes nothing, because the run still writes with its own token. The successful moves of
+  2026-10-19 and 2026-10-21 carried no workflow file; the failing range carried four. The manual
+  route that worked: the bot's `pull-request-work` token (it carries `workflows: write`) and a
+  `PATCH` of `refs/heads/main` with `force=false`. The cure is the run minting the app token, as
+  the carrier workflow already does.
+- **An open pull request whose head is the mirror does not lock the mirror.** Moving `main` moved
+  374's head with it; the carrier landing then read 374 as merged, because its head was inside
+  `engraph`. A sync opened by hand from `main` is landed through a carrier, never resolved on `main`.
+- **This clone's local `user.name` is the bot.** The estate's rule passes the owner as author per
+  commit (`GIT_AUTHOR_NAME`/`GIT_AUTHOR_EMAIL` on the command, and on a merge, since `git merge` has
+  no author flag); two commits went out bot-authored before I read the rule. Check
+  `git config --show-origin user.name` at the first commit of a session.
+- **zsh reads `$C:r…` as a filename modifier**: `"$C:refs/remotes/…"` lost the `:r` and the fetch
+  named a ref that does not exist. Brace a variable before a colon: `"${C}:refs/…"`.
+- **A lint twin's parity is per shape, not per rule.** `unicorn/prefer-string-starts-ends-with`
+  (S6557's twin, at `error`) catches the regex form but not `a.charAt(0) === b.charAt(0)`; the
+  analyser found that shape in new code on 375. The twin did not fail; it was never asked.
+- **A conflict both forks solved differently is merged by insight, not by side.** The
+  install-version-guard smoke: Oak's fixture lockfile (a current format every pnpm parses) and
+  `engraph`'s guard-log read-back (independent of how pnpm forwards script output) were each the
+  better half; the merge kept both and re-trued the comment that described the old fixture.
+- **A reviewer's ancestry claim is checked with `git merge-base --is-ancestor`, in one command.**
+  Codex's P1 on 376 read the tip commit's single parent as the whole history.

@@ -23,7 +23,7 @@ on the default branch.
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
 | Smelter herds Basalt | claude-code | claude-fable-5-1 | 871ba4 | solo seat (its own Director): the analyser triage and plan, the drain of the open pull requests, the merge-bot write command; delegated three bounded implementer agents and one security read in-session; then the analyser plan's remainder as one lint pull request, six lane agents' cures verified and corrected by the seat (2026-11-01 to 2026-11-02) | 2026-10-27 | 2026-11-02 |
-| Sandpiper guards Wind | claude-code | claude-opus-5-5 | 690653 | solo seat (its own Director), implementer on the lint lane: assessed the unpushed series, pushed it and opened draft 375 at the owner's word; archived the two expired-gate plans (2026-11-03) | 2026-11-03 | 2026-11-03 |
+| Sandpiper guards Wind | claude-code | claude-opus-5-5 | 690653 | solo seat (its own Director), implementer on the lint lane: assessed the unpushed series, pushed it, landed items 13 and 14 and merged 375; archived the two expired-gate plans; ran the Oak 1.186.4 sync through carrier 376 (2026-11-03) | 2026-11-03 | 2026-11-03 |
 
 ## Lane state at 2026-10-27 (the owner's compaction word; the 2026-10-28 state below supersedes it where they differ)
 
@@ -378,3 +378,36 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
 - **The two expired-gate plans archived** on this coordination branch (`semantic-search-showcase`,
   `warranted-means-in-the-operating-environment`, each with an outcome note quoting his word); the
   session-open drift alert reads the primary checkout and stops once this branch folds.
+
+## Lane state (2026-11-03 ~15:0xZ, the lint lane complete and the sync landed; Sandpiper guards Wind, 690653)
+
+- **The owner's word, verbatim.** "13 approved, 14 approved, plans agreed, merge agreed, I do want
+  you to also merge 374, and then to check if Engraph main is up to date with Oak main and sync from
+  Oak main to Engraph main, and then merge from Engraph main to Engraph engraph".
+- **The sync.** Oak `main` stood at release 1.186.4 (`52e7f3bed`), six commits past Engraph `main`.
+  The mirror workflow had failed every scheduled run since 2026-11-02 with HTTP 403 at its reference
+  update, and a dispatch under `upstream-mirror-dispatch` failed the same way (run 41643954178): the
+  range carried four workflow-file changes, which a run's own token may never write; the two
+  successful moves before it carried none (a side seat's note, checked first-hand). The mirror was
+  fast-forwarded as the bot under `pull-request-work` (`PATCH` of the reference, `force=false`). The
+  carrier workflow then opened pull request 376; `engraph` merged into it at `7ef74522a` with four
+  conflicts resolved (setup-node at v7.1.0, pnpm 12.17.0, the lockfile reconciled and the rebuild
+  test passed, the install-version-guard smoke keeping both forks' pnpm 12 fixes) and one premise
+  re-true (`.agent/reference/tooling.md`). It merged by the door at `71e727ec5`; 374, whose head is
+  the mirror, read as merged at the same moment. One Codex P1 on the carrier (that the advertised
+  mirror commit was not an ancestor) was rejected on the branch's own history and resolved.
+- **Pull request 375 merged** by the door at `4adcfc069`: items 13 (`css-fences.ts`,
+  `css-declarations.ts`, `theme-markup.ts` in the showcase tools; each grader's output over its
+  fixtures byte-identical) and 14 (`TableScrollRegion.tsx`; red first; the specimen accessibility
+  spec 26 of 26), both plan nodes ratified, `engraph` merged in cleanly, a Windows fixture cure
+  (three in-memory trees rooted at a resolved path), and the analyser's one new issue on the pull
+  request (S6557 in `fence-line.ts`) cured; the analyser then read zero issues on the pull request.
+  The branch is retired and the claim closed.
+- **Identity, recorded as a miss.** This clone's local config names the bot as `user.name`; the
+  estate's rule passes the owner as author per commit. Two commits on 375 (`56eb08a72`,
+  `9b4270e4e`) carry the bot as author; every later commit and merge passed the owner.
+- **Proposed, not started**: the mirror workflow's cure (mint the app token in the run, as
+  `upstream-carrier.yml` does), put to the owner. Until it lands, any Oak change to a workflow file
+  stalls the mirror, and the fast-forward above is the manual route.
+- **Criterion 1** (the analyser's reading of the resting branch in the plan's filter) is read once
+  the analyser has analysed `4adcfc069`; the reading is recorded on the lane's closing comms event.

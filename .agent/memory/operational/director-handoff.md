@@ -318,6 +318,18 @@ on `claims open` exist since PR #225: frictions F-94 and F-95.)
 
 ## CURRENT HANDOFF STATE
 
+**§STATE, 2026-11-03 15:0xZ (Sandpiper guards Wind, `690653`, the n=1 seat at the owner's word;
+this block supersedes the 2026-11-02 block below where they differ).** The lint lane is complete:
+pull request 375 merged by the door at `4adcfc069` (items 13 and 14 landed, the analyser plan and
+the `maintenance` node ratified at his word "plans agreed", the analyser's one new issue on the
+pull request cured), its branch retired, the claim closed. The sync is complete at his word: Oak
+`main` (release 1.186.4) fast-forwarded into Engraph `main` as the bot, carried into `engraph` by
+pull request 376 (merged at `71e727ec5`), which also closed pull request 374 as merged. Open
+pull requests on this repository: 373 (this coordination branch) alone. The mirror workflow fails
+whenever the fast-forward carries a workflow-file change (its run token may never write those);
+its cure, minting the app token in the run as the carrier workflow does, is a proposed lane put to
+him, not started. The thread record `open-pull-requests-to-zero` carries the detail.
+
 **§STATE, 2026-11-02 14:5xZ (Smelter herds Basalt, `871ba4`, the n=1 seat, at the owner's word to put
 the lint lane down; this block adds to the 2026-10-28 block below).** The analyser plan's remainder
 (units 2 to 14) is one lint pull request at his word ("No. 1 PR."), its series committed on the
