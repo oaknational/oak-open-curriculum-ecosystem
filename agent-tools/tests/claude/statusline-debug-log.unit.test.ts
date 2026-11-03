@@ -1,8 +1,15 @@
+import path from 'node:path';
+
 import {
   debugLogLine,
   invalidConfigWarningLine,
   resolveDebugLogConfig,
 } from '../../src/claude/statusline-debug-log';
+
+// Resolved, not a literal: the resolver uses `path.resolve`, which carries the
+// drive letter on Windows, so the project directory and the expected log path
+// are built the same way.
+const PROJECT_DIR = path.resolve(path.sep, 'repo');
 
 describe('resolveDebugLogConfig', () => {
   it('resolves disabled when PRACTICE_STATUSLINE_LOG_FILE is unset', () => {
@@ -32,9 +39,9 @@ describe('resolveDebugLogConfig', () => {
     expect(
       resolveDebugLogConfig({
         PRACTICE_STATUSLINE_LOG_FILE: '.logs/statusline.log',
-        CLAUDE_PROJECT_DIR: '/repo',
+        CLAUDE_PROJECT_DIR: PROJECT_DIR,
       }),
-    ).toEqual({ kind: 'enabled', path: '/repo/.logs/statusline.log' });
+    ).toEqual({ kind: 'enabled', path: path.join(PROJECT_DIR, '.logs', 'statusline.log') });
   });
 
   it('resolves invalid, with a renderable warning, for a relative path when CLAUDE_PROJECT_DIR is unset', () => {

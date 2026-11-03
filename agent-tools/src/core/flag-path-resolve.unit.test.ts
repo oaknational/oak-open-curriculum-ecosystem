@@ -19,8 +19,11 @@ import { inMemorySyncFileSystem } from './test-helpers/in-memory-sync-file-syste
  * cannot create anything; the trees here are literal.
  */
 
-const REPO = path.join(path.sep, 'repo');
-const OUTSIDE = path.join(path.sep, 'outside');
+// Resolved, not joined: the resolvers compare against `path.resolve` output,
+// which carries the drive letter on Windows, so a joined `\repo` would miss
+// every key of the in-memory tree there.
+const REPO = path.resolve(path.sep, 'repo');
+const OUTSIDE = path.resolve(path.sep, 'outside');
 
 const repoWith = (files: Readonly<Record<string, string>> = {}) =>
   inMemorySyncFileSystem({ directories: [REPO, OUTSIDE], files });

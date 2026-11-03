@@ -1,4 +1,4 @@
-import { join } from 'node:path';
+import { join, resolve, sep } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
@@ -15,7 +15,10 @@ import { runProtocolConformance } from '../../src/protocol-conformance/report.js
  * clearly-fake artefacts held in memory.
  */
 
-const ROOT = join('/', 'estate');
+// Resolved, not joined: the adapter resolves every relative path against the
+// root, which carries the drive letter on Windows, so a joined `\estate` would
+// miss every key of the in-memory tree there.
+const ROOT = resolve(sep, 'estate');
 
 /** A path under the fixture estate root. */
 const at = (...segments: readonly string[]): string => join(ROOT, ...segments);
