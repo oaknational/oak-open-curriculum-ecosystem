@@ -701,10 +701,12 @@ only if its opening check shows `no-require-imports` absent.
   a genuinely cleaned closure.
 - **Install-time peer-range lag warnings** (`typescript` 6.0.3 vs
   third-party `^5` ranges: tsconfck, openapi-typescript, a
-  typescript-eslint 8.56.1 resolution) — pre-existing estate-wide,
-  surfaced on every install; home: Director-routed cure lane
-  (`peerDependencyRules.allowedVersions` extension or dependency
-  bumps), out of this plan's scope but named so it is not re-lost.
+  typescript-eslint 8.56.1 resolution) — cured 2026-11-03 in the
+  pnpm 12 and Vitest 5 dependency follow-up to #1013. tsconfck left
+  the tree with the unused `vite-tsconfig-paths`; the openapi-typescript
+  and typescript-eslint 8.56 ranges carry version-scoped
+  `peerDependencyRules.allowedVersions` entries in
+  `pnpm-workspace.yaml`, each with its removal trigger.
 - **Pre-existing `no-throw-statement` warning surface** (15 in
   graph-core, 37 in oak-search-sdk, more in research-evidence and
   agent-tools — active WARNINGS, not disables, so outside the census'

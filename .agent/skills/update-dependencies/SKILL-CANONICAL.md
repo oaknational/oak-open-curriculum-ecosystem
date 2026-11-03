@@ -82,7 +82,8 @@ Work per PACKAGE (advisories group by package lineage, not alert), in
 preference order — the first mechanism that cures TREE-WIDE wins. One
 invariant rides ABOVE the order: when the package already carries an
 override floor, the curing change also raises that floor to the
-patched version (or retires it when its removal conditions are met),
+patched version, and the comment's removal threshold with it (or
+retires the floor when its removal conditions are met),
 WHICHEVER step cures resolution — terminating at steps 1–3 with a
 stale floor standing recreates the drift the opener's drift-check
 exists to catch, and the verification tail's `pnpm why` proves only
@@ -144,17 +145,24 @@ the selected version, never the floor:
    condition governs, never the sweep.
 7. **The target version is younger than the configured
    `minimumReleaseAge` floor** (read the value from
-   pnpm-workspace.yaml) → two outcomes, both verified first-hand 2026-08-11 on
-   pnpm 11.20. When the requested range admits an older mature
+   pnpm-workspace.yaml) → two outcomes, both verified first-hand 2026-11-03 on
+   pnpm 12.17.0 (first observed 2026-08-11 on pnpm 11.20). When the
+   requested range admits an older mature
    version, the resolver SILENTLY excludes the young one and picks
    the newest version older than the floor — exit 0, no warning.
    When NOTHING mature satisfies the request (an exact pin to a
-   too-young version), pnpm refuses loudly with
+   too-young version), a non-interactive install refuses loudly with
    ERR_PNPM_NO_MATURE_MATCHING_VERSION, naming each too-young
-   package. Consequence of the silent branch: age-floored targets
+   package. An interactive install offers to approve the pick
+   instead and records the approval in `minimumReleaseAgeExclude`:
+   decline it, because an exclusion is its own reviewed decision,
+   never a side effect of a sweep. A frozen-lockfile install now
+   checks every locked version against the floor too, failing with
+   ERR_PNPM_MINIMUM_RELEASE_AGE_VIOLATION. Consequence of the silent
+   branch: age-floored targets
    are INVISIBLE to
    `pnpm outdated` — its "latest" is computed under the floor too, so
-   the row reads current (observed 2026-08-11). An outdated-zero
+   the row reads current (observed again 2026-11-03). An outdated-zero
    therefore does not mean fully-current: name age-floored rows from
    publish-date reads (`pnpm view <pkg> time`), never from outdated's
    silence. The age-floored SET is discoverable only exhaustively:

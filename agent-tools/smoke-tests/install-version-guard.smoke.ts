@@ -14,9 +14,17 @@ import { resolvePnpm } from '../src/spawn/pnpm-path.js';
  * rewrite an incompatible lockfile.
  *
  * The fixture copies the guard source and wires it as a real `pnpm:devPreinstall`
- * hook, then runs the installed pnpm binary against a deliberately old-format
- * lockfile. The guard must be the process that refuses the install, and the
+ * hook, then runs the installed pnpm binary against a lockfile pnpm would
+ * rewrite. The guard must be the process that refuses the install, and the
  * lockfile bytes must remain identical.
+ *
+ * The fixture lockfile is in the current format (`lockfileVersion: '9.0'`), so
+ * every supported pnpm parses it and reaches the preinstall hook — pnpm refuses
+ * a format it does not support before any hook runs, which would leave the
+ * guard unexercised. Its recorded `autoInstallPeers: false` differs from
+ * pnpm's default, so without the guard pnpm re-resolves and rewrites it
+ * (observed on pnpm 11.20.0, 12.16.1 and 12.17.0, 2026-11-03); byte-identity
+ * therefore proves the guard refused before pnpm wrote.
  *
  * Fixture layout — why the mismatched pin is NOT at the install root. The guard
  * fires when the `packageManager` pin differs from the running pnpm. But a
@@ -68,11 +76,15 @@ const pinnedRoot = join(fixtureRoot, 'pinned');
 const fixtureGuardPath = join(pinnedRoot, guardRelativePath);
 const fixtureDevPreinstall = `node pinned/${guardRelativePath}`;
 const originalLockfile = [
-  "lockfileVersion: '6.0'",
+  "lockfileVersion: '9.0'",
   '',
   'settings:',
-  '  autoInstallPeers: true',
+  '  autoInstallPeers: false',
   '  excludeLinksFromLockfile: false',
+  '',
+  'importers:',
+  '',
+  '  .: {}',
   '',
 ].join('\n');
 

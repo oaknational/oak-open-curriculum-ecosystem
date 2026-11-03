@@ -37,21 +37,27 @@ packages:
 # Supply-chain hardening: exclude any package version younger than 24h
 # (1440 min) from resolution, so a freshly-published compromised release ages —
 # giving the ecosystem time to detect and yank it — before it can enter the
-# tree. pnpm's default is 0 (no floor); this line introduces the floor.
-# Mechanism, verified first-hand 2026-08-11 on pnpm 11.20 — two outcomes:
-# when the requested range admits an older mature version, the resolver
+# tree. pnpm 12's built-in default is also 1440 minutes, but non-strict:
+# per its 12.3.0 changelog, too-young picks are then added to
+# minimumReleaseAgeExclude without asking. Setting the value here makes the
+# floor strict, so keep this line even though it matches the default.
+# Mechanism, verified first-hand 2026-11-03 on pnpm 12.17.0 — three outcomes.
+# When the requested range admits an older mature version, the resolver
 # SILENTLY picks the newest version older than the floor (exit 0, no
-# warning, no prompt) — a just-published release simply stays out of
-# resolution until it ages past the floor. The exclusion is INVISIBLE to
-# `pnpm outdated` too: its "latest" is computed under the same floor, so
-# age-floored rows read current — surface them from publish-date reads
-# (`pnpm view <pkg> time`), never from outdated's silence. When NOTHING
-# mature satisfies the request (an exact pin to a too-young version),
-# pnpm instead refuses loudly with ERR_PNPM_NO_MATURE_MATCHING_VERSION,
-# naming each too-young package.
-# Applies to all (incl. transitive) deps at resolution time; frozen-lockfile
-# installs (CI) are unaffected. Allow-list a genuinely-needed young package
-# via minimumReleaseAgeExclude.
+# warning) — a just-published release simply stays out of resolution until
+# it ages past the floor. The exclusion is INVISIBLE to `pnpm outdated` too:
+# its "latest" is computed under the same floor, so age-floored rows read
+# current — surface them from publish-date reads (`pnpm view <pkg> time`),
+# never from outdated's silence. When NOTHING mature satisfies the request
+# (an exact pin to a too-young version), a non-interactive install refuses
+# loudly with ERR_PNPM_NO_MATURE_MATCHING_VERSION, naming each too-young
+# package; an interactive install offers to approve the pick instead, and
+# pnpm records an approval in minimumReleaseAgeExclude — decline it, since
+# an exclusion is its own reviewed decision. A frozen-lockfile install (CI)
+# also checks every locked version against the floor and fails with
+# ERR_PNPM_MINIMUM_RELEASE_AGE_VIOLATION, so a lockfile resolved without
+# the floor cannot pass CI. Applies to all (incl. transitive) deps.
+# Allow-list a genuinely-needed young package via minimumReleaseAgeExclude.
 minimumReleaseAge: 1440
 
 allowBuilds:
@@ -67,6 +73,23 @@ peerDependencyRules:
     eslint-plugin-import-x>eslint: '10'
     eslint-plugin-react>eslint: '10'
     eslint-plugin-react-hooks>eslint: '10'
+    # TypeScript 6 is the held major (docs/engineering/build-system.md
+    # §Dependency updates). These packages' peer ranges stop at TypeScript 5,
+    # and nothing newer can be adopted yet (checked 2026-11-03). The
+    # @typescript-eslint 8.56 line is pulled only by eslint-plugin-tsdoc,
+    # whose latest release (0.5.4) still pins @typescript-eslint/utils
+    # ~8.56.0; openapi-typescript 7.13.0 is that package's latest release.
+    # The lint and codegen gates run them on 6. Each selector names the
+    # installed line, so any other version is checked against its own
+    # declared range. Remove the four @typescript-eslint entries when
+    # `pnpm why -r @typescript-eslint/utils` shows no 8.56 copy (tsdoc has
+    # left its pin), and the openapi-typescript entry when no 7.13 copy
+    # remains.
+    '@typescript-eslint/project-service@8.56>typescript': '6'
+    '@typescript-eslint/tsconfig-utils@8.56>typescript': '6'
+    '@typescript-eslint/typescript-estree@8.56>typescript': '6'
+    '@typescript-eslint/utils@8.56>typescript': '6'
+    openapi-typescript@7.13>typescript: '6'
 overrides:
   # Security floor, added 2026-08-11 (MCP-549 wave): three HIGH undici
   # WebSocket-client advisories — invalid server_max_window_bits unhandled
@@ -119,14 +142,14 @@ overrides:
   body-parser: '>=2.4.0 <3'
   # Security floor, raised 2026-07-25 and again 2026-08-11 (MCP-549).
   # Originally 5.0.5 for an earlier finding; then 5.0.8 for a DoS via
-  # unbounded expansion length (out-of-memory abort, high); now 5.0.9 for
+  # unbounded expansion length (out-of-memory abort, high); then 5.0.9 for
   # the quadratic-expansion advisory — the whole tree already resolves 5.x
   # under this floor, so no major cross occurs. Reaches the tree through
   # glob/minimatch tooling chains; no production reachability established.
   # Bounded below 6 pre-emptively (no 6.x published at 2026-08-11): an
   # open floor admits the next major the day it ships, so the bound is
   # structural rather than conditional on watching the registry.
-  # Remove when every dependent's declared floor reaches >=5.0.9.
+  # Remove when every dependent's declared floor reaches >=5.0.12.
   # Raised 2026-11-02 to 5.0.12 for two further advisories, same 5.x line.
   brace-expansion: '>=5.0.12 <6'
   csstype: '>=3.2.3'
@@ -146,7 +169,7 @@ overrides:
   # dev tooling chains (eslint/stryker/codegen) reach it too. Bounded below
   # 4 deliberately — 4.x is published, and an open floor would silently
   # adopt a major nobody asked for. Raise the bound when a consumer actually
-  # needs fast-uri 4. Remove when ajv's declared fast-uri floor is >=3.1.5.
+  # needs fast-uri 4. Remove when ajv's declared fast-uri floor is >=3.1.9.
   # Raised 2026-11-02 to 3.1.9 for four further advisories, same 3.x line.
   fast-uri: '>=3.1.9 <4'
   file-type: '>=21.3.2'
@@ -166,7 +189,7 @@ overrides:
   # @hono/node-server's hono peer range), so an open floor would adopt a
   # future hono 5 unreviewed AND silence the peer conflict that should block
   # it. Raise the bound when @modelcontextprotocol/sdk admits hono 5. Remove
-  # when the SDK's and @clerk/mcp-tools' declared hono floors are >=4.12.34.
+  # when the SDK's and @clerk/mcp-tools' declared hono floors are >=4.13.11.
   # Raised 2026-11-02 to 4.13.11 for five further advisories, same 4.x line.
   hono: '>=4.13.11 <5'
   # Security floor: unauthenticated memory-leak DoS in the Hono Node adapter
@@ -192,7 +215,7 @@ overrides:
   # constraint, so the CVE floor earns the override. Bounded below 11
   # pre-emptively (no 11.x published at 2026-08-11) — an open floor
   # admits the next major the day it ships. Drop the floor when
-  # express-rate-limit's own declared floor exceeds 10.3.1.
+  # express-rate-limit's own declared floor reaches 10.7.4.
   # Raised 2026-11-02 to 10.7.4 for three further advisories, same 10.x line.
   ip-address: '>=10.7.4 <11'
   'js-cookie': '>=3.0.7'
@@ -201,7 +224,7 @@ overrides:
   # chains only (openapi-zod-client-adapter and siblings). Bounded below 5 —
   # 5.x is published, and an open floor would adopt it unreviewed. Raise the
   # bound when a consumer actually needs js-yaml 5. Remove when every
-  # dependent's declared floor reaches >=4.3.1.
+  # dependent's declared floor reaches >=4.3.2.
   # Raised 2026-11-02 to 4.3.2 for a further high advisory, same 4.x line.
   js-yaml: '>=4.3.2 <5'
   # Security floor: quadratic-complexity ReDoS via the mailto: matcher in
@@ -264,3 +287,17 @@ overrides:
   # 0.8.15 on the consumed 0.8 line. Bounded below 0.9 (0.x minors are
   # breaking lines). Remove when every dependent declares >=0.8.15.
   '@xmldom/xmldom': '>=0.8.15 <0.9'
+# What each dependency may do (pnpm 12). pnpm 12 links the agent skills that
+# direct dependencies ship into the agent skill directories (such as
+# .claude/skills) once they are approved. No third-party skill enters this
+# estate without a recorded security review
+# (.agent/rules/third-party-skills-require-security-review.md), so the skill
+# dotenv ships is denied; written by `pnpm approve '!dotenv'`, 2026-11-03.
+# Approving it is the outcome of that review, never a side effect of
+# `pnpm approve`, which reviews build scripts and skills in one prompt.
+# While this block exists, `pnpm approve-builds` records new build approvals
+# here rather than in allowBuilds: either way, grant `build` only to a
+# reviewed, build-requiring package.
+permissions:
+  dotenv:
+    skills: false
