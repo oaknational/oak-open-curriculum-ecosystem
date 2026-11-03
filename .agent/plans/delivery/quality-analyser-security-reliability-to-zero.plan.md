@@ -3,10 +3,10 @@ id: quality-analyser-security-reliability-to-zero
 node_type: delivery
 name: "Code-quality analyser security and reliability findings to zero, and held there by the lint gate"
 overview: "Every open BLOCKER, HIGH or MEDIUM security or reliability issue the code-quality analyser reports on the resting branch is FIXED in the tree, and the six analyser rules with a lint twin are locked at error so the class cannot regrow: thirteen single-story pull requests, landed one at a time under the work-in-progress limit."
-status: sketch
-ratified_by: null
-ratified_date: null
-ratified_where: null
+status: ratified
+ratified_by: "Jim Cresswell (owner)"
+ratified_date: 2026-11-03
+ratified_where: "The owner's word of 2026-11-03 in the session of Sandpiper guards Wind (690653), answering which plans pull request 375 serves: \"plans agreed\"; items 13 and 14 approved in the same message"
 serves: maintenance
 impact_areas:
   - practice-and-estate
@@ -19,7 +19,7 @@ depends_on:
   - plan: code-quality-binding-per-checkout
     kind: beneficial
 owner_gates: []
-last_updated: 2026-11-02
+last_updated: 2026-11-03
 ---
 
 # Code-quality analyser security and reliability findings to zero, and held there by the lint gate
