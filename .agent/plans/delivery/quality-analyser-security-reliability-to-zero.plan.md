@@ -203,7 +203,7 @@ word, 2026-11-02: one pull request, never a series of them). The cures land as l
 sensible chunks, one per workspace; the series' first and last commits run the hooks and the others
 are committed with the hooks bypassed under that word, each saying so in its body, with the
 major-version guard run by hand over every message. The whole gate, `pnpm check`, is green on the
-tree before the push. The work, by item; every item is in the tree unless marked still to land:
+tree before the push. The work, by item; every item is in the tree:
 
 1. **The lock.** The six twins at `error` in `recommended.ts`, at the head of the series with the
    autofixable twins applied across the estate; `recommended.unit.test.ts` with one pathogen fixture
@@ -274,15 +274,16 @@ tree before the push. The work, by item; every item is in the tree unless marked
     carried them; `pr-tally`'s review dispositions carry the parser row and the author check as that
     node's own work; the content audit's item C484 re-anchored on the heading map the generator cure
     hoisted.
-13. **The skill eval scripts' patterns move into the showcase tools module.** Still to land. The
-    CSS-fence walker (a line walk, used by `grade-page.ts` and `grade-no-invented-values.ts`), the
-    declaration test
-    (`/[a-z-]\s*:/i`), the attribute and custom-property patterns (lookbehind-started) and the
-    theme-rule walk (split on braces) from `grade-theming.ts` land in
-    `demos/oak-design-showcase/tools/`, beside `css-literal-values.ts` that both scripts already
-    import, each with a unit test; the three scripts import them. Each script's grade over its own
-    fixtures is unchanged.
-14. **The specimen's scroll region is a tab stop only while it scrolls.** Still to land. A small
+13. **The skill eval scripts' patterns move into the showcase tools module.** The CSS-fence scan
+    (by string offsets, the old pattern's extent kept exactly; used by `grade-page.ts` and
+    `grade-no-invented-values.ts`) in `css-fences.ts`; the declaration test (`/[a-z-]\s*:/i`) and the
+    custom-property test (lookbehind-started; `x--a:` is no longer read as a custom property, the
+    one named behaviour change) in `css-declarations.ts`; the attribute pattern (lookbehind-started)
+    and the theme-rule walk (over braces, returning the offset the grader's media-block check reads)
+    from `grade-theming.ts` in `theme-markup.ts`; all in `demos/oak-design-showcase/tools/`, beside
+    `css-literal-values.ts`, each with a unit test; the three scripts import them. Each script's
+    grade over its own fixtures is byte-identical before and after.
+14. **The specimen's scroll region is a tab stop only while it scrolls.** A small
     client component wraps the lesson-breakdown `<section>` (the named region kept): a
     `ResizeObserver` on both the
     section and the table (a web font widens the table without resizing the section) sets a state
@@ -297,9 +298,9 @@ tree before the push. The work, by item; every item is in the tree unless marked
     any cell padding, in the tightest identity), and a stacked narrow layout loses table semantics
     on older WebKit and changes the design system for four rows.
 
-The two items still to land are the analyser's only findings outside the lint twins' reach: the
-eval scripts sit outside every workspace, and S6845 has no twin. They land in this pull request
-before the push.
+Items 13 and 14 are the analyser's only findings outside the lint twins' reach: the eval scripts
+sit outside every workspace, and S6845 has no twin. Both landed in this pull request on 2026-11-03
+(the component as `TableScrollRegion.tsx`, its tests red first against the constant tab stop).
 
 ## Out of scope
 
