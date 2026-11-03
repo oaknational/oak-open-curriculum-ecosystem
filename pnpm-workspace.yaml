@@ -172,7 +172,6 @@ overrides:
   # needs fast-uri 4. Remove when ajv's declared fast-uri floor is >=3.1.9.
   # Raised 2026-11-02 to 3.1.9 for four further advisories, same 3.x line.
   fast-uri: '>=3.1.9 <4'
-  file-type: '>=21.3.2'
   # Security floor, raised 2026-11-02: advisories patched in 1.16.2 (axios's
   # redirect chain). Bounded below 2. Remove when axios declares >=1.16.2.
   follow-redirects: '>=1.16.2 <2'

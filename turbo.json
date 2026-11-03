@@ -138,7 +138,7 @@
       "dependsOn": ["build"],
       "cache": true,
       "outputs": [],
-      "inputs": ["$TURBO_DEFAULT$", "src/**/*.ts", "oak-theme.js", "vitest.config.ts"]
+      "inputs": ["$TURBO_DEFAULT$", "src/**/*.ts", "oak-theme.js", "vitest.config.mts"]
     },
     "@oaknational/oak-curriculum-mcp-streamable-http#test": {
       // Own `build` (which already implies ^build): suites that construct
