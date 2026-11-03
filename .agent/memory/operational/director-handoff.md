@@ -324,11 +324,13 @@ pull request 375 merged by the door at `4adcfc069` (items 13 and 14 landed, the 
 the `maintenance` node ratified at his word "plans agreed", the analyser's one new issue on the
 pull request cured), its branch retired, the claim closed. The sync is complete at his word: Oak
 `main` (release 1.186.4) fast-forwarded into Engraph `main` as the bot, carried into `engraph` by
-pull request 376 (merged at `71e727ec5`), which also closed pull request 374 as merged. Open
-pull requests on this repository: 373 (this coordination branch) alone. The mirror workflow fails
-whenever the fast-forward carries a workflow-file change (its run token may never write those);
-its cure, minting the app token in the run as the carrier workflow does, is a proposed lane put to
-him, not started. The thread record `open-pull-requests-to-zero` carries the detail.
+pull request 376 (merged at `71e727ec5`), which also closed pull request 374 as merged. The
+analyser plan's criterion 1 read zero on `engraph` after 375 (comms event `7af7c09a`). The mirror
+workflow fails whenever the fast-forward carries a workflow-file change (its run token may never
+write those); its cure, minting the app token in the run as the carrier workflow does, is its own
+lane at his word of ~16:2xZ ("coordinate please"), landing before Oak's workflow-linter lane merges,
+as agreed with Elder rides Topsoil (65857c) on the comms stream. The thread record
+`open-pull-requests-to-zero` carries the detail.
 
 **§STATE, 2026-11-02 14:5xZ (Smelter herds Basalt, `871ba4`, the n=1 seat, at the owner's word to put
 the lint lane down; this block adds to the 2026-10-28 block below).** The analyser plan's remainder

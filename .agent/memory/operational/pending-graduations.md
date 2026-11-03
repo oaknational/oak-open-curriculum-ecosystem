@@ -243,8 +243,8 @@ stand to their review dates with today's evidence logged in their prediction cel
   justification ledger is kept, that an anchor on the governed text (or its like) is the instrument
   where one is needed, and that a review ledger is kept only where it proves what the diff and the
   commit cannot | trigger: the lint pull request from the branch fix/stricter_linting merges,
-  which puts the content audit's dropped ledger on the default branch | size: one clause |
-  status: pending]`
+  which puts the content audit's dropped ledger on the default branch (fired 2026-11-03: 375
+  merged at 4adcfc069) | size: one clause | status: due]`
 
   Verbatim: "We do not need to justify evert change, the change carries the what, the commit carries
   the why. Major decisions belong in ADRs and PDRs" and, on the audit's hash, "why are you using

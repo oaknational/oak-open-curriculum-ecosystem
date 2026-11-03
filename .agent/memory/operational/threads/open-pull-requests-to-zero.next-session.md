@@ -15,8 +15,8 @@ the writes it lacked; then start the analyser plan's units. Owning plans:
 `.agent/plans/delivery/open-pull-requests-to-zero.plan.md`
 (the drain and the tool) and
 `.agent/plans/delivery/quality-analyser-security-reliability-to-zero.plan.md`
-(the analyser findings, after the drain). Both nodes are sketch on the lane branch below, not yet
-on the default branch.
+(the analyser findings, after the drain). Both nodes are on the default branch: the drain's node at
+`status: sketch`, the analyser's ratified on 2026-11-03 (375).
 
 ## Participating agent identities (PDR-027)
 
@@ -108,19 +108,15 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
 ## Next safe step
 
 1. Read `git status --branch` on the primary and `gh pr list` first-hand before any act.
-2. Land the analyser plan's unit 0 (lane `chore/sonar-security-reliability-triage`, a records pull
-   request for the records door), then unit 1 (the three parsers of third-party review text, the live
-   exposure) from a worktree cut from the default branch.
-3. Open the two tool lanes as pull requests, the Codex-failure cure
-   (`fix/pr-watch-codex-failure-evidence`) first and the empty-set declaration
-   (`fix/pr-watch-expect-none`) after it lands; each carries the estate's reviews on its body and takes
-   the door with `--expect none`.
-4. The follow-up lanes the fold's reviews routed: the review-cost gate's hold (the hook's guidance
-   lines dead under `sh -e`, the hold counting reviewed rounds where PDR-140 says pushes, the
-   unrounded crossing test and its duplicated loop) and the comms write path (a render that fails
-   after the write; renders published out of order).
-5. Worktree hygiene: `merge-bot-pr-writes`, `pr-watch-codex-failure` and `sonar-sec-rel-triage` are
-   this session's; each is retired by content check when its branch has landed, never by force.
+2. The analyser plan is complete: units 0 and 1 landed as 366 and 369, the two tool lanes as 368 and
+   370, and units 2 to 14 as 375. Criterion 1 read zero on 2026-11-03 (comms event `7af7c09a`).
+3. The mirror workflow's cure is its own lane, at the owner's word of 2026-11-03 ("coordinate
+   please"). It lands before Oak's workflow-linter lane merges on Oak `main`, as agreed with Elder
+   rides Topsoil (65857c) on the comms stream (event `2dd20168` and that seat's acceptance).
+4. The follow-up lanes the fold of 360's reviews routed, none opened yet: the review-cost gate's hold
+   (the hook's guidance lines dead under `sh -e`, the hold counting reviewed rounds where PDR-140 says
+   pushes, the unrounded crossing test and its duplicated loop) and the comms write path (a render
+   that fails after the write; renders published out of order).
 
 ## Updates after the compaction word
 
@@ -406,8 +402,11 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
 - **Identity, recorded as a miss.** This clone's local config names the bot as `user.name`; the
   estate's rule passes the owner as author per commit. Two commits on 375 (`56eb08a72`,
   `9b4270e4e`) carry the bot as author; every later commit and merge passed the owner.
-- **Proposed, not started**: the mirror workflow's cure (mint the app token in the run, as
-  `upstream-carrier.yml` does), put to the owner. Until it lands, any Oak change to a workflow file
-  stalls the mirror, and the fast-forward above is the manual route.
-- **Criterion 1** (the analyser's reading of the resting branch in the plan's filter) is read once
-  the analyser has analysed `4adcfc069`; the reading is recorded on the lane's closing comms event.
+- **The mirror workflow's cure** (mint the app token in the run, as `upstream-carrier.yml` does) was
+  put to the owner; at ~16:2xZ the owner's word was "coordinate please", and the sequencing with
+  Oak's workflow-linter lane is in Next safe step 3. Until the cure lands, any Oak change to a
+  workflow file stalls the mirror, and the fast-forward above is the manual route.
+- **Criterion 1 read at ~16:17Z**: zero in the plan's filter on `engraph`, from the analyser's
+  analysis at 14:47:26Z, after 375 merged at 14:46:50Z (its check run on `4adcfc069` green at
+  14:53:35Z). One issue stays open outside the filter: S6822, RELIABILITY LOW, at
+  `TokenRows.tsx:107`, a deliberate `role="list"`. Recorded on comms event `7af7c09a`.
