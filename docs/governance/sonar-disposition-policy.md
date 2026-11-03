@@ -342,9 +342,10 @@ dependency lifecycle scripts can execute arbitrary code at install time.
   absence is a criterion, not an assumption (verified absent in this
   repo's tracked config, 2026-07-20). From pnpm 12, the `permissions`
   setting's `build` capability works like `allowBuilds` and takes
-  precedence over it, so `permissions` is likewise absent, or grants
-  `build` only to the reviewed allowlist entries below (verified absent,
-  2026-11-03).
+  precedence over it, so `permissions` grants `build` only to the
+  reviewed allowlist entries below, or to none (verified 2026-11-03: it
+  holds no `build` grant; its one entry denies the agent skill `dotenv`
+  ships).
 - Every allowlist entry is a **reviewed, build-requiring package** (the
   current six: `@clerk/shared`, `@sentry/cli`, `esbuild`,
   `unrs-resolver`, `core-js`, `sharp` — see

@@ -287,3 +287,17 @@ overrides:
   # 0.8.15 on the consumed 0.8 line. Bounded below 0.9 (0.x minors are
   # breaking lines). Remove when every dependent declares >=0.8.15.
   '@xmldom/xmldom': '>=0.8.15 <0.9'
+# What each dependency may do (pnpm 12). pnpm 12 links the agent skills that
+# direct dependencies ship into the agent skill directories (such as
+# .claude/skills) once they are approved. No third-party skill enters this
+# estate without a recorded security review
+# (.agent/rules/third-party-skills-require-security-review.md), so the skill
+# dotenv ships is denied; written by `pnpm approve '!dotenv'`, 2026-11-03.
+# Approving it is the outcome of that review, never a side effect of
+# `pnpm approve`, which reviews build scripts and skills in one prompt.
+# While this block exists, `pnpm approve-builds` records new build approvals
+# here rather than in allowBuilds: either way, grant `build` only to a
+# reviewed, build-requiring package.
+permissions:
+  dotenv:
+    skills: false
