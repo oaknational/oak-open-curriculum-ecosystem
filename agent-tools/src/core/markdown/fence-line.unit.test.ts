@@ -50,4 +50,8 @@ describe('closesFence', () => {
     expect(closesFence('```', '``` still code')).toBe(false);
     expect(closesFence('```', 'plain text')).toBe(false);
   });
+
+  it('closes nothing for an empty delimiter, which names no character', () => {
+    expect(closesFence('', '```')).toBe(false);
+  });
 });

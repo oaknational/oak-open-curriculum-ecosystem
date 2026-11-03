@@ -57,7 +57,9 @@ export function closesFence(delimiter: string, line: string): boolean {
   if (fence?.info !== '') {
     return false;
   }
+  // The line's own run is never empty, so its first character is a real one,
+  // and an empty `delimiter` cannot start with it.
   return (
-    fence.delimiter.charAt(0) === delimiter.charAt(0) && fence.delimiter.length >= delimiter.length
+    delimiter.startsWith(fence.delimiter.charAt(0)) && fence.delimiter.length >= delimiter.length
   );
 }
