@@ -532,8 +532,8 @@ each with its measure:
 1. The partial plans. The programme's fifteen `oce-*` sketches and its strategic node (every one
    `status: sketch`, `last_updated: 2026-10-10`) read against the merged ADR-233 and the seven points in the
    thread record `oce-rearchitecting-programme`; the two nodes with expired owner gates
-   (`semantic-search-showcase`, `warranted-means-in-the-operating-environment`) decided under PDR-100 with
-   the register's owner-gate entry; the three superseded nodes placed as the plans index says (§"Plans
+   (`semantic-search-showcase`, `warranted-means-in-the-operating-environment`) are decided: archived at
+   the owner's word of 2026-11-03; the three superseded nodes placed as the plans index says (§"Plans
    estate — superseded-node placement to re-true" below); the other thirty-five sketches read for a
    supersession or a stamp, not planned. The programme's files reached the coordination branch with the default branch's
    merge at its fold (`0d8b234af`, 2026-10-28).

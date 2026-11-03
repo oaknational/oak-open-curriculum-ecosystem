@@ -328,8 +328,11 @@ to the product standard with IO split by process tier, the content audit's per-f
 his word. The drain thread record carries the resume order. The mis-pushed remote tip the block below
 names was cured on 2026-10-29 without force (the thread record's 2026-10-29 state). This coordination
 branch's fold is decided by the work on it (records only since 2026-10-29), at the next Director's DUE
-check, not inside this wrap. Two owner gates stand expired (`semantic-search-showcase`,
-`warranted-means-in-the-operating-environment`); the session-open alert repeats until his word.
+check, not inside this wrap. The two expired owner gates (`semantic-search-showcase`,
+`warranted-means-in-the-operating-environment`) are discharged: both plans archived at his word of
+2026-11-03 ("archive both decisions, if they are important they will come up again"), on this
+branch; the session-open alert reads the primary checkout, so it stops once this branch folds and
+the primary's branch takes the default branch.
 
 **§STATE, 2026-10-28 16:2xZ (Smelter herds Basalt, `871ba4`, the n=1 seat, post-fold; this block
 adds to the 2026-10-05 blocks below).** The coordination branch `2026-10-16-f1e9d3` folded as #360 at

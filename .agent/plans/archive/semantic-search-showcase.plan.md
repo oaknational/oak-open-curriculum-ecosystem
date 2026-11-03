@@ -6,7 +6,7 @@ overview: >-
   Build the Innovation Kit's first proposition: a discovery-to-resource semantic-search
   showcase that reveals the search capability honestly and produces the Kit's first
   gap-and-seam register.
-status: sketch
+status: archived
 ratified_by: null
 ratified_date: null
 ratified_where: null
@@ -23,10 +23,17 @@ owner_gates:
       The owner reviews this plan shape and the Stage-0 composition declaration (proposition,
       claim boundary, activated and omitted capabilities, decision-budget seed) and says build.
     expires: 2026-10-10
-last_updated: 2026-09-08
+last_updated: 2026-11-03
 ---
 
 # Semantic-search showcase
+
+## Outcome (2026-11-03) — archived at the owner's word, the gate unanswered
+
+The owner gate above expired on 2026-10-10 with no decision; the plan was never built. Archived at
+the owner's word of 2026-11-03, verbatim: "archive both decisions, if they are important they will
+come up again". The plan is a record of the direction as it stood; work in this area starts from a
+new decision, not from this node.
 
 ## Authority anchors
 
