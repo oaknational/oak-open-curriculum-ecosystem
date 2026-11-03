@@ -192,10 +192,12 @@ fails the _mint_ with `HTTP 422`, so a mint that succeeded followed by that
 problems: a ruleset refusing a merge is this design working as intended, and
 rate limits return 403 too.
 
-`workflows: write` is needed only by `gh pr update-branch`, which writes the
+`workflows: write` is needed by `gh pr update-branch`, which writes the
 merge commit onto the **head** branch; GitHub refuses that write when the
-merge touches `.github/workflows/**` without it — which is why the setup
-steps below treat Workflows as non-optional. Merging a pull request does not
+merge touches `.github/workflows/**` without it. The upstream mirror workflow
+needs it too: it mints an App token with it in the run, for a fast-forward
+whose range changes a workflow file. Together these are why the setup steps
+below treat Workflows as non-optional. Merging a pull request does not
 need it; the observations behind that, and behind every other scope member,
 live in `token-scopes.ts` beside the decisions they justify.
 

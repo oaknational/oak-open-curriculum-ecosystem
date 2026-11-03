@@ -145,8 +145,9 @@ describe('runMergeBotCli mint-token --scope', () => {
     // while every scheduled run of the same step succeeded, and succeeded
     // under this permission set (run 35241924531). A change to that job's
     // permissions is this value's re-adjudication point; a downgrade of either
-    // member in the TABLE would pass the generic test and fail only at the
-    // next live mirror dispatch.
+    // member in the TABLE would pass the generic test and surface only at the
+    // next live mirror dispatch, as a move by the run's App-token fallback,
+    // which starts the workflows the run's own token keeps off the mirror.
     expect(await mintedPermissionsFor('upstream-mirror-dispatch')).toEqual({
       actions: 'write',
       contents: 'write',

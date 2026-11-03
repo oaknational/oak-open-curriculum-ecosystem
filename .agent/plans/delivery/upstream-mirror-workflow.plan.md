@@ -13,7 +13,7 @@ impact_areas:
 tickets: []
 depends_on: []
 owner_gates: []
-last_updated: 2026-10-02
+last_updated: 2026-11-03
 ---
 
 # Upstream mirror workflow
@@ -200,7 +200,8 @@ jobs:
 The carrier into the default branch (`upstream-carrier-workflow`); any semantic integration;
 the retirement of the Codex OCE task (an owner decision named in the exploration record); any
 change to the fork's `Release` or `CI` workflows (mirror pushes by the run's token trigger
-neither, decision 7).
+neither, decision 7; a move by the App-token fallback of 2026-11-03 starts both once, and
+`Release` fails at its token mint).
 
 ## Todos
 
@@ -285,6 +286,20 @@ here so the next reader does not re-derive them:
   Decision 7 stands (the run's own token, so a moved reference triggers no workflow); its
   precondition is now stated in the file's header, which the fence above carries too: whoever
   dispatches must hold what the run writes with.
+- **A range that changes a workflow file (2026-11-03, at the owner's word "do fix the
+  mirror").** No run token may write such a range. The scheduled runs of 2026-11-02 and
+  2026-11-03 failed the reference update with 403 `Resource not accessible by integration` over
+  a range carrying four workflow-file changes, and `main` was fast-forwarded by hand under the
+  bot's `pull-request-work` token. Decision 7 stands as the default writer. On the run token's
+  403 alone, the run mints the bot's App token (`contents: write` and `workflows: write`, from
+  the carrier's App secrets) and moves the reference with it; a 422 still fails the run with no
+  fallback. That move is a push, so the push-triggered workflows at the mirror's tip run once:
+  none writes to the repository or dispatches, and the fork's `Release` fails at its token
+  mint, as decision 7 records. The job's `if:` admits only `schedule` and `workflow_dispatch`,
+  so nothing its write starts can start it again. The owner's word on the mirror's CI, the same
+  day: "It's a _mirror_, it is the responsibility of Oak to make sure that there code is in a
+  proper state, our job is to mirror it". The fence above is the file as todo 1 authored it;
+  the file on the default branch carries this amendment.
 
 Review round on PR #131, 2026-09-11. Carried to the owner:
 

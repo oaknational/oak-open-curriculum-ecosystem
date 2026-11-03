@@ -20,12 +20,26 @@ name: Upstream mirror
 # side, so `ahead` means the PARENT is ahead and `behind` means THIS mirror
 # is ahead.
 #
+# The writer is the run's own token: a reference it moves starts no workflow,
+# so the mirror branch runs no CI of its own (the parent's CI proved its tip,
+# and the pull request that carries it into this repository runs this
+# repository's checks). GitHub refuses that token (HTTP 403) when the range
+# changes a file under .github/workflows/, which no run token may write; that
+# one case moves with the bot's App token, minted in the run with
+# `workflows: write`. A move by the App token is a push, so the workflows the
+# mirror's tip triggers on a push to its branch run once; none of them writes
+# to this repository or dispatches a workflow.
+#
+# This job runs only on its schedule or a dispatch (the job-level `if:`), so
+# no push or workflow run that its own write starts can start it again.
+#
 # A dispatched run's own token is capped at the permissions of the token that
 # dispatched it, in addition to the job's own `permissions:` block: a dispatch
 # under a token carrying `actions: write` alone ran the compare and then
 # failed the reference update with 403 (run 35240876819, 2026-09-17), while
-# the same step succeeds on every scheduled run. Dispatch with a token that
-# also carries `contents: write` (in this estate, the bot's
+# the same step succeeds on every scheduled run. Under that cap the move now
+# falls back to the App token. To keep it on the run's own token, dispatch
+# with a token that also carries `contents: write` (in this estate, the bot's
 # `upstream-mirror-dispatch` scope, named for this act).
 
 on:
@@ -43,7 +57,9 @@ permissions: {}
 jobs:
   mirror:
     name: Fast-forward the mirror branch to the parent's default branch
-    if: vars.UPSTREAM_MIRROR_ENABLED == 'true'
+    if: >-
+      vars.UPSTREAM_MIRROR_ENABLED == 'true' &&
+      (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -91,20 +107,46 @@ jobs:
           echo "::error title=Mirror branch is ahead of the parent::${MIRROR_AHEAD_BY} commit(s) on ${GITHUB_REPOSITORY}@${MIRROR_BRANCH} are not on ${PARENT}@${PARENT_BRANCH}. The mirror branch follows the parent and carries no work of its own. Compare: https://github.com/${PARENT}/compare/${PARENT_BRANCH}...${GITHUB_REPOSITORY_OWNER}:${GITHUB_REPOSITORY#*/}:${MIRROR_BRANCH}"
           exit 1
 
+      - name: Mint the bot App token, for a range the run's own token may not write
+        id: app-token
+        if: steps.compare.outputs.status == 'ahead'
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          client-id: ${{ secrets.UPSTREAM_CARRIER_APP_CLIENT_ID }}
+          private-key: ${{ secrets.UPSTREAM_CARRIER_APP_PRIVATE_KEY }}
+          # Only what the fallback writes with: one reference (contents), over
+          # a range that may change workflow files (workflows).
+          permission-contents: write
+          permission-workflows: write
+
       - name: Fast-forward the mirror branch to the parent's tip
         if: steps.compare.outputs.status == 'ahead'
         env:
           MIRROR_BRANCH: ${{ steps.compare.outputs.mirror_branch }}
           PARENT_TIP: ${{ steps.compare.outputs.parent_tip }}
           PARENT_AHEAD_BY: ${{ steps.compare.outputs.parent_ahead_by }}
+          APP_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           set -euo pipefail
           # force=false makes the platform refuse anything but a fast-forward,
           # so a commit landing on the mirror between the compare and this
-          # update answers 422 and nothing is written.
-          moved="$(gh api --method PATCH "repos/${GITHUB_REPOSITORY}/git/refs/heads/${MIRROR_BRANCH}" \
-            -f "sha=${PARENT_TIP}" -F force=false --jq '.object.sha')"
-          echo "::notice title=Mirror fast-forwarded::${MIRROR_BRANCH} moved to ${moved} (${PARENT_AHEAD_BY} commit(s))."
+          # update answers 422 and nothing is written, whichever token writes.
+          fast_forward() {
+            GH_TOKEN="$1" gh api --method PATCH "repos/${GITHUB_REPOSITORY}/git/refs/heads/${MIRROR_BRANCH}" \
+              -f "sha=${PARENT_TIP}" -F force=false --jq '.object.sha'
+          }
+          refusal="${RUNNER_TEMP}/run-token-refusal.txt"
+          if moved="$(fast_forward "$GH_TOKEN" 2>"$refusal")"; then
+            via="the run's own token"
+          elif grep -q '(HTTP 403)' "$refusal"; then
+            echo "The run's own token was refused: $(cat "$refusal")"
+            moved="$(fast_forward "$APP_TOKEN")"
+            via="the bot's App token"
+          else
+            cat "$refusal" >&2
+            exit 1
+          fi
+          echo "::notice title=Mirror fast-forwarded::${MIRROR_BRANCH} moved to ${moved} (${PARENT_AHEAD_BY} commit(s)) by ${via}."
 
       - name: Report in sync
         if: steps.compare.outputs.status == 'identical'
