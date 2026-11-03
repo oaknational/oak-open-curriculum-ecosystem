@@ -71,9 +71,9 @@ function recordUnavailable(state: CollectedMergeFlags, value: string): Result<un
   try {
     state.unavailable.push(parseUnavailableFlag(value));
     return ok(undefined);
-  } catch (cause) {
+  } catch (error) {
     return err(
-      new Error(`${cause instanceof Error ? cause.message : String(cause)}\n${MERGE_USAGE}`),
+      new Error(`${error instanceof Error ? error.message : String(error)}\n${MERGE_USAGE}`),
     );
   }
 }
@@ -219,8 +219,12 @@ function requireExpectedSet(
   return ok(expected);
 }
 
+/** A login as compared: without case, and without the `[bot]` suffix that names the same account. */
+function bareLogin(login: string): string {
+  return login.toLowerCase().replace(/\[bot\]$/u, '');
+}
+
 // Logins compare without case, and a `[bot]` suffix names the same account.
 function sameLogin(left: string, right: string): boolean {
-  const bare = (login: string) => login.toLowerCase().replace(/\[bot\]$/u, '');
-  return bare(left) === bare(right);
+  return bareLogin(left) === bareLogin(right);
 }

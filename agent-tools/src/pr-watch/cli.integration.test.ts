@@ -48,6 +48,16 @@ function capture(): {
 
 const noSleep = (): Promise<void> => Promise.resolve();
 
+/** A snapshot reader that answers the given snapshots in turn and then holds the last. */
+function sequenceReader(snapshots: readonly PrSnapshot[]): () => PrSnapshot {
+  let index = 0;
+  return () => {
+    const snapshot = snapshots[Math.min(index, snapshots.length - 1)];
+    index += 1;
+    return snapshot;
+  };
+}
+
 describe('runPrWatchCli — one-shot', () => {
   it('prints the formatted snapshot line for a PR number', async () => {
     const io = capture();
@@ -111,15 +121,6 @@ describe('runPrWatchCli — one-shot', () => {
 });
 
 describe('runPrWatchCli — watch', () => {
-  function sequenceReader(snapshots: readonly PrSnapshot[]): () => PrSnapshot {
-    let index = 0;
-    return () => {
-      const snapshot = snapshots[Math.min(index, snapshots.length - 1)];
-      index += 1;
-      return snapshot;
-    };
-  }
-
   // Waiting-state snapshots keep one check pending: an all-green open PR is
   // itself a watch exit since the all-green standardisation.
   const waiting = { checks: { total: 1, passed: 0, failed: 0, pending: 1 } };

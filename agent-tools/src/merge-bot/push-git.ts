@@ -67,8 +67,8 @@ export function resolveGitContext(seams: {
   }
   try {
     return ok({ file: resolveTrustedGit(), exec });
-  } catch (cause) {
-    return err(new Error(cause instanceof Error ? cause.message : String(cause)));
+  } catch (error) {
+    return err(new Error(error instanceof Error ? error.message : String(error)));
   }
 }
 

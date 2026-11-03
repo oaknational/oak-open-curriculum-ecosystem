@@ -11,7 +11,10 @@ import { failureMessage } from './test-helpers/result-failure.js';
  * grammar here is a table.
  */
 
+/** A ref-format oracle under which git's grammar accepts every name. */
 const everyNameLegal: RefFormatOracle = () => true;
+/** A ref-format oracle under which git's grammar rejects every name. */
+const nothingLegal: RefFormatOracle = () => false;
 const seams = { refFormatOracle: everyNameLegal };
 
 describe('parseRetireArgs', () => {
@@ -34,8 +37,6 @@ describe('parseRetireArgs', () => {
   );
 
   it("refuses a name git's grammar rejects", () => {
-    const nothingLegal: RefFormatOracle = () => false;
-
     expect(parseRetireArgs(['--branch', 'feat/x'], { refFormatOracle: nothingLegal }).ok).toBe(
       false,
     );

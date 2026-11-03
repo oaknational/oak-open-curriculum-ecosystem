@@ -39,14 +39,17 @@ function retriesAnnounced(errText: string): number {
 }
 
 describe('merge-bot push: a named branch', () => {
-  it('pushes a named branch whatever branch HEAD is on', async () => {
+  it('refuses a named branch that is not the one HEAD is on, with exit 3, minting nothing and pushing nothing', async () => {
     const run = runPush({
       args: ['--branch', 'other-lane', '--json'],
       reads: gitReads({ currentBranch: answered('feat/elsewhere\n') }),
     });
 
-    expect(await run.exit).toBe(0);
-    expect(JSON.parse(run.out())).toMatchObject({ kind: 'pushed', branch: 'other-lane' });
+    expect(await run.exit).toBe(3);
+    expect(JSON.parse(run.out())).toMatchObject({ kind: 'refused' });
+    expect(run.out()).toContain('other-lane');
+    expect(run.out()).toContain('feat/elsewhere');
+    expect(run.calls).toEqual([]);
   });
 });
 

@@ -32,6 +32,16 @@ function firstCommand(records: TestRecord[]): { event: TestRecord; item: Fixture
   return { event, item: object(event.payload['item']) };
 }
 
+/** A record of the given type with an empty payload. */
+const recordOfType = (type: string): TestRecord => ({ type, payload: {} });
+
+/** The fixture's last turn completion, which every appended record follows. */
+function lastCompletion(records: readonly TestRecord[]): TestRecord {
+  const completion = records.findLast((record) => record.payload['type'] === 'task_complete');
+  assert(completion);
+  return completion;
+}
+
 describe('readCommandRecords over the recorded seat rollout', () => {
   it('counts the turns started and the commands the harness recorded as run', () => {
     const records = execRecords();
@@ -82,8 +92,7 @@ describe('readCommandRecords over the recorded seat rollout', () => {
 
   it('counts a record type named like an object property under its own key', () => {
     const records = execRecords();
-    const shaped = (type: string): TestRecord => ({ type, payload: {} });
-    records.push(shaped('__proto__'), shaped('__proto__'), shaped('constructor'));
+    records.push(recordOfType('__proto__'), recordOfType('__proto__'), recordOfType('constructor'));
     const { recordTypes } = readCommandRecords(lines(records));
     expect(Object.hasOwn(recordTypes, '__proto__')).toBe(true);
     expect(recordTypes['__proto__']).toBe(2);
@@ -234,13 +243,6 @@ describe('readCommandRecords fails closed on the evidence records', () => {
 });
 
 describe('readCommandRecords reads an exec call after its turn completed as malformed', () => {
-  /** The fixture's last turn completion, which every appended record follows. */
-  function lastCompletion(records: readonly TestRecord[]): TestRecord {
-    const completion = records.findLast((record) => record.payload['type'] === 'task_complete');
-    assert(completion);
-    return completion;
-  }
-
   it('reads an exec request and its output after the turn completed as malformed', () => {
     const records = execRecords();
     const request: TestRecord = {

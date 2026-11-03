@@ -58,8 +58,8 @@ const esbuildSyntaxValidator: SyntaxValidator = (source) => {
   try {
     transformSync(source, { loader: 'js' });
     return ok(undefined);
-  } catch (cause) {
-    return err(new Error(cause instanceof Error ? cause.message : String(cause), { cause }));
+  } catch (error) {
+    return err(new Error(error instanceof Error ? error.message : String(error), { cause: error }));
   }
 };
 

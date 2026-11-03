@@ -65,6 +65,16 @@ const passProvenance = (
   candidates: readonly string[],
 ): Result<ProvenanceCheckReport, ProvenanceScanError> => ok(cleanReport(candidates));
 
+/** A provenance check that flags the given event as a violation on an otherwise clean report. */
+const flaggingViolation =
+  (violator: string) =>
+  (candidates: readonly string[]): Result<ProvenanceCheckReport, ProvenanceScanError> =>
+    ok({ ...cleanReport(candidates), violations: [violator] });
+
+/** A provenance scan that fails before reporting: its digest is unreadable. */
+const failingScan = (): Result<ProvenanceCheckReport, ProvenanceScanError> =>
+  err({ kind: 'digest-unreadable', path: 'digest.md', cause: 'EACCES' });
+
 function request(overrides: Partial<ArchiveMovePlanRequest> = {}): ArchiveMovePlanRequest {
   return {
     commsDir: COMMS_DIR,
@@ -141,9 +151,11 @@ describe('planArchiveMove — provenance gate (fail-closed, re-blocks violators)
     const ledger = new Map<string, LedgerEntry>([
       ['dddddddd', { disposition: 'routine', bodyReadConfirmed: false }],
     ]);
-    const flagViolation = (candidates: readonly string[]) =>
-      ok({ ...cleanReport(candidates), violations: ['dddddddd'] });
-    const result = planArchiveMove(request({ ledger }), memoryIo(events), flagViolation);
+    const result = planArchiveMove(
+      request({ ledger }),
+      memoryIo(events),
+      flaggingViolation('dddddddd'),
+    );
     expect(result.ok).toBe(true);
     if (!result.ok) {
       return;
@@ -161,9 +173,11 @@ describe('planArchiveMove — provenance gate (fail-closed, re-blocks violators)
       ['aa000000', { disposition: 'routine', bodyReadConfirmed: false }],
       ['bb000000', { disposition: 'routine', bodyReadConfirmed: false }],
     ]);
-    const flagOne = (candidates: readonly string[]) =>
-      ok({ ...cleanReport(candidates), violations: ['bb000000'] });
-    const result = planArchiveMove(request({ ledger }), memoryIo(events), flagOne);
+    const result = planArchiveMove(
+      request({ ledger }),
+      memoryIo(events),
+      flaggingViolation('bb000000'),
+    );
     expect(result.ok).toBe(true);
     if (!result.ok) {
       return;
@@ -174,9 +188,7 @@ describe('planArchiveMove — provenance gate (fail-closed, re-blocks violators)
 
   it('fails closed when the provenance scan itself errors', () => {
     const events = [ev({ eventId: 'eeeeeeee', createdAt: '2026-06-01T00:00:00Z' })];
-    const scanError = (): Result<ProvenanceCheckReport, ProvenanceScanError> =>
-      err({ kind: 'digest-unreadable', path: 'digest.md', cause: 'EACCES' });
-    const result = planArchiveMove(request(), memoryIo(events), scanError);
+    const result = planArchiveMove(request(), memoryIo(events), failingScan);
     expect(result.ok).toBe(false);
     if (result.ok) {
       return;

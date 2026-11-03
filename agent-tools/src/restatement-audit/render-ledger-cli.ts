@@ -90,11 +90,11 @@ async function readCheckpoint(filePath: string): Promise<Result<unknown, Error>>
   try {
     const parsed: unknown = JSON.parse(await readFile(filePath, 'utf8'));
     return ok(parsed);
-  } catch (cause) {
+  } catch (error) {
     return err(
       new Error(
-        `Failed to read or parse the meta-result checkpoint at ${filePath}: ${cause instanceof Error ? cause.message : String(cause)}`,
-        { cause },
+        `Failed to read or parse the meta-result checkpoint at ${filePath}: ${error instanceof Error ? error.message : String(error)}`,
+        { cause: error },
       ),
     );
   }

@@ -5,8 +5,6 @@ import { err, isErr, ok, type Result } from '@oaknational/result';
 import { detectExistingWorktree, type SpawnGitRunner } from './existing-worktree.js';
 import { realGitRunner } from './git.js';
 
-export type { SpawnGitRunner };
-
 /** Inputs to {@link createSpawnWorktree}. */
 export interface CreateSpawnWorktreeOptions {
   /** Lane slug; lowercase alphanumeric words separated by single hyphens. */
@@ -207,3 +205,5 @@ export function createSpawnWorktree(
 
   return addSpawnWorktree(runGit, options.coordinationHome, worktree);
 }
+
+export type { SpawnGitRunner } from './existing-worktree.js';

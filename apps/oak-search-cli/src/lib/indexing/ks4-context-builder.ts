@@ -26,8 +26,6 @@ import {
   type Ks4Logger,
 } from './ks4-context-types';
 
-export type { UnitContext, AggregatedUnitContext, UnitContextMap, SubjectSequenceInfo };
-
 /**
  * Creates an empty UnitContextMap with proper typing.
  * Use this instead of `new Map()` to avoid unsafe type widening.
@@ -202,3 +200,10 @@ export function getKs4ContextForUnit(
 ): AggregatedUnitContext {
   return contextMap.get(unitSlug) ?? EMPTY_AGGREGATED_CONTEXT;
 }
+
+export {
+  type UnitContext,
+  type AggregatedUnitContext,
+  type UnitContextMap,
+  type SubjectSequenceInfo,
+} from './ks4-context-types';

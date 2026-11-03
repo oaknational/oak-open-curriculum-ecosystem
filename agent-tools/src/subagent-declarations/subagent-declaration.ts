@@ -212,7 +212,8 @@ export function parseSubagentDeclaration(
 function shapeRefusal(error: z.ZodError): string {
   const issue = error.issues[0];
   const where = issue?.path.join('.') ?? '';
-  return `${where === '' ? '' : `${where}: `}${issue?.message ?? 'invalid declaration'}`;
+  const wherePrefix = where === '' ? '' : `${where}: `;
+  return `${wherePrefix}${issue?.message ?? 'invalid declaration'}`;
 }
 
 /** A variant name declared twice, naming the second by its index; a generator keyed by name could carry only one. */

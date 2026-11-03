@@ -31,6 +31,10 @@ function runnerFake(outcome: FileBackedChildResult): {
   };
 }
 
+/** A runner that rejects at launch, as spawning a missing binary does. */
+const rejectingRunner = (): Promise<FileBackedChildResult> =>
+  Promise.reject(new Error('spawn ENOENT'));
+
 describe('realGitExecutor arm selection and runner wiring (F-112 cure seam)', () => {
   it('routes a sink-supplied call through the runner intact, replaying both streams to the sink', async () => {
     const fake = runnerFake({ exitCode: 0, signal: null, stderr: '' });
@@ -68,8 +72,7 @@ describe('realGitExecutor arm selection and runner wiring (F-112 cure seam)', ()
   });
 
   it('answers a runner rejection as a value, never a throw (the Result pattern)', async () => {
-    const runner = (): Promise<FileBackedChildResult> => Promise.reject(new Error('spawn ENOENT'));
-    const result = await realGitExecutor(runner)('/no/such/git', [], {
+    const result = await realGitExecutor(rejectingRunner)('/no/such/git', [], {
       cwd: '/repo',
       env: {},
       onOutput: () => undefined,

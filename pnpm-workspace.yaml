@@ -37,21 +37,27 @@ packages:
 # Supply-chain hardening: exclude any package version younger than 24h
 # (1440 min) from resolution, so a freshly-published compromised release ages —
 # giving the ecosystem time to detect and yank it — before it can enter the
-# tree. pnpm's default is 0 (no floor); this line introduces the floor.
-# Mechanism, verified first-hand 2026-08-11 on pnpm 11.20 — two outcomes:
-# when the requested range admits an older mature version, the resolver
+# tree. pnpm 12's built-in default is also 1440 minutes, but non-strict:
+# per its 12.3.0 changelog, too-young picks are then added to
+# minimumReleaseAgeExclude without asking. Setting the value here makes the
+# floor strict, so keep this line even though it matches the default.
+# Mechanism, verified first-hand 2026-11-03 on pnpm 12.17.0 — three outcomes.
+# When the requested range admits an older mature version, the resolver
 # SILENTLY picks the newest version older than the floor (exit 0, no
-# warning, no prompt) — a just-published release simply stays out of
-# resolution until it ages past the floor. The exclusion is INVISIBLE to
-# `pnpm outdated` too: its "latest" is computed under the same floor, so
-# age-floored rows read current — surface them from publish-date reads
-# (`pnpm view <pkg> time`), never from outdated's silence. When NOTHING
-# mature satisfies the request (an exact pin to a too-young version),
-# pnpm instead refuses loudly with ERR_PNPM_NO_MATURE_MATCHING_VERSION,
-# naming each too-young package.
-# Applies to all (incl. transitive) deps at resolution time; frozen-lockfile
-# installs (CI) are unaffected. Allow-list a genuinely-needed young package
-# via minimumReleaseAgeExclude.
+# warning) — a just-published release simply stays out of resolution until
+# it ages past the floor. The exclusion is INVISIBLE to `pnpm outdated` too:
+# its "latest" is computed under the same floor, so age-floored rows read
+# current — surface them from publish-date reads (`pnpm view <pkg> time`),
+# never from outdated's silence. When NOTHING mature satisfies the request
+# (an exact pin to a too-young version), a non-interactive install refuses
+# loudly with ERR_PNPM_NO_MATURE_MATCHING_VERSION, naming each too-young
+# package; an interactive install offers to approve the pick instead, and
+# pnpm records an approval in minimumReleaseAgeExclude — decline it, since
+# an exclusion is its own reviewed decision. A frozen-lockfile install (CI)
+# also checks every locked version against the floor and fails with
+# ERR_PNPM_MINIMUM_RELEASE_AGE_VIOLATION, so a lockfile resolved without
+# the floor cannot pass CI. Applies to all (incl. transitive) deps.
+# Allow-list a genuinely-needed young package via minimumReleaseAgeExclude.
 minimumReleaseAge: 1440
 
 allowBuilds:
@@ -67,6 +73,23 @@ peerDependencyRules:
     eslint-plugin-import-x>eslint: '10'
     eslint-plugin-react>eslint: '10'
     eslint-plugin-react-hooks>eslint: '10'
+    # TypeScript 6 is the held major (docs/engineering/build-system.md
+    # §Dependency updates). These packages' peer ranges stop at TypeScript 5,
+    # and nothing newer can be adopted yet (checked 2026-11-03). The
+    # @typescript-eslint 8.56 line is pulled only by eslint-plugin-tsdoc,
+    # whose latest release (0.5.4) still pins @typescript-eslint/utils
+    # ~8.56.0; openapi-typescript 7.13.0 is that package's latest release.
+    # The lint and codegen gates run them on 6. Each selector names the
+    # installed line, so any other version is checked against its own
+    # declared range. Remove the four @typescript-eslint entries when
+    # `pnpm why -r @typescript-eslint/utils` shows no 8.56 copy (tsdoc has
+    # left its pin), and the openapi-typescript entry when no 7.13 copy
+    # remains.
+    '@typescript-eslint/project-service@8.56>typescript': '6'
+    '@typescript-eslint/tsconfig-utils@8.56>typescript': '6'
+    '@typescript-eslint/typescript-estree@8.56>typescript': '6'
+    '@typescript-eslint/utils@8.56>typescript': '6'
+    openapi-typescript@7.13>typescript: '6'
 overrides:
   # Security floor, added 2026-08-11 (MCP-549 wave): three HIGH undici
   # WebSocket-client advisories — invalid server_max_window_bits unhandled
@@ -91,8 +114,17 @@ overrides:
   # EVERY provider-utils generation — including a future v5, whose
   # patched undici ^7.28.0 the <7 bound would force DOWN to 6.x
   # mid-transition. Qualified floors leave a v5 arrival untouched.
-  '@ai-sdk/provider-utils@3>undici': '>=6.27.0 <7'
-  '@ai-sdk/provider-utils@4>undici': '>=6.27.0 <7'
+  # Raised 2026-11-02: further undici 6.x advisories are patched in 6.29.1.
+  '@ai-sdk/provider-utils@3>undici': '>=6.29.1 <7'
+  '@ai-sdk/provider-utils@4>undici': '>=6.29.1 <7'
+  # Security floors, added 2026-11-02: undici advisories patched per line in
+  # 6.29.1 and 7.30.1. Version-scoped so each consumed line moves within
+  # its own major (6.x: @actions/http-client, @digitalbazaar/http-client,
+  # @sentry/cli; 7.x: @elastic/transport, @semantic-release/github) and no
+  # consumer is dragged across one. Remove each when its consumers'
+  # declared floors reach the patched release.
+  'undici@^6': '>=6.29.1 <7'
+  'undici@^7': '>=7.30.1 <8'
   # Pin @types/node to the Node 24 LTS line across the whole tree, including
   # transitive peers (vite/vitest pull @types/node@26 as an optional peer).
   # Matches engines.node 24.x and keeps every workspace — including those that
@@ -100,18 +132,26 @@ overrides:
   # This override IS the hold — lift it when the project moves Node majors
   # (docs/engineering/build-system.md §Dependency updates).
   '@types/node': '^24.13.3'
-  axios: '>=1.15.1'
+  # Security floor, raised 2026-11-02: advisories patched in 1.20.0. Production
+  # dependency scope per `pnpm audit --prod`; runtime reachability not
+  # established in this sweep. Bounded below 2 so a future major arrives
+  # reviewed. Remove when every dependent's declared floor is >=1.20.0.
+  axios: '>=1.20.0 <2'
+  # Security floor, added 2026-11-02: body-parser 2.x advisory patched in 2.4.0
+  # (express chains). Bounded below 3. Remove when express declares >=2.4.0.
+  body-parser: '>=2.4.0 <3'
   # Security floor, raised 2026-07-25 and again 2026-08-11 (MCP-549).
   # Originally 5.0.5 for an earlier finding; then 5.0.8 for a DoS via
-  # unbounded expansion length (out-of-memory abort, high); now 5.0.9 for
+  # unbounded expansion length (out-of-memory abort, high); then 5.0.9 for
   # the quadratic-expansion advisory — the whole tree already resolves 5.x
   # under this floor, so no major cross occurs. Reaches the tree through
   # glob/minimatch tooling chains; no production reachability established.
   # Bounded below 6 pre-emptively (no 6.x published at 2026-08-11): an
   # open floor admits the next major the day it ships, so the bound is
   # structural rather than conditional on watching the registry.
-  # Remove when every dependent's declared floor reaches >=5.0.9.
-  brace-expansion: '>=5.0.9 <6'
+  # Remove when every dependent's declared floor reaches >=5.0.12.
+  # Raised 2026-11-02 to 5.0.12 for two further advisories, same 5.x line.
+  brace-expansion: '>=5.0.12 <6'
   csstype: '>=3.2.3'
   # Floor kept aligned with the manifests' esbuild ranges (^0.28.2 as of
   # 2026-08-11, per lockfile-rebuild-survivability §override-alignment).
@@ -129,10 +169,17 @@ overrides:
   # dev tooling chains (eslint/stryker/codegen) reach it too. Bounded below
   # 4 deliberately — 4.x is published, and an open floor would silently
   # adopt a major nobody asked for. Raise the bound when a consumer actually
-  # needs fast-uri 4. Remove when ajv's declared fast-uri floor is >=3.1.5.
-  fast-uri: '>=3.1.5 <4'
+  # needs fast-uri 4. Remove when ajv's declared fast-uri floor is >=3.1.9.
+  # Raised 2026-11-02 to 3.1.9 for four further advisories, same 3.x line.
+  fast-uri: '>=3.1.9 <4'
   file-type: '>=21.3.2'
-  follow-redirects: '>=1.15.12'
+  # Security floor, raised 2026-11-02: advisories patched in 1.16.2 (axios's
+  # redirect chain). Bounded below 2. Remove when axios declares >=1.16.2.
+  follow-redirects: '>=1.16.2 <2'
+  # Security floor, added 2026-11-02: critical prototype-pollution and RCE
+  # advisories patched in 4.7.10. Tooling chains only. Bounded below 5.
+  # Remove when every dependent declares >=4.7.10.
+  handlebars: '>=4.7.10 <5'
   # Security floor, raised 2026-08-11 (MCP-549): three advisories patched in
   # 4.12.34 — memo() cross-user SSR retention, language-middleware DoS, CORS
   # ReDoS. PRODUCTION-REACHABLE: @modelcontextprotocol/sdk declares hono
@@ -142,8 +189,9 @@ overrides:
   # @hono/node-server's hono peer range), so an open floor would adopt a
   # future hono 5 unreviewed AND silence the peer conflict that should block
   # it. Raise the bound when @modelcontextprotocol/sdk admits hono 5. Remove
-  # when the SDK's and @clerk/mcp-tools' declared hono floors are >=4.12.34.
-  hono: '>=4.12.34 <5'
+  # when the SDK's and @clerk/mcp-tools' declared hono floors are >=4.13.11.
+  # Raised 2026-11-02 to 4.13.11 for five further advisories, same 4.x line.
+  hono: '>=4.13.11 <5'
   # Security floor: unauthenticated memory-leak DoS in the Hono Node adapter
   # (patched in 2.0.10). PRODUCTION-REACHABLE, unlike most entries here:
   # @modelcontextprotocol/sdk's StreamableHTTPServerTransport imports
@@ -153,7 +201,8 @@ overrides:
   # why 2.x was adopted at all (the SDK asked only for ^1.19.9 then; as of SDK
   # 1.30.0 it declares ^1.19.9 || ^2.0.5), and the bound stops the next major
   # arriving unreviewed. Raise the bound when the SDK admits a newer major.
-  '@hono/node-server': '>=2.0.10 <3'
+  # Raised 2026-11-02 to 2.1.3 for a further advisory, same 2.x line.
+  '@hono/node-server': '>=2.1.3 <3'
   # Security floor, added 2026-08-11 (MCP-549): leading-zero octet decode →
   # SSRF/trust-boundary bypass (high; patched in 10.3.1), plus two moderate
   # special-use misclassification advisories (patched by 10.2.2).
@@ -166,22 +215,33 @@ overrides:
   # constraint, so the CVE floor earns the override. Bounded below 11
   # pre-emptively (no 11.x published at 2026-08-11) — an open floor
   # admits the next major the day it ships. Drop the floor when
-  # express-rate-limit's own declared floor exceeds 10.3.1.
-  ip-address: '>=10.3.1 <11'
+  # express-rate-limit's own declared floor reaches 10.7.4.
+  # Raised 2026-11-02 to 10.7.4 for three further advisories, same 10.x line.
+  ip-address: '>=10.7.4 <11'
   'js-cookie': '>=3.0.7'
   # Security floor, raised 2026-08-11 (MCP-549): quadratic CPU consumption in
   # !!omap resolution (high; CVE-2026-59870; patched in 4.3.1). Dev/tooling
   # chains only (openapi-zod-client-adapter and siblings). Bounded below 5 —
   # 5.x is published, and an open floor would adopt it unreviewed. Raise the
   # bound when a consumer actually needs js-yaml 5. Remove when every
-  # dependent's declared floor reaches >=4.3.1.
-  js-yaml: '>=4.3.1 <5'
+  # dependent's declared floor reaches >=4.3.2.
+  # Raised 2026-11-02 to 4.3.2 for a further high advisory, same 4.x line.
+  js-yaml: '>=4.3.2 <5'
   # Security floor: quadratic-complexity ReDoS via the mailto: matcher in
   # linkify-it (high; patched in 5.0.2). Arrives transitively through markdown
   # tooling. Bounded below 6 for the same reason as fast-uri: 6.x exists and an
   # open floor would take it. Raise the bound when markdown-it moves.
   linkify-it: '>=5.0.2 <6'
-  markdown-it: '>=14.1.2'
+  # Security floor, raised 2026-11-02: advisories patched in 15.0.3; the tree
+  # already resolves 15.x under the earlier open floor. Bounded below 16 so
+  # the next major arrives reviewed. Remove when every dependent declares
+  # >=15.0.3.
+  markdown-it: '>=15.0.3 <16'
+  # Security floors, added 2026-11-02: MCP server and client 2.x advisories
+  # patched in 2.3.0, via @mcpjam/cli, @mcpjam/sdk and @posthog/mcp. Bounded
+  # below 3. Remove when those dependents declare >=2.3.0.
+  '@modelcontextprotocol/client': '>=2.3.0 <3'
+  '@modelcontextprotocol/server': '>=2.3.0 <3'
   # Security floor, added 2026-08-11 (MCP-549): infinite loop on a zero-size
   # generator (high; patched in 3.3.17 on the 3.x line). Reached via postcss
   # chains, direct and transitive — a direct postcss bump left transitive
@@ -191,6 +251,9 @@ overrides:
   # Remove when postcss's declared nanoid floor is >=3.3.17.
   nanoid: '>=3.3.17 <4'
   picomatch: '>=4.0.4'
+  # Security floor, added 2026-11-02: critical advisory patched in 2.0.8
+  # (express chains). Bounded below 3. Remove when dependents declare >=2.0.8.
+  proxy-addr: '>=2.0.8 <3'
   # Security floor, raised 2026-07-25. Originally for next's nested postcss
   # 8.4.31 (GHSA-qx2v-qp2m-jg93, XSS via unescaped </style> in stringify
   # output; patched in 8.5.10); now also covers path traversal in previous
@@ -202,6 +265,39 @@ overrides:
   # advisory at this raise. Remove when next's nested postcss floor and the
   # direct manifests all clear the newest patched line.
   postcss: '>=8.5.26 <9'
-  qs: '>=6.15.2'
+  # Security floor, raised 2026-11-02: advisories patched in 6.16.1. Bounded
+  # below 7. Remove when every dependent declares >=6.16.1.
+  qs: '>=6.16.1 <7'
   rollup: '>=4.59.0'
+  # Security floor, added 2026-11-02: advisory patched in 1.8.1 for the copy
+  # markdownlint-cli2 pins (1.7.0). Bounded below 2. Remove when
+  # markdownlint-cli2 declares >=1.8.1.
+  smol-toml: '>=1.8.1 <2'
+  # Security floor, added 2026-11-02: advisory patched in 1.2.2 (build tooling).
+  # Bounded below 2. Remove when every dependent declares >=1.2.2.
+  source-map-js: '>=1.2.2 <2'
   sucrase: '>=3.35.1'
+  # Security floor, added 2026-11-02: zod 4.x memory-exhaustion advisory
+  # (GHSA-mrhx-c7xc-m3w5) patched in 4.6.6. @vercel/cli-config pins
+  # zod 4.1.11 exactly, so only a parent-scoped floor moves it; scoped so
+  # the zod 3 copy under openapi-zod-client is NOT dragged across a major.
+  # Remove when @vercel/cli-config declares >=4.6.6.
+  '@vercel/cli-config>zod': '>=4.6.6 <5'
+  # Security floor, added 2026-11-02: @xmldom/xmldom advisories patched in
+  # 0.8.15 on the consumed 0.8 line. Bounded below 0.9 (0.x minors are
+  # breaking lines). Remove when every dependent declares >=0.8.15.
+  '@xmldom/xmldom': '>=0.8.15 <0.9'
+# What each dependency may do (pnpm 12). pnpm 12 links the agent skills that
+# direct dependencies ship into the agent skill directories (such as
+# .claude/skills) once they are approved. No third-party skill enters this
+# estate without a recorded security review
+# (.agent/rules/third-party-skills-require-security-review.md), so the skill
+# dotenv ships is denied; written by `pnpm approve '!dotenv'`, 2026-11-03.
+# Approving it is the outcome of that review, never a side effect of
+# `pnpm approve`, which reviews build scripts and skills in one prompt.
+# While this block exists, `pnpm approve-builds` records new build approvals
+# here rather than in allowBuilds: either way, grant `build` only to a
+# reviewed, build-requiring package.
+permissions:
+  dotenv:
+    skills: false

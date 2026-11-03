@@ -64,10 +64,10 @@ export function emitStatusline(rawJson: string, deps: EmitDeps): string {
   }
   try {
     return warningPrefix + deps.render(plan.inputs);
-  } catch (cause) {
+  } catch (error) {
     // Fail loud, never blank: the fault token joins the warning rather than
     // replacing it, so a misconfiguration stays visible through a renderer
     // fault.
-    return `${warningPrefix}${RED}${BOLD}⚠ statusline: ${String(cause)}${RESET}`;
+    return `${warningPrefix}${RED}${BOLD}⚠ statusline: ${String(error)}${RESET}`;
   }
 }

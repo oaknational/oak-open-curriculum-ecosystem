@@ -86,7 +86,7 @@ export function flagCommand(segment: Command): readonly Hit[] {
   for (const subcommand of gitSubcommands(segment)) {
     const name = segment[subcommand] ?? '';
     const shape = SHAPES.find((candidate) => candidate.subcommand === name);
-    if (shape !== undefined && shape.tokens.length === 0) {
+    if (shape?.tokens.length === 0) {
       return [{ kind: shape.kind, token: name }];
     }
     if (shape !== undefined) {

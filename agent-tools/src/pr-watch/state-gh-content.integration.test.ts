@@ -68,6 +68,11 @@ function harvestFor(query: string, harvests: Harvests): string | undefined {
   return query.includes('reviews(') ? page('reviews', harvests.reviews) : undefined;
 }
 
+/** The fake's answer to a REST call: the compare endpoint's diff when asked for in diff media type, nothing otherwise. */
+function restAnswer(args: readonly string[], endpoint: string): string | undefined {
+  return args.includes('Accept: application/vnd.github.diff') ? DIFFS.get(endpoint) : undefined;
+}
+
 function github(harvests: Harvests, view: StateViewSeed): GhCommandExecutor {
   return (_file, args) => {
     const query = args.find((arg) => arg.startsWith('query='));
@@ -81,12 +86,7 @@ function github(harvests: Harvests, view: StateViewSeed): GhCommandExecutor {
         answer = '[]';
         break;
       case 'api':
-        answer =
-          query === undefined
-            ? args.includes('Accept: application/vnd.github.diff')
-              ? DIFFS.get(endpoint)
-              : undefined
-            : harvestFor(query, harvests);
+        answer = query === undefined ? restAnswer(args, endpoint) : harvestFor(query, harvests);
         break;
       default:
         answer = undefined;

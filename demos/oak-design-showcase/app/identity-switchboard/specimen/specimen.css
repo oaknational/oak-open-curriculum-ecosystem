@@ -587,6 +587,14 @@ html {
   overflow-x: auto;
 }
 
+/* The region is a tab stop while it scrolls (TableScrollRegion); its focus
+   takes the kit's ring, as the kit's own focusable components do. */
+[data-page='unit'] .table-scroll:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+  box-shadow: var(--focus-ring);
+}
+
 /* Tab row: the underline carries the current state (a non-colour marker),
    sitting on the row's own baseline rule. */
 [data-page='unit'] .tabs {

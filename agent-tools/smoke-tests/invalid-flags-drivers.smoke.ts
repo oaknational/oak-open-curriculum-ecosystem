@@ -36,8 +36,9 @@ for (const driver of DRIVERS) {
   const result = run(driver);
   const combined = `${result.stdout}${result.stderr}`;
   if (result.status !== 1) {
+    const spawnErrorSuffix = result.error === undefined ? '' : `, ${result.error.message}`;
     fail(
-      `${driver}: expected exit 1 on an unknown flag, got ${String(result.status)} (signal ${String(result.signal)}${result.error === undefined ? '' : `, ${result.error.message}`})`,
+      `${driver}: expected exit 1 on an unknown flag, got ${String(result.status)} (signal ${String(result.signal)}${spawnErrorSuffix})`,
     );
   }
   if (!result.stderr.startsWith('Invalid flags: ')) {

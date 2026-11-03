@@ -60,11 +60,11 @@ function readSurface<T>(
 ): Result<T, Error> {
   try {
     return parse(parseGhJson(gh.run(gh.path, args, GH_EXEC_OPTIONS), surface));
-  } catch (cause) {
+  } catch (error) {
     return err(
       new Error(
-        `fold-clock: gh ${surface} failed: ${cause instanceof Error ? cause.message : String(cause)}`,
-        { cause },
+        `fold-clock: gh ${surface} failed: ${error instanceof Error ? error.message : String(error)}`,
+        { cause: error },
       ),
     );
   }
@@ -73,8 +73,8 @@ function readSurface<T>(
 function resolveGh(source: FoldClockSource): Result<Gh, Error> {
   try {
     return ok({ run: source.execFileSync, path: resolveGhPath(source.ghPath, source.exists) });
-  } catch (cause) {
-    return err(cause instanceof Error ? cause : new Error(String(cause), { cause }));
+  } catch (error) {
+    return err(error instanceof Error ? error : new Error(String(error), { cause: error }));
   }
 }
 

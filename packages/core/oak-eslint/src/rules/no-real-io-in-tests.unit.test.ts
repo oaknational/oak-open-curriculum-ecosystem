@@ -18,6 +18,24 @@ ruleTester.run('no-real-io-in-tests', noRealIoInTestsRule, {
   valid: [
     // ────────────────────────────────────────────────────────────────────
     // Out-of-scope file shapes — rule does not fire on non-test files.
+    // An E2E check is an out-of-process test against a test instance of one
+    // of our systems; IO is its nature (testing-strategy.md §Out-of-process
+    // checks), so *.e2e.test.ts and *.e2e.spec.ts are outside the rule.
+    // ────────────────────────────────────────────────────────────────────
+    {
+      filename: E2E_TEST_FILE,
+      code: `import { readFileSync } from 'node:fs';\nreadFileSync('x');`,
+    },
+    {
+      filename: E2E_TEST_FILE,
+      code: `import { spawn } from 'node:child_process';\nconst port = process.env.PORT;\nspawn('node', ['server.js']);`,
+    },
+    {
+      filename: 'packages/example/e2e-tests/example.e2e.spec.ts',
+      code: `import { readFileSync } from 'node:fs';\nreadFileSync('x');`,
+    },
+    // ────────────────────────────────────────────────────────────────────
+    // Non-test files.
     // ────────────────────────────────────────────────────────────────────
     {
       filename: NON_TEST_FILE,
@@ -473,7 +491,7 @@ ruleTester.run('no-real-io-in-tests', noRealIoInTestsRule, {
 
     // ────────────────────────────────────────────────────────────────────
     // Test-file shape coverage — *.spec.ts / *.unit.test.ts /
-    // *.integration.test.ts / *.e2e.test.ts all trigger.
+    // *.integration.test.ts all trigger (in-process tiers).
     // ────────────────────────────────────────────────────────────────────
     {
       filename: SPEC_FILE,
@@ -487,11 +505,6 @@ ruleTester.run('no-real-io-in-tests', noRealIoInTestsRule, {
     },
     {
       filename: INTEGRATION_TEST_FILE,
-      code: `import { readFileSync } from 'node:fs';\nreadFileSync('x');`,
-      errors: [{ messageId: 'bannedModuleStaticImport', data: { specifier: 'node:fs' } }],
-    },
-    {
-      filename: E2E_TEST_FILE,
       code: `import { readFileSync } from 'node:fs';\nreadFileSync('x');`,
       errors: [{ messageId: 'bannedModuleStaticImport', data: { specifier: 'node:fs' } }],
     },

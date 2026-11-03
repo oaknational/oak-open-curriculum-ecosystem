@@ -176,9 +176,11 @@ function canonicalRoot(
     return path.isAbsolute(canonical)
       ? ok(canonical)
       : err(new EstateReviewError('SNAPSHOT_INVALID', 'Git root is not absolute'));
-  } catch (cause: unknown) {
+  } catch (error: unknown) {
     return err(
-      new EstateReviewError('SNAPSHOT_INVALID', 'cannot canonicalise invoking Git root', { cause }),
+      new EstateReviewError('SNAPSHOT_INVALID', 'cannot canonicalise invoking Git root', {
+        cause: error,
+      }),
     );
   }
 }

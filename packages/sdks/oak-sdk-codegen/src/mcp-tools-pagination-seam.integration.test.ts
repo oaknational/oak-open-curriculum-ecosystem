@@ -11,7 +11,7 @@
 
 import { describe, it, expect } from 'vitest';
 import { createPathBasedClient } from 'openapi-fetch';
-import type { paths } from './types/generated/api-schema/api-paths-types.js';
+import type { Paths } from './types/generated/api-schema/api-paths-types.js';
 import { callTool } from './mcp-tools.js';
 
 const UPSTREAM = 'https://upstream.test';
@@ -28,7 +28,7 @@ const KEYWORDS_PAGE = [
 
 /** A client whose upstream answers every request with the given headers and body. */
 function clientAnswering(headers: Record<string, string>, requests: string[]) {
-  return createPathBasedClient<paths>({
+  return createPathBasedClient<Paths>({
     baseUrl: UPSTREAM,
     fetch: async (request: Request) => {
       requests.push(request.url);

@@ -208,7 +208,7 @@ function buildQueryTransformLine(paramName: string, queryMeta: ParamMetadata | u
   const mcpName = normaliseParamName(paramName);
   const flatValue = `flatArgs.${mcpName}`;
   if (shouldCoerceYearParam(paramName, queryMeta)) {
-    return `      ${paramName}: ${flatValue} === 'all-years' ? undefined : ${flatValue} === undefined ? undefined : Number(${flatValue}),`;
+    return `      ${paramName}: ${flatValue} === undefined || ${flatValue} === 'all-years' ? undefined : Number(${flatValue}),`;
   }
   return `      ${paramName}: ${flatValue},`;
 }

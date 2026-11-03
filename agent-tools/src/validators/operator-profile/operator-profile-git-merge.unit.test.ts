@@ -5,6 +5,19 @@ import type { GitRunner } from './operator-profile-git.js';
 import { pushProfile } from './operator-profile-git-push.js';
 import { failure, PROFILE_PATHSPECS, scripted } from './test-helpers/git-runner-fakes.js';
 
+/** A git answer: what it printed, whether it succeeded, and what it said on stderr. */
+const answer = (stdout = '', ok = true, stderr = '') => ({ ok, stdout, stderr });
+
+/** The pathspec after `--`, or the match-everything spec when a command names none. */
+const pathsOf = (args: readonly string[]) =>
+  args.includes('--') ? args.slice(args.indexOf('--') + 1) : [''];
+
+/** The paths among the given ones that a command's pathspec selects. */
+const within = (paths: Iterable<string>, args: readonly string[]) =>
+  [...paths].filter((path) =>
+    pathsOf(args).some((spec) => spec === '' || path === spec || path.startsWith(`${spec}/`)),
+  );
+
 // A fake git in the middle of a merge, with git's own rules: a path stays
 // unmerged until staged; the sides differ on it and on paths merged cleanly;
 // a commit naming paths is partial, refused while `MERGE_HEAD` exists; `diff`
@@ -17,13 +30,6 @@ interface MergeState {
 }
 
 function mergingGit(state: MergeState): GitRunner {
-  const answer = (stdout = '', ok = true, stderr = '') => ({ ok, stdout, stderr });
-  const pathsOf = (args: readonly string[]) =>
-    args.includes('--') ? args.slice(args.indexOf('--') + 1) : [''];
-  const within = (paths: Iterable<string>, args: readonly string[]) =>
-    [...paths].filter((path) =>
-      pathsOf(args).some((spec) => spec === '' || path === spec || path.startsWith(`${spec}/`)),
-    );
   const unmerged = new Set(state.unmerged ?? ['repos/a--b.md']);
   const diff: GitRunner = (args) => {
     if (args.includes('MERGE_HEAD')) {

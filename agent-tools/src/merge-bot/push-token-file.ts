@@ -62,13 +62,13 @@ export function stageTokenFile(store: TokenFileStore, token: string): Result<Sta
     const tokenPath = join(dir, 'token');
     store.writeFile(tokenPath, token, 0o600);
     return ok({ dir, tokenPath });
-  } catch (cause) {
+  } catch (error) {
     if (dir !== undefined) {
       removeQuietly(store, dir);
     }
     return err(
       new Error(
-        `cannot stage the push credential file: ${cause instanceof Error ? cause.message : String(cause)}`,
+        `cannot stage the push credential file: ${error instanceof Error ? error.message : String(error)}`,
       ),
     );
   }
@@ -85,7 +85,7 @@ export function removeQuietly(store: TokenFileStore, dir: string): string | unde
   try {
     store.remove(dir);
     return undefined;
-  } catch (cause) {
-    return `warning: push credential directory not removed (${dir}): ${cause instanceof Error ? cause.message : String(cause)}`;
+  } catch (error) {
+    return `warning: push credential directory not removed (${dir}): ${error instanceof Error ? error.message : String(error)}`;
   }
 }

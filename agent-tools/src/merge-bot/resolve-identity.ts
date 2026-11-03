@@ -105,11 +105,11 @@ function resolvePrimaryConfigRoot(input: MergeBotResolveInput): Result<string, E
     return ok(
       resolveCoordinationHome(input.repoRoot ?? process.cwd(), { runGit: input.runGitImpl }),
     );
-  } catch (cause) {
+  } catch (error) {
     return err(
       new Error(
-        `cannot locate this clone's primary checkout to read ${MERGE_BOT_CONFIG_RELATIVE_PATH}: run from inside the clone (any worktree); git said: ${rootCause(cause)}`,
-        { cause },
+        `cannot locate this clone's primary checkout to read ${MERGE_BOT_CONFIG_RELATIVE_PATH}: run from inside the clone (any worktree); git said: ${rootCause(error)}`,
+        { cause: error },
       ),
     );
   }

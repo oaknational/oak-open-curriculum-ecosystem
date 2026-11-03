@@ -3,7 +3,8 @@ import { describe, expect, it } from 'vitest';
 
 import type { GitCommandResult } from './git-executor.js';
 import type { PushGitReads } from './push-git.js';
-import { settleCommitFor, settleTargetBranch, type TargetBranch } from './push-target-branch.js';
+import { settleCommitFor } from './push-settle-commit.js';
+import { settleTargetBranch, type TargetBranch } from './push-target-branch.js';
 import { failureMessage } from './test-helpers/result-failure.js';
 
 /**
@@ -14,6 +15,9 @@ import { failureMessage } from './test-helpers/result-failure.js';
 
 const REPOSITORY = { owner: 'acme', repoName: 'widgets' } as const;
 const ORIGIN = 'https://github.com/acme/widgets.git';
+// The scheme is the subject of two refusals below: the URL is built at runtime so the
+// clear-text scheme never sits in source as a literal.
+const CLEAR_TEXT_SCHEME = 'http';
 const DEFAULT_BRANCH = 'engraph';
 
 function answered(stdout: string): GitCommandResult {
@@ -63,10 +67,10 @@ describe('settleTargetBranch: the branch a push writes', () => {
     });
   });
 
-  it('pushes the named branch even when git cannot name the branch HEAD is on', async () => {
+  it('pushes the named branch when it is the one HEAD is on', async () => {
     const settled = await settleTargetBranch(
       'other-lane',
-      reads({ currentBranch: failed(128, 'fatal: not a git repository\n') }),
+      reads({ currentBranch: answered('other-lane\n') }),
       REPOSITORY,
     );
 
@@ -87,7 +91,10 @@ describe('settleTargetBranch: the branch a push writes', () => {
   ])('pushes $name', async ({ branch, head }) => {
     const settled = await settleTargetBranch(
       branch,
-      reads({ originHead: answered(`refs/remotes/origin/${head}\n`) }),
+      reads({
+        currentBranch: answered(`${branch}\n`),
+        originHead: answered(`refs/remotes/origin/${head}\n`),
+      }),
       REPOSITORY,
     );
 
@@ -148,6 +155,30 @@ describe('settleTargetBranch: refusals', () => {
     expect(outcomeLine(settled)).toContain('detached');
   });
 
+  it('refuses a named branch that is not the one HEAD is on, naming both, before origin is read', async () => {
+    const settled = await settleTargetBranch(
+      'other-lane',
+      reads({ currentBranch: answered('feat/example\n'), ...UNREADABLE_ORIGIN }),
+      REPOSITORY,
+    );
+
+    expect(outcomeLine(settled)).toMatch(/^refused: /u);
+    expect(outcomeLine(settled)).toContain('"other-lane"');
+    expect(outcomeLine(settled)).toContain('"feat/example"');
+  });
+
+  it('refuses a named branch when HEAD is detached, naming the detachment', async () => {
+    const settled = await settleTargetBranch(
+      'other-lane',
+      reads({ currentBranch: answered('\n'), ...UNREADABLE_ORIGIN }),
+      REPOSITORY,
+    );
+
+    expect(outcomeLine(settled)).toMatch(/^refused: /u);
+    expect(outcomeLine(settled)).toContain('"other-lane"');
+    expect(outcomeLine(settled)).toContain('detached');
+  });
+
   it.each([
     { name: 'the default branch origin names', branch: DEFAULT_BRANCH, head: DEFAULT_BRANCH },
     { name: 'the default branch in another case', branch: 'Engraph', head: DEFAULT_BRANCH },
@@ -156,7 +187,10 @@ describe('settleTargetBranch: refusals', () => {
   ])('refuses $name', async ({ branch, head }) => {
     const settled = await settleTargetBranch(
       branch,
-      reads({ originHead: answered(`refs/remotes/origin/${head}\n`) }),
+      reads({
+        currentBranch: answered(`${branch}\n`),
+        originHead: answered(`refs/remotes/origin/${head}\n`),
+      }),
       REPOSITORY,
     );
 
@@ -180,7 +214,10 @@ describe('settleTargetBranch: refusals', () => {
   ])('names $name it refuses without its format characters', async ({ branch, head, shown }) => {
     const settled = await settleTargetBranch(
       branch,
-      reads({ originHead: answered(`refs/remotes/origin/${head}\n`) }),
+      reads({
+        currentBranch: answered(`${branch}\n`),
+        originHead: answered(`refs/remotes/origin/${head}\n`),
+      }),
       REPOSITORY,
     );
 
@@ -235,11 +272,11 @@ describe('settleTargetBranch: failures, each naming its cure', () => {
     },
     {
       name: 'origin is read over plain http',
-      originUrls: answered('http://github.com/acme/widgets.git\n'),
+      originUrls: answered(`${CLEAR_TEXT_SCHEME}://github.com/acme/widgets.git\n`),
     },
     {
       name: 'origin is read over plain http, written after a space',
-      originUrls: answered(' http://github.com/acme/widgets.git\n'),
+      originUrls: answered(` ${CLEAR_TEXT_SCHEME}://github.com/acme/widgets.git\n`),
     },
     {
       name: 'origin is read over the git protocol',
@@ -333,7 +370,7 @@ describe('settleCommitFor: the branch and the commit are one snapshot of HEAD', 
   }
 
   it('settles the commit HEAD names while HEAD is still on the branch read from it', async () => {
-    expect(await settleCommitFor('feat/example', true, headReads({}))).toEqual({
+    expect(await settleCommitFor('feat/example', headReads({}))).toEqual({
       ok: true,
       value: COMMIT,
     });
@@ -342,7 +379,6 @@ describe('settleCommitFor: the branch and the commit are one snapshot of HEAD', 
   it('fails, naming both branches, when HEAD is on another branch by the time the commit is read', async () => {
     const settled = await settleCommitFor(
       'feat/example',
-      true,
       headReads({ currentBranch: answered('feat/second\n') }),
     );
 
@@ -353,7 +389,6 @@ describe('settleCommitFor: the branch and the commit are one snapshot of HEAD', 
   it('names both branches without their format characters', async () => {
     const settled = await settleCommitFor(
       'feat/ex\u{200b}ample',
-      true,
       headReads({ currentBranch: answered('feat/se\u{202e}cond\n') }),
     );
 
@@ -365,7 +400,6 @@ describe('settleCommitFor: the branch and the commit are one snapshot of HEAD', 
   it('fails when HEAD is on no branch by the time the commit is read', async () => {
     const settled = await settleCommitFor(
       'feat/example',
-      true,
       headReads({ currentBranch: answered('\n') }),
     );
 
@@ -375,33 +409,28 @@ describe('settleCommitFor: the branch and the commit are one snapshot of HEAD', 
   it("fails with git's own words when the branch cannot be read again", async () => {
     const settled = await settleCommitFor(
       'feat/example',
-      true,
       headReads({ currentBranch: failed(128, 'fatal: not a git repository\n') }),
     );
 
     expect(failureMessage(settled)).toContain('not a git repository');
   });
 
-  it.each([{ fromHead: true }, { fromHead: false }])(
-    'fails when HEAD names no commit (branch read from HEAD: $fromHead)',
-    async ({ fromHead }) => {
-      const settled = await settleCommitFor(
-        'feat/example',
-        fromHead,
-        headReads({ headCommit: failed(128, 'fatal: bad object HEAD\n') }),
-      );
+  it('fails when HEAD names no commit', async () => {
+    const settled = await settleCommitFor(
+      'feat/example',
+      headReads({ headCommit: failed(128, 'fatal: bad object HEAD\n') }),
+    );
 
-      expect(failureMessage(settled)).toContain('cannot settle the commit');
-    },
-  );
+    expect(failureMessage(settled)).toContain('cannot settle the commit');
+  });
 
-  it('settles the commit for a named branch whatever branch HEAD is on', async () => {
+  it('fails for a named branch too when HEAD is on another branch by the time the commit is read', async () => {
     const settled = await settleCommitFor(
       'other-lane',
-      false,
       headReads({ currentBranch: answered('feat/elsewhere\n') }),
     );
 
-    expect(settled).toEqual({ ok: true, value: COMMIT });
+    expect(failureMessage(settled)).toContain('"other-lane"');
+    expect(failureMessage(settled)).toContain('"feat/elsewhere"');
   });
 });

@@ -1,10 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
-import {
-  createFileMap,
-  generatePathParametersContent,
-  postProcessTypesSource,
-} from './codegen-core';
+import { createFileMap, generatePathParametersContent } from './codegen-core';
+import { postProcessTypesSource } from './typegen/openapi-ts/post-process-types-source';
 
 describe('codegen-core', () => {
   describe('createFileMap', () => {
@@ -63,10 +60,10 @@ describe('codegen-core', () => {
         "import type { PathBasedClient } from 'openapi-fetch'",
       );
       expect(result['client-types.ts']).toContain(
-        "import type { paths } from './api-paths-types.js'",
+        "import type { Paths } from './api-paths-types.js'",
       );
       expect(result['client-types.ts']).toContain(
-        'export type OakApiPathBasedClient = PathBasedClient<paths>',
+        'export type OakApiPathBasedClient = PathBasedClient<Paths>',
       );
     });
 

@@ -125,6 +125,14 @@ function parsedFixture(path: string, lines: readonly string[]): ParsedPlanFile {
   return { path, node: result.value };
 }
 
+/** A coherent two-file corpus: a strategic node and the delivery lane beneath it. */
+function coherentCorpus(): ParsedPlanFile[] {
+  return [
+    parsedFixture('strategic/fixture-release.plan.md', STRATEGIC_LINES),
+    parsedFixture('delivery/fixture-lane.plan.md', DELIVERY_LINES),
+  ];
+}
+
 describe('parseImpactAreasRegistry', () => {
   it('collects backtick-quoted area names from the registry table', () => {
     expect([...impactAreas()].sort((a, b) => a.localeCompare(b))).toEqual([
@@ -319,15 +327,8 @@ describe('validatePlanFile — the D23 contract', () => {
 });
 
 describe('validateCorpus — cross-file resolution', () => {
-  function corpus(): ParsedPlanFile[] {
-    return [
-      parsedFixture('strategic/fixture-release.plan.md', STRATEGIC_LINES),
-      parsedFixture('delivery/fixture-lane.plan.md', DELIVERY_LINES),
-    ];
-  }
-
   it('accepts a coherent corpus', () => {
-    expect(validateCorpus(corpus(), choiceRegistry(), impactAreas())).toEqual([]);
+    expect(validateCorpus(coherentCorpus(), choiceRegistry(), impactAreas())).toEqual([]);
   });
 
   it('accepts a ratified ticketless delivery plan beside a ticketed strategic sibling — no ticket-existence obligation at any level (2026-08-07 amendment)', () => {

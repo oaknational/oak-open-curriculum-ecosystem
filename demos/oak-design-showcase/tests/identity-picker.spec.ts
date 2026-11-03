@@ -31,7 +31,7 @@ import {
   openPickerStage,
 } from './picker-stage';
 
-const COUNTER_BRANDS = IDENTITIES.filter((slug) => slug !== BASE_IDENTITY);
+const COUNTER_BRAND = IDENTITIES.find((slug) => slug !== BASE_IDENTITY);
 
 /** The controls open on the ruled defaults: Identity default (DDR-003
  *  dated amendment 2026-08-11 — the frame shows each identity's own
@@ -49,7 +49,7 @@ test.describe('picker: every control is an in-place change', () => {
   test('brand changes inside the frame with no navigation', async ({ page }) => {
     const { aborted, stage, frame, mountSrc, baseFont } = await openPickerStage(page);
 
-    const firstCounterBrand = COUNTER_BRANDS[0];
+    const firstCounterBrand = COUNTER_BRAND;
     assertResolved(firstCounterBrand, 'the roster must hold a counter-brand');
     // Controls v3: the identity radio group lives in the FRAME's strip.
     await frame.getByRole('radio', { name: IDENTITY_LABELS[firstCounterBrand] ?? '' }).check();

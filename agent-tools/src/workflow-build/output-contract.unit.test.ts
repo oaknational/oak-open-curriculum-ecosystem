@@ -130,6 +130,12 @@ describe('buildHarnessWrapSource (the exact source the harness compiles)', () =>
   });
 });
 
+/** A syntax validator that rejects every wrap source. */
+const rejectingValidator: SyntaxValidator = () => err(new Error('Unexpected token'));
+
+/** A syntax validator that accepts every wrap source. */
+const acceptAll: SyntaxValidator = () => ok(undefined);
+
 describe('checkCompilesUnderHarness (validator injected — the real parser runs at build time)', () => {
   it('passes the wrap source to the validator and accepts when it accepts', () => {
     const seen: string[] = [];
@@ -142,14 +148,13 @@ describe('checkCompilesUnderHarness (validator injected — the real parser runs
   });
 
   it('translates a validator rejection into a typed contract failure', () => {
-    const rejecting: SyntaxValidator = () => err(new Error('Unexpected token'));
-    expect(errorMessage(checkCompilesUnderHarness(validArtefact, rejecting))).toMatch(/compile/i);
+    expect(errorMessage(checkCompilesUnderHarness(validArtefact, rejectingValidator))).toMatch(
+      /compile/i,
+    );
   });
 });
 
 describe('checkHarnessArtefactContract', () => {
-  const acceptAll: SyntaxValidator = () => ok(undefined);
-
   it('passes the valid artefact through every check', () => {
     expect(isOk(checkHarnessArtefactContract(validArtefact, acceptAll))).toBe(true);
   });
@@ -166,7 +171,6 @@ describe('checkHarnessArtefactContract', () => {
 });
 
 describe('checkSeededArtefactShape (data may contain anything; code rules stay on the unseeded tier)', () => {
-  const acceptAll: SyntaxValidator = () => ok(undefined);
   const seeded = validArtefact.replace(
     'async function main() {',
     'var RUN_DATA = {"leaves":[{"quote":"we read process.env and z.strictObject via node:fs"}]};\nasync function main() {',

@@ -97,10 +97,10 @@ export async function sendGithubRequest(
 ): Promise<Result<Awaited<ReturnType<GithubApiFetch>>, Error>> {
   try {
     return ok(await fetchImpl(url, init));
-  } catch (cause) {
+  } catch (error) {
     return err(
       new Error(
-        `${label} request failed: ${cause instanceof Error ? cause.message : String(cause)}`,
+        `${label} request failed: ${error instanceof Error ? error.message : String(error)}`,
       ),
     );
   }
@@ -113,10 +113,10 @@ export async function readJsonBody(
 ): Promise<Result<unknown, Error>> {
   try {
     return ok(await response.json());
-  } catch (cause) {
+  } catch (error) {
     return err(
       new Error(
-        `${label} returned a non-JSON body: ${cause instanceof Error ? cause.message : String(cause)}`,
+        `${label} returned a non-JSON body: ${error instanceof Error ? error.message : String(error)}`,
       ),
     );
   }

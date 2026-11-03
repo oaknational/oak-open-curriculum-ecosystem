@@ -1,7 +1,7 @@
 import type { PushAttempt } from './push-attempts.js';
 import type { PushGitReads } from './push-git.js';
 import type { PushToken } from './push-mint.js';
-import { settleCommit } from './push-target-branch.js';
+import { settleCommit } from './push-settle-commit.js';
 import { deadlinePassed } from './token-deadline.js';
 
 /**

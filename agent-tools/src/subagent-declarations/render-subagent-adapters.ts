@@ -119,13 +119,13 @@ function claudeBody(path: string, spec: AdapterSpec): Result<string, string> {
   if (spec.claude?.body === undefined) {
     return ok(markdownBody('claude', spec, spec.claude));
   }
-  return spec.systemPrompt === undefined
-    ? err(
-        `${path}: claude.body names the System prompt block, and the declaration carries none (the reader takes it from the template); refusing to render it`,
-      )
-    : ok(
-        `\n${spec.systemPrompt}\n\n${systemPromptClosing(`${TEMPLATES_DIR}/${spec.template}.md`)}\n`,
-      );
+  if (spec.systemPrompt === undefined) {
+    return err(
+      `${path}: claude.body names the System prompt block, and the declaration carries none (the reader takes it from the template); refusing to render it`,
+    );
+  }
+  const closing = systemPromptClosing(`${TEMPLATES_DIR}/${spec.template}.md`);
+  return ok(`\n${spec.systemPrompt}\n\n${closing}\n`);
 }
 
 function renderClaude(path: string, spec: AdapterSpec): Result<string, string> {

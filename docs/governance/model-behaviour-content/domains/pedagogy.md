@@ -1787,31 +1787,21 @@ function buildConventionsSection(): string {
 **What it says now:**
 
 ```text
-function renderSections(grouped: Map<string, TDReflection[]>): string[] {
-  const sections: string[] = [];
-  const plural = (k: string): string => {
-    const map: Record<string, string> = {
-      Class: 'Classes',
-      'Type alias': 'Type Aliases',
-      Variable: 'Variables',
-      Function: 'Functions',
-      Interface: 'Interfaces',
-      Enum: 'Enums',
-      Namespace: 'Namespaces',
-      Reference: 'References',
-    };
-    return map[k] ?? (k.endsWith('s') ? k : `${k}s`);
-  };
-  for (const [kind, items] of grouped) {
-    if (items.length === 0) {
-      continue;
-    }
-    sections.push(`## ${plural(kind)}`);
-    for (const r of items) {
-      sections.push(renderReflection(r));
-    }
-  }
-  return sections;
+const KIND_HEADINGS: Readonly<Record<string, string>> = {
+  Class: 'Classes',
+  'Type alias': 'Type Aliases',
+  Variable: 'Variables',
+  Function: 'Functions',
+  Interface: 'Interfaces',
+  Enum: 'Enums',
+  Namespace: 'Namespaces',
+  Reference: 'References',
+};
+
+/** The section heading for a reflection kind; an unlisted kind takes a regular plural. */
+function pluraliseKind(kind: string): string {
+  return KIND_HEADINGS[kind] ?? (kind.endsWith('s') ? kind : `${kind}s`);
+}
 ```
 
 **What it is for:** Pluralise TypeDoc kind names into section headings in the AI doc (Class-\>Classes, Type alias-\>Type Aliases, etc.).

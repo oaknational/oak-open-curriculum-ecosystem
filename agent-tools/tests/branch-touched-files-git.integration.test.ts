@@ -5,6 +5,14 @@ import { describe, expect, it } from 'vitest';
 import { readBranchTouchedFileReport, readGitStdout } from '../src/branch-touched-files/git';
 import type { GitCommandExecutor } from '../src/branch-touched-files/git';
 
+/** A git executor answering every call with one commit sha. */
+const answeringSha: GitCommandExecutor = () => 'abc123\n';
+
+/** A git executor whose every call fails. */
+const failingGit: GitCommandExecutor = () => {
+  throw new Error('git failed');
+};
+
 describe('branch touched files git boundary', () => {
   it('executes git by its absolute trusted path, not by name via PATH', () => {
     const calls: {
@@ -63,41 +71,33 @@ describe('branch touched files git boundary', () => {
   });
 
   it('rejects a --git override that is not named git', () => {
-    const execFileSync: GitCommandExecutor = () => 'abc123\n';
-
     expect(() =>
       readGitStdout({
         repoRoot: 'repo-root',
         args: ['rev-parse', '--show-toplevel'],
-        execFileSync,
+        execFileSync: answeringSha,
         gitPath: '/usr/bin/not-git',
       }),
     ).toThrow('--git must point to an executable named git');
   });
 
   it('rejects relative git path overrides', () => {
-    const execFileSync: GitCommandExecutor = () => 'abc123\n';
-
     expect(() =>
       readGitStdout({
         repoRoot: 'repo-root',
         args: ['rev-parse', '--show-toplevel'],
-        execFileSync,
+        execFileSync: answeringSha,
         gitPath: 'git',
       }),
     ).toThrow('--git requires an absolute path to a git executable');
   });
 
   it('propagates git command failures', () => {
-    const execFileSync: GitCommandExecutor = () => {
-      throw new Error('git failed');
-    };
-
     expect(() =>
       readGitStdout({
         repoRoot: 'repo-root',
         args: ['merge-base', 'origin/main', 'HEAD'],
-        execFileSync,
+        execFileSync: failingGit,
       }),
     ).toThrow('git failed');
   });

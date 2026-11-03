@@ -44,7 +44,7 @@ const bareSlug = (id: string): string => id.slice(id.indexOf(':') + 1);
 /** A thread slug carrying at least one placement (lexicographic minimum sequence). */
 const knownThreadSlug = bareSlug(
   required(
-    graphCorpus.sequences.filter((sequence) => sequence.placements.length > 0)[0]?.threadId,
+    graphCorpus.sequences.find((sequence) => sequence.placements.length > 0)?.threadId,
     'corpus has no non-empty sequence to anchor the tool tests',
   ),
 );

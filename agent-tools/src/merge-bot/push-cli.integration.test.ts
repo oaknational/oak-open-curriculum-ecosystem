@@ -211,11 +211,11 @@ describe('merge-bot push credential discipline', () => {
 });
 
 describe('merge-bot push outcomes and refusals', () => {
-  it('--branch names the branch pushed and reported under --json', async () => {
-    const run = runPush({ args: ['--branch', 'other-lane', '--json'] });
+  it('--branch names the branch HEAD is on, pushed and reported under --json', async () => {
+    const run = runPush({ args: ['--branch', BRANCH, '--json'] });
 
     expect(await run.exit).toBe(0);
-    expect(JSON.parse(run.out())).toEqual({ kind: 'pushed', branch: 'other-lane', remote: REMOTE });
+    expect(JSON.parse(run.out())).toEqual({ kind: 'pushed', branch: BRANCH, remote: REMOTE });
   });
 
   it('fails without pushing when the default branch cannot be read, naming the cure', async () => {

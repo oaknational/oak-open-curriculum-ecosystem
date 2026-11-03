@@ -40,7 +40,7 @@ interface AdapterFrontmatter extends SpecPortableFrontmatter {
  * deliberate: a spec-portable field added to the schema later is quoted
  * automatically instead of silently missing from a second list.
  */
-const SERIALISER_QUOTED_KEYS: readonly string[] = ['name', 'description'];
+const SERIALISER_QUOTED_KEYS: ReadonlySet<string> = new Set(['name', 'description']);
 
 const YAML_EMIT_OPTIONS = { lineWidth: 0 } as const;
 
@@ -72,7 +72,7 @@ function quoteEmittedStrings(doc: Document): void {
   }
   for (const pair of contents.items) {
     const key: unknown = isScalar(pair.key) ? pair.key.value : undefined;
-    if (typeof key !== 'string' || SERIALISER_QUOTED_KEYS.includes(key)) {
+    if (typeof key !== 'string' || SERIALISER_QUOTED_KEYS.has(key)) {
       continue;
     }
     const value: unknown = pair.value;

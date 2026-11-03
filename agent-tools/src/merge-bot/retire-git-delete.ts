@@ -68,7 +68,8 @@ export async function deletePlannedRef(
  * (the section of a branch named `a.b`).
  */
 function sectionPattern(branch: string): string {
-  return String.raw`^branch\.${branch.replaceAll('.', String.raw`\.`)}\.[^.]+$`;
+  const escapedBranch = branch.replaceAll('.', String.raw`\.`);
+  return String.raw`^branch\.${escapedBranch}\.[^.]+$`;
 }
 
 /**

@@ -67,9 +67,9 @@ export function runPrThroughput(argv: readonly string[], deps: PrThroughputDeps)
 
   try {
     options = parsePrThroughputArgs(argv, new Date());
-  } catch (cause) {
+  } catch (error) {
     deps.writeError(
-      `pr-throughput: ${cause instanceof Error ? cause.message : String(cause)}\n\n${USAGE}`,
+      `pr-throughput: ${error instanceof Error ? error.message : String(error)}\n\n${USAGE}`,
     );
     return 2;
   }
@@ -78,8 +78,8 @@ export function runPrThroughput(argv: readonly string[], deps: PrThroughputDeps)
   // write failing on permissions must still exit 0 with the loud message.
   try {
     return runWithOptions(options, deps);
-  } catch (cause) {
-    return reportFailure(deps, cause);
+  } catch (error) {
+    return reportFailure(deps, error);
   }
 }
 
@@ -88,8 +88,8 @@ function runWithOptions(options: PrThroughputOptions, deps: PrThroughputDeps): n
 
   try {
     ghPath = deps.resolveGh(options.ghOverride);
-  } catch (cause) {
-    return reportFailure(deps, cause);
+  } catch (error) {
+    return reportFailure(deps, error);
   }
 
   const covered = fetchCoveredCorpus(options, deps, ghPath);
@@ -201,15 +201,15 @@ function realDeps(): PrThroughputDeps {
       try {
         linkSync(tempPath, registerPath);
         return true;
-      } catch (cause) {
-        if (cause instanceof Error && 'code' in cause && cause.code === 'EEXIST') {
+      } catch (error) {
+        if (error instanceof Error && 'code' in error && error.code === 'EEXIST') {
           return false;
         }
 
         // EACCES/ENOSPC/anything else is a REAL failure: rethrow into the
         // contract-wide catch (loud message, exit 0) instead of appending
         // to a register that may not exist or be partial.
-        throw cause;
+        throw error;
       } finally {
         unlinkSync(tempPath);
       }

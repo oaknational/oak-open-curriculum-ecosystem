@@ -51,8 +51,10 @@ export const PUSH_USAGE = `merge-bot push [--branch <name>] [--json]
   overwriting.
 
   --branch names the target branch (default: the branch HEAD is on; a
-  detached HEAD is a typed refusal, never a guess). The push always writes
-  refs/heads/<branch>, so a full ref name (refs/...) refuses.
+  detached HEAD is a typed refusal, never a guess). The branch named must be
+  the one HEAD is on: the push writes HEAD's commit under the name given, so
+  another name is a typed refusal and nothing is minted or pushed. The push
+  always writes refs/heads/<branch>, so a full ref name (refs/...) refuses.
   --json puts EXACTLY the outcome object on stdout; git's transfer output is
   diagnostics and always goes to stderr.
   Exit map: 0 pushed, 1 operational failure (git's own non-zero exit, its

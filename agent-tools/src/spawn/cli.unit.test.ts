@@ -342,7 +342,7 @@ describe('runSpawnCli', () => {
     const text = cap.text();
     expect(text).toContain('task:     build the lane Director: forged');
     // The injected newline must not produce a second, forged "Director:" line.
-    expect(text).not.toMatch(/\n\s*Director: forged/u);
+    expect(text).not.toMatch(/^[ \t]*Director: forged/mu);
   });
 
   it('carries the supplied --role, --task and --director into the seat brief', () => {

@@ -11,6 +11,7 @@ import type { Result } from '@oaknational/result';
 import { describe, expect, it, vi } from 'vitest';
 import { createSentryConfig } from './config.js';
 import { createSentryLogSink, flushSentry, initialiseSentry } from './runtime.js';
+import { NOOP_LOGGER_SDK } from './test-helpers/noop-logger-sdk.js';
 import type {
   ParsedSentryConfig,
   SentryConfigEnvironment,
@@ -27,14 +28,6 @@ interface FakeCaptureMessageCall {
   readonly message: string;
   readonly context?: CaptureContext;
 }
-
-function createNoopLoggerSdk(): SentryNodeSdk['logger'] {
-  const noop = (): void => {
-    /* noop */
-  };
-  return { trace: noop, debug: noop, info: noop, warn: noop, error: noop, fatal: noop };
-}
-const noopLoggerSdk = createNoopLoggerSdk();
 
 interface FakeSdk {
   readonly sdk: SentryNodeSdk;
@@ -70,7 +63,7 @@ function createFakeSdk(loggerOverride?: SentryNodeSdk['logger']): FakeSdk {
   const setUser = vi.fn<SentryNodeSdk['setUser']>();
   const setTag = vi.fn<SentryNodeSdk['setTag']>();
   const setContext = vi.fn<SentryNodeSdk['setContext']>();
-  const loggerSdk = loggerOverride ?? noopLoggerSdk;
+  const loggerSdk = loggerOverride ?? NOOP_LOGGER_SDK;
 
   return {
     sdk: {
@@ -268,7 +261,7 @@ describe('initialiseSentry', () => {
 
   it('forwards live log sink events to Sentry logger API', () => {
     const errorFn = vi.fn<SentryNodeSdk['logger']['error']>();
-    const sdk = createFakeSdk({ ...noopLoggerSdk, error: errorFn });
+    const sdk = createFakeSdk({ ...NOOP_LOGGER_SDK, error: errorFn });
     const runtime = initialiseRuntime(
       createLiveConfig({ SENTRY_ENVIRONMENT_OVERRIDE: 'production' }),
       sdk.sdk,

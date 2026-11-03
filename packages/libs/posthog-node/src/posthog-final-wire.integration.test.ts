@@ -152,22 +152,19 @@ async function connectInstrumentedRuntime(
   const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
   const send = clientTransport.send.bind(clientTransport);
   clientTransport.send = (message, options) => send(message, { ...options, authInfo: AUTH_INFO });
-  try {
-    await server.connect(subject.runtime.transportObserver.observe(serverTransport));
-    // InMemoryTransport delivers only authInfo, so request headers are injected
-    // at the wired server-transport seam, matching a network transport's extra.
-    const installed = serverTransport.onmessage;
-    assert(installed !== undefined, 'Expected the observer to wire the server transport');
-    serverTransport.onmessage = (message, extra) => {
-      const enriched: MessageExtraInfo = { ...extra, requestInfo: { headers } };
-      installed(message, enriched);
-    };
-    await client.connect(clientTransport);
-    return { client, server };
-  } catch (error: unknown) {
-    await Promise.allSettled([client.close(), server.close()]);
-    return Promise.reject(error);
-  }
+  // A connect failure is the test's failure: it propagates as the rejection it
+  // is, and the in-memory transports it leaves behind hold no process handle.
+  await server.connect(subject.runtime.transportObserver.observe(serverTransport));
+  // InMemoryTransport delivers only authInfo, so request headers are injected
+  // at the wired server-transport seam, matching a network transport's extra.
+  const installed = serverTransport.onmessage;
+  assert(installed !== undefined, 'Expected the observer to wire the server transport');
+  serverTransport.onmessage = (message, extra) => {
+    const enriched: MessageExtraInfo = { ...extra, requestInfo: { headers } };
+    installed(message, enriched);
+  };
+  await client.connect(clientTransport);
+  return { client, server };
 }
 
 async function closeMcpConnection(connection: McpConnection): Promise<void> {

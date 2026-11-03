@@ -33,6 +33,11 @@ const withOrigin = (...urls: string[]): GitWorld => ({
   originUrls: ok(urls),
 });
 
+/** A config reader that finds no merge-bot.json. */
+const missingIdentityFile = (): string => {
+  throw new Error('ENOENT: no merge-bot.json');
+};
+
 describe('merge-bot retire, front door', () => {
   it('prints its usage on --help and exits 0', async () => {
     const run = await runRetire(['--help'], UNREADABLE);
@@ -63,11 +68,8 @@ describe('merge-bot retire, front door', () => {
   });
 
   it('exits 2, minting nothing, when the bot identity cannot be read', async () => {
-    const unreadable = (): string => {
-      throw new Error('ENOENT: no merge-bot.json');
-    };
     const run = await runRetire(['--branch', BRANCH], REMOTE_WORLD, {
-      readConfigFileImpl: unreadable,
+      readConfigFileImpl: missingIdentityFile,
     });
 
     expect(run.exit).toBe(2);

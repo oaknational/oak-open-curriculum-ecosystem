@@ -53,8 +53,8 @@ function trustedSpawnTarget(command: string): {
 function trustedGitTarget(command: string): { readonly command: string; readonly error?: string } {
   try {
     return { command: resolveTrustedGit() };
-  } catch (cause) {
-    return { command, error: cause instanceof Error ? cause.message : String(cause) };
+  } catch (error) {
+    return { command, error: error instanceof Error ? error.message : String(error) };
   }
 }
 

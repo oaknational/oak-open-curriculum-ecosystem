@@ -205,6 +205,12 @@ describe('runKeywordGraphTool — anchored retrieval envelope', () => {
   });
 });
 
+/** How many keywords the shipped corpus yields for one subject × keyStage anchor. */
+function liveKeywordCount(subject: string, keyStage: string): number {
+  return KEYWORD_ENVELOPE.parse(runKeywordGraphTool({ subject, keyStage }).structuredContent)
+    .keywords.length;
+}
+
 describe('get-keyword-graph wire schema — advertised examples (MCP-303 drive-leg cure)', () => {
   // Behaviour, never config (owner ruling 2026-07-28): the `.meta()` must
   // survive the z.toJSONSchema round-trip so clients can derive a call (the
@@ -220,9 +226,6 @@ describe('get-keyword-graph wire schema — advertised examples (MCP-303 drive-l
     // well-formed EMPTY envelope by design), so liveness is counted.
     const subjects = wireExamplesOf(GET_KEYWORD_GRAPH_INPUT_SCHEMA, 'subject', z.string());
     const keyStages = wireExamplesOf(GET_KEYWORD_GRAPH_INPUT_SCHEMA, 'keyStage', z.string());
-    const liveKeywordCount = (subject: string, keyStage: string): number =>
-      KEYWORD_ENVELOPE.parse(runKeywordGraphTool({ subject, keyStage }).structuredContent).keywords
-        .length;
 
     for (const subject of subjects) {
       const live = keyStages.filter((keyStage) => liveKeywordCount(subject, keyStage) > 0);

@@ -14,11 +14,19 @@ import { resolvePnpm } from '../src/spawn/pnpm-path.js';
  * rewrite an incompatible lockfile.
  *
  * The fixture copies the guard source and wires it as a real `pnpm:devPreinstall`
- * hook, then runs the installed pnpm binary against a deliberately old-format
- * lockfile. The guard must be the process that refuses the install, and the
+ * hook, then runs the installed pnpm binary against a lockfile pnpm would
+ * rewrite. The guard must be the process that refuses the install, and the
  * lockfile bytes must remain identical. The guard's refusal is read from its
  * own stderr log (the hook redirects it), never from pnpm's stream, because
- * pnpm's forwarding of lifecycle output differs by runner.
+ * pnpm's forwarding of lifecycle output differs by runner and by major.
+ *
+ * The fixture lockfile is in the current format (`lockfileVersion: '9.0'`), so
+ * every supported pnpm parses it and reaches the preinstall hook — pnpm refuses
+ * a format it does not support before any hook runs, which would leave the
+ * guard unexercised. Its recorded `autoInstallPeers: false` differs from
+ * pnpm's default, so without the guard pnpm re-resolves and rewrites it
+ * (observed on pnpm 11.20.0, 12.16.1 and 12.17.0, 2026-11-03); byte-identity
+ * therefore proves the guard refused before pnpm wrote.
  *
  * Fixture layout — why the mismatched pin is NOT at the install root. The guard
  * fires when the `packageManager` pin differs from the running pnpm. But a
@@ -83,11 +91,15 @@ const fixtureGuardPath = join(pinnedRoot, guardRelativePath);
 const guardLogName = 'guard-stderr.log';
 const fixtureDevPreinstall = `node pinned/${guardRelativePath} 2>>${guardLogName}`;
 const originalLockfile = [
-  "lockfileVersion: '6.0'",
+  "lockfileVersion: '9.0'",
   '',
   'settings:',
-  '  autoInstallPeers: true',
+  '  autoInstallPeers: false',
   '  excludeLinksFromLockfile: false',
+  '',
+  'importers:',
+  '',
+  '  .: {}',
   '',
 ].join('\n');
 
@@ -129,6 +141,10 @@ try {
     fail(pnpm.error.message);
   }
 
+  // The fixture root has no `packageManager`, so whichever pnpm `resolvePnpm`
+  // finds runs the install itself, and the proof has to hold on every
+  // supported major; the guard's words come from its own log, so pnpm's
+  // reporter can stay silent.
   const install = spawnSync(
     pnpm.value.file,
     [
@@ -138,11 +154,12 @@ try {
       '--ignore-workspace',
       '--reporter=silent',
       // pnpm defaults `frozen-lockfile` to on when it detects a CI runner, and
-      // that mode validates the lockfile BEFORE any lifecycle script runs: the
-      // deliberately old-format fixture lockfile is then refused as broken
-      // (ERR_PNPM_BROKEN_LOCKFILE) and the guard never fires, so the smoke
-      // would prove pnpm's lockfile reader, not the guard. Off, explicitly, on
-      // every runner, so the guard is the process that refuses the install.
+      // that mode checks the lockfile against the configuration BEFORE any
+      // lifecycle script runs: the fixture's recorded settings differ from
+      // pnpm's defaults (the difference that makes pnpm rewrite it), so a
+      // frozen install would refuse it there and the guard would never fire,
+      // proving pnpm's lockfile check rather than the guard. Off, explicitly,
+      // on every runner, so the guard is the process that refuses the install.
       '--no-frozen-lockfile',
     ],
     {

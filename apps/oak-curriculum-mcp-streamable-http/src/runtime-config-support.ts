@@ -1,6 +1,6 @@
 import type { ApplicationVersionSource, GitShaSource } from '@oaknational/build-metadata';
 import type { EnvResolutionError } from '@oaknational/env-resolution';
-import type { AuthEnabledEnv, AuthDisabledEnv } from './env.js';
+import type { AuthEnabledEnv, Env } from './env.js';
 
 /**
  * Runtime configuration when authentication is enabled.
@@ -25,7 +25,7 @@ export interface AuthEnabledRuntimeConfig {
  * Clerk keys may be absent.
  */
 export interface AuthDisabledRuntimeConfig {
-  readonly env: AuthDisabledEnv;
+  readonly env: Env;
   readonly dangerouslyDisableAuth: true;
   readonly useStubTools: boolean;
   readonly version: string;

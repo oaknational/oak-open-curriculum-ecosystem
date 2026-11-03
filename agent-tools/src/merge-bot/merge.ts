@@ -57,7 +57,7 @@ export interface MergeExecutionInput {
   /** DECLARED expected reviewer set — required; empty only when declared `none` (expect-flag.ts). */
   readonly expectedReviewers: readonly string[];
   readonly nowIso: string;
-  readonly unavailable?: UnavailableInput | undefined;
+  readonly unavailable?: UnavailableInput;
   readonly seams: MergeExecutionSeams;
 }
 
@@ -107,7 +107,7 @@ export async function runMergeExecution(
     target: target.value,
     ghPath: input.seams.ghPath,
     expectedReviewers: input.expectedReviewers,
-    unavailable: input.unavailable,
+    ...(input.unavailable === undefined ? {} : { unavailable: input.unavailable }),
   });
   if (!reading.ok) {
     return reading;
@@ -127,10 +127,10 @@ function mergeTarget(input: MergeExecutionInput): Result<PrTarget, Error> {
     return ok(
       parsePrTarget(String(input.prNumber), `${input.identity.owner}/${input.identity.repoName}`),
     );
-  } catch (cause) {
+  } catch (error) {
     return err(
       new Error(
-        `merge target rejected by PR-target grammar: ${cause instanceof Error ? cause.message : String(cause)}`,
+        `merge target rejected by PR-target grammar: ${error instanceof Error ? error.message : String(error)}`,
       ),
     );
   }
@@ -152,10 +152,10 @@ function defaultReadReading(
           execFileSync: readExecutor(baseEnv ?? process.env),
         }),
       );
-    } catch (cause) {
+    } catch (error) {
       return err(
         new ReadingUnavailableError(
-          `PR state reading failed: ${cause instanceof Error ? cause.message : String(cause)}`,
+          `PR state reading failed: ${error instanceof Error ? error.message : String(error)}`,
         ),
       );
     }

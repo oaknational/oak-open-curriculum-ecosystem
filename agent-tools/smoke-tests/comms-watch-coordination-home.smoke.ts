@@ -144,9 +144,8 @@ function runCli(
   });
   if (result.error !== undefined) {
     const what = `collaboration-state ${args.slice(0, 2).join(' ')}`;
-    const error: { code?: string | undefined; message: string } = result.error;
     assert.fail(
-      `${describeSpawnFailure(what, error, WATCHER_HANG_BACKSTOP_MS)} ${hostDetail()}\n${result.stderr}`,
+      `${describeSpawnFailure(what, result.error, WATCHER_HANG_BACKSTOP_MS)} ${hostDetail()}\n${result.stderr}`,
     );
   }
   return result;

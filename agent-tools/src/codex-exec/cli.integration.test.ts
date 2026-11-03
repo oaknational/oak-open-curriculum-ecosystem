@@ -88,11 +88,14 @@ describe('runCodexExecCli — command-records', () => {
   it('summarises a seat rollout as text, naming its turn', async () => {
     const records = execRecords();
     const [start] = turnStarts(records);
+    assert(start);
+    const turnId = start.payload['turn_id'];
+    assert(typeof turnId === 'string');
     const io = makeIo(lines(records));
     const code = await runCodexExecCli({ command: 'command-records', args: [], ...io });
     expect(code).toBe(0);
     expect(io.stdoutText).toContain('command records:');
-    expect(io.stdoutText).toContain(String(start?.payload['turn_id']));
+    expect(io.stdoutText).toContain(turnId);
   });
 
   it('summarises as JSON when --format json is set', async () => {

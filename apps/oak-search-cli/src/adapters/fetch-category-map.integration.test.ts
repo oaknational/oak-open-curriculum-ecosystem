@@ -87,7 +87,11 @@ describe('fetchCategoryMapForSequences', () => {
     const result = await fetchCategoryMapForSequences(deps, ['maths-primary']);
 
     expect(result.ok).toBe(false);
-    expect(!result.ok && result.error.message).toContain('maths-primary');
+    if (result.ok) {
+      throw new Error('Expected the category fetch to fail');
+    }
+    expect(result.error.message).toContain("sequence 'maths-primary'");
+    expect(result.error.message).toContain('Network error for maths-primary: Connection refused');
   });
 
   it('returns empty map when no sequences are provided', async () => {

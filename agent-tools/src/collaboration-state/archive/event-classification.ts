@@ -121,7 +121,7 @@ export interface DispositionDecision {
  */
 const HEARTBEAT_TITLE = /^Heartbeat(-end)?:/;
 
-const RESEARCH_PRECIOUS_TAGS: readonly string[] = ['failure-mode', 'behaviour-note'];
+const RESEARCH_PRECIOUS_TAGS: ReadonlySet<string> = new Set(['failure-mode', 'behaviour-note']);
 
 /**
  * Assign the structural tier from metadata alone. Returns only the three
@@ -139,7 +139,7 @@ const RESEARCH_PRECIOUS_TAGS: readonly string[] = ['failure-mode', 'behaviour-no
  * signal.
  */
 export function classifyTier(event: ClassifiableEvent): AutoTier {
-  if (event.tags.some((tag) => RESEARCH_PRECIOUS_TAGS.includes(tag))) {
+  if (event.tags.some((tag) => RESEARCH_PRECIOUS_TAGS.has(tag))) {
     return 'research-precious';
   }
   if (event.isHeartbeatShaped || HEARTBEAT_TITLE.test(event.titleOrSubject)) {

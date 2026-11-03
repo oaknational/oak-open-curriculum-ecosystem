@@ -185,9 +185,12 @@ export function reviewCost(
   const chargedCosts = charged.map((entry) => entry.cost);
   const verdict = verdictFor(total, budget, chargedCosts, policy, options);
   const pushesPastBudget = roundsPastBudget(chargedCosts, budget);
+  const roundCosts = costs
+    .map((entry) => `${entry.head.slice(0, 9)} ${String(entry.cost)}`)
+    .join(', ');
   const evidence = [
     `rounds ${String(costs.length)} (opening plus ${String(Math.max(0, costs.length - 1))} settlement), budget ${String(budgetPushes)} settlement pushes`,
-    `settlement cost ${String(total)} of ${String(budget)}; rounds: ${costs.map((entry) => `${entry.head.slice(0, 9)} ${String(entry.cost)}`).join(', ')}`,
+    `settlement cost ${String(total)} of ${String(budget)}; rounds: ${roundCosts}`,
     ...(verdict === 'exhausted'
       ? [
           "BUDGET-EXHAUSTED: the settlement budget is spent; a push from here needs the seat's recorded decision (one local line per push), and every finding from here is dispositioned by triage",

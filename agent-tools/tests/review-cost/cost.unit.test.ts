@@ -14,6 +14,18 @@ const measure = (overrides: Partial<RoundMeasure> & { head: string }): RoundMeas
   ...overrides,
 });
 
+/** A small round: two findings, a short comment, a light related push within the hour. */
+const smallRound = (head: string): RoundMeasure =>
+  measure({
+    head,
+    findings: 2,
+    commentChars: 800,
+    pushLines: 30,
+    pushFiles: 2,
+    relatedness: 0.5,
+    hoursSincePrevious: 0.5,
+  });
+
 // The shape of PR #139's first three rounds, 2026-09-12: ten, nine and six
 // findings, pushes of a few hundred lines to the same files within the hour.
 const PR_139_LIKE: RoundMeasure[] = [
@@ -162,17 +174,7 @@ describe('reviewCost — the opening round is priced, never charged; settlement 
   });
 
   it('exhausts a long loop of small rounds through the round floor alone', () => {
-    const small = (head: string) =>
-      measure({
-        head,
-        findings: 2,
-        commentChars: 800,
-        pushLines: 30,
-        pushFiles: 2,
-        relatedness: 0.5,
-        hoursSincePrevious: 0.5,
-      });
-    const rounds = ['r1', 'r2', 'r3', 'r4', 'r5', 'r6'].map(small);
+    const rounds = ['r1', 'r2', 'r3', 'r4', 'r5', 'r6'].map(smallRound);
     expect(reviewCost(rounds.slice(0, 4), 2).verdict).not.toBe('exhausted');
     expect(reviewCost(rounds, 2).verdict).toBe('exhausted');
   });

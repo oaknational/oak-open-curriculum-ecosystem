@@ -59,52 +59,58 @@ function createMockSummary(overrides: Partial<SearchLessonSummary> = {}): Search
   });
 }
 
+/** The failure outcomes the fake client can answer a materials fetch with. */
+type FetchFailure = 'not_found' | 'network_error';
+
+/** A transcript payload as the SDK returns one. */
+type TranscriptPayload = { transcript: string; vtt: string };
+
+/** A network failure for the test lesson, in the SDK's error shape. */
+function testLessonNetworkError() {
+  return {
+    kind: 'network_error' as const,
+    resource: 'test-lesson',
+    cause: new Error('Connection failed'),
+  };
+}
+
+/** A not-found error for the test lesson's given resource type. */
+function testLessonNotFound(resourceType: SdkNotFoundError['resourceType']): SdkNotFoundError {
+  return { kind: 'not_found', resource: 'test-lesson', resourceType };
+}
+
+/** The transcript Result the fake client answers with for the given scenario. */
+function resolveTranscriptResult(response: TranscriptPayload | FetchFailure | undefined) {
+  if (response === 'not_found') {
+    return err(testLessonNotFound('transcript'));
+  }
+  if (response === 'network_error') {
+    return err(testLessonNetworkError());
+  }
+  return ok(response ?? { transcript: 'Test transcript', vtt: 'WEBVTT' });
+}
+
+/** The lesson-summary Result the fake client answers with for the given scenario. */
+function resolveSummaryResult(response: SearchLessonSummary | FetchFailure | undefined) {
+  if (response === 'not_found') {
+    return err(testLessonNotFound('lesson'));
+  }
+  if (response === 'network_error') {
+    return err(testLessonNetworkError());
+  }
+  return ok(response ?? createMockSummary());
+}
+
 /** Create a mock OakClient with customisable transcript/summary responses. */
 function createLessonMaterialsMockClient(options: {
-  transcriptResponse?: { transcript: string; vtt: string } | 'not_found' | 'network_error';
-  summaryResponse?: ReturnType<typeof createMockSummary> | 'not_found' | 'network_error';
+  transcriptResponse?: TranscriptPayload | FetchFailure;
+  summaryResponse?: SearchLessonSummary | FetchFailure;
 }): OakClient {
-  const networkError = {
-    kind: 'network_error' as const,
-    resource: 'test-lesson',
-    cause: new Error('Connection failed'),
-  };
-
-  const summaryNetworkError = {
-    kind: 'network_error' as const,
-    resource: 'test-lesson',
-    cause: new Error('Connection failed'),
-  };
-
-  const transcriptNotFound: SdkNotFoundError = {
-    kind: 'not_found',
-    resource: 'test-lesson',
-    resourceType: 'transcript',
-  };
-
-  const summaryNotFound: SdkNotFoundError = {
-    kind: 'not_found',
-    resource: 'test-lesson',
-    resourceType: 'lesson',
-  };
-
-  const transcriptResult =
-    options.transcriptResponse === 'not_found'
-      ? err(transcriptNotFound)
-      : options.transcriptResponse === 'network_error'
-        ? err(networkError)
-        : ok(options.transcriptResponse ?? { transcript: 'Test transcript', vtt: 'WEBVTT' });
-
-  const summaryResult =
-    options.summaryResponse === 'not_found'
-      ? err(summaryNotFound)
-      : options.summaryResponse === 'network_error'
-        ? err(summaryNetworkError)
-        : ok(options.summaryResponse ?? createMockSummary());
-
   return createMockClient({
-    getLessonTranscript: vi.fn().mockResolvedValue(transcriptResult),
-    getLessonSummary: vi.fn().mockResolvedValue(summaryResult),
+    getLessonTranscript: vi
+      .fn()
+      .mockResolvedValue(resolveTranscriptResult(options.transcriptResponse)),
+    getLessonSummary: vi.fn().mockResolvedValue(resolveSummaryResult(options.summaryResponse)),
   });
 }
 

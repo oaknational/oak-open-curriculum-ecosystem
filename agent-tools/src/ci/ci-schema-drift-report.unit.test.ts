@@ -133,7 +133,7 @@ describe('buildSkippedSchemaDriftReport', () => {
   it('leaves a status description that exactly fills the limit untouched', () => {
     const report = buildSkippedSchemaDriftReport('r'.repeat(fill));
 
-    expect(report.statusDescription.length).toBe(STATUS_DESCRIPTION_LIMIT);
+    expect(report.statusDescription).toHaveLength(STATUS_DESCRIPTION_LIMIT);
     expect(report.statusDescription.endsWith('…')).toBe(false);
   });
 
@@ -141,7 +141,7 @@ describe('buildSkippedSchemaDriftReport', () => {
     const exact = buildSkippedSchemaDriftReport('r'.repeat(fill));
     const report = buildSkippedSchemaDriftReport('r'.repeat(fill + 1));
 
-    expect(report.statusDescription.length).toBe(STATUS_DESCRIPTION_LIMIT);
+    expect(report.statusDescription).toHaveLength(STATUS_DESCRIPTION_LIMIT);
     expect(report.statusDescription.endsWith('…')).toBe(true);
     expect(report.statusDescription.slice(0, -1)).toBe(
       exact.statusDescription.slice(0, STATUS_DESCRIPTION_LIMIT - 1),

@@ -1,8 +1,15 @@
+import path from 'node:path';
+
 import {
   debugLogLine,
   invalidConfigWarningLine,
   resolveDebugLogConfig,
 } from '../../src/claude/statusline-debug-log';
+
+// Resolved, not a literal: the resolver uses `path.resolve`, which carries the
+// drive letter on Windows, so the project directory and the expected log path
+// are built the same way.
+const PROJECT_DIR = path.resolve(path.sep, 'repo');
 
 describe('resolveDebugLogConfig', () => {
   it('resolves disabled when PRACTICE_STATUSLINE_LOG_FILE is unset', () => {
@@ -23,6 +30,28 @@ describe('resolveDebugLogConfig', () => {
       kind: 'enabled',
       path: '/tmp/statusline.log',
     });
+  });
+
+  it('resolves a relative path against CLAUDE_PROJECT_DIR, never the working directory', () => {
+    // The harness runs the statusline with the session's current directory as
+    // cwd, which moves with the session; a cwd-relative log once landed inside
+    // the skills tree and the adapter generator refused the directory.
+    expect(
+      resolveDebugLogConfig({
+        PRACTICE_STATUSLINE_LOG_FILE: '.logs/statusline.log',
+        CLAUDE_PROJECT_DIR: PROJECT_DIR,
+      }),
+    ).toEqual({ kind: 'enabled', path: path.join(PROJECT_DIR, '.logs', 'statusline.log') });
+  });
+
+  it('resolves invalid, with a renderable warning, for a relative path when CLAUDE_PROJECT_DIR is unset', () => {
+    expect(resolveDebugLogConfig({ PRACTICE_STATUSLINE_LOG_FILE: '.logs/statusline.log' })).toEqual(
+      {
+        kind: 'invalid',
+        warning:
+          'PRACTICE_STATUSLINE_LOG_FILE is relative but CLAUDE_PROJECT_DIR is unset — name an absolute *.log path; logging disabled',
+      },
+    );
   });
 
   it('trims surrounding whitespace from the value — a padded shell export must not leak into the path', () => {

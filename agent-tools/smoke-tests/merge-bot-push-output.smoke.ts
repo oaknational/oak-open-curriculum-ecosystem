@@ -184,7 +184,8 @@ async function landsARealPushThroughALoudHook(): Promise<void> {
  * Leg 3: the reads the push settles its target with, answered by real git. A
  * tag named like the branch makes `rev-parse --abbrev-ref HEAD` print
  * `heads/<name>`; the read must still name the branch whole, so the default
- * branch origin names is refused and any other branch is not.
+ * branch origin names is refused, the branch HEAD is on is the target once
+ * origin names another default, and a name that is not HEAD's refuses.
  */
 async function settlesTheTargetFromRealGitAnswers(): Promise<void> {
   const settled = await withTempDir(async (root) => {
@@ -201,10 +202,15 @@ async function settlesTheTargetFromRealGitAnswers(): Promise<void> {
     assert.ok(context.ok, 'no trusted git binary to read against');
     const reads = gitReadsFrom(context.value, { cwd: work, env });
     const repository = { owner: 'acme', repoName: 'widgets' };
+    const current = (await reads.currentBranch()).stdout.trim();
+    const onDefault = await settleTargetBranch(undefined, reads, repository);
+    git(['update-ref', 'refs/remotes/origin/trunk', 'HEAD']);
+    git(['remote', 'set-head', 'origin', 'trunk']);
     return {
-      current: (await reads.currentBranch()).stdout.trim(),
-      onDefault: await settleTargetBranch(undefined, reads, repository),
-      onFeature: await settleTargetBranch('feat/example', reads, repository),
+      current,
+      onDefault,
+      onHeadNamed: await settleTargetBranch('lane', reads, repository),
+      onOther: await settleTargetBranch('feat/example', reads, repository),
     };
   });
 
@@ -213,10 +219,14 @@ async function settlesTheTargetFromRealGitAnswers(): Promise<void> {
     settled.onDefault.ok && settled.onDefault.value.kind === 'refused',
     'HEAD on the default branch origin names was not refused',
   );
-  assert.deepEqual(settled.onFeature, {
-    ok: true,
-    value: { kind: 'target', branch: 'feat/example' },
-  });
+  assert.deepEqual(settled.onHeadNamed, { ok: true, value: { kind: 'target', branch: 'lane' } });
+  assert.ok(
+    settled.onOther.ok &&
+      settled.onOther.value.kind === 'refused' &&
+      settled.onOther.value.reason.includes('"feat/example"') &&
+      settled.onOther.value.reason.includes('"lane"'),
+    'a named branch that is not the one HEAD is on was not refused naming both',
+  );
 }
 
 await drivesTwiceTheMeasuredCorpus();

@@ -33,6 +33,59 @@ function probeOf(present: Present): PresenceProbe {
   return (target) => Promise.resolve(ok(present[path.basename(target)] ?? 'absent'));
 }
 
+/** A presence probe that cannot read `repos` and finds every other path absent. */
+const unreadableReposProbe: PresenceProbe = (target) =>
+  Promise.resolve(
+    path.basename(target) === 'repos' ? err(`cannot read ${target} (EACCES)`) : ok('absent'),
+  );
+
+/** A presence probe that finds a directory at every path. */
+const directoryProbe: PresenceProbe = () => Promise.resolve(ok('directory'));
+
+/** A presence probe that finds a symlink at every path. */
+const symlinkProbe: PresenceProbe = () => Promise.resolve(ok('symlink'));
+
+/** A stat answering the given symlink and directory flags. */
+const statOf = (symlink: boolean, directory: boolean) => () =>
+  Promise.resolve({ isSymbolicLink: () => symlink, isDirectory: () => directory });
+
+/** A directory lister answering one regular file and one symlink. */
+const fileAndLinkLister = () =>
+  Promise.resolve([
+    {
+      name: 'a--b.md',
+      type: { isSymbolicLink: () => false, isDirectory: () => false, isFile: () => true },
+    },
+    {
+      name: 'link.md',
+      type: { isSymbolicLink: () => true, isDirectory: () => false, isFile: () => false },
+    },
+  ]);
+
+/** A directory entry type answering the given symlink, directory and file flags. */
+const entryTypeAnswers = (symlink: boolean, directory: boolean, file: boolean) => ({
+  isSymbolicLink: () => symlink,
+  isDirectory: () => directory,
+  isFile: () => file,
+});
+
+/** A stat probe reporting an entry of the given kind. */
+const statOfKind =
+  (kind: 'directory' | 'file' | 'symlink'): StatProbe =>
+  (): ReturnType<StatProbe> =>
+    Promise.resolve({
+      isDirectory: () => kind === 'directory',
+      isSymbolicLink: () => kind === 'symlink',
+    });
+
+/** A stat probe that finds nothing at the path. */
+const absentStat: StatProbe = () =>
+  Promise.reject(Object.assign(new Error('gone'), { code: 'ENOENT' }));
+
+/** A stat probe the platform refuses to answer. */
+const sealedStat: StatProbe = () =>
+  Promise.reject(Object.assign(new Error('no'), { code: 'EACCES' }));
+
 describe('existingProfilePaths — the document paths a push may stage', () => {
   it('lists only the paths that exist, in layout order, so a minimal profile can be pushed', async () => {
     const probe = probeOf({ 'index.md': 'not-a-directory', machines: 'directory' });
@@ -60,20 +113,13 @@ describe('existingProfilePaths — the document paths a push may stage', () => {
   });
 
   it('reports an unreadable path as an error, never as absent', async () => {
-    const probe: PresenceProbe = (target) =>
-      Promise.resolve(
-        path.basename(target) === 'repos' ? err(`cannot read ${target} (EACCES)`) : ok('absent'),
-      );
-    const result = await existingProfilePaths(ROOT, probe);
+    const result = await existingProfilePaths(ROOT, unreadableReposProbe);
     expect(result.ok).toBe(false);
     expect(result.ok ? '' : result.error).toContain('EACCES');
   });
 });
 
 describe('presence — what is at a path, never following a link', () => {
-  const statOf = (symlink: boolean, directory: boolean) => () =>
-    Promise.resolve({ isSymbolicLink: () => symlink, isDirectory: () => directory });
-
   it('reports a symlink as a symlink even when it points at a directory', async () => {
     expect(unwrap(await presence('repos', statOf(true, true)))).toBe('symlink');
     expect(unwrap(await presence('repos', statOf(false, true)))).toBe('directory');
@@ -90,22 +136,19 @@ describe('presence — what is at a path, never following a link', () => {
 });
 
 describe('listEntries — one level, never through a link, never a thrown error', () => {
-  const directory: PresenceProbe = () => Promise.resolve(ok('directory'));
-
   it('lists a scoped directory that is a symlink as empty, so nothing behind it is ever read', async () => {
-    const linked: PresenceProbe = () => Promise.resolve(ok('symlink'));
     const reads: string[] = [];
     const lister = (dir: string) => {
       reads.push(dir);
       return Promise.resolve([]);
     };
-    expect(unwrap(await listEntries(ROOT, 'repos', linked, lister))).toEqual([]);
+    expect(unwrap(await listEntries(ROOT, 'repos', symlinkProbe, lister))).toEqual([]);
     expect(reads).toEqual([]);
   });
 
   it('turns a listing the platform refuses after the probe into an error, never a throw', async () => {
     const eacces = Object.assign(new Error('denied'), { code: 'EACCES' });
-    const listed = await listEntries(ROOT, 'repos', directory, () => Promise.reject(eacces));
+    const listed = await listEntries(ROOT, 'repos', directoryProbe, () => Promise.reject(eacces));
     expect(listed).toEqual({
       ok: false,
       error: `cannot list ${path.join(ROOT, 'repos')} (EACCES)`,
@@ -113,18 +156,7 @@ describe('listEntries — one level, never through a link, never a thrown error'
   });
 
   it("prefixes scoped entries with their directory and keeps each entry's kind", async () => {
-    const lister = () =>
-      Promise.resolve([
-        {
-          name: 'a--b.md',
-          type: { isSymbolicLink: () => false, isDirectory: () => false, isFile: () => true },
-        },
-        {
-          name: 'link.md',
-          type: { isSymbolicLink: () => true, isDirectory: () => false, isFile: () => false },
-        },
-      ]);
-    expect(unwrap(await listEntries(ROOT, 'repos', directory, lister))).toEqual([
+    expect(unwrap(await listEntries(ROOT, 'repos', directoryProbe, fileAndLinkLister))).toEqual([
       { relPath: 'repos/a--b.md', kind: 'file' },
       { relPath: 'repos/link.md', kind: 'symlink' },
     ]);
@@ -133,16 +165,11 @@ describe('listEntries — one level, never through a link, never a thrown error'
 
 describe('entryKind', () => {
   it('reports a symlink as a symlink whatever it points at, then a directory, a file, or other', () => {
-    const answers = (symlink: boolean, directory: boolean, file: boolean) => ({
-      isSymbolicLink: () => symlink,
-      isDirectory: () => directory,
-      isFile: () => file,
-    });
-    expect(entryKind(answers(true, false, false))).toBe('symlink');
-    expect(entryKind(answers(true, true, false))).toBe('symlink');
-    expect(entryKind(answers(false, true, false))).toBe('directory');
-    expect(entryKind(answers(false, false, true))).toBe('file');
-    expect(entryKind(answers(false, false, false))).toBe('other');
+    expect(entryKind(entryTypeAnswers(true, false, false))).toBe('symlink');
+    expect(entryKind(entryTypeAnswers(true, true, false))).toBe('symlink');
+    expect(entryKind(entryTypeAnswers(false, true, false))).toBe('directory');
+    expect(entryKind(entryTypeAnswers(false, false, true))).toBe('file');
+    expect(entryKind(entryTypeAnswers(false, false, false))).toBe('other');
   });
 });
 
@@ -165,32 +192,20 @@ function fakeFileSystem(
 }
 
 describe('isGitRepository — read without following links', () => {
-  const stats =
-    (kind: 'directory' | 'file' | 'symlink'): StatProbe =>
-    (): ReturnType<StatProbe> =>
-      Promise.resolve({
-        isDirectory: () => kind === 'directory',
-        isSymbolicLink: () => kind === 'symlink',
-      });
-
   it('reports a .git directory and a worktree .git file as a repository', async () => {
-    expect(await isGitRepository(ROOT, stats('directory'))).toEqual(ok(true));
-    expect(await isGitRepository(ROOT, stats('file'))).toEqual(ok(true));
+    expect(await isGitRepository(ROOT, statOfKind('directory'))).toEqual(ok(true));
+    expect(await isGitRepository(ROOT, statOfKind('file'))).toEqual(ok(true));
   });
 
   it('refuses a symlinked .git by name, never following it into another repository', async () => {
-    expect(await isGitRepository(ROOT, stats('symlink'))).toEqual(
+    expect(await isGitRepository(ROOT, statOfKind('symlink'))).toEqual(
       err(`${path.join(ROOT, '.git')} is a symlink — the profile repository is never followed`),
     );
   });
 
   it('reads absence as not a repository and a refused probe as the failure it is', async () => {
-    const absent: StatProbe = () =>
-      Promise.reject(Object.assign(new Error('gone'), { code: 'ENOENT' }));
-    expect(await isGitRepository(ROOT, absent)).toEqual(ok(false));
-    const sealed: StatProbe = () =>
-      Promise.reject(Object.assign(new Error('no'), { code: 'EACCES' }));
-    expect(await isGitRepository(ROOT, sealed)).toEqual(
+    expect(await isGitRepository(ROOT, absentStat)).toEqual(ok(false));
+    expect(await isGitRepository(ROOT, sealedStat)).toEqual(
       err(`cannot read ${path.join(ROOT, '.git')} (EACCES)`),
     );
   });

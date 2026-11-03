@@ -14,10 +14,10 @@ import { refineClerkKeyLocality } from './env-clerk-guards.js';
 
 const ModeSchema = z.enum(['stateless', 'session']).default('stateless');
 
-const LOOPBACK_HOSTNAMES: readonly string[] = ['localhost', '127.0.0.1', '::1'];
+const LOOPBACK_HOSTNAMES: ReadonlySet<string> = new Set(['localhost', '127.0.0.1', '::1']);
 
 function isLoopbackHostname(value: string): boolean {
-  return LOOPBACK_HOSTNAMES.includes(value.toLowerCase());
+  return LOOPBACK_HOSTNAMES.has(value.toLowerCase());
 }
 
 /**
@@ -203,9 +203,6 @@ export type AuthEnabledEnv = Env & {
   readonly CLERK_PUBLISHABLE_KEY: string;
   readonly CLERK_SECRET_KEY: string;
 };
-
-/** Environment with auth disabled — Clerk keys may be absent */
-export type AuthDisabledEnv = Env;
 
 export type Env = z.input<typeof BaseEnvSchema>;
 

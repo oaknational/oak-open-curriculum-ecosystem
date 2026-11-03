@@ -130,8 +130,7 @@ function render(
 // pushed head is one merge of the pull request's base over the head the remote holds.
 function pushIsSync(ref: PushedRef | undefined, baseRefOid: string | undefined): boolean {
   return (
-    ref !== undefined &&
-    ref.remoteSha !== undefined &&
+    ref?.remoteSha !== undefined &&
     baseRefOid !== undefined &&
     isSyncPush(ref.remoteSha, ref.localSha, baseRefOid)
   );
@@ -212,8 +211,8 @@ function guarded(
           stdout,
         })
       : gate(parsed, stdout);
-  } catch (cause) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
     stderr.write(`review-cost ${parsed.command}: operational failure — ${message}\n`);
     return 1;
   }

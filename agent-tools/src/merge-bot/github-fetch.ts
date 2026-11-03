@@ -10,15 +10,18 @@ import { githubHeaders, type GithubApiFetch } from './mint-installation-token.js
 /** Every GitHub call ends inside this bound, so a stalled connection never holds a live token open on an unattended seat. */
 const GITHUB_CALL_TIMEOUT_MS = 120_000;
 
+/** One real GitHub call under {@link GITHUB_CALL_TIMEOUT_MS}, answered in the port's shape. */
+const boundedFetch: GithubApiFetch = async (url, init) => {
+  const response = await fetch(url, {
+    ...init,
+    signal: AbortSignal.timeout(GITHUB_CALL_TIMEOUT_MS),
+  });
+  return { status: response.status, json: () => response.json() };
+};
+
 /** The real fetch, wrapped to the port shape at this one boundary, each call under {@link GITHUB_CALL_TIMEOUT_MS}. */
 export function realFetch(): GithubApiFetch {
-  return async (url, init) => {
-    const response = await fetch(url, {
-      ...init,
-      signal: AbortSignal.timeout(GITHUB_CALL_TIMEOUT_MS),
-    });
-    return { status: response.status, json: () => response.json() };
-  };
+  return boundedFetch;
 }
 
 /** {@link githubHeaders} for a call whose body is JSON. */

@@ -391,9 +391,13 @@ ruleset on the default branch binds the bot, as this repository's does,
 GitHub refuses a direct push either way. An unreadable default branch,
 or an `origin` that is not that one repository, fails the push (exit 1)
 rather than guessing. So does a checkout that changes branch while the
-target is settled: with no `--branch`, the branch and the commit are one
-snapshot of HEAD (see
+target is settled: the branch and the commit are one snapshot of HEAD (see
 [`bot-identity-on-third-party-systems`](../rules/bot-identity-on-third-party-systems.md)).
+With `--branch`, the branch named must be the one HEAD is on: the push
+writes HEAD's commit under the name given, so another name is a typed
+refusal (exit 3) and nothing is minted or pushed. On 2026-10-28 a push named
+the coordination branch from a lane's worktree, and the coordination
+branch's remote tip became that lane's commits; the refusal is the cure.
 
 GitHub has refused a freshly minted token's push at its first request,
 before git runs the pre-push hook. The transcript is these two lines and

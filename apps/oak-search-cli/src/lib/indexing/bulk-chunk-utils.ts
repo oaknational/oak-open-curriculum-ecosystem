@@ -6,6 +6,7 @@
  * bulk operations before upload to Elasticsearch.
 
  */
+import { randomInt } from 'node:crypto';
 import type { BulkOperationEntry, BulkOperations } from './bulk-operation-types';
 
 // =============================================================================
@@ -172,16 +173,17 @@ export function createNdjson(operations: BulkOperations): string {
  *
  * @remarks
  * Uses full jitter strategy: delay = random(0, base * 2^attempt).
- * This spreads retry attempts to avoid thundering herd.
+ * This spreads retry attempts to avoid thundering herd. The draw comes from
+ * `node:crypto`'s `randomInt` (`docs/governance/sonar-disposition-policy.md`
+ * §S2245); its range is `[0, floor(base * 2^attempt))`, as before.
  *
  * @param attempt - Current retry attempt (0-indexed)
  * @param baseDelayMs - Base delay in milliseconds
- * @returns Delay in milliseconds with jitter applied
+ * @returns Whole milliseconds of delay with jitter applied
  */
 export function calculateBackoffWithJitter(attempt: number, baseDelayMs: number): number {
   const exponentialDelay = baseDelayMs * Math.pow(2, attempt);
-  const jitter = Math.random() * exponentialDelay;
-  return Math.floor(jitter);
+  return randomInt(Math.max(1, Math.floor(exponentialDelay)));
 }
 
 /**

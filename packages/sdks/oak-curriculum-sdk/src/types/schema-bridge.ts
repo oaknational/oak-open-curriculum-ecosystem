@@ -5,8 +5,8 @@
  *
  * @generated
  */
-import { schemaBase } from '@oaknational/sdk-codegen/api-schema';
+import type { schemaBase } from '@oaknational/sdk-codegen/api-schema';
 
 export type OpenApiSchemaBase = typeof schemaBase;
 
-export { schemaBase };
+export { schemaBase } from '@oaknational/sdk-codegen/api-schema';

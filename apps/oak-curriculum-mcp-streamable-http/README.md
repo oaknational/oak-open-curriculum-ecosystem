@@ -180,8 +180,8 @@ Tokens live in `packages/design/oak-design-tokens/src/tokens/`:
 Dark mode is CSS-only via `@media (prefers-color-scheme: dark)` — no
 JavaScript theme switching. The build pipeline generates
 `dist/contrast-report.json` validating all declared pairings against
-WCAG AA thresholds. Violations fail the build (unless `OAK_TOKEN_DEV=1`
-is set for iterative development).
+WCAG AA thresholds. Violations fail the build, except under the `--dev`
+flag the widget dev server's token watcher passes for iterative development.
 
 The widget loads **Google Fonts (Lexend)** via `@import` from
 `fonts.googleapis.com` and `fonts.gstatic.com`. These domains are

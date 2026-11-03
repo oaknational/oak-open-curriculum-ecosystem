@@ -45,7 +45,7 @@ import { findBacktickClose, findSubstitutionClose } from './substitution-bounds.
 
 export type { ShellWord } from './scan-state.js';
 
-const TWO_CHAR_OPERATORS: readonly string[] = ['&&', '||', '|&'];
+const TWO_CHAR_OPERATORS: ReadonlySet<string> = new Set(['&&', '||', '|&']);
 const ONE_CHAR_OPERATORS: ReadonlySet<string> = new Set(['|', ';', '&', '\n', '(', ')']);
 /** The characters a redirection operator is made of; a `&` here is one `isRedirectionPart` kept. */
 const REDIRECTION_CHARACTERS: ReadonlySet<string> = new Set(['<', '>', '&']);
@@ -162,7 +162,7 @@ function lastCharacter(state: ScanState): string {
 /** Consume an operator or a substitution at `index`; `null` when the text there is neither. */
 function scanOperator(command: string, index: number, state: ScanState): number | null {
   const char = command[index] ?? '';
-  if (TWO_CHAR_OPERATORS.includes(command.slice(index, index + 2))) {
+  if (TWO_CHAR_OPERATORS.has(command.slice(index, index + 2))) {
     endSegment(state);
     return index + 2;
   }

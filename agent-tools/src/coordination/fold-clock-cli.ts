@@ -127,8 +127,8 @@ function targetOf(state: MutableFoldClockArgs): Result<PrTarget, Error> {
   }
   try {
     return ok(parsePrTarget(state.pr, state.repo));
-  } catch (cause) {
-    return err(usageError(cause instanceof Error ? cause.message : String(cause)));
+  } catch (error) {
+    return err(usageError(error instanceof Error ? error.message : String(error)));
   }
 }
 

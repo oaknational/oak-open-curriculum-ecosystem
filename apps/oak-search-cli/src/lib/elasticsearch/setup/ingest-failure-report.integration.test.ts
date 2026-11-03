@@ -2,6 +2,9 @@ import { describe, expect, it } from 'vitest';
 import type { BulkUploadResult } from '../../indexing/ingest-harness-ops.js';
 import { handleUploadCompleteWithWriter } from './ingest-failure-report.js';
 
+/** A report writer for paths the completion handler never reaches. */
+const unusedReportWriter = (): string => 'unused-report.json';
+
 describe('handleUploadComplete integration', () => {
   it('returns ok when indexed count matches and there are no permanent failures', () => {
     const result: BulkUploadResult = {
@@ -26,9 +29,8 @@ describe('handleUploadComplete integration', () => {
       permanentlyFailed: [],
       indexCounts: {},
     };
-    const reportWriter = (): string => 'unused-report.json';
 
-    const completionResult = handleUploadCompleteWithWriter(result, '.', 2, reportWriter);
+    const completionResult = handleUploadCompleteWithWriter(result, '.', 2, unusedReportWriter);
     expect(completionResult.ok).toBe(false);
     if (completionResult.ok) {
       throw new Error('Expected mismatch between expected and indexed counts to fail');

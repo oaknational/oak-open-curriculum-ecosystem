@@ -36,9 +36,9 @@ const document: unknown = JSON.parse(raw);
 assert.ok(isJsonObject(document), 'the contract document is a JSON object');
 
 const version = document['version'];
-assert.equal(typeof version, 'string', 'the contract declares a version');
+assert.ok(typeof version === 'string', 'the contract declares a version');
 assert.equal(
-  String(version).split('.')[0],
+  version.split('.')[0],
   String(OPERATOR_PROFILE_SCHEMA_VERSION),
   'the contract MAJOR and the enforcement schema family agree',
 );
@@ -93,5 +93,5 @@ for (const fixture of PROFILE_FIXTURES) {
 }
 
 writeLine(
-  `✓ operator-profile contract ${String(version)} and the family-${OPERATOR_PROFILE_SCHEMA_VERSION} enforcement schema agree on ${checked} fixtures`,
+  `✓ operator-profile contract ${version} and the family-${OPERATOR_PROFILE_SCHEMA_VERSION} enforcement schema agree on ${checked} fixtures`,
 );

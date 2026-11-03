@@ -6,6 +6,12 @@ function rule(block: readonly string[]): string {
   return ['---', ...block, '---', '', '# Title', '', 'Body.', ''].join('\n');
 }
 
+/** The refusal of a glob the Cursor comma-joined globs line would not carry back as itself. */
+const commaJoinRefusal = (glob: string): unknown => ({
+  ok: false,
+  error: `.agent/rules/r.md: glob "${glob}" would not survive the Cursor trigger's comma-joined globs line`,
+});
+
 describe('readRuleDeclaration', () => {
   it('reads a core declaration', () => {
     expect(readRuleDeclaration('r', rule(['classification: core', 'description: d']))).toEqual({
@@ -148,18 +154,14 @@ describe('readRuleDeclaration', () => {
 
   it('refuses a glob the Cursor comma-joined globs line would not carry back as itself', () => {
     const scoped = ['classification: situational', 'description: d', 'trigger: surface:x'];
-    const refusal = (glob: string): unknown => ({
-      ok: false,
-      error: `.agent/rules/r.md: glob "${glob}" would not survive the Cursor trigger's comma-joined globs line`,
-    });
     expect(
       readRuleDeclaration('r', rule([...scoped, 'globs:', '  - "src/a.ts,src/b.ts"'])),
-    ).toStrictEqual(refusal('src/a.ts,src/b.ts'));
+    ).toStrictEqual(commaJoinRefusal('src/a.ts,src/b.ts'));
     expect(readRuleDeclaration('r', rule([...scoped, 'globs:', '  - "src/{a,b"']))).toStrictEqual(
-      refusal('src/{a,b'),
+      commaJoinRefusal('src/{a,b'),
     );
     expect(readRuleDeclaration('r', rule([...scoped, 'globs:', '  - " src/a.ts"']))).toStrictEqual(
-      refusal(' src/a.ts'),
+      commaJoinRefusal(' src/a.ts'),
     );
     expect(
       readRuleDeclaration('r', rule([...scoped, 'globs:', '  - "src/{a,b}/**/*.ts"'])),

@@ -104,6 +104,14 @@ const config = defineConfigArray(
       'import-x/no-unresolved': 'error',
     },
   },
+  {
+    // The owner's override of 2026-11-01, verbatim: "In the case of the
+    // oauth-proxy file, I am overriding the normal rules, only I can do this,
+    // and instructing you to change the length limit for that one file to 300
+    // lines". One file, one limit; the recommended 250 holds everywhere else.
+    files: ['src/oauth-proxy/oauth-proxy-handlers.ts'],
+    rules: { 'max-lines': ['error', 300] },
+  },
   // ADR-162 observability-first: require structured emission in newly
   // exported async functions. Rule is path-scoped internally to apps/**
   // and packages/sdks/**.
@@ -140,7 +148,13 @@ const config = defineConfigArray(
   },
   {
     files: ['**/*.ts', '**/*.tsx'],
-    // TODO: remove once config DI standardisation is complete (see .agent/plans/architecture/config-architecture-standardisation-plan.md)
+    // The ignores below are the composition roots and script tiers whose one
+    // `process.env` read is their boundary contract (ADR-078: entry points are
+    // the single place that reads the environment; ADR-168: the workspace
+    // script tiers); the ban holds everywhere else. ADR-168 records
+    // .agent/plans/delivery/workspace-config-isolation.plan.md as the successor
+    // of the config-architecture standardisation plan this block once pointed
+    // at, so that plan owns any further narrowing of this list.
     ignores: [
       '**/*.test.ts',
       '**/*.spec.ts',

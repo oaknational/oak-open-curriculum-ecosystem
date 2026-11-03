@@ -135,10 +135,11 @@ function parseCliArg(
 export function parseCliArgs(args: readonly string[]): FieldReadbackCliArgs {
   let parseState = createDefaultCliParseState();
 
-  for (let index = 0; index < args.length; index += 1) {
-    const parseResult = parseCliArg(args, index, parseState);
-    index = parseResult.lastConsumedIndex;
+  let cursor = 0;
+  while (cursor < args.length) {
+    const parseResult = parseCliArg(args, cursor, parseState);
     parseState = parseResult.parseState;
+    cursor = parseResult.lastConsumedIndex + 1;
   }
 
   const emitJson = args.includes('--emit-json');

@@ -131,7 +131,6 @@ const config: KnipConfig = {
         'src/validators/core-adr-citations/validate-core-adr-citations.ts',
         'src/validators/core-host-names/validate-no-host-names-in-core-headings.ts',
         'src/validators/patterns-index/validate-patterns-index.ts',
-        'src/validators/ratified-lists/validate-ratified-lists.ts',
         'src/rule-declarations/rule-frontmatter-sweep.ts',
         'src/validators/portability/validate-portability.ts',
         'src/validators/subagents/validate-subagents.ts',
@@ -147,24 +146,6 @@ const config: KnipConfig = {
         // `agent-tools:pr-throughput` package script (`pnpm exec tsx`), not
         // imported.
         'src/pr-throughput/cli.ts',
-        // Refounding mechanical-instrument CLIs (plan-corpus-refounding R0a):
-        // invoked via `pnpm exec tsx` package scripts, not imported.
-        'src/refounding/refound-freeze.ts',
-        'src/refounding/refound-verify-freeze.ts',
-        'src/refounding/refound-inventory.ts',
-        'src/refounding/refound-residue.ts',
-        'src/refounding/refound-sweep.ts',
-        'src/refounding/refound-plant-orphan.ts',
-        'src/refounding/refound-plant-challenge-canary.ts',
-        'src/refounding/refound-merge-recheck.ts',
-        'src/refounding/refound-tile.ts',
-        'src/refounding/refound-default-ledger.ts',
-        'src/refounding/refound-claim-census.ts',
-        'src/refounding/refound-batch-status.ts',
-        'src/refounding/refound-window-sample.ts',
-        // Plan-state recomputation CLI (plan-corpus-refounding R0b):
-        // invoked via `pnpm exec tsx` package scripts, not imported.
-        'src/plan-state/plan-state.ts',
         // Corpus-analysis workflow stage entries: consumed by esbuild as string
         // entry points in workflows/build/workflow-builder.ts (bundled into
         // self-contained harness artefacts), which knip cannot trace as imports.
@@ -257,8 +238,6 @@ const config: KnipConfig = {
         'evaluation/**/*.ts',
       ],
       ignoreDependencies: [
-        // Used via CLI tooling, not direct imports
-        'vite-tsconfig-paths',
         // prettier is needed for eslint-plugin-prettier
         'prettier',
       ],

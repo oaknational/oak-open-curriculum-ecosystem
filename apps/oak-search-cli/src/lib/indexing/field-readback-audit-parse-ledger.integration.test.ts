@@ -1,64 +1,48 @@
-import { mkdtemp, rm, writeFile } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { parseLedger } from '../../../operations/ingestion/field-readback-audit-lib.js';
+import { createLedgerParser } from '../../../operations/ingestion/field-readback-audit-lib.js';
+import { createInMemoryFileReader } from '../../test-helpers/in-memory-file-reader.js';
 
-async function withTempDir<T>(run: (dir: string) => Promise<T>): Promise<T> {
-  const dir = await mkdtemp(join(tmpdir(), 'field-readback-audit-'));
-  try {
-    return await run(dir);
-  } finally {
-    await rm(dir, { recursive: true, force: true });
-  }
+const LEDGER_PATH = 'ledgers/field-gap-ledger.json';
+
+/** Parses the ledger at the fixed path from the given in-memory files. */
+function parseLedgerFrom(files: Readonly<Record<string, string>>) {
+  return createLedgerParser(createInMemoryFileReader(files))(LEDGER_PATH);
 }
 
-describe('parseLedger integration', () => {
+describe('createLedgerParser', () => {
   it('parses a valid ledger file', async () => {
-    await withTempDir(async (dir) => {
-      const validPath = join(dir, 'valid-ledger.json');
-      await writeFile(
-        validPath,
-        JSON.stringify({
-          statuses: ['unknown', 'must_be_populated'],
-          fields: [
-            {
-              indexFamily: 'lessons',
-              fieldName: 'thread_slugs',
-              stage: 'ingest_dispatch_readback',
-              status: 'must_be_populated',
-              findingRefs: ['F1'],
-            },
-          ],
-        }),
-        'utf8',
-      );
-      const ledger = await parseLedger(validPath);
-      expect(ledger.statuses).toContain('must_be_populated');
-      expect(ledger.fields).toHaveLength(1);
+    const ledger = await parseLedgerFrom({
+      [LEDGER_PATH]: JSON.stringify({
+        statuses: ['unknown', 'must_be_populated'],
+        fields: [
+          {
+            indexFamily: 'lessons',
+            fieldName: 'thread_slugs',
+            stage: 'ingest_dispatch_readback',
+            status: 'must_be_populated',
+            findingRefs: ['F1'],
+          },
+        ],
+      }),
     });
+
+    expect(ledger.statuses).toContain('must_be_populated');
+    expect(ledger.fields).toHaveLength(1);
   });
 
-  it('fails with helpful error when file does not exist', async () => {
-    await withTempDir(async (dir) => {
-      const missingPath = join(dir, 'missing-ledger.json');
-      await expect(parseLedger(missingPath)).rejects.toThrow('Failed to read ledger file');
-    });
+  it('fails naming the path when the ledger file cannot be read', async () => {
+    await expect(parseLedgerFrom({})).rejects.toThrow(`Failed to read ledger file: ${LEDGER_PATH}`);
   });
 
-  it('fails with helpful error when JSON is invalid', async () => {
-    await withTempDir(async (dir) => {
-      const invalidPath = join(dir, 'invalid-ledger.json');
-      await writeFile(invalidPath, '{invalid-json', 'utf8');
-      await expect(parseLedger(invalidPath)).rejects.toThrow('Ledger file contains invalid JSON');
-    });
+  it('fails naming the path when the ledger file is not JSON', async () => {
+    await expect(parseLedgerFrom({ [LEDGER_PATH]: '{invalid-json' })).rejects.toThrow(
+      `Ledger file contains invalid JSON: ${LEDGER_PATH}`,
+    );
   });
 
-  it('fails when JSON shape is invalid', async () => {
-    await withTempDir(async (dir) => {
-      const invalidShapePath = join(dir, 'invalid-shape-ledger.json');
-      await writeFile(invalidShapePath, JSON.stringify({ statuses: [] }), 'utf8');
-      await expect(parseLedger(invalidShapePath)).rejects.toThrow('Invalid ledger JSON shape');
-    });
+  it('fails naming the path when the JSON shape is invalid', async () => {
+    await expect(
+      parseLedgerFrom({ [LEDGER_PATH]: JSON.stringify({ statuses: [] }) }),
+    ).rejects.toThrow(`Invalid ledger JSON shape: ${LEDGER_PATH}`);
   });
 });

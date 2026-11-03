@@ -43,9 +43,9 @@ export function readSubagentDeclaration(name: string, text: string): Result<Temp
   let value: unknown;
   try {
     value = parseYaml(lines.slice(1, closing).join('\n'));
-  } catch (cause: unknown) {
+  } catch (error: unknown) {
     return err(
-      `${name}: frontmatter is not YAML (${cause instanceof Error ? cause.message : String(cause)})`,
+      `${name}: frontmatter is not YAML (${error instanceof Error ? error.message : String(error)})`,
     );
   }
   const declaration = parseSubagentDeclaration(name, value);

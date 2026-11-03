@@ -16,8 +16,8 @@ async function collect(lines: AsyncIterable<string>): Promise<readonly string[]>
   return collected;
 }
 
-const LINE_SEPARATOR = String.fromCharCode(0x2028);
-const PARAGRAPH_SEPARATOR = String.fromCharCode(0x2029);
+const LINE_SEPARATOR = String.fromCodePoint(0x2028);
+const PARAGRAPH_SEPARATOR = String.fromCodePoint(0x2029);
 
 describe('splitLines', () => {
   it('yields each line once, wherever the chunk boundaries fall', async () => {

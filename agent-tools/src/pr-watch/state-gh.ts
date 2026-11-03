@@ -59,7 +59,7 @@ export interface ReadPrStateOptions {
   /** Hashes a diff to its patch-id; the trusted git's `patch-id` by default. */
   readonly patchIdOf?: PatchIdOf;
   /** Vendors declared unavailable (`--unavailable`), the bot that may declare, and the clock. */
-  readonly unavailable?: UnavailableInput | undefined;
+  readonly unavailable?: UnavailableInput;
 }
 
 // `mergeable: UNKNOWN` means GitHub has not computed mergeability yet — a
@@ -105,10 +105,10 @@ function readHarvest<Parsed>(input: {
         `api graphql ${input.label}`,
       ),
     );
-  } catch (cause) {
+  } catch (error) {
     throw new Error(
       `PR #${input.prNumber}: ${input.label} harvest failed — does the PR exist and is it accessible?`,
-      { cause },
+      { cause: error },
     );
   }
 }
@@ -199,7 +199,7 @@ export function readPrStateReading(options: ReadPrStateOptions): PrStateReading 
         // The base branch's configuration, from the view the reading composes from.
         reviewConfiguration: readReviewConfigurationLeg({ run, gh, repo, view: confirm }),
         declared: options.expectedReviewers ?? null,
-        unavailable: options.unavailable,
+        ...(options.unavailable === undefined ? {} : { unavailable: options.unavailable }),
         readContent: contentReaderFor({ run, gh, repo, view: confirm, patchIdOf }),
       });
     }

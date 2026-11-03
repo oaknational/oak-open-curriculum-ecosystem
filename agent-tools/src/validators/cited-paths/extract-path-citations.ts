@@ -18,6 +18,8 @@
  * @packageDocumentation
  */
 
+import { trimEndWhile } from '../../core/trim-end-while.js';
+
 /** One repository path cited in a code span or fenced block. */
 export interface PathCitation {
   /** 1-based line number of the citation. */
@@ -49,8 +51,10 @@ function escapeForRegExp(text: string): string {
 }
 /** Characters and fragments that make a token a pattern or a placeholder, never one path. */
 const UNRESOLVABLE_PATTERN = /[*<>{}$|]|\.\.\.|YYYY|\/\.\.(?:\/|$)/;
-/** Trailing punctuation that belongs to the sentence, not the path. */
-const TRAILING_PUNCTUATION = /[.,;:)\]'"]+$/;
+/** True for one character of trailing punctuation that belongs to the sentence, not the path. */
+const isSentencePunctuation = (character: string): boolean => '.,;:)]\'"'.includes(character);
+/** True for one path separator. */
+const isSlash = (character: string): boolean => character === '/';
 /** A `:line` or `:line:column` suffix. */
 const LINE_SUFFIX = /:\d+(?::\d+)?$/;
 
@@ -110,10 +114,10 @@ function normaliseTarget(token: string): string | undefined {
     return undefined;
   }
   const withoutAnchor = token.split('#', 1)[0] ?? token;
-  const trimmed = withoutAnchor
-    .replace(TRAILING_PUNCTUATION, '')
-    .replace(LINE_SUFFIX, '')
-    .replace(/\/+$/, '');
+  const trimmed = trimEndWhile(
+    trimEndWhile(withoutAnchor, isSentencePunctuation).replace(LINE_SUFFIX, ''),
+    isSlash,
+  );
   const prefix = CITED_PATH_PREFIXES.find((candidate) => trimmed.startsWith(candidate));
   if (prefix === undefined) {
     return undefined;

@@ -62,7 +62,9 @@ export function isVendorErrorReview(body: string): boolean {
  */
 export function vendorErrorNote(bodies: readonly string[]): string {
   const errors = bodies.filter(isVendorErrorReview).length;
-  return errors === 0
-    ? ''
-    : `; ${String(errors)} tip-bound vendor error review${errors === 1 ? '' : 's'} ignored (the vendor could not review this tip)`;
+  if (errors === 0) {
+    return '';
+  }
+  const plural = errors === 1 ? '' : 's';
+  return `; ${String(errors)} tip-bound vendor error review${plural} ignored (the vendor could not review this tip)`;
 }

@@ -126,14 +126,15 @@ describe('parseStateView', () => {
   });
 });
 
-describe('parseReviewsHarvest', () => {
-  function page(nodes: readonly unknown[]): unknown {
-    return { data: { repository: { pullRequest: { reviews: { nodes } } } } };
-  }
+/** One GraphQL reviews page carrying the given nodes. */
+function reviewsPage(nodes: readonly unknown[]): unknown {
+  return { data: { repository: { pullRequest: { reviews: { nodes } } } } };
+}
 
+describe('parseReviewsHarvest', () => {
   it('flattens all pages and normalises null author/commit/submittedAt', () => {
     const reviews = parseReviewsHarvest([
-      page([
+      reviewsPage([
         {
           author: { login: 'copilot-pull-request-reviewer' },
           state: 'COMMENTED',
@@ -142,7 +143,7 @@ describe('parseReviewsHarvest', () => {
           commit: { oid: 'f'.repeat(40) },
         },
       ]),
-      page([
+      reviewsPage([
         {
           author: null,
           state: 'COMMENTED',

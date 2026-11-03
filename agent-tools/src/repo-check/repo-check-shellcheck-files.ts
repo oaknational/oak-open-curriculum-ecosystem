@@ -158,8 +158,9 @@ export function shebangFailures(
   const refusal = shellPath
     ? 'not a recognised shell form, and its path makes the file a shell script'
     : 'not a recognised form';
+  const shebang = line.replaceAll('\r', String.raw`\r`);
   return [
-    `${file}:1: the shebang \`${line.replaceAll('\r', String.raw`\r`)}\` is ${refusal}; ` +
+    `${file}:1: the shebang \`${shebang}\` is ${refusal}; ` +
       `use one of ${usable.join(', ')}, ${refusalRemedies(form, shellPath).join(', ')}`,
   ];
 }

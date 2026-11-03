@@ -17,8 +17,6 @@
 
 import { extractScriptCitations, type ScriptCitation } from './extract-script-citations.js';
 
-export { extractScriptCitations, type ScriptCitation };
-
 /** The script tables the citations resolve against. */
 export interface WorkspaceScripts {
   /** Root `package.json` script names. */
@@ -166,3 +164,6 @@ function finding(
     reason,
   };
 }
+
+export { extractScriptCitations } from './extract-script-citations.js';
+export type { ScriptCitation } from './extract-script-citations.js';

@@ -157,8 +157,8 @@ const liveTemplateReads: TemplateReads = {
   list: (dir) => {
     try {
       return ok(readdirSync(dir));
-    } catch (cause) {
-      return err(describe(cause));
+    } catch (error) {
+      return err(describe(error));
     }
   },
   read: readTemplateText,
@@ -178,8 +178,8 @@ function readTemplateText(file: string): Result<string, string> {
   let fd: number;
   try {
     fd = openSync(file, NO_FOLLOW_READ_FLAGS);
-  } catch (cause) {
-    return err(isLinkRefusal(cause) ? 'not a regular file' : unreadable(cause));
+  } catch (error) {
+    return err(isLinkRefusal(error) ? 'not a regular file' : unreadable(error));
   }
   try {
     const viaDescriptor = fstatSync(fd, { bigint: true });
@@ -187,8 +187,8 @@ function readTemplateText(file: string): Result<string, string> {
       return err('not a regular file');
     }
     return ok(readFileSync(fd, 'utf8'));
-  } catch (cause) {
-    return err(unreadable(cause));
+  } catch (error) {
+    return err(unreadable(error));
   } finally {
     closeSync(fd);
   }

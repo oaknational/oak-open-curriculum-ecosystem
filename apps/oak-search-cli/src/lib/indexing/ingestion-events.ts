@@ -14,6 +14,12 @@ export type LessonSkipReason =
 /** Reasons why a unit may be skipped during ingestion. */
 type UnitSkipReason = 'summary_unavailable' | 'fetch_error';
 
+/** A value an ingestion event may carry in its context. */
+type IngestionEventContextValue = string | number | boolean;
+
+/** Key-value context attached to an ingestion event. */
+type IngestionEventContext = Readonly<Record<string, IngestionEventContextValue>>;
+
 /** All possible ingestion event types. */
 type IngestionEventType =
   | 'PHASE_START'
@@ -30,7 +36,7 @@ type IngestionEventType =
 interface IngestionEvent {
   readonly type: IngestionEventType;
   readonly phase?: IngestionPhase;
-  readonly context: Readonly<Record<string, string | number | boolean>>;
+  readonly context: IngestionEventContext;
 }
 
 /** Formats duration in milliseconds to human-readable string (e.g., "45.2s"). */
@@ -47,7 +53,7 @@ function formatDuration(ms: number): string {
 }
 
 /** Formats context key-value pairs (e.g., "subject=maths keyStage=ks4"). */
-function formatContext(context: Readonly<Record<string, string | number | boolean>>): string {
+function formatContext(context: IngestionEventContext): string {
   return typeSafeEntries(context)
     .map(([key, value]) => `${key}=${String(value)}`)
     .join(' ');
@@ -72,7 +78,7 @@ export function formatIngestionEvent(event: IngestionEvent): string {
 /** Creates a PHASE_START event for the given phase. */
 export function createPhaseStartEvent(
   phase: IngestionPhase,
-  context: Readonly<Record<string, string | number | boolean>>,
+  context: IngestionEventContext,
 ): IngestionEvent {
   return {
     type: 'PHASE_START',
@@ -114,7 +120,7 @@ export function createProgressEvent(
 ): IngestionEvent {
   const { current, total, unitSlug } = context;
   const percentage = ((current / total) * 100).toFixed(1);
-  const progressContext: Record<string, string | number | boolean> = {
+  const progressContext: Record<string, IngestionEventContextValue> = {
     progress: `${current}/${total} (${percentage}%)`,
   };
   if (unitSlug !== undefined) {
@@ -136,7 +142,7 @@ export function createLessonSkippedEvent(
     httpStatus?: number;
   }>,
 ): IngestionEvent {
-  const eventContext: Record<string, string | number | boolean> = {
+  const eventContext: Record<string, IngestionEventContextValue> = {
     lessonSlug: context.lessonSlug,
     unitSlug: context.unitSlug,
     reason: context.reason,

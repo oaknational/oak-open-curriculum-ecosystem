@@ -104,9 +104,11 @@ function deriveIdentityRoots(
 function pathFromUrl(moduleUrl: URL): Result<string, EstateReviewError> {
   try {
     return ok(fileURLToPath(moduleUrl));
-  } catch (cause: unknown) {
+  } catch (error: unknown) {
     return err(
-      new EstateReviewError('IDENTITY_INVALID', 'identity module URL is not a file URL', { cause }),
+      new EstateReviewError('IDENTITY_INVALID', 'identity module URL is not a file URL', {
+        cause: error,
+      }),
     );
   }
 }

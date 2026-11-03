@@ -116,7 +116,7 @@ function markedDocuments(
     }
     marked.push(...(found.ok ? lines(found.stdout) : []));
   }
-  return ok(marked.sort((left, right) => left.localeCompare(right)));
+  return ok(marked.toSorted((left, right) => left.localeCompare(right)));
 }
 
 function markerRefusal(marked: readonly string[]): string {

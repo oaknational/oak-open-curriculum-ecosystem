@@ -37,8 +37,8 @@ const nameOf = (path: string): string => printable(basename(path));
 const readOptionalFile: ReadOptionalFile = async (path) => {
   try {
     return ok(await readFile(path, 'utf8'));
-  } catch (cause) {
-    const code = cause instanceof Error && 'code' in cause ? cause.code : undefined;
+  } catch (error) {
+    const code = error instanceof Error && 'code' in error ? error.code : undefined;
     if (code === 'ENOENT') {
       return ok(undefined);
     }

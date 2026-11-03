@@ -34,6 +34,8 @@ import {
   generateGraphCorpusData,
   writeGraphCorpusAsJson,
 } from '../src/bulk.js';
+import type { FileSystemPort } from '../src/io/file-system-port.js';
+import { nodeFileSystem } from '../src/io/node-file-system.js';
 import { readAllBulkFiles } from './lib/index.js';
 import { processBulkData, type ProcessingResult } from './vocab-gen-core.js';
 import { type PipelineConfig, type PipelineResult } from './vocab-gen-config.js';
@@ -106,6 +108,7 @@ async function readSourceVersion(bulkDataPath: string): Promise<string> {
 async function generateOutputFiles(
   result: ProcessingResult,
   config: PipelineConfig,
+  fs: FileSystemPort,
   logger?: Logger,
 ): Promise<string[]> {
   const outputFiles: string[] = [];
@@ -125,18 +128,23 @@ async function generateOutputFiles(
     keywords: result.extractedData.keywords,
     sourceVersion,
   });
-  const graphCorpusDirPath = await writeGraphCorpusAsJson(graphCorpus, config.outputPath, logger);
+  const graphCorpusDirPath = await writeGraphCorpusAsJson(
+    graphCorpus,
+    config.outputPath,
+    fs,
+    logger,
+  );
   outputFiles.push(basename(graphCorpusDirPath));
 
   // Generate analysis report (written to vocab-gen/reports in the SDK)
   const analysisReport = generateAnalysisReport(result.extractedData);
   const vocabGenDir = dirname(fileURLToPath(import.meta.url));
-  const analysisFilePath = await writeAnalysisReportFile(analysisReport, vocabGenDir, logger);
+  const analysisFilePath = await writeAnalysisReportFile(analysisReport, vocabGenDir, fs, logger);
   outputFiles.push(`reports/${basename(analysisFilePath)}`);
 
   const minedSynonyms = generateMinedSynonyms(result.extractedData.keywords);
   const synonymsDir = join(config.outputPath, 'synonyms');
-  const synonymsFilePath = await writeMinedSynonymsFile(minedSynonyms, synonymsDir, logger);
+  const synonymsFilePath = await writeMinedSynonymsFile(minedSynonyms, synonymsDir, fs, logger);
   outputFiles.push(`synonyms/${basename(synonymsFilePath)}`);
 
   // Generate vocabulary graph (JSON + typed loader)
@@ -144,6 +152,7 @@ async function generateOutputFiles(
   const vocabularyDirPath = await writeVocabularyGraphAsJson(
     vocabularyGraph,
     config.outputPath,
+    fs,
     logger,
   );
   outputFiles.push(basename(vocabularyDirPath));
@@ -156,6 +165,7 @@ async function generateOutputFiles(
   const ncCoverageDirPath = await writeNCCoverageGraphAsJson(
     ncCoverageGraph,
     config.outputPath,
+    fs,
     logger,
   );
   outputFiles.push(basename(ncCoverageDirPath));
@@ -167,6 +177,8 @@ async function generateOutputFiles(
 export interface RunPipelineDeps {
   /** Bulk-file reader; defaults to the disk-backed {@link readAllBulkFiles}. */
   readonly readAllBulkFiles?: typeof readAllBulkFiles;
+  /** File system the output files are written through; defaults to the real one. */
+  readonly fileSystem?: FileSystemPort;
 }
 
 /**
@@ -202,7 +214,12 @@ export async function runPipeline(
 
   let outputFiles: string[] = [];
   if (!config.dryRun) {
-    outputFiles = await generateOutputFiles(result, config, logger);
+    outputFiles = await generateOutputFiles(
+      result,
+      config,
+      deps.fileSystem ?? nodeFileSystem,
+      logger,
+    );
   }
 
   const durationMs = Date.now() - startTime;

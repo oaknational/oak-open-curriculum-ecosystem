@@ -11,7 +11,7 @@ import type { RepoCheckCommandResult } from './repo-check-types.js';
  */
 
 /** The escape character that opens an SGR colour sequence. */
-const ESC = String.fromCharCode(0x1b);
+const ESC = String.fromCodePoint(0x1b);
 
 const SWALLOWED_CRASH_LINE =
   'ERROR: Error loading packages/site/vitest.config.ts (Cannot find module "vitest/config")';

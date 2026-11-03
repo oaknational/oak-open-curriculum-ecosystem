@@ -132,5 +132,9 @@ export function roundAwaiter(
   const asked = requests
     .filter((request) => normaliseLogin(request.reviewer) === own)
     .map((request) => Date.parse(request.at));
-  return (review) => asked.some((at) => !(Date.parse(review.submittedAt) > at));
+  // A landing or an asking time that cannot be read holds the review for that round.
+  return (review) => {
+    const landed = Date.parse(review.submittedAt);
+    return asked.some((at) => Number.isNaN(landed) || Number.isNaN(at) || landed <= at);
+  };
 }

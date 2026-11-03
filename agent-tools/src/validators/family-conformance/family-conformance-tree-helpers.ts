@@ -115,7 +115,8 @@ export function checkCiFanIn(
   // Fail-closed: without `if: always()` GitHub skips the fan-in whenever a
   // prerequisite fails, so the required context never reports the failure.
   if (fanIn.if !== 'always()') {
-    const found = fanIn.if === undefined ? 'no condition' : `\`if: ${String(fanIn.if)}\``;
+    const condition = typeof fanIn.if === 'string' ? fanIn.if : JSON.stringify(fanIn.if);
+    const found = fanIn.if === undefined ? 'no condition' : `\`if: ${condition}\``;
     drifts.push(
       drift(
         'ci',
