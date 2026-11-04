@@ -333,6 +333,38 @@ describe('commit-queue CLI read commands', () => {
     expect(stderr.text()).toBe('');
   });
 
+  it("writes the workflow's advisory transcript to the command's stderr, leaving stdout as the sha alone", async () => {
+    const stdout = stdoutBuffer();
+    const stderr = stdoutBuffer();
+
+    await expect(
+      runCommitQueueCli({
+        command: 'commit',
+        options: {
+          file: [],
+          'intent-id': '11111111-1111-4111-8111-111111111111',
+          'message-file': '.git/COMMIT_EDITMSG',
+        },
+        repoRoot: '/repo',
+        resolveGitRoot: () => '/repo-worktrees/lane',
+        commitWorkflow: async (runnerInput) => {
+          runnerInput.stderr.write('advisory transcript\n');
+          return {
+            ok: true,
+            intentId: '11111111-1111-4111-8111-111111111111',
+            sha: 'cafef00dcafef00dcafef00dcafef00dcafef00d',
+            advisoryExitCode: 0,
+          };
+        },
+        stdout: stdout.stdout,
+        stderr: stderr.stdout,
+      }),
+    ).resolves.toBe(0);
+
+    expect(stderr.text()).toBe('advisory transcript\n');
+    expect(stdout.text()).toBe('cafef00dcafef00dcafef00dcafef00dcafef00d\n');
+  });
+
   it('surfaces the advisory orchestrator exit code to stderr on commit success when the advisory exit was non-zero', async () => {
     const stdout = stdoutBuffer();
     const stderr = stdoutBuffer();

@@ -94,8 +94,8 @@ echo "🔗 Checking for unused code (knip)..."
 # generated dist files, so a fresh checkout would fail closed here before
 # the build has run (CI restores build outputs before knip for the same reason).
 if ! pnpm knip:gate; then
-  echo "❌ Knip found unused code, or the knip analysis itself crashed!"
-  echo "💡 Remove the unused code, register intended entry points in knip.config.ts, or fix the crash above"
+  echo "❌ Knip found unused code or a configuration hint, or the knip analysis itself crashed!"
+  echo "💡 Remove the unused code, register intended entry points or cure the hint in knip.config.ts, or fix the crash above"
   echo "   (a 'died without a verdict' line above is the crash class, not unused code — F-112 in the frictions register)"
   exit 1
 fi

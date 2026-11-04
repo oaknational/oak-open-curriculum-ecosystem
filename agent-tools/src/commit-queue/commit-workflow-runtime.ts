@@ -6,13 +6,18 @@
  * file binds the real `spawn` + `git` + `fs` dependencies the CLI uses
  * at runtime, and keeps cli.ts focused on command dispatch.
  *
- * Advisory polarity is preserved by construction: the advisory
- * orchestrator's stdout/stderr are conserved in full and replayed to
- * the caller's terminal on completion (file-capture-and-replay in
- * `runFileBackedChild` — never live Node pipes, which poison the
- * spawned git's hook chain; F-112), and the workflow does not change
- * its path on non-zero advisory exit. The blocking authority remains
- * `.husky/pre-commit` + `.husky/commit-msg`. See PDR-053 and ADR-176.
+ * Both children's output is conserved in full (file-capture-and-replay in
+ * `runFileBackedChild` — never live Node pipes, which poison the spawned
+ * git's hook chain; F-112) and replayed to the command's own stderr
+ * writer, never to the process's stdio, so the command's stdout carries
+ * only the commit sha. The order there is the run's order: the advisory
+ * banner first (ADR-176 §3), then the advisory transcript, captured as
+ * one stream in write order, then the inner `git commit`'s transcript.
+ *
+ * Advisory polarity is preserved by construction: the workflow does not
+ * change its path on non-zero advisory exit. The blocking authority
+ * remains `.husky/pre-commit` + `.husky/commit-msg`. See PDR-053 and
+ * ADR-176.
  */
 
 import { execFileSync } from 'node:child_process';
@@ -28,33 +33,18 @@ import {
 } from './commit-workflow.js';
 import { getStagedBundle } from './git.js';
 import { type CommitWorkflowPathspec } from './pathspec.js';
-import { runFileBackedChild } from '../core/file-backed-child.js';
+import { runFileBackedChild, textReplaySinks } from '../core/file-backed-child.js';
 import { readRegistry, updateRegistry } from './registry.js';
+import { type CommitWorkflowRunnerInput } from './types.js';
 
 const ADVISORY_BANNER = '[ADVISORY ONLY — NOT A COMMIT GATE]';
-
-/**
- * Input for the runtime commit-workflow runner.
- *
- * `registryPath` anchors registry reads/writes at the coordination home;
- * `gitRoot` is the root of the INVOKING git worktree, and every git-side
- * operation (staged reads, the advisory orchestrator, the inner
- * `git commit`, the HEAD read) runs against it — never against the
- * coordination home (F-138).
- */
-export interface CommitWorkflowRuntimeInput {
-  readonly intentId: string;
-  readonly messageFilePath: string;
-  readonly registryPath: string;
-  readonly gitRoot: string;
-}
 
 /**
  * Real-runtime entry that builds spawn-based dependencies and runs the
  * pure workflow orchestrator.
  */
 export async function runCommitWorkflowRuntime(
-  input: CommitWorkflowRuntimeInput,
+  input: CommitWorkflowRunnerInput,
 ): Promise<CommitWorkflowResult> {
   await assertMessageFileReadable(input.messageFilePath);
 
@@ -66,10 +56,9 @@ export async function runCommitWorkflowRuntime(
     runAdvisoryOrchestrator: () => runAdvisoryOrchestrator(input),
     runGitCommit: (scopeInput) =>
       runGitCommit({
-        intentId: input.intentId,
         messageFilePath: input.messageFilePath,
-        registryPath: input.registryPath,
         gitRoot: input.gitRoot,
+        stderr: input.stderr,
         pathspec: scopeInput.pathspec,
       }),
     nowIso: () => new Date().toISOString(),
@@ -86,23 +75,30 @@ async function assertMessageFileReadable(messageFilePath: string): Promise<void>
 }
 
 async function runAdvisoryOrchestrator(
-  input: CommitWorkflowRuntimeInput,
+  input: CommitWorkflowRunnerInput,
 ): Promise<CommitWorkflowProcessResult> {
-  process.stderr.write(`${ADVISORY_BANNER}\n`);
+  input.stderr.write(`${ADVISORY_BANNER}\n`);
   return runFileBackedChild({
     command: 'pnpm',
     args: ['agent-tools:check-commit-skill-advisories', '-F', input.messageFilePath],
     cwd: input.gitRoot,
+    combinedOutput: true,
+    replaySinks: textReplaySinks(input.stderr),
   });
 }
 
 async function runGitCommit(
-  input: CommitWorkflowRuntimeInput & { readonly pathspec: CommitWorkflowPathspec },
+  input: Pick<CommitWorkflowRunnerInput, 'messageFilePath' | 'gitRoot' | 'stderr'> & {
+    readonly pathspec: CommitWorkflowPathspec;
+  },
 ): Promise<CommitWorkflowGitCommitResult> {
   const commit = await runFileBackedChild({
     command: resolveTrustedGit(),
     args: ['commit', '-F', input.messageFilePath, '--', ...input.pathspec],
     cwd: input.gitRoot,
+    // Separate captures, both replayed to stderr: the workflow builds its
+    // abandon note from the result's stderr, where git writes hook output.
+    replaySinks: textReplaySinks(input.stderr),
   });
 
   if (commit.exitCode !== 0) {

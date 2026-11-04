@@ -221,6 +221,17 @@ describe('parseAgentTaskList / parseAgentTaskView', () => {
     ).toEqual({ id: 'run-1', completedAt: null, pullRequestNumber: 461 });
   });
 
+  it('reads a run with no pull request as unmapped, as gh reports it with null fields', () => {
+    expect(
+      parseAgentTaskView({
+        id: 'run-2',
+        completedAt: '2026-11-03T17:20:00Z',
+        pullRequestNumber: null,
+        pullRequestUrl: null,
+      }),
+    ).toEqual({ id: 'run-2', completedAt: '2026-11-03T17:20:00Z' });
+  });
+
   it('fails loud on misshapen agent-task output', () => {
     expect(() => parseAgentTaskList({ not: 'an array' })).toThrow();
   });

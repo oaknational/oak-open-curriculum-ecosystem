@@ -1,6 +1,6 @@
 import { spawnSync } from 'node:child_process';
 
-import { runFileBackedChild } from '../core/file-backed-child.js';
+import { runFileBackedChild, textReplaySinks } from '../core/file-backed-child.js';
 
 /**
  * The one boundary where `merge-bot push` meets a real git child process, and
@@ -114,7 +114,6 @@ function fileBackedGitCall(
   options: GitCallOptions & { readonly onOutput: (chunk: string) => void },
   runner: typeof runFileBackedChild,
 ): Promise<GitCommandResult> {
-  const sink = { write: (content: Buffer) => options.onOutput(content.toString('utf8')) };
   return runner({
     command: file,
     args,
@@ -124,7 +123,7 @@ function fileBackedGitCall(
     // stdout and stderr in write order, so a failing gate's stderr verdict
     // stays next to the stdout that explains it.
     combinedOutput: true,
-    replaySinks: { stdout: sink, stderr: sink },
+    replaySinks: textReplaySinks({ write: options.onOutput }),
   }).then(
     (outcome) => ({
       status: outcome.exitCode,
