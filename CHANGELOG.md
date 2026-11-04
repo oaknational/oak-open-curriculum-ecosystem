@@ -1,3 +1,11 @@
+## [1.186.6](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.186.5...v1.186.6) (2026-11-04)
+
+
+### Bug Fixes
+
+* **agent-tools:** read null pull-request fields on an agent-task view as an unmapped run ([03f65c0](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/03f65c06a39dcbde0ed482687df93461bad8c755)), closes [#1014](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/1014) [#1015](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/1015)
+* **agent-tools:** replay the commit workflow's child output to the command's own stderr ([95203fc](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/95203fcc6a5abdedf4f1cf3f9582f8d2e548584b)), closes [#1015](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/1015)
+
 ## [1.186.5](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.186.4...v1.186.5) (2026-11-03)
 
 ## [1.186.4](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.186.3...v1.186.4) (2026-11-03)
