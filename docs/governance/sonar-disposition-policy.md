@@ -204,9 +204,9 @@ bounded quantifiers) per the rule's documented strategies.
 
 ### S4036 — OS commands resolved via PATH
 
-**Pattern**: `spawn`, `spawnSync`, `execFile`, `execFileSync` and similar calls
-resolve a command name (`git`, `pnpm`, `gh`, `gitleaks`, `typedoc`) through
-`PATH`, not an absolute path.
+**Pattern**: `spawn`, `spawnSync`, `exec`, `execSync`, `execFile`,
+`execFileSync` and similar calls resolve a command name (`git`, `pnpm`, `gh`,
+`gitleaks`, `typedoc`) through `PATH`, not an absolute path.
 
 **Ruling** (owner, 2026-11-03):
 
@@ -222,20 +222,23 @@ resolve a command name (`git`, `pnpm`, `gh`, `gitleaks`, `typedoc`) through
   and opaque. The check is `command -v` plus, where the version matters, a
   version check, run once.
 
-**Decision criteria**: SAFE if and only if all hold:
+**Decision criteria**: SAFE if and only if both hold:
 
 - The command is a binary the repository's tooling, build, tests or CI need,
   named literally at the call site or by a constant.
-- Arguments pass as an argv array, with no shell between the call and the
-  binary.
-- No part of the command name comes from external input.
+- No external input reaches a shell. Either the arguments pass as an argv
+  array, or the call's shell string is wholly literal.
 
-A call that runs through a shell with interpolated input, or takes its command
-name from input, falls outside this class. Disposition it under the command
-injection rules, at the site.
+**FIX** when a site fails them. Once fixed, the site is SAFE under this class:
+
+- External input interpolated into a shell string: move the call to argv form
+  (`execFile`, or `spawn` with an arguments array), so the input can only ever
+  be an argument.
+- A command name taken from input: choose it from a fixed set of literal names
+  at the site.
 
 **Canonical rationale**: "repository-required binary invoked by name; `PATH`
-is the trust root (§S4036 ruling); argv form, no shell".
+is the trust root (§S4036 ruling); no external input reaches a shell".
 
 **Worked example**: `packages/sdks/oak-sdk-codegen/code-generation/run-typedoc.ts:56`.
 `spawn('typedoc', args, …)` runs the workspace's own TypeDoc by name with an
@@ -245,8 +248,10 @@ argv array.
 chosen from a fixed list of directories. The ruling reclassifies it SAFE. An
 absolute path is the only change that clears the analyser, and it makes the
 repository depend on one machine's directory layout, which the ruling rejects.
-No site previously dispositioned under this class needs re-disposition: its
-earlier `SAFE` marks are consistent with the ruling.
+No site previously dispositioned under this class needs re-disposition. The
+eight sites marked `SAFE` before the class became FIX-only each name a
+repository binary literally. Six pass an argv array and two run a wholly
+literal shell string.
 
 ### S2245 — Pseudorandom number generator (`Math.random()`)
 
