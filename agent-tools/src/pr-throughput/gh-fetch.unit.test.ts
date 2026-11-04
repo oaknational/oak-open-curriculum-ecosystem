@@ -20,8 +20,8 @@ describe('fetchMergedPrs', () => {
   it('parses the merged-PR corpus from one bounded, repo-pinned pr list search', () => {
     const calls: (readonly string[])[] = [];
     const result = fetchMergedPrs({
-      executor: (_file, args) => {
-        calls.push(args);
+      executor: (...call) => {
+        calls.push(call[1]);
         return VALID_PAYLOAD;
       },
       limit: 200,
