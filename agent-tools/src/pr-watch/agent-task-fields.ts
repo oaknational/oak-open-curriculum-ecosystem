@@ -49,8 +49,15 @@ const agentTaskViewSchema = z
       .string()
       .nullish()
       .transform((value) => value ?? null),
-    pullRequestNumber: z.number().optional(),
-    pullRequestUrl: z.string().optional(),
+    // A run with no pull request reports both fields as null.
+    pullRequestNumber: z
+      .number()
+      .nullish()
+      .transform((value) => value ?? undefined),
+    pullRequestUrl: z
+      .string()
+      .nullish()
+      .transform((value) => value ?? undefined),
   })
   .loose();
 
