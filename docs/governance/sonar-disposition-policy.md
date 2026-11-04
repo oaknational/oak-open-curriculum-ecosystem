@@ -3,7 +3,7 @@ boundary: B1-Governance
 doc_role: policy
 authority: sonar-disposition
 status: active
-last_reviewed: 2026-05-06
+last_reviewed: 2026-11-04
 ---
 
 # Sonar Disposition Policy
@@ -202,26 +202,72 @@ handler path".
 linear constructs (negated character classes, anchored alternations,
 bounded quantifiers) per the rule's documented strategies.
 
-### S4036 — OS commands resolved via PATH (FIX-only — no SAFE disposition)
+### S4036 — OS commands resolved via PATH
 
-**Pattern**: `spawnSync`, `spawn`, `exec`, `execSync`, `execFileSync` etc.
-resolving a command name (`pnpm`, `git`, `typedoc`) via PATH rather than
-absolute path.
+**Pattern**: `spawn`, `spawnSync`, `exec`, `execSync`, `execFile`,
+`execFileSync` and similar calls resolve a command name (`git`, `pnpm`, `gh`,
+`gitleaks`, `typedoc`) through `PATH`, not an absolute path.
 
-**Disposition**: there is none — S4036 is always **FIXED**, never disposed
-`SAFE`. Execute the binary by a fixed absolute path so a user-writable `PATH`
-entry cannot shadow it (the security property is the fixed absolute path, not
-any guarantee the directory is non-writable). For `git`, the canonical fix is
-`resolveTrustedGit()` in `agent-tools/src/core/trusted-git.ts` (an absolute path
-from a fixed allowlist of well-known directories, resolved without consulting
-`PATH`); other binaries follow the same absolute-path shape.
+**Ruling** (owner, 2026-11-03):
 
-**Why no SAFE class**: PATH-pinning (overriding `env.PATH` to trusted
-directories) does **not** clear S4036 — the analyser flags the by-name call
-regardless — so a SAFE disposition would document a non-fix as acceptable. The
-genuine fix is cheap and available, so per `never-disable-checks` and the
-Two-Outcome Rule above, S4036 resolves to FIXED. A prior allowance for this
-class is reviewed and migrated, never extended.
+- Tooling invokes each binary it needs by name, as any repository does.
+- Code must not choose a binary's path or rewrite `PATH` for it, and nothing
+  in the repository may depend on one machine's directory layout.
+- `PATH` is the trust root. The operator's environment, local or CI, decides
+  which binary a name resolves to. A writer of a directory on that `PATH`
+  already controls the operator's shell, so no path chosen inside the
+  repository adds a boundary.
+- A binary check exists only where a quality gate or CI needs the binary, and
+  only so that a missing tool fails early with a helpful message, never late
+  and opaque. The check is `command -v` plus, where the version matters, a
+  version check, run once.
+
+**Decision criteria**: a site is within the class if and only if both hold:
+
+- The command is a binary the repository's tooling, build, tests or CI need,
+  named literally at the call site or by a constant.
+- No external input reaches a shell. Either the arguments pass as an argv
+  array with no `shell` option, or the call's shell string is wholly literal.
+  With `shell: true`, Node joins an argv array into one shell string, so an
+  array alone does not keep input from the shell.
+
+**Outcome for a site within the class**, by the finding's type:
+
+- In this project the rule raises a vulnerability **issue**. It is
+  `FALSE_POSITIVE`: the defect it describes, a command resolved through a
+  `PATH` the operator does not control, is not present, because `PATH` is the
+  trust root.
+- Where the rule raised a **hotspot** (it did before 2026-07), the hotspot is
+  `SAFE`.
+
+**FIX** a site outside the class. Once fixed, it is within the class:
+
+- External input that reaches a shell: move the call to argv form with no
+  `shell` option (`execFile`, or `spawn` with an arguments array), so the
+  input can only ever be an argument.
+- A command name taken from input: choose it from a fixed set of literal names
+  at the site.
+
+**Canonical rationale**: "repository-required binary invoked by name; `PATH`
+is the trust root (§S4036 ruling); no external input reaches a shell".
+
+**Worked example**: `packages/sdks/oak-sdk-codegen/code-generation/run-typedoc.ts:56`.
+`spawn('typedoc', args, …)` runs the workspace's own TypeDoc by name with an
+argv array.
+
+**Delta from the prior class**: S4036 was FIX-only, cured by an absolute path
+chosen from a fixed list of directories. The ruling gives a site within the
+class the outcomes above instead. An absolute path is the only change that
+clears the analyser, and it makes the repository depend on one machine's
+directory layout, which the ruling rejects. No site previously dispositioned
+under this class needs re-disposition:
+
+- The eight hotspots marked `SAFE` before the class became FIX-only each name
+  a repository binary literally. Six pass an argv array, and two run a wholly
+  literal shell string.
+- The one issue the rule has raised, on the `gitleaks` call in
+  `agent-tools/src/secret-scan/run-push-secret-scan.ts`, was accepted in
+  2026-07 and stays resolved.
 
 ### S2245 — Pseudorandom number generator (`Math.random()`)
 
