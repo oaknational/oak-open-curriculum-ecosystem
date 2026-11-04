@@ -62,10 +62,11 @@ interface without owning the analysis it needs.
 
 ## First-Hand Current State
 
-The implementation and its tests live at:
+The implementation and its tests lived at (deleted 2026-09-25 under the owner's
+2026-09-14 ruling, the rule having never been registered):
 
-- [`max-files-per-dir.ts`](../../packages/core/oak-eslint/src/rules/max-files-per-dir.ts)
-- [`max-files-per-dir.test.ts`](../../packages/core/oak-eslint/src/rules/max-files-per-dir.test.ts)
+- `max-files-per-dir.ts`
+- `max-files-per-dir.test.ts`
 
 The rule is not exported or registered by
 [`plugin.ts`](../../packages/core/oak-eslint/src/plugin.ts). Its default maximum

@@ -14,19 +14,19 @@ import {
 } from './validate-ground-truth.js';
 import type { GroundTruthQuery } from '../../src/lib/search-quality/ground-truth-archive/types.js';
 
-describe('checkCategoryCoverage', () => {
-  /**
-   * Helper to create a minimal valid query for testing.
-   */
-  function createQuery(category: GroundTruthQuery['category']): GroundTruthQuery {
-    return {
-      query: 'test query for category',
-      expectedRelevance: { 'test-slug-1': 3, 'test-slug-2': 2 },
-      category,
-      description: 'Test query for validation',
-    };
-  }
+/**
+ * Creates a minimal valid query in the given category.
+ */
+function createQuery(category: GroundTruthQuery['category']): GroundTruthQuery {
+  return {
+    query: 'test query for category',
+    expectedRelevance: { 'test-slug-1': 3, 'test-slug-2': 2 },
+    category,
+    description: 'Test query for validation',
+  };
+}
 
+describe('checkCategoryCoverage', () => {
   describe('required categories', () => {
     it('should include all four required categories', () => {
       expect(REQUIRED_CATEGORIES).toContain('precise-topic');

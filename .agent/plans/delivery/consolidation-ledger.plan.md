@@ -3,17 +3,17 @@ id: consolidation-ledger
 node_type: delivery
 name: "The consolidation ledger — stock instrument generalised to flow"
 overview: "A distributed, closure-checked ledger over every knowledge-capture surface: computed denominator, authored dispositions, monotone re-integration."
-status: sketch
-ratified_by: null
-ratified_date: null
-ratified_where: null
+status: ratified
+ratified_by: Jim Cresswell (owner)
+ratified_date: 2026-09-08
+ratified_where: "PR #85 (2026-09-08), whose body quotes the owner's card answer verbatim: 'Ratify 2, 3 and 4; hold 1'"
 serves: planning-and-intent-estate
 impact_areas:
   - practice-and-estate
 tickets: []
 depends_on: []
 owner_gates: []
-last_updated: 2026-07-31
+last_updated: 2026-09-08
 ---
 
 # The consolidation ledger — stock instrument generalised to flow

@@ -21,6 +21,15 @@ const KIT_ADMITS = exportsSurfaceAdmits([
 ]);
 const ROOTS: readonly OverlayRoot[] = [{ dir: STUDIO }, { dir: KIT, admits: KIT_ADMITS }];
 
+/** An `exists` probe for a file present only under the studio root. */
+const existsUnderStudio = (candidate: string): boolean => candidate.startsWith(STUDIO);
+/** An `exists` probe for a file present only under the kit root. */
+const existsUnderKit = (candidate: string): boolean => candidate.startsWith(KIT);
+/** An `exists` probe for a file present under every root. */
+const existsEverywhere = (): boolean => true;
+/** An `exists` probe for a file present under no root. */
+const existsNowhere = (): boolean => false;
+
 describe('exportsSurfaceAdmits', () => {
   const admits = exportsSurfaceAdmits(['.', './styles.css', './fonts/*']);
 
@@ -42,48 +51,38 @@ describe('exportsSurfaceAdmits', () => {
 
 describe('resolveAcrossRoots (the studio overlay)', () => {
   it('serves from the first root when the file exists there', () => {
-    const exists = (candidate: string): boolean => candidate.startsWith(STUDIO);
-
-    expect(resolveAcrossRoots(ROOTS, '/whitelabel/specimen.html', exists)).toBe(
+    expect(resolveAcrossRoots(ROOTS, '/whitelabel/specimen.html', existsUnderStudio)).toBe(
       path.join(STUDIO, 'whitelabel', 'specimen.html'),
     );
   });
 
   it('falls through to the second root for a DECLARED kit asset', () => {
-    const exists = (candidate: string): boolean => candidate.startsWith(KIT);
-
-    expect(resolveAcrossRoots(ROOTS, '/colors_and_type.css', exists)).toBe(
+    expect(resolveAcrossRoots(ROOTS, '/colors_and_type.css', existsUnderKit)).toBe(
       path.join(KIT, 'colors_and_type.css'),
     );
   });
 
   it('refuses an undeclared kit path even when the file exists — the fallback is surface-bounded', () => {
-    const exists = (candidate: string): boolean => candidate.startsWith(KIT);
-
-    expect(resolveAcrossRoots(ROOTS, '/package.json', exists)).toBeUndefined();
-    expect(resolveAcrossRoots(ROOTS, '/DECISIONS.md', exists)).toBeUndefined();
+    expect(resolveAcrossRoots(ROOTS, '/package.json', existsUnderKit)).toBeUndefined();
+    expect(resolveAcrossRoots(ROOTS, '/DECISIONS.md', existsUnderKit)).toBeUndefined();
   });
 
   it('judges the surface on the canonical path — an admitted prefix cannot smuggle a relative hop', () => {
     // '/fonts/../package.json' wears the declared /fonts/ prefix but
     // canonicalises to /package.json, which the surface refuses; resolution
     // would otherwise serve exactly that undeclared file.
-    const exists = (candidate: string): boolean => candidate.startsWith(KIT);
-
-    expect(resolveAcrossRoots(ROOTS, '/fonts/../package.json', exists)).toBeUndefined();
-    expect(resolveAcrossRoots(ROOTS, '/fonts/%2e%2e/package.json', exists)).toBeUndefined();
+    expect(resolveAcrossRoots(ROOTS, '/fonts/../package.json', existsUnderKit)).toBeUndefined();
+    expect(resolveAcrossRoots(ROOTS, '/fonts/%2e%2e/package.json', existsUnderKit)).toBeUndefined();
   });
 
   it('prefers the first root when the file exists in both', () => {
-    const exists = (): boolean => true;
-
-    expect(resolveAcrossRoots(ROOTS, '/styles.css', exists)).toBe(path.join(STUDIO, 'styles.css'));
+    expect(resolveAcrossRoots(ROOTS, '/styles.css', existsEverywhere)).toBe(
+      path.join(STUDIO, 'styles.css'),
+    );
   });
 
   it('returns undefined when the file exists in neither root', () => {
-    const exists = (): boolean => false;
-
-    expect(resolveAcrossRoots(ROOTS, '/styles.css', exists)).toBeUndefined();
+    expect(resolveAcrossRoots(ROOTS, '/styles.css', existsNowhere)).toBeUndefined();
   });
 });
 
@@ -92,26 +91,24 @@ describe('resolveAcrossRoots guards', () => {
     // The traversal guard applies per root; what must hold is the union
     // invariant: a URL whose canonical resolution lands outside EVERY root
     // resolves nowhere, even when the escaped-to file exists.
-    const exists = (): boolean => true;
-
-    expect(resolveAcrossRoots(ROOTS, '/../outside/escape.txt', exists)).toBeUndefined();
-    expect(resolveAcrossRoots(ROOTS, '/%2e%2e/%2e%2e/etc/passwd', exists)).toBeUndefined();
-    expect(resolveAcrossRoots(ROOTS, '/../kit-root-evil/x.txt', exists)).toBeUndefined();
+    expect(resolveAcrossRoots(ROOTS, '/../outside/escape.txt', existsEverywhere)).toBeUndefined();
+    expect(
+      resolveAcrossRoots(ROOTS, '/%2e%2e/%2e%2e/etc/passwd', existsEverywhere),
+    ).toBeUndefined();
+    expect(resolveAcrossRoots(ROOTS, '/../kit-root-evil/x.txt', existsEverywhere)).toBeUndefined();
   });
 
   it('answers a malformed percent-escape with nothing across the overlay too', () => {
-    const exists = (): boolean => true;
-
-    expect(resolveAcrossRoots(ROOTS, '/%zz', exists)).toBeUndefined();
+    expect(resolveAcrossRoots(ROOTS, '/%zz', existsEverywhere)).toBeUndefined();
   });
 
   it('refuses decoded backslashes — POSIX admission must never disagree with host resolution', () => {
     // On Windows, path.resolve treats the decoded backslash as a
     // separator, so `/fonts/..%5Cpackage.json` would pass the declared
     // /fonts/ prefix here yet serve the undeclared package.json there.
-    const exists = (): boolean => true;
-
-    expect(resolveAcrossRoots(ROOTS, '/fonts/..%5Cpackage.json', exists)).toBeUndefined();
-    expect(resolveAcrossRoots(ROOTS, String.raw`/fonts/..\package.json`, exists)).toBeUndefined();
+    expect(resolveAcrossRoots(ROOTS, '/fonts/..%5Cpackage.json', existsEverywhere)).toBeUndefined();
+    expect(
+      resolveAcrossRoots(ROOTS, String.raw`/fonts/..\package.json`, existsEverywhere),
+    ).toBeUndefined();
   });
 });

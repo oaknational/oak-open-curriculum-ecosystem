@@ -3,6 +3,7 @@ name: "Validate a Sampled Schema Against the Complete Corpus"
 polarity: pattern
 use_this_when: "A type, union, schema, or universal claim was derived from a SAMPLE of the data it describes — and you are about to trust it for the whole corpus (build on it, verify with it, or assert it)."
 category: code
+layer: general
 proven_in: "curriculum-hub-demo 2026-07-01: the Block union, built from a content subset during the spine, missed 5 real fields; the generator's `: Course` typed-literal annotation over the full 214-block extraction surfaced all 5 at compile time (scripts/course-extract.ts + lib/course/oak-course.generated.ts). Second instance 2026-07-02, one layer up in VERIFICATION: a workflow verifier CONFIRMED 'the token package carries the same values' from two sampled anchors; the corpus-complete check found 3 of 20 values present."
 proven_date: 2026-07-06
 barrier:

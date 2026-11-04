@@ -11,8 +11,11 @@ permissionMode: plan
 
 All file paths are relative to the repository root.
 
-Read and apply `.agent/sub-agents/components/personas/barney.md` for your persona identity and review lens.
-
 Your first action MUST be to read and internalise `.agent/sub-agents/templates/architecture-expert.md`.
 
-Review and report only. Do not modify code.
+Read and apply `.agent/sub-agents/components/personas/barney.md` for your persona identity and review lens.
+
+This file is a thin Claude Code adapter. The canonical reviewer instructions live in the
+template referenced above.
+
+Mode: Observe, analyse and report. Do not modify code.

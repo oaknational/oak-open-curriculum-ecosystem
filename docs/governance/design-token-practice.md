@@ -166,6 +166,19 @@ the staged token-source convergence. It collapses at ADR-213 Stage B,
 when the hand-authored trees and their gate are deleted and generation
 re-points onto the design system as the single token source.
 
+Throughout that window the authority relationship is fixed: the design
+system (`packages/design/oak-design-system`, ADR-213) is the design source
+of truth, and the hand-authored `oak-design-tokens` tree is legacy delivery
+plumbing awaiting Stage B — its semantic mappings and contrast pairings are
+not design authority. A design question is answered from the design system
+and the owner's rendered approval, never from what the old package happens
+to encode; where the two conflict the old code is the thing to replace or
+route to the Stage B lane, never a constraint to design within. Presenting
+legacy-package state as "ratified" or "audited" inverts that relationship
+(owner, 2026-07-28: "We replace old code with new code, we don't silently
+defer to it"). And describe what a render shows by looking at the render —
+a screenshot, a browser — never by narrating token names and hex values.
+
 ## oak-components Relationship
 
 Reference-only for value extraction during authoring. Oak palette hex

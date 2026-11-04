@@ -51,6 +51,29 @@ describe('createIntent — write-side identity contract (Cycle 5)', () => {
     expect(() => createIntent(options({ id: 'not-a-uuid' }))).toThrow();
   });
 
+  it('rejects a malformed --intent-id before it can become a store filename', () => {
+    // The intent_id IS the per-intent store filename: a non-UUID value must
+    // refuse at this boundary, never rely on a later write-validator step.
+    expect(() => createIntent(options({ 'intent-id': 'not-a-uuid' }))).toThrow('Invalid UUID');
+  });
+
+  it('rejects a path-traversal --intent-id outright, as a UUID refusal and nothing later', () => {
+    expect(() => createIntent(options({ 'intent-id': '../../escape' }))).toThrow('Invalid UUID');
+  });
+
+  it('refuses a non-lowercase --intent-id rather than canonicalising it, naming the canonical form', () => {
+    // Uppercase hex is a valid UUID, so nothing upstream refuses it — but
+    // `<ID>.json` and `<id>.json` are ONE file on a case-insensitive
+    // filesystem, so two live intents would alias and wedge the store.
+    // Silently lowercasing is not the cure: every downstream lookup
+    // (phase, complete, show) matches the id EXACTLY, so the caller would
+    // hold an id addressing nothing and meet an unrelated "unknown
+    // intent_id" much later.
+    expect(() =>
+      createIntent(options({ 'intent-id': '11111111-1111-4111-8111-11111111111A' })),
+    ).toThrow('11111111-1111-4111-8111-11111111111a');
+  });
+
   it('rejects an intent when --id is a UUID v4 (version nibble != 5)', () => {
     expect(() => createIntent(options({ id: 'f47ac10b-58cc-4372-a567-0e02b2c3d479' }))).toThrow();
   });

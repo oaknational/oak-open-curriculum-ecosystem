@@ -1,9 +1,13 @@
-import { readFileSync } from 'node:fs';
-
 import type { PolicyDecision } from './evaluate.js';
 import { parseHookInput, readStreamText } from './hook-input.js';
-import { POLICY_URL } from './policy-loader.js';
+import { POLICY_URL, REPO_ROOT } from './policy-loader.js';
 import { loadPolicySnapshot, type PolicySnapshot } from './policy-snapshot.js';
+import {
+  diskPriorReadEdge,
+  priorContentReader,
+  REQUEST_READ_BUDGET,
+} from './prior-content-read.js';
+import { otherRepositoryTest } from './repository-identity.js';
 import type { RawBlockedPattern, ScopedContentBlockGroup } from './types.js';
 
 /**
@@ -23,8 +27,8 @@ import type { RawBlockedPattern, ScopedContentBlockGroup } from './types.js';
 /**
  * Per-request context handed to the matched route's evaluation: the parsed
  * payload, the injected policy sections (which win over the snapshot), the
- * memoised snapshot accessor for un-injected sections, and the prior-content
- * reader for Write payloads.
+ * memoised snapshot accessor for un-injected sections, the prior-content
+ * reader for Write payloads, and the test for a file in another repository.
  */
 export interface PolicyRouteContext {
   /** The parsed hook stdin payload. */
@@ -39,6 +43,8 @@ export interface PolicyRouteContext {
   readonly scopedBlocks: readonly ScopedContentBlockGroup[] | undefined;
   /** Prior-content reader for Write payloads (real filesystem by default). */
   readonly readPriorContent: (filePath: string) => string | null;
+  /** Whether an absolute path lies in a git repository other than the session's (disk by default). */
+  readonly isInOtherRepository: (filePath: string) => boolean;
 }
 
 /**
@@ -82,20 +88,8 @@ export interface RunPreToolUseDispatchOptions {
   readonly contentPatterns?: readonly string[];
   readonly scopedBlocks?: readonly ScopedContentBlockGroup[];
   readonly readPriorContent?: (filePath: string) => string | null;
+  readonly isInOtherRepository?: (filePath: string) => boolean;
   readonly loadSnapshot?: (policyUrl: URL) => Promise<PolicySnapshot>;
-}
-
-/**
- * Read prior file content for the real hook adapter — the production default
- * behind the `readPriorContent` seam, identical to the runner default it
- * supersedes.
- */
-function readPriorFileContent(filePath: string): string | null {
-  try {
-    return readFileSync(filePath, 'utf8');
-  } catch {
-    return null;
-  }
 }
 
 /**
@@ -110,7 +104,9 @@ function applyDispatchDefaults(options: RunPreToolUseDispatchOptions) {
     bashPatterns: options.bashPatterns,
     contentPatterns: options.contentPatterns,
     scopedBlocks: options.scopedBlocks,
-    readPriorContent: options.readPriorContent ?? readPriorFileContent,
+    readPriorContent:
+      options.readPriorContent ?? priorContentReader(diskPriorReadEdge, REQUEST_READ_BUDGET),
+    isInOtherRepository: options.isInOtherRepository ?? otherRepositoryTest(REPO_ROOT),
     loadSnapshot: options.loadSnapshot ?? loadPolicySnapshot,
   };
 }
@@ -184,6 +180,7 @@ export async function dispatchPreToolUse(
       contentPatterns: seams.contentPatterns,
       scopedBlocks: seams.scopedBlocks,
       readPriorContent: seams.readPriorContent,
+      isInOtherRepository: seams.isInOtherRepository,
     });
     render(decision, seams.stdout);
     return { exitCode: 0 };

@@ -1,3 +1,5 @@
+import { sep } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -6,6 +8,9 @@ import {
   type FitnessPathDirEntry,
   type FitnessPathFileSystem,
 } from './paths.js';
+
+/** The product joins host-separator paths; the POSIX-keyed fake normalises at lookup. */
+const posixPath = (hostPath: string): string => hostPath.split(sep).join('/');
 
 interface FakeEntry {
   readonly name: string;
@@ -25,9 +30,9 @@ function fakeFileSystem(input: {
   readonly files: Readonly<Record<string, string>>;
 }): FitnessPathFileSystem {
   return {
-    readdir: async (absDir) => input.dirs[absDir]?.map(fakeDirEntry) ?? [],
+    readdir: async (absDir) => input.dirs[posixPath(absDir)]?.map(fakeDirEntry) ?? [],
     readFileUtf8: async (absPath) => {
-      const content = input.files[absPath];
+      const content = input.files[posixPath(absPath)];
       if (content === undefined) {
         throw new Error(`missing fixture ${absPath}`);
       }

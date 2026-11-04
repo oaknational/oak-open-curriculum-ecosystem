@@ -3,6 +3,7 @@ name: "Derive the View; Never Store the Copy"
 polarity: pattern
 use_this_when: "About to STORE a value that is computable from values already stored (a display token, a disambiguator, a denormalised label) — or reviewing a surface whose findings keep clustering on one stored field."
 category: architecture
+layer: general
 proven_in: "2026-07 visual-disambiguator token: storing it generated five reviewer waves' findings; render-time derivation as a pure function of prefix+id dissolved the entire class"
 proven_date: 2026-07-31
 barrier:

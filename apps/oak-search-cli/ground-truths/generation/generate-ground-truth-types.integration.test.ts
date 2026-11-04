@@ -12,8 +12,17 @@
  * ambient clock, no generated tree written during a test run.
  */
 
+import { sep } from 'node:path';
 import { describe, it, expect, vi } from 'vitest';
 import { generateGroundTruthTypes, type GeneratorFs } from './generate-ground-truth-types.js';
+
+/**
+ * Basename of a product-emitted path. The generator joins with the host
+ * separator, so the fake's lookups and the assertions normalise to POSIX
+ * form at this one choke point before taking the final segment.
+ */
+const basenameOf = (productPath: string): string =>
+  productPath.split(sep).join('/').split('/').at(-1) ?? '';
 
 const bulkDir = '/app/bulk-downloads';
 const outputDir = '/app/ground-truths/generated';
@@ -88,7 +97,7 @@ function createFakeGeneratorFs(input: {
   const dataFiles: Record<string, string> = { 'maths-primary.json': mathsPrimary };
   const fs: GeneratorFs = {
     readFileSync: (path) => {
-      const basename = path.split('/').at(-1) ?? '';
+      const basename = basenameOf(path);
       return dataFiles[basename] ?? input.readManifest();
     },
     readdirSync: () => [...input.listing],
@@ -150,7 +159,7 @@ describe('generateGroundTruthTypes', () => {
       // Membership, not emission order — the row pins WHICH artefacts the
       // generator produces, and the order they are written in is not a
       // promise the generator makes to anyone.
-      const written = result.value.filesWritten.map((path) => path.split('/').at(-1));
+      const written = result.value.filesWritten.map((path) => basenameOf(path));
       expect(written).toEqual(expect.arrayContaining(expectedArtefacts));
       expect(written).toHaveLength(expectedArtefacts.length);
     }
@@ -159,7 +168,7 @@ describe('generateGroundTruthTypes', () => {
     // EVERY timestamped artefact carries the INJECTED clock. A single
     // un-threaded `new Date()` anywhere in the emitters fails here.
     const contentByName = new Map(
-      writeFileSync.mock.calls.map(([path, content]) => [path.split('/').at(-1), content]),
+      writeFileSync.mock.calls.map(([path, content]) => [basenameOf(path), content]),
     );
     for (const artefact of timestampedArtefacts) {
       expect(contentByName.get(artefact)).toContain(now.toISOString());

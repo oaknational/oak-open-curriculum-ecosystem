@@ -597,8 +597,11 @@ which files and which intent become a commit.
 Session-count freshness is not part of Class A.3 unless a host
 also installs a real session-counter primitive with its own
 start-of-session increment and validation semantics. Wall-clock
-expiry is sufficient for v1: expiry reports stale queue state
-and never auto-removes or blocks another agent by itself.
+expiry is sufficient for v1. In the machine-local per-intent
+store (registry schema 1.4.0; owner ruling QUEUE-LOCAL,
+2026-08-17) an expired intent reads as absent and is swept by
+the next queue write — ephemera, not inspectable after expiry;
+expiry never blocks another agent by itself.
 
 ### Platform parity (load-bearing)
 
@@ -1015,3 +1018,13 @@ before landing, and cites the patterns it extends. A future
 Core edit that proposes relaxing any of the required layers
 must cite observed evidence that the omission is safe — the
 burden is on the relaxer, not the installer.
+
+### Revision history
+
+- 2026-09-04 — The Class A.3 expiry sentence trued for the machine-local
+  per-intent store (registry schema 1.4.0, PR #38 / MCP-612, owner ruling
+  QUEUE-LOCAL 2026-08-17): an expired intent reads as absent and is swept
+  by the next queue write, where the v1 text said expiry only reports
+  stale state and never auto-removes. Falsifiability axis: this revision
+  is falsified if any production read path presents a TTL-expired intent
+  as live, or if a queue write leaves an expired peer in place.

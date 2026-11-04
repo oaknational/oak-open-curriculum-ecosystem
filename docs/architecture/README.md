@@ -3,15 +3,25 @@ boundary: B2-Architecture
 doc_role: index
 authority: architecture-navigation
 status: active
-last_reviewed: 2026-08-02
+last_reviewed: 2026-09-08
 ---
 
 # Architecture
 
-**Last Updated**: 2026-08-02
+**Last Updated**: 2026-10-10
 **Status**: Active architectural index
 
 ## Start Here
+
+For the current Engraph rearchitecting direction, begin with
+[OCE architecture and open invariants](oce-architecture.md) and
+[ADR-233](architectural-decisions/233-retained-framework-and-configurable-instances.md).
+The target combines [CF reconstruction](foundations/oce-cf-reconstruction.md),
+[instance contracts](oce-configuration-contracts.md),
+[integrity and Castr](oce-integrity-and-castr.md) and the full innovation framework.
+The implemented structure below remains a baseline, not a claim that the target
+has been constructed. App-local composition is current code to be separated;
+external instances will carry configuration over OCE-owned mechanisms.
 
 The architecture exists to turn Oak's openly licenced, fully sequenced and
 resourced curriculum into reusable primitives: generated SDKs, MCP and MCP App
@@ -42,6 +52,14 @@ block in the ADR index:
   concentrate recurring mechanism and assurance at the lowest coherent layer.
   The [general pattern](../foundation/cost-of-change-gradient.md) also applies
   across human-agent systems, inquiry, and the Practice.
+- Algorithm and data-structure foundations (a documented direction; no
+  implementation has landed yet): [ADR-230](./architectural-decisions/230-own-built-algorithm-and-data-structure-foundations.md)
+  records the owner-established direction to author Capability Foundations:
+  small completed Primitives and meaningful compositions, informed by openly
+  licensed references. The
+  [governing policy](./foundations/algorithms-and-data-structures-governance-2026-09-08.md)
+  owns scope, research and qualification; the [bundle index](./foundations/foundations-bundle-index-2026-09-08.md)
+  locates the graph and non-graph contracts, requirements and worked examples.
 - Standard structure:
   - `apps/` – application runtimes (MCP servers, search CLI)
   - `packages/sdks/` – SDK packages (`@oaknational/curriculum-sdk`, `@oaknational/oak-search-sdk`)
@@ -78,6 +96,8 @@ block in the ADR index:
 - [ADR-040: Transition to Neutral Architecture and Allowlist Identity Check](./architectural-decisions/040-neutral-architecture-and-identity-allowlist.md)
 - [ADR-041: Workspace Structure Option A Adopted](./architectural-decisions/041-workspace-structure-option-a.md)
 - [ADR-174: Dependency Vulnerability Scanning as a Quality Gate](./architectural-decisions/174-dependency-vulnerability-scanning-quality-gate.md)
+- [ADR-230: Own-built Algorithm and Data-structure Foundations](./architectural-decisions/230-own-built-algorithm-and-data-structure-foundations.md)
+- [ADR-233: Retained framework and configurable instances](./architectural-decisions/233-retained-framework-and-configurable-instances.md)
 - [All ADRs](./architectural-decisions/) - Complete decision record (historical ADRs preserved)
 
 ## Related Agent Guidance

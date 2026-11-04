@@ -39,7 +39,7 @@ todos:
     content: "Completed: dependency-cruiser findings resolved and promoted to blocking QG, with manifest/API enforcement kept separate."
     status: completed
   - id: enable-max-files-per-dir
-    content: "Ratify or reject the 2026-07-15 proposal to route directory cardinality to report-only visibility instead of promoting max-files-per-dir."
+    content: "Owner ruled 2026-09-14: directory cardinality is a blocking repository validator for the Reliable Atoms workspace class (delivery node reliable-atoms-workspace-shape; ADR-166 §Amendment 2026-09-14) and the max-files-per-dir ESLint rule is deleted; the estate-wide report-only proposal of 2026-07-15 remains unratified."
     status: pending
   - id: promote-type-assertions-in-tests
     content: "Remove the testRules exception that makes consistent-type-assertions a warning rather than an error. Remediate all ~218 assertion warnings across 6 workspaces."

@@ -56,7 +56,7 @@ describe('parsePushArgs', () => {
 
   it('requires --branch to be a git branch name', () => {
     // Blank, flag-shaped, option-shaped and ref-illegal values all fail: the
-    // value lands inside a `HEAD:<branch>` refspec in git's OWN argv, so it
+    // value lands inside a `<commit>:refs/heads/<branch>` refspec in git's OWN argv, so it
     // must never be able to read as anything but a branch name.
     for (const bad of ['', ' ', '--json', '-x', '--upload-pack=evil', 'a..b', 'feat/', 'x.lock']) {
       const parsed = parsePushArgs(['--branch', bad]);

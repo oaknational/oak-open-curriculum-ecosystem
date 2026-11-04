@@ -6,7 +6,10 @@ Platform: Claude; panel: the effort-inversion quartet per the cricket skill's Cl
 bindings; both stances on one identical frame, dispatched as two waves (normal, then
 adversarial) of four concurrent Agent calls. Recorded at occurrence. Per-leg token,
 context and runtime figures were not harvested from transcripts in this window (the
-owner's hour bound the session); the verdicts and their substance are the record.
+owner's hour bound the session); the verdicts and their substance are the record. At
+the 2026-09-06 consolidation the session's subagent directory held only the eight
+transcripts of the ~10:16Z intent suite (already tallied in its own report), none from
+this ~10:45Z panel, so the figures are unrecoverable and this record stays as it is.
 
 ## Legs (platform / model / effort / stable role / stance)
 

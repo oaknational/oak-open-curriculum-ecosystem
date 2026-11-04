@@ -1,5 +1,4 @@
-import { readFile } from 'node:fs/promises';
-import { typeSafeGet, typeSafeHasOwn } from '@oaknational/type-helpers';
+import { typeSafeGet, typeSafeHasOwn, typeSafeIncludes } from '@oaknational/type-helpers';
 import { z } from 'zod';
 import type { GapLedger, GapLedgerFieldEntry } from './field-readback-audit-types.js';
 
@@ -40,36 +39,51 @@ const SUPPORTED_READBACK_STATUSES = [
 export type ReadbackStatus = (typeof SUPPORTED_READBACK_STATUSES)[number];
 
 function isReadbackStatus(status: string): status is ReadbackStatus {
-  return SUPPORTED_READBACK_STATUSES.some((value) => value === status);
+  return typeSafeIncludes(SUPPORTED_READBACK_STATUSES, status);
 }
 
 /**
- * Parses and validates a field-gap ledger JSON file.
+ * Reads a text file by path: the ledger parser's one IO port.
  *
- * @param ledgerPath - Path to the gap ledger JSON file.
- * @returns A validated ledger object.
- * @throws Error when file read fails, JSON is invalid, or schema shape is invalid.
+ * The composition root wires `node:fs/promises`; in-process tests inject an
+ * in-memory reader (ADR-078; testing-strategy.md §Philosophy).
  */
-export async function parseLedger(ledgerPath: string): Promise<GapLedger> {
-  let fileContent: string;
-  try {
-    fileContent = await readFile(ledgerPath, 'utf8');
-  } catch (error) {
-    throw new Error(`Failed to read ledger file: ${ledgerPath}`, { cause: error });
-  }
+export type ReadTextFile = (path: string) => Promise<string>;
 
-  let parsedJson: unknown;
-  try {
-    parsedJson = JSON.parse(fileContent);
-  } catch (error) {
-    throw new Error(`Ledger file contains invalid JSON: ${ledgerPath}`, { cause: error });
-  }
+/**
+ * Creates the ledger parser over the given file reader.
+ *
+ * The parser reads, parses and validates a field-gap ledger JSON file.
+ *
+ * @param readTextFile - Reads the ledger's text by path.
+ * @returns A parser that resolves with a validated ledger object and rejects
+ *   with an Error naming the path when the read fails, the JSON is invalid,
+ *   or the schema shape is invalid.
+ */
+export function createLedgerParser(
+  readTextFile: ReadTextFile,
+): (ledgerPath: string) => Promise<GapLedger> {
+  return async (ledgerPath) => {
+    let fileContent: string;
+    try {
+      fileContent = await readTextFile(ledgerPath);
+    } catch (error) {
+      throw new Error(`Failed to read ledger file: ${ledgerPath}`, { cause: error });
+    }
 
-  const parsed = gapLedgerSchema.safeParse(parsedJson);
-  if (!parsed.success) {
-    throw new Error(`Invalid ledger JSON shape: ${ledgerPath}`);
-  }
-  return parsed.data;
+    let parsedJson: unknown;
+    try {
+      parsedJson = JSON.parse(fileContent);
+    } catch (error) {
+      throw new Error(`Ledger file contains invalid JSON: ${ledgerPath}`, { cause: error });
+    }
+
+    const parsed = gapLedgerSchema.safeParse(parsedJson);
+    if (!parsed.success) {
+      throw new Error(`Invalid ledger JSON shape: ${ledgerPath}`);
+    }
+    return parsed.data;
+  };
 }
 
 /**

@@ -146,11 +146,11 @@ function analyzeAll(
       // check-then-use window (CodeQL js/file-system-race).
       const bytes = readLinkBytesOrFile(path.join(repoRoot, relativePath));
       reports.push(analyzeFileBytes(relativePath, new Uint8Array(bytes)));
-    } catch (cause) {
+    } catch (error) {
       // Fail loud: a tracked file the scanner cannot read could hide an encoding
       // defect, so silently skipping it would be a green-gate bypass.
       return err(
-        `cannot read tracked file '${relativePath}': ${cause instanceof Error ? cause.message : String(cause)}`,
+        `cannot read tracked file '${relativePath}': ${error instanceof Error ? error.message : String(error)}`,
       );
     }
   }

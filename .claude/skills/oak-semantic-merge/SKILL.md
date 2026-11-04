@@ -5,4 +5,4 @@ description: Merge agent memory and state files (napkin, repo-continuity, distil
 
 # Semantic Merge (Claude Code)
 
-Read and follow `.agent/skills/semantic-merge/SKILL-CANONICAL.md`.
+Read and follow `.agent/skills/change-custody/semantic-merge/SKILL-CANONICAL.md`.

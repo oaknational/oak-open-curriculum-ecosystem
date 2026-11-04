@@ -67,7 +67,11 @@ This repository currently provides:
    `dist/server.js` default export;
 5. a repo-owned Vercel `ignoreCommand` that cancels production non-release
    builds before the build runs;
-6. no repo-local rewrite list.
+6. a deploy-config gate (`deploy-config-gate`, MCP-475): a never-cached
+   Turbo task the build depends on that rehearses the server's own
+   configuration resolution against the deploy environment and fails the
+   build on refusal (§Runtime Build);
+7. no repo-local rewrite list.
 
 This means the deployment contract in-repo is explicit: build `dist/server.js`,
 point `package.json` `main` at it, and let Vercel's Express integration import
@@ -279,8 +283,29 @@ change, commit the result, and the runtime build consumes it as normal TypeScrip
 ### Runtime Build (`build`)
 
 ```json
-"build": "tsx esbuild.config.ts"
+"build": "pnpm run deploy-config-gate && pnpm exec tsx esbuild.config.ts",
+"deploy-config-gate": "pnpm exec tsx build-scripts/run-validate-deploy-config.ts"
 ```
+
+The deploy-config gate (MCP-475) runs on both build paths. The `build`
+script runs it first, so a build that invokes the workspace script
+directly — Vercel's default when no `buildCommand` enters the Turbo graph,
+a dashboard setting the tree cannot see — is gated before esbuild. It is
+also its own Turbo task, `deploy-config-gate`, which the `build` task
+depends on: never cached, so a same-commit redeploy that replays the cached
+build still runs it (the script inside the replayed task never executes).
+On a real Turbo build the gate therefore runs twice, seconds each, by
+design. Either way a refusal precedes any Sentry release side effect. On a Vercel build (`VERCEL` is set) it runs the server's own
+configuration resolution — the env schema, the product-analytics bootstrap
+and the Sentry configuration parse — against the process environment
+alone (no `.env` file can change the rehearsal), seeing only the validated
+variables (build-only credentials are filtered out), and exits non-zero on
+refusal with the verdict on stderr, so an invalid deploy environment turns
+the build red instead of shipping a function that would never boot (the
+2026-07-31 preview outage). Outside Vercel the gate prints a skip line and
+exits 0. Its contract test reads Turbo's own resolution of the graph.
+`build:sentry:configured` spawns `esbuild.config.ts` directly and is not
+gated.
 
 The esbuild composition root compiles `src/` to `dist/`. The committed
 `src/generated/widget-html-content.ts` is bundled into the `server.js` and

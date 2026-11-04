@@ -26,7 +26,6 @@ interface CommitQueueStatusEntry {
 interface CommitQueueStatusReport {
   readonly total: number;
   readonly active: number;
-  readonly expired: number;
   readonly abandoned: number;
   readonly entries: readonly CommitQueueStatusEntry[];
 }
@@ -50,7 +49,6 @@ export function formatCommitQueueStatus(
   return {
     total: entries.length,
     active: entries.filter((entry) => entry.queue_status === 'active').length,
-    expired: entries.filter((entry) => entry.queue_status === 'expired').length,
     abandoned: entries.filter((entry) => entry.queue_status === 'abandoned').length,
     entries,
   };
@@ -152,7 +150,7 @@ function statusEntry(entry: CommitIntent, nowIso: string): CommitQueueStatusEntr
     updated_at: entry.updated_at,
     expires_at: entry.expires_at,
     phase: entry.phase,
-    queue_status: queueStatus(entry, secondsUntilExpiryValue),
+    queue_status: queueStatus(entry),
     seconds_until_expiry: secondsUntilExpiryValue,
     ...(entry.staged_bundle_fingerprint === undefined
       ? {}
@@ -168,9 +166,9 @@ function startsWithIgnoreCase(value: string, prefix: string): boolean {
   return value.toLocaleLowerCase().startsWith(prefix.toLocaleLowerCase());
 }
 
-function queueStatus(entry: CommitIntent, secondsUntilExpiry: number): CommitQueueEntryStatus {
-  if (entry.phase === 'abandoned') {
-    return 'abandoned';
-  }
-  return secondsUntilExpiry < 0 ? 'expired' : 'active';
+// Every entry a view receives is live: the store treats a TTL-expired file
+// as absent, so status is the phase alone (`seconds_until_expiry` carries
+// the time left, never a negative classification).
+function queueStatus(entry: CommitIntent): CommitQueueEntryStatus {
+  return entry.phase === 'abandoned' ? 'abandoned' : 'active';
 }

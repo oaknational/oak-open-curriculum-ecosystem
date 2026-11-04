@@ -20,10 +20,28 @@ tickets:
   - MCP-592
 depends_on: []
 owner_gates: []
-last_updated: 2026-08-13
+last_updated: 2026-09-05
 ---
 
 # Showcase information architecture — landing, generated reference, routed demos
+
+**Dated amendment — governance and sequencing (2026-08-17, records-truth
+pass MCP-613, owner ruling).** The later-ratified
+`design-showcase-experience` node (evening, 2026-08-13) **governs the
+showcase surface**; the 2026-08-17 review found this node and that one
+contradicting each other on the reference route with no cross-references
+(this node's "A2 unblocked, starts at ratification" against that node's
+out-of-scope-until-the-four-R1-outcomes-land row) — resolved in the
+governing node's favour by owner card. Sequencing now (re-trued
+2026-09-05): **A1 and A2 landed on 2026-08-18** under the governing node's
+governance — A1 as the front page's doors to every demo surface
+(`6ca3462b5`), A2 as the generated token reference at `/tokens`
+(`e0a85e842`) with the colour matrix at `/tokens/colours` (`3b276f0d6`);
+A2's fifteen identity × theme cells become twenty when Tango ships as a
+pack (`tango-identity-pack`). A3 stays sequenced with the governing node.
+This node's goal and mechanism stand unchanged; only its self-declared
+sequencing was superseded. The governing node's §Relationships carries the
+mirror row.
 
 **Default-face gate discharged 2026-08-13.** The owner decided at the
 ratification card: the showcase default stays Oak. The owner_gates
@@ -65,7 +83,7 @@ kernel's demos-as-falsifier-suite made legible.
 - Default face: Oak, by owner decision (2026-08-13, ratification
   card — the pds-default derivation was presented and declined).
 
-Sequencing: A1/A3 touch routes that exist only on the PR #846 branch
+Sequencing (as ratified; A1 and A2 landed 2026-08-18): A1/A3 touch routes that exist only on the PR #846 branch
 (`identity-switchboard`, `identity-white-labelling`) and follow its
 merge; A2 (the reference route) is a new route and starts at
 ratification. A1 lands before the recognisability plan's S4 chrome
@@ -98,12 +116,17 @@ the completion plan at his word.
 
 ## Todos (slices, each a single-story PR, default round budget)
 
-- **A2 generated reference** (unblocked): the reference route with
-  cell verification, completeness check, private-tier separation, and
-  a11y coverage.
-- **A1 landing** (after #846 merges): front page restructure —
-  landing composition, doors, unified self-descriptions, route
-  registry.
+- **A2 generated reference** — **landed in part 2026-08-18**
+  (`e0a85e842`; `/tokens/colours` `3b276f0d6`): the reference route,
+  private-tier separation, and a11y coverage. Open: AC1's proof — no
+  test renders every public role across the fifteen identity × theme
+  cells and checks computed style, no completeness check compares the
+  rendered set with the kit's declared public vocabulary, and the route
+  shows one cell at a time.
+- **A1 landing** — **landed in part 2026-08-18** (`6ca3462b5`): landing
+  composition, doors, and unified self-descriptions. Open: the route
+  registry and AC2's closure property — the doors are written by hand in
+  `app/page.tsx`, so an unregistered or undescribed route does not fail.
 - **A3 demo self-descriptions** (with A1): switchboard and
   white-labelling routes state their falsifier; default face stays
   Oak (owner decision 2026-08-13).

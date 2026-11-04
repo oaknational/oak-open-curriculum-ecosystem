@@ -5,10 +5,19 @@ description: >-
   The Subagent Invocation Framework (Sif): general doctrine for invoking
   another agent — any vendor, any arity — as bounded in-session capability,
   plus per-binding annexes carrying each binding's transport,
-  tool-contract, and authority facts. Read before building or using any
-  agent-invoking instrument; route to a concrete instrument
-  (the-codex-dialogues, cricket, codex-helper) for the actual invocation
-  workflow.
+  tool-contract, and authority facts. Use when building or using any
+  agent-invoking instrument, then route to one the host enables: a
+  conscience check (cricket and its Codex legs), a bounded cross-vendor
+  dialogue (the-codex-dialogues, where the host carries it), a
+  self-contained cross-vendor task (a cricket Codex leg, or the Codex
+  CLI's exec mode with agent-tools codex-exec last-message --strict
+  reading its result, templated by codex-helper where carried), a
+  same-vendor delegation (the reviewer fleet, a named background agent).
+  Do not use for sustained collaboration with its own clock and claims:
+  that is membership, a peer seat. Right: a bounded packet, a
+  pre-registered prior and budget, a close event, no per-call authority
+  parameters. Wrong: a context dump, dialogue momentum setting the
+  scope, an instrument speaking in the seat's name.
 ---
 
 # Sif — the Subagent Invocation Framework
@@ -18,7 +27,8 @@ framework layer for agent-invokes-agent capability: one general doctrine,
 plus per-binding annexes that carry each concrete transport's facts at
 their stated evidence grade (probe-verified, or an explicitly labelled
 observation-grade candidate). Instruments ride Sif; Sif is not itself an instrument. The
-first instrument is [`the-codex-dialogues`](../the-codex-dialogues/SKILL-CANONICAL.md).
+first conforming instrument is `the-codex-dialogues`, a capability a host enables by
+carrying that skill beside its probe record.
 
 ## The two axes
 
@@ -39,7 +49,7 @@ The cell map, with the estate's instruments placed on it:
 | | One-shot | Multi-turn |
 | --- | --- | --- |
 | **Same-vendor** | expert-reviewer fleet, [`cricket`](../cognition/cricket/SKILL-CANONICAL.md), Workflow-fleet legs | named background agents via Agent + SendMessage; session forks |
-| **Cross-vendor** | Cricket Codex legs, [`codex-helper`](../codex-helper/SKILL-CANONICAL.md) | [`the-codex-dialogues`](../the-codex-dialogues/SKILL-CANONICAL.md) |
+| **Cross-vendor** | Cricket Codex legs; `codex exec --json` (the vendor CLI) with `pnpm agent-tools:codex-exec last-message --strict` reading its result, templated by `codex-helper` where the host carries it | `the-codex-dialogues`, where the host carries it |
 
 ## Instrument, not citizen
 
@@ -58,14 +68,13 @@ name — the record belongs to the invoking seat.
 Every Sif instrument states these six planks in its own skill; the
 framework defines what each plank must contain. The contract binds at
 adoption:
-[`the-codex-dialogues`](../the-codex-dialogues/SKILL-CANONICAL.md) is
-the first conforming instrument.
-[`cricket`](../cognition/cricket/SKILL-CANONICAL.md) and
-[`codex-helper`](../codex-helper/SKILL-CANONICAL.md) PRE-DATE the
-framework and do not yet state all six planks — the cell map above
-routes to them as invocation instruments, but they are not claimed as
-six-plank-conforming; migrating them is a routed follow-on of this
-framework, never a silent grandfathering.
+`the-codex-dialogues` is the first conforming instrument.
+[`cricket`](../cognition/cricket/SKILL-CANONICAL.md) and `codex-helper`
+PRE-DATE the framework and do not yet state all six planks — the cell
+map above routes to them as invocation instruments, but they are not
+claimed as six-plank-conforming; migrating them is a routed follow-on of
+this framework, never a silent grandfathering. The Codex CLI's exec mode
+is a vendor transport, not an instrument.
 
 1. **Authority layering, probe-evidenced.** State the authority layers
    in order of real strength. In this estate that order is: the same-UID
@@ -123,23 +132,34 @@ authority to be obeyed.
 
 - A fast conscience check on priority or framing, one bounded exchange,
   same session: [`cricket`](../cognition/cricket/SKILL-CANONICAL.md).
-- Delegating a self-contained task for a result:
-  [`codex-helper`](../codex-helper/SKILL-CANONICAL.md) (`codex exec`).
+- Delegating a self-contained task for a result, same vendor: a named
+  background agent (Agent, then SendMessage) or the reviewer fleet,
+  neither of which states the six planks (same-vendor wrappers that
+  pre-date the framework, as cricket does); cross-vendor: a cricket
+  Codex leg, or `codex exec --json` called under plank 1's
+  disciplined-call rule (no per-call authority parameters) with
+  `pnpm agent-tools:codex-exec last-message --strict` reading the final
+  message from its output (strict, so a stream carrying no agent message
+  fails loudly instead of exiting clean with nothing), with
+  `codex-helper`'s `codex exec` templates where the host carries them;
+  neither is a six-plank instrument.
 - A bounded multi-turn reflective dialogue that perturbs the seat's own
   stated uncertainty against a different vendor's prior:
-  [`the-codex-dialogues`](../the-codex-dialogues/SKILL-CANONICAL.md).
+  `the-codex-dialogues`, where the host carries it.
 - Sustained collaboration with its own clock and claims: that is
   membership, not invocation — a live peer seat and, for pairwise
   dialogue, an ArcAngel channel.
 
 ## Annex A — binding: `codex mcp-server` (stdio)
 
-**Probe-verified.** Evidence recorded first-hand 2026-08-02 against
-the pinned `codex_cli_version` in
+**Probe-verified 2026-08-02** (first in OCE), against the pinned
+`codex_cli_version` in
 [`the-codex-dialogues/probe-record.md`](../the-codex-dialogues/references/probe-record.md)
-(the record is the sole holder of the version literal; the runnable
-probe lives beside it at
-[`the-codex-dialogues/scripts/probe-codex-mcp-server.mjs`](../the-codex-dialogues/scripts/probe-codex-mcp-server.mjs)):
+(the record
+is the sole holder of the version literal; the runnable probe lives
+beside it, `scripts/probe-codex-mcp-server.mjs`); by plank 2 an
+instrument opens on this binding only in a host that carries the record
+beside it. The binding's facts:
 
 - Transport: stdio MCP server via
   `codex mcp-server -c sandbox_mode=read-only -c approval_policy=never`;
@@ -192,7 +212,11 @@ its probe script and record landing beside the instrument that uses it.
 Until that probe evidence exists, an annex may hold ONLY as an
 explicitly labelled observation-grade candidate (Annex B is the worked
 instance) — the label is part of the fact set, and "verified" is
-reserved for probe-backed annexes. A new instrument is a skill of its
+reserved for probe-backed annexes. An annex whose probe record and
+script a host does not carry (Annex A, in a host without
+`the-codex-dialogues`) keeps its verified facts as the verifying host's
+and opens no instrument there until the record lands beside one. A new
+instrument is a skill of its
 own that states the six planks concretely and names its routing
 boundaries against the instruments above. One probe-verified binding
 plus one observed candidate was this framework's factoring trigger;

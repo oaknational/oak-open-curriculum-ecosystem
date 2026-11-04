@@ -64,6 +64,6 @@ describe('oakCourse census — content', () => {
       b.t === 'callout' ? [...(b.qs ?? []), ...(b.items ?? []).map((i) => i.qs)] : [],
     );
     expect(qsCodes.length).toBeGreaterThan(0);
-    expect(qsCodes.every((code) => /^QS-/.test(code))).toBe(true);
+    expect(qsCodes.every((code) => code.startsWith('QS-'))).toBe(true);
   });
 });

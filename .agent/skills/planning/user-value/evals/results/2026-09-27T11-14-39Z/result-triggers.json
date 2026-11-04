@@ -1,0 +1,725 @@
+{
+  "schemaVersion": 1,
+  "claudeVersion": "2.1.283",
+  "startedAt": "2026-09-27T11:24:43.471Z",
+  "durationSeconds": 178,
+  "costUsd": 0.9577834,
+  "partial": false,
+  "suite": {
+    "root": "<plugin>",
+    "ablation": "none",
+    "judgeModel": "sonnet",
+    "caseFilter": "trigger-*",
+    "threshold": 0,
+    "concurrency": 1,
+    "plugins": [
+      {
+        "name": "oak-user-value-evals",
+        "version": "0.0.0",
+        "path": "<plugin>"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "name": "trigger-01-fires",
+      "dir": "evals/trigger-01-fires",
+      "source": "mixed",
+      "promptMarkdown": "Rework these proposed user stories into needs, journeys, acceptance criteria and evidence of value.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 4,
+      "graders": [
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-user-value)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-user-value(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.0863256,
+            "judgeCostUsd": 0,
+            "durationSeconds": 10,
+            "startedAt": "2026-09-27T11:24:43.513Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "trigger-02-fires",
+      "dir": "evals/trigger-02-fires",
+      "source": "mixed",
+      "promptMarkdown": "Our service backlog is a feature list. Find what value each item offers and what user research is missing.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 4,
+      "graders": [
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-user-value)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-user-value(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 5,
+            "costUsd": 0.09389600000000001,
+            "judgeCostUsd": 0,
+            "durationSeconds": 11,
+            "startedAt": "2026-09-27T11:24:53.641Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "trigger-03-fires",
+      "dir": "evals/trigger-03-fires",
+      "source": "mixed",
+      "promptMarkdown": "Define the proposed journey for people who cannot complete the online application, including support staff.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 4,
+      "graders": [
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-user-value)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-user-value(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 5,
+            "costUsd": 0.18742399999999998,
+            "judgeCostUsd": 0,
+            "durationSeconds": 68,
+            "startedAt": "2026-09-27T11:25:05.119Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "trigger-04-fires",
+      "dir": "evals/trigger-04-fires",
+      "source": "mixed",
+      "promptMarkdown": "Explore an innovative service proposition without pretending we have proven demand.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 4,
+      "graders": [
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-user-value)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-user-value(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 6,
+            "costUsd": 0.15142339999999999,
+            "judgeCostUsd": 0,
+            "durationSeconds": 27,
+            "startedAt": "2026-09-27T11:26:12.969Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "trigger-05-silent",
+      "dir": "evals/trigger-05-silent",
+      "source": "mixed",
+      "promptMarkdown": "Implement the settled binary heap contract and its tests.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 4,
+      "graders": [
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-user-value)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-silent",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "min": 0,
+            "max": 0
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.0710086,
+            "judgeCostUsd": 0,
+            "durationSeconds": 15,
+            "startedAt": "2026-09-27T11:26:39.639Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-silent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "trigger-06-silent",
+      "dir": "evals/trigger-06-silent",
+      "source": "mixed",
+      "promptMarkdown": "Calculate sample size for the already defined randomised trial.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 4,
+      "graders": [
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-user-value)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-silent",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "min": 0,
+            "max": 0
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 5,
+            "costUsd": 0.0620782,
+            "judgeCostUsd": 0,
+            "durationSeconds": 7,
+            "startedAt": "2026-09-27T11:26:54.413Z",
+            "error": "exit 1: Reached maximum number of turns (4)",
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-silent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "trigger-07-silent",
+      "dir": "evals/trigger-07-silent",
+      "source": "mixed",
+      "promptMarkdown": "Schedule the approved implementation tasks for the next fortnight.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 4,
+      "graders": [
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-user-value)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-silent",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "min": 0,
+            "max": 0
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.06552179999999999,
+            "judgeCostUsd": 0,
+            "durationSeconds": 10,
+            "startedAt": "2026-09-27T11:27:01.707Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-silent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "trigger-08-silent",
+      "dir": "evals/trigger-08-silent",
+      "source": "mixed",
+      "promptMarkdown": "Compare two research reports' incompatible effect estimates and shared datasets.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 4,
+      "graders": [
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-user-value)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-silent",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "min": 0,
+            "max": 0
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 3,
+            "costUsd": 0.060195799999999994,
+            "judgeCostUsd": 0,
+            "durationSeconds": 10,
+            "startedAt": "2026-09-27T11:27:11.967Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-silent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "trigger-09-fires",
+      "dir": "evals/trigger-09-fires",
+      "source": "mixed",
+      "promptMarkdown": "Define what use value this reusable queue offers its consuming scheduler, and how its guarantees connect to wider capabilities.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 4,
+      "graders": [
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-user-value)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-user-value(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 5,
+            "costUsd": 0.0888506,
+            "judgeCostUsd": 0,
+            "durationSeconds": 10,
+            "startedAt": "2026-09-27T11:27:21.488Z",
+            "error": "exit 1: Reached maximum number of turns (4)",
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    },
+    {
+      "name": "trigger-10-fires",
+      "dir": "evals/trigger-10-fires",
+      "source": "mixed",
+      "promptMarkdown": "Trace the value of an API through consumer capabilities, contracts and implementation without assuming technical correctness proves user benefit.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 4,
+      "graders": [
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-user-value)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-user-value(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 5,
+            "costUsd": 0.0910594,
+            "judgeCostUsd": 0,
+            "durationSeconds": 9,
+            "startedAt": "2026-09-27T11:27:31.934Z",
+            "error": "exit 1: Reached maximum number of turns (4)",
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1
+      }
+    }
+  ],
+  "aggregates": {
+    "casesTotal": 10,
+    "casesPassed": 10,
+    "overallScore": 1,
+    "overallPassRate": 1
+  }
+}

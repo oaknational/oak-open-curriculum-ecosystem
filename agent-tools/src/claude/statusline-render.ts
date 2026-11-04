@@ -26,7 +26,7 @@
  * @packageDocumentation
  */
 
-import { resolveLogoRows, type OakLogoStyle } from './oak-logo.js';
+import { resolveLogoRows, type LogoStyle } from './logo.js';
 import { DIM, GREEN, RESET } from './statusline-ansi.js';
 import {
   buildSegments,
@@ -49,10 +49,10 @@ export interface StatuslineRenderOptions {
    * Glyph family for the Oak mark. `none` is this option's default (the original
    * layout without the logo column — still one or more rows depending on the
    * error and coordination-branch lines); the deployed statusline defaults to
-   * `braille-sharp` (set by the adapter from `OAK_STATUSLINE_LOGO`). Any
+   * `braille-sharp` (set by the adapter from `PRACTICE_STATUSLINE_LOGO`). Any
    * non-`none` style renders the multi-row logo-column layout.
    */
-  readonly logo?: OakLogoStyle;
+  readonly logo?: LogoStyle;
   /** Per-session counter selecting the `braille-sharp` cycle frame (other styles ignore it); defaults to 0. */
   readonly logoFrame?: number;
   /**
@@ -130,7 +130,7 @@ function modelRowWithUsage(seg: Segments): string {
  */
 function renderWithLogo(
   seg: Segments,
-  logo: Exclude<OakLogoStyle, 'none'>,
+  logo: Exclude<LogoStyle, 'none'>,
   options: StatuslineRenderOptions,
 ): string {
   const rowTexts = [

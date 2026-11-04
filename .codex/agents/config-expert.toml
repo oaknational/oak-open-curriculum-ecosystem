@@ -1,5 +1,5 @@
 name = "config-expert"
-description = "Tooling configuration reviewer (ESLint, TypeScript, Vitest, Prettier, Turbo)."
+description = "Tooling configuration reviewer (TypeScript, ESLint, Vitest, Prettier, Turbo, knip, dependency-cruiser, Husky)."
 model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 approval_policy = "never"

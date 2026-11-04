@@ -43,7 +43,8 @@ proof renders are comparable across runs and seats.
 
 ## Consequences
 
-- The showcase carries a first-class probe (`pnpm tool:visual-probe`)
+- The showcase carries a first-class probe
+  (`pnpm --filter @oaknational/oak-design-showcase tool:visual-probe`)
   whose parameters cover route, viewport, interaction steps, readiness
   mark, and output directory; running it is cheaper than arguing about
   pixels.

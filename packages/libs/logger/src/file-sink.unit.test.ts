@@ -77,19 +77,17 @@ describe('createFileSink', () => {
     expect(sink).not.toBeNull();
     const preFormattedLine = '{"level":"INFO","message":"test","context":{"key":"value"}}\n';
     sink?.write(createEvent(preFormattedLine));
-    expect(mockWrite).toHaveBeenCalledWith(preFormattedLine, 'utf8', expect.any(Function));
+    expect(mockWrite).toHaveBeenCalledWith(preFormattedLine, expect.any(Function));
   });
 
   it('logs errors when write callback receives error', () => {
     const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {
       // swallow log
     });
-    mockWrite.mockImplementationOnce(
-      (_chunk: unknown, _encoding: unknown, cb?: (error?: Error | null) => void) => {
-        cb?.(new Error('write error'));
-        return true;
-      },
-    );
+    mockWrite.mockImplementationOnce((_chunk: unknown, cb?: (error?: Error | null) => void) => {
+      cb?.(new Error('write error'));
+      return true;
+    });
     const sink = createFileSink(baseConfig, mockFs);
     sink?.write(createEvent('{"level":"ERROR","message":"test error"}\n'));
     expect(consoleError).toHaveBeenCalledWith('Failed to write log line to file', {

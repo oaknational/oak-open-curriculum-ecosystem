@@ -40,7 +40,7 @@ export class RefFormatOracleUnavailableError extends Error {}
  * shorthand against a repository, which a name being validated must not get).
  *
  * The binary is resolved ONCE, here, and its throw translated at this one
- * boundary (ADR-088, the pattern `resolveGitContext` uses): resolving inside
+ * boundary (the Result pattern, the pattern `resolveGitContext` uses): resolving inside
  * the returned closure would let the throw escape through whatever
  * Result-typed function later asks the question.
  */
@@ -48,9 +48,9 @@ export function realRefFormatOracle(exists?: PathExists): Result<RefFormatOracle
   let gitPath: string;
   try {
     gitPath = exists === undefined ? resolveTrustedGit() : resolveTrustedGit(exists);
-  } catch (cause) {
+  } catch (error) {
     return err(
-      new RefFormatOracleUnavailableError(cause instanceof Error ? cause.message : String(cause)),
+      new RefFormatOracleUnavailableError(error instanceof Error ? error.message : String(error)),
     );
   }
   return ok((fullRefName) => {

@@ -1,12 +1,11 @@
 #!/usr/bin/env node
 
-import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 
 import { glob } from 'tinyglobby';
 
 import { resolveRepoRoot } from '../../core/repo-root.js';
-import { resolveTrustedGit } from '../../core/trusted-git.js';
+import { describeGitReadFailure, listTrackedPathSet } from '../../core/repository-paths.js';
 import { readText } from '../portability/portability-fs.js';
 import { writeLine } from '../../core/terminal-output.js';
 
@@ -30,7 +29,9 @@ import { findBrokenLinks } from './validate-markdown-links-report.js';
  * NOT modify Markdown.
  *
  * Broken links fail the gate. The validator became blocking after the
- * repository-wide broken-link backlog was repaired.
+ * repository-wide broken-link backlog was repaired. A tracked-path listing git
+ * could not give fails it too: without the listing the untracked-target rule
+ * cannot be judged.
  *
  * Cross-file fragment validation (does a `#section` exist in the *target* file)
  * is a documented future enhancement and is out of scope here — markdownlint
@@ -40,9 +41,6 @@ import { findBrokenLinks } from './validate-markdown-links-report.js';
  */
 
 const repoRoot = resolveRepoRoot(import.meta.url);
-
-/** Null byte: the unambiguous `git ls-files -z` record separator. */
-const NUL = '\u0000';
 
 /** Glob patterns for every policed live Markdown source in the repository. */
 const SCAN_GLOBS = ['**/*.md'] as const;
@@ -56,6 +54,9 @@ const INVENTORY_IGNORE_GLOBS = [
   // Repo-local pnpm store cache (gitignored, machine-local): package
   // tarball contents are never live sources or portable link targets.
   '.pnpm-store/**',
+  // Agent worktrees nested in the checkout (gitignored, machine-local;
+  // owner ruling 2026-09-30): whole sibling checkouts, never link targets.
+  '.claude/worktrees/**',
 ] as const;
 
 /** Additional non-live or generated Markdown sources excluded from validation. */
@@ -115,31 +116,6 @@ async function collectRepoPaths(): Promise<string[]> {
     .filter((p) => !isExcludedPath(p));
 }
 
-/**
- * List versioned paths plus their implied directories.
- *
- * Git tracks files rather than directories, but a directory link travels with
- * the referrer when at least one tracked entry keeps that directory present.
- */
-function collectTrackedPaths(): ReadonlySet<string> {
-  const stdout = execFileSync(resolveTrustedGit(), ['ls-files', '-z'], {
-    cwd: repoRoot,
-    encoding: 'utf8',
-    maxBuffer: 64 * 1024 * 1024,
-  });
-  const tracked = new Set<string>();
-  for (const entry of stdout.split(NUL).filter((item) => item.length > 0)) {
-    const repoPath = entry.split(path.sep).join('/');
-    tracked.add(repoPath);
-    let parent = path.posix.dirname(repoPath);
-    while (parent !== '.') {
-      tracked.add(parent);
-      parent = path.posix.dirname(parent);
-    }
-  }
-  return tracked;
-}
-
 /** Read the scan-source files into memory as {@link ScanFile} records. */
 async function readScanFiles(relPaths: readonly string[]): Promise<ScanFile[]> {
   const files: ScanFile[] = [];
@@ -184,14 +160,22 @@ function reportBrokenLinks(report: MarkdownLinkReport): void {
 }
 
 async function main(): Promise<void> {
+  const trackedPaths = listTrackedPathSet(repoRoot);
+  if (!trackedPaths.ok) {
+    writeLine(
+      `validate-markdown-links: cannot list tracked paths — ` +
+        `${describeGitReadFailure(trackedPaths.error)}. BLOCKING.`,
+    );
+    process.exitCode = 1;
+    return;
+  }
   const scanPaths = await collectMarkdownPaths(SCAN_GLOBS, SOURCE_IGNORE_GLOBS);
   // The target inventory is broader than the Markdown source set: every
   // present internal file or directory can be a valid Markdown dependency.
   const repoPaths = await collectRepoPaths();
-  const trackedPaths = collectTrackedPaths();
   const files = await readScanFiles(scanPaths);
 
-  const report = findBrokenLinks(files, repoPaths, trackedPaths);
+  const report = findBrokenLinks(files, repoPaths, trackedPaths.value);
 
   if (report.totals.brokenLinks === 0) {
     writeLine('validate-markdown-links: OK (no broken internal links in scanned surfaces).');

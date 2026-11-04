@@ -138,10 +138,10 @@ Re-add an entry only when a setup-time card implicates a host.
   using the environment; channel ids are not secrets, and no secret may be
   added here.
 
-## Git-hook policy for cloud agent sessions (HUSKY=0)
+## Git-hook policy for Claude cloud sessions (HUSKY=0)
 
 Owner ruling, 2026-08-31 (trialled the same session, then adopted with a
-companion profiling commission): **cloud agent sessions commit and push with
+companion profiling commission): **Claude cloud sessions commit and push with
 `HUSKY=0`**, relying on GitHub CI as the quality gate. This relocates the
 checks, it does not remove them — the adoption was conditional on CI being
 comprehensive, and that premise was verified first-hand against `ci.yml`
@@ -155,9 +155,9 @@ seconds per commit-push cycle against ~15 minutes with local hooks.
 
 Conditions that keep the policy honest:
 
-- Scope is **agent cloud sessions**; local human development keeps hooks. The
+- Scope is **Claude cloud sessions**; local human development keeps hooks. The
   canonical [`no-verify-requires-fresh-authorisation`](../rules/no-verify-requires-fresh-authorisation.md)
-  rule carries this standing ruling as its one scoped narrowing — outside this
+  rule carries this standing ruling as a scoped narrowing — outside this
   scope its per-invocation requirement is unchanged.
 - **The blocking in-session substitute set** — the skipped hooks' checks are
   enumerated here once, each mapped to its substitute; skipping any of the
@@ -307,8 +307,10 @@ never ask to route around it.**
   held-work discipline cannot assume a dirty tree stays dirty in a cloud
   session, and a freeze decision accounts for auto-checkpoint.
 - **The merge-bot front door cannot run in a cloud session**: the bot's
-  machine-local private key is absent and `.github/merge-bot.json` names
-  the upstream repo, so an owner-authorised merge executed through the
+  machine-local private key is absent and the per-checkout
+  `.github/merge-bot.json` (never tracked; template at
+  `.github/merge-bot.json.example`) does not exist in a fresh cloud checkout,
+  so an owner-authorised merge executed through the
   session's GitHub connector runs under the OPERATOR credential — a
   credential-selection gap against `bot-identity-on-third-party-systems`,
   recorded as an environment fact, never a practice to normalise.

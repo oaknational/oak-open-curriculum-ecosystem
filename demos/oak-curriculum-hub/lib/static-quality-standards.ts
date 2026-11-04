@@ -24,8 +24,6 @@ export {
 import type { QualityStandard } from './quality-standards-types';
 import { qualityStandards } from './data/load-quality-standards';
 
-export { qualityStandards };
-
 /**
  * Filter quality standards by a free-text query (case-insensitive across text, subject, areas,
  * components, and rubrics). An empty query returns no results — parity with the live curriculum
@@ -47,3 +45,5 @@ export function searchQualityStandards(query: string, limit = 24): QualityStanda
     s.rubrics.some((r) => r.toLowerCase().includes(q));
   return qualityStandards.filter(matches).slice(0, limit);
 }
+
+export { qualityStandards } from './data/load-quality-standards';

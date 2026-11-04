@@ -3,6 +3,7 @@ name: Frame-Free Absolutes Are Unhandled Cases
 polarity: anti-pattern
 use_this_when: "Authoring or citing any categorical statement in doctrine, tickets, TSDoc, or review dispositions — 'all', 'never', 'without exception', 'the only sound shape' — and whenever a review loop keeps generating findings against categorical estate text"
 category: process
+layer: general
 status: emerging
 discovered: 2026-07-29
 proven_in: >-
@@ -26,6 +27,12 @@ adjacent: >-
   the transmission-side frame-carriage clause.
 ---
 
+> **POLARITY: ANTI-PATTERN.** This entry names a *failure mode to avoid*,
+> not a shape to repeat.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern)
+> for the polarity discipline.
+
 # Frame-Free Absolutes Are Unhandled Cases
 
 A statement true **within a frame**, recorded **without** the frame, is later
@@ -42,6 +49,12 @@ exchange"; not "supertest is E2E" but "classification follows the boundary".
 The absolute stays absolute; its domain becomes explicit. Same move as
 `Result<T, E>` over throwing — stating the axis makes the rule total over a
 named domain.
+
+The first of those restatements was itself withdrawn on 2026-09-14, when the
+owner made "tests never use or create IO" an absolute invariant
+(`testing-strategy.md` §Philosophy). The axis that carries it is the taxonomy's
+own: a test, or a validation check that drives a running system. A loopback
+exchange belongs to the second and is never an allowance inside the first.
 
 Authoring discipline: hunt your own "every", "all", "never", "regardless",
 and "without exception" before a reviewer does; the strong-sounding claim is

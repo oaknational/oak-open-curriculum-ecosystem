@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import { assertPathWithinBase } from './index.js';
@@ -64,6 +66,99 @@ describe('assertPathWithinBase', () => {
     const realpath = canonical({ '/base': '/base' });
     expect(() => assertPathWithinBase('/base/missing.json', '/base', { realpath })).toThrow(
       /ENOENT/u,
+    );
+  });
+});
+
+// The flavour seam: comparisons run through the injected `pathApi`, so each
+// platform's containment rules are provable from any host (the changeset's
+// provable-from-POSIX pattern). The RETURN value always keeps the
+// canonicaliser's own bytes — only the comparison is normalised and (win32
+// only) case-folded.
+describe('assertPathWithinBase — path flavours', () => {
+  it.each([
+    {
+      label: 'win32 accepts a forward-slash canonical form inside a backslash base',
+      pathApi: path.win32,
+      base: String.raw`C:\base`,
+      candidate: String.raw`C:\base\run.json`,
+      table: {
+        [String.raw`C:\base`]: 'C:/base',
+        [String.raw`C:\base\run.json`]: 'C:/base/run.json',
+      },
+      returns: 'C:/base/run.json',
+    },
+    {
+      label: 'win32 accepts a drive-letter case difference between base and candidate',
+      pathApi: path.win32,
+      base: String.raw`C:\base`,
+      candidate: String.raw`c:\base\run.json`,
+      table: {
+        [String.raw`C:\base`]: String.raw`C:\base`,
+        [String.raw`c:\base\run.json`]: String.raw`c:\base\run.json`,
+      },
+      returns: String.raw`c:\base\run.json`,
+    },
+    {
+      label: 'posix accepts a contained candidate and keeps the canonical bytes',
+      pathApi: path.posix,
+      base: '/base',
+      candidate: '/base/run.json',
+      table: { '/base': '/base', '/base/run.json': '/base/run.json' },
+      returns: '/base/run.json',
+    },
+  ])('$label', ({ pathApi, base, candidate, table, returns }) => {
+    const realpath = canonical(table);
+    expect(assertPathWithinBase(candidate, base, { realpath, pathApi })).toBe(returns);
+  });
+
+  it.each([
+    {
+      label: 'win32 still refuses a genuine escape whatever the separator form',
+      pathApi: path.win32,
+      base: String.raw`C:\base`,
+      candidate: String.raw`C:\base\link`,
+      table: {
+        [String.raw`C:\base`]: 'C:/base',
+        [String.raw`C:\base\link`]: 'C:/outside/secret.json',
+      },
+    },
+    {
+      label: 'win32 refuses a sibling sharing the base as a prefix, across drive-letter case',
+      pathApi: path.win32,
+      base: String.raw`C:\base`,
+      candidate: String.raw`c:\BASE-secret\data.json`,
+      table: {
+        [String.raw`C:\base`]: String.raw`C:\base`,
+        [String.raw`c:\BASE-secret\data.json`]: String.raw`c:\BASE-secret\data.json`,
+      },
+    },
+    {
+      // Windows directories can opt into case-sensitive lookup (fsutil, and
+      // anything created under WSL interop), so `C:\Base` and `C:\base` may be
+      // different directories. Folding them would report a candidate outside
+      // the base as contained — a false accept on a security boundary. The
+      // drive letter still normalises; only components are case-sensitive.
+      label: 'win32 refuses a component-case difference — case sensitivity is per-directory',
+      pathApi: path.win32,
+      base: String.raw`C:\Base`,
+      candidate: String.raw`c:\base\RUN.json`,
+      table: {
+        [String.raw`C:\Base`]: String.raw`C:\Base`,
+        [String.raw`c:\base\RUN.json`]: String.raw`c:\base\RUN.json`,
+      },
+    },
+    {
+      label: 'posix refuses a case-only difference — POSIX filesystems are case-sensitive',
+      pathApi: path.posix,
+      base: '/base',
+      candidate: '/Base/run.json',
+      table: { '/base': '/base', '/Base/run.json': '/Base/run.json' },
+    },
+  ])('$label', ({ pathApi, base, candidate, table }) => {
+    const realpath = canonical(table);
+    expect(() => assertPathWithinBase(candidate, base, { realpath, pathApi })).toThrow(
+      /not within/u,
     );
   });
 });

@@ -1,4 +1,5 @@
 import { Buffer } from 'node:buffer';
+import path from 'node:path';
 
 import { err, ok, unwrapErr, unwrapOrThrow } from '@oaknational/result';
 import { describe, expect, it } from 'vitest';
@@ -24,6 +25,10 @@ const INPUT: ContainedIdentityRead = {
 };
 const BYTES = Buffer.from('export {};\n');
 
+// Fixtures are POSIX-form, so the path flavour is pinned to `path.posix`
+// throughout: the flavour seam makes each platform's rules provable from any
+// host, and the win32 rows below prove the Windows-specific behaviour.
+
 const ACCEPTING_OPERATIONS: IdentitySecureFilePort<Handle> = {
   canonicalRealpath: (path) => ok(path),
   validateBeforeOpen: () => ok(LEAF_NODE),
@@ -35,7 +40,7 @@ const ACCEPTING_OPERATIONS: IdentitySecureFilePort<Handle> = {
 
 describe('secure identity read orchestration', () => {
   it('returns bytes only after both validation phases and a regular no-follow descriptor read', () => {
-    const read = createSecureIdentityReadPort(ACCEPTING_OPERATIONS);
+    const read = createSecureIdentityReadPort(ACCEPTING_OPERATIONS, path.posix);
 
     const bytes = unwrapOrThrow(read.readRegularFileNoFollow(INPUT));
 
@@ -78,7 +83,7 @@ describe('secure identity read orchestration', () => {
     },
   ])('preserves a failure from $label', ({ operations, message }) => {
     const failure = unwrapErr(
-      createSecureIdentityReadPort(operations).readRegularFileNoFollow(INPUT),
+      createSecureIdentityReadPort(operations, path.posix).readRegularFileNoFollow(INPUT),
     );
 
     expect(failure.message).toContain(message);
@@ -86,11 +91,14 @@ describe('secure identity read orchestration', () => {
 
   it('retains both the read/check failure and the mandatory close failure', () => {
     const failure = unwrapErr(
-      createSecureIdentityReadPort({
-        ...ACCEPTING_OPERATIONS,
-        validateBeforeAccept: () => err(new Error('directory drifted')),
-        close: () => err(new Error('close failed')),
-      }).readRegularFileNoFollow(INPUT),
+      createSecureIdentityReadPort(
+        {
+          ...ACCEPTING_OPERATIONS,
+          validateBeforeAccept: () => err(new Error('directory drifted')),
+          close: () => err(new Error('close failed')),
+        },
+        path.posix,
+      ).readRegularFileNoFollow(INPUT),
     );
 
     expect(failure).toBeInstanceOf(AggregateError);
@@ -100,12 +108,36 @@ describe('secure identity read orchestration', () => {
     });
   });
 
+  it('rejects a dot-segment member path before consulting injected operations', () => {
+    // A `..` through a symlinked component would be collapsed lexically by
+    // the normalised comparisons while the observed component chain skips the
+    // symlink itself — so dot segments are refused outright, never resolved.
+    const failure = unwrapErr(
+      createSecureIdentityReadPort(
+        {
+          ...ACCEPTING_OPERATIONS,
+          validateBeforeOpen: () => err(new Error('operations must not run')),
+        },
+        path.posix,
+      ).readRegularFileNoFollow({
+        chainRoot: '/checkout',
+        ownerRoot: '/checkout/agent-tools/dist',
+        path: '/checkout/agent-tools/dist/link/../member.js',
+      }),
+    );
+
+    expect(failure.message).toContain('must not contain "." or ".." segments');
+  });
+
   it('rejects lexical escape before consulting injected operations', () => {
     const failure = unwrapErr(
-      createSecureIdentityReadPort({
-        ...ACCEPTING_OPERATIONS,
-        validateBeforeOpen: () => err(new Error('operations must not run')),
-      }).readRegularFileNoFollow({
+      createSecureIdentityReadPort(
+        {
+          ...ACCEPTING_OPERATIONS,
+          validateBeforeOpen: () => err(new Error('operations must not run')),
+        },
+        path.posix,
+      ).readRegularFileNoFollow({
         chainRoot: '/checkout',
         ownerRoot: '/checkout/agent-tools/dist',
         path: '/checkout/outside.js',
@@ -120,15 +152,19 @@ describe('identity path observation validation', () => {
   it('accepts the exact directory chain, regular leaf, and canonical lexical path', () => {
     expect(
       unwrapOrThrow(
-        validateIdentityPathObservation(INPUT, {
-          components: [
-            { path: '/checkout/agent-tools', kind: 'directory' },
-            { path: '/checkout/agent-tools/dist', kind: 'directory' },
-            { path: '/checkout/agent-tools/dist/src', kind: 'directory' },
-            { path: '/checkout/agent-tools/dist/src/member.js', kind: 'file' },
-          ],
-          canonicalPath: '/checkout/agent-tools/dist/src/member.js',
-        }),
+        validateIdentityPathObservation(
+          INPUT,
+          {
+            components: [
+              { path: '/checkout/agent-tools', kind: 'directory' },
+              { path: '/checkout/agent-tools/dist', kind: 'directory' },
+              { path: '/checkout/agent-tools/dist/src', kind: 'directory' },
+              { path: '/checkout/agent-tools/dist/src/member.js', kind: 'file' },
+            ],
+            canonicalPath: '/checkout/agent-tools/dist/src/member.js',
+          },
+          path.posix,
+        ),
       ),
     ).toBeUndefined();
   });
@@ -174,8 +210,135 @@ describe('identity path observation validation', () => {
       message: 'outside its exact lexical owner',
     },
   ])('refuses a $label observation', ({ observation, message }) => {
-    const failure = unwrapErr(validateIdentityPathObservation(INPUT, observation));
+    const failure = unwrapErr(validateIdentityPathObservation(INPUT, observation, path.posix));
 
     expect(failure.message).toContain(message);
+  });
+});
+
+describe('identity path observation validation — path flavours', () => {
+  const WIN_INPUT: ContainedIdentityRead = {
+    chainRoot: String.raw`C:\checkout`,
+    ownerRoot: String.raw`C:\checkout\agent-tools\dist`,
+    path: String.raw`C:\checkout\agent-tools\dist\member.js`,
+  };
+
+  it('win32: accepts an observation echoing forward-slash separator forms', () => {
+    expect(
+      unwrapOrThrow(
+        validateIdentityPathObservation(
+          WIN_INPUT,
+          {
+            components: [
+              { path: 'C:/checkout/agent-tools', kind: 'directory' },
+              { path: 'C:/checkout/agent-tools/dist', kind: 'directory' },
+              { path: 'C:/checkout/agent-tools/dist/member.js', kind: 'file' },
+            ],
+            canonicalPath: 'C:/checkout/agent-tools/dist/member.js',
+          },
+          path.win32,
+        ),
+      ),
+    ).toBeUndefined();
+  });
+
+  // Drive letters are case-insensitive on Windows unconditionally, and their
+  // case varies by which API produced the path, so this difference is noise.
+  it('win32: accepts a drive-letter case difference', () => {
+    expect(
+      unwrapOrThrow(
+        validateIdentityPathObservation(
+          WIN_INPUT,
+          {
+            components: [
+              { path: String.raw`c:\checkout\agent-tools`, kind: 'directory' },
+              { path: String.raw`c:\checkout\agent-tools\dist`, kind: 'directory' },
+              { path: String.raw`c:\checkout\agent-tools\dist\member.js`, kind: 'file' },
+            ],
+            canonicalPath: String.raw`c:\checkout\agent-tools\dist\member.js`,
+          },
+          path.win32,
+        ),
+      ),
+    ).toBeUndefined();
+  });
+
+  // Case sensitivity on Windows is per-directory, not global: a directory can
+  // opt in via `fsutil file setCaseSensitiveInfo`, and anything created under
+  // WSL interop already has. `C:\checkout` and `C:\CHECKOUT` can therefore be
+  // different directories, so treating them as one would accept an
+  // observation outside the owner — the failure this validation exists to
+  // catch. Over-refusal is the safe direction.
+  it('win32: refuses a component-case difference — case sensitivity is per-directory', () => {
+    const failure = unwrapErr(
+      validateIdentityPathObservation(
+        WIN_INPUT,
+        {
+          components: [
+            { path: String.raw`C:\CHECKOUT\agent-tools`, kind: 'directory' },
+            { path: String.raw`C:\CHECKOUT\agent-tools\dist`, kind: 'directory' },
+            { path: String.raw`C:\CHECKOUT\agent-tools\dist\member.js`, kind: 'file' },
+          ],
+          canonicalPath: String.raw`C:\CHECKOUT\agent-tools\dist\member.js`,
+        },
+        path.win32,
+      ),
+    );
+
+    expect(failure.message).toBeTruthy();
+  });
+
+  it('win32: still refuses a genuine canonical redirect outside the owner', () => {
+    const failure = unwrapErr(
+      validateIdentityPathObservation(
+        WIN_INPUT,
+        {
+          components: [
+            { path: String.raw`C:\checkout\agent-tools`, kind: 'directory' },
+            { path: String.raw`C:\checkout\agent-tools\dist`, kind: 'directory' },
+            { path: String.raw`C:\checkout\agent-tools\dist\member.js`, kind: 'file' },
+          ],
+          canonicalPath: String.raw`C:\outside\member.js`,
+        },
+        path.win32,
+      ),
+    );
+
+    expect(failure.message).toContain('outside its exact lexical owner');
+  });
+
+  it('win32: refuses drive-relative rooted inputs — they resolve against the current drive', () => {
+    const failure = unwrapErr(
+      validateIdentityPathObservation(
+        INPUT,
+        {
+          components: [],
+          canonicalPath: INPUT.path,
+        },
+        path.win32,
+      ),
+    );
+
+    expect(failure.message).toContain('fully qualified');
+  });
+
+  it('posix: refuses a case-only canonical difference — POSIX stays case-sensitive', () => {
+    const failure = unwrapErr(
+      validateIdentityPathObservation(
+        INPUT,
+        {
+          components: [
+            { path: '/checkout/agent-tools', kind: 'directory' },
+            { path: '/checkout/agent-tools/dist', kind: 'directory' },
+            { path: '/checkout/agent-tools/dist/src', kind: 'directory' },
+            { path: '/checkout/agent-tools/dist/src/member.js', kind: 'file' },
+          ],
+          canonicalPath: '/checkout/agent-tools/dist/src/Member.js',
+        },
+        path.posix,
+      ),
+    );
+
+    expect(failure.message).toContain('outside its exact lexical owner');
   });
 });

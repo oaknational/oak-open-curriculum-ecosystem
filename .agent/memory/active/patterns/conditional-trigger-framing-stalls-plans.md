@@ -3,6 +3,7 @@ name: "Conditional-Trigger Framing Stalls Plans"
 polarity: anti-pattern
 use_this_when: "Authoring or reviewing plan todos, sequencing, or scope — and a step is framed as 'when X ships', 'depends on future Y', or an unscheduled 'next phase'."
 category: planning
+layer: general
 related_pdr: PDR-058
 proven_in: "v2 large-corpus-analysis kept candidate C49 (2026-06-30): recurring owner-corrected class — 'sequence not scope-reduction', 'schedule it, no imaginary flows' — across planning sessions."
 proven_date: 2026-06-30

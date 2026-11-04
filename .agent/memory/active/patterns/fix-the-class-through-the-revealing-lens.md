@@ -3,6 +3,7 @@ name: fix-the-class-through-the-revealing-lens
 use_this_when: "A fix addresses a class of defect, not one incident — before declaring it done, enumerate the other members of the class and run the lens (fresh checkout, CI, cold start) that reveals them; the instance you saw is visible in the lens you already have, the others often are not."
 polarity: pattern
 category: process
+layer: general
 status: emerging
 discovered: 2026-06-14
 proven_by: "WS7 atomic-untrack ENOENT (Whirlwind rides Ridge): the untrack made .agent/state/collaboration/ absent in fresh CI checkouts; validate-collaboration-state crashed ENOENT. The first fix patched only the comms/ surface that crashed; CI failed again on the next class member (active-claims.json), and a third member existed (closed-claims.archive.json). Three members of one class — 'untracked-by-design surface absent in a fresh checkout' — only the fresh-checkout/CI lens revealed all three; the local tree (all files present) hid them."
@@ -58,6 +59,11 @@ sees what the working lens hides.
 - A migration changes a precondition that many call sites depend on.
 - Any fix whose root cause is a shared property ("missing X", "wrong assumption about Y")
   rather than a one-off typo.
+- A second review round that brings another member of a class the first round cured. One
+  allowlist renderer leaked in six of its branches over two rounds, each found by a reviewer and
+  none by the lane's tests (a seat's observation, 2026-09-27; one instance); the lens that
+  would have revealed the class was one property test over every branch, not a different
+  environment.
 
 ## Adjacent
 

@@ -3,6 +3,7 @@ name: "Tool-Default Scan-Set Drift"
 polarity: anti-pattern
 use_this_when: "Citing any sweep, search, or lint result — including a healthy non-empty one — without stating the file-selection semantics that defined the set the tool actually visited (dot-directories, .gitignore handling, hidden files)."
 category: process
+layer: general
 proven_in: "Longitudinal synthesis 2026-08-07, candidate C06 (adversary-surviving, novelty-verified): rg/fd dot-dir and ignore defaults, markdownlint-cli dot-dir exclusion, and validator-specific scan shapes each silently changed the scanned set across the June 2026 windows; live sibling instance — the machine-local-paths validator green over 10,121 files while tilde paths sat in JSON string leaves (napkin 2026-08-07)."
 proven_date: 2026-08-07
 barrier:
@@ -11,6 +12,12 @@ barrier:
   prevents_recurring_mistake: "Reading a green or plausible sweep as covering the intended set while the tool's own selection defaults quietly excluded part of it — the denominator is wrong even when the result is non-empty."
   stable: true
 ---
+
+> **POLARITY: ANTI-PATTERN.** This entry names a *failure mode to avoid*,
+> not a shape to repeat.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern)
+> for the polarity discipline.
 
 # Tool-default scan-set drift
 

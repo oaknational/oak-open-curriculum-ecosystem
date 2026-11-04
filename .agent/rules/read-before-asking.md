@@ -1,3 +1,8 @@
+---
+classification: core
+description: Read empirical artefacts (file, schema, data, plan) before posing a question to the owner. Render the read result in chat as information, not as authorisation to act. Replaces the quarantined apply-don't-ask doctrine.
+---
+
 # Read Before Asking
 
 When a question is **empirical** — its answer is a fact about repo
@@ -31,6 +36,14 @@ question is the residue of a verified record gap, and new evidence against
 a settled decision is a statement plus default-continue
 (`present-verdicts-not-menus` §Closed decisions), not a reopened card.
 
+**Read the governing text before a ruling or a new home.** A status is
+ruled from the template that governs that file's line, not from a schema's
+general clause; a divergence is called after the file's open pull requests
+are read, since one may already carry the convergence; and a new rule or
+pattern file is authored after the candidate homes' headings are read, since
+a phrase search misses the home that already answers (three instances,
+2026-09-27 and 09-28).
+
 **A card built on a premise the seat knows is unverified is void.** Naming
 the verification as pending inside the recommendation is worse than
 omitting it — it advertises that the question was put before the reading
@@ -39,6 +52,25 @@ before looking at the OWA code is a waste of time"; the premise was an
 absence inferred from URL helpers, never from the product's code). Read
 the source that the premise rests on first; a question is the residue of a
 verified gap, never the substitute for reading.
+
+**Owner-decision-class facts are read, then asked — never surveyed.** Repo
+purpose, edit authority, audience and priority are the owner's facts; they
+live in his word and his ratified records, never in the bytes. A survey or
+instrument built to infer them ratifies its own model and returns zero
+evidence — instrument ratification is not weak evidence, it is none
+(2026-08-17: a landscape survey of about thirteen million tokens guessed at
+what the owner wanted while an earlier plan of his already stated it;
+recurrence 2026-09-01). Read the ratified record first; if it is silent,
+ask him directly, in one card.
+
+Read the text that owns a subject before amending it or proposing for it. An
+amendment to wording that implements an owner ruling is preceded by a grep of
+this estate's own doctrine for the sections the ruling touches (a signed
+cross-estate gloss collided with the testing directive's §Stubs vs Fakes,
+2026-09-24), and a mechanism proposed for an act class is preceded by reading
+the rule that owns that class (a repository `author.*` setting was proposed
+against the rule that keeps the author explicit, 2026-09-24; five instances
+across three seats in four days).
 
 ## Two Structural Guards
 
@@ -83,7 +115,7 @@ This rule is the operational expression of
 the doctrinal frame under which the rule's substance lives. PDR-057
 supersedes the quarantined `apply-don't-ask` candidate; the original
 doctrine was
-[quarantined on 2026-05-01](../memory/operational/quarantine/apply-dont-ask-doctrine.md)
+quarantined on 2026-05-01 (OCE)
 because it lacked a destructive-operation guard and contributed to
 the action landscape that produced a destructive
 `git checkout --` incident.
@@ -117,11 +149,8 @@ the action that information enabled.
 
 - [PDR-057 (empirical-answerability)](../practice-core/decision-records/PDR-057-empirical-answerability.md)
   — the doctrinal frame this rule implements.
-- [`undo-change` skill](../skills/undo-change/SKILL-CANONICAL.md) — the same
+- [`undo-change` skill](../skills/change-custody/undo-change/SKILL-CANONICAL.md) — the same
   *render the diagnosis, then halt-ask* shape applied to undo
   operations.
-- [Quarantined apply-don't-ask doctrine](../memory/operational/quarantine/apply-dont-ask-doctrine.md)
-  — the predecessor doctrine; preserved for review (quarantine
-  cleared 2026-05-10 by PDR-057 + PDR-058).
 - [Pending-graduations register](../memory/operational/pending-graduations.md)
   — graduation log + design/outcome optionality routing labels.

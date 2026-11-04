@@ -2,6 +2,7 @@
 title: "Prefer Native SDK Over Custom Plumbing"
 polarity: pattern
 category: architecture
+layer: general
 barrier_met: true
 source_sessions: ["2026-04-14d", "2026-04-14g"]
 ---
@@ -51,7 +52,7 @@ make both coexist?"
 
 ## Evidence
 
-`@oaknational/sentry-mcp` provided custom per-handler MCP
+OCE's `sentry-mcp` package provided custom per-handler MCP
 observation wrapping. Sentry SDK v10.47.0 added
 `wrapMcpServerWithSentry()` which is a strict superset
 (transport correlation, error classification, 20+ OTel

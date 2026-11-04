@@ -137,7 +137,7 @@ In scope for downstream implementation:
   rendering after intent shape changes
 - `.agent/state/collaboration/active-claims.schema.json`
 - `.agent/state/collaboration/closed-claims.schema.json`
-- `.agent/skills/commit/SKILL-CANONICAL.md`
+- `.agent/skills/change-custody/commit/SKILL-CANONICAL.md`
 - `.agent/directives/agent-collaboration.md`
 - focused README or lifecycle documentation that describes the queue handoff
 

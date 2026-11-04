@@ -25,6 +25,9 @@ const ORIENTATION_GUIDANCE = 'packages/sdks/oak-curriculum-sdk/src/mcp/orientati
 const UNIVERSAL_EXECUTOR = 'packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/executor.ts';
 const TOOL_DESCRIPTION_PARTS =
   'packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/tool-description.ts';
+const EXPLORE_EXECUTION = `${SDK_MCP}/aggregated-explore/execution.ts`;
+const GENERATE_MARKDOWN_DOCS =
+  'packages/sdks/oak-sdk-codegen/code-generation/generate-markdown-docs.ts';
 
 export const CURRENT_AGGREGATED_ITEM_ANCHOR_OVERRIDES = {
   C001: {
@@ -222,6 +225,24 @@ export const CURRENT_AGGREGATED_ITEM_ANCHOR_OVERRIDES = {
   C706: {
     [AUTH_ROUTES]: [
       'resource: `${selfOrigin}${MCP_RESOURCE_PATH}`,\n      authorization_servers: [upstreamMetadata.issuer],\n      scopes_supported: SCOPES_SUPPORTED,',
+    ],
+  },
+  /**
+   * Two error-message items whose baseline fragments spanned a `catch` clause.
+   * The 2026-11-01 lint pass renamed every catch parameter to `error`, so the
+   * baseline fragment no longer occurs in the source while the served wording
+   * is unchanged; these anchors are the content-bearing lines themselves.
+   */
+  C111: {
+    [EXPLORE_EXECUTION]: [
+      "error: `${scopeName} search failed: ${result.error?.message ?? 'unknown error'}`,",
+      'return { ok: false, error: `${scopeName} search error: ${message}` };',
+    ],
+  },
+  C426: {
+    [GENERATE_MARKDOWN_DOCS]: [
+      'function formatZodIssues(issues: ZodIssueType[]): string {',
+      String.raw`throw new Error('TypeDoc JSON validation failed:\n' + formatZodIssues(error.issues), {`,
     ],
   },
 } as const;

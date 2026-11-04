@@ -4,33 +4,11 @@
 import { describe, expect, it } from 'vitest';
 
 import type { Lesson } from '../../types/generated/bulk/index.js';
+import { createLesson } from '../test-fixtures.js';
 
 import { extractTeacherTips } from './teacher-tip-extractor.js';
 
 describe('extractTeacherTips', () => {
-  const createLesson = (overrides: Partial<Lesson>): Lesson => ({
-    lessonTitle: 'Test Lesson',
-    lessonSlug: 'test-lesson',
-    oakUrl: 'https://www.thenational.academy/teachers/lessons/test-lesson',
-    canonicalUrl:
-      'https://www.thenational.academy/teachers/programmes/english-primary-ks2/units/test-unit/lessons/test-lesson',
-    unitSlug: 'test-unit',
-    unitTitle: 'Test Unit',
-    subjectSlug: 'english',
-    subjectTitle: 'English',
-    keyStageSlug: 'ks2',
-    keyStageTitle: 'Key Stage 2',
-    lessonKeywords: [],
-    keyLearningPoints: [],
-    misconceptionsAndCommonMistakes: [],
-    pupilLessonOutcome: 'Test outcome',
-    teacherTips: [],
-    contentGuidance: null,
-    downloadsavailable: true,
-    supervisionLevel: null,
-    ...overrides,
-  });
-
   it('extracts teacher tips from a lesson', () => {
     const lessons: readonly Lesson[] = [
       createLesson({

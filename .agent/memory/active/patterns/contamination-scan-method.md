@@ -3,6 +3,7 @@ name: Contamination Scan Method
 polarity: pattern
 use_this_when: A plan, report, or memory estate may contain contaminated current-truth claims and needs a repeatable scan that separates live residue from historical mention
 category: process
+layer: general
 proven_in: .agent/reports/mandate-1-contamination-scan-2026-06-02.md
 proven_date: 2026-06-02
 barrier:
@@ -73,7 +74,7 @@ refutation-briefed reviewer fan-out, and calibrated reviewer recall with a
 withheld known-answer probe.
 
 Method ledger:
-[`mandate-1-contamination-scan-2026-06-02.md`](../../../reports/mandate-1-contamination-scan-2026-06-02.md).
+`mandate-1-contamination-scan-2026-06-02.md`.
 
 The 2026-06-02 ADR-173 `Inc.3` decontamination pass supplied the same
 history-vs-live-residue distinction at smaller scale: dated amendment history

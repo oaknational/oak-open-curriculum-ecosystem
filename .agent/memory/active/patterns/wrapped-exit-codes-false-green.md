@@ -3,6 +3,7 @@ name: "Wrapped Exit Codes False-Green"
 polarity: anti-pattern
 use_this_when: "Reading success from any piped, redirected, background-wrapped, or hook-bannered invocation — especially git push, aggregate gate runs, and collaboration-CLI writes."
 category: process
+layer: general
 proven_in: "Worked instances 2026-06-08 → 2026-06-12: piped pnpm check, piped/redirected/bare git push triplet (PR #176), background-task wrapper over red hooks, collaboration-CLI proof-line destinations"
 proven_date: 2026-06-12
 barrier:

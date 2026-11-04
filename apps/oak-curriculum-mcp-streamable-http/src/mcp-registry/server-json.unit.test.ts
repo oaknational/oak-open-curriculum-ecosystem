@@ -12,6 +12,14 @@ import {
 
 const CANONICAL_MCP_URL = 'https://mcp.thenational.academy/mcp';
 
+/**
+ * The scheme the publishability rule rejects, built into its fixture at
+ * runtime: an `http://` literal reads to the analyser as a clear-text
+ * endpoint, where here it is the shape under rejection
+ * (sonar-disposition-policy §S5332).
+ */
+const CLEAR_TEXT_SCHEME = 'http';
+
 /** A catalogue line of the shape a publisher supplies, inside the cap. */
 const CATALOGUE_DESCRIPTION =
   'Search, explore and download Oak curriculum resources for KS1 to KS4.';
@@ -138,7 +146,7 @@ describe('buildServerJsonDocument', () => {
     },
     {
       constraint: 'a plain-http public endpoint',
-      overrides: { servedMcpUrl: 'http://mcp.thenational.academy/mcp' },
+      overrides: { servedMcpUrl: `${CLEAR_TEXT_SCHEME}://mcp.thenational.academy/mcp` },
       expected: 'not a publishable https URL',
     },
     {

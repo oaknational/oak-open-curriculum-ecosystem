@@ -31,6 +31,7 @@ domain-specific flows:
 - `commit-queue`: coordinate short-lived git index/head commit windows and verify staged bundles before commit.
 - `branch-touched-files`: report the files touched by a branch against a base ref.
 - `context-cost`: estimate chars/4 token cost for an arbitrary fileset from repeatable glob inputs.
+- `arc-metrics`: measure an arc from the vendor's session transcripts — active hours against a named gap threshold, model calls and tokens counted once per API message id, median context per call (per session only), compactions, usage-limit stalls, and owner messages read from the transcript's own attribution (the owner's turns, and the messages a running turn absorbed) with the excluded count reported beside them. It measures the main sessions' transcripts; the sub-agent transcripts the vendor nests under each session are not counted.
 - `claude-agent-ops`: monitor background agents, inspect logs, diff worktrees, run preflight checks, and run a summary-first health probe for agent infrastructure drift.
 - `cursor-session-from-claude-session`: find/inspect Claude sessions and generate Cursor takeover bundles with an explicit reintegration contract.
 - `codex-reviewer-resolve`: resolve a repo-local Codex reviewer adapter to the exact `.codex` and canonical `.agent` files that should ground a review.
@@ -43,12 +44,9 @@ domain-specific flows:
 agent-tools/
 ├─ src/bin/        # CLI entrypoints
 ├─ src/core/       # Shared runtime/session helpers
-├─ src/refounding/ # Plan-corpus refounding instrument (run-scoped; owned by
-│                  # the plan-corpus-refounding plan + G1 packet; invoked via
-│                  # package scripts, no root aliases)
 ├─ tests/          # Shared test fakes and existing co-located coverage
 ├─ e2e-tests/      # E2E suites
-└─ smoke-tests/    # Local running-command smoke checks
+└─ smoke-tests/    # Running-command smoke checks; test:e2e runs every *.smoke.ts
 ```
 
 ## Commands
@@ -60,10 +58,12 @@ pnpm agent-tools:build
 pnpm agent-tools:lint
 pnpm agent-tools:test
 pnpm agent-tools:test:e2e
-pnpm agent-tools:smoke:collaboration-tui
 pnpm agent-tools agent-identity --seed example-session-id-001 --format display
 pnpm agent-tools collaboration-state identity preflight --platform codex --model GPT-5
 pnpm agent-tools context-cost --glob '.agent/rules/*.md'
+pnpm agent-tools arc-metrics --vendor claude --json
+pnpm agent-tools merge-bot pull-request comment --pr 42 --body-file /tmp/reply.md
+pnpm agent-tools merge-bot pull-request dispatch-workflow --workflow upstream-carrier.yml
 pnpm agent-tools:claude-agent-ops status
 pnpm agent-tools:claude-agent-ops health
 pnpm agent-tools:cursor-session-from-claude-session find --last-hours 2
@@ -198,6 +198,18 @@ pnpm agent-tools:collaboration-state comms direct \
   --active .agent/state/collaboration/active-claims.json
 ```
 
+The CLI owns its own mechanics: `--now` defaults to the wall clock, the sender identity derives from
+the platform session seed, and on `comms send`, `comms watch` and `comms validate` the registry and
+stream paths resolve to the primary coordination home, so an agent never copies timestamps, ids or
+registry paths between commands. On those commands the explicit flags stay for deterministic tests,
+recovery and replay, never as the normal path (OCE friction F-19, settled 2026-06-28). `comms
+direct` and `comms reply` still take `--active` and `--comms-dir` explicitly.
+
+To capture a command's output in a script, run the shortcut silently (`pnpm -s agent-tools:<topic>
+-- <command>`) or call `node agent-tools/dist/src/bin/agent-tools.js` directly; without `-s` the
+pnpm wrapper prints its script preamble ahead of the command's stdout and the captured value is
+polluted (OCE friction F-36, settled 2026-08-14).
+
 For directed messages (`comms direct` / `comms reply`), the body
 (whether inline or from file) must contain at least one non-
 whitespace character after trimming; an empty file is rejected as
@@ -234,23 +246,27 @@ pnpm agent-tools collaboration-state comms render \
   --output .agent/state/collaboration/shared-comms-log.md
 ```
 
-The automated startup smoke is intentionally separate from E2E:
+The TUI's startup smoke runs in the [smoke suite](#the-smoke-suite); to run it alone:
 
 ```bash
 pnpm agent-tools:build
-pnpm agent-tools:smoke:collaboration-tui
+cd agent-tools && node --import tsx smoke-tests/collaboration-tui-start.smoke.ts
 ```
 
 ## `agent-identity` quick reference
 
-- `--seed <seed>` — explicit stable seed. If omitted, the CLI reads
-  `PRACTICE_AGENT_SESSION_ID_CLAUDE`, then
+- `--seed <seed>` — explicit stable seed. If omitted, `--platform <label>` is
+  required and the CLI reads `PRACTICE_AGENT_SESSION_ID_CLAUDE`, then
   `PRACTICE_AGENT_SESSION_ID_CURSOR`, then
   `PRACTICE_AGENT_SESSION_ID_GEMINI`, then
-  `PRACTICE_AGENT_SESSION_ID_CODEX`, then `CODEX_THREAD_ID`, then
-  Antigravity's stable `conversationId` surfaces.
+  `PRACTICE_AGENT_SESSION_ID_CODEX`, then `CLAUDE_CODE_REMOTE_SESSION_ID`,
+  then `CLAUDE_CODE_SESSION_ID`, then `CODEX_THREAD_ID`, then Antigravity's
+  stable `conversationId` surfaces.
+- `--platform <label>` — the seat's platform (`claude-code`, `cursor`, `codex`
+  or `gemini`). The three Claude seeds count only on a Claude platform, so a
+  seat opened from a Claude shell keeps its own identity.
 - `--format kebab|display|json` — output slug, display name, or full result.
-- `OAK_AGENT_IDENTITY_OVERRIDE` — bypasses wordlist derivation with a
+- `PRACTICE_AGENT_IDENTITY_OVERRIDE` — bypasses wordlist derivation with a
   type-total override result.
 
 There is no `git config user.email` fallback. Platform wrappers or harness
@@ -266,11 +282,25 @@ Examples:
 pnpm agent-tools agent-identity --seed example-session-id-001 --format display
 pnpm agent-tools:build
 node agent-tools/dist/src/bin/agent-tools.js agent-identity --seed example-session-id-001 --format json
-OAK_AGENT_IDENTITY_OVERRIDE="Frolicking Toast" pnpm agent-tools agent-identity --seed any --format display
+PRACTICE_AGENT_IDENTITY_OVERRIDE="Frolicking Toast" pnpm agent-tools agent-identity --seed any --format display
 ```
 
 ## `collaboration-state` quick reference
 
+- **Every entry point that reads the claims file is a migration trigger.**
+  `claims`, `comms append` / `comms send`, and the audits all read the
+  active-claims file through the migrating reader, so the first such call
+  after a rebuild that ships a newer registry schema runs the one-time
+  migration — and the migration archives nothing by design (the operator
+  conserves the blob). A comms broadcast is therefore a transactional touch,
+  not a read: on 2026-09-04 the 1.3.0 → 1.4.0 queue split ran under a
+  merge-landed broadcast seconds after the primary's dist was rebuilt and
+  before the planned by-hand archive copy, so no pre-migration copy of that
+  day's file exists. When a landing changes a state-file schema, sequence it
+  as archive copy → rebuild → first write, and use absolute paths in every
+  shell call on this repo (the shell's working directory persists between
+  calls; one `cd` into a subdirectory made later relative paths read as
+  "file missing").
 - `identity preflight` — emit the collaboration-state identity block with
   `agent_name`, `platform`, `model`, `session_id_prefix`, and seed source.
 - `comms watch` / `comms inbox` / `comms list` headings and summary lines,
@@ -282,8 +312,9 @@ OAK_AGENT_IDENTITY_OVERRIDE="Frolicking Toast" pnpm agent-tools agent-identity -
   bare prefix. Derivation, doctrine, the statusline hold-out, and a
   drift-tested example: [docs/agent-identity.md](docs/agent-identity.md).
 - `comms append` / `comms send` / `comms render` — append immutable
-  communication events and render `shared-comms-log.md`. Use `send` for the
-  low-boilerplate append-and-render path. `send` prints JSON with `event_id`,
+  communication events; every write renders `shared-comms-log.md` beside the
+  comms directory as part of the write, and `render` re-renders it on demand.
+  Use `send` for the low-boilerplate path with canonical paths resolved. `send` prints JSON with `event_id`,
   `event_path`, and `shared_log_path` so agents can verify the write target.
   Comms writes check the active-claims registry and refuse live collisions on
   the canonical PDR-076a `sameAgentRoutingKey` (the stable `id`); a matching
@@ -312,8 +343,8 @@ OAK_AGENT_IDENTITY_OVERRIDE="Frolicking Toast" pnpm agent-tools agent-identity -
   defaults to the platform-derived Practice session id (matching `comms send`
   / `comms direct`); explicit `--agent-name` + a REQUIRED non-empty
   `--session-prefix` is available for admin/test overrides (a supplied
-  `--session-prefix` is trimmed and must be non-empty on any path). `watch` uses `fs.watch` with polling
-  fallback and records seen event ids in a durable cursor. Omit
+  `--session-prefix` is trimmed and must be non-empty on any path). `watch` polls the comms
+  directory every `--poll-ms` and records seen event ids in a durable cursor. Omit
   `--comms-dir` and `--seen-file` together to resolve the PRIMARY coordination
   home and derive `comms-seen/<exact display name>.json`; `--repo-root`
   overrides that derived home. Resolution precedence is explicit
@@ -408,6 +439,25 @@ pnpm agent-tools collaboration-state comms validate
 pnpm agent-tools commit-queue status
 ```
 
+## `coordination` quick reference
+
+- `successor-name [--base <ref>]` — prints the next coordination branch name,
+  `coordination/<UTC date>-<sha6>`, from the FULL sha the base ref resolves to;
+  read-only, never cuts the branch (the `cut-coordination-branch` skill does).
+- `fold-clock --pr <n> [--repo <owner>/<repo>] [--successor <sha>] [--gh <path>] [--json]` —
+  prints a fold's measured clock as one line for the review-cost ledger row: the
+  ready-mark (the last `ready_for_review`, else the opening), checks green on the
+  base branch's REQUIRED contexts (the merge door's own definition for the records
+  class; a vendor's review runs as a check-run and never counts; each context is
+  judged by its latest run, check-runs and commit statuses alike), each Bot review
+  round (a request answered by that Bot's next review; a newer request supersedes
+  an open one at once), the merge, and with
+  `--successor` the successor tip's first check-run start. Every interval is minutes
+  from the ready-mark. Read-only on the session's own `gh` login through the
+  keyring-pinned read executor (no ambient token). Exit 0 on success, 2 on any
+  error with stdout empty. The `coordination-fold` skill's step 10 pastes the line
+  into the ledger row's Notes.
+
 ## `commit-queue` quick reference
 
 - `enqueue` — register a commit intent against an active claim and print the
@@ -419,12 +469,13 @@ pnpm agent-tools commit-queue status
   `abandoned`.
 - `record-staged` / `verify-staged` — capture and verify the exact staged
   bundle before committing.
-- `complete` — remove a landed intent and clear the owning claim pointer.
-- `status` — print queued, active, expired, and abandoned entries as JSON
-  without parsing `active-claims.json` manually.
+- `complete` — remove a landed intent.
+- `status` — print the live entries as JSON from the per-intent store,
+  counted as active or abandoned (a TTL-expired file reads as absent, so it
+  never appears in any view).
 - `list [--prefix <intent-prefix>]
 [--phase <queued|staging|pre_commit|abandoned>]
-[--agent-name <prefix>] [--queue-status <active|expired|abandoned>]` —
+[--agent-name <prefix>] [--queue-status <active|abandoned>]` —
   print matching queue entries only.
 - `show --intent-id <uuid>` — print one exact queue entry.
 
@@ -458,13 +509,13 @@ The Claude Code statusline is rendered by the built adapter
 Code passes on stdin and renders identity, coordination glyphs, model,
 context/usage percentages, and git location. Environment controls:
 
-- `OAK_STATUSLINE_LOGO` — logo style: `braille-sharp` (default),
+- `PRACTICE_STATUSLINE_LOGO` — logo style: `braille-sharp` (default),
   `braille-sharp-compact`, `braille`, `quad`, `sextant`, or `none`
   (hides the logo column; every present row still renders).
-- `OAK_STATUSLINE_MOTION` — set to `off`, `static`, `none`, or
+- `PRACTICE_STATUSLINE_MOTION` — set to `off`, `static`, `none`, or
   `reduce` (case-insensitive) to disable the logo animation cycle;
   other values leave motion on.
-- `OAK_STATUSLINE_LOG_FILE` — diagnosis logging: set to a path ending
+- `PRACTICE_STATUSLINE_LOG_FILE` — diagnosis logging: set to a path ending
   `.log` and the adapter appends one timestamped line per invocation
   carrying the stdin payload as received — terminal line breaks
   stripped, interior line breaks collapsed to spaces, every other
@@ -473,8 +524,9 @@ context/usage percentages, and git location. Environment controls:
   statusline warning, including on payloads that otherwise render
   nothing. The
   destination is a boundary: symlinks refuse to open, non-regular files
-  never receive a write, and a pre-existing file is retightened to
-  owner-only before each append. Write refusals are swallowed — the
+  never receive a write, a pre-existing file is retightened to
+  owner-only before each append, and native Windows, where file modes
+  cannot make a file owner-only, gets no log. Write refusals are swallowed — the
   statusline never breaks for its own
   diagnostics. The log grows unbounded and carries session ids and
   paths: delete it after the diagnosis.
@@ -539,6 +591,62 @@ pnpm agent-tools:codex-reviewer-resolve sentry-expert
 pnpm agent-tools:codex-reviewer-resolve architecture-expert-fred --json
 ```
 
+## `skill-evals` quick reference
+
+Runs a canonical skill's declared evals (`<skill>/evals/evals.json`, the cases; `evals/trigger-validation.json`, the
+trigger examples) through the host eval runner, `claude plugin eval`, and retains the evidence in the repository.
+
+- `run --skill <canonical dir> --host-skill <name>` — project the fixtures into a temporary plugin whose skill is the
+  host adapter's frontmatter over the canonical body (references carried beside; a link into a sibling skill's
+  references is pointed at `references/<sibling>/` under the skill and the linked file is projected there from its
+  canonical source, transitively, so the projected skill reads what the canonical links; a link to a sibling's
+  `SKILL-CANONICAL.md` is left as written, the sibling being reached as a skill, via `--also`), run the cases with
+  the with-without ablation and the trigger examples without one, and retain the runner's result, every run's trace
+  and final answer, and a manifest (blob ids of every carried skill's canonical and adapter files and of the sibling
+  references projected under it, the repository head, the runner configuration, the cases asked for and the cases
+  that ran) under `<canonical dir>/evals/results/<started-at>/`, every machine-local path scrubbed
+- `--also <canonical dir>=<name>` (repeatable) — carry another skill in the plugin, so a case that declares
+  `skills_expected` (canonical names) can exercise a handoff to it; each expected skill gets its own fired indicator
+- `project --skill <canonical dir> --host-skill <name> --out <dir>` — write the same projection for inspection; nothing
+  runs
+- `--suite all|cases|triggers`, `--case <glob>` (narrows within each suite; an emptied suite is not invoked),
+  `--ablation with-without|none`, `--runs <n>`, `--max-cost-usd <usd>` (the runner's ceiling; a run cut by it is
+  recorded PARTIAL), `--judge-model <m>`, `--model <m>`, `--max-turns <n>`, `--trigger-max-turns <n>`,
+  `--timeout-seconds <n>`, `--keep-plugin`, `--json`
+- Exit 0 done; exit 1 a named operational refusal (the kept plugin directory is named); exit 2 usage
+
+Four facts of the runner shape the projection, read first-hand from its traces and its binary on 2026-09-27. The agent
+under test runs in an empty temporary workspace and may read nothing outside it except the plugin's own files, so the
+method reaches it through the plugin's skill file alone and nothing is placed in the workspace: the without-arm, which
+has no plugin, has no route to the method (a workspace copy would have given the baseline the text, which the first
+form of this tool did). A `tool_used` grader counts the call, not its outcome, so the skill-fired indicator is paired
+with a trace check that no read under the plugin's `skills/` was refused. Its `input_match` is a regular expression
+over the serialised input, and the Skill tool names a plugin skill `<plugin>:<skill>`, so the indicator is anchored
+with a negative lookahead: `oak-specify` never counts `oak-specify-connection`. And the judge reads only the rubric,
+which carries the expected outcome and the numbered assertions and says when the method's absence is correct. The
+runner's default score threshold would exit 1 on any case below 1.0; the tool passes `--threshold 0` and reads pass,
+fail and score from the result, which is the evidence.
+
+Examples:
+
+```bash
+pnpm agent-tools:skill-evals run --skill .agent/skills/planning/user-value --host-skill oak-user-value --max-cost-usd 40 --judge-model sonnet
+pnpm agent-tools:skill-evals run --skill .agent/skills/planning/user-value --host-skill oak-user-value --suite triggers
+pnpm agent-tools:skill-evals run --skill .agent/skills/planning/plan --host-skill oak-plan --also .agent/skills/planning/user-value=oak-user-value --case case-04 --max-turns 40
+pnpm agent-tools:skill-evals project --skill .agent/skills/planning/user-value --host-skill oak-user-value --out ../inspect
+```
+
+The runner is a per-user install resolved by name on the operator's PATH: the run already loads the repository's own
+skills into an agent under `--trust-plugin`, so PATH resolution adds no trust boundary the run does not already cross;
+only suites the repository authored are run.
+
+## `codex-exec` quick reference
+
+- `last-message [--format text|json] [--strict]` — read a `codex exec` JSONL stream from stdin and print the final assistant text
+- `command-records [--format text|json] [--strict]` — read a seat's whole rollout from stdin and summarise what the harness recorded: the commands it ran per turn, every exec call accounted, refused or unaccounted, and every command carrying a forbidden shape of `.codex/rules/seat-landing.rules`, rendered by allowlist; `--strict` exits 1 on a shape that ran, an unaccounted call or unreadable evidence
+
+Both read the harness's own records, never the model's text (ADR-180 §2).
+
 ## Repo gate status
 
 `agent-tools` checks currently run via:
@@ -546,5 +654,25 @@ pnpm agent-tools:codex-reviewer-resolve architecture-expert-fred --json
 - `pnpm agent-tools:build`
 - `pnpm agent-tools:lint`
 - `pnpm agent-tools:test`
-- `pnpm agent-tools:test:e2e`
-- `pnpm agent-tools:smoke:collaboration-tui`
+- `pnpm agent-tools:test:e2e` (the E2E suites, the contract validators and every smoke)
+
+### The smoke suite
+
+`test:e2e` runs the E2E suites, the two contract validators, a build, and then the smoke suite:
+every `smoke-tests/*.smoke.ts`, discovered from the directory by
+`dist/src/bin/run-smoke-tests.js` rather than listed, so a new smoke file is gated as soon as it
+exists. Each smoke runs as `node --import tsx <file>` from the package root, as the runner's direct
+child, in UTF-16 code-unit order (code-point order for ASCII names). Every smoke runs even after a failure, and the suite fails when any
+smoke fails or is killed by a signal, or when none is found. The runner takes no arguments;
+`--help` prints its usage.
+
+Every smoke in the directory is on the PR-check path, since CI runs `test:e2e`, so no smoke may
+reach the network
+([ADR-161](../docs/architecture/architectural-decisions/161-network-free-pr-check-ci-boundary.md)).
+
+One smoke runs alone after a build, from `agent-tools/`:
+
+```bash
+pnpm agent-tools:build
+cd agent-tools && node --import tsx smoke-tests/<name>.smoke.ts
+```

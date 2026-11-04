@@ -89,11 +89,11 @@ async function bundleStageEntry<TData>(input: {
       );
     }
     return ok(bundle.text);
-  } catch (cause) {
+  } catch (error) {
     return err(
       new Error(
-        `esbuild failed for stage "${stage.name}": ${cause instanceof Error ? cause.message : String(cause)}`,
-        { cause },
+        `esbuild failed for stage "${stage.name}": ${error instanceof Error ? error.message : String(error)}`,
+        { cause: error },
       ),
     );
   }

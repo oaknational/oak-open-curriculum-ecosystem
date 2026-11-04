@@ -1,3 +1,8 @@
+---
+classification: core
+description: No irreversible discard in an agentic judgment pipeline rests on a single voter; LLMs emit per-item judgments only, deterministic code computes every aggregate and disposition; conserve by default (PDR-122).
+---
+
 # Agentic Judgment: Conserve by Default
 
 Operationalises

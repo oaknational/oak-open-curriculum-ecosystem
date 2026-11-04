@@ -78,7 +78,7 @@ export type AgentSupportToolName = keyof typeof AGENT_SUPPORT_TOOL_METADATA;
  * Array of all agent support tool names, sorted by call order.
  */
 export const AGENT_SUPPORT_TOOL_NAMES = typeSafeValues(AGENT_SUPPORT_TOOL_METADATA)
-  .sort((a, b) => a.callOrder - b.callOrder)
+  .toSorted((a, b) => a.callOrder - b.callOrder)
   .map((t) => t.name);
 
 /**
@@ -159,13 +159,13 @@ export function generateServerInstructions(): string {
   const startTools = allTools.filter((t) => t.callAtStart);
 
   const toolLines = startTools
-    .sort((a, b) => a.callOrder - b.callOrder)
+    .toSorted((a, b) => a.callOrder - b.callOrder)
     .map(
       (t) => `${String(t.callOrder)}. ${t.name} - ${t.shortDescription}: ${t.provides.join(', ')}`,
     );
 
   const relationshipLines = allTools
-    .sort((a, b) => a.callOrder - b.callOrder)
+    .toSorted((a, b) => a.callOrder - b.callOrder)
     .map((t) => `- ${t.name}: ${t.purpose}. See also: ${t.seeAlso}`);
 
   return `Oak Curriculum MCP Server - AI Agent Guidance

@@ -3,6 +3,7 @@ name: "A Live Peer's agent_name Assigned to Your Fresh Session Is a Collision to
 polarity: anti-pattern
 use_this_when: "Registering a session identity when the owner-assigned or derived agent_name matches a name already live in the claims registry or comms stream."
 category: process
+layer: general
 proven_in: "2026-06-21 (Aardvark turns Whisper) — rotating-cast name reuse"
 proven_date: 2026-06-21
 barrier:

@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0.0",
+  "conversation_id": "owner-only-retention-enforcement-2026-09-11",
+  "thread": "estate-coordination",
+  "status": "closed",
+  "title": "Conformance retention: what protects credential-bearing vendor output?",
+  "participants": [
+    {
+      "agent_name": "Nettle guards Pistil",
+      "platform": "claude-code",
+      "model": "claude-opus-5[1m]",
+      "session_id_prefix": "2de368"
+    },
+    {
+      "agent_name": "Owner",
+      "platform": "human",
+      "model": "human",
+      "session_id_prefix": "unknown"
+    }
+  ],
+  "opened_at": "2026-09-11T19:20:00Z",
+  "entries": [
+    {
+      "entry_id": "entry-001",
+      "kind": "message",
+      "created_at": "2026-09-11T19:20:00Z",
+      "author": {
+        "agent_name": "Nettle guards Pistil",
+        "platform": "claude-code",
+        "model": "claude-opus-5[1m]",
+        "session_id_prefix": "2de368"
+      },
+      "body": "An attended conformance run retains vendor output verbatim, and that output can carry a bearer or refresh token. PR #132 (merged, SHA:14d9938c2) made the owner-only file mode verified rather than assumed: the descriptor is probed and read back, and a mount that carries no permission bits, or reports a constant synthetic mode, is refused with nothing written. Review then established the limit of that approach and it is real. A round-trip proves the mount's mode interface is LIVE; it does not prove those bits govern access. A CIFS mount using client-cached dynperm with noperm round-trips mode changes locally while the server's own credentials and ACLs stay authoritative, and the module writes there. Node exposes no effective-access check: fs.access answers for the calling process, never for another principal."
+    },
+    {
+      "entry_id": "entry-002",
+      "kind": "decision_request",
+      "created_at": "2026-09-11T19:22:00Z",
+      "body": "Three answers, and the third is the one the first two obscured. (A) ACCEPT THE RESIDUAL AS BOUNDED. Attended conformance with retained authenticated output runs on POSIX or under WSL, on local storage, which is the estate's first-class tier; the exotic mount is out of scope and the module's narrowed claim already says exactly what it establishes. Costs nothing, changes nothing, leaves a documented hole. (B) COMMISSION THE MOUNT CHECK. A filesystem-type allowlist used deny-by-default (fs.statfsSync returns a StatFs whose `type` property carries the filesystem identifier — verified first-hand on this host: the object's keys are type, bsize, frsize, blocks, bfree, bavail, files, ffree, and there is no f_type; f_type is the C struct's field name, not Node's. The VALUE is platform-specific — a filesystem magic number on Linux, something else on macOS — so the allowlist is per-platform and its constants are read from each platform's own headers at implementation time rather than quoted here unverified), refusing retention on anything not on the allowlist. Closes the class, and refuses retention on EVERY network mount, which is a product decision about who may retain conformance output where rather than a defect fix. (C) REDACT AT THE RETENTION BOUNDARY. The whole owner-only apparatus exists because credential-bearing output is written to disk verbatim; there is no redaction anywhere in agent-tools/src/mcp-conformance (verified 2026-09-11). If the retained artefact carried no credential, the file-permission question would mostly dissolve: no secret on disk, nothing for an unusual mount to leak, and (A) and (B) both stop mattering. This is the lower level and the four review rounds spent hardening the mitigation never asked about it."
+    },
+    {
+      "entry_id": "entry-003",
+      "kind": "evidence",
+      "created_at": "2026-09-11T19:24:00Z",
+      "evidence": [
+        {
+          "kind": "thread_record",
+          "ref": ".agent/memory/operational/threads/estate-coordination.next-session.md",
+          "summary": "Carries the lane state and cites this thread; the options body it used to hold moved here."
+        },
+        {
+          "kind": "plan",
+          "ref": ".agent/plans/delivery/native-windows-support-carrier.plan.md",
+          "summary": "The carrier node whose todo 5 the verification closed; acceptance criteria and dispositions."
+        }
+      ]
+    },
+    {
+      "entry_id": "entry-004",
+      "kind": "decision",
+      "created_at": "2026-09-12T00:00:00Z",
+      "author": {
+        "agent_name": "Owner",
+        "platform": "human",
+        "model": "human",
+        "session_id_prefix": "unknown"
+      },
+      "body": "Owner, 2026-09-12, verbatim at the cards: \"redact at boundary, but do not touch any .env files\". Option C."
+    },
+    {
+      "entry_id": "entry-005",
+      "kind": "resolution",
+      "created_at": "2026-09-12T00:00:00Z",
+      "outcome": "resolved",
+      "body": "Resolved as option C with the .env prohibition. Options A and B are not taken. A composes with C rather than competing — the mode verification landed on PR #132 stays exactly as it is, and its residual stays documented — but it is no longer the answer to the question, because a retained artefact carrying no credential does not depend on the mount honouring its permission bits. B is refused: no filesystem-type allowlist, so retention keeps working on network mounts. The recorder's reading (Nettle guards Pistil, 2de368), not the owner's word: the constraint is read as part of the decision — the redactor must not read, scan or otherwise reach for .env files, which forbids sourcing known secret VALUES from environment files to match against output (a second secret-handling surface that would widen what option C exists to narrow); on that reading redaction is a property of the OUTPUT, shape-matched on the text about to be retained, never a comparison against real secrets read from disk. Implementation is not yet planned; the delivery node is this resolution's named follow-up."
+    }
+  ],
+  "closed_at": "2026-09-12T00:00:00Z"
+}

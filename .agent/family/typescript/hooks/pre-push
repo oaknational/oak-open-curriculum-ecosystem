@@ -1,0 +1,75 @@
+#!/usr/bin/env sh
+
+# Full pre-push (the owner's ruling of 2026-09-12, the TypeScript family's
+# convention by the owner's card answer of 2026-10-04: light commit, full
+# push): the secret scan of the pushed commits, the review cost gate, then the
+# read-only aggregate gate (`pnpm check`, whose end-to-end leg runs every
+# workspace's suite through turbo). The aggregate runs under a host gate slot
+# (no-unbounded-host-load item 6): at most two full gates on the host at once,
+# and one at a time in a working tree; a blocked push waits and names the
+# gates it waits for (`pnpm agent-tools:gate-slot status` lists them), and a
+# step that holds a slot past thirty minutes is stopped. The agent-tools
+# aliases carry --fail-if-no-match: pnpm exits 0 without running anything when
+# a filter matches no project.
+export TURBO_UI=0
+. .husky/turbo-remote-cache-notice.sh
+
+echo "🚀 Running pre-push checks..."
+
+if ! command -v gitleaks >/dev/null 2>&1; then
+  echo "❌ gitleaks is not installed."
+  echo "Install it before running pre-push:"
+  echo "  - macOS: brew install gitleaks"
+  # gitleaks' go.mod declares the zricethezav module path; the
+  # github.com/gitleaks/gitleaks form makes `go install` refuse the mismatch.
+  echo "  - Go: go install github.com/zricethezav/gitleaks/v8@latest"
+  echo "Then retry your push."
+  exit 1
+fi
+
+echo "🛡️ Running secret scan (pushed commits only; CI scans full history)..."
+# git feeds pre-push the destination remote name as $1 and, on stdin, one
+# "<local_ref> <local_sha> <remote_ref> <remote_sha>" line per pushed ref. The
+# tested range logic lives in agent-tools/src/secret-scan/; here we only capture
+# git's ref lines into a temp file (a clean single-token path survives pnpm's
+# argument handling) and hand them to the scanner, which scans ONLY the pushed
+# commits. The CI secret-scan job runs the full `--branches --tags` scan as the
+# comprehensive backstop, so no history goes unscanned.
+pushed_refs="$(mktemp)"
+[ -t 0 ] || cat > "$pushed_refs"   # capture git's ref lines once (empty on a manual/TTY run)
+pnpm agent-tools:secret-scan --remote "$1" --refs-file "$pushed_refs"
+secret_scan_status=$?
+if [ "$secret_scan_status" -ne 0 ]; then
+  rm "$pushed_refs"
+  echo "❌ Secret scan failed."
+  echo "Remove or scrub secret-like values before pushing."
+  echo "Use local placeholders for .env.example and real credentials only in .env files."
+  exit 1
+fi
+
+echo "💸 Pricing the review loop against the declared budget..."
+# The review cost gate (a pull request of 2026-09-12 took seven settlement
+# pushes against a declared budget of two, stopped only by the owner). It
+# prices every pushed branch from the captured ref lines; past the budget
+# the push is held, here before the long check, until the seat has written
+# its decision as one line in the local note the gate names, then the same
+# push passes (the owner, 2026-10-24: the check makes the seat think, and
+# costs no comment, no further push and never the owner's word). A TTY run
+# with no ref lines prices nothing.
+pnpm --silent agent-tools:review-cost gate --refs-file "$pushed_refs"
+review_cost_status=$?
+rm "$pushed_refs"
+if [ "$review_cost_status" -ne 0 ]; then
+  echo "❌ Review cost gate held the push: read its lines above (the budget is spent with no decision line recorded, or the pricing failed)."
+  echo "💡 One line in .agent/state/collaboration/review-rebudgets.md, then the same push again."
+  exit 1
+fi
+
+echo "🧪 Running the aggregate gate (pnpm check) under the host gate slot..."
+if ! env -u GIT_DIR -u GIT_INDEX_FILE -u GIT_WORK_TREE \
+  pnpm agent-tools:gate-slot run pnpm check; then
+  echo "❌ check did not pass (the reason is above)."
+  exit 1
+fi
+
+echo "✅ Pre-push checks completed!"

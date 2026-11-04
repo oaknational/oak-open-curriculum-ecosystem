@@ -3,10 +3,10 @@ id: consolidation-induction
 node_type: delivery
 name: "Consolidation induction — one action, either direction"
 overview: "A consolidation session becomes a single agent-inducible action: canonical skill-homed dispatch brief; the prompt files become thin pointers."
-status: sketch
-ratified_by: null
-ratified_date: null
-ratified_where: null
+status: ratified
+ratified_by: Jim Cresswell (owner)
+ratified_date: 2026-09-08
+ratified_where: "PR #85 (2026-09-08), whose body quotes the owner's card answer verbatim: 'Ratify 2, 3 and 4; hold 1'"
 serves: planning-and-intent-estate
 impact_areas:
   - practice-and-estate
@@ -15,7 +15,7 @@ depends_on:
   - plan: consolidation-signal
     kind: beneficial
 owner_gates: []
-last_updated: 2026-07-31
+last_updated: 2026-09-08
 ---
 
 # Consolidation induction — one action, either direction

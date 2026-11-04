@@ -23,6 +23,48 @@ const candidate = (id: string): { id: string; pattern: string } => ({
   pattern: `pattern ${id}`,
 });
 
+/** A validated candidate carrying one of the terminal dispositions. */
+const terminalCandidate = (
+  id: string,
+  disposition: ValidatedCandidate['disposition'],
+): ValidatedCandidate => ({
+  candidateId: id,
+  disposition,
+  reason: null,
+});
+
+/** A validated candidate held for review for the given reason. */
+const heldCandidate = (id: string, reason: string): ValidatedCandidate => ({
+  candidateId: id,
+  disposition: 'held-for-review',
+  reason,
+});
+
+/**
+ * A fake of the harness `parallel`: runs a chunk's thunks concurrently, returns results in order,
+ * and substitutes `null` for a thunk that throws (the harness null-on-throw contract).
+ */
+const fakeParallel = async <R>(
+  thunks: readonly (() => Promise<R>)[],
+): Promise<readonly (R | null)[]> =>
+  Promise.all(
+    thunks.map(async (t) => {
+      try {
+        return await t();
+      } catch {
+        return null;
+      }
+    }),
+  );
+
+/** A work item that yields ten times its input and rejects at exactly three. */
+const tenfoldRejectingAtThree = (n: number): Promise<number> =>
+  n === 3 ? Promise.reject(new Error('boom')) : Promise.resolve(n * 10);
+
+/** A parallel runner that rejects outright instead of substituting null per thunk. */
+const rejectingParallel = (): Promise<readonly (number | null)[]> =>
+  Promise.reject(new Error('runParallel failed'));
+
 describe('resolveResumeSeed (candidate-granular resume)', () => {
   const seed = [candidate('C01'), candidate('C02'), candidate('C03'), candidate('C04')];
 
@@ -55,25 +97,12 @@ describe('resolveResumeSeed (candidate-granular resume)', () => {
 
 describe('assessValidateCompleteness (the extended completeness guard)', () => {
   const candidates = [{ id: 'C01' }, { id: 'C02' }, { id: 'C03' }];
-  const terminal = (
-    id: string,
-    disposition: ValidatedCandidate['disposition'],
-  ): ValidatedCandidate => ({
-    candidateId: id,
-    disposition,
-    reason: null,
-  });
-  const held = (id: string, reason: string): ValidatedCandidate => ({
-    candidateId: id,
-    disposition: 'held-for-review',
-    reason,
-  });
 
   it('is complete when every candidate has a terminal disposition and the count matches', () => {
     const validated = [
-      terminal('C01', 'keep'),
-      terminal('C02', 'kill'),
-      terminal('C03', 'reroute'),
+      terminalCandidate('C01', 'keep'),
+      terminalCandidate('C02', 'kill'),
+      terminalCandidate('C03', 'reroute'),
     ];
     expect(assessValidateCompleteness(validated, candidates)).toEqual({
       complete: true,
@@ -83,7 +112,11 @@ describe('assessValidateCompleteness (the extended completeness guard)', () => {
   });
 
   it('is incomplete on a retry-cap hold (the original quota-trip case)', () => {
-    const validated = [terminal('C01', 'keep'), held('C02', 'retry-cap'), terminal('C03', 'keep')];
+    const validated = [
+      terminalCandidate('C01', 'keep'),
+      heldCandidate('C02', 'retry-cap'),
+      terminalCandidate('C03', 'keep'),
+    ];
     const report = assessValidateCompleteness(validated, candidates);
     expect(report.complete).toBe(false);
     expect(report.incompleteCandidateIds).toEqual(['C02']);
@@ -92,9 +125,9 @@ describe('assessValidateCompleteness (the extended completeness guard)', () => {
 
   it('is incomplete on a held-for-review of ANY reason, not only retry-cap (the extension)', () => {
     const validated = [
-      terminal('C01', 'keep'),
-      held('C02', 'quorum-tie'),
-      held('C03', 'lens-collision'),
+      terminalCandidate('C01', 'keep'),
+      heldCandidate('C02', 'quorum-tie'),
+      heldCandidate('C03', 'lens-collision'),
     ];
     const report = assessValidateCompleteness(validated, candidates);
     expect(report.complete).toBe(false);
@@ -102,7 +135,7 @@ describe('assessValidateCompleteness (the extended completeness guard)', () => {
   });
 
   it('is incomplete when a candidate is missing from validated (a silent filter(Boolean) drop)', () => {
-    const validated = [terminal('C01', 'keep'), terminal('C03', 'kill')]; // C02 dropped
+    const validated = [terminalCandidate('C01', 'keep'), terminalCandidate('C03', 'kill')]; // C02 dropped
     const report = assessValidateCompleteness(validated, candidates);
     expect(report.complete).toBe(false);
     expect(report.missingCandidateIds).toEqual(['C02']);
@@ -110,7 +143,7 @@ describe('assessValidateCompleteness (the extended completeness guard)', () => {
   });
 
   it('reports held AND missing together (the two failure dimensions do not mask each other)', () => {
-    const validated = [terminal('C01', 'keep'), held('C02', 'quorum-tie')]; // C02 held, C03 dropped
+    const validated = [terminalCandidate('C01', 'keep'), heldCandidate('C02', 'quorum-tie')]; // C02 held, C03 dropped
     const report = assessValidateCompleteness(validated, candidates);
     expect(report.complete).toBe(false);
     expect(report.incompleteCandidateIds).toEqual(['C02']);
@@ -119,10 +152,10 @@ describe('assessValidateCompleteness (the extended completeness guard)', () => {
 
   it('is incomplete when the validated count does not match (a duplicate row)', () => {
     const validated = [
-      terminal('C01', 'keep'),
-      terminal('C02', 'keep'),
-      terminal('C03', 'keep'),
-      terminal('C03', 'keep'), // duplicate → count 4 ≠ 3
+      terminalCandidate('C01', 'keep'),
+      terminalCandidate('C02', 'keep'),
+      terminalCandidate('C03', 'keep'),
+      terminalCandidate('C03', 'keep'), // duplicate → count 4 ≠ 3
     ];
     expect(assessValidateCompleteness(validated, candidates).complete).toBe(false);
   });
@@ -217,21 +250,6 @@ describe('deterministicJitterMs (no Math.random — resume-safe in the Workflow 
 });
 
 describe('runCapped (chunked-barrier concurrency cap, injected parallel)', () => {
-  // A fake of the harness `parallel`: runs a chunk's thunks concurrently, returns results in order,
-  // and substitutes `null` for a thunk that throws (the harness null-on-throw contract).
-  const fakeParallel = async <R>(
-    thunks: readonly (() => Promise<R>)[],
-  ): Promise<readonly (R | null)[]> =>
-    Promise.all(
-      thunks.map(async (t) => {
-        try {
-          return await t();
-        } catch {
-          return null;
-        }
-      }),
-    );
-
   it('preserves global output order == input order across chunk boundaries', async () => {
     const out = await runCapped([1, 2, 3, 4, 5], 2, async (n) => n * 10, fakeParallel);
     expect(out).toEqual([10, 20, 30, 40, 50]);
@@ -268,9 +286,7 @@ describe('runCapped (chunked-barrier concurrency cap, injected parallel)', () =>
   });
 
   it('passes null through at the exact failing position (mirrors the parallel null-on-throw contract)', async () => {
-    const fn = (n: number): Promise<number> =>
-      n === 3 ? Promise.reject(new Error('boom')) : Promise.resolve(n * 10);
-    const out = await runCapped([1, 2, 3, 4, 5], 2, fn, fakeParallel);
+    const out = await runCapped([1, 2, 3, 4, 5], 2, tenfoldRejectingAtThree, fakeParallel);
     expect(out).toEqual([10, 20, null, 40, 50]);
   });
 
@@ -339,8 +355,6 @@ describe('runCapped (chunked-barrier concurrency cap, injected parallel)', () =>
   });
 
   it('rejects if runParallel itself rejects (a conduit — distinct from null-on-throw)', async () => {
-    const rejectingParallel = (): Promise<readonly (number | null)[]> =>
-      Promise.reject(new Error('runParallel failed'));
     await expect(runCapped([1, 2], 2, async (n: number) => n, rejectingParallel)).rejects.toThrow(
       'runParallel failed',
     );

@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "claudeVersion": "2.1.283",
+  "startedAt": "2026-09-27T11:31:29.763Z",
+  "durationSeconds": 30,
+  "costUsd": 0.15844000000000003,
+  "partial": false,
+  "suite": {
+    "root": "<plugin>",
+    "ablation": "with-without",
+    "judgeModel": "sonnet",
+    "caseFilter": "case-01",
+    "threshold": 0,
+    "concurrency": 1,
+    "plugins": [
+      {
+        "name": "oak-specify-evals",
+        "version": "0.0.0",
+        "path": "<plugin>"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "name": "case-01",
+      "dir": "evals/case-01",
+      "source": "mixed",
+      "promptMarkdown": "Write the specification for a function parentIndex(i) that returns the parent index of node i in a binary heap stored in an array with the root at index 0. The heap lives in another repository you cannot read; its behaviour is settled and its tests (heap.sift-up.test and heap.sift-down.test, which call parentIndex on every non-root index) pass. Write the record from this statement alone; do not look for files. Keep it as short as the subject deserves.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A dozen-line record: what the function is, who calls it (the heap's sift operations), the admissible inputs (i >= 1), the behaviour for i = 0 addressed explicitly (either a defined result, or declared unspecified with the caller's obligation not to pass it), the definition floor((i-1)/2), determinism and no mutation, and the evidence (the existing tests, named by reference). No human journey, no service context, no persona; nothing beyond what the unit needs.\n\nAssertions:\n1. The record contains only what the unit needs: no service context, persona, journey or template sections beyond the function's own obligations, and the omission is not belaboured\n2. The behaviour for i = 0 is addressed explicitly: either a defined result, or declared unspecified together with the caller's obligation not to pass it; it is not left as an implicit permission\n3. No fictional human user, national outcome or theory of change is introduced\n4. The evidence names the heap's existing tests by reference and proposes only checks derivable from the definition; no test results or heap details are invented",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A dozen-line record: what the function is, who calls it (the heap's sift operations), the admissible inputs (i >= 1), the behaviour for i = 0 addressed explicitly (either a defined result, or declared unspecified with the caller's obligation not to pass it), the definition floor((i-1)/2), determinism and no mutation, and the evidence (the existing tests, named by reference). No human journey, no service context, no persona; nothing beyond what the unit needs.\n\nAssertions:\n1. The record contains only what the unit needs: no service context, persona, journey or template sections beyond the function's own obligations, and the omission is not belaboured\n2. The behaviour for i = 0 is addressed explicitly: either a defined result, or declared unspecified together with the caller's obligation not to pass it; it is not left as an implicit permission\n3. No fictional human user, national outcome or theory of change is introduced\n4. The evidence names the heap's existing tests by reference and proposes only checks derivable from the definition; no test results or heap details are invented",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-specify)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-specify(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 3,
+            "costUsd": 0.1007504,
+            "judgeCostUsd": 0.00858,
+            "durationSeconds": 19,
+            "startedAt": "2026-09-27T11:31:29.809Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "# parentIndex(i) — specification, rev 1\n\n**Subject.** A pure function in the array-backed binary heap. The root is at index 0, and the children of node `p` are at `2p+1` and `2p+2`.\n**Status.** This records behaviour that is already settled. It is written from your statement alone, because the heap repository was not read.\n\n## Obligation\n\nFor any integer `i` with `1 ≤ i < n`, where `n` is the heap size, `parentIndex(i)` must return `⌊(i − 1) / 2⌋`. The function must not change any state.\n\nEquivalently, the result `p` is the unique index for which `i ∈ {2p+1, 2p+2}`. That means `0 ≤ p < i` for every valid `i`.\n\n**Example.** `parentIndex(1) = 0`, `parentIndex(2) = 0`, `parentIndex(5) = 2`, `parentIndex(6) = 2`.\n\n## Deliberately unspecified\n\n- **The root (`i = 0`).** It has no parent. The tests never call this case, so its result (a value, a sentinel or an error) is not specified, and no caller may rely on it. Callers must check `i > 0` before calling.\n- **Negative, non-integer or out-of-range `i`.** Also unspecified. The function doesn't know `n`, so it can't enforce the upper bound.\n\n## Evidence\n\n- **Existing tests.** heap.sift-up.test and heap.sift-down.test call the function on every non-root index and pass. That is the stated evidence for the obligation above. I haven't inspected them, so I can't confirm they check against an independent answer rather than just exercising the function.\n- **Independent check.** The formula comes from the child-index definition, not from the implementation. It can serve as the expected answer in a direct test: for every `p ≥ 0`, `parentIndex(2p+1) = parentIndex(2p+2) = p`.\n\n## Open issue\n\nWhat the function actually does at the root is unknown. This is accepted as a known gap: it doesn't affect sift-up or sift-down, since both check `i > 0` before calling. If a caller ever needs specific root behaviour, this spec needs a revision.\n\nThere's no external dependency to hand off to anyone else. The spec is complete enough to implement from and to check against."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 0.5,
+            "passed": false,
+            "turns": 1,
+            "costUsd": 0.05768960000000001,
+            "judgeCostUsd": 0.006672000000000001,
+            "durationSeconds": 11,
+            "startedAt": "2026-09-27T11:31:49.284Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL FAIL FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  false,
+                  false
+                ],
+                "evidence": "## `parentIndex(i)`\n\n**Purpose:** Return the index of the parent of node `i` in a binary heap stored in an array, with the root at index 0.\n\n**Precondition:** `i` is an integer and `i ≥ 1`. In other words, `i` is any node except the root.\n\n**Returns:** `⌊(i − 1) / 2⌋`\n\n**Equivalently:** For every `p ≥ 0`, the children of `p` are `2p + 1` and `2p + 2`, and `parentIndex` of either child returns `p`.\n\n**Examples:**\n\n| i | parentIndex(i) |\n|---|---|\n| 1 | 0 |\n| 2 | 0 |\n| 3 | 1 |\n| 4 | 1 |\n| 5 | 2 |\n| 6 | 2 |\n\n**Properties:**\n- `0 ≤ parentIndex(i) < i`\n- It is a pure function: it has no side effects and doesn't depend on what is stored in the heap.\n\n**Unspecified:** What happens for `i = 0`, a negative `i`, or a non-integer `i`. The existing tests (`heap.sift-up.test`, `heap.sift-down.test`) only call `parentIndex` on non-root indices. Callers must not rely on any particular result or error for these inputs."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 0.5,
+        "passRateWithout": 0,
+        "delta": 0.5
+      }
+    }
+  ],
+  "aggregates": {
+    "casesTotal": 1,
+    "casesPassed": 1,
+    "overallScore": 1,
+    "overallPassRate": 1,
+    "meanDelta": 0.5
+  }
+}

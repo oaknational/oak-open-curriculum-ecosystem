@@ -72,7 +72,7 @@ export async function readCommsEvents(commsDir: string): Promise<readonly CommsE
  * Read only the comms events whose ids are absent from `excludeIds` — the
  * incremental drain (MCP-198).
  *
- * The watch loop re-drains on every wake. Reading the whole directory made
+ * The watch loop re-drains on every pass. Reading the whole directory made
  * that cost proportional to TOTAL event count rather than to how many events
  * were new — cheap at idle, but it multiplies under host contention and
  * crossed the watcher's per-step deadline during ordinary repository builds.

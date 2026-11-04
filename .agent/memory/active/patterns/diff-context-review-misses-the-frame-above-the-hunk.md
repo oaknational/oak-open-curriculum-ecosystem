@@ -3,6 +3,7 @@ name: "Diff-Context Review Misses the Frame Above the Hunk"
 polarity: anti-pattern
 use_this_when: "Repeatedly editing one long entry, record, or section across a session (status lines, continuity entries, batch records) — before each commit, and when reviewing a diff whose hunks sit inside a larger semantic unit."
 category: process
+layer: general
 proven_in: "Two instances in one session (2026-07-04 tier-E drain): a repo-continuity entry HEADER still scoping 'ranks 26-187' survived four diff-anchored review rounds while the batch lines below it advanced through five updates; then the same entry's executed-batches label went stale AGAIN one edit later and was caught only by a reviewer reading the whole entry. A harness whole-file view, not any diff, exposed the first."
 proven_date: 2026-07-04
 barrier:

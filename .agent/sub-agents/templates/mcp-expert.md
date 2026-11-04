@@ -1,3 +1,27 @@
+---
+description: MCP protocol specification and implementation expert for both read-only review and active-workflow planning. Invoke for MCP tool or resource or prompt definitions, transport or session patterns, MCP best-practice questions, MCP Apps migration planning/work, or general protocol questions.
+platforms:
+  - cursor
+  - claude
+  - codex
+claude:
+  tools: Read, Grep, Glob, Bash, WebFetch, WebSearch
+  disallowedTools: Write, Edit, NotebookEdit
+  color: cyan
+  note: Review or recommend; do not modify code. The calling agent executes any changes you propose.
+cursor:
+  description: MCP protocol specification and implementation expert for both read-only review and active-workflow planning. Use for MCP spec compliance, tool or resource or prompt definition validation, transport/session pattern checks, MCP best-practice assessments, protocol questions, and OpenAI App to MCP Apps migration planning/review.
+  note: Review or recommend; do not modify code. The calling agent executes any changes you propose.
+codex:
+  description: MCP protocol specification and implementation expert for both read-only review and active-workflow planning.
+  note: |-
+    This file is a thin Codex adapter. The canonical expert instructions live in
+    the template referenced above.
+
+    Mode: Review or recommend. Do not modify code. The calling agent executes any
+    changes you propose.
+---
+
 ## Delegation Triggers
 
 Invoke this expert when work touches the MCP protocol, MCP tool definitions,

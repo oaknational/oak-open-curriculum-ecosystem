@@ -82,14 +82,6 @@ export interface HttpRegistrationWalk {
   readonly guidanceRegistrationsBySource: Readonly<Record<string, RegistrationSourceEvidence>>;
 }
 
-function pnpmSpawnEnvironment(): NodeJS.ProcessEnv {
-  const environment = { ...process.env };
-  delete environment.COREPACK_ROOT;
-  delete environment.COREPACK_ENABLE_AUTO_PIN;
-  delete environment.COREPACK_ENABLE_DOWNLOAD_PROMPT;
-  return environment;
-}
-
 function indexGuidanceRegistrationsBySource(
   registrationsByUri: Readonly<Record<string, RegistrationSourceEvidence>>,
 ): Readonly<Record<string, RegistrationSourceEvidence>> {
@@ -115,11 +107,15 @@ export async function walkHttpRegistrationRoot(repoRoot: string): Promise<HttpRe
   if (!pnpm.ok) {
     throw pnpm.error;
   }
-  const { stdout } = await execFileAsync(pnpm.value, ['exec', 'tsx', proofScript], {
-    cwd: repoRoot,
-    env: pnpmSpawnEnvironment(),
-    maxBuffer: 16 * 1024 * 1024,
-  });
+  const { stdout } = await execFileAsync(
+    pnpm.value.file,
+    [...pnpm.value.leadingArgs, 'exec', 'tsx', proofScript],
+    {
+      cwd: repoRoot,
+      env: pnpm.value.env,
+      maxBuffer: 16 * 1024 * 1024,
+    },
+  );
   const parsed = httpRegistrationWalkSchema.parse(JSON.parse(stdout));
   return {
     root: parsed.root,

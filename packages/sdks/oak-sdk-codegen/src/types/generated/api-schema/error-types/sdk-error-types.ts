@@ -155,13 +155,34 @@ export function classifyException(
   const message = error.message;
 
   // Parse status from SDK error messages like "SDK request failed: 404 Not Found"
-  const statusMatch = message.match(/(\d{3})/);
+  const statusMatch = /(\d{3})/.exec(message);
   if (statusMatch) {
     const status = Number.parseInt(statusMatch[1], 10);
     return classifyHttpError(status, resource, resourceType, message);
   }
 
   return { kind: 'network_error', resource, cause: error };
+}
+
+/** The rejected value as text: strings verbatim; numbers, booleans, bigints and symbols as they print; undefined by name; anything else as JSON, or a marker when it cannot be serialised. */
+function describeReceived(received: unknown): string {
+  if (typeof received === 'string') {
+    return received;
+  }
+  if (typeof received === 'number' || typeof received === 'boolean' || typeof received === 'bigint') {
+    return String(received);
+  }
+  if (typeof received === 'symbol') {
+    return received.toString();
+  }
+  if (received === undefined) {
+    return 'undefined';
+  }
+  try {
+    return JSON.stringify(received) ?? '[unserialisable]';
+  } catch {
+    return '[unserialisable]';
+  }
 }
 
 /**
@@ -176,7 +197,7 @@ export function validationError(
     kind: 'validation_error',
     resource,
     expected,
-    received: typeof received === 'object' ? JSON.stringify(received) : String(received),
+    received: describeReceived(received),
   };
 }
 

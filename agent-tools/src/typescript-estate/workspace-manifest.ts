@@ -8,7 +8,6 @@ import type {
   GitSnapshotAuxiliaryReader,
   TrackedTreeEntry,
 } from './git-snapshot-model.js';
-import type { RepoPath } from './scalar-model.js';
 import { compareUtf16 } from './utf16-order.js';
 import {
   compileWorkspacePackageNamePattern,
@@ -77,7 +76,7 @@ function parseCandidates(
   packageNamePattern: RegExp,
 ): Result<readonly WorkspaceRecord[], EstateReviewError> {
   const workspaces: WorkspaceRecord[] = [];
-  const names = new Map<string, RepoPath>();
+  const names = new Map<string, string>();
   for (const candidate of candidates) {
     const read = readRequired(auxiliary, candidate.path);
     if (isErr(read)) {
@@ -108,7 +107,7 @@ function parseCandidates(
 
 function readRequired(
   auxiliary: GitSnapshotAuxiliaryReader,
-  path: RepoPath,
+  path: string,
 ): Result<AuxiliaryBlobRead, EstateReviewError> {
   const read = auxiliary.read(path);
   if (!isErr(read)) {
@@ -123,7 +122,7 @@ function readRequired(
       );
 }
 
-function candidateRoot(path: RepoPath): RepoPath | null {
+function candidateRoot(path: string): string | null {
   const segments = path.split('/');
   if (segments.length < 2 || segments.at(-1) !== 'package.json') {
     return null;

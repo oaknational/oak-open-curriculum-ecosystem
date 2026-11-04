@@ -49,7 +49,7 @@ closure-pressure coordination decision (t5). PDR-098 deliberately leaves the
 mechanism open and points here.
 **Created**: 2026-06-04
 **Authoring session**: Hidden Hiding Dusk (claude / Opus 4.8 / `38dbaf`), dedicated consolidation / owner-directed graduation walk.
-**Owner-greenlit graduation**: the `action-time-structural-interrupt` / `doctrine-adoption-lag` register item in [`pending-graduations.md`](../../../memory/operational/pending-graduations.md) (the 3rd owner-greenlit graduation of the 2026-06-04 Arboreal owner-walk; ledger: [`curator-passes/2026-06-04-arboreal-sprouting-branch-curation.md`](../../../memory/operational/curator-passes/2026-06-04-arboreal-sprouting-branch-curation.md)).
+**Owner-greenlit graduation**: the `action-time-structural-interrupt` / `doctrine-adoption-lag` register item in [`pending-graduations.md`](../../../memory/operational/pending-graduations.md) (the 3rd owner-greenlit graduation of the 2026-06-04 Arboreal owner-walk).
 **Conceptual anchors**:
 [PDR-044 — Memetic Immune System](../../../practice-core/decision-records/PDR-044-memetic-immune-system.md);
 [PDR-029 — Perturbation-Mechanism Bundle](../../../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md);
@@ -195,6 +195,38 @@ its own cure by two independent seats who had just diagnosed it (2026-08-13,
 with `query-the-value-never-the-lookalike` loaded (2026-09-02). The calibration
 holds: every bite was cheaper and mostly externally caught, and none was
 prevented by the passive home.
+
+**Recurrence-evidence ledger routed from the 2026-09-16 dedicated consolidation**
+(the window 2026-09-10 → 2026-09-16; PDR-098 recurrence-despite-home), three
+classes whose homes held and did not fire:
+
+- **A bare `cd` moves the session's residency.** Home: the
+  `harness-shell-and-commit-edge-cases` pattern (parallel calls share one working
+  directory). One seat broke it five times across 2026-09-14 → 09-16: three times
+  before the consolidation that routed this row, one of them four hours after
+  writing its own cure ("a shell call never runs a bare `cd`"), and twice during
+  that consolidation, the second minutes after this row was committed.
+- **"Use the proper tools only"** (owner, 2026-09-16) — repository file edits
+  through the file-editing tools, never sed, heredocs or node scripts. Corrected by
+  the owner on 2026-09-02, 09-06 and 09-16, and broken twice more by the corrected
+  seat the same day. A platform text works against it: the harness's auto-mode note
+  offers shell edits "instead of the dedicated Read, Edit, or Write tools" and
+  arrives fresh at every mode change (the 2026-09-16 retrospective's addendum). The
+  candidate interrupt is a Bash-guard policy entry refusing in-place edits of
+  tracked files (`sed -i`, `perl -pi`, a redirect or heredoc into a tracked path);
+  unresolved whether the argument-aware `argv` matcher (#116) sees redirection
+  targets, which are not argv.
+- **zsh does not word-split an unquoted variable.** Home: `verify-dont-trust`.
+  Re-learned at the cost of a gate run by at least three seats on 2026-09-10.
+- **A time written from memory, not read from the clock.** Home:
+  `records-are-technical-not-emotional` (the clock clause landed 2026-09-16 21:43Z).
+  One seat broke it three times across 2026-09-16 → 09-17 after writing the clause:
+  three records stamped "~00:1xZ" when the clock read 12:28Z (exposed by a workflow run
+  list showing later runs), then two hand-typed `claims close --now` values, 36 minutes
+  and 41 seconds ahead, each found only by reading `date -u` just after the write.
+  `claims open` defaults `--now` to the clock and `claims close` requires the flag, so the
+  candidate interrupt is structural and small: a close-time default like the open's, or
+  the CLI refusing a `--now` more than a minute from its own clock.
 
 ## The Reconciliation (the distinct value)
 
@@ -846,3 +878,16 @@ its next anecdote:
   rule's five-instance section already existed — and corrected their own draft that
   had proposed the clause as new. Independent of this session's corpus run, the same
   shape: the home exists, the mechanism did not fire at the action moment.
+
+## Worked Instance — 2026-09-03 a plan's decision log declared itself the durable home (recurrence despite the home)
+
+- **The class.** "Plans are ephemeral; decisions live in ADRs and PDRs" is homed twice (the
+  plan skill; `no-moving-targets-in-permanent-docs` §Citation directionality). On
+  2026-09-03 an extraction plan's decision log declared itself "the durable home of the
+  rulings" for thirteen owner rulings while no ADR named the extraction or its topology;
+  the owner re-raised "plans are ephemeral", and the cure was ADR-227 carrying the rulings
+  self-contained with the plans citing it. Filed here at the 2026-09-07 consolidation as
+  the drainable-buffer protocol's recurrence check requires: the home existed and did not
+  fire at the authoring moment; the plan skill now states the capture-surface reading
+  beside the permanent-page clause, and the traction question — what fires at the moment
+  a plan author writes "this log is the durable home" — stays this lane's.

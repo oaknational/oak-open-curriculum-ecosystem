@@ -79,4 +79,10 @@ describe('emitHarnessArtefact', () => {
     const result = emitHarnessArtefact({ bundleSource: colliding, meta });
     expect(isErr(result) && result.error.message).toMatch(/meta/);
   });
+
+  it('errs on a bundle whose meta binding is a class declaration, a legal binding the keyword list must name', () => {
+    const colliding = 'class meta {}\nasync function main() {}\nexport {\n  main,\n  meta\n};\n';
+    const result = emitHarnessArtefact({ bundleSource: colliding, meta });
+    expect(isErr(result) && result.error.message).toMatch(/meta/);
+  });
 });

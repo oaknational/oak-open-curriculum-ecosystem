@@ -42,21 +42,33 @@ Mint the name with the tool — never by hand, never from memory:
 pnpm --silent agent-tools coordination successor-name
 ```
 
-It prints `coordination/<today UTC>-<sha6 of origin/main>` and nothing
-else (pass `--base <ref>` to cut from another commit; an unresolvable
-ref is a typed refusal). Cut tree-preserving and publish:
+Without `--base` it prints `coordination/<today UTC>-<sha6 of
+origin/main>` and nothing else; the recipe below always passes `--base`,
+because the base is the repository's DEFAULT branch, derived at the moment
+of use and never a literal (`downstream-checkout-never-writes-upstream-surfaces`):
+on a downstream checkout whose default branch is not `main`, the tool's
+own default would name the upstream mirror's tip and the cut would start
+from the wrong lineage (a fork-line seat paid for this on 2026-09-06; the
+cure was passing the fork's default branch explicitly). An unresolvable
+ref is a typed refusal. Cut tree-preserving and publish:
 
 ```bash
-git fetch origin main
-BASE="$(git rev-parse origin/main)"
+# A single-branch clone has no remote-tracking ref for the default branch
+# yet: read the name from the remote and fetch it to an explicit tracking
+# ref first (the downstream-checkout rule's recipe), then set-head.
+NAME="$(git ls-remote --symref origin HEAD | sed -n 's#^ref: refs/heads/\(.*\)\tHEAD$#\1#p')"
+git fetch origin "${NAME}:refs/remotes/origin/${NAME}"
+git remote set-head origin --auto
+DEFAULT="$(git symbolic-ref --short refs/remotes/origin/HEAD)"
+BASE="$(git rev-parse "$DEFAULT")"
 git switch -c "$(pnpm --silent agent-tools coordination successor-name --base "$BASE")" "$BASE"
 git push -u origin HEAD
 ```
 
 Resolve the base ONCE and pass the same full sha to both the mint and
-the cut: two separate `origin/main` resolutions race a concurrent fetch
-(name encodes tip A, branch starts at tip B), and the lineage the name
-carries is then false from birth.
+the cut: two separate resolutions of the default branch race a concurrent
+fetch (name encodes tip A, branch starts at tip B), and the lineage the
+name carries is then false from birth.
 
 ## When this fires
 

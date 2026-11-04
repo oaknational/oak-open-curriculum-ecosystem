@@ -11,12 +11,12 @@ export function toColon(path: string): string {
 
 /** Convert colon params to OpenAPI-style curly params. */
 export function toCurly(path: string): string {
-  return path.replaceAll(/:([A-Za-z0-9_]+)/g, '{$1}');
+  return path.replaceAll(/:(\w+)/g, '{$1}');
 }
 
 /** Detect if a path uses colon parameter style. */
 export function isColon(path: string): boolean {
-  return /:[A-Za-z0-9_]+/.test(path);
+  return /:\w+/.test(path);
 }
 
 /** Detect if a path uses curly parameter style. */

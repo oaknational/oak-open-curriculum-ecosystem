@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "family-conformance.schema.json",
+  "title": "Family conformance manifest",
+  "description": "One tooling family's declared Practice-operation scripts and gate placement (the Practice's family layer, PDR-143). The manifest is the same bytes in every repository of the family; the host's two placeholder values live in host.json ($defs/host_values). Every item is recomputed against the live tree by the family-conformance validator, a leg of repo-validators:check, at every run. The shapes are strict (additionalProperties false) because the only consumers are the family's own validators: a field the family does not name is a refusal, never a silent pass.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "family",
+    "scripts",
+    "check",
+    "aggregates",
+    "hooks",
+    "ci",
+    "compiler_base_flags",
+    "formatter",
+    "package_manager"
+  ],
+  "properties": {
+    "family": {
+      "description": "The tooling family's name; the manifest lives at .agent/family/<family>/practice-operations.json.",
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "scripts": {
+      "description": "Every Practice-operation root package script, name to body. {scope} and {skill_prefix} are substituted from host.json before the body is compared with the live root package.json.",
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "pattern": "^[A-Za-z0-9:._-]+$" },
+      "additionalProperties": { "$ref": "#/$defs/leg" }
+    },
+    "check": {
+      "description": "The skeleton of the root check script as ordered legs: head, then a host slot, then the gates, then a host slot, then tail. A slot holds zero or more of the host's own legs; the family legs must appear exactly, in order, around them.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["head", "slot_before_build", "gates", "slot_after_tests", "tail"],
+      "properties": {
+        "head": { "$ref": "#/$defs/leg_list" },
+        "slot_before_build": { "$ref": "#/$defs/host_slot" },
+        "gates": { "$ref": "#/$defs/leg_list" },
+        "slot_after_tests": { "$ref": "#/$defs/host_slot" },
+        "tail": { "$ref": "#/$defs/leg_list" }
+      }
+    },
+    "aggregates": {
+      "description": "Aggregate root scripts, name to the ordered family legs the script must start with; host legs may follow.",
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "pattern": "^[A-Za-z0-9:._-]+$" },
+      "additionalProperties": { "$ref": "#/$defs/leg_list" }
+    },
+    "hooks": {
+      "description": "Git hook file names under .husky/ that must be byte-identical to the family's copies under .agent/family/<family>/hooks/.",
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[A-Za-z0-9._-]+$" }
+    },
+    "ci": {
+      "description": "The PR-gating workflow and its fan-in job, whose needs must list every other job in the workflow.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["workflow", "fan_in_job"],
+      "properties": {
+        "workflow": { "type": "string", "pattern": "^\\.github/workflows/[A-Za-z0-9._-]+\\.ya?ml$" },
+        "fan_in_job": { "type": "string", "pattern": "^[A-Za-z0-9_-]+$" }
+      }
+    },
+    "compiler_base_flags": {
+      "description": "Compiler options of the root tsconfig.base.json that must be present with exactly these values.",
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "pattern": "^[A-Za-z][A-Za-z0-9]*$" },
+      "additionalProperties": { "type": "boolean" }
+    },
+    "formatter": {
+      "description": "The one formatter configuration file at the root, and the file names that must be absent there.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["config_file", "forbidden"],
+      "properties": {
+        "config_file": { "type": "string", "pattern": "^[A-Za-z0-9._-]+$" },
+        "forbidden": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[A-Za-z0-9._-]+$" }
+        }
+      }
+    },
+    "package_manager": {
+      "description": "The package manager named by the root package.json packageManager field, and its major version.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "major"],
+      "properties": {
+        "name": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+        "major": { "type": "integer", "minimum": 1 }
+      }
+    }
+  },
+  "$defs": {
+    "leg": {
+      "description": "One shell leg of a root script: the text between && separators, trimmed, with host placeholders allowed.",
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^\\S(.*\\S)?$"
+    },
+    "leg_list": {
+      "description": "An ordered, non-empty list of legs.",
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/leg" }
+    },
+    "host_slot": {
+      "description": "A position the host fills with zero or more of its own legs.",
+      "const": "host"
+    },
+    "host_values": {
+      "description": "The host's values for the manifest placeholders: .agent/family/host.json, the one contextual file in the family directory.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope", "skill_prefix"],
+      "properties": {
+        "scope": {
+          "description": "The host's package scope, substituted for {scope}.",
+          "type": "string",
+          "pattern": "^@[a-z0-9][a-z0-9._-]*$"
+        },
+        "skill_prefix": {
+          "description": "The host's skill adapter prefix, substituted for {skill_prefix}.",
+          "type": "string",
+          "pattern": "^[a-z0-9]+-$"
+        }
+      }
+    }
+  }
+}

@@ -1,3 +1,9 @@
+---
+classification: situational
+description: "Arming a long-running process whose output lines should wake the agent — comms watchers (comms watch), build/test streams, file-system watchers, tail-of-log surfaces: on Monitor-capable hosts arm Monitor with persistent true, pipe-less for the comms CLI; on Codex use the relay-child composition. Never Bash run_in_background here — it delivers no notifications, so the agent must poll. A one-shot wait-until-complete is a Monitor too on Monitor-capable hosts (the owner's word of 2026-10-02), printing its exit line and ending; not for periodic checks with no stream to notify from. Failure shape: a wrong grep anchor silently swallowing every event while the watcher looks healthy."
+trigger: tool:background-task-arm
+---
+
 # Use Monitor for Event-Driven Wake-Ups
 
 For any long-running command whose output should drive agent wake-ups
@@ -15,6 +21,28 @@ reaction — runs on a notification path proven end to end for that host.
 Polling work — where the agent must intermittently re-check a surface — has
 no stream to notify from and remains the agent's responsibility, subject to
 the periodic-comms-check cadence rule.
+
+The owner's word (2026-09-29, verbatim): "Wherever reasonable we must use
+monitors instead of ad-hoc shell scripts in order to stay aware of events".
+It binds every wait, for all work: a wait on a pull request, a review or a
+CI run is a Monitor that emits its pass and fail lines and exits at the
+terminal state, never a scripted loop; a long command whose lines must be
+watched runs as a Monitor too. The owner's later word (2026-10-02,
+verbatim: "always use monitors, not ad-hoc shell processes") closed the
+one-shot carve-out this rule once made for a command whose only event is
+its exit: on a Monitor-capable host that wait is a Monitor too, one that
+prints its exit line and ends, so that it appears in the task list every
+pause and resume reads; on Codex and other hosts without the primitive it
+takes the host's own proven notification path named above, never a poll.
+On Codex that path is the relay, which reaches an active root turn and
+cannot start an idle one, so a one-shot wait there is the bounded
+foreground wait the Codex bootstrap below names as a requirement of Codex
+participation (not the degraded fallback, which is the case without the
+session relay), and a Codex seat confirms the relay's reach before it relies
+on the wait (a reviewer's reading, 2026-10-02). Where a script is unavoidable it sets its own paths,
+locks itself, is syntax-checked (`bash -n`), and sends its failures to the
+stream, because five scratch scripts failed silently in four days
+(2026-09-25 to 29).
 
 ## Why
 
@@ -70,14 +98,30 @@ here.
 - Any tail-of-log surface where the agent's next reaction is keyed
   to a specific log line.
 
+A watching role watches every surface it answers for. A seat that answers for a pull request
+watches its checks, its threads and its merge state, not the comms stream alone: a comms-only
+watcher was blind to all three. A pull-request watch emits on change of the compound state it
+answers for (the head, the merge state, the check rollup, the unresolved threads, the tip-bound
+reviews), on every state that means stuck, and on the terminal states, merged and closed
+(`pr-lifecycle`, the compound watch loop); a ticker that repeats an unchanged count spends
+context and tells the seat nothing it can act on.
+
+Before a new watch's silence is trusted, see it emit once, and read each of its conditions
+against one live sample. A watch run through a buffering entrypoint said nothing for half an
+hour while two reviews landed (2026-09-29); a ready condition that needed "no review request
+pending" never fired beside a person's standing request (2026-10-02).
+
 ## When the Rule Does Not Fire
 
-- One-shot "wait until this completes" — use Bash with
-  `run_in_background: true` and accept the completion notification
-  the harness delivers when the process exits.
+- A one-shot "wait until this completes" is NOT an exception since the
+  owner's word of 2026-10-02 (above): it runs as a Monitor that prints its
+  exit line and ends, or as the host's notification path where no Monitor
+  exists.
 - Genuinely periodic checks (poll a remote queue at a fixed cadence,
   re-read a status file every N minutes) — Monitor cannot replace a
-  poll because the source surface emits no stream.
+  poll because the source surface emits no stream. A poller that emits a
+  stream, such as `comms watch`, still fires the rule: Monitor wraps its
+  output.
 
 ## Composition With Existing Rules
 
@@ -274,7 +318,9 @@ lifetime — the watcher keeps running; MCP-229).
 
 On a Monitor-capable host, run with `persistent: true`, **pipe-less** — the
 `comms watch` CLI already self-excludes and emits only relevant events, so no
-grep filter is needed or wanted. On Codex, use the root watcher plus
+grep filter is needed or wanted. Each expiry at the Monitor's 30-minute cap
+costs one agent turn to re-arm (about twenty-four turns over one idle night,
+2026-09-24); the cost is known, and no exemption from the watch follows from it. On Codex, use the root watcher plus
 [relay-child procedure](#codex-notify-session-relay), not Monitor. Each
 emitted event is a multi-line block whose **first line is `--- NEW
 [<CHANNEL>] EVENT ---`**: the channel tag sits MID-line, after the `--- NEW`
@@ -300,7 +346,7 @@ failure cause reaches the output file even when it does not notify.
 ## Why This Is a Rule, Not a Preference
 
 A single instance landed as a behavioural surface
-(`oak-start-right-team` SKILL §0 defaults to Monitor), but the
+(the `start-right-team` SKILL §0 defaults to Monitor), but the
 underlying choice — *which harness wrapper to use for any
 event-driven stream* — generalises beyond comms watching. Treating
 it as a general rule prevents the same Bash-background reflex from

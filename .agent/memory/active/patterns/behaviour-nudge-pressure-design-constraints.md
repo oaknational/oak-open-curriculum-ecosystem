@@ -2,6 +2,7 @@
 name: Behaviour-Nudge Pressure Design Constraints
 polarity: design-note
 category: coordination-architecture
+layer: general
 status: provisional
 discovered: 2026-05-12
 proven_in: "Owner-directed design prompt 2026-05-12 during a P5 queue-pressure window; peer expansion captured across two comms events. Forward-looking substance: no implementation has run yet. Captured here as a design-note pattern so that when a behaviour-nudge implementation slice opens, these constraints are visible at plan-author time. Promotion to a PDR is appropriate when the implementation slice opens; until then this pattern is the design-substrate."

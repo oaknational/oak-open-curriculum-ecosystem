@@ -28,7 +28,7 @@ evidenced platform limit justifies divergence.
 | Surface | Ratified local-CLI target | Wired and proven in this repository |
 | --- | --- | --- |
 | Identity | Native `sessionStart` adapter returns honest Copilot identity through `additionalContext` | **No** — canonical identity types and persistence do not yet admit Copilot |
-| Deliberate team join | Native bootstrap is useful alone and creates no shared coordination state; any working session, quick-start included, must register a bounded active claim before its first edit under the always-loaded [`register-active-areas-at-session-open`](../../rules/register-active-areas-at-session-open.md) rule, whichever start-right skill ran; `oak-start-right-team` adds only *continuous* team participation — heartbeat emission, the all-channels watcher, and the handoff/retirement lifecycle | **No** — no Copilot launcher or joined/non-joined proof |
+| Deliberate team join | Native bootstrap is useful alone and creates no shared coordination state; any working session, quick-start included, must register a bounded active claim before its first edit under the always-loaded [`register-active-areas-at-session-open`](../../rules/register-active-areas-at-session-open.md) rule, whichever start-right skill ran; `start-right-team` adds only *continuous* team participation — heartbeat emission, the all-channels watcher, and the handoff/retirement lifecycle | **No** — no Copilot launcher or joined/non-joined proof |
 | Repo instructions | `.github/copilot-instructions.md` imports `AGENT.md`, giving local and cloud Copilot the full canonical rule set | **Partial** — the file links to `AGENT.md`; validated native import and parity proof remain targets |
 | Path-scoped instructions | Generated `.github/instructions/**/*.instructions.md` projections, each with an explicit `cloud-shared` or `cloud-excluded` intent and, where excluded, the documented `excludeAgent: "cloud-agent"` frontmatter — see the `excludeAgent` note below for what that does and does not achieve | **No** |
 | Skills | Use `.agents/skills/` under documented `.github/skills` → `.agents/skills` → `.claude/skills` first-found precedence | **Partial** — the portable wrappers exist; clean local Copilot CLI discovery/invocation is not yet an acceptance gate |
@@ -53,12 +53,11 @@ still supplies every canonical rule to local and cloud Copilot. Per this file's
 preamble, this capability claim expires: re-check the current official
 documentation before relying on it.
 
-The repository
-[`agent-platform-citizenship`](../../plans/strategic/agent-platform-citizenship.plan.md)
-node (formerly `first-class-copilot-cli-practice-citizenship`) and its
-serving delivery plans are authoritative for target and mechanism.
-MCP-150, MCP-154, MCP-155, and MCP-156 are supplementary Linear projections
-for execution state and sensitive details.
+In OCE the `agent-platform-citizenship` strategic node (formerly
+`first-class-copilot-cli-practice-citizenship`) and its serving delivery plans
+are authoritative for target and mechanism, with MCP-150, MCP-154, MCP-155 and
+MCP-156 as supplementary Linear projections for execution state and sensitive
+details; jimcresswell.net carries the target in this matrix alone.
 
 ## Adapter Families
 
@@ -66,9 +65,9 @@ for execution state and sensitive details.
 | -------------- | ------------------- | ------------------------------------------------------ | ------------------------------------------------- | ---------------------------------------------------- | -------------------------------------------------------- | ---------------------- |
 | **Skills**     | `.agents/skills/`   | `.claude/skills/`                                      | `.agents/skills/`                                 | `.agents/skills/` exists; acceptance target above    | `.agents/skills/oak-*/` loaded as native Codex skills    | `.agents/skills/`      |
 | **Commands**   | retired; workflows use `.agents/skills/` | retired; workflows use `.claude/skills/` | `review-*.toml` transitional reviewer adapters only; workflows use `.agents/skills/` | no separate command projection | built-in slash commands; repo workflows use skills | repo workflows use `.agents/skills/oak-*/` |
-| **Rules**      | `.cursor/rules/`    | `.claude/rules/`                                       | entry-point chain only                            | full canonical rule chain via `AGENT.md`; supplemental modular projection target | entry-point chain; no project execpolicy `.rules` wired  | `.agents/rules/`       |
+| **Rules**      | `.cursor/rules/`    | `.claude/rules/`                                       | entry-point chain only                            | full canonical rule chain via `AGENT.md`; supplemental modular projection target | entry-point chain; project exec-policy rules in `.codex/rules/` allow the landing commands | `.agents/rules/`       |
 | **Sub-agents** | `.cursor/agents/`   | `.claude/agents/`                                      | native `/agents` upstream; no repo wrappers wired | native custom agents documented; repo target unwired | `.codex/config.toml` → `.codex/agents/*.toml`             | unsupported            |
-| **Hooks**      | canonical policy guard unsupported; `.cursor/hooks.json` has tracked soft `sessionStart` identity | `.claude/settings.json` (tracked soft `SessionStart` identity plus `PreToolUse` guards) | supported upstream; no project-local hook wired | native hooks documented; Copilot-only adapters target unwired; content policy uses inherited activation | tracked project `SessionStart`; no `PreToolUse` guard | unsupported |
+| **Hooks**      | canonical policy guard unsupported; `.cursor/hooks.json` has tracked soft `sessionStart` identity | `.claude/settings.json` (tracked soft `SessionStart` identity, `PreToolUse` guards, and a never-blocking `PreCompact` observer) | supported upstream; no project-local hook wired | native hooks documented; Copilot-only adapters target unwired; content policy uses inherited activation | tracked project `SessionStart`; no `PreToolUse` guard | unsupported |
 | **MCP**        | user-local          | user-local / MCP config                                | supported upstream; no `.agents/mcp_config.json` wired | repository config documented; tracked projection target | two tracked project servers in `.codex/config.toml`       | `.agents/mcp_config.json` target |
 
 ## Hook Support
@@ -82,14 +81,42 @@ shared by all three matchers, invoked through the verdict shim
 `.claude/hooks/run-pretooluse-guard.mjs` so a built-but-broken artefact blocks
 the tool call (exit 2), while a not-built artefact fails open (exit 0) with a
 loud, logged warning so a fresh checkout is not bricked — well within the
-per-tool-call hook timeout. Local additive overrides, when needed, live in
-`.claude/settings.local.json`.
+per-tool-call hook timeout. The same file registers a never-blocking
+`PreCompact` observer (`agent-tools`' `claude-pre-compact-observe-hook`, through
+the `.claude/hooks/_lib/log-hook-errors.sh` wrapper; jimcresswell.net runs it
+from the TypeScript source, OCE from the prebuilt `dist` artefact). It is an
+observer, not a guard: it has no key in the canonical policy, never blocks a
+compaction, and appends what the harness sends at each compaction to a
+machine-local, owner-only log,
+`.claude/logs/pre-compact-observe/observations.jsonl`. Local additive
+overrides, when needed, live in `.claude/settings.local.json`.
+
+The contract the observer saw at its first real compaction is recorded here
+because the harness documentation disagreed with itself; it was seen on
+2026-09-16 with Claude Code 2.1.273 installed, so re-observe it after a harness
+upgrade:
+
+- **Payload** of a bare `/compact`: `session_id`, `transcript_path`, `cwd`,
+  `scratchpad_dir`, `prompt_id`, `hook_event_name: "PreCompact"`,
+  `trigger: "manual"` and `custom_instructions: null`.
+- **Environment**: `CLAUDE_PROJECT_DIR`, `CLAUDE_CODE_SESSION_ID`,
+  `CLAUDE_CODE_ENTRYPOINT`, `CLAUDE_CODE_CHILD_SESSION`,
+  `CLAUDE_CODE_SESSION_ATTENDED` and `CLAUDE_PID` are present;
+  `PRACTICE_AGENT_SESSION_ID_CLAUDE` is not.
+- **Response**: JSON stdout is validated against top-level fields only
+  (`continue`, `suppressOutput`, `stopReason`, `decision`, `reason`,
+  `systemMessage`, `terminalSequence`); a `hookSpecificOutput` fails validation,
+  because there is no `PreCompact` variant.
+- **Exit codes**, from the event table in the installed binary and not yet
+  observed: 0 appends stdout to the compaction as custom instructions, 2 blocks
+  the compaction, and any other code shows stderr to the user and continues.
 
 Status by platform:
 
 - **Claude Code**: tracked project `.claude/settings.json` activates a soft
   `SessionStart` identity adapter and `PreToolUse` command/content guards for
-  Bash, Edit, and Write through the single dispatcher artefact.
+  Bash, Edit, and Write through the single dispatcher artefact, plus the
+  never-blocking `PreCompact` observer described above.
 - **Cursor**: tracked project `.cursor/hooks.json` activates a soft
   `sessionStart` identity adapter. The canonical command/content policy is not
   activated for Cursor, and this Codex-focused research pass did not reassess
@@ -120,8 +147,8 @@ Status by platform:
   canonical command/content guard on Codex `PreToolUse`.
 
 The Codex product claims and event list above inherit their version pin,
-source-authority boundary, and evidence grades from the
-[Codex CLI capability catalogue](../../reports/agentic-engineering/codex-cli-agentic-capability-catalogue-2026-07-25.md).
+source-authority boundary, and evidence grades from the Codex CLI capability
+catalogue kept in OCE.
 
 ## Platform Liveness Declaration (PDR-133 §8)
 
@@ -147,8 +174,8 @@ declaration set yet. Dated observations already on record:
 - **Slack Watcher organ (Slack channel + cloud-harness reminder
   substrate) — full 14-class declaration, 2026-08-24**: recorded
   skill-locally for operational reading in
-  [`slack-watcher` §6](../../skills/slack-watcher/SKILL-CANONICAL.md#6-liveness-classes--the-pdr-133-declaration-for-this-substrate)
-  (this ledger points, never restates). Headline rows: `NOTIFY`
+  `slack-watcher` §6 (authored in OCE; carried to jimcresswell.net on
+  2026-10-03) (this ledger points, never restates). Headline rows: `NOTIFY`
   cannot-certify (no dated externally observed wake on record; a
   self-bind reminder records no run history), proxy = the tenure
   status message's staleness; `EMIT` = that status message edited
@@ -279,6 +306,51 @@ Failure semantics:
 | Gemini CLI             | `GEMINI.md` → `AGENT.md`                       |
 | Linear coding sessions | `skills.md` → `AGENT.md`                       |
 
+## Codex CLI: observed behaviour (from the records, 2026-07-31 to 2026-09-27)
+
+Each line names the version it was read on. A line is an observation at that version, never a
+contract: re-read it against the running CLI before a design rests on it.
+
+- **Collaboration tools come in two surfaces** (the vendor's source, read 2026-07-31). V1 is
+  `spawn_agent`, `send_input`, `resume_agent`, `wait_agent` and `close_agent`, deferrable under
+  tool search. V2 is a direct `spawn_agent`, `send_message`, `followup_task`, `wait_agent`,
+  `close_agent`, `list_agents` and `interrupt_agent`. With no explicit override, the model
+  catalogue's `multi_agent_version` decides. A fresh `codex exec` root on CLI 0.146.0 showed V2
+  and no `tool_search` (one probe; a session opened interactively was not probed). Two reported
+  failure modes: a resumed thread keeps its older tool surface, and deferred V1 tools are
+  unreachable where `tool_search` is unavailable. The vendor's public docs name only the V1
+  vocabulary.
+- **Config precedence** (0.156.1 source). A trusted project `.codex/config.toml` beats
+  `~/.codex/config.toml`; only CLI flags and `-c` override it; there is no local override
+  file, include or environment pointer. The project file applies only where the user config
+  trusts the repository path. Each project hook needs a per-user `trusted_hash` in the user
+  config. Only an MCP always-allow on a project server and `/import` write the project file,
+  and `/import` re-emits the whole file.
+- **`on-failure` is not a distinct approval policy** (0.156.1): `protocol.rs` reads it only as
+  a deserialisation alias of `on-request`.
+- **Rollout shapes** (codex-cli 0.157.1). Every successful function-tool output opens with the
+  harness's header. An unfinished turn followed by a new one is the harness's normal shape
+  (`TurnAborted`), not a defect. A sandbox denial detected after the process has exited emits
+  no `CommandExecution` item (one instance). A reader whose record union was captured on
+  0.157.0 failed closed on 0.157.1's `response_item.function_call`: an evidence reader follows
+  the runtime's version.
+- **The patch tool is offered under a read-only sandbox** (one recorded `codex exec` turn): the
+  model may attempt `apply_patch`, and the refusal comes from Codex's policy check in the tool
+  router, a layer a sandbox test does not exercise.
+- **TUI queue behaviour without a daemon** (0.157.0, one run each, 2026-09-25): an idle TUI
+  wakes on a queued message; typed input runs before a queued one; a message queued during an
+  active turn runs after it; a queue to a killed TUI is accepted and runs only on an explicit
+  resume. In managed-daemon mode, a sandbox denies the PID-recording `ps` call and the daemon
+  cannot start; outside a sandbox the daemon was healthy and the TUI exited within 25 seconds
+  with no rollout. Desktop and editor-terminal hosts are unproven.
+- **Codex's automatic approval reviewer can refuse a push**: the push then waits on the
+  owner's explicit approval in that Codex session (one instance, September 2026).
+- **The bounded-poll challenge** (a convention seats used with a Codex peer; from the comms
+  record). To show that a Codex seat hears the stream, a peer posts an event carrying a nonce.
+  The Codex seat must find it by its own declared foreground polling, with no relay. Its reply
+  records the nonce, the timestamps, the command, the cadence, the state of its turn and what
+  it did after its final message.
+
 ## Notes
 
 - `.agents/skills/` and `.agents/rules/` are portable skill/command and
@@ -299,6 +371,9 @@ Failure semantics:
   local overrides are additive where the platform supports them.
 - Unsupported states are written down explicitly rather than inferred
   from missing files.
+- A rule adapter's `@` import path is written as the vendor documents it, relative to the
+  importing file. Whether the platform expands it at launch stays a prediction until a fresh
+  session has been seen to do so; record that observation with its date.
 - Linear coding sessions run through Claude Code or Codex and inherit
   those entry-point chains; the root `skills.md` is supplementary
   guidance Linear Agent can use during a delegated session (per
@@ -308,6 +383,6 @@ Failure semantics:
 - Portable does not mean symmetrical: each platform has different native
   capabilities and the matrix records what is actually wired.
 - Copilot CLI target surfaces are governed by
-  [ADR-125](../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md)
+  PDR-009
   and the linked plan estate; the target table above must not be collapsed into
   an unsupported/supported binary before live acceptance.

@@ -16,7 +16,7 @@ impact_areas:
 tickets: []
 depends_on: []
 owner_gates: []
-last_updated: 2026-08-31
+last_updated: 2026-09-09
 ---
 
 # Upstream curriculum data exposure requests
@@ -28,16 +28,23 @@ three pieces of curriculum structure their database already holds but
 does not reach the surfaces this estate consumes, and this estate has
 a recorded outcome either way. Established first-hand (2026-08-31,
 oaknational/oak-openapi and oaknational/database-tools checkouts):
-`thread_units.order` — published on no served surface: the per-thread
-endpoint (`GET /threads/{threadSlug}/units`) reads the sequence view
-filtered by thread membership and returns only `unitTitle` and
-`unitSlug` with no order field (`threads.ts` handler and
-`threadUnitsResponse` schema; the endpoint's description still
+`thread_units.order` — exposed as itself on no served surface: the
+per-thread endpoint (`GET /threads/{threadSlug}/units`) reads the
+sequence view filtered by thread membership and returns only
+`unitTitle` and `unitSlug` with no order field (`threads.ts` handler
+and `threadUnitsResponse` schema; the endpoint's description still
 advertises a removed `unitOrder` — an overclaim the issue should also
 name), and the bulk sequence export's `threads[].order` carries the
-thread display index (`programme_threads.order`) instead — this
-request asks Oak to expose `thread_units.order` itself, data the
-database already holds; the unit
+thread display index (`programme_threads.order`). Narrowed 2026-09-09
+(upstream MCP-681, incorporated by the sync of that date): the bulk
+`sequence` array carries Oak's authored unit order within each year,
+and the served `get-thread-progressions` now derives per-subject
+curriculum order from it, so within-year order is no longer
+unpublished; what stays unexposed is the per-thread endpoint's order
+and the six KS4 programme-years whose tiers and exam boards share one
+array, where the bulk order is a merge of several authored orders —
+this request asks Oak to expose `thread_units.order` itself for those,
+data the database already holds; the unit
 connections — `connection_prior_unit_id` and
 `connection_future_unit_id` with their descriptions are columns on
 `public.units` (Drizzle schema, Hasura metadata, init migration), and

@@ -1,4 +1,4 @@
-import { isErr, isOk, unwrap } from '@oaknational/result';
+import { isErr, isOk, unwrap, unwrapErr } from '@oaknational/result';
 import { describe, expect, it } from 'vitest';
 
 import { type PathExists } from '../core/path-exists.js';
@@ -18,26 +18,32 @@ describe('resolvePnpm', () => {
     const result = resolvePnpm(
       { PNPM_HOME: '/pnpm-home', HOME: FAKE_HOME },
       onlyExists('/pnpm-home/pnpm'),
+      'linux',
     );
 
     expect(isOk(result)).toBe(true);
-    expect(unwrap(result)).toBe('/pnpm-home/pnpm');
+    expect(unwrap(result).file).toBe('/pnpm-home/pnpm');
+    expect(unwrap(result).leadingArgs).toEqual([]);
   });
 
   it('falls back to the per-user macOS standalone location', () => {
-    const result = resolvePnpm({ HOME: FAKE_HOME }, onlyExists(`${FAKE_HOME}/Library/pnpm/pnpm`));
+    const result = resolvePnpm(
+      { HOME: FAKE_HOME },
+      onlyExists(`${FAKE_HOME}/Library/pnpm/pnpm`),
+      'darwin',
+    );
 
-    expect(unwrap(result)).toBe(`${FAKE_HOME}/Library/pnpm/pnpm`);
+    expect(unwrap(result).file).toBe(`${FAKE_HOME}/Library/pnpm/pnpm`);
   });
 
   it('resolves a system location when no per-user install exists', () => {
-    const result = resolvePnpm({}, onlyExists('/opt/homebrew/bin/pnpm'));
+    const result = resolvePnpm({}, onlyExists('/opt/homebrew/bin/pnpm'), 'linux');
 
-    expect(unwrap(result)).toBe('/opt/homebrew/bin/pnpm');
+    expect(unwrap(result).file).toBe('/opt/homebrew/bin/pnpm');
   });
 
   it('returns err naming the searched paths and the remedy when pnpm is found nowhere', () => {
-    const result = resolvePnpm({ HOME: FAKE_HOME }, () => false);
+    const result = resolvePnpm({ HOME: FAKE_HOME }, () => false, 'linux');
 
     expect(isErr(result)).toBe(true);
     if (isErr(result)) {
@@ -55,6 +61,7 @@ describe('resolvePnpm', () => {
         // The relative candidate "would" exist when probed against the process cwd...
         return candidate === 'relative/pnpm-home/pnpm';
       },
+      'linux',
     );
 
     // ...but execFileSync resolves a relative executable against the worktree cwd, so a
@@ -67,10 +74,14 @@ describe('resolvePnpm', () => {
 
   it('never consults PATH — every probed candidate is an absolute path, never bare "pnpm"', () => {
     const probed: string[] = [];
-    resolvePnpm({ PNPM_HOME: '/pnpm-home', HOME: FAKE_HOME }, (candidate) => {
-      probed.push(candidate);
-      return false;
-    });
+    resolvePnpm(
+      { PNPM_HOME: '/pnpm-home', HOME: FAKE_HOME },
+      (candidate) => {
+        probed.push(candidate);
+        return false;
+      },
+      'linux',
+    );
 
     expect(probed.length).toBeGreaterThan(0);
     expect(probed.every((candidate) => candidate.startsWith('/'))).toBe(true);
@@ -94,28 +105,31 @@ describe('resolvePnpm — PNPM_HOME/bin layout (2026-08-04 regression)', () => {
     const result = resolvePnpm(
       { PNPM_HOME: '/pnpm-home', HOME: '/home-dir' },
       (path) => path === '/pnpm-home/bin/pnpm',
+      'linux',
     );
 
     expect(result.ok).toBe(true);
-    expect(result.ok && result.value).toBe('/pnpm-home/bin/pnpm');
+    expect(result.ok && result.value.file).toBe('/pnpm-home/bin/pnpm');
   });
 
   it('still prefers $PNPM_HOME/pnpm when both layouts exist', () => {
     const result = resolvePnpm(
       { PNPM_HOME: '/pnpm-home', HOME: '/home-dir' },
       (path) => path === '/pnpm-home/pnpm' || path === '/pnpm-home/bin/pnpm',
+      'linux',
     );
 
-    expect(result.ok && result.value).toBe('/pnpm-home/pnpm');
+    expect(result.ok && result.value.file).toBe('/pnpm-home/pnpm');
   });
 
   it('finds the Linux standalone per-user bin layout with no PNPM_HOME set', () => {
     const result = resolvePnpm(
       { HOME: '/home-dir' },
       (path) => path === '/home-dir/.local/share/pnpm/bin/pnpm',
+      'linux',
     );
 
-    expect(result.ok && result.value).toBe('/home-dir/.local/share/pnpm/bin/pnpm');
+    expect(result.ok && result.value.file).toBe('/home-dir/.local/share/pnpm/bin/pnpm');
   });
 
   // The macOS sibling of the case above. This is the layout that actually broke —
@@ -126,17 +140,22 @@ describe('resolvePnpm — PNPM_HOME/bin layout (2026-08-04 regression)', () => {
     const result = resolvePnpm(
       { HOME: '/home-dir' },
       (path) => path === '/home-dir/Library/pnpm/bin/pnpm',
+      'darwin',
     );
 
-    expect(result.ok && result.value).toBe('/home-dir/Library/pnpm/bin/pnpm');
+    expect(result.ok && result.value.file).toBe('/home-dir/Library/pnpm/bin/pnpm');
   });
 
   it('names every searched path when pnpm is absent, so the remedy is actionable', () => {
     const probed: string[] = [];
-    const result = resolvePnpm({ PNPM_HOME: '/pnpm-home', HOME: '/home-dir' }, (candidate) => {
-      probed.push(candidate);
-      return false;
-    });
+    const result = resolvePnpm(
+      { PNPM_HOME: '/pnpm-home', HOME: '/home-dir' },
+      (candidate) => {
+        probed.push(candidate);
+        return false;
+      },
+      'linux',
+    );
 
     expect(result.ok).toBe(false);
     expect(probed.length).toBeGreaterThan(0);
@@ -152,10 +171,212 @@ describe('resolvePnpm — PNPM_HOME/bin layout (2026-08-04 regression)', () => {
   });
 
   it('never admits a relative candidate, keeping the absolute-only invariant', () => {
-    const result = resolvePnpm({ PNPM_HOME: 'relative/pnpm', HOME: '/home-dir' }, (path) =>
-      path.startsWith('relative/'),
+    const result = resolvePnpm(
+      { PNPM_HOME: 'relative/pnpm', HOME: '/home-dir' },
+      (path) => path.startsWith('relative/'),
+      'linux',
     );
 
     expect(result.ok).toBe(false);
+  });
+});
+
+// The invocation carries its own environment because both launch modes need
+// it and a resolver that returns only a file invites the omission: five of
+// six call sites had spawned without it, so an inherited COREPACK_ROOT could
+// redirect which package-manager build ran, or stop the standalone binary
+// self-switching to the repository's pin.
+describe('resolvePnpm — the invocation carries its spawn environment', () => {
+  const corepackPolluted = {
+    HOME: FAKE_HOME,
+    COREPACK_ROOT: '/somewhere/corepack',
+    COREPACK_HOME: '/somewhere/cache',
+    COREPACK_ENABLE_AUTO_PIN: '1',
+    UNRELATED: 'kept',
+  };
+
+  it('scrubs the corepack knobs that redirect code selection, on the direct launch path', () => {
+    const result = resolvePnpm(corepackPolluted, onlyExists('/usr/bin/pnpm'), 'linux');
+
+    expect(result.ok && result.value.env).toEqual({
+      HOME: FAKE_HOME,
+      UNRELATED: 'kept',
+      COREPACK_ENABLE_DOWNLOAD_PROMPT: '0',
+      COREPACK_ENV_FILE: '0',
+    });
+  });
+
+  it('scrubs them on the via-node launch path too — the corepack launcher obeys them', () => {
+    const result = resolvePnpm(
+      corepackPolluted,
+      onlyExists(String.raw`C:\Program Files\nodejs\node_modules\corepack\dist\pnpm.js`),
+      'win32',
+    );
+
+    expect(result.ok && result.value.env.COREPACK_ROOT).toBeUndefined();
+    expect(result.ok && result.value.env.COREPACK_ENABLE_DOWNLOAD_PROMPT).toBe('0');
+  });
+
+  // The resolver's platform and the scrub's platform must be the same one:
+  // Windows reads `corepack_root` as `COREPACK_ROOT`, so a win32 resolution
+  // whose scrub ran as posix would hand the launcher a live redirect.
+  it('scrubs differently-cased corepack knobs on a win32 resolution', () => {
+    const result = resolvePnpm(
+      { ...corepackPolluted, corepack_root: 'D:/attacker', Corepack_Home: 'D:/attacker-home' },
+      onlyExists(String.raw`C:\Program Files\nodejs\node_modules\corepack\dist\pnpm.js`),
+      'win32',
+    );
+
+    expect(result.ok && result.value.env).toEqual({
+      HOME: FAKE_HOME,
+      UNRELATED: 'kept',
+      COREPACK_ENABLE_DOWNLOAD_PROMPT: '0',
+      COREPACK_ENV_FILE: '0',
+    });
+  });
+});
+
+describe('resolvePnpm — win32', () => {
+  const COREPACK = String.raw`C:\Program Files\nodejs\node_modules\corepack\dist\pnpm.js`;
+
+  it('resolves the fixed corepack launcher via the running Node when present', () => {
+    const result = resolvePnpm({}, onlyExists(COREPACK), 'win32');
+
+    expect(result.ok).toBe(true);
+    // A .js entry cannot be executed directly; it launches via the current
+    // process's own Node binary — a fixed absolute path by definition.
+    expect(result.ok && result.value.file).toBe(process.execPath);
+    expect(result.ok && result.value.leadingArgs).toEqual([COREPACK]);
+  });
+
+  // Fixture env values use fully qualified non-user drives: a realistic
+  // C:\Users\<name> shape would trip the machine-local-paths validator (a
+  // username in a committed path is the PII class it guards against), and
+  // the candidate composition under test is root-agnostic.
+  it('prefers the corepack launcher over env-derived locations when both exist', () => {
+    const result = resolvePnpm({ PNPM_HOME: String.raw`D:\pnpm-home` }, () => true, 'win32');
+
+    expect(result.ok && result.value.leadingArgs).toEqual([COREPACK]);
+  });
+
+  it('resolves the standalone pnpm.exe under PNPM_HOME as a direct launch', () => {
+    const result = resolvePnpm(
+      { PNPM_HOME: String.raw`D:\pnpm-home` },
+      onlyExists(String.raw`D:\pnpm-home\pnpm.exe`),
+      'win32',
+    );
+
+    expect(result.ok && result.value.file).toBe(String.raw`D:\pnpm-home\pnpm.exe`);
+    expect(result.ok && result.value.leadingArgs).toEqual([]);
+  });
+
+  // The win32 sibling of the POSIX `$PNPM_HOME/bin` layout: pnpm's installer
+  // treats PNPM_HOME as the global bin directory, but some installations
+  // place the launcher one level down.
+  it(
+    String.raw`finds the standalone binary under PNPM_HOME\bin when it is not directly in PNPM_HOME`,
+    () => {
+      const result = resolvePnpm(
+        { PNPM_HOME: String.raw`D:\pnpm-home` },
+        onlyExists(String.raw`D:\pnpm-home\bin\pnpm.exe`),
+        'win32',
+      );
+
+      expect(result.ok && result.value.file).toBe(String.raw`D:\pnpm-home\bin\pnpm.exe`);
+      expect(result.ok && result.value.leadingArgs).toEqual([]);
+    },
+  );
+
+  it('composes cleanly from a PNPM_HOME carrying a trailing backslash', () => {
+    const result = resolvePnpm(
+      { PNPM_HOME: 'D:\\pnpm-home\\' },
+      onlyExists(String.raw`D:\pnpm-home\pnpm.exe`),
+      'win32',
+    );
+
+    expect(result.ok && result.value.file).toBe(String.raw`D:\pnpm-home\pnpm.exe`);
+  });
+
+  it('resolves the standalone default home from LOCALAPPDATA with no PNPM_HOME set', () => {
+    const result = resolvePnpm(
+      { LOCALAPPDATA: String.raw`D:\local-app-data` },
+      onlyExists(String.raw`D:\local-app-data\pnpm\pnpm.exe`),
+      'win32',
+    );
+
+    expect(result.ok && result.value.file).toBe(String.raw`D:\local-app-data\pnpm\pnpm.exe`);
+  });
+
+  it('resolves the npm-global module entry via the running Node', () => {
+    const cjs = String.raw`D:\roaming\npm\node_modules\pnpm\bin\pnpm.cjs`;
+    const result = resolvePnpm({ APPDATA: String.raw`D:\roaming` }, onlyExists(cjs), 'win32');
+
+    expect(result.ok && result.value.file).toBe(process.execPath);
+    expect(result.ok && result.value.leadingArgs).toEqual([cjs]);
+  });
+
+  // On win32, path.isAbsolute is not the invariant: a rooted-but-driveless
+  // PNPM_HOME ('/pnpm-home') is DRIVE-RELATIVE — it resolves against the
+  // process's current drive into caller-influenced space — and a UNC path is
+  // a network location, not a fixed local install. Neither may become a
+  // candidate.
+  it('never probes a drive-relative PNPM_HOME', () => {
+    const probed: string[] = [];
+    const result = resolvePnpm(
+      { PNPM_HOME: '/pnpm-home' },
+      (candidate) => {
+        probed.push(candidate);
+        return candidate === String.raw`/pnpm-home\pnpm.exe`;
+      },
+      'win32',
+    );
+
+    expect(probed).not.toContain(String.raw`/pnpm-home\pnpm.exe`);
+    expect(result.ok).toBe(false);
+  });
+
+  it('never probes a UNC PNPM_HOME', () => {
+    const probed: string[] = [];
+    resolvePnpm(
+      { PNPM_HOME: String.raw`\\attacker-host\share` },
+      (candidate) => {
+        probed.push(candidate);
+        return false;
+      },
+      'win32',
+    );
+
+    expect(probed.every((candidate) => !candidate.startsWith('\\\\'))).toBe(true);
+  });
+
+  it('errs with the Windows remedy when pnpm is found nowhere', () => {
+    const error = unwrapErr(resolvePnpm({}, () => false, 'win32'));
+    expect(error.message).toMatch(/pnpm not found/u);
+    expect(error.message).toContain(COREPACK);
+    expect(error.message).toMatch(/Install Node\.js system-wide/u);
+  });
+
+  // A bare drive designator is drive-relative space, but composing `C:` +
+  // `\pnpm.exe` yields the fully-qualified `C:\pnpm.exe` — so the refusal
+  // must land on the ROOT, or a caller-influenced value becomes an accepted
+  // drive-root probe (and `C:\` itself is not an admin-protected directory).
+  it.each([
+    { label: 'a bare drive designator', root: 'C:' },
+    { label: 'a drive root', root: 'C:\\' },
+    { label: 'a rooted drive-relative path', root: String.raw`\pnpm-home` },
+    { label: 'a UNC share', root: String.raw`\\srv\share` },
+  ])('never derives a candidate from $label in PNPM_HOME', ({ root }) => {
+    const probed: string[] = [];
+    const result = resolvePnpm(
+      { PNPM_HOME: root },
+      (candidate) => {
+        probed.push(candidate);
+        return false;
+      },
+      'win32',
+    );
+
+    expect(result.ok).toBe(false);
+    expect(probed).toEqual([COREPACK]);
   });
 });

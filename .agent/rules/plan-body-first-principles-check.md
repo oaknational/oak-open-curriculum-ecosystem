@@ -1,3 +1,8 @@
+---
+classification: core
+description: Before authoring tests, implementations, or doctrine prescribed by a plan body, run the three-clause first-principles check (shape, landing-path, vendor-literal) and surface any failure to the owner before writing.
+---
+
 # Plan-Body First-Principles Check
 
 Before authoring a plan, acceptance criterion, outcome, or status — or
@@ -8,7 +13,7 @@ you are about to author). If any clause fails, surface the mismatch to the owner
 before writing code or doctrine.
 
 The stakes, from a worked failure (2026-07-26, owner-named as a discipline
-signal): ADR-217 §1 recorded no-hydration as a decided state although it
+signal, OCE): an ADR recorded no-hydration as a decided state although it
 contradicted the owner's standing Full-React requirement, survived four
 reviewer passes AND ratification, and was then cited back to the owner as
 authority for the contradiction. A decided-state that contradicts standing
@@ -17,7 +22,7 @@ downstream are goal-blind and will polish the wrong decision rather than
 catch it.
 
 1. **Shape clause.** Is the test-shape (or implementation-shape, or doctrine-
-   shape) right for the **Oak-authored behaviour** being proven, or is it a
+   shape) right for the **repo-authored behaviour** being proven, or is it a
    vendor / configuration / framework assertion in disguise? If the shape
    proves "the vendor did its job" or "the config is set", the shape is wrong.
 2. **Landing-path clause.** Does the file naming carry a tooling contract
@@ -95,6 +100,18 @@ pre-installed tripwire. Passive guidance did not fire.
 This rule converts the check from passive guidance into an always-applied
 trigger at shape-entry, per the `passive-guidance-loses-to-artefact-gravity`
 pattern's Heath-brothers tripwire framing.
+
+A plan binds at or above its source, never below: "a plan may be stricter than the policy it cites,
+never looser", so a sequenced landing orders its steps to keep that direction between them, and
+"findings on files outside its story are pointers on the next PR in the sequence, never absorbed" (a
+Director's ruling, 2026-09-08, event 4681f525).
+
+A plan whose instrument is a probe states the probe's threat model in its body, so review tests one
+stated adversary instead of supplying a new one each round: Blazar lifts Corona found on the Codex
+dialogues node that "Each finding was right under an adversarial-interlocutor model, but the node
+never states a threat model" and asked to "state the threat model rather than let each review round
+supply one"; "a probe whose exit criterion cannot be reached on the owner's model is not an
+instrument" (the seat's reading of 2026-09-24, event 071a8257).
 
 ## Related surfaces
 

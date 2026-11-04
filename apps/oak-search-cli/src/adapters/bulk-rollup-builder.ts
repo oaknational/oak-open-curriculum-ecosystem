@@ -166,11 +166,11 @@ function transformUnitSafe(
   let summary: SearchUnitSummary;
   try {
     summary = transformBulkUnitToSummary(unit, subjectSlug, keyStage, sequenceSlug);
-  } catch (caught: unknown) {
+  } catch (error: unknown) {
     return err(
       new Error(
         `Failed to transform unit "${unit.unitSlug}" with sequenceSlug "${sequenceSlug}": ` +
-          `${caught instanceof Error ? caught.message : String(caught)}`,
+          `${error instanceof Error ? error.message : String(error)}`,
       ),
     );
   }

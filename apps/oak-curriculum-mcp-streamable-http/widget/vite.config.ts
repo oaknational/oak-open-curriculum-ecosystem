@@ -10,7 +10,7 @@
  * (`.widget-build/oak-banner.html`) is an intermediate artefact consumed
  * by the embed script to produce a committed TypeScript constant.
  */
-import { exec } from 'node:child_process';
+import { execFile } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve, sep } from 'node:path';
 import { defineConfig } from 'vite';
@@ -41,9 +41,10 @@ function findWorkspaceRoot(startDir: string): string | undefined {
 }
 
 const workspaceRoot = findWorkspaceRoot(widgetRoot);
-const tokenSourceDir = workspaceRoot
-  ? resolve(workspaceRoot, 'packages/design/oak-design-tokens/src')
+const tokenPackageDir = workspaceRoot
+  ? resolve(workspaceRoot, 'packages/design/oak-design-tokens')
   : undefined;
+const tokenSourceDir = tokenPackageDir ? resolve(tokenPackageDir, 'src') : undefined;
 
 export default defineConfig({
   root: widgetRoot,
@@ -54,7 +55,7 @@ export default defineConfig({
     /**
      * Cross-workspace file watcher for design token source files.
      *
-     * Watches `oak-design-tokens/src/` and triggers an async rebuild
+     * Watches `oak-design-tokens/src/` and triggers an async CSS rebuild
      * + full-reload when token JSON or TS sources change. Guarded by
      * an existence check on the token source directory and a rebuild
      * lock to prevent concurrent builds.
@@ -73,7 +74,7 @@ export default defineConfig({
           return;
         }
 
-        if (!tokenSourceDir || !existsSync(tokenSourceDir)) {
+        if (!tokenPackageDir || !tokenSourceDir || !existsSync(tokenSourceDir)) {
           server.config.logger.warn(
             `Token source directory not found at ${tokenSourceDir ?? '(unknown)'} — skipping design token watcher`,
           );
@@ -103,9 +104,18 @@ export default defineConfig({
 
           rebuilding = true;
 
-          exec(
-            'OAK_TOKEN_DEV=1 pnpm --filter @oaknational/oak-design-tokens build',
-            { cwd: workspaceRoot },
+          // The rebuild runs the token package's CSS generator (`src/build.ts`,
+          // the source of the `dist/index.css` this widget imports) through
+          // the running Node binary: a fixed absolute path, never a `PATH`
+          // lookup (sonar-disposition-policy §S4036). `--import tsx` resolves
+          // from the token package directory, as that package's own build
+          // script does. `--dev` has the generator report contrast violations
+          // as warnings and still write the CSS, so the dev page renders the
+          // state being iterated on.
+          execFile(
+            process.execPath,
+            ['--import', 'tsx', resolve(tokenSourceDir, 'build.ts'), '--dev'],
+            { cwd: tokenPackageDir },
             (error, stdout, stderr) => {
               try {
                 if (error) {

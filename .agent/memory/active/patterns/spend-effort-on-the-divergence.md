@@ -3,6 +3,7 @@ name: "When External Research Flatters the Repo, the Value Is in the Divergence"
 polarity: pattern
 use_this_when: "Comparing the repo/Practice against authoritative external research, a benchmark, or a best-practice source."
 category: process
+layer: general
 proven_in: "DORA-2025 comparison (2026-06-21, Cutter holds Warmth)"
 proven_date: 2026-06-21
 barrier:

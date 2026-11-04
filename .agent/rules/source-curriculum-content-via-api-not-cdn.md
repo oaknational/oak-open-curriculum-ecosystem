@@ -1,3 +1,8 @@
+---
+classification: core
+description: Fetch Oak curriculum content and assets only through the Oak Open Curriculum API/SDK (TPC-filtered = safe); never fetch the raw CDN directly without fresh owner authorisation.
+---
+
 # Source Curriculum Content via the API, Not the Raw CDN
 
 Oak curriculum **content and assets** — lesson images, charts, datasets,

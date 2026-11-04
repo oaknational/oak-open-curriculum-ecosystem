@@ -1,9 +1,9 @@
 #!/usr/bin/env sh
 
-# Refuse sequencer commits (cherry-pick, revert) on main — they stay on the
+# Refuse sequencer commits (cherry-pick, revert) on a default branch — they stay on the
 # branch and never reach pre-commit; this hook is the one pre-hook they fire,
 # and a non-zero exit aborts the commit (githooks(5)). Plain commits and
-# merges on main are already refused by pre-commit / pre-merge-commit before
+# merges on a default branch are already refused by pre-commit / pre-merge-commit before
 # this hook runs. Mechanics live in the shared guard (never-commit-to-main
 # rule).
 GUARD_BRANCH=""

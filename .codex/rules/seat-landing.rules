@@ -1,0 +1,140 @@
+# Exec-policy rules for Codex team seats in this repository: the landing path
+# (commit, sync, push through the merge bot) runs with no approval prompt, as
+# the owner requires: "I absolutely need all seats to be able to push without
+# me" (2026-09-25). Opening a pull request is left to the default flow (see
+# README.md).
+#
+# Why rules and not a writable root: workspace-write keeps `.git` read-only, and
+# in a linked worktree the git dir sits outside every writable root, so no git
+# write succeeds inside the sandbox. A writable `.git` would let any sandboxed
+# command rewrite refs, history and git config for every later git command. An
+# allowed command below instead skips approval and runs outside the sandbox,
+# and only when every segment of the command matches an allowed rule. So each
+# rule allows the narrowest prefix that does the job, and seats run each as one
+# plain command (see README.md). The residual: an allowed command can run code
+# written inside the sandbox, such as the hooks under `.husky/`. The same
+# residual exists on Claude seats and is unowned in both.
+#
+# Codex loads these rules only for a trusted project, at session start. Codex
+# checks every `match` and `not_match` example when it loads the file; a file
+# that fails to parse drops every user and project rule.
+
+# Bare program names only: with no listed path, a command naming any path to a
+# binary called git or pnpm (`./git`, `/tmp/x/pnpm`) matches no rule here,
+# forbidden rules included, so a binary written inside the sandbox never runs
+# outside it by name.
+host_executable(name = "git", paths = [])
+host_executable(name = "pnpm", paths = [])
+
+prefix_rule(
+    pattern = ["pnpm", "agent-tools", "merge-bot", "push"],
+    decision = "allow",
+    justification = "Seats push only through the merge bot, which refuses force, --no-verify, unknown flags, full refs and default branches.",
+    match = [
+        ["pnpm", "agent-tools", "merge-bot", "push", "--branch", "feat/example"],
+    ],
+    not_match = [
+        ["pnpm", "agent-tools", "merge-bot", "merge", "--pr", "1"],
+        ["git", "push", "origin", "feat/example"],
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "add"],
+    decision = "allow",
+    justification = "Staging writes the git index, which the sandbox keeps read-only.",
+    match = [
+        ["git", "add", "--", "README.md"],
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "add", ["-A", "--all", "."]],
+    decision = "forbidden",
+    justification = "Stage by explicit pathspec, never the whole tree.",
+    match = [
+        ["git", "add", "-A"],
+        ["git", "add", "."],
+    ],
+    not_match = [
+        ["git", "add", "--", "README.md"],
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "commit"],
+    decision = "allow",
+    justification = "A commit writes the git dir and runs the repository's hooks, the quality gates.",
+    match = [
+        ["git", "commit", "-F", "message.txt"],
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "commit", ["--amend", "--no-verify", "-n"]],
+    decision = "forbidden",
+    justification = "Never skip the hooks and never rewrite a commit: make a new commit instead.",
+    match = [
+        ["git", "commit", "--amend", "--no-edit"],
+        ["git", "commit", "--no-verify", "-F", "message.txt"],
+    ],
+    not_match = [
+        ["git", "commit", "-F", "message.txt"],
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "fetch", "origin"],
+    decision = "allow",
+    justification = "Fetching origin before a sync or a new worktree writes the git dir.",
+    match = [
+        ["git", "fetch", "origin"],
+    ],
+    not_match = [
+        ["git", "fetch", "https://example.com/other.git"],
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "merge", "--no-edit", "refs/remotes/origin/HEAD"],
+    decision = "allow",
+    justification = "A pull request syncs with origin's default branch by a merge, never a rebase; the full ref cannot be shadowed by a local branch.",
+    match = [
+        ["git", "merge", "--no-edit", "refs/remotes/origin/HEAD"],
+    ],
+    not_match = [
+        ["git", "merge", "--no-edit", "origin/HEAD"],
+        ["git", "merge", "--no-edit", "origin/feat/other"],
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "merge", "--abort"],
+    decision = "allow",
+    justification = "A conflicted sync can be backed out; an unattended seat has no other way to.",
+    match = [
+        ["git", "merge", "--abort"],
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "worktree", "add"],
+    decision = "allow",
+    justification = "Implementation work starts in a fresh worktree, never on the primary checkout.",
+    match = [
+        ["git", "worktree", "add", "-b", "feat/example", "../example", "refs/remotes/origin/HEAD"],
+    ],
+    not_match = [
+        ["git", "worktree", "remove", "../example"],
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "push"],
+    decision = "forbidden",
+    justification = "Push with `pnpm agent-tools merge-bot push --branch <branch>`, which refuses force and default branches.",
+    match = [
+        ["git", "push", "origin", "feat/example"],
+        ["git", "push", "--force", "origin", "feat/example"],
+    ],
+)

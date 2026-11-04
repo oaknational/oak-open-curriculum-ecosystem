@@ -13,14 +13,13 @@ description: >-
 
 # Working with Graphs
 
-**Governance**: This skill operationalises the bounded-retrieval graph contract built in
-`packages/core/graph-core` (the `GraphView` query layer) and `packages/sdks/graph-corpus-sdk`
-(the per-view constructions over the EEF and curriculum corpora), under
-[ADR-191](../../../docs/architecture/architectural-decisions/191-deterministic-data-surface-agent-reasons.md)
-(deterministic data surface; the consuming agent is the only reasoner) and
-[ADR-195](../../../docs/architecture/architectural-decisions/195-graph-tools-first-class-tool-category.md)
-(graph-tool category doctrine). The value redesign that produced the contract is
-[`graph-tools-value-redesign.plan.md`](../../plans-backlog-2026-07/connecting-oak-resources/knowledge-graph-integration/current/graph-tools-value-redesign.plan.md).
+**Governance**: This skill operationalises the bounded-retrieval graph contract built in OCE:
+its `packages/core/graph-core` (the `GraphView` query layer) and `packages/sdks/graph-corpus-sdk`
+(the per-view constructions over OCE's corpora), under OCE's deterministic-data-surface
+decision (ADR-191: deterministic data surface; the consuming agent is the only reasoner) and
+its graph-tool category decision (ADR-195: graph-tool category doctrine). The value redesign
+that produced the contract is OCE's graph-tools value redesign plan; those are OCE's records,
+cited as the instance, and the doctrine below stands on its own in any estate.
 
 ## Use When
 

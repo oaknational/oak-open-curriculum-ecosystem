@@ -111,6 +111,16 @@ describe('validateRunDataFrom', () => {
     expect(runData.resolvedIds).toEqual([]);
   });
 
+  it('refuses an empty reduce result explicitly: nothing for validate or meta to judge, the run ends at reduce', () => {
+    const result = validateRunDataFrom({
+      mapResult: mapOk,
+      reduceResult: { ...reduceOk, candidates: [] },
+      priorValidateResults: [],
+      validateTokenCeiling: 1000,
+    });
+    expect(isErr(result) && result.error.message).toMatch(/no candidates/);
+  });
+
   it('refuses a failed reduce result and a partial map', () => {
     expect(
       isErr(

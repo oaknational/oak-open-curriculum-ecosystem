@@ -9,7 +9,11 @@
  */
 import { useSyncExternalStore } from 'react';
 
-const subscribeNever = (): (() => void) => () => undefined;
+/** The unsubscribe `subscribeNever` hands back: nothing was wired, so nothing is torn down. */
+const unsubscribeNothing = (): void => undefined;
+
+/** The framed fact never changes after load, so no subscriber is ever notified. */
+const subscribeNever = (): (() => void) => unsubscribeNothing;
 
 export function useFramed(): boolean {
   return useSyncExternalStore(

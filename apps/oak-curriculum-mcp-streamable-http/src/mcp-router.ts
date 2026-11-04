@@ -24,7 +24,8 @@ import { isPublicResourceUri } from './auth/public-resources.js';
 interface McpRouterOptions {
   /**
    * Authentication middleware to apply when auth is required.
-   * Typically `createMcpAuthClerk(logger)` or similar OAuth middleware factory.
+   * Typically `createMcpAuthClerk(logger, allowedHosts)` or a similar OAuth
+   * middleware factory.
    * This middleware MUST return HTTP 401 + WWW-Authenticate for auth failures.
    */
   readonly auth: RequestHandler;
@@ -88,7 +89,7 @@ function shouldSkipAuth(method: string | undefined, body: unknown): boolean {
  *
  * @example
  * ```typescript
- * const mcpRouter = createMcpRouter({ auth: createMcpAuthClerk(logger) });
+ * const mcpRouter = createMcpRouter({ auth: createMcpAuthClerk(logger, allowedHosts) });
  * app.post('/mcp', mcpRouter, createMcpHandler(coreTransport, log));
  * ```
  *

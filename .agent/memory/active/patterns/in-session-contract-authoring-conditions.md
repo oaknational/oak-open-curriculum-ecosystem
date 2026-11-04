@@ -3,6 +3,7 @@ name: In-Session Contract Authoring Conditions
 polarity: pattern
 use_this_when: A plan has just landed that proposes a new contract / directive / governance doc and the question is whether to author the contract in the same session or sequence it to a fresh session
 category: process
+layer: general
 proven_in: .agent/directives/operationalisation-contract.md
 proven_date: 2026-05-06
 barrier:

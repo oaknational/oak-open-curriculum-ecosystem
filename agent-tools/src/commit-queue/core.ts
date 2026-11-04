@@ -3,7 +3,6 @@ import { createHash } from 'node:crypto';
 import {
   isActiveCommitQueuePhase,
   type CommitIntent,
-  type CommitQueueClaim,
   type CommitQueuePhase,
   type CommitQueueRegistry,
 } from './types.js';
@@ -13,6 +12,10 @@ import { formatFileList, normalizeFileList } from './path-list.js';
 
 /**
  * Compute the staged-bundle fingerprint used by the commit queue.
+ *
+ * The leading tag is hashed into every fingerprint that `record-staged` stores
+ * in the per-intent store and `verify-staged` recomputes, so changing it refuses
+ * every intent recorded before the change until it is re-recorded.
  */
 export function createStagedBundleFingerprint(input: {
   readonly nameStatus: string;
@@ -89,25 +92,6 @@ export function completeCommitIntent(input: {
   return {
     ...input.registry,
     commit_queue: input.registry.commit_queue.filter((entry) => entry.intent_id !== input.intentId),
-    claims: input.registry.claims.map((claim) => clearClaimIntent(claim, input.intentId)),
-  };
-}
-
-/**
- * Append a new commit intent and point the owning claim at it.
- */
-export function enqueueCommitIntent(input: {
-  readonly registry: CommitQueueRegistry;
-  readonly intent: CommitIntent;
-}): CommitQueueRegistry {
-  return {
-    ...input.registry,
-    commit_queue: [...input.registry.commit_queue, input.intent],
-    claims: input.registry.claims.map((claim) =>
-      claim.claim_id === input.intent.claim_id
-        ? { ...claim, intent_to_commit: input.intent.intent_id }
-        : claim,
-    ),
   };
 }
 
@@ -214,15 +198,6 @@ function verifyFingerprint(input: {
   }
 
   return { ok: true, fingerprint };
-}
-
-function clearClaimIntent(claim: CommitQueueClaim, intentId: string): CommitQueueClaim {
-  if (claim.intent_to_commit !== intentId) {
-    return claim;
-  }
-  const { intent_to_commit: removedIntent, ...rest } = claim;
-
-  return removedIntent === undefined ? claim : rest;
 }
 
 function updateIntentPhase(

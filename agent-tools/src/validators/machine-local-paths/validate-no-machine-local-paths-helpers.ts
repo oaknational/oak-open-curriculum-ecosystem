@@ -23,7 +23,7 @@
  */
 
 import { type ScanFile } from '../../core/tracked-file-scan.js';
-import { isPathInScope } from '../../hook-policy/matchers.js';
+import { isPathInScope } from '../../hook-policy/path-scope.js';
 import { type ScopedContentBlockGroup } from '../../hook-policy/types.js';
 
 /**
@@ -31,7 +31,6 @@ import { type ScopedContentBlockGroup } from '../../hook-policy/types.js';
  * `core/tracked-file-scan` (the reader that produces them) and re-exported
  * here so this module's consumers keep one import site for the scan surface.
  */
-export type { ScanFile };
 
 /** A single machine-local path occurrence. */
 export interface MachineLocalPathHit {
@@ -103,3 +102,5 @@ export function scanForMachineLocalPaths(
 
   return hits;
 }
+
+export type { ScanFile } from '../../core/tracked-file-scan.js';

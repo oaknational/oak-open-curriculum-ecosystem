@@ -30,13 +30,11 @@ const SAMPLE_TEXT: Readonly<Partial<Record<SpecimenKind, string>>> = {
  *  beside it carries the information, and four hundred announced sample
  *  glyphs would carry none. */
 export function Specimen({ token }: { readonly token: CatalogueToken }): ReactElement {
+  // No specimen: decorative dash only. In the flat list reading every
+  // row is one unskippable run, so a hidden "no specimen" sentence would
+  // be heard sixty-nine times saying nothing — absence reads as absence.
   if (token.kind === 'plain') {
-    return (
-      <>
-        <span aria-hidden="true">&mdash;</span>
-        <span className="oak-visually-hidden">No specimen for this token</span>
-      </>
-    );
+    return <span aria-hidden="true">&mdash;</span>;
   }
   return (
     <span
@@ -55,21 +53,17 @@ export function Specimen({ token }: { readonly token: CatalogueToken }): ReactEl
  * Tier is annotated only at tier 1, the one a reader can misuse — literals
  * live there and belong inside token definitions — because tiers 2 and 3
  * are both "use these" and marking them would spend four hundred rows
- * saying nothing.
+ * saying nothing. The marker is the single word: in the flat list reading
+ * every row is one unskippable run, so the old per-row hidden sentence
+ * ("reference this inside a token definition…") was heard 185 times —
+ * the explanation lives ONCE in the catalogue note, and "primitive"
+ * carries the per-row signal.
  */
 export function TokenName({ token }: { readonly token: CatalogueToken }): ReactElement {
   return (
     <>
       <span className="oak-code-3">{token.name}</span>
-      {token.tier === 1 && (
-        <span className="oak-body-4 tok-flag">
-          {'primitive'}
-          <span className="oak-visually-hidden">
-            {' '}
-            &mdash; reference this inside a token definition, not at the point of use
-          </span>
-        </span>
-      )}
+      {token.tier === 1 && <span className="oak-body-4 tok-flag">{'primitive'}</span>}
     </>
   );
 }

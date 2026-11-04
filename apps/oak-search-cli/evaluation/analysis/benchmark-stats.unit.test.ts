@@ -6,29 +6,29 @@ import { describe, it, expect } from 'vitest';
 import type { QueryResult } from './benchmark-query-runner-lessons.js';
 import { aggregateByCategory } from './benchmark-stats.js';
 
-describe('aggregateByCategory', () => {
-  /**
-   * Creates a mock QueryResult for testing.
-   */
-  function createResult(
-    category: QueryResult['category'],
-    mrr: number,
-    hasHit: boolean,
-    latencyMs = 100,
-  ): QueryResult {
-    return {
-      category,
-      mrr,
-      ndcg10: mrr * 0.9, // Simplified for testing
-      precision3: mrr * 0.2,
-      recall10: mrr * 0.8,
-      latencyMs,
-      hasHit,
-      actualResults: [], // Not used by aggregateByCategory
-      expectedRelevance: {}, // Not used by aggregateByCategory
-    };
-  }
+/**
+ * Creates a QueryResult whose secondary metrics are derived from the MRR.
+ */
+function createResult(
+  category: QueryResult['category'],
+  mrr: number,
+  hasHit: boolean,
+  latencyMs = 100,
+): QueryResult {
+  return {
+    category,
+    mrr,
+    ndcg10: mrr * 0.9, // Simplified for testing
+    precision3: mrr * 0.2,
+    recall10: mrr * 0.8,
+    latencyMs,
+    hasHit,
+    actualResults: [], // Not used by aggregateByCategory
+    expectedRelevance: {}, // Not used by aggregateByCategory
+  };
+}
 
+describe('aggregateByCategory', () => {
   it('should return empty array for empty input', () => {
     const result = aggregateByCategory([]);
     expect(result).toEqual([]);

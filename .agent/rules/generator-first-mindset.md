@@ -1,3 +1,11 @@
+---
+classification: situational
+description: Update generator templates and rerun pnpm sdk-codegen. Generator is source of truth.
+trigger: surface:codegen
+globs:
+  - "**/*.{ts,tsx,mts}"
+---
+
 # Generator-First Mindset
 
 Operationalises [ADR-029 (No Manual API Data Structures)](../../docs/architecture/architectural-decisions/029-no-manual-api-data.md), [ADR-030 (SDK as Single Source of Truth)](../../docs/architecture/architectural-decisions/030-sdk-single-source-truth.md), [ADR-031 (Generation-Time Extraction)](../../docs/architecture/architectural-decisions/031-generation-time-extraction.md), and [ADR-038 (Compilation Time Revolution)](../../docs/architecture/architectural-decisions/038-compilation-time-revolution.md).

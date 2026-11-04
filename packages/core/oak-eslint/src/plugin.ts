@@ -1,6 +1,7 @@
 import type { TSESLint } from '@typescript-eslint/utils';
 
 import { noAgentSubstrateAccessRule } from './rules/no-agent-substrate-access.js';
+import { noConditionalTestsRule } from './rules/no-conditional-tests.js';
 import { noDynamicImportRule } from './rules/no-dynamic-import.js';
 import { noEslintDisableRule } from './rules/no-eslint-disable.js';
 import { noExportTrivialTypeAliasesRule } from './rules/no-export-trivial-type-aliases.js';
@@ -12,6 +13,7 @@ import { requireObservabilityEmissionRule } from './rules/require-observability-
 
 export const oakRuleModules = {
   'no-agent-substrate-access': noAgentSubstrateAccessRule,
+  'no-conditional-tests': noConditionalTestsRule,
   'no-dynamic-import': noDynamicImportRule,
   'no-eslint-disable': noEslintDisableRule,
   'no-export-trivial-type-aliases': noExportTrivialTypeAliasesRule,

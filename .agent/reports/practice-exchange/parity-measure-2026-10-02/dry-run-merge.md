@@ -1,0 +1,176 @@
+# Dry-run merge of the Practice-wide text, JC.net origin/main against OCE origin/engraph, base e477e62f7
+
+shared 445; identical 279; differing 166; waiting (one-sided) 46 JC.net-only, 59 OCE-only
+of the differing: clean three-way merge 72; conflict 89 files, 221 hunks; no base at the pin 5
+
+## Conflicts (file, hunks)
+- `.agent/directives/AGENT.md` 2
+- `.agent/directives/agent-collaboration.md` 1
+- `.agent/directives/continuity-practice.md` 1
+- `.agent/directives/metacognition.md` 1
+- `.agent/directives/orientation.md` 3
+- `.agent/directives/principles.md` 1
+- `.agent/directives/testing-strategy.md` 23
+- `.agent/directives/validation-strategy.md` 5
+- `.agent/hooks/README.md` 6
+- `.agent/hooks/policy.json` 1
+- `.agent/practice-core/CHANGELOG.md` 9
+- `.agent/practice-core/decision-records/PDR-008-canonical-quality-gate-naming.md` 2
+- `.agent/practice-core/decision-records/PDR-009-canonical-first-cross-platform-architecture.md` 1
+- `.agent/practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md` 4
+- `.agent/practice-core/decision-records/PDR-082-n2-collaboration-mode.md` 1
+- `.agent/practice-core/decision-records/PDR-130-two-speed-learning.md` 1
+- `.agent/practice-core/decision-records/PDR-132-changeset-health-round-budgets-bind-at-authoring-time.md` 2
+- `.agent/practice-core/decision-records/README.md` 2
+- `.agent/practice-core/practice-verification.md` 1
+- `.agent/rules/apply-architectural-principles.md` 1
+- `.agent/rules/check-singleton-per-window.md` 1
+- `.agent/rules/design-values-come-from-the-system.md` 1
+- `.agent/rules/design-work-for-small-prs.md` 1
+- `.agent/rules/directive-file-context-budget.md` 1
+- `.agent/rules/documentation-hygiene.md` 1
+- `.agent/rules/follow-the-practice.md` 1
+- `.agent/rules/handoff-messages-self-contained.md` 1
+- `.agent/rules/important-state-not-in-temp-files.md` 3
+- `.agent/rules/invoke-accessibility-expert.md` 1
+- `.agent/rules/invoke-assumptions-expert.md` 1
+- `.agent/rules/invoke-code-experts.md` 1
+- `.agent/rules/invoke-design-system-expert.md` 1
+- `.agent/rules/invoke-doc-and-onboarding-experts-on-significant-changes.md` 1
+- `.agent/rules/invoke-react-component-expert.md` 1
+- `.agent/rules/lint-after-edit.md` 2
+- `.agent/rules/lockfile-rebuild-survivability.md` 5
+- `.agent/rules/loop-exit-criteria-required.md` 1
+- `.agent/rules/no-global-state-in-tests.md` 1
+- `.agent/rules/no-warning-toleration.md` 1
+- `.agent/rules/pr-comments-resolve-and-recheck.md` 1
+- `.agent/rules/practice-core-portability.md` 1
+- `.agent/rules/read-agent-md.md` 1
+- `.agent/rules/records-are-technical-not-emotional.md` 1
+- `.agent/rules/render-the-reference-before-reproducing.md` 1
+- `.agent/rules/route-blocks-and-questions-to-director.md` 1
+- `.agent/rules/source-is-typescript-esm-only.md` 2
+- `.agent/rules/strict-validation-at-boundary.md` 3
+- `.agent/rules/subagent-practice-core-protection.md` 1
+- `.agent/rules/tdd-for-refactoring.md` 1
+- `.agent/rules/test-immediate-fails.md` 3
+- `.agent/rules/use-monitor-for-event-driven-wake.md` 1
+- `.agent/rules/verify-data-supports-shape-before-building.md` 1
+- `.agent/rules/visual-verdicts-require-rendered-proof.md` 1
+- `.agent/skills/change-custody/commit/SKILL-CANONICAL.md` 3
+- `.agent/skills/change-custody/cross-fork-integration/SKILL-CANONICAL.md` 2
+- `.agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md` 13
+- `.agent/skills/cognition/cricket/SKILL-CANONICAL.md` 3
+- `.agent/skills/comms-channels/SKILL-CANONICAL.md` 1
+- `.agent/skills/coordination-fold/SKILL-CANONICAL.md` 1
+- `.agent/skills/dependency-currency/SKILL-CANONICAL.md` 1
+- `.agent/skills/domain-craft/ui-design/claude-design-pipeline/SKILL-CANONICAL.md` 1
+- `.agent/skills/inter-practice-collaboration/SKILL-CANONICAL.md` 2
+- `.agent/skills/planning/ticket-management/SKILL-CANONICAL.md` 1
+- `.agent/skills/set-up-worktree-lane/SKILL-CANONICAL.md` 7
+- `.agent/skills/start-right-quick/shared/start-right.md` 4
+- `.agent/skills/start-right-team/SKILL-CANONICAL.md` 3
+- `.agent/skills/start-right-thorough/shared/start-right-thorough.md` 2
+- `.agent/sub-agents/README.md` 3
+- `.agent/sub-agents/templates/accessibility-expert.md` 1
+- `.agent/sub-agents/templates/architecture-expert.md` 1
+- `.agent/sub-agents/templates/assumptions-expert.md` 2
+- `.agent/sub-agents/templates/code-expert.md` 4
+- `.agent/sub-agents/templates/config-expert.md` 3
+- `.agent/sub-agents/templates/corpus-mapper.md` 4
+- `.agent/sub-agents/templates/corpus-meta.md` 4
+- `.agent/sub-agents/templates/corpus-reducer.md` 3
+- `.agent/sub-agents/templates/corpus-voter.md` 3
+- `.agent/sub-agents/templates/cricket-judgement.md` 1
+- `.agent/sub-agents/templates/cricket-procedure.md` 3
+- `.agent/sub-agents/templates/design-system-expert.md` 9
+- `.agent/sub-agents/templates/docs-adr-expert.md` 3
+- `.agent/sub-agents/templates/onboarding-expert.md` 1
+- `.agent/sub-agents/templates/prose-expert.md` 2
+- `.agent/sub-agents/templates/react-component-expert.md` 1
+- `.agent/sub-agents/templates/release-readiness-expert.md` 1
+- `.agent/sub-agents/templates/security-expert.md` 3
+- `.agent/sub-agents/templates/subagent-architect.md` 6
+- `.agent/sub-agents/templates/test-expert.md` 5
+- `.agent/sub-agents/templates/type-expert.md` 1
+
+## No base at the pin (both sides added after the transplant)
+- `.agent/practice-core/decision-records/PDR-142-the-best-of-each-practice.md`
+- `.agent/practice-core/schemas/operator-profile.schema.json`
+- `.agent/rules/compute-dont-hope.md`
+- `.agent/rules/one-instance-is-an-observation.md`
+- `.agent/rules/record-generalisation-moves.md`
+
+## Clean merges
+- `.agent/directives/definition-of-delivery.md`
+- `.agent/directives/operationalisation-contract.md`
+- `.agent/practice-core/decision-records/PDR-022-governance-enforcement-scanners.md`
+- `.agent/practice-core/decision-records/PDR-024-vital-integration-surfaces.md`
+- `.agent/practice-core/decision-records/PDR-052-directive-file-context-budget.md`
+- `.agent/practice-core/decision-records/PDR-075-director-substrate-writing-discipline.md`
+- `.agent/practice-core/decision-records/PDR-089-conservation-reflex-external-check.md`
+- `.agent/practice-core/decision-records/PDR-125-inter-practice-collaboration-protocol.md`
+- `.agent/practice-core/provenance.yml`
+- `.agent/rules/agent-state-observable.md`
+- `.agent/rules/capability-landing-decision-procedure.md`
+- `.agent/rules/capture-practice-tool-feedback.md`
+- `.agent/rules/comms-all-channels-watcher.md`
+- `.agent/rules/continuity-surface-commits-as-orphans.md`
+- `.agent/rules/coordination-branch-24h-lifetime.md`
+- `.agent/rules/design-from-impact-not-the-cowpath.md`
+- `.agent/rules/directed-routing-requires-absorption-ack.md`
+- `.agent/rules/executive-memory-drift-capture.md`
+- `.agent/rules/follow-agent-collaboration-practice.md`
+- `.agent/rules/hook-policy-substring-discipline.md`
+- `.agent/rules/identify-as-agent-under-shared-credentials.md`
+- `.agent/rules/liveness-heartbeat-cron.md`
+- `.agent/rules/markdown-code-blocks-must-have-language.md`
+- `.agent/rules/never-commit-to-main.md`
+- `.agent/rules/never-disable-checks.md`
+- `.agent/rules/no-conditional-tests.md`
+- `.agent/rules/no-hedging-vocabulary.md`
+- `.agent/rules/no-moving-targets-in-permanent-docs.md`
+- `.agent/rules/no-parallel-long-lived-branches.md`
+- `.agent/rules/ping-before-escalate.md`
+- `.agent/rules/plan-body-first-principles-check.md`
+- `.agent/rules/pre-merge-divergence-analysis.md`
+- `.agent/rules/present-verdicts-not-menus.md`
+- `.agent/rules/read-before-asking.md`
+- `.agent/rules/read-nextjs-docs-before-coding.md`
+- `.agent/rules/register-identity-on-thread-join.md`
+- `.agent/rules/review-feedback-defaults-to-triage.md`
+- `.agent/rules/skill-naming-and-description-quality.md`
+- `.agent/rules/third-party-skills-require-security-review.md`
+- `.agent/rules/unattended-seats-never-prompt.md`
+- `.agent/rules/use-agent-comms-log.md`
+- `.agent/rules/use-built-agent-tools-cli.md`
+- `.agent/rules/use-result-pattern.md`
+- `.agent/rules/verify-dont-trust.md`
+- `.agent/rules/worktree-hygiene.md`
+- `.agent/rules/worktree-residency.md`
+- `.agent/skills/README.md`
+- `.agent/skills/change-custody/complex-merge/SKILL-CANONICAL.md`
+- `.agent/skills/change-custody/complex-merge/shared/complex-merge.md`
+- `.agent/skills/change-custody/gates/SKILL-CANONICAL.md`
+- `.agent/skills/change-custody/undo-change/SKILL-CANONICAL.md`
+- `.agent/skills/cognition/concept-exploration/SKILL-CANONICAL.md`
+- `.agent/skills/cognition/free-play/SKILL-CANONICAL.md`
+- `.agent/skills/cognition/parallax/references/family/references.md`
+- `.agent/skills/cognition/proportionality/SKILL-CANONICAL.md`
+- `.agent/skills/cognition/reason/SKILL-CANONICAL.md`
+- `.agent/skills/cognition/retrospective/SKILL-CANONICAL.md`
+- `.agent/skills/cut-coordination-branch/SKILL-CANONICAL.md`
+- `.agent/skills/domain-craft/ui-design/ui-visual-design/SKILL-CANONICAL.md`
+- `.agent/skills/domain-craft/ui-design/visual-comparison/SKILL-CANONICAL.md`
+- `.agent/skills/domain-craft/ui-design/visual-verification/SKILL-CANONICAL.md`
+- `.agent/skills/go/SKILL-CANONICAL.md`
+- `.agent/skills/go/shared/go.md`
+- `.agent/skills/knowledge/consolidate-docs/SKILL-CANONICAL.md`
+- `.agent/skills/knowledge/consolidate-until-done/SKILL-CANONICAL.md`
+- `.agent/skills/knowledge/napkin/SKILL-CANONICAL.md`
+- `.agent/skills/planning/plan/SKILL-CANONICAL.md`
+- `.agent/skills/sif/SKILL-CANONICAL.md`
+- `.agent/skills/tsdoc/SKILL-CANONICAL.md`
+- `.agent/skills/working-with-graphs/SKILL-CANONICAL.md`
+- `.agent/skills/wrap/SKILL-CANONICAL.md`
+- `.agent/sub-agents/components/architecture/reviewer-team.md`

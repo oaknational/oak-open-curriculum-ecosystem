@@ -49,6 +49,7 @@
 import { fileURLToPath } from 'node:url';
 
 import { runFileBackedChild } from '../core/file-backed-child.js';
+import { resolvePnpm } from '../spawn/pnpm-path.js';
 
 const ADVISORY_BANNER = '[ADVISORY ONLY — NOT A COMMIT GATE]';
 
@@ -141,25 +142,25 @@ async function main(forwardedArgs: readonly string[]): Promise<number> {
     'A non-zero exit is information for the agent to read and route. It is NEVER a commit verdict, NEVER licence to propose --no-verify, and NEVER licence to construct a doctrinal-collision framing. See PDR-053 and ADR-176.\n\n',
   );
 
+  // Bare 'pnpm' never reaches spawn (the agent-tools invariant, and on
+  // Windows a shell-less by-name spawn cannot resolve the .cmd shim at all).
+  const pnpm = resolvePnpm(process.env);
+  if (!pnpm.ok) {
+    process.stderr.write(`${pnpm.error.message}\n`);
+    return 1;
+  }
+  const runPnpm = (args: readonly string[]) =>
+    runFileBackedChild({
+      command: pnpm.value.file,
+      args: [...pnpm.value.leadingArgs, ...args],
+      cwd: repoRoot,
+      env: pnpm.value.env,
+    });
+
   const result = await runCommitSkillAdvisories({
-    fitnessCheck: async () =>
-      runFileBackedChild({
-        command: 'pnpm',
-        args: ['practice:fitness:strict-hard'],
-        cwd: repoRoot,
-      }),
-    vocabularyCheck: async () =>
-      runFileBackedChild({
-        command: 'pnpm',
-        args: ['practice:vocabulary'],
-        cwd: repoRoot,
-      }),
-    messageCheck: async () =>
-      runFileBackedChild({
-        command: 'pnpm',
-        args: ['agent-tools:check-commit-message', ...forwardedArgs],
-        cwd: repoRoot,
-      }),
+    fitnessCheck: async () => runPnpm(['practice:fitness:strict-hard']),
+    vocabularyCheck: async () => runPnpm(['practice:vocabulary']),
+    messageCheck: async () => runPnpm(['agent-tools:check-commit-message', ...forwardedArgs]),
   });
 
   if (result.ok) {

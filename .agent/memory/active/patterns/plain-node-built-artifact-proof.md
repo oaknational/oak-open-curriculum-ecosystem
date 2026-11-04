@@ -3,6 +3,7 @@ name: "Plain-Node Built-Artefact Proof"
 polarity: pattern
 use_this_when: "A service runs source through tsx, Vite, or another dev loader locally but ships built JavaScript under plain Node, and dev success may mask production-startup defects"
 category: testing
+layer: family
 proven_in: "apps/oak-curriculum-mcp-streamable-http/e2e-tests/built-artifact-import.e2e.test.ts"
 proven_date: 2026-04-09
 barrier:

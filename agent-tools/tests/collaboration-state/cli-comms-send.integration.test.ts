@@ -1,3 +1,5 @@
+import { join } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import { runCollaborationStateCli } from '../../src/collaboration-state';
@@ -7,11 +9,14 @@ import { createFakeCollaborationRuntime } from './fake-collaboration-runtime';
 const LINKED = '/workspace/oak-worktrees/lane-b';
 const PRIMARY = '/workspace/oak';
 const EXPLICIT_COMMS_DIR = '/explicit/comms';
-const CANONICAL_ACTIVE = `${PRIMARY}/.agent/state/collaboration/active-claims.json`;
-const CANONICAL_LOG = `${PRIMARY}/.agent/state/collaboration/shared-comms-log.md`;
+// Derived defaults are host-joined onto the home, so these expectations are
+// built in host form (identical to the POSIX literals on POSIX).
+const CANONICAL_ACTIVE = join(PRIMARY, '.agent/state/collaboration/active-claims.json');
+// The shared log lives beside the comms directory, rendered by the write itself.
+const EXPLICIT_LOG = join('/explicit', 'shared-comms-log.md');
 
 const senderEnv = {
-  OAK_AGENT_IDENTITY_OVERRIDE: 'Juniper crosses Vale',
+  PRACTICE_AGENT_IDENTITY_OVERRIDE: 'Juniper crosses Vale',
   PRACTICE_AGENT_SESSION_ID_CLAUDE: '7c3f11',
 } as const;
 
@@ -34,7 +39,7 @@ const sendArgs = [
 ] as const;
 
 describe('comms send path defaults', () => {
-  it('does not resolve git when comms-dir, output, and active are all explicit', async () => {
+  it('does not resolve git when comms-dir and active are both explicit', async () => {
     const resolver = createCapturingCoordinationHomeResolver('/unexpected-coordination-home');
     const fake = createFakeCollaborationRuntime({
       cwd: LINKED,
@@ -46,8 +51,6 @@ describe('comms send path defaults', () => {
         ...sendArgs,
         '--comms-dir',
         EXPLICIT_COMMS_DIR,
-        '--output',
-        '/explicit/shared-comms-log.md',
         '--active',
         '/explicit/active-claims.json',
       ],
@@ -62,12 +65,14 @@ describe('comms send path defaults', () => {
     expect(fake.readActiveClaimsPaths()).toStrictEqual(['/explicit/active-claims.json']);
     expect(fake.readCommsEvents(EXPLICIT_COMMS_DIR)).toHaveLength(1);
     expect(JSON.parse(result.stdout)).toMatchObject({
-      event_path: `${EXPLICIT_COMMS_DIR}/resolver-boundary-regression.json`,
-      shared_log_path: '/explicit/shared-comms-log.md',
+      // Both paths are host-joined from the comms dir: the event beneath it,
+      // the shared log beside it.
+      event_path: join(EXPLICIT_COMMS_DIR, 'resolver-boundary-regression.json'),
+      shared_log_path: EXPLICIT_LOG,
     });
   });
 
-  it('derives missing output and active defaults from the canonical home', async () => {
+  it('derives the missing active default from the canonical home and renders the log beside the comms directory', async () => {
     const resolver = createCapturingCoordinationHomeResolver(PRIMARY);
     const fake = createFakeCollaborationRuntime({
       cwd: LINKED,
@@ -86,10 +91,10 @@ describe('comms send path defaults', () => {
     expect(resolver.calls).toStrictEqual([LINKED]);
     expect(fake.readActiveClaimsPaths()).toStrictEqual([CANONICAL_ACTIVE]);
     expect(fake.readCommsEvents(EXPLICIT_COMMS_DIR)).toHaveLength(1);
-    expect(fake.readTextFile(CANONICAL_LOG)).toBeDefined();
+    expect(fake.readTextFile(EXPLICIT_LOG)).toBeDefined();
     expect(JSON.parse(result.stdout)).toMatchObject({
-      event_path: `${EXPLICIT_COMMS_DIR}/resolver-boundary-regression.json`,
-      shared_log_path: CANONICAL_LOG,
+      event_path: join(EXPLICIT_COMMS_DIR, 'resolver-boundary-regression.json'),
+      shared_log_path: EXPLICIT_LOG,
     });
   });
 });

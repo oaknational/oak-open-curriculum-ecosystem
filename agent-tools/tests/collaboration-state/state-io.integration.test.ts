@@ -217,6 +217,7 @@ function filesystemIo(): CollaborationStateCliIo {
     loadCommsConceptGateBlocks: async () => ok([]),
     readActiveClaimsFile,
     readClosedClaimsFile,
+    readCommitQueueEntries: async () => [],
     writeCommsEvent,
     readCommsEvents,
     readCommsEventsExcluding,

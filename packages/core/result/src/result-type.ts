@@ -6,7 +6,7 @@
 
 /**
  * Result type representing either success (Ok) or failure (Err).
- * Forces explicit handling of both cases.
+ * A read of `value` or `error` compiles only after narrowing on `ok`.
  */
 export type Result<T, E> = Ok<T> | Err<E>;
 

@@ -6,7 +6,11 @@ import {
   checkCommsTextAgainstConceptGates,
   formatCommsConceptGateRefusal,
 } from './comms-concept-gate.js';
-import { renderCommsLog, writeCommsEventWithReadback } from './comms-use-cases.js';
+import {
+  renderCommsLog,
+  sharedCommsLogPathFor,
+  writeCommsEventWithReadback,
+} from './comms-use-cases.js';
 import { resolveIdentity } from './cli-identity.js';
 import { optional, required, valueOrDefault, type Options } from './cli-options.js';
 import { cliIo, type CollaborationStateCliIo, type CliRuntime } from './cli-runtime.js';
@@ -62,8 +66,8 @@ export async function resolveCommsBody(
   if (filePath !== undefined) {
     try {
       return await io.readTextFile(filePath);
-    } catch (cause) {
-      throw new Error(`--body-file path is unreadable: ${filePath}`, { cause });
+    } catch (error) {
+      throw new Error(`--body-file path is unreadable: ${filePath}`, { cause: error });
     }
   }
   if (inline === undefined) {
@@ -90,12 +94,13 @@ export async function appendComms(
   if (!validation.ok) {
     throw new Error(validation.reason);
   }
-  const registry = await registryForIdentityWrite({
+  const { registry } = await registryForIdentityWrite({
     options,
     agentId: identity.agent_id,
     nowIso,
     surface: 'comms append',
     readActiveClaimsFile: io.readActiveClaimsFile,
+    readCommitQueueEntries: io.readCommitQueueEntries,
   });
 
   const tags = validateCommsEventTags(options.tags);
@@ -116,6 +121,9 @@ export async function appendComms(
       write: (event, currentNowIso) =>
         io.writeCommsEvent({ commsDir, event, nowIso: currentNowIso }),
       read: () => io.readCommsEvents(commsDir),
+    },
+    output: {
+      writeText: (text) => io.writeTextFile({ filePath: sharedCommsLogPathFor(commsDir), text }),
     },
     event: tags.length > 0 ? { ...baseEvent, tags } : baseEvent,
   });

@@ -11,10 +11,7 @@
  * records the accepted residual risk).
  */
 
-import {
-  generateServerInstructions,
-  AGENT_SUPPORT_TOOL_NAMES,
-} from './agent-support-tool-metadata.js';
+import { generateServerInstructions } from './agent-support-tool-metadata.js';
 
 /**
  * The name of the primary orientation tool that provides complete domain understanding.
@@ -43,4 +40,5 @@ export const PRIMARY_ORIENTATION_TOOL_NAME = 'get-curriculum-model' as const;
 export const SERVER_INSTRUCTIONS = generateServerInstructions();
 
 // Re-export for convenience
-export { AGENT_SUPPORT_TOOL_NAMES };
+
+export { AGENT_SUPPORT_TOOL_NAMES } from './agent-support-tool-metadata.js';

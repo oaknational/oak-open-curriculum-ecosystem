@@ -22,6 +22,10 @@ import { readFile } from 'node:fs/promises';
 import { err, type Result } from '@oaknational/result';
 
 import { failureAsError } from '../core/failure-as-error.js';
+import {
+  isLegacyActiveClaimsText,
+  migrateLegacyActiveClaimsFile,
+} from './active-claims-legacy-migration.js';
 import { isErrnoCode } from './errno.js';
 import {
   EMPTY_ACTIVE_CLAIMS_REGISTRY_JSON,
@@ -41,15 +45,42 @@ export type ReadTextFile = (path: string) => Promise<string>;
 const readTextFileFromDisk: ReadTextFile = (path) => readFile(path, 'utf8');
 
 /**
+ * The injectable legacy-migration seam: production rewrites the file via
+ * {@link migrateLegacyActiveClaimsFile}; tests inject fakes so the hook is
+ * provable without real IO.
+ */
+export type MigrateLegacyActiveClaims = (input: {
+  readonly activePath: string;
+  readonly nowIso: string;
+}) => Promise<void>;
+
+/**
  * Read and parse the active claims registry. See the module doc for the
  * failure contract; callers behind the CLI's exception boundary unwrap
  * with `unwrapOrThrow`.
+ *
+ * A legacy 1.3.0 file (still carrying the flat `commit_queue` array) is
+ * migrated ONCE on first contact — live queue entries to the per-intent
+ * store, expired dropped, claims rewritten in the new shape — then re-read.
+ * TTL liveness at this hook is judged against the wall clock: migration is
+ * an IO-boundary act on the real store, not a view over a caller's `--now`.
  */
 export async function readActiveClaimsFile(
   activePath: string,
   readTextFile: ReadTextFile = readTextFileFromDisk,
+  migrateLegacy: MigrateLegacyActiveClaims = migrateLegacyActiveClaimsFile,
 ): Promise<Result<CollaborationRegistry, Error>> {
-  return readStateFile(activePath, parseCollaborationRegistry, readTextFile, {
+  const parseWithMigration = async (
+    text: string,
+  ): Promise<Result<CollaborationRegistry, Error>> => {
+    if (!isLegacyActiveClaimsText(text)) {
+      return parseCollaborationRegistry(text);
+    }
+    await migrateLegacy({ activePath, nowIso: new Date().toISOString() });
+    return parseCollaborationRegistry(await readTextFile(activePath));
+  };
+
+  return readStateFile(activePath, parseWithMigration, readTextFile, {
     label: 'active-claims registry',
     seedJson: EMPTY_ACTIVE_CLAIMS_REGISTRY_JSON,
   });
@@ -71,7 +102,7 @@ export async function readClosedClaimsFile(
 
 async function readStateFile<T>(
   path: string,
-  parse: (text: string) => Result<T, Error>,
+  parse: (text: string) => Result<T, Error> | Promise<Result<T, Error>>,
   readTextFile: ReadTextFile,
   seed: { readonly label: string; readonly seedJson: string },
 ): Promise<Result<T, Error>> {

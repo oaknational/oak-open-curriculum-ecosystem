@@ -16,7 +16,7 @@ durable doctrine);
 [PDR-035](PDR-035-agent-work-capabilities-belong-to-the-practice.md)
 (Practice-owned agent capabilities — the doctrine that makes
 agent-tooling a Practice concern in the first place);
-ADR-131
+the host repository's improvement-loop decision
 (self-reinforcing improvement loop — the architectural realisation
 this PDR's substance feeds).
 

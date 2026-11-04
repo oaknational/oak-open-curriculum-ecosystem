@@ -3,6 +3,7 @@ name: Falsification Cost Determines Claim Quality
 polarity: pattern
 use_this_when: Designing a quality mechanism, triaging why an estate keeps shipping wrong claims, or deciding between adding a check and making an existing check cheaper to run — and at the personal moment of wanting to assert something
 category: agent
+layer: general
 proven_in: .agent/memory/active/archive/napkin-2026-08-06.md 2026-08-03/04 entries (a two-day natural experiment at one seat, plus four tickets that reduce to one shape)
 proven_date: 2026-08-04
 related_pattern: passive-guidance-loses-to-artefact-gravity

@@ -22,7 +22,7 @@ Read these before making documentation changes:
 1. `tsdoc.json`
 2. `.agent/directives/principles.md`
 3. `.agent/directives/testing-strategy.md` when documenting test-facing behaviour
-4. `docs/engineering/tooling.md` for the repository's TSDoc enforcement layers
+4. `.agent/reference/tooling.md` for the repository's TSDoc enforcement layers
 
 ## Canonical Constraints
 

@@ -40,7 +40,7 @@ function createSuccessResponse(): Response {
 function getRequestInput(fetchMock: ReturnType<typeof vi.fn<FetchFn>>, callIndex = 0): Request {
   const [request] = fetchMock.mock.calls[callIndex] ?? [];
   if (!(request instanceof Request)) {
-    throw new Error('Expected middleware to invoke fetch with a Request');
+    throw new TypeError('Expected middleware to invoke fetch with a Request');
   }
   return request;
 }
@@ -67,7 +67,7 @@ describe('rate-limit middleware integration', () => {
     // Mock successful response
     mockFetch.mockResolvedValueOnce(createSuccessResponse());
 
-    const client = createClient<TestPaths>({ baseUrl: 'http://test.local' });
+    const client = createClient<TestPaths>({ baseUrl: 'https://test.local' });
     client.use(middleware);
 
     // First request should not be delayed
@@ -85,7 +85,7 @@ describe('rate-limit middleware integration', () => {
     // Mock successful responses - create new Response for each call
     mockFetch.mockImplementation(() => Promise.resolve(createSuccessResponse()));
 
-    const client = createClient<TestPaths>({ baseUrl: 'http://test.local' });
+    const client = createClient<TestPaths>({ baseUrl: 'https://test.local' });
     client.use(middleware);
 
     // Make first request
@@ -111,7 +111,7 @@ describe('rate-limit middleware integration', () => {
 
     mockFetch.mockImplementation(() => Promise.resolve(createSuccessResponse()));
 
-    const client = createClient<TestPaths>({ baseUrl: 'http://test.local' });
+    const client = createClient<TestPaths>({ baseUrl: 'https://test.local' });
     client.use(middleware);
 
     // Make 3 requests - each needs 50ms interval
@@ -136,7 +136,7 @@ describe('rate-limit middleware integration', () => {
 
     mockFetch.mockImplementation(() => Promise.resolve(createSuccessResponse()));
 
-    const client = createClient<TestPaths>({ baseUrl: 'http://test.local' });
+    const client = createClient<TestPaths>({ baseUrl: 'https://test.local' });
     client.use(middleware);
 
     // Make 3 requests quickly - should not be delayed
@@ -156,7 +156,7 @@ describe('rate-limit middleware integration', () => {
 
     mockFetch.mockImplementation(() => Promise.resolve(createSuccessResponse()));
 
-    const client = createClient<TestPaths>({ baseUrl: 'http://test.local' });
+    const client = createClient<TestPaths>({ baseUrl: 'https://test.local' });
     client.use(middleware);
 
     // Make first request
@@ -181,7 +181,7 @@ describe('rate-limit middleware integration', () => {
 
     mockFetch.mockImplementation(() => Promise.resolve(createSuccessResponse()));
 
-    const client = createClient<TestPaths>({ baseUrl: 'http://test.local' });
+    const client = createClient<TestPaths>({ baseUrl: 'https://test.local' });
     client.use(middleware);
 
     // First request
@@ -211,7 +211,7 @@ describe('rate-limit middleware integration', () => {
 
     mockFetch.mockImplementation(() => Promise.resolve(createSuccessResponse()));
 
-    const client = createClient<TestPaths>({ baseUrl: 'http://test.local' });
+    const client = createClient<TestPaths>({ baseUrl: 'https://test.local' });
     client.use(authMiddleware);
     client.use(rateLimitMiddleware);
 

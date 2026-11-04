@@ -8,14 +8,8 @@ import {
   renewLease,
   validateLeaseTtl,
   DEFAULT_LEASE_TTL_MS,
-  forceReleaseLease,
-  inspectLease,
   type LifecycleLease,
-  type LeaseStatus,
 } from './lifecycle-lease-infra.js';
-
-export { validateLeaseTtl, DEFAULT_LEASE_TTL_MS, forceReleaseLease, inspectLease };
-export type { LifecycleLease, LeaseStatus };
 
 function toExecutionError(error: unknown): AdminError {
   return {
@@ -154,3 +148,12 @@ export async function withLifecycleLease<T>(
   }
   return executionResult;
 }
+
+export {
+  forceReleaseLease,
+  inspectLease,
+  type LeaseStatus,
+  validateLeaseTtl,
+  DEFAULT_LEASE_TTL_MS,
+  type LifecycleLease,
+} from './lifecycle-lease-infra.js';

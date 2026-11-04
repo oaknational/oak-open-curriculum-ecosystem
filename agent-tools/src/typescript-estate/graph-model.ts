@@ -4,14 +4,14 @@ import type {
   GraphNodeKind,
   GraphProducerFor,
 } from './graph-vocabulary.js';
-import type { NonEmptyReadonlyArray, RepoPath } from './scalar-model.js';
+import type { NonEmptyReadonlyArray } from './scalar-model.js';
 
 export interface GraphNode {
   readonly id: string;
   readonly kind: GraphNodeKind;
   readonly identityComponents: readonly string[];
   readonly label: string;
-  readonly path: RepoPath | null;
+  readonly path: string | null;
 }
 
 export interface GraphEdgeFor<K extends GraphEdgeKind> {
@@ -22,7 +22,7 @@ export interface GraphEdgeFor<K extends GraphEdgeKind> {
   readonly status: 'observed' | 'ambiguous';
   readonly producer: GraphProducerFor<K>;
   readonly occurrenceCount: number;
-  readonly evidencePaths: NonEmptyReadonlyArray<RepoPath>;
+  readonly evidencePaths: NonEmptyReadonlyArray<string>;
 }
 
 export type GraphEdge = {
@@ -70,7 +70,7 @@ interface GraphEdgeObservationFor<K extends GraphEdgeKind> {
   readonly kind: K;
   readonly status: GraphEdge['status'];
   readonly producer: GraphProducerFor<K>;
-  readonly evidencePath: RepoPath;
+  readonly evidencePath: string;
 }
 
 export type GraphEdgeObservation = {

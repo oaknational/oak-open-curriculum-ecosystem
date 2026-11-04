@@ -2,7 +2,8 @@
  * `pre-push` secret-scan CLI: scans only the commits being pushed.
  *
  * The `.husky/pre-push` hook captures git's ref lines into a temp file and calls
- * this with `--remote <name> --refs-file <path>`. This is the thin IO adapter
+ * this with `--remote <destination> --refs-file <path>`, the destination as git
+ * names it (a remote name, or a URL or path verbatim). This is the thin IO adapter
  * around the pure {@link computePushScanRanges}: it resolves the ranges to scan,
  * runs gitleaks over each, and exits non-zero if any range reports a leak. The
  * full `--branches --tags` history scan stays in CI (`pnpm secrets:scan`).
@@ -15,33 +16,59 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 import { resolveTrustedGit } from '../core/trusted-git.js';
+import { resolveTrustedGitleaks } from '../core/trusted-gitleaks.js';
 import {
   computePushScanRanges,
   degradedScanWarning,
   type ComputePushScanRangesInput,
+  type ConfiguredRemote,
 } from './compute-push-scan-ranges.js';
 
 export type PushSecretScanArgs = ComputePushScanRangesInput;
 
+/** The non-empty lines of a git listing, trimmed. */
+function listedLines(stdout: string): string[] {
+  return stdout
+    .split('\n')
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0);
+}
+
 /**
- * Ask git which remotes are configured. Whether the push destination can
- * scope the scan is git's fact, not a guess from the destination's spelling —
- * git hands the hook a remote NAME or the destination verbatim, and only
- * membership here tells the two apart. Output is a short list git controls,
- * so capturing it is a fact about the call rather than an unexamined buffer.
+ * Ask git which remotes are configured, and what each fetches from. Whether
+ * the push destination can scope the scan is git's fact, not a guess from the
+ * destination's spelling — git hands the hook a remote NAME or the destination
+ * verbatim, and only these lists tell the two apart: a name by membership, a
+ * URL by the repository a remote fetches from. Output is a short list git
+ * controls, so capturing it is a fact about the call rather than an
+ * unexamined buffer.
  */
-function readConfiguredRemotes(): string[] {
-  const result = spawnSync(resolveTrustedGit(), ['remote'], { encoding: 'utf8' });
-  if (result.error !== undefined || result.status !== 0) {
+function readConfiguredRemotes(): ConfiguredRemote[] {
+  const git = resolveTrustedGit();
+  const names = spawnSync(git, ['remote'], { encoding: 'utf8' });
+  if (names.error !== undefined || names.status !== 0) {
     // No list means nothing can be treated as scopable — the safe direction:
     // the scan widens and says so, rather than building a glob that matches
     // nothing while reporting success.
     return [];
   }
-  return result.stdout
-    .split('\n')
-    .map((line) => line.trim())
-    .filter((line) => line.length > 0);
+  return listedLines(names.stdout).map((name) => ({ name, fetchUrl: readFetchUrl(git, name) }));
+}
+
+/**
+ * The one URL a remote fetches from, `insteadOf` applied, as
+ * `git remote get-url <name>` prints it: the first `remote.<name>.url`. Not
+ * `--all`, whose further entries are push targets that populate no tracking
+ * ref, and not `--push`. A read that fails leaves the remote scopable by its
+ * name only, never by a URL — again the direction that widens the scan rather
+ * than narrowing it on a guess.
+ */
+function readFetchUrl(git: string, name: string): string | undefined {
+  const result = spawnSync(git, ['remote', 'get-url', name], { encoding: 'utf8' });
+  if (result.error !== undefined || result.status !== 0) {
+    return undefined;
+  }
+  return listedLines(result.stdout)[0];
 }
 
 /**
@@ -52,7 +79,7 @@ function readConfiguredRemotes(): string[] {
 export function parseArgs(
   argv: readonly string[],
   readFile: (path: string) => string,
-  configuredRemotes: readonly string[],
+  configuredRemotes: readonly ConfiguredRemote[],
 ): PushSecretScanArgs {
   let remoteName = '';
   let refsText = '';
@@ -108,10 +135,20 @@ export function runPushSecretScan(
   return allClean ? 0 : 1;
 }
 
-/** Scan one range with gitleaks; its own output is inherited to the terminal. */
-function scanRangeWithGitleaks(range: string): boolean {
+/**
+ * The scanner over one range, running `gitleaks` by the absolute path the
+ * trusted resolver found (a by-name spawn resolves through PATH, which a
+ * writable entry can shadow: SonarCloud S4036); its own output is inherited
+ * to the terminal.
+ */
+function scanRangeWithGitleaks(gitleaks: string): (range: string) => boolean {
+  return (range) => scanRange(gitleaks, range);
+}
+
+/** One gitleaks run over `range`: true when clean, false on a leak or a launch failure. */
+function scanRange(gitleaks: string, range: string): boolean {
   const result = spawnSync(
-    'gitleaks',
+    gitleaks,
     ['detect', '--redact=100', '--source', '.', `--log-opts=${range}`],
     {
       stdio: ['ignore', 'inherit', 'inherit'],
@@ -137,7 +174,14 @@ if (process.argv[1] === currentFilePath) {
     (path) => readFileSync(path, 'utf8'),
     readConfiguredRemotes(),
   );
+  const gitleaks = resolveTrustedGitleaks();
+  if (!gitleaks.ok) {
+    process.stderr.write(`${gitleaks.error.message}\n`);
+    process.exit(1);
+  }
   process.exit(
-    runPushSecretScan(args, scanRangeWithGitleaks, (message) => process.stderr.write(message)),
+    runPushSecretScan(args, scanRangeWithGitleaks(gitleaks.value), (message) =>
+      process.stderr.write(message),
+    ),
   );
 }

@@ -13,7 +13,6 @@ import {
 } from './graph-validation.js';
 import type { GraphNodeKind } from './graph-vocabulary.js';
 import { lengthFrame } from './length-framing.js';
-import type { RepoPath, Sha256 } from './scalar-model.js';
 
 export type { GraphNodeInput } from './graph-node-input.js';
 
@@ -23,7 +22,7 @@ const NUL = Buffer.from([0]);
 interface DerivedNodeIdentity {
   readonly kind: GraphNodeKind;
   readonly components: readonly string[];
-  readonly path: RepoPath | null;
+  readonly path: string | null;
 }
 
 /** Construct one graph node from the frozen kind-specific identity vocabulary. */
@@ -169,8 +168,8 @@ function deriveRegistrationIdentity(
 function repoPathNode(
   kind: GraphNodeKind,
   components: readonly string[],
-  path: RepoPath | null,
-  repoPaths: readonly RepoPath[],
+  path: string | null,
+  repoPaths: readonly string[],
 ): Result<DerivedNodeIdentity, EstateReviewError> {
   for (const repoPath of repoPaths) {
     const valid = validateGraphRepoPath(repoPath);
@@ -198,7 +197,7 @@ function validateComponents(components: readonly string[]): Result<undefined, Es
 function hashNode(
   kind: GraphNodeKind,
   components: readonly string[],
-): Result<Sha256, EstateReviewError> {
+): Result<string, EstateReviewError> {
   const hash = createHash('sha256').update(NODE_DOMAIN).update(kind, 'utf8').update(NUL);
   for (const component of components) {
     const appended = appendFramed(hash, component);
