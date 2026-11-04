@@ -27,9 +27,6 @@ const config: KnipConfig = {
   ignoreBinaries: [
     // External tools not installed via npm
     'gitleaks',
-    // System binaries used in package.json scripts for port/process checks
-    'lsof',
-    'ps',
   ],
   ignoreIssues: {
     // Deploy boundary intentionally exposes the same handler as both a named
@@ -51,14 +48,26 @@ const config: KnipConfig = {
     'demos/oak-design-showcase/public/brands/**',
   ],
 
+  // A stale ignore entry or a mis-scoped glob fails the knip gate instead of
+  // printing a hint that scrolls past.
+  treatConfigHintsAsErrors: true,
+
   eslint: true,
   vitest: true,
   typescript: true,
   compilers: {
     // Surface CSS @import statements as import declarations so knip sees
-    // CSS-first dependency consumption (e.g. Tailwind v4's
-    // `@import 'tailwindcss'` in globals.css); everything else in the file
-    // is not dependency-bearing and is dropped.
+    // dependencies consumed only from CSS: the MCP app widget's index.css is
+    // the HTTP app's only reference to @oaknational/oak-design-tokens.
+    // Everything else in a CSS file carries no dependency and is dropped.
+    // `compilers` is root-only, so this compiler runs in every workspace,
+    // and it takes precedence over the CSS compiler knip's Tailwind plugin
+    // registers, even in the hub: a Tailwind `@plugin` or `@config` line
+    // there would read as an unused dependency, and the cure is to extend
+    // this pattern to those directives, never an ignore. Each workspace's
+    // `src` glob carries `css`, as the HTTP app's `.tsx` glob below argues:
+    // the wider glob costs nothing, and a narrow one would silently stop
+    // knip following the imports of a CSS file added later.
     css: (text: string) =>
       [...text.matchAll(/@import\s+['"]([^'"]+)['"]/g)]
         .map(([, specifier]) => `import '${String(specifier)}';`)
@@ -155,7 +164,7 @@ const config: KnipConfig = {
       // (the depcruise red-proof helper imports dependency-cruiser from
       // tests/test-helpers/ — widened 2026-08-10; test files are entries via
       // the vitest plugin).
-      project: ['src/**/*.{ts,tsx}', 'tests/**/*.ts'],
+      project: ['src/**/*.{ts,tsx,css}', 'tests/**/*.ts'],
       // TypeScript-estate review instrument (owner-ratified plan
       // typescript-estate-consolidation-review, staged contract): the module's
       // exported surface is contract-anchored for slices that are
@@ -191,7 +200,7 @@ const config: KnipConfig = {
         // narrow one is silent: a .ts-only glob leaves any future component
         // outside knip's graph, and anything it alone consumes then reads as
         // an unused export.
-        'src/**/*.{ts,tsx}',
+        'src/**/*.{ts,tsx,css}',
         'build-scripts/**/*.ts',
         'e2e-tests/**/*.ts',
         'operations/**/*.ts',
@@ -222,7 +231,7 @@ const config: KnipConfig = {
       ],
       project: [
         'bin/**/*.ts',
-        'src/**/*.ts',
+        'src/**/*.{ts,css}',
         'ground-truths/**/*.ts',
         'operations/**/*.ts',
         'scripts/**/*.ts',
@@ -239,14 +248,14 @@ const config: KnipConfig = {
       // the former `development` condition, removed with the built-code-only
       // ruling). src/index.ts reaches the plugin, configs, and shared graph.
       entry: ['src/index.ts', 'scripts/**/*.ts'],
-      project: ['src/**/*.ts', 'scripts/**/*.ts'],
+      project: ['src/**/*.{ts,css}', 'scripts/**/*.ts'],
       ignoreDependencies: [
         // ESLint plugins are peer dependencies used at runtime
         'eslint-plugin-prettier',
       ],
     },
     'packages/core/openapi-zod-client-adapter': {
-      project: ['src/**/*.ts'],
+      project: ['src/**/*.{ts,css}'],
     },
     'packages/core/workspace-config': {
       // Compiled config package: knip's exports-map auto-detection resolves
@@ -254,22 +263,22 @@ const config: KnipConfig = {
       // drag tsup into every vitest config's module graph), so no explicit
       // entry list is needed; scoping project to src keeps the package's
       // own config files out of the unused-file surface.
-      project: ['src/**/*.ts'],
+      project: ['src/**/*.{ts,css}'],
     },
     'packages/core/observability': {
-      project: ['src/**/*.ts'],
+      project: ['src/**/*.{ts,css}'],
     },
     'packages/core/env': {
-      project: ['src/**/*.ts'],
+      project: ['src/**/*.{ts,css}'],
     },
     'packages/core/graph-core': {
-      project: ['src/**/*.ts'],
+      project: ['src/**/*.{ts,css}'],
     },
     'packages/core/result': {
-      project: ['src/**/*.ts'],
+      project: ['src/**/*.{ts,css}'],
     },
     'packages/core/type-helpers': {
-      project: ['src/**/*.ts'],
+      project: ['src/**/*.{ts,css}'],
     },
     'packages/design/oak-design-system': {
       // The consumable surface stays analysed (owner ruling 2026-07-19:
@@ -281,42 +290,42 @@ const config: KnipConfig = {
       // load. studio-source/ is the explicitly separated non-production
       // studio material (see its README) and is the only part out of scope.
       entry: ['src/oak-theme.ts'],
-      project: ['src/**/*.ts', '*.js'],
+      project: ['src/**/*.{ts,css}', '*.js'],
     },
     'packages/design/oak-design-tokens': {
       // Source entry behind the dist-pointing `./terminal-theme` export
       // (see oak-eslint note on the removed `development` condition), plus
       // the repo-validator script chained into `repo-validators:check`.
       entry: ['src/terminal-theme.ts', 'scripts/validate-design-system-consistency.ts'],
-      project: ['src/**/*.ts', 'scripts/**/*.ts'],
+      project: ['src/**/*.{ts,css}', 'scripts/**/*.ts'],
     },
     'packages/libs/env-resolution': {
-      project: ['src/**/*.ts'],
+      project: ['src/**/*.{ts,css}'],
     },
     'packages/libs/fidelity-review': {
       // No src/index.ts barrel by design (per-module subpath exports);
       // knip resolves the dist-pointing subpath exports back to their
       // sources unaided, so no explicit entries are needed.
-      project: ['src/**/*.ts'],
+      project: ['src/**/*.{ts,css}'],
     },
     'packages/libs/graph-ingest': {
       // Source entries behind the dist-pointing exports map (see oak-eslint
       // note on the removed `development` condition). Only the subpaths not
       // already reachable from knip's default entries need declaring.
       entry: ['src/turtle/index.ts', 'src/source-path/index.ts'],
-      project: ['src/**/*.ts'],
+      project: ['src/**/*.{ts,css}'],
     },
     'packages/libs/graph-project': {
-      project: ['src/**/*.ts'],
+      project: ['src/**/*.{ts,css}'],
     },
     'packages/libs/logger': {
-      project: ['src/**/*.ts'],
+      project: ['src/**/*.{ts,css}'],
     },
     'packages/libs/search-contracts': {
-      project: ['src/**/*.ts'],
+      project: ['src/**/*.{ts,css}'],
     },
     'packages/libs/sentry-node': {
-      project: ['src/**/*.ts'],
+      project: ['src/**/*.{ts,css}'],
       ignoreDependencies: [
         // Readiness-only devDep: `@sentry/cli` lets maintainers run
         // `pnpm exec sentry-cli` inside this package without touching
@@ -330,7 +339,7 @@ const config: KnipConfig = {
       // (see oak-eslint note on the removed `development` condition — the
       // former exports-map auto-detection resolved that condition to src).
       entry: ['src/index.ts', 'src/eef-strands/index.ts', 'src/curriculum/index.ts'],
-      project: ['src/**/*.ts'],
+      project: ['src/**/*.{ts,css}'],
     },
     'packages/sdks/oak-curriculum-sdk': {
       // Knip cannot resolve entries through createSdkConfig() factory.
@@ -344,7 +353,7 @@ const config: KnipConfig = {
         'src/mcp/**/*.ts',
         'src/validation/**/*.ts',
       ],
-      project: ['src/**/*.ts'],
+      project: ['src/**/*.{ts,css}'],
       ignoreDependencies: [
         // @zod/core is a transitive dep of zod, required at runtime
         '@zod/core',
@@ -353,7 +362,7 @@ const config: KnipConfig = {
     'packages/sdks/oak-sdk-codegen': {
       // Knip cannot resolve entries through createSdkConfig() factory.
       entry: ['src/**/*.ts', 'code-generation/**/*.ts', 'vocab-gen/**/*.ts'],
-      project: ['src/**/*.ts', 'code-generation/**/*.ts', 'vocab-gen/**/*.ts'],
+      project: ['src/**/*.{ts,css}', 'code-generation/**/*.ts', 'vocab-gen/**/*.ts'],
       ignoreDependencies: ['@zod/core'],
     },
     'packages/sdks/oak-search-sdk': {
@@ -372,7 +381,7 @@ const config: KnipConfig = {
         'src/observability/**/*.ts',
         'src/internal/**/*.ts',
       ],
-      project: ['src/**/*.ts'],
+      project: ['src/**/*.{ts,css}'],
     },
   },
 };
