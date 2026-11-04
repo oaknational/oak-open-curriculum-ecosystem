@@ -174,7 +174,6 @@ overrides:
   csstype: '>=3.2.3'
   esbuild: '>=0.28.2 <0.29'
   fast-uri: '>=3.1.9 <4'
-  file-type: '>=21.3.2'
   follow-redirects: '>=1.16.2 <2'
   handlebars: '>=4.7.10 <5'
   hono: '>=4.13.11 <5'
@@ -4103,6 +4102,7 @@ packages:
   '@smithy/core@3.31.1':
     resolution: {integrity: sha512-CyogUINxvi7C7LDsh8Syo6hVJOT9ckz4rG8dRZfTJ8r91HkMY59PnNooaj7WcHyxEkxPfBAmbgztZU+xTo76lg==}
     engines: {node: '>=18.0.0'}
+    deprecated: Deprecated due to a bug in custom logger data redaction. See https://github.com/aws/aws-sdk-js-v3/issues/8393.
 
   '@smithy/eventstream-codec@4.4.16':
     resolution: {integrity: sha512-u6l4XW99ESjEikMOGENsZxJblxWNvkTLRbCWcC1c2VwNdmd4QgviN2RRlZxliVWEzG3kyU/m0y3iuVFtLL/6jA==}

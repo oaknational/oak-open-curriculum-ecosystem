@@ -10,7 +10,21 @@ updates:
   # we want the warnings, just not the PRs. npm updates land through agent-run
   # sweeps instead, where pnpm's own resolver honours the age floor.
   # See docs/engineering/build-system.md §Dependency updates.
+  #
+  # `/` covers .github/workflows and a root action.yml. The composite actions
+  # under .github/actions carry their own action.yml with pinned actions, so
+  # they are listed too: `directories` accepts globs, and Dependabot reads the
+  # action.yml of each directory it matches. The same actions are pinned in
+  # both places, so `group-by: dependency-name` bumps each action everywhere
+  # in one pull request, rather than one pull request per directory.
   - package-ecosystem: github-actions
-    directory: /
+    directories:
+      - /
+      - /.github/actions/*
+    groups:
+      github-actions:
+        patterns:
+          - '*'
+        group-by: dependency-name
     schedule:
       interval: weekly
