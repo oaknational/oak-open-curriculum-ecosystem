@@ -148,18 +148,11 @@ async function awaitSpawnedReady(
   const spawned = await spawnAndAwaitReady(demoDir, base, {
     spawnDev: spawnPnpmRunDev,
     untilReady: (stop) => pollUntil(() => responds(base), READY_WAIT_MS, stop),
+    confirmOurs: () => probeIdentity(base, sentinel),
     reap: (pid) => stopSpawned(pid, base)(),
   });
   if (!spawned.ok) {
     return spawned;
   }
-  const pid = spawned.value;
-  // Ready = answering AND provably OURS: a startup race that bound a
-  // different service on the port is a loud identity failure here.
-  const identity = await probeIdentity(base, sentinel);
-  if (!identity.ok) {
-    await stopSpawned(pid, base)();
-    return err(identity.error);
-  }
-  return ok({ mode: 'spawned', stop: stopSpawned(pid, base) });
+  return ok({ mode: 'spawned', stop: stopSpawned(spawned.value, base) });
 }

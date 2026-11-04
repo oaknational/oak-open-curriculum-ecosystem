@@ -1,10 +1,11 @@
 /*
  * Spawning the detached `pnpm run dev` group and waiting for it to be
- * ready: the bounded ready-wait races the pnpm leader's exit, so a leader
- * that dies first (a pnpm refusal, a missing script) fails at once instead
- * of at the deadline. Its IO (the spawn, the ready-wait, the group reap)
- * arrives as arguments, so the race is testable in process. Split from
- * dev-server.ts for module size.
+ * ready and ours: the bounded ready-wait races the pnpm leader's exit, so
+ * a leader that dies first (a pnpm refusal, a missing script) fails at
+ * once instead of at the deadline, and every failure reaps the group. Its
+ * IO (the spawn, the ready-wait, the identity probe, the group reap)
+ * arrives as arguments, so the lifecycle is testable in process. Split
+ * from dev-server.ts for module size.
  */
 import { spawn } from 'node:child_process';
 // Explicit module import, never the ambient global (lib boundary rule).
@@ -33,6 +34,8 @@ export interface SpawnIo {
   readonly spawnDev: (cwd: string) => DevChild;
   /** True once the server answers, false at the bounded deadline; stops early when `stop` aborts. */
   readonly untilReady: (stop: AbortSignal) => Promise<boolean>;
+  /** Proves the server answering once ready is the one this spawn started. */
+  readonly confirmOurs: () => Promise<Result<void, string>>;
   /** Tears the spawned group down. */
   readonly reap: (pid: number) => Promise<Result<void, string>>;
 }
@@ -100,10 +103,27 @@ function earlyExitError(exit: LeaderExit, demoDir: string): string {
   );
 }
 
-/** Spawn the group in `demoDir` and wait until it answers on `base`,
- *  reaping it before erring on any failure; returns its pid once ready.
- *  A failed reap stays in the error: the caller gets no stop handle, so
- *  the operator must know the detached group may still need stopping. */
+/** Ready means answering AND provably ours: a startup race that bound a
+ *  different service on the port is a loud identity failure. */
+async function readyAndOurs(
+  outcome: 'ready' | 'timeout' | LeaderExit,
+  demoDir: string,
+  confirmOurs: SpawnIo['confirmOurs'],
+): Promise<Result<void, string>> {
+  if (outcome === 'timeout') {
+    return err(`dev-server: not ready within ${READY_WAIT_MS / 1000}s`);
+  }
+  if (outcome !== 'ready') {
+    return err(earlyExitError(outcome, demoDir));
+  }
+  return confirmOurs();
+}
+
+/** Spawn the group in `demoDir`, wait until it answers on `base` and
+ *  proves ours, and return its pid; any failure reaps the group before
+ *  erring. A failed reap stays in the error: the caller gets no stop
+ *  handle, so the operator must know the detached group may still need
+ *  stopping. */
 export async function spawnAndAwaitReady(
   demoDir: string,
   base: string,
@@ -115,19 +135,19 @@ export async function spawnAndAwaitReady(
   }
   const { pid, exited } = spawned.value;
   process.stdout.write(`spawned pnpm run dev (pid ${pid}), waiting for ${base}…\n`);
-  const outcome = await readyOrExit(io.untilReady, exited);
-  if (outcome === 'ready') {
+  const ready = await readyAndOurs(
+    await readyOrExit(io.untilReady, exited),
+    demoDir,
+    io.confirmOurs,
+  );
+  if (ready.ok) {
     return ok(pid);
   }
-  const failure =
-    outcome === 'timeout'
-      ? `dev-server: not ready within ${READY_WAIT_MS / 1000}s`
-      : earlyExitError(outcome, demoDir);
   const reaped = await io.reap(pid);
   return err(
     reaped.ok
-      ? failure
-      : `${failure} Teardown also failed, so process group ${pid} may still be running ` +
+      ? ready.error
+      : `${ready.error} Teardown also failed, so process group ${pid} may still be running ` +
           `and need stopping by hand: ${reaped.error}`,
   );
 }
