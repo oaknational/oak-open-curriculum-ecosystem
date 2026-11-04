@@ -112,14 +112,11 @@ function makeExecutor(script: ExecutorScript, calls: string[][]): GhCommandExecu
   };
 }
 
-const ghSeam = { ghPath: '/usr/bin/gh', exists: () => true };
-
 describe('readPrStateReading', () => {
   it('composes view, threads, the full reviews harvest, and PR-scoped runs into one reading', () => {
     const calls: string[][] = [];
     const reading = readPrStateReading({
       target: { number: 461 },
-      ...ghSeam,
       execFileSync: makeExecutor(
         {
           agentTaskList: JSON.stringify([
@@ -155,7 +152,6 @@ describe('readPrStateReading', () => {
   it('a run for the same PR number in ANOTHER repo never backs this PR', () => {
     const reading = readPrStateReading({
       target: { number: 461 },
-      ...ghSeam,
       execFileSync: makeExecutor(
         {
           agentTaskList: JSON.stringify([
@@ -179,7 +175,6 @@ describe('readPrStateReading', () => {
   it('uses the fresher view completedAt: a run finishing between list and view is not live', () => {
     const reading = readPrStateReading({
       target: { number: 461 },
-      ...ghSeam,
       execFileSync: makeExecutor(
         {
           agentTaskList: JSON.stringify([
@@ -213,7 +208,6 @@ describe('readPrStateReading', () => {
   it('defaults the expected set from the observed surface and marks it undeclared', () => {
     const reading = readPrStateReading({
       target: { number: 461 },
-      ...ghSeam,
       execFileSync: makeExecutor({}, []),
     });
     expect(reading.expectedDeclared).toBe(false);
@@ -226,7 +220,6 @@ describe('readPrStateReading', () => {
   it('a declared expected set wins and marks declared', () => {
     const reading = readPrStateReading({
       target: { number: 461 },
-      ...ghSeam,
       expectedReviewers: ['copilot-pull-request-reviewer'],
       execFileSync: makeExecutor({}, []),
     });
@@ -237,7 +230,6 @@ describe('readPrStateReading', () => {
   it('degrades the runs leg to a typed unavailable when gh agent-task fails', () => {
     const reading = readPrStateReading({
       target: { number: 461 },
-      ...ghSeam,
       execFileSync: makeExecutor({ agentTaskList: new Error('unknown command "agent-task"') }, []),
     });
     expect(reading.reviewRuns.kind).toBe('unavailable');
@@ -261,7 +253,6 @@ describe('readPrStateReading', () => {
     );
     readPrStateReading({
       target: { number: 461 },
-      ...ghSeam,
       execFileSync: makeExecutor(
         { agentTaskList: JSON.stringify(completed), agentTaskViews: views },
         calls,
@@ -295,7 +286,6 @@ describe('readPrStateReading', () => {
     expect(() =>
       readPrStateReading({
         target: { number: 461 },
-        ...ghSeam,
         execFileSync: (_file, args) => {
           calls.push([...args]);
           if (args[0] === 'pr') {
@@ -327,7 +317,6 @@ describe('readPrStateReading', () => {
     });
     const reading = readPrStateReading({
       target: { number: 461 },
-      ...ghSeam,
       execFileSync: (_file, args) => {
         if (args[0] === 'pr') {
           return mergedView;
@@ -349,7 +338,6 @@ describe('readPrStateReading', () => {
     const calls: string[][] = [];
     readPrStateReading({
       target: { number: 461, repo: 'oaknational/oak-open-curriculum-ecosystem' },
-      ...ghSeam,
       execFileSync: makeExecutor({}, calls),
     });
     const prView = calls.find((args) => args[0] === 'pr' && args[1] === 'view');
@@ -387,7 +375,6 @@ describe('readPrStateReading — tip consistency (r4 regression)', () => {
     const calls: string[][] = [];
     const reading = readPrStateReading({
       target: { number: 461 },
-      ...ghSeam,
       execFileSync: movingTipExecutor([HEAD, NEW_HEAD, NEW_HEAD], calls),
     });
     expect(reading.headRefOid).toBe(NEW_HEAD);
@@ -400,7 +387,6 @@ describe('readPrStateReading — tip consistency (r4 regression)', () => {
     expect(() =>
       readPrStateReading({
         target: { number: 461 },
-        ...ghSeam,
         execFileSync: movingTipExecutor([HEAD, NEW_HEAD, 'd'.repeat(40)], calls),
       }),
     ).toThrow(/head moved during the compound read/);

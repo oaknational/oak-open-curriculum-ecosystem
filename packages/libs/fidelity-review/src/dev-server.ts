@@ -1,49 +1,37 @@
 /*
  * Dev-server lifecycle for the fidelity review: attach when something is
- * already answering on the base URL (and never touch it), spawn `pnpm dev`
- * when the port is free — with a bounded ready-wait and a teardown that
- * only ever kills what this module spawned, proves the port released, and
- * prints the proof (no-unbounded-host-load: every wait is bounded).
+ * already answering on the base URL (and never touch it), spawn
+ * `pnpm run dev` when the port is free — with a bounded ready-wait that a
+ * dying dev server cuts short, and a teardown that only ever kills what
+ * this module spawned, proves the port released, and prints the proof
+ * (no-unbounded-host-load: every wait is bounded).
  * OWNERSHIP CONTRACT: a spawned handle's `stop()` must be called on every
  * exit path by the caller that received it — the child is detached, so an
  * orchestrator that exits without stopping leaves the group alive. This
  * module guarantees the teardown WORKS; the handle owner guarantees it
  * RUNS (typically via try/finally around the capture body).
  */
-import { spawn } from 'node:child_process';
 import path from 'node:path';
 // Explicit module import, never the ambient global (lib boundary rule):
 // this module owns the spawned dev server's process lifecycle — group
-// kill, pnpm self-identification via npm_execpath, progress lines.
+// kill, progress lines.
 import process from 'node:process';
 
 import { err, ok, type Result } from '@oaknational/result';
 
-import { resolveDevCommand, type DevCommand } from './dev-command';
+import { pollUntil, responds } from './dev-server-poll';
+import { READY_WAIT_MS, spawnAndAwaitReady, spawnPnpmRunDev } from './dev-server-spawn';
 import { probeIdentity, type ServerSentinel } from './server-identity';
 import { describeThrown } from './support';
 
 export { judgeServerIdentity, type IdentityProbe, type ServerSentinel } from './server-identity';
 
-const READY_WAIT_MS = 120_000;
-const POLL_MS = 1000;
 const SIGTERM_GRACE_MS = 10_000;
 const RELEASE_WAIT_MS = 15_000;
 
 export type DevServerHandle =
   | { readonly mode: 'attached' }
   | { readonly mode: 'spawned'; readonly stop: () => Promise<Result<void, string>> };
-
-export { resolveDevCommand, type DevCommand } from './dev-command';
-
-async function responds(base: string): Promise<boolean> {
-  try {
-    await fetch(base, { signal: AbortSignal.timeout(2000) });
-    return true;
-  } catch {
-    return false;
-  }
-}
 
 /** Signal-0 probe of the spawned process GROUP — the primary release
  *  proof: POSIX keeps the pgid reserved while any member exists, so
@@ -59,24 +47,6 @@ function groupGone(pid: number): boolean {
       error !== null && typeof error === 'object' && 'code' in error ? error.code : undefined;
     return code === 'ESRCH';
   }
-}
-
-function wait(ms: number): Promise<void> {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-}
-
-/** Poll `predicate` every POLL_MS until true or the bounded deadline passes. */
-async function pollUntil(predicate: () => Promise<boolean>, deadlineMs: number): Promise<boolean> {
-  const start = Date.now();
-  while (Date.now() - start < deadlineMs) {
-    if (await predicate()) {
-      return true;
-    }
-    await wait(POLL_MS);
-  }
-  return false;
 }
 
 function stopSpawned(pid: number, base: string): () => Promise<Result<void, string>> {
@@ -118,29 +88,6 @@ function stopSpawned(pid: number, base: string): () => Promise<Result<void, stri
   };
 }
 
-/** Spawn the detached dev-server group in `demoDir`; returns its pid. */
-function spawnDevServer(command: DevCommand, demoDir: string): Result<number, string> {
-  const child = spawn(command.bin, command.args, {
-    cwd: demoDir,
-    detached: true,
-    stdio: 'ignore',
-  });
-  // Without a listener, a spawn failure (e.g. ENOENT on a stale
-  // npm_execpath) emits an unhandled 'error' event and crashes a caller
-  // that handled our Result and kept running — shared-library code must
-  // tolerate exactly that caller. The failure still surfaces: the ready
-  // poll times out and returns err.
-  child.on('error', (error: unknown) => {
-    process.stdout.write(`dev-server: spawn error — ${describeThrown(error)}\n`);
-  });
-  const pid = child.pid;
-  if (pid === undefined) {
-    return err('dev-server: spawn produced no pid');
-  }
-  child.unref();
-  return ok(pid);
-}
-
 /** How long an attach-mode reachability ASSERTION retries before failing.
  *  Long enough to ride out a transient listen gap or a slow first
  *  compile of '/', short enough that a genuinely-down server fails in
@@ -166,11 +113,10 @@ export async function assertServerUp(
 }
 
 /** Attach to a responding dev server, or spawn one and wait until it is ready.
- *  `demoDir` is the app directory whose `pnpm dev` answers on `base` — a
- *  REQUIRED parameter, because this module lives in a shared package and
+ *  `demoDir` is the app directory whose `pnpm run dev` answers on `base` —
+ *  a REQUIRED parameter, because this module lives in a shared package and
  *  must never guess the app root from its own location (a wrong guess
- *  spawns in a script-less directory and burns the whole ready-wait
- *  before failing with a misleading not-ready error). */
+ *  spawns in a directory with no dev script). */
 export async function ensureDevServer(
   base: string,
   demoDir: string,
@@ -189,30 +135,25 @@ export async function ensureDevServer(
     process.stdout.write(`dev server already up at ${base} — attaching (will not stop it)\n`);
     return ok({ mode: 'attached' });
   }
-  const command = resolveDevCommand(process.env.npm_execpath, process.execPath);
-  if (!command.ok) {
-    return err(command.error);
-  }
-  const spawned = spawnDevServer(command.value, demoDir);
+  return awaitSpawnedReady(base, demoDir, sentinel);
+}
+
+/** Spawn the group, wait for it to answer, AND prove it is ours; any
+ *  failure reaps the group before erring. */
+async function awaitSpawnedReady(
+  base: string,
+  demoDir: string,
+  sentinel: ServerSentinel,
+): Promise<Result<DevServerHandle, string>> {
+  const spawned = await spawnAndAwaitReady(demoDir, base, {
+    spawnDev: spawnPnpmRunDev,
+    untilReady: (stop) => pollUntil(() => responds(base), READY_WAIT_MS, stop),
+    reap: (pid) => stopSpawned(pid, base)(),
+  });
   if (!spawned.ok) {
     return spawned;
   }
-  return awaitSpawnedReady(spawned.value, base, sentinel);
-}
-
-/** Wait for the spawned group to answer AND prove it is ours; any
- *  failure reaps the group before erring. */
-async function awaitSpawnedReady(
-  pid: number,
-  base: string,
-  sentinel: ServerSentinel,
-): Promise<Result<DevServerHandle, string>> {
-  process.stdout.write(`spawned pnpm dev (pid ${pid}), waiting for ${base}…\n`);
-  const ready = await pollUntil(() => responds(base), READY_WAIT_MS);
-  if (!ready) {
-    await stopSpawned(pid, base)();
-    return err(`dev-server: not ready within ${READY_WAIT_MS / 1000}s`);
-  }
+  const pid = spawned.value;
   // Ready = answering AND provably OURS: a startup race that bound a
   // different service on the port is a loud identity failure here.
   const identity = await probeIdentity(base, sentinel);

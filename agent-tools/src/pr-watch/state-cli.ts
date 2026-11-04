@@ -13,7 +13,6 @@ import { PR_VERDICT_STATES, type PrStateReading } from './state-types.js';
 
 export interface ReadReadingInput {
   readonly target: PrTarget;
-  readonly ghPath?: string;
   readonly expectedReviewers: readonly string[];
 }
 
@@ -31,14 +30,12 @@ interface ParsedStateArgs {
   readonly pr: string;
   readonly repo?: string;
   readonly json: boolean;
-  readonly ghPath?: string;
   readonly help: boolean;
   readonly expect: readonly string[];
 }
 
 interface MutableStateArgs {
   repo?: string;
-  ghPath?: string;
   json: boolean;
   help: boolean;
   positionals: string[];
@@ -62,9 +59,6 @@ const STATE_VALUE_HANDLERS: Readonly<
 > = {
   '--repo': (state, value) => {
     state.repo = value;
-  },
-  '--gh': (state, value) => {
-    state.ghPath = value;
   },
   '--expect': (state, value) => {
     state.expect.push(value);
@@ -114,7 +108,6 @@ function parseStateArgs(args: readonly string[]): ParsedStateArgs {
     help: state.help,
     expect: state.expect,
     ...(state.repo === undefined ? {} : { repo: state.repo }),
-    ...(state.ghPath === undefined ? {} : { ghPath: state.ghPath }),
   };
 }
 
@@ -140,11 +133,7 @@ function runStateAction(input: {
     return 0;
   }
   const target = parsePrTarget(parsed.pr, parsed.repo);
-  const reading = input.read({
-    target,
-    expectedReviewers: parsed.expect,
-    ...(parsed.ghPath === undefined ? {} : { ghPath: parsed.ghPath }),
-  });
+  const reading = input.read({ target, expectedReviewers: parsed.expect });
   input.stdout.write(
     parsed.json ? renderJson(reading, input.nowIso) : renderVerdictLines(reading, input.nowIso),
   );
@@ -186,7 +175,7 @@ export function runPrStateCli(input: PrStateCliInput): number {
 
 function usage(): string {
   return [
-    'pr state <pr-number|github-pull-url> [--repo <owner/repo>] [--json] [--expect <login>]... [--gh <absolute-path>]',
+    'pr state <pr-number|github-pull-url> [--repo <owner/repo>] [--json] [--expect <login>]...',
     '',
     'Resolves the pr-lifecycle compound read (checks BY NAME, review threads, auto-merge',
     'intent, per-reviewer legs over the FULL review harvest, agent-task review-run',

@@ -17,14 +17,13 @@ const VALID_PAYLOAD = JSON.stringify([
 ]);
 
 describe('fetchMergedPrs', () => {
-  it('invokes gh by the given absolute path with an args array and parses the corpus', () => {
-    const calls: { file: string; args: readonly string[] }[] = [];
+  it('parses the merged-PR corpus from one bounded, repo-pinned pr list search', () => {
+    const calls: (readonly string[])[] = [];
     const result = fetchMergedPrs({
-      executor: (file, args) => {
-        calls.push({ file, args });
+      executor: (_file, args) => {
+        calls.push(args);
         return VALID_PAYLOAD;
       },
-      ghPath: '/opt/homebrew/bin/gh',
       limit: 200,
       mergedSinceDate: '2026-07-13',
       mergedUntilDate: '2026-07-20',
@@ -37,24 +36,22 @@ describe('fetchMergedPrs', () => {
     expect(result.value[0].number).toBe(429);
 
     expect(calls).toHaveLength(1);
-    expect(calls[0].file).toBe('/opt/homebrew/bin/gh');
-    expect(calls[0].args).toContain('--limit');
+    expect(calls[0]).toContain('--limit');
     // Bounded range, not an open `merged:>=`: a historical --now run must
     // not let post-window merges consume the cap and trip the coverage
     // refusal on a window that IS complete.
-    expect(calls[0].args).toContain('merged:2026-07-13..2026-07-20');
-    expect(calls[0].args).toContain(MERGED_PR_JSON_FIELDS);
+    expect(calls[0]).toContain('merged:2026-07-13..2026-07-20');
+    expect(calls[0]).toContain(MERGED_PR_JSON_FIELDS);
     // The canonical repository is named explicitly: without --repo, gh uses
     // the checkout's configured default and a fork checkout could append
     // rows computed from the wrong corpus.
-    expect(calls[0].args).toContain('--repo');
-    expect(calls[0].args).toContain(CANONICAL_REPOSITORY);
+    expect(calls[0]).toContain('--repo');
+    expect(calls[0]).toContain(CANONICAL_REPOSITORY);
   });
 
   it('returns a typed err on non-JSON output instead of throwing or reading it as empty', () => {
     const result = fetchMergedPrs({
       executor: () => 'API rate limit exceeded',
-      ghPath: '/usr/bin/gh',
       limit: 10,
       mergedSinceDate: '2026-07-13',
       mergedUntilDate: '2026-07-20',
@@ -69,7 +66,6 @@ describe('fetchMergedPrs', () => {
   it('returns a typed err when the payload shape drifts from the schema', () => {
     const result = fetchMergedPrs({
       executor: () => JSON.stringify([{ number: 'not-a-number' }]),
-      ghPath: '/usr/bin/gh',
       limit: 10,
       mergedSinceDate: '2026-07-13',
       mergedUntilDate: '2026-07-20',
@@ -83,7 +79,6 @@ describe('fetchMergedPrs', () => {
       executor: () => {
         throw new Error('spawn EACCES');
       },
-      ghPath: '/usr/bin/gh',
       limit: 10,
       mergedSinceDate: '2026-07-13',
       mergedUntilDate: '2026-07-20',
