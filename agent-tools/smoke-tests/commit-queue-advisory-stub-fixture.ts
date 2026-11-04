@@ -40,9 +40,10 @@ const ADVISORY_STUB_LINES = [
 export async function writeAdvisoryStub(dir: string): Promise<readonly string[]> {
   const scripts = { [ADVISORY_SCRIPT]: `node ${ADVISORY_STUB}` };
   await writeFile(join(dir, 'package.json'), `${JSON.stringify({ private: true, scripts })}\n`);
-  const writes = ADVISORY_STUB_LINES.map(
-    ({ stream, text }) => `process.${stream}.write(${JSON.stringify(`${text}\n`)});\n`,
-  );
+  const writes = ADVISORY_STUB_LINES.map(({ stream, text }) => {
+    const line = JSON.stringify(`${text}\n`);
+    return `process.${stream}.write(${line});\n`;
+  });
   await writeFile(
     join(dir, ADVISORY_STUB),
     `${writes.join('')}process.exit(${String(ADVISORY_STUB_EXIT)});\n`,
