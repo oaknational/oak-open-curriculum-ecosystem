@@ -18,7 +18,7 @@ export const READY_WAIT_MS = 120_000;
 
 /** The slice of a spawned child process the lifecycle reads. */
 export interface DevChild {
-  readonly pid?: number | undefined;
+  readonly pid?: number;
   on(event: 'error', listener: (error: Error) => void): unknown;
   once(
     event: 'exit',
