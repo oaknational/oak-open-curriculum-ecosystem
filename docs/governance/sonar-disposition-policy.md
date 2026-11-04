@@ -222,18 +222,29 @@ bounded quantifiers) per the rule's documented strategies.
   and opaque. The check is `command -v` plus, where the version matters, a
   version check, run once.
 
-**Decision criteria**: SAFE if and only if both hold:
+**Decision criteria**: a site is within the class if and only if both hold:
 
 - The command is a binary the repository's tooling, build, tests or CI need,
   named literally at the call site or by a constant.
 - No external input reaches a shell. Either the arguments pass as an argv
-  array, or the call's shell string is wholly literal.
+  array with no `shell` option, or the call's shell string is wholly literal.
+  With `shell: true`, Node joins an argv array into one shell string, so an
+  array alone does not keep input from the shell.
 
-**FIX** when a site fails them. Once fixed, the site is SAFE under this class:
+**Outcome for a site within the class**, by the finding's type:
 
-- External input interpolated into a shell string: move the call to argv form
-  (`execFile`, or `spawn` with an arguments array), so the input can only ever
-  be an argument.
+- In this project the rule raises a vulnerability **issue**. It is
+  `FALSE_POSITIVE`: the defect it describes, a command resolved through a
+  `PATH` the operator does not control, is not present, because `PATH` is the
+  trust root.
+- Where the rule raised a **hotspot** (it did before 2026-07), the hotspot is
+  `SAFE`.
+
+**FIX** a site outside the class. Once fixed, it is within the class:
+
+- External input that reaches a shell: move the call to argv form with no
+  `shell` option (`execFile`, or `spawn` with an arguments array), so the
+  input can only ever be an argument.
 - A command name taken from input: choose it from a fixed set of literal names
   at the site.
 
@@ -245,13 +256,18 @@ is the trust root (§S4036 ruling); no external input reaches a shell".
 argv array.
 
 **Delta from the prior class**: S4036 was FIX-only, cured by an absolute path
-chosen from a fixed list of directories. The ruling reclassifies it SAFE. An
-absolute path is the only change that clears the analyser, and it makes the
-repository depend on one machine's directory layout, which the ruling rejects.
-No site previously dispositioned under this class needs re-disposition. The
-eight sites marked `SAFE` before the class became FIX-only each name a
-repository binary literally. Six pass an argv array and two run a wholly
-literal shell string.
+chosen from a fixed list of directories. The ruling gives a site within the
+class the outcomes above instead. An absolute path is the only change that
+clears the analyser, and it makes the repository depend on one machine's
+directory layout, which the ruling rejects. No site previously dispositioned
+under this class needs re-disposition:
+
+- The eight hotspots marked `SAFE` before the class became FIX-only each name
+  a repository binary literally. Six pass an argv array, and two run a wholly
+  literal shell string.
+- The one issue the rule has raised, on the `gitleaks` call in
+  `agent-tools/src/secret-scan/run-push-secret-scan.ts`, was accepted in
+  2026-07 and stays resolved.
 
 ### S2245 — Pseudorandom number generator (`Math.random()`)
 
