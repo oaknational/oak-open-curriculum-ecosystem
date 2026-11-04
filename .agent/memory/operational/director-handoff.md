@@ -320,9 +320,10 @@ on `claims open` exist since PR #225: frictions F-94 and F-95.)
 
 **§STATE, 2026-11-04 15:1xZ (Sandpiper guards Wind, `690653`, the n=1 seat at the owner's word
 "make merging 379 the priority"; this block supersedes the 2026-11-03 blocks below where they
-differ).** `engraph` carries Oak 1.186.5. Carrier 379 (head `0c841ed7f`) was unworked, and the mirror
-had moved one release commit past it, so it was closed under the cross-fork skill's step 1 and
-replaced by 380 at `0bb2ae4f0`. `engraph` merged into the carrier at `5cc1ba948`, clean, the tree
+differ).** `engraph` carries Oak 1.186.5. Carrier 379 (head `0c841ed7f`) was closed as unworked and
+replaced by 380 at `0bb2ae4f0`, one release commit later. The owner corrected this: the owner had
+readied 379 and Codex and Copilot had reviewed it minutes before the close, so the cross-fork
+skill's step 1 kept it, and the landed merge fast-forwards 379's head (napkin, 2026-11-04). `engraph` merged into the carrier at `5cc1ba948`, clean, the tree
 equal to the merge-tree preview. Proofs: frozen install, five generators unchanged, the documents
 sweep with nothing to re-true, no numbering collision, and the full pre-push gate. One unrequested
 Codex P1 (ancestry) was rejected and resolved. The door merged 380 at `c2bcfe7e9` (15:00:37Z,

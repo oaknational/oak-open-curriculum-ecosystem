@@ -1340,12 +1340,29 @@ the owner wants it kept).
 
 ## 2026-11-04 — Sandpiper guards Wind (690653): the Oak 1.186.5 sync, carrier 380 replacing 379
 
-- **The owner named a pull request, but the aim was the sync.** At "make merging 379 the
-  priority", 379 was unworked and the mirror had moved one release commit past it. The
-  cross-fork skill's step 1 replaces such a carrier, so 380 at `0bb2ae4f0` replaced it. Landing
-  379 would have left the release commit for a second, release-only carrier with a full round of
-  its own. Both Cricket stances read the replacement as within the owner's word, provided the
-  owner is told the number changed.
+- **Correction (the owner, 2026-11-04): closing 379 threw away work.** "When it's a straight merge
+  it makes sense, when work needs to be done, and has been done, throwing that work away is just
+  throwing work away." 379's timeline, read after the landing:
+  - the owner readied it at 14:27:07Z, before the word at 14:29:49Z;
+  - Codex reviewed it at 14:30:51Z, with one P2 on `.github/dependabot.yml`, and Copilot at
+    14:32:13Z;
+  - the close at 14:34:21Z said "no review round". By then that was false, and the cross-fork
+    skill's step 1 says a carrier holding a review round is never replaced.
+
+  The P2 did not recur on 380, so the replacement lost a finding as well as CI time.
+- **"Unworked" was never observed.** The one read of 379 (09:37Z) asked for mergeability, checks
+  and body, not draft state or reviews. The plan (14:33Z), both Cricket briefs and the close
+  comment carried "a draft with no review round" from what a carrier usually is, and Cricket
+  confirmed the plan because the plan handed it that fact. The owner's word to the close took
+  under five minutes. Read an irreversible step's precondition from the live object at the step.
+  When the owner names an artefact, act on that artefact: "the aim was the sync" licensed setting
+  aside the pull request the owner had named and just readied.
+- **The replacement bought nothing.** The landed merge `5cc1ba948` is a fast-forward of 379's head
+  (`0c841ed7f`, then the release commit `0bb2ae4f0`, then the merge), and the carrier workflow only
+  reports a head that differs from the mirror's tip. The same commit pushed to 379's branch lands
+  the same tree on the pull request the owner named, release commit included, which meets the
+  plan's one reason (no second, release-only carrier) without a replacement. Step 1's "a reviewed
+  head is not moved" was read as forbidding that extension; the skill wants re-truing on the point.
 - **Two forks cured one warning two ways, and git merged both.** The design system's Vite
   "ESM config loaded as CommonJS" warning: `engraph` declared `"type": "module"` (`c4aedb698`);
   Oak renamed the config to `.mts` and kept the field off. The merge was clean and consistent, and

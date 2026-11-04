@@ -427,12 +427,15 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
 
 - **The owner's word, verbatim.** "okay, please make merging 379 the priority, use all appropriate
   skills to plan the work".
-- **The replacement.** 379 was the carrier at `0c841ed7f` (Oak's pull request 1015). It was
-  unworked, and the mirror had moved one release commit past it to `0bb2ae4f0` (1.186.5). Under the
-  cross-fork skill's step 1 it was closed on its record, the carrier workflow was dispatched (run
-  41848915934), and 380 opened at `0bb2ae4f0`. 379's head is 380's head's parent. Both Cricket
-  stances, normal and adversarial, read the plan ON-TRACK and SOUND before any write; their two
-  redirections were folded in.
+- **The replacement, and the owner's correction.** 379 was the carrier at `0c841ed7f` (Oak's pull
+  request 1015). The mirror had moved one release commit past it to `0bb2ae4f0` (1.186.5). 379 was
+  closed at 14:34:21Z as unworked under the cross-fork skill's step 1, the carrier workflow was
+  dispatched (run 41848915934), and 380 opened at `0bb2ae4f0`. The classification was wrong: the
+  owner had readied 379 at 14:27:07Z, and Codex (14:30:51Z) and Copilot (14:32:13Z) had reviewed
+  it, so step 1 kept it. The landed merge `5cc1ba948` fast-forwards 379's head, so the same commit
+  could have landed on 379. The owner's correction and the mechanism are in the napkin
+  (2026-11-04). Both Cricket stances read the plan ON-TRACK and SOUND, on the plan's own stale
+  "unworked".
 - **The landing.** `engraph` merged into the carrier at `5cc1ba948`. The tree is `dd5ca5ac7`, equal
   to the merge-tree preview. The owner is the author and the bot the committer, by the bot-identity
   rule. Proofs:
@@ -459,3 +462,16 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
 
   Both stand, consistently: a `.mts` config is ESM under any type field, and `c4aedb698` measured
   the theme emit byte-identical under the declaration. Converging on one cure is for the merge-back.
+- **Local work list: two observations harvested late from 379's review round, no lane.** Neither
+  recurred on 380.
+  - Codex P2: `.github/dependabot.yml` groups the github-actions updates across `/` and
+    `/.github/actions/*` with `group-by: dependency-name`, and Dependabot cannot rebase or refresh
+    a pull request made that way. The upstream bug, `dependabot/dependabot-core#14780`, is open,
+    and a comment of 2026-08-13 reproduces it on `github_actions`. The effect: a grouped action
+    bump that conflicts after the default branch moves is closed and reopened by hand. The config
+    is Oak's (its pull request 1015) and now on both forks, so a cure is Oak's to make; leaving it
+    is an option (the owner's ruling of 2026-11-03 on harmless warnings).
+  - Copilot: in `packages/design/oak-design-system/vitest.config.mts`, `mergeConfig` concatenates
+    the `include` arrays, so the base `src/**/*.test.ts` stays live. The header's "scoped to
+    exactly that category" is untrue as written. It is latent: the package's two tests are both
+    integration tests, and the config predates this sync on both forks.
