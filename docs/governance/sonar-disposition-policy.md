@@ -3,7 +3,7 @@ boundary: B1-Governance
 doc_role: policy
 authority: sonar-disposition
 status: active
-last_reviewed: 2026-05-06
+last_reviewed: 2026-11-04
 ---
 
 # Sonar Disposition Policy
@@ -202,26 +202,51 @@ handler path".
 linear constructs (negated character classes, anchored alternations,
 bounded quantifiers) per the rule's documented strategies.
 
-### S4036 — OS commands resolved via PATH (FIX-only — no SAFE disposition)
+### S4036 — OS commands resolved via PATH
 
-**Pattern**: `spawnSync`, `spawn`, `exec`, `execSync`, `execFileSync` etc.
-resolving a command name (`pnpm`, `git`, `typedoc`) via PATH rather than
-absolute path.
+**Pattern**: `spawn`, `spawnSync`, `execFile`, `execFileSync` and similar calls
+resolve a command name (`git`, `pnpm`, `gh`, `gitleaks`, `typedoc`) through
+`PATH`, not an absolute path.
 
-**Disposition**: there is none — S4036 is always **FIXED**, never disposed
-`SAFE`. Execute the binary by a fixed absolute path so a user-writable `PATH`
-entry cannot shadow it (the security property is the fixed absolute path, not
-any guarantee the directory is non-writable). For `git`, the canonical fix is
-`resolveTrustedGit()` in `agent-tools/src/core/trusted-git.ts` (an absolute path
-from a fixed allowlist of well-known directories, resolved without consulting
-`PATH`); other binaries follow the same absolute-path shape.
+**Ruling** (owner, 2026-11-03):
 
-**Why no SAFE class**: PATH-pinning (overriding `env.PATH` to trusted
-directories) does **not** clear S4036 — the analyser flags the by-name call
-regardless — so a SAFE disposition would document a non-fix as acceptable. The
-genuine fix is cheap and available, so per `never-disable-checks` and the
-Two-Outcome Rule above, S4036 resolves to FIXED. A prior allowance for this
-class is reviewed and migrated, never extended.
+- Tooling invokes each binary it needs by name, as any repository does.
+- Code must not choose a binary's path or rewrite `PATH` for it, and nothing
+  in the repository may depend on one machine's directory layout.
+- `PATH` is the trust root. The operator's environment, local or CI, decides
+  which binary a name resolves to. A writer of a directory on that `PATH`
+  already controls the operator's shell, so no path chosen inside the
+  repository adds a boundary.
+- A binary check exists only where a quality gate or CI needs the binary, and
+  only so that a missing tool fails early with a helpful message, never late
+  and opaque. The check is `command -v` plus, where the version matters, a
+  version check, run once.
+
+**Decision criteria**: SAFE if and only if all hold:
+
+- The command is a binary the repository's tooling, build, tests or CI need,
+  named literally at the call site or by a constant.
+- Arguments pass as an argv array, with no shell between the call and the
+  binary.
+- No part of the command name comes from external input.
+
+A call that runs through a shell with interpolated input, or takes its command
+name from input, falls outside this class. Disposition it under the command
+injection rules, at the site.
+
+**Canonical rationale**: "repository-required binary invoked by name; `PATH`
+is the trust root (§S4036 ruling); argv form, no shell".
+
+**Worked example**: `packages/sdks/oak-sdk-codegen/code-generation/run-typedoc.ts:56`.
+`spawn('typedoc', args, …)` runs the workspace's own TypeDoc by name with an
+argv array.
+
+**Delta from the prior class**: S4036 was FIX-only, cured by an absolute path
+chosen from a fixed list of directories. The ruling reclassifies it SAFE. An
+absolute path is the only change that clears the analyser, and it makes the
+repository depend on one machine's directory layout, which the ruling rejects.
+No site previously dispositioned under this class needs re-disposition: its
+earlier `SAFE` marks are consistent with the ruling.
 
 ### S2245 — Pseudorandom number generator (`Math.random()`)
 
