@@ -318,12 +318,26 @@ on `claims open` exist since PR #225: frictions F-94 and F-95.)
 
 ## CURRENT HANDOFF STATE
 
+**§STATE, 2026-11-04 15:1xZ (Sandpiper guards Wind, `690653`, the n=1 seat at the owner's word
+"make merging 379 the priority"; this block supersedes the 2026-11-03 blocks below where they
+differ).** `engraph` carries Oak 1.186.5. Carrier 379 (head `0c841ed7f`) was unworked, and the mirror
+had moved one release commit past it, so it was closed under the cross-fork skill's step 1 and
+replaced by 380 at `0bb2ae4f0`. `engraph` merged into the carrier at `5cc1ba948`, clean, the tree
+equal to the merge-tree preview. Proofs: frozen install, five generators unchanged, the documents
+sweep with nothing to re-true, no numbering collision, and the full pre-push gate. One unrequested
+Codex P1 (ancestry) was rejected and resolved. The door merged 380 at `c2bcfe7e9` (15:00:37Z,
+`--expect none`), and the tree diff against Oak's tip is the same 4,690 files before and after the
+sync. Both carrier branches are retired. Both cures of the design system's Vite warning stand (see
+the thread record). Elder rides Topsoil closed out at 09:38Z; lanes B (MCP-778) and C are Oak's.
+The open pull requests are 377 alone. moved for teachers: nothing / moved for the Practice: the
+fork carries Oak 1.186.5.
+
 **§STATE, 2026-11-03 17:0xZ (Sandpiper guards Wind, `690653`, the n=1 seat; post-fold; this block
 supersedes the 15:0xZ block below where they differ).** The coordination branch `2026-10-28-32c907`
 folded as 373 at `6f2d08552` (16:48:13Z, the door with `--expect none`; one unrequested Codex round,
 two records findings cured; fold-clock merged +26.3 min). The successor is
 `coordination/2026-11-03-6f2d08`; the folded branch is retired on all three names. The mirror
-workflow's cure landed at his word ("go ahead with all three, and do fix the mirror") as 378 at
+workflow's cure landed at the owner's word ("go ahead with all three, and do fix the mirror") as 378 at
 `8fc338d84`: the run's own token stays the writer, and only its exact workflow-file refusal mints
 the bot's App token. Run 41686089225 moved `main` to `0c841ed7f` by the run's own token, and no
 workflow started on `main`. No Oak lane waited on it. moved for teachers: nothing / moved for the Practice: the

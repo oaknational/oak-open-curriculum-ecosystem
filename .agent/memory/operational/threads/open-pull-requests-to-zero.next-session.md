@@ -123,6 +123,8 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
    (`actions: write` alone), and its own token wrote the reference. On 2026-09-17 the same
    dispatch shape answered 403 at that write (run 35240876819). The scope table's comment still
    states the 2026-09-17 reading.
+   `engraph` carries Oak 1.186.5 (380, `c2bcfe7e9`, 2026-11-04). The next carrier opens when Oak's
+   `main` moves.
 4. The follow-up lanes the fold of 360's reviews routed, none opened yet: the review-cost gate's hold
    (the hook's guidance lines dead under `sh -e`, the hold counting reviewed rounds where PDR-140 says
    pushes, the unrounded crossing test and its duplicated loop) and the comms write path (a render
@@ -420,3 +422,40 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
   analysis at 14:47:26Z, after 375 merged at 14:46:50Z (its check run on `4adcfc069` green at
   14:53:35Z). One issue stays open outside the filter: S6822, RELIABILITY LOW, at
   `TokenRows.tsx:107`, a deliberate `role="list"`. Recorded on comms event `7af7c09a`.
+
+## Lane state (2026-11-04 15:1xZ, the Oak 1.186.5 sync landed; Sandpiper guards Wind, 690653)
+
+- **The owner's word, verbatim.** "okay, please make merging 379 the priority, use all appropriate
+  skills to plan the work".
+- **The replacement.** 379 was the carrier at `0c841ed7f` (Oak's pull request 1015). It was
+  unworked, and the mirror had moved one release commit past it to `0bb2ae4f0` (1.186.5). Under the
+  cross-fork skill's step 1 it was closed on its record, the carrier workflow was dispatched (run
+  41848915934), and 380 opened at `0bb2ae4f0`. 379's head is 380's head's parent. Both Cricket
+  stances, normal and adversarial, read the plan ON-TRACK and SOUND before any write; their two
+  redirections were folded in.
+- **The landing.** `engraph` merged into the carrier at `5cc1ba948`. The tree is `dd5ca5ac7`, equal
+  to the merge-tree preview. The owner is the author and the bot the committer, by the bot-identity
+  rule. Proofs:
+  - the frozen install exits 0, and `file-type` resolves nowhere;
+  - the five generators leave the tree unchanged;
+  - no memory file is among the 11 incoming paths;
+  - the premise sweep has nothing to re-true;
+  - no numbering collides;
+  - the full pre-push gate passes.
+
+  One unrequested Codex P1, that the mirror commit was not an ancestor, was rejected with
+  `git merge-base --is-ancestor` and resolved, as on 376. The door merged 380 at `c2bcfe7e9`
+  (15:00:37Z). The integration record is on 380.
+- **The landing proof.** The second parent is `5cc1ba948`. The tree diff of `engraph` against Oak's
+  tip reads the same 4,690 files and line counts as the pre-sync diff of `8fc338d84` against
+  `52e7f3bed`. Of the 11 incoming paths, nine equal Oak's. `package.json` and `turbo.json` carry
+  `engraph`'s own lines, identical before and after. Both carrier branches are retired, and the
+  worktree is removed.
+- **Local work list: one observation, no lane.** Both forks cured the design system's Vite "ESM
+  config loaded as CommonJS" warning, in different ways:
+  - `engraph` declared `"type": "module"` at `packages/design/oak-design-system/package.json:7`
+    (`c4aedb698`);
+  - Oak renamed the config to `vitest.config.mts` and kept the type field off.
+
+  Both stand, consistently: a `.mts` config is ESM under any type field, and `c4aedb698` measured
+  the theme emit byte-identical under the declaration. Converging on one cure is for the merge-back.

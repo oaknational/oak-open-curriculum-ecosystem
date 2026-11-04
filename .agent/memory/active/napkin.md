@@ -1337,3 +1337,33 @@ the owner wants it kept).
   withdrawn the same hour (`8bafd3c2`). An Oak merge is never gated on an Engraph surface; whatever
   an Oak change breaks in Engraph is cured on Engraph's side, at the sync. Nor did the fix's worth
   turn on how often the mirror stalls: "it doesn't matter what dependabot does".
+
+## 2026-11-04 — Sandpiper guards Wind (690653): the Oak 1.186.5 sync, carrier 380 replacing 379
+
+- **The owner named a pull request, but the aim was the sync.** At "make merging 379 the
+  priority", 379 was unworked and the mirror had moved one release commit past it. The
+  cross-fork skill's step 1 replaces such a carrier, so 380 at `0bb2ae4f0` replaced it. Landing
+  379 would have left the release commit for a second, release-only carrier with a full round of
+  its own. Both Cricket stances read the replacement as within the owner's word, provided the
+  owner is told the number changed.
+- **Two forks cured one warning two ways, and git merged both.** The design system's Vite
+  "ESM config loaded as CommonJS" warning: `engraph` declared `"type": "module"` (`c4aedb698`);
+  Oak renamed the config to `.mts` and kept the field off. The merge was clean and consistent, and
+  both cures stand. That two forks cured one thing differently is something only a concept read
+  sees; the merge-tree count is zero.
+- **Practice/tooling feedback: the cross-fork skill's identity sentence is stale.** Step 3 says
+  author and committer are "both the owner". The bot-identity rule makes the bot the committer and
+  the owner the author (`bot-identity-on-third-party-systems`, the different-identities clause).
+  376 and 380 followed the rule. The skill sentence wants re-truing to cite the rule.
+- **Practice/tooling feedback: the staging hook reads `git worktree add -q .claude/…` as
+  `git add .`.** The wildcard-staging block fired on a worktree creation with a relative path
+  beginning with a dot. An absolute path passes. That is a false positive of the substring match,
+  not a staging act.
+- **zsh applies history modifiers to `$VAR:r…`.** `"$C:refs/remotes/origin/$C"` expanded `$C:r`
+  (remove the extension) and sent a mangled refspec; the fetch failed with "couldn't find remote
+  ref …efs/remotes/…". Brace every variable a colon follows: `"${C}:refs/…"`.
+- **Codex's carrier P1 recurred: a second instance.** On 376 and again on 380, Codex reported the
+  mirror commit as not an ancestor of the carrier head, citing a single-parent commit absent from
+  the repository (`bbdac175` here). `git log -1 --format=%P <head>` and
+  `git merge-base --is-ancestor <mirror-tip> <head>` refute it in one read each. Two instances: the
+  pattern is now a candidate, still not a rule.
