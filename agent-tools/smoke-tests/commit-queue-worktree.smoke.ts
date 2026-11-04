@@ -12,6 +12,7 @@ import type { CommitIntent, CommitQueueRegistry } from '../src/commit-queue';
 import { readRegistry } from '../src/commit-queue/registry';
 import { uuidV5Schema } from '../src/collaboration-state/agent-id';
 import { resolveTrustedGit } from '../src/core/trusted-git';
+import { assertAdvisoryReplayed, writeAdvisoryStub } from './commit-queue-advisory-stub-fixture';
 
 /**
  * F-138 regression smoke — the commit-queue two-root split and changed-endpoint identity.
@@ -90,7 +91,8 @@ async function makeFixture(): Promise<WorktreeFixture> {
   await mkdir(join(primary, 'notes'), { recursive: true });
   await writeFile(join(primary, 'README.md'), 'seed\n');
   await writeFile(join(primary, RENAME_SOURCE), '# move me atomically\n');
-  git(primary, 'add', 'README.md', RENAME_SOURCE);
+  const advisoryStubPaths = await writeAdvisoryStub(primary);
+  git(primary, 'add', 'README.md', RENAME_SOURCE, ...advisoryStubPaths);
   git(primary, 'commit', '-m', 'chore: seed');
 
   const linked = join(root, 'linked');
@@ -189,11 +191,10 @@ async function proveCommitLandsOnWorktreeBranch(): Promise<void> {
     });
 
     assert.equal(committed.exitCode, 0);
-    // The scratch repo has no advisory-orchestrator script, so the
-    // advisory pass fails — and MUST NOT gate the commit (PDR-053 /
-    // ADR-176 advisory polarity). The surfaced notice describes that
-    // deliberately exercised state.
-    assert.match(committed.stderr, /advisory orchestrator exit/);
+    // The scratch repo's advisory stub fails on purpose, and the failure
+    // MUST NOT gate the commit (PDR-053 / ADR-176 advisory polarity). The
+    // banner and both children's output reach the command's own stderr.
+    assertAdvisoryReplayed(committed.stderr, COMMIT_SUBJECT);
     const reportedSha = committed.stdout.trim();
     assert.equal(git(fixture.linked, 'rev-parse', 'HEAD').trim(), reportedSha);
     const committedPaths = git(fixture.linked, 'ls-tree', '-r', '--name-only', 'HEAD').split('\n');
