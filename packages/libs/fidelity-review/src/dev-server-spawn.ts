@@ -101,7 +101,9 @@ function earlyExitError(exit: LeaderExit, demoDir: string): string {
 }
 
 /** Spawn the group in `demoDir` and wait until it answers on `base`,
- *  reaping it before erring on any failure; returns its pid once ready. */
+ *  reaping it before erring on any failure; returns its pid once ready.
+ *  A failed reap stays in the error: the caller gets no stop handle, so
+ *  the operator must know the detached group may still need stopping. */
 export async function spawnAndAwaitReady(
   demoDir: string,
   base: string,
@@ -117,10 +119,15 @@ export async function spawnAndAwaitReady(
   if (outcome === 'ready') {
     return ok(pid);
   }
-  await io.reap(pid);
-  return err(
+  const failure =
     outcome === 'timeout'
       ? `dev-server: not ready within ${READY_WAIT_MS / 1000}s`
-      : earlyExitError(outcome, demoDir),
+      : earlyExitError(outcome, demoDir);
+  const reaped = await io.reap(pid);
+  return err(
+    reaped.ok
+      ? failure
+      : `${failure} Teardown also failed, so process group ${pid} may still be running ` +
+          `and need stopping by hand: ${reaped.error}`,
   );
 }
