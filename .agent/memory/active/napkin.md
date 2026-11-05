@@ -1410,3 +1410,13 @@ the owner wants it kept).
   merge base's version before calling a divergence a competing decision. The live collision was
   narrower: engraph's One-Outcome Rule grants no `FALSE_POSITIVE`, which the by-name S4036
   section needs.
+- **I let the ceremony around 381 displace its delivery.** The carrier was integrated and
+  green locally, and I held the push about three hours for an optional review. Monitors ran with
+  no consumer, and the one decision the owner had to make sat under status updates. The owner
+  asked how 381 was not merged yet. Push as soon as the gates pass, and put a blocking decision
+  to the owner as one question at once while independent work continues. Run a monitor only when
+  something reads its output.
+- **The auto-mode classifier can deny a Sonar mark the policy permits.** Five of seven S4036
+  `falsepositive` writes on 381 went through and two were denied, with no reason given. A denial
+  is not a ruling to route around. Name the remaining keys to the owner at once, and carry on
+  with work that does not depend on them.

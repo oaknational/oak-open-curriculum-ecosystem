@@ -486,7 +486,7 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
     exactly that category" is untrue as written. It is latent: the package's two tests are both
     integration tests, and the config predates this sync on both forks.
 
-## Lane state (2026-11-05 ~11:0xZ, carrier 381 held at step 2; Sandpiper guards Wind, 690653)
+## Lane state (2026-11-05 ~14:50Z, carrier 381 merged and pushed, held at the Sonar gate; Sandpiper guards Wind, 690653)
 
 - **The owner's word.** "please continue" (2026-11-05), after the seat's recommendation: re-true
   step 1, correct 379, route the close guard. Done:
@@ -524,6 +524,18 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
   trusted-path machinery (`trusted-gh.ts`, `pnpm-path.ts`, and `trusted-git.ts` with MCP-833)
   goes, Windows partitioning included. The integration checks that the by-name calls still launch
   on native Windows.
-- **Sequencing.** Integrate once, after MCP-833 (oaknational 1019) lands on Oak, extending 381 to
-  that tip. At 13:46Z, 1019 was open at `0939f53`, and Oak's `main` was at `d0023a999` (release
-  1.186.8).
+- **The merge, `85621052c`.** 381 extended to `d0023a999` (release 1.186.8), its head an
+  ancestor. oaknational 1019 (git by name) merged at `5007170e6` while the merge was under way,
+  so it is the next carrier. The integration record is on 381 (issue comment 6660499181). Pushed
+  through the pre-push gate and readied; every required check but the analyser's passed.
+- **The analyser gate.** The pull-request analysis raised S4036 at the seven by-name sites, each
+  within §S4036's class (a literal `pnpm` or `gh`, an argv array, no `shell` option). Five are
+  marked `FALSE_POSITIVE` under the policy's second exception, with the canonical rationale. The
+  auto-mode classifier denied the agent's marks on `AaGsHnCqF0Bho36dFvNH`
+  (`agent-tools/smoke-tests/gate-slot-cli.smoke.ts:48`) and `AaGsHnC5F0Bho36dFvNJ`
+  (`packages/libs/fidelity-review/src/dev-server-spawn.ts:51`), so the gate holds at security
+  rating B until the owner marks those two or allows the write. A background watch runs the door
+  when the analyser's check passes.
+- **The follow-up, `fix/by-name-follow-ups` (`611ff6b27` on `85621052c`, claim `7e0c53cf`).** It
+  carries the resolution review's six non-blocking findings and the stale comments. It opens
+  against `engraph` once 381 lands, so its diff is its own.
