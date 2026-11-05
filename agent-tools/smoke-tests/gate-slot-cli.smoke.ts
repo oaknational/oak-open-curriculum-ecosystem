@@ -20,7 +20,7 @@ import {
 
 /**
  * The gate-slot command line invoked exactly as `.husky/pre-push` invokes
- * it: trusted pnpm running the filtered `gate-slot` script from the
+ * it: pnpm, by name, running the filtered `gate-slot` script from the
  * repository root, in the ambient environment less any held marker, because
  * the smoke itself runs inside a real gate that set one. Also the port
  * adapter's promise that no probe listener outlives a failed step. The

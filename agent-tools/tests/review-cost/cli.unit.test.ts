@@ -37,6 +37,12 @@ describe('review-cost gate — malformed invocations are refused as usage, never
     expect(result.stderr).toContain('--expect needs a value');
   });
 
+  it('refuses --gh: gh is invoked by name, with PATH as the trust root', () => {
+    const result = run(['gate', '--pr', '7', '--gh', '/custom/bin/gh']);
+    expect(result.exitCode).toBe(2);
+    expect(result.stderr).toContain('unknown argument: --gh');
+  });
+
   it('refuses a flag-shaped value', () => {
     expect(run(['gate', '--pr', '--branch']).exitCode).toBe(2);
   });

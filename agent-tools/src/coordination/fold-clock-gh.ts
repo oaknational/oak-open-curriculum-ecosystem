@@ -31,8 +31,6 @@ export interface FoldClockSource {
   readonly target: PrTarget;
   /** The successor branch's pushed tip, validated hex by the caller. */
   readonly successorSha?: string;
-  /** A `gh` to run instead of `gh` by name, from `--gh`. */
-  readonly ghPath?: string;
   readonly execFileSync: GhCommandExecutor;
 }
 
@@ -44,20 +42,15 @@ export function isCommitSha(value: string): boolean {
   return COMMIT_SHA_PATTERN.test(value);
 }
 
-interface Gh {
-  readonly run: GhCommandExecutor;
-  readonly path: string;
-}
-
 /** One surface: run, parse the JSON, validate to its shape; every failure names the surface. */
 function readSurface<T>(
-  gh: Gh,
+  gh: GhCommandExecutor,
   args: readonly string[],
   surface: string,
   parse: (value: unknown) => Result<T, Error>,
 ): Result<T, Error> {
   try {
-    return parse(parseGhJson(gh.run(gh.path, args, GH_EXEC_OPTIONS), surface));
+    return parse(parseGhJson(gh('gh', args, GH_EXEC_OPTIONS), surface));
   } catch (error) {
     return err(
       new Error(
@@ -66,11 +59,6 @@ function readSurface<T>(
       ),
     );
   }
-}
-
-/** The executor and the `gh` it runs: by name, unless the caller named one. */
-function ghFor(source: FoldClockSource): Gh {
-  return { run: source.execFileSync, path: source.ghPath ?? 'gh' };
 }
 
 function checkRunsArgs(repo: string, sha: string): readonly string[] {
@@ -84,7 +72,7 @@ function checkRunsArgs(repo: string, sha: string): readonly string[] {
 
 /** The tip's check-runs and its commit statuses, as runs of their contexts. */
 function readHeadChecks(
-  gh: Gh,
+  gh: GhCommandExecutor,
   repo: string,
   sha: string,
 ): Result<readonly CheckRunReading[], Error> {
@@ -102,7 +90,7 @@ function readHeadChecks(
 }
 
 function readSuccessor(
-  gh: Gh,
+  gh: GhCommandExecutor,
   repo: string,
   successorSha: string | undefined,
 ): Result<
@@ -125,7 +113,7 @@ function readSuccessor(
 }
 
 interface PullContext {
-  readonly gh: Gh;
+  readonly gh: GhCommandExecutor;
   readonly repo: string;
   readonly pr: string;
   readonly prNumber: number;
@@ -181,7 +169,7 @@ function readRemaining(context: PullContext): Result<FoldClockReading, Error> {
 
 /** Read the four surfaces (five with a successor) and assemble the clock's reading. */
 export function readFoldClockReading(source: FoldClockSource): Result<FoldClockReading, Error> {
-  const gh = ghFor(source);
+  const gh = source.execFileSync;
   const repo = source.target.repo ?? '{owner}/{repo}';
   const pr = String(source.target.number);
   const pull = readSurface(gh, ['api', `repos/${repo}/pulls/${pr}`], 'pull request', parsePull);

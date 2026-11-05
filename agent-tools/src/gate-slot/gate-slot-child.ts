@@ -5,7 +5,7 @@ import type { ChildRequest, GateChildEnd } from './gate-slot-types.js';
 
 /** What the runner launches, where, and how long it lets the child run. */
 export interface GateChildRunnerOptions {
-  /** `pnpm` in production, resolved to its trusted binary by the spawn helper. */
+  /** `pnpm` in production, invoked by name. */
   readonly command: string;
   /** The working tree the gate runs in, the same tree its slot names. */
   readonly cwd: string;

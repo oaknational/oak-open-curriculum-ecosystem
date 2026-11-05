@@ -11,7 +11,6 @@ export interface PricingInput {
   readonly number: number;
   readonly repo: string;
   readonly expectedReviewers: readonly string[];
-  readonly ghPath?: string;
 }
 
 export interface GatePricing {
@@ -22,7 +21,7 @@ export interface GatePricing {
 
 /** Price one pull request as the gate prices it, with the base identity the sync test needs. */
 export function priceForGate(input: PricingInput): GatePricing {
-  const live = readLiveHarvest({ number: input.number, repo: input.repo, ghPath: input.ghPath });
+  const live = readLiveHarvest({ number: input.number, repo: input.repo });
   const rounds = measureRounds({
     harvest: live.harvest,
     expectedReviewers:
