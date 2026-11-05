@@ -12,7 +12,12 @@
 // Lesson-based extractors
 // ============================================================================
 
-export { extractKeywords, normaliseKeyword, type ExtractedKeyword } from './keyword-extractor.js';
+export {
+  extractKeywords,
+  normaliseKeyword,
+  type ExtractedKeyword,
+  type ExtractedKeywordDefinition,
+} from './keyword-extractor.js';
 
 export { extractLessons, type ExtractedLesson } from './lesson-extractor.js';
 

@@ -227,25 +227,164 @@ describe('extractKeywords', () => {
     expect(result[0].definition).toBe('Bottom of fraction');
   });
 
-  it('preserves the first-occurrence casing as the display term', () => {
+  it('keeps every authored definition with the lessons that author it, not one per term', () => {
     const lessons: readonly Lesson[] = [
       createLesson({
-        lessonSlug: 'lesson-1',
-        lessonKeywords: [{ keyword: "Rutherford's experiment", description: 'Gold foil' }],
+        lessonSlug: 'grammar-lesson',
+        subjectSlug: 'english',
+        lessonKeywords: [{ keyword: 'subject', description: 'Who or what does the verb' }],
       }),
       createLesson({
-        lessonSlug: 'lesson-2',
-        lessonKeywords: [{ keyword: "rutherford's experiment", description: 'Alpha particles' }],
+        lessonSlug: 'portrait-lesson',
+        subjectSlug: 'art',
+        lessonKeywords: [{ keyword: 'Subject', description: 'What an artwork depicts' }],
+      }),
+      createLesson({
+        lessonSlug: 'sentence-lesson',
+        subjectSlug: 'english',
+        lessonKeywords: [{ keyword: 'subject', description: 'Who or what does the verb' }],
       }),
     ];
 
     const result = extractKeywords(lessons);
 
-    expect(result[0].term).toBe("rutherford's experiment");
-    expect(result[0].displayTerm).toBe("Rutherford's experiment");
+    expect(result).toHaveLength(1);
+    expect(result[0].definitions).toEqual([
+      {
+        term: 'subject',
+        definition: 'Who or what does the verb',
+        lessonSlugs: ['grammar-lesson', 'sentence-lesson'],
+      },
+      { term: 'Subject', definition: 'What an artwork depicts', lessonSlugs: ['portrait-lesson'] },
+    ]);
   });
 
-  it('trims the display term without changing its casing', () => {
+  it('merges one definition written with different capitals, keeping the code-unit-first casing', () => {
+    const lessons: readonly Lesson[] = [
+      createLesson({
+        lessonSlug: 'lesson-a',
+        lessonKeywords: [{ keyword: 'addend', description: 'A number added to another.' }],
+      }),
+      createLesson({
+        lessonSlug: 'lesson-b',
+        lessonKeywords: [{ keyword: 'Addend', description: 'A number added to another.' }],
+      }),
+    ];
+
+    const forward = extractKeywords(lessons);
+    const reversed = extractKeywords([...lessons].reverse());
+
+    expect(forward[0].definitions).toEqual([
+      {
+        term: 'Addend',
+        definition: 'A number added to another.',
+        lessonSlugs: ['lesson-a', 'lesson-b'],
+      },
+    ]);
+    expect(reversed).toEqual(forward);
+  });
+
+  it('merges definitions whose text differs only in capitals, keeping the code-unit-first text', () => {
+    const lessons: readonly Lesson[] = [
+      createLesson({
+        lessonSlug: 'lesson-a',
+        lessonKeywords: [{ keyword: 'acid', description: 'a solution with a pH below 7' }],
+      }),
+      createLesson({
+        lessonSlug: 'lesson-b',
+        lessonKeywords: [{ keyword: 'acid', description: 'A solution with a pH below 7' }],
+      }),
+    ];
+
+    const forward = extractKeywords(lessons);
+    const reversed = extractKeywords([...lessons].reverse());
+
+    expect(forward[0].definitions).toEqual([
+      {
+        term: 'acid',
+        definition: 'A solution with a pH below 7',
+        lessonSlugs: ['lesson-a', 'lesson-b'],
+      },
+    ]);
+    expect(reversed).toEqual(forward);
+  });
+
+  it('keeps both definitions when one lesson authors the same keyword twice', () => {
+    const lessons: readonly Lesson[] = [
+      createLesson({
+        lessonSlug: 'repeating-lesson',
+        lessonKeywords: [
+          { keyword: 'fraction', description: 'Part of a whole' },
+          { keyword: 'fraction', description: 'Equal parts of a whole' },
+        ],
+      }),
+    ];
+
+    const result = extractKeywords(lessons);
+
+    expect(result[0].definitions).toEqual([
+      { term: 'fraction', definition: 'Part of a whole', lessonSlugs: ['repeating-lesson'] },
+      { term: 'fraction', definition: 'Equal parts of a whole', lessonSlugs: ['repeating-lesson'] },
+    ]);
+  });
+
+  it('merges definitions that differ only in whitespace, serving the collapsed text', () => {
+    const lessons: readonly Lesson[] = [
+      createLesson({
+        lessonSlug: 'lesson-a',
+        lessonKeywords: [{ keyword: 'array', description: ' Objects  in equal\nrows ' }],
+      }),
+      createLesson({
+        lessonSlug: 'lesson-b',
+        lessonKeywords: [{ keyword: 'array', description: 'Objects in equal rows' }],
+      }),
+    ];
+
+    const result = extractKeywords(lessons);
+
+    expect(result[0].definitions).toEqual([
+      { term: 'array', definition: 'Objects in equal rows', lessonSlugs: ['lesson-a', 'lesson-b'] },
+    ]);
+  });
+
+  it('skips a keyword entry whose definition is blank, so every placement has a definition', () => {
+    const lessons: readonly Lesson[] = [
+      createLesson({
+        lessonSlug: 'lesson-a',
+        lessonKeywords: [
+          { keyword: 'array', description: '   ' },
+          { keyword: 'factor', description: 'A number that divides exactly' },
+        ],
+      }),
+    ];
+
+    const result = extractKeywords(lessons);
+
+    expect(result.map((keyword) => keyword.term)).toEqual(['factor']);
+  });
+
+  it('counts a lesson placed in two units once under its definition', () => {
+    const lessons: readonly Lesson[] = [
+      createLesson({
+        lessonSlug: 'shared-lesson',
+        unitSlug: 'unit-a',
+        lessonKeywords: [{ keyword: 'array', description: 'Objects in equal rows' }],
+      }),
+      createLesson({
+        lessonSlug: 'shared-lesson',
+        unitSlug: 'unit-b',
+        lessonKeywords: [{ keyword: 'array', description: 'Objects in equal rows' }],
+      }),
+    ];
+
+    const result = extractKeywords(lessons);
+
+    expect(result[0].definitions).toEqual([
+      { term: 'array', definition: 'Objects in equal rows', lessonSlugs: ['shared-lesson'] },
+    ]);
+  });
+
+  it('trims the authored term without changing its casing', () => {
     const lessons: readonly Lesson[] = [
       createLesson({
         lessonSlug: 'lesson-1',
@@ -256,13 +395,13 @@ describe('extractKeywords', () => {
     const result = extractKeywords(lessons);
 
     expect(result[0].term).toBe('plum pudding model');
-    expect(result[0].displayTerm).toBe('Plum Pudding Model');
+    expect(result[0].definitions[0].term).toBe('Plum Pudding Model');
   });
 
   it('extracts identically regardless of lesson arrival order (deterministic first-occurrence)', () => {
     // The bulk file enumeration is an unsorted readdir, so "first occurrence"
     // must be defined by a deterministic order (lessonSlug), never by
-    // encounter order — otherwise definition and displayTerm drift between
+    // encounter order — otherwise definition and definitions drift between
     // regenerations of the same logical corpus.
     const lessons: readonly Lesson[] = [
       createLesson({
@@ -282,7 +421,7 @@ describe('extractKeywords', () => {
 
     expect(reversed).toEqual(forward);
     expect(forward[0].definition).toBe('Ability to do work');
-    expect(forward[0].displayTerm).toBe('Energy');
+    expect(forward[0].definitions[0].term).toBe('Energy');
   });
 
   it('returns empty array for lessons with no keywords', () => {
