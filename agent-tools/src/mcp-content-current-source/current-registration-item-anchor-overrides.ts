@@ -95,8 +95,6 @@ export const CURRENT_REGISTRATION_ITEM_ANCHOR_OVERRIDES: Readonly<
     ],
   },
   C707: {
-    [AUTH_ROUTES]: [
-      'res.json(rewriteAuthServerMetadata(upstreamMetadata, originResult.value, SCOPES_SUPPORTED));',
-    ],
+    [AUTH_ROUTES]: ['sendDiscoveryDocument(res, canonicalOrigin, document);'],
   },
 };
