@@ -49,6 +49,10 @@ flowchart TB
   of freedom, model sensitivity, and contradictory evidence where applicable.
 - Test whether the method could have detected the relevant error.
 - Distinguish absence of evidence from evidence of absence.
+- Where intended reliance depends on a consequential transformation, reconstruct what the target
+  asserts or guarantees and compare it with the evidence, specification or state it derives from.
+  Identify the basis for that reconstruction; do not silently supply missing meaning from familiarity
+  with the author's intent. This applies to models, measurements, designs and decisions as well as text.
 
 ## Synthesis
 
@@ -57,6 +61,11 @@ flowchart TB
 - Check whether uncertainty is multidimensional: support, sensitivity, transportability,
   measurement, model, ethical and operational uncertainty may differ.
 - Identify live alternatives, defeaters, and conditions under which the conclusion changes.
+- Apply the [consequential-transformation procedure](../../parallax-synthesise/references/synthesis-method.md#consequential-transformations)
+  adversarially: probe for lost distinctions, hidden dependence, changed conditions or unsupported
+  strengthening between inputs, intermediate results and the target actually relied on. Accept
+  explicit, warranted reinterpretation; literal preservation is not the criterion. Select probes for
+  the target's domain and use, without turning every audit into a document review.
 
 ## Decision and world-return
 

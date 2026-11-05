@@ -13,7 +13,7 @@ metadata:
 
 Determine what the available material jointly warrants without treating report count, consensus, or numerical averaging as synthesis. Preserve scope, dependence, disagreement, and incomparability.
 
-Read [references/synthesis-method.md](references/synthesis-method.md) when building the claim-evidence graph, distinguishing conflict types, or constructing an Epistemic Profile. Copy and adapt [assets/synthesis-record.yaml](assets/synthesis-record.yaml) when a durable artifact is useful.
+Read [references/synthesis-method.md](references/synthesis-method.md) when transforming consequential inputs, building the claim-evidence graph, distinguishing conflict types, or constructing an Epistemic Profile. Copy and adapt [assets/synthesis-record.yaml](assets/synthesis-record.yaml) when a durable artifact is useful.
 
 Populate the shared artifact envelope and preserve each input's exact artifact revision, basis, scale, method-pass, domain profiles, assumptions, uncertainty, and provenance. Aggregate identity coverage is a derived view, not a substitute for per-input identity.
 
@@ -55,6 +55,8 @@ For each input, extract:
 - explicit and implicit Bridge or Crosswalk Claims.
 
 Normalise identifiers and structure, not meanings. Keep source wording or constructs available when translation would be lossy.
+
+Apply the [consequential-transformation procedure](references/synthesis-method.md#consequential-transformations) when combining, abstracting, aggregating, translating or handing off material. Check the resulting claim at the point of transformation; prior inspection of an input does not validate a changed claim. Make warranted reinterpretation explicit rather than requiring literal preservation.
 
 ### 4. Build claim, dependence, and conflict graphs
 
@@ -104,6 +106,8 @@ Where stakes justify it, request a separate `parallax-audit`; self-challenge is 
 ### 7. Validate
 
 Verify bidirectional traceability from each conclusion to evidence and from each material evidence item to its treatment. Check identifiers, provenance, dependence, scope, bridge and crosswalk status, unresolved conflicts, and calibration language. Confirm that value conflicts have not been disguised as factual uncertainty.
+
+Repeat the consequential-transformation procedure for the final representation and intended reliance. A correct intermediate account does not establish that a compressed conclusion, aggregate or recommendation retains the conditions needed for its use.
 
 End with one status: `validated`, `provisional`, `inconclusive`, `insufficient-evidence`, `declined`, `reopened`, or `superseded`.
 
