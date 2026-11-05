@@ -517,7 +517,13 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
     where `engraph`'s retirement stands;
   - knip and the two hooks: Oak's configuration-hint gate against `engraph`'s hook changes (3);
   - the Sonar policy and its rule (2).
-- **For the owner.** The decision is which S4036 policy holds on `engraph`. The seat recommends
-  adopting the by-name ruling. Elder's MCP-833 (git by name) touches the same files, so the
-  recommended sequencing is to integrate once, after MCP-833 lands on Oak, extending 381 to that
-  tip.
+- **The owner's ruling, 2026-11-05 ~13:45Z, verbatim: "adopt the by-name ruling on engraph".**
+  `engraph` takes Oak's S4036 position. Tooling invokes each binary by name, and `PATH` is the
+  trust root. The carrier merge resolves the by-name class to Oak's side, keeping `engraph`'s
+  other changes in those files, and `engraph`'s Sonar policy takes Oak's S4036 section. The
+  trusted-path machinery (`trusted-gh.ts`, `pnpm-path.ts`, and `trusted-git.ts` with MCP-833)
+  goes, Windows partitioning included. The integration checks that the by-name calls still launch
+  on native Windows.
+- **Sequencing.** Integrate once, after MCP-833 (oaknational 1019) lands on Oak, extending 381 to
+  that tip. At 13:46Z, 1019 was open at `0939f53`, and Oak's `main` was at `d0023a999` (release
+  1.186.8).
