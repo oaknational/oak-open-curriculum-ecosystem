@@ -116,8 +116,8 @@ carrier merge and landing proof names the first.
   receipt on the carrier ("no newer upstream snapshot queued") is evidence at
   its own time only and never substitutes for the fetch: on 2026-09-09 a
   receipt three hours old preceded a fetch that found eleven newer commits.
-  Compare with the carrier's head: a newer upstream tip queues as the NEXT
-  carrier; a reviewed head is not moved.
+  Compare with the carrier's head: where the upstream tip is newer, the open
+  carrier is extended to it (the carrier bullet below), never set aside.
 - The fork's tip: `git fetch origin <fork-default>:refs/remotes/origin/<fork-default>`
   with the explicit destination refspec — a single-branch clone's fetch updates
   only `FETCH_HEAD` for a branch outside its refspec — so every recompute below
@@ -130,21 +130,45 @@ carrier merge and landing proof names the first.
   --json number`); a `--search` head-name query returns nothing, silently,
   and any listing read as "the full open list" carries an explicit
   `--limit`, because the default page is thirty. A second carrier for the same
-  lineage is a defect; close it on the record. A carrier the mirror has moved past is
-  replaced by the seat taking it up, never by automation (the carrier workflow
-  closes and deletes nothing, so it can never act on a carrier a seat is taking
-  up). Where the open carrier is unworked (a draft the carrier workflow's bot app
-  opened, read from the pull request's author, whose head is still the sha in its
-  branch name, with no review round), the seat, holding the claim on the
-  carrier branch pattern so that exactly one seat acts, replaces it in an order
+  lineage is a defect; close it on the record.
+
+  A carrier the mirror has moved past is EXTENDED by the seat taking it up,
+  never by automation (the carrier workflow closes, moves and deletes nothing, so
+  it can never act on a carrier a seat is taking up). Work already done on a
+  carrier is kept: the owner's acts on it, its review rounds and their threads,
+  and its finished checks. First the mirror: where it is behind the upstream tip,
+  dispatch the mirror workflow under the merge-bot's `upstream-mirror-dispatch`
+  scope (a scope `merge-bot pull-request dispatch-workflow` does not mint, so
+  the mirror's dispatch stays a separate route for now), wait for that run to
+  conclude `success` (a dispatch returns at once and orders nothing), and re-read
+  the mirror's tip as equal to the upstream tip. The mirror only fast-forwards, so
+  the carrier's head is an ancestor of the mirror's tip
+  (`git merge-base --is-ancestor <carrier-head> <mirror-tip>`; a no is a stop to
+  surface). Step 2 recomputes against the mirror's tip, and step 3's worktree
+  fast-forwards the carrier branch to it (`git merge --ff-only <mirror-tip>`)
+  before its one merge, so the pull request lands the same merge a fresh
+  carrier would. The branch name then names an older sha. Nothing reads the
+  name as the head: the carrier workflow reports a differing head and never acts
+  on it. Step 6's sweep reads the whole incoming range from the merge base. A
+  carrier the owner names is the carrier that lands. Worked instance
+  (2026-11-04): carrier 379 was closed as unworked seven minutes after the owner
+  readied it, by which time Codex and Copilot had reviewed it; the seat's only
+  read of it, five hours earlier, had not asked for draft state or reviews. Its
+  replacement, 380, landed `5cc1ba948`, a fast-forward of 379's head, so the
+  close gained nothing and lost the round and its one finding.
+
+  Replacement is reserved for a carrier that is bare and whose sync is a straight
+  merge, where nothing is lost; extension stays the cheaper route even there. A
+  carrier is bare when its author is the carrier workflow's bot app, its head is
+  still the sha in its branch name, and its timeline holds no review (a review
+  bot's included), no ready-for-review event, no comment by a person or a seat,
+  and no seat commit. Read that from the live timeline immediately before the
+  close (the pull request's `timelineItems` through `gh api graphql`), never
+  from an earlier read. The seat, holding the claim on the carrier branch
+  pattern so that exactly one seat acts, replaces a bare carrier in an order
   that the carrier workflow's own schedule cannot break, because that workflow
   opens nothing while any carrier is open. First, with the stale carrier still
-  open, the mirror: where it is behind the upstream tip, dispatch the mirror
-  workflow under the merge-bot's `upstream-mirror-dispatch` scope (a scope
-  `merge-bot pull-request dispatch-workflow` does not mint, so the mirror's
-  dispatch stays a separate route for now), wait for that run to conclude
-  `success` (a dispatch returns at once and orders nothing), and re-read the
-  mirror's tip as equal to the upstream tip. Second, as the bot, close the
+  open, the mirror, as above. Second, as the bot, close the
   stale carrier with
   `pnpm agent-tools merge-bot pull-request close --pr <n> --reason-file <path>`
   (the command posts the reason as its comment, then closes), then delete its
@@ -155,8 +179,7 @@ carrier merge and landing proof names the first.
   up the one open carrier, confirming its head is the mirror's tip
   (worked instance: the carrier at
   release 1.181.4, replaced by hand on 2026-09-17 after sitting 76 commits
-  stale). A carrier holding a seat's commits or a review round is never
-  replaced: a newer tip queues as the next carrier. A pull request on the carrier
+  stale). A pull request on the carrier
   branch pattern by any other author is never closed or deleted by a seat,
   whatever its state: it is raised to the owner.
 - Exclusive counts both ways, from fetched history, and the merge base.

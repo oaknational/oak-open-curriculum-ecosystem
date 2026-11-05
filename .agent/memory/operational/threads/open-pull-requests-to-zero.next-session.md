@@ -129,6 +129,16 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
    (the hook's guidance lines dead under `sh -e`, the hold counting reviewed rounds where PDR-140 says
    pushes, the unrounded crossing test and its duplicated loop) and the comms write path (a render
    that fails after the write; renders published out of order).
+   Routed 2026-11-05 at the owner's "please continue", for sizing first: a guard on
+   `merge-bot pull-request close`. It would refuse a pull request whose timeline holds a review, a
+   ready-for-review event, a comment by a person or seat, or a non-bot commit, unless the caller
+   states that count, as `merge --expect` does. Warrant: the 379 close acted on a stale read, and
+   the cross-fork skill's rule (step 1, a bare carrier read live at the close) is a passive lesson
+   that a tool check would enforce. Falsifier: closes of worked pull requests turn out routine, so
+   the flag becomes noise. Its companion, text only: the carrier workflow's pull-request body
+   (`.github/workflows/upstream-carrier.yml:180`) still tells the seat to replace a carrier the
+   mirror has moved past. Step 1 now extends it. Code never rides the coordination branch, so the
+   line is re-trued in its own pull request.
 
 ## Updates after the compaction word
 
