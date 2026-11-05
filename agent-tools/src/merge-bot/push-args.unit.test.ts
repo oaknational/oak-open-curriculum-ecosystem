@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
 import { parsePushArgs } from './push-args.js';
-import { RefFormatOracleUnavailableError } from './ref-format.js';
 
 /**
  * The `merge-bot push` argv contract — pure parsing, no fakes: the surface is
@@ -93,24 +92,6 @@ describe('parsePushArgs', () => {
   it('accepts the branch shapes the estate actually cuts', () => {
     for (const good of ['main', 'jimcresswell/mcp-508-merge-bot-merge', 'release-1.2.3', 'x_y']) {
       expect(parsePushArgs(['--branch', good]).ok).toBe(true);
-    }
-  });
-
-  it('RETURNS the no-trusted-git failure rather than throwing it through the Result', () => {
-    // The real default oracle runs here, with a probe that finds git nowhere:
-    // resolving the binary throws, and this parser's whole contract is its
-    // Result, so the throw must be translated at the oracle boundary rather
-    // than escaping through every caller that trusted the signature.
-    const parsed = parsePushArgs(['--branch', 'lane'], { pathExists: () => false });
-
-    expect(parsed.ok).toBe(false);
-    if (!parsed.ok) {
-      // Typed, so the front door can answer it as operational (exit 1) rather
-      // than as a mistyped argument (exit 2 plus a usage dump).
-      expect(parsed.error).toBeInstanceOf(RefFormatOracleUnavailableError);
-      // The resolver's own remedy survives; the usage text does not drown it.
-      expect(parsed.error.message).toContain('No trusted git binary found');
-      expect(parsed.error.message).not.toContain('--json puts EXACTLY');
     }
   });
 

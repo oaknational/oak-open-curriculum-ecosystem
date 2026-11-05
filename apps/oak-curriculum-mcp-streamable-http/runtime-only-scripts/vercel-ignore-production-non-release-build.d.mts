@@ -27,7 +27,9 @@ export interface RunVercelIgnoreCommandResult {
 
 export declare function validateGitSha(value: unknown): string | null;
 
-export declare function scrubbedGitEnv(): Record<string, string>;
+export declare function scrubbedGitEnv(
+  inherited: Readonly<Record<string, string | undefined>>,
+): Record<string, string>;
 
 export declare function gitShowFileAtSha(sha: string, filePath: string, cwd: string): string;
 

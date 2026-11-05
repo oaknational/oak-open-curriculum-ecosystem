@@ -2,7 +2,6 @@ import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { typeSafeKeys } from '@oaknational/type-helpers';
-import { resolveTrustedGit } from '../core/trusted-git.js';
 import {
   CURRENT_SOURCE_DELTA_REVIEWS,
   type CurrentSourceDeltaReview,
@@ -43,7 +42,7 @@ interface DeltaSourceDependencies {
 }
 
 function gitOutput(repoRoot: string, args: readonly string[]): string {
-  return execFileSync(resolveTrustedGit(), [...args], { cwd: repoRoot, encoding: 'utf8' });
+  return execFileSync('git', [...args], { cwd: repoRoot, encoding: 'utf8' });
 }
 
 function baselineSource(

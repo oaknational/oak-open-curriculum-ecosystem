@@ -154,12 +154,10 @@ async function makeFixture(options: {
     evidenceAbsPath: path.join(outDirAbs, 'proofs/evidence.v1.json'),
     baseSha: BASE,
     makeByteSource: () =>
-      ok(
-        sourceOf({
-          ...options.baseFiles,
-          '.agent/plans-refounding/freeze-rule.json': options.baseRuleJson ?? ruleJson,
-        }),
-      ),
+      sourceOf({
+        ...options.baseFiles,
+        '.agent/plans-refounding/freeze-rule.json': options.baseRuleJson ?? ruleJson,
+      }),
   };
 }
 
@@ -339,7 +337,7 @@ describe('runWindowSample — refusal chain (nothing written)', () => {
 
   it('halts when the rule is unreadable at the pinned base', async () => {
     const fixture = await makeFixture(HAPPY);
-    const bare = { ...fixture, makeByteSource: () => ok(sourceOf(HAPPY.baseFiles)) };
+    const bare = { ...fixture, makeByteSource: () => sourceOf(HAPPY.baseFiles) };
     await expectRefusal(bare, 'unreadable at the pinned base');
   });
 

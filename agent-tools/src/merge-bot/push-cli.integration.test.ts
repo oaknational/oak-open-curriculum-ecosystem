@@ -28,7 +28,6 @@ const { privateKey } = generateKeyPairSync('rsa', {
 });
 
 const TOKEN = 'sekrit-installation-token';
-const GIT_PATH = '/usr/bin/git';
 const BRANCH = 'jimcresswell/mcp-508-slice';
 const REMOTE = 'https://github.com/acme/widgets.git';
 const TRANSFER = `To ${REMOTE}\n   abc1234..def5678  HEAD -> ${BRANCH}\n`;
@@ -167,7 +166,6 @@ function runPush(input: {
     repoRoot: '/repo',
     nowEpochSeconds: () => 1_800_000_000,
     gitExecutor,
-    gitPath: GIT_PATH,
     baseEnv: BASE_ENV,
     tokenFiles: store,
     ...input.overrides,
@@ -221,7 +219,8 @@ describe('merge-bot push credential discipline', () => {
 
     expect(await run.exit).toBe(0);
     const push = pushCall(run.calls);
-    expect(push?.file).toBe(GIT_PATH);
+    // git by name, PATH the trust root (the Sonar disposition policy's S4036 section).
+    expect(push?.file).toBe('git');
     // The whole call, pinned: every config-sourced arm of git's credential
     // chain cleared, then the ONE static helper literal; the remote carries
     // no credentials; the refspec is HEAD:<branch>. Nothing else is on the
@@ -362,17 +361,14 @@ describe('merge-bot push credential discipline', () => {
     // directory must be gone by the time it does — the `finally` runs on the
     // settled call, never on a call still in flight.
     await expect(
-      pushHead(
-        { file: GIT_PATH, exec },
-        {
-          remote: REMOTE,
-          branch: BRANCH,
-          cwd: '/repo',
-          token: TOKEN,
-          baseEnv: BASE_ENV,
-          tokenFiles: store.store,
-        },
-      ),
+      pushHead(exec, {
+        remote: REMOTE,
+        branch: BRANCH,
+        cwd: '/repo',
+        token: TOKEN,
+        baseEnv: BASE_ENV,
+        tokenFiles: store.store,
+      }),
     ).rejects.toThrow('seam breach');
     expect(store.removed).toEqual([STORE_DIR]);
   });

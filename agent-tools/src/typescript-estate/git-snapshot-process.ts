@@ -42,14 +42,17 @@ export function runGit(
     : err(new EstateReviewError(code, `${label} failed`, { cause: processCause(result, label) }));
 }
 
-/** Construct the one permitted defensive Git process invocation. */
+/**
+ * Construct the one permitted defensive Git process invocation: git by name,
+ * `PATH` the trust root.
+ */
 export function buildGitInvocation(
   context: GitContext,
   args: readonly string[],
   maxStdoutBytes: number,
 ): ProcessInvocation {
   return {
-    executable: context.executable,
+    executable: 'git',
     args: ['--no-replace-objects', '--no-lazy-fetch', ...args],
     cwd: context.cwd,
     env: context.env,

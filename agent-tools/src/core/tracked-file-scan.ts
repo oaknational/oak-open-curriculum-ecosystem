@@ -27,8 +27,6 @@ import path from 'node:path';
 
 import { err, ok, type Result } from '@oaknational/result';
 
-import { resolveTrustedGit } from './trusted-git.js';
-
 /** Null byte: the `git ls-files -z` record separator, and the binary-content marker. */
 const NUL = '\u0000';
 
@@ -97,7 +95,7 @@ export interface UnreadableTrackedFile {
  * @returns Every tracked repo-relative path, including binaries.
  */
 export function listTrackedFiles(repoRoot: string): string[] {
-  const stdout = execFileSync(resolveTrustedGit(), ['ls-files', '-z'], {
+  const stdout = execFileSync('git', ['ls-files', '-z'], {
     cwd: repoRoot,
     encoding: 'utf8',
     maxBuffer: 64 * 1024 * 1024,

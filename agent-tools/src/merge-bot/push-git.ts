@@ -1,8 +1,7 @@
 import { err, ok, type Result } from '@oaknational/result';
 
-import { resolveTrustedGit } from '../core/trusted-git.js';
 import { clearedCredentialConfig, scrubbedCredentialEnv } from './git-credential-chain.js';
-import { realGitExecutor, type GitCommandResult, type GitExecutor } from './git-executor.js';
+import type { GitCommandResult, GitExecutor } from './git-executor.js';
 import {
   realTokenFileStore,
   removeQuietly,
@@ -30,12 +29,6 @@ import {
 
 export type { TokenFileStore } from './push-token-file.js';
 
-/** A resolved git binary plus the executor that runs it. */
-export interface GitContext {
-  readonly file: string;
-  readonly exec: GitExecutor;
-}
-
 /**
  * The one credential helper, as a static literal: it echoes the app-token
  * username and reads the password from the token FILE named by
@@ -48,25 +41,6 @@ export interface GitContext {
  */
 const CREDENTIAL_HELPER =
   '!f() { echo username=x-access-token; echo "password=$(cat "$GH_PUSH_TOKEN_FILE")"; }; f';
-
-/**
- * The git binary by ABSOLUTE path (SonarCloud S4036) — `resolveTrustedGit`
- * throws when it finds none, translated here at the one boundary.
- */
-export function resolveGitContext(seams: {
-  readonly gitExecutor?: GitExecutor;
-  readonly gitPath?: string;
-}): Result<GitContext, Error> {
-  const exec = seams.gitExecutor ?? realGitExecutor();
-  if (seams.gitPath !== undefined) {
-    return ok({ file: seams.gitPath, exec });
-  }
-  try {
-    return ok({ file: resolveTrustedGit(), exec });
-  } catch (cause) {
-    return err(new Error(cause instanceof Error ? cause.message : String(cause)));
-  }
-}
 
 /**
  * The child environment for the push: the base WHOLESALE, any stale
@@ -117,10 +91,10 @@ function pushArgv(remote: string, branch: string): readonly string[] {
  * a fact about the call rather than an unexamined buffer.
  */
 export async function currentBranch(
-  git: GitContext,
+  exec: GitExecutor,
   options: { readonly cwd: string; readonly env: Readonly<Record<string, string | undefined>> },
 ): Promise<Result<string, Error>> {
-  const result = await git.exec(git.file, ['rev-parse', '--abbrev-ref', 'HEAD'], options);
+  const result = await exec('git', ['rev-parse', '--abbrev-ref', 'HEAD'], options);
   if (result.status !== 0) {
     return err(
       new Error(
@@ -149,7 +123,7 @@ export async function currentBranch(
  * transcript arrives whole, kernel-interleaved as a terminal would show it.
  */
 export async function pushHead(
-  git: GitContext,
+  exec: GitExecutor,
   input: {
     readonly remote: string;
     readonly branch: string;
@@ -168,7 +142,7 @@ export async function pushHead(
   let result: GitCommandResult;
   let warning: string | undefined;
   try {
-    result = await git.exec(git.file, pushArgv(input.remote, input.branch), {
+    result = await exec('git', pushArgv(input.remote, input.branch), {
       cwd: input.cwd,
       env: pushEnv(staged.value.tokenPath, input.baseEnv),
       ...(input.onOutput === undefined ? {} : { onOutput: input.onOutput }),

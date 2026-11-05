@@ -45,7 +45,7 @@ export const DEFAULT_EVIDENCE_PATH =
   '.agent/plans-refounding/proofs/s1-deterministic-evidence.v1.json';
 
 /** Builds the bytes-at-base source for one run (the composition root's seam). */
-export type ByteSourceFactory = (repoRoot: string, baseSha: string) => Result<ByteSource, Error>;
+export type ByteSourceFactory = (repoRoot: string, baseSha: string) => ByteSource;
 
 /** Everything {@link runWindowSample} needs, resolved and repo-constrained. */
 export interface RunWindowSampleInput {
@@ -80,10 +80,7 @@ export async function runWindowSample(
   }
   const makeByteSource = input.makeByteSource ?? makeGitByteSource;
   const source = makeByteSource(input.repoRoot, input.baseSha);
-  if (isErr(source)) {
-    return source;
-  }
-  const rule = await readBoundRule(input.repoRoot, input.ruleAbsPath, source.value);
+  const rule = await readBoundRule(input.repoRoot, input.ruleAbsPath, source);
   if (isErr(rule)) {
     return rule;
   }
@@ -99,7 +96,7 @@ export async function runWindowSample(
     return hits;
   }
   const manifest = buildWindowSample({
-    source: source.value,
+    source,
     rule: rule.value,
     hits: hits.value,
     expectations: bindings.value.expectations,

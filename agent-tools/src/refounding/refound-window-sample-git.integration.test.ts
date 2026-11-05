@@ -22,23 +22,15 @@ import { type ByteSource } from './refound-window-sample-universe.js';
 const BASE = 'ab'.repeat(20);
 const REPO_ROOT = '/repo';
 
-/** With an all-true probe the trusted allowlist resolves its first entry. */
-const TRUSTED_GIT = '/usr/bin/git';
-
-interface RecordedCall {
-  readonly file: string;
-  readonly args: readonly string[];
-}
-
 function scriptedSpawner(respond: (args: readonly string[]) => GitSpawnResult): {
-  readonly calls: RecordedCall[];
+  readonly calls: (readonly string[])[];
   readonly spawn: GitSpawner;
 } {
-  const calls: RecordedCall[] = [];
+  const calls: (readonly string[])[] = [];
   return {
     calls,
-    spawn: (file, args) => {
-      calls.push({ file, args });
+    spawn: (args) => {
+      calls.push(args);
       return respond(args);
     },
   };
@@ -51,11 +43,11 @@ const okSpawn = (stdout: Buffer | string): GitSpawnResult => ({
 });
 
 function sourceWith(respond: (args: readonly string[]) => GitSpawnResult): {
-  readonly calls: RecordedCall[];
+  readonly calls: (readonly string[])[];
   readonly source: ByteSource;
 } {
   const { calls, spawn } = scriptedSpawner(respond);
-  const source = unwrap(makeGitByteSource(REPO_ROOT, BASE, { spawn, exists: () => true }));
+  const source = makeGitByteSource(REPO_ROOT, BASE, { spawn });
   return { calls, source };
 }
 
@@ -63,12 +55,7 @@ describe('makeGitByteSource — the spawner forwarding contract', () => {
   it('invokes ls-tree with --no-replace-objects, -C <repoRoot>, -r, -z, and the base sha', () => {
     const { calls, source } = sourceWith(() => okSpawn(''));
     expect(source.listPaths().ok).toBe(true);
-    expect(calls).toEqual([
-      {
-        file: TRUSTED_GIT,
-        args: ['--no-replace-objects', '-C', REPO_ROOT, 'ls-tree', '-r', '-z', BASE],
-      },
-    ]);
+    expect(calls).toEqual([['--no-replace-objects', '-C', REPO_ROOT, 'ls-tree', '-r', '-z', BASE]]);
   });
 
   it('invokes show with --no-replace-objects, -C <repoRoot>, and <base>:<path>, returning raw bytes', () => {
@@ -77,19 +64,8 @@ describe('makeGitByteSource — the spawner forwarding contract', () => {
     const read = source.readBytes('.agent/prompts/a b.md');
     expect(Buffer.from(unwrap(read)).equals(bytes)).toBe(true);
     expect(calls).toEqual([
-      {
-        file: TRUSTED_GIT,
-        args: ['--no-replace-objects', '-C', REPO_ROOT, 'show', `${BASE}:.agent/prompts/a b.md`],
-      },
+      ['--no-replace-objects', '-C', REPO_ROOT, 'show', `${BASE}:.agent/prompts/a b.md`],
     ]);
-  });
-
-  it('refuses up front when no trusted git binary exists', () => {
-    const made = makeGitByteSource(REPO_ROOT, BASE, {
-      spawn: () => okSpawn(''),
-      exists: () => false,
-    });
-    expect(unwrapErr(made).message).toContain('No trusted git binary found');
   });
 });
 

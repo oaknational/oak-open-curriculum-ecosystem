@@ -13,6 +13,7 @@ import {
   countWorktrees,
   parsePrimaryWorktreeRoot,
   selectCoordinationBranch,
+  toGitExit,
 } from '../../src/claude/statusline-git-location';
 
 describe('classifyGitOutcome', () => {
@@ -58,6 +59,24 @@ describe('classifyGitOutcome', () => {
     expect(classifyGitOutcome({ status: null, stdout: '', stderr: '' })).toEqual({
       kind: 'error',
       detail: 'git exited on signal',
+    });
+  });
+});
+
+describe('toGitExit', () => {
+  it('names a git that never started, rather than reading it as a signal', () => {
+    const exit = toGitExit({ status: null, error: new Error('spawnSync git ENOENT') });
+    expect(classifyGitOutcome(exit)).toEqual({
+      kind: 'error',
+      detail: 'cannot run git: spawnSync git ENOENT',
+    });
+  });
+
+  it("keeps a run's own streams when git started", () => {
+    expect(toGitExit({ status: 1, stdout: '', stderr: 'fatal: bad revision\n' })).toEqual({
+      status: 1,
+      stdout: '',
+      stderr: 'fatal: bad revision\n',
     });
   });
 });

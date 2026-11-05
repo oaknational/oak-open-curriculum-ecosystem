@@ -8,8 +8,8 @@
 - Final review snapshot: deliberately not frozen here. It is pinned after the
   evidence entrypoint lands, so the entrypoint's own tracked TypeScript is in
   the denominator rather than silently excluded.
-- Detector configuration: re-frozen as contract revision 2.6 in
-  `detector-config.json` after the four archetypes below closed without
+- Detector configuration: re-frozen in `detector-config.json`, at the
+  contract revision its `contractRevision` field names, after the four archetypes below closed without
   requiring incompatible graph models. The unexecuted version 1 freeze was
   rejected at pre-execution review because its construct and fingerprint
   names lacked exact executable mappings; no estate results were produced
@@ -93,9 +93,16 @@
   revision 2.6 was refrozen at `2026-08-03T00:47:05Z`; it changes only that
   sentence and the identities that bind the contract bytes. The implementation
   gate and every detector, population, threshold, candidate, disposition, and
-  proof boundary remain unchanged. Revision 2.6 is the current contract.
+  proof boundary remain unchanged. With no estate result produced, revision
+  2.7 was refrozen at `2026-11-05T01:53:39Z` for the repository's ruling that
+  binaries run by name with `PATH` as the trust root (the Sonar disposition
+  policy's S4036 section). It changes only three statements, `gitExecutable`,
+  `repositoryAnchoring` and the proof child environment's search path, and
+  the identities that bind the contract bytes (the revision constant in the
+  detector and raw-extraction schemas, and the members' hashes).
 
-The contract bytes supplied for post-cure verification are frozen as:
+Revision 2.6's contract bytes, supplied for post-cure verification, were
+frozen as:
 
 | Contract member | SHA-256 |
 | --- | --- |
@@ -104,8 +111,22 @@ The contract bytes supplied for post-cure verification are frozen as:
 | `raw-extraction.schema.json` | `365ddba4532efbc91d4c6b8a1970c1a62492a806f6f1b60d76e5dac343396ddf` |
 | `evidence.schema.json` | `cfcf97f3e5c5ae75849fe5a4c587a3a32253b84624d9fd652bd617ba887a198e` |
 
-Any byte change to those four members invalidates this freeze set and requires
-a new pre-execution verification before the first estate run.
+Revision 2.7's contract bytes are frozen as:
+
+| Contract member | SHA-256 |
+| --- | --- |
+| `detector-config.json` | `38c4c8d4d83789659dbd23fb72637cd32861499fcfcd2726be6826c329567557` |
+| `detector-config.schema.json` | `d896be3afa6b1fdb5e397a472cd4bc05cea49351230304d154f22a53f8460aa5` |
+| `raw-extraction.schema.json` | `8086b538ee94bbe436bc22ef5102a3fd46f0de03e9d89ec7fd3e1c747881985e` |
+| `evidence.schema.json` | `cfcf97f3e5c5ae75849fe5a4c587a3a32253b84624d9fd652bd617ba887a198e` |
+
+The 2.7 hashes were recomputed from the refrozen bytes, and the validated
+detector facade accepts them, by the change that froze it; that change's
+architecture and security reviews checked the three statements. No estate
+result exists at either revision.
+
+Any byte change to the four members invalidates the current freeze set and
+requires a new pre-execution verification before the first estate run.
 
 The authoritative baseline count was recomputed by parsing the complete
 NUL-delimited output of `git ls-tree -r -z --long <commit>` and suffix-filtering
@@ -250,8 +271,9 @@ generic graph operations stay outside it.
 
 ## Frozen-detector rule
 
-`detector-config.json` contract revision 2.6 is frozen before the estate-wide run. Earlier
-drafts produced no estate results; revision 2.6 retains the corrected complete-tree
+`detector-config.json` is frozen, at the contract revision its `contractRevision` field
+names, before the estate-wide run. Earlier drafts produced no estate results; the current
+revision retains the corrected complete-tree
 enumeration, ordered-path digest, complete-output, offline object-read, graph-production,
 type-truth/type-space, four-state delivery, test-doctrine, proof-environment,
 packed-consumer, TDD, built-smoke, and held-out contracts. A detector may be

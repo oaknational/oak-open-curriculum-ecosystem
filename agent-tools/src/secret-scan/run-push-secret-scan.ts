@@ -14,7 +14,6 @@ import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
-import { resolveTrustedGit } from '../core/trusted-git.js';
 import {
   computePushScanRanges,
   degradedScanWarning,
@@ -31,7 +30,7 @@ export type PushSecretScanArgs = ComputePushScanRangesInput;
  * so capturing it is a fact about the call rather than an unexamined buffer.
  */
 function readConfiguredRemotes(): string[] {
-  const result = spawnSync(resolveTrustedGit(), ['remote'], { encoding: 'utf8' });
+  const result = spawnSync('git', ['remote'], { encoding: 'utf8' });
   if (result.error !== undefined || result.status !== 0) {
     // No list means nothing can be treated as scopable — the safe direction:
     // the scan widens and says so, rather than building a glob that matches
