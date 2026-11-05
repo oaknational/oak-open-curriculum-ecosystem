@@ -25,8 +25,6 @@ describe('parseArgs', () => {
       '15',
       '--max-polls',
       '5',
-      '--gh',
-      '/abs/gh',
     ]);
     expect(parsed).toStrictEqual({
       pr: 'https://github.com/o/r/pull/7',
@@ -35,15 +33,8 @@ describe('parseArgs', () => {
       watch: true,
       intervalSeconds: 15,
       maxPolls: 5,
-      ghPath: '/abs/gh',
       help: false,
     });
-  });
-
-  it('omits optional repo/ghPath keys when not supplied', () => {
-    const parsed = parseArgs(['221']);
-    expect('repo' in parsed).toBe(false);
-    expect('ghPath' in parsed).toBe(false);
   });
 
   it('does not require a positional when --help is present', () => {

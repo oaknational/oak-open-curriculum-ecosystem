@@ -40,7 +40,6 @@ interface MergeExecutionSeams {
   readonly readReading?: (options: ReadPrStateOptions) => Result<PrStateReading, Error>;
   readonly fetchImpl?: GithubApiFetch;
   readonly mintSeams?: MintSeams;
-  readonly ghPath?: string;
   /**
    * Base environment for the read-path gh executor. Defaults to
    * `process.env` at the leaf (the default-seam pattern: reality enters at
@@ -141,7 +140,6 @@ export async function runMergeExecution(
   const readReading = input.seams.readReading ?? defaultReadReading(input.seams.baseEnv);
   const reading = readReading({
     target: target.value,
-    ghPath: input.seams.ghPath,
     expectedReviewers: input.expectedReviewers,
   });
   if (!reading.ok) {

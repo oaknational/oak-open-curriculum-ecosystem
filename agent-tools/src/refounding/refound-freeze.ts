@@ -9,11 +9,7 @@ import { resolveRepoRoot } from '../core/repo-root.js';
 import { writeErrorLine, writeLine } from '../core/terminal-output.js';
 import { freezeUsageText, parseFreezeArgs, type FreezeArgs } from './refound-freeze-args.js';
 import { validateOutDirChoice, type SecretScan } from './refound-freeze-helpers.js';
-import {
-  makeGitleaksSecretScan,
-  probeGitleaksVersion,
-  resolveTrustedGitleaks,
-} from './refound-gitleaks.js';
+import { makeGitleaksSecretScan, probeGitleaksVersion } from './refound-gitleaks.js';
 import { runFreeze } from './refound-freeze-runner.js';
 import {
   resolveReadPathWithinRepo,
@@ -86,13 +82,13 @@ interface FreezeSetup {
   readonly secretScan: SecretScan;
 }
 
-/** Resolve both flag paths AND the pinned scanner; refusals are `Err`. */
+/** Resolve both flag paths AND prepare the scanner; refusals are `Err`. */
 function prepareFreeze(args: FreezeArgs): Result<FreezeSetup, Error> {
   const paths = resolvePaths(args);
   if (isErr(paths)) {
     return paths;
   }
-  const secretScan = preparePinnedSecretScan();
+  const secretScan = prepareSecretScan();
   if (isErr(secretScan)) {
     return secretScan;
   }
@@ -100,22 +96,16 @@ function prepareFreeze(args: FreezeArgs): Result<FreezeSetup, Error> {
 }
 
 /**
- * Resolve the scanner once, probe its version, and report the pinned
- * attestation line; any refusal surfaces as `Err` before the freeze starts.
+ * Probe the scanner's version and report the attestation line; any refusal
+ * surfaces as `Err` before the freeze starts.
  */
-function preparePinnedSecretScan(): Result<SecretScan, Error> {
-  const gitleaksBin = resolveTrustedGitleaks();
-  if (isErr(gitleaksBin)) {
-    return gitleaksBin;
-  }
-  const gitleaksVersion = probeGitleaksVersion(gitleaksBin.value);
+function prepareSecretScan(): Result<SecretScan, Error> {
+  const gitleaksVersion = probeGitleaksVersion(repoRoot);
   if (isErr(gitleaksVersion)) {
     return gitleaksVersion;
   }
-  writeLine(
-    `${TOOL}: secret scan pinned to ${gitleaksBin.value} (gitleaks ${gitleaksVersion.value})`,
-  );
-  return ok(makeGitleaksSecretScan(repoRoot, gitleaksBin.value));
+  writeLine(`${TOOL}: secret scan by gitleaks ${gitleaksVersion.value}`);
+  return ok(makeGitleaksSecretScan(repoRoot));
 }
 
 async function main(): Promise<void> {

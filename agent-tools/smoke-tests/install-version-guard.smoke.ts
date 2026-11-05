@@ -4,10 +4,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { isErr } from '@oaknational/result';
 import { z } from 'zod';
-
-import { resolvePnpm } from '../src/spawn/pnpm-path.js';
 
 /**
  * Prove the root pnpm preinstall hook blocks a mismatched pnpm before it can
@@ -121,24 +118,15 @@ try {
   );
   writeFileSync(join(fixtureRoot, 'pnpm-lock.yaml'), originalLockfile);
 
-  const pnpm = resolvePnpm(process.env);
-  if (isErr(pnpm)) {
-    fail(pnpm.error.message);
-  }
-
   // No `--reporter=silent`, and the guard's words are read from stdout and
   // stderr together: pnpm decides where a lifecycle script's output goes. pnpm
   // 11 passes the guard's stderr through as stderr; pnpm 12 relays it on stdout
   // and `--reporter=silent` drops it entirely. The fixture root has no
-  // `packageManager`, so whichever pnpm `resolvePnpm` finds runs the install
-  // itself, and the proof has to hold on either major.
-  const install = spawnSync(pnpm.value, ['install', '--offline', '--ignore-workspace'], {
+  // `packageManager`, so whichever pnpm the environment provides runs the
+  // install itself, and the proof has to hold on either major.
+  const install = spawnSync('pnpm', ['install', '--offline', '--ignore-workspace'], {
     cwd: fixtureRoot,
     encoding: 'utf8',
-    // The install root has no `packageManager`, so there is nothing for
-    // corepack to resolve either; `COREPACK_ENABLE_PROJECT_SPEC=0` keeps that
-    // path inert regardless of the ambient corepack state.
-    env: { ...process.env, COREPACK_ENABLE_PROJECT_SPEC: '0' },
   });
 
   if (install.error !== undefined) {

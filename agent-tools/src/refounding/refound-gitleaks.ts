@@ -1,10 +1,13 @@
-import { spawnSync } from 'node:child_process';
+import {
+  spawnSync,
+  type SpawnSyncOptionsWithStringEncoding,
+  type SpawnSyncReturns,
+} from 'node:child_process';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 
 import { err, ok, type Result } from '@oaknational/result';
 
-import { type PathExists } from '../core/path-exists.js';
 import {
   buildGitleaksDirArgs,
   GITLEAKS_LEAK_EXIT_CODE,
@@ -12,58 +15,37 @@ import {
 } from './refound-freeze-helpers.js';
 
 /**
- * The pinned-gitleaks scanner seam for `refound-freeze` (F1 §8.3): resolve
- * the binary from a fixed allowlist of well-known directories exactly once
- * — NEVER via `PATH` (the repository's established S4036 hardening; see
- * `core/trusted-git.ts` and `core/trusted-gh.ts`, whose reasoning this
- * third sibling mirrors) — probe its version for the run's attestation
- * line, and build the per-file scan closure over the resolved ABSOLUTE
- * path. The invocation shape itself stays in `refound-freeze-helpers.ts`
- * (`buildGitleaksDirArgs`).
+ * The gitleaks scanner seam for `refound-freeze` (F1 §8.3): probe the
+ * scanner's version for the run's attestation line, and build the per-file
+ * scan closure. Both run `gitleaks` by name. The invocation shape itself
+ * stays in `refound-freeze-helpers.ts` (`buildGitleaksDirArgs`).
  *
  * @packageDocumentation
  */
 
-/** Fixed, well-known directories that may hold `gitleaks` (searched by absolute path, never via `PATH`). */
-const TRUSTED_GITLEAKS_DIRS = ['/opt/homebrew/bin', '/usr/local/bin', '/usr/bin', '/bin'] as const;
+/** A `spawnSync`-shaped runner: the version probe's injection seam, so tests supply a fake. */
+export type GitleaksRunner = (
+  file: string,
+  args: readonly string[],
+  options: SpawnSyncOptionsWithStringEncoding,
+) => SpawnSyncReturns<string>;
 
 /**
- * Resolve the absolute path to `gitleaks` from the fixed allowlist
- * {@link TRUSTED_GITLEAKS_DIRS} — the repository's established S4036 fix in
- * code (a caller-influenced `PATH` is the hijacking hole itself, so
- * resolution never consults it; the security property is the fixed
- * absolute path, not any guarantee the directories are non-writable). A
- * gitleaks living only elsewhere (asdf/mise shims, the Nix store, a custom
- * prefix) is a loud refusal naming the remedy, never an unverified path.
- * Exported for the discrimination proof.
+ * Probe gitleaks's self-reported version for the run's operator attestation
+ * line. A gitleaks that cannot print its version will not scan either, so a
+ * failed probe is a refusal. The probe runs from `repoRoot`, the cwd every
+ * scan uses, so a cwd-sensitive lookup (a version manager's shim) attests the
+ * same gitleaks the scans run. Exported for the proof.
  *
- * @param exists - Existence probe; defaults to `node:fs` `existsSync`.
+ * @param repoRoot - The repository root, the cwd for the probe.
+ * @param run - Process runner; defaults to `node:child_process` `spawnSync`.
  */
-export function resolveTrustedGitleaks(exists: PathExists = existsSync): Result<string, Error> {
-  for (const dir of TRUSTED_GITLEAKS_DIRS) {
-    const candidate = `${dir}/gitleaks`;
-    if (exists(candidate)) {
-      return ok(candidate);
-    }
-  }
-  return err(
-    new Error(
-      `No trusted gitleaks binary found. Searched: ${TRUSTED_GITLEAKS_DIRS.join(', ')}. ` +
-        'gitleaks is resolved by a fixed absolute path from these well-known directories ' +
-        '(never via PATH) to defeat PATH-search hijacking (SonarCloud S4036). If gitleaks is ' +
-        'installed elsewhere (asdf/mise, Nix, a custom prefix), symlink it into one of those ' +
-        'directories.',
-    ),
-  );
-}
-
-/**
- * Probe the resolved binary's self-reported version for the run's operator
- * attestation line. A binary that cannot print its version will not scan
- * either, so a failed probe is a refusal. Exported for the proof.
- */
-export function probeGitleaksVersion(binAbsPath: string): Result<string, Error> {
-  const probe = spawnSync(binAbsPath, ['version'], {
+export function probeGitleaksVersion(
+  repoRoot: string,
+  run: GitleaksRunner = spawnSync,
+): Result<string, Error> {
+  const probe = run('gitleaks', ['version'], {
+    cwd: repoRoot,
     stdio: ['ignore', 'pipe', 'pipe'],
     encoding: 'utf8',
   });
@@ -82,15 +64,14 @@ export function probeGitleaksVersion(binAbsPath: string): Result<string, Error> 
 }
 
 /**
- * Production secret scan over a PINNED gitleaks binary: no-git `dir` mode,
- * one process per file with the repo root as cwd (see
- * {@link buildGitleaksDirArgs} for the empirically verified invocation shape
- * and its foot-guns). Refuses when the repo's `.gitleaks.toml` is absent
- * rather than silently scanning with a different rule set. Reports leaking
- * FILES only — never finding contents.
+ * Production secret scan by gitleaks: no-git `dir` mode, one process per
+ * file with the repo root as cwd (see {@link buildGitleaksDirArgs} for the
+ * empirically verified invocation shape and its foot-guns). Refuses when the
+ * repo's `.gitleaks.toml` is absent rather than silently scanning with a
+ * different rule set. Reports leaking FILES only — never finding contents.
  */
 export const makeGitleaksSecretScan =
-  (repoRoot: string, binAbsPath: string): SecretScan =>
+  (repoRoot: string): SecretScan =>
   (absFilePaths) => {
     if (!existsSync(path.join(repoRoot, '.gitleaks.toml'))) {
       return Promise.resolve(
@@ -102,7 +83,7 @@ export const makeGitleaksSecretScan =
       const relPath = path.relative(repoRoot, absFilePath);
       // stderr is captured for failure diagnostics only; gitleaks runs with
       // --redact=100 and --log-level error, so it never carries finding bytes.
-      const scan = spawnSync(binAbsPath, [...buildGitleaksDirArgs(relPath)], {
+      const scan = spawnSync('gitleaks', [...buildGitleaksDirArgs(relPath)], {
         cwd: repoRoot,
         stdio: ['ignore', 'ignore', 'pipe'],
         encoding: 'utf8',

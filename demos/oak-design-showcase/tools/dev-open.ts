@@ -53,9 +53,8 @@ async function openWhenReady(devExited: AbortSignal): Promise<void> {
   }
 }
 
-// Never a PATH search (Sonar S4036, the trusted-git doctrine): the Next
-// binary is resolved to its absolute installed path and run under the
-// current node binary.
+// The Next CLI is this package's own dependency: its entry is resolved
+// from node_modules and run under the current node binary.
 const nextBin = createRequire(import.meta.url).resolve('next/dist/bin/next');
 
 const devExit = new AbortController();
