@@ -485,3 +485,39 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
     the `include` arrays, so the base `src/**/*.test.ts` stays live. The header's "scoped to
     exactly that category" is untrue as written. It is latent: the package's two tests are both
     integration tests, and the config predates this sync on both forks.
+
+## Lane state (2026-11-05 ~11:0xZ, carrier 381 held at step 2; Sandpiper guards Wind, 690653)
+
+- **The owner's word.** "please continue" (2026-11-05), after the seat's recommendation: re-true
+  step 1, correct 379, route the close guard. Done:
+  - step 1 re-trued on 377 (`d41a12fd1`);
+  - the correction posted on 379 (issue comment 6655777622);
+  - the guard and the carrier workflow's body text routed in Next safe step 4.
+- **Carrier 381.** It is a bot draft at `f1070c2` (release 1.186.7) and bare. Oak's `main` moved
+  past it to `2a03987b0` (oaknational 1018, merged 10:33Z). The mirror was dispatched (run
+  42011866659, success) and equals Oak's tip. 381's head is an ancestor of it, so 381 extends under
+  the re-trued step 1. The worktree `.claude/worktrees/upstream-carrier-381` is at 381's head and
+  installed, with no commits. It is held under claim `9e972476`.
+- **Step 2 stops the sync.** `git merge-tree --write-tree --name-only efe1ba72e 2a03987b0` exits 1
+  with 27 conflicted paths (merge base `0bb2ae4f0`; first-parent exclusive counts 5 and 327). The
+  collision is between two policies.
+  - Oak's 1016 to 1018 invoke `pnpm`, `gh` and `gitleaks` by name, under the owner's S4036 ruling
+    of 2026-11-03 in Oak's Sonar policy ("Tooling invokes each binary it needs by name"; `PATH` is
+    the trust root). They delete `trusted-gh.ts` and `pnpm-path.ts`.
+  - `engraph` carries the opposite cure as its own fork work. Trusted absolute paths with Windows
+    platform partitioning sit in `trusted-git.ts`, `trusted-gh.ts` and `pnpm-path.ts`, alongside
+    the 375 analyser cures. Its Sonar policy carries the One-Outcome Rule (2026-09-08), under which
+    S4036 resolves FIXED.
+
+  The paths by class:
+  - the by-name refactor against the trusted-path files and their call sites (15);
+  - Oak's MCP-830 fixes (the commit workflow's output replay, the agent-task view's null fields)
+    against `engraph`'s own changes there (4);
+  - the refounding instruments, retired on `engraph` (`13be1c97f`) and edited by name on Oak (3),
+    where `engraph`'s retirement stands;
+  - knip and the two hooks: Oak's configuration-hint gate against `engraph`'s hook changes (3);
+  - the Sonar policy and its rule (2).
+- **For the owner.** The decision is which S4036 policy holds on `engraph`. The seat recommends
+  adopting the by-name ruling. Elder's MCP-833 (git by name) touches the same files, so the
+  recommended sequencing is to integrate once, after MCP-833 lands on Oak, extending 381 to that
+  tip.

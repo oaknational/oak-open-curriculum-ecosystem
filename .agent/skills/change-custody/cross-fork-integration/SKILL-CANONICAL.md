@@ -149,8 +149,11 @@ carrier merge and landing proof names the first.
   before its one merge, so the pull request lands the same merge a fresh
   carrier would. The branch name then names an older sha. Nothing reads the
   name as the head: the carrier workflow reports a differing head and never acts
-  on it. Step 6's sweep reads the whole incoming range from the merge base. A
-  carrier the owner names is the carrier that lands. Worked instance
+  on it. Step 6's sweep reads the whole incoming range from the merge base.
+  Extension runs up to step 3's merge. Once that merge has opened the review
+  round, a newer upstream tip waits for the next carrier, because moving the
+  head then restarts the round. A carrier the owner names is the carrier that
+  lands. Worked instance
   (2026-11-04): carrier 379 was closed as unworked seven minutes after the owner
   readied it, by which time Codex and Copilot had reviewed it; the seat's only
   read of it, five hours earlier, had not asked for draft state or reviews. Its
@@ -498,7 +501,10 @@ seat's worktree, branch or claim (2026-09-09, the #88 follow-up).
   skill was written for.
 - A reserved fork block of ADR numbers.
 - Squash or rebase on a sync.
-- Moving a reviewed carrier head to a newer upstream tip mid-review.
+- Moving a carrier head to a newer upstream tip after step 3's merge has opened
+  its review round.
+- Closing a carrier that holds work in order to replace it, or closing one on a
+  reading of its state not taken at the close.
 - A carrier merge made at readiness rather than at the slot word, redone once
   per landing ahead of it.
 - A merge commit made in a worktree before install, so no hook ran on it.
