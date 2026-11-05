@@ -17,8 +17,9 @@ path (owner word 2026-08-24).
    [`cloud-environment-setup.sh`](cloud-environment-setup.sh). It discovers
    whichever Practice repo the session carries and installs the toolchain
    that repo declares — Node at the major named by its `engines` field,
-   the exact pnpm its `packageManager` pin selects (via Corepack, shimmed
-   into a trusted path), git ≥ 2.45, and a checksum-verified gitleaks
+   the exact pnpm its `packageManager` pin selects (via Corepack shims that
+   `PATH` resolves first, so every pnpm in a chain runs under corepack),
+   git ≥ 2.45, and a checksum-verified gitleaks
    (version and sha value-synced with castr's supply-chain single source,
    `.claude/hooks/_lib/gitleaks-pin.env`) — then runs `pnpm install` and
    delegates to the repo's own hook. The script itself pins no version a
@@ -253,12 +254,6 @@ again"). **A deterministic local-only failure with a green CI twin is an
 environment defect with a findable mechanism — fix it at the environment;
 never ask to route around it.**
 
-- **`PNPM_HOME` unset** while pnpm lives at `/opt/node22/bin/pnpm`, so
-  `repo-check`'s trusted-location probe fails on the commit chain. Safe
-  homes for the cure: image-level (pre-install) configuration, or adding
-  `/opt/node22/bin/pnpm` to `resolvePnpm`'s trusted candidates — never a
-  late export in the post-install session script, which re-points pnpm's
-  store root after `node_modules` exists (the store-rebind class).
 - **Image git 2.43** lacks `--no-lazy-fetch` (needs ≥ 2.45), on which
   `agent-tools test:e2e` dies. A shallow clone also lacks the
   `validate-mcp-content` `BASELINE_COMMIT`; `git fetch --depth=2000`

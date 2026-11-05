@@ -46,7 +46,6 @@ function fakeDeps(input?: {
     errorLines,
     deps: {
       executor: input?.executor ?? (() => CORPUS),
-      resolveGh: () => '/usr/local/bin/gh',
       createRegister: (path, header) => {
         if (input?.registerExists === true) {
           return false;
@@ -113,13 +112,6 @@ describe('parsePrThroughputArgs', () => {
     expect(() => parsePrThroughputArgs(['--note', '--write'], NOW)).toThrow(/requires a value/u);
     expect(() => parsePrThroughputArgs(['--register', '--write'], NOW)).toThrow(
       /requires a value/u,
-    );
-  });
-
-  it('rejects a relative --gh override so the malformed shape stays on the usage contract', () => {
-    expect(() => parsePrThroughputArgs(['--gh', 'bin/gh'], NOW)).toThrow(/absolute path/u);
-    expect(parsePrThroughputArgs(['--gh', '/opt/homebrew/bin/gh'], NOW).ghOverride).toBe(
-      '/opt/homebrew/bin/gh',
     );
   });
 

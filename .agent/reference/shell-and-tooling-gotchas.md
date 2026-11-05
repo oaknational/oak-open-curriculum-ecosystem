@@ -199,10 +199,14 @@ tool retires them.
   the same explicit loopback. A gate failure in a package the diff never
   touched is still a re-run candidate first, but this signature now has a
   named cause.
-- **Under an inherited `COREPACK_ROOT` the resolved standalone pnpm refuses
-  the `packageManager` self-switch** (observed on an 11.9.0-resolved pnpm
-  against an 11.8.0 pin): strip the corepack env (`env -u COREPACK_ROOT …`
-  or a clean shell) so the pin resolves its own binary.
+- **Under an inherited `COREPACK_ROOT`, a standalone pnpm on `PATH` refuses
+  the `packageManager` self-switch** with `ERR_PNPM_BAD_PM_VERSION`.
+  Observed on an 11.9.0 pnpm against an 11.8.0 pin, and again on 2026-11-04
+  on 12.16.1 against 12.17.0. It happens when an outer pnpm ran under
+  corepack and a child pnpm on `PATH` is standalone. The tooling invokes
+  pnpm by name and passes the environment through, so the cure is the
+  operator's: run the whole chain under one launcher, either a clean shell
+  or `env -u COREPACK_ROOT …` for standalone pnpm, or corepack throughout.
 - **Analytics/event-store retention config is free to fix only BEFORE first
   collection**: before any event lands it is a settings change; after, it
   is a deletion exercise with data-governance weight. The free-to-fix

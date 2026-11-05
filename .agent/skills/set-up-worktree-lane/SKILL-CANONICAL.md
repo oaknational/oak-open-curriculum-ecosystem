@@ -145,11 +145,13 @@ leaves an ambiguous write.
   be half-applied. Ticket MCP-490 tracks making the check mechanical.
 - **The contaminated base** (PR #673). Fresh-mode branch creation from the
   principal's HEAD; the lane PR carried coordination commits; cost a close-recreate.
-- **The gate that blames the wrong thing** (2026-08-04). `PNPM_HOME` on a machine may
-  point at a directory that does not hold the `pnpm` binary, so the hook's *nested*
-  pnpm call fails its trusted-location check and the pre-commit gate reports
-  "formatting issues" for a checker that never ran. If a gate blames formatting on a
-  file you have just formatted, read the gate's own output before believing it.
+- **The gate that blames the wrong thing** (2026-08-04). A hook's *nested* pnpm call
+  can fail for an environment reason while the pre-commit gate reports "formatting
+  issues" for a checker that never ran. If a gate blames formatting on a file you have
+  just formatted, read the gate's own output before believing it. One such reason: an
+  inherited `COREPACK_ROOT` makes a standalone pnpm on `PATH` refuse the
+  `packageManager` pin with `ERR_PNPM_BAD_PM_VERSION`; the cure is the operator's
+  ([`shell-and-tooling-gotchas.md`](../../reference/shell-and-tooling-gotchas.md)).
   **Never re-point `PNPM_HOME` to make the gate run** — pnpm derives its store root
   from `PNPM_HOME` (`pnpm store path` proves it), so a re-pointed value silently
   creates a second store and rebinds every tree it installs into; every default-env

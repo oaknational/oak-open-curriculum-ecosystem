@@ -122,12 +122,14 @@ grep " ${NODE_TGZ}\$" /tmp/node-shasums.txt | sed "s|  ${NODE_TGZ}\$|  /tmp/node
 tar xzf /tmp/node.tgz -C /usr/local --strip-components=1
 
 phase "corepack pnpm shims"
-# pnpm via Corepack shims in /usr/local/bin (a trusted location for repo
-# spawn checks): each repo's packageManager pin selects and verifies its own
-# pnpm version — this script pins nothing
+# pnpm via Corepack shims in /usr/local/bin, which PATH must resolve first so
+# every pnpm in a chain runs under corepack (a standalone pnpm under an
+# inherited COREPACK_ROOT refuses the pin): each repo's packageManager pin
+# selects and verifies its own pnpm version — this script pins nothing
 /usr/local/bin/corepack enable --install-directory /usr/local/bin pnpm
 
-# whatever /opt/nodeXX the image ships shadows /usr/local/bin in PATH
+# whatever /opt/nodeXX the image ships shadows /usr/local/bin in PATH, so its
+# entries are pointed at /usr/local/bin to keep PATH on the corepack shims
 for d in /opt/node*/bin; do
   for b in node npm npx corepack pnpm; do
     ln -sf "/usr/local/bin/$b" "$d/$b"

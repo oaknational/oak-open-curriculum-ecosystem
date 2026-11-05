@@ -44,8 +44,7 @@ const TRUSTED_GIT_DIRS = ['/usr/bin', '/bin', '/opt/homebrew/bin', '/usr/local/b
  * failure that would surface downstream as an opaque `ENOENT` from the caller's
  * `execFileSync`, in the commit-msg hook blocking every commit). Callers run
  * inside their own error handling, so the loud throw replaces a cryptic
- * downstream crash with a diagnosable one. (Its `gh` sibling
- * {@link resolveTrustedGh} returns a `Result`; this throwing resolver has six
+ * downstream crash with a diagnosable one. (This throwing resolver has six
  * call sites and migrates to `Result` with the no-throw backlog, not piecemeal.)
  *
  * @param exists - Existence probe; defaults to `node:fs` `existsSync`.
