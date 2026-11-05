@@ -2,6 +2,7 @@
 name: provider-neutral-types-at-boundaries
 polarity: pattern
 category: architecture
+layer: general
 barrier_met: true
 proven_by: "Sentry adapter extension 2026-04-13 — 4 reviewers independently converged: app-layer interfaces must not import adapter types"
 ---

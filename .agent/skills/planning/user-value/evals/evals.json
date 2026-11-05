@@ -1,0 +1,83 @@
+{
+  "skill_name": "user-value",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "A council team has three backlog items: A: residents need a dashboard; B: as a resident I want to upload evidence so my support application is approved; C: as a caseworker I want fewer calls so processing is faster. No resident research has happened. The prototype accepts uploads but staff must retype their contents. Rework these into a useful value, needs, journey and story model. Preserve correspondence to A, B and C. Do not invent policy or commission research execution.",
+      "expected_output": "A provisional model distinguishing feature proposals, assumed needs, provider targets, the resident journey and bounded delivery stories; old-to-new correspondence and explicit back-office/evidence gaps.",
+      "assertions": [
+        "The dashboard is treated as a proposed response, not an established need",
+        "Upload success is not said to guarantee eligibility, approval or benefit",
+        "Caseworker re-entry and residents unable to enter the digital route remain visible",
+        "A, B and C each have an explicit disposition or successor",
+        "At least one bounded story includes acceptance outcomes, an observation method and unresolved dependencies",
+        "No participant quotations, research findings, policy authority or impact estimates are invented"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "We are exploring a public creative-learning service. The owner wants people to follow unexpected connections even if nobody has asked for this feature. A session can end with an interesting unfinished question. A partner operates the AI host. We have only a synthetic prototype demonstration, not participant research. Define useful needs/value, a proposed journey and one small story. Explain how to assess success without forcing every session into a completion score.",
+      "expected_output": "A bounded opportunity hypothesis with agency and inquiry value, honestly proposed experience, host dependencies and separate delivery/experience/outcome evidence.",
+      "assertions": [
+        "The response permits offered or hypothesised value without inventing pre-existing demand",
+        "An unfinished question can be a valuable ending without being recast as task completion",
+        "Host operation and the team's controlled contribution are distinguished",
+        "The story has an observable delivery contract rather than a guaranteed learning gain",
+        "No synthetic or authored scenario is promoted to observed participant experience",
+        "Engagement or duration is not treated as proof of learning or joy"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Implement a stable priority queue over an existing tested binary heap. The behaviour and algorithmic requirements are settled. The heap is in another repository you cannot read (its API: push, pop_min, peek, len; min-heap on a comparable key); write the queue's local contract and tests from this statement. Do not look for files.",
+      "expected_output": "Routes settled implementation to engineering contract and testing methods without inventing human journeys or repeating value definition.",
+      "assertions": [
+        "It recognises that settled implementation does not require another user-value definition pass",
+        "No fictional human service user or national-impact promise is introduced"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Our rescheduling feature passes all automated tests and ten staff members liked its demo. Can we mark reduced missed appointments and equitable access as achieved? We have no live usage or outcome comparison.",
+      "expected_output": "Separates demonstrated local behaviour and staff opinion from user experience, distributional outcomes and causal impact, with proportionate next evidence.",
+      "assertions": [
+        "It does not promote delivery acceptance to demonstrated impact",
+        "It names who may be excluded and the gap in actual outcome evidence",
+        "It proposes evidence appropriate to the claims without inventing effect sizes or sample sizes"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "We have 12 observed appointment interviews, but they follow two substantially different routes: people booking for themselves and carers arranging transport and appointments for someone else. Create a journey structure. The notes contain actions but no reliable emotional reports. We cannot change the transport provider's service.",
+      "expected_output": "Distinct routes where consequential, with source scope, missing emotion evidence, carer burden, provider boundaries and linked needs/stories.",
+      "assertions": [
+        "Material differences are not averaged into a fictional typical person",
+        "No emotional curve or participant quotation is invented",
+        "Mapping the transport dependency does not become authority to change it",
+        "Observed notes and proposed improvements are distinguishable"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "We are designing a reusable stable priority queue for scheduling components. Its value and contract are not yet settled. Explain use value at the queue, scheduler and possible application levels. Show what implementation and evidence could establish at each level. We have no chosen human-service application.",
+      "expected_output": "Names the scheduler as a technical consumer, defines conditional usefulness and candidate guarantees, distinguishes implementation from consumer fit and wider effects, and keeps unknown application use explicit.",
+      "assertions": [
+        "A technical consumer has a legitimate user-value account without a fictional human persona",
+        "Local ordering correctness is not treated as proof of scheduler fairness or application outcomes",
+        "Implementation, contract, capability and use are connected with distinct relationship meanings",
+        "Unknown application context stays unknown rather than becoming an invented impact chain"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Our curriculum-data API passes its schema tests. Teachers still cannot find resources because the consuming tool does not preserve meaning when mapping subjects. Express the intended use value at the teacher task, consuming tool, API contract and implementation levels. Identify where evidence and changes belong without assuming the API alone owns the problem.",
+      "expected_output": "Uses distinct but connected views, identifies semantic composition and authority boundaries, separates local conformance from usable discovery and educational outcomes.",
+      "assertions": [
+        "Schema conformance is not accepted as proof of useful resource discovery",
+        "The semantic mapping seam and both parties obligations are made explicit",
+        "The proposed intervention follows the failing seam rather than automatically expanding the API",
+        "Teacher experience and learning outcomes retain distinct evidence requirements"
+      ]
+    }
+  ]
+}

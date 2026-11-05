@@ -135,7 +135,7 @@ None depend on each other.
     non-pathspec staging). This is structurally new beyond the two
     failure modes PDR-054 and PDR-059 already name.
 - **T-R4b — Commit-skill amendment.** Amend
-  `.agent/skills/commit/SKILL-CANONICAL.md` to mandate explicit
+  `.agent/skills/change-custody/commit/SKILL-CANONICAL.md` to mandate explicit
   pathspec staging and explicit commit-queue lifecycle invocation
   (enqueue → staging → record-staged → verify-staged → commit →
   complete). Doc-only.

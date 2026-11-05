@@ -77,8 +77,7 @@ function measuredEvidence(
   data: ContrastCheckData | null,
 ): { readonly ratio: number; readonly required: number } | null {
   if (
-    data === null ||
-    data.contrastRatio === undefined ||
+    data?.contrastRatio === undefined ||
     data.contrastRatio <= 0 ||
     data.expectedContrastRatio === undefined
   ) {

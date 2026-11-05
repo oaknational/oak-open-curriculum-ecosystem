@@ -3,6 +3,7 @@ name: Long-Arc Finish-Line, Not Tail
 polarity: pattern
 use_this_when: A multi-session arc (Practice/tooling, observability, large refactor, multi-phase plan) is mid-flight and the next-session record is being authored or refreshed
 category: process
+layer: general
 proven_in: |
   .agent/plans/practice-tooling-doctrine/memory-state-substrate-doctor/
   (memory/state doctor arc — Opalescent's reframe, 2026-05-07);

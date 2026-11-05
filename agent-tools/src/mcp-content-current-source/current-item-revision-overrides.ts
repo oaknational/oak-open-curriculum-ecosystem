@@ -36,4 +36,7 @@ export const CURRENT_ITEM_REVISION_OVERRIDES = {
   ...CURRENT_MISCONCEPTION_ORDER_ITEM_REVISION_OVERRIDES,
   // relatedResources prior-knowledge pointer rewritten for stated statements (MCP-671).
   C290: 'modified',
+  // 2026-11-02: the heading map re-anchors on the module-level KIND_HEADINGS and
+  // pluraliseKind it was hoisted to; the labels the doc renders are unchanged.
+  C484: 'unchanged',
 } as const;

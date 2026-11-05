@@ -2,6 +2,7 @@
 title: "pnpm Strict Hoisting Blocks Transitive Type Resolution"
 polarity: anti-pattern
 category: build-system
+layer: family
 barrier_met: true
 source_sessions: ["2026-04-14d"]
 ---

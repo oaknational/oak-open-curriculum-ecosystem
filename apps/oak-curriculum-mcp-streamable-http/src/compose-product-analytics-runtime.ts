@@ -12,6 +12,7 @@
  * {@link ConfigError} and fails bootstrap whenever PostHog is selected —
  * the deliberate mirror of `resolveProductAnalyticsConfig`'s posture.
  */
+import { PRODUCT_ANALYTICS_ENV_KEYS } from './product-analytics-config.js';
 import type { Transport } from '@modelcontextprotocol/sdk/shared/transport.js';
 import type { Logger } from '@oaknational/logger';
 import { resolveRelease, type ReleaseInput } from '@oaknational/build-metadata';
@@ -137,6 +138,7 @@ function compositionError(reason: string): Result<never, ConfigError> {
   return err({
     message: `invalid PostHog product-analytics composition: ${reason}`,
     diagnostics: [],
+    failingKeys: PRODUCT_ANALYTICS_ENV_KEYS,
   });
 }
 

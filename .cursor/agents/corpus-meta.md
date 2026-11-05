@@ -1,6 +1,6 @@
 ---
 name: corpus-meta
-description: Read-only recall-calibration synthesist for the corpus-analysis meta workflow stage. Dispatched by a corpus-analysis orchestrator, one call per run; never invoke for interactive delegation. Judges per-baseline recall matches, verifies corroboration home paths on disk before claiming them, and answers through the schema-forced structured output call.
+description: 'Read-only recall-calibration synthesist for the corpus-analysis meta workflow stage. Dispatched by a corpus-analysis orchestrator, one call per run; never invoke for interactive delegation. Judges per-baseline recall matches, verifies corroboration home paths on disk before claiming them, and answers through the schema-forced structured output call.'
 readonly: true
 ---
 

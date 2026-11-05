@@ -4,6 +4,7 @@ name: "README as Index"
 polarity: pattern
 use_this_when: "A plan-directory README is growing to contain session instructions, outcome narratives, or design rationale that duplicates or replaces .plan.md content"
 category: process
+layer: general
 proven_in: "Plan architecture refactor (2026-03-23, algo-experiments)"
 proven_date: 2026-03-23
 barrier:

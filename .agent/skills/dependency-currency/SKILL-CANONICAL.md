@@ -41,6 +41,14 @@ behaviour regression is the constraint. The method was proven on the
 - **Read the pinned-version doctrine before bumping pinned surfaces.** Some
   pins are deliberate holds with their own decision records; a currency pass
   honours them (see Holds below).
+- **Upgrade before working around.** When a framework or tool reports that a
+  dependency is stale (a deprecation notice, a peer-range warning, a version
+  check in its own output), the first move is the upgrade cycle, not a local
+  workaround: a workaround written over a known-stale version is debt the next
+  pass unwinds, and it hides the signal that priced the upgrade (2026-08-12).
+  When a hold or the cooldown governs, the stale signal is recorded against the
+  hold and a workaround, if any, names it; the upgrade cycle is otherwise the
+  first move.
 
 ## Workflow
 
@@ -175,7 +183,7 @@ it.
 - Route findings surfaced but out of scope (a blind gate, a stale include,
   an architecture question) to the napkin and the plan — never widen the
   lane.
-- Run the full aggregate gate (`pnpm check` / `pnpm check:ci`), push, and
+- Run the full aggregate gate (`pnpm check`), push, and
   land via PR. Work is not safe until pushed and on a PR.
 
 ## Failure handling
@@ -192,3 +200,8 @@ this. An **already-committed bump** later found regressive is undone with
 cooldown-refused version is recorded, not forced. A finding that needs an
 architecture or owner decision is routed with its evidence, not decided
 inside the lane.
+
+Two bumps that are one change are judged in their combined target state before
+either half is diagnosed: two pull requests that together made one CodeQL
+configuration change were each read alone, closed, and replaced by one
+(2026-08-11).

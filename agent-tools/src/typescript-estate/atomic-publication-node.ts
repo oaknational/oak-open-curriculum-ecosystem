@@ -162,11 +162,11 @@ function inspectKind(pathValue: string): Result<PublicationFileKind | undefined,
 function statNoFollow(pathValue: string): Stats | undefined {
   try {
     return lstatSync(pathValue);
-  } catch (cause: unknown) {
-    if (isErrnoException(cause) && cause.code === 'ENOENT') {
+  } catch (error: unknown) {
+    if (isErrnoException(error) && error.code === 'ENOENT') {
       return undefined;
     }
-    throw cause;
+    throw error;
   }
 }
 
@@ -187,8 +187,8 @@ function isErrnoException(cause: unknown): cause is NodeJS.ErrnoException {
 function tryResult<T>(operation: () => T): Result<T, Error> {
   try {
     return ok(operation());
-  } catch (cause: unknown) {
-    return err(cause instanceof Error ? cause : new Error(String(cause)));
+  } catch (error: unknown) {
+    return err(error instanceof Error ? error : new Error(String(error)));
   }
 }
 

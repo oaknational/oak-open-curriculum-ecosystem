@@ -121,7 +121,7 @@ interface Window {
     // polarity lever renders elsewhere (brand.css, invisible from here), so
     // this is a concrete value for consumers that need one, never a claim
     // about the rendered page — the honest control accessor is choice().
-    return sessionChoice() || auto() || 'light';
+    return sessionChoice() ?? auto() ?? 'light';
   }
   // The explicit choice, or null when none exists. The kit-contract accessor
   // (MCP-388): downstream stores render "no choice" honestly from this,
@@ -159,16 +159,16 @@ interface Window {
       // persistence genuinely failed).
     }
     current = null;
-    apply(auto() || null);
+    apply(auto());
   }
-  apply(stored() || auto() || null);
+  apply(stored() ?? auto());
   // Follow a live OS contrast change until the user makes an explicit choice.
   // The in-memory choice counts: an explicit set() whose persistence threw
   // must still win over an automatic theme change.
   try {
     matchMedia('(prefers-contrast: more)').addEventListener('change', function () {
       if (!sessionChoice()) {
-        apply(auto() || null);
+        apply(auto());
       }
     });
   } catch {

@@ -33,9 +33,9 @@ describe('parseLifecycleIngestOpts', () => {
   });
 
   it('parses includeRestricted as a boolean flag (default omitted)', () => {
-    expect(parseLifecycleIngestOpts({ bulkDir: './bulk-downloads' }).includeRestricted).toBe(
-      undefined,
-    );
+    expect(
+      parseLifecycleIngestOpts({ bulkDir: './bulk-downloads' }).includeRestricted,
+    ).toBeUndefined();
     expect(
       parseLifecycleIngestOpts({ bulkDir: './bulk-downloads', includeRestricted: true })
         .includeRestricted,

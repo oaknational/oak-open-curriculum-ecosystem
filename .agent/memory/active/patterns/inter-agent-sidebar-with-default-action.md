@@ -2,6 +2,7 @@
 name: "Inter-Agent Sidebar with Default Action"
 polarity: pattern
 category: agent
+layer: general
 status: proven
 discovered: 2026-05-11
 proven_in: "R1.b collaboration-protocol-hardening session (Soaring Darting Kite, 2026-05-11). At session open the canonical schema work conflicted with a live peer claim (Fronded Flowering Seed, claim 1ccfa79c, scope included comms-events/**). Posted directed sidebar comms event 2e1a886f-d614-4df7-b4cc-7605218144d4 with two specific questions (write vs read-only intent; expected claim-close ETA), an explicit deadline (15:00Z, ~60 min), and a named default action on no reply (defer R1.b session, re-launch after Fronded closes). Fronded replied at 544bf9bf within 10 minutes — confirmed read-only intent, proactively narrowed claim, R1.b proceeded. Zero owner mediation required. Polling cadence was honoured via a background watcher; no autonomous lock-wait loop."

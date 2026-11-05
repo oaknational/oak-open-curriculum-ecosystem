@@ -27,6 +27,21 @@ export interface RunVercelIgnoreCommandResult {
 
 export declare function validateGitSha(value: unknown): string | null;
 
+/**
+ * Resolve the absolute path to `git` from a fixed, platform-partitioned
+ * allowlist.
+ *
+ * @param exists - **Internal test seam**; production callers use the
+ *   zero-argument form.
+ * @param platform - **Internal test seam**; production callers use the
+ *   zero-argument form. A foreign platform's literals must never be executed
+ *   on this host.
+ */
+export declare function resolveTrustedGitBinary(
+  exists?: (path: string) => boolean,
+  platform?: NodeJS.Platform,
+): string;
+
 export declare function scrubbedGitEnv(): Record<string, string>;
 
 export declare function gitShowFileAtSha(sha: string, filePath: string, cwd: string): string;

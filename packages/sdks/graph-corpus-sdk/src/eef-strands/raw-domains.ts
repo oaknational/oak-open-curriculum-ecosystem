@@ -18,7 +18,7 @@
  * access and deterministic projection.
  */
 import { EEF_TOOLKIT_DATA } from './eef-toolkit.external-data.js';
-import type { EefStrand, EefStrandId } from './strand-lookup.js';
+import type { EefStrand, EefStrandId, StrandCarrying } from './strand-lookup.js';
 
 // --- Declared metadata domains (from `school_context_schema`) ---------------
 
@@ -40,7 +40,7 @@ export type DeclaredPriority =
  * types below index a present-everywhere field rather than failing on the
  * members that omit it — the exact-union cost cured here at the raw boundary.
  */
-type StrandWithSchoolContext = Extract<EefStrand, { school_context_relevance: unknown }>;
+type StrandWithSchoolContext = StrandCarrying<'school_context_relevance'>;
 type SchoolContextRelevance = StrandWithSchoolContext['school_context_relevance'];
 
 /** Phase values strands actually carry (observed: early_years/primary/secondary). */

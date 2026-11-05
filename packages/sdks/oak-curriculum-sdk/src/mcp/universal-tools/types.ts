@@ -95,8 +95,6 @@ export type AggregatedToolName =
  */
 export type UniversalToolName = AggregatedToolName | ToolName;
 
-export type { ToolAnnotations, ToolMeta };
-
 /**
  * Entry in the universal tools list for MCP registration.
  *
@@ -162,3 +160,5 @@ export interface UniversalToolListEntry {
 export interface AppToolListEntry extends UniversalToolListEntry {
   readonly _meta: ToolMeta & { readonly ui: { readonly resourceUri: string } };
 }
+
+export type { ToolAnnotations, ToolMeta } from '@oaknational/sdk-codegen/mcp-tools';

@@ -26,6 +26,6 @@ export default defineConfig({
       'vocab-gen/**/*.test.ts',
       'vocab-gen/**/*.spec.ts',
     ],
-    exclude: ['node_modules', 'dist', 'coverage', '**/*.e2e.test.ts'],
+    exclude: ['node_modules', 'dist', 'coverage'],
   },
 });

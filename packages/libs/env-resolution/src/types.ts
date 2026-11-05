@@ -24,6 +24,29 @@
 import type { z } from 'zod';
 
 /**
+ * Existence probe seam: true when something exists at the absolute path.
+ *
+ * @remarks Injectable so walk outcomes are provable without depending on what
+ * happens to live in the host's ancestor directories.
+ */
+export type PathExists = (path: string) => boolean;
+
+/**
+ * The filesystem the resolution pipeline reads through: the root markers it
+ * walks up to and the `.env` files it layers.
+ *
+ * @remarks The real adapter is the default at the pipeline's entry; a test
+ * composes an in-memory one, so no in-process test reads a disk
+ * (`.agent/directives/testing-strategy.md` §In-process tests).
+ */
+export interface EnvFileSystem {
+  /** True when something exists at the absolute path: a marker file or directory, or an env file. */
+  readonly exists: PathExists;
+  /** The UTF-8 text of the file at the absolute path, or `undefined` when no file exists there. */
+  readonly readText: (path: string) => string | undefined;
+}
+
+/**
  * Diagnostic information for a single environment variable key.
  *
  * @remarks Reports whether the key was present in the merged environment

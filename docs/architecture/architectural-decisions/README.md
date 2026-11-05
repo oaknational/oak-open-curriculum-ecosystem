@@ -3,7 +3,7 @@ boundary: B2-Architecture
 doc_role: index
 authority: adr-navigation
 status: active
-last_reviewed: 2026-08-30
+last_reviewed: 2026-09-08
 ---
 
 # Architectural Decision Records
@@ -218,8 +218,8 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-173: Graph Stack Topology — Standards-First, Layered, MCP-Agnostic](173-graph-stack-topology.md)
   (eight-workspace graph topology — seven active plus one deferred —
   with RDF 1.2-native internals, standards-based wire projection,
-  build-vs-buy attestation per library, and standards-evolution
-  tripwires; Accepted 2026-05-11)
+  and standards-evolution tripwires; Accepted 2026-05-11;
+  implementation-origin scope refined by ADR-230, 2026-09-08)
 - [ADR-174: Dependency Vulnerability Scanning as a Quality Gate](174-dependency-vulnerability-scanning-quality-gate.md)
   (dependency vulnerability triage, blocking/disposition policy,
   Dependabot/override governance, and relationship to quality gates;
@@ -241,7 +241,10 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   2026-05-11; Accepted 2026-05-11)
 - [ADR-180: Codex-Exec Agent Delegation Pattern](180-codex-exec-agent-delegation-pattern.md)
   (`codex exec` is the preferred scripted delegation surface; `read-only` is
-  the default sandbox; Accepted 2026-05-12)
+  the default sandbox; Accepted 2026-05-12; amended 2026-09-23 — §6 fixes the
+  Codex dialogues' call envelope in code; `codex mcp-server` removed from the
+  CLI; amended 2026-09-25 — the designed-sentinel carve-out retired; amended
+  2026-09-26 — §2 gains `command-records`, the seat-rollout reader)
 - [ADR-181: Agent Team Start Ritual and Action-Trace Surface](181-agent-team-start-and-action-log.md)
   (`start-right-team`, emergent temporary responsibilities, team handoff
   routing, and future action-trace event surface; Proposed)
@@ -505,6 +508,22 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   `Origin` MUST the other way: ADR-122's compensating auth-layer Host check does not run when
   `CANONICAL_HOST` is set, as it is in production, so MCP-650 is an amendment to ADR-122 rather
   than a fresh gap. ADR-229 states the conflict and does not settle it)
+- [ADR-230: Own-built algorithm and data-structure foundations](230-own-built-algorithm-and-data-structure-foundations.md)
+  (Accepted by owner direction 2026-09-08; graph and non-graph algorithms and
+  data structures authored as Capability Foundations with small completed Primitives
+  and meaningful compositions,
+  informed by openly licensed references and independently qualified;
+  implementation and qualification remain separate delivery work)
+- [ADR-231: Organisational identity is held below the tree](231-organisational-identity-below-the-tree.md)
+  (Accepted 2026-09-08 as this line's ADR-228; renumbered at the 1.185.0 sync because the Oak
+  line had minted its own ADR-228 — homes the decision the ratified strategic node carries: who
+  runs this tree is never in the tree — identity derived, per-checkout, environment or
+  service-bound; mechanism names no organisation; the default branch derived, never a literal)
+- [ADR-232: Host-side adoption of Practice Core decisions](232-host-side-adoption-of-practice-core-decisions.md)
+  (Accepted 2026-10-03 — this repository's applications of PDR-008 and PDR-132, paired in the
+  practice index; a Core heading never names the host, and the `validate-no-host-names-in-core-headings`
+  gate refuses the shape)
+- [ADR-233: Retained framework and configurable instances](233-retained-framework-and-configurable-instances.md) — current Engraph owner direction, 10 October 2026; detailed design remains proposed.
 
 ## Key Architectural Decisions
 
@@ -520,10 +539,14 @@ For understanding our API integration approach:
 - **[ADR-063](063-sdk-domain-synonyms-source-of-truth.md)** - SDK as single source of truth for domain synonyms
 - **[ADR-064](064-elasticsearch-mapping-organization.md)** - Elasticsearch index mapping organization
 - **[ADR-108](108-sdk-workspace-decomposition.md)** - SDK workspace decomposition (generic/Oak x sdk-codegen/runtime)
-- **[ADR-154](154-separate-framework-from-consumer.md)** - Separate framework from consumer: reusable mechanism vs Oak-specific instance, enforced through workspace topology
-- **[ADR-155](155-decompose-at-the-tension.md)** - Decompose at the tension: classification resistance signals hidden coupling, decompose at the fault line
 - **[ADR-225](225-provider-independent-capability-contracts.md)** - Proposed adoption of provider-independent capability composition: adapter-tier placement, PostgreSQL/Neon separation, and an exercised independent composition for every selected provider
 - **[ADR-132](132-sitemap-scanner-for-canonical-url-validation.md)** - Sitemap scanner and reference-map validation for canonical URL generation
+
+For understanding the foundations and their boundaries:
+
+- **[ADR-154](154-separate-framework-from-consumer.md)** - Separate framework from consumer: reusable mechanism vs Oak-specific instance, enforced through workspace topology
+- **[ADR-155](155-decompose-at-the-tension.md)** - Decompose at the tension: classification resistance signals hidden coupling, decompose at the fault line
+- **[ADR-230](230-own-built-algorithm-and-data-structure-foundations.md)** - Own-built algorithm and data-structure foundations: current development policy, reference research and qualification
 
 For understanding authentication, authorization, and observability:
 
@@ -550,6 +573,9 @@ For understanding the agentic engineering practice:
 - **[ADR-129](129-domain-specialist-capability-pattern.md)** - Domain specialist capability pattern: unified `*-expert` model with situational invocation
 - **[ADR-137](137-specialist-operational-tooling-layer.md)** - Specialist operational tooling layer: optional live-system tooling for domain experts
 - **[ADR-131](131-self-reinforcing-improvement-loop.md)** - Self-reinforcing improvement loop: knowledge flow, consolidation hub, self-referential governance, inter-repo propagation
+- **[ADR-231](231-organisational-identity-below-the-tree.md)** - Organisational identity is held below the tree: who runs this tree is never in the tree; mechanism names no organisation; the default branch derived, never a literal
+- **[ADR-232](232-host-side-adoption-of-practice-core-decisions.md)** - Host-side adoption of Practice Core decisions: this repository's applications of PDR-008 and PDR-132 live here, paired in the practice index; a Core heading never names the host
+- **[ADR-233](233-retained-framework-and-configurable-instances.md)** - Retained framework and configurable instances: current Engraph owner direction, 10 October 2026; detailed design remains proposed
 - **[ADR-135](135-agent-classification-taxonomy.md)** - Agent classification taxonomy: domain_expert, process_executor, specialist; operational modes; Practice domain trio
 - **[ADR-144](144-two-threshold-fitness-model.md)** - Three-zone fitness model: `healthy` / `soft` / `hard` / `critical` graduated scale with `CRITICAL_RATIO = 1.5`; `critical` is a loop-failure signal requiring a three-question post-mortem (§Loop Health)
 - **[ADR-146](146-assumptions-expert-meta-level-plan-assessment.md)** - Assumptions expert: independent proportionality and plan-assumption challenge with an inverted doctrine hierarchy
@@ -682,4 +708,8 @@ which appeared only after every Superseded precedent row had been checked
 ADRs are created when a decision is significant enough to shape future
 work. The consolidation workflow checks whether completed work produced
 decisions that should be recorded. Number sequentially from the highest
-existing ADR. Add the new entry to the Index above.
+existing ADR. Add the new entry to the Index above. A fork of this
+repository numbers in the same sequence; when a sync from upstream reveals
+a collision, the fork renumbers its own record to the next free number in
+the sync's commit with every citation updated (the pre-merge analysis
+guide, §4d) — no lineage reserves a block.

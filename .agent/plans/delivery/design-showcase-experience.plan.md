@@ -11,9 +11,10 @@ serves: design-system-as-configured-framework
 impact_areas:
   - design-system
 tickets: []
-depends_on:
-  - plan: design-system-completion
-    kind: beneficial
+depends_on: []
+# The former beneficial edge to design-system-completion was removed
+# 2026-08-18 (MCP-613 review round 1): that sketch is archived as a
+# knowledge store; nothing here ever waited on it (see §Relationships).
 owner_gates: []
 # The R14/R15 re-cut gate CLEARED 2026-08-13 evening: owner word "ratified,
 # please proceed" at the successor seat (Skua binds Leeward, e2b222), given
@@ -29,7 +30,7 @@ owner_gates: []
 # owner must clear is its own failure mode. The one gate above is different in
 # kind: it re-opens a RATIFIED kit clause the owner's R14 word now contradicts
 # — precisely the class only he can settle.
-last_updated: 2026-08-26
+last_updated: 2026-09-05
 ---
 
 # The showcase experience — a UX-first public face for the design system
@@ -174,10 +175,10 @@ prose inside an unratified plan, and it contradicted the owner's actual ask.
 | **[engineering practice]** | A landed instrument, a shipped mechanism, a verified repo fact | Governs as fact. Cite the file, not a plan that describes it |
 
 **Unratified plan prose is not an authority class.** `design-system-completion`
-is `status: sketch`, `ratified_by: null` — its charter clauses, its workstream
-shapes, and the reviewer findings absorbed into it bind nothing here. Where this
-plan needed something that document contains, the constraint is re-derived from a
-real authority or dropped (§Coherence check).
+is `status: archived` and was never ratified (`ratified_by: null`) — its charter
+clauses, its workstream shapes, and the reviewer findings absorbed into it bind
+nothing here. Where this plan needed something that document contains, the
+constraint is re-derived from a real authority or dropped (§Coherence check).
 
 ## Governing rulings
 
@@ -189,7 +190,7 @@ carry their grounds.
 | R1 | **The tight scope.** "The old showcase purged because it was terrible. A new and good front page for the showcase, and two pages, one demonstrating the identity switching and theme switching, one demonstrating the page sutrcture being maximally configurable via css without the markup changing" … "other work done should be made safe, nothing should be thrown away unless it is at odds with our goals, but the above is the tight scope that allows us to deliver impact before working on improvments" | Owner, 2026-08-13 (verbatim, sic) |
 | R2 | **A11y on the kept pages is delivery, not improvement.** "if you are fixing a11y issues on the identity page I think that is entirely consistent with delivery of the identity page" | Owner, 2026-08-13 (mid-turn ratification) |
 | R3 | **Narrow first.** "if we make the narrow viewport work excellently, then at broader viewports we can use the extra space advantageously, if we start with designing for wide viewports first then the same work instead becomes a fight to constrain the design at narrow viewports. Narrow first, wide follows, always, everywhere." | Owner, 2026-08-13 |
-| R4 | **No coping with constraint.** "get rid of the concept of coping with constraint, we design an excellent base that works at all widths including very narrow, and then we take advantage of the freedoms afforded to us at broader widths." Consequence, owner-stated in the same breath: identities sharing one excellent narrow base is CORRECT, not a gap. **No per-brand narrow maps.** | Owner, 2026-08-13 ~17:1x |
+| R4 | **No coping with constraint.** "get rid of the concept of coping with constraint, we design an excellent base that works at all widths including very narrow, and then we take advantage of the freedoms afforded to us at broader widths." The consequence clause once appended to this row ("identities sharing one excellent narrow base is CORRECT … no per-brand narrow maps") was agent-inscribed inference wearing owner attribution, ruled VOID FROM BIRTH by the owner on 2026-08-17 (director-rulings-ledger POPPY-1; tango-identity-pack P6): every identity composes narrow from its own character, and Oak/PDS narrow similarity is a coincidence of shared GDS-rooted public-service heritage. Only the quoted words stand. | Owner, 2026-08-13 ~17:1x |
 | R5 | **The demo dominates the controls.** On the switching demo the embedded demo page must dominate over the controls, especially at narrow viewports. | Owner, 2026-08-13 ~16:00 (skeleton review) |
 | R6 | **The composition demo's bar is CSS Zen Garden** — "a page designed to optimise the degree and demonstration and communication of configurability of visual appearance with fixed markup". A stub or wireframe grid communicates the mechanism, not the power. The method comes from the repo's own prior research: the owner's paper, `docs/governance/one-html-many-css-compositions.md`. | Owner, 2026-08-13 ~16:00; source-gate discharged same day |
 | R7 | **The composition shape, pinned.** "a given page type can be displayed very differently, with significantly changed layout, in different identities, but with the exact same markup" — one page type, recomposed BY IDENTITY via the ratified region-contract map tokens. A page-type comparison (unit vs home vs proof) is "not at all what I mean". | Owner, 2026-08-13 ~16:4x (supersedes the seat's earlier single-identity verdict) |
@@ -201,6 +202,7 @@ carry their grounds.
 | R11 | **Demo copy is product voice, never internal doctrine.** The pages speak to their visitors about what the system does; they never quote the estate's own governing vocabulary at them. | Seat reading from the editorial-voice doctrine; consistent with the owner's rejection of specimen-sheet framing |
 | R14 | **Fluidity is a pillar, not a feature.** "we shouldn't be incrementally adding fluidity to the design system, it should be the fundamental pillar it is built on." Re-frames W1 from retrofit to foundation: every visual-scale dimension is fluid by construction, and fixedness is a declared, reasoned exception in a named register — the exception set is drawn by principle, each entry carrying its reason and revisit condition. Incremental DELIVERY of the pillar (bounded tranches) stands; what the word rejects is fluidity designed as an added feature whose exception set is drawn by retrofit reach. | Owner, 2026-08-13 evening, direct at the successor seat (Skua binds Leeward, e2b222); captured verbatim at occurrence in seat memory and the napkin drift entry |
 | R15 | **The three identities are a demonstration instrument, not system parts.** "the three identities are not at all parts of the design system, they are three parts of a tool to *demonstrate* the flexibility of the design system" — demonstrating "the extreme ability of the design system to handle very different designs without the need to alter the underlying page structure". Briefs: Oak is set by the origin examples via an orthogonal basis set of preserved aspects ("in setting those constraints we do absolutely affect the design system architecture"); PDS tracks GDS "as closely as we can manage"; EMC² "exists to form a point in the phase space of the design system possibilities *as far away from the other two as possible*" — "turn everything up to 11", including "profoundly altering page order and visual flow without any changes to markup"; "fundamental and *deep* rebranding can be achieved with a few config files". Conditional directive: "if the design system does not support that, then it needs to be changed to support that." Ambient invariants: "Responsive layouts and strict a11y are assumed and required at all times" — never tranche scope, always assumed. Method instruction, standing: questions about identity differences are answered from first principles (WHY the differences exist), never by adjudicating written clauses against each other. Anchoring refinement (same evening, verbatim): "the Oak identity is anchored by Oak design and the PDS identity is anchored by GDS Goverment Digital Services design, and EMC2 is an unanchored fever dream that exists to show the extremes of what the system can, and those extremes are considerable and profound" (sic) — two ANCHORED identities expressing existing systems, one UNANCHORED extremal probe; for the anchored pair, distance from Oak is a consequence of fidelity to their anchors, never the objective; only EMC² maximises distance as its brief. | Owner, 2026-08-13 evening, direct at the seat, answering the rhythm-affordance confirmable from first principles; verbatim in per-user memory (three-identities-are-a-demonstration-instrument) |
+| R16 | **Identity is static; theme is dynamic.** "we need the css to be completely swapped out for each identity. However, *switching* identity will only ever happen in a demo, a real app would have a **single** identity. Real cases will of course still have all four themes, at least." The architectural boundary: a served page carries exactly one identity's CSS, completely swapped, with no identity-switching runtime in the page; theme is the USER-runtime axis — the full selectable theme set ships in every real case. Seat reading (2026-09-05): a multi-tenant deployment that selects one tenant's static sheet server-side per response — the kit's consuming guide §5 — serves each tenant a single identity with no switching runtime, so it sits inside the ruling rather than against it. The in-page identity-switching machinery (the client link swap, `?brand=` addressing, pickers) is DEMO equipment, never system architecture; W2/W3/W4's switchers are built and judged as demonstration instruments under this ruling. | Owner, 2026-08-13 evening, direct at the successor seat (Skua binds Leeward, e2b222); verbatim first carried in per-user memory and the winddown handoff; landed as a rulings row 2026-08-17 (records-truth pass, MCP-613) |
 
 ## Mechanism
 
@@ -225,12 +227,30 @@ the current route pending its owner-specced rebuild."
 | --- | --- | --- |
 | 1. Purge the old showcase | **Landed** `a967f8979` | Nothing. §"What the purge did not remove" is a standing boundary on future work, not an instruction to act |
 | 2. A new, good front page | **Landed** `a967f8979` — `app/page.tsx` is that landing | No workstream builds it. W1's ramp cure re-verifies it at 320px in all three identities; an owner verdict row completes it |
-| 3. The identity + theme switching demo | Partly landed (`a967f8979` narrow-first stage, owner-verified) | W3 controls, W5 masthead |
-| 4. The composition demo | Stub only — the route exists, the demonstration does not | **W2**, the largest remaining build |
+| 3. The identity + theme switching demo | Largely landed — the narrow-first stage `a967f8979` (owner-verified); the PDS masthead cascade cure `d2c4e4e24` (the six declared reds green, suite 70/70, 2026-08-13); fluid display type across all three identities `8b89ad988` | W3's native radio group **landed** 2026-08-18 (`7473d2714`, `components/IdentityRadioGroup.tsx`); W5 tail items only (see §W5's dated landed note) |
+| 4. The composition demo | **Landed** 2026-08-18 (`05897c076`, composition v2 to the owner's spec of that day: one embedded exhibit of eleven region boxes under a four-extreme parent layout control and a light/dark ground, the same markup re-arranged by CSS alone; the exhibit and its maps live at `/composition/frame`) | W6 true-ups only — §W2 below is the specification it was built to |
 
-So this plan's remaining scope is one new page, the controls and masthead around
-an existing one, the foundations all of them inherit, and the record true-ups
-that ride those changes.
+So this plan's remaining scope (re-trued 2026-09-05) is the W1 remainder
+(rhythm + the slice-B unit conversions; the admission instrument's
+manifest-driven arms land at `tango-identity-pack` T1b), W4, the W5 tail, and
+the record true-ups that ride those changes — the composition page and the
+switching demo's radio group landed on 2026-08-18.
+
+### Landed-state surface (dated — updated as the first act of every landing)
+
+Added 2026-08-17 (records-truth pass, MCP-613) after the review panel found
+this plan reading in the future tense over landed work. A successor grounds
+here first; prose below a row's date may still describe that row's problem in
+the present tense — the row wins.
+
+| Date | What landed | Where |
+| --- | --- | --- |
+| 2026-08-13 | R1 outcomes 1+2: purge + the new landing | `a967f8979` |
+| 2026-08-13/14 | **W1 slice A (fluid display type, tranche 1)** — kit bounds + derived clamp, both counter-identity sheets migrated, nine DTCG leaves, print arm, brand.css §1b + CHANGELOG + DECISIONS edits; **W5's masthead cure** (`d2c4e4e24`, six declared reds green); the tri-state `clear()`; the keyboard-blackout cure — all merged in PR #846 (`c0d49fc04`, tranche commit `8b89ad988`) | main |
+| 2026-08-14 | pr-watch settlement reader (#885 `a73f99f77`); the visual-verification governance set — PDR-138, DDR-011, rule, skill, probe (#887 `d6b0c7eb0`) | main |
+| 2026-08-17 | Records-truth pass (MCP-613): R16 landed as a rulings row; the false brand-admission guard claim struck from the kit contract; A2's mechanism re-cut under R15; sibling-plan governance amendments; `design-system-completion` stripped of authority (conserved inputs); spent nodes retired. Same day, owner rulings AT the seat: a **fourth identity, Tango, commissioned** — all four identities to be brought up to standard as identity PACKS, Tango first (admission via pack manifest; Tango's anchor owner-private); narrow-range ruling = capability + per-identity choice; **this plan governs the showcase surface**. Durable homes: the design-system-integration thread record's 2026-08-17 entry + comms event ec2c307b; the pack programme gets its own plan node at planning | this commit |
+| 2026-08-18 | **A1** the front page doors every demo surface (`6ca3462b5`); **A2** the generated token reference at `/tokens` — live-applied values prove the identity switch (`e0a85e842`) — and the colour matrix at `/tokens/colours` (`3b276f0d6`); **W3's native radio group**, stage dominance, strip controls, EMC² round 2 (`7473d2714`); **W2** composition v2, embedded controls owning the pages, fixed breadcrumbs (`05897c076`) | main |
+| 2026-09-04 | The disclosure's content box dissolved at wide and the reserve sized to both bars (`42494dda5`, PR #40); the specimen-strip focus spec waits for the dissolved wide face (PR #53) | engraph |
 
 **One precondition governs all six.** ADR-213 §3 arms a hard gate on the **first
 component export consumed from `@oaknational/oak-design-react`**: the ADR-147
@@ -437,23 +457,26 @@ first-hand in headless Chromium. Dispositions in the decision log).
    plan earlier claimed, by re-declaring the composed verbs per scope; that
    citation is corrected by this re-cut.
 
-**Rhythm is Oak-base-only in this scope, and that is stated rather than
-discovered.** An earlier draft added a kit-owned `--density-viewport` multiplier
-alongside the brand `--density` knob. Verified first-hand, that reaches the Oak
-base alone: both counter-identities override the *derived* spacing tokens
-directly — EMC² sets `--gap-m: 24px`, `--inset-m: 32px`, `--card-pad: 32px`; PDS
-sets `--density: 0.9` **and** `--gap-s/m/l` and `--inset-s/m/l` in literals — and
-brand CSS wins at equal specificity. The same fact makes `--band-pad`, one of the
-kit's three `clamp()` sites, already inert on two thirds of the showcase. Direct
-override is a ratified affordance, not an oversight ("direct overrides still win …
-so existing brands didn't change behaviour"), so constraining it would need a
-dated DECISIONS amendment. **Under R14 this is a register row, not a scope
-note**: the affordance is the one ratified clause that actively fights the
-pillar, and re-ruling or keeping it is the single owner confirmable riding
-this re-cut's ratification glance (register, final row). Until his word, the
-multiplier lands for the Oak base, the counter-identities keep fixed rhythm,
-and the acceptance below measures which is which rather than letting the
-difference pass unnoticed.
+**The rhythm tranche (slice A2), re-cut under R15 (2026-08-17, records-truth
+pass — superseding this section's earlier Oak-base-only mechanism).** The
+earlier draft here added a kit-owned `--density-viewport` multiplier for the
+Oak base alone and held the counter-identities' fixed rhythm behind an owner
+confirmable. R15 dissolved that confirmable from first principles (register,
+final row; decision log), and the review panel found this prose still
+carrying the superseded shape — the acceptance cell even gated it. The
+re-cut mechanism: **A2 delivers fluid-capable rhythm vocabulary that every
+identity expresses intent through** — the same intent-not-values shape as
+the type bounds — with a declared-fixed register row remaining a legitimate
+per-identity choice. The verified facts stand as the CURRENT state the
+tranche cures, not as its design: both counter-identities today override the
+*derived* spacing tokens with literals (EMC² `--gap-m: 24px`,
+`--inset-m: 32px`, `--card-pad: 32px`; PDS `--density: 0.9` **and**
+`--gap-s/m/l` / `--inset-s/m/l`), which makes `--band-pad` inert on two
+thirds of the showcase and freezes counter-brand rhythm against the
+viewport. A2's dated DECISIONS amendment rides the tranche; its detailed
+mechanism is authored at the tranche's open under pre-execution review, with
+the 2026-08-17 narrow-range ruling (capability + per-identity choice,
+sequenced by the fourth identity's measured needs) as a governing input.
 
 **The fixed-point register (R14).** Fixedness on the visual-scale axis is a
 declared, reasoned exception — never an unnamed residue of retrofit reach.
@@ -475,6 +498,12 @@ the kit" governs where the CSS lives, not where its proof runs. The resize
 cells carry the `@a11y` title tag so `test:a11y` runs them; per-slot coverage
 uses injected probe elements — no page renders every slot.
 
+**Dated note (2026-08-17, records-truth pass):** tranche 1's proof cells
+below are LANDED — `demos/oak-design-showcase/tests/fluid-type.spec.ts`,
+green at the #846 merge (`c0d49fc04`). Still open: the rhythm cell (A2, in
+its re-cut form above), the superseded guard row (see its own note), and
+the owner-held cell.
+
 - `repo-safe` — computed-size cells, all three identities: heading-1..3
   computed `font-size` at 960, 1280, 1440 and 1920px equals today's value
   exactly (saturation from 960px; the estate's own comparison widths
@@ -490,14 +519,30 @@ uses injected probe elements — no page renders every slot.
   no loss at 200% — is carried by the rem-true bounds.
 - `repo-safe` — computed `line-height` at 1920px equals today's value for
   every fluid slot (the minted ratio primitives keep leading byte-identical).
-- `repo-safe` — a rhythm cell naming what moved and what did not: for the Oak
-  base a named rhythm token's computed value differs between 320px and 1920px;
-  for both counter-identities it is unchanged, matching the register above.
+- `repo-safe` — a rhythm cell for A2, in its R15 re-cut form: each identity's
+  rhythm intent is expressed through the fluid-capable vocabulary and a named
+  rhythm token's computed value varies with viewport wherever the identity
+  has not declared a fixed choice; any declared-fixed choice has its register
+  row. (The earlier form of this cell gated the superseded Oak-base-only
+  shape — re-cut 2026-08-17.)
 - `repo-safe` — a print cell: under emulated print media, in a dark-first
-  identity, a fluid slot computes at its maximum (the `html:root` arm wins).
+  identity, a fluid slot computes at its maximum (the plain `:root` arm wins
+  — trued 2026-08-17 to mechanism point 8; the earlier `html:root` wording
+  contradicted the shipped, deliberate form).
 - `repo-safe` — the brand-admission guard is red-first on both fatal arms
   against the extended `failing-example.css` fixture: a unit-bearing bound
   part fails; a sheet declaring both a slot's shorthand and its parts fails.
+  *Re-trued 2026-09-05 (owner ruling 4 of 2026-08-17 read with the
+  `tango-identity-pack` ratification card of the same day, re-stamped
+  2026-08-19 and 2026-09-02): this guard stays THE admission instrument —
+  all-fatal, no warn arm, in `agent-tools/src/validators/` on the
+  `repo-validators:check` chain — and gains manifest-driven arms at that
+  node's T1b (its G1: one instrument, never a second admission regime). What
+  the ruling struck was the false present-tense claim that the guard already
+  existed (`brand.css` §1b and the CHANGELOG, cured in the 2026-08-17 records
+  pass); what it moved was admission's source of truth, to the identity-pack
+  manifest. Slice B keeps its remaining substance — the EMC² px→rem slot
+  conversions under the contract's own "Slots stay in rem" rule.*
 - `repo-safe` — the DTCG consistency validator green with the nine new
   `number` leaves and the `dtcg/README.md` functional-set restatement
   (21 → 24) in the same commit.
@@ -507,6 +552,10 @@ uses injected probe elements — no page renders every slot.
 ---
 
 ### W2 — The composition page, rebuilt from scratch
+
+**Landed 2026-08-18** (`05897c076`, composition v2 to the owner's spec of that
+day). The section below is the specification it was built to; where its prose
+still speaks of the stub, the landed-state surface above wins.
 
 **Serves:** S1, S3, S5. **Ruling:** R6, R7, R4, R11, R12.
 
@@ -590,8 +639,9 @@ this page — per-variant declared reading sequences, a DOM-order admissibility
 rule, a `reading-flow`-inert binding cell — and escalated the resulting tension
 to the owner as a decision he had to make. **It was made up.** Traced: the
 envelope originates in review-fleet findings absorbed into
-`design-system-completion`, which is `status: sketch` with `ratified_by: null`.
-No owner word ever established it. His correction (R13) deletes it:
+`design-system-completion`, which is `status: archived` and was never ratified
+(`ratified_by: null`). No owner word ever established it. His correction (R13)
+deletes it:
 
 > "I don't care about DOM order, why would I … I care that someone can author
 > markup and then control the *appearance* that markup leads to with CSS and I
@@ -869,13 +919,31 @@ W3's switchers. Nobody should go looking for a kit component to drop in.
 
 **Serves:** S1, S3. **Ruling:** R2, R3, R8.
 
+**LANDED (dated note, 2026-08-17): the cure itself shipped inside PR #846** —
+commit `d2c4e4e24`, the cascade cure at the generator: the six declared reds
+went green, suite 70/70, and the README's known-red block was rewritten as a
+cured-record paragraph keeping the discriminator ("any red is new
+information") — a stronger record than the deletion the acceptance below
+asked for, and adjudicated as discharging it. Remaining W5 tail:
+the fidelity-register dispositioned entry (landed with this records pass),
+DDR-009's warrant amendment (landed with this records pass), and the
+owner-held seven-width verdict, still open. The problem statement below is
+retained as the record of what was cured.
+
+**Correction (2026-08-17, records-truth pass):** the paragraph below claimed
+the fleet's F-numbers had "no locatable home in this repo". That was false
+when written — the findings ledger had landed seven hours before this plan's
+ratification at `.agent/reports/design/pr-846-review-fleet/report.md`
+(committed `8b83962a0`; F03 at line 103, F05 at 105, F14 at 108 — F14:
+"the register's completeness claim is false: no entry for the dominant pds
+divergence", which is exactly the register gap the tail item above cures),
+and this plan itself cites that path in §Relationships. The restated
+first-hand problem below remains accurate; only the "no home" negative is
+withdrawn.
+
 **The verified problem, stated from first-hand evidence.** An earlier draft
 carried this workstream on three PR #846 review-fleet finding numbers (F03, F05,
-F14). Those numbers have **no locatable home in this repo** — the only reference
-anywhere is a pointer in the showcase README to "the review-fleet F05/F03 cascade
-defect", which names no finding, and nothing mentions F14 at all. An executing
-agent could not resolve what F14 even asserts. The problem is real; the citation
-was not. Restated from what can be verified here:
+F14). The problem is real; restated from what can be verified here:
 
 1. **A measured contrast failure, six cells wide.** Every PDS-brand specimen
    cell — four explicit themes, identity-default, and the 320px reflow cell —
@@ -888,10 +956,6 @@ was not. Restated from what can be verified here:
 3. **Poor narrow stacking**, from the owner's own screenshot evidence: nav links
    wrapping loosely, search and sign-in left-stacked with dead space, an orphaned
    bookmark button.
-
-If the fleet's findings artefact is later landed under `.agent/reports/design/`,
-the numbers can be cited alongside this description — but nothing here depends on
-them, and the plan does not sanction the node that would produce them.
 
 The instrument used to file this as an ignored `incomplete`, and the cells passed
 falsely; the honesty cure landed first by design, which is why the reds are
@@ -941,14 +1005,23 @@ after it:
    "land the true-up with the change that makes it true" would be a category
    error — the causing change is `a967f8979`, already in.
 
-   **Rides its cause:** DDR-009's warrant amendment (W5); ADR-213 §3's
-   first-named-binding amendment (W2, recording the fork the tight scope already
-   exercised); the kit DECISIONS narrowing of the no-CSS-reordering invariant to
-   the `--flow-*` levers (W2, carrying R13's quote); DDR-004's dated pointer to
-   DDR-003's sixth control value (W4); and the brand-contract edits `brand.css`
-   §1b and CHANGELOG take with W1. DDR-010 needs no edit, and the reason is
+   **Reclassified 2026-08-17 (records-truth pass):** the review panel found
+   four of the five "rides its cause" entries were ALREADY OWED — their
+   causes had landed and the rides-its-cause mechanism had a measured zero
+   per cent fire rate across its first opportunities. Dispositions: the kit
+   DECISIONS narrowing of the no-CSS-reordering invariant LANDED 2026-08-13
+   (`DECISIONS.md`, dated); the `brand.css` §1b + CHANGELOG contract edits
+   LANDED with W1 tranche 1 (their false guard clause cured 2026-08-17);
+   DDR-009's warrant amendment and DDR-004's pointer to DDR-003's sixth
+   control value LANDED with this records pass. ADR-213 §3's
+   first-named-binding amendment LANDED 2026-09-05 with this pass: the
+   composition demonstration landed on 2026-08-18 (`05897c076`), and its
+   region boxes at `/composition/frame` are the region contract's first
+   shipped binding (the hub shell binds at its convergence lane). DDR-010 needs no edit, and the reason is
    recorded so nobody runs a fidelity comparison against a page that has no
-   reference.
+   reference. Standing correction to the mechanism itself: record true-ups
+   land AT the landing boundary as part of the same change's checklist — a
+   "first touch later" deferral is the shape that measured at zero.
 2. **Kit flow-columns narrow seam.** The gap is real but an earlier draft
    mis-located it. Verified first-hand: the per-brand collapse patches **are** in
    this worktree's tracked kit source (`studio-source/whitelabel/pds/brand-full.css`
@@ -972,11 +1045,13 @@ after it:
    here: the floor on the *property values* (`transition-duration`,
    `animation-duration`, `animation-iteration-count`) under
    `:root:not([data-motion='full'])` plus a matching `[data-motion='reduced']`
-   arm; `brand.css`'s override comment re-pointed from the kit-internal names to
-   the `-full` names; and the brand-admission guard rejecting the four
-   kit-internal motion names in brand sheets. It lands here because W4 puts a
-   motion control in front of visitors, and the floor is what makes that control
-   honest.
+   arm; and `brand.css`'s override comment re-pointed from the kit-internal
+   names to the `-full` names. (The third item — a brand-admission guard arm
+   rejecting the four kit-internal motion names — is one of the
+   manifest-driven arms the admission instrument gains at
+   `tango-identity-pack` T1b, under the 2026-08-17 ruling that admission's
+   source of truth is the identity-pack manifest; it lands there, not here.) It lands here because W4 puts a motion control
+   in front of visitors, and the floor is what makes that control honest.
 
 **Acceptance.**
 
@@ -1022,6 +1097,18 @@ rejected on 2026-08-05. **That row is the baseline this plan moves.** Naming the
 register here rather than inventing a second record keeps one reader and one
 surface: the register's reader is the design-review instrument, whose blocking
 authority is earned against the owner's actual verdicts.
+
+**Instrument ownership (2026-08-17, owner ruling at the records-truth
+pass):** the design-review rubric (`docs/design/design-review/rubric.md`,
+now v0.1), the wow-verdict register, and its validator are RE-HOMED under
+this node — their minting sketch (`design-system-completion` W0.7) was
+stripped of authority the same day. Two honest facts a user of the path
+must know: the register has taken NO row since its founding FAIL (the
+owner's verdicts to date were given in-session and never recorded — the
+next verdict on a rendered page should become a row in the same session,
+or the path is theatre), and a checkpoint-class row requires three
+instrument legs (two on opus) per the rubric — a real cost this plan now
+states rather than hides.
 
 ## Acceptance criteria for this plan as a whole
 
@@ -1101,18 +1188,19 @@ condition that returns it to scope.
 
 ## Relationships
 
-- **`design-system-completion`** — **`status: sketch`, `ratified_by: null`.
-  Its prose binds nothing here.** That is the plainest and most load-bearing fact
+- **`design-system-completion`** — **archived 2026-08-18 (abandoned
+  sketch, authority stripped 2026-08-17; conserved as a knowledge store in
+  `archive/`). Its prose binds nothing here.** That is the plainest and most load-bearing fact
   in this section, and getting it wrong cost this plan two review rounds: its
   W0.3 charter clauses were treated as governing, and one of them — the
   composition envelope — was a reviewer artefact that contradicted the owner's
   ask. Clauses this plan needs are re-derived from real authorities
   (§Coherence check); the rest are not inherited.
 
-  This plan owns the showcase surface and its sequencing. That node's W-arc is
-  sequenced behind the tight scope. The `depends_on` edge is `beneficial`, not
-  `blocking`: nothing here waits on it. It carries a dated relationship note at
-  its next legal edit window.
+  This plan owns the showcase surface and its sequencing. That node's W-arc
+  is conserved input for the identity-pack programme. The former
+  `beneficial` `depends_on` edge was removed at the archive (2026-08-18):
+  nothing here ever waited on it.
 - **`design-system-as-configured-framework`** (strategic, ratified 2026-08-05,
   this node's `serves` edge) — unchanged by this plan, and more load-bearing on
   it than a `serves` edge usually is. Three of its ratified clauses bind
@@ -1139,7 +1227,8 @@ condition that returns it to scope.
   surface that presents the system" — his words, "a way that a professional
   designer would look at and think 'wow, that looks good'", strengthened to "I
   want to look at each and every demo and think 'wow, that looks *amazing*'".
-- **`identity-switchboard-first-pixels`** (ratified 2026-08-09) — the node that
+- **`identity-switchboard-first-pixels`** (ratified 2026-08-09, now
+  `status: archived` — its build landed and the node is spent) — the node that
   built `/identity-switchboard` and its specimen route. Its **ends-before-means
   steer** (owner recalibration 2026-08-10: the end this lane serves is
   "near-zero-cost exploratory app experiments"; every signal states
@@ -1151,25 +1240,52 @@ condition that returns it to scope.
   a reader must not miss:** that node's `?brand=` query addressing belongs to the
   *specimen* route and stays — W2's "no `?brand=`" ruling is about the
   *composition* route, which owns its whole document and has no frame.
+- **`showcase-information-architecture`** (ratified 2026-08-13, morning card;
+  row added 2026-08-17 — the review panel found the two same-day siblings and
+  this plan carried no cross-references at all) — owns the landing/reference/
+  route-registry IA arc. **This plan governs the showcase surface (owner
+  ruling 2026-08-17)**: that node's A1 (front-page restructure) and A2 (the
+  generated token-reference route, which its text called "unblocked" while
+  this later-ratified plan ruled it out of scope) are re-sequenced to the
+  owner's word — the contradiction is resolved in this plan's favour, and
+  that node carries a matching dated amendment from the same records pass.
+  Both then landed under this plan's governance on 2026-08-18 — A1 as the
+  front page's doors (`6ca3462b5`), A2 as `/tokens` (`e0a85e842`, with
+  `/tokens/colours` `3b276f0d6`).
+- **`oak-identity-recognisability`** (ratified 2026-08-13, morning card; row
+  added 2026-08-17) — owns the origin-referenced measurement basis and the
+  Oak-face re-truing; its S3+ slices unblocked when #846 merged. Its
+  relationship prose wrongly called `design-system-completion` "that ratified
+  plan" — corrected by dated amendment in the same records pass; the
+  workstreams it routes there re-home when the pack-programme node is
+  authored. Its identity-parametric instruments generalise to the fourth
+  identity (Tango, commissioned 2026-08-17).
 - **`public-digital-service-identity`** — the PDS naming replacement whose
   landing arc supplies the identity vocabulary W2 and W5 use. Its demo and kit
-  execution is in flight; the estate-prose tail continues independently. No edge
-  is needed: W2 and W5 consume the renamed surface as it stands.
+  execution LANDED (the rename enforced by the identity-naming validator); now
+  `status: archived`, retired as a spent node 2026-08-17 — records-tail residue
+  only.
 - **`design-lane-review-debt-closure`** (ratified 2026-08-07) — owns the DDR
   corpus's cure and its edge-schema validator. W6's DDR true-ups write into the
-  corpus that node established; they do not re-open its schema work.
-- **`pr-846-review-fleet`** (status `ratified` — owner card "Sanction W1 now",
-  2026-08-12, coordination commit `3b1e5fcce`; its owner gate discharged by
+  corpus that node established; they do not re-open its schema work. State
+  trued 2026-08-17: slices 1/3/4 discharged (#814/#787/#806/#737); slice 2
+  (the `ddr-graph` validator, a day-1 owner ruling) remains specified and
+  unbuilt — that node carries the open question.
+- **`pr-846-review-fleet`** (ratified 2026-08-12 — owner card "Sanction W1 now",
+  coordination commit `3b1e5fcce`; its owner gate discharged by
   removal; W1 EXECUTED 2026-08-13 as MCP-591, its findings ledger at
   `.agent/reports/design/pr-846-review-fleet/report.md` and today's cure
-  bundles drawn from it) — a multi-lens review fleet over PR #846. The
+  bundles drawn from it) — a multi-lens review fleet over PR #846, now
+  `status: archived`, RETIRED as a spent node 2026-08-17: its object (#846)
+  merged 2026-08-14, its W1 executed and its findings ledger absorbed into the
+  merged cure bundles, and no W2+ was sequenced. The
   readiness-vs-outcomes framing note stands as history: **R1 corrected the
   FINISH LINE** from PR readiness to the owner's four outcomes, and this plan
-  defines the work while that node's executed W1 reviews one PR within it; any
-  W2+ of that node remains the owner's to sequence. (This row was corrected
-  2026-08-13 after first shipping stale: this branch's COPY of that node
-  predates its ratification commit — a worked instance of the authority test
-  needing source FRESHNESS alongside identity and appropriateness.)
+  defines the work while that node's executed W1 reviewed one PR within it.
+  (This row was corrected 2026-08-13 after first shipping stale: this branch's
+  COPY of that node predated its ratification commit — a worked instance of the
+  authority test needing source FRESHNESS alongside identity and
+  appropriateness.)
 - **`docs/governance/one-html-many-css-compositions.md`** — the owner's own
   paper, and the method W2 implements. Cited, never restated: the region contract
   W2 exercises is that paper's conclusion already absorbed into the kit's shipped
@@ -1274,8 +1390,9 @@ attempt it.
 
 ### The Demos Charter (completion plan §W0.3) — re-derived, not inherited
 
-The charter lives in a plan that is `status: sketch` with `ratified_by: null`.
-**Its prose binds nothing here.** An earlier draft treated three of its clauses as
+The charter lives in a plan that is `status: archived` and was never ratified
+(`ratified_by: null`). **Its prose binds nothing here.** An earlier draft treated
+three of its clauses as
 governing and built acceptance around them; one of those — the composition
 envelope — turned out to be a reviewer artefact that contradicted the owner's ask
 outright. So each clause is re-derived from a real authority or dropped:
@@ -1294,7 +1411,7 @@ outright. So each clause is re-derived from a real authority or dropped:
 | The completion plan's W2–W7 mechanism | Outside the tight scope and sequenced behind it; restating it here would create a second definition of work this plan does not own |
 | Landing the Demos Charter ADR itself | It is W0.3's deliverable, not this plan's. Honouring its live clauses costs nothing; adopting its authorship would take work this plan's ruling did not ask for |
 | The strategic node's goal architecture | This node delivers its demo properties; a delivery node restating a strategic node's kernel is drift, not coherence |
-| Any amendment to `pr-846-review-fleet` | That node is ratified with its W1 executed (MCP-591); sequencing any W2+ of it is the owner's, surfaced in §Relationships rather than taken here |
+| Any amendment to `pr-846-review-fleet` | That node is archived, retired as spent with its W1 executed (MCP-591); its terminal state is recorded in §Relationships rather than amended here |
 | A ruling on KNOWN-ISSUES #14's open alias-breadth question | No workstream here renders a themed subtree, so the question never arises for this plan's surfaces |
 | ADR-213's studio-source-vs-product-gate tension | The `studio-source/whitelabel/*` brand sheets are consumed through their served copies, which ADR-213 §1 would ordinarily move out from under the gate exemption. Pre-existing, unchanged by W1, and a structural question for the design-system expert rather than a showcase-experience decision |
 | The eleven type classes that compose from primitives directly | `.oak-heading-light-1…7`, `.oak-body-1-bold…3-bold`, `.oak-code-2-bold` keep fixed sizes after W1. Folding them in means minting a `-light` weight variant of every heading slot, doubling the decomposition's surface. Named in W1 so the owner can price it rather than discover it |
@@ -1427,15 +1544,13 @@ at its level against the strategy's taxonomy.
 | Fluid slots carry a `rem` term | Seat verdict — WCAG 2.2 SC 1.4.4; a `vw`-only clamp is immune to zoom |
 | W1 decomposes `--type-heading-*` rather than clamping `--font-size-*` | Seat verdict, 2026-08-13 — verified in the brand sheets that both counter-identities re-point the whole slot with literal sizes, so clamping the primitives would cure the Oak base alone |
 | The decomposition ships as a compatible MINOR under `brand.css`'s own deprecation path | The contract's stability clause governs (`brand.css` §1b — [owner-ratified doc]); the earlier MINOR-or-MAJOR owner escalation was withdrawn as manufactured ceremony (§Questions that turned out not to be his, row 2) |
-| The brand-admission guard enforces `rem`-ness; the whole-slot arm warns | Seat verdict — the rem clause is already in the contract, so the guard enforces rather than revokes. The false "motion guard" precedent is withdrawn: no brand-admission validator exists to copy |
 | EMC²'s px body slots are corrected inside W1 | Reversed at review, 2026-08-13 — an earlier draft routed this out as a separate finding. The kit contract already rules it ("Slots stay in rem"), and W1's guard is the instrument, so it belongs here |
-| Rhythm fluidity is Oak-base-only in this scope | Seat verdict — both counter-identities override the derived spacing tokens with literals, and constraining that would contradict a ratified affordance. Stated with a cell that measures it rather than left to surprise |
 | W1's proof cells run in the showcase's Playwright suite | Seat verdict — the kit workspace runs happy-dom with no Playwright dependency and cannot evaluate viewport-dependent CSS. The cure lives in the kit; the proof runs where a browser is |
 | `--density-viewport` as a separate kit-owned multiplier | Seat verdict — `--density` is brand surface; a brand's fixed value would defeat fluidity written into it |
 | Footer display-settings band follows the hub's shape | Seat verdict — an existing verified precedent in the estate beats a second invention |
 | Audience model and R10 are owner confirmations, not seat facts | Seat verdict per never-invent-identities and the owner-facts doctrine |
 | W4's theme model is DDR-003's, not the OS preference | Coherence check, 2026-08-13 — the plan's first draft defaulted the control to the OS; DDR-003's 2026-08-11 owner-ruled amendment makes the identity default the no-choice state, and the plan was corrected to it |
-| DDR-009 takes a four-part warrant amendment | Coherence check, 2026-08-13 — its first authority source describes a wide-first kit (the shape R4 abolishes) and two of its seven cells are warranted by the reproduction lane the tight scope removes. The set of widths is unchanged |
+| DDR-009 takes a three-part warrant amendment (an earlier form of this row said "four-part"; the body specifies three — corrected 2026-08-17, and the amendment LANDED with the records pass) | Coherence check, 2026-08-13 — its first authority source describes a wide-first kit (the shape R4 abolishes) and two of its seven cells are warranted by the reproduction lane the tight scope removes. The set of widths is unchanged |
 | ADR-213 §3 takes a first-named-binding amendment with W2 | Coherence check, 2026-08-13 — the clause says the region contract "binds no shipped surface" and names the hub shell as its first binding; W2 makes the composition demo that binding, and the clause pre-authorises the fork |
 | DDR-004 takes a dated pointer; DDR-003's spent hedge is struck | Coherence check, 2026-08-13 — W4's control offers six values against a DDR naming five (a superset, so conformant, but not provably so until DDR-004 points at DDR-003's amendment) |
 | DDR-010 takes no edit | Coherence check, 2026-08-13 — it governs comparison against a reference, and the new pages have none |

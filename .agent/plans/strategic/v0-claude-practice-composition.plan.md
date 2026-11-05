@@ -3,10 +3,10 @@ id: v0-claude-practice-composition
 node_type: strategic
 name: "v0–Claude Practice composition"
 overview: "Determine whether v0 and Claude Code can compose into a coherent, evidence-backed Practice team without weakening canonical Practice guarantees or duplicating authority."
-status: sketch
-ratified_by: null
-ratified_date: null
-ratified_where: null
+status: ratified
+ratified_by: Jim Cresswell (owner)
+ratified_date: 2026-09-08
+ratified_where: "PR #85 (2026-09-08), whose body quotes the owner's card answer verbatim: 'Ratify all six'"
 serves: FRAME-1
 impact_areas:
   - practice-and-estate
@@ -16,7 +16,7 @@ depends_on:
     kind: beneficial
 owner_gates: []
 tickets: []
-last_updated: 2026-08-29
+last_updated: 2026-09-08
 ---
 
 # v0–Claude Practice composition

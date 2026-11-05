@@ -191,7 +191,7 @@ citing its owner ruling (2026-07-17):
    out-of-process suite, distinct from the root Playwright suites).
 
 Acceptance: proof `non-code` (text present, rulings cited); prettier +
-markdownlint green. Validation: `pnpm check:ci` docs gates.
+markdownlint green. Validation: `pnpm check:docs` docs gates.
 
 ### C5 — The test-purity validator + ratchet (`qw-c5-test-purity-validator`)
 

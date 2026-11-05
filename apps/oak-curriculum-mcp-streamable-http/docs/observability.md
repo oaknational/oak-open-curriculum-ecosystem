@@ -242,8 +242,14 @@ Production Sentry stack traces are symbolicated via source-map upload, and
 every production build registers a Sentry release + commit + deploy event,
 all inside the Vercel Build Command.
 
-**Mechanism (§L-8 onwards, 2026-04-21):** the workspace's default `build`
-script runs the esbuild composition root
+**Mechanism (§L-8 onwards, 2026-04-21; gated since MCP-475):** Vercel
+invokes the workspace's `build` script directly (no `buildCommand`, so the
+Turbo graph is not entered on this path). The script first runs the
+never-cached `deploy-config-gate` step, which rehearses the server's own
+configuration resolution and fails the build before any release side
+effect when the deploy environment would not boot (on a root Turbo build
+the gate is also a task the `build` task depends on, so a cached replay
+still runs it), and then runs the esbuild composition root
 [`esbuild.config.ts`](../esbuild.config.ts), which conditionally injects
 [`@sentry/esbuild-plugin`](https://docs.sentry.io/platforms/javascript/sourcemaps/uploading/esbuild/)
 into the esbuild build options. The plugin performs every step previously

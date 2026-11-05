@@ -1,4 +1,4 @@
-import { execSync, spawnSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { existsSync, lstatSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { basename, join } from 'node:path';
 import type { SessionEntry, SubagentSummary } from './session-tools.js';
@@ -6,6 +6,7 @@ import { shouldSkipCompactAgent } from './session-tools.js';
 import { escapedRepoPath, isSessionId } from './runtime-paths.js';
 import { isHistoryRow, isMetaRow, readJsonLines } from './json-parsing.js';
 import { writeErrorLine } from './terminal-output.js';
+import { resolveTrustedGit } from './trusted-git.js';
 export { listAgentShortIds, resolveAgentJsonlPath } from './runtime-agent-index.js';
 export { readAgentEvents } from './runtime-agent-events.js';
 /** File-system contract used by runtime helpers for dependency injection in tests. */
@@ -37,7 +38,11 @@ const maxDirectoryFilesRead = 200;
 const maxFileBytesRead = 256 * 1024;
 export function repoRoot(): string {
   try {
-    return execSync('git rev-parse --show-toplevel', { encoding: 'utf8' }).trim();
+    // Absolute-path git via the trusted resolver (S4036): a by-name spawn
+    // resolves through PATH, which a writable entry can shadow.
+    return execFileSync(resolveTrustedGit(), ['rev-parse', '--show-toplevel'], {
+      encoding: 'utf8',
+    }).trim();
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
     throw new Error(`Unable to determine repository root from '${process.cwd()}': ${message}`, {
@@ -102,7 +107,7 @@ export function subagentSummaries(sessionDir: string): SubagentSummary[] {
   }
   const result: SubagentSummary[] = [];
   const metaFiles = readdirSync(subagentsDir).filter((name) => name.endsWith('.meta.json'));
-  for (const metaFile of metaFiles.sort((a, b) => a.localeCompare(b))) {
+  for (const metaFile of metaFiles.toSorted((a, b) => a.localeCompare(b))) {
     const agentId = metaFile.replace('.meta.json', '');
     if (shouldSkipCompactAgent(agentId)) {
       continue;
@@ -119,6 +124,9 @@ export function subagentSummaries(sessionDir: string): SubagentSummary[] {
   return result;
 }
 export function targetNeedles(root: string, targetFile: string): string[] {
+  // Same separator translation as `core/git-relative-path.ts`'s `toGitPath`
+  // (host form → git's forward-slash form), inlined here because the inputs
+  // are already strings of mixed provenance, not host-relative paths.
   const normalized = targetFile.replaceAll('\\', '/');
   const values = new Set<string>([normalized, basename(normalized)]);
   const prefix = `${root.replaceAll('\\', '/')}/`;
@@ -127,8 +135,19 @@ export function targetNeedles(root: string, targetFile: string): string[] {
   }
   return [...values];
 }
+/**
+ * Run a git subcommand in `repoPath` and return its trimmed stdout, or the
+ * empty string when git does not answer: a non-zero exit, or no trusted git
+ * binary at all (the same answer the by-name spawn gave for a missing git).
+ */
 export function runGit(repoPath: string, args: string[]): string {
-  const result = spawnSync('git', ['-C', repoPath, ...args], {
+  let git: string;
+  try {
+    git = resolveTrustedGit();
+  } catch {
+    return '';
+  }
+  const result = spawnSync(git, ['-C', repoPath, ...args], {
     encoding: 'utf8',
     stdio: ['ignore', 'pipe', 'ignore'],
   });

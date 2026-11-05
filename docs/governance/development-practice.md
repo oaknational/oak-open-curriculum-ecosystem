@@ -159,8 +159,12 @@ CodeQL alerts headed for evidence-bearing dismissal were instead fixed at
 source on the owner's one question ("why should I dismiss issues detected by
 CodeQL?"); a ~39M-pair differential then proved one "false positive" regex
 was a real super-linear backtracking vector the dismissal path would have
-preserved. Fix-first is the default disposition; a dismissal needs grounds
-that the instrument's frame — not just its finding — is inapplicable.
+preserved. Since the owner's 2026-09-08 ruling ("We don't dismiss issues,
+we fix them") fix-first is the ONLY disposition — the one-outcome rule in
+[`sonar-disposition-policy.md`](./sonar-disposition-policy.md), whose single
+owner-ruled exception (the MCP server's rate-limiting alerts) is the one
+dismissal that exists; the earlier route, a dismissal on grounds that the
+instrument's frame was inapplicable, is history.
 
 ## Problem-Hiding Patterns
 
@@ -177,6 +181,18 @@ The expanded examples and cures live in
 - **Mockable IO** - All external interactions must be injectable/mockable
 - **No duplication** - NEVER create duplicate interfaces, types, classes, or functions
 - **No unnecessary wrappers** - Use functions directly rather than wrapping them
+- **Pass through where the value is provided elsewhere** - build value
+  provision into our systems, but where a binary, an API or the platform
+  already provides a capability (git, gh, the vendor API), compose it —
+  executor seams, credential injection over the binary, argv pass-through —
+  and build only the layer it lacks (settlement verdicts, identity
+  discipline, typed refusals, structured outcomes). Duplicated capability
+  rots independently of its source and hides which behaviour is ours (owner
+  principle, 2026-08-06: "if the git binary lets us do something, then we
+  need to pass through, rather than duplicate functionality"). A deliberate
+  exception is legitimate only when adjudicated and recorded at the choice it
+  governs; doctrine-carrying pre-checks may layer OVER a binary's own
+  enforcement (better words, earlier refusal), never replace it.
 
 ### Error Handling
 
@@ -403,6 +419,35 @@ the current understanding.
   build steps. Say "codegen time" for SDK generation pipeline
   steps, "runtime build" for app compilation. Never use "build
   time" unqualified.
+- "Connector" and "plugin" are distribution wrappers around the MCP
+  app, defined by the owner (2026-08-11): **the connector is a thin
+  metadata bundle around the MCP app; the plugin is a thin metadata
+  wrapper around the connector that also includes, or can include,
+  skills, workflows and sub-agents.** Approved short glosses for prose:
+  "the connector (the MCP app)" and "the plugin (the MCP app plus
+  skills)". Neither is a Claude Code artefact — never write "Claude
+  Code plugin" for the Oak plugin (a session record once did, and the
+  error propagated into a stocktake and reports before it was caught).
+  Submission and acceptance status are live facts read from the release
+  plan and the vendor directory at time of use, never carried here.
+- A pull request is always referred to by its GitHub number (`#535`), never
+  by a plan-internal ordinal ("PR 1", "PR 2") — the two collide in one
+  sentence and force the reader to hold a private mapping (owner, 2026-07-25:
+  "use the PR numbers from GitHub"). A planned-but-unopened PR gets a short
+  descriptive name until it opens, then switches to its real number
+  everywhere: task boards, comms events, cards, commit messages.
+- Names carry their context explicitly, never as metaphor subtext. The
+  owner rejected "quarantine" for isolating the legacy bulk validation
+  (2026-07-27: "we are improving, fixing, enhancing systems, and I don't
+  know what is implied by quarantine, I want the context explicit, not as
+  subtext"). A metaphor imports a subtext nobody ruled and hides the real
+  context — what is isolated, why, and what ends the state. When naming a
+  ticket, workspace, mechanism or state, write what it is, why it is in
+  that state, and the condition that ends it; the test is whether a reader
+  who missed the ruling could reconstruct the intent from the name alone.
+  The same generator applies to mechanisms: a mechanism carries its
+  context, provenance and revisit condition in its code docs and runtime
+  output ("discoverable, documented, visible", owner, 2026-07-27).
 
 ## Code That Generates Code Is Product Code
 

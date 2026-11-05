@@ -4,6 +4,10 @@ const ACTIVE_CLAIMS_PATH = '.agent/state/collaboration/active-claims.json';
 
 /**
  * Return the operator warning for the intentional active-claims split state.
+ * The claims registry is coordination state (claim open, heartbeat, close),
+ * never part of an authorial bundle: since registry schema 1.4.0 the queue
+ * and its fingerprint live in the machine-local per-intent store, so the
+ * registry has no place in the staged set of a queued commit.
  */
 export function activeClaimsSplitWarning(input: {
   readonly intentFiles: readonly string[];
@@ -15,8 +19,9 @@ export function activeClaimsSplitWarning(input: {
     hasStagedAndUnstagedActiveClaims(input.worktreeShortStatus)
   ) {
     return (
-      `${ACTIVE_CLAIMS_PATH} has an unstaged commit-queue fingerprint after ` +
-      'record-staged; do not re-stage it.'
+      `${ACTIVE_CLAIMS_PATH} is staged with further unstaged changes after ` +
+      'record-staged; the claims registry is coordination state, not part of ' +
+      'this authorial bundle — do not re-stage it.'
     );
   }
 
@@ -32,9 +37,9 @@ export function activeClaimsRestagedReason(files: readonly string[]): string | u
   }
 
   return (
-    'active-claims.json was re-staged after record-staged; the queue ' +
-    'fingerprint changes its own staged payload. Leave the working-tree ' +
-    'fingerprint unstaged and rerun verify-staged.'
+    'active-claims.json was re-staged after record-staged; the claims registry ' +
+    'is coordination state written by claim open, heartbeat and close, never ' +
+    'part of the authorial bundle. Unstage it and rerun verify-staged.'
   );
 }
 

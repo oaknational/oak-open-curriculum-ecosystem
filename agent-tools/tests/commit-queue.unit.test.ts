@@ -43,6 +43,7 @@ function intent(overrides: Partial<CommitIntent> = {}): CommitIntent {
     updated_at: queuedAt,
     expires_at: expiresAt,
     phase: 'queued',
+    queued_seq: 0,
     ...overrides,
   };
 }
@@ -189,7 +190,7 @@ describe('verifyStagedBundle', () => {
     });
   });
 
-  it('warns when active-claims keeps the fingerprint as an unstaged split', () => {
+  it('warns when active-claims is staged with further unstaged changes after record-staged', () => {
     const stagedNameStatus = 'M\t.agent/state/collaboration/active-claims.json\n';
     const stagedPatch =
       'diff --git a/.agent/state/collaboration/active-claims.json ' +
@@ -215,8 +216,9 @@ describe('verifyStagedBundle', () => {
       ok: true,
       fingerprint: stagedBundleFingerprint,
       warning:
-        '.agent/state/collaboration/active-claims.json has an unstaged ' +
-        'commit-queue fingerprint after record-staged; do not re-stage it.',
+        '.agent/state/collaboration/active-claims.json is staged with further unstaged ' +
+        'changes after record-staged; the claims registry is coordination state, not part of ' +
+        'this authorial bundle — do not re-stage it.',
     });
   });
 
@@ -246,9 +248,9 @@ describe('verifyStagedBundle', () => {
     expect(result).toStrictEqual({
       ok: false,
       reason:
-        'active-claims.json was re-staged after record-staged; the queue ' +
-        'fingerprint changes its own staged payload. Leave the working-tree ' +
-        'fingerprint unstaged and rerun verify-staged.',
+        'active-claims.json was re-staged after record-staged; the claims registry ' +
+        'is coordination state written by claim open, heartbeat and close, never ' +
+        'part of the authorial bundle. Unstage it and rerun verify-staged.',
     });
   });
 });
@@ -256,7 +258,7 @@ describe('verifyStagedBundle', () => {
 describe('guardStageFiles', () => {
   it('accepts requested files covered by a fresh owned intent and git claim', () => {
     const registry: CommitQueueRegistry = {
-      schema_version: '1.3.0',
+      schema_version: '1.4.0',
       claims: [gitClaim()],
       commit_queue: [
         intent({
@@ -281,7 +283,7 @@ describe('guardStageFiles', () => {
 
   it('rejects staging before the owner has enqueued a matching intent', () => {
     const registry: CommitQueueRegistry = {
-      schema_version: '1.3.0',
+      schema_version: '1.4.0',
       claims: [gitClaim()],
       commit_queue: [],
     };
@@ -313,7 +315,7 @@ describe('guardStageFiles', () => {
       id: agentId.id,
     };
     const registry: CommitQueueRegistry = {
-      schema_version: '1.3.0',
+      schema_version: '1.4.0',
       claims: [gitClaim({ agent_id: driftedTuple })],
       commit_queue: [intent({ agent_id: driftedTuple, phase: 'staging' })],
     };
@@ -334,7 +336,7 @@ describe('guardStageFiles', () => {
       id: uuidV5Schema.parse('0a105546-2c71-5107-ae67-e04a133bd2ba'),
     };
     const registry: CommitQueueRegistry = {
-      schema_version: '1.3.0',
+      schema_version: '1.4.0',
       claims: [gitClaim()],
       commit_queue: [intent({ agent_id: prefixCollider })],
     };
@@ -365,7 +367,7 @@ describe('guardStageFiles', () => {
       session_id_prefix: agentId.session_id_prefix,
     };
     const registry: CommitQueueRegistry = {
-      schema_version: '1.3.0',
+      schema_version: '1.4.0',
       claims: [gitClaim({ agent_id: legacyClaimIdentity })],
       commit_queue: [intent()],
     };
@@ -393,7 +395,7 @@ describe('guardStageFiles', () => {
       id: uuidV5Schema.parse('0a105546-2c71-5107-ae67-e04a133bd2ba'),
     };
     const registry: CommitQueueRegistry = {
-      schema_version: '1.3.0',
+      schema_version: '1.4.0',
       claims: [gitClaim({ agent_id: prefixCollider })],
       commit_queue: [intent()],
     };
@@ -417,7 +419,7 @@ describe('guardStageFiles', () => {
 
   it('rejects an intent whose claim is not a git index/head claim', () => {
     const registry: CommitQueueRegistry = {
-      schema_version: '1.3.0',
+      schema_version: '1.4.0',
       claims: [gitClaim({ areas: [{ kind: 'files', patterns: ['agent-tools/src/**'] }] })],
       commit_queue: [intent()],
     };
@@ -443,7 +445,7 @@ describe('guardStageFiles', () => {
       files: ['agent-tools/tests/commit-queue.unit.test.ts'],
     });
     const registry: CommitQueueRegistry = {
-      schema_version: '1.3.0',
+      schema_version: '1.4.0',
       claims: [gitClaim({ claim_id: selected.claim_id })],
       commit_queue: [intent({ phase: 'pre_commit' }), selected],
     };
@@ -463,21 +465,25 @@ describe('guardStageFiles', () => {
 });
 
 describe('completeCommitIntent', () => {
-  it('removes the completed queue entry and clears the owning claim pointer', () => {
+  it('removes the completed queue entry and leaves claim rows untouched', () => {
+    // The claim carries a legacy intent_to_commit pointer (written by a
+    // pre-cure enqueue): preserved content owned by no live writer, which a
+    // complete must not edit — queue operations no longer touch claim rows.
+    const claims = [
+      {
+        claim_id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
+        agent_id: agentId,
+        thread: 'agentic-engineering-enhancements',
+        areas: [{ kind: 'files', patterns: ['agent-tools/src/commit-queue/index.ts'] }],
+        claimed_at: queuedAt,
+        intent: 'Implement the queue helper.',
+        intent_to_commit: '11111111-1111-4111-8111-111111111111',
+      },
+    ];
     const registry: CommitQueueRegistry = {
-      schema_version: '1.3.0',
+      schema_version: '1.4.0',
       commit_queue: [intent()],
-      claims: [
-        {
-          claim_id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
-          agent_id: agentId,
-          thread: 'agentic-engineering-enhancements',
-          areas: [{ kind: 'files', patterns: ['agent-tools/src/commit-queue/index.ts'] }],
-          claimed_at: queuedAt,
-          intent: 'Implement the queue helper.',
-          intent_to_commit: '11111111-1111-4111-8111-111111111111',
-        },
-      ],
+      claims,
     };
 
     expect(
@@ -486,37 +492,25 @@ describe('completeCommitIntent', () => {
         intentId: '11111111-1111-4111-8111-111111111111',
       }),
     ).toStrictEqual({
-      schema_version: '1.3.0',
+      schema_version: '1.4.0',
       commit_queue: [],
-      claims: [
-        {
-          claim_id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
-          agent_id: agentId,
-          thread: 'agentic-engineering-enhancements',
-          areas: [{ kind: 'files', patterns: ['agent-tools/src/commit-queue/index.ts'] }],
-          claimed_at: queuedAt,
-          intent: 'Implement the queue helper.',
-        },
-      ],
+      claims,
     });
   });
 });
 
 describe('formatCommitQueueStatus', () => {
-  it('classifies active, expired, and abandoned queue entries', () => {
+  it('classifies queue entries as active or abandoned by phase alone', () => {
+    // The store reads a TTL-expired file as absent, so the status view never
+    // meets one; the report carries no expired count and no expired status.
     const registry: CommitQueueRegistry = {
-      schema_version: '1.3.0',
+      schema_version: '1.4.0',
       claims: [],
       commit_queue: [
         intent({
           intent_id: '11111111-1111-4111-8111-111111111111',
           phase: 'queued',
           expires_at: '2026-04-27T07:35:00Z',
-        }),
-        intent({
-          intent_id: '22222222-2222-4222-8222-222222222222',
-          phase: 'pre_commit',
-          expires_at: '2026-04-27T07:00:00Z',
         }),
         intent({
           intent_id: '33333333-3333-4333-8333-333333333333',
@@ -526,22 +520,22 @@ describe('formatCommitQueueStatus', () => {
       ],
     };
 
-    expect(formatCommitQueueStatus(registry, now)).toMatchObject({
-      total: 3,
+    const report = formatCommitQueueStatus(registry, now);
+    expect(report).toMatchObject({
+      total: 2,
       active: 1,
-      expired: 1,
       abandoned: 1,
       entries: [
         { intent_id: '11111111-1111-4111-8111-111111111111', queue_status: 'active' },
-        { intent_id: '22222222-2222-4222-8222-222222222222', queue_status: 'expired' },
         { intent_id: '33333333-3333-4333-8333-333333333333', queue_status: 'abandoned' },
       ],
     });
+    expect(report).not.toHaveProperty('expired');
   });
 
   it('formats commit-queue status as JSON text', () => {
     const registry: CommitQueueRegistry = {
-      schema_version: '1.3.0',
+      schema_version: '1.4.0',
       claims: [],
       commit_queue: [intent()],
     };
@@ -549,7 +543,6 @@ describe('formatCommitQueueStatus', () => {
     expect(JSON.parse(formatCommitQueueStatusText(registry, now))).toMatchObject({
       total: 1,
       active: 1,
-      expired: 0,
       abandoned: 0,
       entries: [{ intent_id: '11111111-1111-4111-8111-111111111111' }],
     });
@@ -558,7 +551,7 @@ describe('formatCommitQueueStatus', () => {
 
 describe('commit-queue read APIs', () => {
   const registry: CommitQueueRegistry = {
-    schema_version: '1.3.0',
+    schema_version: '1.4.0',
     claims: [],
     commit_queue: [
       intent({
@@ -580,7 +573,6 @@ describe('commit-queue read APIs', () => {
           ...agentId,
           agent_name: 'Prismatic Waxing Anchor',
         },
-        expires_at: '2026-04-27T07:00:00Z',
       }),
     ],
   };
@@ -607,14 +599,14 @@ describe('commit-queue read APIs', () => {
       JSON.parse(
         formatCommitQueueListText(registry, now, {
           agentName: 'Prismatic Waxing A',
-          queueStatus: 'expired',
+          queueStatus: 'active',
         }),
       ),
     ).toMatchObject([
       {
         intent_id: '44444444-4444-4444-8444-444444444444',
         agent_id: { agent_name: 'Prismatic Waxing Anchor' },
-        queue_status: 'expired',
+        queue_status: 'active',
       },
     ]);
   });
@@ -636,7 +628,7 @@ describe('commit-queue read APIs', () => {
 
   it('rejects invalid expiry timestamps instead of presenting them as active', () => {
     const invalidRegistry: CommitQueueRegistry = {
-      schema_version: '1.3.0',
+      schema_version: '1.4.0',
       claims: [],
       commit_queue: [intent({ expires_at: 'not-a-date' })],
     };
@@ -648,7 +640,7 @@ describe('commit-queue read APIs', () => {
 
   it('rejects calendar-overflow expiry timestamps instead of normalising them', () => {
     const invalidRegistry: CommitQueueRegistry = {
-      schema_version: '1.3.0',
+      schema_version: '1.4.0',
       claims: [],
       commit_queue: [intent({ expires_at: '2026-02-31T07:35:00Z' })],
     };

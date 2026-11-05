@@ -8,6 +8,7 @@ import {
   typeSafeSet,
   typeSafeHas,
   typeSafeHasOwn,
+  typeSafeIncludes,
 } from './index.js';
 
 const sample: Readonly<{ a: 1; b: 'two'; c: true }> = { a: 1, b: 'two', c: true };
@@ -101,5 +102,28 @@ describe('typeSafeHasOwn', () => {
 
   it('returns false for inherited properties', () => {
     expect(typeSafeHasOwn(sample, 'toString')).toBe(false);
+  });
+});
+
+describe('typeSafeIncludes', () => {
+  const modes = ['dev', 'observe', 'observe-noauth'] as const;
+
+  it('is true for a member of the tuple', () => {
+    expect(typeSafeIncludes(modes, 'observe')).toBe(true);
+  });
+
+  it('is false for a string outside the tuple', () => {
+    expect(typeSafeIncludes(modes, 'production')).toBe(false);
+  });
+
+  it('is false for a value of another type', () => {
+    expect(typeSafeIncludes(modes, 0)).toBe(false);
+    expect(typeSafeIncludes(modes, undefined)).toBe(false);
+  });
+
+  it('narrows an unknown input so the member is usable as the tuple type', () => {
+    const input: unknown = 'dev';
+    const narrowed = typeSafeIncludes(modes, input) ? modes.indexOf(input) : -1;
+    expect(narrowed).toBe(0);
   });
 });

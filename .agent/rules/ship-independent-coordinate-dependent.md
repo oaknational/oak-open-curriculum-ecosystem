@@ -1,3 +1,9 @@
+---
+classification: situational
+description: "Bundling multiple work items into one commit, queue intent, or push window: ship the independently shippable fixes first — ask whether the bundle would defer an independent item's impact artefact (origin commit, addressed review comment, CI run, removed blocker); if yes, split, unless the owner asked for one combined push. Dependence test: same-line or same-array edits are coordination-dependent even when intents differ. Work has zero value until merged to main. Failure shape: trivial verified fixes held behind a substantive coordination bundle while review comments sat unaddressed (PR #115)."
+trigger: ceremony:commit
+---
+
 # Ship Independent, Coordinate Dependent
 
 Operationalises

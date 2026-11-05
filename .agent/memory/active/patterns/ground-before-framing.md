@@ -3,6 +3,7 @@ related_pdr: PDR-013
 name: "Ground Before Framing"
 polarity: pattern
 category: process
+layer: general
 status: proven
 discovered: 2026-04-17
 proven_in: "Sentry observability maximisation pivot — `wrapMcpServerWithSentry` was already wired at `core-endpoints.ts:98` but claimed as missing in the first pivot summary because scope was inferred from SDK exports rather than read from the composition root"
@@ -94,6 +95,15 @@ lesson: when writing plan prose about compiler-enforced gates,
 ground the claim in the actual type behaviour (e.g. by asking "what
 concrete change would fail this gate?") before asserting what the
 compiler will catch.
+
+**2026-09-03 — the merge-bot config root.** A resolution designed to read the bot's
+per-checkout config at the clone's primary checkout was traced through the module's callers
+but never the composition root: the topic dispatcher passed the invoking repository's root
+explicitly and the CLI forwarded it as the config root, so the new resolution never ran.
+Unit tests, type-check and lint were green; the first bot push from a worktree failed with
+ENOENT at the worktree path. The cure named two roots (where the resolution starts; the
+resolved primary config root it lands on). The composition root is read before a resolution
+design is declared complete; the end-to-end run is the proof the unit seams cannot give.
 
 ## When to Apply
 

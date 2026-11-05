@@ -3,6 +3,7 @@ name: Frozen Text Acts With False Authority
 polarity: anti-pattern
 use_this_when: "A frozen artefact — a captured copy, an inherited record or memory, a succession snapshot, an external wrapper's framing — is about to ACT on a live surface: be committed over it, steer a seat's identity, gate a lane, or be read as overruling ratified direction"
 category: agent
+layer: general
 status: stable
 discovered: 2026-07-20
 proven_in: >-

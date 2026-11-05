@@ -124,7 +124,7 @@ export async function generateZodSchemas(
     '  schemas: CurriculumSchemaCollection,',
     '  options?: { readonly rename?: (original: string) => string },',
     '): CurriculumSchemaCollection {',
-    '  const rename = options?.rename ?? ((value: string) => value.replaceAll(/[^A-Za-z0-9_]/g, "_"));',
+    String.raw`  const rename = options?.rename ?? ((value: string) => value.replaceAll(/\W/g, "_"));`,
     '  const result: Record<string, z.ZodType> = {};',
     '  for (const [key, value] of Object.entries(schemas)) {',
     '    const sanitized = rename(key);',
@@ -211,7 +211,7 @@ export async function generateZodSchemas(
     const body = substring.replace('export const schemas = ', '').replace(';', '');
     return [
       'export type CurriculumSchemaCollection = Record<string, z.ZodType>;',
-      'const renameInlineSchema = (original: string) => {\n  if (original === "changelog_changelog_200") {\n    return "ChangelogResponseSchema";\n  }\n  if (original === "changelog_latest_200") {\n    return "ChangelogLatestResponseSchema";\n  }\n  return original.replaceAll(/[^A-Za-z0-9_]/g, "_");\n};',
+      'const renameInlineSchema = (original: string) => {\n  if (original === "changelog_changelog_200") {\n    return "ChangelogResponseSchema";\n  }\n  if (original === "changelog_latest_200") {\n    return "ChangelogLatestResponseSchema";\n  }\n  return original.replaceAll(/\\W/g, "_");\n};',
       'export const rawCurriculumSchemas = ' +
         body +
         ' as const satisfies CurriculumSchemaCollection;',

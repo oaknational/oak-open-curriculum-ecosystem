@@ -3,6 +3,7 @@ name: "Infrastructure operations never mask business logic"
 polarity: pattern
 use_this_when: "Recording telemetry, flushing buffers, or ending spans in a catch/finally block"
 category: code
+layer: general
 proven_in: "packages/libs/sentry-mcp/src/wrappers.ts, apps/oak-curriculum-mcp-streamable-http/src/observability/span-helpers.ts"
 ---
 

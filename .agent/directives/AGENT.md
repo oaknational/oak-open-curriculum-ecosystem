@@ -15,6 +15,12 @@ referenced homes.
 
 ## Grounding
 
+Before any setup or command in this entry point, use the tri-state host
+classification in
+[cloud-environment-routing.md](./cloud-environment-routing.md). A detected
+ChatGPT Work profile governs every execution-bearing step in start-right as
+well as later work; detector error is a stop, never a standard-profile result.
+
 Commit to British spelling, grammar, and date formats. Reflect on your current
 task; update your task list if needed. Apply the
 [user-collaboration directive](./user-collaboration.md): dialogue, scope
@@ -28,8 +34,10 @@ fast-path. In a coordinated multi-agent session the two first-class seats —
 and **Implementer** (ephemeral, owns one bounded lane) — are defined by
 [PDR-117](../practice-core/decision-records/PDR-117-director-and-implementer-roles.md).
 
-For planning work, read [metacognition.md](./metacognition.md) and follow its
-reflection discipline before finalising a plan.
+Read [metacognition.md](./metacognition.md) and apply it: its generative mode
+is the default for any non-trivial work, and its retrospective mode runs on
+every correction signal, wherever in the work it arrives, not only when a plan
+is being finalised.
 
 ## The Practice
 
@@ -129,8 +137,8 @@ directly, with no primer detour.
 
 On a loader platform invoke the skill (`/oak-working-with-agentic-ai`,
 `/oak-under-the-hood`); on a non-loader platform read and follow the canonical
-`.agent/skills/working-with-agentic-ai/SKILL-CANONICAL.md` or
-`.agent/skills/under-the-hood/SKILL-CANONICAL.md`.
+`.agent/skills/orientation/working-with-agentic-ai/SKILL-CANONICAL.md` or
+`.agent/skills/orientation/under-the-hood/SKILL-CANONICAL.md`.
 
 ## Project Context
 
@@ -144,13 +152,13 @@ package topology, and capabilities, see the [root README](../../README.md) and
 Read [principles.md](./principles.md); reflect on it, apply it, and follow it
 at all times.
 
-The always-applied rule tier lives in [`.agent/rules/`](../rules/). Rules
-operationalise principles, ADRs, and PDRs. The canonical, platform-independent
-enumeration is [`RULES_INDEX.md`](../../RULES_INDEX.md) at the repo root —
-single source of truth for which files belong to the always-applied tier.
-Claude and Cursor load their adapter tiers automatically; Codex, Gemini, and
-any other non-loader platform MUST read every canonical `.agent/rules/*.md`
-file listed in `RULES_INDEX.md` at session open.
+The rule tier, core and situational, lives in [`.agent/rules/`](../rules/). Rules
+operationalise principles, ADRs, and PDRs; each declares how it loads and what
+it is for in its frontmatter, from which [`RULES_INDEX.md`](../../RULES_INDEX.md)
+at the repo root and the host's platform adapters (P1) are rendered
+(`pnpm portability:fix`), never edited by hand. Claude and Cursor load their
+adapter tiers automatically; Codex, Gemini, and any other non-loader platform
+MUST read every canonical `.agent/rules/*.md` file listed there at session open.
 
 ## Reviewers And Tools
 
@@ -173,7 +181,7 @@ Agent artefacts follow ADR-125's three-layer model: canonical content in
 [docs/engineering/extending.md](../../docs/engineering/extending.md) before
 adding rules, skills, commands, sub-agents, adapters, or ADRs.
 
-Use the [commit skill canonical](../skills/commit/SKILL-CANONICAL.md) for
+Use the [commit skill canonical](../skills/change-custody/commit/SKILL-CANONICAL.md) for
 commits. It enumerates live commitlint constraints and validates the drafted
 message via `pnpm agent-tools:check-commit-message` before `git commit`.
 
@@ -243,12 +251,28 @@ Use these links by trigger:
 
 ## Commands
 
-From the repo root. Run gates one at a time while iterating; use `pnpm check`
-for canonical aggregate verification. The command source of truth is
-[Build System](../../docs/engineering/build-system.md) plus root
-`package.json`.
+From the repo root, through Turborepo. The hooks are the gate, placed by the
+family convention "light commit, full push" (owner, 2026-09-12 and 2026-10-04,
+both estates): the commit hook runs the light gate (formatting and lint over
+the staged and changed files), the push hook runs the full `pnpm check`
+aggregate, and CI composes the same legs with the pull request's checks. An
+agent never runs the gates by hand beside the hooks (owner, 2026-09-14: "the
+commit triggers the gates, there is no point and a fair amount of cost
+running the gates separately as well, never, ever do that"). Running one test
+file while a change is red is development, not a gate run. `pnpm check` is
+the aggregate the hooks and CI compose, kept for their parity, writing no
+tracked file; `pnpm fix` is the mutating pass that precedes it. Before every
+commit, check the message in isolation:
+`pnpm agent-tools:check-commit-message -m "…"` (the `commit-msg` hook is the
+backstop, not the first check). The command source of truth is root
+`package.json` and [Build System](../../docs/engineering/build-system.md).
 
-`pnpm check` always includes browser suites. Start it in a browser-capable host
+These commands apply only after the environment classification permits local
+execution. ChatGPT Work uses its non-execution route instead. Claude cloud uses
+its separate [operating document](../claude-harness-integrations/cloud-environment.md).
+
+The browser suites run as pull request checks. When one refuses and the cure
+needs a local reproduction, run that one suite in a browser-capable host
 environment with the necessary process permissions on the first attempt; do
 not run it in the restricted sandbox to rediscover the known Playwright launch
 failure.
@@ -258,29 +282,5 @@ independent checks separately or through the parallel tool wrapper; use shell
 chaining only when the dependency between commands is the behaviour being
 tested.
 
-Common entrypoints:
-
-```bash
-pnpm install
-pnpm sdk-codegen
-pnpm build
-pnpm type-check
-pnpm lint:fix
-pnpm format:root
-pnpm markdownlint:root
-pnpm test
-pnpm check:docs
-pnpm practice:fitness:informational
-pnpm practice:vocabulary
-pnpm check
-```
-
-## Claude cloud environment
-
-Cloud (claude.ai) sessions for this repo run in the shared "Practice Repos"
-environment: a universal setup script plus a per-repo session hook at
-`.agent/setup/cloud-session-setup.sh`. The script
-`.agent/claude-harness-integrations/cloud-environment-setup.sh` is the
-environment script's source of truth — edit it, never the claude.ai dialog
-directly — and `.agent/claude-harness-integrations/cloud-environment.md`
-is the operating doc to read before changing anything.
+The [Build System](../../docs/engineering/build-system.md) enumerates the live
+entrypoints; do not duplicate that command inventory here.

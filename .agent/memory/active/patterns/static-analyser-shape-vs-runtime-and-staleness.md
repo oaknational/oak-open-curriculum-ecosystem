@@ -3,6 +3,7 @@ name: "Static Analysers Want Shape Changes and Can Report Stale Results"
 polarity: pattern
 use_this_when: "Fixing a finding from CodeQL, SonarCloud, dependency-cruiser, markdownlint, or knip — or diagnosing why one of them reports nothing / something that no longer exists."
 category: process
+layer: general
 proven_in: "v2 large-corpus-analysis kept candidate C22 (2026-06-30): recurring class across CodeQL ReDoS shape-fixes, stale Sonar HIGH snapshots, depcruise orphan barrels, markdownlint zero-file silent passes, and knip root-entry config, spanning multiple sessions and agents."
 proven_date: 2026-06-30
 barrier:

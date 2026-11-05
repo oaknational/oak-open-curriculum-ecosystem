@@ -2,6 +2,7 @@
 name: Coordinator as Slice Runner When Team Capacity Is Short by One
 polarity: pattern
 category: coordination
+layer: general
 status: provisional
 discovered: 2026-05-21
 proven_in: "Single instance 2026-05-21: 4-peer pool minus one closeout, leaving 3 peers against 4 file-disjoint slices. Coordinator took the smallest/freshest slice as a concurrent responsibility (Slice B, graph-stack plan, ~2 edits). Coordinator load remained manageable because other slices were parallel and slice-completion events were event-driven. Total ~2 edits in the coordinator's own slice. Second instance in a different team session would strengthen the pattern."

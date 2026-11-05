@@ -28,7 +28,7 @@ describe('createSearchHandler', () => {
   it('returns 200 with the results envelope when the search succeeds', async () => {
     const handler = createSearchHandler(() => Promise.resolve(ok(populated)));
 
-    const res = await handler(new Request('http://x/api/search?q=fractions'));
+    const res = await handler(new Request('https://x/api/search?q=fractions'));
 
     expect(res.status).toBe(200);
     const body: unknown = await res.json();
@@ -41,7 +41,7 @@ describe('createSearchHandler', () => {
     // the behavioural witness that a blank query short-circuits.
     const handler = createSearchHandler(() => Promise.resolve(ok(populated)));
 
-    const res = await handler(new Request('http://x/api/search'));
+    const res = await handler(new Request('https://x/api/search'));
 
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual({ lessons: [], units: [], threads: [] });
@@ -50,7 +50,7 @@ describe('createSearchHandler', () => {
   it('returns 200 with the empty envelope for a whitespace-only q', async () => {
     const handler = createSearchHandler(() => Promise.resolve(ok(populated)));
 
-    const res = await handler(new Request('http://x/api/search?q=%20%20'));
+    const res = await handler(new Request('https://x/api/search?q=%20%20'));
 
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual({ lessons: [], units: [], threads: [] });
@@ -61,7 +61,7 @@ describe('createSearchHandler error contract', () => {
   it('returns 503 with the not-configured error body when search is not configured', async () => {
     const handler = createSearchHandler(() => Promise.resolve(err({ kind: 'not_configured' })));
 
-    const res = await handler(new Request('http://x/api/search?q=fractions'));
+    const res = await handler(new Request('https://x/api/search?q=fractions'));
 
     expect(res.status).toBe(503);
     const body: unknown = await res.json();
@@ -73,7 +73,7 @@ describe('createSearchHandler error contract', () => {
       Promise.resolve(err({ kind: 'failed', message: 'es down' })),
     );
 
-    const res = await handler(new Request('http://x/api/search?q=fractions'));
+    const res = await handler(new Request('https://x/api/search?q=fractions'));
 
     expect(res.status).toBe(502);
     const body: unknown = await res.json();
@@ -107,7 +107,7 @@ describe('createSearchHandler size params (E3)', () => {
   it('forwards valid per-scope size params to the search', async () => {
     const handler = createSearchHandler(sizeEcho);
 
-    const res = await handler(new Request('http://x/api/search?q=fractions&lessons=2'));
+    const res = await handler(new Request('https://x/api/search?q=fractions&lessons=2'));
 
     expect(res.status).toBe(200);
     const body: unknown = await res.json();
@@ -118,7 +118,7 @@ describe('createSearchHandler size params (E3)', () => {
     const handler = createSearchHandler(sizeEcho);
 
     const res = await handler(
-      new Request('http://x/api/search?q=fractions&lessons=2&units=3&threads=4'),
+      new Request('https://x/api/search?q=fractions&lessons=2&units=3&threads=4'),
     );
 
     expect(res.status).toBe(200);
@@ -132,7 +132,7 @@ describe('createSearchHandler size params (E3)', () => {
   it('passes no sizes when the params are absent (hub path unchanged)', async () => {
     const handler = createSearchHandler(sizeEcho);
 
-    const res = await handler(new Request('http://x/api/search?q=fractions'));
+    const res = await handler(new Request('https://x/api/search?q=fractions'));
 
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual({ lessons: [], units: [], threads: [] });
@@ -143,7 +143,7 @@ describe('createSearchHandler size-param validation (E3)', () => {
   it('rejects a non-numeric size param with 400', async () => {
     const handler = createSearchHandler(sizeEcho);
 
-    const res = await handler(new Request('http://x/api/search?q=fractions&lessons=abc'));
+    const res = await handler(new Request('https://x/api/search?q=fractions&lessons=abc'));
 
     expect(res.status).toBe(400);
     const body: unknown = await res.json();
@@ -153,7 +153,7 @@ describe('createSearchHandler size-param validation (E3)', () => {
   it('rejects a zero or negative size param with 400', async () => {
     const handler = createSearchHandler(sizeEcho);
 
-    const res = await handler(new Request('http://x/api/search?q=fractions&units=0'));
+    const res = await handler(new Request('https://x/api/search?q=fractions&units=0'));
 
     expect(res.status).toBe(400);
     const body: unknown = await res.json();
@@ -163,7 +163,7 @@ describe('createSearchHandler size-param validation (E3)', () => {
   it('rejects a size param above the maximum (50) with 400', async () => {
     const handler = createSearchHandler(sizeEcho);
 
-    const res = await handler(new Request('http://x/api/search?q=fractions&threads=999'));
+    const res = await handler(new Request('https://x/api/search?q=fractions&threads=999'));
 
     expect(res.status).toBe(400);
     const body: unknown = await res.json();
@@ -175,8 +175,8 @@ describe('createSearchHandler size-param strict-decimal contract (E3)', () => {
   it('accepts the maximum size (50) and rejects the first value above it (51)', async () => {
     const handler = createSearchHandler(sizeEcho);
 
-    const at = await handler(new Request('http://x/api/search?q=fractions&lessons=50'));
-    const above = await handler(new Request('http://x/api/search?q=fractions&lessons=51'));
+    const at = await handler(new Request('https://x/api/search?q=fractions&lessons=50'));
+    const above = await handler(new Request('https://x/api/search?q=fractions&lessons=51'));
 
     expect(at.status).toBe(200);
     expect(above.status).toBe(400);
@@ -194,7 +194,7 @@ describe('createSearchHandler size-param strict-decimal contract (E3)', () => {
     const handler = createSearchHandler(sizeEcho);
 
     const res = await handler(
-      new Request(`http://x/api/search?q=fractions&units=${encodeURIComponent(raw)}`),
+      new Request(`https://x/api/search?q=fractions&units=${encodeURIComponent(raw)}`),
     );
 
     expect(res.status).toBe(400);

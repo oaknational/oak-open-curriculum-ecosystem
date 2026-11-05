@@ -51,6 +51,23 @@ function makeFakeObservability(): {
   };
 }
 
+/**
+ * Surfaces the forwarded error in the response so a case can assert on its
+ * name (mirrors the real setupExpressErrorHandler chain's effect: 5xx +
+ * Sentry capture). The 4-arg signature is load-bearing: Express recognises
+ * error middleware by arity at registration time, not by the
+ * `ErrorRequestHandler` typing on the function reference. `next` must remain
+ * a parameter even though it is not invoked, otherwise Express demotes the
+ * handler to a regular middleware and the error path bypasses it entirely.
+ */
+const surfacingErrorHandler: ErrorRequestHandler = (err, _req, res, next) => {
+  if (typeof next !== 'function') {
+    throw new TypeError('Expected Express to provide an error-handler next callback');
+  }
+  const e = err instanceof Error ? err : new Error(String(err));
+  res.status(500).json({ error: e.name, message: e.message });
+};
+
 function buildApp(
   observability: ReturnType<typeof makeFakeObservability>,
   log = createFakeLogger(),
@@ -63,23 +80,7 @@ function buildApp(
     observability,
     log,
   });
-  // Test error handler that surfaces the forwarded error in the
-  // response so we can assert on its name (mirrors the real
-  // setupExpressErrorHandler chain's effect: 5xx + Sentry capture).
-  // The 4-arg signature is load-bearing: Express recognises error
-  // middleware by arity at registration time, not by the
-  // `ErrorRequestHandler` typing on the function reference. `_next`
-  // must remain a parameter even though it is not invoked, otherwise
-  // Express demotes the handler to a regular middleware and the
-  // error path bypasses it entirely.
-  const errorHandler: ErrorRequestHandler = (err, _req, res, next) => {
-    if (typeof next !== 'function') {
-      throw new TypeError('Expected Express to provide an error-handler next callback');
-    }
-    const e = err instanceof Error ? err : new Error(String(err));
-    res.status(500).json({ error: e.name, message: e.message });
-  };
-  app.use(errorHandler);
+  app.use(surfacingErrorHandler);
   return app;
 }
 

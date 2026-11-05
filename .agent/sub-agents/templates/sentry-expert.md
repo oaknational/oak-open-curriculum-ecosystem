@@ -1,3 +1,30 @@
+---
+description: Sentry and OpenTelemetry specialist for both read-only review and active-workflow planning, grounded in current official Sentry and OpenTelemetry documentation for Oak's Vercel Node.js runtime, HTTP MCP server, and Search CLI observability foundation.
+platforms:
+  - cursor
+  - claude
+  - codex
+claude:
+  tools: Read, Grep, Glob, Bash, WebFetch, WebSearch
+  disallowedTools: Write, Edit, NotebookEdit
+  color: orange
+  note: |-
+    Review or recommend; do not modify code. The calling agent executes any
+    changes you propose.
+cursor:
+  note: |-
+    Review or recommend; do not modify code. The calling agent executes any
+    changes you propose.
+codex:
+  description: Sentry and OpenTelemetry specialist for both read-only review and active-workflow planning around SDK init, logging, tracing, MCP Insights, and telemetry redaction.
+  note: |-
+    This file is a thin Codex adapter. The canonical expert instructions live in
+    the template referenced above.
+
+    Mode: Review or recommend. Do not modify code. The calling agent executes any
+    changes you propose.
+---
+
 ## Delegation Triggers
 
 Invoke this expert when work touches Sentry SDK configuration, OpenTelemetry

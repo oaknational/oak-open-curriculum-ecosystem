@@ -13,8 +13,12 @@ export async function validateComms(
   _env: unknown,
   runtime: CliRuntime,
 ): Promise<string> {
+  // `comms validate` runs against the coordination home itself, so the
+  // home doubles as the checkout root for the tracked surfaces.
+  const home = resolveCoordinationHomeForOptions(options, runtime);
   const report = await validateCollaborationStateIntegrity({
-    repoRoot: resolveCoordinationHomeForOptions(options, runtime),
+    repoRoot: home,
+    coordinationHome: home,
   });
   const formatted = formatCollaborationStateIntegrityReport(report);
   if (report.findings.length > 0) {

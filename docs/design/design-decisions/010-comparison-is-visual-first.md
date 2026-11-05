@@ -1,8 +1,22 @@
+---
+ddr: DDR-010
+iri: urn:uuid:1f8a4c6e-4b0d-4f2f-9d5b-7c2e8a913d47
+title: Comparison is visual first, statistics direct the looking
+status: accepted
+date: 2026-08-10
+deciders: Jim Cresswell (owner); method derived at the design-lane seat
+edges:
+  depends_on: [DDR-009]
+  supersedes: []
+  informed_by: []
+  related: []
+---
+
 # DDR-010 — Comparison is visual first, statistics direct the looking
 
-- **Status**: accepted (owner-directed, 2026-08-10)
-- **IRI**: `urn:uuid:1f8a4c6e-4b0d-4f2f-9d5b-7c2e8a913d47`
-- **Depends on**: [DDR-009 — measurement happens at canonical widths](009-measurement-happens-at-canonical-widths.md)
+(Frontmatter added 2026-08-17: this record had carried its identity in
+prose bullets, against the corpus's machine-readable-edges contract. Status,
+IRI, and edge are unchanged from the original prose form.)
 
 ## Decision
 

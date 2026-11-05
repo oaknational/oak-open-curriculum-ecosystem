@@ -1,3 +1,5 @@
+import { join } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import { evaluateFitnessFile } from './evaluate.js';
@@ -68,10 +70,14 @@ describe('readFitnessFiles', () => {
 
     const files = await readFitnessFiles('/repo', ['.agent/a.md', '.agent/b.md'], reader);
 
-    expect(reads).toEqual(['/repo/.agent/a.md', '/repo/.agent/b.md']);
+    // The product reads host-joined absolute paths; the expectations derive
+    // the same host form so the assertions hold on every platform.
+    const aAbs = join('/repo', '.agent', 'a.md');
+    const bAbs = join('/repo', '.agent', 'b.md');
+    expect(reads).toEqual([aAbs, bAbs]);
     expect(files).toEqual([
-      { relPath: '.agent/a.md', content: 'content of /repo/.agent/a.md' },
-      { relPath: '.agent/b.md', content: 'content of /repo/.agent/b.md' },
+      { relPath: '.agent/a.md', content: `content of ${aAbs}` },
+      { relPath: '.agent/b.md', content: `content of ${bAbs}` },
     ]);
   });
 });

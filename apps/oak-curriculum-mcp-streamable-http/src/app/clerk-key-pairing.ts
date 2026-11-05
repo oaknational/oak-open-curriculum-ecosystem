@@ -74,8 +74,8 @@ async function fetchKids(
       });
     }
     return ok(parsed.data.keys.map((key) => key.kid));
-  } catch (caught) {
-    const reason = caught instanceof Error ? caught.message : String(caught);
+  } catch (error) {
+    const reason = error instanceof Error ? error.message : String(error);
     return err({ type: 'jwks_fetch_failed', message: `JWKS fetch failed: ${url}: ${reason}` });
   } finally {
     clearTimeout(timer);

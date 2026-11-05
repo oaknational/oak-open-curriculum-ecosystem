@@ -1,3 +1,8 @@
+---
+classification: core
+description: --no-verify (and equivalent hook-skip flags) requires fresh per-invocation owner authorisation. Never default-skip Git hooks.
+---
+
 # --no-verify Requires Fresh Authorisation
 
 Operationalises [`.agent/directives/principles.md` § Code Quality](../directives/principles.md) — *"Never disable any quality gates, never disable Git hooks (`--no-verify`)"*.
@@ -33,6 +38,22 @@ repo-bound operational surface it names, never in this portable rule.
 Everywhere outside a recorded ruling's scope, this rule's per-invocation
 requirement stands unchanged.
 
+**Standing owner ruling — ChatGPT Work cloud, 8 September 2026.** When and only
+when `bash .agent/setup/is-chatgpt-work-cloud.sh` exits zero, `HUSKY=0` is
+authorised for local commits and pushes throughout that detected session. The
+detector is tri-state: exit 1 means only "not this profile"; any other non-zero
+exit, a missing script or the wrong working directory is a detector error and a
+blocker, never a standard-profile result and never this authorisation. The
+host is non-execution infrastructure; the required substitute route is the
+one recorded in
+[`cloud-environment-routing.md`](../directives/cloud-environment-routing.md):
+manual branch/message/outgoing-diff checks, an immediate draft PR, and a
+genuinely concluded GitHub `run-quality-gates` result before any green claim.
+Use the configured default credential only for the task-scoped story-branch
+and draft-PR route, and do not attempt bot provisioning. This ruling authorises
+only `HUSKY=0`; `--no-verify`, alternate environment variables and hook-path
+manipulation still require fresh owner initiation.
+
 If a hook is failing:
 
 1. **Fix the cause.** The hook is failing because something is wrong. Find what.
@@ -45,6 +66,13 @@ If a hook is failing:
    and treat it as per-invocation, per-mechanism authorisation.
 
 The point of pre-commit hooks is precisely to be unskippable by the agent. Skipping them silently re-introduces the failure mode the hook was installed to prevent.
+
+Skipping a gate relocates its cost; it never removes it. Commits made with
+`HUSKY=0` at a compaction boundary under a per-invocation owner
+authorisation (2026-09-03) pushed a one-line markdown-links failure into a
+full CI round on the critical path of a three-PR merge train: the cure was
+one line, the cost was the round. When an authorised skip is weighed, weigh
+the round, not the minute.
 
 ## Why this rule exists
 

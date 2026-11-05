@@ -1,34 +1,19 @@
-import { unwrapOrThrow, type Result } from '@oaknational/result';
+import { unwrapOrThrow } from '@oaknational/result';
 
-import {
-  completeCommitIntent,
-  enqueueCommitIntent,
-  getFreshEntriesAhead,
-  recordStagedBundle,
-  updateCommitIntentPhase,
-} from './core.js';
-import {
-  nowIso,
-  optionString,
-  requireOption,
-  requirePhase,
-  resolveRegistryPath,
-  usage,
-} from './args.js';
+import { nowIso, optionString, resolveRegistryPath, usage } from './args.js';
 import { runCommitCommand } from './commit-command.js';
-import { getStagedBundle } from './git.js';
-import { narrowIntentPathspec } from './pathspec.js';
-import { createIntent } from './intent.js';
 import { validateCommandOptions } from './options.js';
 import { isCommitQueueReadCommand, runCommitQueueReadCommand } from './read-commands.js';
-import { readRegistry, updateRegistry } from './registry.js';
+import { readRegistry } from './registry.js';
+import { type CommitQueueCliInput, type CommitQueueCliOptions } from './types.js';
 import {
-  type CommitIntent,
-  type CommitQueueCliInput,
-  type CommitQueueCliOptions,
-  type CommitQueueRegistry,
-} from './types.js';
-import { writeVerificationResult } from './verify-output.js';
+  readRegistryForCli,
+  runCompleteCommand,
+  runEnqueueCommand,
+  runPhaseCommand,
+  runRecordStagedCommand,
+  runVerifyStagedCommand,
+} from './write-commands.js';
 
 /**
  * Run a commit-queue CLI command against the current repository.
@@ -53,7 +38,7 @@ export async function runCommitQueueCli(input: CommitQueueCliInput): Promise<num
       command: input.command,
       // The CLI dispatch is the sanctioned exception boundary: the topic
       // wrapper converts the thrown message into exit 2 + stderr.
-      registry: unwrapOrThrow(await readRegistryForCli(input, registryPath)),
+      registry: unwrapOrThrow(await readRegistryForCli(input, registryPath, now)),
       options: input.options,
       now,
       stdout: input.stdout,
@@ -70,7 +55,7 @@ async function dispatchWriteCommand(args: {
 }): Promise<number | undefined> {
   const { input, registryPath, now } = args;
   if (input.command === 'enqueue') {
-    return runEnqueueCommand({ registryPath, options: input.options });
+    return runEnqueueCommand({ registryPath, options: input.options, now, input });
   }
   if (input.command === 'phase') {
     return runPhaseCommand({ registryPath, options: input.options, now });
@@ -80,119 +65,19 @@ async function dispatchWriteCommand(args: {
   }
   if (input.command === 'verify-staged') {
     return runVerifyStagedCommand({
-      registry: unwrapOrThrow(await readRegistry(registryPath)),
+      registry: unwrapOrThrow(await readRegistry(registryPath, { nowIso: now })),
       options: input.options,
       now,
       gitRoot: input.resolveGitRoot(),
     });
   }
   if (input.command === 'complete') {
-    return runCompleteCommand({ registryPath, options: input.options });
+    return runCompleteCommand({ registryPath, options: input.options, now });
   }
   if (input.command === 'commit') {
     return runCommitCommand({ registryPath, options: input.options, input });
   }
   return undefined;
-}
-
-function readRegistryForCli(
-  input: CommitQueueCliInput,
-  registryPath: string,
-): Promise<Result<CommitQueueRegistry, Error>> {
-  return (input.readRegistry ?? readRegistry)(registryPath);
-}
-
-async function runEnqueueCommand(input: CommandInput): Promise<number> {
-  const intent = createIntent(input.options);
-  await updateRegistry(input.registryPath, (registry) => {
-    if (!registry.claims.some((claim) => claim.claim_id === intent.claim_id)) {
-      throw new Error(`unknown claim_id: ${intent.claim_id}`);
-    }
-
-    return enqueueCommitIntent({ registry, intent });
-  });
-  process.stdout.write(`${intent.intent_id}\n`);
-  return 0;
-}
-
-async function runPhaseCommand(input: CommandInputWithNow): Promise<number> {
-  const phase = requirePhase(input.options);
-  const intentId = requireOption(input.options, 'intent-id');
-  await updateRegistry(input.registryPath, (registry) => {
-    requireIntent(registry, intentId);
-    return updateCommitIntentPhase({
-      registry,
-      intentId,
-      phase,
-      nowIso: input.now,
-      notes: optionString(input.options, 'notes'),
-    });
-  });
-  return 0;
-}
-
-async function runRecordStagedCommand(input: CommandInputWithCli): Promise<number> {
-  const intentId = requireOption(input.options, 'intent-id');
-  const registryBefore = unwrapOrThrow(await readRegistryForCli(input.input, input.registryPath));
-  const intent = requireIntent(registryBefore, intentId);
-  const narrowed = narrowIntentPathspec(intent);
-  if (!narrowed.ok) {
-    process.stderr.write(`intent ${intent.intent_id}: ${narrowed.reason}\n`);
-    return 1;
-  }
-  const staged = getStagedBundle({
-    gitRoot: input.input.resolveGitRoot(),
-    pathspec: narrowed.pathspec,
-  });
-  await updateRegistry(input.registryPath, (registry) => {
-    requireIntent(registry, intentId);
-    return recordStagedBundle({
-      registry,
-      intentId,
-      nowIso: input.now,
-      stagedNameStatus: staged.stagedNameStatus,
-      stagedPatch: staged.stagedPatch,
-    });
-  });
-  return 0;
-}
-
-function runVerifyStagedCommand(input: VerifyInput): number {
-  const intentId = requireOption(input.options, 'intent-id');
-  const intent = requireIntent(input.registry, intentId);
-  const entriesAhead = getFreshEntriesAhead(input.registry.commit_queue, intentId, input.now);
-  if (entriesAhead.length > 0) {
-    process.stderr.write(`fresh queue entries ahead: ${formatIntentIds(entriesAhead)}\n`);
-    return 1;
-  }
-
-  const narrowed = narrowIntentPathspec(intent);
-  if (!narrowed.ok) {
-    process.stderr.write(`intent ${intent.intent_id}: ${narrowed.reason}\n`);
-    return 1;
-  }
-
-  return writeVerificationResult({
-    intent,
-    staged: getStagedBundle({
-      gitRoot: input.gitRoot,
-      pathspec: narrowed.pathspec,
-    }),
-    commitSubject: requireOption(input.options, 'commit-subject'),
-  });
-}
-
-async function runCompleteCommand(input: CommandInput): Promise<number> {
-  const intentId = requireOption(input.options, 'intent-id');
-  await updateRegistry(input.registryPath, (registry) => {
-    requireIntent(registry, intentId);
-    return completeCommitIntent({ registry, intentId });
-  });
-  return 0;
-}
-
-function formatIntentIds(entries: readonly CommitIntent[]): string {
-  return entries.map((entry) => entry.intent_id).join(', ');
 }
 
 function isHelpCommand(command: string | undefined, options: CommitQueueCliOptions): boolean {
@@ -207,33 +92,4 @@ function isHelpCommand(command: string | undefined, options: CommitQueueCliOptio
 
 function writeStdout(input: CommitQueueCliInput, chunk: string): void {
   (input.stdout ?? process.stdout).write(chunk);
-}
-
-function requireIntent(registry: CommitQueueRegistry, intentId: string): CommitIntent {
-  const intent = registry.commit_queue.find((entry) => entry.intent_id === intentId);
-  if (intent === undefined) {
-    throw new Error(`unknown intent_id: ${intentId}`);
-  }
-
-  return intent;
-}
-interface CommandInput {
-  readonly registryPath: string;
-  readonly options: CommitQueueCliOptions;
-}
-
-interface CommandInputWithNow extends CommandInput {
-  readonly now: string;
-}
-
-interface CommandInputWithCli extends CommandInputWithNow {
-  readonly input: CommitQueueCliInput;
-}
-
-interface VerifyInput {
-  readonly registry: CommitQueueRegistry;
-  readonly options: CommitQueueCliOptions;
-  readonly now: string;
-  /** Root of the INVOKING git worktree — never the coordination home (F-138). */
-  readonly gitRoot: string;
 }

@@ -181,7 +181,7 @@ across the Practice network.
 | Contract | Codified in | What it provides |
 |---|---|---|
 | **Canonical agent artefact architecture** | PDR-009 | Three-layer canonical/adapter/entry-point; thin-wrapper contract; activation triggers distinct from policies |
-| **Canonical quality-gate naming** | PDR-008 | Stable `clean` / `build` / `format` / `format:fix` / `lint` / `lint:fix` / `typecheck` / `test` / `check` / `check:fix` / `check:ci` / `fix` / `dev` across ecosystems; per-ecosystem adaptation rule; CI invokes `check:ci` |
+| **Canonical quality-gate naming** | PDR-008 | Stable `clean` / `build` / `format` / `format:fix` / `lint` / `lint:fix` / `typecheck` / `test` / `check` / `fix` / `dev` across ecosystems; per-ecosystem adaptation rule; CI runs every verifying leg of `check` |
 | **Domain specialist capability pattern** | PDR-010 | Four-layer triplet + optional operational tooling; classification taxonomy; modes; inverted-hierarchy variant |
 | **Continuity surfaces + surprise pipeline** | PDR-011 (host adopters record their host-side companion ADR via the practice-index Concept ↔ ADR map) | Three continuity types; split-loop handoff/consolidate; named continuity contract; capture→distil→graduate→enforce |
 | **Dev tooling per ecosystem** | PDR-006 | Leading-edge reference repos; ecosystem-by-ecosystem nomination/supersession |

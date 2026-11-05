@@ -1,0 +1,6 @@
+---
+description: Unattended seats never prompt — the tracked settings carry no ask rules (asks become denies, which route to the Director); one plain command per Bash call; no git outside the estate's registered worktrees; never rm -rf. The Director's deadline-and-default is the other half of the cure.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/unattended-seats-never-prompt.md`.

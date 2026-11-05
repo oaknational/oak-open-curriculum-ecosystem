@@ -3,6 +3,7 @@ name: "Enforce via Schema, Don't Enumerate in Prose, for Vendor Surfaces"
 polarity: pattern
 use_this_when: "A document re-lists the fields, enums, or values of a fast-moving external/vendor specification (platform frontmatter, an API's accepted parameters, a config surface) so an agent can author against it — and the spec keeps changing underneath the prose."
 category: agent
+layer: general
 proven_in: "agent-tools/.../frontmatter-schema.ts + validate-subagents (docs-reviewer-split, 2026-06-28)"
 proven_date: 2026-06-28
 related_pdr: PDR-105

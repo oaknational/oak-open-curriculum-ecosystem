@@ -1,9 +1,9 @@
-import { describe, it, expect, afterEach } from 'vitest';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
-import { join } from 'node:path';
-import { tmpdir } from 'node:os';
+import { join, sep } from 'node:path';
+import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
 import { resolveEnv } from '../src/resolve-env.js';
+import type { EnvFileSystem } from '../src/types.js';
+import { createInMemoryFileSystem } from './test-helpers/in-memory-file-system.js';
 
 const TestSchema = z.object({
   FOO: z.string().min(1),
@@ -17,121 +17,75 @@ const MixedSchema = z.object({
   OPTIONAL_Y: z.string().optional(),
 });
 
-/**
- * Creates a temp directory tree that mimics a monorepo:
- *
- * ```text
- * tempDir/
- *   pnpm-workspace.yaml   (marker for findRepoRoot)
- *   .env                   (optional)
- *   .env.local             (optional)
- *   nested/                (startDir — exercises walk-up)
- * ```
- */
-function createTestTree(
-  dotEnv?: string,
-  dotEnvLocal?: string,
-): {
-  repoRoot: string;
-  startDir: string;
-  cleanup: () => void;
-} {
-  const repoRoot = mkdtempSync(join(tmpdir(), 'resolve-env-test-'));
-  writeFileSync(join(repoRoot, 'pnpm-workspace.yaml'), 'packages: []');
+const REPO_ROOT = join(sep, 'work', 'repo');
+const APP_ROOT = join(REPO_ROOT, 'apps', 'my-app');
+/** A start directory with no marker anywhere above it: the serverless shape. */
+const NO_MARKER_DIR = join(sep, 'var', 'task', 'handler');
+const EMPTY_FILE_SYSTEM = createInMemoryFileSystem({});
 
-  if (dotEnv !== undefined) {
-    writeFileSync(join(repoRoot, '.env'), dotEnv);
-  }
-  if (dotEnvLocal !== undefined) {
-    writeFileSync(join(repoRoot, '.env.local'), dotEnvLocal);
-  }
-
-  const nestedDir = mkdtempSync(join(repoRoot, 'nested-'));
-
-  return {
-    repoRoot,
-    startDir: nestedDir,
-    cleanup: () => rmSync(repoRoot, { recursive: true, force: true }),
-  };
-}
-
-interface ThreeTierTree {
-  repoRoot: string;
-  appRoot: string;
-  startDir: string;
-  cleanup: () => void;
+interface EnvTree {
+  readonly fileSystem: EnvFileSystem;
+  readonly startDir: string;
 }
 
 /**
- * Creates a temp directory tree that mimics a monorepo with a nested app:
- *
- * ```text
- * repoRoot/
- *   pnpm-workspace.yaml      (repo root marker)
- *   .env                      (optional — repo-level defaults)
- *   .env.local                (optional — repo-level overrides)
- *   apps/my-app/
- *     package.json            (app root marker)
- *     .env                    (optional — app-level defaults)
- *     .env.local              (optional — app-level overrides)
- *     src/                    (startDir — exercises walk-up)
- * ```
+ * A monorepo tree: the workspace manifest at the root plus `files`, keyed by
+ * path relative to the root, with a nested start directory that exercises
+ * the walk-up.
  */
-function createThreeTierTree(files: {
-  repoDotEnv?: string;
-  repoDotEnvLocal?: string;
-  appDotEnv?: string;
-  appDotEnvLocal?: string;
-}): ThreeTierTree {
-  const repoRoot = mkdtempSync(join(tmpdir(), 'three-tier-'));
-  writeFileSync(join(repoRoot, 'pnpm-workspace.yaml'), 'packages: []');
+function createRepoTree(files: Readonly<Record<string, string>>): EnvTree {
+  const entries = Object.fromEntries(
+    Object.entries({ 'pnpm-workspace.yaml': 'packages: []', ...files }).map(
+      ([relativePath, text]) => [join(REPO_ROOT, relativePath), text],
+    ),
+  );
+  return { fileSystem: createInMemoryFileSystem(entries), startDir: join(REPO_ROOT, 'nested') };
+}
 
-  if (files.repoDotEnv !== undefined) {
-    writeFileSync(join(repoRoot, '.env'), files.repoDotEnv);
-  }
-  if (files.repoDotEnvLocal !== undefined) {
-    writeFileSync(join(repoRoot, '.env.local'), files.repoDotEnvLocal);
-  }
-
-  const appRoot = join(repoRoot, 'apps', 'my-app');
-  mkdirSync(appRoot, { recursive: true });
-  writeFileSync(join(appRoot, 'package.json'), '{"name": "my-app"}');
-
-  if (files.appDotEnv !== undefined) {
-    writeFileSync(join(appRoot, '.env'), files.appDotEnv);
-  }
-  if (files.appDotEnvLocal !== undefined) {
-    writeFileSync(join(appRoot, '.env.local'), files.appDotEnvLocal);
-  }
-
-  const startDir = join(appRoot, 'src');
-  mkdirSync(startDir, { recursive: true });
-
-  return {
-    repoRoot,
-    appRoot,
-    startDir,
-    cleanup: () => rmSync(repoRoot, { recursive: true, force: true }),
-  };
+/**
+ * A monorepo tree with a nested app (`apps/my-app/package.json` is the app
+ * root marker) and a start directory inside the app.
+ */
+function createThreeTierTree(files: Readonly<Record<string, string>>): EnvTree {
+  const tree = createRepoTree({ 'apps/my-app/package.json': '{"name":"my-app"}', ...files });
+  return { fileSystem: tree.fileSystem, startDir: join(APP_ROOT, 'src') };
 }
 
 describe('resolveEnv', () => {
-  let cleanup: () => void;
+  describe("envFiles: 'none'", () => {
+    it('validates the process environment alone: a key the process does not carry is absent', () => {
+      const result = resolveEnv({
+        schema: TestSchema,
+        processEnv: { FOO: 'from_process' },
+        envFiles: 'none',
+      });
 
-  afterEach(() => {
-    cleanup?.();
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error.message).toContain('Failing keys: BAR');
+        expect(result.error.diagnostics).toContainEqual({ key: 'BAR', present: false });
+      }
+    });
+
+    it('accepts a process environment that carries every required key', () => {
+      const result = resolveEnv({
+        schema: TestSchema,
+        processEnv: { FOO: 'from_process', BAR: 'from_process' },
+        envFiles: 'none',
+      });
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value).toEqual({ FOO: 'from_process', BAR: 'from_process' });
+      }
+    });
   });
 
   describe('source hierarchy', () => {
     it('loads values from .env', () => {
-      const tree = createTestTree('FOO=from_dotenv\nBAR=from_dotenv');
-      cleanup = tree.cleanup;
+      const tree = createRepoTree({ '.env': 'FOO=from_dotenv\nBAR=from_dotenv' });
 
-      const result = resolveEnv({
-        schema: TestSchema,
-        processEnv: {},
-        startDir: tree.startDir,
-      });
+      const result = resolveEnv({ schema: TestSchema, processEnv: {}, ...tree });
 
       expect(result.ok).toBe(true);
       if (result.ok) {
@@ -141,14 +95,12 @@ describe('resolveEnv', () => {
     });
 
     it('.env.local overrides .env', () => {
-      const tree = createTestTree('FOO=from_dotenv\nBAR=from_dotenv', 'FOO=from_local');
-      cleanup = tree.cleanup;
-
-      const result = resolveEnv({
-        schema: TestSchema,
-        processEnv: {},
-        startDir: tree.startDir,
+      const tree = createRepoTree({
+        '.env': 'FOO=from_dotenv\nBAR=from_dotenv',
+        '.env.local': 'FOO=from_local',
       });
+
+      const result = resolveEnv({ schema: TestSchema, processEnv: {}, ...tree });
 
       expect(result.ok).toBe(true);
       if (result.ok) {
@@ -158,13 +110,15 @@ describe('resolveEnv', () => {
     });
 
     it('processEnv overrides both .env and .env.local', () => {
-      const tree = createTestTree('FOO=from_dotenv\nBAR=from_dotenv', 'FOO=from_local');
-      cleanup = tree.cleanup;
+      const tree = createRepoTree({
+        '.env': 'FOO=from_dotenv\nBAR=from_dotenv',
+        '.env.local': 'FOO=from_local',
+      });
 
       const result = resolveEnv({
         schema: TestSchema,
         processEnv: { FOO: 'from_process', BAR: 'from_process' },
-        startDir: tree.startDir,
+        ...tree,
       });
 
       expect(result.ok).toBe(true);
@@ -177,14 +131,9 @@ describe('resolveEnv', () => {
 
   describe('schema validation', () => {
     it('returns Result ok with typed data on valid input', () => {
-      const tree = createTestTree('FOO=hello\nBAR=world');
-      cleanup = tree.cleanup;
+      const tree = createRepoTree({ '.env': 'FOO=hello\nBAR=world' });
 
-      const result = resolveEnv({
-        schema: TestSchema,
-        processEnv: {},
-        startDir: tree.startDir,
-      });
+      const result = resolveEnv({ schema: TestSchema, processEnv: {}, ...tree });
 
       expect(result.ok).toBe(true);
       if (result.ok) {
@@ -193,14 +142,9 @@ describe('resolveEnv', () => {
     });
 
     it('returns Result err with diagnostics on missing required keys', () => {
-      const tree = createTestTree('FOO=hello');
-      cleanup = tree.cleanup;
+      const tree = createRepoTree({ '.env': 'FOO=hello' });
 
-      const result = resolveEnv({
-        schema: TestSchema,
-        processEnv: {},
-        startDir: tree.startDir,
-      });
+      const result = resolveEnv({ schema: TestSchema, processEnv: {}, ...tree });
 
       expect(result.ok).toBe(false);
       if (!result.ok) {
@@ -218,14 +162,9 @@ describe('resolveEnv', () => {
     });
 
     it('returns Result err when no .env files exist and processEnv is incomplete', () => {
-      const tree = createTestTree();
-      cleanup = tree.cleanup;
+      const tree = createRepoTree({});
 
-      const result = resolveEnv({
-        schema: TestSchema,
-        processEnv: { FOO: 'only_foo' },
-        startDir: tree.startDir,
-      });
+      const result = resolveEnv({ schema: TestSchema, processEnv: { FOO: 'only_foo' }, ...tree });
 
       expect(result.ok).toBe(false);
       if (!result.ok) {
@@ -236,16 +175,10 @@ describe('resolveEnv', () => {
 
   describe('non-mutating', () => {
     it('does not modify the processEnv object passed in', () => {
-      const tree = createTestTree('FOO=from_dotenv\nBAR=from_dotenv');
-      cleanup = tree.cleanup;
-
+      const tree = createRepoTree({ '.env': 'FOO=from_dotenv\nBAR=from_dotenv' });
       const processEnv: Record<string, string> = {};
 
-      resolveEnv({
-        schema: TestSchema,
-        processEnv,
-        startDir: tree.startDir,
-      });
+      resolveEnv({ schema: TestSchema, processEnv, ...tree });
 
       expect(processEnv).toEqual({});
     });
@@ -253,13 +186,11 @@ describe('resolveEnv', () => {
 
   describe('serverless environment (no repo root)', () => {
     it('validates processEnv directly when no repo root markers exist', () => {
-      const noMarkerDir = mkdtempSync(join(tmpdir(), 'serverless-env-'));
-      cleanup = () => rmSync(noMarkerDir, { recursive: true, force: true });
-
       const result = resolveEnv({
         schema: TestSchema,
         processEnv: { FOO: 'from_vercel', BAR: 'from_vercel' },
-        startDir: noMarkerDir,
+        startDir: NO_MARKER_DIR,
+        fileSystem: EMPTY_FILE_SYSTEM,
       });
 
       expect(result.ok).toBe(true);
@@ -270,13 +201,11 @@ describe('resolveEnv', () => {
     });
 
     it('returns validation error when processEnv is incomplete and no .env files available', () => {
-      const noMarkerDir = mkdtempSync(join(tmpdir(), 'serverless-env-'));
-      cleanup = () => rmSync(noMarkerDir, { recursive: true, force: true });
-
       const result = resolveEnv({
         schema: TestSchema,
         processEnv: { FOO: 'only_foo' },
-        startDir: noMarkerDir,
+        startDir: NO_MARKER_DIR,
+        fileSystem: EMPTY_FILE_SYSTEM,
       });
 
       expect(result.ok).toBe(false);
@@ -288,13 +217,11 @@ describe('resolveEnv', () => {
 
   describe('Vercel-specific error guidance', () => {
     it('includes Vercel guidance when VERCEL=1 and validation fails', () => {
-      const noMarkerDir = mkdtempSync(join(tmpdir(), 'vercel-env-'));
-      cleanup = () => rmSync(noMarkerDir, { recursive: true, force: true });
-
       const result = resolveEnv({
         schema: TestSchema,
         processEnv: { VERCEL: '1', FOO: 'present' },
-        startDir: noMarkerDir,
+        startDir: NO_MARKER_DIR,
+        fileSystem: EMPTY_FILE_SYSTEM,
       });
 
       expect(result.ok).toBe(false);
@@ -305,14 +232,9 @@ describe('resolveEnv', () => {
     });
 
     it('does not include Vercel guidance when not on Vercel', () => {
-      const tree = createTestTree('FOO=hello');
-      cleanup = tree.cleanup;
+      const tree = createRepoTree({ '.env': 'FOO=hello' });
 
-      const result = resolveEnv({
-        schema: TestSchema,
-        processEnv: {},
-        startDir: tree.startDir,
-      });
+      const result = resolveEnv({ schema: TestSchema, processEnv: {}, ...tree });
 
       expect(result.ok).toBe(false);
       if (!result.ok) {
@@ -321,13 +243,11 @@ describe('resolveEnv', () => {
     });
 
     it('Vercel guidance lists only keys that failed validation, not optional absent keys', () => {
-      const noMarkerDir = mkdtempSync(join(tmpdir(), 'vercel-mixed-'));
-      cleanup = () => rmSync(noMarkerDir, { recursive: true, force: true });
-
       const result = resolveEnv({
         schema: MixedSchema,
         processEnv: { VERCEL: '1' },
-        startDir: noMarkerDir,
+        startDir: NO_MARKER_DIR,
+        fileSystem: EMPTY_FILE_SYSTEM,
       });
 
       expect(result.ok).toBe(false);
@@ -348,13 +268,11 @@ describe('resolveEnv', () => {
     });
 
     it('Vercel guidance omits optional keys even when mixed with failing required keys', () => {
-      const noMarkerDir = mkdtempSync(join(tmpdir(), 'vercel-partial-'));
-      cleanup = () => rmSync(noMarkerDir, { recursive: true, force: true });
-
       const result = resolveEnv({
         schema: MixedSchema,
         processEnv: { VERCEL: '1', REQUIRED_A: 'set' },
-        startDir: noMarkerDir,
+        startDir: NO_MARKER_DIR,
+        fileSystem: EMPTY_FILE_SYSTEM,
       });
 
       expect(result.ok).toBe(false);
@@ -375,16 +293,11 @@ describe('resolveEnv', () => {
   describe('three-tier hierarchy (repo → app → processEnv)', () => {
     it('app .env overrides repo .env for the same key', () => {
       const tree = createThreeTierTree({
-        repoDotEnv: 'FOO=repo\nBAR=repo',
-        appDotEnv: 'FOO=app',
+        '.env': 'FOO=repo\nBAR=repo',
+        'apps/my-app/.env': 'FOO=app',
       });
-      cleanup = tree.cleanup;
 
-      const result = resolveEnv({
-        schema: TestSchema,
-        processEnv: {},
-        startDir: tree.startDir,
-      });
+      const result = resolveEnv({ schema: TestSchema, processEnv: {}, ...tree });
 
       expect(result.ok).toBe(true);
       if (result.ok) {
@@ -395,17 +308,12 @@ describe('resolveEnv', () => {
 
     it('app .env.local overrides app .env', () => {
       const tree = createThreeTierTree({
-        repoDotEnv: 'FOO=repo\nBAR=repo',
-        appDotEnv: 'FOO=app_base',
-        appDotEnvLocal: 'FOO=app_local',
+        '.env': 'FOO=repo\nBAR=repo',
+        'apps/my-app/.env': 'FOO=app_base',
+        'apps/my-app/.env.local': 'FOO=app_local',
       });
-      cleanup = tree.cleanup;
 
-      const result = resolveEnv({
-        schema: TestSchema,
-        processEnv: {},
-        startDir: tree.startDir,
-      });
+      const result = resolveEnv({ schema: TestSchema, processEnv: {}, ...tree });
 
       expect(result.ok).toBe(true);
       if (result.ok) {
@@ -416,18 +324,13 @@ describe('resolveEnv', () => {
 
     it('full five-source precedence: repo .env < repo .env.local < app .env < app .env.local < processEnv', () => {
       const tree = createThreeTierTree({
-        repoDotEnv: 'FOO=repo_base\nBAR=repo_base',
-        repoDotEnvLocal: 'FOO=repo_local',
-        appDotEnv: 'FOO=app_base',
-        appDotEnvLocal: 'FOO=app_local',
+        '.env': 'FOO=repo_base\nBAR=repo_base',
+        '.env.local': 'FOO=repo_local',
+        'apps/my-app/.env': 'FOO=app_base',
+        'apps/my-app/.env.local': 'FOO=app_local',
       });
-      cleanup = tree.cleanup;
 
-      const result = resolveEnv({
-        schema: TestSchema,
-        processEnv: { FOO: 'process' },
-        startDir: tree.startDir,
-      });
+      const result = resolveEnv({ schema: TestSchema, processEnv: { FOO: 'process' }, ...tree });
 
       expect(result.ok).toBe(true);
       if (result.ok) {
@@ -438,17 +341,12 @@ describe('resolveEnv', () => {
 
     it('repo .env.local overrides repo .env but app .env overrides both', () => {
       const tree = createThreeTierTree({
-        repoDotEnv: 'FOO=repo_base\nBAR=repo_base',
-        repoDotEnvLocal: 'FOO=repo_local\nBAR=repo_local',
-        appDotEnv: 'FOO=app_base',
+        '.env': 'FOO=repo_base\nBAR=repo_base',
+        '.env.local': 'FOO=repo_local\nBAR=repo_local',
+        'apps/my-app/.env': 'FOO=app_base',
       });
-      cleanup = tree.cleanup;
 
-      const result = resolveEnv({
-        schema: TestSchema,
-        processEnv: {},
-        startDir: tree.startDir,
-      });
+      const result = resolveEnv({ schema: TestSchema, processEnv: {}, ...tree });
 
       expect(result.ok).toBe(true);
       if (result.ok) {
@@ -460,19 +358,12 @@ describe('resolveEnv', () => {
 
   describe('app root === repo root deduplication', () => {
     it('does not double-load .env files when package.json is at the repo root', () => {
-      const repoRoot = mkdtempSync(join(tmpdir(), 'single-root-'));
-      writeFileSync(join(repoRoot, 'pnpm-workspace.yaml'), 'packages: []');
-      writeFileSync(join(repoRoot, 'package.json'), '{"name":"root"}');
-      writeFileSync(join(repoRoot, '.env'), 'FOO=once\nBAR=once');
-      const startDir = join(repoRoot, 'src');
-      mkdirSync(startDir, { recursive: true });
-      cleanup = () => rmSync(repoRoot, { recursive: true, force: true });
-
-      const result = resolveEnv({
-        schema: TestSchema,
-        processEnv: {},
-        startDir,
+      const tree = createRepoTree({
+        'package.json': '{"name":"root"}',
+        '.env': 'FOO=once\nBAR=once',
       });
+
+      const result = resolveEnv({ schema: TestSchema, processEnv: {}, ...tree });
 
       expect(result.ok).toBe(true);
       if (result.ok) {
@@ -484,16 +375,9 @@ describe('resolveEnv', () => {
 
   describe('backward compatibility (no app-level .env files)', () => {
     it('works when app has package.json but no .env files', () => {
-      const tree = createThreeTierTree({
-        repoDotEnv: 'FOO=repo\nBAR=repo',
-      });
-      cleanup = tree.cleanup;
+      const tree = createThreeTierTree({ '.env': 'FOO=repo\nBAR=repo' });
 
-      const result = resolveEnv({
-        schema: TestSchema,
-        processEnv: {},
-        startDir: tree.startDir,
-      });
+      const result = resolveEnv({ schema: TestSchema, processEnv: {}, ...tree });
 
       expect(result.ok).toBe(true);
       if (result.ok) {

@@ -52,7 +52,9 @@ describe('readActiveClaimsFile on a fresh checkout', () => {
     );
 
     expect(registry.claims).toEqual([]);
-    expect(registry.commit_queue).toEqual([]);
+    // The 1.4.0 seed carries claims only: the commit queue is machine-local
+    // ephemera in the per-intent store, never in the claims file.
+    expect(EMPTY_ACTIVE_CLAIMS_REGISTRY_JSON).not.toContain('commit_queue');
   });
 
   it('yields the parser error as its original Err for present-but-invalid content — only ENOENT is enriched', async () => {

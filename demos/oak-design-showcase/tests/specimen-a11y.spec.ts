@@ -162,8 +162,41 @@ test.describe('specimen: reflow at 320px', () => {
         reflow.clientW,
       );
       expect(reflow.minLeft, 'content pushed left of the origin is unreachable').toBe(0);
+      // The lesson-breakdown table overflows here, so its scroll region must
+      // be a tab stop before axe reads it (SC 2.1.1). The region takes its
+      // tab stop after hydration, so the assertion waits for it.
+      await expect(breakdownRegion(page)).toHaveAttribute('tabindex', '0');
       await expectNoAxeViolations(page);
       assertOnlyKnownExternalOrigins(aborted);
     });
   }
+});
+
+/** The lesson-breakdown table's scroll region, by its accessible name. */
+function breakdownRegion(page: Page) {
+  return page.getByRole('region', { name: 'Lesson breakdown' });
+}
+
+test.describe('specimen: the lesson-breakdown scroll region', () => {
+  test.use({ viewport: { width: 320, height: 900 } });
+  const identity = IDENTITIES[0];
+
+  test(`is a tab stop only while its table overflows @a11y`, async ({ page }) => {
+    await openSpecimen(page, identity);
+    const region = breakdownRegion(page);
+    await expect(region).toHaveAttribute('tabindex', '0');
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await expect(region).not.toHaveAttribute('tabindex');
+  });
+
+  test(`scrolls its table from the keyboard at 320px @a11y`, async ({ page }) => {
+    await openSpecimen(page, identity);
+    const region = breakdownRegion(page);
+    await expect(region).toHaveAttribute('tabindex', '0');
+    await page.locator('#resources .oak-card-link').last().focus();
+    await page.keyboard.press('Tab');
+    await expect(region).toBeFocused();
+    await page.keyboard.press('ArrowRight');
+    await expect.poll(() => region.evaluate((element) => element.scrollLeft)).toBeGreaterThan(0);
+  });
 });

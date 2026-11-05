@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { readExecutor } from '../src/merge-bot/merge';
+import { readExecutor } from '../src/merge-bot/merge-read-env';
 
 /**
  * The read-path executor's env split, proven at the mechanism: the child a

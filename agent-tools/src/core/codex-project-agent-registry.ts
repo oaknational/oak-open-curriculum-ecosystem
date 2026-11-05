@@ -1,5 +1,9 @@
-import { existsSync, readFileSync } from 'node:fs';
 import { isAbsolute, join, posix } from 'node:path';
+
+import { nodeSyncFileSystem, type SyncFileSystem } from './sync-file-system.js';
+
+/** The repository reads the registry and its adapters are made of; the process's own by default. */
+export type RepoFiles = Pick<SyncFileSystem, 'exists' | 'readText'>;
 
 export const CODEX_CONFIG_PATH = '.codex/config.toml';
 const CODEX_CONFIG_DIR = posix.dirname(CODEX_CONFIG_PATH);
@@ -43,13 +47,16 @@ export function parseCodexAgentRegistrations(content: string): CodexAgentRegistr
   return entries.sort((left, right) => left.name.localeCompare(right.name));
 }
 
-export function readCodexAgentRegistrations(repoRoot: string): CodexAgentRegistration[] {
+export function readCodexAgentRegistrations(
+  repoRoot: string,
+  files: RepoFiles = nodeSyncFileSystem,
+): CodexAgentRegistration[] {
   const configAbsolutePath = join(repoRoot, CODEX_CONFIG_PATH);
-  if (!existsSync(configAbsolutePath)) {
+  if (!files.exists(configAbsolutePath)) {
     throw new Error(`Missing Codex project-agent registry: ${CODEX_CONFIG_PATH}`);
   }
 
-  return parseCodexAgentRegistrations(readFileSync(configAbsolutePath, 'utf8'));
+  return parseCodexAgentRegistrations(files.readText(configAbsolutePath));
 }
 
 export function resolveCodexAgentConfigFilePath(configFile: string): string {
@@ -63,7 +70,7 @@ export function resolveCodexAgentConfigFilePath(configFile: string): string {
 function parseTomlBasicString(rawValue: string): string {
   const parsedValue: unknown = JSON.parse(`"${rawValue}"`);
   if (typeof parsedValue !== 'string') {
-    throw new Error('Expected TOML basic string value to parse as a string.');
+    throw new TypeError('Expected TOML basic string value to parse as a string.');
   }
 
   return parsedValue;
@@ -77,7 +84,7 @@ function readRelevantTomlLines(content: string): string[] {
 }
 
 function readAgentSectionName(line: string): string | null {
-  const match = line.match(AGENT_SECTION_PATTERN);
+  const match = AGENT_SECTION_PATTERN.exec(line);
   return match?.[1] ?? null;
 }
 
@@ -99,7 +106,7 @@ function applyRegistrationLine(
 }
 
 function parseTomlStringAssignment(line: string): TomlStringAssignment | null {
-  const match = line.match(TOML_BASIC_STRING_PATTERN);
+  const match = TOML_BASIC_STRING_PATTERN.exec(line);
   if (!match?.[1] || match[2] === undefined) {
     return null;
   }

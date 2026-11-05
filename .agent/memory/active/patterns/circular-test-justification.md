@@ -3,6 +3,7 @@ related_pdr: PDR-021
 name: circular-test-justification
 polarity: anti-pattern
 category: testing
+layer: general
 proven_by: "Sentry MCP wrapper removal (2026-04-15/16)"
 summary: >
   Tests that are the sole consumers of production code create circular

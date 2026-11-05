@@ -154,12 +154,13 @@ cure once the third instance has fired is portable Practice governance.
 
 ## Implementation
 
-This PDR's host-repo operational application is ADR-177 (Asymmetric-cure
-enforcement in staging — host structural-enforcement choice for the
+This PDR's host-repo operational application is the host's
+staging-boundary enforcement decision (asymmetric-cure enforcement in
+staging — host structural-enforcement choice for the
 `git commit -- <pathspec>` failure mode). The rule
 `stage-by-explicit-pathspec`
 already records the asymmetric-cure observation and is the existing
-behavioural cure; ADR-177 names the symmetric cure that closes the
+behavioural cure; that decision names the symmetric cure that closes the
 asymmetry.
 
 ## Source

@@ -3,6 +3,7 @@
  * lesson-breakdown table. Card and table content is typed data mapped to
  * components, never repeated markup.
  */
+import { TableScrollRegion } from './TableScrollRegion';
 
 interface ResourceCard {
   readonly title: string;
@@ -53,15 +54,11 @@ const BREAKDOWN: readonly BreakdownRow[] = [
   },
 ];
 
-/** SC 1.4.10 excepts a data table from reflow only when it scrolls in
- *  its OWN container — and a scrollable region must be reachable by
- *  keyboard with an accessible name (the axe finding that shaped this).
- *  A named <section> carries the region role natively; tabIndex stays
- *  because WCAG 2.1.1 requires the scroll container focusable — the
- *  known static-analysis tension for scrollable regions. */
+/** The table scrolls in its own named region, a tab stop only while it
+ *  overflows (TableScrollRegion carries the why). */
 function BreakdownTable(): React.JSX.Element {
   return (
-    <section className="table-scroll" aria-label="Lesson breakdown" tabIndex={0}>
+    <TableScrollRegion label="Lesson breakdown">
       <table className="oak-table">
         <caption className="oak-heading-6">Lesson breakdown</caption>
         <thead>
@@ -85,7 +82,7 @@ function BreakdownTable(): React.JSX.Element {
           ))}
         </tbody>
       </table>
-    </section>
+    </TableScrollRegion>
   );
 }
 

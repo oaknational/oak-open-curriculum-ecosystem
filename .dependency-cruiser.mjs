@@ -201,6 +201,31 @@ export default {
       },
     },
     {
+      name: 'no-bootstrap-to-workspace-packages',
+      severity: 'error',
+      comment:
+        'The postinstall bootstrap (agent-tools/src/bootstrap/) runs before any workspace package ' +
+        'is built, and builds the packages agent-tools reaches. An import from a workspace package ' +
+        'there resolves to a dist that a cold install has not written yet, so every fresh checkout ' +
+        'fails its postinstall while warm local builds hide it. Keep local copies (ClosureResult ' +
+        'and recordEntries) instead; the module TSDoc in install-time-closure.ts says why. ' +
+        'Type-only imports count too, even through a local module: tsx erases them, but a ' +
+        'reachable rule matches on path alone, so a needed type is copied locally as well.',
+      from: {
+        path: '^agent-tools/src/bootstrap/',
+        // Test files are never loaded at install time.
+        pathNot: ['\\.(test|spec)\\.(ts|js)$'],
+      },
+      to: {
+        // Reachable, not only direct: a workspace import in a module the
+        // bootstrap imports (core/repo-root, core/terminal-output) fails the
+        // install the same way. `^@oaknational/` covers an unbuilt tree, where
+        // the specifier resolves to no path.
+        path: '^(?:packages|apps|demos)/|^@oaknational/',
+        reachable: true,
+      },
+    },
+    {
       name: 'no-import-from-agent-substrate',
       severity: 'error',
       comment:
@@ -208,6 +233,55 @@ export default {
       from: {},
       to: {
         path: '(^|/)\\.agent/',
+      },
+    },
+    {
+      name: 'observability-no-node-core-modules',
+      severity: 'error',
+      comment:
+        'ADR-160: @oaknational/observability is the browser-safe foundation both the Node Sentry ' +
+        'adapter and a browser adapter compose, so its runtime source takes no Node core module ' +
+        '(`node:*` or bare). Test files are outside the runtime source. This rule replaces the ' +
+        'former src/no-node-only-imports.unit.test.ts source grep: an in-process test reads no ' +
+        'disk (.agent/directives/testing-strategy.md §In-process tests).',
+      from: {
+        path: '^packages/core/observability/src/',
+        pathNot: '\\.test\\.ts$',
+      },
+      to: {
+        dependencyTypes: ['core'],
+      },
+    },
+    {
+      name: 'observability-no-sentry',
+      severity: 'error',
+      comment:
+        'ADR-160: the vendor side of the same browser-safety boundary. No @sentry/* package in ' +
+        '@oaknational/observability runtime source; Sentry composition lives in ' +
+        '@oaknational/sentry-node.',
+      from: {
+        path: '^packages/core/observability/src/',
+        pathNot: '\\.test\\.ts$',
+      },
+      to: {
+        path: '(^|/)@sentry/',
+      },
+    },
+    {
+      name: 'build-metadata-env-read-stays-in-runtime-metadata',
+      severity: 'error',
+      comment:
+        '@oaknational/env evaluates ROOT_PACKAGE_VERSION with a filesystem read at module init, ' +
+        'which a bundled or read-only runtime cannot serve. Inside @oaknational/build-metadata ' +
+        'only runtime-metadata.ts (the build-time application-version resolver) may import it, so ' +
+        'resolveRelease and resolveGitSha stay pure at import. This rule replaces the former ' +
+        'source-grep case in tests/git-sha.unit.test.ts.',
+      from: {
+        path: '^packages/core/build-metadata/src/',
+        pathNot: '^packages/core/build-metadata/src/runtime-metadata\\.ts$',
+      },
+      to: {
+        path: '^packages/core/env/',
       },
     },
     {
@@ -308,7 +382,11 @@ export default {
       // `.agent/` is kept visible (not excluded) so the
       // `no-import-from-agent-substrate` forbidden rule can see an import edge
       // into the substrate, but its internals are never followed/analysed.
-      path: ['node_modules', 'dist', '.turbo', '\\.agent/'],
+      // `dist` and `.turbo` are anchored to a directory: bare, `dist` also
+      // matches a source file such as `dist-witnesses.ts`, and `.turbo` (its `.`
+      // any character) one such as `turbo-glob.ts`, whose imports would then go
+      // unchecked.
+      path: ['node_modules', '(^|/)dist/', '(^|/)\\.turbo/', '\\.agent/'],
     },
     exclude: {
       path: [

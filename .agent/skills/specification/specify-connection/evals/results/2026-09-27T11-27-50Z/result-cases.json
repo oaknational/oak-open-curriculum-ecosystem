@@ -1,0 +1,836 @@
+{
+  "schemaVersion": 1,
+  "claudeVersion": "2.1.283",
+  "startedAt": "2026-09-27T11:27:51.245Z",
+  "durationSeconds": 393,
+  "costUsd": 1.3726204,
+  "partial": false,
+  "suite": {
+    "root": "<plugin>",
+    "ablation": "with-without",
+    "judgeModel": "sonnet",
+    "caseFilter": "case-*",
+    "threshold": 0,
+    "concurrency": 1,
+    "plugins": [
+      {
+        "name": "oak-specify-connection-evals",
+        "version": "0.0.0",
+        "path": "<plugin>"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "name": "case-01",
+      "dir": "evals/case-01",
+      "source": "mixed",
+      "promptMarkdown": "Endpoint A: a curriculum API (revision 5) that returns lessons keyed by subject slug; its schema is validated and its tests pass. Endpoint B: a teacher-facing tool (revision 2) that maps A's slugs to its own taxonomy and shows lessons; its schema is validated and its tests pass. Teachers report wrong results for combined science. Relation: B transforms A's subjects. Intended reliance: teachers find the right lessons. Analyse the connection.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A statement of what the mapping between the API and the tool must preserve (subject identity, combined-science membership), the loss it may permit, when it must reject a slug, and the taxonomy version on each side; the analysis shows the pair fails on the combined-science mapping while each side is valid on its own; a counterexample with a specific combined-science slug; the missing evidence (fixtures that would discriminate the mapping); the obligation placed on whoever owns the mapping, not on the API by default.\n\nAssertions:\n1. Both endpoints' local validity is stated and explicitly not taken as evidence that the composition works\n2. A concrete combined-science counterexample is given in which each side is individually valid and the pair fails\n3. The missing obligation is returned to the endpoint that owns the mapping rather than the API being blamed by default\n4. Schema validity is not equated with preserved meaning",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A statement of what the mapping between the API and the tool must preserve (subject identity, combined-science membership), the loss it may permit, when it must reject a slug, and the taxonomy version on each side; the analysis shows the pair fails on the combined-science mapping while each side is valid on its own; a counterexample with a specific combined-science slug; the missing evidence (fixtures that would discriminate the mapping); the obligation placed on whoever owns the mapping, not on the API by default.\n\nAssertions:\n1. Both endpoints' local validity is stated and explicitly not taken as evidence that the composition works\n2. A concrete combined-science counterexample is given in which each side is individually valid and the pair fails\n3. The missing obligation is returned to the endpoint that owns the mapping rather than the API being blamed by default\n4. Schema validity is not equated with preserved meaning",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-specify-connection)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-specify-connection(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 0.5,
+            "passed": false,
+            "turns": 4,
+            "costUsd": 0.15322319999999998,
+            "judgeCostUsd": 0.01707,
+            "durationSeconds": 36,
+            "startedAt": "2026-09-27T11:27:51.343Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL FAIL FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  false,
+                  false
+                ],
+                "evidence": "I didn't find any code or contract documents for either endpoint in the working directory, so this analysis works only from what you described. That means it can locate where the problem most likely is, but it can't prove the cause.\n\n# Seam analysis: curriculum API (rev 5) → teacher tool (rev 2)\n\n## 1. Seam contract\n\n| Field | Content |\n|---|---|\n| **Relation** | B takes A's subject slugs and converts them into B's own subject categories. So the question is whether the meaning survives the conversion, not whether the data has the right format. |\n| **Endpoints** | A: curriculum API, **rev 5**. B: teacher tool, **rev 2**. Where each contract is officially defined was **not supplied**. |\n| **Purpose** | A teacher picks a subject in B and gets the lessons A holds for that subject: all of them, and only those. |\n| **What A promises** | Lessons keyed by subject slug, in a format that passes validation. **Not stated anywhere:** whether slugs are stable across revisions, whether one subject can have several slugs, whether a lesson can belong to several subjects, how \"combined science\" relates to biology, chemistry and physics, and whether A publishes a list of its slugs. |\n| **What B assumes** | Every slug A sends has an entry in B's mapping, and that entry means the same thing. **Not stated anywhere:** which revision of A's slug list the mapping was built against, what happens to a slug it doesn't recognise (reject, drop, or fall back to a default), and how it handles one-to-many or many-to-one subjects. |\n| **What must survive the conversion** | Which subject a lesson belongs to, the right number of lessons (nothing duplicated or missing), and any variants that A treats as part of the subject, such as tier, exam board or key stage. |\n| **Acceptable loss** | Not stated. This is the main gap. |\n| **Failure and recovery** | When a slug doesn't map, neither side defines what should happen or who finds out. Right now the failure goes unnoticed until teachers report it. |\n| **Evidence** | Each side's format validation and tests pass. Nothing tests the two together, and nothing tests whether meaning is preserved. |\n| **When to redo this analysis** | Any new revision of A or B, any change to A's slug list, or any change to B's categories. |\n\n## 2. Does the connection hold?\n\n**For combined science, no. Across the whole connection, it can't be decided from what was supplied.**\n\n- Both sides passing validation only shows each is correct on its own terms. Nothing checks that the subject a teacher chooses in B means the same as the slug A sent.\n- The version numbers themselves are a warning. B is at rev 2 and A is at rev 5. Nothing shows that B's mapping was ever checked against rev 5's slug list, so this pairing may never have been tested.\n- The fault is limited to one subject. That points to a single slug whose relationship to B's categories isn't one-to-one. It doesn't look like a general mismatch in the data format.\n\n## 3. Likely causes\n\nEach of these fits the symptom while both sides still pass their tests.\n\n| # | Likely cause | Why the tests still pass |\n|---|---|---|\n| C1 | **Combined science is one-to-many.** A files these lessons under `combined-science`, but B splits subjects into biology, chemistry and physics. B assigns them all to one subject, drops them, or shows them under the wrong one. | Every output is a valid subject in B. |\n| C2 | **Many-to-one in the other direction.** B has one \"Science\" category, and A's `combined-science` lessons get mixed in with the separate-science lessons. Teachers see the wrong course's lessons. | Nothing is missing, so the format is still valid. |\n| C3 | **A changed its slugs and B wasn't updated.** A renamed or split the slug somewhere between rev 2 and rev 5 (for example `science` became `combined-science`, or tier suffixes like `-foundation` / `-higher` were added). B's lookup misses and quietly falls back to a default. | B's tests use fixtures from the older slug list. |\n| C4 | **Duplicates.** A lesson listed under both combined and separate science is shown twice, or removed as a duplicate under the wrong subject. | Each individual lesson is valid. |\n| C5 | **A variant is lost.** B's categories have no place for tier, exam board or key stage, so foundation and higher lessons get merged. | That detail isn't a required field in B's format. |\n\nThe fastest way to tell these apart is to take one combined-science request, save A's raw response under rev 5, and compare it with B's mapping table and what B displays.\n\n## 4. Missing evidence\n\n- **A's official list of subject slugs at rev 5**, including how combined science relates to other subjects. This is needed to check B's mapping against it.\n- **B's mapping table and the A revision it was built against.** This is needed to know whether B was ever tested against rev 5.\n- **B's rule for slugs it doesn't recognise.** This is needed to confirm or rule out C3.\n- **A test of the two together:** real rev 5 data in, compared against a set of lessons a subject expert has confirmed per subject. This is what would support the claim that teachers find the right lessons, which neither side's own tests can.\n- **Specific teacher reports:** what they expected to see and what they actually saw. This separates wrong lessons (C1/C2), missing lessons (C3), duplicates (C4) and merged tiers (C5).\n\n## 5. What each side needs to add\n\nThe fix belongs in each side's own contract. Patching it only in the connection code would hide the gap.\n\n- **A (curriculum API):** State how subjects relate to each other (combined vs. separate sciences, tiers), promise slug stability or announce slug changes as versioned events, and publish the slug list as part of the contract.\n- **B (teacher tool):** State which A revision the mapping targets. Handle unknown slugs explicitly by rejecting or flagging them rather than falling back to a default. Define how one-to-many and many-to-one subjects are handled, and what loss is acceptable (tier, exam board).\n- **Shared:** Add a test that runs B's mapping against A's current slug list, reruns whenever either side releases, and fails when a slug is added or renamed without being mapped.\n\n**Conclusion:** Teachers can't currently rely on B to find the right combined-science lessons. The cause is almost certainly B's mapping from A's slugs to its own subjects, not either side's own code. Which specific cause (C1–C5) needs A's rev 5 slug list and B's mapping table, compared against real rev 5 data. Once the fix is in, the question of whether B is ready for teachers again is a separate readiness check."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 0.5,
+            "passed": false,
+            "turns": 2,
+            "costUsd": 0.0881026,
+            "judgeCostUsd": 0.011406,
+            "durationSeconds": 24,
+            "startedAt": "2026-09-27T11:28:27.776Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL FAIL FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  false,
+                  false
+                ],
+                "evidence": "There's no code in the working directory (`cwd` is empty), so this analysis works only from what you described. I haven't tested it against the real systems.\n\n## The core problem: nothing checks the connection\n\nEach side is checked, but only against itself:\n\n| What's verified | What it proves | What it doesn't prove |\n|---|---|---|\n| A's schema + tests | A returns well-formed lessons keyed by slug | That the slugs mean what B thinks they mean |\n| B's schema + tests | B's output is well-formed given its inputs | That its inputs match what A actually sends now |\n| **The A→B mapping** | **Nothing checks it** | **Whether \"combined science\" is sent to the right place** |\n\nA schema check only confirms that a slug is a string. It says nothing about what the string means. B's tests almost certainly run against fixtures or mocks of A, and those were probably captured before A reached revision 5. Both suites pass because each one checks its side against its own assumptions.\n\n## Why combined science in particular\n\nCombined science is the classic case where one subject in one taxonomy doesn't equal one subject in another. Likely causes, roughly in order of probability:\n\n1. **Cardinality mismatch.** In A, combined science is probably one slug that overlaps biology, chemistry and physics, or it's split into several slugs. B's mapping most likely assumes one slug maps to one subject. So B either sends it into one science, which gives partial results, or into a generic \"science\" bucket, which gives too many.\n2. **Slug drift across revisions.** A is on revision 5 and B on revision 2, so B's mapping table was probably written against an older A. If A renamed, split or added a slug (for example `science` → `combined-science`, or tier variants like `combined-science-higher`), B's lookup misses.\n3. **Silent fallback.** When B gets a slug it doesn't recognise, it probably defaults to something (a parent subject, \"other\", or the nearest string match) instead of failing. That turns a mapping gap into wrong results rather than an error, which matches teachers seeing wrong results rather than errors.\n4. **Loose matching.** If B uses prefix or fuzzy matching, `combined-science` could match `science` or even `computer-science`.\n\n## What to check\n\n1. Get A's current list of subject slugs from revision 5 and diff it against B's mapping table's keys. Look for any slug that's missing, or any key B has that A no longer sends.\n2. Find where B's mapping handles a lookup miss. Does it throw, log, or quietly fall back?\n3. Compare the fixtures in B's tests with A's live output for combined science.\n4. Take one example teacher report and trace it from A's response, through the slug B receives and the taxonomy node it picks, to the lessons it shows. Note where it goes wrong.\n\n## Fixes\n\n- **Put the mapping itself under test.** Add a contract test that pulls A's real slug list (or a snapshot pinned to a revision) and checks that every slug maps to a node in B's taxonomy. Run it whenever either side changes.\n- **Fail loudly on unknown slugs.** An unmapped slug should raise an error or alert, not fall back quietly.\n- **Allow one slug to map to several subjects.** B's mapping should accept one A slug → many B nodes, and many A slugs → one B node.\n- **Record which A revision B was built against.** Have B store it, and flag a mismatch.\n- **Add an end-to-end test for what teachers actually rely on.** For example: \"a teacher searching combined science sees lessons X, Y, Z\". That's the promise at stake, and today no test covers it.\n\n**Bottom line:** both endpoints are probably correct on their own terms. The fault is almost certainly in B's slug-to-taxonomy mapping, and no test covers that part. If you share B's mapping code and a sample of A's revision 5 response for combined science, I can find the exact break."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 0.5,
+        "passRate": 0,
+        "scoreWithout": 0.5,
+        "passRateWithout": 0,
+        "delta": 0
+      }
+    },
+    {
+      "name": "case-02",
+      "dir": "evals/case-02",
+      "source": "mixed",
+      "promptMarkdown": "Service S calls payment provider P to charge a card. S retries a failed call up to three times. P's contract says a charge request is processed at most once per idempotency key, and S's contract says every retry carries the same key. Intended reliance: a customer is never charged twice. Both contracts are individually valid. Is the reliance justified?",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: The analysis shows P's at-most-once guarantee protects the customer only if S's key is stable across retries and across S's own restarts; a counterexample where S restarts mid-sequence and mints a new key; the obligations the pair needs beyond either contract (the key persisted before the first call, a reconciliation route for an unknown outcome); the conclusion that the reliance holds only under those named conditions.\n\nAssertions:\n1. The retry-and-duplicate behaviour introduced by the composition is examined rather than assumed away\n2. A concrete counterexample is given (a restart or a new key) in which both contracts hold and the customer is charged twice\n3. The compatibility argument is stated as holding under named conditions, not unconditionally\n4. An obligation the composition adds (key persistence, reconciliation of an unknown outcome) is named",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: The analysis shows P's at-most-once guarantee protects the customer only if S's key is stable across retries and across S's own restarts; a counterexample where S restarts mid-sequence and mints a new key; the obligations the pair needs beyond either contract (the key persisted before the first call, a reconciliation route for an unknown outcome); the conclusion that the reliance holds only under those named conditions.\n\nAssertions:\n1. The retry-and-duplicate behaviour introduced by the composition is examined rather than assumed away\n2. A concrete counterexample is given (a restart or a new key) in which both contracts hold and the customer is charged twice\n3. The compatibility argument is stated as holding under named conditions, not unconditionally\n4. An obligation the composition adds (key persistence, reconciliation of an unknown outcome) is named",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-specify-connection)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-specify-connection(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 3,
+            "costUsd": 0.1241048,
+            "judgeCostUsd": 0.011706000000000005,
+            "durationSeconds": 35,
+            "startedAt": "2026-09-27T11:28:51.966Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "**No, not as stated.** The two contracts together guarantee something narrower than what you want to rely on.\n\n- **What they guarantee:** one retry sequence from S produces at most one charge. S keeps the key the same within that sequence, and P de-duplicates on the key.\n- **What you want to rely on:** a customer is never charged twice. That is about the purchase, not about one call from S. The distance between those two is where the counterexamples below live.\n\n## Seam contract (S depends on P)\n\n| | |\n|---|---|\n| **P supplies** | A request is processed at most once per idempotency key. P's contract doesn't say how long a key is remembered, which account or credentials it's scoped to, what happens when the same key arrives with a different amount or while the first request is still running, or what a repeated request gets back. Each of these gaps is a finding. |\n| **S supplies** | Every retry of a call carries the same key, with at most three retries. S's contract doesn't say where the key comes from, whether it survives S restarting, or what S does when it gives up. |\n| **Reliance needs** | One charge per purchase, across every path that can lead to a charge request. |\n\n## Counterexamples (both contracts hold, the customer is charged twice)\n\n1. **S crashes and restarts.** S sends the charge, P processes it, then S dies before getting the response. When S comes back it creates a new key for the same order and charges again. The same key was only promised within one retry sequence.\n2. **The request reaches S twice.** A double-click, a queue delivering the same message again, or a client retrying against S all start new calls with new keys. P sees two different keys and charges twice.\n3. **Retrying after P forgets the key.** If P only remembers keys for a limited time (24 hours is common) and a retry or replayed message arrives later, P treats it as new.\n4. **Giving up is treated as \"not charged.\"** The first attempt succeeds but the response times out. The retries get \"in progress\" or conflict errors, and S stops after three and reports failure. The customer or support then tries again with a new key, and the customer is charged twice. This isn't a violation by P; it's what S does when it runs out of retries.\n5. **Key scope doesn't match.** S sends requests through different P accounts or API credentials, or fails over to a second provider. P's de-duplication doesn't reach across those.\n6. **Different amount under the same key.** If S rebuilds the request on retry and the amount changes, P's behaviour isn't specified. It might reject, process, or return the old result, depending on P.\n\n## Status\n\n**Holds only under these conditions:**\n- The key is derived from the purchase itself (for example, the order ID) and saved before the first attempt. It is reused after restarts and when the same request reaches S again.\n- All retries and replays happen within P's key-retention window.\n- Every attempt carries the same request details.\n- When S runs out of retries without knowing the outcome, it checks with P (looks up the key's result) rather than reporting failure or starting a new charge.\n- Every request goes through one P account and key namespace.\n\n## Missing evidence\n\n- P's documentation on how long keys are kept, what they're scoped to, what a repeated request returns, and how concurrent or mismatched requests are handled.\n- The code in S that generates keys.\n- Tests that kill S after sending but before it gets the response, retry while the first request is still running, and replay a message after the retention window.\n\n## What each side needs to add\n\n- **S:** Tie the key to the purchase, save it before the first attempt, reuse it across restarts and duplicate requests, and treat \"gave up, outcome unknown\" as something to check, not as failure. S's contract currently says only \"the same key per retry,\" and that is the main gap.\n- **P:** State the retention window, the key scope, and the behaviour for repeated, concurrent and mismatched requests.\n- **Whoever owns the purchase flow upstream:** Ensure one purchase maps to one key before the request reaches S. Neither contract covers this.\n\nIf S's contract is strengthened as above and P confirms the missing semantics, you can rely on it within P's retention window. Beyond that window, only a reconciliation process can support it."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.08258959999999999,
+            "judgeCostUsd": 0.010119999999999997,
+            "durationSeconds": 25,
+            "startedAt": "2026-09-27T11:29:26.484Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  false
+                ],
+                "evidence": "**No, not as stated.** The two contracts together prove something narrower than \"a customer is never charged twice.\"\n\n## What the contracts actually give you\n\nP charges at most once per key, and S's retries of one call reuse that call's key. Together that means **one S call, retried up to three times, produces at most one charge.**\n\nThat's a guarantee about a *retry sequence*. The reliance is about a *customer*. The gap between the two is where double charges happen.\n\n## Missing premises\n\n1. **One key per logical charge, not per call.** S's contract only says retries share a key. It doesn't say every attempt at the same purchase uses the same key. A second key, and so a second charge, appears when:\n   - the user double-clicks or resubmits,\n   - S crashes mid-retry and a restarted instance or another replica picks up the job,\n   - S gives up after three tries and a higher layer (queue redelivery, the client, an ops re-run) retries.\n\n   You need the key to come from a durable business identifier, such as an order or payment-intent ID stored before the first call. It shouldn't be generated per invocation.\n\n2. **Retention window.** Providers typically keep idempotency keys for a limited time, often around 24 hours. A retry or replay after the key expires is treated as new. \"At most once per key\" only holds while P still remembers the key.\n\n3. **Key scope at P.** Dedup may be per API account, environment, region or merchant. If S can reach P through more than one of these, the same key isn't the same key to P.\n\n4. **Same key with a different payload.** If a retry rebuilds the request with a changed amount or currency, P might reject it, return the original result, or process it. The contract doesn't say which.\n\n5. **\"Processed\" vs \"charged.\"** P promises at-most-once processing of *requests*. The customer cares about *money moved*. Other paths can move money outside that promise: separate auth and capture, P's own internal retries to the card network, or a later manual or reconciliation charge.\n\n6. **Scope of the claim.** \"Never charged twice\" has to mean \"never charged twice *for the same purchase*.\" Two real orders should produce two charges. Defining that equivalence is S's job, and it's exactly point 1.\n\n## A related risk (not double-charging)\n\nP may answer an in-flight duplicate with a conflict error. S could then mark the order failed while the first request actually succeeds. The customer is charged once but gets no order, which also violates what the business probably intends.\n\n## What would make the reliance justified\n\nAdd these as explicit contracts:\n- **S:** the key is derived from a durable purchase ID that exists before any call, and every path that can charge for that purchase (retries, restarts, replicas, redeliveries, manual re-runs) uses that ID.\n- **S:** all retries and replays for a purchase finish within P's key retention window, or anything later is reconciled against P first (look up the charge by purchase ID) instead of charging blindly.\n- **S:** the request payload is fixed per key.\n- **P:** dedup covers the account and endpoint S uses, and the key covers the whole money movement, not just request intake.\n\nWith those in place the composition holds. Without them, each contract can be correct on its own and the system can still charge twice. The two contracts were never about the same unit: one is scoped to a key, the other to a retry loop, and the reliance is scoped to a purchase."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 1,
+        "passRateWithout": 1,
+        "delta": 0
+      }
+    },
+    {
+      "name": "case-03",
+      "dir": "evals/case-03",
+      "source": "mixed",
+      "promptMarkdown": "Two services each trust the other's health signal to decide whether to fail over: A fails over when B reports healthy, and B fails over when A reports healthy. Each service's contract is individually consistent. Check whether the pair can be relied on to fail over correctly.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: The circular reliance identified: 'A trusts B and B trusts A' is no basis on its own; the pair needs a justified starting condition or a joint rule (an independent arbiter, a tie-break); a counterexample in which both report healthy while both are degraded, or both fail over at once; the conclusion that the pair cannot be relied on as supplied.\n\nAssertions:\n1. The cyclic assumption is named and rejected as a basis on its own\n2. A counterexample is given in which both individually consistent contracts hold and the pair fails\n3. A justified initial condition or joint argument is named as what would be needed",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: The circular reliance identified: 'A trusts B and B trusts A' is no basis on its own; the pair needs a justified starting condition or a joint rule (an independent arbiter, a tie-break); a counterexample in which both report healthy while both are degraded, or both fail over at once; the conclusion that the pair cannot be relied on as supplied.\n\nAssertions:\n1. The cyclic assumption is named and rejected as a basis on its own\n2. A counterexample is given in which both individually consistent contracts hold and the pair fails\n3. A justified initial condition or joint argument is named as what would be needed",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-specify-connection)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-specify-connection(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 3,
+            "costUsd": 0.11934319999999998,
+            "judgeCostUsd": 0.012173999999999997,
+            "durationSeconds": 33,
+            "startedAt": "2026-09-27T11:29:51.268Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "I worked only from the two rules you described. There were no contracts, revisions or code in the working directory, so I analysed the rules as stated.\n\n**Verdict: no. As stated, the pair can't be relied on to fail over correctly.** Each rule is fine on its own, but together they form a circular dependency. Nothing in the rules decides who acts first or who wins a tie, so some ordinary situations leave nobody serving traffic.\n\n## The connection\n\n| | |\n|---|---|\n| **Relation** | Each service depends on the other's health signal to decide whether to fail over. |\n| **Intended reliance** | Exactly one healthy service carries traffic after either one fails. |\n| **What each service provides** | A health report about itself: \"I am healthy.\" |\n| **What each service assumes** | \"If the peer says it's healthy, it is healthy, will stay healthy after I hand over to it, and isn't handing over to me at the same moment.\" |\n| **Missing from the rules** | What makes a service *want* to fail over (its own degradation isn't mentioned), what \"healthy\" means, how fresh a report must be, what a missing report means, and who owns traffic when both could. |\n\n## Why the pair fails\n\nThe only trigger for failover is the peer's health. A's own state plays no part, and neither does B's. That leaves a guarantee without the assumptions it needs:\n\n- **Implication fails.** B saying \"I'm healthy\" doesn't mean B can take A's load. B hasn't agreed to become primary, and the failover itself changes B's load.\n- **The circularity is unresolved.** A's action depends on B's report and B's action depends on A's report. Nothing sets the starting state or picks a tiebreaker. Neither service's contract can fix this alone; it needs an argument about both together.\n\n## Cases where each service follows its rule and the pair fails\n\n1. **Both healthy.** Both fail over to each other at once. Traffic goes back and forth, or both step down and nobody serves. This happens in normal operation, not just in rare faults.\n2. **Both degraded.** Neither sees a healthy peer, so neither fails over. That's acceptable only if it's a deliberate choice, and nothing says it is.\n3. **Network partition.**\n   - If a missing report counts as unhealthy, neither fails over even though both may be fine.\n   - If it counts as healthy, which a stale cached \"healthy\" amounts to, both fail over, as in case 1.\n   - A split-brain variant: both still reach clients but can't see each other.\n4. **Flapping.** A hands over to B, and B's health drops under the new load. If A is healthy again, B hands straight back. With no delay or hysteresis, this repeats indefinitely.\n5. **Shared failure.** Both depend on the same database, DNS or config. Each keeps reporting \"healthy\" because it only checks itself, while both are actually broken. Checking the pair against each other can't catch this; you need a third point of view.\n6. **Stale report.** A acts on a \"healthy\" report from B that's older than B's actual failure. Nothing requires reports to be fresh or to expire.\n\n## Evidence that's missing\n\n- **Written definitions of \"healthy\" from each service.** You'd need to show that \"healthy\" implies \"can take the peer's full load\", not just \"the process is up\".\n- **Staleness and missing-report handling.** You'd need a stated maximum age and a stated meaning for \"no report\".\n- **Fault-injection tests of the pair together.** Cover both healthy, both degraded, partition, flapping under load, and a shared dependency failing. Tests of each service alone don't carry over to the pair.\n- **A mutual-exclusion argument.** Show that at most one service holds the primary role at any time, for example with a lease plus a fencing token (a counter that rejects commands from an old primary).\n\n## What each side needs to add\n\n- **Service A and service B:** make failover depend on their own degradation *and* the peer being healthy, not the peer's health alone. Define \"healthy\", including capacity and a maximum report age. Say how a missing report is treated. Add a hold-down period or hysteresis so they don't flap.\n- **The pair as a whole:** this belongs to whoever owns the deployment, not to either service. It needs a tiebreaker: a witness or arbiter, a lease with fencing, or a fixed active/standby role with an explicit rule for taking over. Without one, cases 1 and 3 can't be fixed by changing either service by itself.\n\nThis should be reopened when either service's health definition or failover trigger changes, when a shared dependency is added, or when the network layout between them changes."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 2,
+            "costUsd": 0.087727,
+            "judgeCostUsd": 0.009977999999999994,
+            "durationSeconds": 27,
+            "startedAt": "2026-09-27T11:30:24.542Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "There's no code or spec in the working directory (it's empty), so this is based only on the contracts as you described them.\n\n**No, the pair can't be relied on.** Each rule makes sense by itself, but together they produce bad states. Neither rule looks at the service's own health, and nothing guarantees that exactly one service is active.\n\n### Outcomes by state\n\n| A's real state | B's real state | What the rules do | Result |\n|---|---|---|---|\n| healthy | healthy | A fails over (B is healthy) **and** B fails over (A is healthy) | **Both hand off at once.** Either nobody is serving, or traffic bounces back and forth. This is the normal steady state, so it's the worst case. |\n| failing | healthy | A fails over to B. B also fails over only if A still reports healthy. | Works only if A's report is accurate. |\n| healthy | failing | Mirror of the row above | Works only if B's report is accurate. |\n| failing | failing | Neither sees a healthy peer, so neither fails over | **Total outage with no action taken.** That may be acceptable, but nothing escalates it. |\n| partitioned | partitioned | Behaviour when the peer's signal is missing or stale isn't defined | **Undefined.** If \"no signal\" counts as healthy, both fail over. If it counts as unhealthy, neither does. |\n\n### Why the individual contracts don't catch this\n\n1. **The trigger is incomplete.** Failover should require \"I am unhealthy **and** my peer is healthy.\" These rules only check the second half, so a healthy service gives up its role.\n2. **The logic is circular.** Each service's decision rests entirely on the other's self-report. There's no outside source of truth to settle disagreement or check that a report is accurate.\n3. **A self-reported \"healthy\" isn't reliable.** A degraded service (for example, one that's up but returning errors) can still report healthy. In this design, that false report is what triggers the handoff.\n4. **Nothing breaks ties or handles timing.** Both services read each other's signal with some lag, so they can make the same decision at the same moment. That causes simultaneous handoffs and repeated flip-flopping.\n5. **The property that matters belongs to the pair.** \"Exactly one service is active\" depends on both services together. You can't prove it by checking each contract separately, and here it's false.\n\n### Fixes, in order of importance\n\n- **Fix the condition:** fail over only when you're unhealthy and your peer is healthy. Better still, the healthy peer should *take over* rather than the failing one *handing off*.\n- **Use an outside arbiter:** have a lease or lock (etcd, ZooKeeper, a cloud load balancer, or a quorum of three) decide who is active. Attach a number to each leadership term that increases every time it changes, so a stale former leader's actions get rejected.\n- **Define what a missing or stale signal means:** make it explicit and safe, for example \"do nothing and alert.\"\n- **Add hysteresis:** require the signal to hold for a period before acting, and enforce a cooldown after each failover so the services can't flip back and forth.\n- **Check health from outside:** use probes that exercise the real request path instead of trusting each service's own report.\n- **Test the pair together:** model-check or test the combined state machine against the \"exactly one active\" rule. Include the \"both healthy\" and \"partitioned\" cases.\n\nIf you have the actual contracts or code, send them and I'll check them against these points."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 1,
+        "passRateWithout": 1,
+        "delta": 0
+      }
+    },
+    {
+      "name": "case-04",
+      "dir": "evals/case-04",
+      "source": "mixed",
+      "promptMarkdown": "Define what our new billing component must do: its inputs, outputs, errors and invariants. We have no consumer for it yet.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: Routes to specify: this is an endpoint's own obligations, not a connection between two specified things; no seam is analysed.\n\nAssertions:\n1. It recognises that the request is for an endpoint's own specification and routes to specify\n2. No seam contract is fabricated for a connection that has no second endpoint",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: Routes to specify: this is an endpoint's own obligations, not a connection between two specified things; no seam is analysed.\n\nAssertions:\n1. It recognises that the request is for an endpoint's own specification and routes to specify\n2. No seam contract is fabricated for a connection that has no second endpoint",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-specify-connection)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-specify-connection(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 0.5,
+            "passed": false,
+            "turns": 2,
+            "costUsd": 0.11280959999999998,
+            "judgeCostUsd": 0.016637999999999986,
+            "durationSeconds": 32,
+            "startedAt": "2026-09-27T11:30:51.427Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL FAIL FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  false,
+                  false
+                ],
+                "evidence": "I couldn't find anything to build on. This repository has no files and no commits, so there's no code, README or design note about billing. What follows is a first-draft spec. The obligations are ones any billing component needs; anything that depends on your business is marked **[decide]**.\n\nBecause there's no consumer yet, I've specified what the component guarantees rather than a shape tuned to one caller. Real consumers should still be checked against it once they exist.\n\n---\n\n# Billing Component: Draft Specification v0\n\n## 1. Responsibility and scope\n\n**It owns:** turning billable facts (subscriptions, usage, one-off charges) into immutable invoices with correct amounts, and recording what has been paid against them.\n\n**It does not own [decide]:** running payment processors, tax rules (it calls a tax provider), customer identity, product catalogue authoring, dunning emails, or revenue recognition.\n\n## 2. Inputs\n\n| Operation | Required inputs | Notes |\n|---|---|---|\n| `recordUsage` | `accountId`, `meterId`, `quantity` (non-negative decimal), `occurredAt`, `idempotencyKey` | Usage that arrives late is accepted until the period closes. After that it goes to the next period **[decide]** |\n| `addCharge` | `accountId`, `amount` (Money), `description`, `idempotencyKey` | One-off charge or credit |\n| `setSubscription` | `accountId`, `planId`, `effectiveAt`, `idempotencyKey` | Proration policy **[decide]** |\n| `closePeriod` / `issueInvoice` | `accountId`, `periodEnd`, `idempotencyKey` | Produces one invoice |\n| `recordPayment` | `invoiceId`, `amount` (Money), `externalRef`, `idempotencyKey` | Reported by the payment side |\n| `voidInvoice` / `issueCreditNote` | `invoiceId`, `reason`, `idempotencyKey` | The only ways to correct an issued invoice |\n| Queries | `getInvoice`, `listInvoices(accountId, range)`, `getBalance(accountId)` | Read-only |\n\n**Money** is an integer count of minor units plus an ISO 4217 currency, e.g. `{amountMinor: 1999, currency: \"EUR\"}`. Floating point is never used for money.\n\n**Time:** all timestamps are UTC instants. Billing periods are half-open intervals `[start, end)`.\n\n## 3. Outputs\n\n- **Invoice:** `invoiceId`, `accountId`, `currency`, `period`, `lineItems[]`, `subtotal`, `tax[]`, `total`, `amountPaid`, `amountDue`, `status` (`draft | issued | paid | void | uncollectible`), `issuedAt`, and a stable, gapless `invoiceNumber` **[decide: is gapless numbering legally required?]**\n- **Line item:** its source reference (usage aggregate, subscription, or charge), quantity, unit price, amount, and period.\n- **Events** (at-least-once delivery, each with an `eventId` for deduplication): `InvoiceIssued`, `InvoicePaid`, `InvoiceVoided`, `CreditNoteIssued`, `PaymentRecorded`.\n- **Balance:** the account's outstanding amount per currency.\n\n## 4. Errors\n\nEvery error is typed and says whether retrying can help.\n\n| Error | When | Retryable |\n|---|---|---|\n| `ValidationError` | Malformed input, negative quantity, unknown currency | No |\n| `NotFound` | Unknown account, plan, meter or invoice | No |\n| `CurrencyMismatch` | Charge or payment currency differs from the invoice or account currency | No |\n| `IdempotencyConflict` | Same key reused with a different payload | No |\n| `InvalidStateTransition` | For example, paying a voided invoice or editing an issued one | No |\n| `PeriodClosed` | Usage arrives for a period that has been finalized (if the policy is \"reject\") | No |\n| `Overpayment` | Payment exceeds amount due (or record it as account credit **[decide]**) | No |\n| `DependencyUnavailable` | Tax provider or storage is unavailable | Yes |\n| `ConcurrencyConflict` | An optimistic-lock collision | Yes |\n\nNo failure may leave a partial result. Each operation either commits in full or leaves no trace.\n\n## 5. Invariants\n\n**Arithmetic**\n1. `total = subtotal + Σtax`, and `subtotal = Σ lineItem.amount`, exactly, in minor units.\n2. `amountDue = total − amountPaid` and `amountDue ≥ 0`, unless overpayment becomes credit **[decide]**.\n3. All amounts on one invoice share one currency. There is no implicit FX conversion.\n4. Rounding happens once per line item using a documented mode (e.g. half-even), never on intermediate sums **[decide]**.\n\n**Immutability and history**\n\n5. An issued invoice is never modified. It can only be corrected by voiding it or issuing a credit note, and both leave the original readable.\n6. Each billable fact (usage record, charge, subscription interval) is billed on **at most one** non-void invoice. Nothing is billed twice.\n7. Every billable fact whose period has closed is eventually billed on exactly one invoice. Nothing is dropped.\n8. Every line item traces back to the source facts that produced it.\n\n**State**\n\n9. Status transitions only move forward: `draft → issued → {paid, void, uncollectible}`. `paid` and `void` are terminal.\n10. `status = paid` exactly when `amountDue = 0` on an issued invoice.\n\n**Idempotency and concurrency**\n\n11. Repeating an operation with the same idempotency key and payload returns the original result and has no further effect.\n12. Concurrent writes to the same account cannot violate invariants 1–10. The account is serialized per account or uses optimistic locking.\n\n**Determinism**\n\n13. Given the same facts, prices and tax results, invoice generation produces the same invoice. Prices and tax rates are snapshotted at issue time, so later catalogue changes never alter issued invoices.\n\n## 6. Open decisions that block implementation\n\n1. Which currencies are supported, and is each account limited to one currency?\n2. Proration and plan-change policy.\n3. Late usage: bill it in the next period or reject it?\n4. Overpayment: reject it or keep it as account credit?\n5. Tax: which provider, and what to do when it's down (block issuing, or issue as a draft)?\n6. Jurisdiction rules for invoice numbering and how long invoices must be retained.\n7. Will this be an in-process library, a service API, or event-driven?\n\n---\n\nAnswering the decisions in section 6 would let me tighten this into a final spec. I can also write it into the repo, for example as `docs/billing-spec.md`, or turn the invariants into property-based test stubs, so the first implementation is checked against them."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": false,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 0.5,
+            "passed": false,
+            "turns": 2,
+            "costUsd": 0.08886,
+            "judgeCostUsd": 0.011147999999999991,
+            "durationSeconds": 24,
+            "startedAt": "2026-09-27T11:31:23.616Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL FAIL FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  false,
+                  false
+                ],
+                "evidence": "The repo is empty, so there's no existing code or conventions to build on. There's also no consumer, which is the bigger issue. A contract written without a caller tends to guess wrong about what goes in and comes out. I'd split the spec into two parts:\n\n- **Invariants:** true for any billing system, so we can commit to these now.\n- **Inputs, outputs and errors:** a minimal draft that stays open until the first consumer shows up.\n\n## Invariants (commit now)\n\n1. **Money is an integer in minor units plus an ISO 4217 currency code.** No floats. For example, `{amount: 1999, currency: \"USD\"}`.\n2. **One currency per invoice.** Every line item must match the invoice's currency. The component never converts currencies silently.\n3. **Totals are derived, never stored independently.** `total = sum(line.amount) + tax - discounts`, and it's recomputed and checked whenever the invoice is finalized.\n4. **Finalized invoices can't be changed.** To fix one, you issue a credit note or void it. You never edit it.\n5. **Every mutating call is idempotent.** It requires an `idempotency_key`. Replaying the same key with the same payload returns the original result. Replaying it with a different payload is an error.\n6. **An append-only ledger.** Balances are always derived from ledger entries, and entries are never updated or deleted.\n7. **One-way invoice states:** `draft → open → paid | void | uncollectible`. No transition goes backwards.\n8. **Rounding happens once, at line level, with a documented rule** (for example, half-even). It never happens on the aggregated total.\n\n## Inputs (draft)\n\n| Operation | Input |\n|---|---|\n| `create_invoice` | `account_id`, `currency`, `period_start`/`period_end`, `idempotency_key` |\n| `add_line_item` | `invoice_id`, `description`, `quantity`, `unit_amount`, optional `metadata` |\n| `finalize_invoice` | `invoice_id` |\n| `record_payment` | `invoice_id`, `amount`, `external_ref`, `idempotency_key` |\n| `void_invoice` | `invoice_id`, `reason` |\n| `get_invoice` / `get_balance` | `invoice_id` / `account_id` |\n\n## Outputs (draft)\n\n- **`Invoice`:** `id`, `account_id`, `status`, `currency`, `lines[]`, `subtotal`, `tax`, `total`, `amount_paid`, `amount_due`, timestamps.\n- **`LedgerEntry`:** `id`, `account_id`, `amount` (signed), `currency`, `source` (invoice or payment ID), `created_at`.\n- **`Balance`:** `account_id`, `currency`, `amount`.\n\n## Errors (draft)\n\nThese are typed errors that aren't retryable, apart from the last one:\n\n- `InvalidAmount`: negative or zero where that isn't allowed, or too many decimal places for the currency.\n- `CurrencyMismatch`\n- `InvalidStateTransition`: for example, adding a line to a finalized invoice.\n- `IdempotencyConflict`: same key, different payload.\n- `NotFound`: unknown account or invoice.\n- `Overpayment`: or accept it as account credit (see open question 3).\n- `TransientFailure`: the only retryable error, and always safe to retry because of idempotency.\n\n## Open questions only a consumer can answer\n\n1. **What is being billed?** Subscriptions, usage-based metering or one-off charges each change the input shape a lot.\n2. **Does this component collect payments** through a payment provider, or only record them?\n3. **What happens on overpayment?** Reject it, or keep it as credit.\n4. **Tax:** calculated here, passed in, or out of scope?\n5. **Is the interface sync or async?** Does it need to emit events such as `invoice.paid`?\n6. **Multi-currency accounts:** does an account need a separate balance per currency?\n\nMy recommendation is to lock in the invariants now and treat everything else as provisional. Only implement the operations the first consumer actually calls, rather than building the whole draft surface in advance.\n\nI can save this as `docs/billing-contract.md`, or turn the invariants into property-based tests, if either would help."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 0.5,
+        "passRate": 0,
+        "scoreWithout": 0.5,
+        "passRateWithout": 0,
+        "delta": 0
+      }
+    },
+    {
+      "name": "case-05",
+      "dir": "evals/case-05",
+      "source": "mixed",
+      "promptMarkdown": "A council forwards streetlight reports to the utility that owns the lights. The council's service says a report is 'sent'; the utility's contract says it acknowledges receipt within one working day and repairs within ten. Residents rely on their report being acted on. Analyse the connection.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: The handoff analysed as a delegation: the council's obligation ends at a confirmed receipt, not at 'sent'; the utility's obligations (acknowledge, repair, a route to correct a wrong report) and the residents' route to see status stated separately; a counterexample where the report is sent and never received; an argument about responsibility and delivery for a human service (a receiving organisation, its capacity, a usable contact route), not a proof that people behave as intended.\n\nAssertions:\n1. 'Sent' is distinguished from 'received' and from 'repaired'\n2. The obligations of the council and the utility are stated separately, with what stays shared named\n3. A lost-report counterexample is given and the correction or status route it needs\n4. The argument is a responsibility and delivery argument for a human service, not a behavioural proof",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: The handoff analysed as a delegation: the council's obligation ends at a confirmed receipt, not at 'sent'; the utility's obligations (acknowledge, repair, a route to correct a wrong report) and the residents' route to see status stated separately; a counterexample where the report is sent and never received; an argument about responsibility and delivery for a human service (a receiving organisation, its capacity, a usable contact route), not a proof that people behave as intended.\n\nAssertions:\n1. 'Sent' is distinguished from 'received' and from 'repaired'\n2. The obligations of the council and the utility are stated separately, with what stays shared named\n3. A lost-report counterexample is given and the correction or status route it needs\n4. The argument is a responsibility and delivery argument for a human service, not a behavioural proof",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-specify-connection)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-specify-connection(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.1857456,
+            "judgeCostUsd": 0.02109599999999999,
+            "durationSeconds": 54,
+            "startedAt": "2026-09-27T11:31:48.103Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "## Streetlight reports from council to utility: analysis of the connection\n\n**Short answer:** As described, the connection does not support what residents rely on. The council promises that the report was \"sent\". The utility promises to acknowledge \"receipt\" and to repair. Nobody promises the resident that the report will be acted on, and nothing links the council's \"sent\" to the utility's \"received\". It could work under specific conditions, listed in §2.\n\nI only had the three sentences you gave me. I haven't seen the council's service definition, the utility's contract text, or the version of either. Wherever a document would settle a question, I've recorded it as missing evidence rather than guessing.\n\n---\n\n### 1. Seam contract\n\nThere are three parties, so this is more than one link:\n\n| Seam | Relation | Producer → Consumer |\n|---|---|---|\n| A | Represents | Council's \"sent\" status → the resident's belief about what happened to their report |\n| B | Transforms | Resident's report (description, map pin) → the utility's work order (asset, fault type) |\n| C | Hands off the work | Council → utility, which takes on the acknowledgement and repair obligations |\n| D | Contributes to an outcome | The whole chain → the light is fixed |\n\n| Field | Content |\n|---|---|\n| **Endpoints and versions** | Council reporting service (version unknown). Utility contract (version unknown; the other party to it is unknown, probably the council). The resident, who relies on the result but is not a party to either promise. |\n| **Purpose** | A resident reports a faulty light once and can reasonably expect it to be fixed without doing anything more. |\n| **Council supplies** | The report was \"sent\". What that means is not defined: queued, transmitted, or delivered? |\n| **Utility supplies** | Acknowledgement within 1 working day of *receipt*; repair within 10 (working or calendar days not stated; start point not stated). |\n| **Resident assumes** | Someone who owns the light has accepted the job and will fix it or explain why not. |\n| **What must survive the handoff** | The identity of the light (which column), the fault type, how urgent it is, and a link back to the original report. None of this is stated. |\n| **Authority** | The utility's obligations are owed to whoever signed its contract, not to the resident. Handing the work to the utility doesn't take away the council's responsibility for the service it runs for residents. |\n| **Failure and recovery** | Neither side defines what happens if the report is never received, never acknowledged, rejected as \"not our asset\", closed as \"no fault found\", or misses the repair deadline. |\n| **Evidence** | None supplied, beyond the two promises as you described them. |\n| **Events that reopen this analysis** | A contract renewal or change of utility; a change to the council's reporting platform or its data format; a change to asset ownership (adopted roads, private lights, PFI schemes); any change to what residents are told. |\n\n### 2. Does it hold together?\n\n**Status: it fails for the intended reliance. It would hold under the conditions below.**\n\n- **The promises don't meet.** \"Sent\" doesn't guarantee \"received\". The utility's one-day clock starts at receipt, so a report that never arrives starts no clock. The utility's promise isn't wrong; it just never applies.\n- **The link back is missing.** The utility produces an acknowledgement, but nothing says the council receives it, checks for it, or reflects it in the status. So the only guarantee the resident can see is the weakest one in the chain.\n- **The promises don't cover the resident's expectation.** \"Acted on\" includes being told the outcome. The utility's promise stops at the repair, and the council's stops at sending. Nobody tells the resident about a rejection, a \"no fault found\" result, or a delay.\n- **Handing off the work isn't the same as delivering it.** It would be wrong to conclude that because the utility has a 10-day repair promise, the council's service delivers repairs.\n\n**It holds if all of these are true:**\n\n1. The council defines \"sent\" as delivered, with an audit trail.\n2. The council records the utility's acknowledgement and chases it if it's missing after one working day.\n3. The utility's acknowledgement carries a reference the council can match to the resident's report.\n4. The utility returns every outcome (repaired, rejected, no fault found, delayed) to the council, and the council shows it to the resident.\n5. The council checks ownership before routing, and has a route for lights the utility doesn't own.\n6. The contract defines \"repair\", its exceptions, its clock, and how it's enforced, and the council actually monitors performance against it.\n7. Dangerous faults have a separate emergency route.\n\n### 3. Failure cases examined\n\nIn each case below, both the council and the utility do what they promised, and the resident is still let down.\n\n| # | Case | Outcome |\n|---|---|---|\n| 1 | Email or API delivery fails silently after the council marks the report \"sent\". | **Fails.** The utility's clock never starts, and the resident sees \"sent\" indefinitely. |\n| 2 | The utility acknowledges the report, but the acknowledgement goes to an unmonitored mailbox. | **Fails.** The utility has kept its promise, but the council can't tell a delayed job from a lost one. |\n| 3 | The resident drops a pin between two columns, and the utility inspects the wrong one, which works. | **Fails.** \"No fault found\" is a valid closure, but the actual fault persists. The handoff kept the report's format but lost which light it was. |\n| 4 | The light is council-owned, private, or on a trunk road; the utility rejects it as \"not our asset\". | **Fails** unless the council re-routes it. The resident still sees \"sent\". |\n| 5 | Twelve residents report the same light; the utility merges them and closes eleven. | **Partly fails.** One repair happens, but eleven residents may see a status that never updates, or even \"closed\" with no repair. |\n| 6 | An intermittent fault is checked during the day and closed as \"no fault found\". | **Fails.** Both sides are valid, and the resident's reliance is broken with no route back. |\n| 7 | A column is knocked down or wiring is exposed, and the report is handled under the normal 10-day repair. | **Fails badly.** It's a safety risk. Ten days is the wrong promise for this kind of fault, and neither side mentions an emergency route. |\n| 8 | A report is made on a Friday evening and received on Monday; \"10\" turns out to mean working days, counted from inspection. | **Ambiguous.** The resident's likely expectation (about a week and a half) and the contract (possibly 3+ weeks) differ, so this can't be decided without the contract text. |\n| 9 | The utility is behind schedule due to storm damage, and the repair promise has a force-majeure exception. | **Holds only under named conditions.** It's fine if the resident is told, and fails if they aren't. |\n\nNothing in what you gave me survives cases 1, 2, 4 or 7.\n\n### 4. Missing evidence\n\n| Claim | What would settle it |\n|---|---|\n| \"Sent\" means delivered | The council's technical specification plus delivery logs |\n| The acknowledgement arrives and is matched to the report | The interface specification for the return channel, plus the proportion of reports acknowledged |\n| The 10-day repair promise applies to this fault | The contract text: definition of repair, exceptions, clock start, working or calendar days |\n| The council can enforce the promises | Who the contract parties are, and its monitoring and remedy clauses |\n| Reports reach the right owner | Accuracy of the asset ownership register, and the rate of misrouted reports |\n| It works in practice | Actual figures for acknowledgement within 1 day and repair within 10, for reports that came through the council |\n\n### 5. Who needs to fix what\n\n- **Council reporting service:** define \"sent\". Record acknowledgements and chase missing ones. Show the resident the real status and final outcome. Check ownership before routing and handle rejections. Run a route for urgent or dangerous faults. The council keeps responsibility for what residents are told.\n- **Utility (under its contract):** define what counts as \"receipt\". Send an acknowledgement with a reference that can be matched to the report. Define \"repair\", its exceptions and its clock. Report every outcome back, including rejections, \"no fault found\", merged duplicates and delays.\n- **The contract between council and utility:** state the parties, how performance is monitored, and the remedies. Settle whether the utility's obligations reach residents directly or only through the council.\n- **What residents are told:** state only what the chain can actually back up. Until the gaps are closed, that is \"forwarded to the owner\", not \"will be fixed\".\n\n**Where this stops:** reliance on \"acted on\" is blocked, mainly by cases 1, 2, 4 and 7. Once you have the documents in §4, the next step would be to check whether the service is ready to support that promise."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 0.5,
+            "passed": false,
+            "turns": 1,
+            "costUsd": 0.09765159999999999,
+            "judgeCostUsd": 0.013002,
+            "durationSeconds": 32,
+            "startedAt": "2026-09-27T11:32:42.331Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL FAIL FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  false,
+                  false
+                ],
+                "evidence": "# The council-to-utility handoff for streetlight reports\n\n## The core problem\n\nThere are three parties, and each has a different idea of what \"done\" means:\n\n| Party | What they think \"done\" means | Who they're accountable to |\n|---|---|---|\n| Council service | Report **sent** | Resident, but only for forwarding |\n| Utility | Report **acknowledged** (1 working day), light **repaired** (10 working days) | Council, under contract |\n| Resident | Light **fixed** | Nobody. They have no relationship with the utility. |\n\n\"Sent\" is true, but it only describes something the council did. The resident reads it as \"someone is dealing with it.\" Nobody owns the whole journey from report to working light. The council thinks its job ends at \"sent\". The utility's duty is owed to the council, not the resident. And the only person who notices whether the light still works is the resident, who has no way of doing anything with that knowledge.\n\n## Where it can fail without anyone noticing\n\nThe status stays at \"sent\" in every one of these cases:\n\n1. **Delivery fails.** An email bounces, an API call errors, or a mailbox isn't monitored. The council says \"sent\" when it was never received.\n2. **Wrong owner.** Some lights belong to the council itself, a highways authority or a private estate. The utility ignores or rejects the report, and the rejection never gets back to the council.\n3. **Rejected for missing data.** The asset ID is wrong or the location is too vague. The utility bounces it, and the resident still sees \"sent\".\n4. **No acknowledgement.** The one-working-day promise only helps if someone is checking for it. If the council isn't watching for acknowledgements, a missing one is invisible.\n5. **Treated as a duplicate.** The utility merges the report into an existing ticket, and the resident's reference number is lost.\n6. **Repair overdue.** Day 10 passes and nobody chases it, because nobody is counting.\n7. **Closed but not fixed.** The utility closes the ticket as \"no fault found\" or \"fixed\", but the light is still out. The resident has no route to reopen it.\n8. **Urgent cases on the routine timescale.** A knocked-down column or exposed wiring is a safety hazard. It shouldn't wait 10 working days.\n\n## What the contract gives you, and what it doesn't\n\nThe utility's commitments are useful because they are clear, time-bound checkpoints. The council can monitor against them. But a contractual duty to acknowledge within a day only protects residents if:\n- the acknowledgement comes back in a form the council can process automatically,\n- it carries the council's reference number and the utility's own reference,\n- it can say \"rejected, because…\" as well as \"accepted\", and\n- the council actually does something when it doesn't arrive.\n\nWithout those, the service levels exist on paper but give residents no real protection.\n\n## Recommendations\n\n**1. Show residents the states that actually happen.**\nSubmitted → Sent to [Utility] → Acknowledged (utility ref) → Repair due by [date] → Fixed / Closed ([reason])\nPlus: *Not accepted: [reason], we're [re-routing / contacting you]*.\n\n**2. Be honest about what \"sent\" means.** For example: \"Sent to [Utility], who own this light. They aim to confirm within 1 working day and fix it within 10 working days (by [date]).\" This sets the right expectation and gives the resident a date to hold someone to.\n\n**3. Have the council watch the service levels.**\n- No acknowledgement by the end of the next working day: resend, then escalate to a named contact.\n- No repair confirmation by day 10: chase, record the breach, and tell the resident.\n- Report service-level performance as contract-management information.\n\n**4. Close the loop.** Pass the utility's closure and its reason back to the resident. Let them say \"still not working\" and reopen the report under the same reference rather than starting a new one.\n\n**5. Check routing before sending.** Match the report against an asset register of who owns which light, so wrong-owner reports are caught at the council's end and not lost at the utility.\n\n**6. Separate urgent reports.** Put hazards like damaged columns or exposed wiring on their own route with their own response time, and possibly a phone number.\n\n**7. Make one party answerable to the resident.** The council is the resident's point of contact, so it should own the outcome, not just the forwarding. The contract lets it pass the repair work to the utility. It doesn't let it pass on the responsibility for making sure the light gets fixed.\n\n## In one line\n\nThe council tells residents a report was *sent*. The utility promises to *acknowledge* and *repair*. Residents assume it's *fixed*. Nothing currently connects those three. The fix is to track the utility's acknowledgement and repair deadlines, act when they're missed, and show all of it to the resident."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 0.5,
+        "passRateWithout": 0,
+        "delta": 0.5
+      }
+    },
+    {
+      "name": "case-06",
+      "dir": "evals/case-06",
+      "source": "mixed",
+      "promptMarkdown": "Endpoint A: a search API whose contract states results are returned 'promptly' with no latency figure, and that under load requests may be queued. Endpoint B: a classroom tool whose contract assumes every search returns within 50 milliseconds so a lesson list can render before the page's first paint, and which shows an empty list otherwise. Intended reliance: teachers see their lessons on first paint. Both contracts are individually consistent. Analyse the connection.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: The analysis finds B's assumption infeasible: B assumes a latency guarantee A never gives; the counterexample is any queued request under load, in which both contracts hold and the teacher sees an empty list; the finding placed on B's assumption, with A's absent figure named as an obligation the pair needs; what the pair would need (a stated latency bound from A, or B showing a loading state rather than an empty list); what each side must state for the reliance to hold.\n\nAssertions:\n1. B's 50-millisecond assumption is identified as unsupported by A's contract, not treated as a defect in A\n2. A concrete counterexample is given in which both contracts hold and the intended reliance fails\n3. The obligations the composition needs are named on the side that would carry them (a latency bound from A, or a degraded state in B)\n4. The empty-list behaviour is recognised as a silent failure of the reliance rather than a valid outcome",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: The analysis finds B's assumption infeasible: B assumes a latency guarantee A never gives; the counterexample is any queued request under load, in which both contracts hold and the teacher sees an empty list; the finding placed on B's assumption, with A's absent figure named as an obligation the pair needs; what the pair would need (a stated latency bound from A, or B showing a loading state rather than an empty list); what each side must state for the reliance to hold.\n\nAssertions:\n1. B's 50-millisecond assumption is identified as unsupported by A's contract, not treated as a defect in A\n2. A concrete counterexample is given in which both contracts hold and the intended reliance fails\n3. The obligations the composition needs are named on the side that would carry them (a latency bound from A, or a degraded state in B)\n4. The empty-list behaviour is recognised as a silent failure of the reliance rather than a valid outcome",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-specify-connection)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-specify-connection(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 3,
+            "costUsd": 0.14592559999999996,
+            "judgeCostUsd": 0.01670399999999997,
+            "durationSeconds": 42,
+            "startedAt": "2026-09-27T11:33:14.542Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "# Connection analysis: classroom tool (B) relying on the search API (A) for first-paint lessons\n\n**Verdict: the connection fails for the intended reliance.** Each contract makes sense on its own, but together they don't. B needs *every* search back within 50 ms. A promises no latency figure and says outright that requests may be queued under load. When B misses its deadline it shows an empty list, which looks exactly like \"you have no lessons\", so the failure gives teachers the wrong answer instead of an obvious error.\n\n## 1. What each side promises and assumes\n\n| | A (search API, producer) | B (classroom tool, consumer) |\n|---|---|---|\n| Latency | \"Promptly\". No number, percentile, load range or point of measurement. | Every search within 50 ms, before first paint. |\n| Under load | Requests may be queued. No maximum wait, no timeout signal, no rejection behaviour stated. | Not addressed. It assumes load doesn't matter. |\n| Failure behaviour | Not stated. | Shows an empty list. |\n| Late results | Not stated. | Not stated. Does the list update when results arrive after paint? |\n\n- **Relation:** B depends on A, with a latency budget.\n- **Intended reliance:** teachers see their lessons on first paint, for every teacher, at every page load.\n- **Revisions:** none were supplied, so any finding here needs rechecking against actual versions. Also, A can redefine \"promptly\" without breaking its own contract. That makes any change to A a reason to reopen this analysis.\n\nThe blank entries in the table are findings in their own right. They are missing obligations, not things to fill in by guessing.\n\n## 2. Why the promises don't meet the assumptions\n\n- **A's promise doesn't imply B's assumption.** \"Promptly\" can't be tested, so it can't satisfy a 50 ms requirement. A actually states the opposite condition: it may queue. Their shared operating context includes load, so B's assumption is contradicted.\n- **B's assumption can't be met by any networked service.** \"Every search within 50 ms\" is a universal claim. No API reached over a network can guarantee that for all requests. Even if A promised a p99 figure, B would still fail at the tail. B has to plan for missing its budget.\n- **The two sides add to the problem together:**\n  - **Failures cluster at the worst time.** Load peaks when lessons start and many teachers open the tool at once. That is when A queues and when the reliance matters most.\n  - **The 50 ms budget is shared.** Network round-trip, TLS and client-side rendering all count against it before A's own processing time. School networks often use most of the budget before A is even involved.\n  - **Retries make queues longer.** If B retries, or teachers reload after seeing an empty list, more requests join A's queue and waits grow.\n  - **Abandoned requests still cost capacity.** When B gives up on a request, A probably still processes it, because nothing in either contract cancels it.\n\n## 3. Cases where both sides behave correctly and the pair still fails\n\n1. **Start of lessons.** 30 classrooms load at 08:55. A queues requests and answers in 250 ms. Every teacher sees \"no lessons\". **Fails.**\n2. **Slow classroom network.** A answers in 15 ms server-side, but the Wi-Fi round-trip is 70 ms. It fails even with no queue at all. **Fails.**\n3. **Real zero vs timeout.** A new teacher genuinely has no lessons, and another teacher's search timed out. B shows the same thing for both. Some teachers may then recreate lessons they already have, causing duplicate data. **Fails, and gives a wrong answer.**\n4. **Reload loop.** Teachers refresh when they see the empty list. A's queue gets longer and more requests time out. **Fails and gets worse over time.**\n5. **Cold start.** After A is deployed, or its cache is cleared, the first requests are slow. **Fails.**\n6. **A changes quietly.** A's operators decide \"promptly\" means under 1 s. That's still within A's contract, so nothing warns B. **Fails without notice.**\n\nThe connection doesn't survive any of these.\n\n## 4. Evidence that's missing\n\n| Claim | What would support it |\n|---|---|\n| A is fast enough at peak | A's latency distribution (p50/p95/p99) under realistic school-day peak load, measured at the client. |\n| 50 ms is achievable end to end | Round-trip times measured from representative classroom networks and devices. |\n| \"First paint\" is the right target | The product owner confirming that lessons must appear *on first paint*, rather than within N ms behind a loading indicator. |\n| How often failures happen | B's telemetry on timeouts versus real empty results. At the moment the two can't be told apart. |\n\n## 5. What each side needs to fix\n\nThese go back to the owner of each contract. I'm not rewriting either contract here.\n\n**A (search API owner):**\n- Replace \"promptly\" with a latency objective that can be measured: a percentile, a latency bound, the load range it applies to, and where it's measured.\n- Specify queuing: the maximum time in the queue, an explicit timeout or overload signal (for example 429/503 with `Retry-After`), and the load-shedding policy.\n- Say whether abandoned requests are cancelled.\n- Commit to notifying consumers when latency behaviour changes.\n\n**B (classroom tool owner):**\n- Drop \"every search within 50 ms\". Choose a percentile target and specify what happens at the tail.\n- Give loading, timeout/error and genuinely-empty their own distinct states. A timeout should never show as \"no lessons\".\n- Render results that arrive after first paint.\n- Retry with backoff and jitter, never an immediate loop.\n- If first-paint visibility really is required, stop depending on a live search for it. Render the lesson list on the server, serve a cached or prefetched copy, and refresh it afterwards.\n\n**The product owner** decides whether \"on first paint\" is a real requirement or whether \"quickly, with a clear loading state\" is enough. That decision determines which of B's fixes are needed.\n\n## Status\n\nThe intended reliance is **blocked**. It could work under two conditions: A publishes a tested percentile bound, and B stops relying on the live search for first paint or handles misses honestly. Even then, \"every teacher, every time, on first paint\" can only be met if the lesson list doesn't depend on a live search at load time. After both sides revise their contracts, the next step is checking whether the fixed connection is ready to use."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.08653759999999999,
+            "judgeCostUsd": 0.011328000000000005,
+            "durationSeconds": 28,
+            "startedAt": "2026-09-27T11:33:56.566Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "# Connecting A and B: a guarantee B needs that A never gives\n\n## Summary\n\nEach contract is fine on its own. Put together, they fail. B's correctness depends on a precondition (every search returns in 50 ms or less) that A doesn't promise and explicitly reserves the right to break (queuing under load). Nobody breaches anything when this goes wrong. The gap sits in the connection, not in either party.\n\n## What each side offers and needs\n\n| | Endpoint A (provider) | Endpoint B (consumer) |\n|---|---|---|\n| Latency | \"Promptly\": no number, can't be tested | Hard bound: ≤ 50 ms, *every* request |\n| Under load | May queue, so the delay has no upper limit | Not considered |\n| On a slow reply | Still correct (the reply is late, not wrong) | Shows an empty list |\n\n1. **B's assumption is not something A agreed to.** \"Promptly\" can't be turned into 50 ms. The queuing clause says outright that there is no upper limit on delay. B has turned a vague word into a precise promise A never made.\n2. **\"Every\" can't be met by any real service.** Even if A committed to a p99 of 50 ms, 1 request in 100 would miss. The network round trip, TLS, and cold caches can use up 50 ms before A even starts work. B's precondition is stricter than anything a networked dependency could honestly guarantee.\n\n## Why this matters more than a typical latency mismatch\n\n- **Failures cluster when reliance matters most.** Teachers open lessons at the same moments: the start of the school day, the start of each period. Those spikes are exactly the \"under load\" case where A queues. So misses aren't spread randomly. They land on many teachers at once, at the moment they need the list.\n- **The failure is silent and looks like real data.** An empty list can't be told apart from \"you have no lessons.\" A teacher may think their lessons were deleted, recreate them, or start class without them. A visible error would be better than a believable false empty.\n- **Nobody is accountable.** A replied \"promptly\" and was allowed to queue. B behaved exactly as its contract says. The teacher's intended reliance fails, and there's no breach to point to. Checking each contract separately will never catch this.\n\n## Can the intended reliance be met?\n\n\"Teachers see their lessons on first paint\" can't be achieved through A as currently contracted. It can only be met by taking A off the first-paint path:\n\n1. **Render lessons from something that doesn't depend on A**, such as server-side rendering, a local or edge cache of the last known lesson list, or prefetching before navigation. Then use A to refresh.\n2. **Separate \"not loaded yet\" from \"empty.\"** Show a loading skeleton, and a \"couldn't load, retrying\" state if it times out. Only show an empty list when A actually returned zero results.\n3. **Late results should update the page, not be thrown away.** If A replies after 50 ms, fill in the list then.\n\nOptional steps on A's side, which help but can't close the gap alone:\n- Ask for a numeric latency target (e.g. p99 under X ms) and a bounded queue or fail-fast behaviour, so B at least knows when to give up and retry.\n- A priority lane or capacity planning for the predictable class-start peaks.\n\n## Contract-level fix\n\nB's contract should list its latency requirement as an explicit dependency precondition, not an internal assumption. Connecting it to A should then require showing that A meets it. Here that check fails, which forces one of two outcomes: A strengthens its guarantee, or B changes its design so the precondition isn't needed. Given that \"every request under 50 ms\" can't be guaranteed over a network, the realistic answer is the second one. B should aim for lessons shown promptly and never shown falsely empty, not a hard 50 ms deadline on every search."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 1,
+        "passRateWithout": 1,
+        "delta": 0
+      }
+    }
+  ],
+  "aggregates": {
+    "casesTotal": 6,
+    "casesPassed": 6,
+    "overallScore": 0.8333333333333334,
+    "overallPassRate": 0.6666666666666666,
+    "meanDelta": 0.08333333333333333
+  }
+}

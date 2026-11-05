@@ -5,8 +5,6 @@
 import type { JsonObject, JsonValue } from '@oaknational/observability';
 import type { LogLevel } from './log-levels.js';
 
-export type { LogLevel };
-
 /**
  * Resource attributes for service identification.
  *
@@ -96,11 +94,6 @@ export type LogContextInputValue =
   | undefined;
 
 /**
- * Message for the logger. ALL messages must be strings.
- */
-type Message = string;
-
-/**
  * Immutable event object written to logger sinks.
  */
 export interface LogEvent {
@@ -121,16 +114,19 @@ export interface LogSink {
 
 /**
  * Logger interface for consistent structured logging across the application.
+ *
+ * @remarks Every message is a string; structured data travels in the context
+ * argument, never in the message.
  */
 export interface Logger {
-  trace(message: Message, context?: LogContextInput): void;
-  debug(message: Message, context?: LogContextInput): void;
-  info(message: Message, context?: LogContextInput): void;
-  warn(message: Message, context?: LogContextInput): void;
-  error(message: Message, context?: LogContextInput): void;
-  error(message: Message, error: NormalizedError, context?: LogContextInput): void;
-  fatal(message: Message, context?: LogContextInput): void;
-  fatal(message: Message, error: NormalizedError, context?: LogContextInput): void;
+  trace(message: string, context?: LogContextInput): void;
+  debug(message: string, context?: LogContextInput): void;
+  info(message: string, context?: LogContextInput): void;
+  warn(message: string, context?: LogContextInput): void;
+  error(message: string, context?: LogContextInput): void;
+  error(message: string, error: NormalizedError, context?: LogContextInput): void;
+  fatal(message: string, context?: LogContextInput): void;
+  fatal(message: string, error: NormalizedError, context?: LogContextInput): void;
   isLevelEnabled?(level: number): boolean;
   child?(context: LogContextInput): Logger;
 }
@@ -140,3 +136,5 @@ export interface LoggerOptions {
   name?: string;
   context?: LogContextInput;
 }
+
+export type { LogLevel } from './log-levels.js';

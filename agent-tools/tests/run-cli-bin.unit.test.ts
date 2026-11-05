@@ -44,6 +44,18 @@ function makeTestIo(): TestIo {
 
 const fakeEnv: AgentToolsEnvironment = {};
 
+/** A runner that throws an Error before producing a result. */
+const explodingRunner = async (): Promise<AgentToolsCliResult> => {
+  throw new Error('runner exploded');
+};
+
+/** A runner that succeeds with empty text on both streams. */
+const silentRunner = async (): Promise<AgentToolsCliResult> => ({
+  exitCode: 0,
+  stdout: '',
+  stderr: '',
+});
+
 describe('runCliBin', () => {
   it('prefixes the command name onto user argv and propagates runner result fields', async () => {
     const io = makeTestIo();
@@ -75,9 +87,6 @@ describe('runCliBin', () => {
 
   it('on Error throw writes message + newline to stderr and sets exitCode=2', async () => {
     const io = makeTestIo();
-    const runner = async (): Promise<AgentToolsCliResult> => {
-      throw new Error('runner exploded');
-    };
 
     await runCliBin({
       command: 'commit-queue',
@@ -87,7 +96,7 @@ describe('runCliBin', () => {
       stdout: io.stdout,
       stderr: io.stderr,
       setExitCode: io.setExitCode,
-      runner,
+      runner: explodingRunner,
     });
 
     expect(io.stderrChunks).toEqual(['runner exploded\n']);
@@ -97,11 +106,6 @@ describe('runCliBin', () => {
 
   it('propagates empty runner stdout/stderr through io.write unchanged (no implicit filtering)', async () => {
     const io = makeTestIo();
-    const runner = async (): Promise<AgentToolsCliResult> => ({
-      exitCode: 0,
-      stdout: '',
-      stderr: '',
-    });
 
     await runCliBin({
       command: 'branch-touched-files',
@@ -111,7 +115,7 @@ describe('runCliBin', () => {
       stdout: io.stdout,
       stderr: io.stderr,
       setExitCode: io.setExitCode,
-      runner,
+      runner: silentRunner,
     });
 
     expect(io.stdoutChunks).toEqual(['']);

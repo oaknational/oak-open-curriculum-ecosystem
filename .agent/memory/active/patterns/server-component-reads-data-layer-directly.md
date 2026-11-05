@@ -3,6 +3,7 @@ name: "A Server Component Reads Its Data Layer Directly — Never HTTP-Fetches I
 polarity: pattern
 use_this_when: "A Next.js (or equivalent RSC) server component fetches data — and any shape involving fetch('/api/…'), NEXT_PUBLIC_BASE_URL, or localhost self-calls appears."
 category: code
+layer: family
 proven_in: "curriculum-hub-demo 2026-07-01 (data-plane lane): a server component self-fetching NEXT_PUBLIC_BASE_URL ?? 'http://localhost:3010'/api/… was replaced by the typed direct call; the untrusted-unknown apparatus (runtime guard + narrowing) deleted with it. Grounded against live react.dev ('access your data layer without having to build an API') and the installed Next.js 16.2.4 docs ('you do not need to use API Routes and Route Handlers together')."
 proven_date: 2026-07-01
 barrier:

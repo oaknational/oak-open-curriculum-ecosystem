@@ -3,6 +3,26 @@ import { describe, expect, it } from 'vitest';
 import { parseStateView } from './state-fields.js';
 import { stateViewFixture } from './state-view-fixture.js';
 
+/** Two same-named `build` runs completing in the same second with the given conclusions. */
+const tiedBuildRuns = (first: string, second: string): readonly Record<string, unknown>[] => [
+  {
+    __typename: 'CheckRun',
+    name: 'build',
+    workflowName: 'CI',
+    status: 'COMPLETED',
+    conclusion: first,
+    completedAt: '2026-08-13T21:17:17Z',
+  },
+  {
+    __typename: 'CheckRun',
+    name: 'build',
+    workflowName: 'CI',
+    status: 'COMPLETED',
+    conclusion: second,
+    completedAt: '2026-08-13T21:17:17Z',
+  },
+];
+
 describe('parseStateView: latest run per check name', () => {
   // GitHub evaluates a check BY NAME through its latest run on the head
   // commit; superseded runs stay in the rollup as residue. Worked instance
@@ -62,25 +82,10 @@ describe('parseStateView: latest run per check name', () => {
   it('an anchor tie resolves to the more-blocking item in either array order', () => {
     // gh timestamps are second-granularity; twins can complete in the same
     // second. Array order is not contractual, so a tie must never green.
-    const tied = (first: string, second: string): readonly Record<string, unknown>[] => [
-      {
-        __typename: 'CheckRun',
-        name: 'build',
-        workflowName: 'CI',
-        status: 'COMPLETED',
-        conclusion: first,
-        completedAt: '2026-08-13T21:17:17Z',
-      },
-      {
-        __typename: 'CheckRun',
-        name: 'build',
-        workflowName: 'CI',
-        status: 'COMPLETED',
-        conclusion: second,
-        completedAt: '2026-08-13T21:17:17Z',
-      },
-    ];
-    for (const rollup of [tied('SUCCESS', 'FAILURE'), tied('FAILURE', 'SUCCESS')]) {
+    for (const rollup of [
+      tiedBuildRuns('SUCCESS', 'FAILURE'),
+      tiedBuildRuns('FAILURE', 'SUCCESS'),
+    ]) {
       const parsed = parseStateView({ ...stateViewFixture(), statusCheckRollup: rollup });
       expect(parsed.namedChecks).toEqual([{ name: 'build', bucket: 'failed' }]);
     }

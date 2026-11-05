@@ -2,6 +2,7 @@
 name: Dogma Vocabulary Closes Inquiry
 polarity: anti-pattern
 category: process
+layer: general
 status: provisional
 discovered: 2026-05-21
 proven_in: "Single owner-flagged instance 2026-05-21 during a dispatch-shape verdict: *preferred*, *forbidden*, *required*, *established* used as load-bearing structure carriers when the underlying substance had not been re-derived. Owner correction: 'it moves into the language of dogma rather than reason, and that has its own issues'. Adjacent to but distinct from the no-hedging-vocabulary rule (which targets weak vocabulary that softens claims); this anti-pattern targets strong vocabulary that closes inquiry. Second instance would strengthen the pattern; second instance plus owner direction would graduate to a rule (likely `no-dogma-vocabulary.md` parallel to no-hedging-vocabulary, or an extension making no-hedging bidirectional)."

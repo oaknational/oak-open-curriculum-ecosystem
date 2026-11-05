@@ -144,8 +144,8 @@ async function buildKs4ContextSafe(
 ): Promise<Result<Ks4SupplementationContext | null, AdminError>> {
   try {
     return ok(await buildKs4Context(client, subjectSlug, enabled));
-  } catch (caught: unknown) {
-    const reason = caught instanceof Error ? caught.message : String(caught);
+  } catch (error: unknown) {
+    const reason = error instanceof Error ? error.message : String(error);
     return err({
       type: 'data_source_error',
       message: `KS4 API supplementation failed for sequence '${sequenceSlug}': ${reason}`,

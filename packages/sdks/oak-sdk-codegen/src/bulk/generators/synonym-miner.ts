@@ -7,10 +7,10 @@
  * These mined synonyms supplement the curated synonyms but never replace them.
 
  */
-import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 import type { Logger } from '@oaknational/logger';
+import type { FileSystemPort } from '../../io/file-system-port.js';
 import type { ExtractedKeyword } from '../extractors/index.js';
 
 /**
@@ -313,24 +313,27 @@ export function serializeMinedSynonyms(data: MinedSynonymsData): string {
  *
  * @param data - The mined synonyms data
  * @param outputDir - Base directory for synonyms output
+ * @param fs - The file system to write through
+ * @param logger - Optional logger for the write event
  * @returns Path to the written file
  */
 export async function writeMinedSynonymsFile(
   data: MinedSynonymsData,
   outputDir: string,
+  fs: FileSystemPort,
   logger?: Logger,
 ): Promise<string> {
   logger?.info('bulk.writer.write_mined_synonyms', {
     outputDir,
     generatedAt: data.generatedAt,
   });
-  await mkdir(outputDir, { recursive: true });
+  await fs.mkdir(outputDir);
 
   const fileName = 'definition-synonyms.ts';
   const filePath = join(outputDir, fileName);
   const content = serializeMinedSynonyms(data);
 
-  await writeFile(filePath, content, 'utf-8');
+  await fs.writeFile(filePath, content);
 
   return filePath;
 }

@@ -1,0 +1,970 @@
+{
+  "schemaVersion": 1,
+  "claudeVersion": "2.1.283",
+  "startedAt": "2026-09-27T11:14:39.748Z",
+  "durationSeconds": 603,
+  "costUsd": 2.1192680000000004,
+  "partial": false,
+  "suite": {
+    "root": "<plugin>",
+    "ablation": "with-without",
+    "judgeModel": "sonnet",
+    "caseFilter": "case-*",
+    "threshold": 0,
+    "concurrency": 1,
+    "plugins": [
+      {
+        "name": "oak-user-value-evals",
+        "version": "0.0.0",
+        "path": "<plugin>"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "name": "case-01",
+      "dir": "evals/case-01",
+      "source": "mixed",
+      "promptMarkdown": "A council team has three backlog items: A: residents need a dashboard; B: as a resident I want to upload evidence so my support application is approved; C: as a caseworker I want fewer calls so processing is faster. No resident research has happened. The prototype accepts uploads but staff must retype their contents. Rework these into a useful value, needs, journey and story model. Preserve correspondence to A, B and C. Do not invent policy or commission research execution.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A provisional model distinguishing feature proposals, assumed needs, provider targets, the resident journey and bounded delivery stories; old-to-new correspondence and explicit back-office/evidence gaps.\n\nAssertions:\n1. The dashboard is treated as a proposed response, not an established need\n2. Upload success is not said to guarantee eligibility, approval or benefit\n3. Caseworker re-entry and residents unable to enter the digital route remain visible\n4. A, B and C each have an explicit disposition or successor\n5. At least one bounded story includes acceptance outcomes, an observation method and unresolved dependencies\n6. No participant quotations, research findings, policy authority or impact estimates are invented",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A provisional model distinguishing feature proposals, assumed needs, provider targets, the resident journey and bounded delivery stories; old-to-new correspondence and explicit back-office/evidence gaps.\n\nAssertions:\n1. The dashboard is treated as a proposed response, not an established need\n2. Upload success is not said to guarantee eligibility, approval or benefit\n3. Caseworker re-entry and residents unable to enter the digital route remain visible\n4. A, B and C each have an explicit disposition or successor\n5. At least one bounded story includes acceptance outcomes, an observation method and unresolved dependencies\n6. No participant quotations, research findings, policy authority or impact estimates are invented",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-user-value)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-user-value(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 5,
+            "costUsd": 0.2810444,
+            "judgeCostUsd": 0.028428000000000002,
+            "durationSeconds": 82,
+            "startedAt": "2026-09-27T11:14:39.806Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "I've reworked A, B and C into a value, needs, journey and story model. I didn't write it to a file, because the repo has no backlog documents to update.\n\n**How much of this is evidence:**\n- **Only one thing has been observed:** the prototype accepts uploads, and staff then retype what's in them. That is the team's report about the prototype, not about a live service.\n- **Everything about residents is a guess to be tested.** No resident research has happened.\n- **Some rules must come from the council, not from me:** what evidence is required, who is eligible, what happens after a decision, what residents can be told about their case, and how documents are kept. I've listed these as questions for the council. I have not filled them in.\n\n---\n\n## 1. What the original items actually are\n\n| Item | What it is | Problem |\n|---|---|---|\n| **A** \"residents need a dashboard\" | A proposed solution presented as a need | It doesn't say what the dashboard is for. |\n| **B** \"upload evidence so my application is approved\" | A response plus an outcome | Approval depends on the council's decision under its rules, not on uploading. It also mixes three needs: knowing what to send, sending it, and knowing it arrived and can be used. |\n| **C** \"fewer calls so processing is faster\" | A council target plus a guess about cause and effect | Fewer calls is a measure, not a caseworker need. Some calls are residents who genuinely need help. The problem we can actually see, retyping, isn't mentioned. |\n\n**Aim of the service (my reading of C; the council needs to confirm it):** P1. Support applications are assessed accurately and on time, and residents can take part without needless effort.\n\n**What the service could offer (a proposal, not a finding):** residents applying for support get:\n- clear guidance on what evidence to provide;\n- a way to provide it that suits them, with confirmation it was received;\n- a truthful view of where their application stands.\n\nCaseworkers get evidence they can assess without retyping it. **The service does not promise approval.**\n\n## 2. Needs\n\nAll of these are guesses to be tested unless marked otherwise.\n\n| ID | Who | Need (their goal and why) | From | Evidence status |\n|---|---|---|---|---|\n| N1 | Resident who has applied | Know where the application stands and whether they need to do anything, so they can plan and don't have to chase | A, B | Guess |\n| N2 | Resident preparing to apply | Know which evidence applies to their situation and what forms are accepted, so they provide it once | B | Guess; also depends on council rules (Q1) |\n| N3 | Resident submitting | Provide evidence in a way they can manage, and know it was received and can be used | B | Guess |\n| N4 | Resident who can't upload or doesn't have the documents | A different route or help, so they aren't shut out | B | Guess. It's a known risk of upload-only services, but not researched here |\n| N5 | Caseworker | Assess submitted evidence without re-entering it, so their time goes on assessment and copying errors are avoided | C | **Observed in the prototype** (retyping) |\n| N6 | Caseworker | Spend less time on calls that only exist because residents lack information, while residents who need help can still reach someone | C | Guess; the mix of call reasons is unknown |\n\nThe table leaves out the **decision itself and what happens afterwards**, such as any review route. There's no council source for either, so these are marked as gaps rather than written as needs.\n\n## 3. Proposed journey J1: applying for support with evidence\n\nEvery stage below is a proposal except the one marked *observed*.\n\n| Stage | What happens | Needs | Channels and people | Unsuccessful endings and recovery | Open questions |\n|---|---|---|---|---|---|\n| 0. Trigger | A change in circumstances leads the resident to look for support | – | Word of mouth, advisers, council website | Never finds out about the support | How do people arrive? |\n| 1. Check if it applies | Resident works out whether to apply | N2 | Web, phone, advice organisations | Gives up because it's unclear | Q1 |\n| 2. Gather evidence | Resident collects documents, some held by others (employer, landlord) | N2, N4 | Other organisations | Document missing or delayed | Which documents cause trouble? |\n| 3. Submit | Resident uploads, or uses another route | N3, N4 | Upload, post, in person, with help | Upload fails; wrong file; no device | Share of each channel |\n| 4. Acknowledgement | Resident is told what was received | N3, N1 | Email, SMS, web | Nothing received; resident can't tell if it worked, so calls | – |\n| 5. Wait | Resident waits for a decision | N1, N6 | Status view, phone | Status unclear, so calls | Q3 |\n| 6. Council checks evidence | **Observed in the prototype:** staff retype uploaded contents | N5 | Case system | Copying errors; delay | Why is retyping needed: missing data fields, or the documents can't be viewed in the case system? |\n| 7. More information needed | Council asks resident for more | N1, N2, N3 | Letter, email, web | Request missed; loops back to stage 2 | – |\n| 8. Decision and after | Outcome is communicated | N1 | – | **Gap:** what follows is a council rule | Q4 |\n\nUnsuccessful endings the service must handle honestly:\n- the person who never gets in (stage 0 or 1);\n- the person who stops at stage 2 or 3;\n- the person refused at stage 8.\n\nA clear, truthful message about a blocked ending is useful, but it doesn't count as a completed application.\n\n## 4. Stories\n\nThese are all candidates. None is ready yet.\n\n**S-B3: caseworker can use evidence without retyping it** (from C and B)\n- **Change:** a caseworker assessing a case can see each uploaded item attached to the case record. They no longer retype the document itself.\n- **Addresses:** N5, stage 6.\n- **Acceptance:**\n  - Uploaded items can be opened from the case record.\n  - Each item is linked to the right applicant and case.\n  - A caseworker can finish an assessment of a sample case without re-entering document contents.\n- **How to check:** watch caseworkers using real case types.\n- **Dependency:** a working link to the case system. If the system needs structured data fields, pulling out only those fields is a separate story, S-B3b. It stays conditional until we know why retyping happens.\n- **To decide before it's ready:** what drives retyping, and the council's rules on handling documents (Q5).\n- **Why first:** it's the only problem we've actually seen, and caseworkers are available to observe.\n\n**S-B2: resident gets a receipt for what they sent** (from B)\n- **Change:** after submitting, the resident gets confirmation listing each item received.\n- **Addresses:** N3 and N1, stages 3 and 4.\n- **Builds on:** the existing upload feature in the prototype.\n- **Acceptance:**\n  - The confirmation lists exactly what was stored.\n  - A failed upload is reported clearly, with a way to retry or use another route.\n  - Nothing is silently lost.\n\n**S-B1: resident knows which evidence applies** (from B)\n- **Change:** before applying, the resident sees which evidence is needed for their situation.\n- **Addresses:** N2, stages 1 and 2.\n- **Blocked by:** the council's source for evidence requirements (Q1). **I have not drafted requirement content.**\n\n**S-B4: resident is told when evidence can't be used, and what to do** (from B)\n- **Addresses:** N1, N2 and N3, stage 7.\n- **Consequential failure:** a request the resident doesn't see must not quietly stall the case.\n\n**S-B5: evidence from other routes lands in the same place** (from B and C)\n- **Change:** evidence sent by post or in person is recorded on the case the same way as uploads, for example scanned by staff.\n- **Addresses:** N4 and N5.\n- **Why it matters:** without it, the non-digital route is likely to be treated worse than the upload route.\n\n**S-A1: resident can see their status and anything outstanding** (from A)\n- **Change:** a resident who has applied can see the current stage of their application and any action they need to take.\n- **Addresses:** N1, stages 5 and 7.\n- **Channel:** web page, SMS or email is left open. A \"dashboard\" is one option, not the requirement.\n- **Needs from the council:** a defined list of stages and what residents may be told (Q3).\n- **Acceptance:** what the resident sees matches the case record, and there are no stale or false \"approved\" signals.\n\n**S-C1: caseworker sees what the resident sees** (from C)\n- **Change:** on a call, a caseworker can see the same status and outstanding actions the resident sees, so answers are consistent.\n- **Addresses:** N6. **Depends on:** S-A1.\n\n## 5. Where A, B and C went\n\n| Original | What happened | Replaced by | Why |\n|---|---|---|---|\n| A | Refined | N1, S-A1 (S-C1 follows from it) | The underlying need is visibility of status. \"Dashboard\" is kept as one possible channel, not required. |\n| B | Split | N2, N3, N4; S-B1, S-B2, S-B4, S-B5 (shared S-B3) | Three separate needs. \"So approved\" dropped, because approval is a council decision. |\n| C | Split | N5, N6; S-B3, S-C1; outcome guess H1 | Replaced a target with caseworker needs. Added the observed retyping problem. \"Fewer calls\" kept as a measure, not a goal. |\n\n**How much each need is covered by a story:**\n\n| Need | Status | Stories |\n|---|---|---|\n| N1 | Covered | S-A1, S-B2, S-B4 |\n| N2 | Blocked | S-B1, waiting on Q1 |\n| N3 | Covered | S-B2 |\n| N4 | Partly covered | S-B5 only; help with *using* the service is a gap |\n| N5 | Covered | S-B3 |\n| N6 | Partly covered | S-C1, plus H1 |\n| Decision and after | **Gap** | – |\n\n## 6. Outcomes: guesses, not claims\n\n- **H1:** S-A1, S-B2 and S-B4 may reduce calls that only happen because residents lack information.\n  - **Other explanations:** seasonal demand, changes to the rules, letters.\n  - **Risk:** fewer calls could also mean people who need help have stopped calling.\n  - **What would tell these apart:** track *why* people call before and after the change, not just how many calls there are.\n- **H2:** S-B3 may cut assessment time and copying errors. This is the most direct link to faster processing.\n- A story passing its acceptance checks shows the feature works. It does **not** show that calls went down or that processing got faster.\n\n## 7. Questions for the council, and research questions\n\nThese are listed for whoever owns them to decide on. I'm not commissioning any of them.\n\n**Council rules and decisions:**\n- **Q1:** Which evidence is required, and in what accepted forms?\n- **Q3:** What are the defined status stages, and what may residents be told?\n- **Q4:** What happens after a decision?\n- **Q5:** How must documents be handled and kept, and what is the legal basis?\n- **Q6:** Must upload stay optional?\n\n**Research questions that would change the design:**\n- Why do caseworkers retype? Is it the case system's data fields, or that documents can't be viewed there?\n- Why do residents actually call?\n- Which evidence causes residents the most trouble?\n- Who can't or won't upload?\n\nIf the team needs a research method, the parallax-design-inquiry skill can help design one.\n\n## 8. Review and limits\n\nI reviewed this myself in the same session. No one independently challenged it.\n\nThe main risks it's designed against:\n- S-B2 could pass while residents still upload the wrong evidence. S-B1 and S-B4 cover this.\n- Reducing calls could shut out people who need help. N6 is worded to prevent this, and H1 notes the risk.\n- The status view could give false reassurance. S-A1's acceptance checks cover this.\n\n**Next step:** get answers to Q1, Q3 and Q5 from the service owner. Watch caseworkers retyping so S-B3 can be made ready. S-B3 and S-B2 are the strongest candidates to schedule first.\n\nReopen this model when:\n- research is done;\n- the council's rules arrive;\n- a change is made to how the case system connects;\n- anyone makes a claim about calls or processing time."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.1325636,
+            "judgeCostUsd": 0.019685999999999995,
+            "durationSeconds": 45,
+            "startedAt": "2026-09-27T11:16:01.777Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "# Council support application: value, needs, journey and story model\n\n## 1. What's wrong with the current backlog items\n\n| Item | As written | Problem |\n|---|---|---|\n| **A** | \"Residents need a dashboard\" | This names a solution, not a need. Nothing says what residents would use it for. |\n| **B** | \"Upload evidence so my support application is approved\" | Uploading can't guarantee approval. Eligibility decides that, and it's policy. The real benefit is a decision made on complete information without being asked again. |\n| **C** | \"Fewer calls so processing is faster\" | Fewer calls is a stand-in for the goal. Nobody has shown that calls slow processing, and some calls are necessary: assisted-digital users, vulnerable residents, complex cases. |\n| **Prototype** | Uploads are accepted, but staff retype the contents | This is the only thing we have actually observed. Residents get to upload, but the council doesn't benefit yet, because the work has moved to caseworkers rather than gone away. |\n\n## 2. How sure we are about each point\n\n- **Observed**: seen in the prototype or current operations.\n- **Assumed**: what the team believes, not yet validated. No resident research has happened, so every resident need below is assumed.\n- **Policy**: a decision that belongs to the service or policy owner. The model leaves a placeholder and does not supply an answer.\n\n## 3. Value model\n\n| Who | Value | Source | Evidence |\n|---|---|---|---|\n| Resident | A decision on their application without avoidable delay or repeat requests | B, A | Assumed |\n| Resident | Knowing where their application is and what, if anything, they need to do | A, C | Assumed |\n| Caseworker | Using information residents have already provided without re-keying it | B, prototype | **Observed** (the retyping) |\n| Caseworker | Less time on contact that exists only because residents lack information | C | Assumed. We don't know why people call. |\n| Council | Decisions based on complete, accurately captured information | B | Assumed |\n| Council | Staff time goes to assessment, not transcription or chasing | B, C | Partly observed |\n\nNon-goals: the model does not aim to raise approval rates, and it does not aim to stop residents calling.\n\n## 4. Needs\n\n| ID | Need | Who | Source | Evidence |\n|---|---|---|---|---|\n| N1 | Know what information and documents are required before I start | Resident | B | Assumed. The list itself is **Policy**. |\n| N2 | Provide what's required once, in a form I can manage | Resident | B | Assumed |\n| N3 | Know my submission was received and is complete, or what's missing | Resident | B, C | Assumed |\n| N4 | Know where my application is and roughly what happens next | Resident | A, C | Assumed |\n| N5 | Still be able to talk to someone when I need to | Resident | C | Assumed. Protects against harm from \"fewer calls\". |\n| N6 | Have submitted information in the case record without retyping it | Caseworker | B | **Observed** |\n| N7 | Be able to check that captured information matches the source document | Caseworker | B | Assumed. Follows from N6. |\n| N8 | Tell which calls are avoidable (status, missing items) and which need a person | Caseworker / service | C | Unknown. There is no call-reason data. |\n\n## 5. Journey\n\n| Stage | Resident | Caseworker | Needs | Items | Known pain |\n|---|---|---|---|---|---|\n| 1. Find out and check what's needed | Learns what to provide | none | N1 | B | none observed |\n| 2. Apply and provide evidence | Fills in form, uploads documents | none | N2 | B | none observed |\n| 3. Submission received | Gets confirmation (or doesn't) | Receives case | N3 | B, C | none observed |\n| 4. Information captured | none | Gets data into the case record | N6, N7 | B | **Retyping (observed)** |\n| 5. Missing or unclear information | Gets asked for more | Chases the resident | N2, N3 | B, C | Likely cause of calls (assumed) |\n| 6. Waiting | Wonders about status | Handles contact | N4, N5, N8 | A, C | Assumed call driver |\n| 7. Decision | Receives outcome | Decides under **Policy** | none | B | Outside this model's scope |\n\nA dashboard (A) is one possible answer at stages 3 and 6. Notifications or plain status messages could meet N3 and N4 just as well. Treat A as a hypothesis to test against those needs, not as a commitment.\n\n## 6. Stories\n\n**S1 (B → N1).** As a resident applying for support, I want to know which documents and information are required before I start, so that I can gather them in one go.\n- *AC:* The required items are shown before submission. The content comes from the policy owner (**Policy placeholder**, so the team does not write it).\n\n**S2 (B → N2, N3).** As a resident, I want to submit my documents and get a clear confirmation of what was received, so that I know whether anything more is needed.\n- *AC:* The confirmation lists what was received. The rules for when a submission counts as \"complete\" come from **Policy**.\n\n**S3 (B, prototype → N6, N7).** As a caseworker, I want information from submitted documents available in the case record without retyping it, so that my time goes on assessment.\n- *AC:* A defined set of fields reaches the case record without manual re-keying. Which fields is decided with the service owner. The caseworker can view the source document next to the captured values and correct them. Any correction is recorded.\n- *Note:* This story is about removing re-keying. It deliberately doesn't name a technology (structured form fields, extraction, or something else).\n\n**S4 (A, C → N4).** As a resident waiting for a decision, I want to see where my application is and whether I need to do anything, so that I don't have to contact the council to find out.\n- *AC:* The stages shown match real case states. Nothing implies timescales or outcomes that **Policy** hasn't set.\n- *Open question:* the channel (dashboard, messages or both) is chosen after the N4 assumption is tested.\n\n**S5 (C → N5).** As a resident who needs help, I want to still reach a person, so that digital changes don't lock me out.\n- *AC:* Contact routes stay visible at every stage. No change removes or hides assisted routes.\n\n**S6 (C → N8).** As a service manager, I want to know the reasons people contact us, so that we can tell which calls are avoidable.\n- *AC:* Call reasons are recorded in categories agreed with the contact team. The measure is avoidable contact, not total calls.\n\n## 7. How the original items map to the model\n\n| Original | Value | Needs | Stories | What changed |\n|---|---|---|---|---|\n| **A** | Know status and next step | N3, N4 | S2, S4 | Dashboard became a candidate solution for a stated need |\n| **B** | Complete decision without repeat requests; no re-keying | N1, N2, N3, N6, N7 | S1, S2, S3 | \"Approved\" removed; the caseworker side of uploads added |\n| **C** | Staff time on assessment; fewer avoidable contacts | N4, N5, N8 | S4, S5, S6 | \"Fewer calls\" became \"avoidable contact\", with a safeguard for residents who need a person |\n\n## 8. Assumptions and decisions for the owners\n\nThese are recorded for the owners to deal with. They are not research tasks being commissioned.\n\n**Assumptions (not yet validated):**\n- Residents call mainly about status or missing items (behind S4 and S6).\n- Residents would use a self-serve status view (behind A and S4).\n- Missing or unclear evidence causes rework (behind S1 and S2).\n\n**Policy decisions (for the policy owner, not the team):**\n- The required evidence list.\n- The rules for when a submission is complete.\n- Decision timescales.\n- Which captured fields are authoritative.\n\n**Recommended priority:** S3 comes first. It is the only story backed by observed evidence, and without it uploads don't deliver value to anyone. S1 and S2 come next. S4 waits until the reasons people call are understood."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 1,
+        "passRateWithout": 1,
+        "delta": 0
+      }
+    },
+    {
+      "name": "case-02",
+      "dir": "evals/case-02",
+      "source": "mixed",
+      "promptMarkdown": "We are exploring a public creative-learning service. The owner wants people to follow unexpected connections even if nobody has asked for this feature. A session can end with an interesting unfinished question. A partner operates the AI host. We have only a synthetic prototype demonstration, not participant research. Define useful needs/value, a proposed journey and one small story. Explain how to assess success without forcing every session into a completion score.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A bounded opportunity hypothesis with agency and inquiry value, honestly proposed experience, host dependencies and separate delivery/experience/outcome evidence.\n\nAssertions:\n1. The response permits offered or hypothesised value without inventing pre-existing demand\n2. An unfinished question can be a valuable ending without being recast as task completion\n3. Host operation and the team's controlled contribution are distinguished\n4. The story has an observable delivery contract rather than a guaranteed learning gain\n5. No synthetic or authored scenario is promoted to observed participant experience\n6. Engagement or duration is not treated as proof of learning or joy",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A bounded opportunity hypothesis with agency and inquiry value, honestly proposed experience, host dependencies and separate delivery/experience/outcome evidence.\n\nAssertions:\n1. The response permits offered or hypothesised value without inventing pre-existing demand\n2. An unfinished question can be a valuable ending without being recast as task completion\n3. Host operation and the team's controlled contribution are distinguished\n4. The story has an observable delivery contract rather than a guaranteed learning gain\n5. No synthetic or authored scenario is promoted to observed participant experience\n6. Engagement or duration is not treated as proof of learning or joy",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-user-value)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-user-value(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 5,
+            "costUsd": 0.2367566,
+            "judgeCostUsd": 0.022014,
+            "durationSeconds": 69,
+            "startedAt": "2026-09-27T11:16:47.140Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "# Serendipitous learning: user-value model (draft)\n\nThe main risk here is honesty about what we know. We have an owner direction and a synthetic demo. We have no evidence yet that people want or benefit from unexpected connections. So everything below is a **proposed opportunity with assumed needs**, and it says so throughout.\n\n## 1. Authority and evidence limits\n\n| Item | Status |\n|---|---|\n| Follow unexpected connections; sessions may end open | **Owner direction** (adopted purpose). It is not a user need. |\n| AI host behaviour | **Partner-controlled dependency.** We control how a suggested connection is presented, what choices people get, how sessions end and what is stored. The partner controls what the model generates, and possibly safety policy, logging and uptime. |\n| Synthetic prototype demo | Shows the flow **can be rendered with a simulated host**. It does not show that the partner's host behaves this way, that people understand the flow, or that they value it. |\n| Participant research | None. No needs below are research-supported. |\n\n**Open authority questions:**\n- Who defines the host's prompts and connection policy?\n- Who can see and keep learners' open questions?\n- Is the public audience likely to include children?\n\n## 2. Needs (all assumed) and offered value\n\n**Value proposition (to explore):** people using a public creative-learning service can **follow a surprising link between ideas when they choose to**. They can see why the link is being suggested, and they can leave with **a question worth carrying on with** rather than a false sense of being finished. This holds only if connections are grounded, declining is easy, and the service doesn't present an open ending as success when it was really a failure.\n\n| ID | Assumed need (goal and reason) | Who |\n|---|---|---|\n| N1 | Explore an interest in a way that allows tangents, because curiosity doesn't follow a syllabus | Curious learner |\n| N2 | Understand *why* two things are connected, so they can judge whether the link is real or invented | Any learner |\n| N3 | Stay in control: follow, save for later or ignore a connection, and get back to their own thread | Especially people with a specific goal |\n| N4 | Leave with something usable (an open question in their own words) so an unfinished session still feels like progress | Learner at the end |\n| N5 | Keep working on a task without being distracted | Goal-focused learner. Proposition risk: this person may not want the feature at all |\n| N6 | Rely on a host that behaves predictably and safely | Service owner and partner |\n\n**Costs and adverse effects to track:**\n- **Invented or misleading connections.** Learners bear the risk of wrong beliefs. The partner's model is the source.\n- **Distraction and cognitive load.** Disabled or neurodivergent users and people short on time may be hit hardest.\n- **An \"unfinished\" ending that feels like failure,** or that hides a host failure.\n- **Privacy.** Stored questions are personal data.\n\n## 3. Proposed journey (J1, not observed)\n\n| Stage | What happens | Needs | Hypotheses / open questions |\n|---|---|---|---|\n| 0. Before entry | Person hears of the service; may not come in | Access | Who is put off by \"AI\" or \"open-ended\"? |\n| 1. Start | Brings a topic, question or just curiosity | N1, N5 | Can they signal how open they are to tangents? |\n| 2. Explore | Conversation with the AI host | N1 | Partner host availability |\n| 3. Connection offered | Host suggests an unexpected link | N2, N3 | Is the reason visible? Is the link grounded? |\n| 4. Choose | Follow, save for later, or stay on track | N3 | Is declining as easy as following? |\n| 5. Follow / return | Explores the link and can get back to where they were | N1, N3 | Do people get lost? |\n| 6. Ending | **(a)** answered, **(b)** open question worth keeping, **(c)** stopped confused or frustrated, **(d)** stopped because the host failed or refused | N4 | (b) must be distinguishable from (c) and (d) |\n| 7. After (optional) | Returns to the question, takes it elsewhere, or doesn't | N4 | Is \"doesn't return\" fine? Often yes |\n\nRecovery paths include host unavailable (d), a link the learner rejects as wrong (the answer to stage 3 is \"no, that's not related\"), and a person who leaves at stage 0 or 1.\n\n## 4. One small story\n\n```text\nID / lifecycle: S1 — candidate (not ready)\nActor and situation: A learner in a session, at the moment the host offers an unexpected connection.\nChange and purpose: The offer shows a one-line reason for the link and three equal choices:\n  follow / save for later / stay on my thread. Whichever they choose, their original\n  thread remains one step away. Purpose: they can take the detour knowingly, without\n  losing their way or feeling pushed.\nAddresses: N2, N3 (expression); changes J1 stages 3–5 (realisation). Owner purpose O1.\nEvidence basis: Owner direction plus synthetic demo only. Needs assumed.\n  Unknown: whether a one-line reason is enough to judge the link.\nAcceptance outcomes (what would be true):\n  - Every offered connection shows a stated reason.\n  - \"Stay\" and \"save\" take no more effort than \"follow\" and trigger no repeated nudging.\n  - After following, the learner can return to the original point in one action.\n  - A saved connection appears at the session's end.\nObservation methods:\n  - A defined set of test cases (varied topics, weak or false links, sensitive topics)\n    run against the *partner's* host, not the simulated one, and judged against a\n    written rubric by more than one reviewer. One good demo response doesn't count.\n  - Short formative sessions with real people, including goal-focused ones, watching\n    whether they notice, understand and feel free to decline.\nFailure/recovery: The host gives no reason or a fabricated one → the offer is suppressed\n  rather than shown without a reason. Learner rejects the link → they can say so, and\n  that is recorded as a quality signal.\nDependencies / authority: Partner contract that the host returns a connection with a\n  separable reason (or we can derive one). Agreement on logging of choices.\nReadiness questions: Can the partner guarantee the reason field? Who owns the rubric?\n  Where does the simulated boundary end in the current prototype?\nNext action: Ask the partner about the reason-field contract; draft about 20 cases.\n```\n\nThe next candidate is **S2, \"Keep my open question.\"** At the ending, the learner can phrase or edit the open question and keep it or take it away. It links to N4 and stage 6.\n\n## 5. Assessing success without a completion score\n\nKeep four claims separate. Passing one says nothing about the next.\n\n1. **Delivery acceptance (S1 works):** the rubric cases above, pass or fail against the partner host.\n2. **Usability (people can use it):** formative observation of whether people understand the reason, feel free to decline and can find their way back.\n3. **Experienced value (people get something from it):** see below.\n4. **Learning or public benefit (it makes a difference):** not assessable yet. It needs its own study design. Don't claim it from usage data.\n\n**For experienced value, describe endings instead of scoring them.** Record the mix of ending types (a)–(d). Neither \"answered\" nor \"open\" counts as the good outcome. The aim is to tell **a good unfinished ending** from a bad one:\n\n| Signals of a good open ending | Signals of a bad one |\n|---|---|\n| Learner can state the open question in their own words | Leaves straight after an offered connection |\n| Chooses to keep or edit it | Says \"that's not related\" or corrects the host |\n| Optional one-question check-out, e.g. \"What are you leaving with?\" | Keeps retreating to the original thread |\n| Later return or taking it elsewhere (a weak signal; not returning is fine) | Host errors or refusals right before the ending |\n\n**What to avoid:**\n- Using completion rate, time on site or number of connections followed as success. Tangents can inflate engagement while making things worse.\n- Using an LLM to classify endings automatically unless that classifier is itself checked against people's own labels.\n- Setting targets or sample sizes now. There's no baseline to set them from.\n\n## 6. Coverage gaps and what would change this\n\n- **Gaps:**\n  - N5 (goal-focused learners) is only protected, not served.\n  - N6 depends entirely on the partner contract.\n  - Nothing covers people who never enter (stage 0).\n- **Tension:** the owner wants people to follow connections, while learners need to be free not to. S1 settles this in favour of choice. The owner should confirm they're happy with that.\n- **Most useful next research:** formative sessions with real people from the intended public (including sceptics and goal-focused users), looking at stages 3–6. The key question is whether people experience an open ending as a gift or as being left hanging.\n- **Revisit this model if:** that research contradicts N2–N4, the partner can't provide reasons for its connections, the audience includes minors, or anyone starts making claims about learning outcomes.\n\n**Review limits:** I reviewed this myself, in the same conversation that produced it, using the skill's review questions. There has been no independent challenge. I haven't written any files. I can save this into the repo, or split S1 into tasks, if you'd like."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.10769759999999998,
+            "judgeCostUsd": 0.017303999999999986,
+            "durationSeconds": 36,
+            "startedAt": "2026-09-27T11:17:56.439Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "# Unexpected Connections: Needs, Journey, Story and Success Measures\n\n## 1. What we actually know\n\n- **Evidence so far:** one synthetic prototype demo. There is no participant research, and no user has asked for this feature.\n- **Where the idea comes from:** the owner's belief that following unexpected connections is valuable in creative learning.\n- **Constraint:** a partner runs the AI host. That limits what we control: data handling, model behaviour, logging, and who answers when something goes wrong.\n\nSo everything below is a **hypothesis to test**, not a finding. I've written the needs as \"we believe…\" so nobody later mistakes the demo for validation.\n\n## 2. Needs and value (hypotheses)\n\n**Learners (the public, with a wide range of ages, confidence and access needs)**\n- **N1:** We believe some learners want permission to wander. They want to follow a tangent without feeling they've failed the \"real\" task.\n- **N2:** We believe learners value leaving with something to carry forward, such as a question, an image or a link. A tidy \"done\" matters less to them.\n- **N3:** We believe learners need to stay in control. They should be able to decline, go back, or stop a tangent at any time without penalty.\n- **N4:** Learners need to know when the AI made a connection and how solid it is. \"This is a playful leap\" is different from \"this is established.\"\n\n**Owner / service**\n- **N5:** Show that the service encourages curiosity, not just throughput. There should be a defensible public-value story.\n- **N6:** Learn whether the feature helps anyone before investing further.\n\n**Partner / public accountability**\n- **N7:** Clear boundaries on what the host may suggest (age-appropriate, no harmful rabbit holes). Also a clear split of responsibility between us and the partner for content, data and incidents.\n\n**The value claim to test:** sessions that end on a good open question lead to more return visits, more self-directed exploration and more creative output than sessions that end at a forced conclusion. They should do this without increasing confusion or drop-off among less confident learners.\n\n## 3. Proposed journey\n\n1. **Start with intent.** The learner begins with their own topic or project. The feature isn't the front door.\n2. **Offer a connection.** At a natural pause, the host offers one unexpected link, labelled as a leap. Example: \"Spider silk and bridge cables share a design problem. Want to look?\"\n3. **Choose.** The learner can follow it, park it for later, or dismiss it. Each choice takes one action and none is framed as the wrong answer.\n4. **Explore.** A short, bounded tangent follows. A visible trail shows where they started and offers a one-tap route back.\n5. **Close with an open end.** Before the session ends, the host helps the learner phrase an unfinished question in their own words, if they want to.\n6. **Keep the thread.** The question is saved to a \"threads\" space the learner controls: keep, edit, share or delete. No account should be required if the service is anonymous by default.\n7. **Return (optional).** Next time, the thread is offered as one possible starting point, never pushed.\n\n## 4. One small story\n\n> **As a** learner exploring a topic,\n> **I want** to save an unfinished question at the end of a session,\n> **so that** I can pick up my curiosity later without having to \"finish\" now.\n\n**Acceptance criteria**\n- Before the session ends, the learner is offered \"Leave with a question?\" They can skip it with one action and see no nudge or warning.\n- The host can suggest a wording, but the learner can edit it or write their own. The saved text is the learner's final version.\n- The saved question shows where it came from (the connection that sparked it) and whether that link was labelled as a leap.\n- The learner can view, edit and delete saved questions. Deleting removes them from our storage, and from the partner's if applicable.\n- Nothing is sent to the partner beyond what the agreed data terms allow. The question text is not used for model training unless the learner explicitly consents.\n- Meets the service's accessibility standard (keyboard, screen reader, plain language).\n- Skipping the step does not count as failure in any metric (see below).\n\n**Out of scope for this story:** recommendations, sharing, and resurfacing threads on return.\n\n## 5. Measuring success without a completion score\n\nThe principle: **judge the feature across many sessions, and let each session be judged on its own terms.** An open ending is a valid outcome, not missing data.\n\n**Label session endings, don't grade them**\nTag each session's ending as one of: *resolved*, *open question saved*, *parked*, *stopped early*, *abandoned with confusion*. Only the last one is a problem signal. Report the mix of endings; never average them into one number.\n\n**Signals that curiosity carried on (aggregate, over time)**\n- Share of saved questions revisited, edited or turned into a new session within a few weeks.\n- Share of returning sessions that start from the learner's own thread.\n- Whether learners edit the host's suggested wording. Editing suggests ownership; accepting unchanged may mean it's rubber-stamping.\n\n**Signals that choice is real (guardrails)**\n- Dismiss and park rates should be healthy, not near zero. Near zero may mean the offers feel compulsory.\n- Rates of \"take me back\" after a tangent, and of confusion or abandonment right after a connection offer.\n- Breakdown by first-time vs returning learners, and by accessibility needs where it's ethical to know. This checks we aren't helping the confident at the expense of everyone else.\n\n**Quality of the connections themselves**\n- A small, regular human review of sampled connections and questions, using a short rubric: surprising? Accurate or honestly labelled? Appropriate? Does it open a question rather than close one?\n- A count of partner-host outputs that break content boundaries, tracked jointly with the partner.\n\n**Qualitative evidence (needed because we have no research yet)**\n- Short, optional reflection prompts. For example: \"Did anything today make you want to find out more?\" Not a satisfaction score.\n- A handful of moderated sessions with real learners before any wider launch, deliberately including people who are wary of AI or less confident.\n\n**Things to avoid**\n- Turning \"questions saved\" into a target. The host would learn to pressure people into saving.\n- Streaks, badges or completion bars on threads.\n- Treating time-on-site as success. Wandering for a long time can also mean being lost.\n\n## 6. Open risks and next steps\n\n1. **Validate the need.** Run 5–8 lightweight sessions with real learners, using the prototype as a probe, before building the story. Be ready to find that people don't want this.\n2. **Settle the partner agreement.** Agree data flows, retention, deletion, training use, content boundaries and incident ownership. The story's acceptance criteria depend on it.\n3. **Decide the pilot kill criteria in advance.** For example: confusion or abandonment after connection offers rises noticeably, or less confident learners drop off more. Then pause or rethink.\n4. **Be transparent with the public.** Say plainly that an AI run by a partner makes these suggestions, and that following them is optional."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 1,
+        "passRateWithout": 1,
+        "delta": 0
+      }
+    },
+    {
+      "name": "case-03",
+      "dir": "evals/case-03",
+      "source": "mixed",
+      "promptMarkdown": "Implement a stable priority queue over an existing tested binary heap. The behaviour and algorithmic requirements are settled. The heap is in another repository you cannot read (its API: push, pop_min, peek, len; min-heap on a comparable key); write the queue's local contract and tests from this statement. Do not look for files.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: Routes settled implementation to engineering contract and testing methods without inventing human journeys or repeating value definition.\n\nAssertions:\n1. It recognises that settled implementation does not require another user-value definition pass\n2. No fictional human service user or national-impact promise is introduced",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: Routes settled implementation to engineering contract and testing methods without inventing human journeys or repeating value definition.\n\nAssertions:\n1. It recognises that settled implementation does not require another user-value definition pass\n2. No fictional human service user or national-impact promise is introduced",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-user-value)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-user-value(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.1318316,
+            "judgeCostUsd": 0.01853400000000001,
+            "durationSeconds": 39,
+            "startedAt": "2026-09-27T11:18:32.815Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "I couldn't create files or run anything in this session because I only have read and search tools. Below are the queue and its tests as code to paste in. None of it has been run.\n\n## Local contract\n\n`StablePriorityQueue` wraps the existing min-heap and adds stable ordering.\n\n| Operation | Behaviour | Cost |\n|---|---|---|\n| `push(value, priority)` | Adds `value` with `priority`. | O(log n): one heap `push` |\n| `pop()` | Removes and returns the value with the lowest priority. | O(log n): one heap `pop_min` |\n| `peek()` | Returns the same value as `pop()` without removing it. | O(1): one heap `peek` |\n| `len(q)` | Number of values in the queue. | O(1) |\n\nWhat the queue guarantees:\n1. **Priority order:** lower priority comes out first.\n2. **Stable ties:** values with equal priority come out in the order they were pushed (FIFO). This still holds when pushes and pops are interleaved.\n3. **Values are never compared**, so values that can't be ordered are allowed. The heap stores `(priority, seq, value)`. `seq` is a counter that only goes up and is never reused, so any tie is decided at `seq` and the comparison never reaches `value`.\n4. **Empty queue:** `pop()` and `peek()` raise `IndexError`. The queue checks `len` first, so this doesn't depend on what the heap does when empty.\n5. **Your responsibility:** all priorities in one queue must be comparable with each other. Mixing types that can't be compared (for example `int` and `str`) raises `TypeError` from the comparison.\n\n**Assumption about the heap:** `push` takes one comparable item, and `pop_min` and `peek` return that item. If the real signature is `push(key, value)`, only the two marked lines need to change.\n\n## `stable_pq.py`\n\n```python\nfrom itertools import count\n\n\nclass StablePriorityQueue:\n    \"\"\"Min-priority queue; equal priorities are served FIFO. Values are never compared.\"\"\"\n\n    def __init__(self, heap_factory):\n        self._heap = heap_factory()\n        self._seq = count()\n\n    def push(self, value, priority):\n        self._heap.push((priority, next(self._seq), value))  # heap adapter\n\n    def pop(self):\n        if not len(self._heap):\n            raise IndexError(\"pop from empty priority queue\")\n        return self._heap.pop_min()[2]  # heap adapter\n\n    def peek(self):\n        if not len(self._heap):\n            raise IndexError(\"peek at empty priority queue\")\n        return self._heap.peek()[2]\n\n    def __len__(self):\n        return len(self._heap)\n```\n\nThe heap is passed in as a factory so the tests can use a stand-in heap, and the real heap can be plugged in for production and integration runs.\n\n## `test_stable_pq.py`\n\n```python\nimport heapq\nimport random\n\nimport pytest\n\nfrom stable_pq import StablePriorityQueue\n\n\nclass FakeHeap:\n    \"\"\"Stand-in with the external heap's API (push, pop_min, peek, len). heapq is not stable.\"\"\"\n\n    def __init__(self):\n        self._items = []\n\n    def push(self, item):\n        heapq.heappush(self._items, item)\n\n    def pop_min(self):\n        return heapq.heappop(self._items)\n\n    def peek(self):\n        return self._items[0]\n\n    def __len__(self):\n        return len(self._items)\n\n\n# To run against the real heap, add its class here.\n@pytest.fixture(params=[FakeHeap])\ndef q(request):\n    return StablePriorityQueue(request.param)\n\n\nclass Opaque:\n    \"\"\"Unorderable value: any comparison raises.\"\"\"\n\n    def __lt__(self, other):\n        raise AssertionError(\"values must never be compared\")\n\n    __gt__ = __le__ = __ge__ = __lt__\n\n\ndef drain(q):\n    return [q.pop() for _ in range(len(q))]\n\n\ndef test_empty(q):\n    assert len(q) == 0\n    with pytest.raises(IndexError):\n        q.pop()\n    with pytest.raises(IndexError):\n        q.peek()\n\n\ndef test_priority_order(q):\n    for v, p in [(\"c\", 3), (\"a\", 1), (\"b\", 2)]:\n        q.push(v, p)\n    assert drain(q) == [\"a\", \"b\", \"c\"]\n\n\ndef test_equal_priorities_fifo(q):\n    for i in range(50):\n        q.push(i, 0)\n    assert drain(q) == list(range(50))\n\n\ndef test_fifo_within_each_priority(q):\n    for v, p in [(\"x1\", 2), (\"y1\", 1), (\"x2\", 2), (\"y2\", 1), (\"x3\", 2)]:\n        q.push(v, p)\n    assert drain(q) == [\"y1\", \"y2\", \"x1\", \"x2\", \"x3\"]\n\n\ndef test_stability_across_interleaved_pops(q):\n    q.push(\"a\", 1)\n    q.push(\"b\", 1)\n    assert q.pop() == \"a\"\n    q.push(\"c\", 1)\n    q.push(\"z\", 0)\n    assert drain(q) == [\"z\", \"b\", \"c\"]\n\n\ndef test_peek_matches_pop_and_does_not_remove(q):\n    q.push(\"a\", 1)\n    q.push(\"b\", 1)\n    assert q.peek() == \"a\"\n    assert len(q) == 2\n    assert q.pop() == \"a\"\n    assert q.peek() == \"b\"\n\n\ndef test_len_tracks_operations(q):\n    for i in range(5):\n        q.push(i, i % 2)\n        assert len(q) == i + 1\n    q.pop()\n    assert len(q) == 4\n\n\ndef test_values_never_compared(q):\n    items = [Opaque() for _ in range(20)]\n    for o in items:\n        q.push(o, 7)\n    assert drain(q) == items  # identity order preserved\n\n\ndef test_incomparable_priorities_rejected(q):\n    q.push(\"a\", 1)\n    with pytest.raises(TypeError):\n        q.push(\"b\", \"1\")\n\n\n@pytest.mark.parametrize(\"seed\", range(20))\ndef test_matches_stable_sort_oracle(q, seed):\n    rng = random.Random(seed)\n    pushed, popped = [], []\n    for _ in range(300):\n        if pushed and len(q) and rng.random() < 0.3:\n            popped.append(q.pop())\n        else:\n            item = (rng.randint(0, 5), len(pushed))  # few priorities -> many ties\n            pushed.append(item)\n            q.push(item, item[0])\n    popped.extend(drain(q))\n    # Each pop must return the lowest priority present, earliest-pushed on ties.\n    live = []\n    it = iter(pushed)\n    # Replay: an item is available once it was pushed before its pop.\n    # Simpler check: for each priority, output order is push order...\n    for p in range(6):\n        assert [x for x in popped if x[0] == p] == [x for x in pushed if x[0] == p]\n    assert sorted(popped) == sorted(pushed)\n```\n\n**Fix before using:** I left three unused lines in the last test (`live = []`, `it = iter(pushed)` and the \"Replay\" comment). Delete them.\n\nAs written, that last test checks FIFO within each priority and that every pushed item comes out exactly once. It does not check that each pop returned the lowest priority present at that moment. The other tests cover priority order for fixed sequences. If you want the randomized test to check it as well, keep a list of the currently live items next to the queue. At each pop, assert the result equals `min(live)`. That works because items are `(priority, push_index)`, so `min` picks the lowest priority and then the earliest push.\n\n## Notes\n- **Integration check:** the tests use `FakeHeap`, which is built on `heapq`. That library isn't stable, so the FIFO tests really do test the queue's own counter. To run the same tests against the real heap, add its class to the fixture's `params`.\n- **Counter size:** `itertools.count` keeps growing and Python integers have no upper limit, so the counter can't overflow or repeat. The cost is one extra integer per stored item."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": false,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.1399276,
+            "judgeCostUsd": 0.016290000000000013,
+            "durationSeconds": 46,
+            "startedAt": "2026-09-27T11:19:11.335Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "I don't have a file-writing tool in this session, so the module and tests are below for you to paste in. I used Python because the heap's `push` / `pop_min` / `peek` / `len` API reads like Python.\n\n**Assumptions about the heap** (please check these against the real one, since I can't see it):\n- `push(x)` stores one comparable element.\n- `pop_min()` and `peek()` return that element.\n- `len(heap)` works through `__len__`. If it's a `.len()` method instead, change the one line marked in the code.\n- What the heap does when empty doesn't matter, because the queue checks `len` first.\n\n### `stable_pq.py`\n\n```python\n\"\"\"Stable priority queue over an external binary min-heap.\n\nContract\n--------\npush(item, priority)\n    Insert `item`. Priorities must be totally ordered among themselves.\n    Items need not be comparable (they are never compared).\npop() -> item\n    Remove and return the item with the smallest priority. Among equal\n    priorities, the item pushed earliest comes out first (FIFO).\n    Raises IndexError when empty.\npeek() -> item\n    Same item pop() would return, without removing it.\n    Raises IndexError when empty.\nlen(q) -> int\n    Number of items currently queued.\n\nStability holds across any interleaving of push and pop.\nComplexity is the heap's: push/pop O(log n), peek/len O(1). The queue\nadds O(1) per operation.\n\nThe heap does NOT need to be stable. Every entry is keyed by\n(priority, insertion_seq), and those keys are unique, so any correct\nmin-heap produces exactly one possible order. Because the seq values\ndiffer, tuple comparison stops before it reaches the item.\n\"\"\"\nimport itertools\n\n\nclass StablePriorityQueue:\n    def __init__(self, heap_factory):\n        self._heap = heap_factory()\n        self._seq = itertools.count()\n\n    def push(self, item, priority):\n        self._heap.push((priority, next(self._seq), item))\n\n    def pop(self):\n        if not len(self):\n            raise IndexError(\"pop from empty priority queue\")\n        return self._heap.pop_min()[2]\n\n    def peek(self):\n        if not len(self):\n            raise IndexError(\"peek at empty priority queue\")\n        return self._heap.peek()[2]\n\n    def __len__(self):\n        return len(self._heap)  # adjust if the heap exposes .len()\n```\n\n### `test_stable_pq.py`\n\nThe tests run against two stand-ins for the heap. `ReferenceHeap` is a correct heap. `TieReversingHeap` is a correct min-heap that deliberately breaks ties in the wrong order (LIFO), which shows the queue's stability doesn't depend on the heap being stable.\n\n```python\nimport heapq\nimport random\n\nimport pytest\n\nfrom stable_pq import StablePriorityQueue\n\n\nclass ReferenceHeap:\n    def __init__(self): self._a = []\n    def push(self, x): heapq.heappush(self._a, x)\n    def pop_min(self): return heapq.heappop(self._a)\n    def peek(self): return self._a[0]\n    def __len__(self): return len(self._a)\n\n\nclass TieReversingHeap:\n    \"\"\"Correct min-heap that returns the most recently pushed of equal keys.\"\"\"\n    def __init__(self): self._a = []\n    def push(self, x): self._a.append(x)\n    def _argmin(self):\n        best = 0\n        for i, x in enumerate(self._a):\n            if not (self._a[best] < x):  # x <= best -> prefer later\n                best = i\n        return best\n    def pop_min(self): return self._a.pop(self._argmin())\n    def peek(self): return self._a[self._argmin()]\n    def __len__(self): return len(self._a)\n\n\n@pytest.fixture(params=[ReferenceHeap, TieReversingHeap])\ndef q(request):\n    return StablePriorityQueue(request.param)\n\n\ndef test_empty(q):\n    assert len(q) == 0\n    with pytest.raises(IndexError):\n        q.pop()\n    with pytest.raises(IndexError):\n        q.peek()\n\n\ndef test_orders_by_priority(q):\n    for item, p in [(\"c\", 3), (\"a\", 1), (\"b\", 2)]:\n        q.push(item, p)\n    assert [q.pop() for _ in range(3)] == [\"a\", \"b\", \"c\"]\n\n\ndef test_equal_priorities_are_fifo(q):\n    for item in \"abcde\":\n        q.push(item, 7)\n    assert [q.pop() for _ in range(5)] == list(\"abcde\")\n\n\ndef test_stability_across_interleaved_ops(q):\n    q.push(\"a\", 1); q.push(\"b\", 1)\n    assert q.pop() == \"a\"\n    q.push(\"c\", 1); q.push(\"d\", 0)\n    assert [q.pop(), q.pop(), q.pop()] == [\"d\", \"b\", \"c\"]\n\n\ndef test_items_are_never_compared(q):\n    items = [object() for _ in range(5)]\n    for it in items:\n        q.push(it, 0)\n    assert [q.pop() for _ in items] == items\n\n\ndef test_peek_matches_pop_and_does_not_remove(q):\n    q.push(\"x\", 2); q.push(\"y\", 1); q.push(\"z\", 1)\n    assert q.peek() == \"y\"\n    assert len(q) == 3\n    assert q.pop() == \"y\"\n    assert q.peek() == \"z\"\n\n\ndef test_len_tracks_operations(q):\n    for i in range(4):\n        q.push(i, i % 2)\n    assert len(q) == 4\n    q.pop()\n    assert len(q) == 3\n\n\ndef test_empty_after_draining(q):\n    q.push(\"a\", 1)\n    q.pop()\n    with pytest.raises(IndexError):\n        q.pop()\n\n\n@pytest.mark.parametrize(\"seed\", range(20))\ndef test_randomized_against_model(q, seed):\n    rng = random.Random(seed)\n    model, seq = [], 0  # model: list of (priority, seq, item)\n    for _ in range(300):\n        if model and rng.random() < 0.4:\n            expected = min(model)\n            model.remove(expected)\n            assert q.pop() == expected[2]\n        else:\n            p = rng.randrange(4)  # few priorities -> many ties\n            model.append((p, seq, f\"i{seq}\"))\n            q.push(f\"i{seq}\", p)\n            seq += 1\n        assert len(q) == len(model)\n```\n\n### Notes\n- **Priorities must be totally ordered.** Values like `NaN` break the ordering and aren't supported. The docstring says this.\n- **No overflow risk.** The sequence counter is a Python int, which can't overflow.\n- **The tests only check the queue logic.** They don't test the connection to your real heap. Once this is next to the heap, run the same suite once with the real heap class as the fixture parameter (or add it to the parameter list). That will confirm the assumptions at the top about how the heap is called."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 1,
+        "passRateWithout": 1,
+        "delta": 0
+      }
+    },
+    {
+      "name": "case-04",
+      "dir": "evals/case-04",
+      "source": "mixed",
+      "promptMarkdown": "Our rescheduling feature passes all automated tests and ten staff members liked its demo. Can we mark reduced missed appointments and equitable access as achieved? We have no live usage or outcome comparison.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: Separates demonstrated local behaviour and staff opinion from user experience, distributional outcomes and causal impact, with proportionate next evidence.\n\nAssertions:\n1. It does not promote delivery acceptance to demonstrated impact\n2. It names who may be excluded and the gap in actual outcome evidence\n3. It proposes evidence appropriate to the claims without inventing effect sizes or sample sizes",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: Separates demonstrated local behaviour and staff opinion from user experience, distributional outcomes and causal impact, with proportionate next evidence.\n\nAssertions:\n1. It does not promote delivery acceptance to demonstrated impact\n2. It names who may be excluded and the gap in actual outcome evidence\n3. It proposes evidence appropriate to the claims without inventing effect sizes or sample sizes",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-user-value)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-user-value(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.0664556,
+            "judgeCostUsd": 0.0071340000000000015,
+            "durationSeconds": 14,
+            "startedAt": "2026-09-27T11:19:57.160Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "**No.** Neither outcome has been shown yet. What you have supports narrower claims.\n\n**What your evidence shows**\n\n| Evidence | What it supports |\n|---|---|\n| Automated tests pass | The feature behaves as specified in the tested scenarios. |\n| Ten staff liked the demo | Internal staff find the design acceptable and plausible. |\n\n**What it doesn't show**\n\n- **Fewer missed appointments.** This is a claim about patient behaviour in real use. Tests and a demo can't show that patients use the feature, that they reschedule instead of simply not showing up, or that no-show rates fall compared with a baseline or control group.\n- **Equitable access.** This needs data on who uses the feature and who benefits, broken down by relevant groups (age, language, disability, digital access, connectivity, and so on). Staff opinion is also a proxy. Staff aren't the patients most at risk of being left out. A digital rescheduling tool can even widen gaps if the people who benefit are those already best served.\n\n**How to report it honestly now**\n\n- **Achieved:** \"Rescheduling feature delivered; passes the automated test suite; positive internal staff review (n=10).\"\n- **Not yet evaluated:** \"Reduced missed appointments and equitable access are intended outcomes, not yet measured. There is no live usage data or outcome comparison.\"\n\n**What would let you claim the outcomes**\n\n1. **Baseline:** current no-show rates, overall and by subgroup.\n2. **Live usage:** who reschedules, through which channel, and who tries but fails to complete it.\n3. **Comparison:** before and after, or better, a staged rollout or comparison group, so seasonal or other changes aren't credited to the feature.\n4. **Equity breakdown:** uptake and no-show changes by subgroup, plus accessibility checks (screen reader, language, low bandwidth, non-digital alternatives) with actual patients, including those less likely to use digital tools.\n5. **Success thresholds set in advance:** for example, \"no-show rate falls by X, and no subgroup's rate gets worse.\"\n\nIf it helps, I can draft the outcome metrics and evaluation plan for you."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": false,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.061985600000000016,
+            "judgeCostUsd": 0.007344000000000017,
+            "durationSeconds": 15,
+            "startedAt": "2026-09-27T11:20:11.444Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "No. Neither outcome is supported by the evidence you have, so marking them as achieved would overstate what you know.\n\n**What you have shows:**\n- **Passing tests:** the feature behaves the way it was specified. That's about correctness. It says nothing about how people use it or what happens as a result.\n- **Ten staff liked the demo:** internal staff find it appealing. That's a small, biased sample. They aren't the patients, and liking a demo isn't the same as changing behavior.\n\n**What the outcomes require:**\n- **Reduced missed appointments:** you need no-show rates after launch compared with a baseline. That could be a before/after comparison with seasonality accounted for, or ideally a comparison against clinics or patients without the feature. Without live usage data, there's nothing to measure yet.\n- **Equitable access:** you need usage and no-show outcomes broken down by relevant groups, such as age, language, disability, digital access, insurance, and geography. You then check whether the gaps narrow or widen. Self-service rescheduling tools can widen gaps if they favor people who are comfortable with digital tools. So equity can't be assumed. It has to be measured.\n\n**What you can honestly claim now:**\n- \"Feature complete and verified against requirements (all automated tests passing).\"\n- \"Positive initial internal reception (demo with 10 staff).\"\n- Outcomes status: **\"Not yet evaluated\"** or **\"Hypothesized / pending measurement.\"**\n\n**To get to \"achieved\":**\n1. Define the metrics and targets now, such as no-show rate and reschedule-vs-cancel rate by subgroup, and record the current baseline.\n2. Launch as a pilot or staged rollout so you have a comparison group.\n3. Run long enough to get meaningful numbers, then compare overall and by subgroup.\n4. Collect patient feedback, especially from groups at risk of being left out, like non-English speakers, people without smartphones, and people who use assistive technology.\n5. Consider an accessibility review (e.g., WCAG) and a non-digital path, like phone or SMS rescheduling, as supporting evidence for the equity goal. These still won't prove the outcome on their own.\n\nIf you tell me where these statuses are tracked, I can help reword the entries or draft the evaluation plan."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 1,
+        "passRateWithout": 1,
+        "delta": 0
+      }
+    },
+    {
+      "name": "case-05",
+      "dir": "evals/case-05",
+      "source": "mixed",
+      "promptMarkdown": "We have 12 observed appointment interviews, but they follow two substantially different routes: people booking for themselves and carers arranging transport and appointments for someone else. Create a journey structure. The notes contain actions but no reliable emotional reports. We cannot change the transport provider's service.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: Distinct routes where consequential, with source scope, missing emotion evidence, carer burden, provider boundaries and linked needs/stories.\n\nAssertions:\n1. Material differences are not averaged into a fictional typical person\n2. No emotional curve or participant quotation is invented\n3. Mapping the transport dependency does not become authority to change it\n4. Observed notes and proposed improvements are distinguishable",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: Distinct routes where consequential, with source scope, missing emotion evidence, carer burden, provider boundaries and linked needs/stories.\n\nAssertions:\n1. Material differences are not averaged into a fictional typical person\n2. No emotional curve or participant quotation is invented\n3. Mapping the transport dependency does not become authority to change it\n4. Observed notes and proposed improvements are distinguishable",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-user-value)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-user-value(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 5,
+            "costUsd": 0.1794828,
+            "judgeCostUsd": 0.01463399999999998,
+            "durationSeconds": 46,
+            "startedAt": "2026-09-27T11:20:26.222Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "I found no interview notes in the working directory, so I haven't coded them. What follows is a structure for you to code the 12 interviews against. Stage names are a starting guess. Confirm, merge or drop them once you've placed the notes.\n\n## 1. Two separate maps with shared stage IDs\n\nThe carer route has different stages and responsibilities, not just variations of the same ones. The carer has to establish that they can act for the person, coordinate two bookings that depend on each other, and pass information to someone who isn't in the conversation. Folding that into a single map as \"variants\" would hide the part that matters most.\n\nWhere both routes touch the same part of the service, the stages share an ID (for example, `S-BOOK`). That lets you compare the routes directly.\n\n**Code each booking episode, not each person.** One person may book for themselves once and act as a carer another time. There may also be mixed cases, such as the patient booking the appointment while a carer arranges transport. Keep those as a flagged third pattern rather than forcing them into A or B.\n\n## 2. Stages\n\n**Route A: booking for yourself**\n\n| ID | Stage | Owner |\n|---|---|---|\n| A0 | Trigger (referral, letter, recall, symptom) | Mixed |\n| A1 | Find out how to book, and whether you're eligible | Ours |\n| A2 (`S-BOOK`) | Choose and book a slot | Ours |\n| A3 (`S-TRANSPORT`) | Arrange travel: own means or the transport provider | External, fixed |\n| A4 (`S-CHANGE`) | Confirmations, reminders, changes, cancellations | Ours |\n| A5 | Travel and arrival | External / person |\n| A6 (`S-APPT`) | The appointment itself | Ours |\n| A7 | Getting home; booking a follow-up | Mixed |\n\n**Route B: a carer arranging for someone else**\n\n| ID | Stage | Owner |\n|---|---|---|\n| B0 | Trigger, often learned second-hand from the patient or a third party | Mixed |\n| B1 | Establish the right to act; gather the patient's details and needs | Ours / person |\n| B2 | Line up availability across patient, carer, clinic and transport. This is often a loop, not a step. | Mixed |\n| B3 (`S-BOOK`) | Book the appointment on the patient's behalf | Ours |\n| B4 (`S-TRANSPORT`) | Book transport: lead times, eligibility, pickup windows | External, fixed |\n| B5 | Pass details to the patient; decide who receives reminders | Ours / person |\n| B6 (`S-CHANGE`) | Handle a change to either booking, which knocks on to the other | Mixed |\n| B7 | Day of: pickup, whether the carer goes too, waiting | External / person |\n| B8 (`S-APPT`) | The appointment, with the carer present, remote or absent | Ours |\n| B9 | Return transport and follow-up, which starts the cycle again | Mixed |\n\nI expect B2–B4 and B6, where the two bookings meet, to be where the routes differ most. Treat that as a hypothesis to check against the notes, not a finding.\n\n**Endings to record on both maps.** Only \"attended\" counts as success:\n- attended\n- rescheduled\n- cancelled by the person\n- did not attend\n- transport failed, so the appointment was missed\n- gave up before booking\n- never got started (for example, ineligible or unable to find the route in)\n\nThe last two only appear if the notes captured them. If they didn't, record the gap rather than leaving it out silently.\n\n## 3. What to record at each stage\n\n| Field | Notes |\n|---|---|\n| Observed actions | What the notes say people did |\n| Decisions | Include what the decision depended on |\n| Waiting and handoffs | Who else was involved, and for how long |\n| Channels | Phone, online, letter, in person, through the carer |\n| Behavioural difficulty signals | Only things that were observed: repeated contacts, workarounds, errors, backtracking, stopping, time taken |\n| Need at this stage (inferred) | Label it as your inference, with the evidence behind it |\n| Entry and exit conditions; recovery path | What happens when this stage goes wrong |\n| Evidence | Interview IDs, and n/12 only after coding |\n| Open questions for research | |\n\n**No emotion lane.** Where a source records nothing, write \"not recorded\". Don't infer feelings from actions: calling three times is a behaviour, not frustration. Keep direct quotes only if the notes have them verbatim, and label them as quotes.\n\n## 4. How to handle the transport provider\n\nKeep the transport stages (A3, B4, B7, B9) on both maps. People's needs still arise there, and leaving them out would make the journey look smoother than it is. Mark those stages as **external and fixed**. Any response to a need there has to come from the parts you control, for example:\n\n- Show transport lead times and pickup windows before someone chooses an appointment slot.\n- Offer slots that fit the transport constraints.\n- When transport fails, let people rebook quickly without a penalty, and don't record it as a missed appointment on their part.\n- Send reminders and changes to the carer as well as the patient.\n- Show the appointment and transport details together, so carers can manage both.\n\nList transport-side problems as constraints, not as backlog gaps. If the evidence is strong, pass it to the provider as information, not as a change you're committing to.\n\n## 5. Next steps\n\n1. Code each interview's episode or episodes onto the stage IDs. Record the order of actions, and anything that doesn't fit a stage.\n2. Revise the stages to match what actually happened.\n3. Only then attach needs, and count how many of the 12 show each one.\n4. Record what the notes can't tell you: emotions, anyone who couldn't get into the service at all, and how often each ending happens. Each of those needs further research.\n\nIf you share the notes, I can do the coding and fill in the maps."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 2,
+            "costUsd": 0.11634620000000001,
+            "judgeCostUsd": 0.01466400000000001,
+            "durationSeconds": 39,
+            "startedAt": "2026-09-27T11:21:11.919Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "The working directory is empty, so I haven't seen the 12 interview notes. What follows is a structure built from your three constraints. It contains no findings yet. If you share the notes, I can code them into it.\n\n---\n\n# Appointment journey: two-lane structure\n\n## 1. Design decisions\n\n| Decision | Why |\n|---|---|\n| **Two lanes on a shared stage spine**, not one merged journey | Carers do things that self-bookers never do: coordinating with the person, booking on someone else's behalf, and arranging transport. Merging the routes would hide those steps. A shared spine still lets you compare the routes stage by stage. |\n| **Observed friction replaces the emotion curve** | The notes record actions, not reliable feelings. A made-up emotion curve would present guesses as findings. Friction is coded from what people actually did (see §4). |\n| **Every step is tagged with who controls it** | You can't change the transport service. Opportunities are only logged against steps you control or against the handoffs with the provider. |\n| **Every cell cites participants (e.g. P03, P07 · 2/5)** | With about 12 interviews split across two lanes, each lane may have only 5–7 people. Counts stop a single story from being read as a pattern. |\n\n## 2. Stage spine\n\n| # | Shared stage | Self-booker lane | Carer lane |\n|---|---|---|---|\n| 1 | **Trigger** | Notices need / receives letter | Person raises need, carer spots letter, or clinic contacts carer |\n| 2 | **Coordinate** | *(not applicable)* | Agrees on timing, access needs and consent with the person |\n| 3 | **Book** | Books for self | Books on behalf: identity/authority checks, relays the person's details |\n| 4 | **Arrange travel** | Makes own way (may use transport) | **Arranges transport (external)**: eligibility, booking, pickup times |\n| 5 | **Prepare & confirm** | Checks details, reminders | Confirms with clinic, transport **and** the person, often through several channels |\n| 6 | **Get there** | Travels | Travels with the person, or hands over to transport and tracks it |\n| 7 | **Attend** | Attends | Present / partly present / absent; relays information |\n| 8 | **After** | Follow-up, rebooking | Passes outcomes to the person, rebooks, rearranges transport |\n\nStage 2 applies only to carers. Stage 4 is a small step for self-bookers and a major one for carers. Keep the empty cells visible, because the gaps are a finding in themselves.\n\n## 3. Per-stage template (fill once for each lane)\n\n```\nSTAGE: [n. name]                         LANE: [Self | Carer]\nActors:            e.g. carer, person, clinic reception, transport provider\nObserved actions:  verb-first, from notes          — [P02, P05]\nTouchpoints:       phone / portal / letter / SMS / transport line\nFriction signals:  coded (see §4)                  — [code · P ids · n/N]\nWorkarounds:       what people did to cope         — [P ids]\nControl:           OURS | HANDOFF | EXTERNAL (fixed)\nOpportunities:     only if OURS or HANDOFF\nOpen questions:    gaps the notes can't answer\n```\n\n## 4. Friction codes (from behaviour, not emotion)\n\n| Code | Observable evidence in notes |\n|---|---|\n| `REPEAT` | Gave the same information more than once, or re-entered details |\n| `CHASE` | Called or checked back to confirm something that should already have been confirmed |\n| `WORKAROUND` | Used an off-system method (own spreadsheet, calendar, asked a neighbour) |\n| `HELP` | Had to ask someone to complete a step |\n| `DELAY` | A gap or wait between steps that the participant mentioned or that shows in the timeline |\n| `ERROR` | Wrong time or place, missed pickup, rebooked |\n| `ABANDON` | Stopped, postponed or gave up on a step |\n| `SYNC` | Had to reconcile two schedules, e.g. appointment vs transport pickup (mostly carers) |\n\nIf a participant *said* how they felt, record it as a quote with the P id. Don't turn it into a score.\n\n## 5. Control boundary (transport)\n\n| Tag | Meaning | Example opportunity types |\n|---|---|---|\n| **OURS** | Clinic/booking steps you run | Booking-on-behalf flow, confirmations, appointment timing |\n| **HANDOFF** | Where your process meets the transport provider | Appointment times that allow for pickup windows, which transport info you surface, one confirmation that covers both |\n| **EXTERNAL** | The provider's own service | **Record the friction, don't design for it.** Note it as a constraint the other stages must absorb. |\n\nCarer-lane Stages 4–6 will probably collect the most EXTERNAL friction. The useful design questions sit next to them: how Stages 3 and 5 can reduce `SYNC` and `CHASE` given a transport service that won't change.\n\n## 6. Cross-lane view (after filling)\n\n| Stage | Self: top friction (n/N) | Carer: top friction (n/N) | Control | Divergence note |\n|---|---|---|---|---|\n\n## 7. Before synthesis\n\n- **Assign lanes by route, not by role.** Some participants may be mixed: a carer who also books for themselves, or a self-booker who uses transport. Tag them and decide which lane they belong in.\n- **Report counts per lane.** \"3 of 6 carers\" rather than \"3 of 12\".\n- **Filling the emotion gap needs new data.** If you need emotional evidence later, add a short follow-up, such as asking each participant to rate the hardest step. Don't infer it from these notes.\n\n---\n\nIf you share the notes, I'll assign the lanes, code the friction and fill in §3 and §6 with participant references."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 1,
+        "passRateWithout": 1,
+        "delta": 0
+      }
+    },
+    {
+      "name": "case-06",
+      "dir": "evals/case-06",
+      "source": "mixed",
+      "promptMarkdown": "We are designing a reusable stable priority queue for scheduling components. Its value and contract are not yet settled. Explain use value at the queue, scheduler and possible application levels. Show what implementation and evidence could establish at each level. We have no chosen human-service application.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: Names the scheduler as a technical consumer, defines conditional usefulness and candidate guarantees, distinguishes implementation from consumer fit and wider effects, and keeps unknown application use explicit.\n\nAssertions:\n1. A technical consumer has a legitimate user-value account without a fictional human persona\n2. Local ordering correctness is not treated as proof of scheduler fairness or application outcomes\n3. Implementation, contract, capability and use are connected with distinct relationship meanings\n4. Unknown application context stays unknown rather than becoming an invented impact chain",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: Names the scheduler as a technical consumer, defines conditional usefulness and candidate guarantees, distinguishes implementation from consumer fit and wider effects, and keeps unknown application use explicit.\n\nAssertions:\n1. A technical consumer has a legitimate user-value account without a fictional human persona\n2. Local ordering correctness is not treated as proof of scheduler fairness or application outcomes\n3. Implementation, contract, capability and use are connected with distinct relationship meanings\n4. Unknown application context stays unknown rather than becoming an invented impact chain",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-user-value)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-user-value(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 6,
+            "costUsd": 0.23412800000000003,
+            "judgeCostUsd": 0.02260200000000004,
+            "durationSeconds": 59,
+            "startedAt": "2026-09-27T11:21:51.236Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "I used the use-value method from the `oak-user-value` skill. The working directory is empty, so this starts from scratch rather than revising an existing backlog. Nothing below is observed use. It is a structured proposal with its claims kept within what each kind of evidence can support.\n\n## 1. Where things stand\n\n| | Status |\n|---|---|\n| **Direct consumer** | A scheduling component. It's a role, not a person, and no specific scheduler has been named yet. |\n| **Owner's purpose** | Offer a reusable stable priority queue. This is a proposal, not an adopted direction. |\n| **Need evidence** | None yet. \"Schedulers need stable ordering\" is an assumption. |\n| **Application** | Not chosen. Anything said about downstream value is a hypothesis. |\n| **Contract** | Unsettled. See the open questions in §3. |\n\n**Key point:** each level can only support claims at its own level. Passing queue tests say nothing about whether a scheduler behaves well. A scheduler that behaves well says nothing about whether people or systems downstream are better off.\n\n## 2. Use value at each level\n\n### Level A: the queue (component contract)\n\n- **Consumer:** the scheduler code and the developers who build it.\n- **Use value:** predictable selection. The scheduler gets the highest-priority item first, and equal-priority items come out in insertion order. It doesn't have to invent its own tie-breaking or reason about arbitrary reordering.\n- **Why stability might matter (all hypotheses):**\n  - The same inputs produce the same dispatch order, which helps debugging, replay and tests.\n  - Equal-priority work is served first-come-first-served, as people usually expect.\n  - It is required in some settings, such as deterministic discrete-event simulation.\n- **Costs:** a sequence number stored per item; a sequence counter that must not overflow or be shared carelessly; merging queues while keeping stability requires a global sequence; some heap optimisations are ruled out.\n- **Honest alternative:** a standard-library heap keyed on `(priority, sequence)` does the same job in a few lines. A reusable component is only worth building if it adds value beyond that: a documented contract, handling of edge cases like cancellation or reprioritisation, and being tested once and reused. That has to be shown, not assumed.\n\n### Level B: the scheduler (where the queue is used)\n\n- **Consumer:** the scheduler relies on the queue. The scheduler's own consumers (job submitters, operators, downstream services) rely on the scheduler.\n- **Use value to the scheduler:** it can dispatch according to its declared policy, and its decisions can be reproduced and explained. \"Job X ran before Y because it had higher priority, or equal priority and arrived first.\"\n- **What the queue does *not* give the scheduler:** no starvation-freedom, deadlines, fairness across tenants, throughput or latency bounds. Strict priority with stable ties can still starve low-priority work indefinitely.\n- **Pressure back on the queue's contract:** if the scheduler needs aging, cancellation or reprioritisation, the queue must support them (for example remove-by-handle or changing an item's priority). Then someone must decide what \"stable\" means when an item's priority changes: does it keep its original sequence number or get a new one? The scheduler's real needs should settle this, not guesswork.\n- **Scheduler's obligations at the seam:** assign priorities correctly, never change a key in place, respect whatever thread-safety rule the queue sets, and handle an empty queue.\n\n### Level C: possible applications (unchosen)\n\nThese are candidates only, each with a different reason stability might matter:\n\n| Candidate | Why stability might matter | What would really decide the value |\n|---|---|---|\n| CI/build or background job runner | Reproducible order, FIFO among peers | Throughput, queue wait, operator trust |\n| Discrete-event simulation | Determinism of events at the same timestamp | Reproducibility of results |\n| Message or request processing | Ordering expectations within a priority class | Latency by class, starvation |\n| Human-service queue (appointments, triage, casework) | Seen as \"first come, first served\" among equals | People's access, waiting and outcomes. Priority assignment and capacity dominate these. |\n\n**Human services:** because none is chosen, I have not invented a persona or journey. If one is chosen, stable ordering turns into a policy question, since tie-breaking by arrival order is a fairness choice with rights implications. The hard questions move to who assigns priority, how, and who bears the waiting. Passing queue tests supply no evidence about those people's experience or outcomes.\n\n## 3. Contract questions to settle from real scheduler needs\n\n1. **Priority order:** min-first or max-first? What type of key, and must it be totally ordered? How are keys that can't be ordered (e.g. NaN) rejected?\n2. **What stability means:** FIFO among equal keys, measured by insertion sequence. Does that hold across `remove` and reinsertion, and across priority changes?\n3. **Operations:** push, pop, peek, len, and possibly remove-by-handle, change-priority, bulk load, and the order and snapshot behaviour of iteration.\n4. **Empty queue:** raise an error, return an option type, or block?\n5. **Resource bounds:** O(log n) push and pop? Memory per item? Capacity limits?\n6. **Concurrency:** single-threaded only, externally locked, or thread-safe?\n7. **Determinism scope:** within one process run, or across serialisation and restart too (which means persisting the sequence counter)?\n\n## 4. What implementation and evidence can establish at each level\n\n| Level | Candidate implementation | Evidence | What it **can** establish | What it **cannot** establish |\n|---|---|---|---|---|\n| A. Queue | Binary heap keyed on `(priority, seq)`. Monotonic counter. Handles for removal and reprioritisation if needed. | Unit tests for ties, empty queue and invalid keys; property-based tests against a reference model (a stable-sorted list); heap invariant checks; complexity benchmarks; optionally a formal proof of the ordering invariant | The implementation conforms to the contract under stated conditions | That any scheduler can use it correctly, or should |\n| A→B seam | Adapter or direct use in a named scheduler | Integration tests at the seam; checks that the scheduler meets its obligations (no in-place key changes, locking) | The scheduler actually consumes the guarantee as intended | That the scheduler's policy is good |\n| B. Scheduler | Priority policy, plus aging or quotas if needed | Determinism test (same inputs give the same dispatch trace); trace replay; simulated workloads measuring worst-case wait and starvation; load tests | The policy behaves as declared on the workloads tested | Value to the application, or performance on untested workloads |\n| C. Application | Not chosen | Operational metrics, operator or user research, and, for any outcome claim, a proper evaluation design | Only once named: whether use of the system gives its consumers or affected people a useful difference | Anything, at present |\n\nThe chain of claims stays separate at every step: conformance, then usable by the scheduler, then the scheduler behaves as declared, then the application is useful, then there's a measured outcome, then that outcome is caused by the system.\n\n## 5. Traceability (typed links)\n\n- `Q-impl` **realises** `Q-contract` (conformance only).\n- `Q-contract` **enables** `Sched-dispatch` (the scheduler relies on the guarantee). This is conditional on the scheduler meeting its obligations.\n- `Sched-policy` **enables** `App-use`: unknown, since there is no named application.\n- `App-use` **contributes to** an outcome: not proposed. Any such link would need its own mechanism, alternatives and evidence.\n- **Uncovered:** a real scheduler's actual requirements, and whether anything is needed beyond the standard-library recipe.\n\n## 6. Candidate delivery slices\n\n1. **Enabling (research):** find one or two real or planned schedulers and record which of the §3 questions they actually need answered. This is ready now.\n2. **Component slice:** the core stable queue (push, pop, peek, clear empty-queue behaviour, rejection of keys that can't be ordered). Acceptance: property tests match the stable-sort reference, and the documented complexity holds. Only ready once item 1 confirms the scope.\n3. **Conditional slice:** remove and reprioritise with defined stability semantics, only if a scheduler's cancellation or aging needs require it.\n4. **Seam slice:** integrate with the named scheduler, with a determinism test and starvation simulation. Report the starvation results as scheduler findings, not queue defects.\n\n## 7. Review and limits\n\n- **Consumer view:** a scheduler author may not want a new dependency if the recipe is enough. The component has to beat that on contract clarity or features.\n- **Provider view:** reprioritisation and persistence could greatly widen the contract. Include them only when a consumer needs them.\n- **Delivery view:** slice 2 is not ready until slice 1 names a consumer.\n- **Limitations:** this model was produced and reviewed by me in a single pass, with no independent challenge. It contains no user or consumer research. Nothing is observed.\n- **When to revisit:** when a real scheduler consumer is named, when an application (especially a human service) is chosen, when concurrency or persistence becomes a requirement, or when anyone claims a benefit at the application level.\n\n**Suggested next step:** name a first consuming scheduler and answer the §3 questions from its needs. That turns the contract from speculative to grounded and makes slice 2 ready. I can write this up as a design doc in the repo if you'd like."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.11818559999999996,
+            "judgeCostUsd": 0.018695999999999963,
+            "durationSeconds": 38,
+            "startedAt": "2026-09-27T11:22:50.167Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "# Use value of a stable priority queue at three levels\n\nThe main point: each level can only support claims that its own kind of evidence can back up. A correct queue does not make a fair scheduler, and a fair scheduler does not make a good service. Since you haven't chosen an application, the top level is still made of hypotheses. The contract should be written so it doesn't quietly assume any of them.\n\n---\n\n## 1. Queue level: the data structure\n\n**Use value:** callers get a predictable order. Items with higher priority come out first. Among items whose priorities compare as equal, the one inserted first comes out first. Without stability, the order of ties depends on how the heap happens to be arranged. That makes behaviour hard to reproduce, test or explain.\n\n**Contract questions to settle first:**\n\n| Question | Options / risks |\n|---|---|\n| What counts as \"equal\"? | The comparator returns 0. This must be a total preorder, or stability means nothing. |\n| What counts as \"inserted first\"? | The order of calls on one thread? The linearization order under concurrency? The logical time the caller supplies? |\n| Changing an item's priority (update / decrease-key) | Does the item keep its original sequence number or get a new one? Either choice is valid, but it must be stated. |\n| Removing an arbitrary item | Is it supported? What does it cost? |\n| Sequence counter | 64-bit monotonic. State the overflow behaviour, even if it's \"unreachable in practice\". |\n| Iteration and snapshots | Is ordered iteration guaranteed, or only the order of `pop`? |\n| Complexity | For example O(log n) push/pop and O(1) peek. Say whether these are amortized or worst case. |\n\n**Implementation:** the usual approach is a binary or d-ary heap keyed on `(priority, seq)`. The alternative is a bucketed FIFO per priority, which works when the set of priorities is small and discrete.\n\n**Evidence that can establish value here:**\n- **Property and model-based tests.** Run random operation sequences against a trivially correct reference, such as a sorted list with (priority, seq) keys. Check that `pop` order matches exactly, not just \"some valid order\".\n- **Stability-specific tests.** Push many items with identical priority and confirm FIFO order. Mix in priority updates and removals and check the stated rule.\n- **Concurrency tests, if it's concurrent.** Linearizability checking (Lincheck, Jepsen-style histories, or a loom/TLA+ model).\n- **Benchmarks.** Measure against an unstable baseline so the cost of stability is known: memory per item and throughput across n and priority distributions.\n\n**What this level cannot claim:** that the ordering is *good* for anything. It only shows that the ordering is *what the contract says*.\n\n---\n\n## 2. Scheduler level: the components that use the queue\n\n**Use value:** the scheduler's policy becomes easier to reason about and more consistent:\n- **Determinism.** The same inputs produce the same dispatch order. This enables replay debugging, reproducible tests and auditability.\n- **FIFO fairness within a priority class.** Equal-priority work is served in arrival order, so bounded waiting holds *within* a class.\n- **Explainability.** \"You waited because N items had higher priority or arrived earlier at the same priority\" is a statement you can check.\n\n**Limits to state explicitly:** stability does **not** prevent starvation *across* priority classes. A steady stream of high-priority work still starves low-priority work. Aging, quotas or deadline-based priorities are scheduler policies layered on top. They should not be implied by the queue's contract.\n\n**Implementation:** the scheduler owns how priorities are computed, the aging policy, admission control and preemption. The queue only orders items. Keep that boundary clean. For example, don't put \"aging\" into the queue unless it's an explicit, separately specified feature.\n\n**Evidence:**\n- **Deterministic replay.** Record an arrival trace, replay it, and assert identical dispatch order.\n- **Simulation.** Use synthetic workloads (Poisson or bursty arrivals, skewed priority mixes). Measure wait-time distributions per class, the worst-case wait within a class, and starvation incidence with and without aging.\n- **Stated invariants checked in tests.** For example, \"no item waits behind a later-arriving item of equal or lower priority.\"\n- **Overhead measurement.** Measure scheduling latency and the queue's share of it under realistic load.\n\n**What this level cannot claim:** that the resulting waits are acceptable or fair *to the people or systems being served*. \"Fair\" here means fair according to the stated policy.\n\n---\n\n## 3. Application level: no human-service application chosen yet\n\n**Possible use value (hypotheses only):** if the queue were used in something like triage, appointment booking, support tickets or benefits processing, stability could support:\n- **Procedural fairness.** First come, first served among equals, which people generally find legitimate.\n- **Accountability.** Individual outcomes can be reconstructed and explained.\n- **Consistency.** Similar cases are treated the same way.\n\n**Why these remain hypotheses:**\n- In human services, value depends on **how priority is assigned**: who decides urgency, from which data, and with what biases. It doesn't come from how ties are broken. A perfectly stable queue fed biased priorities produces order that is stable but unjust.\n- \"Arrival order\" can itself be unfair. People with better internet access, fewer working-hour constraints, or knowledge of the system arrive earlier.\n- What stakeholders need may be something other than strict ordering: override mechanisms, transparency to the people waiting, appeals, or wait-time guarantees.\n\n**What evidence would need an actual application:**\n- Identifying stakeholders and eliciting requirements. What do service users, staff and operators consider fair?\n- Validating how priorities are assigned, including disparate-impact analysis across groups.\n- Field or pilot evaluation of outcomes: waits, harms, complaints, overrides used.\n- Governance review: who can change priorities, how it's logged, and how people contest it.\n\n**What you can do now:** mark the application layer as *out of scope for the component's claims*. Record the hypotheses above as open questions, not as features. Make sure the queue and scheduler **don't block** those future needs. That means hooks for audit logging, an explicit and inspectable priority source, support for overrides that respect the stated sequence-number rule, and replayable traces.\n\n---\n\n## Summary\n\n| Level | Value claim | Implementation | Evidence that can establish it | Status now |\n|---|---|---|---|---|\n| Queue | Contracted, reproducible order; ties broken by arrival | `(priority, seq)` heap or buckets; explicit update, removal and concurrency semantics | Model-based and property tests, linearizability checks, benchmarks against an unstable baseline | **Can be established** |\n| Scheduler | Determinism, FIFO within a class, explainable dispatch | Priority computation, aging and admission, kept separate from the queue | Trace replay, simulation of wait distributions, invariant tests | **Can be established for the stated policy**. Cross-class starvation needs an explicit policy. |\n| Application | Procedural fairness, accountability, consistency for people | Priority-assignment process, overrides, audit, transparency | Stakeholder work, disparate-impact analysis, pilot or field evaluation, governance | **Cannot be established yet.** Keep as hypotheses and design so they remain possible. |\n\n**Recommended next step:** write the queue contract first, especially the definition of \"equal\", the update/re-sequence rule and the concurrency semantics. Then write the scheduler's stated fairness policy as a separate document. Evidence for each can then be scoped to its own claims, and nothing at the lower levels will be mistaken for proof of value to people."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 1,
+        "passRateWithout": 1,
+        "delta": 0
+      }
+    },
+    {
+      "name": "case-07",
+      "dir": "evals/case-07",
+      "source": "mixed",
+      "promptMarkdown": "Our curriculum-data API passes its schema tests. Teachers still cannot find resources because the consuming tool does not preserve meaning when mapping subjects. Express the intended use value at the teacher task, consuming tool, API contract and implementation levels. Identify where evidence and changes belong without assuming the API alone owns the problem.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: Uses distinct but connected views, identifies semantic composition and authority boundaries, separates local conformance from usable discovery and educational outcomes.\n\nAssertions:\n1. Schema conformance is not accepted as proof of useful resource discovery\n2. The semantic mapping seam and both parties obligations are made explicit\n3. The proposed intervention follows the failing seam rather than automatically expanding the API\n4. Teacher experience and learning outcomes retain distinct evidence requirements",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: Uses distinct but connected views, identifies semantic composition and authority boundaries, separates local conformance from usable discovery and educational outcomes.\n\nAssertions:\n1. Schema conformance is not accepted as proof of useful resource discovery\n2. The semantic mapping seam and both parties obligations are made explicit\n3. The proposed intervention follows the failing seam rather than automatically expanding the API\n4. Teacher experience and learning outcomes retain distinct evidence requirements",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-user-value)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-user-value(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 7,
+            "costUsd": 0.22620900000000002,
+            "judgeCostUsd": 0.019416000000000017,
+            "durationSeconds": 50,
+            "startedAt": "2026-09-27T11:23:27.912Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "I checked the working directory and it's empty: there's no API spec, mapping code, backlog or research to look at. Everything below comes from your description alone. Each claim is marked as either **stated** (you told me) or a **hypothesis** (still needs evidence). I haven't named the subjects that break or the tool's mapping rule because I haven't seen them.\n\n## 1. Purpose, boundary and what we know\n\n- **Whole system:** a teacher finding resources through a consuming tool that reads the curriculum-data API.\n- **Parts the API team can change:** unknown. It matters, because the most likely fix is in the tool, and that may belong to another team or organisation.\n- **Stated:** the API passes its schema tests, and teachers can't find resources.\n- **Hypothesis:** that the tool's subject mapping is *the* cause. It may be one cause among several: search design, teachers' own words for subjects, or gaps in content coverage.\n\nThe key distinction: a schema test shows the **shape** of the response is right. It shows nothing about whether the **meaning** of a subject survives the trip to the teacher. Passing those tests is the first of six separate claims (conformance, working service, usable interface, teacher gets what they came for, measured outcome, proven cause). It doesn't support any of the other five.\n\n## 2. Use value at each level\n\n| Level | Who uses what | To accomplish what | Conditions and limits | Evidence that fits this level |\n|---|---|---|---|---|\n| **Teacher task** (use and experience) | A teacher planning a lesson or unit | Find resources that fit the subject, key stage/year and topic they're teaching, in their own words, fast enough to be worth it | Teachers' terms vary: \"RE\" vs \"Religious Education\", \"Science\" vs \"Biology\", subjects split by exam or pathway. They need to tell \"nothing exists\" apart from \"I searched wrongly\". | Watching real search tasks, logs of zero-result and abandoned searches, support tickets. **None cited yet, so this row is a need hypothesis.** |\n| **Consuming tool** (capability) | The tool, working on the teacher's behalf | Turn what the teacher selects or types into the API's subject identities and back, with nothing lost | The tool's taxonomy may be flatter or older than the API's. Its mapping is where meaning is currently lost (stated). | Integration checks against real subject cases. Compare what the tool shows with what the API holds for the same query. |\n| **API contract** (contract and responsibility) | The tool team, as developers and a system | Rely on each subject having a stable identity and a published meaning: ID, preferred label, alternative labels, parent/child and key-stage scope, and what happens on deprecation or rename | Today the contract probably guarantees **shape** only. Whether it guarantees **meaning** is unknown, and that is the API's possible share of the problem. | Contract tests on meaning, not just shape: stable IDs across releases, a declared hierarchy, alternative labels present, rename/retire rules. Plus a boundary check that the tool actually uses these. |\n| **Implementation** (realisation) | API code and data, and the tool's mapping code | Deliver the guarantees above | Local correctness in either part doesn't prove the two work together | Unit and contract tests, which only tell you each part matches its own declared scope |\n\n## 3. Where the meaning is probably lost\n\nLikely failure modes at the tool/API boundary. All are hypotheses, and each needs checking against real data:\n\n1. **Label matching instead of ID matching:** a renamed subject silently stops matching.\n2. **Flattening the hierarchy:** for example, Biology, Chemistry, Physics and Combined Science all collapsed into \"Science\", or the reverse, so a search misses the children.\n3. **Ignoring key-stage scope:** the same subject name means different content sets at different stages.\n4. **Many-to-one or unmapped values dropped silently:** no warning, and the teacher sees \"no results\".\n5. **Teacher vocabulary never mapped at all:** synonyms exist in the API but the tool doesn't use them, or they don't exist anywhere.\n\nTo decide who owns each one, ask: **could a careful consumer have preserved the meaning using only what the API publishes?**\n- **Yes:** the fix belongs in the tool. The API may still want to improve its guidance.\n- **No** (IDs aren't stable, the hierarchy isn't exposed, or there's no rename policy): the API contract has a real gap. The schema tests can't show that gap, because the missing guarantee was never part of the schema.\n\nIt will probably be split. Treat it as a shared boundary, not a hand-off of blame.\n\n## 4. Candidate work (none of it ready yet)\n\n| ID | Level | Change | Link | Lifecycle |\n|---|---|---|---|---|\n| E1 | Teacher | Find out where teachers' searches fail, and why: gather zero-result and abandoned queries, and observe a small set of real planning tasks | Tests need N1 | Research, next |\n| S1 | Tool | Map subjects by stable ID, keep the hierarchy and key-stage scope, and show \"no match\" visibly instead of dropping it | Addresses N1, relies on C1 | Candidate. Blocked on who owns the tool and on an agreed set of cases. |\n| S2 | Tool | Map teacher terms (synonyms and older names) to API subject IDs | Addresses N1 | Candidate. Needs E1 to learn which terms matter. |\n| C1 | API | Write meaning guarantees into the contract: ID stability, preferred and alternative labels, hierarchy, scope, deprecation and rename rules | Enables S1 and S2 | Candidate, **only if** the §3 ownership test shows a gap |\n| T1 | Boundary | Shared set of subject cases drawn from real failures (renamed, nested, scope-split, synonym, unmapped), run end to end from API through tool to results | Evidence for S1, S2 and C1 | Candidate. This is the missing test. |\n\n- **N1** (need hypothesis): a teacher needs to find resources matching what they teach, described in their own terms, so they can plan without repeating searches or giving up.\n\n**Acceptance for S1/S2 (outcomes):** for every case in T1, the tool returns the resources the API holds for the matching subject IDs and scope. Unmapped values are surfaced, not dropped.\n\n**Checking method:** run T1 end to end. That proves the boundary works. It does **not** prove teachers now find resources; that needs E1-style observation after release.\n\n## 5. Traceability and gaps\n\n- N1 → S1, S2 (these address the need) → C1 (enables them) → API and tool code (realise it).\n- None of these links shows that teachers now succeed.\n- **Uncovered:** the teacher who searches for something that doesn't exist needs an honest \"nothing exists\" result. That's separate from the mapping fix.\n- **Unknown:** other consumers of the same API that may have the same mapping problem.\n- **Outcome hypothesis:** keeping meaning intact through the mapping should reduce failed searches. Other explanations to rule out: search ranking, content coverage and interface design.\n- **What would change this model:** evidence that failures come mainly from teacher vocabulary or content gaps, not from mapping.\n\n## 6. Review and limits\n\nI reviewed this myself in the same session; nobody independently challenged it.\n\n**Where the story still passes while the teacher fails:**\n- S1 can pass while the teacher's search still fails, if the real gap is vocabulary (S2) or content.\n- A shared test set built only from API-side cases would miss the teacher's own terms.\n\n**Burden to watch:** if C1 isn't done, the tool team carries the whole cost of working out subject meaning.\n\n**Next actions:**\n1. Name who owns and has authority over the tool.\n2. Pull 20–50 real failed searches and trace each one from API through the tool to the results. That's the cheapest evidence that tells the §3 failure modes apart.\n3. Apply the ownership test from §3 to decide whether C1 is needed.\n4. Only then mark S1 and T1 ready.\n\nIf you can point me to the API spec, the tool's mapping code or search logs, I can check these hypotheses against the real material."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 2,
+            "costUsd": 0.08665379999999998,
+            "judgeCostUsd": 0.012059999999999987,
+            "durationSeconds": 24,
+            "startedAt": "2026-09-27T11:24:18.187Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "The working directory is empty, so I don't have your API, schema, tests or the consuming tool's mapping code. What follows is a framework to apply to your system, not findings about it. The subject names and failure modes are examples to check against, not observed facts.\n\n## The intended use value, one level at a time\n\n| Level | What \"working\" means | What proves it | Where the gap usually is |\n|---|---|---|---|\n| **Teacher task** | A teacher searching for \"Year 8 algebra\" (in their own words) gets resources they would actually use, in the first results, without knowing internal codes. | Task-based tests: real queries → expected resources. Search success rate, zero-result rate, how often teachers rephrase, support tickets. | Nobody owns this outcome. Every other level can \"pass\" while it fails. |\n| **Consuming tool** | It maps its own subject labels to the API's subject identifiers without losing meaning. No collapsing (Physics → Science loses detail), no widening (Science → Physics+Chemistry+Biology drops Earth Science), no silent drops, no string-matching that breaks when a name changes. | Mapping coverage report: every source subject maps, or is flagged unmapped. Round-trip tests. A logged count of items that fell back to \"Other\" or were dropped. | **Most likely where this failure starts**, based on your description. |\n| **API contract** | Subject is a stable, documented identifier with defined meaning: its scope, parent/child relations, aliases and deprecations. A consumer can tell what \"maths.algebra\" includes. | Contract docs and a published vocabulary (e.g. SKOS or a versioned taxonomy endpoint). Consumer-driven contract tests. | Schema tests check **shape** (field is a string, enum is valid), not **meaning** (`\"science\"` means the same to both sides). |\n| **Implementation** | Stored data uses the identifiers correctly and consistently. Search and filtering respect the hierarchy, so a query for a parent includes its children. | Data-quality checks: distribution of resources per subject, orphaned codes, records tagged with deprecated values. | Right shape, wrong or inconsistent values. Hierarchy ignored in search. |\n\n## Where the evidence belongs\n\n1. **Teacher level:** a small set of golden tasks (query → acceptable results), agreed with teachers. This is the acceptance test the whole chain answers to, so it belongs to the product/curriculum owner, not to either codebase.\n2. **Tool level:** the tool's own mapping tests and runtime counters for unmapped, defaulted and many-to-one mappings. The evidence lives in the tool because only the tool knows its source vocabulary.\n3. **Contract level:** consumer-driven contract tests (e.g. Pact-style). The consuming tool states \"I send X meaning Y and expect Z\", and the API verifies it. This is the missing link between \"schema passes\" and \"meaning is preserved\".\n4. **Implementation level:** data-quality assertions on real records, plus search tests that exercise the hierarchy and aliases.\n\n## Where changes belong (starting guesses; check them against the evidence above)\n\n- **Consuming tool (primary fix):** replace any label or string mapping with an explicit, versioned mapping table to API subject IDs. Fail loudly or report on unmapped subjects instead of defaulting them. Don't flatten the hierarchy.\n- **API contract (enabling fix):** publish the subject vocabulary with definitions, hierarchy, aliases and deprecation policy, so correct mapping is possible and checkable. Without this, the tool has to guess.\n- **Implementation (conditional):** change it only if the data-quality or search evidence shows problems, e.g. search that ignores child subjects or inconsistent tagging. A passing schema suite is not evidence either way.\n- **Shared ownership:** the teacher golden tasks and the contract tests should run in CI on both sides. Then a change to the tool's mapping, the vocabulary or the search logic breaks a test that names the teacher outcome.\n\n## Diagnosis order\n\n1. Take 10–20 real failed teacher searches and trace each one: teacher term → tool subject → mapped API value → stored tags → results.\n2. Note where each trace first loses meaning. The distribution tells you who owns the fix. Don't assume it all traces back to the API or all to the tool.\n3. Turn each failure into a test at the level where it first broke, plus one golden task at the teacher level.\n\nIf you point me to the API repo and the consuming tool's mapping code, I can do the trace and put the tests and changes in the right places."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 1,
+        "passRateWithout": 1,
+        "delta": 0
+      }
+    }
+  ],
+  "aggregates": {
+    "casesTotal": 7,
+    "casesPassed": 7,
+    "overallScore": 1,
+    "overallPassRate": 1,
+    "meanDelta": 0
+  }
+}

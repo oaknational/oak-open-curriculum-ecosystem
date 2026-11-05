@@ -23,7 +23,14 @@ rotation.
 - [`active/distilled.md`](active/distilled.md) — refined cross-session
   lessons; fitness targets live in the file frontmatter.
 - [`active/patterns/`](active/patterns/) — ecosystem-grounded pattern instances.
-- [`active/archive/`](active/archive/) — napkin rotations and historical capture material.
+- `active/unconsolidated/` — rotated napkins whose lessons have not yet been
+  consolidated; empty when the learning loop is current, and absent until the
+  first rotation that needs it.
+- `active/archive/` — processed napkin rotations only. An archive is where material
+  goes after full processing, never before (owner ruling 2026-09-13).
+- In this estate (jimcresswell.net), `active/ws-8-ratification-reviewer-synthesis-2026-05-24.md`
+  is a reviewer synthesis imported from OCE: the worked-instance artefact
+  `important-state-not-in-temp-files` cites, kept at the path that rule names.
 
 **Read trigger**: session start (Ground First step 3 of start-right).
 
@@ -92,7 +99,8 @@ editing which file right now" / live coordination → **local state
 
 **Invariant: only local state (`.agent/state/`) is git-ignored; memory and
 repo state are tracked.** This is the existing boundary, not a new decision:
-[ADR-203](../../docs/architecture/architectural-decisions/203-state-tier-process-and-archive-move.md)
+the state tier's own contract (`.agent/state/README.md`; in OCE also ADR-203,
+the state-tier process-and-archive-move record)
 establishes `.agent/state/collaboration/` as untracked-by-design, and
 [PDR-094](../practice-core/decision-records/PDR-094-coordination-event-rotation-is-class-tiered-archive-not-delete.md)
 governs its archive-not-delete disposition. The continuity surfaces under
@@ -114,16 +122,17 @@ conversations / escalations / sidebars as the durable provenance they are.**
 
 | Layer | Purpose | Surfaces |
 | --- | --- | --- |
-| **Directives** (`.agent/directives/`) | Doctrine — read-and-internalise; sets stance | `AGENT.md`, `principles.md`, `testing-strategy.md`, `schema-first-execution.md`, `metacognition.md`, `orientation.md` |
+| **Directives** (`.agent/directives/`) | Doctrine — read-and-internalise; sets stance | `AGENT.md`, `principles.md`, `testing-strategy.md`, `validation-strategy.md`, `metacognition.md`, `orientation.md`, and the host's own directives |
 | **Memory** (this directory) | Persistent content — read and written; distinguished by mode | `active/`, `operational/`, `executive/` |
-| **Reference** (`.agent/reference/`) | Library — read-to-learn about a matter | deep-dives, research, audits, reports, work-to-date artefacts |
-| **Practice Core** (`.agent/practice-core/`) | Portable Practice doctrine — travels cross-repo | trinity, PDRs, patterns, incoming/ |
+| **Reference** (`.agent/reference/`) | Library — read-to-learn about a matter | the Practice reference documents (its README is the index) |
+| **Practice Core** (`.agent/practice-core/`) | Portable Practice doctrine — travels cross-repo | trinity, PDRs, schemas, incoming/ |
 
 ## Authority Order (for operational conflicts)
 
 When operational surfaces disagree on the same field, the order is:
 
-1. **Plans** (`.agent/plans/*/active/*`) — scope, sequencing, acceptance.
+1. **Plans** (the ratified plan nodes under `.agent/plans/`) — scope,
+   sequencing, acceptance.
 2. **`operational/repo-continuity.md`** — canonical continuity contract.
 3. **`operational/threads/<slug>.next-session.md`** — thread-level identity + next-session landing + lane state.
 

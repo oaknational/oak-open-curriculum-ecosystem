@@ -67,7 +67,7 @@ Guidance:
 git worktree add <worktrees-root>/wt-seat-a -b feat/<first-deliverable-a> origin/main
 git worktree add <worktrees-root>/wt-seat-b -b feat/<first-deliverable-b> origin/main
 # per worktree, once (required for gates):
-cd <worktrees-root>/wt-seat-a && pnpm install && pnpm build
+cd <worktrees-root>/wt-seat-a && pnpm install && pnpm build && .agent/setup/install-shellcheck.sh
 ```
 
 If a deliverable runs vocab-gen: `apps/oak-search-cli/bulk-downloads` is gitignored and

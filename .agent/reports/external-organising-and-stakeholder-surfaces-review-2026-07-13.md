@@ -264,7 +264,7 @@ It is explicit that:
 #### Current corpus refounding and planning-estate rewrite
 
 The
-[active plan-corpus refounding](../plans-backlog-2026-07/product-development-governance/active/plan-corpus-refounding.plan.md)
+`active plan-corpus refounding`
 and
 [current planning-estate rewrite](../plans-backlog-2026-07/product-development-governance/current/planning-estate-rewrite.plan.md)
 are the current execution context.
@@ -1267,7 +1267,7 @@ planning ceremony.
 - [ADR-207 — DORA delivery metrics as a structural property](../../docs/architecture/architectural-decisions/207-dora-delivery-metrics-as-a-structural-property.md)
 - [V0 plan-node schema](../plans-v0-sketch-2026-07-21/plan-node-schema.v0.md)
 - [Planning-estate rewrite](../plans-backlog-2026-07/product-development-governance/current/planning-estate-rewrite.plan.md)
-- [Plan-corpus refounding](../plans-backlog-2026-07/product-development-governance/active/plan-corpus-refounding.plan.md)
+- `Plan-corpus refounding`
 - [Vision, strategy, and plan-estate controlling plan](../plans-backlog-2026-07/product-development-governance/vision-strategy-and-plan-estate.plan.md)
 - [Plans root index](../plans/README.md)
 

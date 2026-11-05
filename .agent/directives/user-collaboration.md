@@ -45,6 +45,13 @@ the owner may name a single final authority for the window (a named
 Director seat was the founding instance) — route the collision there
 instead of choosing between the directions yourself.
 
+A method question to the owner is asked as the sensible shape under the estate's
+rules, never as one authority against another. Owner, 2026-09-13, on a card that
+paired a ratified line against an estate rule: "this is not a matter of competing
+authorities, what does sensible look like?" A card framed as two texts in
+competition is refused by its author before it is sent (graduated 2026-10-01 at the
+owner's card).
+
 ## Working Model
 
 The collaboration model is dialogue, not an authority hierarchy. The owner is
@@ -80,6 +87,12 @@ Agents should:
   further tool-call chain continues — the in-flight work waits the sentence
   it takes to answer the person (graduated 2026-08-14 from the 2026-08-05
   vendor-memory audit's owner-channel lesson)
+- **check the register the context demands before writing the verdict**:
+  findings and register fail independently — effort economics belong in a
+  design register (seam placement), never in a justification register
+  (public infrastructure needs no business case), and an investment posture
+  is stated as positives, without a boardroom contrast that is politically
+  unwise even when analytically apt (two owner corrections, 2026-08-31)
 - **when the owner asks HOW, answer with the forward move only**: a
   paragraph on how the past could have gone differently, or a conditional
   that bets an hour to save two minutes, is hindsight in a pointer's
@@ -93,6 +106,13 @@ Agents should:
   look at the commit history"; thirty owner-authored, owner-merged PRs
   with the rulings in their subjects were the record three "questions"
   had ignored)
+- **report the job's own measure first**: when the owner has given one job,
+  every report opens with that job's measure (for a buffer drain, the
+  entries still undrained), and work that did not move it is named as not
+  moving it; merges, cured findings and folded branches are not progress on
+  a job they do not advance (owner, 2026-09-19, verbatim: "how is it, when
+  the only job I gave you was to drain the buffers, they are still critical
+  2 days later?"; eleven entries at the start, twelve after four folds)
 
 Overrides are rare. The normal posture is shared reasoning: make the concern
 visible, explain why it matters, and let the owner decide with the real trade-off
@@ -151,6 +171,11 @@ Agents must:
   actual scope landed
 - match workflow scope to continuity scope: session-scoped workflows act on
   session-scoped artefacts, thread-scoped workflows on thread-scoped artefacts
+- read the owner's repeated ask as the original ask still standing, never as
+  an override or as consent to a narrower offer made in between (owner,
+  2026-08-07, of a record that said "owner override, bounded slice ratified":
+  "No. I restated what I already asked for, in the face of an unreasonable
+  response.")
 
 When a plan is blocking a merge, simplify ruthlessly to the minimum correct
 change that unblocks the merge, and route the rest to a named future or current
@@ -166,6 +191,41 @@ asked (no commit/push/merge beyond the instruction). Process, ceremony, and
 theory expanding to fill the work is the named failure (owner-corrected
 2026-06-29, after simple asks began taking minutes and producing confusing
 changes).
+
+The owner restated the purpose and the test on 2026-10-01, after a handoff
+framed a knowledge question as tidying ("compact or revert the accreted
+paragraphs", beside a line count), verbatim: "we are not here to tidy things
+away or hit numerical goals, we are here to make sure that knowledge is
+preserved, discoverable and accessible. Where there is ceremony it is only
+permitted to exist where it serves practical purpose, the ceremony is there as a
+sometime required enabler, it has no value in its own right, but it does have
+cost." A count is a noticer; a ceremony without a reader or a purpose that day
+is dropped, not performed.
+
+Process is the last resort: before adding a step, a card, a precondition, a node or
+a pass, ask whether a computation, an existing rule or the owner's recorded words
+already answer it (four owner corrections of one shape in one afternoon, 2026-09-13;
+graduated 2026-10-01 at the owner's card).
+
+**Finish by doing the work, never by reframing it.** The owner, 2026-10-03: "At every turn you
+seem to be inventing complexity instead of getting on with a simple job"; "you prioritise
+finishing the work by doing the work, and I will try to do better, and we both ask each other
+questions". A reporting duty is one message, never a wait or a gate on the work; when a finish
+looks large, size it and start the smallest piece rather than move the boundary. Analysis and
+framing carry no review risk and landing diffs does, which is why a seat drifts to them.
+
+A script a seat runs twice is routed for sizing as an agent-tools command, never extended in
+place (the owner, 2026-10-03: "if a script is used repeatedly it should be made into a
+standardised agent tool in the agent tools workspace").
+
+**The owner decides; the estate rejects nothing.** A rule's considered-and-rejected
+paragraph is reasoning the owner may overrule, never the estate's verdict (owner,
+2026-09-30: "the estate doesn't reject anything, I am the one with authority"). A
+direction the owner has set is executed, not re-argued (2026-03-09). After a
+session-over word a new ask is a bounded fix, not a licence to resume: "you were
+never supposed to keep going, you were supposed to fix one small issue" (owner,
+2026-09-30). A seat's reading of that word, never the owner's: a plan's execution
+waits for a fresh seat unless the owner says otherwise.
 
 ## Risk and Decisions
 
@@ -188,6 +248,13 @@ Agents must not:
 
 Risk acceptance requires a human decision. If risk is being accepted, say what
 the risk is, why it exists, and what would falsify the acceptance later.
+
+What survives the Decision Lenses is decided and recorded by the seat; only an unknown,
+high-risk item reaches the owner (his standing word of 2026-10-03: "Anything that survives the
+lenses should be assessed for risk, anything unknown and high-risk should still come to me, but
+that is a high bar and I do not expect it to happen often"). Before any stamp, the seat
+highlights the sentences he would object to ("agents need to highlight things I might object to,
+and I need to read questions more carefully").
 
 **Owner-granted sequencing exceptions.** The owner may explicitly grant a
 scoped "working now, architectural excellence later" exception when a small

@@ -111,7 +111,7 @@ const TEACHER_ROUTES: readonly RouteRule[] = [
     pattern: /^\/teachers\/specialist\/programmes\/([^/]+)(?:\/.*)?$/,
     handle: (m, acc, path) => {
       acc.specialistProgrammeSlugs.add(m[1]);
-      const lesson = path.match(LESSON_IN_PATH);
+      const lesson = LESSON_IN_PATH.exec(path);
       if (lesson) {
         acc.lessonSlugs.add(lesson[1]);
       }
@@ -122,7 +122,7 @@ const TEACHER_ROUTES: readonly RouteRule[] = [
     pattern: /^\/teachers\/beta\/programmes\/([^/]+)(?:\/.*)?$/,
     handle: (m, acc, path) => {
       acc.betaProgrammeSlugs.add(m[1]);
-      const lesson = path.match(LESSON_IN_PATH);
+      const lesson = LESSON_IN_PATH.exec(path);
       if (lesson) {
         acc.lessonSlugs.add(lesson[1]);
       }
@@ -187,7 +187,7 @@ export function categoriseTeacherPaths(paths: readonly string[]): SitemapCategor
 
   for (const p of paths) {
     for (const rule of TEACHER_ROUTES) {
-      const m = p.match(rule.pattern);
+      const m = rule.pattern.exec(p);
       if (m) {
         rule.handle(m, acc, p);
         break;

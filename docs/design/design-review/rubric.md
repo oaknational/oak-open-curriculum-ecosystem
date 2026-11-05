@@ -3,13 +3,26 @@ boundary: B2-Architecture
 doc_role: instrument
 authority: design-review
 status: active
-last_reviewed: 2026-08-08
+last_reviewed: 2026-08-17
 ---
 
-# The design-review rubric — v0
+# The design-review rubric — v0.1
 
-Minted by the completion plan's W0.7 (the design-review instrument), revision
-**v0**, 2026-08-08. This rubric is a LIVING instrument: every revision
+Revision **v0** authored 2026-08-08; authority settled by owner ruling
+2026-08-17 (the minting sketch was stripped of authority the same day —
+this rubric's authority is the dated owner rulings its criteria cite,
+stated here self-contained). **Revision v0.1 (2026-08-17, records-truth
+pass MCP-613, three cures — no new criteria):** criterion 3's reading-order clause narrowed
+to the `--flow-*` levers, matching owner ruling R13 and the kit DECISIONS
+narrowing landed 2026-08-13 (the v0 clause blocked the region-contract
+recomposition the owner ruled a demonstrated virtue); criterion 5's
+worked instance re-derived off the purged front page onto the shipped one;
+the stale pre-rename note in the derivation sources corrected. Per this
+rubric's own living-instrument contract, **v0.1's recalibration is OWED
+before any blocking verdict is issued under it** — the standing v0.1
+calibration input (the measured v0 miss: both blind legs passed the
+owner-rejected page because demonstrated expressive range is not a
+criterion) rides with it. This rubric is a LIVING instrument: every revision
 triggers recalibration, and each graded calibration record under
 [`records/`](./records/) names the revision it calibrated. The wow-verdict
 register beside this file ([`wow-verdict-register.json`](./wow-verdict-register.json),
@@ -42,11 +55,17 @@ instrument-leg results (required at checkpoint-class rows; a render a
 leg blocks is recorded as an `instrument-blocked` row carrying the
 Director disposition, never an invented owner verdict).
 
-**Fail semantics**: any leg's FAIL blocks the render from reaching the
-owner. A blocking FAIL routes to the Director in the Quality-bar rule-3
-shape (findings, screenshot, blocker assessment) for a named disposition —
-the instrument's false-positive rate is unmeasured at v0, and wow-first
-sequencing must not wait silently on an unearned block.
+**Fail semantics**: while a revision's recalibration is OWED (as v0.1's
+is, above), NO verdict issued under it blocks — a FAIL is ADVISORY and
+routes to the Director in the Quality-bar rule-3 shape (findings,
+screenshot, blocker assessment) for a named disposition; the render may
+still reach the owner with the advisory attached. Once the owed
+recalibration lands and is recorded under [`records/`](./records/), any
+leg's FAIL blocks the render from reaching the owner, routed to the
+Director in the same shape. The split is the living-instrument contract
+applied to authority: blocking is earned by measured calibration, never
+assumed — an uncalibrated instrument must not silently stall wow-first
+sequencing on an unearned block.
 
 ## Criteria
 
@@ -73,10 +92,16 @@ between sibling sections without a recorded reason.
 ### 3. Hierarchy
 
 Each view has one primary focus; heading structure descends without skips;
-visual prominence tracks semantic importance; reading order matches visual
-order.
+visual prominence tracks semantic importance. Within a component,
+`--flow-*`-lever reordering must not break the reading narrative (the
+narrowed clause — v0.1). Region-contract recomposition across a page is NOT
+a hierarchy failure: identity maps legitimately reorder regions visually
+(owner ruling R13, 2026-08-13: CSS "maximally enable[s] visual change,
+including visual order"; the kit DECISIONS invariant was narrowed the same
+day).
 **Fail**: competing primary emphases; skipped or misordered heading levels;
-prominence inverted against meaning.
+prominence inverted against meaning; a `--flow-*` reorder that breaks a
+component's reading narrative.
 
 ### 4. Colour discipline
 
@@ -92,8 +117,9 @@ cell.
 ### 5. Composition grammar
 
 Pages compose the export's region model: named regions in a deliberate
-order (the front-page instance: masthead → hero with trust band → featured
-→ content → context → cta → footer), built from the kit's layout classes
+order (the shipped front page: masthead → hero thesis → demo door cards →
+footer; the v0 instance described the purged page and was corrected at
+v0.1), built from the kit's layout classes
 (`oak-canvas` / `oak-region` / `oak-container` and the composition
 classes). Components sit inside regions; nothing free-floats.
 **Fail**: structure outside the grammar without a recorded reason; regions
@@ -146,9 +172,9 @@ none.
 
 - The export's composed pages (`packages/design/oak-design-system/`
   `studio-source/`: `ui_kits/oak/` and the two `whitelabel/` identity
-  directories — EMC²'s `creature/`, and the PDS identity's directory,
-  which bears its pre-rename name) — the region model and composition
-  grammar.
+  directories — EMC²'s `creature/` and PDS's `pds/` (a v0 note claiming a
+  pre-rename name was corrected at v0.1)) — the region model and
+  composition grammar.
 - The system's own token estate — the dtcg sources (`dtcg/`) and the
   class vocabulary of `colors_and_type.css` / `components.css`.
 - The owner's sitting words of 2026-08-05

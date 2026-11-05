@@ -3,6 +3,7 @@ name: Red-First Test With a Wrong Oracle
 polarity: anti-pattern
 use_this_when: Writing a red-first test for a cure, reviewing one, or trusting a green cure-test as evidence the cure works — especially when the test's input model came from the same belief that produced the defect
 category: testing
+layer: general
 proven_in: .agent/memory/active/napkin.md 2026-08-06 ~20:05Z entry (the #790 S3 cure specimen; third dated instance of the class in two days per that entry)
 proven_date: 2026-08-06
 barrier:

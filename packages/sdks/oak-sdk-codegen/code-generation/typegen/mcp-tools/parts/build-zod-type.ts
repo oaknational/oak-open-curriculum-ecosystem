@@ -31,6 +31,53 @@ function buildNumericBoundSuffix(meta: ParamMetadata): string {
 }
 
 /**
+ * Wrap a numeric flat-schema type so a string-encoded number is accepted
+ * (MCP-487).
+ *
+ * Real MCP clients send numeric tool arguments as JSON strings — Claude Code's
+ * bridge does, verified against live production on 2026-08-04, where the same
+ * call succeeds with `limit: 25` and fails with `limit: "25"`. The server is
+ * right and the client is not, but the MCP surface has to work on every major
+ * host, so the boundary normalises the REPRESENTATION and never the
+ * CONSTRAINT: the bound stays inside the wrapper and still rejects a coerced
+ * value that is out of range.
+ *
+ * Only strings matching a plain decimal are converted. Everything else —
+ * `"abc"`, `""`, `"0x10"`, `"Infinity"`, `null`, `true`, `[]` — passes through
+ * untouched and fails the inner schema with its ordinary message. This is why
+ * `z.coerce.number()` is unsuitable: it is `Number(value)` underneath, which
+ * silently turns `""`, `null` and `[]` into `0` and `true` into `1`, masking
+ * precisely the errors that must keep failing.
+ *
+ * Applied in the flat MCP context only. The nested SDK schema is called from
+ * typed code, where a string genuinely is a defect and should fail loudly.
+ *
+ * The served `inputSchema` IS a Zod conversion of this flat schema (the MCP
+ * server converts the registered shape with `io: 'input'`), and that mode
+ * drops `.describe()` and `.meta({ examples })` chained onto a transforming
+ * wrapper. So the caller attaches description and examples to the INNER
+ * numeric expression before wrapping; the wire then keeps them (owner ruling
+ * 2026-07-28: authored examples reach the wire JSON Schema unchanged).
+ *
+ * A string whose digits overflow to a non-finite Number is left as the string
+ * it was, so the refusal reads "received string", never "received number".
+ *
+ * Grammar, probed 2026-09-10 (do not widen casually):
+ *   "25" → 25, "007" → 7, "-5" → -5, "1.5" → 1.5, "-0" → -0 (serialises "0"),
+ *   "12345678901234567890" → 1.2345678901234567e19 (the same loss a JSON number has);
+ *   REJECTED as strings: "1e3", "+5", " 25", "25" with a trailing newline, ".5", "1.", "0x10",
+ *   "Infinity", "",
+ *   Arabic-Indic digits (the digit class is ASCII without the u flag); a 400-digit string overflows to
+ *   a non-finite Number and stays a string, so the refusal reads "received string".
+ *
+ * @param inner - the numeric Zod expression, bounds included
+ * @returns the same expression wrapped in a guarded `z.preprocess`
+ */
+function buildNumericStringSanitiser(inner: string): string {
+  return String.raw`z.preprocess((val) => typeof val === 'string' && /^-?\d+(\.\d+)?$/.test(val) && Number.isFinite(Number(val)) ? Number(val) : val, ${inner})`;
+}
+
+/**
  * Build a Zod type string from parameter metadata.
  *
  * Generates Zod schema strings that include:
@@ -77,9 +124,17 @@ export function buildZodType(
       case 'string':
         base = 'z.string()';
         break;
-      case 'number':
-        base = `z.number()${buildNumericBoundSuffix(meta)}`;
+      case 'number': {
+        const numeric = `z.number()${buildNumericBoundSuffix(meta)}`;
+        if (context === 'flat') {
+          // Description and examples go on the inner expression: the served
+          // JSON Schema is converted with io: 'input', which drops both from
+          // a transforming wrapper (see buildNumericStringSanitiser).
+          return buildNumericStringSanitiser(attachDescriptionAndExamples(numeric, meta, context));
+        }
+        base = numeric;
         break;
+      }
       case 'boolean':
         base = 'z.boolean()';
         break;
@@ -97,17 +152,28 @@ export function buildZodType(
     }
   }
 
+  return attachDescriptionAndExamples(base, meta, context, isYearPreprocess);
+}
+
+/**
+ * Chain `.describe()` and, for flat MCP schemas with an example, `.meta({ examples })`
+ * onto a Zod expression. The year preprocess skips examples because its wrapper
+ * drops them (see buildCanonicalYearPreprocess).
+ */
+function attachDescriptionAndExamples(
+  expression: string,
+  meta: ParamMetadata,
+  context: 'nested' | 'flat',
+  isYearPreprocess = false,
+): string {
+  let result = expression;
   if (meta.description) {
-    base = `${base}.describe(${JSON.stringify(meta.description)})`;
+    result = `${result}.describe(${JSON.stringify(meta.description)})`;
   }
-
-  // Attach .meta({ examples }) for flat MCP schemas when examples exist.
-  // Enables AI agents to see parameter examples via Zod 4 → JSON Schema conversion.
   if (context === 'flat' && meta.example !== undefined && !isYearPreprocess) {
-    base = `${base}.meta({ examples: [${JSON.stringify(meta.example)}] })`;
+    result = `${result}.meta({ examples: [${JSON.stringify(meta.example)}] })`;
   }
-
-  return base;
+  return result;
 }
 
 /**

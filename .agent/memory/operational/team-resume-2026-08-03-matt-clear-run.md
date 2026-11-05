@@ -205,3 +205,9 @@ has become pertinent flows to a tracked surface like this one.
   now pages), the keywords-finer-grained-control backlog item is partly
   delivered upstream and needs re-adjudication, and rendered-wholes.md
   lacks a frozen-at date.
+
+_Record locations, 2026-09-06: of the thread records named above by their paths of the
+time, those the 2026-09-06 consolidation paused moved under
+`.agent/memory/operational/threads/paused/` (the threads README's lifecycle layout; the
+paused index in `repo-continuity.md` names each); a record still active keeps its root path
+under `.agent/memory/operational/threads/`; the paths here are the historical ones._

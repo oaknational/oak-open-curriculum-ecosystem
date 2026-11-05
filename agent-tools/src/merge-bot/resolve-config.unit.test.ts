@@ -17,7 +17,11 @@ import { resolveMintTokenConfig } from './resolve-config.js';
 const IDENTITY = ['--app-id', '1', '--private-key-path', '/k.pem', '--repo', 'o/r'] as const;
 
 function resolve(...flags: readonly string[]): ReturnType<typeof resolveMintTokenConfig> {
-  return resolveMintTokenConfig([...flags, ...IDENTITY], {});
+  return resolveMintTokenConfig([...flags, ...IDENTITY], {
+    runGitImpl: () => {
+      throw new Error('git must not run when every identity flag is explicit');
+    },
+  });
 }
 
 function errorMessage(result: ReturnType<typeof resolveMintTokenConfig>): string {

@@ -1,6 +1,7 @@
 import { unwrapErr, unwrapOrThrow } from '@oaknational/result';
 import { describe, expect, it } from 'vitest';
 
+import { parseCommitQueueIntentText } from './registry-entry-parser.js';
 import {
   parseClosedClaimsArchive,
   parseCollaborationRegistry,
@@ -22,30 +23,43 @@ describe('parseCollaborationRegistry', () => {
 
   it('parses a valid empty registry', () => {
     const registry = unwrapOrThrow(
-      parseCollaborationRegistry(
-        JSON.stringify({ schema_version: '1.3.0', commit_queue: [], claims: [] }),
-      ),
+      parseCollaborationRegistry(JSON.stringify({ schema_version: '1.4.0', claims: [] })),
     );
 
     expect(registry.claims).toEqual([]);
-    expect(registry.commit_queue).toEqual([]);
   });
 
   it('rejects a foreign schema_version with the exact loud message', () => {
     expect(
       unwrapErr(
         parseCollaborationRegistry(
-          JSON.stringify({ schema_version: '1.2.0', commit_queue: [], claims: [] }),
+          JSON.stringify({ schema_version: '1.3.0', commit_queue: [], claims: [] }),
         ),
       ).message,
-    ).toBe('active claims registry must use schema_version 1.3.0');
+    ).toBe('active claims registry must use schema_version 1.4.0');
   });
 
-  it('rejects a registry without both top-level arrays with the exact loud message', () => {
+  it('rejects a registry without a claims array with the exact loud message', () => {
     expect(
-      unwrapErr(parseCollaborationRegistry(JSON.stringify({ schema_version: '1.3.0', claims: [] })))
-        .message,
-    ).toBe('active claims registry must contain claims and commit_queue arrays');
+      unwrapErr(parseCollaborationRegistry(JSON.stringify({ schema_version: '1.4.0' }))).message,
+    ).toBe('active claims registry must contain a claims array');
+  });
+
+  it.each([
+    ['an array', []],
+    ['a string', 'legacy'],
+    ['an object', {}],
+    ['null', null],
+  ])('rejects a current-version registry carrying commit_queue as %s', (_label, commitQueue) => {
+    // The parser reconstructs {schema_version, claims}, so a non-array
+    // admitted here would be dropped in silence on the next write.
+    expect(
+      unwrapErr(
+        parseCollaborationRegistry(
+          JSON.stringify({ schema_version: '1.4.0', commit_queue: commitQueue, claims: [] }),
+        ),
+      ).message,
+    ).toContain('must not carry a commit_queue property');
   });
 });
 
@@ -117,6 +131,7 @@ function validIntentRow() {
     updated_at: '2026-04-27T07:20:00Z',
     expires_at: '2026-04-27T07:35:00Z',
     phase: 'queued',
+    queued_seq: 0,
   };
 }
 
@@ -136,15 +151,13 @@ function legacyClaimRow() {
   };
 }
 
-describe('parseCollaborationRegistry — PDR-076a intent identity boundary', () => {
+describe('parseCommitQueueIntentText — PDR-076a intent identity boundary', () => {
   it('rejects an id-less intent agent_id loudly, naming the intent and the owner-run recovery', () => {
-    const registry = JSON.stringify({
-      schema_version: '1.3.0',
-      commit_queue: [{ ...validIntentRow(), agent_id: LEGACY_IDLESS_AGENT_ID }],
-      claims: [],
-    });
+    const intentText = JSON.stringify({ ...validIntentRow(), agent_id: LEGACY_IDLESS_AGENT_ID });
 
-    expect(unwrapErr(parseCollaborationRegistry(registry)).message).toMatch(
+    expect(
+      unwrapErr(parseCommitQueueIntentText(intentText, 'commit-queue intent')).message,
+    ).toMatch(
       // Anchored at the message head: an identity-losing wrap PREFIXES the
       // message, so only an anchored pin catches the slip.
       /^commit_queue entry 33333333-3333-4333-8333-333333333333 carries an invalid agent_id[\s\S]*owner-run/,
@@ -153,18 +166,85 @@ describe('parseCollaborationRegistry — PDR-076a intent identity boundary', () 
 
   it('round-trips a valid intent row whole, with its routing id intact', () => {
     const parsed = unwrapOrThrow(
-      parseCollaborationRegistry(
-        JSON.stringify({ schema_version: '1.3.0', commit_queue: [validIntentRow()], claims: [] }),
-      ),
+      parseCommitQueueIntentText(JSON.stringify(validIntentRow()), 'commit-queue intent'),
     );
 
-    expect(parsed.commit_queue[0]).toEqual(validIntentRow());
+    expect(parsed).toEqual(validIntentRow());
   });
 
+  it('rejects a non-ISO updated_at: the TTL clock must never parse to NaN', () => {
+    const intentText = JSON.stringify({ ...validIntentRow(), updated_at: 'not-a-timestamp' });
+
+    expect(
+      unwrapErr(parseCommitQueueIntentText(intentText, 'commit-queue intent')).message,
+    ).toContain('updated_at');
+  });
+
+  // The rejection legs below pinned the claims-file intent rows before the
+  // per-intent store (registry schema 1.4.0); they are the store file's
+  // public failure surface now, so they live at this parser.
+  it('rejects an intent without a recognised phase, naming the leg', () => {
+    const intentText = JSON.stringify({ ...validIntentRow(), phase: 'mystery' });
+
+    expect(unwrapErr(parseCommitQueueIntentText(intentText, 'commit-queue intent')).message).toBe(
+      'unsupported commit queue phase',
+    );
+  });
+
+  it('rejects an intent without a files array, naming the field', () => {
+    const withoutFiles = Object.fromEntries(
+      Object.entries(validIntentRow()).filter(([key]) => key !== 'files'),
+    );
+    const intentText = JSON.stringify(withoutFiles);
+
+    expect(unwrapErr(parseCommitQueueIntentText(intentText, 'commit-queue intent')).message).toBe(
+      'files must be an array of strings',
+    );
+  });
+
+  it('rejects a sparse files array: a hole is never admitted as a string', () => {
+    // JSON.stringify renders a hole as null, and null is not a string — the
+    // dense check must refuse it rather than let `every` skip the hole.
+    const intentText = JSON.stringify({ ...validIntentRow(), files: new Array(1) });
+
+    expect(unwrapErr(parseCommitQueueIntentText(intentText, 'commit-queue intent')).message).toBe(
+      'files must be an array of strings',
+    );
+  });
+
+  it.each([
+    ['an empty files array', []],
+    ['a files array holding an empty path', ['']],
+  ])('rejects %s: an intent names at least one file, as the schema requires', (_label, files) => {
+    const intentText = JSON.stringify({ ...validIntentRow(), files });
+
+    expect(unwrapErr(parseCommitQueueIntentText(intentText, 'commit-queue intent')).message).toBe(
+      'files must be a non-empty array of non-empty strings',
+    );
+  });
+
+  it.each([
+    ['a negative order key', -1],
+    ['a fractional order key', 1.5],
+    ['a string order key', '0'],
+    ['a missing order key', undefined],
+  ])(
+    'rejects %s: the order key that keeps queue order alive across rewrites',
+    (_label, queuedSeq) => {
+      const intentText = JSON.stringify({ ...validIntentRow(), queued_seq: queuedSeq });
+
+      expect(unwrapErr(parseCommitQueueIntentText(intentText, 'commit-queue intent')).message).toBe(
+        'queued_seq must be a non-negative integer',
+      );
+    },
+  );
+});
+
+describe('parseCollaborationRegistry — claim preservation', () => {
   it('preserves an id-less legacy claim row whole — claims narrow at the comparator, never at parse', () => {
     const parsed = unwrapOrThrow(
       parseCollaborationRegistry(
-        JSON.stringify({ schema_version: '1.3.0', commit_queue: [], claims: [legacyClaimRow()] }),
+        JSON.stringify({ schema_version: '1.4.0', claims: [legacyClaimRow()] }),
       ),
     );
 
@@ -196,8 +276,7 @@ describe('parseCollaborationRegistry — reconstruction lossiness (documented di
     const parsed = unwrapOrThrow(
       parseCollaborationRegistry(
         JSON.stringify({
-          schema_version: '1.3.0',
-          commit_queue: [],
+          schema_version: '1.4.0',
           claims: [],
           custodian_note: 'top-level preservation probe',
         }),

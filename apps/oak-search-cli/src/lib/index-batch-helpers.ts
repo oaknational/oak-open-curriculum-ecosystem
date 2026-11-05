@@ -31,6 +31,33 @@ interface SubjectContext {
 }
 
 /**
+ * Adapts `getSequenceUnits` to the throwing fetcher the KS4-context and
+ * sequence-facet builders take: an `ok` Result yields its value, a network
+ * error rethrows its cause, and any other SDK error throws its formatted
+ * message. Every failure is logged first.
+ *
+ * @param client - The client whose `getSequenceUnits` answers each slug
+ * @returns A fetcher that resolves with the sequence units or throws
+ */
+export function createSequenceUnitsFetcher(
+  client: Pick<OakClient, 'getSequenceUnits'>,
+): (slug: string) => Promise<unknown> {
+  return async (slug) => {
+    const result = await client.getSequenceUnits(slug);
+    if (!result.ok) {
+      const error = result.error;
+      const message = formatSdkError(error);
+      ingestLogger.error('Failed to fetch sequence units', { slug, error: message });
+      if (error.kind === 'network_error') {
+        throw error.cause;
+      }
+      throw new Error(message);
+    }
+    return result.value;
+  };
+}
+
+/**
  * Builds the context needed for a subject (sequences, sources, KS4 context).
  * This is computed once per subject and reused across key stages.
  */
@@ -80,20 +107,7 @@ async function buildSubjectKs4ContextMap(
 ): Promise<UnitContextMap> {
   ingestLogger.debug('Building KS4 context map', { subject });
 
-  // Create a wrapper that unwraps Results for the sequence units fetcher
-  const fetchSequenceUnits = async (slug: string): Promise<unknown> => {
-    const result = await client.getSequenceUnits(slug);
-    if (!result.ok) {
-      const error = result.error;
-      const message = formatSdkError(error);
-      ingestLogger.error('Failed to fetch sequence units', { slug, error: message });
-      if (error.kind === 'network_error') {
-        throw error.cause;
-      }
-      throw new Error(message);
-    }
-    return result.value;
-  };
+  const fetchSequenceUnits = createSequenceUnitsFetcher(client);
 
   const unitContextMap = await buildKs4ContextMap(
     fetchSequenceUnits,
@@ -125,20 +139,7 @@ async function buildSequenceSourcesWithEvents(
   const events: SequenceFacetProcessingMetrics[] = [];
   ingestLogger.debug('Building sequence facet sources');
 
-  // Create a wrapper that unwraps Results for the sequence units fetcher
-  const fetchSequenceUnits = async (slug: string): Promise<unknown> => {
-    const result = await client.getSequenceUnits(slug);
-    if (!result.ok) {
-      const error = result.error;
-      const message = formatSdkError(error);
-      ingestLogger.error('Failed to fetch sequence units', { slug, error: message });
-      if (error.kind === 'network_error') {
-        throw error.cause;
-      }
-      throw new Error(message);
-    }
-    return result.value;
-  };
+  const fetchSequenceUnits = createSequenceUnitsFetcher(client);
 
   const sequenceSources = await buildSequenceFacetSources(
     fetchSequenceUnits,

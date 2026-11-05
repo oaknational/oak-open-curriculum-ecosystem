@@ -5,4 +5,4 @@ description: Author and curate the ticket graph deliberately — scoping, relati
 
 # Ticket Management (Cross-tool)
 
-Read and follow `.agent/skills/ticket-management/SKILL-CANONICAL.md`.
+Read and follow `.agent/skills/planning/ticket-management/SKILL-CANONICAL.md`.

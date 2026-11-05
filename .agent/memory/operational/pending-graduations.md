@@ -90,7 +90,9 @@ An entry belongs ONLY if all three hold:
 The test: if you cannot name the *exact* rule / PDR / ADR / pattern / doc section
 the entry will be written into, it is probably not a graduation — find its real
 home above. An item only remains live decision-debt when it is genuinely settled
-doctrine, has a doctrine home, and that home just has not been authored yet.
+doctrine, has a doctrine home, and that home just has not been authored yet. An entry
+leaves this file by its exact title: the five bullets above share the entry shape, so a
+removal by shape takes them too (2026-10-14).
 
 ## Draining and dwell
 
@@ -116,153 +118,153 @@ debt register, 2026-07-08).
 
 <!-- New pending-graduation capture appends below as inline-bracket entries. -->
 
-<!-- Register drained to empty at the 2026-08-14 dedicated consolidation (Quasar
-wakes Nadir, the fresh directive-headroom seat all five rows were gated on):
-ends-before-means graduated to principles.md §Ends Before Means, Front of Chain
-First; the generality-depth articulation to principles.md §Context Specificity
-Gradient; owner-channel-answer-first to user-collaboration.md §Working Model
-(bullet); the goal-hook pacing clause to metacognition.md §Fluency (standing
-goal-hook paragraph); the file-emitting-watcher clause to
-use-monitor-for-event-driven-wake §A File-Emitting Watcher Is Half-Armed
-Without a Read Path, cross-referenced from comms-all-channels-watcher §Related
-Surfaces. Homes verified live at drain. The commits and the homes are the
-record. -->
+### Drained 2026-10-11 from the two napkins (Corsair weaves Seabed, 459358)
 
-<!-- Register drained to empty at the 2026-08-07 curator pass (Gull lifts Nimbus, fresh
-seat clearing the directive-file-context-budget gate both rows were held on): the
-constraint-surface sentence (Badger, 2026-08-02) graduated to principles.md §Separate
-Framework from Consumer as the licence-map paragraph; the sentinel-taxonomy row (Birch,
-2026-08-03) was found ALREADY LANDED in testing-strategy.md §Prove-behaviour as the
-designed-sentinel admissibility clause (commit 92defb609, owner doctrine 2026-08-03,
-MCP-462 trigger artefact named in place) — home verified live first-hand, row removed as
-already-graduated. The commits and the homes are the record. -->
+This estate's napkin (459 lines, 20 blocks, 2026-09-29 to 2026-10-05) and the sibling's (1,376
+lines, 37 blocks, to 2026-10-11) were read whole by the seat, every candidate lesson probed by
+phrase in both estates before it was written here (a control term first; a lesson a home already
+carries is not an entry). The entries sourced from the sibling's napkin sit in its register's batch
+of the same date; every target below is the same bytes in both estates unless marked. The napkins
+are rotated after this batch, so a source cites the block's heading, which the archive keeps
+byte-identical.
 
-<!-- Register drained to empty at the 2026-07-20 dedicated consolidation (Siren lifts
-Trench): the F-92 heartbeat-loop item was already terminal (duplicate of F-92, whose cure
-now also lives in the liveness-heartbeat-cron rule's canonical-invocation clause); the
-no-risk-of-loss absoluteness clause graduated to never-use-git-to-remove-work §A Safety
-Proof Never Licenses the Class; the "nothing is mine" ruling graduated to the PDR-117
-2026-07-20 amendment; derived-output conservation graduated to the
-derived-output-conservation pattern; the cut-branch roll-up practice graduated to
-no-parallel-long-lived-branches and the verification-methods candidate to the
-verification-method-must-answer-the-question pattern; the no-escape-hatches ruling
-graduated to principles.md §Strict and Complete. All homes verified live before this
-drain. The commits and the homes are the record. -->
+- **Oak GitHub reads are always permitted; writes stay forbidden until the owner lifts the ban**
+  `[captured: 2026-10-13 | source: the owner's word of 2026-10-13 in the session of Walrus seeks
+  Maelstrom (9585cc), verbatim in the napkin block of 13:0xZ and the repo-continuity invariant
+  line of the same day | target: the operator profile's repo scope line, at the owner's word (the rule half
+  landed in downstream-checkout-never-writes-upstream-surfaces.md on 2026-10-14) | trigger: the next doctrine pull request from the
+  default branch | size: one profile line | status: due]`
+
+  Verbatim: "You are always permitted read-only access to Oak github, write access is forbidden for
+  now, that will change at a later date." For the home: a read of any Oak GitHub surface needs no
+  permission; a write of any kind stays forbidden until the owner lifts it by word; the 2026-09-06
+  ruling's read half is superseded and its write half stands. The rule half landed on 2026-10-14 as the same bytes in both
+  estates; this entry holds the operator-profile half, which is a write to the owner's own
+  profile and waits on his word.
+
+- **Reviewing agents are never a source of authority; always information to critically evaluate**
+  `[captured: 2026-10-14 | source: the owner's word of 2026-10-14 in the session of Walrus seeks
+  Maelstrom (9585cc), verbatim in the napkin block of 2026-10-14T0xZ | target:
+  .agent/rules/review-feedback-defaults-to-triage.md, its opening paragraph, widened from PR
+  review feedback to every reviewing agent (GitHub review bots, sub-reviewers, Cricket seats),
+  with the owner's line verbatim; and .agent/rules/invoke-code-experts.md, one sentence at the
+  point where findings are received | trigger: the next doctrine pull request from the default
+  branch | size: three sentences | status: due]`
+
+  Verbatim: "Reviewing agents are NEVER a source of authority, they are ALWAYS a source of
+  information to critically evaluate. ALWAYS". For the home: a reviewing agent's finding is a
+  hypothesis; the seat verifies the rule's precondition and the owner's prior rulings first-hand
+  before the finding reaches a record or a cure, and a finding never reaches the owner as an open
+  question on the reviewer's authority. Worked instance: a Codex P1 on PR #356 read invariant I07
+  against the Cardinal Rule; the seat carried it to the owner as a directive decision instead of
+  testing it first (2026-10-13/14). The finding itself pointed at a real softening of the
+  pipeline page, settled on 2026-10-17 by the directive governing.
+
+- **A clean and green pull request merges by the door; the merge is never at the owner's word**
+  `[captured: 2026-10-17 | source: the owner's word of 2026-10-17 to Walrus seeks Maelstrom
+  (9585cc), verbatim in the napkin block of 2026-10-17T14-15Z | target:
+  .agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md, the merge step, one sentence with the owner's
+  line verbatim; any thread record or plan that says "merge at the owner's word" re-trued at its
+  next touch | trigger: the next doctrine pull request from the default branch | size: one
+  sentence | status: due]`
+
+  Verbatim: "Merge has never and will never be at my word, if it is clean and green it gets
+  merged". For the home: the owner's word decides content, never the merge moment; a seat that
+  writes "merge at the owner's word" has invented a gate.
+
+- **An ADR numbering clash is settled by the Oak branch's numbering; Engraph renumbers**
+  `[captured: 2026-10-17 | source: the owner's word of 2026-10-17 to Walrus seeks Maelstrom
+  (9585cc), verbatim in the napkin block of 2026-10-17T14-15Z | target:
+  .agent/skills/change-custody/cross-fork-integration/SKILL-CANONICAL.md, its numbering-collision step, with the
+  owner's line verbatim; docs/architecture/architectural-decisions/README.md, the authoring
+  guidance, one sentence | trigger: the next doctrine pull request from the default branch | size:
+  two sentences | status: due]`
+
+  Verbatim: "When we have an ADR numbering clash, or anything similar, the numbering from the Oak
+  branch wins and the Engraph numbering is updated to accomodate. This is to minimise the work
+  required when we merge the Engraph branch back to the Oak branch". Measured 2026-10-17: Oak's
+  default branch tops out at ADR-229; Engraph holds 230, 231, 232 and 233 above it, so each moves
+  when Oak's numbering reaches it.
+
+- **Plan-schema owner gates reinvented what PDR-100 abolished**
+  `[captured: 2026-10-14 | source: the owner's word of 2026-10-14 to Walrus seeks Maelstrom
+  (9585cc), verbatim in the napkin block of 2026-10-14T0xZ | target: .agent/plans/plan-node-schema.md
+  §Owner gates, the session-open drift alert hook and its validator; the decision is the owner's,
+  the register row keeps it from being lost | trigger: a curator pass | size: a Practice change,
+  routed | status: due]`
+
+  Verbatim: "what the fuck is an 'owner gate' -- ceremony has been invented, and then declared a
+  blocker". PDR-100 (2026-06-16) abolished owner-gating; the plan schema's owner gates with an
+  expiry clock and a session-open alert arrived on 2026-07-22. Four expired gates are reported at
+  every session open; two belong to the extraction plan that pull request 356 supersedes.
+
+- **A merge tool coupled to a third party's review configuration carries a design bug**
+  `[captured: 2026-10-17 | source: the owner's word of 2026-10-17 to Walrus seeks Maelstrom
+  (9585cc), verbatim in the napkin block of 2026-10-17T14-15Z; relayed on the comms stream the same
+  hour | target: the merge tool's owed-ness derivation (agent-tools pr-watch) and
+  .agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md where it describes what a tip is owed; the fix is
+  the merge-tool lane's, in both estates | trigger: the merge-tool lane's next pickup | size: a
+  tooling fix with its tests, routed | status: superseded 2026-10-28: the owner's word of 2026-10-27/28 (a pull-request review is requested only for a stated reason; the one question is whether the work needs a review to be safe and effective) is on the default branch in pr-lifecycle §Phase 2, and the owed-ness derivation landed in 359]`
+
+  Verbatim: "I have changed the github copilot configuration to trigger once per PR, that
+  invalidates some assumptions in the merge tool. Because the assumptions coupled the tool to a
+  specific third party configuration they are considered design bugs to fix".
+  Worked instance the same afternoon: on pull request 356's corrected tip the door read
+  `copilot-pull-request-reviewer: OWED — no substantive review binds the current tip` while the
+  `integration branches` ruleset's `copilot_code_review` rule has `review_on_push: false` and
+  Copilot had reviewed at ready; GitHub read the tip CLEAN. The merging seat ran the door with the
+  configured set the tip actually has (the Codex connector, whose review of the tip the door
+  read); the tool's owed-ness derivation is the thing to fix, with a test on this shape.
+  The owner's standard for the fix, 2026-10-17, verbatim: "All PRs, unless utterly trivial, should
+  have at least one Copilot reivew". So the Copilot leg is satisfied by one Copilot review on the
+  pull request, whichever tip it bound, and owed only when none exists on a non-trivial pull
+  request; pull request 356 carried one, at ready on 2026-10-13. The lifecycle skill's "never the
+  set that happened to bind the tip" reads against this standard at the same touch.
+
+<!-- Fifteen entries graduated 2026-10-14 at the owner's word ("do it all") by the third dedicated
+consolidation's guest curator: the shared texts landed here as the same bytes the sibling estate
+settled, the closed-grammar paragraph in principles among them; the write-list entry was found
+already carried by this estate's consolidate-until-done skill. The one remaining entry holds the
+operator-profile half of the Oak GitHub read ruling. The commit and the homes are the record. -->
+
+<!-- Slow lane decided 2026-10-14 at the owner's word ("do it all") by the third dedicated consolidation,
+its guest curator: the close-time graduation row and the cure-the-governing-text row are PROMOTED as
+carried, their concepts being doctrine since 2026-10-08 in the rule permanent-doc-is-the-consolidation-record
+(the owner's word that a decision lands in its permanent home at occurrence) and, for the cure, in
+principles §Code Quality (the cure stops recurrence; 2026-10-14) with the owner's correction-cure instances in
+the wrap and consolidate-until-done skills; the settlement, blame-referent, signal and clocked-obligations rows
+stand to their review dates with today's evidence logged in their prediction cells. -->
+
+- **The change carries the what, the commit carries the why; a review ledger exists only where it
+  proves what the diff and the commit cannot**
+  `[captured: 2026-11-02 | source: the owner's word of 2026-11-02 in the session of Smelter herds
+  Basalt (871ba4), the napkin block "a ledger that justifies every change is the policy, not the
+  hash" | target: principles.md, the Code Quality section: one clause that no per-change
+  justification ledger is kept, that an anchor on the governed text (or its like) is the instrument
+  where one is needed, and that a review ledger is kept only where it proves what the diff and the
+  commit cannot | trigger: the lint pull request from the branch fix/stricter_linting merges,
+  which puts the content audit's dropped ledger on the default branch (fired 2026-11-03: 375
+  merged at 4adcfc069) | size: one clause | status: due]`
+
+  Verbatim: "We do not need to justify evert change, the change carries the what, the commit carries
+  the why. Major decisions belong in ADRs and PDRs" and, on the audit's hash, "why are you using
+  hashes? Git shows us what changed". The content audit's per-file review ledger (about 4,700
+  lines, an entry per change to each of about 270 governed files since a July baseline, pinned by
+  a 130-line AST hash) was dropped in the lint lane; its item anchors stayed, and they are the
+  instrument: served text moves, the validator refuses until the item is reviewed again.
 
 ## Slow lane (PDR-130 — constitutional-class concepts, decided at their review date)
 
 Rows here are live deliverables under a named review gate, NOT decision-debt:
 each carries a prediction, a falsifier, and a review date, and is decided
 (promote / kill-with-reasoning) AT that date. A dedicated consolidation passes
-these by unless a review date has arrived. **Bootstrap exception (the row
-below): a row tracking an ALREADY-ACCEPTED record is decided retain vs
-retire-by-its-own-falsifier at review — promote/kill applies only to
-not-yet-minted concepts.**
+these by unless a review date has arrived. **Bootstrap exception: a row tracking an
+ALREADY-ACCEPTED record is decided retain vs retire-by-its-own-falsifier at
+review — promote/kill applies only to not-yet-minted concepts.**
 
 | Concept | Prediction (by review) | Falsifier | Review |
 | --- | --- | --- | --- |
-| Two-speed learning itself (PDR-130) | ≥3 fast-lane graduations carry prediction lines; ≥1 slow entry promoted or killed BY its review | Register untouched at review — the lane is theatre; retire the PDR by its own rule | 2026-10-01 (first consolidation on/after) |
-| Close-time single-lesson graduation (retrospective 2026-07-20 proposal 1): a captured lesson that is single-instance sufficient (PDR-100), has a nameable doctrine home, and needs no cross-seat synthesis graduates AT session close; the frozen-corpus constraint gates rotation and cross-seat synthesis only. Promotion target: `session-handoff` step 6b, landed under the PDR-101 quorum. Provenance: authored FAST-enacted in the retrospective, reclassified slow-lane at PR #450 review (PDR-130 §§2/4; Director-ratified 2026-07-20) | Pre-promotion observable, accrued in this row during the quarter: each clause-eligible lesson that recurs between capture and its homing is logged here as it occurs — the measured cost of batching while the clause stays unenacted (worked warrant: a June-documented class re-surfaced 2026-07-17 and re-bit three seats before homing, ~3 days from that re-surfacing). At review: promote if at least one recurrence class accrued; the post-promotion prediction (recurrence drops to ~zero) binds only after enactment | No recurrence accrues by review (the batching frame carries no measured cost — the entry is killed), or the accrual log itself goes untouched (the row is theatre; kill it by the register's own rule) | 2026-10-20 |
-| Blame-referent calibration (retrospective 2026-07-26, PDR-094 arc): agents calibrate to the most salient blame signal (accreted caution, or the last correction), not the standing policy, whenever the policy exists only in the owner's head; a WRITTEN owner-ratified policy line converts reversal-grade corrections on that axis into calibration-grade refinements. Provenance: `.agent/reports/agentic-engineering/2026-07-26-pdr-094-retention-arc-retrospective.md` §Meta root (v1–v2 hoard, v3 over-delete, v4 co-authored referent, all one arc) | By review: NO reversal-grade owner correction on the retention axis (the axis now carries its written line, PDR-094 v4); any retention correction observed is a refinement, not a reversal | A reversal-grade retention correction lands despite the written line — the written-referent cure is insufficient and the mechanism needs an action-time instrument (kill this row into that finding) | 2026-10-26 |
-
-- **PDR-117 missing axes: role-scoped value lens and seat-deliverable framing**
-  `[captured: 2026-08-14 | source: owner corrections 2026-08-10 (Director fold cascade),
-  2026-08-14 (curator self-executed merge-back; archive/napkin-2026-08-14.md 06:08Z entry)
-  and 2026-09-02 ("X needs doing" in a support role read as an assignment — a routing fact,
-  not a seat deliverable; archive/napkin-2026-09-02.md 11:2xZ entry) |
-  target: PDR-117 amendment — the value lens runs role-scoped BEFORE the licensing/safety
-  lens on self-initiated work; a seat's deliverable is its role's output, never legible
-  effort; shared-git-state operations route to the warden/Director from non-warden seats |
-  trigger: owner ratification (amendment authored at next consolidation or Director PDR
-  pass; two owner-correction instances already recorded) | size: S | status: pending]`
-
-- **Codex review leg as a standing member of significant-PR review rounds**
-  `[captured: 2026-08-14 | source: owner rating 2026-08-09 (high-value; "route through the
-  rules process, not assumed") | target: rule — review-round composition (pr-lifecycle
-  Phase 4 round membership or a dedicated rule per new-rule-vs-pdr-clause) | trigger: run
-  the rules process with the owner; until then the leg is selective, never assumed |
-  size: S | status: pending]`
-
-- **Gate-authoring precondition: a gate names the ruling that would resolve it, or it is
-  an enforcement gap, not a gate**
-  `[captured: 2026-09-03 | source: the design plan's item-14 gate (expired 2026-08-21,
-  carded, found to be a missing enforcement of DECISIONS.md 2026-07-26; concept
-  exploration at the MCP-673 wrap, P1 + P4) | target: plan skill owner_gates bullet +
-  the "stated default on expiry" idiom retired (no schema field authorises it) | trigger:
-  next plan-skill or Practice lane; base rate from the six same-day discharges: one of six
-  was enforcement-shaped, so the awaiting enum is not the generator | size: S | status:
-  pending]`
-- **Last-carrier merge check: a PR the owner has named as the last carrier holds until
-  every in-flight remote-bound output has ridden or been released by name**
-  `[captured: 2026-09-03 | source: owner correction at the MCP-673 wrap (#961 merged at
-  green while the wrap workflow was running; a fourth PR authorised) | target:
-  pr-lifecycle §5 merge boundary or wrap step 2, one sentence | trigger: next Practice
-  lane | size: S | status: pending]`
-- **Plan archival sweeps inbound links (the markdown-links validator refuses archive
-  targets)**
-  `[captured: 2026-09-03 | source: #959 static-checks red on the research index's link to
-  the archived skills-scan plan | target: plan skill "Completion and Archival", one
-  sentence | trigger: next plan-skill lane | size: S | status: pending]`
-- **PAUSED seat state for the liveness rule's owner-input clause (claim held, watchers
-  down at owner word, resume only on owner word)**
-  `[captured: 2026-09-03 | source: Vesta rides Solstice's napkin wrap entry (the owner
-  paused the second seat by word; the estate names no such state) | target:
-  liveness-heartbeat-cron / silence-is-never-liveness clause | trigger: next
-  collaboration-doctrine lane | size: S | status: pending]`
-- **Work-shape trigger for start-right-team §6's self-dissolution test (when the
-  remaining work serialises onto one seat, the other proposes its own dissolution)**
-  `[captured: 2026-09-03 | source: the owner dissolved the second seat by word ("the
-  overhead of coordinating two agents is greater than the benefit") before either seat
-  proposed it | target: start-right-team §6 | trigger: next collaboration-doctrine lane |
-  size: S | status: pending]`
-- **Plan template decision log: rows are captures, the durable home is an ADR or PDR**
-  `[captured: 2026-09-03 | source: the extraction plan's "this log is the durable home"
-  sentence re-pointed at ADR-227 (#961); PDR-098 recurrence despite its home | target:
-  plans/templates decision-log guidance, one sentence | trigger: next plan-skill lane |
-  size: S | status: pending]`
-- **validate-reference-direction scope: delivery-plan ids on permanent pages**
-  `[captured: 2026-09-03 | source: the owner refused #959's first push over plan-id
-  citations on permanent pages; the strategy index's pre-existing innovation-kit citation
-  remains | target: the validator's policed-doctrine set, or a PDR-105 clause naming the
-  check | trigger: next validators lane, after the innovation-kit true-up | size: M |
-  status: pending]`
-- **PDR-063 deliberate-succession trigger named (owner-initiated, no budget signal)**
-  `[captured: 2026-09-03 | source: Vesta's handoff record for claim 01e418de (record plus
-  adoption at owner word) | target: PDR-063 §Deliberate succession worked instance, or
-  start-right-team move 7 | trigger: next collaboration-doctrine lane | size: S | status:
-  pending]`
-- **Cricket procedure seat (haiku, xhigh) stays inside the read-only lens: no messaging peers,
-  no drafting, no write-access requests**
-  `[captured: 2026-09-03 | source: both owner-invoked Cricket suites of the MCP-673 day recorded
-  the procedure seat stepping from judging into doing (messaged the PR B subagent; drafted the
-  ADR and asked for write access) — a recurring instrument defect | target: cricket skill (the
-  procedure seat's prompt and the tally's behaviour-note column) | trigger: next Cricket lane;
-  the execution tally (T2) also lacks per-leg tokens and runtime against the 2026-08-01 ruling —
-  recoverable from session 661556's subagent transcripts | size: S | status: pending]`
-- **Over-budget review round ratchet: past PDR-132's round budget only a claim false today, a
-  broken link or a validator failure is cured; everything else is dispositioned without a diff**
-  `[captured: 2026-09-03 | source: the lead's ratchet ruling for #961's round 4 and the owner's
-  word on the wrap PR ("ignore bot comments … less than a P1 or equivalent") | target:
-  pr-lifecycle Phase 4 (the review-round state machine) | trigger: next Practice lane | size:
-  S | status: pending]`
-- **One owner word over a numbered list: an owner gate spanning many items is presented as one
-  numbered list taking one word, declines by item number**
-  `[captured: 2026-09-03 | source: PR 959's body ("Ratify all thirteen"); the estate's earlier
-  one-word precedent over an enumerated scope | target: plan skill (ratification) or
-  pr-lifecycle (owner-gated PR bodies), one paragraph | trigger: next plan-skill lane | size:
-  S | status: pending]`
-- **The n=2 lead is accountable for the second seat's judgement, not only for the split of
-  work**
-  `[captured: 2026-09-03 | source: owner word to the lead ("You are the lead, you are
-  responsible for stopping Vesta from being dumb") | target: start-right-team n=2 overlay,
-  one sentence | trigger: next collaboration-doctrine lane | size: S | status: pending]`
-- **Wrap invoked non-terminally at owner word: the seat runs the programme and stays live**
-  `[captured: 2026-09-03 | source: owner word "begin your wrap, this is not the end of your
-  session" against the wrap skill's routing of non-terminal boundaries to
-  knowledge-safety-sweep | target: wrap skill §Use When, one sentence | trigger: next Practice
-  lane | size: S | status: pending]`
-- **Hook substring policies: worked false positives for hook-policy-substring-discipline**
-  `[captured: 2026-09-03 | source: the wildcard-staging policy fired on a bare "." argument to
-  cp; the git-push-force policy fired on any command containing both "push" and "-f" (merge-bot
-  push chained with gh api -f) | target: hook-policy-substring-discipline worked instances, or
-  the two policies' matchers | trigger: next hooks lane | size: S | status: pending]`
+| Settlement under sampling reviewers cures the class, not the instance, and the budget counts the rounds two reviewers add at every push (retrospective 2026-10-05, proposal 3; the record named this section as the row's home in both estates and no row existed until the third dedicated consolidation registered it on 2026-10-11) | the next landing of more than two hundred files settles in at most three pushes per estate | a class cure that draws a further round on the same class | 2026-10-19 |
+| Blame-referent calibration (retrospective 2026-07-26, PDR-094 arc): agents calibrate to the most salient blame signal (accreted caution, or the last correction), not the standing policy, whenever the policy exists only in the owner's head; a WRITTEN owner-ratified policy line converts reversal-grade corrections on that axis into calibration-grade refinements. Provenance: `.agent/reports/agentic-engineering/2026-07-26-pdr-094-retention-arc-retrospective.md` §Meta root (v1–v2 hoard, v3 over-delete, v4 co-authored referent, all one arc) | By review: NO reversal-grade owner correction on the retention axis (the axis now carries its written line, PDR-094 v4); any retention correction observed is a refinement, not a reversal Evidence logged 2026-10-14 by the third dedicated consolidation: the retention correction of 2026-10-04 (an unasked recovery upload, "needless, without value, damaging") read as a refinement of the written line, not a reversal of it; the prediction stands to its date. | A reversal-grade retention correction lands despite the written line — the written-referent cure is insufficient and the mechanism needs an action-time instrument (kill this row into that finding) | 2026-10-26 |
+| A signal is not the fact it stands for (candidate principle; consolidation 2026-09-13, PR #143; n = 1 seat-day — seven instances at one seat on 2026-09-12/13, so an observation by `one-instance-is-an-observation`): before a seat acts on an instrument's verdict, a reviewer's finding, a single instance or a fit to the data at hand, or writes one into a durable record, it states what the signal stands for, why it is present, against what it is compared, and what would show it wrong. Foundations: `.agent/research/cognitive-systems/structured-thinking/` (experimental-design-foundations, statistical-rigour-foundations), cited never restated. The always-loaded forms landed fast-lane with PR #143: the rule, the `verify-dont-trust` instrument clause, the `reason` warrant sentence, the pattern `signal-read-as-fact`. Routed here at PR #143's round one (PDR-130 §§2/4: a directive-tier line importing research frames is constitutional-class) | By review: at least one instance of the class, recorded in the pattern's filings or the review-cost ledger, arises in a signal kind the rule and the clause do not name — evidence the general framing is needed at the directive tier; then promote the line into `principles.md` Two instances logged 2026-10-14 (one seat): a context meter reading carried across an automatic compaction and acted on as current; a judge's default verdict returned on absent input. Both are kinds the fast-lane forms already name (an instrument's reading, a verdict with no evidence); no new kind yet. | Every instance recorded by review is one the named fast-lane forms already cover, or none is recorded — the line is redundant with its fast-lane forms; kill the entry with this reasoning | 2026-12-15 (first consolidation on/after) |
+| Clocked obligations starve unclocked jobs (retrospective 2026-09-20, proposal 3): when a standing rule with a deadline (a DUE branch fold) will consume the budget of the owner's stated job, the seat puts that one collision to the owner at its first occurrence, as a question about which gives way, and does not resolve it by obeying whichever obligation is due. Provenance: `.agent/reports/agentic-engineering/why-the-register-stayed-at-twelve-for-three-days-2026-09-20.md` §The causal stack (four folds in sixty-six hours, zero register entries moved; the owner's one sentence removed the collision and the register emptied in forty minutes of directive work). The operational forms landed fast-lane in `consolidate-until-done` step 7 (price the pass, reserve the last step; 2026-09-20) and `user-collaboration.md` (report the job's measure first; 2026-09-19). Routed here because a line ranking an owner's job above standing rules is constitutional-class (PDR-130 §§2/4) | By review: the next dedicated consolidation that meets a DUE fold surfaces the collision in its first context and moves its measure in that context Evidence logged 2026-10-14: the third dedicated consolidation met a DUE fold (the coordination branch at day four); the owner ranked the job above the fold in his seating word, the seats recorded the fold as late by his ranking, and the register moved from thirty-five to zero across both estates. The prediction held in its first instance; the concept's directive line is proposed to the owner with this stage's report. | It surfaces the collision and the measure still does not move; or no such collision occurs by review and the row is killed as untested | 2026-12-20 (first consolidation on/after) |

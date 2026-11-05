@@ -15,6 +15,7 @@ import { v5 as uuidv5 } from 'uuid';
 
 import { deriveIdentity } from '../core/agent-identity/index.js';
 
+import { gatedClaudeSeedsPresent } from './platform-gate.js';
 import {
   missingCollaborationIdentitySeedMessage,
   nonEmptyValue,
@@ -78,13 +79,18 @@ export function deriveCollaborationIdentity(input: {
   readonly model: string;
   readonly env: CollaborationStateEnvironment;
 }): DerivedCollaborationIdentity {
-  const seed = resolveCollaborationSeed(input.env);
+  const seed = resolveCollaborationSeed(input.env, input.platform);
   if (seed === undefined) {
-    throw new Error(missingCollaborationIdentitySeedMessage(input.platform));
+    throw new Error(
+      missingCollaborationIdentitySeedMessage(
+        input.platform,
+        gatedClaudeSeedsPresent(input.env, input.platform),
+      ),
+    );
   }
 
   const identity = deriveIdentity(seed.value, {
-    override: nonEmptyValue(input.env.OAK_AGENT_IDENTITY_OVERRIDE),
+    override: nonEmptyValue(input.env.PRACTICE_AGENT_IDENTITY_OVERRIDE),
   });
 
   const agentId: CollaborationAgentIdWrite = {

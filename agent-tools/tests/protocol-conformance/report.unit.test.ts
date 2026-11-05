@@ -1,3 +1,5 @@
+import { sep } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -62,7 +64,10 @@ function fakeIo(overrides?: {
     fileExists: (relPath) => files[relPath] !== undefined,
     readTextFile: (relPath) => files[relPath],
     listDir: (relPath) => dirs[relPath],
-    absoluteDirectoryExists: (path) => (overrides?.absoluteDirs ?? []).includes(path),
+    // The real resolver host-joins its substrate probe path while the fixture
+    // keys absoluteDirs in POSIX form, so normalise at the fake's choke point.
+    absoluteDirectoryExists: (path) =>
+      (overrides?.absoluteDirs ?? []).includes(path.split(sep).join('/')),
     env: overrides?.env ?? {},
   };
 }

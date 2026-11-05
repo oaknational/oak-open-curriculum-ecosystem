@@ -3,6 +3,7 @@ related_pdr: PDR-016
 name: verify-before-propagating
 polarity: pattern
 category: process
+layer: general
 status: active
 discovered: 2026-04-06
 proven_by: "MCP Apps SDK font embedding assumption corrected 3 times; single-callback-slot claim carried from napkin to distilled.md without source verification"

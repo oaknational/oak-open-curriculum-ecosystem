@@ -1,21 +1,21 @@
 import { randomUUID } from 'node:crypto';
 import { join } from 'node:path';
 
-import { appendComms, renderComms } from './cli-comms-commands.js';
+import { appendComms } from './cli-comms-commands.js';
 import { resolveCoordinationHomeForOptions } from './cli-coordination-home.js';
 import { optional, required, type Options } from './cli-options.js';
 import { type CliRuntime } from './cli-runtime.js';
+import { sharedCommsLogPathFor } from './comms-use-cases.js';
 import { type CollaborationStateEnvironment } from './types.js';
 
 const DEFAULT_COMMS_DIR = '.agent/state/collaboration/comms';
-const DEFAULT_SHARED_LOG = '.agent/state/collaboration/shared-comms-log.md';
 
 /**
  * One-shot convenience wrapper: append a comms event — narrative, or the
  * ADR-186 lifecycle heartbeat shape when `--tag heartbeat` selects
- * heartbeat mode — and re-render the shared log, resolving canonical
- * collaboration paths from the repo root when the caller does not pass
- * them explicitly.
+ * heartbeat mode — resolving canonical collaboration paths from the repo
+ * root when the caller does not pass them explicitly. The append renders
+ * the shared log beside the comms directory as part of the write.
  */
 export async function sendComms(
   options: Options,
@@ -27,7 +27,6 @@ export async function sendComms(
   const defaults = commsSendDefaults(options, nowIso, eventId, runtime);
   const resolvedOptions = withDefaults(options, defaults);
   await appendComms(resolvedOptions, env, runtime);
-  await renderComms(resolvedOptions, env, runtime);
 
   return formatCommsSendResult(resolvedOptions, eventId);
 }
@@ -47,7 +46,7 @@ export function commsSendDefaults(
     'created-at': nowIso,
     'event-id': eventId,
   };
-  if (['comms-dir', 'output', 'active'].every((key) => options.values.has(key))) {
+  if (['comms-dir', 'active'].every((key) => options.values.has(key))) {
     return eventDefaults;
   }
 
@@ -55,7 +54,6 @@ export function commsSendDefaults(
   return {
     'comms-dir': join(repoRoot, DEFAULT_COMMS_DIR),
     ...eventDefaults,
-    output: join(repoRoot, DEFAULT_SHARED_LOG),
     active: join(repoRoot, '.agent/state/collaboration/active-claims.json'),
   };
 }
@@ -75,7 +73,7 @@ function commsSendResult(
   return {
     event_id: eventId,
     event_path: join(required(options, 'comms-dir'), `${eventId}.json`),
-    shared_log_path: required(options, 'output'),
+    shared_log_path: sharedCommsLogPathFor(required(options, 'comms-dir')),
   };
 }
 

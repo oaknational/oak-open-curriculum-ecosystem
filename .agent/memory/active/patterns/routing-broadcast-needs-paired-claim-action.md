@@ -2,6 +2,7 @@
 name: Routing Broadcast Needs Paired Claim Action
 polarity: pattern
 category: coordination
+layer: general
 status: provisional
 discovered: 2026-05-22
 proven_in: "Single instance 2026-05-22: routing broadcast at 14:47Z stated 'distilled.md is properly Tempestuous's OUTPUT lane, not mine. Routed'. The broadcasting agent continued editing under direct owner direction; commit landed at 14:54Z. Peer opened a claim based on the routing broadcast at 14:51Z. Collision discovered when peer's Edit failed with 'file has been modified since read' — the binding state was the still-open claim, not the routing broadcast. Resolved by an explicit directed release event. Second instance in a different multi-agent session would strengthen the pattern."

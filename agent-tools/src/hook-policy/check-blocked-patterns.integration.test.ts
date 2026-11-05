@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { buildPreToolUseDenyResponse, findBlockedPattern } from './blocked-patterns.js';
 import { loadBlockedPatterns, loadRawPolicyJson } from './policy-loader.js';
 import { runPreToolUseDispatch } from './pre-tool-use-dispatch.js';
+import { parseArgvPattern } from './argument-matcher.js';
 import { BLOCKED_PATTERN_MATCH_KINDS } from './types.js';
 
 describe('runPreToolUseDispatch', () => {
@@ -243,6 +244,11 @@ describe('canonical policy: ripgrep clustered-replace fingerprint', () => {
         // an uncompilable pattern a commit-time failure instead of a
         // silently dead policy entry.
         expect(() => new RegExp(raw.pattern, 'iu')).not.toThrow();
+      }
+      if (typeof raw !== 'string' && raw.match === 'argv') {
+        // The same bargain for argv mode: a pattern the option tables cannot
+        // parse matches nothing at run time, so it fails HERE instead.
+        expect(parseArgvPattern(raw.pattern)).not.toBeNull();
       }
     }
   });

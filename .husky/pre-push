@@ -1,8 +1,18 @@
 #!/usr/bin/env sh
 
-# Disable turbo TUI
+# Full pre-push (the owner's ruling of 2026-09-12, the TypeScript family's
+# convention by the owner's card answer of 2026-10-04: light commit, full
+# push): the secret scan of the pushed commits, the review cost gate, then the
+# read-only aggregate gate (`pnpm check`, whose end-to-end leg runs every
+# workspace's suite through turbo). The aggregate runs under a host gate slot
+# (no-unbounded-host-load item 6): at most two full gates on the host at once,
+# and one at a time in a working tree; a blocked push waits and names the
+# gates it waits for (`pnpm agent-tools:gate-slot status` lists them), and a
+# step that holds a slot past thirty minutes is stopped. The agent-tools
+# aliases carry --fail-if-no-match: pnpm exits 0 without running anything when
+# a filter matches no project.
 export TURBO_UI=0
-
+. .husky/turbo-remote-cache-notice.sh
 
 echo "🚀 Running pre-push checks..."
 
@@ -25,108 +35,40 @@ echo "🛡️ Running secret scan (pushed commits only; CI scans full history)..
 # argument handling) and hand them to the scanner, which scans ONLY the pushed
 # commits. The CI secret-scan job runs the full `--branches --tags` scan as the
 # comprehensive backstop, so no history goes unscanned.
-secret_scan_refs="$(mktemp)"
-[ -t 0 ] || cat > "$secret_scan_refs"   # capture git's ref lines (empty on a manual/TTY run)
-pnpm agent-tools:secret-scan --remote "$1" --refs-file "$secret_scan_refs"
+pushed_refs="$(mktemp)"
+[ -t 0 ] || cat > "$pushed_refs"   # capture git's ref lines once (empty on a manual/TTY run)
+pnpm agent-tools:secret-scan --remote "$1" --refs-file "$pushed_refs"
 secret_scan_status=$?
-rm -f "$secret_scan_refs"
 if [ "$secret_scan_status" -ne 0 ]; then
+  rm "$pushed_refs"
   echo "❌ Secret scan failed."
   echo "Remove or scrub secret-like values before pushing."
   echo "Use local placeholders for .env.example and real credentials only in .env files."
   exit 1
 fi
 
-echo "📝 Checking formatting..."
-if ! pnpm format-check:root; then
-  echo "❌ Formatting issues found!"
-  echo "💡 Run 'pnpm format:root' to fix formatting issues, then commit the changes"
+echo "💸 Pricing the review loop against the declared budget..."
+# The review cost gate (a pull request of 2026-09-12 took seven settlement
+# pushes against a declared budget of two, stopped only by the owner). It
+# prices every pushed branch from the captured ref lines; past the budget
+# the push is held, here before the long check, until the seat has written
+# its decision as one line in the local note the gate names, then the same
+# push passes (the owner, 2026-10-24: the check makes the seat think, and
+# costs no comment, no further push and never the owner's word). A TTY run
+# with no ref lines prices nothing.
+pnpm --silent agent-tools:review-cost gate --refs-file "$pushed_refs"
+review_cost_status=$?
+rm "$pushed_refs"
+if [ "$review_cost_status" -ne 0 ]; then
+  echo "❌ Review cost gate held the push: read its lines above (the budget is spent with no decision line recorded, or the pricing failed)."
+  echo "💡 One line in .agent/state/collaboration/review-rebudgets.md, then the same push again."
   exit 1
 fi
 
-echo "🔍 Running full markdownlint..."
-if ! pnpm markdownlint-check:root; then
-  echo "❌ Markdownlint issues found!"
-  echo "💡 Run 'pnpm markdownlint:root' to fix markdown issues, then commit again"
-  exit 1
-fi
-
-echo "🔧 Validating sub-agents..."
-if ! pnpm subagents:check; then
-  echo "❌ Sub-agent validation failed!"
-  exit 1
-fi
-
-echo "🔧 Validating portability..."
-if ! pnpm portability:check; then
-  echo "❌ Portability validation failed!"
-  exit 1
-fi
-
-echo "🔧 Validating skill adapters..."
-if ! pnpm skills:check; then
-  echo "❌ Skill adapter validation failed — adapters have drifted from their canonical skills!"
-  echo "💡 Run 'node agent-tools/dist/src/bin/skills-adapter-generate.js --prefix=oak-' to regenerate, then commit"
-  exit 1
-fi
-
-echo "🧪 Running workspace-owned repo validators..."
-if ! pnpm repo-validators:check; then
-  echo "❌ Repo validator checks failed!"
-  exit 1
-fi
-
-echo "🐚 Linting shell scripts..."
-if ! pnpm lint:shell; then
-  echo "❌ Shell script lint failed!"
-  exit 1
-fi
-
-# Advisory only — warns when the committed OpenAPI schema cache is stale versus
-# upstream. Never blocks the push (the check always exits 0; `|| true` is
-# belt-and-braces so a network blip or future change cannot fail pre-push).
-echo "🔭 Checking schema cache staleness (advisory, non-blocking)..."
-pnpm --filter @oaknational/agent-tools ci-schema-drift-check || true
-
-echo "🔤 Running build, type-check, lint, and tests..."
-# Same env hygiene as pre-commit's turbo step (full rationale there): git
-# exports repo-discovery env to hooks — GIT_DIR, and a GIT_INDEX_FILE that
-# during real commits is a transient lock file — and a build tool's
-# children must not inherit either. Unset the trio for the turbo child
-# only (same load-bearing narrow scope); turbo re-derives the repo from
-# cwd in every checkout shape. No gate is narrowed. Dated account: MCP-414.
+echo "🧪 Running the aggregate gate (pnpm check) under the host gate slot..."
 if ! env -u GIT_DIR -u GIT_INDEX_FILE -u GIT_WORK_TREE \
-  pnpm turbo run --continue sdk-codegen build type-check lint test test:e2e test:ui; then
-  echo "❌ Turbo quality gate checks failed!"
-  exit 1
-fi
-
-echo "🔗 Running depcruise (circular deps, orphans, layer violations)..."
-# Runs AFTER the Turbo build for the same reason as knip below: depcruise
-# resolves package exports through built dist outputs, so a fresh checkout
-# would fail or cruise an incomplete graph before the build has run.
-if ! pnpm depcruise; then
-  echo "❌ Dependency-cruiser found violations!"
-  echo "💡 Run 'pnpm depcruise' to see details, then fix circular dependencies or orphan modules"
-  exit 1
-fi
-
-echo "🔬 Running knip (unused code detection)..."
-# knip:gate (repo-check knip-gate) also fails when knip exits 0 after a
-# swallowed config-load crash — a crashed analysis can never read as a pass (F-147).
-# Runs AFTER the Turbo build: knip loads packages whose exports resolve to
-# generated dist files, so a fresh checkout would fail closed here before
-# the build has run (CI restores build outputs before knip for the same reason).
-if ! pnpm knip:gate; then
-  echo "❌ Knip found unused code or a configuration hint, or the knip analysis itself crashed!"
-  echo "💡 Run 'pnpm knip:gate' to see details, then remove unused items or cure the hint in knip.config.ts"
-  echo "   (a 'died without a verdict' line above is the crash class, not unused code — F-112 in the frictions register)"
-  exit 1
-fi
-
-echo "🔤 Scanning file encoding (builds agent-tools, then runs the built scanner)..."
-if ! pnpm encoding:check; then
-  echo "❌ Encoding scan found a critical finding (invalid UTF-8, BOM, bidi/control byte, or U+FFFD)!"
+  pnpm agent-tools:gate-slot run pnpm check; then
+  echo "❌ check did not pass (the reason is above)."
   exit 1
 fi
 

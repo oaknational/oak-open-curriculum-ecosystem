@@ -85,7 +85,8 @@ violation as the input-side practices below.
 ## Expectations
 
 - **Generator-first mindset**: When behaviour needs to change,
-  update the templates under `code-generation/typegen/mcp-tools/**/*`
+  update the templates under
+  `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/**/*`
   and rerun `pnpm sdk-codegen`. If the change cannot be expressed
   there, reconsider the approach.
 - **Comprehensive TSDoc**: Generator templates must emit TSDoc

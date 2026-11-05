@@ -168,7 +168,7 @@ schema (`keyStageSubjectLessonsRequest.schema.ts`) so they
 survive re-generation. However, examining the codegen script
 shows it handles `.describe()` propagation already — the cleaner
 fix may be to add the overrides in the source schema and
-re-run `pnpm run generate:openapi`.
+re-run that repository's `generate:openapi` script.
 
 ## Impact on This Repo
 
@@ -223,6 +223,6 @@ Added a parameter description override in our codegen pipeline:
 
 The fix in `oak-openapi` is a two-line swap in
 `keyStageSubjectLessonsRequest.schema.ts` (source) and the
-corresponding generated file. Note: `pnpm generate:openapi` is
+corresponding generated file. Note: the `generate:openapi` script is
 currently broken in that repo (documented in CLAUDE.md), so both
 files must be edited by hand.

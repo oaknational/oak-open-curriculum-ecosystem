@@ -1,3 +1,8 @@
+---
+classification: core
+description: Silence from a watcher or background task is never liveness evidence — pair every watch with a positive deadman signal, make every exit loud, and verify the signal (not the absence of alarms) before relying on a watch.
+---
+
 # Silence Is Never Liveness
 
 Silence from a watcher, monitor, or background task is never evidence
@@ -27,10 +32,32 @@ any gap in an expected signal.
    re-armed (hourly watcher rotations, post-restart recovery) is
    watched by something else or bounded by a declared
    next-active-turn fallback, so a missed re-arm surfaces instead of
-   accumulating.
+   accumulating. The one re-arm whose deadline is the owner's word is the
+   paused seat (the liveness rule's owner-word stand-down exemption): its
+   quiet is declared by a heartbeat-end event before it begins, and that
+   declaration is what makes it not silence.
 4. **Before relying on any watch, verify the positive signal**, not
    the absence of alarms: stat the heartbeat file, run the assert, read
    the cursor movement. "No alerts" is not a health check.
+5. **A heartbeat is evidence about the heartbeat process, never about
+   the seat.** Any tool call can hold a seat at a permission prompt the
+   session cannot see, while a separate heartbeat loop keeps emitting
+   fresh: a worktree entry to a sibling path held a lane seat for nine
+   hours (2026-09-07/08), and a scratch `git init`, add and commit in a
+   throwaway directory held the same seat twice more, for nearly four
+   hours each (2026-09-08, 2026-09-09) — the second time with the lesson
+   already recorded, because the dry-run was framed as "proving the
+   recipe" and not as a git operation. The trigger is the COMMAND, never
+   the framing. Three cures, all structural: the Director's
+   deadline-and-default on every routed item (a heartbeat never read as
+   liveness; the ping → deadline → default sequence landed each held lane
+   with nothing lost); no git operation outside the paths `git worktree
+   list` names — a recipe is proven by file copy and plain shell (`test`,
+   `mktemp`, `mv`, `ln`, `stat`) with no repository at all, before it is
+   pushed; and any call that may prompt is announced to the Director by
+   directed event before it is issued. On resume after an unexplained gap:
+   `date -u` first, recompute the registry and the board before touching
+   anything, and answer the Director's asks in order.
 
 ## Worked evidence (2026-07-31 → 2026-08-01, four incidents, one shape)
 

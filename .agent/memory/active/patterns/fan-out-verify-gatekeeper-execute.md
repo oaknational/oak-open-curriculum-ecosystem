@@ -3,6 +3,7 @@ name: "Fan Out the Verify, Gatekeep the Execute"
 polarity: pattern
 use_this_when: "Structuring a multi-agent or workflow session that mixes verification work with irreversible or coordination-dependent moves (delete, commit, merge, reshaping shared indexes)."
 category: agent
+layer: general
 related_pdr: PDR-089
 proven_in: "Controller session 2026-06-09 (deletion-safety verification); 25-agent adversarial refutation of 18 proposed withdrawals 2026-06-11 (14 refuted)"
 proven_date: 2026-06-11

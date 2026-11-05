@@ -85,5 +85,5 @@ coordinate rather than trying to trim the patch into shape.
   names the broader full-tree gate coupling pattern.
 - [`stage-by-explicit-pathspec.md`](../../rules/stage-by-explicit-pathspec.md)
   forbids broad staging and reinforces the explicit ownership boundary.
-- [`commit/SKILL-CANONICAL.md`](../../skills/commit/SKILL-CANONICAL.md)
+- [`commit/SKILL-CANONICAL.md`](../../skills/change-custody/commit/SKILL-CANONICAL.md)
   owns commit-window, queue, staged-bundle, and message discipline.

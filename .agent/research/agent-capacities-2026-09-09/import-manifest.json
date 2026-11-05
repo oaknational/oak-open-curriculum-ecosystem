@@ -1,0 +1,68 @@
+{
+  "research_id": "AC-2026-09-09",
+  "research_revision": 1,
+  "import_date": "2026-09-09",
+  "archive": "research-package.zip",
+  "archive_sha256": "4ca49fcf3dad3019aff8d5e2ddce6c58db9df5e3be23f83618fca22cb955c0c1",
+  "archive_files": 87,
+  "archive_root": "agent-capacities-2026-09-09",
+  "research_evidence_commit": "123d2e3e9878b520c7fe1c51a39a8c1f324c1091",
+  "pr_base_commit": "03ec90594",
+  "preservation": "Exact archive bytes; all source-package files verified against archive entries",
+  "authority": "Research import only; no doctrine, skill installation or experiment execution",
+  "readable_projections": [
+    {
+      "file": "report.md",
+      "source_sha256": "49cbfb021ea01088b7d45cae3b6f9676afc7b7724fd8ef69dc2dbcf61d150f86",
+      "projection_sha256": "98a49758da5d9d9d2719a83e33588e06f31c0841f898f418a73895aad968e210",
+      "link_changes": [
+        {
+          "source_link": "evidence/private/impact-aligned-artificial-organisations-framework.md",
+          "projection_link": "research-package.zip"
+        }
+      ],
+      "other_change": "Added repository-reading-copy notice; reformatted footnote definitions across two lines"
+    },
+    {
+      "file": "framework.md",
+      "source_sha256": "b3841813e2b5cb2691c63c095bc92cd40df45a977c312c1501724285dbc86fc3",
+      "projection_sha256": "e7eaa3c7af64d9570936ae77c88c8aa8d510a0dc74aa5d0d5c6c2f9131869014",
+      "link_changes": [],
+      "other_change": "Added repository-reading-copy notice"
+    },
+    {
+      "file": "experimental-programme.md",
+      "source_sha256": "9982f8e59df816128e86be80dcce2ae956fe7bf63ec741dfe706e2ebdebaf992",
+      "projection_sha256": "330e8598836fa4c3def13feba06ce3bbc014bf56dca131611902d064ee32e760",
+      "link_changes": [],
+      "other_change": "Added repository-reading-copy notice"
+    },
+    {
+      "file": "comparison-matrix.csv",
+      "source_sha256": "9ed6b021c9f05809334d9a934cac52ccd8e6c2cf90b72894df473a9db310c503",
+      "projection_sha256": "79b16762b065c40f75443b1a9b102dd65b15463b92480214613bae38dd750aac",
+      "link_changes": [],
+      "other_change": "Normalised CRLF to LF for repository storage; cell values unchanged"
+    },
+    {
+      "file": "source-index.md",
+      "source_sha256": "c14ac492e35711f83d64009ea03246dcf62211aa95a0c0d3243bc09c22bb7f0e",
+      "projection_sha256": "04fda4201c736c9c1b8fc065aa8839c404f65bc1f26c0f45bb6b14448ad6aaca",
+      "link_changes": [
+        {
+          "source_link": "evidence-manifest.json",
+          "projection_link": "research-package.zip"
+        },
+        {
+          "source_link": "evidence/ledgers/",
+          "projection_link": "research-package.zip"
+        },
+        {
+          "source_link": "evidence/audit.md",
+          "projection_link": "research-package.zip"
+        }
+      ],
+      "other_change": "Added repository-reading-copy notice"
+    }
+  ]
+}

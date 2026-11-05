@@ -3,6 +3,7 @@ name: Derived-Output Conservation
 polarity: pattern
 use_this_when: Deciding what to commit from a pipeline run that produced bulk generated outputs alongside unique source material
 category: process
+layer: general
 proven_in: .agent/memory/active/archive/napkin-2026-07-20.md (2026-07-15, plan-corpus refounding S0/S1 publication decision)
 proven_date: 2026-07-15
 barrier:
@@ -45,6 +46,11 @@ The two failure directions are both real:
 Verification must be fail-loud: execute the digest check (`shasum -c`) from
 the committed manifest — printing digests without comparing exits green on a
 mismatch.
+
+A second instance of the retention question arriving late: on the 2026-09-02 Actions export "store
+it in-repo" became "local, untracked, ephemeral" at the first sighting of the size cost, so "the
+retention question belongs at the ask", settled before the first byte is fetched (Kiln holds Slag's
+closeout of 2026-09-02, event 3632de12).
 
 ## Consequences
 

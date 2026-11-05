@@ -8,6 +8,11 @@
 import { describe, it, expect } from 'vitest';
 import { conceptGraph } from './property-graph-data.js';
 
+/** Whether the concept graph carries a directed edge from one concept to another. */
+function hasEdge(from: string, to: string): boolean {
+  return conceptGraph.edges.some((e) => e.from === from && e.to === to);
+}
+
 describe('conceptGraph', () => {
   describe('structure', () => {
     it('has version string matching semver format', () => {
@@ -115,18 +120,12 @@ describe('conceptGraph', () => {
     });
 
     it('includes core hierarchy edges', () => {
-      const hasEdge = (from: string, to: string): boolean =>
-        conceptGraph.edges.some((e) => e.from === from && e.to === to);
-
       expect(hasEdge('subject', 'sequence')).toBe(true);
       expect(hasEdge('sequence', 'unit')).toBe(true);
       expect(hasEdge('unit', 'lesson')).toBe(true);
     });
 
     it('includes content hierarchy edges', () => {
-      const hasEdge = (from: string, to: string): boolean =>
-        conceptGraph.edges.some((e) => e.from === from && e.to === to);
-
       expect(hasEdge('lesson', 'quiz')).toBe(true);
       expect(hasEdge('quiz', 'question')).toBe(true);
       expect(hasEdge('question', 'answer')).toBe(true);

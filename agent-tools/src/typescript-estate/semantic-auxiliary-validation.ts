@@ -6,11 +6,10 @@ import type { AuxiliaryReadRecord } from './document-model.js';
 import { EstateReviewError } from './errors.js';
 import type { TreeEntry } from './file-model.js';
 import type { TrackedTreeEntry } from './git-snapshot-model.js';
-import type { RepoPath } from './scalar-model.js';
 import { compareUtf16 } from './utf16-order.js';
 
 export interface AuxiliaryReadObservation {
-  readonly path: RepoPath;
+  readonly path: string;
   readonly treeEntry: TreeEntry;
   readonly bytes: Uint8Array;
 }
@@ -80,8 +79,8 @@ function validateReadRecords(
 function validateReadRecord(
   asserted: AuxiliaryReadRecord,
   observed: AuxiliaryReadObservation,
-  indexed: ReadonlyMap<RepoPath, TreeEntry>,
-  typescriptPaths: ReadonlySet<RepoPath>,
+  indexed: ReadonlyMap<string, TreeEntry>,
+  typescriptPaths: ReadonlySet<string>,
 ): Result<undefined, EstateReviewError> {
   if (typescriptPaths.has(asserted.path)) {
     return invalid(`auxiliary read '${asserted.path}' is in the TypeScript denominator`);
@@ -97,8 +96,8 @@ function validateReadRecord(
 }
 
 function requireRegularIndexedEntry(
-  path: RepoPath,
-  indexed: ReadonlyMap<RepoPath, TreeEntry>,
+  path: string,
+  indexed: ReadonlyMap<string, TreeEntry>,
 ): Result<RegularTreeEntry, EstateReviewError> {
   const entry = indexed.get(path);
   return entry !== undefined && isRegularBlob(entry)
@@ -139,7 +138,7 @@ function validateObservedBytes(
 }
 
 function validateStrictPathOrder(
-  values: readonly { readonly path: RepoPath }[],
+  values: readonly { readonly path: string }[],
   message: string,
 ): Result<undefined, EstateReviewError> {
   const outOfOrder = values.find(
@@ -149,8 +148,8 @@ function validateStrictPathOrder(
 }
 
 function samePaths(
-  left: readonly { readonly path: RepoPath }[],
-  right: readonly { readonly path: RepoPath }[],
+  left: readonly { readonly path: string }[],
+  right: readonly { readonly path: string }[],
 ): boolean {
   return (
     left.length === right.length && left.every((value, index) => value.path === right[index]?.path)
@@ -159,8 +158,8 @@ function samePaths(
 
 function indexTreeEntries(
   treeEntries: readonly TrackedTreeEntry[],
-): Result<ReadonlyMap<RepoPath, TreeEntry>, EstateReviewError> {
-  const indexed = new Map<RepoPath, TreeEntry>();
+): Result<ReadonlyMap<string, TreeEntry>, EstateReviewError> {
+  const indexed = new Map<string, TreeEntry>();
   for (const entry of treeEntries) {
     if (indexed.has(entry.path)) {
       return invalid(`whole-tree index repeats '${entry.path}'`);
@@ -193,7 +192,7 @@ function sameTreeEntry(left: TreeEntry, right: TreeEntry): boolean {
   );
 }
 
-function isTypeScriptPath(path: RepoPath): boolean {
+function isTypeScriptPath(path: string): boolean {
   return path.endsWith('.ts') || path.endsWith('.tsx');
 }
 

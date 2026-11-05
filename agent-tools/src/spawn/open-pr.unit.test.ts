@@ -15,6 +15,10 @@ interface Call {
   readonly cwd: string;
 }
 
+/** A gh runner whose pull request creation fails, as gh reports it. */
+const ghFailingToCreate: CommandRunner<string> = () =>
+  err(new Error('gh: pull request failed to create'));
+
 /** Recording git + gh seams that succeed; gh returns the PR URL on stdout (with a trailing newline). */
 function recording(): {
   readonly gitCalls: Call[];
@@ -78,15 +82,13 @@ describe('openDraftPr', () => {
       gitCalls.push({ args, cwd });
       return ok('');
     };
-    const runGh: CommandRunner<string> = () => err(new Error('gh: pull request failed to create'));
-
     const result = openDraftPr({
       worktreePath: WORKTREE,
       branch: BRANCH,
       base: 'origin/main',
       slug: SLUG,
       runGit,
-      runGh,
+      runGh: ghFailingToCreate,
     });
 
     expect(isErr(result)).toBe(true);

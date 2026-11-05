@@ -4,6 +4,7 @@
   "private": true,
   "description": "The Oak design system — the estate's design source of truth (ADR-213): token CSS, class library, print layer, brand override contract, theme switcher, DTCG export, contrast manifest, consumption docs, specimens, and white-label proofs.",
   "license": "SEE LICENSE IN LICENCES.md",
+  "type": "module",
   "scripts": {
     "build": "tsc -p tsconfig.build.json && prettier --write --log-level warn dist/oak-theme.js",
     "build:flat": "cat colors_and_type.css oak-icons.css components.css print.css > oak-flat.generated.css",

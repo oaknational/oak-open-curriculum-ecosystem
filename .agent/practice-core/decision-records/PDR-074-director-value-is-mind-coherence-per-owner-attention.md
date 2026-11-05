@@ -20,7 +20,7 @@ team-scale mind-shape the recursion produces — two-mode coherence);
 (handoff protocol this PDR's checklist applies at);
 [PDR-026](PDR-026-per-session-landing-commitment.md)
 (landing-commitment grounding this PDR's substrate-work standby applies);
-ADR-183
+the host repository's comms-event tag namespace decision
 (failure-mode capture substrate this PDR's substrate-observer-of-record
 property names as Director duty).
 
@@ -158,7 +158,7 @@ E. **Director-handoff must be lossless.** When the Director retires
 
 F. **The Director is the team's substrate-observer-of-record.** The
    surface that NOTICES failure modes, behaviour-notes, and substrate
-   inflections in real-time. Per ADR-183, `tags: ["failure-mode"]`
+   inflections in real-time. Per the comms-event tag namespace, `tags: ["failure-mode"]`
    events become the team's first-capture vehicle for doctrine
    evolution.
 
@@ -223,7 +223,7 @@ failure-mode to observable state**, and owner can ratify or override.
 
 **Substrate work is pattern-completion-only**:
 
-- Capture-and-tag failure-modes from the live session (ADR-183 tags)
+- Capture-and-tag failure-modes from the live session (the comms-event tag namespace's tags)
 - Pre-ground on slices already named in the comms stream — queued, pre-positioned, or owner-stated as imminent (read substrate authority)
 - Draft reviewer briefs for known-pending review work
 - Update napkin with worked instances
@@ -352,10 +352,10 @@ This PDR is doctrine. Implementation surfaces emerge from it:
   pending-graduations until both the SKILL amendment and the
   second-instance evidence land.
 - **Substrate-observer-of-record** discharge: Directors should be
-  using ADR-183 `tags: ["failure-mode"]` and `tags: ["behaviour-note"]`
+  using the comms-event tag namespace's `tags: ["failure-mode"]` and `tags: ["behaviour-note"]`
   in real time for substrate moments. The graduation surfaces for
-  these tagged events are napkin + distilled.md per ADR-183
-  §"Skill amendments" closeout discipline.
+  these tagged events are napkin + distilled.md per the tag-namespace
+  decision's §"Skill amendments" closeout discipline.
 - **Autonomy primitives P1-P4** each require their own pending-
   graduations entries; second-instance + cure-design evidence needed
   before they graduate to standing protocol.

@@ -3,6 +3,7 @@ related_pdr: PDR-017
 name: Re-evaluate removal conditions on workarounds
 polarity: pattern
 category: process
+layer: general
 barrier: proven by implementation, prevents recurring mistake, stable
 source_session: 2026-04-05
 ---

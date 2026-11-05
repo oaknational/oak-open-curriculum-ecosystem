@@ -8,8 +8,8 @@ last_updated: 2026-04-02
 
 # GO GO GO
 
-A complementary grounding prompt for AI agents working in the Oak Open Curriculum
-Ecosystem. This skill structures task execution and periodic
+A complementary grounding prompt for AI agents working in this
+estate. This skill structures task execution and periodic
 self-assessment. It complements [AGENT.md](../../../directives/AGENT.md),
 which provides the canonical directives, rules, and architectural
 context.

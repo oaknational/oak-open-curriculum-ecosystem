@@ -2,6 +2,7 @@
 name: "An Unversioned Dependency Gets a Boot-time Invariant Check, Not a Runbook Line"
 polarity: pattern
 category: architecture
+layer: general
 use_this_when: "A service depends on state that is not in version control — environment variables, paired credentials, a vendor instance binding, a remote configuration — and a mismatch would fail only on a path the routine probes do not exercise."
 proven_in: "The MCP app's preview environment ran with mispaired Clerk keys from 2026-08-05 until 2026-09-02: every fresh preview build refused every token, invisible because the deploy probe exercised only unauthenticated paths and the metadata read correct. The cure landed as a bootstrap key-pairing guard that fails the build when the publishable and secret keys name different instances; the owner's key correction cured the instance, the guard cures the class. Conserved in .agent/memory/active/archive/napkin-2026-09-02.md and PR #946."
 proven_date: 2026-09-02

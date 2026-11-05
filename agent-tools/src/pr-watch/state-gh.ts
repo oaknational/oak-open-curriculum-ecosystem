@@ -7,18 +7,30 @@ import {
   type GhCommandExecutor,
   type PrTarget,
 } from './gh.js';
+import { contentReaderFor, gitPatchIdOf, type PatchIdOf } from './content-reader.js';
+import {
+  COMMENTS_QUERY,
+  COMMITS_QUERY,
+  harvestArgs,
+  REQUESTS_QUERY,
+  REVIEWS_QUERY,
+} from './harvests.js';
 import { parseReviewThreadPages } from './review-threads.js';
+import { readReviewConfigurationLeg } from './review-configuration-leg.js';
 import { readReviewRunsLeg } from './review-runs.js';
-import { hasLanded, isSignedSelfReply } from './reviewer-legs.js';
+import { parseRequestsHarvest } from './round-requests.js';
+import { composeReading, type UnavailableInput } from './state-compose.js';
+import { parseCommentsHarvest, parseCommitsHarvest } from './state-conversation.js';
 import { parseReviewsHarvest, parseStateView, PR_STATE_VIEW_JSON_FIELDS } from './state-fields.js';
 import type { PrStateReading } from './state-types.js';
 
 /**
  * The gh IO composition for `pr state`: one extended `pr view` call, the
- * review-threads GraphQL slurp (shared with `pr-watch`), the FULL paginated
- * `reviews` harvest (the reviewer-leg source — never the `latestReviews`
- * pointer), and the `gh agent-task` review-run legs, composed into one
- * {@link PrStateReading}.
+ * review-threads GraphQL slurp (shared with `pr-watch`), four FULL paginated
+ * harvests — `reviews` (the reviewer-leg source, never the `latestReviews`
+ * pointer), `comments` and `commits` (the completion-comment sources), and
+ * the request events (the rounds a review bound by content waits for) — and
+ * the `gh agent-task` review-run legs, composed into one {@link PrStateReading}.
  *
  * The expected reviewer set is a DECLARED input (`expectedReviewers`); when
  * undeclared it defaults to the observed surface (requests ∪ harvest authors)
@@ -26,44 +38,24 @@ import type { PrStateReading } from './state-types.js';
  * first-round-guarantee gap instead of silently passing it.
  *
  * The `gh agent-task` review-run leg (bounded run→PR mapping, typed
- * degradation) lives in `review-runs.ts`.
+ * degradation) lives in `review-runs.ts`. The content leg (`content-reader.ts`)
+ * reads the patch-ids a review of an earlier commit binds the head by, and
+ * degrades to unproven, never failing the reading.
  */
 
 export interface ReadPrStateOptions {
   readonly target: PrTarget;
   readonly execFileSync?: GhCommandExecutor;
-  /** The declared expected reviewer set (`--expect`, repeatable). */
+  /**
+   * The declared expected reviewer set (`--expect`, repeatable): absent, the
+   * set is undeclared and defaults; empty, it was declared `none`
+   * (expect-flag.ts).
+   */
   readonly expectedReviewers?: readonly string[];
-}
-
-// Paginated full-history reviews harvest; `--slurp` wraps pages into one array.
-const REVIEWS_QUERY = `query($owner: String!, $name: String!, $number: Int!, $endCursor: String) {
-  repository(owner: $owner, name: $name) {
-    pullRequest(number: $number) {
-      reviews(first: 100, after: $endCursor) {
-        pageInfo { hasNextPage endCursor }
-        nodes { author { login } state body submittedAt commit { oid } }
-      }
-    }
-  }
-}`;
-
-function reviewsHarvestArgs(prNumber: string, repo: string | undefined): string[] {
-  const [owner, name] = repo === undefined ? ['{owner}', '{repo}'] : repo.split('/');
-  return [
-    'api',
-    'graphql',
-    '--paginate',
-    '--slurp',
-    '-f',
-    `query=${REVIEWS_QUERY}`,
-    '-F',
-    `owner=${owner}`,
-    '-F',
-    `name=${name}`,
-    '-F',
-    `number=${prNumber}`,
-  ];
+  /** Hashes a diff to its patch-id; the trusted git's `patch-id` by default. */
+  readonly patchIdOf?: PatchIdOf;
+  /** Vendors declared unavailable (`--unavailable`), the bot that may declare, and the clock. */
+  readonly unavailable?: UnavailableInput;
 }
 
 // `mergeable: UNKNOWN` means GitHub has not computed mergeability yet — a
@@ -89,34 +81,72 @@ function readMergeabilityComputedView(input: {
   return view;
 }
 
-// Wrap the harvest failure with operator-grade evidence: a nonexistent or
-// inaccessible PR surfaces as a null pullRequest deep in the GraphQL payload.
-function readReviewsHarvest(input: {
+// One paginated harvest, its failure wrapped with operator-grade evidence: a
+// nonexistent or inaccessible PR surfaces as a null pullRequest deep in the
+// GraphQL payload.
+function readHarvest<Parsed>(input: {
+  readonly run: GhCommandExecutor;
+  readonly prNumber: string;
+  readonly repo: string | undefined;
+  readonly query: string;
+  readonly label: string;
+  readonly parse: (raw: unknown) => Parsed;
+}): Parsed {
+  try {
+    return input.parse(
+      parseGhJson(
+        input.run('gh', harvestArgs(input.query, input.prNumber, input.repo), GH_EXEC_OPTIONS),
+        `api graphql ${input.label}`,
+      ),
+    );
+  } catch (error) {
+    throw new Error(
+      `PR #${input.prNumber}: ${input.label} harvest failed — does the PR exist and is it accessible?`,
+      { cause: error },
+    );
+  }
+}
+
+// The four full-history harvests the reading composes from.
+function readHarvests(input: {
   readonly run: GhCommandExecutor;
   readonly prNumber: string;
   readonly repo: string | undefined;
 }) {
-  try {
-    return parseReviewsHarvest(
-      parseGhJson(
-        input.run('gh', reviewsHarvestArgs(input.prNumber, input.repo), GH_EXEC_OPTIONS),
-        'api graphql reviews',
-      ),
-    );
-  } catch (cause) {
-    throw new Error(
-      `PR #${input.prNumber}: reviews harvest failed — does the PR exist and is it accessible?`,
-      { cause },
-    );
-  }
+  return {
+    reviews: readHarvest({
+      ...input,
+      query: REVIEWS_QUERY,
+      label: 'reviews',
+      parse: parseReviewsHarvest,
+    }),
+    comments: readHarvest({
+      ...input,
+      query: COMMENTS_QUERY,
+      label: 'comments',
+      parse: parseCommentsHarvest,
+    }),
+    commits: readHarvest({
+      ...input,
+      query: COMMITS_QUERY,
+      label: 'commits',
+      parse: parseCommitsHarvest,
+    }),
+    requests: readHarvest({
+      ...input,
+      query: REQUESTS_QUERY,
+      label: 'review requests',
+      parse: parseRequestsHarvest,
+    }),
+  };
 }
 
 /**
  * Fetch the `pr state` gh surfaces and compose the compound reading.
  *
- * @throws when the primary `pr view`, review-threads, or reviews-harvest legs
- *   fail (a verdict without them would be a guess); only the agent-task leg
- *   degrades typed.
+ * @throws when the primary `pr view`, review-threads, or any of the reviews,
+ *   comments, commits or review-request harvests fail (a verdict without them would be a
+ *   guess); only the agent-task leg degrades typed.
  */
 // The compound reading must bind ONE tip: a push landing between the view
 // snapshot and the later legs lets an old-tip review match the stored SHA
@@ -127,6 +157,7 @@ const TIP_CONSISTENT_ATTEMPTS = 2;
 
 export function readPrStateReading(options: ReadPrStateOptions): PrStateReading {
   const run = options.execFileSync ?? execFileSync;
+  const patchIdOf = options.patchIdOf ?? gitPatchIdOf;
   const { number, repo } = options.target;
   const prNumber = String(number);
 
@@ -143,29 +174,26 @@ export function readPrStateReading(options: ReadPrStateOptions): PrStateReading 
         'api graphql reviewThreads',
       ),
     );
-    const reviews = readReviewsHarvest({ run, prNumber, repo });
+    const { reviews, comments, commits, requests } = readHarvests({ run, prNumber, repo });
     const reviewRuns = readReviewRunsLeg({ run, prNumber: number, prUrl: view.url });
     // The confirm read closes the race window; on a match it is also the
     // freshest same-tip snapshot, so the reading composes from it.
     const confirm = readMergeabilityComputedView({ run, viewArgs, prNumber });
     if (confirm.headRefOid === view.headRefOid) {
-      const declared = options.expectedReviewers ?? [];
-      // A defaulted expected set must not be polluted by the agent's own signed
-      // disposition replies (shared-credential reviews), unsubmitted drafts, or
-      // deleted-account 'unknown' authors — each would mint a phantom OWED leg.
-      const observedAuthors = reviews
-        .filter((review) => hasLanded(review) && !isSignedSelfReply(review.body))
-        .map((review) => review.author)
-        .filter((author) => author !== 'unknown');
-      const observed = [...new Set([...confirm.reviewRequests, ...observedAuthors])];
-      return {
-        ...confirm,
+      return composeReading({
+        view: confirm,
+        comments,
+        commits,
+        requests,
         reviewThreads,
         reviews,
         reviewRuns,
-        expectedReviewers: declared.length > 0 ? declared : observed,
-        expectedDeclared: declared.length > 0,
-      };
+        // The base branch's configuration, from the view the reading composes from.
+        reviewConfiguration: readReviewConfigurationLeg({ run, repo, view: confirm }),
+        declared: options.expectedReviewers ?? null,
+        ...(options.unavailable === undefined ? {} : { unavailable: options.unavailable }),
+        readContent: contentReaderFor({ run, repo, view: confirm, patchIdOf }),
+      });
     }
     view = confirm;
   }

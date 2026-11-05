@@ -1,3 +1,8 @@
+---
+classification: core
+description: Verify claims against concrete artefacts before routing, reporting completion, archiving source material, or accepting handoff/sub-agent/reviewer statements as current state.
+---
+
 # Verify, Do Not Trust
 
 Operationalises
@@ -18,6 +23,17 @@ not trust confirmations".
 
 If a decision changes work ownership, route, completion status, gate state, or
 knowledge disposition, verify it against the surface that would make it true.
+An instrument's verdict that is recomputable from that surface — a front
+door's refusal, a tally's count, a gate's price — is a reading of the surface,
+not the surface: when the seat can read the state directly, the state governs,
+and a verdict the state contradicts is a defect to file against the instrument,
+never a timer to wait on (2026-09-12: a front door read a substantive review as
+a skip marker and the seat waited on its timeout arm with the settled state in
+front of it). Cure the instrument or route the decision to its owner; never act
+between them, and never take the cheapest move that changes the verdict in place
+of the property it protects — an IO test routed through a helper to quiet a lint
+rule, a leg carried on a comment past a door that cannot read it (2026-09-14). A reviewer's finding is not such a verdict: it is adjudicated on
+its merits through `pr-lifecycle`'s triage, never dismissed by reading state.
 A claim becomes true only when the proving surface is current and visible, not
 merely present in a historical, contaminated, in-flight, or superseded artefact.
 
@@ -48,12 +64,58 @@ corroboration. And "first-hand" means the main agent's own read: run
 a fan-out for breadth or second opinion, but read the load-bearing sources
 yourself and form your own verdicts first — sub-agent reports corroborate or
 challenge your reading, never substitute for it, and the first-hand pass is
-never deferred to "after the agents finish".
+never deferred to "after the agents finish". The owner's word (2026-09-29,
+verbatim): "The work and claims of all subagents MUST be verified by you,
+yourself". A return is a lead: every figure, `file:line` and state it
+reports is re-read at the primary surface before it enters a record or a
+message, and the rest is marked unverified (the same day's re-read
+corrected four of nine gatherers' claims). Gatherers that write files get
+one scratch directory each: one deleted its own files by name in a shared
+directory and could have removed another's.
+
+A ruling names the primary surface it read. Any routing, acceptance,
+recommendation or ruling that rests on a count, a register row, a ruleset,
+a workflow, a vendor mechanism or a Practice text reads that surface itself
+in one command before it goes out, and names what was read: the file's blob
+at the default branch's tip (never a checkout on a coordination branch), the
+API response, the run list, the vendor's issue and its documentation. A
+seat's line about a surface is a copy of it, and a subagent's "missing" is a
+claim to verify by blob before it becomes a row. Worked instances, 2026-09-25
+and 2026-09-26: nine Director rulings reversed on a first-hand read in two
+days, among them a flake count taken from a summary, a register row, a
+ruleset and its mirror, a vendor mechanism (a merge queue) recommended before
+its open issue was read, and a PDR called stale from a checkout fifty-six
+commits behind the default branch.
 
 Fix verification must also return to the original defect location. A patch that
 adds intended cure text elsewhere but leaves the contradicting source text in
 place has not fixed the defect. Re-read the original offending line or section,
 not only the new-content area, before declaring the tranche complete.
+
+A sentence that says what a tool, hook or validator does is written after
+opening the tool's source AND the configuration that wires it; one without the
+other is a guess, and "already" and "names none" are its tells (three
+over-claims caught by a reviewer in one night, 2026-10-03; two failed claims
+that had "checked the source or the configuration but not both", 2026-10-02).
+A host binding written at a carry is read back in the carried file with each
+path checked one at a time, never two listings read as one (2026-10-03).
+
+A claimed violation of a policed rule is checked against the validator that
+polices it before it is repeated to anyone. Every validator the estate owns is
+the first read for a claim in its domain, and its verdict outranks any
+reader's: a claim that contradicts a green validator is wrong until the
+validator is shown to be (2026-09-12: an explorer's six "portability
+violations" reached a peer estate before the reference-direction validator's
+own count, zero, was read; retracted).
+
+A failure hypothesis names the mechanism's existence at the time in question
+as its first premise. Before asking why a hook, a watcher or a write failed at
+time T, establish that it existed and was wired at T: one
+`git log --diff-filter=A -- <path>` answers it (2026-09-12: a "missed
+startup write" was diagnosed and a timeout changed for a hook installed five
+hours after the session started). Surfaces that arrive mid-session, as they do
+in a transplant, make "it did not fire at start" usually mean "it did not
+exist at start".
 
 ## Apply This Before
 
@@ -94,6 +156,16 @@ the point of action, not a fact to inherit. And it covers your own arithmetic:
 recompute any asserted total from its parts before it leaves your output — a
 noise-inclusive grep once asserted 318 blocks where the genuine total was 214,
 with the per-type census right and only the summary total unrecomputed.
+A census carries one probe already known to hit: an all-NONE sweep with no
+known positive is a probe failure, never a finding (a space-joined path list
+the shell did not split, 2026-09-02; a word boundary that missed hyphenated
+names, 2026-09-03; a pattern matching one nesting depth that missed two
+deeper directories and changed twelve rows, 2026-09-03 — a census needs a
+known positive at EVERY depth it claims). A census in a record is re-derived
+from the live query at authoring, never carried from a snapshot: a scanning
+census of twenty alerts in six classes was twenty-seven in eight when the
+query was run (2026-09-06). And instrument-leg results are never invented to
+satisfy a record's class — a row whose legs did not run says so (2026-09-06).
 
 **Self-state is the category where this discipline is most often skipped.** Agents
 reliably verify a peer's, a sub-agent's, or a bot's claim first-hand, then accept
@@ -146,13 +218,13 @@ The same discipline covers authorities you are about to cite or copy. Before
 writing "this discipline lives in ADR-NNN" into a durable artefact, open the
 claimed home and confirm the substance is actually there — citing from a memory
 of "where this kind of thing lives" plants a wrong authority that a future
-reader follows to nothing (worked failure 2026-06-30: a plan cited ADR-117 for
+reader follows to nothing (worked failure 2026-06-30: a plan cited an ADR for
 a discipline that lives in the plan architecture; caught pre-commit). And
 before recommending a consistency or "simplify" move on tooling, ground the
 **governing** decision (the ADR/PDR that owns the surface), never the sibling
 that looks simplest — siblings can themselves be the inconsistency (worked
 instance 2026-06-29: "run it via tsx like its siblings" would have violated
-ADR-178, which mandates built-`dist` for agent-tools CLIs; the simplest-looking
+the `use-built-agent-tools-cli` rule, which mandates built-`dist` for agent-tools CLIs; the simplest-looking
 siblings were the outliers).
 
 The proactive form: before editing *around* an inherited story to repair it,
@@ -198,6 +270,11 @@ hooks ran red. Inspect the inner command's actual output, not the wrapper's
 status. The full behavioural doctrine is the pattern
 `wrapped-exit-codes-false-green`.
 
+A declared sweep or archive move is verified at the reading checkout, never taken from the pass
+record: "a pass record can be true where written and false where read (the declared archive moves)",
+as the 2026-09-02 comms watermarks were declared swept while "its declared archive moves never
+reached this checkout" (Juno seeks Apogee's inventory of 2026-09-06, events 0e50ca85 and 720bdd21).
+
 ## Citation or Silence
 
 A load-bearing claim about current state — what is paused, landed, conserved,
@@ -214,6 +291,77 @@ intention cannot catch. The missing citation can: it is a visible feature of
 the sentence, observable to you as you write and to a reader as they read. Gate
 on the artefact the fluent claim omits, not on the feeling you hoped to notice.
 The smoother and more convenient the claim, the harder the citation is owed.
+
+A public claim needs support its reader can open. A hash of local evidence
+preserves the evidence's integrity for those who hold it and makes nothing
+available to anyone else; reviewable and publishable are separate properties.
+A seat's own scan cannot certify that scan's completeness: another reader
+checks the negatives, the counts and the permission boundaries
+(September 2026, a public claim that rested on a local-only measurement).
+
+A review request for a durable local capture carries metadata only: its path,
+byte size, hash, run times, tool version and the shape of the command. A
+reviewer who asks for the payload is routed to the Director. Originals behind
+test fixtures are never published: redacted projections are committed, and a
+pickup index names the originals for those who hold them to re-verify locally
+(two recorded decisions of one capture lane).
+
+## The Authority Test — Identifiable, Appropriate, Current
+
+*Citation or Silence* gates a claim on a source you read; this gates the source
+on its standing to make the claim. Owner, 2026-08-13, verbatim: "when
+determining if a claim is true, the authority being ratified MUST be
+identifiable and proven appropriate for the claim — I feel like we have
+discussed this a number of times." It is the generator of a recorded family:
+a fitness size warning read as an instruction; ADR prose read as a content
+authority; repository topology read as an organisation model; plan gravity
+read as ratification (three times); reviewer rounds in an unratified plan read
+as doctrine. Instance-recording failed because the failure fires at
+CONSUMPTION time — reading confident, plan-shaped prose — where nothing
+triggers recall of a differently-surfaced instance, and compaction then
+flattens "proposed, under review" into "binding". Vigilance does not survive
+that; structure does. The three-part test, on every load-bearing claim, at
+read time and at write time:
+
+1. **Identifiable** — whose word is this, dated? If no author and moment can
+   be named, it is a proposal, not an authority.
+2. **Appropriate** — is that author the right KIND of authority for THIS claim
+   class? A kit register binds kit mechanics, not design intent; a reviewer
+   finds defects and never mints doctrine; a decision record rules
+   architecture, not content policy; a validator reports a measurement, not an
+   instruction; only the owner rules intent, scope, audience and taste. Org
+   plans, team shapes, who owns or operates a thing, and audience breadth are
+   owner facts on the same footing as product scope — never inferred from
+   repository topology or the seat's own vantage (a paper once asserted an
+   ownership model read off repository boundaries and an audience model
+   centred on the surface the seat worked on; whole passages went when the
+   owner corrected it, 2026-08-12). Source them from the owner's words or
+   leave them unstated.
+3. **Current** — a genuinely authoritative source can be a STALE COPY. A
+   worktree's files lag the coordination branch; a status or relationship
+   claim read from a branch copy needs a current-source check (a row shipped
+   "sketch" the day after the node had been ratified, and the Director repeated
+   it unverified).
+
+Structural form: claims travel WITH their authority class inside the artefact
+that carries them — an authority-classes section, a per-claim tag — so the
+reader never has to remember what the document should have carried.
+
+Content and data policy is the sharpest instance: which content may enter
+which index or surface, whether environments may diverge, who an audience
+is — these are OWNER facts. Committed ADR prose, a bot reviewer's suggested
+fix shape and repo defaults (an example env value, a demo's target) record
+what an engineer wrote, not what the owner decided. A guard was once built
+around "restricted content is appropriate on sandbox" because an ADR's
+consequences paragraph and a reviewer both implied it, and the resulting
+demo-audience residual was carded as accept-recommended; the owner's
+correction was that no such decision had been made, and the right invariant
+(reject everywhere, families consistent) was simpler and left no residue
+(2026-08-13). Two moves follow. Before enforcing any such policy ask "did
+the owner decide this, or did prose, a bot or a default imply it?" — if
+implied, card the PREMISE, never the downstream residual. And when a cure
+spawns a residual-risk card, check whether the cure encoded the wrong axis:
+the correct invariant usually has no residue.
 
 ## Name the Instrument
 
@@ -249,7 +397,94 @@ Four points, each paid for in this estate:
 - **Cost, not correctness, decides whether a check runs.** A check that exists
   but costs "remember at the right moment" is not a mechanism. The design
   consequence — make falsification cheap and make its absence loud — is the
-  pattern `falsification-cost-determines-claim-quality`.
+  pattern `falsification-cost-determines-claim-quality`. The owner's form,
+  spoken in delight when a UUID-v5 gate refused a recipient id typed from
+  memory (2026-07-30): "constant attention should not be part of the
+  toolkit in good engineering." The design test for any mechanism, check or
+  convention: if it needs constant attention to stay true, it is not
+  finished — prefer gates that refuse over disciplines that remind, derived
+  state over manually-synced projections, and when a failure is caught by
+  vigilance, move the catch into structure rather than sharpening the
+  reminder.
+- **Before shipping a pass/fail verdict, quote the clause and score the object
+  it binds.** Three wrong claims in one report shared one shape (2026-07-16):
+  a negative control scored against a nearby sentence instead of the rows its
+  `expect` clause named; a CI failure called a "cascade" without the failing
+  job's log read; every miss attributed to the fashionable cause without the
+  confounds listed. So: quote the gate or key clause and name the exact object
+  it binds; if a zero-cost executable check exists (replay the code over
+  captured data, grep the live tree for the claimed quote, `man test` and one
+  thought experiment for a shell predicate), run it BEFORE writing the verdict
+  — a rule's recipe read as "sensible" on its story carried an inverted
+  `test -L` guard (2026-09-09); and when attributing failures, list the
+  candidate confounds and say which rows each can and cannot explain.
+
+Three later refinements, each paid for:
+
+- **The consumer's resolver is part of the claim.** A verification that ran
+  through a resolver other than the consumer's own proved a different claim:
+  a mermaid diagram every local renderer passed lost the `<br>` inside every
+  node label in the live viewer (2026-08-19); a read-shaped command run
+  through a worktree-resolved binary migrated the home registry it was only
+  meant to read (2026-08-18). Name the resolver with the instrument, and run
+  the proof through the consumer's own.
+- **Read the normative clause, never its example.** A cure built from a
+  specification's worked example was overturned by the clause the example
+  illustrated, before it shipped (RFC 9207 §2.4, 2026-08-19). The example is
+  one instance of the rule; the claim is about the rule.
+- **A by-construction claim is verified on every package it names.**
+  "Correct under both orders, harmless if the flow changes" is the
+  survivability tell: a claim that a shape holds by construction across N
+  packages is N checks, never one sentence (2026-09-06). A resolution
+  designed from a module's callers is proven at the production composition
+  root: a config-root override forwarded by the CLI made a new
+  primary-checkout resolution never run, after unit tests, type-check and
+  lint had all passed (2026-09-03).
+- **A claim about what a live system emits is proven by watching it emit.**
+  Reading the code says where to look, never what it did (2026-08-19).
+- **A mechanism written from memory of a rule is a claim about the rule.**
+  Before naming a class's cure in a plan, read the governing policy and the
+  decision-record index for the class: two mechanisms in one node written
+  from memory of a rule each cost a review round (2026-09-06). The
+  mechanical form: before recommending or ruling on ANY estate mechanism,
+  `grep -ril <concept>` over the rules index, the rules, the decision
+  records (ADRs and PDRs), the skills tier (a skill's mechanics section is
+  the governing document for a mechanism a rule only names) and the
+  directory's own README (it governs that tier's lifecycle moves), and cite
+  what matches or say that nothing names it. A recommendation IS the naming
+  of a mechanism (a merge queue recommended to the owner as a cure had been
+  decided against in an accepted ADR with reasons, 2026-09-06). The same
+  oracle-first move applies to a HANDED instruction (a succession record
+  prescribed a conditional test skip that a lint rule names first among its
+  forbidden mechanisms) and to a CAPABILITY: verify a capability against the
+  GRANT, never against one attempt's refusal — a `403` from a CLI is a
+  wrong-scope symptom (an ungranted permission fails the mint with `422`),
+  and "the bot lacks `actions`" stood in two plan nodes and a thread record
+  while the installation held `actions: write` (2026-09-11). A write capability
+  a plan will rest on is proven by one write on a throwaway object, never
+  inferred from a read (four reference-update calls, create, fast-forward,
+  refused non-fast-forward, delete, removed a whole secret from the mirror
+  workflow's design, 2026-09-10). On owner-ratified text that does not run —
+  ratified YAML that does not parse — cure what cannot run, and carry every
+  design change to the owner rather than redesigning in the lane (2026-09-11).
+- **A rule clause that names repositories, credentials or secrets is read
+  against the workflow file before it is written.** "Re-home any fork head",
+  generalised from one instance, would have handed an external contributor's
+  head the shared repository's secrets; the workflow runs a cross-repository
+  head without secrets by design, visible from one read of the file
+  (2026-09-06). The instrument for a claim about what a workflow grants is
+  the workflow.
+- **Owner-facing state is computed against the default branch's tip after a
+  fetch, never against the coordination checkout.** The coordination branch
+  is cut once a day and lags every landing since; a card computed from it
+  asked the owner about a gate they had archived the day before
+  (2026-09-09). Before any card or report about a plan, a gate, a record's
+  status or a document's existence, read `git show origin/<default>:<path>`
+  or a listing of the tip; a session-start drift alert on the primary is a
+  pointer to re-check, never a fact. Existence is a PATH fact
+  (`git cat-file -e <ref>:<path>`), never a name search: `git grep -l <name>`
+  matches the files that CITE a document, and a report on the tip all along was
+  dispositioned as absent that way (2026-09-10).
 
 The personal form, at the moment of wanting to assert: not *"am I confident?"*
 but **"what is the cheapest thing that would prove me wrong, and have I run
@@ -277,7 +512,15 @@ observe the emission** — a plan's envelope doctrine survived every document
 check and died on one live `tools/call` (three envelope shapes, not one);
 **a universal negative needs its published enumeration** — "no
 registration site carries X" is evidence only when the leg lists the sites
-it searched; and **a reviewer is rejected only against the primary source**
+it searched; **a negative is reported as the instrument plus its blind spot,
+never as the conclusion** — an audit tool's silence on a package was read as
+"not affected", and a 404 on a peer's identifier was resolved against the peer
+instead of traced (two instances, 2026-09-21); **a modification time is
+evidence that something wrote, never of who** — trace, then claim (an outside
+writer inferred from an index mtime was the seat's own status read,
+2026-09-21); **a set claim is a per-member check, never a category word** —
+"byte-identical in both estates" held for one file of three (2026-09-23); and
+**a reviewer is rejected only against the primary source**
 — a re-derivation from memory with a wrong region order nearly rejected a
 CORRECT finding, and the falsifier for any reject-verdict is the artefact's
 own tuple. Ask for probes explicitly in reviewer dispatches: a gateway that
@@ -319,7 +562,12 @@ Three questions gate the transmission, in the order they catch failures:
    stop; implications go in a separate paragraph attributed to the relayer by
    name — a derived inference inside a quoted paragraph inherits the owner's
    authority on the way past, and a reader cannot tell where the owner stopped
-   speaking.
+   speaking. And inside quotation marks that serve as a traceability record
+   — a ratification stamp, a ledger row, a verbatim ruling — quote exactly,
+   typo included, or mark it a paraphrase; never a silent correction (a
+   Director wrote "its own PR" in a stamp quoting the owner's "it's own PR",
+   and a reviewer rightly flagged the stamp as not verbatim, 2026-09-08).
+   Grammar support on the owner's drafts stops at the quote mark.
 3. **Did anyone read this state, ever?** An inference about an unprobed
    surface is a hypothesis wearing a fact's clothes; it carries no staleness
    signal and no borrowed authority to spot.
@@ -368,6 +616,37 @@ still misleads breaks carriage and moves the cure receiver-side; a fresh seat
 paying a new miss on a genuinely new surface after this section lands means
 passive capture failed and a mechanical gate is warranted (route via PDR-098).
 
+The receiving-side discipline is an explicit ledger. Transmitted context —
+plan text, thread records, current code and config, a prior session's
+framing, your own earlier reads — arrives looking like fact (owner, 2026-07-08:
+"Assumptions are being transmitted and then treated as a primary source of
+truth instead of what they actually are, which is just wrong"; four instances
+in one discussion — a compliance framing echoed as a live requirement, a
+runtime asserted from memory, an owner's domain model "corrected" from a lint
+tier name, a vendor mechanism named as the mechanism while unverified). For
+any non-trivial reasoning keep the four bins visible — **Fact (verified) /
+Owner's-call / Assumption-to-verify / Dropped** — and never let a claim enter
+the reasoning unmarked; a note that something needs deciding is not a
+decision, a current config is not a law, and vendor docs from memory are not
+verified behaviour.
+
+A peer's proposal is a transmitted claim too. A well-argued unratified
+proposal from a colleague who was right about other things in the same
+message carries their reasoning and their social weight; verifying its
+neighbours (a count, a file on disk) feels like having vetted it, and it is
+not — the centre is what gets acted on. One such proposal ("a PR comment is a
+permanent doc") was relayed intact to the owner, who refused it in a line
+because the durability hierarchy already answered it (2026-09-12). Before
+relaying any peer proposal to the owner, name the doctrine surface it would
+change and read it: a proposal that contradicts an existing rule is not a
+proposal but a defect report against the reader's memory — refuse it, cite
+the rule, write nothing new.
+
+A fact reaches the owner only after the seat has observed it first-hand: one closeout recorded "two
+facts transmitted to the owner without being observed", a code-owner gate asserted from memory
+against the contrary ruling and a release number "caught by Kiln" (Luna seeks Twilight's closeout of
+2026-09-02, event 61a55a12).
+
 ## Run Gates, Pushes, and Probes BARE — the Exit Code Is the Verdict
 
 `gate | tail` / `| head` / `| grep` returns the LAST pipe stage's exit, so a
@@ -379,11 +658,16 @@ plan-state refusal read green through `| head`, `check-commit | tail`,
 `git push | tail`, `comms | grep -c`. The discipline is categorical:
 
 - Run every gate, push, and verification probe BARE, and read `$?` off the
-  bare command itself (or `PIPESTATUS[0]` / `set -o pipefail` when a pipe is
+  bare command itself (or bash's `PIPESTATUS[0]`, zsh's lowercase
+  `pipestatus[1]`, or `set -o pipefail` when a pipe is
   genuinely required; or append the code INSIDE the artefact:
   `; echo "EXIT: $?" >> log`).
 - A success echo chained after a pipe (`… | tail && echo OK`) is unproven —
   the echo keys off the tail's exit, never the gate's.
+- `set -e` does not stop a Bash-tool chain: on 2026-09-26 a failed `git add`
+  ran on into a push and a gate, and four later instances followed. Join the
+  steps with `&&`, read each exit code in-band, and test a header's length
+  before any step with a side effect.
 - The **trailing-echo variant**: `cmd; echo "exit=$?"` makes the harness task
   notification read exit 0 (the echo's) while `cmd` failed — when a status
   echo trails the command, read the PRINTED value, never the notification's
@@ -415,6 +699,12 @@ surface. The consumer side of the same discipline: a load-bearing, cheap-to-
 check briefing fact gets verified first-hand BEFORE building on it, not at
 verification time (a 10-second `curl` beats a parser built on a relayed
 vocabulary).
+
+A constraint carried in a compaction summary, a handoff or a seat's own notes is a claim about the
+record, never the record: re-read it against the record before it gates an act. One seat carried
+"the three napkins archive only after the owner's privacy review" through a whole session and into
+its retrospective (2026-09-30 to 2026-10-01); the owner's card of 2026-09-14, in the closure record
+the seat never re-opened, had already said no review was needed.
 
 ## Probe the Deployment Before Planning About It
 
@@ -457,6 +747,12 @@ in sync and one fetch would have shown it).
 - Treating a handoff record as live state without checking current claims,
   comms, and git.
 - Trusting a sub-agent's cited source without opening the source.
+- Repeating a claimed violation of a policed rule before reading the policing
+  validator's own output.
+- Curing a failure at time T by changing a mechanism that did not exist at T.
+- Answering "does content X exist in source Y" through a coordinator's subagent
+  workflow: route it to the seat that owns the source for gated first-hand
+  proof; a subagent workflow once fabricated the answer (2026-06).
 - Verifying a compound claim's headline while its elements go unchecked — a
   homes-authored note once claimed "pattern file + testing-strategy cross-ref"
   where the pattern was real and the cross-ref absent; a reviewer-praised
@@ -495,7 +791,7 @@ in sync and one fetch would have shown it).
   report) before any whole-file claim.
 - Running a generator / codegen / build script to *diagnose* without reading it
   first — a `clean` / `rm -rf` prelude on a command that may crash deletes
-  tracked artefacts (a diagnostic `sdk-codegen` once deleted ~100 tracked files
+  tracked artefacts (a diagnostic codegen run in OCE once deleted ~100 tracked files
   this way).
 - A proof loop whose probe consumes its own input as options — `grep -Fq "$line"`
   ate every `-`-prefixed needle as a flag, so 13 of 132 lines were never tested
@@ -527,9 +823,18 @@ load-bearing fact; an unlabelled or mis-zoned one is a verification failure.
   58-minute coordinator-less gap came from reading `07:52Z` against an `~08:50` local
   clock on a `+0100` (BST) host, where `07:52Z` *is* `08:52` local.
 - **Label every timestamp's zone.** An unlabelled timestamp is a bug.
+- **Read the clock before writing a time.** Every time in a record or a message comes
+  from a `date -u` read in a call that COMPLETED before the writing call, never inside
+  it and never in a parallel sibling; eight pre-read times were written in one session
+  (2026-09-25). Grep the text for times before it is sent.
 - **Never infer a timeline from a truncated log view** (`tail` / `head` / capped grep) —
   query the full window first (a `tail`-truncated `pmset` read once reported `00:51Z`
   when the full log gave `00:06Z`).
+- **A time label is read from the clock at the moment of writing, never estimated
+  afterwards.** Labels written from memory ran 25–55 minutes early (2026-09-03, compared
+  against the transcript and GitHub clocks, which agree) and an hour late (2026-09-07, a
+  pause recorded as 14:0xZ when the clock read 12:5xZ, corrected in eight files). A record's
+  sequence rests on SHAs and the host's timestamps; `date -u` in the same turn as the label.
 
 Composes with the `director-handoff.md` liveness rule (let the tool compute age
 UTC-to-UTC; never a local clock).

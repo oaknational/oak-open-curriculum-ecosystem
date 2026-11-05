@@ -1,7 +1,6 @@
 import { type LogContextInput, type Logger, type LogSink } from '@oaknational/logger';
 import { err, ok, type Result } from '@oaknational/result';
 import {
-  createSentryConfig,
   createSentryLogSink,
   initialiseSentry,
   type FixtureSentryStore,
@@ -26,6 +25,7 @@ import type { HttpObservabilityError } from './http-observability-error.js';
 import { describeHttpObservabilityError } from './http-observability-error.js';
 import type { HttpSpanOptions, HttpSyncSpanOptions, SpanFunctions } from './span-helpers.js';
 import { createSpanFunctions } from './span-helpers.js';
+import { parseHttpSentryConfig } from './http-sentry-config.js';
 import { createHttpPostRedactionHooks } from './sanitise-mcp-events.js';
 import { createSentryDelegates } from './sentry-observability-delegates.js';
 
@@ -153,17 +153,6 @@ function resolveTracer(mode: string, serviceName: string, version: string): Trac
   return mode === 'sentry' ? trace.getTracer(serviceName, version) : undefined;
 }
 
-function createSentryConfigEnvironment(runtimeConfig: RuntimeConfig) {
-  return {
-    ...runtimeConfig.env,
-    APP_VERSION: runtimeConfig.version,
-    APP_VERSION_SOURCE: runtimeConfig.versionSource,
-    ...(runtimeConfig.gitSha
-      ? { GIT_SHA: runtimeConfig.gitSha, GIT_SHA_SOURCE: runtimeConfig.gitShaSource }
-      : {}),
-  };
-}
-
 function initialiseHttpSentryRuntime(
   runtimeConfig: RuntimeConfig,
   options: CreateHttpObservabilityOptions | undefined,
@@ -175,7 +164,7 @@ function initialiseHttpSentryRuntime(
   },
   InitialiseSentryError | HttpObservabilityError
 > {
-  const sentryConfigResult = createSentryConfig(createSentryConfigEnvironment(runtimeConfig));
+  const sentryConfigResult = parseHttpSentryConfig(runtimeConfig);
 
   if (!sentryConfigResult.ok) {
     return err(sentryConfigResult.error);

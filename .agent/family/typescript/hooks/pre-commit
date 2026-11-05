@@ -1,0 +1,42 @@
+#!/usr/bin/env sh
+
+# Light pre-commit (the owner's ruling of 2026-09-12, the TypeScript family's
+# convention by the owner's card answer of 2026-10-04: light commit, full
+# push). The branch guard refuses plain and --amend commits on a default
+# branch; merge and sequencer paths are guarded by pre-merge-commit and
+# prepare-commit-msg. Mechanics live in the shared guard (never-commit-to-main
+# rule). The agent-tools aliases carry --fail-if-no-match: pnpm exits 0
+# without running anything when a filter matches no project.
+GUARD_BRANCH=""
+GUARD_HINT="Move to a branch first: git switch -c <branch> (staged changes travel with you)."
+. .husky/refuse-commit-on-main.sh
+
+export TURBO_UI=0
+. .husky/turbo-remote-cache-notice.sh
+
+echo "📝 Checking formatting on staged files..."
+if ! pnpm agent-tools:repo-check prettier-staged; then
+  echo "❌ Formatting issues found! Run 'pnpm format:root', then stage the changes."
+  exit 1
+fi
+
+echo "🔍 Running markdownlint on staged Markdown files..."
+if ! pnpm agent-tools:repo-check markdownlint-staged; then
+  echo "❌ Markdownlint issues found! Run 'pnpm markdownlint:root', then stage the changes."
+  exit 1
+fi
+
+echo "🔍 Linting workspaces changed since HEAD..."
+# git exports GIT_DIR / GIT_INDEX_FILE (a transient lock file during a real
+# commit) to hooks; turbo's children must not inherit them. Unset for the
+# lint step only — the staged-file gates above need GIT_INDEX_FILE. The step
+# runs turbo lint with --filter="...[HEAD]" and skips the run when turbo plans
+# no task for that scope, so a commit that changes no workspace ends without
+# turbo's empty-run warning (repo-check-lint-changed.ts carries the reasoning).
+if ! env -u GIT_DIR -u GIT_INDEX_FILE -u GIT_WORK_TREE \
+  pnpm agent-tools:repo-check lint-changed; then
+  echo "❌ Lint failed!"
+  exit 1
+fi
+
+echo "✅ Pre-commit checks completed!"

@@ -3,6 +3,7 @@ name: "Parsing Parallel/Interleaved Tool Output: Key by a Stable Prefix, Cross-C
 polarity: pattern
 use_this_when: "Parsing stateful logs from a concurrent/interleaved runner — turbo, a parallel test runner, multi-workspace gate output — to attribute lines to a source."
 category: process
+layer: general
 proven_in: "turbo no-throw warning misparse — a phantom '307 warnings in one file' that was a misattribution; the workspace's true total was 77 (2026-06-19, Siren mends Rudder)"
 proven_date: 2026-06-19
 barrier:
