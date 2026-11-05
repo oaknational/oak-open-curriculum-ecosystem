@@ -269,16 +269,15 @@ claim that no additional issue exists.
 
 ## Frozen Contract Identity
 
-Revision 2.6 was frozen at `2026-08-03T00:47:05Z`.
+The current revision is the `contractRevision` in `detector-config.json`, and
+`validated-detector-config.ts` pins its bytes. Each revision's identities and
+cause are recorded in
+[`calibration.md`](../../../reports/typescript-estate-consolidation-review/calibration.md).
+Revision 2.7 (2026-11-05) refroze three statements for the ruling that
+binaries run by name, with `PATH` as the trust root; it changed no detector,
+threshold, candidate or proof boundary.
 
-| Contract member | SHA-256 |
-| --- | --- |
-| `detector-config.json` | `54ace41d941d9fe190b1fd467a3c3ed8aac223953a2e28841b573830e83c7c2d` |
-| `detector-config.schema.json` | `cc052b863ff972b7cfaf03dc53098b6081dcaf9f67faf1984b7c8019d28c8016` |
-| `raw-extraction.schema.json` | `365ddba4532efbc91d4c6b8a1970c1a62492a806f6f1b60d76e5dac343396ddf` |
-| `evidence.schema.json` | `cfcf97f3e5c5ae75849fe5a4c587a3a32253b84624d9fd652bd617ba887a198e` |
-
-The revision corrected provenance precedence: unreadable source with a
+Revision 2.6 corrected provenance precedence: unreadable source with a
 generated path/header signal is `generated-declared-unconfirmed`; `unknown` is
 reserved for unreadable source with no generated or imported signal. Do not
 silently modify accepted bytes or let later implementation invent policy.
