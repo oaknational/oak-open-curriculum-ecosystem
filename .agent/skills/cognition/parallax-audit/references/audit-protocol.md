@@ -50,7 +50,8 @@ flowchart TB
 - Test whether the method could have detected the relevant error.
 - Distinguish absence of evidence from evidence of absence.
 - Where intended reliance depends on a consequential transformation, reconstruct what the target
-  asserts or guarantees and compare it with the evidence, specification or state it derives from.
+  asserts or guarantees, and what material inferences it reasonably supports. Compare these with the
+  evidence, specification or state it derives from.
   Identify the basis for that reconstruction; do not silently supply missing meaning from familiarity
   with the author's intent. This applies to models, measurements, designs and decisions as well as text.
 

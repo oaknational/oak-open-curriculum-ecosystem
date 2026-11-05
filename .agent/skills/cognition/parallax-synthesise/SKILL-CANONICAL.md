@@ -56,7 +56,7 @@ For each input, extract:
 
 Normalise identifiers and structure, not meanings. Keep source wording or constructs available when translation would be lossy.
 
-Apply the [consequential-transformation procedure](references/synthesis-method.md#consequential-transformations) when combining, abstracting, aggregating, translating or handing off material. Check the resulting claim at the point of transformation; prior inspection of an input does not validate a changed claim. Make warranted reinterpretation explicit rather than requiring literal preservation.
+Apply the [consequential-transformation procedure](references/synthesis-method.md#consequential-transformations) when combining, abstracting, aggregating, translating or handing off material. Check the resulting representation and the claims or material implications it carries at the point of transformation; prior inspection of an input does not validate the transformed result. Make warranted reinterpretation explicit rather than requiring literal preservation.
 
 ### 4. Build claim, dependence, and conflict graphs
 
