@@ -1400,3 +1400,16 @@ the owner wants it kept).
   pins the revision as a `const`, and every hash those bytes feed.
 - **`grep -c … || echo 0` prints two lines when the count is zero** (grep prints `0` and exits 1).
   Count inside a `bash -c` loop that defaults an empty value instead.
+- **A heartbeat script with a fixed title broadcasts stale state.** My loop's title read "#1018
+  at the S4036 gate" for about three hours after #1018 merged, on every heartbeat. Re-arm the loop
+  with a current title at each lane-state change, or have it read the title from a state file.
+- **A read-only `git log --all --diff-filter=A` tripped the wildcard-staging hook**, which matches
+  `add --all` as a substring. Name the refs explicitly (`origin/engraph read-only-upstream/main`);
+  the read needed only those two anyway.
+- **"Opposite approach" across forks can be one approach at two dates.** A side note said engraph
+  took the opposite S4036 cure to Oak's. Oak at the shared merge base had the same FIX-only policy
+  and `resolveTrustedGit`; engraph had extended it (Windows partitioning, one trusted-binary
+  module on 2026-11-02) and Oak had since adopted the owner's 2026-11-03 by-name ruling. Read the
+  merge base's version before calling a divergence a competing decision. The live collision was
+  narrower: engraph's One-Outcome Rule grants no `FALSE_POSITIVE`, which the by-name S4036
+  section needs.
