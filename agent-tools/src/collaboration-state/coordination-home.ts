@@ -2,8 +2,6 @@ import { execFileSync } from 'node:child_process';
 import { statSync } from 'node:fs';
 import { isAbsolute, join } from 'node:path';
 
-import { resolveTrustedGit } from '../core/trusted-git.js';
-
 /** Runs a git subcommand from `cwd` and returns stdout; throws on non-zero exit. */
 export type GitRunner = (args: readonly string[], cwd: string) => string;
 
@@ -51,15 +49,30 @@ export const defaultDirectoryExists = (path: string): boolean => {
   }
 };
 
+/**
+ * The real git runner: `git` by name, `PATH` the trust root (the Sonar
+ * disposition policy's S4036 section). git's stderr is captured, never
+ * inherited, so a refusal prints only the caller's own message, and that
+ * message carries git's reason ({@link describeGitFailure}); the thrown
+ * error travels on as the caller's `cause`, or is passed up unchanged.
+ */
 export const defaultRunGit: GitRunner = (args, cwd) =>
-  // Execute git by its ABSOLUTE path (resolveTrustedGit) so a writable PATH
-  // entry cannot shadow it (the S4036 FIX). Once the binary is addressed
-  // absolutely no `env.PATH` override is needed — the absolute path is the
-  // hardening, and it is the pattern the analyser actually accepts.
-  execFileSync(resolveTrustedGit(), [...args], {
-    cwd,
-    encoding: 'utf8',
-  });
+  execFileSync('git', [...args], { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+
+/**
+ * git's own words for a failed run: its captured stderr when there is any,
+ * else the error's message. A caller folds this into its refusal, since a
+ * captured stderr reaches the operator nowhere else, and git's reason is not
+ * always a missing repository (dubious ownership, a corrupt `.git`, no git
+ * on `PATH`).
+ */
+export function describeGitFailure(cause: unknown): string {
+  if (!(cause instanceof Error)) {
+    return String(cause);
+  }
+  const stderr = 'stderr' in cause ? cause.stderr : undefined;
+  return typeof stderr === 'string' && stderr.trim() !== '' ? stderr.trim() : cause.message;
+}
 
 /**
  * Resolve the coordination home: the **primary (main) checkout** for whatever
@@ -113,8 +126,8 @@ export function resolveCoordinationHome(
     porcelain = runGit(['worktree', 'list', '--porcelain'], cwd);
   } catch (cause) {
     throw new Error(
-      `Unable to resolve the collaboration home: '${cwd}' is not inside a git working tree. ` +
-        `Run from inside the repository, or pass an explicit --repo-root <path>.`,
+      `Unable to resolve the collaboration home: git could not resolve a working tree from '${cwd}' ` +
+        `(${describeGitFailure(cause)}). Run from inside the repository, or pass an explicit --repo-root <path>.`,
       { cause },
     );
   }

@@ -1,18 +1,11 @@
 import { ok, type Result } from '@oaknational/result';
 
-import type { GitExecutor } from './git-executor.js';
+import { realGitExecutor, type GitExecutor } from './git-executor.js';
 import { mintForConfig, type MintSeams } from './mint-for-config.js';
 import type { GithubApiFetch } from './mint-installation-token.js';
 import { parsePushArgs, PUSH_USAGE, type PushArgs } from './push-args.js';
 import { RefFormatOracleUnavailableError } from './ref-format.js';
-import {
-  currentBranch,
-  describeGitChildEnd,
-  pushHead,
-  resolveGitContext,
-  type GitContext,
-  type TokenFileStore,
-} from './push-git.js';
+import { currentBranch, describeGitChildEnd, pushHead, type TokenFileStore } from './push-git.js';
 import {
   resolveBotIdentity,
   type BotIdentity,
@@ -47,9 +40,8 @@ export interface PushActionInput {
   readonly fetchImpl?: GithubApiFetch;
   readonly readFileImpl?: (path: string) => Promise<string>;
   readonly nowEpochSeconds?: () => number;
-  /** Git seams: the executor, and the binary path (defaults to the trusted absolute path). */
+  /** The git executor seam; tests inject a recording fake. */
   readonly gitExecutor?: GitExecutor;
-  readonly gitPath?: string;
   /**
    * Base environment for the git child. Defaults to `process.env` at the leaf
    * (the default-seam pattern `merge.ts`'s `readEnv` records): Node
@@ -72,7 +64,7 @@ type Prepared =
   | {
       readonly kind: 'ready';
       readonly identity: BotIdentity;
-      readonly git: GitContext;
+      readonly git: GitExecutor;
       readonly branch: string;
     }
   | { readonly kind: 'failed'; readonly exit: number; readonly message: string }
@@ -106,24 +98,21 @@ async function prepare(parsed: PushArgs, input: PushActionInput): Promise<Prepar
   if (!identity.ok) {
     return { kind: 'failed', exit: 2, message: identity.error.message };
   }
-  const git = resolveGitContext(input);
-  if (!git.ok) {
-    return { kind: 'failed', exit: 1, message: git.error.message };
-  }
-  const branch = await targetBranch(parsed, git.value, input);
+  const git = input.gitExecutor ?? realGitExecutor();
+  const branch = await targetBranch(parsed, git, input);
   if (!branch.ok) {
     return { kind: 'failed', exit: 1, message: branch.error.message };
   }
   const refusal = refuseTargetBranch(branch.value);
   return refusal === undefined
-    ? { kind: 'ready', identity: identity.value, git: git.value, branch: branch.value }
+    ? { kind: 'ready', identity: identity.value, git, branch: branch.value }
     : { kind: 'refused', reason: refusal };
 }
 
 /** The named branch, or the one git says HEAD is on. */
 function targetBranch(
   parsed: PushArgs,
-  git: GitContext,
+  git: GitExecutor,
   input: PushActionInput,
 ): Promise<Result<string, Error>> {
   return parsed.branch === undefined

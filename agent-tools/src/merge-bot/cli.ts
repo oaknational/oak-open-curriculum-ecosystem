@@ -71,9 +71,8 @@ export interface MergeBotCliInput {
   readonly readReadingImpl?: (options: ReadPrStateOptions) => Result<PrStateReading, Error>;
   readonly sleepImpl?: (ms: number) => Promise<void>;
   readonly nowIsoImpl?: () => string;
-  /** Push-action seams: the git binary, its executor, the child's base environment, the token file's lifecycle. */
+  /** Push-action seams: the git executor, the child's base environment, the token file's lifecycle. */
   readonly gitExecutor?: GitExecutor;
-  readonly gitPath?: string;
   readonly baseEnv?: Readonly<Record<string, string | undefined>>;
   readonly tokenFiles?: TokenFileStore;
 }
@@ -131,7 +130,6 @@ function pushActionInputFrom(input: MergeBotCliInput): PushActionInput {
     readFileImpl: input.readFileImpl,
     nowEpochSeconds: input.nowEpochSeconds,
     gitExecutor: input.gitExecutor,
-    gitPath: input.gitPath,
     baseEnv: input.baseEnv,
     tokenFiles: input.tokenFiles,
   };

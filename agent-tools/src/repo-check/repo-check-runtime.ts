@@ -1,51 +1,20 @@
+/**
+ * The repo-check runtime's real I/O edge. Every command runs by name,
+ * inheriting the parent's environment, with `PATH` as the trust root. A
+ * missing binary fails loudly through each runner's own launch-failure path.
+ * Injected fake runtimes never reach this edge.
+ *
+ * @packageDocumentation
+ */
 import { spawn, spawnSync, type SpawnSyncReturns } from 'node:child_process';
 
 import { writeErrorLine } from '../core/terminal-output.js';
-import { resolveTrustedGit } from '../core/trusted-git.js';
 
 import type { RepoCheckRuntime } from './repo-check-types.js';
 
-/**
- * The spawn target for `command` at this real I/O edge: `git` resolves to its
- * trusted absolute path, and every other command runs by name, inheriting the
- * parent's environment. Injected fake runtimes never hit this edge. Returns the
- * resolution error message alongside the command when git is not found, so
- * callers fail loudly through their normal non-zero paths (never a throw).
- */
-function trustedSpawnTarget(command: string): {
-  readonly command: string;
-  readonly error?: string;
-} {
-  if (command === 'git') {
-    return trustedGitTarget(command);
-  }
-
-  return { command };
-}
-
-/**
- * `resolveTrustedGit` throws on failure (its documented contract); this
- * single boundary translates that into the runtime's loud non-zero error
- * shape instead of letting the throw escape.
- */
-function trustedGitTarget(command: string): { readonly command: string; readonly error?: string } {
-  try {
-    return { command: resolveTrustedGit() };
-  } catch (cause) {
-    return { command, error: cause instanceof Error ? cause.message : String(cause) };
-  }
-}
-
 export function runInheritedProcess(command: string, args: readonly string[]): Promise<number> {
-  const trusted = trustedSpawnTarget(command);
-
-  if (trusted.error !== undefined) {
-    writeErrorLine(`${command}: ${trusted.error}`);
-    return Promise.resolve(1);
-  }
-
   return new Promise((resolve) => {
-    const child = spawn(trusted.command, args, { stdio: 'inherit' });
+    const child = spawn(command, args, { stdio: 'inherit' });
     child.on('close', (code) => resolve(code ?? 1));
     child.on('error', (error) => {
       writeErrorLine(`${command}: ${error.message}`);
@@ -58,22 +27,9 @@ export function runCapturedProcess(
   command: string,
   args: readonly string[],
 ): SpawnSyncReturns<string> {
-  const trusted = trustedSpawnTarget(command);
-
-  if (trusted.error !== undefined) {
-    return {
-      pid: 0,
-      output: [],
-      stdout: '',
-      stderr: `${command}: ${trusted.error}`,
-      status: 1,
-      signal: null,
-    };
-  }
-
   return normaliseSpawnResult(
     command,
-    spawnSync(trusted.command, args, {
+    spawnSync(command, args, {
       encoding: 'utf8',
       maxBuffer: 1024 * 1024 * 50,
     }),

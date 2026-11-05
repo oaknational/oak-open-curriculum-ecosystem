@@ -2,11 +2,8 @@ import { execFileSync } from 'node:child_process';
 
 import { err, ok, type Result } from '@oaknational/result';
 
-import { resolveTrustedGit } from '../core/trusted-git.js';
-
 /**
- * The real git runner: runs the trusted absolute `git` binary (resolved via
- * {@link resolveTrustedGit}, so a writable PATH entry cannot shadow it) from
+ * The real git runner: runs `git` by name, with `PATH` as the trust root, from
  * `cwd` and returns its stdout, translating a non-zero exit into an `err`
  * Result at this single library boundary (ADR-088 / use-result-pattern) rather
  * than letting `execFileSync`'s throw escape.
@@ -19,7 +16,7 @@ import { resolveTrustedGit } from '../core/trusted-git.js';
  */
 export const realGitRunner = (args: readonly string[], cwd: string): Result<string, Error> => {
   try {
-    return ok(execFileSync(resolveTrustedGit(), [...args], { cwd, encoding: 'utf8' }));
+    return ok(execFileSync('git', [...args], { cwd, encoding: 'utf8' }));
   } catch (cause) {
     return err(cause instanceof Error ? cause : new Error(String(cause)));
   }

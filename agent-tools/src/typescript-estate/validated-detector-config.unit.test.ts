@@ -3,11 +3,11 @@ import { describe, expect, it } from 'vitest';
 
 import { verifyDetectorContractHashes } from './validated-detector-config.js';
 
-const CONFIG_SHA256 = '54ace41d941d9fe190b1fd467a3c3ed8aac223953a2e28841b573830e83c7c2d';
-const SCHEMA_SHA256 = 'cc052b863ff972b7cfaf03dc53098b6081dcaf9f67faf1984b7c8019d28c8016';
+const CONFIG_SHA256 = '38c4c8d4d83789659dbd23fb72637cd32861499fcfcd2726be6826c329567557';
+const SCHEMA_SHA256 = 'd896be3afa6b1fdb5e397a472cd4bc05cea49351230304d154f22a53f8460aa5';
 
 describe('detector contract identity', () => {
-  it('accepts exactly the independently reviewed revision 2.6 config and schema identities', () => {
+  it('accepts exactly the pinned revision 2.7 config and schema identities', () => {
     expect(
       unwrapOrThrow(
         verifyDetectorContractHashes({
@@ -25,6 +25,6 @@ describe('detector contract identity', () => {
     const failure = unwrapErr(verifyDetectorContractHashes(identity));
 
     expect(failure.code).toBe('IDENTITY_INVALID');
-    expect(failure.message).toContain('revision 2.6 detector contract');
+    expect(failure.message).toContain('revision 2.7 detector contract');
   });
 });

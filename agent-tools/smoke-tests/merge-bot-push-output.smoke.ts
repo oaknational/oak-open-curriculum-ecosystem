@@ -4,9 +4,8 @@ import { chmodSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import { resolveTrustedGit } from '../src/core/trusted-git';
 import { realGitExecutor } from '../src/merge-bot/git-executor';
-import { pushHead, resolveGitContext } from '../src/merge-bot/push-git';
+import { pushHead } from '../src/merge-bot/push-git';
 
 /**
  * The `merge-bot push` output seam under real volume, against real binaries.
@@ -51,18 +50,25 @@ const EMITTER = [
   `process.stderr.write('emitter done' + String.fromCharCode(10));`,
 ].join(' ');
 
-const GIT = resolveTrustedGit();
+/** The smoke's own PATH, read once: git and the hook runner's shell resolve on it by name. */
+function requiredPath(): string {
+  const value = process.env.PATH;
+  assert.ok(value !== undefined, 'the merge-bot push smoke needs PATH so git resolves by name');
+  return value;
+}
+
+const SMOKE_PATH = requiredPath();
 
 /**
- * A literal child environment. `PATH` is here because git's hook runner needs
- * a shell on it; everything else is addressed absolutely. `HOME` points into
- * the throwaway root and the two `GIT_CONFIG_*` variables silence the
- * machine's real git configuration, so this smoke cannot be steered — or
- * broken — by whoever is running it.
+ * A constructed child environment. `PATH` is the smoke's own, so git and the hook
+ * runner's shell resolve by name as they do everywhere else. `HOME` points
+ * into the throwaway root and the two `GIT_CONFIG_*` variables silence the
+ * machine's real git configuration, so that configuration cannot steer — or
+ * break — this smoke.
  */
 function hermeticEnv(home: string): Record<string, string> {
   return {
-    PATH: '/usr/bin:/bin',
+    PATH: SMOKE_PATH,
     HOME: home,
     GIT_CONFIG_GLOBAL: '/dev/null',
     GIT_CONFIG_SYSTEM: '/dev/null',
@@ -111,10 +117,10 @@ function makeRepoWithLoudHook(root: string): { work: string; remote: string } {
   const work = join(root, 'work');
   const env = hermeticEnv(root);
   const git = (cwd: string, args: readonly string[]): void => {
-    execFileSync(GIT, [...args], { cwd, env, stdio: 'ignore' });
+    execFileSync('git', [...args], { cwd, env, stdio: 'ignore' });
   };
-  execFileSync(GIT, ['init', '--bare', '-b', 'lane', remote], { env, stdio: 'ignore' });
-  execFileSync(GIT, ['init', '-b', 'lane', work], { env, stdio: 'ignore' });
+  execFileSync('git', ['init', '--bare', '-b', 'lane', remote], { env, stdio: 'ignore' });
+  execFileSync('git', ['init', '-b', 'lane', work], { env, stdio: 'ignore' });
   git(work, ['config', 'user.email', 'bot@example.invalid']);
   git(work, ['config', 'user.name', 'bot']);
   writeFileSync(join(work, 'file.txt'), 'content\n');
@@ -135,10 +141,8 @@ function makeRepoWithLoudHook(root: string): { work: string; remote: string } {
 async function landsARealPushThroughALoudHook(): Promise<void> {
   const outcome = await withTempDir(async (root) => {
     const { work, remote } = makeRepoWithLoudHook(root);
-    const git = resolveGitContext({});
-    assert.ok(git.ok, 'no trusted git binary to run the live fire against');
     let received = 0;
-    const pushed = await pushHead(git.value, {
+    const pushed = await pushHead(realGitExecutor(), {
       remote,
       branch: 'lane',
       cwd: work,
@@ -148,7 +152,7 @@ async function landsARealPushThroughALoudHook(): Promise<void> {
         received += Buffer.byteLength(chunk);
       },
     });
-    const landed = execFileSync(GIT, ['rev-parse', 'lane'], {
+    const landed = execFileSync('git', ['rev-parse', 'lane'], {
       cwd: remote,
       encoding: 'utf8',
       env: hermeticEnv(root),

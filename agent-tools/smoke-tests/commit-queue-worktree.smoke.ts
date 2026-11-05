@@ -1,18 +1,23 @@
 import assert from 'node:assert/strict';
-import { execFileSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 import { existsSync, realpathSync } from 'node:fs';
 import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-
-import { unwrapOrThrow } from '@oaknational/result';
+import { fileURLToPath } from 'node:url';
 
 import { runAgentToolsCli } from '../src/bin/agent-tools-cli';
-import type { CommitIntent, CommitQueueRegistry } from '../src/commit-queue';
-import { readRegistry } from '../src/commit-queue/registry';
-import { uuidV5Schema } from '../src/collaboration-state/agent-id';
-import { resolveTrustedGit } from '../src/core/trusted-git';
-import { assertAdvisoryReplayed, writeAdvisoryStub } from './commit-queue-advisory-stub-fixture';
+import { assertAdvisoryReplayed } from './commit-queue-advisory-stub-fixture';
+import {
+  COMMIT_SUBJECT,
+  git,
+  INTENT_ID,
+  makeFixture,
+  readPrimaryIntent,
+  REGISTRY_REL,
+  RENAME_DESTINATION,
+  RENAME_SOURCE,
+} from './commit-queue-worktree-fixture';
 
 /**
  * F-138 regression smoke — the commit-queue two-root split and changed-endpoint identity.
@@ -21,94 +26,6 @@ import { assertAdvisoryReplayed, writeAdvisoryStub } from './commit-queue-adviso
  * endpoints, registry state stays at the coordination home, an underivable
  * git root refuses loudly. Real IO makes this a smoke; `test:e2e` gates it.
  */
-
-const CLAIM_ID = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
-const INTENT_ID = '11111111-1111-4111-8111-111111111111';
-const RENAME_SOURCE = 'notes/current.md';
-const RENAME_DESTINATION = 'notes/active.md';
-const COMMIT_SUBJECT = 'feat(f138): stage from the linked worktree';
-const REGISTRY_REL = '.agent/state/collaboration/active-claims.json';
-
-const agentId = {
-  agent_name: 'Prismatic Waxing Constellation',
-  platform: 'claude-code',
-  model: 'test-model',
-  session_id_prefix: '019f00',
-  id: uuidV5Schema.parse('e2e793c7-923e-5baa-97f0-2bedfb9b6b50'),
-};
-
-function seedRegistry(): CommitQueueRegistry {
-  return {
-    schema_version: '1.3.0',
-    claims: [
-      {
-        claim_id: CLAIM_ID,
-        agent_id: agentId,
-        thread: 'agent-tooling',
-        areas: [{ kind: 'files', patterns: ['notes/**'] }],
-        claimed_at: '2026-07-14T00:00:00Z',
-        intent: 'F-138 linked-worktree regression fixture.',
-        intent_to_commit: INTENT_ID,
-      },
-    ],
-    commit_queue: [
-      {
-        intent_id: INTENT_ID,
-        claim_id: CLAIM_ID,
-        agent_id: agentId,
-        files: [RENAME_SOURCE, RENAME_DESTINATION],
-        commit_subject: COMMIT_SUBJECT,
-        queued_at: '2026-07-14T00:00:00Z',
-        updated_at: '2026-07-14T00:00:00Z',
-        expires_at: '2099-01-01T00:00:00Z',
-        phase: 'staging',
-      },
-    ],
-  };
-}
-
-function git(cwd: string, ...args: readonly string[]): string {
-  return execFileSync(resolveTrustedGit(), [...args], { cwd, encoding: 'utf8' });
-}
-
-interface WorktreeFixture {
-  /** Temp parent directory holding both checkouts; removed after each test. */
-  readonly root: string;
-  /** The primary checkout — the coordination home holding the registry. */
-  readonly primary: string;
-  /** The linked worktree the ceremony is invoked from. */
-  readonly linked: string;
-}
-
-async function makeFixture(): Promise<WorktreeFixture> {
-  const root = realpathSync(await mkdtemp(join(tmpdir(), 'oak-f138-')));
-  const primary = join(root, 'primary');
-  await mkdir(primary, { recursive: true });
-  git(primary, 'init', '--initial-branch=main');
-  git(primary, 'config', 'user.email', 'f138-regression@test.invalid');
-  git(primary, 'config', 'user.name', 'F138 Regression');
-  git(primary, 'config', 'commit.gpgsign', 'false');
-  await mkdir(join(primary, 'notes'), { recursive: true });
-  await writeFile(join(primary, 'README.md'), 'seed\n');
-  await writeFile(join(primary, RENAME_SOURCE), '# move me atomically\n');
-  const advisoryStubPaths = await writeAdvisoryStub(primary);
-  git(primary, 'add', 'README.md', RENAME_SOURCE, ...advisoryStubPaths);
-  git(primary, 'commit', '-m', 'chore: seed');
-
-  const linked = join(root, 'linked');
-  git(primary, 'worktree', 'add', linked, '-b', 'lane/f138');
-
-  const collaborationDir = join(primary, '.agent/state/collaboration');
-  await mkdir(collaborationDir, { recursive: true });
-  await writeFile(join(primary, REGISTRY_REL), `${JSON.stringify(seedRegistry(), null, 2)}\n`);
-
-  return { root, primary, linked };
-}
-
-async function readPrimaryIntent(fixture: WorktreeFixture): Promise<CommitIntent | undefined> {
-  const registry = unwrapOrThrow(await readRegistry(join(fixture.primary, REGISTRY_REL)));
-  return registry.commit_queue.find((entry) => entry.intent_id === INTENT_ID);
-}
 
 async function proveRecordStagedUsesWorktreeIndex(): Promise<void> {
   const fixture = await makeFixture();
@@ -227,7 +144,7 @@ async function proveMissingGitRootRefusesLoudly(): Promise<void> {
     });
 
     assert.equal(result.exitCode, 2);
-    assert.match(result.stderr, /not inside a git working tree/);
+    assert.match(result.stderr, /git could not resolve a working tree/);
 
     // No silent fallback: the intent survives untouched — neither
     // fingerprinted against the coordination home's own index nor
@@ -242,8 +159,58 @@ async function proveMissingGitRootRefusesLoudly(): Promise<void> {
   }
 }
 
+/** The CLI's source entry, run in a child process under the smoke's own tsx. */
+const CLI_SOURCE = fileURLToPath(new URL('../src/bin/agent-tools.ts', import.meta.url));
+
+/** The smoke's own PATH, read once at this composition root, so git resolves by name. */
+function requiredPath(): string {
+  const value = process.env.PATH;
+  assert.ok(
+    value !== undefined,
+    'the commit-queue worktree smoke needs PATH so git resolves by name',
+  );
+  return value;
+}
+
+/**
+ * Outside any git working tree, the CLI's refusal is the only thing on its
+ * stderr, captured at the spawn boundary of a child process: git's own
+ * words travel inside the tool's message, never echoed ahead of it. The
+ * child gets PATH and a throwaway HOME and nothing else, so no declared
+ * coordination home can reach a real registry.
+ */
+async function proveRefusalPrintsOnlyTheToolsMessage(): Promise<void> {
+  const outside = realpathSync(await mkdtemp(join(tmpdir(), 'oak-f138-outside-')));
+  try {
+    const refusal = spawnSync(
+      process.execPath,
+      [
+        '--import',
+        import.meta.resolve('tsx'),
+        CLI_SOURCE,
+        'commit-queue',
+        'record-staged',
+        '--intent-id',
+        INTENT_ID,
+      ],
+      { cwd: outside, encoding: 'utf8', env: { PATH: requiredPath(), HOME: outside } },
+    );
+
+    assert.equal(refusal.status, 2, refusal.stderr);
+    // git writes before the tool catches its failure, so an echoed git line
+    // would come first, in whatever language git speaks.
+    assert.match(
+      refusal.stderr,
+      /^Unable to resolve the collaboration home: git could not resolve a working tree/,
+    );
+  } finally {
+    await rm(outside, { recursive: true, force: true });
+  }
+}
+
 await proveRecordStagedUsesWorktreeIndex();
 await proveVerifyStagedUsesWorktreeIndex();
 await proveCommitLandsOnWorktreeBranch();
 await proveMissingGitRootRefusesLoudly();
-process.stdout.write('commit-queue worktree smoke: 4/4 proofs passed\n');
+await proveRefusalPrintsOnlyTheToolsMessage();
+process.stdout.write('commit-queue worktree smoke: 5/5 proofs passed\n');

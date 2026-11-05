@@ -18,6 +18,13 @@ const gitReturning =
   () =>
     output;
 
+/** A runner that fails as the real one does on a non-zero exit: by throwing `failure`. */
+const gitFailingWith =
+  (failure: Error): GitRunner =>
+  () => {
+    throw failure;
+  };
+
 describe('resolveCoordinationHome', () => {
   it('returns the primary checkout for a single-worktree repo', () => {
     expect(resolveCoordinationHome(PRIMARY, { runGit: gitReturning(porcelain(PRIMARY)) })).toBe(
@@ -35,14 +42,21 @@ describe('resolveCoordinationHome', () => {
   });
 
   it('throws loudly when cwd is not inside a git working tree (F-41 stale/worktree cwd)', () => {
-    const gitFails: GitRunner = () => {
-      throw new Error('fatal: not a git repository');
-    };
+    const gitFails = gitFailingWith(new Error('fatal: not a git repository'));
     expect(() => resolveCoordinationHome('/tmp/elsewhere', { runGit: gitFails })).toThrow(
       /Unable to resolve the collaboration home/u,
     );
     expect(() => resolveCoordinationHome('/tmp/elsewhere', { runGit: gitFails })).toThrow(
       /\/tmp\/elsewhere/u,
+    );
+  });
+
+  it("carries git's own reason into the refusal, since git's stderr is captured", () => {
+    const dubious = Object.assign(new Error('Command failed: git worktree list --porcelain'), {
+      stderr: "fatal: detected dubious ownership in repository at '/workspace/oak'\n",
+    });
+    expect(() => resolveCoordinationHome(PRIMARY, { runGit: gitFailingWith(dubious) })).toThrow(
+      /git could not resolve a working tree from '\/workspace\/oak' \(fatal: detected dubious ownership/u,
     );
   });
 

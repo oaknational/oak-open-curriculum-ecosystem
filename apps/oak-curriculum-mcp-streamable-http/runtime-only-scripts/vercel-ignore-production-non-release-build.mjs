@@ -186,22 +186,8 @@ function describeShaValidationFailure(value) {
 }
 
 // ---------------------------------------------------------------------------
-// Defence-in-depth environment + binary location for `git` subprocess execution.
+// Defence-in-depth environment for `git` subprocess execution.
 // ---------------------------------------------------------------------------
-
-/**
- * Absolute path to the `git` binary. The script invokes `git` via this
- * absolute path so the subprocess never consults `PATH`, removing the
- * S4036-class binary-substitution attack surface entirely (an attacker
- * who could manipulate `PATH` cannot redirect to a hostile binary because
- * the lookup never happens). On Vercel's Linux runtime and on standard
- * Linux/macOS dev machines, `git` lives at `/usr/bin/git`. If a future
- * runtime ships `git` elsewhere, the e2e contract test
- * (`e2e-tests/vercel-ignore-runtime.e2e.test.ts`) fails first, and
- * `GIT_BINARY` is updated deliberately with the failure evidence
- * recorded in this TSDoc.
- */
-const GIT_BINARY = '/usr/bin/git';
 
 /**
  * Build a deliberately scrubbed environment object for `git` subprocess
@@ -209,13 +195,18 @@ const GIT_BINARY = '/usr/bin/git';
  * spawn `git` via `execFileSync`.
  *
  * Posture:
- * - **No PATH** — the capabilities invoke `git` via the absolute
- *   {@link GIT_BINARY} path, so `PATH` is never consulted by the
- *   subprocess. Closes the S4036 binary-substitution surface entirely.
- * - **`GIT_CONFIG_GLOBAL` and `GIT_CONFIG_SYSTEM` pinned to `/dev/null`** —
- *   neutralises any hostile global or system gitconfig that might be
- *   present on the runtime. This is the single highest-leverage hardening
- *   against config-driven exploitation paths.
+ * - **`PATH` inherited, and nothing else** — the capabilities run `git`
+ *   by name, with `PATH` as the trust root (the Sonar disposition
+ *   policy's S4036 section). Node resolves the command on the child's
+ *   `env.PATH`, so the inherited value is carried across; when none is
+ *   inherited, no `PATH` key is added and the platform's default command
+ *   search applies.
+ * - **`GIT_CONFIG_GLOBAL` and `GIT_CONFIG_SYSTEM` pinned to `/dev/null`,
+ *   and `GIT_CONFIG_NOSYSTEM=1`** — neutralises any hostile global or
+ *   system gitconfig that might be present on the runtime, on every git
+ *   version (`GIT_CONFIG_SYSTEM` needs git 2.32; `GIT_CONFIG_NOSYSTEM`
+ *   predates it). This is the single highest-leverage hardening against
+ *   config-driven exploitation paths.
  * - **`GIT_TERMINAL_PROMPT=0`** — prevents `git` from blocking the
  *   non-interactive build on a credential prompt.
  * - **`HOME` deliberately omitted** — `git` consults `~/.gitconfig` when
@@ -228,12 +219,15 @@ const GIT_BINARY = '/usr/bin/git';
  *
  * Cites ADR-158.
  *
+ * @param inherited - the environment the script runs in, typically `process.env`.
  * @returns the scrubbed environment object as a `Record\<string, string\>`.
  */
-export function scrubbedGitEnv() {
+export function scrubbedGitEnv(inherited) {
   return {
+    ...(inherited.PATH === undefined ? {} : { PATH: inherited.PATH }),
     GIT_CONFIG_GLOBAL: '/dev/null',
     GIT_CONFIG_SYSTEM: '/dev/null',
+    GIT_CONFIG_NOSYSTEM: '1',
     GIT_TERMINAL_PROMPT: '0',
   };
 }
@@ -275,7 +269,7 @@ function assertSafeFilePath(filePath) {
  *
  * Defence-in-depth: re-validates `<sha>` against `GIT_SHA_PATTERN` even
  * though the caller is expected to validate at the trust boundary. The
- * subprocess runs with `scrubbedGitEnv()` (see that function's TSDoc for
+ * subprocess runs with `scrubbedGitEnv(process.env)` (see that function's TSDoc for
  * the env posture).
  *
  * Cites ADR-024 (DI as named capabilities — this is one of the two
@@ -289,11 +283,11 @@ function assertSafeFilePath(filePath) {
 export function gitShowFileAtSha(sha, filePath, cwd) {
   assertValidatedSha(sha);
   assertSafeFilePath(filePath);
-  return execFileSync(GIT_BINARY, ['show', `${sha}:${filePath}`], {
+  return execFileSync('git', ['show', `${sha}:${filePath}`], {
     cwd,
     encoding: 'utf8',
     stdio: ['ignore', 'pipe', 'pipe'],
-    env: scrubbedGitEnv(),
+    env: scrubbedGitEnv(process.env),
   });
 }
 
@@ -302,7 +296,7 @@ export function gitShowFileAtSha(sha, filePath, cwd) {
  * Wraps `git fetch --depth=1 origin <sha>`.
  *
  * Defence-in-depth: re-validates `<sha>`. The subprocess runs with
- * `scrubbedGitEnv()`.
+ * `scrubbedGitEnv(process.env)`.
  *
  * Cites ADR-024.
  *
@@ -312,11 +306,11 @@ export function gitShowFileAtSha(sha, filePath, cwd) {
  */
 export function gitFetchShallow(sha, cwd) {
   assertValidatedSha(sha);
-  return execFileSync(GIT_BINARY, ['fetch', '--depth=1', 'origin', sha], {
+  return execFileSync('git', ['fetch', '--depth=1', 'origin', sha], {
     cwd,
     encoding: 'utf8',
     stdio: ['ignore', 'pipe', 'pipe'],
-    env: scrubbedGitEnv(),
+    env: scrubbedGitEnv(process.env),
   });
 }
 
@@ -451,13 +445,10 @@ function safeReadPreviousVersion(deps, repositoryRoot, validatedSha) {
  * naming the offending value's length only — attacker-controlled
  * values are never logged raw.
  *
- * Binary-location posture: the git capabilities invoke `git` via the
- * absolute {@link GIT_BINARY} path, so `PATH` is never read by this
- * script and is not part of the data flow into `execFileSync`. The
- * earlier eager PATH-absence precondition (Phase 1 first cut) was
- * removed when {@link scrubbedGitEnv} stopped consulting `PATH` —
- * there is no longer a runtime defect to surface eagerly because the
- * binary location is fixed at module scope.
+ * Binary-location posture: the git capabilities run `git` by name, with
+ * the inherited `PATH` as the trust root; {@link scrubbedGitEnv} passes
+ * that one key through and drops every other inherited key. No input
+ * reaches a shell: every call is argv form with no `shell` option.
  *
  * Dependency posture: this script runs as Vercel's `ignoreCommand`,
  * which executes BEFORE `pnpm install`. It MUST therefore depend only

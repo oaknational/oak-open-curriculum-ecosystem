@@ -35,7 +35,7 @@ describe('realGitExecutor arm selection and runner wiring (F-112 cure seam)', ()
   it('routes a sink-supplied call through the runner intact, replaying both streams to the sink', async () => {
     const fake = runnerFake({ exitCode: 0, signal: null, stderr: '' });
     const chunks: string[] = [];
-    const result = await realGitExecutor(fake.runner)('/usr/bin/git', ['push'], {
+    const result = await realGitExecutor(fake.runner)('git', ['push'], {
       cwd: '/repo',
       env: { GH_PUSH_TOKEN_FILE: '/tokens/t' },
       onOutput: (chunk) => chunks.push(chunk),
@@ -43,7 +43,7 @@ describe('realGitExecutor arm selection and runner wiring (F-112 cure seam)', ()
 
     expect(fake.calls).toHaveLength(1);
     expect(fake.calls[0]).toMatchObject({
-      command: '/usr/bin/git',
+      command: 'git',
       args: ['push'],
       cwd: '/repo',
       env: { GH_PUSH_TOKEN_FILE: '/tokens/t' },
@@ -57,7 +57,7 @@ describe('realGitExecutor arm selection and runner wiring (F-112 cure seam)', ()
 
   it('maps a signal death distinctly: the runner exitCode/signal become status/signal', async () => {
     const fake = runnerFake({ exitCode: 128, signal: 'SIGTERM', stderr: '' });
-    const result = await realGitExecutor(fake.runner)('/usr/bin/git', ['push'], {
+    const result = await realGitExecutor(fake.runner)('git', ['push'], {
       cwd: '/repo',
       env: {},
       onOutput: () => undefined,

@@ -2,8 +2,6 @@ import { spawnSync } from 'node:child_process';
 
 import { err, flatMap, isErr, ok, type Result } from '@oaknational/result';
 
-import { type PathExists } from '../core/path-exists.js';
-import { resolveTrustedGit } from '../core/trusted-git.js';
 import { parseTreeEntry, type ByteSource } from './refound-window-sample-universe.js';
 
 /**
@@ -15,9 +13,9 @@ import { parseTreeEntry, type ByteSource } from './refound-window-sample-univers
  * @remarks
  * Hardening posture (security-expert, s1-reader-sample-b1 gateway):
  *
- * - **Pinned binary** — git resolves from the fixed trusted-directory
- *   allowlist (`core/trusted-git.ts`, the established S4036 posture), never
- *   via `PATH` lookup.
+ * - **git by name** — `PATH` is the trust root (the Sonar disposition
+ *   policy's S4036 section); the scrubbed environment keeps the caller's
+ *   `PATH`, so git resolves as it does everywhere else.
  * - **Scrubbed environment** — the spawn passes an explicit minimal `env`
  *   ({@link buildScrubbedGitEnv}: only `PATH`, `HOME`, `LANG`, and `LC_*`
  *   survive), so every `GIT_*` variable is dropped by construction and the
@@ -34,10 +32,8 @@ import { parseTreeEntry, type ByteSource } from './refound-window-sample-univers
  *   and the decoded listing must round-trip as UTF-8 or the run halts
  *   rather than windowing undecodable paths.
  *
- * Both seams are injectable for in-process tests (ADR-078): the
- * {@link GitSpawner} follows the `branch-touched-files/git.ts`
- * `GitCommandExecutor` precedent, and the existence probe follows
- * `resolveTrustedGit`'s own injected `exists`.
+ * The spawner is injectable for in-process tests (ADR-078), following the
+ * `branch-touched-files/git.ts` `GitCommandExecutor` precedent.
  *
  * @packageDocumentation
  */
@@ -52,8 +48,8 @@ export interface GitSpawnResult {
   readonly stderr: Buffer;
 }
 
-/** The spawn seam {@link makeGitByteSource} runs the pinned git through. */
-export type GitSpawner = (gitBinAbsPath: string, args: readonly string[]) => GitSpawnResult;
+/** The spawn seam {@link makeGitByteSource} runs git through. */
+export type GitSpawner = (args: readonly string[]) => GitSpawnResult;
 
 /**
  * Ceiling for one captured git stdout (the full base-commit listing or one
@@ -81,22 +77,13 @@ export function buildScrubbedGitEnv(env: NodeJS.ProcessEnv): Record<string, stri
   return scrubbed;
 }
 
-/** Production spawner: capped stdout, scrubbed env, no shell. */
-const spawnGit: GitSpawner = (gitBinAbsPath, args) =>
-  spawnSync(gitBinAbsPath, [...args], {
+/** Production spawner: git by name, capped stdout, scrubbed env, no shell. */
+const spawnGit: GitSpawner = (args) =>
+  spawnSync('git', [...args], {
     stdio: ['ignore', 'pipe', 'pipe'],
     maxBuffer: GIT_MAX_BUFFER_BYTES,
     env: buildScrubbedGitEnv(process.env),
   });
-
-/** {@link resolveTrustedGit} as a `Result` (it throws; library code must not). */
-function resolveGitBinary(exists: PathExists | undefined): Result<string, Error> {
-  try {
-    return ok(resolveTrustedGit(exists));
-  } catch (cause: unknown) {
-    return err(new Error(cause instanceof Error ? cause.message : String(cause)));
-  }
-}
 
 /**
  * Parse one NUL-delimited `ls-tree -r -z` listing into repo-relative paths:
@@ -132,28 +119,21 @@ function parseNulDelimitedListing(listing: Buffer): Result<readonly string[], Er
 export interface GitByteSourceOptions {
   /** The spawn seam; defaults to the scrubbed-env production spawner. */
   readonly spawn?: GitSpawner;
-  /** Existence probe for the trusted-git resolution; defaults to `node:fs`. */
-  readonly exists?: PathExists;
 }
 
 /**
- * Build the git-backed {@link ByteSource} at one base commit. The git
- * binary resolves from the trusted allowlist exactly once, up front; every
- * invocation then goes through the (injectable) spawner with the scrubbed
- * environment.
+ * Build the git-backed {@link ByteSource} at one base commit. Every
+ * invocation goes through the (injectable) spawner with the scrubbed
+ * environment; a git that cannot run fails the read that needed it.
  */
 export function makeGitByteSource(
   repoRoot: string,
   baseSha: string,
   options: GitByteSourceOptions = {},
-): Result<ByteSource, Error> {
-  const gitBin = resolveGitBinary(options.exists);
-  if (isErr(gitBin)) {
-    return gitBin;
-  }
+): ByteSource {
   const spawn = options.spawn ?? spawnGit;
   const runGit = (gitArgs: readonly string[]): Result<Buffer, Error> => {
-    const run = spawn(gitBin.value, ['--no-replace-objects', '-C', repoRoot, ...gitArgs]);
+    const run = spawn(['--no-replace-objects', '-C', repoRoot, ...gitArgs]);
     if (run.error !== undefined) {
       return err(new Error(`cannot run git ${gitArgs.join(' ')}: ${run.error.message}`));
     }
@@ -168,10 +148,10 @@ export function makeGitByteSource(
     }
     return ok(run.stdout);
   };
-  return ok({
+  return {
     listPaths: (): Result<readonly string[], Error> =>
       flatMap(runGit(['ls-tree', '-r', '-z', baseSha]), parseNulDelimitedListing),
     readBytes: (relPath: string): Result<Uint8Array, Error> =>
       runGit(['show', `${baseSha}:${relPath}`]),
-  });
+  };
 }

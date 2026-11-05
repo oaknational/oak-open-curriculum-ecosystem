@@ -23,7 +23,6 @@
 import { execFileSync } from 'node:child_process';
 import { readFile } from 'node:fs/promises';
 
-import { resolveTrustedGit } from '../core/trusted-git.js';
 import {
   runCommitWorkflow,
   type CommitWorkflowDependencies,
@@ -93,7 +92,7 @@ async function runGitCommit(
   },
 ): Promise<CommitWorkflowGitCommitResult> {
   const commit = await runFileBackedChild({
-    command: resolveTrustedGit(),
+    command: 'git',
     args: ['commit', '-F', input.messageFilePath, '--', ...input.pathspec],
     cwd: input.gitRoot,
     // Separate captures, both replayed to stderr: the workflow builds its
@@ -108,7 +107,7 @@ async function runGitCommit(
   return { ...commit, sha: readHeadSha(input.gitRoot) };
 }
 function readHeadSha(gitRoot: string): string {
-  return execFileSync(resolveTrustedGit(), ['rev-parse', 'HEAD'], {
+  return execFileSync('git', ['rev-parse', 'HEAD'], {
     cwd: gitRoot,
     encoding: 'utf8',
     stdio: ['ignore', 'pipe', 'pipe'],

@@ -5,7 +5,6 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 
 import { getStagedBundle } from '../src/commit-queue/git';
-import { resolveTrustedGit } from '../src/core/trusted-git';
 
 /**
  * Rename-representability smoke — `getStagedBundle` must report a staged rename as its
@@ -22,7 +21,7 @@ import { resolveTrustedGit } from '../src/core/trusted-git';
  */
 
 function git(cwd: string, ...args: string[]): string {
-  return execFileSync(resolveTrustedGit(), args, { cwd, encoding: 'utf8' });
+  return execFileSync('git', args, { cwd, encoding: 'utf8' });
 }
 
 const repo = await mkdtemp(path.join(tmpdir(), 'commit-queue-git-'));

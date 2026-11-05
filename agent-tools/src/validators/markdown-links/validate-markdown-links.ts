@@ -6,7 +6,6 @@ import path from 'node:path';
 import { glob } from 'tinyglobby';
 
 import { resolveRepoRoot } from '../../core/repo-root.js';
-import { resolveTrustedGit } from '../../core/trusted-git.js';
 import { readText } from '../portability/portability-fs.js';
 import { writeLine } from '../../core/terminal-output.js';
 
@@ -122,7 +121,7 @@ async function collectRepoPaths(): Promise<string[]> {
  * the referrer when at least one tracked entry keeps that directory present.
  */
 function collectTrackedPaths(): ReadonlySet<string> {
-  const stdout = execFileSync(resolveTrustedGit(), ['ls-files', '-z'], {
+  const stdout = execFileSync('git', ['ls-files', '-z'], {
     cwd: repoRoot,
     encoding: 'utf8',
     maxBuffer: 64 * 1024 * 1024,

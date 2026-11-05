@@ -15,7 +15,6 @@ interface ParsedArgs {
   readonly json: boolean;
   readonly showFiles: boolean;
   readonly help: boolean;
-  readonly gitPath?: string;
 }
 
 interface MutableArgs {
@@ -25,7 +24,6 @@ interface MutableArgs {
   json: boolean;
   showFiles: boolean;
   help: boolean;
-  gitPath?: string;
   positionals: string[];
 }
 
@@ -59,9 +57,6 @@ const VALUE_HANDLERS: Readonly<Record<string, ValueHandler>> = {
     state.headRef = value;
     state.explicitHeadRef = true;
   },
-  '--git': (state, value) => {
-    state.gitPath = value;
-  },
 };
 
 export function runBranchTouchedFilesCli(input: BranchTouchedFilesCliInput): number {
@@ -76,10 +71,9 @@ export function runBranchTouchedFilesCli(input: BranchTouchedFilesCliInput): num
     }
 
     const report = readBranchTouchedFileReport({
-      repoRoot: resolveRepoRoot(input, parsed.gitPath),
+      repoRoot: resolveRepoRoot(input),
       baseRef: parsed.baseRef,
       headRef: parsed.headRef,
-      gitPath: parsed.gitPath,
     });
 
     stdout.write(
@@ -95,13 +89,12 @@ export function runBranchTouchedFilesCli(input: BranchTouchedFilesCliInput): num
   }
 }
 
-function resolveRepoRoot(input: BranchTouchedFilesCliInput, gitPath: string | undefined): string {
+function resolveRepoRoot(input: BranchTouchedFilesCliInput): string {
   return (
     input.repoRoot ??
     readGitStdout({
       repoRoot: input.cwd ?? process.cwd(),
       args: ['rev-parse', '--show-toplevel'],
-      gitPath,
     }).trim()
   );
 }
@@ -166,14 +159,13 @@ function finalizeArgs(state: MutableArgs): ParsedArgs {
     state.headRef = state.positionals[0];
   }
 
-  const parsed: ParsedArgs = {
+  return {
     baseRef: state.baseRef,
     headRef: state.headRef,
     json: state.json,
     showFiles: state.showFiles,
     help: state.help,
   };
-  return state.gitPath === undefined ? parsed : { ...parsed, gitPath: state.gitPath };
 }
 
 function requireValue(args: readonly string[], index: number, option: string): string {
@@ -186,12 +178,11 @@ function requireValue(args: readonly string[], index: number, option: string): s
 
 function usage(): string {
   return [
-    'branch-touched-files [branch-or-ref] [--base <ref>] [--head <ref>|--branch <ref>] [--git <absolute-path>] [--json] [--show-files]',
+    'branch-touched-files [branch-or-ref] [--base <ref>] [--head <ref>|--branch <ref>] [--json] [--show-files]',
     '',
     'Counts unique files touched since branch-or-ref diverged from the base ref.',
     'Defaults: --base origin/main --head HEAD.',
     'Use either [branch-or-ref] or --head/--branch; do not provide both.',
-    'Use --git when git is installed outside the default trusted PATH.',
     '',
   ].join('\n');
 }

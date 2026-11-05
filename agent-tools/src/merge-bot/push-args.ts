@@ -1,7 +1,6 @@
 import { err, ok, type Result } from '@oaknational/result';
 
-import type { PathExists } from '../core/path-exists.js';
-import { isLegalBranchName, realRefFormatOracle, type RefFormatOracle } from './ref-format.js';
+import { gitRefFormatOracle, isLegalBranchName, type RefFormatOracle } from './ref-format.js';
 
 /**
  * The argv contract for `merge-bot push`. Split from `push-cli.ts` to keep
@@ -74,10 +73,6 @@ function readsAsFlag(value: string): boolean {
   return value.startsWith('-');
 }
 
-function isBranchName(value: string, oracle: RefFormatOracle): boolean {
-  return !readsAsFlag(value) && isLegalBranchName(value, oracle);
-}
-
 interface CollectedPushFlags {
   branch?: string;
   json: boolean;
@@ -86,16 +81,14 @@ interface CollectedPushFlags {
 /** The seams this parser will construct for itself when not supplied one. */
 export interface PushArgsSeams {
   readonly refFormatOracle?: RefFormatOracle;
-  /** Existence probe for locating the git binary the default oracle asks. */
-  readonly pathExists?: PathExists;
 }
 
 /**
  * The oracle enters HERE (the default-seam pattern the rest of this command
  * uses) rather than at the parser's head, so parsing an argv with no
- * `--branch` never reaches for a git binary at all. Constructing it can FAIL —
- * a machine with no trusted git has no oracle to ask — and that failure is
- * returned, never thrown: this function's whole contract is its Result.
+ * `--branch` never runs git at all. Asking it can FAIL — a machine with no
+ * git on `PATH` has no answer to give — and that failure is returned, never
+ * thrown: this function's whole contract is its Result.
  */
 function consumeBranch(
   state: CollectedPushFlags,
@@ -107,15 +100,18 @@ function consumeBranch(
   if (state.branch !== undefined) {
     return err(new Error('--branch given more than once — pass it exactly once'));
   }
-  const oracle =
-    seams.refFormatOracle === undefined
-      ? realRefFormatOracle(seams.pathExists)
-      : ok(seams.refFormatOracle);
-  if (!oracle.ok) {
-    return err(oracle.error);
+  const notABranch = new Error(
+    `--branch needs a git branch name, got "${value ?? ''}"\n${PUSH_USAGE}`,
+  );
+  if (value === undefined || readsAsFlag(value)) {
+    return err(notABranch);
   }
-  if (value === undefined || !isBranchName(value, oracle.value)) {
-    return err(new Error(`--branch needs a git branch name, got "${value ?? ''}"\n${PUSH_USAGE}`));
+  const legal = isLegalBranchName(value, seams.refFormatOracle ?? gitRefFormatOracle());
+  if (!legal.ok) {
+    return err(legal.error);
+  }
+  if (!legal.value) {
+    return err(notABranch);
   }
   state.branch = value;
   return ok(undefined);
