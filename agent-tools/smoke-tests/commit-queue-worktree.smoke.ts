@@ -1,7 +1,10 @@
 import assert from 'node:assert/strict';
-import { existsSync } from 'node:fs';
-import { mkdir, rm, writeFile } from 'node:fs/promises';
+import { spawnSync } from 'node:child_process';
+import { existsSync, realpathSync } from 'node:fs';
+import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import { runAgentToolsCli } from '../src/bin/agent-tools-cli';
 import { assertAdvisoryReplayed } from './commit-queue-advisory-stub-fixture';
@@ -15,7 +18,6 @@ import {
   RENAME_DESTINATION,
   RENAME_SOURCE,
 } from './commit-queue-worktree-fixture';
-import { recordingProcessStderr } from './process-stderr-recorder';
 
 /**
  * F-138 regression smoke — the commit-queue two-root split and changed-endpoint identity.
@@ -134,21 +136,15 @@ async function proveMissingGitRootRefusesLoudly(): Promise<void> {
     const outside = join(fixture.root, 'outside');
     await mkdir(outside, { recursive: true });
 
-    const { value: result, written } = await recordingProcessStderr(() =>
-      runAgentToolsCli({
-        argv: ['commit-queue', 'record-staged', '--intent-id', INTENT_ID],
-        env: {},
-        cwd: outside,
-        repoRoot: fixture.primary,
-      }),
-    );
+    const result = await runAgentToolsCli({
+      argv: ['commit-queue', 'record-staged', '--intent-id', INTENT_ID],
+      env: {},
+      cwd: outside,
+      repoRoot: fixture.primary,
+    });
 
-    assert.equal(result.exitCode, 2, written);
+    assert.equal(result.exitCode, 2);
     assert.match(result.stderr, /git could not resolve a working tree/);
-    // The expected refusal prints only the tool's message: nothing reaches
-    // this process's stderr stream, and git's own words travel on the
-    // error's cause.
-    assert.equal(written, '');
 
     // No silent fallback: the intent survives untouched — neither
     // fingerprinted against the coordination home's own index nor
@@ -163,8 +159,58 @@ async function proveMissingGitRootRefusesLoudly(): Promise<void> {
   }
 }
 
+/** The CLI's source entry, run in a child process under the smoke's own tsx. */
+const CLI_SOURCE = fileURLToPath(new URL('../src/bin/agent-tools.ts', import.meta.url));
+
+/** The smoke's own PATH, read once at this composition root, so git resolves by name. */
+function requiredPath(): string {
+  const value = process.env.PATH;
+  assert.ok(
+    value !== undefined,
+    'the commit-queue worktree smoke needs PATH so git resolves by name',
+  );
+  return value;
+}
+
+/**
+ * Outside any git working tree, the CLI's refusal is the only thing on its
+ * stderr, captured at the spawn boundary of a child process: git's own
+ * words travel inside the tool's message, never echoed ahead of it. The
+ * child gets PATH and a throwaway HOME and nothing else, so no declared
+ * coordination home can reach a real registry.
+ */
+async function proveRefusalPrintsOnlyTheToolsMessage(): Promise<void> {
+  const outside = realpathSync(await mkdtemp(join(tmpdir(), 'oak-f138-outside-')));
+  try {
+    const refusal = spawnSync(
+      process.execPath,
+      [
+        '--import',
+        import.meta.resolve('tsx'),
+        CLI_SOURCE,
+        'commit-queue',
+        'record-staged',
+        '--intent-id',
+        INTENT_ID,
+      ],
+      { cwd: outside, encoding: 'utf8', env: { PATH: requiredPath(), HOME: outside } },
+    );
+
+    assert.equal(refusal.status, 2, refusal.stderr);
+    // git writes before the tool catches its failure, so an echoed git line
+    // would come first, in whatever language git speaks.
+    assert.match(
+      refusal.stderr,
+      /^Unable to resolve the collaboration home: git could not resolve a working tree/,
+    );
+  } finally {
+    await rm(outside, { recursive: true, force: true });
+  }
+}
+
 await proveRecordStagedUsesWorktreeIndex();
 await proveVerifyStagedUsesWorktreeIndex();
 await proveCommitLandsOnWorktreeBranch();
 await proveMissingGitRootRefusesLoudly();
-process.stdout.write('commit-queue worktree smoke: 4/4 proofs passed\n');
+await proveRefusalPrintsOnlyTheToolsMessage();
+process.stdout.write('commit-queue worktree smoke: 5/5 proofs passed\n');
