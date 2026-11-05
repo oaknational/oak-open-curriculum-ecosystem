@@ -9,7 +9,12 @@
 
 **Related**: [ADR-115](115-proxy-oauth-as-for-cursor.md) — public OAuth proxy
 endpoints; [ADR-126](126-asset-download-proxy.md) — asset download proxy;
-[ADR-121](121-quality-gate-surfaces.md) — quality gate surfaces
+[ADR-121](121-quality-gate-surfaces.md) — quality gate surfaces;
+[MCP Runtime Topology](../mcp-runtime-topology.md) — measured 2026-09-03, and
+the instrument this decision's falsification condition is checked against:
+Cloudflare's rate-limit ruleset holds exactly two rules and neither selects
+this service. The Vercel leg named in the Decision is unmeasured there. Cure
+tracked as MCP-674, MCP-675 and MCP-676
 
 ## Context
 
