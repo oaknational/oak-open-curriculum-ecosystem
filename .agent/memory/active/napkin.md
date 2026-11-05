@@ -1403,9 +1403,6 @@ the owner wants it kept).
 - **A heartbeat script with a fixed title broadcasts stale state.** My loop's title read "#1018
   at the S4036 gate" for about three hours after #1018 merged, on every heartbeat. Re-arm the loop
   with a current title at each lane-state change, or have it read the title from a state file.
-- **A read-only `git log --all --diff-filter=A` tripped the wildcard-staging hook**, which matches
-  `add --all` as a substring. Name the refs explicitly (`origin/engraph read-only-upstream/main`);
-  the read needed only those two anyway.
 - **"Opposite approach" across forks can be one approach at two dates.** A side note said engraph
   took the opposite S4036 cure to Oak's. Oak at the shared merge base had the same FIX-only policy
   and `resolveTrustedGit`; engraph had extended it (Windows partitioning, one trusted-binary
