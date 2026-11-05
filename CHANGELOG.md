@@ -1,3 +1,11 @@
+## [1.186.8](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.186.7...v1.186.8) (2026-11-05)
+
+
+### Bug Fixes
+
+* **fidelity-review:** keep a failed teardown in the error when a spawned server is not ours ([dce8c99](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/dce8c9957a2a4ce4d6d8f338ad8f90808b9652ab))
+* **fidelity-review:** report teardown failure on an unready dev server, and prove the teardown ([dd1660e](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/dd1660e43c3f52279f24c510e7912c5d31c4697f)), closes [#1018](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/1018)
+
 ## [1.186.7](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.186.6...v1.186.7) (2026-11-04)
 
 ## [1.186.6](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.186.5...v1.186.6) (2026-11-04)
