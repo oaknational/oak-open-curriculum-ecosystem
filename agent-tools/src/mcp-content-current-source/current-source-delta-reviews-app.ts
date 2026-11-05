@@ -79,20 +79,19 @@ export const APP_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
     'df0cfab0201177986caa0454d94407077f5930f45a8e34d6d15f6ea4b625b35b',
     IMPLEMENTATION_ONLY,
   ),
+  // MCP-143 PR-3: Guard 3 + production-detection corroboration land here.
   'apps/oak-curriculum-mcp-streamable-http/src/env-clerk-guards.ts': excluded(
-    'fceb09166d44b587a2093664fd9595c3a9741662ad5efb3efd197ce59e083274',
+    '570adc7e832e018e76186969252eece8b54e9eec59b690c4733c732d64cd9b1f',
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/env-product-analytics.ts': excluded(
     '8a67d2cb8ce836a2b2c34bb7782d8b0bee67dadf437ba9e0a60b0be0baf62a36',
     IMPLEMENTATION_ONLY,
   ),
-  // MCP-143 pull request 759: Guard 1b's auth-valve condition restated as its
-  // allowed set negated (isLocalRun) for reviewer clarity. Behaviour-identical
-  // refactor of a startup validation rule; disposition unchanged — no authored
-  // agent-facing content reaches an MCP consumer from this file.
+  // MCP-143 PR-3: wires Guard 3, keeping this PR's corroboration over
+  // PR-759's parallel isLocalRun restatement of Guard 1b (never lands here).
   'apps/oak-curriculum-mcp-streamable-http/src/env.ts': excluded(
-    '0537f72528f0ae1c0de9ff41f1e43e99b16fdc5a26890885bee7d6f16288723b',
+    'cc2dbdb547fdb068c6992b137174e81434d757315c1d7daeddd650d40160c45b',
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/feature-flags.ts': excluded(
