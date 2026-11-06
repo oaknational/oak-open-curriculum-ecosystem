@@ -342,7 +342,10 @@ strategies; on a request-handler path the rewrite is urgent.
 is the trust root (§S4036 ruling); no external input reaches a shell".
 
 **Worked example**: `realPnpmRunner` in `agent-tools/src/spawn/build-runner.ts`
-runs the repository's pnpm by name with an argv array and no shell.
+runs the repository's pnpm by name with an argv array and no `shell` option.
+It launches through `cross-spawn`, which on Windows runs a `pnpm.cmd` shim
+under `cmd.exe` with its own argument escaping; the arguments are the
+repository's own, so no external input reaches that shell.
 
 **Delta from the prior class**: S4036 was FIX-only, cured by an absolute path
 chosen from a fixed list of directories. The ruling gives a site within the

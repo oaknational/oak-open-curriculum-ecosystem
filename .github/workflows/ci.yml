@@ -481,6 +481,12 @@ jobs:
       - name: Unit-test agent-tools
         shell: bash
         run: pnpm --filter @oaknational/agent-tools test
+      # The unit suite injects fakes, so only a real launch proves that the
+      # by-name pnpm launchers run where pnpm is a Windows .cmd shim.
+      - name: Launch pnpm by name
+        shell: bash
+        working-directory: agent-tools
+        run: node --import tsx smoke-tests/pnpm-by-name-launch.smoke.ts
 
   # Single required status check: fans in every job above (the family
   # contract: one required context fed by every job) and fails unless every

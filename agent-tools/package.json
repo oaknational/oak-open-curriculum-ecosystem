@@ -99,6 +99,7 @@
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
     "@oaknational/workspace-config": "workspace:*",
+    "@types/cross-spawn": "^6.0.6",
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.18",
     "dependency-cruiser": "^18.4.0",
@@ -114,6 +115,7 @@
     "@oaknational/safe-path": "workspace:*",
     "@oaknational/type-helpers": "workspace:*",
     "ajv": "^8.20.0",
+    "cross-spawn": "^7.0.6",
     "ink": "^7.1.1",
     "jsonc-parser": "^3.3.1",
     "react": "^19.2.8",

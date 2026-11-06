@@ -1,7 +1,8 @@
-import { spawn } from 'node:child_process';
 import { closeSync, mkdtempSync, openSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+
+import { spawn as crossSpawn } from 'cross-spawn';
 
 /**
  * Destinations for the replayed child streams. Defaults to the parent's
@@ -103,6 +104,11 @@ function isAbortKill(error: Error): boolean {
  * The replay ceiling is the capture buffer (`readFileSync` materialises
  * each stream), orders of magnitude above any gate chain's output —
  * spawnSync's 1 MiB default was the ceiling this replaced.
+ *
+ * The child launches through `cross-spawn`, so a command named without a
+ * path (the commit workflow's `pnpm`) launches on Windows even where it is a
+ * `.cmd` shim, which a shell-less Node spawn cannot run. Elsewhere, and for
+ * an `.exe` or an absolute path, it is Node's own spawn.
  */
 export async function runFileBackedChild(
   options: FileBackedChildOptions,
@@ -120,7 +126,7 @@ export async function runFileBackedChild(
     return await new Promise((resolve, reject) => {
       let settled = false;
 
-      const child = spawn(options.command, options.args, {
+      const child = crossSpawn(options.command, options.args, {
         cwd: options.cwd,
         env: options.env,
         stdio: ['ignore', files.stdoutFd, files.stderrFd],
