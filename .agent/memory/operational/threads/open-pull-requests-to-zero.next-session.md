@@ -539,3 +539,54 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
 - **The follow-up, `fix/by-name-follow-ups` (`611ff6b27` on `85621052c`, claim `7e0c53cf`).** It
   carries the resolution review's six non-blocking findings and the stale comments. It opens
   against `engraph` once 381 lands, so its diff is its own.
+
+## Lane state (2026-11-06 ~15:3xZ, carrier 381 landed; Sandpiper guards Wind, 690653)
+
+- **381 landed at `e3574df72`.** It is a merge commit with parents `44ddac8d7` and `6f553429c`.
+  - **The conflict.** `engraph` had moved on with #382 and #383 (parallax). The carrier conflicted
+    on the four generated parallax adapter projections. Merging `engraph` in at `6f553429c` and
+    regenerating them with `skills:generate` resolved the conflict, and the result equals
+    `engraph`'s copies.
+  - **The analyser gate.** It held on `AaGsHnCqF0Bho36dFvNH` and `AaGsHnC5F0Bho36dFvNJ` (S4036,
+    "OS commands should not rely on PATH resolution"). The owner allowed the write on
+    2026-11-06, and both are now `FALSE_POSITIVE` with the canonical rationale.
+  - **The open thread.** The door then refused on one unresolved Codex P1 thread, about native
+    Windows `.cmd` shims. Triaged as real and non-blocking under the carrier rule, the thread was
+    replied to as the bot and resolved, and the door merged.
+- **Landing proofs.**
+  - The parents are as above.
+  - Oak release 1.186.8 (`d0023a999`) is an ancestor of `engraph`.
+  - `engraph`'s tree equals the carrier head's.
+  - The branch is retired, the worktree removed, claim `9e972476` closed, and the primary
+    checkout fast-forwarded.
+- **The Windows gap.** The 2026-11-05 entry said the integration would check that the by-name
+  calls launch on native Windows. It did not. `windows-basic` builds agent-tools and runs its
+  unit suite, which injects fakes, so no Windows job launches pnpm. Shell-less, Node finds only
+  `.com` and `.exe` on `PATH` and refuses `.cmd`. So where pnpm is a `pnpm.cmd` shim, four
+  launchers fail to start:
+  - the commit workflow's advisory;
+  - the commitlint check;
+  - the worktree build runner;
+  - the agent-ops gates.
+- **The follow-up, #385** (`fix/by-name-follow-ups`, `611ff6b27`, claim `7e0c53cf`). It is open
+  and readied, with the door running. It opened with `--wip-limit 2` while #384 (a research report
+  for the owner, from another session) was open; a solo seat's limit is one.
+- **The Windows fix, `fix/windows-pnpm-by-name`** (`5a390a837`, committed locally, worktree
+  `.claude/worktrees/windows-pnpm-by-name`, not yet pushed).
+  - **The fix.** The four launchers (`runFileBackedChild`, `realPnpmRunner`, `runPnpmGate`, and
+    commitlint in `check-commit-message`) go through `cross-spawn`. It keeps the by-name lookup
+    on `PATH` and `PATHEXT`, and wraps a `.cmd` shim in `cmd.exe`.
+  - **The proof.** The new `pnpm-by-name-launch` smoke runs each launcher, and `windows-basic`
+    runs the smoke. The smoke reports a control (a plain shell-less `spawnSync('pnpm')`), so the
+    Windows log shows whether the proofs discriminate.
+  - **Not changed.** The gate-slot smoke and the fidelity-review dev server spawn detached process
+    groups and reap them with POSIX group signals.
+  - **When it opens.** It pushes and opens when #385 lands.
+- **Next.**
+  - The next carrier, at Oak 1.186.9 (`d5846cf6f`, which includes #1019, git by name).
+  - Oak carries the same Windows defect.
+  - Lanes still open:
+    - `trusted-gitleaks` and `trusted-shell` to by-name;
+    - Dependabot group-by (P2);
+    - the merge-bot close guard;
+    - the carrier workflow's body text.

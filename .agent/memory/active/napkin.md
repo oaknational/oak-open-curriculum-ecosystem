@@ -1426,6 +1426,20 @@ the owner wants it kept).
   in the canonical tree. Codex caught it on engraph #383; my review had checked the canonical
   layout alone. The cure names the sibling skill and section in backticks, as the parallax family
   already does. One instance (2026-11-05, Elder rides Topsoil, 65857c).
+- **A watch whose only exit is someone else's action hands the work back.** After the classifier
+  denied 381's last two Sonar marks, I ran two three-hour watches that could only succeed if the
+  owner marked them. Then I reported that 381 "still hasn't merged", as though the lane were
+  someone else's. The owner: "You say that as if anyone but you is responsible for it." While a
+  permission is missing, the lane stays mine. Name the permission once, as the thing I need. Settle
+  every other condition, running the door to read all its grounds. Never re-arm a watch that cannot
+  succeed by itself (2026-11-06, Sandpiper guards Wind, 690653).
+- **The door names one ground at a time, and a record's plan is not a check.** On 381 it refused
+  on the red Sonar check alone. Once that check was green, it refused on an unresolved Codex P1
+  from the day before: by-name `pnpm` cannot launch a Windows `.cmd` shim. The record had said
+  the integration would check native Windows launches, and it never did. `windows-basic` runs
+  only the unit suite, which injects fakes. Read the review threads first-hand before calling one
+  blocker the only one. Before citing a green check for a claim, check what that job runs
+  (2026-11-06, Sandpiper guards Wind, 690653).
 
 ### Practice/tooling feedback
 
