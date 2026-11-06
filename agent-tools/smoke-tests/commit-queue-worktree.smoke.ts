@@ -1,5 +1,4 @@
 import assert from 'node:assert/strict';
-import type { SpawnSyncReturns } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -15,7 +14,9 @@ import {
   makeFixture,
   readPrimaryIntent,
   runCommitQueue,
+  runCommitQueueInProcess,
   streams,
+  type WorktreeFixture,
 } from './commit-queue-worktree-fixture';
 import { assertAdvisoryReplayed } from './commit-queue-advisory-stub-fixture';
 
@@ -90,7 +91,10 @@ async function proveVerifyStagedUsesWorktreeIndex(): Promise<void> {
  * children's output and the landed notice to its own stderr, in the run's
  * order, so stdout carries the sha alone.
  */
-function assertAdvisoryFailureStreams(committed: SpawnSyncReturns<string>, head: string): void {
+function assertAdvisoryFailureStreams(
+  committed: { readonly stdout: string; readonly stderr: string },
+  head: string,
+): void {
   assert.equal(committed.stdout, `${head}\n`, `stdout is the sha alone:\n${streams(committed)}`);
   assertAdvisoryReplayed(committed.stderr, COMMIT_SUBJECT);
   assert.match(
@@ -102,25 +106,22 @@ function assertAdvisoryFailureStreams(committed: SpawnSyncReturns<string>, head:
   );
 }
 
+/** Stage the rename in the linked worktree, record it, and return the commit's arguments. */
+async function recordRename(fixture: WorktreeFixture): Promise<readonly string[]> {
+  git(fixture.linked, 'mv', RENAME_SOURCE, RENAME_DESTINATION);
+  const recorded = runCommitQueue(fixture.linked, ['record-staged', '--intent-id', INTENT_ID]);
+  assert.equal(recorded.status, 0, streams(recorded));
+  const messageFilePath = join(fixture.root, 'commit-message.txt');
+  await writeFile(messageFilePath, COMMIT_SUBJECT + '\n');
+  return ['commit', '--intent-id', INTENT_ID, '--message-file', messageFilePath];
+}
+
 async function proveCommitLandsOnWorktreeBranch(): Promise<void> {
   const fixture = await makeFixture();
   try {
-    git(fixture.linked, 'mv', RENAME_SOURCE, RENAME_DESTINATION);
     const primaryHeadBefore = git(fixture.primary, 'rev-parse', 'HEAD').trim();
 
-    const recorded = runCommitQueue(fixture.linked, ['record-staged', '--intent-id', INTENT_ID]);
-    assert.equal(recorded.status, 0, streams(recorded));
-
-    const messageFilePath = join(fixture.root, 'commit-message.txt');
-    await writeFile(messageFilePath, COMMIT_SUBJECT + '\n');
-
-    const committed = runCommitQueue(fixture.linked, [
-      'commit',
-      '--intent-id',
-      INTENT_ID,
-      '--message-file',
-      messageFilePath,
-    ]);
+    const committed = runCommitQueue(fixture.linked, await recordRename(fixture));
 
     assert.equal(committed.status, 0, streams(committed));
     const head = git(fixture.linked, 'rev-parse', 'HEAD').trim();
@@ -138,6 +139,28 @@ async function proveCommitLandsOnWorktreeBranch(): Promise<void> {
 
     // The completed intent is removed from the coordination-home registry.
     assert.equal(await readPrimaryIntent(fixture), undefined);
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+}
+
+/**
+ * The same commit through the in-process entry: the replay reaches the
+ * command's own stderr writer and nothing reaches the process's stderr,
+ * which a run of the built CLI as a child cannot tell apart.
+ */
+async function proveCommitReplaysToItsOwnStderr(): Promise<void> {
+  const fixture = await makeFixture();
+  try {
+    const committed = runCommitQueueInProcess(fixture.linked, await recordRename(fixture));
+
+    assert.equal(
+      committed.driver.stderr,
+      '',
+      `the process's stderr stays empty:\n${streams(committed.driver)}`,
+    );
+    assert.equal(committed.result.exitCode, 0, streams(committed.result));
+    assertAdvisoryFailureStreams(committed.result, git(fixture.linked, 'rev-parse', 'HEAD').trim());
   } finally {
     await rm(fixture.root, { recursive: true, force: true });
   }
@@ -186,5 +209,6 @@ assert.equal(existsSync(BIN), true, `built CLI missing at ${BIN}; build agent-to
 await proveRecordStagedUsesWorktreeIndex();
 await proveVerifyStagedUsesWorktreeIndex();
 await proveCommitLandsOnWorktreeBranch();
+await proveCommitReplaysToItsOwnStderr();
 await proveMissingGitRootRefusesLoudly();
-process.stdout.write('commit-queue worktree smoke: 4/4 proofs passed\n');
+process.stdout.write('commit-queue worktree smoke: 5/5 proofs passed\n');

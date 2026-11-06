@@ -66,8 +66,9 @@ Windows and Linux):
 - **Binaries run by name**, with `PATH` as the trust root
   ([Sonar disposition policy §S4036](../../../docs/governance/sonar-disposition-policy.md#s4036--os-commands-resolved-via-path)):
   the operator's environment decides which binary a name resolves to, and
-  nothing depends on one machine's directory layout. `trusted-git` is the
-  one remaining resolver until git runs by name too.
+  nothing depends on one machine's directory layout. `trusted-git`,
+  `trusted-gitleaks` (the push secret scan) and `trusted-shell` (the smokes'
+  hermetic shell) remain as resolvers until those binaries run by name too.
 - **Injected platform flavour** for path comparison — both platforms'
   containment rules are provable from Linux CI, so the Windows
   semantics are guarded per-PR at zero Windows-runner cost.

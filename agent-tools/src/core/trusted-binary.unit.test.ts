@@ -6,7 +6,6 @@ import { resolveTrustedBinary, type TrustedBinarySpec } from './trusted-binary.j
 /** A fixture binary with one location per family. */
 const TOOL: TrustedBinarySpec = {
   name: 'tool',
-  label: 'tool (the fixture)',
   paths: {
     posix: ['/opt/homebrew/bin/tool', '/usr/bin/tool'],
     win32: [String.raw`C:\Program Files\Tool\tool.exe`],
@@ -51,10 +50,10 @@ describe('resolveTrustedBinary', () => {
     expect(isErr(result)).toBe(true);
   });
 
-  it('refuses by naming the label, every searched path, the absolute-path reason and the remedy', () => {
+  it('refuses by naming the binary, every searched path, the absolute-path reason and the remedy', () => {
     const error = unwrapErr(resolveTrustedBinary(TOOL, () => false, 'linux'));
     expect(error.message).toBe(
-      'No trusted tool (the fixture) binary found. Searched: /opt/homebrew/bin/tool, /usr/bin/tool. ' +
+      'No trusted tool binary found. Searched: /opt/homebrew/bin/tool, /usr/bin/tool. ' +
         'tool is resolved by a fixed absolute path from these well-known locations (never via PATH) ' +
         'to defeat PATH-search hijacking (SonarCloud S4036). symlink it.',
     );
@@ -67,10 +66,5 @@ describe('resolveTrustedBinary', () => {
       /Searched: nothing \(no trusted location on this platform\)/u,
     );
     expect(unwrapErr(result).message).toMatch(/run it on a POSIX host\./u);
-  });
-
-  it('names the binary by its name when no label is declared', () => {
-    const error = unwrapErr(resolveTrustedBinary(POSIX_ONLY, () => false, 'linux'));
-    expect(error.message).toMatch(/^No trusted posixtool binary found\./u);
   });
 });

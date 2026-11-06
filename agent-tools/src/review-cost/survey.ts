@@ -15,11 +15,10 @@ export interface SurveyInput {
   readonly since: string;
   readonly repo?: string;
   readonly expectedReviewers: readonly string[];
-  readonly ghPath?: string;
   readonly json: boolean;
   readonly stdout: Pick<NodeJS.WriteStream, 'write'>;
   /** The listing seam (defaults to `gh pr list`). */
-  readonly list?: (since: string, repo: string, ghPath?: string) => ListedPullRequest[];
+  readonly list?: (since: string, repo: string) => ListedPullRequest[];
   /** The pricing seam (defaults to the gate's pricing over the live recording and local git). */
   readonly price?: (input: PricingInput) => CostReport;
 }
@@ -42,7 +41,6 @@ function priceRow(
         number: pull.number,
         repo,
         expectedReviewers: input.expectedReviewers,
-        ghPath: input.ghPath,
       }),
     };
   } catch (error) {
@@ -64,10 +62,8 @@ function tableLine(row: SurveyRow): string {
 export function runSurvey(input: SurveyInput): number {
   const list = input.list ?? pullRequestsSince;
   const price = input.price ?? pricePullRequest;
-  const repo = input.repo ?? currentRepo(input.ghPath);
-  const rows = list(input.since, repo, input.ghPath).map((pull) =>
-    priceRow(pull, input, repo, price),
-  );
+  const repo = input.repo ?? currentRepo();
+  const rows = list(input.since, repo).map((pull) => priceRow(pull, input, repo, price));
   if (input.json) {
     input.stdout.write(`${JSON.stringify(rows)}\n`);
     return 0;

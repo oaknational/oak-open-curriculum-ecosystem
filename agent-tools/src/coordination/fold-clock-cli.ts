@@ -19,7 +19,6 @@ const FOLD_CLOCK_ACTION = 'fold-clock';
 export interface FoldClockReadInput {
   readonly target: PrTarget;
   readonly successorSha?: string;
-  readonly ghPath?: string;
 }
 
 export type FoldClockReader = (input: FoldClockReadInput) => Result<FoldClockReading, Error>;
@@ -37,7 +36,6 @@ interface MutableFoldClockArgs {
   pr?: string;
   repo?: string;
   successor?: string;
-  ghPath?: string;
   json: boolean;
   help: boolean;
   positionals: string[];
@@ -70,9 +68,6 @@ const VALUE_HANDLERS: Readonly<
   },
   '--successor': (state, value) => {
     state.successor = value;
-  },
-  '--gh': (state, value) => {
-    state.ghPath = value;
   },
 };
 
@@ -137,7 +132,6 @@ function readInputOf(state: MutableFoldClockArgs, target: PrTarget): FoldClockRe
   return {
     target,
     ...(state.successor === undefined ? {} : { successorSha: state.successor }),
-    ...(state.ghPath === undefined ? {} : { ghPath: state.ghPath }),
   };
 }
 
@@ -213,7 +207,7 @@ export function runFoldClockCli(input: FoldClockCliInput): number {
 /** The `agent-tools coordination fold-clock` usage text. */
 function foldClockUsage(): string {
   return [
-    `agent-tools coordination ${FOLD_CLOCK_ACTION} --pr <n> [--repo <owner>/<repo>] [--successor <sha>] [--gh <path>] [--json]`,
+    `agent-tools coordination ${FOLD_CLOCK_ACTION} --pr <n> [--repo <owner>/<repo>] [--successor <sha>] [--json]`,
     '',
     "Prints the fold's clock from the GitHub API as one line for the review-cost ledger",
     "row: the ready-mark (the last ready_for_review, else the pull request's opening),",

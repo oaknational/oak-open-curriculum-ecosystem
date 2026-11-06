@@ -1,9 +1,10 @@
 /**
- * The existence-probe seam for the agent-tooling git resolver.
+ * The existence-probe seam for the agent-tooling binary resolvers.
  *
  * @remarks
- * Injecting the filesystem probe keeps `resolveTrustedGit`, and the callers that
- * pass a probe through to it, unit-testable without touching a real filesystem.
+ * Injecting the filesystem probe keeps `resolveTrustedBinary`, the resolvers
+ * built on it and the callers that pass a probe through to them unit-testable
+ * without touching a real filesystem.
  *
  * @packageDocumentation
  */

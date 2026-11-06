@@ -28,11 +28,11 @@ export interface ReviewCostCliInput {
 }
 
 function resolveTarget(parsed: ParsedArgs): { number: number; repo: string } | null {
-  const repo = parsed.repo ?? currentRepo(parsed.ghPath);
+  const repo = parsed.repo ?? currentRepo();
   if (parsed.pr !== undefined) {
     return { number: parsed.pr, repo };
   }
-  const number = openPullRequestFor(currentBranch(), repo, parsed.ghPath);
+  const number = openPullRequestFor(currentBranch(), repo);
   return number === null ? null : { number, repo };
 }
 
@@ -146,7 +146,6 @@ function gateOne(
     number: target.number,
     repo: target.repo,
     expectedReviewers: parsed.expect,
-    ghPath: parsed.ghPath,
   });
   const exit = gateExit(
     priced.report,
@@ -159,9 +158,9 @@ function gateOne(
 
 function gate(parsed: ParsedArgs, stdout: Pick<NodeJS.WriteStream, 'write'>): number {
   if (parsed.refsFile !== undefined) {
-    const repo = parsed.repo ?? currentRepo(parsed.ghPath);
+    const repo = parsed.repo ?? currentRepo();
     const codes = parsePushedRefs(readFileSync(parsed.refsFile, 'utf8')).map((ref) => {
-      const number = openPullRequestFor(ref.branch, repo, parsed.ghPath);
+      const number = openPullRequestFor(ref.branch, repo);
       if (number === null) {
         stdout.write(
           `review-cost gate: ${ref.branch} has no open pull request — nothing to price\n`,
@@ -206,7 +205,6 @@ function guarded(
           since: parsed.since ?? '',
           repo: parsed.repo,
           expectedReviewers: parsed.expect,
-          ghPath: parsed.ghPath,
           json: parsed.json,
           stdout,
         })

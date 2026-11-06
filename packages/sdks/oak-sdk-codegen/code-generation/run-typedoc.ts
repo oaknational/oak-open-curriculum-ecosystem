@@ -7,7 +7,7 @@ import { createCodegenLogger } from './create-codegen-logger.js';
 /**
  * The typedoc CLI entry, resolved through the package's own `exports` so the
  * child runs the installed dependency under this node binary rather than
- * whatever `PATH` would find (`sonarjs/no-os-command-from-path`).
+ * whatever `PATH` would find.
  */
 const typedocEntry = join(
   dirname(fileURLToPath(import.meta.resolve('typedoc/package.json'))),

@@ -32,12 +32,12 @@ import type { SkillEvalsSeams } from './seams.js';
  * The binary the runner is, resolved by name on the operator's PATH.
  *
  * @remarks
- * The estate resolves git and gh by fixed absolute paths (SonarCloud S4036).
- * The host runner is a per-user install under the operator's home, which the
- * estate's allow-lists exclude by doctrine, and the run already loads the
- * repository's own skills into an agent under `--trust-plugin`: PATH
- * resolution adds no trust boundary the run does not already cross. A
- * Sonar finding on this line is dispositioned with this text.
+ * Tooling invokes each binary it needs by name, with `PATH` as the trust
+ * root (Sonar disposition policy §S4036), and the host runner is one of
+ * them. The run already loads the repository's own skills into an agent
+ * under `--trust-plugin`, so `PATH` resolution adds no trust boundary the
+ * run does not already cross. A Sonar S4036 finding on this line is marked
+ * under that section.
  */
 export const RUNNER_COMMAND = 'claude';
 

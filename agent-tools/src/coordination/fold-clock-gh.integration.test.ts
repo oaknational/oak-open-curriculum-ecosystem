@@ -85,14 +85,17 @@ const CHECK_RUNS_ARGS = (repo: string, sha: string): readonly string[] => [
   `repos/${repo}/commits/${sha}/check-runs?per_page=100&filter=all`,
 ];
 
-/** An executor answering by the path argument, recording every argv. */
+/** An executor answering by the path argument, recording every argv and the file it runs. */
 function fakeGh(answers: Readonly<Record<string, unknown>>): {
   exec: GhCommandExecutor;
   calls: (readonly string[])[];
+  files: string[];
 } {
   const calls: (readonly string[])[] = [];
-  const exec: GhCommandExecutor = (_file, args) => {
+  const files: string[] = [];
+  const exec: GhCommandExecutor = (file, args) => {
     calls.push(args);
+    files.push(file);
     const path = args.find((arg) => arg.startsWith('repos/')) ?? '';
     const answer = answers[path];
     if (answer === undefined) {
@@ -100,7 +103,7 @@ function fakeGh(answers: Readonly<Record<string, unknown>>): {
     }
     return typeof answer === 'string' ? answer : JSON.stringify(answer);
   };
-  return { exec, calls };
+  return { exec, calls, files };
 }
 
 const answers = {
@@ -116,13 +119,11 @@ const target = { number: 326, repo: 'acme/widgets' };
 
 describe('readFoldClockReading', () => {
   it('reads the five surfaces with the pinned argv shapes and assembles the reading', () => {
-    const { exec, calls } = fakeGh(answers);
+    const { exec, calls, files } = fakeGh(answers);
 
-    const reading = readFoldClockReading({
-      target,
-      ghPath: '/custom/bin/gh',
-      execFileSync: exec,
-    });
+    const reading = readFoldClockReading({ target, execFileSync: exec });
+
+    expect(new Set(files)).toStrictEqual(new Set(['gh']));
 
     expect(reading.ok).toBe(true);
     if (reading.ok) {

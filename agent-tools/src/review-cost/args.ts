@@ -15,13 +15,12 @@ export interface ParsedArgs {
   expect: string[];
   json: boolean;
   help: boolean;
-  ghPath?: string;
   error?: string;
 }
 
 export const USAGE = [
-  'review-cost gate (--pr <number> | --branch | --refs-file <path>) [--repo <owner/repo>] [--expect <login>]... [--json] [--gh <path>]',
-  'review-cost survey --since <YYYY-MM-DD> [--repo <owner/repo>] [--expect <login>]... [--json] [--gh <path>]',
+  'review-cost gate (--pr <number> | --branch | --refs-file <path>) [--repo <owner/repo>] [--expect <login>]... [--json]',
+  'review-cost survey --since <YYYY-MM-DD> [--repo <owner/repo>] [--expect <login>]... [--json]',
   "  The review loop's cost against the settlement-push budget the pull request declares",
   '  (`budget — N` in its description; two when undeclared). Every reviewed head is a round;',
   '  its cost rises with findings, comment volume, push size, files, pushes to the same files',
@@ -81,9 +80,6 @@ const FLAG_HANDLERS: Readonly<Record<string, (parsed: ParsedArgs, value: Value) 
   '--json': (parsed) => {
     parsed.json = true;
   },
-  '--gh': (parsed, value) => {
-    parsed.ghPath = value();
-  },
   '--help': (parsed) => {
     parsed.help = true;
   },
@@ -93,7 +89,7 @@ const FLAG_HANDLERS: Readonly<Record<string, (parsed: ParsedArgs, value: Value) 
 };
 
 // A value-taking flag must be followed by a value that is not itself a flag.
-const VALUE_FLAGS = new Set(['--pr', '--refs-file', '--since', '--repo', '--expect', '--gh']);
+const VALUE_FLAGS = new Set(['--pr', '--refs-file', '--since', '--repo', '--expect']);
 
 // The error a flag raises before its handler runs: unknown, or a value flag with no value.
 function flagError(flag: string, next: string | undefined): string | undefined {

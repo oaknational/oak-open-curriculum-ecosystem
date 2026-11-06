@@ -66,7 +66,7 @@ export interface InheritedProcessOptions {
 }
 
 /**
- * Spawn a trusted command with inherited stdio and report how it ended.
+ * Spawn a command with inherited stdio and report how it ended.
  *
  * A signal death is reported as such (`status` null, `signal` named), never
  * folded into an exit code: a gate that says "exit 1" for a child the OOM
