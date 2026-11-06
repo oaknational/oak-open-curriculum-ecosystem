@@ -108,11 +108,12 @@ These scripts make this skill actionable end-to-end:
   this repo's commitlint config in isolation from the rest of the pre-commit /
   commit-msg hook chain. Mirrors `git commit` message intake (`-m` repeats,
   `-F`, `-F -`, stdin). Exit 0 conforms, 1 violates (a commitlint WARNING is a
-  violation: strict mode, as in the hook), 2 invalid usage or no verdict. Catches
-  `header-max-length`, `body-max-line-length`, and case violations in ~1s
-  before the ~34s pre-commit cycle. The orchestrator above invokes this
-  script as the third (message) gate; call it directly only when iterating
-  on a draft message in isolation from the tree-state gates.
+  violation: strict mode, as in the hook), 2 invalid usage, an empty message or
+  no verdict. Catches `header-max-length`, `body-max-line-length`, and case
+  violations in ~1s before the ~34s pre-commit cycle. The orchestrator above
+  runs this check in its own process as the third (message) gate, so the
+  message never travels on another command line; call it directly only when
+  iterating on a draft message in isolation from the tree-state gates.
 - **`pnpm agent-tools:commit-queue --`** — runs the `agent-tools` TypeScript
   commit-queue CLI for advisory commit-queue intents in the machine-local
   per-intent store under `.agent/state/collaboration/commit-queue/`
