@@ -1,6 +1,7 @@
+import { isErr, ok } from '@oaknational/result';
 import { describe, expect, it } from 'vitest';
 
-import { assembleMessage, parseArgs } from './check-commit-message.js';
+import { assembleMessage, parseArgs, requireMessage } from './commit-message-intake.js';
 
 describe('parseArgs', () => {
   it('collects repeated -m paragraphs', () => {
@@ -52,5 +53,19 @@ describe('assembleMessage', () => {
 
   it('renders a single paragraph with a trailing newline', () => {
     expect(assembleMessage(['feat(scope): subject'])).toBe('feat(scope): subject\n');
+  });
+});
+
+describe('requireMessage', () => {
+  it('refuses an empty message, which commitlint would pass unchecked', () => {
+    expect(isErr(requireMessage(''))).toBe(true);
+  });
+
+  it('refuses a message of whitespace alone', () => {
+    expect(isErr(requireMessage(' \n\t\n'))).toBe(true);
+  });
+
+  it('keeps a message with text exactly as given', () => {
+    expect(requireMessage('feat(scope): subject\n')).toStrictEqual(ok('feat(scope): subject\n'));
   });
 });

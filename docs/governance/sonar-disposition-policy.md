@@ -319,7 +319,12 @@ strategies; on a request-handler path the rewrite is urgent.
 - No external input reaches a shell. Either the arguments pass as an argv
   array with no `shell` option, or the call's shell string is wholly literal.
   With `shell: true`, Node joins an argv array into one shell string, so an
-  array alone does not keep input from the shell.
+  array alone does not keep input from the shell. Under `cross-spawn` on
+  Windows, a `.cmd` or `.bat` target runs under `cmd.exe`, and a shim such as
+  `pnpm.cmd` reads its arguments a second time, where a double quote in one
+  can end its quoting. There an argv array keeps input from the shell only
+  when no argument can hold that character: the repository's own literals,
+  and paths to files that exist, since Windows forbids it in a file name.
 
 **Outcome for a site within the class**, by the finding's type:
 
