@@ -94,17 +94,12 @@ accepts for that query and no other.
   of the resting branch or the model is wrong; if the rule's own configuration consults no
   barrier kind, the unit records that finding on this node rather than dismissing the alert
   in the hosting service.
-- **Executable searched on PATH.** Fix-only under the policy, tooling included: every site
-  resolves its executable to an absolute path without consulting PATH, and each binary
-  resolves by its own existing mechanism — `git` through the trusted-git atom (the fixed
-  allowlist of well-known directories that atom already carries), `pnpm` through the
-  existing `agent-tools/src/spawn/pnpm-path.ts` resolver, `gitleaks` through the existing
-  `agent-tools/src/refounding/refound-gitleaks.ts` resolver (a standalone binary — CI
-  installs it pinned to `/usr/local/bin` with no `pnpm install`, and no workspace carries a
-  `node_modules/.bin/gitleaks`), and the node-run tools `typedoc` and `tsx` through the
-  owning workspace's `node_modules/.bin` absolute path or `process.execPath` with the
-  script. The trusted-git allowlist is never extended to per-user installs to cover the
-  other binaries. Each resolver is unit-tested for the refusal of an unresolved name.
+- **Executable searched on PATH.** Overtaken on 2026-11-05 by the owner's word "adopt the
+  by-name ruling on engraph": tooling invokes each binary by name with `PATH` as the trust
+  root, and a site within the class is marked under the Sonar disposition policy's second
+  exception (§S4036), not cured. The absolute-path resolver route this bullet set out is
+  withdrawn, and units 4 and 5 below with it. The upstream carrier at release 1.186.8 took
+  `pnpm` and `gh` to by-name; `git`, `gitleaks` and the shell follow.
 - **Clear-text protocol literal.** Fixtures that never dial their host take an `https`
   literal, a fix. A localhost loopback in a test helper or test-runner configuration is a
   code cure per site: the literal leaves the source — configuration, or a helper shape the
@@ -186,18 +181,11 @@ independent unless stated (numbered as cited elsewhere in the estate):
    cache's validated write already exists and does not change. The drift check takes the
    same model only if the closed vocabulary leaves its alert standing, with its reason:
    about five files.
-4. **Executables on PATH — the runtime and server sites.** Each binary resolves by its own
-   existing mechanism, never by a system-directory allowlist extended to per-user installs:
-   `git` through the trusted-git atom; `pnpm` through the existing
-   `agent-tools/src/spawn/pnpm-path.ts` resolver; node-run tools through the workspace's
-   `node_modules/.bin` absolute path, or `process.execPath` with the script. The refusal
-   test covers each resolver's unresolved case; adopted at the runtime sites: about six
-   files.
-5. **Executables on PATH — the tooling sites, and clear-text literals.** The remaining
-   spawn sites take the same per-binary resolution (fix-only, no exception for tooling:
-   `gitleaks` through its existing standalone resolver `refound-gitleaks.ts`, the CI-pinned
-   binary having no `node_modules/.bin` entry; `typedoc` and `tsx` through the owning
-   workspace's `node_modules/.bin` or `process.execPath`);
+4. **Executables on PATH — the runtime and server sites.** Withdrawn on 2026-11-05 with the
+   class's resolver route (§Executable searched on PATH above): a site within the class is
+   marked under the policy's second exception.
+5. **Executables on PATH — the tooling sites, and clear-text literals.** The spawn-site
+   half is withdrawn with unit 4 (2026-11-05). The clear-text half stands:
    fixture literals switch to `https` where the host is never dialled; the localhost helper
    sites take a code cure each — the literal leaves the source, as configuration or a helper
    shape the analyser accepts — recorded per site: about seven files.

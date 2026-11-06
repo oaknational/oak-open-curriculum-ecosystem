@@ -131,6 +131,12 @@ describe('runPrStateCli', () => {
     expect(stderr.text).toContain('pr state');
   });
 
+  it('rejects an unknown option with exit 2 and names it on stderr', () => {
+    const { exit, stderr } = run(['state', '461', '--nope']);
+    expect(exit).toBe(2);
+    expect(stderr.text).toContain('unknown option: --nope');
+  });
+
   it('rejects a malformed PR identifier at the boundary', () => {
     const { exit, stderr } = run(['state', 'not-a-pr']);
     expect(exit).toBe(2);

@@ -18,6 +18,7 @@ import { uuidV5Schema } from '../src/collaboration-state/agent-id';
 import { readRegistry } from '../src/commit-queue/registry';
 import type { CommitIntent, CommitQueueClaimsFile } from '../src/commit-queue/types';
 import { resolveTrustedGit } from '../src/core/trusted-git';
+import { writeAdvisoryStub } from './commit-queue-advisory-stub-fixture';
 
 const CLAIM_ID = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
 export const INTENT_ID = '11111111-1111-4111-8111-111111111111';
@@ -174,7 +175,8 @@ async function populateFixture(root: string): Promise<WorktreeFixture> {
   await mkdir(join(primary, 'notes'), { recursive: true });
   await writeFile(join(primary, 'README.md'), 'seed\n');
   await writeFile(join(primary, RENAME_SOURCE), '# move me atomically\n');
-  git(primary, 'add', 'README.md', RENAME_SOURCE);
+  const advisoryStubPaths = await writeAdvisoryStub(primary);
+  git(primary, 'add', 'README.md', RENAME_SOURCE, ...advisoryStubPaths);
   git(primary, 'commit', '-m', 'chore: seed');
 
   const linked = join(root, 'linked');

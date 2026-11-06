@@ -24,7 +24,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 import { writeErrorLine, writeLine } from '../core/terminal-output.js';
-import { resolveGhPath, type GhCommandExecutor } from '../pr-watch/gh.js';
+import type { GhCommandExecutor } from '../pr-watch/gh.js';
 
 import { parsePrThroughputArgs, USAGE, type PrThroughputOptions } from './cli-args.js';
 import { assertWindowCovered, CANONICAL_REPOSITORY, fetchMergedPrs } from './gh-fetch.js';
@@ -35,7 +35,6 @@ export { DEFAULT_REGISTER_PATH, parsePrThroughputArgs } from './cli-args.js';
 /** IO seams; tests inject fakes, the entry point injects the real edges. */
 export interface PrThroughputDeps {
   readonly executor: GhCommandExecutor;
-  readonly resolveGh: (override?: string) => string;
   /** Create the register with the header, exclusively; false when it already exists. */
   readonly createRegister: (registerPath: string, header: string) => boolean;
   /** Append one row atomically (O_APPEND — never read-modify-overwrite). */
@@ -84,15 +83,7 @@ export function runPrThroughput(argv: readonly string[], deps: PrThroughputDeps)
 }
 
 function runWithOptions(options: PrThroughputOptions, deps: PrThroughputDeps): number {
-  let ghPath: string;
-
-  try {
-    ghPath = deps.resolveGh(options.ghOverride);
-  } catch (error) {
-    return reportFailure(deps, error);
-  }
-
-  const covered = fetchCoveredCorpus(options, deps, ghPath);
+  const covered = fetchCoveredCorpus(options, deps);
 
   if (!covered.ok) {
     return reportFailure(deps, covered.error);
@@ -150,12 +141,10 @@ function writeRegisterRow(options: PrThroughputOptions, deps: PrThroughputDeps, 
 function fetchCoveredCorpus(
   options: PrThroughputOptions,
   deps: PrThroughputDeps,
-  ghPath: string,
 ): ReturnType<typeof fetchMergedPrs> {
   const windowStartMs = options.now.getTime() - options.windowDays * 24 * 60 * 60_000;
   const corpus = fetchMergedPrs({
     executor: deps.executor,
-    ghPath,
     limit: options.limit,
     mergedSinceDate: new Date(windowStartMs).toISOString().slice(0, 10),
     mergedUntilDate: options.now.toISOString().slice(0, 10),
@@ -184,7 +173,6 @@ function reportFailure(deps: Pick<PrThroughputDeps, 'writeError'>, cause: unknow
 function realDeps(): PrThroughputDeps {
   return {
     executor: (file, args, options) => execFileSync(file, [...args], options),
-    resolveGh: (override) => resolveGhPath(override),
     createRegister: (registerPath, header) => {
       mkdirSync(path.dirname(registerPath), { recursive: true });
       // Atomic exclusive publication: the header is written COMPLETE to a

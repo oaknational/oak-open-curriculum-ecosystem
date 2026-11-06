@@ -105,8 +105,6 @@ function reading(
 ) {
   return readPrStateReading({
     target: { number: 7, repo: 'acme/widgets' },
-    ghPath: '/usr/bin/gh',
-    exists: () => true,
     execFileSync: github(harvests, view),
     expectedReviewers,
     patchIdOf: textHasher,

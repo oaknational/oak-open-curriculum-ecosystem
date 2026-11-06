@@ -5,12 +5,25 @@ import { join } from 'node:path';
 
 /**
  * Destinations for the replayed child streams. Defaults to the parent's
- * own stdio; tests inject collectors so replay is assertable and the
- * runner's logs stay clean.
+ * own stdio; callers inject sinks (see {@link textReplaySinks}) to route
+ * the replay through their own writers.
  */
 export interface FileBackedChildReplaySinks {
   readonly stdout: { write(content: Buffer): unknown };
   readonly stderr: { write(content: Buffer): unknown };
+}
+
+/**
+ * Replay sinks that decode the captured bytes as UTF-8 and pass them to one
+ * text writer, such as a CLI's own output stream. Both streams go to the
+ * same writer; pair this with `combinedOutput` when write order across the
+ * two streams matters.
+ */
+export function textReplaySinks(writer: {
+  write(chunk: string): unknown;
+}): FileBackedChildReplaySinks {
+  const sink = { write: (content: Buffer) => writer.write(content.toString('utf8')) };
+  return { stdout: sink, stderr: sink };
 }
 
 export interface FileBackedChildOptions {

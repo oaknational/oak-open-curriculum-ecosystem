@@ -52,7 +52,6 @@ function unproven(reason: string): ContentId {
 
 interface ReadInput {
   readonly run: GhCommandExecutor;
-  readonly gh: string;
   /** `owner/repo`, or undefined for the repository gh infers. */
   readonly repo: string | undefined;
   readonly patchIdOf: PatchIdOf;
@@ -88,7 +87,7 @@ function contentOf(input: ReadInput, base: PlainBaseRef, oid: string): ContentId
   }
   let diff: string;
   try {
-    diff = input.run(input.gh, compareArgs(input, base, oid), GH_EXEC_OPTIONS);
+    diff = input.run('gh', compareArgs(input, base, oid), GH_EXEC_OPTIONS);
   } catch {
     return unproven('the compare diff could not be read');
   }
@@ -142,7 +141,6 @@ export function readContentLeg(
  */
 export function contentReaderFor(input: {
   readonly run: GhCommandExecutor;
-  readonly gh: string;
   readonly repo: string | undefined;
   readonly view: {
     readonly state: string;
@@ -157,7 +155,6 @@ export function contentReaderFor(input: {
   return (reviewedOids) =>
     readContentLeg({
       run: input.run,
-      gh: input.gh,
       repo: input.repo,
       base: input.view.baseRefName,
       headRefOid: input.view.headRefOid,

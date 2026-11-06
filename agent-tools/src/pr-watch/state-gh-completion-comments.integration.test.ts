@@ -111,7 +111,7 @@ function harvestAnswers(surfaces: Surfaces): readonly (readonly [string, () => s
   ];
 }
 
-const ghSeam = { ghPath: '/usr/bin/gh', exists: () => true, patchIdOf: textHasher };
+const ghSeam = { patchIdOf: textHasher };
 const WITH_TIP: Surfaces = { comments: [CODEX_CLEAN_COMMENT], commitPages: [[OLDER, HEAD]] };
 const BOUND_TO_HEAD = {
   id: 'IC_1',

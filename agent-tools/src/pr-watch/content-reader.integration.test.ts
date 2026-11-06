@@ -43,7 +43,6 @@ function read(
 ): ContentLeg {
   return readContentLeg({
     run,
-    gh: '/usr/bin/gh',
     repo: 'owner/name',
     base: 'engraph',
     headRefOid: HEAD,

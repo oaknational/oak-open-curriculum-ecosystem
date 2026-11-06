@@ -7,8 +7,8 @@
  * entry can shadow the binary. The documented compliant fix, and the only
  * one `docs/governance/sonar-disposition-policy.md` §S4036 admits, is to
  * execute the binary by its ABSOLUTE path from a fixed allowlist. This module
- * is that fix written once; `trusted-git.ts`, `trusted-gh.ts`,
- * `trusted-shell.ts` and `trusted-gitleaks.ts` each declare their allowlist
+ * is that fix written once; `trusted-git.ts`, `trusted-shell.ts` and
+ * `trusted-gitleaks.ts` each declare their allowlist
  * and remedy as a {@link TrustedBinarySpec} and resolve through it (one home
  * at the second consumer). The security property is the fixed absolute path
  * (resolution never consults `PATH`), not any guarantee that every listed

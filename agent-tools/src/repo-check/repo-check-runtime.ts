@@ -3,41 +3,21 @@ import { spawn, spawnSync, type ChildProcess, type SpawnSyncReturns } from 'node
 import { writeErrorLine } from '../core/terminal-output.js';
 import { resolveTrustedGit } from '../core/trusted-git.js';
 import { childEnvironment } from '../spawn/child-environment.js';
-import { resolvePnpm } from '../spawn/pnpm-path.js';
 import { signalProcessGroup, type SignalOutcome } from '../spawn/process-group.js';
 
 import type { RepoCheckRuntime } from './repo-check-types.js';
 
 /**
- * Resolve `pnpm` to its trusted launchable invocation (an executable file
- * plus leading arguments — the file may be the running Node binary when the
- * resolved pnpm is a JS entry point) at this real I/O edge — the agent-tools
- * invariant (see `spawn/pnpm-path.ts`): bare `pnpm` never reaches spawn, so
- * a writable PATH entry cannot shadow it. Other commands pass through
- * unchanged; injected fake runtimes never hit this edge. Returns the
- * resolution error message alongside the command when pnpm is not found, so
+ * The spawn target for `command` at this real I/O edge: `git` resolves to its
+ * trusted absolute path, and every other command runs by name. Injected fake
+ * runtimes never hit this edge. Returns the resolution error message alongside
+ * the command when git is not found, so
  * callers fail loudly through their normal non-zero paths (never a throw).
  */
 function trustedSpawnTarget(command: string): {
   readonly command: string;
-  readonly leadingArgs?: readonly string[];
-  readonly environment?: NodeJS.ProcessEnv;
   readonly error?: string;
 } {
-  if (command === 'pnpm') {
-    const resolved = resolvePnpm(process.env);
-
-    if (!resolved.ok) {
-      return { command, error: resolved.error.message };
-    }
-
-    return {
-      command: resolved.value.file,
-      leadingArgs: resolved.value.leadingArgs,
-      environment: resolved.value.env,
-    };
-  }
-
   if (command === 'git') {
     return trustedGitTarget(command);
   }
@@ -94,7 +74,7 @@ export interface InheritedProcessOptions {
  * whether spawn reports it or throws it, is written to stderr and reported as
  * status 1.
  *
- * @param command - The command; `pnpm` and `git` resolve to their trusted binaries.
+ * @param command - The command; `git` resolves to its trusted binary, and every other command runs by name.
  * @param args - Arguments.
  * @param options - The child's working directory, extra environment, group and kill seam.
  */
@@ -113,14 +93,9 @@ export function spawnInheritedProcess(
   return new Promise((resolve) => {
     let child: ChildProcess;
     try {
-      child = spawn(trusted.command, [...(trusted.leadingArgs ?? []), ...args], {
+      child = spawn(trusted.command, args, {
         stdio: 'inherit',
-        env: childEnvironment({
-          pnpm: trusted.environment !== undefined,
-          ambient: process.env,
-          extra: options.extraEnv,
-          platform: process.platform,
-        }),
+        env: childEnvironment({ ambient: process.env, extra: options.extraEnv }),
         cwd: options.cwd,
         detached: options.processGroup !== undefined,
       });
@@ -167,10 +142,9 @@ export function runCapturedProcess(
 
   return normaliseSpawnResult(
     command,
-    spawnSync(trusted.command, [...(trusted.leadingArgs ?? []), ...args], {
+    spawnSync(trusted.command, args, {
       encoding: 'utf8',
       maxBuffer: 1024 * 1024 * 50,
-      env: trusted.environment,
     }),
   );
 }

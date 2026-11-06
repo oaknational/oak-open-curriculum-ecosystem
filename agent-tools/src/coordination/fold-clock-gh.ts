@@ -3,9 +3,7 @@ import { err, ok, type Result } from '@oaknational/result';
 import {
   GH_EXEC_OPTIONS,
   parseGhJson,
-  resolveGhPath,
   type GhCommandExecutor,
-  type PathExistsCheck,
   type PrTarget,
 } from '../pr-watch/gh.js';
 import type { CheckRunReading, FoldClockReading } from './fold-clock.js';
@@ -33,8 +31,8 @@ export interface FoldClockSource {
   readonly target: PrTarget;
   /** The successor branch's pushed tip, validated hex by the caller. */
   readonly successorSha?: string;
+  /** A `gh` to run instead of `gh` by name, from `--gh`. */
   readonly ghPath?: string;
-  readonly exists?: PathExistsCheck;
   readonly execFileSync: GhCommandExecutor;
 }
 
@@ -70,12 +68,9 @@ function readSurface<T>(
   }
 }
 
-function resolveGh(source: FoldClockSource): Result<Gh, Error> {
-  try {
-    return ok({ run: source.execFileSync, path: resolveGhPath(source.ghPath, source.exists) });
-  } catch (error) {
-    return err(error instanceof Error ? error : new Error(String(error), { cause: error }));
-  }
+/** The executor and the `gh` it runs: by name, unless the caller named one. */
+function ghFor(source: FoldClockSource): Gh {
+  return { run: source.execFileSync, path: source.ghPath ?? 'gh' };
 }
 
 function checkRunsArgs(repo: string, sha: string): readonly string[] {
@@ -186,18 +181,10 @@ function readRemaining(context: PullContext): Result<FoldClockReading, Error> {
 
 /** Read the four surfaces (five with a successor) and assemble the clock's reading. */
 export function readFoldClockReading(source: FoldClockSource): Result<FoldClockReading, Error> {
-  const gh = resolveGh(source);
-  if (!gh.ok) {
-    return gh;
-  }
+  const gh = ghFor(source);
   const repo = source.target.repo ?? '{owner}/{repo}';
   const pr = String(source.target.number);
-  const pull = readSurface(
-    gh.value,
-    ['api', `repos/${repo}/pulls/${pr}`],
-    'pull request',
-    parsePull,
-  );
+  const pull = readSurface(gh, ['api', `repos/${repo}/pulls/${pr}`], 'pull request', parsePull);
   if (!pull.ok) {
     return pull;
   }
@@ -205,7 +192,7 @@ export function readFoldClockReading(source: FoldClockSource): Result<FoldClockR
     return err(new Error(`fold-clock: the base ref '${pull.value.baseRef}' is not a branch name`));
   }
   return readRemaining({
-    gh: gh.value,
+    gh: gh,
     repo,
     pr,
     prNumber: source.target.number,

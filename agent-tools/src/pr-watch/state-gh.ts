@@ -3,10 +3,8 @@ import { execFileSync } from 'node:child_process';
 import {
   GH_EXEC_OPTIONS,
   parseGhJson,
-  resolveGhPath,
   reviewThreadsArgs,
   type GhCommandExecutor,
-  type PathExistsCheck,
   type PrTarget,
 } from './gh.js';
 import { contentReaderFor, gitPatchIdOf, type PatchIdOf } from './content-reader.js';
@@ -47,9 +45,7 @@ import type { PrStateReading } from './state-types.js';
 
 export interface ReadPrStateOptions {
   readonly target: PrTarget;
-  readonly ghPath?: string;
   readonly execFileSync?: GhCommandExecutor;
-  readonly exists?: PathExistsCheck;
   /**
    * The declared expected reviewer set (`--expect`, repeatable): absent, the
    * set is undeclared and defaults; empty, it was declared `none`
@@ -68,12 +64,11 @@ export interface ReadPrStateOptions {
 // uncomputed conflict state.
 function readMergeabilityComputedView(input: {
   readonly run: GhCommandExecutor;
-  readonly gh: string;
   readonly viewArgs: readonly string[];
   readonly prNumber: string;
 }) {
   const view = parseStateView(
-    parseGhJson(input.run(input.gh, input.viewArgs, GH_EXEC_OPTIONS), 'pr view'),
+    parseGhJson(input.run('gh', input.viewArgs, GH_EXEC_OPTIONS), 'pr view'),
   );
   // The refusal binds OPEN PRs only: GitHub stops computing (and commonly
   // returns UNKNOWN for) merged/closed PRs, whose terminal verdicts must
@@ -91,7 +86,6 @@ function readMergeabilityComputedView(input: {
 // GraphQL payload.
 function readHarvest<Parsed>(input: {
   readonly run: GhCommandExecutor;
-  readonly gh: string;
   readonly prNumber: string;
   readonly repo: string | undefined;
   readonly query: string;
@@ -101,7 +95,7 @@ function readHarvest<Parsed>(input: {
   try {
     return input.parse(
       parseGhJson(
-        input.run(input.gh, harvestArgs(input.query, input.prNumber, input.repo), GH_EXEC_OPTIONS),
+        input.run('gh', harvestArgs(input.query, input.prNumber, input.repo), GH_EXEC_OPTIONS),
         `api graphql ${input.label}`,
       ),
     );
@@ -116,7 +110,6 @@ function readHarvest<Parsed>(input: {
 // The four full-history harvests the reading composes from.
 function readHarvests(input: {
   readonly run: GhCommandExecutor;
-  readonly gh: string;
   readonly prNumber: string;
   readonly repo: string | undefined;
 }) {
@@ -165,7 +158,6 @@ const TIP_CONSISTENT_ATTEMPTS = 2;
 export function readPrStateReading(options: ReadPrStateOptions): PrStateReading {
   const run = options.execFileSync ?? execFileSync;
   const patchIdOf = options.patchIdOf ?? gitPatchIdOf;
-  const gh = resolveGhPath(options.ghPath, options.exists);
   const { number, repo } = options.target;
   const prNumber = String(number);
 
@@ -174,19 +166,19 @@ export function readPrStateReading(options: ReadPrStateOptions): PrStateReading 
     viewArgs.push('--repo', repo);
   }
 
-  let view = readMergeabilityComputedView({ run, gh, viewArgs, prNumber });
+  let view = readMergeabilityComputedView({ run, viewArgs, prNumber });
   for (let attempt = 0; attempt < TIP_CONSISTENT_ATTEMPTS; attempt += 1) {
     const reviewThreads = parseReviewThreadPages(
       parseGhJson(
-        run(gh, reviewThreadsArgs(prNumber, repo), GH_EXEC_OPTIONS),
+        run('gh', reviewThreadsArgs(prNumber, repo), GH_EXEC_OPTIONS),
         'api graphql reviewThreads',
       ),
     );
-    const { reviews, comments, commits, requests } = readHarvests({ run, gh, prNumber, repo });
-    const reviewRuns = readReviewRunsLeg({ run, gh, prNumber: number, prUrl: view.url });
+    const { reviews, comments, commits, requests } = readHarvests({ run, prNumber, repo });
+    const reviewRuns = readReviewRunsLeg({ run, prNumber: number, prUrl: view.url });
     // The confirm read closes the race window; on a match it is also the
     // freshest same-tip snapshot, so the reading composes from it.
-    const confirm = readMergeabilityComputedView({ run, gh, viewArgs, prNumber });
+    const confirm = readMergeabilityComputedView({ run, viewArgs, prNumber });
     if (confirm.headRefOid === view.headRefOid) {
       return composeReading({
         view: confirm,
@@ -197,10 +189,10 @@ export function readPrStateReading(options: ReadPrStateOptions): PrStateReading 
         reviews,
         reviewRuns,
         // The base branch's configuration, from the view the reading composes from.
-        reviewConfiguration: readReviewConfigurationLeg({ run, gh, repo, view: confirm }),
+        reviewConfiguration: readReviewConfigurationLeg({ run, repo, view: confirm }),
         declared: options.expectedReviewers ?? null,
         ...(options.unavailable === undefined ? {} : { unavailable: options.unavailable }),
-        readContent: contentReaderFor({ run, gh, repo, view: confirm, patchIdOf }),
+        readContent: contentReaderFor({ run, repo, view: confirm, patchIdOf }),
       });
     }
     view = confirm;

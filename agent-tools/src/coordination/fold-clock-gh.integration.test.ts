@@ -121,7 +121,6 @@ describe('readFoldClockReading', () => {
     const reading = readFoldClockReading({
       target,
       ghPath: '/custom/bin/gh',
-      exists: () => true,
       execFileSync: exec,
     });
 
@@ -154,7 +153,6 @@ describe('readFoldClockReading', () => {
     const reading = readFoldClockReading({
       target,
       successorSha: SUCCESSOR,
-      exists: () => true,
       execFileSync: exec,
     });
 
@@ -170,7 +168,6 @@ describe('readFoldClockReading', () => {
     const reading = readFoldClockReading({
       target,
       successorSha: 'coordination/x',
-      exists: () => true,
       execFileSync: exec,
     });
 
@@ -196,7 +193,6 @@ describe('readFoldClockReading', () => {
 
     const reading = readFoldClockReading({
       target: { number: 7 },
-      exists: () => true,
       execFileSync: exec,
     });
 
@@ -210,7 +206,7 @@ describe('readFoldClockReading', () => {
       'repos/acme/widgets/rules/branches/main?per_page=100': 'gh: Not Found (HTTP 404)',
     });
 
-    const reading = readFoldClockReading({ target, exists: () => true, execFileSync: exec });
+    const reading = readFoldClockReading({ target, execFileSync: exec });
 
     expect(reading.ok).toBe(false);
     if (!reading.ok) {
@@ -224,7 +220,7 @@ describe('readFoldClockReading', () => {
       'repos/acme/widgets/pulls/326': { ...pull, head: { sha: 'short' } },
     });
 
-    const reading = readFoldClockReading({ target, exists: () => true, execFileSync: exec });
+    const reading = readFoldClockReading({ target, execFileSync: exec });
 
     expect(reading.ok).toBe(false);
     if (!reading.ok) {
@@ -238,24 +234,12 @@ describe('readFoldClockReading', () => {
       'repos/acme/widgets/pulls/326': { ...pull, base: { ref: '../main' } },
     });
 
-    const reading = readFoldClockReading({ target, exists: () => true, execFileSync: exec });
+    const reading = readFoldClockReading({ target, execFileSync: exec });
 
     expect(reading.ok).toBe(false);
     if (!reading.ok) {
       expect(reading.error.message).toContain('not a branch name');
     }
     expect(calls).toHaveLength(1);
-  });
-
-  it('fails loudly when gh cannot be found', () => {
-    const { exec, calls } = fakeGh(answers);
-
-    const reading = readFoldClockReading({ target, exists: () => false, execFileSync: exec });
-
-    expect(reading.ok).toBe(false);
-    if (!reading.ok) {
-      expect(reading.error.message).toContain('gh CLI not found');
-    }
-    expect(calls).toHaveLength(0);
   });
 });

@@ -18,10 +18,10 @@ modules they use, and app migration diffs stay mechanical
   Result-returning main, prints the failure, sets the exit code),
   `describeThrown`, `stripTrailing`.
 - `dev-server` — `ensureDevServer(base, demoDir)`: attach to a
-  responding dev server or spawn `pnpm dev` in `demoDir` and wait for
-  readiness. `demoDir` is a required parameter — the module must never
-  guess the app root from its own location. Refuses a relative
-  `npm_execpath` (PATH-lookup guard, Sonar S4036). Also
+  responding dev server or spawn `pnpm run dev` in `demoDir` and wait for
+  readiness; a dev server that exits before it is ready fails at once
+  with its exit code. `demoDir` is a required parameter — the module must
+  never guess the app root from its own location. Also
   `assertServerUp(base, hint)`: the attach-mode reachability assertion,
   bounded at 10s BECAUSE it is an assertion, not a spawn wait, with the
   app's own start-it advice rendered into the failure.

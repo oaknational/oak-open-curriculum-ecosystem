@@ -2,7 +2,7 @@ import { execFileSync } from 'node:child_process';
 
 import { z } from 'zod';
 
-import { GH_EXEC_OPTIONS, resolveGhPath, type GhCommandExecutor } from '../pr-watch/gh.js';
+import { GH_EXEC_OPTIONS, type GhCommandExecutor } from '../pr-watch/gh.js';
 import { parseRecordedHarvest, type RecordedHarvest } from '../pr-tally/harvest.js';
 
 /**
@@ -72,7 +72,7 @@ export type ListedPullRequest = z.infer<typeof PULL_REQUEST_LIST>[number];
 /** Read the pull request's recording and description through `gh`. */
 export function readLiveHarvest(options: HarvestOptions): LiveHarvest {
   const run = options.run ?? execFileSync;
-  const gh = resolveGhPath(options.ghPath);
+  const gh = options.ghPath ?? 'gh';
   const [owner, name] = options.repo.split('/');
   const envelope = ENVELOPE.parse(
     JSON.parse(
@@ -109,7 +109,7 @@ export function openPullRequestFor(
   ghPath?: string,
   run: GhCommandExecutor = execFileSync,
 ): number | null {
-  const gh = resolveGhPath(ghPath);
+  const gh = ghPath ?? 'gh';
   const open = OPEN_PULL_REQUESTS.parse(
     JSON.parse(
       run(
@@ -142,7 +142,7 @@ export function pullRequestsSince(
   ghPath?: string,
   run: GhCommandExecutor = execFileSync,
 ): ListedPullRequest[] {
-  const gh = resolveGhPath(ghPath);
+  const gh = ghPath ?? 'gh';
   return PULL_REQUEST_LIST.parse(
     JSON.parse(
       run(
@@ -169,7 +169,7 @@ export function pullRequestsSince(
 
 /** The repository's `owner/repo` from `gh`, when the caller does not name it. */
 export function currentRepo(ghPath?: string, run: GhCommandExecutor = execFileSync): string {
-  const gh = resolveGhPath(ghPath);
+  const gh = ghPath ?? 'gh';
   return run(
     gh,
     ['repo', 'view', '--json', 'nameWithOwner', '--jq', '.nameWithOwner'],

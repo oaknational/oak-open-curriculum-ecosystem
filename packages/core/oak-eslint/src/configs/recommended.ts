@@ -97,7 +97,6 @@ const recommendedBase: TSESLint.FlatConfig.ConfigArray = defineConfig(
       'sonarjs/hashing': 'error', // S4790
       'sonarjs/updated-loop-counter': 'error', // S2310
       'sonarjs/no-all-duplicated-branches': 'error', // S3923
-      'sonarjs/no-os-command-from-path': 'error', // S4036
       'sonarjs/no-clear-text-protocols': 'error', // S5332
       'sonarjs/no-misleading-array-reverse': 'error', // S4043
       'unicorn/no-object-as-default-parameter': 'error', // S7737

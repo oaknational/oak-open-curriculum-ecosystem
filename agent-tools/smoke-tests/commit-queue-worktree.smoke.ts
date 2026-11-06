@@ -17,6 +17,8 @@ import {
   runCommitQueue,
   streams,
 } from './commit-queue-worktree-fixture';
+import { assertAdvisoryReplayed } from './commit-queue-advisory-stub-fixture';
+
 /**
  * F-138 regression smoke — the commit-queue two-root split and
  * changed-endpoint identity. Real scratch primary + linked worktree: a
@@ -82,55 +84,21 @@ async function proveVerifyStagedUsesWorktreeIndex(): Promise<void> {
 }
 
 /**
- * The whole of a commit's stderr when the advisory pass failed: the advisory
- * banner, then whatever the advisory child and the inner `git commit` wrote to
- * stderr (the `children` group, zero or more lines), then the notice that the
- * commit landed at `head` with a non-zero advisory exit recorded. The wording
- * after the dash is free.
- */
-function advisoryFailureStderr(head: string): RegExp {
-  return new RegExp(
-    String.raw`^\[ADVISORY ONLY — NOT A COMMIT GATE\]\n` +
-      String.raw`(?<children>(?:[^\n]*\n)*)` +
-      String.raw`commit landed at ${head} \(intent ${INTENT_ID}\); ` +
-      String.raw`advisory orchestrator exit [1-9]\d* — [^\n]*\n$`,
-  );
-}
-
-/**
- * Both streams of a commit whose advisory pass failed, every line accounted
- * for. This repository's own lines are pinned by their own text: the banner
- * whole, the notice up to its dash with any non-zero exit, and the sha as the
- * last stdout line. The advisory child is the host's pnpm, which can only
- * fail in the scratch repository, and how it fails belongs to its version:
- * pnpm 11 prints one line on stdout, pnpm 12 prints a block on stderr. Its
- * text is pinned by where it may sit and by its presence, never by its
- * wording: on stdout only before git's commit summary, on stderr only between
- * the banner and the notice (where the inner `git commit`'s own stderr also
- * lands), and at least one non-empty line across the two. git's summary is
- * pinned the same way: a first line naming the commit subject, then only
- * git's indented detail lines before the sha. This does not prove the
- * advisory child's working directory or arguments.
+ * Both streams of a commit whose advisory pass failed. The scratch repository's
+ * advisory stub fails on purpose, and the failure never gates the commit
+ * (PDR-053 / ADR-176 advisory polarity). The command replays the banner, both
+ * children's output and the landed notice to its own stderr, in the run's
+ * order, so stdout carries the sha alone.
  */
 function assertAdvisoryFailureStreams(committed: SpawnSyncReturns<string>, head: string): void {
-  const stderr = advisoryFailureStderr(head).exec(committed.stderr);
-  assert.ok(
-    stderr?.groups,
-    `stderr is the banner, the children's stderr, the notice:\n${streams(committed)}`,
-  );
-  const lines = committed.stdout.split('\n');
-  assert.deepEqual(lines.slice(-2), [head, ''], `the sha ends stdout:\n${streams(committed)}`);
-  const summaryAt = lines.findIndex((line) => line.includes(COMMIT_SUBJECT));
-  assert.ok(summaryAt >= 0, `git's commit summary names the subject:\n${streams(committed)}`);
-  assert.deepEqual(
-    lines.slice(summaryAt + 1, -2).filter((line) => !/^ \S/.test(line)),
-    [],
-    `only git's indented detail lines sit between its summary and the sha:\n${streams(committed)}`,
-  );
-  const childLines = [...lines.slice(0, summaryAt), ...stderr.groups.children.split('\n')];
-  assert.ok(
-    childLines.some((line) => line.trim().length > 0),
-    `the advisory child wrote at least one line; none means no pnpm ran:\n${streams(committed)}`,
+  assert.equal(committed.stdout, `${head}\n`, `stdout is the sha alone:\n${streams(committed)}`);
+  assertAdvisoryReplayed(committed.stderr, COMMIT_SUBJECT);
+  assert.match(
+    committed.stderr,
+    new RegExp(
+      String.raw`commit landed at ${head} \(intent ${INTENT_ID}\); advisory orchestrator exit [1-9]\d* — [^\n]*\n$`,
+    ),
+    `stderr ends with the landed notice:\n${streams(committed)}`,
   );
 }
 
@@ -156,9 +124,6 @@ async function proveCommitLandsOnWorktreeBranch(): Promise<void> {
 
     assert.equal(committed.status, 0, streams(committed));
     const head = git(fixture.linked, 'rev-parse', 'HEAD').trim();
-    // The scratch repo has no package manifest, so the host's pnpm fails the
-    // advisory pass — and that MUST NOT gate the commit (PDR-053 / ADR-176
-    // advisory polarity).
     assertAdvisoryFailureStreams(committed, head);
     const committedPaths = new Set(
       git(fixture.linked, 'ls-tree', '-r', '--name-only', 'HEAD').split('\n'),

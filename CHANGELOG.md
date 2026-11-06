@@ -1,3 +1,21 @@
+## [1.186.8](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.186.7...v1.186.8) (2026-11-05)
+
+
+### Bug Fixes
+
+* **fidelity-review:** keep a failed teardown in the error when a spawned server is not ours ([dce8c99](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/dce8c9957a2a4ce4d6d8f338ad8f90808b9652ab))
+* **fidelity-review:** report teardown failure on an unready dev server, and prove the teardown ([dd1660e](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/dd1660e43c3f52279f24c510e7912c5d31c4697f)), closes [#1018](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/1018)
+
+## [1.186.7](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.186.6...v1.186.7) (2026-11-04)
+
+## [1.186.6](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.186.5...v1.186.6) (2026-11-04)
+
+
+### Bug Fixes
+
+* **agent-tools:** read null pull-request fields on an agent-task view as an unmapped run ([03f65c0](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/03f65c06a39dcbde0ed482687df93461bad8c755)), closes [#1014](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/1014) [#1015](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/1015)
+* **agent-tools:** replay the commit workflow's child output to the command's own stderr ([95203fc](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/95203fcc6a5abdedf4f1cf3f9582f8d2e548584b)), closes [#1015](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/1015)
+
 ## [1.186.5](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.186.4...v1.186.5) (2026-11-03)
 
 ## [1.186.4](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.186.3...v1.186.4) (2026-11-03)

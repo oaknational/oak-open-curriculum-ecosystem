@@ -2,11 +2,10 @@
  * The `gh` IO boundary for the PDR-131 throughput register.
  *
  * @remarks
- * Fetches the merged-PR corpus through the injected executor seam (tests
- * inject a fake; the CLI injects `execFileSync` with the absolute `gh` path
- * from `pr-watch`'s resolver — second consumer, so the resolver is reused,
- * never re-derived). The payload is schema-parsed at this boundary: external
- * data enters typed or not at all.
+ * Fetches the merged-PR corpus by running `gh` by name through the injected
+ * executor seam (`pr-watch`'s {@link GhCommandExecutor}: tests inject a fake;
+ * the CLI injects `execFileSync`). The payload is schema-parsed at this
+ * boundary: external data enters typed or not at all.
  *
  * @packageDocumentation
  */
@@ -51,7 +50,6 @@ export const CANONICAL_REPOSITORY = 'oaknational/oak-open-curriculum-ecosystem';
  */
 export function fetchMergedPrs(input: {
   readonly executor: GhCommandExecutor;
-  readonly ghPath: string;
   readonly limit: number;
   readonly mergedSinceDate: string;
   readonly mergedUntilDate: string;
@@ -60,7 +58,7 @@ export function fetchMergedPrs(input: {
 
   try {
     raw = input.executor(
-      input.ghPath,
+      'gh',
       [
         'pr',
         'list',

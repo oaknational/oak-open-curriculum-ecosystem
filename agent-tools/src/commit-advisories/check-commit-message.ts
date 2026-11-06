@@ -42,7 +42,6 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { resolveTrustedGit } from '../core/trusted-git.js';
-import { resolvePnpm } from '../spawn/pnpm-path.js';
 
 import { commitlintArgs, exitCodeForCommitlintStatus } from './commitlint-verdict.js';
 
@@ -194,22 +193,10 @@ function runCommitlint(message: string): number {
   const messageFile = join(dir, 'COMMIT_EDITMSG');
   try {
     writeFileSync(messageFile, message);
-    // Bare 'pnpm' never reaches spawn (the agent-tools invariant, and on
-    // Windows a shell-less by-name spawn cannot resolve the .cmd shim).
-    const pnpm = resolvePnpm(process.env);
-    if (!pnpm.ok) {
-      process.stderr.write(`${pnpm.error.message}\n`);
-      return 2;
-    }
-    const result = spawnSync(
-      pnpm.value.file,
-      [...pnpm.value.leadingArgs, ...commitlintArgs(messageFile)],
-      {
-        cwd: repoRoot,
-        stdio: 'inherit',
-        env: pnpm.value.env,
-      },
-    );
+    const result = spawnSync('pnpm', commitlintArgs(messageFile), {
+      cwd: repoRoot,
+      stdio: 'inherit',
+    });
     return exitCodeForCommitlintStatus(result.status);
   } finally {
     rmSync(dir, { recursive: true, force: true });

@@ -1,7 +1,5 @@
 import { execFileSync } from 'node:child_process';
 import type { ExecFileSyncOptionsWithStringEncoding } from 'node:child_process';
-import { existsSync } from 'node:fs';
-import path from 'node:path';
 
 import { buildSnapshot, PR_VIEW_JSON_FIELDS, type PrSnapshot } from './index.js';
 
@@ -9,11 +7,9 @@ import { buildSnapshot, PR_VIEW_JSON_FIELDS, type PrSnapshot } from './index.js'
  * The `gh` IO seam for `pr-watch`. All process invocation goes through here so
  * the pure core stays testable; tests inject {@link GhCommandExecutor}.
  *
- * Security: `gh` is invoked via `execFileSync` with an ARGS ARRAY (never a shell
- * string), and the binary is given an ABSOLUTE path resolved by
- * {@link resolveGhPath}, so command resolution never consults `PATH` (no S4036
- * binary-shadowing surface). The PR identifier is validated by
- * {@link parsePrTarget} before it ever reaches `gh`.
+ * Security: `gh` is invoked by name via `execFileSync` with an ARGS ARRAY (never
+ * a shell string), and the PR identifier is validated by {@link parsePrTarget}
+ * before it ever reaches `gh`.
  */
 
 export type GhCommandExecutor = (
@@ -21,42 +17,6 @@ export type GhCommandExecutor = (
   args: readonly string[],
   options: ExecFileSyncOptionsWithStringEncoding,
 ) => string;
-
-export type PathExistsCheck = (candidate: string) => boolean;
-
-/**
- * Known absolute install locations for the `gh` binary, most specific first.
- * `gh` is a third-party CLI with no single canonical system path (unlike
- * `git`), so the absolute path is resolved by probing these rather than pinning
- * `PATH`. Using an absolute path with `execFile` keeps resolution off `PATH`.
- */
-const KNOWN_GH_PATHS = [
-  '/opt/homebrew/bin/gh',
-  '/usr/local/bin/gh',
-  '/usr/bin/gh',
-  '/bin/gh',
-] as const;
-
-/** Resolve an absolute path to the `gh` binary, honouring an explicit override. */
-export function resolveGhPath(override?: string, exists: PathExistsCheck = existsSync): string {
-  if (override !== undefined) {
-    if (!path.isAbsolute(override)) {
-      throw new Error('--gh requires an absolute path to a gh executable');
-    }
-    if (path.basename(override) !== 'gh') {
-      throw new Error('--gh must point to an executable named gh');
-    }
-    if (!exists(override)) {
-      throw new Error(`--gh path does not exist: ${override}`);
-    }
-    return override;
-  }
-  const found = KNOWN_GH_PATHS.find((candidate) => exists(candidate));
-  if (found === undefined) {
-    throw new Error(`gh CLI not found in ${KNOWN_GH_PATHS.join(', ')}; pass --gh <absolute-path>`);
-  }
-  return found;
-}
 
 /** A validated pull-request target. */
 export interface PrTarget {
@@ -107,9 +67,7 @@ export function parsePrTarget(prArg: string, repoArg?: string): PrTarget {
 
 export interface ReadPrSnapshotOptions {
   readonly target: PrTarget;
-  readonly ghPath?: string;
   readonly execFileSync?: GhCommandExecutor;
-  readonly exists?: PathExistsCheck;
 }
 
 // gh JSON for a busy PR (many checks/comments, `gh api --paginate`) can exceed
@@ -160,7 +118,6 @@ export function reviewThreadsArgs(prNumber: string, repo: string | undefined): s
 /** Fetch the three `gh` surfaces for a PR and build a {@link PrSnapshot}. */
 export function readPrSnapshot(options: ReadPrSnapshotOptions): PrSnapshot {
   const run = options.execFileSync ?? execFileSync;
-  const gh = resolveGhPath(options.ghPath, options.exists);
   const { number, repo } = options.target;
   const prNumber = String(number);
 
@@ -174,10 +131,10 @@ export function readPrSnapshot(options: ReadPrSnapshotOptions): PrSnapshot {
   const apiOwnerRepo = repo ?? '{owner}/{repo}';
   const apiArgs = ['api', `repos/${apiOwnerRepo}/pulls/${prNumber}/comments`, '--paginate'];
 
-  const prViewRaw = parseGhJson(run(gh, prViewArgs, GH_EXEC_OPTIONS), 'pr view');
-  const reviewCommentsRaw = parseGhJson(run(gh, apiArgs, GH_EXEC_OPTIONS), 'api pulls comments');
+  const prViewRaw = parseGhJson(run('gh', prViewArgs, GH_EXEC_OPTIONS), 'pr view');
+  const reviewCommentsRaw = parseGhJson(run('gh', apiArgs, GH_EXEC_OPTIONS), 'api pulls comments');
   const reviewThreadPagesRaw = parseGhJson(
-    run(gh, reviewThreadsArgs(prNumber, repo), GH_EXEC_OPTIONS),
+    run('gh', reviewThreadsArgs(prNumber, repo), GH_EXEC_OPTIONS),
     'api graphql reviewThreads',
   );
   return buildSnapshot(prViewRaw, reviewCommentsRaw, reviewThreadPagesRaw);

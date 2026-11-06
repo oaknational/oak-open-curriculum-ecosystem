@@ -17,7 +17,6 @@ import { PR_VERDICT_STATES, type PrStateReading } from './state-types.js';
 
 export interface ReadReadingInput {
   readonly target: PrTarget;
-  readonly ghPath?: string;
   /** Absent when `--expect` was not given; empty when it was `none` (expect-flag.ts). */
   readonly expectedReviewers?: readonly string[];
   /** Vendors declared unavailable; absent when none is declared. */
@@ -40,7 +39,6 @@ interface ParsedStateArgs {
   readonly pr: string;
   readonly repo?: string;
   readonly json: boolean;
-  readonly ghPath?: string;
   readonly help: boolean;
   /** `null` when undeclared; empty when declared `none` (expect-flag.ts). */
   readonly expect: readonly string[] | null;
@@ -49,7 +47,6 @@ interface ParsedStateArgs {
 
 interface MutableStateArgs {
   repo?: string;
-  ghPath?: string;
   json: boolean;
   help: boolean;
   positionals: string[];
@@ -74,9 +71,6 @@ const STATE_VALUE_HANDLERS: Readonly<
 > = {
   '--repo': (state, value) => {
     state.repo = value;
-  },
-  '--gh': (state, value) => {
-    state.ghPath = value;
   },
   '--expect': (state, value) => {
     const parsed = parseExpectValue(value);
@@ -144,7 +138,6 @@ function parseStateArgs(args: readonly string[]): ParsedStateArgs {
     expect: expect.value,
     unavailable: state.unavailable,
     ...(state.repo === undefined ? {} : { repo: state.repo }),
-    ...(state.ghPath === undefined ? {} : { ghPath: state.ghPath }),
   };
 }
 
@@ -175,7 +168,6 @@ function runStateAction(input: ActionInput & { readonly rest: readonly string[] 
   const reading = input.read({
     target,
     ...(parsed.expect === null ? {} : { expectedReviewers: parsed.expect }),
-    ...(parsed.ghPath === undefined ? {} : { ghPath: parsed.ghPath }),
     ...(parsed.unavailable.length === 0
       ? {}
       : {
@@ -227,7 +219,7 @@ function noPoster(): string {
 
 function usage(): string {
   return [
-    'pr state <pr-number|github-pull-url> [--repo <owner/repo>] [--json] [--expect <login>|none]... [--unavailable <login>=<comment-url>]... [--gh <absolute-path>]',
+    'pr state <pr-number|github-pull-url> [--repo <owner/repo>] [--json] [--expect <login>|none]... [--unavailable <login>=<comment-url>]...',
     '',
     'Resolves the pr-lifecycle compound read (checks BY NAME, review threads, auto-merge',
     'intent, per-reviewer legs over the FULL review harvest, agent-task review-run',

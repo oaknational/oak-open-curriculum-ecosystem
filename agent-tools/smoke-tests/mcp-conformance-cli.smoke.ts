@@ -17,9 +17,8 @@
  * home.
  *
  * Requires the workspace to be built (the turbo `test:e2e` task depends on
- * `build`, so the pipeline guarantees it); a missing dist fails loudly with
- * the build command rather than spawning a package manager from PATH here
- * (S4036: only fixed executables are spawned — the current Node binary).
+ * `build`, so the pipeline guarantees it); a missing dist fails loudly naming
+ * the build command. The built binary runs under the current Node binary.
  */
 import { spawnSync } from 'node:child_process';
 import { accessSync, constants, existsSync, readFileSync } from 'node:fs';

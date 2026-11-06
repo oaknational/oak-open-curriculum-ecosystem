@@ -6,7 +6,6 @@ import { z } from 'zod';
 
 import { runFileBackedChild } from '../core/file-backed-child.js';
 import { writeLine, writeErrorLine } from '../core/terminal-output.js';
-import { resolvePnpm } from '../spawn/pnpm-path.js';
 
 import {
   runCapturedProcess,
@@ -86,16 +85,11 @@ interface CapturedRunResult {
  * named on stderr and reaches the artifact as the 128 exit sentinel.
  */
 async function runCapturedCheck(): Promise<CapturedRunResult | Error> {
-  const pnpm = resolvePnpm(process.env);
-  if (!pnpm.ok) {
-    return pnpm.error;
-  }
   const transcript: Buffer[] = [];
   const result = await runFileBackedChild({
-    command: pnpm.value.file,
-    args: [...pnpm.value.leadingArgs, 'check'],
+    command: 'pnpm',
+    args: ['check'],
     cwd: process.cwd(),
-    env: pnpm.value.env,
     combinedOutput: true,
     replaySinks: {
       stdout: {

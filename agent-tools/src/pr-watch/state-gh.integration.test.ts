@@ -81,7 +81,7 @@ function movingTipExecutor(oids: readonly string[], calls: string[][]): GhComman
   };
 }
 
-const ghSeam = { ghPath: '/usr/bin/gh', exists: () => true, patchIdOf: textHasher };
+const ghSeam = { patchIdOf: textHasher };
 
 describe('readPrStateReading', () => {
   it('composes view, threads, the full reviews harvest, and PR-scoped runs into one reading', () => {
