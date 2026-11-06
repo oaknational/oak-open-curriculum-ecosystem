@@ -85,7 +85,7 @@ function reemitCapturedStreams(result: RepoCheckCommandResult): void {
  * Run knip captured and return the gate's exit code: knip's own on a
  * finding or a crash, 1 on a swallowed crash, 0 on a clean pass.
  *
- * @param runtime - The process runtime; the default resolves the trusted pnpm.
+ * @param runtime - The process runtime; the default runs pnpm by name.
  * @param emitDiagnostic - Where the crash-class line goes; stdout by default.
  */
 export async function runKnipGate(

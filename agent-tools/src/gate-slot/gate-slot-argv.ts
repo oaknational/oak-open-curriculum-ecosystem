@@ -10,8 +10,8 @@ const HELP_FLAGS: ReadonlySet<string> = new Set(['--help', '-h']);
 /**
  * Parse the gate-slot arguments. `run` takes one form only, a pnpm command
  * (`run pnpm check`): every gate is a pnpm command, so the gate child is
- * always the trusted pnpm binary rather than whatever `PATH` finds. This is
- * not a security boundary (`pnpm exec` runs anything). Every argument after
+ * always pnpm, invoked by name. This is not a security boundary
+ * (`pnpm exec` runs anything). Every argument after
  * `pnpm` belongs to pnpm, flags included.
  */
 export function parseGateSlotArgv(argv: readonly string[]): GateSlotCommand {

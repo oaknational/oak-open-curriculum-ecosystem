@@ -633,8 +633,9 @@ paths, setup files) don't apply.
   alerts headed for dismissal were fixed at source instead, and a
   differential test then proved one "false positive" regex was a real
   super-linear backtracking vector the dismissal path would have
-  preserved. Fix-first is the only disposition (owner ruling
-  2026-09-08: "We don't dismiss issues, we fix them").
+  preserved. Fix-first is the disposition (owner ruling 2026-09-08:
+  "We don't dismiss issues, we fix them"), but for the two exceptions
+  the Sonar disposition policy names.
 - **Session-local tool reports are evidence only inside the session
   that produced them** - Do not make a shell invocation of an
   interactive-session command (such as Claude Code `/doctor`) a

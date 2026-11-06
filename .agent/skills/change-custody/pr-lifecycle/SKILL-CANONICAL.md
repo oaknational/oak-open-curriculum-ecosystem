@@ -660,12 +660,13 @@ live tickets where the platform is in use.
   by horizon, not more rounds).
 - Order by blocking force and risk, not by tool order; root causes before
   echoes.
-- Analyser findings, Sonar's and CodeQL's alike, have no per-site
-  disposition channel: every finding is cured at source (the owner's
-  2026-09-08 ruling, "we don't dismiss issues, we fix them"); the one
-  excepted class is OCE's tracked CodeQL query exclusion of
-  `js/missing-rate-limiting` (the owner's 2026-09-17 mechanism ruling,
-  about that one issue; OCE's sonar disposition policy records it).
+- Analyser findings, Sonar's and CodeQL's alike, are cured at source (the
+  owner's 2026-09-08 ruling, "we don't dismiss issues, we fix them"). OCE's
+  sonar disposition policy records the two excepted classes: the tracked
+  CodeQL query exclusion of `js/missing-rate-limiting` (the owner's
+  2026-09-17 mechanism ruling, about that one issue), and S4036 at a binary
+  invoked by name, marked `FALSE_POSITIVE` per site with the class's
+  canonical rationale (the owner's 2026-11-05 ruling).
   Triage routes findings; it never buries them — never dismissed by
   category or per site, never gate-narrowed, never warning-downgraded,
   never suppressed.

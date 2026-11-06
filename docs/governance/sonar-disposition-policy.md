@@ -15,15 +15,16 @@ code-scanning analyser — security hotspots, security-class issues and
 quality issues alike — are resolved, so that the same reasoning is not
 re-derived per site by every reviewer. Since the owner's ruling of
 2026-09-08 (§[One-Outcome Rule](#one-outcome-rule-owner-ruled-2026-09-08))
-that resolution is a fix in the tree, with one named exception; the
+that resolution is a fix in the tree, with two named exceptions; the
 documented classes below carry what each rule sees and which change clears
 it, so a finding in a known class is cured by reference and only a site
 outside every documented class needs fresh judgement.
 
 The policy composes with the analysers' own records: a cured finding closes
-on the next analysis of the corrected code, and the one excepted query is
+on the next analysis of the corrected code, the first exception's query is
 excluded by tracked CodeQL configuration, explained by ADR-219 and the
-route comments.
+route comments, and a site within §S4036's class is marked under the
+second exception.
 Together they give an auditable record: _what the pattern is_, _what
 clears it_, and _which sites instantiate it_.
 
@@ -46,14 +47,15 @@ Owner ruling, 2026-09-08, verbatim: **"We don't dismiss issues, we fix
 them."** Every finding from either analyser resolves to **one outcome**:
 `FIXED` — a change in the tree after which the finding no longer fires,
 closed by the next analysis. `FALSE_POSITIVE`, `SAFE`, `ACCEPTED` and
-`ACKNOWLEDGED` are analyser-side states this policy does not grant: a
+`ACKNOWLEDGED` are analyser-side states this policy grants only under the
+second exception below (§S4036): a
 finding that is genuinely wrong about a site is still cured by a change
 that stops it firing (a literal removed, a shape restructured, a value
 sourced differently), never by an act in the analyser's console. Precedent
 in the analyser (a site marked before the ruling) licenses nothing at the
 next site.
 
-**The one exception, owner-ruled the same day, verbatim:** "in regard to
+**The first exception, owner-ruled the same day, verbatim:** "in regard to
 the rate limiting work, we are going to pause that for now, and leave
 comments in the code that recognise that additional in-process rate
 limiting would provide defence in depth, but that we regard the two sets of
@@ -126,9 +128,9 @@ These govern _how_ a finding is dispositioned, beneath the per-class catalogue:
   [decision lenses][principles] (LTAE first) decisively resolve which change
   cures a site, decide it — framing a lens-resolved call as an owner-fork is
   analysis-passback. Escalate only when all lenses genuinely fail or the
-  scope is product/feature. (The one exception, the tracked exclusion of
-  `js/missing-rate-limiting`, was the owner's ruling; the cure
-  _determination_ at a site never is.)
+  scope is product/feature. (The exceptions, the tracked exclusion of
+  `js/missing-rate-limiting` and the S4036 by-name class, were the owner's
+  rulings; the cure _determination_ at a site never is.)
 - **A deliberately-adopted profile's findings are a worklist, not noise.** When
   the owner activates an analyser profile on purpose, the target is zero,
   by cure. Do NOT frame the resulting backlog as an activation-wave
@@ -142,8 +144,8 @@ These govern _how_ a finding is dispositioned, beneath the per-class catalogue:
   dismissal buys silence, not absence: cure structurally in the code
   instead. The posture was vindicated when a flagged pattern proved to be a
   real super-linear-backtracking ReDoS vector. Agents never dismiss alerts;
-  the One-Outcome Rule's one exception is a tracked query exclusion, not a
-  dismissal.
+  the One-Outcome Rule's first exception is a tracked query exclusion, not a
+  dismissal, and its second marks an S4036 site within §S4036's class.
 - **Triage by cause-class, but a class splits by disposition-route.** A rule
   class (e.g. a regex backlog) does not resolve uniformly: generated output →
   fix at the generator; generator source → fix in place + regen; hand-written →
@@ -339,9 +341,8 @@ strategies; on a request-handler path the rewrite is urgent.
 **Canonical rationale**: "repository-required binary invoked by name; `PATH`
 is the trust root (§S4036 ruling); no external input reaches a shell".
 
-**Worked example**: `packages/sdks/oak-sdk-codegen/code-generation/run-typedoc.ts:56`.
-`spawn('typedoc', args, …)` runs the workspace's own TypeDoc by name with an
-argv array.
+**Worked example**: `realPnpmRunner` in `agent-tools/src/spawn/build-runner.ts`
+runs the repository's pnpm by name with an argv array and no shell.
 
 **Delta from the prior class**: S4036 was FIX-only, cured by an absolute path
 chosen from a fixed list of directories. The ruling gives a site within the
@@ -778,8 +779,8 @@ say what the analyser sees and which change clears it, and the next analysis
 closes the finding. The absence of a file-based ignore is not a gap to be
 filled by a server-side mark — since the 2026-09-08 ruling there is no mark
 to make, for S5443 / S5332 / S1313 in test fixtures as for every other
-class. The one exception, the rate-limiting query, is no per-site record
-either: it is the tracked `query-filters` entry in
+class but S4036's (the second exception). The first exception, the
+rate-limiting query, is no per-site record either: it is the tracked `query-filters` entry in
 `.github/codeql/codeql-config.yml`, which knowingly silences that query for
 every route (§One-Outcome Rule).
 
@@ -895,12 +896,21 @@ cure. Upstream invokes `pnpm`, `gh` and `gitleaks` by name under the owner's
 S4036 ruling of 2026-11-03, and this estate resolved each binary to an
 absolute path from a platform-partitioned allowlist.
 
-Delta from prior: §S4036 takes the upstream text whole, and the
-§One-Outcome Rule gains its second exception, so a site within the class is
-marked rather than cured. The Disposition Workflow gains the step that
-marks it. The first exception's scope is unchanged. The §S4036 delta's
-counts are the upstream analyser project's; this estate's analyser raises
-S4036 at each by-name site, and each is marked under the second exception.
+Delta from prior: §S4036 takes the upstream text whole except its worked
+example, and the §One-Outcome Rule gains its second exception, so a site
+within the class is marked rather than cured. The Disposition Workflow gains
+the step that marks it. The first exception's scope is unchanged. The
+§S4036 delta's counts are the upstream analyser project's; this estate's
+analyser raises S4036 at each by-name site, and each is marked under the
+second exception.
+
+The worked example is this estate's own. Upstream's names `run-typedoc.ts`,
+which here runs TypeDoc through the package's own entry under
+`process.execPath`, never by name. At this amendment's date `git`,
+`gitleaks` and the smokes' shell still resolve through the absolute-path
+resolvers in `agent-tools/src/core/` (`trusted-git.ts`,
+`trusted-gitleaks.ts`, `trusted-shell.ts`); each moves to by-name in its own
+change.
 
 ## Cross-references
 

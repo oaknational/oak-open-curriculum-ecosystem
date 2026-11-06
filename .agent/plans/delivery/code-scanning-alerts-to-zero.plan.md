@@ -2,7 +2,7 @@
 id: code-scanning-alerts-to-zero
 node_type: delivery
 name: "Code-scanning alerts to zero on the resting branch, and held there"
-overview: "Every open code-scanning alert on the resting branch is FIXED in the tree — never dismissed, never an accepted risk — with one owner-ruled, dated exception (the missing-rate-limiting query, grounded in ADR-219 and the two sets of edge WAFs, excluded permanently by a tracked query filter in the CodeQL configuration and for that query only), and the pull-request gate keeps the count at zero."
+overview: "Every open code-scanning alert on the resting branch is FIXED in the tree — never dismissed, never an accepted risk — with two owner-ruled, dated exceptions (the missing-rate-limiting query, grounded in ADR-219 and the two sets of edge WAFs, excluded permanently by a tracked query filter in the CodeQL configuration and for that query only; and S4036 at a binary invoked by name, marked false-positive per site under the Sonar disposition policy's §S4036), and the pull-request gate keeps the count at zero."
 status: sketch
 ratified_by: null
 ratified_date: null
@@ -15,7 +15,7 @@ impact_areas:
 tickets: []
 depends_on: []
 owner_gates: []
-last_updated: 2026-10-27
+last_updated: 2026-11-05
 ---
 
 # Code-scanning alerts to zero on the resting branch, and held there
@@ -25,9 +25,9 @@ last_updated: 2026-10-27
 The repository's code-scanning surface reads zero open alerts on the resting branch, and
 stays there: each alert is FIXED in the tree with a test that pins the cure (owner ruling 2026-09-08, verbatim: "We don't dismiss issues, we fix them."). Where an analyser is factually wrong about the code, the cure is still a tree change — a
 restructure, or an analyser configuration change tracked in the tree — and no state lives in the
-hosting service that the tree cannot explain. ONE owner-ruled exception, dated 2026-09-08: the
+hosting service that the tree cannot explain. Two owner-ruled exceptions. The first, dated 2026-09-08: the
 missing-rate-limiting findings on the MCP server's routes (CodeQL alerts), on the ground that the two sets of edge WAFs are regarded as sufficient
-for safety for now (owner word 2026-09-08, verbatim: "we are going to pause that for now, and leave comments in the code that recognise that additional in-process rate limiting would provide defence in depth, but that we regard the two sets of edge WAFs to be sufficient for safety for now. And in this ONE case we can dismiss the findings in Sonar, and preferably find a way to keep them dismissed instead of revisiting this same issue every few weeks."). Its mechanism, ruled 2026-09-17 (owner, verbatim: "a permanent exclusion is allowed, but ONLY for that one issue"), is the tracked `query-filters` exclusion of `js/missing-rate-limiting` in `.github/codeql/codeql-config.yml`, for that query only. A reader of
+for safety for now (owner word 2026-09-08, verbatim: "we are going to pause that for now, and leave comments in the code that recognise that additional in-process rate limiting would provide defence in depth, but that we regard the two sets of edge WAFs to be sufficient for safety for now. And in this ONE case we can dismiss the findings in Sonar, and preferably find a way to keep them dismissed instead of revisiting this same issue every few weeks."). Its mechanism, ruled 2026-09-17 (owner, verbatim: "a permanent exclusion is allowed, but ONLY for that one issue"), is the tracked `query-filters` exclusion of `js/missing-rate-limiting` in `.github/codeql/codeql-config.yml`, for that query only. The second, dated 2026-11-05 (owner, verbatim: "adopt the by-name ruling on engraph"), is S4036 at a site within the Sonar disposition policy's §S4036 class: a repository-required binary invoked by name, with `PATH` as the trust root, is marked `FALSE_POSITIVE` with the class's canonical rationale. A reader of
 the security tab, an auditor of the release, or an agent picking up a lane sees a surface
 whose every line is a fact about the code, not an unread signal.
 
@@ -147,13 +147,13 @@ the gate turns "zero" from a snapshot into an invariant.
    `owner-held` — the hosting service's alerts query for the resting branch is that service's
    own record; the landing seat reads it at closing and records the reading, dated, on the
    lane's closing event as an observation, never as a corpus fact.
-2. Every cured site has a test that fails on the previous behaviour: the refusal of a
-   non-absolute executable, the linear-time extraction over a pathological input, the output description's closed vocabulary, the generator's escaping of a line separator. Proof: `repo-safe` — the tests, named in each unit.
-3. No alert on the resting branch carries a dismissed, accepted-risk or won't-fix state, and the missing-rate-limiting query raises none because the tracked configuration excludes it, explained by the code comment at each route citing ADR-219 and the two edge WAFs. Proof: `repo-safe` for the four comments and the `query-filters` entry; `owner-held` for the service's state — the alerts query for dismissed alerts and for open `js/missing-rate-limiting` alerts, both empty, read at closing and recorded as a dated observation.
-4. A pull request introducing one new instance of each of the five analysed classes is
+2. Every cured site has a test that fails on the previous behaviour: the linear-time extraction over a pathological input, the output description's closed vocabulary, the generator's escaping of a line separator. Proof: `repo-safe` — the tests, named in each unit.
+3. No alert on the resting branch carries a dismissed, accepted-risk or won't-fix state, an S4036 site's false-positive mark under the second exception aside, and the missing-rate-limiting query raises none because the tracked configuration excludes it, explained by the code comment at each route citing ADR-219 and the two edge WAFs. Proof: `repo-safe` for the four comments and the `query-filters` entry; `owner-held` for the service's state — the alerts query for dismissed alerts and for open `js/missing-rate-limiting` alerts, both empty, read at closing and recorded as a dated observation.
+4. A pull request introducing one new instance of each of the four classes this node cures is
    blocked by a required check. The owner-ruled exclusion of `js/missing-rate-limiting` means
    no required check can fail on a new instance of that class; it is not probed, and its
-   control is the edge rule ADR-219 states.
+   control is the edge rule ADR-219 states. A new S4036 site is cleared by its mark, not a
+   cure, so that class is not probed either.
    Proof: `owner-held` — whether the hosting service blocked a probe pull request is that
    service's state: one probe per analyser, closed unmerged, its blocked check result read by
    the landing seat and recorded, dated and by number, on the lane's closing event.

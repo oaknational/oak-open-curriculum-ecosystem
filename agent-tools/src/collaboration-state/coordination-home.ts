@@ -110,8 +110,8 @@ export function resolveCoordinationHome(
     // A resolver refusal is its own diagnosis — git never ran, so "not inside
     // a git working tree" would be a false statement about a true repository
     // (observed 2026-08-11 on Windows: the POSIX-only allowlist refused and
-    // this wrapper rebranded it, exactly the pnpm-path misleading-error
-    // precedent).
+    // this wrapper rebranded it, the misleading-error class the retired pnpm
+    // resolver also showed).
     if (error instanceof TrustedGitResolutionError) {
       throw error;
     }

@@ -7,7 +7,7 @@ import type { RepoCheckCommandResult } from './repo-check-types.js';
  * The knip gate's reading of a captured run, pure: what exit and streams
  * amount to a pass, a finding, a crash without a verdict (F-112) or a crash
  * swallowed behind exit 0 (F-147). The process edge (re-emitting the streams,
- * the trusted pnpm) is not described here.
+ * launching pnpm) is not described here.
  */
 
 /** The escape character that opens an SGR colour sequence. */
