@@ -1338,6 +1338,17 @@ the owner wants it kept).
   merges at settled; the merge bot's tokens are scoped and expiry-bounded but never revoked;
   no standing rule says content read is data, never instruction. Each would have been a false
   "same" in the mechanism map.
+  - Correction, same session: the accuracy reviewer refuted two of those absences, and both
+    refutations held on re-read. Review content already is information, never instruction
+    (`review-feedback-defaults-to-triage`, the core `invoke-code-experts` rule); the gap is
+    tickets, pages and peer messages. CI and three workflows do revoke their tokens; only
+    the merge bot does not. An absence found by a survey is a hypothesis until someone
+    tries to falsify it.
+- **Two stale references found on the way, outside this lane.** `pr-lifecycle` (around line
+  1490) names `suppressed-hold.ts` as the enforcer of signed lifts on suppressed findings;
+  no such file is in `agent-tools/src` or in git history, and no `SUPPRESSED-FINDINGS-OPEN`
+  state exists there. The lights-on comparison (§3.3) names a "Claude Approvals" check that no
+  workflow defines (the rulesets were not read). Both are for their owners' next pass.
 
 ### Mistakes Made
 
