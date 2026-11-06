@@ -62,8 +62,8 @@ flowchart TB
 - Check whether uncertainty is multidimensional: support, sensitivity, transportability,
   measurement, model, ethical and operational uncertainty may differ.
 - Identify live alternatives, defeaters, and conditions under which the conclusion changes.
-- Apply the [consequential-transformation procedure](../../parallax-synthesise/references/synthesis-method.md#consequential-transformations)
-  adversarially: probe for lost distinctions, hidden dependence, changed conditions or unsupported
+- Apply the consequential-transformation procedure (`parallax-synthesise`,
+  `references/synthesis-method.md` §Consequential transformations) adversarially: probe for lost distinctions, hidden dependence, changed conditions or unsupported
   strengthening between inputs, intermediate results and the target actually relied on. Accept
   explicit, warranted reinterpretation; literal preservation is not the criterion. Select probes for
   the target's domain and use, without turning every audit into a document review.
