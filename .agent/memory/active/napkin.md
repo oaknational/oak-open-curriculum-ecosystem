@@ -1420,3 +1420,21 @@ the owner wants it kept).
   `falsepositive` writes on 381 went through and two were denied, with no reason given. A denial
   is not a ruling to route around. Name the remaining keys to the owner at once, and carry on
   with work that does not depend on them.
+- **A relative link between two skills dies in the projections.** `skills:generate` copies a
+  skill's reference files byte-for-byte into `.claude/skills/oak-*/` and `.agents/skills/oak-*/`,
+  so `../../parallax-synthesise/…` in `parallax-audit/references/audit-protocol.md` resolved only
+  in the canonical tree. Codex caught it on engraph #383; my review had checked the canonical
+  layout alone. The cure names the sibling skill and section in backticks, as the parallax family
+  already does. One instance (2026-11-05, Elder rides Topsoil, 65857c).
+
+### Practice/tooling feedback
+
+- **Surface**: `pnpm check` (vitest)
+- **Signal**: surprise
+- **Observation**: an owner-run full `pnpm check` on engraph at `efe1ba72e` failed in vitest
+  with ENOTEMPTY on the rmdir of the root `node_modules/.vitest-cache`, which no tracked config
+  sets, and stopped before `skills:check`. Unverified hypothesis: parallel workspaces racing on
+  one cache directory. It did not recur on the #383 pushes. Noted at the owner's word, not
+  pursued (2026-11-05, Elder rides Topsoil, 65857c).
+- **Behaviour change / candidate follow-up**: if it repeats, find what sets that cache directory
+  before touching any vitest config.
