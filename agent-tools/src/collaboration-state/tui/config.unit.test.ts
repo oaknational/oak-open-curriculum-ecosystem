@@ -1,3 +1,5 @@
+import { join } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import { parseOptions } from '../cli-options.js';
@@ -10,9 +12,11 @@ describe('collaborationTuiConfig', () => {
     });
 
     expect(config).toEqual({
-      activePath: '/workspace/.agent/state/collaboration/active-claims.json',
-      closedPath: '/workspace/.agent/state/collaboration/closed-claims.archive.json',
-      commsDir: '/workspace/.agent/state/collaboration/comms',
+      // Defaults are host-joined from the repo root, so the expectations are
+      // derived in host form (identical to the POSIX literals on POSIX).
+      activePath: join('/workspace', '.agent/state/collaboration/active-claims.json'),
+      closedPath: join('/workspace', '.agent/state/collaboration/closed-claims.archive.json'),
+      commsDir: join('/workspace', '.agent/state/collaboration/comms'),
       pollMs: 500,
     });
   });

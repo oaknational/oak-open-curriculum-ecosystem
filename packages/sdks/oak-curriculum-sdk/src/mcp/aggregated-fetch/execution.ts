@@ -222,6 +222,7 @@ async function executeFetchByType(
         thread: slug,
       });
     }
+    default:
+      return err(new McpParameterError('fetch', `Unsupported content type: ${String(type)}`));
   }
-  return err(new McpParameterError('fetch', `Unsupported content type: ${String(type)}`));
 }

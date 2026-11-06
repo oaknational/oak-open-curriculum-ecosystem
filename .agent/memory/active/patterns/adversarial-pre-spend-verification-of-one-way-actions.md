@@ -3,6 +3,7 @@ name: "Adversarial Pre-Spend Verification of One-Way Actions"
 polarity: pattern
 use_this_when: "About to take a one-way, costly, or unrecoverable action — launching a large fleet/workflow run, an irreversible migration, a bulk send — whose artefacts you authored yourself."
 category: process
+layer: general
 proven_in: "2026-07-01 launch preflight (fresh-reader panel caught metaPrompt drift + a scratchpad-unreachable-by-subagents flaw self-review missed) and 2026-07-02 TS-rebuild review (three independent lenses converged on the same wrong-stage seeding guard hole; a content-blind contract scan caught inlined corpus quotes containing `process.env` verbatim that would have stranded a 30M-token run after the map spend). ~450k review tokens against a 30M-token one-way spend."
 proven_date: 2026-07-02
 barrier:

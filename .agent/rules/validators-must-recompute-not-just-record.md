@@ -1,3 +1,8 @@
+---
+classification: core
+description: Validators must recompute and compare derived values (hashes, fingerprints, manifests); storing without recomputing cannot detect drift
+---
+
 # Validators Must Recompute, Not Just Record
 
 A validator that *stores* a derived value (content hash, file
@@ -18,6 +23,10 @@ the same validator (or a co-located checker) MUST also:
 A validator that only records the value, never compares it, is a
 recording surface, not a validation surface. Naming it "validator"
 mis-advertises its function.
+
+The general form of this rule — no list is ever hand-kept; it is computed from
+its source or gated by a recomputing validator — is
+[`compute-dont-hope`](compute-dont-hope.md) (owner ruling 2026-09-13).
 
 A validator that scans its own outputs needs a DECLARED regeneration
 order: a census parity gate failed its first run because `render`
@@ -65,6 +74,7 @@ The corrective is the natural one:
 | "Record the hash so we know what was vendored" | Lock entry has `computedHash`; validator only checks the entry exists | Lock entry has `computedHash`; validator recomputes `localHash` from current source and compares |
 | "Snapshot the generated output" | Snapshot is written to disk; nothing reads it | Snapshot is written; the next-run validator re-generates and diffs |
 | "Track the manifest checksum" | Manifest stores `checksum` field; field is never re-derived | Manifest stores `checksum`; manifest validator re-derives from current contents and compares |
+| "Count the messages, reviews or tokens for a report" | A one-off script over one surface's records, read as one-to-one with the thing counted | A tested instrument with a cell per known error: records are not one-to-one with what they count (peer messages recorded as user turns, 417 for 145; bot thread replies counted as reviews, 123 for 133 after pagination; several content blocks carrying one message's usage, 35.8M for 8.35M, all in one retrospective, 2026-09-15) |
 
 ## Scope
 
@@ -91,6 +101,12 @@ it where it is used):
   memory is a fabricated value of the right type; derive the id from
   the store in the same command that uses it, and read back the
   written artefact's reference after the write.
+- **Counts in tracked reports** — a count stands only where a reader at
+  the default tip can recompute it: the script that produced a tracked
+  count lands beside its output, and a record cites only what the tip
+  can read, or quotes the content. A generator in a gitignored session
+  directory makes its report's count a number, not a count (three
+  instances on 2026-10-02).
 
 It does NOT apply to:
 
@@ -119,6 +135,26 @@ any CLI-side cure, so the recompute must live in every read surface that
 renders the state, not only in the writer. (Recorded by the 2026-07-31
 comms-corpus run; the registry-side cure is tooling work for the
 agent-tooling backlog.)
+
+## Worked instances — proofs that checked something else
+
+- A strict-YAML round trip proved the container valid, not the values: a comma splitter had
+  broken brace groups and the round trip still passed. A proof script that copies the parser's
+  own logic proves the copy and repeats its bugs; a derivation that reaches the values by
+  another route is the oracle this rule asks for.
+- A census validator's contract put the run's provenance (`generatedAt`, `sourceCommit`)
+  inside the payload it compared with a fresh derivation, so it could never pass across two
+  runs. Provenance sits outside the compared payload.
+- A merge resolver's test had the merge sides reversed, and the first run in the real
+  orientation refused. Run a new check once against the real input shape before its verdict
+  is trusted.
+- Inside one instrument, a fact is read by one route. Where an instrument reads one fact by
+  two routes and they disagree (two git commands gave two answers for a dangling symbolic
+  ref), remove a route; a third check that reconciles them is a third route. This is about
+  how an instrument reads, not about recomputing a recorded value, which this rule requires.
+- Evidence is taken at the moment and on the bytes it describes. A figure read before a push,
+  a rebase or a compaction describes that earlier state, so an instrument is tested for the
+  integrity of its evidence as well as for its function (2026-09-28).
 
 ## Enforcement
 

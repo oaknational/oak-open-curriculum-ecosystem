@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
+
+import { errorResponseRef } from '../test-helpers/error-response-ref.js';
 import { crossValidateResponseMap, crossValidatePaths } from './cross-validate.js';
 
 /**
@@ -8,15 +10,6 @@ import { crossValidateResponseMap, crossValidatePaths } from './cross-validate.j
  * API pattern and should produce valid wildcard entries.
  */
 function createSchemaWithSharedErrors(): OpenAPIObject {
-  const errorRef = (name: string) => ({
-    description: name,
-    content: {
-      'application/json': {
-        schema: { $ref: `#/components/schemas/${name}` },
-      },
-    },
-  });
-
   return {
     openapi: '3.0.0',
     info: { title: 'Shared errors API', version: '1' },
@@ -29,7 +22,7 @@ function createSchemaWithSharedErrors(): OpenAPIObject {
               description: 'ok',
               content: { 'application/json': { schema: { $ref: '#/components/schemas/Alpha' } } },
             },
-            404: errorRef('NotFound'),
+            404: errorResponseRef('NotFound'),
           },
         },
       },
@@ -41,7 +34,7 @@ function createSchemaWithSharedErrors(): OpenAPIObject {
               description: 'ok',
               content: { 'application/json': { schema: { $ref: '#/components/schemas/Beta' } } },
             },
-            404: errorRef('NotFound'),
+            404: errorResponseRef('NotFound'),
           },
         },
       },

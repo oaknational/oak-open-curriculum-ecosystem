@@ -119,8 +119,8 @@ describe('renderReviewerPack — the walkthrough is a traceable projection of on
       outcome: OUTCOME,
       provenance: PROVENANCE,
     });
-    const placeholderMarkers = pack.match(/\[[^\]]*owner-approved copy pending\]/gu) ?? [];
-    expect(placeholderMarkers.length).toBe(3);
+    const placeholderMarkers = pack.match(/\[[^\][]*owner-approved copy pending\]/gu) ?? [];
+    expect(placeholderMarkers).toHaveLength(3);
   });
 });
 

@@ -3,6 +3,7 @@ name: "Actuate a Mechanism in the Same Breath You Commit to It"
 polarity: pattern
 use_this_when: "About to say 'I'll watch X' / 'I'll run the gate' / 'the loop will close' / 'I'll monitor the PR' — any committed intent to run a mechanism."
 category: process
+layer: general
 proven_in: "2026-06-21 (Cutter); recurs across watcher/heartbeat/gate arming"
 proven_date: 2026-06-21
 barrier:

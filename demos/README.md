@@ -29,12 +29,16 @@ dependency graph, never a library.
   canonical export and token sources — see its `.gitignore` for the rationale
   and its README for how to re-obtain them via the claude-design MCP).
 - [`oak-design-showcase/`](oak-design-showcase/README.md) — **Oak Design
-  Showcase**: a one-page live showcase of the Oak Open Curriculum Design
-  System consuming the kit the plain-CSS way — the aggregate stylesheet and
-  the kit's own classes, tokens, and self-hosted fonts, with no Tailwind and
-  no mapping layer. The plain-path counterpart to the hub's Tailwind-mapped
-  consumption: one page of markup with a live switchboard driving identity ×
-  theme × motion through the token contract.
+  Showcase**: the design system's public face — a front page plus demo
+  routes (the identity/theme switching demo with its framed specimen, the
+  side-by-side white-labelling view, the composition demonstration, and the
+  generated token reference at `/tokens` with its `/tokens/colours`
+  matrix) —
+  consuming the kit the plain-CSS way: the aggregate stylesheet and the
+  kit's own classes, tokens, and self-hosted fonts, with no Tailwind and no
+  mapping layer. The plain-path counterpart to the hub's Tailwind-mapped
+  consumption; every visible difference between identities and themes is
+  the token contract at work.
 
 ## Licences
 

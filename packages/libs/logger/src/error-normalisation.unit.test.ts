@@ -59,6 +59,23 @@ describe('normalizeError', () => {
     });
   });
 
+  it('renders boolean and bigint primitives as their string forms', () => {
+    expect(normalizeError(true)).toMatchObject({ name: 'Error', message: 'true' });
+    expect(normalizeError(false)).toMatchObject({ name: 'Error', message: 'false' });
+    expect(normalizeError(9_007_199_254_740_993n)).toMatchObject({
+      name: 'Error',
+      message: '9007199254740993',
+    });
+  });
+
+  it('names a thrown symbol by its description', () => {
+    expect(normalizeError(Symbol('token'))).toMatchObject({
+      name: 'SymbolError',
+      message: 'token',
+    });
+    expect(normalizeError(Symbol())).toMatchObject({ name: 'SymbolError', message: 'Symbol' });
+  });
+
   it('handles nullish values as Unknown error', () => {
     expect(normalizeError(null)).toMatchObject({
       name: 'Error',

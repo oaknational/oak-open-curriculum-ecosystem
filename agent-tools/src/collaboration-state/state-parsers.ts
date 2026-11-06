@@ -8,7 +8,6 @@ import {
   parseStringArray,
   requireString,
 } from '../core/json.js';
-import { parseCommitQueueEntry } from './registry-entry-parser.js';
 import { parseCommsEventValue } from './state-schemas.js';
 import {
   ACTIVE_CLAIMS_SCHEMA_VERSION,
@@ -38,10 +37,10 @@ export function parseCollaborationRegistry(text: string): Result<CollaborationRe
 }
 
 function parseRegistryValue(parsed: unknown): Result<CollaborationRegistry, Error> {
-  // This exact-version pin is what makes the intent RECONSTRUCTION in
-  // registry-entry-parser.ts non-destructive — relaxing it without
-  // revisiting that reconstruction silently strips unrecognised fields
-  // (the asymmetry note there is the full contract).
+  // The exact-version pin (latest-only support): any other version — the
+  // legacy 1.3.0 flat-queue shape included — is refused here; the IO
+  // readers route a legacy file through the one-time queue-split migration
+  // BEFORE this parser sees it (active-claims-legacy-migration.ts).
   if (
     !isJsonObject(parsed) ||
     getJsonValue(parsed, 'schema_version') !== ACTIVE_CLAIMS_SCHEMA_VERSION
@@ -51,18 +50,26 @@ function parseRegistryValue(parsed: unknown): Result<CollaborationRegistry, Erro
     );
   }
   const claims = getJsonValue(parsed, 'claims');
-  const commitQueue = getJsonValue(parsed, 'commit_queue');
-  if (!Array.isArray(claims) || !Array.isArray(commitQueue)) {
-    return err(new Error('active claims registry must contain claims and commit_queue arrays'));
+  if (!Array.isArray(claims)) {
+    return err(new Error('active claims registry must contain a claims array'));
+  }
+  // Any own `commit_queue` property, whatever its type: this parser
+  // reconstructs {schema_version, claims}, so a non-array admitted here
+  // would be dropped in silence on the next collaboration-state write.
+  if (Object.hasOwn(parsed, 'commit_queue')) {
+    return err(
+      new Error(
+        'active claims registry must not carry a commit_queue property: the queue is ' +
+          'machine-local ephemera in .agent/state/collaboration/commit-queue/ ' +
+          '(one JSON file per intent)',
+      ),
+    );
   }
 
-  return flatMap(collect(Array.from(commitQueue, parseCommitQueueEntry)), (entries) =>
-    map(collect(Array.from(claims, parseClaim)), (parsedClaims): CollaborationRegistry => ({
-      schema_version: ACTIVE_CLAIMS_SCHEMA_VERSION,
-      commit_queue: entries,
-      claims: parsedClaims,
-    })),
-  );
+  return map(collect(Array.from(claims, parseClaim)), (parsedClaims): CollaborationRegistry => ({
+    schema_version: ACTIVE_CLAIMS_SCHEMA_VERSION,
+    claims: parsedClaims,
+  }));
 }
 
 /** Parse the closed-claims archive from JSON text, as a `Result` (ADR-088). */

@@ -14,7 +14,7 @@ export function extractComponentNameFromRef(ref: string): string | undefined {
 }
 
 export function sanitizeIdentifier(value: string): string {
-  return value.replaceAll(/[^A-Za-z0-9_]/g, '_');
+  return value.replaceAll(/\W/g, '_');
 }
 
 export function toColonPath(path: string): string {

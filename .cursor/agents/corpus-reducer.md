@@ -1,6 +1,6 @@
 ---
 name: corpus-reducer
-description: Clustering synthesist for the corpus-analysis reduce workflow stage. Dispatched by a corpus-analysis orchestrator, one call per run; never invoke for interactive delegation. Clusters the inlined leaf signals into mechanism-grained candidates and answers only through the schema-forced structured output call.
+description: 'Clustering synthesist for the corpus-analysis reduce workflow stage. Dispatched by a corpus-analysis orchestrator, one call per run; never invoke for interactive delegation. Clusters the inlined leaf signals into mechanism-grained candidates and answers only through the schema-forced structured output call.'
 readonly: true
 ---
 

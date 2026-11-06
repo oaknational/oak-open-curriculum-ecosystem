@@ -21,6 +21,8 @@
  * `.agent/plans/agent-tooling/current/pending-graduations-schema-and-count-fitness.plan.md`.
  */
 
+import { trimEndWhile } from '../core/trim-end-while.js';
+
 export const LIVE_ITEM_STATUSES = ['pending', 'due', 'overdue'] as const;
 export const TERMINAL_ITEM_STATUSES = ['graduated', 'rejected', 'duplicate'] as const;
 
@@ -120,7 +122,7 @@ function statusToken(status: string | null): string | null {
     return null;
   }
   const [token] = status.trim().split(/\s/);
-  return token.replace(/[^\w-]+$/, '');
+  return trimEndWhile(token, (character) => !/[\w-]/u.test(character));
 }
 
 const LIVE_STATUS_SET = new Set<string>(LIVE_ITEM_STATUSES);

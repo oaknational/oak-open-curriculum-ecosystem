@@ -17,7 +17,7 @@ description: >-
 
 # UI visual design
 
-Judgment, not values. The Oak Open Curriculum Design System already decides
+Judgment, not values. The design system already decides
 what a colour, a step of the type scale, or a spacing unit *is*; this skill
 decides what a screen should **emphasise, group, sequence, and afford**. When
 a decision here needs a value, take it from the system —
@@ -43,11 +43,12 @@ amplifying both.
 
 **Semantic level and visual step are chosen independently.** `h1`–`h6` is
 document structure: it follows the outline, descends without skips, and is
-what assistive technology navigates by. `oak-heading-1…7` is visual
-hierarchy: it follows how loud this text should be on this screen. They are
-two separate decisions, and Oak pairs them deliberately across the ramp —
+what assistive technology navigates by. The design system's heading classes
+(OCE's `oak-heading-1…7`) are visual hierarchy: they follow how loud this
+text should be on this screen. They are two separate decisions, and the
+system pairs them deliberately across the ramp (in OCE
 `<h1 class="oak-heading-2">` is the documented masthead pairing, and
-specimens carry `<h3 class="oak-heading-5">`. Pick the level from the
+specimens carry `<h3 class="oak-heading-5">`). Pick the level from the
 document's structure, pick the class from the screen's hierarchy, and
 distort neither to reach the other: wanting a smaller step is not a reason
 to demote a heading, and wanting a heading is not a reason to jump the ramp.
@@ -67,7 +68,7 @@ to demote a heading, and wanting a heading is not a reason to jump the ramp.
   rhythm is what makes a long page scannable; arbitrary gaps are what make it
   tiring.
 - **Regions before boxes.** Page shells build on the region contract
-  (`.oak-canvas` > `[data-region]` siblings, `data-page` on the canvas) — the
+  (in OCE `.oak-canvas` > `[data-region]` siblings, `data-page` on the canvas) — the
   structure carries the layout so a re-brand can recompose it. A wrapper
   column added for visual convenience breaks that.
 
@@ -84,9 +85,9 @@ case is not an emphasis tool here.
 - **Every interactive element declares itself** before it is touched, and
   confirms itself when it is. The system's signature motif (thick border,
   offset shadow, hover widen, press collapse with a +2/+2 translate via
-  `.oak-interactive`) is the estate's answer to both — use it rather than
+  OCE's `.oak-interactive`) is the system's answer to both — use it rather than
   minting a new affordance vocabulary.
-- **Target size and reach**: Oak's design-system floor is **≥44px**, and hit
+- **Target size and reach**: the design system's floor is **≥44px**, and hit
   areas must match what looks clickable. A 12px icon inside a 44px target is
   fine; a 44px-looking control with a 12px target is a defect. Keep the
   conformance claim straight: WCAG 2.2 **AA** is

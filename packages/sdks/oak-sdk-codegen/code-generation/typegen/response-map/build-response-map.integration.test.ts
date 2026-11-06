@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
 
+import { errorResponseRef } from '../test-helpers/error-response-ref.js';
+
 import { buildResponseMapData } from './build-response-map.js';
 
 /**
@@ -10,15 +12,6 @@ import { buildResponseMapData } from './build-response-map.js';
  * triggered the original Cardinal Rule breach.
  */
 function createSchemaWithDottedErrorComponents(): OpenAPIObject {
-  const errorRef = (name: string) => ({
-    description: name,
-    content: {
-      'application/json': {
-        schema: { $ref: `#/components/schemas/${name}` },
-      },
-    },
-  });
-
   return {
     openapi: '3.0.0',
     info: { title: 'Multi-endpoint API', version: '1.0.0' },
@@ -35,9 +28,9 @@ function createSchemaWithDottedErrorComponents(): OpenAPIObject {
                 },
               },
             },
-            '400': errorRef('error.BAD_REQUEST'),
-            '401': errorRef('error.UNAUTHORIZED'),
-            '404': errorRef('error.NOT_FOUND'),
+            '400': errorResponseRef('error.BAD_REQUEST'),
+            '401': errorResponseRef('error.UNAUTHORIZED'),
+            '404': errorResponseRef('error.NOT_FOUND'),
           },
         },
       },
@@ -53,9 +46,9 @@ function createSchemaWithDottedErrorComponents(): OpenAPIObject {
                 },
               },
             },
-            '400': errorRef('error.BAD_REQUEST'),
-            '401': errorRef('error.UNAUTHORIZED'),
-            '404': errorRef('error.NOT_FOUND'),
+            '400': errorResponseRef('error.BAD_REQUEST'),
+            '401': errorResponseRef('error.UNAUTHORIZED'),
+            '404': errorResponseRef('error.NOT_FOUND'),
           },
         },
       },
@@ -71,9 +64,9 @@ function createSchemaWithDottedErrorComponents(): OpenAPIObject {
                 },
               },
             },
-            '400': errorRef('error.BAD_REQUEST'),
-            '401': errorRef('error.UNAUTHORIZED'),
-            '404': errorRef('error.NOT_FOUND'),
+            '400': errorResponseRef('error.BAD_REQUEST'),
+            '401': errorResponseRef('error.UNAUTHORIZED'),
+            '404': errorResponseRef('error.NOT_FOUND'),
           },
         },
       },
@@ -257,7 +250,7 @@ describe('buildResponseMapData with dotted error components (integration)', () =
 
     for (const name of allComponentNames) {
       expect(name).not.toContain('.');
-      expect(name).toMatch(/^[A-Za-z0-9_]+$/);
+      expect(name).toMatch(/^\w+$/);
     }
   });
 

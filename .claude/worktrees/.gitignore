@@ -1,0 +1,4 @@
+# Agent worktrees live here (one directory per lane); nothing in this
+# directory is ever tracked but this file.
+*
+!.gitignore

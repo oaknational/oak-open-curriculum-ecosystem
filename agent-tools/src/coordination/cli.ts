@@ -1,18 +1,21 @@
 import { err, isErr, ok, type Result } from '@oaknational/result';
 
+import { runFoldClockCli, type FoldClockReader } from './fold-clock-cli.js';
 import { resolveRefToCommitSha } from './git.js';
 import { formatCoordinationSuccessorName } from './successor-name.js';
 
 /**
- * CLI for the `coordination` topic. Ships one action — `successor-name` —
- * which resolves the base ref to its full sha and prints the next
- * coordination branch name, `coordination/<UTC date>-<sha6>`. Read-only by
- * design: it never creates a branch; cutting the branch stays with the
+ * CLI for the `coordination` topic. Two actions: `successor-name` resolves
+ * the base ref to its full sha and prints the next coordination branch name,
+ * `coordination/<UTC date>-<sha6>`; `fold-clock` prints a fold's measured
+ * clock from the GitHub API (`fold-clock-cli.ts`). Read-only by design: it
+ * never creates a branch; cutting the branch stays with the
  * coordination-fold ceremony's explicit boundary.
  */
 
 const DEFAULT_BASE = 'origin/main';
 const SUCCESSOR_NAME_ACTION = 'successor-name';
+const FOLD_CLOCK_ACTION = 'fold-clock';
 
 export interface CoordinationCliInput {
   readonly args: readonly string[];
@@ -23,6 +26,8 @@ export interface CoordinationCliInput {
   readonly resolveRef?: (ref: string, cwd: string) => Result<string, Error>;
   /** Clock seam (defaults to the real clock). */
   readonly now?: () => Date;
+  /** Fold-clock reading seam (defaults to the real gh reads). */
+  readonly readFoldClock?: FoldClockReader;
 }
 
 interface ParsedCoordinationArgs {
@@ -133,6 +138,14 @@ function successorName(input: CoordinationCliInput, base: string): Result<string
 export function runCoordinationCli(input: CoordinationCliInput): number {
   const stdout = input.stdout ?? process.stdout;
   const stderr = input.stderr ?? process.stderr;
+  if (input.args[0] === FOLD_CLOCK_ACTION) {
+    return runFoldClockCli({
+      args: input.args.slice(1),
+      stdout,
+      stderr,
+      readReading: input.readFoldClock,
+    });
+  }
 
   const parsed = parseCoordinationArgs(input.args);
   if (isErr(parsed)) {
@@ -158,6 +171,7 @@ export function runCoordinationCli(input: CoordinationCliInput): number {
 function usage(): string {
   return [
     'agent-tools coordination successor-name [--base <ref>]',
+    `agent-tools coordination ${FOLD_CLOCK_ACTION} --pr <n> [...]   (see fold-clock --help)`,
     '',
     'Prints the next coordination branch name: coordination/<UTC date>-<sha6>,',
     'where <sha6> is the first six hex characters of the FULL sha the base ref',

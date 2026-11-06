@@ -48,7 +48,7 @@ interface MockRuntimeConfigOverrides {
 
 const BASE_MOCK_ENV = {
   OAK_API_KEY: 'test-key',
-  ELASTICSEARCH_URL: 'http://fake-es:9200',
+  ELASTICSEARCH_URL: 'https://fake-es:9200',
   ELASTICSEARCH_API_KEY: 'fake-api-key',
   SENTRY_MODE: 'off' as const,
 };

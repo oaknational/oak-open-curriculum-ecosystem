@@ -1,27 +1,20 @@
 # .agent/ — The Practice Infrastructure
 
-> **Human developers**: this directory is AI agent infrastructure, not
-> intended for you. See [HUMANS.md](HUMANS.md) for where to go instead.
+> **Human developers**: this directory is AI agent infrastructure. See
+> [HUMANS.md](HUMANS.md) for where to go instead.
 
-This directory contains the canonical infrastructure for the agentic
-engineering practice that governs this repository. For the formal
-definition, see
-[ADR-119](../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md).
+This directory holds the canonical infrastructure for the agentic engineering
+practice that governs this repository. One Practice runs in two estates (this
+repository and its sibling, OCE): its general layer is the same text in both,
+and what binds to this repository is in §This host at the end of this file.
 
-**Practice, not product.** Everything under `.agent/` is Oak's internal
-engineering practice — how this repository is built and governed. It is
-public because the repository is public, but none of it is part of the
-Oak MCP product surface, and none of it is served to MCP clients, with
-one deliberate exception: the
-[`under-the-hood`](skills/under-the-hood/SKILL-CANONICAL.md) skill is the
-public orientation method the MCP server points integrators at. If you
-are here to use or evaluate the Oak MCP, the product lives in
-[`apps/`](../apps/) and its documentation — not in this directory.
+**Practice, not product.** Everything under `.agent/` is how this repository is
+built and governed, never the product; §This host names where the product and
+the Practice tooling live.
 
 ## Structural model
 
-`.agent/` is the **canonical layer** in a three-layer architecture
-([ADR-125](../docs/architecture/architectural-decisions/125-agent-artefact-portability.md)):
+`.agent/` is the **canonical layer** in a three-layer architecture:
 
 ```text
                     .agent/
@@ -29,124 +22,160 @@ are here to use or evaluate the Oak MCP, the product lives in
                       ↑                        ↑
         referenced by |                        | pointed to, via
                       |                        | directives/AGENT.md
-.claude/ .cursor/ .gemini/          CLAUDE.md, AGENTS.md,
-.codex/ .agents/                    GEMINI.md, skills.md
-(thin platform adapters —           (entry points platforms
- one-line pointers)                  read or can use)
+.claude/ .cursor/ .codex/ .agents/  CLAUDE.md, AGENTS.md and the
+and the other platform directories  other entry files the host's
+the host renders                    platforms read or can use
+(thin platform adapters —
+ generated, one-line pointers)
 ```
 
-Adapters and entry points are independent platform-facing surfaces:
-each references `.agent/` directly, and no entry point consumes an
-adapter directory.
-
-When you see a rule in `.claude/rules/` or `.cursor/rules/`, it is a
-one-line pointer back to the canonical version in `.agent/rules/`. Edit
-the canonical version; adapters follow.
+Adapters and entry points are independent platform-facing surfaces: each
+references `.agent/` directly, and no entry point consumes an adapter
+directory. A rule in `.claude/rules/` or `.cursor/rules/` is a one-line pointer
+back to the canonical version in `.agent/rules/`. Edit the canonical version;
+adapters are regenerated with `pnpm portability:fix` (`pnpm skills:generate`
+for a skill) and checked with `pnpm portability:check`, `pnpm subagents:check`
+and `pnpm skills:check`. The platforms a host renders, and what each has
+wired, are in
+[`memory/executive/cross-platform-agent-surface-matrix.md`](memory/executive/cross-platform-agent-surface-matrix.md).
 
 ## How information flows
 
 ### Rules: directives → rules → platform adapters
 
-`directives/` holds the authoritative source documents (principles,
-testing strategy, schema-first execution). `rules/` atomises those
-directives into individual canonical rules. Platform adapters in
-`.claude/rules/` and `.cursor/rules/` point back to `rules/`.
+`directives/` holds the authoritative source documents — principles, the
+testing and validation strategies, the collaboration and continuity
+directives, and the host's own. `rules/` atomises those directives into
+individual canonical rules. Platform adapters point back to `rules/`.
 
-### Plans: future → current → active → archive
+### Plans: sketch → ratified → superseded / archived
 
-Plans follow a lifecycle through `plans/` subdirectories:
+Plans are plan nodes under `plans/` — `strategic/`, `delivery/`, `runbooks/` —
+governed by [`plans/plan-node-schema.md`](plans/plan-node-schema.md). Every
+plan is born `status: sketch` and governs no work until it carries an owner
+ratification stamp. The pre-schema plans are conserved as records, each with
+its disposition, where §This host says.
 
-- `future/` — deferred, not yet queued
-- `current/` — queued, next to execute
-- `active/` — in progress now
-- `archive/completed/` — done, read-only evidence
+### Knowledge: napkin → distilled → pending-graduations → permanent homes
 
-Each plan collection (e.g. `semantic-search/`, `sdk-and-mcp-enhancements/`)
-has its own lifecycle directories and a `roadmap.md` as its strategic entry
-point. Not all collections use every stage — lifecycle directories are
-created as needed.
-
-### Knowledge: napkin → distilled → patterns → graduated
-
-Session observations are captured in [`memory/active/napkin.md`](memory/active/napkin.md).
-Periodic distillation extracts high-signal learnings into
-[`memory/active/distilled.md`](memory/active/distilled.md). Abstract, reusable solutions
-are extracted to the [pattern library](memory/active/patterns/README.md) (77
-patterns across code, architecture, process, testing, and agent categories).
-Settled knowledge graduates into permanent documentation (ADRs, governance
-docs, READMEs) via the consolidation workflow.
+Session observations are captured in
+[`memory/active/napkin.md`](memory/active/napkin.md). Distillation extracts
+high-signal learnings into
+[`memory/active/distilled.md`](memory/active/distilled.md). Learned doctrine
+awaiting a home queues in
+[`memory/operational/pending-graduations.md`](memory/operational/pending-graduations.md)
+and graduates into rules, PDRs, ADRs, directives or documentation through the
+consolidation workflow. Rotation of the napkin is an archive step that follows
+processing; it is never a goal in itself.
 
 ## Directory map
 
+The directories every estate carries. The ones only this repository carries
+are in §This host.
+
 ### Core
 
-| Directory | Purpose |
-| --- | --- |
-| `directives/` | Authoritative rules, testing strategy, schema-first execution directive, and operational entry point ([AGENT.md](directives/AGENT.md)) |
-| `rules/` | Individual canonical rules referenced by platform adapters (`.claude/rules/`, `.cursor/rules/`) |
-| `practice-core/` | Foundational practice definitions (practice spec, lineage tracking, bootstrap sequence) for cross-repo exchange. Includes `decision-records/` (PDRs), `incoming/` (inbound practice exchange), and the trinity blueprint files. The previous `patterns/` directory and `practice-context/` exchange surface were retired 2026-04-29 (PDR-007 amendment); patterns live at `memory/active/patterns/` (engineering instances) or as PDRs with `pdr_kind: pattern` (governance). |
-| [`practice-index.md`](practice-index.md) | Bridge file linking portable Practice Core to this repo's local artefacts |
+| Directory                                | Purpose                                                                                                      |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `directives/`                            | Authoritative source documents and the operational entry point ([AGENT.md](directives/AGENT.md))             |
+| `rules/`                                 | Individual canonical rules referenced by platform adapters                                                   |
+| `practice-core/`                         | Portable Practice Core: the trinity files, `provenance.yml`, `protocol.json`, `schemas/`, `decision-records/` (PDRs) and the `incoming/` exchange box |
+| [`practice-index.md`](practice-index.md) | Bridge from the portable Practice Core to this repository's local artefacts                                  |
 
 ### Planning and execution
 
-| Directory | Purpose |
-| --- | --- |
-| `plans/` | Executable work plans with lifecycle management (`future/` → `current/` → `active/` → `archive/`) |
-| `milestones/` | Per-milestone summaries: audience, value delivered, and progression gates |
-| `prompts/` | Reusable prompt playbooks for common workflows |
-| `skills/` | Canonical skills (sole user-and-model-invokable workflow surface; `.agent/commands/` was retired per ADR-125 §2026-05-10). Each skill lives at `skills/<name>/SKILL-CANONICAL.md`; adapters at `.agents/skills/oak-*/SKILL.md` and `.claude/skills/oak-*/SKILL.md` are emitted by `pnpm agent-tools:skills-adapter-generate`. |
+| Directory  | Purpose                                                                                                                                         |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `plans/`   | Plan nodes (`strategic/`, `delivery/`, `runbooks/`, `templates/`, `plan-node-schema.md`, `impact-areas.md`)                                     |
+| `prompts/` | Session continuation and handoff prompts                                                                                                        |
+| `skills/`  | Canonical skills — the user-and-model-invokable workflow surface. Each skill lives at `skills/<name>/SKILL-CANONICAL.md`; adapters are generated |
 
 ### Knowledge and learning
 
-| Directory | Purpose |
-| --- | --- |
-| `memory/` | Three-mode persistent content: [`active/`](memory/README.md#active----learning-loop-memory) (learning loop — napkin, distilled, patterns, archive), [`operational/`](memory/README.md#operational----continuity--session-resume-memory) (continuity — repo-continuity, workstreams, tracks), [`executive/`](memory/README.md#executive----organisational--contract-memory) (contracts — artefact inventory, reviewer catalogue, platform-adapter matrix). See [`memory/README.md`](memory/README.md). |
-| `experience/` | Qualitative records of what work was like across sessions — see [experience/HUMAN.md](experience/HUMAN.md) |
-| `research/` | Research proposals and analysis |
-| `analysis/` | Technical analysis artefacts (API investigations, reranking assessments, etc.) |
-| `evaluations/` | Experiment results and guidance |
-| `proposals/` | Formal proposals for upstream API changes and architectural enhancements |
-| `reports/` | Bug reports and investigation outputs |
+| Directory      | Purpose                                                                                                                                                                    |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `memory/`      | Three-mode persistent content — see [`memory/README.md`](memory/README.md): `active/` (learning loop), `operational/` (continuity and registers), `executive/` (contracts) |
+| `experience/`  | Qualitative records of what work was like across sessions                                                                                                                  |
+| `research/`    | Research notes and analysis                                                                                                                                                |
+| `evaluations/` | Skill and experiment evaluation logs                                                                                                                                       |
+| `reports/`     | Promoted audits, syntheses and measurement reports                                                                                                                         |
 
 ### Agent infrastructure
 
-| Directory | Purpose |
-| --- | --- |
-| `skills/` | Specialised capabilities that encode domain knowledge |
-| `sub-agents/` | Sub-agent definitions, component templates, and standards |
-| `roles/` | Named role definitions for agent personas |
-| `tools/` | Agent-local tool scripts (e.g. `cursor-session-from-claude-session`) |
+| Directory                                | Purpose                                                                                              |
+| ---------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `sub-agents/`                            | Expert sub-agent templates, components and standards                                                 |
+| `roles/`                                 | Named role definitions                                                                               |
+| `collaboration/`                         | Rapid-comms channels for multi-seat sessions                                                         |
+| `state/`                                 | Machine-local coordination state (git-ignored) and tracked decision provenance; see its `.gitignore` |
+| `hooks/`                                 | Hook policy for platform harnesses                                                                   |
+| `family/`                                | The family layer: the tooling family's declared Practice operations (`typescript/practice-operations.json`, its hook copies) and `host.json`, the host's placeholder values |
+| `setup/`, `claude-harness-integrations/` | Cloud-session preflight and setup scripts                                                            |
 
 ### Reference
 
-| Directory | Purpose |
-| --- | --- |
-| `reference/` | Supporting reference material (some internal-only) |
-| `archive/` | Historical prompts and context snapshots |
-
-Agent tooling CLIs also live at [`../agent-tools/`](../agent-tools/README.md)
-at the repo root (`claude-agent-ops`, `cursor-session-from-claude-session`,
-`codex-reviewer-resolve`). `claude-agent-ops health` is the summary-first
-probe for agent-infrastructure drift. Ephemeral directories like `tmp/` are
-gitignored and not listed.
+| Directory          | Purpose                                                                                                   |
+| ------------------ | --------------------------------------------------------------------------------------------------------- |
+| `reference/`       | The Practice's reference documents, read on demand; its README is the index                               |
+| `reference-local/` | Git-ignored local material, never source-controlled                                                       |
+| `operator-local/`  | Git-ignored and empty by design: the operator profile lives in the home directory (PDR-141); its README is the pointer |
 
 ## Entry point and reading order
 
-> **Human developers**: the Practice documented here is also explained
-> through an engineering lens in
-> [How the Agentic Engineering System Works](../docs/foundation/agentic-engineering-system.md)
-> — same system, written from a systems lens.
+Start with [directives/AGENT.md](directives/AGENT.md). The grounding sequence is:
 
-Start with [directives/AGENT.md](directives/AGENT.md). The canonical
-grounding sequence is:
-
-1. [AGENT.md](directives/AGENT.md) — operational entry point and
-   documentation index
+1. [AGENT.md](directives/AGENT.md) — operational entry point
 2. [principles.md](directives/principles.md) — authoritative rules
-3. [testing-strategy.md](directives/testing-strategy.md) — TDD at all
-   levels
-4. [schema-first-execution.md](directives/schema-first-execution.md) —
-   types flow from the OpenAPI schema
+3. [testing-strategy.md](directives/testing-strategy.md) — TDD at all levels
+4. [`memory/active/distilled.md`](memory/active/distilled.md) and
+   [`memory/active/napkin.md`](memory/active/napkin.md) — learned context
+5. [`memory/operational/repo-continuity.md`](memory/operational/repo-continuity.md)
+   — where we are and what is next
+6. The host's own directives for its product work (§This host)
 
-For the full artefact index (directives, ADRs, tools, workflows), see
-[practice-index.md](practice-index.md).
+For the full artefact index, see [practice-index.md](practice-index.md).
+
+## This host
+
+The facts above that bind to this repository (OCE); the sibling estate's copy
+of this file carries its own section here, and everything above it is the same
+text in both.
+
+- **Product and tooling.** The product — the MCP server and the apps that
+  serve the open curriculum — lives in [`apps/`](../apps/) and its
+  documentation; none of `.agent/` is served to MCP clients, with one
+  deliberate exception: the
+  [`under-the-hood`](skills/orientation/under-the-hood/SKILL-CANONICAL.md)
+  skill is the public orientation method the MCP server points integrators
+  at. The Practice tooling lives in
+  [`agent-tools/`](../agent-tools/README.md) and the shared packages under
+  [`packages/`](../packages/).
+- **Lineage.** The Practice originated here; its formal definition and
+  conceptual boundary are
+  [ADR-119](../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md)
+  and the three-layer model is
+  [ADR-125](../docs/architecture/architectural-decisions/125-agent-artefact-portability.md).
+  The sibling estate received the lineage by transplant on 2026-09-12.
+- **Platforms rendered.** `.claude/`, `.cursor/`, `.codex/`, `.gemini/` and
+  `.agents/`; the entry files are `CLAUDE.md`, `AGENTS.md`, `GEMINI.md`,
+  `.github/copilot-instructions.md` and `skills.md`.
+- **Host directives.** [schema-first-execution.md](directives/schema-first-execution.md)
+  (types flow from the OpenAPI schema) and
+  [editorial-tone.md](directives/editorial-tone.md) (the outward editorial
+  voice); reading-order step 6 is `schema-first-execution.md`.
+- **Pre-schema plans.** Conserved as records in `plans-backlog-2026-07/` (the
+  lifecycle lanes and the roadmaps), `plans-old-archive/`,
+  `plans-v0-sketch-2026-07-21/` and `plans-refounding/`; completed nodes are
+  archived under `plans/archive/`.
+- **Directories only this repository carries.**
+
+| Directory                      | Purpose                                                                                   |
+| ------------------------------ | ----------------------------------------------------------------------------------------- |
+| `analysis/`                    | Technical analysis artefacts (API investigations, reranking assessments, and kin)         |
+| `archive/`                     | Historical prompts and context snapshots                                                  |
+| `milestones/`                  | Per-milestone summaries: audience, value delivered, and progression gates                 |
+| `proposals/`                   | Formal proposals for upstream API changes and architectural enhancements                  |
+| `plans/archive/`               | Completed plan nodes, read-only evidence                                                  |
+| `plans-backlog-2026-07/`       | The pre-schema plan collections, with their lifecycle lanes and roadmaps                  |
+| `plans-old-archive/`           | Completed pre-schema plans, read-only evidence                                            |
+| `plans-refounding/`, `plans-v0-sketch-2026-07-21/` | The plan-estate re-founding record and the first plan-node sketches  |

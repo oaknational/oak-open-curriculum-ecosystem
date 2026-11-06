@@ -63,14 +63,14 @@ alignment (MCP-462, PR #735).
    loosened to make drift pass (`strict-validation-at-boundary`).
 4. **Re-attest the agent-facing content audit.** Regeneration moves
    served text, so the MCP content-audit record must be re-trued in the
-   same PR: anchor re-pins and delta-review re-attestations in
-   `agent-tools/src/mcp-content-current-source/`, green under
-   `validate-mcp-content-current-source`. The 2026-08-03 instance
-   re-pinned 21 anchors and re-attested 15 semantic hashes — budget for
-   this; it is part of the alignment, not an afterthought.
+   same PR: anchor re-pins in `agent-tools/src/mcp-content-current-source/`,
+   green under `validate-mcp-content-current-source`. The 2026-08-03
+   instance re-pinned 21 anchors — budget for this; it is part of the
+   alignment, not an afterthought.
 5. **Verify the served surface, not just the gates.** Regenerate the
-   served tool table (`pnpm generate:tool-table`), read at least one
-   changed descriptor end-to-end, and run the UAT smoke subset
+   served tool table
+   (`pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http generate:tool-table`),
+   read at least one changed descriptor end-to-end, and run the UAT smoke subset
    (`apps/oak-curriculum-mcp-streamable-http/docs/manual-uat-guide.md`)
    against a running instance of the changed head, checking the
    specific changed behaviours live (the 2026-08-03 instance verified

@@ -59,7 +59,11 @@ PDR-NNN-kebab-case-title.md
 ```
 
 Numbers are not reused. Superseded PDRs stay in place with a
-`Superseded by` header; they are not deleted.
+`Superseded by` header; they are not deleted. A PDR that withdraws one
+clause of an earlier PDR amends that PDR in the same change: a dated pointer
+at each section that granted the clause, its index row and the changelog. One
+record withdrew another's permission without amending it, the two then
+contradicted each other, and a third acted on the stale one (2026-09-28).
 
 ## Shape of a PDR
 
@@ -72,7 +76,10 @@ Each PDR follows a stable shape inherited from the ADR convention:
 - **Related** (optional — links to other PDRs, Core sections, or
   concept-level references; avoid host-repo ADR numbers inside the
   substance of a PDR — they do not travel)
-- **Context** — what problem, what observation, what pressure.
+- **Context** — what problem, what observation, what pressure. An owner
+  quote is the owner's sentence whole, never spliced, and says whether it
+  was heard first-hand or relayed, and by whom (one record's goal quote was
+  spliced and relayed unlabelled; three reports, 2026-09-25).
 - **Decision** — what is decided. Name the constraint clearly.
 - **Rationale** — why this, not the alternatives. Name the
   alternatives.
@@ -80,6 +87,10 @@ Each PDR follows a stable shape inherited from the ADR convention:
   forbids.
 - **Notes** (optional) — self-reference, migration implications,
   follow-ups.
+
+A record carries a decision with its context and consequences;
+sequence, size and proof are a plan's
+([PDR-019](PDR-019-adr-scope-by-reusability.md), amended 2026-10-02).
 
 ## Portability Constraint
 
@@ -131,7 +142,7 @@ Practice-Core concept ↔ ADR map):
 | [PDR-005](PDR-005-wholesale-practice-transplantation.md) | Wholesale Practice Transplantation as a Third Genesis Scenario | Accepted |
 | [PDR-006](PDR-006-dev-tooling-per-ecosystem.md) | Dev Tooling Per Ecosystem — Leading-Edge Reference Repos | Accepted |
 | [PDR-007](PDR-007-promoting-pdrs-and-patterns-to-first-class-core.md) | Promoting PDRs and Universal Patterns to First-Class Core Infrastructure | Accepted |
-| [PDR-008](PDR-008-canonical-quality-gate-naming.md) | Canonical Quality-Gate Naming | Accepted |
+| [PDR-008](PDR-008-canonical-quality-gate-naming.md) | Canonical Quality-Gate Naming | Accepted (amended 2026-09-24) |
 | [PDR-009](PDR-009-canonical-first-cross-platform-architecture.md) | Canonical-First Cross-Platform Architecture for Agent Artefacts | Accepted |
 | [PDR-010](PDR-010-domain-specialist-capability-pattern.md) | Domain Specialist Capability Pattern — Adding New Expertise to the Agent Ecosystem | Accepted |
 | [PDR-011](PDR-011-continuity-surfaces-and-surprise-pipeline.md) | Continuity Surfaces and the Surprise Pipeline | Accepted (amended 2026-04-21) |
@@ -142,7 +153,7 @@ Practice-Core concept ↔ ADR map):
 | [PDR-016](PDR-016-claim-propagation-and-reference-quality.md) | Claim Propagation and Reference Quality | Accepted |
 | [PDR-017](PDR-017-workaround-hygiene-and-fix-discipline.md) | Workaround Hygiene and Fix-at-Source Discipline | Accepted |
 | [PDR-018](PDR-018-planning-discipline.md) | Planning Discipline — End Goals and Workflow Contracts | Accepted |
-| [PDR-019](PDR-019-adr-scope-by-reusability.md) | ADR Scope by Reusability, Not Diff Size | Accepted (amended 2026-04-21) |
+| [PDR-019](PDR-019-adr-scope-by-reusability.md) | ADR Scope by Reusability, Not Diff Size | Accepted (amended 2026-04-21, 2026-10-02) |
 | [PDR-020](PDR-020-check-driven-development.md) | Check-Driven Development — Gates as Assertions | Accepted |
 | [PDR-021](PDR-021-test-validity-discipline.md) | Test Validity Discipline — Circular Justification and Claim-Assertion Parity | Accepted |
 | [PDR-022](PDR-022-governance-enforcement-scanners.md) | Governance Enforcement Requires a Scanner | Accepted |
@@ -198,16 +209,16 @@ Practice-Core concept ↔ ADR map):
 | [PDR-072](PDR-072-knowledge-curation-as-autonomic-learning.md) | Knowledge Curation as Autonomic Learning | Proposed |
 | [PDR-073](PDR-073-recursion-as-method-is-practice-core-mind-shape.md) | Recursion as Method Is Practice Core's Mind-Shape | Proposed |
 | [PDR-074](PDR-074-director-value-is-mind-coherence-per-owner-attention.md) | Director Value Is Mind-Coherence-Per-Owner-Attention | Candidate |
-| [PDR-075](PDR-075-director-substrate-writing-discipline.md) | Director Substrate-Writing Discipline During The Role Authority Window | Candidate |
+| [PDR-075](PDR-075-director-substrate-writing-discipline.md) | Director Substrate-Writing Discipline During The Role Authority Window | Proposed |
 | [PDR-076](PDR-076-agent-identity-tuple-and-body-file-frontmatter.md) | Agent Identity Tuple and Body-File Frontmatter (SPLIT stub) | Superseded |
 | [PDR-076a](PDR-076a-agent-identity-tuple-name-and-uuid.md) | Agent Identity Tuple `(name, UUID id)` | Accepted |
 | [PDR-076b](PDR-076b-body-file-frontmatter-contract.md) | Body-File Frontmatter Contract | Accepted |
 | [PDR-077](PDR-077-marshal-as-cycle-discipline.md) | Commit Marshal As Cycle-Discipline Role | Accepted |
 | [PDR-078](PDR-078-liveness-heartbeat-contract.md) | Liveness-Heartbeat Contract | Accepted |
-| [PDR-079](PDR-079-pdr-vs-adr-portability-distinction.md) | PDR-vs-ADR Portability Distinction | Accepted |
+| [PDR-079](PDR-079-pdr-vs-adr-portability-distinction.md) | PDR-vs-ADR Portability Distinction | Accepted (amended 2026-09-28) |
 | [PDR-080](PDR-080-coordination-event-absorption-is-signal-driven.md) | Coordination-Event Absorption Is Signal-Driven | Accepted |
 | [PDR-081](PDR-081-curator-role-and-substrate-care-lane.md) | Curator Role and Substrate-Care Lane | Proposed |
-| [PDR-082](PDR-082-n2-collaboration-mode.md) | n=2 Collaboration Mode | Proposed |
+| [PDR-082](PDR-082-n2-collaboration-mode.md) | n=2 Collaboration Mode | Adopted (amended 2026-09-24) |
 | [PDR-083](PDR-083-director-pure-direction-only-boundary.md) | Director Pure-Direction-Only Boundary | Accepted |
 | [PDR-084](PDR-084-owner-action-is-not-a-cure.md) | Owner Action Is Not a Cure | Accepted |
 | [PDR-085](PDR-085-definition-of-delivery.md) | Definition of Delivery | Accepted |
@@ -248,14 +259,14 @@ Practice-Core concept ↔ ADR map):
 | [PDR-122](PDR-122-agentic-judgment-pipelines.md) | Agentic Judgment Pipelines — Atomic Judgment, Deterministic Aggregation, Conserve-by-Default Routing | Accepted |
 | [PDR-123](PDR-123-agentic-design-panel-protocol.md) | Agentic Design Panels — Independent Generators, a Diverse-Lens Critic Ensemble, Orchestrator Synthesis | Accepted |
 | [PDR-124](PDR-124-definition-surface-context-economy.md) | Definition-Surface Context Economy — Session-Injected Surfaces Carry a Budget; Depth Lives at Invocation Time | Accepted |
-| [PDR-125](PDR-125-inter-practice-collaboration-protocol.md) | The Inter-Practice Collaboration Protocol | Accepted |
+| [PDR-125](PDR-125-inter-practice-collaboration-protocol.md) | The Inter-Practice Collaboration Protocol | Accepted (amended 2026-07-08, 2026-07-13, 2026-08-01, 2026-09-23, 2026-09-24) |
 | [PDR-126](PDR-126-gates-land-strict-in-one-landing.md) | Gates Land Strict, in One Landing — Never at Warn Over an Allowlist | Accepted |
 | [PDR-127](PDR-127-team-branch-coordination-protocol.md) | The Team-Branch Coordination Protocol | Accepted |
 | [PDR-128](PDR-128-review-conversations-are-first-class.md) | Review Conversations Are First-Class — a PR Is the Structured Earning of Shared Truth | Accepted |
 | [PDR-129](PDR-129-diagnosis-reads-whole-surfaces-catalogues-are-open-sets.md) | Diagnosis Reads Whole Surfaces First; Failure Catalogues Are Open Sets | Accepted |
 | [PDR-130](PDR-130-two-speed-learning.md) | Two-Speed Learning — Fast Lessons, Slow Concepts, Predictions on Both | Accepted |
 | [PDR-131](PDR-131-merge-concurrency-is-free-quality-binds-at-settled-ready.md) | Merge Concurrency Is Free — Quality Binds at Settled-READY | Accepted |
-| [PDR-132](PDR-132-changeset-health-round-budgets-bind-at-authoring-time.md) | Changeset Health — Round Budgets Bind at Authoring Time | Accepted |
+| [PDR-132](PDR-132-changeset-health-round-budgets-bind-at-authoring-time.md) | Changeset Health — Round Budgets Bind at Authoring Time | Accepted (amended 2026-09-14, 2026-09-26) |
 | [PDR-133](PDR-133-liveness-classes-and-platform-declaration.md) | Liveness Classes and the Platform Liveness Declaration | Proposed |
 | [PDR-134](PDR-134-knowledge-strata-carriers-and-the-concept-layer.md) | Knowledge Strata, Carriers, and the Concept Layer | Accepted |
 | [PDR-135](PDR-135-cost-of-change-gradient.md) | The Cost-of-Change Gradient — General Mechanism Below, Specific Value Above | Proposed |
@@ -263,4 +274,7 @@ Practice-Core concept ↔ ADR map):
 | [PDR-137](PDR-137-basis-set-transformation-method.md) | The Basis-Set Transformation Method | Accepted |
 | [PDR-138](PDR-138-visual-verification-for-design-verdicts.md) | Visual Verification for Design Verdicts | Accepted |
 | [PDR-139](PDR-139-provider-independent-capability-composition.md) | Provider-Independent Capability Composition | Proposed |
-| [PDR-140](PDR-140-review-response-pricing.md) | Review Feedback Is Information — the Response Is What Gets Priced | Accepted |
+| [PDR-140](PDR-140-review-response-pricing.md) | Review Feedback Is Information — the Response Is What Gets Priced | Accepted (amended 2026-09-07, 2026-09-26) |
+| [PDR-141](PDR-141-operator-profile-in-the-home-directory.md) | The Operator Profile Lives in the Home Directory — the Practice's First Surface Outside a Repository | Accepted (amended 2026-09-14, 2026-09-17, 2026-09-23) |
+| [PDR-142](PDR-142-the-best-of-each-practice.md) | The Best of Each Practice — How the Practice's Instances Are Aligned, Judged and Pruned | Accepted (amended 2026-09-23, 2026-09-25, 2026-10-04) |
+| [PDR-143](PDR-143-the-practice-as-a-standalone-entity.md) | The Practice as a Standalone Entity — What Is Extracted, What Is Installed, and How It Keeps Learning | Accepted (ratified 2026-10-04; amended 2026-10-02, 2026-10-04) |

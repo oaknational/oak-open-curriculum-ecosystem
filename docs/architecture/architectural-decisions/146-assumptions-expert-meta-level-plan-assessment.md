@@ -82,6 +82,6 @@ The seven assessment areas (build-vs-buy, proportionality, assumption validity, 
 ## References
 
 - `.agent/sub-agents/templates/assumptions-expert.md` — expert template
-- `.agent/rules/invoke-assumptions-expert.md` — situational invocation rule
+- the `assumptions-expert` row of `.agent/rules/invoke-code-experts.md` — the reviewer roster (the per-reviewer rule retired 2026-10-04)
 - `.agent/memory/executive/invoke-code-experts.md` — expert invocation guidance
 - `.agent/directives/principles.md` — project principles (first question, simplicity)

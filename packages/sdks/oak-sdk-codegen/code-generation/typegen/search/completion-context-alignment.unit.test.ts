@@ -44,7 +44,7 @@ function extractEsCompletionContexts(
  * Extracts context names from generated Zod completion contexts schema code.
  */
 function extractZodContextNames(schemaCode: string): string[] {
-  const contextPattern = /^\s+(\w+): z\.array/gm;
+  const contextPattern = /^[ \t]+(\w+): z\.array/gm;
   const matches: string[] = [];
   let match;
 

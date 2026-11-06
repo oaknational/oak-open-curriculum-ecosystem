@@ -55,6 +55,14 @@ const config = defineConfigArray(
   },
   configs.strict,
   {
+    // The owner's ruling of 2026-09-08 on `no-throw-statement`: off where the
+    // throw debt lives (this workspace), error everywhere else and in every new
+    // workspace; the migration waits for the merge-back into the upstream. The
+    // ruling is quoted in the plugin's configs/recommended.ts; the
+    // no-throw-remediation plan owns the migration.
+    rules: { '@oaknational/no-throw-statement': 'off' },
+  },
+  {
     files: ['**/*.js', '**/*.mjs'],
     languageOptions: {
       ecmaVersion: 'latest',
@@ -96,6 +104,14 @@ const config = defineConfigArray(
       'import-x/no-unresolved': 'error',
     },
   },
+  {
+    // The owner's override of 2026-11-01, verbatim: "In the case of the
+    // oauth-proxy file, I am overriding the normal rules, only I can do this,
+    // and instructing you to change the length limit for that one file to 300
+    // lines". One file, one limit; the recommended 250 holds everywhere else.
+    files: ['src/oauth-proxy/oauth-proxy-handlers.ts'],
+    rules: { 'max-lines': ['error', 300] },
+  },
   // ADR-162 observability-first: require structured emission in newly
   // exported async functions. Rule is path-scoped internally to apps/**
   // and packages/sdks/**.
@@ -132,7 +148,13 @@ const config = defineConfigArray(
   },
   {
     files: ['**/*.ts', '**/*.tsx'],
-    // TODO: remove once config DI standardisation is complete (see .agent/plans/architecture/config-architecture-standardisation-plan.md)
+    // The ignores below are the composition roots and script tiers whose one
+    // `process.env` read is their boundary contract (ADR-078: entry points are
+    // the single place that reads the environment; ADR-168: the workspace
+    // script tiers); the ban holds everywhere else. ADR-168 records
+    // .agent/plans/delivery/workspace-config-isolation.plan.md as the successor
+    // of the config-architecture standardisation plan this block once pointed
+    // at, so that plan owns any further narrowing of this list.
     ignores: [
       '**/*.test.ts',
       '**/*.spec.ts',
@@ -164,6 +186,11 @@ const config = defineConfigArray(
       // The rest of the gate logic stays in pure helpers under
       // build-scripts/sentry-configured-build-gate.ts.
       'build-scripts/run-sentry-configured-build.ts',
+      // Repo-owned deploy-config validation gate (MCP-475): reads
+      // process.env once at the build's composition root and hands it to
+      // `runDeployConfigValidation`, which filters it to the validated
+      // surface; the decision logic stays in build-scripts/validate-deploy-config.ts.
+      'build-scripts/run-validate-deploy-config.ts',
       // Workspace tooling scripts (dev/test harness CLIs, e.g.
       // `run-requests.ts`, `server-harness.ts`, `embed-widget-html.ts`).
       // These are not product code — they read env vars at startup as

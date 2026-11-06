@@ -11,7 +11,7 @@ polarity is unchanged here);
 [ADR-177](177-asymmetric-cure-enforcement-in-staging.md) — asymmetric-cure enforcement for
 staging; the per-commit bundle-boundary discipline that this ADR extends to the branch level
 (a feature branch, like a staged bundle, carries exactly its authored content);
-the [commit-skill canonical](../../../.agent/skills/commit/SKILL-CANONICAL.md) — its four
+the [commit-skill canonical](../../../.agent/skills/change-custody/commit/SKILL-CANONICAL.md) — its four
 operational moves write the shared registries on every commit, and its "collaboration-state
 commit residue exception" is the single-checkout precursor of this decision;
 [PDR-064](../../../.agent/practice-core/decision-records/PDR-064-coordinator-handoff-two-moments.md)
@@ -31,7 +31,8 @@ the `validate-no-machine-local-paths` repo-validator and write hook).
 ## Context
 
 The multi-agent collaboration registries are versioned repo files under
-`.agent/state/collaboration/`: `active-claims.json` (which also carries the `commit_queue`),
+`.agent/state/collaboration/`: `active-claims.json` (with, since registry schema 1.4.0, the
+per-intent `commit-queue/` store beside it — machine-local ephemera, never versioned),
 `closed-claims.archive.json`, the comms event store (`comms/`, `comms-seen/`), the rendered
 `shared-comms-log.md`, and the handoff records. Versioning them is deliberate — the audit trail
 (`claim_id` ↔ `intent_id` ↔ commit SHA ↔ closure summary) is durable, observable state, not
@@ -39,7 +40,7 @@ temp-file residue.
 
 The commit ceremony writes those registries on **every** commit: opening the `git:index/head`
 claim writes `active-claims.json`; the queue ceremony (`enqueue` → `record-staged` → `commit`)
-writes `commit_queue` entries into the same file; closing the claim writes both
+writes intent files into the `commit-queue/` store beside it; closing the claim writes both
 `active-claims.json` and `closed-claims.archive.json`. The structural consequence: if registry
 state rides feature-branch commits, **any two open PRs collide by construction** — both carry
 diverging writes to the same always-written files, regardless of how disjoint their source
@@ -142,3 +143,14 @@ commit-skill canonical's residue exception for self-contained collaboration-stat
 - **Out-of-tree (unversioned) state.** Removes conflicts by removing the audit trail — rejected
   by the standing doctrine that important coordination state is versioned and observable, never
   temp-file residue.
+
+## Change log
+
+- 2026-09-04 — Context corrected for registry schema 1.4.0 (PR #38, MCP-612): the commit queue
+  is no longer carried by `active-claims.json`; it is the per-intent `commit-queue/` store beside
+  the claims file at the coordination home — machine-local TTL ephemera by the owner's
+  QUEUE-LOCAL ruling (2026-08-17), never versioned. The decision is unchanged: the claims file and
+  the closed-claims archive stay versioned at the coordination home; the queue is the ruled
+  exception to the "versioned and observable" doctrine named under Alternatives, as ephemera
+  rather than audit trail (the `claim_id` ↔ `intent_id` ↔ commit SHA trail survives in the
+  closure summaries).

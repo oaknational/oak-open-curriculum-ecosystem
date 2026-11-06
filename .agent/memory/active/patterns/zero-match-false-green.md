@@ -3,6 +3,7 @@ name: "Zero-Match False-Green"
 polarity: anti-pattern
 use_this_when: "Reading success from any filtered or glob-scoped tool run — a targeted test filter, a path-scoped linter, a sweep over a file set — without confirming the filter actually matched the intended targets."
 category: build-system
+layer: general
 proven_in: "Discovery-run rescued candidates C35 and C47 (2026-07-02 salvage): a targeted vitest path/name filter silently expanded to the full workspace run and reported green with zero tests matched; markdownlint-cli without --dot matched ZERO files under dot-directory paths (.agent/), printed usage, exited 0 — voiding every prior targeted .agent/** markdownlint pass."
 proven_date: 2026-07-02
 barrier:
@@ -52,3 +53,28 @@ contexts, drift-prone after `cd` in others; the F-125 family), so either
 way it cannot be assumed. Cures: absolute paths in sweep commands, and
 treat empty output over a directory that SHOULD have content as a refusal,
 never a pass — a gate over nothing never passes.
+
+Further instances, 2026-09-10 to 2026-09-16, the same generator in other
+instruments: `prettier --check` over an ignored path printed "All matched files
+use Prettier code style!" while matching zero files (`--file-info` returns
+`ignored: true` and discriminates); BSD `xargs` has no `-a` and refuses it on
+stderr with exit 1, but the sweep composed around it read neither, so a sweep
+over nothing read clean; a shell ate four code spans from a comms body and the
+send reported success. The verdict-channel form is the same generator one level
+up: an instrument that watches only the channels failures arrive on reads a
+positive result as silence. The merge door read review objects only, so a
+vendor's explicit zero-findings completion comment read as "no review", and a
+watcher with no positive liveness line was read as "still waiting" for ten
+minutes while the checks moved from none to nineteen passing (frictions F-164). The cure there is a positive-evidence channel
+for every leg, and a verdict that names whether it concluded from PRESENCE or
+from ABSENCE (the `landing-instruments-read-the-evidence` node carries the
+door's form).
+
+The authored form (2026-09-17, two instances in one fold's pre-publication
+pass): a seat's own absence claim in a record is a zero-match reading too. A
+friction entry said no instrument reads a session's context usage, and
+`agent-tools session-metadata` does; a disposition policy said no path
+exclusion exists, and one did. In both the seat had searched one tool or one
+file, not the surface the claim covered (the CLI's command list, the whole
+configuration). Cure: an absence claim carries its search beside it, the
+command and its scope, so a reader can see what "none" was measured over.

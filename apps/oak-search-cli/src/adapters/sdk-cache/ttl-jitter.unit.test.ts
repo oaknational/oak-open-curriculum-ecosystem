@@ -11,14 +11,22 @@
 import { describe, it, expect } from 'vitest';
 import { calculateTtlWithJitter } from './ttl-jitter';
 
+/** A random source pinned at the bottom of its range: the jitter's minimum. */
+const randomAtMinimum = (): number => 0;
+
+/** A random source pinned at the midpoint of its range: no jitter. */
+const randomAtMidpoint = (): number => 0.5;
+
+/** A random source pinned at the top of its range: the jitter's maximum. */
+const randomAtMaximum = (): number => 1;
+
 describe('calculateTtlWithJitter', () => {
   /** Base TTL calculation with no jitter. */
   it('returns base TTL in seconds when jitter is zero', () => {
     const baseDays = 14;
     const jitterHours = 0;
-    const deterministicRandom = () => 0.5;
 
-    const result = calculateTtlWithJitter(baseDays, jitterHours, deterministicRandom);
+    const result = calculateTtlWithJitter(baseDays, jitterHours, randomAtMidpoint);
 
     const expectedSeconds = baseDays * 24 * 60 * 60; // 1,209,600 seconds
     expect(result).toBe(expectedSeconds);
@@ -28,9 +36,8 @@ describe('calculateTtlWithJitter', () => {
   it('adds maximum positive jitter when random = 1', () => {
     const baseDays = 14;
     const jitterHours = 12;
-    const maxRandom = () => 1;
 
-    const result = calculateTtlWithJitter(baseDays, jitterHours, maxRandom);
+    const result = calculateTtlWithJitter(baseDays, jitterHours, randomAtMaximum);
 
     const baseSeconds = baseDays * 24 * 60 * 60;
     const jitterSeconds = jitterHours * 60 * 60;
@@ -42,9 +49,8 @@ describe('calculateTtlWithJitter', () => {
   it('applies maximum negative jitter when random = 0', () => {
     const baseDays = 14;
     const jitterHours = 12;
-    const minRandom = () => 0;
 
-    const result = calculateTtlWithJitter(baseDays, jitterHours, minRandom);
+    const result = calculateTtlWithJitter(baseDays, jitterHours, randomAtMinimum);
 
     const baseSeconds = baseDays * 24 * 60 * 60;
     const jitterSeconds = jitterHours * 60 * 60;
@@ -56,9 +62,8 @@ describe('calculateTtlWithJitter', () => {
   it('returns base TTL with no jitter when random = 0.5', () => {
     const baseDays = 14;
     const jitterHours = 12;
-    const midpointRandom = () => 0.5;
 
-    const result = calculateTtlWithJitter(baseDays, jitterHours, midpointRandom);
+    const result = calculateTtlWithJitter(baseDays, jitterHours, randomAtMidpoint);
 
     const baseSeconds = baseDays * 24 * 60 * 60;
     expect(result).toBe(baseSeconds);
@@ -89,8 +94,8 @@ describe('calculateTtlWithJitter', () => {
     const baseDays = 14;
     const jitterHours = 12;
 
-    const minTtl = calculateTtlWithJitter(baseDays, jitterHours, () => 0);
-    const maxTtl = calculateTtlWithJitter(baseDays, jitterHours, () => 1);
+    const minTtl = calculateTtlWithJitter(baseDays, jitterHours, randomAtMinimum);
+    const maxTtl = calculateTtlWithJitter(baseDays, jitterHours, randomAtMaximum);
 
     // 13.5 days in seconds
     const expectedMin = (14 - 0.5) * 24 * 60 * 60; // 1,166,400
@@ -128,8 +133,8 @@ describe('calculateTtlWithJitter', () => {
     const baseDays = 14;
     // Using extreme random values to verify default jitter amount
 
-    const minTtl = calculateTtlWithJitter(baseDays, undefined, () => 0);
-    const maxTtl = calculateTtlWithJitter(baseDays, undefined, () => 1);
+    const minTtl = calculateTtlWithJitter(baseDays, undefined, randomAtMinimum);
+    const maxTtl = calculateTtlWithJitter(baseDays, undefined, randomAtMaximum);
 
     const baseSeconds = baseDays * 24 * 60 * 60;
     const defaultJitterSeconds = 12 * 60 * 60;

@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "claudeVersion": "2.1.283",
+  "startedAt": "2026-09-27T11:41:26.534Z",
+  "durationSeconds": 66,
+  "costUsd": 0.2340284,
+  "partial": false,
+  "suite": {
+    "root": "<plugin>",
+    "ablation": "with-without",
+    "judgeModel": "sonnet",
+    "caseFilter": "case-01",
+    "threshold": 0,
+    "concurrency": 1,
+    "plugins": [
+      {
+        "name": "oak-specify-connection-evals",
+        "version": "0.0.0",
+        "path": "<plugin>"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "name": "case-01",
+      "dir": "evals/case-01",
+      "source": "mixed",
+      "promptMarkdown": "Endpoint A: a curriculum API (revision 5) that returns lessons keyed by subject slug; its slugs are biology, chemistry, physics and combined-science, where a combined-science lesson covers content from all three sciences for pupils taking the double-award course; its schema is validated and its tests pass. Endpoint B: a teacher-facing tool (revision 2) whose taxonomy has the subjects Biology, Chemistry and Physics only; it maps A's slugs to its subjects by exact match on a mapping table built against A's revision 3, and a slug with no entry is dropped silently; its schema is validated and its tests pass. Teachers of the double-award course report that their lessons are missing or filed under the wrong science. Relation: B transforms A's subjects. Intended reliance: teachers find the right lessons. There is nothing to read; analyse the connection from these facts.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A statement of what the mapping between the API and the tool must preserve (subject identity, combined-science membership), the loss it may permit, when it must reject a slug, and the taxonomy version on each side; the analysis shows the pair fails on the combined-science mapping while each side is valid on its own; a counterexample with a specific combined-science slug; the missing evidence (fixtures that would discriminate the mapping); the obligation placed on whoever owns the mapping, not on the API by default.\n\nAssertions:\n1. Both endpoints' local validity is stated and explicitly not taken as evidence that the composition works\n2. A concrete counterexample is given from the stated facts (a combined-science lesson, valid under A's schema, dropped or misfiled by B while B's own tests pass) in which each side is individually valid and the pair fails\n3. The missing obligation is returned to the endpoint that owns the mapping rather than the API being blamed by default\n4. Schema validity is not equated with preserved meaning",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A statement of what the mapping between the API and the tool must preserve (subject identity, combined-science membership), the loss it may permit, when it must reject a slug, and the taxonomy version on each side; the analysis shows the pair fails on the combined-science mapping while each side is valid on its own; a counterexample with a specific combined-science slug; the missing evidence (fixtures that would discriminate the mapping); the obligation placed on whoever owns the mapping, not on the API by default.\n\nAssertions:\n1. Both endpoints' local validity is stated and explicitly not taken as evidence that the composition works\n2. A concrete counterexample is given from the stated facts (a combined-science lesson, valid under A's schema, dropped or misfiled by B while B's own tests pass) in which each side is individually valid and the pair fails\n3. The missing obligation is returned to the endpoint that owns the mapping rather than the API being blamed by default\n4. Schema validity is not equated with preserved meaning",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-specify-connection|oak-specify)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-specify-connection(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 3,
+            "costUsd": 0.1483428,
+            "judgeCostUsd": 0.016062,
+            "durationSeconds": 40,
+            "startedAt": "2026-09-27T11:41:26.571Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "# The connection between the curriculum API and the teacher tool fails for double-award teachers\n\nThe analysis below uses only the facts you gave. Both schemas validate and both test suites pass, but that says nothing about this connection. B's mapping was built against A's revision 3 and is running against revision 5. B's taxonomy also has no subject that can hold a lesson covering all three sciences. Teachers of the double-award course therefore can't rely on B to find their lessons.\n\n## 1. The connection\n| | |\n|---|---|\n| **Relation** | B turns A's subject slugs into its own subjects. |\n| **Endpoints** | A is the curriculum API at revision 5, with slugs `biology`, `chemistry`, `physics` and `combined-science`. B is the teacher tool at revision 2, with subjects Biology, Chemistry and Physics, mapped by exact match on a table built against A's revision 3. |\n| **Intended reliance** | Teachers, including those teaching the double-award course, find the right lessons in B. |\n| **What must survive the mapping** | Each lesson's subject and the course it belongs to (double-award or single science). Nothing in the facts permits losing either. |\n| **What A supplies** | Lessons keyed by one of four slugs. `combined-science` covers content from all three sciences. The facts say nothing about how A changes its slugs between revisions or whether the slug list can grow. |\n| **What B assumes** | Every slug matches a table entry exactly, and each lesson belongs to exactly one of three subjects. A slug with no entry is dropped with no signal to anyone. |\n| **Failure behaviour** | A drop or a wrong match looks the same as success on both sides. Nothing detects it, so there is nothing to recover from. |\n| **Supporting evidence** | Only local: each side's schema checks and tests. Nothing tests A's revision 5 against B's revision 2. |\n| **When to re-check** | Any change to A's revision or slug list, B's mapping table or taxonomy, or who the tool is meant to serve. |\n\n## 2. Is the connection sound?\n**It fails for double-award lessons. It holds for the three single-science slugs only if they haven't changed since revision 3, which nothing confirms.**\n\n- **Revision gap:** B's table was written for revision 3 and nobody has checked it against revision 5. Anything A changed in between reaches B with no check.\n- **Representation gap:** a `combined-science` lesson belongs to three sciences at once, and B can only file a lesson under one. So every exact-match table leaves the teacher with a loss:\n  - **No entry:** the lesson is dropped silently, which explains \"missing\".\n  - **An entry pointing to one science:** the lesson lands under a science it only partly covers, and the other two lose it. That explains \"filed under the wrong science\".\n  - **Even a correct entry:** the lesson loses its link to the double-award course and sits among single-science lessons.\n\n  No change to the table alone fixes this.\n- **Silent dropping** means B's tests can't catch the problem. The first sign of trouble was teacher complaints.\n\n## 3. Cases where each side works but the pair fails\n1. **`combined-science` added after revision 3 (or renamed):** there's no table entry, so the lesson is dropped silently and reported as missing. Each side is valid on its own, the pair fails, and this matches the reports.\n2. **A table entry sends `combined-science` to one science, say Biology:** the lesson's chemistry and physics content can't be found under Chemistry or Physics. This matches \"wrong science\".\n3. **Revision 3 used different slugs from revision 5** (for example, per-science combined slugs): some still match by chance and some don't. That would explain why teachers report both missing and misfiled lessons. It can't be confirmed from the facts.\n4. **A single-science slug was renamed or changed case between revisions 3 and 5:** that science's lessons would vanish for every teacher, not just double-award ones. It isn't reported, so it's probably not happening, but nothing checks for it.\n5. **A adds or renames any slug in the future:** the same silent loss happens again, because nothing detects it.\n\nBecause teachers report both symptoms, cases 1 or 2 and 3 may be happening at the same time. Which ones actually apply can't be decided without the evidence below.\n\n## 4. Missing evidence\n- **A's slug list at revision 3 and its changes since:** needed to tell cases 1, 3 and 4 apart. A's release history is the authority.\n- **B's actual mapping table:** shows whether `combined-science` has an entry and where it points (case 2). B's configuration is the authority.\n- **Any count or log of slugs B has dropped:** shows how much is being lost. B currently doesn't record this.\n- **Whether A tags each combined-science lesson with its component science:** decides whether splitting lessons across sciences is even possible. A's contract is the authority.\n- **The specific lessons teachers reported:** needed to link each complaint to a case.\n\n## 5. What each side is asked to do\n- **B's owner:**\n  - B's taxonomy needs a way to represent double-award lessons. The options are a combined-science subject, filing a lesson under more than one science, or keeping the course as a separate attribute.\n  - Unmapped slugs should be rejected or flagged, not dropped silently.\n  - B should declare which A revision it supports.\n  - B needs a contract test against A's current revision.\n- **A's owner:**\n  - Publish the slug list for each revision, with changes and deprecations.\n  - Say whether the slug list is fixed or can grow.\n  - Say whether combined-science lessons carry their component sciences.\n- **Curriculum or product owner** (this isn't for the connection itself to decide): define what \"the right lesson\" means for a double-award teacher. Is it the combined lesson as a whole, or its parts filed under each science? B's fix depends on this answer.\n\nThis analysis doesn't judge whether the connection is ready for use. Once these obligations are written into A's and B's own specifications, the next step is to rerun the checks in sections 2 and 3 against the repaired pair."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 0.5,
+            "passed": false,
+            "turns": 1,
+            "costUsd": 0.0856856,
+            "judgeCostUsd": 0.010932000000000004,
+            "durationSeconds": 26,
+            "startedAt": "2026-09-27T11:42:06.464Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL FAIL FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  false,
+                  false
+                ],
+                "evidence": "# The connection A → B: where it breaks and why\n\n**Summary:** Both endpoints are correct by their own standards. The fault is in the mapping between them, and none of the existing checks covers that mapping. Teachers of the double-award course are losing lessons because a single-subject taxonomy cannot hold a lesson that belongs to three subjects, and because B drops unmapped slugs without saying so.\n\n## Why the passing checks don't help\n\n- A's schema and tests only show that A returns well-formed lessons under its own four slugs.\n- B's schema and tests only show that B handles inputs its mapping table already knows about.\n- Nothing tests \"every slug A currently emits is represented correctly in B.\" That is the one property teachers depend on, and it has no owner.\n\n## What is actually going wrong\n\n**1. The mapping table is out of date.**\nB's table was built against A's revision 3, and A is now on revision 5. The facts don't say what changed between those revisions. But exact-match lookup on a two-revision-old table is fragile: any slug that was added or renamed misses its entry.\n\n**2. Unmatched slugs disappear silently.**\nWhen a slug has no entry, B drops the lesson with no error, log or count. B's tests can't notice this, because from B's side a dropped lesson looks the same as a lesson that never existed. This explains the **missing** lessons: combined-science lessons with no table entry are discarded.\n\n**3. B's taxonomy can't represent combined science (the root cause).**\nA combined-science lesson covers biology, chemistry and physics. B's taxonomy is a single choice from {Biology, Chemistry, Physics}, and the table maps each slug to one subject. So a combined-science lesson has no correct place in B:\n- With no entry, it is dropped (lessons go missing).\n- With an entry, it goes to one science, and teachers looking under the other two won't find it (lessons filed under the wrong science).\n\nUpdating the table can't fix this, because any single value is wrong. The facts don't say which lessons fall into which case. One likely explanation: the rev-3 table has an entry for combined-science, or for an earlier slug, that points to one science, while other combined lessons arrive under a slug with no entry. That needs checking against the actual table, not assuming.\n\n## Fixes, in priority order\n\n1. **Stop failing silently.** For unmapped slugs, log them, count them and hold the lessons in a quarantine list rather than dropping them. On its own this would have exposed the problem.\n2. **Change how B represents combined science.** Either:\n   - let a lesson carry several subjects and map combined-science to all three, or\n   - add a Combined Science subject to B's taxonomy, since double-award teachers think of it as its own course.\n\n   Which to choose is a product decision about how those teachers browse. Mapping combined-science to one science is not an acceptable fix.\n3. **Add a contract test on the connection.** Fetch A's current list of slugs and check that each one has an explicit mapping in B, including an explicit \"multiple subjects\" or \"intentionally excluded\" entry where that applies. Run it in CI against A's live revision so a new or renamed slug fails the build instead of reaching teachers.\n4. **Track A's revision explicitly.** Record which A revision the table was checked against, and alert when A moves ahead of it. Then review A's rev 3→5 changes for other drift beyond combined-science.\n5. **Recover the lost lessons.** Once mapping is fixed, re-run it over existing A content so the missing combined-science lessons are brought back."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 0.5,
+        "passRateWithout": 0,
+        "delta": 0.5
+      }
+    }
+  ],
+  "aggregates": {
+    "casesTotal": 1,
+    "casesPassed": 1,
+    "overallScore": 1,
+    "overallPassRate": 1,
+    "meanDelta": 0.5
+  }
+}

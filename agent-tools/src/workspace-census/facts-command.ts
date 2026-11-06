@@ -1,5 +1,5 @@
 /**
- * The `facts` subcommand (census todo 2): gathers the mechanical
+ * The `facts` subcommand (the census node's second unit): gathers the mechanical
  * detector facts for every subject and writes the facts artefact.
  * Split from commands.js on size; shares the CommandContext shape.
  */

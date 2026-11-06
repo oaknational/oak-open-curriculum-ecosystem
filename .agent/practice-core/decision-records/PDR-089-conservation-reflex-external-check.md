@@ -194,7 +194,7 @@ to a governance decision:
    high-stakes outcomes, or if the skip-verification reflex is observed to be
    *weakest* (not strongest) on the highest-felt-authority surfaces. Confirmed by
    the 2026-06-04 EEF D5 review, where three convergent reviewers — one stamped
-   "confirmed in package.json" — agreed on a package filter (`@oaknational/oak-curriculum-sdk`)
+   "confirmed in package.json" — agreed on a package filter (the SDK package's then name)
    that matched no project; only an empirical `pnpm --filter` run found it.
 
 8. **Verifier verdicts carry per-check positive attestations, and

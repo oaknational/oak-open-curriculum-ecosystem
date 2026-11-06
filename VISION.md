@@ -6,6 +6,19 @@ last_reviewed: 2026-08-30
 
 # Vision
 
+## Engraph OCE programme — 10 October 2026
+
+OCE remains the full capability innovation kit and framework, retaining all
+mechanisms and potentially reusable material. External apps will carry supported
+instance configuration over published OCE packages. CF construction, reusable-core
+reconstruction, layered curriculum integrity, Castr, publication and receiving
+responsibility form one incremental design. See the
+[architecture](docs/architecture/oce-architecture.md) and
+[instance guide](docs/development/oce-instance-development.md).
+This is the accepted direction and proposed design, not a completed implementation
+or a claim that packages are available. The curriculum infrastructure consumer and the exploratory pedagogy project remain distinct profiles;
+the framework extends beyond them and today's applications.
+
 Oak's mission is to
 
 > _"improve pupil outcomes and close the disadvantage gap by supporting

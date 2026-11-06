@@ -62,12 +62,8 @@ question:
 
 Consequences for the model this DDR governs:
 
-- The choice model this DDR names is CONFIRMED: the control's state is
-  the user's choice, with "Identity default" as the honest name of the
-  no-choice state (superseding both the earlier "Page default" wording
-  and the 2026-08-10 interim applied-model store, which briefly
-  contradicted this DDR unamended — the drift is owned and corrected
-  here).
+- The control's state is the user's choice, with "Identity default" as
+  the honest name of the no-choice state.
 - "Identity default" is itself selectable: choosing it clears the
   stored choice and returns the page to the identity's own default
   (implementation: no `data-theme` attribute; a brand may re-polarise
@@ -75,10 +71,6 @@ Consequences for the model this DDR governs:
   restores as first-class design intent).
 - The automatic access commitment stands: with no stored choice, an
   OS-level `prefers-contrast: more` still applies high-contrast.
-- Implementation of this amendment is the design lane's next slice
-  (post-2026-08-11-compaction); until it lands, the interim
-  applied-model behaviour from 2026-08-10 is the live state and this
-  amendment is the governing intent.
 
 ## Provenance
 

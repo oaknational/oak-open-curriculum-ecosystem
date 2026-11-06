@@ -9,15 +9,7 @@ import {
   type ReleaseError,
   type ResolvedRelease,
 } from './release-types.js';
-
-function trimToUndefined(value: string | undefined): string | undefined {
-  const trimmed = value?.trim();
-  if (!trimmed) {
-    return undefined;
-  }
-
-  return trimmed;
-}
+import { trimToUndefined } from './trim-to-undefined.js';
 
 /**
  * Project canonical app build identity into a Sentry release identifier.

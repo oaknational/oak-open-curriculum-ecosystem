@@ -835,3 +835,7 @@ only if its opening check shows `no-require-imports` absent.
   costs minutes. Its branch: `jimcresswell/vitest-config-workspace`.
 - Linear ticket: mint when the standing ticket embargo lifts
   (2026-08-10) and backfill `tickets`.
+
+## Review dispositions
+
+- 2026-09-10 — from PR #125 (config-expert leg): (a) `no-relative-packages: 'error'` binds only in `createGraphBaseConfig`; 23 workspaces keep it off in their own config-file block — the shared config-file block and decoy deletion this plan names (items ~615–620) are the cure; (b) no test proves `createGraphBaseConfig` reports on a violating config file — the RuleTester fixture (item ~752); (c) the shared `'**/*.d.ts'` ignore hides 11 hand-written declaration files from lint — decide per file at the isolation pass. Routed here, not cured on #125.

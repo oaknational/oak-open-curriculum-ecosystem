@@ -9,7 +9,7 @@ last_updated: 2026-06-20
 related:
   - ../vision-strategy-and-plan-estate.plan.md
   - ../../high-level-plan.md
-  - ../../../memory/operational/threads/strategy-and-plan-estate-holistic-review.next-session.md
+  - ../../../memory/operational/threads/paused/strategy-and-plan-estate-holistic-review.next-session.md
   - ../../../../VISION.md
   - ../../../../docs/strategy/
   - ../../../../agent-tools/README.md

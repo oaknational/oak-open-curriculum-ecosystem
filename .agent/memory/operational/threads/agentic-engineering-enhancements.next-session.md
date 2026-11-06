@@ -11,178 +11,36 @@ fitness_line_length_rationale: >-
   noise while still flagging genuine over-runs (this record still has a few >115
   lines that correctly remain flagged).
 fitness_content_role: reference
-overflow_disposition: 'leave-if-live; else conserve-insight-and-delete — never
-archive/split/rotate/shard (see continuity-practice.md §Disposition of Continuity Surfaces)'
+overflow_disposition: 'leave-if-live; else graduate, then archive to a dated file proven byte-identical — never before full processing, never split/shard (see continuity-practice.md §Disposition of Continuity Surfaces)'
 merge_class: index-narrative-tables
 ---
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
 Practice continuity and temporary knowledge-curation. This is not a product
 implementation thread. The full 142-session history (curation passes, the
-feedback-mechanism arc, taxonomy work) is retained in git and in the
-[`curator-passes/`](../curator-passes/) ledgers; this record carries the live
+feedback-mechanism arc, taxonomy work) is retained in git, the commits
+that homed each pass's substance; this record carries the live
 work brief and the recent identity stretch, per
 [`continuity-practice.md` §Disposition](../../../directives/continuity-practice.md).
 
-## DEDICATED CONSOLIDATION, NAPKIN-ONLY — EXECUTED (2026-09-02, Kiln holds Slag, 1447f4, curator)
+Finished history up to 2026-09-20 is in
+`.agent/memory/operational/archive/agentic-engineering-enhancements-thread-2026-09-20.md`
+(an inline path: the link validator's target set excludes archive directories by design),
+a snapshot of this record as it stood before the 2026-09-20 graduate-then-archive pass (blob
+`f6237bcf8` at both paths): the executed consolidation and doctrine logs of 2026-07-06 to
+2026-09-02, the salvage arc, and the landing narratives of the inter-Practice and
+corpus-generalisation lanes. The step-6a processed marker is 2026-09-02
+(`research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-09-02.md`);
+the next "since last marker" pass starts after it.
 
-**Step-6a synthesis landed the same day** (owner redirect ~12:1xZ: the seat had read the six
-archives into its own context and compacted; the different approach was the corpus-analysis
-engine, scoped against the 2026-08-07 processed marker). Report:
-`research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-09-02.md`,
-processed marker 2026-09-02; one graduation (`patterns/claim-before-check.md`); the
-interrupt plan's ledger carries the first measured recurrence-despite-home rate (16 of 19
-prior-kept mechanisms recurred within four weeks). The since-marker run recipe is in the
-corpus-analysis runbook. Open at close: the main-merge into `handoff/jim-september` after
-Finch's #915 fold lands is the rotation-versus-appends shape — carry the 2026-08-19 napkin
-additions into the fresh napkin and process them; both napkin and repo-continuity need
-semantic merges. DONE 2026-09-02 ~14:3xZ after #915 landed: merge commit on
-`handoff/jim-september` (the napkin the one conflict; the fold's 156-line delta carried under a
-dated heading and routed into eight homes in the following commit, five items on distilled
-with candidate homes, dispositions on the napkin); branch pushed under the bot. WRAPPED
-2026-09-02 ~14:5xZ: #951 ready, all checks green, the owner merges; any post-merge true-up
-rides #954 at owner word; the seat stayed live only for a local-only data export (MCP-662,
-untracked). The next consolidation session starts from main's fresh napkin and the
-distilled entries' candidate homes (the owner named the distilled pass as the next session). Deep handoff taken at the owner's word ~13:4xZ with the seat kept live: the
-machine-local handoff record is
-`.agent/state/collaboration/handoffs/d88ab157-curator-napkin-only-consolidation-2026-09-02.md`
-(attached to claim d88ab157), the formation letter is
-`.agent/experience/2026-09-02-kiln-holds-slag-the-corpus-i-was-meant-to-query.md`, and the
-napkin's ~13:4xZ entry carries the lens harvest and the loss scan.
+## Open residuals of the 2026-07-28 session-close doctrine landing
 
-Owner-launched consolidate-until-done pass, scoped by owner word to the current napkin and
-the five archived napkins before it: distilled appended to, never curated; every non-napkin
-fitness signal ignored; the comms watermarks left where the 2026-08-14 pass set them. Run
-n=1 on `handoff/jim-september` in the primary checkout (the owner's handoff branch for the
-2026-09-02 uncommitted records; PR #951 the landing surface), under a curator claim on this
-thread; the two claims retained at the 2026-08-19 week-sleep freeze (design lane, Director
-seat) were reported, not archived. Napkin rotated at 3,093 lines
-(`archive/napkin-2026-09-02.md`, cmp-proven) after every behaviour-changing item in the
-2026-08-14 → 2026-09-02 window was read and dispositioned first-hand; the rotation record
-at the top of the fresh napkin lists the homes, and the commits are the record. Five
-pattern files carry the window's named concepts in the pre-SDK concept-node form. The
-step-6a historical synthesis over the six napkins follows in the same session; its report
-in the continuity-memory research lane is the marker for the next "since last marker" pass.
-
-## DEDICATED CONSOLIDATION — EXECUTED (2026-08-14, Quasar wakes Nadir, 0fabcd, curator)
-
-Owner-launched consolidate-until-done pass, run inside a live team window (Director seat
-Smith hunts Obsidian active in the morning; commit-window and expletive-sweep coordination
-on the stream). Napkin rotated at 3,490 lines (`archive/napkin-2026-08-14.md`,
-cmp-proven); pending-graduations and distilled both drained to EMPTY by first-instance
-promotion (homes in the commit records `aba0128dd` / `99e3eb026` / `2633f2fd4`);
-open-questions verified empty. Comms step-3a: 4,420 events archive-moved loss-free under
-the three gates; watermarks extended (non-heartbeat 2026-08-14T06:16:28Z via a full
-in-seat body-read of all 496 post-watermark events; heartbeats 2026-08-12T06:29Z with the
-batch aggregate in the napkin rotation record). Session lesson conserved in the archive's
-06:08Z entry: the owner corrected this seat for self-executing the coordination-branch
-merge-back and push (role-scope breach at a curator seat — licensed-activity class
-recurrence, routed to PDR-098's action-time lane). Live signals left named, not chased:
-director-handoff.md remains its own bounded owner-named sitting; this record's char
-pressure drains at the salvage-plan closure (the 2026-07-02/03 ws1b ledger half of the
-salvage section is conserve-and-delete eligible once the rescue-set workstream completes;
-its rescue-set pointer half stays live intake).
-
-## LONGITUDINAL STEP-6A SYNTHESIS — EXECUTED AND ARCHIVED (2026-08-07/08, Nettle weaves Root, 5cfa11, implementer)
-
-Identity: `Nettle weaves Root` (`claude-code` / `fable-5` / `5cfa11`), implementer,
-first_session 2026-08-07, last_session 2026-08-08. The owner-ratified
-archive-scale synthesis (consolidate-docs step 6a) ran end to end on the
-corpus-analysis engine: 37 napkins since the 2026-05-29 marker → 572 leaves →
-80 candidates → 35 keep / 44 kill / 1 reroute → deterministic close (integrity
-empty, zero recompute diff). Report + **processed marker 2026-08-07**:
-[`historical-napkin-synthesis-2026-08-07.md`](../../../research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-08-07.md).
-Two novel patterns graduated (`tool-default-scan-set-drift`,
-`collaboration-cli-interface-drift`); Choice-B recall MISS dispositioned
-graduate-with-gap-named (dual mechanism, §Recall of the report). Owner
-approved the report and archival 2026-08-08; plan archived at
-`.agent/plans/delivery/archive/longitudinal-napkin-synthesis-2026-08.plan.md`
-(inline path — the link validator's target set excludes archive directories by
-design); MCP-531 Done. **Grounded execution knowledge for the next archive-scale
-runner**: the tooling README launch-card is accurate first-hand (build →
-Workflow → commit per stage); launch seeded artefacts with ABSOLUTE
-scriptPath (the Workflow tool resolves relative paths against the caller's
-cwd); re-freeze the recall fixture from the marker-chain reports covering the
-NEW window before spending (the frozen 18-baseline fixture is calibrated to
-February–June); a banked-verdict pre-filter at validate dispatch is a
-legitimate engine refinement pointer (report §Limitations). **Next safe step
-on this lane**: none — the lane is complete; the next step-6a pass triggers
-per consolidate-docs' own checklist, starting after marker 2026-08-07.
-
-## SESSION-CLOSE DOCTRINE RE-TRUED — wrap closes every session (2026-07-28, Juniper holds Tendril, 3dfd3b, implementer)
-
-- Owner ruling (verbatim substance): "it was never my intention to use wrap for 'big sessions', it is
-  for all sessions." Landed in two owner-merged PRs the same afternoon: #603 (`5404a4aa2`,
-  human-facing: the dev guide + README/CONTRIBUTING/lens) and #604 (`238fc26c1`, doctrine: ADR-150
-  Amendment Log + §1/§4 body revision, mirrored PDR-011 entry, continuity-practice, the
-  wrap/session-handoff/consolidate-docs/go/start-right-team skill contracts with regenerated
-  adapters, definition-of-delivery's authority parenthetical, the ADR index descriptor, the
-  lifecycle-triggers plan template — a generator, Director-adjudicated into the PR — and the
-  onboarding-register annotation).
-- Split-loop model PRESERVED one level down (docs-adr-expert verified): the consolidation gate is
-  intact; `session-handoff` is wrap's continuity component, never an alternative close.
-- Follow-ons, Director-adjudicated: MCP-310 (PDR-026 closeout-phrasing amendment — land this week),
-  MCP-311 (two pre-existing record defects: the ADR-150 "§Interaction Points" citation, PDR-011
-  status-line omissions), MCP-312 (ADR-150 which-sections-live note). Known-stale recorded on
-  MCP-299, not chased: `skill-composition.md:26-27,51-56`; the continuity research doc `:34-36`.
-- Session lesson pair, homed: transmit-before-verify hit two seats in one session (Director's
-  graduation-candidate capture at `43c03362a`); provenance-of-authority — a napkin imperative cited
-  as an owner ruling, corrected by the Director's constraint-lift broadcast (11:11Z, napkin entry).
-
-## DEDICATED CONSOLIDATION — EXECUTED (2026-07-30)
-
-Ingot tracks Slag (claude-code / claude-fable-5 / `be4ac9`), curator,
-first_session 2026-07-30, last_session 2026-07-30. Owner-named dedicated
-pass, n=2 with Director Falcon hunts Flight (cold-paused mid-pass); base
-`coordination/estate-2026-07-30-c`. Owner ordering honoured: ALL raw
-sources swept into/against the napkin FIRST (46 experience letters whole;
-177 tagged events; 4 platform memories; ~140 handoff records risk-sampled;
-non-repo plans; box), then the 5,333-line napkin bottom-up, then distilled,
-then the upper registers. Napkin rotated (`archive/napkin-2026-07-30.md`,
-cmp-proven); distilled drained EMPTY (both entries graduated on their own
-recorded routing); pending-graduations = 2 trigger-gated rows only;
-open-questions empty. The full graduation ledger is repo-continuity §0a +
-the pass commits; headline: the referent/derivation synthesis
-(verify-dont-trust §Claims-Crossing-Boundaries + referent-narrowing
-transmitting-dual + post-graduation record), frame-free-absolutes pattern,
-the PDR-063 writer/reader/succession amendment bundle, pr-lifecycle
-read-mechanics + cure-is-a-claim, liveness reading calibrations,
-MCP-446/447 minted. Named next-pass items: the ~7,600-event comms
-archive-move (gates run fresh); this record's own char-critical drain
-(unchanged from Magnetar's naming); director-handoff curation
-(Director-routed).
-
-## DEDICATED CONSOLIDATION — EXECUTED (2026-07-26)
-
-Magnetar guards Perigee (claude-code / fable-5 / `565521`), curator,
-first_session 2026-07-26, last_session 2026-07-26. Owner-launched dedicated
-pass on base f5f48a332; comms sweep first per owner word (58 tagged + 570
-titled + longest bodies, post-07-23 window). Graduations at e1d48b955 +
-the follow-on commit: two new patterns (description-is-not-a-check;
-frozen-text-false-authority — the play seed's 4th instance), pr-lifecycle
-×4 (settled-by-name, Class F/P, quiet-window supersede, owner-branch
-collision), PDR-133 §8 landed in the surface matrix, stance-gradient +
-tier-inheritance in invoke-code-experts, six rule sharpenings, napkin
-rotated to `archive/napkin-2026-07-26.md`. Registers empty at open and
-close (pending-graduations 0, open-questions 0); comms archive-move
-executed (123 heartbeat-tier; provenance 0 violations). Named next-pass
-candidates: this record's own char-hard drain; the 1,406-event
-curator-ledger tooling gap; agent-collaboration.md relay-doctrine homing
-for the crossed-owner-words lesson (staged in distilled).
-
-## DEDICATED CONSOLIDATION — EXECUTED (2026-07-23)
-
-Session identity: Magma mends Sulphur (claude / claude-fable-5 / prefix
-`639530`), curator, first_session 2026-07-23, last_session 2026-07-23.
-The full pass record is `repo-continuity.md` §Agentic-Engineering Curation
-item 0a (commits `62a7dccf8`, `ae6936e39`, `1f3e7c9ae`); napkin archive
-`archive/napkin-2026-07-23.md`. Named next-pass candidates: the
-handoff-ratification-ledger homing; the comms curator-disposition input
-channel (with the rotation cursor-floor mitigation, both on the
-comms-watch-storage-redesign lane); the archive-stale-vs-live-seat policy
-seam (a claims-tooling candidate: the sweep read a live Director seat as
-stale because its loop bumped comms only — cure adopted seat-side, tool
-seam stands).
+The owner's ruling that `wrap` closes every session landed in #603 and #604 (2026-07-28). Its
+follow-ons were ticketed on the Oak line's tracker and are unverified from this fork: a PDR-026
+closeout-phrasing amendment (MCP-310); the ADR-150 "§Interaction Points" citation defect
+(MCP-311; its PDR-011 status-line half was cured 2026-09-20); an ADR-150 which-sections-live note
+(MCP-312). Known-stale and unchased: the continuity research doc's lines 34–36 on the closeout
+model (`skill-composition.md`'s wording was cured 2026-09-20).
 
 ## MUTATION TESTING RE-BASELINE — DECISION-READY, NO IMPLEMENTATION (2026-07-15)
 
@@ -235,63 +93,6 @@ the plan indexes, repo continuity, and the 2026-07-15 napkin loss/metaloss
 record. No code, package configuration, test, mutation run, CI surface, commit,
 or push occurred.
 
-## DEDICATED CONSOLIDATION — EXECUTED (2026-07-06, evening)
-
-Session identity: Zenith wakes Perigee (claude-code / claude-fable-5 / prefix `8897eb`),
-curator; `last_session` 2026-07-06. Owner-directed dedicated knowledge-curation pass on branch
-`docs/zenith-dedicated-consolidation` (off post-#314 `main`), run as the third agent alongside
-the Wildfire×Kiln refounding lane (boundaries de-conflicted on the stream; their lane untouched).
-
-**EXECUTED:** pending-graduations drained to ZERO by decision (nine homes verified first-hand;
-sequence-first graduated into PDR-018 under a live owner ratification recorded on the comms
-stream; doctrine-lookup tripwires into the sonarqube rule + invoke-code-experts; the
-merge-commit path into the commit skill); distilled drained to header; the napkin fully
-processed then rotated (verbatim archive, cmp-proven); repo-continuity's completed-arc
-narrative drained per its disposition (char-critical cleared honestly); open-questions
-confirmed empty; four new patterns; frictions F-122..F-129; PDR-063/082/117 amendments. Both
-graduation batches ran the PDR-101 four-seat quorum; all findings adjudicated. Commits
-`519484dcc`, `3561ffd58`, `3ea53d89f` (+ the handoff bundle). **Residual signals:** the
-Zodiac-section residual (1) below is VERIFIED STALE — `run-quality-gates` (+ CodeQL +
-SonarCloud) is ALREADY required (first-hand `gh api …/rules/branches/main`, 2026-07-06);
-repo-continuity remains hard-over on chars at rest with named remediation lanes; the 7c audit
-flagged two >14-day-stale Active threads and two COMPLETE threads still listed Active (napkin
-carries the list).
-
-## PR-LIFECYCLE DOCTRINE TIGHTENING — EXECUTED: PR #310 MERGED (2026-07-06)
-
-Session identity: Zodiac herds Spectrum (claude-code / claude-fable-5 / prefix `72dd40`),
-owner-named successor to Cricket lifts Echo (2fffa2); `last_session` 2026-07-06. Succession ran
-the standby seat contract (watcher + registration, no cron, no claim) and flipped to active at
-Cricket's natural-boundary closeout.
-
-**EXECUTED:** PR #310 merged to `main` (`18a2d8c17`): Strand D in full — D1 the "every issue
-earns a check" principle + operationalisations, D2 the Phase-7 merge-gate correction, D3 the
-ADR-168 dated shell-scope amendment + the 4-form `source-is-typescript-esm-only` rule — plus
-Cricket's conserve-at-close bundle and a docs-adr-expert review absorption (9 findings, two
-substantive: the rule/ADR-168 §4 hand-authored-`.mjs` contradiction; the stale pr-lifecycle
-frontmatter description propagating the superseded gate model into generated adapters).
-**Residuals:** (1) owner action — `run-quality-gates` as a REQUIRED status check; (2) the Bugbot
-merge-ready-definition fix (`c2671010e`) missed the merge window (owner merged mid-gate) and
-rides the follow-up branch `docs/pr-lifecycle-merge-ready-review-leg` (cherry-pick `09bbbc91d`)
-with this continuity bundle; (3) plan archive-move (`future/` → `archive/completed/`) is
-deferred lifecycle hygiene, inbound-link sweep required; (4) napkin rotation twice-deferred, due
-at the next dedicated consolidation. The prior session facts below stand as history.
-
-**Landed this session:** #306 (gitleaks pushed-range secret-scan fix, `62208200`) + #305 (docs
-closeout, `d14a989a`) merged via non-admin `gh pr merge`; #300–302 closed by owner; `main` FF'd to
-`d14a989a`; the Sonar MCP gateway URL typo repaired (`sonarcould.io`→`sonarcloud.io`); the S4036
-finding on the new secret-scan CLI ACCEPTED as a context false-positive (code-expert + security-expert
-ratified). **The decision-complete plan (now executed):**
-[`every-issue-earns-a-check-and-doctrine-tightening.plan.md`](../../../plans-backlog-2026-07/agentic-engineering-enhancements/future/every-issue-earns-a-check-and-doctrine-tightening.plan.md).
-Strand D: D1 the foundational "every issue earns a check" principle (`principles.md` §Code Quality +
-`testing-strategy.md` + `pr-comments-resolve-and-recheck.md`); D2 the pr-lifecycle Phase-7 merge-gate
-correction (truly-green → non-admin `gh pr merge`; `--admin` forbidden); D3 the ADR-168 §5a shell-scope
-amendment + a new 4-form `source-is-typescript-esm-only.md` rule. **Next safe step:** branch off latest
-`main`, author D1→D2→D3, background the commits (pre-commit runs the full turbo gate, ~minutes each).
-**Owner action pending:** make `run-quality-gates` a REQUIRED status check — the class-guard that
-prevents the #300–302 gate-suppressed-bot-PR family. Peer **Orchid binds Verdure (51a331)** worked
-**#308** (sonar phase-5B idiom residuals) in a separate worktree all session — independent lane.
-
 ## INTER-PRACTICE EXCHANGE LANE — protocol LANDED both estates; conformance + wire-schema twins LANDED (2026-07-07)
 
 **2026-07-13 UPDATE (Monsoon herds Airstream, claude-code / claude-fable-5,
@@ -322,78 +123,56 @@ in its repo-independent scope while the exchange protocol defines
 the conjugation model; reconcile at the next exchange-window doctrine
 sitting.
 
-**2026-07-07 UPDATE (written by the visiting resonance seat Kiln tracks Basalt,
-prefix `2a5066`, under the join ceremony — the WS0-landing record queued since
-2026-07-06 plus this landing's own):**
+**Offered by resonance on 2026-07-08** (the session known there as Gnarled
+Ripening Root, `f0bdae`). The next exchange window reads them:
 
-- **WS0/WS4/WS0b/WS0d LANDED on this estate 2026-07-06 at `95e35a7c9`**
-  (branch `docs/inter-practice-protocol-ws0`, base main `d14a989a1`, full
-  pre-commit pipeline green): PDR-125 (this estate's copy of the shared
-  portable protocol spec), the `inter-practice-collaboration` join-ceremony
-  skill, the `cross-repo-sessions-run-the-join-ceremony` rule + forwarder +
-  index row, the practice.md/practice-lineage.md two-modes amendments, the
-  Core CHANGELOG entry, and the host phenotype ADR. Authored in the
-  coordinated cross-estate session (this estate's seat: Lapwing herds Eyrie,
-  join key `d24947`; the resonance twin PDR-133 landed the same day at their
-  `7eafbe0`, published via their PR #38). Acceptance: cross-estate diff on
-  the COMMITTED copies — portable body identical, divergence confined to
-  number/Related/phenotype. En route this estate's reference-direction gate
-  caught two doctrine-to-plan citations, both cured (doctrine cites
-  doctrine). Publication was owner-held until 2026-07-07, then
-  owner-authorised: this branch stacks the records and the conformance twins
-  on the protocol landing as one PR.
-- **WS0c LANDED (this branch): `pnpm protocol:conformance`** recomputes this
-  estate's tier from artefacts (PDR-125 §Conformance): live self-run reports
-  **tier-1** with `comms-threading` advertised; the declaration artefact is
-  `.agent/practice-core/protocol.json`. The resonance twin merged there as
-  PR #50. Phenotype note: the usage-spec detector anchor is quote-agnostic —
-  this estate's single-quoted CLI help was the live divergence the twin's
-  detector caught on its first run (cured in both estates' copies).
-- **WS0e LANDED (this branch): the shared wire contract**
-  (`.agent/practice-core/schemas/inter-practice-wire.schema.json`,
-  **byte-identical across both estates — verified by diff at this landing**)
-  with the `protocol-wire` version-family validators (cross-family contact
-  is a typed refusal) and the reconciliation binding test against THIS
-  estate's strict comms-event schema (all green — the two estates' local
-  schemas honour one wire contract). The resonance twin merged there as
-  PR #52.
-- **The PDR-129/130 renumber correction is CLOSED**: this estate's
-  `666e08b9b` trued the box copy and the protocol plan; re-verified
-  first-hand by the visiting seat 2026-07-07.
-- Remaining on this lane: WS2 (`repo_ref`, extension), WS5 (this estate's
-  protocol-record proposal into the resonance Box — their seat holds an
-  arrival-gated receipt watch), WS7 (docs + gates consolidation).
+- **Offers for the cross-estate design integration session (owner-scoped;
+  adopting a foreign estate's shapes is an owner-priced decision taken when
+  that work opens).** Four artefact shapes resonance's owner-ratified design
+  practice built, offered as domain-general:
+  1. *The proof ladder*: every design claim carries a proof-rung class —
+     `computable` (a validator decides it), `comparable` (decidable against a
+     reference artefact), `statistical` (decidable over a sample with stated
+     confidence), `perceptual` (decidable only by human judgement, batched
+     into owner moments) — so "is this claim proven?" is a typed question
+     routed to its cheapest honest instrument, and claims are priced by their
+     verification cost.
+  2. *The refusals-list shape*: a machine-readable list of what the system
+     refuses to do (resonance: thirteen design refusals as JSON), each
+     enforced by a named gate or an explicit review duty, never prose only.
+  3. *The posture selection procedure*: a shipped procedure, not a
+     configuration key, by which an estate selects its design posture and
+     records the outcome as a decision record; posture is instance judgement
+     re-derived per estate, and judgement flattened into configuration is the
+     named failure mode (resonance's portability-taxonomy decision record:
+     substrate / configuration / instance judgement).
+  4. *The obligation-family shape*: a small closed set of universal, binary,
+     enforcement-mapped obligations (resonance: fifteen MUST-level design
+     obligations, each mapped to its gate or review); the shape travels, the
+     obligations are instance content.
+- **Castr-bound, for the next castr exchange window.** (5) castr's graft
+  lacks the plan-templates surface; its napkin carries the corrected note.
+  (9) castr's copy of the region renderer likely carries a zero-patterns
+  defect that resonance TDD-fixed in its transplant (a renderer over an empty
+  patterns set); paired design question for castr, not a defect claim: two
+  content-pinning test cases resonance dropped as over-constraining.
+- **Core-exchange evidence, travelling with its record at the next Core
+  exchange, not cited into the PDRs from here** (a foreign estate's internal
+  window is not first-hand-verifiable from this seat). (6) A fresh resonance
+  instance of the invented-optionality failure class castr's PDR-005
+  amendment records. (8) The 2026-07-04 resonance n = 2 collaboration window
+  as a third instance for PDR-078 §4 and PDR-082.
 
-Session identity: Cricket lifts Echo (claude-code / claude-fable-5 / prefix `2fffa2`;
-= Hushed Prowling Lantern on the resonance estate). Owner-named successor to Wolf rides Vigil
-on the inter-Practice exchange lane (Lane E). Controlling plan:
-[`agent-tooling/current/inter-practice-collaboration-protocol.plan.md`](../../../plans-backlog-2026-07/agent-tooling/current/inter-practice-collaboration-protocol.plan.md)
-— its **NEXT SESSION** section carries the 2026-07-06 UPDATE block with the full state.
-
-**Self-contained.** Adopted the lane at a Moment-2 acknowledgement on the resonance stream,
-then executed everything that does not need an owner decision. **Landed on
-`feat/corpus_research_enhancements` (9 ahead of origin, unpushed — owner push decision):**
-`cf05fe95a` (WS6 adoption assessment —
-[`reports/agentic-engineering/resonance-bundle-adoption-assessment-2026-07-05.md`](../../../reports/agentic-engineering/resonance-bundle-adoption-assessment-2026-07-05.md)),
-`f31faec62` (WS1 `PRACTICE_COORDINATION_HOME` declared-home override), `4b9683be1` (WS3
-statusline `name (prefix)` join key + the canonical `sessionIdPrefix` helper). Full estate
-suite green at each landing.
-
-**Both owner gates ANSWERED (2026-07-06, recorded via AskUserQuestion at the owner's
-request):** (a) the canonical protocol PDR is authored in **BOTH repos** in one coordinated
-cross-estate session (not oak-first-then-transplant); (b) v1 minimum conformance is the
-**five-item floor with the Tier-0-box / Tier-1-hosting ladder** — Tier-0 is the incoming box
-plus the concepts-vs-pointers layering guard; Tier-1 is a threadable comms substrate,
-identity-with-prefix, and a declared coordination-home; threading, `repo_ref`, and statusline
-are version-advertised extensions, not floor. **The WS0 family is therefore UNBLOCKED.**
-
-**Next session (owner-requested opening statement authored 2026-07-06 — pasteable at
-`.agent/prompts/agentic-engineering/inter-practice-protocol-ws0-ws4-authoring-session.md`):**
-author **WS0** (the
-portable PDR, in both estates' propagating decision-records sets) paired with **WS4** (the
-join-ceremony skill, created alongside the PDR), plus WS0b/WS0c/WS0e/WS0d; then WS2 (`repo_ref`,
-depends WS0), WS5 (the resonance-side proposal — MAR awaits it in resonance's incoming box),
-WS7 (docs + gates).
+**State of the protocol on this estate:** landed. PDR-125 (the portable protocol, twin of
+resonance's PDR-133), the `inter-practice-collaboration` join-ceremony skill, the
+`cross-repo-sessions-run-the-join-ceremony` rule, `pnpm protocol:conformance` (tier-1, the
+declaration at `.agent/practice-core/protocol.json`) and the shared wire contract
+(`.agent/practice-core/schemas/inter-practice-wire.schema.json`) with its validators. The
+controlling plan is
+[`agent-tooling/current/inter-practice-collaboration-protocol.plan.md`](../../../plans-backlog-2026-07/agent-tooling/current/inter-practice-collaboration-protocol.plan.md).
+Remaining on this lane: WS2 (`repo_ref`, extension), WS5 (this estate's protocol-record
+proposal into the resonance Box — their seat holds an arrival-gated receipt watch), WS7 (docs +
+gates consolidation).
 
 **Practice-box correction (2026-07-08, Elder, PR-332 post-merge round):** the box clearance
 above deleted files that ten durable consumers still cite by path (incl. the active
@@ -416,70 +195,17 @@ EXPLICIT tools allowlist; an omitted tools list inherits ALL tools; zero-tools v
 decision-complete briefs with a JUDGEMENT-REQUIRED refusal clause) — an agent-tooling lane
 candidate for the subagent generator estate.
 
-**Coordination state at closeout.** The exchange is COMPLETE and receipted both ways. MAR
-(resonance side) closed out symmetrically 2026-07-06: pnpm check green at `021fe93`,
-heartbeat-end, team-member closeout at `eefd4ef`, claim `44f0ea2c` CLOSED. My exchange claim
-`d0e453a3` (Hushed Prowling Lantern, resonance) was CLOSED at this handoff with a
-final-heartbeat-end + team-member-closeout broadcast; watcher and claim-heartbeat torn down.
-The lane resumes when a fresh session opens a new claim to run WS0. **Inbound Core doctrine to
-reconcile:** the resonance owner canonicalised `[HEARTBEAT]`-filtered watchers as the DEFAULT
+**Inbound Core doctrine to reconcile:** the resonance owner canonicalised
+`[HEARTBEAT]`-filtered watchers as the DEFAULT
 (resonance `021fe93` in the shared `comms-all-channels-watcher.md`, 2026-07-06); oak's copy of
 that portable rule should reconcile to it as an inbound conjugation item — the protocol's own
 proof of value (doctrine flowing INTO oak).
 
-**Provenance:** the subsection below is Orchid binds Verdure's 2026-07-06 session record,
-found staged-but-uncommitted in the `shared-model-synthesis` worktree during worktree
-cleanup (Callisto guards Penumbra, da9f8c) and preserved verbatim before that worktree's
-removal. Its forward pointers ("Next on this lane") are SUPERSEDED by the 2026-07-07
-WS0-landing update above; its landings (#309 synthesis, #311 durable copy + wiring) and
-identity row remain the authoritative record of that session.
-
-### RECOVERED RECORD (2026-07-06, committed 2026-07-08): inter-Practice knowledge transfer
-
-Oak now OWNS the resonance substance; synthesis + durable copy landed (2026-07-06) (heading tail relocated 2026-07-20; substance unchanged):
-
-Session identity: Orchid binds Verdure (claude / claude-fable-5 / prefix `51a331`); =
-Vining Rustling Dew on the resonance estate (guest observer, no claim held). This session made
-the resonance→oak knowledge transfer **safe and complete** — oak holds its own
-filesystem-independent copy of the transferable methods, wired into the planning-estate rewrite.
-
-**Landed on `main`:**
-
-- **Shared-model synthesis** (#309, merge `0dcd11733`):
-  `reports/agentic-engineering/inter-practice-shared-model-synthesis-2026-07-06.md` — the *why*
-  both estates converged (the verification-scarce testimony economy; a nine-lens panel; the
-  confound resolution homology-vs-analogy; the third-estate falsifier; the recomputable-edge
-  unification; enrichment-as-recombination). Its §"Portable core" is the intended donor-neutral
-  **WS0-PDR preamble** for both estates.
-- **Oak's durable copy of the resonance methods** (#311):
-  `reference/resonance-practice-knowledge.md` — the *how*: the conservation method (freeze →
-  tiling ledger → challenge-the-clean → planted synthetic orphan → repoint-before-retire, with
-  the reference-class classifier + orphan-disposition taxonomy), the six-kind typed-proof
-  taxonomy + two-direction gate, workers + the three-clause verification doctrine, verification
-  economics, the recomputable-edge unification. Re-sourced first-hand, pin-free,
-  filesystem-independent. Adversarially verified (4-lens) before landing — the material catch was
-  a dropped PDR-125 clause 2 (loss-detection non-delegable to fresh context), restored.
-- **Planning-estate wiring** (#311): the planning-estate-rewrite plan gains a "Design inputs from
-  the inter-Practice exchange" section pointing WS2 / WS6 / WS7 at **oak's own copy** (never the
-  resonance checkout); ADR-200 deliberately not amended (reference-direction).
-
-**Renumber trued:** resonance's recomputable-state pair (delivered as PDR-128/129) renumbered to
-**PDR-129/130** at resonance's fork union; oak's durable copy + synthesis use the current numbers
-and document the renumber (additive supersession note — resonance's own discipline). Delivery-time
-surfaces (the incoming bundle, the WS6 assessment's source-citation) are left accurate-about-the-past;
-TFA (resonance) will verify the truing at the WS0 contact.
-
-**Box:** the reference doc graduates the 2026-07-05 teaching bundle's substance; the incoming-box
-copy is a clear-candidate at the next consolidation but stays tracked/safe until then.
-
-**Exchange coordination:** established guest comms with Sparking Tempering Spark (its r6/r7 estate
-re-founding close) then Thermal Floating Airstream (`d24947`, who holds the resonance
-inter-practice-exchange lane; the WS0+WS4 authoring folds into TFA's live session per the owner's
-ruling); heads-up + renumber flagged to TFA and acked; guest-observer seat stood down. No claim.
-
-**Next on this lane:** the cross-estate WS0+WS4 protocol-PDR authoring (folding into TFA's
-resonance session) consumes the synthesis Portable core + oak's durable copy; the planning-estate
-rewrite (WS2 onward) integrates the resonance methods from oak's copy, not the resonance checkout.
+**This estate's own copies of the resonance substance** (read these, never the resonance
+checkout): the shared-model synthesis
+(`.agent/reports/agentic-engineering/inter-practice-shared-model-synthesis-2026-07-06.md`, the
+*why* both estates converged) and the durable methods copy
+(`.agent/reference/resonance-practice-knowledge.md`, the *how*).
 
 ## CORPUS GENERALISATION — research complete, design not yet ratified (2026-07-03)
 
@@ -502,64 +228,12 @@ first-hand per owner direction. Durable homes:
   — Phase 0 design-ratify (ABSORBS salvage ws2), Phase 1 comms (extraction trigger), Phase 2
   planning corpus + graph; cross-cutting knowledge-layer reframe.
 
-**The load-bearing conclusions:**
-
-1. **Identity:** a calibrated measurement instrument (recall/novelty diff of a corpus against the
-   Practice knowledge base), compiler-shaped, graph = one optional downstream backend. NOT an
-   indexer, NOT a KG-builder (both ruled out with evidence).
-2. **One thread, not two:** the salvage plan's D1–D6 topology redesign IS the shape of the general
-   kernel, so the generalisation *contains* it; **salvage ws2 folds into Phase 0.**
-3. **Generalisation = configuration-reification, not an engine rewrite.** Three collapse surfaces:
-   hardcoded composition roots, napkin vocabulary leaks (enumerated), and the un-reified judgment
-   **regime** → a calibration-stamped **regime registry** (the model/effort decoupling answer).
-4. **Comms is the forcing second consumer** (extraction trigger; composition of existing strata;
-   mechanical grounding; PDR-094 disposition enum). **Forensic finding (owner attention; corrected
-   by the review):** the archived ~1,707-event residual is GONE from live disk but intact in git at
-   `255117a43^` (5,202 events). The removal is **UNEXPLAINED, not benign** — the untrack commit
-   says "all preserved on disk", the checkout pre-dates it, and no record accounts for the
-   removal: a live untracked-tier loss-detection gap (post-untrack events removed the same way are
-   unrecoverable). Re-materialise from git; the stale work-list wordings in `repo-continuity.md`
-   and the retired thread are corrected (2026-07-03); P0 weighs a tracked watermark manifest.
-5. **Sharpest correctness finding (candidate PDR-122 amendment, NOT amended):** the tier-2 quorum's
-   three lenses all run on ONE model, so invariant 2's "uncorrelated votes license a majority" is
-   unmeasured; external evidence + the repo's own 40% regime divergence suggest ~1–2 effective
-   votes. NOW MEASURED (see the further-research entry below): ≈1.4 effective votes of 3; the
-   remedy ladder is dependence-aware aggregation + corrected boundaries + cross-tier concurrence
-   as the bias gate (cross-family diversity verified as a weak independence lever).
-6. **Owner observations (2026-07-03):** [candidate goal] a general document→knowledge-graph
-   pipeline; [conviction, stronger] agent-tools has become a **knowledge-curation-and-expression
-   layer** belonging in `packages/` along seams, agent-tools reduced to a **thin CLI** — the
-   *destination*, gated on (second consumer + topology gate + WS0 fork); reshapes the
-   agent-tools-architecture-standard WS0 packaging question. Homed in the
-   [`future/corpus-analysis-generalisation-and-knowledge-layer.plan.md`](../../../plans-backlog-2026-07/agentic-engineering-enhancements/future/corpus-analysis-generalisation-and-knowledge-layer.plan.md)
-   brief and the repo-continuity corpus entry.
-
-**Adversarial review COMPLETE (2026-07-03, Hazel rides Orchard `de9f72`) — verdict: needs
-targeted revision, core sound; corrections APPLIED in place.** Every sampled `[V]` fact
-reproduced first-hand; both workflow journals cross-checked; the seven design conclusions and the
-owner-observation capture ratified; the candidate PDR-122 invariant-2 amendment judged warranted
-in the recorded shape. Corrections: R1 (comms-residual removal is unexplained, not benign — see
-item 4), R2 (a fourth, behavioural leak point: `temporalCoverageReport` window-id collation), R3
-(three restored open questions). Review report:
-[`corpus-generalisation-review-2026-07-03.md`](../../../reports/agentic-engineering/large-corpus-analysis-tooling/corpus-generalisation-review-2026-07-03.md).
-Method lesson: lens `openQuestions` are the synthesis drop zone.
-
-**Further research COMPLETE (2026-07-03, same session, owner-directed — the model switch had cut
-the programme short).** (1) **The quorum-diversity gap is now MEASURED**, from the committed
-checkpoints (deterministic code; banked at `data/lens-correlation-measurement-2026-07-03.json`):
-inter-lens phi ≈0.548/0.544 in BOTH regimes → ≈1.4 effective votes of 3; cross-regime quorum
-agreement 59.6%, 18/19 one-directional. Regime dominates lens, measured. (2) Gap lenses landed:
-the two-hash calibration stamp (prompt IS stamped) + three-tier enforcement; the linking layer as
-Fellegi–Sunter three-band + reconciliation-API surface + minting-unified-with-resolution; the
-standing audit (cross-regime elusion + alpha-and-n_eff pair + PRISMA render + tracked watermark
-manifest = the R1 cure); the estate-wide markdown→graph inversion needs its OWN proposed ADR
-(three round-trip classes; §8 reconciler must be PDR-122-bound, with the merge behind
-dependence-aware aggregation + a corrected boundary + cross-tier concurrence). (3) **Owner
-observation 6 captured**: markdown → two-way representation layer; the graph is the definition
-layer, estate-wide. (4) The quorum-remedy ladder A–F (report §Quorum heterogeneity; keystone
-sources fetch-verified): dependence-aware aggregation first, e-process/deflated boundaries,
-cross-tier concurrence gate, then input-diversity / human-tail experiments. All in the report
-§Further research; the P0 agenda is now seventeen questions.
+The research, its adversarial review
+([`corpus-generalisation-review-2026-07-03.md`](../../../reports/agentic-engineering/large-corpus-analysis-tooling/corpus-generalisation-review-2026-07-03.md))
+and the further research (the quorum measured at about 1.4 effective votes of 3) are complete
+and live in those reports. One standing fact for any pass over the comms corpus: the archived
+coordination-tier residual is gone from live disk and intact in git at `255117a43^` (5,202
+events); re-materialise it from git first.
 
 **PHASE 0 IN FLIGHT — PAUSED 2026-07-05 (owner-directed; Hedgehog stirs Rime, `da727a`).** The
 promotion trigger fired and the design session ran to mid-review-absorption before the owner
@@ -594,102 +268,6 @@ on the conformance-test design when the registry lands; betty on the adjudicatio
 refactor at extraction. Build-vs-Buy verdict already taken (build; MLflow/Braintrust-class
 platforms named and declined — SaaS/Python stack vs a small typed in-repo registry). WS2/WS4
 of ADR-200 proceed independently and must NOT wait.
-
-## SALVAGE ws1 + ws1b COMPLETE — next: FULL PROCESSING ws1c–ws1g (2026-07-02/03)
-
-Session identity: Rosemary stirs Bracken (ws1, late evening 2026-07-02); Vega mends Oblivion
-(ws1b disposition, 2026-07-03).
-
-**ws1b EXECUTED 2026-07-03 (Vega mends Oblivion, consolidate-until-done on
-`feat/corpus_research_enhancements`).** All 59 A–D rescue entries dispositioned first-hand:
-graduations/enrichments landed in `user-collaboration.md` (hedge ≠ authorisation, from C205),
-`agent-collaboration.md` (peer-sidebar preference, C154), PDR-060 (convergence corollary,
-C149), PDR-122 (measurement-corpus clause), the commit skill (intent-scoped message file, C07;
-preflight parsing fix), `testing-strategy.md` + `testing-patterns.md` +
-`test-coverage-review-lens.md` (C36 supertest classification reconciled to the 2026-05-21
-owner ratification), `build-system.md` (filtered-gates + serial-chain sections, C64/C45),
-`development-practice.md` (markdownlint autofix fragmentation, C46),
-`semantic-search-architecture.md` (field-population check, C25), the sonarqube rule (C18),
-`mcp-app-styling.md` (C15), `collaboration-state-conventions.md` (parallel-session design
-constraint, C116; stale comms-preservation paragraph reconciled to ADR-199/PDR-094),
-`check-singleton-per-window` (clean-deletes-dist, C65), the whole-tree-gate pattern
-(owner-ratified full-tree resolution, C02), and two new patterns (`zero-match-false-green`
-C35/C47; `atomic-relocation-of-shared-substrate` C10). C183/C184/C214 routed to the
-action-time-structural-interrupt inventory as corpus-scale recurrence evidence (temporal
-qualifier verified: instances straddle PDR-098's landing). The remaining entries verified
-duplicate against live homes. The ninth-reinforcement question was DECIDED: no new
-subagent-output clause — the textual home (`verify-dont-trust`) is complete; the gap is
-firing, not text; the firing-moment candidate is routed to the same inventory. Frictions
-F-113–F-115 registered (+F-109 corroboration).
-
-**Self-contained.** The 2026-07-02 discovery run's salvage (ws1 of
-[`corpus-analysis-salvage-and-topology-redesign.plan.md`](../../../plans-backlog-2026-07/agentic-engineering-enhancements/current/corpus-analysis-salvage-and-topology-redesign.plan.md))
-is EXECUTED and committed on branch `chore/rescue_findings`:
-
-1. **The deliverable**: the discovery report
-   [`discovery-run-salvage-report-2026-07-02.md`](../../../reports/agentic-engineering/large-corpus-analysis-tooling/discovery-run-salvage-report-2026-07-02.md)
-   — the full tier table with pattern text plus the novelty stratification. Machine-readable:
-   `data/discovery-run-salvage-tiers-2026-07-02.json` (tier table) and
-   `data/discovery-run-post-run-close-2026-07-02.json` (repaired close: 18/18 corroborated,
-   0 missing claims). All checkpoints live under
-   `.agent/reports/agentic-engineering/large-corpus-analysis-tooling/data/` (note the
-   `.agent/` prefix — an earlier version of this record omitted it).
-2. **The numbers** (conservation-checked 246/246): A=18 (corroborated or quorum-kept keeps),
-   B=8 (uncorroborated keeps; incl. C36 the lone reverse and C54 the sole incomplete quorum),
-   C=18 (opus-quorum-keep vs sonnet-kill — recomputed from the banked corpus; equals the
-   plan's named ids exactly), D=18 (proven-real false kills, all note-named), C∩D=3
-   (C03/C04/C07), E=187 ranked kills for the OWNER'S MANUAL ROUND (C245 at 10 windows leads),
-   residual=0. Eight of the 26 survivors are genuinely novel (no on-disk home).
-3. **The tooling** (TDD, panel-reviewed pre- and post-execution): `pnpm salvage-driver` in
-   agent-tools over the post-run/ modules salvage-tiers / salvage-strata / banked-verdicts /
-   disposition-partition / recall-named-kills / checkpoint-io. The corroboration cwd bug is
-   FIXED (`e18516265`); the salvage stack landed as `f5fd2e5b2`. `finaliseQuorum`,
-   `terminalResolutions`, and `adversaryLensSchema` are exported (visibility only — the
-   adjudication semantics stay frozen).
-4. **Economics and regime doctrine unchanged**: `burn-analysis-2026-07-02.md` remains the
-   method of record; never re-run the full validate; ~1/10th pilots first; every run
-   pre-declares agents/tokens/dollars.
-
-**Next actions, in order:**
-
-1. **The full-processing pass is COMPLETE (2026-07-04): ws1c/e/f/g + E-b1 by Gust hunts
-   Headwind (`6708fb8eb`→`d79b56c63`); E-b2..E-b8 by Otter hunts Jetty (`de001662d`,
-   the ripgrep clustered-replace hook-policy fingerprint `b6af3e0bd` — the six-instance
-   fires-despite-home recurrence graduated to action-time enforcement —, `1d32ff917`,
-   `fb29ff2ef`, `558f046af`, `0fd8e57a7`, `f0b754f9c`, `1be79fa62` + the E-b8 commit).
-   Tier E 187/187; ws1d todo completed; the mandate's set-level acceptance is VERIFIED in
-   the plan status line.** The plan's ws1d todo carries the per-batch trails; the ws1g
-   todo carries the v2/v1/probe verdicts; two banked measurement artefacts
-   (`banked-verdict-structural-mine-2026-07-03.json`,
-   `probe-supersession-proof-2026-07-03.json`) carry the calibration outputs, all routed to
-   the generalisation plan's P0 agenda. Owner direction 2026-07-03 stands: EVERY stratum
-   processed in full — the prior "owner-gated" framing was never ratified and is withdrawn
-   (`precedence-is-not-approval`). The full-processing opener
-   (`.agent/prompts/agentic-engineering/rescued-knowledge-full-processing-session.md`) is now
-   CONSUMED — do not paste it again; the ws2 readiness review is the successor work.
-   Comms events alone are owner-routed to a separate plan.
-   THEN the owner-ratified SUPERSESSION PASS landed (2026-07-04, `e0c639bc6`): the
-   discovery-run plan CLOSED truthfully (the >13M owner-gated run EXECUTED and is spent — its
-   stale pending todo had read as still-awaiting-execution); the conservation plan CLOSED
-   (WS-A/WS-B stand; WS-C/WS-D superseded-with-routing, mapping appendix on the plan); the
-   WS-C requirement + per-run candidate-identity note routed into the generalisation plan's
-   Phase 0 agenda; current/README rows updated (salvage plan row added). Deferred lifecycle
-   hygiene for a future curator pass: the physical archive-moves of the four closed/superseded
-   corpus plans (discovery-run, conservation, v3-grain, v2-implementation) out of `current/` —
-   constraint: each move needs the repo-wide inbound-link sweep (navigation AND prescription
-   modes) plus in-file relative-link depth fixes; falsifiable by ripgrepping the four
-   filenames. The banners and index rows already prevent mis-pickup meanwhile.
-2. **The ws2 readiness review** (fresh seat) — the topology redesign (D1–D6 remain PROPOSED).
-   **Now folds into the corpus-generalisation Phase 0 design session** (see the section above):
-   D1–D6 are the shape of the general kernel, so the topology review and the generalisation design
-   are one decision, not two.
-
-**Operator discipline:** typed envelopes inspected before trust; never `--no-verify`; lean
-pathspec commits sanctioned for checkpoints. (Historical note: the ws1 session twice hit the
-commit-workflow truncation and used the then-documented direct `git commit -F` route; that
-route was withdrawn 2026-07-03 by the owner's no-fallbacks correction, and the underlying
-defect is FIXED as F-112 at `b2ae96898` — queue-workflow commits are the only sanctioned
-path.)
 
 ## Current Continuation
 
@@ -880,7 +458,7 @@ pickup trigger; neither blocks the other.
 Additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md).
 This table carries the **recent active stretch**; the full 142-session trail (older curation
-passes) is in git history and the [`curator-passes/`](../curator-passes/) ledgers.
+passes) is in git history, the commits that homed each pass's substance.
 
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -962,6 +540,7 @@ passes) is in git history and the [`curator-passes/`](../curator-passes/) ledger
 | `Hyena spins Lamplight` | `claude-code` | `claude-fable-5` | `27cb6f` | `PDR-049 doctrine amendment (owner-ratified sequential-identifier collision standard → PDR-049 §Sequential-identifier collisions + practice-core CHANGELOG + semantic-merge skill pointer; PR #313 MERGED same day) with its founding worked instance executed live (PR-295 merge run-in: F-111→F-121). CORRECTION to Zodiac's residual above, verified first-hand 2026-07-06: run-quality-gates IS a required status check on main (gh api rules/branches/main: run-quality-gates + CodeQL + SonarCloud) — the "owner action pending" residual is STALE; do not re-relay it. Session closed 2026-07-06, no claims retained` | 2026-07-06 | 2026-07-06 |
 | `Corsair guards Channel` | `claude-code` | `claude-fable-5` | `ecdd12` | `dedicated consolidation (curation touch on this record only): routed the resonance teaching-bundle residuals into the WS0 agenda above at the owner-approved box clearance; the pass itself is recorded at repo-continuity §Next Safe Steps 0a. Session closed 2026-07-08, no claims retained` | 2026-07-08 | 2026-07-08 |
 | `Dolphin weaves Reef` | `claude-code` | `sonnet-5` | `ffedcf` | `dedicated consolidation (2026-07-08→14 arc, ten-seat planning-and-visibility team): PDR-127 (team-branch coordination protocol) + PDR-128 (review-conversations-are-first-class) authored from previously-untracked comms narrative; 4 rules amended + 1 new rule; 5 patterns graduated + 1 sharpened instance; napkin fully processed and rotated (archive/napkin-2026-07-14.md); both pending-graduations items drained; Practice Box light-passed (full cross-estate design-adoption queued at repo-continuity §Agentic-Engineering Curation item 4, cross-linked to the strategy-and-plan-estate-holistic-review thread). Commit SHA:725749349 on team/planning_and_visibility. Session closed 2026-07-14, no claims retained` | 2026-07-14 | 2026-07-14 |
+| `Titan turns Ether` | `codex` | `GPT-5` | `01a0d8` | `Codex partner on the ratified queue-wake bridge todo 1; host-probe observations` | 2026-09-25 | 2026-09-25 |
 
 ## Cross-Plan and Cross-Thread Links
 
@@ -985,6 +564,5 @@ passes) is in git history and the [`curator-passes/`](../curator-passes/) ledger
   friction F-37; pending-graduations entry "PDR-051 reduced-implementation reconciliation review".
 - **Graduation register**: [`pending-graduations.md`](../pending-graduations.md) (decision-debt
   candidates — pending/due/overdue — and fired-trigger candidates from this thread's curation passes).
-- **Curation ledgers**: [`curator-passes/`](../curator-passes/) (per-pass disposition evidence).
 - **Repo state**: [`repo-continuity.md`](../repo-continuity.md) § Current State (authoritative
   live state across threads).

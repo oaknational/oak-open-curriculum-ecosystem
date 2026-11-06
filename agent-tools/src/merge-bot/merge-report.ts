@@ -1,5 +1,7 @@
 import type { Result } from '@oaknational/result';
 
+import { printable } from '../pr-watch/printable.js';
+
 import type { MergeArgs } from './merge-args.js';
 import type { MergeOutcome } from './merge.js';
 
@@ -31,10 +33,15 @@ export function writeProgress(
   );
 }
 
-/** The verdict evidence, printed line-per-ground (security H3: never silent). */
+/**
+ * The verdict evidence, printed line-per-ground (security H3: never silent),
+ * each line made printable at this boundary: the grounds quote external text
+ * (check names, run titles, review headlines) and the terminal obeys what it
+ * is given (printable.ts).
+ */
 function writeEvidence(evidence: readonly string[], streams: MergeStreams): void {
   for (const line of evidence) {
-    streams.stderr.write(`  grounds: ${line}\n`);
+    streams.stderr.write(`  grounds: ${printable(line)}\n`);
   }
 }
 

@@ -76,7 +76,7 @@ const sequencedUnit = graphCorpus.nodes.find(
   (node) => node.kind === 'unit' && placedUnitIds.has(node.id),
 );
 assert.ok(
-  sequencedUnit !== undefined && sequencedUnit.kind === 'unit',
+  sequencedUnit?.kind === 'unit',
   'corpus has no sequenced unit to derive a subject+keyStage anchor',
 );
 const knownSubjectKeyStage = {

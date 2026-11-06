@@ -76,8 +76,8 @@ export async function withEsClient(
   } finally {
     try {
       await esClient.close();
-    } catch (closeErr: unknown) {
-      deps.logger.warn('ES client close failed', { error: sanitiseForJson(closeErr) });
+    } catch (error: unknown) {
+      deps.logger.warn('ES client close failed', { error: sanitiseForJson(error) });
       deps.setExitCode(1);
     }
   }

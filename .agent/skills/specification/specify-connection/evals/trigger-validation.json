@@ -1,0 +1,12 @@
+[
+  { "query": "Can these two individually specified services be relied on together?", "should_trigger": true },
+  { "query": "Both sides pass their own tests but the integration produces wrong results; find what the connection between them must guarantee.", "should_trigger": true },
+  { "query": "Our client retries and the provider promises at-most-once processing; is a customer ever charged twice?", "should_trigger": true },
+  { "query": "Check the seam between the API and the tool that maps its subjects before we ship.", "should_trigger": true },
+  { "query": "Two services trust each other's health signal to fail over; can the pair be relied on?", "should_trigger": true },
+  { "query": "Define what this component must do, preserve and permit.", "should_trigger": false },
+  { "query": "Does the evidence justify calling revision 4 ready for production?", "should_trigger": false },
+  { "query": "Who would use this feature and is its value claim justified?", "should_trigger": false },
+  { "query": "Does component-level test evidence justify a claim about workflow reliability across scales?", "should_trigger": false },
+  { "query": "Schedule the approved integration work for the next fortnight.", "should_trigger": false }
+]

@@ -1,6 +1,6 @@
 ---
 description: Every design value on a consumer surface resolves through the design system (token, role class, or custom property) — no hardcoded values; kit-internal literals are the definitions; retained consumer literals need the owner's named word with a recorded disposition.
-globs: 'apps/**/*.{ts,tsx,css,html},demos/**/*.{ts,tsx,css,html},packages/design/**'
+globs: apps/**/*.{ts,tsx,css,html},demos/**/*.{ts,tsx,css,html},packages/design/**
 alwaysApply: false
 ---
 

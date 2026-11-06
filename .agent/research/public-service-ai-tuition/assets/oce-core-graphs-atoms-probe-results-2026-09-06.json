@@ -1,0 +1,495 @@
+{
+  "inquiry": "oce-core-graphs-atoms-2026-09-06",
+  "revision": 1,
+  "pass": "M3",
+  "pin": "31e76a7237ee7aecb8adfca96e73b2d83b25be39",
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "arch": "x64",
+    "cpu": "AMD EPYC 9V74 80-Core Processor",
+    "cpus": 9,
+    "memoryBytes": 23109910528
+  },
+  "probes": {
+    "P1": {
+      "unequal": true,
+      "datasetSize": 2,
+      "sameSourceKey": true,
+      "sourceMapSize": 1
+    },
+    "P2": {
+      "before": {
+        "ok": true,
+        "value": {
+          "nodes": [
+            {
+              "id": "a"
+            },
+            {
+              "id": "b"
+            }
+          ],
+          "edges": [
+            {
+              "source": "a",
+              "type": "edge",
+              "target": "b"
+            }
+          ]
+        }
+      },
+      "retainedViewAfterMutation": {
+        "ok": true,
+        "value": {
+          "nodes": [
+            {
+              "id": "a"
+            },
+            {
+              "id": "b"
+            }
+          ],
+          "edges": [
+            {
+              "source": "a",
+              "type": "edge",
+              "target": "b"
+            }
+          ]
+        }
+      },
+      "freshView": {
+        "ok": true,
+        "value": {
+          "nodes": [
+            {
+              "id": "a"
+            },
+            {
+              "id": "b"
+            },
+            {
+              "id": "c"
+            }
+          ],
+          "edges": [
+            {
+              "source": "a",
+              "type": "edge",
+              "target": "b"
+            },
+            {
+              "source": "b",
+              "type": "edge",
+              "target": "c"
+            }
+          ]
+        }
+      },
+      "interpretation": "Fixed-input ownership assumption; not proof that immutable corpus callers fail."
+    },
+    "P3": {
+      "NaN": {
+        "ok": true,
+        "value": {
+          "nodes": [
+            {
+              "id": "a"
+            }
+          ],
+          "edges": []
+        }
+      },
+      "fraction": {
+        "ok": true,
+        "value": {
+          "nodes": [
+            {
+              "id": "a"
+            },
+            {
+              "id": "b"
+            }
+          ],
+          "edges": [
+            {
+              "source": "a",
+              "type": "edge",
+              "target": "b"
+            }
+          ]
+        }
+      },
+      "Infinity": {
+        "ok": false,
+        "error": {
+          "kind": "SubgraphDepthExceeded",
+          "depth": {
+            "nonFiniteNumber": "Infinity"
+          },
+          "limit": 3
+        }
+      },
+      "negative": {
+        "ok": false,
+        "error": {
+          "kind": "SubgraphDepthExceeded",
+          "depth": -1,
+          "limit": 3
+        }
+      },
+      "zero": {
+        "ok": true,
+        "value": {
+          "nodes": [
+            {
+              "id": "a"
+            }
+          ],
+          "edges": []
+        }
+      }
+    },
+    "P4": {
+      "reorderedBytesEqual": true,
+      "bytes": "{\n  \"10\": \"ten\",\n  \"2\": \"two\",\n  \"a\": 2,\n  \"b\": 1\n}\n",
+      "invalidValues": {
+        "NaN": {
+          "code": "VALIDATION_FAILED",
+          "message": "$ contains a non-finite number"
+        },
+        "undefined": {
+          "code": "VALIDATION_FAILED",
+          "message": "$ contains unsupported undefined value"
+        },
+        "bigint": {
+          "code": "VALIDATION_FAILED",
+          "message": "$ contains unsupported bigint value"
+        },
+        "sparse": {
+          "code": "VALIDATION_FAILED",
+          "message": "$[0] is sparse"
+        },
+        "cyclic": {
+          "code": "VALIDATION_FAILED",
+          "message": "$.self contains a JSON cycle"
+        }
+      },
+      "firstAccessor": "{\n  \"value\": 1\n}\n",
+      "secondAccessor": "{\n  \"value\": 2\n}\n",
+      "getterReads": 2,
+      "lowLimit": {
+        "code": "RESOURCE_LIMIT",
+        "message": "serialized output is 4099 bytes, exceeding limit 8"
+      }
+    },
+    "P5": {
+      "sameByteReference": true,
+      "framedAfterMutation": [
+        9,
+        2
+      ],
+      "interpretation": "A framing view; digest callers must own bytes for the whole hash operation."
+    },
+    "P6": {
+      "abortAttempts": 3,
+      "abortName": "AbortError",
+      "statusAttempts": 3,
+      "configuredRetriesFor503": 0,
+      "globalMaxRetries": 2,
+      "networkCalls": 0
+    },
+    "P7": {
+      "inputQuads": 3,
+      "projectedNodes": 2,
+      "projectedEdges": 1,
+      "restoredQuads": 1,
+      "roundTripRetainsOrdinary": true,
+      "retainedNamedGraph": false,
+      "retainedTripleTerm": false,
+      "returnKeys": [
+        "nodes",
+        "edges"
+      ]
+    },
+    "P8": {
+      "pointer": {
+        "raw": "/a~1b/~0name//𝄞"
+      },
+      "roundTrip": [
+        "a/b",
+        "~name",
+        "",
+        "𝄞"
+      ],
+      "malformedRejected": true
+    },
+    "P9": {
+      "shape": "synthetic unique chain quads",
+      "samples": [
+        {
+          "size": 250,
+          "repeats": 5,
+          "arrayBuildMs": [
+            4.889837,
+            3.470922999999999,
+            2.770575000000008,
+            2.8192490000000134,
+            2.8319379999999796
+          ],
+          "matchAllMs": [
+            3.414268000000007,
+            3.176097999999996,
+            3.206132999999994,
+            2.8976069999999936,
+            2.7599090000000217
+          ],
+          "mapBuildMs": [
+            0.4502599999999859,
+            0.1645780000000059,
+            0.15721700000000283,
+            0.1407119999999793,
+            0.1316590000000133
+          ],
+          "mapHeapDeltaBytes": [
+            159136,
+            156176,
+            149080,
+            151464,
+            145288
+          ],
+          "medians": {
+            "arrayBuildMs": 2.8319379999999796,
+            "matchAllMs": 3.176097999999996,
+            "mapBuildMs": 0.15721700000000283
+          }
+        },
+        {
+          "size": 500,
+          "repeats": 5,
+          "arrayBuildMs": [
+            11.582396999999986,
+            11.128421000000003,
+            11.654325999999998,
+            11.041158999999993,
+            11.764071999999999
+          ],
+          "matchAllMs": [
+            12.917134000000004,
+            12.221922999999975,
+            11.541825999999986,
+            11.657360000000011,
+            13.615419000000031
+          ],
+          "mapBuildMs": [
+            0.2502589999999998,
+            0.285601000000014,
+            0.24972699999997872,
+            0.23987299999998868,
+            0.30618300000003273
+          ],
+          "mapHeapDeltaBytes": [
+            289968,
+            292968,
+            289464,
+            289456,
+            289632
+          ],
+          "medians": {
+            "arrayBuildMs": 11.582396999999986,
+            "matchAllMs": 12.221922999999975,
+            "mapBuildMs": 0.2502589999999998
+          }
+        },
+        {
+          "size": 1000,
+          "repeats": 5,
+          "arrayBuildMs": [
+            45.61608000000001,
+            50.26758699999999,
+            44.23749799999996,
+            44.046869000000015,
+            43.43831
+          ],
+          "matchAllMs": [
+            45.53065000000004,
+            51.055858,
+            43.781449000000066,
+            44.06045000000006,
+            42.761558000000036
+          ],
+          "mapBuildMs": [
+            0.49746099999998705,
+            0.506385000000023,
+            0.5304609999999457,
+            0.47123199999998633,
+            0.6149189999999862
+          ],
+          "mapHeapDeltaBytes": [
+            578664,
+            578240,
+            578200,
+            578256,
+            -3510976
+          ],
+          "medians": {
+            "arrayBuildMs": 44.23749799999996,
+            "matchAllMs": 44.06045000000006,
+            "mapBuildMs": 0.506385000000023
+          }
+        },
+        {
+          "size": 2000,
+          "repeats": 5,
+          "arrayBuildMs": [
+            183.45598900000005,
+            174.55431199999998,
+            168.5978630000002,
+            180.031074,
+            168.66887999999972
+          ],
+          "matchAllMs": [
+            176.0149980000001,
+            170.69885699999986,
+            171.70153200000004,
+            165.13209800000004,
+            174.45658500000036
+          ],
+          "mapBuildMs": [
+            1.0940719999998691,
+            1.0863819999999578,
+            1.2019459999999071,
+            1.2113799999999628,
+            0.9855990000000929
+          ],
+          "mapHeapDeltaBytes": [
+            1156016,
+            1197608,
+            1156248,
+            1166472,
+            1156152
+          ],
+          "medians": {
+            "arrayBuildMs": 174.55431199999998,
+            "matchAllMs": 171.70153200000004,
+            "mapBuildMs": 1.0940719999998691
+          }
+        }
+      ],
+      "limits": "Map candidate is not a complete DatasetCore replacement; heap deltas include allocator/GC noise, not retained-memory proof. No end-to-end product speedup established."
+    },
+    "P10": {
+      "sourceBytes": 25026134,
+      "version": "1.4.0",
+      "sourceVersion": "2026-07-27T07:48:39.755Z",
+      "generatedAt": "2026-07-27T11:38:19.806Z",
+      "nodes": 36283,
+      "edges": 67923,
+      "nodesByKind": {
+        "unit": 1834,
+        "thread": 160,
+        "lesson": 11022,
+        "misconception": 11017,
+        "keyword": 12250
+      },
+      "edgesByType": {
+        "addressesMisconception": 11017,
+        "containsKeyword": 38655,
+        "containsLesson": 11253,
+        "containsUnit": 3971,
+        "prerequisiteFor": 3027
+      },
+      "prerequisiteSelfLoops": 243,
+      "interpretation": "These are generated edge labels, not validated educational relationships."
+    },
+    "P11": {
+      "cycleResult": {
+        "ok": true,
+        "value": {
+          "nodes": [
+            {
+              "id": "a"
+            },
+            {
+              "id": "b"
+            },
+            {
+              "id": "c"
+            }
+          ],
+          "edges": [
+            {
+              "source": "a",
+              "type": "x",
+              "target": "b"
+            },
+            {
+              "source": "a",
+              "type": "y",
+              "target": "b"
+            },
+            {
+              "source": "b",
+              "type": "x",
+              "target": "a"
+            },
+            {
+              "source": "b",
+              "type": "x",
+              "target": "c"
+            },
+            {
+              "source": "c",
+              "type": "x",
+              "target": "c"
+            }
+          ]
+        }
+      },
+      "disconnected": {
+        "ok": true,
+        "value": {
+          "nodes": [
+            {
+              "id": "z"
+            }
+          ],
+          "edges": []
+        }
+      },
+      "missing": {
+        "ok": false,
+        "error": {
+          "kind": "SubgraphRootNotFound",
+          "rootId": "missing"
+        }
+      },
+      "highDegreeDepth": 1,
+      "highDegreeReturnedNodes": 1001,
+      "interpretation": "Depth bounds hops; it does not independently bound breadth, bytes or CPU work."
+    }
+  },
+  "sourceHashes": {
+    "packages/core/graph-core/src/term/index.ts": "ef5c09db29b200db05ba75076bbd7c0fb50e512456ddc37d7bcb98c7b1f4078b",
+    "packages/core/graph-core/src/dataset/index.ts": "d6db1cf901ae336e2a7ac7e05f50c29888d0d6fe5113ae458ac8c088980f2934",
+    "packages/libs/graph-ingest/src/source-path/index.ts": "39475ce9d662ccd6bc643c06f062f333e3591524ca14d97ffa9d9b819b74c513",
+    "packages/core/result/src/index.ts": "c307a3276e70d627bfedd0a0ba26cfcdcb6de386a4f9124ea78e99a0a7d225a6",
+    "packages/core/result/src/unwrapping.ts": "9a316fb45a737134cfbf8c6cbe1b146c8432f2315d082e73b3c743bf99d63418",
+    "packages/core/graph-core/src/graph-view/create-graph-view.ts": "afe42611b0c9e4cb5da29efda5688471edd5b6a38db50c75bf1ccf881bc85d17",
+    "agent-tools/src/typescript-estate/canonical-json.ts": "4d9d27762903530bb8a8520b226346a1fe77dcac74e1dfb5737d2654892a2345",
+    "packages/core/type-helpers/src/index.ts": "69854139e2f053a7032669c1df0dabd16c4a3d492891d056746726a30f4a7d30",
+    "agent-tools/src/typescript-estate/errors.ts": "9731072394f24e221ae0b7575da44ca3e1eae2c42a3634c794c3a07750642ea8",
+    "agent-tools/src/typescript-estate/utf16-order.ts": "d848ac1d7f448d88a6c933f6b8fdffa0452d3c6235b63d46c0297056ffe0dd4c",
+    "agent-tools/src/typescript-estate/length-framing.ts": "de265fe3b596233b534f521d93ebfb49d3afc5e08addff459d5e793d02b14893",
+    "packages/sdks/oak-curriculum-sdk/src/client/middleware/retry.ts": "34c9bb03b02af854f279836eee4a3fc998b9720c5b20efeebcfdef1b912b517e",
+    "packages/sdks/oak-curriculum-sdk/src/config/retry-config.ts": "710b5f74d3a85777cb12cdfef1628d07106d8922e577cf646183ea2515c7dad0",
+    "packages/sdks/oak-curriculum-sdk/src/client/middleware/rate-limit.ts": "f00d02a92fa08ce813e094d5f14243c43c77955ec63b8a1c92d1fdd34c2e1d34",
+    "packages/sdks/oak-curriculum-sdk/src/config/rate-limit-config.ts": "4df4ad8fce7321d610132c411fb5e2962eed83409bed50f2377e38e8540507ac",
+    "packages/libs/graph-project/src/projection/to-property-graph.ts": "9a258b3cae71f9ebbc988ec48f1c91dafa25fe18c43455d9938b5dd982183c8e",
+    "packages/libs/graph-project/src/projection/rdf-vocab.ts": "7579e1a40aea2d22a3f453e1e3adb26f4a9f2fbb314cf64b3841faeb78b7c943",
+    "packages/core/graph-core/src/data-factory/index.ts": "82ac8176ddbd191b9e2048e945a26a27943d81e42618405adbae515b9c20900f",
+    "packages/libs/graph-project/src/projection/from-property-graph.ts": "f476471ef0f01435d3a4df361dafb5d1bf9e590a84a5fa3c01ae50307cf33c35",
+    "packages/sdks/oak-sdk-codegen/src/generated/vocab/graph-corpus/data.json": "6252ee33a2f5472dc127df1f6c823a146ce1076f1ffd86ad3feef93a40d67158"
+  }
+}

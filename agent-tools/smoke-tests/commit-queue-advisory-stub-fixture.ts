@@ -53,12 +53,13 @@ export async function writeAdvisoryStub(dir: string): Promise<readonly string[]>
 
 /**
  * Assert the command's captured stderr reads in the run's order: the
- * advisory banner, the stub's three lines, the inner commit's transcript
- * (marked by its subject), then the notice naming the stub's exit code.
+ * advisory banner as its first line, the stub's three lines, the inner
+ * commit's transcript (marked by its subject), then the notice naming the
+ * stub's exit code.
  */
 export function assertAdvisoryReplayed(stderr: string, commitSubject: string): void {
+  assert.ok(stderr.startsWith(`${ADVISORY_BANNER}\n`), `stderr opens with the banner:\n${stderr}`);
   const expectedInOrder = [
-    ADVISORY_BANNER,
     ...ADVISORY_STUB_LINES.map(({ text }) => text),
     commitSubject,
     `advisory orchestrator exit ${String(ADVISORY_STUB_EXIT)}`,

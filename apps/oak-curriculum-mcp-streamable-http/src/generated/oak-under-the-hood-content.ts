@@ -3,7 +3,7 @@
  *
  * The under-the-hood orientation digest served by the oak-under-the-hood MCP
  * tool: the audience-independent sections of the canonical skill
- * (`.agent/skills/under-the-hood/SKILL-CANONICAL.md`), selected by the total section classification
+ * (`.agent/skills/orientation/under-the-hood/SKILL-CANONICAL.md`), selected by the total section classification
  * in `agent-tools/src/under-the-hood-content-generate/sections.ts`.
  *
  * Re-generate: `pnpm under-the-hood-content:generate` (repo root).

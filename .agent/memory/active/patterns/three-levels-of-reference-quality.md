@@ -4,6 +4,7 @@ name: "Three Levels of Reference Quality"
 polarity: pattern
 use_this_when: "Documentation, portable content, or cross-repo material references concepts from another context — choose the right level of self-containment"
 category: process
+layer: general
 proven_in: ".agent/practice-core/ — ADR references replaced with exported concepts for portability"
 proven_date: 2026-04-05
 barrier:

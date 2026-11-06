@@ -57,8 +57,12 @@ const noExportTrivialTypeAliasesRule: RuleWithReappraisingMessages<'aliasNotAllo
           return;
         }
 
-        const rootIdentifier = targetName.split('.')[0];
-        if (!importedBindings.has(rootIdentifier) || !startsWithCapitalLetter(rootIdentifier)) {
+        const rootIdentifier = targetName.split('.').at(0);
+        if (
+          rootIdentifier === undefined ||
+          !importedBindings.has(rootIdentifier) ||
+          !startsWithCapitalLetter(rootIdentifier)
+        ) {
           return;
         }
 

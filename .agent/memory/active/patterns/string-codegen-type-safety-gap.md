@@ -3,6 +3,7 @@ name: "String-Based Codegen Type-Safety Gap"
 polarity: anti-pattern
 use_this_when: "A code generator emits code as string templates rather than AST nodes, and the output includes API calls with specific argument names or shapes"
 category: code
+layer: general
 proven_in: "packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/build-zod-type.ts — .meta({ examples }) emitted as string literal"
 proven_date: 2026-04-05
 barrier:

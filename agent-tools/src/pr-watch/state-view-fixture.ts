@@ -7,11 +7,13 @@
 export interface StateViewSeed {
   readonly number: number;
   readonly url: string;
+  readonly author: { readonly login: string };
   readonly state: string;
   readonly isDraft: boolean;
   readonly mergeable: string;
   readonly mergeStateStatus: string;
   readonly headRefOid: string;
+  readonly baseRefName: string;
   readonly statusCheckRollup: readonly unknown[];
   readonly autoMergeRequest: unknown;
   readonly reviewRequests: readonly unknown[];
@@ -21,11 +23,13 @@ export function stateViewFixture(): StateViewSeed {
   return {
     number: 461,
     url: 'https://github.com/oaknational/oak-open-curriculum-ecosystem/pull/461',
+    author: { login: 'app/el-graphael' },
     state: 'OPEN',
     isDraft: false,
     mergeable: 'MERGEABLE',
     mergeStateStatus: 'BLOCKED',
     headRefOid: 'f'.repeat(40),
+    baseRefName: 'main',
     statusCheckRollup: [
       {
         __typename: 'CheckRun',

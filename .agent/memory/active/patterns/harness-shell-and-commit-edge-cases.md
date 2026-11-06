@@ -3,6 +3,7 @@ name: "Harness Shell and Commitlint Edge Cases"
 polarity: pattern
 use_this_when: "Driving the Bash/harness shell or composing a merge/commit message and hitting a surprising failure."
 category: process
+layer: general
 proven_in: "2026-06-21/22 (Oyster, Cosmos, Cutter) — collected operational edge-cases"
 proven_date: 2026-06-22
 barrier:
@@ -26,6 +27,11 @@ barrier:
 - **zsh does not word-split an unquoted `$var`** (`cat $files` passes one
   joined string → "No such file") and lacks `local -n` namerefs — use zsh
   arrays and `${(P)name}`.
+- **`[ "$a" \> "$b" ]` is a zsh error ("condition expected"), not a string
+  compare**, so an `until` loop on it spins forever; compare numerically.
+  `set -- $pair` does not word-split either (2026-09-24).
+- **The edit tool drops trailing whitespace from a replacement** (2026-09-23;
+  caught by the commit ceremony failing fast).
 - **`rg -r` is replace, not line numbers** — `-n` is line numbers; the two
   are one typo apart and `-r` silently rewrites the match in the output.
 - **A custom `Merge origin/...` header fails commitlint** — only
@@ -90,6 +96,42 @@ barrier:
   presence checks through the script's own `fail()`; a
   "behaviour-identical" claim must include the instrumentation's
   behaviour, not only the control flow.
+- **A permission-gated call never rides in the same batch as its gate**: a
+  code search against a private repository ran in the same parallel tool
+  batch as the `gh repo view --json visibility` check that gated it, so the
+  check's answer (PRIVATE) arrived after the read had returned six paths
+  (2026-09-05; read-only, nothing written). Batch only calls whose
+  permission does not depend on another call's result — the shared-cwd trap
+  above in another costume: parallel calls share state, and ordering by
+  hope is no ordering.
+- **A permission-layer denial is not lifted by the owner's approval in chat**:
+  `git commit --amend --only` was denied, then denied again after the owner
+  chose "Allow" in the question tool (2026-09-16). Offer the owner the exact
+  command to run with `!` at once instead of retrying; a leading space before
+  the `!` sends the line as chat text and runs nothing.
+- **git's file-system monitor prints `error: could not read IPC response`** on
+  `git fetch` and `git worktree remove`, among others, while the command
+  completes normally (2026-09-16). `git -c core.fsmonitor=false`
+  silences it for a read.
+- **Markdown commit refusals that recur**, all from the pre-commit markdownlint (2026-09-16/17):
+  a wrapped line that begins with `#` and a number (`#127 …`) is an ATX heading with no space
+  (MD018), so re-wrap until the number sits mid-line and grep `^#[0-9]` before committing (one
+  first fix moved the wrong word); deleting a file's last block also deletes its final newline
+  (MD047); a backticked sha inside an inline-bracket register line nests code spans (MD038); a
+  list needs a blank line before it (MD032). A refused commit abandons its queue intent, so the
+  re-run opens a fresh window claim and intent.
+- **A pathspec comes from `git ls-files`, never from memory**: on the case-insensitive
+  filesystem `.github/pull_request_template.md` edited the tracked
+  `.github/PULL_REQUEST_TEMPLATE.md` while `git add` staged nothing, and the commit queue's
+  staged-set check refused (2026-09-17).
+- **Never type a `--now` timestamp by hand**: `claims open` defaults `--now` to the current time
+  when the flag is omitted, while `claims close` requires the flag, so a close reads `date -u`
+  into it (as a commit-ceremony script does). Two hand-typed values in one context landed 36
+  minutes and 41 seconds in the future (2026-09-17). A time a command needs is read, never
+  recalled.
+- **Check an Edit that anchors an insertion on a duplicated line**: anchoring a new register
+  entry by repeating the next entry's bracket line left a placeholder bullet and a duplicate
+  bracket; grep the result before committing (2026-09-16).
 
 ## See also (homed elsewhere, not duplicated)
 

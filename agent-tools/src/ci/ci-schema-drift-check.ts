@@ -1,20 +1,38 @@
 /**
  * Advisory CI check: compares the committed OpenAPI schema cache against
- * the live upstream spec. Emits a GitHub Actions warning annotation if
- * they differ. Always exits 0 — this is informational, not blocking.
+ * the live upstream spec and renders ONE verdict onto every signal surface.
+ * Always exits 0 — this is informational, not blocking.
+ *
+ * Stream contract (the ci-turbo-report shape): STDOUT carries the
+ * step-summary markdown — the workflow appends it with
+ * `>> "$GITHUB_STEP_SUMMARY"` — while `::warning`/`::notice` workflow
+ * commands go to STDERR, where the Actions runner still parses them but the
+ * summary redirect cannot swallow them. The commit-status DESCRIPTION rides
+ * `$GITHUB_OUTPUT` (that channel has no stdout alternative); the POST itself
+ * lives in the workflow via `gh api`, which owns retry, timeout, and
+ * User-Agent concerns — and keeps the status token OFF the build job.
+ *
+ * Every path yields a verdict — in-sync, drifted, or skipped-with-reason —
+ * so a fetch failure produces a status that SAYS "skipped" rather than a
+ * missing status indistinguishable from the check never running (the
+ * 2026-08-18 failure class: a correct signal landing where nobody looks).
  *
  * The upstream swagger endpoint is public, so no authentication is required.
  *
  * @packageDocumentation
  */
 
-import { readFile } from 'node:fs/promises';
+import { appendFile, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
-import { isJsonObject } from '../core/json.js';
 import { resolveRepoRoot } from '../core/repo-root.js';
 
-import { evaluateSchemaDrift } from './ci-schema-drift-eval.js';
+import {
+  buildSchemaDriftReport,
+  buildSkippedSchemaDriftReport,
+  type SchemaDriftReport,
+} from './ci-schema-drift-report.js';
+import { escapeAnnotationMessage } from './ci-turbo-report-formatting.js';
 
 const SCHEMA_URL = 'https://open-api.thenational.academy/api/v0/swagger.json';
 const CACHE_PATH = resolve(
@@ -32,36 +50,47 @@ const CACHE_FILE_ANNOTATION =
  */
 const SCHEMA_FETCH_TIMEOUT_MS = 5000;
 
-function writeLine(message: string): void {
+/** Step-summary markdown: stdout, so the workflow's `>>` redirect owns the file. */
+function writeSummaryLine(message: string): void {
   process.stdout.write(`${message}\n`);
 }
 
-function extractVersion(schemaText: string): string {
-  try {
-    const parsed: unknown = JSON.parse(schemaText);
-    if (isJsonObject(parsed) && 'info' in parsed) {
-      const info: unknown = parsed['info'];
-      if (isJsonObject(info) && 'version' in info) {
-        const version: unknown = info['version'];
-        return typeof version === 'string' ? version : 'unknown';
-      }
-    }
-  } catch {
-    // fall through
-  }
-  return 'unknown';
+/** Workflow commands (`::warning`/`::notice`): stderr, out of the summary redirect's path. */
+function writeWorkflowCommand(message: string): void {
+  process.stderr.write(`${message}\n`);
 }
 
-function buildDriftAnnotation(liveText: string, cachedText: string): string {
-  const liveVersion = extractVersion(liveText);
-  const cachedVersion = extractVersion(cachedText);
+/**
+ * Error text that rides a workflow command is escaped like every other
+ * untrusted surface: a malformed upstream body reaches `JSON.parse`'s
+ * message, which quotes raw bytes of the document (a line break included),
+ * and an unescaped line break would end the `::notice::` line early.
+ */
+function describeError(error: unknown): string {
+  return escapeAnnotationMessage(String(error));
+}
 
-  const versionNote =
-    liveVersion === cachedVersion
-      ? `Both are version ${liveVersion} but content differs (upstream may have fixed descriptions or parameters without a version bump).`
-      : `Cached: ${cachedVersion}, live: ${liveVersion}.`;
-
-  return `::warning ${CACHE_FILE_ANNOTATION}::Schema cache has drifted from the live upstream spec. ${versionNote} Run \`pnpm sdk-codegen:refresh\` to update the cache and rebuild.`;
+/**
+ * Hand the verdict to the workflow's status-publish job. `$GITHUB_OUTPUT`
+ * is the one channel with no stdout alternative, so the script writes it
+ * directly; local and pre-push runs (no env) skip silently.
+ *
+ * Line format: one `key=value` per line, so the description must never
+ * carry a line break — the report builder percent-encodes CR and LF before
+ * it caps the length, which is what keeps a second key or a heredoc
+ * delimiter from being injected through upstream text (the invariant
+ * `ci-schema-drift-report.unit.test.ts` pins).
+ */
+async function writeStepOutputs(report: SchemaDriftReport): Promise<void> {
+  const outputPath = process.env['GITHUB_OUTPUT'] ?? '';
+  if (outputPath === '') {
+    return;
+  }
+  try {
+    await appendFile(outputPath, `description=${report.statusDescription}\n`, 'utf8');
+  } catch (error) {
+    writeWorkflowCommand(`::notice::Schema drift outputs not written: ${describeError(error)}`);
+  }
 }
 
 async function fetchLiveSchema(): Promise<string | null> {
@@ -71,7 +100,7 @@ async function fetchLiveSchema(): Promise<string | null> {
   });
 
   if (!response.ok) {
-    writeLine(
+    writeWorkflowCommand(
       `::notice::Schema drift check skipped — upstream returned HTTP ${String(response.status)}.`,
     );
     return null;
@@ -85,43 +114,48 @@ async function readCachedSchema(): Promise<string | null> {
   try {
     return await readFile(CACHE_PATH, 'utf8');
   } catch {
-    writeLine(`::warning ${CACHE_FILE_ANNOTATION}::Schema cache file not found.`);
+    writeWorkflowCommand(`::warning ${CACHE_FILE_ANNOTATION}::Schema cache file not found.`);
     return null;
   }
 }
 
-async function main(): Promise<void> {
+/** Compare live against cache, or explain why the comparison could not run. */
+async function computeReport(): Promise<SchemaDriftReport> {
   let liveText: string | null;
-
   try {
     liveText = await fetchLiveSchema();
   } catch (error) {
-    writeLine(
-      `::notice::Schema drift check skipped — failed to fetch upstream schema: ${String(error)}`,
+    writeWorkflowCommand(
+      `::notice::Schema drift check skipped — failed to fetch upstream schema: ${describeError(error)}`,
     );
-    return;
+    return buildSkippedSchemaDriftReport('upstream schema fetch failed');
   }
-
   if (liveText === null) {
-    return;
+    return buildSkippedSchemaDriftReport('upstream schema fetch refused');
   }
 
   const cachedText = await readCachedSchema();
-
   if (cachedText === null) {
-    return;
+    return buildSkippedSchemaDriftReport('schema cache file missing');
   }
 
-  if (!evaluateSchemaDrift(cachedText, liveText).drifted) {
-    writeLine('Schema cache is up to date with the live upstream spec.');
-    return;
-  }
+  return buildSchemaDriftReport(cachedText, liveText);
+}
 
-  writeLine(buildDriftAnnotation(liveText, cachedText));
+async function main(): Promise<void> {
+  const report = await computeReport();
+
+  if (report.annotation !== undefined) {
+    writeWorkflowCommand(report.annotation);
+  }
+  writeSummaryLine(report.summaryMarkdown);
+  await writeStepOutputs(report);
 }
 
 try {
   await main();
 } catch (error) {
-  process.stdout.write(`::notice::Schema drift check failed unexpectedly: ${String(error)}\n`);
+  process.stderr.write(
+    `::notice::Schema drift check failed unexpectedly: ${describeError(error)}\n`,
+  );
 }

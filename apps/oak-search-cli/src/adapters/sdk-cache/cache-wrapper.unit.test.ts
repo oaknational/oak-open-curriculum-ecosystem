@@ -20,8 +20,14 @@ import {
   buildCacheKey,
   type CacheStats,
   type CacheOperations,
+  type CacheWrapperOptions,
+  type NegativeCacheWrapperOptions,
 } from './cache-wrapper';
-import { type TranscriptCacheEntry, serializeTranscriptCacheEntry } from './transcript-cache-types';
+import {
+  isTranscriptCacheEntry,
+  serializeTranscriptCacheEntry,
+  type TranscriptCacheEntry,
+} from './transcript-cache-types';
 
 // =============================================================================
 // Test Helpers
@@ -64,6 +70,42 @@ describe('buildCacheKey', () => {
   });
 });
 
+/** The TTL every test wrapper writes: one day, so written TTLs are pinned without jitter. */
+const ONE_DAY_TTL_SECONDS = 86400;
+
+/** A TTL calculator that ignores the base days and answers one day. */
+const oneDayTtl = (): number => ONE_DAY_TTL_SECONDS;
+
+/** Wrapper options over the given ops and stats under the 'test' key prefix. */
+function testCacheOptions<T>(
+  ops: CacheOperations,
+  stats: CacheStats,
+  isValidCached: (value: unknown) => value is T,
+): CacheWrapperOptions<T> {
+  return {
+    ops,
+    cacheKeyPrefix: 'test',
+    baseTtlDays: 14,
+    stats,
+    isValidCached,
+    ttlCalculator: oneDayTtl,
+  };
+}
+
+/** Negative-cache wrapper options under the 'transcript' key prefix. */
+function transcriptCacheOptions<T>(
+  ops: CacheOperations,
+  stats: CacheStats,
+  isValidCached: (value: unknown) => value is T,
+  ignoreCached404: boolean,
+): NegativeCacheWrapperOptions<T> {
+  return {
+    ...testCacheOptions(ops, stats, isValidCached),
+    cacheKeyPrefix: 'transcript',
+    ignoreCached404,
+  };
+}
+
 // =============================================================================
 // withCache tests
 // =============================================================================
@@ -75,7 +117,7 @@ describe('withCache', () => {
     const stats = createStats();
     const underlying = vi.fn();
 
-    const wrapped = withCache(underlying, ops, 'test', 14, stats, isString, () => 86400);
+    const wrapped = withCache(underlying, testCacheOptions(ops, stats, isString));
 
     const result = await wrapped('id1');
 
@@ -90,7 +132,7 @@ describe('withCache', () => {
     const stats = createStats();
     const underlying = vi.fn().mockResolvedValue(ok('fresh-value'));
 
-    const wrapped = withCache(underlying, ops, 'test', 14, stats, isString, () => 86400);
+    const wrapped = withCache(underlying, testCacheOptions(ops, stats, isString));
 
     const result = await wrapped('id1');
 
@@ -105,7 +147,7 @@ describe('withCache', () => {
     const stats = createStats();
     const underlying = vi.fn().mockResolvedValue(ok('fresh-value'));
 
-    const wrapped = withCache(underlying, ops, 'test', 14, stats, isString, () => 86400);
+    const wrapped = withCache(underlying, testCacheOptions(ops, stats, isString));
 
     await wrapped('id1');
 
@@ -122,7 +164,7 @@ describe('withCache', () => {
     const error: SdkNotFoundError = { kind: 'not_found', resource: 'id1', resourceType: 'lesson' };
     const underlying = vi.fn().mockResolvedValue(err(error));
 
-    const wrapped = withCache(underlying, ops, 'test', 14, stats, isString, () => 86400);
+    const wrapped = withCache(underlying, testCacheOptions(ops, stats, isString));
 
     const result = await wrapped('id1');
 
@@ -144,13 +186,7 @@ describe('withCacheAndNegative', () => {
 
     const wrapped = withCacheAndNegative(
       underlying,
-      ops,
-      'transcript',
-      14,
-      stats,
-      isString,
-      false,
-      () => 86400,
+      transcriptCacheOptions(ops, stats, isString, false),
     );
 
     const result = await wrapped('lesson1');
@@ -169,13 +205,7 @@ describe('withCacheAndNegative', () => {
 
     const wrapped = withCacheAndNegative(
       underlying,
-      ops,
-      'transcript',
-      14,
-      stats,
-      isString,
-      false,
-      () => 86400,
+      transcriptCacheOptions(ops, stats, isString, false),
     );
 
     const result = await wrapped('lesson1');
@@ -197,13 +227,7 @@ describe('withCacheAndNegative', () => {
 
     const wrapped = withCacheAndNegative(
       underlying,
-      ops,
-      'transcript',
-      14,
-      stats,
-      isString,
-      false,
-      () => 86400,
+      transcriptCacheOptions(ops, stats, isString, false),
     );
 
     const result = await wrapped('lesson1');
@@ -225,13 +249,7 @@ describe('withCacheAndNegative', () => {
 
     const wrapped = withCacheAndNegative(
       underlying,
-      ops,
-      'transcript',
-      14,
-      stats,
-      isString,
-      true,
-      () => 86400,
+      transcriptCacheOptions(ops, stats, isString, true),
     );
 
     const result = await wrapped('lesson1');
@@ -253,13 +271,7 @@ describe('withCacheAndNegative', () => {
 
     const wrapped = withCacheAndNegative(
       underlying,
-      ops,
-      'transcript',
-      14,
-      stats,
-      isString,
-      false,
-      () => 86400,
+      transcriptCacheOptions(ops, stats, isString, false),
     );
 
     await wrapped('lesson1');
@@ -275,13 +287,7 @@ describe('withCacheAndNegative', () => {
 
     const wrapped = withCacheAndNegative(
       underlying,
-      ops,
-      'transcript',
-      14,
-      stats,
-      isString,
-      false,
-      () => 86400,
+      transcriptCacheOptions(ops, stats, isString, false),
     );
 
     await wrapped('lesson1');
@@ -299,26 +305,6 @@ describe('withCacheAndNegative', () => {
 // =============================================================================
 
 describe('withCacheAndNegative with structured TranscriptCacheEntry format', () => {
-  /**
-   * Type guard for transcript cache entry.
-   */
-  function isTranscriptCacheData(value: unknown): value is TranscriptCacheEntry {
-    if (value === null || typeof value !== 'object') {
-      return false;
-    }
-    if (!('status' in value)) {
-      return false;
-    }
-    const obj: { status: unknown; transcript?: unknown; vtt?: unknown } = value;
-    if (obj.status === 'available') {
-      return typeof obj.transcript === 'string' && typeof obj.vtt === 'string';
-    }
-    if (obj.status === 'no_video' || obj.status === 'not_found') {
-      return true;
-    }
-    return false;
-  }
-
   it('should handle structured "available" cache format', async () => {
     const entry: TranscriptCacheEntry = {
       status: 'available',
@@ -334,13 +320,7 @@ describe('withCacheAndNegative with structured TranscriptCacheEntry format', () 
 
     const wrapped = withCacheAndNegative(
       underlying,
-      ops,
-      'transcript',
-      14,
-      stats,
-      isTranscriptCacheData,
-      false,
-      () => 86400,
+      transcriptCacheOptions(ops, stats, isTranscriptCacheEntry, false),
     );
 
     const result = await wrapped('lesson1');
@@ -364,13 +344,7 @@ describe('withCacheAndNegative with structured TranscriptCacheEntry format', () 
 
     const wrapped = withCacheAndNegative(
       underlying,
-      ops,
-      'transcript',
-      14,
-      stats,
-      isTranscriptCacheData,
-      false,
-      () => 86400,
+      transcriptCacheOptions(ops, stats, isTranscriptCacheEntry, false),
     );
 
     const result = await wrapped('lesson1');
@@ -395,13 +369,7 @@ describe('withCacheAndNegative with structured TranscriptCacheEntry format', () 
 
     const wrapped = withCacheAndNegative(
       underlying,
-      ops,
-      'transcript',
-      14,
-      stats,
-      isTranscriptCacheData,
-      false,
-      () => 86400,
+      transcriptCacheOptions(ops, stats, isTranscriptCacheEntry, false),
     );
 
     const result = await wrapped('lesson1');

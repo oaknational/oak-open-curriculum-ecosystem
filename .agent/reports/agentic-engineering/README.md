@@ -19,6 +19,18 @@ It complements, rather than replaces:
 
 ## Current Promoted Synthesis
 
+### Reviews of the Practice as a system
+
+Evidence for a decision the owner has taken; the decision itself lives in the record the
+review names.
+
+- [practice-system-review-2026-10.md](./practice-system-review-2026-10.md)
+  — the Practice as one system across two estates, read side by side from
+  what runs: the five-layer definition the owner ratified on 2026-10-04
+  (recorded in PDR-143), the divergence classes with a direction each, the
+  six placements decided, and the evidence rows per area; the same bytes as
+  the sibling estate's copy
+
 ### Proposal syntheses
 
 Proposal-status, **explicitly non-doctrine**: these documents propose and
@@ -74,6 +86,28 @@ argue; they do not decide anything.
   — systems-thinking synthesis of the repo's reinforcing, refinement, and
   balancing loops, with a narrow recommended tranche for stronger
   negative-feedback control over memory quality
+- [retrospective-the-twenty-four-open-prs-2026-09-27.md](./retrospective-the-twenty-four-open-prs-2026-09-27.md)
+  — the Director's retrospective on the arc from twenty-four open pull requests (2026-09-25) to
+  the count at the limit (2026-09-27): the causal stack, the counterfactual of a mechanised door,
+  the proposals read against their falsifiers, and a resume addendum
+- [retrospective-the-review-rounds-that-grew-2026-09-27.md](./retrospective-the-review-rounds-that-grew-2026-09-27.md)
+  — the Director's retrospective, on the owner's brief relayed by Siren, on the review rounds that grew on the transplant runbook's rollback and the WIP clause (2026-09-26 to 27): the mechanism (a procedure written as prose, with the reviewers as its only test, under a per-PR budget the concept crossed), the five rivals against their falsifiers, a blind pre-open pass, six proposals.
+
+- [2026-10-05-why-the-alignment-took-four-days-after-the-owner-said-hours.md](./2026-10-05-why-the-alignment-took-four-days-after-the-owner-said-hours.md)
+  — the Director's retrospective on the alignment arc of 2026-10-01 to 2026-10-05, the same
+  bytes as the home estate's copy: the owner's words that bound it, the pull-request counts per
+  day in both estates, the causal stack (one text against two gate sets; the hunk-times-lifecycle
+  unit; the inherited frame), the counterfactual inside the arc, five proposals with lanes and the
+  predecessor's proposals read against the arc
+
+### Cricket suite tallies
+
+- [cricket-suite-tally-2026-10-04-alignment-node.md](./cricket-suite-tally-2026-10-04-alignment-node.md)
+  — the full eight-leg suite on the delivery node `practice-alignment-by-class`
+  before its card: eight ON-TRACK, seven CONTRADICTED and one NARROWED on the
+  same two facts (six pull requests against the owner's two; the cost guide
+  read per landing), and the reshape they drove; the same bytes as the sibling
+  estate's copy
 
 ## Current Posture
 

@@ -1,7 +1,6 @@
 import { ScriptKind, ScriptTarget, createSourceFile } from 'typescript';
 
 import type { RegularBlobTreeEntry, SnapshotSource } from '../git-snapshot-model.js';
-import type { RepoPath } from '../scalar-model.js';
 
 const CONTENT_SHA256 = 'd'.repeat(64);
 
@@ -21,7 +20,7 @@ export const CLASSIFICATION_FILES = [
 
 export { classificationProgramFixture } from './classification-program-fixture.js';
 
-function readable(path: RepoPath, text: string): SnapshotSource {
+function readable(path: string, text: string): SnapshotSource {
   const bytes = new TextEncoder().encode(text);
   const sourceFile = createSourceFile(path, text, ScriptTarget.Latest, true, ScriptKind.TS);
   return {

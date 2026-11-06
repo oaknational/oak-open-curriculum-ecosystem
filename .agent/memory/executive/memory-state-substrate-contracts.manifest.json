@@ -1,13 +1,13 @@
 {
   "$schema": "./memory-state-substrate-contracts.schema.json",
   "schema_version": "1.0.0",
-  "contract_version": "0.3",
-  "generated_at": "2026-05-25T06:45:18Z",
+  "contract_version": "0.4",
+  "generated_at": "2026-09-13T14:20:00Z",
   "generated_by": {
-    "agent_name": "Twilit Orbiting Galaxy",
-    "platform": "codex",
-    "model": "GPT-5",
-    "session_id_prefix": "019e5d"
+    "agent_name": "Djinn hunts Solder",
+    "platform": "claude",
+    "model": "claude-fable-5-1",
+    "session_id_prefix": "36720b"
   },
   "human_contract": ".agent/memory/executive/memory-state-substrate-contracts.md",
   "doctrine": {
@@ -33,8 +33,8 @@
       ".agent/practice-core/decision-records/PDR-050-state-memory-substrate-contracts.md"
     ],
     "plan_roots": [
-      ".agent/plans/agentic-engineering-enhancements/current/memory-state-substrate-portable-contracts.plan.md",
-      ".agent/plans/agent-tooling/archive/completed/memory-state-contract-doctor.plan.md"
+      ".agent/plans-backlog-2026-07/agentic-engineering-enhancements/current/memory-state-substrate-portable-contracts.plan.md",
+      ".agent/plans-old-archive/agent-tooling/archive/completed/memory-state-contract-doctor.plan.md"
     ],
     "historical_roots": [
       ".agent/memory/active/archive/",
@@ -242,7 +242,7 @@
         "PDR-049-memory-and-state-file-merge-semantics"
       ],
       "lifecycle": "live generated read model",
-      "writer_or_write_api": "pnpm agent-tools:collaboration-state -- comms render",
+      "writer_or_write_api": "every comms write (comms append, comms send, comms reply) renders it as part of the write; pnpm agent-tools:collaboration-state -- comms render re-renders it",
       "entry_identity": "rendered heading timestamp plus event identity from source fragment",
       "merge_class": "append-only-narrative",
       "schema_or_parser": "generated Markdown header plus renderer comparison",
@@ -279,14 +279,14 @@
       "id": "collaboration-active-claims",
       "path": ".agent/state/collaboration/active-claims.json",
       "plane": "state",
-      "purpose": "Live truth-of-now registry for active agent claims and advisory commit queue.",
+      "purpose": "Live truth-of-now registry for active agent claims (the advisory commit queue is the machine-local per-intent commit-queue/ store beside it since registry schema 1.4.0).",
       "authority": [
         "PDR-050-state-memory-substrate-contracts",
         "PDR-049-memory-and-state-file-merge-semantics"
       ],
       "lifecycle": "live truth-of-now registry",
-      "writer_or_write_api": "pnpm agent-tools:collaboration-state -- claims open|heartbeat|close and commit skill queue helpers",
-      "entry_identity": "claim_id for claims; intent_id for commit_queue",
+      "writer_or_write_api": "pnpm agent-tools:collaboration-state -- claims open|heartbeat|close (the commit skill queue helpers write the per-intent store beside it)",
+      "entry_identity": "claim_id for claims",
       "merge_class": "index-narrative-tables",
       "schema_or_parser": "agent-tools/src/collaboration-state/schemas/active-claims.schema.json",
       "generated_outputs": [],
@@ -301,7 +301,7 @@
           "severity": "blocking"
         },
         {
-          "invariant": "invalid commit_queue entry",
+          "invariant": "commit_queue property present at 1.4.0 (the queue lives in the per-intent store)",
           "severity": "blocking"
         },
         {
@@ -320,6 +320,58 @@
         },
         {
           "action": "silent deletion of claims or queue entries",
+          "repair_class": "forbidden"
+        }
+      ],
+      "portability_tier": "repo-local-contract",
+      "owner_reviewer_route": "agent-tooling + architecture"
+    },
+    {
+      "id": "collaboration-commit-queue",
+      "path": ".agent/state/collaboration/commit-queue/",
+      "plane": "state",
+      "purpose": "Machine-local per-intent commit-queue store beside the claims file (registry schema 1.4.0; owner ruling QUEUE-LOCAL, 2026-08-17): one JSON file per advisory commit intent, the observable artefact of the shared git transaction tripwire (PDR-029 Class A.3).",
+      "authority": [
+        "PDR-050-state-memory-substrate-contracts",
+        "PDR-049-memory-and-state-file-merge-semantics",
+        "PDR-029-perturbation-mechanism-bundle"
+      ],
+      "lifecycle": "machine-local ephemera: absent until the first enqueue; each intent file expires one hour after its last write (expires_at is updated_at plus the TTL), reads treat an expired file as absent, every queue write sweeps expired peers, complete removes a landed intent; never in version control (the collaboration-state ignore file covers the directory)",
+      "writer_or_write_api": "pnpm agent-tools:commit-queue -- enqueue|phase|record-staged|verify-staged|complete (atomic per-file publish under the claims-file transaction lock; the one-time 1.3.0 migration on first contact)",
+      "entry_identity": "intent_id, which is also the file basename (<intent_id>.json)",
+      "merge_class": "machine-local-ephemera",
+      "schema_or_parser": "agent-tools/src/collaboration-state/schemas/commit-queue-intent.schema.json; agent-tools/src/collaboration-state/registry-entry-parser.ts (parseCommitQueueIntentText)",
+      "generated_outputs": [],
+      "validator": "pnpm agent-tools:collaboration-state -- comms validate (the state-integrity validator: schema, contract parser, filename/intent_id correspondence, expires_at relation); every store read re-judges the same relations",
+      "severity": [
+        {
+          "invariant": "invalid JSON/schema (unknown key, empty files, bad timestamp)",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "filename disagrees with intent_id",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "expires_at disagrees with updated_at plus the TTL",
+          "severity": "blocking"
+        },
+        {
+          "invariant": "abandoned intent left in place",
+          "severity": "informational"
+        }
+      ],
+      "repair_path": [
+        {
+          "action": "rerun the queue write (phase, record-staged, complete) so the store re-validates and sweeps expired peers",
+          "repair_class": "deterministic"
+        },
+        {
+          "action": "delete a corrupt or misnamed intent file by hand (machine-local ephemera by owner ruling; record the deletion on the comms log)",
+          "repair_class": "manual-with-provenance"
+        },
+        {
+          "action": "hand-edit an intent file's content",
           "repair_class": "forbidden"
         }
       ],
@@ -951,11 +1003,11 @@
         "PDR-050-state-memory-substrate-contracts",
         "PDR-049-memory-and-state-file-merge-semantics"
       ],
-      "lifecycle": "operational diagnostic evidence",
+      "lifecycle": "append-only; traces retained indefinitely, never rewritten",
       "writer_or_write_api": "diagnostic sessions and consolidation",
       "entry_identity": "diagnostic filename or directory slug",
       "merge_class": "exclusive-create-fragments",
-      "schema_or_parser": "directory conventions; future README contract",
+      "schema_or_parser": "directory conventions; README contract (the directory's README.md)",
       "generated_outputs": [],
       "validator": "future practice:substrate:check",
       "severity": [
@@ -989,16 +1041,16 @@
       "id": "memory-operational-quarantine",
       "path": ".agent/memory/operational/quarantine/",
       "plane": "memory",
-      "purpose": "Quarantined operational memory awaiting explicit disposition.",
+      "purpose": "Doctrine or guidance removed from circulation, held for owner disposition; read-only for agents, never applied.",
       "authority": [
         "PDR-050-state-memory-substrate-contracts",
         "PDR-049-memory-and-state-file-merge-semantics"
       ],
-      "lifecycle": "quarantined operational memory awaiting disposition",
+      "lifecycle": "held until the owner re-authors or archives each item",
       "writer_or_write_api": "consolidation and owner-directed quarantine/disposition edits",
       "entry_identity": "quarantine filename slug",
       "merge_class": "exclusive-create-fragments",
-      "schema_or_parser": "directory conventions; future README contract",
+      "schema_or_parser": "directory conventions; README contract (the directory's README.md)",
       "generated_outputs": [],
       "validator": "future practice:substrate:check",
       "severity": [
@@ -1027,6 +1079,92 @@
       ],
       "portability_tier": "repo-local-contract",
       "owner_reviewer_route": "consolidation + assumptions"
+    },
+    {
+      "id": "memory-operational-documentation-sync-logs",
+      "path": ".agent/memory/operational/documentation-sync-logs/",
+      "plane": "memory",
+      "purpose": "Per-collection documentation-sync logs kept by the plan templates' documentation-propagation component: one file per plan collection, one section per phase or workstream, recording status and the update or no-update rationale for each required canonical document.",
+      "authority": [
+        "PDR-050-state-memory-substrate-contracts",
+        "PDR-049-memory-and-state-file-merge-semantics"
+      ],
+      "lifecycle": "runtime-created: absent until the first plan collection runs its documentation-propagation step; the directory and its first file appear in that step's commit",
+      "writer_or_write_api": "the documentation-propagation plan component (one section appended per phase or workstream)",
+      "entry_identity": "<collection> filename plus phase or workstream section heading",
+      "merge_class": "mostly-append-register",
+      "schema_or_parser": "the documentation-propagation component's recommended tracking pattern (markdown sections per phase)",
+      "generated_outputs": [],
+      "validator": "future practice:substrate:check",
+      "severity": [
+        {
+          "invariant": "a log section names a required canonical document with neither an update nor a no-update rationale",
+          "severity": "review-required"
+        },
+        {
+          "invariant": "conflict markers",
+          "severity": "blocking"
+        }
+      ],
+      "repair_path": [
+        {
+          "action": "append the missing rationale to the phase section",
+          "repair_class": "deterministic"
+        },
+        {
+          "action": "reconcile a section against the landed documentation during consolidation",
+          "repair_class": "manual-with-provenance"
+        },
+        {
+          "action": "rewrite an earlier phase's recorded rationale",
+          "repair_class": "forbidden"
+        }
+      ],
+      "portability_tier": "repo-local-contract",
+      "owner_reviewer_route": "consolidation + docs"
+    },
+    {
+      "id": "memory-operational-deferred-controls-register",
+      "path": ".agent/memory/operational/deferred-controls-register.md",
+      "plane": "memory",
+      "purpose": "Register of lower-priority security or operational controls a plan has excluded from its executable sequence, each with its research anchor, current state and the trigger that promotes it.",
+      "authority": [
+        "PDR-050-state-memory-substrate-contracts",
+        "PDR-049-memory-and-state-file-merge-semantics"
+      ],
+      "lifecycle": "runtime-created: absent until the first control is deferred by a plan in this estate; the file appears in that plan's commit",
+      "writer_or_write_api": "the plan that defers a control appends its row",
+      "entry_identity": "control family (table row)",
+      "merge_class": "mostly-append-register",
+      "schema_or_parser": "markdown table: control family, research anchor, current state, trigger to promote",
+      "generated_outputs": [],
+      "validator": "future practice:substrate:check",
+      "severity": [
+        {
+          "invariant": "a deferred control with no trigger to promote",
+          "severity": "review-required"
+        },
+        {
+          "invariant": "conflict markers",
+          "severity": "blocking"
+        }
+      ],
+      "repair_path": [
+        {
+          "action": "add the missing trigger from the deferring plan",
+          "repair_class": "deterministic"
+        },
+        {
+          "action": "re-evaluate a stale row at the next phase boundary",
+          "repair_class": "manual-with-provenance"
+        },
+        {
+          "action": "delete a deferred row without a promote or reject decision",
+          "repair_class": "forbidden"
+        }
+      ],
+      "portability_tier": "repo-local-contract",
+      "owner_reviewer_route": "security + architecture"
     },
     {
       "id": "memory-executive-contracts",

@@ -299,6 +299,16 @@ relocates to a tracked home in WS7 step b).
   (`conversations/`, `escalations/`, `sidebars/`) stay tracked — see
   §"Repo/instance content boundary and the standing curation obligation".
 
+A reader of an untracked-by-design state file that meets ENOENT fails with an actionable error
+carrying the exact seed content; it never treats absence as an empty registry, because a wrong path
+would then masquerade as no claims. The operator verifies the path, then seeds the file (F-45,
+settled 2026-07-20).
+
+Validators and watchers that read untracked coordination paths resolve the primary coordination home
+first, because a linked worktree's cwd holds only decoys, and then apply the same rule to a missing
+file: a named, seedable condition, never a crash and never an empty result (F-58, settled
+2026-07-20).
+
 ## Sub-choices defaulted (WS5 §7; owner ratified "as proposed")
 
 - Retention window: 7 d coordination narrative / 48 h heartbeats (tunable).

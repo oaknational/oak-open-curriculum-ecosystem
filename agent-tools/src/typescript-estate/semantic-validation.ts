@@ -4,7 +4,6 @@ import type { CoverageRecord } from './document-model.js';
 import { EstateReviewError } from './errors.js';
 import type { FileRecord } from './file-model.js';
 import { digestOrderedPaths } from './path-coverage-digest.js';
-import type { RepoPath } from './scalar-model.js';
 
 export {
   type AuxiliaryReadObservation,
@@ -25,7 +24,7 @@ export {
 } from './semantic-classification-validation.js';
 
 export interface CoverageFileState {
-  readonly path: RepoPath;
+  readonly path: string;
   readonly readStatus: FileRecord['read']['status'];
   readonly parseStatus: FileRecord['parseStatus'];
 }

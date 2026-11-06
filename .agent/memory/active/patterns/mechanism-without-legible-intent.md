@@ -3,6 +3,7 @@ name: Mechanism Without Legible Intent
 polarity: anti-pattern
 use_this_when: Landing or auditing an enforcement surface (rule, hook, gate, review lens) — ask where its system-level intent is legible; when agents comply with the letter, misattribute the why to a person, or cannot derive the next rule themselves, the mechanism has outrun its intent
 category: agent
+layer: general
 proven_in: The Claude per-user memory-buffer drain (212 feedback entries, 2026-07-03..05) and the owner-ratified reflection of 2026-07-05
 proven_date: 2026-07-05
 barrier:
@@ -34,7 +35,7 @@ psychological model of whoever corrects them, and file system design as personal
 The cure direction is **generative intent at system level** — a compact set of
 generators from which the mechanisms are derivable (the Decision Lenses in
 [`principles.md`](../../../directives/principles.md) are the proof shape; the
-[ADR-200](../../../../docs/architecture/architectural-decisions/200-intent-as-a-living-idea-graph.md)
+ADR-200 (`200-intent-as-a-living-idea-graph.md`, a file OCE holds)
 idea-graph is the structural home) — **never more prose per mechanism**. The
 per-mechanism Why layer already exists and context budgets are owner-ratified; the
 gap this pattern names is system-level.
@@ -128,7 +129,7 @@ reconstructing them from corrections.
   complement this pattern motivated).
 - [`passive-guidance-loses-to-artefact-gravity.md`](passive-guidance-loses-to-artefact-gravity.md)
   — the named twin on the other axis.
-- [ADR-200](../../../../docs/architecture/architectural-decisions/200-intent-as-a-living-idea-graph.md)
+- ADR-200 (`200-intent-as-a-living-idea-graph.md`, a file OCE holds)
   — the structural home for system-level intent (ideas as first-class nodes;
   documents and mechanisms as realisations).
 - [`design-from-impact-not-the-cowpath.md`](../../../rules/design-from-impact-not-the-cowpath.md)

@@ -21,6 +21,7 @@ import {
   type CacheOperations,
 } from './sdk-cache';
 import { cacheLogger } from '../lib/logger';
+import { disconnectWithoutConnection, reportNoCacheStats } from './no-cache-client-methods';
 import { makeGetAllThreads, makeGetThreadUnits } from './oak-adapter-threads';
 import {
   makeGetUnitsByKeyStageAndSubject,
@@ -34,7 +35,6 @@ import {
 } from './sdk-api-methods';
 import type {
   OakClient,
-  CacheStats,
   GetUnitsFn,
   GetTranscriptFn,
   GetLessonSummaryFn,
@@ -90,12 +90,11 @@ export function createUncachedClient(
   baseClient: ReturnType<typeof createOakBaseClient>,
 ): OakClient {
   const methods = createBaseMethods(baseClient.client);
-  const noCacheStats: CacheStats = { hits: 0, misses: 0, connected: false };
   return {
     ...methods,
     rateLimitTracker: baseClient.rateLimitTracker,
-    getCacheStats: () => noCacheStats,
-    disconnect: () => Promise.resolve(),
+    getCacheStats: reportNoCacheStats,
+    disconnect: disconnectWithoutConnection,
   };
 }
 
@@ -115,40 +114,32 @@ export function createCachedClient(
 ): OakClient {
   const baseMethods = createBaseMethods(baseClient.client);
   const stats = { hits: 0, misses: 0 };
-  const ops = createCacheOps(redis);
-  const ttlFn = (days: number) => calculateTtlWithJitter(days);
+  const sharedOptions = {
+    ops: createCacheOps(redis),
+    baseTtlDays: ttlDays,
+    stats,
+    ttlCalculator: calculateTtlWithJitter,
+  };
 
   return {
     ...baseMethods,
     rateLimitTracker: baseClient.rateLimitTracker,
-    getUnitSummary: withCache(
-      baseMethods.getUnitSummary,
-      ops,
-      'unit-summary',
-      ttlDays,
-      stats,
-      isUnitSummary,
-      ttlFn,
-    ),
-    getLessonSummary: withCache(
-      baseMethods.getLessonSummary,
-      ops,
-      'lesson-summary',
-      ttlDays,
-      stats,
-      isLessonSummary,
-      ttlFn,
-    ),
-    getLessonTranscript: withCacheAndNegative(
-      baseMethods.getLessonTranscript,
-      ops,
-      'lesson-transcript',
-      ttlDays,
-      stats,
-      isTranscriptResponse,
+    getUnitSummary: withCache(baseMethods.getUnitSummary, {
+      ...sharedOptions,
+      cacheKeyPrefix: 'unit-summary',
+      isValidCached: isUnitSummary,
+    }),
+    getLessonSummary: withCache(baseMethods.getLessonSummary, {
+      ...sharedOptions,
+      cacheKeyPrefix: 'lesson-summary',
+      isValidCached: isLessonSummary,
+    }),
+    getLessonTranscript: withCacheAndNegative(baseMethods.getLessonTranscript, {
+      ...sharedOptions,
+      cacheKeyPrefix: 'lesson-transcript',
+      isValidCached: isTranscriptResponse,
       ignoreCached404,
-      ttlFn,
-    ),
+    }),
     getCacheStats: () => ({ hits: stats.hits, misses: stats.misses, connected: true }),
     disconnect: createDisconnect(redis),
   };

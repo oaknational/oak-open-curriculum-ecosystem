@@ -1,0 +1,169 @@
+name: Upstream mirror
+
+# Keeps this repository's mirror branch identical to its parent's default
+# branch by moving one reference; it never creates a commit. Off by default:
+# the job runs only where the repository variable UPSTREAM_MIRROR_ENABLED is
+# the string 'true', so a copy of this file that reaches the parent by a
+# merge-back is inert there (a skipped job per slot, zero minutes, no write).
+# No repository, organisation or branch is named here: the parent and its
+# default branch are read from the API at run time, and the mirror branch is
+# by construction this repository's branch of the same name. The parent reads
+# use the run's own token, which works because the parent is public.
+#
+#   identical         — one log line, exit 0.
+#   ahead             — the parent is ahead: fast-forward the mirror by a
+#                       reference update with force=false (never a merge).
+#   behind / diverged — the mirror carries commits the parent lacks: the run
+#                       fails; nothing is written.
+#
+# The compare endpoint reports status, ahead_by and behind_by from the HEAD
+# side, so `ahead` means the PARENT is ahead and `behind` means THIS mirror
+# is ahead.
+#
+# The writer is the run's own token: a reference it moves starts no workflow,
+# so the mirror branch runs no CI of its own (the parent's CI proved its tip,
+# and the pull request that carries it into this repository runs this
+# repository's checks). GitHub refuses that token with "Resource not
+# accessible by integration (HTTP 403)" when the range changes a file under
+# .github/workflows/, which no run token may write. On that refusal alone the
+# run mints the bot's App token with `workflows: write` and moves the
+# reference with it. A move by the App token is a push, so the workflows at
+# the mirror's new tip that trigger on a push to its branch run at most once.
+#
+# That push cannot loop back into this job. The job runs only on its schedule
+# or a dispatch (the job-level `if:`), and it is idempotent: once the mirror
+# equals the parent's tip, the next compare reads `identical` and writes
+# nothing.
+#
+# A dispatched run's own token is capped at the permissions of the token that
+# dispatched it, in addition to the job's own `permissions:` block: a dispatch
+# under a token carrying `actions: write` alone ran the compare and then
+# failed the reference update with 403 (run 35240876819, 2026-09-17), while
+# the same step succeeds on every scheduled run. Under that cap the move now
+# falls back to the App token. To keep it on the run's own token, dispatch
+# with a token that also carries `contents: write` (in this estate, the bot's
+# `upstream-mirror-dispatch` scope, named for this act).
+
+on:
+  schedule:
+    # Every six hours, Monday to Friday, UTC.
+    - cron: '0 0,6,12,18 * * 1-5'
+  workflow_dispatch:
+
+concurrency:
+  group: upstream-mirror
+  cancel-in-progress: false
+
+permissions: {}
+
+jobs:
+  mirror:
+    name: Fast-forward the mirror branch to the parent's default branch
+    if: >-
+      vars.UPSTREAM_MIRROR_ENABLED == 'true' &&
+      (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Read the parent and compare the mirror branch with its default branch
+        id: compare
+        run: |
+          set -euo pipefail
+          repo="$(gh api "repos/${GITHUB_REPOSITORY}")"
+          if [ "$(jq -r '.fork' <<<"$repo")" != "true" ]; then
+            echo "::notice title=Not a fork::${GITHUB_REPOSITORY} has no parent; nothing to mirror."
+            echo "status=not-a-fork" >>"$GITHUB_OUTPUT"
+            exit 0
+          fi
+          parent="$(jq -r '.parent.full_name' <<<"$repo")"
+          parent_branch="$(jq -r '.parent.default_branch' <<<"$repo")"
+          # The mirror is this repository's branch of the parent's default name.
+          MIRROR_BRANCH="$parent_branch"
+          comparison="$(gh api \
+            "repos/${GITHUB_REPOSITORY}/compare/${MIRROR_BRANCH}...${parent%%/*}:${parent##*/}:${parent_branch}")"
+          status="$(jq -r '.status' <<<"$comparison")"
+          parent_tip="$(gh api "repos/${parent}/branches/${parent_branch}" --jq '.commit.sha')"
+          {
+            echo "status=${status}"
+            echo "mirror_branch=${MIRROR_BRANCH}"
+            echo "parent=${parent}"
+            echo "parent_branch=${parent_branch}"
+            echo "parent_tip=${parent_tip}"
+            echo "parent_ahead_by=$(jq -r '.ahead_by' <<<"$comparison")"
+            echo "mirror_ahead_by=$(jq -r '.behind_by' <<<"$comparison")"
+          } >>"$GITHUB_OUTPUT"
+          echo "compare ${MIRROR_BRANCH}...${parent}:${parent_branch} => ${status}"
+
+      - name: Fail when the mirror branch carries commits the parent lacks
+        if: steps.compare.outputs.status == 'behind' || steps.compare.outputs.status == 'diverged'
+        env:
+          MIRROR_BRANCH: ${{ steps.compare.outputs.mirror_branch }}
+          PARENT: ${{ steps.compare.outputs.parent }}
+          PARENT_BRANCH: ${{ steps.compare.outputs.parent_branch }}
+          MIRROR_AHEAD_BY: ${{ steps.compare.outputs.mirror_ahead_by }}
+        run: |
+          set -euo pipefail
+          echo "::error title=Mirror branch is ahead of the parent::${MIRROR_AHEAD_BY} commit(s) on ${GITHUB_REPOSITORY}@${MIRROR_BRANCH} are not on ${PARENT}@${PARENT_BRANCH}. The mirror branch follows the parent and carries no work of its own. Compare: https://github.com/${PARENT}/compare/${PARENT_BRANCH}...${GITHUB_REPOSITORY_OWNER}:${GITHUB_REPOSITORY#*/}:${MIRROR_BRANCH}"
+          exit 1
+
+      - name: Fast-forward the mirror branch with the run's own token
+        id: run-token
+        if: steps.compare.outputs.status == 'ahead'
+        env:
+          MIRROR_BRANCH: ${{ steps.compare.outputs.mirror_branch }}
+          PARENT_TIP: ${{ steps.compare.outputs.parent_tip }}
+          PARENT_AHEAD_BY: ${{ steps.compare.outputs.parent_ahead_by }}
+        run: |
+          set -euo pipefail
+          # force=false makes the platform refuse anything but a fast-forward,
+          # so a commit landing on the mirror between the compare and this
+          # update answers 422 and nothing is written, whichever token writes.
+          refusal="${RUNNER_TEMP}/run-token-refusal.txt"
+          if moved="$(gh api --method PATCH "repos/${GITHUB_REPOSITORY}/git/refs/heads/${MIRROR_BRANCH}" \
+            -f "sha=${PARENT_TIP}" -F force=false --jq '.object.sha' 2>"$refusal")"; then
+            echo "::notice title=Mirror fast-forwarded::${MIRROR_BRANCH} moved to ${moved} (${PARENT_AHEAD_BY} commit(s)) by the run's own token."
+          elif grep -qF 'Resource not accessible by integration (HTTP 403)' "$refusal"; then
+            # A range that changes a workflow file, or a dispatch that capped
+            # this token below contents: write. Any other refusal, a rate
+            # limit's 403 among them, fails the run below.
+            echo "The run's own token was refused: $(cat "$refusal")"
+            echo "refused=true" >>"$GITHUB_OUTPUT"
+          else
+            cat "$refusal" >&2
+            exit 1
+          fi
+
+      - name: Mint the bot App token, for the range the run's own token may not write
+        id: app-token
+        if: steps.run-token.outputs.refused == 'true'
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          client-id: ${{ secrets.UPSTREAM_CARRIER_APP_CLIENT_ID }}
+          private-key: ${{ secrets.UPSTREAM_CARRIER_APP_PRIVATE_KEY }}
+          # Only what this move writes with: one reference (contents), over a
+          # range that changes workflow files (workflows).
+          permission-contents: write
+          permission-workflows: write
+
+      - name: Fast-forward the mirror branch with the bot's App token
+        if: steps.run-token.outputs.refused == 'true'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          MIRROR_BRANCH: ${{ steps.compare.outputs.mirror_branch }}
+          PARENT_TIP: ${{ steps.compare.outputs.parent_tip }}
+          PARENT_AHEAD_BY: ${{ steps.compare.outputs.parent_ahead_by }}
+        run: |
+          set -euo pipefail
+          moved="$(gh api --method PATCH "repos/${GITHUB_REPOSITORY}/git/refs/heads/${MIRROR_BRANCH}" \
+            -f "sha=${PARENT_TIP}" -F force=false --jq '.object.sha')"
+          echo "::notice title=Mirror fast-forwarded::${MIRROR_BRANCH} moved to ${moved} (${PARENT_AHEAD_BY} commit(s)) by the bot's App token."
+
+      - name: Report in sync
+        if: steps.compare.outputs.status == 'identical'
+        env:
+          MIRROR_BRANCH: ${{ steps.compare.outputs.mirror_branch }}
+        run: |
+          echo "In sync: ${MIRROR_BRANCH} equals the parent's default branch. No action taken."

@@ -10,11 +10,17 @@ comms-seen/*
 *-seen.json
 *.heartbeat.json
 comms-draft/*
+# Machine-local per-intent commit-queue store (owner ruling 2026-08-17,
+# QUEUE-LOCAL): queue state is ephemera with a 1-hour TTL and must never
+# enter version control.
+commit-queue/*
 handoffs/*
 !handoffs/README.md
 active-claims.json
 closed-claims.archive.json
 shared-comms-log.md
+# The review-cost gate's rebudget decisions, one local line per push past a budget.
+review-rebudgets.md
 # Cross-worktree work-state map (interim manual F-98) — local index of live worktrees/lanes.
 cross-worktree-work-state.md
 comms-archive/*

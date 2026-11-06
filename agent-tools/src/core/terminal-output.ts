@@ -2,7 +2,7 @@
  * Terminal write helpers shared by the CLI runners. Lines are sanitised:
  * C0/C1 control characters (other than tab and newline) are stripped so an
  * attacker-controllable string reaching the operator's terminal -- a crafted
- * todo id, a YAML error echo, a duplicate-key refusal -- cannot smuggle ANSI
+ * item id, a YAML error echo, a duplicate-key refusal -- cannot smuggle ANSI
  * escapes that rewrite the output the operator reads (e.g. visually forging
  * a green verdict line over a refusal). Security-expert finding, R0b
  * gateway 2026-07-07.

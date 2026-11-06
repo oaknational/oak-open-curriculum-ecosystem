@@ -47,12 +47,11 @@ export const CLAUDE_HOOK_COMMAND =
 export const CLAUDE_HOOK_ARTEFACT = 'agent-tools/dist/src/hook-policy/pre-tool-use-dispatch.js';
 
 /**
- * Repo-relative path to the Codex fallback rules index file.
- * This Markdown document must enumerate every canonical rule file so that the
- * Codex platform — which cannot load `.claude/rules/` triggers — still
- * receives the full rule set.
+ * Repo-relative path to the rules index, the projection of every rule declaration that
+ * platforms which load no rule adapters (Codex) read instead. The renderer owns the path;
+ * it is re-exported here so the validator modules share one definition.
  */
-export const RULES_INDEX_PATH = 'RULES_INDEX.md';
+export { RULES_INDEX_PATH } from '../../rule-declarations/render-rule-projections.js';
 
 /**
  * Maximum allowed byte size for the Codex project-doc rules index.

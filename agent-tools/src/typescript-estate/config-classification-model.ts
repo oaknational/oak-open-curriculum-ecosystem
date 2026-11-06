@@ -1,5 +1,5 @@
 import type { FileRole } from './file-vocabulary.js';
-import type { NonEmptyReadonlyArray, RepoPath } from './scalar-model.js';
+import type { NonEmptyReadonlyArray } from './scalar-model.js';
 
 export interface WorkspaceYamlParserOptions {
   readonly version: '1.2';
@@ -39,8 +39,8 @@ export interface WorkspaceAttributionConfig {
 
 export interface GeneratedOutputRule {
   readonly id: string;
-  readonly pathPrefix: RepoPath;
-  readonly producerEvidence: NonEmptyReadonlyArray<RepoPath>;
+  readonly pathPrefix: string;
+  readonly producerEvidence: NonEmptyReadonlyArray<string>;
 }
 
 export interface GeneratedOutputRuleSemantics {

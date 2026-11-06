@@ -49,11 +49,11 @@ export function createOAuthProxyRoutes(options: CreateOAuthProxyRoutesOptions): 
     handler: (req: ExpressRequest, res: ExpressResponse) => Promise<void>,
   ): (req: ExpressRequest, res: ExpressResponse) => void {
     return (req, res) => {
-      handler(req, res).catch((err: unknown) => {
-        config.logger.error('oauth-proxy.unhandled-error', normalizeError(err), {
+      handler(req, res).catch((error: unknown) => {
+        config.logger.error('oauth-proxy.unhandled-error', normalizeError(error), {
           path: req.path,
         });
-        config.observability?.captureHandledError(err, {
+        config.observability?.captureHandledError(error, {
           boundary: 'oauth_proxy_unhandled',
           route: req.path,
         });

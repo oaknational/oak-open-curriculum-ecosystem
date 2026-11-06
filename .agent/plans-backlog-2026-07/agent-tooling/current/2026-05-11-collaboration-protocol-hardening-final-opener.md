@@ -179,7 +179,7 @@ assert second derivation returns cached first-derivation name.
 ### R4b — Commit-skill mandates pathspec
 
 Single atomic doc + any helper script change. Update
-[`.agent/skills/commit/SKILL-CANONICAL.md`](../../../skills/commit/SKILL-CANONICAL.md)
+[`.agent/skills/change-custody/commit/SKILL-CANONICAL.md`](../../../skills/change-custody/commit/SKILL-CANONICAL.md)
 to require pathspec input and always issue `git commit -- <pathspec>`.
 Refuse bare `git commit` invocations within the skill flow. Reviewer:
 docs-adr-expert.

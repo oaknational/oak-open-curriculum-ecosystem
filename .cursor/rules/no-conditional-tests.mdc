@@ -1,6 +1,7 @@
 ---
 description: No conditional tests. They are a symptom of architectural failure.
 globs: '**/*.test.ts'
+alwaysApply: false
 ---
 
 Read and follow `.agent/rules/no-conditional-tests.md`.

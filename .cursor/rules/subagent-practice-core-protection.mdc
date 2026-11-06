@@ -1,6 +1,7 @@
 ---
-description: Sub-agents must not modify .agent/directives/, .agent/rules/, .claude/rules/, or .cursor/rules/.
-alwaysApply: true
+description: Keep foundational Practice surfaces owner-edited
+globs: AGENTS.md,CLAUDE.md,.agent/practice-core/**/*,.agent/directives/**/*,.agent/rules/**/*,.claude/rules/**/*,.cursor/rules/**/*
+alwaysApply: false
 ---
 
 Read and follow `.agent/rules/subagent-practice-core-protection.md`.

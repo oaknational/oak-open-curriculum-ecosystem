@@ -1,0 +1,101 @@
+diff --git a/.agent/memory/active/patterns/harness-shell-and-commit-edge-cases.md b/.agent/memory/active/patterns/harness-shell-and-commit-edge-cases.md
+index bd348e54b..0551510bc 100644
+--- a/.agent/memory/active/patterns/harness-shell-and-commit-edge-cases.md
++++ b/.agent/memory/active/patterns/harness-shell-and-commit-edge-cases.md
+@@ -31,6 +31,11 @@ barrier:
+   `set -- $pair` does not word-split either (2026-09-24).
+ - **The edit tool drops trailing whitespace from a replacement** (2026-09-23;
+   caught by the commit ceremony failing fast).
++- **zsh reserves `status`** (`status=0` fails "read-only variable"; use `rc`),
++  and **`pnpm --silent` suppresses the root script's echo but not the nested
++  `--filter` script's**, so a pipeline into `jq` sees a `$ pnpm …` banner line
++  first and fails on it (drop lines that open with a dollar sign before parsing; two seats,
++  2026-09-25).
+ - **`rg -r` is replace, not line numbers** — `-n` is line numbers; the two
+   are one typo apart and `-r` silently rewrites the match in the output.
+ - **A custom `Merge origin/...` header fails commitlint** — only
+diff --git a/.agent/practice-core/decision-records/PDR-063-mid-cycle-retirement-protocol.md b/.agent/practice-core/decision-records/PDR-063-mid-cycle-retirement-protocol.md
+index 929587fc7..1d5be0f86 100644
+--- a/.agent/practice-core/decision-records/PDR-063-mid-cycle-retirement-protocol.md
++++ b/.agent/practice-core/decision-records/PDR-063-mid-cycle-retirement-protocol.md
+@@ -333,7 +333,15 @@ replaces it. No other step changes.
+    can never become an indefinite one. A lane waiting on a peer needs the
+    same release condition, and a hold with no default is a stall waiting to
+    happen (two retained claims waited on a silent partner with no release
+-   condition until a handoff record proposed one, 2026-09-25). The bound is
++   condition until a handoff record proposed one, 2026-09-25). The owner's
++   word on these triggers, 2026-09-21 09:24Z, verbatim and labelled by the
++   owner "not to be given undue weight": "any context measuring mechanism or
++   workflow that causes the agent to stop rather than to work more
++   efficiently is an antipattern" (doctrine row O1 of the three-estate
++   exchange). Read with it, a rest taken with owner-directed work remaining
++   and window capacity left is an action moment surfaced to the owner, never
++   a default (three cards in three hours and a six-hour rest, 2026-09-21 to
++   2026-09-25). The bound is
+    executable, not vibes: the surfacing event MUST declare its
+    absolute deadline and the default action that fires at the
+    deadline (protocol default when no coordinator SLA applies:
+diff --git a/.agent/rules/handoff-messages-self-contained.md b/.agent/rules/handoff-messages-self-contained.md
+index d74ffdc8b..59a51bd5a 100644
+--- a/.agent/rules/handoff-messages-self-contained.md
++++ b/.agent/rules/handoff-messages-self-contained.md
+@@ -40,7 +40,11 @@ A handoff's next-step list names the credential route beside each write
+ (the merge-bot's push command, the minted token), since a pickup reads the
+ steps, not the rule: steps that said "merge", "push", "request Copilot" with
+ the credential implicit produced three writes under the owner's credential in
+-one day (2026-09-24).
++one day (2026-09-24). A decision with no live executor is recorded as
++unassigned, in that word, at the moment it is recorded (a record routed an
++owner's "land it now" to a lane whose holder had stopped, 2026-09-25). The
++owner's test for what a handoff analysis carries (2026-09-25): what is lost,
++or who is misled, if this point is ignored; a point that fails it is noise.
+ 
+ ## Forbidden patterns
+ 
+diff --git a/.agent/rules/hook-policy-substring-discipline.md b/.agent/rules/hook-policy-substring-discipline.md
+index 790eb91cf..eb1039d7c 100644
+--- a/.agent/rules/hook-policy-substring-discipline.md
++++ b/.agent/rules/hook-policy-substring-discipline.md
+@@ -150,6 +150,9 @@ form to use rather than a bypass:
+   heredoc trips the argv matcher as a forced push (2026-09-25): a script
+   whose text describes commands is written to scratch with the file tool
+   and run by path, and its command names stay descriptive where they can.
++  The same day the git-restore shape in a comms event's prose ("restore the
++  file to the branch's bytes", advice to a peer) refused the whole call and
++  neither message went out; two seats, one day (F-207 carries the cure).
+ - The force-push guard's `push` + `-f` co-occurrence (frictions F-102)
+   recurred on a merge-bot push chained with `gh api -f` (2026-09-03). A push
+   is its task's final command and stands alone in its own call.
+diff --git a/.agent/rules/records-are-technical-not-emotional.md b/.agent/rules/records-are-technical-not-emotional.md
+index 980804651..35ec3e4a0 100644
+--- a/.agent/rules/records-are-technical-not-emotional.md
++++ b/.agent/rules/records-are-technical-not-emotional.md
+@@ -54,7 +54,11 @@ A record's REGISTER encodes its authority, and readers obey the register
+   the number is read from the instrument before it enters a record. **A record
+   carries the minimum its function needs**: any claim beyond that names its
+   source and when the source was read, or is cut (two of three wrong claims in
+-  one wrap were extras its function never needed, 2026-09-23).
++  one wrap were extras its function never needed, 2026-09-23). The mechanical
++  form before review: grep the draft for "no", "never", "only", "every" and
++  "reliably", and give each a source beside it or cut the word (two reviews
++  of one retrospective caught six such claims across three drafts,
++  2026-09-25).
+ - **A rule that needs repeated shrinking corrections was never
+   grounded.** When a constraint contracts correction by correction (a
+   full prohibition, then a may-share residue, then coincidence-not-concept,
+diff --git a/.agent/skills/change-custody/commit/SKILL-CANONICAL.md b/.agent/skills/change-custody/commit/SKILL-CANONICAL.md
+index cff54734f..c1bdc121e 100644
+--- a/.agent/skills/change-custody/commit/SKILL-CANONICAL.md
++++ b/.agent/skills/change-custody/commit/SKILL-CANONICAL.md
+@@ -658,6 +658,11 @@ never on the lock file, then re-run the ceremony alone (two ceremonies lost the
+ race to a periodic git process, 2026-09-20; two lost it to peers' commits,
+ 2026-09-25).
+ 
++A push from the primary checkout ends with a read of `.git/index.lock`: a
++zero-byte lock born in the pre-push hook's last steps outlived one push and
++blocked two peers' commits before its own seat saw it (2026-09-25); a lock that
++outlives the push with no holder is the pusher's to report at once.
++
+ The advisory commit queue, `git:index/head` active claim, and shared-log
+ entry are the coordination surfaces; the lock file is never one of them.
+ 

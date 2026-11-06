@@ -10,8 +10,7 @@ permissionMode: plan
 
 All file paths are relative to the repository root.
 
-Your first action MUST be to read and internalise
-`.agent/sub-agents/templates/prose-expert.md`.
+Your first action MUST be to read and internalise `.agent/sub-agents/templates/prose-expert.md`.
 
 Review and report only. Do not modify files. The calling agent executes any
 rewrite you recommend.

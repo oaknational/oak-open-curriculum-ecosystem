@@ -150,7 +150,7 @@ regardless of the session's worktree.
 
 **Lane coordination (2026-06-27):** §B1/B2 are the INFRASTRUCTURE member of the statusline
 lane — coordinate via the
-[`statusline-enhancements` thread record](../../../memory/operational/threads/statusline-enhancements.next-session.md)
+[`statusline-enhancements` thread record](../../../memory/operational/threads/paused/statusline-enhancements.next-session.md)
 (the lane SSOT). Both §B2 and the logo-modularisation plan's WS4.2 edit
 `statusline-identity.ts`; sequence with it, do not land in parallel. This work stays behind
 the §Review gate below.

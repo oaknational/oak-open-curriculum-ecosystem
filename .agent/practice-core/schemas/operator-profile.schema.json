@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "operator-profile.schema.json",
+  "$ref": "#/$defs/profile_frontmatter",
+  "title": "Operator profile frontmatter (the operator-profile PDR; the PDR's number is estate-local)",
+  "version": "1.1.0",
+  "$comment_contract": "Core-carried: the operator profile is the Practice's one surface outside a repository, at `~/.practice/profile/` (root overridable by PRACTICE_HOME). It is the OPERATOR's, not a machine's: `index.md` holds what is true of the operator everywhere; `repos/<scope-key>.md` holds what is true of one repository line, the scope key being the root package.json name lowercased (`name`, or `scope--name` for a scoped `@scope/name`), never a remote or a path; `machines/<machine-key>.md` holds what is true of one machine only, the machine key being the short host name lowercased. That split is what lets the root be an optional, private git repository the operator syncs between machines: person-level and line-level facts travel, machine-level facts stay keyed to their host, and the estate never assumes any particular machine. The Practice never initialises that repository — that is the operator's act; it syncs the repository at two moments under the operator's own git identity: a fetch and fast-forward (or plain merge) at session open, and, immediately after any write made on the operator's word (the Practice writes the profile on no other), a check, a commit and a push of that write, so no write sits unpushed across a session boundary — never a force, a history rewrite or a wildcard stage (the operator-profile PDR's decisions 11 and 14). Every document opens with a YAML frontmatter block that this schema governs. The profile is strictly optional: a missing root or document is the expected condition and no reader may fail, warn or depend on it. Version-family compatibility: within one MAJOR family evolution is additive-optional only (a new field is optional and lands with a MINOR bump of this document and of every estate validator together); a breaking change is a MAJOR bump and a new family. The shapes are strict (additionalProperties false) because the only consumers are the estate's own validators; a field the family does not name is a refusal, never a silent pass.",
+  "$comment_body": "The body below the frontmatter is prose with clear headings, short enough to read whole at session open. It names identities, never credentials (no tokens, keys, passwords or canary values); paths inside it are fine and no tracked file may resolve through one; nothing in it is load-bearing for a gate, validator or build. Estate validators refuse credential-shaped lines.",
+  "$defs": {
+    "date": {
+      "$comment": "ISO calendar date (YYYY-MM-DD), the day the document was last edited; the pattern bounds the month to 01-12 and the day to 01-31, the strongest check expressible identically in this contract and in an estate's enforcement schema without a format library.",
+      "type": "string",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+    },
+    "scope_key": {
+      "$comment": "The root package.json name as a key, lowercase: name, or scope--name for a scoped @scope/name (never a remote or a path, so every clone, fork and mirror of one repository reads one file); the file is repos/<scope_key>.md and the two must agree. Widened from owner--repository on 2026-10-28 (1.1.0).",
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]*(--[a-z0-9][a-z0-9._-]*)?$"
+    },
+    "index_frontmatter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["practice_profile", "schema_version", "kind", "updated", "ratified"],
+      "properties": {
+        "practice_profile": { "const": "operator-profile" },
+        "schema_version": { "const": 1 },
+        "kind": { "const": "index" },
+        "updated": { "$ref": "#/$defs/date" },
+        "ratified": {
+          "$comment": "false while any content is agent-inferred and unconfirmed; the operator sets true.",
+          "type": "boolean"
+        },
+        "seeded_by": {
+          "$comment": "Optional: the seat or person that wrote the current content.",
+          "type": "string",
+          "minLength": 1
+        },
+        "operator": {
+          "$comment": "Optional display name of the operator, never an account or credential.",
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "scope_frontmatter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "practice_profile",
+        "schema_version",
+        "kind",
+        "scope_key",
+        "updated",
+        "ratified"
+      ],
+      "properties": {
+        "practice_profile": { "const": "operator-profile" },
+        "schema_version": { "const": 1 },
+        "kind": { "const": "scope" },
+        "scope_key": { "$ref": "#/$defs/scope_key" },
+        "updated": { "$ref": "#/$defs/date" },
+        "ratified": { "type": "boolean" },
+        "seeded_by": { "type": "string", "minLength": 1 },
+        "operator": { "type": "string", "minLength": 1 }
+      }
+    },
+    "machine_key": {
+      "$comment": "The short host name, lowercase; the file is machines/<machine_key>.md and the two must agree.",
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9.-]*$"
+    },
+    "machine_frontmatter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "practice_profile",
+        "schema_version",
+        "kind",
+        "machine_key",
+        "updated",
+        "ratified"
+      ],
+      "properties": {
+        "practice_profile": { "const": "operator-profile" },
+        "schema_version": { "const": 1 },
+        "kind": { "const": "machine" },
+        "machine_key": { "$ref": "#/$defs/machine_key" },
+        "updated": { "$ref": "#/$defs/date" },
+        "ratified": { "type": "boolean" },
+        "seeded_by": { "type": "string", "minLength": 1 },
+        "operator": { "type": "string", "minLength": 1 }
+      }
+    },
+    "profile_frontmatter": {
+      "$comment": "Any profile document's frontmatter: exactly one of the three kinds.",
+      "oneOf": [
+        { "$ref": "#/$defs/index_frontmatter" },
+        { "$ref": "#/$defs/scope_frontmatter" },
+        { "$ref": "#/$defs/machine_frontmatter" }
+      ]
+    }
+  }
+}

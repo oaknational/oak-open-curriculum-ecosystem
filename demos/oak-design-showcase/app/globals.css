@@ -124,3 +124,32 @@ body {
 .showcase-crumbs .here {
   color: var(--text-subdued);
 }
+
+/* The NarrowDisclosure's wide face: the SAME mounted <details> at every
+   width (remounting across the seam destroys focus and open state — the
+   seam is crossed by 400% zoom and rotation, both accessibility paths).
+   At wide the wrapper dissolves: contents join the surrounding layout,
+   the summary leaves the tree, and the component holds the panel open. */
+.narrow-disclosure-dissolved {
+  display: contents;
+}
+
+/* The details element renders its children through an internal content
+   box (`::details-content`); `display: contents` on the element alone
+   leaves that box standing as ONE flex item, so the controls stacked in
+   a column at wide (measured on the fork: a 111px two-row strip against
+   a 65px row, with the masthead's sticky offset sized for the row).
+   Dissolving the content box hands the children to the surrounding
+   layout as the wide face promises. */
+.narrow-disclosure-dissolved::details-content {
+  display: contents;
+}
+
+/* The summary leaves the tree at wide — EXCEPT while it holds focus:
+   hiding the focused node would drop focus to the document body on a
+   narrow → wide cross (zoom-out is an accessibility path). Declarative
+   focus continuity: it stays rendered exactly until focus moves on,
+   then hides — no script, no timing. */
+.narrow-disclosure-dissolved > summary:not(:focus) {
+  display: none;
+}

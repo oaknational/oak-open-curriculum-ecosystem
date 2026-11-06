@@ -1,10 +1,45 @@
 import { describe, expect, it } from 'vitest';
 
-import { runCommitSkillAdvisories } from './check-commit-skill-advisories.js';
+import {
+  commitSkillAdvisoryChecks,
+  runCommitSkillAdvisories,
+} from './check-commit-skill-advisories.js';
 
 const passingCheck = async (): Promise<{ exitCode: number; stderr: string }> => ({
   exitCode: 0,
   stderr: '',
+});
+
+describe('commitSkillAdvisoryChecks', () => {
+  // The sentinel: a subject whose quote would let Windows' cmd.exe, reading a
+  // pnpm.cmd shim's arguments a second time, run what follows the ampersand.
+  const hostileSubject = 'fix(scope): a" & echo injected & "';
+
+  it('puts no argument it was given on the command line of a launched check', async () => {
+    const checks = commitSkillAdvisoryChecks(['-m', hostileSubject], {
+      // A launched check's output is its own command line, so any argument
+      // that reaches one shows in the results.
+      runPnpm: async (args) => ({ exitCode: 0, stderr: args.join(' ') }),
+      checkMessage: () => 0,
+    });
+
+    const results = [
+      await checks.fitnessCheck(),
+      await checks.vocabularyCheck(),
+      await checks.messageCheck(),
+    ];
+
+    expect(results.map((result) => result.stderr).join('\n')).not.toContain(hostileSubject);
+  });
+
+  it("answers the message advisory with the in-process check's verdict", async () => {
+    const checks = commitSkillAdvisoryChecks(['-m', hostileSubject], {
+      runPnpm: passingCheck,
+      checkMessage: () => 1,
+    });
+
+    expect(await checks.messageCheck()).toStrictEqual({ exitCode: 1, stderr: '' });
+  });
 });
 
 describe('runCommitSkillAdvisories', () => {

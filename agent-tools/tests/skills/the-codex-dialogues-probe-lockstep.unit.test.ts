@@ -84,7 +84,10 @@ describe('the-codex-dialogues probe evidence lockstep', () => {
 
   it('pins the tracked registration template to the exact launch contract', async () => {
     const skill = await readRepoDocument(INSTRUMENT_SKILL_PATH);
-    const fenced = /```json\n([\s\S]*?)```/.exec(skill)?.[1] ?? '"TEMPLATE-FENCE-MISSING"';
+    // \r?\n: the document is committed LF but a Windows checkout under
+    // autocrlf renders it CRLF; the pin binds the content, not the host's
+    // line-ending rendering.
+    const fenced = /```json\r?\n([\s\S]*?)```/.exec(skill)?.[1] ?? '"TEMPLATE-FENCE-MISSING"';
     const template: unknown = JSON.parse(fenced);
     expect(template).toStrictEqual({
       mcpServers: {

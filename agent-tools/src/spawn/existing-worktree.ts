@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 import { isErr } from '@oaknational/result';
 
 import { type CommandRunner } from '../core/command-runner.js';
@@ -42,7 +44,13 @@ export function detectExistingWorktree(
   for (const block of listed.value.split('\n\n')) {
     const lines = block.split('\n');
     const pathLine = lines.find((line) => line.startsWith('worktree '));
-    if (pathLine === undefined || pathLine.slice('worktree '.length).trim() !== worktreePath) {
+    // git emits forward-slash paths on every platform, while `worktreePath`
+    // is host-joined — compare normalised forms, or on Windows this match
+    // never fires and the resume path is silently lost.
+    if (
+      pathLine === undefined ||
+      path.normalize(pathLine.slice('worktree '.length).trim()) !== path.normalize(worktreePath)
+    ) {
       continue;
     }
     const branchLine = lines.find((line) => line.startsWith('branch '));

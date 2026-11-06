@@ -4,6 +4,7 @@ name: "\"Widen\" Is a Type Smell — Discriminate Model-Wrong From Correct-and-V
 polarity: anti-pattern
 use_this_when: "About to widen a list, type, union, or allowlist to make a case pass (or an owner/reviewer flags a 'widen') — the reach for a wider shape is usually hiding a type problem."
 category: code
+layer: general
 proven_in: ".agent/agent-tools reference-direction validator — 2026-06-19 owner correction (Drake lifts Obsidian)."
 proven_date: 2026-06-19
 barrier:

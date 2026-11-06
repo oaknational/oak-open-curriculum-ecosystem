@@ -5,12 +5,11 @@ import { classifySnapshotFiles } from './file-classification.js';
 import type { FileClassification } from './file-classification-model.js';
 import type { ProvenanceSignal, WorkspaceRecord } from './file-model.js';
 import type { GitSourceSnapshot, SnapshotSource } from './git-snapshot-model.js';
-import type { RepoPath } from './scalar-model.js';
 import type { ValidatedDetectorConfig } from './validated-detector-config.js';
 
 /** One independently asserted classification, identified by pinned repository path. */
 export interface ClassificationSemanticFile {
-  readonly path: RepoPath;
+  readonly path: string;
   readonly classification: FileClassification;
 }
 

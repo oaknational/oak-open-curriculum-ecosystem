@@ -1,0 +1,77 @@
+# Public AI-enabled tuition: knowledge for useful OCE work
+
+**Purpose:** enable useful, impactful work in OCE by bringing together the service concept, educational knowledge, POC requirements, engineering evidence and wider public-infrastructure research in a self-contained collection.
+
+Prepared 6 September 2026. This collection contains **17 files:14 Markdown documents, two original engineering probe assets and one consolidated research workbook**. Read the relevant chapter for the substantive definitions, examples, operational contracts and evidence; access to the originating project or the old transfer archive is not needed to understand or use them. External references identify the underlying literature and dated repository witnesses.
+
+The service provides valuable additional tuition alongside teachers, peers, families and other human relationships. Durable learning, learner agency and independent capability govern the design across subjects and throughout life. Oak's complete, high-quality curriculum is an established asset available through API and bulk provision. OCE is the owner's wider engineering estate, with consumers beyond tuition.
+
+## Reading routes
+
+| What you need to do | Read in this order | What you should be able to recover |
+| --- | --- | --- |
+| Understand the service and choose useful early work | [01](01-service-concept.md) → [13](13-oce-work-programme-and-integration.md) → relevant parts of [08](08-oce-audit-and-engineering-findings.md) | Beneficiaries, activities, value, existing assets, alternatives and the next decision |
+| Design an educational profile or learner activity | [02](02-education-and-teaching-knowledge.md) → [03](03-learner-experience-and-profiles.md) → [05](05-inclusion-and-human-service.md) | Subject knowledge/PCK, concrete examples, assessment crosswalks, access and human support |
+| Design or assess the POC | [04](04-poc-requirements-and-evaluation.md) → [05](05-inclusion-and-human-service.md) → [06](06-state-rights-and-context.md) | Full E1–E7 and gate meanings, measurement fields, estimands, harms, alternatives and open thresholds |
+| Decide whether derived learner state is justified | [06](06-state-rights-and-context.md) → E7 in [04](04-poc-requirements-and-evaluation.md) | Necessity/rights, calibration and a separate causal contrast against an equivalent service without derived state |
+| Reuse or extend OCE engineering | [07](07-capabilities-bridges-and-proof.md) → [08](08-oce-audit-and-engineering-findings.md) → [13](13-oce-work-programme-and-integration.md) | Carriers, consumers, semantic laws, dependencies, placement, scoped proof and real-consumer return |
+| Explore public infrastructure and institutional choices | [09](09-public-value-standards-and-commons.md) → [11](11-evidence-publication-and-decisions.md) → [10](10-comparative-research-and-evidence.md) | Public purpose, standards/commons contracts, evidence use, force/applicability, operating models and comparators |
+| Filter comparative projects and trace their sources | [10](10-comparative-research-and-evidence.md) → [research workbook](assets/research-landscape.xlsx) |102dated project records, distinct openness fields, source associations, coverage and unresolved conflicts |
+| Understand changed decisions, rejected options or future ideas | [12](12-decisions-insights-and-open-questions.md) → relevant topic chapter | Authority, reasoning evolution, contrary evidence, wider OCE ideas, negative knowledge and reopening conditions |
+
+## What is settled, observed and still open
+
+The commitment to build a POC and conduct experiments, and the PaaS direction, are settled. Detailed provider choices, package decomposition, evaluator appointments, numerical thresholds and release decisions retain their individual standing. The Year 9 proportional-reasoning/four-week design is a detailed research proposal. Its possible findings would not automatically establish efficacy in another subject, phase, population or lifelong context.
+
+The engineering evidence is dated. The original graph/atom probes were executed at `31e76a7237ee7aecb8adfca96e73b2d83b25be39`; their runner and recorded outputs are preserved unchanged here. They were not rerun during reconstruction. Later routing/planning evidence reaches `f1a1428415ee3df5b623a5cc31c207f098937bfb`, including two plans and visitor ignore rules, with no corresponding runtime implementation claim. The34 bridge proof scenarios and additional state cases are designed, unexecuted cases. Source inspection, a passing schema, actual delivery, learning effects and public value require different evidence.
+
+Optional persistent learner-state hypotheses must earn both calibration and incremental causal value, while meeting necessity, contestability and other rights requirements. A service without derived state remains a viable comparator and fallback. Human educators' knowledge of motivation, relationships and emotional conditions does not authorise automated emotion, personality, diagnosis, vulnerability or potential inference. A public teaching-knowledge commons can succeed independently of any learner-data federation.
+
+The numbered chapters are the authoritative **interpretive homes within this collection**, not a source of new legal or institutional authority. Source-derived recommendations remain attributed proposals. Current user intent governs the commissioned work; external factual claims retain their dated sources and limits. Useful future ideas survive without becoming mandatory POC features.
+
+## Contents and source-family map
+
+Historical labels such as F01, SRC-0053 or EXT-SRC-0081 identify source witnesses. Each owning chapter explains the substantive source identities and relevant bibliography; those aliases do not require an omitted file. Repeated reports or exact duplicate bytes do not count as independent corroboration.
+
+| File | Content owned and principal source families |
+| --- | --- |
+| [01-service-concept.md](01-service-concept.md) | The5 September _UK Public-Service AI Tutoring POC Deep Research Report_, its corrected restart wording, the 4 September research commission and explicit service directions: purpose, theory of change, human roles and responsibilities |
+| [02-education-and-teaching-knowledge.md](02-education-and-teaching-knowledge.md) | _What Good Education Looks Like: Evidence and Research Landscape_(4 September) and _Teaching/Learning Knowledge Infrastructure_(5 September): educational ends, subject knowledge, PCK, curriculum, assessment and knowledge representation |
+| [03-learner-experience-and-profiles.md](03-learner-experience-and-profiles.md) | _All-Subject and Lifelong AI Tutoring Profile Design_(5 September), the 4 September GCSE resits brief/report and educational foundations: profile contract, mathematics/English and wider contexts, concrete activities and transport limits |
+| [04-poc-requirements-and-evaluation.md](04-poc-requirements-and-evaluation.md) | Canonical service report and _Experiment and Controlled Service Learning Protocol_: E1–E7, gates, complete useful metrics, assignment/exposure/analysis, harms and decisions |
+| [05-inclusion-and-human-service.md](05-inclusion-and-human-service.md) | _SEND, Accessibility and Inclusive AI Tutoring Evidence Report_(5 September), education/resit and service sources: functional needs, accommodations, safeguarding, affected-user participation and human service |
+| [06-state-rights-and-context.md](06-state-rights-and-context.md) | _Learner Modelling, Theory of Mind and Safe Adaptation_(5 September), national commons revisions, governed forgetting/context and personal-knowledge-graph analyses: rights, lifecycle, influence, correction and substitution |
+| [07-capabilities-bridges-and-proof.md](07-capabilities-bridges-and-proof.md) | OCE capability and impactful-capability inquiries plus the prior integrated bridge model:24 bridges,10proof profiles and34 scenarios, with intermediate responsibilities and exact proof limits |
+| [08-oce-audit-and-engineering-findings.md](08-oce-audit-and-engineering-findings.md) | OCE enablement/workspace/core-graph-atom inquiries, Oak engineering, Castr/ORCA, GDS/PaaS and related infrastructure research: detailed capability contracts, source observations, alternatives and subsequent plan changes |
+| [09-public-value-standards-and-commons.md](09-public-value-standards-and-commons.md) | Public-service principles, standards-success/impact revisions and historical inventory, UK sovereign capability, national education commons and artificial-organisation/Practice research: institutional mechanisms and operating contracts |
+| [10-comparative-research-and-evidence.md](10-comparative-research-and-evidence.md) |3/4 September global landscape/inventory/ledger and sovereign-AI research; tutoring product/evidence, private-sector control, Pioneers programme and OATutor reports: detailed cases, methods and unresolved evidence |
+| [11-evidence-publication-and-decisions.md](11-evidence-publication-and-decisions.md) | _Sharing Research with UK Government_, _Open Standards and AI for UK Government Research Evidence Flow_, and _UK Government Evidence, Research and Policy Reporting_ across compared formats: evidence objects, schema limitations, applicability, disclosure and actual decision use |
+| [12-decisions-insights-and-open-questions.md](12-decisions-insights-and-open-questions.md) | Reasoning-evolution and _The Joins Are the System_ syntheses, cognitive failure audit, OCE self-study/ensemble analysis,197-idea catalogue, Parallax framework, negative concept-scan checkpoint and earlier transfer/decision records |
+| [13-oce-work-programme-and-integration.md](13-oce-work-programme-and-integration.md) | Fresh OCE assessment brief, project instructions, inquiry/decision/handoff protocols, OCE vision, integration proposal and later plans: useful next work, dependencies, method records and proposed repository landing |
+| [assets/oce-core-graphs-atoms-probes-2026-09-06.md](assets/oce-core-graphs-atoms-probes-2026-09-06.md) | Original probe runner, preserved as a listing; setup/dependencies and limits explained in 08 |
+| [assets/oce-core-graphs-atoms-probe-results-2026-09-06.json](assets/oce-core-graphs-atoms-probe-results-2026-09-06.json) | Original structured observations; interpretation in 08 |
+| [assets/research-landscape.xlsx](assets/research-landscape.xlsx) | Consolidated inventory and source relationships:102 records, original 27 fields plus explicit later corrections/provenance, coverage calculations and historical scope explained in 10 |
+
+The source-family boundaries deliberately place the full pedagogical claim schema and commons programme in 09, educational meaning in 02, the nine-part educational profile in 03, proof profiles in 07, and evidence-publication schema in 11. These are different contracts. Relative links connect them without treating their superficially similar labels as one object.
+
+## Evidence boundaries and conservation
+
+The bounded input was the edition2 transfer collection:358physical files,143registered source identities and130 distinct registered source payload hashes. These are different denominators; the full physical tree also includes prior snapshots, formats and working/packaging records. This reconstruction removes repeated expression and packaging while bringing useful source detail into the 17 files. It preserves the original archive unchanged. Concept conservation was assessed through source reading, exact-duplicate and variant/format comparisons, source-to-section dispositions and specialist challenge; copying and file counts alone cannot prove it.
+
+The corpus does not contain a complete mirror of every linked study, law, standard, repository history or conversation. Its conversation evidence comprises23bounded records in 13documents: supplied continuity excerpts, two returned passages labelled direct user excerpts, and visible current directions. These are not complete historical transcripts. Some older method inputs and exact version identities remain unavailable. The service report's six previously unavailable papers are not treated as a closed queue merely because later reports discuss similar topics.
+
+Detailed unresolved issues are preserved where they matter: the P101 supplier/role and publication-force ambiguity; Carnegie/RAND population denominators; differing ASSISTments study scopes and Eedi inference limits; and the inability to estimate precise standards-adoption waves from the historical corpus. P012's second-source classification is corrected to Independent media. Later source dates do not automatically resolve contradictions or refresh external facts. Use the primary source/version when making a new consequential factual claim.
+
+The workbook and casebook preserve more than names and verdicts: interface/code/content/access/licence distinctions, trial context and denominators, negative/null/adverse results, source dependencies, institutional conditions and missing evidence. Wider research, historical failures and197 OCE ideas remain useful without being adopted into tuition architecture.
+
+## Review and completion
+
+The reconstruction uses source-aware education/service and engineering/evidence reviews, plus a reader review limited to a copy of the successor. Findings are resolved against source evidence and user intent rather than reviewer votes. These reviews share the corpus and are correlated documentary assurance; they are not independent educational trials, legal opinions, professional accessibility certification or a fresh live-repository audit.
+
+Reconstruction and the planned review pass are complete. All 143 registered source identities have substantive, compared-duplicate/variant or justified packaging dispositions. The source-aware reviews found and repaired consequential wording about help-seeking, profile-dependent sequencing, experiment readiness and exact schema semantics. The reader exercise found and repaired orphan requirement references and collisions between source-local identifiers. No identified material reconstruction defect remains unresolved; the source/access and empirical limitations above remain.
+
+The reader exercise used an isolated copy of the successor as its only admissible evidence. The session could not create another agent after reaching its agent-thread limit, so an existing reviewer performed it with prior source knowledge explicitly disclosed. It is a source-isolated usability check, not a genuinely context-naive fresh-reader test. Its answers and repairs were demonstrated from the copied files.
+
+Final checks found 403 resolving local file/anchor links, balanced Markdown fences and consistent table widths. Both original probe assets match their recorded hashes; all 358 archive files remain unchanged. The workbook contains 102 records, 191 source associations and 186 distinct URLs across eight sheets and four filterable tables. Its original 27 fields, richer code-openness descriptions, explicit source-kind corrections and derived counts were reconciled; 1,180 formula cells have no cached error values. The author visually inspected all eight sheets. These checks establish the stated documentary and analytical scope, not execution of the proposed service or experiments.
+
+For repository pickup, follow [13](13-oce-work-programme-and-integration.md). This session reconstructs and reviews the collection; it does not import to GitHub, implement the application or run experiments.

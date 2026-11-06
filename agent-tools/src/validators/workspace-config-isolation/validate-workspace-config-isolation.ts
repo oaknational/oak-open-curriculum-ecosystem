@@ -21,9 +21,9 @@
  * so this file imports nothing from any built workspace package.
  *
  * Exit 0 = clean; exit 1 = at least one escape or stale turbo input;
- * exit 2 = refusal — an unanalysable construct, unreadable input, or a
- * degenerate scan set (the scan never silently skips and never reports
- * success over nothing checked).
+ * exit 2 = refusal — an unanalysable construct, unreadable input (a failed
+ * tracked-file listing included), or a degenerate scan set (the scan never
+ * silently skips and never reports success over nothing checked).
  *
  * @packageDocumentation
  */
@@ -35,7 +35,7 @@ import { parse as parseYaml } from 'yaml';
 
 import { resolveRepoRoot } from '../../core/repo-root.js';
 import { writeErrorLine, writeLine } from '../../core/terminal-output.js';
-import { listTrackedFiles } from '../../core/tracked-file-scan.js';
+import { describeGitReadFailure, listTrackedFiles } from '../../core/repository-paths.js';
 
 import { findConfigEscapes, type EscapeFinding, type UnanalysableFinding } from './containment.js';
 import { scanTurboRootInputs } from './turbo-inputs.js';
@@ -74,7 +74,16 @@ if (!Array.isArray(packagesEntry) || !packagesEntry.every((entry) => typeof entr
   process.exit(2);
 }
 
-const trackedFiles = listTrackedFiles(repoRoot);
+const listing = listTrackedFiles(repoRoot);
+if (!listing.ok) {
+  // The tracked-file listing is an input like any file: unreadable, it refuses.
+  writeErrorLine(
+    `validate-workspace-config-isolation: cannot list tracked files — ` +
+      describeGitReadFailure(listing.error),
+  );
+  process.exit(2);
+}
+const trackedFiles = listing.value;
 const workspaceDirs = expandWorkspaceGlobs(packagesEntry, trackedFiles);
 const configFiles = trackedFiles.filter((file) => isWorkspaceConfigFile(file));
 

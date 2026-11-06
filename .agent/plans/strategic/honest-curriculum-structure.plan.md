@@ -5,10 +5,10 @@ name: "Honest curriculum structure"
 overview: >-
   The served surface provides Oak's curriculum ordering, threads, and
   prior knowledge honestly and richly, under Oak's own names.
-status: sketch
-ratified_by: null
-ratified_date: null
-ratified_where: null
+status: ratified
+ratified_by: Jim Cresswell (owner)
+ratified_date: 2026-09-08
+ratified_where: "PR #85 (2026-09-08), whose body quotes the owner's card answer verbatim: 'Ratify all six'"
 serves: APP-2
 impact_areas:
   - served-surface
@@ -16,7 +16,7 @@ gate_expiry_default: P3D
 depends_on: []
 owner_gates: []
 tickets: []
-last_updated: 2026-08-31
+last_updated: 2026-09-08
 ---
 
 # Honest curriculum structure

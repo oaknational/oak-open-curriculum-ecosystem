@@ -1,7 +1,7 @@
 /**
  * Section classification for the under-the-hood MCP content digest.
  *
- * The canonical skill (`.agent/skills/under-the-hood/SKILL-CANONICAL.md`) is
+ * The canonical skill (`.agent/skills/orientation/under-the-hood/SKILL-CANONICAL.md`) is
  * written for a local-checkout audience. The MCP server serves a DIGEST of it:
  * the audience-independent orientation method plus the factual-reference map,
  * with every checkout-bound or fetch-instructing section excluded (Anthropic

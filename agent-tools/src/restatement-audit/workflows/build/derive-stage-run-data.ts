@@ -12,21 +12,13 @@
  * @packageDocumentation
  */
 
-import { readFile } from 'node:fs/promises';
+import { err, type Result } from '@oaknational/result';
 
-import { err, ok, type Result } from '@oaknational/result';
-
-import { resolveReadPathWithinRepo } from '../../../core/flag-path-resolve.js';
 import { resolveRepoRoot } from '../../../core/repo-root.js';
+import { readAnd, readValidateResults, type Containment } from './derive-stage-checkpoint-io.js';
 import { parseGazetteerFile, projectGazetteer } from '../gazetteer-schema.js';
 import { metaRunDataFrom, reduceRunDataFrom, validateRunDataFrom } from '../run-inputs.js';
-import type {
-  MapRunData,
-  MetaRunData,
-  ReduceRunData,
-  ValidateResult,
-  ValidateRunData,
-} from '../stage-io.js';
+import type { MapRunData, MetaRunData, ReduceRunData, ValidateRunData } from '../stage-io.js';
 import {
   parseMapResult,
   parseMapRunData,
@@ -34,9 +26,20 @@ import {
   parsePartitionFile,
   parseReduceResult,
   parseReduceRunData,
-  parseValidateResult,
   parseValidateRunData,
 } from '../stage-io.js';
+
+/**
+ * Containment seam for {@link deriveRunData} (ADR-078): the repo root and the
+ * canonicaliser are injectable so containment refusals describe with literal
+ * fixtures deterministically on every host, with no IO. Production callers
+ * omit both; the defaults resolve the real repo root and use the real
+ * symlink-resolving canonicaliser.
+ */
+export interface DeriveRunDataOptions {
+  readonly repoRoot?: string;
+  readonly realpath?: (path: string) => string;
+}
 
 export interface CliFlags {
   readonly stage: string;
@@ -51,64 +54,22 @@ export interface CliFlags {
 /** Every stage's run data, as the concrete union — never widened back to unknown. */
 export type StageRunData = MapRunData | ReduceRunData | ValidateRunData | MetaRunData;
 
-async function readJson(filePath: string): Promise<Result<unknown, Error>> {
-  // Containment before I/O (the render-ledger-cli.ts precedent, AIP-126 item 7): a
-  // checkpoint flag must never read/inline JSON from outside the repository. Relative
-  // flags DELIBERATELY resolve against the repo root, not process.cwd(): pnpm pins the
-  // script cwd to the agent-tools workspace wherever the operator stands, so a cwd base
-  // would make the committed `.agent/reports/...` checkpoint paths unreachable — the
-  // repo-root base is the deterministic convention every flag-path CLI here shares.
-  const safePath = resolveReadPathWithinRepo(resolveRepoRoot(import.meta.url), filePath);
-  if (!safePath.ok) {
-    return safePath;
-  }
-  try {
-    const raw = await readFile(safePath.value, 'utf8');
-    return ok(JSON.parse(raw));
-  } catch (cause) {
-    return err(
-      new Error(
-        `Cannot read checkpoint ${filePath}: ${cause instanceof Error ? cause.message : String(cause)}`,
-        { cause },
-      ),
-    );
-  }
-}
-
-async function readAnd<T>(
-  filePath: string | undefined,
-  label: string,
-  parse: (value: unknown) => Result<T, Error>,
-): Promise<Result<T, Error>> {
-  if (filePath === undefined) {
-    return err(new Error(`Missing required checkpoint flag for ${label}.`));
-  }
-  const json = await readJson(filePath);
-  return json.ok ? parse(json.value) : json;
-}
-
-async function readValidateResults(
-  paths: readonly string[],
-): Promise<Result<ValidateResult[], Error>> {
-  const results: ValidateResult[] = [];
-  for (const filePath of paths) {
-    const parsed = await readAnd(filePath, '--validate-result', parseValidateResult);
-    if (!parsed.ok) {
-      return parsed;
-    }
-    results.push(parsed.value);
-  }
-  return ok(results);
-}
-
-async function deriveMapRunData(flags: CliFlags): Promise<Result<MapRunData, Error>> {
+async function deriveMapRunData(
+  flags: CliFlags,
+  containment: Containment,
+): Promise<Result<MapRunData, Error>> {
   // The closed canonical {"windows": [...]} shape — parsePartitionFile rejects a typo'd
   // key, a stray sibling key, or a bare window array (AIP-126 item 8).
-  const partition = await readAnd(flags.partition, '--partition', parsePartitionFile);
+  const partition = await readAnd(flags.partition, '--partition', parsePartitionFile, containment);
   if (!partition.ok) {
     return partition;
   }
-  const gazetteerFile = await readAnd(flags.gazetteer, '--gazetteer', parseGazetteerFile);
+  const gazetteerFile = await readAnd(
+    flags.gazetteer,
+    '--gazetteer',
+    parseGazetteerFile,
+    containment,
+  );
   if (!gazetteerFile.ok) {
     return gazetteerFile;
   }
@@ -118,16 +79,24 @@ async function deriveMapRunData(flags: CliFlags): Promise<Result<MapRunData, Err
   });
 }
 
-async function deriveValidateRunData(flags: CliFlags): Promise<Result<ValidateRunData, Error>> {
-  const mapResult = await readAnd(flags.mapResult, '--map-result', parseMapResult);
+async function deriveValidateRunData(
+  flags: CliFlags,
+  containment: Containment,
+): Promise<Result<ValidateRunData, Error>> {
+  const mapResult = await readAnd(flags.mapResult, '--map-result', parseMapResult, containment);
   if (!mapResult.ok) {
     return mapResult;
   }
-  const reduceResult = await readAnd(flags.reduceResult, '--reduce-result', parseReduceResult);
+  const reduceResult = await readAnd(
+    flags.reduceResult,
+    '--reduce-result',
+    parseReduceResult,
+    containment,
+  );
   if (!reduceResult.ok) {
     return reduceResult;
   }
-  const priors = await readValidateResults(flags.validateResults);
+  const priors = await readValidateResults(flags.validateResults, containment);
   if (!priors.ok) {
     return priors;
   }
@@ -142,19 +111,27 @@ async function deriveValidateRunData(flags: CliFlags): Promise<Result<ValidateRu
   });
 }
 
-async function deriveMetaRunData(flags: CliFlags): Promise<Result<MetaRunData, Error>> {
-  const mapResult = await readAnd(flags.mapResult, '--map-result', parseMapResult);
+async function deriveMetaRunData(
+  flags: CliFlags,
+  containment: Containment,
+): Promise<Result<MetaRunData, Error>> {
+  const mapResult = await readAnd(flags.mapResult, '--map-result', parseMapResult, containment);
   if (!mapResult.ok) {
     return mapResult;
   }
-  const reduceResult = await readAnd(flags.reduceResult, '--reduce-result', parseReduceResult);
+  const reduceResult = await readAnd(
+    flags.reduceResult,
+    '--reduce-result',
+    parseReduceResult,
+    containment,
+  );
   if (!reduceResult.ok) {
     return reduceResult;
   }
   // Zero --validate-result flags is VALID for a zero-cluster reduce (validate was
   // rightly skipped); metaRunDataFrom's coverage gate errs when clusters exist
   // without dispositions, naming each one.
-  const validateResults = await readValidateResults(flags.validateResults);
+  const validateResults = await readValidateResults(flags.validateResults, containment);
   if (!validateResults.ok) {
     return validateResults;
   }
@@ -165,27 +142,43 @@ async function deriveMetaRunData(flags: CliFlags): Promise<Result<MetaRunData, E
   });
 }
 
-async function deriveReduceRunData(flags: CliFlags): Promise<Result<ReduceRunData, Error>> {
-  const mapResult = await readAnd(flags.mapResult, '--map-result', parseMapResult);
+async function deriveReduceRunData(
+  flags: CliFlags,
+  containment: Containment,
+): Promise<Result<ReduceRunData, Error>> {
+  const mapResult = await readAnd(flags.mapResult, '--map-result', parseMapResult, containment);
   if (!mapResult.ok) {
     return mapResult;
   }
   return reduceRunDataFrom(mapResult.value);
 }
 
+/** Await the stage derivation, then re-validate through the stage's parser. */
+async function revalidated<Derived, Parsed>(
+  derived: Promise<Result<Derived, Error>>,
+  parse: (value: Derived) => Result<Parsed, Error>,
+): Promise<Result<Parsed, Error>> {
+  const outcome = await derived;
+  return outcome.ok ? parse(outcome.value) : outcome;
+}
+
 /** Derive and RE-VALIDATE the stage's run data from checkpoint file paths named in `flags`. */
-export async function deriveRunData(flags: CliFlags): Promise<Result<StageRunData, Error>> {
+export async function deriveRunData(
+  flags: CliFlags,
+  options: DeriveRunDataOptions = {},
+): Promise<Result<StageRunData, Error>> {
+  const containment: Containment = {
+    repoRoot: options.repoRoot ?? resolveRepoRoot(import.meta.url),
+    realpath: options.realpath,
+  };
   if (flags.stage === 'map') {
-    return deriveMapRunData(flags);
+    return deriveMapRunData(flags, containment);
   }
   if (flags.stage === 'reduce') {
-    const derived = await deriveReduceRunData(flags);
-    return derived.ok ? parseReduceRunData(derived.value) : derived;
+    return revalidated(deriveReduceRunData(flags, containment), parseReduceRunData);
   }
   if (flags.stage === 'validate') {
-    const derived = await deriveValidateRunData(flags);
-    return derived.ok ? parseValidateRunData(derived.value) : derived;
+    return revalidated(deriveValidateRunData(flags, containment), parseValidateRunData);
   }
-  const derived = await deriveMetaRunData(flags);
-  return derived.ok ? parseMetaRunData(derived.value) : derived;
+  return revalidated(deriveMetaRunData(flags, containment), parseMetaRunData);
 }

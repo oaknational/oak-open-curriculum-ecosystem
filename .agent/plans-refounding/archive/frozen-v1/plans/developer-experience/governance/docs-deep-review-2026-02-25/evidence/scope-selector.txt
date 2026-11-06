@@ -1,1 +1,0 @@
-rg --files docs | rg -v '(^|/)archive(/|$)|(^|/)architectural-decisions(/|$)|(^|/)adr(s)?(/|$)|ADR' | sort

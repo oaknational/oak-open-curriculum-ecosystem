@@ -20,8 +20,8 @@ napkin rotation, fitness management) belongs to
 thread-scoped.
 
 **Governance**: This workflow operationalises
-[ADR-150 (Continuity Surfaces, Session Handoff, and Surprise Pipeline)](../../../docs/architecture/architectural-decisions/150-continuity-surfaces-session-handoff-and-surprise-pipeline.md)
-(host architecture) and
+the continuity-surfaces and surprise-pipeline decision (PDR-011)
+and
 [PDR-011 (Continuity Surfaces and the Surprise Pipeline)](../../practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md)
 (portable Practice governance). These name the learning path for
 surprise and correction as `capture → distil → graduate → enforce`,
@@ -127,13 +127,16 @@ Team member closeout:
 - Outcome:
 - Evidence:
 - Claims / queue / git state:
+- Open pull requests owned (each merged, or its claim retained with its next step and the seat that takes it named):
 - Surprise or changed understanding:
 - Blockers or risks:
 - Handoff needed:
 ```
 
-Then clean up any claims, queue entries, or comms obligations you own. Stop
-there unless the owner or closeout owner gives a further assignment.
+Then clean up any claims, queue entries, or comms obligations you own, except the
+claim of an open pull request, which `start-right-team` §Closeout Contract
+retains until the pull request merges. Stop there unless the owner or closeout
+owner gives a further assignment.
 
 ## Mid-Session Light Update (distinct, lighter cadence)
 
@@ -222,7 +225,22 @@ no retrospective memos; those are close-out work, this skill's §Steps.
    the owner rules a shared handoff BRANCH for a day's uncommitted records
    (2026-09-02, `handoff/jim-september`), that branch is the owner's
    instrument, not a licence for per-seat handover PRs — a seat's own draft
-   continuity PR was withdrawn the same day under this ruling.
+   continuity PR was withdrawn the same day under this ruling. Local
+   amendment (owner ruling 2026-09-13, `jimcresswell.net`): a wrap run
+   because the owner has asked for a clean tree before compaction lands
+   as its own `chore(continuity)` commit; the owner's compaction word is
+   the instrument, and the no-handover-PR half of the 2026-07-15 ruling
+   stands unchanged. The home of
+   every wrap and continuity record is the primary checkout's day-stamped
+   coordination branch, by pathspec, riding its fold; no seat mints a private
+   records branch (owner, 2026-09-15, verbatim: "the whole point of
+   coordination branches is to have a common home for things like wraps").
+   Cadence, reconciled with the ruling above: commit records at each state
+   change, but push once per landed merge or shape change, never per event,
+   and where a live-state block and the routing log's last entry disagree the
+   block says which line is current (2026-09-13: a records pull request
+   pushed per event drew five review rounds, each finding the next stale
+   line).
    Active plans remain authoritative for scope, sequencing, acceptance criteria,
    and validation.
 
@@ -257,7 +275,11 @@ no retrospective memos; those are close-out work, this skill's §Steps.
    state lives in the harness task-list, the napkin, and active claims. At
    session close, promote any short-lived signal worth keeping into the owning
    thread's next-session record lane-state promotion watchlist or into the
-   napkin; the rest lapse with the task-list and claims.
+   napkin; the rest lapse with the task-list and claims. A tactical signal is
+   an observation, a lesson or a pending decision; git state (the checked-out
+   branch, ahead/behind, the worktree list) is never one, because git
+   recomputes it and a record of it is stale by the next checkout
+   (2026-10-07).
 
 5. **Sync the authoritative next-action surfaces.** Update any active plan
    whose status, preconditions, or immediate next safe step changed this
@@ -470,6 +492,11 @@ no retrospective memos; those are close-out work, this skill's §Steps.
      AGENT.md pointer to its rules-index references the way Claude
      Code does, so the rules-index pointer is part of the AGENTS.md
      contract.
+   - `AGENTS.md` also carries a `## Code review` section: the review
+     contract the Codex connector reads from the head branch, mirrored for
+     Copilot in `.github/copilot-instructions.md` (landed with #136 on
+     2026-09-12, extended by #140). It is deliberate reviewer context, not
+     drift.
    - `skills.md` extends the default with the same rules-index line.
      This is the entry point for
      [Linear coding sessions](https://linear.app/docs/coding-sessions);
@@ -477,6 +504,16 @@ no retrospective memos; those are close-out work, this skill's §Steps.
      `skills.md` as supplementary guidance, so the non-loader
      rules-index pointer is part of the `skills.md` contract for the
      same reason as `AGENTS.md`.
+   - `AGENTS.md` also carries the generator-fenced Codex team-session
+     alert bootstrap block (between the `CODEX_TEAM_ALERT_BOOTSTRAP_GENERATED`
+     start and end markers). It is generator-owned, regenerated and never
+     hand-edited, so it is an extension, not drift; a wrap reports it as
+     drift only when the generator's own check refuses the file — a
+     marker missing, duplicated, out of order or not on its own line, or
+     the fenced content differing from the render (the generator is the
+     test; the wrap runs it rather than re-deriving its rules) (decided at
+     the 2026-09-09 consolidation after every wrap since 2026-09-07 had
+     reported it).
 
    Anything beyond the default (or beyond a named extension) is
    **drift**: an instruction, fact, preference, or operational note
@@ -614,7 +651,7 @@ no retrospective memos; those are close-out work, this skill's §Steps.
       Practice-bearing repos may choose a clearer `Active identities` heading.
       Update the existing identity summary column rather than renaming the
       table during routine handoff. The summary must reflect the thread record
-      or the audit in `oak-consolidate-docs` step 7c will flag a mismatch.
+      or the audit in `consolidate-docs` step 7c will flag a mismatch.
 
    This is the session-close counterpart to the session-open
    registration step in
@@ -643,7 +680,7 @@ no retrospective memos; those are close-out work, this skill's §Steps.
       threads from it, not from memory. Self-reporting is not
       sufficient (the very failure mode this gate exists to
       counter per the
-      [`passive-guidance-loses-to-artefact-gravity`](../../memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md)
+      `passive-guidance-loses-to-artefact-gravity`
       pattern).
    2. For each thread the session touched (by edit, read-and-
       reference, or commit), open its next-session record at the
@@ -674,7 +711,9 @@ no retrospective memos; those are close-out work, this skill's §Steps.
    1. Read `.agent/state/collaboration/active-claims.json` and find
       claims matching your PDR-027 identity and any thread touched this
       session.
-   2. For every matching claim, copy the full claim entry into
+   2. For every matching claim except an open pull request's claim
+      (which stays active until the pull request merges, named per
+      `start-right-team` §Closeout Contract), copy the full claim entry into
       `.agent/state/collaboration/closed-claims.archive.json`, add
       `archived_at`, and add `closure.kind: "explicit"`,
       `closure.closed_at`, `closure.closed_by`, `closure.summary`, and
@@ -729,21 +768,44 @@ no retrospective memos; those are close-out work, this skill's §Steps.
 10. **Escalate only when the deeper loop is clearly warranted.**
 
     - If the triggered work is already well-bounded and belongs to this
-      closeout, continue immediately into `oak-consolidate-docs`.
+      closeout, continue immediately into `consolidate-docs`.
     - If deep consolidation is due but not well-bounded for this closeout,
       stop after marking `due — <reason>` so the next session can pick it up
       deliberately.
-    - If `oak-consolidate-docs` runs now, refresh `Deep consolidation status`
+    - If `consolidate-docs` runs now, refresh `Deep consolidation status`
       to `completed this handoff — <reason>`.
 
-11. **Verify the `pnpm check` cleanliness gate.** A sole-contributor session
-    or team handoff-owner closeout cannot be marked complete while
-    `pnpm check` is red or carries warnings. Run `pnpm check` from the repo
-    root before declaring handoff complete. The outcome routes one of three
-    ways:
+11. **Verify the cleanliness gate — from the commit, never a separate run.**
+    A sole-contributor session or team handoff-owner closeout cannot be
+    marked complete while the gate is red or carries warnings. The local
+    gate evidence is the landed commit's own pre-commit run: the hook runs
+    Prettier and markdownlint on the staged files, the repo validators, the
+    shell lint, and the whole-tree build, type-check, lint and unit tests
+    (`.turbo/last-gate.log`). That is OCE's hook. In JC.net the commit hook
+    runs the staged-file checks and the changed-workspace lint only, and the
+    whole-tree gate with the site's end-to-end suite runs at the push, so in
+    JC.net the local gate evidence is the push's own pre-push run and a
+    commit that was never pushed carries none. The wider suites that `pnpm check` also
+    aggregates (widget, e2e, ui and a11y) run on the pull request's checks,
+    which the front door verdicts before any merge. Owner ruling,
+    2026-09-14, verbatim: "the commit triggers the gates, there is no point
+    and a fair amount of cost running the gates separately as well, never,
+    ever do that." So a closing seat never runs `pnpm check` (or any
+    whole-repo gate) after or beside a commit: read the commit's gate log
+    and the commit's landing, note that the pull request's checks carry the
+    rest, and record that. Pending pull-request checks are named in the
+    handover with their owner, and a red one blocks the close: a handoff
+    never reads green over a suite that has not finished. A session that
+    landed no commit has nothing to gate.
+    The outcome routes one of three ways:
 
     - **Green** — handoff may complete. Record the green run in the landed
       outcome or as a no-landing-session closeout artefact.
+    - **Pending on the pull request** — the landed commit's local gate is
+      green, and pull-request checks are still running. The handoff may
+      complete, naming each pending check and its owner, and records the
+      outcome as pending, never green. The owner reads the checks when they
+      finish and routes a red one to its lane.
     - **Red on this session's work** — fix before declaring complete. The
       [`local-broken-code-never-leaves`](../../rules/local-broken-code-never-leaves.md)
       rule applies; the
@@ -755,23 +817,33 @@ no retrospective memos; those are close-out work, this skill's §Steps.
       evidence and stop. Do not bundle handoff over a red gate.
 
     Owner-stated standing 2026-05-14 (carried by
-    [`gates/SKILL-CANONICAL.md`](../gates/SKILL-CANONICAL.md) and
+    [`gates/SKILL-CANONICAL.md`](../change-custody/gates/SKILL-CANONICAL.md) and
     [`build-system.md`](../../../docs/engineering/build-system.md)
     § `pnpm check` - Canonical full gate): session-handoff is not complete
-    in the individual-contributor or handoff-owner sense unless `pnpm check`
-    completes with no errors or warnings. This step makes that standing
-    direction structurally enforced rather than agent-recalled.
+    in the individual-contributor or handoff-owner sense unless the full
+    gate completes with no errors or warnings. Since the owner's ruling of
+    2026-09-14, that evidence is the landed commit's own hook run, never a
+    separate `pnpm check`. The suites the hook does not run are the pull
+    request's checks: one still running at the close does not hold it, and
+    is named with its owner under the Pending outcome above; one already red
+    blocks it. This step makes the standing direction structurally enforced
+    rather than agent-recalled.
 
-    **Singleton in multi-agent windows.** When two or more agents are
-    closing concurrently, only **one** of them runs the whole-repo
-    `pnpm check`. Apply the
+    **Singleton per working tree in multi-agent windows.** Where a
+    whole-repo gate run is warranted at all (it never is beside a commit,
+    per the ruling above), and two or more agents in one working tree are
+    closing concurrently, only **one** of them runs it; seats closing in
+    separate worktrees each may run their own under
+    [`no-unbounded-host-load`](../../rules/no-unbounded-host-load.md)
+    item 6. Apply the
     [`check-singleton-per-window`](../../rules/check-singleton-per-window.md)
     rule: before invoking `pnpm check`, broadcast on the comms stream
-    *"Lane &lt;name&gt; running pnpm check, ETA ~30s, will broadcast
-    result"*, observe peers' in-flight broadcasts and defer if one is
-    live, and broadcast the result event (green or red with first
-    blocker) carrying the HEAD SHA at run time. Peers consume the
-    result; do not duplicate the run.
+    *"Lane &lt;name&gt; running pnpm check in &lt;worktree&gt;, ETA ~30s,
+    will broadcast result"*, observe in-flight broadcasts that name the
+    same working tree and defer if one is live, and broadcast the result
+    event (green or red with first blocker) naming the tree and carrying
+    the HEAD SHA at run time. Peers in that tree consume the result; do
+    not duplicate the run.
 
 11a. **Dispatch PENDING reviewers if the session touched a plan body.**
     If a thread record's plan carries PENDING reviewer markers AND this
@@ -798,6 +870,6 @@ no retrospective memos; those are close-out work, this skill's §Steps.
     discover the dispatch obligation only at session-open.
 
 12. **Keep the boundary clean.** `session-handoff` includes the consolidation
-    gate and can escalate into `oak-consolidate-docs` when appropriate, but
+    gate and can escalate into `consolidate-docs` when appropriate, but
     ordinary sessions remain lightweight. It does not smuggle in review or git
     actions.

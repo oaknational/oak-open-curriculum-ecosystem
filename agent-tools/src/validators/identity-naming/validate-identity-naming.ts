@@ -26,7 +26,9 @@
  * stdout, with every human banner diverted to stderr, so the census authoring
  * source can be piped straight into a file. The exit code is the ordinary
  * verdict either way. Wired into root `repo-validators:check` (pre-commit AND
- * CI). Exit 0 = clean; 1 = findings; 2 = misconfiguration.
+ * CI). Exit 0 = clean; 1 = findings; 2 = refusal — misconfiguration, git could
+ * not list the tracked files (git's dubious-ownership refusal among them), or a
+ * tracked file could not be read.
  *
  * @packageDocumentation
  */
@@ -36,7 +38,8 @@ import path from 'node:path';
 
 import { resolveRepoRoot } from '../../core/repo-root.js';
 import { writeErrorLine, writeLine } from '../../core/terminal-output.js';
-import { listTrackedFiles, readScanFiles } from '../../core/tracked-file-scan.js';
+import { describeGitReadFailure, listTrackedFiles } from '../../core/repository-paths.js';
+import { readScanFiles } from '../../core/tracked-file-scan.js';
 
 import {
   CENSUS_PATH,
@@ -91,11 +94,17 @@ const { printCounts } = invocation.value;
 const writeVerdictLine = printCounts ? writeErrorLine : writeLine;
 
 const repoRoot = resolveRepoRoot(import.meta.url);
-const trackedPaths = listTrackedFiles(repoRoot);
-if (trackedPaths.length === 0) {
-  writeErrorLine('validate-identity-naming: zero tracked files scanned — refusing a vacuous pass.');
+// A failed listing and an empty one are both refusals: an empty listing is
+// the listing's own error value, so a vacuous pass cannot reach the scan.
+const listing = listTrackedFiles(repoRoot);
+if (!listing.ok) {
+  writeErrorLine(
+    `validate-identity-naming: cannot list tracked files — ` +
+      describeGitReadFailure(listing.error),
+  );
   process.exit(2);
 }
+const trackedPaths = listing.value;
 
 const scan = readScanFiles(repoRoot, trackedPaths);
 if (!scan.ok) {

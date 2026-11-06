@@ -6,6 +6,7 @@
  * directory and resolves repo-root-relative ledgers through injected fakes,
  * without filesystem or Elasticsearch IO.
  */
+import { join } from 'node:path';
 import { expect, it } from 'vitest';
 import { DEFAULT_FIELD_READBACK_LEDGER_PATH } from './field-readback-audit-cli.js';
 import { runFieldReadbackAuditCommand } from './field-readback-audit.js';
@@ -35,7 +36,7 @@ it('loads env from the script directory and resolves explicit relative ledgers f
   expect(callLog.loadRuntimeConfigProcessEnv).toEqual(processEnv);
   expect(callLog.loadRuntimeConfigStartDir).toBe(SCRIPT_DIR);
   expect(callLog.repoRootLookupStartDir).toBe(SCRIPT_DIR);
-  expect(callLog.ledgerPath).toBe('/repo/root/fixtures/empty-ledger.json');
+  expect(callLog.ledgerPath).toBe(join(REPO_ROOT, 'fixtures', 'empty-ledger.json'));
   expect(callLog.targetVersion).toBe('v2026-03-24-123456');
   expect(callLog.stdout).toEqual(['Field readback audit complete. entries=0\n']);
   expect(callLog.exitCodes).toEqual([]);
@@ -47,7 +48,7 @@ it('uses the default repo-root-relative ledger path when --ledger is omitted', a
 
   await runFieldReadbackAuditCommand([], {}, TEST_MODULE_URL, createCommandDeps(callLog));
 
-  expect(callLog.ledgerPath).toBe(`${REPO_ROOT}/${DEFAULT_FIELD_READBACK_LEDGER_PATH}`);
+  expect(callLog.ledgerPath).toBe(join(REPO_ROOT, DEFAULT_FIELD_READBACK_LEDGER_PATH));
   expect(callLog.attempts).toBe(6);
   expect(callLog.intervalMs).toBe(5000);
   expect(callLog.targetVersion).toBeUndefined();

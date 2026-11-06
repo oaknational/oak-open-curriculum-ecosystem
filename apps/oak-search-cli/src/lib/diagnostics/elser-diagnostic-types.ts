@@ -54,7 +54,7 @@ export interface DiagnosticConfig {
 /**
  * Summary statistics for diagnostic run.
  */
-export interface DiagnosticSummary {
+interface DiagnosticSummary {
   readonly totalDocuments: number;
   readonly totalSuccess: number;
   readonly totalFailures: number;

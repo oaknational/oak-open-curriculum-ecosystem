@@ -25,9 +25,17 @@ import type { CreateMcpAuthClerkDeps } from '../../src/auth/mcp-auth/index.js';
  * @see ADR-078 for the dependency injection rationale
  */
 export function createNoOpClerkMiddleware(): () => RequestHandler {
-  return () => (_req, _res, next) => {
-    next();
-  };
+  return noOpClerkMiddlewareFactory;
+}
+
+/** The pass-through standing in for Clerk's middleware: installs no `req.auth`, just continues. */
+const passThroughClerkMiddleware: RequestHandler = (_req, _res, next) => {
+  next();
+};
+
+/** The factory shape `CreateAppOptions.clerkMiddlewareFactory` takes, yielding the pass-through. */
+function noOpClerkMiddlewareFactory(): RequestHandler {
+  return passThroughClerkMiddleware;
 }
 
 /**
@@ -79,7 +87,7 @@ export function createMockRuntimeConfig(
       dangerouslyDisableAuth: true,
       env: {
         OAK_API_KEY: 'mock-oak-key',
-        ELASTICSEARCH_URL: 'http://fake-es:9200',
+        ELASTICSEARCH_URL: 'https://fake-es:9200',
         ELASTICSEARCH_API_KEY: 'fake-api-key-for-mock-config',
         SENTRY_MODE: 'off' as const,
         LOG_LEVEL: 'error' as const,
@@ -96,7 +104,7 @@ export function createMockRuntimeConfig(
       OAK_API_KEY: 'mock-oak-key',
       CLERK_PUBLISHABLE_KEY: 'pk_test_mock',
       CLERK_SECRET_KEY: 'sk_test_mock',
-      ELASTICSEARCH_URL: 'http://fake-es:9200',
+      ELASTICSEARCH_URL: 'https://fake-es:9200',
       ELASTICSEARCH_API_KEY: 'fake-api-key-for-mock-config',
       SENTRY_MODE: 'off' as const,
       LOG_LEVEL: 'error' as const,

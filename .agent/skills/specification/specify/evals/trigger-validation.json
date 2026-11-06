@@ -1,0 +1,12 @@
+[
+  { "query": "Write down what this component must do, preserve and permit, with its conditions and failure behaviour.", "should_trigger": true },
+  { "query": "Our requirements document mixes hopes, promises and observations; make its obligations precise and label what each statement is.", "should_trigger": true },
+  { "query": "A condition in our service contract changed; revise the specification and find what relies on the old condition.", "should_trigger": true },
+  { "query": "Specify what this exploratory project can legitimately promise a funder.", "should_trigger": true },
+  { "query": "Define the mapping contract between our API and the tool that consumes it, so both sides know what they owe.", "should_trigger": true },
+  { "query": "Who could use this feature, for what purpose, and is the value claim justified?", "should_trigger": false },
+  { "query": "Can these two individually specified services be relied on together?", "should_trigger": false },
+  { "query": "Does the evidence we have justify shipping revision 4 to production?", "should_trigger": false },
+  { "query": "Implement the settled heap contract and its tests.", "should_trigger": false },
+  { "query": "Schedule the approved implementation tasks for the next fortnight.", "should_trigger": false }
+]

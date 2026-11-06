@@ -21,17 +21,17 @@ for the operational-memory surfaces and authority order within them.
 
 | Layer | Purpose | Surfaces | Read trigger |
 | --- | --- | --- | --- |
-| **Doctrine** | Read-and-internalise; sets stance for every session | `.agent/directives/` (AGENT.md, principles, testing-strategy, schema-first-execution, metacognition, orientation) | Session open — Ground First step 1 |
+| **Doctrine** | Read-and-internalise; sets stance for every session | `.agent/directives/` (`AGENT.md` is the index, and the rest are read by trigger per its §Essential Links) | Session open — Ground First step 1 |
 | **Portable Doctrine** | Cross-repo Practice doctrine; travels with Practice Core | `.agent/practice-core/` (trinity, PDRs, patterns) | Orientation + when Practice questions arise |
 | **Active Memory** | Learning loop — capture, distil, graduate, enforce | `.agent/memory/active/` (napkin, distilled, patterns, archive) | Session open — Ground First step 3 |
 | **Operational Memory** | Continuity / session-resume state | `.agent/memory/operational/` (repo-continuity, threads) | Session open — Ground First step 4 |
 | **Executive Memory** | Stable organisational contracts and catalogues | `.agent/memory/executive/` (artefact inventory, reviewer catalogue, adapter matrix) | Ad-hoc lookup when taking an action the surface governs |
-| **Plans** | Scope, sequencing, acceptance criteria | `.agent/plans/` (V0 corpus: `delivery/`, `practice/`, the milestone plan; prior estate in `.agent/plans-backlog-2026-07/`) | When picking up a lane |
+| **Plans** | Scope, sequencing, acceptance criteria | `.agent/plans/` (the plan-node estate, laid out as the README in that directory states; the pre-migration corpus is conserved in a dated directory beside it) | When picking up a lane |
 | **Reference** | Curated library — owner-vetted evergreen read-to-learn material; promotion-gated ([PDR-032](../practice-core/decision-records/PDR-032-reference-tier-as-curated-library.md)) | `.agent/reference/` | When consulting promoted reference material |
 | **Research** | Default exploratory-synthesis tier and holding bay for un-promoted material | `.agent/research/` (with optional transient `notes/` holding bay) | When investigating a topic, or when authoring fresh material that has not been (and may not be) promoted to reference |
 | **Workflow** | Named rituals and canonical skills | `.agent/skills/`, `.agent/rules/`, `.agent/sub-agents/` | On invocation or trigger |
 | **Platform Adapters** | Thin wrappers pointing back at canonical surfaces | `.cursor/`, `.claude/`, `.gemini/`, `.agents/`, `.codex/` | Platform-specific activation |
-| **Operator-Local Profile** | Machine-local facts about the human at *this* machine: credential bindings, tone of voice, personal operating preferences. Lowest authority; see below | `.agent/operator-local/` (tracked README, untracked `profile.md`) | Session open — grounding, via the shared start-right workflow |
+| **Operator-Local Profile** | Facts about the human operator that no tracked surface may carry — credential bindings by name, tone of voice, personal operating preferences — in three scopes: operator-wide (`index.md`), one repository (`repos/<scope-key>.md`) and one machine (`machines/<machine-key>.md`). Lowest authority; see below | `~/.practice/profile/` (home directory, shared by every Practice repository on the machine; may not exist; [PDR-141](../practice-core/decision-records/PDR-141-operator-profile-in-the-home-directory.md)) | Session open — grounding, via the shared start-right workflow |
 
 ## Authority Order (for same-scope conflicts)
 
@@ -39,7 +39,7 @@ When two surfaces make conflicting claims on the same field, the
 higher-authority surface wins. This is a tiebreaker for same-scope
 conflicts, not a gating rule across different-scope claims.
 
-1. **Plans** (`.agent/plans/`, V0 corpus) — scope, sequencing,
+1. **Plans** (`.agent/plans/`) — scope, sequencing,
    acceptance criteria, validation.
 2. **`memory/operational/repo-continuity.md`** — canonical continuity
    contract.
@@ -53,7 +53,7 @@ explicitly amends the ADR in the same commit.
 ### The Operator-Local Profile Tier
 
 The operator-local tier sits **below every tracked surface** in this order. It
-is invisible to every other checkout and to CI, so it can never be the
+is invisible to every other machine and to CI, so it can never be the
 authority for anything a second reader must see.
 
 **A local binding or preference cannot override tracked governance.** Where the
@@ -67,15 +67,17 @@ by correcting or graduating it, never by acting on it.
 The tier is authoritative on exactly one thing: the machine-local **binding**
 that a tracked surface deliberately declines to name, because naming it would
 be false on another machine (`principles.md` §Any User, Any Machine). Where a
-tracked rule owns the portable mapping and points here for the binding — as
-[`bot-identity-on-third-party-systems`](../rules/bot-identity-on-third-party-systems.md)
-does for which credential performs which action class — the profile supplies
+tracked rule owns the portable mapping and points here for the binding
+— the profile supplies
 the binding and nothing else.
 
 A missing profile is the expected condition, not a defect: readers proceed on
-tracked defaults and say nothing. The full contract, including what must never
-be stored there, is
-[`.agent/operator-local/README.md`](../operator-local/README.md).
+tracked defaults and say nothing. The tier lives in the home directory,
+`~/.practice/profile/`, shared by every Practice repository on the machine
+(PDR-141, 2026-09-14); the full contract, including what must never be stored
+there, is
+[PDR-141](../practice-core/decision-records/PDR-141-operator-profile-in-the-home-directory.md)
+and the Core schema it names.
 
 ## Routing Rule
 

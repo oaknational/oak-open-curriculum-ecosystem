@@ -37,5 +37,7 @@ export interface CheckProfileArtifact {
   readonly environment: CheckProfileEnvironmentEvidence;
   readonly outputLog?: string;
   readonly failurePhase: CheckProfileFailurePhase;
+  /** The leg a failed captured run stopped in: the last whose start line the output carries. */
+  readonly failedLeg?: string;
   readonly postTurboGateStatus: PostTurboGateStatus;
 }

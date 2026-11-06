@@ -61,8 +61,9 @@ function resolveHeartbeatFile(options: Options, seenFile: string): string | unde
  * exit path at all — the watcher rule mandates the supervisor pid.
  *
  * Liveness surface (FM-2 cure, 2026-05-23; default-on 2026-06-10): the watcher
- * writes a substrate-typed heartbeat JSON every `--heartbeat-interval-ms`
- * milliseconds (default 30000) with `last_drain_at`, `last_emit_at`,
+ * writes a substrate-typed heartbeat JSON after its first pass, then on the
+ * first pass ending one `--heartbeat-interval-ms` (default 30000) after the
+ * previous write, with `last_drain_at`, `last_emit_at`,
  * `last_error_at`, `emitted_count`, the `pid`, and the lexically absolute
  * comms directory actually drained. The path is the seen-file's derived
  * default (`<seen-file>.heartbeat.json`) unless `--heartbeat-file` overrides

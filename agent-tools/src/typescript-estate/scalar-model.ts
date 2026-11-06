@@ -1,15 +1,12 @@
-/** Repository-relative POSIX path validated at the document boundary. */
-export type RepoPath = string;
-
-/** Workspace package name validated against the frozen package-name grammar. */
-export type WorkspacePackageName = string;
-
-/** Lower-case hexadecimal SHA-256 validated at the document boundary. */
-export type Sha256 = string;
-
-/** Full hexadecimal Git object id validated at the document boundary. */
-export type GitObjectId = string;
-
+/**
+ * The tuple shapes the estate documents share. The scalar fields they once
+ * aliased (a repository-relative POSIX path, a workspace package name, a
+ * lower-case SHA-256, a Git object id) are plain strings validated at the
+ * document boundary by their zod schemas; an alias of `string` carries no
+ * guarantee the schema does not, so the fields say `string`.
+ *
+ * @packageDocumentation
+ */
 export type NonEmptyReadonlyArray<T> = readonly [T, ...T[]];
 export type AtLeastTwoReadonly<T> = readonly [T, T, ...T[]];
 export type AtLeastThreeReadonly<T> = readonly [T, T, T, ...T[]];

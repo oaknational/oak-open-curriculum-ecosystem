@@ -4,7 +4,7 @@ fitness_line_limit: 1100
 fitness_char_limit: 70000
 fitness_line_length: 100
 fitness_content_role: reference
-overflow_disposition: 'leave-if-live; else conserve-insight-and-delete — never archive/split/rotate/shard (see continuity-practice.md §Disposition of Continuity Surfaces)'
+overflow_disposition: 'leave-if-live; else graduate, then archive to a dated file proven byte-identical — never before full processing, never split/shard (see continuity-practice.md §Disposition of Continuity Surfaces)'
 merge_class: index-narrative-tables
 ---
 # Next-Session Record — `architectural-budget-system` thread
@@ -23,6 +23,7 @@ No validator, rule, threshold, refactor, ADR amendment, or gate was implemented.
 | --- | --- | --- | --- | --- | --- | --- |
 | `Nebulous Weaving Dusk` | `codex` | `GPT-5` | `019dd7` | `architectural-budget-planning-and-adr-handoff` | 2026-04-29 | 2026-04-29 |
 | `Spark seeks Pumice` | `codex` | `GPT-5` | `019f61` | `architectural-fitness-concept-exploration-and-handoff` | 2026-07-15 | 2026-07-15 |
+| `Kinkajou binds Lair` | `claude-code` | `claude-fable-5-1` | `e17ab4` | `owner-ruling-record-reliable-atoms-workspace-class` | 2026-09-14 | 2026-09-14 |
 
 Identity discipline remains additive per
 [PDR-027](../../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
@@ -51,11 +52,34 @@ Validation evidence:
 - `pnpm markdownlint-check:root`
 - `git diff --check` scoped to the touched ADR/planning files
 
+## 2026-09-14 — owner ruling recorded (Kinkajou binds Lair, docs only, uncommitted at close)
+
+The owner ruled, for the Reliable Atoms programme: the workspaces holding
+Reliable Atoms are a declared class subject to a BLOCKING directory-cardinality
+validator in the repository validator framework (initial parameters five
+TypeScript files and seven files of any kind per directory, tweaks at edge
+cases found inside the class); every length, complexity and clarity budget is
+stricter for the class; the check is a validator, never ESLint and never a
+test; the unregistered `max-files-per-dir` ESLint rule is deleted. Records:
+ADR-166 §Amendment 2026-09-14, ADR-230 §Repository interpretation, the
+programme node's 2026-09-14 amendment and bar element 10, the delivery node
+`reliable-atoms-workspace-shape` (values, instruments, empty edge-case
+ledger), and the research note
+`reliable-atoms-workspace-shape-exploration-2026-09-14.md`. This thread's
+open question — signal versus invariant for the ESTATE-WIDE report-only
+signal — is unchanged and still owner-gated; the class answered it for
+itself only. Owner correction the same hour, binding on any seat that
+resumes here: never measure a non-atom workspace to calibrate the class; a
+workspace that does not fit the class's starting parameters is outside the
+class, a special case recorded as its own fact.
+
 ## Next Landing Target
 
 The next action is an owner decision, not implementation: ratify, revise, or
 reject the proposal that directory cardinality should be a non-blocking signal
-in the repository validator framework rather than a per-file ESLint gate.
+in the repository validator framework rather than a per-file ESLint gate —
+for the estate outside the Reliable Atoms workspace class (the class is ruled;
+see the 2026-09-14 note above).
 
 If ratified, the next executable landing is Phase 2 of the re-founded child
 plan: deterministic discovery, explicit file-role classification, and stable

@@ -41,7 +41,7 @@ const BulkResponseItemSchema = z.object({
 /**
  * Zod schema for detailed bulk response.
  */
-export const DetailedBulkResponseSchema = z.object({
+const DetailedBulkResponseSchema = z.object({
   errors: z.boolean(),
   took: z.number().optional(),
   items: z.array(BulkResponseItemSchema),
@@ -50,7 +50,7 @@ export const DetailedBulkResponseSchema = z.object({
 /**
  * Extract document ID from bulk operation action line.
  */
-export function extractDocumentId(actionLine: BulkOperationEntry): string | undefined {
+function extractDocumentId(actionLine: BulkOperationEntry): string | undefined {
   if ('index' in actionLine && actionLine.index && '_id' in actionLine.index) {
     return actionLine.index._id;
   }

@@ -80,6 +80,11 @@ moment play borrows the foundational pair, and only there.
   (it can now name its contribution — the border is crossed honestly).
 - A small sharp observation → the napkin, marked as a play seed.
 - Most seeds → nowhere, and that is correct.
+- **The discard pile is re-read against the live question before it is dropped.**
+  A discard judged "documented and nothing more" can be the plain fact a later
+  question turns on: a vendor's 👍 for a clean review was discarded as forced on
+  2026-09-15, and the next evening turned on exactly that positive signal. Keep
+  discarding visibly; re-read the pile when the day's question changes.
 - **"Nothing appeared" is a valid, complete outcome.** Say it plainly and
   stop. This outcome must actually occur sometimes: a play practice that
   always returns insights is confabulating, and the practice — not the

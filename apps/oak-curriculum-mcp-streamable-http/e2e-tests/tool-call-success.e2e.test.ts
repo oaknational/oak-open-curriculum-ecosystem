@@ -102,7 +102,7 @@ function assertSuccessfulResponse(res: Response, captured: CapturedCall[]): void
   const payload = parseToolSuccessPayload(result);
   expect(payload.status).toBe(200);
   if (!Array.isArray(payload.data)) {
-    throw new Error('Tool payload data must be an array');
+    throw new TypeError('Tool payload data must be an array');
   }
   expect(payload.data).toHaveLength(2);
   expect(payload.data[0]).toHaveProperty('canonicalUrl');

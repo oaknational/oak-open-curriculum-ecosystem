@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { PR_VERDICT_STATES } from './state-types.js';
-import type { PrStateReading } from './state-types.js';
+import { COPILOT, LATE_NOW, OLD_TIP, settledReading, TIP } from './state-reading-fixture.js';
 import { computePrVerdict } from './states.js';
 
 /**
@@ -12,50 +12,11 @@ import { computePrVerdict } from './states.js';
  * min quiet window, and the latestReviews backwards-pointer.
  */
 
-const TIP = 'a'.repeat(40);
-const OLD_TIP = 'b'.repeat(40);
-const COPILOT = 'copilot-pull-request-reviewer';
-/** A now safely past every fixture timestamp's quiet window. */
-const LATE_NOW = '2026-07-21T13:00:00Z';
-
-function settledReading(overrides: Partial<PrStateReading> = {}): PrStateReading {
-  return {
-    number: 999,
-    url: 'https://github.com/oaknational/oak-open-curriculum-ecosystem/pull/999',
-    state: 'OPEN',
-    isDraft: false,
-    mergeable: 'MERGEABLE',
-    mergeStateStatus: 'BLOCKED',
-    headRefOid: TIP,
-    checks: { total: 3, passed: 3, failed: 0, pending: 0 },
-    namedChecks: [
-      { name: 'secret-scan', bucket: 'passed' },
-      { name: 'SonarCloud Code Analysis', bucket: 'passed' },
-      { name: 'CI / static-checks', bucket: 'passed' },
-    ],
-    checksGreenAt: '2026-07-21T12:00:00Z',
-    reviewThreads: { total: 4, unresolved: 0 },
-    autoMergeArmed: false,
-    reviewRequests: [],
-    expectedReviewers: [COPILOT],
-    expectedDeclared: true,
-    reviews: [
-      {
-        author: COPILOT,
-        state: 'COMMENTED',
-        body: 'Reviewed 2 of 2 files.',
-        commitOid: TIP,
-        submittedAt: '2026-07-21T12:05:00Z',
-      },
-    ],
-    reviewRuns: { kind: 'read', runs: [] },
-    ...overrides,
-  };
-}
+/** A locale ordering of state names, so two listings compare independent of declaration order. */
+const byLocale = (left: string, right: string): number => left.localeCompare(right);
 
 describe('PR_VERDICT_STATES', () => {
   it('is the closed set from the plan plus the typed extensions', () => {
-    const byLocale = (left: string, right: string): number => left.localeCompare(right);
     expect([...PR_VERDICT_STATES].sort(byLocale)).toEqual(
       [
         'SETTLE-READY',
@@ -72,6 +33,7 @@ describe('PR_VERDICT_STATES', () => {
         'ARMED-BEHIND-RED',
         'QUOTA-SKIPPED',
         'SETTLED-NO-REVIEW',
+        'UNCLASSIFIED-EVIDENCE',
         'MERGED',
         'CLOSED',
         'CONFLICT-DIRTY',
@@ -295,6 +257,55 @@ describe('computePrVerdict — per-reviewer legs (the collapsed-legs r2 class)',
   });
 });
 
+describe('computePrVerdict — empty-bodied reviews never settle a round (the thread-reply artefact)', () => {
+  it('a tip-bound EMPTY review never satisfies the leg — the round is not merge-eligible', () => {
+    const verdict = computePrVerdict(
+      settledReading({
+        reviews: [
+          {
+            author: COPILOT,
+            state: 'COMMENTED',
+            body: '',
+            commitOid: TIP,
+            submittedAt: '2026-07-21T12:05:00Z',
+          },
+        ],
+      }),
+      LATE_NOW,
+    );
+    expect(verdict.state).toBe('SETTLED-NO-REVIEW');
+  });
+
+  it('an empty review never ANCHORS the quiet window — the window measures reviewer activity, not the seat’s own replies', () => {
+    // Worked instance 2026-09-15 (#147): the anchor excluded PENDING drafts
+    // and SIGNED self-replies, but an empty body is neither — so the window
+    // anchored on the seat's own thread reply at 15:44:32Z, seven minutes
+    // after the round's last real review.
+    const verdict = computePrVerdict(
+      settledReading({
+        reviews: [
+          {
+            author: COPILOT,
+            state: 'COMMENTED',
+            body: 'Reviewed 2 of 2 files.',
+            commitOid: TIP,
+            submittedAt: '2026-07-21T12:05:00Z',
+          },
+          {
+            author: 'el-graphael',
+            state: 'COMMENTED',
+            body: '',
+            commitOid: TIP,
+            submittedAt: '2026-07-21T12:58:00Z',
+          },
+        ],
+      }),
+      '2026-07-21T13:00:00Z',
+    );
+    expect(verdict.state).toBe('SETTLE-READY');
+  });
+});
+
 describe('computePrVerdict — run liveness per reviewer', () => {
   it('WAITING-REVIEW-RUN-LIVE when the owed requested reviewer has a live run', () => {
     const verdict = computePrVerdict(
@@ -373,6 +384,120 @@ describe('computePrVerdict — base currency and vacuous sets', () => {
     );
     expect(verdict.state).toBe('SILENT-WAIT-NO-REVIEWER');
     expect(verdict.evidence.join('\n')).toContain('EMPTY');
+  });
+
+  it('a set DECLARED empty (--expect none) settles once the quiet window after checks green elapses, naming the declaration', () => {
+    // The owner's word of 2026-10-27: the one question is whether the work
+    // needs a review to be safe and effective; a seat that judged it does
+    // not says so, and the verdict carries that judgement into the record.
+    const verdict = computePrVerdict(
+      settledReading({ expectedReviewers: [], expectedDeclared: true, reviews: [] }),
+      LATE_NOW,
+    );
+    expect(verdict.state).toBe('SETTLE-READY');
+    expect(verdict.evidence.join('\n')).toContain('--expect none');
+    expect(verdict.evidence.join('\n')).toContain('safe and effective');
+    expect(verdict.evidence.join('\n')).toContain("this one's author is app/el-graphael");
+  });
+
+  it('a set DECLARED empty still waits out the quiet window after checks green', () => {
+    // Checks green at 12:00 in the fixture; 12:05 is inside the window.
+    const verdict = computePrVerdict(
+      settledReading({ expectedReviewers: [], expectedDeclared: true, reviews: [] }),
+      '2026-07-21T12:05:00Z',
+    );
+    expect(verdict.state).toBe('SETTLING-QUIET-WINDOW');
+  });
+
+  it('a set DECLARED empty anchors its window on checks green, not on a review that landed before it', () => {
+    // Checks green at 12:00; a review landed at 11:50; 12:07 is seven minutes
+    // after checks green, so the window is open whatever the review's age.
+    const verdict = computePrVerdict(
+      settledReading({
+        expectedReviewers: [],
+        expectedDeclared: true,
+        reviews: [
+          {
+            author: COPILOT,
+            state: 'COMMENTED',
+            body: 'Reviewed.',
+            commitOid: TIP,
+            submittedAt: '2026-07-21T11:50:00Z',
+          },
+        ],
+      }),
+      '2026-07-21T12:07:00Z',
+    );
+    expect(verdict.state).toBe('SETTLING-QUIET-WINDOW');
+    expect(verdict.evidence.join('\n')).toContain('after 2026-07-21T12:00:00Z');
+  });
+
+  it('a set DECLARED empty does not extend its window for a review that lands after checks green', () => {
+    // The declaration waits for no reviewer: a review at 12:08 leaves the
+    // window measured from checks green at 12:00, elapsed by 12:11.
+    const verdict = computePrVerdict(
+      settledReading({
+        expectedReviewers: [],
+        expectedDeclared: true,
+        reviews: [
+          {
+            author: COPILOT,
+            state: 'COMMENTED',
+            body: 'Reviewed.',
+            commitOid: TIP,
+            submittedAt: '2026-07-21T12:08:00Z',
+          },
+        ],
+      }),
+      '2026-07-21T12:11:00Z',
+    );
+    expect(verdict.state).toBe('SETTLE-READY');
+  });
+
+  it('a set DECLARED empty settles beside an outstanding request and a live run, and names both', () => {
+    // The declaration is the seat's judgement, so neither holds the round;
+    // the record of the irreversible act must still say what was in flight.
+    const verdict = computePrVerdict(
+      settledReading({
+        expectedReviewers: [],
+        expectedDeclared: true,
+        reviews: [],
+        reviewRequests: [COPILOT],
+        reviewRuns: {
+          kind: 'read',
+          runs: [
+            { id: 'run-1', name: 'Review', createdAt: '2026-07-21T12:01:00Z', completedAt: null },
+          ],
+        },
+      }),
+      LATE_NOW,
+    );
+    expect(verdict.state).toBe('SETTLE-READY');
+    const evidence = verdict.evidence.join('\n');
+    expect(evidence).toContain(`${COPILOT}: review requested on this tip and not expected`);
+    expect(evidence).toContain('review run is live');
+  });
+
+  it('a set DECLARED empty does not override a refused unavailability declaration', () => {
+    const verdict = computePrVerdict(
+      settledReading({
+        expectedReviewers: [],
+        expectedDeclared: true,
+        reviews: [],
+        declaredUnavailable: {
+          standIns: [],
+          refused: [
+            {
+              login: COPILOT,
+              url: 'https://github.com/acme/widgets/pull/999#issuecomment-1',
+              refusal: 'names a reviewer that is not expected',
+            },
+          ],
+        },
+      }),
+      LATE_NOW,
+    );
+    expect(verdict.state).toBe('UNCLASSIFIED-EVIDENCE');
   });
 
   it('a missing quiet-window anchor holds the window open, never silently settles', () => {
@@ -511,6 +636,23 @@ describe('computePrVerdict — round-4 residual classes (2026-07-21)', () => {
       LATE_NOW,
     );
     expect(verdict.state).toBe('SETTLING-QUIET-WINDOW');
+  });
+
+  it("an EMPTY review with no submittedAt neither anchors nor holds open the quiet window: the round settles on the real review's time (#149 round two)", () => {
+    // Literal-input case: the empties exclusion runs first, so a thread-reply
+    // artefact whose timestamp gh omitted neither anchors the window nor
+    // holds it open — the round settles on the real review's own time.
+    const verdict = computePrVerdict(
+      settledReading({
+        reviews: [
+          ...settledReading().reviews,
+          { author: COPILOT, state: 'COMMENTED', body: '', commitOid: TIP, submittedAt: '' },
+        ],
+      }),
+      LATE_NOW,
+    );
+    expect(verdict.state).toBe('SETTLE-READY');
+    expect(verdict.evidence.join('\n')).toContain('1 tip-bound empty-bodied review ignored');
   });
 
   it('a TRUNCATED run list never asserts deadness — the requested owed leg reads RUNS-UNREADABLE (r5 regression)', () => {

@@ -16,7 +16,7 @@ This guide codifies a systematic analysis process that surfaces those hidden
 risks before the merge begins.
 
 For an agent-executable workflow wrapping this guide, see the
-[complex-merge skill](../../.agent/skills/complex-merge/SKILL-CANONICAL.md).
+[complex-merge skill](../../.agent/skills/change-custody/complex-merge/SKILL-CANONICAL.md).
 
 ## When to Use This Guide
 
@@ -156,6 +156,13 @@ Check for ADRs, plan files, or generated files where both branches used
 the same number or name for different content. Git merges these silently
 because the filenames differ.
 
+Across lineages (a fork integrating its upstream) the rule is fixed so
+that it never needs deciding: upstream's sequence is authoritative; the
+fork's colliding record is renumbered to the next free number in the
+same commit as the sync, with every citation updated and the index rows
+confirmed; the fork never reserves a block of numbers, because a block
+is estate identity carried in the tree (ADR-231).
+
 ### 4e. Dependency version conflicts
 
 Compare `package.json` changes on both sides. If both branches updated
@@ -194,6 +201,34 @@ Check: which existing tests exercise the integration boundary between your
 branch's changes and the other branch's changes? Run them against both
 branches independently to confirm they pass. These are your existing safety
 net — new characterisation tests should cover gaps, not duplicate coverage.
+
+### 4i. Premise cascades in prose
+
+The other branch changes a fact — a served shape, a published field, a
+version, a count — that documents and plans on your branch state as a
+premise. Their text merges untouched, because the other branch never
+edited them, and their meaning is now false. Type-check proves code and a
+generator's own check proves generated pages; nothing proves prose, so this
+gap is closed by reading.
+
+Derive the sweep terms from the change's claims, never from its file list:
+the wording the other branch retracted (its ADR amendments, changelog,
+thread record, PR body), the new facts it introduces, and the old facts
+those replace (the negations — "unordered", "not yet", "published on no
+surface", the previous version string). Enumerate every document that
+differs between the two tips (`git diff --name-only <other-tip> <your-tip>
+-- '*.md' '*.json'`) — the files only your branch holds (plans, runbooks,
+research and report records, executive memory, generated pages whose
+generator lives only on your branch) AND every shared file both branches
+edited, since git auto-merges a runbook whose two paragraphs now
+contradict each other. The keyword search is discovery; completeness is
+reading the enumerated files' claims. Give every hit one disposition and record it in the pull
+request — re-true a permanent document; narrow a plan whose scope is
+partly overtaken; archive a plan whose whole premise the other branch
+delivered; add a dated section to a dated record, never rewrite it. The
+sweep is complete when a second pass over the same terms finds nothing
+new. For a lineage sync (a fork integrating its upstream) the
+cross-fork-integration skill runs this step as §6.
 
 ## Phase 5: Create Characterisation Tests
 
@@ -266,6 +301,7 @@ Use this checklist to ensure nothing is missed:
 - [ ] Grepped for imports of deleted files on your branch
 - [ ] Identified files added by both branches (add/add collisions)
 - [ ] Checked for numbering collisions (ADRs, plans)
+- [ ] Swept documents and plans for refuted premises (§4i) and recorded each disposition
 - [ ] Categorised every conflict (trivial/mechanical/semantic/structural)
 - [ ] Checked for auto-merged files that call changed interfaces
 - [ ] Checked for auto-merged files that import deleted modules

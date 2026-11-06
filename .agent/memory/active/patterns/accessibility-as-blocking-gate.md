@@ -3,6 +3,7 @@ name: "Accessibility as a Blocking Gate"
 polarity: pattern
 use_this_when: "A project ships user-facing HTML and needs to prove WCAG compliance automatically"
 category: testing
+layer: general
 proven_in: "opal-connection-site/tests/accessibility.spec.ts"
 proven_date: 2026-03-28
 barrier:

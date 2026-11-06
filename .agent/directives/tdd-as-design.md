@@ -43,10 +43,17 @@ and every check the test-expert applies, derives from it.
    in separate commits treats one act as two outputs.
 3. **A unit test is never enough on its own to show that value is
    delivered.** Scales (unit / integration / E2E / UI / a11y / visual)
-   are complementary and run in parallel. The higher-scale tests
-   describe value flow that lower-scale tests cannot reach. Different
-   scales have different greening costs, and that is intentional, not a
-   flaw to optimise away.
+   are complementary and run in parallel. The higher-scale tests and
+   checks describe value flow that lower-scale tests cannot reach.
+   Different scales have different greening costs, and that is
+   intentional, not a flaw to optimise away. The scales that drive a
+   running system (E2E, a browser journey at the UI scale, a11y, visual
+   regression) use IO, so they are validation checks, not tests
+   (`testing-strategy.md` §Philosophy); a component's rendered
+   behaviour, proven in process, is an integration test. The cycle
+   discipline applies to the checks unchanged, as checks written
+   before the code they describe, and "test" at those scales in this
+   directive reads "check".
 
 ## The Atomic Landing Invariant
 
@@ -56,11 +63,12 @@ and product code never travel in separate commits.**
 
 If a test cannot be greened in a single landing, the slice is too big.
 Break the test+code pair into smaller pairs and land each as its own
-cycle. If the higher-level test (integration, E2E) requires several
-lower-level cycles before it can be greened, sequence the lower-level
-cycles first and finish with the commit that adds the final piece
-that makes the higher-level test green. Every commit ends with all
-tests passing at every level.
+cycle. If the higher-level proof (an integration test or an E2E check)
+requires several lower-level cycles before it can be greened, sequence
+the lower-level cycles first and finish with the commit that adds the
+final piece that makes the higher-level proof green. Every commit ends
+with every test and check the landing's gates run passing, at every
+level.
 
 **Forbidden shapes** (each is a TDD violation, not merely a process
 slip):
@@ -85,11 +93,14 @@ needed for internal restructuring.
 ## One State, One Describing Surface
 
 A multi-cycle plan moves the system toward a system state. That state
-has **one place where it is observable from a test, in the form the
-code actually runs** — the workflow seam, the persisted record, the
-rendered output, or the effect on an external surface. Every cycle's
-tests in the plan describe that surface, even when the cycles'
-internal mechanics differ.
+has **one place where it is observable, in the form the code actually
+runs** — the workflow seam, the persisted record, the rendered output,
+or the effect on an external surface. A test observes the seam, the
+record and the output in process, with every IO dependency injected;
+observing an effect on an external surface is IO, so a check observes
+it and a test never does. Every cycle's tests and checks in the plan
+describe that surface, even when the cycles' internal mechanics
+differ.
 
 Cycles that produce tests below the describing surface are
 **scaffolding tests**. They exist for the implementer's confidence
@@ -111,27 +122,29 @@ apply the constraint during cycle decomposition.
 
 ## Why Scales Are Complementary
 
-Each test scale describes a different swathe of behaviour:
+Each scale describes a different swathe of behaviour, the unit and
+integration scales by tests and the E2E, UI, a11y and visual
+regression scales by checks:
 
 | Scale | What it describes | What it cannot describe |
 |-------|-------------------|--------------------------|
 | Unit | A single pure function's behaviour from inputs to outputs | How units compose into a feature |
 | Integration | Several units composed at a boundary | Whether the system delivers value end to end |
 | E2E (system) | A whole-system behaviour through its protocol/transport | Visual presentation, accessibility, runtime performance |
-| UI | A component's rendered behaviour | Whole-system flow |
+| UI | A browser journey through the rendered interface | Whole-system flow |
 | a11y | Emergent accessibility properties | Functional correctness |
 | Visual regression | Appearance stability | Behaviour |
 
 A unit test proves *that the unit works in isolation*; it never proves
 that *value reaches a user*. You always need at least one higher-scale
-test to prove value flow, even when the unit tests are exhaustive.
-Conversely, a high-scale test alone leaves the lower scales unspecified
+test or check to prove value flow, even when the unit tests are exhaustive.
+Conversely, a high-scale check alone leaves the lower scales unspecified
 and the implementation under-described.
 
 The doctrine is therefore: **all the scales, all the time, in
 parallel cycles**. The cost difference between scales is intentional —
 a unit test is fast to green because it specifies narrow behaviour; an
-E2E test is slower to green because it specifies whole-system
+E2E check is slower to green because it specifies whole-system
 behaviour and requires many lower-level pieces to be in place first.
 Collapsing scales toward the cheapest one is *not* an optimisation; it
 is a description gap that future failure will exploit.
@@ -167,15 +180,14 @@ refactoring. They should be deleted or rewritten as descriptions.
 
 - `principles.md` §Code Quality — TDD is named there as a non-negotiable;
   this directive is the foundational definition that "TDD" expands to.
-- `testing-strategy.md` — defines the test-type taxonomy (unit /
-  integration / E2E / smoke); this directive defines *why* tests
+- `testing-strategy.md` — defines the taxonomy (unit and integration
+  tests; E2E and smoke as validation checks); this directive defines *why* tests
   exist and *how* they relate to product code. The two are
   complementary; in cases of conflict, this directive's
   foundational definition is authoritative on intent and the
   testing-strategy taxonomy is authoritative on shape.
-- `validation-strategy.md` (forthcoming under plan
-  `validation-and-tdd-doctrine-restructure`) — the umbrella that
-  positions tests as one of several validation surfaces.
+- `validation-strategy.md` — the umbrella that positions tests as one
+  of several validation surfaces.
 - `.agent/rules/no-conditional-tests.md`,
   `no-global-state-in-tests.md`, `test-immediate-fails.md` — the
   rule surface operationalising this directive (the skip
@@ -193,8 +205,6 @@ refactoring. They should be deleted or rewritten as descriptions.
   examples of the cycle at each scale, atomic-landing scenarios,
   parallel-cycle sequencing for multi-level deliveries, refactoring
   TDD edge cases) lives in the recipes file and grows over time.
-  The plan `validation-and-tdd-doctrine-restructure` (P2) promotes
-  this seed into the full playbook.
 - **It is not a process checklist.** It is a description of what TDD
   *is*. The atomic landing invariant has process consequences, but
   the invariant exists because of the foundational definition, not

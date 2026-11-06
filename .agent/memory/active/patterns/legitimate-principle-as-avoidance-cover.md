@@ -3,6 +3,7 @@ name: "A Legitimate Principle Invoked as Cover for Not Doing the Work"
 polarity: anti-pattern
 use_this_when: "You are about to NOT do something — not investigate, not graduate, not act — and the justification is a real principle (conservation, owner-authority, restraint, proportionality)."
 category: process
+layer: general
 proven_in: "2026-06-29 dedicated consolidation (Borealis binds Genesis): three owner corrections in one session, all the same shape — (1) 'don't chase fitness numbers' bent into a metadata-only 'residual' verdict on two over-limit files without reading them; (2) 'owner-routed synthesis' bent into deferring the graduation of learned Director-craft lessons into PDR-117; (3) 'don't over-reach' bent into asking permission to run a drain inside a consolidation session whose job is to drain."
 proven_date: 2026-06-29
 related_pdr: PDR-089
@@ -19,6 +20,8 @@ barrier:
 > [`README.md` § Polarity](README.md#polarity-required-every-pattern).
 
 # A Legitimate Principle Invoked as Cover for Not Doing the Work
+
+Imported from OCE at pin `e477e62f7` on 2026-09-14 (practice-completion closure item 4, row 6). The worked instances and measurements are OCE's; local divergence is recorded where it exists.
 
 The dangerous cousin of [`fluency-is-a-failure-vector`](fluency-is-a-failure-vector.md).
 Fluency is a *smooth* justification you over-trust; this is a *true* justification

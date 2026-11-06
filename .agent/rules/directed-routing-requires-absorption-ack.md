@@ -1,3 +1,9 @@
+---
+classification: situational
+description: In a live team session, a directed comms event carrying routing or an ask gets ACK-REQUESTED in its subject; on absorbing one, reply with a content-bearing threaded ack (comms reply, or --in-response-to) whose title back-references the antecedent, id read from the event store, never from watcher-output memory. Not for pure-FYI directed events or broadcast traffic. An unanswered challenge past ~10 minutes is absorb-absent evidence to verify, never a stall verdict. Failure shapes — a bare unthreaded ACK certifying nothing; a heartbeat-fresh seat reading live while coordination goes unabsorbed.
+trigger: session:team — Team session active; a directed event carrying routing or an ask sent or absorbed
+---
+
 # Directed Routing Requires an Absorption Ack
 
 A directed comms event that carries routing or an ask is a bounded
@@ -11,8 +17,7 @@ that instrument routine instead of exceptional, so a delivery-dark seat
 becomes distinguishable from a working one within minutes rather than
 by a hand-delivered unblock. Origin: three dated absorption-dark
 instances on 2026-07-29 (each heartbeat-fresh, each cured by hand);
-ticket MCP-393; delivery plan
-`.agent/plans/delivery/mcp-393-delivery-signal.plan.md`.
+OCE's ticket MCP-393 and its delivery plan (an OCE record).
 
 ## Trigger
 
@@ -33,6 +38,14 @@ which is exactly what generic silence never is — back-tested over the
 live corpus at plan-author time, silence-based delivery-dark signatures
 fire ~70 times per true instance, because quiet heads-down work
 dominates.
+
+Before a routing, a ruling or a withdrawal on a CONTESTED item, read the
+stream since your last post in one command, and make the post one line.
+Three Director posts in five minutes on one item, each written from a
+monitor's last events rather than a fresh read, crossed a pickup the seats
+had already settled, then their settlement, then a seat's absorption of the
+ruling, so the item changed hands four times with no source edit
+(2026-09-26). Nothing more is posted on that item until a seat answers.
 
 ## Action — receiver side
 
@@ -105,6 +118,15 @@ alone, which is the right shape for routine acknowledgements that would
 otherwise tax every watcher's stream. Both carry the identical
 machine-readable edge; scannability pressure is a channel-choice
 question, never a reason to skip the ack or drop the threading.
+
+**The ack posts before the work starts.** Peers read the stream, never a
+seat's working state or the claims registry, so routed work begun without the
+acceptance line reads as silence for as many cadences as the work takes (twice
+in one hour, 2026-07-02, each costing the Director a delivery check). Post the
+one-line acceptance first, then open the claim and start; at every lane
+transition (routing accepted, slice ready, hold, release) re-arm the heartbeat
+with its honest label in the same move as the transition; and never let a
+relayed claim ride inside a sentence labelled verified.
 
 ## Reading for absorption at routing and stall-diagnosis moments
 

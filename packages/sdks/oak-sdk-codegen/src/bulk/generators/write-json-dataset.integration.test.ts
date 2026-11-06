@@ -1,16 +1,10 @@
 /**
- * Integration tests for the generic JSON dataset writer.
- *
- * @remarks
- * Tests actual filesystem output: directory creation, file content,
- * and runtime loading of generated modules under Node ESM.
+ * Integration tests for the generic JSON dataset writer: the three-file
+ * layout and the verbatim content, written through the in-memory file system.
  */
-import { mkdtemp, readFile, rm } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-
 import { describe, expect, it } from 'vitest';
 
+import { createInMemoryFileSystem } from '../../io/test-helpers/in-memory-file-system.js';
 import { writeJsonDataset, type JsonDatasetDescriptor } from './write-json-dataset.js';
 
 const sampleTypesContent = [
@@ -19,23 +13,14 @@ const sampleTypesContent = [
   '  readonly label: string;',
   '}',
   '',
-  'export interface TestGraph {',
-  '  readonly version: string;',
-  '  readonly nodes: readonly TestNode[];',
-  '}',
-  '',
 ].join('\n');
 
 const sampleIndexContent = [
-  "import { readFileSync } from 'node:fs';",
-  "import type { TestGraph } from './types.js';",
+  "import type { TestNode } from './types.js';",
   '',
   "const dataUrl = new URL('./data.json', import.meta.url);",
-  "const data: TestGraph = JSON.parse(readFileSync(dataUrl, 'utf8'));",
-  '',
-  'export const testGraph: TestGraph = data;',
-  '',
-  "export type { TestGraph, TestNode } from './types.js';",
+  'export { dataUrl };',
+  "export type { TestNode } from './types.js';",
   '',
 ].join('\n');
 
@@ -54,57 +39,16 @@ const sampleData = {
 };
 
 describe('writeJsonDataset', () => {
-  it('writes data.json, types.ts, and index.ts into a named subdirectory', async () => {
-    const tempDir = await mkdtemp(join(tmpdir(), 'oak-json-dataset-'));
+  it('creates the named subdirectory and writes data.json, types.ts and index.ts into it', async () => {
+    const fs = createInMemoryFileSystem();
 
-    try {
-      const outputDir = await writeJsonDataset(sampleDescriptor, sampleData, tempDir);
+    const outputDir = await writeJsonDataset(sampleDescriptor, sampleData, '/out', fs);
 
-      expect(outputDir).toBe(join(tempDir, 'test-dataset'));
-
-      const dataJson = await readFile(join(outputDir, 'data.json'), 'utf-8');
-      const typesModule = await readFile(join(outputDir, 'types.ts'), 'utf-8');
-      const indexModule = await readFile(join(outputDir, 'index.ts'), 'utf-8');
-
-      expect(JSON.parse(dataJson)).toStrictEqual(sampleData);
-      expect(typesModule).toContain('export interface TestNode');
-      expect(typesModule).toContain('export interface TestGraph');
-      expect(indexModule).toContain("import { readFileSync } from 'node:fs'");
-      expect(indexModule).toContain(
-        "const data: TestGraph = JSON.parse(readFileSync(dataUrl, 'utf8'))",
-      );
-    } finally {
-      await rm(tempDir, { recursive: true, force: true });
-    }
-  });
-
-  it('creates the subdirectory even if it does not exist', async () => {
-    const tempDir = await mkdtemp(join(tmpdir(), 'oak-json-dataset-nested-'));
-
-    try {
-      const outputDir = await writeJsonDataset(sampleDescriptor, sampleData, tempDir);
-
-      const dataJson = await readFile(join(outputDir, 'data.json'), 'utf-8');
-
-      expect(JSON.parse(dataJson)).toStrictEqual(sampleData);
-    } finally {
-      await rm(tempDir, { recursive: true, force: true });
-    }
-  });
-
-  it('does not include eslint-disable directives in any written file', async () => {
-    const tempDir = await mkdtemp(join(tmpdir(), 'oak-json-dataset-lint-'));
-
-    try {
-      const outputDir = await writeJsonDataset(sampleDescriptor, sampleData, tempDir);
-
-      const typesModule = await readFile(join(outputDir, 'types.ts'), 'utf-8');
-      const indexModule = await readFile(join(outputDir, 'index.ts'), 'utf-8');
-
-      expect(typesModule).not.toContain('eslint-disable');
-      expect(indexModule).not.toContain('eslint-disable');
-    } finally {
-      await rm(tempDir, { recursive: true, force: true });
-    }
+    expect(outputDir).toBe('/out/test-dataset');
+    expect(fs.directories.has('/out/test-dataset')).toBe(true);
+    expect(JSON.parse(fs.files.get('/out/test-dataset/data.json') ?? '')).toStrictEqual(sampleData);
+    expect(fs.files.get('/out/test-dataset/types.ts')).toBe(sampleTypesContent);
+    expect(fs.files.get('/out/test-dataset/index.ts')).toBe(sampleIndexContent);
+    expect(fs.files.size).toBe(3);
   });
 });

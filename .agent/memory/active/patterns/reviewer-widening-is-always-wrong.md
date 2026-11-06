@@ -3,6 +3,7 @@ related_pdr: PDR-015
 name: Reviewer Widening Is Always Wrong
 polarity: anti-pattern
 category: agent
+layer: general
 status: proven
 emerged_from: "Session 2026-04-06 — type-expert recommended z.unknown()"
 cross_session: true

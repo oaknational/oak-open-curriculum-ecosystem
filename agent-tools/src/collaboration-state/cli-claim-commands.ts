@@ -1,18 +1,15 @@
 import { randomUUID } from 'node:crypto';
-import { dirname } from 'node:path';
 
-import { assertNoLiveIdentityRoutingCollision } from './active-agents.js';
+import { unwrapOrThrow } from '@oaknational/result';
+
 import { archiveStaleClaims } from './claims.js';
-import {
-  assertNotBlindWithOtherAgents,
-  resolveOpenClaimWatcherVerdict,
-} from './claims-open-watcher-gate.js';
 import { areaFromOptions } from './cli-claim-areas.js';
+import { resolveOpenClaimWatcherGate, runLockedClaimOpen } from './cli-claim-open-gate.js';
 import { fail } from './cli-fail.js';
 import { resolveIdentity } from './cli-identity.js';
 import { optional, required, valueOrDefault, type Options } from './cli-options.js';
-import { resolveCanonicalCommsWatchPaths } from './comms-watch-paths.js';
 import { type CliRuntime } from './cli-runtime.js';
+import { readActiveClaimsFile } from './state-file-readers.js';
 import { updateActiveClaimsFile, updateClaimStateFiles } from './state-io.js';
 import {
   type CollaborationAgentId,
@@ -37,33 +34,17 @@ export async function openClaim(
     return fail(`claims open: --now must be a valid ISO-8601 timestamp: ${nowIso}`);
   }
 
-  // F-95: classify the watcher OUTSIDE the lock (one IO), then decide
-  // populated-vs-solo INSIDE the locked transform so the solo-then-peer race
-  // cannot slip a blind claim into a registry that became populated mid-open.
-  const watcherPaths = resolveCanonicalCommsWatchPaths(options, identity.agent_name, runtime);
-  const watcherVerdict = await resolveOpenClaimWatcherVerdict(
-    identity,
-    dirname(watcherPaths.seenFile),
-    watcherPaths.commsDir,
-  );
+  // Pre-transaction read: fresh-checkout seeding errors surface here, and a
+  // legacy flat-queue file migrates once, so the locked read is plain.
+  unwrapOrThrow(await readActiveClaimsFile(activePath));
 
-  await updateActiveClaimsFile({
-    activePath,
-    transform: (registry) => {
-      assertNoLiveIdentityRoutingCollision({
-        registry,
-        nowIso,
-        agentId: identity,
-        surface: 'claims open',
-      });
-      assertNotBlindWithOtherAgents({ registry, nowIso, selfIdentity: identity, watcherVerdict });
+  // F-95: classify the watcher OUTSIDE the lock (3x-interval-grained, not a
+  // race, and it keeps the lock window short); claims AND queue are read
+  // INSIDE the locked operation so neither a claims-side nor a queue-only
+  // peer appearing mid-open can slip past the populated-vs-solo decision.
+  const watcherVerdict = await resolveOpenClaimWatcherGate({ options, identity, runtime });
 
-      return {
-        ...registry,
-        claims: [...registry.claims, openedClaim],
-      };
-    },
-  });
+  await runLockedClaimOpen({ activePath, openedClaim, nowIso, identity, watcherVerdict });
 
   return formatOpenClaimResult(openedClaim);
 }

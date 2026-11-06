@@ -2,8 +2,7 @@
 
 *Author: Wren stirs Rainbow (claude / claude-opus-4-8[1m] / 093458) — 2026-06-29.*
 *Status: substance home for the first Discovery run of the large-corpus-analysis*
-*method. This is the research artefact; the metadata run-record (curator-passes shape)*
-*points here. The method design is authoritative in*
+*method. This is the research artefact. The method design is authoritative in*
 *[`../../../reports/agentic-engineering/large-corpus-analysis-runbook-design-2026-06-29.md`](../../../reports/agentic-engineering/large-corpus-analysis-runbook-design-2026-06-29.md);*
 *the proving-run-driven v2 design is in*
 *[`../../../reports/agentic-engineering/large-corpus-analysis-runbook-v2-design-2026-06-29.md`](../../../reports/agentic-engineering/large-corpus-analysis-runbook-v2-design-2026-06-29.md).*
@@ -176,6 +175,5 @@ single-mechanism structural defects that never recurred enough to read as emerge
 
 ## Pointers
 
-- Run-record (metadata): `../../../memory/operational/curator-passes/2026-06-29-wren-napkin-discovery-pass.md`.
 - v2 design (the fixes): `../../../reports/agentic-engineering/large-corpus-analysis-runbook-v2-design-2026-06-29.md`.
 - Method design (v1, authoritative): `../../../reports/agentic-engineering/large-corpus-analysis-runbook-design-2026-06-29.md`.
