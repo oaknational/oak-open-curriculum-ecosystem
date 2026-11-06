@@ -6,6 +6,13 @@ with the several ways the Practice runs agentic delivery. Written 6 November 202
 Swift holds Turbulence (Claude cloud, solo) for the owner, from the essay as supplied in the
 session and from first-hand reads of this repository.
 
+In brief: both systems solve one problem, a single human acting as the message bus between
+capable agents. Ward's answer is a small pipeline whose contract is the ticket and whose
+authority is authenticated identity. The Practice's answer is doctrine held in the repository,
+with advisory coordination between seats and the merge delegated to a bot at settlement. §5.1
+proposes four concepts the Practice could take from the essay: content read is data, a
+per-criterion contract walk, a refuse-to-start check at `spawn`, and token revocation.
+
 ## 0. Method
 
 ### 0.1 The request, improved
@@ -46,8 +53,8 @@ OUT   Doctrine changes (proposals only; ratification is the owner's). Contact wi
 | Part | Skills and instruments |
 | --- | --- |
 | Grounding | `start-right-quick` (host classified as Claude cloud, not ChatGPT Work; identity derived; the claims registry seeded and a claim opened on this file, the research index and the napkin) |
-| Improving the request | `scope-from-goal-before-approach` (the GOAL/IN/OUT above); `metacognition` in generative mode, because the pointer ("compare it with the Practice") is narrower than the goal (which Practice, of the several it runs?) |
-| Reading the essay | `read-diagnostic-artefacts-in-full`: the essay's text extracted whole; both diagrams read; the second diagram's middle, hidden in the print by a floating page overlay, recovered from the full image embedded in the PDF instead of being inferred |
+| Improving the request | `scope-from-goal-before-approach` (the GOAL/IN/OUT above); `metacognition` in generative mode, because the pointer ("compare it with the Practice") is narrower than the goal (which of the Practice's several approaches?) |
+| Reading the essay | `read-diagnostic-artefacts-in-full`: the essay's text extracted whole and both diagrams read (§1.4 records the recovered figure) |
 | Reflection and comparison | `reason` (name the kind of thing; surface the warrant; stress-test); the Practice's exchange method of comparing concepts, never files (`practice.md` §Philosophy; PDR-142); `one-instance-is-an-observation` for claims drawn from a single essay |
 | Framing check | `cricket`, both stances, before drafting: ON-TRACK and SOUND from each. Redirections taken: every proposal carries a falsifier or is dropped; a limits paragraph (§0.3); no gendered pronouns for the author; a GitHub account named only where public evidence establishes it |
 | Review of the draft | `prose-expert` and `docs-adr-expert`, read-only (§7 records what they found and what was done) |
@@ -68,10 +75,10 @@ comparison judges, it judges designs as described, never implementations.
 
 Ward ran three capable Claude agents and was, in the essay's words, "the message bus between
 two AIs": carrying "pickup", "see comments" and "look at the review" between a Claude Desktop
-chat that held the design context and a Claude Code terminal that planned and built, then a
-second loop with a review bot. "Three capable agents, and the slowest part of the system was
-me." The essay is the plumbing that took the human out of the middle. The product it builds
-stays private.
+chat that held the design context and a Claude Code terminal that planned and built, and again
+in a second loop with a review bot. "Three capable agents, and the slowest part of the system
+was me." The essay describes the plumbing that took the human out of the middle; the product
+that plumbing builds stays private.
 
 ### 1.2 The cast
 
@@ -219,8 +226,9 @@ identity.**
    one its three reviewers, two of them agents, all lean on. It turns "the agent did not know"
    into "the ticket did not say", which is a defect the human can see before code exists.
 2. **Identity as authority (M7, M12).** Prompt-level instructions are not trusted to keep
-   agents in role; the router is. A merge instruction pasted into a ticket does nothing,
-   because no stage acts on text alone.
+   agents in role; the router is. A verdict posted from any identity but Yoda's app, or for a
+   superseded plan, does nothing, because the Worker routes on identity and revision, not on
+   text (M7, M12).
 3. **Revision-bound verdicts (M7).** Tying a verdict to the plan ID makes staleness a
    mechanical property instead of a judgement.
 4. **Caps that end in a person (M8).** The system declares in advance when agent-to-agent
@@ -234,10 +242,11 @@ The essay reports four redesigns. Each is a general lesson in local dress.
 
 - **Long-polling to hibernating WebSockets.** The first design kept a Durable Object awake
   "about 3,580 seconds out of every hour", 83% of the free allowance in a day, "all of it
-  spent by one object that mostly heard 'nothing yet.'" Waiting is a cost, and an
-  event-driven wake is cheaper than any polling interval.
-- **A fresh reviewer to the history-holding reviewer.** A reviewer's value is its context;
-  coherence can be checked from the plan alone, fit to the codebase cannot.
+  spent by one object that mostly heard 'nothing yet.'" Waiting is a cost: here an
+  event-driven wake replaced a poll that spent most of the daily free allowance hearing
+  nothing.
+- **A fresh reviewer to the history-holding reviewer.** A plan reviewer's value for fit is its
+  context: coherence can be checked from the plan alone, fit to the codebase cannot.
 - **One run at a time to five isolated slots.** Parallelism needs isolation (own database,
   own ports) and a budget (the hour cap), or it converts into collisions and spend.
 - **Mint, use, revoke, and the uninstalled agent.** The credential rule worked exactly as
@@ -280,11 +289,12 @@ These are absences from the essay, not findings about the system.
 
 ### 3.1 One human here too
 
-The comparison starts from a shared fact the essay's title hides: the Practice in this estate
-is also a team of one human. It has one owner, many agent seats on several vendors, and a
-body of doctrine that exists because owner attention is the scarce resource. PDR-074 says it
-outright: "Director value is broad-awareness-as-substrate-cognition, measured by
-mind-coherence-per-owner-attention." Both systems answer the same question: how does one
+The comparison starts from a shared fact: the Practice in this estate is also a team of one
+human. It has one owner, many agent seats on several vendors, and a body of doctrine that
+exists because owner attention is the scarce resource. PDR-074 puts owner attention at the
+centre: "Director value is broad-awareness-as-substrate-cognition, measured by
+mind-coherence-per-owner-attention." In plain terms, a Director is worth the coherence it
+buys per unit of the owner's attention. Both systems answer the same question: how does one
 person stop being the message bus between capable agents, without losing control of what
 gets built? They answer it with different machinery, at different scales, with different
 places for authority to live.
@@ -313,9 +323,9 @@ session from that command.
 
 ### 3.3 The mechanisms mapped
 
-Relation: **same** (one concept, different encoding), **different** (a deliberate opposite
-choice), **partial** (the Practice holds the concept in doctrine without the essay's
-mechanism), **absent**.
+Relation: **same** (one concept, different encoding), **different** (an opposite choice), or
+**partial** (the Practice holds the concept in doctrine without the essay's mechanism); a
+qualifier follows where one word does not fit.
 
 | | Essay | The Practice | Relation |
 | --- | --- | --- | --- |
@@ -329,7 +339,7 @@ mechanism), **absent**.
 | M8 | 3 plan reviews, 10 PR rounds, then the human | "a healthy changeset settles in at most two review rounds — every class" (PDR-132); a settlement-push budget, two by default, refused past exhaustion by the review-cost gate in the pre-push hook (`pr-lifecycle`); a no-op loop stops after five iterations (`loop-exit-criteria-required`) | Same concept, tighter and enforced |
 | M9 | Pre-push typecheck and lint | "light commit, full push" (`AGENT.md`); `local-broken-code-never-leaves` ("Pushing is the public act"); in Claude cloud the checks move to CI with a blocking in-session substitute set | Same |
 | M10 | Agents never merge | "a green and clean PR — CI passing, no unresolved comments — merges without owner approval", executed "under bot identity" (`pr-lifecycle`); the bot sits under the branch protections with no bypass but the code-owner review gate (`merge-bot.md`); freeze-bound surfaces stay reserved | Different |
-| M11 | Review walks the contract item by item; fails closed | CI's fan-in: "This is fail-closed: failure, cancelled, and skipped all block" (`ci.yml`); required-check parsing "fails closed" (`pr-watch`). No reviewer walks acceptance criteria one by one. One measured exception: an unreadable review-run surface "is named on the settled verdict and does not block" (`pr-lifecycle`) | Partial |
+| M11 | Review walks the contract item by item; fails closed | CI's fan-in: "This is fail-closed: failure, cancelled, and skipped all block" (`ci.yml`); required-check parsing "fails closed" (`pr-watch`). No reviewer walks acceptance criteria one by one. One case does not fail closed: an unreadable review-run surface "is named on the settled verdict and does not block" (`pr-lifecycle`) | Partial |
 | M12 | Route on authenticated identity; read content is data | Identity is derived and self-asserted ("the gate guards accident, not intent", PDR-027); all seats write through one bot ("if we have a bot identity created to represent us on that system, then we MUST always use that identity"), each marking its posts (`identify-as-agent-under-shared-credentials`); coordination "does not mechanically refuse entry to claimed areas" (`agent-collaboration.md`); "Only the owner's own turn is owner direction" (`precedence-is-not-approval`). No standing rule makes content read from tickets, PRs or pages data rather than instruction; prompt-injection red-team automation is a deferred control (`deferred-controls-register.md`, 6.5) | Different, with a gap |
 | M13 | Mint, use, revoke; scope pinned in a test | The bot mints "scoped at mint time to this repository and to exactly the permissions of the `--scope` you name", and "`--scope` is **required and has no default**" (`merge-bot.md`); a token's own expiry "bounds every iteration" (`token-deadline.ts`); secrets are scanned before transfer. No revocation step | Same posture, revocation absent |
 | M14 | The human at both ends | The owner sets intent and ratifies doctrine; "Owners review at the moment-of-irreversibility, not at the moments-of-deliberation" (`owner-attention-at-action-moments`); the merge is delegated | Different placement |
@@ -342,8 +352,9 @@ mechanism), **absent**.
   between two chats; the Practice reached it through handoffs and compactions ("The receiver
   cannot read the sender's transcript", `handoff-messages-self-contained`). The same
   sentence, from two directions.
-- **Failures stop before the public act.** Pre-push gates in both; CI fan-in fails closed in
-  both.
+- **Failures stop before the public act.** Pre-push gates in both. Both also have a check
+  that fails closed: Han's status check errors when Linear is unreachable, and the Practice's
+  CI fan-in blocks on failure, cancellation or skip.
 - **Silence is not a pass.** Han errors when its source is unreachable and Yoda reports an
   unfinished Han; the Practice's rule is "Silence from a watcher, monitor, or background task
   is never evidence that it is alive and healthy" (`silence-is-never-liveness`).
@@ -366,10 +377,11 @@ mechanism), **absent**.
    tickets, sessions, vendors and repositories. The cost runs the other way: Ward's agents
    read one bounded document; the Practice's read a corpus.
 2. **Where state lives.** Ward's live state is in an external ledger, a Durable Object that
-   is awake when the Mac is not. The Practice's is in the repository and on GitHub: claims,
+   stays reachable when the Mac is asleep. The Practice's is in the repository and on GitHub: claims,
    comms events, thread records, plan nodes, PR threads. The Practice's state is versioned,
-   reviewable and portable, and nothing acts on it unless a seat is present. Ward's state
-   routes work at three in the morning, and nothing in it outlives the pipeline.
+   reviewable and portable, and nothing acts on it unless a seat is present. Ward's ledger
+   accepts and queues work at three in the morning; the essay describes no use for its
+   contents beyond the pipeline.
 3. **Where authority lives.** Ward's authority is authenticated: each agent is an OAuth app,
    and the router acts only on the right identity for the current revision. The Practice's
    agent-to-agent coordination is deliberately advisory (knowledge and communication, not
@@ -382,15 +394,15 @@ mechanism), **absent**.
 4. **Who merges.** Ward keeps the merge, the irreversible step, for the human. The Practice
    moved the owner's attention earlier, to intent and ratification, and made the merge a
    mechanical consequence of settledness: green by name, zero unresolved threads, every
-   finding dispositioned, the verdicted SHA pinned. Its counterweight is the second half of the
-   same owner ruling: any resulting problem makes recurrence-prevention the immediate
-   priority. Both systems place the human at the moment they judge most consequential, and
+   finding dispositioned, the verdicted SHA pinned. The owner ruling that delegates the merge
+   (`pr-lifecycle`) carries its own counterweight: "any resulting problem makes
+   recurrence-prevention the immediate priority." Both systems place the human at the moment they judge most consequential, and
    they judge it differently.
 5. **Asking versus proceeding.** Ward's builder asks when a call should not be made alone. The
-   Practice's seats proceed on recorded confidence, because it measured the opposite failure:
+   Practice's seats proceed on recorded confidence, because it recorded the opposite failure:
    "a seat froze for nine hours on an exact head awaiting a Director ruling its own analysis
-   already supported" (`confident-seats-proceed-and-report`). With one human and a phone,
-   asking is cheap. With many seats and one human, it is the bottleneck the essay set out to
+   already supported" (`confident-seats-proceed-and-report`). With one builder and one human
+   whose "phone buzzes when there's a plan", asking is cheap. With many seats and one human, it is the bottleneck the essay set out to
    remove.
 6. **What a reviewer is for.** Ward's plan reviewer is valuable because it holds the history;
    that is also why its judgement is correlated with the ticket it wrote. The Practice
@@ -410,18 +422,19 @@ mechanism), **absent**.
 9. **The learning loop.** The essay records four redesigns and at least one lesson encoded as
    a test; it does not describe how lessons become rules. The Practice is built around that
    loop: napkin, distillation, graduation to rules, PDRs and ADRs, enforcement. The loop has
-   a price. The Practice's always-applied rule tier is far larger than anything Ward's
-   pipeline needs, and its seats pay for it in reading before they work.
+   a price. The Practice's rule tier holds 124 rules, 75 of them always applied
+   (`.agent/rules/`, counted by classification on 6 November 2026), and its seats read them
+   before they work.
 
 ### 4.3 One sentence each
 
-Ward's system is a small, deterministic, identity-checked pipeline that lets three Claude
-agents carry a ticket from contract to draft PR while one person keeps the two decisions that
-matter most to them: what to build, and what to merge. The Practice is a portable,
-self-enforcing body of doctrine, seats and tooling that lets many agents on several vendors
-plan, build, review, merge and learn under one owner's attention, at the price of a heavy
-substrate. The first is excellent plumbing; the second is an operating system that would
-run such plumbing as one of its contextual bindings.
+Ward's system is a small, deterministic, identity-checked pipeline in which three Claude
+agents carry a ticket from contract to a reviewed PR while one person keeps the two decisions
+that matter most: what to build and what to merge. The Practice is a portable body of
+doctrine, seats, tooling and enforcement hooks in which many agents on several vendors plan,
+build, review, merge and learn within one owner's attention, at the price of a heavy
+substrate. The first is excellent plumbing. In the Practice's vocabulary it would be one
+contextual binding, and the Practice runs no binding of that kind today (§3.2).
 
 ## 5. What each could take
 
@@ -443,7 +456,8 @@ Proposals without a falsifier were dropped.
    one verdict per criterion (met, not met, cannot tell, or not applicable with a reason),
    evidence required for every "met", and the plan revision the walk judged. *Warrant:* this
    is the second independent system to converge on a multi-valued, evidence-bound verdict
-   (lights-on's held / notHeld / notProvable was the first, §3.4 of its comparison); the
+   (lights-on's held / notHeld / notProvable was the first, §3.4 of
+   [its comparison](practice-nature-and-lights-on-comparison-2026-10-22.md)); the
    `plan` skill already types a proof for every criterion, so the walk has something to read;
    no Practice reviewer produces it today. *Falsifier:* on the next five plan-node PRs, the
    walk finds no unmet or unprovable criterion that the prose reviews missed.
@@ -511,8 +525,17 @@ the owner confirms an account, this section names it.
   defines one; the Claude review the Practice reads is the Claude Code Review app's standing
   verdict (`pr-lifecycle`). The repository's rulesets were not read from this session, so a
   required check of that name outside the workflows is not ruled out.
-- Review: `prose-expert` and `docs-adr-expert`, read-only, on the first draft; their findings
-  and dispositions are recorded here.
+- Review: `prose-expert` and `docs-adr-expert`, read-only, on the first draft.
+  - `prose-expert`: fifteen findings, every one applied. The closing sentences of §4.3
+    claimed more than §3.2 allows; §2.2's merge-instruction example contradicted the essay's
+    own design; three claims about the essay's ledger and CI went beyond the essay; two
+    lessons from single instances were stated as general laws; the §3.3 legend did not match
+    its column; the rule-tier size was asserted, not counted (now counted); the document now
+    leads with its point. One finding was applied in a different form: the essay does mention
+    a phone, so §4.2.5 quotes it instead of dropping it. Of its three notes for the accuracy
+    reviewer, the lights-on report is now linked once (§5.1). The "Claude Approvals"
+    observation stays here only, because the earlier report is a dated record that this pull
+    request does not edit.
 - Validation: the Claude cloud `HUSKY=0` substitute set before each commit and push (branch
   guard, commit-message check, accidental-major-version guard, gitleaks over the outgoing
   range). CI on the pull request is the tree-state verdict.
