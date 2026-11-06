@@ -275,7 +275,7 @@ claim that no additional issue exists.
 The current revision is the `contractRevision` in `detector-config.json`, and
 `validated-detector-config.ts` pins its bytes. Each revision's identities and
 cause are recorded in
-[`calibration.md`](../../../reports/typescript-estate-consolidation-review/calibration.md).
+[`calibration.md`](../../../../reports/typescript-estate-consolidation-review/calibration.md).
 Revision 2.7 (2026-11-05) refroze three statements for the ruling that
 binaries run by name, with `PATH` as the trust root; it changed no detector,
 threshold, candidate or proof boundary.
