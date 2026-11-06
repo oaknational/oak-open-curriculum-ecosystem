@@ -341,9 +341,8 @@ strategies; on a request-handler path the rewrite is urgent.
 **Canonical rationale**: "repository-required binary invoked by name; `PATH`
 is the trust root (§S4036 ruling); no external input reaches a shell".
 
-**Worked example**: `packages/sdks/oak-sdk-codegen/code-generation/run-typedoc.ts:56`.
-`spawn('typedoc', args, …)` runs the workspace's own TypeDoc by name with an
-argv array.
+**Worked example**: `realPnpmRunner` in `agent-tools/src/spawn/build-runner.ts`
+runs the repository's pnpm by name with an argv array and no shell.
 
 **Delta from the prior class**: S4036 was FIX-only, cured by an absolute path
 chosen from a fixed list of directories. The ruling gives a site within the
@@ -897,20 +896,19 @@ cure. Upstream invokes `pnpm`, `gh` and `gitleaks` by name under the owner's
 S4036 ruling of 2026-11-03, and this estate resolved each binary to an
 absolute path from a platform-partitioned allowlist.
 
-Delta from prior: §S4036 takes the upstream text whole, and the
-§One-Outcome Rule gains its second exception, so a site within the class is
-marked rather than cured. The Disposition Workflow gains the step that
-marks it. The first exception's scope is unchanged. The §S4036 delta's
-counts are the upstream analyser project's; this estate's analyser raises
-S4036 at each by-name site, and each is marked under the second exception.
+Delta from prior: §S4036 takes the upstream text whole except its worked
+example, and the §One-Outcome Rule gains its second exception, so a site
+within the class is marked rather than cured. The Disposition Workflow gains
+the step that marks it. The first exception's scope is unchanged. The
+§S4036 delta's counts are the upstream analyser project's; this estate's
+analyser raises S4036 at each by-name site, and each is marked under the
+second exception.
 
-§S4036's worked example does not hold in this estate: `run-typedoc.ts` runs
-TypeDoc through the package's own entry under `process.execPath`, never by
-name. This estate's worked example is `realPnpmRunner` in
-`agent-tools/src/spawn/build-runner.ts`: `execFileSync('pnpm', [...args], …)`
-runs the repository's pnpm by name with an argv array. At this amendment's
-date `git`, `gitleaks` and the smokes' shell still resolve through the
-absolute-path resolvers in `agent-tools/src/core/` (`trusted-git.ts`,
+The worked example is this estate's own. Upstream's names `run-typedoc.ts`,
+which here runs TypeDoc through the package's own entry under
+`process.execPath`, never by name. At this amendment's date `git`,
+`gitleaks` and the smokes' shell still resolve through the absolute-path
+resolvers in `agent-tools/src/core/` (`trusted-git.ts`,
 `trusted-gitleaks.ts`, `trusted-shell.ts`); each moves to by-name in its own
 change.
 
