@@ -41,6 +41,8 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { sync as crossSpawnSync } from 'cross-spawn';
+
 import { resolveTrustedGit } from '../core/trusted-git.js';
 
 import { commitlintArgs, exitCodeForCommitlintStatus } from './commitlint-verdict.js';
@@ -193,7 +195,9 @@ function runCommitlint(message: string): number {
   const messageFile = join(dir, 'COMMIT_EDITMSG');
   try {
     writeFileSync(messageFile, message);
-    const result = spawnSync('pnpm', commitlintArgs(messageFile), {
+    // pnpm by name through cross-spawn, which launches a Windows `pnpm.cmd`
+    // shim that a shell-less Node spawn cannot.
+    const result = crossSpawnSync('pnpm', commitlintArgs(messageFile), {
       cwd: repoRoot,
       stdio: 'inherit',
     });
