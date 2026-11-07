@@ -1329,6 +1329,13 @@ Written from a solo Claude cloud session on `claude/oce-parallel-workflow-pcgrc9
 - **A no-tools framing pass on the session model cost about 91k tokens**, close to a mid-tier
   reader that made sixteen tool calls. One instance, cause unmeasured; price the next framing
   pass from its own pilot before choosing its tier.
-- **The owner's requested pre-merge check is a new gate** against the standing word "no prs are
-  blocked on me" (2026-09-07). The research note carries it as an owner decision (D1), not as a
-  settled design.
+- **The owner's requested pre-merge check is not a collision.** The merge doctrine already says
+  green and clean PRs "don't wait on me unless I explicitly say so" (2026-09-03); the request is
+  that explicit word. The first draft called it a new gate; the adversarial audit corrected it.
+- **An "improved request" can silently reorder the owner's sequence.** The first draft put the
+  sign-off before the plan and its review; the owner's order is plan, review, sign-off. Three
+  passes and two reviewers missed it; the adversarial `assumptions-expert` caught it. Walk the
+  restatement against the owner's words clause by clause, in order, before any reviewer.
+- **The open-PR count is read before the first push, not after.** This seat pushed, then found
+  two non-coordination PRs already open; the rule's other clause (a pushed branch's PR opens at
+  once) then forced the PR over the limit.
