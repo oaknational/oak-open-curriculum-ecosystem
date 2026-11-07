@@ -1,12 +1,11 @@
 # An idea-to-merge delivery workflow: concept exploration and the improved request
 
 **Date**: 2026-11-07 · **Seat**: Juniper seeks Pollen (Claude Code cloud session, solo) ·
-**Status**: provisional; revision 2, after the owner's first answers. Every open question in
-§2 is the owner's.
+**Status**: provisional; revision 2, after two rounds of the owner's answers. The working
+defaults in §2 are confirmed when the owner ratifies the trial's plan.
 
-**What you need to do:** check that §1 now says what you want, then answer the open questions
-in §2 (the workflow's name; which limits become its parameters; how it sizes a run; how it
-merges from a cloud session; where it stops). The rest of the note is the evidence.
+**What you need to do:** give the trial its idea. §1 is the request as it now stands; §2
+records your answers and the working defaults; the rest of the note is the evidence.
 
 ## 1. The improved request
 
@@ -144,6 +143,15 @@ Each has a proposed answer; nothing is decided until the owner replies.
   permits), and a GitHub Actions job mints the bot's token and merges as the bot. To build
   and verify before the trial's merge.
 - **Q5. The stop list in §1 ("Surprises reach me at once").** Proposed: adopt it as written.
+
+### Answers, round 2 (owner, 2026-11-07)
+
+The owner answered "No preference" to Q1 to Q4; Q5 was not put as a card. The proposals
+therefore stand as working defaults: the name Bookends; all five limits in §3 as the
+workflow's parameters, with the doctrine wording drafted for ratification after the trial;
+single-PR runs first; the review-triggered Actions merge, built and verified before the
+trial's merge; the stop list as written. None of them is irreversible yet, and each is
+confirmed or changed when the owner ratifies the trial's plan node.
 
 ## 3. Which rules hold, and which become the workflow's parameters
 
@@ -471,7 +479,7 @@ Reopen this inquiry when the trial closes, or sooner if the answers to §2 chang
 
 Proposals for the owner to accept, change or refuse.
 
-1. The owner answers Q1 to Q5 and provides the trial idea.
+1. The owner provides the trial idea (the working defaults in §2 stand meanwhile).
 2. Before the trial's merge: build and verify the review-triggered merge job (§5), the one
    piece of tooling a cloud run cannot do without. It handles a credential, so its lane takes
    a `security-expert` review alongside the usual reviewers.
@@ -538,4 +546,5 @@ workflow events (outside this session's allowed hosts).
 - **Round 2**: the owner's answers moved the pre-merge check from a gate to retire to a
   designed part of a named workflow, asked for normal-operations limits to become the
   workflow's tunable parameters, and asked for an end-to-end cloud path; §§3 to 5 are the
-  response.
+  response. The owner then expressed no preference on the round-2 questions, so the seat's
+  proposals stand as working defaults until the trial's plan is ratified.
