@@ -1339,3 +1339,11 @@ Written from a solo Claude cloud session on `claude/oce-parallel-workflow-pcgrc9
 - **The open-PR count is read before the first push, not after.** This seat pushed, then found
   two non-coordination PRs already open; the rule's other clause (a pushed branch's PR opens at
   once) then forced the PR over the limit.
+- **A design conversation run as a delivery lane gathers momentum from the delivery rules.**
+  Asked to improve a request and keep notes, this seat let PR, CI, card and proceed-and-report
+  rules drive the session: it added an owner touch for deviations to a process whose
+  checkpoints the owner fixed, tied the design to today's open PRs, read "No preference" as
+  licence to adopt its own proposals, wrote design choices into the owner's request, and
+  "corrected" the owner's premise from its own guess (owner: "so, much, fluent and incorrect
+  momentum", 2026-11-07). Keep three things apart: the thing being designed, the session's own
+  artefacts, and current operations. "No preference" leaves a question open; it adopts nothing.

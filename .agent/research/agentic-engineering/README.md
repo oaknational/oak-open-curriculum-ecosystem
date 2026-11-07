@@ -98,11 +98,10 @@ sources without turning research notes into a second canon.
   — official interface documentation, role and authority questions, and bounded
   follow-up proposals for the Codex tooling work.
 - [idea-to-merge-workflow-concept-exploration-2026-11-07.md](./idea-to-merge-workflow-concept-exploration-2026-11-07.md)
-  — the owner's request for a named idea-to-merge workflow (working name
-  Bookends) with three owner touch-points and an automated middle, improved and
-  mapped stage by stage to existing machinery: which limits become its
-  parameters, single-PR versus project runs, the cloud merge path, the owner's
-  open questions and a proposed first trial.
+  — initial design notes for a new idea-to-merge workflow with fixed owner
+  checkpoints and an automated middle: what the owner has decided, the request
+  restated, the open design questions, the assumptions withdrawn, and the
+  estate's existing machinery and lessons as evidence.
 - [cross-lane-direction-survey.md](./cross-lane-direction-survey.md) —
   Slice C umbrella: re-reads direction-of-travel evidence (Slice A
   governance projects, Slice B practice-methodology primitives,
