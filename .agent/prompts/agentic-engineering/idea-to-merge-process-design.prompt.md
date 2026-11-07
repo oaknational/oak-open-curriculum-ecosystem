@@ -83,7 +83,8 @@ projects.
   the cognitive and planning skills (`concept-exploration`, `proportionality`, `reason`,
   `metacognition`, `user-value`, `specify`, `plan`) through it.
 - Explore what parts of this process the estate already has, and how each would need
-  improving or refining to serve it. Read the reports and research on similar concepts under
+  improving or refining to serve it; where no existing skill serves a stage, the design
+  writes a new one. Read the reports and research on similar concepts under
   `.agent/reports/agentic-engineering/`, `.agent/research/`, and the decision records.
 - Make design decisions in the design, each with its reasoning. A decision that is the
   owner's by the decision lenses goes to the owner as a card; everything else is the
@@ -97,9 +98,10 @@ projects.
 [`idea-to-merge-process-design-notes-2026-11-07.md`](../../research/agentic-engineering/idea-to-merge-process-design-notes-2026-11-07.md)
 holds the owner's direction on the process's quality mechanism: a doubt point in every stage,
 at differing altitudes, asking not only whether the work is right but whether what it is
-trying to achieve is worthwhile; the process composed from skills, with no tooling needed for
-a first run; and a nine-stage draft with the doubt points placed. It is input to assess
-critically; the owner's words in it are the authority, the draft is not.
+trying to achieve is worthwhile; the process built from the agent's native features, skills
+above all, each stage's skill kept, changed or newly written as the design finds; and a
+nine-stage draft with the doubt points placed and candidate skills named. It is input to
+assess critically; the owner's words in it are the authority, the draft is not.
 
 ## Evidence already gathered (facts; the design is yours)
 

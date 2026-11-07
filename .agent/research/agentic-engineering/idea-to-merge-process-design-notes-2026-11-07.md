@@ -23,8 +23,10 @@ Measured against it:
 - **The request's quality mechanism is the reviews**, and the owner's later words make the
   mechanism exact: at each stage, step back and ask not only whether the work is right but
   whether what it is trying to achieve is worthwhile. The design below is built from those
-  doubt points outward; the machinery follows them. It is composed from skills, the agent's
-  native features; no tooling is needed for a first run.
+  doubt points outward; the machinery follows them. Its mechanisms are the agent's native
+  features, skills above all. For each stage the design decides which of three serves: an
+  existing skill as it is, an existing skill changed for this process, or a new skill written
+  for it. The skills named in §3 are the candidates that decision starts from.
 - **Two touches became three** at the owner's word: initiation, acceptance-criteria
   approval, final sense check. The original "ideation and refinement" touch split into its
   two halves because the approval is where the contract is doubted before anything is built.
@@ -67,7 +69,9 @@ where a doubt brief covers it.
 ## 3. The process
 
 Three owner checkpoints, fixed. Between them, stages run through skills, one doubt point in
-each. A doubt point has an altitude, one question, one skill that asks it, and an exit. The
+each. A doubt point has an altitude, one question, a skill that asks it, and an exit; the
+"asked through" column names the candidate skill the design assesses for that stage, and the
+assessment may keep it, change it, or replace it with a skill written for this process. The
 doubter receives the artefact and the contract and nothing of the author's claims about them.
 A doubt changes the artefact, is answered with evidence, or travels to the final check as a
 finding; **a worth-doubt with evidence ends the run early**, and the final check takes the
@@ -99,8 +103,8 @@ worth doing?".
 
 - **Defined** as one skill in the Practice corpus: the stage order, each doubt point's
   question and brief, the summary's shape, and the run's parameters (the PR and token limits
-  the workflow sets for itself, each with its reason). It composes the skills named above
-  and introduces no tooling for the trial; the doubt briefs are its substance.
+  the workflow sets for itself, each with its reason). It invokes, at each stage, the skill
+  the design settled on for that stage; the doubt briefs are its substance.
 - **Started** by invoking the skill with the idea and outcomes. Stage 2 opens the plan node
   at `sketch`; nothing builds until the node carries the owner's stamp.
 - **Observed** from records any seat can read: the plan node (sketch, stamped, archived), the
@@ -116,4 +120,7 @@ worth doing?".
 - The run's parameters and their starting values.
 - The credential path for a cloud run's merge, and the trial's host.
 - Single-PR work against larger projects (the Claude Code project facts are in the brief).
-- Which skills need a doubt-shaped brief and which serve as they are.
+- For each stage, whether its candidate skill serves as it is, needs changing for this
+  process, or gives way to a new skill; the doubt briefs are the likeliest places a new or
+  changed skill is needed, since no existing skill is written to receive an artefact and a
+  contract and withhold the author's claims.
