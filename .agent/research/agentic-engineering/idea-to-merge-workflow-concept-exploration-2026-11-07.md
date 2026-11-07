@@ -32,8 +32,9 @@ The detail:
 > named proof), the split into pieces with their interfaces, and the estimated cost.
 > Reviewers with distinct lenses review and improve the plan; one of them is asked whether
 > each part should exist at all. Touch-point 1 ends when I sign off the reviewed plan, with
-> the reviewers' verdicts and the cost estimate in front of me. My sign-off is the
-> ratification stamp on the work's plan node. The plan also sizes the run: a small idea takes
+> the reviewers' verdicts and the cost estimate in front of me; if the drafting and review
+> outlast our conversation, it pauses and resumes for the sign-off, and it is still one
+> touch-point. My sign-off is the ratification stamp on the work's plan node. The plan also sizes the run: a small idea takes
 > a lighter path (fewer reviewers, pieces built one after another), and the size is part of
 > what I sign off.
 >
