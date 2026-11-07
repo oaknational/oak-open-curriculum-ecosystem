@@ -141,6 +141,16 @@ Nothing is built before the first run.
 
 - The sub-skill set: the six proposed in §3 are a starting cut, to be settled by what each
   stage needs in its own detail.
+- The sub-agent definitions. Every doubt point dispatches a sub-agent, since only a fresh
+  context stands outside the frame that produced the artefact; a skill loads into the
+  context that did the work. The sub-skill carries the stage (what it hands the doubter,
+  what it withholds, the round budget, how it uses the verdict); the sub-agent definition
+  carries the doubter (its lens, its question at that altitude, the contract of what it
+  receives and returns); components serve both, as the estate's sub-agent templates already
+  do. New doubters: the contract reviewer, the plan reviewer, the track and whole value
+  assessors, the independent challenger. One sharp doubter per altitude, several of them one
+  definition parameterised by its brief. In a parallel run the track builders are sub-agents
+  with a brief, a worktree and no prompts.
 - Which parts of existing skills become components, and what each sub-skill adds that no
   existing skill holds; the doubt briefs are the surest additions, since no existing skill
   receives an artefact and a contract while withholding the author's claims.
