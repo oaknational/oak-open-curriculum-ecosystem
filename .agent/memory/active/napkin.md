@@ -1312,38 +1312,18 @@ the owner wants it kept).
 - **A reviewer's ancestry claim is checked with `git merge-base --is-ancestor`, in one command.**
   Codex's P1 on 376 read the tip commit's single parent as the whole history.
 
-## 2026-11-07 — Juniper seeks Pollen (01Duoc): the idea-to-merge workflow request, explored
+## 2026-11-07 — Juniper seeks Pollen (01Duoc): tool and method facts
 
-Written from a solo Claude cloud session on `claude/oce-parallel-workflow-pcgrc9`.
+Written from a solo Claude cloud session.
 
 - **Reader legs paraphrase inside quotation marks.** Four of the quotations three mid-tier reader
   legs returned were paraphrases presented as verbatim (2026-11-07). A fixed-string check of each
-  quotation against its cited file caught all four before review; two more "misses" were only
-  line wraps, cured by collapsing whitespace before searching. Run the check before any reviewer
-  sees the text: a leg's quotation is a pointer to a source, never the source.
+  quotation against its cited file, whitespace collapsed, caught all four before any reviewer
+  read them. A leg's quotation is a pointer to a source, never the source.
 - **A fresh cloud checkout has no claims registry.** `commit-queue list` refused until
   `.agent/state/collaboration/active-claims.json` was seeded with the tool's own seed line; the
-  claim for this session was therefore opened after the first edits. The registry is
-  untracked by design, so every fresh cloud container starts this way.
+  registry is untracked by design, so every fresh cloud container starts this way.
 - **`claims open --area-kind` takes `files`, not `path`** (`files | workspace | plan | adr | git`).
 - **A no-tools framing pass on the session model cost about 91k tokens**, close to a mid-tier
   reader that made sixteen tool calls. One instance, cause unmeasured; price the next framing
   pass from its own pilot before choosing its tier.
-- **The owner's requested pre-merge check is not a collision.** The merge doctrine already says
-  green and clean PRs "don't wait on me unless I explicitly say so" (2026-09-03); the request is
-  that explicit word. The first draft called it a new gate; the adversarial audit corrected it.
-- **An "improved request" can silently reorder the owner's sequence.** The first draft put the
-  sign-off before the plan and its review; the owner's order is plan, review, sign-off. Three
-  passes and two reviewers missed it; the adversarial `assumptions-expert` caught it. Walk the
-  restatement against the owner's words clause by clause, in order, before any reviewer.
-- **The open-PR count is read before the first push, not after.** This seat pushed, then found
-  two non-coordination PRs already open; the rule's other clause (a pushed branch's PR opens at
-  once) then forced the PR over the limit.
-- **A design conversation run as a delivery lane gathers momentum from the delivery rules.**
-  Asked to improve a request and keep notes, this seat let PR, CI, card and proceed-and-report
-  rules drive the session: it added an owner touch for deviations to a process whose
-  checkpoints the owner fixed, tied the design to today's open PRs, read "No preference" as
-  licence to adopt its own proposals, wrote design choices into the owner's request, and
-  "corrected" the owner's premise from its own guess (owner: "so, much, fluent and incorrect
-  momentum", 2026-11-07). Keep three things apart: the thing being designed, the session's own
-  artefacts, and current operations. "No preference" leaves a question open; it adopts nothing.

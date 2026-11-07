@@ -97,11 +97,11 @@ sources without turning research notes into a second canon.
 - [codex-official-docs-follow-up-2026-09-23.md](./codex-official-docs-follow-up-2026-09-23.md)
   — official interface documentation, role and authority questions, and bounded
   follow-up proposals for the Codex tooling work.
-- [idea-to-merge-workflow-concept-exploration-2026-11-07.md](./idea-to-merge-workflow-concept-exploration-2026-11-07.md)
-  — initial design notes for a new idea-to-merge workflow with fixed owner
-  checkpoints and an automated middle: what the owner has decided, the request
-  restated, the open design questions, the assumptions withdrawn, and the
-  estate's existing machinery and lessons as evidence.
+- [idea-to-merge-process-design-notes-2026-11-07.md](./idea-to-merge-process-design-notes-2026-11-07.md)
+  — design notes for a new idea-to-merge process with three fixed owner
+  checkpoints: the better of Ward's team-of-one pipeline and the Practice's
+  approaches, built from skills, with a doubt point at each stage asking whether
+  the work is worth doing; input to the design session's brief.
 - [cross-lane-direction-survey.md](./cross-lane-direction-survey.md) —
   Slice C umbrella: re-reads direction-of-travel evidence (Slice A
   governance projects, Slice B practice-methodology primitives,
