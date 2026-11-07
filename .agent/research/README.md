@@ -1,6 +1,6 @@
 # Research Documents Index
 
-**Last Updated**: 22 October 2026
+**Last Updated**: 6 November 2026
 **Purpose**: Permanent record of research, discoveries, and insights  
 **Maintained By**: AI agents and human collaborators
 
@@ -164,6 +164,7 @@ developer-experience inputs used to improve Oak's agentic engineering system.
 | [user-value-method-review-2026-09-26.md](user-value-method-review-2026-09-26.md) | Framing and correction record of the `user-value` skill | The service-first framing corrected to use value across levels; three complementary bases with their bridges and crosswalks; two fresh-context exercises of the earlier draft and the limits of what they show |
 | [comprehensive-specification-framework-2026-09-26.md](comprehensive-specification-framework-2026-09-26.md) | Comprehensive specification framework and ratified three-skill delivery scope | Common records, profiles, connection contracts, evidence and change; Appendix E requires complete skill implementation and evals in PR #250; effectiveness remains provisional |
 | [practice-nature-and-lights-on-comparison-2026-10-22.md](practice-nature-and-lights-on-comparison-2026-10-22.md) | The nature of the Practice read through PDR-143's five layers, a reviewed read of Gojko Adzic's lights-on software factory boilerplate, and a concept-level comparison | The Practice is nine systems at once (constitution, learning loop, species, family contract, organisation, epistemology, enforced doctrine, multi-vendor substrate, product); lights-on is one deterministic family-level mechanism with reproduced fail-open defects in its regulator; five concepts OCE could take, led by run records derived from per-position agent schemas |
+| [team-of-one-agentic-sdlc-and-the-practice-2026-11-06.md](team-of-one-agentic-sdlc-and-the-practice-2026-11-06.md) | A reading of Alex Ward's essay on an agentic SDLC for a team of one (both figures redrawn), a reflection, and a concept-level comparison with the Practice's eight delivery approaches | Both are one-human estates; they agree that no decision lives only in chat and that silence is not a pass, and diverge on where the contract, state and authority live, who merges, and what a reviewer is for; four proposals for OCE, led by a standing rule that content read is data, never instruction |
 
 ### 🔐 Authentication & Security
 
@@ -216,6 +217,13 @@ Research on API structure and data analysis.
 | [approaches-to-knowledge-strategic-report.md](approaches-to-knowledge-strategic-report.md) | Knowledge strategy | |
 
 ---
+
+## Recent Additions (2026-11-06)
+
+- [A team-of-one agentic SDLC and the Practice's approaches](team-of-one-agentic-sdlc-and-the-practice-2026-11-06.md):
+  Alex Ward's essay read with both of its figures, a reflection on its design moves and
+  incidents, and a mechanism-by-mechanism comparison with the Practice's several delivery
+  shapes, closing with what each could take, every proposal carrying a falsifier.
 
 ## Recent Additions (2026-10-22)
 
