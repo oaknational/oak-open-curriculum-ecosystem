@@ -77,7 +77,7 @@ separates them.
 | Step | Sub-skill (proposed) | Owner | What happens | Doubt: altitude and question | Concepts explored in | Exit |
 | --- | --- | --- | --- | --- | --- | --- |
 | 1 | `attendant` | ✔ initiation | The owner puts forward the idea and asks for the Attendant. The umbrella skill opens the run: a plan node at `sketch`, a branch | — | — | The idea recorded as given |
-| 2 | `attendant-shape` | | The idea is analysed and improved. The result is the value contract: beneficiaries and what each gets; outcomes; scope and non-goals; acceptance criteria denominated in value, each with the evidence that would show it met; the size of the run; the doubts raised | **Purpose.** Is the outcome worth having, for whom, and what changes if it arrives? What would make this complete and worthless? Would the better move be a different idea, or none? | `user-value`, `concept-exploration`, `parallax-frame`, `proportionality`, PDR-103 | The contract, with its worth stated and what would show it wrong; or a recommendation that the idea is better served another way |
+| 2 | `attendant-shape` | | The idea is analysed and improved. The result is the value contract: beneficiaries and what each gets; outcomes; scope and non-goals; acceptance criteria denominated in value, each with the evidence that would show it met; the size of the run; the doubts raised | **Value.** What is the real user value here, and for whom? How can we deliver it? Does the idea as stated deliver that value, or is there a sharper shape for it? What would make this complete and worthless? | `user-value`, `concept-exploration`, `parallax-frame`, `proportionality`, PDR-103 | The contract, with the value stated, the way to it, and what would show it wrong |
 | — | internal review | | **Contract review**: a sub-agent outside the shaping frame assesses the contract for the reliance "build from this unattended" | **Contract.** Would meeting every criterion be worth the cost of meeting it? Which criteria measure activity rather than outcome? What is unprovable? | `assess-specification`, the definition of delivery | The contract and its doubts presented to the owner |
 | 3 | `attendant` | ✔ approval | The owner approves the acceptance criteria (the ratification stamp on the plan node) or returns them | — | — | Stamped, or returned to step 2 |
 | 4 | `attendant-plan` | | The detailed plan: subplans (tracks) with interfaces and sequence, parallel where tracks are independent. For parallel work the lead sets each track's acceptance criteria, each tracing to an approved value criterion; these need no owner approval | **Approach.** Simplest plan that meets the contract? Simpler if the system changed? Does each track need to exist, and for which value criterion? Are the parallel tracks independent in fact? | `plan`, PDR-132 clause 5, PDR-093, `specify-connection` | Every track names its value criterion and interface; a track with none is cut |
@@ -99,7 +99,7 @@ assesses tracks it did not build; the whole is challenged by a sub-agent that di
 
 **Doubt throughout.** Every sub-skill emits its doubts as a named output. A doubt carries
 forward until it is answered with evidence or reaches the owner at step 9. An evidenced
-worth-doubt at steps 2, 4, 6 or 8 ends the run early: step 9 then takes the report, with the
+worth-doubt at steps 4, 6 or 8 ends the run early: step 9 then takes the report, with the
 agent's recommendation, in place of a PR.
 
 ## 4. Defined, started, observed, done
