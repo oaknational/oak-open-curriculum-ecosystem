@@ -36,7 +36,8 @@ Measured against it:
 ## 2. Two systems, each imagined better, and what the better of both leaves out
 
 **Alex Ward's team-of-one pipeline** (the essay of 5 November 2026; compared with the
-Practice in `team-of-one-agentic-sdlc-and-the-practice-2026-11-06.md` on pull request 384).
+Practice in
+[`team-of-one-agentic-sdlc-and-the-practice-2026-11-06.md`](../team-of-one-agentic-sdlc-and-the-practice-2026-11-06.md)).
 Its strength: the contract is one durable record; the builder refuses to start without
 acceptance criteria; a reviewer walks the acceptance list with evidence and fails closed;
 verdicts bind to a plan revision; iteration has caps; the human stands at the ends. Better:

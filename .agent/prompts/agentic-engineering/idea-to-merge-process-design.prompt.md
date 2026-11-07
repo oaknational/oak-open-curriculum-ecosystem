@@ -40,8 +40,9 @@ stage. Structured reviews during both refinement and implementation.
 
 **The model to work from.** Alex Ward's team-of-one agentic SDLC (the essay "I built an
 agentic SDLC for a team of one. Here's the plumbing", 5 November 2026) as compared with the
-Practice in the report `team-of-one-agentic-sdlc-and-the-practice-2026-11-06.md` on pull
-request 384: the ticket as the contract; a refuse-to-start check on the ticket; plan review
+Practice in the report
+[`team-of-one-agentic-sdlc-and-the-practice-2026-11-06.md`](../../research/team-of-one-agentic-sdlc-and-the-practice-2026-11-06.md):
+the ticket as the contract; a refuse-to-start check on the ticket; plan review
 before build; two reviewers on every push, one walking the acceptance list item by item with
 evidence for every "met", failing closed; verdicts that count only for the current plan
 revision; round caps that end with the human; the human at both ends. The owner's
@@ -152,7 +153,7 @@ secrets.
 `.agent/reports/agentic-engineering/multi-agent-review-methodology-2026-08-09.md`;
 `.agent/reports/agentic-engineering/fleet-topologies-history-and-designs-2026-08-05.md`;
 `.agent/reports/agentic-engineering/why-written-lessons-kept-needing-the-owner-2026-09-16.md`;
-the open pull request 384, a comparison of a team-of-one agentic pipeline with the Practice.
+`.agent/research/team-of-one-agentic-sdlc-and-the-practice-2026-11-06.md`.
 
 ## Deliverable
 
