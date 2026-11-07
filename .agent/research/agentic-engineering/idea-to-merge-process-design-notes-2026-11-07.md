@@ -23,10 +23,12 @@ Measured against it:
 - **The request's quality mechanism is the reviews**, and the owner's later words make the
   mechanism exact: at each stage, step back and ask not only whether the work is right but
   whether what it is trying to achieve is worthwhile. The design below is built from those
-  doubt points outward; the machinery follows them. Its mechanisms are the agent's native
-  features, skills above all. For each stage the design decides which of three serves: an
-  existing skill as it is, an existing skill changed for this process, or a new skill written
-  for it. The skills named in §3 are the candidates that decision starts from.
+  doubt points outward. It is a new skill with sub-skills, assembled from skill components:
+  where an existing skill holds a part of a definition the process needs, that part is
+  extracted into a plain file that the existing skill and the new skills both reference.
+  Existing skills are evidence that a concept was explored; the names in §3 say where. The
+  base is zero machinery: skills, sub-agents and the repository's records. Tooling enters
+  where a run has shown skills alone fail, never in anticipation.
 - **Two touches became three** at the owner's word: initiation, acceptance-criteria
   approval, final sense check. The original "ideation and refinement" touch split into its
   two halves because the approval is where the contract is doubted before anything is built.
@@ -69,9 +71,9 @@ where a doubt brief covers it.
 ## 3. The process
 
 Three owner checkpoints, fixed. Between them, stages run through skills, one doubt point in
-each. A doubt point has an altitude, one question, a skill that asks it, and an exit; the
-"asked through" column names the candidate skill the design assesses for that stage, and the
-assessment may keep it, change it, or replace it with a skill written for this process. The
+each. A doubt point has an altitude, one question, a sub-skill that asks it, and an exit; the
+"asked through" column names where the estate has already worked the concept through, the
+place the sub-skill's components are extracted from. The
 doubter receives the artefact and the contract and nothing of the author's claims about them.
 A doubt changes the artefact, is answered with evidence, or travels to the final check as a
 finding; **a worth-doubt with evidence ends the run early**, and the final check takes the
@@ -101,10 +103,12 @@ worth doing?".
 
 ## 4. Defined, started, observed, done
 
-- **Defined** as one skill in the Practice corpus: the stage order, each doubt point's
-  question and brief, the summary's shape, and the run's parameters (the PR and token limits
-  the workflow sets for itself, each with its reason). It invokes, at each stage, the skill
-  the design settled on for that stage; the doubt briefs are its substance.
+- **Defined** as a new skill with one sub-skill per stage, assembled from skill components.
+  The skill carries the stage order, the summary's shape and the run's parameters (the PR
+  and token limits the workflow sets for itself, each with its reason); each sub-skill
+  carries its stage's doubt question and brief, the brief being its substance. The
+  components are plain files, each holding one definition, referenced by the sub-skill and
+  by the existing skill it was extracted from.
 - **Started** by invoking the skill with the idea and outcomes. Stage 2 opens the plan node
   at `sketch`; nothing builds until the node carries the owner's stamp.
 - **Observed** from records any seat can read: the plan node (sketch, stamped, archived), the
@@ -114,13 +118,30 @@ worth doing?".
   word stands on the merged commit, the plan node is archived, and the retrospective is
   recorded.
 
-## 5. Held open for the design session
+Each of those is a skill reading or writing a record the repository and GitHub already hold.
+Nothing is built before the first run.
+
+## 5. Could it be simpler?
+
+- **Simpler without loss.** The stage read is reading the plan node and the PR; the
+  one-screen summary is the final sub-skill's output; the finish check is that sub-skill's
+  checklist; the entry point is invoking the skill. Each would otherwise have been a tool.
+- **Simpler if the system changed.** The component layer: skills sharing definitions by
+  reference instead of restating them. One change to how skills are built, and this process
+  assembles from references; the skills estate's duplication falls with it.
+- **What is complex, and what gets better when it goes.** Tooling for the stages, rule
+  amendments for the parameters, and a merge job for the cloud. Without them there is
+  nothing to build before the first run and nothing to break during it, the skill declares
+  its own parameters, and the cloud merge is answered by a run: the owner's final-check
+  answer and a native merge first, tooling only where a run shows the credential constraint
+  blocks it. Attention stays on the doubt points, which are where the value is.
+
+## 6. Held open for the design session
 
 - The name.
 - The run's parameters and their starting values.
-- The credential path for a cloud run's merge, and the trial's host.
+- The credential a cloud run's merge uses, found where a run meets the constraint.
 - Single-PR work against larger projects (the Claude Code project facts are in the brief).
-- For each stage, whether its candidate skill serves as it is, needs changing for this
-  process, or gives way to a new skill; the doubt briefs are the likeliest places a new or
-  changed skill is needed, since no existing skill is written to receive an artefact and a
-  contract and withhold the author's claims.
+- Which parts of existing skills become components, and what each sub-skill adds that no
+  existing skill holds; the doubt briefs are the surest additions, since no existing skill
+  receives an artefact and a contract while withholding the author's claims.

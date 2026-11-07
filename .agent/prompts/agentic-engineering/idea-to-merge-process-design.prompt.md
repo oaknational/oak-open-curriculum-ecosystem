@@ -64,17 +64,31 @@ are appropriate.
 larger projects, and whether and how a larger project relates to the Claude Code concept of
 projects.
 
+## How it is built (the owner, 2026-11-07)
+
+1. **The process is a new skill with sub-skills.** Where an existing skill holds a part of a
+   definition the process needs, that part is extracted into a skill component, a plain file
+   that the existing skill and the new skills both reference, so one definition serves both.
+   Existing skills are evidence that a concept was explored, never a part to reuse whole.
+2. **The base is zero machinery.** The process is skills, sub-agents and the repository's
+   records. Tooling enters at a point where a run has shown that skills alone fail there,
+   never in anticipation, and it leaves when that evidence lapses. The bar is high because
+   machinery draws attention to itself, adds complexity and fragility, and displaces the
+   value.
+
 ## What the design must answer
 
-1. How the process is defined: the artefact that is its definition, and where it lives.
+1. How the process is defined: the new skill, its sub-skills, and the components extracted
+   from existing skills, each with its home.
 2. How a run is started.
 3. How anyone can tell the current state of a specific run.
 4. How a run is known to be done.
-5. What happens inside the automated middle: which instruments run at each stage, what each
+5. What happens inside the automated middle: which sub-skill runs at each stage, what each
    review tests, and what the middle does when a stage finds the approved plan or criteria
    cannot be met, within the three fixed checkpoints.
 6. The parameters the process sets for itself, each with its value and its reason.
-7. The credential path for each write a cloud run makes.
+7. The credential each write a cloud run makes uses, found by running the process on skills
+   alone and meeting the constraint where a run meets it.
 8. The scale question above.
 
 ## How to work
@@ -82,10 +96,10 @@ projects.
 - Ground with `start-right-thorough`. Use the Parallax skill to explore the design space, and
   the cognitive and planning skills (`concept-exploration`, `proportionality`, `reason`,
   `metacognition`, `user-value`, `specify`, `plan`) through it.
-- Explore what parts of this process the estate already has, and how each would need
-  improving or refining to serve it; where no existing skill serves a stage, the design
-  writes a new one. Read the reports and research on similar concepts under
-  `.agent/reports/agentic-engineering/`, `.agent/research/`, and the decision records.
+- Find where the estate has already worked through a concept the process needs, and extract
+  the part of each existing skill that carries it as a component. Read the reports and
+  research on similar concepts under `.agent/reports/agentic-engineering/`,
+  `.agent/research/`, and the decision records.
 - Make design decisions in the design, each with its reasoning. A decision that is the
   owner's by the decision lenses goes to the owner as a card; everything else is the
   designer's to settle and state.
@@ -103,9 +117,12 @@ above all, each stage's skill kept, changed or newly written as the design finds
 nine-stage draft with the doubt points placed and candidate skills named. It is input to
 assess critically; the owner's words in it are the authority, the draft is not.
 
-## Evidence already gathered (facts; the design is yours)
+## Concepts already explored, and where (facts; the design is yours)
 
-**Estate machinery by stage.** Initiation and refinement: `concept-exploration`, `parallax`
+Each name below is a place where a concept was worked through, to read and extract from; the
+process starts from zero machinery and no existing skill is assumed to serve.
+
+**By stage.** Initiation and refinement: `concept-exploration`, `parallax`
 and its siblings, `proportionality`, `reason`, `metacognition`, `user-value`, `specify`,
 `cricket`, PDR-103. Plan: the `plan` skill, PDR-132 clause 5, PDR-093, `specify-connection`,
 `ticket-management`. Plan review: PDR-123, `assumptions-expert` (ADR-146), the four
@@ -159,6 +176,5 @@ secrets.
 
 ## Deliverable
 
-The process design, recorded where the estate's capability-landing procedure places a
-definition of this kind, with its parameters, its credential path, and its answers to the
-eight questions above.
+The new skill, its sub-skills and the components extracted from existing skills, with the
+process's parameters and its answers to the eight questions above.
