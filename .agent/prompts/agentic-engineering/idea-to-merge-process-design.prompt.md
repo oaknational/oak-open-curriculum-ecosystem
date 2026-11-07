@@ -1,15 +1,34 @@
-# Brief: design the idea-to-merge process
+# Brief: design the Attendant Workflow
 
 **Type**: handover brief, session entry point. **Written**: 2026-11-07, from the owner's words
-of that day. **Task of the session that reads this**: design the process below and record the
-design.
+of that day. **Task of the session that reads this**: design the Attendant Workflow and record
+the design as the `attendant` skill, its `attendant-*` sub-skills and their components.
 
 ## The process, as the owner specified it
 
-A new, named, reusable OCE workflow. It is a process in its own right, designed on its own
-terms; the repository's current pull requests and day-to-day operations are not inputs to it.
+**The Attendant Workflow**: a new, reusable OCE workflow. It is a process in its own right,
+designed on its own terms; the repository's current pull requests and day-to-day operations
+are not inputs to it.
 
-**It needs a memorable name.** Choosing one is part of the design.
+**The owner's user story** (verbatim):
+
+1. "I put forward an idea and ask for the Attendant workflow"
+2. "The idea is analysed using all appropriate skills, improved, and acceptance criteria in
+   terms of value the implemented work would provide are presented for my approval"
+3. "Once I approve a detailed plan is created, broken down into subplans, optimised for
+   parallel work where appropriate"
+4. "The plan is implemented by the agent or agents"
+5. "An assessment is made by the solo agent, or if in parallel the lead agent, as to whether
+   the implementation has delivered the value specified in the plan. If work is happening in
+   parallel each parallel track subplan must have acceptance criteria set by the lead agent,
+   these do not need my approval, and each parallel track be agent assessed for value delivery,
+   and then when the sub tracks come together the above overall assessment must happen"
+6. "Once the agent believes that the value has been delivered the PR is marked ready for
+   review"
+7. "Once the review iteration is complete the agent judges if the work is ready for merge, if
+   it is then the final request for a user sense check is made"
+
+"Throughout that process doubt is explored and valued."
 
 **The owner's checkpoints are fixed. There are three:**
 
@@ -66,10 +85,14 @@ projects.
 
 ## How it is built (the owner, 2026-11-07)
 
-1. **The process is a new skill with sub-skills.** Where an existing skill holds a part of a
-   definition the process needs, that part is extracted into a skill component, a plain file
-   that the existing skill and the new skills both reference, so one definition serves both.
-   Existing skills are evidence that a concept was explored, never a part to reuse whole.
+1. **The process is the `attendant` skill with `attendant-*` sub-skills.** The umbrella
+   skill is the entry point and the high-level flow; each sub-skill is one part of the flow
+   in its own appropriate detail, so no single large skill sits in context creating confusion
+   and competing demands. Skill components are units of logic, guidance and contract that
+   skills assemble from; they are not skills. Where an existing skill holds a part the
+   Attendant needs, that part is extracted into a component the existing skill and the
+   Attendant both reference, so one definition serves both. Existing skills are evidence that
+   a concept was explored, never a part to reuse whole.
 2. **The base is zero machinery.** The process is skills, sub-agents and the repository's
    records. Tooling enters at a point where a run has shown that skills alone fail there,
    never in anticipation, and it leaves when that evidence lapses. The bar is high because
@@ -112,10 +135,10 @@ projects.
 [`idea-to-merge-process-design-notes-2026-11-07.md`](../../research/agentic-engineering/idea-to-merge-process-design-notes-2026-11-07.md)
 holds the owner's direction on the process's quality mechanism: a doubt point in every stage,
 at differing altitudes, asking not only whether the work is right but whether what it is
-trying to achieve is worthwhile; the process built from the agent's native features, skills
-above all, each stage's skill kept, changed or newly written as the design finds; and a
-nine-stage draft with the doubt points placed and candidate skills named. It is input to
-assess critically; the owner's words in it are the authority, the draft is not.
+trying to achieve is worthwhile; and a ten-step sequence drawn from the user story, with the
+internal reviews and the PR review set apart, a proposed sub-skill per stage, and the places
+where each concept was already explored. It is input to assess critically; the owner's words
+in it are the authority, the draft is not.
 
 ## Concepts already explored, and where (facts; the design is yours)
 
@@ -176,5 +199,5 @@ secrets.
 
 ## Deliverable
 
-The new skill, its sub-skills and the components extracted from existing skills, with the
-process's parameters and its answers to the eight questions above.
+The `attendant` skill, its `attendant-*` sub-skills and the components extracted from
+existing skills, with the process's parameters and its answers to the eight questions above.
