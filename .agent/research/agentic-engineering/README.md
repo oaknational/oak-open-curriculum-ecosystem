@@ -97,6 +97,10 @@ sources without turning research notes into a second canon.
 - [codex-official-docs-follow-up-2026-09-23.md](./codex-official-docs-follow-up-2026-09-23.md)
   — official interface documentation, role and authority questions, and bounded
   follow-up proposals for the Codex tooling work.
+- [idea-to-merge-workflow-concept-exploration-2026-11-07.md](./idea-to-merge-workflow-concept-exploration-2026-11-07.md)
+  — the owner's request for a reusable idea-to-merge workflow with two owner
+  touch-points, improved and mapped stage by stage to existing machinery, with
+  the collisions, the owner's open decisions and a proposed first trial.
 - [cross-lane-direction-survey.md](./cross-lane-direction-survey.md) —
   Slice C umbrella: re-reads direction-of-travel evidence (Slice A
   governance projects, Slice B practice-methodology primitives,

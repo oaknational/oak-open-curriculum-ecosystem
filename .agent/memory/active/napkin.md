@@ -1311,3 +1311,24 @@ the owner wants it kept).
   better half; the merge kept both and re-trued the comment that described the old fixture.
 - **A reviewer's ancestry claim is checked with `git merge-base --is-ancestor`, in one command.**
   Codex's P1 on 376 read the tip commit's single parent as the whole history.
+
+## 2026-11-07 — Juniper seeks Pollen (01Duoc): the idea-to-merge workflow request, explored
+
+Written from a solo Claude cloud session on `claude/oce-parallel-workflow-pcgrc9`.
+
+- **Reader legs paraphrase inside quotation marks.** Four of the quotations three mid-tier reader
+  legs returned were paraphrases presented as verbatim (2026-11-07). A fixed-string check of each
+  quotation against its cited file caught all four before review; two more "misses" were only
+  line wraps, cured by collapsing whitespace before searching. Run the check before any reviewer
+  sees the text: a leg's quotation is a pointer to a source, never the source.
+- **A fresh cloud checkout has no claims registry.** `commit-queue list` refused until
+  `.agent/state/collaboration/active-claims.json` was seeded with the tool's own seed line; the
+  claim for this session was therefore opened after the first edits. The registry is
+  untracked by design, so every fresh cloud container starts this way.
+- **`claims open --area-kind` takes `files`, not `path`** (`files | workspace | plan | adr | git`).
+- **A no-tools framing pass on the session model cost about 91k tokens**, close to a mid-tier
+  reader that made sixteen tool calls. One instance, cause unmeasured; price the next framing
+  pass from its own pilot before choosing its tier.
+- **The owner's requested pre-merge check is a new gate** against the standing word "no prs are
+  blocked on me" (2026-09-07). The research note carries it as an owner decision (D1), not as a
+  settled design.
