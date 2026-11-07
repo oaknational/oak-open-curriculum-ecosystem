@@ -55,9 +55,11 @@ and ask not only whether the work is right but whether what it is trying to achi
 worthwhile. The sequence below is built from those doubt points outward. Each sub-skill
 carries one doubt brief; the doubter receives the artefact and the contract and nothing of
 the author's claims about them; a doubt changes the artefact, is answered with evidence, or
-travels forward to the final sense check as a finding; and a worth-doubt with evidence ends
-the run early, the final checkpoint taking a report in place of a PR. The checkpoint count
-holds either way.
+travels forward to the final sense check as a finding; and a worth-doubt with evidence stops
+the spend and brings the run to the final sense check as *not yet*, with the blocking doubt
+named and the agent's recommendation. The owner's word there redirects the run, which
+resumes. A run is done only when its work is merged; *no merge yet* is a state of a run,
+and *no merge at all* is not. The checkpoint count holds throughout.
 
 The estate's own record of why this matters: four reviewers hardened a mechanism nobody had
 asked whether to keep, because "review happens inside the frame it is handed"
@@ -84,7 +86,7 @@ separates them.
 | — | internal review | | **Plan review**: a sub-agent outside the planning frame, with the contract and the plan | the same questions, asked from outside | `assumptions-expert`, `cricket` (frame verdict), PDR-123 | The plan revised or confirmed; doubts recorded |
 | 5 | `attendant-build` | | Each track built test-first in its own worktree, by the solo agent or by track agents under the lead | **Track against contract, at each milestone.** Does the track still serve its criterion? Has building it shown the contract wrong? Has it grown past its reason? | worktree isolation, `spawn`, PDR-117, TDD doctrine, the `commit` skill | A track whose review converged within its rounds; a track stopped at its milestone when the doubt holds, its criterion carried as not met |
 | — | internal review | | **Track code review**: the reviewer roster on each track's change, in its worktree, before integration; **track value assessment**: the lead (or, solo, a fresh sub-agent) walks the track's criteria with evidence | **Track worth.** Did the track deliver its criterion's value, shown, not claimed? | `invoke-code-experts`, PDR-122, the per-finding disposition concept in `pr-tally` | Each track: criteria met with evidence, or not met with the reason |
-| 6 | `attendant-assess` | | The tracks come together: integration, every interface checked, then the overall assessment of whether the implementation delivered the value specified in the plan: the criterion walk (each value criterion met, not met, cannot tell, not applicable, with evidence for every "met") and the holistic perspectives | **Whole worth.** Would the beneficiary notice? Could half of it be deleted? Then engineering excellence, Practice alignment, and whatever else the change calls for | the definition of delivery, `user-value` (assess), `proportionality`, `parallax-audit`, the reviewer roster | Value delivered, shown; or back to step 5 within the plan's budget; or, when it cannot be delivered, the run ends with its report for step 9 |
+| 6 | `attendant-assess` | | The tracks come together: integration, every interface checked, then the overall assessment of whether the implementation delivered the value specified in the plan: the criterion walk (each value criterion met, not met, cannot tell, not applicable, with evidence for every "met") and the holistic perspectives | **Whole worth.** Would the beneficiary notice? Could half of it be deleted? Then engineering excellence, Practice alignment, and whatever else the change calls for | the definition of delivery, `user-value` (assess), `proportionality`, `parallax-audit`, the reviewer roster | Value delivered, shown; or back to step 5 within the plan's budget; or, when it cannot be delivered within the contract, to step 9 as *not yet* with the blocking doubt |
 | — | internal review | | **Independent challenge**: a sub-agent that neither planned nor built nor assessed the work challenges the run's whole claim with the contract and the diff | **Frame.** Is the claim "value delivered" the right claim, and is its evidence sufficient? | `parallax-audit`, `cricket` | The claim stands, is narrowed, or sends the run back |
 | 7 | `attendant-review` | | The agent believes the value delivered: the PR is marked ready for review. The PR review runs: the repository's configured reviewers and checks; every surface harvested; findings triaged (fixed, rejected with evidence, or routed) within the run's round budget | **Change.** Is each finding worth curing, or is the review producing rounds? Does the PR say what the diff does? Did a cure change what step 6 judged? | `pr-lifecycle`, PDR-128, PDR-140 | Settled: green, clean, every finding dispositioned; a materially changed diff re-opens the criterion walk |
 | 8 | `attendant-review` | | The agent judges whether the work is ready for merge: settled, and the value assessment still true of the current head | **Readiness.** What, if anything, in the review iteration changed the value delivered? | the merge doctrine's green, clean and sensible | Ready, with the summary for the owner; or back to step 7 |
@@ -99,8 +101,12 @@ assesses tracks it did not build; the whole is challenged by a sub-agent that di
 
 **Doubt throughout.** Every sub-skill emits its doubts as a named output. A doubt carries
 forward until it is answered with evidence or reaches the owner at step 9. An evidenced
-worth-doubt at steps 4, 6 or 8 ends the run early: step 9 then takes the report, with the
-agent's recommendation, in place of a PR.
+worth-doubt at steps 4, 6 or 8 stops the spend and takes the run to step 9 as *not yet*: the
+owner sees the blocking doubt and the agent's recommendation, and the owner's word sends the
+run back into the middle at the step the doubt names. Doubts at steps 2 and 3 take a
+different path by design: the decision that the value is wanted is the owner's, made at
+initiation, so the contract review's doubts about the criteria and their cost are presented
+at the approval checkpoint, where the owner shapes or returns the contract.
 
 ## 4. Defined, started, observed, done
 
@@ -115,6 +121,9 @@ agent's recommendation, in place of a PR.
 - **Observed** from records any seat can read: the plan node (sketch, stamped, archived), the
   run's branch and draft PR, and the run's log as comments on that PR, one line per step
   entered and per doubt recorded.
+- **Not yet** is a state, never an end: the run holds at step 9 with the blocking doubt and
+  the agent's recommendation on the one screen, and the owner's word sends it back into the
+  middle. A run has no completed state short of a merge.
 - **Done** when the owner's word stands on the merged commit, the criterion walk on that
   commit shows every value criterion met or dispositioned, the plan node is archived, and
   the retrospective is recorded.
