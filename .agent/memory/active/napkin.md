@@ -1387,3 +1387,11 @@ Written from a solo Claude cloud session.
   reader that made sixteen tool calls. One instance, cause unmeasured; price the next framing
   pass from its own pilot before choosing its tier.
 - A fresh-context Parallax auditor cannot see the owner's words a document paraphrases; three of fifteen findings on 2026-11-08 were attribution doubts that the transcript settled in one grep. Quote the owner's sentence in the document and the finding does not arise.
+- **Provisional metrics and a single adjective became hard constraints to engineer around**
+  (2026-11-08). "Unattended" and "the sense check changes nothing material in most runs" were
+  read as requirements, so the owner's word became a bot-readable record with a wake mechanism,
+  a worth-doubt return became a cost against a metric, and the remaining design became a list
+  of unknowns to close by menu. The owner rejected the framing, not the answers: two
+  requirements in tension are a signal to step back and assess the frame, and a new way of
+  working is explored for what becomes easier if the system varies, with judgement and value
+  ahead of any count.

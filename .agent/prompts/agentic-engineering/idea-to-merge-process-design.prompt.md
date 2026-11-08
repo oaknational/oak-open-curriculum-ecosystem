@@ -7,11 +7,12 @@ plan* is the detailed plan a run makes after approval; *the run node* is the pla
 record a run keeps.
 
 **Task of the session that reads this**: produce the creation plan for the Attendant
-Workflow. The plan is decision-complete: every item in it is either specified to the point
-where building it is execution, or assigned to a named run with the signal that settles it
-and the default that holds until then. Research complete means the bounded research below
-is done and cited; design complete means every item of "What we currently believe the work
-should produce" is in one of those two states.
+Workflow, "decision completed and therefore research complete and design complete" (the
+owner, 2026-11-08). The author's reading: research complete means the bounded research below
+is done and cited; design complete means every design decision the plan makes is made from
+that research and the owner's words, with its reasoning, by exploring the design rather than
+by closing a list of unknowns, and a question that only a run can answer is named as such
+with what would answer it.
 
 ## Success, provisionally
 
@@ -219,11 +220,10 @@ assigns it to a named run.
 9. **The run's resumption contract** [C6, C7]: what record a fresh session reads to resume a
    run at the right step after a compaction or a session end, what it must not redo, and how
    a second live run is detected.
-10. **The owner's word and the run** [C5, C7]: the owner's word, at the checkpoints and when
-    a run asks for direction, is given in the session, which is attended at those moments;
-    the record the agent writes from it; the abandoned state; and the answers to how a run is
-    started, how anyone can tell its current state, how it is known to be done, and the scale
-    question.
+10. **The owner's word and the run** [C5, C7]: the owner's word is given in the session,
+    which is attended at the interaction points (the owner, 2026-11-08); the abandoned state;
+    and the answers to how a run is started, how anyone can tell its current state, how it is
+    known to be done, and the scale question.
 11. **The first run** [all]: the owner's idea, and the order in which the skills, sub-agents
     and components are built so that run can happen.
 12. **The stepping-back capability** [C3] (the notes §2): the component review of the
@@ -330,8 +330,8 @@ per-checkout config, so it cannot run in a cloud session
 under the operator credential as an environment fact and not a practice). Cloud-environment
 secrets are injected by the network proxy as request headers and are not readable in the
 session. The upstream-carrier workflow mints the bot's app token inside GitHub Actions from
-repository secrets. Candidate shapes for the creation plan to weigh: a bot write made by a
-GitHub Actions job the run triggers; a local seat woken by the PR record to make the write.
+repository secrets. How a cloud run makes its writes as the bot is designed from these facts
+in the creation plan.
 
 **Most relevant prior reports.** `.agent/research/practice-nature-and-lights-on-comparison-2026-10-22.md`;
 `.agent/research/review-loop-convergence-concept-exploration-2026-07.md`;
@@ -349,7 +349,7 @@ GitHub Actions job the run triggers; a local seat woken by the PR record to make
 ## Deliverable
 
 The creation plan, authored in the plan estate: the bounded research answered with
-citations; every item of "What we currently believe the work should produce" either specified
-to build or assigned to a named run with its settling signal and interim default, with a
-record of what the exploration added, merged, reshaped or retired and why; the owner's
-decisions carded as they arise; and the build order for the first run.
+citations; every item of "What we currently believe the work should produce" designed with
+its reasoning, or named as a question only a run can answer, with a record of what the
+exploration added, merged, reshaped or retired and why; the owner's decisions carded as they
+arise; and the build order for the first run.

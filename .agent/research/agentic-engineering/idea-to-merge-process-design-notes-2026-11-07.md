@@ -311,11 +311,7 @@ at the approval checkpoint, where the owner shapes or returns the contract.
   archived), the run's branch and draft pull request, and the run's log as comments on that
   pull request, one line per step entered and per doubt recorded. This is the single-carrier
   shape, a first cut; the brief's item 7 asks what becomes easier if it changes.
-- **Directed**: the owner's word, at the checkpoints and when the run asks for direction, is
-  given in the session, which is attended at those moments; the agent writes the record (the
-  stamp, the log line) from it.
-- **Not yet** is a state of a run: it holds for the owner's word, at a checkpoint or at a
-  worth-doubt, with the evidence and the agent's analysis on the one screen.
+- **Not yet** is a state of a run: it holds for the owner's word, given in the session.
 - **Abandoned** on the owner's word: the run node archived with the reason, the branch and
   pull request closed, the retrospective recorded.
 - **Done** when the owner's word stands on the merged commit, the criterion walk on that
