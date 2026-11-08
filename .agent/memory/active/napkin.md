@@ -1386,3 +1386,4 @@ Written from a solo Claude cloud session.
 - **A no-tools framing pass on the session model cost about 91k tokens**, close to a mid-tier
   reader that made sixteen tool calls. One instance, cause unmeasured; price the next framing
   pass from its own pilot before choosing its tier.
+- A fresh-context Parallax auditor cannot see the owner's words a document paraphrases; three of fifteen findings on 2026-11-08 were attribution doubts that the transcript settled in one grep. Quote the owner's sentence in the document and the finding does not arise.
