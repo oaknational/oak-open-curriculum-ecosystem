@@ -104,9 +104,13 @@ nothing yet shows that they work.
    optional; every rule holds.
 3. *Simpler?* The first increment that creates the value is the checkpoints plus the doubt
    briefs, run by hand on one idea; the rest is added by the friction a real run shows.
-4. *Simpler if the system changed?* Twice: skill components, so the Attendant assembles from
-   references; and a doubt contract (artefact plus contract, the author's claims withheld)
-   native to the estate's reviewers, which improves every review in the estate.
+4. *Simpler if the system changed?* Asked of every part of the design, by the owner's
+   direction: the Attendant is a new way of working, and existing constraints (multiple pull
+   requests among them) are questioned during design and development for what becomes easier
+   if the system is allowed to change, never by ignoring rules or best practice. Two answers
+   so far: skill components, so the Attendant assembles from references; and a doubt contract
+   (artefact plus contract, the author's claims withheld) native to the estate's reviewers,
+   which improves every review in the estate.
 5. *User value*: proximately the owner; ultimately the people the estate serves.
 
 ## 2. Stepping back: the capability the owner still supplies
@@ -161,7 +165,7 @@ for both the review and the questions the sub-agent would ask.
 **Can the structural trigger be built from native features?** Mostly yes, and the two
 halves of the trigger differ.
 
-*At every stage boundary*: yes, by three layers that need no script.
+*At every stage boundary*: yes, by script-free layers.
 
 1. **The skill makes the dispatch a dependency, never a reminder.** Each `attendant-*`
    sub-skill names the step-back agent's return as a required input of the next stage. An
@@ -173,7 +177,10 @@ halves of the trigger differ.
    outside-the-frame property, available today.
 3. **A hook is machinery** (the owner, 2026-11-08: costlier here than rules, skills and
    sub-agents, slightly less costly than arbitrary scripts; script-free guidance wherever it
-   can serve). So the trigger is built from layers 1 and 2. For the record of what a hook
+   can serve). So the trigger is built from layers 1 and 2, and potentially a supporting
+   rule: always loaded or trigger-loaded text that states the obligation, the cheapest lever
+   of all, so the agent meets the obligation before any skill is open (the owner,
+   2026-11-08). For the record of what a hook
    could do if a run ever shows those layers fail: Claude Code's hooks fire on harness events;
    this estate configures four kinds (`SessionStart`, `PreToolUse`, `UserPromptSubmit`,
    `PreCompact`), each running a script; `SubagentStop` (a sub-agent returning) and `Stop`
@@ -316,13 +323,14 @@ No tooling is built before the first run; the skills, sub-agents and components 
   assembles from references; the skills estate's duplication falls with it.
 - **What is complex, and what gets better when it goes.** Tooling for the stages, and a
   per-run negotiation of every limit. Without the first there is no tooling to build before
-  the first run and none to break during it. For the limits, no mechanism: each
-  normal-operations limit is a purpose with a value calibrated for normal operations
-  (unlanded work bounded; changes small enough to review; non-convergence visible early;
-  spend priced before it is spent), and the Attendant's definition states how a run serves
-  each purpose, with a value only where one is needed, tuned by its retrospectives. Where a
-  rule's literal sentence would be false of an Attendant run, the sentence is incomplete and
-  is improved as doctrine always is (`rules-have-no-exceptions`); nothing is overridden. The cloud merge is a design question answered from the known
+  the first run and none to break during it. For the limits, no mechanism and no pricing:
+  each normal-operations constraint protects something (unlanded work bounded; changes small
+  enough to review; non-convergence visible early), and the Attendant, a new way of working,
+  asks of each what becomes easier if the system is allowed to change so that the constraint
+  no longer binds in the same way, multiple pull requests among them, proposing the change to
+  the owner where one earns its place and improving a rule's incomplete sentence as doctrine
+  always is (`rules-have-no-exceptions`). Cost is observed for information; proportion is
+  held by judgement, the doubt points and the proportionality lens. The cloud merge is a design question answered from the known
   constraints (the brief's facts): the bot for every write, a blocker surfaced to the owner
   where no bot path exists, and never a write under the owner's credential to find out.
   Attention stays on the doubt points, which are where the value is.

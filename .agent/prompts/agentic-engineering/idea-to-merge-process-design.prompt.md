@@ -172,14 +172,18 @@ work that follows the plan.
 6. **The contract's carrier**: how the value-denominated acceptance criteria with their
    evidence, and the lead's track criteria, are recorded; the plan node's ratification stamp
    is the candidate the notes propose, not a decision.
-7. **How a run meets the purpose of each normal-operations limit**, limit by limit: unlanded
-   work bounded (the open-PR limit's purpose), changes small enough to review well (the PR
-   bands'), non-convergence visible early (the round budgets'), spend priced before it is
-   spent (the fan-out controls'). The Attendant's definition states how a run serves each
-   purpose, with a value only where one is needed, and its retrospectives tune what it
-   states. Where a rule's literal sentence would be false of an Attendant run, the sentence
-   is incomplete and is improved in the ordinary way doctrine changes; nothing is overridden
-   and no mechanism is added.
+7. **What each normal-operations constraint protects, and what becomes easier if the system
+   changes.** The Attendant is a new way of working, and the owner's direction (2026-11-08)
+   is to question existing constraints during design and development, multiple pull requests
+   among them: never to ignore rules or best practice, but to explore what becomes easier if
+   aspects of the system are allowed to change. For each constraint (the open-PR limit, the
+   PR bands, the round budgets, the fan-out controls, the one-PR-per-run shape, and any other
+   the design meets): what it protects in normal operations; what an Attendant run would gain
+   if the system changed so that the constraint no longer binds in the same way; and the
+   change, if any, the design proposes, each proposal to the owner. Where a rule's sentence
+   is incomplete for the Attendant it is improved in the ordinary way doctrine changes. Cost
+   is observed for information and is never priced as a mechanism; proportion is held by
+   judgement, the doubt points and the proportionality lens.
 8. **The credential each write a cloud run makes uses**, designed from the known constraints
    (the facts section below): the bot for every write; where no bot path exists for a write,
    the plan names the blocker and the owner rules, per the bot-identity rule's own escalation
@@ -197,7 +201,8 @@ work that follows the plan.
     sub-agent carries it: one that reads the record and the owner's verbatim words, is
     triggered at stage boundaries and on signals rather than by the main agent's judgement,
     climbs altitude more than once, and returns frame-challenging questions the main agent
-    must answer before continuing.
+    must answer before continuing. The trigger is built from a skill precondition, the
+    sub-agent dispatch, and potentially a supporting rule that states the obligation.
 13. **The composition of the native levers** for the Attendant, as a hypothesis to test: rules
     for invariants across every run; skills for the flow and stage procedures; sub-agents for
     judgement from outside the frame. Hooks are machinery (the owner, 2026-11-08): costlier
@@ -249,14 +254,22 @@ source in the bounded corpus.
 - On whether a lens-named sub-agent is a distinct agent identity: closed by the decision
   lenses (item 4 above): a role under Practice norms, as the existing reviewer sub-agents are.
 - On a mechanism for the tunable limits: the question dissolved on stepping back (item 7
-  above). The Attendant's definition states how a run serves each limit's purpose; an
-  incomplete rule sentence is improved as doctrine always is; no mechanism exists to admit.
+  above), and the owner added two directions. Pricing is excluded as a mechanism for this
+  work, as cost was excluded as a metric. And: "we have also said, right at the beginning,
+  that the attendant workflow is a new way of working, and that we can question existing
+  constraints such as multiple PRs, that doesn't mean ignore rules or best practice, it means
+  that during design and development we should explore what becomes easier if aspects of the
+  system are allowed to change."
+- On the stepping-back trigger: built from the skill precondition and the sub-agent
+  dispatch, "and potentially a supporting rule to help trigger the workflow".
 
 ## How to work
 
 - Ground with `start-right-thorough`. Use the Parallax skill to explore the design space, and
   the cognitive and planning skills (`concept-exploration`, `proportionality`, `reason`,
   `metacognition`, `user-value`, `specify`, `plan`) through it.
+- At every part of the design ask what becomes easier if the system changes (the fourth
+  decision lens), and record the answer beside the part, whether or not a change is proposed.
 - Find where the estate has already worked through a concept the process needs, and extract
   the part of each existing skill that carries it as a component. Existing skills are
   evidence that a concept was explored, never a part to reuse whole.
