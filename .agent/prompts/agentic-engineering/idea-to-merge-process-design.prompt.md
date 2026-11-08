@@ -89,9 +89,20 @@ the existing PRs."
 The user story is the later word: the detailed plan follows the owner's approval of the
 acceptance criteria, and the pre-approval work turns the idea into those criteria.
 
-**States of a run (2026-11-07)**: "'No merge yet' is a valid state, 'no merge at all' is
-not." (The owner may stop any run at any time; stopping is the owner's act, outside the
-workflow's states.)
+**States of a run (2026-11-07 and 2026-11-08)**: "'No merge yet' is a valid state, 'no merge
+at all' is not." Asked on 2026-11-08 whether an idea the owner decides against after a run
+has started is a recorded state of the workflow or the owner's act from outside it, the owner
+chose the recorded state: abandoned, the run node archived with the owner's word and the
+reason, the branch and pull request closed, the retrospective still run.
+
+**Direction, and the checkpoints (2026-11-08)**. On a worth-doubt found with evidence in the
+middle: "This is the very heart of the value we are trying to create. Stepping back,
+questioning, and changing direction. This is not a failure, it's a success of the process.
+[...] If this state occurs then ask the user for direction, don't offer a menu of options,
+ask for direction". On where the owner's word is given: "All in the session. The session is
+largely unattended, but clearly at the interaction points the session cannot be unattended.
+Instead of making requirements in tension try to fit, recognise that requirements in tension
+are a strong signal to step back and assess the frame".
 
 **The first doubt (2026-11-07)**: "this workflow happens once I have an idea for value I want
 provided, so the first questions include 'what is the real user value here', and 'how can we
@@ -163,7 +174,8 @@ in another form.
 
 The belief before the exploration, written on 2026-11-07 and revised on 2026-11-08. Each item
 names in brackets the capability it serves (the notes §1: C1 find the real value; C2 tell
-whether value was delivered; C3 keep quality without presence; C4 run unattended in the cloud;
+whether value was delivered; C3 keep quality without presence; C4 run in the cloud end to
+end, unattended between the interaction points;
 C5 earn the owner's trust at the decision screens; C6 survive its own duration; C7 be legible
 to any seat from records; C8 learn). The design session tests the list as it explores: an item
 may be added, merged, reshaped or retired on evidence, an item that serves no capability is
@@ -207,10 +219,11 @@ assigns it to a named run.
 9. **The run's resumption contract** [C6, C7]: what record a fresh session reads to resume a
    run at the right step after a compaction or a session end, what it must not redo, and how
    a second live run is detected.
-10. **The owner's word and the run** [C4, C5, C7]: the record that carries the owner's word at
-    checkpoints 2 and 3, how an unattended cloud run wakes on it, and the answers to how a run
-    is started, how anyone can tell its current state, how it is known to be done, and the
-    scale question.
+10. **The owner's word and the run** [C5, C7]: the owner's word, at the checkpoints and when
+    a run asks for direction, is given in the session, which is attended at those moments;
+    the record the agent writes from it; the abandoned state; and the answers to how a run is
+    started, how anyone can tell its current state, how it is known to be done, and the scale
+    question.
 11. **The first run** [all]: the owner's idea, and the order in which the skills, sub-agents
     and components are built so that run can happen.
 12. **The stepping-back capability** [C3] (the notes §2): the component review of the

@@ -42,7 +42,8 @@ derived from the capabilities below, and an item that serves none of them is cut
 3. **Keep quality without presence**: doubt at each altitude that catches what the owner would
    have caught, and above all the one act the owner still performs for every instrument the
    estate has: pausing the flow and changing altitude, perspective or frame (§2).
-4. **Run unattended, end to end, in the cloud**, the merge included.
+4. **Run in the cloud, end to end**, the merge included, unattended between the interaction
+   points.
 5. **Earn the owner's trust at the two decision screens**: what the owner sees at approval and
    at the sense check lets a good decision be made in minutes.
 6. **Survive its own duration**: a run outlives a context window and perhaps a session, and
@@ -76,7 +77,6 @@ antidote; nothing yet shows that they work.
 | Does parallel build pay here, or does assembly consume the gain? | Measurement across runs |
 | How does a cloud run merge as the bot? | Designed from the known constraints (the brief's item 8 and facts); the first run confirms the design |
 | Does a stated precondition hold an agent in a captured frame to the step-back dispatch? | The first runs: a stage entered without the step-back return on record falsifies it (§2) |
-| How does the owner's word reach an unattended run at checkpoints 2 and 3? | The brief's item 10: the record that carries it and how the run wakes on it |
 | Is one run node, one branch and one pull request per idea proportionate? | The first runs' friction, read with the brief's item 7 |
 
 ### Questions first asked here, and their status
@@ -139,8 +139,9 @@ the five, rather than a sixth of the same kind:
   records and the owner's verbatim words, with the invoking agent's prose withheld.
 - **Structurally triggered.** At every stage boundary of the Attendant, and on signals read
   from the record: a cure that grows, churn without convergence, instruments appearing before
-  value, the same correction arriving twice. It does not wait for the captured agent to call
-  it.
+  value, the same correction arriving twice, requirements in tension (the owner, 2026-11-08:
+  a strong signal to step back and assess the frame). It does not wait for the captured agent
+  to call it.
 - **Multi-altitude, ascending.** The work in hand; the stage; the plan; the value
   proposition; the bigger picture the estate exists for. Stepping back more than once is the
   climb, and it ends at the top, not at the first level that looks fine.
@@ -239,14 +240,13 @@ and ask not only whether the work is right but whether what it is trying to achi
 worthwhile. The sequence in §5 is built from those doubt points outward. Each sub-skill
 carries one doubt brief; the doubter receives the artefact and the contract, with the
 author's claims about them withheld; a doubt changes the artefact, is answered with evidence,
-or travels forward to the final sense check as a finding. For a worth-doubt with evidence in
-the middle, these notes propose that it stops the spend and brings the run to the final
-sense check as *not yet*, with the blocking doubt named and the agent's recommendation, and
-that the owner's word there sends the run back into the middle. The proposal has a cost the
-design session weighs: each such arrival is a sense check that changes something material,
-which the second success metric counts against the Attendant, so the first runs' *not yet*
-arrivals are the signal that settles it. A run is done when its work is merged (the owner's
-words on the states of a run are in the brief). The checkpoint count holds throughout.
+or travels forward to the final sense check as a finding. A worth-doubt found with evidence
+in the middle is the process succeeding (the owner, 2026-11-08, quoted in the brief under
+"Direction, and the checkpoints"): the run stops the spend and asks the owner for direction,
+in the session, with the evidence and its analysis of what is happening; the owner's
+direction sends the run to the point in the graph it names, where it continues with better
+understanding. A run ends merged, or abandoned on the owner's word (the owner's words on the
+states of a run are in the brief). The checkpoint count holds throughout.
 
 The estate's own record of why this matters: four reviewers hardened a mechanism nobody had
 asked whether to keep, because "review happens inside the frame it is handed"
@@ -268,12 +268,12 @@ separates them.
 | 1 | `attendant` | ✔ initiation | The owner puts forward the idea and asks for the Attendant. The umbrella skill opens the run: a run node at `sketch`, one branch, one draft pull request (the single-carrier shape, a first cut that the brief's item 7 questions) | — | — | The idea recorded as given |
 | 2 | `attendant-shape` | | The idea is analysed and improved. The result is the value contract: beneficiaries and what each gets; outcomes; scope and non-goals; acceptance criteria denominated in value, each with the evidence that would show it met; the doubts raised (the run's sizing is the plan's, after approval) | **Value.** What is the real user value here, and for whom? How can we deliver it? Does the idea as stated deliver that value, or is there a sharper shape for it? What would make this complete and worthless? | `user-value`, `concept-exploration`, `parallax-frame`, `proportionality`, PDR-103 | The contract, with the value stated, the way to it, and what would show it wrong |
 | — | internal review | | **Contract review**: a sub-agent outside the shaping frame assesses the contract for the reliance "build from this unattended" | **Contract.** Would meeting every criterion be worth the cost of meeting it? Which criteria measure activity rather than outcome? What is unprovable? | `assess-specification`, the definition of delivery | The contract and its doubts presented to the owner |
-| 3 | `attendant` | ✔ approval | The owner approves the acceptance criteria or returns them (the notes propose the run node's ratification stamp as the record of that approval; how the word reaches an unattended run is the brief's item 10) | — | — | Stamped, or returned to step 2 |
+| 3 | `attendant` | ✔ approval | The owner approves the acceptance criteria or returns them, in the session; the notes propose the run node's ratification stamp as the record the agent writes from that word | — | — | Stamped, or returned to step 2 |
 | 4 | `attendant-plan` | | The detailed plan: subplans (tracks) with interfaces and sequence, parallel where tracks are independent. For parallel work the lead sets each track's acceptance criteria, each tracing to an approved value criterion; these need no owner approval | **Approach.** Simplest plan that meets the contract? Simpler if the system changed? Does each track need to exist, and for which value criterion? Are the parallel tracks independent in fact? | `plan`, PDR-132 clause 5, PDR-093, `specify-connection` | Every track names its value criterion and interface; a track with none is cut |
 | — | internal review | | **Plan review**: a sub-agent outside the planning frame, with the contract and the plan | the same questions, asked from outside | `assumptions-expert`, `cricket` (frame verdict), PDR-123 | The plan revised or confirmed; doubts recorded |
 | 5 | `attendant-build` | | Each track built test-first in its own worktree, by the solo agent or by track agents under the lead | **Track against contract, at each milestone.** Does the track still serve its criterion? Has building it shown the contract wrong? Has it grown past its reason? | worktree isolation, `spawn`, PDR-117, TDD doctrine, the `commit` skill | A track whose review converged within its rounds; a track stopped at its milestone when the doubt holds, its criterion carried as not met |
 | — | internal review | | **Track code review**: the reviewer roster on each track's change, in its worktree, before integration; **track value assessment**: the lead (or, solo, a fresh sub-agent) walks the track's criteria with evidence | **Track worth.** Did the track deliver its criterion's value, shown, not claimed? | `invoke-code-experts`, PDR-122, the per-finding disposition concept in `pr-tally` | Each track: criteria met with evidence, or not met with the reason |
-| 6 | `attendant-assess` | | The tracks come together: integration, every interface checked, then the overall assessment of whether the implementation delivered the value specified in the plan: the criterion walk (each value criterion met, not met, cannot tell, not applicable, with evidence for every "met") and the holistic perspectives | **Whole worth.** Would the beneficiary notice? Could half of it be deleted? Then engineering excellence, Practice alignment, and whatever else the change calls for | the definition of delivery, `user-value` (assess), `proportionality`, `parallax-audit`, the reviewer roster | Value delivered, shown; or back to step 5 within the plan's budget; or, when it cannot be delivered within the contract, to step 9 as *not yet* with the blocking doubt |
+| 6 | `attendant-assess` | | The tracks come together: integration, every interface checked, then the overall assessment of whether the implementation delivered the value specified in the plan: the criterion walk (each value criterion met, not met, cannot tell, not applicable, with evidence for every "met") and the holistic perspectives | **Whole worth.** Would the beneficiary notice? Could half of it be deleted? Then engineering excellence, Practice alignment, and whatever else the change calls for | the definition of delivery, `user-value` (assess), `proportionality`, `parallax-audit`, the reviewer roster | Value delivered, shown; or back to step 5 within the plan's budget; or, when it cannot be delivered within the contract, the run asks the owner for direction with the evidence |
 | — | internal review | | **Independent challenge**: a sub-agent that neither planned nor built nor assessed the work challenges the run's whole claim with the contract and the diff | **Frame.** Is the claim "value delivered" the right claim, and is its evidence sufficient? | `parallax-audit`, `cricket` | The claim stands, is narrowed, or sends the run back |
 | 7 | `attendant-review` | | The agent believes the value delivered: the PR is marked ready for review. The PR review runs: the repository's configured reviewers and checks; every surface harvested; findings triaged (fixed, rejected with evidence, or routed) within the run's round budget | **Change.** Is each finding worth curing, or is the review producing rounds? Does the PR say what the diff does? Did a cure change what step 6 judged? | `pr-lifecycle`, PDR-128, PDR-140 | Settled: green, clean, every finding dispositioned; a materially changed diff re-opens the criterion walk |
 | 8 | `attendant-review` | | The agent judges whether the work is ready for merge: settled, and the value assessment still true of the current head | **Readiness.** What, if anything, in the review iteration changed the value delivered? | the merge doctrine's green, clean and sensible | Ready, with the summary for the owner; or back to step 7 |
@@ -288,9 +288,10 @@ assesses tracks it did not build; the whole is challenged by a sub-agent that di
 
 **Doubt throughout.** Every sub-skill emits its doubts as a named output. A doubt carries
 forward until it is answered with evidence or reaches the owner at step 9. An evidenced
-worth-doubt at steps 4, 6 or 8 stops the spend and takes the run to step 9 as *not yet*: the
-owner sees the blocking doubt and the agent's recommendation, and the owner's word sends the
-run back into the middle at the step the doubt names. Doubts at steps 2 and 3 take a
+worth-doubt at steps 4, 6 or 8 stops the spend and asks the owner for direction, in the
+session: the owner sees the doubt, the evidence and the agent's analysis of what is
+happening, and the owner's direction sends the run to the point in the graph it names.
+Doubts at steps 2 and 3 take a
 different path by design: the decision that the value is wanted is the owner's, made at
 initiation, so the contract review's doubts about the criteria and their cost are presented
 at the approval checkpoint, where the owner shapes or returns the contract.
@@ -310,10 +311,13 @@ at the approval checkpoint, where the owner shapes or returns the contract.
   archived), the run's branch and draft pull request, and the run's log as comments on that
   pull request, one line per step entered and per doubt recorded. This is the single-carrier
   shape, a first cut; the brief's item 7 asks what becomes easier if it changes.
-- **Woken**: the record that carries the owner's word at checkpoints 2 and 3, and how an
-  unattended cloud run resumes on it, is the brief's item 10.
-- **Not yet** is a state of a run: it holds at step 9 with the blocking doubt and the agent's
-  recommendation on the one screen, and the owner's word sends it back into the middle.
+- **Directed**: the owner's word, at the checkpoints and when the run asks for direction, is
+  given in the session, which is attended at those moments; the agent writes the record (the
+  stamp, the log line) from it.
+- **Not yet** is a state of a run: it holds for the owner's word, at a checkpoint or at a
+  worth-doubt, with the evidence and the agent's analysis on the one screen.
+- **Abandoned** on the owner's word: the run node archived with the reason, the branch and
+  pull request closed, the retrospective recorded.
 - **Done** when the owner's word stands on the merged commit, the criterion walk on that
   commit shows every value criterion met or dispositioned, the run node is archived, and
   the retrospective is recorded.
