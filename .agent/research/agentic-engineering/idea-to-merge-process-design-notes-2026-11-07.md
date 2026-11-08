@@ -8,7 +8,95 @@ to assess critically, never authority. An adversarial Cricket check ran on the f
 its redirection (give the worth-doubt the power to end a run; cut rather than accumulate) is
 folded in.
 
-## 1. What the owner has set
+## 1. Impact, value, and what we do not yet know
+
+**The outcome.** An idea of the owner's becomes merged, value-bearing work with three touches
+of the owner's attention and none unplanned, at a quality the owner would otherwise get only
+by being present throughout.
+
+**The impact.** The owner's attention stops being the bottleneck on delivery. What gets
+delivered is bounded by the ideas the owner has, not by the hours the owner can supervise, and
+the attention the owner does spend lands where only the owner can decide: what value is
+wanted, whether the criteria capture it, whether the result is sensible to merge. Everything
+the estate serves gets more of the owner's ideas, sooner.
+
+**The mechanism.** A fixed-shape process in which judgement replaces presence: doubt exercised
+at several altitudes by minds outside the frame that did the work, so that the work stays
+honest and valuable without the owner watching it.
+
+The artefacts (skills, sub-agents, components) are means. Every item the brief asks for is
+derived from the capabilities below, and an item that serves none of them is cut.
+
+### What we need in order to create that value
+
+1. **Find the real value in a sketch**: turn a one-line idea into a value contract the owner
+   recognises as their own and would have written given the time.
+2. **Tell whether value was delivered, without the owner**: an assessment denominated in value
+   with evidence, by someone outside the builder's frame.
+3. **Keep quality without presence**: doubt at each altitude that catches what the owner would
+   have caught.
+4. **Run unattended, end to end, in the cloud**, the merge included.
+5. **Earn the owner's trust at the two decision screens**: what the owner sees at approval and
+   at the sense check lets a good decision be made in minutes.
+6. **Survive its own duration**: a run outlives a context window and perhaps a session, and
+   resumes from its records.
+7. **Learn**: each run improves the next.
+
+### What we understand
+
+The owner's three checkpoints and the sequence; that doubt at altitude is the quality
+mechanism; the estate's doctrine on delivery, plan nodes and reviews; what Ward's pipeline
+and the lights-on factory do and lack; the estate's measured failure modes (review
+treadmills, reviewers hardening a frame nobody questioned, prose disciplines regressing). And
+one datum from the session that wrote these notes: an agent working without the owner
+present generated fluent momentum in the wrong direction for hours. The Attendant's middle
+consists of agents in exactly that condition. Its doubt points are the designed antidote;
+nothing yet shows that they work.
+
+### What is unknown, and how each would be learned
+
+| Unknown | How we would learn it |
+| --- | --- |
+| Can an agent find the real user value from the owner's idea, in this domain, reliably? | The first runs: how much the owner changes the contract at approval is the signal |
+| Do fresh-context doubters catch frame errors, or produce doubt theatre? | Per run: doubts that changed something, against their cost; what the owner's sense check catches is the miss rate |
+| What must the owner see at approval and at the sense check? | The owner, now (owner-constitutive); refined by runs |
+| What does "value delivered" mean before release? | Doctrine distinguishes landed from released; the claim boundary needs the owner's word |
+| What does a run cost, and what cost is acceptable? | Measurement; the owner's word on the envelope |
+| Does parallel build pay here, or does assembly consume the gain? | Measurement across runs |
+| How does a cloud run merge as the bot? | A probe at the point a run meets it |
+| Is one plan node per idea proportionate? | The first runs' friction |
+
+### Questions not yet asked
+
+- **What are the Attendant's own acceptance criteria, in value terms?** Candidates, for the
+  owner to shape: an idea reaches merged value with three touches and none unplanned; the
+  owner's sense check changes nothing material in most runs; the owner would rather use it
+  than not; cost per run inside an envelope the owner sets.
+- **What has the owner historically caught at review that agents missed?** That history is
+  the specification for the doubt briefs; the estate's retrospectives hold it.
+- **What does an agent need to know at initiation to find real value?** A model of the
+  estate's beneficiaries exists in the vision and strategy; whether it serves as a value
+  model at step 2 is untested.
+- **What holds a run across compactions and sessions**, and what does resuming a run look
+  like?
+- **May two runs be live at once**, and what do they share?
+- **What does the first run teach that only many runs can**, and what must it settle before a
+  second starts?
+
+### The decision lenses, in order
+
+1. *Architectural excellence*: the Attendant is a Practice capability, portable across hosts,
+   defined in skills, sub-agents and components, learning through the estate's loop.
+2. *Strict everywhere*: the checkpoints are fixed structure; the doubt points are not
+   optional; every rule holds.
+3. *Simpler?* The first increment that creates the value is the checkpoints plus the doubt
+   briefs, run by hand on one idea; the rest is added by the friction a real run shows.
+4. *Simpler if the system changed?* Twice: skill components, so the Attendant assembles from
+   references; and a doubt contract (artefact plus contract, the author's claims withheld)
+   native to the estate's reviewers, which improves every review in the estate.
+5. *User value*: proximately the owner; ultimately the people the estate serves.
+
+## 2. What the owner has set
 
 - **The name.** The Attendant Workflow. The umbrella skill is `attendant`; the sub-skills
   are `attendant-*`.
@@ -48,11 +136,11 @@ folded in.
   operations are the Attendant's own parameters, set in its definition and tuned by its runs.
 - **Cloud.** It runs end to end in cloud sessions.
 
-## 2. The request's quality mechanism
+## 3. The request's quality mechanism
 
 The reviews are the mechanism, and the owner's words make it exact: at each stage, step back
 and ask not only whether the work is right but whether what it is trying to achieve is
-worthwhile. The sequence below is built from those doubt points outward. Each sub-skill
+worthwhile. The sequence in §4 is built from those doubt points outward. Each sub-skill
 carries one doubt brief; the doubter receives the artefact and the contract and nothing of
 the author's claims about them; a doubt changes the artefact, is answered with evidence, or
 travels forward to the final sense check as a finding; and a worth-doubt with evidence stops
@@ -69,7 +157,7 @@ Alex Ward's team-of-one pipeline
 has the same gap: both of its reviewers grade against a ticket its author wrote, and nothing
 doubts the ticket. The Attendant's doubt points are the answer to both.
 
-## 3. The sequence
+## 4. The sequence
 
 Two kinds of review run inside it. **Internal reviews** are the Attendant's own, by
 sub-agents within the run, before the PR is marked ready. **The PR review** is the
@@ -108,10 +196,10 @@ different path by design: the decision that the value is wanted is the owner's, 
 initiation, so the contract review's doubts about the criteria and their cost are presented
 at the approval checkpoint, where the owner shapes or returns the contract.
 
-## 4. Defined, started, observed, done
+## 5. Defined, started, observed, done
 
 - **Defined** as the `attendant` skill and its `attendant-*` sub-skills, assembled from
-  components. The umbrella carries the flow of §3, the hand-off between sub-skills, the
+  components. The umbrella carries the flow of §4, the hand-off between sub-skills, the
   three checkpoints, the summary's shape and the run's parameters. Each sub-skill carries its
   stage in its own detail, with its doubt brief as its substance. Components are plain
   files, one definition each, referenced by the sub-skill that needs them and by the existing
@@ -131,7 +219,7 @@ at the approval checkpoint, where the owner shapes or returns the contract.
 Each of those is a skill reading or writing a record the repository and GitHub already hold.
 Nothing is built before the first run.
 
-## 5. Could it be simpler?
+## 6. Could it be simpler?
 
 - **Simpler without loss.** Reading the run's state is reading the plan node and the PR; the
   owner's one screen is `attendant`'s output at step 9; the finish check is its checklist;
@@ -146,9 +234,9 @@ Nothing is built before the first run.
   word at step 9 and a native merge first, tooling only where a run shows the credential
   constraint blocks it. Attention stays on the doubt points, which are where the value is.
 
-## 6. Held open for the design session
+## 7. Held open for the design session
 
-- The sub-skill set: the six proposed in §3 are a starting cut, to be settled by what each
+- The sub-skill set: the six proposed in §4 are a starting cut, to be settled by what each
   stage needs in its own detail.
 - The sub-agent definitions. Every doubt point dispatches a sub-agent, since only a fresh
   context stands outside the frame that produced the artefact; a skill loads into the

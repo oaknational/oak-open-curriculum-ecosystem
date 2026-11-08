@@ -4,6 +4,22 @@
 of that day. **Task of the session that reads this**: design the Attendant Workflow and record
 the design as the `attendant` skill, its `attendant-*` sub-skills and their components.
 
+## The impact, through what value
+
+**The outcome**: an idea of the owner's becomes merged, value-bearing work with three touches
+of the owner's attention and none unplanned, at a quality the owner would otherwise get only
+by being present throughout. **The impact**: the owner's attention stops being the bottleneck
+on delivery; what gets delivered is bounded by the owner's ideas, not by the hours the owner
+can supervise, and the attention spent lands where only the owner can decide. **The
+mechanism**: a fixed-shape process in which judgement replaces presence, doubt exercised at
+several altitudes by minds outside the frame that did the work.
+
+The design starts from the question "what do we need to create that value?", not from "how
+does what we have fit this shape?". The design notes (below) open with the seven capabilities
+the value needs, what is understood, what is unknown and how each unknown would be learned,
+and the questions not yet asked, the first of which is the Attendant's own acceptance
+criteria in value terms. Settle those before the artefacts.
+
 ## The process, as the owner specified it
 
 **The Attendant Workflow**: a new, reusable OCE workflow. It is a process in its own right,
@@ -101,9 +117,11 @@ projects.
 
 ## What we currently believe the work should produce
 
-This list is the belief before the exploration, written on 2026-11-07. The design session
-tests it as it explores: an item may be added, merged, reshaped or retired on evidence, and
-the session records what it changed and why.
+This list is the belief before the exploration, written on 2026-11-07, derived from the
+seven capabilities the value needs (the design notes, §1). The design session tests it as it
+explores: an item may be added, merged, reshaped or retired on evidence, an item that serves
+none of the capabilities is cut, and the session records what it changed and why. Before any
+of it: the Attendant's own acceptance criteria, in value terms, for the owner to shape.
 
 1. **The `attendant` skill**: the entry point and the high-level flow, the three checkpoints,
    the hand-offs between sub-skills, the one screen for the final sense check, and the
