@@ -99,20 +99,33 @@ projects.
    machinery draws attention to itself, adds complexity and fragility, and displaces the
    value.
 
-## What the design must answer
+## What we currently believe the work should produce
 
-1. How the process is defined: the new skill, its sub-skills, and the components extracted
-   from existing skills, each with its home.
-2. How a run is started.
-3. How anyone can tell the current state of a specific run.
-4. How a run is known to be done.
-5. What happens inside the automated middle: which sub-skill runs at each stage, what each
-   review tests, and what the middle does when a stage finds the approved plan or criteria
-   cannot be met, within the three fixed checkpoints.
-6. The parameters the process sets for itself, each with its value and its reason.
-7. The credential each write a cloud run makes uses, found by running the process on skills
-   alone and meeting the constraint where a run meets it.
-8. The scale question above.
+This list is the belief before the exploration, written on 2026-11-07. The design session
+tests it as it explores: an item may be added, merged, reshaped or retired on evidence, and
+the session records what it changed and why.
+
+1. **The `attendant` skill**: the entry point and the high-level flow, the three checkpoints,
+   the hand-offs between sub-skills, the one screen for the final sense check, and the
+   process's parameters.
+2. **The `attendant-*` sub-skills**, one per stage, each in its own detail: inputs, outputs,
+   exit, and what it hands to its doubter and withholds.
+3. **The doubt briefs**: for each stage, what the doubter receives, what it may not receive,
+   the question at that altitude, the return shape, and the round budget.
+4. **The sub-agent definitions** for the doubters: at least the contract reviewer, the plan
+   reviewer, the track and whole value assessors, and the independent challenger; and the
+   track builder for parallel runs.
+5. **The components**: which parts of which existing skills are extracted, each as one unit
+   of logic, guidance and contract, referenced by the existing skill and by the Attendant.
+6. **The contract's carrier**: how the plan node holds the value-denominated acceptance
+   criteria with their evidence, the run's size, and the lead's track criteria.
+7. **The parameters**, each with its starting value and its reason.
+8. **The credential** each write a cloud run makes uses, found by running the process on
+   skills alone and meeting the constraint where a run meets it.
+9. **The answers** to how a run is started, how anyone can tell its current state, how it is
+   known to be done, and the scale question above.
+10. **The first run**: the owner's idea, and the order in which the skills, sub-agents and
+    components are built so that run can happen.
 
 ## How to work
 
@@ -199,5 +212,5 @@ secrets.
 
 ## Deliverable
 
-The `attendant` skill, its `attendant-*` sub-skills and the components extracted from
-existing skills, with the process's parameters and its answers to the eight questions above.
+The items in "What we currently believe the work should produce", as the exploration leaves
+them, with a record of what the exploration added, merged, reshaped or retired, and why.
