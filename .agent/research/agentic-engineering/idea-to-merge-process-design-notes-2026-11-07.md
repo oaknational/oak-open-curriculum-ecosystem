@@ -153,6 +153,57 @@ capability, and whether the Attendant's doubters are that sub-agent parameterise
 altitude or separate instruments. The record of the owner's corrections is the evidence base
 for both the review and the questions the sub-agent would ask.
 
+**Can the structural trigger be built from native features?** Mostly yes, and the two
+halves of the trigger differ.
+
+*At every stage boundary*: yes, by three layers that need no script.
+
+1. **The skill makes the dispatch a dependency, never a reminder.** Each `attendant-*`
+   sub-skill names the step-back agent's return as a required input of the next stage. An
+   agent in a captured frame can rationalise skipping a reminder; it cannot start a stage
+   whose stated precondition is missing without visibly breaking the procedure it follows.
+   The dispatch brief is a fixed component, so it cannot be softened per call.
+2. **Sub-agents give the fresh context.** The step-back agent is dispatched through the
+   native Agent tool with the record and the owner's verbatim words as its inputs: the
+   outside-the-frame property, available today.
+3. **Hooks make the obligation independent of the agent's judgement.** Claude Code's hooks are
+   harness configuration, and this estate runs four kinds (`SessionStart`, `PreToolUse`,
+   `UserPromptSubmit`, `PreCompact`). Two more fit this need: `SubagentStop`, firing each time
+   a sub-agent returns, a natural stage boundary; and `Stop`, firing when the main agent tries
+   to end its turn, able to refuse with an instruction. A hook that injects a fixed line (the
+   step-back return for this stage is owed before the next begins) is configuration, not
+   tooling, and fires whether or not the agent thought of it. Hooks run in ordinary cloud
+   sessions (this session's own `SessionStart` hook fired) and do not run in Claude Code
+   project threads, one more reason the first version runs in a single session.
+
+*On signals*: partly, and the rest stays unbuilt until a run asks for it. Detecting a growing
+cure or churn without convergence as an event needs a script reading the record and computing
+a condition, which is machinery. The native alternatives: the step-back agent reads the
+signals itself when it runs, since analysing what is happening is its brief and the boundary
+trigger brings it in often enough for most signals; and a cadence for long stages through
+native scheduling (the estate's heartbeat cron and `Monitor` are the same mechanism), a
+dispatch every so many minutes of a stage, so a long build cannot drift unobserved between
+boundaries. Boundaries plus cadence, with the arriving agent doing the detection. If runs
+show misses clustering between boundaries with the cadence too coarse, that is the evidence
+a hook script would need.
+
+**To verify in the design session, never assume**: the exact hook events Claude Code offers
+and what a `Stop` or `SubagentStop` hook may do in a cloud session, read from Anthropic's
+current hooks documentation. Everything else above is built from features already in use in
+this repository.
+
+**Research the design session owes on the levers themselves.** What a rule can trigger on
+and instigate: in Claude Code a rule under `.claude/rules/` is text loaded always or by path
+glob and shapes behaviour; whether it can instigate an action, and under what conditions it
+is loaded in a cloud session, is to be read from the documentation and tested, and set
+beside the estate's own trigger vocabulary for rules (`surface:`, `tool:`, `session:`,
+`ceremony:`), which is convention the agent honours, not a harness mechanism. Then how the
+four levers compose for the Attendant: rules for the invariants that hold across every run;
+skills for the flow and the stage procedures; hooks for obligations that must fire without
+the agent's judgement; sub-agents for judgement that must come from outside the frame. The
+estate's capability-landing procedure is the starting map for that composition; the research
+tests it against what each lever can do in a cloud session.
+
 ## 3. What the owner has set
 
 - **The name.** The Attendant Workflow. The umbrella skill is `attendant`; the sub-skills

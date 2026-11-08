@@ -183,6 +183,17 @@ every claim cited to its source.
   notes' §2 holds a hypothesis (invoked from inside the frame; triggered by the captured
   judgement; climbing one level); the research tests it against the record and the
   instruments' own texts.
+- **What can each native lever trigger on and instigate, and how do they compose?** Rules
+  (what loads them, in a cloud session included, and whether a rule can instigate an action
+  or only shape behaviour); skills (invocation, sub-skill hand-off, what a skill can require
+  as a precondition); hooks (the exact events Claude Code offers, what `Stop` and
+  `SubagentStop` may do, and what runs in a cloud session); sub-agents (dispatch, inputs,
+  return shapes, what a sub-agent can and cannot read of the main agent's context). Read from
+  Anthropic's current documentation and tested where a test is cheap, never assumed. Then the
+  composition for the Attendant: rules for invariants across every run; skills for the flow
+  and stage procedures; hooks for obligations that must fire without the agent's judgement;
+  sub-agents for judgement from outside the frame. The notes' §2 holds a first answer for the
+  stepping-back trigger, with its verification item flagged.
 
 ## How to work
 
