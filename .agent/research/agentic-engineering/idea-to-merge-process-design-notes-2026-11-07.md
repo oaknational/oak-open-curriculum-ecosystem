@@ -1,6 +1,6 @@
 # The Attendant Workflow: design notes
 
-**Date**: 2026-11-07 · **Seat**: Juniper seeks Pollen (Claude Code cloud session) ·
+**Date**: 2026-11-07, revised 2026-11-08 · **Seat**: Juniper seeks Pollen (Claude Code cloud session) ·
 **Status**: design notes, input to the design session briefed in
 [`idea-to-merge-process-design.prompt.md`](../../prompts/agentic-engineering/idea-to-merge-process-design.prompt.md).
 Every prior analysis these notes draw on, the two reports they compare included, is input
@@ -76,7 +76,7 @@ nothing yet shows that they work.
 | How does a cloud run merge as the bot? | A probe at the point a run meets it |
 | Is one plan node per idea proportionate? | The first runs' friction |
 
-### Questions not yet asked
+### Questions first asked here, and their status
 
 - **What are the Attendant's own acceptance criteria, in value terms?** Answered
   provisionally above (the owner, 2026-11-08).
@@ -86,8 +86,10 @@ nothing yet shows that they work.
   estate's beneficiaries exists in the vision and strategy; whether it serves as a value
   model at step 2 is untested.
 - **What holds a run across compactions and sessions**, and what does resuming a run look
-  like?
-- **May two runs be live at once**, and what do they share?
+  like? Now an expected output of the plan (the brief's item 9, the resumption contract):
+  the record a fresh session reads to resume at the right step, what it must not redo, and
+  how a second live run is detected.
+- **May two runs be live at once**, and what do they share? Folded into the same item.
 - **What does the first run teach that only many runs can**, and what must it settle before a
   second starts?
 
@@ -166,15 +168,18 @@ halves of the trigger differ.
 2. **Sub-agents give the fresh context.** The step-back agent is dispatched through the
    native Agent tool with the record and the owner's verbatim words as its inputs: the
    outside-the-frame property, available today.
-3. **Hooks make the obligation independent of the agent's judgement.** Claude Code's hooks are
-   harness configuration, and this estate runs four kinds (`SessionStart`, `PreToolUse`,
-   `UserPromptSubmit`, `PreCompact`). Two more fit this need: `SubagentStop`, firing each time
-   a sub-agent returns, a natural stage boundary; and `Stop`, firing when the main agent tries
-   to end its turn, able to refuse with an instruction. A hook that injects a fixed line (the
-   step-back return for this stage is owed before the next begins) is configuration, not
-   tooling, and fires whether or not the agent thought of it. Hooks run in ordinary cloud
-   sessions (this session's own `SessionStart` hook fired) and do not run in Claude Code
-   project threads, one more reason the first version runs in a single session.
+3. **A hook, as a candidate only, and a hypothesis to verify.** Claude Code's hooks fire on
+   harness events; this estate configures four kinds (`SessionStart`, `PreToolUse`,
+   `UserPromptSubmit`, `PreCompact`), each running a script. Two kinds would fit this need if
+   they behave as the author believes: `SubagentStop`, firing when a sub-agent returns, a
+   natural stage boundary; and `Stop`, firing when the main agent tries to end its turn, able
+   to refuse with an instruction. A hook that injects the fixed line "the step-back return
+   for this stage is owed before the next begins" would fire whether or not the agent thought
+   of it. Two things keep it a candidate: every hook in this estate is a script, so whether a
+   hook clears the owner's machinery bar is the owner's ruling, not the author's
+   classification; and it enters only if a run shows layers 1 and 2 fail. One observation,
+   not a general fact: this session's `SessionStart` hook fired in an ordinary cloud session.
+   The Projects documentation says hooks do not run in Claude Code project threads.
 
 *On signals*: partly, and the rest stays unbuilt until a run asks for it. Detecting a growing
 cure or churn without convergence as an event needs a script reading the record and computing
@@ -189,60 +194,33 @@ a hook script would need.
 
 **To verify in the design session, never assume**: the exact hook events Claude Code offers
 and what a `Stop` or `SubagentStop` hook may do in a cloud session, read from Anthropic's
-current hooks documentation. Everything else above is built from features already in use in
-this repository.
+current hooks documentation. Layers 1 and 2 are built from features this repository already
+uses; one of them is verified for the target host: repository skills load and invoke one
+another in an ordinary cloud session (the session that wrote these notes).
 
 **Research the design session owes on the levers themselves.** What a rule can trigger on
 and instigate: in Claude Code a rule under `.claude/rules/` is text loaded always or by path
 glob and shapes behaviour; whether it can instigate an action, and under what conditions it
 is loaded in a cloud session, is to be read from the documentation and tested, and set
 beside the estate's own trigger vocabulary for rules (`surface:`, `tool:`, `session:`,
-`ceremony:`), which is convention the agent honours, not a harness mechanism. Then how the
-four levers compose for the Attendant: rules for the invariants that hold across every run;
-skills for the flow and the stage procedures; hooks for obligations that must fire without
-the agent's judgement; sub-agents for judgement that must come from outside the frame. The
-estate's capability-landing procedure is the starting map for that composition; the research
-tests it against what each lever can do in a cloud session.
+`ceremony:`), which is convention the agent honours, not a harness mechanism. The composition
+of the four levers for the Attendant is a hypothesis the research tests, not its premise:
+rules for the invariants that hold across every run; skills for the flow and the stage
+procedures; sub-agents for judgement that must come from outside the frame; hooks only on
+the owner's machinery ruling and a run's evidence. The estate's capability-landing procedure
+is the starting map; the research tests it against what each lever can do in a cloud
+session.
 
 ## 3. What the owner has set
 
-- **The name.** The Attendant Workflow. The umbrella skill is `attendant`; the sub-skills
-  are `attendant-*`.
-- **The shape of the definition.** The umbrella skill is the entry point and the high-level
-  flow; each sub-skill is one part of the flow in its own appropriate detail, so no single
-  large skill sits in context creating confusion and competing demands. Skill components are
-  units of logic, guidance and contract that skills assemble from; they are not skills.
-  Where an existing skill holds a part the Attendant needs, that part is extracted into a
-  component the existing skill and the Attendant both reference.
-- **The base is zero machinery.** Skills, sub-agents and the repository's records. Tooling
-  enters only where a run has shown skills alone fail, never in anticipation, and leaves when
-  that evidence lapses; the bar is high because machinery draws attention to itself, adds
-  complexity and fragility, and displaces the value.
-- **Three owner checkpoints, fixed**: initiation; approval of the acceptance criteria; a
-  final sense check just before merge.
-- **The user story** (the owner, 2026-11-07, verbatim):
-  1. "I put forward an idea and ask for the Attendant workflow"
-  2. "The idea is analysed using all appropriate skills, improved, and acceptance criteria in
-     terms of value the implemented work would provide are presented for my approval"
-  3. "Once I approve a detailed plan is created, broken down into subplans, optimised for
-     parallel work where appropriate"
-  4. "The plan is implemented by the agent or agents"
-  5. "An assessment is made by the solo agent, or if in parallel the lead agent, as to whether
-     the implementation has delivered the value specified in the plan. If work is happening in
-     parallel each parallel track subplan must have acceptance criteria set by the lead agent,
-     these do not need my approval, and each parallel track be agent assessed for value
-     delivery, and then when the sub tracks come together the above overall assessment must
-     happen"
-  6. "Once the agent believes that the value has been delivered the PR is marked ready for
-     review"
-  7. "Once the review iteration is complete the agent judges if the work is ready for merge, if
-     it is then the final request for a user sense check is made"
-
-  "Throughout that process doubt is explored and valued."
-
-- **Rules.** Every Practice rule applies, strictly. The PR and token limits set for normal
-  operations are the Attendant's own parameters, set in its definition and tuned by its runs.
-- **Cloud.** It runs end to end in cloud sessions.
+The owner's words are quoted once, with their dates, in the brief
+([`idea-to-merge-process-design.prompt.md`](../../prompts/agentic-engineering/idea-to-merge-process-design.prompt.md),
+"The owner's words"); these notes point there and do not restate them. In short: the
+Attendant Workflow, the `attendant` skill with `attendant-*` sub-skills assembled from
+components; zero machinery as the base, with a high bar for any tooling; three fixed owner
+checkpoints; the seven-step user story, with doubt explored and valued throughout; every
+rule applying strictly, the normal-operations PR and token limits tunable for this workflow;
+end to end in cloud sessions; the next session's output a decision-complete plan.
 
 ## 4. The request's quality mechanism
 
@@ -275,9 +253,9 @@ separates them.
 | Step | Sub-skill (proposed) | Owner | What happens | Doubt: altitude and question | Concepts explored in | Exit |
 | --- | --- | --- | --- | --- | --- | --- |
 | 1 | `attendant` | ✔ initiation | The owner puts forward the idea and asks for the Attendant. The umbrella skill opens the run: a plan node at `sketch`, a branch | — | — | The idea recorded as given |
-| 2 | `attendant-shape` | | The idea is analysed and improved. The result is the value contract: beneficiaries and what each gets; outcomes; scope and non-goals; acceptance criteria denominated in value, each with the evidence that would show it met; the size of the run; the doubts raised | **Value.** What is the real user value here, and for whom? How can we deliver it? Does the idea as stated deliver that value, or is there a sharper shape for it? What would make this complete and worthless? | `user-value`, `concept-exploration`, `parallax-frame`, `proportionality`, PDR-103 | The contract, with the value stated, the way to it, and what would show it wrong |
+| 2 | `attendant-shape` | | The idea is analysed and improved. The result is the value contract: beneficiaries and what each gets; outcomes; scope and non-goals; acceptance criteria denominated in value, each with the evidence that would show it met; the doubts raised (the run's sizing is the plan's, after approval) | **Value.** What is the real user value here, and for whom? How can we deliver it? Does the idea as stated deliver that value, or is there a sharper shape for it? What would make this complete and worthless? | `user-value`, `concept-exploration`, `parallax-frame`, `proportionality`, PDR-103 | The contract, with the value stated, the way to it, and what would show it wrong |
 | — | internal review | | **Contract review**: a sub-agent outside the shaping frame assesses the contract for the reliance "build from this unattended" | **Contract.** Would meeting every criterion be worth the cost of meeting it? Which criteria measure activity rather than outcome? What is unprovable? | `assess-specification`, the definition of delivery | The contract and its doubts presented to the owner |
-| 3 | `attendant` | ✔ approval | The owner approves the acceptance criteria (the ratification stamp on the plan node) or returns them | — | — | Stamped, or returned to step 2 |
+| 3 | `attendant` | ✔ approval | The owner approves the acceptance criteria or returns them (the notes propose the plan node's ratification stamp as the record of that approval) | — | — | Stamped, or returned to step 2 |
 | 4 | `attendant-plan` | | The detailed plan: subplans (tracks) with interfaces and sequence, parallel where tracks are independent. For parallel work the lead sets each track's acceptance criteria, each tracing to an approved value criterion; these need no owner approval | **Approach.** Simplest plan that meets the contract? Simpler if the system changed? Does each track need to exist, and for which value criterion? Are the parallel tracks independent in fact? | `plan`, PDR-132 clause 5, PDR-093, `specify-connection` | Every track names its value criterion and interface; a track with none is cut |
 | — | internal review | | **Plan review**: a sub-agent outside the planning frame, with the contract and the plan | the same questions, asked from outside | `assumptions-expert`, `cricket` (frame verdict), PDR-123 | The plan revised or confirmed; doubts recorded |
 | 5 | `attendant-build` | | Each track built test-first in its own worktree, by the solo agent or by track agents under the lead | **Track against contract, at each milestone.** Does the track still serve its criterion? Has building it shown the contract wrong? Has it grown past its reason? | worktree isolation, `spawn`, PDR-117, TDD doctrine, the `commit` skill | A track whose review converged within its rounds; a track stopped at its milestone when the doubt holds, its criterion carried as not met |
@@ -325,7 +303,7 @@ at the approval checkpoint, where the owner shapes or returns the contract.
   the retrospective is recorded.
 
 Each of those is a skill reading or writing a record the repository and GitHub already hold.
-Nothing is built before the first run.
+No tooling is built before the first run; the skills, sub-agents and components are.
 
 ## 7. Could it be simpler?
 
@@ -335,12 +313,16 @@ Nothing is built before the first run.
 - **Simpler if the system changed.** The component layer: skills sharing definitions by
   reference instead of restating them. One change to how skills are built, and the Attendant
   assembles from references; the skills estate's duplication falls with it.
-- **What is complex, and what gets better when it goes.** Tooling for the stages, rule
-  amendments for the parameters, and a merge job for the cloud. Without them there is
-  nothing to build before the first run and nothing to break during it, the `attendant`
-  skill declares its own parameters, and the cloud merge is answered by a run: the owner's
-  word at step 9 and a native merge first, tooling only where a run shows the credential
-  constraint blocks it. Attention stays on the doubt points, which are where the value is.
+- **What is complex, and what gets better when it goes.** Tooling for the stages, and a
+  per-run negotiation of every limit. Without the first there is no tooling to build before
+  the first run and none to break during it. For the limits, one mechanism, consistent with
+  `rules-have-no-exceptions`: each governing rule's statement is widened once, on the owner's
+  ratification, to carry a per-context value, and the Attendant's definition then sets and
+  its runs tune that value; a skill that silently departs from a rule's statement is an
+  exception and is not this. The cloud merge is a design question answered from the known
+  constraints (the brief's facts): the bot for every write, a blocker surfaced to the owner
+  where no bot path exists, and never a write under the owner's credential to find out.
+  Attention stays on the doubt points, which are where the value is.
 
 ## 8. Held open for the design session
 
@@ -360,5 +342,10 @@ Nothing is built before the first run.
   existing skill holds; the doubt briefs are the surest additions, since no existing skill
   receives an artefact and a contract while withholding the author's claims.
 - The run's parameters and their starting values.
-- The credential a cloud run's merge uses, found where a run meets the constraint.
+- The credential a cloud run's merge uses, designed from the known constraints; the brief's
+  item 8 and its facts section hold the candidates.
+- The run's resumption contract across compactions and sessions, and the detection of a
+  second live run (the brief's item 9).
+- Whether a lens-named doubter is a "distinct agent identity" in the owner's sense (a question
+  for the owner in the brief).
 - Single-PR work against larger projects (the Claude Code project facts are in the brief).
