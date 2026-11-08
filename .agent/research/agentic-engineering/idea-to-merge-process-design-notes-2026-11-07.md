@@ -29,7 +29,10 @@ touches of the owner's attention and none unplanned; the owner's sense check cha
 material in most runs; the owner would rather use the Attendant than not. Cost per run is
 measured for information and is not a success metric: a number as a target pulls work towards
 the number and away from value and sound judgement (the owner's experience, stated as the
-reason), and that holds for every numerical measure the Attendant takes.
+reason), and that holds for every numerical measure the Attendant takes. The three touch
+points are kinds of moment, not a tally: a return at a checkpoint is the owner sending the
+flow back to an earlier point in the graph, from which it continues with better
+understanding (the owner, 2026-11-08).
 
 The artefacts (skills, sub-agents, components) are means. Every item the brief asks for is
 derived from the capabilities below, and an item that serves none of them is cut.
@@ -168,18 +171,16 @@ halves of the trigger differ.
 2. **Sub-agents give the fresh context.** The step-back agent is dispatched through the
    native Agent tool with the record and the owner's verbatim words as its inputs: the
    outside-the-frame property, available today.
-3. **A hook, as a candidate only, and a hypothesis to verify.** Claude Code's hooks fire on
-   harness events; this estate configures four kinds (`SessionStart`, `PreToolUse`,
-   `UserPromptSubmit`, `PreCompact`), each running a script. Two kinds would fit this need if
-   they behave as the author believes: `SubagentStop`, firing when a sub-agent returns, a
-   natural stage boundary; and `Stop`, firing when the main agent tries to end its turn, able
-   to refuse with an instruction. A hook that injects the fixed line "the step-back return
-   for this stage is owed before the next begins" would fire whether or not the agent thought
-   of it. Two things keep it a candidate: every hook in this estate is a script, so whether a
-   hook clears the owner's machinery bar is the owner's ruling, not the author's
-   classification; and it enters only if a run shows layers 1 and 2 fail. One observation,
-   not a general fact: this session's `SessionStart` hook fired in an ordinary cloud session.
-   The Projects documentation says hooks do not run in Claude Code project threads.
+3. **A hook is machinery** (the owner, 2026-11-08: costlier here than rules, skills and
+   sub-agents, slightly less costly than arbitrary scripts; script-free guidance wherever it
+   can serve). So the trigger is built from layers 1 and 2. For the record of what a hook
+   could do if a run ever shows those layers fail: Claude Code's hooks fire on harness events;
+   this estate configures four kinds (`SessionStart`, `PreToolUse`, `UserPromptSubmit`,
+   `PreCompact`), each running a script; `SubagentStop` (a sub-agent returning) and `Stop`
+   (the main agent ending its turn) would fit a stage boundary if they behave as the author
+   believes, which is unverified. One observation, not a general fact: this session's
+   `SessionStart` hook fired in an ordinary cloud session. The Projects documentation says
+   hooks do not run in Claude Code project threads.
 
 *On signals*: partly, and the rest stays unbuilt until a run asks for it. Detecting a growing
 cure or churn without convergence as an event needs a script reading the record and computing
@@ -206,8 +207,8 @@ beside the estate's own trigger vocabulary for rules (`surface:`, `tool:`, `sess
 `ceremony:`), which is convention the agent honours, not a harness mechanism. The composition
 of the four levers for the Attendant is a hypothesis the research tests, not its premise:
 rules for the invariants that hold across every run; skills for the flow and the stage
-procedures; sub-agents for judgement that must come from outside the frame; hooks only on
-the owner's machinery ruling and a run's evidence. The estate's capability-landing procedure
+procedures; sub-agents for judgement that must come from outside the frame; hooks are
+machinery and enter only on a run's evidence, as any machinery does. The estate's capability-landing procedure
 is the starting map; the research tests it against what each lever can do in a cloud
 session.
 
@@ -315,11 +316,13 @@ No tooling is built before the first run; the skills, sub-agents and components 
   assembles from references; the skills estate's duplication falls with it.
 - **What is complex, and what gets better when it goes.** Tooling for the stages, and a
   per-run negotiation of every limit. Without the first there is no tooling to build before
-  the first run and none to break during it. For the limits, one mechanism, consistent with
-  `rules-have-no-exceptions`: each governing rule's statement is widened once, on the owner's
-  ratification, to carry a per-context value, and the Attendant's definition then sets and
-  its runs tune that value; a skill that silently departs from a rule's statement is an
-  exception and is not this. The cloud merge is a design question answered from the known
+  the first run and none to break during it. For the limits, no mechanism: each
+  normal-operations limit is a purpose with a value calibrated for normal operations
+  (unlanded work bounded; changes small enough to review; non-convergence visible early;
+  spend priced before it is spent), and the Attendant's definition states how a run serves
+  each purpose, with a value only where one is needed, tuned by its retrospectives. Where a
+  rule's literal sentence would be false of an Attendant run, the sentence is incomplete and
+  is improved as doctrine always is (`rules-have-no-exceptions`); nothing is overridden. The cloud merge is a design question answered from the known
   constraints (the brief's facts): the bot for every write, a blocker surfaced to the owner
   where no bot path exists, and never a write under the owner's credential to find out.
   Attention stays on the doubt points, which are where the value is.
@@ -346,6 +349,4 @@ No tooling is built before the first run; the skills, sub-agents and components 
   item 8 and its facts section hold the candidates.
 - The run's resumption contract across compactions and sessions, and the detection of a
   second live run (the brief's item 9).
-- Whether a lens-named doubter is a "distinct agent identity" in the owner's sense (a question
-  for the owner in the brief).
 - Single-PR work against larger projects (the Claude Code project facts are in the brief).

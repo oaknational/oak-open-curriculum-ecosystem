@@ -18,7 +18,10 @@ means the bounded research below is done and cited; design complete means every 
 
 Cost per run is measured for information and is not a success metric: a number as a target
 pulls work towards the number and away from value and sound judgement. That holds for every
-numerical measure the Attendant takes.
+numerical measure the Attendant takes. The three touch points are kinds of moment, not a
+tally: a return (criteria returned at approval; "not yet" at the sense check) is the owner
+sending the flow back to an earlier point in the graph, from which it continues as before
+with better understanding. Nothing is counted (the owner, 2026-11-08).
 
 ## The impact, through what value
 
@@ -160,16 +163,23 @@ work that follows the plan.
    the question at that altitude, the return shape, and the round budget.
 4. **The sub-agent definitions** for the doubters and, in parallel runs, the track builders.
    The count and shape are open: whether one definition parameterised by altitude serves, or
-   several; and whether a lens-named sub-agent is a "distinct agent identity" in the owner's
-   sense (a question for the owner, below).
+   several. A lens-named sub-agent is a role inside a run under the Practice's norms (the
+   estate's bot on third-party systems, the seat's own name in its records), as the existing
+   reviewer sub-agents are; it is not a distinct agent identity in the sense the owner set
+   aside, which is Ward's separate accounts per agent on Linear and GitHub.
 5. **The components**: which parts of which existing skills are extracted, each as one unit
    of logic, guidance and contract, referenced by the existing skill and by the Attendant.
 6. **The contract's carrier**: how the value-denominated acceptance criteria with their
    evidence, and the lead's track criteria, are recorded; the plan node's ratification stamp
    is the candidate the notes propose, not a decision.
-7. **The parameters**, each with its starting value and its reason, and the one mechanism by
-   which the Attendant may hold a value different from normal operations (below, under the
-   owner's questions).
+7. **How a run meets the purpose of each normal-operations limit**, limit by limit: unlanded
+   work bounded (the open-PR limit's purpose), changes small enough to review well (the PR
+   bands'), non-convergence visible early (the round budgets'), spend priced before it is
+   spent (the fan-out controls'). The Attendant's definition states how a run serves each
+   purpose, with a value only where one is needed, and its retrospectives tune what it
+   states. Where a rule's literal sentence would be false of an Attendant run, the sentence
+   is incomplete and is improved in the ordinary way doctrine changes; nothing is overridden
+   and no mechanism is added.
 8. **The credential each write a cloud run makes uses**, designed from the known constraints
    (the facts section below): the bot for every write; where no bot path exists for a write,
    the plan names the blocker and the owner rules, per the bot-identity rule's own escalation
@@ -190,8 +200,10 @@ work that follows the plan.
     must answer before continuing.
 13. **The composition of the native levers** for the Attendant, as a hypothesis to test: rules
     for invariants across every run; skills for the flow and stage procedures; sub-agents for
-    judgement from outside the frame; hooks only if the owner rules they clear the machinery
-    bar and a run shows the skill-level obligations fail.
+    judgement from outside the frame. Hooks are machinery (the owner, 2026-11-08): costlier
+    here than rules, skills and sub-agents, slightly less costly than arbitrary scripts;
+    script-free guidance wherever it can serve, a hook only on a run's evidence that it
+    cannot.
 
 ## Research the plan must complete
 
@@ -224,21 +236,21 @@ source in the bounded corpus.
   this brief was one, and ran `start-right-thorough`, `parallax` and others through the Skill
   tool on 2026-11-07).
 
-## Questions for the owner
+## The owner's answers of 2026-11-08 to the review's questions
 
-Raised by review on 2026-11-08; the design session puts each as a card when it reaches it,
-unless the owner answers sooner.
-
-- Does a planned return to a checkpoint (criteria returned at approval; "not yet" at the
-  sense check) count as a touch against "three touches and none unplanned"?
-- Is a lens-named sub-agent (a contract reviewer, an independent challenger) a "distinct agent
-  identity" in the sense the owner set aside, or is the identity the Practice norm it runs
-  under?
-- Are hooks machinery under the owner's bar? In this estate every hook runs a script.
-- For the tunable limits: is the mechanism one widening of each governing rule's statement,
-  ratified by the owner, to carry a per-context value that the Attendant's definition then
-  sets and its runs tune? (`rules-have-no-exceptions` forbids a value that departs from a
-  rule's statement without the owner's ruling.)
+- On whether a return to a checkpoint counts: "Already we are being distracted by the pull of
+  numbers. A return to a checkpoint is cycling back to an earlier point in the graph. There is
+  no count to check against, the flow has three touch points, only I am send the process
+  around to an earlier one, but once it is at that earlier one it continues as before but
+  with better understanding."
+- On hooks: "Hooks are machinery, in our approach here they are more expensive than rules,
+  skills, and sub-agents, slightly less expensive than arbitrary scripts. Wherever we can we
+  want to use script free guidance rather than code."
+- On whether a lens-named sub-agent is a distinct agent identity: closed by the decision
+  lenses (item 4 above): a role under Practice norms, as the existing reviewer sub-agents are.
+- On a mechanism for the tunable limits: the question dissolved on stepping back (item 7
+  above). The Attendant's definition states how a run serves each limit's purpose; an
+  incomplete rule sentence is improved as doctrine always is; no mechanism exists to admit.
 
 ## How to work
 
