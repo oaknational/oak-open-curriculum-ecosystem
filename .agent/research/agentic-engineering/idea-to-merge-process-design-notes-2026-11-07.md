@@ -24,6 +24,13 @@ the estate serves gets more of the owner's ideas, sooner.
 at several altitudes by minds outside the frame that did the work, so that the work stays
 honest and valuable without the owner watching it.
 
+**Success, provisionally** (the owner, 2026-11-08): an idea reaches merged value with three
+touches of the owner's attention and none unplanned; the owner's sense check changes nothing
+material in most runs; the owner would rather use the Attendant than not. Cost per run is
+measured for information and is not a success metric: a number as a target pulls work towards
+the number and away from value and sound judgement (the owner's experience, stated as the
+reason), and that holds for every numerical measure the Attendant takes.
+
 The artefacts (skills, sub-agents, components) are means. Every item the brief asks for is
 derived from the capabilities below, and an item that serves none of them is cut.
 
@@ -34,7 +41,8 @@ derived from the capabilities below, and an item that serves none of them is cut
 2. **Tell whether value was delivered, without the owner**: an assessment denominated in value
    with evidence, by someone outside the builder's frame.
 3. **Keep quality without presence**: doubt at each altitude that catches what the owner would
-   have caught.
+   have caught, and above all the one act the owner still performs for every instrument the
+   estate has: pausing the flow and changing altitude, perspective or frame (§2).
 4. **Run unattended, end to end, in the cloud**, the merge included.
 5. **Earn the owner's trust at the two decision screens**: what the owner sees at approval and
    at the sense check lets a good decision be made in minutes.
@@ -59,21 +67,21 @@ nothing yet shows that they work.
 | --- | --- |
 | Can an agent find the real user value from the owner's idea, in this domain, reliably? | The first runs: how much the owner changes the contract at approval is the signal |
 | Do fresh-context doubters catch frame errors, or produce doubt theatre? | Per run: doubts that changed something, against their cost; what the owner's sense check catches is the miss rate |
-| What must the owner see at approval and at the sense check? | The owner, now (owner-constitutive); refined by runs |
+| What must the owner see at approval and at the sense check? | Research in the retrospectives, napkins and lessons (the owner, 2026-11-08: a design question for the next session), refined by runs |
+| What has the owner historically caught at review that agents missed? | The same research; the answer is the specification for the doubt briefs and the stepping-back questions |
 | What does "value delivered" mean before release? | Doctrine distinguishes landed from released; the claim boundary needs the owner's word |
-| What does a run cost, and what cost is acceptable? | Measurement; the owner's word on the envelope |
+| What does a run cost? | Measured and reported, never a target |
+| Why do the existing step-back instruments leave the altitude change to the owner, and what differs in kind? | The component review of §2, against the record of owner corrections |
 | Does parallel build pay here, or does assembly consume the gain? | Measurement across runs |
 | How does a cloud run merge as the bot? | A probe at the point a run meets it |
 | Is one plan node per idea proportionate? | The first runs' friction |
 
 ### Questions not yet asked
 
-- **What are the Attendant's own acceptance criteria, in value terms?** Candidates, for the
-  owner to shape: an idea reaches merged value with three touches and none unplanned; the
-  owner's sense check changes nothing material in most runs; the owner would rather use it
-  than not; cost per run inside an envelope the owner sets.
-- **What has the owner historically caught at review that agents missed?** That history is
-  the specification for the doubt briefs; the estate's retrospectives hold it.
+- **What are the Attendant's own acceptance criteria, in value terms?** Answered
+  provisionally above (the owner, 2026-11-08).
+- **What has the owner historically caught at review that agents missed?** Now a research
+  task of the next session; the estate's retrospectives, napkins and lessons hold it.
 - **What does an agent need to know at initiation to find real value?** A model of the
   estate's beneficiaries exists in the vision and strategy; whether it serves as a value
   model at step 2 is untested.
@@ -96,7 +104,56 @@ nothing yet shows that they work.
    native to the estate's reviewers, which improves every review in the estate.
 5. *User value*: proximately the owner; ultimately the people the estate serves.
 
-## 2. What the owner has set
+## 2. Stepping back: the capability the owner still supplies
+
+**The observation** (the owner, 2026-11-08). Planning, metacognition, parts of Parallax, the
+other cognitive skills and the Cricket suites have each provided value, and one use of the
+owner's attention remains: pausing the flow and changing altitude, perspective or frame. The
+first two success metrics measure this directly: an unplanned touch is the owner changing
+altitude; a sense check that changes something material is a frame nobody changed in time.
+If this act stays the owner's, the Attendant's middle cannot run unattended.
+
+**A hypothesis for the research to test.** Read against the record of this session's own
+corrections, the existing instruments share three properties. They are invoked by the agent
+from inside its frame: the agent writes the brief, selects the sources and chooses the
+moment, and a captured frame writes a captured brief (this session's paraphrases of the
+owner's words were the error vector each time). Their trigger is the agent's own judgement
+that stepping back is needed, the judgement that fails when the frame is wrong. And they
+climb one level: metacognition asks about the action's bridge to impact; Cricket judges the
+work against the agent's reading; Parallax reframes within a charter the agent wrote. None
+climbs until it reaches the owner's stated purpose and asks whether the whole direction
+serves it.
+
+**What the capability needs, if the hypothesis holds.** Something that differs in kind from
+the five, rather than a sixth of the same kind:
+
+- **Outside the frame.** A fresh context, briefed by a fixed component and never by the
+  invoking agent's prose; its inputs are the records and the owner's verbatim words, never the
+  agent's narrative of them.
+- **Structurally triggered.** At every stage boundary of the Attendant, and on signals read
+  from the record: a cure that grows, churn without convergence, instruments appearing before
+  value, the same correction arriving twice. It does not wait for the captured agent to call
+  it.
+- **Multi-altitude, ascending.** The work in hand; the stage; the plan; the value
+  proposition; the bigger picture the estate exists for. Stepping back more than once is the
+  climb, and it ends at the top, not at the first level that looks fine.
+- **Questions as output.** It returns questions the main agent must answer in writing before
+  continuing, with an analysis of what is happening read from the record, and the standing to
+  say "stop and climb".
+
+**The work this sets for the design session.** Review the step-back family while decomposing
+into components: the `plan` skill's design gate, `metacognition`, `parallax` and its frame,
+proportionality and audit siblings, `concept-exploration`, `reason`, `cricket`,
+`retrospective`, and the rules `scope-from-goal-before-approach`,
+`re-apply-first-question-at-elaboration-boundaries` and `design-from-impact-not-the-cowpath`.
+For each: what it does well, which of the three properties above it has, what content, logic
+or guidance is missing for questioning the genuinely bigger picture, and in what form that
+missing part should exist. Then decide whether a specialised sub-agent carries the
+capability, and whether the Attendant's doubters are that sub-agent parameterised by
+altitude or separate instruments. The record of the owner's corrections is the evidence base
+for both the review and the questions the sub-agent would ask.
+
+## 3. What the owner has set
 
 - **The name.** The Attendant Workflow. The umbrella skill is `attendant`; the sub-skills
   are `attendant-*`.
@@ -136,11 +193,11 @@ nothing yet shows that they work.
   operations are the Attendant's own parameters, set in its definition and tuned by its runs.
 - **Cloud.** It runs end to end in cloud sessions.
 
-## 3. The request's quality mechanism
+## 4. The request's quality mechanism
 
 The reviews are the mechanism, and the owner's words make it exact: at each stage, step back
 and ask not only whether the work is right but whether what it is trying to achieve is
-worthwhile. The sequence in §4 is built from those doubt points outward. Each sub-skill
+worthwhile. The sequence in §5 is built from those doubt points outward. Each sub-skill
 carries one doubt brief; the doubter receives the artefact and the contract and nothing of
 the author's claims about them; a doubt changes the artefact, is answered with evidence, or
 travels forward to the final sense check as a finding; and a worth-doubt with evidence stops
@@ -157,7 +214,7 @@ Alex Ward's team-of-one pipeline
 has the same gap: both of its reviewers grade against a ticket its author wrote, and nothing
 doubts the ticket. The Attendant's doubt points are the answer to both.
 
-## 4. The sequence
+## 5. The sequence
 
 Two kinds of review run inside it. **Internal reviews** are the Attendant's own, by
 sub-agents within the run, before the PR is marked ready. **The PR review** is the
@@ -196,10 +253,10 @@ different path by design: the decision that the value is wanted is the owner's, 
 initiation, so the contract review's doubts about the criteria and their cost are presented
 at the approval checkpoint, where the owner shapes or returns the contract.
 
-## 5. Defined, started, observed, done
+## 6. Defined, started, observed, done
 
 - **Defined** as the `attendant` skill and its `attendant-*` sub-skills, assembled from
-  components. The umbrella carries the flow of §4, the hand-off between sub-skills, the
+  components. The umbrella carries the flow of §5, the hand-off between sub-skills, the
   three checkpoints, the summary's shape and the run's parameters. Each sub-skill carries its
   stage in its own detail, with its doubt brief as its substance. Components are plain
   files, one definition each, referenced by the sub-skill that needs them and by the existing
@@ -219,7 +276,7 @@ at the approval checkpoint, where the owner shapes or returns the contract.
 Each of those is a skill reading or writing a record the repository and GitHub already hold.
 Nothing is built before the first run.
 
-## 6. Could it be simpler?
+## 7. Could it be simpler?
 
 - **Simpler without loss.** Reading the run's state is reading the plan node and the PR; the
   owner's one screen is `attendant`'s output at step 9; the finish check is its checklist;
@@ -234,9 +291,9 @@ Nothing is built before the first run.
   word at step 9 and a native merge first, tooling only where a run shows the credential
   constraint blocks it. Attention stays on the doubt points, which are where the value is.
 
-## 7. Held open for the design session
+## 8. Held open for the design session
 
-- The sub-skill set: the six proposed in §4 are a starting cut, to be settled by what each
+- The sub-skill set: the six proposed in §5 are a starting cut, to be settled by what each
   stage needs in its own detail.
 - The sub-agent definitions. Every doubt point dispatches a sub-agent, since only a fresh
   context stands outside the frame that produced the artefact; a skill loads into the

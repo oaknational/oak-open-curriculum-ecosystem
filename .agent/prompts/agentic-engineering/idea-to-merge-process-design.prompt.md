@@ -1,8 +1,22 @@
 # Brief: design the Attendant Workflow
 
-**Type**: handover brief, session entry point. **Written**: 2026-11-07, from the owner's words
-of that day. **Task of the session that reads this**: design the Attendant Workflow and record
-the design as the `attendant` skill, its `attendant-*` sub-skills and their components.
+**Type**: handover brief, session entry point. **Written**: 2026-11-07 and 2026-11-08, from
+the owner's words of those days. **Task of the session that reads this**: produce the plan to
+create the Attendant Workflow, not the workflow itself. The plan is decision-complete:
+research complete (the research questions below answered from the estate's record) and
+design complete (the `attendant` skill, its `attendant-*` sub-skills, their sub-agents and
+their components specified to the point where building them is execution, not design).
+
+## Success, provisionally (the owner, 2026-11-08)
+
+- An idea reaches merged value with three touches of the owner's attention and none
+  unplanned.
+- The owner's sense check changes nothing material in most runs.
+- The owner would rather use the Attendant than not.
+
+Cost per run is measured for information and is not a success metric: a number as a target
+pulls work towards the number and away from value and sound judgement. That holds for every
+numerical measure the Attendant takes.
 
 ## The impact, through what value
 
@@ -120,8 +134,8 @@ projects.
 This list is the belief before the exploration, written on 2026-11-07, derived from the
 seven capabilities the value needs (the design notes, §1). The design session tests it as it
 explores: an item may be added, merged, reshaped or retired on evidence, an item that serves
-none of the capabilities is cut, and the session records what it changed and why. Before any
-of it: the Attendant's own acceptance criteria, in value terms, for the owner to shape.
+none of the capabilities is cut, and the session records what it changed and why. The plan
+specifies each item; building them is the work that follows the plan.
 
 1. **The `attendant` skill**: the entry point and the high-level flow, the three checkpoints,
    the hand-offs between sub-skills, the one screen for the final sense check, and the
@@ -144,6 +158,31 @@ of it: the Attendant's own acceptance criteria, in value terms, for the owner to
    known to be done, and the scale question above.
 10. **The first run**: the owner's idea, and the order in which the skills, sub-agents and
     components are built so that run can happen.
+11. **The stepping-back capability** (the design notes, §2): the review of the step-back
+    family of skills and rules as components, what each lacks for questioning the genuinely
+    bigger picture and in what form the missing part should exist, and whether a specialised
+    sub-agent carries it: one that reads the record and the owner's verbatim words, is
+    triggered at stage boundaries and on signals rather than by the main agent's judgement,
+    climbs altitude more than once, and returns frame-challenging questions the main agent
+    must answer before continuing.
+
+## Research the plan must complete
+
+Each is answered from the estate's record (the retrospectives under
+`.agent/reports/agentic-engineering/`, the napkin and its archives, `distilled.md`, the
+patterns, the Director rulings and owner corrections in the thread records), read whole, with
+every claim cited to its source.
+
+- **What has the owner historically caught at review, in conversation and at corrections,
+  that agents missed?** Classified by altitude (the work, the stage, the plan, the value
+  proposition, the bigger picture). This is the specification for the doubt briefs and for the
+  stepping-back questions.
+- **What must the owner see at approval and at the sense check** to decide well in minutes?
+  Derived from the same record: what the owner asked for, re-asked for, and acted on.
+- **Why do the existing step-back instruments leave the altitude change to the owner?** The
+  notes' §2 holds a hypothesis (invoked from inside the frame; triggered by the captured
+  judgement; climbing one level); the research tests it against the record and the
+  instruments' own texts.
 
 ## How to work
 
@@ -230,5 +269,7 @@ secrets.
 
 ## Deliverable
 
-The items in "What we currently believe the work should produce", as the exploration leaves
-them, with a record of what the exploration added, merged, reshaped or retired, and why.
+A decision-complete plan to create the Attendant: the research above answered with citations;
+the items in "What we currently believe the work should produce" specified as the exploration
+leaves them, with a record of what the exploration added, merged, reshaped or retired, and
+why; and the build order for the first run.
