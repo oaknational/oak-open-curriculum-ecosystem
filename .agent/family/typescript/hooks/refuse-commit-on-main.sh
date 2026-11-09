@@ -38,6 +38,7 @@ guard_default_folded="$(printf '%s' "$guard_default_branch" | tr '[:upper:]' '[:
 guard_refused=""
 case "$guard_current_folded" in
   main | master) guard_refused=1 ;;
+  *) ;;
 esac
 if [ -n "$guard_current_folded" ] && [ "$guard_current_folded" = "$guard_default_folded" ]; then
   guard_refused=1

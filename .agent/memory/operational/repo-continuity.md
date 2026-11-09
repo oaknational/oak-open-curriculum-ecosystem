@@ -868,8 +868,9 @@ authority.
   2026-09-06 ruling governs. The disconnection mechanics stay checkout-local.
   Owner word 2026-10-13, verbatim: "You are always permitted read-only access to Oak github,
   write access is forbidden for now, that will change at a later date." Under it a read of any
-  Oak GitHub surface needs no permission; every write stays forbidden until he lifts it; the
-  2026-09-06 ruling's read half is superseded and its write half stands.
+  Oak GitHub surface needs no permission. He lifted the write ban on 2026-11-02, verbatim:
+  "Oak repos are now permitted again, as are other Oak systems, welcome back me." Writes to Oak
+  go under Oak's bot identity, and both halves of the 2026-09-06 ruling are superseded there.
 - Strict validation happens only at boundaries.
 - No `process.env` read/write in test files or setup files.
 - `--no-verify` requires fresh per-invocation owner authorisation.

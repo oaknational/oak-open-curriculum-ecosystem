@@ -482,11 +482,12 @@ the second estate runs its smoke suite that way on every gate.
 
 ### The remote cache is optional and reached without a login
 
-Remote caching is enabled in `turbo.json`, which also names the Vercel team that
-holds the cache (`remoteCache.teamSlug`, the lowest-priority team source:
-`TURBO_TEAM` in the environment, a `turbo link` config and a Vercel build's own
-credentials all outrank it); the hooks export `TURBO_UI=0` so the TUI does not
-swallow output.
+Remote caching is enabled in `turbo.json`. The Vercel team that holds the cache
+is each checkout's own, never the tree's: `TURBO_TEAM` in the environment, a
+`turbo link` config, or a Vercel build's own credentials. A `turbo link` config
+lives in one checkout's `.turbo/config.json`, which a new worktree lacks, so
+`TURBO_TEAM` in the environment is the one source that reaches every worktree.
+The hooks export `TURBO_UI=0` so the TUI does not swallow output.
 
 The remote cache is optional. This repository enables it; a fork, a clone or a
 shell without a credential runs every gate the same on turbo's local cache, and
@@ -496,11 +497,14 @@ credential from its own config when the variable is absent; that is a user
 token that expires, so the repository's shape rests on `TURBO_TOKEN` and does
 not remove the fallback:
 
-- A developer's host: a team-scoped token exported as `TURBO_TOKEN` from the
-  shell profile (read from a keychain, never a file in the tree). The hooks
+- A developer's host: a team-scoped token exported as `TURBO_TOKEN`, with the
+  team's slug as `TURBO_TEAM`, from the shell profile (read from a keychain,
+  never a file in the tree). The hooks
   source `.husky/turbo-remote-cache-notice.sh`, which prints one line when the
   shell carries no `TURBO_TOKEN`; the line names turbo's own login credential
-  as the one other way the cache is reached, since the shell cannot see it. A
+  as the one other way the cache is reached, since the shell cannot see it. It
+  also prints one line when a token has no team (no `TURBO_TEAM` and no
+  `turbo link` config in the checkout). A
   token the cache refuses is turbo's own warning in the gate output; the gates
   judge turbo by its exit code, so it does not fail them.
 - CI: every job that runs turbo (`ci.yml`'s five, and `release.yml`'s build)

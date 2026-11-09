@@ -5,6 +5,9 @@ Reports: shared, identical, differing, clean merges (files a clean merge would c
 (files and hunks), and waiting (one-sided). usage: dry_run_merge.py <jc-root> <jc-ref> <oce-root>
 <oce-ref> <base-ref-in-oce> <out>"""
 import subprocess, sys, tempfile, os
+def write_text(path, text):
+    with open(path, 'w', encoding='utf-8') as f:
+        f.write(text)
 jc, jcref, oce, oceref, base, out = sys.argv[1:7]
 PREFIXES = ('.agent/directives/', '.agent/rules/', '.agent/skills/', '.agent/practice-core/', '.agent/sub-agents/', '.agent/hooks/')
 def tree(root, ref):
@@ -29,7 +32,7 @@ with tempfile.TemporaryDirectory() as td:
         if p not in basetree:
             nobase.append(p); continue
         ours, theirs, bs = [os.path.join(td, n) for n in ('ours','theirs','base')]
-        open(ours,'w').write(blob(jc,jcref,p)); open(theirs,'w').write(blob(oce,oceref,p)); open(bs,'w').write(blob(oce,base,p))
+        write_text(ours, blob(jc,jcref,p)); write_text(theirs, blob(oce,oceref,p)); write_text(bs, blob(oce,base,p))
         r = subprocess.run(['git','merge-file','-p','-L','jc','-L','base','-L','oce',ours,bs,theirs], capture_output=True, text=True)
         if r.returncode == 0: clean.append(p)
         else:
@@ -40,4 +43,4 @@ lines = [f"# Dry-run merge of the Practice-wide text, JC.net {jcref} against OCE
          "## Conflicts (file, hunks)", *[f"- `{p}` {n}" for p,n in conflicts], "",
          "## No base at the pin (both sides added after the transplant)", *[f"- `{p}`" for p in nobase], "",
          "## Clean merges", *[f"- `{p}`" for p in clean]]
-open(out,'w').write('\n'.join(lines)+'\n'); print('\n'.join(lines[2:4]))
+write_text(out, '\n'.join(lines)+'\n'); print('\n'.join(lines[2:4]))

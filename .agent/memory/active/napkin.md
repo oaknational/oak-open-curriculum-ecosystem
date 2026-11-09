@@ -1574,3 +1574,24 @@ Written from a solo Claude cloud session.
   requirements in tension are a signal to step back and assess the frame, and a new way of
   working is explored for what becomes easier if the system varies, with judgement and value
   ahead of any count.
+
+## 2026-11-09 — Sandpiper guards Wind (690653): framing the merge back
+
+- **I measured around a constraint instead of asking about it.** Planning the merge back, I spent a
+  long run classifying 229 fork-naming files into dated records and "living files" to satisfy the
+  2026-09-02 naming ruling, then put a three-option question to the owner. The owner lifted the
+  ruling in one sentence and did not know what "living files" meant. The cheap move was one line at
+  the start: the merge necessarily names the fork in history; does the ruling still bind? Trace
+  friction to the decision it blocks before measuring it, and never send the owner a coined term
+  (2026-11-09, Sandpiper guards Wind, 690653).
+- **Analysis cannot observe another system's checks.** Most of what I was predicting about the merge
+  back (the receiving repository's code-quality gate, its deploy check, its release) is what that
+  repository's own checks report on a pull request. Where the real trial is a draft pull request,
+  prefer asking for it over predicting its result (2026-11-09, Sandpiper guards Wind, 690653).
+- **A failed commit leaves its files staged for the next one.** A docs commit failed commitlint
+  (a body line opening "2026-11-02:" parses as a footer token with no blank line before it, and
+  `--strict` fails the warning); its staged files then rode into the next `chore(continuity)`
+  commit. The repo forbids `git restore` and history rewrites, so the commit stands with its
+  message understating its contents, recorded on the pull request. After any failed commit, read
+  `git diff --cached --name-only` before the next, and keep date-colon openings off body lines
+  (2026-11-09, Sandpiper guards Wind, 690653).
