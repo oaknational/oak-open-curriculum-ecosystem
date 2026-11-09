@@ -19,7 +19,6 @@
 import { spawnSync } from 'node:child_process';
 
 import { describeSpawnFailure } from '../core/spawn-failure.js';
-import { resolveTrustedGit } from '../core/trusted-git.js';
 import { isPatchId, type ContentId, type ContentLeg } from './content-binding.js';
 import { GH_EXEC_OPTIONS, type GhCommandExecutor } from './gh.js';
 
@@ -168,19 +167,13 @@ const PATCH_ID_BACKSTOP_MS = 30_000;
 const PATCH_ID_LINE = /^([0-9a-f]{40}) 0{40}$/u;
 
 /**
- * The real hasher: the trusted git's `patch-id --verbatim` with the diff on
+ * The real hasher: git's `patch-id --verbatim`, git by name, with the diff on
  * stdin, which needs no repository. Its first field is the id. A git that
  * cannot be found, fails to start, hangs past the backstop, exits non-zero
  * or prints no id reads as unproven, never as a failure of the reading.
  */
 export const gitPatchIdOf: PatchIdOf = (diff) => {
-  let git: string;
-  try {
-    git = resolveTrustedGit();
-  } catch {
-    return unproven('no trusted git binary');
-  }
-  const result = spawnSync(git, ['patch-id', '--verbatim'], {
+  const result = spawnSync('git', ['patch-id', '--verbatim'], {
     input: diff,
     encoding: 'utf8',
     maxBuffer: GH_EXEC_OPTIONS.maxBuffer,

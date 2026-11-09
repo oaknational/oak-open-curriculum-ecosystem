@@ -20,14 +20,13 @@
 import { spawnSync } from 'node:child_process';
 import { basename } from 'node:path';
 
-import { resolveTrustedGit } from '../core/trusted-git.js';
-
 import {
   classifyGitOutcome,
   coordinationToParts,
   countWorktrees,
   parsePrimaryWorktreeRoot,
   selectCoordinationBranch,
+  toGitExit,
   type GitExit,
   type GitOutcome,
 } from './statusline-git-location.js';
@@ -212,25 +211,10 @@ function runGit(cwd: string, args: readonly string[]): string | undefined {
 }
 
 /**
- * Invoke git against a directory and capture the raw exit for classification.
- * `spawnSync` with an encoding can still return `null` stdout/stderr if the
- * stream was not captured, so both are coerced to a string for the classifier.
+ * Invoke git by name against a directory and capture the raw exit for
+ * classification ({@link toGitExit} names a git that never started), never
+ * a render crash.
  */
 function spawnGit(cwd: string, args: readonly string[]): GitExit {
-  // Execute git by its absolute path (resolveTrustedGit) so a writable PATH entry
-  // cannot shadow it (SonarCloud S4036). resolveTrustedGit throws when no trusted
-  // git exists; the statusline is a best-effort cosmetic read, so a missing git is
-  // a non-value outcome (status null, like a spawn failure), never a render crash.
-  let gitBinary: string;
-  try {
-    gitBinary = resolveTrustedGit();
-  } catch (error) {
-    return {
-      status: null,
-      stdout: '',
-      stderr: error instanceof Error ? error.message : String(error),
-    };
-  }
-  const result = spawnSync(gitBinary, ['-C', cwd, ...args], { encoding: 'utf8' });
-  return { status: result.status, stdout: result.stdout ?? '', stderr: result.stderr ?? '' };
+  return toGitExit(spawnSync('git', ['-C', cwd, ...args], { encoding: 'utf8' }));
 }

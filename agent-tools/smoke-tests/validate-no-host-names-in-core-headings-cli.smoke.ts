@@ -3,7 +3,6 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
-import { resolveTrustedGit } from '../src/core/trusted-git';
 import { fileURLToPath } from 'node:url';
 
 /**
@@ -32,7 +31,7 @@ const GREEN =
 const REFUSAL =
   /^validate-no-host-names-in-core-headings: cannot read \.agent\/practice-core\/provenance\.yml/mu;
 
-const GIT = resolveTrustedGit();
+const GIT = 'git';
 
 function fail(message: string): never {
   process.stderr.write(`validate-no-host-names-in-core-headings CLI smoke: ${message}\n`);

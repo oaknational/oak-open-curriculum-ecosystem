@@ -6,8 +6,8 @@
  * "OS commands should not rely on PATH resolution"). The disposition policy
  * (`docs/governance/sonar-disposition-policy.md` §S4036) makes `PATH` the
  * trust root for a repository-required binary invoked by name, so this
- * resolver is not what the policy requires. It is what `trusted-git.ts`,
- * `trusted-shell.ts` and `trusted-gitleaks.ts` resolve through, each
+ * resolver is not what the policy requires. It is what `trusted-shell.ts` and
+ * `trusted-gitleaks.ts` resolve through, each
  * declaring its allowlist and remedy as a {@link TrustedBinarySpec} (one home
  * at the second consumer). Its security property is the fixed absolute path
  * (resolution never consults `PATH`), not any guarantee that every listed

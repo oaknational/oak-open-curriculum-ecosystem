@@ -15,6 +15,7 @@ import {
   REFUSED_PUSH,
   tokenStoreFake,
 } from './test-helpers/push-cli-double.js';
+import { ok } from '@oaknational/result';
 
 /**
  * `merge-bot push` with its production mint. The other push tests inject the
@@ -80,7 +81,7 @@ function pushMinting(gitExecutor: GitExecutor): {
     gitExecutor,
     gitPath: GIT_PATH,
     gitReads: gitReads(),
-    branchArgSeams: { refFormatOracle: () => true },
+    branchArgSeams: { refFormatOracle: () => ok(true) },
     baseEnv: BASE_ENV,
     tokenFiles: store,
   });

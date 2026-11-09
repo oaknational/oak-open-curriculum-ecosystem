@@ -2,9 +2,6 @@ import { spawnSync } from 'node:child_process';
 
 import { err, ok, type Result } from '@oaknational/result';
 
-import type { PathExists } from '../core/path-exists.js';
-import { resolveTrustedGit } from '../core/trusted-git.js';
-
 /**
  * Ref-name legality, asked of the system that OWNS it.
  *
@@ -22,16 +19,31 @@ import { resolveTrustedGit } from '../core/trusted-git.js';
  * unexamined seam (R1 binds output the tool does NOT control).
  */
 
-/** The legality question as a seam, so callers can pin behaviour without a git binary. */
-export type RefFormatOracle = (fullRefName: string) => boolean;
-
 /**
- * There is no oracle to ask: no trusted git binary was found. Named as a type
- * so the front door can tell it apart from a malformed argument — a machine
- * whose git sits outside the trusted directories has an OPERATIONAL problem,
- * and answering it with a usage dump sends the operator to fix their spelling.
+ * There is no answer to read: git could not be run to ask. Named as a type so
+ * the front door can tell it apart from a malformed argument — a machine with
+ * no git on `PATH` has an OPERATIONAL problem, and answering it with a usage
+ * dump sends the operator to fix their spelling.
  */
 export class RefFormatOracleUnavailableError extends Error {}
+
+/** The legality question as a seam: git's answer, or the failure to ask it. */
+export type RefFormatOracle = (
+  fullRefName: string,
+) => Result<boolean, RefFormatOracleUnavailableError>;
+
+/** The slice of a `git check-ref-format` run the oracle reads. */
+export interface CheckRefFormatRun {
+  readonly status: number | null;
+  readonly error?: Error;
+}
+
+/** The real run: git by name, with `PATH` as the trust root. */
+function runCheckRefFormat(fullRefName: string): CheckRefFormatRun {
+  return spawnSync('git', ['check-ref-format', fullRefName], {
+    stdio: ['ignore', 'ignore', 'ignore'],
+  });
+}
 
 /**
  * git's own answer. The name is passed as a FULL ref (`refs/heads/<branch>`)
@@ -39,29 +51,35 @@ export class RefFormatOracleUnavailableError extends Error {}
  * against; `--branch` is a different question (it also expands `@{-1}`-style
  * shorthand against a repository, which a name being validated must not get).
  *
- * The binary is resolved ONCE, here, and its throw translated at this one
- * boundary (the Result pattern, the pattern `resolveGitContext` uses): resolving inside
- * the returned closure would let the throw escape through whatever
- * Result-typed function later asks the question.
+ * A run that fails to start (no git on `PATH`) or ends without an exit status
+ * (killed by a signal) is the unavailable error, never an illegal name: git
+ * gave no answer. The failure is returned, never thrown (ADR-088).
  */
-export function realRefFormatOracle(exists?: PathExists): Result<RefFormatOracle, Error> {
-  let gitPath: string;
-  try {
-    gitPath = exists === undefined ? resolveTrustedGit() : resolveTrustedGit(exists);
-  } catch (error) {
-    return err(
-      new RefFormatOracleUnavailableError(error instanceof Error ? error.message : String(error)),
-    );
-  }
-  return ok((fullRefName) => {
-    const result = spawnSync(gitPath, ['check-ref-format', fullRefName], {
-      stdio: ['ignore', 'ignore', 'ignore'],
-    });
-    return result.error === undefined && result.status === 0;
-  });
+export function gitRefFormatOracle(
+  run: (fullRefName: string) => CheckRefFormatRun = runCheckRefFormat,
+): RefFormatOracle {
+  return (fullRefName) => {
+    const result = run(fullRefName);
+    if (result.error !== undefined) {
+      return err(
+        new RefFormatOracleUnavailableError(
+          `git check-ref-format could not run (${result.error.message}); install git or put it on PATH`,
+        ),
+      );
+    }
+    if (result.status === null) {
+      return err(
+        new RefFormatOracleUnavailableError('git check-ref-format ended without an exit status'),
+      );
+    }
+    return ok(result.status === 0);
+  };
 }
 
 /** Whether `branch` is a legal branch name, per git. */
-export function isLegalBranchName(branch: string, oracle: RefFormatOracle): boolean {
+export function isLegalBranchName(
+  branch: string,
+  oracle: RefFormatOracle,
+): Result<boolean, RefFormatOracleUnavailableError> {
   return oracle(`refs/heads/${branch}`);
 }

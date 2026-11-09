@@ -181,14 +181,15 @@ async function proveMissingGitRootRefusesLoudly(): Promise<void> {
 
     assert.equal(result.status, 2, streams(result));
     assert.equal(result.stdout, '');
-    // The whole of stderr: git's own refusal (git's words, which a localised
-    // git translates), then the guard's own line, last.
+    // The whole of stderr is the guard's one line: git's own words travel
+    // inside it, never echoed ahead of it, since the shared git runner
+    // captures git's stderr.
     assert.match(
       result.stderr,
-      /^(?:[^\n]*\n)*Unable to resolve the invoking git worktree root: [^\n]*no fallback to the coordination home[^\n]*\n$/,
+      /^Unable to resolve the invoking git worktree root: [^\n]*no fallback to the coordination home[^\n]*\n$/,
     );
     assert.ok(
-      result.stderr.includes(`'${gitDir}' is not inside a git working tree`),
+      result.stderr.includes(`git could not resolve a working tree from '${gitDir}'`),
       streams(result),
     );
 

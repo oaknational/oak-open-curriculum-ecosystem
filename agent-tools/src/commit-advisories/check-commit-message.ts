@@ -47,8 +47,6 @@ import { fileURLToPath } from 'node:url';
 
 import { sync as crossSpawnSync } from 'cross-spawn';
 
-import { resolveTrustedGit } from '../core/trusted-git.js';
-
 import { parseArgs, resolveMessage } from './commit-message-intake.js';
 import { commitlintArgs, exitCodeForCommitlintStatus } from './commitlint-verdict.js';
 
@@ -82,9 +80,9 @@ export function checkCommitMessage(argv: readonly string[]): 0 | 1 | 2 {
  * using the repo-pinned dependency graph. The temp file is always cleaned up.
  */
 function runCommitlint(message: string): 0 | 1 | 2 {
-  // git by its absolute path (resolveTrustedGit): a by-name spawn resolves
-  // through PATH, which a writable entry can shadow (SonarCloud S4036).
-  const repoRoot = spawnSync(resolveTrustedGit(), ['rev-parse', '--show-toplevel'], {
+  // git by name, with PATH as the trust root (the Sonar disposition policy's
+  // S4036 section).
+  const repoRoot = spawnSync('git', ['rev-parse', '--show-toplevel'], {
     encoding: 'utf8',
   }).stdout.trim();
   const dir = mkdtempSync(join(tmpdir(), 'commitlint-check-'));

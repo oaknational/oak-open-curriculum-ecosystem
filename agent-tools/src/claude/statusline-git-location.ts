@@ -22,12 +22,40 @@
 
 /** A raw git invocation result, as produced by `spawnSync('git', …)`. */
 export interface GitExit {
-  /** Process exit status; `null` when the process was killed by a signal. */
+  /** Process exit status; `null` when killed by a signal or when git never started. */
   readonly status: number | null;
   /** Captured stdout. */
   readonly stdout: string;
   /** Captured stderr. */
   readonly stderr: string;
+}
+
+/** The slice of a `spawnSync('git', …)` result {@link toGitExit} reads. */
+export interface GitSpawnResult {
+  readonly status: number | null;
+  readonly stdout?: string | null;
+  readonly stderr?: string | null;
+  readonly error?: Error;
+}
+
+/**
+ * Normalise a spawn result into a {@link GitExit}. A git that never started
+ * (no git on `PATH`) has no streams; its spawn error becomes the stderr the
+ * classifier reports, so it is named, never read as a signal. `spawnSync`
+ * with an encoding can still return `null` streams, so both are coerced.
+ *
+ * @param result - The `spawnSync` result fields.
+ * @returns The raw exit for {@link classifyGitOutcome}.
+ */
+export function toGitExit(result: GitSpawnResult): GitExit {
+  return {
+    status: result.status,
+    stdout: result.stdout ?? '',
+    stderr:
+      result.error === undefined
+        ? (result.stderr ?? '')
+        : `cannot run git: ${result.error.message}`,
+  };
 }
 
 /**

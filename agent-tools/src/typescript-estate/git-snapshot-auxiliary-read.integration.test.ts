@@ -320,7 +320,6 @@ function captureFixture(
     captureGitSnapshot({
       callerCwd: '/repo',
       inputRef: 'HEAD',
-      gitExecutable: '/trusted/git',
       inheritedEnvironment: {},
       limits,
       process,

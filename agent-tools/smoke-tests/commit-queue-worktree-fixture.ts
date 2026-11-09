@@ -19,7 +19,6 @@ import { z } from 'zod';
 import { uuidV5Schema } from '../src/collaboration-state/agent-id';
 import { readRegistry } from '../src/commit-queue/registry';
 import type { CommitIntent, CommitQueueClaimsFile } from '../src/commit-queue/types';
-import { resolveTrustedGit } from '../src/core/trusted-git';
 import { writeAdvisoryStub } from './commit-queue-advisory-stub-fixture';
 
 const CLAIM_ID = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
@@ -88,7 +87,7 @@ export const BIN = join(
  * call still throws with git's stderr in the message.
  */
 export function git(cwd: string, ...args: readonly string[]): string {
-  return execFileSync(resolveTrustedGit(), [...args], {
+  return execFileSync('git', [...args], {
     cwd,
     env: smokeEnvironment(),
     encoding: 'utf8',

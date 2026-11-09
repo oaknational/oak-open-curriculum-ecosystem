@@ -5,7 +5,6 @@ import path from 'node:path';
 
 import { unwrapErr, unwrapOrThrow } from '@oaknational/result';
 
-import { resolveTrustedGit } from '../dist/src/core/trusted-git.js';
 import { gitEnvironment } from '../dist/src/typescript-estate/git-snapshot-process.js';
 import { createPinnedGitBlobPort } from '../dist/src/typescript-estate/git-snapshot-pinned-blob.js';
 import type { GitContext } from '../dist/src/typescript-estate/git-snapshot-model.js';
@@ -14,8 +13,6 @@ import type {
   ProcessPort,
   ProcessResult,
 } from '../dist/src/typescript-estate/ports.js';
-
-import { trustedShellPath } from './trusted-shell-directories';
 
 /**
  * Built-form smoke for the commit-bound pinned-blob adapter (handoff step 4):
@@ -29,22 +26,6 @@ function fail(message: string): never {
   process.stderr.write(`SMOKE FAIL: ${message}\n`);
   process.exit(1);
 }
-
-/**
- * Every child process this smoke starts runs with a fixed, root-owned
- * directory list as its entire PATH, so no writable directory on the ambient
- * PATH can shadow the executables the smoke means to exercise.
- */
-const PINNED_PATH = trustedShellPath();
-
-/**
- * `git` comes from the estate's own platform-partitioned allowlist rather
- * than a second list maintained here: the resolver already refuses anything
- * outside fixed absolute locations, and a duplicate list is a second thing to
- * keep true (its POSIX-only predecessor made this smoke unrunnable on
- * Windows).
- */
-const GIT_EXECUTABLE = resolveTrustedGit();
 
 const realProcessPort: ProcessPort = {
   run(input: ProcessInvocation): ProcessResult {
@@ -64,10 +45,7 @@ const realProcessPort: ProcessPort = {
 };
 
 function git(root: string, ...args: readonly string[]): string {
-  const outcome = spawnSync(GIT_EXECUTABLE, ['-C', root, ...args], {
-    encoding: 'utf8',
-    env: { ...process.env, PATH: PINNED_PATH },
-  });
+  const outcome = spawnSync('git', ['-C', root, ...args], { encoding: 'utf8' });
   if (outcome.status !== 0) {
     fail(`git ${args.join(' ')} failed: ${outcome.stderr}`);
   }
@@ -90,10 +68,9 @@ try {
   writeFileSync(pinnedPath, 'drifted-bytes\n');
 
   const context: GitContext = {
-    executable: GIT_EXECUTABLE,
     cwd: root,
     root,
-    env: gitEnvironment({ ...process.env, PATH: PINNED_PATH }),
+    env: gitEnvironment(process.env),
     stderrLimit: 4096,
     process: realProcessPort,
   };

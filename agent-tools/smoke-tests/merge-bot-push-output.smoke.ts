@@ -4,7 +4,6 @@ import { chmodSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import { resolveTrustedGit } from '../src/core/trusted-git';
 import { realGitExecutor } from '../src/merge-bot/git-executor';
 import { gitReadsFrom, pushCommit, resolveGitContext } from '../src/merge-bot/push-git';
 import { settleTargetBranch } from '../src/merge-bot/push-target-branch';
@@ -57,7 +56,7 @@ const EMITTER = [
   `process.stderr.write('emitter done' + String.fromCharCode(10));`,
 ].join(' ');
 
-const GIT = resolveTrustedGit();
+const GIT = 'git';
 
 /** Awaits the work BEFORE removing the directory. */
 async function withTempDir<T>(run: (dir: string) => Promise<T>): Promise<T> {
@@ -145,10 +144,9 @@ async function landsARealPushThroughALoudHook(): Promise<void> {
     });
     execFileSync(GIT, ['tag', '-a', 'v1', '-m', 'v1'], { cwd: work, env: hermeticGitEnv(root) });
     const git = resolveGitContext({});
-    assert.ok(git.ok, 'no trusted git binary to run the live fire against');
     let received = 0;
     const commit = gitOutput(work, ['rev-parse', 'HEAD'], root);
-    const pushed = await pushCommit(git.value, {
+    const pushed = await pushCommit(git, {
       remote,
       branch: 'lane',
       commit,
@@ -198,9 +196,7 @@ async function settlesTheTargetFromRealGitAnswers(): Promise<void> {
     git(['remote', 'add', 'origin', 'https://github.com/acme/widgets.git']);
     git(['update-ref', 'refs/remotes/origin/lane', 'HEAD']);
     git(['remote', 'set-head', 'origin', 'lane']);
-    const context = resolveGitContext({});
-    assert.ok(context.ok, 'no trusted git binary to read against');
-    const reads = gitReadsFrom(context.value, { cwd: work, env });
+    const reads = gitReadsFrom(resolveGitContext({}), { cwd: work, env });
     const repository = { owner: 'acme', repoName: 'widgets' };
     const current = (await reads.currentBranch()).stdout.trim();
     const onDefault = await settleTargetBranch(undefined, reads, repository);

@@ -90,7 +90,7 @@ export interface DeliveryClassificationConfig extends Readonly<Record<DeliveryDi
 
 export interface ConfigIdentityFields {
   readonly schemaVersion: '2.0.0';
-  readonly contractRevision: '2.6';
+  readonly contractRevision: '2.7';
   readonly reviewId: 'typescript-estate-consolidation-review';
   readonly calibrationBaseCommit: string;
   readonly frozenAt: string;

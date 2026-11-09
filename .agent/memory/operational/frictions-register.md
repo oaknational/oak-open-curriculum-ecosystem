@@ -3574,6 +3574,9 @@ Observed twice on 2026-09-29 by the Director: `.agent/rules/.logs` refused by th
 - **Expected**: the smoke can find any git the allowlist admits.
 - **Candidate cure**: the smoke's PATH gains the directory of the resolved trusted git, joined
   with the platform's delimiter; both estates carry the same list.
+- **Update (2026-11-06, the Oak 1.186.9 sync)**: `trusted-git.ts` is gone and git runs by name.
+  The smoke still runs it on the trusted shell's PATH, so a host whose only git is outside
+  `/usr/bin:/bin` still fails closed. The residue travels with `trusted-shell`'s move to by-name.
 - **Target surface**: agent-tools smoke tests.
 - **Status**: open
 - **Owner direction status**: standing

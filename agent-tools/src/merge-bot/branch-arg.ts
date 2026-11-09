@@ -1,8 +1,7 @@
 import { err, ok, type Result } from '@oaknational/result';
 
-import type { PathExists } from '../core/path-exists.js';
 import { printable } from '../pr-watch/printable.js';
-import { isLegalBranchName, realRefFormatOracle, type RefFormatOracle } from './ref-format.js';
+import { gitRefFormatOracle, isLegalBranchName, type RefFormatOracle } from './ref-format.js';
 
 /**
  * The `--branch <name>` contract `merge-bot push` and `merge-bot retire`
@@ -35,8 +34,6 @@ export function isUrlSafeBranchName(name: string): boolean {
 /** The seams the branch check will construct for itself when not supplied one. */
 export interface BranchArgSeams {
   readonly refFormatOracle?: RefFormatOracle;
-  /** Existence probe for locating the git binary the default oracle asks. */
-  readonly pathExists?: PathExists;
 }
 
 /**
@@ -52,9 +49,9 @@ function readsAsFlag(value: string): boolean {
 
 /**
  * Read one `--branch` value. The oracle enters HERE rather than at the
- * parser's head, so an argv with no `--branch` never reaches for a git binary
- * at all. Constructing it can FAIL (a machine with no trusted git has no
- * oracle to ask), and that failure is returned, never thrown.
+ * parser's head, so an argv with no `--branch` never runs git at all. Asking
+ * it can FAIL (a machine with no git on `PATH` has no answer to give), and
+ * that failure is returned, never thrown.
  *
  * @param current - the branch already read, if any: a repeat is refused, so
  *   which branch a command acts on is never decided by argv order.
@@ -69,17 +66,15 @@ export function readBranchArg(
   if (current !== undefined) {
     return err(new Error('--branch given more than once — pass it exactly once'));
   }
-  const oracle =
-    seams.refFormatOracle === undefined
-      ? realRefFormatOracle(seams.pathExists)
-      : ok(seams.refFormatOracle);
-  if (!oracle.ok) {
-    return err(oracle.error);
+  const notABranch = new Error(
+    `--branch needs a git branch name, got "${printable(value ?? '')}"\n${usage}`,
+  );
+  if (value === undefined || readsAsFlag(value)) {
+    return err(notABranch);
   }
-  if (value === undefined || readsAsFlag(value) || !isLegalBranchName(value, oracle.value)) {
-    return err(
-      new Error(`--branch needs a git branch name, got "${printable(value ?? '')}"\n${usage}`),
-    );
+  const legal = isLegalBranchName(value, seams.refFormatOracle ?? gitRefFormatOracle());
+  if (!legal.ok) {
+    return err(legal.error);
   }
-  return ok(value);
+  return legal.value ? ok(value) : err(notABranch);
 }

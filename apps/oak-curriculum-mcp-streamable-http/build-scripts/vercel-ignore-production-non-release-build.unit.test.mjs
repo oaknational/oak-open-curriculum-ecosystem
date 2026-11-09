@@ -157,34 +157,44 @@ describe('validateGitSha — trust-boundary input gate', () => {
 });
 
 describe('scrubbedGitEnv — defence-in-depth env construction', () => {
-  it('does NOT include PATH — the production capabilities invoke git via a fixed absolute path so PATH never participates in binary lookup (closes S4036)', () => {
-    const env = scrubbedGitEnv();
-    expect(env.PATH).toBeUndefined();
+  // An inherited environment carrying every surface the scrub exists to drop.
+  const HOSTILE_INHERITED = {
+    PATH: '/runtime/bin:/usr/bin',
+    HOME: '/hostile-home',
+    GIT_CONFIG_GLOBAL: '/hostile/gitconfig',
+    GIT_SSH_COMMAND: 'hostile-ssh',
+    GIT_EXEC_PATH: '/hostile/exec',
+    LD_PRELOAD: '/hostile/lib.so',
+  };
+
+  it('carries the inherited PATH, so git runs by name with PATH as the trust root', () => {
+    expect(scrubbedGitEnv(HOSTILE_INHERITED).PATH).toBe('/runtime/bin:/usr/bin');
   });
 
   it('pins git global and system config to /dev/null so hostile gitconfig cannot influence the build', () => {
-    const env = scrubbedGitEnv();
+    const env = scrubbedGitEnv(HOSTILE_INHERITED);
     expect(env.GIT_CONFIG_GLOBAL).toBe('/dev/null');
     expect(env.GIT_CONFIG_SYSTEM).toBe('/dev/null');
   });
 
+  it('refuses system config on every git version, not only those that read GIT_CONFIG_SYSTEM', () => {
+    expect(scrubbedGitEnv(HOSTILE_INHERITED).GIT_CONFIG_NOSYSTEM).toBe('1');
+  });
+
   it('disables interactive credential prompting', () => {
-    const env = scrubbedGitEnv();
-    expect(env.GIT_TERMINAL_PROMPT).toBe('0');
+    expect(scrubbedGitEnv(HOSTILE_INHERITED).GIT_TERMINAL_PROMPT).toBe('0');
   });
 
-  it('omits HOME so git cannot read ~/.gitconfig from a hostile home directory', () => {
-    const env = scrubbedGitEnv();
-    expect(env.HOME).toBeUndefined();
+  it('omits HOME, even when inherited, so git cannot read ~/.gitconfig from a hostile home directory', () => {
+    expect(scrubbedGitEnv(HOSTILE_INHERITED).HOME).toBeUndefined();
   });
 
-  it('returns exactly three scrubbed keys — no inherited env can sneak through (whole-object equality)', () => {
-    // The function takes no input, so there is nothing to "leak through" —
-    // this assertion is the structural guarantee that the contract is
-    // exactly { GIT_CONFIG_GLOBAL, GIT_CONFIG_SYSTEM, GIT_TERMINAL_PROMPT }.
-    expect(scrubbedGitEnv()).toStrictEqual({
+  it('passes PATH and nothing else of the inherited environment (whole-object equality)', () => {
+    expect(scrubbedGitEnv(HOSTILE_INHERITED)).toStrictEqual({
+      PATH: '/runtime/bin:/usr/bin',
       GIT_CONFIG_GLOBAL: '/dev/null',
       GIT_CONFIG_SYSTEM: '/dev/null',
+      GIT_CONFIG_NOSYSTEM: '1',
       GIT_TERMINAL_PROMPT: '0',
     });
   });

@@ -20,7 +20,7 @@ export interface ClassificationSemanticInput {
   readonly assertedFiles: readonly ClassificationSemanticFile[];
 }
 
-/** Reparse pinned inputs and compare the complete revision 2.6 fragment. */
+/** Reparse pinned inputs and compare the complete workspace/provenance/role classification fragment. */
 export function validateClassificationSemantics(
   input: ClassificationSemanticInput,
 ): Result<undefined, EstateReviewError> {

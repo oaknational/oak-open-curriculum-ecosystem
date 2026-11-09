@@ -126,7 +126,7 @@
       "properties": {
         "path": { "$ref": "#/$defs/repoPath" },
         "schemaVersion": { "const": "2.0.0" },
-        "contractRevision": { "const": "2.6" },
+        "contractRevision": { "const": "2.7" },
         "sha256": { "$ref": "#/$defs/sha256" }
       }
     },

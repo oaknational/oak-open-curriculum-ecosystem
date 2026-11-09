@@ -60,7 +60,6 @@ function captureFromRoot(
   root: string,
 ): Result<GitSourceSnapshot, EstateReviewError> {
   const context: GitContext = {
-    executable: input.gitExecutable,
     cwd: root,
     root,
     env: environment,
@@ -110,11 +109,6 @@ function validateSnapshotInput(
       new EstateReviewError('SNAPSHOT_INVALID', 'snapshot ref must be one non-empty argv value'),
     );
   }
-  if (!path.isAbsolute(input.gitExecutable)) {
-    return err(
-      new EstateReviewError('SNAPSHOT_INVALID', 'trusted Git executable must be an absolute path'),
-    );
-  }
   const invalid = limitValues(input.limits).find(
     ({ value }) => !Number.isSafeInteger(value) || value < 1,
   );
@@ -148,7 +142,6 @@ function discoverInvokingGitRoot(
 ): Result<string, EstateReviewError> {
   const result = runGit(
     {
-      executable: input.gitExecutable,
       cwd: input.callerCwd,
       root: input.callerCwd,
       env,

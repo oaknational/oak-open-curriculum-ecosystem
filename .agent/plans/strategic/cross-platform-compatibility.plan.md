@@ -27,7 +27,7 @@ depends_on: []
 owner_gates: []
 tickets:
   - MCP-624
-last_updated: 2026-09-11
+last_updated: 2026-11-06
 ---
 
 # Host portability — support tiers, seams, and the ratchet
@@ -66,9 +66,9 @@ Windows and Linux):
 - **Binaries run by name**, with `PATH` as the trust root
   ([Sonar disposition policy §S4036](../../../docs/governance/sonar-disposition-policy.md#s4036--os-commands-resolved-via-path)):
   the operator's environment decides which binary a name resolves to, and
-  nothing depends on one machine's directory layout. `trusted-git`,
-  `trusted-gitleaks` (the push secret scan) and `trusted-shell` (the smokes'
-  hermetic shell) remain as resolvers until those binaries run by name too.
+  nothing depends on one machine's directory layout. `trusted-gitleaks` (the
+  push secret scan) and `trusted-shell` (the smokes' hermetic shell) remain as
+  resolvers until those binaries run by name too; git runs by name.
 - **Injected platform flavour** for path comparison — both platforms'
   containment rules are provable from Linux CI, so the Windows
   semantics are guarded per-PR at zero Windows-runner cost.
@@ -106,8 +106,7 @@ Linear parent MCP-624 is the visibility surface):
    `windows-basic` CI leg, green on the landing tip; native Windows is true
    at head.
 5. **Post-merge residue** — the SDK generator emits LF explicitly (kills
-   the CRLF working-tree dirtying on Windows); the two remaining raw
-   `spawnSync('git')` calls route through the trusted resolver.
+   the CRLF working-tree dirtying on Windows).
 6. **Static ratchet** — a lint/validator rule refusing code that chooses
    a binary's path (an absolute binary path at a spawn site, or a
    rewritten `PATH`), since binaries run by name; a fixture-path hygiene
@@ -192,3 +191,9 @@ strategic node rather than only from a thread record.
   the original deliberately deferred. The research-first rider is
   discharged for the enumerated surface: PR #891 ran the entire gate
   estate on a real Windows machine, which IS the census, empirically.
+- **2026-11-03** (owner ruling, recorded in the
+  [Sonar disposition policy §S4036](../../../docs/governance/sonar-disposition-policy.md#s4036--os-commands-resolved-via-path)):
+  binaries run by name, with `PATH` as the trust root, and no code
+  chooses a binary's path or rewrites `PATH`. This reverses the
+  2026-08-18 bet on trusted binary allowlists; the resolvers were
+  removed under MCP-832 (pnpm, gh, gitleaks) and MCP-833 (git).

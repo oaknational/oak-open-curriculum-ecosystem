@@ -110,15 +110,6 @@ describe('branch touched files CLI args', () => {
     );
   });
 
-  it('accepts an explicit git executable path override', () => {
-    expect(
-      parseArgs(['--git', '/nix/store/git/bin/git', '--branch', 'feature/example']),
-    ).toMatchObject({
-      gitPath: '/nix/store/git/bin/git',
-      headRef: 'feature/example',
-    });
-  });
-
   it('ignores a pnpm-forwarded argument separator', () => {
     expect(parseArgs(['--', '--base', 'main'])).toMatchObject({
       baseRef: 'main',
