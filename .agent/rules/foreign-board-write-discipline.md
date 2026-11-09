@@ -160,8 +160,9 @@ boundary.
   read-only strategy page) are that estate's host-local instances of the
   outer gate this rule defers to. This estate's one such outer gate is
   [`downstream-checkout-never-writes-upstream-surfaces`](./downstream-checkout-never-writes-upstream-surfaces.md):
-  a write to an upstream repository, tracker or chat is refused outright
-  there, before this rule's field split is ever reached.
+  a write to an upstream repository, tracker or chat is refused there unless
+  the owner has lifted the ban for that upstream (for Oak, on 2026-11-02),
+  before this rule's field split is ever reached.
 
 ## Enforcement
 
