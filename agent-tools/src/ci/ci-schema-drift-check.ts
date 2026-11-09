@@ -76,10 +76,11 @@ function describeError(error: unknown): string {
  * directly; local and pre-push runs (no env) skip silently.
  *
  * Line format: one `key=value` per line, so the description must never
- * carry a line break — the report builder percent-encodes CR and LF before
- * it caps the length, which is what keeps a second key or a heredoc
- * delimiter from being injected through upstream text (the invariant
- * `ci-schema-drift-report.unit.test.ts` pins).
+ * carry a line break. It carries no upstream text: the report builder
+ * composes it from the verdict and this script's own literal skip reasons,
+ * so nothing read from the network reaches this file
+ * (`ci-schema-drift-report.unit.test.ts` pins that for the two verdicts that
+ * read the network).
  */
 async function writeStepOutputs(report: SchemaDriftReport): Promise<void> {
   const outputPath = process.env['GITHUB_OUTPUT'] ?? '';

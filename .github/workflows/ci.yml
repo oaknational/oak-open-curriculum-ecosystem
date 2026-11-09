@@ -209,7 +209,8 @@ jobs:
   # the PR merge ref, so anyone who can push a branch here can already declare
   # any permission the workflow can — that is the repository's trust model,
   # not a gap this split can close. Both job rows appear in the PR checks
-  # list; the commit status carries the version verdict. Neither job is in
+  # list; the commit status carries the verdict, and the versions are on the
+  # step summary its link opens. Neither job is in
   # the `run-quality-gates` fan-in: advisory by design.
   schema-drift:
     name: schema-drift
