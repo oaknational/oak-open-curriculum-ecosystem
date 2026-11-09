@@ -1588,3 +1588,10 @@ Written from a solo Claude cloud session.
   back (the receiving repository's code-quality gate, its deploy check, its release) is what that
   repository's own checks report on a pull request. Where the real trial is a draft pull request,
   prefer asking for it over predicting its result (2026-11-09, Sandpiper guards Wind, 690653).
+- **A failed commit leaves its files staged for the next one.** A docs commit failed commitlint
+  (a body line opening "2026-11-02:" parses as a footer token with no blank line before it, and
+  `--strict` fails the warning); its staged files then rode into the next `chore(continuity)`
+  commit. The repo forbids `git restore` and history rewrites, so the commit stands with its
+  message understating its contents, recorded on the pull request. After any failed commit, read
+  `git diff --cached --name-only` before the next, and keep date-colon openings off body lines
+  (2026-11-09, Sandpiper guards Wind, 690653).
