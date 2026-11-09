@@ -10,6 +10,14 @@ import { parseRecordedHarvest, type RecordedHarvest } from '../pr-tally/harvest.
  * recording query, every connection with its page info — a truncated read is
  * refused, never counted short), its description, and a diff reader over the
  * local repository. Everything else in the gate is pure.
+ *
+ * The commits connection is read page by page, since a pull request's history
+ * can outgrow one page (a fork's merge back carries thousands of commits).
+ * GitHub serves at most a pull request's newest 250 commits, so on a longer
+ * history the first commit served is not the branch's first. The reviewed
+ * heads the gate prices are recent, so they fall inside what is served.
+ * Every other connection is read once, and any connection still truncated is
+ * refused by the parser.
  */
 
 const RECORDING_QUERY = `query($owner: String!, $name: String!, $number: Int!) {
@@ -29,6 +37,48 @@ const RECORDING_QUERY = `query($owner: String!, $name: String!, $number: Int!) {
     }
   }
 }`;
+
+/** One further page of the commits connection, after a cursor. */
+const COMMIT_PAGE_QUERY = `query($owner: String!, $name: String!, $number: Int!, $after: String!) {
+  repository(owner: $owner, name: $name) {
+    pullRequest(number: $number) {
+      commits(first: 100, after: $after) { pageInfo { hasNextPage endCursor } nodes { commit { oid committedDate } } }
+    }
+  }
+}`;
+
+/** Pages read after the first before the harvest stops, leaving the parser to refuse the rest: 20,000 commits. */
+const MAX_FURTHER_COMMIT_PAGES = 200;
+
+const COMMITS = z.object({
+  pageInfo: z.object({ hasNextPage: z.boolean(), endCursor: z.string().nullable() }),
+  nodes: z.array(z.unknown()),
+});
+
+type Commits = z.infer<typeof COMMITS>;
+
+const COMMIT_PAGE = z.object({
+  data: z.object({ repository: z.object({ pullRequest: z.object({ commits: COMMITS }) }) }),
+});
+
+/**
+ * The whole commits connection: the first page, then each further page while
+ * GitHub says there is one, up to the cap. A cursorless "next page", or one
+ * past the cap, leaves `hasNextPage` true, so the parser refuses it.
+ */
+function readAllCommits(first: Commits, readPage: (after: string) => Commits): Commits {
+  const nodes = [...first.nodes];
+  let pageInfo = first.pageInfo;
+  for (let read = 0; read < MAX_FURTHER_COMMIT_PAGES; read += 1) {
+    if (!pageInfo.hasNextPage || pageInfo.endCursor === null) {
+      break;
+    }
+    const next = readPage(pageInfo.endCursor);
+    nodes.push(...next.nodes);
+    pageInfo = next.pageInfo;
+  }
+  return { pageInfo, nodes };
+}
 
 interface LiveHarvest {
   readonly harvest: RecordedHarvest;
@@ -50,6 +100,7 @@ const ENVELOPE = z.object({
       pullRequest: z.looseObject({
         body: z.string().nullable(),
         baseRef: z.object({ target: z.object({ oid: z.string().min(1) }) }).nullable(),
+        commits: COMMITS,
       }),
     }),
   }),
@@ -72,15 +123,14 @@ export type ListedPullRequest = z.infer<typeof PULL_REQUEST_LIST>[number];
 export function readLiveHarvest(options: HarvestOptions): LiveHarvest {
   const run = options.run ?? execFileSync;
   const [owner, name] = options.repo.split('/');
-  const envelope = ENVELOPE.parse(
+  const graphql = (fields: readonly string[]): unknown =>
     JSON.parse(
       run(
         'gh',
         [
           'api',
           'graphql',
-          '-f',
-          `query=${RECORDING_QUERY}`,
+          ...fields,
           '-F',
           `owner=${owner ?? ''}`,
           '-F',
@@ -90,11 +140,17 @@ export function readLiveHarvest(options: HarvestOptions): LiveHarvest {
         ],
         GH_EXEC_OPTIONS,
       ),
-    ),
-  );
+    );
+  const envelope = ENVELOPE.parse(graphql(['-f', `query=${RECORDING_QUERY}`]));
   const pullRequest = envelope.data.repository.pullRequest;
+  const commits = readAllCommits(
+    pullRequest.commits,
+    (after) =>
+      COMMIT_PAGE.parse(graphql(['-f', `query=${COMMIT_PAGE_QUERY}`, '-f', `after=${after}`])).data
+        .repository.pullRequest.commits,
+  );
   return {
-    harvest: parseRecordedHarvest(pullRequest),
+    harvest: parseRecordedHarvest({ ...pullRequest, commits }),
     body: pullRequest.body ?? '',
     baseRefOid: pullRequest.baseRef?.target.oid,
   };
