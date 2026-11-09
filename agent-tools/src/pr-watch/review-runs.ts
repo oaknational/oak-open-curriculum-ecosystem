@@ -51,7 +51,6 @@ function describeError(error: unknown): string {
 
 function mapRunsToPr(input: {
   readonly run: GhCommandExecutor;
-  readonly gh: string;
   readonly prNumber: number;
   readonly prUrl: string;
   readonly runs: readonly ReviewRun[];
@@ -137,14 +136,14 @@ interface UnreadableRun {
 
 /** Read one run's view; the failure's description when it cannot be read or parsed. */
 function readRunView(
-  input: { readonly run: GhCommandExecutor; readonly gh: string },
+  input: { readonly run: GhCommandExecutor },
   runId: string,
 ): AgentTaskView | string {
   try {
     return parseAgentTaskView(
       parseGhJson(
         input.run(
-          input.gh,
+          'gh',
           [
             'agent-task',
             'view',
@@ -165,13 +164,12 @@ function readRunView(
 /** Read and PR-scope the review-run leg; failures degrade typed, never throw. */
 export function readReviewRunsLeg(input: {
   readonly run: GhCommandExecutor;
-  readonly gh: string;
   readonly prNumber: number;
   readonly prUrl: string;
 }): ReviewRunsLeg {
   try {
     const listRaw = parseGhJson(
-      input.run(input.gh, AGENT_TASK_LIST_ARGS, GH_EXEC_OPTIONS),
+      input.run('gh', AGENT_TASK_LIST_ARGS, GH_EXEC_OPTIONS),
       'agent-task list',
     );
     return mapRunsToPr({ ...input, runs: parseAgentTaskList(listRaw) });

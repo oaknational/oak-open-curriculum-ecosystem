@@ -105,9 +105,6 @@ function portFrom(input: RetireActionInput): Result<RetireGitPort, Error> {
     return ok(input.gitPort);
   }
   const git = resolveGitContext(input);
-  if (!git.ok) {
-    return git;
-  }
   const env = {
     ...(input.baseEnv ?? process.env),
     ...scrubbedCredentialEnv(),
@@ -116,7 +113,7 @@ function portFrom(input: RetireActionInput): Result<RetireGitPort, Error> {
     GIT_NO_REPLACE_OBJECTS: '1',
     GIT_GRAFT_FILE: '/dev/null',
   };
-  return ok(gitRetirePort({ git: git.value, cwd: input.repoRoot, env }));
+  return ok(gitRetirePort({ git, cwd: input.repoRoot, env }));
 }
 
 /** The port bound to the identity's repository, or the outcome that stops before any read. */

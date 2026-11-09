@@ -50,10 +50,9 @@ export function parseGitWorktreeList(porcelain: string): readonly GitWorktree[] 
 
 /**
  * Read the machine's git worktrees from `cwd`. Throws when `cwd` is not inside a
- * git working tree (consistent with `resolveCoordinationHome` and the
- * `resolveTrustedGit` throwing convention — the no-throw backlog migrates them
- * together). The `runGit` seam is injected in tests so the read is exercised
- * without a real repository.
+ * git working tree (consistent with `resolveCoordinationHome`'s throwing
+ * convention; the no-throw backlog migrates them together). The `runGit` seam
+ * is injected in tests so the read is exercised without a real repository.
  */
 export function readGitWorktrees(
   cwd: string,

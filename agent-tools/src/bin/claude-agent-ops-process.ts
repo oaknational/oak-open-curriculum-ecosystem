@@ -5,27 +5,15 @@
  *
  * @packageDocumentation
  */
-import { spawnSync } from 'node:child_process';
+import { sync as crossSpawnSync } from 'cross-spawn';
 
-import { writeErrorLine } from '../core/terminal-output.js';
-import { resolvePnpm } from '../spawn/pnpm-path.js';
-
-/** True when `pnpm <gate>` exits 0 in `root`; its output is discarded. */
+/**
+ * True when `pnpm <gate>` exits 0 in `root`; its output is discarded. pnpm
+ * runs by name through `cross-spawn`, which launches a Windows `pnpm.cmd`
+ * shim that a shell-less Node spawn cannot.
+ */
 export function runPnpmGate(gate: string, root: string): boolean {
-  // Bare 'pnpm' never reaches spawn (the agent-tools invariant, and on
-  // Windows a shell-less by-name spawn cannot resolve the .cmd shim).
-  const pnpm = resolvePnpm(process.env);
-  if (!pnpm.ok) {
-    writeErrorLine(pnpm.error.message);
-    return false;
-  }
-  return (
-    spawnSync(pnpm.value.file, [...pnpm.value.leadingArgs, gate], {
-      cwd: root,
-      stdio: 'ignore',
-      env: pnpm.value.env,
-    }).status === 0
-  );
+  return crossSpawnSync('pnpm', [gate], { cwd: root, stdio: 'ignore' }).status === 0;
 }
 /** A promise that settles after `milliseconds`. */
 export function waitMs(milliseconds: number): Promise<void> {

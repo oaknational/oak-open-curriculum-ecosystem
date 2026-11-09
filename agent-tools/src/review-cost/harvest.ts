@@ -2,7 +2,7 @@ import { execFileSync } from 'node:child_process';
 
 import { z } from 'zod';
 
-import { GH_EXEC_OPTIONS, resolveGhPath, type GhCommandExecutor } from '../pr-watch/gh.js';
+import { GH_EXEC_OPTIONS, type GhCommandExecutor } from '../pr-watch/gh.js';
 import { parseRecordedHarvest, type RecordedHarvest } from '../pr-tally/harvest.js';
 
 /**
@@ -40,7 +40,6 @@ interface LiveHarvest {
 interface HarvestOptions {
   readonly number: number;
   readonly repo: string;
-  readonly ghPath?: string;
   readonly run?: GhCommandExecutor;
 }
 
@@ -72,12 +71,11 @@ export type ListedPullRequest = z.infer<typeof PULL_REQUEST_LIST>[number];
 /** Read the pull request's recording and description through `gh`. */
 export function readLiveHarvest(options: HarvestOptions): LiveHarvest {
   const run = options.run ?? execFileSync;
-  const gh = resolveGhPath(options.ghPath);
   const [owner, name] = options.repo.split('/');
   const envelope = ENVELOPE.parse(
     JSON.parse(
       run(
-        gh,
+        'gh',
         [
           'api',
           'graphql',
@@ -106,14 +104,12 @@ export function readLiveHarvest(options: HarvestOptions): LiveHarvest {
 export function openPullRequestFor(
   branch: string,
   repo: string,
-  ghPath?: string,
   run: GhCommandExecutor = execFileSync,
 ): number | null {
-  const gh = resolveGhPath(ghPath);
   const open = OPEN_PULL_REQUESTS.parse(
     JSON.parse(
       run(
-        gh,
+        'gh',
         [
           'pr',
           'list',
@@ -139,14 +135,12 @@ export function openPullRequestFor(
 export function pullRequestsSince(
   since: string,
   repo: string,
-  ghPath?: string,
   run: GhCommandExecutor = execFileSync,
 ): ListedPullRequest[] {
-  const gh = resolveGhPath(ghPath);
   return PULL_REQUEST_LIST.parse(
     JSON.parse(
       run(
-        gh,
+        'gh',
         [
           'pr',
           'list',
@@ -168,10 +162,9 @@ export function pullRequestsSince(
 }
 
 /** The repository's `owner/repo` from `gh`, when the caller does not name it. */
-export function currentRepo(ghPath?: string, run: GhCommandExecutor = execFileSync): string {
-  const gh = resolveGhPath(ghPath);
+export function currentRepo(run: GhCommandExecutor = execFileSync): string {
   return run(
-    gh,
+    'gh',
     ['repo', 'view', '--json', 'nameWithOwner', '--jq', '.nameWithOwner'],
     GH_EXEC_OPTIONS,
   ).trim();

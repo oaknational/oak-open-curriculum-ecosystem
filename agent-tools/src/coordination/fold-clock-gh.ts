@@ -3,9 +3,7 @@ import { err, ok, type Result } from '@oaknational/result';
 import {
   GH_EXEC_OPTIONS,
   parseGhJson,
-  resolveGhPath,
   type GhCommandExecutor,
-  type PathExistsCheck,
   type PrTarget,
 } from '../pr-watch/gh.js';
 import type { CheckRunReading, FoldClockReading } from './fold-clock.js';
@@ -33,8 +31,6 @@ export interface FoldClockSource {
   readonly target: PrTarget;
   /** The successor branch's pushed tip, validated hex by the caller. */
   readonly successorSha?: string;
-  readonly ghPath?: string;
-  readonly exists?: PathExistsCheck;
   readonly execFileSync: GhCommandExecutor;
 }
 
@@ -46,20 +42,15 @@ export function isCommitSha(value: string): boolean {
   return COMMIT_SHA_PATTERN.test(value);
 }
 
-interface Gh {
-  readonly run: GhCommandExecutor;
-  readonly path: string;
-}
-
 /** One surface: run, parse the JSON, validate to its shape; every failure names the surface. */
 function readSurface<T>(
-  gh: Gh,
+  gh: GhCommandExecutor,
   args: readonly string[],
   surface: string,
   parse: (value: unknown) => Result<T, Error>,
 ): Result<T, Error> {
   try {
-    return parse(parseGhJson(gh.run(gh.path, args, GH_EXEC_OPTIONS), surface));
+    return parse(parseGhJson(gh('gh', args, GH_EXEC_OPTIONS), surface));
   } catch (error) {
     return err(
       new Error(
@@ -67,14 +58,6 @@ function readSurface<T>(
         { cause: error },
       ),
     );
-  }
-}
-
-function resolveGh(source: FoldClockSource): Result<Gh, Error> {
-  try {
-    return ok({ run: source.execFileSync, path: resolveGhPath(source.ghPath, source.exists) });
-  } catch (error) {
-    return err(error instanceof Error ? error : new Error(String(error), { cause: error }));
   }
 }
 
@@ -89,7 +72,7 @@ function checkRunsArgs(repo: string, sha: string): readonly string[] {
 
 /** The tip's check-runs and its commit statuses, as runs of their contexts. */
 function readHeadChecks(
-  gh: Gh,
+  gh: GhCommandExecutor,
   repo: string,
   sha: string,
 ): Result<readonly CheckRunReading[], Error> {
@@ -107,7 +90,7 @@ function readHeadChecks(
 }
 
 function readSuccessor(
-  gh: Gh,
+  gh: GhCommandExecutor,
   repo: string,
   successorSha: string | undefined,
 ): Result<
@@ -130,7 +113,7 @@ function readSuccessor(
 }
 
 interface PullContext {
-  readonly gh: Gh;
+  readonly gh: GhCommandExecutor;
   readonly repo: string;
   readonly pr: string;
   readonly prNumber: number;
@@ -186,18 +169,10 @@ function readRemaining(context: PullContext): Result<FoldClockReading, Error> {
 
 /** Read the four surfaces (five with a successor) and assemble the clock's reading. */
 export function readFoldClockReading(source: FoldClockSource): Result<FoldClockReading, Error> {
-  const gh = resolveGh(source);
-  if (!gh.ok) {
-    return gh;
-  }
+  const gh = source.execFileSync;
   const repo = source.target.repo ?? '{owner}/{repo}';
   const pr = String(source.target.number);
-  const pull = readSurface(
-    gh.value,
-    ['api', `repos/${repo}/pulls/${pr}`],
-    'pull request',
-    parsePull,
-  );
+  const pull = readSurface(gh, ['api', `repos/${repo}/pulls/${pr}`], 'pull request', parsePull);
   if (!pull.ok) {
     return pull;
   }
@@ -205,7 +180,7 @@ export function readFoldClockReading(source: FoldClockSource): Result<FoldClockR
     return err(new Error(`fold-clock: the base ref '${pull.value.baseRef}' is not a branch name`));
   }
   return readRemaining({
-    gh: gh.value,
+    gh: gh,
     repo,
     pr,
     prNumber: source.target.number,

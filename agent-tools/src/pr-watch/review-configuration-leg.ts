@@ -29,7 +29,6 @@ function isBranchName(ref: string): boolean {
  */
 export function readReviewConfigurationLeg(input: {
   readonly run: GhCommandExecutor;
-  readonly gh: string;
   readonly repo: string | undefined;
   readonly view: { readonly url: string; readonly baseRefName: string };
 }): ReviewConfiguration {
@@ -43,7 +42,7 @@ export function readReviewConfigurationLeg(input: {
       return { kind: 'unread', reason: `the base ref '${base}' is not a branch name` };
     }
     const raw = input.run(
-      input.gh,
+      'gh',
       ['api', `repos/${repo}/rules/branches/${encodeURIComponent(base)}`, '--paginate', '--slurp'],
       GH_EXEC_OPTIONS,
     );

@@ -6,7 +6,6 @@ import { shouldSkipCompactAgent } from './session-tools.js';
 import { escapedRepoPath, isSessionId } from './runtime-paths.js';
 import { isHistoryRow, isMetaRow, readJsonLines } from './json-parsing.js';
 import { writeErrorLine } from './terminal-output.js';
-import { resolveTrustedGit } from './trusted-git.js';
 export { listAgentShortIds, resolveAgentJsonlPath } from './runtime-agent-index.js';
 export { readAgentEvents } from './runtime-agent-events.js';
 /** File-system contract used by runtime helpers for dependency injection in tests. */
@@ -38,9 +37,9 @@ const maxDirectoryFilesRead = 200;
 const maxFileBytesRead = 256 * 1024;
 export function repoRoot(): string {
   try {
-    // Absolute-path git via the trusted resolver (S4036): a by-name spawn
-    // resolves through PATH, which a writable entry can shadow.
-    return execFileSync(resolveTrustedGit(), ['rev-parse', '--show-toplevel'], {
+    // git by name, with PATH as the trust root (the Sonar disposition
+    // policy's S4036 section).
+    return execFileSync('git', ['rev-parse', '--show-toplevel'], {
       encoding: 'utf8',
     }).trim();
   } catch (error: unknown) {
@@ -137,17 +136,11 @@ export function targetNeedles(root: string, targetFile: string): string[] {
 }
 /**
  * Run a git subcommand in `repoPath` and return its trimmed stdout, or the
- * empty string when git does not answer: a non-zero exit, or no trusted git
- * binary at all (the same answer the by-name spawn gave for a missing git).
+ * empty string when git does not answer: a non-zero exit, or a git that
+ * could not start.
  */
 export function runGit(repoPath: string, args: string[]): string {
-  let git: string;
-  try {
-    git = resolveTrustedGit();
-  } catch {
-    return '';
-  }
-  const result = spawnSync(git, ['-C', repoPath, ...args], {
+  const result = spawnSync('git', ['-C', repoPath, ...args], {
     encoding: 'utf8',
     stdio: ['ignore', 'pipe', 'ignore'],
   });

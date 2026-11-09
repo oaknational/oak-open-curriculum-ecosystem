@@ -3,14 +3,13 @@
  *
  * @remarks
  * Resolving a command by name lets the OS search `PATH` (SonarCloud S4036,
- * "OS commands should not rely on PATH resolution"): a user-writable `PATH`
- * entry can shadow the binary. The documented compliant fix, and the only
- * one `docs/governance/sonar-disposition-policy.md` §S4036 admits, is to
- * execute the binary by its ABSOLUTE path from a fixed allowlist. This module
- * is that fix written once; `trusted-git.ts`, `trusted-gh.ts`,
- * `trusted-shell.ts` and `trusted-gitleaks.ts` each declare their allowlist
- * and remedy as a {@link TrustedBinarySpec} and resolve through it (one home
- * at the second consumer). The security property is the fixed absolute path
+ * "OS commands should not rely on PATH resolution"). The disposition policy
+ * (`docs/governance/sonar-disposition-policy.md` §S4036) makes `PATH` the
+ * trust root for a repository-required binary invoked by name, so this
+ * resolver is not what the policy requires. It is what `trusted-shell.ts` and
+ * `trusted-gitleaks.ts` resolve through, each
+ * declaring its allowlist and remedy as a {@link TrustedBinarySpec} (one home
+ * at the second consumer). Its security property is the fixed absolute path
  * (resolution never consults `PATH`), not any guarantee that every listed
  * location is non-writable.
  *
@@ -42,10 +41,8 @@ interface TrustedBinaryPaths {
 
 /** What a trusted-binary resolver declares: the name, the allowlist and the remedy. */
 export interface TrustedBinarySpec {
-  /** The command's name, as the refusal says what is resolved (`git`, `gh`, `sh`). */
+  /** The command's name, as the refusal says what is resolved (`git`, `gitleaks`, `sh`). */
   readonly name: string;
-  /** How the refusal names the binary (`git`, `gh (GitHub CLI)`); defaults to `name`. */
-  readonly label?: string;
   /** The fixed candidate paths. */
   readonly paths: TrustedBinaryPaths;
   /** The platform-correct remedy appended to a refusal; advice differs by OS. */
@@ -92,7 +89,7 @@ export function resolveTrustedBinary(
       : candidates.join(', ');
   return err(
     new Error(
-      `No trusted ${spec.label ?? spec.name} binary found. Searched: ${searched}. ` +
+      `No trusted ${spec.name} binary found. Searched: ${searched}. ` +
         `${spec.name} is resolved by a fixed absolute path from these well-known locations (never via PATH) ` +
         `to defeat PATH-search hijacking (SonarCloud S4036). ${spec.remedyFor(platform)}`,
     ),

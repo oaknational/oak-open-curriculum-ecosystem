@@ -15,7 +15,6 @@ import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
-import { resolveTrustedGit } from '../core/trusted-git.js';
 import { resolveTrustedGitleaks } from '../core/trusted-gitleaks.js';
 import {
   computePushScanRanges,
@@ -44,15 +43,14 @@ function listedLines(stdout: string): string[] {
  * unexamined buffer.
  */
 function readConfiguredRemotes(): ConfiguredRemote[] {
-  const git = resolveTrustedGit();
-  const names = spawnSync(git, ['remote'], { encoding: 'utf8' });
+  const names = spawnSync('git', ['remote'], { encoding: 'utf8' });
   if (names.error !== undefined || names.status !== 0) {
     // No list means nothing can be treated as scopable — the safe direction:
     // the scan widens and says so, rather than building a glob that matches
     // nothing while reporting success.
     return [];
   }
-  return listedLines(names.stdout).map((name) => ({ name, fetchUrl: readFetchUrl(git, name) }));
+  return listedLines(names.stdout).map((name) => ({ name, fetchUrl: readFetchUrl(name) }));
 }
 
 /**
@@ -63,8 +61,8 @@ function readConfiguredRemotes(): ConfiguredRemote[] {
  * name only, never by a URL — again the direction that widens the scan rather
  * than narrowing it on a guess.
  */
-function readFetchUrl(git: string, name: string): string | undefined {
-  const result = spawnSync(git, ['remote', 'get-url', name], { encoding: 'utf8' });
+function readFetchUrl(name: string): string | undefined {
+  const result = spawnSync('git', ['remote', 'get-url', name], { encoding: 'utf8' });
   if (result.error !== undefined || result.status !== 0) {
     return undefined;
   }

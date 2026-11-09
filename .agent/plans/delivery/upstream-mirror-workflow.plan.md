@@ -13,7 +13,7 @@ impact_areas:
 tickets: []
 depends_on: []
 owner_gates: []
-last_updated: 2026-10-02
+last_updated: 2026-11-03
 ---
 
 # Upstream mirror workflow
@@ -54,7 +54,7 @@ proves it. Each vendor shape names where it was verified at author time.
 | 4 | The compare | `GET /repos/{owner}/{repo}/compare/{mirror}...{parentOwner}:{parentRepo}:{parentBranch}` — the owner's draft's call, verified live 2026-09-10 (`identical`, `ahead_by 0`, `behind_by 0` with the mirror current). Direction convention: `status`, `ahead_by`, `behind_by` are reported from the head side, so `ahead` means the PARENT is ahead and `behind` means the MIRROR is ahead. |
 | 5 | The write | `PATCH /repos/{owner}/{repo}/git/refs/heads/{mirror}` with `sha` = the parent's tip and `force=false` ("make sure the update is a fast-forward update", REST docs read 2026-09-10). Not `POST …/merge-upstream`: that endpoint returns `merge_type: merge` and MINTS A MERGE COMMIT when the branches have diverged, which is the one state a mirror must never reach by automation (docs read 2026-09-10; `merge_type` enum `merge, fast-forward, none`). The reference update either fast-forwards to exactly the parent's tip or answers 422, so a race between the compare and the write can never create a commit. |
 | 6 | The parent's tip | `GET /repos/{parent}/branches/{parentBranch}` → `.commit.sha`, a public read of the parent. A parent-only commit is writable through the fork's own API, verified by a repo-safe probe on 2026-09-10 (the probe refs deleted after): `POST git/refs` on the fork at a sha present only on the parent answered 201; `PATCH …/git/refs/heads/<probe>` with `force=false` from that sha to a later parent-only sha answered 200 (a genuine fast-forward between two parent-only commits); the same update back to the older sha answered 422 `Update is not a fast forward`. Todo 2's first dispatch is the drift detector for the platform keeping this behaviour. |
-| 7 | The token | The run's own `GITHUB_TOKEN` with job `permissions: contents: write`. `main` is unprotected on the fork (verified 2026-09-10: branch protection 404; no ruleset applies to `main`, the one active ruleset targets the default branch), so the token can move it. A reference moved by `GITHUB_TOKEN` triggers no workflow (platform rule, exploration record observation 6), which is the wanted behaviour: the fork's `main` needs no fork-side CI (upstream's CI proved the tip) and the fork's `Release` workflow, which fails on the fork for want of the release app's secrets whenever a non-release tip lands on `main` (run history 2026-08-26), never fires. Consequence: NO secret and no app is needed for the mirror; the owner's only act is the variable. |
+| 7 | The token | The run's own `GITHUB_TOKEN` with job `permissions: contents: write`. `main` is unprotected on the fork (verified 2026-09-10: branch protection 404; no ruleset applies to `main`, the one active ruleset targets the default branch), so the token can move it. A reference moved by `GITHUB_TOKEN` triggers no workflow (platform rule, exploration record observation 6), which is the wanted behaviour: the fork's `main` needs no fork-side CI (upstream's CI proved the tip) and the fork's `Release` workflow, which fails on the fork for want of the release app's secrets whenever a non-release tip lands on `main` (run history 2026-08-26), never fires. Consequence: NO secret and no app is needed for the mirror; the owner's only act is the variable. Amended 2026-11-03 (Review dispositions, "A range that changes a workflow file"): the run's own token stays the writer, and on its refusal for such a range the run mints the bot's App token from the carrier's App secrets. |
 | 8 | Failure semantics | `behind` or `diverged` (the mirror carries commits the parent lacks) → `::error` with the compare link and `exit 1`; the run failure is the notification. `identical` → one log line, exit 0. `ahead` → the reference update. The run never pushes on failure. |
 | 8a | The parent is public | The two parent reads (the cross-repository compare and `branches/{branch}`) use the run's own token and work because the parent is public; a private parent is outside this mechanism, stated in the file's header for the any-organisation reader. |
 | 9 | Schedule and concurrency | `0 0,6,12,18 * * 1-5` (UTC, the owner's draft), `workflow_dispatch` retained, concurrency group `upstream-mirror` with `cancel-in-progress: false`. |
@@ -200,7 +200,8 @@ jobs:
 The carrier into the default branch (`upstream-carrier-workflow`); any semantic integration;
 the retirement of the Codex OCE task (an owner decision named in the exploration record); any
 change to the fork's `Release` or `CI` workflows (mirror pushes by the run's token trigger
-neither, decision 7).
+neither, decision 7; a move by the App-token fallback of 2026-11-03 starts each at most once,
+and `Release` fails at its token mint).
 
 ## Todos
 
@@ -285,6 +286,27 @@ here so the next reader does not re-derive them:
   Decision 7 stands (the run's own token, so a moved reference triggers no workflow); its
   precondition is now stated in the file's header, which the fence above carries too: whoever
   dispatches must hold what the run writes with.
+- **A range that changes a workflow file (2026-11-03, at the owner's word "do fix the
+  mirror").** No run token may write such a range. The scheduled runs of 2026-11-02 and
+  2026-11-03 failed the reference update with 403 `Resource not accessible by integration` over
+  `4e9d49a2f..299229cae`, which changed three workflow files (`ci`, `mcp-conformance-unattended`,
+  `release`). `main` was then moved by hand twice (the activity log): by the owner to
+  `299229cae` at 11:41:26Z, and by the bot under its `pull-request-work` token to `52e7f3bed` at
+  13:24:20Z, after a dispatched run (41643954178) failed the same way. Decision 7 stands as the
+  default writer. On that refusal alone, matched by its exact text, the run mints the bot's App
+  token (`contents: write` and `workflows: write`, from the carrier's App secrets) and moves the
+  reference with it. Any other refusal fails the run with no fallback: a 422, a rate limit's
+  403. That move is a push, so the workflows at the mirror's new tip that trigger on a push to
+  its branch run at most once (none, when the tip is a release commit carrying `[skip ci]`).
+  It cannot loop back into the mirror: the job's `if:` admits only `schedule` and
+  `workflow_dispatch`, and the job is idempotent, its next compare reading `identical`. The
+  owner's word on the mirror's CI, the same day: "It's a _mirror_, it is the responsibility of
+  Oak to make sure that there code is in a proper state, our job is to mirror it". The fence
+  above is the file as todo 1 authored it; the file on the default branch carries this
+  amendment. Held, not cured, by the change's security review: the App key's secrets are
+  repository-wide, so any same-repository workflow can read them (the carrier's pull requests
+  already could); an environment restricted to `engraph` would close that. The fork's `Release`
+  stays inert only while the fork lacks its release secrets.
 
 Review round on PR #131, 2026-09-11. Carried to the owner:
 

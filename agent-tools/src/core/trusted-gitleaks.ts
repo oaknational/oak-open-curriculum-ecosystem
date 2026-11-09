@@ -11,8 +11,7 @@
  * `/usr/bin`. Windows has no administrator-protected install location for
  * gitleaks (the release is a bare archive, and the package managers place
  * it in user-writable space), so the win32 family is empty and the scan is
- * refused there loudly, as `docs/governance/sonar-disposition-policy.md`
- * §S4036 directs, never served from user-writable space.
+ * refused there loudly, never served from user-writable space.
  *
  * @packageDocumentation
  */

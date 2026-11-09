@@ -47,8 +47,6 @@ describe('readPrSnapshot', () => {
   it('assembles a snapshot from the three gh surfaces', () => {
     const snapshot = readPrSnapshot({
       target: { number: 221 },
-      ghPath: '/custom/bin/gh',
-      exists: () => true,
       execFileSync: fakeExec(),
     });
     expect(snapshot.state).toBe('OPEN');
@@ -62,8 +60,6 @@ describe('readPrSnapshot', () => {
     const exec = fakeExec();
     readPrSnapshot({
       target: { number: 221 },
-      ghPath: '/x/gh',
-      exists: () => true,
       execFileSync: exec,
     });
     const apiCall = exec.mock.calls.find((call) => isRestComments(call[1]));
@@ -78,8 +74,6 @@ describe('readPrSnapshot', () => {
     const exec = fakeExec();
     readPrSnapshot({
       target: { number: 221 },
-      ghPath: '/x/gh',
-      exists: () => true,
       execFileSync: exec,
     });
     const graphqlCalls = exec.mock.calls.filter((call) => isGraphql(call[1]));
@@ -100,8 +94,6 @@ describe('readPrSnapshot', () => {
     const exec = fakeExec();
     readPrSnapshot({
       target: { number: 221, repo: 'o/r' },
-      ghPath: '/x/gh',
-      exists: () => true,
       execFileSync: exec,
     });
     const calls = exec.mock.calls;
@@ -120,8 +112,6 @@ describe('readPrSnapshot', () => {
     expect(() =>
       readPrSnapshot({
         target: { number: 221 },
-        ghPath: '/x/gh',
-        exists: () => true,
         execFileSync: exec,
       }),
     ).toThrow(/non-JSON output/u);
@@ -137,8 +127,6 @@ describe('readPrSnapshot', () => {
     expect(() =>
       readPrSnapshot({
         target: { number: 221 },
-        ghPath: '/x/gh',
-        exists: () => true,
         execFileSync: exec,
       }),
     ).toThrow(/reviewThreads.*non-JSON output/u);

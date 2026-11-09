@@ -27,7 +27,7 @@ depends_on: []
 owner_gates: []
 tickets:
   - MCP-624
-last_updated: 2026-09-11
+last_updated: 2026-11-06
 ---
 
 # Host portability — support tiers, seams, and the ratchet
@@ -41,12 +41,12 @@ The estate declares and holds two support tiers:
 | First class | Linux, macOS, Windows via WSL | POSIX semantics throughout; per-PR CI proof on Linux AND macOS (basic leg); WSL inherits the POSIX proof and the README route (PR #888) |
 | Goal, non-vital | Native Windows | The seams of upstream PR #891 (set down unmerged upstream on 2026-09-10; carried onto this line by the `native-windows-support-carrier` node's lane, PR #129), a basic Windows CI leg (advisory until green, then required), and the static ratchet — it currently blocks nothing and never becomes the slow leg |
 
-The deeper outcome is platform-independent: machine assumptions (which
-binary runs, how paths compare, what the filesystem can express) live
-behind named seams rather than being scattered assumptions, so the
-codebase is correct BY CONSTRUCTION on every tier — most of what native
-Windows needed turned out to be latent cross-platform defects, including
-one on a security boundary.
+The deeper outcome is platform-independent: machine assumptions (how
+paths compare, what the filesystem can express) live behind named seams
+rather than being scattered assumptions, so the codebase is correct BY
+CONSTRUCTION on every tier — most of what native Windows needed turned
+out to be latent cross-platform defects, including one on a security
+boundary.
 
 Amendment 2026-09-11 (owner, verbatim): "consider real Windows proven, one
 of our developers uses Windows machines." Native Windows is in daily use on
@@ -63,10 +63,12 @@ ratification, now with the generator seams built and proven (PR #891,
 authored from real failures on a real Windows machine, gate-green on
 Windows and Linux):
 
-- **Trusted binary resolution** through fixed, platform-partitioned
-  allowlists (`trusted-git`, `trusted-gh`, the pnpm invocation
-  contract) — a security property (S4036) and the portability seam in
-  one place.
+- **Binaries run by name**, with `PATH` as the trust root
+  ([Sonar disposition policy §S4036](../../../docs/governance/sonar-disposition-policy.md#s4036--os-commands-resolved-via-path)):
+  the operator's environment decides which binary a name resolves to, and
+  nothing depends on one machine's directory layout. `trusted-gitleaks` (the
+  push secret scan) and `trusted-shell` (the smokes' hermetic shell) remain as
+  resolvers until those binaries run by name too; git runs by name.
 - **Injected platform flavour** for path comparison — both platforms'
   containment rules are provable from Linux CI, so the Windows
   semantics are guarded per-PR at zero Windows-runner cost.
@@ -104,12 +106,11 @@ Linear parent MCP-624 is the visibility surface):
    `windows-basic` CI leg, green on the landing tip; native Windows is true
    at head.
 5. **Post-merge residue** — the SDK generator emits LF explicitly (kills
-   the CRLF working-tree dirtying on Windows); the two remaining raw
-   `spawnSync('git')` calls route through the trusted resolver.
-6. **Static ratchet** — a lint/validator rule refusing raw
-   `spawn`/`execFile` of git, gh, pnpm, or gitleaks outside the trusted
-   resolvers; a fixture-path hygiene check refusing hardcoded
-   machine-absolute paths in new fixtures. The axis is named **host
+   the CRLF working-tree dirtying on Windows).
+6. **Static ratchet** — a lint/validator rule refusing code that chooses
+   a binary's path (an absolute binary path at a spawn site, or a
+   rewritten `PATH`), since binaries run by name; a fixture-path hygiene
+   check refusing hardcoded machine-absolute paths in new fixtures. The axis is named **host
    portability** — distinct from the existing agent-platform
    `portability:check` gate, which covers a different concern.
 7. **Executable ratchet** — the flavour-injected dual-platform tests
@@ -137,8 +138,8 @@ Linear parent MCP-624 is the visibility surface):
   machine assumption reddens at authoring time (lint) or at the PR
   (flavour tests, basic legs) — never at a contributor's machine first.
 - The four cross-platform bug classes #891 exposed cannot silently
-  recur: the seams are the only path to a binary, a path comparison, or
-  a fixture path.
+  recur: the seams are the only path to a path comparison or a fixture
+  path.
 - Honestly not claimed: full native-Windows parity of every diagnostic
   convenience; native-Windows agent-seat operability (demoted with
   item 9); any macOS/Linux behaviour change — additions never subtract
@@ -190,3 +191,9 @@ strategic node rather than only from a thread record.
   the original deliberately deferred. The research-first rider is
   discharged for the enumerated surface: PR #891 ran the entire gate
   estate on a real Windows machine, which IS the census, empirically.
+- **2026-11-03** (owner ruling, recorded in the
+  [Sonar disposition policy §S4036](../../../docs/governance/sonar-disposition-policy.md#s4036--os-commands-resolved-via-path)):
+  binaries run by name, with `PATH` as the trust root, and no code
+  chooses a binary's path or rewrites `PATH`. This reverses the
+  2026-08-18 bet on trusted binary allowlists; the resolvers were
+  removed under MCP-832 (pnpm, gh, gitleaks) and MCP-833 (git).

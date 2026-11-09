@@ -85,14 +85,17 @@ const CHECK_RUNS_ARGS = (repo: string, sha: string): readonly string[] => [
   `repos/${repo}/commits/${sha}/check-runs?per_page=100&filter=all`,
 ];
 
-/** An executor answering by the path argument, recording every argv. */
+/** An executor answering by the path argument, recording every argv and the file it runs. */
 function fakeGh(answers: Readonly<Record<string, unknown>>): {
   exec: GhCommandExecutor;
   calls: (readonly string[])[];
+  files: string[];
 } {
   const calls: (readonly string[])[] = [];
-  const exec: GhCommandExecutor = (_file, args) => {
+  const files: string[] = [];
+  const exec: GhCommandExecutor = (file, args) => {
     calls.push(args);
+    files.push(file);
     const path = args.find((arg) => arg.startsWith('repos/')) ?? '';
     const answer = answers[path];
     if (answer === undefined) {
@@ -100,7 +103,7 @@ function fakeGh(answers: Readonly<Record<string, unknown>>): {
     }
     return typeof answer === 'string' ? answer : JSON.stringify(answer);
   };
-  return { exec, calls };
+  return { exec, calls, files };
 }
 
 const answers = {
@@ -116,14 +119,11 @@ const target = { number: 326, repo: 'acme/widgets' };
 
 describe('readFoldClockReading', () => {
   it('reads the five surfaces with the pinned argv shapes and assembles the reading', () => {
-    const { exec, calls } = fakeGh(answers);
+    const { exec, calls, files } = fakeGh(answers);
 
-    const reading = readFoldClockReading({
-      target,
-      ghPath: '/custom/bin/gh',
-      exists: () => true,
-      execFileSync: exec,
-    });
+    const reading = readFoldClockReading({ target, execFileSync: exec });
+
+    expect(new Set(files)).toStrictEqual(new Set(['gh']));
 
     expect(reading.ok).toBe(true);
     if (reading.ok) {
@@ -154,7 +154,6 @@ describe('readFoldClockReading', () => {
     const reading = readFoldClockReading({
       target,
       successorSha: SUCCESSOR,
-      exists: () => true,
       execFileSync: exec,
     });
 
@@ -170,7 +169,6 @@ describe('readFoldClockReading', () => {
     const reading = readFoldClockReading({
       target,
       successorSha: 'coordination/x',
-      exists: () => true,
       execFileSync: exec,
     });
 
@@ -196,7 +194,6 @@ describe('readFoldClockReading', () => {
 
     const reading = readFoldClockReading({
       target: { number: 7 },
-      exists: () => true,
       execFileSync: exec,
     });
 
@@ -210,7 +207,7 @@ describe('readFoldClockReading', () => {
       'repos/acme/widgets/rules/branches/main?per_page=100': 'gh: Not Found (HTTP 404)',
     });
 
-    const reading = readFoldClockReading({ target, exists: () => true, execFileSync: exec });
+    const reading = readFoldClockReading({ target, execFileSync: exec });
 
     expect(reading.ok).toBe(false);
     if (!reading.ok) {
@@ -224,7 +221,7 @@ describe('readFoldClockReading', () => {
       'repos/acme/widgets/pulls/326': { ...pull, head: { sha: 'short' } },
     });
 
-    const reading = readFoldClockReading({ target, exists: () => true, execFileSync: exec });
+    const reading = readFoldClockReading({ target, execFileSync: exec });
 
     expect(reading.ok).toBe(false);
     if (!reading.ok) {
@@ -238,24 +235,12 @@ describe('readFoldClockReading', () => {
       'repos/acme/widgets/pulls/326': { ...pull, base: { ref: '../main' } },
     });
 
-    const reading = readFoldClockReading({ target, exists: () => true, execFileSync: exec });
+    const reading = readFoldClockReading({ target, execFileSync: exec });
 
     expect(reading.ok).toBe(false);
     if (!reading.ok) {
       expect(reading.error.message).toContain('not a branch name');
     }
     expect(calls).toHaveLength(1);
-  });
-
-  it('fails loudly when gh cannot be found', () => {
-    const { exec, calls } = fakeGh(answers);
-
-    const reading = readFoldClockReading({ target, exists: () => false, execFileSync: exec });
-
-    expect(reading.ok).toBe(false);
-    if (!reading.ok) {
-      expect(reading.error.message).toContain('gh CLI not found');
-    }
-    expect(calls).toHaveLength(0);
   });
 });

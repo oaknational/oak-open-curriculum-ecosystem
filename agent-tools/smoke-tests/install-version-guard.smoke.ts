@@ -4,10 +4,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { isErr } from '@oaknational/result';
 import { z } from 'zod';
-
-import { resolvePnpm } from '../src/spawn/pnpm-path.js';
 
 /**
  * Prove the root pnpm preinstall hook blocks a mismatched pnpm before it can
@@ -136,19 +133,13 @@ try {
   );
   writeFileSync(join(fixtureRoot, 'pnpm-lock.yaml'), originalLockfile);
 
-  const pnpm = resolvePnpm(process.env);
-  if (isErr(pnpm)) {
-    fail(pnpm.error.message);
-  }
-
-  // The fixture root has no `packageManager`, so whichever pnpm `resolvePnpm`
-  // finds runs the install itself, and the proof has to hold on every
+  // The fixture root has no `packageManager`, so whichever pnpm the
+  // environment provides runs the install itself, and the proof has to hold on every
   // supported major; the guard's words come from its own log, so pnpm's
   // reporter can stay silent.
   const install = spawnSync(
-    pnpm.value.file,
+    'pnpm',
     [
-      ...pnpm.value.leadingArgs,
       'install',
       '--offline',
       '--ignore-workspace',
@@ -165,13 +156,10 @@ try {
     {
       cwd: fixtureRoot,
       encoding: 'utf8',
-      // Every PnpmInvocation carries the environment it must be spawned with
-      // (`pnpm.value.env`, already scrubbed of COREPACK_ROOT/HOME and auto-pin
-      // settings that could redirect the launcher); the test-specific override
-      // overlays it. The install root has no `packageManager`, so there is
-      // nothing for corepack to resolve either; `COREPACK_ENABLE_PROJECT_SPEC=0`
-      // keeps that path inert regardless of the ambient corepack state.
-      env: { ...pnpm.value.env, COREPACK_ENABLE_PROJECT_SPEC: '0' },
+      // The install root has no `packageManager`, so there is nothing for
+      // corepack to resolve; `COREPACK_ENABLE_PROJECT_SPEC=0` keeps that path
+      // inert regardless of the ambient corepack state.
+      env: { ...process.env, COREPACK_ENABLE_PROJECT_SPEC: '0' },
     },
   );
 

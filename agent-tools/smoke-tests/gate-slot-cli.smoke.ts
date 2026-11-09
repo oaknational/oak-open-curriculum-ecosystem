@@ -10,7 +10,6 @@ import { typeSafeEntries } from '@oaknational/type-helpers';
 import { GATE_SLOT_HELD_ENV, GATE_SLOT_HOST } from '../src/gate-slot/gate-slot-contract';
 import { encodeHolderIdentity } from '../src/gate-slot/gate-slot-identity';
 import { createPortRegistry } from '../src/gate-slot/gate-slot-ports';
-import { resolvePnpm } from '../src/spawn/pnpm-path';
 
 import {
   holdSmokeLock,
@@ -21,7 +20,7 @@ import {
 
 /**
  * The gate-slot command line invoked exactly as `.husky/pre-push` invokes
- * it: trusted pnpm running the filtered `gate-slot` script from the
+ * it: pnpm, by name, running the filtered `gate-slot` script from the
  * repository root, in the ambient environment less any held marker, because
  * the smoke itself runs inside a real gate that set one. Also the port
  * adapter's promise that no probe listener outlives a failed step. The
@@ -45,10 +44,8 @@ async function runCli(
   args: readonly string[],
   extraEnv: Readonly<Record<string, string>> = {},
 ): Promise<CliRun> {
-  const pnpm = resolvePnpm(process.env);
-  assert.ok(pnpm.ok, 'gate-slot cli smoke: pnpm not found');
-  const inherited = typeSafeEntries(pnpm.value.env).filter(([name]) => name !== GATE_SLOT_HELD_ENV);
-  const child = spawn(pnpm.value.file, [...pnpm.value.leadingArgs, ...HOOK_COMMAND, ...args], {
+  const inherited = typeSafeEntries(process.env).filter(([name]) => name !== GATE_SLOT_HELD_ENV);
+  const child = spawn('pnpm', [...HOOK_COMMAND, ...args], {
     cwd: REPO_ROOT,
     env: { ...Object.fromEntries(inherited), ...extraEnv },
     stdio: ['ignore', 'pipe', 'pipe'],

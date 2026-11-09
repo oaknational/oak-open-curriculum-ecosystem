@@ -16,6 +16,13 @@ import {
   UNREADABLE,
   type GitWorld,
 } from './test-helpers/retire-cli-double.js';
+import { gitRefFormatOracle, type CheckRefFormatRun } from './ref-format.js';
+
+/** A check-ref-format run that never starts, as with no git on `PATH`. */
+const gitCannotStart = (): CheckRefFormatRun => ({
+  status: null,
+  error: new Error('spawnSync git ENOENT'),
+});
 
 /**
  * The `merge-bot retire` front door over injected seams: git is the
@@ -52,15 +59,15 @@ describe('merge-bot retire, front door', () => {
 
   it("exits 2 on a name git's ref grammar rejects", async () => {
     const run = await runRetire(['--branch', BRANCH], UNREADABLE, {
-      branchArgSeams: { refFormatOracle: () => false },
+      branchArgSeams: { refFormatOracle: () => ok(false) },
     });
 
     expect(run.exit).toBe(2);
   });
 
-  it('fails with exit 1, reading nothing, when no git binary can answer the ref grammar', async () => {
+  it('fails with exit 1, reading nothing, when no git can run to answer the ref grammar', async () => {
     const run = await runRetire(['--branch', BRANCH], UNREADABLE, {
-      branchArgSeams: { pathExists: () => false },
+      branchArgSeams: { refFormatOracle: gitRefFormatOracle(gitCannotStart) },
     });
 
     expect(run.exit).toBe(1);

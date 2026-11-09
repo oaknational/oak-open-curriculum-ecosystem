@@ -27,18 +27,23 @@ A signal is information about an architectural tension — before any
 response, interrogate what produced it (a bug, a half-finished change, a
 misplaced abstraction, a leaky boundary), and cross-check where else the
 same shape appears un-flagged. For an analyser finding (Sonar, CodeQL)
-there is no dismissal route, since the owner's 2026-09-08 ruling ("We
-don't dismiss issues, we fix them"): the finding is cured at source under
-the one-outcome rule in `docs/governance/sonar-disposition-policy.md`. The
-single exception to cure-at-source is the CodeQL query `js/missing-rate-limiting`, excluded permanently by the
+there is no dismissal route outside the policy's two exceptions, since the
+owner's 2026-09-08 ruling ("We don't dismiss issues, we fix them"): the
+finding is cured at source under the one-outcome rule in
+`docs/governance/sonar-disposition-policy.md`. The first exception to
+cure-at-source is the CodeQL query `js/missing-rate-limiting`, excluded permanently by the
 tracked `query-filters` entry in `.github/codeql/codeql-config.yml` (owner,
 2026-09-17, verbatim: "a permanent exclusion is allowed, but ONLY for that
 one issue"). ADR-219 is its ground: rate limiting is an edge concern, and
 the MCP server's route registrations carry comments citing it. The exclusion
 removes the query for every file the analysis scans, so a new HTTP route
 anywhere raises no alert; ADR-219's edge rule, not the analyser, is the
-control for it. No other query id or finding class is excluded, filtered or
-dismissed by any route, and an agent never dismisses an alert. Where a warning from another
+control for it. The second (owner, 2026-11-05) is Sonar's S4036 at a site
+within the policy's §S4036 class, a repository-required binary invoked by
+name with `PATH` as the trust root: no change in the tree cures it without
+choosing a binary's path, so the site is marked `FALSE_POSITIVE` with the
+class's canonical rationale. No other query id or finding class is excluded,
+filtered or dismissed by any route, and an agent never dismisses an alert. Where a warning from another
 system can only be suppressed, suppress per site with rationale, never by
 a rule-level disable — per-site forces a fresh interrogation when the
 shape recurs.

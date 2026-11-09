@@ -2,22 +2,19 @@ import { execFileSync } from 'node:child_process';
 
 import { err, isErr, ok, type Result } from '@oaknational/result';
 
-import { resolveTrustedGit } from '../core/trusted-git.js';
-
 /** Runs git with the given arguments from `cwd` and returns its stdout. */
 type GitRunner = (args: readonly string[], cwd: string) => Result<string, Error>;
 
 /**
- * The real git runner: executes the trusted absolute `git` binary (resolved
- * via {@link resolveTrustedGit}, so a writable PATH entry cannot shadow it)
- * and translates a non-zero exit into an `err` Result at this single library
+ * The real git runner: runs `git` by name, with `PATH` as the trust root, and
+ * translates a non-zero exit into an `err` Result at this single library
  * boundary. Unit tests inject a fake runner; this default is exercised only
  * at the composition edge.
  */
 const realGitRunner: GitRunner = (args, cwd) => {
   try {
     return ok(
-      execFileSync(resolveTrustedGit(), [...args], {
+      execFileSync('git', [...args], {
         cwd,
         encoding: 'utf8',
         stdio: ['ignore', 'pipe', 'pipe'],

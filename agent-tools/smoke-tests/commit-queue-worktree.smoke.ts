@@ -1,5 +1,4 @@
 import assert from 'node:assert/strict';
-import type { SpawnSyncReturns } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -15,8 +14,12 @@ import {
   makeFixture,
   readPrimaryIntent,
   runCommitQueue,
+  runCommitQueueInProcess,
   streams,
+  type WorktreeFixture,
 } from './commit-queue-worktree-fixture';
+import { assertAdvisoryReplayed } from './commit-queue-advisory-stub-fixture';
+
 /**
  * F-138 regression smoke — the commit-queue two-root split and
  * changed-endpoint identity. Real scratch primary + linked worktree: a
@@ -82,83 +85,46 @@ async function proveVerifyStagedUsesWorktreeIndex(): Promise<void> {
 }
 
 /**
- * The whole of a commit's stderr when the advisory pass failed: the advisory
- * banner, then whatever the advisory child and the inner `git commit` wrote to
- * stderr (the `children` group, zero or more lines), then the notice that the
- * commit landed at `head` with a non-zero advisory exit recorded. The wording
- * after the dash is free.
+ * Both streams of a commit whose advisory pass failed. The scratch repository's
+ * advisory stub fails on purpose, and the failure never gates the commit
+ * (PDR-053 / ADR-176 advisory polarity). The command replays the banner, both
+ * children's output and the landed notice to its own stderr, in the run's
+ * order, so stdout carries the sha alone.
  */
-function advisoryFailureStderr(head: string): RegExp {
-  return new RegExp(
-    String.raw`^\[ADVISORY ONLY — NOT A COMMIT GATE\]\n` +
-      String.raw`(?<children>(?:[^\n]*\n)*)` +
-      String.raw`commit landed at ${head} \(intent ${INTENT_ID}\); ` +
-      String.raw`advisory orchestrator exit [1-9]\d* — [^\n]*\n$`,
+function assertAdvisoryFailureStreams(
+  committed: { readonly stdout: string; readonly stderr: string },
+  head: string,
+): void {
+  assert.equal(committed.stdout, `${head}\n`, `stdout is the sha alone:\n${streams(committed)}`);
+  assertAdvisoryReplayed(committed.stderr, COMMIT_SUBJECT);
+  assert.match(
+    committed.stderr,
+    new RegExp(
+      String.raw`commit landed at ${head} \(intent ${INTENT_ID}\); advisory orchestrator exit [1-9]\d* — [^\n]*\n$`,
+    ),
+    `stderr ends with the landed notice:\n${streams(committed)}`,
   );
 }
 
-/**
- * Both streams of a commit whose advisory pass failed, every line accounted
- * for. This repository's own lines are pinned by their own text: the banner
- * whole, the notice up to its dash with any non-zero exit, and the sha as the
- * last stdout line. The advisory child is the host's pnpm, which can only
- * fail in the scratch repository, and how it fails belongs to its version:
- * pnpm 11 prints one line on stdout, pnpm 12 prints a block on stderr. Its
- * text is pinned by where it may sit and by its presence, never by its
- * wording: on stdout only before git's commit summary, on stderr only between
- * the banner and the notice (where the inner `git commit`'s own stderr also
- * lands), and at least one non-empty line across the two. git's summary is
- * pinned the same way: a first line naming the commit subject, then only
- * git's indented detail lines before the sha. This does not prove the
- * advisory child's working directory or arguments.
- */
-function assertAdvisoryFailureStreams(committed: SpawnSyncReturns<string>, head: string): void {
-  const stderr = advisoryFailureStderr(head).exec(committed.stderr);
-  assert.ok(
-    stderr?.groups,
-    `stderr is the banner, the children's stderr, the notice:\n${streams(committed)}`,
-  );
-  const lines = committed.stdout.split('\n');
-  assert.deepEqual(lines.slice(-2), [head, ''], `the sha ends stdout:\n${streams(committed)}`);
-  const summaryAt = lines.findIndex((line) => line.includes(COMMIT_SUBJECT));
-  assert.ok(summaryAt >= 0, `git's commit summary names the subject:\n${streams(committed)}`);
-  assert.deepEqual(
-    lines.slice(summaryAt + 1, -2).filter((line) => !/^ \S/.test(line)),
-    [],
-    `only git's indented detail lines sit between its summary and the sha:\n${streams(committed)}`,
-  );
-  const childLines = [...lines.slice(0, summaryAt), ...stderr.groups.children.split('\n')];
-  assert.ok(
-    childLines.some((line) => line.trim().length > 0),
-    `the advisory child wrote at least one line; none means no pnpm ran:\n${streams(committed)}`,
-  );
+/** Stage the rename in the linked worktree, record it, and return the commit's arguments. */
+async function recordRename(fixture: WorktreeFixture): Promise<readonly string[]> {
+  git(fixture.linked, 'mv', RENAME_SOURCE, RENAME_DESTINATION);
+  const recorded = runCommitQueue(fixture.linked, ['record-staged', '--intent-id', INTENT_ID]);
+  assert.equal(recorded.status, 0, streams(recorded));
+  const messageFilePath = join(fixture.root, 'commit-message.txt');
+  await writeFile(messageFilePath, COMMIT_SUBJECT + '\n');
+  return ['commit', '--intent-id', INTENT_ID, '--message-file', messageFilePath];
 }
 
 async function proveCommitLandsOnWorktreeBranch(): Promise<void> {
   const fixture = await makeFixture();
   try {
-    git(fixture.linked, 'mv', RENAME_SOURCE, RENAME_DESTINATION);
     const primaryHeadBefore = git(fixture.primary, 'rev-parse', 'HEAD').trim();
 
-    const recorded = runCommitQueue(fixture.linked, ['record-staged', '--intent-id', INTENT_ID]);
-    assert.equal(recorded.status, 0, streams(recorded));
-
-    const messageFilePath = join(fixture.root, 'commit-message.txt');
-    await writeFile(messageFilePath, COMMIT_SUBJECT + '\n');
-
-    const committed = runCommitQueue(fixture.linked, [
-      'commit',
-      '--intent-id',
-      INTENT_ID,
-      '--message-file',
-      messageFilePath,
-    ]);
+    const committed = runCommitQueue(fixture.linked, await recordRename(fixture));
 
     assert.equal(committed.status, 0, streams(committed));
     const head = git(fixture.linked, 'rev-parse', 'HEAD').trim();
-    // The scratch repo has no package manifest, so the host's pnpm fails the
-    // advisory pass — and that MUST NOT gate the commit (PDR-053 / ADR-176
-    // advisory polarity).
     assertAdvisoryFailureStreams(committed, head);
     const committedPaths = new Set(
       git(fixture.linked, 'ls-tree', '-r', '--name-only', 'HEAD').split('\n'),
@@ -173,6 +139,28 @@ async function proveCommitLandsOnWorktreeBranch(): Promise<void> {
 
     // The completed intent is removed from the coordination-home registry.
     assert.equal(await readPrimaryIntent(fixture), undefined);
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+}
+
+/**
+ * The same commit through the in-process entry: the replay reaches the
+ * command's own stderr writer and nothing reaches the process's stderr,
+ * which a run of the built CLI as a child cannot tell apart.
+ */
+async function proveCommitReplaysToItsOwnStderr(): Promise<void> {
+  const fixture = await makeFixture();
+  try {
+    const committed = runCommitQueueInProcess(fixture.linked, await recordRename(fixture));
+
+    assert.equal(
+      committed.driver.stderr,
+      '',
+      `the process's stderr stays empty:\n${streams(committed.driver)}`,
+    );
+    assert.equal(committed.result.exitCode, 0, streams(committed.result));
+    assertAdvisoryFailureStreams(committed.result, git(fixture.linked, 'rev-parse', 'HEAD').trim());
   } finally {
     await rm(fixture.root, { recursive: true, force: true });
   }
@@ -193,14 +181,15 @@ async function proveMissingGitRootRefusesLoudly(): Promise<void> {
 
     assert.equal(result.status, 2, streams(result));
     assert.equal(result.stdout, '');
-    // The whole of stderr: git's own refusal (git's words, which a localised
-    // git translates), then the guard's own line, last.
+    // The whole of stderr is the guard's one line: git's own words travel
+    // inside it, never echoed ahead of it, since the shared git runner
+    // captures git's stderr.
     assert.match(
       result.stderr,
-      /^(?:[^\n]*\n)*Unable to resolve the invoking git worktree root: [^\n]*no fallback to the coordination home[^\n]*\n$/,
+      /^Unable to resolve the invoking git worktree root: [^\n]*no fallback to the coordination home[^\n]*\n$/,
     );
     assert.ok(
-      result.stderr.includes(`'${gitDir}' is not inside a git working tree`),
+      result.stderr.includes(`git could not resolve a working tree from '${gitDir}'`),
       streams(result),
     );
 
@@ -221,5 +210,6 @@ assert.equal(existsSync(BIN), true, `built CLI missing at ${BIN}; build agent-to
 await proveRecordStagedUsesWorktreeIndex();
 await proveVerifyStagedUsesWorktreeIndex();
 await proveCommitLandsOnWorktreeBranch();
+await proveCommitReplaysToItsOwnStderr();
 await proveMissingGitRootRefusesLoudly();
-process.stdout.write('commit-queue worktree smoke: 4/4 proofs passed\n');
+process.stdout.write('commit-queue worktree smoke: 5/5 proofs passed\n');

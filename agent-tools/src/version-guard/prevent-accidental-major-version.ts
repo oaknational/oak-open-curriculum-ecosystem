@@ -12,7 +12,6 @@ import { fileURLToPath } from 'node:url';
 
 import { assertPathWithinBase } from '@oaknational/safe-path';
 import { writeErrorLine } from '../core/terminal-output.js';
-import { resolveTrustedGit } from '../core/trusted-git.js';
 
 const BREAKING_CHANGE_INDICATORS = [
   'BREAKING CHANGE:',
@@ -75,19 +74,16 @@ function resolveSeams(options: PreventAccidentalMajorVersionOptions): ResolvedSe
 }
 
 /**
- * Resolve the absolute git directory, executing git by its absolute path.
+ * Resolve the absolute git directory.
  *
  * @remarks
- * git is invoked via {@link resolveTrustedGit} (an absolute path from a fixed
- * allowlist), not by name through `PATH`, so a shadowing `git` on a
- * user-writable `PATH` entry cannot be executed (SonarCloud S4036, the compliant
- * fix). `execFileSync` may throw if git is genuinely absent; the caller resolves
- * this inside its try/catch.
+ * git runs by name, with `PATH` as the trust root. `execFileSync` throws if
+ * git is absent; the caller resolves this inside its try/catch.
  *
  * @returns The absolute git directory, used as the containment base.
  */
 function resolveAbsoluteGitDir(): string {
-  return execFileSync(resolveTrustedGit(), ['rev-parse', '--absolute-git-dir'], {
+  return execFileSync('git', ['rev-parse', '--absolute-git-dir'], {
     encoding: 'utf8',
   }).trim();
 }

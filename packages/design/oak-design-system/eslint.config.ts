@@ -57,7 +57,7 @@ const config = defineConfigArray(
     },
   },
   {
-    files: ['**/*.test.ts', '**/*.spec.ts', '*.config.ts'],
+    files: ['**/*.test.ts', '**/*.spec.ts', '*.config.ts', '*.config.mts'],
     languageOptions: {
       globals: { ...globals.node, ...globals.es2021 },
       parserOptions: { projectService: false, project: wsTsProject, tsconfigRootDir: thisDir },
@@ -84,7 +84,7 @@ const config = defineConfigArray(
     },
   },
   {
-    files: ['eslint.config.ts', 'vitest.config.ts'],
+    files: ['eslint.config.ts', 'vitest.config.mts'],
     languageOptions: {
       parserOptions: { project: './tsconfig.json', tsconfigRootDir: thisDir },
     },

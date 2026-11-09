@@ -148,13 +148,14 @@ export const TOKEN_SCOPES = {
    * poll, and a seat that needs one dispatch has no business holding contents
    * write. GitHub keeps them as separate permissions and so does this table.
    * NOT for the upstream mirror: its run writes with the dispatcher's
-   * ceiling, so a dispatch under this scope fails its reference update (run
-   * 35240876819, 2026-09-17) — mint `upstream-mirror-dispatch` for that one
-   * workflow. This scope stays actions-only for the carrier dispatch and for
-   * re-running a failed job (two re-runs on 2026-09-12, CodeQL run
-   * 34748348080 and CI run 34748348052, both green on the second attempt; a
-   * re-run keeps the original run's context, so the cap below does not
-   * apply to it).
+   * ceiling, so under this scope the run's own token is refused at the
+   * reference update (run 35240876819, 2026-09-17) and the move falls back to
+   * the App token, a push that starts the workflows the mirror keeps off its
+   * branch — mint `upstream-mirror-dispatch` for that one workflow. This
+   * scope stays actions-only for the carrier dispatch and for re-running a
+   * failed job (two re-runs on 2026-09-12, CodeQL run 34748348080 and CI run
+   * 34748348052, both green on the second attempt; a re-run keeps the
+   * original run's context, so the cap below does not apply to it).
    *
    * ## Provenance, 2026-09-11
    *
@@ -198,11 +199,13 @@ export const TOKEN_SCOPES = {
    * The MIRROR writes through the run's own token by design (its node's
    * decision 7: a reference the run token moves triggers no workflow, which
    * keeps CI off the mirror branch), so the token that dispatches it must
-   * carry what the run writes with. The CARRIER workflow writes through an
-   * App token it mints in the run, so its dispatch needs nothing beyond
-   * `actions` and stays on `workflow-dispatch`. Named for the act that
-   * writes, so no other dispatch holds a push-capable token for an hour it
-   * never uses.
+   * carry what the run writes with. One range is the exception: no run token
+   * may write a change to a workflow file, so on that refusal alone the run
+   * mints an App token with `workflows: write` and moves with it
+   * (2026-11-03). The CARRIER workflow writes through an App token it mints
+   * in the run, so its dispatch needs nothing beyond `actions` and stays on
+   * `workflow-dispatch`. Named for the act that writes, so no other dispatch
+   * holds a push-capable token for an hour it never uses.
    */
   'upstream-mirror-dispatch': {
     actions: 'write',

@@ -2,7 +2,7 @@
 id: code-scanning-alerts-to-zero
 node_type: delivery
 name: "Code-scanning alerts to zero on the resting branch, and held there"
-overview: "Every open code-scanning alert on the resting branch is FIXED in the tree — never dismissed, never an accepted risk — with one owner-ruled, dated exception (the missing-rate-limiting query, grounded in ADR-219 and the two sets of edge WAFs, excluded permanently by a tracked query filter in the CodeQL configuration and for that query only), and the pull-request gate keeps the count at zero."
+overview: "Every open code-scanning alert on the resting branch is FIXED in the tree — never dismissed, never an accepted risk — with two owner-ruled, dated exceptions (the missing-rate-limiting query, grounded in ADR-219 and the two sets of edge WAFs, excluded permanently by a tracked query filter in the CodeQL configuration and for that query only; and S4036 at a binary invoked by name, marked false-positive per site under the Sonar disposition policy's §S4036), and the pull-request gate keeps the count at zero."
 status: sketch
 ratified_by: null
 ratified_date: null
@@ -15,7 +15,7 @@ impact_areas:
 tickets: []
 depends_on: []
 owner_gates: []
-last_updated: 2026-10-27
+last_updated: 2026-11-05
 ---
 
 # Code-scanning alerts to zero on the resting branch, and held there
@@ -25,9 +25,9 @@ last_updated: 2026-10-27
 The repository's code-scanning surface reads zero open alerts on the resting branch, and
 stays there: each alert is FIXED in the tree with a test that pins the cure (owner ruling 2026-09-08, verbatim: "We don't dismiss issues, we fix them."). Where an analyser is factually wrong about the code, the cure is still a tree change — a
 restructure, or an analyser configuration change tracked in the tree — and no state lives in the
-hosting service that the tree cannot explain. ONE owner-ruled exception, dated 2026-09-08: the
+hosting service that the tree cannot explain. Two owner-ruled exceptions. The first, dated 2026-09-08: the
 missing-rate-limiting findings on the MCP server's routes (CodeQL alerts), on the ground that the two sets of edge WAFs are regarded as sufficient
-for safety for now (owner word 2026-09-08, verbatim: "we are going to pause that for now, and leave comments in the code that recognise that additional in-process rate limiting would provide defence in depth, but that we regard the two sets of edge WAFs to be sufficient for safety for now. And in this ONE case we can dismiss the findings in Sonar, and preferably find a way to keep them dismissed instead of revisiting this same issue every few weeks."). Its mechanism, ruled 2026-09-17 (owner, verbatim: "a permanent exclusion is allowed, but ONLY for that one issue"), is the tracked `query-filters` exclusion of `js/missing-rate-limiting` in `.github/codeql/codeql-config.yml`, for that query only. A reader of
+for safety for now (owner word 2026-09-08, verbatim: "we are going to pause that for now, and leave comments in the code that recognise that additional in-process rate limiting would provide defence in depth, but that we regard the two sets of edge WAFs to be sufficient for safety for now. And in this ONE case we can dismiss the findings in Sonar, and preferably find a way to keep them dismissed instead of revisiting this same issue every few weeks."). Its mechanism, ruled 2026-09-17 (owner, verbatim: "a permanent exclusion is allowed, but ONLY for that one issue"), is the tracked `query-filters` exclusion of `js/missing-rate-limiting` in `.github/codeql/codeql-config.yml`, for that query only. The second, dated 2026-11-05 (owner, verbatim: "adopt the by-name ruling on engraph"), is S4036 at a site within the Sonar disposition policy's §S4036 class: a repository-required binary invoked by name, with `PATH` as the trust root, is marked `FALSE_POSITIVE` with the class's canonical rationale. A reader of
 the security tab, an auditor of the release, or an agent picking up a lane sees a surface
 whose every line is a fact about the code, not an unread signal.
 
@@ -94,17 +94,12 @@ accepts for that query and no other.
   of the resting branch or the model is wrong; if the rule's own configuration consults no
   barrier kind, the unit records that finding on this node rather than dismissing the alert
   in the hosting service.
-- **Executable searched on PATH.** Fix-only under the policy, tooling included: every site
-  resolves its executable to an absolute path without consulting PATH, and each binary
-  resolves by its own existing mechanism — `git` through the trusted-git atom (the fixed
-  allowlist of well-known directories that atom already carries), `pnpm` through the
-  existing `agent-tools/src/spawn/pnpm-path.ts` resolver, `gitleaks` through the existing
-  `agent-tools/src/refounding/refound-gitleaks.ts` resolver (a standalone binary — CI
-  installs it pinned to `/usr/local/bin` with no `pnpm install`, and no workspace carries a
-  `node_modules/.bin/gitleaks`), and the node-run tools `typedoc` and `tsx` through the
-  owning workspace's `node_modules/.bin` absolute path or `process.execPath` with the
-  script. The trusted-git allowlist is never extended to per-user installs to cover the
-  other binaries. Each resolver is unit-tested for the refusal of an unresolved name.
+- **Executable searched on PATH.** Overtaken on 2026-11-05 by the owner's word "adopt the
+  by-name ruling on engraph": tooling invokes each binary by name with `PATH` as the trust
+  root, and a site within the class is marked under the Sonar disposition policy's second
+  exception (§S4036), not cured. The absolute-path resolver route this bullet set out is
+  withdrawn, and units 4 and 5 below with it. The upstream carrier at release 1.186.8 took
+  `pnpm` and `gh` to by-name; `git`, `gitleaks` and the shell follow.
 - **Clear-text protocol literal.** Fixtures that never dial their host take an `https`
   literal, a fix. A localhost loopback in a test helper or test-runner configuration is a
   code cure per site: the literal leaves the source — configuration, or a helper shape the
@@ -152,13 +147,13 @@ the gate turns "zero" from a snapshot into an invariant.
    `owner-held` — the hosting service's alerts query for the resting branch is that service's
    own record; the landing seat reads it at closing and records the reading, dated, on the
    lane's closing event as an observation, never as a corpus fact.
-2. Every cured site has a test that fails on the previous behaviour: the refusal of a
-   non-absolute executable, the linear-time extraction over a pathological input, the output description's closed vocabulary, the generator's escaping of a line separator. Proof: `repo-safe` — the tests, named in each unit.
-3. No alert on the resting branch carries a dismissed, accepted-risk or won't-fix state, and the missing-rate-limiting query raises none because the tracked configuration excludes it, explained by the code comment at each route citing ADR-219 and the two edge WAFs. Proof: `repo-safe` for the four comments and the `query-filters` entry; `owner-held` for the service's state — the alerts query for dismissed alerts and for open `js/missing-rate-limiting` alerts, both empty, read at closing and recorded as a dated observation.
-4. A pull request introducing one new instance of each of the five analysed classes is
+2. Every cured site has a test that fails on the previous behaviour: the linear-time extraction over a pathological input, the output description's closed vocabulary, the generator's escaping of a line separator. Proof: `repo-safe` — the tests, named in each unit.
+3. No alert on the resting branch carries a dismissed, accepted-risk or won't-fix state, an S4036 site's false-positive mark under the second exception aside, and the missing-rate-limiting query raises none because the tracked configuration excludes it, explained by the code comment at each route citing ADR-219 and the two edge WAFs. Proof: `repo-safe` for the four comments and the `query-filters` entry; `owner-held` for the service's state — the alerts query for dismissed alerts and for open `js/missing-rate-limiting` alerts, both empty, read at closing and recorded as a dated observation.
+4. A pull request introducing one new instance of each of the four classes this node cures is
    blocked by a required check. The owner-ruled exclusion of `js/missing-rate-limiting` means
    no required check can fail on a new instance of that class; it is not probed, and its
-   control is the edge rule ADR-219 states.
+   control is the edge rule ADR-219 states. A new S4036 site is cleared by its mark, not a
+   cure, so that class is not probed either.
    Proof: `owner-held` — whether the hosting service blocked a probe pull request is that
    service's state: one probe per analyser, closed unmerged, its blocked check result read by
    the landing seat and recorded, dated and by number, on the lane's closing event.
@@ -186,18 +181,11 @@ independent unless stated (numbered as cited elsewhere in the estate):
    cache's validated write already exists and does not change. The drift check takes the
    same model only if the closed vocabulary leaves its alert standing, with its reason:
    about five files.
-4. **Executables on PATH — the runtime and server sites.** Each binary resolves by its own
-   existing mechanism, never by a system-directory allowlist extended to per-user installs:
-   `git` through the trusted-git atom; `pnpm` through the existing
-   `agent-tools/src/spawn/pnpm-path.ts` resolver; node-run tools through the workspace's
-   `node_modules/.bin` absolute path, or `process.execPath` with the script. The refusal
-   test covers each resolver's unresolved case; adopted at the runtime sites: about six
-   files.
-5. **Executables on PATH — the tooling sites, and clear-text literals.** The remaining
-   spawn sites take the same per-binary resolution (fix-only, no exception for tooling:
-   `gitleaks` through its existing standalone resolver `refound-gitleaks.ts`, the CI-pinned
-   binary having no `node_modules/.bin` entry; `typedoc` and `tsx` through the owning
-   workspace's `node_modules/.bin` or `process.execPath`);
+4. **Executables on PATH — the runtime and server sites.** Withdrawn on 2026-11-05 with the
+   class's resolver route (§Executable searched on PATH above): a site within the class is
+   marked under the policy's second exception.
+5. **Executables on PATH — the tooling sites, and clear-text literals.** The spawn-site
+   half is withdrawn with unit 4 (2026-11-05). The clear-text half stands:
    fixture literals switch to `https` where the host is never dialled; the localhost helper
    sites take a code cure each — the literal leaves the source, as configuration or a helper
    shape the analyser accepts — recorded per site: about seven files.

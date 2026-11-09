@@ -5,14 +5,14 @@
 **Status**: living knowledge document. Last updated 2026-07-30 by Glowworm
 spins Pewter during the MCP-411 rate-limiter removal.
 
-This document captures the operational knowledge for driving repo quality up using three coupled tools — SonarCloud (with the Sonar MCP), CodeQL (via GitHub), and Sentry (with the Sentry MCP) — and the discipline that turns each tool's signal into a fix at source — since the owner's 2026-09-08 ruling the one outcome for every finding, with the single exception (the MCP server's rate-limiting alerts) stated in the disposition policy.
+This document captures the operational knowledge for driving repo quality up using three coupled tools — SonarCloud (with the Sonar MCP), CodeQL (via GitHub), and Sentry (with the Sentry MCP) — and the discipline that turns each tool's signal into a fix at source — since the owner's 2026-09-08 ruling the one outcome for every finding, with the two exceptions (the MCP server's rate-limiting alerts, and S4036 at a binary invoked by name) stated in the disposition policy.
 
 ---
 
 ## TL;DR
 
 1. **SonarCloud** is the canonical static-analysis surface for this repo. The default Quality Gate ("Sonar way") fails on rating thresholds + coverage + duplication; the project's _active_ Quality Gate may also fail on raw `new_violations > 0` (which it does for this repo). **Always query the live QG conditions before scoping work** — different conditions need different fixes.
-2. **CodeQL** is GitHub's deep dataflow / taint-tracking analysis. It complements Sonar by catching cross-function flows that Sonar's per-rule heuristics miss (and vice versa). Both are cured at source; the one exception is the CodeQL query `js/missing-rate-limiting`, excluded by tracked configuration under ADR-219 (§Dismissal), and no finding from either analyser is dismissed.
+2. **CodeQL** is GitHub's deep dataflow / taint-tracking analysis. It complements Sonar by catching cross-function flows that Sonar's per-rule heuristics miss (and vice versa). Both are cured at source, with two exceptions: the CodeQL query `js/missing-rate-limiting`, excluded by tracked configuration under ADR-219 (§Dismissal), and Sonar's S4036 at a binary invoked by name, marked per site under the policy's §S4036 (§Disposition mechanics). No other finding from either analyser is dismissed.
 3. **Sentry** is the runtime observability surface. It tells you which static-analysis findings actually matter in production by correlating issue locations with real error/perf events. Use Sentry MCP to ground severity rankings against runtime impact.
 4. **The cardinal sin**: silencing a finding without investigating the architectural tension it surfaces. Per `principles.md` "NEVER disable any quality gates" and the `no-warning-toleration` rule. The drift pattern that produces violation: investigation-mode → disposition-mode under context pressure. Mitigations are structural (one finding/site = one commit) not just textual.
 
@@ -61,15 +61,15 @@ The QG status for a PR returns _only_ the conditions that apply to new code. The
 
 ### Mapping QG conditions to action
 
-| QG condition                           | What it measures                            | How to address                                                               |
-| -------------------------------------- | ------------------------------------------- | ---------------------------------------------------------------------------- |
-| `new_violations > 0`                   | Raw OPEN issue count on new code            | Per-issue fix at source (the one-outcome policy; its single exception aside) |
-| `new_security_rating > 1`              | Security rating worse than A on new code    | Resolve any new SECURITY-impact OPEN issue or unreviewed hotspot             |
-| `new_reliability_rating > 1`           | Reliability rating worse than A on new code | Resolve any new RELIABILITY-impact OPEN issue (CRITICAL bugs especially)     |
-| `new_maintainability_rating > 1`       | Maintainability rating worse than A         | Reduce technical-debt-cost on new code                                       |
-| `new_coverage < 80`                    | Test coverage on new code below threshold   | Write tests for uncovered new lines                                          |
-| `new_duplicated_lines_density > 3`     | Duplication density above 3%                | Consolidate copy-pasted code into shared modules                             |
-| `new_security_hotspots_reviewed < 100` | Security hotspots not 100% reviewed         | Cure each hotspot at source; the next analysis marks it REVIEWED / FIXED     |
+| QG condition                           | What it measures                            | How to address                                                            |
+| -------------------------------------- | ------------------------------------------- | ------------------------------------------------------------------------- |
+| `new_violations > 0`                   | Raw OPEN issue count on new code            | Per-issue fix at source (the one-outcome policy); S4036 by name is marked |
+| `new_security_rating > 1`              | Security rating worse than A on new code    | Resolve any new SECURITY-impact OPEN issue or unreviewed hotspot          |
+| `new_reliability_rating > 1`           | Reliability rating worse than A on new code | Resolve any new RELIABILITY-impact OPEN issue (CRITICAL bugs especially)  |
+| `new_maintainability_rating > 1`       | Maintainability rating worse than A         | Reduce technical-debt-cost on new code                                    |
+| `new_coverage < 80`                    | Test coverage on new code below threshold   | Write tests for uncovered new lines                                       |
+| `new_duplicated_lines_density > 3`     | Duplication density above 3%                | Consolidate copy-pasted code into shared modules                          |
+| `new_security_hotspots_reviewed < 100` | Security hotspots not 100% reviewed         | Cure each hotspot at source; the next analysis marks it REVIEWED / FIXED  |
 
 ### Per-finding investigation discipline
 
@@ -87,13 +87,15 @@ The cardinal anti-pattern is the **rule-level disable** (the `sonar.issue.ignore
 we fix them"; the one-outcome policy in
 [`sonar-disposition-policy.md`](../governance/sonar-disposition-policy.md)):
 every finding from either analyser is fixed at source and closed by the
-next analysis. The policy's single exception is the CodeQL query
-`js/missing-rate-limiting`, excluded by the tracked `query-filters` entry in
-`.github/codeql/codeql-config.yml` and grounded in ADR-219 (§Dismissal
-below) — so the Sonar write operations below have NO
-live use: they are documented for reading history, and an `accept`,
-`falsepositive`, `SAFE` or `ACKNOWLEDGED` write on any finding is the act
-the policy forbids.
+next analysis. The policy names two exceptions. The first is the CodeQL
+query `js/missing-rate-limiting`, excluded by the tracked `query-filters`
+entry in `.github/codeql/codeql-config.yml` and grounded in ADR-219
+(§Dismissal below), never a Sonar write. The second (owner, 2026-11-05) is
+S4036 at a site within the policy's §S4036 class: the issue is marked
+`falsepositive` (a hotspot `SAFE`) with the class's canonical rationale.
+That mark is the Sonar write operations' one live use; the rest below are
+documented for reading history, and an `accept`, `falsepositive`, `SAFE` or
+`ACKNOWLEDGED` write on any other finding is the act the policy forbids.
 
 The Sonar MCP exposes two state-change operations:
 
@@ -218,7 +220,7 @@ CodeQL alert state machine: `open` → `dismissed` (with reason) → `closed` (w
 ### Dismissal
 
 There is no live dismissal route: every CodeQL alert is cured at source, and
-the one exception is not a dismissal. The query `js/missing-rate-limiting` is
+the policy's CodeQL exception is not a dismissal. The query `js/missing-rate-limiting` is
 excluded permanently by the `query-filters` entry in
 `.github/codeql/codeql-config.yml`, grounded in ADR-219 (owner, 2026-09-17,
 verbatim: "a permanent exclusion is allowed, but ONLY for that one issue").
@@ -259,7 +261,7 @@ When a finding appears in both — e.g., a regex DoS in `S5852` (Sonar) AND `js/
 ### Common Oak CodeQL alerts
 
 Since 2026-09-08 every CodeQL alert is fixed at source (the one-outcome
-policy); the entries below name the cure, and the one excepted class its
+policy); the entries below name the cure, and the excepted query its
 route.
 
 - `js/polynomial-redos` HIGH — regex with overlapping quantifiers vulnerable to ReDoS. Often co-fired with Sonar `S5852`. Cure at every site: rewrite to linear constructs (the policy's S5852 / S8786 cure), whether or not the site's input makes the backtracking reachable.
@@ -361,7 +363,8 @@ Note any deltas from the briefing or the master plan. State drift is real; the b
 
 For each failing condition, identify the work that addresses it:
 
-- `new_violations` → per-finding fix at source (the one-outcome policy).
+- `new_violations` → per-finding fix at source (the one-outcome policy); an
+  S4036 site within the policy's §S4036 class is marked instead.
 - `new_duplicated_lines_density` → consolidation refactors.
 - `new_security_hotspots_reviewed` → cure each hotspot at source; the next
   analysis marks it REVIEWED / FIXED.
@@ -379,13 +382,17 @@ For mechanical fixes, batch within a rule. For per-site investigations, separate
 
 There is no live per-issue dismissal route: a finding that would once have
 taken `accept` or `falsepositive` is cured by its class's tree change in the
-one-outcome policy. The habit that survives is the record — strengthen the
+one-outcome policy. The one live per-issue mark is S4036's: a site within
+the policy's §S4036 class is marked `falsepositive` with the class's
+canonical rationale (owner, 2026-11-05). The habit that survives is the
+record — strengthen the
 in-code TSDoc with why the site changed, and commit it with the cure.
 
 ### 6. Hotspot review (since 2026-09-08: FIXED by analysis)
 
 Cure each hotspot at source per its class in the policy; the next analysis
-marks it REVIEWED / FIXED. `SAFE` and `ACKNOWLEDGED` are not used.
+marks it REVIEWED / FIXED. `ACKNOWLEDGED` is not used, and `SAFE` only for
+an S4036 hotspot within the policy's §S4036 class.
 
 ### 7. CodeQL action items
 

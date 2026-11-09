@@ -33,8 +33,8 @@ The machinery under deconstruction, all on main (preserved at safety commit
 foundations-review lane — `d16ba0e7d` and three follow-on cure rounds, with
 three boundary smokes wired into `test:e2e`):
 
-- the frozen four-file detector contract (revision 2.6 with the R8/R9/R10
-  refreezes): `detector-config.json`, `detector-config.schema.json`,
+- the frozen four-file detector contract (at the revision its
+  `contractRevision` field names; `calibration.md` records each revision): `detector-config.json`, `detector-config.schema.json`,
   `raw-extraction.schema.json`, `evidence.schema.json`;
 - the extractor implementation under `agent-tools/src/typescript-estate/`
   (green at main; partial against the frozen contract — the R10

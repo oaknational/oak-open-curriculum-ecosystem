@@ -6,7 +6,7 @@
  * mechanics live in one tested place (the operator-profile PDR, decision
  * 16): a seat resident in a linked worktree, whose shell git is confined to
  * that worktree, syncs the profile through this tool like any other seat.
- * The real runner executes the trusted git binary by absolute path with
+ * The real runner executes git by name, with `PATH` as the trust root, with
  * `-C <root>`; tests inject a scripted runner and never touch a repository.
  *
  * A git command that fails to run is an operational error, never a clean
@@ -17,7 +17,6 @@ import { spawnSync } from 'node:child_process';
 
 import { err, ok, type Result } from '@oaknational/result';
 
-import { resolveTrustedGit } from '../../core/trusted-git.js';
 import { PUSH_COMMAND, type SyncStateInput } from './operator-profile-sync-state.js';
 
 interface GitOutcome {
@@ -30,7 +29,8 @@ interface GitOutcome {
 export type GitRunner = (args: readonly string[]) => GitOutcome;
 
 /**
- * The real runner: the trusted git binary, `-C <root>`, never a shell.
+ * The real runner: git by name, `-C <root>`, never a shell. A git that cannot
+ * start is a failed outcome carrying the launch error, never a throw.
  *
  * Every call runs with `core.symlinks=false`, so a symbolic link a pull
  * delivers is checked out as a plain file holding the link's text, never
@@ -42,12 +42,14 @@ export type GitRunner = (args: readonly string[]) => GitOutcome;
  * the way the pull wrote it.
  */
 export function createGitRunner(root: string): GitRunner {
-  const git = resolveTrustedGit();
   return (args) => {
-    const result = spawnSync(git, ['-c', 'core.symlinks=false', '-C', root, ...args], {
+    const result = spawnSync('git', ['-c', 'core.symlinks=false', '-C', root, ...args], {
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'pipe'],
     });
+    if (result.error !== undefined) {
+      return { ok: false, stdout: '', stderr: `git could not run: ${result.error.message}` };
+    }
     return {
       ok: result.status === 0,
       stdout: result.stdout.trimEnd(),

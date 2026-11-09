@@ -10,12 +10,10 @@ import { describe, expect, it } from 'vitest';
 
 import {
   describeGitReadFailure,
-  gitUnavailable,
   parseTrackedFiles,
   toGitRunOutput,
   withImpliedDirectories,
 } from './repository-paths.js';
-import { TrustedGitResolutionError } from './trusted-git.js';
 
 describe('withImpliedDirectories', () => {
   it('adds every ancestor directory of a tracked file', () => {
@@ -137,19 +135,6 @@ describe('parseTrackedFiles', () => {
   });
 });
 
-describe('gitUnavailable', () => {
-  it("carries the resolver's own message, without the error's class name", () => {
-    const refusal = new TrustedGitResolutionError(
-      'No trusted git binary found. Searched: /usr/bin/git, /bin/git',
-    );
-
-    expect(gitUnavailable(refusal)).toStrictEqual({
-      kind: 'git-unavailable',
-      message: 'No trusted git binary found. Searched: /usr/bin/git, /bin/git',
-    });
-  });
-});
-
 describe('describeGitReadFailure', () => {
   it("carries git's exit status and its own standard error to the operator, on one line", () => {
     const line = describeGitReadFailure({
@@ -161,11 +146,6 @@ describe('describeGitReadFailure', () => {
     expect(line).toContain('fatal: not a git repository: .git');
     expect(line).toContain('hint: run it inside a checkout');
     expect(line).not.toContain('\n');
-  });
-
-  it("carries the git resolver's own refusal, unchanged", () => {
-    const message = 'No trusted git binary found. Searched: /usr/bin/git, /bin/git';
-    expect(describeGitReadFailure({ kind: 'git-unavailable', message })).toContain(message);
   });
 
   it('says a git that gave no exit status did so, with its standard error', () => {
@@ -190,8 +170,9 @@ describe('describeGitReadFailure', () => {
 
   it("ends without a full stop, so the caller's own sentence closes it", () => {
     const line = describeGitReadFailure({
-      kind: 'git-unavailable',
-      message: 'No trusted git binary found. Symlink git at one of those paths.',
+      kind: 'git-failed',
+      status: 128,
+      stderr: 'fatal: not a git repository.',
     });
     expect(line.endsWith('.')).toBe(false);
   });

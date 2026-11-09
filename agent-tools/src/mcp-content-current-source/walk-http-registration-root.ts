@@ -9,7 +9,6 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { typeSafeKeys } from '@oaknational/type-helpers';
 import { z } from 'zod';
-import { resolvePnpm } from '../spawn/pnpm-path.js';
 import type { RegistrationRoot, RegistrationSourceEvidence } from './current-source-model.js';
 import { GUIDANCE_SOURCE_ENTRIES } from './prompt-era-lineage.js';
 import { requireSameStringMembers } from './require-same-string-members.js';
@@ -103,19 +102,10 @@ function indexGuidanceRegistrationsBySource(
 
 /** Runs and validates the app-owned in-memory MCP protocol proof. */
 export async function walkHttpRegistrationRoot(repoRoot: string): Promise<HttpRegistrationWalk> {
-  const pnpm = resolvePnpm(process.env);
-  if (!pnpm.ok) {
-    throw pnpm.error;
-  }
-  const { stdout } = await execFileAsync(
-    pnpm.value.file,
-    [...pnpm.value.leadingArgs, 'exec', 'tsx', proofScript],
-    {
-      cwd: repoRoot,
-      env: pnpm.value.env,
-      maxBuffer: 16 * 1024 * 1024,
-    },
-  );
+  const { stdout } = await execFileAsync('pnpm', ['exec', 'tsx', proofScript], {
+    cwd: repoRoot,
+    maxBuffer: 16 * 1024 * 1024,
+  });
   const parsed = httpRegistrationWalkSchema.parse(JSON.parse(stdout));
   return {
     root: parsed.root,

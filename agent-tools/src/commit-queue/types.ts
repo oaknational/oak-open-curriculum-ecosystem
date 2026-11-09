@@ -41,13 +41,11 @@ interface CommitQueueClaimArea extends JsonObject {
 }
 
 /**
- * An advisory queue entry before the queue's order key is assigned.
- *
- * `queued_seq` cannot be known outside the claims-file transaction lock —
- * it is derived from the live queue — so `createIntent` builds this draft
- * at the CLI boundary and `enqueueCommitIntent` completes it inside the
- * transform. Mutually assignable with
- * `CollaborationCommitQueueEntryDraft`, the store's half of the same split.
+ * An advisory queue entry before its order key, `queued_seq`, is assigned:
+ * the key is derived from the live queue inside the claims-file transaction
+ * lock, so `createIntent` builds this draft at the CLI boundary and
+ * `enqueueCommitIntent` completes it inside the transform. Mutually
+ * assignable with `CollaborationCommitQueueEntryDraft`, the store's half.
  */
 export interface CommitIntentDraft extends JsonObject {
   readonly intent_id: string;
@@ -102,8 +100,7 @@ export interface CommitQueueClaim extends JsonObject {
 
 /**
  * The claims FILE's shape as the queue helper reads it (claims only since
- * registry schema 1.4.0). The version field is pinned to the same constant
- * as the full registry type.
+ * registry schema 1.4.0), its version pinned to the full registry type's.
  */
 export interface CommitQueueClaimsFile extends JsonObject {
   readonly schema_version: typeof ACTIVE_CLAIMS_SCHEMA_VERSION;
@@ -169,15 +166,32 @@ export type CommitWorkflowCliResult =
     };
 
 /**
- * Injected commit-workflow dependency exposed to CLI input so tests can
- * exercise the dispatch wiring without spawning real sub-processes.
+ * Input to the commit-workflow runner, shared by the CLI's injected runner
+ * and the real runtime so the two cannot drift apart.
+ *
+ * `registryPath` anchors registry reads/writes at the coordination home;
+ * `gitRoot` is the root of the INVOKING git worktree, and every git-side
+ * operation (staged reads, the advisory orchestrator, the inner
+ * `git commit`, the HEAD read) runs against it — never against the
+ * coordination home (F-138). `stderr` is the command's own stderr writer:
+ * the advisory banner, the advisory transcript and the inner commit's
+ * transcript go there, in that order, instead of to the process's stdio.
  */
-export type CommitWorkflowCliRunner = (input: {
+export interface CommitWorkflowRunnerInput {
   readonly intentId: string;
   readonly messageFilePath: string;
   readonly registryPath: string;
   readonly gitRoot: string;
-}) => Promise<CommitWorkflowCliResult>;
+  readonly stderr: { write(chunk: string): void };
+}
+
+/**
+ * Injected commit-workflow dependency exposed to CLI input so tests can
+ * exercise the dispatch wiring without spawning real sub-processes.
+ */
+export type CommitWorkflowCliRunner = (
+  input: CommitWorkflowRunnerInput,
+) => Promise<CommitWorkflowCliResult>;
 
 /**
  * Parsed command-line input for the commit-queue CLI.

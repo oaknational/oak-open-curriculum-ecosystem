@@ -39,7 +39,7 @@ const MINIMAL_ENVIRONMENT = {
 } as const;
 
 const DISCOVER_FROM_CALLER = {
-  executable: '/trusted/git',
+  executable: 'git',
   args: [
     '--no-replace-objects',
     '--no-lazy-fetch',
@@ -55,7 +55,7 @@ const DISCOVER_FROM_CALLER = {
 } as const satisfies ProcessInvocation;
 
 const RESOLVE_SURPRISING_COMMIT = {
-  executable: '/trusted/git',
+  executable: 'git',
   args: [
     '--no-replace-objects',
     '--no-lazy-fetch',
@@ -73,7 +73,7 @@ const RESOLVE_SURPRISING_COMMIT = {
 } as const satisfies ProcessInvocation;
 
 const RESOLVE_TREE_WITH_SCRUBBED_ENVIRONMENT = {
-  executable: '/trusted/git',
+  executable: 'git',
   args: [
     '--no-replace-objects',
     '--no-lazy-fetch',
@@ -91,7 +91,7 @@ const RESOLVE_TREE_WITH_SCRUBBED_ENVIRONMENT = {
 } as const satisfies ProcessInvocation;
 
 const LIST_TREE_WITH_SCRUBBED_ENVIRONMENT = {
-  executable: '/trusted/git',
+  executable: 'git',
   args: [
     '--no-replace-objects',
     '--no-lazy-fetch',
@@ -110,7 +110,7 @@ const LIST_TREE_WITH_SCRUBBED_ENVIRONMENT = {
 } as const satisfies ProcessInvocation;
 
 const SHOW_A_WITH_SCRUBBED_ENVIRONMENT = {
-  executable: '/trusted/git',
+  executable: 'git',
   args: ['--no-replace-objects', '--no-lazy-fetch', '-C', '/repo', 'show', `${COMMIT}:a.tsx`],
   cwd: '/repo',
   env: SCRUBBED_ENVIRONMENT,
@@ -119,7 +119,7 @@ const SHOW_A_WITH_SCRUBBED_ENVIRONMENT = {
 } as const satisfies ProcessInvocation;
 
 const SHOW_Z_WITH_SCRUBBED_ENVIRONMENT = {
-  executable: '/trusted/git',
+  executable: 'git',
   args: ['--no-replace-objects', '--no-lazy-fetch', '-C', '/repo', 'show', `${COMMIT}:z.ts`],
   cwd: '/repo',
   env: SCRUBBED_ENVIRONMENT,
@@ -128,7 +128,7 @@ const SHOW_Z_WITH_SCRUBBED_ENVIRONMENT = {
 } as const satisfies ProcessInvocation;
 
 const DISCOVER_FROM_REPO = {
-  executable: '/trusted/git',
+  executable: 'git',
   args: ['--no-replace-objects', '--no-lazy-fetch', '-C', '/repo', 'rev-parse', '--show-toplevel'],
   cwd: '/repo',
   env: MINIMAL_ENVIRONMENT,
@@ -137,7 +137,7 @@ const DISCOVER_FROM_REPO = {
 } as const satisfies ProcessInvocation;
 
 const RESOLVE_HEAD_COMMIT = {
-  executable: '/trusted/git',
+  executable: 'git',
   args: [
     '--no-replace-objects',
     '--no-lazy-fetch',
@@ -155,7 +155,7 @@ const RESOLVE_HEAD_COMMIT = {
 } as const satisfies ProcessInvocation;
 
 const RESOLVE_HEAD_TREE = {
-  executable: '/trusted/git',
+  executable: 'git',
   args: [
     '--no-replace-objects',
     '--no-lazy-fetch',
@@ -173,7 +173,7 @@ const RESOLVE_HEAD_TREE = {
 } as const satisfies ProcessInvocation;
 
 const LIST_HEAD_TREE = {
-  executable: '/trusted/git',
+  executable: 'git',
   args: [
     '--no-replace-objects',
     '--no-lazy-fetch',
@@ -192,7 +192,7 @@ const LIST_HEAD_TREE = {
 } as const satisfies ProcessInvocation;
 
 const SHOW_BOM = {
-  executable: '/trusted/git',
+  executable: 'git',
   args: ['--no-replace-objects', '--no-lazy-fetch', '-C', '/repo', 'show', `${COMMIT}:bom.ts`],
   cwd: '/repo',
   env: MINIMAL_ENVIRONMENT,
@@ -201,7 +201,7 @@ const SHOW_BOM = {
 } as const satisfies ProcessInvocation;
 
 const SHOW_ONLY = {
-  executable: '/trusted/git',
+  executable: 'git',
   args: ['--no-replace-objects', '--no-lazy-fetch', '-C', '/repo', 'show', `${COMMIT}:only.ts`],
   cwd: '/repo',
   env: MINIMAL_ENVIRONMENT,
@@ -271,7 +271,6 @@ describe('captureGitSnapshot integration', () => {
       captureGitSnapshot({
         callerCwd: '/caller',
         inputRef: '--surprising-ref',
-        gitExecutable: '/trusted/git',
         inheritedEnvironment: {
           PATH: '/bin',
           HOME: '/test-home',
@@ -334,7 +333,6 @@ describe('captureGitSnapshot integration', () => {
       captureGitSnapshot({
         callerCwd: '/repo',
         inputRef: 'HEAD',
-        gitExecutable: '/trusted/git',
         inheritedEnvironment: {},
         limits: LIMITS,
         process,
@@ -362,7 +360,6 @@ describe('captureGitSnapshot integration', () => {
       captureGitSnapshot({
         callerCwd: '/repo',
         inputRef: 'HEAD',
-        gitExecutable: '/trusted/git',
         inheritedEnvironment: {},
         limits: LIMITS,
         process,
@@ -391,7 +388,6 @@ describe('captureGitSnapshot integration', () => {
       captureGitSnapshot({
         callerCwd: '/repo',
         inputRef: 'HEAD',
-        gitExecutable: '/trusted/git',
         inheritedEnvironment: {},
         limits: LIMITS,
         process,
@@ -421,7 +417,6 @@ describe('captureGitSnapshot integration', () => {
       captureGitSnapshot({
         callerCwd: '/repo',
         inputRef: 'HEAD',
-        gitExecutable: '/trusted/git',
         inheritedEnvironment: {},
         limits: LIMITS,
         process,
@@ -451,7 +446,6 @@ describe('captureGitSnapshot integration', () => {
       captureGitSnapshot({
         callerCwd: '/repo',
         inputRef: 'HEAD',
-        gitExecutable: '/trusted/git',
         inheritedEnvironment: {},
         limits: { ...LIMITS, maxTrackedPaths: 1 },
         process,

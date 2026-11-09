@@ -7,7 +7,7 @@
   "required": ["schemaVersion", "contractRevision", "reviewId", "calibrationBaseCommit", "frozenAt", "refreezeReason", "sourceExtensions", "implementationGate", "snapshot", "moduleResolution", "detectors", "generatedOutputRules", "generatedOutputRuleSemantics", "vocabularies", "provenanceClassification", "roleRules", "roleSemantics", "sourcePredicateDefinitions", "deliveryClassification", "constructs", "repetition", "typeTruthSignals", "graphObservation", "archetypeChains", "placementConformance", "proofEnvironmentPolicy", "generationProof", "packedSdkConsumerProof", "schemaShapeFingerprint", "testAndProofPlacement", "resourceLimits", "outputWrite", "ordering", "semanticValidation", "implementationIdentity", "serialisation", "heldOutAudit"],
   "properties": {
     "schemaVersion": { "const": "2.0.0" },
-    "contractRevision": { "const": "2.6" },
+    "contractRevision": { "const": "2.7" },
     "reviewId": { "const": "typescript-estate-consolidation-review" },
     "calibrationBaseCommit": { "$ref": "#/$defs/gitObjectId" },
     "frozenAt": { "type": "string", "format": "date-time" },

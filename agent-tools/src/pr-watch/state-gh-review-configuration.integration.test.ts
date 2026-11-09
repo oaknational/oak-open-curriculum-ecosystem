@@ -59,7 +59,7 @@ function fakeGithub(fake: Fake): GhCommandExecutor {
   };
 }
 
-const ghSeam = { ghPath: '/usr/bin/gh', exists: () => true, patchIdOf: textHasher };
+const ghSeam = { patchIdOf: textHasher };
 const MAIN_RULES = 'repos/oaknational/oak-open-curriculum-ecosystem/rules/branches/main';
 
 describe('readPrStateReading — the review-configuration leg', () => {

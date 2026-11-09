@@ -1,5 +1,8 @@
-import { defaultRunGit, type GitRunner } from '../collaboration-state/coordination-home.js';
-import { TrustedGitResolutionError } from '../core/trusted-git.js';
+import {
+  defaultRunGit,
+  describeGitFailure,
+  type GitRunner,
+} from '../collaboration-state/coordination-home.js';
 
 /**
  * Resolve the root of the git worktree the CLI was INVOKED from.
@@ -17,14 +20,13 @@ import { TrustedGitResolutionError } from '../core/trusted-git.js';
  * top level — the primary checkout is the degenerate case where both roots
  * coincide, preserving prior behaviour byte-for-byte there.
  *
- * The default runner is the trusted-git runner shared with
- * `resolveCoordinationHome` (absolute-path git, S4036 hardening) — one
- * canonical invocation shape for both root resolvers.
+ * The default runner is the git runner shared with `resolveCoordinationHome`
+ * — one canonical invocation shape for both root resolvers.
  *
  * @param cwd - the directory the CLI was invoked from.
  * @param runGit - git-runner seam; unit tests inject a fake, production
- *   omits it and the shared trusted-git runner runs.
- * @throws when `cwd` is not inside a git working tree — the F-138 fail-loud
+ *   omits it and the shared git runner runs.
+ * @throws when git cannot resolve a working tree from `cwd` — the F-138 fail-loud
  *   guard. There is no fallback to the coordination home: a fallback is
  *   exactly the silent two-root collapse this module exists to prevent.
  */
@@ -33,14 +35,9 @@ export function resolveInvokingGitRoot(cwd: string, runGit: GitRunner = defaultR
   try {
     topLevel = runGit(['rev-parse', '--show-toplevel'], cwd);
   } catch (error) {
-    // A resolver refusal is its own diagnosis — git never ran, so the
-    // not-inside-a-working-tree translation below would be false (the
-    // misleading-error class this repository has now hit three times).
-    if (error instanceof TrustedGitResolutionError) {
-      throw error;
-    }
     throw new Error(
-      `Unable to resolve the invoking git worktree root: '${cwd}' is not inside a git working tree. ` +
+      `Unable to resolve the invoking git worktree root: git could not resolve a working tree from '${cwd}' ` +
+        `(${describeGitFailure(error)}). ` +
         `Commit-queue staged reads and the inner commit operate against the INVOKING worktree's index; ` +
         `there is no fallback to the coordination home. Run the command from inside the worktree that ` +
         `holds the staged files.`,

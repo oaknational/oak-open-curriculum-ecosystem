@@ -39,23 +39,30 @@ export async function runCommitCommand(input: CommitCommandInput): Promise<numbe
   const intentId = requireOption(input.options, 'intent-id');
   const messageFilePath = requireOption(input.options, 'message-file');
   const runner: CommitWorkflowCliRunner = input.input.commitWorkflow ?? runCommitWorkflowRuntime;
+  const output: CommandOutput = {
+    stdout: input.input.stdout ?? process.stdout,
+    stderr: input.input.stderr ?? process.stderr,
+  };
 
   const result = await runner({
     intentId,
     messageFilePath,
     registryPath: input.registryPath,
     gitRoot: input.input.resolveGitRoot(),
+    stderr: output.stderr,
   });
 
-  return writeCommitCommandResult(result, input.input);
+  return writeCommitCommandResult(result, output);
 }
 
-function writeCommitCommandResult(
-  result: CommitWorkflowCliResult,
-  cliInput: CommitQueueCliInput,
-): number {
-  const stdout = cliInput.stdout ?? process.stdout;
-  const stderr = cliInput.stderr ?? process.stderr;
+/** The command's own writers, resolved once from the CLI input. */
+interface CommandOutput {
+  readonly stdout: { write(chunk: string): void };
+  readonly stderr: { write(chunk: string): void };
+}
+
+function writeCommitCommandResult(result: CommitWorkflowCliResult, output: CommandOutput): number {
+  const { stdout, stderr } = output;
 
   if (result.ok) {
     stdout.write(`${result.sha}\n`);

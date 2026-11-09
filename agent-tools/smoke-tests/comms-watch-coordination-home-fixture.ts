@@ -5,7 +5,6 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 import { ACTIVE_CLAIMS_SCHEMA_VERSION } from '../src/collaboration-state/types';
-import { resolveTrustedGit } from '../src/core/trusted-git';
 
 export const AGENT_NAME = 'Europa stirs Void';
 const SESSION_ID = '019fad-mcp360-smoke';
@@ -31,7 +30,7 @@ const peerIdentity = {
 } as const;
 
 function git(cwd: string, ...args: readonly string[]): void {
-  execFileSync(resolveTrustedGit(), [...args], { cwd, encoding: 'utf8' });
+  execFileSync('git', [...args], { cwd, encoding: 'utf8' });
 }
 
 async function writeJson(path: string, value: unknown): Promise<void> {

@@ -37,6 +37,16 @@ Compact live state only. Finished-session narrative is conserved in its homes
 from here per `continuity-practice.md` §Disposition; only live lanes and live
 forward-asks remain.
 
+- **2026-11-08T20:0xZ: the Attendant Workflow design brief is the next session's entry point**
+  (Juniper seeks Pollen, 01Duoc, solo cloud session, the owner-interface directly). The owner's words
+  of 2026-11-07 and 2026-11-08 are quoted and dated in
+  `.agent/prompts/agentic-engineering/idea-to-merge-process-design.prompt.md`; the design notes
+  beside it are input to assess critically. Pull request 390 carries both, and the owner merges it
+  before the next session (the owner's word, 2026-11-08). The next session opens with a review of the
+  brief, stating the desired impact and how the session delivers the value that creates it, then
+  produces the decision-complete creation plan by exploring the design with the owner as design
+  partner; a design question is explored there, never settled by a menu put to the owner.
+
 - **2026-10-19T10:0xZ: the two local-only branches proven of no use at the owner's word; deletion denied by
   the policy** (Walrus seeks Maelstrom, 9585cc, reviewer, the owner-interface directly). His word: "Analyse
   the two branches, if they are useful put them in a draft PR, if they are not useful, delete them". The

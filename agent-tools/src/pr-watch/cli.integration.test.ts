@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 
 import { runPrWatchCli } from './cli.js';
 import type { PrSnapshot } from './index.js';
-import type { PrTarget } from './gh.js';
 
 function makeSnapshot(overrides: Partial<PrSnapshot> = {}): PrSnapshot {
   return {
@@ -83,21 +82,16 @@ describe('runPrWatchCli — one-shot', () => {
     expect(JSON.parse(io.out())).toMatchObject({ number: 221, state: 'OPEN' });
   });
 
-  it('passes the parsed target and gh path through to the reader', async () => {
+  it('reports the PR that the URL positional names', async () => {
     const io = capture();
-    const seen: { target?: PrTarget; ghPath?: string } = {};
-    await runPrWatchCli({
-      args: ['https://github.com/o/r/pull/7', '--gh', '/x/gh'],
+    const code = await runPrWatchCli({
+      args: ['https://github.com/o/r/pull/7'],
       stdout: io.stdout,
       stderr: io.stderr,
-      readSnapshot: (target, ghPath) => {
-        seen.target = target;
-        seen.ghPath = ghPath;
-        return makeSnapshot({ number: 7 });
-      },
+      readSnapshot: (target) => makeSnapshot({ number: target.number }),
     });
-    expect(seen.target).toStrictEqual({ number: 7, repo: 'o/r' });
-    expect(seen.ghPath).toBe('/x/gh');
+    expect(code).toBe(0);
+    expect(io.out()).toContain('PR #7');
   });
 
   it('rejects an invalid PR identifier with a non-zero exit and stderr message', async () => {

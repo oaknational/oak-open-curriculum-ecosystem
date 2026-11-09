@@ -77,7 +77,7 @@ describe('runFoldClockCli', () => {
     expect(reads).toStrictEqual([{ target: { number: 326, repo: undefined } }]);
   });
 
-  it('passes --repo, --successor and --gh through to the reader', () => {
+  it('passes --repo and --successor through to the reader', () => {
     const { exit, reads } = run([
       '--pr',
       '326',
@@ -85,8 +85,6 @@ describe('runFoldClockCli', () => {
       'acme/widgets',
       '--successor',
       'fa74b727',
-      '--gh',
-      '/custom/bin/gh',
     ]);
 
     expect(exit).toBe(0);
@@ -94,7 +92,6 @@ describe('runFoldClockCli', () => {
       {
         target: { number: 326, repo: 'acme/widgets' },
         successorSha: 'fa74b727',
-        ghPath: '/custom/bin/gh',
       },
     ]);
   });
@@ -137,6 +134,7 @@ describe('runFoldClockCli', () => {
       [['--pr', '326', '--repo', 'acme'], 'Invalid --repo'],
       [['--pr', '326', '--successor', 'coordination/x'], '--successor must be a commit sha'],
       [['--pr', '326', '--base', 'main'], 'unknown option: --base'],
+      [['--pr', '326', '--gh', '/custom/bin/gh'], 'unknown option: --gh'],
       [['--pr'], '--pr requires a value'],
       [['--pr', '326', 'extra'], 'unexpected argument: extra'],
     ];

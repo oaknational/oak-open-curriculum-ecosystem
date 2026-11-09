@@ -5,8 +5,6 @@ import { tmpdir } from 'node:os';
 import { delimiter, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { resolveTrustedGit } from '../src/core/trusted-git';
-
 import { gitWithoutShowCurrent } from './git-without-show-current';
 import { hermeticGitEnv } from './hermetic-git-env';
 import { shellSafePath, trustedShell } from './trusted-shell-directories';
@@ -28,8 +26,19 @@ import { shellSafePath, trustedShell } from './trusted-shell-directories';
  * Real IO makes this a smoke; `test:e2e` gates it.
  */
 
-const GIT = resolveTrustedGit();
+const GIT = 'git';
 const SH = trustedShell();
+
+/**
+ * The git `PATH` resolves by name, as a path. A shim placed first on `PATH`
+ * hands its other calls to this git; given the bare name, it would find itself
+ * and run forever.
+ *
+ * @param env - the hermetic environment whose `PATH` names the git.
+ */
+function realGitOn(env: Record<string, string>): string {
+  return execFileSync(SH, ['-c', 'command -v git'], { env, encoding: 'utf8' }).trim();
+}
 // Forward-slashed for the shell that sources it, as an argument and inside
 // the hook script below: see `shellSafePath`.
 const GUARD = shellSafePath(
@@ -183,7 +192,7 @@ function refusesWhenGitCannotNameTheBranch(): void {
   withTempDir((root) => {
     const repository = makeRepository(root);
     onBranch(repository, 'feat/example');
-    const shims = gitWithoutShowCurrent(root, GIT);
+    const shims = gitWithoutShowCurrent(root, realGitOn(hermeticGitEnv(root)));
     const guarded = runGuard(repository, '', shims);
     assert.equal(
       guarded.status,

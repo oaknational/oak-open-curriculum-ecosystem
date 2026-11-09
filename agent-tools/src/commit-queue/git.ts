@@ -1,6 +1,5 @@
 import { execFileSync } from 'node:child_process';
 
-import { resolveTrustedGit } from '../core/trusted-git.js';
 import { type StagedBundle } from './types.js';
 
 const STAGED_PATCH_BUFFER_BYTES = 32 * 1024 * 1024;
@@ -79,7 +78,7 @@ export function getStagedBundle(input: GetStagedBundleInput): StagedBundle {
 }
 
 function runGit(gitRoot: string, args: readonly string[]): string {
-  return execFileSync(resolveTrustedGit(), args, {
+  return execFileSync('git', args, {
     cwd: gitRoot,
     encoding: 'utf8',
     maxBuffer: STAGED_PATCH_BUFFER_BYTES,

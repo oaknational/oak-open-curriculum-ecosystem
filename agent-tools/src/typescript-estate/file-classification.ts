@@ -21,7 +21,7 @@ export interface ClassifySnapshotFilesInput {
 }
 
 /**
- * Compose only the revision 2.6 classification fragment over pinned sources.
+ * Compose only the workspace/provenance/role classification fragment over pinned sources.
  *
  * Delivery and complete FileRecord assembly remain deliberately impossible at
  * this boundary while their later contract slices are held.

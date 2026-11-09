@@ -1,6 +1,5 @@
-import { err, ok, type Result } from '@oaknational/result';
+import { ok, type Result } from '@oaknational/result';
 
-import { resolveTrustedGit } from '../core/trusted-git.js';
 import { clearedCredentialConfig, scrubbedCredentialEnv } from './git-credential-chain.js';
 import { realGitExecutor, type GitCommandResult, type GitExecutor } from './git-executor.js';
 import {
@@ -54,22 +53,16 @@ const CREDENTIAL_HELPER =
   '!f() { echo username=x-access-token; echo "password=$(cat "$GH_PUSH_TOKEN_FILE")"; }; f';
 
 /**
- * The git binary by ABSOLUTE path (SonarCloud S4036) — `resolveTrustedGit`
- * throws when it finds none, translated here at the one boundary.
+ * The git a command runs: `git` by name, with `PATH` as the trust root (the
+ * Sonar disposition policy's S4036 section), unless a test names the binary.
+ * Nothing here can fail, so the context is returned directly; a git that
+ * cannot start fails at its first call, through the executor.
  */
 export function resolveGitContext(seams: {
   readonly gitExecutor?: GitExecutor;
   readonly gitPath?: string;
-}): Result<GitContext, Error> {
-  const exec = seams.gitExecutor ?? realGitExecutor();
-  if (seams.gitPath !== undefined) {
-    return ok({ file: seams.gitPath, exec });
-  }
-  try {
-    return ok({ file: resolveTrustedGit(), exec });
-  } catch (error) {
-    return err(new Error(error instanceof Error ? error.message : String(error)));
-  }
+}): GitContext {
+  return { file: seams.gitPath ?? 'git', exec: seams.gitExecutor ?? realGitExecutor() };
 }
 
 /**

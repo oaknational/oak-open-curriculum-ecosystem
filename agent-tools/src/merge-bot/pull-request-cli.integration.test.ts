@@ -17,6 +17,13 @@ import {
 } from './test-helpers/pull-request-cli-double.js';
 import { mintFailing } from './test-helpers/push-cli-double.js';
 import { TOKEN_SCOPES } from './token-scopes.js';
+import { gitRefFormatOracle, type CheckRefFormatRun } from './ref-format.js';
+
+/** A check-ref-format run that never starts, as with no git on `PATH`. */
+const gitCannotStart = (): CheckRefFormatRun => ({
+  status: null,
+  error: new Error('spawnSync git ENOENT'),
+});
 
 /**
  * The `merge-bot pull-request` front door over injected seams: GitHub is a
@@ -65,14 +72,17 @@ describe('merge-bot pull-request, front door', () => {
     },
   );
 
-  it('fails with exit 1, minting nothing, when no git binary can answer the ref grammar', async () => {
+  it('fails with exit 1, minting nothing, when no git can run to answer the ref grammar', async () => {
     const run = await runPullRequest(
       ['open', '--branch', 'feat/x', '--title', 't', '--body-file', BODY_FILE, '--wip-limit', '3'],
-      { mint: MINT_UNREACHED, branchArgSeams: { pathExists: () => false } },
+      {
+        mint: MINT_UNREACHED,
+        branchArgSeams: { refFormatOracle: gitRefFormatOracle(gitCannotStart) },
+      },
     );
 
     expect(run.exit).toBe(1);
-    expect(run.err).toContain('No trusted git binary');
+    expect(run.err).toContain('git check-ref-format could not run');
   });
 
   it('exits 2, minting nothing, when the bot identity cannot be read', async () => {

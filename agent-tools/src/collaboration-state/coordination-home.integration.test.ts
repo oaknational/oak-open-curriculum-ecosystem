@@ -2,8 +2,6 @@ import { join } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
-import { TrustedGitResolutionError } from '../core/trusted-git.js';
-
 import { type GitRunner, resolveCoordinationHome } from './coordination-home.js';
 
 const PRIMARY = '/workspace/oak';
@@ -22,15 +20,12 @@ const gitReturning =
   () =>
     output;
 
-/** A git runner that fails as git does outside a working tree. */
-const gitFails: GitRunner = () => {
-  throw new Error('fatal: not a git repository');
-};
-
-/** A git runner whose trusted-git resolution refuses before git runs. */
-const resolverRefuses: GitRunner = () => {
-  throw new TrustedGitResolutionError('No trusted git binary found. Searched: …');
-};
+/** A runner that fails as the real one does on a non-zero exit: by throwing `failure`. */
+const gitFailingWith =
+  (failure: Error): GitRunner =>
+  () => {
+    throw failure;
+  };
 
 /** A pure existence fake: only the listed directories exist. */
 const dirsPresent =
@@ -69,6 +64,7 @@ describe('resolveCoordinationHome', () => {
   });
 
   it('throws loudly when cwd is not inside a git working tree (F-41 stale/worktree cwd)', () => {
+    const gitFails = gitFailingWith(new Error('fatal: not a git repository'));
     expect(() => resolveCoordinationHome('/tmp/elsewhere', { runGit: gitFails })).toThrow(
       /Unable to resolve the collaboration home/u,
     );
@@ -77,22 +73,18 @@ describe('resolveCoordinationHome', () => {
     );
   });
 
-  it('throws when git reports no worktree at all', () => {
-    expect(() => resolveCoordinationHome(PRIMARY, { runGit: gitReturning('') })).toThrow(
-      /returned no worktree/u,
+  it("carries git's own reason into the refusal, since git's stderr is captured", () => {
+    const dubious = Object.assign(new Error('Command failed: git worktree list --porcelain'), {
+      stderr: "fatal: detected dubious ownership in repository at '/workspace/oak'\n",
+    });
+    expect(() => resolveCoordinationHome(PRIMARY, { runGit: gitFailingWith(dubious) })).toThrow(
+      /git could not resolve a working tree from '\/workspace\/oak' \(fatal: detected dubious ownership/u,
     );
   });
 
-  it('lets a trusted-git RESOLUTION refusal pass through as its own diagnosis', () => {
-    // git never ran, so "not inside a git working tree" would be a false
-    // statement about a true repository (the 2026-08-11 Windows instance of
-    // the misleading-error class): the resolver's typed refusal — and its
-    // actionable remedy — must reach the reader unrebranded.
-    expect(() => resolveCoordinationHome(PRIMARY, { runGit: resolverRefuses })).toThrow(
-      /No trusted git binary found/u,
-    );
-    expect(() => resolveCoordinationHome(PRIMARY, { runGit: resolverRefuses })).not.toThrow(
-      /not inside a git working tree/u,
+  it('throws when git reports no worktree at all', () => {
+    expect(() => resolveCoordinationHome(PRIMARY, { runGit: gitReturning('') })).toThrow(
+      /returned no worktree/u,
     );
   });
 });

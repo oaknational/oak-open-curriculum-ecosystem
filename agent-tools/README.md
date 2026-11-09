@@ -444,7 +444,7 @@ pnpm agent-tools commit-queue status
 - `successor-name [--base <ref>]` — prints the next coordination branch name,
   `coordination/<UTC date>-<sha6>`, from the FULL sha the base ref resolves to;
   read-only, never cuts the branch (the `cut-coordination-branch` skill does).
-- `fold-clock --pr <n> [--repo <owner>/<repo>] [--successor <sha>] [--gh <path>] [--json]` —
+- `fold-clock --pr <n> [--repo <owner>/<repo>] [--successor <sha>] [--json]` —
   prints a fold's measured clock as one line for the review-cost ledger row: the
   ready-mark (the last `ready_for_review`, else the opening), checks green on the
   base branch's REQUIRED contexts (the merge door's own definition for the records

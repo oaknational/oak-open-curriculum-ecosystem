@@ -4,20 +4,22 @@
  * (see `commit-queue-registry-fixture.ts`) so the smoke file itself is
  * proofs only.
  */
+import assert from 'node:assert/strict';
 import { execFileSync, spawnSync, type SpawnSyncReturns } from 'node:child_process';
 import { realpathSync } from 'node:fs';
 import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { unwrapOrThrow } from '@oaknational/result';
 import { typeSafeEntries } from '@oaknational/type-helpers';
+import { z } from 'zod';
 
 import { uuidV5Schema } from '../src/collaboration-state/agent-id';
 import { readRegistry } from '../src/commit-queue/registry';
 import type { CommitIntent, CommitQueueClaimsFile } from '../src/commit-queue/types';
-import { resolveTrustedGit } from '../src/core/trusted-git';
+import { writeAdvisoryStub } from './commit-queue-advisory-stub-fixture';
 
 const CLAIM_ID = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
 export const INTENT_ID = '11111111-1111-4111-8111-111111111111';
@@ -85,7 +87,7 @@ export const BIN = join(
  * call still throws with git's stderr in the message.
  */
 export function git(cwd: string, ...args: readonly string[]): string {
-  return execFileSync(resolveTrustedGit(), [...args], {
+  return execFileSync('git', [...args], {
     cwd,
     env: smokeEnvironment(),
     encoding: 'utf8',
@@ -112,8 +114,9 @@ function steers(name: string): boolean {
  * own, read here at the smoke's spawn composition root, less every variable
  * that steers git or the registry, and with the machine's git configuration
  * silenced as `hermeticGitEnv` does. A standalone run with `GIT_DIR` exported
- * would otherwise write the fixture into the outer repository. `HOME` and
- * `PATH` stay, because the CLI's advisory child resolves pnpm through them.
+ * would otherwise write the fixture into the outer repository. `PATH` stays,
+ * because the CLI's advisory child runs pnpm by name, and `HOME` with it,
+ * for pnpm's own configuration.
  * The commit-queue topic resolves its home through git today; removing
  * `PRACTICE_COORDINATION_HOME` keeps an ambient declared home from ever
  * redirecting the fixture's registry if the topic comes to honour it.
@@ -142,8 +145,52 @@ export function runCommitQueue(cwd: string, args: readonly string[]): SpawnSyncR
 }
 
 /** A captured run's streams, for an assertion message that shows why it failed. */
-export function streams(result: SpawnSyncReturns<string>): string {
+export function streams(result: Pick<SpawnSyncReturns<string>, 'stdout' | 'stderr'>): string {
   return `stdout:\n${result.stdout}\nstderr:\n${result.stderr}`;
+}
+
+/**
+ * Calls the built CLI's `runAgentToolsCli` in the driver's own process and
+ * prints its result as JSON: the command's streams are its own writers, so
+ * output sent to the process's streams instead lands outside the JSON.
+ */
+const IN_PROCESS_DRIVER = [
+  'const [moduleUrl, argvJson] = process.argv.slice(1);',
+  'const { runAgentToolsCli } = await import(moduleUrl);',
+  'const argv = JSON.parse(argvJson);',
+  'const result = await runAgentToolsCli({ argv, env: {}, cwd: process.cwd() });',
+  'process.stdout.write(JSON.stringify(result));',
+].join('\n');
+
+const CLI_RESULT = z.object({ exitCode: z.number(), stdout: z.string(), stderr: z.string() });
+
+/** The driver's own run, and the command's result as the in-process call returned it. */
+export interface InProcessRun {
+  readonly driver: SpawnSyncReturns<string>;
+  readonly result: z.infer<typeof CLI_RESULT>;
+}
+
+/**
+ * Run `agent-tools commit-queue <args>` through the in-process entry, in a
+ * driver child that has the smoke's hermetic environment, so a proof can tell
+ * the command's own stderr from the process's.
+ */
+export function runCommitQueueInProcess(cwd: string, args: readonly string[]): InProcessRun {
+  const moduleUrl = pathToFileURL(join(dirname(BIN), 'agent-tools-cli.js')).href;
+  const argv = JSON.stringify(['commit-queue', ...args]);
+  const driver = spawnSync(
+    process.execPath,
+    ['--input-type=module', '-e', IN_PROCESS_DRIVER, moduleUrl, argv],
+    {
+      cwd,
+      env: smokeEnvironment(),
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+      timeout: CHILD_TIMEOUT_MS,
+    },
+  );
+  assert.equal(driver.status, 0, streams(driver));
+  return { driver, result: CLI_RESULT.parse(JSON.parse(driver.stdout)) };
 }
 
 export interface WorktreeFixture {
@@ -174,7 +221,8 @@ async function populateFixture(root: string): Promise<WorktreeFixture> {
   await mkdir(join(primary, 'notes'), { recursive: true });
   await writeFile(join(primary, 'README.md'), 'seed\n');
   await writeFile(join(primary, RENAME_SOURCE), '# move me atomically\n');
-  git(primary, 'add', 'README.md', RENAME_SOURCE);
+  const advisoryStubPaths = await writeAdvisoryStub(primary);
+  git(primary, 'add', 'README.md', RENAME_SOURCE, ...advisoryStubPaths);
   git(primary, 'commit', '-m', 'chore: seed');
 
   const linked = join(root, 'linked');

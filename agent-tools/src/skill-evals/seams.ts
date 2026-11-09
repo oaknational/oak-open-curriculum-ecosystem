@@ -15,8 +15,6 @@ import { dirname, join, relative } from 'node:path';
 
 import { err, ok, type Result } from '@oaknational/result';
 
-import { resolveTrustedGit } from '../core/trusted-git.js';
-
 import { blobIdsFromHashObject } from './manifest.js';
 
 /**
@@ -181,9 +179,9 @@ function run(command: string, args: readonly string[], cwd: string): Result<Comm
   return ok({ exitCode: child.status ?? 1 });
 }
 
-/** One git query under the trusted binary, its trimmed stdout. */
-function gitQuery(git: string, repoRoot: string, args: readonly string[]): Result<string, Error> {
-  const child = spawnSync(git, args, { cwd: repoRoot, encoding: 'utf8' });
+/** One git query, git by name, its trimmed stdout. */
+function gitQuery(repoRoot: string, args: readonly string[]): Result<string, Error> {
+  const child = spawnSync('git', args, { cwd: repoRoot, encoding: 'utf8' });
   if (child.error !== undefined) {
     return err(child.error);
   }
@@ -200,12 +198,7 @@ function blobIds(dir: string, paths: readonly string[]): Result<readonly string[
     return ok([]);
   }
   try {
-    const hashed = gitQuery(resolveTrustedGit(), dir, [
-      'hash-object',
-      '--no-filters',
-      '--',
-      ...paths,
-    ]);
+    const hashed = gitQuery(dir, ['hash-object', '--no-filters', '--', ...paths]);
     return hashed.ok ? blobIdsFromHashObject(hashed.value, paths, dir) : hashed;
   } catch (error) {
     return err(asError(error));
@@ -213,17 +206,12 @@ function blobIds(dir: string, paths: readonly string[]): Result<readonly string[
 }
 
 function gitState(repoRoot: string): Result<GitState, Error> {
-  try {
-    const git = resolveTrustedGit();
-    const head = gitQuery(git, repoRoot, ['rev-parse', 'HEAD']);
-    if (!head.ok) {
-      return head;
-    }
-    const status = gitQuery(git, repoRoot, ['status', '--porcelain']);
-    return status.ok ? ok({ head: head.value, clean: status.value.length === 0 }) : status;
-  } catch (error) {
-    return err(asError(error));
+  const head = gitQuery(repoRoot, ['rev-parse', 'HEAD']);
+  if (!head.ok) {
+    return head;
   }
+  const status = gitQuery(repoRoot, ['status', '--porcelain']);
+  return status.ok ? ok({ head: head.value, clean: status.value.length === 0 }) : status;
 }
 
 /** The seams bound to this machine. */

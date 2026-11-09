@@ -19,7 +19,7 @@ export interface PrWatchCliInput {
   readonly stdout?: Pick<NodeJS.WriteStream, 'write'>;
   readonly stderr?: Pick<NodeJS.WriteStream, 'write'>;
   /** Snapshot reader seam (defaults to the real {@link readPrSnapshot}). */
-  readonly readSnapshot?: (target: PrTarget, ghPath?: string) => PrSnapshot;
+  readonly readSnapshot?: (target: PrTarget) => PrSnapshot;
   /** Sleep seam for the watch loop (defaults to a real timer). */
   readonly sleep?: (ms: number) => Promise<void>;
 }
@@ -34,7 +34,6 @@ interface MutableArgs {
   watch: boolean;
   intervalSeconds: number;
   maxPolls: number;
-  ghPath?: string;
   help: boolean;
   positionals: string[];
 }
@@ -46,7 +45,6 @@ interface ParsedArgs {
   readonly watch: boolean;
   readonly intervalSeconds: number;
   readonly maxPolls: number;
-  readonly ghPath?: string;
   readonly help: boolean;
 }
 
@@ -74,9 +72,6 @@ const VALUE_HANDLERS: Readonly<Record<string, (state: MutableArgs, value: string
   },
   '--max-polls': (state, value) => {
     state.maxPolls = requirePositiveInt(value, '--max-polls');
-  },
-  '--gh': (state, value) => {
-    state.ghPath = value;
   },
 };
 
@@ -144,12 +139,11 @@ export function parseArgs(args: readonly string[]): ParsedArgs {
   return {
     ...parsed,
     ...(state.repo === undefined ? {} : { repo: state.repo }),
-    ...(state.ghPath === undefined ? {} : { ghPath: state.ghPath }),
   };
 }
 
-function resolveRead(input: PrWatchCliInput): (target: PrTarget, ghPath?: string) => PrSnapshot {
-  return input.readSnapshot ?? ((target, ghPath) => readPrSnapshot({ target, ghPath }));
+function resolveRead(input: PrWatchCliInput): (target: PrTarget) => PrSnapshot {
+  return input.readSnapshot ?? ((target) => readPrSnapshot({ target }));
 }
 
 function resolveSleep(input: PrWatchCliInput): (ms: number) => Promise<void> {
@@ -189,10 +183,10 @@ export async function runPrWatchCli(input: PrWatchCliInput): Promise<number> {
 function runOnce(input: {
   readonly target: PrTarget;
   readonly parsed: ParsedArgs;
-  readonly read: (target: PrTarget, ghPath?: string) => PrSnapshot;
+  readonly read: (target: PrTarget) => PrSnapshot;
   readonly stdout: Pick<NodeJS.WriteStream, 'write'>;
 }): number {
-  const snapshot = input.read(input.target, input.parsed.ghPath);
+  const snapshot = input.read(input.target);
   input.stdout.write(
     input.parsed.json ? `${JSON.stringify(snapshot, null, 2)}\n` : `${formatSnapshot(snapshot)}\n`,
   );
@@ -202,12 +196,12 @@ function runOnce(input: {
 async function runWatch(input: {
   readonly target: PrTarget;
   readonly parsed: ParsedArgs;
-  readonly read: (target: PrTarget, ghPath?: string) => PrSnapshot;
+  readonly read: (target: PrTarget) => PrSnapshot;
   readonly sleep: (ms: number) => Promise<void>;
   readonly stdout: Pick<NodeJS.WriteStream, 'write'>;
 }): Promise<number> {
   const { target, parsed, read, sleep, stdout } = input;
-  let previous = read(target, parsed.ghPath);
+  let previous = read(target);
   stdout.write(`${formatSnapshot(previous)}\n`);
   const initialEnd = watchEndLine(previous);
   if (initialEnd !== undefined) {
@@ -217,7 +211,7 @@ async function runWatch(input: {
 
   for (let poll = 0; poll < parsed.maxPolls; poll += 1) {
     await sleep(parsed.intervalSeconds * MILLIS_PER_SECOND);
-    const next = read(target, parsed.ghPath);
+    const next = read(target);
     emitChanges(stdout, previous, next);
     previous = next;
     const end = watchEndLine(next);
@@ -233,7 +227,7 @@ async function runWatch(input: {
 
 function usage(): string {
   return [
-    'pr-watch <pr-number|github-pull-url> [--repo <owner/repo>] [--json] [--watch] [--interval <seconds>] [--max-polls <n>] [--gh <absolute-path>]',
+    'pr-watch <pr-number|github-pull-url> [--repo <owner/repo>] [--json] [--watch] [--interval <seconds>] [--max-polls <n>]',
     '',
     'Reports a pull request CI / review / mergeable state, comments, and unresolved review threads.',
     'Default: a one-shot snapshot. --json prints the structured snapshot.',
@@ -242,7 +236,6 @@ function usage(): string {
     '  check passed AND every review thread resolved — passing checks alone are not green),',
     '  or after --max-polls',
     `  (default ${DEFAULT_MAX_POLLS}). It runs under a background-task supervisor; PR state has no push primitive, so polling is unavoidable (not an event-wake violation).`,
-    '--gh sets the gh binary path when gh is installed outside the probed locations.',
     '',
   ].join('\n');
 }

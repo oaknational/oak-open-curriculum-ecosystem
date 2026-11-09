@@ -1490,3 +1490,87 @@ the owner wants it kept).
   pursued (2026-11-05, Elder rides Topsoil, 65857c).
 - **Behaviour change / candidate follow-up**: if it repeats, find what sets that cache directory
   before touching any vitest config.
+
+## 2026-11-06 — Swift holds Turbulence (01Duoc): a team-of-one agentic SDLC compared with the Practice
+
+### What Was Done
+
+- Read Alex Ward's essay "I built an agentic SDLC for a team of one. Here's the plumbing" from an
+  owner-supplied PDF print, reflected on it, and compared it with the Practice's eight delivery
+  approaches in `.agent/research/team-of-one-agentic-sdlc-and-the-practice-2026-11-06.md`, with
+  its index row. Cricket in both stances on the frame before drafting; prose-expert and
+  docs-adr-expert on the draft; two read-only surveys for path-and-quote tables, each quote
+  re-read in its file before use.
+
+### Patterns to Remember
+
+- **A browser print of a web page can hide a figure behind a fixed overlay, and the figure is
+  still in the PDF.** `pdfimages -list` missed it because it was an inline image; PyMuPDF's
+  `page.get_text("dict")` image blocks returned the full 1344×838 PNG. Read the embedded image
+  before inferring what an overlay hides.
+- **In a Claude cloud session the GitHub REST `users/{login}` path is refused** ("sessions are
+  bound to their configured repositories", 403), while `search/users`, `search/commits`,
+  `search/code` and `search/repositories` answer, and `github.com` profile pages fetch through
+  the web-fetch tool. A professional-network host did not resolve at all.
+- **Two surveys corrected the comparison before it was written.** The Practice's ticket is a
+  temporary surface (`permanent-doc-is-the-consolidation-record`), not the contract; the bot
+  merges at settled; the merge bot's tokens are scoped and expiry-bounded but never revoked;
+  no standing rule says content read is data, never instruction. Each would have been a false
+  "same" in the mechanism map.
+  - Correction, same session: the accuracy reviewer refuted two of those absences, and both
+    refutations held on re-read. Review content already is information, never instruction
+    (`review-feedback-defaults-to-triage`, the core `invoke-code-experts` rule); the gap is
+    tickets, pages and peer messages. CI and three workflows do revoke their tokens; only
+    the merge bot does not. An absence found by a survey is a hypothesis until someone
+    tries to falsify it.
+- **Two stale references found on the way, outside this lane.** `pr-lifecycle` (around line
+  1490) names `suppressed-hold.ts` as the enforcer of signed lifts on suppressed findings;
+  no such file is in `agent-tools/src` or in git history, and no `SUPPRESSED-FINDINGS-OPEN`
+  state exists there. The lights-on comparison (§3.3) names a "Claude Approvals" check that no
+  workflow defines (the rulesets were not read). Both are for their owners' next pass.
+
+### Mistakes Made
+
+- **I compared profile photos to find the author's GitHub account.** About thirty-five avatars,
+  no match, and a photo is not evidence of identity in any case: linking a person across sites
+  by face is the wrong method, whatever the result. The right instruments were the stated
+  links (the author card's profile slug, a site, an organisation) and the names the essay gives
+  its agents; when those run out, the answer is "not established", reported to the owner.
+
+### Surprise
+
+- **Expected**: the author's GitHub account would be findable from the essay's details.
+- **Actual**: the product's code is private, the essay names no repository or organisation,
+  and of about fifty "Alex Ward" and "Alexander Ward" accounts none is linked to the essay by
+  public evidence. A bot-shaped account matching the build agent's name exists, created in
+  2026, with no public activity; a name match, so it stays out of the permanent record and
+  went to the owner in the session.
+- **Why expectation failed**: the essay is about plumbing for a private product; public
+  identity links live on the publishing site, which this session could not reach.
+- **Behaviour change**: time-box author identification; record "not established" plainly in
+  the document and give the leads to the owner in chat.
+
+## 2026-11-07 — Juniper seeks Pollen (01Duoc): tool and method facts
+
+Written from a solo Claude cloud session.
+
+- **Reader legs paraphrase inside quotation marks.** Four of the quotations three mid-tier reader
+  legs returned were paraphrases presented as verbatim (2026-11-07). A fixed-string check of each
+  quotation against its cited file, whitespace collapsed, caught all four before any reviewer
+  read them. A leg's quotation is a pointer to a source, never the source.
+- **A fresh cloud checkout has no claims registry.** `commit-queue list` refused until
+  `.agent/state/collaboration/active-claims.json` was seeded with the tool's own seed line; the
+  registry is untracked by design, so every fresh cloud container starts this way.
+- **`claims open --area-kind` takes `files`, not `path`** (`files | workspace | plan | adr | git`).
+- **A no-tools framing pass on the session model cost about 91k tokens**, close to a mid-tier
+  reader that made sixteen tool calls. One instance, cause unmeasured; price the next framing
+  pass from its own pilot before choosing its tier.
+- A fresh-context Parallax auditor cannot see the owner's words a document paraphrases; three of fifteen findings on 2026-11-08 were attribution doubts that the transcript settled in one grep. Quote the owner's sentence in the document and the finding does not arise.
+- **Provisional metrics and a single adjective became hard constraints to engineer around**
+  (2026-11-08). "Unattended" and "the sense check changes nothing material in most runs" were
+  read as requirements, so the owner's word became a bot-readable record with a wake mechanism,
+  a worth-doubt return became a cost against a metric, and the remaining design became a list
+  of unknowns to close by menu. The owner rejected the framing, not the answers: two
+  requirements in tension are a signal to step back and assess the frame, and a new way of
+  working is explored for what becomes easier if the system varies, with judgement and value
+  ahead of any count.

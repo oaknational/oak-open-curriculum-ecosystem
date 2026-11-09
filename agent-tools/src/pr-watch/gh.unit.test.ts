@@ -1,27 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { parsePrTarget, resolveGhPath } from './gh.js';
-
-describe('resolveGhPath', () => {
-  it('probes the known absolute locations and returns the first that exists', () => {
-    const path = resolveGhPath(undefined, (candidate) => candidate === '/usr/local/bin/gh');
-    expect(path).toBe('/usr/local/bin/gh');
-  });
-
-  it('throws a helpful error when gh is found nowhere', () => {
-    expect(() => resolveGhPath(undefined, () => false)).toThrow(/gh CLI not found/u);
-  });
-
-  it('accepts a valid absolute override', () => {
-    expect(resolveGhPath('/custom/bin/gh', () => true)).toBe('/custom/bin/gh');
-  });
-
-  it('rejects a relative override, a wrong basename, and a missing override', () => {
-    expect(() => resolveGhPath('bin/gh', () => true)).toThrow(/absolute path/u);
-    expect(() => resolveGhPath('/custom/bin/hub', () => true)).toThrow(/named gh/u);
-    expect(() => resolveGhPath('/custom/bin/gh', () => false)).toThrow(/does not exist/u);
-  });
-});
+import { parsePrTarget } from './gh.js';
 
 describe('parsePrTarget', () => {
   it('accepts a bare PR number with no repo', () => {

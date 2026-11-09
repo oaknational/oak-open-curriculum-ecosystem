@@ -18,10 +18,7 @@
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 
-import { err, flatMap, map, ok, type Result } from '@oaknational/result';
-
-import { failureAsError } from './failure-as-error.js';
-import { resolveTrustedGit } from './trusted-git.js';
+import { err, map, ok, type Result } from '@oaknational/result';
 
 /** Null byte: the record separator of git's `-z` input and output. */
 const NUL = '\u0000';
@@ -51,13 +48,12 @@ export interface SpawnedGit {
 type GitRun = (args: readonly string[], input: string) => GitRunOutput;
 
 /**
- * Why a git read gave no usable answer: no trusted git (`git-unavailable`, the
- * resolver's own refusal); a status the read does not accept, or none
- * (`git-failed`, git's own standard error); or a listing that names no file
- * (`empty-listing`: every checkout tracks files, so git read the wrong place).
+ * Why a git read gave no usable answer: a status the read does not accept, or
+ * none (`git-failed`, git's own standard error, or the spawn's own error when
+ * git could not start); or a listing that names no file (`empty-listing`:
+ * every checkout tracks files, so git read the wrong place).
  */
 export type GitReadFailure =
-  | { readonly kind: 'git-unavailable'; readonly message: string }
   | { readonly kind: 'git-failed'; readonly status: number | null; readonly stderr: string }
   | { readonly kind: 'empty-listing' };
 
@@ -101,7 +97,7 @@ export function parseTrackedFiles(output: GitRunOutput): Result<readonly string[
 
 /** List every tracked file, binaries included, of the repository at `repoRoot`. */
 export function listTrackedFiles(repoRoot: string): Result<readonly string[], GitReadFailure> {
-  return flatMap(gitRunAt(repoRoot), (run) => parseTrackedFiles(run(['ls-files', '-z'], '')));
+  return parseTrackedFiles(gitRunAt(repoRoot)(['ls-files', '-z'], ''));
 }
 
 /**
@@ -170,8 +166,9 @@ export function listIgnoredPaths(
   repoRoot: string,
   candidates: readonly string[],
 ): Result<ReadonlySet<string>, GitReadFailure> {
-  return flatMap(gitRunAt(repoRoot), (run) =>
-    parseIgnoredPaths(candidates, run(PROBE_ARGS, ignoreProbeInput(candidates))),
+  return parseIgnoredPaths(
+    candidates,
+    gitRunAt(repoRoot)(PROBE_ARGS, ignoreProbeInput(candidates)),
   );
 }
 
@@ -186,9 +183,6 @@ export function describeGitReadFailure(failure: GitReadFailure): string {
 }
 
 function failureLine(failure: GitReadFailure): string {
-  if (failure.kind === 'git-unavailable') {
-    return failure.message;
-  }
   if (failure.kind === 'empty-listing') {
     return 'git listed no tracked files, so it read the wrong place; refusing a vacuous pass';
   }
@@ -223,28 +217,12 @@ function gitFailed(output: GitRunOutput): GitReadFailure {
 }
 
 /**
- * The failure for a git the trusted resolver could not find: its refusal
- * message, carried verbatim.
- *
- * @param thrown - What {@link resolveTrustedGit} threw.
- * @returns The `git-unavailable` failure.
+ * The live runner: git by name, with `PATH` as the trust root (the Sonar
+ * disposition policy's S4036 section), from `repoRoot`, no shell. A git that
+ * cannot start is a `git-failed` read with no status, the spawn's own error
+ * its standard error ({@link toGitRunOutput}).
  */
-export function gitUnavailable(thrown: unknown): GitReadFailure {
-  return { kind: 'git-unavailable', message: failureAsError(thrown, 'resolveTrustedGit').message };
-}
-
-/**
- * The live runner: git by its trusted absolute path, from `repoRoot`, no shell.
- * A missing trusted git is the resolver's refusal, carried verbatim, never
- * rebranded ({@link resolveTrustedGit}).
- */
-function gitRunAt(repoRoot: string): Result<GitRun, GitReadFailure> {
-  let git: string;
-  try {
-    git = resolveTrustedGit();
-  } catch (error) {
-    return err(gitUnavailable(error));
-  }
+function gitRunAt(repoRoot: string): GitRun {
   const options = { cwd: repoRoot, encoding: 'utf8', maxBuffer: MAX_GIT_OUTPUT_BYTES } as const;
-  return ok((args, input) => toGitRunOutput(spawnSync(git, args, { ...options, input })));
+  return (args, input) => toGitRunOutput(spawnSync('git', args, { ...options, input }));
 }

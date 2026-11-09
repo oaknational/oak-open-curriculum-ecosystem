@@ -3,7 +3,7 @@ boundary: B1-Governance
 doc_role: policy
 authority: sonar-disposition
 status: active
-last_reviewed: 2026-09-09
+last_reviewed: 2026-11-05
 ---
 
 # Sonar Disposition Policy
@@ -15,15 +15,16 @@ code-scanning analyser — security hotspots, security-class issues and
 quality issues alike — are resolved, so that the same reasoning is not
 re-derived per site by every reviewer. Since the owner's ruling of
 2026-09-08 (§[One-Outcome Rule](#one-outcome-rule-owner-ruled-2026-09-08))
-that resolution is a fix in the tree, with one named exception; the
+that resolution is a fix in the tree, with two named exceptions; the
 documented classes below carry what each rule sees and which change clears
 it, so a finding in a known class is cured by reference and only a site
 outside every documented class needs fresh judgement.
 
 The policy composes with the analysers' own records: a cured finding closes
-on the next analysis of the corrected code, and the one excepted query is
+on the next analysis of the corrected code, the first exception's query is
 excluded by tracked CodeQL configuration, explained by ADR-219 and the
-route comments.
+route comments, and a site within §S4036's class is marked under the
+second exception.
 Together they give an auditable record: _what the pattern is_, _what
 clears it_, and _which sites instantiate it_.
 
@@ -46,14 +47,15 @@ Owner ruling, 2026-09-08, verbatim: **"We don't dismiss issues, we fix
 them."** Every finding from either analyser resolves to **one outcome**:
 `FIXED` — a change in the tree after which the finding no longer fires,
 closed by the next analysis. `FALSE_POSITIVE`, `SAFE`, `ACCEPTED` and
-`ACKNOWLEDGED` are analyser-side states this policy does not grant: a
+`ACKNOWLEDGED` are analyser-side states this policy grants only under the
+second exception below (§S4036): a
 finding that is genuinely wrong about a site is still cured by a change
 that stops it firing (a literal removed, a shape restructured, a value
 sourced differently), never by an act in the analyser's console. Precedent
 in the analyser (a site marked before the ruling) licenses nothing at the
 next site.
 
-**The one exception, owner-ruled the same day, verbatim:** "in regard to
+**The first exception, owner-ruled the same day, verbatim:** "in regard to
 the rate limiting work, we are going to pause that for now, and leave
 comments in the code that recognise that additional in-process rate
 limiting would provide defence in depth, but that we regard the two sets of
@@ -69,8 +71,9 @@ verbatim: "a permanent exclusion is allowed, but ONLY for that one issue".
 The mechanism is the `query-filters` entry in
 `.github/codeql/codeql-config.yml`, which excludes the query for every file
 the analysis scans, so a new route anywhere raises no alert and ADR-219's
-edge rule is the control for it. No other query or finding class is
-excluded, filtered or dismissed, and none is admitted. The analysers' path
+edge rule is the control for it. No other query is excluded or filtered,
+and no other finding class is dismissed or admitted beyond the second
+exception below. The analysers' path
 exclusions are scope rules, not finding-class exceptions: the studio-source
 preservation tier (§2026-07-19 amendment, ADR-213) and the duplication
 globs under §Expansion discipline. The owner's 2026-09-08 word also asked
@@ -81,24 +84,36 @@ cite ADR-219 but do not yet recognise it (the `code-scanning-alerts-to-zero`
 plan's unit 6). The exclusion is tracked in the tree, so it is never
 re-litigated by hand.
 
+**The second exception, owner-ruled 2026-11-05, verbatim:** "adopt the
+by-name ruling on engraph". It carries the owner's S4036 ruling of
+2026-11-03 (§[S4036](#s4036--os-commands-resolved-via-path)): tooling invokes
+each binary by name, with `PATH` as the trust root. No change in the tree
+cures a site within that class without choosing a binary's path, which the
+ruling rejects, so such a site is marked `FALSE_POSITIVE` (an issue) or
+`SAFE` (a hotspot) with the class's canonical rationale. A site outside the
+class is cured like any other finding.
+
 ## Disposition Workflow
 
 1. **Is the finding the excepted query?** `js/missing-rate-limiting` is
    excluded in `.github/codeql/codeql-config.yml`, so it should never
    appear. If it does, the tracked exclusion has regressed: restore the
    configuration, never an act in the analyser's console. It is not a class
-   in the catalogue below, and no step of this workflow has a server-side
-   action.
-2. Otherwise **match the rule key** to a documented class below.
-3. **Match the site shape** against the class's shape criteria; they say
+   in the catalogue below.
+2. **Is the finding S4036 at a site within §S4036's class?** Mark it there,
+   `FALSE_POSITIVE` for an issue or `SAFE` for a hotspot, with the class's
+   canonical rationale: the second exception, and the only server-side act
+   in this workflow. A site outside the class continues below.
+3. Otherwise **match the rule key** to a documented class below.
+4. **Match the site shape** against the class's shape criteria; they say
    what the analyser is seeing, which is what tells you the cure.
-4. Apply the class's **cure**: make the change and let the next analysis
+5. Apply the class's **cure**: make the change and let the next analysis
    close the finding. There is no server-side action here; a `FIXED` state
    is assigned by analysis, never by hand.
-5. If the rule is documented but the site shape does not match: do per-site
+6. If the rule is documented but the site shape does not match: do per-site
    review, cure it, and consider whether the class needs a sub-clause
    amendment recording the new shape and its cure.
-6. If the rule is not yet documented: cure the site and add the class to
+7. If the rule is not yet documented: cure the site and add the class to
    this document at the next consolidation pass.
 
 ## General Disposition Principles
@@ -113,9 +128,9 @@ These govern _how_ a finding is dispositioned, beneath the per-class catalogue:
   [decision lenses][principles] (LTAE first) decisively resolve which change
   cures a site, decide it — framing a lens-resolved call as an owner-fork is
   analysis-passback. Escalate only when all lenses genuinely fail or the
-  scope is product/feature. (The one exception, the tracked exclusion of
-  `js/missing-rate-limiting`, was the owner's ruling; the cure
-  _determination_ at a site never is.)
+  scope is product/feature. (The exceptions, the tracked exclusion of
+  `js/missing-rate-limiting` and the S4036 by-name class, were the owner's
+  rulings; the cure _determination_ at a site never is.)
 - **A deliberately-adopted profile's findings are a worklist, not noise.** When
   the owner activates an analyser profile on purpose, the target is zero,
   by cure. Do NOT frame the resulting backlog as an activation-wave
@@ -129,8 +144,8 @@ These govern _how_ a finding is dispositioned, beneath the per-class catalogue:
   dismissal buys silence, not absence: cure structurally in the code
   instead. The posture was vindicated when a flagged pattern proved to be a
   real super-linear-backtracking ReDoS vector. Agents never dismiss alerts;
-  the One-Outcome Rule's one exception is a tracked query exclusion, not a
-  dismissal.
+  the One-Outcome Rule's first exception is a tracked query exclusion, not a
+  dismissal, and its second marks an S4036 site within §S4036's class.
 - **Triage by cause-class, but a class splits by disposition-route.** A rule
   class (e.g. a regex backlog) does not resolve uniformly: generated output →
   fix at the generator; generator source → fix in place + regen; hand-written →
@@ -277,33 +292,79 @@ linear constructs (negated character classes, anchored alternations,
 bounded quantifiers) or plain string operations, per the rule's documented
 strategies; on a request-handler path the rewrite is urgent.
 
-### S4036 — OS commands resolved via PATH (FIX-only — no SAFE disposition)
+### S4036 — OS commands resolved via PATH
 
-**Pattern**: `spawnSync`, `spawn`, `exec`, `execSync`, `execFileSync` etc.
-resolving a command name (`pnpm`, `git`, `typedoc`) via PATH rather than
-absolute path.
+**Pattern**: `spawn`, `spawnSync`, `exec`, `execSync`, `execFile`,
+`execFileSync` and similar calls resolve a command name (`git`, `pnpm`, `gh`,
+`gitleaks`, `typedoc`) through `PATH`, not an absolute path.
 
-**Disposition**: there is none — S4036 is always **FIXED**, never disposed
-`SAFE`. Execute the binary by a fixed absolute path so a user-writable `PATH`
-entry cannot shadow it (the security property is the fixed absolute path, not
-any guarantee the location is non-writable). For `git`, the canonical fix is
-`resolveTrustedGit()` in `agent-tools/src/core/trusted-git.ts` (an absolute path
-from a fixed, platform-partitioned allowlist of complete binary paths, resolved
-without consulting `PATH` — partitioned because a rooted POSIX path is
-drive-relative on win32 and a `C:\...` literal is a legal relative filename on
-POSIX, so each platform may only ever probe its own family); other binaries
-follow the same absolute-path shape.
+**Ruling** (owner, 2026-11-03):
 
-**Why no SAFE class**: PATH-pinning (overriding `env.PATH` to trusted
-directories) does **not** clear S4036 — the analyser flags the by-name call
-regardless — so a SAFE disposition would document a non-fix as acceptable. The
-genuine fix is cheap and available, so per `never-disable-checks` and the
-One-Outcome Rule above, S4036 resolves to FIXED. A prior allowance for this
-class is reviewed and migrated, never extended.
+- Tooling invokes each binary it needs by name, as any repository does.
+- Code must not choose a binary's path or rewrite `PATH` for it, and nothing
+  in the repository may depend on one machine's directory layout.
+- `PATH` is the trust root. The operator's environment, local or CI, decides
+  which binary a name resolves to. A writer of a directory on that `PATH`
+  already controls the operator's shell, so no path chosen inside the
+  repository adds a boundary.
+- A binary check exists only where a quality gate or CI needs the binary, and
+  only so that a missing tool fails early with a helpful message, never late
+  and opaque. The check is `command -v` plus, where the version matters, a
+  version check, run once.
 
-Where a platform offers no admin-protected install location for a binary, the
-compliant outcome is a loud refusal on that platform, never an allowlist entry
-in user-writable space.
+**Decision criteria**: a site is within the class if and only if both hold:
+
+- The command is a binary the repository's tooling, build, tests or CI need,
+  named literally at the call site or by a constant.
+- No external input reaches a shell. Either the arguments pass as an argv
+  array with no `shell` option, or the call's shell string is wholly literal.
+  With `shell: true`, Node joins an argv array into one shell string, so an
+  array alone does not keep input from the shell. Under `cross-spawn` on
+  Windows, a `.cmd` or `.bat` target runs under `cmd.exe`, and a shim such as
+  `pnpm.cmd` reads its arguments a second time, where a double quote in one
+  can end its quoting. There an argv array keeps input from the shell only
+  when no argument can hold that character: the repository's own literals,
+  and paths to files that exist, since Windows forbids it in a file name.
+
+**Outcome for a site within the class**, by the finding's type:
+
+- In this project the rule raises a vulnerability **issue**. It is
+  `FALSE_POSITIVE`: the defect it describes, a command resolved through a
+  `PATH` the operator does not control, is not present, because `PATH` is the
+  trust root.
+- Where the rule raised a **hotspot** (it did before 2026-07), the hotspot is
+  `SAFE`.
+
+**FIX** a site outside the class. Once fixed, it is within the class:
+
+- External input that reaches a shell: move the call to argv form with no
+  `shell` option (`execFile`, or `spawn` with an arguments array), so the
+  input can only ever be an argument.
+- A command name taken from input: choose it from a fixed set of literal names
+  at the site.
+
+**Canonical rationale**: "repository-required binary invoked by name; `PATH`
+is the trust root (§S4036 ruling); no external input reaches a shell".
+
+**Worked example**: `realPnpmRunner` in `agent-tools/src/spawn/build-runner.ts`
+runs the repository's pnpm by name with an argv array and no `shell` option.
+It launches through `cross-spawn`, which on Windows runs a `pnpm.cmd` shim
+under `cmd.exe` with its own argument escaping; the arguments are the
+repository's own, so no external input reaches that shell.
+
+**Delta from the prior class**: S4036 was FIX-only, cured by an absolute path
+chosen from a fixed list of directories. The ruling gives a site within the
+class the outcomes above instead. An absolute path is the only change that
+clears the analyser, and it makes the repository depend on one machine's
+directory layout, which the ruling rejects. No site previously dispositioned
+under this class needs re-disposition:
+
+- The eight hotspots marked `SAFE` before the class became FIX-only each name
+  a repository binary literally. Six pass an argv array, and two run a wholly
+  literal shell string.
+- The one issue the rule has raised, on the `gitleaks` call in
+  `agent-tools/src/secret-scan/run-push-secret-scan.ts`, was accepted in
+  2026-07 and stays resolved.
 
 ### S2245 — Pseudorandom number generator (`Math.random()`)
 
@@ -726,8 +787,8 @@ say what the analyser sees and which change clears it, and the next analysis
 closes the finding. The absence of a file-based ignore is not a gap to be
 filled by a server-side mark — since the 2026-09-08 ruling there is no mark
 to make, for S5443 / S5332 / S1313 in test fixtures as for every other
-class. The one exception, the rate-limiting query, is no per-site record
-either: it is the tracked `query-filters` entry in
+class but S4036's (the second exception). The first exception, the
+rate-limiting query, is no per-site record either: it is the tracked `query-filters` entry in
 `.github/codeql/codeql-config.yml`, which knowingly silences that query for
 every route (§One-Outcome Rule).
 
@@ -834,6 +895,30 @@ silenced for every route to come, and ADR-219's edge rule is the control
 for them. The scope does not widen: no other query or finding class is
 excluded or dismissed, and the path scope rules (the studio-source tier of
 the 2026-07-19 amendment, the duplication globs) are unchanged by this one.
+
+## 2026-11-05 amendment: S4036 by name, the second exception, owner-ruled
+
+Owner ruling (2026-11-05, verbatim): "adopt the by-name ruling on engraph".
+Given when the upstream carrier at release 1.186.8 met this estate's opposite
+cure. Upstream invokes `pnpm`, `gh` and `gitleaks` by name under the owner's
+S4036 ruling of 2026-11-03, and this estate resolved each binary to an
+absolute path from a platform-partitioned allowlist.
+
+Delta from prior: §S4036 takes the upstream text whole except its worked
+example, and the §One-Outcome Rule gains its second exception, so a site
+within the class is marked rather than cured. The Disposition Workflow gains
+the step that marks it. The first exception's scope is unchanged. The
+§S4036 delta's counts are the upstream analyser project's; this estate's
+analyser raises S4036 at each by-name site, and each is marked under the
+second exception.
+
+The worked example is this estate's own. Upstream's names `run-typedoc.ts`,
+which here runs TypeDoc through the package's own entry under
+`process.execPath`, never by name. At this amendment's date `git`,
+`gitleaks` and the smokes' shell still resolve through the absolute-path
+resolvers in `agent-tools/src/core/` (`trusted-git.ts`,
+`trusted-gitleaks.ts`, `trusted-shell.ts`); each moves to by-name in its own
+change.
 
 ## Cross-references
 
