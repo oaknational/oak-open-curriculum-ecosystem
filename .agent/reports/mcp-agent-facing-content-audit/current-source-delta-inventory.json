@@ -916,7 +916,7 @@
     },
     {
       "file": "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search/year-filter-schema.ts",
-      "semanticSha256": "5ec3365a88fb342221551d34a26e33489af33bae5f3708c3a64c0c5a17f51e6b",
+      "semanticSha256": "0fa65cd7182a0231d07b5f4d0164d1dd8db759dd0f13e07772a1f632421a6b91",
       "itemIds": [],
       "exclusionReason": "Reviewed engineering implementation change; no new authored agent-facing content."
     },

@@ -71,7 +71,7 @@ export const SEARCH_YEAR_FILTER_DELTA_REVIEWS: Readonly<Record<string, CurrentSo
     // schemas so the two cannot diverge. Input validation, not authored text:
     // the served description of `year` is C078, reviewed at FLAT_ZOD_SCHEMA.
     [YEAR_FILTER_SCHEMA]: excluded(
-      '5ec3365a88fb342221551d34a26e33489af33bae5f3708c3a64c0c5a17f51e6b',
+      '0fa65cd7182a0231d07b5f4d0164d1dd8db759dd0f13e07772a1f632421a6b91',
       IMPLEMENTATION_ONLY,
     ),
     [VALIDATION]: excluded(
