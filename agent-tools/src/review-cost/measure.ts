@@ -48,6 +48,28 @@ function reviewedHeads(input: MeasureInput): { oid: string; committedDate: strin
   );
 }
 
+/**
+ * The heads a declared reviewer's landed review binds that the commit list does
+ * not hold. GitHub serves at most a pull request's newest 250 commits, so on a
+ * longer history an older reviewed head can fall outside the list; its round
+ * would vanish and the loop would price short. The gate refuses a windowed list
+ * that loses one, rather than count the loop short.
+ */
+export function reviewedHeadsMissingFromList(
+  harvest: RecordedHarvest,
+  expectedReviewers: readonly string[],
+): string[] {
+  const listed = new Set(harvest.commits.map((commit) => commit.oid));
+  const missing = harvest.reviews
+    .filter(
+      (review) =>
+        landed(review) && expectedReviewers.some((login) => sameLogin(review.author, login)),
+    )
+    .map((review) => review.commitOid)
+    .filter((oid): oid is string => oid !== null && !listed.has(oid));
+  return [...new Set(missing)];
+}
+
 type Thread = RecordedHarvest['reviewThreads'][number];
 
 // The threads of a head whose originating review landed (an unbound thread counts).

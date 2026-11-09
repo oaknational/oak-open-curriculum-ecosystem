@@ -2,7 +2,7 @@ import { readBudget } from './budget.js';
 import { DEFAULT_POLICY, reviewCost, type CostReport } from './cost.js';
 import { gitDiffStat } from './git.js';
 import { readLiveHarvest } from './harvest.js';
-import { measureRounds } from './measure.js';
+import { measureRounds, reviewedHeadsMissingFromList } from './measure.js';
 
 /** The repository's automatic reviewers — the declared expected set when `--expect` is absent. */
 const DEFAULT_EXPECTED_REVIEWERS = ['copilot-pull-request-reviewer', 'chatgpt-codex-connector'];
@@ -22,12 +22,22 @@ export interface GatePricing {
 /** Price one pull request as the gate prices it, with the base identity the sync test needs. */
 export function priceForGate(input: PricingInput): GatePricing {
   const live = readLiveHarvest({ number: input.number, repo: input.repo });
+  const expectedReviewers =
+    input.expectedReviewers.length > 0 ? input.expectedReviewers : DEFAULT_EXPECTED_REVIEWERS;
+  const missing = live.commitsWindowed
+    ? reviewedHeadsMissingFromList(live.harvest, expectedReviewers)
+    : [];
+  if (missing.length > 0) {
+    throw new Error(
+      `the commit list GitHub serves (its newest 250) lacks reviewed head ${missing.join(', ')}, so the loop cannot be priced in full`,
+    );
+  }
   const rounds = measureRounds({
     harvest: live.harvest,
-    expectedReviewers:
-      input.expectedReviewers.length > 0 ? input.expectedReviewers : DEFAULT_EXPECTED_REVIEWERS,
-    // The opening push is measured from the parent of the pull request's first commit,
-    // which holds for an open and for a merged pull request alike.
+    expectedReviewers,
+    // The opening push is measured from the parent of the first commit the list holds:
+    // the pull request's first commit, open or merged, or on a history past GitHub's
+    // 250-commit window, the window's first.
     baseRef: `${live.harvest.commits[0]?.oid ?? live.harvest.headRefOid}^`,
     diff: gitDiffStat,
   });

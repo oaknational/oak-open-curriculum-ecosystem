@@ -13,12 +13,16 @@ import { parseRecordedHarvest, type RecordedHarvest } from '../pr-tally/harvest.
  *
  * The commits connection is read page by page, since a pull request's history
  * can outgrow one page (a fork's merge back carries thousands of commits).
- * GitHub serves at most a pull request's newest 250 commits, so on a longer
- * history the first commit served is not the branch's first. The reviewed
- * heads the gate prices are recent, so they fall inside what is served.
- * Every other connection is read once, and any connection still truncated is
- * refused by the parser.
+ * GitHub serves at most a pull request's newest 250 commits and then reports
+ * no further page, so the harvest also says when the list is windowed (fewer
+ * commits served than the pull request holds); the gate refuses a windowed
+ * list that loses a reviewed head. Every other connection is read once, and
+ * any connection still truncated is refused by the parser.
  */
+
+/** The commits selection both queries read, so a field added reaches both. */
+const COMMITS_SELECTION =
+  'pageInfo { hasNextPage endCursor } totalCount nodes { commit { oid committedDate } }';
 
 const RECORDING_QUERY = `query($owner: String!, $name: String!, $number: Int!) {
   repository(owner: $owner, name: $name) {
@@ -26,7 +30,7 @@ const RECORDING_QUERY = `query($owner: String!, $name: String!, $number: Int!) {
       number headRefOid baseRefName body
       baseRef { target { oid } }
       mergeCommit { oid }
-      commits(first: 100) { pageInfo { hasNextPage endCursor } nodes { commit { oid committedDate } } }
+      commits(first: 100) { ${COMMITS_SELECTION} }
       reviewThreads(first: 100) { pageInfo { hasNextPage endCursor } nodes {
         id isResolved isOutdated path line originalLine startLine originalStartLine
         comments(first: 50) { pageInfo { hasNextPage endCursor } nodes {
@@ -42,16 +46,22 @@ const RECORDING_QUERY = `query($owner: String!, $name: String!, $number: Int!) {
 const COMMIT_PAGE_QUERY = `query($owner: String!, $name: String!, $number: Int!, $after: String!) {
   repository(owner: $owner, name: $name) {
     pullRequest(number: $number) {
-      commits(first: 100, after: $after) { pageInfo { hasNextPage endCursor } nodes { commit { oid committedDate } } }
+      commits(first: 100, after: $after) { ${COMMITS_SELECTION} }
     }
   }
 }`;
 
-/** Pages read after the first before the harvest stops, leaving the parser to refuse the rest: 20,000 commits. */
-const MAX_FURTHER_COMMIT_PAGES = 200;
+/**
+ * Pages read after the first: GitHub serves at most 250 commits (100, 100,
+ * 50), so two further pages hold all it serves. A further page past these is
+ * left to the parser to refuse, which is the prompt to revisit if GitHub ever
+ * serves more.
+ */
+const MAX_FURTHER_COMMIT_PAGES = 2;
 
 const COMMITS = z.object({
   pageInfo: z.object({ hasNextPage: z.boolean(), endCursor: z.string().nullable() }),
+  totalCount: z.number().int().nonnegative(),
   nodes: z.array(z.unknown()),
 });
 
@@ -77,7 +87,7 @@ function readAllCommits(first: Commits, readPage: (after: string) => Commits): C
     nodes.push(...next.nodes);
     pageInfo = next.pageInfo;
   }
-  return { pageInfo, nodes };
+  return { pageInfo, totalCount: first.totalCount, nodes };
 }
 
 interface LiveHarvest {
@@ -85,6 +95,8 @@ interface LiveHarvest {
   readonly body: string;
   /** The tip of the pull request's base branch as GitHub holds it; undefined when the base is gone. */
   readonly baseRefOid: string | undefined;
+  /** True when GitHub served fewer commits than the pull request holds: its newest 250 only. */
+  readonly commitsWindowed: boolean;
 }
 
 interface HarvestOptions {
@@ -153,6 +165,7 @@ export function readLiveHarvest(options: HarvestOptions): LiveHarvest {
     harvest: parseRecordedHarvest({ ...pullRequest, commits }),
     body: pullRequest.body ?? '',
     baseRefOid: pullRequest.baseRef?.target.oid,
+    commitsWindowed: commits.nodes.length < commits.totalCount,
   };
 }
 
