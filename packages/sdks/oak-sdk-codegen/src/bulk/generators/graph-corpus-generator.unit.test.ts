@@ -134,12 +134,18 @@ describe('generateGraphCorpusData', () => {
 
   const baseKeyword: ExtractedKeyword = {
     term: 'denominator',
-    displayTerm: 'Denominator',
     definition: 'The number below the line in a fraction.',
     frequency: 1,
     subjects: ['maths'],
     firstYear: 3,
     lessonSlugs: ['comparing-fractions'],
+    definitions: [
+      {
+        term: 'Denominator',
+        definition: 'The number below the line in a fraction.',
+        lessonSlugs: ['comparing-fractions'],
+      },
+    ],
   };
 
   describe('graph metadata', () => {

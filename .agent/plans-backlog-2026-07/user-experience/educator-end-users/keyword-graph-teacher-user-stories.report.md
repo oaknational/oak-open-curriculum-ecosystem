@@ -4,7 +4,7 @@ collection: user-experience
 audience: educator-end-users
 type: discovery-note
 status: captured-for-prioritisation
-last_updated: 2026-06-11
+last_updated: 2026-09-14
 ---
 
 # Keyword-graph teacher user stories — discovery note
@@ -25,9 +25,12 @@ last_updated: 2026-06-11
 the production alpha: a bounded, anchored, frequency-ranked keyword retrieval
 over the curriculum graph corpus. Every call is anchored by `subject` +
 `keyStage` (both required), optionally narrowed by `unitSlugs` /
-`lessonSlugs`, and returns a ranked top-N term set in which decorated
-keywords carry canonical Oak descriptions, their placing lessons, and a
-`firstYear` trace (the teaching year a term first appears).
+`lessonSlugs`, and returns a ranked top-N term set in which each keyword
+carries the definitions its in-scope lessons authored (each naming those
+lessons) and a `firstYear` trace (the teaching year a term first appears).
+Under the ADR-086 amendment (2026-09-13) a term's definition comes from the
+lessons in scope, not one corpus-wide description, so "subject" in art is
+not "subject" in English.
 
 The EEF re-validation re-proof
 ([report §3](../../../reports/eef-revalidation-report-2026-06-11.md))
@@ -47,11 +50,12 @@ never invents definitions.
 ### 1. Explicit vocabulary planning
 
 A teacher preparing a unit or lesson asks for the key vocabulary to
-pre-teach. The frequency-ranked, description-carrying bounded term set is the
+pre-teach. The frequency-ranked, definition-carrying bounded term set is the
 pre-teach artefact directly — tier-2/3 vocabulary instruction support.
 
-- **Data support (verified)**: the ranked decorated set with canonical
-  descriptions is the tool's core response shape.
+- **Data support (re-verified 2026-09-14)**: the ranked set, each keyword
+  with the definitions its in-scope lessons authored, is the tool's core
+  response shape.
 - **Open**: whether teachers reach for this through an existing prompt or
   need a named entry point.
 
@@ -63,8 +67,8 @@ keyword→lesson placements plus the `firstYear` trace carry exactly this.
 Pairs naturally with `get-prior-knowledge-graph` — prerequisites say what was
 *taught*; keywords say what was *named*.
 
-- **Data support (verified)**: `firstYear` on keyword nodes; placing-lesson
-  decorations within the anchor.
+- **Data support (re-verified 2026-09-14)**: `firstYear` on keyword nodes;
+  the lessons that author each definition within the anchor.
 - **Open**: presentation shape (the pairing is an agent-side composition).
 
 ### 3. Position-anchored vocabulary bridge (folded into the plan)
@@ -84,12 +88,13 @@ continuity anchors, new terms become the pre-teach list.
 
 ### 4. Adaptation for EAL/SEND
 
-Bounded ranked terms with canonical Oak descriptions as the raw material for
-simplification and glossary generation. The canonical description is the
-control: the agent simplifies *from* Oak's definition rather than inventing
-one (ADR-194 boundary, same shape as the EEF caveat discipline).
+Bounded ranked terms with the definitions Oak's lessons authored as the raw
+material for simplification and glossary generation. The authored definition
+is the control: the agent simplifies *from* Oak's definition rather than
+inventing one (ADR-194 boundary, same shape as the EEF caveat discipline).
 
-- **Data support (verified)**: canonical descriptions on decorated keywords.
+- **Data support (re-verified 2026-09-14)**: lesson-authored definitions on
+  each keyword, specific to the anchored scope.
 - **Open**: whether adaptation quality holds without curriculum-team review;
   this story most needs observed real use before any build.
 

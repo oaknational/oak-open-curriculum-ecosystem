@@ -11,10 +11,10 @@
  *
  * Results are bounded top-N ({@link DEFAULT_KEYWORD_LIMIT} default, ceiling
  * {@link MAX_KEYWORD_LIMIT}) with honest totals (`totalMatchingKeywords`,
- * `hasMore`). Each entry is decorated with its in-scope placing lessons
- * (id-sorted, windowed at {@link KEYWORD_LESSON_DECORATION_LIMIT} with
- * `hasMoreLessons`) — richness arrives via edge traversal on the one-graph
- * substrate, never a fat node.
+ * `hasMore`). Each entry carries every definition its in-scope lessons
+ * authored, each with those lessons windowed (`keyword-definitions`) —
+ * richness arrives via edge traversal and the corpus's `keywordDefinitions`
+ * section, never a fat node.
  *
  * The underlying indexes live in the `keyword-projection` module, constructed
  * once at module load (the EEF precedent).
@@ -30,6 +30,7 @@ import {
 } from '@oaknational/sdk-codegen/graph-corpus';
 
 import { resolveAnchors, type ResolvedAnchors } from './anchor-resolution.js';
+import { scopedDefinitions, type KeywordDefinitionLessons } from './keyword-definitions.js';
 import {
   buildCurriculumKeywordProjection,
   type CurriculumKeywordProjection,
@@ -41,20 +42,17 @@ export const DEFAULT_KEYWORD_LIMIT = 25;
 /** Inclusive top-N ceiling; a larger limit is `KeywordLimitInvalid` (bounded-retrieval contract). */
 export const MAX_KEYWORD_LIMIT = 100;
 
-/** Per-keyword in-scope lesson decoration window (id-sorted; `hasMoreLessons` marks the cut). */
-export const KEYWORD_LESSON_DECORATION_LIMIT = 10;
-
-/** One ranked keyword with its in-scope placement count and windowed lesson decoration. */
-export interface KeywordLessons {
+/** One ranked keyword with its in-scope placement count and the definitions its in-scope lessons author. */
+export interface RankedKeyword {
   readonly keyword: GraphCorpusKeywordNode;
+  /** Distinct in-scope placing lessons. */
   readonly scopedLessonCount: number;
-  readonly lessons: readonly GraphCorpusLessonNode[];
-  readonly hasMoreLessons: boolean;
+  readonly definitions: readonly KeywordDefinitionLessons[];
 }
 
 /** Anchored result: ranked bounded keywords with honest totals and anchor resolution reports. */
 export interface KeywordSubgraph {
-  readonly keywords: readonly KeywordLessons[];
+  readonly keywords: readonly RankedKeyword[];
   readonly totalMatchingKeywords: number;
   readonly limit: number;
   readonly hasMore: boolean;
@@ -90,17 +88,16 @@ function validateLimit(limit: number | undefined): Result<number, KeywordLimitIn
   return ok(resolved);
 }
 
-/** Builds one ranked entry: the keyword with its id-sorted, windowed in-scope lessons. */
+/** Builds one ranked entry: the keyword with every definition its in-scope lessons authored. */
 function keywordEntry(
   keyword: GraphCorpusKeywordNode,
   scopedLessons: readonly GraphCorpusLessonNode[],
-): KeywordLessons {
-  const sorted = [...scopedLessons].sort((a, b) => a.id.localeCompare(b.id));
+): RankedKeyword {
+  const rows = projection.definitionsByKeywordId.get(keyword.id) ?? [];
   return {
     keyword,
-    scopedLessonCount: sorted.length,
-    lessons: sorted.slice(0, KEYWORD_LESSON_DECORATION_LIMIT),
-    hasMoreLessons: sorted.length > KEYWORD_LESSON_DECORATION_LIMIT,
+    scopedLessonCount: scopedLessons.length,
+    definitions: scopedDefinitions(rows, scopedLessons),
   };
 }
 
@@ -166,7 +163,7 @@ function rankScopedKeywords(
   subject: string,
   keyStage: string,
   scope: NarrowingScope,
-): readonly KeywordLessons[] {
+): readonly RankedKeyword[] {
   const scopedLessonsByKeyword = new Map<
     GraphCorpusNodeId,
     { readonly keyword: GraphCorpusKeywordNode; readonly lessons: GraphCorpusLessonNode[] }
