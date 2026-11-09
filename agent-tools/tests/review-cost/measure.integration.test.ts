@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { parseRecordedHarvest } from '../../src/pr-tally/harvest.js';
 import { reviewCost } from '../../src/review-cost/cost.js';
-import { measureRounds } from '../../src/review-cost/measure.js';
+import { measureRounds, reviewedHeadsMissingFromList } from '../../src/review-cost/measure.js';
 import type { DiffStat } from '../../src/review-cost/measure.js';
 import pr138 from '../pr-tally/fixtures/pr-138-harvest.json' with { type: 'json' };
 
@@ -122,5 +122,27 @@ describe('measureRounds — one measure per reviewed head of the #138 recording'
       diff: () => sameFiles,
     });
     expect(reviewCost(rounds, 2).verdict).toBe('exhausted');
+  });
+});
+
+// GitHub serves at most a pull request's newest 250 commits, so on a longer
+// history an older reviewed head can fall outside the list the gate reads.
+describe('reviewedHeadsMissingFromList', () => {
+  const harvest = parseRecordedHarvest(pr138);
+  const opening = harvest.commits
+    .filter((commit) => commit.oid.startsWith('352ad0ee5'))
+    .map((commit) => commit.oid);
+
+  it("names a declared reviewer's reviewed head that the commit list lacks", () => {
+    const windowed = {
+      ...harvest,
+      commits: harvest.commits.filter((commit) => !opening.includes(commit.oid)),
+    };
+
+    expect(reviewedHeadsMissingFromList(windowed, EXPECTED)).toStrictEqual(opening);
+  });
+
+  it('names none when the list holds every reviewed head', () => {
+    expect(reviewedHeadsMissingFromList(harvest, EXPECTED)).toStrictEqual([]);
   });
 });
