@@ -7,6 +7,7 @@ import { APP_RATE_LIMITING_DELTA_REVIEWS } from './current-source-delta-reviews-
 import { APP_REGISTRATION_DELTA_REVIEWS } from './current-source-delta-reviews-app-registration.js';
 import { APP_TEST_HELPERS_DELTA_REVIEWS } from './current-source-delta-reviews-app-test-helpers.js';
 import { SDK_DELTA_REVIEWS } from './current-source-delta-reviews-sdk.js';
+import { SEARCH_YEAR_FILTER_DELTA_REVIEWS } from './current-source-delta-reviews-search.js';
 import { SDK_CODEGEN_DELTA_REVIEWS } from './current-source-delta-reviews-sdk-codegen.js';
 import { SDK_GUIDANCE_RESOURCES_DELTA_REVIEWS } from './current-source-delta-reviews-sdk-guidance-resources.js';
 import { SDK_GENERATED_REGISTRY_DELTA_REVIEWS } from './current-source-delta-reviews-sdk-generated-registry.js';
@@ -35,6 +36,7 @@ export const CURRENT_SOURCE_DELTA_REVIEWS: Readonly<Record<string, CurrentSource
   ...APP_REGISTRATION_DELTA_REVIEWS,
   ...APP_TEST_HELPERS_DELTA_REVIEWS,
   ...SDK_DELTA_REVIEWS,
+  ...SEARCH_YEAR_FILTER_DELTA_REVIEWS,
   ...SDK_CODEGEN_DELTA_REVIEWS,
   ...SDK_GENERATED_REGISTRY_DELTA_REVIEWS,
   ...SDK_GENERATED_RUNTIME_DELTA_REVIEWS,

@@ -16,6 +16,8 @@ export const CURRENT_AGGREGATED_ITEM_REVISION_OVERRIDES = {
   // MCP-366: the response call survives minus the hint inclusion line.
   C057: 'modified',
   C066: 'modified',
+  // MCP-755: the year filter description now covers units too.
+  C078: 'modified',
   C067: 'modified',
   C101: 'modified',
   C102: 'modified',
