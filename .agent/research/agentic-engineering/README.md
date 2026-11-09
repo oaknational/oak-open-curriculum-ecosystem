@@ -97,6 +97,12 @@ sources without turning research notes into a second canon.
 - [codex-official-docs-follow-up-2026-09-23.md](./codex-official-docs-follow-up-2026-09-23.md)
   — official interface documentation, role and authority questions, and bounded
   follow-up proposals for the Codex tooling work.
+- [idea-to-merge-process-design-notes-2026-11-07.md](./idea-to-merge-process-design-notes-2026-11-07.md)
+  — design notes for the Attendant Workflow, a new idea-to-merge process with
+  three fixed owner checkpoints, defined as the `attendant` skill and its
+  `attendant-*` sub-skills: the owner's user story as a ten-step sequence with
+  internal reviews and the PR review set apart, and a doubt point at each stage
+  asking whether the work is worth doing; input to the design session's brief.
 - [cross-lane-direction-survey.md](./cross-lane-direction-survey.md) —
   Slice C umbrella: re-reads direction-of-travel evidence (Slice A
   governance projects, Slice B practice-methodology primitives,

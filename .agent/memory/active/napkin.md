@@ -1370,3 +1370,28 @@ the owner wants it kept).
   identity links live on the publishing site, which this session could not reach.
 - **Behaviour change**: time-box author identification; record "not established" plainly in
   the document and give the leads to the owner in chat.
+
+## 2026-11-07 — Juniper seeks Pollen (01Duoc): tool and method facts
+
+Written from a solo Claude cloud session.
+
+- **Reader legs paraphrase inside quotation marks.** Four of the quotations three mid-tier reader
+  legs returned were paraphrases presented as verbatim (2026-11-07). A fixed-string check of each
+  quotation against its cited file, whitespace collapsed, caught all four before any reviewer
+  read them. A leg's quotation is a pointer to a source, never the source.
+- **A fresh cloud checkout has no claims registry.** `commit-queue list` refused until
+  `.agent/state/collaboration/active-claims.json` was seeded with the tool's own seed line; the
+  registry is untracked by design, so every fresh cloud container starts this way.
+- **`claims open --area-kind` takes `files`, not `path`** (`files | workspace | plan | adr | git`).
+- **A no-tools framing pass on the session model cost about 91k tokens**, close to a mid-tier
+  reader that made sixteen tool calls. One instance, cause unmeasured; price the next framing
+  pass from its own pilot before choosing its tier.
+- A fresh-context Parallax auditor cannot see the owner's words a document paraphrases; three of fifteen findings on 2026-11-08 were attribution doubts that the transcript settled in one grep. Quote the owner's sentence in the document and the finding does not arise.
+- **Provisional metrics and a single adjective became hard constraints to engineer around**
+  (2026-11-08). "Unattended" and "the sense check changes nothing material in most runs" were
+  read as requirements, so the owner's word became a bot-readable record with a wake mechanism,
+  a worth-doubt return became a cost against a metric, and the remaining design became a list
+  of unknowns to close by menu. The owner rejected the framing, not the answers: two
+  requirements in tension are a signal to step back and assess the frame, and a new way of
+  working is explored for what becomes easier if the system varies, with judgement and value
+  ahead of any count.
