@@ -590,3 +590,69 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
     - Dependabot group-by (P2);
     - the merge-bot close guard;
     - the carrier workflow's body text.
+
+## Lane state (2026-11-06 ~18:0xZ, the owner's bounded set; Sandpiper guards Wind, 690653)
+
+- **The owner's frame.** First, `engraph` gets its remaining fixes and everything on Oak's
+  default branch. Then the merge back to Oak is prepared. After that, Engraph is a plain mirror
+  of Oak. The owner asked for the first step as the smallest bounded set.
+- **The set, in order.**
+  1. **#387**, the commit advisory checks the message in its own process. Green. Codex hit its
+     usage limit, so it was declared unavailable on head `427601f47`, and the door is merging.
+  2. **One carrier**: Oak's `main` at 1.186.9 (`d5846cf6f`), only #1019 and its release ahead
+     of `engraph`. The dry-run merge conflicts in 34 files: 24 content, 8 modify/delete and 2
+     add/add. #1019 deletes `trusted-git.ts`, and about 30 Engraph-only files still use it. They
+     move to `git` by name in the carrier. Keeping the resolver would undo Oak's change and carry
+     it back at the merge back. If Oak releases again first, its tip goes into the same carrier.
+  3. **The fold of #377**, so the records land on `engraph`.
+- **Done when.**
+  - Oak's `main` tip is an ancestor of `engraph`.
+  - No file references `trusted-git`.
+  - CI is green on `engraph`, including `windows-basic`.
+  - None of this seat's pull requests is open.
+- **Left out, with the reason.**
+  - **Oak's Windows defect.** The merge back delivers #386 and #387.
+  - **`trusted-gitleaks` and `trusted-shell` to by-name.** No conflict forces them, and Oak has
+    neither file, so they belong to preparing the merge back.
+  - **Dependabot group-by (P2).** `engraph`'s `.github/dependabot.yml` equals Oak's.
+  - **The merge-bot close guard and the carrier workflow's body text.** Their use ends with the
+    mirror.
+  - **The review-cost ledger, the Director handoff and the landing broadcast.** The fold carries
+    the record.
+  - **#384.** The owner's research report, with 4 unresolved threads; it is the owner's.
+- **Progress (2026-11-06 ~19:0xZ).**
+  - **#387** merged at `3f65a2923`. The branch is retired and the worktree removed.
+  - **Carrier #388** (claim open on `automation/upstream-carrier-*`, worktree
+    `.claude/worktrees/carrier-1-186-9`) is pushed at `7ccbf1d55`.
+    - The merge commit is `78901869a`. A follow-up corrects the depth of one merged link.
+    - The resolution and its proofs are recorded on the PR. Codex is declared unavailable on the
+      head (usage limit).
+    - The door refuses on SonarCloud alone. 44 S4036 issues sit at by-name git sites, all within
+      §S4036's class, and their marks wait on the owner's word.
+  - **Next.** After the carrier lands, #377 merges with engraph's tip merged into it, then the
+    claim closes and the lane is cleaned up.
+- **Progress (2026-11-08 ~11:55Z).**
+  - #388's head is `727d71b3b`: the owner merged engraph's tip `a3d0159c5` (#384, documents
+    only) into the carrier on 2026-11-07. Copilot's review of that head found nothing blocking.
+  - At the owner's word, 42 of the 44 S4036 issues are marked false positive. Each line was read
+    at the head first. The classifier denied two marks, which were not retried:
+    `AaGyOBo5clzenSkzrQZa` (content-reader.ts:176) and `AaGyOBtaclzenSkzrQZr`
+    (merge-bot-push-output.smoke.ts:145). They wait on the owner.
+  - Codex failed on the new head (usage limit). The declaration is comment 6721137745.
+  - The door refuses CHECKS-RED on SonarCloud alone. Every other check is green and no thread
+    is open.
+  - **Owner direction, 2026-11-08:** no pull requests back to Oak yet.
+- **Progress (2026-11-09 ~08:50Z).** **#388 landed at `36362c356`**, a merge commit through the door.
+  - With the owner's allow rule, the last two S4036 marks were made. SonarCloud's bot left four of
+    the PR's 19 code-scanning threads open after their alerts were dismissed; each got a reply and
+    was resolved.
+  - #390 moved engraph, so engraph's tip `b1c3ee289` was merged into the carrier (`53e749062`,
+    seven documentation files, the carrier's delta patch-id unchanged). Codex failed on that head
+    too (usage limit); the declaration is comment 6735694592.
+  - **Landing proofs.** Oak main `d5846cf6f` is an ancestor of engraph, and engraph's tree equals
+    the carrier head's. `trusted-git` survives only in 17 dated records (archives, logged plan
+    rows, F-224, a dated amendment note), the same kind Oak's main keeps 9 of.
+  - **Lane closed.** The carrier worktree is removed, the branch retired by the door, the primary
+    checkout fast-forwarded, and the claim closed.
+  - **Next.** #377 folds with engraph's tip merged in. Phase 1 then ends once CI on engraph
+    (including `windows-basic`) is green.

@@ -1440,8 +1440,46 @@ the owner wants it kept).
   only the unit suite, which injects fakes. Read the review threads first-hand before calling one
   blocker the only one. Before citing a green check for a claim, check what that job runs
   (2026-11-06, Sandpiper guards Wind, 690653).
+- **A claim written for one site does not cover a change to four.** On #386 I moved four pnpm
+  launchers to `cross-spawn`, and wrote of one, `realPnpmRunner`, that its arguments are the
+  repository's own, so no outside input reaches Windows' `cmd.exe`. One of the other three,
+  `runFileBackedChild`, is generic. The commit-advisory orchestrator forwards its own arguments
+  through it, and the commit skill documents `-m "subject"` as one of them. So a commit subject
+  can reach `cmd.exe`, and a global `pnpm.cmd` reads it a second time on its `%*` line. A side
+  agent's note found the area, though its fix (widen the ruling, or avoid the shell) was wrong.
+  Before stating a property of a change to a shared launcher, trace every caller's arguments.
+  Tracing them found a worse fault: the launched check got no stdin, so the advisory had been
+  passing every message given as `-F -`. The follow-up, #387, runs the check in the advisory's
+  own process (2026-11-06, Sandpiper guards Wind, 690653).
+- **A path and a name are different values, even when both run git.** In carrier 1.186.9 I
+  swapped `resolveTrustedGit()` for `'git'` at every call site. One caller passed it to a shim
+  that sits first on `PATH` and execs "the real git". Given the name, the shim found itself and
+  ran forever, and the smoke run hung for 16 minutes. The in-session reviewer caught it. Before
+  a mechanical swap, read what each consumer does with the value, not only its type (2026-11-06,
+  Sandpiper guards Wind, 690653).
+- **A clean auto-merge of a memory file can still break its links.** Oak's edit to a thread
+  record merged cleanly into engraph's copy, which lives one folder deeper (`paused/`). Its new
+  relative link missed by one level, and only the pre-push links validator caught it. On a
+  carrier, run `docs-validators:check` before the first push (2026-11-06, Sandpiper guards Wind,
+  690653).
+
+- **A side agent's note is a set of claims to check, and its labels are not mine to repeat.** A
+  side agent said Engraph's main differed from Oak's main by about 4,700 files. Checked: `main`
+  is still Oak's `d5846cf6f`, and the note meant the default branch `engraph`. I passed on its
+  "fork-only content" without testing it against the owner's intent that all work merges back
+  to Oak, and the owner did not recognise it. Check each claim first-hand and describe what the
+  data shows in my own terms (2026-11-08, Sandpiper guards Wind, 690653).
 
 ### Practice/tooling feedback
+
+- **Surface**: the Bash hook's `wildcard-staging` entry in `.agent/hooks/policy.json`
+- **Signal**: false positive
+- **Observation**: `git worktree add -b <branch> "$W" origin/engraph && … && cp "$R/.env.local" .`
+  was refused as `git add .`. The two-word entry matched across a whole compound command
+  that stages nothing; splitting it and naming the copy's destination cleared the refusal
+  (2026-11-06, Sandpiper guards Wind, 690653).
+- **Behaviour change / candidate follow-up**: anchor the entry to a `git add` invocation, as
+  the `stash` entry's regex anchors to a command start.
 
 - **Surface**: `pnpm check` (vitest)
 - **Signal**: surprise
