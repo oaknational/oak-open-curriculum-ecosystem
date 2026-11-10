@@ -24,7 +24,8 @@ thread record existed.
 
 ## Current Continuation
 
-- Branch: `ccr-ddb70dc4-jltz47`, cut at `engraph` `SHA:b1c3ee289` (pull request 390's merge).
+- Branch: `ccr-ddb70dc4-jltz47`, restarted at `engraph` `SHA:54fb0b8c5` (pull request 394's
+  merge) for the research step; the same branch name carried the creation plan before that merge.
 - Invocation pointer: the brief above.
 - Controlling plans: the strategic node [`attendant-workflow`](../../../plans/strategic/attendant-workflow.plan.md)
   and, for the next session, the delivery node
@@ -45,10 +46,16 @@ thread record existed.
 | platform | model | session_id_prefix | agent_name | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
 | claude-code | claude-fable-5-1 | 01Duoc | Juniper seeks Pollen | brief author (row reconstructed at thread open from pull request 390's commits and records) | 2026-11-07 | 2026-11-08 |
-| claude-code | claude-opus-5-5, then claude-fable-5-2 from 2026-11-10 | 01Duoc | Limpet lifts Spray | designer of the creation plan | 2026-11-08 | 2026-11-10 |
+| claude-code | claude-opus-5-5, then claude-fable-5-2 from 2026-11-10 | 01Duoc | Limpet lifts Spray | designer of the creation plan; research seat from 2026-11-10 (the owner's opener, given in the same session) | 2026-11-08 | 2026-11-10 |
 
 The two rows share a prefix and are two seats. Juniper seeks Pollen is cloud session
 `01DuocjTp8TB8373EtwFwkoA` (pull request 390's `Claude-Session` trailers); Limpet lifts Spray is
 cloud session `01DuocjT6NUndtf6abNSv8Tp`, created 2026-11-08T20:22Z. Each name derives from its
 own session id with the identity tool. The six-character prefix collides across these cloud
 sessions; the name tells them apart.
+
+The research step was written to be picked up cold by a new seat. The owner gave its opener to
+the session that wrote the plans, so the research seat is Limpet lifts Spray, continuing after a
+context compaction. Two consequences: the seat that writes the scenarios also wrote the
+proposals for the mechanism's design (working notes §7); and this seat does not design the
+mechanism and does not open the held-back file after the research step ends.
