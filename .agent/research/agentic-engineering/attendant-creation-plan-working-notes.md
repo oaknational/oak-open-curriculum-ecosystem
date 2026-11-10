@@ -470,3 +470,94 @@ Attendant skill's own frontmatter (`Stop` or `SubagentStop`, of the `prompt` or 
 which exists only while a run is live, runs no script of the estate's, and is still a hook under
 the owner's cost ordering.
 
+## 7. Proposals for the later steps of the lane (2026-11-10)
+
+The authoring seat's proposals for the delivery nodes of steps 2 to 4 of the strategic node
+`attendant-workflow`, as input to the seats that write them at pickup. They carry the cures of
+two independent reviews and of the pull request's reviewers; "question 4" is the research
+step's fourth question.
+
+### Step 2: design and test the stepping-back mechanism
+
+The heart of the work, done before the rest of the Attendant because every other part depends
+on it; designed by exploration with the owner as design partner.
+
+1. **Design the composition** across the four surfaces the owner named: `start-right`,
+   `AGENT.md`, skills and rules. For each, what it carries, with descriptions and application
+   criteria written so the agent meets it at its moment without having to recall it. Two of the
+   four are read by every session, so the mechanism is designed as a general capability of the
+   estate with the Attendant as its first user, and any change to `AGENT.md` or a `start-right`
+   workflow is proposed to the owner before it is made. Candidate parts, to be confirmed or
+   replaced by the research step: a line in `start-right` and `AGENT.md` that names the obligation and
+   points to its skill; a rule stating the obligation and its moments; a stage's required
+   written input (a stage does not start without the step-back return and its written answer
+   on record); the step-back brief as fixed text in a forked skill, given the owner's words and
+   primary evidence.
+2. **Find out whether it works**, with three instruments, each for what it can show.
+   - *The skill part*: the estate's skill-evaluation runner on the step-back skill, including
+     its trigger suite for the description. The runner tests a skill alone, in an empty
+     workspace; rules, `AGENT.md` and `start-right` are in neither of its arms.
+   - *The composition*: full-repository sessions on output B's scenarios, run with the
+     composition present and absent (two branches), if question 4's feasibility check shows
+     this can be done. Each scenario is run at least three times per arm, on the model a run
+     would use, named in the results; the control scenarios measure stepping back where it is
+     noise. Once the design is frozen, a fresh agent runs the held-back
+     scenarios (the research step's second file, which the designing seat never opens) and
+     fresh agents score them; the designing seat sees only the scores until the decision of
+     step 3 is made.
+   - *What neither can show*, left to the first runs and their retrospectives and said so: a
+     frame drifting slowly over a long session; firing after compaction; capture by the agent's
+     own sunk work; whether a written answer is real or formulaic; behaviour across a model
+     change.
+   Results are kept under the skill's `evals/results/`.
+3. **Decide on the evidence, with the owner.** The composition goes forward if, on the seeded
+   scenarios, the agent steps back more often with it than without and what it does next is
+   right more often than without (both by the rubric written before the runs), it does not step
+   back more often on the control scenarios, and the owner judges the returns worth having. The
+   rule is a direction and a judgement, with no numeric threshold: a number set before any run
+   would be invented, and the owner has said what numbers put in front of an agent do. If the
+   feasibility check of question 4 shows the full-repository comparison cannot be run or
+   scored, this step decides on the skill runner's results and the owner's reading of the
+   returns alone, says so, and leaves the firing of the rules, `AGENT.md` and `start-right` to
+   be shown by the first runs. If not, the
+   design is revised and re-run. A hook declared in the skill's own frontmatter is considered
+   only then, tested cheaply first, and is the owner's decision.
+
+### Step 3: design the rest of the Attendant
+
+Each decision below is made in this plan with its reasoning, from phases 1 and 2 and the owner's
+words; "simpler if the system changed?" is asked of each and the answer recorded.
+
+- The stages and their sub-skills, from the owner's user story and the settled touch model; the
+  doubt asked at each stage and its altitude.
+- The two decision screens (the research step, question 2).
+- The sub-agent definitions, and how each receives the owner's words and primary evidence.
+- How a run's contract and state are recorded, against three constraints: the plan-node estate's
+  rule that delivery state is a Linear projection; `one-pr-per-leaf-issue` and its split of
+  decision from delivery; the one-open-pull-request limit for a seat working alone. Each is
+  analysed for what it protects and what becomes easier if it changes; any change is proposed
+  to the owner.
+- How an Attendant cloud session is detected and recorded as its session class, and how its
+  writes are marked.
+- The review stage without GraphQL.
+- The resumption contract across compactions and sessions, and how a second live run is
+  detected.
+- Which parts of existing skills become components shared with the Attendant.
+- The scale question: one pull request against larger work, and Claude Code Projects (a project
+  thread does not load the repository's sub-agents or run its hooks, so a run executes in an
+  ordinary cloud session).
+- The states of a run: not yet; abandoned on the owner's word; done.
+
+Step 3 ends with an outside-the-frame audit of the whole design, asked whether it could be
+complete and still worthless, and the owner's stamp on its node.
+
+### Step 4: build and first run
+
+The build order is decided at the end of phase 3; the mechanism of phase 2 already exists by
+then. The owner gives the idea for the first run. The first run is an experiment as well as a
+delivery. Its record shows each stepping-back return and its written answer. Its retrospective
+reads the run against the owner's three provisional measures ("an idea reaches merged value with
+three touches of your attention and none unplanned"; "your sense check changes nothing material
+in most runs"; "you would rather use it than not"), as information and never as targets, and
+says which doubt points changed something, what the owner changed at the sense check, and what
+this plan got wrong.

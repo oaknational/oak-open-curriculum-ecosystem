@@ -9,12 +9,13 @@ owner's words of that day and on facts re-read that day; the evidence for each r
 plan* is the detailed plan a run makes after approval; *the run node* is the plan-estate
 record a run keeps.
 
-**Task of the session that reads this**: carry out phase 1, the research, of the creation plan
-[`attendant-workflow-creation`](../../plans/delivery/attendant-workflow-creation.plan.md). The
+**Task of the session that reads this**: carry out the research step of the Attendant lane,
+[`attendant-research`](../../plans/delivery/attendant-research.plan.md), under its strategic node
+[`attendant-workflow`](../../plans/strategic/attendant-workflow.plan.md). Both are born `sketch`;
+a sketch governs no work, so the session's first check is that the owner has stamped them. The
 owner, 2026-11-10: "Let's get the plan written and ready, and the next session will carry out the
-research". The plan is written to be picked up cold and says where findings go. The owner's
-earlier word on the plan's standard (2026-11-08) still describes where it must arrive: "decision
-completed and therefore research complete and design complete".
+research". The owner's earlier word on the standard the planning must reach (2026-11-08):
+"decision completed and therefore research complete and design complete".
 
 ## Success, provisionally
 
