@@ -1636,3 +1636,15 @@ Written from a solo Claude cloud session.
   with your analysis, and do not offer me a menu of options" (2026-11-08). Requests for direction
   go in prose with the analysis and a leaning, not as option cards; recorded as the divergence
   the collaboration directive asks for.
+- **Five requests with leanings were not questions** (owner, 2026-11-10: "Please review the above
+  questions"). Each of the review's five requests for direction carried this seat's answer, and
+  the previous seat's experience file had named the shape two days earlier. A request with a
+  leaning is a decision to state; the plan carries it to the owner's stamp. Also corrected: a
+  doubt that the Attendant must say what it replaces imported an estate-wide problem (gate cost,
+  ceremony) into a lane that is an exploration and replaces nothing.
+- **That correction was then over-applied** (same day). "None of the five was a question" swung
+  to the opposite of the correction; four Cricket seats on one frame each returned the frame
+  NARROWED or CONTRADICTED on it, quoting the owner's "ask me for direction with your analysis".
+  The three tensions went back to the owner and were answered in three lines. The swing after a
+  correction is the tell `metacognition.md` names; a decision is the owner's by what it is, not
+  by whether the seat has a leaning.

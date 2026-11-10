@@ -29,12 +29,13 @@ thread record existed.
   plan estate through the `plan` skill.
 - Working notes: [`attendant-creation-plan-working-notes.md`](../../../research/agentic-engineering/attendant-creation-plan-working-notes.md)
   (the session's impact and value, how it delivers them, the review of the brief).
-- Next safe step: the brief review is delivered (2026-11-10: ready to start from, with
-  conditions); it waits on the owner's direction on three tensions in the owner's own words (the
-  credential a hosted cloud run writes under, what the touch points are and what happens between
-  initiation and approval, what "pricing" covers), the supporting rule's target, and the idea for
-  the first run. Then the research over the widened corpus, then design by exploration with the
-  owner, the stepping-back capability first.
+- Next safe step: the brief review is delivered and the owner has answered it (2026-11-10, in the
+  working notes §3.6): the Attendant replaces nothing and is an exploration towards unsupervised
+  working; a reliable automatic stepping-back mechanism is a main goal. The seat's review of its own
+  work (notes §3.7) found its "no question waits on the owner" an over-correction: the credential
+  decision and the meaning of "pricing" are the owner's; the owner answered all three tensions the
+  same day (notes §3.8). Next: research why the existing step-back instruments only partly succeed, over the
+  widened corpus, then design by exploration with the owner, that mechanism first.
 - Team expectation: solo cloud seat, the owner as design partner.
 - Acceptance bar: the creation plan decision-complete, research-complete and design-complete, in
   the owner's words of 2026-11-08.
@@ -44,7 +45,7 @@ thread record existed.
 | platform | model | session_id_prefix | agent_name | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
 | claude-code | claude-fable-5-1 | 01Duoc | Juniper seeks Pollen | brief author (row reconstructed at thread open from pull request 390's commits and records) | 2026-11-07 | 2026-11-08 |
-| claude-code | claude-opus-5-5 | 01Duoc | Limpet lifts Spray | designer of the creation plan | 2026-11-08 | 2026-11-08 |
+| claude-code | claude-opus-5-5, then claude-fable-5-2 from 2026-11-10 | 01Duoc | Limpet lifts Spray | designer of the creation plan | 2026-11-08 | 2026-11-10 |
 
 The two rows share a prefix and are two seats. Juniper seeks Pollen is cloud session
 `01DuocjTp8TB8373EtwFwkoA` (pull request 390's `Claude-Session` trailers); Limpet lifts Spray is
