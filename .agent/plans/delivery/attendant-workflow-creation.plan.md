@@ -167,11 +167,15 @@ the classes found so far.
    - Output A: a classification of the catches by what was wrong (seed classes: the work, the
      stage, the plan, the value, the bigger picture; let the classes emerge), with, for each
      class, the question that would have caught it and the moment it should have been asked.
-   - Output B: for each class, three real instances written as evaluation scenarios (the
+   - Output B: for each class, up to three real instances written as evaluation scenarios (the
      situation; the frame error in it; what stepping back looks like; what carrying on looks
-     like), one of the three held back from the mechanism's design as a test case; and, for
-     each class, one control scenario in which the frame is sound and stepping back would be
-     noise.
+     like), and one control scenario in which the frame is sound and stepping back would be
+     noise. A class the saturated corpus gives fewer than three instances is recorded with the
+     instances it has and the shortfall stated; the stopping rule is not relaxed to find more.
+   - Held-back scenarios are not written in phase 1, so that nobody who designs the mechanism
+     has read them. Output A lists, for each class with spare instances, the sources of
+     instances not used in output B; phase 2 has a fresh agent write the held-back scenarios
+     from those after the design is frozen (phase 2, step 2).
    - If the corpus does not saturate by hand, the estate's corpus-analysis pipeline
      (`agent-tools/src/corpus-analysis/`, run through the Workflow tool) is the instrument, and
      running it needs the owner's explicit word.
@@ -233,8 +237,11 @@ on it; designed by exploration with the owner as design partner.
    - *The composition*: full-repository sessions on output B's scenarios, run with the
      composition present and absent (two branches), if question 4's feasibility check shows
      this can be done. Each scenario is run at least three times per arm, on the model a run
-     would use, named in the results; the held-back scenarios are used only here; the control
-     scenarios measure stepping back where it is noise. Scoring is by a fixed rubric written
+     would use, named in the results; the control scenarios measure stepping back where it is
+     noise. Once the design is frozen, a fresh agent that has not seen the design writes the
+     held-back scenarios from the unused instances output A lists, into a file the designing
+     seat does not read; they are run and scored by fresh agents, and the designing seat sees
+     only their scores until the decision of step 3 is made. Scoring is by a fixed rubric written
      before the runs (did the agent step back; was what it did next right), applied by a fresh
      agent that did not design the mechanism, with the owner reading a sample.
    - *What neither can show*, left to the first runs and their retrospectives and said so: a
@@ -243,8 +250,15 @@ on it; designed by exploration with the owner as design partner.
      change.
    Results are kept under the skill's `evals/results/`.
 3. **Decide on the evidence, with the owner.** The composition goes forward if, on the seeded
-   scenarios, the agent steps back more often with it than without, it does not step back more
-   often on the control scenarios, and the owner judges the returns worth having. If not, the
+   scenarios, the agent steps back more often with it than without and what it does next is
+   right more often than without (both by the rubric written before the runs), it does not step
+   back more often on the control scenarios, and the owner judges the returns worth having. The
+   rule is a direction and a judgement, with no numeric threshold: a number set before any run
+   would be invented, and the owner has said what numbers put in front of an agent do. If the
+   feasibility check of question 4 shows the full-repository comparison cannot be run or
+   scored, this step decides on the skill runner's results and the owner's reading of the
+   returns alone, says so, and leaves the firing of the rules, `AGENT.md` and `start-right` to
+   be shown by the first runs. If not, the
    design is revised and re-run. A hook declared in the skill's own frontmatter is considered
    only then, tested cheaply first, and is the owner's decision.
 
@@ -293,8 +307,10 @@ this plan got wrong.
 1. The research questions are answered with cited evidence. Proof: `repo-safe` for existence
    (the findings and scenarios files, merged); `owner-held` for adequacy, the owner's reading of
    the phase 1 report, recorded in the thread record.
-2. The stepping-back composition exists with its evaluation cases, and the results with and
-   without it are recorded with what they do and do not show. Proof: `repo-safe`, the skill and
+2. The stepping-back composition exists with its evaluation cases, and the results of every
+   instrument that could be run are recorded with what they do and do not show; where the
+   full-repository comparison proved infeasible, the feasibility finding is recorded in its
+   place. Proof: `repo-safe`, the skill and
    its `evals/` files, `pnpm skills:check` and `pnpm portability:check` in CI.
 3. The `attendant` skill and its sub-skills exist and pass the same two checks, which prove
    form only; whether they work is criterion 4's. Proof: `repo-safe`, CI.
