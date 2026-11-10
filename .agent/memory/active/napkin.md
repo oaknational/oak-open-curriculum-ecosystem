@@ -1615,7 +1615,8 @@ outside the repository. One instance each; scope is this session.
 - **Correction (mine):** `rg PATTERN -g GLOB` with no path, in a compound command, read standard
   input and hung to the tool timeout. Give `rg` an explicit path and `< /dev/null`.
 - **Correction (mine):** the Cricket frame said "No holds" while the owner's opening message
-  carried one (a file not to open until a condition). Five of eight seats flagged the frame.
+  carried one (a file not to open until a condition). Four of eight seats named that omission,
+  and six of eight returned a frame verdict other than SOUND.
   A frame's SOURCES block quotes the plan's trigger line for every hold, verbatim.
 - **Correction (mine):** I edited files twice with an inline Python heredoc where the per-file
   edit tool was the instrument the grounding names. The edits were right; the instrument was not.
@@ -1644,3 +1645,32 @@ outside the repository. One instance each; scope is this session.
 - **Observation:** a reviewer bot raised the same finding class twice (a Fact row whose source
   did not cover its whole claim) because the fix for the first round was applied to the rows
   named and a row added in the same push repeated it. Fix the class with a check, then the rows.
+- **Correction (mine, to the entry above that begins "one comparison thought occurred"):** no
+  such thought was recorded anywhere, and at the wrap I could not name one. The line overstated;
+  the true record is that the research files were swept for Practice vocabulary and held none.
+  A napkin line that reports an event needs the event.
+- **Observation:** the study's five measurement scripts lived only in the session scratch
+  directory while four research files cited them as instruments. The wrap's loss scan found
+  them; they are now `method-instruments.md` beside the study. An instrument named in evidence
+  is evidence, and belongs in the repository at the moment it is first cited.
+- **Observation:** `agent-tools review-cost survey` cannot run in a Claude cloud session: it
+  shells to `gh repo view`, and GitHub GraphQL is not reachable there (HTTP 403 with a message
+  naming the REST routes). The ledger row for pull request 395 is the seat's reading from the
+  connector's review-thread listing.
+- **Observation:** a reviewer bot's third finding arrived on the merged pull request, after the
+  merge, on the last push. A merged pull request's threads are re-read at the next wrap.
+- **Correction (the owner, 2026-11-10: "run this through the decision matrix please"):** the
+  comparison brief's first draft said the owner had not stated the comparison's purpose, depth or
+  output, and made asking the session's first act. I had written that as care: owner facts are
+  not to be inferred. It was a passback. One search of the plan estate found a strategic node the
+  owner ratified on 2026-08-01 that states the end and the shape serving work must take, and two
+  accepted precedents for the form. "The owner has not said" is a claim of absence like any
+  other, and I had run no search behind it, hours after recording that lesson about Hermes.
+  Before a question reaches the owner, search the ruling surfaces; what is left after the lenses
+  is a verdict with its one inference named, not a question.
+- **Correction (mine):** the wrap's first push failed the `static-checks` leg on four
+  machine-local paths in two new research files, and two reviewer bots found the same paths and
+  an invocation note that fitted two scripts of five. The no-machine-local-paths validator is
+  one command (`pnpm docs-validators:check`, about a minute); I had not run it on new Markdown
+  because the earlier research files had passed without it. A new file that names where things
+  are on this machine is the case that validator exists for.

@@ -108,6 +108,10 @@ sources without turning research notes into a second canon.
   memory and learning mechanisms, evidence log with permalinks at the pinned
   commit, and a synthesis whose status is provisional; the footing for a later
   comparison, which it does not contain.
+- [hermes-practice-comparison-2026-11/brief.md](./hermes-practice-comparison-2026-11/brief.md)
+  — entry brief for the session that compares the Hermes study with the Practice: the owner's
+  words, the inputs on both sides, and proposals for the session to test. It does not begin
+  the comparison.
 - [cross-lane-direction-survey.md](./cross-lane-direction-survey.md) —
   Slice C umbrella: re-reads direction-of-travel evidence (Slice A
   governance projects, Slice B practice-methodology primitives,
