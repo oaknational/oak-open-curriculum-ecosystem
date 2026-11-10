@@ -1,0 +1,347 @@
+# The Attendant creation plan: working notes
+
+**Seat**: Limpet lifts Spray (claude-code, prefix `01Duoc`), thread `attendant-workflow`.
+**Started**: 2026-11-08. **Status**: working notes of the design session whose deliverable is the
+creation plan for the Attendant Workflow; research tier. The owner's words, quoted and dated in the
+brief ([`idea-to-merge-process-design.prompt.md`](../../prompts/agentic-engineering/idea-to-merge-process-design.prompt.md)),
+are the authority. Everything here is this seat's reading, and is input in the same sense as the
+brief's own readings and the
+[design notes](idea-to-merge-process-design-notes-2026-11-07.md).
+
+## 1. The session's impact, and the value it delivers (2026-11-08)
+
+The Attendant's own impact comes from its runs: an idea of the owner's becomes merged value with
+the owner's attention at three points, so delivery is bounded by the owner's ideas rather than
+the owner's hours. A plan frees none of that attention, so it cannot be this session's impact.
+The session's impact sits one step earlier: once the owner stamps the creation plan, the
+Attendant is built and its first run starts on the owner's idea without needing more design from
+the owner, and what gets built is a version that delivers value rather than ceremony. Where the
+session's doubt shows the shape is wrong, the better shape is found while changing it costs a
+conversation. It serves the owner first, then the sessions that build the Attendant (they carry
+out decisions rather than make them), and through the Attendant the people the estate serves.
+
+The value is the creation plan, measured by the owner's three words:
+
+- **Research complete**: the questions that decide the design answered from cited evidence.
+  First, what the owner has caught that agents missed: that record tells the doubt points what to
+  ask, and without it the doubters are generic, their doubt is theatre, and the owner stays the
+  bottleneck however much else is built. Then what the owner needs to see at approval and at the
+  sense check to decide in minutes, and what rules, skills, sub-agents and hooks can actually do
+  in a cloud session, including how a cloud run makes its writes: checked, not assumed.
+- **Design complete**: every part designed from that evidence and the owner's words, each asked
+  what becomes easier if the system changes. The part everything rests on is the one the owner
+  called the heart of the value: stepping back, questioning and changing direction, done from
+  outside the frame that did the work. The Attendant itself is doubted for whether it is worth
+  building and how big it should be, so the plan builds nothing for show.
+- **Decision complete**: nothing left for a builder to decide alone inside its own frame, the
+  failure the Attendant exists to prevent; the owner's decisions brought as requests for
+  direction during the session, with analysis; every question only a run can answer named with
+  what would answer it; a build order that ends at the owner's idea's first run, so that run both
+  delivers the idea and tests the design.
+
+How we would know: building from the plan raises no design question the plan should have
+settled; at the first run's sense check the owner changes nothing that the research could have
+caught; in the session the owner's attention goes to direction and value, not to correcting a
+frame the seat should have doubted itself.
+
+## 2. How the session delivers that value
+
+1. **Footing first.** Review the brief for the reliance "start the design session from it"
+   (§3), correct the readings that narrow the owner's words, bring it up to date, fix the
+   research corpus, and bring the owner the tensions in the owner's own words. Corrections are
+   recorded here; the brief stays the record of its own date.
+2. **Research, bounded and cited.** The brief's five questions over the widened corpus (§3.3),
+   densest evidence first. Every quotation is checked against its file before it is used; a
+   reader's quotation is a pointer to a source, never the source (the napkin, 2026-11-07).
+   Findings land here with citations.
+3. **Explore the design with the owner, the crux first.** The stepping back and the doubt come
+   first, because every other part depends on them. Each part comes to the owner as analysis,
+   a leaning and, where one exists, the tension. Two of the owner's requirements pulling against
+   each other stops the work and the frame is examined with the owner. The owner's decisions come
+   as requests for direction, never menus. Instruments: `concept-exploration` for the
+   stepping-back concept, which is not yet shaped; Parallax at standard depth for the design
+   space, with protected frames; `proportionality` to size each part; `user-value` and `specify`
+   for the contracts; `reason` for each decision.
+4. **Doubt from outside the seat's frame, as the Attendant would.** At the points where the
+   seat's frame could be captured (the research synthesis, the crux's design, the whole plan),
+   a fresh-context reviewer receives the owner's words and the artefact with the seat's claims
+   withheld, is asked whether the thing should exist as well as whether it is right, and its
+   dependence on the seat's brief is recorded. The first instance ran on 2026-11-10 against
+   the brief (§3.1).
+5. **Author the plan in the plan estate**, born `sketch`: each decision with its reasoning and
+   evidence, the build order to the first run. The owner's stamp makes it the plan of record.
+   Between phases the seat re-reads the brief's quotations and §1 and re-commits to them.
+
+"Decision complete", as this session holds it: every decision the build needs is made. Where only
+a run can show a decision right, the plan states the decision, the observation that would show it
+wrong, and what changes if it does; that is a decision with its falsifier, not a deferral.
+
+Stopping condition: every decision a builder needs is made, and an outside-the-frame audit of the
+whole plan, asked whether it could be complete and still worthless, finds nothing that changes it.
+
+## 3. Review of the brief (2026-11-10)
+
+**Assessed**: the brief at `SHA:b1c3ee289` (pull request 390's merge on `engraph`) with the design
+notes. **Reliance**: a design session starts from it and produces the decision-complete creation
+plan by exploration with the owner. **Acceptance authority**: the owner.
+
+### 3.1 Independence and method
+
+Two assessments. This seat's: it did not write the brief, has read it in full and will rely on it.
+An independent one: an `assumptions-expert` sub-agent in a fresh context, briefed with the reliance
+and the brief's convention, without this seat's doubts, which read the repository and Anthropic's
+documentation (38 tool calls, 2026-11-10). Both read the same brief and corpus, so they are
+independent readings of shared sources, not independent evidence. Every claim of the independent
+assessment used below was re-read first-hand by this seat: the repository quotations against
+their files, and the documentation against the pages themselves (`cloud-environments` and
+`claude-projects` as page text; `hooks`, `skills` and `sub-agents` as a second extraction, which
+agreed with the first). They converged on four of this seat's doubts (§3.4: the credential
+reading, the reunification, the corpus, the missing constraints); the independent assessment
+added the touch-point and shaping tension, the pricing reading, the GitHub proxy facts, the hook,
+skill and sub-agent mechanics, and the work-in-progress limit.
+
+### 3.2 Disposition
+
+Ready to start from, with conditions. In structure the brief is what the session needs: the
+owner's words verbatim and dated, kept apart from every reading; the outcome, impact and
+mechanism; bounded research; the notes labelled as input. As a fact base for a decision-complete
+plan it is not yet sound, and the gaps sort into two kinds.
+
+- **Three tensions in the owner's own words, for the owner's direction** (§3.3, items 1 to 3):
+  the credential a hosted cloud run writes under; what the touch points are and what happens
+  between initiation and approval; what "pricing" covers. Per the owner's word of 2026-11-08 they
+  are not fitted.
+- **Corrections this session makes at its start** (§3.4, items 4 to 9), recorded here.
+
+Two doubts are carried into the design rather than settled before it (§3.5).
+
+### 3.3 Tensions for the owner's direction
+
+1. **The credential a cloud run writes under.** The owner (2026-11-07, brief lines 142 to 144):
+   "how do we make that possible with bot credentials, and if it isn't how do we distinguish
+   these sessions so it's clear when using my credentials is appropriate?" Item 8 (brief line
+   217) keeps the first half only: "the bot for every write; where no bot path exists for a
+   write, the creation plan names the blocker and the owner rules". Anthropic's documentation
+   ("Configure cloud environments", §GitHub proxy, read 2026-11-10) settles the first half for
+   Anthropic-hosted sessions: "all GitHub operations go through a dedicated proxy that keeps your
+   real GitHub credentials outside the session's VM"; git pushes and API requests "go out with
+   your real credentials substituted"; and the proxy "rejects requests to GitHub's GraphQL
+   endpoint", a restriction that "applies to every request through the proxy regardless of the
+   credentials you supply". A bot token could only enter as an environment variable, and "anyone
+   who uses the environment can read it"; the estate forbids secrets there. So from a hosted
+   session no GitHub write is the bot's, not the merge alone. The documented exception is a
+   self-hosted environment, with "per-session minted credentials". The estate has the shape the
+   owner's second half asks for: the ChatGPT Work profile, a detected session class whose
+   task-scoped writes use the owner's credential by the owner's ruling of 8 September 2026, with
+   agent-authored content marked (`cloud-environment-routing.md`; `bot-identity` lines 44 to
+   58; `identify-as-agent-under-shared-credentials`). The bot-identity rule leaves the choice to
+   the owner: "The fallback happens only when the owner explicitly permits it, and the owner
+   generally instigates it." GitHub Actions minting the bot's token is proven "by a stub trial
+   only" (`open-pull-requests-to-zero` thread record on `engraph`). Two further consequences: the
+   estate's review settlement reads review threads through GraphQL, which the hosted proxy
+   refuses, so the review stage is designed against REST or the session's GitHub connector
+   (whether the connector passes through the same proxy is not yet verified); and under the
+   owner's credential the agent must never submit a pull-request review, since it would appear
+   as the owner's own review. This seat's leaning: a distinguished Attendant cloud session class
+   under the owner's ruling, every write marked as agent-authored, no review ever submitted, the
+   merge made under the owner's credential only after the owner's word at the sense check, so
+   that the record of the merge says what is true; strict bot attribution would need a
+   self-hosted environment or the Actions route, both machinery.
+2. **What the touch points are, and what happens between initiation and approval.** The owner's
+   words, all of 2026-11-07: "I specify an idea and outcomes, the agent(s) flesh out and refine
+   the idea, create a plan, review and improve the plan, I sign off on the definition of done
+   and acceptance criteria" (brief lines 46 to 48); "it must need me only twice, during initial
+   ideation and refinement, then to sense check the PR just before merge" (line 55); the three
+   touch points "initiation, acceptance criteria approval, final sense check just before merge";
+   the user story's "Once I approve a detailed plan is created" (line 75); the metric "three
+   touches of your attention and none unplanned" (line 21); "There is no count to check against"
+   (line 27); and on a worth-doubt, "ask the user for direction" (line 102). The brief settles
+   these by "The user story is the later word" (line 90), which drops the outcomes the owner
+   states, the definition of done, a reviewed plan before sign-off, and the owner's presence
+   during refinement; and a mid-run request for direction is none of the three touches. This
+   seat's reading of the frame: the touches are kinds of judgement only the owner can make (what
+   is wanted, whether the criteria capture it, whether the result is sensible to merge), and the
+   count is not the measure. On that reading initiation through approval can be one attended
+   conversation (the idea and its outcomes in, refinement with the owner, the owner signing the
+   outcomes, the definition of done and the acceptance criteria), which the principles favour
+   ("The what, the why, and the why-now are established in CONVERSATION with the owner before
+   building ANY structure", `principles.md`), and a mid-run worth-doubt is the process returning
+   to that conversation: the success the owner named, not an unplanned touch.
+3. **What "pricing" covers.** The owner: "We have already excluded pricing as a mechanism for
+   this work." (brief line 136), beside "previous PR limits and token limits taken from normal
+   operations should be tunable" (line 135). In this estate "pricing" names the review-cost
+   mechanisms: PDR-140, "Review feedback is information — the response is what gets priced";
+   the fleet rule's "before the owner prices it"; the pre-push gate's "the pricing failed". The
+   brief reads the exclusion as cost per run only, keeps PDR-132's round budgets and PDR-140's
+   push budgets as tunable constraints the owner did not name (line 308), and the notes put
+   "cost against the plan" on the sense-check screen (notes line 280), the moment the owner's
+   reason for the exclusion ("pulled work towards numerical outcomes rather than value provision
+   and sound judgement") applies to. In a hosted cloud session PDR-140's gate does not run at
+   all: it lives in `.husky/pre-push` and cloud sessions push with `HUSKY=0`, and the in-session
+   substitute set does not include it. This seat's leaning: the exclusion covers the estate's
+   pricing mechanisms; a run holds proportion by judgement and the doubt points; cost is
+   recorded for the retrospective and kept off the owner's decision screens.
+
+### 3.4 Corrections the session makes at its start
+
+4. **The reunification** (both assessments). On 2026-11-09 `engraph` gained the delivery node
+   `reunify-oce-forks` (pull request 391, `sketch`, owner gates expiring 2026-11-30): the fork
+   merges into Oak's `main` by one merge commit and returns to a mirror. After that a run's
+   branch, pull request, required checks (CodeQL, SonarCloud, run-quality-gates, Vercel),
+   reviewers, rulesets and bot are Oak's. The brief names no target repository. Correction: the
+   Attendant binds to its host at run time; it is built as text that travels with the merge; the
+   first run's home follows from when it is ready.
+5. **The research corpus** (both). The bounded corpus (brief lines 241 to 247) leaves out the
+   graduated record of what the owner catches: the rules, many of which carry the owner's dated
+   words as their provenance (51 of 124 by a pattern count on 2026-11-10) and so already classify
+   the catches; `owner-signal-interpretation.md`; the `why-…` retrospectives (the
+   two-expert-reviews record the notes cite at line 252 is outside the twelve, as are the records
+   of a ruling that took three owner words, of review arcs that hit one generator, of an alignment
+   that took four days, of review rounds that grew, of records that outran their evidence, and the
+   October practice-system review); the Cricket tallies, the estate's direct evidence on whether
+   fresh-context doubters catch frame errors; the experience files; and the operational
+   review-cost ledger, frictions register and open questions. A saturation rule over a
+   pre-selected corpus saturates the selection. Correction: the research reads the graduated
+   record first and fills from napkins and threads. If that does not saturate, the estate's
+   calibrated corpus-analysis workflow is the instrument for the rest, and running it needs the
+   owner's explicit word (the Workflow tool's policy).
+6. **Constraints item 7 does not name** (both). The pull-request lifecycle's work-in-progress
+   limit: "its limit is one open pull request across the repositories" for a seat the owner names
+   alone, and no pull request starting new work opens at the limit (`pr-lifecycle`, lines 2084 to
+   2087); a run whose draft pull request opens at initiation holds the only slot from the idea
+   through the wait for approval to the merge. `one-pr-per-leaf-issue` (a hard rule): one leaf
+   issue, exactly one pull request, split "between decision and delivery", which the
+   single-carrier shape (the run node and the code in one pull request) crosses. The plan-node
+   estate: delivery state "is a Linear projection, never a repo field"
+   ([ADR-216](../../../docs/architecture/architectural-decisions/216-plan-node-estate.md));
+   about a third of this estate's plan nodes carry Linear tickets (58 of 167 on 2026-11-10), and
+   Oak's practice applies after the reunification. The Director rules
+   (`route-blocks-and-questions-to-director`, `unattended-seats-never-prompt`, PDR-117), the fleet
+   rule for any parallel run, `owner-attention-at-action-moments` as the estate's existing doctrine
+   on the decision screens, and PDR-140's gate not running in cloud. Correction: each enters item
+   7's analysis of what it protects and what becomes easier if the system changes.
+7. **Lever facts** (the independent assessment, re-read first-hand; §4). Correction: the notes'
+   hook paragraph and "a skill loads into the context that did the work" (notes line 352) are
+   replaced by what the documentation says, and the build-versus-buy survey covers the native
+   levers beyond the four the brief lists: dynamic workflows, agent teams, sub-agent nesting,
+   worktree isolation, forked skills, skill-scoped and sub-agent-scoped hooks, prompt and agent
+   hook types. A name collision to keep in view: Claude Code's own feature is called
+   "workflows".
+8. **The Projects facts.** A project thread loads root `CLAUDE.md` and root `.claude/rules/`, but
+   not path-specific rules, not skills (the remedy is enabling a skill on the claude.ai account),
+   not repository agents and commands, and does not run repository hooks; the documented remedy
+   for agents and hooks is running the thread on the owner's own computer. The brief's
+   conclusion ("a skills-defined Attendant cannot run inside a project thread") holds in effect,
+   for a reason it does not give: the doubt points' sub-agents do not load there. A project can
+   coordinate runs that each execute in an ordinary cloud session. A thread "opens a pull
+   request when the work calls for one", not always.
+9. **Smaller corrections.** The notes contradict themselves on build order (line 105: "the
+   checkpoints plus the doubt briefs, run by hand on one idea"; line 322: "The skills, sub-agents
+   and components are built before the first run"); the design settles it. "Repository skills
+   load and invoke one another" (brief line 266) was shown only as the agent invoking skills.
+   Two "concepts explored" are machinery (`spawn` and `pr-tally` are `agent-tools` modules). The
+   Claude adapters carry an `oak-` prefix, which the names `attendant` and `attendant-*` meet.
+   The notes' cadence lever (a `Monitor` tick) only reminds the main agent, the kind of prompt the
+   central bet says a captured agent rationalises past. Components have been explored twice
+   before: sub-agent prompt components are leaf nodes
+   ([ADR-114](../../../docs/architecture/architectural-decisions/114-layered-sub-agent-prompt-composition-architecture.md)),
+   and plan components were retired when the plan-node estate replaced the templates
+   ([ADR-117](../../../docs/architecture/architectural-decisions/117-plan-templates-and-components.md));
+   the skill-component design learns from both. The owner's words put components shared with
+   existing skills in scope; improvements to the estate beyond what the Attendant needs (notes
+   lines 113 and 332) are separate deliverables unless the owner says otherwise.
+
+### 3.5 Doubts carried into the design
+
+- **Fresh context is not independence.** The notes give the step-back agent "the records and the
+  owner's verbatim words, with the invoking agent's prose withheld" (notes line 139). A run's
+  records are written by the run's own agent; and through the Agent tool "Claude composes a
+  delegation message that summarizes the task", so the captured agent writes the doubter's
+  prompt and picks its records, and a custom sub-agent loads `CLAUDE.md` unless `omitClaudeMd`
+  is set (sub-agents documentation, 2026-11-10). The estate's record: a mis-dated record
+  "propagated into four independent verdicts" of a Cricket panel
+  ([tally, 2026-08-12](../../reports/agentic-engineering/cricket-quartet-tally-2026-08-12-24h-retrospective.md));
+  readers briefed by one author "share one frame: they are dependent evidence, not independent
+  corroboration"
+  ([five-days retrospective](../../reports/agentic-engineering/why-five-days-of-landings-closed-nine-stories-2026-09-29.md));
+  "review happens inside the frame it is handed", and a brief that asks whether a design is safe
+  and correct cannot return "delete it"
+  ([two-expert-reviews retrospective](../../reports/agentic-engineering/why-two-expert-reviews-hardened-a-mechanism-that-should-not-exist-2026-09-20.md)).
+  The same tally shows the other side: four fresh legs converged on a systemic false-frame
+  finding the seats had never caught themselves. The native means exist: a skill with
+  `context: fork` runs as a sub-agent with the skill's own text as its prompt, so a doubt brief
+  can be fixed text; `omitClaudeMd` withholds the estate's frame where that frame is what is
+  doubted; primary evidence (the diff, observed behaviour, the owner's words) goes in beside the
+  run's records; dependence is recorded.
+- **Whose bottleneck.** The impact sentence (brief line 36) assumes the owner's attention is the
+  constraint that binds delivery. One retrospective (five days, 2026-09-29) found agent delivery
+  bound by mechanics and process: every check on every change, the slice as the unit of delivery
+  (57 landing rows for 9 stories), and accretion ("Every correction produced an instrument";
+  nothing retired). The Attendant adds stages, doubters and reviews; it states what it replaces
+  or retires as well as what it adds, and observes process cost so the next bottleneck is
+  visible. The second success metric, "your sense check changes nothing material", reads true of
+  an excellent run and of a screen that does not show the owner what they would change; the
+  screen has to make the metric honest.
+
+### 3.6 Requests for the owner's direction
+
+The three tensions of §3.3, each with this seat's leaning; and two smaller ones:
+
+- **The supporting rule**: the owner's "a supporting rule to help trigger the workflow" is filed
+  in the brief under "On the stepping-back trigger" (line 153), the previous seat's framing;
+  "the workflow" reads as the Attendant itself. Which it should help trigger.
+- **The idea for the first run**, which the brief says the owner provides. Known early, it lets
+  every part of the design be tested against one real case as it is made.
+
+## 4. Lever facts
+
+Observed first-hand in this cloud session (Claude cloud, the "Practice Repos" environment,
+2026-11-08 to 2026-11-10; one observation each):
+
+- Repository skills load and are invoked through the Skill tool (`oak-start-right-thorough`).
+- The `.claude/rules/` adapters were in context from the session's first turn.
+- The repository's sub-agent definitions were in the session's agent list and one was
+  dispatched (`assumptions-expert`).
+- The repository configures `SessionStart`, `PreToolUse`, `UserPromptSubmit` and `PreCompact`
+  hooks (`.claude/settings.json`); `SessionStart` injected the PDR-027 identity context, and
+  `PreToolUse` refused a `git stash` push by the repository's policy.
+- The cloud launcher configures its own `SessionStart` and `Stop` hooks
+  (`~/.claude/launcher-settings.json`, event names read 2026-11-10); the `Stop` hook ran at a
+  turn's end and its feedback re-prompted the agent.
+
+From Anthropic's documentation (code.claude.com/docs, read 2026-11-10):
+
+- **Hooks**: 33 events, among them `SubagentStart`, `SubagentStop`, `TaskCompleted` and `Stop`.
+  `Stop` blocking "Prevents Claude from stopping, continues the conversation"; `SubagentStop`
+  blocking "Prevents the subagent from stopping". Hooks fire the same way in cloud sessions.
+  Handler types include `prompt` (a single-turn model evaluation returning a decision) and
+  `agent` (a sub-agent with read tools returning a decision; experimental). Hooks in a skill's
+  frontmatter register when the skill is invoked and run for the rest of the session (`once: true`
+  removes one after its first successful run); hooks in a sub-agent's frontmatter run only while
+  it runs, with `Stop` converted to `SubagentStop`.
+- **Skills**: `context: fork` starts a sub-agent of the type in the `agent` field and gives it
+  the skill content as its prompt, without the conversation's history. After auto-compaction
+  the most recent invocation of each skill is re-attached, its first 5,000 tokens, within a
+  combined 25,000.
+- **Sub-agents**: the delegation message is written by the delegating agent; custom sub-agents
+  load `CLAUDE.md` unless `omitClaudeMd` is set; `isolation: worktree` gives a temporary
+  worktree branched from the default branch; sub-agents nest up to three layers by default; a
+  sub-agent does not see the conversation, the skills already invoked or the files already read.
+- **Cloud GitHub access**: §3.3 item 1.
+- **Projects**: §3.4 item 8.
+
+## 5. Sources read for this review
+
+The brief and the design notes in full; `principles.md`, `metacognition.md`,
+`user-collaboration.md` (working model), `orientation.md`; the rules
+`bot-identity-on-third-party-systems`, `identify-as-agent-under-shared-credentials`,
+`one-pr-per-leaf-issue`, `present-verdicts-not-menus`, `design-from-impact-not-the-cowpath`,
+`scope-from-goal-before-approach`, `owner-attention-at-action-moments`;
+`cloud-environment-routing.md` and `.agent/claude-harness-integrations/cloud-environment.md`;
+ADR-114, ADR-117, ADR-125 and ADR-216 (decision sections); the plan node `reunify-oce-forks` and
+the `open-pull-requests-to-zero` thread record at `origin/engraph`; the five-days,
+two-expert-reviews and Cricket-tally retrospectives (summary and causal sections); the plan-node
+schema's Linear sections; PDR-140's title, the fleet rule and `.husky/pre-push`; the
+`pr-lifecycle` work-in-progress lines; Anthropic's `cloud-environments`, `claude-projects`,
+`hooks`, `skills` and `sub-agents` pages; the existence of the twelve listed reports, checked.
+The independent assessment's full return is summarised in §3, its claims re-read first-hand.
