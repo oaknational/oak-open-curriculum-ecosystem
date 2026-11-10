@@ -44,8 +44,11 @@ forward-asks remain.
   `provisional`. The owner then said: "I do want that session opened, please prepare for it"; "Once
   that is done I will compact this session, and we can begin the next phase". The entry point is
   `.agent/research/agentic-engineering/hermes-practice-comparison-2026-11/brief.md`: the owner's
-  words, the inputs on both sides, and proposals to test. The owner has named the task and nothing
-  yet about its purpose, depth or output; the brief's first act is to ask. The two Hermes clones in
+  words, the inputs on both sides, and proposals to test. The brief's first draft handed the purpose
+  back to the owner as a question; the owner sent it through the decision lenses ("run this through
+  the decision matrix please"), and the brief now carries a verdict on purpose, depth and output,
+  resting on the ratified node `outcome-informed-practice-learning`. The session proceeds on that
+  verdict unless the owner says otherwise; the one inference it rests on is named in the brief. The two Hermes clones in
   the cloud session are pinned and clean and nothing was ever written to them; the pins and the
   commands to recreate them are in `method-instruments.md` beside the study.
 
