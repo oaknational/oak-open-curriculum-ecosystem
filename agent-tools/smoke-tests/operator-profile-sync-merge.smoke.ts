@@ -5,7 +5,6 @@ import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { writeErrorLine, writeLine } from '../src/core/terminal-output.js';
-import { resolveTrustedGit } from '../src/core/trusted-git.js';
 import {
   VALID_INDEX_DOCUMENT,
   VALID_MACHINE_DOCUMENT,
@@ -41,7 +40,7 @@ const smokeDir = fileURLToPath(new URL('.', import.meta.url));
 const repoRoot = resolve(smokeDir, '..', '..');
 const entry = (name: string) =>
   resolve(repoRoot, `agent-tools/dist/src/validators/operator-profile/${name}.js`);
-const GIT = resolveTrustedGit();
+const GIT = 'git';
 const DOC = 'repos/engraphcode--open-curriculum-ecosystem.md';
 const INDEX = 'index.md';
 const MACHINE = 'machines/studio-laptop.md';

@@ -52,7 +52,7 @@ export interface ReadPrStateOptions {
    * (expect-flag.ts).
    */
   readonly expectedReviewers?: readonly string[];
-  /** Hashes a diff to its patch-id; the trusted git's `patch-id` by default. */
+  /** Hashes a diff to its patch-id; git's `patch-id` by default. */
   readonly patchIdOf?: PatchIdOf;
   /** Vendors declared unavailable (`--unavailable`), the bot that may declare, and the clock. */
   readonly unavailable?: UnavailableInput;

@@ -1,6 +1,6 @@
 ---
 classification: core
-description: A seat on a downstream checkout (fork, mirror, an organisation running the tree as its own) never reads the upstream repository's surfaces without the owner's permission (the one standing grant is a read-only upstream fetch) and never writes to them; every repository-scoped call names its repository explicitly, the checkout's own by default; the PR base is the repository's default branch, derived at the moment of use, never a literal.
+description: A seat on a downstream checkout (fork, mirror, an organisation running the tree as its own) never reads the upstream repository's surfaces without the owner's permission (the one standing grant is a read-only upstream fetch) and never writes to them without the owner's word for that upstream; every repository-scoped call names its repository explicitly, the checkout's own by default; the PR base is the repository's default branch, derived at the moment of use, never a literal.
 ---
 
 # Downstream Checkout Never Writes Upstream Surfaces
@@ -24,7 +24,8 @@ of surfaces of its own: its repository, its tracker, its chat, its
 code-quality and error-reporting projects — the identity held below the
 tree. The upstream's surfaces are someone else's. A seat on a downstream
 checkout never reads the upstream repository's surfaces without the
-owner's permission and never writes to them at all. Which repository a
+owner's permission and never writes to them without the owner's word for
+that upstream. Which repository a
 checkout is, and so whose surfaces are its own, is read from its git remote,
 never from the directory it sits in: a method checkout under a path named
 for the upstream organisation was the fork by its `origin` URL (2026-10-07),
@@ -49,13 +50,15 @@ repositories. Calls with no repository target (a `users/...` endpoint, a
   read-only comparison"). Nothing else is standing. Amended for Oak's
   GitHub on 2026-10-13 (owner verbatim: "You are always permitted read-only
   access to Oak github, write access is forbidden for now, that will change
-  at a later date"): a read of any Oak GitHub surface needs no permission;
-  a write of any kind stays forbidden until the owner lifts it by word. The
-  2026-09-06 ruling's read half is superseded there and its write half
-  stands.
-- **Writes to the upstream's surfaces are forbidden without exception**:
-  no pull request, comment, review, issue, label, tracker ticket or chat
-  message on the upstream's repository, tracker or chat.
+  at a later date"): a read of any Oak GitHub surface needs no permission.
+  The owner lifted that amendment's write ban on 2026-11-02 (owner verbatim:
+  "Oak repos are now permitted again, as are other Oak systems, welcome back
+  me"), with writes made under Oak's bot identity. Both halves of the
+  2026-09-06 ruling are superseded there.
+- **Writes to the upstream's surfaces are forbidden until the owner lifts
+  the ban for that upstream by word** (for Oak, lifted 2026-11-02): no pull
+  request, comment, review, issue, label, tracker ticket or chat message on
+  the upstream's repository, tracker or chat.
 - **Every repository-scoped call names its repository explicitly** —
   the checkout's own by default; the upstream's only under an
   owner-permitted read, and named explicitly then too. `gh` takes
@@ -119,7 +122,8 @@ as a fact about the upstream and transmit no upstream product gate as a gate
 here; the only gates on a served-surface change downstream are the line's
 own product decision and its licence position.
 
-The upstream organisation's PRIVATE repositories are internal systems, not
+Where the owner has not opened an upstream organisation's systems (Oak's were
+opened on 2026-11-02), its PRIVATE repositories are internal systems, not
 reads: only the public upstream repository is a permitted read source.
 Before any read of another repository under the upstream organisation, run
 the visibility check on its own (`gh repo view <owner>/<repo> --json

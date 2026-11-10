@@ -7,7 +7,6 @@ import { join } from 'node:path';
 
 import { z } from 'zod';
 
-import { resolveTrustedGit } from '../src/core/trusted-git';
 import { runMergeBotCli } from '../src/merge-bot/cli';
 import { realGitExecutor } from '../src/merge-bot/git-executor';
 import type { GithubApiFetch } from '../src/merge-bot/mint-installation-token';
@@ -27,7 +26,7 @@ import { hermeticGitEnv } from './hermetic-git-env';
  * back is real git.
  */
 
-export const GIT = resolveTrustedGit();
+export const GIT = 'git';
 const GITHUB_URL = 'https://github.com/acme/widgets.git';
 /** The token the GitHub double mints; no output stream may carry it. */
 export const SMOKE_TOKEN = 'smoke-token-never-printed';
@@ -152,7 +151,6 @@ export async function retire(
       execFileSync(GIT, [...args], { cwd, env: rig.env, encoding: 'utf8' }),
     nowEpochSeconds: () => 1_800_000_000,
     gitExecutor: realGitExecutor(),
-    gitPath: GIT,
     baseEnv: rig.env,
   });
   const run = { exit, out: out.join(''), err: err.join('') };

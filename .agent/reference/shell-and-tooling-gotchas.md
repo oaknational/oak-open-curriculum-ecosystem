@@ -837,9 +837,9 @@ Director's landing record of 2026-09-06, event f05a54da).
   fails**: a probe of the sender's refusal with its output at `/dev/null` left a one-word body on
   the append-only stream (2026-10-02); both estates' CLI takes `--comms-dir`, so a probe points
   it at a scratch directory.
-- **SonarCloud's security rating fails a smoke that resolves `pnpm` or `git` through `PATH`**: a
-  smoke spawns `process.execPath` with tsx and the resolved trusted git (both estates carry the
-  smokes; cured in OCE on 2026-10-03).
+- **SonarCloud raises S4036 at a smoke that runs `pnpm` or `git` by name**: the site is within
+  §S4036's class in the Sonar disposition policy, so it is marked `FALSE_POSITIVE` with the class's
+  rationale, never given an absolute path (2026-11-06).
 - **BSD `grep` has no `\b`**: `grep -o '\bok('` matched nothing and read as absence; a fixed
   string (`grep -F`) or a python `in` test (2026-10-14).
 - **`git log --format=%cI` prints the committer's local offset (`+01:00`)**: a record stamp copied

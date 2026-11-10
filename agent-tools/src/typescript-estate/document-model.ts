@@ -95,7 +95,7 @@ export interface RawExtractionDocument {
   readonly detectorConfig: {
     readonly path: string;
     readonly schemaVersion: '2.0.0';
-    readonly contractRevision: '2.6';
+    readonly contractRevision: '2.7';
     readonly sha256: string;
   };
   readonly extractor: ExtractorIdentity;

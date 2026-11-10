@@ -109,7 +109,6 @@ export interface GitSourceSnapshot {
 export interface CaptureGitSnapshotInput {
   readonly callerCwd: string;
   readonly inputRef: string;
-  readonly gitExecutable: string;
   readonly inheritedEnvironment: NodeJS.ProcessEnv;
   readonly limits: GitSnapshotLimits;
   readonly process: ProcessPort;
@@ -117,7 +116,6 @@ export interface CaptureGitSnapshotInput {
 }
 
 export interface GitContext {
-  readonly executable: string;
   readonly cwd: string;
   readonly root: string;
   readonly env: Readonly<Record<string, string>>;

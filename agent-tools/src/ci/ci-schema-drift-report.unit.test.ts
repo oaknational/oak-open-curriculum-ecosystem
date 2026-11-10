@@ -26,8 +26,7 @@ describe('buildSchemaDriftReport', () => {
     expect(report.annotation).toContain('Cached: 0.7.0, live: 0.11.0');
     expect(report.summaryMarkdown).toContain('0.7.0');
     expect(report.summaryMarkdown).toContain('0.11.0');
-    expect(report.statusDescription.startsWith('Drift:')).toBe(true);
-    expect(report.statusDescription).toContain('0.11.0');
+    expect(report.statusDescription.startsWith('Drift')).toBe(true);
   });
 
   it('reports drifted content under one version without inventing a version gap', () => {
@@ -38,7 +37,23 @@ describe('buildSchemaDriftReport', () => {
 
     expect(report.outcome).toBe('drifted');
     expect(report.annotation).toContain('content differs');
-    expect(report.statusDescription).toContain('0.9.0');
+    expect(report.statusDescription.startsWith('Drift')).toBe(true);
+  });
+
+  // The runner writes the status description to $GITHUB_OUTPUT, so it carries
+  // no text from the network: the versions reach the step summary (stdout) and
+  // the annotation (stderr), never that output.
+  it.each([
+    ['drifted', CACHED_070],
+    ['in-sync', JSON.stringify({ info: { version: 'upstream-sentinel-9f3c' }, paths: {} })],
+  ])('keeps upstream text out of the %s status description', (outcome, cached) => {
+    const live = JSON.stringify({ info: { version: 'upstream-sentinel-9f3c' }, paths: {} });
+
+    const report = buildSchemaDriftReport(cached, live);
+
+    expect(report.outcome).toBe(outcome);
+    expect(report.summaryMarkdown).toContain('upstream-sentinel-9f3c');
+    expect(report.statusDescription).not.toContain('upstream-sentinel-9f3c');
   });
 
   it('judges version equality on the raw strings, so two versions that differ only beyond the render cap still read as a gap', () => {
@@ -95,21 +110,6 @@ describe('buildSchemaDriftReport', () => {
     expect(report.liveVersion).not.toContain('\n');
     expect(report.annotation).not.toContain('\n::error::');
     expect(report.statusDescription).not.toContain('\n');
-  });
-
-  it('keeps BOTH version numbers inside the status description under the version cap', () => {
-    const cached = JSON.stringify({ info: { version: `0.7.0-${'y'.repeat(80)}` }, paths: {} });
-    const live = JSON.stringify({
-      info: { version: `0.11.0-${'x'.repeat(80)}` },
-      paths: { '/a': {} },
-    });
-
-    const report = buildSchemaDriftReport(cached, live);
-
-    expect(report.statusDescription.length).toBeLessThanOrEqual(STATUS_DESCRIPTION_LIMIT);
-    expect(report.statusDescription).toContain('0.7.0');
-    expect(report.statusDescription).toContain('0.11.0');
-    expect(report.statusDescription.startsWith('Drift:')).toBe(true);
   });
 });
 

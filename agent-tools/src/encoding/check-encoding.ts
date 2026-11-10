@@ -34,7 +34,6 @@ import { err, isErr, ok, type Result } from '@oaknational/result';
 
 import { resolveRepoRoot } from '../core/repo-root.js';
 import { writeErrorLine, writeLine } from '../core/terminal-output.js';
-import { resolveTrustedGit } from '../core/trusted-git.js';
 
 import { analyzeFileBytes, reportFailsThreshold } from './check-encoding-helpers.js';
 import { formatScanReport, isFlagged } from './check-encoding-report.js';
@@ -108,7 +107,7 @@ Usage: pnpm agent-tools:check-encoding [--fail-on <severity>] [--json]
         Show this help.`;
 
 function listTrackedFiles(repoRoot: string): string[] {
-  const stdout = execFileSync(resolveTrustedGit(), ['ls-files', '-z'], {
+  const stdout = execFileSync('git', ['ls-files', '-z'], {
     cwd: repoRoot,
     encoding: 'utf8',
     maxBuffer: 64 * 1024 * 1024,

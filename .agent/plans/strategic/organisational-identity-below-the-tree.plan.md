@@ -125,8 +125,8 @@ system working and ADR-227's rulings; thin configuration, not zero); build mecha
 product-band pins that extraction deletes; tokenise or sweep prose with a rewriter (prose
 names canonical ids and a generated index carries the projected names); adopt the alias-
 prefix proposal (it leaves the prefix hand-pinned, doubles the adapter set against the
-listing budget, and has no ratchet); re-true dated records; name any fork on upstream
-surfaces; or accept a checklist without a validator.
+listing budget, and has no ratchet); re-true dated records; or accept a checklist without
+a validator.
 
 Sequencing: these cures are independent of the extraction lane and cheap now; they proceed
 beside it, and the product-band deletions ride the extraction lane's per-box design step.
@@ -226,9 +226,9 @@ identity is held below the tree); permanent doctrine cites that record, and this
   ruled otherwise.
 - **The fork's branch on upstream surfaces.** Upstream's workflow triggers and one rule
   have named this fork's working branch since 2026-08-22, by the owner's own commit. The
-  derived trigger shape (default branch from the event) removes the need; whether upstream
-  keeps naming the fork is the owner's, against the later ruling that forks are never named
-  on the canonical organisation's surfaces.
+  owner ruled on 2026-11-09 that the fork may be named on upstream's surfaces; the entries
+  go when the fork's working branch retires, and the derived trigger shape (default branch
+  from the event) is what keeps a later fork from needing them.
 - **Sequencing against the extraction-first priority.** Confirm these platform cures run
   beside the extraction lane, with the product-band pins deleted by extraction and the one
   skill-name collision with a served product tool resolved at that lane's boundary.

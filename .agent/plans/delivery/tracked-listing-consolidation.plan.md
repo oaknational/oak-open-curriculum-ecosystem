@@ -27,10 +27,9 @@ The shared tracked-path set landed with the markdown-links validator as its firs
 the core `listTrackedFiles` moved beside it. Three private copies remain, and they have already
 drifted:
 
-- `agent-tools/src/validators/notion-fence/validate-notion-fence.ts` runs `git` found through
-  `PATH` rather than `resolveTrustedGit`, and skips a tracked file it cannot read. The skip is the
-  green-gate bypass `core/tracked-file-scan.ts` exists to refuse. This one goes first, and its
-  unreadable-file posture becomes a refusal.
+- `agent-tools/src/validators/notion-fence/validate-notion-fence.ts` skips a tracked file it
+  cannot read. The skip is the green-gate bypass `core/tracked-file-scan.ts` exists to refuse.
+  This one goes first, and its unreadable-file posture becomes a refusal.
 - `agent-tools/src/workspace-census/inputs.ts` runs `git` through `PATH` and returns a Result.
 - `agent-tools/src/encoding/check-encoding.ts` holds a byte-identical copy of the core listing.
 

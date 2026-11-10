@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import type { RefFormatOracle } from './ref-format.js';
 import { parseRetireArgs } from './retire-args.js';
 import { failureMessage } from './test-helpers/result-failure.js';
+import { ok } from '@oaknational/result';
 
 /**
  * The `merge-bot retire` argv contract: one required `--branch`, legal by
@@ -12,9 +13,9 @@ import { failureMessage } from './test-helpers/result-failure.js';
  */
 
 /** A ref-format oracle under which git's grammar accepts every name. */
-const everyNameLegal: RefFormatOracle = () => true;
+const everyNameLegal: RefFormatOracle = () => ok(true);
 /** A ref-format oracle under which git's grammar rejects every name. */
-const nothingLegal: RefFormatOracle = () => false;
+const nothingLegal: RefFormatOracle = () => ok(false);
 const seams = { refFormatOracle: everyNameLegal };
 
 describe('parseRetireArgs', () => {

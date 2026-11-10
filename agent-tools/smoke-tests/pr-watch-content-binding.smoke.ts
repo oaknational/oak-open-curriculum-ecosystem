@@ -6,7 +6,6 @@ import { join } from 'node:path';
 import { typeSafeEntries } from '@oaknational/type-helpers';
 
 import { writeErrorLine, writeLine } from '../src/core/terminal-output.js';
-import { resolveTrustedGit } from '../src/core/trusted-git.js';
 import type { ContentId } from '../src/pr-watch/content-binding.js';
 import { gitPatchIdOf } from '../src/pr-watch/content-reader.js';
 import { hermeticGitEnv } from './hermetic-git-env.js';
@@ -31,7 +30,7 @@ import { hermeticGitEnv } from './hermetic-git-env.js';
  *   unproven, never as an id.
  */
 
-const GIT = resolveTrustedGit();
+const GIT = 'git';
 const base = mkdtempSync(join(tmpdir(), 'pr-watch-content-binding-smoke-'));
 const env = hermeticGitEnv(base);
 const repo = join(base, 'repo');

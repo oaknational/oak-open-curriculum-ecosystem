@@ -199,7 +199,7 @@ export function runPush(input: {
     gitExecutor,
     gitPath: GIT_PATH,
     gitReads: input.reads ?? gitReads(),
-    branchArgSeams: { refFormatOracle: () => true },
+    branchArgSeams: { refFormatOracle: () => ok(true) },
     baseEnv: BASE_ENV,
     tokenFiles: store,
     ...input.overrides,

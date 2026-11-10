@@ -89,11 +89,8 @@ async function prepare(parsed: PushArgs, input: PushActionInput): Promise<Prepar
     return { kind: 'failed', exit: 2, message: identity.error.message };
   }
   const git = resolveGitContext(input);
-  if (!git.ok) {
-    return { kind: 'failed', exit: 1, message: git.error.message };
-  }
   const env = input.baseEnv ?? process.env;
-  const reads = input.gitReads ?? gitReadsFrom(git.value, { cwd: input.repoRoot, env });
+  const reads = input.gitReads ?? gitReadsFrom(git, { cwd: input.repoRoot, env });
   const target = await settleTargetBranch(parsed.branch, reads, identity.value);
   if (!target.ok) {
     return { kind: 'failed', exit: 1, message: target.error.message };
@@ -107,7 +104,7 @@ async function prepare(parsed: PushArgs, input: PushActionInput): Promise<Prepar
     ? {
         kind: 'ready',
         identity: identity.value,
-        git: git.value,
+        git,
         branch,
         commit: commit.value,
         env,

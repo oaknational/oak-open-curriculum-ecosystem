@@ -9,8 +9,8 @@ import type { DetectorConfig } from './config-model.js';
 import { EstateReviewError } from './errors.js';
 import { compileStrictSchema } from './schema-validation.js';
 
-const CONFIG_SHA256 = '54ace41d941d9fe190b1fd467a3c3ed8aac223953a2e28841b573830e83c7c2d';
-const SCHEMA_SHA256 = 'cc052b863ff972b7cfaf03dc53098b6081dcaf9f67faf1984b7c8019d28c8016';
+const CONFIG_SHA256 = '38c4c8d4d83789659dbd23fb72637cd32861499fcfcd2726be6826c329567557';
+const SCHEMA_SHA256 = 'd896be3afa6b1fdb5e397a472cd4bc05cea49351230304d154f22a53f8460aa5';
 
 /** Accepted SHA-256 identities for the frozen detector document and its schema. */
 export interface DetectorContractHashes {
@@ -70,7 +70,7 @@ export class ValidatedDetectorConfig {
   }
 }
 
-/** Bind the schema authority and detector document to the accepted revision 2.6 bytes. */
+/** Bind the schema authority and detector document to the accepted revision 2.7 bytes. */
 export function verifyDetectorContractHashes(
   identity: DetectorContractHashes,
 ): Result<undefined, EstateReviewError> {
@@ -79,7 +79,7 @@ export function verifyDetectorContractHashes(
     : err(
         new EstateReviewError(
           'IDENTITY_INVALID',
-          'revision 2.6 detector contract bytes do not match the independently reviewed identities',
+          'revision 2.7 detector contract bytes do not match the pinned identities',
         ),
       );
 }

@@ -21,7 +21,7 @@ owner_gates: []
 # removed by the plan-node schema §2026-08-07 amendment, PR #817), so
 # the stamp completed 2026-08-07. A visibility ticket may still be
 # minted as working practice.
-last_updated: 2026-09-09
+last_updated: 2026-11-05
 ---
 
 # ARC-colour statusline — per-channel identity-coloured feather badges
@@ -37,7 +37,11 @@ anchored frontmatter, the 2026-08-03 staleness true-up (§Ground truth), and
 current owner provenance. The backlog file gains a dated pointer to this node;
 its record is preserved. The backlog corpus sits outside the anchored
 id-space, so the supersession edge is body-carried (the plan-corpus validator
-correctly refuses cross-corpus frontmatter edges).
+correctly refuses cross-corpus frontmatter edges). One backlog decision is
+superseded: its instruction to route every git invocation through
+`resolveTrustedGit()` yields to the owner's ruling of 2026-11-03 that
+binaries run by name, with `PATH` as the trust root (the Sonar disposition
+policy's S4036 section), as ws-b7-c1 below states.
 
 ## Direction (owner words)
 
@@ -222,7 +226,8 @@ Deliverable A shares no surface with B and is parallel-safe.
   worn colours + next free index; the channel OPENER records the line) +
   package script (`pnpm exec tsx` on source) + knip entry. Depends: b6-c1.
 - **ws-b7-c1-validator-core** — `validate-arc-channels.ts` over the canonical
-  rapid-comms surface; every git invocation through `resolveTrustedGit()`;
+  rapid-comms surface; every git invocation by name, with `PATH` as the
+  trust root (the Sonar disposition policy's S4036 section);
   in-memory fixtures; three verdicts asserted (malformed fails loud,
   conformant passes, ABSENT canonical surface fails loud). Depends: b2-c2.
 - **ws-b7-c2-validator-wiring** — helpers + package script + knip entry + the

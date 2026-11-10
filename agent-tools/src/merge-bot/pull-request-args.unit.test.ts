@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import type { BranchArgSeams } from './branch-arg.js';
 import { parsePullRequestArgs } from './pull-request-args.js';
 import { failureMessage } from './test-helpers/result-failure.js';
+import { ok } from '@oaknational/result';
 
 /**
  * The `merge-bot pull-request` argv contract: a closed grammar of seven verbs,
@@ -13,7 +14,7 @@ import { failureMessage } from './test-helpers/result-failure.js';
  * grammar — is a refusal that names what was expected.
  */
 
-const everyNameLegal: BranchArgSeams = { refFormatOracle: () => true };
+const everyNameLegal: BranchArgSeams = { refFormatOracle: () => ok(true) };
 
 function parse(argv: readonly string[]): ReturnType<typeof parsePullRequestArgs> {
   return parsePullRequestArgs(argv, everyNameLegal);
@@ -173,7 +174,7 @@ describe('parsePullRequestArgs', () => {
   it("refuses a --branch git's ref grammar rejects, asking the oracle", () => {
     const result = parsePullRequestArgs(
       ['open', '--branch', 'feat/x', '--title', 't', '--body-file', 'b', '--wip-limit', '1'],
-      { refFormatOracle: () => false },
+      { refFormatOracle: () => ok(false) },
     );
 
     expect(result.ok).toBe(false);

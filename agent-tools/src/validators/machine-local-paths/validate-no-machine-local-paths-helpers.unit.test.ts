@@ -68,7 +68,7 @@ describe('machine-local-path patterns (live policy.json set)', () => {
   it('does NOT flag portable system paths, placeholders, or repo-relative paths (negative controls)', async () => {
     const block = await loadBlockOrInert();
     const negatives = [
-      '/usr/bin/git', // the S4036 fix — must never be flagged
+      '/usr/bin/git', // a portable system path, not one machine's layout — must never be flagged
       '/opt/homebrew/bin/git',
       '/usr/local/bin/git',
       '/tmp/scratch',

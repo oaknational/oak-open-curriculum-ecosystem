@@ -13,7 +13,10 @@
  *
  * Upstream text (`info.version`) is untrusted: it is escaped through the
  * shared annotation escaper and length-capped before composing, so a crafted
- * version cannot break out of a workflow-command line or flood a status.
+ * version cannot break out of a workflow-command line. It reaches only the
+ * summary line, which the runner prints to stdout, and the annotation, which
+ * it prints to stderr; the commit-status description, which the runner writes
+ * to `$GITHUB_OUTPUT`, carries no upstream text at all.
  *
  * Side-effect-free (no fetch, no fs, no env) like its sibling
  * {@link file://./ci-schema-drift-eval.ts}; the runner owns all IO.
@@ -28,8 +31,8 @@ import { escapeAnnotationMessage } from './ci-turbo-report-formatting.js';
 
 /**
  * The commit-status API truncates descriptions beyond 140 characters; the
- * builder stays inside the limit, and composes verdict-and-versions FIRST so
- * truncation can only ever eat the remedial tail, never the payload.
+ * builder stays inside the limit, and composes the verdict FIRST so
+ * truncation can only ever eat the tail, never the verdict.
  */
 export const STATUS_DESCRIPTION_LIMIT = 140;
 
@@ -113,7 +116,7 @@ export function buildSchemaDriftReport(cachedText: string, liveText: string): Sc
       liveVersion,
       annotation: undefined,
       summaryMarkdown: `✅ Schema cache in sync with the live upstream spec (version ${liveVersion}, as of this run).`,
-      statusDescription: truncateToLimit(`In sync: upstream ${liveVersion} (as of this run)`),
+      statusDescription: 'In sync with the live upstream spec (as of this run)',
     };
   }
 
@@ -128,8 +131,7 @@ export function buildSchemaDriftReport(cachedText: string, liveText: string): Sc
     liveVersion,
     annotation: `::warning ${CACHE_FILE_ANNOTATION}::Schema cache has drifted from the live upstream spec. ${versionNote} Run \`pnpm sdk-codegen:refresh\` to update the cache and rebuild.`,
     summaryMarkdown: `⚠️ **Schema cache drifted from upstream.** ${versionNote} Run \`pnpm sdk-codegen:refresh\`.`,
-    statusDescription: truncateToLimit(
-      `Drift: cached ${cachedVersion}, live ${liveVersion} (as of this run) — pnpm sdk-codegen:refresh`,
-    ),
+    statusDescription:
+      'Drift from the live upstream spec (as of this run) — pnpm sdk-codegen:refresh',
   };
 }

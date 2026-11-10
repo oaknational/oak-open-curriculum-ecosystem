@@ -318,6 +318,33 @@ on `claims open` exist since PR #225: frictions F-94 and F-95.)
 
 ## CURRENT HANDOFF STATE
 
+**§STATE, 2026-11-04 15:1xZ (Sandpiper guards Wind, `690653`, the n=1 seat at the owner's word
+"make merging 379 the priority"; this block supersedes the 2026-11-03 blocks below where they
+differ).** `engraph` carries Oak 1.186.5. Carrier 379 (head `0c841ed7f`) was closed as unworked and
+replaced by 380 at `0bb2ae4f0`, one release commit later. The owner corrected this: the owner had
+readied 379 and Codex and Copilot had reviewed it minutes before the close, so the cross-fork
+skill's step 1 kept it, and the landed merge fast-forwards 379's head (napkin, 2026-11-04). `engraph` merged into the carrier at `5cc1ba948`, clean, the tree
+equal to the merge-tree preview. Proofs: frozen install, five generators unchanged, the documents
+sweep with nothing to re-true, no numbering collision, and the full pre-push gate. One unrequested
+Codex P1 (ancestry) was rejected and resolved. The door merged 380 at `c2bcfe7e9` (15:00:37Z,
+`--expect none`), and the tree diff against Oak's tip is the same 4,690 files before and after the
+sync. Both carrier branches are retired. Both cures of the design system's Vite warning stand (see
+the thread record). Elder rides Topsoil closed out at 09:38Z; lanes B (MCP-778) and C are Oak's.
+The open pull requests are 377 alone. moved for teachers: nothing / moved for the Practice: the
+fork carries Oak 1.186.5.
+
+**§STATE, 2026-11-03 17:0xZ (Sandpiper guards Wind, `690653`, the n=1 seat; post-fold; this block
+supersedes the 15:0xZ block below where they differ).** The coordination branch `2026-10-28-32c907`
+folded as 373 at `6f2d08552` (16:48:13Z, the door with `--expect none`; one unrequested Codex round,
+two records findings cured; fold-clock merged +26.3 min). The successor is
+`coordination/2026-11-03-6f2d08`; the folded branch is retired on all three names. The mirror
+workflow's cure landed at the owner's word ("go ahead with all three, and do fix the mirror") as 378 at
+`8fc338d84`: the run's own token stays the writer, and only its exact workflow-file refusal mints
+the bot's App token. Run 41686089225 moved `main` to `0c841ed7f` by the run's own token, and no
+workflow started on `main`. No Oak lane waited on it. moved for teachers: nothing / moved for the Practice: the
+analyser's security and reliability list on `engraph` reads zero and is held at commit time (375),
+and the fork carries Oak 1.186.4 (376).
+
 **§STATE, 2026-11-03 15:0xZ (Sandpiper guards Wind, `690653`, the n=1 seat at the owner's word;
 this block supersedes the 2026-11-02 block below where they differ).** The lint lane is complete:
 pull request 375 merged by the door at `4adcfc069` (items 13 and 14 landed, the analyser plan and

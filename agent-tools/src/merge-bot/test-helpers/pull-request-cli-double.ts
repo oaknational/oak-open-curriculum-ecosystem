@@ -109,7 +109,7 @@ export async function runPullRequest(
     readConfigFileImpl: options.readConfigFileImpl ?? (() => IDENTITY_CONFIG),
     repoRoot: '/srv/repo',
     runGitImpl: () => 'worktree /srv/repo\n',
-    branchArgSeams: options.branchArgSeams ?? { refFormatOracle: () => true },
+    branchArgSeams: options.branchArgSeams ?? { refFormatOracle: () => ok(true) },
     ...options.overrides,
   });
   return { exit, out: out.join(''), err: errText.join(''), requests: github.requests };

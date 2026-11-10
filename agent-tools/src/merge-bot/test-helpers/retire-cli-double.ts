@@ -181,7 +181,7 @@ export async function runRetire(
     repoRoot: '/srv/repo',
     runGitImpl: () => 'worktree /srv/repo\n',
     retireGitPort: portOver(world),
-    branchArgSeams: options.branchArgSeams ?? { refFormatOracle: () => true },
+    branchArgSeams: options.branchArgSeams ?? { refFormatOracle: () => ok(true) },
   });
   return { exit, out: out.join(''), err: errText.join('') };
 }

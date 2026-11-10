@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { parsePushArgs } from './push-args.js';
 import type { RefFormatOracle } from './ref-format.js';
 import { failureMessage } from './test-helpers/result-failure.js';
+import { ok } from '@oaknational/result';
 
 /**
  * The `merge-bot push` argv contract over an injected ref-format oracle (a
@@ -10,7 +11,7 @@ import { failureMessage } from './test-helpers/result-failure.js';
  * argument it refuses.
  */
 
-const noNameLegal: RefFormatOracle = () => false;
+const noNameLegal: RefFormatOracle = () => ok(false);
 
 /** A refusal's own line: the message's first, before the usage text. */
 function refusalLine(argv: readonly string[]): string {

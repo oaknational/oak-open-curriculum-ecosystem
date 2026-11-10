@@ -1312,6 +1312,185 @@ the owner wants it kept).
 - **A reviewer's ancestry claim is checked with `git merge-base --is-ancestor`, in one command.**
   Codex's P1 on 376 read the tip commit's single parent as the whole history.
 
+## 2026-11-03T17:0xZ — Sandpiper guards Wind (690653): the fold of 373, and a mirror is only a copy
+
+- **The fold skipped its records pass and paid for it.** No read-only pass over the fold's records
+  ran before the ready-mark (the fold skill's precondition 3). Codex's two findings were records
+  that 375's merge had made stale; their cure push cost a second CI run, and the fold took 26.3
+  minutes against the owner's ten. The pass runs beside the opening push's gate, at no wall cost.
+- **`comms reply` answers directed events only.** On a broadcast it refuses ("directed message not
+  found") and writes nothing; `comms append --in-response-to <id>` threads a reply to any kind.
+- **zsh does not word-split a variable.** Paths held in one variable reached prettier and
+  markdownlint as a single argument; markdownlint linted zero files and exited 0. List the paths
+  literally, and read the "Linting: N files" line before trusting a green.
+- **A side note's alarm, tested and found harmless, collapses; it does not become a design
+  refinement.** A side agent said the mirror fix's app token would start Oak's workflows on Engraph
+  `main` with access to Engraph's secrets. First-hand, a workflow receives only the secrets it
+  names (Oak's name only `TURBO_TOKEN`, which Engraph lacks), Release fails at its token mint for
+  want of `RELEASE_APP_*`, and the repository is public. I still proposed narrowing the fix. The
+  owner, verbatim: "why would we want our mirror to run CI? It's a _mirror_, it is the
+  responsibility of Oak to make sure that there code is in a proper state, our job is to mirror it,
+  when we merge Engraph main into Engraph engraph via a PR all normal checks will run. Do we have
+  any real problems, or was this just ceremony?" The one real problem was the mirror's 403.
+- **The fork never makes upstream wait.** At "coordinate please" I asked the Oak seat to hold its
+  workflow-linter lane until Engraph's mirror was fixed and to post its linter versions; both were
+  withdrawn the same hour (`8bafd3c2`). An Oak merge is never gated on an Engraph surface; whatever
+  an Oak change breaks in Engraph is cured on Engraph's side, at the sync. Nor did the fix's worth
+  turn on how often the mirror stalls: "it doesn't matter what dependabot does".
+
+## 2026-11-04 — Sandpiper guards Wind (690653): the Oak 1.186.5 sync, carrier 380 replacing 379
+
+- **Correction (the owner, 2026-11-04): closing 379 threw away work.** "When it's a straight merge
+  it makes sense, when work needs to be done, and has been done, throwing that work away is just
+  throwing work away." 379's timeline, read after the landing:
+  - the owner readied it at 14:27:07Z, before the word at 14:29:49Z;
+  - Codex reviewed it at 14:30:51Z, with one P2 on `.github/dependabot.yml`, and Copilot at
+    14:32:13Z;
+  - the close at 14:34:21Z said "no review round". By then that was false, and the cross-fork
+    skill's step 1 says a carrier holding a review round is never replaced.
+
+  The P2 did not recur on 380, so the replacement lost a finding as well as CI time.
+- **"Unworked" was never observed.** The one read of 379 (09:37Z) asked for mergeability, checks
+  and body, not draft state or reviews. The plan (14:33Z), both Cricket briefs and the close
+  comment carried "a draft with no review round" from what a carrier usually is, and Cricket
+  confirmed the plan because the plan handed it that fact. The owner's word to the close took
+  under five minutes. Read an irreversible step's precondition from the live object at the step.
+  When the owner names an artefact, act on that artefact: "the aim was the sync" licensed setting
+  aside the pull request the owner had named and just readied.
+- **The replacement bought nothing.** The landed merge `5cc1ba948` is a fast-forward of 379's head
+  (`0c841ed7f`, then the release commit `0bb2ae4f0`, then the merge), and the carrier workflow only
+  reports a head that differs from the mirror's tip. The same commit pushed to 379's branch lands
+  the same tree on the pull request the owner named, release commit included, which meets the
+  plan's one reason (no second, release-only carrier) without a replacement. Step 1's "a reviewed
+  head is not moved" was read as forbidding that extension; the skill wants re-truing on the point.
+- **Two forks cured one warning two ways, and git merged both.** The design system's Vite
+  "ESM config loaded as CommonJS" warning: `engraph` declared `"type": "module"` (`c4aedb698`);
+  Oak renamed the config to `.mts` and kept the field off. The merge was clean and consistent, and
+  both cures stand. That two forks cured one thing differently is something only a concept read
+  sees; the merge-tree count is zero.
+- **Practice/tooling feedback: the cross-fork skill's identity sentence is stale.** Step 3 says
+  author and committer are "both the owner". The bot-identity rule makes the bot the committer and
+  the owner the author (`bot-identity-on-third-party-systems`, the different-identities clause).
+  376 and 380 followed the rule. The skill sentence wants re-truing to cite the rule.
+- **Practice/tooling feedback: the staging hook reads `git worktree add -q .claude/…` as
+  `git add .`.** The wildcard-staging block fired on a worktree creation with a relative path
+  beginning with a dot. An absolute path passes. That is a false positive of the substring match,
+  not a staging act.
+- **zsh applies history modifiers to `$VAR:r…`.** `"$C:refs/remotes/origin/$C"` expanded `$C:r`
+  (remove the extension) and sent a mangled refspec; the fetch failed with "couldn't find remote
+  ref …efs/remotes/…". Brace every variable a colon follows: `"${C}:refs/…"`.
+- **Codex's carrier P1 recurred: a second instance.** On 376 and again on 380, Codex reported the
+  mirror commit as not an ancestor of the carrier head, citing a single-parent commit absent from
+  the repository (`bbdac175` here). `git log -1 --format=%P <head>` and
+  `git merge-base --is-ancestor <mirror-tip> <head>` refute it in one read each. Two instances: the
+  pattern is now a candidate, still not a rule.
+- **I repeated the bot-authored merge that "This clone's local `user.name` is the bot" warns of.** The build-ahead merge of
+  #1018's branch into the MCP-833 lane (f3a42810a, local) went out bot-authored; the harness then
+  refused the amend. Set `GIT_AUTHOR_NAME`/`GIT_AUTHOR_EMAIL` on the `git merge` command itself.
+  On the refused amend I also reached for `--no-verify` and the hook stopped it: a hook is never
+  bypassed, not even on a no-content amend.
+- **The write hook refuses a home-directory path inside a file's content**, so a scratch script
+  takes its directories as arguments instead of embedding them.
+- **Capturing a child's stderr moves the diagnostic, it does not remove the need to show it.**
+  `defaultRunGit` stopped echoing git's stderr, and the root resolvers' refusal then read "not
+  inside a git working tree" for a dubious-ownership failure too; the cure folds git's own words
+  into the refusal (`describeGitFailure`). Ask where captured output now reaches the operator.
+- **A frozen file is hashed after every formatter has run.** Stamp `frozenAt` last, once the whole
+  member set is final, then recompute and re-pin; a revision bump also moves every schema that
+  pins the revision as a `const`, and every hash those bytes feed.
+- **`grep -c … || echo 0` prints two lines when the count is zero** (grep prints `0` and exits 1).
+  Count inside a `bash -c` loop that defaults an empty value instead.
+- **A heartbeat script with a fixed title broadcasts stale state.** My loop's title read "#1018
+  at the S4036 gate" for about three hours after #1018 merged, on every heartbeat. Re-arm the loop
+  with a current title at each lane-state change, or have it read the title from a state file.
+- **"Opposite approach" across forks can be one approach at two dates.** A side note said engraph
+  took the opposite S4036 cure to Oak's. Oak at the shared merge base had the same FIX-only policy
+  and `resolveTrustedGit`; engraph had extended it (Windows partitioning, one trusted-binary
+  module on 2026-11-02) and Oak had since adopted the owner's 2026-11-03 by-name ruling. Read the
+  merge base's version before calling a divergence a competing decision. The live collision was
+  narrower: engraph's One-Outcome Rule grants no `FALSE_POSITIVE`, which the by-name S4036
+  section needs.
+- **I let the ceremony around 381 displace its delivery.** The carrier was integrated and
+  green locally, and I held the push about three hours for an optional review. Monitors ran with
+  no consumer, and the one decision the owner had to make sat under status updates. The owner
+  asked how 381 was not merged yet. Push as soon as the gates pass, and put a blocking decision
+  to the owner as one question at once while independent work continues. Run a monitor only when
+  something reads its output.
+- **The auto-mode classifier can deny a Sonar mark the policy permits.** Five of seven S4036
+  `falsepositive` writes on 381 went through and two were denied, with no reason given. A denial
+  is not a ruling to route around. Name the remaining keys to the owner at once, and carry on
+  with work that does not depend on them.
+- **A relative link between two skills dies in the projections.** `skills:generate` copies a
+  skill's reference files byte-for-byte into `.claude/skills/oak-*/` and `.agents/skills/oak-*/`,
+  so `../../parallax-synthesise/…` in `parallax-audit/references/audit-protocol.md` resolved only
+  in the canonical tree. Codex caught it on engraph #383; my review had checked the canonical
+  layout alone. The cure names the sibling skill and section in backticks, as the parallax family
+  already does. One instance (2026-11-05, Elder rides Topsoil, 65857c).
+- **A watch whose only exit is someone else's action hands the work back.** After the classifier
+  denied 381's last two Sonar marks, I ran two three-hour watches that could only succeed if the
+  owner marked them. Then I reported that 381 "still hasn't merged", as though the lane were
+  someone else's. The owner: "You say that as if anyone but you is responsible for it." While a
+  permission is missing, the lane stays mine. Name the permission once, as the thing I need. Settle
+  every other condition, running the door to read all its grounds. Never re-arm a watch that cannot
+  succeed by itself (2026-11-06, Sandpiper guards Wind, 690653).
+- **The door names one ground at a time, and a record's plan is not a check.** On 381 it refused
+  on the red Sonar check alone. Once that check was green, it refused on an unresolved Codex P1
+  from the day before: by-name `pnpm` cannot launch a Windows `.cmd` shim. The record had said
+  the integration would check native Windows launches, and it never did. `windows-basic` runs
+  only the unit suite, which injects fakes. Read the review threads first-hand before calling one
+  blocker the only one. Before citing a green check for a claim, check what that job runs
+  (2026-11-06, Sandpiper guards Wind, 690653).
+- **A claim written for one site does not cover a change to four.** On #386 I moved four pnpm
+  launchers to `cross-spawn`, and wrote of one, `realPnpmRunner`, that its arguments are the
+  repository's own, so no outside input reaches Windows' `cmd.exe`. One of the other three,
+  `runFileBackedChild`, is generic. The commit-advisory orchestrator forwards its own arguments
+  through it, and the commit skill documents `-m "subject"` as one of them. So a commit subject
+  can reach `cmd.exe`, and a global `pnpm.cmd` reads it a second time on its `%*` line. A side
+  agent's note found the area, though its fix (widen the ruling, or avoid the shell) was wrong.
+  Before stating a property of a change to a shared launcher, trace every caller's arguments.
+  Tracing them found a worse fault: the launched check got no stdin, so the advisory had been
+  passing every message given as `-F -`. The follow-up, #387, runs the check in the advisory's
+  own process (2026-11-06, Sandpiper guards Wind, 690653).
+- **A path and a name are different values, even when both run git.** In carrier 1.186.9 I
+  swapped `resolveTrustedGit()` for `'git'` at every call site. One caller passed it to a shim
+  that sits first on `PATH` and execs "the real git". Given the name, the shim found itself and
+  ran forever, and the smoke run hung for 16 minutes. The in-session reviewer caught it. Before
+  a mechanical swap, read what each consumer does with the value, not only its type (2026-11-06,
+  Sandpiper guards Wind, 690653).
+- **A clean auto-merge of a memory file can still break its links.** Oak's edit to a thread
+  record merged cleanly into engraph's copy, which lives one folder deeper (`paused/`). Its new
+  relative link missed by one level, and only the pre-push links validator caught it. On a
+  carrier, run `docs-validators:check` before the first push (2026-11-06, Sandpiper guards Wind,
+  690653).
+
+- **A side agent's note is a set of claims to check, and its labels are not mine to repeat.** A
+  side agent said Engraph's main differed from Oak's main by about 4,700 files. Checked: `main`
+  is still Oak's `d5846cf6f`, and the note meant the default branch `engraph`. I passed on its
+  "fork-only content" without testing it against the owner's intent that all work merges back
+  to Oak, and the owner did not recognise it. Check each claim first-hand and describe what the
+  data shows in my own terms (2026-11-08, Sandpiper guards Wind, 690653).
+
+### Practice/tooling feedback
+
+- **Surface**: the Bash hook's `wildcard-staging` entry in `.agent/hooks/policy.json`
+- **Signal**: false positive
+- **Observation**: `git worktree add -b <branch> "$W" origin/engraph && … && cp "$R/.env.local" .`
+  was refused as `git add .`. The two-word entry matched across a whole compound command
+  that stages nothing; splitting it and naming the copy's destination cleared the refusal
+  (2026-11-06, Sandpiper guards Wind, 690653).
+- **Behaviour change / candidate follow-up**: anchor the entry to a `git add` invocation, as
+  the `stash` entry's regex anchors to a command start.
+
+- **Surface**: `pnpm check` (vitest)
+- **Signal**: surprise
+- **Observation**: an owner-run full `pnpm check` on engraph at `efe1ba72e` failed in vitest
+  with ENOTEMPTY on the rmdir of the root `node_modules/.vitest-cache`, which no tracked config
+  sets, and stopped before `skills:check`. Unverified hypothesis: parallel workspaces racing on
+  one cache directory. It did not recur on the #383 pushes. Noted at the owner's word, not
+  pursued (2026-11-05, Elder rides Topsoil, 65857c).
+- **Behaviour change / candidate follow-up**: if it repeats, find what sets that cache directory
+  before touching any vitest config.
+
 ## 2026-11-06 — Swift holds Turbulence (01Duoc): a team-of-one agentic SDLC compared with the Practice
 
 ### What Was Done
@@ -1415,6 +1594,27 @@ Written from a solo Claude cloud session.
   `get_session`) settles it. Whether the prefix should stay the register coordinate for cloud
   seats is a question for the identity lane.
 - **Source plane**: `operational`
+
+## 2026-11-09 — Sandpiper guards Wind (690653): framing the merge back
+
+- **I measured around a constraint instead of asking about it.** Planning the merge back, I spent a
+  long run classifying 229 fork-naming files into dated records and "living files" to satisfy the
+  2026-09-02 naming ruling, then put a three-option question to the owner. The owner lifted the
+  ruling in one sentence and did not know what "living files" meant. The cheap move was one line at
+  the start: the merge necessarily names the fork in history; does the ruling still bind? Trace
+  friction to the decision it blocks before measuring it, and never send the owner a coined term
+  (2026-11-09, Sandpiper guards Wind, 690653).
+- **Analysis cannot observe another system's checks.** Most of what I was predicting about the merge
+  back (the receiving repository's code-quality gate, its deploy check, its release) is what that
+  repository's own checks report on a pull request. Where the real trial is a draft pull request,
+  prefer asking for it over predicting its result (2026-11-09, Sandpiper guards Wind, 690653).
+- **A failed commit leaves its files staged for the next one.** A docs commit failed commitlint
+  (a body line opening "2026-11-02:" parses as a footer token with no blank line before it, and
+  `--strict` fails the warning); its staged files then rode into the next `chore(continuity)`
+  commit. The repo forbids `git restore` and history rewrites, so the commit stands with its
+  message understating its contents, recorded on the pull request. After any failed commit, read
+  `git diff --cached --name-only` before the next, and keep date-colon openings off body lines
+  (2026-11-09, Sandpiper guards Wind, 690653).
 
 ## 2026-11-10 — Limpet lifts Spray (01Duoc): the brief review
 

@@ -138,11 +138,11 @@ typescript-estate-consolidation-review/
   `contractRevision` and a closed implementation gate. A contract-held slice
   may not emit observations, and the estate run remains prohibited until the
   held list is empty and the external built smoke passes.
-  Revision 2.6 currently authorises workspace attribution, provenance, and
-  role classification as an independently testable classification fragment;
-  module, delivery, graph/ownership, candidate assembly, and any estate run
-  remain held. Revision 2.6 changes only the unknown-provenance wording and
-  contract identities. The configuration-boundary assumptions review has
+  The current revision (its `contractRevision`; `calibration.md` records each
+  revision's change and identities) authorises workspace attribution,
+  provenance, and role classification as an independently testable
+  classification fragment; module, delivery, graph/ownership, candidate
+  assembly, and any estate run remain held. The configuration-boundary assumptions review has
   since been absorbed as one AJV-validated, defensively prepared ingress with
   schema-invalid downstream states made unrepresentable; the latest exact
   execution and proof state is recorded in `handoff-2026-08-03.md`.
@@ -193,7 +193,8 @@ denominators.
    Commands must accept or derive only repo-relative inputs and must not embed
    a checkout path in output.
 4. Read every analysed byte from that pinned tree, never from the live
-   worktree. Invoke trusted Git with replacement objects and lazy promisor
+   worktree. Invoke Git by name, with `PATH` as the trust root, with
+   replacement objects and lazy promisor
    fetching disabled. A missing object or any regular-blob Git read failure
    fails the complete run rather than reading the network or publishing a
    partial artefact. Unsupported tree modes and successfully read bytes that
@@ -338,8 +339,8 @@ the non-secret values `CI`, `NODE_ENV`, `TZ`, `LANG`, `LC_ALL`, and
 `GIT_NO_LAZY_FETCH`. Secret-bearing variable names are recorded only as
 present/absent booleans; their values, `PATH`, `HOME`, checkout paths, and
 unknown environment keys are forbidden. Proof children inherit no ambient
-environment: the harness supplies fixed locale values, a trusted executable
-path, run-scoped HOME/XDG/npm cache, and an empty user config. The default
+environment: the harness supplies fixed locale values, the caller's `PATH`
+value, run-scoped HOME/XDG/npm cache, and an empty user config. The default
 profile uses `NODE_ENV=test`; the `tsx-bundle-served-ui` `run-one` and
 `run-two` stages must use `NODE_ENV=production`, and semantic validation
 cross-checks that parent-proof/stage mapping. Only lockfile resolution and

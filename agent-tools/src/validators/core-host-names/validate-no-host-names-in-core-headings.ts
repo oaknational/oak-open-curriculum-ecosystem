@@ -45,7 +45,7 @@ import { resolveRepoRoot } from '../../core/repo-root.js';
 import { writeErrorLine, writeLine } from '../../core/terminal-output.js';
 import { describeGitReadFailure, listTrackedFiles } from '../../core/repository-paths.js';
 import { describeUnreadable, readScanFiles } from '../../core/tracked-file-scan.js';
-import { resolveTrustedGit } from '../../core/trusted-git.js';
+import { errorCodeOf } from '../../core/error-code.js';
 
 import {
   CHANGELOG_PATH,
@@ -104,22 +104,17 @@ function readDeclaredRepositories(repoRoot: string): Result<string[], string> {
 
 /** The origin remote's owner and repository; a refusal reason when absent or not that shape. */
 function readOrigin(repoRoot: string): Result<GitRemoteRepository, string> {
-  let git: string;
-  try {
-    git = resolveTrustedGit();
-  } catch (error) {
-    return err(
-      `cannot resolve a trusted git binary — ${error instanceof Error ? error.message : 'unknown'}`,
-    );
-  }
   let url: string;
   try {
-    url = execFileSync(git, ['remote', 'get-url', 'origin'], {
+    url = execFileSync('git', ['remote', 'get-url', 'origin'], {
       cwd: repoRoot,
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'ignore'],
     });
-  } catch {
+  } catch (error) {
+    if (error instanceof Error && errorCodeOf(error) === 'ENOENT') {
+      return err(`git could not run (${error.message}) — install git or put it on PATH`);
+    }
     return err(
       'no origin remote — the scanned tree names itself by its origin owner and repository',
     );

@@ -21,6 +21,13 @@ import {
   TOKEN,
   tokenStoreFake,
 } from './test-helpers/push-cli-double.js';
+import { gitRefFormatOracle, type CheckRefFormatRun } from './ref-format.js';
+
+/** A check-ref-format run that never starts, as with no git on `PATH`. */
+const gitCannotStart = (): CheckRefFormatRun => ({
+  status: null,
+  error: new Error('spawnSync git ENOENT'),
+});
 
 /**
  * The `merge-bot push` front door over injected seams (mint, config, git,
@@ -314,14 +321,14 @@ describe('merge-bot push outcomes and refusals', () => {
     expect(run.errText()).toContain('single authority');
   });
 
-  it('fails as an operation, never as usage, when no trusted git can check the --branch value', async () => {
+  it('fails as an operation, never as usage, when no git can run to check the --branch value', async () => {
     const run = runPush({
       args: ['--branch', 'other-lane'],
-      overrides: { branchArgSeams: { pathExists: () => false } },
+      overrides: { branchArgSeams: { refFormatOracle: gitRefFormatOracle(gitCannotStart) } },
     });
 
     expect(await run.exit).toBe(1);
-    expect(run.errText()).toContain('No trusted git binary found');
+    expect(run.errText()).toContain('git check-ref-format could not run');
     expect(run.calls).toEqual([]);
   });
 

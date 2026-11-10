@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
 import { type GitRunner } from '../collaboration-state/coordination-home.js';
-import { TrustedGitResolutionError } from '../core/trusted-git.js';
 
 import { resolveInvokingGitRoot } from './git-root.js';
 
@@ -11,11 +10,6 @@ const gitWithFeatureToplevel: GitRunner = () => '/workspace/oak-worktrees/featur
 /** A git runner that fails as git does when run outside a working tree. */
 const gitFails: GitRunner = () => {
   throw new Error('fatal: not a git repository');
-};
-
-/** A git runner whose trusted-binary resolution refuses before git ever runs. */
-const resolverRefuses: GitRunner = () => {
-  throw new TrustedGitResolutionError('No trusted git binary found. Searched: …');
 };
 
 /** A git runner whose toplevel query reports only whitespace. */
@@ -28,20 +22,9 @@ describe('resolveInvokingGitRoot', () => {
     ).toBe('/workspace/oak-worktrees/feature');
   });
 
-  it('translates a git-execution failure into the F-138 fail-loud guard', () => {
+  it("translates a git-execution failure into the F-138 fail-loud guard, carrying git's reason", () => {
     expect(() => resolveInvokingGitRoot('/tmp/elsewhere', gitFails)).toThrow(
-      /not inside a git working tree/u,
-    );
-  });
-
-  it('lets a trusted-git RESOLUTION refusal pass through as its own diagnosis', () => {
-    // git never ran — rebranding the refusal as not-inside-a-working-tree
-    // would be the misleading-error class this repository has hit three times.
-    expect(() => resolveInvokingGitRoot('/workspace/oak', resolverRefuses)).toThrow(
-      /No trusted git binary found/u,
-    );
-    expect(() => resolveInvokingGitRoot('/workspace/oak', resolverRefuses)).not.toThrow(
-      /not inside a git working tree/u,
+      /git could not resolve a working tree from '\/tmp\/elsewhere' \(fatal: not a git repository\)/u,
     );
   });
 

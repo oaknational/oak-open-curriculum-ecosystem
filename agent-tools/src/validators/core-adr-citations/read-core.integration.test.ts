@@ -35,11 +35,14 @@ describe('readCore', () => {
     const result = readCore(
       ROOT,
       readers({
-        listTrackedFiles: () => err({ kind: 'git-unavailable', message: 'git is not on PATH' }),
+        listTrackedFiles: () =>
+          err({ kind: 'git-failed', status: null, stderr: 'spawnSync git ENOENT' }),
       }),
     );
 
-    expect(result).toEqual(err('cannot list tracked files — git is not on PATH'));
+    expect(result).toEqual(
+      err('cannot list tracked files — git failed with no exit status: spawnSync git ENOENT'),
+    );
   });
 
   it('refuses a listing with no tracked Core file rather than passing vacuously', () => {
