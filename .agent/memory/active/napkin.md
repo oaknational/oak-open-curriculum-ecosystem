@@ -1615,7 +1615,8 @@ outside the repository. One instance each; scope is this session.
 - **Correction (mine):** `rg PATTERN -g GLOB` with no path, in a compound command, read standard
   input and hung to the tool timeout. Give `rg` an explicit path and `< /dev/null`.
 - **Correction (mine):** the Cricket frame said "No holds" while the owner's opening message
-  carried one (a file not to open until a condition). Five of eight seats flagged the frame.
+  carried one (a file not to open until a condition). Four of eight seats named that omission,
+  and six of eight returned a frame verdict other than SOUND.
   A frame's SOURCES block quotes the plan's trigger line for every hold, verbatim.
 - **Correction (mine):** I edited files twice with an inline Python heredoc where the per-file
   edit tool was the instrument the grounding names. The edits were right; the instrument was not.
@@ -1644,3 +1645,17 @@ outside the repository. One instance each; scope is this session.
 - **Observation:** a reviewer bot raised the same finding class twice (a Fact row whose source
   did not cover its whole claim) because the fix for the first round was applied to the rows
   named and a row added in the same push repeated it. Fix the class with a check, then the rows.
+- **Correction (mine, to the entry above that begins "one comparison thought occurred"):** no
+  such thought was recorded anywhere, and at the wrap I could not name one. The line overstated;
+  the true record is that the research files were swept for Practice vocabulary and held none.
+  A napkin line that reports an event needs the event.
+- **Observation:** the study's five measurement scripts lived only in the session scratch
+  directory while four research files cited them as instruments. The wrap's loss scan found
+  them; they are now `method-instruments.md` beside the study. An instrument named in evidence
+  is evidence, and belongs in the repository at the moment it is first cited.
+- **Observation:** `agent-tools review-cost survey` cannot run in a Claude cloud session: it
+  shells to `gh repo view`, and GitHub GraphQL is not reachable there (HTTP 403 with a message
+  naming the REST routes). The ledger row for pull request 395 is the seat's reading from the
+  connector's review-thread listing.
+- **Observation:** a reviewer bot's third finding arrived on the merged pull request, after the
+  merge, on the last push. A merged pull request's threads are re-read at the next wrap.

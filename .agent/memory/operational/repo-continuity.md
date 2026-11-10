@@ -37,14 +37,17 @@ Compact live state only. Finished-session narrative is conserved in its homes
 from here per `continuity-practice.md` §Disposition; only live lanes and live
 forward-asks remain.
 
-- **2026-11-10T11:1xZ: the Hermes Agent v0.23.0 own-terms study is written and awaits the owner's
-  merge** (Swift holds Aether, 01Duocji, solo cloud session, the owner-interface directly). Draft
-  pull request 395 carries the brief, the sealed ledger and five research files under
-  `.agent/research/agentic-engineering/hermes-agent-v0.23.0-2026-11/`; start at `synthesis.md`,
-  whose status is `provisional`. The owner's word of 2026-11-10 (quoted in `brief.md`) keeps the
-  comparison with the Practice for a separate, later session: its gate is that pull request merged
-  and the owner's go-ahead, and its inputs are the Fact rows of `evidence-log.md` and the two
-  architecture files. Nothing was written to either Hermes repository.
+- **2026-11-10T13:0xZ: the Hermes and Practice comparison is the next phase of this session, at the
+  owner's word** (Swift holds Aether, 01Duocji, solo cloud session, the owner-interface directly). The
+  Hermes Agent v0.23.0 own-terms study merged as pull request 395 (merge `8af1b0fc2`); start at
+  `.agent/research/agentic-engineering/hermes-agent-v0.23.0-2026-11/synthesis.md`, status
+  `provisional`. The owner then said: "I do want that session opened, please prepare for it"; "Once
+  that is done I will compact this session, and we can begin the next phase". The entry point is
+  `.agent/research/agentic-engineering/hermes-practice-comparison-2026-11/brief.md`: the owner's
+  words, the inputs on both sides, and proposals to test. The owner has named the task and nothing
+  yet about its purpose, depth or output; the brief's first act is to ask. The two Hermes clones in
+  the cloud session are pinned and clean and nothing was ever written to them; the pins and the
+  commands to recreate them are in `method-instruments.md` beside the study.
 
 - **2026-11-08T20:0xZ: the Attendant Workflow design brief is the next session's entry point**
   (Juniper seeks Pollen, 01Duoc, solo cloud session, the owner-interface directly). The owner's words
