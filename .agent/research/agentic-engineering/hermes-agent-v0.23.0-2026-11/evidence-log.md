@@ -278,7 +278,7 @@ subagent for the fresh-eyes pass.
 
 ## 5. Cricket verdict on the Charter (Phase 1 close)
 
-Panel run 2026-11-10 about 10:55 to 11:05 UTC, four roles, two stances. The adversarial wave ran
+Panel run 2026-11-10, between the pin at 10:47 UTC and the commit at 10:54 UTC (the last two returns arrived after it), four roles, two stances. The adversarial wave ran
 on a corrected frame, because the normal wave's frame verdicts were acted on first.
 
 | Role | Stance | Work | Frame | Substance |
