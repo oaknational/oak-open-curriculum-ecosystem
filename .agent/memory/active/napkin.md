@@ -1648,3 +1648,82 @@ Written from a solo Claude cloud session.
   The three tensions went back to the owner and were answered in three lines. The swing after a
   correction is the tell `metacognition.md` names; a decision is the owner's by what it is, not
   by whether the seat has a leaning.
+
+## 2026-11-10 — a read-only study of an external codebase (Swift holds Aether, 01Duocji)
+
+Solo cloud session carrying this repository and two external ones, working from a brief written
+outside the repository. One instance each; scope is this session.
+
+- **Observation:** a brief written in a chat with read-only API access assumed the attached
+  repositories were the upstream ones; the session carried the owner's forks, and one fork served
+  no tags. The tag came from the public upstream by URL (`git fetch <url> tag <name>`), with no
+  remote added. The six-clause plan-body check named this before any work started.
+- **Observation:** this repository's `CLAUDE.md`, rule adapters and skills loaded in a
+  three-repository cloud session whose start directory was above the clones. The brief had
+  planned for the non-loader route.
+- **Correction (mine):** line citations written from windowed reads (`sed -n A,Bp`) were off by
+  one to six lines in nine of 122 spot checks. A script that looks for the quoted substring at
+  the cited line range found all nine; a check that the path exists and has that many lines found
+  none. Checking that a link resolves is not checking the quotation.
+- **Correction (mine):** `rg PATTERN -g GLOB` with no path, in a compound command, read standard
+  input and hung to the tool timeout. Give `rg` an explicit path and `< /dev/null`.
+- **Correction (mine):** the Cricket frame said "No holds" while the owner's opening message
+  carried one (a file not to open until a condition). Four of eight seats named that omission,
+  and six of eight returned a frame verdict other than SOUND.
+  A frame's SOURCES block quotes the plan's trigger line for every hold, verbatim.
+- **Correction (mine):** I edited files twice with an inline Python heredoc where the per-file
+  edit tool was the instrument the grounding names. The edits were right; the instrument was not.
+- **Observation:** a fresh-eyes subagent given questions, never this seat's answers, agreed on
+  five claims and corrected one count (it found four further call sites of a function this seat
+  had described from two). The question-only frame is what let it find more than it was shown.
+- **Observation:** one comparison thought occurred during the study and was not developed, as
+  the owner's word of 2026-11-10 requires; it is left for the comparison session to raise from
+  the evidence itself.
+- **Correction (the owner's question, 2026-11-10: "it seems like DSPy/GEPA might be the heart of
+  the self improvement in Hermes?"):** the first synthesis had left a 30-file repository's one
+  report and its eight-commit history unread, and both held decisive facts (which optimiser had
+  actually run; that the named one could not be constructed as called). In a small repository,
+  read every artefact before giving a verdict on it.
+- **Correction (mine):** the first synthesis said Hermes "claims none" about training model
+  weights. No sweep backed it; one `git grep` found the claim in two documents. A sentence with
+  "none" or "never" in it is the cue for the cheapest check that could prove it wrong, and the
+  brief had said so.
+- **Observation:** the study's centre followed its method. A cold pass that starts from runtime
+  write sites makes the runtime the centre by construction; the owner's reversed reading was
+  what exposed it. After a first synthesis, ask which conclusion the starting point made
+  inevitable.
+- **Observation:** a third-party library's call shape was settled by downloading its wheels
+  from the package registry and reading one file in each release as data (fourteen releases,
+  under two minutes), when its documentation site was outside the allowed network.
+- **Observation:** a reviewer bot raised the same finding class twice (a Fact row whose source
+  did not cover its whole claim) because the fix for the first round was applied to the rows
+  named and a row added in the same push repeated it. Fix the class with a check, then the rows.
+- **Correction (mine, to the entry above that begins "one comparison thought occurred"):** no
+  such thought was recorded anywhere, and at the wrap I could not name one. The line overstated;
+  the true record is that the research files were swept for Practice vocabulary and held none.
+  A napkin line that reports an event needs the event.
+- **Observation:** the study's five measurement scripts lived only in the session scratch
+  directory while four research files cited them as instruments. The wrap's loss scan found
+  them; they are now `method-instruments.md` beside the study. An instrument named in evidence
+  is evidence, and belongs in the repository at the moment it is first cited.
+- **Observation:** `agent-tools review-cost survey` cannot run in a Claude cloud session: it
+  shells to `gh repo view`, and GitHub GraphQL is not reachable there (HTTP 403 with a message
+  naming the REST routes). The ledger row for pull request 395 is the seat's reading from the
+  connector's review-thread listing.
+- **Observation:** a reviewer bot's third finding arrived on the merged pull request, after the
+  merge, on the last push. A merged pull request's threads are re-read at the next wrap.
+- **Correction (the owner, 2026-11-10: "run this through the decision matrix please"):** the
+  comparison brief's first draft said the owner had not stated the comparison's purpose, depth or
+  output, and made asking the session's first act. I had written that as care: owner facts are
+  not to be inferred. It was a passback. One search of the plan estate found a strategic node the
+  owner ratified on 2026-08-01 that states the end and the shape serving work must take, and two
+  accepted precedents for the form. "The owner has not said" is a claim of absence like any
+  other, and I had run no search behind it, hours after recording that lesson about Hermes.
+  Before a question reaches the owner, search the ruling surfaces; what is left after the lenses
+  is a verdict with its one inference named, not a question.
+- **Correction (mine):** the wrap's first push failed the `static-checks` leg on four
+  machine-local paths in two new research files, and two reviewer bots found the same paths and
+  an invocation note that fitted two scripts of five. The no-machine-local-paths validator is
+  one command (`pnpm docs-validators:check`, about a minute); I had not run it on new Markdown
+  because the earlier research files had passed without it. A new file that names where things
+  are on this machine is the case that validator exists for.
