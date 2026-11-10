@@ -11,9 +11,8 @@ record a run keeps.
 
 **Task of the session that reads this**: carry out the research step of the Attendant lane,
 [`attendant-research`](../../plans/delivery/attendant-research.plan.md), under its strategic node
-[`attendant-workflow`](../../plans/strategic/attendant-workflow.plan.md). Both are born `sketch`;
-a sketch governs no work, so the session's first check is that the owner has stamped them. The
-owner, 2026-11-10: "Let's get the plan written and ready, and the next session will carry out the
+[`attendant-workflow`](../../plans/strategic/attendant-workflow.plan.md). Both were ratified by the owner on 2026-11-10 ("I ratify both plans and both design choices and
+designs to evaluate"). The owner, 2026-11-10: "Let's get the plan written and ready, and the next session will carry out the
 research". The owner's earlier word on the standard the planning must reach (2026-11-08):
 "decision completed and therefore research complete and design complete".
 
@@ -180,6 +179,11 @@ this, but have only been partially successful".
 
 **The plan now, the research next (2026-11-10)**: "Let's get the plan written and ready, and the
 next session will carry out the research".
+
+**Ratification (2026-11-10)**: "I ratify both plans and both design choices and designs to
+evaluate". The plans are the strategic node `attendant-workflow` and the delivery node
+`attendant-research`; the design choices are the placement under FRAME-1 and the stepping-back
+mechanism as a general capability of the estate with the Attendant as its first user.
 
 **How stepping back fires (2026-11-10)**: "This is the very heart of the challenge we face. It is
 what we are researching. Hooks are one option, but very heavy handed, skills and rules with

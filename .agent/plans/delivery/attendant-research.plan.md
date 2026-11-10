@@ -3,19 +3,16 @@ id: attendant-research
 node_type: delivery
 name: Research for the Attendant Workflow
 overview: Answer the five research questions the Attendant's design rests on, classify what the owner has caught that agents missed, and write the scenarios that will test the stepping-back mechanism.
-status: sketch
-ratified_by: null
-ratified_date: null
-ratified_where: null
+status: ratified
+ratified_by: "Jim Cresswell"
+ratified_date: 2026-11-10
+ratified_where: "In-session word, Claude cloud session session_01DuocjT6NUndtf6abNSv8Tp (seat Limpet lifts Spray), 2026-11-10, verbatim: \"I ratify both plans and both design choices and designs to evaluate\"; recorded in the brief under The owner's words and on pull request 394"
 serves: attendant-workflow
 impact_areas:
   - practice-and-estate
 tickets: []
 depends_on: []
-owner_gates:
-  - awaiting: owner-decision
-    clears_when: "The owner stamps this node and its parent `attendant-workflow`; a sketch governs no work, so the research does not start before the stamp"
-    expires: 2026-12-01
+owner_gates: []
 last_updated: 2026-11-10
 ---
 

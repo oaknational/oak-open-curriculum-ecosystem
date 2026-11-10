@@ -3,10 +3,10 @@ id: attendant-workflow
 node_type: strategic
 name: The Attendant Workflow
 overview: An idea of the owner's becomes merged, value-bearing work through a process agents run between the owner's touches, built on a mechanism that steps back and questions the frame automatically.
-status: sketch
-ratified_by: null
-ratified_date: null
-ratified_where: null
+status: ratified
+ratified_by: "Jim Cresswell"
+ratified_date: 2026-11-10
+ratified_where: "In-session word, Claude cloud session session_01DuocjT6NUndtf6abNSv8Tp (seat Limpet lifts Spray), 2026-11-10, verbatim: \"I ratify both plans and both design choices and designs to evaluate\"; recorded in the brief under The owner's words and on pull request 394"
 serves: FRAME-1
 impact_areas:
   - practice-and-estate
@@ -23,10 +23,10 @@ The owner's words are quoted and dated in the
 [brief](../../prompts/agentic-engineering/idea-to-merge-process-design.prompt.md) and are the
 authority; the evidence behind this node is in the
 [working notes](../../research/agentic-engineering/attendant-creation-plan-working-notes.md).
-Two things here are the authoring seat's reading, for the owner to confirm or change at the
-stamp: the placement under FRAME-1 (the Practice as a meta-learning loop), and that the
-stepping-back mechanism is designed to live in the estate's general surfaces with the Attendant
-as its first user.
+The owner ratified this node on 2026-11-10 together with its two design choices: the placement
+under FRAME-1 (the Practice as a meta-learning loop), and the stepping-back mechanism designed
+to live in the estate's general surfaces with the Attendant as its first user; and the designs
+to evaluate (working notes §7).
 
 ## Outcome
 
@@ -151,7 +151,7 @@ run will do.
 
 Delivery plans serving this node declare `serves: attendant-workflow`; enumerate them by search.
 The lane has four steps, each its own delivery node, authored by its implementer at pickup and
-stamped before it governs work:
+stamped before it governs work (the research node was stamped with this one):
 
 1. **Research**: [`attendant-research`](../delivery/attendant-research.plan.md), written.
 2. **The stepping-back mechanism**: designed across start-right, `AGENT.md`, skills and rules,
