@@ -25,8 +25,9 @@ thread record existed.
 
 - Branch: `ccr-ddb70dc4-jltz47`, cut at `engraph` `SHA:b1c3ee289` (pull request 390's merge).
 - Invocation pointer: the brief above.
-- Controlling plan: none yet; this session's deliverable is the creation plan, authored in the
-  plan estate through the `plan` skill.
+- Controlling plan: [`attendant-workflow-creation`](../../../plans/delivery/attendant-workflow-creation.plan.md),
+  a `sketch` in design: the session's deliverable. Research findings and decisions land there;
+  the working notes hold the evidence.
 - Working notes: [`attendant-creation-plan-working-notes.md`](../../../research/agentic-engineering/attendant-creation-plan-working-notes.md)
   (the session's impact and value, how it delivers them, the review of the brief).
 - Next safe step: the brief review is delivered and the owner has answered it (2026-11-10, in the
@@ -34,8 +35,10 @@ thread record existed.
   working; a reliable automatic stepping-back mechanism is a main goal. The seat's review of its own
   work (notes §3.7) found its "no question waits on the owner" an over-correction: the credential
   decision and the meaning of "pricing" are the owner's; the owner answered all three tensions the
-  same day (notes §3.8). Next: research why the existing step-back instruments only partly succeed, over the
-  widened corpus, then design by exploration with the owner, that mechanism first.
+  same day (notes §3.8). The brief and the design notes were corrected in place on 2026-11-10.
+  Next: the owner's direction on how the stepping-back mechanism fires (the plan's first open
+  decision); research questions 1, 2 and 5 into the plan; then the design of the mechanism with
+  the owner.
 - Team expectation: solo cloud seat, the owner as design partner.
 - Acceptance bar: the creation plan decision-complete, research-complete and design-complete, in
   the owner's words of 2026-11-08.
