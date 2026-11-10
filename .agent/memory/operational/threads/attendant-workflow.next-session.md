@@ -30,18 +30,14 @@ thread record existed.
   the working notes hold the evidence.
 - Working notes: [`attendant-creation-plan-working-notes.md`](../../../research/agentic-engineering/attendant-creation-plan-working-notes.md)
   (the session's impact and value, how it delivers them, the review of the brief).
-- Next safe step: the brief review is delivered and the owner has answered it (2026-11-10, in the
-  working notes §3.6): the Attendant replaces nothing and is an exploration towards unsupervised
-  working; a reliable automatic stepping-back mechanism is a main goal. The seat's review of its own
-  work (notes §3.7) found its "no question waits on the owner" an over-correction: the credential
-  decision and the meaning of "pricing" are the owner's; the owner answered all three tensions the
-  same day (notes §3.8). The brief and the design notes were corrected in place on 2026-11-10.
-  Next: the owner's direction on how the stepping-back mechanism fires (the plan's first open
-  decision); research questions 1, 2 and 5 into the plan; then the design of the mechanism with
-  the owner.
+- Next safe step: Phase 1 of the controlling plan, the research, at the owner's word of 2026-11-10
+  ("Let's get the plan written and ready, and the next session will carry out the research").
+  The plan is written to be picked up cold: start with `start-right-thorough`, read the brief's
+  quotations and the plan, register here, then the five research questions in the plan's order.
+  The plan is a `sketch`; the owner has not stamped it.
 - Team expectation: solo cloud seat, the owner as design partner.
-- Acceptance bar: the creation plan decision-complete, research-complete and design-complete, in
-  the owner's words of 2026-11-08.
+- Acceptance bar: for the next session, phase 1's outputs as the plan names them (the findings
+  file, the scenarios file, the plan's summary section, a report to the owner).
 
 ## Participating Agent Identities
 
