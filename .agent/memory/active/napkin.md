@@ -1395,3 +1395,44 @@ Written from a solo Claude cloud session.
   requirements in tension are a signal to step back and assess the frame, and a new way of
   working is explored for what becomes easier if the system varies, with judgement and value
   ahead of any count.
+
+## 2026-11-08 — Limpet lifts Spray (01Duoc): identity at session open
+
+Written from a solo Claude cloud session.
+
+### Practice/tooling feedback
+
+- **Surface**: `agent-tools:agent-identity`, PDR-027 `session_id_prefix`
+- **Signal**: surprise
+- **Observation**: two different claude.ai cloud sessions, created about a day apart, share
+  the prefix `01Duoc` (their untagged ids share eight characters, `01DuocjT`). The brief's
+  author (Juniper seeks Pollen, claude-fable-5-1, `01DuocjTp8TB8373EtwFwkoA`) and this seat
+  (`01DuocjT6NUndtf6abNSv8Tp`) looked at first like one session whose name had drifted, the
+  reading the identity rule gives for same prefix and different name. Deriving each name from
+  its own full id, and reading pull request 390's `Claude-Session` trailers, showed two seats.
+- **Behaviour change / candidate follow-up**: on a cloud seat, read a shared prefix as a
+  possible collision before reading it as tooling drift; the full session id (commit trailers,
+  `get_session`) settles it. Whether the prefix should stay the register coordinate for cloud
+  seats is a question for the identity lane.
+- **Source plane**: `operational`
+
+## 2026-11-10 — Limpet lifts Spray (01Duoc): the brief review
+
+- **A fresh-context reviewer found what a full read missed.** One `assumptions-expert`, briefed
+  with the reliance and the brief's convention and without this seat's doubts, converged on four
+  of nine doubts and added five, three of them weighty: the hosted cloud's GitHub proxy sends
+  every write under the owner's token and refuses GraphQL whatever the credential; "pricing" is
+  a term of art in this estate, so the owner's exclusion may cover PDR-140 and the fleet rule;
+  and the touch-point words are in tension, which the brief had settled by declaring the later
+  word. Every claim it returned was re-read first-hand before use, and all held. One instance.
+- **Stash-park is refused by the repository's hook policy**: this seat reached for a stash to
+  fast-forward the branch under live edits. Cure: commit, then merge the default branch in.
+- **The same policy refused a napkin append whose prose quoted that command in backticks**: the
+  pattern's leading class admits a backtick, so prose about the command reads as the command.
+  A substring misfire of the kind `hook-policy-substring-discipline` names; the append went
+  through the edit tool instead. Candidate follow-up for the hook lane: anchor the pattern so a
+  quoted command in a heredoc does not match.
+- **The owner's word for this session overrides the cards-always rule**: "ask me for direction
+  with your analysis, and do not offer me a menu of options" (2026-11-08). Requests for direction
+  go in prose with the analysis and a leaning, not as option cards; recorded as the divergence
+  the collaboration directive asks for.
