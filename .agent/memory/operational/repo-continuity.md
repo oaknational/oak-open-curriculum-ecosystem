@@ -37,7 +37,7 @@ Compact live state only. Finished-session narrative is conserved in its homes
 from here per `continuity-practice.md` §Disposition; only live lanes and live
 forward-asks remain.
 
-- **2026-11-10T12:3xZ: the Hermes Agent v0.23.0 own-terms study is written and awaits the owner's
+- **2026-11-10T11:1xZ: the Hermes Agent v0.23.0 own-terms study is written and awaits the owner's
   merge** (Swift holds Aether, 01Duocji, solo cloud session, the owner-interface directly). Draft
   pull request 395 carries the brief, the sealed ledger and five research files under
   `.agent/research/agentic-engineering/hermes-agent-v0.23.0-2026-11/`; start at `synthesis.md`,
