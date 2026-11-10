@@ -404,3 +404,69 @@ schema's Linear sections; PDR-140's title, the fleet rule and `.husky/pre-push`;
 `pr-lifecycle` work-in-progress lines; Anthropic's `cloud-environments`, `claude-projects`,
 `hooks`, `skills` and `sub-agents` pages; the existence of the twelve listed reports, checked.
 The independent assessment's full return is summarised in §3, its claims re-read first-hand.
+
+## 6. Research, first pass: why the step-back instruments only partly succeed (2026-11-10)
+
+Sources read first-hand: the retrospective
+[why written lessons kept needing the owner](../../reports/agentic-engineering/why-written-lessons-kept-needing-the-owner-2026-09-16.md)
+(summary, arc, causal stack, counterframe, counterfactual); the two-expert-reviews and
+five-days retrospectives and the Cricket tally of 2026-08-12 (§3.5); the Cricket skill; the
+trigger text of each instrument (its "use when"); this session's own two instances. A first
+pass, not saturation.
+
+Five causes, each with its evidence:
+
+1. **The trigger is the working agent's own recognition.** Every instrument fires when the
+   agent judges it should: `metacognition` "when the purpose under an action is non-obvious",
+   `concept-exploration` when "framing options immediately would foreclose the real question",
+   Cricket "at cycle or decision boundaries", `retrospective` on a surprise. A captured frame
+   does not feel like one. The record: "Sixteen of nineteen prior-kept mechanisms recurred
+   within four weeks of the run that kept them"; "Writing the lesson did not install it"; under
+   a silent model change, mechanically enforced disciplines held while prose-only ones
+   "regressed to error types months absent, despite the full rule corpus being loaded in
+   context".
+2. **The frame is written by the one being checked.** "A consultation inherits the asker's
+   frame … the opposite of parallax, while feeling like diligence". A seat's Cricket suites
+   returned 19 ON-TRACK of 24 while it worked one direction of a two-way goal (Cricket skill,
+   the owner's word of 2026-09-24: "Crickets judge in the frame provided, we need them to also
+   judge the frame itself").
+3. **The question asked has no answer of the form "stop" or "delete it".** "internal instruments
+   audit MECHANICS; only external reads audit WARRANTS"; four reviewers hardened a mechanism
+   nobody was asked whether to keep.
+4. **The evidence handed over is the working agent's own record.** A mis-dated record
+   "propagated into four independent verdicts".
+5. **The return is advice to the agent it doubts, and the estate's response to failure adds.**
+   "Resolve is advice; a sentence that must be written is a step"; "the owner SUBTRACTED at
+   every touch while agent rounds had ADDED".
+
+What has worked, from the same record:
+
+- **Anchor-free legs commissioned against the question**: on 2026-08-17 they "were the only
+  parts of the day's work that survived" and agreed with the owner.
+- **A frame built from the owner's verbatim words**: on 2026-11-10 four Cricket seats, given the
+  owner's sentences beside this seat's reading, each caught the seat's over-correction (§3.7);
+  an assessor briefed without the seat's doubts found five the seat had missed (§3.1). Two
+  instances, one session.
+- **Instruments, where doctrine had not changed the rate**: the review tally builder and the
+  review-cost gate; a lint rule; the merge front door's typed refusals.
+- **Two script-free forms that held**: "a sentence that must be written is a step" (stating the
+  prong stopped a generator that naming twice had not), and a declared deadline-and-default.
+
+What this asks of the mechanism (the design question, for exploration with the owner):
+
+- its firing does not depend on the working agent judging that it is needed;
+- its frame is the owner's words and primary evidence, with the working agent's reading as the
+  thing judged, never the lens;
+- its question is fixed, climbs (the work, the stage, the plan, the value, the bigger picture)
+  and admits "stop", "smaller" and "not worth doing" as answers;
+- its return binds: the working agent answers it in writing in the run's record before it
+  continues, and a worth-doubt with evidence goes to the owner;
+- it can subtract.
+
+The open fork is the firing. Script-free candidates: a stage's required input (the notes'
+precondition bet, supported by "a sentence that must be written is a step", one instance); a
+`context: fork` skill for the fixed brief. The native alternative: a hook declared in the
+Attendant skill's own frontmatter (`Stop` or `SubagentStop`, of the `prompt` or `agent` type),
+which exists only while a run is live, runs no script of the estate's, and is still a hook under
+the owner's cost ordering.
+
