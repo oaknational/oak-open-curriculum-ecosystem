@@ -150,8 +150,11 @@ run will do.
 ## Delivery
 
 Delivery plans serving this node declare `serves: attendant-workflow`; enumerate them by search.
-The lane has four steps, each its own delivery node, authored by its implementer at pickup and
-stamped before it governs work (the research node was stamped with this one):
+The lane has four steps, each its own delivery node. This node's ratification names the four
+and delegates the authoring of each to its implementer at pickup, so no step waits on a stamp
+of its own (the plan skill, "Born-Sketch Ratification"). The owner stays the design partner
+throughout: a decision that is the owner's goes to the owner with analysis when it arises, and
+a change to this node's outcome, bet or settled decisions returns this node to the owner.
 
 1. **Research**: [`attendant-research`](../delivery/attendant-research.plan.md), written.
 2. **The stepping-back mechanism**: designed across start-right, `AGENT.md`, skills and rules,

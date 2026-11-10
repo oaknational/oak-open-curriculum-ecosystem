@@ -549,7 +549,8 @@ words; "simpler if the system changed?" is asked of each and the answer recorded
 - The states of a run: not yet; abandoned on the owner's word; done.
 
 Step 3 ends with an outside-the-frame audit of the whole design, asked whether it could be
-complete and still worthless, and the owner's stamp on its node.
+complete and still worthless, and the design returned to the owner as design partner (no step waits on a stamp of its own; the
+strategic node's ratification delegates each step's authoring).
 
 ### Step 4: build and first run
 

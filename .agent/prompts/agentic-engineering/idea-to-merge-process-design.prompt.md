@@ -5,9 +5,10 @@ the owner's words of those days; a quotation is the owner's, dated; every other 
 the author's reading. **Revised**: 2026-11-10 by the design seat (Limpet lifts Spray), on the
 owner's words of that day and on facts re-read that day; the evidence for each revision is in the
 [working notes](../../research/agentic-engineering/attendant-creation-plan-working-notes.md).
-**Terms**: *the creation plan* is this session's deliverable; *the run
-plan* is the detailed plan a run makes after approval; *the run node* is the plan-estate
-record a run keeps.
+**Terms**: *the creation plan* was the name of the design session's deliverable, now the
+strategic node `attendant-workflow` and its delivery nodes; *the run plan* is the detailed plan
+a run makes after approval; *the run node* is the plan-estate record a run keeps. The session
+that reads this does the research step only.
 
 **Task of the session that reads this**: carry out the research step of the Attendant lane,
 [`attendant-research`](../../plans/delivery/attendant-research.plan.md), under its strategic node
@@ -217,6 +218,9 @@ in another form.
 
 ## What we currently believe the work should produce
 
+**For the lane's later steps, not the research session.** The research informs these items; the
+seats that design the mechanism and the rest of the Attendant test and decide them.
+
 The belief before the exploration, written on 2026-11-07 and revised on 2026-11-08. Each item
 names in brackets the capability it serves (the notes §1: C1 find the real value; C2 tell
 whether value was delivered; C3 keep quality without presence; C4 run in the cloud end to
@@ -331,21 +335,22 @@ corpus.
 
 ## How to work
 
-- Ground with `start-right-thorough`. Use the Parallax skill to explore the design space, and
-  the cognitive and planning skills (`concept-exploration`, `proportionality`, `reason`,
-  `metacognition`, `user-value`, `specify`, `plan`) through it.
-- At every part of the design ask what becomes easier if the system changes (the fourth
-  decision lens), and record the answer beside the part, whether or not a change is proposed.
-- Find where the estate has already worked through a concept the process needs, and extract
-  the part of each existing skill that carries it as a component. Existing skills are
-  evidence that a concept was explored.
-- Make design decisions in the creation plan, each with its reasoning. A decision that is the
-  owner's by the decision lenses goes to the owner as a card; everything else is the
-  designer's to settle and state.
-- The owner is the design partner, and provides the idea for the first run.
-- Author the creation plan in the plan estate through the `plan` skill (born `sketch`; the
-  owner's ratification stamp makes it the plan of record), and keep working notes in the
-  repository as the work proceeds.
+For the research session:
+
+- Ground with `start-right-thorough`, then follow the delivery node `attendant-research`: its
+  order of questions, its stopping rule and the files its findings go to.
+- Check every quotation against its file before using it.
+- Stop at the research step's outputs and report to the owner. Designing the mechanism or the
+  Attendant belongs to later steps, and the seat that does the research does not design the
+  mechanism.
+
+For the later steps (input to the seats that take them): use the Parallax skill and the
+cognitive and planning skills (`concept-exploration`, `proportionality`, `reason`,
+`metacognition`, `user-value`, `specify`, `plan`); at every part of the design ask what becomes
+easier if the system changes and record the answer; extract the parts of existing skills that
+carry a needed concept as components; make each design decision with its reasoning; bring the
+owner's decisions to the owner with analysis, never as a menu. The owner is the design partner
+and provides the idea for the first run.
 
 ## Design notes to start from
 
@@ -420,8 +425,6 @@ load `CLAUDE.md` unless `omitClaudeMd` is set.
 
 ## Deliverable
 
-The creation plan, authored in the plan estate: the bounded research answered with
-citations; every item of "What we currently believe the work should produce" designed with
-its reasoning, or named as a question only a run can answer, with a record of what the
-exploration added, merged, reshaped or retired and why; the owner's decisions carded as they
-arise; and the build order for the first run.
+For the research session: the outputs the delivery node `attendant-research` names (the findings
+file, the two scenarios files, the strategic node's revised research summary) and a report to
+the owner. The lane's whole deliverable, across its four steps, is the strategic node's outcome.

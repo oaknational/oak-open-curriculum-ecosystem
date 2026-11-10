@@ -124,14 +124,21 @@ screens, and what the findings change in the strategic node.
 
 ## Acceptance criteria (each with a proof — required)
 
+The outputs are research prose, accepted on what a reader can decide from them; no validator
+checks their content, so each proof is `owner-held` (amended 2026-11-10 at a review finding:
+"the file, merged" names no instrument).
+
 1. The findings file answers the five questions, each claim cited to a source the seat read
-   first-hand. Proof: `repo-safe` for existence and citation form (the file, merged; quotations
-   checked by fixed-string search, the check recorded in the pull request); `owner-held` for
-   adequacy, the owner's reading of the report, recorded in the thread record.
-2. The scenarios files exist, with a control scenario per class and each class's shortfall
-   stated where it has fewer than three instances. Proof: `repo-safe`, the files, merged.
+   first-hand. Proof: `owner-held`, the owner's reading of the step's report in the session,
+   recorded in the thread record; in support, the seat's fixed-string check of every quotation,
+   recorded in the pull request.
+2. The scenarios files hold, for every class, its scenarios, a control scenario and its
+   shortfall where it has fewer than three instances. Proof: `owner-held`, a fresh reviewer's
+   read of the files against the classification, its result shown to the owner with the report
+   and recorded in the thread record.
 3. The strategic node's research summary is revised from the findings, and the five causes and
-   five requirements are confirmed or revised. Proof: `repo-safe`, the node, merged.
+   five requirements are each confirmed or revised with the evidence. Proof: `owner-held`, the
+   owner's reading of the revised summary, recorded in the thread record.
 
 ## Todos
 
