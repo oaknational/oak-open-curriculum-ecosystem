@@ -6,10 +6,25 @@ reproduced. These five scripts were written in the session's scratch directory, 
 survive the session; they are kept here as text because the evidence cites them as instruments.
 
 All five use only Python's standard library. Each reads files as text or parses them with
-`ast`; none imports anything from the repositories it reads. Run each with `python3 -I`, from a
-directory outside the clones, with the clone paths as arguments. Paths inside the scripts
-(`/home/user/hermes-agent`, `/home/user/hermes-agent-self-evolution`) are the session's clone
-locations and need changing elsewhere.
+`ast`; none imports anything from the repositories it reads. Save each block to a file in a
+directory outside the clones and run it with `python3 -I`. Four are byte copies of what the
+session ran. `spot.py` differs in one respect: the session's copy held the two clone locations
+as constants, and here they are its first two arguments, because this repository does not carry
+machine-local paths.
+
+Each script has its own invocation. `<hermes>` and `<selfevo>` stand for the two clone paths and
+`<tools>` for the directory holding the saved scripts:
+
+| Script | Working directory | Command |
+| --- | --- | --- |
+| `enclose.py` | The clone's root, since it opens the paths it is given | `printf 'agent/curator.py:62\n' \| python3 -I <tools>/enclose.py` |
+| `pkggraph.py` | Any | `python3 -I <tools>/pkggraph.py <hermes>` |
+| `checkcites.py` | Any | `python3 -I <tools>/checkcites.py <hermes> <selfevo> <file.md>...` |
+| `spot.py` | Any | `python3 -I <tools>/spot.py <hermes> <selfevo> <rows.tsv>` |
+| `fixcites.py` | Any; it rewrites the Markdown file in place | `python3 -I <tools>/fixcites.py <file.md> 'path\|old-fragment\|new-fragment'...` |
+
+`checkcites.py` reports two false positives when run over this file: the two base-URL constants
+inside its own source below look like permalinks with no path.
 
 To reproduce the pins first:
 
@@ -147,7 +162,7 @@ sys.exit(1 if bad else 0)
 
 ## 4. `spot.py`: quotation match
 
-Checks that a substring occurs within a cited line range. Argument: a tab-separated file with
+Checks that a substring occurs within a cited line range. Arguments: the two clone paths, then a tab-separated file with
 one row per check: `H` or `E` (which clone), path, first line, last line, substring. On a miss it
 prints the lines where the first forty characters do occur. The session ran six batches (122, 44,
 25, 5, 16 and 8 rows); the row files were scratch and are not kept, since each row restates a
@@ -156,8 +171,8 @@ citation that is in the research files.
 ```python
 """Spot-check: each row is repo, path, first line, last line, substring that must occur in that line range. Reads only."""
 import sys
-H="/home/user/hermes-agent/"; E="/home/user/hermes-agent-self-evolution/"
-rows = [l.rstrip("\n").split("\t") for l in open(sys.argv[1], encoding="utf-8") if l.strip() and not l.startswith("#")]
+H = sys.argv[1].rstrip("/") + "/"; E = sys.argv[2].rstrip("/") + "/"
+rows = [l.rstrip("\n").split("\t") for l in open(sys.argv[3], encoding="utf-8") if l.strip() and not l.startswith("#")]
 bad = 0
 for repo, path, a, b, needle in rows:
     lines = open((H if repo == "H" else E) + path, encoding="utf-8", errors="replace").read().split("\n")

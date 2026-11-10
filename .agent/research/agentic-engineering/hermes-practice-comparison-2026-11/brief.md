@@ -28,13 +28,102 @@ session reports the conflict.
 The gate the Hermes study set for this session has two parts and both are met: pull request 395
 merged (merge commit `8af1b0fc2` on `engraph`), and the owner's go-ahead (the fourth quote).
 
-## What the owner has not yet said
+- 2026-11-10, on this brief's first draft, which said the session should open by asking the
+  owner for the comparison's purpose, depth and output: "Ultrathink run this through the
+  decision matrix please @principles.md"
 
-The owner has named the task, a comparison, and nothing about its purpose, its depth, its
-questions or its output. Those are owner facts. The session's first act after grounding is to
-ask for them in dialogue, not to infer them: what decision or change the comparison is meant to
-serve, which of the two systems is the one being examined in the light of the other, and what
-the owner wants to hold at the end. A scope block (`GOAL`, `IN`, `OUT`) comes after that answer.
+## Purpose, depth and output: a verdict, not a question
+
+The first draft of this brief handed the purpose back to the owner as an open question. The
+owner sent it through the decision lenses instead. The estate's rule is record first, ask last
+(`read-before-asking`), and the record already holds most of the answer. What follows is the
+author's verdict; the owner's word overrides any part of it, and the session proceeds on it
+unless that word comes.
+
+### What the record already says
+
+- **The end is stated and ratified.** The strategic node
+  `.agent/plans/strategic/outcome-informed-practice-learning.plan.md` (ratified by the owner,
+  2026-08-01) has as its kernel: "The system's missing centre is outcome-informed human
+  learning, not tooling neatness." Its outcome: "A later outcome—not the mere production of a
+  rule, document, or metric—judges whether the learning paid off." Its boundary: it "does not
+  claim that the learning loop is already observable".
+- **The node says what serving work must carry.** A plan under it "must name the live decision
+  it enables, the evidence that warrants intervention, its falsifier or stop condition, and the
+  beneficiary-level effect it expects to change. It must isolate a narrower hypothesis or one
+  feedback loop rather than claim this strategic frame as sufficient warrant".
+- **The owner named the research strand.** The commissioning branch was
+  `research/self_improving_systems` and its one commit, by the owner, reads "planning self
+  improvement research". The owner then asked for "other recent research and reports on
+  learning and self-improvement systems in the repo".
+- **The form has two accepted precedents.** The comparisons of 2026-10-22 and 2026-11-06 (in the
+  inputs table below) share a shape: method; the other system; the Practice; where they
+  converge and diverge, and why; what each could take. The second fed a design session
+  directly: `.agent/prompts/agentic-engineering/idea-to-merge-process-design.prompt.md` cites it.
+- **Research of this kind holds a protected floor** in the session priority order, as "the
+  improve-how-we-improve loop" (owner standing guidance, 2026-07-25, in
+  `.agent/skills/start-right-quick/shared/start-right.md`).
+
+### The lenses, in order
+
+| Lens | What it settles |
+| --- | --- |
+| 1. Long-term architectural excellence | The comparison is a means. Its end is the Practice's own learning loop, so its result must land in the terms the plan estate can use, under the ratified node, and not as one more free-standing essay. The Practice is described by the same discipline Hermes was: cited, with what it says set beside what it does. |
+| 2. Strict, everywhere | One standard for both systems. No table of features from memory, no ranking of which system is better, no flattering asymmetry. Where the evidence is unequal (Hermes was read; the Practice can be observed running), the document says so. |
+| 3. Could it be simpler? | Yes. Hermes's repository architecture has no counterpart worth comparing and is dropped. The learning loop is compared in breadth with one compact table, and in depth on one slice only. A second full study the size of the first is not needed: the Hermes side is done, and the Practice side has decision records and retrospectives. |
+| 4. Would it be simpler if the system changed? | This lens changes the output. A comparison is an instrument for seeing ourselves; if the Practice's learning loop were observable, we would not need another system to show us where it is blind. So the document does not end in a list of differences. It ends in at most three candidate changes to the Practice's loop, each in the node's own shape, with one recommended. |
+| 5. User value | The owner's attention is the scarce thing, and the node names the risk that "maintaining the learning substrate" becomes "the dominant work". The result is one decision the owner can take, not a survey to digest. |
+
+A question that arrives as an either/or is usually a false frame. The either/or here was a broad
+symmetric comparison against skipping straight to a list of things to adopt. The lenses give a
+sequence in place of the choice: compare narrowly, then propose.
+
+### The verdict
+
+```text
+GOAL    Use Hermes as a mirror for the Practice's own learning loop, in service of
+        the ratified node "Outcome-informed Practice learning": find the one
+        feedback loop the Practice should make outcome-informed first.
+IN      The learning loop of both systems, compared in breadth: what is stored,
+        what writes it, what triggers a write, how it re-enters, what controls it,
+        what retains or retires it, what records its effect, which failure modes
+        each system names.
+        In depth, one slice: what decides that a learned item is kept, changed or
+        retired, and whether anything records its effect on later work.
+        A cited, own-terms account of the Practice on that slice, with says-and-does
+        rows and falsifiers, as the Hermes study has.
+OUT     Hermes's repository architecture. Ranking the systems. Adopting Hermes or
+        any part of its code. Advice to Hermes's maintainers, and any write to a
+        Hermes repository. Writing or changing a Practice rule, skill or plan: the
+        result is a proposal, and the plan workflow takes it from there.
+```
+
+- **Depth.** Parallax Core, not Standard. The main seat reads; no fleet. The Practice can be
+  observed as well as read, so where a claim about it can be checked by running its own tooling,
+  it is. One challenge pass by a reviewer that did not write either account.
+- **Output.** One research document beside this brief, in the form of the two precedents,
+  ending in "what the Practice could take". That section holds at most three candidates. Each
+  names the live decision it enables, the evidence that warrants it, its falsifier or stop
+  condition, and the effect it expects to change for the owner or for a later agent. One is
+  recommended.
+- **The live decision this enables.** Which single feedback loop in the Practice's learning
+  pipeline gets an effect measure first, or whether none should.
+
+### What would overturn this verdict
+
+- The owner states a different end. Three are plausible and were set aside: understanding for
+  its own sake; describing how the Practice differs, for an outside reader; and a wider harvest
+  of mechanisms to borrow. The breadth table keeps the third partly open at small cost.
+- The comparison finds that nothing in Hermes bears on the node. The Hermes study suggests
+  otherwise, since its sharpest line was that Hermes's operating loop measures nothing and its
+  measured loop does not operate; but that study was written by this seat, and the node was
+  chosen by this seat as the frame. Both the finding and the frame share one author. The
+  challenge pass is asked to test the frame first.
+
+### What remains the owner's
+
+The link from this research strand to that node is the author's reading of the record, not an
+owner statement. It is the one inference the verdict rests on.
 
 ## Inputs
 
@@ -90,9 +179,9 @@ doctrine and which are historical is for the session to establish from the canon
 1. **Describe the Practice by the same discipline before comparing.** The Hermes account was
    written from code first, then Hermes's own words, with every claim cited. A comparison of
    that account with an uncited, from-memory picture of the Practice would compare evidence with
-   belief. The proportionate form is for the owner to size: it may be a cited account of the
-   Practice's learning mechanisms from the live rules, skills, decision records and tooling, or
-   it may be that the documents above already serve.
+   belief. The verdict above sizes it: a cited account of the Practice on one slice, drawing on
+   the live rules, skills, decision records and tooling, with the documents above as evidence
+   and not as a substitute for reading the mechanisms.
 2. **Guard against the lens.** The Hermes study's categories (store, writer, trigger, re-entry,
    control, retention, evidence of effect, offline loop, named failure modes) are a convenient
    frame and were built for Hermes. Using them unexamined would find in the Practice only what
@@ -111,8 +200,8 @@ doctrine and which are historical is for the session to establish from the canon
 ## Inherited constraints and environment facts
 
 - The session carries three repositories. The two Hermes clones are the owner's forks, pinned
-  and clean at `/home/user/hermes-agent` (detached at `v0.23.0`) and
-  `/home/user/hermes-agent-self-evolution`. Nothing has been written to either, and the study's
+  and clean in the session's working directory beside this repository's clone: `hermes-agent`
+  (detached at `v0.23.0`) and `hermes-agent-self-evolution`. Nothing has been written to either, and the study's
   rule stands unless the owner lifts it: no Hermes code is run, and no commit, branch, push or
   GitHub write goes to a Hermes repository. The harness names a work branch in all three
   repositories; in the two forks it is not used.
@@ -140,7 +229,7 @@ doctrine and which are historical is for the session to establish from the canon
 
 ## What this brief does not do
 
-It does not begin the comparison, state a hypothesis about how the two systems relate, or
-describe the Practice. One line in the study's napkin entry said a comparison thought had
+It does not begin the comparison or describe how the Practice learns. It quotes one ratified
+strategic node to establish the comparison's purpose, and stops there. One line in the study's napkin entry said a comparison thought had
 occurred and was left undeveloped; no such thought was recorded anywhere, and the session
 should not look for one.
