@@ -5,12 +5,20 @@
 schema_version: "parallax/inquiry-charter/0.1"
 artifact_id: "hermes-agent-architecture-2026-11/charter"
 artifact_type: inquiry-charter
-artifact_revision: 1
+artifact_revision: 2
 inquiry_id: "hermes-agent-architecture-2026-11"
-inquiry_revision: 1
+inquiry_revision: 2
 status: provisional
 created_at: "2026-11-10T10:50Z"
-updated_at: "2026-11-10T10:50Z"
+updated_at: "2026-11-10T11:40Z"
+revision_history:
+  - revision: 1
+    at: "2026-11-10T10:50Z"
+    commit: "db3c7ff05"
+    note: "Written before any Hermes document was read."
+  - revision: 2
+    at: "2026-11-10T11:40Z"
+    note: "Phase 3 filled the missing field with Hermes's stated design, quoted below. Scope, frames and depth are unchanged."
 created_by:
   kind: "agent"
   identifier: "Swift holds Aether (Claude Code cloud session 01Duocji)"
@@ -147,9 +155,39 @@ reopening_conditions:
   - "A later release changes a module named in the Phase 4 inventory."
 missing_context:
   - field: "Hermes's stated design, quoted"
-    consequence: "Frames QA-F1 and QL-F1 have no content to test until Phase 3 and Phase 4 Step 1 quote it; revision 2 fills it."
+    consequence: "Filled at revision 2; see hermes_stated_design below."
   - field: "Depth verdicts re-tested"
     consequence: "Recorded below from the proportionality re-test at revision 1."
+hermes_stated_design:
+  source_note: >-
+    Quoted from the root AGENTS.md and the developer guide at the pinned commit
+    2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19. The full set, with permalinks, is section 1 of
+    architecture-map.md. Both sources come from the same maintainers.
+  what_hermes_is: >-
+    "Hermes is a personal AI agent that runs the same agent core across a CLI, a messaging
+    gateway (Telegram, Discord, Slack, ~20 platforms), a TUI, and an Electron desktop app. It
+    learns across sessions (memory + skills), delegates to subagents, runs scheduled jobs, and
+    drives a real terminal and browser. It is extended primarily through **plugins and skills**,
+    not by growing the core." (AGENTS.md L12-L16)
+  invariants:
+    - >-
+      "**Per-conversation prompt caching is sacred.** Mutating past context, swapping toolsets,
+      reloading memories or rebuilding the system prompt mid-conversation breaks the cached
+      prefix and multiplies the user's cost; the ONE exception is context compression."
+      (AGENTS.md L20-L22)
+    - >-
+      "**The core is a narrow waist; capability lives at the edges.**" (AGENTS.md L24)
+  design_principles:
+    - "Prompt stability"
+    - "Observable execution"
+    - "Interruptible"
+    - "Platform-agnostic core"
+    - "Loose coupling"
+    - "Profile isolation"
+  design_principles_source: "website/docs/developer-guide/architecture.md L260-L269"
+  qa_frame_verdict: >-
+    QA-F1 holds for the decomposition and the request path. QA-F2 holds for the documented
+    counts and for the tool dependency chain as drawn. Detail: architecture-map.md, A6.
 depth_verdicts:
   inquiry: "Core"
   learning_sub_inquiry: "Standard"
@@ -159,4 +197,8 @@ depth_verdicts:
     Re-tested at revision 1 against the owner's words. The owner confirmed on 2026-11-10 that
     more than a high-level overview is appropriate. No depth changed.
 cricket:
-  verdict: "pending at the time revision 1 was written; recorded in evidence-log.md"
+  verdict: >-
+    Work ON-TRACK in seven of eight returns and DRIFTING in one; frame verdicts NARROWED or
+    CONTRADICTED in six, all on three points now absorbed (the self-evolution repository named in
+    scope; the ledger opened only after the cold-pass commit; "for now" kept on the Practice
+    comparison). The table is section 5 of evidence-log.md.
