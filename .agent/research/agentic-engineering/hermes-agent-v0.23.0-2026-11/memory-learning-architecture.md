@@ -114,7 +114,8 @@ exceeds the baseline's ([`evolve_skill.py#L224-L226`](https://github.com/NousRes
 Documents read for this finding: the README, `memory.md`, `curator.md`, the cited sections of
 `skills.md`, the root, `agent/` and `skills/` `AGENTS.md` files, and the self-evolution `README.md`
 and the cited sections of `PLAN.md`. A definition elsewhere in the 1.27 MB developer guide is not
-excluded.
+excluded. Section 10 takes up what follows from this: whether the offline pipeline, as the one
+place a measure exists, is the heart of Hermes's self-improvement.
 
 ## 2. Glossary (memory and learning terms)
 
@@ -362,13 +363,23 @@ flowchart TB
     end
 ```
 
-No mechanism was found at two of the brief's candidate scales: across installations (S4), and
-model weights (S6). On S4, Hermes says "Memory is scoped per profile by design"
+No mechanism was found in the code read at two of the brief's candidate scales: across
+installations (S4), and model weights (S6). On S4, Hermes says "Memory is scoped per profile by design"
 ([`memory.md#L23`](https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/website/docs/user-guide/features/memory.md#L23)); skills can arrive from
 outside an installation through the Skills Hub and bundled-skill sync, which are installs, not a
-return path from one installation's learning to another's. On S6, the runtime exports trajectory
-files "for use as training data" (section 3.10) and the self-evolution repository states "No GPU
-training required"; no code in either pinned repository trains or loads weights from them.
+return path from one installation's learning to another's. On S6, Hermes does make a claim, and this study did not test it: "Research-ready — Batch
+processing, trajectory export, RL training with Atropos"
+([`index.mdx#L153`](https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/website/docs/index.mdx#L153)), and "Use reinforcement learning to fine-tune
+model behavior with Hermes Agent's RL training pipeline (powered by Atropos)"
+([`learning-path.md#L113`](https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/website/docs/getting-started/learning-path.md#L113)). The runtime
+ships an `rl` toolset ([`tools/AGENTS.md#L72-L75`](https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/tools/AGENTS.md#L72-L75)) and an `[rl]`
+dependency extra ([`Dockerfile#L254`](https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/Dockerfile#L254)); neither was read, and Atropos is a
+third repository outside this study. The self-evolution report names the same division: model
+weights are improved by "RL training (Tinker-Atropos)"
+([`generate_report.py#L177`](https://github.com/NousResearch/hermes-agent-self-evolution/blob/0a929e3aa20e15cf04dc7c28492a7d41a5139125/generate_report.py#L177)). What the study can say is narrower: the
+runtime exports trajectory files "for use as training data" (section 3.10), the self-evolution
+repository states "No GPU training required", and no path was found by which trained weights
+return to a running installation other than the user choosing a model.
 
 ## 5. L1 to L10
 
@@ -521,19 +532,26 @@ schedules it and nothing in the runtime calls it.
 | The optimiser call: `dspy.GEPA(metric=skill_fitness_metric, max_steps=iterations)`, with `dspy.MIPROv2(metric=..., auto="light")` in the `except Exception` branch | `evolve` | [`evolve_skill.py#L155-L176`](https://github.com/NousResearch/hermes-agent-self-evolution/blob/0a929e3aa20e15cf04dc7c28492a7d41a5139125/evolution/skills/evolve_skill.py#L155-L176) |
 
 Two findings from setting that call beside DSPy's own source. DSPy is a third codebase; it was
-read from the PyPI wheels `dspy-3.0.0` and `dspy-3.4.1` (downloaded 2026-11-10 12:35 UTC,
-unpacked and read as data, never imported), file `dspy/teleprompt/gepa/gepa.py`. `dspy.ai` was
+read from PyPI wheels (first `dspy-3.0.0` and `dspy-3.4.1`, then every 3.x release; downloaded
+2026-11-10 12:35 to 12:42 UTC, unpacked and read as data, never imported), file
+`dspy/teleprompt/gepa/gepa.py`. `dspy.ai` was
 outside this session's allowed network domains, so the documentation site was not read.
 
-1. **The GEPA call does not match `dspy.GEPA`'s constructor in either version read.** The
+1. **The GEPA call does not match `dspy.GEPA`'s constructor in any DSPy 3.x release.** The
    constructor takes `metric` and keyword-only arguments; none is named `max_steps` (in 3.4.1,
    lines 399 to 435; `rg max_steps` over the wheel matches only another optimiser, `simba.py`).
+   The same file was then read in all fourteen 3.x releases on PyPI (3.0.0 to 3.4.1,
+   `grep -c max_steps` and `grep -c '\*\*kwargs'` both zero in each). The call has carried
+   `max_steps` since the repository's first commit
+   ([`0949dc7`](https://github.com/NousResearch/hermes-agent-self-evolution/commit/0949dc738ccaa3b1a15b46466ad45b011ad8ac36);
+   `git grep` of the call at each of the seven commits that touch the file).
    It also requires exactly one of `auto`, `max_full_evals` and `max_metric_calls`, a
    `reflection_lm` or an instruction proposer, and a metric that accepts five arguments (lines
    437 to 466 in 3.4.1); `skill_fitness_metric` accepts three. An unexpected keyword raises
    `TypeError` at construction, and the script's `except Exception` then prints "GEPA not
-   available" and runs `MIPROv2`. On this static reading, with any DSPy release from 3.0.0 to
-   3.4.1 the path taken is the fallback and GEPA does not run. This was not executed.
+   available" and runs `MIPROv2`. With any DSPy release that satisfies `dspy>=3.0.0` today, the
+   path taken is the fallback and GEPA does not run. The signature is a fact read from source;
+   the script was not executed.
 2. **What either optimiser changes is the predictor's instruction text, and the script reads a
    different attribute.** GEPA's candidates are `pred.signature.instructions` for each named
    predictor (3.4.1, lines 140 and 652). The skill body is held in `self.skill_text` and passed
@@ -544,9 +562,29 @@ outside this session's allowed network domains, so the documentation site was no
    "evolved" skill text written to `evolved_skill.md` is the baseline text, and any score change
    on the holdout comes from changed predictor instructions or demonstrations that are not
    saved. This is an inference across two codebases from static reading; it is an **Assumption
-   to verify**, and running the script once would settle it.
+   to verify**, and running the script once would settle it. Hermes's own report says the same
+   of the one run it documents (below).
 
-The repository's one tracked report, `reports/phase1_validation_report.pdf`, was not read.
+**The one documented run.** The repository's report, `reports/phase1_validation_report.pdf`
+(dated 9 March 2026, read in full; its text is generated by `generate_report.py`, cited here by
+line), records what was actually run:
+
+| The report says | Citation |
+| --- | --- |
+| The optimiser was "DSPy BootstrapFewShot", not GEPA | [`generate_report.py#L269`](https://github.com/NousResearch/hermes-agent-self-evolution/blob/0a929e3aa20e15cf04dc7c28492a7d41a5139125/generate_report.py#L269) |
+| "the optimizer doesn't rewrite the skill — it **augments** the skill's instructions with concrete examples of successful execution" | [`generate_report.py#L391`](https://github.com/NousResearch/hermes-agent-self-evolution/blob/0a929e3aa20e15cf04dc7c28492a7d41a5139125/generate_report.py#L391) |
+| "Fitness was measured using keyword overlap between the expected behavior rubric and the agent's actual output" | [`generate_report.py#L324`](https://github.com/NousResearch/hermes-agent-self-evolution/blob/0a929e3aa20e15cf04dc7c28492a7d41a5139125/generate_report.py#L324) |
+| Two held-out validation examples; one improved from 0.408 to 0.569 and one did not change | [`generate_report.py#L271`](https://github.com/NousResearch/hermes-agent-self-evolution/blob/0a929e3aa20e15cf04dc7c28492a7d41a5139125/generate_report.py#L271); PDF page 4 |
+| "Run GEPA optimizer" is the first of the "Immediate Next Steps" | [`generate_report.py#L470`](https://github.com/NousResearch/hermes-agent-self-evolution/blob/0a929e3aa20e15cf04dc7c28492a7d41a5139125/generate_report.py#L470) |
+| The instructions layer (skills, system prompts, tool descriptions) is "currently improved" by "Manual authoring (static)" | [`generate_report.py#L178`](https://github.com/NousResearch/hermes-agent-self-evolution/blob/0a929e3aa20e15cf04dc7c28492a7d41a5139125/generate_report.py#L178) |
+
+Two things follow. First, no artefact in the repository records a GEPA run: the report names
+GEPA as the next step, and `BootstrapFewShot` appears nowhere in the optimisation code at any
+commit (`git log -S BootstrapFewShot` returns only the report's commit), so the documented run
+was not made by the committed `evolve` function as written. Second, the repository has eight
+commits, the last on 17 June 2026 (a configuration fix); none after the report changed the
+optimiser call (`git log`; `git grep` of the call at each commit). The report's five next
+steps are not reflected in later code.
 
 ### L9. The research path
 
@@ -658,6 +696,7 @@ row.
 | V-9 | Self-evolution produces "measurably better versions" and ends in "Best variant ──► PR against hermes-agent"; "Every evolved variant must pass: 1. **Full test suite**" ([`README.md#L5`](https://github.com/NousResearch/hermes-agent-self-evolution/blob/0a929e3aa20e15cf04dc7c28492a7d41a5139125/README.md#L5), [`#L23`](https://github.com/NousResearch/hermes-agent-self-evolution/blob/0a929e3aa20e15cf04dc7c28492a7d41a5139125/README.md#L23), [`#L71-L72`](https://github.com/NousResearch/hermes-agent-self-evolution/blob/0a929e3aa20e15cf04dc7c28492a7d41a5139125/README.md#L71-L72)) | The measure is a word-overlap score on a holdout split ([`fitness.py#L121-L136`](https://github.com/NousResearch/hermes-agent-self-evolution/blob/0a929e3aa20e15cf04dc7c28492a7d41a5139125/evolution/core/fitness.py#L121-L136)). Output is three local files ([`evolve_skill.py#L255-L283`](https://github.com/NousResearch/hermes-agent-self-evolution/blob/0a929e3aa20e15cf04dc7c28492a7d41a5139125/evolution/skills/evolve_skill.py#L255-L283)). The test-suite gate and the LLM judge are defined and never called. | The implemented pipeline is narrower than the description in three ways: the judge, the test gate, and the pull request. | A call to `LLMJudge`, `run_test_suite` or a git operation in `evolution/` at the pinned commit. |
 | V-10 | Self-evolution "operates ON hermes-agent — not part of it" ([`PLAN.md#L5`](https://github.com/NousResearch/hermes-agent-self-evolution/blob/0a929e3aa20e15cf04dc7c28492a7d41a5139125/PLAN.md#L5)) | It reads a skill from a Hermes checkout and writes to its own `output/` directory; nothing in it writes into a Hermes home or checkout ([`evolve_skill.py#L61-L66`](https://github.com/NousResearch/hermes-agent-self-evolution/blob/0a929e3aa20e15cf04dc7c28492a7d41a5139125/evolution/skills/evolve_skill.py#L61-L66), [`#L255-L260`](https://github.com/NousResearch/hermes-agent-self-evolution/blob/0a929e3aa20e15cf04dc7c28492a7d41a5139125/evolution/skills/evolve_skill.py#L255-L260)) | None. | A write into the Hermes repository or `<home>` from `evolution/`. |
 | V-11 | "builds a deepening model of who you are across sessions" ([`README.md#L19`](https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/README.md#L19)) | `USER.md`, capped at 1,375 characters by default, with no automatic compaction; and, when configured, one external provider. The README names Honcho for "dialectic user modeling" ([`README.md#L26`](https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/README.md#L26)); that provider is not in the tree at the tag ([`plugins/AGENTS.md#L20-L21`](https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/plugins/AGENTS.md#L20-L21)). | With the built-in store alone, "deepening" is bounded by a fixed character budget that the model must make room in. | A growing or structured built-in user model at the tag. |
+| V-12 | "GEPA (Genetic-Pareto Prompt Evolution) is the star engine"; "GEPA is the star" ([`generate_report.py#L228`](https://github.com/NousResearch/hermes-agent-self-evolution/blob/0a929e3aa20e15cf04dc7c28492a7d41a5139125/generate_report.py#L228); [`PLAN.md#L15`](https://github.com/NousResearch/hermes-agent-self-evolution/blob/0a929e3aa20e15cf04dc7c28492a7d41a5139125/PLAN.md#L15)) | The one documented run used `BootstrapFewShot`; the committed GEPA call does not match `dspy.GEPA`'s constructor in any 3.x release, so the `MIPROv2` fallback is the path taken; the report lists "Run GEPA optimizer" as a next step (section 5, L8) | GEPA is the named and intended engine. No artefact in the repository shows it running, and the code as committed cannot construct it. | A recorded GEPA run, or a DSPy release whose `GEPA` accepts `max_steps`. |
 
 ### Frame verdicts per time scale
 
@@ -672,7 +711,7 @@ different (less, more or other).
 | S3, periodic maintenance | The curator | QL-F1; the user guide carries one stale pair of thresholds | V-7, V-8 |
 | S4, across installations | None found | No claim by Hermes to test; profiles are "islands on purpose" ([`AGENTS.md#L49`](https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/AGENTS.md#L49)) | Section 4.2 |
 | S5, offline | `evolve_skill` | QL-F2 (less) | V-9 |
-| S6, model weights | None found | No claim by Hermes that weights are trained; trajectories are exported "for use as training data" | Section 3.10 |
+| S6, model weights | None in the code read | Not tested. Hermes claims an "RL training pipeline (powered by Atropos)"; the `rl` toolset and Atropos were outside what this study read | Section 4.2 |
 
 ### Bridge Claims
 
@@ -683,3 +722,97 @@ different (less, more or other).
 | S1/S2 → S3: use keeps a skill alive | "tracks how often each skill is viewed, used, and patched" ([`curator.md#L9`](https://github.com/NousResearch/hermes-agent/blob/2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19/website/docs/user-guide/features/curator.md#L9)) | `bump_use` timestamps feed the transitions | The skill is not marked agent-created, so no transition ever applies; cron-referenced skills are protected regardless of use |
 | S2 → S5: real usage feeds offline evolution | "use real session history from Claude Code, Copilot, and Hermes" ([`README.md#L45`](https://github.com/NousResearch/hermes-agent-self-evolution/blob/0a929e3aa20e15cf04dc7c28492a7d41a5139125/README.md#L45)) | An importer reads `~/.hermes/sessions/*.json` | The path and format may not match the runtime's store (`[unverified]`); the default source is synthetic |
 | S5 → S2: evolved skills reach the runtime | "Best variant ──► PR against hermes-agent" ([`README.md#L23`](https://github.com/NousResearch/hermes-agent-self-evolution/blob/0a929e3aa20e15cf04dc7c28492a7d41a5139125/README.md#L23)) | None in code; a person must copy or commit the file | The bridge does not exist as code at the pinned commit |
+
+## 10. Is DSPy and GEPA the heart of Hermes's self-improvement?
+
+Added 2026-11-10 at the owner's question: "To me it seems like DSPy/GEPA might be the heart of
+the self improvement in Hermes?" The question was explored in four movements, reflection and
+reasoning alternating, and then challenged. The yardstick stays Hermes's own words and code.
+
+### 10.1 What this study had inherited
+
+Sections 1 to 9 centre the runtime. That centring was partly an artefact of method: the cold
+pass started from runtime modules that write durable state, and the brief sorted the
+self-evolution repository under "Offline and research". A study built that way would place an
+offline optimiser at the edge whether or not it belonged there. The owner's reading reverses
+the centre, so the evidence was re-read for it and extended: the repository's report and its
+git history were read, and both repositories were swept for references to each other.
+
+### 10.2 "Heart" has four meanings here, and they give different answers
+
+| Sense of "heart" | Test | Evidence | Answer |
+| --- | --- | --- | --- |
+| Operating centre: the mechanism that runs when Hermes improves itself | Is DSPy or GEPA executed by a running installation? | No runtime Python imports either; ten mentions, all optional-skill or documentation text (L8). The runtime does not mention the self-evolution repository at all: `git grep -i -E 'self-evolution\|hermes-agent-self\|evolve_skill'` over its tracked files returned nothing (known positive for the probe: `darwinian` matches an optional skill). | No |
+| Demonstrated engine: the optimiser shown to improve something | Did GEPA run and produce a better skill? | The one documented run used `BootstrapFewShot`, scored by word overlap on two examples; the committed GEPA call cannot construct the optimiser in any DSPy 3.x release (V-12). | No for GEPA. For DSPy, one small run in March 2026 |
+| Evaluative centre: the place where "improvement" is defined and measured | Where does Hermes state a measure of better? | Only here. The runtime writes, patches and prunes memory and skills with no score (L7, section 1.8). The self-evolution pipeline has a metric, a baseline, a holdout split and a comparison ([`evolve_skill.py#L206-L226`](https://github.com/NousResearch/hermes-agent-self-evolution/blob/0a929e3aa20e15cf04dc7c28492a7d41a5139125/evolution/skills/evolve_skill.py#L206-L226)). | Yes, with a weak measure |
+| Intended centre: where the maintainers said self-improvement would come from | What do Hermes's own planning documents say? | "This plan IS the implementation of #337" (Evolutionary Self-Improvement) ([`PLAN.md#L762`](https://github.com/NousResearch/hermes-agent-self-evolution/blob/0a929e3aa20e15cf04dc7c28492a7d41a5139125/PLAN.md#L762)). Phase 5 would "Wire up to Hermes cron scheduler" and "auto-trigger GEPA" when a skill's failure rate passes a threshold ([`PLAN.md#L592-L594`](https://github.com/NousResearch/hermes-agent-self-evolution/blob/0a929e3aa20e15cf04dc7c28492a7d41a5139125/PLAN.md#L592-L594)). Phases 2 to 5 are marked planned; "we may stop at Phase 1 or 2 if the returns diminish" ([`PLAN.md#L258`](https://github.com/NousResearch/hermes-agent-self-evolution/blob/0a929e3aa20e15cf04dc7c28492a7d41a5139125/PLAN.md#L258)). | It was, in March 2026, as a plan |
+
+### 10.3 What the two repositories say about each other
+
+Nothing, in either direction that was found, and that is itself a finding.
+
+- The runtime's README calls Hermes "the self-improving AI agent" with "a built-in learning
+  loop" and describes memory, skills, nudges and session search (section 1.1). It does not
+  mention DSPy, GEPA or the self-evolution repository.
+- The self-evolution report describes the instructions layer, "Skills, system prompts, tool
+  descriptions", as "currently improved" by "Manual authoring (static)"
+  ([`generate_report.py#L178`](https://github.com/NousResearch/hermes-agent-self-evolution/blob/0a929e3aa20e15cf04dc7c28492a7d41a5139125/generate_report.py#L178)). It does not mention the background
+  review or the curator, which at the v0.23.0 tag write and prune skills without a person.
+- The plan's integration table names runtime paths that this study could not all find at the
+  tag: `environments/benchmarks/tblite/` ([`PLAN.md#L213`](https://github.com/NousResearch/hermes-agent-self-evolution/blob/0a929e3aa20e15cf04dc7c28492a7d41a5139125/PLAN.md#L213)) has no `environments/`
+  directory in the runtime tree at v0.23.0 (`ls environments` fails). The plan is dated by its
+  commits to March 2026 and the tag to November 2026.
+
+The dates matter and the study cannot fully supply them. The report is from March 2026; the
+runtime was read at a tag from November 2026; the runtime clone is shallow, so when the
+background review and curator arrived is not established here. The report's "manual authoring"
+may have been accurate when written.
+
+### 10.4 Verdict
+
+**DSPy and GEPA are not the heart of Hermes's self-improvement as built at v0.23.0.** Hermes has
+two separate designs for improving its skills, and they do not touch:
+
+| | In the runtime | In the self-evolution repository |
+| --- | --- | --- |
+| What changes | Memory entries and skills | The text of one skill |
+| What proposes the change | The model, in a turn or in a review fork replaying one conversation | A DSPy optimiser over a dataset |
+| What decides it is better | Nothing measured; the review prompt's instructions and, optionally, a person's approval | A score on a holdout split |
+| Runs | Automatically, on counters and timers, in every installation | When a person runs a script |
+| Evidence it has run | Not observable by static reading; the code paths are reached | One documented run, with a different optimiser from the one named |
+| Reaches users | Directly, on the installation's own disk | By no code path |
+
+The owner's reading is right in one sense that matters for the later comparison: the offline
+pipeline is the only place where Hermes says what "better" means and tries to select for it.
+It is wrong as a description of what operates. The self-improvement that runs is unmeasured
+and automatic; the self-improvement that is measured does not run as described and is not
+connected. GEPA, named the star, is the least supported part of either.
+
+### 10.5 Challenge
+
+- **A frame that would reverse the verdict.** If the maintainers evolve skills privately with a
+  working GEPA setup and commit the results to `skills/` by hand, the offline loop could be
+  shaping every installation with no trace in either repository's code. This study cannot
+  exclude it. What it can say: no bundled skill or document at the tag claims it, and the
+  public repository's code could not have produced such a run unmodified.
+- **Dependent evidence.** The report, the plan and the README are one author's documents from
+  one week in March 2026. They corroborate each other only as one source.
+- **This study's own limit.** "Does not run" rests on reading a constructor signature and one
+  `except` branch, not on execution. A run would settle it in minutes, and was out of bounds.
+- **An unsupported analogy, noted and not used.** The review fork reflects on a transcript and
+  rewrites skill text, which resembles reflective prompt evolution without the selection step.
+  Hermes does not draw that link anywhere this study read, so it is this study's observation,
+  not Hermes's account, and no verdict rests on it.
+
+### 10.6 What would change this verdict
+
+| Observation | Effect |
+| --- | --- |
+| A commit, release note or bundled skill in `hermes-agent` naming an evolved skill or the self-evolution pipeline | The offline loop reaches users; the "not connected" half falls |
+| A recorded GEPA run, or the script executing GEPA under some DSPy release | V-12 falls |
+| A runtime measure of a skill's or a memory entry's effect on later tasks | The "only place improvement is measured" half falls |
+| A later self-evolution commit implementing Phase 5 | The intended centre becomes an operating one |
+
+Not checked, and able to move the verdict: the issues and pull requests of
+`NousResearch/hermes-agent` (#336, #337 and #339 are named by the plan); release notes; and the
+`rl` toolset.

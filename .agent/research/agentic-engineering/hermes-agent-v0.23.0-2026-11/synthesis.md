@@ -1,7 +1,7 @@
 # Synthesis: Hermes Agent v0.23.0 in its own terms
 
 Reader: the owner. Decision served: whether to open the comparison session, and what it may rely
-on. Inquiry `hermes-agent-architecture-2026-11`, revision 2. Written 2026-11-10 (UTC) by Swift
+on. Inquiry `hermes-agent-architecture-2026-11`, revision 3. Written 2026-11-10 (UTC) by Swift
 holds Aether, a Claude Code cloud session.
 
 ## 1. Status
@@ -35,7 +35,7 @@ graph is cyclic at function level. Detail: `architecture-map.md`, A6.
 
 ### 2.2 Memory, learning and self-improvement (Q-L)
 
-The eleven own-terms verdict rows are in `memory-learning-architecture.md` section 9. In short:
+The twelve own-terms verdict rows are in `memory-learning-architecture.md` section 9. In short:
 
 | Id | Verdict |
 | --- | --- |
@@ -50,11 +50,30 @@ The eleven own-terms verdict rows are in `memory-learning-architecture.md` secti
 | V-9 | Self-evolution "measurably better … PR … full test suite": the implemented measure is a word-overlap score, and the judge, the test gate and the pull request are not wired. Added at the owner's question on DSPy and GEPA: the script's `dspy.GEPA` call does not match that class's constructor in DSPy 3.0.0 or 3.4.1, so on a static reading the `MIPROv2` fallback runs; and the saved "evolved" text is an attribute neither optimiser changes. Both are in `memory-learning-architecture.md` L8; the second is an assumption to verify. |
 | V-10 | Self-evolution "operates ON hermes-agent — not part of it": matches. |
 | V-11 | "A deepening model of who you are": with the built-in store alone it is a 1,375-character file the model must make room in. |
+| V-12 | "GEPA is the star engine": it is the named and intended optimiser. The one documented run used a different one, and the committed call cannot construct `dspy.GEPA` in any DSPy 3.x release. |
 
 Frame verdict per time scale: Hermes's account holds within a turn, within a session, across
 sessions and for periodic maintenance, with the wording differences above. It does not hold for
-the offline loop, where the code does less than the account. No mechanism exists across
-installations or at model weights, and Hermes claims none.
+the offline loop, where the code does less than the account. No mechanism was found across
+installations, and Hermes claims none. At model weights Hermes does claim one, an RL training
+pipeline powered by Atropos; this study did not read it and gives no verdict on it.
+
+### 2.3 Is DSPy and GEPA the heart of the self-improvement?
+
+Asked by the owner on 2026-11-10 and worked through in `memory-learning-architecture.md`
+section 10. The answer depends on which sense of "heart" is meant:
+
+| Sense | Answer |
+| --- | --- |
+| The mechanism that operates when Hermes improves itself | No. The runtime imports neither library and never mentions the self-evolution repository. What operates is the review fork and the curator. |
+| The optimiser shown to improve something | Not GEPA. One small run is documented, with `BootstrapFewShot`, a word-overlap score and two held-out examples. |
+| The place where "improvement" is defined and measured | Yes, and only there, with a weak measure. The runtime measures nothing of the kind. |
+| Where the maintainers planned self-improvement to come from | Yes as a plan from March 2026: five phases, one built, a continuous loop wired to the scheduler as the last. The repository has eight commits, the last in June 2026. |
+
+So Hermes carries two designs that do not touch. One runs automatically in every installation
+and measures nothing. The other defines a measure and runs only when a person starts a script,
+with no code path back to the runtime. Neither repository mentions the other's mechanism. This
+is this study's interpretation of the evidence, recorded as claim E-043 with its falsifiers.
 
 ## 3. Reconciling the evidence streams
 
@@ -88,7 +107,7 @@ specifications.
 | L5 controls | Read in code | The terminal lock check's coverage, beyond its own stated limit |
 | L6 retention | Read in code | — |
 | L7 evidence of effect | Negative, by a sweep with a known positive | Bounded by the sweep's vocabulary and three trees |
-| L8 offline loop | Read in full for `evolve_skill`, `fitness`, `constraints` | Dataset builders and importers read in part |
+| L8 offline loop | Read in full for `evolve_skill`, `fitness`, `constraints`, `skill_module`, the validation report and the git history; `dspy.GEPA`'s constructor read in fourteen DSPy releases | Dataset builders and importers read in part; nothing executed |
 | L9 research path | Module headers and one document | `evals/`; `batch_runner.py` internals |
 | L10 failure modes | Seventeen quoted | Only the documents and prompts read; issue threads were not read |
 
@@ -109,6 +128,11 @@ specifications.
 4. The example configuration against the code fallback on `skills.creation_nudge_interval`.
 5. The user guide against itself on curator thresholds (V-7), and the prompt-assembly page
    against itself on the skills index tier.
+6. The self-evolution documents against their own code and report on GEPA: named the primary
+   engine, never shown running, and not constructible as called (V-12).
+7. The self-evolution report against the runtime on how skills are improved: "Manual authoring
+   (static)" in March 2026, against an automatic review fork and curator at the November tag.
+   The dates may reconcile them; the shallow runtime clone could not establish when each arrived.
 
 ### 4.4 Shared-source dependence
 
@@ -118,14 +142,14 @@ specifications.
   was not, the row says so.
 - This session's verification is one model's. The mechanical checks are instruments, not a
   second reader. Two kinds were run, over these populations:
-  - Link resolution: every permalink in the research files (753 at the last run) names a path
+  - Link resolution: every permalink in the research files (802 at the last run) names a path
     that exists in the pinned clone with at least the cited number of lines. This check cannot
     see a wrong quotation.
   - Quotation match, a quoted substring looked for at its cited line range, in four batches:
     122 citations from `memory-learning-architecture.md` (nine were one to six lines off and
     were corrected); 44 from `architecture-map.md` and the ledger rows (none off); 25 lines
     cited by the fresh-eyes subagent (24 matched; the other was a docstring wrapped across
-    lines, not an error); and 5 from the DSPy and GEPA addition (none off). In total 196
+    lines, not an error); and 29 from the DSPy and GEPA additions (none off). In total 220
     checked, nine corrected. Citations outside those batches were not quotation-checked.
 - The fresh-eyes pass in section 5 is the same model The fresh-eyes pass in section 5 is the same model
   family and is recorded as a challenge pass, not independent assurance.
@@ -144,6 +168,11 @@ the behaviour. This frame does not overturn a row; it limits what every mechanis
 
 ### 5.2 An omitted scale
 
+Two, on re-examination. The second was found only when the owner's question sent the study back
+to the self-evolution report: Hermes claims RL training of model weights with Atropos, a scale
+the first pass recorded as "no claim". That was an error of omission, corrected in
+`memory-learning-architecture.md` section 4.2; the pipeline itself remains unread.
+
 The brief's seven time scales leave out the maintainers' own release cycle. Bundled skills,
 prompts and defaults change between releases and reach every installation through bundled-skill
 sync at start-up and update (cold-pass row C-13). That is a path by which the product's behaviour
@@ -153,7 +182,9 @@ changes over time without any installation's own learning. It was noted and not 
 
 The bridge from the offline loop back to the runtime (S5 to S2) has no code at the pinned
 commit. The bridge from real usage to the offline loop (S2 to S5) has an importer whose input
-path was not matched against the runtime's store.
+path was not matched against the runtime's store. Section 2.3 and
+`memory-learning-architecture.md` section 10 follow this to its consequence: the measured loop
+and the operating loop are separate.
 
 ### 5.4 Presence against participation
 
@@ -192,6 +223,9 @@ Recorded for the embedding Practice; nothing here edits a skill or a rule.
 | A command of the form `rg PATTERN` with no path, run with a heredoc on the same line | Search of the working tree | The command hung until timeout, reading standard input | Method: give `rg` an explicit path and `< /dev/null` |
 | The Cricket frame was written before re-reading the brief's ledger rule | A frame carrying the owner's hold | "No holds" omitted the ledger hold; five of eight seats flagged the frame | The frame's SOURCES block should quote the plan's trigger lines |
 | Two file edits made with an inline Python heredoc | The platform's per-file edit tool | Used once for the Cricket frame and Charter, and for citation rewrites | Grounding rule on editing instruments |
+| The first pass left the self-evolution repository's one report unread and its git history unexamined | Every primary artefact of a 30-file repository read | The report held the decisive facts on which optimiser had run; the owner's question surfaced it | Method: in a small repository, read every artefact before giving a verdict on it |
+| The first pass wrote "Hermes claims none" about model weights | A claim of absence backed by a sweep | No sweep had been run; `git grep` for the training terms found the claim in two documents | The brief's own rule on trigger words ("never", "none") |
+| The study's centre of gravity followed its method | A centre chosen from the evidence | The cold pass began from runtime write sites, so the runtime became the centre by construction; the owner's reversed reading exposed it | Method: after a first synthesis, ask which finding the starting point made inevitable |
 
 ## 8. Fresh-eyes results
 
