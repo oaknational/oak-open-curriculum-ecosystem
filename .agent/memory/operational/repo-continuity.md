@@ -37,6 +37,15 @@ Compact live state only. Finished-session narrative is conserved in its homes
 from here per `continuity-practice.md` §Disposition; only live lanes and live
 forward-asks remain.
 
+- **2026-11-10T11:1xZ: the Hermes Agent v0.23.0 own-terms study is written and awaits the owner's
+  merge** (Swift holds Aether, 01Duocji, solo cloud session, the owner-interface directly). Draft
+  pull request 395 carries the brief, the sealed ledger and five research files under
+  `.agent/research/agentic-engineering/hermes-agent-v0.23.0-2026-11/`; start at `synthesis.md`,
+  whose status is `provisional`. The owner's word of 2026-11-10 (quoted in `brief.md`) keeps the
+  comparison with the Practice for a separate, later session: its gate is that pull request merged
+  and the owner's go-ahead, and its inputs are the Fact rows of `evidence-log.md` and the two
+  architecture files. Nothing was written to either Hermes repository.
+
 - **2026-11-08T20:0xZ: the Attendant Workflow design brief is the next session's entry point**
   (Juniper seeks Pollen, 01Duoc, solo cloud session, the owner-interface directly). The owner's words
   of 2026-11-07 and 2026-11-08 are quoted and dated in

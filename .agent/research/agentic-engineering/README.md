@@ -103,6 +103,11 @@ sources without turning research notes into a second canon.
   `attendant-*` sub-skills: the owner's user story as a ten-step sequence with
   internal reviews and the PR review set apart, and a doubt point at each stage
   asking whether the work is worth doing; input to the design session's brief.
+- [hermes-agent-v0.23.0-2026-11/](./hermes-agent-v0.23.0-2026-11/synthesis.md)
+  — read-only study of Hermes Agent v0.23.0 in its own terms: architecture map,
+  memory and learning mechanisms, evidence log with permalinks at the pinned
+  commit, and a synthesis whose status is provisional; the footing for a later
+  comparison, which it does not contain.
 - [cross-lane-direction-survey.md](./cross-lane-direction-survey.md) —
   Slice C umbrella: re-reads direction-of-travel evidence (Slice A
   governance projects, Slice B practice-methodology primitives,
