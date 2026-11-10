@@ -9,13 +9,12 @@ owner's words of that day and on facts re-read that day; the evidence for each r
 plan* is the detailed plan a run makes after approval; *the run node* is the plan-estate
 record a run keeps.
 
-**Task of the session that reads this**: produce the creation plan for the Attendant
-Workflow, "decision completed and therefore research complete and design complete" (the
-owner, 2026-11-08). The author's reading: research complete means the bounded research below
-is done and cited; design complete means every design decision the plan makes is made from
-that research and the owner's words, with its reasoning, by exploring the design rather than
-by closing a list of unknowns, and a question that only a run can answer is named as such
-with what would answer it.
+**Task of the session that reads this**: carry out phase 1, the research, of the creation plan
+[`attendant-workflow-creation`](../../plans/delivery/attendant-workflow-creation.plan.md). The
+owner, 2026-11-10: "Let's get the plan written and ready, and the next session will carry out the
+research". The plan is written to be picked up cold and says where findings go. The owner's
+earlier word on the plan's standard (2026-11-08) still describes where it must arrive: "decision
+completed and therefore research complete and design complete".
 
 ## Success, provisionally
 
@@ -177,6 +176,14 @@ mechanisms, they are not particular to the Attendant. One of the main goals of t
 create a reliable, effective mechanism for automatically stepping back and questioning the bigger
 picture frame, motivation, and nature of the work. Several skills already attempt to provide
 this, but have only been partially successful".
+
+**The plan now, the research next (2026-11-10)**: "Let's get the plan written and ready, and the
+next session will carry out the research".
+
+**How stepping back fires (2026-11-10)**: "This is the very heart of the challenge we face. It is
+what we are researching. Hooks are one option, but very heavy handed, skills and rules with
+appropriate descriptions and application criteria are better. Ideally some combination of start
+right, the agent.md file, skills and rules, but will it work? We just don't know yet".
 
 **Cost (2026-11-10)**: "Our efforts to use cost to steer behaviour have produced some dumb results
 where cost reduction was minimised at the expense of producing value. So I definitely do not want
