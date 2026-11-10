@@ -1,6 +1,8 @@
 # The Attendant Workflow: design notes
 
 **Date**: 2026-11-07, revised 2026-11-08 · **Seat**: Juniper seeks Pollen (Claude Code cloud session) ·
+**Revised** 2026-11-10 by the design seat (Limpet lifts Spray): facts corrected against Anthropic's
+documentation and the owner's words of that day; the design proposals stand as this seat's input.
 **Status**: design notes, input to the design session briefed in
 [`idea-to-merge-process-design.prompt.md`](../../prompts/agentic-engineering/idea-to-merge-process-design.prompt.md).
 Every prior analysis these notes draw on, the two reports they compare included, is input
@@ -14,11 +16,12 @@ run makes after approval, *the run node* is the plan-estate record a run keeps.
 of the owner's attention and none unplanned, at a quality the owner would otherwise get only
 by being present throughout.
 
-**The impact.** The owner's attention stops being the bottleneck on delivery. What gets
-delivered is bounded by the ideas the owner has, not by the hours the owner can supervise, and
-the attention the owner does spend lands where only the owner can decide: what value is
-wanted, whether the criteria capture it, whether the result is sensible to merge. Everything
-the estate serves gets more of the owner's ideas, sooner.
+**The impact.** The Attendant is an exploration on the journey towards unsupervised working and
+replaces nothing (the owner, 2026-11-10). The attention the owner spends lands where only the
+owner can decide: what value is wanted, whether the criteria capture it, whether the result is
+sensible to merge; those touches are kept few by the agent stepping back, analysing and doubting
+before each one. A reliable, effective mechanism for automatically stepping back is a main goal
+of the work in its own right.
 
 **The mechanism.** A fixed-shape process in which judgement replaces presence: doubt exercised
 at several altitudes by minds outside the frame that did the work, so that the work stays
@@ -186,10 +189,13 @@ halves of the trigger differ.
    procedure. For the record of what a hook could do if a run ever shows those layers fail:
    Claude Code's hooks fire on harness events;
    this estate configures four kinds (`SessionStart`, `PreToolUse`, `UserPromptSubmit`,
-   `PreCompact`), each running a script; `SubagentStop` (a sub-agent returning) and `Stop`
-   (the main agent ending its turn) would fit a stage boundary if they behave as the author
-   believes, which is unverified. One observation, from a single session: this session's
-   `SessionStart` hook fired in an ordinary cloud session. The Projects documentation says
+   `PreCompact`), each running a script. Anthropic's hooks page (read 2026-11-10): a `Stop` hook
+   "Prevents Claude from stopping, continues the conversation" and a `SubagentStop` hook
+   "Prevents the subagent from stopping"; hooks fire in cloud sessions; a handler can be a
+   `prompt` (a single-turn model evaluation) or, experimentally, an `agent`, as well as a
+   command; and a hook declared in a skill's frontmatter registers when the skill is invoked,
+   so it exists only in sessions that run that skill. Observed in ordinary cloud sessions: the
+   repository's `SessionStart` and `PreToolUse` hooks, and the platform's own `Stop` hook. The Projects documentation says
    hooks do not run in Claude Code project threads.
 
 *On signals*: partly, and the rest stays unbuilt until a run asks for it. Detecting a growing
@@ -277,7 +283,7 @@ separates them.
 | — | internal review | | **Independent challenge**: a sub-agent that neither planned nor built nor assessed the work challenges the run's whole claim with the contract and the diff | **Frame.** Is the claim "value delivered" the right claim, and is its evidence sufficient? | `parallax-audit`, `cricket` | The claim stands, is narrowed, or sends the run back |
 | 7 | `attendant-review` | | The agent believes the value delivered: the PR is marked ready for review. The PR review runs: the repository's configured reviewers and checks; every surface harvested; findings triaged (fixed, rejected with evidence, or routed) within the run's round budget | **Change.** Is each finding worth curing, or is the review producing rounds? Does the PR say what the diff does? Did a cure change what step 6 judged? | `pr-lifecycle`, PDR-128, PDR-140 | Settled: green, clean, every finding dispositioned; a materially changed diff re-opens the criterion walk |
 | 8 | `attendant-review` | | The agent judges whether the work is ready for merge: settled, and the value assessment still true of the current head | **Readiness.** What, if anything, in the review iteration changed the value delivered? | the merge doctrine's green, clean and sensible | Ready, with the summary for the owner; or back to step 7 |
-| 9 | `attendant` | ✔ sense check | One screen for an exact commit: the worth verdicts, each criterion against its evidence, each doubt and what became of it, what the review iteration changed, cost against the plan, what was left out, the agent's recommendation | — | — | The owner's word on that commit |
+| 9 | `attendant` | ✔ sense check | One screen for an exact commit: the worth verdicts, each criterion against its evidence, each doubt and what became of it, what the review iteration changed, what was left out, the agent's recommendation | — | — | The owner's word on that commit |
 | 10 | `attendant-close` | | The agent merges on the owner's word; the run node is archived; a short retrospective records which doubt points changed something and which did not, and tunes the run's definition | **The process.** Which doubt point earned its place this run? | `retrospective`, PDR-130 | Done |
 
 **Solo and parallel.** A solo run collapses the lead's role into the one agent, with one
@@ -319,8 +325,8 @@ at the approval checkpoint, where the owner shapes or returns the contract.
   the retrospective is recorded.
 
 Each of those is a skill reading or writing a record the repository and GitHub already hold.
-The skills, sub-agents and components are built before the first run; tooling enters on a
-run's evidence.
+What is built before the first run is the creation plan's build-order decision (§1's third lens
+proposes the checkpoints and the doubt briefs first); tooling enters on a run's evidence.
 
 ## 7. Could it be simpler?
 
@@ -349,8 +355,11 @@ run's evidence.
 - The sub-skill set: the six proposed in §5 are a starting cut, to be settled by what each
   stage needs in its own detail.
 - The sub-agent definitions. Every doubt point dispatches a sub-agent, since only a fresh
-  context stands outside the frame that produced the artefact; a skill loads into the
-  context that did the work. The sub-skill carries the stage (what it hands the doubter,
+  context stands outside the frame that produced the artefact. A skill normally loads into the
+  context that did the work; one with `context: fork` runs as a sub-agent with the skill's own
+  text as its prompt, which keeps the doubter's brief out of the working agent's hands (through
+  the Agent tool the working agent writes the prompt, and a custom sub-agent loads `CLAUDE.md`
+  unless `omitClaudeMd` is set). The sub-skill carries the stage (what it hands the doubter,
   what it withholds, the round budget, how it uses the verdict); the sub-agent definition
   carries the doubter (its lens, its question at that altitude, the contract of what it
   receives and returns); components serve both, as the estate's sub-agent templates already

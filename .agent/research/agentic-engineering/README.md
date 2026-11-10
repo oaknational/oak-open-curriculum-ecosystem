@@ -103,6 +103,10 @@ sources without turning research notes into a second canon.
   `attendant-*` sub-skills: the owner's user story as a ten-step sequence with
   internal reviews and the PR review set apart, and a doubt point at each stage
   asking whether the work is worth doing; input to the design session's brief.
+- [attendant-creation-plan-working-notes.md](./attendant-creation-plan-working-notes.md)
+  — the design session's working notes for the Attendant creation plan: the
+  session's impact and value, how it delivers them, and the review of the brief
+  (disposition, ranked doubts, requests for the owner's direction).
 - [hermes-agent-v0.23.0-2026-11/](./hermes-agent-v0.23.0-2026-11/synthesis.md)
   — read-only study of Hermes Agent v0.23.0 in its own terms: architecture map,
   memory and learning mechanisms, evidence log with permalinks at the pinned
