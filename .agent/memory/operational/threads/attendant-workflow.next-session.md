@@ -28,15 +28,14 @@ thread record existed.
 - Invocation pointer: the brief above.
 - Controlling plans: the strategic node [`attendant-workflow`](../../../plans/strategic/attendant-workflow.plan.md)
   and, for the next session, the delivery node
-  [`attendant-research`](../../../plans/delivery/attendant-research.plan.md). Both are `sketch`.
+  [`attendant-research`](../../../plans/delivery/attendant-research.plan.md). Both ratified by the owner on 2026-11-10.
 - Working notes: [`attendant-creation-plan-working-notes.md`](../../../research/agentic-engineering/attendant-creation-plan-working-notes.md)
   (the evidence; §7 holds proposals for the lane's later steps).
-- Next safe step: first, confirm the owner's ratification stamp is on both nodes; a sketch
-  governs no work, and the research does not start without it. Then the research step as its
-  node sets it out (the owner, 2026-11-10: "Let's get the plan written and ready, and the next
-  session will carry out the research"): `start-right-thorough`, the brief's quotations, the two
-  nodes, registration here, the five questions in the node's order. The seat that does the
-  research does not later design the mechanism.
+- Next safe step: the research step as its node sets it out (the owner, 2026-11-10: "Let's get
+  the plan written and ready, and the next session will carry out the research"; both nodes
+  ratified the same day): `start-right-thorough`, the brief's quotations, the two nodes,
+  registration here, the five questions in the node's order. The seat that does the research
+  does not later design the mechanism.
 - Team expectation: solo cloud seat, the owner as design partner.
 - Acceptance bar: for the next session, phase 1's outputs as the plan names them (the findings
   file, the scenarios file, the plan's summary section, a report to the owner).
