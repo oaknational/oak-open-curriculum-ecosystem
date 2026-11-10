@@ -1625,3 +1625,22 @@ outside the repository. One instance each; scope is this session.
 - **Observation:** one comparison thought occurred during the study and was not developed, as
   the owner's word of 2026-11-10 requires; it is left for the comparison session to raise from
   the evidence itself.
+- **Correction (the owner's question, 2026-11-10: "it seems like DSPy/GEPA might be the heart of
+  the self improvement in Hermes?"):** the first synthesis had left a 30-file repository's one
+  report and its eight-commit history unread, and both held decisive facts (which optimiser had
+  actually run; that the named one could not be constructed as called). In a small repository,
+  read every artefact before giving a verdict on it.
+- **Correction (mine):** the first synthesis said Hermes "claims none" about training model
+  weights. No sweep backed it; one `git grep` found the claim in two documents. A sentence with
+  "none" or "never" in it is the cue for the cheapest check that could prove it wrong, and the
+  brief had said so.
+- **Observation:** the study's centre followed its method. A cold pass that starts from runtime
+  write sites makes the runtime the centre by construction; the owner's reversed reading was
+  what exposed it. After a first synthesis, ask which conclusion the starting point made
+  inevitable.
+- **Observation:** a third-party library's call shape was settled by downloading its wheels
+  from the package registry and reading one file in each release as data (fourteen releases,
+  under two minutes), when its documentation site was outside the allowed network.
+- **Observation:** a reviewer bot raised the same finding class twice (a Fact row whose source
+  did not cover its whole claim) because the fix for the first round was applied to the rows
+  named and a row added in the same push repeated it. Fix the class with a check, then the rows.
