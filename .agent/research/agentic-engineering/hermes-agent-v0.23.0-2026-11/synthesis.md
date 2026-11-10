@@ -47,7 +47,7 @@ The eleven own-terms verdict rows are in `memory-learning-architecture.md` secti
 | V-6 | "Consent-aware learning loop": both approval gates default to off; one class of write (an unattended review's memory patch or remove) is always held for approval. |
 | V-7 | Curator thresholds: 14 and 30 days in code; one line of the guide still says 30 and 90. |
 | V-8 | "Only manages agent-created skills": matches; `created_by` is a policy flag set by the review fork or by `adopt`. |
-| V-9 | Self-evolution "measurably better … PR … full test suite": the implemented measure is a word-overlap score, and the judge, the test gate and the pull request are not wired. |
+| V-9 | Self-evolution "measurably better … PR … full test suite": the implemented measure is a word-overlap score, and the judge, the test gate and the pull request are not wired. Added at the owner's question on DSPy and GEPA: the script's `dspy.GEPA` call does not match that class's constructor in DSPy 3.0.0 or 3.4.1, so on a static reading the `MIPROv2` fallback runs; and the saved "evolved" text is an attribute neither optimiser changes. Both are in `memory-learning-architecture.md` L8; the second is an assumption to verify. |
 | V-10 | Self-evolution "operates ON hermes-agent — not part of it": matches. |
 | V-11 | "A deepening model of who you are": with the built-in store alone it is a 1,375-character file the model must make room in. |
 
@@ -116,9 +116,18 @@ specifications.
   come from the same maintainers. Agreement among them is one source agreeing with itself.
 - Where a mechanism claim cites a docstring or comment, the surrounding code was read; where it
   was not, the row says so.
-- This session's verification is one model's. The mechanical checks (732 permalinks resolved;
-  166 quotations matched at their cited lines, nine first found a few lines off and corrected)
-  are instruments, not a second reader. The fresh-eyes pass in section 5 is the same model
+- This session's verification is one model's. The mechanical checks are instruments, not a
+  second reader. Two kinds were run, over these populations:
+  - Link resolution: every permalink in the research files (753 at the last run) names a path
+    that exists in the pinned clone with at least the cited number of lines. This check cannot
+    see a wrong quotation.
+  - Quotation match, a quoted substring looked for at its cited line range, in four batches:
+    122 citations from `memory-learning-architecture.md` (nine were one to six lines off and
+    were corrected); 44 from `architecture-map.md` and the ledger rows (none off); 25 lines
+    cited by the fresh-eyes subagent (24 matched; the other was a docstring wrapped across
+    lines, not an error); and 5 from the DSPy and GEPA addition (none off). In total 196
+    checked, nine corrected. Citations outside those batches were not quotation-checked.
+- The fresh-eyes pass in section 5 is the same model The fresh-eyes pass in section 5 is the same model
   family and is recorded as a challenge pass, not independent assurance.
 - The brief, the Charter and these files share one author lineage.
 
