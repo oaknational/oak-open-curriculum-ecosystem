@@ -13,9 +13,10 @@ merge_class: index-narrative-tables
 ## Thread Identity
 
 Thread: `attendant-workflow`
-Goal: the Attendant Workflow, a reusable idea-to-merge process with three owner touch points
-(initiation, approval of the value-denominated acceptance criteria, the sense check before merge)
-and a middle run on Practice norms. The owner's words are quoted and dated in the brief
+Goal: the Attendant Workflow, a reusable idea-to-merge process in which the owner's judgement
+comes at the points only the owner can supply (what is wanted and whether the criteria capture
+it, in one conversation from initiation through approval; then the sense check before merge),
+with a middle run on Practice norms and a mechanism for automatically stepping back. The owner's words are quoted and dated in the brief
 [`idea-to-merge-process-design.prompt.md`](../../../prompts/agentic-engineering/idea-to-merge-process-design.prompt.md);
 the design notes beside it are input to assess critically. Opened 2026-11-08 by Limpet lifts
 Spray at the design session's open; the brief and notes landed in pull request 390 before any
