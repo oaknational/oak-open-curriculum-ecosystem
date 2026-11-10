@@ -10,15 +10,21 @@ brief's own readings and the
 
 ## 1. The session's impact, and the value it delivers (2026-11-08)
 
-The Attendant's own impact comes from its runs: an idea of the owner's becomes merged value with
-the owner's attention at three points, so delivery is bounded by the owner's ideas rather than
-the owner's hours. A plan frees none of that attention, so it cannot be this session's impact.
-The session's impact sits one step earlier: once the owner stamps the creation plan, the
-Attendant is built and its first run starts on the owner's idea without needing more design from
-the owner, and what gets built is a version that delivers value rather than ceremony. Where the
-session's doubt shows the shape is wrong, the better shape is found while changing it costs a
-conversation. It serves the owner first, then the sessions that build the Attendant (they carry
-out decisions rather than make them), and through the Attendant the people the estate serves.
+The Attendant is a new approach and an exploration on the journey towards unsupervised working
+(the owner, 2026-11-10); it replaces nothing. Its own impact comes from its runs: an idea of the
+owner's becomes merged value with the owner's judgement at the few points only the owner can
+supply, those touches kept few by the agent stepping back, analysing and doubting before each one
+(the owner, 2026-11-10), and each run teaching how far unsupervised work can be relied on. One of
+the work's main goals is a reliable, effective mechanism for automatically stepping back and
+questioning the bigger picture frame, motivation and nature of the work, which several skills
+attempt and only partly achieve (the owner, same day). A plan creates none of that, so it is not
+this session's impact. The session's impact sits one step earlier: once the owner stamps the
+creation plan, the Attendant is built and its first run starts on the owner's idea without
+needing more design from the owner, and what gets built delivers value rather than ceremony.
+Where the session's doubt shows the shape is wrong, the better shape is found while changing it
+costs a conversation. It serves the owner first, then the sessions that build the Attendant (they
+carry out decisions rather than make them), and through the Attendant the people the estate
+serves.
 
 The value is the creation plan, measured by the owner's three words:
 
@@ -48,7 +54,7 @@ frame the seat should have doubted itself.
 
 1. **Footing first.** Review the brief for the reliance "start the design session from it"
    (§3), correct the readings that narrow the owner's words, bring it up to date, fix the
-   research corpus, and bring the owner the tensions in the owner's own words. Corrections are
+   research corpus, and bring the owner the tensions in the owner's own words (answered, §3.8). Corrections are
    recorded here; the brief stays the record of its own date.
 2. **Research, bounded and cited.** The brief's five questions over the widened corpus (§3.3),
    densest evidence first. Every quotation is checked against its file before it is used; a
@@ -107,10 +113,10 @@ owner's words verbatim and dated, kept apart from every reading; the outcome, im
 mechanism; bounded research; the notes labelled as input. As a fact base for a decision-complete
 plan it is not yet sound, and the gaps sort into two kinds.
 
-- **Three tensions in the owner's own words, for the owner's direction** (§3.3, items 1 to 3):
-  the credential a hosted cloud run writes under; what the touch points are and what happens
-  between initiation and approval; what "pricing" covers. Per the owner's word of 2026-11-08 they
-  are not fitted.
+- **Three tensions in the owner's own words, put to the owner** (§3.3, items 1 to 3): the
+  credential a hosted cloud run writes under; what the touch points are and what happens between
+  initiation and approval; what "pricing" covers. The owner answered all three on 2026-11-10
+  (§3.8).
 - **Corrections this session makes at its start** (§3.4, items 4 to 9), recorded here.
 
 Two doubts are carried into the design rather than settled before it (§3.5).
@@ -273,25 +279,78 @@ Two doubts are carried into the design rather than settled before it (§3.5).
   can be fixed text; `omitClaudeMd` withholds the estate's frame where that frame is what is
   doubted; primary evidence (the diff, observed behaviour, the owner's words) goes in beside the
   run's records; dependence is recorded.
-- **Whose bottleneck.** The impact sentence (brief line 36) assumes the owner's attention is the
-  constraint that binds delivery. One retrospective (five days, 2026-09-29) found agent delivery
-  bound by mechanics and process: every check on every change, the slice as the unit of delivery
-  (57 landing rows for 9 stories), and accretion ("Every correction produced an instrument";
-  nothing retired). The Attendant adds stages, doubters and reviews; it states what it replaces
-  or retires as well as what it adds, and observes process cost so the next bottleneck is
-  visible. The second success metric, "your sense check changes nothing material", reads true of
-  an excellent run and of a screen that does not show the owner what they would change; the
-  screen has to make the metric honest.
+- **The sense-check metric needs an honest screen.** "your sense check changes nothing material"
+  reads true of an excellent run and of a screen that does not show the owner what they would
+  change; the screen has to make the metric honest.
 
-### 3.6 Requests for the owner's direction
+### 3.6 The owner's word on the review, and the questions reviewed (2026-11-10)
 
-The three tensions of §3.3, each with this seat's leaning; and two smaller ones:
+The owner, 2026-11-10, on this review: "Please review the above questions. The Attendant doesn't
+replace anything, it is a new approach and an exploration on the general journey towards
+unsupervised working." And: "I absolutely agree that the quality gates are too slow and that
+ceremony has a tendency to get in the way of delivery, and that we need to improve both. This
+are general problems with the repo's mechanisms, they are not particular to the Attendant. One
+of the main goals of this work is to create a reliable, effective mechanism for automatically
+stepping back and questioning the bigger picture frame, motivation, and nature of the work.
+Several skills already attempt to provide this, but have only been partially successful".
 
-- **The supporting rule**: the owner's "a supporting rule to help trigger the workflow" is filed
-  in the brief under "On the stepping-back trigger" (line 153), the previous seat's framing;
-  "the workflow" reads as the Attendant itself. Which it should help trigger.
-- **The idea for the first run**, which the brief says the owner provides. Known early, it lets
-  every part of the design be tested against one real case as it is made.
+What changes. The "whose bottleneck" doubt is withdrawn: gate cost and ceremony are the estate's
+general problems with their own lanes, and the Attendant is not asked what it replaces. The
+Attendant is an exploration, so the first run is an experiment that teaches, and the plan is
+judged by what it lets a run learn as well as deliver. The stepping-back mechanism is a main
+goal in its own right: reliable, effective, automatic. The research opens with why the existing
+instruments only partly succeed.
+
+The seat first read "Please review the above questions" as "none of these is a question for the
+owner". Its review of its own work (§3.7) found that an over-correction, and the three tensions
+went back to the owner, who answered them (§3.8). The supporting rule's place is settled by the
+lever research and the design. The first run's idea is the owner's to give, wanted when the plan
+fixes the build order.
+
+### 3.7 Review of the work so far (2026-11-10, at the owner's word)
+
+Instruments: metacognition, reason and proportionality by the seat; the Cricket panel's normal
+wave on one frame (three judgement seats returned, the procedure seat undelivered; the
+adversarial wave not run, the redirection being already actionable). The three seats read one
+frame the seat wrote: dependent readings. Work verdicts: ON-TRACK three times. Frame verdicts:
+NARROWED twice, CONTRADICTED once, on the same point.
+
+- **§3.6 over-corrected.** "None was a question" swung to the opposite of the correction it
+  answered. The owner's "ask me for direction with your analysis" makes analysis plus a leaning
+  the form asked for, not proof the decision is the seat's. The credential decision is the
+  owner's by the bot-identity rule's own words; what "pricing" covers is a fact only the owner
+  holds, and the two readings do not give the same design (round and push budgets stay tunable
+  under one, leave under the other); the touch-point reading is the seat's model, to be confirmed
+  or corrected by the owner, not settled. What "Please review the above questions" asked for is
+  itself the seat's reading.
+- **Cohesion.** §1 stated the impact as the owner's attention ceasing to be the bottleneck, and
+  §3.2 and §3.6 disagreed on whether anything went to the owner. Both are re-trued on the owner's
+  answers (§3.8).
+- **Effectiveness.** Four owner turns have produced a corrected fact base (the credential proxy,
+  the hook, skill and sub-agent mechanics, the widened corpus) and no research or design on the
+  main goal. Two of the owner's turns went to correcting the seat's frame, the seat's own
+  failure measure in §1. Record-keeping took a large share of the work.
+
+### 3.8 The owner's answers (2026-11-10)
+
+1. **The credential**: "Agreed." The owner permits the seat's leaning: an Attendant cloud session
+   class that writes under the owner's credential, every write marked as agent-authored, no
+   pull-request review ever submitted by the agent, the merge only after the owner's word at the
+   sense check. The plan designs how such a session is distinguished.
+2. **Cost**: "Our efforts to use cost to steer behaviour have produced some dumb results where
+   cost reduction was minimised at the expense of producing value. So I definitely do not want
+   cost used as a success metric. That is not to say it is unimportant, or to ignore it, only that
+   if highlighted it tends to distort the direction the agent moves, and the distortion compounds
+   over time, which would make independent work less reliable." The seat's reading for the
+   design: cost is observed and recorded, never a target, a success measure or a highlighted
+   figure in what a running agent or the owner's decision screens see; a round or push budget,
+   where the design keeps one, is read as a sign of non-convergence to step back on, not as a
+   cost to minimise.
+3. **The touch points**: "Correct, and those touches are minimised by the agent stepping back and
+   analysing and doubting before my touch." The touches are kinds of judgement only the owner
+   makes; initiation through approval is one conversation; a mid-run doubt about worth returns to
+   it. The stepping back before each touch is what keeps them few, which ties the touch design
+   to the stepping-back mechanism.
 
 ## 4. Lever facts
 
