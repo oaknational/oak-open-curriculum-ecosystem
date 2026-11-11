@@ -3,7 +3,7 @@ boundary: B1-Governance
 doc_role: policy
 authority: sonar-disposition
 status: active
-last_reviewed: 2026-11-05
+last_reviewed: 2026-11-11
 ---
 
 # Sonar Disposition Policy
@@ -27,16 +27,17 @@ route comments, and a site within §S4036's class is resolved under the
 second exception: under `agent-tools/` by one project criterion on each
 analyser project, and elsewhere by a mark at the site.
 Together they give an auditable record: _what the pattern is_, _what
-clears it_, and _which sites instantiate it_.
+clears it_, and, outside `agent-tools/`, _which sites instantiate it_.
 
 ## Authority and Doctrine
 
 - [`principles.md`][principles] §Strict and Complete and §Architectural
   Excellence Over Expediency.
 - [`safety-and-security.md`][safety] — repository security baseline.
-- [`never-disable-checks`][no-disable] — quality gates stay on; this policy
-  does not weaken Sonar, it documents the substantive judgement Sonar's
-  hotspot model defers to a human.
+- [`never-disable-checks`][no-disable] — quality gates stay on. The one rule
+  this policy lets an analyser project ignore is S4036 under `agent-tools/`
+  (the second exception); beyond it the policy documents the substantive
+  judgement Sonar's hotspot model defers to a human.
 
 [principles]: ../../.agent/directives/principles.md
 [safety]: ./safety-and-security.md
@@ -49,10 +50,11 @@ them."** Every finding from either analyser resolves to **one outcome**:
 `FIXED` — a change in the tree after which the finding no longer fires,
 closed by the next analysis. `FALSE_POSITIVE`, `SAFE`, `ACCEPTED` and
 `ACKNOWLEDGED` are analyser-side states this policy grants only under the
-second exception below (§S4036): a
-finding that is genuinely wrong about a site is still cured by a change
-that stops it firing (a literal removed, a shape restructured, a value
-sourced differently), never by an act in the analyser's console. Precedent
+second exception below (§S4036), whose `agent-tools/` criterion is the one
+act this policy allows in an analyser's settings. Every other finding that
+is genuinely wrong about a site is still cured by a change that stops it
+firing (a literal removed, a shape restructured, a value sourced
+differently), never by an act in the analyser's console. Precedent
 in the analyser (a site marked before the ruling) licenses nothing at the
 next site.
 
@@ -103,14 +105,15 @@ Sonar?" It is set on both analyser projects, Oak's
 Settings → Analysis scope → Issues → Ignore Issues on Multiple Criteria,
 with one criterion, rule key pattern `typescript:S4036` and file path pattern
 `agent-tools/**/*`. Automatic analysis reads no rule-ignore configuration
-from the tree, so this server-side setting is the only mechanism for the
-purpose. A class site outside `agent-tools/` keeps the per-site mark. The
+from the tree, so the criterion lives in each project's server-side
+settings. A class site outside `agent-tools/` keeps the per-site mark. The
 criterion's cost is known: it also silences S4036 at an
 `agent-tools/` site outside the class, where external input reaches a shell.
 Review against §S4036's decision criteria is then the remaining control.
-CodeQL's command-injection queries do not cover it, because the CodeQL
-configuration uses the remote threat model, under which command-line
-arguments and the environment are not taint sources.
+CodeQL's command-injection queries do not cover such a site when the input
+is a command-line argument or an environment variable: the CodeQL workflow
+leaves the threat model at its default, remote, under which neither is a
+taint source.
 
 ## Disposition Workflow
 
@@ -120,10 +123,12 @@ arguments and the environment are not taint sources.
    configuration, never an act in the analyser's console. It is not a class
    in the catalogue below.
 2. **Is the finding S4036 at a site within §S4036's class?** A site under
-   `agent-tools/` raises no finding, because the second exception's project
-   criterion ignores it. If one appears
-   there, the criterion has been lost: restore the project setting, never
-   mark the site. Mark any other class site there, `FALSE_POSITIVE` for an
+   `agent-tools/` raises no finding in the analyser, because the second
+   exception's project criterion ignores it. An issue there from an analysis
+   that ran before the criterion was saved closes at the next analysis. If
+   a later analysis raises one, the criterion has been lost: the owner, who
+   holds the project setting, restores it, and the site is never marked.
+   Mark a class site anywhere else, `FALSE_POSITIVE` for an
    issue or `SAFE` for a hotspot, with the class's canonical rationale: the
    second exception, and the only per-site server-side act in this
    workflow. A site outside the class continues below.
@@ -353,10 +358,11 @@ strategies; on a request-handler path the rewrite is urgent.
 
 **Outcome for a site within the class**, by the finding's type:
 
-- In this project the rule raises a vulnerability **issue**. It is
-  `FALSE_POSITIVE`: the defect it describes, a command resolved through a
-  `PATH` the operator does not control, is not present, because `PATH` is the
-  trust root.
+- The rule raises a vulnerability **issue**. It is `FALSE_POSITIVE`: the
+  defect it describes, a command resolved through a `PATH` the operator does
+  not control, is not present, because `PATH` is the trust root. Under
+  `agent-tools/` neither analyser project raises it (the second exception's
+  criterion), so the mark is made only at a class site elsewhere.
 - Where the rule raised a **hotspot** (it did before 2026-07), the hotspot is
   `SAFE`.
 
@@ -389,7 +395,8 @@ under this class needs re-disposition:
   literal shell string.
 - The one issue the rule has raised, on the `gitleaks` call in
   `agent-tools/src/secret-scan/run-push-secret-scan.ts`, was accepted in
-  2026-07 and stays resolved.
+  2026-07. That file sits under `agent-tools/`, where the second exception's
+  criterion now ignores the rule.
 
 ### S2245 — Pseudorandom number generator (`Math.random()`)
 
@@ -799,24 +806,26 @@ The only file-based analysis config is:
   denominator; it disables no rule.
 
 **There is no file-based rule-ignore mechanism.**
-`sonar.issue.ignore.multicriteria` (per-rule × glob disables) is a
-sonar-scanner-CLI feature that automatic analysis does not read. Wherever it
-is set, in a file or as the project setting Ignore Issues on Multiple
-Criteria, it suppresses a rule across every current and future matching
+`sonar.issue.ignore.multicriteria` (per-rule × glob disables) is read from
+no file in the tree: the scanner CLI reads it from
+`sonar-project.properties`, which automatic analysis ignores. Automatic
+analysis applies it only as the server-side project setting Ignore Issues on
+Multiple Criteria. Wherever it is set, it suppresses a rule across every current and future matching
 file, blind to per-site context, so it is forbidden under
 [`never-disable-checks`][no-disable] with one owner-chosen exception: the
 S4036 criterion for `agent-tools/`, set on both analyser projects
-(§One-Outcome Rule, the second exception). No other rule-ignore criterion is
-set on either analyser project. A dead copy of such a block once lived in the unread
+(§One-Outcome Rule, the second exception). No other rule-ignore criterion may
+be set on either analyser project. A dead copy of such a block once lived in the unread
 `sonar-project.properties` and never took effect; it has been removed.
 
-**Every finding is therefore resolved in the tree**, per
+**Every other finding is resolved in the tree**, per
 [§Disposition Workflow](#disposition-workflow): the class definitions above
 say what the analyser sees and which change clears it, and the next analysis
-closes the finding. The absence of a file-based ignore is not a gap to be
-filled by a server-side mark — since the 2026-09-08 ruling there is no mark
+closes the finding. The S4036 criterion aside, the absence of a file-based
+ignore is not a gap to be filled by a server-side mark or setting — since the 2026-09-08 ruling there is no mark
 to make, for S5443 / S5332 / S1313 in test fixtures as for every other
-class but S4036's (the second exception). The first exception, the
+class but S4036's (the second exception: the criterion under
+`agent-tools/`, a mark at a class site elsewhere). The first exception, the
 rate-limiting query, is no per-site record either: it is the tracked `query-filters` entry in
 `.github/codeql/codeql-config.yml`, which knowingly silences that query for
 every route (§One-Outcome Rule).
@@ -954,7 +963,7 @@ change.
 Owner ruling (2026-11-11, verbatim): "we are not removing automatic analysis
 for one issue. What setting do I need to change in Sonar?" Given when the
 reunification pull request's first analysis on Oak's project raised the
-S4036 class at by-name sites that Oak's project had never marked, and a
+S4036 class at 30 by-name sites carrying no mark on Oak's project, and a
 tracked configuration was found to need CI-based analysis, which the owner
 declined. The owner set the criterion on both analyser projects the same day.
 
@@ -962,17 +971,19 @@ Delta from prior: the second exception's mechanism for `agent-tools/` is one
 project criterion on each analyser project, Ignore Issues on Multiple
 Criteria with rule key pattern `typescript:S4036` and file path pattern
 `agent-tools/**/*`, in place of a mark at each site. The per-site mark stands
-for a class site outside `agent-tools/`, and marks already made under
-`agent-tools/` stay as they are. The §There is no file-based rule-ignore
+for a class site outside `agent-tools/`, and the issues already marked under
+`agent-tools/` need no re-disposition. The §There is no file-based rule-ignore
 mechanism block names this criterion as the one exception to its ban, and
-Disposition Workflow step 2 treats an S4036 finding under `agent-tools/` as a
-lost criterion to restore. The cost is accepted knowingly, as the first
+Disposition Workflow step 2 treats an S4036 finding under `agent-tools/`, raised
+after the criterion was saved, as a lost criterion for the owner to restore. The cost is accepted knowingly, as the first
 exception's was: an `agent-tools/` site outside the class is silenced too,
 and review against §S4036's decision criteria is its control.
 
 Worked example: the pull request's first analysis raised 30 S4036 issues in
-18 files, all under `agent-tools/`: 11 smoke tests and 7 tooling sources,
-among them `agent-tools/src/secret-scan/run-push-secret-scan.ts`. With the
+18 files, all under `agent-tools/`: 11 files under
+`agent-tools/smoke-tests/` (nine smoke tests and two fixtures) and 7 tooling
+sources, among them the two `git` calls in
+`agent-tools/src/secret-scan/run-push-secret-scan.ts`. With the
 criterion in place the analyser raises none of them, and a new by-name site
 under `agent-tools/` raises nothing either. A class site under `apps/` or
 `packages/` still raises its issue and takes the per-site mark with the

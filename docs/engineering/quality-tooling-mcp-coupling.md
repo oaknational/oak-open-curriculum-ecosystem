@@ -73,7 +73,7 @@ The QG status for a PR returns _only_ the conditions that apply to new code. The
 
 ### Per-finding investigation discipline
 
-The cardinal anti-pattern is the **rule-level disable** (the `sonar.issue.ignore.multicriteria` block reverted in commit `dba01e7c`). Each Sonar rule fires at distinct sites with distinct contexts. The disposition that's right for one site can be wrong for another:
+The cardinal anti-pattern is the **rule-level disable** (the `sonar.issue.ignore.multicriteria` block reverted in commit `dba01e7c`); the one the policy allows is the owner's S4036 criterion for `agent-tools/`. Each Sonar rule fires at distinct sites with distinct contexts. The disposition that's right for one site can be wrong for another:
 
 - `S6644` (`??=` over conditional default-assign): mechanical fix at one site; the explicit `if` form may carry information about null-vs-undefined intent at another site.
 - `S6594` (`RegExp.exec` over `String.match`): mechanical fix where the rule applies; the rule does not apply when `String.match` is used with the `/g` flag (the semantics differ).
@@ -190,8 +190,8 @@ exist rather than applying the suggestion blind.
 
 ### Anti-patterns
 
-- **`sonar.issue.ignore.multicriteria` rule-level block** (a sonar-scanner-CLI feature SonarCloud automatic analysis does not read). Disables the rule for an entire path glob across all current and future code. Violates `principles.md` "NEVER disable any quality gates". First reverted in commit `dba01e7c` after Vining Bending Root's drift incident on 2026-04-27; it later re-crept into a `sonar-project.properties` that automatic analysis never read, and that dead file has since been removed entirely. Findings are cured per site in the tree, never disposed by a rule-level block, and since 2026-09-08 never by a server-side mark either (see [Sonar Disposition Policy](../governance/sonar-disposition-policy.md)).
-- **Per-rule mass-mark via Sonar UI** without per-site investigation. Same shape as the `multicriteria` block — the disposition isn't grounded in the architectural tension at each site.
+- **`sonar.issue.ignore.multicriteria` rule-level block** (a sonar-scanner-CLI feature SonarCloud automatic analysis does not read). Disables the rule for an entire path glob across all current and future code. Violates `principles.md` "NEVER disable any quality gates". First reverted in commit `dba01e7c` after Vining Bending Root's drift incident on 2026-04-27; it later re-crept into a `sonar-project.properties` that automatic analysis never read, and that dead file has since been removed entirely. Findings are cured per site in the tree, never disposed by a rule-level block. The one exception is the owner's: the server-side Ignore Issues on Multiple Criteria entry for `typescript:S4036` on `agent-tools/**/*`, set on both analyser projects (owner, 2026-11-11; see the [Sonar Disposition Policy](../governance/sonar-disposition-policy.md)'s second exception). No other criterion is added.
+- **Per-rule mass-mark via Sonar UI** without per-site investigation. Same shape as the `multicriteria` block — the disposition isn't grounded in the architectural tension at each site. The S4036 criterion above is the one owner-chosen exception, and its cost is stated in the policy.
 - **"Stylistic" / "false positive" labels** without naming the architectural tension. Labels are shortcuts; describe the actual code-shape constraint instead.
 
 ---
@@ -398,7 +398,8 @@ in-code TSDoc with why the site changed, and commit it with the cure.
 
 Cure each hotspot at source per its class in the policy; the next analysis
 marks it REVIEWED / FIXED. `ACKNOWLEDGED` is not used, and `SAFE` only for
-an S4036 hotspot within the policy's §S4036 class.
+an S4036 hotspot within the policy's §S4036 class outside `agent-tools/`,
+where the project criterion ignores the rule.
 
 ### 7. CodeQL action items
 

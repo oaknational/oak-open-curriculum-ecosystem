@@ -669,7 +669,8 @@ live tickets where the platform is in use.
   canonical rationale (the owner's 2026-11-05 ruling), except under
   `agent-tools/`, where one project criterion on each analyser project
   ignores the rule (the owner's 2026-11-11 choice).
-  Triage routes findings; it never buries them — never dismissed by
+  Beyond those two exceptions, triage routes findings; it never buries
+  them — never dismissed by
   category or per site, never gate-narrowed, never warning-downgraded,
   never suppressed.
 - Fix the class, not the instance: a spelling finding on two lines gets a

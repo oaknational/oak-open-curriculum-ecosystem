@@ -36,8 +36,8 @@ import type { SkillEvalsSeams } from './seams.js';
  * root (Sonar disposition policy §S4036), and the host runner is one of
  * them. The run already loads the repository's own skills into an agent
  * under `--trust-plugin`, so `PATH` resolution adds no trust boundary the
- * run does not already cross. A Sonar S4036 finding on this line is marked
- * under that section.
+ * run does not already cross. Sonar raises no S4036 finding on this line:
+ * that section's project criterion ignores the rule under `agent-tools/`.
  */
 export const RUNNER_COMMAND = 'claude';
 
