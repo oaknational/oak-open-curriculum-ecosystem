@@ -736,3 +736,52 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
   5. The release watch.
 - **Claims.** `d3e552c1-4515-4906-918e-5a02e11f2524` holds the carrier branch pattern and its
   worktree. `a811ef22-6735-4306-bf57-4f29adaac9b7` holds `reunify-oce-forks`.
+
+## Lane state (2026-11-11 ~19:3xZ, #1023 synced, Sonar one issue from green; Sandpiper guards Wind, 690653)
+
+- **Landed on `engraph`.** Carrier #393 at `4e33dd98d` (Oak 1.186.10) and #401 at `495c82f45`
+  (five Sonar code smells cured in four files). Both by the door; branches, worktrees and
+  claims closed.
+- **oaknational#1023.** `reunify-oce-forks` is at `495c82f45` on Oak, a fast-forward to
+  `engraph`'s tip, pushed as Oak's bot. It contains Oak's `main` at `0d8543021`. Every check
+  passes except SonarCloud. The upgrade note is posted (comment 6803479244).
+- **Sonar gate on #1023.** The S4036 criterion works: 30 open issues went to 0. The gate's
+  code-smell condition reads the worst severity, not a sum (threshold 14; MAJOR reads as 15),
+  so one MAJOR issue fails it. Two issues stay open: `typescript:S6822` MAJOR on
+  `demos/oak-design-showcase/app/tokens/TokenRows.tsx` (the explicit `role="list"`), and
+  `typescript:S1135` INFO on `packages/core/oak-eslint/src/configs/strict.ts:17` (the lint rule
+  name `vitest/warn-todo` in a comment), which does not affect the gate.
+- **Draft #402** (`fix/token-rows-list-semantics`, `7153a5917`, claim
+  `5c17db53-a880-4bb1-a313-cee92f31aef8`) cures S6822 at source: `list-style-type: ''` where the
+  list had `list-style: none`, and each row's flex layout on an inner `div.tok-row-body` so the
+  `li` stays a list item. The accessibility-expert reviewer read WebKit's
+  `determineListRoleWithCleanChildren` and recommended this shape. Proved: 414 rows, equal
+  row and cell boxes, byte-identical full-page screenshots at 320, 960 and 1440 pixels. Not
+  proved: what VoiceOver announces in Safari. It stays draft until the owner hears "list, 87
+  items" there.
+- **Turbo cache on Oak, re-read.** On run 43068100283 Vercel still refuses the OIDC exchange
+  ("Not authorized"), and turbo reports "Remote caching disabled". The Vercel policy is the
+  owner's to add before the merge.
+- **GitHub runners, 2026-11-11.** From 13:57Z to about 17:15Z every `browser-tests` job failed
+  at the Playwright apt step: the hosted runner could not resolve `archive.ubuntu.com` or
+  `security.ubuntu.com`. The image matched the previous day's passing runs. It recovered
+  without a change on our side.
+- **Work list (non-blocking, each its own pull request).**
+  - C078's `behavioural_intent` in `registry.json` (lessons and units scopes).
+  - `search-units-year-filter.integration.test.ts` and `create-search-sdk.integration.test.ts`
+    spy on a production Elasticsearch `Client`; an injectable search port and a recording fake
+    replace the spy (Codex on #393, carried Oak code).
+  - `agent-tools/src/collaboration-state/transaction-lock.ts` treats only `EEXIST` as
+    contention. On Windows a `mkdir` racing a removal fails `EPERM`, which failed
+    `windows-basic` once on #1023 (run 43074766686) and passed on re-run.
+  - Nineteen other `list-style: none` rules in the estate's stylesheets carry no role, so a
+    list of theirs outside a navigation landmark is exposed as a group in WebKit.
+- **Next, in order.**
+  1. The owner's VoiceOver check on #402; then ready, the door, and `engraph` into
+     `reunify-oce-forks` again, with the gate read again.
+  2. If Hydra's #399 or #400 lands first, the same re-sync carries it.
+  3. Report #1023 ready once the owner ends the exploratory status. The owner alone executes
+     that merge.
+  4. The release watch.
+- **Claims.** `a811ef22-6735-4306-bf57-4f29adaac9b7` holds `reunify-oce-forks`;
+  `5c17db53-a880-4bb1-a313-cee92f31aef8` holds #402's two files.
