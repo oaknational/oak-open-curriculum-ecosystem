@@ -656,3 +656,79 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
     checkout fast-forwarded, and the claim closed.
   - **Next.** #377 folds with engraph's tip merged in. Phase 1 then ends once CI on engraph
     (including `windows-basic`) is green.
+
+## Lane state (2026-11-11 ~14:3xZ, the #1023 chain at compaction; Sandpiper guards Wind, 690653)
+
+- **Team.** The owner's word of 2026-11-11: n=2, both seats implementers, no Director, a clear
+  division of labour (Hydra's comms broadcast, 13:44Z).
+  - **Sandpiper (690653)**: the oaknational#1023 chain. Carrier #393, then `engraph` into
+    `reunify-oce-forks`, the re-push once the owner saves the Sonar criterion and its gate
+    result, todo 4's upgrade note, the door merge when the owner ends the exploratory status,
+    todo 5's release watch.
+  - **Hydra holds Lightyear (d827c5)**: the S4036 wording pull request (branch
+    `docs/s4036-project-criterion`), and todo 6, the return to a mirror, with the plan's todo 6
+    text. Sandpiper edits the plan only after Hydra's pull requests merge, and only todos 4
+    and 5.
+- **Phase 1 closed.** #388, #377, #391 and #392 merged. Draft oaknational#1023 is open on
+  `reunify-oce-forks` at `0509940e6`. The delivery plan `reunify-oce-forks` (status sketch)
+  carries the two owner gates.
+- **Carrier #393: Oak 1.186.10** (`0d8543021`, #990, MCP-755: the search year filter applies to
+  the units scope too).
+  - Merge `4629ac8b9` merges `engraph` at `54fb0b8c5` into the carrier (author the owner,
+    committer the bot). The dry run had three modify/delete conflicts, all in the content
+    audit's per-file review ledger, which `be63e46dd` dropped on 2026-11-02. It stays dropped,
+    and #990's new ledger module goes with it. #990's C078 anchor and revision overrides merged
+    cleanly. The current-source validator reads 729 items OK.
+  - A lint cure on the carrier: `current-aggregated-item-anchor-overrides.ts` reached 257
+    lines, past the 250 limit both forks share (Oak's copy is 236 lines; engraph's C111 and
+    C426 add 21). The app and widget items move to `current-app-item-anchor-overrides.ts`.
+  - One content-workspace page was regenerated. The documents sweep found one refuted claim,
+    which is on the work list below.
+  - Pushed through the door at `4629ac8b9`, gates green, with CI running at the compaction. Still
+    to do: post the PR comment with the merge readings and sweep dispositions, undraft, declare
+    Codex unavailable on the head (its usage limit), settle, merge through the door, and retire
+    the branch. If `engraph` moves first (#397 and #398 are open), merge its tip into the carrier
+    again.
+- **Sonar on #1023.** The owner keeps Automatic Analysis and chose one project-setting criterion
+  on Oak's SonarCloud project: Ignore Issues on Multiple Criteria, rule `typescript:S4036`,
+  path `agent-tools/**/*`. Oak's public API (2026-11-11) lists 30 open S4036 issues on #1023,
+  all in 18 files under `agent-tools/`. The owner then saved the criterion on both projects,
+  Oak's and Engraph's, and Hydra verified both through the settings API (2026-11-11; Hydra's
+  read, not this seat's). No issue is marked by key. A new head on `reunify-oce-forks` (the
+  `engraph` tip after #393 lands) makes Automatic Analysis run again, and the gate result goes
+  to Hydra.
+- **The door on a pull request this size (Hydra's hypothesis, checked by reading).**
+  #1023 changes about 4,690 files, and GitHub lists at most 3,000. The door only reads the
+  changed files when the verdict is not SETTLE-READY
+  (`agent-tools/src/merge-bot/merge-records-checks.ts:211-217`). When it does, the read stops
+  at 30 pages with a typed refusal, saying "never records-class; the SETTLE-READY door stands"
+  (`merge-changed-files.ts:89-105`), so it never misreads a truncated list. A SETTLE-READY
+  verdict merges without the read.
+- **Turbo remote cache on Oak.** Oak's `main` reaches the cache today through its `TURBO_TOKEN`
+  secret: every job in run 42666051642 reports "Remote caching enabled". The merged workflow
+  uses OIDC, and on #1023 (run 42631264008) Vercel refuses the exchange, "Not authorized", with
+  `TURBO_TEAM` set to `oak-national-academy`. The action's README makes a Turborepo CLI OIDC
+  policy for the repository its precondition. Reading the refusal as that policy's absence is an
+  inference, because this seat has not read the Vercel team's settings. So, before the merge, the
+  owner needs a Turborepo CLI OIDC policy for `oaknational/oak-open-curriculum-ecosystem` on that
+  Vercel team (Settings,
+  Build and Deployment, OIDC Policies for CLI Access); check that step on #1023 before the door
+  merge. On the owner's machine nothing is needed: `TURBO_TEAM` is exported beside `TURBO_TOKEN`
+  from the shell profile.
+- **Work list (non-blocking, its own pull request).** In
+  `.agent/reports/mcp-agent-facing-content-audit/registry.json`, C078's `behavioural_intent`
+  ("Constrains year filter to lessons scope...") needs to say lessons and units scopes. Oak's
+  copy has the same line. Regenerate the content workspace with the fix.
+- **Found, for Hydra's todo 6 checklist.** The primary checkout has an `upstream` remote whose
+  push URL is live to Oak, beside `read-only-upstream` (`no_push`). Who added it is not known.
+  That is an inference from absence: no session transcript in this project's store adds it.
+- **Next, in order.**
+  1. Carrier #393 lands.
+  2. Merge `engraph` into `reunify-oce-forks` and push as Oak's bot through the door (the Sonar
+     criterion is saved), then read the gate.
+  3. Add the upgrade note to #1023. Each Oak checkout recreates `.github/merge-bot.json` from
+     `.example`. The Turbo cache needs `TURBO_TEAM` plus the OIDC policy.
+  4. The door merge, at the owner's end of the exploratory status.
+  5. The release watch.
+- **Claims.** `d3e552c1-4515-4906-918e-5a02e11f2524` holds the carrier branch pattern and its
+  worktree. `a811ef22-6735-4306-bf57-4f29adaac9b7` holds `reunify-oce-forks`.
