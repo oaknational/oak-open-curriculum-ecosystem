@@ -205,8 +205,12 @@
    once across all columns, so the second column's first row would sit
    ruleless beside a ruled first — the heading provides the separation
    and every row carries its own bottom rule. */
+/* An empty-string marker, never `list-style: none`: WebKit exposes a list
+   with no visible markers as a plain group unless its items render as list
+   items with a marker type other than `none`. The empty string paints
+   nothing and keeps the list a list, so the markup needs no `role`. */
 [data-page='tokens'] .tok-rows {
-  list-style: none;
+  list-style-type: '';
   margin: var(--space-4) 0 0;
   padding: 0;
   font: var(--type-body-3);
@@ -220,13 +224,18 @@
      empty-scroll class from the scroll-container era; the cure travels to
      the row now that the container is gone). */
   position: relative;
+  padding: var(--space-4) var(--space-12);
+  border-block-end: var(--border-solid-s) solid var(--border-neutral-lighter);
+  break-inside: avoid;
+}
+
+/* The row's cells wrap inside this box, not the `li`: the `li` stays
+   `display: list-item`, which is what keeps the list's semantics in WebKit. */
+[data-page='tokens'] .tok-row-body {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-4) var(--space-8);
-  padding: var(--space-4) var(--space-12);
-  border-block-end: var(--border-solid-s) solid var(--border-neutral-lighter);
-  break-inside: avoid;
 }
 
 /* Names carry identification, not emphasis — four hundred bold identifiers
