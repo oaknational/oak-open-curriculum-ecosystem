@@ -113,6 +113,21 @@ function isVitestImport(definition: TSESLint.Scope.Definition, kind: VitestBindi
   );
 }
 
+/**
+ * The statically known property name of a member access, under either
+ * spelling: `x.skipIf` and `x['skipIf']` are the same call, so reading only
+ * the dotted form would leave the bracketed one — ordinary, legal syntax —
+ * outside a gate that claims to ban the construct.
+ */
+function staticPropertyName(node: TSESTree.MemberExpression): string | undefined {
+  if (!node.computed) {
+    return node.property.type === AST_NODE_TYPES.Identifier ? node.property.name : undefined;
+  }
+  return node.property.type === AST_NODE_TYPES.Literal && typeof node.property.value === 'string'
+    ? node.property.value
+    : undefined;
+}
+
 const noConditionalTestsRule: RuleWithReappraisingMessages<'conditionalTestBanned'> = {
   meta: {
     type: 'problem',
@@ -161,22 +176,6 @@ const noConditionalTestsRule: RuleWithReappraisingMessages<'conditionalTestBanne
         return kind === 'callee' && TEST_CALLEES.has(node.name);
       }
       return variable.defs.some((definition) => isVitestImport(definition, kind));
-    }
-
-    /**
-     * The statically known property name of a member access, under either
-     * spelling: `x.skipIf` and `x['skipIf']` are the same call, so reading only
-     * the dotted form would leave the bracketed one — ordinary, legal syntax —
-     * outside a gate that claims to ban the construct.
-     */
-    function staticPropertyName(node: TSESTree.MemberExpression): string | undefined {
-      if (!node.computed) {
-        return node.property.type === AST_NODE_TYPES.Identifier ? node.property.name : undefined;
-      }
-      return node.property.type === AST_NODE_TYPES.Literal &&
-        typeof node.property.value === 'string'
-        ? node.property.value
-        : undefined;
     }
 
     /** `vitest.it` / `vitest['it']`, where `vitest` resolves to a namespace import. */

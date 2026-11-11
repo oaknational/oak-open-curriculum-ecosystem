@@ -51,10 +51,7 @@ export function entryIsDescriptorFile(
   viaDescriptor: FileIdentity,
 ): boolean {
   return (
-    entry !== undefined &&
-    entry.isFile() &&
-    entry.dev === viaDescriptor.dev &&
-    entry.ino === viaDescriptor.ino
+    entry?.isFile() === true && entry.dev === viaDescriptor.dev && entry.ino === viaDescriptor.ino
   );
 }
 
