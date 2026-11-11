@@ -34,13 +34,14 @@ packages:
   - packages/sdks/oak-curriculum-sdk
   - packages/sdks/oak-sdk-codegen
   - packages/sdks/oak-search-sdk
-# Supply-chain hardening: exclude any package version younger than 24h
-# (1440 min) from resolution, so a freshly-published compromised release ages —
-# giving the ecosystem time to detect and yank it — before it can enter the
-# tree. pnpm 12's built-in default is also 1440 minutes, but non-strict:
-# per its 12.3.0 changelog, too-young picks are then added to
-# minimumReleaseAgeExclude without asking. Setting the value here makes the
-# floor strict, so keep this line even though it matches the default.
+# Supply-chain hardening: exclude any package version younger than 7 days
+# (10080 min) from resolution, so a freshly-published compromised release
+# ages — giving the ecosystem time to detect and yank it — before it can enter
+# the tree. Seven days aligns with Oak's supply-chain policy. This
+# is stricter than pnpm 12's built-in default of 1440 minutes (24h), and that
+# default is non-strict: per its 12.3.0 changelog, too-young picks are then
+# added to minimumReleaseAgeExclude without asking. Removing this line would
+# both shorten the floor to 24h and make it non-strict, so it must stay.
 # Mechanism, verified first-hand 2026-11-03 on pnpm 12.17.0 — three outcomes.
 # When the requested range admits an older mature version, the resolver
 # SILENTLY picks the newest version older than the floor (exit 0, no
@@ -58,7 +59,7 @@ packages:
 # ERR_PNPM_MINIMUM_RELEASE_AGE_VIOLATION, so a lockfile resolved without
 # the floor cannot pass CI. Applies to all (incl. transitive) deps.
 # Allow-list a genuinely-needed young package via minimumReleaseAgeExclude.
-minimumReleaseAge: 1440
+minimumReleaseAge: 10080
 
 allowBuilds:
   '@clerk/shared': true

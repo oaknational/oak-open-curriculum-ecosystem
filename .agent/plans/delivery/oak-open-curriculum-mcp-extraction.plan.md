@@ -438,15 +438,16 @@ package; the separation of the toolkit's clock from the products' clock is
 `public-packages-release`'s decision (its wager 3), to which this plan
 contributes two observations when they occur — a second app releasing from
 here daily, and a breaking change the product consumes. The release-age floor
-this repository's workspace sets (a 24-hour minimum age, which silently
+this repository's workspace sets (a seven-day minimum age, which silently
 resolves to an older mature version when one exists and refuses loudly when
 none does; its own comment names the per-package allow-list for a genuinely
 needed young release) travels with the template and stays in force for the
 `@oaknational` scope: a compromised publish under Oak's own scope is exactly
 the case the floor's detection window exists for, so a release here reaches
-the product's dependency bot the following day, inside the upstream
-contract's week, and a genuinely urgent fix is allow-listed for that one
-package at the owner's word, never by a standing scope exclusion.
+the product's dependency bot once it has aged seven days. A fix that must
+land inside the upstream contract's week therefore cannot wait out the
+floor: it is allow-listed for that one package at the owner's word, never
+by a standing scope exclusion.
 
 ### Scaffold the new repository functional — the app template
 
@@ -801,9 +802,9 @@ Scaffold (the new repository; gate 2; after E7):
    server by the README alone, timed.
 5. **S2** Release at one version per repository, with the dependency-update
    bot configured for the `@oaknational` scope on a batching schedule that
-   runs after the release-age floor's day. Proof: a tagged pre-release from
-   a no-op commit class; the bot opens one grouped PR for a toolkit release
-   once it has aged.
+   runs after the release-age floor's seven days. Proof: a tagged
+   pre-release from a no-op commit class; the bot opens one grouped PR for
+   a toolkit release once it has aged.
 
 Moves, cut-over and retirement:
 

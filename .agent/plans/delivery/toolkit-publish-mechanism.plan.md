@@ -91,10 +91,10 @@ repository's release version.
 - **Consumers and the release-age floor.** A consumer keeps its
   minimum-release-age floor in force for the `@oaknational` scope — a
   compromised first-party publish is exactly what the floor's detection
-  window is for — so a release here is installable the following day; a
-  genuinely urgent fix is allow-listed for that one package at the owner's
-  word, as the floor's own comment permits, never by a standing scope
-  exclusion. The package READMEs say so.
+  window is for — so a release here is installable seven days after
+  publish; a genuinely urgent fix is allow-listed for that one package at
+  the owner's word, as the floor's own comment permits, never by a standing
+  scope exclusion. The package READMEs say so.
 
 ## Acceptance criteria (each with a proof — required)
 

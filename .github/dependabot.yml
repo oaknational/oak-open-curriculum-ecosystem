@@ -2,8 +2,8 @@ version: 2
 updates:
   # github-actions only. The npm ecosystem is deliberately absent: Dependabot
   # regenerates the whole pnpm lockfile per PR with its own resolver, which
-  # imports transitives published in the preceding 24h and so trips the
-  # `minimumReleaseAge: 1440` supply-chain floor at CI install — every
+  # imports transitives published in the preceding 7 days and so trips the
+  # `minimumReleaseAge: 10080` supply-chain floor at CI install — every
   # npm-ecosystem PR was therefore unmergeable and closed by hand, while
   # github-actions PRs merge cleanly because they never touch `pnpm-lock.yaml`.
   # Vulnerability ALERTS stay enabled (a repo setting, not configured here):
