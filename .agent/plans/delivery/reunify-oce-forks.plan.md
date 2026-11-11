@@ -18,7 +18,7 @@ owner_gates:
     clears_when: "The owner ends the exploratory status of oaknational#1023, so it is marked ready and merged through the door once clean and green"
     expires: 2026-11-30
   - awaiting: external-input
-    clears_when: "An account with access to Oak's SonarCloud project marks the pull request's S4036 by-name sites false positive under the disposition policy's S4036 section"
+    clears_when: "The Ignore Issues on Multiple Criteria entry (typescript:S4036 on agent-tools/**/*, the disposition policy's second exception; saved by the owner on both SonarCloud projects 2026-11-11) is in place and the next analysis of the pull request raises no S4036 issue"
     expires: 2026-11-30
 last_updated: 2026-11-09
 ---
@@ -78,8 +78,9 @@ back to being a plain mirror of Oak: one line of development again.
    - the downstream-writes rule and the identity node match the owner's words of 2026-11-02 and
      2026-11-09.
 2. Merge `engraph` into `reunify-oce-forks`; Oak's checks run again.
-3. Oak's SonarCloud project marks the S4036 by-name sites false positive (30 on the first run), by
-   an account with access to it (the second gate).
+3. The S4036 criterion for `agent-tools/`, which covers all 30 sites of the first run, is saved on
+   both SonarCloud projects (the owner, 2026-11-11), and a push to `reunify-oce-forks` re-runs the
+   analysis (the second gate).
 4. The owner ends the exploratory status (the first gate). The description gains one upgrade note:
    each Oak checkout recreates `.github/merge-bot.json` from `.github/merge-bot.json.example`, and
    Oak's CI reaches the Turbo cache through the `TURBO_TEAM` variable and its OIDC policy, not a

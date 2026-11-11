@@ -42,7 +42,11 @@ control for it. The second (owner, 2026-11-05) is Sonar's S4036 at a site
 within the policy's §S4036 class, a repository-required binary invoked by
 name with `PATH` as the trust root: no change in the tree cures it without
 choosing a binary's path, so the site is marked `FALSE_POSITIVE` with the
-class's canonical rationale. No other query id or finding class is excluded,
+class's canonical rationale. Under `agent-tools/` one project criterion on
+each analyser project ignores the rule instead (owner, 2026-11-11, who kept
+automatic analysis, which reads no rule-ignore configuration from the tree);
+it is the one rule-level ignore the policy allows, and it carries the cost
+the policy states. No other query id or finding class is excluded,
 filtered or dismissed by any route, and an agent never dismisses an alert. Where a warning from another
 system can only be suppressed, suppress per site with rationale, never by
 a rule-level disable — per-site forces a fresh interrogation when the

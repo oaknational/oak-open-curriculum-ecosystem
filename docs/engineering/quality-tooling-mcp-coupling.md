@@ -12,7 +12,7 @@ This document captures the operational knowledge for driving repo quality up usi
 ## TL;DR
 
 1. **SonarCloud** is the canonical static-analysis surface for this repo. The default Quality Gate ("Sonar way") fails on rating thresholds + coverage + duplication; the project's _active_ Quality Gate may also fail on raw `new_violations > 0` (which it does for this repo). **Always query the live QG conditions before scoping work** — different conditions need different fixes.
-2. **CodeQL** is GitHub's deep dataflow / taint-tracking analysis. It complements Sonar by catching cross-function flows that Sonar's per-rule heuristics miss (and vice versa). Both are cured at source, with two exceptions: the CodeQL query `js/missing-rate-limiting`, excluded by tracked configuration under ADR-219 (§Dismissal), and Sonar's S4036 at a binary invoked by name, marked per site under the policy's §S4036 (§Disposition mechanics). No other finding from either analyser is dismissed.
+2. **CodeQL** is GitHub's deep dataflow / taint-tracking analysis. It complements Sonar by catching cross-function flows that Sonar's per-rule heuristics miss (and vice versa). Both are cured at source, with two exceptions: the CodeQL query `js/missing-rate-limiting`, excluded by tracked configuration under ADR-219 (§Dismissal), and Sonar's S4036 at a binary invoked by name, marked per site under the policy's §S4036, or ignored under `agent-tools/` by one project criterion on each analyser project (§Disposition mechanics). No other finding from either analyser is dismissed.
 3. **Sentry** is the runtime observability surface. It tells you which static-analysis findings actually matter in production by correlating issue locations with real error/perf events. Use Sentry MCP to ground severity rankings against runtime impact.
 4. **The cardinal sin**: silencing a finding without investigating the architectural tension it surfaces. Per `principles.md` "NEVER disable any quality gates" and the `no-warning-toleration` rule. The drift pattern that produces violation: investigation-mode → disposition-mode under context pressure. Mitigations are structural (one finding/site = one commit) not just textual.
 
@@ -61,15 +61,15 @@ The QG status for a PR returns _only_ the conditions that apply to new code. The
 
 ### Mapping QG conditions to action
 
-| QG condition                           | What it measures                            | How to address                                                            |
-| -------------------------------------- | ------------------------------------------- | ------------------------------------------------------------------------- |
-| `new_violations > 0`                   | Raw OPEN issue count on new code            | Per-issue fix at source (the one-outcome policy); S4036 by name is marked |
-| `new_security_rating > 1`              | Security rating worse than A on new code    | Resolve any new SECURITY-impact OPEN issue or unreviewed hotspot          |
-| `new_reliability_rating > 1`           | Reliability rating worse than A on new code | Resolve any new RELIABILITY-impact OPEN issue (CRITICAL bugs especially)  |
-| `new_maintainability_rating > 1`       | Maintainability rating worse than A         | Reduce technical-debt-cost on new code                                    |
-| `new_coverage < 80`                    | Test coverage on new code below threshold   | Write tests for uncovered new lines                                       |
-| `new_duplicated_lines_density > 3`     | Duplication density above 3%                | Consolidate copy-pasted code into shared modules                          |
-| `new_security_hotspots_reviewed < 100` | Security hotspots not 100% reviewed         | Cure each hotspot at source; the next analysis marks it REVIEWED / FIXED  |
+| QG condition                           | What it measures                            | How to address                                                             |
+| -------------------------------------- | ------------------------------------------- | -------------------------------------------------------------------------- |
+| `new_violations > 0`                   | Raw OPEN issue count on new code            | Per-issue fix at source (the one-outcome policy); S4036 by name per §S4036 |
+| `new_security_rating > 1`              | Security rating worse than A on new code    | Resolve any new SECURITY-impact OPEN issue or unreviewed hotspot           |
+| `new_reliability_rating > 1`           | Reliability rating worse than A on new code | Resolve any new RELIABILITY-impact OPEN issue (CRITICAL bugs especially)   |
+| `new_maintainability_rating > 1`       | Maintainability rating worse than A         | Reduce technical-debt-cost on new code                                     |
+| `new_coverage < 80`                    | Test coverage on new code below threshold   | Write tests for uncovered new lines                                        |
+| `new_duplicated_lines_density > 3`     | Duplication density above 3%                | Consolidate copy-pasted code into shared modules                           |
+| `new_security_hotspots_reviewed < 100` | Security hotspots not 100% reviewed         | Cure each hotspot at source; the next analysis marks it REVIEWED / FIXED   |
 
 ### Per-finding investigation discipline
 
@@ -92,7 +92,9 @@ query `js/missing-rate-limiting`, excluded by the tracked `query-filters`
 entry in `.github/codeql/codeql-config.yml` and grounded in ADR-219
 (§Dismissal below), never a Sonar write. The second (owner, 2026-11-05) is
 S4036 at a site within the policy's §S4036 class: the issue is marked
-`falsepositive` (a hotspot `SAFE`) with the class's canonical rationale.
+`falsepositive` (a hotspot `SAFE`) with the class's canonical rationale,
+except under `agent-tools/`, where one project criterion on each analyser
+project (owner, 2026-11-11) ignores the rule and no mark is made.
 That mark is the Sonar write operations' one live use; the rest below are
 documented for reading history, and an `accept`, `falsepositive`, `SAFE` or
 `ACKNOWLEDGED` write on any other finding is the act the policy forbids.
@@ -364,7 +366,9 @@ Note any deltas from the briefing or the master plan. State drift is real; the b
 For each failing condition, identify the work that addresses it:
 
 - `new_violations` → per-finding fix at source (the one-outcome policy); an
-  S4036 site within the policy's §S4036 class is marked instead.
+  S4036 site within the policy's §S4036 class is marked instead, and under
+  `agent-tools/` raises nothing, because the policy's project criterion
+  ignores it there.
 - `new_duplicated_lines_density` → consolidation refactors.
 - `new_security_hotspots_reviewed` → cure each hotspot at source; the next
   analysis marks it REVIEWED / FIXED.
@@ -384,7 +388,9 @@ There is no live per-issue dismissal route: a finding that would once have
 taken `accept` or `falsepositive` is cured by its class's tree change in the
 one-outcome policy. The one live per-issue mark is S4036's: a site within
 the policy's §S4036 class is marked `falsepositive` with the class's
-canonical rationale (owner, 2026-11-05). The habit that survives is the
+canonical rationale (owner, 2026-11-05). Under `agent-tools/` no mark is
+made: the policy's project criterion on each analyser project (owner,
+2026-11-11) ignores the rule there. The habit that survives is the
 record — strengthen the
 in-code TSDoc with why the site changed, and commit it with the cure.
 
