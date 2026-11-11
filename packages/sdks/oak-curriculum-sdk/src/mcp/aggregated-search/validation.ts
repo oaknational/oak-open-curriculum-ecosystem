@@ -14,6 +14,7 @@ import {
   isSubject,
 } from '@oaknational/sdk-codegen/api-schema';
 import { type SearchSdkArgs, SEARCH_SCOPES, isSearchSdkScope } from './types.js';
+import { YEAR_NUMBER_SCHEMA, YEAR_STRING_SCHEMA } from './year-filter-schema.js';
 
 /**
  * Zod schema for the search tool's object input.
@@ -32,7 +33,7 @@ const SearchSdkObjectSchema = z
     unitSlug: z.string().optional(),
     tier: z.string().optional(),
     examBoard: z.string().optional(),
-    year: z.union([z.string(), z.number().int().min(1).max(11).transform(String)]).optional(),
+    year: z.union([YEAR_STRING_SCHEMA, YEAR_NUMBER_SCHEMA.transform(String)]).optional(),
     threadSlug: z.string().optional(),
     highlight: z.boolean().optional(),
     minLessons: z.number().int().min(1).optional(),

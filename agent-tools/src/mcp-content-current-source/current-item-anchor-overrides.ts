@@ -6,6 +6,7 @@
  * semantic hand-offs; changing one is a compliance review act.
  */
 import { CURRENT_AGGREGATED_ITEM_ANCHOR_OVERRIDES } from './current-aggregated-item-anchor-overrides.js';
+import { CURRENT_APP_ITEM_ANCHOR_OVERRIDES } from './current-app-item-anchor-overrides.js';
 import { CURRENT_GENERATED_DESCRIPTION_ANCHOR_OVERRIDES } from './current-generated-description-anchor-overrides.js';
 import { CURRENT_GENERATED_ITEM_ANCHOR_OVERRIDES } from './current-generated-item-anchor-overrides.js';
 import { CURRENT_GUIDANCE_ITEM_ANCHOR_OVERRIDES } from './current-guidance-item-anchor-overrides.js';
@@ -23,6 +24,7 @@ export const CURRENT_ITEM_ANCHOR_OVERRIDES: AnchorOverrides = {
   ...CURRENT_GENERATED_ITEM_ANCHOR_OVERRIDES,
   ...CURRENT_GENERATED_DESCRIPTION_ANCHOR_OVERRIDES,
   ...CURRENT_AGGREGATED_ITEM_ANCHOR_OVERRIDES,
+  ...CURRENT_APP_ITEM_ANCHOR_OVERRIDES,
   ...CURRENT_PRIOR_KNOWLEDGE_ITEM_ANCHOR_OVERRIDES,
   /**
    * The landing page's canonical-URL resolution, promoted to `served-origin.ts`
