@@ -505,6 +505,10 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   `Origin` MUST the other way: ADR-122's compensating auth-layer Host check does not run when
   `CANONICAL_HOST` is set, as it is in production, so MCP-650 is an amendment to ADR-122 rather
   than a fresh gap. ADR-229 states the conflict and does not settle it)
+- [ADR-230: npm dependencies must be at least seven days old before they can enter the tree](230-seven-day-dependency-release-age-floor.md)
+  (Accepted 2026-11-11; `minimumReleaseAge` rises from 1440 to 10080 minutes to align with Oak's
+  supply-chain policy, stays explicit because pnpm's default is shorter and non-strict, and
+  `minimumReleaseAgeExclude` stays the only reviewed escape hatch)
 
 ## Key Architectural Decisions
 
