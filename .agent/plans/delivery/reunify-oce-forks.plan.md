@@ -15,7 +15,7 @@ tickets: []
 depends_on: []
 owner_gates:
   - awaiting: owner-decision
-    clears_when: "The owner ends the exploratory status of oaknational#1023, so it is marked ready and merged through the door once clean and green"
+    clears_when: "The owner ends the exploratory status of oaknational#1023, so it is marked ready; the owner alone executes the merge (owner, 2026-11-11), never a seat, the door or any automation"
     expires: 2026-11-30
   - awaiting: external-input
     clears_when: "An account with access to Oak's SonarCloud project marks the pull request's S4036 by-name sites false positive under the disposition policy's S4036 section"
@@ -83,7 +83,8 @@ back to being a plain mirror of Oak: one line of development again.
 4. The owner ends the exploratory status (the first gate). The description gains one upgrade note:
    each Oak checkout recreates `.github/merge-bot.json` from `.github/merge-bot.json.example`, and
    Oak's CI reaches the Turbo cache through the `TURBO_TEAM` variable and its OIDC policy, not a
-   `TURBO_TOKEN` secret. The door merges it.
+   `TURBO_TOKEN` secret. The seat reports it ready; the owner alone executes the merge (owner,
+   2026-11-11), never a seat, the door or any automation.
 5. Watch Oak's release and the deployed service.
 6. Return the fork to a mirror, as the mechanism's last item says.
 
