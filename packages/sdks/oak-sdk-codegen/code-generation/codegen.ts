@@ -33,6 +33,7 @@ import { runSitemapValidation } from './typegen/routing/validate-canonical-urls.
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
 import { createCodegenLogger } from './create-codegen-logger.js';
 import { resolveSchemaSource } from './resolve-schema-source.js';
+import { nodeFileSystem } from '../src/io/node-file-system.js';
 
 const logger = createCodegenLogger('codegen');
 
@@ -101,7 +102,7 @@ async function loadSchema(): Promise<LoadedSchema> {
 
   const apiSchemaUrl = 'https://open-api.thenational.academy/api/v0/swagger.json';
   const live = await fetchValidatedSchema(apiSchemaUrl);
-  await writeSchemaCacheIfChanged(schemaCacheFilePath, live, logger);
+  await writeSchemaCacheIfChanged(schemaCacheFilePath, live, logger, nodeFileSystem);
   logger.info('Schema fetched successfully');
   return createOpenCurriculumSchema(live);
 }
@@ -113,7 +114,7 @@ logger.info('Creating SDK schema with oakUrl and upstream canonicalUrl fields...
 
 // api-schema-original.json is written once, inside generateSchemaArtifacts, from the
 // unfiltered original; the sdk document (minus DEFERRED_PATHS) drives everything else.
-await generateSchemaArtifacts(originalSchema, sdkSchema, outDirectory);
+await generateSchemaArtifacts(originalSchema, sdkSchema, outDirectory, nodeFileSystem);
 
 logger.info('Generating widget constants...');
 generateWidgetConstants(logger);
@@ -126,7 +127,7 @@ generateSubjectHierarchy(logger);
 // while we build confidence in the validation layer. See the integration plan
 // WS2.2 for the decision to start warn-only before making it a hard gate.
 const sitemapRefPath = path.resolve(rootDirectory, 'reference/canonical-url-map.json');
-const validation = runSitemapValidation(sitemapRefPath);
+const validation = await runSitemapValidation(sitemapRefPath, nodeFileSystem);
 if (!validation.ok) {
   const refError = validation.error;
   if (refError.kind === 'invalid_json') {

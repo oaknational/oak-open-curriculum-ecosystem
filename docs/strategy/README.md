@@ -44,6 +44,15 @@ the decision recorded in [ADR-227](../architecture/architectural-decisions/227-o
 estate (`.agent/plans/`, its index the entry point) carries the lane whose delivery order puts
 the extraction first._
 
+_Dated line, 2026-10-10: the current Engraph owner direction is
+[ADR-233](../architecture/architectural-decisions/233-retained-framework-and-configurable-instances.md),
+"Retained framework and configurable instances", accepted as direction that day from the
+owner's architecture commission. It amends ADR-227 and records the order of the line above,
+"ADR-227 puts extraction before remaining estate relocation", as "Replaced in this Engraph
+programme by CF-first preference with actual dependency edges". The plan estate's
+`oce-rearchitecting-programme` node carries the programme; its adoption is held and its merge
+is not (the owner, 2026-10-13: "Merge is not blocked on the corpus being added, but adoption is")._
+
 | Read                                                                           | For                                                                                                                |
 | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
 | [Diagnosis](diagnosis.md)                                                      | the central challenge, and the edge each stream faces                                                              |

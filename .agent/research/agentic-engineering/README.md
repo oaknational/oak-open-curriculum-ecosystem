@@ -92,6 +92,30 @@ sources without turning research notes into a second canon.
 
 ## Cross-Lane Notes
 
+- [codex-support-concept-exploration-2026-09-23.md](./codex-support-concept-exploration-2026-09-23.md)
+  — current Codex Practice tooling census, latest-CLI experiments, and proposals.
+- [codex-official-docs-follow-up-2026-09-23.md](./codex-official-docs-follow-up-2026-09-23.md)
+  — official interface documentation, role and authority questions, and bounded
+  follow-up proposals for the Codex tooling work.
+- [idea-to-merge-process-design-notes-2026-11-07.md](./idea-to-merge-process-design-notes-2026-11-07.md)
+  — design notes for the Attendant Workflow, a new idea-to-merge process with
+  three fixed owner checkpoints, defined as the `attendant` skill and its
+  `attendant-*` sub-skills: the owner's user story as a ten-step sequence with
+  internal reviews and the PR review set apart, and a doubt point at each stage
+  asking whether the work is worth doing; input to the design session's brief.
+- [attendant-creation-plan-working-notes.md](./attendant-creation-plan-working-notes.md)
+  — the design session's working notes for the Attendant creation plan: the
+  session's impact and value, how it delivers them, and the review of the brief
+  (disposition, ranked doubts, requests for the owner's direction).
+- [hermes-agent-v0.23.0-2026-11/](./hermes-agent-v0.23.0-2026-11/synthesis.md)
+  — read-only study of Hermes Agent v0.23.0 in its own terms: architecture map,
+  memory and learning mechanisms, evidence log with permalinks at the pinned
+  commit, and a synthesis whose status is provisional; the footing for a later
+  comparison, which it does not contain.
+- [hermes-practice-comparison-2026-11/brief.md](./hermes-practice-comparison-2026-11/brief.md)
+  — entry brief for the session that compares the Hermes study with the Practice: the owner's
+  words, the inputs on both sides, and proposals for the session to test. It does not begin
+  the comparison.
 - [cross-lane-direction-survey.md](./cross-lane-direction-survey.md) —
   Slice C umbrella: re-reads direction-of-travel evidence (Slice A
   governance projects, Slice B practice-methodology primitives,

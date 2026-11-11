@@ -31,7 +31,7 @@ const senderWithId = deriveCollaborationIdentity({
   platform: sender.platform,
   model: sender.model,
   env: {
-    OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+    PRACTICE_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
     PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
   },
 }).agentId;
@@ -40,13 +40,13 @@ const recipientWithId = deriveCollaborationIdentity({
   platform: recipient.platform,
   model: recipient.model,
   env: {
-    OAK_AGENT_IDENTITY_OVERRIDE: recipient.agent_name,
+    PRACTICE_AGENT_IDENTITY_OVERRIDE: recipient.agent_name,
     PRACTICE_AGENT_SESSION_ID_CLAUDE: recipient.session_id_prefix,
   },
 }).agentId;
 
 const senderEnv = {
-  OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+  PRACTICE_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
   PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
 };
 

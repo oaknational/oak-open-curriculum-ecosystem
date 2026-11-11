@@ -3,6 +3,7 @@ name: "Hydration State Pinning: Any Check Against a Progressively-Enhanced Page 
 polarity: pattern
 use_this_when: "Writing or trusting any capture, measurement, interaction proof, accessibility scan, or fidelity check against a page that hydrates (SSR + client JS) — a fast run otherwise races the hydration boundary and measures an arbitrary state."
 category: testing
+layer: family
 proven_in: "curriculum-hub-demo 2026-07-02 (Limpet, named by Peregrine's closeout): three tools independently defended the same trust boundary — the capture witness, the interaction proof, and the two-state measurement (each defined in the body)."
 proven_date: 2026-07-02
 barrier:

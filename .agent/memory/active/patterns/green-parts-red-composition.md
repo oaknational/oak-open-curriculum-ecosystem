@@ -3,6 +3,7 @@ name: Green Parts, Red Composition
 polarity: anti-pattern
 use_this_when: Changing any mechanism whose OUTPUT another mechanism consumes (rulesets, release automation, build caches, ignore scripts, codegen), or diagnosing a silent production/pipeline failure where every individual component reports healthy
 category: process
+layer: general
 proven_in: >-
   2026-07-23 release-flow incident chain (three compositions in one day):
   ruleset-split × semantic-release bypass; Vercel ignore-script × missing

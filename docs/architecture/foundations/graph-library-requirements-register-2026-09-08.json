@@ -1,0 +1,1182 @@
+{
+  "artifact_id": "graph-library-requirements-register",
+  "artifact_revision": "1.1",
+  "inquiry_id": "graph-library-envelope-2026-09-08",
+  "inquiry_revision": 5,
+  "status": "normative-target-register; no implementation support claims",
+  "definition_documents": [
+    "algorithms-and-data-structures-governance-2026-09-08.md",
+    "comprehensive-graph-library-capability-architecture-2026-09-08.md",
+    "graph-library-capability-contracts-2026-09-08.md"
+  ],
+  "coverage_rules": [
+    "Every leaf below is required target coverage; parent IDs are grouping references and never close a leaf.",
+    "Leaf labels address the corresponding prose requirement; they do not relax any qualifier in the parent model/operation contract.",
+    "The library-wide coverage disposition must cover every required ID, with no omissions or unknown IDs. A support entry may cover several IDs sharing its exact profiles, ownership and evidence; repeated metadata is unnecessary. Duplicate ID/profile claims are consolidated rather than counted twice.",
+    "A well-formed manifest may report incomplete implementation. Comprehensive completion additionally requires supported coverage for every target minimum and required interaction through lawful profiles.",
+    "Inapplicable is a per-profile judgement requiring semantic reason; it cannot remove a required target leaf from library-wide completion.",
+    "Alternative implementations retain separate profile-qualified claims. Completion aggregates only qualified applicable evidence, never unsupported/inapplicable labels.",
+    "Accountable owner is a stable team/role with authority over contract and evidence; ownership transfer is versioned, preserving historical attribution.",
+    "A supported entry has immutable evidence revisions and no remaining required work within its conformance scope.",
+    "Missing implementation/profile/owner bindings are explicit unassigned values only on unimplemented entries; they cannot appear on entries of any other status (the schema's conditional rules reject them for supported, unsupported-by-this-implementation and inapplicable entries).",
+    "Cross-cutting applicability is checked on every realised capability, not discharged once by one example.",
+    "Coverage keys are not atom, module, package, team or test boundaries. One meaningful proof/journey can establish several requirements; unrelated obligations cannot hide behind a parent status.",
+    "Support entries are immutable by (entry_id, entry_revision). First revision is 1 with null predecessor_ref; each update appends the next revision with predecessor_ref equal to entry_id@previous_revision. Conflicting bytes for an existing identity/revision are rejected.",
+    "Ownership transfer appends an entry revision with the new accountable_owner; retain the immutable predecessor and its qualification evidence/owner attribution. Carried evidence keeps its original qualification provenance through the predecessor chain; new qualification is new evidence. Schema shape checking alone cannot establish persistence/history integrity.",
+    "Implementation sourcing and survey-to-design provenance follow algorithms-and-data-structures-governance-2026-09-08.md. Reference agreement or historical package evidence alone does not qualify an owned implementation; evidence distinguishes independent contract reasoning from source-dependent checks. This policy adds no target leaves and removes none."
+  ],
+  "support_entry_schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "Graph library support entry, working definition 1.1",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "accountable_owner",
+      "assumptions",
+      "conformance_scope",
+      "contract_ref",
+      "entry_id",
+      "entry_revision",
+      "evidence",
+      "execution_profile",
+      "implementation",
+      "model_profile",
+      "operation_profile",
+      "owning_composition",
+      "predecessor_ref",
+      "remaining_work",
+      "requirement_ids",
+      "status"
+    ],
+    "properties": {
+      "status": {
+        "enum": ["supported", "unimplemented", "unsupported-by-this-implementation", "inapplicable"]
+      },
+      "accountable_owner": {
+        "type": "string",
+        "minLength": 1
+      },
+      "owning_composition": {
+        "type": "string",
+        "minLength": 1
+      },
+      "model_profile": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "version", "definition_ref"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "version": {
+            "type": "string",
+            "minLength": 1
+          },
+          "definition_ref": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "operation_profile": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "version", "definition_ref"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "version": {
+            "type": "string",
+            "minLength": 1
+          },
+          "definition_ref": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "execution_profile": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "version", "definition_ref"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "version": {
+            "type": "string",
+            "minLength": 1
+          },
+          "definition_ref": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "implementation": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "version"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "version": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "contract_ref": {
+        "type": "string",
+        "minLength": 1
+      },
+      "conformance_scope": {
+        "type": "string",
+        "minLength": 1
+      },
+      "assumptions": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "evidence": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "revision", "scope", "result_ref"],
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "revision": {
+              "type": "string",
+              "minLength": 1
+            },
+            "scope": {
+              "type": "string",
+              "minLength": 1
+            },
+            "result_ref": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      },
+      "remaining_work": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "semantic_reason": {
+        "type": "string",
+        "minLength": 1
+      },
+      "requirement_ids": {
+        "type": "array",
+        "minItems": 1,
+        "uniqueItems": true,
+        "items": {
+          "enum": [
+            "M01.directed",
+            "M01.undirected",
+            "M01.mixed",
+            "M01.simple",
+            "M01.parallel",
+            "M01.loops",
+            "M01.isolates",
+            "M01.disconnected",
+            "M02.dag",
+            "M02.tree",
+            "M02.forest",
+            "M02.rooted-tree",
+            "M02.rooted-forest",
+            "M02.arborescence",
+            "M02.bipartite",
+            "M02.multipartite",
+            "M03.vertex-properties",
+            "M03.relationship-properties",
+            "M03.incidence-properties",
+            "M03.labels",
+            "M03.property-values",
+            "M03.schema-evolution",
+            "M03.property-indexes",
+            "M04.undirected-set-hypergraph",
+            "M04.directed-tail-head-hypergraph",
+            "M04.parallel-hyperedges",
+            "M04.role-incidence",
+            "M04.ordered-incidence",
+            "M04.repeated-incidence",
+            "M04.nullary-relation",
+            "M04.arity-policy",
+            "M05.ports",
+            "M05.open-boundaries",
+            "M05.interface-maps",
+            "M05.gluing",
+            "M05.safe-renaming",
+            "M05.boundary-algebra",
+            "M05.fragment-rewriting",
+            "M06.graph-context-inventory",
+            "M06.empty-contexts",
+            "M06.overlapping-membership",
+            "M06.node-layer-occurrences",
+            "M06.interlayer-edges",
+            "M06.containment",
+            "M07.rdf11-terms",
+            "M07.rdf11-graphs",
+            "M07.rdf11-datasets",
+            "M07.rdf12-snapshot",
+            "M07.blank-node-scope",
+            "M07.empty-named-graphs",
+            "M07.rdf-matching",
+            "M07.rdf-query",
+            "M07.rdf-shapes",
+            "M07.rdf-exchange",
+            "M08.typed-targets",
+            "M08.relationship-statements",
+            "M08.assertion-statements",
+            "M08.recursive-reference-graphs",
+            "M08.reverse-references",
+            "M08.unasserted-content",
+            "M08.assertion-multiplicity",
+            "M08.reference-lifecycle",
+            "M08.reference-mappings",
+            "M09.graph-references",
+            "M09.subgraph-references",
+            "M09.path-references",
+            "M09.view-references",
+            "M09.artefact-references",
+            "M10.valid-time",
+            "M10.recorded-time",
+            "M10.revisions",
+            "M10.contacts",
+            "M10.duration-intervals",
+            "M10.slices",
+            "M10.history",
+            "M10.temporal-journeys",
+            "M10.temporal-updates",
+            "M11.generated-sources",
+            "M11.local-partial-readers",
+            "M11.paged-async-readers",
+            "M11.materialisations",
+            "M11.unbounded-domain-bounds",
+            "M11.frontiers",
+            "M11.coverage",
+            "M11.external-consistency",
+            "M12.finite-simplicial-complex",
+            "M12.faces-cofaces",
+            "M12.closure",
+            "M12.simplex-boundaries",
+            "M12.oriented-cell-chain-profile",
+            "M12.cell-boundaries",
+            "M12.skeletons",
+            "M12.chain-homology",
+            "M13.finite-automata",
+            "M13.automata-stepping",
+            "M13.word-acceptance",
+            "M13.pt-petri-net",
+            "M13.markings",
+            "M13.enabling",
+            "M13.firing",
+            "M13.typed-graph-rules",
+            "M13.rewrite-matching",
+            "M13.rewrite-application",
+            "M14.discrete-factor-graph",
+            "M14.factor-evaluation",
+            "M14.conditioning",
+            "M14.marginalisation",
+            "M14.normalisation",
+            "M14.zero-mass",
+            "M14.exact-enumeration",
+            "M14.tree-message-passing",
+            "O01.checked-construction",
+            "O01.membership",
+            "O01.identity",
+            "O01.incidence-endpoints",
+            "O01.neighbours",
+            "O01.degree",
+            "O01.properties",
+            "O01.inventories",
+            "O01.add",
+            "O01.remove",
+            "O01.update",
+            "O01.conflict-outcomes",
+            "O02.bfs",
+            "O02.dfs",
+            "O02.incoming-neighbourhood",
+            "O02.outgoing-neighbourhood",
+            "O02.vertex-induced-selection",
+            "O02.edge-selection",
+            "O02.filtering",
+            "O02.frontier",
+            "O02.binary-reachability",
+            "O02.bounded-exploration",
+            "O02.incidence-traversal",
+            "O02.conjunctive-reachability",
+            "O03.undirected-components",
+            "O03.bridges",
+            "O03.articulation",
+            "O03.scc",
+            "O03.condensation",
+            "O03.cycle-witness",
+            "O03.topological-order",
+            "O03.reachability-index",
+            "O03.partial-order-view",
+            "O04.unweighted-shortest",
+            "O04.nonnegative-shortest",
+            "O04.negative-edge-shortest",
+            "O04.negative-cycle-outcome",
+            "O04.multi-source",
+            "O04.multi-target",
+            "O04.k-simple-paths",
+            "O05.minimum-spanning-tree",
+            "O05.minimum-spanning-forest",
+            "O05.directed-arborescence",
+            "O06.maximum-flow",
+            "O06.minimum-cut",
+            "O06.general-matching",
+            "O06.bipartite-matching",
+            "O06.weighted-bipartite-assignment",
+            "O07.selection",
+            "O07.projection",
+            "O07.joins",
+            "O07.union",
+            "O07.grouping",
+            "O07.aggregates",
+            "O07.existence",
+            "O07.negation",
+            "O07.path-patterns",
+            "O07.graph-homomorphic-match",
+            "O07.graph-injective-match",
+            "O07.hypergraph-match",
+            "O07.sparql11",
+            "O07.query-planning",
+            "O08.rename",
+            "O08.reverse",
+            "O08.disjoint-union",
+            "O08.aligned-union",
+            "O08.intersection",
+            "O08.difference",
+            "O08.merge",
+            "O08.split",
+            "O08.quotient",
+            "O08.contraction",
+            "O08.closure",
+            "O08.dag-reduction",
+            "O08.cartesian-product",
+            "O08.direct-product",
+            "O08.strong-product",
+            "O08.line-graph",
+            "O08.incidence-construction",
+            "O08.hypergraph-dual",
+            "O08.boundary-composition",
+            "O09.sparse-adjacency",
+            "O09.sparse-incidence",
+            "O09.degree-measures",
+            "O09.pagerank",
+            "O09.betweenness",
+            "O09.laplacian",
+            "O09.jaccard",
+            "O09.triangle-count",
+            "O09.modularity-community",
+            "O09.seeded-vertex-sampling",
+            "O09.seeded-edge-sampling",
+            "O10.structural-validation",
+            "O10.property-validation",
+            "O10.shacl-core",
+            "O10.positive-rule-fixpoint",
+            "O10.rdf-rdfs-entailment",
+            "O10.derivation-explanation",
+            "O10.stratified-negation-aggregation",
+            "O10.contradiction-status",
+            "O11.time-slices",
+            "O11.windows",
+            "O11.event-query",
+            "O11.interval-query",
+            "O11.temporal-journeys",
+            "O11.valid-time-history",
+            "O11.recorded-time-history",
+            "O11.change-diff",
+            "O11.maintained-indexes",
+            "O11.maintained-views",
+            "O11.support-retraction",
+            "O12.identity-diff",
+            "O12.labelled-isomorphism",
+            "O12.unlabelled-isomorphism",
+            "O12.morphism",
+            "O12.embedding",
+            "O12.quotient-map",
+            "O12.bounded-canonicalisation",
+            "O12.rule-match",
+            "O12.rule-apply",
+            "O12.rewrite-conflict",
+            "O13.ntriples11",
+            "O13.nquads11",
+            "O13.turtle11",
+            "O13.trig11",
+            "O13.jsonld11",
+            "O13.rdf12-qualified-codec",
+            "O13.structured-graph-codec",
+            "O13.schema-aware-import",
+            "O13.schema-aware-export",
+            "O13.external-source-adapter",
+            "O13.external-query-adapter",
+            "O14.layout",
+            "O14.selected-visual-view",
+            "O14.aggregate-visual-view",
+            "O14.source-mapping",
+            "O14.nonvisual-inspection",
+            "O14.accessible-export",
+            "O14.checked-edit",
+            "O14.derived-view-update-map",
+            "O15.complex-characteristic-operations",
+            "O15.automata-characteristic-operations",
+            "O15.petri-characteristic-operations",
+            "O15.rewrite-characteristic-operations",
+            "O15.factor-characteristic-operations",
+            "O16.targeted-statements",
+            "O16.reference-resolution",
+            "O16.reverse-reference-query",
+            "O16.assertion-lifecycle",
+            "O16.evidence-inspection",
+            "O16.derivation-inspection",
+            "O16.explained-query",
+            "O16.explicit-assertion-promotion",
+            "E01.finite-local-values",
+            "E01.coherent-snapshots",
+            "E02.controlled-change",
+            "E02.retained-revisions",
+            "E02.incremental-views",
+            "E03.async-paging",
+            "E03.cancellation-backpressure",
+            "E03.partial-source-failure",
+            "E03.consistency-coverage",
+            "E04.durable-reconstruction",
+            "E04.history",
+            "E04.commit-reconciliation",
+            "E04.versioned-recovery",
+            "E05.numerical-reference",
+            "E05.accelerator-provider-port",
+            "E05.transfer-ownership",
+            "E05.numeric-equivalence",
+            "E05.resource-cancellation",
+            "G01",
+            "G02",
+            "G03",
+            "G04",
+            "G05",
+            "G06",
+            "G07",
+            "G08",
+            "G09",
+            "G10",
+            "I01",
+            "I02",
+            "I03",
+            "I04",
+            "I05",
+            "I06",
+            "I07",
+            "I08",
+            "I09",
+            "I10",
+            "I11",
+            "I12",
+            "X01",
+            "X02",
+            "X03",
+            "X04",
+            "X05",
+            "X06",
+            "X07",
+            "X08",
+            "X09",
+            "L01",
+            "L02",
+            "L03",
+            "L04",
+            "L05",
+            "L06",
+            "L07",
+            "L08",
+            "L09",
+            "L10",
+            "L11",
+            "L12",
+            "L13",
+            "A01",
+            "A02",
+            "A03",
+            "A04",
+            "A05",
+            "A06",
+            "A07",
+            "A08",
+            "H01",
+            "H02",
+            "H03",
+            "H04",
+            "H05",
+            "H06",
+            "H07",
+            "H08",
+            "H09",
+            "H10",
+            "J01",
+            "J02",
+            "J03",
+            "J04",
+            "J05",
+            "J06",
+            "J07",
+            "J08",
+            "J09",
+            "J10",
+            "J11",
+            "J12"
+          ]
+        }
+      },
+      "entry_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "entry_revision": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "predecessor_ref": {
+        "type": ["string", "null"],
+        "minLength": 1
+      }
+    },
+    "allOf": [
+      {
+        "if": {
+          "properties": {
+            "status": {
+              "const": "supported"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "evidence": {
+              "minItems": 1
+            },
+            "remaining_work": {
+              "maxItems": 0
+            },
+            "accountable_owner": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^(?!unassigned$).+"
+            },
+            "owning_composition": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^(?!unassigned$).+"
+            },
+            "implementation": {
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!unassigned$).+"
+                },
+                "version": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!unassigned$).+"
+                }
+              }
+            },
+            "model_profile": {
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!unassigned$).+"
+                },
+                "version": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!unassigned$).+"
+                },
+                "definition_ref": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!unassigned$).+"
+                }
+              }
+            },
+            "operation_profile": {
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!unassigned$).+"
+                },
+                "version": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!unassigned$).+"
+                },
+                "definition_ref": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!unassigned$).+"
+                }
+              }
+            },
+            "execution_profile": {
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!unassigned$).+"
+                },
+                "version": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!unassigned$).+"
+                },
+                "definition_ref": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!unassigned$).+"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "status": {
+              "enum": ["unimplemented", "unsupported-by-this-implementation"]
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "remaining_work": {
+              "minItems": 1
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "status": {
+              "enum": ["unsupported-by-this-implementation", "inapplicable"]
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "accountable_owner": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^(?!unassigned$).+"
+            },
+            "owning_composition": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^(?!unassigned$).+"
+            },
+            "implementation": {
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!unassigned$).+"
+                },
+                "version": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!unassigned$).+"
+                }
+              }
+            },
+            "model_profile": {
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!unassigned$).+"
+                },
+                "version": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!unassigned$).+"
+                },
+                "definition_ref": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!unassigned$).+"
+                }
+              }
+            },
+            "operation_profile": {
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!unassigned$).+"
+                },
+                "version": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!unassigned$).+"
+                },
+                "definition_ref": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!unassigned$).+"
+                }
+              }
+            },
+            "execution_profile": {
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!unassigned$).+"
+                },
+                "version": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!unassigned$).+"
+                },
+                "definition_ref": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^(?!unassigned$).+"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "status": {
+              "const": "inapplicable"
+            }
+          }
+        },
+        "then": {
+          "required": ["semantic_reason"]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "entry_revision": {
+              "const": 1
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "predecessor_ref": {
+              "const": null
+            }
+          }
+        },
+        "else": {
+          "properties": {
+            "predecessor_ref": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  "required_leaves_by_group": {
+    "M01": [
+      "M01.directed",
+      "M01.undirected",
+      "M01.mixed",
+      "M01.simple",
+      "M01.parallel",
+      "M01.loops",
+      "M01.isolates",
+      "M01.disconnected"
+    ],
+    "M02": [
+      "M02.dag",
+      "M02.tree",
+      "M02.forest",
+      "M02.rooted-tree",
+      "M02.rooted-forest",
+      "M02.arborescence",
+      "M02.bipartite",
+      "M02.multipartite"
+    ],
+    "M03": [
+      "M03.vertex-properties",
+      "M03.relationship-properties",
+      "M03.incidence-properties",
+      "M03.labels",
+      "M03.property-values",
+      "M03.schema-evolution",
+      "M03.property-indexes"
+    ],
+    "M04": [
+      "M04.undirected-set-hypergraph",
+      "M04.directed-tail-head-hypergraph",
+      "M04.parallel-hyperedges",
+      "M04.role-incidence",
+      "M04.ordered-incidence",
+      "M04.repeated-incidence",
+      "M04.nullary-relation",
+      "M04.arity-policy"
+    ],
+    "M05": [
+      "M05.ports",
+      "M05.open-boundaries",
+      "M05.interface-maps",
+      "M05.gluing",
+      "M05.safe-renaming",
+      "M05.boundary-algebra",
+      "M05.fragment-rewriting"
+    ],
+    "M06": [
+      "M06.graph-context-inventory",
+      "M06.empty-contexts",
+      "M06.overlapping-membership",
+      "M06.node-layer-occurrences",
+      "M06.interlayer-edges",
+      "M06.containment"
+    ],
+    "M07": [
+      "M07.rdf11-terms",
+      "M07.rdf11-graphs",
+      "M07.rdf11-datasets",
+      "M07.rdf12-snapshot",
+      "M07.blank-node-scope",
+      "M07.empty-named-graphs",
+      "M07.rdf-matching",
+      "M07.rdf-query",
+      "M07.rdf-shapes",
+      "M07.rdf-exchange"
+    ],
+    "M08": [
+      "M08.typed-targets",
+      "M08.relationship-statements",
+      "M08.assertion-statements",
+      "M08.recursive-reference-graphs",
+      "M08.reverse-references",
+      "M08.unasserted-content",
+      "M08.assertion-multiplicity",
+      "M08.reference-lifecycle",
+      "M08.reference-mappings"
+    ],
+    "M09": [
+      "M09.graph-references",
+      "M09.subgraph-references",
+      "M09.path-references",
+      "M09.view-references",
+      "M09.artefact-references"
+    ],
+    "M10": [
+      "M10.valid-time",
+      "M10.recorded-time",
+      "M10.revisions",
+      "M10.contacts",
+      "M10.duration-intervals",
+      "M10.slices",
+      "M10.history",
+      "M10.temporal-journeys",
+      "M10.temporal-updates"
+    ],
+    "M11": [
+      "M11.generated-sources",
+      "M11.local-partial-readers",
+      "M11.paged-async-readers",
+      "M11.materialisations",
+      "M11.unbounded-domain-bounds",
+      "M11.frontiers",
+      "M11.coverage",
+      "M11.external-consistency"
+    ],
+    "M12": [
+      "M12.finite-simplicial-complex",
+      "M12.faces-cofaces",
+      "M12.closure",
+      "M12.simplex-boundaries",
+      "M12.oriented-cell-chain-profile",
+      "M12.cell-boundaries",
+      "M12.skeletons",
+      "M12.chain-homology"
+    ],
+    "M13": [
+      "M13.finite-automata",
+      "M13.automata-stepping",
+      "M13.word-acceptance",
+      "M13.pt-petri-net",
+      "M13.markings",
+      "M13.enabling",
+      "M13.firing",
+      "M13.typed-graph-rules",
+      "M13.rewrite-matching",
+      "M13.rewrite-application"
+    ],
+    "M14": [
+      "M14.discrete-factor-graph",
+      "M14.factor-evaluation",
+      "M14.conditioning",
+      "M14.marginalisation",
+      "M14.normalisation",
+      "M14.zero-mass",
+      "M14.exact-enumeration",
+      "M14.tree-message-passing"
+    ],
+    "O01": [
+      "O01.checked-construction",
+      "O01.membership",
+      "O01.identity",
+      "O01.incidence-endpoints",
+      "O01.neighbours",
+      "O01.degree",
+      "O01.properties",
+      "O01.inventories",
+      "O01.add",
+      "O01.remove",
+      "O01.update",
+      "O01.conflict-outcomes"
+    ],
+    "O02": [
+      "O02.bfs",
+      "O02.dfs",
+      "O02.incoming-neighbourhood",
+      "O02.outgoing-neighbourhood",
+      "O02.vertex-induced-selection",
+      "O02.edge-selection",
+      "O02.filtering",
+      "O02.frontier",
+      "O02.binary-reachability",
+      "O02.bounded-exploration",
+      "O02.incidence-traversal",
+      "O02.conjunctive-reachability"
+    ],
+    "O03": [
+      "O03.undirected-components",
+      "O03.bridges",
+      "O03.articulation",
+      "O03.scc",
+      "O03.condensation",
+      "O03.cycle-witness",
+      "O03.topological-order",
+      "O03.reachability-index",
+      "O03.partial-order-view"
+    ],
+    "O04": [
+      "O04.unweighted-shortest",
+      "O04.nonnegative-shortest",
+      "O04.negative-edge-shortest",
+      "O04.negative-cycle-outcome",
+      "O04.multi-source",
+      "O04.multi-target",
+      "O04.k-simple-paths"
+    ],
+    "O05": [
+      "O05.minimum-spanning-tree",
+      "O05.minimum-spanning-forest",
+      "O05.directed-arborescence"
+    ],
+    "O06": [
+      "O06.maximum-flow",
+      "O06.minimum-cut",
+      "O06.general-matching",
+      "O06.bipartite-matching",
+      "O06.weighted-bipartite-assignment"
+    ],
+    "O07": [
+      "O07.selection",
+      "O07.projection",
+      "O07.joins",
+      "O07.union",
+      "O07.grouping",
+      "O07.aggregates",
+      "O07.existence",
+      "O07.negation",
+      "O07.path-patterns",
+      "O07.graph-homomorphic-match",
+      "O07.graph-injective-match",
+      "O07.hypergraph-match",
+      "O07.sparql11",
+      "O07.query-planning"
+    ],
+    "O08": [
+      "O08.rename",
+      "O08.reverse",
+      "O08.disjoint-union",
+      "O08.aligned-union",
+      "O08.intersection",
+      "O08.difference",
+      "O08.merge",
+      "O08.split",
+      "O08.quotient",
+      "O08.contraction",
+      "O08.closure",
+      "O08.dag-reduction",
+      "O08.cartesian-product",
+      "O08.direct-product",
+      "O08.strong-product",
+      "O08.line-graph",
+      "O08.incidence-construction",
+      "O08.hypergraph-dual",
+      "O08.boundary-composition"
+    ],
+    "O09": [
+      "O09.sparse-adjacency",
+      "O09.sparse-incidence",
+      "O09.degree-measures",
+      "O09.pagerank",
+      "O09.betweenness",
+      "O09.laplacian",
+      "O09.jaccard",
+      "O09.triangle-count",
+      "O09.modularity-community",
+      "O09.seeded-vertex-sampling",
+      "O09.seeded-edge-sampling"
+    ],
+    "O10": [
+      "O10.structural-validation",
+      "O10.property-validation",
+      "O10.shacl-core",
+      "O10.positive-rule-fixpoint",
+      "O10.rdf-rdfs-entailment",
+      "O10.derivation-explanation",
+      "O10.stratified-negation-aggregation",
+      "O10.contradiction-status"
+    ],
+    "O11": [
+      "O11.time-slices",
+      "O11.windows",
+      "O11.event-query",
+      "O11.interval-query",
+      "O11.temporal-journeys",
+      "O11.valid-time-history",
+      "O11.recorded-time-history",
+      "O11.change-diff",
+      "O11.maintained-indexes",
+      "O11.maintained-views",
+      "O11.support-retraction"
+    ],
+    "O12": [
+      "O12.identity-diff",
+      "O12.labelled-isomorphism",
+      "O12.unlabelled-isomorphism",
+      "O12.morphism",
+      "O12.embedding",
+      "O12.quotient-map",
+      "O12.bounded-canonicalisation",
+      "O12.rule-match",
+      "O12.rule-apply",
+      "O12.rewrite-conflict"
+    ],
+    "O13": [
+      "O13.ntriples11",
+      "O13.nquads11",
+      "O13.turtle11",
+      "O13.trig11",
+      "O13.jsonld11",
+      "O13.rdf12-qualified-codec",
+      "O13.structured-graph-codec",
+      "O13.schema-aware-import",
+      "O13.schema-aware-export",
+      "O13.external-source-adapter",
+      "O13.external-query-adapter"
+    ],
+    "O14": [
+      "O14.layout",
+      "O14.selected-visual-view",
+      "O14.aggregate-visual-view",
+      "O14.source-mapping",
+      "O14.nonvisual-inspection",
+      "O14.accessible-export",
+      "O14.checked-edit",
+      "O14.derived-view-update-map"
+    ],
+    "O15": [
+      "O15.complex-characteristic-operations",
+      "O15.automata-characteristic-operations",
+      "O15.petri-characteristic-operations",
+      "O15.rewrite-characteristic-operations",
+      "O15.factor-characteristic-operations"
+    ],
+    "O16": [
+      "O16.targeted-statements",
+      "O16.reference-resolution",
+      "O16.reverse-reference-query",
+      "O16.assertion-lifecycle",
+      "O16.evidence-inspection",
+      "O16.derivation-inspection",
+      "O16.explained-query",
+      "O16.explicit-assertion-promotion"
+    ],
+    "E01": ["E01.finite-local-values", "E01.coherent-snapshots"],
+    "E02": ["E02.controlled-change", "E02.retained-revisions", "E02.incremental-views"],
+    "E03": [
+      "E03.async-paging",
+      "E03.cancellation-backpressure",
+      "E03.partial-source-failure",
+      "E03.consistency-coverage"
+    ],
+    "E04": [
+      "E04.durable-reconstruction",
+      "E04.history",
+      "E04.commit-reconciliation",
+      "E04.versioned-recovery"
+    ],
+    "E05": [
+      "E05.numerical-reference",
+      "E05.accelerator-provider-port",
+      "E05.transfer-ownership",
+      "E05.numeric-equivalence",
+      "E05.resource-cancellation"
+    ],
+    "G": ["G01", "G02", "G03", "G04", "G05", "G06", "G07", "G08", "G09", "G10"],
+    "I": ["I01", "I02", "I03", "I04", "I05", "I06", "I07", "I08", "I09", "I10", "I11", "I12"],
+    "X": ["X01", "X02", "X03", "X04", "X05", "X06", "X07", "X08", "X09"],
+    "L": [
+      "L01",
+      "L02",
+      "L03",
+      "L04",
+      "L05",
+      "L06",
+      "L07",
+      "L08",
+      "L09",
+      "L10",
+      "L11",
+      "L12",
+      "L13"
+    ],
+    "A": ["A01", "A02", "A03", "A04", "A05", "A06", "A07", "A08"],
+    "H": ["H01", "H02", "H03", "H04", "H05", "H06", "H07", "H08", "H09", "H10"],
+    "J": ["J01", "J02", "J03", "J04", "J05", "J06", "J07", "J08", "J09", "J10", "J11", "J12"]
+  }
+}

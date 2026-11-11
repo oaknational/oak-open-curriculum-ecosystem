@@ -1,6 +1,5 @@
 import type { WorkspaceAttributionConfig } from './config-classification-model.js';
 import type { DeliveryDimension } from './file-vocabulary.js';
-import type { GitObjectId } from './scalar-model.js';
 
 export interface SnapshotConfig {
   readonly source: 'git-tree';
@@ -93,7 +92,7 @@ export interface ConfigIdentityFields {
   readonly schemaVersion: '2.0.0';
   readonly contractRevision: '2.7';
   readonly reviewId: 'typescript-estate-consolidation-review';
-  readonly calibrationBaseCommit: GitObjectId;
+  readonly calibrationBaseCommit: string;
   readonly frozenAt: string;
   readonly refreezeReason: string;
   readonly sourceExtensions: readonly ['.ts', '.tsx'];

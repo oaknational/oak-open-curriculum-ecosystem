@@ -121,6 +121,7 @@ function runMerge(input: {
     readConfigFileImpl: () =>
       JSON.stringify({ appSlug: 'jimbot-oakington-iii', appId: '4352989', repo: 'acme/widgets' }),
     repoRoot: '/repo',
+    runGitImpl: () => 'worktree /repo\n',
     nowEpochSeconds: () => 1_800_000_000,
     readReadingImpl: (options) => {
       expectSeen.push(options.expectedReviewers ?? []);
@@ -397,6 +398,9 @@ describe('runMergeBotCli merge', () => {
     const exit = runMergeBotCli({
       args: ['--help'],
       env: {},
+      runGitImpl: () => {
+        throw new Error('git must not run for --help');
+      },
       stdout: out.sink,
       stderr: errSink.sink,
     });
@@ -407,5 +411,26 @@ describe('runMergeBotCli merge', () => {
       out.text(),
       'A6 sentinel: re-adjudicate amendment A6 before removing the sweep from usage',
     ).toContain('merge-base deletion sweep');
+  });
+});
+
+describe('runMergeBotCli merge — the author fence under an empty set', () => {
+  it("refuses a person's pull request under --expect none on the first poll, even while checks run: the author fence is terminal", async () => {
+    const run = runMerge({
+      args: ['--pr', '42', '--expect', 'none'],
+      readings: [
+        settledReading({
+          checks: { total: 3, passed: 2, failed: 0, pending: 1 },
+          namedChecks: [{ name: 'e2e', bucket: 'pending' }],
+          checksGreenAt: null,
+          expectedReviewers: [],
+          expectedDeclared: true,
+        }),
+      ],
+    });
+
+    expect(await run.exit).toBe(3);
+    expect(run.errText()).toContain('did not author');
+    expect(run.sleeps).toEqual([]);
   });
 });

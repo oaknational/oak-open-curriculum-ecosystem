@@ -1,3 +1,8 @@
+---
+classification: core
+description: Quality gates are NEVER disabled. The gate-off-fix-gate-on sequence is a named anti-pattern. Sequence the work, not the gate.
+---
+
 # Never Disable Checks
 
 Operationalises [`principles.md` §Code Quality](../directives/principles.md#code-quality)
@@ -51,8 +56,7 @@ state.
   warnings are not deferrable; downgrading to `warn` is suppression
   with extra steps).
 - **Adding `eslint-disable` / `eslint-disable-next-line`** to
-  silence a rule. The
-  [`no-eslint-disable`](https://github.com/oaknational/oak-open-curriculum-ecosystem/blob/main/eslint-rules/eslint-rules/lib/rules/no-eslint-disable.ts)
+  silence a rule. The estate's ESLint plugin's `no-eslint-disable`
   rule already enforces this; the rule itself must never be exempted.
 - **Adding `// @ts-expect-error` / `// @ts-ignore`** to bypass a
   type error. Fix the type flow upstream — see
@@ -87,6 +91,11 @@ state.
   gates they intend to harden.** The right shape is: the gate is
   on, the team fixes findings under it; the plan tracks the
   remediation work, not a gate-off period.
+
+Lengthening a test's time budget so a slow test passes is a disabled check: "Raising the timeout to
+make it pass is disabling the check and is refused"; the cure is the algorithm or "a structural
+assertion (the pass count, or an input size that proves linearity by ratio on two sizes with a
+generous bound), not a longer `testTimeout`" (a Director's ruling, 2026-09-10, event b3057b7a).
 
 ## Required tactics (when a gate is failing on inherited debt)
 
@@ -129,14 +138,60 @@ the governing principle for a masking override is
 [`no-warning-toleration.md`](no-warning-toleration.md), not scope
 discipline.
 
+## Configuring a check to express the architecture is not disabling it
+
+When a check flags a legitimate design as a violation — an ESLint boundary
+rule, a tier matrix, a config gate — hold two hypotheses, never one: (a)
+the design is wrong; (b) the check's configuration is wrong for this case.
+Test the configuration against the actual architectural intent (the ADRs,
+the tier's purpose) before choosing. The current config is a hypothesis
+about the right design, never the verdict — blindly obeying it is the same
+failure class as treating precedent as correctness. Worked instance
+(2026-07-08): the lib-tier boundary rule ("an adapter must not depend on
+another adapter") was read as immutable, so a framework was judged unable
+to consume the Sentry-backed logging adapter and an injection workaround was
+proposed; the owner corrected that apps taking adapters backed by services
+IS the intended architecture — "I wonder if you took the current eslint
+boundary rules and tried to obey them rather than configure them
+appropriately." Reconfiguring a rule so it permits a legitimate dependency
+and still fires on real violations is correct and is not a disable; an
+`eslint-disable`, a skip, or a workaround designed around a wrong
+configuration is the forbidden shape.
+
+## A warranted exemption is an alarm bell, never a resting state
+
+Owner, 2026-08-11, on a dependency-cruiser exemption for a `libs` to `sdks`
+import: "warranted exemption is a huge alarm bell, either we need to change
+policy, or fix the problem. Strict, everywhere, all the time, is not for
+fun, it is for survival of a complex system in the face of entropy and
+time." And in the same message: "if things are at error they need fixing."
+On 2026-09-29, of a local-cache environment a seat set so that one commit
+passed a lint step: "we don't do workarounds, we fix problems"; the
+environment was withdrawn and the cure went to the step that consulted the
+remote cache (one instance).
+An exemption inside an enforcement configuration (a `pathNot`, an eslint
+disable, a census row, an allowlist entry) is a bypass surface where entropy
+compounds silently while the gate reads green; a dated warrant makes it
+legible, not acceptable, and "warranted and routed" is a queue entry, never
+a disposition. The moment an exemption enters any gate it is a live work
+item with exactly two exits, fix the violation or change the policy at its
+owning level; route the fork immediately with a clock, and the exemption
+dies in the cure PR. Never present a warranted exemption to the owner as a
+settled state. The vocabulary is part of the alarm: "standing cure",
+"standing workaround", "honest bypass" and "live with it for now" are
+the acceptance-shaped euphemisms `no-hedging-vocabulary` bans, and their
+harm is memetic (owner, 2026-08-12: "once those cognitive shapes are in the
+team they will propagate to other decisions"); a mitigation is lawful only
+spoken with its owning ticket and retirement condition in the same breath.
+
 ## Definition of "check" / "gate"
 
 For this rule, a check or gate is any of:
 
 - A lint rule (ESLint, Prettier, markdownlint, custom eslint-rules).
 - A type-checker invocation (`tsc`, `pnpm type-check`).
-- A test in any test suite (`pnpm test`, `pnpm test:e2e`,
-  `pnpm test:widget`, `pnpm test:a11y`, etc.).
+- A test in any test suite (`pnpm test`, the end-to-end checks, the
+  host's rendering-proof instrument, etc.).
 - A static analysis tool (knip, depcruise, Sonar, CodeQL).
 - A pre-commit hook (`.husky/`, `.claude/hooks/`,
   `pre-tool-use` / `post-tool-use` agentic hooks).
@@ -146,8 +201,8 @@ For this rule, a check or gate is any of:
 - A practice-fitness threshold (`pnpm practice:fitness`).
 - A schema validation step (Zod, JSON-schema, OpenAPI codegen
   output validation).
-- A monitoring / observability assertion (Sentry uptime checks,
-  Sentry release boundary, CI deployment-validation steps).
+- A monitoring / observability assertion (uptime checks, CI
+  deployment-validation steps).
 
 If it produces a pass/fail signal, it is a gate, and the rule applies.
 
@@ -185,9 +240,8 @@ during the window — which they will not.
   PDR-126 (gates land strict, in one landing) — a new rule is not
   a "weakening" diff, so this clause names it explicitly.
 - `release-readiness-expert` enforces the rule at PR-ready gate.
-- `architecture-expert-fred` (principles-first) enforces the rule
-  on any architectural decision that proposes a gate-off-fix-gate-on
-  shape.
+- `assumptions-expert` enforces the rule on any plan or proposal
+  that schedules a gate-off-fix-gate-on shape.
 
 ## Cross-references
 

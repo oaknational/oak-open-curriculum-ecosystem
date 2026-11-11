@@ -185,13 +185,14 @@ describe('parseMemberList — resolver output stays inside the Result contract',
   });
 });
 
-describe('parseRowsArtefactJson — the full row shape is validated at parse time', () => {
-  const envelope = (rows: unknown): string =>
-    JSON.stringify({ schema_version: '1.0.0', plan: 'plan.md', rows });
+/** A rows artefact envelope around the given rows, as the census writes it. */
+const rowsArtefactEnvelope = (rows: unknown): string =>
+  JSON.stringify({ schema_version: '1.0.0', plan: 'plan.md', rows });
 
+describe('parseRowsArtefactJson — the full row shape is validated at parse time', () => {
   it('rejects a row whose evidence array holds a null entry', () => {
     const result = parseRowsArtefactJson(
-      envelope([
+      rowsArtefactEnvelope([
         {
           dirPath: 'agent-tools',
           publishedName: null,
@@ -206,7 +207,7 @@ describe('parseRowsArtefactJson — the full row shape is validated at parse tim
 
   it('rejects a row whose targetState is not a string', () => {
     const result = parseRowsArtefactJson(
-      envelope([
+      rowsArtefactEnvelope([
         { dirPath: 'agent-tools', publishedName: null, disposition: 'classified', targetState: 7 },
       ]),
       'rows.json',
@@ -215,7 +216,7 @@ describe('parseRowsArtefactJson — the full row shape is validated at parse tim
   });
 
   it('accepts a fully shaped judged row', () => {
-    const result = parseRowsArtefactJson(envelope([judgedRow()]), 'rows.json');
+    const result = parseRowsArtefactJson(rowsArtefactEnvelope([judgedRow()]), 'rows.json');
     expect(result.ok).toBe(true);
   });
 });

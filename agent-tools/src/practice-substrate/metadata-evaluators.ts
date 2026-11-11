@@ -10,6 +10,10 @@ const MERGE_CLASSES = new Set([
   'mostly-append-register',
   'index-narrative-tables',
   'exclusive-create-fragments',
+  // Machine-local surfaces outside version control (the per-intent
+  // commit-queue store): never merged; validity is the schema's, lifecycle
+  // the TTL's (PDR-049 revision 2026-09-04).
+  'machine-local-ephemera',
 ]);
 
 /**

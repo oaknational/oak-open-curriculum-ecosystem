@@ -1,3 +1,8 @@
+---
+classification: core
+description: Verify external-dependency call shapes against installed-or-published docs at plan-author time, never from memory.
+---
+
 # Verify Vendor Call Shapes At Plan-Author Time
 
 When a plan body pins the call shape of an external dependency — an
@@ -36,8 +41,7 @@ function signature.
   the model's priors and must be checked against the latest published
   documentation — never against installed source alone or a
   remembered capability matrix (corpus-validated recurring class,
-  2026-06-30; see also the per-user memory
-  "Platform feature support — check official docs").
+  2026-06-30).
 - **When probing a vendor refusal or normalisation before encoding it,
   enumerate the class's sub-cases and probe the EXACT spelling being
   encoded.** Two probes of different sub-cases can both be "right" and
@@ -78,6 +82,16 @@ function signature.
   have cost a release cycle to learn what one fetch taught. Read the
   MUST/SHOULD text of the clause the cure relies on before the cure is
   built.
+- **A by-construction claim is verified on every package it names.** On 2026-09-06 an
+  "enforced by construction" claim about export shape was checked against one package's
+  exports map while the second package the design relied on published wildcard subpaths,
+  which falsified the claim at review.
+
+A fork record's null parent is not a visibility verdict: "GitHub returns a null parent both when the
+fork network is intact but the parent is not surfaced to the caller and when the parent is
+inaccessible to the token", and the Director's amended ruling holds that "the parent's visibility
+NOW is not derivable from the fork's record" (Jackal wakes Nocturne's first-hand read and the
+Director's amendment of 2026-09-06, events b9e9fc17 and 17f83196).
 
 ## Related Surfaces
 

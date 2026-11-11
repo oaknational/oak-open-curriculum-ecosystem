@@ -105,8 +105,6 @@ const claudeWrapperFiles = await listMarkdownFiles(CLAUDE_WRAPPER_DIR);
 const wrapperFiles = await listMarkdownFiles(CURSOR_WRAPPER_DIR);
 const codexAdapterFiles = await listFiles(CODEX_ADAPTER_DIR, '.toml');
 const templateFiles = await listMarkdownFiles(TEMPLATE_DIR);
-const cursorReferencedTemplates = new Set<string>();
-const codexReferencedTemplates = new Set<string>();
 const codexRegistrationsByName = new Map<string, CodexRegistration>();
 
 for (const wrapperFile of claudeWrapperFiles) {
@@ -132,7 +130,6 @@ for (const wrapperFile of wrapperFiles) {
   }
 
   const templatePath = templateLoadMatch[1];
-  cursorReferencedTemplates.add(templatePath);
 
   if (!templatePath.startsWith(`${TEMPLATE_DIR}/`)) {
     addIssue(
@@ -168,11 +165,7 @@ for (const codexAdapterFile of codexAdapterFiles) {
   const content = await readText(codexAdapterFile);
   const adapterBasename = path.basename(codexAdapterFile, '.toml');
   const registeredAgent = codexRegistrationsByName.get(adapterBasename) ?? null;
-  const {
-    issues: codexAdapterIssues,
-    templatePaths,
-    canonicalPaths,
-  } = getCodexAdapterValidation({
+  const { issues: codexAdapterIssues, canonicalPaths } = getCodexAdapterValidation({
     codexAdapterFile,
     content,
     registeredAgent,
@@ -185,9 +178,6 @@ for (const codexAdapterFile of codexAdapterFiles) {
     if (!(await exists(canonicalPath))) {
       addIssue(`${codexAdapterFile}: referenced canonical file does not exist (${canonicalPath})`);
     }
-  }
-  for (const templatePath of templatePaths) {
-    codexReferencedTemplates.add(templatePath);
   }
 }
 
@@ -205,18 +195,6 @@ for (const templateFile of templateFiles) {
   if (!content.includes(REQUIRED_IDENTITY_LINE)) {
     addIssue(
       `${templateFile}: missing required identity component reference (${IDENTITY_COMPONENT_PATH})`,
-    );
-  }
-
-  if (!cursorReferencedTemplates.has(templateFile)) {
-    addIssue(
-      `${templateFile}: no wrapper in ${CURSOR_WRAPPER_DIR} currently references this template`,
-    );
-  }
-
-  if (!codexReferencedTemplates.has(templateFile)) {
-    addIssue(
-      `${templateFile}: no adapter in ${CODEX_ADAPTER_DIR} currently references this template`,
     );
   }
 }

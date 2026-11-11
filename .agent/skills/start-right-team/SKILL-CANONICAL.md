@@ -1,10 +1,41 @@
 ---
 name: start-right-team
 classification: active
-description: Apply repository start-right grounding plus team bootstrapping for multi-agent sessions. Use when a coordinated team is starting, re-grounding, or choosing temporary collaboration responsibilities.
+description: >-
+  Apply the repository's grounding plus the team bootstrap for a coordinated
+  multi-agent session after classifying the host (a detected ChatGPT Work host
+  runs no team session and stops to surface that). Use when a team is starting,
+  re-grounding, or choosing temporary responsibilities. Not for a solo session
+  (that is start-right-quick or start-right-thorough). Right looks like: the
+  watcher and heartbeat armed, the team-start report posted, the claim opened
+  only after coordination resolves. Wrong looks like: a source claim opened
+  before the team-start reports surface, or a seat read as live from a
+  heartbeat alone.
 ---
 
 # Start Right (Team)
+
+## Environment Classification
+
+Before Mode Selection or any team command, use the tri-state classification in
+`.agent/directives/cloud-environment-routing.md`. When it selects ChatGPT Work,
+the team route's visibility preconditions cannot be met from that host: the
+canonical watcher, the heartbeat, the claims registry and the commit queue are
+the estate's own built tooling, there is no way to run them without the package
+manager, and platform-native messages reach the active turn only — they never
+consume the canonical comms stream. A detected Work seat therefore runs no
+team session: when its task names a team, a peer, a coordinator or any
+coordinated route, it STOPS and surfaces the unsupported host — it never edits
+outside coordination, because neither it nor its peers could observe an
+ownership change and overlapping source work would follow. It proceeds only on
+a task-scoped lane assigned to it alone, solo under the Work profile, and its
+first message declares that it holds no canonical visibility; a coordinator who
+hears such a seat treats it as one without canonical visibility and routes
+nothing to it
+([`agent-state-observable`](../../rules/agent-state-observable.md),
+[`silence-is-never-liveness`](../../rules/silence-is-never-liveness.md)). Every
+“run” or “execute” below is conditional on the selected profile permitting that
+command. Detector error is a stop, not a fall-through.
 
 ## Mode Selection
 
@@ -22,9 +53,10 @@ remains background.
 
 ### n=2 mode (overlay on team-member modes)
 
-1. **Open an ArcAngel channel** with your partner — or any agent you will
-   substantively collaborate with. ArcAngel is predominantly a _pairwise_
-   channel, but it can be used for n=3 as well.
+1. **Open a dialogue channel** with your partner — s2s where both seats can use it and the
+   transcript is not itself the record, otherwise an ArcAngel channel (the [`comms-channels`](../comms-channels/SKILL-CANONICAL.md) skill) —
+   or any agent you will substantively collaborate with. ArcAngel is predominantly a
+   _pairwise_ channel, but it can be used for n=3 as well.
 2. **When the team has exactly two active participants, activate n=2 collaboration
    mode** per
    [PDR-082](../../practice-core/decision-records/PDR-082-n2-collaboration-mode.md),
@@ -34,12 +66,37 @@ In short: **drop** the heartbeat cron and periodic/standby heartbeats (the
 PDR-078 §4 consumer-absent exemption — at n=2 chat-visibility makes the
 async-detection consumer absent), the directed events between the two agents,
 the 120s message-sweep, and the multi-section team-start ceremony (one concise
-registration broadcast suffices); **retain** identity preflight, the
+registration broadcast suffices); **keep the state line**: during a long turn
+each seat sends its partner one state line at least every 120 seconds and the
+lead reads silence past that as unknown, never as work (PDR-082 §Amendment
+Log, 2026-09-14); **retain** identity preflight, the
 all-channels comms watcher, claims on substantive source/doctrine edits,
 commit-queue intents, the substantive cross-agent broadcasts (tree-green,
-push-landed, gate-state, merge-ready, blocker), mid-cycle retirement, and
-closeout broadcasts. A third agent joining re-activates the full protocol
-atomically; declare the mode in your team-start broadcast.
+push-landed, gate-state, merge-ready, blocker), mid-cycle retirement,
+closeout broadcasts, and your own state line to your partner: at least every
+120 s during a long turn, one line naming the state, any blocker and the next
+action, by the channel `comms-channels` names for one live reader. Silence past
+that interval is unknown state: ping, never escalate (PDR-082 §What changes at
+n=2). A third agent joining re-activates the full protocol
+atomically; declare the mode in your team-start broadcast. The n=2 lead is
+accountable for the second seat's judgement, not only for the split of work
+(owner to the lead, 2026-09-03: "You are the lead, you are responsible for
+stopping Vesta from being dumb").
+
+A detected ChatGPT Work seat is never one of the two participants: it holds no
+canonical visibility (§Environment Classification), so it cannot supply the
+retain-set above, and the n=2 mode is not available to it.
+
+When the owner pairs two seats, the first message between them carries
+state, and assignments come from the routing or after asking: a seat that
+opens by proposing the split has decided what the other seat was paired to
+help decide. Two seats writing to one pull request divide it over their
+dialogue channel (n=2 mode, step 1), the division mirrored to the stream
+at occurrence, one driving the door, the cut and the rotation, the other
+disposing threads on its own files (two instances). Routing
+broadcasts that cross are settled by ratifying the version already in flight
+and closing the chain in one event, never by a third version (a lesson from a
+handoff record).
 
 ## Goal
 
@@ -48,14 +105,29 @@ Run the same shared repository foundation as `start-right-quick`, then add the t
 This skill does not replace `start-right-quick` or `start-right-thorough`.
 It layers team bootstrapping on top of the shared start-right requirements.
 
+Every seat, the Director included, states the landing target and the finish
+condition in its first message, arms processes only for the gates on that path
+and stops them at the finish (the owner, 2026-10-02, verbatim: "you are working
+on a bounded task, not open ended, we must always understand the goal so that
+we are able to finish"). A lane carries its completion criterion, its sizing
+(files, commits, pushes, hours) and the ratified decision or owner word it
+serves before it starts; one that lacks any of the three is routed to the
+Director with the gap named (the owner, the same day: "NOTHING should be worked
+on without clear completion criteria, sizing, and an unambiguous and provable
+statement of how it provides ratified value. Run a fully Cricket suite"). The
+Cricket panel runs on the seat's plan at seating and after each re-plan
+(`cricket` §When to call the panel).
+
 ## Non-Negotiable Foundation
 
 1. Read `.agent/skills/start-right-quick/shared/start-right.md` end to end.
 2. Follow that workflow's referenced reading order. Do not replace it with a
    smaller subset for team sessions.
-3. Run the live collaboration checks named by the shared workflow: identity
-   preflight, active claims, shared comms, active commit queue, active plans,
-   and git status/log.
+3. Complete the live collaboration checks named by the shared workflow:
+   identity preflight, active claims, shared comms, active commit queue, active
+   plans, and git status/log. In detected ChatGPT Work, inspect their durable
+   state statically where available and use platform-native coordination; do
+   not execute their repo-owned CLIs.
 4. If the task is architectural, high-risk, planning-heavy, cross-workspace, or
    explicitly asks for thorough grounding, apply `start-right-thorough` after
    the shared quick foundation and before team routing.
@@ -146,7 +218,14 @@ the special case. Run both unless that exemption applies.
    "Register Presence" section that owns the broadcast format AND the
    coordination rules; the broadcast declares identity, foundation
    status, intended boundary, inherited working-tree status, heartbeat
-   cron status, and any preferred cycle).
+   cron status, and any preferred cycle). The boundary the report states
+   is derived from the owner's words, whatever channel delivered them (a
+   coordinator's relay of the owner's directive carries the owner's
+   authority and is the standing default, PDR-064 §Relayed directives), and
+   from nothing else: a peer's own routing can narrow that boundary, never
+   widen it, and a peer confirming a seat's reading of the owner's words is
+   not evidence for the reading (a seat spent fifteen minutes on a widened
+   reading a peer had confirmed, 2026-10-02).
 4. **Wait for peer team-starts** to surface, then coordinate cycle /
    boundary assignment via comms (§1 cycle-overlap coordination rule
    and singleton-lane coordination rule).
@@ -186,7 +265,13 @@ the special case. Run both unless that exemption applies.
    <id> --platform <p> --model <m>` — it rewrites the claim's `agent_id` to
    your identity in place (never a duplicate row, never a hand-edit); the
    retiring agent records the pointer with `claims set-handoff --active
-   <active-claims-path> --claim-id <id> --path <record>`.
+   <active-claims-path> --claim-id <id> --path <record>`. Worked
+   instance (2026-09-03): the owner's word started a succession; the
+   outgoing seat wrote the record
+   (`01e418de-vesta-rides-solstice-to-chinook-seeks-cloud-2026-09-03.md`)
+   and the successor adopted the claim against it — the PDR-063
+   §Deliberate succession path, landing through exactly this pickup
+   contract.
    **An adopted claim gets its PREMISE recomputed at adoption, not just its
    ownership**: verify first-hand that the work the claim names is still
    live and undone before continuing it (worked instance 2026-08-13: a
@@ -216,7 +301,10 @@ Before bundling work into one queue intent, commit, or push window, apply
 [`ship-independent-coordinate-dependent`](../../rules/ship-independent-coordinate-dependent.md):
 independently shippable fixes should land and expose their impact artefact
 before coordination-dependent substance, unless the owner explicitly asks to
-optimise for a combined push.
+optimise for a combined push. Where push-window hold lines are in use, a hold
+stands on the line alone until its push-done or release, even when the holder
+has stopped; and a report written for a live peer is recomputed at the moment
+of posting, never at drafting (2026-10-02).
 
 ### 1. Register Presence
 
@@ -356,6 +444,33 @@ claims. Because only one agent runs but the team must know the
 outcome, coordination and communication are the structural
 precondition for work-start. There is no path where multiple agents
 independently start source work on a non-verified inherited tree.
+
+#### Detected ChatGPT Work cloud branch
+
+A detected ChatGPT Work seat takes no team role (§Environment Classification),
+so it is never elected gate-runner and never hands the role off; this branch is
+that seat's own surfacing shape when it finds a non-clean inherited tree on
+its task-scoped lane.
+
+1. The seat posts, through the platform's channel, a static custody report
+   naming the branch, base and current head; every dirty path and its
+   attributed owner; the exact diff; and the non-executing checks performed.
+   Unknown ownership is a stop to surface, not permission to package another
+   contributor's work.
+2. It reads an already-concluded successful `run-quality-gates` result for
+   the inherited committed head. If none exists and the dirty state is a known,
+   task-scoped verification parcel of its own lane, it may commit it through
+   the Work-cloud commit route and open an immediate draft PR so that CI can
+   produce the verdict. Another seat's dirty work is surfaced, never packaged.
+3. Dirty content is never called green from static inspection. The seat's own
+   source work begins only after `run-quality-gates` concludes on the exact
+   transferred head. A missing, cancelled or failing check, an unattributable
+   diff, or inability to open the draft PR stops the route and is surfaced.
+
+This is the named downstream-proof path for the non-execution profile, not an
+exception to inherited-tree verification, not a local-gate claim, and not a
+gate-state report for a team: a coordinator who receives it reads it as one
+seat's observation of one lane.
 
 #### Electing the gate-runner
 
@@ -497,6 +612,18 @@ in this list. A bare label accretes no operational substance and its
 discipline erodes into tacit practice; the commit-warden monitoring duty did
 exactly this before it was defined below.
 
+A multi-seat arc opens at two seats and widens only on measured throughput
+(PDR-082 §Operating default): the route names the seat-hours per merge the
+current shape achieves, and a third seat is added when that figure, not a
+task count, says the work is seat-bound (2026-09-15: four seats ran at 3.8
+seat-hours per merge against 0.95 at two, and two lanes handed most of their
+items back). Concurrent fix lanes across the team are capped by the narrowest
+serial stage, the push slot, the review turnaround and the session budget
+(about three lanes; open fix pull requests at most four), never by host CPU;
+each seat holds one lane at a time in an estate and finishes it before it starts the next there,
+and when the same finding repeats across lanes the cure is the generator, not
+another lane (2026-09-26).
+
 When adding a top-level responsibility or keeping an existing one alive, name
 the seat cost as part of the route. Expensive top-level model seats should be
 reserved for work that needs their judgement or continuity; review passes,
@@ -513,11 +640,12 @@ distinct from `consolidator` — consolidator is the session-bounded
 closeout-synthesis owner; curator owns the cross-session, lane-shaped
 substrate-care work
 (routing durable knowledge to permanent homes, draining the
-graduations buffer, surfacing home-gaps as structural-cure proposals,
-maintaining the per-pass curation log). A session may run a curator
-lane in parallel with implementer / reviewer / marshal lanes; the
-curator's traceability surface is the per-pass metadata file under
-the operational-memory curator-passes directory.
+graduations buffer, surfacing home-gaps as structural-cure proposals).
+A session may run a curator lane in parallel with implementer /
+reviewer / marshal lanes; the curator's traceability surface is the
+commit plus the homed substance
+(`permanent-doc-is-the-consolidation-record`), with the close-of-pass
+broadcast (PDR-081 §Amendment Log; the `curator-pass` skill's Step 8).
 
 **The `marshal` / commit-warden runs the team's awareness surface.**
 In a multi-agent window only ONE agent owns `git:index/head`, runs the
@@ -601,7 +729,7 @@ defined in full by
 the **Director** (long-lived, minimum-action, the single owner-interface
 and cross-session awareness carrier — routes, does not execute) and the
 **Implementer** (ephemeral, owns one bounded lane in its own worktree,
-runs its own gates, reports compressed verdicts, retires with a handoff).
+runs its own gates, records compressed verdicts, retires with a handoff).
 One idea in two layers: **isolate the doing (Implementers); centralise the
 awareness (Director).** Every other label in this section stays a
 session-local example; these two are doctrine.
@@ -623,6 +751,12 @@ owner's (PDR-074 P2). Three points keep this honest:
   only. The owner may direct any agent _directly_ downward
   (owner-direction-beats-plan); a directly-directed Implementer follows it
   AND informs the Director so the map stays current.
+  Read through the owner's ruling for all agents (2026-09-23, verbatim: "do
+  not update the Director unless you have a question or other request, the
+  normal records keep the record"), the Implementer informs the Director by
+  recording the direction in its thread record, where the Director reads the
+  map when it needs it, and messages the Director only when the direction
+  raises a question or a request.
 - **Multiply-directed coordination.** When the owner issues the _same_
   directive to more than one Implementer, "who executes" is itself an
   upward coordination question that routes to the Director; an Implementer
@@ -655,7 +789,9 @@ Record intent and brief reasoning, not hidden chain-of-thought.
 Once a team session is active, every participating agent must check for new
 messages of any type at least once every 120 seconds until they close out or
 are explicitly released from the team route. Use a tighter cadence when the
-owner or controller sets one.
+owner or controller sets one. At n=2 this sweep is dropped (PDR-082 §What drops
+at n=2: owner-chat is the cadence), and the progress report below takes the
+state-line form during a long turn.
 
 Where an event-driven monitor covers a surface (per
 [`use-monitor-for-event-driven-wake`](../../rules/use-monitor-for-event-driven-wake.md)),
@@ -681,10 +817,20 @@ surfaces on the manual/polled cadence unless a separate event-driven monitor
 has been proved for them. Keep the canonical watcher running alongside any
 ArcAngel tail. The two watchers are paired, always (First Moves move 1).
 
+A push slot is a turn, never a notice. A message naming a sequencing point
+("tell me before you push", a shared port, a gate the host can run once) is a
+request for the turn: the seat asks, waits for the one-word confirmation,
+pushes, and the holder releases the slot by word; the forcing fact (the port,
+the host load, the gate) is named each time the slot changes hands (2026-09-13:
+two seats read "tell me before you push" as notify-and-go; the hazard was a
+shared end-to-end port, and it stays as host load after the port cure).
+
 Each participating agent must also report progress at least once every 120
 seconds. A progress report can be a brief owner-facing update, a shared-comms
-entry, or a directed reply, depending on the team route. It should name the
-current state, any blocker, and the next action. Silence is only acceptable
+entry, or a directed reply, depending on the team route; at n=2 it is the state
+line to the partner seat during a long turn (PDR-082 §Amendment Log,
+2026-09-14). It should name
+the current state, any blocker, and the next action. Silence is only acceptable
 after the agent has been explicitly released, closed out, or told to stop
 reporting.
 
@@ -701,7 +847,11 @@ coordinator seat at n=2 owner-visible is default-absent (per
 [PDR-082](../../practice-core/decision-records/PDR-082-n2-collaboration-mode.md)'s
 n=2 owner-visible mode, explicit owner opt-in aside), and the right move is
 to propose dissolving it yourself rather than waiting for the owner to make
-the call.
+the call. The trigger is the WORK SHAPE, not the calendar: when the
+remaining work serialises onto one seat, the other proposes its own
+dissolution before the owner has to (2026-09-03: the owner dissolved the
+second seat by word — "the overhead of coordinating two agents is greater
+than the benefit" — before either seat proposed it).
 
 If multiple viable routes remain, use a bounded proposal:
 
@@ -750,13 +900,22 @@ claim the session opened before leaving. Keep a claim active only when there is
 a specific handoff reason for a follow-on agent, and make that reason explicit
 in the closeout message: which claim remains, what boundary it protects, who or
 what session should pick it up, and when it should be released if the follow-on
-does not arrive.
+does not arrive. An open pull request the session opened or shepherds is such a
+reason until it merges: its claim stays active, and the closeout names the pull
+request, its next step and the seat that takes it (`pr-lifecycle`: a PR is done
+when it is live).
 
 When a later agent picks up a session, claim, or boundary that was retained for
 handoff, they must notify the other agents before acting. The pickup message
 must name the retained claim or boundary, confirm whether they are continuing,
 closing, or replacing that claim, and state their next coordination-visible
-action.
+action. A seat that wakes into a takeover — a STOP, a RELEASE, a default
+already executed on its lane — reports its worktree state FIRST, before any
+other act: which files are uncommitted, which commit is unpushed, which merge
+is mid-flight. A STOP acknowledgement that handed the uncommitted cure over
+verbatim let a takeover meet no surprise and reverse within two minutes
+(2026-09-06); a seat that acts before reporting can race the default that was
+run on its behalf.
 
 Non-closeout agents provide a boundary-scoped synthesis instead of running the
 full `wrap` closeout (which carries `session-handoff`):
@@ -767,6 +926,7 @@ Team member closeout:
 - Outcome:
 - Evidence:
 - Claims / queue / git state:
+- Open pull requests owned (each merged, or its claim retained with its next step and the seat that takes it named):
 - Session complete announcement:
 - Retained claims, if any, and handoff reason:
 - Pickup notification required for follow-on agent:
@@ -785,81 +945,48 @@ canonical continuity surfaces.
 Mid-cycle retirement is a distinct closeout mode alongside the
 natural-boundary closeout above, governed by
 [PDR-063](../../practice-core/decision-records/PDR-063-mid-cycle-retirement-protocol.md)
-with substrate phenotype in
-[ADR-182](../../../docs/architecture/architectural-decisions/182-mid-cycle-handoff-record-substrate.md).
-It fires when an agent must retire before the natural boundary they
-were working toward — almost always under context-budget pressure
-during rotating-cast operation. Natural-boundary closeouts continue to
-use the contract above unchanged. **The ORIGIN discriminates**: these
-five steps fire only on a measured budget signal — the owner calling
-the handoff moment on that signal (PDR-063 ruling 2) stays inside
-them; an owner INITIATING a succession with no measured budget
-signal in play routes through PDR-063 §Deliberate succession instead
-(in-flight state hands over via record-plus-adoption; an at-rest
-lane hands over tracked-surfaces-only with no claim to adopt).
+with its substrate under `.agent/state/collaboration/handoffs/` (the
+handoff-record convention in [`.agent/state/README.md`](../../state/README.md)).
+It fires when the owner calls a handoff of a seat's in-flight work
+to a successor before the natural boundary it was heading for.
+Natural-boundary closeouts continue to use the contract above
+unchanged. **The owner starts every handoff** (PDR-063 §Deliberate
+succession): in-flight state hands over through the five steps below
+plus claim adoption; an at-rest lane hands over tracked-surfaces-only
+with no claim to adopt.
 
-**Triggers** (whichever fires first):
+**Context readings never stop a seat** (PDR-063 §Context readings
+never stop a seat, which governs; the owner's word to every seat,
+2026-09-25). A seat works through every threshold with its records
+current. An owner-called compaction gets the drill and resumes on the
+owner's word; a platform compaction gets no drill, and the seat
+re-arms and carries on. PDR-052's floor defers only directive-file
+edits, until after the next compaction.
 
-- **Effectiveness-window start** (primary under rotating-cast
-  operation): measured usage crosses ~50% of the full window —
-  handover STARTS here (PDR-063's effectiveness-window refinement).
-- **Quantitative ceiling**: context usage ≥ 80% of the agent's
-  bounded budget — the hard stop.
-- **Post-commit**: immediately after landing any commit, the agent
-  re-evaluates remaining budget against the next-cycle floor and
-  enters the protocol if the remaining budget would not cover one
-  more cycle with margin. The floor is OBSERVABLE, never estimated:
-  the measured token cost of this session's most recent completed
-  cycle (TDD authoring + reviewer absorption + gate suite, read from
-  the transcript); a session with no completed cycle has no measured
-  floor — this arm cannot fire and the two threshold axes govern
-  alone (PDR-063 Step 1).
-
-The 80% ceiling has priority over post-commit — an agent at 85%
-mid-cycle does not get to push for one more commit.
-
-**Authority (PDR-063 §Retirement authority, owner rulings
-2026-07-08):** budget verdicts are measured, never self-declared.
-Owner-present, the seat surfaces the measured metric and the OWNER
-calls the handoff moment. Owner-absent at a measured handover signal
-(any Step-1 trigger: the ~50% effectiveness-window start, the ≥ 80%
-ceiling, or a measured post-commit shortfall — whichever fires
-first), the seat surfaces the measurement through the comms event
-PLUS an out-of-band owner notification where the platform provides
-one (PDR-063 ruling 3; the platform's declared notification
-mechanism is a host-phenotype fact — a platform with none satisfies
-surfacing with the comms event alone), with an explicit absolute deadline and default action
-declared in the surfacing event (protocol default when no
-coordinator SLA applies: 10 minutes, then autonomous execution of
-the remaining Steps 2–5),
-waits out that declared window, and AT THE DEADLINE EXECUTES the
-declared default action — the REMAINING Steps 2–5, autonomously, on
-the measured verdict (Step 1 already fired and completed this
-authority wait; re-entering it would recurse). The default action is
-role-determined: a COORDINATOR seat declares and runs the PDR-064
-intersection's combined order (its steps 2–6, Moment 1 interleaved;
-step 7 — Moment 2 — is the receiving agent's later pickup action —
-see §"Coordinator Handoff (Two Moments)", subsection "Intersection
-with PDR-063", below), never the bare Steps 2–5 block. Owner or
-coordinator
-word arriving before
-the deadline redirects the seat and EXITS the sequence — the bounded
-wait can never become an indefinite one. With no live recipient
-for step 4's directed event (schema-required `to`), the no-recipient
-variant applies: a broadcast pending-handoff announcement carrying
-the record path; the successor picks up via claim adoption
-(PDR-063 §Retirement authority ruling 3). A trigger firing is
-surface-and-route, never self-retirement.
+**Authority (PDR-063 §Retirement authority):** the owner calls every
+handoff. With no live recipient for step 4's directed event
+(schema-required `to`), the no-recipient variant applies: a broadcast
+pending-handoff announcement carrying the record path; the successor
+picks up via claim adoption (PDR-063 ruling 3). A COORDINATOR seat's
+handoff runs the PDR-064 intersection's combined order (its steps
+2–6, Moment 1 interleaved; step 7, Moment 2, is the receiving agent's
+later pickup action; see §"Coordinator Handoff (Two Moments)",
+subsection "Intersection with PDR-063", below), never the bare Steps
+2–5 block.
 
 **The five-step protocol** (PDR-063 §Decision is authoritative; this
 SKILL names the protocol shape and points at it):
 
-1. **Sense approaching budget** at one of the triggers above.
+1. **The owner calls the handoff.** The seat never starts one itself.
 2. **Freeze work-in-progress to a structured handoff record** under
    `.agent/state/collaboration/handoffs/` naming the four required
    sections — _current edit state_, _in-flight reasoning_, _decisions
    made_, _decisions deferred_. The record is a first-class artefact,
-   content-addressed by `claim_id`, retained until the claim closes.
+   content-addressed by `claim_id`, retained until the claim closes. The
+   directory is gitignored in both estates, so the file stays on the machine
+   that wrote it: a Director absorbing a closeout homes the record's text on
+   the thread record beside its boundary entry (done for three seats'
+   handoffs, 2026-09-29; one instance).
 3. **Extend the active claim** by setting the optional
    `handoff_record_path` field on the active-claims entry pointing at
    the new handoff record. No other schema field changes; existing
@@ -887,7 +1014,12 @@ those use the two-moments shape below.
 Coordinator role transitions have two distinct moments per
 [PDR-064](../../practice-core/decision-records/PDR-064-coordinator-handoff-two-moments.md);
 conflating them creates a coordinator-less window the team cannot
-detect.
+detect. Inside the authority window, from Moment 2 of acquiring the role to
+Moment 1 of releasing it, what a coordinator holding the Director role
+writes to the stream as it happens is
+[PDR-075](../../practice-core/decision-records/PDR-075-director-substrate-writing-discipline.md)'s
+discipline: rulings and owner-decision answers go on the stream when they
+occur, so a successor reads the stream and the handoff record stays small.
 
 **Moment 1 — Pre-positioning (information transfer only).** The
 outgoing coordinator broadcasts a `narrative` event with the
@@ -908,12 +1040,9 @@ pre-positioning event via `in_response_to`, naming the prior
 coordinator, and declaring the cadence the incoming coordinator will
 adopt. The outgoing coordinator continues to hold authority until this
 broadcast lands in the comms stream — with PDR-064's one forced
-exception: a retirement AUTHORISED under PDR-063 §Retirement
-authority on any measured Step-1 signal, once that authority route
-COMPLETES (owner-called when present; the completed owner-absent
-deadline/default path when absent), ends the session before Moment 2
-can land; the
-Step 5 retirement broadcast then returns coordination authority to
+exception: a retirement the owner calls under PDR-063 §Retirement
+authority ends the session before Moment 2 can land; the Step 5
+retirement broadcast then returns coordination authority to
 the OWNER explicitly, the role context rides the (re-broadcast if
 stale) Moment 1 pre-positioning event, and the next coordinator is
 owner- or team-designated at pickup — never silently assumed.
@@ -944,8 +1073,8 @@ warden's `git:index/head` claim closed as the incoming warden opened theirs
 and broadcast the takeover, the outgoing warden's acknowledgement mirroring
 Moment 2.
 
-**Intersection with PDR-063.** When the outgoing coordinator is
-retiring mid-cycle under token pressure, BOTH protocols fire. The
+**Intersection with PDR-063.** When the owner calls the outgoing
+coordinator's handoff mid-cycle, BOTH protocols fire. The
 per-claim cycle handoff uses the `mid-cycle-handoff` `message_kind`
 (PDR-063 Step 4 / ADR-182); the role-level pre-positioning is a
 distinct `narrative` broadcast covering coordinator-role context
@@ -953,19 +1082,23 @@ distinct `narrative` broadcast covering coordinator-role context
 events — the handoff record carries cycle-claim substance; the
 pre-positioning event carries coordinator-role substance. **Do not
 use `mid-cycle-handoff` for coordinator role transitions.** The
-combined ORDER is PDR-064's: sense (Step 1) → complete the
-§Retirement-authority route (owner-present call, or the owner-absent
-declared-deadline/default path; a redirect EXITS here) → WHEN an open
+combined ORDER is PDR-064's: the owner's call (Step 1; a redirect
+EXITS here) → WHEN an open
 cycle claim exists: freeze its record (Step 2) and extend the claim with
 `handoff_record_path` (Step 3 — before any transport whose pickup
 relies on adoption) → Moment 1 pre-positioning broadcast → PDR-063
 Step 4 under the same open-claim condition (directed to a live
 receiver, else the broadcast pending-handoff transport exception) →
 Step 5 retirement broadcast → the incoming coordinator's Moment 2 at
-pickup. A coordinator with NO open cycle claim runs only Step 1 (with its
-completed authority route) → Moment 1 → Step 5; the incoming
-coordinator supplies Moment 2 at pickup — the
-claimless path never bypasses the owner/deadline gate.
+pickup. A coordinator with NO open cycle claim runs only Step 1 (the
+owner's call) → Moment 1 → Step 5; the incoming coordinator supplies
+Moment 2 at pickup — the claimless path never bypasses the owner's
+call.
+
+The Director snapshot is a record, never a roster: Forge herds Vapor found that "the Director
+snapshot names past seats; live comms shows their closeout, so it is not a roster", so the live
+roster is read from the comms stream and the claims registry (the seat's reading of 2026-09-24,
+event 9abff88d).
 
 ### Closeout consolidation discipline for failure-mode events
 

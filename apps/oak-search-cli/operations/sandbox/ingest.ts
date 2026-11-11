@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import path from 'node:path';
 import process from 'node:process';
+import { normalizeError } from '@oaknational/logger';
 import { createIngestHarness } from '../../src/lib/indexing/ingest-harness';
 import { coerceSearchIndexTarget, type SearchIndexTarget } from '../../src/lib/search-index-target';
 import { ingestLogger } from '../../src/lib/logger';
@@ -100,7 +101,9 @@ async function main(): Promise<void> {
   });
 }
 
-main().catch((error) => {
-  ingestLogger.error('ingest.fixture.error', error);
+try {
+  await main();
+} catch (error: unknown) {
+  ingestLogger.error('ingest.fixture.error', normalizeError(error));
   process.exitCode = 1;
-});
+}

@@ -7,6 +7,14 @@ pdr_kind: contract
 **Status**: Accepted (owner-ratified 2026-07-31, in-session ratification
 sitting — card answers at the Director seat, Falcon hunts Flight 52841f)
 **Date**: 2026-07-31
+
+**2026-09-08 semantic clarification**: the mounting law is set inclusion.
+Query semantics, validation and termination have separate proof obligations.
+Declared orders structure the existing carrier, authority and privacy
+boundaries; each implemented guarantee retains its own premises and checks
+(owner-directed reconciliation of 2026-09-08; the §Context of the host's own-built
+algorithm and data-structure foundations decision records the direction).
+
 **Related**:
 [PDR-105](PDR-105-reference-direction-invariants.md)
 (reference-direction invariants — this record extends its portability
@@ -165,13 +173,19 @@ validates, and renders (external references displaying as unresolved
 names). The outermost instance is the clone test: a cold public clone
 is complete and valid with zero operator overlays present.
 
-**Union semantics are monotone by construction**: mounting a more
-specific stratum extends but can never falsify a more general one —
-readers with more entitlement see strictly more, never different,
-knowledge. Constraints therefore declare a scope: **home-local**
-(checked at each home's rebuild) or **union-scoped** (checked at
-mount); a mount that violates a union-scoped constraint fails that
-mount, never the more general base.
+**Mounting preserves the base and takes set union.** A mounted home adds its
+statements under the declared identity scopes while preserving the admitted
+base. This guarantees set inclusion; a new home removes no statement already
+admitted. Queries over additional statements can produce different counts,
+absence results or conflict reports under their own semantics. Each projection
+declares the homes it reads, and the strip test checks that retained
+projections remain independent of removed strata.
+
+Constraints declare a scope: **home-local** (checked at each home's rebuild)
+or **union-scoped** (checked at mount), including their target selection and
+interpretation. A mount that violates a union-scoped constraint fails that
+mount and leaves the more general base unchanged. Preservation under union
+is established for the particular constraint or query and its premises.
 
 ## Consequences
 
@@ -192,21 +206,19 @@ mount, never the more general base.
 
 ## The unifying schema (one law, four axes)
 
-Examined together, this record's laws share a single schema: **every
-binding law is the monotonicity of a flow over a declared order.**
-Four orders are in play — **generality** (the strata; references flow
+The shared schema is **a flow respecting its declared order**.
+Four axes are in play — **generality** (the strata; references flow
 toward the general), **time** (versions; resolution flows along
 supersession and never breaks), **epistemic provenance** (authored
 precedes derived; statistics, inference, and extraction read the
 authored layer and never mechanically enter it — the two-axes rule,
 the asserted-only commitment, and harvest-proposes-authors-ratify are
 one membrane stated three times), and **entitlement** (mounting;
-readers see the union over their down-set). Every falsifier in this
-record is a monotonicity check over one of these orders, so an
-implementation may enforce the whole family with one engine
-instantiated per axis — and extensions (new strata, new derivation
-kinds, entitlement lattices rather than chains) inherit the law by
-declaring their order, with no new doctrine.
+readers see the union over their down-set). Reusable order checks can serve
+these axes. The relation, permitted transitions and interpretation are
+specified per axis; completeness, provenance, lifecycle and query guarantees
+also carry their own checks. An extension declares its order and establishes
+that its operations preserve the applicable carrier and authority contracts.
 
 The epistemic-provenance order also decides mutability, so no separate
 policy is needed: **immutability follows epistemic kind.**
@@ -229,17 +241,17 @@ by deletion.
 
 ## Mathematical grounding (deliberately standard)
 
-The shapes above are chosen to be proven mathematics, not novel
-design, so any implementing stack can lean on existing results and
-algorithms: the strata with the direction law are a stratified
-knowledge base (order-respecting references; validity preserved under
-restriction to down-sets); the mount is a monotone union over the
-entitlement order; ontology-versus-instance is the classical
-theory/model split with decidable validation; identity-versus-content
-is rigid naming with a version category over it; and the
-intended-versus-actual split is a bimodal provenance structure. Host
-records name the concrete frameworks and algorithms; this record fixes
-only the properties.
+These models identify useful existing results and algorithms together with
+their applicability premises. The direction law orders references across
+strata; restriction to a down-set preserves that direction. References within
+a stratum can still form cycles, so traversal and resolution require an
+explicit termination and resource contract. Mounting is monotone in statement
+set inclusion; semantic query monotonicity and constraint preservation are
+separate properties. Ontology-versus-instance separates a theory from its
+data; the selected language and evaluation profile determine validation
+guarantees. Stable naming distinguishes identity from content, and provenance
+distinguishes intended from realised events. Host records name the concrete
+frameworks, algorithms and qualification evidence for those properties.
 
 And the grounding is itself subject to the membrane: **formal
 grounding is evidence, never authority.** A mathematical claim in

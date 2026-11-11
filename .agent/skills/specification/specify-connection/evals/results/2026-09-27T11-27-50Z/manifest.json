@@ -1,0 +1,150 @@
+{
+  "schema_version": "1.2.0",
+  "started_at": "2026-09-27T11:27:50.775Z",
+  "repo_head": "ae21c5a3373f41ff292721ef838d63bd52b20e59",
+  "worktree_clean": false,
+  "agent_tools_version": "0.1.0",
+  "host_skill": "oak-specify-connection",
+  "canonical_dir": ".agent/skills/specification/specify-connection",
+  "canonical_files": [
+    {
+      "path": "SKILL-CANONICAL.md",
+      "blob": "7b48d74616abb8e59265c6174af121e571ba177d"
+    },
+    {
+      "path": "evals/evals.json",
+      "blob": "099c2ff7afb0f2164453b554d2baeb147be5ad05"
+    },
+    {
+      "path": "evals/trigger-validation.json",
+      "blob": "d1ed3eee698f9278553cf0f19df046b536cc3143"
+    },
+    {
+      "path": "references/connection-method.md",
+      "blob": "7ae1c20b4b91ae5a60a54e52c1f0f48609df7c4b"
+    }
+  ],
+  "adapter_files": [
+    {
+      "path": "SKILL.md",
+      "blob": "8aec1aeffb417f56e1807a6918e213b479ba6549"
+    },
+    {
+      "path": "references/connection-method.md",
+      "blob": "7ae1c20b4b91ae5a60a54e52c1f0f48609df7c4b"
+    }
+  ],
+  "carried_skills": [],
+  "plugin_skill_form": "the adapter's frontmatter over the canonical body, references carried beside; nothing placed in the workspace",
+  "runner": {
+    "command": "claude",
+    "model": "the runner default",
+    "judge_model": "sonnet"
+  },
+  "suites": [
+    {
+      "suite": "cases",
+      "ablation": "with-without",
+      "runs": 1,
+      "cases": [
+        "case-01",
+        "case-02",
+        "case-03",
+        "case-04",
+        "case-05",
+        "case-06"
+      ],
+      "ran": [
+        "case-01",
+        "case-02",
+        "case-03",
+        "case-04",
+        "case-05",
+        "case-06"
+      ],
+      "command": [
+        "claude",
+        "plugin",
+        "eval",
+        "<plugin>",
+        "--keep-temp",
+        "--no-publish",
+        "--trust-plugin",
+        "--threshold",
+        "0",
+        "--ablation",
+        "with-without",
+        "--runs",
+        "1",
+        "--case",
+        "case-*",
+        "--json",
+        "<plugin>/result-cases.json",
+        "--max-cost-usd",
+        "40",
+        "--judge-model",
+        "sonnet"
+      ],
+      "resultFile": "result-cases.json",
+      "costUsd": 1.3726204,
+      "claudeVersion": "2.1.283",
+      "partial": false
+    },
+    {
+      "suite": "triggers",
+      "ablation": "none",
+      "runs": 1,
+      "cases": [
+        "trigger-01-fires",
+        "trigger-02-fires",
+        "trigger-03-fires",
+        "trigger-04-fires",
+        "trigger-05-fires",
+        "trigger-06-silent",
+        "trigger-07-silent",
+        "trigger-08-silent",
+        "trigger-09-silent",
+        "trigger-10-silent"
+      ],
+      "ran": [
+        "trigger-01-fires",
+        "trigger-02-fires",
+        "trigger-03-fires",
+        "trigger-04-fires",
+        "trigger-05-fires",
+        "trigger-06-silent",
+        "trigger-07-silent",
+        "trigger-08-silent",
+        "trigger-09-silent",
+        "trigger-10-silent"
+      ],
+      "command": [
+        "claude",
+        "plugin",
+        "eval",
+        "<plugin>",
+        "--keep-temp",
+        "--no-publish",
+        "--trust-plugin",
+        "--threshold",
+        "0",
+        "--ablation",
+        "none",
+        "--runs",
+        "1",
+        "--case",
+        "trigger-*",
+        "--json",
+        "<plugin>/result-triggers.json",
+        "--max-cost-usd",
+        "40",
+        "--judge-model",
+        "sonnet"
+      ],
+      "resultFile": "result-triggers.json",
+      "costUsd": 0.7444518,
+      "claudeVersion": "2.1.283",
+      "partial": false
+    }
+  ]
+}

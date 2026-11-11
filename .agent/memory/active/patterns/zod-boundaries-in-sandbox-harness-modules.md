@@ -3,6 +3,7 @@ name: Zod Boundaries in Sandbox-Harness Modules
 polarity: pattern
 use_this_when: Authoring or reviewing a module whose files are esbuild-bundled into a sandboxed harness artefact (Workflow scripts, agent prompts), or whose zod refinements guard stage-boundary invariants
 category: code
+layer: family
 proven_in: .agent/memory/active/archive/napkin-2026-07-20.md (2026-07-16, restatement-audit module build + review rounds)
 proven_date: 2026-07-16
 barrier:

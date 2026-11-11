@@ -5,7 +5,7 @@ import type {
   SentryTransactionEvent,
 } from '@oaknational/sentry-node';
 
-type SentryRequest = SentryErrorEvent['request'];
+type SentryRequest = NonNullable<SentryErrorEvent['request']>;
 
 type HttpPostRedactionHooks = SentryPostRedactionHooks;
 

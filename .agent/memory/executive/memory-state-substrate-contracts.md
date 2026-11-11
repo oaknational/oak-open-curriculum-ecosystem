@@ -15,7 +15,7 @@ when adding, auditing, repairing, or building tooling for any `.agent/state/`
 or `.agent/memory/` surface.
 
 Portable doctrine lives in [PDR-050][pdr-050]. Merge-time semantics live in
-[PDR-049][pdr-049]. This file is the repo-local bridge: it may name Oak paths,
+[PDR-049][pdr-049]. This file is the repo-local bridge: it may name host paths,
 commands, schemas, and plans. Do not move those host details into Practice Core.
 The transferable contract specification belongs in PDR-050; this file is the
 human-facing local instance that a future doctor validates against that
@@ -27,7 +27,7 @@ specification and the adjacent strict JSON manifest/schema.
 | --- | --- |
 | Inventory owner | This executive-memory file |
 | Primary writers | Substrate-contract adoption work, consolidation, and doctor-plan implementation |
-| Reviewer route | `docs-adr-expert`, `assumptions-expert`, `architecture-expert-fred`; add `test-expert` when executable checks change |
+| Reviewer route | `docs-adr-expert`, `assumptions-expert`, the architecture persona whose lens or lane covers the Practice substrate; add `test-expert` when executable checks change |
 | Doctrine source | PDR-050 for substrate contracts; PDR-049 for merge classes |
 | Implementation owner | Repo-local `agent-tools` doctor plan |
 | Boundary | Practice Core names portable doctrine only; this file names local roots and commands |
@@ -57,7 +57,8 @@ This Markdown file remains the human-facing contract; the JSON manifest is the
 strict data surface the future doctor consumes before authoring RED fixtures.
 
 The retired YAML seed was promoted into strict JSON on 2026-05-07 and is
-preserved as dated evidence at [retired seed evidence][retired-seed].
+preserved as dated evidence in OCE's plans backlog
+(`2026-05-07-memory-state-substrate-retired-yaml-seed.md`).
 Future machine consumption must read the JSON manifest, not the retired seed.
 
 ## Surface Contract Template
@@ -121,7 +122,7 @@ for the doctor plan.
 
 | Gap | Current classification | Next owner |
 | --- | --- | --- |
-| `comms/events/` legacy fragments migrated | Terminal migration complete; the whole legacy `comms/` tree must not remain on disk | Doctor validates root absence and stale-path classifier |
+| `comms/events/` legacy fragments migrated | Terminal migration complete; the current root is declared below and the retired tree has no manifest entry | Doctor validates the declared root and the stale-path classifier |
 | Live and archived prose still mention `comms/events/` | Must classify by live reference vs archived evidence | Doctor stale-path classifier |
 | `shared-comms-log.md` is not drift-checked by no-arg collaboration check | Deterministic checker gap | Doctor report mode |
 | Communication event JSON has a parser but no colocated JSON Schema | Contract gap | Agent tooling |
@@ -146,11 +147,21 @@ it is a narrow parser check unless explicit paths are supplied.
 
 ## Legacy Event Transition Rule
 
-`.agent/state/collaboration/comms-events/` is the one live communication-event
-root. The deleted legacy collaboration comms tree must not remain on disk.
-Archived references to the old path remain archived evidence unless a reviewer
-explicitly decides they are live instructions.
+`.agent/state/collaboration/comms/` is the one live communication-event
+root. Archived references to the old path remain archived evidence unless a
+reviewer explicitly decides they are live instructions.
+
+## Lifecycle Declarations
+
+The manifest declares presence and lifecycle, nothing else. A surface that
+is absent until its first writer acts (the commit-queue store, a seen-file
+directory) is declared with lifecycle `runtime-created`, so a reader knows
+its absence is a state and not a defect. A surface that doctrine has
+superseded gets no manifest entry at all: absence-by-supersession lives in
+the superseding record (the ADR or PDR that retired it), never as a
+manifest row of the form "must never exist" (`no-tombstones-for-removed-ideas`
+§Rule; the retired comms tree above once carried such a row, cured
+2026-09-30).
 
 [pdr-049]: ../../practice-core/decision-records/PDR-049-memory-and-state-file-merge-semantics.md
 [pdr-050]: ../../practice-core/decision-records/PDR-050-state-memory-substrate-contracts.md
-[retired-seed]: ../../plans-backlog-2026-07/agentic-engineering-enhancements/evidence/2026-05-07-memory-state-substrate-retired-yaml-seed.md

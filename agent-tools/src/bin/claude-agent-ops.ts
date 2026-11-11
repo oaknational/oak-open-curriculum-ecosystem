@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-import { spawnSync } from 'node:child_process';
 import { existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -11,6 +10,7 @@ import {
   type CliHandler,
 } from './claude-agent-ops-cli.js';
 import { detectPhaseFromEvents, isValidAgentId, resolveDiffCwd } from '../core/agent-ops.js';
+import { runPnpmGate, waitMs } from './claude-agent-ops-process.js';
 import {
   evaluateAgentInfrastructureHealth,
   formatAgentInfrastructureHealthReport,
@@ -220,17 +220,13 @@ function resolveHomePath(): string {
     ? process.env.HOME
     : exitWithError('Missing HOME environment variable');
 }
-function runPnpmGate(gate: string, root: string): boolean {
-  return spawnSync('pnpm', [gate], { cwd: root, stdio: 'ignore' }).status === 0;
-}
-function waitMs(milliseconds: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, milliseconds));
-}
 function exitWithError(message: string): never {
   writeErrorLine(`Error: ${message}`);
   process.exit(1);
 }
-run().catch((error: unknown) => {
+try {
+  await run();
+} catch (error: unknown) {
   writeErrorLine(`Error: ${error instanceof Error ? error.message : String(error)}`);
   process.exit(1);
-});
+}

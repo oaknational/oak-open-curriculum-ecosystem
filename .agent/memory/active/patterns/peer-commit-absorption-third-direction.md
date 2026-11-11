@@ -2,6 +2,7 @@
 name: "Peer-Commit Absorption — Third Direction Failure Mode"
 polarity: antipattern
 category: agent
+layer: general
 status: proven
 discovered: 2026-05-11
 proven_in: "R1.b session 2026-05-11. Mistbound Watching Lantern's commit 67885e3f (subject: docs(graph): absorb review findings into MVP arc) used non-pathspec staging (git add . or equivalent) and swept six of Soaring Darting Kite's session-lifecycle working-tree files into Mistbound's commit. Files absorbed: primary-agent-tooling-enhancements.plan.md (B-01 fix), active-claims.json (session-open claim), closed-claims.archive.json (R1.b claim closure), shared-comms-log.md (session-open + sidebar + close narratives), comms-events/2e1a886f (sidebar to Fronded), comms-events/c09300be (B-10 orphan sidebar). Mistbound's queue intent declared one file (graph-mvp-arc.plan.md); their actual staged set was seven. Verify-staged would have caught the divergence if invoked. Working evidence at comms event e0a17465-fd5a-4c7d-979d-89696247de0a."

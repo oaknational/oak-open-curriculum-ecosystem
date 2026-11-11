@@ -3,6 +3,7 @@ name: "Bounded Structured Output for Workflow Fan-Outs"
 polarity: pattern
 use_this_when: "Authoring a Workflow script that uses agent({schema}) fan-out, passing args into it, or consuming its verify-stage results."
 category: agent
+layer: general
 proven_in: "Workflow runs 2026-06-11 → 2026-06-12: 45-retry unbounded findings[] collapse; args-delivery instant failure; 3-of-15 verifier deaths on a session limit"
 proven_date: 2026-06-12
 barrier:

@@ -3,6 +3,7 @@ name: "Parse-Time Narrowing Is Destructive in Read-Modify-Write Transactions"
 polarity: anti-pattern
 use_this_when: "adding validation to a parse layer that feeds a read → transform → write-back transaction over a shared file, and rejecting, omitting, or normalising rows at parse looks like the clean cure"
 category: code
+layer: general
 proven_in: "agent-tools/src/commit-queue/registry.ts"
 proven_date: 2026-07-31
 barrier:
@@ -74,5 +75,5 @@ strict via the canonical write schema (census: zero id-less intents
 across the live registry and 11 historical versions), claims
 preserved verbatim with enforcement at `sameAgentRoutingKey`
 ("an id-less identity is never the same live agent"), and the
-`smoke:commit-queue-registry` proof
+`commit-queue-registry.smoke.ts` proof
 `provePreservesLegacyIdlessClaimThroughWrite` guarding the contract.

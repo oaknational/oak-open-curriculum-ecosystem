@@ -85,6 +85,34 @@ recorded independently.
   as separate columns; "repo-internal", "distributable", and "both"
   are all legitimate values, and dual-homed versions of one
   capability do not force a category change on either side.
+- **Amendment 2026-09-05 (owner corrections on a fork line).** On a line run as another
+  organisation's fork, whether a distributable capability is listed or served is that line's
+  own product decision and licence position; the canonical organisation's product gates do
+  not carry across by analogy — a report on the EngraphCode line had carried the canonical
+  connector-listing gate onto the fork, and the owner corrected it. For a distributable
+  capability the surfaces that matter in this tree are the marketplace listing manifest
+  (`.claude-plugin/marketplace.json`, which lists the plugin) and the plugin directory it
+  points at (`plugins/`); an installed plugin and a listed one differ exactly there. A
+  sibling skills library's privacy is incidental to that question.
+- **Addendum 2026-09-17 (the 1.185.0 sync).** The tree now carries a second listing manifest
+  and package: `.agents/plugins/marketplace.json` lists `plugins/oak-open-curriculum-chatgpt`
+  (ChatGPT and Codex) beside `.claude-plugin/marketplace.json` and `plugins/oak-open-curriculum`
+  (the Claude plugin, for any Claude host — the "(Claude Code)" qualifier in ADR-125's 2026-09-08
+  amendment is the Oak line's wording, corrected on this line by the owner on 2026-09-17: the
+  plugin is in no way constrained to Claude Code). The listed-versus-installed distinction above
+  holds per manifest.
+- **Addendum 2026-09-30 (the 1.185.4 sync).** Upstream renamed the plugin, its ChatGPT and Codex
+  package and its MCP server key to `oak-national-academy`, matching the display name, and moved
+  the packages: `.claude-plugin/marketplace.json` now points at `claude/plugins/oak-national-academy`
+  and `.agents/plugins/marketplace.json` at `chatgpt/plugins/oak-national-academy`. The paths the
+  2026-09-17 addendum names are the pre-rename ones.
+- **Addendum 2026-10-27 (the 1.186.1 sync).** Upstream moved the plugins to
+  oaknational/oak-ai-plugins, which builds, checks and releases them from 1.1.1 (MCP-773, MCP-774,
+  MCP-775; 2026-10-21). This tree carries no listing manifest and no plugin package: both
+  marketplace files, `claude/plugins/` and `chatgpt/plugins/` are removed with the skill-copy
+  validator and the plugin tests; the last versions are in this repository's history at release
+  v1.186.0. The listed-versus-installed distinction above now lives in that repository, and the two
+  addenda above name surfaces this tree no longer has.
 
 ## Validation
 

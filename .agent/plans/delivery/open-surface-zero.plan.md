@@ -140,6 +140,14 @@ live value ⇒ open the draft PR that should have existed; unclear ⇒
 one-line owner ask. Owner-authored branches (`jimcresswell/jim-next…`)
 get the ask, never a unilateral disposition.
 
+`jimcresswell/mcp-487-sanitise-numeric-input`, provenance for its slot: MCP-487 was closed
+2026-09-02 on evidence — the server accepts numeric `offset`/`limit` (the owner's MCPJam
+test); the Claude Code client defect the branch worked around was fixed in 2.1.221 (PR #752
+triage record, `.agent/reports/pr-comment-triage-2026-08-04.md`); a live Claude Code MCP
+client re-verified numeric `offset`/`limit` accepted with `offset` honoured. The branch is
+superseded: surface this provenance and put the deletion ask (an owner-prefixed branch;
+the ask, never a unilateral disposition).
+
 ## Acceptance criteria (each with a proof)
 
 - Every census PR row carries an executed disposition (merged sha or

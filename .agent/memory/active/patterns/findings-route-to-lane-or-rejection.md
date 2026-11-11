@@ -3,6 +3,7 @@ related_pdr: PDR-012
 name: "Findings Route to a Lane or a Rejection"
 polarity: pattern
 category: process
+layer: general
 status: proven
 discovered: 2026-04-17
 proven_in: "Sentry L-0b reviewer findings register (commit d08c6969) + prior scope-separation doctrine from the maximisation-pivot session"

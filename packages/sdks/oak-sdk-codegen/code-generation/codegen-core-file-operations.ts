@@ -1,114 +1,90 @@
 /**
- * File operations for the type generation process
+ * File operations for the type generation process.
+ *
+ * @remarks
+ * Every write goes through an injected {@link FileSystemPort}, so the layout
+ * logic is provable in-process against the in-memory fake and the real
+ * adapter is wired once, in `codegen.ts` (`principles.md` §Testing; ADR-078).
  */
 
 import path from 'node:path';
-import fs from 'node:fs';
 
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
 
+import type { FileSystemPort } from '../src/io/file-system-port.js';
 import type { FileMap } from './typegen/extraction-types.js';
 import {
   generateCompleteMcpTools,
   type GeneratedMcpToolFiles,
 } from './typegen/mcp-tools/mcp-tool-generator.js';
-import { generateJsonContent } from './typegen/schema/schema-generators.js';
 
-/**
- * Write MCP tools directory structure to disk
- */
-export function writeMcpToolsDirectory(
-  outDirectory: string,
-  mcpTools: GeneratedMcpToolFiles,
-): void {
-  const mcpToolsDir = path.resolve(outDirectory, 'mcp-tools');
-  const contractDir = path.resolve(mcpToolsDir, 'contract');
-  const toolsDir = path.resolve(mcpToolsDir, 'tools');
-  const aliasesDir = path.resolve(mcpToolsDir, 'aliases');
-  const runtimeDir = path.resolve(mcpToolsDir, 'runtime');
-  const stubsDir = path.resolve(mcpToolsDir, 'stubs');
-  const stubsToolsDir = path.resolve(stubsDir, 'tools');
-
-  fs.mkdirSync(contractDir, { recursive: true });
-  fs.mkdirSync(toolsDir, { recursive: true });
-  fs.mkdirSync(aliasesDir, { recursive: true });
-  fs.mkdirSync(runtimeDir, { recursive: true });
-  fs.mkdirSync(stubsToolsDir, { recursive: true });
-
-  fs.writeFileSync(path.resolve(mcpToolsDir, 'index.ts'), mcpTools.index);
-
-  for (const [filename, content] of Object.entries(mcpTools.contract)) {
-    fs.writeFileSync(path.resolve(contractDir, filename), content);
-  }
-
-  fs.writeFileSync(path.resolve(mcpToolsDir, 'definitions.ts'), mcpTools.data['definitions.ts']);
-  fs.writeFileSync(
-    path.resolve(mcpToolsDir, 'scopes-supported.ts'),
-    mcpTools.data['scopes-supported.ts'],
+/** Prefixes every key of a file map with a directory. */
+function nestFileMap(directory: string, files: Readonly<Record<string, string>>): FileMap {
+  return Object.fromEntries(
+    Object.entries(files).map(([filename, content]) => [`${directory}/${filename}`, content]),
   );
-  for (const [filename, content] of Object.entries(mcpTools.data.tools)) {
-    fs.writeFileSync(path.resolve(toolsDir, filename), content);
-  }
-
-  for (const [filename, content] of Object.entries(mcpTools.aliases)) {
-    fs.writeFileSync(path.resolve(aliasesDir, filename), content);
-  }
-
-  for (const [filename, content] of Object.entries(mcpTools.runtime)) {
-    fs.writeFileSync(path.resolve(runtimeDir, filename), content);
-  }
-
-  fs.writeFileSync(path.resolve(stubsDir, 'index.ts'), mcpTools.stubs['index.ts']);
-  fs.writeFileSync(path.resolve(stubsDir, 'tools/index.ts'), mcpTools.stubs['tools/index.ts']);
-  for (const [filename, content] of Object.entries(mcpTools.stubs.tools)) {
-    fs.writeFileSync(path.resolve(stubsToolsDir, filename), content);
-  }
 }
 
 /**
- * Write files to disk
- * Side effect function - separated from pure logic
+ * Lays out the generated MCP tool modules under `mcp-tools/`.
+ *
+ * @remarks
+ * Pure: the result maps each relative path to its content, in the structure
+ * the runtime, the stubs and the aliases import one another by.
+ *
+ * @param mcpTools - The generated module contents, grouped by role
+ * @returns Relative paths under the output directory and their content
  */
-function writeFiles(outDirectory: string, fileMap: FileMap): void {
-  for (const [filename, content] of Object.entries(fileMap)) {
-    const target = path.resolve(outDirectory, filename);
-    const dir = path.dirname(target);
-    fs.mkdirSync(dir, { recursive: true });
-    fs.writeFileSync(target, content);
-  }
+export function createMcpToolsFileMap(mcpTools: GeneratedMcpToolFiles): FileMap {
+  return {
+    'mcp-tools/index.ts': mcpTools.index,
+    ...nestFileMap('mcp-tools/contract', mcpTools.contract),
+    'mcp-tools/definitions.ts': mcpTools.data['definitions.ts'],
+    'mcp-tools/scopes-supported.ts': mcpTools.data['scopes-supported.ts'],
+    ...nestFileMap('mcp-tools/tools', mcpTools.data.tools),
+    ...nestFileMap('mcp-tools/aliases', mcpTools.aliases),
+    ...nestFileMap('mcp-tools/runtime', mcpTools.runtime),
+    'mcp-tools/stubs/index.ts': mcpTools.stubs['index.ts'],
+    'mcp-tools/stubs/tools/index.ts': mcpTools.stubs['tools/index.ts'],
+    ...nestFileMap('mcp-tools/stubs/tools', mcpTools.stubs.tools),
+  };
 }
 
-export function calculateSdkSchemaPath(outDirectory: string): string {
-  return path.resolve(outDirectory, 'api-schema-sdk.json');
-}
-
-export function writeSdkSchemaFile(
+/**
+ * Writes every entry of a file map beneath the output directory, creating the
+ * directories it needs first.
+ *
+ * @param outDirectory - Absolute output directory
+ * @param fileMap - Relative paths and their content
+ * @param fs - The file system to write through
+ */
+export async function writeFileMap(
   outDirectory: string,
-  sdkSchema: OpenAPIObject,
-  sdkSchemaPath: string,
-): void {
-  fs.mkdirSync(outDirectory, { recursive: true });
-  const sdkSchemaContent = generateJsonContent(sdkSchema);
-  fs.writeFileSync(sdkSchemaPath, sdkSchemaContent);
+  fileMap: FileMap,
+  fs: FileSystemPort,
+): Promise<void> {
+  const targets = Object.entries(fileMap).map(
+    ([filename, content]) => [path.resolve(outDirectory, filename), content] as const,
+  );
+  const directories = new Set(targets.map(([target]) => path.dirname(target)));
+  await Promise.all([...directories].map((directory) => fs.mkdir(directory)));
+  await Promise.all(targets.map(([target, content]) => fs.writeFile(target, content)));
 }
 
-export function outputGeneratedFiles(
+/**
+ * Writes the derived SDK files and the generated MCP tools to the output directory.
+ *
+ * @param outDirectory - Absolute output directory
+ * @param fileMap - The derived SDK files from `createFileMap`
+ * @param sdkSchema - The SDK-decorated schema the MCP tools derive from
+ * @param fs - The file system to write through
+ */
+export async function outputGeneratedFiles(
   outDirectory: string,
   fileMap: FileMap,
   sdkSchema: OpenAPIObject,
-  sdkSchemaPath: string,
-): void {
-  // Create output directory
-  fs.mkdirSync(outDirectory, { recursive: true });
-
-  // Write SDK schema to disk
-
-  writeSdkSchemaFile(outDirectory, sdkSchema, sdkSchemaPath);
-
-  // Write all derived SDK files to disk
-  writeFiles(outDirectory, fileMap);
-
-  // Generate and write MCP tools
-  const mcpTools = generateCompleteMcpTools(sdkSchema);
-  writeMcpToolsDirectory(outDirectory, mcpTools);
+  fs: FileSystemPort,
+): Promise<void> {
+  const mcpTools = createMcpToolsFileMap(generateCompleteMcpTools(sdkSchema));
+  await writeFileMap(outDirectory, { ...fileMap, ...mcpTools }, fs);
 }

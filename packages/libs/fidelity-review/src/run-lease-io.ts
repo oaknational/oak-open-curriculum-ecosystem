@@ -84,7 +84,7 @@ function readExistingLease(leasePath: string): Result<LeaseFileContent | undefin
 }
 
 function livenessOf(existing: LeaseFileContent | undefined, selfHostname: string): HolderLiveness {
-  if (existing === undefined || existing.hostname !== selfHostname) {
+  if (existing?.hostname !== selfHostname) {
     return 'unknown';
   }
   return probePidLiveness(existing.pid);

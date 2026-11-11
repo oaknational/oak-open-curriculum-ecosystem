@@ -28,6 +28,13 @@ function hasDurationMs(context: unknown): context is { readonly durationMs: numb
   );
 }
 
+/** A sync span that runs its work against the no-op handle and records nothing. */
+const passThroughWithSpanSync: HttpObservability['withSpanSync'] = ({ run }) => run(noopSpanHandle);
+
+/** An async span that runs its work against the no-op handle and records nothing. */
+const passThroughWithSpan: HttpObservability['withSpan'] = async ({ run }) =>
+  await run(noopSpanHandle);
+
 describe('runAsyncBootstrapPhase', () => {
   it('returns the resolved value of an async operation', async () => {
     const { logger } = createRecordingLogger();
@@ -105,7 +112,6 @@ describe('runAsyncBootstrapPhase', () => {
       spanCalls.push({ name, attributes });
       return await run(noopSpanHandle);
     };
-    const withSpanSync: HttpObservability['withSpanSync'] = ({ run }) => run(noopSpanHandle);
 
     await runAsyncBootstrapPhase(
       logger,
@@ -113,7 +119,7 @@ describe('runAsyncBootstrapPhase', () => {
       TEST_PHASE,
       TEST_APP_ID,
       () => Promise.resolve('ok'),
-      { withSpan, withSpanSync },
+      { withSpan, withSpanSync: passThroughWithSpanSync },
     );
 
     const expectedAsyncAttrs: unknown = expect.objectContaining({
@@ -137,7 +143,6 @@ describe('runBootstrapPhase', () => {
       readonly name: string;
       readonly attributes?: Record<string, unknown>;
     }[] = [];
-    const withSpan: HttpObservability['withSpan'] = async ({ run }) => await run(noopSpanHandle);
     const withSpanSync: HttpObservability['withSpanSync'] = ({ name, attributes, run }) => {
       spanCalls.push({ name, attributes });
       return run(noopSpanHandle);
@@ -149,7 +154,7 @@ describe('runBootstrapPhase', () => {
       'setupBaseMiddleware',
       TEST_APP_ID,
       () => 'done',
-      { withSpan, withSpanSync },
+      { withSpan: passThroughWithSpan, withSpanSync },
     );
 
     expect(result).toBe('done');

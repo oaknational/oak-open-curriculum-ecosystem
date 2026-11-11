@@ -16,6 +16,9 @@ const JSON_MEDIA_TYPE_PRIORITY = [
   'text/json',
 ] as const;
 
+/** A response as a path item may hold it: inline, by reference, or absent. */
+type ResponseCandidate = ResponseObject | ReferenceObject | undefined;
+
 function isReferenceObject(value: unknown): value is ReferenceObject {
   return Boolean(value && typeof value === 'object' && '$ref' in value);
 }
@@ -61,7 +64,7 @@ export function createSchemaResolver(schema: OpenAPIObject): (ref: string) => Sc
 
 function resolveResponseObject(
   schema: OpenAPIObject,
-  candidate: ResponseObject | ReferenceObject | undefined,
+  candidate: ResponseCandidate,
 ): ResponseObject | undefined {
   if (!candidate) {
     return undefined;
@@ -76,8 +79,7 @@ function resolveResponseObject(
   if (!candidate.$ref.startsWith('#/components/responses/')) {
     throw new Error(`Unsupported response reference: ${candidate.$ref}`);
   }
-  const responses: Record<string, ResponseObject | ReferenceObject | undefined> =
-    components.responses;
+  const responses: Record<string, ResponseCandidate> = components.responses;
   const key = candidate.$ref.slice('#/components/responses/'.length);
   const resolved = responses[key];
   if (!resolved) {
@@ -125,12 +127,9 @@ export function resolveResponseSchemaForOperation(
     return undefined;
   }
 
-  const responses: Record<string, ResponseObject | ReferenceObject | undefined> =
-    operation.responses;
+  const responses: Record<string, ResponseCandidate> = operation.responses;
 
-  const lookupSchema = (
-    entry: ResponseObject | ReferenceObject | undefined,
-  ): SchemaObject | undefined => {
+  const lookupSchema = (entry: ResponseCandidate): SchemaObject | undefined => {
     const resolvedResponse = resolveResponseObject(schema, entry);
     if (!resolvedResponse) {
       return undefined;

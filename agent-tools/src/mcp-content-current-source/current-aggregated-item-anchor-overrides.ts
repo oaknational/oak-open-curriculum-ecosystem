@@ -1,9 +1,10 @@
 /**
- * Reviewed anchors for aggregated-tool, app, and widget items whose baseline
- * fragments were intentionally modified on latest main: MCP-300 rewrote the
- * aggregated descriptions and added `annotations.title` to every tool, and
- * the widget/app surfaces evolved alongside. Anchor strings are verbatim
- * from the current sources.
+ * Reviewed anchors for aggregated-tool items whose baseline fragments were
+ * intentionally modified on latest main: MCP-300 rewrote the aggregated
+ * descriptions and added `annotations.title` to every tool. The app and
+ * widget items that evolved alongside are in
+ * `current-app-item-anchor-overrides.ts`. Anchor strings are verbatim from
+ * the current sources.
  */
 
 const SDK_MCP = 'packages/sdks/oak-curriculum-sdk/src/mcp';
@@ -16,16 +17,14 @@ const FETCH_EXECUTION = `${SDK_MCP}/aggregated-fetch/execution.ts`;
 const ASSET_DOWNLOAD_DEF = `${SDK_MCP}/aggregated-asset-download/definition.ts`;
 const CURRICULUM_MODEL_DEF = `${SDK_MCP}/aggregated-curriculum-model/definition.ts`;
 const KEYWORD_GRAPH = `${SDK_MCP}/aggregated-keyword-graph.ts`;
-const APP_ROOT = 'apps/oak-curriculum-mcp-streamable-http';
-const UNDER_THE_HOOD = `${APP_ROOT}/src/oak-under-the-hood/oak-under-the-hood-tool.ts`;
-const AUTH_ROUTES = `${APP_ROOT}/src/auth-routes.ts`;
-const WIDGET_APP = `${APP_ROOT}/widget/src/App.tsx`;
-const BRAND_BANNER = `${APP_ROOT}/widget/src/BrandBanner.tsx`;
 const AGENT_SUPPORT_METADATA = `${SDK_MCP}/agent-support-tool-metadata.ts`;
 const ORIENTATION_GUIDANCE = 'packages/sdks/oak-curriculum-sdk/src/mcp/orientation-guidance.ts';
 const UNIVERSAL_EXECUTOR = 'packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/executor.ts';
 const TOOL_DESCRIPTION_PARTS =
   'packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/tool-description.ts';
+const EXPLORE_EXECUTION = `${SDK_MCP}/aggregated-explore/execution.ts`;
+const GENERATE_MARKDOWN_DOCS =
+  'packages/sdks/oak-sdk-codegen/code-generation/generate-markdown-docs.ts';
 
 export const CURRENT_AGGREGATED_ITEM_ANCHOR_OVERRIDES = {
   C001: {
@@ -159,78 +158,27 @@ export const CURRENT_AGGREGATED_ITEM_ANCHOR_OVERRIDES = {
   C231: {
     [KEYWORD_GRAPH]: ['title: KEYWORD_GRAPH_TOOL_TITLE,'],
   },
-  // MCP-353: the resource_link title occurrence retired with the pointer;
-  // the tool title anchors on its shared declaration.
-  C372: {
-    [UNDER_THE_HOOD]: ["const OAK_UNDER_THE_HOOD_TOOL_TITLE = 'Oak: Under the Hood';"],
-  },
-  // MCP-353: openWorldHint flipped false — the result is served entirely from
-  // the deployed artefact (§2.F cure).
-  C374: {
-    [UNDER_THE_HOOD]: ['openWorldHint: false,\n        title: OAK_UNDER_THE_HOOD_TOOL_TITLE,'],
-  },
-  // MCP-353: the summary reworded from fetch-the-linked-method to
-  // served-in-full (the baked shape).
-  C376: {
-    [UNDER_THE_HOOD]: [
-      "'Oak: Under the Hood — the orientation method for this repository (the Oak Open Curriculum '",
-    ],
-  },
-  C385: {
-    [WIDGET_APP]: ['<h1 className="visually-hidden">Oak National Academy Curriculum</h1>'],
-  },
-  // MCP-368: the visible brand text and the separate new-tab hint merged
-  // into ONE visually hidden node (the wordmark is the link's only visible
-  // content). C391 (the brand name) and C392 (the hint) both live in that
-  // merged node now; each keeps its own row.
-  C391: {
-    [BRAND_BANNER]: [
-      '<span className="visually-hidden">Oak National Academy (opens in a new tab)</span>',
-    ],
-  },
-  C392: {
-    [BRAND_BANNER]: [
-      '<span className="visually-hidden">Oak National Academy (opens in a new tab)</span>',
-    ],
-  },
-  // MCP-368: the acorn became the wide wordmark (design-system asset,
-  // injected inner geometry); the anchor pins the JSX root that owns the
-  // a11y and theming contract.
-  C393: {
-    [BRAND_BANNER]: [
-      '<svg\n      aria-hidden="true"\n      focusable="false"\n      viewBox={WORDMARK_VIEWBOX}\n      className="oak-brand-banner__logo"\n      dangerouslySetInnerHTML={wordmarkGeometry}\n    />',
-    ],
-  },
   C463: {
     [TOOL_DESCRIPTION_PARTS]: [
       'export const TOOL_DESCRIPTION_ADDITIONS: ReadonlyMap<string, string> = new Map([',
     ],
   },
-  C705: {
-    [AUTH_ROUTES]: ['const servePrm: RequestHandler = (req, res) => {'],
-  },
-  C717: {
-    [WIDGET_APP]: [
-      'This service is experimental. It uses Oak National Academy content, but AI can make',
+  /**
+   * Two error-message items whose baseline fragments spanned a `catch` clause.
+   * The 2026-11-01 lint pass renamed every catch parameter to `error`, so the
+   * baseline fragment no longer occurs in the source while the served wording
+   * is unchanged; these anchors are the content-bearing lines themselves.
+   */
+  C111: {
+    [EXPLORE_EXECUTION]: [
+      "error: `${scopeName} search failed: ${result.error?.message ?? 'unknown error'}`,",
+      'return { ok: false, error: `${scopeName} search error: ${message}` };',
     ],
   },
-  // MCP-411: the metadataRateLimiter middleware left with the in-code
-  // limiter (ADR-219); the registration lines anchor on their handlers alone.
-  C707: {
-    [AUTH_ROUTES]: ["app.get('/.well-known/oauth-protected-resource', servePrm);"],
-  },
-  C708: {
-    [AUTH_ROUTES]: ["app.get('/.well-known/mcp-stub-mode', (_req, res) => {"],
-  },
-  // MCP-351: the published PRM resource now composes the shared
-  // MCP_RESOURCE_PATH constant, so it cannot diverge from the RFC 8707
-  // expected audience.
-  // MCP-655: `authorization_servers` names the upstream authorization
-  // server's issuer instead of this origin, so a PRM-following client holds
-  // the issuer the authorization response's `iss` carries (RFC 9207 §2.4).
-  C706: {
-    [AUTH_ROUTES]: [
-      'resource: `${selfOrigin}${MCP_RESOURCE_PATH}`,\n      authorization_servers: [upstreamMetadata.issuer],\n      scopes_supported: SCOPES_SUPPORTED,',
+  C426: {
+    [GENERATE_MARKDOWN_DOCS]: [
+      'function formatZodIssues(issues: ZodIssueType[]): string {',
+      String.raw`throw new Error('TypeDoc JSON validation failed:\n' + formatZodIssues(error.issues), {`,
     ],
   },
 } as const;

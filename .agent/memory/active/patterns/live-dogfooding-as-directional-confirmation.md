@@ -3,6 +3,7 @@ name: "Live Dogfooding as Directional Confirmation"
 polarity: pattern
 use_this_when: "While building a capability, the team hits — in real time — exactly the gap or friction that capability exists to cure, and the impulse is to read the friction as a setback."
 category: agent
+layer: general
 proven_in: "v2 large-corpus-analysis kept candidate C41 (2026-06-30), with repeated live instances: the team-tooling session built liveness tools while suffering liveness gaps (F-75's manual check performed by hand during F-75's construction); a context-measurement CLI used on its own author mid-build to time a handover; the corpus pipeline discovering the very dogfooding pattern it exemplifies."
 proven_date: 2026-06-30
 barrier:

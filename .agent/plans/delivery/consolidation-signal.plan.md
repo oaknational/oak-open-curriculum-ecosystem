@@ -3,10 +3,10 @@ id: consolidation-signal
 node_type: delivery
 name: "The consolidation signal — a noticer, never a nag"
 overview: "Unprocessed-mass and oldest-item-age per capture surface, projected where sessions already look; the DUE mark becomes computed."
-status: sketch
-ratified_by: null
-ratified_date: null
-ratified_where: null
+status: ratified
+ratified_by: Jim Cresswell (owner)
+ratified_date: 2026-09-08
+ratified_where: "PR #85 (2026-09-08), whose body quotes the owner's card answer verbatim: 'Ratify 2, 3 and 4; hold 1'"
 serves: planning-and-intent-estate
 impact_areas:
   - practice-and-estate
@@ -15,7 +15,7 @@ depends_on:
   - plan: consolidation-ledger
     kind: blocking
 owner_gates: []
-last_updated: 2026-07-31
+last_updated: 2026-09-08
 ---
 
 # The consolidation signal — a noticer, never a nag

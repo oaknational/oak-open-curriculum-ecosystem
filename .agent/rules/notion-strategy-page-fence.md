@@ -1,3 +1,8 @@
+---
+classification: core
+description: The owner-held Notion strategy page is strictly read-only and never enters version control. Three fence layers bind — mechanical (validate-notion-fence blocks workspace hosts + hashed page ID), construction (strategy material enters only via owner-added documents), human (CODEOWNERS review).
+---
+
 # Notion strategy-page fence
 
 The owner-held Notion strategy page is the stakeholder-facing strategy

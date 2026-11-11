@@ -5,4 +5,4 @@ description: Structured workflow for merging significantly diverged branches. Us
 
 # Complex Merge (Cross-tool)
 
-Read and follow `.agent/skills/complex-merge/SKILL-CANONICAL.md`.
+Read and follow `.agent/skills/change-custody/complex-merge/SKILL-CANONICAL.md`.

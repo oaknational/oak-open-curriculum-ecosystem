@@ -185,3 +185,10 @@ Consequences for this plan's remaining scope:
 
 Sequencing note update: PR #911 remains the dependency for todo 1's
 drift-instrument proof reading only; the removal no longer waits on it.
+
+Release class of the removal, ruled on PR #950 (owner word, 2026-09-02): a review finding
+asked for the release-major footer on the removal of the two changelog tools; it was declined
+with written rationale and the landing released as a patch. Grounds: the surface was dead
+before the change — both upstream endpoints answered 404 — and the generated SDK had no
+published consumers of those operations, so no consumer-visible contract changed. The
+rejection and its rationale stand on the PR thread.

@@ -12,7 +12,7 @@ export function assertUtcTimestampNotFuture(input: {
     throw new Error(`${input.label} must be UTC ISO 8601 with trailing Z`);
   }
   if (Number.isNaN(Date.parse(input.value))) {
-    throw new Error(`${input.label} must be a valid UTC timestamp`);
+    throw new TypeError(`${input.label} must be a valid UTC timestamp`);
   }
   if (Date.parse(input.value) > Date.parse(input.nowIso)) {
     throw new Error(`${input.label} must not be in the future`);

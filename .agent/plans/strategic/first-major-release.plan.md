@@ -20,7 +20,7 @@ gate_expiry_default: P3D
 depends_on: []
 owner_gates: []
 tickets: []
-last_updated: 2026-09-01
+last_updated: 2026-10-02
 ---
 
 # First major release — Oak distribution-ready in AI assistants
@@ -149,6 +149,13 @@ onto this node — one line each, pointers never duplicates.
   (1.29.0) implements RFC 8414 path-inserted AS discovery. Fallback if
   a named client fails: the PR #551 shape as opened. Authoritative
   record: MCP-344 comment (2026-07-29).
+- 2026-07-25 — PostHog scope, the owner's card answer to the sitting
+  Director (recorded in that day's Director handover; entered here
+  2026-10-01), verbatim: "We discuss it now, it does not block the current
+  work, we define what we need for initial release, we define what we need
+  after, and we explicitly and permanently acknowledge that we can iterate
+  over time." The day-0 visibility ruling below fixes what initial release
+  needs; this word keeps the scope after release open to iteration.
 - 2026-07-29 — PostHog scope narrowing NEVER owner-agreed (owner word,
   verbatim: "I never agreed to Posthog scope being narrowed, I was
   explicit, we need visibility of analytics events from day 0"). The

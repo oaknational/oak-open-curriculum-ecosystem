@@ -9,7 +9,7 @@ todos:
     content: Method captured in the design report (single home until proven); no separate reference doc yet
     status: completed
   - id: run-discovery-napkins
-    content: "DONE (2026-06-29, Wren stirs Rainbow). First Discovery pass ran over 100 files / 14 token-balanced windows. Substance: research/.../napkin-discovery-pass-1-2026-06-29.md; metadata: curator-passes/2026-06-29-wren-napkin-discovery-pass.md."
+    content: "DONE (2026-06-29, Wren stirs Rainbow). First Discovery pass ran over 100 files / 14 token-balanced windows. Substance and run record: .agent/research/agentic-engineering/continuity-memory-and-knowledge-flow/napkin-discovery-pass-1-2026-06-29.md."
     status: completed
   - id: calibrate-and-assess
     content: "DONE. Verdict refine-and-rerun: machinery sound, apophenia gate functioning (9/19 killed, all principled), but recall below threshold (corrected 0.28 strict / 0.56 lenient — the run's self-reported 0.72 was a meta-arithmetic defect caught first-hand). Misses all out-of-remit single-window defects."
@@ -79,7 +79,7 @@ promotion; one that fails has told us so before any doctrine was minted.
    in the prior syntheses only as a 2026-05-29 processing-exclusion note, never as a
    kept validated pattern). The v1 run enumerated **18** discrete baselines (4 / 9 / 5),
    above the original "~16" floor. Record the recall discount; confirm every reported
-   pattern is grounded and survived the null. (DONE for v1; see the curator-pass.)
+   pattern is grounded and survived the null. (DONE for v1; see the discovery-pass record named in run-discovery-napkins.)
 4. **Refine** — fold first-run lessons (window size, leaf schema, critic depth)
    back into the method section.
 5. **Graduate or decide** — if proven, graduate the method to a reference runbook
@@ -101,7 +101,7 @@ promotion; one that fails has told us so before any doctrine was minted.
   machinery drops.
 - Every reported pattern survived the apophenia gate (grounded, beat base rate,
   survived the null, visible in raw entries).
-- A dated run-record exists in operational memory (curator-passes shape).
+- A dated run record exists under `.agent/research/` (the discovery-pass record's shape).
 - The graduate-or-decide outcome is recorded with evidence.
 
 ## Prerequisites

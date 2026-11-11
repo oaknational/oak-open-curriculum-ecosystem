@@ -134,7 +134,7 @@ afterAll(async () => {
 
 /** The shared harness server's bound address; throws when not live. */
 export function harnessAddress(): AddressInfo {
-  if (sharedServer === null || !sharedServer.listening) {
+  if (!sharedServer?.listening) {
     throw new Error(
       'loopback-request harness error (MCP-403): shared server is not live for this file.',
     );
@@ -152,7 +152,7 @@ export function harnessAddress(): AddressInfo {
  * every chained `.get/.post/...` call works unchanged.
  */
 export function request(app: AppHandler): ReturnType<typeof supertest> {
-  if (sharedServer === null || !sharedServer.listening) {
+  if (!sharedServer?.listening) {
     throw new Error(
       'loopback-request harness error (MCP-403): shared server is not live for this file. ' +
         'The helper requires per-file worker isolation (the vitest default); do not run with ' +

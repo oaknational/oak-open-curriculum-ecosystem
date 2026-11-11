@@ -1,3 +1,5 @@
+import { join } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import { defaultPrivateKeyPath, loadMergeBotRepoConfig } from './repo-config.js';
@@ -5,7 +7,7 @@ import { defaultPrivateKeyPath, loadMergeBotRepoConfig } from './repo-config.js'
 const VALID = JSON.stringify({
   appSlug: 'jimbot-oakington-iii',
   appId: '4352989',
-  repo: 'oaknational/oak-open-curriculum-ecosystem',
+  repo: 'acme/widgets',
 });
 
 describe('loadMergeBotRepoConfig', () => {
@@ -23,10 +25,12 @@ describe('loadMergeBotRepoConfig', () => {
       value: {
         appSlug: 'jimbot-oakington-iii',
         appId: '4352989',
-        repo: 'oaknational/oak-open-curriculum-ecosystem',
+        repo: 'acme/widgets',
       },
     });
-    expect(paths).toEqual(['/repo/.github/merge-bot.json']);
+    // The product reads a host-joined path; the expectation derives the same
+    // host form so the assertion holds on every platform.
+    expect(paths).toEqual([join('/repo', '.github', 'merge-bot.json')]);
   });
 
   it('rejects unknown keys, malformed slugs, and non-numeric ids (strict boundary)', () => {
@@ -44,7 +48,7 @@ describe('loadMergeBotRepoConfig', () => {
     }
   });
 
-  it('names the config path when unreadable and rejects invalid JSON', () => {
+  it('names the config path and the template to copy when unreadable, and rejects invalid JSON', () => {
     const missing = loadMergeBotRepoConfig({
       repoRoot: '/repo',
       readFileImpl: () => {
@@ -53,7 +57,9 @@ describe('loadMergeBotRepoConfig', () => {
     });
     expect(missing.ok).toBe(false);
     if (!missing.ok) {
-      expect(missing.error.message).toContain('.github/merge-bot.json');
+      expect(missing.error.message).toContain(join('.github', 'merge-bot.json'));
+      expect(missing.error.message).toContain(join('.github', 'merge-bot.json.example'));
+      expect(missing.error.message).toContain('ENOENT');
     }
 
     const invalid = loadMergeBotRepoConfig({ repoRoot: '/repo', readFileImpl: () => '{nope' });
@@ -64,7 +70,7 @@ describe('loadMergeBotRepoConfig', () => {
 describe('defaultPrivateKeyPath', () => {
   it('derives ~/.config/<appSlug>/private-key.pem', () => {
     expect(defaultPrivateKeyPath({ home: '/test-home', appSlug: 'jimbot-oakington-iii' })).toBe(
-      '/test-home/.config/jimbot-oakington-iii/private-key.pem',
+      join('/test-home', '.config', 'jimbot-oakington-iii', 'private-key.pem'),
     );
   });
 });

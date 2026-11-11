@@ -3,6 +3,10 @@ import { describe, expect, it } from 'vitest';
 import { oldestLiveItemAgeDays, parseLeadingIsoDate } from './dwell.js';
 import { parseRegisterItems } from './item-count.js';
 
+/** A register item with the given captured date and status, in the register's own markdown. */
+const datedItem = (captured: string, status: string): string =>
+  `- **t**\n  \`[captured: ${captured} | source: s | target: r | trigger: t | size: S | status: ${status}]\``;
+
 describe('parseLeadingIsoDate', () => {
   it('parses a plain ISO date', () => {
     expect(parseLeadingIsoDate('2026-06-16')).toBe('2026-06-16');
@@ -24,12 +28,10 @@ describe('parseLeadingIsoDate', () => {
 
 describe('oldestLiveItemAgeDays', () => {
   const NOW = new Date('2026-06-16T00:00:00Z');
-  const DATED = (captured: string, status: string): string =>
-    `- **t**\n  \`[captured: ${captured} | source: s | target: r | trigger: t | size: S | status: ${status}]\``;
 
   it('returns the greatest age across live items (injected now, never a clock)', () => {
     const items = parseRegisterItems(
-      [DATED('2026-06-14', 'pending'), DATED('2026-06-06', 'overdue')].join('\n\n'),
+      [datedItem('2026-06-14', 'pending'), datedItem('2026-06-06', 'overdue')].join('\n\n'),
     );
     // 2026-06-06 is 10 days before 2026-06-16.
     expect(oldestLiveItemAgeDays(items, NOW)).toBe(10);
@@ -37,13 +39,15 @@ describe('oldestLiveItemAgeDays', () => {
 
   it('ignores terminal items — dwell is a property of undecided debt', () => {
     const items = parseRegisterItems(
-      [DATED('2026-01-01', 'graduated'), DATED('2026-06-14', 'pending')].join('\n\n'),
+      [datedItem('2026-01-01', 'graduated'), datedItem('2026-06-14', 'pending')].join('\n\n'),
     );
     // The ancient entry is graduated (terminal); only the 2-day pending item counts.
     expect(oldestLiveItemAgeDays(items, NOW)).toBe(2);
   });
 
   it('returns null when no live item carries a parseable date', () => {
-    expect(oldestLiveItemAgeDays(parseRegisterItems(DATED('undated', 'pending')), NOW)).toBeNull();
+    expect(
+      oldestLiveItemAgeDays(parseRegisterItems(datedItem('undated', 'pending')), NOW),
+    ).toBeNull();
   });
 });

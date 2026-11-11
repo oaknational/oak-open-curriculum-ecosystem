@@ -15,7 +15,7 @@ import {
 // frame splits "q quit" with escape codes in a colour terminal and not in a plain one. Assert on the
 // VISIBLE text (what a user reads) rather than the colour encoding (an ambient-env implementation
 // detail): strip the escape sequences first so the proof is deterministic across environments.
-const ansiPattern = new RegExp(String.raw`${String.fromCharCode(27)}\[[0-9;]*m`, 'g');
+const ansiPattern = new RegExp(String.raw`${String.fromCodePoint(27)}\[[0-9;]*m`, 'g');
 const visibleText = (frame: string | undefined): string =>
   (frame ?? '').replaceAll(ansiPattern, '');
 

@@ -20,8 +20,8 @@ import { oakPlugin } from '../plugin.js';
  * `require-observability-emission` is registered here (rule available)
  * but not activated in the recommended rule set. Per ADR-162 Phase 5
  * acceptance, each `apps/*` and `packages/sdks/*` workspace enables the
- * rule at `warn` in its own flat config. Preset-level activation is
- * deliberately avoided so the rule never fires outside its intended scope.
+ * rule in its own flat config. Preset-level activation is deliberately
+ * avoided so the rule never fires outside its intended scope.
  */
 /**
  * Restricted types shared between recommended and strict configs.
@@ -55,15 +55,12 @@ const recommendedBase: TSESLint.FlatConfig.ConfigArray = defineConfig(
   ...tseslint.configs.stylistic,
   importX.flatConfigs.recommended,
   importX.flatConfigs.typescript,
-  // Full `sonarjs.configs.recommended` activation is tracked by the
-  // sonarjs-activation-and-sonarcloud-backlog plan in
-  // .agent/plans/architecture-and-infrastructure/current/ — flip the
-  // entry below to `sonarjs.configs.recommended` when the plan is in its
-  // GREEN phase. Until then, keep only the Quality-Gate remediation rules
-  // active so local lint mirrors the current Sonar blocker surface without
-  // importing the whole recommended preset. Sonar S7778 maps to
-  // unicorn/prefer-single-call; enable that one rule without adopting the
-  // full Unicorn preset.
+  // The analyser rules below are enabled one by one, each tagged with the
+  // Sonar key it mirrors, rather than through `sonarjs.configs.recommended`,
+  // so every active rule is one the resting branch is held at zero on. The
+  // dispositions are recorded in docs/governance/sonar-disposition-policy.md.
+  // Sonar S7778 maps to unicorn/prefer-single-call; enable that one rule
+  // without adopting the full Unicorn preset.
   {
     plugins: { sonarjs, unicorn },
     rules: {
@@ -80,13 +77,6 @@ const recommendedBase: TSESLint.FlatConfig.ConfigArray = defineConfig(
       // in the same work-item; do not defer). The new-rules-start-warn carve-out
       // applies only to a violation surface that needs a separate migration lane
       // (e.g. no-throw-statement); this is not that. Each maps to a Sonar rule.
-      // Two related classes are deliberately NOT locked here and are handled
-      // per-site in a later tranche: S6594 (prefer-regexp-exec is a
-      // @typescript-eslint rule overlapping generated output, not a clean
-      // autofix) and S7765 (prefer-includes force-converts the ADR-153
-      // `value is X` type-guard `.some((id) => id === value)` idiom to a
-      // type-unsound `.includes(value)` where the argument is wider than the
-      // element type — incompatible with the house type-guard pattern).
       'unicorn/prefer-string-replace-all': 'error', // S7781
       'unicorn/prefer-string-raw': 'error', // S7780
       'unicorn/prefer-number-properties': 'error', // S7773
@@ -95,20 +85,60 @@ const recommendedBase: TSESLint.FlatConfig.ConfigArray = defineConfig(
       'unicorn/prefer-node-protocol': 'error', // S7772
       'unicorn/prefer-global-this': 'error', // S7764
 
-      // Potentials
+      // Every remaining analyser rule with an open finding on the resting
+      // branch (the analyser's issue list for this checkout's project,
+      // read 2026-11-01) and a lint twin in the installed plugins, locked at
+      // `error` so each class is refused at commit time once cured. The
+      // twins were read from eslint-plugin-sonarjs 4.2.0 (rule docs carry
+      // the Sonar key), eslint-plugin-unicorn 73 and typescript-eslint.
+      // Security and reliability:
+      'sonarjs/super-linear-regex': 'error', // S8786
+      'sonarjs/pseudo-random': 'error', // S2245
+      'sonarjs/hashing': 'error', // S4790
+      'sonarjs/updated-loop-counter': 'error', // S2310
+      'sonarjs/no-all-duplicated-branches': 'error', // S3923
+      'sonarjs/no-clear-text-protocols': 'error', // S5332
+      'sonarjs/no-misleading-array-reverse': 'error', // S4043
+      'unicorn/no-object-as-default-parameter': 'error', // S7737
+      // Maintainability, autofixable:
+      'unicorn/prefer-export-from': 'error', // S7763
+      'unicorn/prefer-includes': 'error', // S7765
+      'sonarjs/concise-regex': 'error', // S6353
+      'sonarjs/prefer-regexp-exec': 'error', // S6594
+      'unicorn/catch-error-name': 'error', // S7718
+      'unicorn/prefer-set-has': 'error', // S7776
+      '@typescript-eslint/prefer-optional-chain': 'error', // S6582
+      'unicorn/prefer-type-error': 'error', // S7786
+      'sonarjs/no-redundant-optional': 'error', // S4782
+      'unicorn/no-useless-spread': 'error', // S7747
+      'unicorn/prefer-string-starts-ends-with': 'error', // S6557
+      'sonarjs/no-inverted-boolean-check': 'error', // S1940
+      'no-unneeded-ternary': ['error', { defaultAssignment: false }], // S6644 (ESLint core rule)
+      'unicorn/no-useless-promise-resolve-reject': 'error', // S7746
+      'unicorn/prefer-array-find': 'error', // S7750
+      'unicorn/no-useless-fallback-in-spread': 'error', // S7744
+      'unicorn/prefer-native-coercion-functions': 'error', // S7770
+      // Maintainability, cured by hand:
+      'sonarjs/no-nested-template-literals': 'error', // S4624
+      'unicorn/prefer-top-level-await': 'error', // S7785
+      'sonarjs/redundant-type-aliases': 'error', // S6564
+      'sonarjs/use-type-alias': 'error', // S4323
+      'sonarjs/no-nested-conditional': 'error', // S3358
+      '@typescript-eslint/max-params': ['error', { max: 7 }], // S107
+      'sonarjs/todo-tag': 'error', // S1135
+      'sonarjs/class-name': 'error', // S101
+      'sonarjs/no-identical-functions': 'error', // S4144
+      'sonarjs/no-selector-parameter': 'error', // S2301
+      'sonarjs/regex-complexity': 'error', // S5843
+      'sonarjs/prefer-specific-assertions': 'error', // S5906
+      '@typescript-eslint/prefer-nullish-coalescing': 'error', // S6606
+      '@typescript-eslint/no-base-to-string': 'error', // S6551
+      '@typescript-eslint/no-redundant-type-constituents': 'error', // S6571
+      'unicorn/consistent-function-scoping': 'error', // S7721
+      'unicorn/prefer-code-point': 'error', // S7758
+      // S6845 and S6822 (jsx-a11y classes) have no twin in the estate.
+
       'unicorn/no-abusive-eslint-disable': 'error',
-      // 'unicorn/error-message': 'warn',
-      // 'unicorn/throw-new-error': 'warn',
-      // 'unicorn/no-new-buffer': 'warn',
-      // 'unicorn/custom-error-definition': 'warn',
-      // 'unicorn/explicit-length-check': 'warn',
-      // 'unicorn/consistent-function-scoping': 'warn',
-      // 'unicorn/no-anonymous-default-export': 'warn',
-      // 'unicorn/prefer-string-starts-ends-with': 'warn',
-      // 'unicorn/prefer-includes': 'warn',
-      // 'unicorn/prefer-array-find': 'warn',
-      // 'unicorn/prefer-array-some': 'warn',
-      // 'unicorn/no-array-method-this-argument': 'warn',
     },
   },
   prettierConfig,
@@ -197,99 +227,40 @@ const oakRecommendedConfig: TSESLint.FlatConfig.Config = {
   },
   rules: {
     '@oaknational/no-eslint-disable': 'error',
+    '@oaknational/no-conditional-tests': 'error',
     '@oaknational/no-dynamic-import': 'error',
     // Architectural boundary: application code must not READ the `.agent/`
     // knowledge substrate at runtime (fs reads / `new URL` into `.agent/`).
     // agent-tools/ (the substrate operator) is exempt inside the rule. The
     // companion IMPORT boundary is enforced by the depcruise
-    // `no-import-from-agent-substrate` forbidden rule. Wired at `warn` per the
-    // new-ESLint-rule convention (the existing-violation surface is empty —
-    // the gap-ledger reader was deleted — so escalation to `error` is a
-    // separate, immediately-safe decision). Doctrine: owner 2026-06-22,
-    // .agent/directives/testing-strategy.md.
-    '@oaknational/no-agent-substrate-access': 'warn',
-    // New rule (2026-06-14): bans `throw` in favour of the Result pattern
-    // (ADR-088 / use-result-pattern). Wired at `warn` first per the
-    // no-warning-toleration §"Scope and exceptions" rule-authoring nuance — the
-    // existing-throw surface (notably workspaces that predate Result adoption
-    // here, such as agent-tools) is captured at `warn` while the throw→Result
-    // retrofit lane migrates it and the false-positive profile (test files,
-    // sanctioned boundary throws) is designed. PROMOTION POINT TO `error`: the
-    // completion of that retrofit lane, at which point the no-warning-toleration
-    // zero-warning regime applies unchanged. This rule must NOT be used to claim
-    // green quality gates until promotion.
-    '@oaknational/no-throw-statement': 'warn',
-    // Severity is `warn` during the rule's development phase per the general
-    // principle that new ESLint rules wire at `warn` first to avoid blocking
-    // unrelated work in the monorepo while the rule is iterated and the
-    // existing-violation surface is captured. Escalation to `error` (and the
-    // no-warning-toleration regime) is a separate, deliberate decision once
-    // the rule is stable and every existing violation is either on the frozen
-    // allowlist or migrated away.
-    //
-    // The `allowlistPathShapes` entries below are a frozen historical-violation
-    // inventory captured at the moment this rule went live. The structural
-    // defaults (`**/test-helpers/**`, `**/test-fakes/**`,
+    // `no-import-from-agent-substrate` forbidden rule. Strict (PDR-126): the
+    // rule's violation surface measured empty across every lint workspace on
+    // 2026-09-25, so it sits at `error` with nothing behind it. Doctrine: owner
+    // 2026-06-22, .agent/directives/testing-strategy.md.
+    '@oaknational/no-agent-substrate-access': 'error',
+    // Bans `throw` in favour of the Result pattern (ADR-088 /
+    // use-result-pattern). The owner's ruling of 2026-09-08 on the rule's
+    // warning surface (sixteen workspaces held throw debt when this landed):
+    // "Turn the rule off for now, we can't fix it without creating
+    // incredible churn, so that needs to wait until the Engraph fork is merged
+    // back into the upstream. However, in any workspace with no current
+    // warnings and in any new workspace, leave it on as an error." So the
+    // preset says `error`, every workspace that holds throw debt turns the rule
+    // `off` in its own flat config citing this ruling, and there is no warn
+    // tier (PDR-126). The migration lane (the no-throw-remediation plan under
+    // .agent/plans-backlog-2026-07/) waits for the merge-back.
+    '@oaknational/no-throw-statement': 'error',
+    // At `error` with no allowlist, as every gate is (principles.md §Code
+    // Quality: no warning toleration, never disable checks, fix things). The
+    // structural exemptions (`**/test-helpers/**`, `**/test-fakes/**`,
     // `**/vitest.*.config.ts`, `**/vitest.setup.ts`) are hardcoded inside the
-    // rule and are not removable through this option.
-    //
-    // Per `.agent/rules/never-disable-checks.md`, per-file `eslint-disable`
-    // comments to bypass this rule are FORBIDDEN. Allowlist-ADD discipline:
-    // any PR adding a path here must cite either an entry in the §IO Inventory
-    // historical record carried by the originating capture commit, or a named
-    // follow-up plan whose closure removes the entry. Allowlist removals
-    // (migrating a path off the allowlist) require no citation — they are the
-    // intended end state.
-    '@oaknational/no-real-io-in-tests': [
-      'warn',
-      {
-        allowlistPathShapes: [
-          // Recorded reason: plan `plan-corpus-refounding` — the freeze/verify
-          // discrimination proofs (F1 D8) mutate genuine frozen artefacts on
-          // mkdtemp temp trees; a fake fs would make the mutation proofs
-          // theatre. The refounding module retires with the run (F1 §5), and
-          // that plan's closure removes these entries.
-          '**/agent-tools/src/refounding/refound-freeze.integration.test.ts',
-          '**/agent-tools/src/refounding/refound-verify-freeze.integration.test.ts',
-          '**/agent-tools/src/refounding/refound-inventory.integration.test.ts',
-          '**/agent-tools/src/refounding/refound-residue.integration.test.ts',
-          '**/agent-tools/src/refounding/refound-sweep.integration.test.ts',
-          '**/agent-tools/src/refounding/refound-plant-orphan.integration.test.ts',
-          '**/agent-tools/src/refounding/refound-plant-challenge-canary.integration.test.ts',
-          '**/agent-tools/src/refounding/refound-merge-recheck.integration.test.ts',
-          '**/agent-tools/src/refounding/refound-tile.integration.test.ts',
-          '**/agent-tools/src/refounding/refound-default-ledger.integration.test.ts',
-          '**/agent-tools/src/refounding/refound-claim-census.integration.test.ts',
-          '**/agent-tools/src/refounding/refound-batch-status.integration.test.ts',
-          '**/agent-tools/src/refounding/refound-window-sample.integration.test.ts',
-          // Recorded reason: plan `plan-corpus-refounding` — the read/write
-          // path-resolver containment proofs need real symlinks and real
-          // existence probes (a fake fs would make the symlink-escape and
-          // ENOENT-refusal proofs theatre); same closure as the entries above.
-          '**/agent-tools/src/refounding/refound-path-resolve.integration.test.ts',
-          '**/agent-tools/tests/codex-project-agents.integration.test.ts',
-          '**/agent-tools/tests/codex-reviewer-resolve.integration.test.ts',
-          '**/agent-tools/tests/collaboration-state/collaboration-state.unit.test.ts',
-          '**/agent-tools/tests/runtime-agent-index.integration.test.ts',
-          '**/apps/oak-curriculum-mcp-streamable-http/e2e-tests/vercel-ignore-runtime.e2e.test.ts',
-          '**/apps/oak-search-cli/src/lib/indexing/field-readback-audit-parse-ledger.integration.test.ts',
-          '**/packages/core/build-metadata/tests/git-sha.unit.test.ts',
-          '**/packages/core/env/tests/root-package-version.unit.test.ts',
-          '**/packages/core/observability/src/no-node-only-imports.unit.test.ts',
-          '**/packages/libs/env-resolution/tests/app-root.integration.test.ts',
-          '**/packages/libs/env-resolution/tests/repo-root.integration.test.ts',
-          '**/packages/libs/env-resolution/tests/resolve-env.integration.test.ts',
-          '**/packages/sdks/oak-sdk-codegen/code-generation/codegen-core-file-operations.integration.test.ts',
-          '**/packages/sdks/oak-sdk-codegen/code-generation/copy-json-assets.integration.test.ts',
-          '**/packages/sdks/oak-sdk-codegen/code-generation/schema-cache.integration.test.ts',
-          '**/packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/upstream-param-description-overrides.unit.test.ts',
-          '**/packages/sdks/oak-sdk-codegen/code-generation/typegen/routing/validate-canonical-urls.integration.test.ts',
-          '**/packages/sdks/oak-sdk-codegen/e2e-tests/scripts/codegen-core.e2e.test.ts',
-          '**/packages/sdks/oak-sdk-codegen/src/bulk/generators/synonym-miner.integration.test.ts',
-          '**/packages/sdks/oak-sdk-codegen/src/bulk/generators/write-json-dataset.integration.test.ts',
-        ],
-      },
-    ],
+    // rule, and the rule stops at the in-process tiers: an E2E check
+    // (`*.e2e.test.ts`) is an out-of-process test whose IO is its nature
+    // (testing-strategy.md §Out-of-process checks). Per
+    // `.agent/rules/never-disable-checks.md`, per-file `eslint-disable`
+    // comments to bypass this rule are FORBIDDEN; an in-process test that does
+    // real IO takes an injected port and a fake.
+    '@oaknational/no-real-io-in-tests': 'error',
   },
 };
 

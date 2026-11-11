@@ -1,6 +1,6 @@
 # ADR-179: Transport-Agnostic Graph Substrate — Surfacing Is A Consumer-Side Concern
 
-**Status**: Accepted 2026-05-11 (Sparking Charring Ash session, owner
+**Status**: Accepted 2026-05-11, amended 2026-09-06 (Sparking Charring Ash session, owner
 final-approval; extracted from ADR-173 per owner direction during the
 reviewer cycle).
 **Date**: 2026-05-11
@@ -170,3 +170,14 @@ positioning (e.g., a future event-bus substrate), this ADR may be
 generalised into a substrate-transport-discipline ADR rather than a
 graph-specific one. The current scope is the graph substrate; do
 not pre-generalise.
+
+## Amendment: Repository-local tooling is not a transport surface (2026-09-06)
+
+The substrate discipline above governs what a graph substrate workspace ships and exports.
+Repository-local development tooling under a substrate workspace's `scripts/` directory,
+excluded from the workspace's published files and from its build output, ships nothing and
+is therefore not a transport surface: it may parse its own arguments, write to the process
+streams and touch the filesystem, provided it composes only the workspace's exported
+functions and holds to the same import boundaries as the workspace's source. A substrate
+that wants to publish a command, or to expose a transport type or factory, still extracts
+a consumer adapter workspace, exactly as the at-most-one-home-per-transport rule says.

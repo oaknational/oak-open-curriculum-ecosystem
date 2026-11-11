@@ -12,10 +12,11 @@ import { vendorBoundaryRules } from '../rules/boundary.js';
  * vitest test-shape immune surface (PDR-044 § Memetic Immune System,
  * principles.md § Architectural Excellence Over Expediency,
  * principles.md § Code Quality "no skipped tests"). The
- * `vitest/no-disabled-tests` and `vitest/no-focused-tests` rules at
- * `'error'` severity prevent reintroduction of `it.skip`,
- * `describe.skip`, `it.only`, `describe.only`, and adjacent
- * skipping/focusing mechanisms after the binary deletion of those
+ * `vitest/no-disabled-tests`, `vitest/no-focused-tests` and
+ * `vitest/warn-todo` rules at `'error'` severity prevent reintroduction
+ * of `it.skip`, `describe.skip`, `it.only`, `describe.only`, `it.todo` and
+ * adjacent skipping/focusing/deferring mechanisms after the binary
+ * deletion of those
  * patterns recorded in the plan
  * `agentic-engineering-enhancements/current/doctrine-enforcement-quick-wins.plan.md`
  * (§Issue 1). The behaviour is exercised by `strict.unit.test.ts`.
@@ -50,6 +51,7 @@ const strictExtensions: TSESLint.FlatConfig.ConfigArray = defineConfig(
       ...vendorBoundaryRules,
       'vitest/no-disabled-tests': 'error',
       'vitest/no-focused-tests': 'error',
+      'vitest/warn-todo': 'error',
       '@typescript-eslint/ban-ts-comment': [
         'error',
         {

@@ -1,3 +1,8 @@
+---
+classification: core
+description: Validate ignored or excluded estates with commands that actually include them.
+---
+
 # Validate the Full Target Estate
 
 Operationalises [PDR-020 (Check-Driven Development)](../practice-core/decision-records/PDR-020-check-driven-development.md),

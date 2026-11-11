@@ -160,8 +160,8 @@ SCOPE BOUNDARY: this clause binds local substrates only. The
 inter-practice WIRE is governed by PDR-125 §Version-family
 compatibility, which requires backward and forward tolerance across
 minor versions on that boundary — the two contracts coexist because
-they bind different surfaces. Separately, ADR-186 pre-commits any
-stricter validation of the comms `event_type` VALUE space to its own
+they bind different surfaces. Separately, the host repository's comms-event
+heartbeat lifecycle decision pre-commits any stricter validation of the comms `event_type` VALUE space to its own
 ADR; this clause governs schema VERSIONS, not enum tolerance.
 (Ruled by the owner 2026-08-01, in-session, standing; enacted in
 tooling via the named-constant and latest-only-contract changes of
@@ -269,8 +269,9 @@ The owner's standing ruling ("we support only the latest schema
 version, no significant backwards-compatibility effort, replace old
 with new") gains its durable doctrine home here because this PDR owns
 the substrate contracts the ruling binds. The amendment also corrects
-a phantom citation: five downstream records (ADR-182, ADR-186,
-ADR-220, PDR-063, PDR-066) cited a "PDR-049 + PDR-050
+a phantom citation: five downstream records (PDR-063, PDR-066 and the host repository's decisions on
+the mid-cycle handoff record substrate, the comms-event heartbeat lifecycle and the
+comms-event threading edge) cited a "PDR-049 + PDR-050
 additive-extension discipline" that neither record ever stated; those
 citations are re-pointed to this clause in the same pass.
 Falsifiability: a live local-substrate flow that legitimately must

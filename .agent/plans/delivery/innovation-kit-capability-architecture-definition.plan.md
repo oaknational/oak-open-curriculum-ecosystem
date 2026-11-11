@@ -5,29 +5,30 @@ name: Innovation Kit product-creation-system definition
 overview: >-
   Make the full intellectual lineage and proposed product-creation system durable, navigable and
   reviewable before any implementation proof or provider selection narrows the concept.
-status: sketch
-ratified_by: null
-ratified_date: null
-ratified_where: null
+status: ratified
+ratified_by: Jim Cresswell (owner)
+ratified_date: 2026-09-08
+ratified_where: "PR #95 (2026-09-08), whose body quotes the owner's card answer verbatim: 'ratify it, we can always iterate later if we need to'"
 serves: innovation-kit
 impact_areas:
   - innovation-kit
 tickets: []
 depends_on: []
-owner_gates:
-  - awaiting: owner-decision
-    clears_when: >-
-      The owner reviews the proposed definition corpus and records acceptance or amendment of its
-      foundational thesis, authority boundary, product-creation-system model and documentation
-      responsibilities. This gate does not require selecting an implementation proof or provider.
-      Owner word 2026-08-31: this review runs jointly with the semantic-search-showcase Stage-0
-      review — one owner moment covers the definition and the first concrete instantiation of its
-      record interfaces.
-    expires: 2026-09-20
-last_updated: 2026-08-31
+owner_gates: []
+last_updated: 2026-09-08
 ---
 
 # Innovation Kit product-creation-system definition
+
+## OCE programme connection — 10 October 2026
+
+The existing outcome and ratification remain. `oce-framework-lifecycle-contracts`
+serves the Innovation Kit strategy and supplies one bounded composition/elevation
+profile to this architecture work. The
+[OCE programme](../../reports/repo-architecture/oce-rearchitecting/README.md)
+connects its retained mechanisms to CF, layered integrity and published instances.
+It does not reduce this programme to current MCP/search apps or move domain
+authority into the Kit. No team measurement is commissioned by that connection.
 
 ## Goal
 
@@ -51,9 +52,9 @@ same date. The definition's value is offered, not need-proven (the innovation cl
   reviewed definition of what the Kit is, what it provides, and where authority boundaries
   sit — composition without archaeology, and gaps routed to their legitimate owners
   instead of absorbed locally.
-- **The owner**: a durable, reviewable statement of the product-creation system to accept
-  or amend at the joint gate — governance grip on the Kit's shape before implementation
-  narrows it.
+- **The owner**: a durable, reviewable statement of the product-creation system, accepted
+  at the 2026-09-08 ratification and amended by its own review from here — governance grip
+  on the Kit's shape before implementation narrows it.
 - **Future Kit stewards**: the conserved lineage — why the Kit exists and which claims
   would falsify its model — so later curation amends deliberately rather than rediscovers.
 
@@ -120,15 +121,16 @@ by accident.
 8. **The current lane selects no implementation.** The plan and corpus do not select a framework,
    package topology, provider, first proof or horizontal platform. Proof: **repo-safe** for the
    explicit boundaries and absence of a selected implementation; **owner-held** for any later
-   decision to ratify the definition or authorise a separate proposition-led implementation plan.
+   decision to authorise a separate proposition-led implementation plan (the definition itself
+   was ratified on 2026-09-08).
 
 ## Todos
 
 1. Reconcile substantive owner or competent-authority amendments into the single-responsibility
    definition homes, keeping evidence and examples separate from rules.
-2. When the definition is accepted or amended, promote any genuinely ratified architecture or
-   Practice decisions to their legitimate canonical surfaces; leave this research corpus as the
-   evidence and conceptual source.
+2. The definition being ratified (2026-09-08), promote any genuinely ratified architecture or
+   Practice decisions to their legitimate canonical surfaces as they are picked up; leave this
+   research corpus as the evidence and conceptual source.
 3. Author a separate born-sketch delivery plan only if the owner later selects a proposition-led
    implementation or discriminating proof. That plan must consume the definition and derive its
    capabilities from the proposition rather than from the current gap list.
@@ -144,3 +146,10 @@ by accident.
 - Ratifying the Innovation Kit strategy, strategic node, ADR or PDR through this plan.
 - Preserving the deconstruction as runnable code; its retained value is analysis, examples,
   methods, difficult cases and evidence limits.
+
+## Amendment (2026-09-08, owner-ruled)
+
+Ratified at the owner's card answer of 2026-09-08, verbatim: "ratify it, we can always iterate
+later if we need to". The owner-gate row is removed as discharged. The 2026-08-31 note that this
+review runs jointly with the semantic-search-showcase Stage-0 review is superseded: the showcase
+review is renewed separately on its own node.

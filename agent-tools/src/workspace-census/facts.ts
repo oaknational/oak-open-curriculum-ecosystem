@@ -1,5 +1,5 @@
 /**
- * Detector-fact assembly (census todo 2). Facts are MECHANICAL
+ * Detector-fact assembly (the census node's second unit). Facts are MECHANICAL
  * observations banked per subject — manifest summaries, consumer
  * topology at workspace grain (manifest-declared internal dependencies
  * AND the depcruise source-level graph), the turbo task graph,

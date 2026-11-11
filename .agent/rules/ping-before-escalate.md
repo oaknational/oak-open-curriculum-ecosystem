@@ -1,3 +1,9 @@
+---
+classification: situational
+description: "Before broadcasting that a peer agent is retired, offline, or unresponsive in a team session: cross-check three surfaces — recent git commits by the agent, commit-queue entries in active-claims.json, their directed-comms inbox — then send a direct liveness ping with a bounded four-minute deadline; broadcast only after it expires unanswered. Applies when the PDR-078 silence threshold makes the broadcast permissible; not inside its exemption windows, which already suppress it. Failure shape: a false-positive retirement broadcast about an actively committing peer, firing claim auto-rebalance."
+trigger: session:team
+---
+
 # Ping Before Escalate
 
 Before broadcasting a retirement-detection event about another
@@ -38,11 +44,11 @@ retirement broadcast and direct-ping them instead.
    Active commit work is the strongest counter-signal to a
    retirement hypothesis — an agent landing commits within the
    silence window is unambiguously alive.
-2. **Commit-queue entries**: read
-   `.agent/state/collaboration/active-claims.json`'s `commit_queue`
-   for entries authored by the suspected-silent agent within the
-   silence window. An unexpired queued intent means the agent was
-   actively staging when last seen.
+2. **Commit-queue intents**: list the machine-local advisory commit
+   queue (`pnpm agent-tools:commit-queue -- list`) for intents
+   authored by the suspected-silent agent within the silence window.
+   An unexpired queued intent means the agent was actively staging
+   when last seen.
 3. **Directed-comms inbox**: scan recent comms events for
    directed messages addressed to the agent inside the silence
    window. If they have an unread directed message, route through
@@ -58,6 +64,13 @@ with subject *"Liveness check: are you still active?"*) and wait
 for a response with a short bounded deadline (≤4 minutes — one
 heartbeat cycle). The retirement broadcast lands only after the
 ping deadline expires with no response.
+
+When the seat that routes is the silent one, the next reader is the owner. Send one notice by
+the owner-audience lane the channels contract names (Slack via the Watcher, the
+`talk-to-slack-watcher` skill), never left on an agent-facing surface: a plain statement of
+the state, not a question. A report left in the
+terminal waited nine hours to be read while a ready pull request sat behind a held slot
+(2026-09-27).
 
 ## Worked Instance
 
@@ -91,8 +104,8 @@ the agent who owns the retirement-detection decision.
   — the substrate this rule defends. The 10-minute threshold and
   retirement-on-silence rule live there; this rule names the
   pre-broadcast cross-check discipline.
-- [ADR-186 (comms-event heartbeat lifecycle substrate)](../../docs/architecture/architectural-decisions/186-comms-event-heartbeat-lifecycle-substrate.md)
-  — the repo-bound phenotype that operationalises PDR-078.
+- The `agent-tools` comms-event heartbeat substrate — the repo-bound
+  phenotype that operationalises PDR-078.
 - [`use-built-agent-tools-cli`](use-built-agent-tools-cli.md) —
   governs the CLI surfaces the cross-check uses
   (`comms direct`, `claims show`, and equivalents).

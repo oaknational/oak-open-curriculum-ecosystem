@@ -3,6 +3,7 @@ name: LLM Fleet Task Design — Workers Point, Dispatcher Copies; Pilot Before D
 polarity: pattern
 use_this_when: Designing a fleet/workflow task whose workers must produce verbatim-anchored output verified against pinned bytes, or whose judgment procedure sits behind an existing canary/ground-truth key
 category: agent
+layer: general
 proven_in: .agent/memory/active/archive/napkin-2026-07-20.md (2026-07-15 reader-sample batch; 2026-07-16 canary pilot + 18-agent re-assessment)
 proven_date: 2026-07-16
 barrier:

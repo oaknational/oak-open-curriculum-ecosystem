@@ -3,14 +3,22 @@ import { describe, expect, it } from 'vitest';
 import { formatDecisionDebtSection, type DecisionDebtReading } from './decision-debt-report.js';
 import type { DecisionDebtResult } from './decision-debt.js';
 
+/** A decision-debt result of `count` entries, every one pending unless a breakdown is given. */
 const result = (
   count: number,
   zone: DecisionDebtResult['zone'],
-  byStatus: DecisionDebtResult['byStatus'] = { pending: count, due: 0, overdue: 0 },
+  byStatus?: DecisionDebtResult['byStatus'],
   findings: DecisionDebtResult['findings'] = [],
   oldestDwellDays: DecisionDebtResult['oldestDwellDays'] = null,
   dwellZone: DecisionDebtResult['dwellZone'] = null,
-): DecisionDebtResult => ({ count, byStatus, zone, findings, oldestDwellDays, dwellZone });
+): DecisionDebtResult => ({
+  count,
+  byStatus: byStatus ?? { pending: count, due: 0, overdue: 0 },
+  zone,
+  findings,
+  oldestDwellDays,
+  dwellZone,
+});
 
 const reading = (
   filename: string,

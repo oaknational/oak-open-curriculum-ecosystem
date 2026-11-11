@@ -3,6 +3,7 @@ related_pdr: PDR-012
 name: "Non-Leading Reviewer Prompts"
 polarity: pattern
 category: agent
+layer: general
 status: proven
 discovered: 2026-04-17
 proven_in: "Sentry maximisation pivot — two reviewer rounds on related questions produced qualitatively different finding surfaces: leading prompts narrowed findings; non-leading prompts widened them"

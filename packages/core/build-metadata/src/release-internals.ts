@@ -25,17 +25,9 @@ import {
   type ReleaseInput,
   type ResolvedRelease,
 } from './release-types.js';
+import { trimToUndefined } from './trim-to-undefined.js';
 
 const SHORT_SHA_LENGTH = 7;
-
-function trimToUndefined(value: string | undefined): string | undefined {
-  const trimmed = value?.trim();
-  if (!trimmed) {
-    return undefined;
-  }
-
-  return trimmed;
-}
 
 /**
  * Derive the effective deployment environment for release naming.

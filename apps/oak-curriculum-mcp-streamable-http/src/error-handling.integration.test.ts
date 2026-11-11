@@ -35,7 +35,7 @@ function requireStringField(context: Record<string, unknown>, field: string): st
   const value = context[field];
 
   if (typeof value !== 'string') {
-    throw new Error(`Expected "${field}" to be a string`);
+    throw new TypeError(`Expected "${field}" to be a string`);
   }
 
   return value;
@@ -45,7 +45,7 @@ function requireNumberField(context: Record<string, unknown>, field: string): nu
   const value = context[field];
 
   if (typeof value !== 'number') {
-    throw new Error(`Expected "${field}" to be a number`);
+    throw new TypeError(`Expected "${field}" to be a number`);
   }
 
   return value;

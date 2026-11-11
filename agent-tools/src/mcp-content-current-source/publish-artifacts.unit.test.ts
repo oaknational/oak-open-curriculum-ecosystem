@@ -15,11 +15,11 @@ function failingSecondReplacement(): {
   let stageCount = 0;
   let replacementCount = 0;
   const fileSystem: ArtifactPublicationFileSystem = {
-    readText: async (filePath) => Promise.resolve(contents.get(filePath) ?? null),
+    readText: async (filePath) => contents.get(filePath) ?? null,
     stageText: async (filePath, content) => {
       const stagedPath = `${filePath}.stage-${String(++stageCount)}`;
       contents.set(stagedPath, content);
-      return Promise.resolve(stagedPath);
+      return stagedPath;
     },
     replace: async (stagedPath, targetPath) => {
       replacementCount += 1;
@@ -31,7 +31,7 @@ function failingSecondReplacement(): {
     },
     remove: async (filePath) => {
       contents.delete(filePath);
-      return Promise.resolve();
+      return;
     },
   };
   return { contents, fileSystem };

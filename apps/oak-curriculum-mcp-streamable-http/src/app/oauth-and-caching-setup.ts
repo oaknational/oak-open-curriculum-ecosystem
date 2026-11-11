@@ -18,25 +18,52 @@ export type { FetchFn } from './upstream-metadata-fetch.js';
 export { fetchUpstreamMetadata } from './upstream-metadata-fetch.js';
 
 /**
- * Creates middleware that adds no-cache headers to error responses.
+ * The bootstrap context the OAuth-and-caching phase runs in: the app under
+ * construction, its runtime config and bootstrap instrumentation, and the
+ * auth inputs the OAuth surfaces are registered with.
+ */
+export interface OAuthAndCachingSetupOptions {
+  readonly app: Express;
+  readonly runtimeConfig: RuntimeConfig;
+  readonly log: Logger;
+  readonly bootstrapTimer: PhasedTimer;
+  readonly appCounter: number;
+  readonly allowedHosts: readonly string[];
+  readonly observability: HttpObservability;
+  /**
+   * Upstream authorization-server metadata supplied by a test (ADR-078). When
+   * present it bypasses the live Clerk fetch and the RFC 8414 Section 3.3
+   * issuer check, so a production caller leaves it undefined and routes
+   * through `fetchUpstreamMetadata`, where the check applies (MCP-655).
+   */
+  readonly injectedMetadata?: UpstreamAuthServerMetadata;
+  readonly canonicalOrigin?: string;
+}
+
+/** The upstream authorization server the OAuth routes proxy to. */
+interface ResolvedUpstream {
+  readonly upstreamBaseUrl: string;
+  readonly upstreamMetadata: UpstreamAuthServerMetadata;
+}
+
+/**
+ * Adds no-cache headers to error responses.
  *
  * This prevents Vercel and other CDNs from caching error responses (4xx, 5xx)
  * which can block proper diagnosis of authentication and application issues.
  */
-function createNoCacheErrorMiddleware(): RequestHandler {
-  return (_req, res, next) => {
-    const originalStatus = res.status.bind(res);
-    res.status = function (code: number) {
-      if (code >= 400) {
-        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-        res.setHeader('Pragma', 'no-cache');
-        res.setHeader('Expires', '0');
-      }
-      return originalStatus(code);
-    };
-    next();
+const addNoCacheHeadersToErrors: RequestHandler = (_req, res, next) => {
+  const originalStatus = res.status.bind(res);
+  res.status = function (code: number) {
+    if (code >= 400) {
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
+    }
+    return originalStatus(code);
   };
-}
+  next();
+};
 
 /**
  * Resolves upstream metadata, either from injection or a live Clerk fetch.
@@ -46,13 +73,10 @@ function createNoCacheErrorMiddleware(): RequestHandler {
  * `fetchUpstreamMetadata`, where the check applies (MCP-655).
  */
 async function resolveUpstreamMetadata(
-  runtimeConfig: RuntimeConfig,
-  log: Logger,
-  bootstrapTimer: PhasedTimer,
-  appCounter: number,
-  observability: HttpObservability,
-  injectedMetadata?: UpstreamAuthServerMetadata,
-): Promise<{ upstreamBaseUrl: string; upstreamMetadata: UpstreamAuthServerMetadata }> {
+  options: OAuthAndCachingSetupOptions,
+): Promise<ResolvedUpstream> {
+  const { runtimeConfig, log, bootstrapTimer, appCounter, observability, injectedMetadata } =
+    options;
   if (injectedMetadata) {
     return { upstreamBaseUrl: injectedMetadata.issuer, upstreamMetadata: injectedMetadata };
   }
@@ -99,24 +123,16 @@ async function resolveUpstreamMetadata(
 }
 
 /**
- * Sets up OAuth metadata endpoints, proxy routes, and error caching prevention.
- *
- * Phase 2.5: Registers PUBLIC OAuth metadata endpoints and proxy routes
- *   BEFORE clerkMiddleware.
- * Phase 2.6: Adds no-cache headers to error responses (4xx/5xx only).
+ * Registers the PUBLIC OAuth metadata endpoints and the proxy routes against
+ * the resolved upstream, BEFORE clerkMiddleware (phase 2.5).
  */
 function registerOAuthRoutes(
-  app: Express,
-  runtimeConfig: RuntimeConfig,
-  log: Logger,
-  bootstrapTimer: PhasedTimer,
-  appCounter: number,
-  allowedHosts: readonly string[],
-  observability: HttpObservability,
-  upstreamBaseUrl: string,
-  upstreamMetadata: UpstreamAuthServerMetadata,
-  canonicalOrigin?: string,
+  options: OAuthAndCachingSetupOptions,
+  upstream: ResolvedUpstream,
 ): void {
+  const { app, runtimeConfig, log, bootstrapTimer, appCounter, allowedHosts } = options;
+  const { observability, canonicalOrigin } = options;
+  const { upstreamBaseUrl, upstreamMetadata } = upstream;
   runBootstrapPhase(
     log,
     bootstrapTimer,
@@ -154,20 +170,15 @@ function registerOAuthRoutes(
 
 /**
  * Sets up OAuth metadata endpoints, proxy routes, and error caching prevention.
+ *
+ * Phase 2.5: Registers PUBLIC OAuth metadata endpoints and proxy routes
+ *   BEFORE clerkMiddleware.
+ * Phase 2.6: Adds no-cache headers to error responses (4xx/5xx only).
  */
 // observability-emission-exempt: orchestration wrapper; concrete emissions live
 // in runBootstrapPhase/runAsyncBootstrapPhase and the nested route setup.
-export async function setupOAuthAndCaching(
-  app: Express,
-  runtimeConfig: RuntimeConfig,
-  log: Logger,
-  bootstrapTimer: PhasedTimer,
-  appCounter: number,
-  allowedHosts: readonly string[],
-  observability: HttpObservability,
-  injectedMetadata: UpstreamAuthServerMetadata | undefined,
-  canonicalOrigin?: string,
-): Promise<void> {
+export async function setupOAuthAndCaching(options: OAuthAndCachingSetupOptions): Promise<void> {
+  const { app, runtimeConfig, log, bootstrapTimer, appCounter, observability } = options;
   // Public in every auth mode: the challenge proves domain control to the
   // OpenAI plugin-submission portal and is not an OAuth surface (MCP-700).
   registerOpenAiDomainVerificationChallenge(app, log);
@@ -178,26 +189,7 @@ export async function setupOAuthAndCaching(
   registerRobotsTxt(app, log);
 
   if (!runtimeConfig.dangerouslyDisableAuth) {
-    const { upstreamBaseUrl, upstreamMetadata } = await resolveUpstreamMetadata(
-      runtimeConfig,
-      log,
-      bootstrapTimer,
-      appCounter,
-      observability,
-      injectedMetadata,
-    );
-    registerOAuthRoutes(
-      app,
-      runtimeConfig,
-      log,
-      bootstrapTimer,
-      appCounter,
-      allowedHosts,
-      observability,
-      upstreamBaseUrl,
-      upstreamMetadata,
-      canonicalOrigin,
-    );
+    registerOAuthRoutes(options, await resolveUpstreamMetadata(options));
   }
 
   runBootstrapPhase(
@@ -206,7 +198,7 @@ export async function setupOAuthAndCaching(
     'addNoCacheToErrors',
     appCounter,
     () => {
-      app.use(createNoCacheErrorMiddleware());
+      app.use(addNoCacheHeadersToErrors);
     },
     observability,
   );

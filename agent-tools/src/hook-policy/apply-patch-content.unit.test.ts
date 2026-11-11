@@ -117,7 +117,12 @@ describe('parseApplyPatchContent', () => {
 
     expect(unwrap(parseApplyPatchContent(patch))).toStrictEqual([
       { newContent: 'added line', priorContent: '', filePath: '/repo/added.md' },
-      { newContent: 'moved line', priorContent: 'old line', filePath: '/repo/moved.md' },
+      {
+        newContent: 'moved line',
+        priorContent: 'old line',
+        filePath: '/repo/moved.md',
+        movedFromPath: '/repo/old.md',
+      },
       { newContent: '', priorContent: '', filePath: '/repo/deleted.md' },
     ]);
   });

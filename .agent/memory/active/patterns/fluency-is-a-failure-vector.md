@@ -3,7 +3,8 @@ name: "Fluency Is a Failure Vector"
 polarity: anti-pattern
 use_this_when: "A move, justification, or framing arrives smoothly — a local convention obvious to match, an owner statement that seems to license a shortcut, an 'of course X' framing, or a claim that simply feels true."
 category: process
-proven_in: "Recurs across the experience and napkin corpus from 2026-05-30 onward; in the 2026-06-17/18 window alone it is cited as the sibling failure mode ~13 times. Founding write-up: .agent/experience/2026-06-14-the-fluency-was-the-vector.md. Doctrine source: the metacognition directive section 'Fluency Is a Warning, Not a Confirmation'."
+layer: general
+proven_in: "Recurs across the experience and napkin corpus from 2026-05-30 onward; in the 2026-06-17/18 window alone it is cited as the sibling failure mode ~13 times. Founding write-up: OCE's experience letter of 2026-06-14, the-fluency-was-the-vector (at the pin, not imported). Doctrine source: the metacognition directive section 'Fluency Is a Warning, Not a Confirmation'."
 proven_date: 2026-06-18
 related_pdr: PDR-098
 barrier:
@@ -16,6 +17,8 @@ barrier:
 > **POLARITY: ANTI-PATTERN.** A failure mode to avoid. The name is the diagnostic: when the move arrives smoothly, recognising the shape is the first step in not repeating it. See [`README.md` § Polarity](README.md#polarity-required-every-pattern).
 
 # Fluency Is a Failure Vector
+
+Imported from OCE at pin `e477e62f7` on 2026-09-14 (practice-completion closure item 4, row 6, under todo 1's one-link precedent). The worked instances and measurements are OCE's; local divergence is recorded where it exists.
 
 The dual of friction. Friction is information you are tempted to *under*-read; fluency
 — a move or justification that arrives *smoothly* — is information you are tempted to
@@ -42,7 +45,14 @@ ever ratified? is the precondition constitutive regardless of the stated situati
 the claim true right now?* Naming this does **not** inoculate against it — a fluent move
 under context pressure overrides a passively-held lesson (the conservation reflex recurs
 even while you document it). So the cure is structural — an external check or a firing
-gate — not self-vigilance.
+gate — not self-vigilance. A review opened with "the through-line is…" has locked a
+narrative before the evidence: open it as inquiry and hunt the disconfirming case first
+(owner, 2026-06-05). Read the complete source before a diagnosis, never a subset
+(one ruleset rule type, an index line, a partial grep: two fluent wrong diagnoses in one
+session, 2026-06-26), and name the falsifier. The verification boundary is the lane
+boundary: in a briefing or handoff tag each fact verified-live, from-fixtures or inferred,
+since the two wrong facts in an "all first-hand" eight-fact briefing were the load-bearing
+ones (2026-07-02).
 
 ## The escape-hatch generative screen (general form)
 

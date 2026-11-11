@@ -1,3 +1,9 @@
+---
+classification: situational
+description: "Invoking any agent-tools CLI (agent-identity, collaboration-state, commit-queue, context-cost, and peers): bind to the built dist artefact via the pnpm agent-tools:* shortcuts, never rebuild per invocation; rebuild once after editing source, merging main, or a branch switch. Sequence CLI calls after any running check/build chain — a half-written dist kills the loader; a stale dist makes hooks fail open. A missing affordance is a friction to record, never a licence to fork. Failure shape: per-invocation rebuilds resolving one session seed to different agent names mid-conversation."
+trigger: tool:agent-tools-cli
+---
+
 # Use Only The Built Agent-Tools CLI
 
 When invoking any agent-tools CLI (`agent-identity`, `collaboration-state`,
@@ -20,11 +26,13 @@ agents that are *using* it concurrently.
   per [`agent-tools/README.md` §Unified entrypoint](../../agent-tools/README.md#unified-entrypoint).
   After editing `agent-tools` source, run `pnpm agent-tools:build` once
   before the next invocation.
-- Cache resolved identity values (`agent_name`, `session_id_prefix`) in
-  the per-platform env file at session-open and read them from env on
-  every subsequent invocation rather than re-deriving. The
-  `$CLAUDE_ENV_FILE` / `$CURSOR_ENV_FILE` mechanism already supports this;
-  the discipline is that re-derivation only happens once per session.
+- The session-open hook persists only the seed (`PRACTICE_AGENT_SESSION_ID_*`)
+  through the `$CLAUDE_ENV_FILE` / `$CURSOR_ENV_FILE` mechanism; every
+  invocation re-derives `agent_name` and `session_id_prefix` from the live
+  seed, never from a cached name (PDR-027, 2026-08-24). On a Claude Code CLI
+  seat the shell also carries the harness-native `CLAUDE_CODE_SESSION_ID`,
+  which the seed CLIs read when the env-file write did not reach the shell
+  (PDR-027, 2026-09-12); pass `--seed` only when neither is present.
 - During wordlist-, identity-, or collaboration-CLI refactors by other
   agents, identity drift will happen unless your session has bound to the
   built artefact at session start; if you observe mid-session identity
@@ -55,8 +63,15 @@ should become a permanent agent-tools command — a TypeScript command under
 `agent-tools/src/`, TDD'd, with the hard-won lesson baked in — rather than
 leaving it as a scratchpad one-off. A per-session script is a once-cure that
 gets re-derived (often re-derived wrong); the permanent command amortises
-across every future agent. The owner decides build-now vs backlog vs
-keep-scratchpad.
+across every future agent. The owner decides build-now vs backlog.
+
+The owner closed the keep-scratchpad outcome on 2026-10-03, verbatim: "if a
+script is used repeatedly it should be made into a standardised agent tool in
+the agent tools workspace". The second use is the signal: the script is named
+on the napkin with its usage line and routed to the Director for sizing and a
+ledger row; the conversion is work with criteria, sizing and value like any
+other, landing under `agent-tools/src/` with its tests through a pull request;
+the script is never extended in place.
 
 ## "Re-create X" Inherits X's Old Form
 
@@ -105,8 +120,7 @@ were running. Per-invocation rebuilds resolved the same session seed to
 different `agent_name`s mid-conversation (Twilit Beaming Aurora →
 Ashen Banking Bellows; Opalescent Eclipsing Asteroid wiped from name
 lookups entirely). The cure is structural: bind to the built artefact,
-not to the in-progress source. Source: Claude per-user memory
-`feedback_use_built_agent_tools_only`.
+not to the in-progress source.
 
 The built-artefact contract has a staleness dual — the **build/dist
 inversion** (three instances, late July 2026): validators, gates, and
@@ -130,6 +144,12 @@ before a subcommand's first use; the first well-formed invocation is the
 real one. Where a subcommand rejects `--help` (the merge-bot token mint
 does), read its source or the topic help — never invoke it to learn its
 flags.
+
+Build output has its own verb as well. A stale derived artefact that blocks a gate
+(a `.next` directory, a `dist`) is cleared with the build graph's own clean
+verb, `pnpm --filter <workspace> run clean`: never with a raw delete, and
+never by asking the owner which to use (owner's correction, 2026-08-10, as
+recorded: "you shouldn't have asked").
 
 ## Related Surfaces
 

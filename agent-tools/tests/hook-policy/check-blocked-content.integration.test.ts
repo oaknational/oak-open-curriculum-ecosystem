@@ -113,6 +113,7 @@ describe('runPreToolUseDispatch', () => {
       },
       contentPatterns: ['existing-marker'],
       readPriorContent: () => 'code with existing-marker already',
+      isInOtherRepository: () => false,
     });
 
     expect(result).toStrictEqual({ exitCode: 0 });
@@ -349,6 +350,7 @@ describe('canonical policy: SHA-in-permanent-doc regex (WS4)', () => {
         },
       },
       contentPatterns: [],
+      isInOtherRepository: () => false,
     });
 
     expect(result).toStrictEqual({ exitCode: 0 });
@@ -377,6 +379,7 @@ describe('canonical policy: SHA-in-permanent-doc regex (WS4)', () => {
       },
       stderr: { write: () => undefined },
       contentPatterns: [],
+      isInOtherRepository: () => false,
     });
 
     expect(result).toStrictEqual({ exitCode: 0 });
@@ -401,6 +404,7 @@ describe('canonical policy: SHA-in-permanent-doc regex (WS4)', () => {
       },
       stderr: { write: () => undefined },
       contentPatterns: [],
+      isInOtherRepository: () => false,
     });
 
     expect(result).toStrictEqual({ exitCode: 0 });

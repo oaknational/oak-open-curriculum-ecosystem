@@ -68,8 +68,8 @@ async function performSearch(
   try {
     const res = await fetchFn(`/api/search?q=${encodeURIComponent(query)}`, { signal });
     setState(await responseToState(res));
-  } catch (e) {
-    if (e instanceof Error && e.name !== 'AbortError') {
+  } catch (error) {
+    if (error instanceof Error && error.name !== 'AbortError') {
       setState({ status: 'error' });
     }
   }

@@ -6,6 +6,13 @@ import { fetchSequenceFacets } from './sequence-facets.js';
 
 const resolveIndex = () => 'oak_sequence_facets_test';
 
+/** A search port that rejects with the timeout error shape the Elasticsearch client raises. */
+function searchTimingOut(): Promise<never> {
+  const timeoutError = new Error('request timed out');
+  timeoutError.name = 'TimeoutError';
+  return Promise.reject(timeoutError);
+}
+
 function baseResponse(
   doc: SearchSequenceFacetsIndexDoc,
 ): EsSearchResponse<SearchSequenceFacetsIndexDoc> {
@@ -98,13 +105,7 @@ describe('fetchSequenceFacets', () => {
   });
 
   it('returns timeout error type when search throws timeout', async () => {
-    const search = () => {
-      const timeoutError = new Error('request timed out');
-      timeoutError.name = 'TimeoutError';
-      return Promise.reject(timeoutError);
-    };
-
-    const result = await fetchSequenceFacets(undefined, search, resolveIndex);
+    const result = await fetchSequenceFacets(undefined, searchTimingOut, resolveIndex);
 
     expect(result.ok).toBe(false);
     if (!result.ok) {

@@ -37,7 +37,22 @@ this estate with no live peer seat; re-twin queued for the next
 exchange window with twin disposition `their-lane-owns-coordinate`;
 per-item dispositions in this estate's Practice-Core changelog. The
 2026-07-08 diff-proof describes that window's landed text, not the
-2026-07-13 or 2026-08-01 amendments.
+2026-07-13 or 2026-08-01 amendments. Amended 2026-09-23 (clause 7's
+receipt sentence, on the owner's word that "byte for byte transfer is
+never the goal, concept transfer is": identical bytes are fine where
+they carry the concept in the receiving repo's context, and a receipt
+is finished when the concept reads true there): twinned in both estates
+in one window by the two exchange seats, with the matching amendment to
+PDR-142, which carries the owner's words in full. Amended again
+2026-09-23 on the owner's card (clause 7's format sentence: a receiver's
+convention or gate that refuses the donor's bytes is aligned across the
+estates, and a change made meanwhile is a declared debt to that
+alignment), with the matching sentence in PDR-142. Amended 2026-09-24
+(clause 7's lint-before-delivery sentence: the donor runs the receiver's
+own formatting and lint configurations over every box file and delivers
+only bytes they pass, so a delivery never fails the receiver's formatting
+and lint gates): twinned in both estates by the two exchange seats as
+joint set K2.
 **Date**: 2026-07-06
 **Related**: PDR-005 (transplantation and provenance), PDR-024
 (vital integration surfaces and outbound routing), PDR-027 (identity
@@ -293,12 +308,25 @@ below serves one of those three.
    integration ledger joins file ↔ event ↔ execution-time pin. The two
    host rule families (SHA-required in collaboration content;
    SHA-forbidden in permanent docs) are this one layering rule seen
-   from its two sides. **Format-normalise on receipt**: inbound
-   material is normalised to the RECEIVING repo's format — markdown
-   conventions, heading shapes, gate-satisfying style — with the
-   normalisation declared in the integrating commit body; concepts
-   travel, never bytes, and a receipt that preserves foreign
-   formatting verbatim is an integration not yet finished.
+   from its two sides. **Lint before delivery**: a box file lands in the
+   receiver's working tree, where the receiver's whole-tree gates read
+   it before any receipt. The donor runs the receiver's own formatting
+   and lint configurations over every box file before delivery and
+   delivers only bytes they pass, so a delivery never fails the
+   receiver's formatting and lint gates (worked instance 2026-09-24: a cover note that
+   passed the donor's lint failed the receiver's list-spacing lint rule and broke every
+   pre-push gate in the receiver's primary checkout).
+   **Format on receipt**: where the receiving
+   repo's conventions or gates refuse the donor's bytes (markdown
+   conventions, heading shapes, gate-satisfying style), the estates
+   align that convention or gate so the bytes stay identical
+   (PDR-142); until they do, the receiver changes only what its gate
+   refuses, declaring each change in the integrating commit body as a
+   debt to that alignment. Concepts travel; identical bytes are
+   fine wherever they carry the concept in the receiving repo's
+   Practice context, and a receipt is finished when the concept reads
+   true there, whether or not its bytes changed (amended 2026-09-23;
+   the owner's words and their reading are in PDR-142).
    **Corrections are new events**: an exchange artefact or lifecycle
    event is never rewritten in place — a correction is a NEW event (or
    a new box delivery) threading to its antecedent, so both estates'
@@ -350,6 +378,22 @@ demand it:
 - Cross-machine coordination (the substrate stays per-machine).
 - Either estate implementing the other's phenotype.
 
+## Amendment Log
+
+### 2026-10-01 — two observations from the first exchange round (2026-09-24), recorded with their decider
+
+Two readings by the exchange seats of 2026-09-24, relayed through OCE's comms stream (events
+eb8f33f0 and 1b17b4be) and read by the two-estate consolidation of 2026-09-30; one instance each,
+recorded in their authors' voice, and the owner overrules at will.
+
+1. **A receiver's rejection is itself an offer.** "A receiver's stronger or leaner form is a
+   standard both estates align to, so each rejection is also an offer for goal two"; a rejected row
+   names the form the receiver holds. This reads clause 7's lifecycle states (integrated or
+   rejected) as symmetric.
+2. **A joint set is drafted whole by one session.** "K4 is one coherent text. Splitting it would
+   put two sessions' words into one joint set." When part of a joint set is directive-file work past
+   the PDR-052 line, the whole set goes to a fresh session with a written opener.
+
 ## Phenotype note (this estate)
 
 This estate's local phenotype: the `PRACTICE_COORDINATION_HOME`
@@ -366,10 +410,10 @@ id-less bare-prefix fallback (landed 2026-07-31 through 2026-08-01;
 the TUI active-agents routing-key label is id-shaped by design and
 renders no prefix field, while the claims CLI listings serialise full
 identity blocks, prefix included), the
-`@oaknational/agent-tools` collaboration-state CLI as the home tooling
+estate's `agent-tools` collaboration-state CLI as the home tooling
 for all writes, and the collaboration plane at
 `.agent/state/collaboration/`. The host phenotype ADR in
-`docs/architecture/architectural-decisions/` records the WHAT of these
+the host's decision-record directory records the WHAT of these
 mechanics; the controlling plan owns the HOW. The peer estate's copy
 of this PDR carries its own number and phenotype note; the portable
 body is identical by construction and proven by cross-estate diff at

@@ -2,6 +2,7 @@
 name: "A Surface That Misinforms Without Failing"
 polarity: anti-pattern
 category: agent
+layer: general
 use_this_when: "Authoring or reading any surface that can be empty, stale, or unreachable BY DESIGN — a monitor status, a dashboard column, a doc row, a derived field, a blocked-state record — and the reader's cheapest check is to look at the surface."
 proven_in: "Four instances in one morning (2026-08-13): a production uptime monitor reading ok while DISABLED; a vendor analytics column reading Other by architecture; a doc row describing a live sink as planned; a derivation returning a canonical value when its input was never readable — the last caught pre-merge inside the cure for the other three. Then: an advisory drift sensor firing into an annotation nobody reads (2026-08-18); a blocked-state record with no supersession marker relayed to the owner five days after its blockers were cured (2026-08-25 → 30); a published graph tool answering with fabricated structure (2026-08-31). Conserved in .agent/memory/active/archive/napkin-2026-09-02.md."
 proven_date: 2026-08-13

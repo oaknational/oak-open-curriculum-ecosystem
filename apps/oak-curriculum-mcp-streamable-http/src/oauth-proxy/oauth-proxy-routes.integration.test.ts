@@ -5,6 +5,7 @@ import type { LogContextInput } from '@oaknational/logger';
 
 import { createOAuthProxyRoutes, type OAuthProxyConfig } from './oauth-proxy-routes.js';
 import type { HttpObservability } from '../observability/http-observability.js';
+import { fetchThatRejectsOnAbort } from '../test-helpers/fetch-fakes.js';
 
 /** Stub logger that satisfies the ProxyLogger interface without producing output. */
 const stubLogger = {
@@ -82,6 +83,17 @@ function createProxyApp(
   return app;
 }
 
+/** The URL a `fetch` call addressed, whichever of the three request shapes carried it. */
+function requestUrlOf(input: Parameters<typeof fetch>[0]): string {
+  if (typeof input === 'string') {
+    return input;
+  }
+  if (input instanceof URL) {
+    return input.href;
+  }
+  return input.url;
+}
+
 /**
  * Creates a fake fetch that returns a JSON response for all requests.
  * Captures the most recent request URL, method, headers, and body for assertion.
@@ -95,8 +107,7 @@ function createSimpleFakeFetch(
 } {
   const captured: { url?: string; method?: string; body?: string } = {};
   const fakeFetch: NonNullable<OAuthProxyConfig['fetch']> = async (input, init) => {
-    captured.url =
-      typeof input === 'string' ? input : input instanceof URL ? input.toString() : String(input);
+    captured.url = requestUrlOf(input);
     captured.method = init?.method;
     captured.body = typeof init?.body === 'string' ? init.body : undefined;
 
@@ -466,20 +477,7 @@ describe('upstream error passthrough', () => {
 describe('upstream timeout and unreachability', () => {
   it('returns 504 when upstream does not respond within timeout', async () => {
     const observability = createObservabilitySpy();
-    const neverResolveFetch: NonNullable<OAuthProxyConfig['fetch']> = async (...args) => {
-      const init = args[1];
-      return new Promise<Response>((...promiseArgs) => {
-        const reject = promiseArgs[1];
-        const signal = init?.signal;
-        if (signal) {
-          signal.addEventListener('abort', () => {
-            reject(new DOMException('The operation was aborted.', 'AbortError'));
-          });
-        }
-      });
-    };
-
-    const app = createProxyApp(neverResolveFetch, 100, observability);
+    const app = createProxyApp(fetchThatRejectsOnAbort, 100, observability);
 
     const res = await request(app)
       .post('/oauth/token')

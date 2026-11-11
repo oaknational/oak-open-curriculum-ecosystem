@@ -5,6 +5,7 @@ import { type Result } from '@oaknational/result';
 import { type ScopedContentBlockGroup } from '../hook-policy/types.js';
 import { loadCommsConceptGateBlocks } from './comms-concept-gate.js';
 import { filesystemLegacyCommsIo, migrateLegacyCommsDirectories } from './comms-migration.js';
+import { readCommitQueueEntries } from './commit-queue-store.js';
 import { type GitWorktree, readGitWorktrees } from './git-worktree-list.js';
 import {
   readActiveClaimsFile,
@@ -17,6 +18,7 @@ import {
 import { writeTextFileAtomically } from './transaction.js';
 import {
   type ClosedClaimsArchive,
+  type CollaborationCommitQueueEntry,
   type CollaborationRegistry,
   type CommsEvent,
   type DirectedCommsMessage,
@@ -34,6 +36,16 @@ export interface CollaborationStateCliIo {
   readonly readClosedClaimsFile: (
     closedPath: string,
   ) => Promise<Result<ClosedClaimsArchive, Error>>;
+  /**
+   * Read the live entries of the machine-local per-intent commit-queue
+   * store (expired files read as absent). The queue left the claims file at
+   * registry schema 1.4.0; commands that reason about queue state read it
+   * through this seam so tests stay hermetic.
+   */
+  readonly readCommitQueueEntries: (input: {
+    readonly queueDir: string;
+    readonly nowIso: string;
+  }) => Promise<readonly CollaborationCommitQueueEntry[]>;
   readonly writeCommsEvent: (input: {
     readonly commsDir: string;
     readonly event: CommsEvent;
@@ -82,6 +94,7 @@ export interface CollaborationStateCliIo {
 export const productionIo: CollaborationStateCliIo = {
   readActiveClaimsFile,
   readClosedClaimsFile,
+  readCommitQueueEntries,
   writeCommsEvent,
   readCommsEvents,
   readCommsEventsExcluding,

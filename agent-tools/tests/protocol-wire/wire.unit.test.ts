@@ -334,26 +334,90 @@ describe('validateWireValue against the real contract', () => {
   });
 });
 
-describe('version-family evolution (simulated newer minor)', () => {
-  function simulatedNewerMinor(): WireContract {
-    const parsed: unknown = JSON.parse(REAL_CONTRACT_TEXT);
-    if (parsed === null || typeof parsed !== 'object') {
-      throw new Error('real contract is not an object');
-    }
-    const clone: unknown = JSON.parse(JSON.stringify(parsed));
-    const doc = clone;
-    if (doc === null || typeof doc !== 'object') {
-      throw new Error('clone failed');
-    }
-    const record = doc;
-    Object.assign(record, { version: '1.1.0' });
-    const loaded = loadWireContractText(JSON.stringify(record));
-    if (!loaded.ok) {
-      throw new Error(loaded.error);
-    }
-    return loaded.value;
+/** The real contract re-versioned as a later minor of the same family. */
+function simulatedNewerMinor(): WireContract {
+  const parsed: unknown = JSON.parse(REAL_CONTRACT_TEXT);
+  if (parsed === null || typeof parsed !== 'object') {
+    throw new Error('real contract is not an object');
   }
+  const clone: unknown = JSON.parse(JSON.stringify(parsed));
+  const doc = clone;
+  if (doc === null || typeof doc !== 'object') {
+    throw new Error('clone failed');
+  }
+  const record = doc;
+  Object.assign(record, { version: '1.1.0' });
+  const loaded = loadWireContractText(JSON.stringify(record));
+  if (!loaded.ok) {
+    throw new Error(loaded.error);
+  }
+  return loaded.value;
+}
 
+/** Whether a value is a plain object (not null, not an array). */
+function isRecord(value: unknown): value is { [key: string]: unknown } {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
+/** The JSON object a text parses to; refuses any other JSON shape. */
+function parseRecord(text: string): { [key: string]: unknown } {
+  const parsed: unknown = JSON.parse(text);
+  if (!isRecord(parsed)) {
+    throw new Error('expected a JSON object');
+  }
+  return parsed;
+}
+
+/** The named `$defs` entry of a JSON Schema document. */
+function defOf(document: { [key: string]: unknown }, name: string): { [key: string]: unknown } {
+  const defs = document['$defs'];
+  if (!isRecord(defs)) {
+    throw new Error('no $defs');
+  }
+  const def = defs[name];
+  if (!isRecord(def)) {
+    throw new Error(`no $def ${name}`);
+  }
+  return def;
+}
+
+/** The `required` field names of a schema definition. */
+function requiredOf(def: { [key: string]: unknown }): readonly string[] {
+  const required = def['required'];
+  if (!Array.isArray(required)) {
+    throw new TypeError('no required array');
+  }
+  return required.filter((entry): entry is string => typeof entry === 'string');
+}
+
+/** The declared property names of a schema definition. */
+function propertyNamesOf(def: { [key: string]: unknown }): readonly string[] {
+  const properties = def['properties'];
+  if (properties === null || typeof properties !== 'object') {
+    throw new Error('no properties');
+  }
+  return Object.keys(properties);
+}
+
+/** Asserts a shared field agrees across the wire and local schemas: the one legal `$ref` pairing, or the same JSON type. */
+function expectSharedFieldCompat(name: string, wireField: unknown, localField: unknown): void {
+  if (!isRecord(wireField) || !isRecord(localField)) {
+    throw new Error(`field ${name} not an object on both sides`);
+  }
+  const wireRef = wireField['$ref'];
+  const localRef = localField['$ref'];
+  if (typeof wireRef === 'string' || typeof localRef === 'string') {
+    // The one legal $ref pairing: the wire identity ↔ the local agent_id.
+    expect(wireRef, `field ${name}: wire $ref`).toBe('#/$defs/wire_identity');
+    expect(localRef, `field ${name}: local $ref`).toBe('#/$defs/agent_id');
+    return;
+  }
+  if (typeof wireField['type'] === 'string' && typeof localField['type'] === 'string') {
+    expect(wireField['type'], `field ${name}: type drift`).toBe(localField['type']);
+  }
+}
+
+describe('version-family evolution (simulated newer minor)', () => {
   it('an older-minor minimal payload stays valid under the newer minor (backward)', () => {
     expect(
       validateWireValue(simulatedNewerMinor(), 'exchange_comms_event', minimalExchangeEvent()).ok,
@@ -369,46 +433,6 @@ describe('version-family evolution (simulated newer minor)', () => {
 
 describe('reconciliation binding: the local strict schema honours the wire contract (no second drift surface)', () => {
   const localSchemaText = JSON.stringify(localCommsEventSchema);
-
-  function isRecord(value: unknown): value is { [key: string]: unknown } {
-    return value !== null && typeof value === 'object' && !Array.isArray(value);
-  }
-
-  function parseRecord(text: string): { [key: string]: unknown } {
-    const parsed: unknown = JSON.parse(text);
-    if (!isRecord(parsed)) {
-      throw new Error('expected a JSON object');
-    }
-    return parsed;
-  }
-
-  function defOf(document: { [key: string]: unknown }, name: string): { [key: string]: unknown } {
-    const defs = document['$defs'];
-    if (!isRecord(defs)) {
-      throw new Error('no $defs');
-    }
-    const def = defs[name];
-    if (!isRecord(def)) {
-      throw new Error(`no $def ${name}`);
-    }
-    return def;
-  }
-
-  function requiredOf(def: { [key: string]: unknown }): readonly string[] {
-    const required = def['required'];
-    if (!Array.isArray(required)) {
-      throw new Error('no required array');
-    }
-    return required.filter((entry): entry is string => typeof entry === 'string');
-  }
-
-  function propertyNamesOf(def: { [key: string]: unknown }): readonly string[] {
-    const properties = def['properties'];
-    if (properties === null || typeof properties !== 'object') {
-      throw new Error('no properties');
-    }
-    return Object.keys(properties);
-  }
 
   it('required sets agree over the shared event fields (both directions)', () => {
     const wire = defOf(realContract().document, 'exchange_comms_event');
@@ -451,23 +475,6 @@ describe('reconciliation binding: the local strict schema honours the wire contr
       expect(localNames.has(name), `local agent_id does not declare wire field ${name}`).toBe(true);
     }
   });
-
-  function expectSharedFieldCompat(name: string, wireField: unknown, localField: unknown): void {
-    if (!isRecord(wireField) || !isRecord(localField)) {
-      throw new Error(`field ${name} not an object on both sides`);
-    }
-    const wireRef = wireField['$ref'];
-    const localRef = localField['$ref'];
-    if (typeof wireRef === 'string' || typeof localRef === 'string') {
-      // The one legal $ref pairing: the wire identity ↔ the local agent_id.
-      expect(wireRef, `field ${name}: wire $ref`).toBe('#/$defs/wire_identity');
-      expect(localRef, `field ${name}: local $ref`).toBe('#/$defs/agent_id');
-      return;
-    }
-    if (typeof wireField['type'] === 'string' && typeof localField['type'] === 'string') {
-      expect(wireField['type'], `field ${name}: type drift`).toBe(localField['type']);
-    }
-  }
 
   it('shared event fields agree on their JSON type or identity $ref (type drift red-gates)', () => {
     // The exchange delivery event is narrative-shaped (PDR-125 clause 7);

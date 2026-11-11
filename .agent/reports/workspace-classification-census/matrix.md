@@ -7,7 +7,7 @@ kinds per judged row) and recomputes this rendering for parity. Evidence
 pointers live in `rows.json`; detector facts in `facts.json`. Governing record:
 `.agent/plans/delivery/workspace-classification-census.plan.md`.
 
-Subjects: 43 (36 classified — 12 generic-foundation, 9 mixed, 15 oak-leaf; 7 recorded exclusions; 0 needs-construct-evidence).
+Subjects: 44 (37 classified — 12 generic-foundation, 9 mixed, 16 oak-leaf; 7 recorded exclusions; 0 needs-construct-evidence).
 
 ## Classification matrix
 
@@ -48,6 +48,7 @@ Subjects: 43 (36 classified — 12 generic-foundation, 9 mixed, 15 oak-leaf; 7 r
 | `packages/sdks/oak-sdk-codegen` | `@oaknational/sdk-codegen` | **mixed** | emitted-surfaces (runtime-emitted); names (runtime-emitted); domain-assumptions (runtime-emitted) | Extract the generic OpenAPI-to-types/Zod/MCP generation machinery when tranche 4 executes; keep the Oak schema cache and generated Oak artefacts Oak-side. | 4 | code-mit + content-ogl | 
 | `packages/sdks/oak-search-sdk` | `@oaknational/oak-search-sdk` | **oak-leaf** | none found | Keep as the Oak-leaf semantic-search SDK over Oak's index contracts and curriculum scopes. | 5 | code-mit | 
 | `plugins/oak-open-curriculum` | — | **oak-leaf** | none found | Hold as the Oak agent-platform plugin leaf (subject derived by the owner-approved manifest arm ii-b, 2026-08-14); keep skill content grounded in the live Oak API per the plugin description, never embedded curriculum snapshots. | none-assigned | code-mit + content-ogl + brand-reserved | 
+| `plugins/oak-open-curriculum-chatgpt` | — | **oak-leaf** | none found | Hold as the Oak agent-platform plugin leaf for the ChatGPT and Codex hosts, sibling of plugins/oak-open-curriculum (subject derived by the manifest arm ii-b as widened 2026-09-20 to the .codex-plugin suffix); shared skill content stays a validated copy of the sibling package, never an independent fork. | none-assigned | code-mit + content-ogl + brand-reserved | 
 | `runtime-only-scripts` | — | **generic-foundation** | names (docs-level) | Keep as the ADR-168 pre-install exception home; every script stays dependency-free Node-builtin ESM (.mjs) with a typed .d.mts sibling, and anything without the pre-install constraint moves to a TypeScript workspace. | none-assigned | code-mit | 
 
 ## Thinnest-Oak-slice dispositions (mixed rows only)
@@ -87,7 +88,7 @@ The 2026-04-28 matrix carried 20 rows. This census supersedes it; the delta is k
 - `packages/libs/logger`: generic-foundation → mixed
 - `packages/libs/search-contracts`: mixed → oak-leaf
 
-**Appeared since 2026-04-28 (25):**
+**Appeared since 2026-04-28 (26):**
 - `.`
 - `.agent`
 - `.agents`
@@ -112,6 +113,7 @@ The 2026-04-28 matrix carried 20 rows. This census supersedes it; the delta is k
 - `packages/libs/posthog-node`
 - `packages/sdks/graph-corpus-sdk`
 - `plugins/oak-open-curriculum`
+- `plugins/oak-open-curriculum-chatgpt`
 - `runtime-only-scripts`
 
 **Disappeared since 2026-04-28 (2):**

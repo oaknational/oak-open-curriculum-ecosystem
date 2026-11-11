@@ -4,7 +4,8 @@ pdr_kind: governance
 
 # PDR-052: Directive-File Context Budget
 
-**Status**: Accepted
+**Status**: Accepted (amended 2026-09-25 — a deferral waits for the
+next compaction and never stops the seat)
 **Date**: 2026-05-10
 **Related**:
 PDR-014 (`PDR-014-pattern-routing-discipline.md`) (consolidation flow —
@@ -22,7 +23,7 @@ Directive files (the canonical entry points and operative rules an
 agent reads at every session open) are deep, dense, and structurally
 load-bearing. In this Practice they live under `.agent/directives/`
 (`AGENT.md`, `principles.md`, `tdd-as-design.md`, `testing-strategy.md`,
-`schema-first-execution.md`, `orientation.md`, etc.). Other Practice-
+`orientation.md`, etc.). Other Practice-
 bearing repos have analogous surfaces under their host equivalents.
 
 A directive file edit lands at the apex of the doctrine staircase. A
@@ -48,7 +49,10 @@ always true"* — across sessions, not a session-scoped suggestion.
 **Directive-file work runs only when context usage is below 30% of
 the active session's working budget.** The threshold is a structural
 constraint, not a guideline. At or above 30%, directive-file work is
-deferred to a fresh session with a written handoff opener.
+deferred until after the next compaction, when the same session
+resumes below 30%. The deferral never stops the seat: it records the
+queued directive work and carries on with other work (PDR-063
+§Context readings never stop a seat).
 
 The rule has three operational corollaries:
 
@@ -63,9 +67,16 @@ The rule has three operational corollaries:
 2. **Threshold check at the boundary**. Immediately before directive-
    file work begins, the agent performs an explicit context-usage
    check. If at or above 30%, the agent finishes the current step,
-   writes a session-handoff opener that names the queued directive
-   work, and ends the session. The next fresh-context session resumes
-   at the directive-file step.
+   records the queued directive work in its continuity record, and
+   carries on with other work. The directive-file step runs after the
+   next compaction, in the same session, with this check repeated
+   immediately before it. A seat left with only directive edits that
+   this check holds says so: its report names the queued edit, the
+   reading, and that the edit waits for the next compaction and the
+   repeated reading below the threshold. A seat cannot compact itself,
+   so the report is the only way the hold reaches someone who can end
+   it (2026-10-02, a review cure held on an open pull request until the
+   next compaction).
 
 3. **Self-applying clause**. This PDR is itself directive-shape doctrine.
    When this PDR is edited, the same 30%-context-budget rule applies
@@ -135,17 +146,17 @@ PDR explicitly applies to its own edits.
   surrounding-frame comprehension intact, materially reducing the
   rounding-off error rate.
 - Sessions that hit the threshold without reaching directive work
-  produce a clean handoff opener rather than a degraded edit. The
-  next session inherits a precise resume point.
+  record a precise resume point rather than making a degraded edit,
+  and reach it after the next compaction.
 - The doctrine layer at the apex of the staircase ages slowly because
   it accumulates careful edits, not panicked under-pressure ones.
 
 **Costs**:
 
 - Some sessions will discover, mid-pass, that they cannot reach the
-  directive-file step. This is the rule operating correctly — the
-  cost of a clean handoff is small compared to the cost of a corrupted
-  directive.
+  directive-file step before a compaction. This is the rule operating
+  correctly — the cost of a deferral is small compared to the cost of
+  a corrupted directive.
 - Multi-step consolidation passes (e.g. consolidate-docs running all 10
   steps) need to budget context across earlier steps so that directive
   work at the end is reachable. Step-by-step accounting is a small

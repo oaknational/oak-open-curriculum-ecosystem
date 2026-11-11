@@ -3,6 +3,7 @@ name: Referent Narrowing
 polarity: anti-pattern
 use_this_when: "Constructing ANY filter, gate, predicate, monitor, or verdict that keys on an instrument's signal (an exit code, an API status, a state field, a green check); and at any decision moment resting on a SINGLE source — before acting, name what the signal actually reports on and add one independent witness"
 category: process
+layer: general
 status: emerging
 discovered: 2026-07-26
 proven_in: >-
@@ -34,13 +35,21 @@ adjacent: >-
   not what-holds) — this pattern covers LIVE instrument signals, where no
   stored text exists to blame. The estate's incident-level rules for specific
   instances: exit-codes-in-band-never-piped, verify-dont-trust,
-  read-verdicts-by-name-never-column-parse,
-  validators-must-recompute-not-just-record,
+  the read-surface-is-not-decide-surface pattern (verdicts read by name,
+  never column-parsed), validators-must-recompute-not-just-record,
   stale-capture-wins-silent-merge-reverts, the Sonar dropped-trigger cure,
   PDR-133's liveness classes.
 ---
 
+> **POLARITY: ANTI-PATTERN.** This entry names a *failure mode to avoid*,
+> not a shape to repeat.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern)
+> for the polarity discipline.
+
 # Referent Narrowing
+
+Imported from OCE at pin `e477e62f7` on 2026-09-14 (practice-completion closure item 4, row 6). The worked instances and measurements are OCE's; local divergence is recorded where it exists.
 
 An instrument answers a NARROWER question than the one you asked, truthfully,
 and says nothing about the difference. `EXIT:0` after a pipe truthfully reports

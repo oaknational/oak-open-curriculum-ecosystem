@@ -3,6 +3,7 @@ name: "A Policy/Content Hook Firing While You Author Names a Concept, Not a Toke
 polarity: pattern
 use_this_when: "A content/policy hook or commit gate fires while you author a schema, contract, doctrine, or other artefact, and you are tempted to read it as an over-match to patch away."
 category: process
+layer: general
 proven_in: "2026-06-21/22 (Cutter, Petrel) — original. Re-fired 2026-06-27 (Hawthorn rides Foliage): the SHA-in-permanent-doc hook blocked a pattern file; the cure was removing the moving-target SHA dependence (structural), not swapping a synonym to bypass — and the block message itself said so."
 proven_date: 2026-06-27
 barrier:

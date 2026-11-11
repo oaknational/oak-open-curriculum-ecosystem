@@ -20,3 +20,15 @@ queries:
 # scanned here (JavaScript/TypeScript, Python).
 paths-ignore:
   - packages/design/oak-design-system/studio-source
+
+# Exclude the missing-rate-limiting query. The estate's decision is ADR-219
+# (rate limiting is an edge concern): the two sets of edge WAFs are the
+# control, and an in-process limiter would be defence in depth only. The
+# owner ruled on 2026-09-08 that this is the ONE finding class the estate
+# keeps dismissed — by tracked analyser configuration, so it is not
+# re-dismissed by hand every few weeks — and that the class is missing rate
+# limiting on the MCP server's routes and nothing else. The order matters:
+# filters apply after the suite above.
+query-filters:
+  - exclude:
+      id: js/missing-rate-limiting

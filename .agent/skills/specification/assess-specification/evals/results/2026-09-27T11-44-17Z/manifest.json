@@ -1,0 +1,141 @@
+{
+  "schema_version": "1.2.0",
+  "started_at": "2026-09-27T11:44:17.455Z",
+  "repo_head": "ae21c5a3373f41ff292721ef838d63bd52b20e59",
+  "worktree_clean": false,
+  "agent_tools_version": "0.1.0",
+  "host_skill": "oak-assess-specification",
+  "canonical_dir": ".agent/skills/specification/assess-specification",
+  "canonical_files": [
+    {
+      "path": "SKILL-CANONICAL.md",
+      "blob": "5b88e6c66d372fbae85014bbcd23249e6c2d5ac5"
+    },
+    {
+      "path": "evals/evals.json",
+      "blob": "ecf396a76a68782cd7408339ea44e2c728d9f980"
+    },
+    {
+      "path": "evals/trigger-validation.json",
+      "blob": "165941b150c040b127cb136f151ea1e02adcefd9"
+    },
+    {
+      "path": "references/assessment-criteria.md",
+      "blob": "6aec306d9cbd98a71738ff5209323118dfbe604c"
+    }
+  ],
+  "adapter_files": [
+    {
+      "path": "SKILL.md",
+      "blob": "ec5d1c29801acd446cfa62ec7b2c9989e6099819"
+    },
+    {
+      "path": "references/assessment-criteria.md",
+      "blob": "6aec306d9cbd98a71738ff5209323118dfbe604c"
+    }
+  ],
+  "carried_skills": [
+    {
+      "host_skill": "oak-specify",
+      "canonical_dir": ".agent/skills/specification/specify",
+      "canonical_files": [
+        {
+          "path": "SKILL-CANONICAL.md",
+          "blob": "b856a77b1cff7dd97e6281254206066331ef8578"
+        },
+        {
+          "path": "evals/evals.json",
+          "blob": "3819f678e3c387e640de13b46ee27da911d260b7"
+        },
+        {
+          "path": "evals/trigger-validation.json",
+          "blob": "8ce0bab9f825f2f3afe25a586ffc1abe7448716d"
+        },
+        {
+          "path": "references/assurance.md",
+          "blob": "42dee1c0f14aee113eaa46416b737195051cb65a"
+        },
+        {
+          "path": "references/lifecycle-and-change.md",
+          "blob": "695e0d4f657b51d78e104504b0b5dd9c4d89acbc"
+        },
+        {
+          "path": "references/profiles.md",
+          "blob": "424622f504032a595a426b8d3ebc2b02d6ea4c1b"
+        },
+        {
+          "path": "references/specification-record.md",
+          "blob": "6b76fed72b846023be3345d9af5861c475e91aba"
+        }
+      ],
+      "adapter_files": [
+        {
+          "path": "SKILL.md",
+          "blob": "f36dffd8d38b094dafdfb36e412690f5acd0f6be"
+        },
+        {
+          "path": "references/assurance.md",
+          "blob": "42dee1c0f14aee113eaa46416b737195051cb65a"
+        },
+        {
+          "path": "references/lifecycle-and-change.md",
+          "blob": "695e0d4f657b51d78e104504b0b5dd9c4d89acbc"
+        },
+        {
+          "path": "references/profiles.md",
+          "blob": "424622f504032a595a426b8d3ebc2b02d6ea4c1b"
+        },
+        {
+          "path": "references/specification-record.md",
+          "blob": "6b76fed72b846023be3345d9af5861c475e91aba"
+        }
+      ]
+    }
+  ],
+  "plugin_skill_form": "the adapter's frontmatter over the canonical body, references carried beside; nothing placed in the workspace",
+  "runner": {
+    "command": "claude",
+    "model": "the runner default",
+    "judge_model": "sonnet"
+  },
+  "suites": [
+    {
+      "suite": "cases",
+      "ablation": "with-without",
+      "runs": 1,
+      "cases": [
+        "case-01"
+      ],
+      "ran": [
+        "case-01"
+      ],
+      "command": [
+        "claude",
+        "plugin",
+        "eval",
+        "<plugin>",
+        "--keep-temp",
+        "--no-publish",
+        "--trust-plugin",
+        "--threshold",
+        "0",
+        "--ablation",
+        "with-without",
+        "--runs",
+        "1",
+        "--case",
+        "case-01",
+        "--json",
+        "<plugin>/result-cases.json",
+        "--max-cost-usd",
+        "10",
+        "--judge-model",
+        "sonnet"
+      ],
+      "resultFile": "result-cases.json",
+      "costUsd": 0.1837436,
+      "claudeVersion": "2.1.283",
+      "partial": false
+    }
+  ]
+}

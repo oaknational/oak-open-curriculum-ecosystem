@@ -3,7 +3,8 @@ name: "A Compile-Time-Only Helper Has No Standalone Runtime Test — Co-Land It 
 polarity: pattern
 use_this_when: "Authoring a helper whose entire value is a compile-time guarantee (exhaustiveness, type narrowing) and TDD pressure wants a standalone unit test for it before any consumer exists."
 category: testing
-proven_in: "assertNeverResult exhaustiveness helper, @oaknational/result WS0 + graph-core term-reconstruction WS4 — 2026-06-19 (Merlin spins Cirrus)."
+layer: family
+proven_in: "assertNeverResult exhaustiveness helper, OCE's result package WS0 + graph-core term-reconstruction WS4 — 2026-06-19 (Merlin spins Cirrus)."
 proven_date: 2026-06-19
 barrier:
   broadly_applicable: true
@@ -38,7 +39,7 @@ first real consumer**, whose tests exercise the property at a genuine use site.
 
 ## Worked instance — 2026-06-19 (Merlin spins Cirrus)
 
-`assertNeverResult` (an exhaustiveness helper in `@oaknational/result`) could not
+`assertNeverResult` (an exhaustiveness helper in OCE's `result` package) could not
 get a standalone unit test: its correctness is a compile-time exhaustiveness
 guarantee, and the repo's type-assertion ban makes any runtime test type-forge.
 `type-expert` and `test-expert` both ruled: land it **atomically with** its first

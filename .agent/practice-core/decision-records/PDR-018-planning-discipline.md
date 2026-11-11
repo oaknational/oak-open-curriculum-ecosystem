@@ -24,7 +24,7 @@ aspirations).
 - **2026-07-23 amendment — lifecycle-lane realisation superseded in the source
   host (Heron lifts Summit / claude / claude-fable-5; records the owner-ratified
   estate decision of 2026-07-22 — this host's decisions register D23 — whose
-  doctrine home is host ADR-216, the plan-node estate; MCP-120 propagation
+  doctrine home is the host's plan-node estate decision; MCP-120 propagation
   sweep).** In this repository the lifecycle-lane
   realisation this PDR's placement sections describe — `future/` →
   `current/` → `active/` directories, the promotion workflow, and
@@ -37,7 +37,7 @@ aspirations).
   artefacts, readiness gates before execution — is unchanged and continues
   to bind. The lane-placement and promotion sections below remain as the
   portable pattern for hosts whose estates are lane-shaped; in this host,
-  read placement questions against ADR-216's node-type table and
+  read placement questions against the plan-node estate decision's node-type table and
   ratification gate instead.
   - **Falsifiability**: shown wrong if the node-typed estate proves unable
     to express an actionability distinction the lanes carried (queued vs in

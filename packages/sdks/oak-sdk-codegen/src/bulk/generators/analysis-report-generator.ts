@@ -7,10 +7,10 @@
  * and misconception density to inform subsequent generators.
 
  */
-import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 import type { Logger } from '@oaknational/logger';
+import type { FileSystemPort } from '../../io/file-system-port.js';
 import { typeSafeEntries } from '../../types/helpers/type-helpers.js';
 import type { ExtractedData } from '../processing.js';
 
@@ -120,7 +120,7 @@ const SYNONYM_PATTERNS = {
   alsoKnownAs: /also known as\s+(?:an?\s+)?([^,.]+)/gi,
   sometimesCalled: /sometimes called\s+(?:an?\s+)?([^,.]+)/gi,
   orPattern: /,\s+or\s+([^,.]+)/gi,
-  parenthetical: /\(([^)]+)\)/g,
+  parenthetical: /\(([^()]+)\)/g,
 } as const;
 
 /**
@@ -450,11 +450,14 @@ export function serializeAnalysisReport(report: AnalysisReport): string {
  *
  * @param report - The analysis report to write
  * @param outputDir - Directory to write the file to (reports subdirectory)
+ * @param fs - The file system to write through
+ * @param logger - Optional logger for the write event
  * @returns Path to the written file
  */
 export async function writeAnalysisReportFile(
   report: AnalysisReport,
   outputDir: string,
+  fs: FileSystemPort,
   logger?: Logger,
 ): Promise<string> {
   logger?.info('bulk.writer.write_analysis_report', {
@@ -462,14 +465,14 @@ export async function writeAnalysisReportFile(
     outputDir,
   });
   const reportsDir = join(outputDir, 'reports');
-  await mkdir(reportsDir, { recursive: true });
+  await fs.mkdir(reportsDir);
 
   const dateStr = report.generatedAt.split('T')[0];
   const fileName = `bulk-analysis-${dateStr}.md`;
   const filePath = join(reportsDir, fileName);
   const content = serializeAnalysisReport(report);
 
-  await writeFile(filePath, content, 'utf-8');
+  await fs.writeFile(filePath, content);
 
   return filePath;
 }

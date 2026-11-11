@@ -63,6 +63,11 @@ function countingRender(): {
   };
 }
 
+/** A renderer that throws on every decision, so the dispatcher's fail-closed path is reached from the render step. */
+const throwingRender: RenderPolicyDecision = () => {
+  throw new Error('renderer exploded');
+};
+
 /** Counting loadSnapshot seam serving a fully-populated synthetic snapshot. */
 function countingLoadSnapshot(): {
   readonly loadSnapshot: (policyUrl: URL) => Promise<PolicySnapshot>;
@@ -155,9 +160,6 @@ describe('dispatchPreToolUse', () => {
     const stdout = collector();
     const stderr = collector();
     const hit = countingRoute('bash', true);
-    const throwingRender: RenderPolicyDecision = () => {
-      throw new Error('renderer exploded');
-    };
 
     const result = await dispatchPreToolUse([hit.route], throwingRender, {
       stdin: stdinFromJson({ command: 'git status' }),

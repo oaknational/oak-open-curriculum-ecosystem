@@ -1,3 +1,4 @@
+import { typeSafeKeys } from '@oaknational/type-helpers';
 import { z } from 'zod';
 
 import { blockingRank, latestRunPerCheck } from './check-rollup.js';
@@ -52,6 +53,13 @@ const reviewRequestSchema = z
 const stateViewSchema = z.object({
   number: z.number(),
   url: z.string(),
+  // The pull request's author login as `gh pr view` spells it: a user's login,
+  // or `app/<slug>` for a GitHub App; a deleted account is null, read as
+  // 'unknown'. The records-class door reads it (`merge-records-checks.ts`).
+  author: z
+    .object({ login: z.string() })
+    .nullish()
+    .transform((value) => value?.login ?? 'unknown'),
   state: z.string(),
   // Drafts cannot merge via the sanctioned landing path — the verdict core
   // refuses them typed before any settlement read.
@@ -59,6 +67,7 @@ const stateViewSchema = z.object({
   mergeable: z.string(),
   mergeStateStatus: z.string(),
   headRefOid: z.string(),
+  baseRefName: z.string(),
   statusCheckRollup: z
     .array(namedRollupItemSchema)
     .nullish()
@@ -75,29 +84,21 @@ const stateViewSchema = z.object({
     .transform((value) => value ?? []),
 });
 
-/** The exact `--json` field set the `pr state` gh call requests. */
-export const PR_STATE_VIEW_JSON_FIELDS = [
-  'number',
-  'url',
-  'state',
-  'isDraft',
-  'mergeable',
-  'mergeStateStatus',
-  'headRefOid',
-  'statusCheckRollup',
-  'autoMergeRequest',
-  'reviewRequests',
-] as const;
+/** The exact `--json` field set the `pr state` gh call requests: the fields the view schema parses. */
+export const PR_STATE_VIEW_JSON_FIELDS: readonly string[] = typeSafeKeys(stateViewSchema.shape);
 
 /** The parsed `gh pr view` legs specific to `pr state`. */
 export interface ParsedStateView {
   readonly number: number;
   readonly url: string;
+  /** The author login as `gh pr view` spells it (`app/<slug>` for an App). */
+  readonly author: string;
   readonly state: string;
   readonly isDraft: boolean;
   readonly mergeable: string;
   readonly mergeStateStatus: string;
   readonly headRefOid: string;
+  readonly baseRefName: string;
   readonly checks: ChecksSummary;
   readonly namedChecks: readonly NamedCheck[];
   readonly checksGreenAt: string | null;
@@ -160,11 +161,13 @@ export function parseStateView(raw: unknown): ParsedStateView {
   return {
     number: parsed.number,
     url: parsed.url,
+    author: parsed.author,
     state: parsed.state,
     isDraft: parsed.isDraft,
     mergeable: parsed.mergeable,
     mergeStateStatus: parsed.mergeStateStatus,
     headRefOid: parsed.headRefOid,
+    baseRefName: parsed.baseRefName,
     checks,
     namedChecks,
     checksGreenAt: checksGreenAt(liveChecks, checks),
@@ -173,7 +176,8 @@ export function parseStateView(raw: unknown): ParsedStateView {
   };
 }
 
-const authorLogin = z
+/** A GraphQL author, or null for a deleted account, as a login ('unknown' when null). */
+export const authorLogin = z
   .object({ login: z.string() })
   .nullish()
   .transform((value) => value?.login ?? 'unknown');

@@ -2,6 +2,7 @@
 name: Recital Loses to Recipe Momentum
 polarity: anti-pattern
 category: process
+layer: general
 status: provisional
 discovered: 2026-04-29
 proven_in: "Experience-audit cross-session scan. ≥5 instances: 2026-04-22-the-plan-was-not-the-conversation (named explicitly as installed-rule-recited-but-not-honoured-when-plan-momentum-dominates), 2026-04-29-the-quietly-off-grid-session (\"I read the workflow, therefore I will follow it\" is a story I tell that is empirically not true), 2026-04-21-the-recursive-session (4 self-application drifts in one session despite full awareness), 2026-04-24-pippin-the-spiral-i-could-not-see (rev2/rev3 absorptions despite the reviewer-respect doctrine itself acknowledging diminishing returns), 2026-03-21-the-comfort-of-deferral (deferral feels like responsibility, is actually avoidance, all rationalisations locally true)."

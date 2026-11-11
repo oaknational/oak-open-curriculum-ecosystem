@@ -3,6 +3,7 @@ name: "Judge Usefulness From the Current Process, Never From Existence, Usage Hi
 polarity: anti-pattern
 use_this_when: "Asked whether a surface, rule, process, or artefact is useful — and reaching for usage history ('never instantiated', 'was retired'), the past decision that created it ('PDR-X defines it'), or mere existence, instead of present need."
 category: process
+layer: general
 proven_in: "tracks/ and workstreams/ retirement — 2026-06-19 owner correction (Sandpiper lifts Downdraft)."
 proven_date: 2026-06-19
 barrier:

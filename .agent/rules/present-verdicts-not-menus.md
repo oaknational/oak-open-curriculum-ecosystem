@@ -1,10 +1,13 @@
+---
+classification: core
+description: Present verdicts when analysis is complete; AskUserQuestion is reserved for genuine permission gates, owner-only decisions, and unknown-to-agent design intent. Converting completed findings into a multiple-choice form is responsibility-passback.
+---
+
 # Present Verdicts, Not Menus
 
-Operationalises the standing feedback memories
-`feedback_no_responsibility_passback` (`../../../.claude/projects/<project>/memory/feedback_no_responsibility_passback.md`)
-(origin 2026-05-09) and
-`feedback_answer_verification_questions_directly` (`../../../.claude/projects/<project>/memory/feedback_answer_verification_questions_directly.md`)
-(origin 2026-04-24), together with
+Operationalises two standing owner corrections — no responsibility
+passback (2026-05-09) and answering verification questions directly
+(2026-04-24), quoted under §Doctrinal Anchors — together with
 PDR-057 (`../practice-core/decision-records/PDR-057-empirical-answerability-pre-question-gate.md`)
 (apply-don't-ask doctrine) and
 [PDR-058](../practice-core/decision-records/PDR-058-three-tier-optionality-decomposition.md)
@@ -27,6 +30,12 @@ excellence frame leave only one defensible answer, there is no
 question to ask. State the forced verdict and the evidence that makes
 alternatives non-viable.
 
+A decided thing at risk gets a mobilisation verdict. When scope the owner has decided, or a
+deadline fixed outside the team, is at risk, the seat brings who and what unblocks it and by
+when, never the decision back as options (owner, 2026-07-29, of a target re-offered as a
+choice: "we cannot simply move an external deadline because it is inconvenient"). A decided
+thing re-offered as a question is re-litigation.
+
 ## Legitimate Uses of AskUserQuestion
 
 `AskUserQuestion` (and equivalent multi-choice surfaces) is reserved for:
@@ -40,7 +49,7 @@ alternatives non-viable.
 3. **Exploration of design intent before verdict is possible.** When the
    agent genuinely has no strong basis for a position (early planning,
    ambiguous scope, novel domain), surfacing 2–3 approaches with
-   trade-offs is the right move. This is the case the `oak-plan` skill's
+   trade-offs is the right move. This is the case the `plan` skill's
    §Before Writing item 1 is written for. One shape-check within this
    case: when the owner has framed the work as joint reflection —
    thinking a doctrine or design question through *together* — even the
@@ -62,7 +71,7 @@ alternatives non-viable.
 - Asking what to prioritise when the brief already names the priority.
 - Asking permission to EXECUTE work the owner already directed. Directed work
   is self-authorising: the trigger to execute it is the boundary reached
-  (budget spent, work complete, successor pre-positioned), not a fresh go.
+  (work complete, successor pre-positioned), not a fresh go.
   A clear owner directive also covers its sub-cases — apply it; a real
   nuance in a sub-case is worth noting, not gating on a re-confirmation.
   (Applying a directive within its plain scope is this item; a reading
@@ -150,6 +159,16 @@ surface.
 Options that fail these screens are not respectful alternatives. They are
 anti-shapes offered as owner work.
 
+A wording screen on whatever survives: a question that can only be asked in
+the process's own vocabulary (tallies, legs, rounds, settings) is a question
+about the means, and the means are the agent's. Restate it in the owner's
+terms, by the end it serves, or answer it. Worked instance, 2026-09-19: three
+of four cards in one sitting failed this screen — a menu of naming schemes
+where the owner had asked for the right names, a carrier question wrapped in
+review-tally terms ("The jargon is inpenetrable"), and a git setting offered
+without its cause ("Why is it happening, what is the cause"). The owner's
+one-sentence answer to the carrier question replaced ten lines of skill text.
+
 The form for what survives: once something IS a genuine owner decision,
 pose it as an explicit question (AskUserQuestion) with the recommended
 option first and the analysis attached — never as a recommendation
@@ -170,6 +189,13 @@ default.
    wrong and I'll re-analyse" is legitimate; "pick one of these three"
    over the agent's own findings is not.
 4. **Reserve `AskUserQuestion`** for the three legitimate cases above.
+5. **Synthesise; never choose between options.** A binary card gets the
+   decision method and a synthesis verdict (owner, 2026-09-28, by the question tool, relayed by
+   the Director: "Run it through the decision matrix, we don't choose
+   between options, we create the best from what we know"); the
+   options are inputs to one design, not a menu. And a pending-state label
+   that names no owner, position, clock and failure signal is a parked item,
+   not a decision awaiting the owner.
 
 ## Proportionate Exploration and the Optionality-Invention Costumes
 
@@ -210,15 +236,14 @@ instance and waiting to be corrected again.
 
 ## Doctrinal Anchors
 
-- `feedback_no_responsibility_passback` (origin 2026-05-09): "it is
-  your job to analyse and then present results, not to try to pass off
-  the responsibility back to me."
-- `feedback_answer_verification_questions_directly` (origin
-  2026-04-24): yes/no + evidence; breadth as evasion is a named
-  anti-pattern.
-- `feedback_user_attention_means_analyse_report_flag`: when work
-  requires user attention, analyse → report → flag; never silently
-  defer, and never quiz instead of reporting.
+- No responsibility passback (owner, 2026-05-09): "it is your job to
+  analyse and then present results, not to try to pass off the
+  responsibility back to me."
+- Answer verification questions directly (owner, 2026-04-24): yes/no +
+  evidence; breadth as evasion is a named anti-pattern.
+- User attention means analyse, report, flag: when work requires user
+  attention, analyse → report → flag; never silently defer, and never
+  quiz instead of reporting.
 - PDR-057 §Empirical-answerability pre-question gate: if the question
   is empirically answerable from the codebase/memory, the agent reads
   rather than asks.

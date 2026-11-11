@@ -17,6 +17,8 @@
  * ```
  */
 
+import { typeSafeIncludes } from '@oaknational/type-helpers';
+
 /**
  * All valid completion context names across all indexes.
  *
@@ -51,7 +53,7 @@ export function isValidCompletionContext(value: unknown): value is CompletionCon
   }
   // Equality-form membership per ADR-153 §Membership Without Widening —
   // no assertion, no widening; each literal compares against the input.
-  return ALL_COMPLETION_CONTEXTS.some((ctx) => ctx === value);
+  return typeSafeIncludes(ALL_COMPLETION_CONTEXTS, value);
 }
 
 /**

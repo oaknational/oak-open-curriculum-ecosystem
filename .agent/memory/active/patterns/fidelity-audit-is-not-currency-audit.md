@@ -3,6 +3,7 @@ name: "A Fidelity Audit Is Not a Currency Audit"
 polarity: anti-pattern
 use_this_when: "Verifying a claim that rests on an inherited surface (a record, a thread note, a prior session's framing) before relying on it."
 category: process
+layer: general
 proven_in: "2026-06-17 strategy/plan-estate session (Tempest spins Spire): a claim that faithfully matched its source record still rested on a stale framing; the owner's 'are you working from the latest understanding?' forced the deeper check the fidelity audit had passed over."
 proven_date: 2026-06-18
 related_pdr: PDR-013

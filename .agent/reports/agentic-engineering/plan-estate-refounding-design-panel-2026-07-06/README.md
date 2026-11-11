@@ -1,7 +1,7 @@
 # Design-panel working corpus — plan-estate refounding (2026-07-06)
 
 The verbatim outputs of the six-facet design panel + four-lens critic pass that produced
-[`plan-corpus-refounding.plan.md`](../../../plans-backlog-2026-07/product-development-governance/active/plan-corpus-refounding.plan.md),
+`plan-corpus-refounding.plan.md`,
 conserved from the session-local working directory so the R0 builder has the full script
 contracts, cost tables, worker-role specs, and rejected alternatives — not just the
 synthesis.

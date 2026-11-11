@@ -3,6 +3,7 @@ name: Probe Deployed Surfaces Before Planning
 polarity: anti-pattern
 use_this_when: Authoring or reviewing any plan, owner card, or adjudication about a DEPLOYED surface (a live service, domain, auth realm, vendor integration) — before decisions or questions are drafted
 category: planning
+layer: general
 proven_in: >-
   MCP-67 Clerk-promotion instance (2026-07-21): plan + owner cards asked
   domain/staging questions answerable by 30 seconds of curl against the

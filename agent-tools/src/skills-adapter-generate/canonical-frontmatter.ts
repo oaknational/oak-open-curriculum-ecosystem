@@ -99,7 +99,7 @@ export function validateAgentSkillsFrontmatter(value: unknown): FrontmatterRead 
 function describeIssues(issues: readonly z.core.$ZodIssue[]): string {
   return issues
     .map((issue) => {
-      const path = issue.path.map((segment) => String(segment)).join('.');
+      const path = issue.path.map(String).join('.');
       return path === '' ? issue.message : `${path}: ${issue.message}`;
     })
     .join('; ');

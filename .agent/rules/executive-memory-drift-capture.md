@@ -1,3 +1,8 @@
+---
+classification: core
+description: "When a session observation surfaces drift in an executive-memory surface (artefact inventory, reviewer catalogues, adapter/surface matrices, stable canonical paths), capture it in the napkin with a `Source plane: executive` tag so consolidation routes it back to the affected surface for amendment."
+---
+
 # Executive-Memory Drift Capture
 
 When a session observation surfaces drift, incompleteness, or a learning
@@ -43,7 +48,7 @@ plane-origin tag:
 ```
 
 The tag is load-bearing: without it, consolidation treats the entry as
-ordinary active-plane learning. With it, `/oak-consolidate-docs` step 5
+ordinary active-plane learning. With it, the `consolidate-docs` skill's step 5
 cross-plane scan routes the observation to the affected executive surface
 for amendment.
 
@@ -67,7 +72,7 @@ executive-plane update.
   — the doctrine this rule operationalises.
 - [PDR-030 Plane-Tag Vocabulary](../practice-core/decision-records/PDR-030-plane-tag-vocabulary.md)
   — canonical form of the `Source plane:` tag.
-- [ADR-131 Self-Reinforcing Improvement Loop](../../docs/architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md)
+- [PDR-014 (Consolidation and Knowledge-Flow Discipline)](../practice-core/decision-records/PDR-014-consolidation-and-knowledge-flow-discipline.md)
   — architectural basis for the feedback loop shape.
 - [`.agent/directives/orientation.md § Layers`](../directives/orientation.md#layers)
   — three-plane memory taxonomy the tag routes across.

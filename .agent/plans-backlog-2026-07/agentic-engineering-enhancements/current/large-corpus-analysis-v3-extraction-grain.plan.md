@@ -190,8 +190,9 @@ per PDR-122 — this pipeline is a FEEDER, never a bespoke graduation); a FAIL r
 ## Lifecycle triggers
 
 Per [`lifecycle-triggers`](../../../plans/templates/components/lifecycle-triggers.md): session-open
-grounding reads this plan + the v2 rerun result report + PDR-122; the full rerun emits a
-curator-pass run-record; completion runs the learning loop above and sweeps the discoverability
+grounding reads this plan + the v2 rerun result report + PDR-122; the full rerun's record is
+the commits that home its substance; completion runs the learning loop above and sweeps the
+discoverability
 surfaces (this README row, the thread record, the reference hub).
 
 ## Lineage

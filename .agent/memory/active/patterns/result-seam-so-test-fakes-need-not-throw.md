@@ -3,6 +3,7 @@ name: "Result-Seam So Test Fakes Need Not Throw"
 polarity: pattern
 use_this_when: "Testing an error path that wraps a throwing dependency (execFileSync, a path resolver, a vendor call), and a throwing test-fake would trip the no-throw warn rule — lift the seam to return Result and translate the throw at the single real boundary, so the fake returns err() and never throws."
 category: testing
+layer: family
 proven_in: "agent-tools spawn-flow / collaboration-state error-path tests (2026-06-28) — supervisor-liveness and coordination-home resolvers"
 proven_date: 2026-06-28
 related_pattern: "interface-segregation-for-test-fakes (the sibling: narrow the type a fake must satisfy; this one removes the throw a fake must mimic)"
@@ -23,7 +24,7 @@ barrier:
 To test an error path, the fake must produce the error. When the dependency
 under the seam *throws* (`execFileSync`, a resolver, a vendor call), the obvious
 fake throws too — which trips the repo's `no-throw-statement` warn rule
-([ADR-088](../../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md))
+(ADR-088 (`088-result-pattern-for-error-handling.md`, a file OCE holds))
 and pushes test code onto the no-throw backlog. The cure is not to suppress the
 rule on the test; it is to move the throw out of the seam.
 

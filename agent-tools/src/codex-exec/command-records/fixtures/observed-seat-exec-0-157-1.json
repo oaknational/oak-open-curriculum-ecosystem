@@ -1,0 +1,266 @@
+[
+  {
+    "type": "session_meta",
+    "payload": {
+      "id": "00000001-0000-4000-8000-000000010000"
+    }
+  },
+  {
+    "type": "event_msg",
+    "payload": {
+      "type": "task_started",
+      "turn_id": "00000002-1111-4000-8000-000000020000"
+    }
+  },
+  {
+    "type": "response_item",
+    "payload": {
+      "type": "message"
+    }
+  },
+  {
+    "type": "response_item",
+    "payload": {
+      "type": "message"
+    }
+  },
+  {
+    "type": "response_item",
+    "payload": {
+      "type": "message"
+    }
+  },
+  {
+    "type": "response_item",
+    "payload": {
+      "type": "message"
+    }
+  },
+  {
+    "type": "world_state",
+    "payload": {}
+  },
+  {
+    "type": "turn_context",
+    "payload": {
+      "turn_id": "00000002-1111-4000-8000-000000020000"
+    }
+  },
+  {
+    "type": "response_item",
+    "payload": {
+      "type": "message"
+    }
+  },
+  {
+    "type": "event_msg",
+    "payload": {
+      "type": "item_completed",
+      "turn_id": "00000002-1111-4000-8000-000000020000",
+      "thread_id": "00000001-0000-4000-8000-000000010000",
+      "item": {
+        "type": "UserMessage"
+      }
+    }
+  },
+  {
+    "type": "event_msg",
+    "payload": {
+      "type": "item_completed",
+      "turn_id": "00000002-1111-4000-8000-000000020000",
+      "thread_id": "00000001-0000-4000-8000-000000010000",
+      "item": {
+        "type": "AgentMessage"
+      }
+    }
+  },
+  {
+    "type": "response_item",
+    "payload": {
+      "type": "message"
+    }
+  },
+  {
+    "type": "response_item",
+    "payload": {
+      "type": "custom_tool_call",
+      "call_id": "00000003-2222-4000-8000-000000030000",
+      "name": "exec"
+    }
+  },
+  {
+    "type": "token_usage_record",
+    "payload": {}
+  },
+  {
+    "type": "event_msg",
+    "payload": {
+      "type": "item_completed",
+      "turn_id": "00000002-1111-4000-8000-000000020000",
+      "thread_id": "00000001-0000-4000-8000-000000010000",
+      "item": {
+        "type": "CommandExecution",
+        "command": ["/bin/zsh", "-lc", "git status --short"],
+        "status": "completed",
+        "source": "unified_exec_startup",
+        "exit_code": 0
+      }
+    }
+  },
+  {
+    "type": "response_item",
+    "payload": {
+      "type": "custom_tool_call_output",
+      "call_id": "00000003-2222-4000-8000-000000030000",
+      "output": "Script completed\nWall time 0.1 seconds\nOutput:\n{\"chunk_id\":\"13d8a2\",\"wall_time_seconds\":0.000018209,\"exit_code\":0,\"original_token_count\":3,\"output\":\"?? .logs/\\n\"}"
+    }
+  },
+  {
+    "type": "event_msg",
+    "payload": {
+      "type": "token_count"
+    }
+  },
+  {
+    "type": "response_item",
+    "payload": {
+      "type": "custom_tool_call",
+      "call_id": "00000004-2222-4000-8000-000000040000",
+      "name": "exec"
+    }
+  },
+  {
+    "type": "token_usage_record",
+    "payload": {}
+  },
+  {
+    "type": "event_msg",
+    "payload": {
+      "type": "item_completed",
+      "turn_id": "00000002-1111-4000-8000-000000020000",
+      "thread_id": "00000001-0000-4000-8000-000000010000",
+      "item": {
+        "type": "CommandExecution",
+        "command": ["/bin/zsh", "-lc", "git log --oneline -1"],
+        "status": "completed",
+        "source": "unified_exec_startup",
+        "exit_code": 0
+      }
+    }
+  },
+  {
+    "type": "response_item",
+    "payload": {
+      "type": "custom_tool_call_output",
+      "call_id": "00000004-2222-4000-8000-000000040000",
+      "output": "Script completed\nWall time 0.1 seconds\nOutput:\n{\"chunk_id\":\"73433d\",\"wall_time_seconds\":0.000004125,\"exit_code\":0,\"original_token_count\":4,\"output\":\"ee8ae2b seed\\n\"}"
+    }
+  },
+  {
+    "type": "event_msg",
+    "payload": {
+      "type": "token_count"
+    }
+  },
+  {
+    "type": "response_item",
+    "payload": {
+      "type": "custom_tool_call",
+      "call_id": "00000005-2222-4000-8000-000000050000",
+      "name": "exec"
+    }
+  },
+  {
+    "type": "token_usage_record",
+    "payload": {}
+  },
+  {
+    "type": "event_msg",
+    "payload": {
+      "type": "item_completed",
+      "turn_id": "00000002-1111-4000-8000-000000020000",
+      "thread_id": "00000001-0000-4000-8000-000000010000",
+      "item": {
+        "type": "CommandExecution",
+        "command": ["/bin/zsh", "-lc", "printf hello > note.txt"],
+        "status": "completed",
+        "source": "unified_exec_startup",
+        "exit_code": 0
+      }
+    }
+  },
+  {
+    "type": "response_item",
+    "payload": {
+      "type": "custom_tool_call_output",
+      "call_id": "00000005-2222-4000-8000-000000050000",
+      "output": "Script completed\nWall time 0.1 seconds\nOutput:\n{\"chunk_id\":\"edbb6a\",\"wall_time_seconds\":0.000004333,\"exit_code\":0,\"original_token_count\":0,\"output\":\"\"}"
+    }
+  },
+  {
+    "type": "event_msg",
+    "payload": {
+      "type": "token_count"
+    }
+  },
+  {
+    "type": "response_item",
+    "payload": {
+      "type": "custom_tool_call",
+      "call_id": "00000006-2222-4000-8000-000000060000",
+      "name": "exec"
+    }
+  },
+  {
+    "type": "token_usage_record",
+    "payload": {}
+  },
+  {
+    "type": "response_item",
+    "payload": {
+      "type": "custom_tool_call_output",
+      "call_id": "00000006-2222-4000-8000-000000060000",
+      "output": "Script completed\nWall time 0.1 seconds\nOutput:\n{\"chunk_id\":\"47de9a\",\"wall_time_seconds\":0,\"exit_code\":128,\"original_token_count\":53,\"output\":\"fatal: Unable to create '<path>': Operation not permitted\\n\"}"
+    }
+  },
+  {
+    "type": "event_msg",
+    "payload": {
+      "type": "token_count"
+    }
+  },
+  {
+    "type": "event_msg",
+    "payload": {
+      "type": "item_completed",
+      "turn_id": "00000002-1111-4000-8000-000000020000",
+      "thread_id": "00000001-0000-4000-8000-000000010000",
+      "item": {
+        "type": "AgentMessage"
+      }
+    }
+  },
+  {
+    "type": "response_item",
+    "payload": {
+      "type": "message"
+    }
+  },
+  {
+    "type": "token_usage_record",
+    "payload": {}
+  },
+  {
+    "type": "event_msg",
+    "payload": {
+      "type": "token_count"
+    }
+  },
+  {
+    "type": "event_msg",
+    "payload": {
+      "type": "task_complete",
+      "turn_id": "00000002-1111-4000-8000-000000020000"
+    }
+  }
+]

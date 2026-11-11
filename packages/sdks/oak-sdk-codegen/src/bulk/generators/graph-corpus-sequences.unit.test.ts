@@ -262,38 +262,36 @@ describe('generateGraphCorpusData — sequences (G3 curriculum-ordered placement
  * fails here rather than being diagnosed through the whole generator.
  */
 describe('compareSequencePositions — one term at a time', () => {
-  const sign = (n: number): number => Math.sign(n);
-
   it('orders by year first, whatever the slug and index say', () => {
     const earlier = mathsUnit('zzz-later-index-in-secondary', 'secondary', 99, 3);
     const later = mathsUnit('aaa-earlier-index-in-primary', 'primary', 0, 6);
 
-    expect(sign(compareSequencePositions(earlier, later))).toBe(-1);
-    expect(sign(compareSequencePositions(later, earlier))).toBe(1);
+    expect(Math.sign(compareSequencePositions(earlier, later))).toBe(-1);
+    expect(Math.sign(compareSequencePositions(later, earlier))).toBe(1);
   });
 
   it('sorts a year-less unit after every year-placed unit', () => {
     const yearless = mathsUnit('aaa-all-years', 'primary', 0, undefined);
     const yearEleven = mathsUnit('zzz-year-11', 'secondary', 99, 11);
 
-    expect(sign(compareSequencePositions(yearEleven, yearless))).toBe(-1);
-    expect(sign(compareSequencePositions(yearless, yearEleven))).toBe(1);
+    expect(Math.sign(compareSequencePositions(yearEleven, yearless))).toBe(-1);
+    expect(Math.sign(compareSequencePositions(yearless, yearEleven))).toBe(1);
   });
 
   it('breaks a year tie on the sequence slug before the index', () => {
     const primary = mathsUnit('zzz-in-primary', 'primary', 99, 6);
     const secondary = mathsUnit('aaa-in-secondary', 'secondary', 0, 6);
 
-    expect(sign(compareSequencePositions(primary, secondary))).toBe(-1);
-    expect(sign(compareSequencePositions(secondary, primary))).toBe(1);
+    expect(Math.sign(compareSequencePositions(primary, secondary))).toBe(-1);
+    expect(Math.sign(compareSequencePositions(secondary, primary))).toBe(1);
   });
 
   it('breaks a year and slug tie on the bulk sequence index, not the unit slug', () => {
     const authoredFirst = mathsUnit('zzz-authored-first', 'primary', 3, 6);
     const authoredSecond = mathsUnit('aaa-authored-second', 'primary', 8, 6);
 
-    expect(sign(compareSequencePositions(authoredFirst, authoredSecond))).toBe(-1);
-    expect(sign(compareSequencePositions(authoredSecond, authoredFirst))).toBe(1);
+    expect(Math.sign(compareSequencePositions(authoredFirst, authoredSecond))).toBe(-1);
+    expect(Math.sign(compareSequencePositions(authoredSecond, authoredFirst))).toBe(1);
   });
 
   it('reports two year-less units from one sequence as equal only when their index matches', () => {
@@ -302,6 +300,6 @@ describe('compareSequencePositions — one term at a time', () => {
     const later = mathsUnit('third', 'primary', 5, undefined);
 
     expect(compareSequencePositions(first, same)).toBe(0);
-    expect(sign(compareSequencePositions(first, later))).toBe(-1);
+    expect(Math.sign(compareSequencePositions(first, later))).toBe(-1);
   });
 });

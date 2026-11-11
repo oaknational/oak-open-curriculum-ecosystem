@@ -5,4 +5,4 @@ description: Run all quality gates and fix issues.
 
 # Gates (Claude Code)
 
-Read and follow `.agent/skills/gates/SKILL-CANONICAL.md`.
+Read and follow `.agent/skills/change-custody/gates/SKILL-CANONICAL.md`.

@@ -2,6 +2,7 @@
 name: "An Observer Must See the Terminal State of What It Observes"
 polarity: pattern
 category: agent-operations
+layer: general
 status: active
 use_this_when: "Designing or arming any watcher, monitor, poll loop, or wait — a PR watch, a CI waiter, a job poller, a peer-liveness probe — especially one that reports progress by emitting on change."
 proven_in: "PR #878 watch, 2026-08-13: a watcher tracking reviewDecision, mergeStateStatus, reviews, threads, checks and head SHA — but not `state` — reported a merged PR as pending for ~30 minutes while emitting change events throughout."
@@ -95,3 +96,13 @@ returns green without having checked. This is the same disease in a *watcher*:
 an observer that reports state without having observed the state that matters.
 The cure rhymes — a control that must fail — because in all three cases the
 failure mode and the success mode are indistinguishable from the output alone.
+
+## Instances filed at the 2026-09-25 consolidation
+
+- A close-down claim needs a process-table read after the signal, not the
+  signal alone: an interactive Codex session survived SIGTERM and needed
+  SIGKILL, with its child (2026-09-23).
+- A stand-down reads the remote tip, not the monitor's last line, before
+  stating a push's disposition: a push stopped at the owner's word had already
+  transferred, though its monitor was killed before it logged an exit
+  (2026-09-24).

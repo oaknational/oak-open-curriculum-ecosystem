@@ -1,12 +1,15 @@
-// @vitest-environment happy-dom
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { observe } from './live-token-causes';
 
+// No href: the observer keys off `rel` alone, and an address would make
+// happy-dom attempt a stylesheet load (refused by the package config, but
+// still a logged exception and an `error` event on the link). The package
+// config supplies the happy-dom environment; a per-file docblock with
+// options would silently replace those package settings.
 function appendStylesheetLink(): HTMLLinkElement {
   const link = document.createElement('link');
   link.rel = 'stylesheet';
-  link.href = '/fake.css';
   document.body.append(link);
   return link;
 }

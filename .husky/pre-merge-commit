@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
-# Refuse merge commits on main — a clean `git merge` (incl. `git pull` on a
-# diverged main) fires this hook, not pre-commit. Mechanics live in the
+# Refuse merge commits on a default branch — a clean `git merge` (incl. `git
+# pull` on a diverged default branch) fires this hook, not pre-commit. Mechanics live in the
 # shared guard (never-commit-to-main rule).
 GUARD_BRANCH=""
 GUARD_HINT="Abort the merge (git merge --abort), then merge on a branch and land via PR."

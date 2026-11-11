@@ -47,8 +47,8 @@ async function searchScope(
       ok: false,
       error: `${scopeName} search failed: ${result.error?.message ?? 'unknown error'}`,
     };
-  } catch (thrown: unknown) {
-    const message = thrown instanceof Error ? thrown.message : 'unknown error';
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'unknown error';
     return { ok: false, error: `${scopeName} search error: ${message}` };
   }
 }

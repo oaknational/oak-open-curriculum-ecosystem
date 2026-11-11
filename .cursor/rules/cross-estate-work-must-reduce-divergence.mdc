@@ -1,0 +1,6 @@
+---
+description: 'Any activity that edits both estates (a consolidation, a skill or rule sync, a Practice exchange or transplant, an edit to a path both estates hold) measures the shared-path divergence at its open and its close, and closes only with both estates more aligned than at the open: neither the differing shared files nor the differing lines more than at the open, at least one fewer (or both zero), every shared file that grew more divergent named in the close record with its reason. Owner, 2026-09-30: all activities involving both estates MUST leave them more aligned and less divergent than they were before those activities.'
+alwaysApply: false
+---
+
+Read and follow `.agent/rules/cross-estate-work-must-reduce-divergence.md`.

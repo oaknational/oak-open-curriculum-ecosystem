@@ -1,8 +1,12 @@
+---
+classification: situational
+description: "Continuity-surface edits — napkin.md, repo-continuity.md, thread records, pending-graduations, comms and claims state — land as their own chore(continuity) commit or an explicit handoff naming the unstaged files, never bundled with the cycle commit. Apply at every commit boundary, not only session-handoff: the failure shape is a mid-session product commit sweeping napkin or claims drift in alongside tested code. Not a constraint on the product commit itself — that is stage-by-explicit-pathspec's ground. Right shape: chore(continuity): land <date> <agent> session reflection."
+trigger: ceremony:commit
+---
+
 # Continuity-Surface Commits Are Session-End Orphans
 
 Operationalises
-[ADR-150 (Continuity Surfaces, Session Handoff, and Surprise Pipeline)](../../docs/architecture/architectural-decisions/150-continuity-surfaces-session-handoff-and-surprise-pipeline.md)
-and
 [PDR-011 (Continuity Surfaces and the Surprise Pipeline)](../practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md).
 
 ## Rule

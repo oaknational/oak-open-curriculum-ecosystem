@@ -187,7 +187,9 @@ async function runBenchmark(): Promise<void> {
   }
 }
 
-runBenchmark().catch((error: unknown) => {
+try {
+  await runBenchmark();
+} catch (error: unknown) {
   console.error('Sequence benchmark failed:', error);
   process.exit(1);
-});
+}

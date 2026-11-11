@@ -17,7 +17,7 @@ export interface ClaudeSessionIdentityHookEnvironment {
   /** Explicit operator seed — outranks the ambient platform id (PDR-027 precedence). */
   readonly PRACTICE_AGENT_SESSION_ID_CLAUDE?: string;
   /** Explicit operator display-name override — honoured for rendering only, never written back. */
-  readonly OAK_AGENT_IDENTITY_OVERRIDE?: string;
+  readonly PRACTICE_AGENT_IDENTITY_OVERRIDE?: string;
   /**
    * Cloud-seat platform session id (`cse_`-tagged). Its untagged payload is
    * the PDR-027 seed there — the identifier the owner sees in the session
@@ -78,7 +78,7 @@ export function planClaudeSessionIdentityHook(
     return { hookOutput: {} };
   }
 
-  const override = nonEmpty(input.environment.OAK_AGENT_IDENTITY_OVERRIDE);
+  const override = nonEmpty(input.environment.PRACTICE_AGENT_IDENTITY_OVERRIDE);
   const displayName = deriveIdentity(
     sessionId,
     override === undefined ? {} : { override },
@@ -103,7 +103,7 @@ export function planClaudeSessionIdentityHook(
     envFileWrite: {
       absolutePath: envFile,
       // Seed only — never a pinned display name. Pinning
-      // OAK_AGENT_IDENTITY_OVERRIDE here let a later seed change produce a
+      // PRACTICE_AGENT_IDENTITY_OVERRIDE here let a later seed change produce a
       // mixed-provenance tuple (name from the old seed, prefix and uuid
       // from the new one); the name derives from the live seed at every
       // point of use instead (PDR-027, 2026-08-24 amendment).
@@ -130,9 +130,9 @@ export function claudeSessionIdentityHookEnvironmentFromProcessEnv(
     ...(env.CLAUDE_CODE_REMOTE_SESSION_ID === undefined
       ? {}
       : { CLAUDE_CODE_REMOTE_SESSION_ID: env.CLAUDE_CODE_REMOTE_SESSION_ID }),
-    ...(env.OAK_AGENT_IDENTITY_OVERRIDE === undefined
+    ...(env.PRACTICE_AGENT_IDENTITY_OVERRIDE === undefined
       ? {}
-      : { OAK_AGENT_IDENTITY_OVERRIDE: env.OAK_AGENT_IDENTITY_OVERRIDE }),
+      : { PRACTICE_AGENT_IDENTITY_OVERRIDE: env.PRACTICE_AGENT_IDENTITY_OVERRIDE }),
   };
 }
 
@@ -188,7 +188,7 @@ function identityContext(input: { readonly displayName: string; readonly prefix:
     '[Practice agent identity]',
     `Session identity (PDR-027): ${input.displayName}.`,
     `PDR-027 session_id_prefix (first 6 of the PDR-027 seed): ${input.prefix}.`,
-    'PRACTICE_AGENT_SESSION_ID_CLAUDE is set in $CLAUDE_ENV_FILE so shell tools (e.g. `pnpm agent-tools:agent-identity --format display`) resolve the same identity without --seed.',
+    'PRACTICE_AGENT_SESSION_ID_CLAUDE is set in $CLAUDE_ENV_FILE so shell tools (e.g. `pnpm agent-tools:agent-identity --platform claude-code --format display`) resolve the same identity without --seed.',
     `Once the session intent is clear, suggest the user run: /rename ${input.displayName} - <intent>`,
     'so the agent name is the first part of the session title. Do not auto-rename — the user owns the title.',
   ].join('\n');
