@@ -663,8 +663,9 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
   division of labour (Hydra's comms broadcast, 13:44Z).
   - **Sandpiper (690653)**: the oaknational#1023 chain. Carrier #393, then `engraph` into
     `reunify-oce-forks`, the re-push once the owner saves the Sonar criterion and its gate
-    result, todo 4's upgrade note, the door merge when the owner ends the exploratory status,
-    todo 5's release watch.
+    result, todo 4's upgrade note, reporting #1023 ready once the owner ends the exploratory
+    status (the owner alone executes that merge, by the owner's word of 2026-11-11), and todo
+    5's release watch.
   - **Hydra holds Lightyear (d827c5)**: the S4036 wording pull request (branch
     `docs/s4036-project-criterion`), and todo 6, the return to a mirror, with the plan's todo 6
     text. Sandpiper edits the plan only after Hydra's pull requests merge, and only todos 4
@@ -712,8 +713,8 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
   inference, because this seat has not read the Vercel team's settings. So, before the merge, the
   owner needs a Turborepo CLI OIDC policy for `oaknational/oak-open-curriculum-ecosystem` on that
   Vercel team (Settings,
-  Build and Deployment, OIDC Policies for CLI Access); check that step on #1023 before the door
-  merge. On the owner's machine nothing is needed: `TURBO_TEAM` is exported beside `TURBO_TOKEN`
+  Build and Deployment, OIDC Policies for CLI Access); check that step on #1023 before reporting
+  it ready for the owner's merge. On the owner's machine nothing is needed: `TURBO_TEAM` is exported beside `TURBO_TOKEN`
   from the shell profile.
 - **Work list (non-blocking, its own pull request).** In
   `.agent/reports/mcp-agent-facing-content-audit/registry.json`, C078's `behavioural_intent`
@@ -728,7 +729,10 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
      criterion is saved), then read the gate.
   3. Add the upgrade note to #1023. Each Oak checkout recreates `.github/merge-bot.json` from
      `.example`. The Turbo cache needs `TURBO_TEAM` plus the OIDC policy.
-  4. The door merge, at the owner's end of the exploratory status.
+  4. Once the owner ends the exploratory status, report #1023 ready. The owner alone executes
+     the merge (owner, 2026-11-11, verbatim: "the reunification merge MUST NOT happen
+     automatically, only I am permitted to execute it"); no seat runs the door, the merge button
+     or any API merge on it.
   5. The release watch.
 - **Claims.** `d3e552c1-4515-4906-918e-5a02e11f2524` holds the carrier branch pattern and its
   worktree. `a811ef22-6735-4306-bf57-4f29adaac9b7` holds `reunify-oce-forks`.
