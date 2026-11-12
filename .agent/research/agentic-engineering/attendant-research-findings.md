@@ -162,15 +162,17 @@ asked about. The two lists are kept apart here so the owner can correct the seco
   addendum after the first classification. It adds no class. Its owner catches are two single
   questions ("a merge-warden? do you mean a human?", and a wrong revert recommendation
   withdrawn "after the owner caught it with one question").
-- *Not read, by the seat's choice and not by the owner's word:* the Cricket tallies; the rulings
-  ledger; the retrospectives beyond those nine; the twelve reports the brief lists, apart from
-  those among the nine; the experience files, thread records and napkin archives. The plan put
-  these under its stopping rule. The seat stopped because the last three things read for catches (the
-  pilot's twenty rows, the late retrospective and the keyword search of the rule excerpts)
-  added no class. A
-  class that lives only in the unread sources is missing from the table. Question 3's remark
-  that the Cricket panel is a partial exception to cause 2 rests on the skill's text and one
-  retrospective, not on the tallies.
+- *Read at the owner's word of 2026-11-12, after the report:* the rulings ledger, whole, and the
+  Cricket tallies in part (the protocol, verdict, pattern and adjudication sections of the
+  three largest and of the 2026-10-04 suite; the rest by search for where a verdict was right or
+  wrong). Neither adds a class. How far each is used is set out under question 3.
+- *Not read, by the seat's choice and not by the owner's word:* the retrospectives beyond those
+  nine; the twelve reports the brief lists, apart from those among the nine; the experience
+  files, thread records and napkin archives; the run-by-run rows of the Cricket tallies. The
+  plan put these under its stopping rule. The seat stopped because the last things read for
+  catches (the pilot's twenty rows, the late retrospective, the keyword search of the rule
+  excerpts, the ledger) added no class. A class that lives only in the unread sources is
+  missing from the table.
 
 The scenarios drawn from these classes are in
 [`attendant-step-back-scenarios.md`](attendant-step-back-scenarios.md). A fresh reviewer read both
@@ -316,6 +318,73 @@ recall marked the moment, and the response was a thing that had to be produced o
 passed. A counter that refused a push. A count stated first in every report. A sentence that had
 to be written before a cure. A declared deadline with a default. A reviewer handed the owner's
 words and the question, not the author's summary. None was a better-worded rule.
+
+### The rulings ledger and the Cricket tallies: whether to use them, and how far
+
+Read on 2026-11-12 at the owner's word, with the owner's caution that Cricket is not always
+correct. The decision on each:
+
+**The rulings ledger: used, lightly, for two things.** It is not a source of catches. By its own
+header "This file proves homing; it never stores ruling substance", and most rows are rulings
+with no agent miss recorded beside them. It is used:
+
+- *As a check on the classification.* Its rows add no class. They add instances to two: class 6
+  ("the original target architecture was WRONG", after which a ratified target was re-graded to
+  historical data) and class 1 (a survey cancelled because "the programme guessed at owner-class
+  questions"; a ruling that three corrections shrank to nothing because it had been a seat's
+  inference).
+- *As a working component for requirement 2.* Every row carries an authority class:
+  `owner-verbatim`, `owner-paraphrase`, `owner-relayed`, `seat-inference` or `plan-prose`. That
+  is the estate already marking, line by line, whether a sentence is the owner's or a seat's
+  reading. The ledger also shows the marking is needed: three owner-verbatim rulings are recorded
+  as critic finds, one of them in the words "critic find, missed by the inventory".
+
+**The Cricket tallies: used as evidence about one instrument, and not as ground truth about
+anything else.** They record Cricket's verdicts, not the owner's catches, so they do not feed
+question 1. They do show when a frame check of this kind is right and when it is wrong.
+
+Where it was right:
+
+- With the owner's words quoted as sources, eight legs of a full suite found a plan node
+  contradicting them before the owner read it: six pull requests against the owner's "two large
+  PRs", a guide for the whole read per landing, and directions attributed to the owner that
+  were a review's. "No two legs disagreed". Those are classes 1 and 6 of question 1, caught by
+  the reading set beside the words.
+- "The adversarial stance earns its cost": it caught a needless gate and rejected a refutation
+  its own normal leg accepted. In one suite two adversarial legs found three ordering defects in
+  a plan's content that the other six had passed.
+- In this research, two legs caught the seat stretching the owner's "no fan-out"; the seat
+  confirmed it against the words.
+
+Where it was wrong, or could not be right:
+
+- A false alarm: "ground truth was ON-TRACK: sonnet false-alarmed on an input gap".
+- It inherits the frame's facts. Legs took "the mis-dated freeze-6 block" in a record "as ground
+  truth" and built two findings on intervals that did not exist. A seat's own adjudication:
+  "eight convergent verdicts over one seeded frame carry no more evidence than the frame does".
+- It cannot see what the frame leaves out: "a verdict cannot fault compliance with a standing
+  rule its own frame omitted". Before the frame verdict existed, a seat's suites returned
+  nineteen ON-TRACK of twenty-four while it worked one direction of a two-way goal.
+- Its labels are unstable where its substance is not: the same finding came back as NARROWED
+  from one seat and CONTRADICTED from seven; one model's verdict changed on an identical re-ask;
+  in this research one frame drew DRIFTING and ON-TRACK from the same role in two stances.
+- Six legs can agree and miss: a plan "had reproduced its author's own diagnosed failure mode
+  one level up, and six legs missed it".
+
+**What that licenses.** Three statements, and no more:
+
+1. The part of a Cricket-style check that the tallies show working is narrow and specific: the
+   seat's reading compared against the owner's quoted words, by a reader who did not write the
+   reading. That supports requirement 2 and it is the only part this research leans on.
+2. The work verdict (is this the right work?) is the unreliable part: it false-alarms on a thin
+   frame, passes on a wrong one, and varies by stance. Requirement 4 already treats a return as
+   something to answer in writing and not as authority; the tallies are the evidence for
+   keeping it that way, and for the control scenarios.
+3. Agreement among legs given one frame is one piece of evidence, not eight.
+
+The earlier remark under cause 2, that the Cricket panel is a partial exception, stands on this
+evidence with its limit stated: an exception where the owner's words are quoted in the frame,
+and only for what those words cover.
 
 ## Question 4: what each lever can do, and whether the evaluation can be run
 

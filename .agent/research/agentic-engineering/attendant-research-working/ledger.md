@@ -431,3 +431,25 @@ search for the thin classes had not been run; one paragraph of question 4 and on
 strategic node sketched the mechanism's composition; and the node called class 1 "the largest
 class" with no counts behind it. All four acted on the same hour. The first is this research's
 own class 1, made by its author while writing up class 1.
+
+### `director-rulings-ledger.md` (whole) and the Cricket tallies (in part), read at the owner's word
+
+The owner, 2026-11-12, in session: "Read the Cricket rallies and rulings ledger, then decide if
+we should use them or not, and if yes decide to what degree. Cricket is not always correct".
+
+Ledger: a homing proof, not a record of catches ("it never stores ruling substance"). Rows
+carry an authority class. Catch-bearing rows: the survey reground ("the original target
+architecture was WRONG"), the survey's cancelled round ("the programme guessed at owner-class
+questions"), the void-from-birth ruling (attribution drift), the retired throttle, the commit
+cadence word ("we are currently overshooting the sweet spot"). No new class.
+
+Tallies: read the protocol, standing verdict and owner-observation sections of the 2026-07-16
+A/B tally; the governing words, standing patterns and doctrine cures of the 2026-07-26 two-pair
+tally; the governing words of the 2026-07-29 quartet tally; the whole of the 2026-10-04 suite
+tally; and four passages found by searching the other tallies for where a verdict was right or
+wrong. Not read: the run-by-run rows, about 150,000 characters.
+
+Reading: the tallies are evidence about Cricket and not about the owner's catches. What they
+show working is the comparison of a reading against quoted owner words by another reader. What
+they show failing is the work verdict on a thin or wrong frame, and convergence mistaken for
+independence. Decision recorded in the findings file under question 3.
