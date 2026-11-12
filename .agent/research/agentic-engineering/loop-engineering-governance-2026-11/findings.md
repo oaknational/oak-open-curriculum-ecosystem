@@ -72,6 +72,15 @@ the rows it draws on. Everything else states what a cited row says.
    "much of the agreement traces back to one origin" (E-302).
 10. **Status: `provisional`.** The baseline supports a concept-level comparison. Its limits are in
     the status section.
+11. **No source read describes a standing intention to learn.** The sources supply triggers and
+    stores. Loops can be started by a clock (E-107), an agent can write notes for itself during a
+    session (E-232) or rewrite its memory in idle time (E-235), and a person can add a "compound"
+    step after each unit of work (E-230). None describes a durable brief, held with the code, that
+    says what experience to review, by what standard and where the results go, and that a clock
+    then wakes. The one measured study found triggers committed and no loop state files (E-305).
+    This is an absence in the sources read, found by searching them for it after the owner's
+    "Doing and Dreaming" proposal named the idea; it is not evidence that nobody has written about
+    it.
 
 ## What was read, and at what strength
 
@@ -379,5 +388,5 @@ All on 2026-11-12.
 | Change of subject | Recentred on the field at the owner's word |
 | Broadening | Four areas added and earlier claims re-read at the page; rows E-200 to E-265 |
 | Full-paper reads | Six papers; rows E-300 to E-350; the adoption study's result corrected |
-| Reading of "Doing and Dreaming" | The owner's proposal for periodic learning filed as received and read against rows E-200 to E-350; no change to the verdicts above |
+| Reading of "Doing and Dreaming" | The owner's proposal for periodic learning filed as received and read against rows E-200 to E-350. No earlier verdict changed. Verdict 11 was added at the owner's word: an absence in the field that the proposal made visible |
 | Second review pass | 116 of 116 checked quotations matched their pages. 25 findings on framing: sweeping words, selective rows and stale sections. This rewrite is the response. Twelve evidence rows were corrected, among them one that had omitted a paper's positive result and one that misread an essay as not about memory |
