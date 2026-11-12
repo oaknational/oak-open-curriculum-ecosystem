@@ -65,10 +65,11 @@ esac
 
 # The sha256 of a file, by whichever tool the host has.
 sha256_of() {
+  local file="$1"
   if command -v sha256sum > /dev/null 2>&1; then
-    sha256sum "$1" | cut -d ' ' -f 1
+    sha256sum "${file}" | cut -d ' ' -f 1
   else
-    shasum --algorithm 256 "$1" | cut -d ' ' -f 1
+    shasum --algorithm 256 "${file}" | cut -d ' ' -f 1
   fi
 }
 
