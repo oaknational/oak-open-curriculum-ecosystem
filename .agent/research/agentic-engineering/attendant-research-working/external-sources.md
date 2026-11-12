@@ -52,7 +52,8 @@ Claude Code documentation, fetched on 2026-11-12. The findings file quotes only 
 
 ## The owner's report "Doing and Dreaming: Periodic Learning for Agents in a Repo" (12 November 2026)
 
-Attached by the owner in session on 2026-11-12 and not held in this repository. Each line below
+Attached by the owner in session on 2026-11-12; a copy is filed in this repository under
+`loop-engineering-governance-2026-11/owner-reports/`. Each line below
 was checked by script against the attached file.
 
 - Agents act when something prompts them, so learning from accumulated experience happens only when a person remembers to start it.

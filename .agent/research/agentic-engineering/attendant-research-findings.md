@@ -568,16 +568,19 @@ item. Both are bound to a moment the process owns.
 ## The owner's report on periodic learning, read against these findings
 
 The owner wrote "Doing and Dreaming: Periodic Learning for Agents in a Repo" on 12 November 2026
-and asked in session for these findings to be updated from it. The report is not held in this
-repository; the sentences quoted here were checked against the attached file
+and asked in session for these findings to be updated from it. The report is filed as received
+at
+[`owner-reports/doing-and-dreaming.md`](loop-engineering-governance-2026-11/owner-reports/doing-and-dreaming.md),
+by another seat's work that reached the default branch the same day; the sentences quoted here
+were checked against the copy attached in session
 ([`external-sources.md`](attendant-research-working/external-sources.md)). It proposes a second
 mode of agent activity, dreaming, that runs on a clock beside ordinary work and turns raw
 experience into better guidance. Quotations in this section are the owner's, from the report.
 
 ### The report's proposal, restated
 
-The report is not in the repository, so its proposal is restated here in this seat's words for
-the seats that come later; the owner's own text is the authority and the owner holds it. The
+The owner's own text, at the path above, is the authority. Its proposal is restated here in
+this seat's words so the comparison can be followed without leaving this file. The
 entity that learns is a repository joined with the agents that act in it: the repository is the
 body and the memory, the agents animate it. Doing faces the task in hand and is prompted by an
 occasion. Dreaming faces accumulated experience and is prompted by a clock, then a judgement
@@ -604,6 +607,27 @@ questions include where raw experience lives, what marks an experience as worth 
 reviews what dreaming proposes, what evidence shows a lesson changed how work is done, whether
 dreaming may change the body or only the memory, what cadence suits the pass, and whether
 lessons pass between repositories.
+
+### Two readings of one report
+
+A second seat (Rocket holds Patina) read the same report the same day against outside research:
+[`doing-and-dreaming-reading.md`](loop-engineering-governance-2026-11/doing-and-dreaming-reading.md).
+Its boundary: it "does not set it beside the Practice's existing mechanisms; that comparison is
+still the later work." This section is that comparison, from the estate's own records. The two
+were written without sight of each other and should be read together. Where they meet:
+
+| Point | The field, in that reading | The estate, in these findings |
+| --- | --- | --- |
+| Waking | "A lesson that must hold needs a control, not a note" | Guidance read at the open did not bind at the act; what bound was a gate, a counter, a required sentence. |
+| Who reviews | "Agreement among reviewing agents is weak evidence" | Eight convergent Cricket verdicts over one frame "carry no more evidence than the frame does". |
+| The gate on a proposed change | Review by reading "is a weaker gate than the proposal assumes"; the reliable method gates on execution | Four reviewers hardened a mechanism none asked whether to delete; the scenarios are a way to gate on behaviour. |
+| Checking that it took | A method: "compare with the lesson withheld" | The feasibility check ran exactly that shape once: one scenario with a rule present and with it removed. |
+| Selection | Selecting by surprise "can amplify an accident" | These findings offer the classes of owner catch as a selection key. That reading's caution applies: a class with one instance is an observation. |
+| Capture | It supports capture and challenges leaving it unedited: what the writer is told about the environment changed results | The log is written by the agent it describes, and napkins over-record corrections. |
+
+Two independent lines of evidence, the field's and the estate's, reach the same place on the
+first four rows. That is stronger than either alone, and it is the part of this section the
+mechanism step should weigh most.
 
 ### One diagnosis, two halves
 
