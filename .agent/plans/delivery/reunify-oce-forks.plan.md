@@ -91,8 +91,8 @@ back to being a plain mirror of Oak: one line of development again.
    word; the fork's settings were read through the API on 2026-11-12.
    1. Prove `engraph`'s tip is an ancestor of Oak's `main` (criterion 1) and that the mirror
       workflow has fast-forwarded the fork's `main` to Oak's `main`.
-   2. Stop the carrier first. Set the fork's `UPSTREAM_CARRIER_ENABLED` variable to anything but
-      `true`, wait for any carrier run already started to finish (the variable is read only when
+   2. Stop the carrier first. Delete the fork's `UPSTREAM_CARRIER_ENABLED` variable, or set it to
+      `false`, wait for any carrier run already started to finish (the variable is read only when
       a run starts), then close every open carrier pull request and delete every
       `automation/upstream-carrier-*` branch, with or without a pull request.
       `UPSTREAM_MIRROR_ENABLED` stays `true`.
