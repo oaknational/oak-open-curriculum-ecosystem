@@ -43,6 +43,16 @@ interface FakeMediaQueryList {
   addEventListener: (type: string, listener: () => void) => void;
 }
 
+/**
+ * The DOMStringMap name mapping: a camelCase dataset property names the
+ * kebab-cased `data-*` attribute, so `dataset.theme` and `data-theme` are
+ * one state.
+ */
+function datasetAttributeName(property: string): string {
+  const kebabCased = property.replaceAll(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
+  return `data-${kebabCased}`;
+}
+
 function createWorld(options?: {
   storedTheme?: string;
   storedMotion?: string;
@@ -57,8 +67,6 @@ function createWorld(options?: {
   // dataset mirrors the real DOMStringMap contract: property writes and
   // deletes are the same state as the data-* attributes, so the attributes
   // Map stays the single source of truth for every assertion.
-  const datasetAttributeName = (property: string): string =>
-    `data-${property.replaceAll(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}`;
   const documentFake = {
     documentElement: {
       setAttribute: (name: string, value: string) => {

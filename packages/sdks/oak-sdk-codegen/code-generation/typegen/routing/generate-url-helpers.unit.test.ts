@@ -53,7 +53,7 @@ describe('generateUrlHelpers', () => {
 
     it('does not generate /teachers/programmes/ for sequences', () => {
       const output = generateUrlHelpers();
-      const seqMatch = output.match(/function urlForSequence[\s\S]*?\n}/m);
+      const seqMatch = /function urlForSequence[\s\S]*?\n}/m.exec(output);
       expect(seqMatch).not.toBeNull();
       if (seqMatch) {
         expect(seqMatch[0]).not.toContain('/teachers/programmes/');
@@ -66,7 +66,7 @@ describe('generateUrlHelpers', () => {
     it('generates /teachers/curriculum/{sequenceSlug}/units/{unitSlug}', () => {
       const output = generateUrlHelpers();
       // The urlForUnit body should reference /curriculum/ and /units/
-      const unitMatch = output.match(/function urlForUnit[\s\S]*?\n}/m);
+      const unitMatch = /function urlForUnit[\s\S]*?\n}/m.exec(output);
       expect(unitMatch).not.toBeNull();
       if (unitMatch) {
         expect(unitMatch[0]).toContain('/teachers/curriculum/');
@@ -77,7 +77,7 @@ describe('generateUrlHelpers', () => {
     it('accepts sequenceSlug in context (not subjectSlug/phaseSlug)', () => {
       const output = generateUrlHelpers();
       // The context parameter should reference sequenceSlug, not subjectSlug/phaseSlug
-      const unitMatch = output.match(/function urlForUnit\(slug: string, context\?:[^)]+\)/);
+      const unitMatch = /function urlForUnit\(slug: string, context\?:[^)]+\)/.exec(output);
       expect(unitMatch).not.toBeNull();
       if (unitMatch) {
         expect(unitMatch[0]).toContain('sequenceSlug');
@@ -86,7 +86,7 @@ describe('generateUrlHelpers', () => {
 
     it('does not use /teachers/programmes/ for units', () => {
       const output = generateUrlHelpers();
-      const unitMatch = output.match(/function urlForUnit[\s\S]*?\n}/m);
+      const unitMatch = /function urlForUnit[\s\S]*?\n}/m.exec(output);
       expect(unitMatch).not.toBeNull();
       if (unitMatch) {
         expect(unitMatch[0]).not.toContain('/teachers/programmes/');
@@ -98,7 +98,7 @@ describe('generateUrlHelpers', () => {
     it('generates /teachers/lessons/{slug} (unchanged)', () => {
       const output = generateUrlHelpers();
       expect(output).toContain('/teachers/lessons/');
-      const lessonMatch = output.match(/function urlForLesson[\s\S]*?\n}/m);
+      const lessonMatch = /function urlForLesson[\s\S]*?\n}/m.exec(output);
       expect(lessonMatch).not.toBeNull();
     });
   });
@@ -115,7 +115,7 @@ describe('generateUrlHelpers', () => {
   describe('generateOakUrlWithContext', () => {
     it('context type uses sequenceSlug for unit (not subjectSlug/phaseSlug)', () => {
       const output = generateUrlHelpers();
-      const contextMatch = output.match(/unit\?:\s*\{[^}]+\}/);
+      const contextMatch = /unit\?:\s*\{[^}]+\}/.exec(output);
       expect(contextMatch).not.toBeNull();
       if (contextMatch) {
         expect(contextMatch[0]).toContain('sequenceSlug');

@@ -81,6 +81,16 @@ const config: KnipConfig = {
       // operational notes and platform shims as default source.
       entry: ['package.json'],
       project: [],
+      ignoreDependencies: [
+        // Spawned as `pnpm exec markdownlint-cli2` from the repo root by
+        // agent-tools' repo-check (the markdown gate over the staged set and the
+        // tracked tree), never referenced from a root script knip can parse. It
+        // stays a root devDependency because its config
+        // (`.markdownlint-cli2.jsonc`) and its exec cwd are the root; scoped to
+        // this workspace so a stray copy elsewhere is still reported. Prettier is
+        // referenced by `prettier.config.ts`, so knip reads it as used.
+        'markdownlint-cli2',
+      ],
     },
     'agent-tools': {
       // Platform adapters (src/claude/, future src/codex/, src/cursor/) are
@@ -100,6 +110,7 @@ const config: KnipConfig = {
         'src/cursor/**/*.ts',
         'src/hook-policy/pre-tool-use-dispatch.ts',
         'src/repo-check/repo-check.ts',
+        'src/gate-slot/gate-slot.ts',
         'src/commit-advisories/check-commit-message.ts',
         'src/commit-advisories/check-commit-skill-advisories.ts',
         'src/workspace-census/cli.ts',
@@ -108,9 +119,16 @@ const config: KnipConfig = {
         'src/validators/fitness-vocabulary/validate-fitness-vocabulary.ts',
         'src/validators/collaboration-state/validate-collaboration-state.ts',
         'src/validators/protocol-wire/validate-protocol-wire-contract.ts',
+        'src/validators/operator-profile/validate-operator-profile.ts',
+        'src/validators/operator-profile/validate-operator-profile-contract.ts',
+        'src/validators/operator-profile/operator-profile-sync.ts',
         'src/validators/stale-script-invocations/validate-no-stale-script-invocations.ts',
         'src/validators/lifecycle-scripts/validate-lifecycle-scripts.ts',
         'src/validators/markdown-links/validate-markdown-links.ts',
+        'src/validators/cited-paths/validate-cited-paths.ts',
+        'src/validators/cited-scripts/validate-cited-scripts.ts',
+        'src/validators/lineage-names/validate-no-lineage-names.ts',
+        'src/validators/family-conformance/validate-family-conformance.ts',
         'src/validators/pretooluse-guard-routing/validate-pretooluse-guard-routing.ts',
         'src/validators/policy-reappraisal/validate-policy-reappraisal.ts',
         'src/validators/claim-freshness/validate-claim-freshness.ts',
@@ -122,36 +140,25 @@ const config: KnipConfig = {
         'src/validators/notion-fence/validate-notion-fence.ts',
         'src/validators/reference-direction/validate-reference-direction.ts',
         'src/validators/machine-local-paths/validate-no-machine-local-paths.ts',
+        'src/validators/core-adr-citations/validate-core-adr-citations.ts',
+        'src/validators/core-host-names/validate-no-host-names-in-core-headings.ts',
         'src/validators/patterns-index/validate-patterns-index.ts',
-        'src/validators/ratified-lists/validate-ratified-lists.ts',
+        'src/rule-declarations/rule-frontmatter-sweep.ts',
         'src/validators/portability/validate-portability.ts',
         'src/validators/subagents/validate-subagents.ts',
         'src/practice-fitness/validate-practice-fitness.ts',
+        'src/ci/ci-docs-only-check.ts',
         'src/ci/ci-schema-drift-check.ts',
         'src/ci/ci-turbo-report.ts',
         'src/mcp-content-current-source/validate-current-source.ts',
+        // MCP-103 content-workspace generator: invoked via the
+        // `build-mcp-content-workspace` / `validate-mcp-content-workspace`
+        // package scripts (`pnpm exec tsx`), not imported.
+        'src/mcp-content-workspace/build-content-workspace.ts',
         // PDR-131 throughput register CLI: invoked via the
         // `agent-tools:pr-throughput` package script (`pnpm exec tsx`), not
         // imported.
         'src/pr-throughput/cli.ts',
-        // Refounding mechanical-instrument CLIs (plan-corpus-refounding R0a):
-        // invoked via `pnpm exec tsx` package scripts, not imported.
-        'src/refounding/refound-freeze.ts',
-        'src/refounding/refound-verify-freeze.ts',
-        'src/refounding/refound-inventory.ts',
-        'src/refounding/refound-residue.ts',
-        'src/refounding/refound-sweep.ts',
-        'src/refounding/refound-plant-orphan.ts',
-        'src/refounding/refound-plant-challenge-canary.ts',
-        'src/refounding/refound-merge-recheck.ts',
-        'src/refounding/refound-tile.ts',
-        'src/refounding/refound-default-ledger.ts',
-        'src/refounding/refound-claim-census.ts',
-        'src/refounding/refound-batch-status.ts',
-        'src/refounding/refound-window-sample.ts',
-        // Plan-state recomputation CLI (plan-corpus-refounding R0b):
-        // invoked via `pnpm exec tsx` package scripts, not imported.
-        'src/plan-state/plan-state.ts',
         // Corpus-analysis workflow stage entries: consumed by esbuild as string
         // entry points in workflows/build/workflow-builder.ts (bundled into
         // self-contained harness artefacts), which knip cannot trace as imports.
@@ -159,20 +166,26 @@ const config: KnipConfig = {
         // Restatement-audit workflow stage entries: same string-entry-point
         // pattern as corpus-analysis above.
         'src/restatement-audit/workflows/*.workflow.ts',
+        // Smoke checks: the smoke runner (`src/bin/run-smoke-tests.ts`)
+        // discovers and spawns every `smoke-tests/*.smoke.ts`, so no import or
+        // package script names them; each is an entry so what it imports from
+        // `src/` is traced.
+        'smoke-tests/*.smoke.ts',
       ],
       // tests/ is inside the project so tests-only dependencies are traced
       // (the depcruise red-proof helper imports dependency-cruiser from
       // tests/test-helpers/ — widened 2026-08-10; test files are entries via
-      // the vitest plugin).
-      project: ['src/**/*.{ts,tsx,css}', 'tests/**/*.ts'],
+      // the vitest plugin). smoke-tests/ is inside it so a dead smoke helper
+      // file or export is reported.
+      project: ['src/**/*.{ts,tsx,css}', 'tests/**/*.ts', 'smoke-tests/**/*.ts'],
       // TypeScript-estate review instrument (owner-ratified plan
       // typescript-estate-consolidation-review, staged contract): the module's
       // exported surface is contract-anchored for slices that are
       // deliberately HELD (delivery, graph/ownership, candidate assembly,
       // raw-document composition, CLI wiring), so knip's dead-code model
-      // false-positives on it until those consumers land. Its two real
-      // smokes are invoked through dist by package scripts, which knip
-      // cannot trace. REMOVAL CONDITION: delete this ignore when the estate
+      // false-positives on it until those consumers land. Its smokes
+      // import it through dist, which knip cannot trace to the source.
+      // REMOVAL CONDITION: delete this ignore when the estate
       // run lands (plan §Todos step 8-9); knip then audits the module in
       // full. Scoped-and-dated per configure-checks-not-blindly-obey; the
       // module's own tsc/eslint/vitest gates remain fully live.
@@ -338,8 +351,14 @@ const config: KnipConfig = {
       // Source entries behind the dist-pointing exports map, one per subpath
       // (see oak-eslint note on the removed `development` condition — the
       // former exports-map auto-detection resolved that condition to src).
-      entry: ['src/index.ts', 'src/eef-strands/index.ts', 'src/curriculum/index.ts'],
-      project: ['src/**/*.{ts,css}'],
+      entry: [
+        'src/index.ts',
+        'src/eef-strands/index.ts',
+        'src/curriculum/index.ts',
+        // The markdown-projection writer, run via `pnpm render:eef-markdown`.
+        'scripts/**/*.ts',
+      ],
+      project: ['src/**/*.{ts,css}', 'scripts/**/*.ts'],
     },
     'packages/sdks/oak-curriculum-sdk': {
       // Knip cannot resolve entries through createSdkConfig() factory.

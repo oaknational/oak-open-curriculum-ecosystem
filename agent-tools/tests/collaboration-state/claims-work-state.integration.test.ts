@@ -42,8 +42,7 @@ function heartbeat(branch: string, createdAt: string): CommsEvent {
 }
 
 const activeClaims: CollaborationRegistry = {
-  schema_version: '1.3.0',
-  commit_queue: [],
+  schema_version: '1.4.0',
   claims: [
     {
       claim_id: '11111111-1111-4111-8111-111111111111',

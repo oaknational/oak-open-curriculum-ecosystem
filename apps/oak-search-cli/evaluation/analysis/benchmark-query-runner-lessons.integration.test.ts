@@ -40,22 +40,22 @@ function stubResult(slug: string): LessonResult {
   };
 }
 
-describe('runQuery', () => {
-  /**
-   * Creates a mock search function that returns specified slugs
-   * in SDK LessonsSearchResult format.
-   */
-  function createMockSearch(slugs: readonly string[]) {
-    const result: LessonsSearchResult = {
-      scope: 'lessons',
-      results: slugs.map(stubResult),
-      total: slugs.length,
-      took: 1,
-      timedOut: false,
-    };
-    return vi.fn().mockResolvedValue(ok(result));
-  }
+/**
+ * Creates a mock search function that returns specified slugs
+ * in SDK LessonsSearchResult format.
+ */
+function createMockSearch(slugs: readonly string[]) {
+  const result: LessonsSearchResult = {
+    scope: 'lessons',
+    results: slugs.map(stubResult),
+    total: slugs.length,
+    took: 1,
+    timedOut: false,
+  };
+  return vi.fn().mockResolvedValue(ok(result));
+}
 
+describe('runQuery', () => {
   describe('category field', () => {
     it('should include category in QueryResult', async () => {
       const mockSearch = createMockSearch(['test-slug']);

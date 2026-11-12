@@ -24,14 +24,14 @@ jobs:
     # Only release when the upstream CI run succeeded.
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
+    # id-token: write lets the Turbo remote cache step below exchange the
+    # job's OIDC token for a short-lived Vercel token; no long-lived cache
+    # secret is read anywhere in this workflow.
     permissions:
       contents: write
       issues: write
       pull-requests: write
-
-    env:
-      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+      id-token: write
 
     steps:
       # A GitHub App token (not the default GITHUB_TOKEN) so the version-bump
@@ -65,6 +65,28 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Turbo remote cache by OIDC
+        id: turbo-remote-cache
+        # The step runs only where an OIDC token can exist and a team is named:
+        # a fork's or Dependabot's pull request has no usable token, and a fork
+        # or a clone without the TURBO_TEAM repository variable names no team.
+        # It never fails the job either: the cache is a speed-up, not a gate,
+        # so a refused exchange shows as this step's own red mark and turbo
+        # runs on its local cache. The next step says so in either case.
+        if: vars.TURBO_TEAM != '' && github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+        continue-on-error: true
+        uses: vercel/setup-turborepo-remote-cache-action@49d7b1b46ba4c9251e1977986bfe18336feabc8f # v1.1.0
+        with:
+          team: ${{ vars.TURBO_TEAM }}
+      - name: Turbo remote cache not in use
+        if: steps.turbo-remote-cache.outcome != 'success'
+        run: >-
+          echo "::notice title=Turbo remote cache::Not in use for this run
+          (${{ steps.turbo-remote-cache.outcome }}); turbo uses its local cache.
+          To share a cache, configure an optional remote Turbo cache: a TURBO_TEAM
+          repository variable and a Vercel OIDC policy for this repository
+          (docs/engineering/build-system.md, Caching)."
 
       - name: Build
         run: pnpm build

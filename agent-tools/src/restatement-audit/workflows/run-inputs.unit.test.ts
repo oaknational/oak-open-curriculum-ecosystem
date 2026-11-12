@@ -234,7 +234,7 @@ describe('validateRunDataFrom', () => {
     });
     expect(isOk(result)).toBe(true);
     const ids = unwrap(result).groundingInstances.map((i) => i.id);
-    expect(ids.sort((a, b) => a.localeCompare(b))).toEqual(['f1', 'f2']);
+    expect(ids.toSorted((a, b) => a.localeCompare(b))).toEqual(['f1', 'f2']);
   });
 
   it('refuses resolved cluster ids lacking disposition evidence in ANY prior checkpoint — an unevidenced id must never silently skip re-voting', () => {

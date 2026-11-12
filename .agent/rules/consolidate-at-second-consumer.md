@@ -1,3 +1,8 @@
+---
+classification: core
+description: Consolidate duplicated shapes when the second consumer appears.
+---
+
 # Consolidate at the Second Consumer
 
 Operationalises the no-duplication principle in
@@ -24,6 +29,17 @@ or workflow shape:
 
 The pressure signal is not "this feels reusable"; it is "the next caller
 would make two places that must evolve together."
+
+**Test a one-consumer premise by search.** Before building a local shape on the
+claim that nothing else needs it, search the estate for the shape. A bounded
+check found an existing shell segmenter two directories away with four
+consumers, so a lane's one-consumer premise was unsupported; moving the
+segmenter to a shared home let one cure close a guard bypass (September 2026).
+The search comes first for a mechanism the estate has had to get exactly right
+before: a parser, a matcher, a validator, a process kill or sweep, a retry, a
+lock. A five-line helper that killed a process group arrived faster than the
+search did, in an estate whose own module already recorded the platform
+behaviour the helper got wrong (2026-09-29).
 
 **Reclassification is the event.** When the extraction moves code into a
 library, the move itself changes the code's obligations independent of any

@@ -1,14 +1,31 @@
+import { dirname, join } from 'node:path';
+
 import { err, isErr, isOk, ok, unwrap } from '@oaknational/result';
 import { describe, expect, it } from 'vitest';
 
 import { createSpawnWorktree, type SpawnGitRunner } from './create.js';
 
+/**
+ * Fixture forms follow their real sources: the coordination home and every
+ * porcelain path are FORWARD-SLASH, because git emits forward slashes on
+ * every platform and `resolveCoordinationHome` passes them through — while
+ * the expected worktree path is HOST-JOINED, because that is the product's
+ * documented output (a sibling of the home named `oak-<slug>`). The product
+ * compares the two through normalised forms; a fixture that host-joined the
+ * porcelain would prove a git that does not exist (2026-08-12 review).
+ */
 const HOME = '/workspace/oak-open-curriculum-ecosystem';
+const GIT_SIBLING_WORKTREE = '/workspace/oak-spawn-flow';
+const SIBLING_WORKTREE = join(dirname(HOME), 'oak-spawn-flow');
 
 interface GitCall {
   readonly args: readonly string[];
   readonly cwd: string;
 }
+
+/** A git runner whose every call fails as git does when the branch already exists. */
+const failingGit: SpawnGitRunner = () =>
+  err(new Error('fatal: a branch named "feat/spawn-flow" already exists'));
 
 /**
  * A recording {@link SpawnGitRunner} fake — the injected seam for these unit tests.
@@ -51,21 +68,14 @@ describe('createSpawnWorktree', () => {
     expect(isOk(result)).toBe(true);
     const worktree = unwrap(result);
     expect(worktree.branch).toBe('feat/spawn-flow');
-    expect(worktree.worktreePath).toBe('/workspace/oak-spawn-flow');
+    expect(worktree.worktreePath).toBe(SIBLING_WORKTREE);
     expect(worktree.base).toBe('origin/main');
     expect(worktree.resumed).toBe(false);
     // It checks for an existing worktree first (idempotent-retry support), then adds.
     expect(calls).toEqual([
       { args: ['worktree', 'list', '--porcelain'], cwd: HOME },
       {
-        args: [
-          'worktree',
-          'add',
-          '/workspace/oak-spawn-flow',
-          '-b',
-          'feat/spawn-flow',
-          'origin/main',
-        ],
+        args: ['worktree', 'add', SIBLING_WORKTREE, '-b', 'feat/spawn-flow', 'origin/main'],
         cwd: HOME,
       },
     ]);
@@ -75,9 +85,7 @@ describe('createSpawnWorktree', () => {
     // A prior `agent spawn` created the worktree+branch but a later step (build)
     // failed, leaving it on disk. Retrying must RESUME (so the caller re-runs build)
     // rather than erroring — and without removing anything (never-use-git-to-remove-work).
-    const { runGit, calls } = recordingGit(
-      porcelainBlock('/workspace/oak-spawn-flow', 'feat/spawn-flow'),
-    );
+    const { runGit, calls } = recordingGit(porcelainBlock(GIT_SIBLING_WORKTREE, 'feat/spawn-flow'));
 
     const result = createSpawnWorktree({
       slug: 'spawn-flow',
@@ -89,7 +97,7 @@ describe('createSpawnWorktree', () => {
 
     expect(isOk(result)).toBe(true);
     const worktree = unwrap(result);
-    expect(worktree.worktreePath).toBe('/workspace/oak-spawn-flow');
+    expect(worktree.worktreePath).toBe(SIBLING_WORKTREE);
     expect(worktree.branch).toBe('feat/spawn-flow');
     // Flagged as a resume so callers do not report it as a fresh creation from `base`
     // (the branch was cut from its original base earlier, not from this invocation's base).
@@ -100,7 +108,7 @@ describe('createSpawnWorktree', () => {
 
   it('returns err when the target path exists on a different branch (genuine collision, no add)', () => {
     const { runGit, calls } = recordingGit(
-      porcelainBlock('/workspace/oak-spawn-flow', 'feat/something-else'),
+      porcelainBlock(GIT_SIBLING_WORKTREE, 'feat/something-else'),
     );
 
     const result = createSpawnWorktree({
@@ -294,15 +302,12 @@ describe('createSpawnWorktree', () => {
   });
 
   it('returns err, naming the branch, base, and worktree path, when git fails', () => {
-    const failing: SpawnGitRunner = () =>
-      err(new Error('fatal: a branch named "feat/spawn-flow" already exists'));
-
     const result = createSpawnWorktree({
       slug: 'spawn-flow',
       type: 'feat',
       base: 'origin/main',
       coordinationHome: HOME,
-      runGit: failing,
+      runGit: failingGit,
     });
 
     expect(isErr(result)).toBe(true);

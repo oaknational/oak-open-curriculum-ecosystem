@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { Linter } from '@typescript-eslint/utils/ts-eslint';
 import type { TSESLint } from '@typescript-eslint/utils';
 import { strict } from './strict.js';
+import { testRules } from '../test-rules.js';
+import { lintFixture, linter, TYPED_RULES_OVERRIDE } from './test-helpers/lint-fixture.js';
 
 /**
  * Behavioural tests for the strict config exported by
@@ -18,8 +19,9 @@ import { strict } from './strict.js';
  * Per `principles.md` §Code Quality (no skipped tests) and §Testing —
  * skipping mechanisms (`it.skip`, `describe.skip`, `it.only`,
  * `describe.only`, `it.todo`, `xit`, `xdescribe`) are forbidden outright.
- * The vitest plugin rules `vitest/no-disabled-tests` and
- * `vitest/no-focused-tests` enforce this at the lint surface.
+ * The vitest plugin rules `vitest/no-disabled-tests`,
+ * `vitest/no-focused-tests` and `vitest/warn-todo` enforce this at the
+ * lint surface.
  *
  * Worked example: a regression on this surface would silently allow a
  * future commit to reintroduce `it.skip(...)` six months after the binary
@@ -27,52 +29,6 @@ import { strict } from './strict.js';
  * `.agent/plans/agentic-engineering-enhancements/current/doctrine-enforcement-quick-wins.plan.md`
  * §Issue 1.
  */
-
-const linter = new Linter({ configType: 'flat' });
-
-/**
- * Type-information-requiring rules that the strict config inherits from
- * `tseslint.configs.strict` and the recommended config. Linting an
- * in-memory fixture cannot supply parser services without spawning a
- * TypeScript project, which the testing-strategy directive forbids in
- * unit tests (`testing-strategy.md` § No process spawning in in-process
- * tests). The override below disables only those typed rules so the
- * parser-free run still produces faithful coverage of the syntactic
- * rules under test.
- */
-const TYPED_RULES_OFF = {
-  '@typescript-eslint/no-misused-promises': 'off',
-  '@typescript-eslint/no-floating-promises': 'off',
-  '@typescript-eslint/no-unsafe-assignment': 'off',
-  '@typescript-eslint/no-unsafe-return': 'off',
-  '@typescript-eslint/no-deprecated': 'off',
-  '@typescript-eslint/consistent-return': 'off',
-  '@typescript-eslint/consistent-type-exports': 'off',
-  'sonarjs/no-alphabetical-sort': 'off',
-  'sonarjs/void-use': 'off',
-} as const;
-
-const TYPED_RULES_OVERRIDE: TSESLint.FlatConfig.Config = {
-  rules: TYPED_RULES_OFF,
-};
-
-interface LintResult {
-  readonly ruleIds: readonly string[];
-  readonly messages: readonly TSESLint.Linter.LintMessage[];
-}
-
-function lint(code: string, filename: string): LintResult {
-  const config: TSESLint.FlatConfig.ConfigArray = [...strict, TYPED_RULES_OVERRIDE];
-  const messages = linter.verify(code, config, {
-    filename,
-  });
-
-  const ruleIds = messages
-    .map((message) => message.ruleId)
-    .filter((value): value is string => value !== null && value !== undefined);
-
-  return { ruleIds, messages };
-}
 
 describe('@oaknational/eslint-plugin-standards strict config: vitest test-disabling pathogens', () => {
   it('reports vitest/no-disabled-tests for it.skip(...)', () => {
@@ -84,7 +40,7 @@ describe('@oaknational/eslint-plugin-standards strict config: vitest test-disabl
       'export {};',
     ].join('\n');
 
-    const { ruleIds } = lint(code, 'fixture.test.ts');
+    const { ruleIds } = lintFixture(strict, code, 'fixture.test.ts');
 
     expect(ruleIds).toContain('vitest/no-disabled-tests');
   });
@@ -98,9 +54,103 @@ describe('@oaknational/eslint-plugin-standards strict config: vitest test-disabl
       'export {};',
     ].join('\n');
 
-    const { ruleIds } = lint(code, 'fixture.test.ts');
+    const { ruleIds } = lintFixture(strict, code, 'fixture.test.ts');
 
     expect(ruleIds).toContain('vitest/no-disabled-tests');
+  });
+
+  it('reports vitest/warn-todo for it.todo(...)', () => {
+    const code = [
+      "import { describe, it } from 'vitest';",
+      "describe('suite', () => {",
+      "  it.todo('case to write');",
+      '});',
+      'export {};',
+    ].join('\n');
+
+    const { ruleIds } = lintFixture(strict, code, 'fixture.test.ts');
+
+    expect(ruleIds).toContain('vitest/warn-todo');
+  });
+
+  it('reports vitest/warn-todo for test.todo(...)', () => {
+    const code = [
+      "import { describe, test } from 'vitest';",
+      "describe('suite', () => {",
+      "  test.todo('case to write');",
+      '});',
+      'export {};',
+    ].join('\n');
+
+    const { ruleIds } = lintFixture(strict, code, 'fixture.test.ts');
+
+    expect(ruleIds).toContain('vitest/warn-todo');
+  });
+
+  it('reports vitest/warn-todo for describe.todo(...)', () => {
+    const code = [
+      "import { describe } from 'vitest';",
+      "describe.todo('suite to write');",
+      'export {};',
+    ].join('\n');
+
+    const { ruleIds } = lintFixture(strict, code, 'fixture.test.ts');
+
+    expect(ruleIds).toContain('vitest/warn-todo');
+  });
+
+  it('reports vitest/warn-todo for a test marked with the todo option', () => {
+    const code = [
+      "import { describe, it } from 'vitest';",
+      "describe('suite', () => {",
+      "  it('case to write', { todo: true }, () => {});",
+      '});',
+      'export {};',
+    ].join('\n');
+
+    const { ruleIds } = lintFixture(strict, code, 'fixture.test.ts');
+
+    expect(ruleIds).toContain('vitest/warn-todo');
+  });
+
+  it('still reports the three test-shape rules when a workspace layers testRules on test files', () => {
+    const code = [
+      "import { describe, it } from 'vitest';",
+      "describe('suite', () => {",
+      "  it.skip('skipped case', () => {});",
+      "  it.only('focused case', () => {});",
+      "  it.todo('case to write');",
+      '});',
+      'export {};',
+    ].join('\n');
+    const config: TSESLint.FlatConfig.ConfigArray = [
+      ...strict,
+      { files: ['**/*.test.ts'], rules: testRules },
+      TYPED_RULES_OVERRIDE,
+    ];
+
+    const ruleIds = linter
+      .verify(code, config, { filename: 'fixture.test.ts' })
+      .map((message) => message.ruleId)
+      .filter((value): value is string => value !== null && value !== undefined);
+
+    expect(ruleIds).toContain('vitest/no-disabled-tests');
+    expect(ruleIds).toContain('vitest/no-focused-tests');
+    expect(ruleIds).toContain('vitest/warn-todo');
+  });
+
+  it('does not report vitest/warn-todo for it.each(...)', () => {
+    const code = [
+      "import { describe, it } from 'vitest';",
+      "describe('suite', () => {",
+      "  it.each([[1]])('case', () => {});",
+      '});',
+      'export {};',
+    ].join('\n');
+
+    const { ruleIds } = lintFixture(strict, code, 'fixture.test.ts');
+
+    expect(ruleIds).not.toContain('vitest/warn-todo');
   });
 
   it('reports vitest/no-focused-tests for it.only(...)', () => {
@@ -112,7 +162,7 @@ describe('@oaknational/eslint-plugin-standards strict config: vitest test-disabl
       'export {};',
     ].join('\n');
 
-    const { ruleIds } = lint(code, 'fixture.test.ts');
+    const { ruleIds } = lintFixture(strict, code, 'fixture.test.ts');
 
     expect(ruleIds).toContain('vitest/no-focused-tests');
   });
@@ -126,7 +176,7 @@ describe('@oaknational/eslint-plugin-standards strict config: vitest test-disabl
       'export {};',
     ].join('\n');
 
-    const { ruleIds } = lint(code, 'fixture.test.ts');
+    const { ruleIds } = lintFixture(strict, code, 'fixture.test.ts');
 
     expect(ruleIds).toContain('vitest/no-focused-tests');
   });
@@ -140,7 +190,7 @@ describe('@oaknational/eslint-plugin-standards strict config: vitest test-disabl
       'export {};',
     ].join('\n');
 
-    const { ruleIds } = lint(code, 'fixture.test.ts');
+    const { ruleIds } = lintFixture(strict, code, 'fixture.test.ts');
 
     expect(ruleIds).not.toContain('vitest/no-disabled-tests');
     expect(ruleIds).not.toContain('vitest/no-focused-tests');
@@ -178,7 +228,7 @@ describe('@oaknational/eslint-plugin-standards strict config: TS-suppression dir
       'export { value };',
     ].join('\n');
 
-    const { ruleIds } = lint(code, 'fixture.ts');
+    const { ruleIds } = lintFixture(strict, code, 'fixture.ts');
 
     expect(ruleIds).toContain('@typescript-eslint/ban-ts-comment');
   });
@@ -190,7 +240,7 @@ describe('@oaknational/eslint-plugin-standards strict config: TS-suppression dir
       'export { value };',
     ].join('\n');
 
-    const { ruleIds } = lint(code, 'fixture.ts');
+    const { ruleIds } = lintFixture(strict, code, 'fixture.ts');
 
     expect(ruleIds).toContain('@typescript-eslint/ban-ts-comment');
   });
@@ -202,7 +252,7 @@ describe('@oaknational/eslint-plugin-standards strict config: TS-suppression dir
       'export { value };',
     ].join('\n');
 
-    const { ruleIds } = lint(code, 'fixture.ts');
+    const { ruleIds } = lintFixture(strict, code, 'fixture.ts');
 
     expect(ruleIds).not.toContain('@typescript-eslint/ban-ts-comment');
   });
@@ -214,7 +264,7 @@ describe('@oaknational/eslint-plugin-standards strict config: TS-suppression dir
       'export { value };',
     ].join('\n');
 
-    const { ruleIds } = lint(code, 'fixture.ts');
+    const { ruleIds } = lintFixture(strict, code, 'fixture.ts');
 
     expect(ruleIds).not.toContain('@typescript-eslint/ban-ts-comment');
     expect(ruleIds).not.toContain('@oaknational/no-eslint-disable');
@@ -227,7 +277,7 @@ describe('@oaknational/eslint-plugin-standards strict config: TS-suppression dir
       'export { value };',
     ].join('\n');
 
-    const { ruleIds } = lint(code, 'fixture.ts');
+    const { ruleIds } = lintFixture(strict, code, 'fixture.ts');
 
     expect(ruleIds).toContain('@oaknational/no-eslint-disable');
   });
@@ -237,7 +287,7 @@ describe('@oaknational/eslint-plugin-standards strict config: TS-suppression dir
       '\n',
     );
 
-    const { ruleIds } = lint(code, 'fixture.ts');
+    const { ruleIds } = lintFixture(strict, code, 'fixture.ts');
 
     expect(ruleIds).toContain('@oaknational/no-eslint-disable');
   });
@@ -268,7 +318,7 @@ describe('@oaknational/eslint-plugin-standards strict config: no-real-io-in-test
       'export { contents };',
     ].join('\n');
 
-    const { ruleIds } = lint(code, 'fixture.test.ts');
+    const { ruleIds } = lintFixture(strict, code, 'fixture.test.ts');
 
     expect(ruleIds).toContain('@oaknational/no-real-io-in-tests');
   });
@@ -276,7 +326,7 @@ describe('@oaknational/eslint-plugin-standards strict config: no-real-io-in-test
   it('reports @oaknational/no-real-io-in-tests for process.env access in *.test.ts', () => {
     const code = ['const apiKey = process.env.API_KEY;', 'export { apiKey };'].join('\n');
 
-    const { ruleIds } = lint(code, 'fixture.test.ts');
+    const { ruleIds } = lintFixture(strict, code, 'fixture.test.ts');
 
     expect(ruleIds).toContain('@oaknational/no-real-io-in-tests');
   });
@@ -288,7 +338,7 @@ describe('@oaknational/eslint-plugin-standards strict config: no-real-io-in-test
       'export { contents };',
     ].join('\n');
 
-    const { ruleIds } = lint(code, 'fixture.ts');
+    const { ruleIds } = lintFixture(strict, code, 'fixture.ts');
 
     expect(ruleIds).not.toContain('@oaknational/no-real-io-in-tests');
   });
@@ -300,7 +350,7 @@ describe('@oaknational/eslint-plugin-standards strict config: no-real-io-in-test
       'export { contents };',
     ].join('\n');
 
-    const { ruleIds } = lint(code, 'apps/x/src/test-helpers/loader.test.ts');
+    const { ruleIds } = lintFixture(strict, code, 'apps/x/src/test-helpers/loader.test.ts');
 
     expect(ruleIds).not.toContain('@oaknational/no-real-io-in-tests');
   });

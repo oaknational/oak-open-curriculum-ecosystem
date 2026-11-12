@@ -1,9 +1,14 @@
+---
+classification: core
+description: Important state and context must never be left in a temp file long-term. Temp files (e.g. /tmp/) are acceptable as compose-buffers (write → consume → done); they are forbidden as durable references from version-controlled or substrate files. Everything of importance stays in the repo.
+---
+
 # Important State Not In Temp Files
 
 Specialises the no-machine-local-paths principle
 ([principles.md §Code Design and Architectural Principles](../directives/principles.md);
 shapes in
-[safety-and-security.md §Machine-local paths](../../docs/governance/safety-and-security.md#machine-local-paths))
+[privacy.md §Machine-local paths](../directives/privacy.md#machine-local-paths))
 for the durable-reference failure mode at the `/tmp/` class, and
 operationalises PDR-014's knowledge-flow pipeline (capture,
 distillation, graduation, enforcement) at the buffer-vs-reference
@@ -17,8 +22,8 @@ Worked instance that prompted graduation: Ferny Capture D in
 `/tmp/ferny-ws8-reviewer-synthesis-window2.md` was referenced from a
 napkin entry intended for ongoing follow-on-author consumption. The
 napkin pointer became a broken link the moment `/tmp/` rotated. Cured
-by moving the synthesis to
-`.agent/memory/active/ws-8-ratification-reviewer-synthesis-2026-05-24.md`
+by moving the synthesis into the active memory tier (the WS-8 ratification
+reviewer synthesis of 2026-05-24, a record jimcresswell.net still carries)
 and updating the napkin pointer. The same shape has appeared multiple
 times across sessions — this rule fixes the class.
 
@@ -33,6 +38,17 @@ Owner-stated 2026-05-24 (direct quote): *"important state and context
 must never be left in a temp file long-term, using it as a buffer is
 fine, but leaving it there for reference is not okay, everything of
 importance stays in the repo."*
+
+Tracked-versus-untracked is a placement axis, never an importance axis
+(owner, 2026-07-16, after an audit was scoped by tracked globs and missed
+the untracked handoff records where the worst defects lived: "we stop
+treating untracked files as if they are of secondary importance, they are
+local because they are high traffic and ephemeral, not because they don't
+matter, they matter, A LOT"). When scoping any corpus, audit, validator or
+conservation concern, include the untracked live tier — handoff records,
+rapid-comms channels, briefs, live reports — explicitly, classified by
+authoritative-versus-derived and live-versus-historical, never by git
+status.
 
 ## The Distinction
 
@@ -71,7 +87,7 @@ napkin entry references /tmp/synthesis.md for follow-on author      ❌
 comms event references /tmp/handover.md as the handover record      ❌
 plan file references /tmp/cycle-evidence.md as substrate            ❌
 .agent/ surface points at /tmp/ for ongoing context                 ❌
-curator-pass log names /tmp/ as load_bearing_working_artefact       ❌
+curator pass closes with its substance still only at /tmp/          ❌
 handoff record body asks the next agent to read /tmp/...md          ❌
 ```
 
@@ -119,10 +135,22 @@ instruction, surface the conflict in one sentence at the action moment
 ("tracking them in place — say if you'd rather I snapshot instead"), never
 resolve it silently toward the weaker protection.
 
+A placement that feels easy under a sensitivity constraint is checked against the tree before
+it is made. Search the tracked files for the thing being protected: one such search found
+sixty-two tracked files already naming it, and both of the estate's own tiers for derived
+analysis already in place. Repository data does not go in a machine-local folder (owner,
+2026-09-25); a guard's allowance of a path shape is not a reason to place something there.
+
 ## Composition With Other Rules
 
+- **The machine-local-path guard fires on the session scratchpad too**, and on
+  any file that names the home or temp directory, in-repo or not: give a
+  subagent its scratch location in the dispatch prompt or by `mktemp -d`, and
+  pass paths as arguments or read them from the working directory rather than
+  writing them into files (three refusals in one seat before the pattern was
+  learned, 2026-09-24; a fourth on an edit script, 2026-09-25).
 - **The no-machine-local-paths principle** (principles.md; shapes in
-  safety-and-security.md §Machine-local paths): forbids machine-local
+  privacy.md §Machine-local paths): forbids machine-local
   *paths* (the syntactic class). This rule forbids *durable
   references* to a particular machine-local class (`/tmp/`). A path
   under `/tmp/breezy-survey.md` is both — machine-local *and* not
@@ -142,13 +170,13 @@ resolve it silently toward the weaker protection.
 - **PDR-067 (surface classification)**: per-user-memory is a buffer,
   not a personal store. By the same logic, `/tmp/` is a buffer, not
   a substrate store.
-- **PDR-081 (curator role)**: the curator's per-pass log MAY name a
-  `/tmp/` working artefact only as a transient pointer that is
-  immediately resolved (substance absorbed by reference into routed
-  homes, or copied to a durable in-repo location, before the pass
-  closes). A pass that *closes* with the per-pass log's
-  `load_bearing_working_artefact` still pointing at `/tmp/` is in
-  violation.
+- **PDR-081 (curator role)**: the curator keeps no per-pass log (the
+  commit plus the homed substance is its record, PDR-081 as amended
+  2026-06-14), so a `/tmp/` working artefact used during a pass MAY be
+  named only as a transient pointer, resolved before the pass closes:
+  its substance is absorbed by reference into routed homes, or copied
+  to a durable in-repo location. A pass whose close-of-pass broadcast
+  or commit still points at `/tmp/` is in violation.
 
 ## Detection
 
@@ -189,9 +217,9 @@ curator-pass's own surface survey.
   after a reboot, will not have it.
 - "I'll move it later" pointers. The migration is the rule's whole
   cure — defer it and the substrate decays.
-- Curator-pass log files whose `load_bearing_working_artefact`
-  pointer remains at `/tmp/` after the pass closes. The pass-close
-  step is where the migration completes.
+- A curator pass that closes with its survey or working artefact
+  still only at `/tmp/`. The pass-close step is where the migration
+  completes.
 - Substrate-bridge files left at `/tmp/` after the agent who composed
   them retires. The bridge artefact is durable substrate by purpose;
   its home is `.agent/state/collaboration/handoffs/`.
@@ -200,7 +228,7 @@ curator-pass's own surface survey.
 
 ### Example 1 — the bug that prompted this rule
 
-`.agent/memory/active/archive/napkin-2026-05-24-shaded-silencing-dusk.md`
+OCE's archived napkin of 2026-05-24 (an OCE record)
 § "2026-05-24 — Ferny Fruiting Root / claude / claude-opus-4-7 /
 `ee16a4` — Window 2 session-end captures" → "Capture D — Owner rule
 (2026-05-24): no important state long-term in temp files":
@@ -208,8 +236,8 @@ curator-pass's own surface survey.
 > "my Capture B pointer at
 > `/tmp/ferny-ws8-reviewer-synthesis-window2.md` was the violation —
 > a napkin entry referenced `/tmp/` for ongoing follow-on-author
-> substrate. Cured this turn: synthesis content moved to
-> `.agent/memory/active/ws-8-ratification-reviewer-synthesis-2026-05-24.md`;
+> substrate. Cured this turn: synthesis content moved into the active memory
+> tier (the WS-8 ratification reviewer synthesis of 2026-05-24);
 > Capture B pointer updated."
 
 The cure is the canonical pattern: identify the substrate's true
@@ -233,17 +261,18 @@ naming the new durable location, not retroactive event editing.
 ### Example 3 — curator-pass first-day self-instantiation
 
 A deep-curation survey commissioned by an outgoing curator is
-delivered at `/tmp/<survey>.md`. The incoming curator's per-pass log
-names this `/tmp/` artefact as `load_bearing_working_artefact` in the
-frontmatter. **This is acceptable only as a transient pointer.** The
-pass's first concrete cycle is the migration: either copy the survey
-into `.agent/state/collaboration/handoffs/<handover-record>.md` (when
-the artefact is a one-shot role-transfer record) or absorb its
-substance by reference into routed permanent homes and delete the
-temp file (when the substance has been distributed across multiple
-permanent homes). The per-pass log's frontmatter pointer updates to
-the durable home — or the pointer is removed entirely once substance
-is distributed.
+delivered at `/tmp/<survey>.md`. The incoming curator's opening claim may
+name this `/tmp/` artefact transiently; the curator keeps no per-pass log
+(PDR-081 as amended 2026-06-14), and a claim and a broadcast are not one.
+**The artefact is acceptable only while the pass is open.** The pass's
+first concrete cycle is the migration: either copy the survey into
+`.agent/state/collaboration/handoffs/<handover-record>.md` (when the
+artefact is a one-shot role-transfer record) or absorb its substance by
+reference into routed permanent homes and delete the temp file (when the
+substance has been distributed across multiple permanent homes). The
+close-of-pass broadcast names the durable home, or drops the pointer once
+substance is distributed; the commit that homes the substance is the
+record of where it went.
 
 The same custody hazard applies to UNTRACKED files inside the repo:
 durable-tier artefacts (formation letters, succession and permanent
@@ -256,10 +285,11 @@ July 2026).
 ## Related
 
 - `.agent/directives/principles.md` §"No machine-local paths".
-- `docs/governance/safety-and-security.md` §Machine-local paths (the
+- `.agent/directives/privacy.md` §Machine-local paths (the
   forbidden / permitted shapes; the companion syntactic-class
   surface).
 - PDR-014 (capture → distil → graduate → enforce; the layered model
   this rule's "buffer vs reference" distinction maps onto).
 - PDR-067 (surface classification; per-user-memory as buffer).
-- PDR-081 (curator role; per-pass log metadata-only contract).
+- PDR-081 (curator role; no per-pass log, the commit plus the homed
+  substance is the record).

@@ -59,11 +59,14 @@ Create a linked worktree off `main`, then **install and build before any gate or
 git worktree add ../oak-<change-name> -b feat/<change-name> main
 cd ../oak-<change-name>
 pnpm install && pnpm build
+.agent/setup/install-shellcheck.sh
 ```
 
 Build first, always: the ESLint flat config and the statusline resolve from `dist/`, so
 an unbuilt worktree silently fails `lint` and shows no statusline
-([worktree-hygiene.md](../../.agent/rules/worktree-hygiene.md)).
+([worktree-hygiene.md](../../.agent/rules/worktree-hygiene.md)). The installer puts the
+pinned shellcheck in the worktree's ignored `.tools/bin`, which the pre-commit shell lint
+runs.
 
 ### 2. Refresh the cached schema, then diff the delta before regenerating
 

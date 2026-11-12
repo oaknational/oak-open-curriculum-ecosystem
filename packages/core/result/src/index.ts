@@ -1,7 +1,8 @@
 /**
  * Result type for explicit error handling without exceptions.
  *
- * Forces handling of both success and error cases at compile time.
+ * A read of `value` or `error` compiles only after the union is narrowed on `ok`;
+ * a caller may still ignore, default or unwrap a Result.
  *
  * @example
  * ```typescript

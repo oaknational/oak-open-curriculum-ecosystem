@@ -120,3 +120,19 @@ on: (a) migrating CodeQL to advanced setup with a `merge_group` trigger;
 (b) resolving the SonarCloud `merge_group` route without violating ADR-161
 (which would itself require an ADR-161 amendment); and (c) a custom Vercel
 `merge_group` deployment. Each is a precondition, not an afterthought.
+
+## Amendment log
+
+- **2026-09-26 — merge-queue constraint and volume reassessed.** CodeQL has
+  used advanced setup since 2026-07-24, completing the setup migration named
+  in Future Work precondition (a). Its workflow still lacks a `merge_group`
+  trigger, but adding one would not make the queue viable:
+  [github/codeql-action#1537](https://github.com/github/codeql-action/issues/1537)
+  remained open when last confirmed on 2026-05-22, and the ruleset's required
+  `CodeQL` status is the code-scanning app's check (integration 57789), which
+  does not report on a `merge_group` ref under either setup. A queue would time
+  out and dequeue every PR. The original low-volume premise was also refuted
+  on 2026-09-25/26: with 24 PRs open, each landing made the others out of date.
+  The decision to require branches up to date and not use a merge queue stands;
+  its decisive reason is now that the required check cannot report on a queue
+  ref, rather than that the advanced-setup precondition is unmet.

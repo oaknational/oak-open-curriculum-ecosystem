@@ -71,7 +71,14 @@ either speed carries a prediction**.
    **only at review, only if the prediction held**; a fired falsifier
    kills the entry with its reasoning retained (the estate's conservation
    doctrine — the kill is recorded, not erased). There is no third
-   outcome and no undated holding state.
+   outcome and no undated holding state. Before a review changes a
+   record's status, the reviewer searches the record for every condition
+   it puts on that status ("hinges", "requires", "until", "ratified
+   when") and answers each in the decision: on 2026-10-01 one record was
+   promoted on its ladder alone and stepped back when a review quoted the
+   record's own sentence on what its ratification hinges on. A verdict
+   that favours the reviewer's own edit is the one to check against the
+   text.
 3. **Register home**: a `## Slow lane` section of the pending-graduations
    register — the existing graduation register, one home for both speeds.
    Slow-lane rows are NOT decision-debt in the register's drain metric:
@@ -104,3 +111,14 @@ reviewed), the lane is theatre — retire this PDR under its own rule. For
 the fast lane: if graduations routinely land without prediction lines
 three months after adoption, the obligation has no traction and needs a
 mechanical check or retirement.
+
+**First review, 2026-10-01: retained.** Decided by the curating seat of the
+second two-estate consolidation, on computed evidence. The slow-lane
+falsifier did not fire. Prediction lines stand in rule and skill files in
+both estates. In
+JC.net five slow-lane rows were decided on 2026-10-01 by the owner's cards. In
+OCE the lane held eight rows; none had reached a review date before this one,
+and this review decided the first two (this record retained; PDR-075
+promoted to Proposed). The fast-lane falsifier falls due three months after adoption, on
+2026-10-20, and is not yet measured as a rate: nobody has counted the
+graduations that landed without a prediction line.

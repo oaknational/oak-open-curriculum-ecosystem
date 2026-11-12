@@ -1,6 +1,7 @@
 #!/usr/bin/env -S pnpm exec tsx
 import { Client } from '@elastic/elasticsearch';
 import { findRepoRoot } from '@oaknational/env-resolution';
+import { readFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import {
@@ -10,7 +11,7 @@ import {
 } from '../../src/runtime-config.js';
 import {
   createElasticsearchDeps,
-  parseLedger,
+  createLedgerParser,
   runFieldReadbackAudit,
   type GapLedger,
   type ReadbackAuditDependencies,
@@ -60,6 +61,11 @@ export interface FieldReadbackAuditCommandDeps {
   readonly writeStdout: (message: string) => void;
 }
 
+/** Reads a UTF-8 text file from the filesystem: the ledger parser's production reader. */
+function readUtf8File(path: string): Promise<string> {
+  return readFile(path, 'utf8');
+}
+
 function createClient(runtimeConfig: SearchCliRuntimeConfig): Client {
   return new Client({
     node: runtimeConfig.env.ELASTICSEARCH_URL,
@@ -81,7 +87,7 @@ export function createFieldReadbackAuditCommandDeps(): FieldReadbackAuditCommand
     },
     findRepoRoot,
     loadRuntimeConfig,
-    parseLedger,
+    parseLedger: createLedgerParser(readUtf8File),
     runFieldReadbackAudit,
     setExitCode: (exitCode) => {
       process.exitCode = exitCode;
@@ -178,9 +184,11 @@ async function main(): Promise<void> {
 }
 
 if (process.argv[1] !== undefined && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  main().catch((error: unknown) => {
+  try {
+    await main();
+  } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
     process.stderr.write(`${message}\n`);
     process.exitCode = 1;
-  });
+  }
 }

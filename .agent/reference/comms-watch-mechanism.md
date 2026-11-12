@@ -4,15 +4,17 @@ tier: reference
 
 # Comms Watch Mechanism — Portable Reference
 
-Event-driven all-channel comms intake for agent sessions, with an explicit
+Polled all-channel comms intake for agent sessions, with an explicit
 liveness-attestation seam.
 
 ## Purpose
 
-`comms watch` is the canonical event-driven mechanism by which an agent
-session observes broadcast, group, directed, observed, and lifecycle comms
-without polling. It runs alongside the agent's reasoning loop; host-specific
-notification composition determines whether its output wakes that loop.
+`comms watch` is the canonical mechanism by which an agent session observes
+broadcast, group, directed, observed, and lifecycle comms. It drains the comms
+directory once per pass and waits one `--poll-ms` interval between passes, on a
+plain timer. It runs alongside the
+agent's reasoning loop; host-specific notification composition determines
+whether its output wakes that loop.
 
 Watcher delivery and agent notification are separate contracts. A watcher
 can discover an event, emit it, and mark it seen while the reasoning harness
@@ -63,7 +65,7 @@ A watcher takes:
   does not re-deliver),
 - optionally: a clock and a heartbeat sink (see "Liveness" below).
 
-On each filesystem-change tick:
+On each pass (the watcher waits one `--poll-ms` interval between passes, on a plain timer):
 
 1. Enumerate event files under the comms directory.
 2. Emit every event with **self-exclusion plus the sanctioned
@@ -86,7 +88,7 @@ On each filesystem-change tick:
 3. Exclude event ids already recorded in the seen-events file.
 4. Emit new events to the agent's notice surface.
 5. Append the delivered event ids to the seen-events file.
-6. If a heartbeat sink is configured, call it once per tick with
+6. If a heartbeat sink is configured, call it once per pass with
    `{ last_heartbeat_at, last_heartbeat_source }` so a separate
    liveness surface can record that the watcher is alive.
 
@@ -173,7 +175,9 @@ A watcher is a single-process intake mechanism. If the process
 dies silently — host crash, panic in an event handler, container
 OOM — nothing notices until a peer waits unreasonably long for a
 reply. The remedy is **liveness attestation**: the watcher writes a
-freshness signal to a substrate file on every tick.
+freshness signal to a substrate file after its first pass, then on the first
+pass that ends at least one heartbeat interval after the previous write (a long
+pass delays it).
 
 The minimal liveness record:
 
@@ -259,19 +263,20 @@ substrate primitive.
 
 ## Loop — the theoretical complement (under exploration)
 
-Watch is event-driven, sub-second, and a single failure point. An
-**independent liveness floor** can be added by composing watch
-with a periodic check command driven by a host scheduler such as
+Watch runs in passes, waiting one `--poll-ms` interval (500 ms by default)
+after each pass, and is a single failure point. An **independent liveness floor** can be added by composing
+watch with a periodic check command driven by a host scheduler such as
 Claude Code's `/loop`:
 
-- Watch handles fast-path delivery (sub-second).
+- Watch handles fast-path delivery (on its next pass: one `--poll-ms` wait
+  after each pass, plus the pass's own run time).
 - A periodic `check` command runs every N seconds and writes a
   liveness record with `source: "check"`.
 
 If watch dies, the check-driven heartbeat keeps the liveness
 record fresh, and observers can tell which writer is alive by
 inspecting `source` on the most recent record. On hosts without
-an event-driven watch (no Monitor-equivalent), the polled `check`
+a long-lived watch (no Monitor-equivalent), the polled `check`
 becomes the sole liveness writer — honestly polled, not
 "degraded".
 
@@ -282,7 +287,7 @@ The host-integration question to validate per agent host:
   agent's reasoning context? Observe over a real session of 30+
   minutes; record outcome.
 - **Codex / Cursor / other hosts**: does an equivalent scheduling
-  primitive exist? If not, the polled-only mode on those hosts
+  primitive exist? If not, the check-only mode on those hosts
   may need a different driver (a sidecar process, a shell
   `while sleep` loop, a cron entry).
 
@@ -308,11 +313,13 @@ responsibility and the capabilities of their host.
   own identity comparison can diverge from routing truth and self-echo or
   suppress a distinct seat. Reuse the canonical `sameAgentRoutingKey`
   comparator.
-- **Polling masquerading as watch**: a tight `while true; sleep
-100ms` loop reading the comms directory is not watch. It is
-  polling at 100ms. Document it as polling, name the cadence
-  honestly, and prefer the event-driven watcher when the host
-  supports it.
+- **Polling presented as event-driven**: every poll loop, `comms watch`
+  included, detects a write on its next pass, not on the write. Each pass
+  starts one `--poll-ms` wait after the previous pass ends, so the gap is the
+  pass's run time plus that wait. Under Monitor its output still wakes the
+  agent once per emitted event. Name its cadence honestly. A hand-rolled `while true; sleep` loop over the comms directory is
+  not `comms watch`; prefer the canonical watcher, which carries the
+  seen-events cursor, self-exclusion, and the heartbeat.
 - **Delivery treated as notification**: a watcher that marks an event seen and
   writes it to the detached process's captured stdout has delivered the event
   to a process, not necessarily to the agent. Require a proven host wake-up

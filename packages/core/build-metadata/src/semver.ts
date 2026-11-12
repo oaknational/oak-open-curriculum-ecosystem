@@ -21,16 +21,32 @@ import { lte as semverLte, parse as semverParse } from 'semver';
 import { ok, err, type Result } from '@oaknational/result';
 
 /**
+ * A semver §2 numeric identifier: `0`, or digits with no leading zero.
+ */
+const NUMERIC_IDENTIFIER = String.raw`(0|[1-9]\d*)`;
+
+/**
+ * A dot-separated run of §9 pre-release or §10 build identifiers.
+ */
+const DOT_SEPARATED_IDENTIFIERS = String.raw`[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*`;
+
+/**
  * Strict semver §2 / §9 / §10 pattern.
  *
  * @remarks
- * Verbatim copy of the canonical regex from the npm `semver` package's
- * §2 strict pattern, preserved here so tools that need a regex (rather
- * than a parser) can match without depending on `semver`'s private API.
- * Required by the two pre-install / pre-dist scripts noted above.
+ * The npm `semver` package's strict §2 grammar, composed from its two named
+ * parts so each part is read on its own: three numeric identifiers, an
+ * optional `-` pre-release run and an optional `+` build run. Capture groups
+ * 1 to 3 are the core numbers and group 4 the pre-release run. It exists so
+ * tools that need a regex rather than a parser can match without depending
+ * on `semver`'s private API. The one consumer that cannot import this module
+ * (the vercel-ignore script runs before `pnpm install`) carries an inline
+ * copy whose source `tests/semver-parity.test.ts` holds equal to this one.
  */
-export const SEMVER_PATTERN =
-  /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/u;
+export const SEMVER_PATTERN = new RegExp(
+  String.raw`^${NUMERIC_IDENTIFIER}\.${NUMERIC_IDENTIFIER}\.${NUMERIC_IDENTIFIER}(?:-(${DOT_SEPARATED_IDENTIFIERS}))?(?:\+${DOT_SEPARATED_IDENTIFIERS})?$`,
+  'u',
+);
 
 /**
  * Structurally parsed semver components.

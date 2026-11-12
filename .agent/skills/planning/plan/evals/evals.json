@@ -1,0 +1,55 @@
+{
+  "skill_name": "plan",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Plan the delivery of a residents' dashboard for our council service. What we have: a feature request from a councillor, no resident research, no definition of what residents need to see, and a two-week deadline.",
+      "expected_output": "A conditional handoff: the value, needs and delivery boundary are undefined, so the plan routes to user-value first and states what must come back (the needs' evidence status, the bounded value proposition, a ready slice) before sequencing; it does not invent the needs to fill the plan; the deadline is preserved as a constraint, not a reason to skip the definition.",
+      "assertions": [
+        "The plan does not sequence work whose value and needs are undefined; it hands off to user-value and names what must return",
+        "No resident needs are invented to complete the plan",
+        "The deadline is carried as a constraint rather than used to skip the definition pass"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Plan the implementation of a stable priority queue for the scheduler. Everything is settled and written down here, in full. The contract: items are (priority, payload); pop returns the item with the lowest priority; among equal priorities the earliest pushed item is returned first; push and pop are O(log n); pop on an empty queue raises EmptyQueue. The consumer: the scheduler's dispatch loop, which calls push on job arrival and pop on each tick. The acceptance tests, already written: test_pop_lowest_priority, test_equal_priorities_fifo, test_interleaved_push_pop_keeps_fifo, test_empty_pop_raises. Nothing about its value is in question and there is no repository to read; plan from this statement.",
+      "expected_output": "A direct implementation plan: the settled contract is the input; steps, order, validation against the written acceptance tests and the landing; no mandatory user-value or specification pass, no persona, no ceremony.",
+      "assertions": [
+        "No value-definition or specification pass is required for already-settled work",
+        "The plan consumes the written contract and acceptance tests as its inputs and sequences implementation directly",
+        "No fictional service user or outcome claim is introduced"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Plan the integration of our curriculum API with a partner's teacher tool. Settled and written down here, in full: the value (teachers need to find lessons by subject; three observed sessions and the partner's request record it) and the API's contract (lessons keyed by subject slug; slugs biology, chemistry, physics, combined-science; schema versioned; a slug never renamed within a major version). Unresolved: the subject-mapping contract between the API's slugs and the tool's taxonomy, which has no combined-science subject; the partner says the mapping is the API's to define and our team says it is the tool's, and no one with authority over both has ruled. There is no repository to read; plan from this statement.",
+      "expected_output": "A plan that sequences the settled parts and routes the unresolved seam to specify (the mapping contract) and specify-connection (the seam analysis) before the dependent integration steps, preserving the ownership dispute as an open item for the authority that holds it; the settled steps are not blocked and the unresolved one is not invented.",
+      "assertions": [
+        "The unresolved mapping contract is routed to the specification skills rather than planned around or invented",
+        "The settled steps proceed and the dependent steps wait on the returned obligation",
+        "The ownership dispute is preserved for its authority rather than resolved by the plan"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "We are delivering a lesson-finder integration. Our curriculum API (contract settled at revision 5) will be consumed by a partner's teacher-facing tool that maps our subject slugs to its own taxonomy. On the table: (a) 'teachers will find the right lessons faster' (nobody has measured it; one teacher said so in a demo); (b) the partner's mapping is 'complete' (their word; no fixtures for combined science exist); (c) our API's schema tests pass. Take this from the value claim to an executable plan, applying each method in turn: establish what value is claimed, for whom, and its evidence status; specify the mapping contract; analyse the seam between the API and the tool; assess whether the resulting record is ready for integration reliance; then plan the delivery. Then a material revision arrives: the partner's taxonomy splits 'combined science' into three subjects with immediate effect. Trace that revision through everything above. Throughout, keep every claim's status (observed, hypothesis, promise, unknown) exactly as the evidence allows.",
+      "expected_output": "Five linked outputs in order, each consuming the previous: a bounded value proposition with claim (a) held as a hypothesis; a mapping-contract specification with a named owner, preserved meaning, permitted loss and discriminating fixtures as its evidence plan; a seam analysis showing both endpoints locally valid and the composition unproven for combined science, with a counterexample; an assessment that finds the record not ready for integration reliance until the fixtures run, with the condition and reassessment trigger named; a plan sequencing the settled work and holding the dependent steps on the returned obligation. Then the revision traced: the contract's affected obligations, the seam's changed preservation rule, the assessment's trigger firing, the plan's dependent steps; unaffected work not reopened; the previous revision retained. No measurements, quotations or fixture results invented.",
+      "assertions": [
+        "Each of the five methods is applied in order and each hands the next what it needs: value to obligations, obligations to the seam, the seam to the assessment, the assessment to the plan",
+        "Claim (a) remains a hypothesis at every stage and is never written into the plan as a delivered or measured outcome",
+        "Claim (b) is treated as the partner's assertion, not evidence; the absent combined-science fixtures are named as the evidence gap and as the assessment's condition",
+        "Claim (c), passing schema tests, is not taken as evidence that the mapping preserves meaning",
+        "The revision is traced through the contract, the seam, the assessment's reassessment trigger and the plan's dependent steps; unaffected work is not reopened and the previous revision is retained",
+        "No measurements, participant quotations or fixture results are invented"
+      ],
+      "skills_expected": [
+        "user-value",
+        "specify",
+        "specify-connection",
+        "assess-specification",
+        "plan"
+      ]
+    }
+  ]
+}

@@ -6,9 +6,11 @@
 > (and the department it serves with the Office of Education), and its
 > white-label directory now reads `whitelabel/pds/`. Authority: the owner's
 > 2026-08-03 instruction that the outgoing word "will not exist in the repo",
-> executed under the ratified plan
-> [`public-digital-service-identity`](../../../../.agent/plans/delivery/public-digital-service-identity.plan.md)
-> (§D4 prescribes in-place repair of records rather than deletion). Nothing
+> executed on 2026-08-13 under the owner's standing ruling that records are
+> repaired in place rather than deleted; the rename is landed and
+> validator-enforced (the estate's identity-naming ratchet holds each file's
+> count of the outgoing word at its census value, so the word cannot spread
+> to a new file or grow within one). Nothing
 > else in the capture changed — no markup, tokens, values, or layout. The
 > manifest's `bytes` and `sha256` columns are left as CAPTURED FACT and
 > therefore no longer recompute against the repaired files; its `path` column

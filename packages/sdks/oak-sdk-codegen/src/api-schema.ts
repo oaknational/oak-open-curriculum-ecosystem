@@ -6,11 +6,11 @@
  */
 
 export type {
-  paths,
-  webhooks,
-  components,
-  $defs,
-  operations,
+  Paths,
+  Webhooks,
+  Components,
+  $Defs,
+  Operations,
 } from './types/generated/api-schema/api-paths-types.js';
 
 export {

@@ -3,6 +3,7 @@ name: "Generator-First for Vendored Static Data"
 polarity: pattern
 use_this_when: "A vendored/static JSON asset needs validation or narrowing (widened literals, closed unions) and the reflex fix is a runtime guard, a module-init throw, or Result-threading at the import boundary."
 category: code
+layer: family
 proven_in: "curriculum-hub-demo: quality-standards module-init throw (2 no-throw warnings) dissolved by mirroring the existing generate-course generator (2026-07-01, Cinder); the 2026-07-02 content-is-data redesign (Peregrine) then moved both giant generated TS modules to zod-schema SSOT + JSON emission, proving the schema-validates-at-both-belts variant."
 proven_date: 2026-07-02
 barrier:

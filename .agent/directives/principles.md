@@ -9,7 +9,10 @@ fitness_rationale: >-
   grew legitimately; trimming substance was explicitly forbidden ("do not chase the
   fitness number"). This is a "for now" raise — a deliberate substance-led
   refinement (graduate elaborated guidance to governance docs per split_strategy,
-  never the principles themselves) remains the proper long-term move.
+  never the principles themselves) remains the proper long-term move. Measured
+  2026-09-09 at ≈41.9k chars / 760 lines, past the limits; the owner ruled the
+  same day that a dedicated curation lane graduates elaborated guidance later and
+  that no landing trims substance to fit ("we can always iterate later").
 split_strategy: "This file is the source of truth for all principles. Extract only elaborated guidance to governance docs, never the principles themselves. The principles are operationalised through several mechanisms, including rules, sub-agents, and tooling."
 ---
 
@@ -78,6 +81,11 @@ Always apply the first question; **Ask: could it be simpler *without
 compromising quality or value*?**. The answer will often be no, that is fine,
 but bring real critical thinking to the question each time.
 
+- **Trace work to value** — Every non-trivial piece of work must be traceable to a defined
+  outcome, the impact that outcome is meant to create, and the mechanism by which that impact
+  creates value. If you cannot state all three clearly, stop and reframe before planning or
+  implementation.
+
 ### Ends Before Means, Front of Chain First
 
 The what, the why, and the why-now are established in CONVERSATION with the
@@ -112,6 +120,19 @@ rush-assumption this estate rejects. The same absoluteness governs
 risk-of-loss operations (`never-use-git-to-remove-work` §A Safety Proof
 Never Licenses the Class): a discipline's value is that it holds
 precisely when a locally-sound argument says it could bend.
+
+**No change freezes.** Owner, 2026-07-30, on submission day, declining a
+proposed merge freeze, verbatim: "we don't do change freezes, we do absolutely
+world class observability and the ability to respond quickly and safely to
+issues." The freeze instinct treats change as the risk; this estate treats
+blindness and slow response as the risk. A freeze buys nothing a well-observed,
+fast-response system lacks, costs throughput, and normalises fear of the deploy
+path on the day confidence matters. Never propose a change freeze, code freeze
+or merge moratorium as a risk control, on launch days included; when the
+instinct fires, the question is whether the surface's observability is
+world-class and whether a break can be answered quickly and safely, and a "no"
+there is the work to surface. Full-condition gates on every merge stay: that is
+structure, not a freeze.
 
 ## Architectural Excellence Over Expediency
 
@@ -227,6 +248,28 @@ architecture keeps it extractable. A component whose licence cannot
 be named in one word is one where general mechanism and Oak identity
 cohabit.
 
+Open source and public is the Oak and UK Government standard (owner,
+2026-08-12, verbatim, on a proposal that framed opening a private Oak
+repository as a licensing cost: "open source and public is the Oak and UK Gov
+standard, forcing that change is actually a huge positive"). This is Oak
+policy as the owner states it. Its external root is the Government Service
+Standard's point 12,
+[Make new source code open](https://www.gov.uk/service-manual/service-standard/point-12-make-new-source-code-open),
+which binds the services in that standard's scope and names its own exceptions;
+Oak, a public body, holds the same default for its own surfaces. So a proposal
+that makes a private Oak surface public is aligned with standing policy, and
+the framing burden is on staying private. File the open-sourcing itself under
+benefits and policy alignment; only the transitional work (a security review
+before exposure, secrets-in-history hygiene) is a cost.
+
+A mechanism built to prove a capability is a consumer of the
+framework, never the framework: check its warrant when it outlives its
+demonstration. An identity built as an override sheet to prove live
+switching quietly became the architecture until the owner read the
+substitution off the page's own badges (2026-08-18); the day's defect
+ledger argued for self-containment, and the demonstration instrument
+was retired with its demo.
+
 ### Context Specificity Gradient
 
 Every capability decomposes by context specificity. Push functionality
@@ -248,8 +291,28 @@ canonical form already exists — an industry contract, a mature library —
 adopt it behind a thin conformance check rather than re-derive it
 in-estate; own only concepts with no external canonical form, or small
 enough that a finished owned module costs less than curating a
-dependency. Both directions stay falsifiable by measured cost. A thin
-highest-specificity layer is also a detachable one (owner-directed
+dependency. Both directions stay falsifiable by measured cost. Which
+canonical form is adopted is a different question from where an owned
+implementation originates, and for algorithm and data-structure
+foundations the owner decided the second for the whole class
+(owner-directed 2026-09-08, recorded in OCE's own-built-foundations
+decision; scope confirmed 2026-09-09 as that class, not the estate): "select the
+best, permissively licenced libraries, and use their code as inspiration
+to create Reliable Atoms and composition layers tailored to our needs and
+created to our deliberately very high quality standards" — the estate
+authors them. The concept the quotation names as Reliable Atoms is now
+named Capability Foundations (the owner, 2026-10-02, verbatim: "the
+Reliable Atoms concept has been replaced by the Capability Foundations
+concept"; OCE's foundations records under its architecture docs define
+the concept and carry the owner's September 2026 direction); the
+quotation stands as spoken. The 2026-09-08 decision (OCE's ADR-230) bounds the class
+(language/runtime, protocol, storage, transport and platform capabilities
+and standards conformance stay under the sentence above), owns the
+provenance discipline that keeps learning distinct from adapting, and
+keeps the class's whole-life effort saving an empirical hypothesis
+measured through delivered capabilities and their later changes; what
+that measurement reopens is the owner's decision, never a seat's.
+A thin highest-specificity layer is also a detachable one (owner-directed
 2026-08-19): an Oak product surface built as configuration, styling, and
 experience tuning on general machinery can be handed off to a product
 squad — extracted to its own home — without dragging the lever machinery
@@ -279,9 +342,12 @@ this way produces cleaner boundaries and simpler classification.
 
 ### Code Design and Architectural Principles
 
-- **TDD** - ALWAYS use TDD at ALL levels — unit, integration, AND
-  E2E. Test and product code are two halves of one act of design;
-  they land together as one atomic commit. See
+- **TDD** - ALWAYS use TDD at ALL levels — unit and integration
+  tests, AND the E2E checks that describe the running system (a
+  validation surface, written first like a test;
+  [testing-strategy.md](testing-strategy.md)). Test and product code are
+  two halves of one act of design; they land together as one atomic
+  commit. See
   [tdd-as-design.md](tdd-as-design.md) for the foundational
   definition and atomic-landing invariant.
 - **Keep it simple** - DRY, KISS, YAGNI, SOLID principles
@@ -308,6 +374,37 @@ this way produces cleaner boundaries and simpler classification.
   command MUST target the canonical surface and fail loudly when that
   surface is absent or invalid; it must not quietly scan an old location,
   skip a missing canonical directory, or keep a migration path alive.
+  Historical data here is state a live reader still consumes. A dated
+  record that nothing reads as live state (a closed channel document, an
+  archive) is history: when the validator of a new shape obligation
+  refuses it, the validator's declared reach is corrected and the record
+  is not rewritten (owner, 2026-07-20, of channel records a new validator
+  refused: "no, we don't fix the old channel docs, we just update the
+  system"). A prohibition on content is a different class and reaches
+  every tracked file whatever its date, as the machine-local path ruling
+  does (the No machine-local paths bullet below: whole-repo, retroactive).
+- **No timing dependence** - nothing we build relies on timing, ordering
+  luck, or a race being unlikely (owner principle, 2026-08-17, verbatim:
+  "nothing we do should ever, ever rely on timing or races, we build
+  things so they WORK" — "an important principle of fleet mechanics, and
+  also in general"). Eliminate the shared mutable resource instead of
+  shrinking its window; make the correct order structural (a render-time
+  latch, a declarative guard, a per-seat directory) instead of scheduled;
+  in review, a correctness argument that contains "the window is small",
+  "usually", or an ordering assumption names a defect. The worked shapes
+  are the anti-pattern `timing-derived-state-is-the-defect`; its
+  read-side dual is the pattern `timing-artefact-read-as-state`.
+- **At most one holder, and for continuously owned authority exactly
+  one** - a singleton-authority state never has two holders. A
+  continuously owned authority (a coordinator role, a document root's
+  theme, a shared index between windows' owner) has exactly one holder at
+  all times, never zero; a windowed authority (a commit window on
+  `git:index/head`) has one holder while it is open and none between
+  windows, by design. Ownership is decided by context up front, never
+  negotiated at runtime between two well-meaning holders — two theme holds
+  on one root corrected each other forever until context (standalone: the
+  page; framed: the parent) chose the owner (2026-08-19); the coordinator
+  two-moments invariant of PDR-064 is the same rule for roles.
 - **Pure functions first** - Use TDD to design (*test first*, red,
   green, refactor), no side effects, no I/O
 - **Consistent Naming** - Use consistent naming conventions for
@@ -342,6 +439,26 @@ this way produces cleaner boundaries and simpler classification.
   lose the ability to debug the problem.
 - **No empty catch blocks** - Never use empty catch blocks, always
   handle errors explicitly and using the `Result<T, E>` pattern.
+- **Never `void` a promise** - `void promise` swallows its rejection.
+  A cleanup promise in an event handler carries an explicit `.catch`
+  that routes to the error path.
+- **Distinct HTTP semantics** - Never collapse distinct HTTP status
+  codes into a single error kind (404 and 451 mean different things).
+  Per-surface error types are cleaner than one unified error type —
+  each surface has its own failure modes.
+- **Libraries do not own logging** - A shared package returns
+  classified results; the consuming app is responsible for
+  observability. Libraries never instantiate loggers or log
+  internally — pass results up, and the app inspects and logs through
+  its own logger.
+- **Survey the workspaces before proposing new infrastructure** -
+  Before proposing a new schema, validation pipeline, parsing helper,
+  env-loading mechanism, or path primitive, survey the shared packages
+  and the Practice tooling: read each README whose name plausibly
+  matches the capability and grep for existing usage sites. The right
+  proposal is usually an extension of an existing package (the
+  Practice's `result`, `type-helpers` and `workspace-config` packages
+  among them), not a parallel implementation.
 - **Document Everywhere** - ALL code, all decisions, all use
   cases MUST be documented: TSDoc on every file/module/function/
   data structure/class/constant/type; ADRs for major engineering
@@ -398,6 +515,21 @@ this way produces cleaner boundaries and simpler classification.
   of responsibility, keeping boundaries and public API clear with
   index.ts files, using TDD. Run lint after every substantive edit
   to catch violations early.
+  The limits exist to "enforce thoughtful code design and clear
+  public APIs and proper encapsulation, not to ask if the bucket
+  has enough room left" (owner, 2026-09-24): a module's room under
+  its limit is never the question, where the responsibility
+  belongs is.
+- **Never trim documentation to fit a limit** — size and complexity
+  limits exist for developer experience, and documentation IS
+  developer experience; a file over its limit is a signal of an
+  unsplit seam, never of excess explanation. Split at a meaningful
+  responsibility seam with each half fully documented; never
+  condense TSDoc, comments or docs to satisfy the number (owner,
+  2026-08-03: "we never trim to hit complexity limits … the
+  approved approach is to split files by identifying fundamentally
+  meaningful seams"; 2026-09-01: "we do not trim information to
+  meet targets, we maximise developer experience").
 - **Splitting long functions** - If a function exceeds 50 lines
   (`max-lines-per-function`), split it into smaller, pure functions
   with a single responsibility, using TDD. Extract conditional
@@ -412,6 +544,12 @@ this way produces cleaner boundaries and simpler classification.
 - **Removing unused code** - If a function is not used, delete it.
   If product code is only used in tests, delete it. If a file is
   not used, delete it. Delete dead code.
+- **Moving files between workspaces** - Check whether removed tests
+  should be recreated in the destination, and verify ESLint
+  overrides, README relative links, and `tsconfig` include patterns
+  transfer correctly. When moving any artefact, grep for the old
+  path in `*.ts`, `*.mjs` and `*.json` as well as `*.md` — test
+  fixtures and CLI defaults hardcode paths.
 - **Version with git, not with names** - Fix files in place, or
   replace old approaches with new approaches, NEVER create parallel
   versions using naming. Incorrect: `execute-tool-call.ts` and
@@ -449,7 +587,7 @@ shared bases — they do not replace them. This applies to
 `tsconfig.json` `extends` chains are the one root-anchored
 convention that remains (an `extends` reference is not a module
 import). Deviations cause silent quality-gate leaks (e.g. E2E
-tests running under `pnpm test`, disabled lint rules, weakened
+checks running under `pnpm test`, disabled lint rules, weakened
 type-checking). See [Testing Strategy: Canonical Vitest
 Configuration][vitest-config] for vitest-specific patterns. E2E
 vitest configs may be workspace-specific when base defaults (include
@@ -475,13 +613,48 @@ paths, setup files) don't apply.
   `.agent/rules/no-warning-toleration.md` for the operational
   discipline (covers esbuild/tsc/ESLint/vitest/depcruise/knip and
   Sentry runtime/uptime surfaces).
+- **An enforcement-scope gap is not a requirement gap** - Repo-wide
+  standards (Result over throw, strict types, the rule corpus) govern
+  every workspace regardless of where a lint rule happens to be
+  wired; "not enforced here" never implies "not required here". A
+  missing or narrowly-scoped binding is itself a defect — flag it,
+  prefer the structural cure (extend the enforcement), and never read
+  an inherited non-conforming local convention as ratified exemption.
+- **Progressive re-enablement** - When a pre-existing lint override
+  exists in a file you touch, fix the root cause; narrow
+  directory-wide overrides to file-specific first.
+- **Analysability is part of correctness** - For findings from static
+  instruments (CodeQL, lint), "false positive" is usually the wrong
+  frame: an alert on code whose safety the instrument cannot see is a
+  true positive about analysability, and only source-shape cures are
+  durable. Dismissal is doubly non-durable — the safety stays
+  invisible to every future scan, and positional alert identity makes
+  suppression a recurring tax. Worked instance (2026-07-29): five
+  alerts headed for dismissal were fixed at source instead, and a
+  differential test then proved one "false positive" regex was a real
+  super-linear backtracking vector the dismissal path would have
+  preserved. Fix-first is the disposition (owner ruling 2026-09-08:
+  "We don't dismiss issues, we fix them"), but for the two exceptions
+  the Sonar disposition policy names.
+- **Session-local tool reports are evidence only inside the session
+  that produced them** - Do not make a shell invocation of an
+  interactive-session command (such as Claude Code `/doctor`) a
+  validation gate for plans or commits. Validate durable changes
+  through repo-local gates, settings diffs, generated artefacts, and
+  owner-supplied session evidence when the session surface itself is
+  the subject.
+- **Code that generates code is product code** - A generator's output
+  is product code, so the generator is product code: full logger
+  discipline, lint, and type strictness apply. Adapter generation
+  (`pnpm portability:fix`) and every other generator are never
+  "build scripts" exempt from the gates.
 - **Fix things** - All quality gates are blocking at all times,
   regardless of location, cause, or context.
 - **Every issue earns a check** - An issue, however discovered —
   exploration, exercise, review, external comment — is not resolved
   until a check of the appropriate kind exists that would catch the
   instance AND its class. The kind fits the class: behaviour → a
-  unit/integration/E2E test; types → the type-check gate or a
+  unit or integration test, or an E2E check; types → the type-check gate or a
   `satisfies` anchor; structural → an ESLint/boundary rule;
   process/CI coverage → a required status check or validator;
   content-quality invariant → construction plus human review, never
@@ -489,6 +662,11 @@ paths, setup files) don't apply.
   check is an incomplete disposition. Operationalised in
   [testing-strategy.md §When a Defect Is Found](testing-strategy.md)
   and [`pr-comments-resolve-and-recheck.md`](../rules/pr-comments-resolve-and-recheck.md).
+- **The cure stops recurrence; symptom removal is hygiene** - The cure is the action that stops
+  the issue happening again, never the one that removes the symptom (the owner, 2026-10-07: "the
+  cure is the action that stops it from happening again, not the action the removes the
+  symptom"). A cure names the change to the generator (a skill, a rule, a validator, a hook)
+  first and alone; removing the symptom is hygiene, stated as such.
 - **Local broken code never leaves** — Broken code is never
   acceptable. The local-only constraint is not an excuse to tolerate
   brokenness; it is the discipline that prevents brokenness from
@@ -581,6 +759,14 @@ assumptions. See [validation-strategy.md](validation-strategy.md) for the
 test/evaluate/assure frame, the assurance tiers, and the instrument-by-surface
 mapping.
 
+Text a model wrote crosses a write boundary into host authority (a path, a name or content a
+tool is about to write, a flag value that becomes a path) only after a harness-owned parser
+has admitted it against a closed grammar; what the grammar does not name is refused, and the
+refusal names it, never passed through. Reading a command's output as evidence is ordinary
+work, not that boundary. The engineering instance is the pattern
+`cli-writer-boundary-discipline`; this is its general form, promoted from the slow lane at its
+2026-10-10 review and scoped to the write boundary at the review of 2026-10-16.
+
 ### Compiler Time Types and Runtime Validation
 
 Type precision is one expression of strict, complete, schema-driven practice.
@@ -605,22 +791,50 @@ test-type taxonomy, full rules, examples, and recipes, see
 
 Universal testing principles:
 
+- tests are held to the same standard as product code, if anything a higher one:
+  a good test is the living description of intent and correctness, and product
+  code may change and be accepted while it satisfies a well-written test (owner,
+  2026-11-01);
 - use TDD at every affected test level;
 - test behaviour through public interfaces, not implementation details;
 - assert effects, not internal constants or configuration collections;
 - each proof happens once and must prove product code;
 - unit tests are pure, in-process, and mock-free;
 - integration tests import code directly and use only simple DI fakes;
-- E2E tests prove running-system behaviour;
-- smoke tests prove the built artefact is viable in its shipped form (invoked as
-  production invokes it, no loaders); every built binary carries at least one —
-  new ones at landing, the pre-existing gap as recorded debt;
+- in-process tests never use or create IO other than stdio, at any level, and no
+  helper such a test imports does (owner, 2026-09-14: an absolute invariant);
+  what needs a running system is an out-of-process test against a test instance
+  of one of our systems, which may use IO and still uses fakes where they are
+  the better instrument (owner, 2026-11-01); a validator script is the
+  instrument only where no test can make the proof, which is basically never
+  ([testing-strategy.md](testing-strategy.md) §Philosophy;
+  [validation-strategy.md](validation-strategy.md));
+- E2E checks prove running-system behaviour, as out-of-process tests;
+- smoke checks prove the built artefact is viable in its shipped form (invoked as
+  production invokes it, no loaders), as validators reachable from a CI-gated
+  task; every built binary carries at least one — new ones at landing, the
+  pre-existing gap as recorded debt;
 - tests must never read or mutate `process.env`, global objects, module cache,
-  ambient env files, or `process.cwd()` — smoke composition roots only;
+  ambient env files, or `process.cwd()`; a validation check's composition root
+  may read ambient env and inject it;
+- do not test types — tests are for runtime logic; a test that only proves a
+  type is deleted;
+- no useless tests — each test proves something about product code, never
+  about test code;
 - no skipped tests, no conditional tests, no complex mocks, no complex test
-  logic, no process spawning in in-process tests. Conditional tests are an
+  logic, no process spawning in tests. Conditional tests are an
   architectural-failure symptom — remove them, fix the ambiguity in product
   code, write deterministic behaviour-proving tests.
+
+### CSS and Accessibility
+
+- **Relative units for scalability** — Use `rem`/`em` for text sizing,
+  spacing, focus rings, and border radii. `px` is acceptable only for design
+  constraints (container max-width) and WCAG minimums (44px touch targets).
+  Layouts MUST scale with text size at 200%+ zoom.
+- **Accessibility is a gate, not a review note** — axe runs in the E2E suite;
+  a pre-hydration fallback state must pass contrast like any other state.
+  Practice detail: [Accessibility Practice](../../docs/governance/accessibility-practice.md).
 
 ### Any User, Any Machine
 
@@ -638,7 +852,13 @@ state that only exists because an earlier session happened to leave it
 and per-user surfaces derive their user at run time rather than at
 authoring time. A surface that silently assumes its author's identity
 or host is a portability defect even while it works perfectly for
-them.
+them. The same lens covers checkouts: for any coordination-state,
+path-resolution, or identity feature, many checkouts on many machines
+is the case to satisfy first; a single checkout is the degenerate
+case that satisfies it trivially. Resolving a path by walking up from
+the current directory lands in the LOCAL checkout — in a
+many-checkout world, the wrong registry. "Currently we run one
+checkout" is the tripwire to re-ground, not a licence.
 
 ### Developer Experience
 
@@ -699,3 +919,34 @@ flows toward the more fundamental artefact), and **stable indexes**
 drift). A DRY violation, a stale index, a god-document, or a dangling
 cross-reference is a real defect, not a style nit. Canonical decision:
 [ADR-127](../../docs/architecture/architectural-decisions/127-documentation-as-foundational-infrastructure.md).
+
+- **TSDoc everywhere** — All exported functions and non-trivial internal
+  functions carry TSDoc; public interfaces include examples.
+- **Good READMEs** — Each significant directory has a README that points,
+  never carries.
+- **Inline comments for the why** — The code shows what; comments explain
+  why.
+- **Permanent docs never reference ephemeral docs** — Plans and prompts are
+  ephemeral; `docs/`, directives, ADRs and EDRs never depend on them. Only the
+  reverse direction is valid.
+- **Tooling docs are contract surfaces** — When scripts, hooks, gate
+  sequences, or adapter surfaces change, update README, CONTRIBUTING, ADRs
+  and Practice docs in the same pass.
+- **Narrative sections drift first** — When syncing a plan or record,
+  inspect body status lines, decision tables, and current-state prose, not
+  just frontmatter and todo checkboxes; prose is where stale truth hides. A
+  child plan that changes runtime truth reconciles its parent plan and any
+  closure proof in the same session.
+- **Write the plain meaning, not coined status-jargon** — "safe to delete",
+  not "reclaimable". Before using a coined adjective or status term, ask
+  what it means for the reader and write that instead (or alongside, if the
+  term is load-bearing jargon the reader already knows). Agent-authored
+  artefacts accrete invented vocabulary that reads as ceremony.
+- **Prose artefacts are accepted on decision and audience outcome** — For
+  READMEs, decision records and runbooks, acceptance criteria name the
+  decision and the reader outcome (discoverability, accuracy), never an
+  exact sentence shape. Reserve executable tests and grep guards for code
+  contracts, generated surfaces, or forbidden runtime exposure; validation
+  of prose is read-through plus formatting and link hygiene.
+- **Read the index before guessing URLs** — When researching external
+  documentation, fetch `sitemap.xml`, `llms.txt`, or the docs index first.

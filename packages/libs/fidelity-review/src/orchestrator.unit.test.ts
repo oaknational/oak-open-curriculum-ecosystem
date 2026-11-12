@@ -1,3 +1,5 @@
+import { join } from 'node:path';
+
 import { ok } from '@oaknational/result';
 import { describe, expect, it } from 'vitest';
 
@@ -43,8 +45,10 @@ describe('resolveRunFlags', () => {
 
 describe('the run layout convention', () => {
   it("places the report dir exactly two levels below the demo root — the position the renderer's evidence links assume", () => {
-    expect(reportDirFor('/apps/demo')).toBe('/apps/demo/demo-evidence/fidelity-report');
-    expect(registerPathFor('/apps/demo')).toBe('/apps/demo/fidelity-register.json');
+    // Real filesystem paths, host-joined by the product; the expectations
+    // derive the same form so the convention is pinned on every platform.
+    expect(reportDirFor('/apps/demo')).toBe(join('/apps/demo', 'demo-evidence', 'fidelity-report'));
+    expect(registerPathFor('/apps/demo')).toBe(join('/apps/demo', 'fidelity-register.json'));
   });
 });
 

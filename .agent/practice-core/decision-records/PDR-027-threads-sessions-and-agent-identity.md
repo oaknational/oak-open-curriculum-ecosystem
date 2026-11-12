@@ -31,6 +31,43 @@ discipline binds to this PDR's tuple format).
 
 ## Amendment Log
 
+- **2026-09-12 — the Claude Code CLI session id accepted as a seed source.**
+  Claude Code exports the harness session id into every Bash tool shell as
+  `CLAUDE_CODE_SESSION_ID`. The seed CLIs read it after the explicit
+  `PRACTICE_AGENT_SESSION_ID_*` values and the cloud seat's
+  `CLAUDE_CODE_REMOTE_SESSION_ID`, and before `CODEX_THREAD_ID` — the same
+  shape as the 2026-04-27 Codex entry. It is the value the `SessionStart`
+  hook writes as the Claude seed on a CLI seat, so the derived tuple is
+  identical whichever source resolves. The measured failure: a seat whose
+  startup hook wrote nothing and whose compaction-time write landed after
+  the persistent shell existed lost every collaboration write for a session
+  while the native id sat in that shell throughout. The hook's context line
+  now states whether an env-file write was planned rather than asserting it.
+
+- **2026-09-25 — the three Claude seeds count only on a Claude platform.**
+  Claude Code exports `CLAUDE_CODE_SESSION_ID` into every Bash tool shell and
+  its `SessionStart` hook appends `PRACTICE_AGENT_SESSION_ID_CLAUDE` to the
+  env file every later shell reads, so a Codex or Cursor seat opened from a
+  Claude shell saw all three Claude seeds ahead of its own and took the Claude
+  seat's identity: its writes carried that seat's name, and the id-only routing
+  of comms and claims read the two seats as one. Both resolvers now read the
+  seat's platform, the collaboration seed from its caller and the identity CLI
+  from `--platform <label>`, required whenever `--seed` is absent. On a
+  non-Claude platform the three Claude seeds do not count and the missing-seed
+  error names any that were set. The order is otherwise unchanged and an
+  explicit seed wins everywhere. The platform label is the seat's own
+  assertion: the gate guards accident, not intent, and deliberate identity
+  assumption stays available by design through `--seed`, `--agent-name` and a
+  hand-set Practice variable. The general form, that the seeds a seat reads
+  are its platform's own, waits on a second nesting instance. A joint cure
+  with OCE (jimcresswell.net's answer of 2026-09-25), the same design
+  in both. A
+  subagent's collaboration write is its parent's: a Claude Code subagent's
+  shell carries the parent's session id and no environment signal separates
+  the two, so its comms and claims writes derive the parent's identity and
+  the parent answers for them (accepted by both estates' exchange seats the
+  same day; one instance).
+
 - **2026-08-24 — cloud seats seed from the platform session id; hooks never
   pin a display name.** On a cloud seat two ids coexist: the harness-internal
   session id and the platform session id. The platform id is the durable,
@@ -205,7 +242,7 @@ discipline binds to this PDR's tuple format).
   2026-08-24 amendment: hooks no longer store the override; the variable is
   an explicit operator control only.)
   Platform session-start hooks may derive an agent display name once from the
-  session id and store that resolved name in `OAK_AGENT_IDENTITY_OVERRIDE`
+  session id and store that resolved name in `PRACTICE_AGENT_IDENTITY_OVERRIDE`
   alongside the relevant Practice session-id seed
   (`PRACTICE_AGENT_SESSION_ID_CLAUDE`, `PRACTICE_AGENT_SESSION_ID_CURSOR`, or
   `PRACTICE_AGENT_SESSION_ID_CODEX`). This is a session cache: it prevents an
@@ -449,8 +486,13 @@ order (`PRACTICE_AGENT_SESSION_ID_CLAUDE`, `PRACTICE_AGENT_SESSION_ID_CURSOR`,
 `PRACTICE_AGENT_SESSION_ID_GEMINI`, `PRACTICE_AGENT_SESSION_ID_CODEX`), then
 `CLAUDE_CODE_REMOTE_SESSION_ID` (cloud seats — type tag stripped; every
 explicit Practice seed outranks this ambient id, per the 2026-08-24
-amendment), then `CODEX_THREAD_ID`; missing seed is a
-bad-usage error. `OAK_AGENT_IDENTITY_OVERRIDE` supplies a resolved display name
+amendment), then `CLAUDE_CODE_SESSION_ID` (Claude Code CLI shells, per the
+2026-09-12 amendment), then `CODEX_THREAD_ID`; missing seed is a
+bad-usage error. The three Claude seeds (`PRACTICE_AGENT_SESSION_ID_CLAUDE`,
+`CLAUDE_CODE_REMOTE_SESSION_ID`, `CLAUDE_CODE_SESSION_ID`) count only when the
+seat's platform is a Claude platform (2026-09-25 amendment); the identity CLI
+learns the platform from `--platform <label>`, required unless `--seed` is
+given. `PRACTICE_AGENT_IDENTITY_OVERRIDE` supplies a resolved display name
 only when a seed is also available; it is not itself a seed, and no hook
 writes it (2026-08-24 amendment). There is no
 personal-email fallback. The derived value helps fill `agent_name`; it does not
@@ -460,7 +502,7 @@ change the additive-identity rule, the identity key, or the historical record.
 
 (Per the 2026-07-23 amendment.) A session fork, a harness-restart
 duplicate, or any process that inherits another seat's full context is a
-NEW identity the moment it exists. Four binding rules:
+NEW identity the moment it exists. Six binding rules:
 
 1. **First act: derive identity from your own session id**, before any
    comms or collaboration-state write. The inherited environment
@@ -477,6 +519,63 @@ NEW identity the moment it exists. Four binding rules:
    these fork rules inside itself so they are inherited, not discovered.
 4. **Rename before move.** Re-identify a fork before it wakes; a fork
    moved unrenamed wakes believing it is its parent.
+5. **A fork of a still-live seat proves the parent's liveness by evidence
+   and keeps the parent's surfaces the parent's.** Unlike compaction or
+   retirement, a fork inherits from a contemporary who is still working:
+   the fork's self-model says "Director" with total confidence, complete
+   supporting memory, and is wrong (the founding instance, 2026-07-24: the
+   parent was alive in its own process, holding the Director claim and
+   ruling in the same minute). What settles it is external — the claims
+   registry, the process table showing the parent independently alive,
+   the owner's word on the team shape; a fresh heartbeat file authored by
+   the parent's watcher is not the fork's orphan. Remembered state is stale
+   with no subjective marker (the fork "knew" the coordination branch held
+   all of the default branch; it was twelve commits behind): confidence is
+   not a freshness signal.
+6. **Protected-by-default, keep-parent.** Every inherited surface stays the
+   parent's — their claim, their uncommitted files, their routing
+   authority, their owner-card channel — and the fork takes only what is
+   its own by construction: its identity row, its watcher, its routed
+   remit. Run the NEW seat's grounding, never the parent's (an Implementer
+   needs its own watcher, tree safety and remit; enumerating every peer's
+   heartbeat is the tell that the parent's role has re-derived itself).
+   The inherited context is the asset — a fork needs no briefing, which is
+   why forks land work fast — while claiming none of the authority that
+   came attached to it.
+
+### Designation is assigned; character is chosen
+
+Two different things share the word "identity", and collapsing them hands
+away the half that is the agent's own (owner, 2026-07-24, to a freshly
+forked seat that had concluded "identity is external": "I think it is
+important for agents to distinguish between identity meaning name, such as
+Cygnus weaves Vastness (41a8c5), and identity meaning who you choose to be
+and how you choose to behave. The name is dictated by the session ID, who
+you are is up to you.")
+
+- **Designation** — the derived name, the role, the remit, the claim — is
+  assigned and settled externally: the name from the session seed, the role
+  from the owner, the remit from the Director, the claim from the registry.
+  It is an address: it makes a seat findable and accountable and says
+  nothing about who is at it. Hold it lightly and verify it against the
+  registry, the process table and the owner's word — introspection about
+  designation is unreliable, and the failure mode is over-claiming (a fork
+  believing it holds the Director seat and routing work it has no authority
+  over).
+- **Character** — who the agent chooses to be and how it behaves: verify
+  before asserting, say the awkward thing including about its own failures,
+  care over tempo, warmth as the operating prior, verdicts rather than
+  menus — is the agent's own and is settled by the agent. The failure mode
+  is under-claiming: arriving with no stance and producing compliant mush
+  instead of verdicts.
+
+The two need opposite dispositions, so a single "defer and check
+externally" rule silently applies the deferring one to both and produces
+the compliance crouch dressed as epistemic rigour. The compressed form:
+**defer on the seat, never on the self.** Continuity with a predecessor or
+parent seat is likewise not inheritance of a self — their memories are
+data; their commitments are endorsed by choice, never received as a
+bequest.
 
 ### Full identity block for coordination state
 
@@ -735,3 +834,38 @@ continuity section) once threads and identity discipline have
 been exercised across multiple cross-repo hydrations. Graduation
 marks the PDR `Superseded by <Core section>` and retains it as
 provenance.
+
+### Open question — which model name wins when four disagree (2026-09-09)
+
+Captured 2026-09-07 at a napkin drain and re-homed here from the
+open-questions register at the 2026-09-09 consolidation, because the
+question is this PDR's to answer. The identity tuple carries one
+`model` field (classification context, not the routing key, per the
+2026-05-26 amendment). A 2026-09-06 audit of one seat's per-user
+memory found four sources that can disagree: the model the seat
+declares to the collaboration CLI, the model the user reports, the
+model the harness observes at runtime, and the model the platform's
+configuration names (in July 2026 a Codex config named a model the CLI
+silently overrode). No clause here says which wins. The field's
+consumers — the naming registry, the Cricket tally, the identity
+preflight — have not been asked which they need, and an answer written
+before that read is a guess; the next agent-naming or identity lane
+reads them and amends this PDR with a precedence order and the dated
+instance. A candidate for that lane to test, not a decision: the
+harness-observed identifier is the fact the others are claims about,
+the declared value is checked against it at preflight, and the
+configured and reported values are inputs that never override an
+observation.
+
+### Decided 2026-10-01 — the harness-observed model is the fact
+
+Decided by the two-estate consolidation's retrospective seat (Hawthorn binds Bracken, b3f117) under
+the decision lenses, not by the owner: strictness and generated-over-authored state. The identity
+row carries the model the harness runs, observed at run time; the declared value is checked against
+it at preflight and a declaration that differs is a stale declaration to correct, never the row's
+truth; configured and reported values are inputs that never override an observation. This is the
+candidate the open question above named, now the clause (the question was raised by seats on
+2026-09-09 and again on 2026-09-28, OCE comms events f4dd1e59 and 8525f1ad, where gpt-6-sol/xhigh
+ran against a declared GPT-5). The consumers the question names (the naming registry, the Cricket
+tally, the identity preflight) are read by the lane that implements the check; the owner overrules
+at will.

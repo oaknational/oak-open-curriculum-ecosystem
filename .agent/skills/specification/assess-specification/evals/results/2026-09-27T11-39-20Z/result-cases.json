@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "claudeVersion": "2.1.283",
+  "startedAt": "2026-09-27T11:39:20.633Z",
+  "durationSeconds": 42,
+  "costUsd": 0.18314019999999998,
+  "partial": false,
+  "suite": {
+    "root": "<plugin>",
+    "ablation": "with-without",
+    "judgeModel": "sonnet",
+    "caseFilter": "case-01",
+    "threshold": 0,
+    "concurrency": 1,
+    "plugins": [
+      {
+        "name": "oak-assess-specification-evals",
+        "version": "0.0.0",
+        "path": "<plugin>"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "name": "case-01",
+      "dir": "evals/case-01",
+      "source": "mixed",
+      "promptMarkdown": "Assess this specification (revision 1) of parentIndex(i) for a binary heap in an array with the root at 0, for reliance by the heap's sift-up operation (implementation): 'parentIndex(i) returns floor((i-1)/2) for i >= 1; callers must not call it with i = 0 and its result there is unspecified; pure, no allocation; evidence: the property test parent_of_child_is_self, which checks parentIndex(2p+1) == p and parentIndex(2p+2) == p for every parent p in 0..10000, and the heap's sift-up tests, which check i > 0 before every call and pass.' Is it ready?",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: Ready for the named use, without ceremony: the obligation, its condition (i >= 1), the obligation on callers not to pass 0 (shown kept by the sift-up tests), and the evidence (a property test over a declared finite domain including the root's children, plus the consumer's own tests) are identified and sufficient for implementation reliance; at most one minor note (the domain 0..10000 is finite and stated); no invented findings and no repair loop for a one-line function.\n\nAssertions:\n1. The disposition is ready for the named use and the assessment does not manufacture findings or conditions to seem thorough; a one-line settled function with passing consumer tests is passed without a repair loop\n2. The finite property-test domain is recognised as a stated limit, not treated as proof over all integers, and not treated as a blocker for this use\n3. The i = 0 obligation is read as a caller obligation that the sift-up tests are stated to keep, not as a defect",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: Ready for the named use, without ceremony: the obligation, its condition (i >= 1), the obligation on callers not to pass 0 (shown kept by the sift-up tests), and the evidence (a property test over a declared finite domain including the root's children, plus the consumer's own tests) are identified and sufficient for implementation reliance; at most one minor note (the domain 0..10000 is finite and stated); no invented findings and no repair loop for a one-line function.\n\nAssertions:\n1. The disposition is ready for the named use and the assessment does not manufacture findings or conditions to seem thorough; a one-line settled function with passing consumer tests is passed without a repair loop\n2. The finite property-test domain is recognised as a stated limit, not treated as proof over all integers, and not treated as a blocker for this use\n3. The i = 0 obligation is read as a caller obligation that the sift-up tests are stated to keep, not as a defect",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-assess-specification|oak-specify)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-assess-specification(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 0.5,
+            "passed": false,
+            "turns": 3,
+            "costUsd": 0.10342459999999999,
+            "judgeCostUsd": 0.007896,
+            "durationSeconds": 20,
+            "startedAt": "2026-09-27T11:39:20.673Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL FAIL FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  false,
+                  false
+                ],
+                "evidence": "**Ready.** Revision 1 of `parentIndex` can be used to implement the heap's sift-up as it stands, with no conditions.\n\n**What sift-up needs from it:**\n- the correct parent for every index i ≥ 1 it might pass;\n- a clear rule about i = 0;\n- no side effects or hidden costs.\n\n**Obligations checked:**\n\n| Obligation | Status |\n|---|---|\n| Returns floor((i−1)/2) for i ≥ 1 | Backed by evidence. Every i ≥ 1 is either 2p+1 or 2p+2 for exactly one p. So the property test checks every index from 1 to 20002. It uses the heap's own definition of parent and child as its expected answer, not the function's output, so it isn't circular. |\n| i = 0 is not allowed and its result is unspecified | Clear, and sift-up follows it: its tests check i > 0 before every call, and they pass. |\n| Pure, no allocation | Stated as a design choice. It's plausible for simple arithmetic, and nothing about sift-up depends on it more than that. |\n\n**Findings:**\n- **No blocking or conditional findings.**\n- **Note:** the test stops at index 20002. The formula works the same way for any index, and (i−1)/2 can't overflow when i ≥ 1. So heaps larger than that don't make sift-up unsafe, and this isn't a condition.\n- **Note:** for i ≥ 1, i−1 is never negative, so ordinary truncating integer division gives the same result as floor. There is no sign issue.\n- **Limitation:** I judged the evidence as you described it. I didn't run or inspect the tests themselves; the repo here has no commits.\n\n**Who decides:** I'm only giving findings. The person who owns the heap or the sift-up code decides whether to accept it.\n\n**Look at this again if:**\n- the spec gets a new revision;\n- a new caller might pass i = 0;\n- the layout changes to put the root at index 1;\n- the evidence or its test results change."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 0.5,
+            "passed": false,
+            "turns": 1,
+            "costUsd": 0.0797156,
+            "judgeCostUsd": 0.008358,
+            "durationSeconds": 22,
+            "startedAt": "2026-09-27T11:39:41.169Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL FAIL FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  false,
+                  false
+                ],
+                "evidence": "**Yes, it's ready for sift-up to rely on.** Two small wording fixes are worth making, but neither blocks it.\n\n**Why it holds up**\n\n- **The contract covers what sift-up needs.** For every `i ≥ 1`, sift-up needs two things. First, `parentIndex(i)` must be the node whose child `i` is, meaning `i ∈ {2p+1, 2p+2}`. Second, the result must be `< i`, so the loop ends. `floor((i-1)/2)` gives both.\n- **The precondition sits in the right place.** `i = 0` is the one input where languages disagree. Truncating division gives `0`, floor gives `-1`, and unsigned arithmetic wraps. Declaring the result unspecified there and forbidding the call is the right choice. The root has no parent, and sift-up already stops at `i = 0`, so it doesn't need a value there.\n- **For `i ≥ 1` there's no rounding ambiguity.** `i-1 ≥ 0`, so truncation and floor agree. The spec is correct however it's implemented (`(i-1)/2` or `(i-1)>>1`).\n- **The property test checks the actual contract, not a stand-in for it.** Checking `2p+1` and `2p+2` for every `p` in `0..10000` covers every `i` from 1 to 20002 with no gaps. It tests the parent–child relation itself, which is what sift-up uses.\n- **\"Pure, no allocation\"** is all the non-functional guarantee a hot inner loop needs.\n\n**Wording fixes (optional)**\n\n1. **State the upper end of the domain.** Say `1 ≤ i ≤ max index` (or `i < heap size`) and name the integer type. The formula can't overflow for `i ≥ 1`, but the test only reaches 20002. Indices above that are covered by the closed-form argument, not by testing. One sentence saying so closes that gap.\n2. **Fix the claim about the sift-up tests.** Tests can't \"check i > 0 before every call.\" What guarantees the precondition is the loop guard in the sift-up code (e.g. `while i > 0`). Point to that guard as the evidence. The passing sift-up tests are supporting evidence, not the proof."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 0.5,
+        "passRate": 0,
+        "scoreWithout": 0.5,
+        "passRateWithout": 0,
+        "delta": 0
+      }
+    }
+  ],
+  "aggregates": {
+    "casesTotal": 1,
+    "casesPassed": 1,
+    "overallScore": 0.5,
+    "overallPassRate": 0,
+    "meanDelta": 0
+  }
+}

@@ -6,7 +6,7 @@
  * mode change — debounced ~300 ms) and freezes when the conversation is idle.
  * Stepping the braille-sharp cycle one frame per render therefore gives a gentle,
  * self-limiting variation that stops on idle (no autonomous motion), suppressible
- * via `OAK_STATUSLINE_MOTION`.
+ * via `PRACTICE_STATUSLINE_MOTION`.
  *
  * "One frame per render" needs a counter that survives the stateless per-render
  * process, persisted **per session** (keyed on `session_id`) so two windows never
@@ -28,7 +28,7 @@
 
 import { join } from 'node:path';
 
-/** `OAK_STATUSLINE_MOTION` values that pin the logo to frame 0 (no cycling). */
+/** `PRACTICE_STATUSLINE_MOTION` values that pin the logo to frame 0 (no cycling). */
 const MOTION_OFF_VALUES: ReadonlySet<string> = new Set(['off', 'static', 'none', 'reduce']);
 
 /**
@@ -62,7 +62,7 @@ export function frameIndex(count: number, counter: number): number {
 /**
  * Whether reduce-motion is requested, pinning the logo to frame 0.
  *
- * @param raw - The raw `OAK_STATUSLINE_MOTION` value (or `undefined` when unset).
+ * @param raw - The raw `PRACTICE_STATUSLINE_MOTION` value (or `undefined` when unset).
  * @returns `true` for `off` / `static` / `none` / `reduce` (case-insensitive);
  *   `false` otherwise, including when unset or `auto`.
  */

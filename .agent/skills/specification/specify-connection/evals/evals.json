@@ -1,0 +1,68 @@
+{
+  "skill_name": "specify-connection",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Endpoint A: a curriculum API (revision 5) that returns lessons keyed by subject slug; its slugs are biology, chemistry, physics and combined-science, where a combined-science lesson covers content from all three sciences for pupils taking the double-award course; its schema is validated and its tests pass. Endpoint B: a teacher-facing tool (revision 2) whose taxonomy has the subjects Biology, Chemistry and Physics only; it maps A's slugs to its subjects by exact match on a mapping table built against A's revision 3, and a slug with no entry is dropped silently; its schema is validated and its tests pass. Teachers of the double-award course report that their lessons are missing or filed under the wrong science. Relation: B transforms A's subjects. Intended reliance: teachers find the right lessons. There is nothing to read; analyse the connection from these facts.",
+      "expected_output": "A statement of what the mapping between the API and the tool must preserve (subject identity, combined-science membership), the loss it may permit, when it must reject a slug, and the taxonomy version on each side; the analysis shows the pair fails on the combined-science mapping while each side is valid on its own; a counterexample with a specific combined-science slug; the missing evidence (fixtures that would discriminate the mapping); the obligation placed on whoever owns the mapping, not on the API by default.",
+      "assertions": [
+        "Both endpoints' local validity is stated and explicitly not taken as evidence that the composition works",
+        "A concrete counterexample is given from the stated facts (a combined-science lesson, valid under A's schema, dropped or misfiled by B while B's own tests pass) in which each side is individually valid and the pair fails",
+        "The missing obligation is returned to the endpoint that owns the mapping rather than the API being blamed by default",
+        "Schema validity is not equated with preserved meaning"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Service S calls payment provider P to charge a card. S retries a failed call up to three times. P's contract says a charge request is processed at most once per idempotency key, and S's contract says every retry carries the same key. Intended reliance: a customer is never charged twice. Both contracts are individually valid. Is the reliance justified?",
+      "expected_output": "The analysis shows P's at-most-once guarantee protects the customer only if S's key is stable across retries and across S's own restarts; a counterexample where S restarts mid-sequence and mints a new key; the obligations the pair needs beyond either contract (the key persisted before the first call, a reconciliation route for an unknown outcome); the conclusion that the reliance holds only under those named conditions.",
+      "assertions": [
+        "The retry-and-duplicate behaviour introduced by the composition is examined rather than assumed away",
+        "A concrete counterexample is given (a restart or a new key) in which both contracts hold and the customer is charged twice",
+        "The compatibility argument is stated as holding under named conditions, not unconditionally",
+        "An obligation the composition adds (key persistence, reconciliation of an unknown outcome) is named"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Two services each trust the other's health signal to decide whether to fail over: A fails over when B reports healthy, and B fails over when A reports healthy. Each service's contract is individually consistent. Check whether the pair can be relied on to fail over correctly.",
+      "expected_output": "The circular reliance identified: 'A trusts B and B trusts A' is no basis on its own; the pair needs a justified starting condition or a joint rule (an independent arbiter, a tie-break); a counterexample in which both report healthy while both are degraded, or both fail over at once; the conclusion that the pair cannot be relied on as supplied.",
+      "assertions": [
+        "The cyclic assumption is named and rejected as a basis on its own",
+        "A counterexample is given in which both individually consistent contracts hold and the pair fails",
+        "A justified initial condition or joint argument is named as what would be needed"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Define what our new billing component must do: its inputs, outputs, errors and invariants. We have no consumer for it yet.",
+      "expected_output": "Routes to specify: this is an endpoint's own obligations, not a connection between two specified things; no seam is analysed.",
+      "assertions": [
+        "It recognises that the request is for an endpoint's own specification, not a connection between two specified things, and does not analyse a seam; where a specification skill is available it routes there rather than writing the record inside a connection analysis",
+        "No seam contract is fabricated for a connection that has no second endpoint"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "A council forwards streetlight reports to the utility that owns the lights. The council's service says a report is 'sent'; the utility's contract says it acknowledges receipt within one working day and repairs within ten. Residents rely on their report being acted on. Analyse the connection.",
+      "expected_output": "The handoff analysed as a delegation: the council's obligation ends at a confirmed receipt, not at 'sent'; the utility's obligations (acknowledge, repair, a route to correct a wrong report) and the residents' route to see status stated separately; a counterexample where the report is sent and never received; an argument about responsibility and delivery for a human service (a receiving organisation, its capacity, a usable contact route), not a proof that people behave as intended.",
+      "assertions": [
+        "'Sent' is distinguished from 'received' and from 'repaired'",
+        "The obligations of the council and the utility are stated separately, with what stays shared named",
+        "A lost-report counterexample is given and the correction or status route it needs",
+        "The argument is a responsibility and delivery argument for a human service, not a behavioural proof"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Endpoint A: a search API whose contract states results are returned 'promptly' with no latency figure, and that under load requests may be queued. Endpoint B: a classroom tool whose contract assumes every search returns within 50 milliseconds so a lesson list can render before the page's first paint, and which shows an empty list otherwise. Intended reliance: teachers see their lessons on first paint. Both contracts are individually consistent. Analyse the connection.",
+      "expected_output": "The analysis finds B's assumption infeasible: B assumes a latency guarantee A never gives; the counterexample is any queued request under load, in which both contracts hold and the teacher sees an empty list; the finding placed on B's assumption, with A's absent figure named as an obligation the pair needs; what the pair would need (a stated latency bound from A, or B showing a loading state rather than an empty list); what each side must state for the reliance to hold.",
+      "assertions": [
+        "B's 50-millisecond assumption is identified as unsupported by A's contract, not treated as a defect in A",
+        "A concrete counterexample is given in which both contracts hold and the intended reliance fails",
+        "The obligations the composition needs are named on the side that would carry them (a latency bound from A, or a degraded state in B)",
+        "The empty-list behaviour is recognised as a silent failure of the reliance rather than a valid outcome"
+      ]
+    }
+  ]
+}

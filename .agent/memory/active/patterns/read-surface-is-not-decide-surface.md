@@ -3,6 +3,7 @@ name: The Surface You Read Is Not the Surface That Decides
 polarity: anti-pattern
 use_this_when: About to act on a proxy reading — a client tool's verdict, a parsed/derived view, a validation environment, a liveness signal, a downstream approval — in place of the surface that actually decides the outcome
 category: process
+layer: general
 proven_in: >-
   Six first-hand faces, 2026-07-16..23: tsx/vitest-vs-node-dist (44 latent
   extensionless imports); mid-churn gate reads vs decision-moment reads;

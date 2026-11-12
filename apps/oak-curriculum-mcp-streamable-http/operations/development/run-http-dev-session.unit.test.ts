@@ -24,7 +24,7 @@ interface SignalHarness {
 }
 
 function createDeferredPromise<T>(): DeferredPromise<T> {
-  let resolveValue: (value: T) => void = () => undefined;
+  let resolveValue: ((value: T) => void) | undefined;
   const promise = new Promise<T>((resolve) => {
     resolveValue = resolve;
   });
@@ -32,7 +32,7 @@ function createDeferredPromise<T>(): DeferredPromise<T> {
   return {
     promise,
     resolve(value) {
-      resolveValue(value);
+      resolveValue?.(value);
     },
   };
 }

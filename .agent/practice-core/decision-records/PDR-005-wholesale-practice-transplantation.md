@@ -93,18 +93,67 @@ Transplantation runs in three phases:
    adaptation), extract-and-rewrite (hybrid), or create-from-scratch
    (local). Every row reaches a completed state; no row is left
    unhandled. The destination Practice becomes structurally present.
+   Antigen density chooses between the two adaptation methods: a
+   surface with fewer than about five antigen lines (source-repo
+   names, paths, record numbers, workspace identifiers) is copied and
+   grafted; one with more than about fifteen is rewritten on the
+   lineage's structure, and the band between is the transplanter's
+   call, recorded in the manifest row. Every host path a merged
+   surface names is exercised (`ls` the path, run the script) before
+   the row closes: on 2026-09-12 two host paths in a merged surface
+   were wrong and only a listing found them. When a transplant leaves
+   two conventions live (the host's gate names beside the lineage's,
+   two script vocabularies), converge on the lineage's practised
+   convention, read from its live manifests at the pin rather than
+   its doctrine, before the first surface citing it is copied, and
+   surface the choice; an alias layer that keeps both is a
+   compatibility layer (`replace-dont-bridge`) and doubles every
+   citation until the owner rules.
 
-3. **Four-audit close** — the destination Practice passes four audits
+3. **Audit close** — the destination Practice passes five audits
    that cold-start hydration does not require:
    - **Foreign-antigen audit** — grep for source-repo names, paths,
      ADR numbers, workspace identifiers; every hit must resolve to a
      destination equivalent or be documented as intentionally
-     retained (e.g. a historical note in an ADR).
+     retained (e.g. a historical note in an ADR). The scrub is
+     two-tier and its checklist has three surfaces: organisation-
+     shaped residue (names, scopes, org paths) is a mechanical
+     replacement; product-shaped residue (a lineage's product
+     concepts inside doctrine) is excised or re-authored case by
+     case; and test fixtures are a surface of their own, read after
+     any mechanical pass, because a replacement over a fixture can
+     move a rule's test out of the rule's own scope with no failure
+     until the suite runs (2026-09-12).
    - **Completeness audit** — every concept in the source Practice
      has a representative in the destination, even if the artefact
      shape differs. Missing concepts are either intentional omissions
      (recorded in `practice-index.md` per the existing deliberate-
-     omission discipline) or gaps.
+     omission discipline) or gaps. Completeness is judged by
+     function, never by a green gate: green means the checks that
+     exist pass, not that the estate is whole (2026-09-13: an estate
+     called itself complete with `check` green while its doctrine
+     cited about forty absent paths). Define the Practice by what it
+     must do, then for each function exercise the destination's own
+     claims; the cheapest instrument is a cited-paths check (every
+     backticked path and cited script in live doctrine resolves).
+     Every ruling to trim a surface records the default it was made
+     under ("keep only what the host runs" and "bring the entire
+     Practice, adapt" produce different verdicts on one surface), so
+     that a later direction reopens exactly the drops made under the
+     old default and no other.
+   - **Assertion audit** — a transplanted surface's assertions about
+     its host are enumerated and exercised, never trusted: a hook's
+     claim about an environment file, a gate list, a docs path, a
+     cited record number (whose subject is checked at the target: a
+     number surviving a transplant proves nothing), a bootstrap
+     building from the source's workspace paths (one class, five
+     instances on 2026-09-12). Prefer wiring a validator leg over
+     truing the text by hand; the cited-scripts, CI-parity,
+     reference-direction and machine-local-paths validators are the
+     worked instances. The class is wider than transplants: nominal
+     adoption, a surface saying X is adopted while no mechanism makes
+     X true; the cure is the same, wire the mechanism, then true the
+     text.
    - **Cohesion audit** — the destination Practice does not
      contradict itself. Adapted directives and unadapted ADRs must
      reconcile; if they don't, one of them is wrong.
@@ -114,7 +163,7 @@ Transplantation runs in three phases:
 
 ### Success criteria
 
-Transplantation is complete when all four audits pass AND the
+Transplantation is complete when all five audits pass AND the
 destination repo passes the cold-start hydration's existing Bootstrap
 Checklist (reference check, agent check, build check, stable-index
 check, cohesion check, operational check, deliberate-omission check,
@@ -297,7 +346,7 @@ being treated as a specialised case of cold-start.
 - Any wholesale Practice transplantation MUST produce a transplant
   manifest as an exploration in the destination's `docs/explorations/`
   before any file is copied.
-- The four audits MUST pass before the transplantation is considered
+- The five audits MUST pass before the transplantation is considered
   complete.
 - The manifest is retained as the destination's record of what was
   imported and adapted; it is not discarded after the transplant.
@@ -349,6 +398,20 @@ already-generalised get classified quickly as fully-portable). The
 two disciplines reinforce each other.
 
 ## Amendment Log
+
+### 2026-09-30 — a transplant's lessons: execution method, scrub tiers, assertion audit, completeness by function
+
+**Driver**: the 2026-09-12 transplant of the Practice into jimcresswell.net
+captured seven operational lessons on its register, each ruled `graduated`
+by the owner's cards of 2026-09-14; this amendment is their home.
+
+**Changes**: §The process step 2 gains the antigen-density method choice,
+the path-exercise clause and the convention-convergence clause; the
+foreign-antigen audit gains its three-surface scrub checklist; the
+completeness audit gains judgment by function with the cited-paths check
+and the trim-ruling default; a fifth audit, the assertion audit, names
+the nominal-adoption class. Sources: the jimcresswell.net napkins of
+2026-09-12 and 2026-09-13 and its `journey-so-far.md` report.
 
 ### 2026-04-22 — Session 6 (memory-feedback): Source-side preservation and seeding
 

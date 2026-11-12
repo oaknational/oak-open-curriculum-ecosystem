@@ -6,7 +6,6 @@ import type { AuxiliaryReadRecord, SnapshotRecord } from './document-model.js';
 import type { AuxiliaryBlobReadRefusal, EstateReviewError } from './errors.js';
 import type { InvalidUtf8Read, ReadSuccess, TreeEntry, UnsupportedModeRead } from './file-model.js';
 import type { ProcessPort } from './ports.js';
-import type { RepoPath, Sha256 } from './scalar-model.js';
 
 export const SOURCE_EXTENSIONS = ['.ts', '.tsx'] as const;
 
@@ -27,7 +26,7 @@ export interface SnapshotPathPort {
 }
 
 interface SnapshotFileBase {
-  readonly path: RepoPath;
+  readonly path: string;
   readonly extension: (typeof SOURCE_EXTENSIONS)[number];
   readonly treeEntry: TreeEntry;
 }
@@ -63,16 +62,16 @@ export type RegularBlobTreeEntry = TreeEntry & {
 
 /** One successful pinned blob read returned to a caller as defensive bytes. */
 export interface AuxiliaryBlobRead {
-  readonly path: RepoPath;
+  readonly path: string;
   readonly treeEntry: RegularBlobTreeEntry;
   readonly bytes: Uint8Array;
   readonly byteCount: number;
-  readonly contentSha256: Sha256;
+  readonly contentSha256: string;
 }
 
 /** Exact cached non-TypeScript bytes used to recompute the auxiliary ledger. */
 export interface AuxiliaryBlobReadObservation {
-  readonly path: RepoPath;
+  readonly path: string;
   readonly treeEntry: RegularBlobTreeEntry;
   readonly bytes: Uint8Array;
 }
@@ -83,13 +82,13 @@ export interface AuxiliaryBlobReadObservation {
  * a reader holding this port cannot name any other revision.
  */
 export interface PinnedBlobReadPort {
-  read(path: RepoPath, maxBytes: number): Result<Uint8Array, EstateReviewError>;
+  read(path: string, maxBytes: number): Result<Uint8Array, EstateReviewError>;
 }
 
 /** Run-scoped access to regular blobs in the already validated pinned tree. */
 export interface GitSnapshotAuxiliaryReader {
   /** Read one exact path as defensive uninterpreted bytes or a typed failure. */
-  read(path: RepoPath): Result<AuxiliaryBlobRead, EstateReviewError | AuxiliaryBlobReadRefusal>;
+  read(path: string): Result<AuxiliaryBlobRead, EstateReviewError | AuxiliaryBlobReadRefusal>;
 
   /** Project successful unique non-TypeScript reads into the frozen output record. */
   ledger(): Result<readonly AuxiliaryReadRecord[], EstateReviewError>;
@@ -125,7 +124,7 @@ export interface GitContext {
 }
 
 export interface TrackedTreeEntry {
-  readonly path: RepoPath;
+  readonly path: string;
   readonly treeEntry: TreeEntry;
 }
 

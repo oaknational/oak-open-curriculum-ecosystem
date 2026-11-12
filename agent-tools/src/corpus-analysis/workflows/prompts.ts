@@ -12,6 +12,7 @@
  */
 
 import type { AdversaryLens, Candidate, LeafSignal } from '../judgment-schemas.js';
+import { CORROBORATION_ROOTS } from '../corroboration-roots.js';
 import type { Baseline } from '../recall-schemas.js';
 import type { DispositionedCandidate, GroundingLeaf, PartitionWindow } from './stage-io.js';
 
@@ -144,7 +145,7 @@ export function metaPrompt(
     '  matchedCandidateId: REQUIRED for any non-missed verdict (name the candidate id); OMIT IT ENTIRELY for "missed".',
     '  note: one sentence.',
     '',
-    'ALSO, for each KEPT candidate that you believe has already graduated to a durable home, emit a corroboration claim: candidateId + claimedHomePaths (on-disk file paths under .agent/memory/active/patterns/ or .agent/rules/ that encode this pattern). Verify with Glob/Grep/Read before naming a path — your read-only search tools exist for exactly this; a downstream check re-verifies each path exists. Never invent a path you have not seen.',
+    `ALSO, for each KEPT candidate that you believe has already graduated to a durable home, emit a corroboration claim: candidateId + claimedHomePaths (on-disk file paths under ${CORROBORATION_ROOTS.join(' or ')} that encode this pattern). Verify with Glob/Grep/Read before naming a path — your read-only search tools exist for exactly this; a downstream check re-verifies each path exists. Never invent a path you have not seen.`,
     '',
     "ALSO emit discountNote (a qualitative caveat on this run's reliability) and synthesisNotes (3-8 key qualitative takeaways). Emit NO numbers, fractions, or aggregate recall — only per-item judgments and prose.",
     '',

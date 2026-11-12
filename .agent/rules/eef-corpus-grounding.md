@@ -1,3 +1,11 @@
+---
+classification: situational
+description: EEF corpus grounding — when authoring or editing a claim about the EEF corpus (EEF_TOOLKIT_DATA), cite the source path it derives from or tag it agent-side; a claim that can do neither is left out.
+trigger: surface:eef-corpus — Authoring/editing a claim about the EEF corpus or EEF-thread work
+globs:
+  - packages/sdks/graph-corpus-sdk/**
+---
+
 # EEF Corpus Grounding: Cite or Tag
 
 Operationalises [ADR-038 (Compilation-Time Revolution)](../../docs/architecture/architectural-decisions/038-compilation-time-revolution.md)

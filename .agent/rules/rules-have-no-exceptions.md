@@ -1,3 +1,8 @@
+---
+classification: core
+description: A rule holds in every case it governs. When a case seems not to fit, improve the rule until its single statement covers it; do not freeze the misfit into the rule as an exception. If a rule is not working, fix it.
+---
+
 # Rules Have No Exceptions
 
 Operationalises [`principles.md` §Strict and Complete](../directives/principles.md#strict-and-complete).
@@ -27,6 +32,48 @@ tombstone for the case the author could not yet fit.
    conflating two principles — split it into two rules, each whole on its own.
 4. A case you cannot yet resolve is surfaced for an owner doctrine decision,
    never parked inside the rule as a carve-out.
+5. An exception claimed on the owner's behalf needs the owner's ruling
+   creating it. Owner, 2026-07-25, when a scope ruling about one operation
+   had been silently generalised into a standing "remote-only surfaces"
+   exemption: "the tripwire is the word exception, unless you can find
+   evidence of me saying 'this is a supported exception' then odds are
+   you, or a prior agent, made something up." Carry owner rulings at
+   exactly the altitude given — no invented exceptions below, no invented
+   mechanisms above. And the parity a ruling asks for is parity of
+   CAPABILITY and impact, never of mechanism (same day: "we need
+   equivalence of impact, not mechanism … step back and focus on value
+   delivery, not over literal interpretation of my words"): a capability
+   visible on a remote surface must be demonstrable and buildable from the
+   repository, while a missing generator is not a debt to recover if the
+   capability arrives by a better route.
+
+An act's own check passing is not the same question as which standing ruling
+governs the act. A clean tree, a sound verdict and a green gate each answered
+"is this act correct?" while a standing ruling forbade the act itself — a
+lead removing a peer's local branch, a conscience-check seat stepping from
+judging into doing, a build stricter than the ask (three in one day,
+2026-09-03). Beside every correctness check, ask "which standing ruling
+governs this act?" before acting; the rule that owns the act class carries
+the answer, and this rule is why that answer has no exception.
+
+## Apply the whole rule — the escalation clause is part of it
+
+A rule that prohibits a default path almost always names the exception path,
+and that path is as binding as the prohibition. Citing the prohibition clause
+while skipping the rule's own escalation or surfacing clause is the same
+pathology as inventing a gate: inaction dressed as compliance. The worked
+instance (2026-07-15): a Director told the owner a boundary-locked seat
+"cannot do any work without word from you there, which the protocol forbids
+me requesting", citing the routing rule's prohibition while its next clause
+said a refusal that blocks every capable session is a matrix survivor and
+DOES surface. Owner, verbatim: "the rule always [...] applies and I am
+absolutely sick of the double think." Before declaring anything unfixable or
+forbidden, re-read the governing rule for its escalation clause; exhaust the
+team-side cures it names (including re-checking what a constrained seat's
+session HAS demonstrably allowed and assigning work inside that surface);
+then surface true survivors immediately as verdicts with a recommendation. A
+team member doing no work is a defect to fix or escalate, never a state to
+narrate as acceptable.
 
 ## A documented bypass is a carve-out, even when the actor is legitimately outside the rule's audience
 

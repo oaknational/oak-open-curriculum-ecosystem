@@ -3,6 +3,7 @@ name: "A Sandbox Constraint Is a Build Instruction, Not a Hand-Authoring Licence
 polarity: pattern
 use_this_when: "A runtime surface cannot import or reuse repo code (a sandbox, an embedded script, a config DSL, a remote executor) and the impulse is to hand-write a parallel copy of logic, schemas, or prompts for it."
 category: architecture
+layer: general
 proven_in: "Corpus-analysis workflow suite, weeks of 2026-06 → owner-corrected 2026-07-01: 'the harness cannot import repo code' was read as 'hand-author plain .mjs with pasted mirrors', spawning an entire drift ecosystem — five duplicated blocks (routing mirror, three stage prompts, votePrompt), hand JSON schemas, splice tokens, and a re-diff checklist. Two blocks were found drifted in successive weeks; the fifth (votePrompt) had drifted with the 'source of truth' itself being the stale copy. The TS rebuild (compile + bundle to a self-contained artefact) ended the class."
 proven_date: 2026-07-02
 barrier:

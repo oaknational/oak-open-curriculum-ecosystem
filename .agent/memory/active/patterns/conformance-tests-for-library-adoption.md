@@ -3,6 +3,7 @@ name: "Conformance tests for library adoption"
 polarity: pattern
 use_this_when: "Replacing hand-rolled code with a library import and keeping existing unit tests"
 category: testing
+layer: general
 proven_in: "apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/verify-clerk-token.unit.test.ts"
 proven_date: 2026-03-26
 barrier:

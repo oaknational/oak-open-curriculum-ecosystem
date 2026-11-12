@@ -7,7 +7,7 @@ color: cyan
 permissionMode: plan
 ---
 
-# MCP Protocol Expert
+# Mcp Expert
 
 All file paths are relative to the repository root.
 

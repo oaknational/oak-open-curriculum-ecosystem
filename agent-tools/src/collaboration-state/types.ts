@@ -1,4 +1,4 @@
-import type { CollaborationAgentId, CollaborationAgentIdWrite } from './agent-id.js';
+import type { CollaborationAgentId } from './agent-id.js';
 
 export {
   collaborationAgentIdSchema,
@@ -15,13 +15,15 @@ export interface CollaborationStateEnvironment {
   readonly PRACTICE_AGENT_SESSION_ID_CLAUDE?: string;
   /** Cloud-seat platform session id (`cse_`-tagged); the untagged payload is the PDR-027 seed there. */
   readonly CLAUDE_CODE_REMOTE_SESSION_ID?: string;
+  /** Claude Code CLI session id, exported into every Bash tool shell; equals the SessionStart seed. */
+  readonly CLAUDE_CODE_SESSION_ID?: string;
   readonly PRACTICE_AGENT_SESSION_ID_CURSOR?: string;
   readonly PRACTICE_AGENT_SESSION_ID_GEMINI?: string;
   readonly PRACTICE_AGENT_SESSION_ID_CODEX?: string;
   readonly CODEX_THREAD_ID?: string;
   readonly conversationId?: string;
   readonly ANTIGRAVITY_SOURCE_METADATA?: string;
-  readonly OAK_AGENT_IDENTITY_OVERRIDE?: string;
+  readonly PRACTICE_AGENT_IDENTITY_OVERRIDE?: string;
 }
 
 export interface CollaborationArea {
@@ -80,7 +82,6 @@ export interface CollaborationClaim {
   readonly role?: string;
   readonly intent: string;
   readonly notes?: string;
-  readonly intent_to_commit?: string;
   /**
    * Optional repo-root-relative pointer to a mid-cycle handoff record under
    * `.agent/state/collaboration/handoffs/` (PDR-063 step 3 + ADR-182). Presence
@@ -94,25 +95,10 @@ export interface CollaborationClaim {
   readonly closure?: CollaborationClosure;
 }
 
-export interface CollaborationCommitQueueEntry {
-  readonly intent_id: string;
-  readonly claim_id: string;
-  /**
-   * Intent identity is the PDR-076a WRITE shape: `id` is required at parse
-   * in both registry read paths (see `parseIntentAgentId` in agent-id.ts).
-   * Claims keep the read shape — legacy id-less rows are preserved there.
-   */
-  readonly agent_id: CollaborationAgentIdWrite;
-  readonly files: readonly string[];
-  readonly commit_subject: string;
-  readonly queued_at: string;
-  readonly updated_at: string;
-  readonly expires_at: string;
-  readonly phase: 'queued' | 'staging' | 'pre_commit' | 'abandoned';
-  readonly staged_bundle_fingerprint?: string;
-  readonly staged_name_status?: string;
-  readonly notes?: string;
-}
+export {
+  type CollaborationCommitQueueEntry,
+  type CollaborationCommitQueueEntryDraft,
+} from './commit-queue-entry-types.js';
 
 /**
  * The exact schema version this code reads and writes for the active-claims
@@ -126,19 +112,24 @@ export interface CollaborationCommitQueueEntry {
  * constant has not adopted) has no mechanical guard yet. Test fixtures and
  * assertions deliberately keep the raw literal so a version bump reddens
  * the contract pins; validity-constructing helpers ride the constant.
+ *
+ * 1.4.0 (owner ruling 2026-08-17, QUEUE-LOCAL): the flat `commit_queue`
+ * array left this file for the per-intent store; the claims file carries
+ * claims only, and the readers migrate a legacy 1.3.0 file once on first
+ * contact (`active-claims-legacy-migration.ts`).
  */
-export const ACTIVE_CLAIMS_SCHEMA_VERSION = '1.3.0';
+export const ACTIVE_CLAIMS_SCHEMA_VERSION = '1.4.0';
 
 /**
  * The exact schema version for the closed-claims archive — a separate
- * surface pinned separately, currently versioned in lockstep with the
- * active-claims registry.
+ * surface pinned separately. It stays at 1.3.0 through the registry's
+ * 1.4.0 queue split: the archive never carried a commit_queue, so nothing
+ * in its shape changed.
  */
 export const CLOSED_CLAIMS_SCHEMA_VERSION = '1.3.0';
 
 export interface CollaborationRegistry {
   readonly schema_version: typeof ACTIVE_CLAIMS_SCHEMA_VERSION;
-  readonly commit_queue: readonly CollaborationCommitQueueEntry[];
   readonly claims: readonly CollaborationClaim[];
 }
 

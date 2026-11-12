@@ -119,6 +119,54 @@ describe('findBlockedPattern', () => {
     expect(findBlockedPattern('rg --replace=X "pattern" docs/', [ripgrepReplace])).toBeNull();
   });
 
+  it('argv-mode matches a destructive mode under every spelling the command accepts', () => {
+    const hardReset = { pattern: 'git reset --hard', match: 'argv' as const };
+    const recursiveForceRemoval = { pattern: 'rm -rf', match: 'argv' as const };
+
+    expect(findBlockedPattern('git reset --h HEAD~1', [hardReset])).toStrictEqual(hardReset);
+    expect(findBlockedPattern('git reset HEAD~1 --hard', [hardReset])).toStrictEqual(hardReset);
+    expect(findBlockedPattern('rm -r --force build', [recursiveForceRemoval])).toStrictEqual(
+      recursiveForceRemoval,
+    );
+    // The forward-going forms stay allowed.
+    expect(findBlockedPattern('git reset --soft HEAD~1', [hardReset])).toBeNull();
+    expect(findBlockedPattern('git reset -- src/index.ts', [hardReset])).toBeNull();
+    expect(findBlockedPattern('rm -r build', [recursiveForceRemoval])).toBeNull();
+    // A MENTION is what the string modes over-match: substring mode fires on
+    // the quoted span; argv mode reads it as one word that invokes nothing.
+    expect(
+      findBlockedPattern('grep -n "rm -rf" docs/', [
+        { pattern: 'rm -rf', match: 'substring' as const },
+      ]),
+    ).not.toBeNull();
+    expect(findBlockedPattern('grep -n "rm -rf" docs/', [recursiveForceRemoval])).toBeNull();
+  });
+
+  it('carries an argv entry through the policy load boundary into an argv match', () => {
+    // The schema degrades an UNKNOWN match kind to the default mode rather
+    // than failing the guard closed, so the only proof that argv is a known
+    // kind is a policy literal that survives the load and then matches as argv.
+    const patterns = parseBlockedPatternPolicy({
+      hooks: { preToolUse: { blocked_patterns: [{ pattern: 'rm -rf', match: 'argv' }] } },
+    });
+
+    expect(findBlockedPattern('rm -Rf build', patterns)).toStrictEqual({
+      pattern: 'rm -rf',
+      match: 'argv',
+    });
+    expect(findBlockedPattern('rm -r --force build', patterns)).toStrictEqual({
+      pattern: 'rm -rf',
+      match: 'argv',
+    });
+    expect(findBlockedPattern('rm -r build', patterns)).toBeNull();
+  });
+
+  it('argv-mode fails open on a pattern the tables cannot parse instead of bricking the guard', () => {
+    const unknown = { pattern: 'git frobnicate --hard', match: 'argv' as const };
+
+    expect(findBlockedPattern('git frobnicate --hard', [unknown])).toBeNull();
+  });
+
   it('regex-mode fails open on an invalid pattern instead of bricking the guard', () => {
     const invalidRegex = { pattern: '(unclosed', match: 'regex' as const };
 

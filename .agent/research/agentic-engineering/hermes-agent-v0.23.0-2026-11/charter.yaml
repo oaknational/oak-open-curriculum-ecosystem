@@ -1,0 +1,214 @@
+# Inquiry Charter: Hermes Agent v0.23.0 in its own terms.
+# Reader: any resuming session. Decision served: what is in scope and what is still open.
+# Revision 1 was written before any Hermes document was read. Revision 2 (Phase 3) fills
+# `missing_context` item "Hermes's stated design, quoted".
+schema_version: "parallax/inquiry-charter/0.1"
+artifact_id: "hermes-agent-architecture-2026-11/charter"
+artifact_type: inquiry-charter
+artifact_revision: 3
+inquiry_id: "hermes-agent-architecture-2026-11"
+inquiry_revision: 3
+status: provisional
+created_at: "2026-11-10T10:54Z"
+updated_at: "2026-11-10T12:45Z"
+revision_history:
+  - revision: 1
+    at: "2026-11-10T10:54Z"
+    commit: "db3c7ff05"
+    note: "Written before any Hermes document was read."
+  - revision: 2
+    at: "2026-11-10T11:02Z"
+    note: "Phase 3 filled the missing field with Hermes's stated design, quoted below. Scope, frames and depth are unchanged."
+  - revision: 3
+    at: "2026-11-10T12:45Z"
+    note: >-
+      After the study was written the owner asked whether DSPy and GEPA are the heart of Hermes's
+      self-improvement. The question was explored and challenged; memory-learning-architecture.md
+      section 10 and synthesis.md section 2.3 carry the result. Scope and frames are unchanged. One
+      error of omission was corrected: Hermes does claim RL training of model weights (scale S6),
+      which this study did not read.
+created_by:
+  kind: "agent"
+  identifier: "Swift holds Aether (Claude Code cloud session 01Duocji)"
+producing_skill:
+  name: parallax
+  version: "0.1.0"
+execution_context:
+  run_id: "session_01DuocjSig1rYLYhoLbF6r6w"
+  mode: "native-skill"
+  independence: shared-context
+  host: "Claude Code cloud, Practice Repos environment, three repositories"
+inputs:
+  - "brief.md at OCE commit 4015d6f39e46d48b70ed220d0b0c3c3e75e2ff09"
+  - "NousResearch/hermes-agent tag v0.23.0 = 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19"
+  - "NousResearch/hermes-agent-self-evolution HEAD = 0a929e3aa20e15cf04dc7c28492a7d41a5139125 (read 2026-11-10T10:47Z)"
+permissions_and_scope:
+  requested_operation: inquiry-orchestration
+  task_artifact_writes: true # the five research files in this folder
+  practice_memory_writes: true # napkin entries only
+  decision_authority: false
+  external_actions: false # no write of any kind to a Hermes repository
+identity:
+  basis_ids:
+    - "QA-B1 by package directory"
+    - "QA-B2 by runtime flow"
+    - "QA-B3 by extension point"
+    - "QL-B1 by store"
+    - "QL-B2 by time scale"
+    - "QL-B3 by what initiates a write"
+  scale_regions: ["S0", "S1", "S2", "S3", "S4", "S5", "S6"]
+  method_pass_ids:
+    - "MP-1 cold pass: code only, before any account of Hermes is open (protected)"
+    - "MP-2 Hermes's own account, quoted"
+    - "MP-3 code and tests read at the tag, beside MP-2"
+  domain_profiles: ["investigation", "software-engineering"]
+assumptions:
+  - "The mapping from top-level directory to subsystem is partial; it is recorded as a claim with evidence, never assumed."
+  - "The seven time scales are the brief author's scaffolding; Phase 4 keeps a span only where the code shows a mechanism in it."
+  - "Static reading of code and tests is the highest rung this session reaches; nothing is observed running."
+uncertainties:
+  - "Whether what Hermes says about its learning systems matches what the code does, per time scale."
+  - "Whether the self-evolution repository's results reach the runtime by any mechanism in code."
+  - "Whether GEPA has ever run on a Hermes skill; no artefact in the pinned repository shows it."
+  - "What the RL training pipeline (Atropos, the rl toolset) does; it was not read."
+provenance:
+  sources:
+    - "Owner's words of 2026-11-09 and 2026-11-10, quoted in brief.md"
+    - "The two pinned repositories"
+  transformations:
+    - "The tag was fetched from the public upstream by URL; the attached fork serves no tags."
+validity_domain:
+  populations: []
+  systems: ["Hermes Agent at tag v0.23.0", "hermes-agent-self-evolution at the pinned HEAD"]
+  contexts: ["static reading; default configuration as shipped at the tag"]
+  time_horizons: ["valid until a later release changes a module in the Phase 4 inventory"]
+defeaters:
+  - "A cited line does not say what the claim says when re-read at the permalink."
+  - "A described path is present in the code and never reached (presence without participation)."
+  - "A default read from a document differs from the default the loader applies."
+reopen_when:
+  - "A later release changes a module named in the Phase 4 inventory."
+
+purpose: >-
+  Understand Hermes Agent v0.23.0 in its own terms, as the footing for a later comparison with
+  the Practice.
+intended_impact: >-
+  A cited account that the later comparison session can draw on without re-reading Hermes.
+question: >-
+  Q-A: how is the system decomposed, how does one request flow, and where can it be extended?
+  Q-L: what is stored, what writes it and when, how it reaches the model again, what controls
+  it, and what Hermes says all of this is for.
+claim_types:
+  - "Q-A: empirical and formal, about code"
+  - "Q-L: empirical about code; interpretive about Hermes's stated intent"
+decision_owner: "Jim (owner)"
+affected_parties: ["the owner", "the later comparison session"]
+authority:
+  investigate: true
+  decide: false
+  act: false
+scope:
+  in:
+    - "Both repositories the owner named on 2026-11-10: hermes-agent at v0.23.0 and hermes-agent-self-evolution at the pinned HEAD. The second has its own census row, its durable writes are in the cold pass, and it feeds L8, L9 and L10."
+    - "Repository architecture, at a high level."
+    - "Memory, learning and self-improvement, at mechanism level."
+    - "Hermes's own vocabulary and stated design intent."
+  out:
+    - "Any comparison with the Practice (owner, 2026-11-10)."
+    - "Running Hermes (owner, 2026-11-09)."
+    - "Tool implementations, platform adapters, Desktop, Webapp and TUI code."
+    - "A security audit. Adoption advice."
+  constraints:
+    - "Owner, 2026-11-09: \"I am not interested in using it as a tool, but I am interested in creating a high level understanding if its architecture from the MIT code.\""
+    - "Owner, 2026-11-09: \"I would like a detailed brief for a Claude Code session to dig into the architecture of the repo, and additionally the architecture of the memory, learning, and self-improvement systems.\""
+    - "Owner, 2026-11-10: \"The eventual task is to compare the understanding we develop about Hermes to a comparison with the Practice, however I want us to understand Hermes in its own terms first, so keep the Practice comparison out of the exploration for now\""
+    - "Owner, 2026-11-10: \"Yes it is more than a high level overview, but I agree that is appropriate\""
+    - "Held command classes: no Hermes code runs; no writes to either Hermes clone or repository; no recursive deletes."
+    - "Every claim carries a GitHub permalink at the pinned SHA or the tag [unverified]."
+scales:
+  dimensions: ["time span over which stored state persists and is acted on"]
+  observation: ["source files and tests at the tag"]
+  mechanism:
+    - "S0 within one turn"
+    - "S1 within one session"
+    - "S2 across sessions, on one installation"
+    - "S3 scheduled or periodic maintenance"
+    - "S4 across installations"
+    - "S5 offline, outside the running agent"
+    - "S6 model weights"
+  intervention: []
+  consequence: []
+  monitoring: ["a later release's diff against the Phase 4 module inventory"]
+candidate_frames:
+  - id: "QA-F1"
+    statement: "The architecture is as Hermes's own documents describe it."
+    discriminating_observation: "Census and package graph agree with the documented decomposition."
+  - id: "QA-F2"
+    statement: "The structure measured in the code differs materially from that description."
+    discriminating_observation: "Documented boundaries that the import graph crosses, or measured subsystems the documents omit."
+  - id: "QL-F1"
+    statement: "The memory and learning systems do what Hermes says they do."
+    discriminating_observation: "Each stated behaviour has a reached code path; each cold-pass write is accounted for."
+  - id: "QL-F2"
+    statement: "They do something materially different: less, more, or other."
+    discriminating_observation: "A stated behaviour with no reached path, or a durable write the account does not mention."
+critical_functions:
+  - "Bridge Claims: every link Hermes asserts between two time scales is recorded with mechanism, evidence and failure conditions, then tested against code."
+  - "Disconfirmation first: whichever frame the session starts to favour, it searches for evidence against it first."
+budgets:
+  evidence: "Computed in Phase 2 (bytes / 4 per document and module, summed, plus rules context)."
+  time: "One session."
+  action: "None; investigation only."
+stopping_conditions:
+  - "Every key question A1 to A6 and L1 to L10 is answered with citations or marked insufficient-evidence."
+reopening_conditions:
+  - "A later release changes a module named in the Phase 4 inventory."
+missing_context:
+  - field: "Hermes's stated design, quoted"
+    consequence: "Filled at revision 2; see hermes_stated_design below."
+  - field: "Depth verdicts re-tested"
+    consequence: "Recorded below from the proportionality re-test at revision 1."
+hermes_stated_design:
+  source_note: >-
+    Quoted from the root AGENTS.md and the developer guide at the pinned commit
+    2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19. The full set, with permalinks, is section 1 of
+    architecture-map.md. Both sources come from the same maintainers.
+  what_hermes_is: >-
+    "Hermes is a personal AI agent that runs the same agent core across a CLI, a messaging
+    gateway (Telegram, Discord, Slack, ~20 platforms), a TUI, and an Electron desktop app. It
+    learns across sessions (memory + skills), delegates to subagents, runs scheduled jobs, and
+    drives a real terminal and browser. It is extended primarily through **plugins and skills**,
+    not by growing the core." (AGENTS.md L12-L16)
+  invariants:
+    - >-
+      "**Per-conversation prompt caching is sacred.** Mutating past context, swapping toolsets,
+      reloading memories or rebuilding the system prompt mid-conversation breaks the cached
+      prefix and multiplies the user's cost; the ONE exception is context compression."
+      (AGENTS.md L20-L22)
+    - >-
+      "**The core is a narrow waist; capability lives at the edges.**" (AGENTS.md L24)
+  design_principles:
+    - "Prompt stability"
+    - "Observable execution"
+    - "Interruptible"
+    - "Platform-agnostic core"
+    - "Loose coupling"
+    - "Profile isolation"
+  design_principles_source: "website/docs/developer-guide/architecture.md L260-L269"
+  qa_frame_verdict: >-
+    QA-F1 holds for the decomposition and the request path. QA-F2 holds for the documented
+    counts and for the tool dependency chain as drawn. Detail: architecture-map.md, A6.
+depth_verdicts:
+  inquiry: "Core"
+  learning_sub_inquiry: "Standard"
+  repository_architecture: "high level: subsystem boundaries, interfaces, one traced request"
+  memory_learning: "mechanism level, each claim cited at the pinned commit"
+  retest_note: >-
+    Re-tested at revision 1 against the owner's words. The owner confirmed on 2026-11-10 that
+    more than a high-level overview is appropriate. No depth changed.
+cricket:
+  verdict: >-
+    Work ON-TRACK in seven of eight returns and DRIFTING in one; frame verdicts NARROWED or
+    CONTRADICTED in six, all on three points now absorbed (the self-evolution repository named in
+    scope; the ledger opened only after the cold-pass commit; "for now" kept on the Practice
+    comparison). The table is section 5 of evidence-log.md.

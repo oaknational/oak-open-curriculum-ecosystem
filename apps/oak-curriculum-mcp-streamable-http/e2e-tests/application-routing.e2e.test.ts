@@ -31,6 +31,28 @@ import {
 import { TEST_UPSTREAM_METADATA } from '../src/test-helpers/upstream-metadata-fixture.js';
 import { getScratchStaticRoot } from '../src/test-helpers/static-root-fixture.js';
 
+/**
+ * Creates a fresh app with auth disabled.
+ * Each test creates its own app for isolation.
+ */
+async function createBypassApp(): Promise<Express> {
+  const runtimeConfig = createMockRuntimeConfig({
+    dangerouslyDisableAuth: true,
+    env: {
+      OAK_API_KEY: 'test-api-key',
+      NODE_ENV: 'development',
+      ELASTICSEARCH_URL: 'https://fake-es:9200',
+      ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
+    },
+  });
+  return await createApp({
+    staticRoot: await getScratchStaticRoot(),
+    runtimeConfig,
+    observability: createMockObservability(runtimeConfig),
+    getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
+  });
+}
+
 const ACCEPT_HEADER = 'application/json, text/event-stream';
 
 /**
@@ -45,7 +67,7 @@ async function createAuthEnabledApp(): Promise<Express> {
       CLERK_PUBLISHABLE_KEY: 'pk_test_123',
       CLERK_SECRET_KEY: 'sk_test_123',
       NODE_ENV: 'test',
-      ELASTICSEARCH_URL: 'http://fake-es:9200',
+      ELASTICSEARCH_URL: 'https://fake-es:9200',
       ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
     },
   });
@@ -226,28 +248,6 @@ describe('Application-Level Method-Aware Auth', () => {
   });
 
   describe('DANGEROUSLY_DISABLE_AUTH compatibility', () => {
-    /**
-     * Creates a fresh app with auth disabled.
-     * Each test creates its own app for isolation.
-     */
-    async function createBypassApp(): Promise<Express> {
-      const runtimeConfig = createMockRuntimeConfig({
-        dangerouslyDisableAuth: true,
-        env: {
-          OAK_API_KEY: 'test-api-key',
-          NODE_ENV: 'development',
-          ELASTICSEARCH_URL: 'http://fake-es:9200',
-          ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
-        },
-      });
-      return await createApp({
-        staticRoot: await getScratchStaticRoot(),
-        runtimeConfig,
-        observability: createMockObservability(runtimeConfig),
-        getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
-      });
-    }
-
     it('allows discovery methods without token when flag is true', async () => {
       const response = await request(await createBypassApp())
         .post('/mcp')

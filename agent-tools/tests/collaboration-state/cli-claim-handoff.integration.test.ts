@@ -29,7 +29,7 @@ const retiree = {
 } as const;
 
 const retireeEnv = {
-  OAK_AGENT_IDENTITY_OVERRIDE: retiree.agent_name,
+  PRACTICE_AGENT_IDENTITY_OVERRIDE: retiree.agent_name,
   PRACTICE_AGENT_SESSION_ID_CODEX: retiree.session_id_prefix,
 } as const;
 
@@ -41,7 +41,7 @@ const successor = {
 } as const;
 
 const successorEnv = {
-  OAK_AGENT_IDENTITY_OVERRIDE: successor.agent_name,
+  PRACTICE_AGENT_IDENTITY_OVERRIDE: successor.agent_name,
   PRACTICE_AGENT_SESSION_ID_CLAUDE: successor.session_id_prefix,
 } as const;
 

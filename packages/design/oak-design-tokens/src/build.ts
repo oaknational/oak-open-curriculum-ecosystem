@@ -8,7 +8,7 @@
  * Errors propagate naturally — Node surfaces the stack trace, and
  * Turbo reports the non-zero exit.
  *
- * When invoked with `OAK_TOKEN_DEV=1`, contrast violations in the
+ * When invoked with `--dev`, contrast violations in the
  * hand-authored trees are reported as warnings instead of errors — CSS
  * is still generated so the widget dev server can render the current
  * state. Violations must be resolved before committing (the CI build
@@ -30,7 +30,7 @@ import {
 const outputDirectory = resolve(import.meta.dirname, '../dist');
 const cssOutputPath = resolve(outputDirectory, 'index.css');
 const contrastReportPath = resolve(outputDirectory, 'contrast-report.json');
-const isDevMode = process.env['OAK_TOKEN_DEV'] === '1';
+const isDevMode = process.argv.includes('--dev');
 
 mkdirSync(outputDirectory, { recursive: true });
 writeFileSync(cssOutputPath, buildOakDesignTokensCss());
@@ -66,7 +66,7 @@ if (totalFailures > 0) {
   const message = `Contrast validation: ${String(totalFailures)} violation(s):\n${listFailedEntries(contrastReports).join('\n')}`;
 
   if (isDevMode) {
-    process.stderr.write(`⚠ ${message}\nCSS generated despite violations (OAK_TOKEN_DEV=1).\n`);
+    process.stderr.write(`⚠ ${message}\nCSS generated despite violations (--dev).\n`);
   } else {
     throw new Error(message);
   }

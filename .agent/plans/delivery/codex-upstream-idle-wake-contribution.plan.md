@@ -22,7 +22,8 @@ last_updated: 2026-08-01
 commission (2026-08-01): the owner ruled against carrying a pinned native
 Codex extension (disproportionate maintenance for the benefit — see the
 rulings section of
-[`codex-app-server-idle-wake`](codex-app-server-idle-wake.plan.md)) and
+the `codex-app-server-idle-wake` sketch, archived at
+`.agent/plans/delivery/archive/codex-app-server-idle-wake.plan.md`) and
 commissioned exactly this exploration in its place — "open a speculative
 plan to explore doing this work as a PR into the Codex codebase, and also
 consider if this would enable a Codex native 'loop' functionality similar

@@ -35,7 +35,7 @@ missing) · `UNHOMED` (no home; queued S3) · `EXPIRED`/`SUPERSEDED`/`EXECUTED`
 | Row | Ruling | Authority | Proposed home |
 | --- | --- | --- | --- |
 | L1612a | System residue (.DS_Store): gitignore AND delete on find (owner, 2026-08-01 era) | owner-paraphrase | new always-applied rule via `new-rule-vs-pdr-clause` |
-| SPARK-5 | Tool descriptions governed: stale anchor + semanticSha256; one validator problem per run; hashes only from validator output | seat-inference | fold into per-user memory `mcp-agent-facing-content-audit` (existing audit-mechanics home) |
+| SPARK-5 | Tool descriptions governed: stale anchor + semanticSha256; one validator problem per run; hashes only from validator output | seat-inference | the agent-facing content audit's own report and registry under `.agent/reports/mcp-agent-facing-content-audit/` (the audit-mechanics home) |
 | C-971 | "Self-limits are gated on ASKING, never silent" (owner, 2026-07-28, line 971) — critic find, missed by the inventory | owner-verbatim | first-hand read then rule-route via `new-rule-vs-pdr-clause` |
 | C-357 | ESM ruling: zero `require`; dynamic imports error-with-recorded-exemptions (owner, 2026-08-09, line 357) — critic find | owner-verbatim | first-hand read; candidate `source-is-typescript-esm-only` rule amendment |
 | C-690W | Graph-tools strictness ruling with verbatim scope fence "I don't want to replace the hand authored checks just yet" (owner, 2026-07-28 ~15:1xZ, 690–1100 window) — critic find | owner-verbatim | first-hand read; route to the graph-tools lane's plan/thread |
@@ -65,22 +65,22 @@ missing) · `UNHOMED` (no home; queued S3) · `EXPIRED`/`SUPERSEDED`/`EXECUTED`
 | Row | Ruling (compressed) | Authority | Home |
 | --- | --- | --- | --- |
 | R2 | supertest classifies by boundary | owner-verbatim | `testing-strategy.md` ~319 + testing-patterns §classification |
-| R3 | Copilot standing at PR-open | owner-verbatim | per-user memory `copilot-standing-for-source-prs` |
+| R3 | Copilot standing at PR-open | owner-verbatim | pr-lifecycle skill §Phase 3 Copilot review policy (owner grants 2026-07-26→29) |
 | R6 | /mcp* collapse gated on client-compat | owner-verbatim | MCP-344 (ruling + evidence + 2026-08-04 decision comments) |
 | R7 | nothing hardcoded; URLs derive from instance; www canonical | owner-verbatim | MCP-307 + MCP-351 (+PR #635) + INFP-8 |
 | R8 | avoid WAF skip rules (JR, owner-quoted) | owner-relayed | INFP-4; kin rule `never-disable-checks` |
 | R10 | hold project goals, not activity | owner-verbatim | MCP-355 (commission verbatim + design sketch) |
 | R11 | DoD in every ticket + strict change ceremony | owner-verbatim | MCP-356 |
-| R13 | additions never subtract capabilities | owner-verbatim | per-user memory `additions-never-subtract-standing-capabilities` |
-| R16 | review-ratchet two-axis, tally ~4 rounds | owner-verbatim | per-user memories (ratchet + batch-disposition) |
-| R17 | blocking owner asks are ALWAYS cards | owner-verbatim | per-user memories (route-owner-blockers; decisions-as-questions) |
-| R18 | colleagues run on trust, never chased | owner-verbatim | per-user memory `colleagues-run-on-trust-never-chased` |
+| R13 | additions never subtract capabilities | owner-verbatim | `.agent/rules/scope-from-goal-before-approach.md` §Standing capabilities are in the IN set |
+| R16 | review-ratchet two-axis, tally ~4 rounds | owner-verbatim | pr-lifecycle skill (PDR-140 §Decision; the ratchet clauses of Phase 4) |
+| R17 | blocking owner asks are ALWAYS cards | owner-verbatim | `.agent/rules/owner-attention-at-action-moments.md` §Blocking asks are ALWAYS cards |
+| R18 | colleagues run on trust, never chased | owner-verbatim | `.agent/memory/executive/owner-signal-interpretation.md` §Colleagues Run on Trust, Never Pursuit |
 | R19 | lane handovers get wrap-grade ceremony | owner-verbatim | PDR-063 + session-handoff/wrap skills |
 | R20 | every consumed value from the design system | owner-verbatim | rule `design-values-come-from-the-system` |
-| R21 | milestones simple, completable, visible | owner-verbatim | per-user memory `milestones-propose-agree-never-dangle` |
-| R22 | no change freezes | owner-verbatim | per-user memory `no-change-freezes…` |
-| R23 | structure over vigilance | owner-verbatim | per-user memory `structure-over-vigilance-owner-principle` |
-| R24 | falsifiable structure at the surface | owner-verbatim | per-user memory `falsifiable-structure…` |
+| R21 | milestones simple, completable, visible | owner-verbatim | ticket-management skill (milestone rulings) |
+| R22 | no change freezes | owner-verbatim | `principles.md` §Strict and Complete, the "No change freezes" paragraph |
+| R23 | structure over vigilance | owner-verbatim | `.agent/rules/verify-dont-trust.md`, the "Cost, not correctness, decides whether a check runs" clause |
+| R24 | falsifiable structure at the surface | owner-verbatim | PDR-026 §Owner endorsement of surfaced falsifiable structure |
 | R27 | cricket duos → superseded by quartet | owner-verbatim | per-user memory `cricket-two-ab-pairs` (current form) |
 | R28 | TS exceptions a high, high bar | owner-verbatim | rule `source-is-typescript-esm-only` + typescript-practice |
 | R29 | isitagentready results all ticketed | owner-verbatim | MCP-422…427 (+421) |
@@ -109,7 +109,6 @@ missing) · `UNHOMED` (no home; queued S3) · `EXPIRED`/`SUPERSEDED`/`EXECUTED`
 | MAG-4 | iteration local; Claude Design owner-instigated only | owner-verbatim | napkin 2700–2717 (no-studio-sync + dormant-retained) + MCP-588 |
 | MAG-5 | counter-brand off-horizontal delta | owner-verbatim | plan `design-system-completion` (point 9 + gate provenance) |
 | MAG-6 | PDS identity refocus (rename from the outgoing identity) | owner-verbatim | plan `public-digital-service-identity` |
-| SPARK-6 | /mcp landing 406 without Accept: text/html | seat-inference | ADR-046:22 |
 | PETREL-ERA | bot identity every write; mint-fails-stop; never-squash; sha-pins; suppressed-findings; pathspec; --body-file; zero-new-Sonar | owner-verbatim (class) | always-applied rules + per-user memories (fleet spot-checked) |
 | OAK-ID | Oak identity instantly recognisable (canonical refs) | owner-paraphrase | plan `oak-identity-recognisability` §Goal (merged PR #873) |
 | CBC | claim-before-check pattern | seat-inference | rule `verify-dont-trust` §Name the Instrument (`360214de9`) |
@@ -124,17 +123,22 @@ missing) · `UNHOMED` (no home; queued S3) · `EXPIRED`/`SUPERSEDED`/`EXECUTED`
 | COLD-PAUSE | any agent with no active work for an hour goes into cold pause — verbatim "any agent that has no active work for an hour should go into cold pause. This is to prevent the monitors draining tokens for no value" (2026-08-14, direct to Director) | owner-verbatim | rule-estate cure routed (watcher/liveness rule family); relayed on the survey ARC channel; Director instruments tightened same hour |
 | QUEUE-LOCAL | commit queues are LOCAL-MACHINE state, never in version control; split out of active-claims.json into per-intent event files like the comms store, entries carry a 1-hour TTL, `list` is a view over the directory; the queue is legacy-use under the worktree model — four-point ruling 2026-08-17 direct to Director, with "split it now and plan the work now and carry it out now" | owner-verbatim | executed same hour: interim split live (4.4MB→4KB, the legacy blob retained loss-free at the gitignored `archive/commit-queue-legacy-2026-08-17.json` until the MCP-612 landing's verification read, then owner-disposed; claims byte-preserved, both CLI readers validated across an atomic candidate swap); plan `commit-queue-local-ephemera` + MCP-612 + build dispatched; supersedes F-163's archive-action cure shape |
 | 774 | #774 illustrative, never merge-queued | owner-verbatim | napkin 3270–3277 + thread record HELD row |
-| FIX-LOW | fix at the lowest effective level | owner-verbatim | per-user memory `fix-at-the-lowest-effective-level` |
+| FIX-LOW | fix at the lowest effective level | owner-verbatim | pattern `.agent/memory/active/patterns/fix-at-source-not-consumer.md` (the owner's general form, both bounds) |
 | XPLAT | cross-platform node ratified; research precedes work ("stamp it now, it will need further research before work on it begins") | owner-verbatim | strategic plan `cross-platform-compatibility` (stamp + §Delivery rider) |
 | XPLAT-2 | no-vendor-structural-dependence constraint is the owner's, ESTABLISHED in ADR-225 at review (2026-08-14) — never citable as pre-dating it; MUST forward-scoped, priors (ADR-074/076/219/162) not retroactively bound | owner-verbatim (card) | PR #886 comment 5290518682 → ADR-225 at the cure landing |
 | DECON-5 | the deconstruction charter's "boundaries follow meaning; placement doctrines do not" is research policy scoped to that research frame (the charter's own words) — NOT estate-wide licence against estate placement rules (`consolidate-at-second-consumer`, PDR-108); the collision is unadjudicated at estate level and routed to the fresh survey design (owner-agreed routing, 2026-08-14) | seat-inference (scope) + owner-agreed routing | research record `capability-deconstruction-survey-comparison.md` Finding 3 + survey-machinery plan §Banked inputs |
 | XPLAT-4 | resume order at the 2026-08-17 compaction — verbatim: "after compaction start with our Windows work and reviewing Luke's work. He has only been on the team a few days so please be supportive, not crazy supportive, but just warm"; with the same-day sequencing correction "I intended our Windows work to go in first in order to support the manual windows work" — the XPLAT research rider is support-sequencing, never a contribution fence; supersedes SKILLS-FIRST at the queue head | owner-verbatim | discharged this seating: research node `cross-platform-research` born sketch (plan-corpus status enum; execution state rides MCP-607, In Progress — authorities distinguished per the plan's amendment trail); warm reviews delivered on #891 (with first-hand macOS gate proof) and #888 |
 | BATCH-CADENCE | commit/push cadence corrected — verbatim: "comitting is expensive, pushing is expensive, you are committing and pushing every little thing, and it means a MASSIVELY disproportionate amount of our time is spent running the quality gates. I like that you make small commits and push often, but I do think we are currently overshooting the sweet spot" (2026-08-17, direct to Director) | owner-verbatim | working practice: one commit per coherent parcel, push at safety boundaries; safety floor unchanged — freezes and handoffs never left unpushed |
 | XPLAT-3 | invariant restated at the provider quantifier, owner-agreed 2026-08-14 at this seat, superseding XPLAT-2's capability-level wording in the live ADR-225 text (establishment discipline unchanged): "no single named external provider may become a condition for this system's existence: every supported composition survives the loss of any one such provider — by a compatible provider, a local or self-hosted binding, or omission of a non-constitutive capability — and each surviving composition is exercised, not merely declared" | owner-verbatim (agreed to Director-proposed wording, "agreed, please make the change") | ADR-225 at `1823c90f2` on PR #886 + PR comment 5292457799 |
-| PLUGIN-NAME | plugin, ChatGPT/Codex package and MCP server key are all `oak-national-academy`, matching the display name; supersedes R46 (owner, 2026-09-30) | owner-verbatim | plugin CHANGELOG 0.1.4; SERVER_KEY TSDoc in `plugin-mcp-server-binding.integration.test.ts` |
+| PLUGIN-NAME | plugin, ChatGPT/Codex package and MCP server key are all `oak-national-academy`, matching the display name; supersedes R46 (owner, 2026-09-30) | owner-verbatim | plugin CHANGELOG 0.1.4; SERVER_KEY TSDoc in `plugin-mcp-server-binding.integration.test.ts` — both in this repository's history at release v1.186.0, the plugins having moved to oaknational/oak-ai-plugins on 2026-10-21 (the 1.186.1 sync) |
+| FOLD-CADENCE | the 24 hours is a rough guide; the need to fold varies with how much work is happening; no fold on the clock alone (owner, 2026-10-19) | owner-verbatim | rule `coordination-branch-24h-lifetime`, amendment of 2026-10-19 |
+| SAFE-AND-COMPLETE | safely recorded = pushed and in a PR; complete = merged; every worktree and branch made safe or, if of no use, deleted; this session a named exception for the merge (owner, 2026-10-19) | owner-verbatim | rule `worktree-hygiene`, the 2026-10-19 paragraph |
 
 ## Expired / superseded / executed (dated; no home owed)
 
+SPARK-6 (the `/mcp` landing 406 without `Accept: text/html`; superseded 2026-09-17 at the
+1.185.0 sync: the MCP app serves no HTML on any host and the `/mcp` HTML-negotiation leg is
+gone, Oak #928/#987 — a browser `GET /mcp` draws the protocol gate's 406 for every request).
 R1, R5, R9, R12, R15, R25, R26, R31 (superseded by L1578's general grant),
 R32–R35, R37–R41, R43, R44, R49, R50, S626–S648, L1571, L1572 (superseded;
 class kin `model-tier-stance-gradient`), L1574 (superseded by L1580), L1576

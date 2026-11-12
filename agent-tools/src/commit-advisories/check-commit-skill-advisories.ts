@@ -6,8 +6,8 @@
  * Runs the commit skill's pre-`git commit` advisory discipline checks as a
  * single composed sequence: fitness (`practice:fitness:strict-hard`),
  * vocabulary (`practice:vocabulary`), then commit message validation
- * (`pnpm agent-tools:check-commit-message`). Exits with the first non-zero exit
- * code; exit 0 means every advisory check passed.
+ * (`check-commit-message`, run in this process). Exits with the first non-zero
+ * exit code; exit 0 means every advisory check passed.
  *
  * **Polarity is advisory, NOT blocking.** This script is agent-invoked. Its
  * non-zero exit is information for the agent to read and route, NEVER a
@@ -42,18 +42,21 @@
  *   0   every advisory check passed
  *   ≠0  the first failing advisory check's exit code
  *
- * Argument forwarding: all CLI arguments are forwarded verbatim to the
- * commit-message check (e.g. `-F .git/COMMIT_EDITMSG`, `-m "subject"`).
+ * Message intake: the arguments are `check-commit-message`'s (`-m`, `-F`,
+ * `-F -`, or stdin), passed to its check in this process, never onto another
+ * command line (see {@link commitSkillAdvisoryChecks}).
  */
 
 import { fileURLToPath } from 'node:url';
 
 import { runFileBackedChild } from '../core/file-backed-child.js';
 
+import { checkCommitMessage } from './check-commit-message.js';
+
 const ADVISORY_BANNER = '[ADVISORY ONLY — NOT A COMMIT GATE]';
 
 /**
- * Result of running a single advisory check sub-process.
+ * Result of running a single advisory check.
  */
 export interface AdvisoryCheckResult {
   readonly exitCode: number;
@@ -73,18 +76,26 @@ export type CommitSkillAdvisoriesResult =
     };
 
 /**
+ * The three advisory checks the orchestrator drives, in their run order.
+ */
+export interface CommitSkillAdvisoryChecks {
+  readonly fitnessCheck: () => Promise<AdvisoryCheckResult>;
+  readonly vocabularyCheck: () => Promise<AdvisoryCheckResult>;
+  readonly messageCheck: () => Promise<AdvisoryCheckResult>;
+}
+
+/**
  * Pure orchestrator: drives the three advisory checks in order and
  * short-circuits on the first failure. Caller injects the check
- * implementations; the runtime entry binds real spawn-based implementations.
+ * implementations; the runtime entry binds the real checks through
+ * {@link commitSkillAdvisoryChecks}.
  *
  * @param input - the three injected advisory-check functions
  * @returns the orchestrator outcome
  */
-export async function runCommitSkillAdvisories(input: {
-  readonly fitnessCheck: () => Promise<AdvisoryCheckResult>;
-  readonly vocabularyCheck: () => Promise<AdvisoryCheckResult>;
-  readonly messageCheck: () => Promise<AdvisoryCheckResult>;
-}): Promise<CommitSkillAdvisoriesResult> {
+export async function runCommitSkillAdvisories(
+  input: CommitSkillAdvisoryChecks,
+): Promise<CommitSkillAdvisoriesResult> {
   const fitness = await input.fitnessCheck();
   if (fitness.exitCode !== 0) {
     return {
@@ -118,6 +129,36 @@ export async function runCommitSkillAdvisories(input: {
   return { ok: true };
 }
 
+/**
+ * The three advisory checks, built from the arguments this command was given.
+ *
+ * @remarks
+ * The tree-state checks run as pnpm scripts with fixed arguments. The message
+ * check runs in this process, through `checkMessage`, and takes every argument
+ * this command was given. So no argument reaches another command line: under
+ * `cross-spawn` on Windows, a `pnpm.cmd` shim's arguments pass through
+ * `cmd.exe`, which reads them a second time, and a quote in a commit subject
+ * could end the quoting early. Running in-process also lets `-F -` read this
+ * command's own stdin, which a launched check never receives.
+ *
+ * @param forwardedArgs - this command's arguments, in `check-commit-message`'s intake form
+ * @param deps - how a pnpm script is launched, and the in-process message check
+ * @returns the checks {@link runCommitSkillAdvisories} drives
+ */
+export function commitSkillAdvisoryChecks(
+  forwardedArgs: readonly string[],
+  deps: {
+    readonly runPnpm: (args: readonly string[]) => Promise<AdvisoryCheckResult>;
+    readonly checkMessage: (argv: readonly string[]) => number;
+  },
+): CommitSkillAdvisoryChecks {
+  return {
+    fitnessCheck: async () => deps.runPnpm(['practice:fitness:strict-hard']),
+    vocabularyCheck: async () => deps.runPnpm(['practice:vocabulary']),
+    messageCheck: async () => ({ exitCode: deps.checkMessage(forwardedArgs), stderr: '' }),
+  };
+}
+
 function describeFailure(
   failure: Extract<CommitSkillAdvisoriesResult, { readonly ok: false }>,
 ): string {
@@ -141,26 +182,12 @@ async function main(forwardedArgs: readonly string[]): Promise<number> {
     'A non-zero exit is information for the agent to read and route. It is NEVER a commit verdict, NEVER licence to propose --no-verify, and NEVER licence to construct a doctrinal-collision framing. See PDR-053 and ADR-176.\n\n',
   );
 
-  const result = await runCommitSkillAdvisories({
-    fitnessCheck: async () =>
-      runFileBackedChild({
-        command: 'pnpm',
-        args: ['practice:fitness:strict-hard'],
-        cwd: repoRoot,
-      }),
-    vocabularyCheck: async () =>
-      runFileBackedChild({
-        command: 'pnpm',
-        args: ['practice:vocabulary'],
-        cwd: repoRoot,
-      }),
-    messageCheck: async () =>
-      runFileBackedChild({
-        command: 'pnpm',
-        args: ['agent-tools:check-commit-message', ...forwardedArgs],
-        cwd: repoRoot,
-      }),
-  });
+  const result = await runCommitSkillAdvisories(
+    commitSkillAdvisoryChecks(forwardedArgs, {
+      runPnpm: async (args) => runFileBackedChild({ command: 'pnpm', args, cwd: repoRoot }),
+      checkMessage: checkCommitMessage,
+    }),
+  );
 
   if (result.ok) {
     return 0;

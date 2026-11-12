@@ -3,6 +3,7 @@ name: "Source-first adopt-or-explain evaluation"
 polarity: pattern
 use_this_when: "Evaluating whether an existing dependency's utilities should replace hand-rolled code"
 category: process
+layer: general
 proven_in: "docs/spikes/clerk-mcp-tools-express-evaluation.md"
 proven_date: 2026-03-26
 barrier:

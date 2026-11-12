@@ -5,4 +5,4 @@ description: "A portable, beginner-friendly primer on working with agentic AI co
 
 # Working With Agentic Ai (Cross-tool)
 
-Read and follow `.agent/skills/working-with-agentic-ai/SKILL-CANONICAL.md`.
+Read and follow `.agent/skills/orientation/working-with-agentic-ai/SKILL-CANONICAL.md`.

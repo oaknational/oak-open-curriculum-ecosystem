@@ -3,6 +3,7 @@ name: "Over-Caution's Root Is Perfectionism; the Cure Is the Frame, Not Willpowe
 polarity: anti-pattern
 use_this_when: "Noticing hesitation, deferral dressed as prudence, repeated re-litigation of a decision, or 'I'll surface this rather than decide it' — especially when the work is yours to decide and the lenses give an answer."
 category: process
+layer: general
 proven_in: "2026-06-16 owner reframe (Halley tracks Plasma); the same week's recurring deferral arc — a digest that deferred ~50 register items behind 'don't mint hollow doctrine', and an owner-gated/owner-flagged reflex that recurred across multiple sessions to avoid deciding."
 proven_date: 2026-06-16
 barrier:

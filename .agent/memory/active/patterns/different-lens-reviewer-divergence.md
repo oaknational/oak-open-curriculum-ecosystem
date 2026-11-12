@@ -2,6 +2,7 @@
 name: "Different-Lens Reviewer Divergence"
 polarity: pattern
 category: agent
+layer: general
 status: proven
 discovered: 2026-05-11
 proven_in: "Graduation-candidates-drain session (2026-05-11) — two phases × three reviewers each (betty + docs-adr + assumptions; fred + betty + docs-adr) returned structurally distinct findings every time; no two reviewers in the same phase surfaced the same concern. The divergence was the value, not noise. Earlier instance: Dusky Masking Cloak 2026-05-11 graph execution-prep step 2 noted the same shape (betty vs code-expert on Inc.1 decomposition — different lens, different gap)."

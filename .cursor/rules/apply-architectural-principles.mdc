@@ -1,5 +1,5 @@
 ---
-description: Apply all architectural principles — code design, quality gates, testing, naming, error handling, type discipline, and decomposition
+description: Apply the first question and existing architecture before non-trivial work
 alwaysApply: true
 ---
 

@@ -26,8 +26,26 @@ todos:
 
 **Created**: 2026-03-07
 **Last Updated**: 2026-07-15
-**Status**: Decision-ready; implementation waits for owner ratification of the
-signal contract
+**Status**: Decision-ready for the estate-wide report-only signal, which still
+awaits owner ratification. **Superseded for the Reliable Atoms workspace class
+by the owner's ruling of 2026-09-14** — read the note below before this plan.
+
+## 2026-09-14 Owner ruling — what this plan no longer governs
+
+The owner ruled that the workspaces holding Reliable Atoms are a declared
+class subject to a **blocking** directory-cardinality validator in the
+repository validator framework, with stricter length, complexity and clarity
+budgets; that the check is a validator, never an ESLint rule and never a test;
+and that the unregistered `max-files-per-dir` ESLint rule is deleted. For the
+class, Phase 1 below is answered (invariant, not signal), the threshold
+non-goals do not apply, and Phase 5's replacement-equivalence condition is
+void because the replacement is a different instrument. The durable records
+are ADR-166 §Amendment 2026-09-14 and ADR-230 §Repository interpretation; the
+executable node is the Reliable Atoms programme's delivery node
+`reliable-atoms-workspace-shape` in the live plan estate. Everything below
+stays true for the rest of the estate: the report-only signal remains an
+unratified proposal, and no workspace outside the class is evidence about the
+class.
 **Parent doctrine**:
 [ADR-166](../../../../docs/architecture/architectural-decisions/166-architectural-budget-system-across-scales.md)
 and

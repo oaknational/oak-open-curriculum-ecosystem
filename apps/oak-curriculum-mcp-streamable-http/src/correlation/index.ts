@@ -2,6 +2,8 @@
  * Correlation ID support for HTTP request tracing.
  */
 
+import { randomBytes } from 'node:crypto';
+
 /**
  * Context object containing a correlation ID for request tracing.
  *
@@ -19,8 +21,10 @@ export interface CorrelationContext {
 /**
  * Generates a unique correlation ID for request tracing.
  *
- * The correlation ID uses a combination of timestamp and random hex to ensure
- * uniqueness while maintaining sortability and collision resistance.
+ * The correlation ID combines a millisecond timestamp with six hex characters
+ * from the cryptographic source (`node:crypto`), so it stays sortable and its
+ * collision resistance does not rest on `Math.random` (sonar-disposition-policy
+ * §S2245: every pseudo-random site takes the cryptographic source).
  *
  * @returns A correlation ID in the format `req_{timestamp}_{randomHex}`
  *
@@ -34,9 +38,7 @@ export interface CorrelationContext {
  */
 export function generateCorrelationId(): string {
   const timestamp = Date.now();
-  const randomHex = Math.floor(Math.random() * 0xffffff)
-    .toString(16)
-    .padStart(6, '0');
+  const randomHex = randomBytes(3).toString('hex');
 
   return `req_${String(timestamp)}_${randomHex}`;
 }

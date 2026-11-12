@@ -60,51 +60,62 @@ function isOperationObject(value: unknown): value is OperationObject {
   return 'responses' in value;
 }
 
+/** The HTTP methods a path item may carry operations under. */
+const METHODS = ['get', 'post', 'put', 'delete', 'patch', 'head', 'options'] as const;
+
+/** Status codes whose responses carry no body. */
+const EMPTY_BODY_STATUSES: ReadonlySet<string> = new Set(['204', '304']);
+
+/**
+ * The state one walk of the schema accumulates and shares across every
+ * operation it visits.
+ */
+interface ResponseCollection {
+  /** The entries collected so far, in schema order. */
+  readonly out: ResponseMapEntry[];
+  /** How many inline schemas each `operationId_status` base name has taken. */
+  readonly inlineCounts: Map<string, number>;
+  /** Resolves a component schema by its sanitised name. */
+  readonly resolveComponent: (name: string) => SchemaObject | undefined;
+  /** Every component schema the entries refer to, for the wildcard pass. */
+  readonly componentSchemas: Map<string, SchemaObject>;
+}
+
 export function buildResponseMapData(schema: OpenAPIObject): readonly ResponseMapEntry[] {
-  const out: ResponseMapEntry[] = [];
-  const inlineCounts = new Map<string, number>();
   const resolver = createComponentResolver(schema.components?.schemas ?? {});
-  const componentSchemas = new Map<string, SchemaObject>();
+  const collection: ResponseCollection = {
+    out: [],
+    inlineCounts: new Map<string, number>(),
+    resolveComponent: resolver.resolve,
+    componentSchemas: new Map<string, SchemaObject>(),
+  };
   const paths = schema.paths ?? {};
-  const methods = ['get', 'post', 'put', 'delete', 'patch', 'head', 'options'] as const;
-  const emptyBodyStatuses = new Set(['204', '304']);
 
   for (const pathKey in paths) {
     if (!Object.hasOwn(paths, pathKey)) {
       continue;
     }
-    const pathItem = paths[pathKey];
-    collectFromPathItem(
-      pathKey,
-      pathItem,
-      methods,
-      out,
-      emptyBodyStatuses,
-      inlineCounts,
-      resolver.resolve,
-      componentSchemas,
-    );
+    collectFromPathItem(pathKey, paths[pathKey], collection);
   }
 
-  out.push(...createWildcardResponseMapEntries(out, componentSchemas));
+  collection.out.push(
+    ...createWildcardResponseMapEntries(collection.out, collection.componentSchemas),
+  );
 
-  return out;
+  return collection.out;
 }
 
 function collectResponses(
   opId: string,
   path: string,
-  method: 'get' | 'post' | 'put' | 'delete' | 'patch' | 'head' | 'options',
+  method: Exclude<ResponseMapMethod, '*'>,
   responses: ResponsesObject | undefined,
-  out: ResponseMapEntry[],
-  emptyBodyStatuses: Set<string>,
-  inlineCounts: Map<string, number>,
-  resolveComponent: (name: string) => SchemaObject | undefined,
-  componentSchemas: Map<string, SchemaObject>,
+  collection: ResponseCollection,
 ): void {
   if (!responses) {
     return;
   }
+  const { out, inlineCounts, resolveComponent, componentSchemas } = collection;
   for (const [status, response] of Object.entries(responses)) {
     if (!isResponseObject(response)) {
       continue;
@@ -125,7 +136,7 @@ function collectResponses(
       continue;
     }
     // If there is no JSON schema and status implies no content, emit a void entry
-    if (emptyBodyStatuses.has(status)) {
+    if (EMPTY_BODY_STATUSES.has(status)) {
       out.push({
         operationId: opId,
         status,
@@ -187,18 +198,13 @@ function createJsonResponseEntry({
 function collectFromPathItem(
   pathKey: string,
   pathItem: PathItemObject | undefined,
-  methods: readonly ['get', 'post', 'put', 'delete', 'patch', 'head', 'options'],
-  out: ResponseMapEntry[],
-  emptyBodyStatuses: Set<string>,
-  inlineCounts: Map<string, number>,
-  resolveComponent: (name: string) => SchemaObject | undefined,
-  componentSchemas: Map<string, SchemaObject>,
+  collection: ResponseCollection,
 ): void {
   if (!isPathItemObject(pathItem)) {
     return;
   }
 
-  for (const method of methods) {
+  for (const method of METHODS) {
     const operation = pathItem[method];
     if (!isOperationObject(operation)) {
       continue;
@@ -207,17 +213,7 @@ function collectFromPathItem(
     if (typeof opId !== 'string') {
       continue;
     }
-    collectResponses(
-      opId,
-      pathKey,
-      method,
-      operation.responses,
-      out,
-      emptyBodyStatuses,
-      inlineCounts,
-      resolveComponent,
-      componentSchemas,
-    );
+    collectResponses(opId, pathKey, method, operation.responses, collection);
   }
 }
 

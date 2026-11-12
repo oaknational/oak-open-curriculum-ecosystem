@@ -62,7 +62,7 @@ export function usage(): string {
     '  status [--registry <path>] [--now <iso>]',
     '  list [--registry <path>] [--now <iso>] [--prefix <intent-prefix>]',
     '       [--phase <queued|staging|pre_commit|abandoned>]',
-    '       [--agent-name <agent-name-prefix>] [--queue-status <active|expired|abandoned>]',
+    '       [--agent-name <agent-name-prefix>] [--queue-status <active|abandoned>]',
     '  show --intent-id <uuid> [--registry <path>] [--now <iso>]',
   ].join('\n');
 }

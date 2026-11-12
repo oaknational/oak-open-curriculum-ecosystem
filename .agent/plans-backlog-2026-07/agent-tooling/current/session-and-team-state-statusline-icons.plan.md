@@ -321,7 +321,7 @@ discovery phase (owner 2026-06-15). Archive with outputs mined on completion.
 ## Relationship to other statusline plans (the unified lane)
 
 All live in `agent-tooling/current/`; the canonical hub is the
-[`statusline-enhancements` thread record](../../../memory/operational/threads/statusline-enhancements.next-session.md).
+[`statusline-enhancements` thread record](../../../memory/operational/threads/paused/statusline-enhancements.next-session.md).
 
 - **Sibling — logo column / reuse**:
   [`statusline-logo-modularisation.plan.md`](statusline-logo-modularisation.plan.md)

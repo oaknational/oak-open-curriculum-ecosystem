@@ -1,6 +1,19 @@
 import { spawn } from 'node:child_process';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { normalizeError } from '@oaknational/logger';
 import { createCodegenLogger } from './create-codegen-logger.js';
+
+/**
+ * The typedoc CLI entry, resolved through the package's own `exports` so the
+ * child runs the installed dependency under this node binary rather than
+ * whatever `PATH` would find.
+ */
+const typedocEntry = join(
+  dirname(fileURLToPath(import.meta.resolve('typedoc/package.json'))),
+  'bin',
+  'typedoc',
+);
 
 const logger = createCodegenLogger('typedoc');
 
@@ -53,7 +66,9 @@ function processLine(line: string): string | null {
 
 async function run(): Promise<number> {
   const args = process.argv.slice(2);
-  const child = spawn('typedoc', args, { stdio: ['ignore', 'pipe', 'pipe'] });
+  const child = spawn(process.execPath, [typedocEntry, ...args], {
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
   child.stdout.setEncoding('utf8');
   child.stderr.setEncoding('utf8');
 

@@ -8,7 +8,10 @@
  * ADR-179 the substrate owns these corpus types; the MCP surface consumes them.
  * The graph-native EEF view (`eefStrandGraph`, the bounded-BFS projection over
  * this foundation) is built here (D5); the MCP schemas are built downstream
- * (D6).
+ * (D6). The markdown projection (`renderEefMarkdownFiles` and the two
+ * renderers behind it) is a pure, transport-free rendering of the same corpus
+ * into formatter-normal reference files: the renderers return text and paths,
+ * and writing is the caller's concern.
  */
 
 export {
@@ -66,3 +69,8 @@ export {
 } from './eef-evidence.js';
 
 export { evidenceForMoveHeadlines, type EefStrandHeadline } from './eef-headline-view.js';
+
+export { CORPUS_REFERENCE_FILE, STRANDS_DIRECTORY, strandFilePath } from './eef-markdown-paths.js';
+export { renderStrandMarkdown } from './eef-strand-markdown.js';
+export { renderCorpusReferenceMarkdown } from './eef-corpus-reference-markdown.js';
+export { renderEefMarkdownFiles, type RenderedMarkdownFile } from './eef-markdown-files.js';

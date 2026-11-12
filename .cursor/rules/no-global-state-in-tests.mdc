@@ -1,6 +1,7 @@
 ---
-description: Tests MUST NOT mutate global state. Pass configuration as parameters.
-globs: '**/*.test.ts'
+description: Keep tests isolated from global-state mutation
+globs: '**/*.test.*,jcdotnet/e2e/**/*,agent-tools/e2e-tests/**/*,**/smoke-tests/**/*,**/test-helpers/**/*,**/*setup.ts,**/tests/**/*,**/*fixture*.ts'
+alwaysApply: false
 ---
 
 Read and follow `.agent/rules/no-global-state-in-tests.md`.

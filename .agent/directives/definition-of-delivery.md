@@ -52,8 +52,8 @@ it is *in progress*, not delivered.
 3. **Reachable in the beneficiary's real environment.** For an **end user**:
    whole and reachable in **production** (on `main`, which deploys). For a
    **developer/agent**: consumable in the estate they build in — a published,
-   importable workspace package (`@oaknational/*`), discoverable and
-   documented. Not on a branch, not orphaned, not behind an unreachable seam.
+   importable workspace package under the host's package scope (P2),
+   discoverable and documented. Not on a branch, not orphaned, not behind an unreachable seam.
 4. **Whole for its unit.** The increment is functional end-to-end for that
    beneficiary. A *reachable* non-functional fragment is a **defect**, not a
    partial delivery. Interdependent surfaces (e.g. a prompt and the tool it
@@ -61,7 +61,7 @@ it is *in progress*, not delivered.
 5. **Observable signal of receipt.** Falsifiable evidence the beneficiary
    *can* get the value: a completable user journey, an integration/E2E test
    on the *real* path, an importable-and-exercised surface, or telemetry
-   (per ADR-162). The boundary: delivery requires *can-receive* evidence —
+   (OCE's ADR-162 is an instance). The boundary: delivery requires *can-receive* evidence —
    **not** *did-receive-at-scale* proof. Adoption is a later, separate signal;
    requiring it would make delivery undeclarable.
 6. **No regression of others' value.** Delivering to one beneficiary must not
@@ -90,8 +90,8 @@ Value often passes through intermediate consumers before reaching the end
 user — e.g. **tool → agent → end user**. Each hop must receive *usable*
 value; **delivery fails at the weakest hop.**
 
-Worked example (the failure this directive was written from): an MCP tool
-that returned its whole evidence graph (~16k tokens) failed the **agent**
+Worked example (the failure this directive was written from, in OCE): an MCP
+tool that returned its whole evidence graph (~16k tokens) failed the **agent**
 hop — the orchestrating model, the tool's immediate consumer, could not
 ingest the response within its context budget. Because the agent hop failed,
 value could never reach the teacher. The tool produced an artefact; it
@@ -143,6 +143,6 @@ producer milestone; naming the impostors is half the value of this doctrine:
 - `practice-core/decision-records/PDR-026-per-session-landing-commitment.md` — session landing.
 - `tdd-as-design.md` §Three Corollaries — the value-flow corollary.
 - `principles.md` — repository-wide rules (authoritative above this directive).
-- The first application: the EEF gate-1a delivery plan (see the
-  `sector-engagement/eef/` plan collection) rebuilds its acceptance criteria
-  around these states and criteria.
+- The first application, in OCE: its EEF gate-1a delivery work (the `eef`
+  thread record and plan collection in OCE's memory and plan estates) rebuilt
+  its acceptance criteria around these states and criteria.

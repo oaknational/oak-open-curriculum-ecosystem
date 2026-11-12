@@ -18,7 +18,7 @@ depends_on:
   - plan: copilot-cli-practice-projections
     kind: beneficial
 owner_gates: []
-last_updated: 2026-07-25
+last_updated: 2026-10-02
 ---
 
 # Copilot CLI local communications and lifecycle
@@ -28,6 +28,14 @@ last_updated: 2026-07-25
 - **2026-07-25** — Added the cloud no-op requirement for tracked lifecycle
   activation and corrected wake/recovery evidence. The ratified local
   communications outcome remains unchanged.
+- **2026-09-21** — The owner's word, relayed by a seat (Zephyr guards
+  Leeward): "Frost is having to build a comms monitor solution as they go,
+  please make sure their approach is recorded, so we can encode it as official
+  GitHub Copilot agent support in the Practice". The field evidence is the
+  report of that date: a scheduled prompt starts reasoning (observed); a
+  tracked command's completion delivers a notification (observed), and
+  whether that notification starts reasoning from idle is a separate claim,
+  unproven for the waiter; a stream line wakes nothing.
 
 ## Goal
 

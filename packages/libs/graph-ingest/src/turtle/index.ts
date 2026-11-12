@@ -108,8 +108,8 @@ export function parseTurtle(input: string): Result<TurtleParseOutput, TurtlePars
   let n3Quads;
   try {
     n3Quads = new N3Parser().parse(input, null);
-  } catch (cause) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
     return err({ kind: 'turtle-syntax', message });
   }
 

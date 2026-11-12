@@ -14,7 +14,7 @@ import { ACTIVE_CLAIMS_SCHEMA_VERSION, CLOSED_CLAIMS_SCHEMA_VERSION } from './ty
  * missing-registry error so a fresh checkout can seed the file without
  * reverse-engineering the parser's expectations.
  */
-export const EMPTY_ACTIVE_CLAIMS_REGISTRY_JSON = `{ "schema_version": "${ACTIVE_CLAIMS_SCHEMA_VERSION}", "claims": [], "commit_queue": [] }`;
+export const EMPTY_ACTIVE_CLAIMS_REGISTRY_JSON = `{ "schema_version": "${ACTIVE_CLAIMS_SCHEMA_VERSION}", "claims": [] }`;
 
 /**
  * The minimal valid closed-claims archive content, offered in the

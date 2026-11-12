@@ -1,3 +1,12 @@
+---
+classification: situational
+description: "Apply the agent-experience (AX) lens before declaring any agent-facing substrate work done — coordination CLIs (comms, claims, commit-queue, identity), watchers, hooks, quality gates, and generated agent artefacts under .agent/** and agent-tools/**: usable correctly first time, no correct-looking use that corrupts state, friction captured durably, a structural cure over per-instance patches, a drain home for AX debt. Substrate work only — not a gate on ordinary code or doc edits. Failure shapes — a green proof line over a wrong-target write; substrate closed on functional correctness alone."
+trigger: surface:agent-substrate
+globs:
+  - agent-tools/**
+  - .agent/hooks/**
+---
+
 # Agent Experience Review Lens
 
 Operationalises

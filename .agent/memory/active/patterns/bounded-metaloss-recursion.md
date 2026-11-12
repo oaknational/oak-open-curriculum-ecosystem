@@ -3,6 +3,7 @@ name: Bounded Metaloss Recursion
 polarity: pattern
 use_this_when: Running a loss scan at compaction or session close and a recursive pass over the scan itself risks becoming an unbounded attempt to prove that nothing was omitted
 category: process
+layer: general
 proven_in: three worked instances inlined below (Sloop holds Lagoon, 2026-07-13; Cedar rides Undergrowth and Galleon calls Channel, 2026-07-14), conserved verbatim in the dated napkin archive at .agent/memory/active/archive/napkin-2026-07-14.md
 proven_date: 2026-07-14
 barrier:

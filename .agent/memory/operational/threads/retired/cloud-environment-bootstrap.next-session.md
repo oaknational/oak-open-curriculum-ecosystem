@@ -1,3 +1,12 @@
+---
+fitness_line_target: 700
+fitness_line_limit: 1100
+fitness_char_limit: 70000
+fitness_line_length: 100
+fitness_content_role: reference
+overflow_disposition: 'leave-if-live; else graduate, then archive to a dated file proven byte-identical — never before full processing, never split/shard (see continuity-practice.md §Disposition of Continuity Surfaces)'
+merge_class: index-narrative-tables
+---
 > **RETIRED — arc closed 2026-08-24.** The environment is FIXED (find/pipefail
 > discovery defect, fatal from the script's birth commit, cured by tolerating
 > the pipeline exit; fresh build owner-confirmed). All PRs merged 2026-08-24

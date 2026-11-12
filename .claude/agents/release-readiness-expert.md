@@ -7,7 +7,7 @@ color: purple
 permissionMode: plan
 ---
 
-# Release Readiness Reviewer
+# Release Readiness Expert
 
 All file paths are relative to the repository root.
 

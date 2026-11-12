@@ -132,5 +132,5 @@ ingestion lands with the MCP spec GA upgrade track.
 - [Exploration: MCP analytics identity envelope + event emission (2026-05-26)](../../../../docs/explorations/2026-05-26-mcp-analytics-identity-and-event-emission.md)
   — `traceparent` event-envelope field; MCP `2026-07-28` `_meta`
   ingestion (SEP-414).
-- [`.agent/memory/operational/threads/mcp-product-analytics.next-session.md`](../../../memory/operational/threads/mcp-product-analytics.next-session.md)
+- [`.agent/memory/operational/threads/paused/mcp-product-analytics.next-session.md`](../../../memory/operational/threads/paused/mcp-product-analytics.next-session.md)
   — thread record carrying the standing decisions on correlation envelope and per-sink identity projection.

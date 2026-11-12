@@ -3,6 +3,7 @@ name: "Shared-State Topology Is a Coordinator Question, Not a Solo-Archaeology O
 polarity: anti-pattern
 use_this_when: "You need to know who owns a shared artefact, which branch carries the canonical buffer/coordination state, or where live shared state lives — and you are not the coordinator/Director."
 category: process
+layer: general
 proven_in: "2026-06-27 (Hawthorn rides Foliage) — deduced the canonical buffer base by a ~6-step solo divergence-archaeology pass diffing napkins across 8 worktrees; one directed question to the Director (Hearth tracks Tallow) answered it authoritatively (the canonical branch and its stable tip, flow-back into the coordination branch, and that repo-continuity is the Director's lane)."
 proven_date: 2026-06-27
 barrier:

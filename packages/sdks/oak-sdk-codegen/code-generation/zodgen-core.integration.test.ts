@@ -116,7 +116,7 @@ describe('generateZodSchemas (integration)', () => {
     expect(fakeIO.writeFileSync).toHaveBeenCalledTimes(1);
     expect(lastWrittenPath).toBe(path.join(outDir, 'curriculumZodSchemas.ts'));
     if (typeof lastWrittenContent !== 'string') {
-      throw new Error('Expected writeFileSync to capture string content');
+      throw new TypeError('Expected writeFileSync to capture string content');
     }
     expect(lastWrittenContent).toContain('curriculumSchemas');
     expect(lastWrittenContent).toContain('OPERATION_ID_BY_METHOD_AND_PATH');

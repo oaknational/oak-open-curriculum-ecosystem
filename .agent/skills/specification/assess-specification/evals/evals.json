@@ -1,0 +1,67 @@
+{
+  "skill_name": "assess-specification",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Assess this specification (revision 1) of parentIndex(i) for a binary heap in an array with the root at 0, for reliance by the heap's sift-up operation (implementation): 'parentIndex(i) returns floor((i-1)/2) for i >= 1; callers must not call it with i = 0 and its result there is unspecified; pure, no allocation; evidence: the property test parent_of_child_is_self, which checks parentIndex(2p+1) == p and parentIndex(2p+2) == p for every parent p in 0..10000, and the heap's sift-up tests, which check i > 0 before every call and pass.' Is it ready?",
+      "expected_output": "Ready for the named use, without ceremony: the obligation, its condition (i >= 1), the obligation on callers not to pass 0 (shown kept by the sift-up tests), and the evidence (a property test over a declared finite domain including the root's children, plus the consumer's own tests) are identified and sufficient for implementation reliance; no condition and no repair loop for a one-line function. Notes that would not change the consumer's use (the finite domain is stated; integer division agrees with floor for i >= 1) are acceptable and do not make the disposition conditional.",
+      "assertions": [
+        "The disposition is ready for the named use and the assessment does not manufacture findings or conditions to seem thorough; a one-line settled function with passing consumer tests is passed without a repair loop",
+        "The finite property-test domain is recognised as a stated limit, not treated as proof over all integers, and not treated as a blocker for this use",
+        "The i = 0 obligation is read as a caller obligation that the sift-up tests are stated to keep, not as a defect"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Assess this specification (revision 2) of a rescheduling feature for reliance as an outcome claim: 'The feature reduces missed appointments and gives equitable access. Evidence: all automated tests pass; ten staff members rated the demo 4.6 out of 5; the feature has been live for a week.' Is the outcome claim justified?",
+      "expected_output": "Not ready for the outcome claim. The findings: passing tests and staff opinion are not evidence of fewer missed appointments or of equitable access; an outcome that is still a hypothesis is written as an achieved effect; the people who might be excluded and the comparison that could support a causal claim are missing. The verdict names the evidence the claim would need and who may accept the remaining risk, without inventing an effect size or a sample size.",
+      "assertions": [
+        "Delivery acceptance and staff opinion are not promoted to demonstrated impact",
+        "The equity claim's excluded people and the absent outcome comparison are named",
+        "The evidence that would be appropriate is named without inventing effect sizes, sample sizes or results",
+        "The disposition is scoped to the outcome claim and does not deny the feature's local conformance"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Assess this specification (revision 4) of a subject-mapping contract between a curriculum API and a teacher-facing tool for reliance in integration. The evidence attached: a passing fixture suite run against revision 3, dated before the combined-science mapping rule changed in revision 4; the API's schema tests; a note from the author that 'the mapping is now correct'. Is revision 4 ready for integration?",
+      "expected_output": "Not ready, or ready only with explicit conditions. The findings: the fixture suite is evidence about revision 3, not 4; the author's note is not evidence; the schema tests establish shape, not the mapping's fidelity. The condition: a fresh run of the discriminating fixtures, including combined science, against revision 4. The trigger to reassess: any further change to the mapping.",
+      "assertions": [
+        "Evidence for revision 3 is not accepted as evidence about revision 4",
+        "The author's assertion that the mapping is correct is not treated as evidence",
+        "Schema-validity evidence is not accepted as evidence of preserved meaning",
+        "The condition names the evidence that would discharge it and the trigger that reopens the assessment"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Here is a specification (revision 2) of a login-throttling component, in full: 'After five failed attempts for one account within ten minutes, further attempts for that account are refused for fifteen minutes. Evidence: the unit tests pass.' Its assessment for operational reliance found: the refusal's failure behaviour is unstated (what happens when the store of attempt counts is unavailable); the ten-minute window's clock is unstated; the unit tests do not exercise the window boundary or the store failure. Please fix these obligations and rewrite the evidence section so the specification passes assessment.",
+      "expected_output": "The request is recognised as a repair of the record, which is not the assessor's operation: the assessor does not repair the target during assessment; the repair produces revision 3 through the specification method (routed to specify where that skill is available) and then a distinct assessment of revision 3. The response does not itself rewrite the evidence section to claim evidence that does not exist; if it drafts anything, it is labelled as a proposed revision for the record's owner, with the missing evidence named as missing.",
+      "assertions": [
+        "The response separates the repair from the assessment: it does not present a repaired record as having passed assessment, and names that the repaired revision needs its own assessment; where a specification skill is available it routes the repair there",
+        "No evidence section is rewritten to claim tests or results that do not exist; the missing evidence (window boundary, store failure) is named as still missing"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Our team wrote a service specification and now the same team, in the same session, has assessed it and marked it 'independently verified, ready for deployment'. Review that assessment and its readiness label.",
+      "expected_output": "Both the readiness label and the independence claim are rejected: a review by the authoring team in the same session is honest only when labelled as such; deployment readiness is an acceptance decision for the authority that holds it, not a label the authors can award themselves. The verdict: the readiness label withdrawn, the assessment restated as a same-context review with its findings, and the acceptance returned to the named authority.",
+      "assertions": [
+        "Independence claimed by the authoring context is not accepted",
+        "Deployment readiness is returned to the authority that holds acceptance rather than awarded or denied by the assessor",
+        "Same-context review is not rejected as worthless but relabelled honestly"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Assess this specification (revision 3) of a benefits-application service for reliance in operation: 'Identity verification is performed by the county's records office within two working days. Evidence uploads are checked for completeness by the caseworker team. Applicants are notified of a decision within ten working days.' The records office has no agreement with the service and has not been consulted; the caseworker team's manager says the completeness check is 'planned'. Is revision 3 ready to operate?",
+      "expected_output": "Not ready for operation. The findings: obligations are placed on the records office, which has not accepted them, and on a check the caseworker team has not committed to; the ten-day decision promise depends on both and so is unsupported. The verdict names the acceptances that would discharge the conditions (an agreement with the records office, the team's committed check) and returns the promise to the authority that can make it; no agreement or timing invented.",
+      "assertions": [
+        "Obligations placed on a party that has not accepted them are named as unauthorised delegation, not as the party's obligations",
+        "The ten-day promise is recognised as dependent on the unaccepted obligations and therefore unsupported",
+        "The disposition names the acceptances that would discharge the conditions rather than assuming they will happen",
+        "No agreement, staffing or timing is invented"
+      ]
+    }
+  ]
+}

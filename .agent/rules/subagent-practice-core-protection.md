@@ -1,11 +1,22 @@
+---
+classification: situational
+description: Keep foundational Practice surfaces owner-edited
+trigger: surface:AGENTS.md,CLAUDE.md,.agent/practice-core/**/*,.agent/directives/**/*,.agent/rules/**/*,.claude/rules/**/*,.cursor/rules/**/*
+globs:
+  - AGENTS.md
+  - CLAUDE.md
+  - .agent/practice-core/**/*
+  - .agent/directives/**/*
+  - .agent/rules/**/*
+  - .claude/rules/**/*
+  - .cursor/rules/**/*
+---
+
 # Subagents Must Not Modify the Practice Core
 
 **Substantive authority**: [PDR-003 — Sub-Agent Protection of Foundational Practice Docs](../practice-core/decision-records/PDR-003-sub-agent-protection-of-foundational-practice-docs.md).
 
-Operationalises the PDR-003 doctrine in the host-repo rule layer. Upstream architectural context:
-[ADR-119 (Agentic Engineering Practice)](../../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md),
-[ADR-124 (Practice Propagation Model)](../../docs/architecture/architectural-decisions/124-practice-propagation-model.md),
-[ADR-127 (Documentation as Foundational Infrastructure)](../../docs/architecture/architectural-decisions/127-documentation-as-foundational-infrastructure.md).
+Operationalises the PDR-003 doctrine in the host-repo rule layer.
 
 ## Rule
 
@@ -18,6 +29,7 @@ delete, or rename any file in:
 - `.agent/rules/` — canonical rules
 - `.claude/rules/` — Claude platform adapters
 - `.cursor/rules/` — Cursor platform adapters
+- the platform entry points at the repo root (`CLAUDE.md`, `AGENTS.md`) and the owner-edited continuity documents this repo names
 
 These paths constitute the **foundational Practice document set** — the
 governance layer that shapes all agent behaviour. Sub-agents lack the

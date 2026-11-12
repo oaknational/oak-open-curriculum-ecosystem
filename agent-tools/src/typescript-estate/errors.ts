@@ -1,5 +1,4 @@
 import type { TreeEntry } from './file-model.js';
-import type { RepoPath } from './scalar-model.js';
 
 /** Stable failure codes emitted by the TypeScript estate extractor. */
 export type EstateErrorCode =
@@ -38,9 +37,9 @@ export function estateError(
 /** A requested path that is absent from the validated pinned-tree index. */
 export class MissingAuxiliaryBlobRefusal extends Error {
   readonly kind = 'missing-path';
-  readonly path: RepoPath;
+  readonly path: string;
 
-  constructor(path: RepoPath) {
+  constructor(path: string) {
     super(`auxiliary blob path '${path}' is absent from the pinned tree`);
     this.name = 'MissingAuxiliaryBlobRefusal';
     this.path = path;
@@ -50,10 +49,10 @@ export class MissingAuxiliaryBlobRefusal extends Error {
 /** A pinned-tree entry that cannot be read as a regular auxiliary blob. */
 export class NonRegularAuxiliaryBlobRefusal extends Error {
   readonly kind = 'nonregular-entry';
-  readonly path: RepoPath;
+  readonly path: string;
   readonly treeEntry: TreeEntry;
 
-  constructor(path: RepoPath, treeEntry: TreeEntry) {
+  constructor(path: string, treeEntry: TreeEntry) {
     super(`auxiliary blob path '${path}' is not a 100644 or 100755 blob with a declared size`);
     this.name = 'NonRegularAuxiliaryBlobRefusal';
     this.path = path;

@@ -4,6 +4,7 @@ name: "Repair workflow contract clarity"
 polarity: pattern
 use_this_when: "A workflow repairs or transforms the same content across multiple artefacts or locations, and ambiguous verbs could trigger rewrite or promotion drift"
 category: process
+layer: general
 proven_in: "2026-04-03 protocol/interoperability report repair and consolidation"
 proven_date: 2026-04-03
 barrier:

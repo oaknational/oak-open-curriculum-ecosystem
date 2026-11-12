@@ -212,10 +212,14 @@ export type SentryBreadcrumb = Parameters<NonNullable<NodeOptions['beforeBreadcr
 export type SentryLogPayload = Parameters<NonNullable<NodeOptions['beforeSendLog']>>[0];
 export type SentrySpanPayload = Parameters<NonNullable<NodeOptions['beforeSendSpan']>>[0];
 
+/**
+ * Consumer hooks that run after the redaction barrier, on already-redacted
+ * payloads; each slot takes the SDK's own hook type.
+ */
 export interface SentryPostRedactionHooks {
-  readonly beforeSend?: NodeOptions['beforeSend'];
-  readonly beforeSendTransaction?: NodeOptions['beforeSendTransaction'];
-  readonly beforeBreadcrumb?: NodeOptions['beforeBreadcrumb'];
+  readonly beforeSend?: NonNullable<NodeOptions['beforeSend']>;
+  readonly beforeSendTransaction?: NonNullable<NodeOptions['beforeSendTransaction']>;
+  readonly beforeBreadcrumb?: NonNullable<NodeOptions['beforeBreadcrumb']>;
 }
 
 export interface InitialiseSentryOptions {

@@ -77,6 +77,8 @@ describe('the served surface carries no HTML (owner instruction 2026-08-20)', ()
     const res = await request(app).get('/').set('Host', 'localhost').set('Accept', 'text/html');
 
     expect(res.status).toBe(404);
+    expect(res.headers['content-type']).toMatch(/application\/json/);
+    expect(res.body).toStrictEqual({ error: 'Not found' });
   });
 
   /**

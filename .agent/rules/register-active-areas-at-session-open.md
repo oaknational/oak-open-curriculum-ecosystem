@@ -1,3 +1,8 @@
+---
+classification: core
+description: Before any edit in a session, list intended areas and scan active-claims.json for overlap. On overlap, consult the shared communication log and decide how to coordinate before proceeding. Then register the session's own claim. Before staging or committing, use the advisory commit queue and a short-lived git:index/head claim. Advisory, not refusal.
+---
+
 # Register Active Areas At Session Open
 
 Before any edit in this session, list the areas you intend to touch. For each
@@ -9,7 +14,8 @@ post-hoc; an unwritten consultation is indistinguishable from no
 consultation at all):
 
 **The first edit of a session that opened as pure reading is a second firing
-moment for this rule.** Registration is skipped most often not at session
+moment for this rule.** A lane in a fresh worktree opens its claim in the same
+step as the worktree (edits began ten minutes before the claim, 2026-09-24). Registration is skipped most often not at session
 open but at the silent transition where a light audit or review session grows
 into substantive edits — nothing at that moment forces the registration the
 session-open moment would have produced (corpus-proven recurrence,
@@ -21,12 +27,14 @@ Codex sessions with `CODEX_THREAD_ID` available must derive a named
 `agent_name` and `session_id_prefix`; new Codex claim writes must not use
 `Codex` / `unknown`.
 
-- **(a-1) Registry empty (bootstrap fast-path)** — the registry has no
-  entries other than your own. Append a single comms event noting
-  `"no other agents present"` and register your claim. The rendered
-  shared-log entry is the artefact.
-- **(a-2) Registry populated but no overlap** — other agents have active
-  claims, but none of their `areas` intersect yours. Register your own
+- **(a-1) Solo (bootstrap fast-path)** — the registry has no
+  entries other than your own and the comms log shows no live peer: the
+  session is solo. Register your claim and proceed without broadcasts
+  (`use-agent-comms-log` §Scale ceremony to the audience). The claim is
+  the artefact.
+- **(a-2) Peers present, no overlap** — other agents have active claims
+  or the comms log shows a live peer, and no other claim's `areas`
+  intersect yours. Register your own
   claim with a `notes` value summarising the scan, e.g.
   `"scanned registry: <N> active claims, no overlap with my areas"`.
   The `notes` value is the artefact.
@@ -65,8 +73,16 @@ answer.
 
 ## Commit-window claims
 
-Before staging or committing, repeat the consultation step for the shared git
-transaction surface and the root `commit_queue`. If a fresh queue entry is
+This section governs the SHARED PRIMARY checkout only (owner ruling 2026-09-07,
+verbatim: "The commit queue was created to stop git operations colliding, that is
+not necessary for work in separate worktrees"). A lane in its own linked worktree
+commits by plain pathspec with an audit line in the message and opens neither a
+queue intent nor a `git:index/head` claim; the commit skill's scope paragraph
+carries the mechanics.
+
+Before staging or committing on the shared primary, repeat the consultation step for the shared git
+transaction surface and the advisory commit queue
+(`pnpm agent-tools:commit-queue -- list`). If a fresh queue entry is
 ahead of yours, coordinate rather than racing the index. If no fresh
 `git:index/head` claim exists, register a short-lived claim entry under
 `claims[]`:
@@ -116,7 +132,10 @@ pnpm agent-tools:collaboration-state -- claims open|heartbeat|close|archive-stal
 
 ## At session close
 
-Write durable closure history, then remove your active entry:
+The claim of an open pull request the session opened or shepherds stays
+active until the pull request merges (`start-right-team` §Closeout
+Contract). For every other claim, write durable closure history, then
+remove your active entry:
 
 1. Copy the active claim into `closed-claims.archive.json`.
 2. Add `archived_at` plus `closure.kind: "explicit"`,
@@ -188,8 +207,9 @@ The authoritative schema is
 Every entry carries: `claim_id`, `agent_id` block (PDR-027 identity), `thread`
 slug, `areas` array, `claimed_at`, `freshness_seconds` (default 14400 = 4
 hours), optional `heartbeat_at`, `sidebar_open` (whether a sidebar is
-open against the claim), optional `intent_to_commit` pointer to the root queue,
-`intent` prose, and optional `notes`. Commit-window claims normally use
+open against the claim), `intent` prose, and optional `notes` (a legacy
+`intent_to_commit` pointer may survive on pre-MCP-612 rows; no live writer
+sets it — queue linkage is the store entry's own `claim_id`). Commit-window claims normally use
 `areas.kind: "git"` with `patterns: ["index/head"]` and
 `freshness_seconds: 900`.
 
@@ -201,10 +221,13 @@ gradient as a refinement amendment.
 
 ## Bootstrap fast-path
 
-If `active-claims.json` contains no entries other than your own, append a
-single comms event noting *"no other agents present"* and proceed.
-Solo sessions pay the protocol's minimum overhead — one read, one write —
-not the full coordination cycle.
+If `active-claims.json` contains no entries other than your own and the
+comms log shows no live peer, the session is solo: record your claim and
+proceed without broadcasts (`use-agent-comms-log` §Scale ceremony to the
+audience).
+Solo sessions pay the protocol's minimum overhead — two reads (the
+registry and the comms log), one write (the claim) — not the full
+coordination cycle.
 
 ## Self-application
 

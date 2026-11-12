@@ -32,8 +32,8 @@ function errorMessage(cause: unknown): string {
 function listEventFilenames(commsDir: string): Result<readonly string[], string> {
   try {
     return ok(readdirSync(commsDir));
-  } catch (cause) {
-    return err(errorMessage(cause));
+  } catch (error) {
+    return err(errorMessage(error));
   }
 }
 
@@ -41,8 +41,8 @@ function readEvent(path: string): Result<ClassifiableEvent, string> {
   let text: string;
   try {
     text = readFileSync(path, 'utf8');
-  } catch (cause) {
-    return err(errorMessage(cause));
+  } catch (error) {
+    return err(errorMessage(error));
   }
 
   return mapErr(map(parseCommsEvent(text), toClassifiableEvent), errorMessage);
@@ -51,8 +51,8 @@ function readEvent(path: string): Result<ClassifiableEvent, string> {
 function countEventFiles(dir: string): Result<number, string> {
   try {
     return ok(readdirSync(dir).filter(isEventFile).length);
-  } catch (cause) {
-    return err(errorMessage(cause));
+  } catch (error) {
+    return err(errorMessage(error));
   }
 }
 
@@ -69,8 +69,8 @@ function readManifestEventIds(manifestPath: string): Result<ReadonlySet<string>,
       }
     }
     return ok(ids);
-  } catch (cause) {
-    return err(errorMessage(cause));
+  } catch (error) {
+    return err(errorMessage(error));
   }
 }
 
@@ -78,8 +78,8 @@ function appendManifestRow(manifestPath: string, jsonLine: string): Result<void,
   try {
     appendFileSync(manifestPath, `${jsonLine}\n`);
     return ok(undefined);
-  } catch (cause) {
-    return err(errorMessage(cause));
+  } catch (error) {
+    return err(errorMessage(error));
   }
 }
 
@@ -93,8 +93,8 @@ function moveEventFile(fromPath: string, toPath: string): Result<void, string> {
   try {
     renameSync(fromPath, toPath);
     return ok(undefined);
-  } catch (cause) {
-    return err(errorMessage(cause));
+  } catch (error) {
+    return err(errorMessage(error));
   }
 }
 

@@ -46,9 +46,9 @@ export {
   schemaBase,
 } from './api-schema.js';
 export type {
-  paths,
-  components,
-  operations,
+  Paths,
+  Components,
+  Operations,
   ValidPath,
   KeyStage,
   Subject,

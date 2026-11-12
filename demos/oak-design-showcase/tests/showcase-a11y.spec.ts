@@ -57,18 +57,17 @@ async function focusRingContrast(page: Page): Promise<number> {
     if (!(active instanceof HTMLElement)) {
       return null;
     }
-    let surface: string | null = null;
     for (let el = active.parentElement; el !== null; el = el.parentElement) {
       const bg = getComputedStyle(el).backgroundColor;
       // Chromium serialises fully-transparent as exactly this string.
       if (bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent') {
-        surface = bg;
-        break;
+        return { shadow: getComputedStyle(active).boxShadow, surface: bg };
       }
     }
-    return { shadow: getComputedStyle(active).boxShadow, surface };
+    // No opaque ancestor: there is no surface to judge the ring against.
+    return null;
   });
-  if (evidence === null || evidence.surface === null) {
+  if (evidence === null) {
     return 0;
   }
   const surface = parseColour(evidence.surface);

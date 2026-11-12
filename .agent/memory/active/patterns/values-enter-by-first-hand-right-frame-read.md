@@ -2,6 +2,7 @@
 name: values-enter-by-first-hand-right-frame-read
 polarity: pattern
 category: agent
+layer: general
 use_this_when: >-
   About to type a full identifier (sha, UUID, event id, claim id), a timestamp,
   a count, or an exit code into a command, filter, record, or prose narration —

@@ -168,11 +168,11 @@ export function parseBulkDataFile(json: string): Result<BulkDataFile, BulkDataPa
   let parsed: unknown;
   try {
     parsed = JSON.parse(json);
-  } catch (e) {
+  } catch (error) {
     return err({
       kind: 'parse_error',
-      message: `Invalid JSON: ${e instanceof Error ? e.message : String(e)}`,
-      cause: e,
+      message: `Invalid JSON: ${error instanceof Error ? error.message : String(error)}`,
+      cause: error,
     });
   }
 

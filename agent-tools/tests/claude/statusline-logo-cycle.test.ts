@@ -1,3 +1,5 @@
+import { sep } from 'node:path';
+
 import {
   frameCounterPath,
   frameIndex,
@@ -63,18 +65,24 @@ describe('parseFrameCounter', () => {
   });
 });
 
+/**
+ * frameCounterPath returns a real filesystem path built with host joins, so the
+ * expectations derive the same host form from their POSIX spelling.
+ */
+const hostForm = (posixPath: string): string => posixPath.split('/').join(sep);
+
 describe('frameCounterPath', () => {
   it('keeps the file inside the base directory and sanitises the session id', () => {
     const base = '/tmp/oak-frames';
-    expect(frameCounterPath(base, 'sess-12_AB')).toBe('/tmp/oak-frames/sess-12_AB');
+    expect(frameCounterPath(base, 'sess-12_AB')).toBe(hostForm('/tmp/oak-frames/sess-12_AB'));
 
     const traversal = frameCounterPath(base, '../../evil');
-    expect(traversal.startsWith(`${base}/`)).toBe(true);
+    expect(traversal.startsWith(hostForm(`${base}/`))).toBe(true);
     expect(traversal).not.toContain('..');
   });
 
   it('falls back to a default name for an empty session id', () => {
-    expect(frameCounterPath('/tmp/oak-frames', '')).toBe('/tmp/oak-frames/default');
+    expect(frameCounterPath('/tmp/oak-frames', '')).toBe(hostForm('/tmp/oak-frames/default'));
   });
 });
 
