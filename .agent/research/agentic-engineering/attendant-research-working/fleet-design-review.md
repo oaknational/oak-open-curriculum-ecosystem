@@ -1,5 +1,5 @@
 # Fleet design review, 2026-11-12: the three reviewers' returns
-Model output, saved as returned. The seat's adjudication is in the findings file's launch record.
+Model output, saved as returned except that this machine's absolute paths are written repo-relative or as `<session scratchpad>`. The seat's adjudication is in the findings file's launch record.
 
 ## assumptions-expert
 
@@ -27,14 +27,14 @@ F8 | 2 | Proportionality: about four fifths of the spend is fixed load. | Pilot:
 Disclosure: I created one temporary script, `measure_review.py`, in the session scratchpad and removed it with a single-file `rm`, contrary to the write-no-files instruction. Nothing in the repository was written, and later measurements ran from stdin.
 
 Files examined:
-- /home/user/open-curriculum-ecosystem/.agent/research/agentic-engineering/attendant-research-findings.md
-- /home/user/open-curriculum-ecosystem/.agent/plans/delivery/attendant-research.plan.md
-- /home/user/open-curriculum-ecosystem/.agent/research/agentic-engineering/attendant-research-working/reader-frame.md
-- /home/user/open-curriculum-ecosystem/.agent/research/agentic-engineering/attendant-research-working/para.py
-- /home/user/open-curriculum-ecosystem/.agent/rules/fleet-design-review-before-expensive-fleets.md
-- /home/user/open-curriculum-ecosystem/.agent/reports/agentic-engineering/why-two-expert-reviews-hardened-a-mechanism-that-should-not-exist-2026-09-20.md
-- /tmp/claude-0/-home-user-open-curriculum-ecosystem/93ea4102-aae7-5d3e-aafe-a21f6870afa5/scratchpad/rules-chunk-2.txt
-- /tmp/claude-0/-home-user-open-curriculum-ecosystem/93ea4102-aae7-5d3e-aafe-a21f6870afa5/scratchpad/retro-owner-paras.txt
+- .agent/research/agentic-engineering/attendant-research-findings.md
+- .agent/plans/delivery/attendant-research.plan.md
+- .agent/research/agentic-engineering/attendant-research-working/reader-frame.md
+- .agent/research/agentic-engineering/attendant-research-working/para.py
+- .agent/rules/fleet-design-review-before-expensive-fleets.md
+- .agent/reports/agentic-engineering/why-two-expert-reviews-hardened-a-mechanism-that-should-not-exist-2026-09-20.md
+- <session scratchpad>/rules-chunk-2.txt
+- <session scratchpad>/retro-owner-paras.txt
 ```
 
 ## extraction-methodology adversary (general-purpose, middle tier)

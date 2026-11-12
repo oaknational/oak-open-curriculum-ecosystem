@@ -2,7 +2,7 @@
 
 GOAL. Find every instance in your unit where the repository's owner caught something that agents had missed: a correction, a stop, a redirection, a "that is not what I asked", a question that exposed a wrong premise. Extract each instance as one ITEM in the exact shape below.
 
-UNIT. One text file of excerpts. Each excerpt group starts with a line `##### <source path>`; the paragraphs under it were copied verbatim from that source file in the repository at /home/user/open-curriculum-ecosystem. Read the unit file in full with the Read tool. You may open a source file only when an excerpt cannot be understood without its neighbours; open at most five source files.
+UNIT. One text file of excerpts. Each excerpt group starts with a line `##### <source path>`; the paragraphs under it were copied verbatim from that source file in the repository at the repository root. Read the unit file in full with the Read tool. You may open a source file only when an excerpt cannot be understood without its neighbours; open at most five source files.
 
 INCLUDE an instance only when the excerpt shows (a) what agents did or were about to do, and (b) the owner's correction of it. EXCLUDE: a preference the owner stated with no prior agent miss; a rule's general statement; agents correcting agents with no owner involvement.
 
