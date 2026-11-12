@@ -2,8 +2,8 @@
 
 The findings of the research step
 [`attendant-research`](../../plans/delivery/attendant-research.plan.md), one section per
-question. Research seat: Limpet lifts Spray. Status: in progress; a section with no content yet
-says so.
+question. Research seat: Limpet lifts Spray. Status: all five questions answered on 2026-11-12,
+awaiting the owner's reading; each section states what it rests on and what was not read.
 
 ## Method and launch record for the corpus read (question 1)
 
@@ -96,7 +96,8 @@ populated classes only, and the plan's stopping rule is departed from as recomme
 
 ## Question 1: what the owner has caught that agents missed
 
-**Status: a first classification, from the instances in hand.** Sources so far: the
+**Status: answered from the instances in hand; the unread sources are listed at the end of
+this section.** Sources so far: the
 owner-signal file, three rules and eight `why-…` records read whole at the seat (the reading
 ledger has each), and the pilot leg's twenty rows from the first seventh of the rule excerpts.
 About seventy instances. The limit that stands whatever else is read: this is a classification
@@ -146,9 +147,37 @@ against its file.
   than the estate's written ones. It came from outside the seat's frame, and it came whether or
   not the seat thought it needed it.
 
-**Still owed for question 1:** the rule files beyond the pilot's seventh; the other
-retrospectives, the Cricket tallies and the rulings ledger, under the stopping rule; one
-`why-…` record read only in part; the scenarios.
+**What was read after the first classification, and what was not.** Two conscience checks at
+the close found that the seat had read the owner's "no fan-out" as covering more than it was
+asked about. The two lists are kept apart here so the owner can correct the second.
+
+- *Covered by the owner's word of 2026-11-12:* no reader legs; the rule files harvested only
+  for the thin classes. That search was run at the seat over the rule excerpts for classes 4, 6
+  and 8, by keyword. It added no class. It found two further class 6 instances (the rules
+  `precedence-is-not-approval` and `rules-have-no-exceptions`: "odds are you, or a prior agent,
+  made something up"), one further class 8 instance (the bot identity dropped for a signed-in
+  default, now scenario 8c), and nothing further for class 4.
+- *Read late:* the ninth retrospective,
+  `2026-09-01-why-delivery-stopped-when-the-merge-engine-was-a-seat.md`, was read to its first
+  addendum after the first classification. It adds no class. Its owner catches are two single
+  questions ("a merge-warden? do you mean a human?", and a wrong revert recommendation
+  withdrawn "after the owner caught it with one question").
+- *Not read, by the seat's choice and not by the owner's word:* the Cricket tallies; the rulings
+  ledger; the retrospectives beyond those nine; the twelve reports the brief lists, apart from
+  those among the nine; the experience files, thread records and napkin archives. The plan put
+  these under its stopping rule. The seat stopped because the last three things read for catches (the
+  pilot's twenty rows, the late retrospective and the keyword search of the rule excerpts)
+  added no class. A
+  class that lives only in the unread sources is missing from the table. Question 3's remark
+  that the Cricket panel is a partial exception to cause 2 rests on the skill's text and one
+  retrospective, not on the tallies.
+
+The scenarios drawn from these classes are in
+[`attendant-step-back-scenarios.md`](attendant-step-back-scenarios.md). A fresh reviewer read both
+scenario files against this classification and against each cited source on 2026-11-12: verdict
+"sound-with-corrections", thirteen findings, none above the middle severity, no instance shared
+between the open and the held-back file. All thirteen were applied; the return is in
+[`scenario-review.md`](attendant-research-working/scenario-review.md).
 
 ## Question 2: what the owner must see at approval and at the sense check
 
@@ -199,7 +228,7 @@ owner's unless marked. These are contents, not a layout; the design step shapes 
 ## Question 3: why the step-back instruments only partly succeed
 
 **Status: answered from the instruments' full texts, read at the seat; the reading ledger has
-each.** To be re-read against question 1's final classes.
+each.**
 
 **The estate has already framed this problem, and the plan did not cite it.** PDR-098, accepted
 with the owner's approval on 2026-06-15, splits the question of whether a rule takes hold into
@@ -417,12 +446,11 @@ facts above, each has one thing it can do without depending on recall, and the l
   description cannot be relied on as the trigger.
 - **`AGENT.md` and always-on rules**: a name in context. Fit for the vocabulary, not for firing.
 
-That points the mechanism step at one design question, which is the Attendant's to answer and
-not this research's: which of question 1's moments can be given a file. Those can be fired by a
-path-scoped rule or by the order of a workflow, and answered by a skill in a fresh context
-handed the owner's words. The moments with no file (a step that has grown; a loop at a steady
-beat) are the ones the script-free composition has no way to mark, and they are where the
-question of a hook would be put on evidence.
+As input to the seat that designs the mechanism, which decides: the facts above sort question
+1's moments into those that have a file or a place in a script, which something other than
+recall can mark, and those that do not (a step that has grown; a loop at a steady beat), which
+the script-free surfaces have no way to mark. How the mechanism is composed is that seat's work
+and is not proposed here.
 
 ## Question 5: which of the reference point's mechanics the Practice already holds
 

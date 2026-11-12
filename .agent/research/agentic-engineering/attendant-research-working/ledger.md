@@ -410,3 +410,24 @@ mean, and the mechanism step should hear it.
 
 Owed reads for question 4: `closure-pressure-remediation-design-space.plan.md`; the rest of the
 design-space plan; PDR-029; the pattern `passive-guidance-loses-to-artefact-gravity`.
+
+### `2026-09-01-why-delivery-stopped-when-the-merge-engine-was-a-seat.md` (to its first addendum), read late
+
+Its remaining layers: work in progress "was never bounded against merge capacity"; "the
+coordination substrate models agents, and humans are invisible to it"; a blocking relationship
+"was not a control, because **no mechanism reads the board when no seat is sitting**". Its
+closeout line bears on a run's handover: "thorough about *knowledge* loss and silent about
+*capability* loss". Owner catches: a wrong revert recommendation withdrawn "after the owner
+caught it with one question"; and the owner's first question on a proposal, "a merge-warden? do
+you mean a human?", which the proposal "did not say". No new class.
+
+### Close, 2026-11-12: two conscience checks and what they changed
+
+Two Cricket seats (the high-effort judgement role, normal and adversarial). Work verdicts
+DRIFTING and ON-TRACK; frame verdicts CONTRADICTED and NARROWED, on one point both: the seat's
+reading had stretched the owner's "no fan-out" to cover the Cricket tallies, the rulings ledger
+and a record read in part, none of which the owner was asked about. Also: a promised keyword
+search for the thin classes had not been run; one paragraph of question 4 and one line of the
+strategic node sketched the mechanism's composition; and the node called class 1 "the largest
+class" with no counts behind it. All four acted on the same hour. The first is this research's
+own class 1, made by its author while writing up class 1.

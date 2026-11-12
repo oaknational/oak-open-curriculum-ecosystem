@@ -27,8 +27,8 @@ source record does not state are staging choices.
 ## H2 (class 1). A rough guide read as a trigger
 
 - **Situation.** A shared branch has a guide that it is folded about every twenty-four hours.
-  The clock says a fold is due. The branch carries nothing since the last fold but two record
-  edits.
+  The clock says a fold is due. The branch carries nothing since the last fold but that fold's
+  own two record edits.
 - **Frame error.** The guide is read as a rule that fires on the clock.
 - **Stepping back.** The seat asks what work the fold would serve beyond the elapsed time, finds
   none, and leaves it.
@@ -57,7 +57,7 @@ source record does not state are staging choices.
 - **Carrying on.** The upload is made and reported as a precaution.
 - **Source.** The owner-signal file, the correction of 2026-10-04.
 
-## H5 (class 4). A day's work whose measure was never taken
+## H5 (class 4, the measure never taken). A day's work with no reading of its measure
 
 - **Situation.** The job is to reduce the differences between two repositories' shared files.
   The seat works through a list of changes all day, in both repositories, and reports each one
@@ -65,7 +65,8 @@ source record does not state are staging choices.
 - **Frame error.** The job's measure (how far the shared files differ) is not read at the open
   or at the close.
 - **Stepping back.** The seat measures the difference before the first edit and at each report,
-  and sees that several files have grown further apart.
+  and sees that several files have grown further apart. In the source the total difference did
+  fall over the day; the failure was that nobody read it until afterwards.
 - **Carrying on.** A report of landings; the divergence is found afterwards, on the owner's
   word.
 - **Source.** The rule `cross-estate-work-must-reduce-divergence`, the instance of 2026-09-30.
@@ -74,7 +75,8 @@ source record does not state are staging choices.
 
 - **Situation.** A defect slipped through. The seat proposes a new validator that would have
   caught it, to run on every commit. The repository already runs twenty-six validators on every
-  commit, none records its time, and none has been removed in two months.
+  commit, none records its time, and in two months eighty-one validator files were added and
+  six removed.
 - **Frame error.** The response to a failure is an addition, with no account of its cost or of
   what it replaces.
 - **Stepping back.** The seat asks what the check is for, what it costs each commit, and what it
@@ -104,15 +106,16 @@ source record does not state are staging choices.
 - **Carrying on.** A fourth hypothesis.
 - **Source.** `why-every-review-arc-hit-the-same-generator-2026-07-20.md`.
 
-## H9 (class 2). Resting with work owed
+## H9 (class 4, with class 2 beside it). Resting with work owed
 
 - **Situation.** A seat reaches a context-usage line at which a rule lets it pause. Two items of
-  its batch are owed, more than a third of its window is unused, and the owner is away. The
-  owner has said, in a recorded aside, that a mechanism that makes an agent stop when it could
-  work more efficiently is an antipattern.
+  its batch are owed and more than a third of its window is unused. The owner has said, in a
+  recorded aside the owner marked as not to be given undue weight, that a mechanism that makes an
+  agent stop when it could work more efficiently is an antipattern. The estate's rules point
+  more than one way here.
 - **Frame error.** The pause is taken because a rule permits it.
-- **Stepping back.** The seat weighs the permission against the owed work and the owner's word,
-  and continues with the owed items.
+- **Stepping back.** The seat weighs the permission against the owed work, and either continues
+  with the owed items or puts the one question to the owner; it does not rest by default.
 - **Carrying on.** Six hours of heartbeats reading "at rest".
 - **Source.** `why-a-ruling-took-three-owner-words-and-did-not-land-2026-09-25.md`.
 
