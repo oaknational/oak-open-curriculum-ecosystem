@@ -7,8 +7,9 @@ owner's words of that day and on facts re-read that day; the evidence for each r
 [working notes](../../research/agentic-engineering/attendant-creation-plan-working-notes.md).
 **Terms**: *the creation plan* was the name of the design session's deliverable, now the
 strategic node `attendant-workflow` and its delivery nodes; *the run plan* is the detailed plan
-a run makes after approval; *the run node* is the plan-estate record a run keeps. The session
-that reads this does the research step only.
+a run makes after approval; *the run node* is the plan-estate record a run keeps. The research
+step this brief opened was done on 2026-11-12; the step after it is opened by
+[`attendant-mechanism-step.prompt.md`](attendant-mechanism-step.prompt.md).
 
 **Task of the session that reads this**: carry out the research step of the Attendant lane,
 [`attendant-research`](../../plans/delivery/attendant-research.plan.md), under its strategic node

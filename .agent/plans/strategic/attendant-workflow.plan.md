@@ -186,8 +186,8 @@ of its own (the plan skill, "Born-Sketch Ratification"). The owner stays the des
 throughout: a decision that is the owner's goes to the owner with analysis when it arises, and
 a change to this node's outcome, bet or settled decisions returns this node to the owner.
 
-1. **Research**: [`attendant-research`](../delivery/attendant-research.plan.md), carried out on
-   2026-11-12; its acceptance is the owner's reading of its report.
+1. **Research**: [`attendant-research`](../delivery/attendant-research.plan.md), carried out and
+   ratified by the owner on 2026-11-12.
 2. **The stepping-back mechanism**: designed across start-right, `AGENT.md`, skills and rules,
    and tested.
 3. **The rest of the Attendant's design**: stages, decision screens, records, the cloud session

@@ -2,8 +2,9 @@
 
 The findings of the research step
 [`attendant-research`](../../plans/delivery/attendant-research.plan.md), one section per
-question. Research seat: Limpet lifts Spray. Status: all five questions answered on 2026-11-12,
-awaiting the owner's reading; each section states what it rests on and what was not read.
+question. Research seat: Limpet lifts Spray. Status: all five questions answered on 2026-11-12
+and ratified by the owner the same day; each section states what it rests on and what was not
+read.
 
 ## Method and launch record for the corpus read (question 1)
 
