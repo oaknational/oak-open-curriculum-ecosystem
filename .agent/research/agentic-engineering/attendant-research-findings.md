@@ -152,7 +152,49 @@ retrospectives, the Cricket tallies and the rulings ledger, under the stopping r
 
 ## Question 2: what the owner must see at approval and at the sense check
 
-Not yet written.
+**Status: answered from the instances collected for question 1.** Each item is something the
+owner asked for, asked for again, or acted on at once when it was shown. The quotations are the
+owner's unless marked. These are contents, not a layout; the design step shapes the screens.
+
+### At approval (the end of the opening conversation)
+
+| The owner sees | Traced to |
+| --- | --- |
+| The owner's own words for the idea, verbatim, and beside them the seat's reading of them, marked as a reading | Class 1: "wow, that's a lot of assumptions that are not what I said". The estate's rule from those corrections: an owner-attributed line "carries the owner's words verbatim, or a seat-reading mark, and nothing in between" (the owner-signal file). |
+| The value in one statement: what, why, to whom, when | "What is the work trying to achieve and why, what is the value, to whom, when. That is all that matters." |
+| The definition of done as one measure the owner would recognise, and the acceptance criteria, each with how it will be shown | "NOTHING should be worked on without clear completion criteria, sizing, and an unambiguous and provable statement of how it provides ratified value."; "ALL of it must have a known, reachable, measurable end state" |
+| The size, against any guide the owner gave, and the unit the work is counted in | "update the repo plan and include sizing"; "if the estimate hits four we have a problem"; the units-for-stories instance of class 4 |
+| What is deliberately out, and what that stands today is carried forward | "I shouldn't have to say things like 'Sentry needs to keep working'" |
+| What the step back returned before this screen, and the seat's written answer to it | Requirement 4 of question 3; the owner's word that touches are "minimised by the agent stepping back and analysing and doubting before my touch" |
+| Only the decisions that are the owner's, each naming the decision and what turns on it, with the seat's recommendation and concrete text to accept | A seat that put four questions "two of which the decision lenses could settle and two of which named no decision and no impact" (the record's words); a question is "answered with concrete before-and-after text so acceptance is one word" (the owner-signal file) |
+
+### At the sense check (before merge)
+
+| The owner sees | Traced to |
+| --- | --- |
+| The job's measure first: each acceptance criterion as met, not met or cannot tell, with its evidence | "say those counts first in every report"; "the one report that opened with the counts showed at once that the napkin was not empty" (the record's words); the reference point's contract walk (question 5, M11) |
+| Whether the value statement holds at the head to be merged | The rule's section on a lane closing on its value statement, from the owner's correction of a report given "in terms of legs, analyser rules" (the rule's words) |
+| What changed between what was approved and what was built: scope added, scope dropped, criteria altered | Classes 3 and 8; "I asked for an update of deps, not an overhaul of settled architecture" |
+| What was not looked at, and what is claimed without a first-hand read | "did you even check?"; "The work and claims of all subagents MUST be verified by you, yourself" |
+| Green and clean, as the safety line and no more: checks passing, threads resolved | "green and clean and sensible" names three requirements; the first two are necessary and the third is the owner's |
+| Each step-back return during the run and the written answer to it, including any that said stop or smaller | Requirement 4; a seat that "discounted" a DRIFTING verdict with nothing on the record (the record's word) |
+| What is left outside the pull request: work prepared and not landed, follow-ups, anything parked | Three pieces of finished work found "outside pull requests" at one close (the record's words); "work is safe when it is merged, the target number of open PRs is always zero" |
+
+### What the instances say about both screens
+
+- **Signal, not an inventory.** A seat "reported every verifiable finding" and the owner's reply
+  was that some matters and some is noise; the test the seat took from it: "what is lost, or who
+  is misled, if this is ignored". A screen that lists everything true has the owner doing the
+  seat's sorting.
+- **The owner often decides by looking at the thing itself.** A twenty-minute diagnosis was
+  "resolved in about one minute by the owner reading the merge box" (the record's words). Each
+  item should link to the primary thing, not to the seat's account of it.
+- **Cost is not on either screen.** That is the seat's reading of the owner's word that cost,
+  "if highlighted", "tends to distort the direction the agent moves"; it is kept for the
+  retrospective.
+- **A measure the seat chose can hide the failure.** Units for stories, open pull requests for
+  unfinished work, findings cured for the job done. The measure on both screens is the one the
+  owner signed at approval, in the owner's unit.
 
 ## Question 3: why the step-back instruments only partly succeed
 
