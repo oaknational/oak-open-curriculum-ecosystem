@@ -2,7 +2,8 @@
  * Explicit revision verdicts for aggregated-tool, app, and widget items whose
  * reviewed anchors point at intentionally modified (or added) current
  * fragments. Paired with the reviewed anchors in
- * `current-aggregated-item-anchor-overrides.ts`; composed into
+ * `current-aggregated-item-anchor-overrides.ts` and
+ * `current-app-item-anchor-overrides.ts`; composed into
  * `CURRENT_ITEM_REVISION_OVERRIDES` alongside the generated-item and
  * generated-description revision maps.
  */
@@ -16,6 +17,8 @@ export const CURRENT_AGGREGATED_ITEM_REVISION_OVERRIDES = {
   // MCP-366: the response call survives minus the hint inclusion line.
   C057: 'modified',
   C066: 'modified',
+  // MCP-755: the year filter description now covers units too.
+  C078: 'modified',
   C067: 'modified',
   C101: 'modified',
   C102: 'modified',

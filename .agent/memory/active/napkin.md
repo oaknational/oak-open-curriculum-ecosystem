@@ -1575,6 +1575,26 @@ Written from a solo Claude cloud session.
   working is explored for what becomes easier if the system varies, with judgement and value
   ahead of any count.
 
+## 2026-11-08 — Limpet lifts Spray (01Duoc): identity at session open
+
+Written from a solo Claude cloud session.
+
+### Practice/tooling feedback
+
+- **Surface**: `agent-tools:agent-identity`, PDR-027 `session_id_prefix`
+- **Signal**: surprise
+- **Observation**: two different claude.ai cloud sessions, created about a day apart, share
+  the prefix `01Duoc` (their untagged ids share eight characters, `01DuocjT`). The brief's
+  author (Juniper seeks Pollen, claude-fable-5-1, `01DuocjTp8TB8373EtwFwkoA`) and this seat
+  (`01DuocjT6NUndtf6abNSv8Tp`) looked at first like one session whose name had drifted, the
+  reading the identity rule gives for same prefix and different name. Deriving each name from
+  its own full id, and reading pull request 390's `Claude-Session` trailers, showed two seats.
+- **Behaviour change / candidate follow-up**: on a cloud seat, read a shared prefix as a
+  possible collision before reading it as tooling drift; the full session id (commit trailers,
+  `get_session`) settles it. Whether the prefix should stay the register coordinate for cloud
+  seats is a question for the identity lane.
+- **Source plane**: `operational`
+
 ## 2026-11-09 — Sandpiper guards Wind (690653): framing the merge back
 
 - **I measured around a constraint instead of asking about it.** Planning the merge back, I spent a
@@ -1595,6 +1615,145 @@ Written from a solo Claude cloud session.
   message understating its contents, recorded on the pull request. After any failed commit, read
   `git diff --cached --name-only` before the next, and keep date-colon openings off body lines
   (2026-11-09, Sandpiper guards Wind, 690653).
+
+## 2026-11-10 — Limpet lifts Spray (01Duoc): the brief review
+
+- **A fresh-context reviewer found what a full read missed.** One `assumptions-expert`, briefed
+  with the reliance and the brief's convention and without this seat's doubts, converged on four
+  of nine doubts and added five, three of them weighty: the hosted cloud's GitHub proxy sends
+  every write under the owner's token and refuses GraphQL whatever the credential; "pricing" is
+  a term of art in this estate, so the owner's exclusion may cover PDR-140 and the fleet rule;
+  and the touch-point words are in tension, which the brief had settled by declaring the later
+  word. Every claim it returned was re-read first-hand before use, and all held. One instance.
+- **Stash-park is refused by the repository's hook policy**: this seat reached for a stash to
+  fast-forward the branch under live edits. Cure: commit, then merge the default branch in.
+- **The same policy refused a napkin append whose prose quoted that command in backticks**: the
+  pattern's leading class admits a backtick, so prose about the command reads as the command.
+  A substring misfire of the kind `hook-policy-substring-discipline` names; the append went
+  through the edit tool instead. Candidate follow-up for the hook lane: anchor the pattern so a
+  quoted command in a heredoc does not match.
+- **The owner's word for this session overrides the cards-always rule**: "ask me for direction
+  with your analysis, and do not offer me a menu of options" (2026-11-08). Requests for direction
+  go in prose with the analysis and a leaning, not as option cards; recorded as the divergence
+  the collaboration directive asks for.
+- **Five requests with leanings were not questions** (owner, 2026-11-10: "Please review the above
+  questions"). Each of the review's five requests for direction carried this seat's answer, and
+  the previous seat's experience file had named the shape two days earlier. A request with a
+  leaning is a decision to state; the plan carries it to the owner's stamp. Also corrected: a
+  doubt that the Attendant must say what it replaces imported an estate-wide problem (gate cost,
+  ceremony) into a lane that is an exploration and replaces nothing.
+- **That correction was then over-applied** (same day). "None of the five was a question" swung
+  to the opposite of the correction; four Cricket seats on one frame each returned the frame
+  NARROWED or CONTRADICTED on it, quoting the owner's "ask me for direction with your analysis".
+  The three tensions went back to the owner and were answered in three lines. The swing after a
+  correction is the tell `metacognition.md` names; a decision is the owner's by what it is, not
+  by whether the seat has a leaning.
+
+## 2026-11-10 — a read-only study of an external codebase (Swift holds Aether, 01Duocji)
+
+Solo cloud session carrying this repository and two external ones, working from a brief written
+outside the repository. One instance each; scope is this session.
+
+- **Observation:** a brief written in a chat with read-only API access assumed the attached
+  repositories were the upstream ones; the session carried the owner's forks, and one fork served
+  no tags. The tag came from the public upstream by URL (`git fetch <url> tag <name>`), with no
+  remote added. The six-clause plan-body check named this before any work started.
+- **Observation:** this repository's `CLAUDE.md`, rule adapters and skills loaded in a
+  three-repository cloud session whose start directory was above the clones. The brief had
+  planned for the non-loader route.
+- **Correction (mine):** line citations written from windowed reads (`sed -n A,Bp`) were off by
+  one to six lines in nine of 122 spot checks. A script that looks for the quoted substring at
+  the cited line range found all nine; a check that the path exists and has that many lines found
+  none. Checking that a link resolves is not checking the quotation.
+- **Correction (mine):** `rg PATTERN -g GLOB` with no path, in a compound command, read standard
+  input and hung to the tool timeout. Give `rg` an explicit path and `< /dev/null`.
+- **Correction (mine):** the Cricket frame said "No holds" while the owner's opening message
+  carried one (a file not to open until a condition). Four of eight seats named that omission,
+  and six of eight returned a frame verdict other than SOUND.
+  A frame's SOURCES block quotes the plan's trigger line for every hold, verbatim.
+- **Correction (mine):** I edited files twice with an inline Python heredoc where the per-file
+  edit tool was the instrument the grounding names. The edits were right; the instrument was not.
+- **Observation:** a fresh-eyes subagent given questions, never this seat's answers, agreed on
+  five claims and corrected one count (it found four further call sites of a function this seat
+  had described from two). The question-only frame is what let it find more than it was shown.
+- **Observation:** one comparison thought occurred during the study and was not developed, as
+  the owner's word of 2026-11-10 requires; it is left for the comparison session to raise from
+  the evidence itself.
+- **Correction (the owner's question, 2026-11-10: "it seems like DSPy/GEPA might be the heart of
+  the self improvement in Hermes?"):** the first synthesis had left a 30-file repository's one
+  report and its eight-commit history unread, and both held decisive facts (which optimiser had
+  actually run; that the named one could not be constructed as called). In a small repository,
+  read every artefact before giving a verdict on it.
+- **Correction (mine):** the first synthesis said Hermes "claims none" about training model
+  weights. No sweep backed it; one `git grep` found the claim in two documents. A sentence with
+  "none" or "never" in it is the cue for the cheapest check that could prove it wrong, and the
+  brief had said so.
+- **Observation:** the study's centre followed its method. A cold pass that starts from runtime
+  write sites makes the runtime the centre by construction; the owner's reversed reading was
+  what exposed it. After a first synthesis, ask which conclusion the starting point made
+  inevitable.
+- **Observation:** a third-party library's call shape was settled by downloading its wheels
+  from the package registry and reading one file in each release as data (fourteen releases,
+  under two minutes), when its documentation site was outside the allowed network.
+- **Observation:** a reviewer bot raised the same finding class twice (a Fact row whose source
+  did not cover its whole claim) because the fix for the first round was applied to the rows
+  named and a row added in the same push repeated it. Fix the class with a check, then the rows.
+- **Correction (mine, to the entry above that begins "one comparison thought occurred"):** no
+  such thought was recorded anywhere, and at the wrap I could not name one. The line overstated;
+  the true record is that the research files were swept for Practice vocabulary and held none.
+  A napkin line that reports an event needs the event.
+- **Observation:** the study's five measurement scripts lived only in the session scratch
+  directory while four research files cited them as instruments. The wrap's loss scan found
+  them; they are now `method-instruments.md` beside the study. An instrument named in evidence
+  is evidence, and belongs in the repository at the moment it is first cited.
+- **Observation:** `agent-tools review-cost survey` cannot run in a Claude cloud session: it
+  shells to `gh repo view`, and GitHub GraphQL is not reachable there (HTTP 403 with a message
+  naming the REST routes). The ledger row for pull request 395 is the seat's reading from the
+  connector's review-thread listing.
+- **Observation:** a reviewer bot's third finding arrived on the merged pull request, after the
+  merge, on the last push. A merged pull request's threads are re-read at the next wrap.
+- **Correction (the owner, 2026-11-10: "run this through the decision matrix please"):** the
+  comparison brief's first draft said the owner had not stated the comparison's purpose, depth or
+  output, and made asking the session's first act. I had written that as care: owner facts are
+  not to be inferred. It was a passback. One search of the plan estate found a strategic node the
+  owner ratified on 2026-08-01 that states the end and the shape serving work must take, and two
+  accepted precedents for the form. "The owner has not said" is a claim of absence like any
+  other, and I had run no search behind it, hours after recording that lesson about Hermes.
+  Before a question reaches the owner, search the ruling surfaces; what is left after the lenses
+  is a verdict with its one inference named, not a question.
+- **Correction (mine):** the wrap's first push failed the `static-checks` leg on four
+  machine-local paths in two new research files, and two reviewer bots found the same paths and
+  an invocation note that fitted two scripts of five. The no-machine-local-paths validator is
+  one command (`pnpm docs-validators:check`, about a minute); I had not run it on new Markdown
+  because the earlier research files had passed without it. A new file that names where things
+  are on this machine is the case that validator exists for.
+
+### 2026-11-11 (Sandpiper guards Wind, 690653): the #1023 chain, carrier #393
+
+- **Correction (mine):** I left the all-channels comms watcher off in a live n=2 team, on the
+  grounds that it had been silent for five windows and the Director messaged me directly. The
+  claims CLI then refused to open the carrier claim while blind to comms (F-95). The watcher is a
+  precondition of claiming in a team, not a convenience. A silent stream is not an irrelevant one,
+  and switching the watcher off only moves the cost to the next claim.
+- **Observation:** at the Oak 1.186.10 sync, one file in the content audit grew past the
+  250-line limit after merging cleanly. Both forks have the same `max-lines` rule. Oak's copy had
+  236 lines, and engraph's own additions (C111, C426) plus Oak's (C078) came to 257. My first
+  explanation, that Oak's lint was laxer, was wrong, and reading both configs showed it. Two lines
+  of development each adding to one file under one shared limit can trip it only at the merge.
+  The class ends when the forks reunite.
+- **Correction (mine):** in zsh, `"$C:refs/..."` again took `:r` as a modifier, inside double
+  quotes, so a fetch refspec failed. The gotcha has been recorded since 2026-10-01
+  (shell-and-tooling-gotchas), and this was its third instance in my session. The cure is a habit:
+  always write `${NAME}` before a colon.
+- **Observation (an association from free play, not a finding):** the merge back's real
+  dependencies are settings that live outside the tree: Vercel's OIDC policy for the Turbo
+  cache, Sonar's project criterion, GitHub repository variables and rulesets, and each checkout's
+  `merge-bot.json`. The tree merges cleanly, but the settings do not travel with it. #1023's
+  upgrade note (todo 4) and Hydra's return-to-mirror checklist (todo 6) are both lists of these
+  settings.
+- **Observation:** a side agent's note said Oak's CI "needs" a `TURBO_TEAM` variable. Oak's own
+  CI log showed the variable already set, and the missing piece was the Vercel policy. Reading
+  the run's log answered in one step a question the note left open.
 
 ## 2026-11-12 — Rocket holds Patina (01Duoc): an own-terms review of a paywalled article
 
