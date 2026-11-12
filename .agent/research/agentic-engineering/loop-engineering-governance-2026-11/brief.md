@@ -27,7 +27,7 @@ The owner's quoted words bind. Everything else in this brief is the author's pro
 | --- | --- |
 | "the attached PDF" is not identified | Linas Beliūnas, "Loops at Scale: The Governance Layer Nobody Built Yet", Substack, dated 3 August 2026, URL `https://linas.substack.com/p/ai-agent-loop-governance`, printed to PDF on 12 November 2026 |
 | The PDF's extent is assumed complete | It is not. The PDF is four pages: the free preview only. The post is marked PAID and stops at the heading "The Harness Is Not the Loop" with "This post is for paid subscribers". The body the owner wants reviewed is absent from the attachment |
-| "the approaches they talk about" is unbounded | The preview names four topics and one prerequisite. Those five are the IN set (below) |
+| "the approaches they talk about" is unbounded | The preview names four topics and one prerequisite. Those five, with the incidents and provenance, are the IN set (below) |
 | "deep dive" has no depth or stopping rule | Parallax depth Core. Each key question ends with a cited answer or `insufficient-evidence` |
 | "on their own terms" has no test | The own-terms rule below, with a vocabulary sweep before landing |
 | "concepts and practicalities" is not operationalised | Each approach gets the same six-field card (below) |
@@ -84,7 +84,8 @@ Three facts shape the method, all read first-hand on 2026-11-12.
    checklist, the framework or the swarm architecture.
 2. **The session's network refuses the article's host and two others.** `linas.substack.com`,
    `addyosmani.com` and `arxiv.org` fail to resolve from this cloud session. `gist.github.com`
-   resolves. Web search works and returns summaries.
+   resolves. Web search works and returns summaries. A later probe, recorded in the evidence log,
+   found GitHub the only research host family the session could reach.
 3. **The article presents itself as a digest.** It points to an earlier "Loop Engineering Guide" and
    names concepts that circulate under other authors' names.
 
@@ -157,11 +158,12 @@ framing, synthesis and audit siblings, `oak-reason`, `oak-metacognition`, `oak-c
 - **Citation or silence.** A claim stands with a URL and the UTC date read, or carries
   `[unverified]`.
 - **Bins.** Fact (verified), Owner's call, Assumption to verify, Dropped.
-- **Rungs,** lowest first:
+- **Rungs,** lowest first. The evidence log carries the scale as used, which adds R0 for the PDF
+  preview and records that R2 and R3 reads came through the fetch tool's model summary:
   1. R1, search summary: a search engine's digest of a page the session did not open.
   2. R2, secondary page read: a page opened this session that reports someone else's claim.
   3. R3, primary page read: the originator's own page, opened this session.
-  4. R4, artefact read: code, a licence text or a model card, opened this session.
+  4. R4, artefact read: code, a licence text or a model card, read directly.
 - **Dependence.** Pages that repeat one origin count as one source.
 - **The article's paid body is at no rung.** Nothing is attributed to it.
 - **Models and dates.** The article names products and releases. Each is checked as a claim; none
@@ -182,6 +184,10 @@ All in `.agent/research/agentic-engineering/loop-engineering-governance-2026-11/
 | `brief.md` | This file | Any resuming session: what is in scope |
 | `evidence-log.md` | Provenance, the preview transcript, every claim with bin, rung and source | The comparison session: which statements it may rely on |
 | `findings.md` | The approach cards, K1 to K8 answered, frame verdicts, status, open items | The owner: what the baseline is and whether it is firm enough to compare against |
+
+Added on the owner's offer of 2026-11-12 to run a web session: `commissioned-report-brief.md`, a
+self-contained brief for a session with open web access to read the primary sources this session
+could not open.
 
 One row is added to the lane `README.md`. Nothing else in the repository changes.
 

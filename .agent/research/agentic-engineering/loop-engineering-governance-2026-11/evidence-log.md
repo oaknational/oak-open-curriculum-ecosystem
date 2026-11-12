@@ -113,6 +113,7 @@ Bins: F is Fact (verified at the stated rung), A is Assumption to verify, D is D
 | E-15 | Anthropic's guide classifies loops as turn-based, goal-based, time-based and proactive | A | S18, S16 |
 | E-16 | A mining study of 36,710 repositories confirmed autonomous agent loops in 217; almost all committed the configuration that starts the loop and almost none committed the state files the gray literature recommends | A | S16 |
 | E-17 | Beliūnas's own "Loop Engineering Guide" was not found by search; its "six primitives" are unlisted in any source read | F | Three searches, S0 |
+| E-18 | A curated list says Huntley named the Ralph Wiggum loop pattern in July 2025 | F at R2 | S10 |
 
 ### Harness
 
@@ -184,6 +185,8 @@ Bins: F is Fact (verified at the stated rung), A is Assumption to verify, D is D
 | E-72 | The licence holds no revenue-share clause | F | S8, full text read |
 | E-73 | Self-hosting guides put the checkpoint near 1.56 TB and the vLLM minimum near 1.68 TB of accelerator memory across eight current-generation accelerators | A | S22 |
 | E-74 | The weights went public on 26 or 27 July 2026 | A | Search digest |
+| E-75 | Condition 1 requires the copyright and permission notice in all copies and compliance with applicable laws; condition 5 provides the software "AS IS" and disclaims liability | F | S8 |
+| E-76 | A search digest, citing Wikipedia's Moonshot AI page, reported a revenue share of up to 30% for inference providers above US$20 million a year; the licence text read directly holds no such clause | F | Search of 12 November 2026 against S8 |
 
 ### The two incidents
 
@@ -211,5 +214,17 @@ Bins: F is Fact (verified at the stated rung), A is Assumption to verify, D is D
 - S6 compiles press and practitioner posts. It is not independent of the Medium post behind E-80.
 - S22 and S24 are vendors with products to sell in the area they describe.
 - S5 is a fork of a third party's playbook about Huntley's technique, not Huntley's own post.
-- The subject article postdates S2, S3 and S4 and its four topics follow theirs in order. Whether
-  its body cites them is unknown.
+- The subject article postdates S2, S3 and S4. This session's inference, attested by no source: its
+  floor tracks S2, its outer-loop topic S3, and its harness and factory topics S4. Whether its body
+  cites them is unknown.
+- S6 is unsigned, and its file name begins "Claude -", which suggests a model compiled it. Its
+  claims about the Medium post are its own; that post was not opened.
+
+## Reading the bins
+
+- F means the cited source says this, at the rung shown. For an R1 or R2 source that is a weaker
+  statement than for an R4 source. "F at R2" marks a Fact row whose only source is a model summary
+  of a secondary page.
+- A negative row ("not found") is F for the searches run and no further. Each rests on two or three
+  extended searches made on 12 November 2026 with the row's own key phrases as the query.
+- No row needed the Owner's call bin, and no row was Dropped.
