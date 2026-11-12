@@ -20,7 +20,7 @@ owner_gates:
   - awaiting: external-input
     clears_when: "The Ignore Issues on Multiple Criteria entry (typescript:S4036 on agent-tools/**/*, the disposition policy's second exception; saved by the owner on both SonarCloud projects 2026-11-11) is in place and the next analysis of the pull request raises no S4036 issue"
     expires: 2026-11-30
-last_updated: 2026-11-09
+last_updated: 2026-11-12
 ---
 
 # Reunify the OCE forks
@@ -87,7 +87,28 @@ back to being a plain mirror of Oak: one line of development again.
    `TURBO_TOKEN` secret. The seat reports it ready; the owner alone executes the merge (owner,
    2026-11-11), never a seat, the door or any automation.
 5. Watch Oak's release and the deployed service.
-6. Return the fork to a mirror, as the mechanism's last item says.
+6. Return the fork to a mirror, in this order. Each step is the owner's or a seat's at the owner's
+   word; the fork's settings were read through the API on 2026-11-12.
+   1. Prove `engraph`'s tip is an ancestor of Oak's `main` (criterion 1) and that the mirror
+      workflow has fast-forwarded the fork's `main` to Oak's `main`.
+   2. Stop the carrier first. Delete the fork's `UPSTREAM_CARRIER_ENABLED` variable, or set it to
+      `false`, wait for any carrier run already started to finish (the variable is read only when
+      a run starts), then close every open carrier pull request and delete every
+      `automation/upstream-carrier-*` branch, with or without a pull request.
+      `UPSTREAM_MIRROR_ENABLED` stays `true`.
+   3. Retarget the fork's ruleset "integration branches" from the default branch to
+      `refs/heads/engraph`. It follows the default branch and requires a pull request, so if the
+      default moved first it would land on `main` and block the mirror workflow's direct
+      fast-forward. The ruleset "mirror branch: fast-forward only" already covers `main`.
+   4. Switch the fork's default branch to `main`.
+   5. Once no open pull request has `engraph` as its base (deleting a base branch closes its pull
+      requests), delete the "integration branches" ruleset, then `engraph` on the fork. The
+      ruleset restricts deletion of the branch it covers, so the branch cannot go first.
+   6. One Oak pull request, as Oak's bot, drops `engraph` from the triggers in `ci.yml`,
+      `codeql.yml` and `dependency-review.yml`. The carrier and mirror workflows stay in the tree:
+      each job is gated on its variable and exits on a repository that is not a fork.
+   7. Each local checkout is re-pointed on the owner's word: its remotes, its default branch and
+      the commit identity it uses. Those bindings belong in the operator profile.
 
 ## Out of scope
 
