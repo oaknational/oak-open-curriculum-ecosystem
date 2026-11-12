@@ -103,6 +103,18 @@ sources without turning research notes into a second canon.
   `attendant-*` sub-skills: the owner's user story as a ten-step sequence with
   internal reviews and the PR review set apart, and a doubt point at each stage
   asking whether the work is worth doing; input to the design session's brief.
+- [loop-engineering-governance-2026-11/findings.md](./loop-engineering-governance-2026-11/findings.md)
+  — own-terms baseline of the field's writing on loops in agentic systems
+  (loop engineering, the harness and enforcement outside the loop, the inner
+  and outer loop, light and dark factories, swarms and verification gates,
+  Kimi K3's licence), prompted by the preview of Linas Beliūnas's "Loops at
+  Scale" and read through direct reads and two commissioned web-session
+  reports; status provisional; no comparison with the Practice. A second
+  report in the same folder,
+  [paper-readings.md](./loop-engineering-governance-2026-11/paper-readings.md),
+  reads six of the field's papers in depth and reconciles them, and a third,
+  [doing-and-dreaming-reading.md](./loop-engineering-governance-2026-11/doing-and-dreaming-reading.md),
+  reads the owner's proposal for periodic agent learning against that evidence.
 - [attendant-creation-plan-working-notes.md](./attendant-creation-plan-working-notes.md)
   — the design session's working notes for the Attendant creation plan: the
   session's impact and value, how it delivers them, and the review of the brief
