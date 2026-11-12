@@ -91,6 +91,9 @@ export interface SearchUnitsParams extends SearchParamsBase {
 
   /** Minimum number of lessons a unit must contain to be included. */
   readonly minLessons?: number;
+
+  /** Filter by year group. */
+  readonly year?: string;
 }
 
 /**
