@@ -91,15 +91,18 @@ back to being a plain mirror of Oak: one line of development again.
    word; the fork's settings were read through the API on 2026-11-12.
    1. Prove `engraph`'s tip is an ancestor of Oak's `main` (criterion 1) and that the mirror
       workflow has fast-forwarded the fork's `main` to Oak's `main`.
-   2. Retarget the fork's ruleset "integration branches" from the default branch to
+   2. Stop the carrier first. Set the fork's `UPSTREAM_CARRIER_ENABLED` variable to anything but
+      `true`, wait for any carrier run already started to finish (the variable is read only when
+      a run starts), then close every open carrier pull request and delete its branch.
+      `UPSTREAM_MIRROR_ENABLED` stays `true`.
+   3. Retarget the fork's ruleset "integration branches" from the default branch to
       `refs/heads/engraph`. It follows the default branch and requires a pull request, so if the
       default moved first it would land on `main` and block the mirror workflow's direct
       fast-forward. The ruleset "mirror branch: fast-forward only" already covers `main`.
-   3. Switch the fork's default branch to `main`.
-   4. Set the fork's `UPSTREAM_CARRIER_ENABLED` variable to anything but `true`, and close any open
-      carrier pull request. `UPSTREAM_MIRROR_ENABLED` stays `true`.
-   5. Delete the "integration branches" ruleset, then `engraph` on the fork. The ruleset
-      restricts deletion of the branch it covers, so the branch cannot go first.
+   4. Switch the fork's default branch to `main`.
+   5. Once no open pull request has `engraph` as its base (deleting a base branch closes its pull
+      requests), delete the "integration branches" ruleset, then `engraph` on the fork. The
+      ruleset restricts deletion of the branch it covers, so the branch cannot go first.
    6. One Oak pull request, as Oak's bot, drops `engraph` from the triggers in `ci.yml`,
       `codeql.yml` and `dependency-review.yml`. The carrier and mirror workflows stay in the tree:
       each job is gated on its variable and exits on a repository that is not a fork.
