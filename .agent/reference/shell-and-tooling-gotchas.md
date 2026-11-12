@@ -839,7 +839,8 @@ Director's landing record of 2026-09-06, event f05a54da).
   it at a scratch directory.
 - **SonarCloud raises S4036 at a smoke that runs `pnpm` or `git` by name**: the site is within
   §S4036's class in the Sonar disposition policy, so it is marked `FALSE_POSITIVE` with the class's
-  rationale, never given an absolute path (2026-11-06).
+  rationale, never given an absolute path (2026-11-06). A smoke under `agent-tools/` now
+  raises nothing, because the policy's project criterion ignores the rule there (2026-11-11).
 - **BSD `grep` has no `\b`**: `grep -o '\bok('` matched nothing and read as absence; a fixed
   string (`grep -F`) or a python `in` test (2026-10-14).
 - **`git log --format=%cI` prints the committer's local offset (`+01:00`)**: a record stamp copied

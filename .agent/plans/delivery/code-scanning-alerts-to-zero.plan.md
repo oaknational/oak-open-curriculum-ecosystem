@@ -2,7 +2,7 @@
 id: code-scanning-alerts-to-zero
 node_type: delivery
 name: "Code-scanning alerts to zero on the resting branch, and held there"
-overview: "Every open code-scanning alert on the resting branch is FIXED in the tree — never dismissed, never an accepted risk — with two owner-ruled, dated exceptions (the missing-rate-limiting query, grounded in ADR-219 and the two sets of edge WAFs, excluded permanently by a tracked query filter in the CodeQL configuration and for that query only; and S4036 at a binary invoked by name, marked false-positive per site under the Sonar disposition policy's §S4036), and the pull-request gate keeps the count at zero."
+overview: "Every open code-scanning alert on the resting branch is FIXED in the tree — never dismissed, never an accepted risk — with two owner-ruled, dated exceptions (the missing-rate-limiting query, grounded in ADR-219 and the two sets of edge WAFs, excluded permanently by a tracked query filter in the CodeQL configuration and for that query only; and S4036 at a binary invoked by name, ignored under agent-tools/ by one criterion on each Sonar project and marked false-positive per site elsewhere, under the Sonar disposition policy's §S4036), and the pull-request gate keeps the count at zero."
 status: sketch
 ratified_by: null
 ratified_date: null
@@ -96,8 +96,9 @@ accepts for that query and no other.
   in the hosting service.
 - **Executable searched on PATH.** Overtaken on 2026-11-05 by the owner's word "adopt the
   by-name ruling on engraph": tooling invokes each binary by name with `PATH` as the trust
-  root, and a site within the class is marked under the Sonar disposition policy's second
-  exception (§S4036), not cured. The absolute-path resolver route this bullet set out is
+  root, and a site within the class is resolved under the Sonar disposition policy's second
+  exception (§S4036), not cured: ignored by the project criterion under `agent-tools/`
+  (owner, 2026-11-11) and marked per site elsewhere. The absolute-path resolver route this bullet set out is
   withdrawn, and units 4 and 5 below with it. The upstream carrier at release 1.186.8 took
   `pnpm` and `gh` to by-name; `git`, `gitleaks` and the shell follow.
 - **Clear-text protocol literal.** Fixtures that never dial their host take an `https`
@@ -148,12 +149,13 @@ the gate turns "zero" from a snapshot into an invariant.
    own record; the landing seat reads it at closing and records the reading, dated, on the
    lane's closing event as an observation, never as a corpus fact.
 2. Every cured site has a test that fails on the previous behaviour: the linear-time extraction over a pathological input, the output description's closed vocabulary, the generator's escaping of a line separator. Proof: `repo-safe` — the tests, named in each unit.
-3. No alert on the resting branch carries a dismissed, accepted-risk or won't-fix state, an S4036 site's false-positive mark under the second exception aside, and the missing-rate-limiting query raises none because the tracked configuration excludes it, explained by the code comment at each route citing ADR-219 and the two edge WAFs. Proof: `repo-safe` for the four comments and the `query-filters` entry; `owner-held` for the service's state — the alerts query for dismissed alerts and for open `js/missing-rate-limiting` alerts, both empty, read at closing and recorded as a dated observation.
+3. No alert on the resting branch carries a dismissed, accepted-risk or won't-fix state, an S4036 site's false-positive mark under the second exception aside (under `agent-tools/` the project criterion means no alert is raised), and the missing-rate-limiting query raises none because the tracked configuration excludes it, explained by the code comment at each route citing ADR-219 and the two edge WAFs. Proof: `repo-safe` for the four comments and the `query-filters` entry; `owner-held` for the service's state — the alerts query for dismissed alerts and for open `js/missing-rate-limiting` alerts, both empty, read at closing and recorded as a dated observation.
 4. A pull request introducing one new instance of each of the four classes this node cures is
    blocked by a required check. The owner-ruled exclusion of `js/missing-rate-limiting` means
    no required check can fail on a new instance of that class; it is not probed, and its
-   control is the edge rule ADR-219 states. A new S4036 site is cleared by its mark, not a
-   cure, so that class is not probed either.
+   control is the edge rule ADR-219 states. A new S4036 site is cleared by the project criterion
+   under `agent-tools/` or by its mark elsewhere, not a cure, so that class is not probed
+   either.
    Proof: `owner-held` — whether the hosting service blocked a probe pull request is that
    service's state: one probe per analyser, closed unmerged, its blocked check result read by
    the landing seat and recorded, dated and by number, on the lane's closing event.
