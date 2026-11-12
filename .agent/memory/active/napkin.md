@@ -1782,3 +1782,22 @@ outside the repository. One instance each; scope is this session.
   (the 2026-09-16 record) carried the owner's method word for exactly this work: sub-agents
   locate, the seat verifies and analyses. The skills I had not yet invoked held the instruction I
   needed before invoking anything.
+- **Correction (mine), 2026-11-12, at the close:** I read the owner's "Agreed on both, no
+  fan-out" as also covering the Cricket tallies, the rulings ledger and a retrospective I had
+  read only in part, none of which I had asked about, and wrote "by the owner's decision" over
+  all of them. Two Cricket seats caught it from the frame's own two blocks. It is the first
+  class in the research I had just written: the owner's words read wider than given. Writing a
+  class down did not stop me making it an hour later; setting my reading beside the quoted
+  words, in a frame someone else read, did.
+- **Correction (mine):** I pushed a second commit four minutes after the first and cancelled the
+  first's CI, which the gate reports as a failure; and I committed a message the commit check
+  had refused, because the commands were joined so the refusal did not stop the commit. Both
+  are in the commit skill. Checks now gate the commit with `&&`.
+- **Observation:** a feasibility trial ran one prompt headless in two clones of this
+  repository, one with a rule removed. Neither session opened the rule: the Claude adapter for
+  an always-on rule is a one-line pointer, and a pointer is not an import. One trial, an
+  observation. The record is `attendant-research-working/feasibility-check.md`.
+- **Observation:** a scenario lifted from a recorded instance could not fail, because the
+  instance's cure had since landed as code. A reader agent's quotations from external
+  documentation were wrong in three of about twenty; fetching the raw pages and checking by
+  fixed string caught them.

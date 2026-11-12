@@ -44,6 +44,15 @@ thread record existed.
   reviewed (three verdicts of "revise") and not launched. Two matters are with the owner: the
   price of a smaller staged fan-out over the rule files, and a departure from the plan's
   stopping rule. PDR-098 was found and bears on the mechanism step.
+- The owner's answer to both, 2026-11-12, in session: "Agreed on both, no fan-out; carry on with
+  questions 4 and 5". Since then questions 4 and 5 are answered and a feasibility check has run.
+  By the session's close all five questions are answered, both scenario files are written and
+  reviewed by a fresh reader, and the strategic node's research summary is revised. The step's
+  acceptance is the owner's reading of the report (the plan's three criteria, each
+  `owner-held`); it is not yet recorded here. Not read, by the seat's choice: the Cricket
+  tallies, the rulings ledger, the further retrospectives and reports, the archives.
+- Next safe step after the owner accepts the research: the mechanism step, by a different seat,
+  which writes its own delivery node at pickup and does not open the held-back scenarios.
 - Team expectation: solo cloud seat, the owner as design partner.
 - Acceptance bar: for the next session, phase 1's outputs as the plan names them (the findings
   file, the scenarios file, the plan's summary section, a report to the owner).
