@@ -4,8 +4,10 @@ name: CI
 # either branch. Parallel jobs let each gate report independently, while superseded PR runs
 # cancel. A final `run-quality-gates` fan-in job is the single required status
 # check: it fails unless EVERY gate succeeded (so a failed, cancelled, or skipped
-# gate all block), so the branch ruleset and the Release workflow's
-# `workflow_run: [CI]` trigger need no change while every split job is blocking.
+# gate all block, except the two skips the fan-in names as by design), so the
+# branch ruleset and the Release workflow's `workflow_run: [CI]` trigger need no
+# change while every split job is blocking. One of those skips is `browser-tests`
+# on a docs-only pull request, which the `change-scope` job computes from the diff.
 # The one deliberate exception is the advisory `schema-drift` pair below: they
 # sit outside the fan-in by design (a stale schema cache is a signal, never a
 # gate — ADR-121 §Rationale for exclusions), so their rows never block merge.
@@ -18,13 +20,15 @@ name: CI
 # are version-pinned. Job dependency tiers:
 #   secret-scan        — no pnpm install (gitleaks binary); runs from t=0 in parallel
 #   install            — warms the pnpm store cache
+#     change-scope     — needs install (no build): is this pull request docs-only?
 #     static-checks    — needs install (no build): format, markdown, shell, validators
 #     schema-drift     — needs install (no build): ADVISORY, outside the fan-in
 #       schema-drift-status — needs schema-drift: ADVISORY, publishes the commit status
 #     build            — needs install: warms the Turbo remote cache
 #       unit-tests     — needs build: type-check, lint, unit tests
 #       knip-depcruise — needs build: unused-code + dependency-direction checks
-#       browser-tests  — needs build: e2e, ui, a11y, widget suites (Playwright)
+#       browser-tests  — needs build and change-scope: e2e, ui, a11y, widget suites
+#                        (Playwright); skipped on a docs-only pull request
 
 on:
   push:
@@ -108,6 +112,38 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/setup
+
+  # Whether this pull request is a docs-only change: every changed path a
+  # Markdown file under `.agent` or the root `docs` folder. No browser suite
+  # takes such a file as an input, so `browser-tests` skips for it. The verdict
+  # is computed from the diff, never declared: on a pull request the checkout
+  # is the merge commit, so `HEAD^1..HEAD` is exactly what the pull request
+  # changes against its base. Every other event leaves the output empty, and an
+  # empty output runs every gate. If this job fails, `browser-tests` is skipped
+  # without the output that would excuse it, so `run-quality-gates` blocks.
+  change-scope:
+    name: change-scope
+    permissions:
+      contents: read
+    needs: install
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      docs_only: ${{ steps.scope.outputs.docs_only }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 2 # the merge commit and its first parent, the base tip
+      - uses: ./.github/actions/setup
+      - name: Classify the change
+        id: scope
+        if: github.event_name == 'pull_request'
+        # An explicit shell turns `pipefail` on, so a failing `git diff` fails
+        # the step, where the default shell would pass an empty list on.
+        shell: bash
+        run: >-
+          git diff --name-only -z --no-renames HEAD^1 HEAD
+          | pnpm --filter @oaknational/agent-tools ci-docs-only-check
 
   # Static analysis that needs node_modules but not a build. Runs in parallel
   # with `build`.
@@ -381,7 +417,13 @@ jobs:
     permissions:
       contents: read
       id-token: write
-    needs: build
+    needs:
+      - build
+      - change-scope
+    # A docs-only pull request changes no input of any browser suite, so the
+    # job skips, and `run-quality-gates` accepts that skip only when
+    # `change-scope` said so.
+    if: needs.change-scope.outputs.docs_only != 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -492,10 +534,11 @@ jobs:
   # Single required status check: fans in every job above (the family
   # contract: one required context fed by every job) and fails unless every
   # one succeeded — failed, cancelled, AND skipped results all block (fail-closed,
-  # so adding an `if:` guard to a gate later cannot silently bypass it), with one
-  # named exception: `schema-drift-status` skips by its own design on a fork's or
+  # so adding an `if:` guard to a gate later cannot silently bypass it), with two
+  # named exceptions. `schema-drift-status` skips by its own design on a fork's or
   # Dependabot's pull request (a read-only token cannot write a commit status),
-  # and only under exactly that condition is its skipped result accepted. Reusing
+  # and `browser-tests` skips on a docs-only pull request (`change-scope`). Each
+  # skipped result is accepted only under exactly its own condition. Reusing
   # the existing `run-quality-gates` context keeps the branch ruleset unchanged
   # while each split job blocks merge.
   run-quality-gates:
@@ -504,6 +547,7 @@ jobs:
     needs:
       - secret-scan
       - install
+      - change-scope
       - static-checks
       - build
       - schema-drift
@@ -523,17 +567,26 @@ jobs:
       - name: Verify every quality gate passed
         env:
           RESULTS: ${{ join(needs.*.result, ',') }}
-          # The one by-design skip: mirrors the `if` on schema-drift-status, so a
+          # The first by-design skip: mirrors the `if` on schema-drift-status, so a
           # skipped result is accepted only where that job's own condition
           # excluded it, never because a gate grew an `if:` guard.
           DRIFT_STATUS_RESULT: ${{ needs.schema-drift-status.result }}
           DRIFT_STATUS_SKIPS_BY_DESIGN: ${{ github.actor == 'dependabot[bot]' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) }}
+          # The second by-design skip: mirrors the `if` on browser-tests. A skip
+          # for any other reason (a failed `build` or `change-scope`) finds
+          # that job's own non-success result in the list and blocks on it.
+          BROWSER_TESTS_RESULT: ${{ needs.browser-tests.result }}
+          DOCS_ONLY: ${{ needs.change-scope.outputs.docs_only }}
         run: |
           echo "Gate results: $RESULTS"
           skips_allowed=0
           if [ "$DRIFT_STATUS_RESULT" = "skipped" ] && [ "$DRIFT_STATUS_SKIPS_BY_DESIGN" = "true" ]; then
             echo "schema-drift-status skipped by design on this pull request (no commit status on a read-only token)."
-            skips_allowed=1
+            skips_allowed=$((skips_allowed + 1))
+          fi
+          if [ "$BROWSER_TESTS_RESULT" = "skipped" ] && [ "$DOCS_ONLY" = "true" ]; then
+            echo "browser-tests skipped by design on this docs-only pull request."
+            skips_allowed=$((skips_allowed + 1))
           fi
           IFS=',' read -ra results <<< "$RESULTS"
           for result in "${results[@]}"; do
