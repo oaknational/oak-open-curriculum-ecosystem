@@ -371,3 +371,42 @@ estimate at twice the guide. The question: "the estimate is past twice what the 
 am I assuming about what this work IS that makes it this large?". The moment: when an estimate
 is revised upward. Also direct evidence for cause 5: a step-back return (DRIFTING) was advice,
 and the seat it doubted discounted it.
+
+### `2026-09-01-why-delivery-stopped-when-the-merge-engine-was-a-seat.md` (first 150 lines only)
+
+Read in part. The owner's hypothesis is corrected by the record, not the other way round: "The
+correlation is real; the causation is not." Its mechanism: "An embodied capability", one that
+"lives in a live seat's privileges rather than in a service". Not an owner catch; bears on the
+Attendant's later steps (a run's capability must not live in one seat). The rest is owed a read.
+
+### PDR-098, `PDR-098-doctrine-traction-firing-detection-response.md` (whole), and the first 140 lines of `action-time-structural-interrupt-design-space.plan.md`
+
+Found by following a pointer in the 2026-09-16 retrospective. The creation plan and its working
+notes did not cite either. PDR-098 is accepted, owner-approved 2026-06-15. Three axes: firing
+(environment or recall), detection (surface match or cognitive), response (advisory or
+enforcing). "The gap is an empty quadrant": "mechanical-firing + cognitive-detection +
+advisory-response, for semantic pathogens at action time". Forbids "another passive always-on
+rule"; requires "a mechanical firing cadence AND an observable-artefact-or-it-didn't-fire
+record"; warns of "false-positive fatigue". Holds open that the gap is "irreducibly cognitive".
+The closest installed approximation it names is the plan-body first-principles check: "cognitive
+content bound to a *defined firing moment* (shape-entry) via recall-gated ritual". Its
+2026-09-06 evidence: a cure that landed "as a PR-open step in the delivery-plan template, a
+shape-entry binding installed where the PR is authored rather than a further sentence in the
+rule".
+
+The design-space plan lists what is mechanically installed today (git command blocks, an
+approval-marker block, about six content-fingerprint families, the pre-commit gates) and points
+mechanism candidates to `closure-pressure-remediation-design-space.plan.md` (questions 2, 3, 5,
+9, 10), not yet read. It notes the estate "has already tried executable enforcement once and let
+it lapse".
+
+Reading: the Attendant's central research question is this PDR's empty quadrant, already named
+and owner-approved. The mechanism step inherits its two requirements and its prohibition. The
+owner's stated preference (skills and rules over hooks) and the PDR meet at shape-entry binding:
+a question carried by an artefact the run must produce. The Attendant is well placed for that
+because it is a process with stages and records, so it has artefacts to bind to; a general
+session does not. This narrows what "general surfaces with the Attendant as first user" can
+mean, and the mechanism step should hear it.
+
+Owed reads for question 4: `closure-pressure-remediation-design-space.plan.md`; the rest of the
+design-space plan; PDR-029; the pattern `passive-guidance-loses-to-artefact-gravity`.

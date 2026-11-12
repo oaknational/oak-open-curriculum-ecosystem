@@ -152,7 +152,95 @@ Not yet written.
 
 ## Question 3: why the step-back instruments only partly succeed
 
-Not yet written.
+**Status: answered from the instruments' full texts, read at the seat; the reading ledger has
+each.** To be re-read against question 1's final classes.
+
+**The estate has already framed this problem, and the plan did not cite it.** PDR-098, accepted
+with the owner's approval on 2026-06-15, splits the question of whether a rule takes hold into
+three independent parts: what fires the check (the environment, or the agent's recall), how the
+problem is recognised (a string match, or judgement), and what the check does (advises, or
+refuses). Its finding: "mechanical-FIRING with cognitive-DETECTION at action time does not exist
+anywhere". Its prohibition: "The cure for recall-dependent doctrine MUST NOT be another passive
+always-on rule" that tells the agent to fire at action time, and any mechanism "must carry a mechanical
+firing cadence AND an observable-artefact-or-it-didn't-fire record". It holds open that the gap
+may not be closable: "semantic pathogens are irreducibly cognitive". Its later evidence section
+records a cure that worked without a hook: "a PR-open step in the delivery-plan template, a
+shape-entry binding installed where the PR is authored rather than a further sentence in the
+rule".
+
+This bears on the strategic node directly. The owner's preference of 2026-11-10 is for "skills
+and rules with appropriate descriptions and application criteria" over hooks. PDR-098 forbids a
+further always-on rule as the cure. The two are compatible only if the composition fires from
+something other than the agent's recall. The evidence names what that can be without a hook: an
+artefact the work must produce anyway, whose shape carries the question.
+
+**Each instrument, read against the classes of question 1.**
+
+| Instrument | What it does well | Which of the five causes it shows | What the Attendant can reuse |
+| --- | --- | --- | --- |
+| `scope-from-goal-before-approach` (rule) | Names classes 3 and 8 exactly; asks for an artefact (`GOAL / IN / OUT`) that an outside reader can check. | 1: its own text says "not yet hook-enforced". 2: the agent writes the goal it is checked against. | The artefact, with the goal line replaced by the owner's words. |
+| `re-apply-first-question-at-elaboration-boundaries` (rule) | Holds the best question for classes 5 and 6: the warrant ladder and the rung before it, tracing a problem to "an owner observation or to a first-hand reproduced defect". | 1: "The signal is behavioural, not hook-enforceable". 2 and 4: it records an item that survived two re-derivations because each answered "FROM THE ITEM'S OWN DESCRIPTION". | The ladder as the fixed question; the rule that the evidence may not be the item's own description. |
+| `design-from-impact-not-the-cowpath` (rule) | Names class 6; the owner's value statement is here. | 1: "this is an agent self-scan"; the lens slipped "six times in one session". | Its section on a lane closing on its value statement: what, why, to whom, when, as the opening line of any report. |
+| `metacognition` (skill and directive) | Four good questions; says a pass that only recaps has failed. | 1, stated about itself: "Naming this does not inoculate against it"; "none self-caught". 5: the output is the agent's own revised intention. | Its questions. Its admission is evidence, not a component. |
+| `proportionality` (skill) | Names class 7 and the level half of class 2; findings run both ways (too big, too small). | 1: it calls its own manual use into a running loop "evidence that the domain skill's own checkpoint failed to fire". | The symmetric return. The lesson of its worked instance: a counter made a check fire where a sentence had not. |
+| `reason` (skill) | The only instrument whose return set includes stopping by construction: "There is no `CONTINUE`: an expired budget never self-extends". | 1: invoked by the agent. | The three exits and the pre-declared budget. |
+| `concept-exploration` (skill) | Loop dynamics: judge a loop by whether its rounds shrink. | 1. | The shrink test as a signal an environment can compute. |
+| `cricket` (skill and four sub-agents) | The one instrument that separates the owner's words from the seat's reading (`SOURCES:` and `READING:`) and returns a verdict on the reading; independent context. | 1: the working seat decides when. 4: the working seat chooses what to quote. 5: "treat every verdict as evidence rather than authority", and a seat "discounted" a DRIFTING verdict in the alignment arc. | The frame's two blocks and the two verdicts, nearly as they are. This is the closest existing thing to requirement 2. |
+| `parallax` and its frame and audit siblings (skills) | The audit declares its independence honestly and can return `block` or `reopen`. | 1. Also weight: a charter, frame cards and claims are heavy for a check that must run often. | The honesty rule: "An audit emulated by an orchestrator is always same-context self-review". |
+| `plan` skill, design gate | Fires at a real artefact moment: a plan is being written. | 2: "the frame is the owner's to set", and nothing makes the plan carry the owner's words. | The moment. It is the estate's working example of binding a question to an artefact. |
+| `retrospective` (skill) | Finds causes well, afterwards. | Not a step back during work. Its proposals often do not land: of one day's three, "None is present in its target file". | Its records are the scenarios' source. |
+
+**The five causes, against the evidence.**
+
+1. *The working agent decides when to step back.* Confirmed, and it is the dominant cause.
+   Eleven of eleven instruments depend on it, several say so in their own text, and the
+   retrospectives show authors breaking a lesson within the hour of writing it: "a lesson held
+   as a sentence is retrieved only on cue, and a find-cure loop supplies no cue".
+2. *The one being checked writes the frame.* Confirmed. Cricket is the partial exception since
+   2026-09-24, and only where the invoker quotes the owner faithfully.
+3. *The question asked cannot return "stop" or "delete it".* Confirmed for review (a brief that asks whether a design is safe and correct "has no answer of
+   the form" delete it, in the record's words), and revised: several
+   step-back instruments can return stop (`reason`, `proportionality`, the parallax audit). The
+   cause holds for reviewers, less for the step-back skills.
+4. *The evidence handed over is the working agent's own record.* Confirmed.
+5. *The return is advice to the agent it doubts.* Confirmed, with a counter-case that matters:
+   a declared last push "was a promise; the gate was a fuse." Where a return changed what
+   could happen next, it bound.
+
+**Two causes the first pass did not have.**
+
+6. *The moment has no owner.* The retrospectives name moments at which the estate "holds the
+   doctrine" and "has no firing gate": the first cycle of a build, the second finding of one
+   class, a step grown past its one-line proposal, an estimate revised upward. A good question
+   with no moment is cause 1 seen from the other side, but it is separately curable: a moment
+   can be attached to an artefact.
+7. *A step back competes with clocked work and loses.* "clocked obligations starve unclocked
+   jobs". A check with no deadline, no artefact and no visible end is displaced by anything that
+   has them. The mechanism needs a place in the run where it is the due thing.
+
+**The five requirements, against the evidence.**
+
+1. *It fires without the working agent judging it is needed.* Stands, and PDR-098 already
+   requires it. Sharpened: it fires on a moment something other than the agent's judgement
+   marks. Question 1 lists moments an environment or an artefact can mark.
+2. *Its frame is the owner's words and primary evidence.* Stands. Class 1 of question 1 makes it
+   the first requirement in time. Cricket's two-block frame is the existing form.
+3. *Its question is fixed, climbs from the work to the bigger picture, and admits "stop",
+   "smaller" and "not worth doing".* Stands, and gains one exit, for a matter already answered: proceed
+   (class 2). A mechanism that can only slow work down will be the next thing the owner has to
+   stop.
+4. *Its return is answered in writing in the run's record before the run continues.* Stands:
+   "a sentence that must be written is a step".
+5. *It can subtract.* Stands, and applies to the mechanism itself. The estate's response to
+   failure has been additive ("Every correction produced an instrument"; rules and skills grew
+   about 30% in forty-two days). The mechanism must name what it retires, and its own load on
+   every session must be visible.
+
+**What worked, across the corpus.** Each case had the same shape: something outside the agent's
+recall marked the moment, and the response was a thing that had to be produced or could not be
+passed. A counter that refused a push. A count stated first in every report. A sentence that had
+to be written before a cure. A declared deadline with a default. A reviewer handed the owner's
+words and the question, not the author's summary. None was a better-worded rule.
 
 ## Question 4: what each lever can do, and whether the evaluation can be run
 
