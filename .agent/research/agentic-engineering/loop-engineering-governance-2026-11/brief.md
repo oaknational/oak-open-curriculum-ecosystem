@@ -38,6 +38,16 @@ areas plus a direct re-read of the earlier relayed claims; read inline by the ma
 no fleet; each area ends with an approach card resting on at least three pages read directly, or is
 marked thin. The own-terms rule holds unchanged.
 
+A fourth instruction asked for depth on the papers the baseline leans on. Verbatim:
+
+> Please do full reads of the papers that carry the most weight. The PR can contain more than one
+> report if appropriate. Use all appropriate cognitive skills
+
+Six papers were read and are reported in `paper-readings.md`, a second report beside the findings.
+Sizing, by `oak-proportionality`: six papers of about 44,000 words fit a direct read by the main
+seat; two of about 40,000 words each were left at their earlier rung and named as unread.
+Reconciliation follows `oak-parallax-synthesise`.
+
 The owner's quoted words bind. Everything else in this brief is the author's proposal.
 
 ## The subject after the change of focus

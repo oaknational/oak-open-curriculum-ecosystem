@@ -109,7 +109,10 @@ sources without turning research notes into a second canon.
   and outer loop, light and dark factories, swarms and verification gates,
   Kimi K3's licence), prompted by the preview of Linas Beliūnas's "Loops at
   Scale" and read through direct reads and two commissioned web-session
-  reports; status provisional; no comparison with the Practice.
+  reports; status provisional; no comparison with the Practice. A second
+  report in the same folder,
+  [paper-readings.md](./loop-engineering-governance-2026-11/paper-readings.md),
+  reads six of the field's papers in depth and reconciles them.
 - [attendant-creation-plan-working-notes.md](./attendant-creation-plan-working-notes.md)
   — the design session's working notes for the Attendant creation plan: the
   session's impact and value, how it delivers them, and the review of the brief

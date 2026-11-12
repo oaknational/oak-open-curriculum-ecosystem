@@ -22,12 +22,15 @@ served: which statements about these approaches may be relied on. Method and sco
 
 ## Rungs
 
+The source register below shows the rung each source had in the first round. Many were later
+read at a higher rung; the later sections (rows E-200 onward) give the strongest read of each.
+
 | Rung | Meaning in this log |
 | --- | --- |
 | R0 | The PDF preview of the subject article, read directly |
 | R1 | Search digest of a page this session could not open |
 | R2 | GitHub-hosted secondary page, read through the fetch tool's summary |
-| R3 | GitHub-hosted primary page, read through the fetch tool's summary |
+| R3 | Primary page, read through the fetch tool's summary |
 | R4 | Primary file read directly with `curl` |
 
 Most of this log sits at R1. An R1 row records what a search digest says a page says. It is two
@@ -364,29 +367,29 @@ which this session did not open; it stays at rung RW.
 | Id | Claim | Bin | Source |
 | --- | --- | --- | --- |
 | E-220 | Steinberger posted on 18 July 2026 at 00:34:54 UTC: "Are we still talking loops or did we shift to graphs yet?" The post "contains neither the phrase 'graph engineering' nor a claim about a new technique"; the phrase appears in a 2024 post and one of 11 July 2026. One source dates the post 17 July | F | `https://www.aibuilderclub.com/blog/graph-engineering-peter-steinberger`; `https://datasciencedojo.com/blog/graph-engineering-frameworks/` |
-| E-221 | One vendor post reads it as "a joke about how quickly our field renames the same discipline", says a same-day piece titled "Loop Engineering Is Dead. Enter Graph Engineering" was "a joke too", and that "By the end of the week there were courses, roadma[ps]". Its restated question: "which cycles in software development deserve to be made explicit" | F | `https://clustercode.io/blog/graph-engineering` |
-| E-222 | Definitions in circulation: "wiring multiple agents, each running its own loop, together through nodes, edges, and shared state"; "making multi-agent control flow explicit" | F | `https://datasciencedojo.com/blog/graph-engineering-frameworks/`; `https://www.palo-it.com/en/blog/loop-and-graph-engineering` |
-| E-223 | Prior art named by the same sources: "None of this is new to software engineering. State machines, DAGs, workflow engines, and orchestration systems have been doing versions of it for decades. LangChain launched LangGraph in January 2024"; "Graph engineering largely renames orchestration" | F | `https://www.turingpost.com/p/is-graph-engineering-real-why-everyone-is-talking-about-it` (20 July 2026); palo-it, 18 July 2026 |
+| E-221 | One vendor post reads it as "a joke about how quickly our field renames the same discipline", says "Hours later Hamel Husain published a piece titled Loop Engineering Is Dead. Enter Graph Engineering. That was a joke too", and that "By the end of the week there were courses, roadma[ps]". Its restated question: "which cycles in software development deserve to be made explicit". A second source says of the post: "It reads as a joke about vocabulary churn. That is an interpretation" | F | `https://clustercode.io/blog/graph-engineering`; aibuilderclub |
+| E-222 | Definitions in circulation: "wiring multiple agents, each running its own loop, together through nodes, edges, and shared state"; "making multi-agent control flow explicit". The second source draws the line at who routes: in a loop "the routing lives in the model's judgement: the agent reads the state and decides what to do next. In a graph the routing lives in code — agents, validators, deterministic functions, and humans as nodes" | F | `https://datasciencedojo.com/blog/graph-engineering-frameworks/`; `https://www.palo-it.com/en/blog/loop-and-graph-engineering` |
+| E-223 | Prior art, named by two further sources: "None of this is new to software engineering. State machines, DAGs, workflow engines, and orchestration systems have been doing versions of it for decades. LangChain launched LangGraph in January 2024" (a newsletter); "Graph engineering largely renames orchestration" (a consultancy) | F | `https://www.turingpost.com/p/is-graph-engineering-real-why-everyone-is-talking-about-it` (20 July 2026); palo-it, 18 July 2026 |
 | E-224 | The same consultancy post opens "AI teams keep inventing new names for old problems" and calls loop engineering "the outer loop component of the harness given its own name and taxonomy" | F | palo-it |
 | E-225 | "Graph" is used for unrelated things in the debate: execution graphs, and knowledge graphs for retrieval. "Graph engineering is about modeling execution. Same word, unrelated practice" | F | palo-it; datasciencedojo |
 | E-226 | Anthropic's earlier vocabulary: "Workflows are systems where LLMs and tools are orchestrated through predefined code paths." Its evaluator-optimizer workflow has "one LLM call generates a response while another provides evaluation and feedback in a loop", and agents commonly carry "stopping conditions (such as a maximum number of iterations) to maintain control" | F | `https://www.anthropic.com/engineering/building-effective-agents` |
-| E-227 | Anthropic's dynamic workflows: "Claude dynamically writes orchestration scripts that run tens to hundreds of parallel" subagents. Here the model writes the graph | F | `https://claude.com/blog/introducing-dynamic-workflows-in-claude-code` |
+| E-227 | Anthropic's dynamic workflows: "Claude dynamically writes orchestration scripts that run tens to hundreds of parallel" subagents. The page does not use the word "graph" | F | `https://claude.com/blog/introducing-dynamic-workflows-in-claude-code` |
 | E-228 | LangChain's founder is reported to have replied "it's basically just langgraph?" | A, R1 | Search digest |
 
 ### Loops whose product is the agent's own memory or skills
 
 | Id | Claim | Bin | Source |
 | --- | --- | --- | --- |
-| E-230 | Compound engineering (Every): "each unit of engineering work should make subsequent units easier—not harder". The loop is "Plan → Work → Review → Compound → Repeat"; "the compound step is where the gains are to be made"; plan and review "should comprise 80 percent of an engineer's time". The compound step: "Add new patterns into CLAUDE.md, the file the agent reads at the start of every session. Create new agents when warranted." | F | `https://every.to/guides/compound-engineering` |
+| E-230 | Compound engineering (Every): "each unit of engineering work should make subsequent units easier—not harder". The loop is "Plan → Work → Review → Compound → Repeat"; "the compound step is where the gains are to be made"; within feature work, plan and review "should comprise 80 percent of an engineer's time". The same page later sets "The 50/50 rule": half of engineering time on features, half on improving the system. The compound step: "Add new patterns into CLAUDE.md, the file the agent reads at the start of every session. Create new agents when warranted." | F | `https://every.to/guides/compound-engineering` |
 | E-231 | Its plugin is "38 skills for AI coding agents" structured around "brainstorm, plan, build, review, then capture what you learned" | F | `https://github.com/EveryInc/compound-engineering-plugin` |
 | E-232 | Claude Code's documentation separates two stores: instruction files a person writes, and "Auto memory: notes Claude writes itself based on your corrections and preferences", loaded every session up to "first 200 lines or 25KB", in "four kinds of notes" | F | `https://code.claude.com/docs/en/memory` |
 | E-233 | The same page states the limit of both stores: Claude "treats them as context, not enforced configuration. To block an action regardless of what Claude decides, use a PreToolUse hook instead"; instructions "are not a hard enforcement layer" | F | Same |
-| E-234 | Osmani's "Self-Improving Coding Agents" uses the phrase for unattended coding loops in the Ralph line: a fresh context each iteration ("stateless but iterative"), a completion promise checked by the script, and a step to "log any learnings" | F | `https://addyosmani.com/blog/self-improving-agents/` |
+| E-234 | Osmani's "Self-Improving Coding Agents" describes unattended coding loops in the Ralph line: a fresh context each iteration ("stateless but iterative"), a completion promise checked by the script, and a memory the agent writes. Its instruction file is "a running notebook of the agent's discoveries"; "After each task, the loop can append key learnings"; it quotes another practitioner: "agents update AGENTS.md - discovered patterns are documented for future iterations" | F | `https://addyosmani.com/blog/self-improving-agents/` |
 | E-235 | Sleep-time compute (Letta, 21 April 2025): agents "use their 'sleep' time to process information and form new connections by rewriting their memory state" | F | `https://www.letta.com/blog/sleep-time-compute` |
 | E-236 | A survey states the loop in general form: "short-term memory gates which experiences are perceived and abstracted during execution, while long-term memory consolidates them into reusable knowledge and skills, forming the loop through which agents improve from their own experience"; memory management "is becoming a trainable capability" | F | `https://arxiv.org/abs/2602.06052` (v4, 4 August 2026) |
 | E-237 | "On the Fragility of Self-Improving Agents": "stacking a self-improving loop on top can further amplify this noise"; "the agent's improvement is highly dependent on task order"; default orderings "impose an implicit curriculum, acting as a hidden prerequisite for success"; the findings "call for systems and interfaces that enable effective human oversight" | F | `https://arxiv.org/abs/2608.18066` (v2, 6 September 2026) |
 | E-238 | EvoPathBench: "gains on similar unseen tasks often weaken under distribution shift"; "no method achieves reliable rule adaptation"; self-evolution generates candidates with real gains, but "the selected updates consistently fall short of realizing this potential" | F | `https://arxiv.org/abs/2609.24663` (21 September 2026) |
-| E-239 | SkillGLoW: one global skill document "collapses into generic discipline, while the pool inflates and its entries stay bound to the instance that wrote them"; its remedy includes "a commit gate [that] admits a prior only when real execution shows it does not degrade the deployed library" | F | `https://arxiv.org/abs/2609.02217` (2 September 2026) |
+| E-239 | SkillGLoW, abstract: one global skill document "collapses into generic discipline, while the pool inflates and its entries stay bound to the instance that wrote them"; its remedy includes "a commit gate [that] admits a prior only when real execution shows it does not degrade the deployed library". It reports gains of 17.2 points "with positive gains in all 12 continual-improvement runs". Read further in E-330 to E-334 | F | `https://arxiv.org/abs/2609.02217` (2 September 2026) |
 | E-240 | "Continual Learning in Transition": memory, skill libraries and interaction protocols "extend the evolutionary boundaries of model capabilities far beyond the static parameter space", "a transition from parameter-centric learning toward system-level adaptation" | F | `https://arxiv.org/abs/2608.06216` (v2, 12 August 2026) |
 | E-241 | OpenAI's cookbook "Self-Evolving Agents" combines "human review, LLM-as-judge evals, and iterative prompt refinement"; "The loop continues until the score exceeds a target threshold (e.g., 0.8) or the maximum number of retries is reached (e.g., max_retry = 10)" | F | `https://github.com/openai/openai-cookbook` (examples/partners/self_evolving_agents) |
 
@@ -397,8 +400,8 @@ A separate study in this repository reads one such system, Hermes Agent, at mech
 
 | Id | Claim | Bin | Source |
 | --- | --- | --- | --- |
-| E-250 | Husain and Shankar: "Error analysis is the most important activity in evals"; reviewers iterate "until you reach theoretical saturation, meaning new reviews stop revealing failure modes"; teams "turn important failures into targeted evals and use the results to guide changes. Finally, rerunning the evals tells us whether the system improved"; the whole is "a sustained product-improvement loop"; "roughly 100 diverse traces" is the working pool | F | `https://hamel.dev/blog/posts/evals-faq/` |
-| E-251 | Anthropic, "Demystifying evals for AI agents", 9 January 2026: an outcome is the final state in the environment, not what the agent claims; capability evals "start at a low pass rate" and graduate into regression suites that "should have a nearly 100% pass rate"; "An eval at 100% tracks regressions but provides no signal for improvement."; "You won't know if your graders are working well unless you read the transcripts" | F at R3 | `https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents` |
+| E-250 | Husain and Shankar: "Error analysis is the most important activity in evals"; reviewers iterate "until you reach theoretical saturation, meaning new reviews stop revealing failure modes"; teams "turn important failures into targeted evals and use the results to guide changes. Finally, rerunning the evals tells us whether the system improved"; "roughly 100 diverse traces" is the working pool. The phrase "a sustained product-improvement loop" is the page's one-line description of a linked guide, not the authors' name for evaluation as a whole | F | `https://hamel.dev/blog/posts/evals-faq/` |
+| E-251 | Anthropic, "Demystifying evals for AI agents", 9 January 2026: an outcome is the final state in the environment, not what the agent claims; capability evals "start at a low pass rate"; those with high pass rates "can 'graduate' to become a regression suite", which "should have a nearly 100% pass rate"; "An eval at 100% tracks regressions but provides no signal for improvement."; "You won't know if your graders are working well unless you read the transcripts"; model graders require "calibration with human graders". First read through the fetch tool; the quotations were then confirmed in the page text | F | `https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents` |
 | E-252 | "The Verification Horizon": "generating complex candidate solutions is no longer difficult -- reliably verifying them has become the harder problem. Every verifier we can build is only a proxy for human intent"; "no fixed reward function can remain effective as policy capability continues to grow; and verification must co-evolve with the generator" | F | `https://arxiv.org/abs/2606.26300` (v2, 29 June 2026) |
 | E-253 | Anthropic's harness-design post: asked to evaluate their own work, "agents tend to respond by confidently praising the work"; "tuning a standalone evaluator to be skeptical turns out to be far more tractable than making a generator critical of its own work"; the design is planner, generator and evaluator, "Taking inspiration from Generative Adversarial Networks" | F | `https://www.anthropic.com/engineering/harness-design-long-running-apps` |
 | E-254 | An article on Martin Fowler's site, dated 2 April 2026, organises harness engineering under "Feedforward and Feedback", with sections on a "Maintainability harness" and an "Architecture fitness harness" | F for the headings only | `https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html` |
@@ -407,10 +410,10 @@ A separate study in this repository reads one such system, Hermes Agent, at mech
 
 | Id | Claim | Bin | Source |
 | --- | --- | --- | --- |
-| E-260 | Karpathy's autoresearch, March 2026: "give an AI agent a small but real LLM training setup and let it experiment autonomously overnight"; "It modifies the code, trains for 5 minutes, checks if the result improved, keeps or discards, and repeats"; the metric is validation bits per byte; the human edits `program.md`, the agent edits `train.py`; the README states no stop rule and reports no measured results | F at R3 | `https://github.com/karpathy/autoresearch` |
+| E-260 | Karpathy's autoresearch, March 2026: "give an AI agent a small but real LLM training setup and let it experiment autonomously overnight"; "It modifies the code, trains for 5 minutes, checks if the result improved, keeps or discards, and repeats"; the metric is validation bits per byte; the human edits `program.md`, the agent edits `train.py`; the README states no stop rule and reports no measured results. First read through the fetch tool; the two quotations were then confirmed in the README text | F | `https://github.com/karpathy/autoresearch` |
 | E-261 | Google's AI co-scientist, 19 February 2025: agents "use automated feedback to iteratively generate, evaluate, and refine hypotheses, resulting in a self-improving cycle"; the steps are "self-play–based scientific debate", "ranking tournaments" and "an 'evolution' process"; "The system's self-improvement relies on the Elo auto-evaluation metric derived from its tournaments", which the authors checked against benchmark accuracy | F | `https://research.google/blog/accelerating-scientific-breakthroughs-with-an-ai-co-scientist/` |
-| E-262 | A survey of autonomous research agents: of 24 runnable systems, "83 percent release code, while 38 percent release seeds or execution traces"; "Among nine closed-loop L4 systems, seven are mechanical reruns"; "no LLM-era system in the corpus demonstrates an externally validated in-loop oracle"; the bottleneck is "whether reviewers can verify the claims those agents produce" | F | `https://arxiv.org/abs/2608.05179` (29 June 2026) |
-| E-263 | Incident response, by one vendor's survey of four vendors: "agents may investigate on their own, but a human approves any action that mutates production. Four vendors published the same boundary within four weeks"; one frames the first autonomous step as rollback, "a well-scoped, reversible action" | F, vendor source | `https://www.aurorasre.ai/blog/ai-agent-autonomy-gated-production` |
+| E-262 | A survey of autonomous research agents, scoped to "computational AI/ML research": of 24 runnable systems, "83 percent release code, while 38 percent release seeds or execution traces"; "Among nine closed-loop L4 systems, seven are mechanical reruns and one is author-claimed without an external check; no LLM-era system in the corpus demonstrates an externally validated in-loop oracle under our coding rule"; the bottleneck "is no longer only whether agents can complete research tasks, but whether reviewers can verify the claims those agents produce". The page gives a submission date of 29 June 2026 for an identifier in the 2608 series; the mismatch is unresolved | F | `https://arxiv.org/abs/2608.05179` |
+| E-263 | Incident response. One vendor reports of four vendors: "agents may investigate on their own, but a human approves any action that mutates production. Four vendors published the same boundary within four weeks". The vendors' own words, as it quotes them, are looser: "human approval and intervention where required"; a "ladder of trust" whose first rung is autonomous rollback, "a well-scoped, reversible action" | F, one vendor's summary | `https://www.aurorasre.ai/blog/ai-agent-autonomy-gated-production` |
 | E-264 | STAIR, an academic incident-response agent, keeps evidence, actions and feedback in a shared graph state, runs actions through an "Execution Harness" and reuses "effect-validated historical experience" | F | `https://arxiv.org/abs/2608.09524` (v2, 9 October 2026) |
 | E-265 | Customer-support loops: vendor pages claim 60 to 80% of routine queries resolved without a person. No measured study was found | A, R1 | Search digest |
 
@@ -423,3 +426,81 @@ A separate study in this repository reads one such system, Hermes Agent, at mech
 - Pages were read as passages, not whole. A claim that a page does not say something is limited to
   the words searched.
 - Steinberger's posts on X were not opened; his words are taken from pages that quote them.
+
+## Full-paper reads (rung R4, whole main body)
+
+At the owner's instruction of 2026-11-12, six papers were downloaded as arXiv HTML and read. The
+extent of each read is in [paper-readings.md](./paper-readings.md), which also reconciles them.
+Papers 1 to 3 were read end to end; papers 4 to 6 by their load-bearing sections. Appendices were
+not read. All rows are bin F at this rung: the paper says this.
+
+### Loop Engineering: Building Blocks, Adoption, and Impact (arXiv 2608.21884 v3)
+
+| Id | Claim | Corrects |
+| --- | --- | --- |
+| E-300 | The paper has three parts: a review of eleven gray-literature sources (7 June to 25 July 2026), a mining study, and the design of an experiment "we will execute for the planned journal extension" | E-214 |
+| E-301 | Its working definition names a machine-checkable stop condition, state across loops, independent verification, bounded inference cost, limits on unattended change, and defined human intervention | |
+| E-302 | The review: novelty is contested ("a renamed cron job"); "the practitioner sources are not independent ... much of the agreement traces back to one origin"; benefits are self-reported (1,300 pull requests a week at Stripe, 423 Firefox security fixes in a month) with "No published study or dataset"; failure modes include "verifier theater" and a human gate become "a rubber stamp" | |
+| E-303 | 36,710 repositories sampled; 65 unreachable and 158 duplicates removed; 36,487 analysed. Heuristics matched 255 repositories; 256 inspected; loops confirmed in 217 (0.59%); precision 0.87 (217 of 250). Claude Code 189, Codex 11, OpenCode 6, Gemini CLI 5, Cursor 4, Copilot 2. By trigger: 21 scheduled, 180 on repository events ("mostly automatic pull request reviews"), 15 both | E-109, which gave 36,645 |
+| E-304 | File-matching heuristics found no stop-condition, budget, verifier or measured cost files, and two state files, both rejected. Model-assisted annotation of the 256 inspected repositories "recorded a goal or stop condition in 55", "state persisted across agent loops in 35", "a spending or turn limit in 101, a verifier in 76, and a cost record in 10" | E-110, which reported only the zeros |
+| E-305 | "We found no loop state files on the default branches that we scanned"; "no inspected repository declared an autonomy level for its loops" | |
+| E-306 | Stated threats: the rate "may underestimate" adoption; files truncated in 795 repositories; default branches only; tool-native schedulers "leave no trace"; the adjudicating author "read the model's judgments before making his own decisions"; the sample does "not establish prevalence across ... the internal company systems" | E-111 |
+| E-307 | Cherny, in an interview published 2 June 2026: "I don't prompt Claude anymore. I have loops that are running. They're the ones that are prompting Claude and kind of figuring out what to do. My job is to write loops". Steinberger, 7 June 2026: "you shouldn't be prompting coding agents anymore. You should be designing loops that prompt your agents". The paper dates his graphs post 17 July 2026 and credits the four-part loop classification to Osmani's one-month retrospective | E-112, E-220 |
+| E-308 | It cites a study of 2,853 repositories concluding "harness engineering in open source today is ... mostly context engineering", two studies with opposite findings on whether instruction files help, and a randomised trial in which early-2025 tools slowed experienced developers | |
+
+### On the Fragility of Self-Improving Agents (arXiv 2608.18066 v2)
+
+| Id | Claim |
+| --- | --- |
+| E-310 | Two methods (Agent Workflow Memory, ReasoningBank), three web-browsing benchmarks, GPT-5-mini as agent and memory writer, three runs per setting, default and two shuffled task orders. The memory writer is given the true reward |
+| E-311 | Memory methods increased variance in 17 of 24 cases, in 11 by over 50%. On the stronger baseline one method changed the pass rate by -0.7 and the other by +1.5, with p = 0.23 on three runs |
+| E-312 | The default task order is an "implicit easy-to-hard curriculum". Under one shuffle the pass rate fell from 54.8% to 49.1% and 49.8%; performance degraded "significantly in 6 out of 8 cases" |
+| E-313 | Memories recommended API use in a browser-only environment, and "user confirmation" where none was possible (26 and 22 times across runs). A fallback distance formula that sometimes worked was reinforced: "Memories are 'contagious'" |
+| E-314 | Rubrics, environment feedback and prompt changes together closed 31% of the degradation; "the agent still underperforms the no-memory baseline under Shuffle-1 and Shuffle-2" |
+| E-315 | "without proper validation mechanisms, agent memories are merely unverified hypotheses rather than true lessons learned"; deployments "unfold as a single, irreversible run"; the findings "motivate the development of interfaces that enable effective human oversight and timely intervention" |
+
+### Beyond Endpoint Performance: EvoPathBench (arXiv 2609.24663 v1)
+
+| Id | Claim |
+| --- | --- |
+| E-320 | 1,800 ordered streams, six task families, two market layers, five update opportunities per stream, six frozen checkpoints tested on held-out episodes; ten configurations, five of them skill-evolution methods |
+| E-321 | Two methods gained on near-distribution episodes (0.763, 0.555) and fell below the baseline on transfer episodes (-0.273, -0.383): "a generalization gap consistent with overfitting". One method gained on both (1.597, 0.537) |
+| E-322 | "Forgetting is sparse and tail-dominated"; the best method still declined on 21.3% of trajectories. "no revision effect remains statistically significant after Holm correction". "longer skills are beneficial but insufficient"; the strongest method used 2.39 times the tokens of the second for a 45.5% larger gain |
+| E-323 | Moving from one candidate to four raised the best candidate's gain by 0.496 and the gap between best and selected by 0.163: "These results identify candidate selection, rather than candidate generation, as a central bottleneck" |
+| E-324 | With safeguards, precision rose from 9.3% to 29.5% and harmful commits fell from 12.4% to 6.2%, while missed improvements rose from 0.0% to 16.5% and agreement with held-out results stayed at 56.9% against 55.8%: "safeguards provide greater stability mainly by accepting fewer updates, rather than by identifying better candidates" |
+
+### SkillGLoW (arXiv 2609.02217 v1)
+
+| Id | Claim |
+| --- | --- |
+| E-330 | Skills are grouped into procedural families; one prior per family is kept; instance detail "is regenerated per task rather than stored"; the global prior "stays frozen during a solving episode and is revised only offline" |
+| E-331 | Gains of 17.2 points over no skills, positive in all 12 runs; a library 3.6 times smaller than the per-task pool; unseen embodied tasks from 73.9% to 83.9%; 30 unseen repair instances from 40.0% to 45.6% |
+| E-332 | "Admission therefore rests on measured execution", because "compression can widen a rule or drop a constraint, and the text offers no way to tell". The gate made 26 decisions, "accepting 19 and rejecting 7"; "4 of the 7 would have been admitted under the consolidation-time score alone"; one rejected candidate measured -13.2 points |
+| E-333 | It cites SkillsBench: "Human-curated skills raise the pass rate by 16.2 points, while skills a model writes for itself from the task description alone land 1.3 points below the no-skill baseline" |
+| E-334 | "Transfer was shown where task categories recur; whether a prior survives a genuine domain change remains open"; cross-model reuse "remains untested" |
+
+### The Verification Horizon (arXiv 2606.26300 v2)
+
+| Id | Claim |
+| --- | --- |
+| E-339 | "reward hacking is not a bug that can be patched but an inevitable consequence of sustained optimization towards an imperfect objective"; of scalability, faithfulness and robustness, "Most existing approaches satisfy only two" |
+| E-340 | With test-based rewards, "stronger policies still find exploitable weaknesses, such as retrieving solution artifacts or tampering with tests". A quality judge and trajectory monitoring cut the hacked resolved rate from 28.57% to 0.56% and raised the clean rate from 40.22% to 60.53%. The monitor's pattern set "is updated iteratively throughout training" |
+| E-341 | An interactive judge that exercises the artefact in a live browser "resists the length-exploitation hacking to which static judges are susceptible" |
+| E-342 | "Users are the most faithful verifiers"; user feedback gave "a 13.3 percentage-point gain on a private benchmark" |
+| E-343 | "three forms of boundary violation: the evaluator occasionally modifies the generator's code to fix bugs before evaluation, masking real defects; it sometimes executes tests already in the repository rather than writing its own; and it may advocates for the generator, dismissing failing tests"; without end-to-end validation "globally broken repositories ... can still receive inflated scores" |
+
+### Refute-or-Promote (arXiv 2604.19049 v1)
+
+| Id | Claim |
+| --- | --- |
+| E-344 | Four adversarial stages with context asymmetry, a cross-model critic and an empirical gate; "a human reviews" the routing. About 79% of about 171 candidates killed; Stage A about 63% of entrants, Stage B about 42% of survivors; about US$250 for 36 or more outcomes, labour excluded |
+| E-345 | "a case where 80+ agents—including dedicated adversarial reviewers—unanimously endorsed a Bleichenbacher padding oracle in OpenSSL's CMS module that did not exist"; "killed by one test" |
+| E-346 | "the resurrected lcms2 CubeSize() finding that became CVE-2026-41254 despite unanimous kill (unanimity-as-warning in both directions)" |
+| E-347 | It cites work finding that models "agree ~60% of the time when both err, with correlation increasing with model capability", and work measuring an agreeableness bias in model judges |
+| E-348 | "Single operator with domain expertise (not independently replicated). No ablation studies isolating individual mechanisms." The per-stage figures are "retrospective point-estimates from a single-rater mapping" |
+
+### Three sentences from the harness source-code study (arXiv 2609.00006 v1)
+
+| Id | Claim |
+| --- | --- |
+| E-350 | Of one harness: "the hard stop ships disabled: the default posture is warnings appended to tool results, trusting the model to self-correct". Of another: "no turn cap, no stuck detection, and no cost kill-switch ... all of those absences are documented design refusals". Of a third: "There is no default step cap (maxSteps defaults to infinity)". Confirms E-119 at the page |
