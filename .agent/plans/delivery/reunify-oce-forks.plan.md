@@ -93,7 +93,8 @@ back to being a plain mirror of Oak: one line of development again.
       workflow has fast-forwarded the fork's `main` to Oak's `main`.
    2. Stop the carrier first. Set the fork's `UPSTREAM_CARRIER_ENABLED` variable to anything but
       `true`, wait for any carrier run already started to finish (the variable is read only when
-      a run starts), then close every open carrier pull request and delete its branch.
+      a run starts), then close every open carrier pull request and delete every
+      `automation/upstream-carrier-*` branch, with or without a pull request.
       `UPSTREAM_MIRROR_ENABLED` stays `true`.
    3. Retarget the fork's ruleset "integration branches" from the default branch to
       `refs/heads/engraph`. It follows the default branch and requires a pull request, so if the
