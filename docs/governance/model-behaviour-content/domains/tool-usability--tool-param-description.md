@@ -225,11 +225,7 @@ examBoard: z
 **What it says now:**
 
 ```text
-year: z
-    .union([z.string(), z.number().int().min(1).max(11)])
-    .optional()
-    .describe('Filter by year group number. Lessons scope only.')
-    .meta({ examples: ['3', '7', 10] }),
+Filter by year group number. Lessons and units scopes. Filters exactly, so content pitched one year either side — including across a key stage boundary — is excluded; omit it, or search the adjacent year too, when a year group is the teacher's intended pitch rather than a hard limit.
 ```
 
 **What it is for:** Constrains year filter to lessons scope and shows numeric/string examples (3, 7, 10).
@@ -237,7 +233,7 @@ year: z
 - **Can an agent see it?** Not separately traced — the words are in live code, but this pass has not traced which registered surface carries them
 - **Where it lives:** `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search/flat-zod-schema.ts`
 - **Who owns the words:** This repository — the words are authored here.
-- **Since the audit baseline:** Unchanged since the audit baseline.
+- **Since the audit baseline:** The wording has changed since the audit baseline.
 - **Kind of surface:** tool-param-description · **Impact tier:** high-impact
 
 ### C079 — SEARCH\_INPUT\_SCHEMA.threadSlug

@@ -1727,3 +1727,30 @@ outside the repository. One instance each; scope is this session.
   one command (`pnpm docs-validators:check`, about a minute); I had not run it on new Markdown
   because the earlier research files had passed without it. A new file that names where things
   are on this machine is the case that validator exists for.
+
+### 2026-11-11 (Sandpiper guards Wind, 690653): the #1023 chain, carrier #393
+
+- **Correction (mine):** I left the all-channels comms watcher off in a live n=2 team, on the
+  grounds that it had been silent for five windows and the Director messaged me directly. The
+  claims CLI then refused to open the carrier claim while blind to comms (F-95). The watcher is a
+  precondition of claiming in a team, not a convenience. A silent stream is not an irrelevant one,
+  and switching the watcher off only moves the cost to the next claim.
+- **Observation:** at the Oak 1.186.10 sync, one file in the content audit grew past the
+  250-line limit after merging cleanly. Both forks have the same `max-lines` rule. Oak's copy had
+  236 lines, and engraph's own additions (C111, C426) plus Oak's (C078) came to 257. My first
+  explanation, that Oak's lint was laxer, was wrong, and reading both configs showed it. Two lines
+  of development each adding to one file under one shared limit can trip it only at the merge.
+  The class ends when the forks reunite.
+- **Correction (mine):** in zsh, `"$C:refs/..."` again took `:r` as a modifier, inside double
+  quotes, so a fetch refspec failed. The gotcha has been recorded since 2026-10-01
+  (shell-and-tooling-gotchas), and this was its third instance in my session. The cure is a habit:
+  always write `${NAME}` before a colon.
+- **Observation (an association from free play, not a finding):** the merge back's real
+  dependencies are settings that live outside the tree: Vercel's OIDC policy for the Turbo
+  cache, Sonar's project criterion, GitHub repository variables and rulesets, and each checkout's
+  `merge-bot.json`. The tree merges cleanly, but the settings do not travel with it. #1023's
+  upgrade note (todo 4) and Hydra's return-to-mirror checklist (todo 6) are both lists of these
+  settings.
+- **Observation:** a side agent's note said Oak's CI "needs" a `TURBO_TEAM` variable. Oak's own
+  CI log showed the variable already set, and the missing piece was the Vercel policy. Reading
+  the run's log answered in one step a question the note left open.

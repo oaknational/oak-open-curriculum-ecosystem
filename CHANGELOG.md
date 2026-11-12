@@ -1,3 +1,13 @@
+## [1.186.10](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.186.9...v1.186.10) (2026-11-09)
+
+
+### Bug Fixes
+
+* **search:** apply the year filter to the units scope (MCP-755) ([056c73f](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/056c73fec0670a859d1f5e4ed18f5a5e77610bf2))
+* **search:** constrain the year filter to Years 1 to 11 (MCP-755) ([b9916fc](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/b9916fcc6c421992232af9660ff389c9c4bd2c29))
+* **search:** keep all-years searchable, and match it in both indexes (MCP-755) ([3cec3dd](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/3cec3ddb583361de69bdcc8ad93cee16e46ea60e))
+* **search:** take the year filter's values from the generated contract (MCP-755) ([75dbb19](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/75dbb190c08eb9e1457905ef033629413e4369b4))
+
 ## [1.186.9](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.186.8...v1.186.9) (2026-11-05)
 
 ## [1.186.8](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.186.7...v1.186.8) (2026-11-05)

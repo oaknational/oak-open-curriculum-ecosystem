@@ -98,7 +98,7 @@ function takesNextWord(text: string): boolean {
   if (!SSH_CLUSTER.test(text)) {
     return false;
   }
-  const letters = [...text.slice(1)];
+  const letters = Array.from(text.slice(1));
   return letters.findIndex((letter) => SSH_VALUE_OPTIONS.has(letter)) === letters.length - 1;
 }
 
