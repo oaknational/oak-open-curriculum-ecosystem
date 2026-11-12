@@ -86,6 +86,7 @@
     "rule-frontmatter-sweep": "cd .. && pnpm exec tsx agent-tools/src/rule-declarations/rule-frontmatter-sweep.ts",
     "validate-practice-fitness": "cd .. && pnpm exec tsx agent-tools/src/practice-fitness/validate-practice-fitness.ts",
     "validate-subagents": "cd .. && pnpm exec tsx agent-tools/src/validators/subagents/validate-subagents.ts",
+    "ci-docs-only-check": "cd .. && pnpm exec tsx agent-tools/src/ci/ci-docs-only-check.ts",
     "ci-schema-drift-check": "cd .. && pnpm exec tsx agent-tools/src/ci/ci-schema-drift-check.ts",
     "ci-turbo-report": "cd .. && pnpm exec tsx agent-tools/src/ci/ci-turbo-report.ts",
     "pr-throughput": "cd .. && pnpm exec tsx agent-tools/src/pr-throughput/cli.ts",
