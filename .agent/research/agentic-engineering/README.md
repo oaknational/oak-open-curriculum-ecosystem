@@ -103,6 +103,13 @@ sources without turning research notes into a second canon.
   `attendant-*` sub-skills: the owner's user story as a ten-step sequence with
   internal reviews and the PR review set apart, and a doubt point at each stage
   asking whether the work is worth doing; input to the design session's brief.
+- [loop-engineering-governance-2026-11/findings.md](./loop-engineering-governance-2026-11/findings.md)
+  — own-terms baseline of the approaches in Linas Beliūnas's "Loops at Scale"
+  (loop engineering, the harness and enforcement outside the loop, the inner
+  and outer loop, light and dark factories, swarms with a refutation gate,
+  Kimi K3's licence), reconstructed from the field's public sources because
+  the article's body is paywalled; status provisional; no comparison with the
+  Practice.
 - [cross-lane-direction-survey.md](./cross-lane-direction-survey.md) —
   Slice C umbrella: re-reads direction-of-travel evidence (Slice A
   governance projects, Slice B practice-methodology primitives,

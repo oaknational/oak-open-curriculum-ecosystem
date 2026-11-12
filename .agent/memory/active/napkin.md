@@ -1595,3 +1595,25 @@ Written from a solo Claude cloud session.
   message understating its contents, recorded on the pull request. After any failed commit, read
   `git diff --cached --name-only` before the next, and keep date-colon openings off body lines
   (2026-11-09, Sandpiper guards Wind, 690653).
+
+## 2026-11-12 — Rocket holds Patina (01Duoc): an own-terms review of a paywalled article
+
+- **An attached PDF is not the document it is a print of.** The owner attached a four-page PDF of a
+  Substack post and asked for a deep dive into its approaches; the PDF held the free preview only,
+  cut at the first body heading. The file read reported success and a size, and said nothing about
+  content. Read the pages of an attachment before planning around it, and state its extent in the
+  first reply (2026-11-12, Rocket holds Patina, 01Duoc).
+- **This cloud environment reaches GitHub and almost nothing else.** A `curl` probe of 22 research
+  hosts got a proxy 403 on 20; `github.com` and `raw.githubusercontent.com` answered. Web search
+  still works and returns digests. For web research here: probe the hosts in one command first, read
+  GitHub-hosted mirrors and primary files with `curl`, and record search digests at their own lower
+  rung (2026-11-12, Rocket holds Patina, 01Duoc).
+- **A search digest was wrong twice where a direct read was possible.** It reported a 30% revenue
+  share in the Kimi K3 licence that the licence text does not hold, and two checkpoint sizes. The
+  fetch tool also declined to reproduce the licence verbatim; `curl` on the raw file returned it
+  whole (2026-11-12, Rocket holds Patina, 01Duoc).
+- **The fresh checkout had no claims registry and no `gh`-shaped GitHub tooling connected at
+  start.** The registry was seeded by hand from the reader's own error text before the claim opened
+  (2026-11-12, Rocket holds Patina, 01Duoc).
+- Own-terms holding line, one association only: the article's "governance layer outside the loop"
+  invites comparison with this estate's hooks and gates; left for the comparison session.
