@@ -909,32 +909,6 @@ Implementation:
   change. Expansion of the studio-source scope follows the §Duplications
   discipline: policy amendment first, owner authorisation, then config.
 
-## 2026-11-11 amendment: binary files excluded from analysis scope, owner-authorised
-
-Owner authorisation (2026-11-11, verbatim): "yes, make it as its own small
-PR". Given on a proposal to test one hypothesis about the analysis warning
-both analyser projects show: "There are problems with file encoding in the
-source code. Please check the scanner logs for more details." Automatic
-analysis exposes no scanner log.
-
-Delta from prior: `sonar.exclusions` gains seven by-extension globs beside
-the studio-source path — `**/*.png`, `**/*.gif`, `**/*.ico`, `**/*.ttf`,
-`**/*.pdf`, `**/*.xlsx`, `**/*.zip`. These are the extensions of every
-tracked file outside `studio-source/` that is not valid UTF-8, at this
-amendment's date: 37 files, all binary. Every tracked text file decodes as
-UTF-8 with no byte-order mark. A binary file is not source, so this is a
-scope rule: no rule is disabled and no source file leaves analysis. The
-2026-07-19 ruling on product code is unchanged; a product image or font is
-an asset, not code, and every source file beside it stays fully analysed.
-
-The cause is a hypothesis, not a finding: that the scanner, run over the
-whole tree, reads these binaries as UTF-8 and raises the warning. The check
-is the analysis-warning banner on each analyser project after the next
-analysis of the default branch. If the warning persists, the hypothesis is
-false and the globs are reconsidered. Worked example: `favicon.ico` under an
-app's `public/` directory is no longer indexed, and the app's source files
-are analysed as before.
-
 ## 2026-09-08 amendment: one outcome, one exception, owner-ruled
 
 Owner ruling (2026-09-08, verbatim): "We don't dismiss issues, we fix
@@ -1039,6 +1013,32 @@ criterion in place the analyser raises none of them, and a new by-name site
 under `agent-tools/` raises nothing either. A class site under `apps/` or
 `packages/` still raises its issue and takes the per-site mark with the
 canonical rationale.
+
+## 2026-11-11 amendment: binary files excluded from analysis scope, owner-authorised
+
+Owner authorisation (2026-11-11, verbatim): "yes, make it as its own small
+PR". Given on a proposal to test one hypothesis about the analysis warning
+both analyser projects show: "There are problems with file encoding in the
+source code. Please check the scanner logs for more details." Automatic
+analysis exposes no scanner log.
+
+Delta from prior: `sonar.exclusions` gains seven by-extension globs beside
+the studio-source path — `**/*.png`, `**/*.gif`, `**/*.ico`, `**/*.ttf`,
+`**/*.pdf`, `**/*.xlsx`, `**/*.zip`. These are the extensions of every
+tracked file outside `studio-source/` that is not valid UTF-8, at this
+amendment's date: 37 files, all binary. Every tracked text file decodes as
+UTF-8 with no byte-order mark. A binary file is not source, so this is a
+scope rule: no rule is disabled and no source file leaves analysis. The
+2026-07-19 ruling on product code is unchanged; a product image or font is
+an asset, not code, and every source file beside it stays fully analysed.
+
+The cause is a hypothesis, not a finding: that the scanner, run over the
+whole tree, reads these binaries as UTF-8 and raises the warning. The check
+is the analysis-warning banner on each analyser project after the next
+analysis of the default branch. If the warning persists, the hypothesis is
+false and the globs are reconsidered. Worked example: `favicon.ico` under an
+app's `public/` directory is no longer indexed, and the app's source files
+are analysed as before.
 
 ## Cross-references
 
