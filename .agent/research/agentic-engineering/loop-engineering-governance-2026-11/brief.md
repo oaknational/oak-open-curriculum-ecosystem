@@ -48,6 +48,19 @@ Sizing, by `oak-proportionality`: six papers of about 44,000 words fit a direct 
 seat; two of about 40,000 words each were left at their earlier rung and named as unread.
 Reconciliation follows `oak-parallax-synthesise`.
 
+A fifth instruction brought the owner's own report, "Doing and Dreaming: Periodic Learning for
+Agents in a Repo", and asked for it to be read against this work and for the pull request to be
+merged. Verbatim:
+
+> Please read and reflect on the attached report and how it relates to our work here. Make
+> appropriate updates, then merge the PR. Once the PR is in please give me a short text summary of
+> the sessions conclusions, and a brief list of changed files. Use the cognitive skills throughout
+
+The report is filed as received in `owner-reports/` and read against the field's evidence in
+`doing-and-dreaming-reading.md`. It is a proposal, not existing Practice doctrine, and it is read
+the way the field's proposals were: by what the sources support. The comparison with the Practice's
+existing mechanisms stays out.
+
 The owner's quoted words bind. Everything else in this brief is the author's proposal.
 
 ## The subject after the change of focus

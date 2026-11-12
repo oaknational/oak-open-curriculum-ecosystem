@@ -3,7 +3,9 @@
 As of 2026-11-12. Reader: the owner. Decision served: what the independent baseline on loops in
 agentic systems is, and whether it is firm enough to compare against. Scope and method are in
 [brief.md](./brief.md). Claims cite [evidence-log.md](./evidence-log.md) by row. Six papers are read
-in depth in [paper-readings.md](./paper-readings.md), which also reconciles them.
+in depth in [paper-readings.md](./paper-readings.md), which also reconciles them. The owner's
+proposal "Doing and Dreaming" is read against this baseline in
+[doing-and-dreaming-reading.md](./doing-and-dreaming-reading.md).
 
 This file was rewritten whole after its second review, on the evidence as it now stands. Its
 revision record is at the end.
@@ -377,4 +379,5 @@ All on 2026-11-12.
 | Change of subject | Recentred on the field at the owner's word |
 | Broadening | Four areas added and earlier claims re-read at the page; rows E-200 to E-265 |
 | Full-paper reads | Six papers; rows E-300 to E-350; the adoption study's result corrected |
+| Reading of "Doing and Dreaming" | The owner's proposal for periodic learning filed as received and read against rows E-200 to E-350; no change to the verdicts above |
 | Second review pass | 116 of 116 checked quotations matched their pages. 25 findings on framing: sweeping words, selective rows and stale sections. This rewrite is the response. Twelve evidence rows were corrected, among them one that had omitted a paper's positive result and one that misread an essay as not about memory |

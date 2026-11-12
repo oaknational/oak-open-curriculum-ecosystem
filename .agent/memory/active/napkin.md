@@ -1783,3 +1783,21 @@ outside the repository. One instance each; scope is this session.
   list for `run-quality-gates` by name; when it is absent, run
   `git merge-tree --write-tree origin/<base> HEAD` before anything else (2026-11-12, Rocket holds
   Patina, 01Duoc).
+- **The fetch tool and `curl` disagree about the network.** After the owner lifted restrictions the
+  fetch tool still refused `arxiv.org`, `hamel.dev` and others that `curl` reached at once. Probe
+  with `curl` before concluding a host is closed, and read pages by downloading and extracting text
+  (2026-11-12, Rocket holds Patina, 01Duoc).
+- **An abstract understated its own paper, and I repeated it.** The loop-adoption study's abstract
+  says almost no repository committed the prescribed files; its body records a spending or turn
+  limit in 101 of 256 inspected repositories. A verdict written from the abstract said "none". A
+  claim that carries a verdict is read in the body before it is written (2026-11-12, Rocket holds
+  Patina, 01Duoc).
+- **My evidence rows were accurate and selective.** A reviewer matched 116 of 116 quotations to
+  their pages and still found twelve rows wrong in what they left out: one logged a paper's critique
+  of other methods and omitted its own positive result; one called an essay "not about memory"
+  that has a section on the agent's notebook. Checking that a quotation exists does not check that
+  it is representative; give the reviewer the page text and ask for both (2026-11-12, Rocket holds
+  Patina, 01Duoc).
+- **Seven rounds of patching a findings file left it contradicting itself; one rewrite cured it.**
+  After the second review listed stale sections across the file, rewriting it whole on the current
+  evidence was shorter than the patches it replaced (2026-11-12, Rocket holds Patina, 01Duoc).
