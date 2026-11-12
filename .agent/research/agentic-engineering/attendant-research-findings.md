@@ -574,6 +574,37 @@ repository; the sentences quoted here were checked against the attached file
 mode of agent activity, dreaming, that runs on a clock beside ordinary work and turns raw
 experience into better guidance. Quotations in this section are the owner's, from the report.
 
+### The report's proposal, restated
+
+The report is not in the repository, so its proposal is restated here in this seat's words for
+the seats that come later; the owner's own text is the authority and the owner holds it. The
+entity that learns is a repository joined with the agents that act in it: the repository is the
+body and the memory, the agents animate it. Doing faces the task in hand and is prompted by an
+occasion. Dreaming faces accumulated experience and is prompted by a clock, then a judgement
+that there is enough to review. A learning pass is separate from the stream it reviews,
+selective, forgetful and recombining. The loop has eight parts, in the order a lesson travels:
+
+1. A standing brief in the repository: what to review, by what standard, where results go.
+2. Capture during work: working agents append raw experience (corrections, failures, dead ends,
+   friction) to a log, cheaply and unedited.
+3. A clock: any scheduler that starts a dreaming session at intervals.
+4. A threshold check: the dreaming agent first judges whether enough has accumulated, and stops
+   if not.
+5. Consolidation in isolation: in a worktree or cloud session, on a fixed view of the log, it
+   selects, prunes and recombines, then rewrites distilled memory and guidance.
+6. Review and integration: the result arrives as one reviewable, reversible change that a person
+   or a reviewing agent accepts or rejects.
+7. Waking: working sessions read the guidance when they start; a session under way keeps a
+   stable view until it ends.
+8. Checking that it took: a later pass looks for whether the friction behind a lesson has
+   recurred, and revises or drops a lesson that changed nothing.
+
+The report's risks are churn, compounding error, unattended authority and drift. Its open
+questions include where raw experience lives, what marks an experience as worth revisiting, who
+reviews what dreaming proposes, what evidence shows a lesson changed how work is done, whether
+dreaming may change the body or only the memory, what cadence suits the pass, and whether
+lessons pass between repositories.
+
 ### One diagnosis, two halves
 
 The report and this research start from the same observation. The report: "Agents act when
@@ -659,8 +690,8 @@ the second: a run ends with a retrospective, and nothing carries its lessons int
    review of accumulated experience, and a clock independent of any session exists.
 3. **A gap is named for the lane, and it is the owner's to place.** The lane has no loop between
    runs. Whether dreaming is part of the Attendant, beside it, or a lane of its own is not a
-   research finding. The seats that take steps 2 to 4 should read the report's eight parts as a
-   candidate design for that loop.
+   research finding. The seats that take steps 2 to 4 should read the eight parts restated above
+   as a candidate design for that loop.
 4. **The answer to "body or memory" is carried into step 2 as evidence.** Where the mechanism
    step has a choice between changing guidance and changing a template, a check or a script, the
    corpus favours the second, and the report gives the reason.
