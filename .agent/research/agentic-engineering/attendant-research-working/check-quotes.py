@@ -2,7 +2,8 @@
 
 Usage: python3 check-quotes.py <file> [<file> ...]
 A span passes when it occurs, whitespace-normalised, in some tracked file other
-than the files being checked. Spans under 25 characters are skipped as too short
+than the files being checked. The working folder is excluded, except its
+file of sentences copied from external documentation. Spans under 25 characters are skipped as too short
 to identify a source.
 """
 import re
@@ -10,11 +11,18 @@ import subprocess
 import sys
 
 targets = sys.argv[1:]
-tracked = subprocess.run(["git", "ls-files", ".agent"], capture_output=True, text=True).stdout.split("\n")
+tracked = subprocess.run(
+    ["git", "ls-files", ".agent", "agent-tools/README.md"], capture_output=True, text=True
+).stdout.split("\n")
+EXTERNAL = ".agent/research/agentic-engineering/attendant-research-working/external-sources.md"
+if EXTERNAL not in tracked:
+    tracked.append(EXTERNAL)
 skip = set(targets) | {t.lstrip("./") for t in targets}
 corpus = {}
 for path in tracked:
-    if not path or path in skip or "attendant-research-working" in path:
+    if not path or path in skip:
+        continue
+    if "attendant-research-working" in path and not path.endswith("external-sources.md"):
         continue
     if not path.endswith((".md", ".txt")):
         continue

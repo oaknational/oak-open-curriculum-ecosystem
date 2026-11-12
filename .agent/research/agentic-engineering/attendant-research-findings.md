@@ -90,6 +90,10 @@ classes stop changing. The seat's recommendation is that departure, because the 
 classes with at most three scenarios each, and the instances in hand already number about
 fifty.
 
+**The owner's answer, 2026-11-12:** "Agreed on both, no fan-out; carry on with questions 4 and
+5". No reader legs run. The remaining rule files are searched at the seat for the thinly
+populated classes only, and the plan's stopping rule is departed from as recommended.
+
 ## Question 1: what the owner has caught that agents missed
 
 **Status: a first classification, from the instances in hand.** Sources so far: the
@@ -244,8 +248,166 @@ words and the question, not the author's summary. None was a better-worded rule.
 
 ## Question 4: what each lever can do, and whether the evaluation can be run
 
-Not yet written.
+**Status: answered.** Estate facts were read and measured at the seat on 2026-11-12. Facts
+about Claude Code are from Anthropic's documentation fetched that day; a reader sub-agent
+located them and the seat checked each sentence quoted here against the raw page
+([`external-sources.md`](attendant-research-working/external-sources.md)). Three sentences the
+reader returned were not on the page as written and are not used.
+
+### What decides whether an instruction is in front of the model at the right moment
+
+The documentation describes five ways an instruction reaches the model, and only the last three
+do not depend on the model deciding it needs the instruction.
+
+| How it loads | What uses it | Who decides the moment |
+| --- | --- | --- |
+| Always, at session start | `CLAUDE.md`; a rule with no path scope | Nobody: it is there from the start, as context ("Claude treats them as context, not enforced configuration."). |
+| On the model's judgement | A skill's body; a sub-agent | The model, from a name and a description ("full skill content only loads when invoked"). |
+| On a file being worked with | A path-scoped rule ("Rules load into context every session or when matching files are opened."); a skill with `paths` | The environment, when a matching file is opened. |
+| On a clock | A scheduled prompt ("Tasks only fire while Claude Code is running and idle.") | The scheduler, between turns. |
+| In code order | A workflow script ("A workflow moves the plan into code."; the documentation's table gives "Who decides what runs next" as "The script") | The script. |
+
+Two of these are not hooks and do not depend on recall: a path-scoped rule and a workflow
+script. Nothing in the documentation ties a skill or a sub-agent to an event except hooks.
+
+### What the estate's own surfaces do today, measured
+
+- **An always-on rule here is a pointer, not a text.** The Claude adapter for each rule is one
+  line: "Read and follow" and the canonical file's path. 124 rule adapters; 103 load at session
+  start; together they are 9,931 characters. A plain-text pointer is not an import: the
+  documentation describes only `@path` imports as loading content ("Imported files are expanded
+  and loaded into context alongside the CLAUDE.md that references them."). So at session start
+  the model holds 103 file names, and each rule's body arrives only if the model opens the file.
+  The feasibility check below saw this: a session with the rule's pointer in context did not
+  open the rule.
+- **21 rules are path-scoped**, and they do load when a matching file is opened. This seat saw
+  it in this session: the Markdown code-block rule's pointer arrived after the first Markdown
+  edit, and the capability-landing rule's after the first read under `.agent/rules/`. That is
+  an instruction arriving at a moment the environment marked. It still arrives as a pointer.
+- **Skills: 87 adapters, 40,845 characters of description.** The listing budget "scales at 1% of
+  the model's context window"; the estate has raised it to 3%
+  (`.claude/settings.json`). At about four characters a token, that is room for roughly 24,000
+  characters on a 200,000-token model and 120,000 on a million-token one. On the smaller
+  window "Claude Code drops some descriptions to fit the listing's character budget, which
+  removes the keywords Claude needs to match your request". A skill that relies on its
+  description to fire is competing with 86 others for that room.
+- **Sub-agents: 31.** Each "starts with a fresh, isolated context window" and, unless
+  configured otherwise, loads `CLAUDE.md`. In this repository that fixed load is large: a
+  sub-agent measured at about 107,000 tokens before its task, a headless session at about
+  169,000.
+- **The estate's own rule for landing a capability already says where a trigger can live.**
+  `capability-landing-decision-procedure`, step 4: "A trigger-bound landing is sound only when
+  the *loader* — a path match, a tool-call match, a session-shape flag, or an always-invoked
+  ceremony skill — can recognise the moment." And: "When recognition depends on the agent
+  noticing" that it is in the situation, "the agent must already remember the capability to know
+  to load it, which is the failure it exists to prevent". The same rule records the owner's
+  word on where substance lives: "if a question of disambiguation or de-duplication arises,
+  favour skills as the SSOT, with evals".
+
+### What start-right and `AGENT.md` can carry, and what a change costs
+
+- `AGENT.md` is 14,274 characters and the shared start-right workflow 33,107, with 9,952 more
+  for the thorough form. They are read when a session is opened with a start-right skill, which
+  is the owner's own opening word. So start-right owns one moment that does not depend on the
+  agent's recall: the open of a session.
+- What start-right already carries: five guiding questions, among them "Are we solving the right
+  problem, at the right layer?" and the scope question. They are asked once, at the open, and
+  nothing brings them back.
+- What that moment is good for: class 1 of question 1. The open of a session is when the owner's
+  words arrive, so it is the one place a seat can be made to set the owner's words beside its own
+  reading before any work exists to defend.
+- What it cannot carry: the later moments. A sentence in start-right about what to do at the
+  second cure of one thing is an always-on sentence, with the record that has.
+- Cost: every character added is read by every session of every kind, including the many that
+  will never run an Attendant. The documentation's guidance is "target under 200 lines per
+  CLAUDE.md file" and that "The more specific and concise your instructions, the more
+  consistently Claude follows them." A retrospective in the corpus found a launch prompt that
+  loaded six skills had spent the headroom its own job needed, and the cure was four lines. Edits
+  to directive files are also held to a fresh context by the estate's own rule.
+
+### Dynamic workflows and agent teams, surveyed for fit
+
+- **Workflows fit the middle of a run, in principle.** A script decides what runs next, so a
+  review step placed between two stages runs because the script reaches it, not because an agent
+  thought of it. That is firing without recall, with judgement doing the detecting, and it needs
+  no hook. Limits: "No mid-run user input", so the owner's two touches sit outside any workflow;
+  a workflow starts on the owner's word, not on a schedule; this estate's rule prices every
+  fan-out before launch.
+- **Agent teams do not fit as the mechanism.** The lead is a model choosing turn by turn, so a
+  team moves the recall problem to the lead. The documentation calls them experimental and off by
+  default.
+- **Scheduled prompts** fire between turns while a session is idle. A clock is the wrong signal
+  for a step back (question 1's moments are events), and the corpus has the owner cancelling
+  checks that fired on a clock alone.
+
+### Can the mechanism step's evaluation be run?
+
+- **For a skill alone: yes, with the estate's runner.** `pnpm agent-tools:skill-evals` runs a
+  skill's cases with and without the skill, and its trigger examples, and keeps the traces. Its
+  agent "runs in an empty temporary workspace", so it tests the skill's text and description and
+  nothing of the repository around it. It can answer whether a skill's description fires on given
+  prompts and whether its body changes the answer. It cannot test a rule, `AGENT.md`,
+  start-right, or how a skill fares among 86 others.
+- **For the full repository: yes, by hand, cheaply.** The feasibility check
+  ([`feasibility-check.md`](attendant-research-working/feasibility-check.md)) ran one scenario
+  headless in two clones, one with a rule removed: under twenty seconds and a quarter of a
+  dollar an arm, with a trace that shows mechanically whether the rule's file was ever opened.
+- **What the one trial showed about scoring.** Whether a text entered the session is readable
+  from the trace. Whether the answer stepped back needs a reader. And a scenario lifted from a
+  recorded instance can be dead on arrival: the trial's scenario (a proposal that once dropped
+  Sentry) could not fail, because the code now refuses the configuration, citing the owner's
+  ruling. Scenarios have to be set where the cure is absent.
+- **The estate's caution stands.** `validation-strategy.md`: "Diffuse, long-horizon, cultural
+  capability (doctrine, planning discipline, collaboration) does not decompose into
+  `prompt → graded output`." A seeded scenario can show whether a mechanism fires and what it
+  returns on a short task. It cannot show what a long run does, which the strategic node already
+  declines to claim.
+
+### What this means for the composition the owner prefers
+
+The owner's preferred composition is start-right, `AGENT.md`, skills and rules. Read against the
+facts above, each has one thing it can do without depending on recall, and the list is short:
+
+- **start-right**: the open of a session. Fit for class 1.
+- **A path-scoped rule**: the moment a file of a known kind is opened. Fit for any moment that
+  has a file: a plan node, a run's record, a report, a pull-request description.
+- **A skill**: a procedure and a fresh context, once something else has decided to run it. Its
+  description cannot be relied on as the trigger.
+- **`AGENT.md` and always-on rules**: a name in context. Fit for the vocabulary, not for firing.
+
+That points the mechanism step at one design question, which is the Attendant's to answer and
+not this research's: which of question 1's moments can be given a file. Those can be fired by a
+path-scoped rule or by the order of a workflow, and answered by a skill in a fresh context
+handed the owner's words. The moments with no file (a step that has grown; a loop at a steady
+beat) are the ones the script-free composition has no way to mark, and they are where the
+question of a hook would be put on evidence.
 
 ## Question 5: which of the reference point's mechanics the Practice already holds
 
-Not yet written.
+**Status: answered.** The source,
+`.agent/research/team-of-one-agentic-sdlc-and-the-practice-2026-11-06.md`, numbers the
+reference point's mechanics M1 to M14 and already maps each to the Practice (its §3.3). The
+"Practice holds" column below is that document's verdict, read at the seat. The last two
+columns are this research's reading for the Attendant, as input to the design step, which
+decides.
+
+| Mechanic | Practice holds | For the Attendant | Reason |
+| --- | --- | --- | --- |
+| M1. The ticket is the contract | Same principle, different home (plan nodes carry acceptance criteria with proofs) | Kept | The run's contract is what the owner signs in the opening conversation: the outcomes, the definition of done and the criteria. Class 1 of question 1 says the owner's words must be in it verbatim. |
+| M2. A pre-flight that refuses to plan | Partial: "Nothing refuses to start a lane" | Kept | It is a check the entry to a stage fires, not the agent's recall: the kind of moment question 3 found to work. |
+| M3. Delegation by signed webhook; the machine only dials out | Different | Left | The host is read at run time and a cloud run has its own transport. |
+| M4. Bounded parallel runs, each capped at an hour | Partial | Adapted | A declared bound with a default exit is what bound seats in the corpus. The Attendant's bound is rounds or time, with the cost recorded and kept off the agent's screen, as the owner settled. |
+| M5. A one-line landing; ask instead of guessing | Partial: the Practice asks without blocking | Adapted | The landing line is kept. "Ask" needs the class 2 guard: a question the purpose already answers is an error, and the run proceeds while a real one is with the owner. |
+| M6. Plan review by the reviewer that holds the history | Same need, different home | Adapted | The estate's reviewers are fresh contexts and "goal-blind" (the source's quotation of a rule). The cure the corpus supports is a reviewer handed the owner's words and the question, not a warm history. |
+| M7. Verdicts bound to identity and plan revision | Same at the merge | Kept | A step-back return names the revision of the record it judged, so a late return on a stale state does nothing. |
+| M8. Round caps that hand back to the human | Same concept, tighter and enforced | Kept | The estate's review-cost gate is the working instance: "the gate was a fuse". |
+| M9. Gates before the push | Same | Left | The repository's general mechanism; out of this lane's scope by the owner's word. |
+| M10. Agents never merge | Different: the estate's bot merges green work | Adapted | Settled on 2026-11-10: in an Attendant run the merge follows the owner's word at the sense check. |
+| M11. Review walks the contract item by item and fails closed | Partial: "No reviewer walks a plan node's acceptance criteria one by one" | Kept | It is the natural content of the sense-check screen (question 2): each criterion met, not met, or cannot tell, with evidence. |
+| M12. Route on authenticated identity; content read is data | Different, with a gap | Kept as a principle | Bears on class 1: only the owner's own turn is owner direction, and a recorded frame is evidence with a date. The identity mechanics are left; a cloud run writes under the owner's credential. |
+| M13. Mint, use and revoke credentials | Same posture | Left | A hosted cloud session has no credential of its own to mint. |
+| M14. The human at both ends | Different placement | Kept | It is the Attendant's shape: the owner's judgement at the opening conversation and at the sense check. |
+
+Seven kept, four adapted, three left. The two the Practice holds only in part and the Attendant
+most needs are M2 and M11: a check that refuses to start, and a walk of the contract item by
+item. Both are bound to a moment the process owns.
