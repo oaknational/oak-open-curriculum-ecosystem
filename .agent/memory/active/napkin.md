@@ -1754,3 +1754,97 @@ outside the repository. One instance each; scope is this session.
 - **Observation:** a side agent's note said Oak's CI "needs" a `TURBO_TEAM` variable. Oak's own
   CI log showed the variable already set, and the missing piece was the Vercel policy. Reading
   the run's log answered in one step a question the note left open.
+
+### 2026-11-12 (Limpet lifts Spray, 01Duoc): the attendant research step, first sitting
+
+- **Correction (mine):** the creation plan I wrote on 2026-11-10 names "the tension at the
+  centre" and cites a pattern for it, and never cites PDR-098, the accepted decision record that
+  frames the same problem in three parts and forbids one of the cures. I found it two days later
+  by following a pointer in a retrospective. A search of the decision records for the plan's own
+  central noun would have found it while the plan was being written. The 2026-09-27 reader
+  retrospective names this miss for code ("No step of the lane owned the prior-art question");
+  it holds for a plan's central question too.
+- **Correction (mine):** I designed a twelve-unit reader fan-out on volume ("the yield is high,
+  so an instrument is warranted") before classifying the fifty instances already in hand. Three
+  design reviewers returned "revise" for the same reasons: the filter dropped the causal account
+  from the retrospectives, the frame handed the readers the plan's own seed classes, and
+  saturation had never been tested. Classifying the instances in hand then showed the pilot's
+  twenty rows added no class. The fleet rule's review paid for itself; the cheaper first move
+  was the classification, which the plan's own stopping rule pointed at.
+- **Observation:** a sub-agent in this repository carries about 107,000 tokens of fixed load
+  before it reads its unit (one pilot: 121,367 tokens for a 54,463-character unit). A fan-out's
+  cost here is set by the number of legs far more than by what they read.
+- **Observation:** the staging guard refused an explicit-path `git add` three times. The cause
+  was a later segment of the same command, the branch guard's dot-source of a husky script, read
+  together with the add. Running the add as its own command passed at once.
+- **Observation:** the retrospective skill tells a whole-corpus reader to find the last run of
+  the same task class first. I read that sentence after designing the fan-out, and the last run
+  (the 2026-09-16 record) carried the owner's method word for exactly this work: sub-agents
+  locate, the seat verifies and analyses. The skills I had not yet invoked held the instruction I
+  needed before invoking anything.
+- **Correction (mine), 2026-11-12, at the close:** I read the owner's "Agreed on both, no
+  fan-out" as also covering the Cricket tallies, the rulings ledger and a retrospective I had
+  read only in part, none of which I had asked about, and wrote "by the owner's decision" over
+  all of them. Two Cricket seats caught it from the frame's own two blocks. It is the first
+  class in the research I had just written: the owner's words read wider than given. Writing a
+  class down did not stop me making it an hour later; setting my reading beside the quoted
+  words, in a frame someone else read, did.
+- **Correction (mine):** I pushed a second commit four minutes after the first and cancelled the
+  first's CI, which the gate reports as a failure; and I committed a message the commit check
+  had refused, because the commands were joined so the refusal did not stop the commit. Both
+  are in the commit skill. Checks now gate the commit with `&&`.
+- **Observation:** a feasibility trial ran one prompt headless in two clones of this
+  repository, one with a rule removed. Neither session opened the rule: the Claude adapter for
+  an always-on rule is a one-line pointer, and a pointer is not an import. One trial, an
+  observation. The record is `attendant-research-working/feasibility-check.md`.
+- **Observation:** a scenario lifted from a recorded instance could not fail, because the
+  instance's cure had since landed as code. A reader agent's quotations from external
+  documentation were wrong in three of about twenty; fetching the raw pages and checking by
+  fixed string caught them.
+
+## 2026-11-12 — Rocket holds Patina (01Duoc): an own-terms review of a paywalled article
+
+- **An attached PDF is not the document it is a print of.** The owner attached a four-page PDF of a
+  Substack post and asked for a deep dive into its approaches; the PDF held the free preview only,
+  cut at the first body heading. The file read reported success and a size, and said nothing about
+  content. Read the pages of an attachment before planning around it, and state its extent in the
+  first reply (2026-11-12, Rocket holds Patina, 01Duoc).
+- **This cloud environment reaches GitHub and almost nothing else.** A `curl` probe of 22 research
+  hosts got a proxy 403 on 20; `github.com` and `raw.githubusercontent.com` answered. Web search
+  still works and returns digests. For web research here: probe the hosts in one command first, read
+  GitHub-hosted mirrors and primary files with `curl`, and record search digests at their own lower
+  rung (2026-11-12, Rocket holds Patina, 01Duoc).
+- **A search digest was wrong twice where a direct read was possible.** It reported a 30% revenue
+  share in the Kimi K3 licence that the licence text does not hold, and two checkpoint sizes. The
+  fetch tool also declined to reproduce the licence verbatim; `curl` on the raw file returned it
+  whole (2026-11-12, Rocket holds Patina, 01Duoc).
+- **The fresh checkout had no claims registry and no `gh`-shaped GitHub tooling connected at
+  start.** The registry was seeded by hand from the reader's own error text before the claim opened
+  (2026-11-12, Rocket holds Patina, 01Duoc).
+- Own-terms holding line, one association only: the article's "governance layer outside the loop"
+  invites comparison with this estate's hooks and gates; left for the comparison session.
+- **A pull request that conflicts with its base gets no `CI` run, and nothing says so.** PR 403's
+  first two heads showed four green checks (CodeQL, SonarCloud) and no `run-quality-gates`; I noted
+  the absence and did not ask why. The branch conflicted with `engraph` in the napkin and the lane
+  README, so GitHub never started the `pull_request` workflow. After any first push, read the check
+  list for `run-quality-gates` by name; when it is absent, run
+  `git merge-tree --write-tree origin/<base> HEAD` before anything else (2026-11-12, Rocket holds
+  Patina, 01Duoc).
+- **The fetch tool and `curl` disagree about the network.** After the owner lifted restrictions the
+  fetch tool still refused `arxiv.org`, `hamel.dev` and others that `curl` reached at once. Probe
+  with `curl` before concluding a host is closed, and read pages by downloading and extracting text
+  (2026-11-12, Rocket holds Patina, 01Duoc).
+- **An abstract understated its own paper, and I repeated it.** The loop-adoption study's abstract
+  says almost no repository committed the prescribed files; its body records a spending or turn
+  limit in 101 of 256 inspected repositories. A verdict written from the abstract said "none". A
+  claim that carries a verdict is read in the body before it is written (2026-11-12, Rocket holds
+  Patina, 01Duoc).
+- **My evidence rows were accurate and selective.** A reviewer matched 116 of 116 quotations to
+  their pages and still found twelve rows wrong in what they left out: one logged a paper's critique
+  of other methods and omitted its own positive result; one called an essay "not about memory"
+  that has a section on the agent's notebook. Checking that a quotation exists does not check that
+  it is representative; give the reviewer the page text and ask for both (2026-11-12, Rocket holds
+  Patina, 01Duoc).
+- **Seven rounds of patching a findings file left it contradicting itself; one rewrite cured it.**
+  After the second review listed stale sections across the file, rewriting it whole on the current
+  evidence was shorter than the patches it replaced (2026-11-12, Rocket holds Patina, 01Duoc).
