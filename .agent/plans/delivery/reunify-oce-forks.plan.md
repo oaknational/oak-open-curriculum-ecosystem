@@ -98,8 +98,8 @@ back to being a plain mirror of Oak: one line of development again.
    3. Switch the fork's default branch to `main`.
    4. Set the fork's `UPSTREAM_CARRIER_ENABLED` variable to anything but `true`, and close any open
       carrier pull request. `UPSTREAM_MIRROR_ENABLED` stays `true`.
-   5. Delete `engraph` on the fork, then the "integration branches" ruleset, which no longer
-      matches a branch.
+   5. Delete the "integration branches" ruleset, then `engraph` on the fork. The ruleset
+      restricts deletion of the branch it covers, so the branch cannot go first.
    6. One Oak pull request, as Oak's bot, drops `engraph` from the triggers in `ci.yml`,
       `codeql.yml` and `dependency-review.yml`. The carrier and mirror workflows stay in the tree:
       each job is gated on its variable and exits on a repository that is not a fork.
