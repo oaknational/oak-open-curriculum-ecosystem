@@ -14,7 +14,7 @@ gate_expiry_default: P21D
 depends_on: []
 owner_gates: []
 tickets: []
-last_updated: 2026-11-10
+last_updated: 2026-11-12
 ---
 
 # The Attendant Workflow
@@ -89,48 +89,86 @@ The authoring seat's readings, not the owner's words: that cost also stays off t
 decision screens (kept for the retrospective); and that the script-free composition is designed
 and tested first, a hook considered only on the evidence of the mechanism step.
 
-## What the first pass of research found
+## What the research found
 
-A first pass (working notes §6), to be completed by the research step.
+The research step ran on 2026-11-12. Its findings, with every source, are in
+[`attendant-research-findings.md`](../../research/agentic-engineering/attendant-research-findings.md).
+This section says what they change here.
 
-Five causes of the step-back instruments only partly succeeding:
+**What the owner catches.** About seventy recorded catches sort into ten classes. Eight are
+errors about the work's frame and are the mechanism's ground: the owner's words read wrongly;
+asking or waiting when the answer was already given; work grown past the ask; the job's own
+measure not moving; a thing that should not exist or already does; an inherited frame never
+examined; an instrument of the wrong size; something standing silently dropped. Two (a claim
+that outran what was looked at; an operating rule not followed) belong to other parts of the
+Practice. The classification covers catches that were written down.
 
-1. The working agent decides when to step back ("Sixteen of nineteen prior-kept mechanisms
-   recurred within four weeks of the run that kept them").
-2. The one being checked writes the frame.
-3. The question asked cannot return "stop" or "delete it".
-4. The evidence handed over is the working agent's own record.
-5. The return is advice to the agent it doubts.
+**Seven causes of the instruments only partly succeeding**, five confirmed and two added:
 
-What has worked: reviewers given no frame and pointed at the question; a frame built from the
-owner's verbatim words; instruments where doctrine had not changed the rate; a sentence that
-must be written; a declared deadline with a default.
+1. The working agent decides when to step back. Confirmed, and dominant: all eleven instruments
+   read depend on it.
+2. The one being checked writes the frame. Confirmed; the Cricket panel's split of the owner's
+   words from the seat's reading is the partial exception.
+3. The question asked cannot return "stop" or "delete it". Confirmed for review; several
+   step-back skills can return stop.
+4. The evidence handed over is the working agent's own record. Confirmed.
+5. The return is advice to the agent it doubts. Confirmed; where a return changed what could
+   happen next, it bound.
+6. The moment has no owner. The estate holds the doctrine for a moment and nothing fires at it.
+7. A step back competes with clocked work and loses.
 
-Five requirements for the mechanism, to be tested by the research step and revised if it refutes them:
+**What has worked**, every time: something outside the agent's recall marked the moment, and
+the response was a thing that had to be produced or could not be passed.
 
-1. It fires without the working agent judging it is needed.
-2. Its frame is the owner's words and primary evidence; the working agent's reading is the thing
-   judged.
+**The five requirements stand, each sharpened:**
+
+1. It fires on a moment that something other than the agent's judgement marks.
+2. Its frame is the owner's words and primary evidence, set beside the working agent's reading.
+   This comes first in time: one class of catch is a misreading made before work began.
 3. Its question is fixed, climbs from the work to the bigger picture, and admits "stop",
-   "smaller" and "not worth doing".
+   "smaller", "not worth doing" and one more: already answered, proceed. A mechanism that can
+   only slow work makes one class of catch worse.
 4. Its return is answered in writing in the run's record before the run continues, and a
    worth-doubt with evidence goes to the owner.
-5. It can subtract.
+5. It can subtract, itself included: it names what it retires, and its load on every session is
+   visible. A lesson or a check that changed nothing is revised or dropped.
 
-**The tension at the centre.** Requirement 1 pulls against the estate's own evidence: under a
-silent model change, prose-only disciplines "regressed to error types months absent, despite the
-full rule corpus being loaded in context", and the estate's pattern
-(`.agent/memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md`) holds that
-guidance works when the environment fires it. A written input a stage requires is still checked
-by the agent it constrains. The owner prefers skills and rules to hooks and says plainly that
-nobody knows yet whether they will work. This node does not resolve it; the mechanism step is how it is found out.
+**The tension at the centre, restated on the estate's own decision record.** PDR-098, accepted
+with the owner's approval on 2026-06-15, already frames this problem and forbids curing it with
+"another passive always-on rule"; any mechanism "must carry a mechanical firing cadence AND an
+observable-artefact-or-it-didn't-fire record". The owner's preference of 2026-11-10 is for
+start-right, `AGENT.md`, skills and rules over hooks. The two meet where the composition fires
+from something other than recall. The research found what each preferred surface can do without
+recall:
 
-Lever facts (working notes §4; Anthropic's documentation read 2026-11-10): rules, skills,
-sub-agents and repository hooks all load in an ordinary cloud session; a skill with
-`context: fork` runs as a sub-agent with the skill's own text as its prompt; through the Agent
-tool the delegating agent writes the sub-agent's prompt; custom sub-agents load `CLAUDE.md`
-unless `omitClaudeMd` is set; hooks can be declared in a skill's frontmatter and can hold a
-turn open.
+- **start-right** owns the open of a session, which is when the owner's words arrive.
+- **A path-scoped rule** marks the moment a file of a known kind is opened. In this repository
+  it arrives as a one-line pointer, so its text still depends on the model opening the file.
+- **A workflow script** runs a step because the script reaches it.
+- **A skill** supplies a procedure and a fresh context once something else has decided to run
+  it; its description cannot be relied on to fire it among seventy-eight tracked ones.
+- **`AGENT.md` and the always-on rules** put a name in context. In this repository an always-on
+  rule loads as a one-line pointer, and in the one trial run the rule behind the pointer was
+  never opened.
+
+As input to the mechanism step, whose implementer writes its own node and decides: the moments
+in the findings divide into those that have a file or a place in a script, which something
+other than recall can mark, and those that do not (a step that has grown; a loop running at a
+steady beat).
+
+**A gap between runs, named by the owner's report of 2026-11-12.** The owner's "Doing and
+Dreaming" proposes a clocked pass that turns accumulated experience into guidance. Read against
+the findings, it and this lane are two halves: stepping back acts inside a task, dreaming
+between tasks. The lane has no loop that carries one run's lessons into the next, and no check
+that a lesson took. Where that loop belongs is the owner's to place; the findings' last section
+gives the comparison, and the seats that take steps 2 to 4 read it as input.
+
+**The evaluation can be run.** The estate's skill runner tests a skill alone in an empty
+workspace. A with-and-without comparison in the full repository was tried once and works: under
+twenty seconds an arm, with a trace that shows whether a text was ever opened. Scenarios must be
+staged where the recorded cure is absent. Twenty-three scenarios and two controls are in
+[`attendant-step-back-scenarios.md`](../../research/agentic-engineering/attendant-step-back-scenarios.md);
+a second file is held back for a fresh scorer after the design is frozen.
 
 ## Success looks like
 
@@ -156,7 +194,8 @@ of its own (the plan skill, "Born-Sketch Ratification"). The owner stays the des
 throughout: a decision that is the owner's goes to the owner with analysis when it arises, and
 a change to this node's outcome, bet or settled decisions returns this node to the owner.
 
-1. **Research**: [`attendant-research`](../delivery/attendant-research.plan.md), written.
+1. **Research**: [`attendant-research`](../delivery/attendant-research.plan.md), carried out and
+   ratified by the owner on 2026-11-12.
 2. **The stepping-back mechanism**: designed across start-right, `AGENT.md`, skills and rules,
    and tested.
 3. **The rest of the Attendant's design**: stages, decision screens, records, the cloud session
