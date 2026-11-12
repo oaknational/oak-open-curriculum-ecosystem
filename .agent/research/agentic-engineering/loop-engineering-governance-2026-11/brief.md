@@ -25,6 +25,19 @@ focus. Verbatim:
 > Let's change focus, we don't need the original article text, we can treat the preview as a piece
 > of information that led to wider research into loops in agentic systems
 
+A third instruction followed, after the findings named four areas the first round had not searched.
+Verbatim:
+
+> Broaden the research to cover the gaps identified above. Do not compare or contrast to the
+> Practice yet, that comes later. I have lifted network restrictions so you should be able to
+> research fully now. Use all appropriate skills
+
+The four areas are the graph-engineering turn, loops whose product is the agent's own memory or
+skills, evaluation as a loop, and loops outside coding. Sizing, by `oak-proportionality`: four
+areas plus a direct re-read of the earlier relayed claims; read inline by the main seat with `curl`,
+no fleet; each area ends with an approach card resting on at least three pages read directly, or is
+marked thin. The own-terms rule holds unchanged.
+
 The owner's quoted words bind. Everything else in this brief is the author's proposal.
 
 ## The subject after the change of focus

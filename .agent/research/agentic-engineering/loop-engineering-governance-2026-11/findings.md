@@ -14,36 +14,48 @@ not needed, and nothing below waits on it.
 
 ## Verdicts
 
+Revised on 2026-11-12 after the owner lifted the session's network restrictions. This round read
+about 48 pages directly, confirmed the earlier relayed claims at the page (E-200 to E-216), and
+added four areas the first round left out (approaches 6 to 9).
+
 1. **The field has a clear spine.** Its sources stack four layers: the harness, the environment one
-   agent run sits inside (E-113 to E-115); the loop, the system that prompts the agent in place of a
-   person (E-100, E-107); the outer loop, where a person stays answerable (E-120, E-121); and the
-   factory, many harnessed loops drained through a review gate (E-126, E-127). Swarms are the same
-   structure widened: many workers, a verifier (E-132, E-134).
-2. **This session's synthesis: one idea runs through every layer. A loop cannot be trusted to stop
-   or to judge itself, so the stopping power and the verdict must sit outside it.** It draws on
-   E-24, E-30, E-31, E-113, E-120, E-123, E-127 and E-132.
-3. **The vocabulary is unsettled.** "Gate", "inner and outer", "closed loop", "harness" and "back
-   pressure" each carry two to four senses across the sources, and loop and harness nest in
-   opposite directions in different accounts (E-102, E-103, E-114, E-115, E-123).
-4. **The practice lags its own prescription.** The one measured study found loops running in 217 of
-   36,645 public repositories, and found stop conditions, budgets and verification files committed
-   in none of them (E-109, E-110). Real harnesses differ on whether a stop is enforced at all
-   (E-119). The detail beyond the study's headline counts rests on Report B's reading alone.
-5. **The field's evidence is mostly self-report.** One named dark factory built by three people
-   (E-128), one named abandonment after about four months (E-130), one measured adoption study with
-   stated limits (E-111), and a body of cost incidents whose best-known figure does not reconcile
-   with its own numbers (E-137).
-6. **One voice dominates.** Four essays by Addy Osmani, from April to July 2026, supply most of the
-   definitions the rest of the field repeats (E-100, E-113, E-120, E-126), and his factories essay
-   is largely a report of a talk by Dexter Horthy, the field's main critic of running without
-   review (E-126).
-7. **Swarms on open weights are real; the single gate is not established.** The vendor documents up
-   to 300 sub-agents on Kimi K3 (E-134). The licence, read directly, is permissive for most
-   builders (E-69, E-70), and the serving minimum is eight current-generation accelerators (E-135).
-   The nearest method to a refuting gate reports agreement among agents failing in both directions
-   (E-133).
-8. **Status: `provisional`.** The baseline supports a concept-level comparison. Most of it rests on
-   a model's relay of pages this session could not open.
+   agent run sits inside (E-201, E-215); the loop, the system that prompts the agent in place of a
+   person (E-200, E-207); the outer loop, where a person stays answerable (E-204); and the factory,
+   many harnessed loops drained through a review gate (E-203). Swarms and graphs are the same
+   structure widened: many workers, explicit routes, a verifier (E-209, E-222).
+2. **This session's synthesis: one idea runs through every layer and every area. A loop cannot be
+   trusted to stop or to judge itself, so the stopping power and the verdict must sit outside it.**
+   The four new areas each restate it in their own words: a generator "confidently praising" its own
+   work (E-253); a self-improving loop that amplifies evaluation noise (E-237); research agents with
+   no externally validated in-loop oracle (E-262); operations agents that investigate freely and
+   need a person to approve any change to production (E-263).
+3. **Verification, not generation, is the stated bottleneck everywhere.** The coding sources say it
+   (E-252), the research-agent survey says it (E-262), the factories essay builds its rule on it
+   (E-127), and the self-improvement papers locate the weak step at selecting which update to keep
+   (E-238). One paper states the limit: every verifier is "only a proxy for human intent", and
+   verification "must co-evolve with the generator" (E-252).
+4. **The vocabulary is unsettled, and the field says so itself.** "Gate", "inner and outer", "closed
+   loop", "harness" and "back pressure" each carry two to four senses (E-200, E-203, E-206). "Graph
+   engineering" arrived six weeks after "loop engineering" from a one-line post its own
+   commentators read as a joke, and the sources that explain it also say it renames orchestration
+   (E-220 to E-224).
+5. **The practice lags its own prescription.** The one measured study found loops running in 217
+   public repositories and almost none committing the state files the literature prescribes; its
+   abstract says the literature offers "no systematic evidence of the claimed benefits" (E-214).
+   Real harnesses differ on whether a stop is enforced at all (E-119).
+6. **Self-improvement is real as a mechanism and fragile as a result.** The mechanism is plain:
+   write what was learned into a store the agent reads next time, by a person's hand (E-230) or the
+   agent's own (E-232). Independent studies find the gains depend on task order, weaken under
+   distribution shift, and are lost at the step that chooses which update to keep (E-237, E-238).
+7. **The field's evidence is mostly self-report.** One named dark factory built by three people
+   (E-128), one named abandonment after about four months (E-130), vendor claims in operations and
+   support (E-263, E-265), and a best-known cost incident whose figures do not reconcile (E-137).
+   The measured work is recent, academic, and mostly critical.
+8. **One voice dominates the coding half.** Four essays by Addy Osmani supply most of the
+   definitions others repeat (E-200 to E-204), and his factories essay is largely a report of a talk
+   by Dexter Horthy, the main critic of running without review (E-126).
+9. **Status: `provisional`, on firmer ground.** The core claims now rest on pages this session read.
+   Pages were read as passages, not whole; papers as abstracts.
 
 ## What the commissioned reports changed
 
@@ -101,8 +113,9 @@ $4,200 incident (E-138).
 | The prompting article's paid body | Unread, and not needed (owner, 2026-11-12) | Nothing is attributed to it |
 | The Kimi K3 licence and README lines, and the quoted lines of an incident compilation | Read directly with `curl` | The firm part of the baseline |
 | Other GitHub-hosted pages: the 14-step roadmap, the Ralph playbook, one issue, two lists | Read through the fetch tool's model summary | Usable; quotations from them are the summary's rendering |
-| Osmani's four essays, Huntley's post, Shapiro's levels, StrongDM, Dagu, Ng, three arXiv papers, Anthropic's guide, Moonshot's pages | Opened by two commissioned web sessions and relayed as paraphrase (rung RW in the evidence log) | Usable for what each source says and when; not for exact wording. Three earlier search-digest statements were corrected by these reads |
-| The Medium post behind the $47,000 incident; the X posts; the harness term's origin sources | Search digests only | Unchecked |
+| About 48 pages across all nine approaches, among them Osmani's five essays, Huntley, Dagu, Ng, Anthropic's guides, Moonshot, and fourteen arXiv abstracts | Downloaded with `curl` after the network change and read as extracted passages (rows E-200 to E-265) | The firm part of the baseline, with exact wording. Papers were read as abstracts only |
+| Shapiro's levels, StrongDM, Horthy's account, and the bodies of three papers | Opened by two commissioned web sessions and relayed as paraphrase (rung RW in the evidence log) | Usable for what each source says and when; not for exact wording |
+| The Medium post behind the $47,000 incident; posts on X | Refused access; known through pages that quote them | Unchecked at origin |
 
 Of 22 hosts probed, the two GitHub hosts answered and 20 were refused. The reopen conditions in the
 brief follow from that. The owner then ran
@@ -354,6 +367,140 @@ those figures, "open weights" at this size means a datacentre, or a hosted endpo
 **Evidence.** The licence and README were read directly. The swarm architecture is reconstructed
 from sources about a predecessor model and a different product.
 
+## Approach 6: the graph-engineering turn
+
+**Definition.** "Wiring multiple agents, each running its own loop, together through nodes, edges,
+and shared state" (E-222). A second source puts it as "making multi-agent control flow explicit":
+agents, validators and people as nodes, conditional routing as edges (E-222).
+
+**Origin.** A one-line post by Peter Steinberger on 18 July 2026: "Are we still talking loops or
+did we shift to graphs yet?" The post contains neither the phrase nor a claim about a technique,
+and the phrase predates it (E-220). One vendor reads the post as "a joke about how quickly our
+field renames the same discipline", and notes that within a week there were courses (E-221).
+
+**Mechanism.** The distinction the sources draw is who decides the route. In a loop the agent
+decides its next step. In a graph the designer fixes the routes and checkpoints in advance.
+Anthropic's older vocabulary calls the second a workflow: "systems where LLMs and tools are
+orchestrated through predefined code paths" (E-226). Its dynamic workflows blur the line again:
+there the model "dynamically writes orchestration scripts" for tens to hundreds of subagents, so
+the model writes the graph it then runs inside (E-227).
+
+**Operation.** The sources point to tooling that already exists: LangGraph since January 2024,
+workflow engines and DAG schedulers for decades before (E-223).
+
+**Failure modes.** The debate's own confusion is one: "graph" also names knowledge graphs for
+retrieval, "Same word, unrelated practice" (E-225). No source read reports a measured failure or
+benefit of graphs over loops.
+
+**Evidence.** Five commentary sources, each selling training, consulting or a product, agree that
+the term is new and the practice is not: "Graph engineering largely renames orchestration" (E-223,
+E-224). One of them restates the question worth keeping: "which cycles in software development
+deserve to be made explicit" (E-221).
+
+## Approach 7: loops whose product is the agent's own memory or skills
+
+**Definition.** A loop in which the work leaves behind something the next run reads. A survey gives
+the general form: short-term memory selects what is noticed during execution, long-term memory
+"consolidates them into reusable knowledge and skills, forming the loop through which agents
+improve from their own experience" (E-236). A second survey names the shift: from changing a
+model's parameters to "system-level adaptation" through memory and skill libraries (E-240).
+
+**Origin and variants.** Three forms appear, differing in who writes the store and when:
+
+| Form | Who writes | When | Source |
+| --- | --- | --- | --- |
+| Compound engineering | A person, with the agent's help, in a named step | After each unit of work: "Plan → Work → Review → Compound → Repeat" | E-230 |
+| Auto memory | The agent, from the person's corrections | During the session | E-232 |
+| Sleep-time compute | The agent, rewriting its own memory | In idle time between tasks | E-235 |
+
+The phrase "self-improving" is also used loosely. Osmani's essay of that name describes an
+unattended coding loop with a step to "log any learnings"; what improves there is the codebase
+(E-234).
+
+**Mechanism.** Compound engineering states the aim as "each unit of engineering work should make
+subsequent units easier—not harder", and puts 80% of an engineer's time in planning and review
+(E-230). Research systems automate the write. Where they add a control, it is a gate on the write:
+one admits a new skill "only when real execution shows it does not degrade the deployed library"
+(E-239). OpenAI's cookbook loops prompt refinement against graders until a score threshold or a
+retry cap (E-241).
+
+**Operation.** The store needs a size limit and a shape. One product loads only the first 200 lines
+or 25KB of the agent's own notes each session (E-232). One paper finds a single skills document
+"collapses into generic discipline" while a pool of per-task entries "inflates" (E-239).
+
+**Failure modes.** A stored note is advice, not a control: the same documentation says the agent
+"treats them as context, not enforced configuration" and that blocking an action needs a hook
+(E-233). Three independent studies report the learning itself is unreliable. Improvement "is
+highly dependent on task order", with default orderings acting as "a hidden prerequisite for
+success", and the loop "can further amplify" evaluation noise (E-237). Gains "often weaken under
+distribution shift", "no method achieves reliable rule adaptation", and the updates a system
+selects "consistently fall short" of the best candidates it generated (E-238).
+
+**Evidence.** The practitioner forms are described by their makers, without measurement. The
+research results are abstracts from independent groups on benchmarks, and they are the most
+critical body of evidence in this baseline. A mechanism-level reading of one such system is in the
+sibling study of Hermes Agent, linked from the evidence log.
+
+## Approach 8: evaluation as a loop
+
+**Definition.** Evaluation treated as a repeating cycle that feeds the system it measures. Husain
+and Shankar call it "a sustained product-improvement loop": read traces, name the failures, "turn
+important failures into targeted evals and use the results to guide changes", then rerun to see
+"whether the system improved" (E-250).
+
+**Mechanism.** The cycle starts from reading, not from metrics: "Error analysis is the most
+important activity in evals", continued "until you reach theoretical saturation, meaning new
+reviews stop revealing failure modes" (E-250). Anthropic's guide gives the second half. Capability
+evals "start at a low pass rate" and, once passed, graduate into regression suites held near 100%;
+an outcome is the final state of the environment, not what the agent says happened (E-251).
+
+**Operation.** People stay in three places: reading transcripts, because "You won't know if your
+graders are working well unless you read the transcripts" (E-251); calibrating model graders
+against human judgement; and replacing saturated evals, since "An eval at 100% tracks regressions
+but provides no signal for improvement" (E-251).
+
+**Failure modes.** Self-grading: asked to judge their own work, "agents tend to respond by
+confidently praising the work", and a separate evaluator tuned to be sceptical is "far more
+tractable than making a generator critical of its own work" (E-253). Proxy drift: "Every verifier
+we can build is only a proxy for human intent", and optimisation against it widens the gap as
+"reward hacking or signal saturation" (E-252).
+
+**Evidence.** Two practitioner guides and one vendor engineering post, read at the page, and one
+paper's abstract. The paper's conclusion bounds the whole approach: "no fixed reward function can
+remain effective as policy capability continues to grow; and verification must co-evolve with the
+generator" (E-252).
+
+## Approach 9: loops outside coding
+
+**Definition.** The same structure, an agent repeating a cycle against a check, applied where the
+check is not a test suite.
+
+| Domain | The loop | The check | Source |
+| --- | --- | --- | --- |
+| Machine-learning research | Edit the training script, train for five minutes, keep or discard, repeat overnight | One metric on a validation set | E-260 |
+| Scientific hypotheses | Generate, debate, rank in tournaments, evolve | An Elo rating from the system's own tournaments | E-261 |
+| Incident response | Investigate, propose, act | A person approves any change to production | E-263 |
+| Customer support | Read the ticket, draft, check against a knowledge base, send or escalate | Vendor-defined | E-265 |
+
+**Mechanism.** Where a cheap, fast, objective check exists, the loop runs unattended: autoresearch
+is a training metric and a keep-or-discard rule, with the person editing only the instructions
+(E-260). Where none exists, the systems build one from their own judgement: the co-scientist's
+"self-improvement relies on the Elo auto-evaluation metric derived from its tournaments", which its
+authors then tested against benchmark accuracy (E-261).
+
+**Operation.** In operations the vendors converged on a line: "agents may investigate on their
+own, but a human approves any action that mutates production", with the first unattended step
+framed as rollback, "a well-scoped, reversible action" (E-263).
+
+**Failure modes.** The research-agent survey names it "the verification gap": these systems'
+"claims are often harder to verify than their code is to run". Of nine closed-loop systems, "seven
+are mechanical reruns", and none "demonstrates an externally validated in-loop oracle" (E-262).
+
+**Evidence.** Thinner than for coding. One README with no measured results (E-260), one vendor
+research post (E-261), one survey abstract (E-262), one vendor's summary of its competitors (E-263)
+and unmeasured vendor claims for support (E-265). The one measured loop study in this baseline
+covers code repositories only (E-214).
+
 ## The incident record: two cases the prompt cites
 
 The tracing below rests on one unsigned compilation on GitHub (S6), read directly. The Medium post
@@ -454,9 +601,9 @@ the same sources at a higher rung and will replace them.
   reliance on what the Kimi K3 licence text says; reliance on what the incident compilation says.
 - **Forbids:** treating a relayed paraphrase as an author's wording; treating the swarm card as an
   established architecture.
-- **Why provisional:** the commissioned reports are a model's relay that this session cannot
-  re-read at the source, the two runs are not independent of each other, and the topics covered
-  were set by one article's contents list.
+- **Why provisional:** pages were read as passages around search terms, not end to end; papers
+  were read as abstracts; three sources are still relayed, not read; and much of the practitioner
+  evidence is self-report from parties with something to sell.
 
 | Topic | Coverage | Strongest rung reached |
 | --- | --- | --- |
@@ -467,24 +614,24 @@ the same sources at a higher rung and will replace them.
 | Swarms and Kimi K3 | Licence complete; Moonshot's swarm and hardware covered by one report | Direct read for the licence; commissioned report for the rest |
 | Incidents | One traced to an unopened post with figures that do not reconcile; one untraced; a compilation of further cases read | Commissioned report; direct read of the compilation |
 | What operation requires | Assembled from the above | Mixed |
+| Graph engineering | Origin, definitions, prior art and the sceptics covered | Direct read |
+| Memory and skills as a loop's product | Three practitioner forms and five research abstracts covered | Direct read |
+| Evaluation as a loop | Two practitioner guides, one engineering post, one abstract | Direct read |
+| Loops outside coding | Research and operations covered; support by vendor claims only | Direct read; search digest for support |
 
 ## Open items, in order
 
-1. **The edges of the field.** The topics here are the four the prompting article listed. A
-   baseline on loops in agentic systems would also look at what that list left out and this work
-   did not search for: loops outside coding agents; the "graph engineering" turn that followed in
-   July 2026 (E-92); loops whose product is the agent's own memory or skills; and evaluation as a
-   loop. Whether to widen is the owner's call.
-2. **Three unopened origins.** The Medium post behind the $47,000 incident, the exact words of
-   Steinberger and Cherny, and the harness sources Osmani draws on. Each refused automated access.
-3. **The later parts of the harness paper.** Its remaining observations and its recommendations
-   were not reached by either report.
-4. **A second review pass.** The revisions made after the commissioned reports and after the
-   change of subject have not been reviewed.
+1. **A second review pass.** The revisions since the first review (the commissioned reports, the
+   change of subject, and this broadening) have not been reviewed by anyone but their author.
+2. **Whole-document reads of the papers.** Fourteen papers stand on their abstracts. The adoption
+   study and the three self-improvement studies carry the most weight and merit a full read.
+3. **Measured evidence outside coding.** Customer support and operations rest on vendor claims. A
+   search for independent studies was not exhaustive.
+4. **Two unopened origins.** The Medium post behind the $47,000 incident and the posts on X.
 
 ## What comes next
 
 The comparison with the Practice is a separate, later piece of work, gated on the owner's go-ahead.
 Its inputs are the Fact rows of the evidence log, and the approach cards only where the rows they
-cite are Fact rows or rows E-100 to E-139. Assumption rows the reports did not reach remain leads.
+cite are Fact rows, with rows E-200 to E-265 the strongest. Assumption rows remain leads.
 This session does not begin the comparison.
