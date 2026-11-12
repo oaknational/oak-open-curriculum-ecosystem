@@ -757,8 +757,9 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
   `li` stays a list item. The accessibility-expert reviewer read WebKit's
   `determineListRoleWithCleanChildren` and recommended this shape. Proved: 414 rows, equal
   row and cell boxes, byte-identical full-page screenshots at 320, 960 and 1440 pixels. Not
-  proved: what VoiceOver announces in Safari. It stays draft until the owner hears "list, 87
-  items" there.
+  proved: what VoiceOver announces in Safari. I held it as a draft for an owner VoiceOver
+  check until the owner said, on 2026-11-12, that those checks were stopped as unworkable; it
+  lands on the source evidence and the rendered proof.
 - **Turbo cache on Oak, re-read.** On run 43068100283 Vercel still refuses the OIDC exchange
   ("Not authorized"), and turbo reports "Remote caching disabled". The Vercel policy is the
   owner's to add before the merge.
@@ -777,11 +778,19 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
   - Nineteen other `list-style: none` rules in the estate's stylesheets carry no role, so a
     list of theirs outside a navigation landmark is exposed as a group in WebKit.
 - **Next, in order.**
-  1. The owner's VoiceOver check on #402; then ready, the door, and `engraph` into
-     `reunify-oce-forks` again, with the gate read again.
-  2. If Hydra's #399 or #400 lands first, the same re-sync carries it.
+  1. #402 by the door (level with `engraph` at `ff58a2878`, which carries Hydra's #399, #400,
+     #404 and #405); then `engraph` into `reunify-oce-forks` again, with the gate read again.
+  2. A docs-only pull request skips `browser-tests` (the owner, 2026-11-12: "docs only PRs do
+     not need browser tests"): its own pull request, on the aggregator's by-design skip pattern.
   3. Report #1023 ready once the owner ends the exploratory status. The owner alone executes
      that merge.
   4. The release watch.
 - **Claims.** `a811ef22-6735-4306-bf57-4f29adaac9b7` holds `reunify-oce-forks`;
   `5c17db53-a880-4bb1-a313-cee92f31aef8` holds #402's two files.
+- **Team.** Hydra holds Lightyear closed out on 2026-11-12 (event 7341c024) with #399, #400,
+  #404 and #405 merged. This seat is solo from there, and its comms watcher is off. The plan's
+  second owner gate (the S4036 criterion) has cleared and comes out of `owner_gates` at the
+  next plan edit.
+- **Stale record found.** ADR-213's ruling 3 (2026-07-19) still names owner-run VoiceOver in
+  Safari at each widget ship. The owner's word of 2026-11-12 is that those checks were stopped
+  as unworkable. What replaces the ruling is the owner's to say.
