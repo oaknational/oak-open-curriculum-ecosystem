@@ -124,7 +124,7 @@ the response was a thing that had to be produced or could not be passed.
 
 1. It fires on a moment that something other than the agent's judgement marks.
 2. Its frame is the owner's words and primary evidence, set beside the working agent's reading.
-   This comes first in time: the largest class of catch is a misreading made before work began.
+   This comes first in time: one class of catch is a misreading made before work began.
 3. Its question is fixed, climbs from the work to the bigger picture, and admits "stop",
    "smaller", "not worth doing" and one more: already answered, proceed. A mechanism that can
    only slow work makes one class of catch worse.
@@ -150,15 +150,15 @@ recall:
   rule loads as a one-line pointer, and in the one trial run the rule behind the pointer was
   never opened.
 
-So the mechanism step's question narrows to this: which of the moments in the findings can be
-given a file or a place in a script. Those can be fired without a hook. The moments with no
-file (a step that has grown; a loop running at a steady beat) are where the script-free
-composition has nothing to mark the moment, and where a hook would be weighed on evidence.
+As input to the mechanism step, whose implementer writes its own node and decides: the moments
+in the findings divide into those that have a file or a place in a script, which something
+other than recall can mark, and those that do not (a step that has grown; a loop running at a
+steady beat).
 
 **The evaluation can be run.** The estate's skill runner tests a skill alone in an empty
 workspace. A with-and-without comparison in the full repository was tried once and works: under
 twenty seconds an arm, with a trace that shows whether a text was ever opened. Scenarios must be
-staged where the recorded cure is absent. Twenty-three scenarios and two controls are in
+staged where the recorded cure is absent. Twenty-four scenarios and two controls are in
 [`attendant-step-back-scenarios.md`](../../research/agentic-engineering/attendant-step-back-scenarios.md);
 a second file is held back for a fresh scorer after the design is frozen.
 
