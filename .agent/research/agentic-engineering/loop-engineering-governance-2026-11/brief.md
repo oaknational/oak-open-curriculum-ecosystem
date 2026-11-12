@@ -187,7 +187,8 @@ All in `.agent/research/agentic-engineering/loop-engineering-governance-2026-11/
 
 Added on the owner's offer of 2026-11-12 to run a web session: `commissioned-report-brief.md`, a
 self-contained brief for a session with open web access to read the primary sources this session
-could not open.
+could not open. The owner ran it twice the same day; both reports are filed as received in
+`commissioned-reports/` and merged into the evidence log as rows E-100 to E-139.
 
 One row is added to the lane `README.md`. Nothing else in the repository changes.
 

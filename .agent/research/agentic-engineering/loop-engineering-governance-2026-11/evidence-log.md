@@ -228,3 +228,96 @@ Bins: F is Fact (verified at the stated rung), A is Assumption to verify, D is D
 - A negative row ("not found") is F for the searches run and no further. Each rests on two or three
   extended searches made on 12 November 2026 with the row's own key phrases as the query.
 - No row needed the Owner's call bin, and no row was Dropped.
+
+## The commissioned reports (rung RW)
+
+On 2026-11-12 the owner ran [commissioned-report-brief.md](./commissioned-report-brief.md) in two
+web sessions with open access and returned two reports, filed as received in
+[commissioned-reports/](./commissioned-reports/): `report-a.md` (274 lines) and `report-b.md` (773
+lines, with a note that its enrichment step failed and its register was cut).
+
+**Rung RW.** A page opened by a commissioned web session and relayed to this session as paraphrase
+with at most one short quotation per source. This session did not open the page. RW sits above R1,
+because the page was opened and is named with its section, and below R3, because the relay is a
+model's report that this session cannot re-read at the source. Both reports departed from the
+brief's quotation rule: neither reproduces lists, templates or abstracts verbatim.
+
+**How the two reports relate.** They are two runs of one brief by the same model family. Where they
+agree, that is one reading made twice, not two independent witnesses. They differ in coverage:
+
+| Point | Report A | Report B |
+| --- | --- | --- |
+| W12, the adoption paper | Abstract page only | Full paper |
+| W14, Refute-or-Promote | Abstract page only | Full paper |
+| W13, the harness paper | To part-way through section 6.2 | To section 13.1, by a subagent |
+| W17, Moonshot | K2.5 pages only; hardware not opened | K3 blog, model card, vLLM recipe, swarm help page, each partly |
+| W8, StrongDM | Story page | Story, Principles and Techniques pages, a Hacker News thread |
+| W16 and W18 | Not opened | Not opened |
+
+Report B also tried to read this repository's own skill files, which the brief did not ask for. It
+could not open them and applied none.
+
+### Rows the reports settle
+
+W ids are the brief's. "Was" gives the earlier row and its bin.
+
+| Id | Claim, as the reports relay it | Was | Source |
+| --- | --- | --- | --- |
+| E-100 | W1 is dated 7 June 2026 and defines loop engineering as replacing yourself as the person who prompts the agent | E-02, A | A and B, Q1 |
+| E-101 | W1 lists five pieces, then a sixth, memory. Its table has six rows under the column header "Primitive", the sixth labelled "State" | E-03, A | A and B, Q1 |
+| E-102 | W1 does not use the word "gate"; it says verifier, checker and stop condition | new | A and B, Q1 |
+| E-103 | W1 places the practice "one floor above the harness" | new | A, Q1 |
+| E-104 | The author's earlier guide exists: "Loop Engineering: How to Design AI Loops That Build, Ship, and Improve While You Sleep", 10 June 2026, paid, preview ending at "What Is a Loop?" | E-17, F (not found) | A and B, Q2 |
+| E-105 | That guide's preview lists a 14-step roadmap, 41 pre-built loops, Claude Fable 5, and failures, costs and three debts. The phrase "six primitives" is not in its preview | new | A and B, Q2 |
+| E-106 | Huntley's original Ralph post is dated 14 July 2025. The loop as shown never exits; the operator stops it. He would not use it on an existing codebase. It says nothing on sandboxing or permissions | E-10 to E-13, E-18 | A and B, Q3 |
+| E-107 | Anthropic's guide is dated 30 June 2026 and classifies four loops by what is handed off: turn-based (the check), goal-based (the stop condition), time-based (the trigger), proactive (the prompt) | E-15, A | A and B, Q4 |
+| E-108 | The guide bounds goal loops by turn caps written into the goal and shows spend through usage commands; it describes no monetary budget control | new | A and B, Q4 |
+| E-109 | W12 scanned 36,710 repositories on 19 August 2026 (36,645 after removals), matched 256 by heuristics and confirmed 217 loops, precision 0.868 | E-16, A | B, Q5; A for the counts |
+| E-110 | In W12's Table 2, stop conditions, verification, budgets and cost files were detected in 0 repositories and state in 2, none confirmed; triggers were confirmed in 242. Of the 217 loops, 180 were event-triggered, mostly pull-request review | E-16, A | B, Q5 |
+| E-111 | W12 names its own limits: a single adjudicator, public repositories only, a scan about ten weeks after the term appeared; it records that novelty is contested ("renamed cron job") and that benefits are self-reported | new | B, Q5 |
+| E-112 | Cherny's line was spoken on stage, not posted: W12 dates it to a WorkOS "Acquired Unplugged" video of 2 June 2026. W1, W5 and W12 word it three ways | E-90, A | A and B, Q6 |
+| E-113 | W4, "Agent Harness Engineering", is dated 19 April 2026. It defines the harness as everything that is not the model and calls hooks "the enforcement layer" | new | A and B, Q7 |
+| E-114 | W3's harness definition is the walls around a loop: sandbox, reachable tools, memory between runs, and the gates that decide what done means | E-20, A | A and B, Q7 |
+| E-115 | W13 defines the harness by seven subsystems: agent loop, LLM integration, tools, memory and context, safety and permissions, orchestration, extensibility | E-25, A | A and B, Q7 |
+| E-116 | Credit for "harness engineering" is split: W4 names Trivedy; W13 says Hashimoto used it first in passing in February 2026 and Trivedy then defined it | new | A and B, Q7 |
+| E-117 | No opened source gives a seven-file harness structure. Report A reads the live preview as advertising a harness "built from seven files with templates" | E-27, F | A and B, Q8; A, Part 1 note |
+| E-118 | W13's first observation: the eleven systems span three orders of magnitude in code size and loop sophistication does not predict benchmark performance | E-26, A | A and B, Q9 |
+| E-119 | W13 records budget and stop controls per system: a 100-turn cap, a 90-iteration budget with a hard stop that ships disabled, price and token middlewares, one system with no cost kill switch, one whose step limit defaults to infinite | new | B, Q9 |
+| E-120 | W2 is dated 15 July 2026 and is the written form of a conference keynote. Agents run the inner loop (investigate, implement, verify, report); engineers own the outer loop (decide, verify, approve, own) | E-40, E-41, A | A and B, Q11 |
+| E-121 | W2's four loops and their questions: constraints (what to set), sampling (how much to review), audit (what evidence to keep), ownership (which part of the production boundary to own) | E-42, A | A and B, Q11 |
+| E-122 | W2 itself names Quality, Verdict and Answerability, and three costs: cognitive surrender, cognitive debt, orchestration tax. Its statistics come from sources neither report opened | new | A and B, Q11 |
+| E-123 | W9 is dated 6 November 2026, after the subject article. It defines inner and outer by nesting, closed by feedback returning to the agent, and a gate as a check that can only stop work where a loop sends it back | E-44, E-45, A | A and B, Q12 |
+| E-124 | Ng's letter is dated 26 June 2026: an agentic coding loop (minutes), a developer feedback loop (tens of minutes to hours), an external feedback loop (hours to weeks) | E-46, A | A and B, Q13 |
+| E-125 | Shapiro's post is dated 23 January 2026. The level names in circulation (spicy autocomplete to dark software factory) are from Willison's note; Shapiro's running text uses other labels | E-50, E-51 | A and B, Q14 |
+| E-126 | W3, dated 20 July 2026, is largely an account of a Horthy conference talk. Its body says "lit factory"; its title says "Light" | E-55, A | A, Q15 and conflicts |
+| E-127 | W3's rule for a loop to run dark: its check is cheap, runs at high frequency, is hard to fake, answers immediately and does not drift. Review stays where a wrong answer is expensive and only a person can catch it; auth, billing and public API contracts are named | E-56, A | A and B, Q15 |
+| E-128 | StrongDM's story page gives three rules: no code written by humans, none reviewed by humans, and at least US$1,000 of tokens per engineer per day. Three named people; the team dates from 14 July 2025 | E-52 to E-54, A | A and B, Q16 |
+| E-129 | Willison's main objection to StrongDM is cost, about US$20,000 per engineer per month; Hacker News commenters dispute released code quality and intent | new | A and B, Q16 |
+| E-130 | Horthy's lights-out run: no human reviewed code from July 2025; about four months later the system was abandoned and rebuilt, with three weeks of re-onboarding. Sources give three, four or five months | E-58, A | A and B, Q17 |
+| E-131 | Among opened sources, "refutation gate" appears only in the subject article. W14 says "promotion gate" and "mandatory empirical validation gate". Report B saw the phrase in later or undated search snippets it did not open | E-60, F | A and B, Q18 |
+| E-132 | W14 is a method for defect discovery, not for coding swarms. Adversaries see only the claim; a candidate survives when unrefuted; a mandatory empirical stage follows | E-61, A | A and B, Q19 |
+| E-133 | W14 reports two failures in opposite directions: ten reviewers unanimously endorsed a vulnerability that did not exist, killed by one empirical test; and a real CVE was killed and restored by a human | E-62, A | A and B, Q19 |
+| E-134 | Moonshot's swarm help page gives up to 300 sub-agents and over 4,000 tool calls, introduced with K2.5, upgraded in K2.6 and "now powered by K3"; only the orchestrator is trained | E-63, A | B, Q20 |
+| E-135 | The vLLM recipe states a minimum of eight GB300 accelerators, or eight MI355X or MI350X | E-73, A | B, Q20 |
+| E-136 | Moonshot's pages give K3 as 2.8T parameters with 104B activated, and promised full weights by 27 July 2026 | E-66, E-74 | B, Q20 |
+| E-137 | The Medium post behind the $47,000 incident was opened by neither report. Its republished weekly figures ($127, $891, $6,240, $18,400) sum to $25,658, and four weeks of rising cost do not fit an 11-day loop. Its date is given as 16 October, 31 October and 14 November 2025 | E-80 to E-83 | A and B, Q21 |
+| E-138 | Neither report found a source for the $4,200 incident earlier than the subject article. The nearest is a Medium post, unopened, titled "The Agent That Burned $4,200 in 63 Hours" | E-84, F | A and B, Q22 |
+| E-139 | Named critics, each in a source the reports opened: Horthy (maintainability has no fast oracle), Willison (cost), Osmani (his own caveats), Ng (the developer's context advantage), Huntley (greenfield only) | new | A and B, Q23 |
+
+### Disagreements between the two reports
+
+- Report A says W12 and W14 were read as abstract pages only; Report B says both in full. Rows that
+  rest on the papers' bodies (E-110, E-111, the second failure in E-133) are Report B's alone.
+- Report A found nothing on K3 and swarms and did not open the hardware recipe; Report B did both.
+  E-134 to E-136 are Report B's alone.
+- Report A reads the preview as naming "seven files"; Report B mentions the number only to say no
+  source supports it. The PDF this session read is cut at that line (P12).
+
+### Still open after the reports
+
+- The subject article's paid body, and the paid body of the author's earlier guide.
+- The exact words of Steinberger's post and Cherny's remark at origin.
+- The Medium post behind the $47,000 incident, and any source for the $4,200 incident.
+- The sources W4 draws on for the harness (Trivedy, Hashimoto, Böckeler), and the origins of W2's
+  statistics.
+- W13's later observations and recommendations.
