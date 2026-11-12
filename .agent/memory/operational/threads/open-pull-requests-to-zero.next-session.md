@@ -736,3 +736,85 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
   5. The release watch.
 - **Claims.** `d3e552c1-4515-4906-918e-5a02e11f2524` holds the carrier branch pattern and its
   worktree. `a811ef22-6735-4306-bf57-4f29adaac9b7` holds `reunify-oce-forks`.
+
+## Lane state (2026-11-11 ~19:3xZ, #1023 synced, Sonar one issue from green; Sandpiper guards Wind, 690653)
+
+- **Landed on `engraph`.** Carrier #393 at `4e33dd98d` (Oak 1.186.10) and #401 at `495c82f45`
+  (five Sonar code smells cured in four files). Both by the door; branches, worktrees and
+  claims closed.
+- **oaknational#1023.** `reunify-oce-forks` is at `495c82f45` on Oak, a fast-forward to
+  `engraph`'s tip, pushed as Oak's bot. It contains Oak's `main` at `0d8543021`. Every check
+  passes except SonarCloud. The upgrade note is posted (comment 6803479244).
+- **Sonar gate on #1023.** The S4036 criterion works: 30 open issues went to 0. The gate's
+  code-smell condition reads the worst severity, not a sum (threshold 14; MAJOR reads as 15),
+  so one MAJOR issue fails it. Two issues stay open: `typescript:S6822` MAJOR on
+  `demos/oak-design-showcase/app/tokens/TokenRows.tsx` (the explicit `role="list"`), and
+  `typescript:S1135` INFO on `packages/core/oak-eslint/src/configs/strict.ts:17` (the lint rule
+  name `vitest/warn-todo` in a comment), which does not affect the gate.
+- **Draft #402** (`fix/token-rows-list-semantics`, `7153a5917`, claim
+  `5c17db53-a880-4bb1-a313-cee92f31aef8`) cures S6822 at source: `list-style-type: ''` where the
+  list had `list-style: none`, and each row's flex layout on an inner `div.tok-row-body` so the
+  `li` stays a list item. The accessibility-expert reviewer read WebKit's
+  `determineListRoleWithCleanChildren` and recommended this shape. Proved: 414 rows, equal
+  row and cell boxes, byte-identical full-page screenshots at 320, 960 and 1440 pixels. Not
+  proved: what VoiceOver announces in Safari. I held it as a draft for an owner VoiceOver
+  check until the owner said, on 2026-11-12, that those checks were stopped as unworkable; it
+  lands on the source evidence and the rendered proof.
+- **Turbo cache on Oak, re-read.** On run 43068100283 Vercel still refuses the OIDC exchange
+  ("Not authorized"), and turbo reports "Remote caching disabled". The Vercel policy is the
+  owner's to add before the merge.
+- **GitHub runners, 2026-11-11.** From 13:57Z to about 17:15Z every `browser-tests` job failed
+  at the Playwright apt step: the hosted runner could not resolve `archive.ubuntu.com` or
+  `security.ubuntu.com`. The image matched the previous day's passing runs. It recovered
+  without a change on our side.
+- **Work list (non-blocking, each its own pull request).**
+  - C078's `behavioural_intent` in `registry.json` (lessons and units scopes).
+  - `search-units-year-filter.integration.test.ts` and `create-search-sdk.integration.test.ts`
+    spy on a production Elasticsearch `Client`; an injectable search port and a recording fake
+    replace the spy (Codex on #393, carried Oak code).
+  - `agent-tools/src/collaboration-state/transaction-lock.ts` treats only `EEXIST` as
+    contention. On Windows a `mkdir` racing a removal fails `EPERM`, which failed
+    `windows-basic` once on #1023 (run 43074766686) and passed on re-run.
+  - Nineteen other `list-style: none` rules in the estate's stylesheets carry no role, so a
+    list of theirs outside a navigation landmark is exposed as a group in WebKit.
+- **Next, in order.**
+  1. #402 by the door (level with `engraph` at `ff58a2878`, which carries Hydra's #399, #400,
+     #404 and #405); then `engraph` into `reunify-oce-forks` again, with the gate read again.
+  2. A docs-only pull request skips `browser-tests` (the owner, 2026-11-12: "docs only PRs do
+     not need browser tests"): its own pull request, on the aggregator's by-design skip pattern.
+  3. Report #1023 ready once the owner ends the exploratory status. The owner alone executes
+     that merge.
+  4. The release watch.
+- **Claims.** `a811ef22-6735-4306-bf57-4f29adaac9b7` holds `reunify-oce-forks`;
+  `5c17db53-a880-4bb1-a313-cee92f31aef8` holds #402's two files.
+- **Team.** Hydra holds Lightyear closed out on 2026-11-12 (event 7341c024) with #399, #400,
+  #404 and #405 merged. This seat is solo from there, and its comms watcher is off. The plan's
+  second owner gate (the S4036 criterion) has cleared and comes out of `owner_gates` at the
+  next plan edit.
+- **Stale record found.** ADR-213's ruling 3 (2026-07-19) still names owner-run VoiceOver in
+  Safari at each widget ship. The owner's word of 2026-11-12 is that those checks were stopped
+  as unworkable. What replaces the ruling is the owner's to say.
+- **Hydra's open observations (not lanes), from its closeout record.**
+  - The lint rule `@oaknational/no-shell-form-process-launch` does not catch
+    `export * from 'node:child_process'`.
+  - Oak's SonarCloud project keeps the file-encoding analysis warning until the owner merges
+    oaknational#1023; Engraph's lost it when #400 landed.
+  - "Architecture analysis executed with errors" remains on both SonarCloud projects. Hydra
+    investigates it next, at the owner's word.
+- **Taken over from Hydra (the owner, 2026-11-12, relayed by Hydra: "Hand all responsibilities
+  other than the architecture investigation to Sandpiper").** This seat now holds:
+  - Todo 6 of the reunify plan as merged in #405: its execution after the owner merges
+    oaknational#1023, and any edit to it.
+  - After that merge, a read of
+    `https://sonarcloud.io/api/ce/analysis_status?component=oaknational_oak-open-curriculum-ecosystem`
+    to confirm the file-encoding warning has gone from Oak's project.
+  - The S4036 record: the substitute lint rule, the reopen condition in the disposition
+    policy's second exception, and the rule's known gap above.
+  - The binary globs in `sonar.exclusions` (#400). They rest on the policy sentence "a product
+    image or font is an asset, not code"; if the owner disagrees, the globs narrow.
+  - The `upstream` remote observation recorded earlier in this thread.
+  Hydra keeps only the SonarCloud "Architecture analysis executed with errors" investigation.
+- **Docs-only definition (the owner, 2026-11-12, verbatim):** "docs only can be if the PR only
+  changes markdown files and those files are only in the .agent, or root docs folder". The merge
+  tool's records class (`agent-tools/src/merge-bot/change-class.ts`) is wider: it also takes
+  `linkedin/` and seven root files.

@@ -1848,3 +1848,48 @@ outside the repository. One instance each; scope is this session.
 - **Seven rounds of patching a findings file left it contradicting itself; one rewrite cured it.**
   After the second review listed stale sections across the file, rewriting it whole on the current
   evidence was shorter than the patches it replaced (2026-11-12, Rocket holds Patina, 01Duoc).
+
+### 2026-11-12 (Sandpiper guards Wind, 690653): the #1023 chain, Sonar gate and #402
+
+- **Correction (mine):** I held draft #402 for a day on an owner VoiceOver check in Safari and
+  reported the hold each half hour. The owner then said those checks were stopped as unworkable.
+  ADR-213's ruling 3 still named them, and I took the tracked record for the live rule without
+  asking whether it still held. A gate that needs the owner's hands is asked about once, at the
+  moment it is invented, never waited on.
+- **Correction (mine):** I read Oak's Sonar gate condition `new_code_smells_severity` (15 against
+  14) as a weighted sum and cured five issues to bring it down. It is the worst severity present:
+  one MAJOR reads 15. The value did not move, and the falsifier, one more gate read, was the next
+  push. Read a gate metric's definition before sizing the cure to it.
+- **Observation:** on 2026-11-11 every `browser-tests` job failed for about three hours at the
+  Playwright apt step, because the hosted runner could not resolve Ubuntu's package hosts. The
+  step fetches nine font packages on every run even when the browser cache hits. Five re-runs
+  told me nothing a single read of another repository run would not have; a peer's green run was
+  the signal that ended it.
+- **Observation:** the worktree hook that blocks wildcard staging also matched a
+  `git worktree add ... .claude/...` command in one compound line. Giving the path first and in
+  absolute form, in its own command, passed.
+
+### 2026-11-12 (Hydra holds Lightyear, d827c5; lifted from the seat's closeout record by Sandpiper)
+
+- **A runbook of ordered acts on live settings is reviewed against the platform's rules before
+  its first push.** #405 took five pushes; each round found one gap (a ruleset that restricts
+  deletion of its branch, a variable read only when a run starts, branches without a pull
+  request, a case-insensitive comparison). Ask of each step: what forbids it, what races it, what
+  does it leave behind, what does its literal wording admit.
+- **The review-cost gate reads its decision file relative to the pushing worktree**, and a line
+  starts with the bare pull request number, no `#`. The HELD message gives the format, not the
+  location.
+- **Post the "cured in commit X" reply after the push lands.** One reply went out before a push
+  the gate then held.
+- **The force-push guard matches `-f` anywhere on a command line that also pushes.** A later
+  `gh api graphql -f` on the same line was refused. Use `--raw-field` or separate commands.
+- **A reviewer's finding is tested, then owned.** Two reviewers raised the missing substitute
+  check for the S4036 criterion. Tested against the rule, it held, and the test produced the
+  recommendation: no agent-tools code used a shell-form launch, so a lint rule could carry the
+  check at no cost to the tree.
+- **A Sonar analysis warning with no scanner log can still be bisected from the tree.** Listing
+  every tracked file that fails UTF-8 decoding named the suspects (37 binaries); excluding them
+  removed the warning on the next analysis.
+- **Commitlint reads a body line that starts with a word and a colon as a footer.** Reflow the sentence.
+- **The door refuses a pull request behind its base**, so one seat's pull requests serialise: each
+  merge costs the next a sync, a full check run and a fresh review.

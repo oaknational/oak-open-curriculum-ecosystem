@@ -59,20 +59,26 @@ function TokenRow({
   // spending width on an em dash.
   return (
     <li className="tok-row" data-token={token.name} data-owners={owners.length}>
-      <span className="tok-name">
-        <TokenName token={token} />
-      </span>
-      <span className="tok-specimen">
-        <Specimen token={token} />
-      </span>
-      <span className="tok-value">
-        <span className="oak-visually-hidden">Value </span>
-        <TokenValue token={token} value={value} expression={expression} />
-      </span>
-      <span className="tok-owners-cell">
-        <span className="oak-visually-hidden">Re-pointed by </span>
-        <IdentityDeltaCell owners={owners} identity={identity} />
-      </span>
+      {/* The row's flex layout lives on this inner box so the `li` itself
+          stays a list item: WebKit keeps list semantics only for a list
+          whose items render as list items with a marker type other than
+          `none` (see the `.tok-rows` rule). */}
+      <div className="tok-row-body">
+        <span className="tok-name">
+          <TokenName token={token} />
+        </span>
+        <span className="tok-specimen">
+          <Specimen token={token} />
+        </span>
+        <span className="tok-value">
+          <span className="oak-visually-hidden">Value </span>
+          <TokenValue token={token} value={value} expression={expression} />
+        </span>
+        <span className="tok-owners-cell">
+          <span className="oak-visually-hidden">Re-pointed by </span>
+          <IdentityDeltaCell owners={owners} identity={identity} />
+        </span>
+      </div>
     </li>
   );
 }
@@ -103,8 +109,7 @@ export function TokenRows({
           {tokens.length} {tokens.length === 1 ? 'token' : 'tokens'}
         </span>
       </h3>
-      {/* list-style: none drops native list semantics in WebKit; the role keeps the contract. */}
-      <ul className="tok-rows" role="list" aria-labelledby={headingId}>
+      <ul className="tok-rows" aria-labelledby={headingId}>
         {tokens.map((token) => (
           <TokenRow
             key={token.name}
