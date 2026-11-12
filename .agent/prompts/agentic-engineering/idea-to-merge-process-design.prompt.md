@@ -11,7 +11,9 @@ a run makes after approval; *the run node* is the plan-estate record a run keeps
 step this brief opened was done on 2026-11-12; the step after it is opened by
 [`attendant-mechanism-step.prompt.md`](attendant-mechanism-step.prompt.md).
 
-**Task of the session that reads this**: carry out the research step of the Attendant lane,
+**This brief no longer assigns a task.** A session that reads it takes its task from the opener
+named above and reads this file for the owner's words. The task it carried was the research
+step of the Attendant lane,
 [`attendant-research`](../../plans/delivery/attendant-research.plan.md), under its strategic node
 [`attendant-workflow`](../../plans/strategic/attendant-workflow.plan.md). Both were ratified by the owner on 2026-11-10 ("I ratify both plans and both design choices and
 designs to evaluate"). The owner, 2026-11-10: "Let's get the plan written and ready, and the next session will carry out the
@@ -336,7 +338,8 @@ corpus.
 
 ## How to work
 
-For the research session:
+For the research session (carried out on 2026-11-12; kept as the record of how it was asked to
+work):
 
 - Ground with `start-right-thorough`, then follow the delivery node `attendant-research`: its
   order of questions, its stopping rule and the files its findings go to.
@@ -426,6 +429,6 @@ load `CLAUDE.md` unless `omitClaudeMd` is set.
 
 ## Deliverable
 
-For the research session: the outputs the delivery node `attendant-research` names (the findings
+For the research session, now done: the outputs the delivery node `attendant-research` names (the findings
 file, the two scenarios files, the strategic node's revised research summary) and a report to
 the owner. The lane's whole deliverable, across its four steps, is the strategic node's outcome.

@@ -401,8 +401,9 @@ reader returned were not on the page as written and are not used.
 
 ### What decides whether an instruction is in front of the model at the right moment
 
-The documentation describes five ways an instruction reaches the model, and only the last three
-do not depend on the model deciding it needs the instruction.
+The documentation describes five ways an instruction reaches the model. One depends on the
+model deciding it needs the instruction. One is there from the start and marks no later
+moment. The last three arrive at a moment something other than the model marks.
 
 | How it loads | What uses it | Who decides the moment |
 | --- | --- | --- |
