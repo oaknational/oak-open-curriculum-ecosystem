@@ -19,13 +19,15 @@ for path in tracked:
     if not path.endswith((".md", ".txt")):
         continue
     try:
-        corpus[path] = re.sub(r"\s+", " ", open(path, encoding="utf-8").read())
+        with open(path, encoding="utf-8") as handle:
+            corpus[path] = re.sub(r"\s+", " ", handle.read())
     except (OSError, UnicodeDecodeError):
         continue
 
 failed = 0
 for target in targets:
-    text = re.sub(r"\s+", " ", open(target, encoding="utf-8").read())
+    with open(target, encoding="utf-8") as handle:
+        text = re.sub(r"\s+", " ", handle.read())
     for span in re.findall(r'"([^"]*)"', text):
         if len(span) < 25:
             continue
