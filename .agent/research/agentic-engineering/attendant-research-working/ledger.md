@@ -209,3 +209,165 @@ the estate already have this?") and the second finding of one class ("is this on
 Both are environment-visible moments (a new file of a known kind; a second thread of a kind),
 which matters for question 4: a moment an environment can see can be fired without the agent's
 judgement. Not an owner catch, so it enters the classification marked as such.
+
+### `why-a-ruling-took-three-owner-words-and-did-not-land-2026-09-25.md` (whole)
+
+Arc: one owner ruling on doctrine, landed by the sibling estate in an hour, needed three owner
+words here over twenty-three hours and was still unlanded. A seat rested "101 heartbeats 'at
+rest'" for six hours with work owed.
+
+Its mechanism: "An owner ruling on doctrine that is recorded outside the queue waits for the
+owner to repeat it." The ruling was bundled into an eight-file merge ("its release became the
+intake's release"). `ship-independent-coordinate-dependent` "names this case and did not fire
+... the intake was one thing, so there was no bundling moment at which the rule could bite".
+"in every instance above, the actor who moved an unqueued ruling was the one who made it."
+
+Owner's words in the record: "any context measuring mechanism or workflow that causes the agent
+to stop rather than to work more efficiently is an antipattern" (2026-09-21, labelled by the
+owner "not to be given undue weight").
+
+The author's metacognition section is evidence in its own right: "It reported every verifiable
+finding in its handoff analysis. The owner: some matters, some is noise."; "It put four
+questions to the owner, two of which the decision lenses could settle and two of which named no
+decision and no impact."; "Naming the class in the first draft's metacognition did not stop the
+second draft producing more of it."; and it "routed the ruling's execution 'through the
+Director' to a lane whose holder had stopped: the record's own mechanism, enacted by its author
+twenty-five minutes before naming it".
+
+Reading: the catch class is "an owner's decision was treated as an item inside a larger unit,
+so it waited". The question: "is there an owner word here that can land on its own, now?". The
+moment: when a ruling is relayed, and when a unit of work is drawn around it. Also a class of
+question-to-owner that names no decision: relevant to question 2 (what reaches the owner).
+
+### `why-the-register-stayed-at-twelve-for-three-days-2026-09-20.md` (whole)
+
+The owner, 2026-09-19: "how is it, when the only job I gave you was to drain the buffers, they
+are still critical 2 days later?"; then "drain the buffers to zero, do not mess about with
+coordination branches"; 2026-09-20: "you are supposed to analyse the buffers, preserve the
+knowledge, then analyse and preserve the knowledge in the oversized memory files, nothing else".
+
+Its mechanism: "clocked obligations starve unclocked jobs", "without anyone deciding to, because
+each individual choice ... is correct by its own rule". "Those reports were true and read as
+progress, to the seat as much as to the owner." "The seat surfaced questions about means ... and
+never the question those stood for." "When the owner removed the competing obligation, in one
+sentence, the job took forty minutes." About 130 true review findings, "None of them concerned a
+register entry."
+
+What bound: "Report the job's own measure first"; "the one report that opened with the counts
+showed at once that the napkin was not empty". The lesson "held as a sentence did not bind
+within hours of being written". The launch prompt itself spent the budget: six skills on its
+first line.
+
+Reading: a strong scenario. Every step is correct by its own rule and the job's own measure
+does not move. The question: "what is the one measure of the job I was given, and did this turn
+move it?". The moment: every report, and every pickup. The owner needed: the job's measure,
+first. This is direct evidence for question 2: a count stated first let the owner (and the
+seat) see non-movement at once.
+
+Also evidence for question 4: a launch prompt that loads many skills spends the headroom the
+job needs; the cure was subtraction to four lines.
+
+### `why-five-days-of-landings-closed-nine-stories-2026-09-29.md` (whole)
+
+235 pull requests merged in five days; nine of twenty-one stories whole; every gate slower.
+
+Owner's words in the record: "a failure of throughout and PR management and a failure of not
+inventing categories to lend legitimacy to failures" (2026-09-29, "verbatim as typed"); "serious
+decay in standards"; "work is safe when it is merged, the target number of open PRs is always
+zero" (2026-09-26); "The work and claims of all subagents MUST be verified by you, yourself";
+"did you even check?"; "The Practice exchange is a means to an end, no an endless horizon, there
+are next steps we have not discussed yet."; "For now identify the quickest wins."; validation
+scripts "abused in order to avoid the strictures of the tests".
+
+Its causal statements: "The unit count grew with every design read, so progress and growth read
+the same." "the words 'residue', 'queued' and 'in flight' made the growth read as progress".
+"Every correction produced an instrument: a rule, a validator, a smoke or a record. Deletions ran
+at a small fraction of additions." "The estate had a rule for each failure and the rules did not
+bind ... because a passive rule loses to the next fluent move unless something in the work fires
+it." "A person with judgement merging green work is the fastest door the estates have." The
+retrospectives' own proposals: "None is present in its target file", and the class recurred.
+"The author's own conduct is in scope, and the owner caught most of it first".
+
+Reading: catch classes here. (1) The measure was replaced by a proxy that grows with activity
+(units for stories; open pull requests for unfinished work); the question, "what is the owner's
+unit of done, and how many are whole?". (2) A new category name made a failure read as a state
+("residue"); the question, "did the owner use this word, or did I mint it, and what does it
+hide?". (3) A claim reported from a partial read ("did you even check?"). (4) Enforcement added
+with no retire stage: the estate's own response to failure is additive, which bears directly on
+this lane, since a stepping-back mechanism is one more addition. Requirement 5 ("it can
+subtract") is supported here, and a sixth consideration appears: the mechanism's own cost in
+every session has to be visible, and something has to be able to retire it.
+
+### `why-the-outage-outlived-its-six-character-fix-2026-08-24.md` (whole)
+
+Arc: a cloud environment was down about a day; the fix was six characters; in between, one seat
+built a validation harness and made twenty-five review-cure commits in three and a half hours
+"for configurations the estate does not have".
+
+The owner's catch: "The owner stopped the loop at ~11:52Z with one question — 'are we doing the
+right thing?' — after which zero further fidelity cures were pushed". "The cure for the whole
+outage was one round-trip of owner attention, available from the arc's first hour."
+
+Its causal statements: "a review whose reference surface is unbounded cannot converge by
+instance cures". "every cure the estate holds for this class is passive at the moment of need —
+retrospective prose, skill clauses, a worked instance in the proportionality skill — and
+instrumentation is opt-in at exactly the moment a fluency-rewarded seat is least likely to opt
+in." "an unbuilt tally store means the trigger cannot fire"; this was "the third" no-tally arc.
+The streetlight: "The loop optimised what was probe-able from where it sat." Play harvest:
+"cadence regularity as a non-convergence smell ... a loop with no inner variance".
+
+Reading: the cleanest scenario in the corpus. The owner's question is the bare step-back
+question, it took one sentence, and it worked at once. The question: "are we doing the right
+thing: what was I asked to restore, and does this commit move it?". The moment: a loop at
+constant cadence past functional completeness, and before any of it: "who can see the cause
+from where they sit, and have I asked them?". The owner needed nothing shown; the owner asked.
+A regular cadence is an environment-visible signal (commit timestamps), relevant to question 4.
+
+### `why-every-review-arc-hit-the-same-generator-2026-07-20.md` (whole)
+
+Seven review arcs failed to converge on one generator: closed-world claims over open surfaces.
+"The generator survives kills by climbing one abstraction level." "Closure reads as rigour."
+Counterfactual inside the arc: instance cures ran four to five rounds; killing the class
+converged in one or two.
+
+Owner's catches: a Director's twenty-minute diagnosis by matching named failure classes was
+"resolved in about one minute by the owner reading the merge box"; and, of the author's "the
+graph closes cleanly", the owner's "I believe there was also a Decide workflow?".
+
+What bound: "Post-predicate ... six landings, zero races"; where the tally was built its
+trigger "fired seven times that day — but only after three to four settled rounds each".
+
+Reading: catch class "a closure claim over an open set" (complete, global, all, closes cleanly),
+caught by an outside reader looking at the thing itself. The question: "what did I actually
+look at, and what would an unfiltered read of the whole surface show?". The moment: writing
+"all", "complete", "none", "closes". This is a claim-level error, lower than the frame; it
+belongs in the classification as its own class and probably outside the stepping-back
+mechanism's remit (the estate's claim pass owns it).
+
+### `2026-10-05-why-the-alignment-took-four-days-after-the-owner-said-hours.md` (whole)
+
+Owner's words in the record: "We WILL finish the Practice work in the next few hours"
+(2026-10-02); "ALL of this work is bounded, ALL of it must have a known, reachable, measurable
+end state, and ALL of it must be finished soon."; (2026-10-03) "Yesterday I said finish within 2
+hours as a guide, if the estimate hits four we have a problem. Today I said finish today. Now
+you are telling me that we need all of today and ten straight hours tomorrow. And I am telling
+you, that means we are doing it wrong." then "I am happy to do this in two large PRs".
+
+Its causal statements: "the frame was inherited from the transplant and no definition of the
+Practice existed. 'The Practice' meant the copyable subset, so parity meant bytes, so the work
+became hunks times a lifecycle". "Each estimate was re-sized with reasons rather than stopped at
+twice the guide." "a Cricket read the seat as DRIFTING at 14:00Z and the seat discounted it".
+"A plan node written at a compaction boundary reproduced the instrument it replaced ... caught
+by two Crickets". Once the owner's definition existed "the alignment became two landings by
+class with a proof, and the two landings took one day and a half".
+
+Its adversarial read killed a proposal that "broadens authority", and found "the verdict that
+favours it".
+
+Reading: the largest frame catch in the corpus. The seat's unit of work came from an inherited
+frame nobody had ratified, and an estimate that broke the owner's guide was explained instead
+of read as a signal. The owner's rule is a usable trigger and is an environment fact: the
+estimate at twice the guide. The question: "the estimate is past twice what the owner said; what
+am I assuming about what this work IS that makes it this large?". The moment: when an estimate
+is revised upward. Also direct evidence for cause 5: a step-back return (DRIFTING) was advice,
+and the seat it doubted discounted it.
