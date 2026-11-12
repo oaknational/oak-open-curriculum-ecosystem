@@ -17,9 +17,6 @@ owner_gates:
   - awaiting: owner-decision
     clears_when: "The owner ends the exploratory status of oaknational#1023, so it is marked ready; the owner alone executes the merge (owner, 2026-11-11), never a seat, the door or any automation"
     expires: 2026-11-30
-  - awaiting: external-input
-    clears_when: "The Ignore Issues on Multiple Criteria entry (typescript:S4036 on agent-tools/**/*, the disposition policy's second exception; saved by the owner on both SonarCloud projects 2026-11-11) is in place and the next analysis of the pull request raises no S4036 issue"
-    expires: 2026-11-30
 last_updated: 2026-11-12
 ---
 
@@ -79,12 +76,13 @@ back to being a plain mirror of Oak: one line of development again.
      2026-11-09.
 2. Merge `engraph` into `reunify-oce-forks`; Oak's checks run again.
 3. The S4036 criterion for `agent-tools/`, which covers all 30 sites of the first run, is saved on
-   both SonarCloud projects (the owner, 2026-11-11), and a push to `reunify-oce-forks` re-runs the
-   analysis (the second gate).
+   both SonarCloud projects (the owner, 2026-11-11). Done: the analysis of 2026-11-12 on
+   `reunify-oce-forks` raises no S4036 issue (30 before), and the SonarCloud gate passes.
 4. The owner ends the exploratory status (the first gate). The description gains one upgrade note:
    each Oak checkout recreates `.github/merge-bot.json` from `.github/merge-bot.json.example`, and
    Oak's CI reaches the Turbo cache through the `TURBO_TEAM` variable and its OIDC policy, not a
-   `TURBO_TOKEN` secret. The seat reports it ready; the owner alone executes the merge (owner,
+   `TURBO_TOKEN` secret. The note is posted as a comment on the pull request (2026-11-11), and
+   every required check passes (2026-11-12). The seat reports it ready; the owner alone executes the merge (owner,
    2026-11-11), never a seat, the door or any automation.
 5. Watch Oak's release and the deployed service.
 6. Return the fork to a mirror, in this order. Each step is the owner's or a seat's at the owner's

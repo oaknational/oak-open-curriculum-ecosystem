@@ -818,3 +818,30 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
   changes markdown files and those files are only in the .agent, or root docs folder". The merge
   tool's records class (`agent-tools/src/merge-bot/change-class.ts`) is wider: it also takes
   `linkedin/` and seven root files.
+
+## Lane state (2026-11-12 ~12:3xZ, #1023 green on every check; Sandpiper guards Wind, 690653)
+
+- **oaknational#1023 passes every check.** At `2e577c299` on Oak the SonarCloud gate reads OK
+  (code-smell severity 5, one INFO issue left: `typescript:S1135` on
+  `packages/core/oak-eslint/src/configs/strict.ts:17`), and CodeQL, `run-quality-gates` and
+  Vercel pass. The plan's second owner gate is cleared and removed. What remains is the owner's:
+  the Turborepo CLI OIDC policy on Vercel, the end of the exploratory status, and the merge.
+- **Landed on `engraph` since the last section.** #402 at `2e577c299` (the token list keeps list
+  semantics in WebKit without an explicit role; it also carried Hydra's closeout records) and
+  #407 at `9301a148e` (a docs-only pull request skips `browser-tests`). Both by the door;
+  branches, worktrees and claims closed.
+- **The docs-only skip.** `change-scope` computes the verdict from the merge commit's diff:
+  every changed path a Markdown file under `.agent` or the root `docs` folder. On #407's own
+  run it read "docs_only=false: 7 changed paths" and every gate ran. The pull request that
+  carries this section is the first docs-only one after it.
+- **`reunify-oce-forks` must equal `engraph`'s tip when the owner merges.** After that merge
+  `engraph` is retired (todo 6), so a commit on `engraph` that is not on the branch would not
+  reach Oak. Fast-forward and push the branch after every landing on `engraph`, and check the
+  two tips are equal when reporting ready.
+- **Next, in order.**
+  1. Fast-forward `reunify-oce-forks` after each `engraph` landing.
+  2. Report #1023 ready once the owner ends the exploratory status. The owner alone executes
+     that merge.
+  3. After it: the release watch (todo 5), todo 6, and the file-encoding warning read on Oak's
+     SonarCloud project.
+- **Claims.** `a811ef22-6735-4306-bf57-4f29adaac9b7` holds `reunify-oce-forks`.
