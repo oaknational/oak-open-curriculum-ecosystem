@@ -432,13 +432,16 @@ the model opens the file; a workflow step carries its own prompt. Nothing in the
   it in this session: the Markdown code-block rule's pointer arrived after the first Markdown
   edit, and the capability-landing rule's after the first read under `.agent/rules/`. That is
   an instruction arriving at a moment the environment marked. It still arrives as a pointer.
-- **Skills: 87 adapters, 40,845 characters of description.** The listing budget "scales at 1% of
+- **Skills: 78 adapters tracked in the repository, 38,142 characters of description.** This
+  session's checkout held nine more that the installer manages and the repository does not
+  track, 87 and 40,845 in all. The listing budget "scales at 1% of
   the model's context window"; the estate has raised it to 3%
   (`.claude/settings.json`). At about four characters a token, that is room for roughly 24,000
   characters on a 200,000-token model and 120,000 on a million-token one. On the smaller
   window "Claude Code drops some descriptions to fit the listing's character budget, which
   removes the keywords Claude needs to match your request". A skill that relies on its
-  description to fire is competing with 86 others for that room.
+  description to fire is competing with the rest for that room, and the tracked set alone is
+  past the smaller window's budget.
 - **Sub-agents: 31.** Each "starts with a fresh, isolated context window" and, unless
   configured otherwise, loads `CLAUDE.md`. In this repository that fixed load is large: a
   sub-agent measured at about 107,000 tokens before its task, a headless session at about
@@ -495,7 +498,7 @@ the model opens the file; a workflow step carries its own prompt. Nothing in the
   agent "runs in an empty temporary workspace", so it tests the skill's text and description and
   nothing of the repository around it. It can answer whether a skill's description fires on given
   prompts and whether its body changes the answer. It cannot test a rule, `AGENT.md`,
-  start-right, or how a skill fares among 86 others.
+  start-right, or how a skill fares among the others.
 - **For the full repository: yes, by hand, cheaply.** The feasibility check
   ([`feasibility-check.md`](attendant-research-working/feasibility-check.md)) ran one scenario
   headless in two clones, one with a rule removed: under twenty seconds and a quarter of a

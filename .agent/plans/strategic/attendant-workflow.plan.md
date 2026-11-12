@@ -146,7 +146,7 @@ recall:
   it arrives as a one-line pointer, so its text still depends on the model opening the file.
 - **A workflow script** runs a step because the script reaches it.
 - **A skill** supplies a procedure and a fresh context once something else has decided to run
-  it; its description cannot be relied on to fire it among eighty-seven.
+  it; its description cannot be relied on to fire it among seventy-eight tracked ones.
 - **`AGENT.md` and the always-on rules** put a name in context. In this repository an always-on
   rule loads as a one-line pointer, and in the one trial run the rule behind the pointer was
   never opened.
