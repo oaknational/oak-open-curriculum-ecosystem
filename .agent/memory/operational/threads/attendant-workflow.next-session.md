@@ -37,6 +37,13 @@ thread record existed.
   ratified the same day): `start-right-thorough`, the brief's quotations, the two nodes,
   registration here, the five questions in the node's order. The seat that does the research
   does not later design the mechanism.
+- Research progress, 2026-11-12 (pull request 398): question 3 answered; question 1 has a first
+  classification of ten classes from about seventy instances and owes the remaining rule files,
+  the other retrospectives and the scenarios; questions 2, 4 and 5 not started. Sources read are
+  in the reading ledger under `attendant-research-working/`. A reader fan-out was designed,
+  reviewed (three verdicts of "revise") and not launched. Two matters are with the owner: the
+  price of a smaller staged fan-out over the rule files, and a departure from the plan's
+  stopping rule. PDR-098 was found and bears on the mechanism step.
 - Team expectation: solo cloud seat, the owner as design partner.
 - Acceptance bar: for the next session, phase 1's outputs as the plan names them (the findings
   file, the scenarios file, the plan's summary section, a report to the owner).

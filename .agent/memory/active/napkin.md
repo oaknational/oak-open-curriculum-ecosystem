@@ -1754,3 +1754,31 @@ outside the repository. One instance each; scope is this session.
 - **Observation:** a side agent's note said Oak's CI "needs" a `TURBO_TEAM` variable. Oak's own
   CI log showed the variable already set, and the missing piece was the Vercel policy. Reading
   the run's log answered in one step a question the note left open.
+
+### 2026-11-12 (Limpet lifts Spray, 01Duoc): the attendant research step, first sitting
+
+- **Correction (mine):** the creation plan I wrote on 2026-11-10 names "the tension at the
+  centre" and cites a pattern for it, and never cites PDR-098, the accepted decision record that
+  frames the same problem in three parts and forbids one of the cures. I found it two days later
+  by following a pointer in a retrospective. A search of the decision records for the plan's own
+  central noun would have found it while the plan was being written. The 2026-09-27 reader
+  retrospective names this miss for code ("No step of the lane owned the prior-art question");
+  it holds for a plan's central question too.
+- **Correction (mine):** I designed a twelve-unit reader fan-out on volume ("the yield is high,
+  so an instrument is warranted") before classifying the fifty instances already in hand. Three
+  design reviewers returned "revise" for the same reasons: the filter dropped the causal account
+  from the retrospectives, the frame handed the readers the plan's own seed classes, and
+  saturation had never been tested. Classifying the instances in hand then showed the pilot's
+  twenty rows added no class. The fleet rule's review paid for itself; the cheaper first move
+  was the classification, which the plan's own stopping rule pointed at.
+- **Observation:** a sub-agent in this repository carries about 107,000 tokens of fixed load
+  before it reads its unit (one pilot: 121,367 tokens for a 54,463-character unit). A fan-out's
+  cost here is set by the number of legs far more than by what they read.
+- **Observation:** the staging guard refused an explicit-path `git add` three times. The cause
+  was a later segment of the same command, the branch guard's dot-source of a husky script, read
+  together with the add. Running the add as its own command passed at once.
+- **Observation:** the retrospective skill tells a whole-corpus reader to find the last run of
+  the same task class first. I read that sentence after designing the fan-out, and the last run
+  (the 2026-09-16 record) carried the owner's method word for exactly this work: sub-agents
+  locate, the seat verifies and analyses. The skills I had not yet invoked held the instruction I
+  needed before invoking anything.
