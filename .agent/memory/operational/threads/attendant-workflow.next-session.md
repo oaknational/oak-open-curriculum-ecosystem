@@ -27,7 +27,8 @@ thread record existed.
 - State: step 1 of the lane, the research, is done and accepted. The owner, 2026-11-12, in
   session: "I ratify the research." That is the recorded proof of the research node's three
   acceptance criteria, each `owner-held`; the fresh reviewer's read that criterion 2 names
-  returned "sound-with-corrections", all applied. The research landed by pull request 398.
+  returned "sound-with-corrections" on the twenty-three open and nine held-back scenarios, all
+  corrections applied. The research landed by pull request 398.
 - Next safe step: step 2, the stepping-back mechanism, designed and tested by a seat other than
   Limpet lifts Spray. That seat writes the step's delivery node at pickup; the strategic node
   delegates it, so it needs no stamp of its own.
