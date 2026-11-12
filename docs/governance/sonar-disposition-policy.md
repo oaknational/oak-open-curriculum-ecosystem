@@ -109,11 +109,23 @@ from the tree, so the criterion lives in each project's server-side
 settings. A class site outside `agent-tools/` keeps the per-site mark. The
 criterion's cost is known: it also silences S4036 at an
 `agent-tools/` site outside the class, where external input reaches a shell.
-Review against §S4036's decision criteria is then the remaining control.
 CodeQL's command-injection queries do not cover such a site when the input
 is a command-line argument or an environment variable: the CodeQL workflow
 leaves the threat model at its default, remote, under which neither is a
 taint source.
+
+The substitute check, owner-chosen on 2026-11-12, is the lint rule
+`@oaknational/no-shell-form-process-launch`, on for every file the
+`agent-tools` workspace lints. It fails on `exec` and `execSync` from
+`child_process`, which always run a shell, and on a `shell` option that is
+not the literal `false`, so a process there launches with an argv array and
+no shell. That is stricter than §S4036's criteria, which allow a wholly
+literal shell string. The rule reads syntax only: a shell reached by its
+command name (`spawn('sh', ['-c', text])`), or through an options object
+built where the rule cannot see it, is left to review against §S4036's
+decision criteria. The criterion is reopened if the repository moves to
+CI-based analysis, where a tracked configuration can take the place of the
+server-side setting, or if that lint rule is relaxed or removed.
 
 ## Disposition Workflow
 
@@ -976,8 +988,11 @@ for a class site outside `agent-tools/`, and the issues already marked under
 mechanism block names this criterion as the one exception to its ban, and
 Disposition Workflow step 2 treats an S4036 finding under `agent-tools/`, raised
 after the criterion was saved, as a lost criterion for the owner to restore. The cost is accepted knowingly, as the first
-exception's was: an `agent-tools/` site outside the class is silenced too,
-and review against §S4036's decision criteria is its control.
+exception's was: an `agent-tools/` site outside the class is silenced too.
+Its control is the lint rule `@oaknational/no-shell-form-process-launch`,
+which the owner chose as the substitute check on 2026-11-12, with review
+against §S4036's decision criteria for what that rule cannot see. The second
+exception states the reopen condition.
 
 Worked example: the pull request's first analysis raised 30 S4036 issues in
 18 files, all under `agent-tools/`: 11 files under
