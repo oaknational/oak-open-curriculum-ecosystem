@@ -666,8 +666,11 @@ live tickets where the platform is in use.
   CodeQL query exclusion of `js/missing-rate-limiting` (the owner's
   2026-09-17 mechanism ruling, about that one issue), and S4036 at a binary
   invoked by name, marked `FALSE_POSITIVE` per site with the class's
-  canonical rationale (the owner's 2026-11-05 ruling).
-  Triage routes findings; it never buries them — never dismissed by
+  canonical rationale (the owner's 2026-11-05 ruling), except under
+  `agent-tools/`, where one project criterion on each analyser project
+  ignores the rule (the owner's 2026-11-11 choice).
+  Beyond those two exceptions, triage routes findings; it never buries
+  them — never dismissed by
   category or per site, never gate-narrowed, never warning-downgraded,
   never suppressed.
 - Fix the class, not the instance: a spelling finding on two lines gets a
