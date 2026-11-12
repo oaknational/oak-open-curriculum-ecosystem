@@ -24,51 +24,46 @@ thread record existed.
 
 ## Current Continuation
 
-- Branch: `ccr-ddb70dc4-jltz47`, restarted at `engraph` `SHA:54fb0b8c5` (pull request 394's
-  merge) for the research step; the same branch name carried the creation plan before that merge.
-- Invocation pointer: the opener `attendant-mechanism-step.prompt.md`; the brief above holds the
-  owner's words.
-- Controlling plans: the strategic node [`attendant-workflow`](../../../plans/strategic/attendant-workflow.plan.md)
-  and, for the next session, the delivery node
-  [`attendant-research`](../../../plans/delivery/attendant-research.plan.md). Both ratified by the owner on 2026-11-10.
-- Working notes: [`attendant-creation-plan-working-notes.md`](../../../research/agentic-engineering/attendant-creation-plan-working-notes.md)
-  (the evidence; §7 holds proposals for the lane's later steps).
-- Next safe step: the research step as its node sets it out (the owner, 2026-11-10: "Let's get
-  the plan written and ready, and the next session will carry out the research"; both nodes
-  ratified the same day): `start-right-thorough`, the brief's quotations, the two nodes,
-  registration here, the five questions in the node's order. The seat that does the research
-  does not later design the mechanism.
-- Research progress, 2026-11-12 (pull request 398): question 3 answered; question 1 has a first
-  classification of ten classes from about seventy instances and owes the remaining rule files,
-  the other retrospectives and the scenarios; questions 2, 4 and 5 not started. Sources read are
-  in the reading ledger under `attendant-research-working/`. A reader fan-out was designed,
-  reviewed (three verdicts of "revise") and not launched. Two matters are with the owner: the
-  price of a smaller staged fan-out over the rule files, and a departure from the plan's
-  stopping rule. PDR-098 was found and bears on the mechanism step.
-- The owner's answer to both, 2026-11-12, in session: "Agreed on both, no fan-out; carry on with
-  questions 4 and 5". Since then questions 4 and 5 are answered and a feasibility check has run.
-  By the session's close all five questions are answered, both scenario files are written and
-  reviewed by a fresh reader, and the strategic node's research summary is revised. The step's
-  acceptance is the owner's reading of the report (the plan's three criteria, each
-  `owner-held`); it is not yet recorded here. Not read, by the seat's choice: the Cricket
-  tallies, the rulings ledger, the further retrospectives and reports, the archives.
-- The research is accepted. The owner, 2026-11-12, in session: "I ratify the research." That is
-  the recorded proof of the research node's three acceptance criteria, each `owner-held`. The
-  fresh reviewer's read that criterion 2 names returned "sound-with-corrections", all applied.
-- Next safe step: the mechanism step, by a different seat, opened with
+- State: step 1 of the lane, the research, is done and accepted. The owner, 2026-11-12, in
+  session: "I ratify the research." That is the recorded proof of the research node's three
+  acceptance criteria, each `owner-held`; the fresh reviewer's read that criterion 2 names
+  returned "sound-with-corrections", all applied. The research landed by pull request 398.
+- Next safe step: step 2, the stepping-back mechanism, designed and tested by a seat other than
+  Limpet lifts Spray. That seat writes the step's delivery node at pickup; the strategic node
+  delegates it, so it needs no stamp of its own.
+- Invocation pointer: the opener
   [`attendant-mechanism-step.prompt.md`](../../../prompts/agentic-engineering/attendant-mechanism-step.prompt.md).
-  That seat writes its own delivery node at pickup and does not open the held-back scenarios or
-  the scenario review.
+  The brief above holds the owner's words.
+- Controlling plan: the strategic node
+  [`attendant-workflow`](../../../plans/strategic/attendant-workflow.plan.md), ratified on
+  2026-11-10, its research summary revised on 2026-11-12. The delivery node
+  [`attendant-research`](../../../plans/delivery/attendant-research.plan.md) is complete and
+  controls nothing further.
+- What step 2 reads: the findings,
+  [`attendant-research-findings.md`](../../../research/agentic-engineering/attendant-research-findings.md);
+  the open scenarios, `attendant-step-back-scenarios.md` beside it; PDR-098. The working notes
+  ([`attendant-creation-plan-working-notes.md`](../../../research/agentic-engineering/attendant-creation-plan-working-notes.md),
+  §7) are an earlier seat's proposals, as input.
+- What step 2 does not open: `attendant-step-back-held-back.md` and
+  `attendant-research-working/scenario-review.md`. They are for a fresh scorer after the design
+  is frozen, and the mechanism step records whether this was kept.
+- Limits the research states about itself: the classification covers catches that were written
+  down; the retrospectives beyond nine, most of the twelve reports the brief lists, the
+  archives and the run-by-run rows of the Cricket tallies were not read; a reader fan-out was
+  designed, reviewed and not launched (the owner, 2026-11-12: "Agreed on both, no fan-out;
+  carry on with questions 4 and 5"); the feasibility check is one trial.
+- Branch: none held. A new session works on its own designated branch from `engraph`.
 - Team expectation: solo cloud seat, the owner as design partner.
-- Acceptance bar: for the next session, phase 1's outputs as the plan names them (the findings
-  file, the scenarios file, the plan's summary section, a report to the owner).
+- Acceptance bar for the next session: the step's delivery node, brought to the owner, saying
+  what the mechanism has to do, how it will be tested against the scenarios before anything is
+  relied on, and what would show it does not work.
 
 ## Participating Agent Identities
 
 | platform | model | session_id_prefix | agent_name | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
 | claude-code | claude-fable-5-1 | 01Duoc | Juniper seeks Pollen | brief author (row reconstructed at thread open from pull request 390's commits and records) | 2026-11-07 | 2026-11-08 |
-| claude-code | claude-opus-5-5, then claude-fable-5-2 from 2026-11-10 | 01Duoc | Limpet lifts Spray | designer of the creation plan; research seat from 2026-11-10 (the owner's opener, given in the same session) | 2026-11-08 | 2026-11-10 |
+| claude-code | claude-opus-5-5, then claude-fable-5-2 from 2026-11-10 | 01Duoc | Limpet lifts Spray | designer of the creation plan; research seat on 2026-11-12 (the owner's opener, given in the same session) | 2026-11-08 | 2026-11-12 |
 
 The two rows share a prefix and are two seats. Juniper seeks Pollen is cloud session
 `01DuocjTp8TB8373EtwFwkoA` (pull request 390's `Claude-Session` trailers); Limpet lifts Spray is
