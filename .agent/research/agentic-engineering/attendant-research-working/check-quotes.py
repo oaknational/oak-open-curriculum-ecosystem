@@ -4,7 +4,8 @@ Usage: python3 check-quotes.py <file> [<file> ...]
 A span passes when it occurs, whitespace-normalised, in some tracked file other
 than the files being checked. The working folder is excluded, except its
 file of sentences copied from external documentation. Spans under 25 characters are skipped as too short
-to identify a source.
+to identify a source. The check shows a span exists somewhere in the sources; it does
+not show which source a sentence attributes it to. A source that cannot be read stops the run.
 """
 import re
 import subprocess
@@ -29,8 +30,8 @@ for path in tracked:
     try:
         with open(path, encoding="utf-8") as handle:
             corpus[path] = re.sub(r"\s+", " ", handle.read())
-    except (OSError, UnicodeDecodeError):
-        continue
+    except (OSError, UnicodeDecodeError) as error:
+        sys.exit(f"cannot read source {path}: {error}")
 
 failed = 0
 for target in targets:

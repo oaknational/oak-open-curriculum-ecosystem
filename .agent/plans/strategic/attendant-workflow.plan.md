@@ -142,7 +142,8 @@ from something other than recall. The research found what each preferred surface
 recall:
 
 - **start-right** owns the open of a session, which is when the owner's words arrive.
-- **A path-scoped rule** arrives when a file of a known kind is opened.
+- **A path-scoped rule** marks the moment a file of a known kind is opened. In this repository
+  it arrives as a one-line pointer, so its text still depends on the model opening the file.
 - **A workflow script** runs a step because the script reaches it.
 - **A skill** supplies a procedure and a fresh context once something else has decided to run
   it; its description cannot be relied on to fire it among eighty-seven.
@@ -158,7 +159,7 @@ steady beat).
 **The evaluation can be run.** The estate's skill runner tests a skill alone in an empty
 workspace. A with-and-without comparison in the full repository was tried once and works: under
 twenty seconds an arm, with a trace that shows whether a text was ever opened. Scenarios must be
-staged where the recorded cure is absent. Twenty-four scenarios and two controls are in
+staged where the recorded cure is absent. Twenty-three scenarios and two controls are in
 [`attendant-step-back-scenarios.md`](../../research/agentic-engineering/attendant-step-back-scenarios.md);
 a second file is held back for a fresh scorer after the design is frozen.
 

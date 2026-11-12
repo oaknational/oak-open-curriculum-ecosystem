@@ -101,8 +101,8 @@ what to quote (cause 4).
 After the arc. Step 2 tells a whole-corpus reader to find the last run of the same task class
 first and to write a ledger as each window is read.
 
-### Skills `parallax`, `parallax-frame`, `parallax-audit` (whole; first 400 characters of each
-long line)
+### Skills `parallax`, `parallax-frame`, `parallax-audit` (whole; the six longest lines were cut
+at 400 characters on the first read and their remainders read later the same day)
 
 Heavy inquiry machinery: charter, frame cards, bridge and crosswalk claims, statuses. The audit
 says "Never infer independence from agent count alone. An audit emulated by an orchestrator is

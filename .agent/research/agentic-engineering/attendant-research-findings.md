@@ -109,8 +109,9 @@ owner corrections and under-states what was absorbed in a turn.
 sources had already produced, and twelve of the twenty fall in one class, the last in the table,
 which is outside what a stepping-back mechanism is for.
 
-The classes, by what was wrong. The quotations are the owner's unless marked, each checked
-against its file.
+The classes, by what was wrong. The quotations are the owner's unless marked. Each was read at its
+source by the seat, and a script confirms each occurs word for word in some tracked file; the
+script does not confirm which file.
 
 | Class | What was wrong | Instances (examples) | The question that would have caught it | The moment to ask it |
 | --- | --- | --- | --- | --- |
@@ -156,8 +157,9 @@ asked about. The two lists are kept apart here so the owner can correct the seco
   for the thin classes. That search was run at the seat over the rule excerpts for classes 4, 6
   and 8, by keyword. It added no class. It found two further class 6 instances (the rules
   `precedence-is-not-approval` and `rules-have-no-exceptions`: "odds are you, or a prior agent,
-  made something up"), one further class 8 instance (the bot identity dropped for a signed-in
-  default, now scenario 8c), and nothing further for class 4.
+  made something up"), and nothing further for classes 4 or 8. One candidate (the bot identity dropped for a
+  signed-in default) was first written as a class 8 scenario and then withdrawn at review: the
+  table already files identity under class 10.
 - *Read late:* the ninth retrospective,
   `2026-09-01-why-delivery-stopped-when-the-merge-engine-was-a-seat.md`, was read to its first
   addendum after the first classification. It adds no class. Its owner catches are two single
@@ -177,9 +179,10 @@ asked about. The two lists are kept apart here so the owner can correct the seco
 
 The scenarios drawn from these classes are in
 [`attendant-step-back-scenarios.md`](attendant-step-back-scenarios.md). A fresh reviewer read both
-scenario files against this classification and against each cited source on 2026-11-12: verdict
+scenario files as they then stood (twenty-three open scenarios, nine held back, three controls)
+against this classification and each cited source on 2026-11-12: verdict
 "sound-with-corrections", thirteen findings, none above the middle severity, no instance shared
-between the open and the held-back file. All thirteen were applied; the return is in
+between the two files. All thirteen were applied, and no scenario has been added since; the return is in
 [`scenario-review.md`](attendant-research-working/scenario-review.md).
 
 ## Question 2: what the owner must see at approval and at the sense check
@@ -231,7 +234,8 @@ owner's unless marked. These are contents, not a layout; the design step shapes 
 ## Question 3: why the step-back instruments only partly succeed
 
 **Status: answered from the instruments' full texts, read at the seat; the reading ledger has
-each.**
+each.** The three parallax skills were first read with their longest lines cut short; the cut
+parts were read on 2026-11-12 at a review finding and change nothing here.
 
 **The estate has already framed this problem, and the plan did not cite it.** PDR-098, accepted
 with the owner's approval on 2026-06-15, splits the question of whether a rule takes hold into
@@ -408,8 +412,10 @@ do not depend on the model deciding it needs the instruction.
 | On a clock | A scheduled prompt ("Tasks only fire while Claude Code is running and idle.") | The scheduler, between turns. |
 | In code order | A workflow script ("A workflow moves the plan into code."; the documentation's table gives "Who decides what runs next" as "The script") | The script. |
 
-Two of these are not hooks and do not depend on recall: a path-scoped rule and a workflow
-script. Nothing in the documentation ties a skill or a sub-agent to an event except hooks.
+Two of these are not hooks and mark a moment without the model's recall: a path-scoped rule and
+a workflow script. Marking the moment is not supplying the content. In this repository a
+path-scoped rule's adapter is also a one-line pointer, so the rule's text still arrives only if
+the model opens the file; a workflow step carries its own prompt. Nothing in the documentation ties a skill or a sub-agent to an event except hooks.
 
 ### What the estate's own surfaces do today, measured
 
@@ -510,8 +516,9 @@ The owner's preferred composition is start-right, `AGENT.md`, skills and rules. 
 facts above, each has one thing it can do without depending on recall, and the list is short:
 
 - **start-right**: the open of a session. Fit for class 1.
-- **A path-scoped rule**: the moment a file of a known kind is opened. Fit for any moment that
-  has a file: a plan node, a run's record, a report, a pull-request description.
+- **A path-scoped rule**: the moment a file of a known kind is opened. Fit for marking any
+  moment that has a file: a plan node, a run's record, a report, a pull-request description. As
+  the adapters stand it delivers a pointer at that moment, not the rule's text.
 - **A skill**: a procedure and a fresh context, once something else has decided to run it. Its
   description cannot be relied on as the trigger.
 - **`AGENT.md` and always-on rules**: a name in context. Fit for the vocabulary, not for firing.
