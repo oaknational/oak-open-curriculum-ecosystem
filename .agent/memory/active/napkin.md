@@ -1801,3 +1801,50 @@ outside the repository. One instance each; scope is this session.
   instance's cure had since landed as code. A reader agent's quotations from external
   documentation were wrong in three of about twenty; fetching the raw pages and checking by
   fixed string caught them.
+
+## 2026-11-12 — Rocket holds Patina (01Duoc): an own-terms review of a paywalled article
+
+- **An attached PDF is not the document it is a print of.** The owner attached a four-page PDF of a
+  Substack post and asked for a deep dive into its approaches; the PDF held the free preview only,
+  cut at the first body heading. The file read reported success and a size, and said nothing about
+  content. Read the pages of an attachment before planning around it, and state its extent in the
+  first reply (2026-11-12, Rocket holds Patina, 01Duoc).
+- **This cloud environment reaches GitHub and almost nothing else.** A `curl` probe of 22 research
+  hosts got a proxy 403 on 20; `github.com` and `raw.githubusercontent.com` answered. Web search
+  still works and returns digests. For web research here: probe the hosts in one command first, read
+  GitHub-hosted mirrors and primary files with `curl`, and record search digests at their own lower
+  rung (2026-11-12, Rocket holds Patina, 01Duoc).
+- **A search digest was wrong twice where a direct read was possible.** It reported a 30% revenue
+  share in the Kimi K3 licence that the licence text does not hold, and two checkpoint sizes. The
+  fetch tool also declined to reproduce the licence verbatim; `curl` on the raw file returned it
+  whole (2026-11-12, Rocket holds Patina, 01Duoc).
+- **The fresh checkout had no claims registry and no `gh`-shaped GitHub tooling connected at
+  start.** The registry was seeded by hand from the reader's own error text before the claim opened
+  (2026-11-12, Rocket holds Patina, 01Duoc).
+- Own-terms holding line, one association only: the article's "governance layer outside the loop"
+  invites comparison with this estate's hooks and gates; left for the comparison session.
+- **A pull request that conflicts with its base gets no `CI` run, and nothing says so.** PR 403's
+  first two heads showed four green checks (CodeQL, SonarCloud) and no `run-quality-gates`; I noted
+  the absence and did not ask why. The branch conflicted with `engraph` in the napkin and the lane
+  README, so GitHub never started the `pull_request` workflow. After any first push, read the check
+  list for `run-quality-gates` by name; when it is absent, run
+  `git merge-tree --write-tree origin/<base> HEAD` before anything else (2026-11-12, Rocket holds
+  Patina, 01Duoc).
+- **The fetch tool and `curl` disagree about the network.** After the owner lifted restrictions the
+  fetch tool still refused `arxiv.org`, `hamel.dev` and others that `curl` reached at once. Probe
+  with `curl` before concluding a host is closed, and read pages by downloading and extracting text
+  (2026-11-12, Rocket holds Patina, 01Duoc).
+- **An abstract understated its own paper, and I repeated it.** The loop-adoption study's abstract
+  says almost no repository committed the prescribed files; its body records a spending or turn
+  limit in 101 of 256 inspected repositories. A verdict written from the abstract said "none". A
+  claim that carries a verdict is read in the body before it is written (2026-11-12, Rocket holds
+  Patina, 01Duoc).
+- **My evidence rows were accurate and selective.** A reviewer matched 116 of 116 quotations to
+  their pages and still found twelve rows wrong in what they left out: one logged a paper's critique
+  of other methods and omitted its own positive result; one called an essay "not about memory"
+  that has a section on the agent's notebook. Checking that a quotation exists does not check that
+  it is representative; give the reviewer the page text and ask for both (2026-11-12, Rocket holds
+  Patina, 01Duoc).
+- **Seven rounds of patching a findings file left it contradicting itself; one rewrite cured it.**
+  After the second review listed stale sections across the file, rewriting it whole on the current
+  evidence was shorter than the patches it replaced (2026-11-12, Rocket holds Patina, 01Duoc).
