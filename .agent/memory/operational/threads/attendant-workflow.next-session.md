@@ -26,7 +26,8 @@ thread record existed.
 
 - Branch: `ccr-ddb70dc4-jltz47`, restarted at `engraph` `SHA:54fb0b8c5` (pull request 394's
   merge) for the research step; the same branch name carried the creation plan before that merge.
-- Invocation pointer: the brief above.
+- Invocation pointer: the opener `attendant-mechanism-step.prompt.md`; the brief above holds the
+  owner's words.
 - Controlling plans: the strategic node [`attendant-workflow`](../../../plans/strategic/attendant-workflow.plan.md)
   and, for the next session, the delivery node
   [`attendant-research`](../../../plans/delivery/attendant-research.plan.md). Both ratified by the owner on 2026-11-10.
@@ -51,8 +52,13 @@ thread record existed.
   acceptance is the owner's reading of the report (the plan's three criteria, each
   `owner-held`); it is not yet recorded here. Not read, by the seat's choice: the Cricket
   tallies, the rulings ledger, the further retrospectives and reports, the archives.
-- Next safe step after the owner accepts the research: the mechanism step, by a different seat,
-  which writes its own delivery node at pickup and does not open the held-back scenarios.
+- The research is accepted. The owner, 2026-11-12, in session: "I ratify the research." That is
+  the recorded proof of the research node's three acceptance criteria, each `owner-held`. The
+  fresh reviewer's read that criterion 2 names returned "sound-with-corrections", all applied.
+- Next safe step: the mechanism step, by a different seat, opened with
+  [`attendant-mechanism-step.prompt.md`](../../../prompts/agentic-engineering/attendant-mechanism-step.prompt.md).
+  That seat writes its own delivery node at pickup and does not open the held-back scenarios or
+  the scenario review.
 - Team expectation: solo cloud seat, the owner as design partner.
 - Acceptance bar: for the next session, phase 1's outputs as the plan names them (the findings
   file, the scenarios file, the plan's summary section, a report to the owner).
