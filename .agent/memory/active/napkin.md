@@ -1869,26 +1869,27 @@ outside the repository. One instance each; scope is this session.
   `git worktree add ... .claude/...` command in one compound line. Giving the path first and in
   absolute form, in its own command, passed.
 
-### 2026-11-12 (Hydra holds Lightyear, d827c5; lifted from closeout event 7341c024 by Sandpiper)
+### 2026-11-12 (Hydra holds Lightyear, d827c5; lifted from the seat's closeout record by Sandpiper)
 
-- **#405 took five pushes against a budget of two.** Each review round found one more gap in a
-  seven-step runbook. A runbook of ordered acts on live settings wants an adversarial read of
-  every step against the system's rules (deletion restrictions, when a variable is read, what a
-  branch deletion closes) before the first push, not one cure per round.
-- **The review-cost gate's decision file is read relative to the worktree that pushes,** and a
-  line must start with the bare pull request number, with no `#`. The HELD message shows the
-  format but not the location.
-- **A reply that said "cured in the next commit" was posted before the push that failed.** Post
-  the reply after the push lands.
-- **The hook guard matched `-f` in a later `gh api graphql -f` on the same command line as a
-  push** and refused it as a force-push. Use `--raw-field` or split the commands.
-- **Reaching for `--no-verify` on a throwaway commit was refused by the hook.** The right move
-  was the one then taken: commit properly, then merge.
-- **An opinion given without reading the file was wrong:** "delete the carrier and mirror
-  workflows, fork-only". Their job guards answered it in one `git show`. Read a file's guards
-  before classifying its behaviour.
-- **The instrument was mis-sized twice:** menus offered, and a move to CI analysis recommended
-  for one rule. The owner answered with a sharper question each time. Answer in the frame and at
-  the size asked.
-- **Under the compaction drive a plain `git push` went out where `merge-bot push` was the
-  route.** The urge to finish is the moment to slow down.
+- **A runbook of ordered acts on live settings is reviewed against the platform's rules before
+  its first push.** #405 took five pushes; each round found one gap (a ruleset that restricts
+  deletion of its branch, a variable read only when a run starts, branches without a pull
+  request, a case-insensitive comparison). Ask of each step: what forbids it, what races it, what
+  does it leave behind, what does its literal wording admit.
+- **The review-cost gate reads its decision file relative to the pushing worktree**, and a line
+  starts with the bare pull request number, no `#`. The HELD message gives the format, not the
+  location.
+- **Post the "cured in commit X" reply after the push lands.** One reply went out before a push
+  the gate then held.
+- **The force-push guard matches `-f` anywhere on a command line that also pushes.** A later
+  `gh api graphql -f` on the same line was refused. Use `--raw-field` or separate commands.
+- **A reviewer's finding is tested, then owned.** Two reviewers raised the missing substitute
+  check for the S4036 criterion. Tested against the rule, it held, and the test produced the
+  recommendation: no agent-tools code used a shell-form launch, so a lint rule could carry the
+  check at no cost to the tree.
+- **A Sonar analysis warning with no scanner log can still be bisected from the tree.** Listing
+  every tracked file that fails UTF-8 decoding named the suspects (37 binaries); excluding them
+  removed the warning on the next analysis.
+- **Commitlint reads a body line that starts with a word and a colon as a footer.** Reflow the sentence.
+- **The door refuses a pull request behind its base**, so one seat's pull requests serialise: each
+  merge costs the next a sync, a full check run and a fresh review.

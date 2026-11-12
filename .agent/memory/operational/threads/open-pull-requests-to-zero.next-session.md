@@ -794,3 +794,27 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
 - **Stale record found.** ADR-213's ruling 3 (2026-07-19) still names owner-run VoiceOver in
   Safari at each widget ship. The owner's word of 2026-11-12 is that those checks were stopped
   as unworkable. What replaces the ruling is the owner's to say.
+- **Hydra's open observations (not lanes), from its closeout record.**
+  - The lint rule `@oaknational/no-shell-form-process-launch` does not catch
+    `export * from 'node:child_process'`.
+  - Oak's SonarCloud project keeps the file-encoding analysis warning until the owner merges
+    oaknational#1023; Engraph's lost it when #400 landed.
+  - "Architecture analysis executed with errors" remains on both SonarCloud projects. Hydra
+    investigates it next, at the owner's word.
+- **Taken over from Hydra (the owner, 2026-11-12, relayed by Hydra: "Hand all responsibilities
+  other than the architecture investigation to Sandpiper").** This seat now holds:
+  - Todo 6 of the reunify plan as merged in #405: its execution after the owner merges
+    oaknational#1023, and any edit to it.
+  - After that merge, a read of
+    `https://sonarcloud.io/api/ce/analysis_status?component=oaknational_oak-open-curriculum-ecosystem`
+    to confirm the file-encoding warning has gone from Oak's project.
+  - The S4036 record: the substitute lint rule, the reopen condition in the disposition
+    policy's second exception, and the rule's known gap above.
+  - The binary globs in `sonar.exclusions` (#400). They rest on the policy sentence "a product
+    image or font is an asset, not code"; if the owner disagrees, the globs narrow.
+  - The `upstream` remote observation recorded earlier in this thread.
+  Hydra keeps only the SonarCloud "Architecture analysis executed with errors" investigation.
+- **Docs-only definition (the owner, 2026-11-12, verbatim):** "docs only can be if the PR only
+  changes markdown files and those files are only in the .agent, or root docs folder". The merge
+  tool's records class (`agent-tools/src/merge-bot/change-class.ts`) is wider: it also takes
+  `linkedin/` and seven root files.
