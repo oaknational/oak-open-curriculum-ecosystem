@@ -1776,3 +1776,10 @@ outside the repository. One instance each; scope is this session.
   (2026-11-12, Rocket holds Patina, 01Duoc).
 - Own-terms holding line, one association only: the article's "governance layer outside the loop"
   invites comparison with this estate's hooks and gates; left for the comparison session.
+- **A pull request that conflicts with its base gets no `CI` run, and nothing says so.** PR 403's
+  first two heads showed four green checks (CodeQL, SonarCloud) and no `run-quality-gates`; I noted
+  the absence and did not ask why. The branch conflicted with `engraph` in the napkin and the lane
+  README, so GitHub never started the `pull_request` workflow. After any first push, read the check
+  list for `run-quality-gates` by name; when it is absent, run
+  `git merge-tree --write-tree origin/<base> HEAD` before anything else (2026-11-12, Rocket holds
+  Patina, 01Duoc).
