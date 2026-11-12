@@ -1,43 +1,49 @@
-# Findings: loop engineering at scale, in its own terms
+# Findings: loops in agentic systems, in the field's own terms
 
-As of 2026-11-12. Reader: the owner. Decision served: what the independent baseline is, and whether
-it is firm enough to compare against. Scope and method are in [brief.md](./brief.md). Claims cite
-[evidence-log.md](./evidence-log.md): an E or P id names a logged claim with its bin; an S id alone
-names a source, and the claim then stands at that source's rung with no row of its own. Sentences
-marked as this session's inference or synthesis cite nothing and are the author's.
+As of 2026-11-12. Reader: the owner. Decision served: what the independent baseline on loops in
+agentic systems is, and whether it is firm enough to compare against. Scope and method are in
+[brief.md](./brief.md). Claims cite [evidence-log.md](./evidence-log.md): an E or P id names a
+logged claim with its bin; an S id alone names a source, and the claim then stands at that source's
+rung with no row of its own. Sentences marked as this session's inference or synthesis cite nothing
+and are the author's.
+
+**The subject.** The owner reset the focus on 2026-11-12: the subject is the field's writing on
+loops in agentic systems. The article that started the work, Linas Beliūnas's "Loops at Scale", is
+the prompt that pointed at the field. Its preview is one source among the others, its paid body is
+not needed, and nothing below waits on it.
 
 ## Verdicts
 
-Revised on 2026-11-12 after two commissioned web-session reports opened the pages this session
-could not reach. The section after this one lists what they changed.
-
-1. **The article's body is still unread.** The PDF and both web sessions reached only the free
-   preview, which stops at its first body heading (P17). The templates, the checklist, the framework
-   and the swarm architecture it promises are unread. The author's earlier guide, the "floor", is
-   also paid and unread past its preview (E-104).
-2. **The field behind the article is now read at the page.** The article's topics line up with four
-   essays by one author, Addy Osmani: the harness (19 April 2026, E-113), the loop (7 June, E-100),
-   the outer loop (15 July, E-120) and light and dark factories (20 July, E-126). The preview
-   credits none of them; whether the body does is unknown. This alignment is an inference, made
-   separately by this session and by Report A.
-3. **This session's synthesis: one idea runs through all four topics. A loop cannot be trusted to
-   stop or to judge itself, so the stopping power and the verdict must sit outside it.** It draws on
+1. **The field has a clear spine.** Its sources stack four layers: the harness, the environment one
+   agent run sits inside (E-113 to E-115); the loop, the system that prompts the agent in place of a
+   person (E-100, E-107); the outer loop, where a person stays answerable (E-120, E-121); and the
+   factory, many harnessed loops drained through a review gate (E-126, E-127). Swarms are the same
+   structure widened: many workers, a verifier (E-132, E-134).
+2. **This session's synthesis: one idea runs through every layer. A loop cannot be trusted to stop
+   or to judge itself, so the stopping power and the verdict must sit outside it.** It draws on
    E-24, E-30, E-31, E-113, E-120, E-123, E-127 and E-132.
+3. **The vocabulary is unsettled.** "Gate", "inner and outer", "closed loop", "harness" and "back
+   pressure" each carry two to four senses across the sources, and loop and harness nest in
+   opposite directions in different accounts (E-102, E-103, E-114, E-115, E-123).
 4. **The practice lags its own prescription.** The one measured study found loops running in 217 of
    36,645 public repositories, and found stop conditions, budgets and verification files committed
-   in none of them (E-109, E-110). The article's claim that the governance layer is unbuilt has
-   measured support, from a study with stated limits (E-111). The detail beyond the headline counts
-   rests on Report B's reading of the full paper alone.
-5. **The evidence is thin where the article is most vivid.** Nobody opened the Medium post behind
-   the $47,000 incident, and its republished weekly figures sum to $25,658 over four weeks, which
-   fits neither the total nor the 11 days (E-137). The $4,200 incident has no source earlier than
-   the article (E-138). "Refutation gate" appears in no opened source but the article (E-131).
-6. **The article's model claims hold.** Moonshot's pages give Kimi K3 as 2.8 trillion parameters
-   with weights promised by 27 July 2026, and swarms of up to 300 sub-agents now running on K3
-   (E-134, E-136). The licence, read directly, is permissive for most builders (E-69, E-70). The
-   serving minimum is eight current-generation accelerators (E-135).
-7. **Status: `provisional`, firmer than before.** The baseline supports a concept-level comparison
-   on the field's account. It supports no statement about the article's paid body.
+   in none of them (E-109, E-110). Real harnesses differ on whether a stop is enforced at all
+   (E-119). The detail beyond the study's headline counts rests on Report B's reading alone.
+5. **The field's evidence is mostly self-report.** One named dark factory built by three people
+   (E-128), one named abandonment after about four months (E-130), one measured adoption study with
+   stated limits (E-111), and a body of cost incidents whose best-known figure does not reconcile
+   with its own numbers (E-137).
+6. **One voice dominates.** Four essays by Addy Osmani, from April to July 2026, supply most of the
+   definitions the rest of the field repeats (E-100, E-113, E-120, E-126), and his factories essay
+   is largely a report of a talk by Dexter Horthy, the field's main critic of running without
+   review (E-126).
+7. **Swarms on open weights are real; the single gate is not established.** The vendor documents up
+   to 300 sub-agents on Kimi K3 (E-134). The licence, read directly, is permissive for most
+   builders (E-69, E-70), and the serving minimum is eight current-generation accelerators (E-135).
+   The nearest method to a refuting gate reports agreement among agents failing in both directions
+   (E-133).
+8. **Status: `provisional`.** The baseline supports a concept-level comparison. Most of it rests on
+   a model's relay of pages this session could not open.
 
 ## What the commissioned reports changed
 
@@ -91,8 +97,8 @@ $4,200 incident (E-138).
 
 | Layer | Strength | Consequence |
 | --- | --- | --- |
-| The article's preview | Read directly | K1 is answered in full |
-| The article's paid body | Unread | Nothing is attributed to it |
+| The prompting article's preview | Read directly | One source among the others |
+| The prompting article's paid body | Unread, and not needed (owner, 2026-11-12) | Nothing is attributed to it |
 | The Kimi K3 licence and README lines, and the quoted lines of an incident compilation | Read directly with `curl` | The firm part of the baseline |
 | Other GitHub-hosted pages: the 14-step roadmap, the Ralph playbook, one issue, two lists | Read through the fetch tool's model summary | Usable; quotations from them are the summary's rendering |
 | Osmani's four essays, Huntley's post, Shapiro's levels, StrongDM, Dagu, Ng, three arXiv papers, Anthropic's guide, Moonshot's pages | Opened by two commissioned web sessions and relayed as paraphrase (rung RW in the evidence log) | Usable for what each source says and when; not for exact wording. Three earlier search-digest statements were corrected by these reads |
@@ -103,11 +109,7 @@ brief follow from that. The owner then ran
 [commissioned-report-brief.md](./commissioned-report-brief.md) in two web sessions with open access;
 their reports opened most of the pages behind the search-digest rows.
 
-Two questions depend least on the paid body: K2, the stated floor, and K7, the incidents. Each
-still has one item only the author can settle: the "six primitives" of his earlier guide, and the
-source of the $4,200 case. K3 to K6 are the field's account, awaiting the article's.
-
-## K1: what the preview claims
+## The prompt: what the article's preview claims
 
 The thesis is one sentence: "a working loop and a safe loop are not the same thing, and the gap
 between them is where real incidents happen" (P7). The diagnosis follows from two incidents: both
@@ -127,7 +129,7 @@ It promises four topics and shows none of them (P12 to P16):
 4. swarm-scale architecture with a single refutation gate, with a reading of Kimi K3's licence and
    infrastructure.
 
-## Approach 1: loop engineering, the stated floor
+## Approach 1: loop engineering
 
 **Definition.** Replacing yourself as the person who prompts the agent, and designing the system
 that does it instead (E-02). The loop finds work, hands it to the agent, checks the result, records
@@ -350,10 +352,9 @@ footprint near 1.68 TB of accelerator memory, on eight current-generation accele
 those figures, "open weights" at this size means a datacentre, or a hosted endpoint.
 
 **Evidence.** The licence and README were read directly. The swarm architecture is reconstructed
-from sources about a predecessor model and a different product. The article's own architecture is
-unread.
+from sources about a predecessor model and a different product.
 
-## K7: the two incidents
+## The incident record: two cases the prompt cites
 
 The tracing below rests on one unsigned compilation on GitHub (S6), read directly. The Medium post
 it cites was not opened.
@@ -370,8 +371,7 @@ compresses a specific mechanism, detection by monthly invoice (E-83).
 The nearest public record is a Claude Code issue of December 2025: over 300 identical calls in about
 4.6 hours and about 27 million tokens, with no dollar figure and no dashboards (E-85). The numbers
 do not match. The commissioned reports found one further near-miss, an unopened Medium post about
-$4,200 burned over 63 hours, with none of the other details (E-138). The case is unsourced until
-the paid body is read.
+$4,200 burned over 63 hours, with none of the other details (E-138). The case is unsourced.
 
 The compilation lists many further cases of the same class and notes that first-party engineering
 post-mortems "remain extraordinarily rare" (S6, line 3).
@@ -391,7 +391,8 @@ The sources that give numbers treat token spend as large and variable (E-08, E-5
 
 ## Frame verdicts
 
-The brief held two frames: a coherent emerging discipline, or a newsletter digest of recent coinages.
+The brief held two frames for each topic: a coherent emerging discipline with identifiable
+originators and stable definitions, or recent coinages with shifting definitions and thin evidence.
 
 | Topic | Verdict |
 | --- | --- |
@@ -402,8 +403,9 @@ The brief held two frames: a coherent emerging discipline, or a newsletter diges
 | Swarm with a refutation gate | Mixed. Frame 1 for the swarm: the vendor documents up to 300 sub-agents on the open-weight model the article names (E-134). Frame 2 for the "single refutation gate": the phrase is in no other opened source (E-131), and the nearest method reports that agreement among refuting agents failed in both directions (E-133) |
 | The incidents | Frame 2. One single-source figure whose own numbers do not reconcile (E-137), one untraced (E-138) |
 
-For the article as a whole: the preview reads as a digest that orders a field's ideas for founders.
-Whether its body adds templates and a checklist of its own is the open question.
+For the field as a whole: mixed, nearer the first frame. The originators are named and dated, the
+implementations exist and one study has measured them. The definitions are not yet stable and most
+of the evidence of benefit is self-reported.
 
 ## Challenge pass
 
@@ -450,32 +452,35 @@ the same sources at a higher rung and will replace them.
 
 - **Permits:** a concept-level comparison against these five approaches as the field describes them;
   reliance on what the Kimi K3 licence text says; reliance on what the incident compilation says.
-- **Forbids:** any statement of what the article's paid body says; treating a relayed paraphrase as
-  the author's wording; treating the swarm card as the article's architecture.
-- **Why still provisional:** the reports are a model's relay that this session cannot re-read at
-  the source, the two runs are not independent of each other, and the article's body is unread.
+- **Forbids:** treating a relayed paraphrase as an author's wording; treating the swarm card as an
+  established architecture.
+- **Why provisional:** the commissioned reports are a model's relay that this session cannot
+  re-read at the source, the two runs are not independent of each other, and the topics covered
+  were set by one article's contents list.
 
-| Question | Coverage | Strongest rung reached |
+| Topic | Coverage | Strongest rung reached |
 | --- | --- | --- |
-| K1 preview | Complete | Direct read |
-| K2 the floor | Osmani's essay, Huntley's post, Anthropic's guide and the adoption study covered; the author's guide paid and unread | Commissioned report |
-| K3 harness | Three definitions and per-system controls covered; no file structure exists in any opened source | Commissioned report; direct read for enforcement |
-| K4 inner and outer | Three versions covered and dated | Commissioned report |
-| K5 factories | Levels, rule, one success and one abandonment covered | Commissioned report |
-| K6 swarm and K3 | Licence complete; Moonshot's swarm and hardware covered by one report; the article's architecture unread | Direct read for the licence; commissioned report for the rest |
-| K7 incidents | One traced to an unopened post with figures that do not reconcile; one untraced | Commissioned report; direct read of the compilation |
-| K8 practicalities | Assembled from the above | Mixed |
+| Loop engineering | Osmani's essay, Huntley's post, Anthropic's guide and the adoption study covered | Commissioned report |
+| Harness and enforcement | Three definitions and per-system controls covered; no canonical file structure exists in any opened source | Commissioned report; direct read for enforcement |
+| Inner and outer loop | Three versions covered and dated | Commissioned report |
+| Light and dark factories | Levels, rule, one success and one abandonment covered | Commissioned report |
+| Swarms and Kimi K3 | Licence complete; Moonshot's swarm and hardware covered by one report | Direct read for the licence; commissioned report for the rest |
+| Incidents | One traced to an unopened post with figures that do not reconcile; one untraced; a compilation of further cases read | Commissioned report; direct read of the compilation |
+| What operation requires | Assembled from the above | Mixed |
 
 ## Open items, in order
 
-1. **The full article text.** With it, K3 to K6 are re-answered against the author's own templates,
-   checklist, framework and architecture, and the $4,200 incident gets its source or stays
-   unsourced. This is the largest gain available and the owner holds it.
-2. **The author's earlier guide.** It defines the floor this article builds on, and it is paid
-   (E-104). The owner's subscription covers it or does not; with its text, the "six primitives" and
-   the 14-step roadmap are read in the author's own form.
-3. **Three unopened origins.** The Medium post behind the $47,000 incident, the exact words of
+1. **The edges of the field.** The topics here are the four the prompting article listed. A
+   baseline on loops in agentic systems would also look at what that list left out and this work
+   did not search for: loops outside coding agents; the "graph engineering" turn that followed in
+   July 2026 (E-92); loops whose product is the agent's own memory or skills; and evaluation as a
+   loop. Whether to widen is the owner's call.
+2. **Three unopened origins.** The Medium post behind the $47,000 incident, the exact words of
    Steinberger and Cherny, and the harness sources Osmani draws on. Each refused automated access.
+3. **The later parts of the harness paper.** Its remaining observations and its recommendations
+   were not reached by either report.
+4. **A second review pass.** The revisions made after the commissioned reports and after the
+   change of subject have not been reviewed.
 
 ## What comes next
 

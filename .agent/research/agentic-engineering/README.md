@@ -104,12 +104,12 @@ sources without turning research notes into a second canon.
   internal reviews and the PR review set apart, and a doubt point at each stage
   asking whether the work is worth doing; input to the design session's brief.
 - [loop-engineering-governance-2026-11/findings.md](./loop-engineering-governance-2026-11/findings.md)
-  — own-terms baseline of the approaches in Linas Beliūnas's "Loops at Scale"
+  — own-terms baseline of the field's writing on loops in agentic systems
   (loop engineering, the harness and enforcement outside the loop, the inner
-  and outer loop, light and dark factories, swarms with a refutation gate,
-  Kimi K3's licence), reconstructed from the field's public sources because
-  the article's body is paywalled; status provisional; no comparison with the
-  Practice.
+  and outer loop, light and dark factories, swarms and verification gates,
+  Kimi K3's licence), prompted by the preview of Linas Beliūnas's "Loops at
+  Scale" and read through direct reads and two commissioned web-session
+  reports; status provisional; no comparison with the Practice.
 - [attendant-creation-plan-working-notes.md](./attendant-creation-plan-working-notes.md)
   — the design session's working notes for the Attendant creation plan: the
   session's impact and value, how it delivers them, and the review of the brief

@@ -1,4 +1,4 @@
-# Session brief: loop engineering at scale, in its own terms
+# Session brief: loops in agentic systems, in the field's own terms
 
 As of 2026-11-12. Owner: Jim. Author: Claude (Rocket holds Patina), in a Claude Code cloud session
 with the owner.
@@ -19,7 +19,27 @@ Verbatim, typos kept, 2026-11-12:
 > recent research into self improving and learning systems. The first task is to improve this
 > request. Open a draft PR
 
+Later the same day, after the first findings and two commissioned reports, the owner reset the
+focus. Verbatim:
+
+> Let's change focus, we don't need the original article text, we can treat the preview as a piece
+> of information that led to wider research into loops in agentic systems
+
 The owner's quoted words bind. Everything else in this brief is the author's proposal.
+
+## The subject after the change of focus
+
+The subject is the field's writing on loops in agentic systems. The article is the prompt that
+pointed at it; its preview is one source among the others and its paid body is not sought. Three
+things in the sections below are superseded by this and kept as the record of how the work began:
+
+- the GOAL line's "approaches in the article" now reads "approaches to loops in agentic systems";
+- key question K1 (what the preview claims) is provenance, and K2 to K8 are questions about the
+  field;
+- the first reopen condition (the owner supplies the full article text) is withdrawn.
+
+The topics covered are still the four the article listed. Whether to widen past them is recorded as
+the first open item in the findings.
 
 ## What the request left open, and how this brief closes it
 

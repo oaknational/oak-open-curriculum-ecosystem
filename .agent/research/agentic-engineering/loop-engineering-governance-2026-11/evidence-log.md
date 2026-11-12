@@ -1,4 +1,4 @@
-# Evidence log: loop engineering at scale
+# Evidence log: loops in agentic systems
 
 Reader: the owner, and the later session that compares this baseline with the Practice. Decision
 served: which statements about these approaches may be relied on. Method and scope are in
@@ -315,7 +315,6 @@ W ids are the brief's. "Was" gives the earlier row and its bin.
 
 ### Still open after the reports
 
-- The subject article's paid body, and the paid body of the author's earlier guide.
 - The exact words of Steinberger's post and Cherny's remark at origin.
 - The Medium post behind the $47,000 incident, and any source for the $4,200 incident.
 - The sources W4 draws on for the harness (Trivedy, Hashimoto, Böckeler), and the origins of W2's
