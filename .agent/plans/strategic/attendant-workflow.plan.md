@@ -131,7 +131,7 @@ the response was a thing that had to be produced or could not be passed.
 4. Its return is answered in writing in the run's record before the run continues, and a
    worth-doubt with evidence goes to the owner.
 5. It can subtract, itself included: it names what it retires, and its load on every session is
-   visible.
+   visible. A lesson or a check that changed nothing is revised or dropped.
 
 **The tension at the centre, restated on the estate's own decision record.** PDR-098, accepted
 with the owner's approval on 2026-06-15, already frames this problem and forbids curing it with
@@ -155,6 +155,13 @@ As input to the mechanism step, whose implementer writes its own node and decide
 in the findings divide into those that have a file or a place in a script, which something
 other than recall can mark, and those that do not (a step that has grown; a loop running at a
 steady beat).
+
+**A gap between runs, named by the owner's report of 2026-11-12.** The owner's "Doing and
+Dreaming" proposes a clocked pass that turns accumulated experience into guidance. Read against
+the findings, it and this lane are two halves: stepping back acts inside a task, dreaming
+between tasks. The lane has no loop that carries one run's lessons into the next, and no check
+that a lesson took. Where that loop belongs is the owner's to place; the findings' last section
+gives the comparison, and the seats that take steps 2 to 4 read it as input.
 
 **The evaluation can be run.** The estate's skill runner tests a skill alone in an empty
 workspace. A with-and-without comparison in the full repository was tried once and works: under

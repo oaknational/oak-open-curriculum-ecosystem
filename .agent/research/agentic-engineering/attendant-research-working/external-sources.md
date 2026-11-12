@@ -49,3 +49,36 @@ Claude Code documentation, fetched on 2026-11-12. The findings file quotes only 
 ## `https://code.claude.com/docs/en/cloud-environments.md`
 
 - | Your repo's `CLAUDE.md` | Yes | Part of the clone |
+
+## The owner's report "Doing and Dreaming: Periodic Learning for Agents in a Repo" (12 November 2026)
+
+Attached by the owner in session on 2026-11-12 and not held in this repository. Each line below
+was checked by script against the attached file.
+
+- Agents act when something prompts them, so learning from accumulated experience happens only when a person remembers to start it.
+
+- Periodicity is still only the trigger.
+
+- A tick with no brief has nothing to act on.
+
+- The clock grants the opportunity and the agent decides whether to take it.
+
+- Pruning is half the work. A system that only accumulates has a bigger pile and has learned nothing.
+
+- A merge is not learning.
+
+- A lesson that changed nothing is revised or dropped.
+
+- any agent may append raw experience, but only the dreaming agent rewrites distilled memory
+
+- May dreaming change the body, such as tests and conventions, or only the memory?
+
+- Working sessions read the guidance when they start, so the next session begins with the new lessons.
+
+- Some of what the entity knows is in its shape.
+
+- The pass works on a fixed view of past experience.
+
+- Experience has to be captured cheaply and rawly in the moment, or there is nothing honest to dream about later.
+
+- What evidence shows that a lesson has changed how work is done?

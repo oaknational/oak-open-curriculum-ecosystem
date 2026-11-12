@@ -3,7 +3,8 @@
 The findings of the research step
 [`attendant-research`](../../plans/delivery/attendant-research.plan.md), one section per
 question. Research seat: Limpet lifts Spray. Status: all five questions answered on 2026-11-12
-and ratified by the owner the same day; each section states what it rests on and what was not
+and ratified by the owner the same day; a last section, added afterwards at the owner's word,
+reads the owner's report on periodic learning against them; each section states what it rests on and what was not
 read.
 
 ## Method and launch record for the corpus read (question 1)
@@ -316,7 +317,7 @@ artefact the work must produce anyway, whose shape carries the question.
 5. *It can subtract.* Stands, and applies to the mechanism itself. The estate's response to
    failure has been additive ("Every correction produced an instrument"; rules and skills grew
    about 30% in forty-two days). The mechanism must name what it retires, and its own load on
-   every session must be visible.
+   every session must be visible. A lesson or a check that changed nothing is revised or dropped, which needs something that looks later for whether it took (the owner's report of 2026-11-12; the last section of this file).
 
 **What worked, across the corpus.** Each case had the same shape: something outside the agent's
 recall marked the moment, and the response was a thing that had to be produced or could not be
@@ -562,3 +563,104 @@ decides.
 Seven kept, four adapted, three left. The two the Practice holds only in part and the Attendant
 most needs are M2 and M11: a check that refuses to start, and a walk of the contract item by
 item. Both are bound to a moment the process owns.
+
+
+## The owner's report on periodic learning, read against these findings
+
+The owner wrote "Doing and Dreaming: Periodic Learning for Agents in a Repo" on 12 November 2026
+and asked in session for these findings to be updated from it. The report is not held in this
+repository; the sentences quoted here were checked against the attached file
+([`external-sources.md`](attendant-research-working/external-sources.md)). It proposes a second
+mode of agent activity, dreaming, that runs on a clock beside ordinary work and turns raw
+experience into better guidance. Quotations in this section are the owner's, from the report.
+
+### One diagnosis, two halves
+
+The report and this research start from the same observation. The report: "Agents act when
+something prompts them, so learning from accumulated experience happens only when a person
+remembers to start it." This research: every step-back instrument depends on the working agent
+deciding to use it. Both conclude that a trigger alone is not the cure. The report: "Periodicity
+is still only the trigger", and "A tick with no brief has nothing to act on." This research:
+what worked had a moment marked from outside the agent's recall and a response that had to be
+produced.
+
+They cover different ground. Stepping back acts inside a task, at a moment. Dreaming acts
+between tasks, on accumulated experience. The Attendant lane as planned has the first and not
+the second: a run ends with a retrospective, and nothing carries its lessons into the next run.
+
+### Where the estate's evidence bears on the report
+
+- **Waking is the weak step.** The report's step 7: "Working sessions read the guidance when
+  they start, so the next session begins with the new lessons." In the estate's record, guidance
+  read at the open did not reliably change behaviour at the act: sixteen of nineteen lessons
+  with verified homes recurred within four weeks, and in this research's one trial an always-on
+  rule's file was never opened. A dreaming pass that ends in better guidance inherits question
+  3's whole problem at the point where the guidance has to act.
+- **The report's question about the body has evidence behind one answer.** It asks: "May
+  dreaming change the body, such as tests and conventions, or only the memory?" Everything the
+  corpus shows binding behaviour was a change to the body in the report's sense: a lint rule, a
+  gate that refused a push, a template step, a count that a report must open with. The report
+  itself says "Some of what the entity knows is in its shape." A pass that may only rewrite
+  memory can only produce the kind of cure the estate has measured as weak.
+- **The estate already dreams by hand, and its failures are on record.** The napkin is the raw
+  log, distillation and consolidation are the pass, and the pending-graduations register is the
+  queue. The recorded failures are the report's own risks: the napkin "has become a journal";
+  a consolidation ran three days while its count did not move, displaced by a daily ceremony; a
+  mapping fleet spent about eight million tokens and homed nothing; rules, skills and directives
+  grew about 30% in forty-two days. The report's "Pruning is half the work. A system that only
+  accumulates has a bigger pile and has learned nothing." describes the measured state.
+- **A dreamer inherits the frame of the log.** The report asks for a pass that "works on a fixed
+  view of past experience" and for experience "captured cheaply and rawly in the moment, or
+  there is nothing honest to dream about later." Causes 2 and 4 of question 3 apply to the log:
+  it is written by the agent that had the experience, the estate's records say napkins
+  over-record owner corrections, and Cricket legs built findings on a mis-dated record. Raw
+  capture helps; it does not make the log independent of its author.
+- **The clock, with the threshold, agrees with the owner's rulings.** Question 4 found a clock
+  the wrong signal for a step back, and the corpus has the owner cancelling work that fired on
+  the clock alone. The report does not fire on the clock alone: "The clock grants the
+  opportunity and the agent decides whether to take it." That is the same shape as the owner's
+  2026-10-19 word that a fold's need "varies with how much work is happening". The threshold is
+  an agent's judgement again, made in a fresh session and not under the drive to finish.
+
+### What the report adds that these findings lacked
+
+- **The half between runs.** A stepping-back mechanism, however reliable, changes one task.
+  Whether the Attendant gets better from run to run is the report's subject and was nobody's in
+  this lane.
+- **Checking that a lesson took.** The report's step 8: a later pass looks for whether the
+  friction has recurred, and "A lesson that changed nothing is revised or dropped." The estate
+  has no instrument for this; its own records say a napkin measures recurrence and never
+  extinction. The report's open question, "What evidence shows that a lesson has changed how
+  work is done?", is the same question the mechanism step faces for a seeded scenario, at a
+  longer range.
+- **A single-writer rule for distilled memory.** "any agent may append raw experience, but only
+  the dreaming agent rewrites distilled memory". The estate has no such rule.
+- **"A merge is not learning."** The lane's success measures should not read a merged mechanism
+  as a working one. The strategic node already declines that claim; the report states why.
+
+### What this research offers the report
+
+- **What to select.** The report asks what marks an experience as worth revisiting. The ten
+  classes of question 1 are a candidate key, and the estate's own observation that a second
+  owner correction on one class is itself a detector is a candidate trigger for selection.
+- **A test set.** The scenarios written for the stepping-back mechanism can serve the report's
+  step 8: a lesson has taken when the scenario for its class no longer fails.
+- **A caution on the reader.** Question 3's evidence on Cricket applies to a dreaming pass: the
+  reliable part is a reading compared against quoted source words by another reader, and
+  agreement among readers of one log is one piece of evidence.
+
+### What changes in these findings
+
+1. **Requirement 5 is restated in the report's terms.** The mechanism can subtract, itself
+   included, and a lesson or a check that changed nothing is revised or dropped. That needs
+   something that looks later for whether it took.
+2. **Question 4's reading of the clock is narrowed.** A clock is the wrong signal for a step
+   back inside a task. A clock with a threshold is a sound trigger for a different job, the
+   review of accumulated experience, and a clock independent of any session exists.
+3. **A gap is named for the lane, and it is the owner's to place.** The lane has no loop between
+   runs. Whether dreaming is part of the Attendant, beside it, or a lane of its own is not a
+   research finding. The seats that take steps 2 to 4 should read the report's eight parts as a
+   candidate design for that loop.
+4. **The answer to "body or memory" is carried into step 2 as evidence.** Where the mechanism
+   step has a choice between changing guidance and changing a template, a check or a script, the
+   corpus favours the second, and the report gives the reason.
