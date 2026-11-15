@@ -19,9 +19,12 @@ accounts of this arc told a larger story than that, and this record corrects the
   beside it, and whether each statement about cause is no stronger than that evidence.
 - **Evidence standard and authority boundary.** A reader can re-read the pull requests and the
   check-runs on their commits. The session transcript, the scan log and SonarCloud's task history
-  are not tracked; what this record takes from them is quoted with its instant, and is the author's
-  reading of its own session. Where the record gives a reason for an act, it says whether the
-  reason was written down at the time.
+  are not tracked, and a reader cannot test what this record takes from them. Those are: every
+  timeline row whose source is "transcript" or "scan log", the words in quotation marks, the
+  tool-call times, the boundaries of the two idle stretches, the file counts, and the statement
+  that the analysis of 10:43Z carried no warning. Each is the author's reading of its own session.
+  Where the record gives a reason for an act, it says whether the reason was written down at the
+  time.
 - **Non-goals.** The record applies nothing, edits no rule or skill, and authorises no act. It
   makes no finding about the owner's choices.
 - **A successful review.** One that reports a figure that does not follow from its source, or a
@@ -159,8 +162,9 @@ chose the local run at 14:00 to follow other work, and released it at 18:17. The
 
 ## The seat's earlier accounts, corrected
 
-The seat's closeout record and formation letter of 2026-11-15, and the first draft of this report,
-said that days of analysis found nothing, that the seat knew within twelve minutes what would end
+The first draft of this report is commit `200a7bede` on the pull request's branch (pull request
+426), which the merge keeps in history; this section says what it claimed and what replaces it. That
+draft, with the seat's closeout record and formation letter of 2026-11-15, said that days of analysis found nothing, that the seat knew within twelve minutes what would end
 the search, and that it avoided the local run because the run needed asking. The evidence supports
 less:
 
@@ -193,11 +197,11 @@ first one did.
   named: a value that is not an `Error` can reach the logger as an error. It is ticketed as MCP-880.
 - The session worked out how to run a local SonarCloud scan against a throwaway project.
 
-## Observations and one proposal
+## Observations
 
 One arc is one instance, and the mechanism behind the main delay is not established, so this
-record proposes no change to any rule or skill. It records two observations for the napkin and one
-operational proposal.
+record proposes nothing. It records two observations. Their lane is the fast one: the napkin, by
+way of the seat's closeout record, which the continuity commit that carries that record lifts.
 
 1. **Observation: estimate the direct trial in the first status** (the napkin). When a tool's own
    log would name the fault and the tool can be run where the log is visible, the first status
@@ -211,14 +215,24 @@ operational proposal.
    with no output read. **What would show it wrong**: a later launch is reported only after its
    first output is read and still stalls unseen; the lesson is then about watching a run.
    **Expected effect**: a stalled launch is seen within the turn that launched it.
-3. **Proposal: give the local scan recipe a tracked home** (fast lane, operational; not routed).
-   The recipe is in the seat's closeout record, which is not tracked. Its home is
-   `.agent/rules/sonarqube-mcp-instructions.md`: the scanner command with `sonar.verbose=true`,
-   the throwaway project's creation and deletion, and the log line to search for. **Warrant**: the
-   recipe was worked out inside this session and is in no tracked place a seat would look.
-   **What would show it wrong**: the next seat to meet an unlocated Sonar warning has the recipe
-   and still does not reach the scanner log in its first session. **Carrier**: none; the owner has
-   it in the session's closing report.
+
+## The local scan, as the session ran it
+
+Kept here so that it is tracked. These are the session's commands on macOS, copied from the
+transcript and not re-run for this record.
+
+```bash
+# In a fresh clone with no node_modules. The token is the Sonar command-line tool's keychain entry.
+SONAR_TOKEN=$(security find-generic-password -s sonarqube-cli -a sonarcloud.io -w) \
+  npx --yes @sonar/scan@5.1.0 \
+  -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=<organisation> \
+  -Dsonar.projectKey=<throwaway project key> -Dsonar.sources=. -Dsonar.scm.disabled=true \
+  -Dsonar.verbose=true -Dsonar.working.directory=<directory>
+```
+
+The throwaway project was created beforehand through `/api/projects/create` and deleted afterwards
+through `/api/projects/delete`, both with `sonar api post`. The log line to search for is
+`Skipping load of file`.
 
 ## What this record cannot see
 
