@@ -133,9 +133,10 @@ and it reads the two live configuration files only, because this record names th
   (`EngraphCode_open-curriculum-ecosystem`). Which tool wrote them is not known. The branch for
   Oak is built from the fetched `engraph` ref, so a working-tree edit cannot reach it unless
   someone commits it.
-- **Not a fork value:** the `enabledPlugins` entry for `sonarqube@claude-plugins-official` in
-  `.claude/settings.json` names no organisation or project. It has its own pull request (#415),
-  with a security review, and reaches Oak only if that lands first.
+- **Not a fork value:** the `enabledPlugins` and `skillOverrides` blocks in
+  `.claude/settings.json` name no organisation or project. On `engraph` they match Oak's `main`
+  (seven official plugins, the owner's choice of 2026-11-15), so the merge changes neither block
+  for Oak.
 - **Names in test data and records, not live configuration:** `engraph` and `engraphcode` in
   agent-tools tests, the pull-request tally fixtures and the operator-profile scope key
   `engraphcode--open-curriculum-ecosystem`.

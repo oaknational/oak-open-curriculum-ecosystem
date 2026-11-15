@@ -19,10 +19,10 @@ its own MCP server for end users — see the
 
 ## Sanctioned servers
 
-On first launch Claude Code offers to install the plugins enabled in the tracked
-`.claude/settings.json`; accept the prompt. Install any other sanctioned plugin you use once,
-with Claude Code's plugin command (`/plugin install <plugin>@claude-plugins-official`); the rows
-below name the plugin where one applies.
+The tracked `.claude/settings.json` enables the project's plugins. Enabling a plugin does not
+install it: install each one you use once, with
+`claude plugin install <plugin>@claude-plugins-official --scope project`. The rows below name the
+plugin where one applies.
 
 | Server                              | Purpose                                                                    | How to enable                                                                                                                                                                                                              |
 | ----------------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
