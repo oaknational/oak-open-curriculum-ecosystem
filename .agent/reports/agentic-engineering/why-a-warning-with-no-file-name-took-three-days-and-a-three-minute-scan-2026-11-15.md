@@ -58,10 +58,10 @@ from the session transcript; scan times are from the scan log's file time and it
 Durations, computed from the table:
 
 - Request to cause: 68 hours 33 minutes. Request to merged cure: 71 hours 2 minutes.
-- The direct trial, once begun: at most 10 minutes of setup (18:17 to 18:27) and 2 minutes 52
-  seconds of scan. The setup used a token the Sonar command-line tool had put in the keychain
-  earlier that day (its sign-in ran between 12:49 and 12:57); a trial on the first day would have
-  needed that sign-in too.
+- The direct trial's price from nothing: at most 21 minutes. That is at most 8 minutes for the
+  Sonar command-line tool's sign-in, which put the token in the keychain (11-13 12:49 to 12:57,
+  a span that also holds a session restart); at most 10 minutes of setup (18:17 to 18:27); and 2
+  minutes 52 seconds of scan. On the day, the sign-in was already done when the trial began.
 - Launched but not running: 37 hours 33 minutes (11-13 18:27 to 11-15 08:00).
 - Request to the first mention of a local run: 25 hours 11 minutes, to the reply of 11-13 12:44.
   "First" is by a search of the seat's replies in the transcript for a local or scanner run; the
@@ -133,8 +133,8 @@ price, with no finding against it.
 
 **Meta root.** An act that needs the owner's permission was treated as more expensive than an act
 that does not, without either being priced. The probe lane cost 26 analyses, committed across at
-least 87 minutes, and was free to start. The local run cost at most 13 minutes, a sign-in and one
-question. The seat compared "start now" with "ask first" where it should have compared one run with
+least 87 minutes, and was free to start. The local run cost at most 21 minutes, sign-in included, and
+one question. The seat compared "start now" with "ask first" where it should have compared one run with
 26 analyses. The two times are measured differently (commit spans against a scan's own total), so
 the comparison is of order, and the order is not in doubt. The estate already has the words for the
 trial (the Direct Trial Gate). It does not have a line for the case where the trial is cheap and
@@ -142,11 +142,11 @@ only authority is missing, and that is the layer where the next "why" leaves the
 
 ## The counterfactual test
 
-The strongest counterfactual is inside the arc. The cured segment is the local run: at most 10 minutes
-of setup, 2 minutes 52 seconds of scan, and both files named on the first pass, with a reproduction
+The strongest counterfactual is inside the arc. The cured segment is the local run: at most 21 minutes
+from nothing, of which 2 minutes 52 seconds were the scan, and both files named on the first pass, with a reproduction
 logged one minute later. Had the seat asked for it in the 11:45 status on the first day, and had
-the owner agreed at once, the cause was reachable within the hour, allowing for the sign-in: against
-68 hours 33 minutes.
+the owner agreed at once, the cause was reachable within the hour, the trial's 21 minutes included:
+against 68 hours 33 minutes.
 
 A second counterfactual needs no local run. Had the bisection continued at 12:58 on the first day,
 the seat's own estimate put single files 50 minutes away. The method would then have needed a
@@ -177,7 +177,7 @@ None of this needed three days. The first two items were by-products of looking 
    meets every precondition except authority, the first act is to ask for that authority, stating
    the trial's price and what it will observe; a proxy may run while the answer is awaited, and its
    running cost is compared with the trial's price at each report. **Warrant**: this arc; the trial
-   was known at minute 12, priced at no more than 13 minutes once somebody priced it, and asked for at hour 25.
+   was known at minute 12, priced at no more than 21 minutes once somebody priced it, and asked for at hour 25.
    **Falsifier**: the next three investigations that meet this case ask first and the owner
    declines each time (the sentence only adds a question); or a seat asks, runs the trial, and the
    trial does not answer (the lesson was particular to this tool). **Prediction**: the next
@@ -218,7 +218,7 @@ words above were read from the transcript file itself, but the author's reasons 
 reconstructed from what was written, and a reason that was never written is absent. The formation
 letter of the same date tells this arc as a story and says the seat stayed away from the local run
 because of the arrangement it needed. This record sharpens that: the arrangement was at most 10
-minutes and a sign-in, and what was missing was a question to the owner.
+minutes of setup after a sign-in, 21 minutes in all, and what was missing was a question to the owner.
 
 No free-play pass was run.
 
