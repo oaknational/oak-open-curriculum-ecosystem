@@ -132,7 +132,7 @@ before implementation promotion:
 4. advance playbook work from
    [`sector-reusable-components-adoption.plan.md`](../../../../plans-backlog-2026-07/sector-engagement/current/sector-reusable-components-adoption.plan.md)
    (maturity matrix, first adopter profile, scaffold prose) grounded in the README
-   [Sector reusable components](../../../../README.md#sector-reusable-components).
+   [Sector reusable components](../../../../README.md#build-with-it).
 
 ## Session Shape and Grounding Order
 
