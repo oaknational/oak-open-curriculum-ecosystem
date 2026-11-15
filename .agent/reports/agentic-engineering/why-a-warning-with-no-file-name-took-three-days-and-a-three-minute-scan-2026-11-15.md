@@ -1,250 +1,236 @@
 # Why a warning with no file name took three days and a three-minute scan
 
 **Date**: 2026-11-15. **Author**: Hydra holds Lightyear (d827c5), the seat whose investigation this
-was, at the owner's word after the arc closed. **Arc**: the SonarCloud warning "Architecture
-analysis executed with errors", from the owner's instruction on 2026-11-12 at 11:33Z to the cure's
-landing on 2026-11-15 at 10:35Z as `b03d8ddb2` (pull request 420). **Modes**: metacognition
-(retrospective) and reason throughout. **Status of the arc**: landed; the main-branch analysis of
-2026-11-15 at 10:43Z reported no warning. Every instant and count below is read from the pull
-requests, the scan log and the session transcript at writing time, never from memory.
+was, at the owner's word after the arc closed ("run the retro please", 2026-11-15 16:50Z).
+**Arc**: the SonarCloud warning "Architecture analysis executed with errors", from the owner's
+instruction on 2026-11-12 at 11:33Z to the cure's merge on 2026-11-15 at 10:35Z as `b03d8ddb2`
+(pull request 420). **Modes**: metacognition (retrospective) and reason.
 
-The owner's word, 2026-11-15 at 16:50Z, after the closeout report offered it: "run the retro
-please".
+The short answer the record reaches: of the 68 hours 33 minutes from request to cause, 60 hours 32
+minutes were two stretches with no session activity. The investigation itself ran for about two
+and a quarter hours before the seat first offered the local scan that found the cause. The seat's earlier
+accounts of this arc told a larger story than that, and this record corrects them.
 
 ## Review contract
 
-- **Purpose and intended impact.** To say why this investigation took 68 hours when the act that
-  ended it took minutes, so that one sentence can be proposed for the Direct Trial Gate in the
-  `reason` skill, on the warrant of this one arc.
-- **What a review should test.** Whether each instant and count follows from the source named
-  beside it; whether each layer of the causal stack is supported by the timeline; whether each
-  proposal has a warrant and a condition that would show it wrong.
-- **Evidence standard and authority boundary.** The pull requests on GitHub are the only sources a
-  reader can re-read. The session transcript and the scan log are not tracked; what this record
-  takes from them is quoted, with its instant or line number, and is the author's reading of its
-  own session. The reasons given for the seat's acts are reconstruction and are marked as such in
-  "What this record cannot see".
-- **Non-goals.** The record applies no proposal, edits no rule or skill, and authorises no act.
-  It does not assess the owner's choices; where the owner's ordering cost time, it states the
-  time and makes no finding.
-- **A successful review.** One that reports a figure that does not follow from its source, a
-  causal claim the timeline does not carry, or a proposal without a real falsifier. Evidence the
-  record cannot supply because its source is not tracked is reported as a limit of the record.
+- **Purpose and intended impact.** To say where the elapsed time of this investigation went, and
+  what, if anything, the seat should have done differently. The record proposes no doctrine.
+- **What a review should test.** Whether each instant and figure follows from the source named
+  beside it, and whether each statement about cause is no stronger than that evidence.
+- **Evidence standard and authority boundary.** A reader can re-read the pull requests and the
+  check-runs on their commits. The session transcript, the scan log and SonarCloud's task history
+  are not tracked; what this record takes from them is quoted with its instant, and is the author's
+  reading of its own session. Where the record gives a reason for an act, it says whether the
+  reason was written down at the time.
+- **Non-goals.** The record applies nothing, edits no rule or skill, and authorises no act. It
+  makes no finding about the owner's choices.
+- **A successful review.** One that reports a figure that does not follow from its source, or a
+  causal statement stronger than its evidence. Evidence the record cannot supply because its source
+  is not tracked is reported as a limit of the record. A mismatch between this contract and the
+  record is reported as a finding against the record.
 
-## Timeline, from primary sources
+## Timeline
 
-Instants are UTC. Commit times are from pull request 406's commit list; owner and seat messages are
-from the session transcript; scan times are from the scan log's file time and its own total.
+Instants are UTC. "PR 406" rows come from `gh pr view 406 --json commits` and from the
+"SonarCloud Code Analysis" check-run on each commit
+(`gh api repos/EngraphCode/open-curriculum-ecosystem/commits/<sha>/check-runs`). "Transcript" rows
+are message and tool-call times in the session transcript. "Scan log" is the local scanner's log.
 
-| When (UTC)  | Event                                                                                                                                                                                              | Evidence                                |
-| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
-| 11-12 11:33 | The owner asks for the investigation.                                                                                                                                                              | transcript                              |
-| 11-12 11:42 | The seat begins bisecting by exclusion on a draft pull request, one SonarCloud analysis per probe.                                                                                                 | `c4d9523f8`, probe 1                    |
-| 11-12 11:45 | First status. The seat cites two community threads in which the **scanner log** names the graph file that failed to load. The project is on automatic analysis, which shows no scanner log.          | transcript; the two links in that reply |
-| 11-12 12:40 | The owner asks for a pause after the running batch, to review.                                                                                                                                     | transcript                              |
-| 11-12 12:53 | Probe 20. The warning is confined to two groups: `logger` with `sentry-node` (62 files), and one slice of `agent-tools/src` (185 files). The seat recommends about fourteen more probes, 50 minutes. | `1950851ba`; reply of 12:58             |
-| 11-12 13:00 | The owner asks for a study of the two groups for runtime dependencies, then for old or deprecated usage. The seat finds config oddities in `logger` and no cause.                                  | transcript, 13:00, 13:03, 13:04         |
-| 11-13 12:02 | The owner asks for the six targeted probes. They narrow to `logger` alone (34 files) and six `agent-tools` directories (128 files).                                                                | probes 21 to 26; reply of 12:22         |
-| 11-13 12:25 | The owner asks for a scan of the suspect files for what is unusual, with no more probes. The seat finds nothing that separates them.                                                               | transcript, 12:25 and 12:44             |
-| 11-13 12:44 | **The seat first offers a local scanner run**, as one of two options beside five more probes.                                                                                                      | transcript, 12:44 to 12:57              |
-| 11-13 14:00 | The owner chooses it: "Yes, run the sonar checks locally to see the issue, but not until we have resolved the rest".                                                                               | transcript                              |
-| 11-13 18:17 | The rest is resolved. The owner: "Are you ready to run the local sonar scan, if so please do so".                                                                                                  | transcript                              |
-| 11-13 18:27 | The seat reports "The local scan is running now, in the background".                                                                                                                               | transcript                              |
-| 11-15 08:00 | The scan writes its first log line. The seat reports at 08:01 that it "only actually started at 08:00 this morning".                                                                               | transcript; scan log                    |
-| 11-15 08:03 | The scan ends: "Analysis total time: 2:52.523 min". Two "Skipping load of file" lines name the two files.                                                                                          | scan log, lines 82708, 90120, 103098    |
-| 11-15 08:06 | The seat reports the cause, with a minimal reproduction.                                                                                                                                           | transcript; reproduction log of 08:04   |
-| 11-15 10:35 | The cure merges, after three owner corrections to its shape.                                                                                                                                       | pull request 420                        |
+| When (UTC)     | Event                                                                                                                                                                     | Source                   |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| 11-12 11:33    | The owner asks for the investigation.                                                                                                                                     | transcript               |
+| 11-12 11:42:33 | Probe 1 is committed: bisection by exclusion on a draft pull request, one SonarCloud analysis per probe.                                                                  | PR 406, `c4d9523f8`      |
+| 11-12 11:45    | First status. It cites two community threads in which a scanner log names the graph file that failed to load, and says the project's automatic analysis shows no log.     | transcript; links below  |
+| 11-12 12:40    | The owner asks for a pause after the running batch.                                                                                                                       | transcript               |
+| 11-12 12:56:09 | Probe 20's analysis completes.                                                                                                                                            | PR 406, `1950851ba`      |
+| 11-12 12:58    | The seat reports two groups carry the warning (62 and 185 files), says the fault is "something the files don't visibly share", and recommends about fourteen more probes. | transcript               |
+| 11-12 13:00    | The owner asks for two studies of the groups. At 13:04 the seat reports no cause and repeats its recommendation of six targeted probes.                                   | transcript               |
+| 11-12 13:04:40 | Last session activity of the day.                                                                                                                                         | transcript               |
+| 11-13 12:02    | The owner asks for the six targeted probes. They narrow the groups to 34 and 128 files; the seat recommends six more.                                                     | transcript; PR 406       |
+| 11-13 12:25    | The owner asks for a study of what is unusual in the suspect files, with no more probes. The seat finds nothing that separates them.                                      | transcript               |
+| 11-13 12:44    | The seat first offers a local scanner run, as one of two options beside five more probes.                                                                                 | transcript               |
+| 11-13 12:49    | The owner runs the SonarQube integration command, which signs the Sonar command-line tool in.                                                                             | transcript               |
+| 11-13 14:00    | The owner: "Yes, run the sonar checks locally to see the issue, but not until we have resolved the rest".                                                                 | transcript               |
+| 11-13 18:17    | The owner: "Are you ready to run the local sonar scan, if so please do so".                                                                                               | transcript               |
+| 11-13 18:26:54 | The seat issues the scan command in the background. At 18:27 it reports "The local scan is running now".                                                                  | transcript               |
+| 11-13 18:27:12 | Last session activity until 11-15 08:01:10.                                                                                                                               | transcript               |
+| 11-15 08:00    | The scan writes its first log line.                                                                                                                                       | scan log; reply of 08:01 |
+| 11-15 08:03    | The scan ends: "Analysis total time: 2:52.523 min". Two "Skipping load of file" lines name two files.                                                                     | scan log                 |
+| 11-15 08:06    | The seat reports the cause, with an eight-file reproduction launched at 08:04:33.                                                                                         | transcript               |
+| 11-15 10:35:48 | The cure merges.                                                                                                                                                          | pull request 420         |
 
-Durations, computed from the table:
+The two threads cited at 11:45:
+<https://community.sonarsource.com/t/net-analysis-always-has-warning-architecture-analysis-executed-with-errors/181651>
+and
+<https://community.sonarsource.com/t/new-architecture-step-in-sonar-analysis-skipping-load-fail-and-raised-error-null/149252>.
 
-- Request to cause: 68 hours 33 minutes. Request to merged cure: 71 hours 2 minutes.
-- The direct trial's price from nothing: at most 21 minutes. That is at most 8 minutes for the
-  Sonar command-line tool's sign-in, which put the token in the keychain (11-13 12:49 to 12:57,
-  a span that also holds a session restart); at most 10 minutes of setup (18:17 to 18:27); and 2
-  minutes 52 seconds of scan. On the day, the sign-in was already done when the trial began.
-- Launched but not running: 37 hours 33 minutes (11-13 18:27 to 11-15 08:00).
-- Request to the first mention of a local run: 25 hours 11 minutes, to the reply of 11-13 12:44.
-  "First" is by a search of the seat's replies in the transcript for a local or scanner run; the
-  11:45 status mentions scanner logs and no run.
-- Probes: 26, each a SonarCloud analysis of a pull request. Twenty were committed over 71 minutes on
-  the first day and six over 16 minutes on the second; these are spans between commits, and no
-  analysis start or end time was recorded.
+## Where the time went
 
-How to recompute the probe figures. The probe branch is deleted; the closed pull request keeps its
-commits. `gh pr view 406 --json commits` lists 26 commits, each headed "chore(sonar): probe N for
-the architecture warning [skip ci]", N from 1 to 26, with these commit times:
+From the request (11-12 11:33) to the report of the cause (11-15 08:06) is 68 hours 33 minutes.
 
-| Batch         | First commit              | Last commit               | Span       |
-| ------------- | ------------------------- | ------------------------- | ---------- |
-| Probes 1-20   | `c4d9523f8`, 11-12 11:42Z | `1950851ba`, 11-12 12:53Z | 71 minutes |
-| Probes 21-26  | `4968daefb`, 11-13 12:02Z | `547d7f465`, 11-13 12:18Z | 16 minutes |
+| Segment                                             | From, to                         | Length  |
+| --------------------------------------------------- | -------------------------------- | ------- |
+| Probes and studies, day one                         | 11-12 11:33 to 13:04:40          | 1h 32m  |
+| No session activity                                 | 11-12 13:04:40 to 11-13 12:02:30 | 22h 58m |
+| Probes and study, to the first offer of a local run | 11-13 12:02:30 to 12:44          | 0h 41m  |
+| Offer to launch                                     | 11-13 12:44 to 18:26:54          | 5h 43m  |
+| No session activity                                 | 11-13 18:27:12 to 11-15 08:01:10 | 37h 34m |
+| Reading the log and reproducing                     | 11-15 08:01:10 to 08:06          | 0h 5m   |
 
-The spans run from a batch's first commit to its last, so each leaves out the last probe's own
-analysis. The file counts (4,597, 247, 34 and 128) are the seat's, quoted from its replies of
-11-12 12:58Z and 11-13 12:22Z in the session transcript, which is not tracked: 62 and 185 files in
-the two groups after probe 20, and 34 and 16, 3, 10, 37, 10 and 52 after probe 26. The scan log
-and the transcript are not tracked either; the lines this record relies on are quoted in the
-timeline.
+The lengths are rounded to the minute and sum to 68 hours 33 minutes. The two idle stretches are
+60 hours 32 minutes. The session was active for about 2 hours 13 minutes before the first offer of
+a local run.
+
+**The probes.** Twenty-six, each one SonarCloud analysis. Measured from a batch's first commit to
+its last analysis completing: 73 minutes 36 seconds for probes 1 to 20 (11:42:33 to 12:56:09) and
+18 minutes 59 seconds for probes 21 to 26 (12:02:53 to 12:21:52), 92 minutes 35 seconds together.
+Each result is one yes or no. Twenty probes took the suspect set from 4,597 files to 247 (62 plus
+185); six more took it to 162 (34 plus 128, the 128 being 16, 3, 10, 37, 10 and 52 across six
+directories). The file counts are the seat's, from its replies of 11-12 12:58 and 11-13 12:22.
+
+**The local run.** Three parts were measured. The sign-in: the owner's command at 12:49 and the
+seat's first working call at 12:57, a span that also holds a session restart. The setup: tool calls at
+18:26:21 (scanner check), 18:26:41 (fresh clone and throwaway project) and 18:26:54 (launch). The
+scan: 2 minutes 52 seconds by its own total. Not measured: the time to work out how to run a scan
+against a throwaway project, which happened inside the session between 12:44 and 18:26, and the
+project's deletion afterwards.
+
+**The wait after launch.** The scan command was issued at 18:26:54 and the log's first line is at
+08:00 two days later. The cause is not known. The seat's guess at 08:01 was a permission prompt or
+a sleeping machine; it was not tested. Two observations bear on it: the session shows no activity
+from 18:27:12 to 08:01:10, and the first log line falls one minute before the owner's next
+message. A second launch of the same scanner, on the reproduction, was issued at 08:04:33 and had
+finished by 08:05:06.
 
 ## What the cause was
 
-SonarQube Architecture Analysis 3.8.0.13073 cannot load the graph file of a TypeScript file that
-passes `'constructor'`, `'__proto__'` or `'toString'` as a call argument. Two files did so. The code
-was correct. The trigger is visible in the source: three particular words in one syntactic
-position. A search for it finds it at once, given the hypothesis. The studies the seat ran had no
-such hypothesis: they compared the suspect groups (247 files, then 162) with the clean files on
-structure, syntax features, imports and configuration, and none of those comparisons separates
-files by the value of a string argument.
+In the local run, Architecture Analysis 3.8.0.13073 logged "Skipping load of file" for the graph
+files of two source files, with `IllegalStateException: Value Attribute not found for key function
+Object() { [native code] }`. One file passed `'__proto__'` as a call argument; the other passed
+`'constructor'` and `'toString'`. In the eight-file reproduction, each of those three literals as
+a call argument produced the same line; the same string in a `return`, and an ordinary string as
+an argument, did not. Other names were not tried. After pull request 420 removed the literals from
+call arguments, the analysis of the main branch at 2026-11-15 10:43Z carried no warning, by
+SonarCloud's task history as the seat read it in the session.
 
-## The causal stack
+The trigger is visible in the source. A text search for those literals as call arguments would
+find both files. No such search was run, because nothing suggested the hypothesis before the log
+did.
 
-**Technical root.** An analyser fault, and a warning that names no file. Under automatic analysis
-the scanner log, which does name the file, is not shown to anyone.
+## What the record shows, and what it does not
 
-**Process root 1: the evidence was gathered in the reverse of the estate's preferred order.** The
-`reason` skill's Direct Trial Gate ranks evidence: the smallest real end-to-end execution, then a
-proxy probe, then static analysis. This arc ran proxy probes first (bisection by exclusion), then
-static analysis (three studies of the suspect files), and the real execution last. The seat knew at
-11:45 on the first day that a scanner log names the failing file: its first status cites the
-threads that show it. It did not name a local run as an option until 25 hours later.
+**The technical root.** An analyser fault, and a warning that names no file. Under automatic
+analysis the scanner log is not shown to the project's users.
 
-**Why was that possible?** Read against the gate's five preconditions, the local run met three and
-failed two:
+**The local run was not put forward in the first two and a quarter hours of work.** At 11:45 on the first day
+the seat knew that a scanner log names the failing file. It first offered a local run at 11-13
+12:44, after 26 probes. Nothing written before then shows the seat weighing a local run or
+estimating what one would cost. Three readings fit that: the seat did not think of it; it thought
+the arrangement costly; it set it aside because it needed the owner's organisation and token. The
+formation letter the seat wrote on 2026-11-15 gives the second and third as its reasons, but that
+is recollection after the fact. This record cannot tell the three apart.
 
-- _Within current authority_: failed. It needed a new project in the owner's SonarCloud
-  organisation and the token in the owner's keychain.
-- _A two-way door_: met. The throwaway project was deleted afterwards.
-- _Contained away from production, third parties and irreplaceable data_: failed in part. It left
-  the production project untouched, but it wrote to SonarCloud, a third party: a new project, and
-  an upload of source that the same service already analyses from the public repository.
-- _Bounded, with a kill path and cleanup_: met in design (one scan, one project to delete). The
-  seat set no time bound on the launch, which is how process root 3 went unseen.
-- _Directly observable_: met. The scanner log is the observation.
+**Read against the Direct Trial Gate.** The gate in the `reason` skill prefers "the smallest real
+end-to-end execution", then "a proxy probe", then "static analysis". It also says: "A proxy earns
+precedence only when it is materially cheaper than the real trial **and** can change the decision,
+or when the real trial cannot yet be safely contained." The local run needed a new project in the
+owner's SonarCloud organisation and a token in the owner's keychain, and it wrote to SonarCloud;
+on a plain reading it was outside the seat's authority and not yet contained, so the gate allowed
+the probes to go first. (The probes also ran in SonarCloud, through the automatic analysis the
+owner had already set up.) What the gate asks and the seat did not do is the estimate: "If
+cumulative inquiry reaches the estimated cost or elapsed time of the direct trial, it has already
+lost its warrant: RUN, STOP, or ESCALATE immediately." With no estimate of the trial, that
+sentence had nothing to compare the probes with.
 
-Both failures are ones only the owner can lift: permission to act in the organisation, and
-acceptance of a write to an outside service. So the gate's default verdict of RUN did not apply,
-and the gate says a missing approval never becomes permission. It also says to run, stop or
-escalate once inquiry has cost as much as the trial would. The seat did neither of the two things
-that follow. It never estimated the trial's cost, so the threshold could not fire. It did not put
-the trial to the owner. It began the proxy that needed no asking.
+**The bisection was narrowing, and the seat said so each time.** It recommended more probes at
+11-12 12:58, at 13:04 and at 11-13 12:22. The owner asked for studies of the suspect files at
+11-12 13:00 and 11-13 12:25, and the seat ran them. The seat's estimate at 12:58 of fourteen more
+probes to reach single files was not tested as designed; the six that ran took 247 files to 162.
+This record makes no finding here.
 
-**Process root 2: a converging proxy was traded for studies that were not converging, and the seat
-did not say so.** The bisection was working. Twenty probes took 4,597 files to 247, and both true
-files lay inside the two groups; the seat estimated fourteen more probes and 50 minutes to reach
-single files, an estimate that was never tested. The owner twice paused the probes and asked for a study of the files (11-12 13:00 and
-11-13 12:25). Those were reasonable questions from someone who could not see what the seat knew.
-The seat answered them and reported that reading the code named no cause. It did not give the
-verdict it held: that comparing the groups without a hypothesis had found nothing three times,
-that the fault was "something the files don't visibly share" (its own words at 12:58), and that
-an instrument which narrows with each run should go first. This record does not claim that static
-study could never have found the cause; reading two isolated files might have.
+**A launch was reported as a run.** At 18:27, seconds after issuing the command, the seat wrote
+that the scan "is running now". It had read no output. Whether reading the first output would have
+shown the wait depends on the wait's cause, which is not known. The session then had no activity
+for 37 hours 34 minutes, so nobody was present to act on a report either way.
 
-**Process root 3: a launch was reported as a run.** At 18:27 the seat wrote that the scan "is
-running now". The scan wrote nothing until 08:00 two days later. The seat did not read a first log
-line before reporting. Why the process waited is not known; the seat's guess at 08:01 was a
-permission prompt or a sleeping machine, and that guess was never tested.
+**From the offer to the launch.** After the offer at 12:44 the owner signed the tool in at 12:49,
+chose the local run at 14:00 to follow other work, and released it at 18:17. The seat launched at
+18:26:54. This record states the times and makes no finding.
 
-**Process root 4: the chosen trial queued behind unrelated work.** From the owner's choice at 14:00
-to the launch at 18:27 the session settled plugin and editor configuration. That order was the
-owner's, stated in the choice. It cost 4 hours 27 minutes of the arc and is recorded here as a
-price, with no finding against it.
+## The seat's earlier accounts, corrected
 
-**Meta root.** An act that needs the owner's permission was treated as more expensive than an act
-that does not, without either being priced. The probe lane cost 26 analyses, committed across at
-least 87 minutes, and was free to start. The local run cost at most 21 minutes, sign-in included, and
-one question. The seat compared "start now" with "ask first" where it should have compared one run with
-26 analyses. The two times are measured differently (commit spans against a scan's own total), so
-the comparison is of order only. The estate already has the words for the
-trial (the Direct Trial Gate). It does not have a line for the case where the trial is cheap and
-what it lacks is the owner's to give, and that is the layer where the next "why" leaves the estate's control.
+The seat's closeout record and formation letter of 2026-11-15, and the first draft of this report,
+said that days of analysis found nothing, that the seat knew within twelve minutes what would end
+the search, and that it avoided the local run because the run needed asking. The evidence supports
+less:
 
-## The counterfactual test
+- The search ran for about two and a quarter hours of session time before the local run was
+  offered. Most of
+  the elapsed time was two idle stretches.
+- At minute 12 the seat knew that a scanner log names the file. That a local run against a
+  throwaway project would produce that log, and how to run one, was worked out on the second day.
+- Why the local run was not raised sooner is not established.
+- An earlier draft said the seat never told the owner that the bisection should continue. It did,
+  three times.
 
-The strongest counterfactual is inside the arc. The cured segment is the local run: at most 21 minutes
-from nothing, of which 2 minutes 52 seconds were the scan, and both files named on the first pass, with a reproduction
-logged one minute later. Had the seat asked for it in the 11:45 status on the first day, and had
-the owner agreed at once, the cause was reachable within the hour, the trial's 21 minutes included:
-against 68 hours 33 minutes.
+## The counterfactual
 
-A second counterfactual needs no local run. Had the bisection continued at 12:58 on the first day,
-the seat's own estimate put single files 50 minutes away. The method would then have needed a
-reading of two short files to see what they share; whether the seat would have seen three string
-literals as the common factor is not known.
-
-The uncured cost per unit: the probes were committed one every three to four minutes (19 intervals
-in 71 minutes, 5 in 16), each for one bit of information. The cured cost:
-one run for the whole answer.
+The one segment of the arc that ran differently is the local run itself: once launched and
+running, it named both files in 2 minutes 52 seconds, against 92 minutes 35 seconds of probes that
+had narrowed 4,597 files to 162. Had the seat put a local run forward in its first status, the
+cause might have been reached on the first day. That needs four things this record cannot show:
+that the owner would have agreed then, that the sign-in would have followed, that the seat could
+have worked out the recipe as quickly on day one, and that the launch would not have waited as the
+first one did.
 
 ## Honest credit
 
-- The bisection was correct. Its two groups contained both files, and that agreement is why the
-  seat could say at 08:06 that the log's two files were the whole set.
-- The static studies found real, unrelated defects: stale `bin` includes in `logger` and four other
-  workspaces, and redundant bundler externals in `logger`. Pull requests 421 and 422 removed them.
+- The bisection's two groups contained both files. That, with the log showing two skipped files
+  and no others, is why the seat could say at 08:06 that the two were the whole set.
+- The studies found unrelated defects: stale `bin` includes in `logger` and four other workspaces,
+  and redundant bundler externals in `logger`. Pull requests 421 and 422 removed them.
 - Reading the fallback chain that held one of the literals exposed a design fault the owner then
   named: a value that is not an `Error` can reach the logger as an error. It is ticketed as MCP-880.
-- The session now holds a tested recipe for a local SonarCloud scan with a throwaway project, and
-  knows that the Sonar command-line tool reads the architecture graph.
+- The session worked out how to run a local SonarCloud scan against a throwaway project.
 
-None of this needed three days. The first two items were by-products of looking in the wrong place.
+## Observations and one proposal
 
-## Proposals, each with warrant, falsifier and lane
+One arc is one instance, and the mechanism behind the main delay is not established, so this
+record proposes no change to any rule or skill. It records two observations for the napkin and one
+operational proposal.
 
-1. **Put the trial to the owner first** (fast lane, operational). The Direct Trial Gate in
-   `.agent/skills/cognition/reason/SKILL-CANONICAL.md` gains one sentence: where the direct trial
-   fails only preconditions the owner can lift (authority, or a bounded and reversible write to a
-   third party the owner may accept), the first act is to put it to the owner, stating which
-   preconditions fail, the trial's price and what it will observe; a proxy may run while the answer is awaited, and its
-   running cost is compared with the trial's price at each report. **Warrant**: this arc, one
-   instance, in which the trial failed the authority and third-party preconditions and no other; the
-   trial was known at minute 12, priced at no more than 21 minutes once somebody priced it, and asked for at hour 25.
-   **Falsifier**: the next three investigations that meet this case ask first and the owner
-   declines each time (the sentence only adds a question); or a seat asks, runs the trial, and the
-   trial does not answer (the lesson was particular to this tool). **Prediction**: the next
-   unlocated tool warning in this estate reaches its cause in the session it is raised.
-   **Carrier**: the next doctrine pull request; the owner has the proposal in this session's report.
-2. **A launch is reported as launched until its first output is read** (fast lane, the napkin; no
-   new doctrine proposed). The claim is that reading one line of output before reporting would
-   have caught the stall. It is an instance of `verify-dont-trust` and `silence-is-never-liveness`,
-   and one instance is an observation. **Warrant**: 37 hours 33 minutes behind the words "running
-   now". **Falsifier**: the cause of the stall, once known, is one that a first-output read at
-   launch would not have caught (for example the process wrote its first lines and then
-   waited); the lesson would then be about watching a run, not about reporting a launch.
-   **Lane**: the napkin, through the seat's closeout record.
-3. **Say when a requested study is not narrowing the search** (fast lane, the napkin; no new doctrine
-   proposed). The claim is that had the seat said the comparisons it was running were not narrowing the
-   search,
-   the bisection or the local run would have started sooner. It is an instance of
-   `present-verdicts-not-menus`: the seat answered two requests for static study without that
-   statement, and at 12:44 on the second day offered two options where it held a preference.
-   **Warrant**: the two pauses at 11-12 13:00 and 11-13 12:25 and the replies to them.
-   **Falsifier**: the owner, reading this record, says the studies were wanted for their own sake
-   and would have been asked for whatever the seat said; the pauses would then be the owner's
-   informed choice and no lesson for the seat. **Lane**: the napkin, through the seat's closeout
-   record.
-4. **Keep the local scan recipe where the next seat finds it** (fast lane, operational). The
-   recipe lives in the seat's closeout record, which is not tracked. Its home is
-   `.agent/rules/sonarqube-mcp-instructions.md` or the engineering documentation beside the
-   SonarQube setup: the scanner command with `sonar.verbose=true`, the throwaway project's creation
-   and deletion, and the two log strings to search for. **Warrant**: the recipe took up to 10 minutes to
-   assemble the first time and would take the same again from nothing. **Falsifier**: the next
-   seat to meet an unlocated Sonar warning has the recipe and still does not reach the scanner log
-   in its first session (the recipe was not what was missing). **Carrier**: unassigned; the owner
-   has it in this session's report.
+1. **Observation: estimate the direct trial in the first status** (the napkin). When a tool's own
+   log would name the fault and the tool can be run where the log is visible, the first status
+   names that run and a rough price for it, even when it needs the owner's word. **Warrant**:
+   n = 1; in this arc the estimate was absent and the run was first offered after 26 probes.
+   **What would show it wrong**: a seat names the run and its price in a first status, and the
+   investigation is no shorter for it; or a second arc shows the delay had another cause.
+   **Expected effect**: the direct trial is put forward before a second batch of proxy probes.
+2. **Observation: a background launch is reported as launched until its first output is read**
+   (the napkin). An instance of `verify-dont-trust`. **Warrant**: n = 1; "running now" was written
+   with no output read. **What would show it wrong**: a later launch is reported only after its
+   first output is read and still stalls unseen; the lesson is then about watching a run.
+   **Expected effect**: a stalled launch is seen within the turn that launched it.
+3. **Proposal: give the local scan recipe a tracked home** (fast lane, operational; not routed).
+   The recipe is in the seat's closeout record, which is not tracked. Its home is
+   `.agent/rules/sonarqube-mcp-instructions.md`: the scanner command with `sonar.verbose=true`,
+   the throwaway project's creation and deletion, and the log line to search for. **Warrant**: the
+   recipe was worked out inside this session and is in no tracked place a seat would look.
+   **What would show it wrong**: the next seat to meet an unlocated Sonar warning has the recipe
+   and still does not reach the scanner log in its first session. **Carrier**: none; the owner has
+   it in the session's closing report.
 
 ## What this record cannot see
 
-The transcript before 2026-11-13 reached the author through two summaries; the instants and quoted
-words above were read from the transcript file itself, but the author's reasons at each point are
-reconstructed from what was written, and a reason that was never written is absent. The formation
-letter of the same date tells this arc as a story and says the seat stayed away from the local run
-because of the arrangement it needed. This record sharpens that: the arrangement was at most 10
-minutes of setup after a sign-in, 21 minutes in all, and what was missing was a question to the owner.
-
-No free-play pass was run.
+The transcript before 2026-11-13 reached the author through two summaries before the author
+re-read the file for this record. The instants and quoted words above come from the file. Reasons
+are a different matter: the record has only what was written at the time, and for the main delay
+nothing was. No free-play pass was run.
 
 ## Success test
 
-The record names a mechanism the estate had no line for: a cheap direct trial that fails only
-preconditions the owner can lift is silently ranked last. Proposal 1 is routed to a named surface with a
-prediction. If no doctrine pull request takes it, this record is a eulogy.
+The retrospective skill asks that a record change a decision or name a mechanism. This one names
+no mechanism. It changes a decision: the lesson the seat had written for the napkin ("ask for the
+trial's authority first", stated as the cause of a three-day delay) is withdrawn and replaced by
+the two observations above, and a proposal the first draft made for the Direct Trial Gate is
+dropped as resting on one instance and an unestablished cause.

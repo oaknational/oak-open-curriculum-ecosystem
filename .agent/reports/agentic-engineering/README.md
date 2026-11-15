@@ -101,10 +101,10 @@ argue; they do not decide anything.
   predecessor's proposals read against the arc
 - [why-a-warning-with-no-file-name-took-three-days-and-a-three-minute-scan-2026-11-15.md](./why-a-warning-with-no-file-name-took-three-days-and-a-three-minute-scan-2026-11-15.md)
   — a seat's retrospective on the SonarCloud architecture-warning investigation of 2026-11-12 to
-  2026-11-15: the timeline from the pull requests, the scan log and the transcript, the causal
-  stack (evidence gathered in the reverse of the Direct Trial Gate's order; a direct trial that
-  failed only preconditions the owner can lift ranked last; a launch reported as a run), the counterfactual inside the
-  arc and four proposals with lanes
+  2026-11-15: the timeline from the pull requests, their check-runs, the scan log and the
+  transcript; where the 68 hours went (two idle stretches hold most of them); what the record
+  does and does not establish about why the local scan came late; a correction of the seat's
+  earlier accounts; two observations and one unrouted proposal
 
 ### Cricket suite tallies
 
