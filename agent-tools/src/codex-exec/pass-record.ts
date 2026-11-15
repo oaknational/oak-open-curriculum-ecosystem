@@ -75,7 +75,18 @@ export function parsePassRecord(value: unknown): Result<PassRecord, PassRecordIn
  * `JSON.parse` keeps a `"__proto__"` key as an own field, which the schema
  * would drop without a word. The record defines no such field, so a value
  * carrying one is refused.
+ *
+ * The key is matched by a predicate and never passed as a call argument:
+ * SonarQube's architecture analysis cannot load a file that passes a string
+ * literal naming an `Object.prototype` member (`'__proto__'`, `'constructor'`,
+ * `'toString'`) to a call.
  */
 function hasOwnPrototypeKey(value: unknown): boolean {
-  return typeof value === 'object' && value !== null && Object.hasOwn(value, '__proto__');
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    Object.getOwnPropertyNames(value).some(isPrototypeKey)
+  );
 }
+
+const isPrototypeKey = (name: string): boolean => name === '__proto__';

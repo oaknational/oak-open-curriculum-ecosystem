@@ -110,6 +110,37 @@ describe('normalizeError', () => {
     });
   });
 
+  it('names a thrown class instance by its class when it carries no name', () => {
+    class QuotaExceeded {
+      readonly limit = 3;
+    }
+
+    expect(normalizeError(new QuotaExceeded())).toMatchObject({
+      name: 'QuotaExceeded',
+      message: '{"limit":3}',
+    });
+  });
+
+  it('describes a thrown object with no fields by its own toString', () => {
+    const thrown = { toString: (): string => 'own description' };
+    Object.defineProperty(thrown, 'toString', { enumerable: false });
+
+    expect(normalizeError(thrown)).toMatchObject({ name: 'Error', message: '"own description"' });
+  });
+
+  it('describes a thrown class instance with no fields by its inherited toString', () => {
+    class Described {
+      toString(): string {
+        return 'inherited description';
+      }
+    }
+
+    expect(normalizeError(new Described())).toMatchObject({
+      name: 'Described',
+      message: '"inherited description"',
+    });
+  });
+
   it('builds branded normalised errors explicitly', () => {
     const result = buildNormalizedError({
       name: 'OakError',
