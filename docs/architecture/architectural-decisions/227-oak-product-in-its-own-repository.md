@@ -1,14 +1,13 @@
 # ADR-227: The Oak MCP product is built in its own repository from packages published here
 
-## Engraph amendment — 10 October 2026
+## Amendment — 10 October 2026
 
 [ADR-233](233-retained-framework-and-configurable-instances.md) retains the
 published-package boundary and thin-in-place protection while superseding this
 record's extraction-first ordering, executable app residue, team-measurement
 criteria and any unchosen shared-search topology. All reusable mechanisms and
-potentially reusable material remain OCE. The original accepted record below is
-historical evidence; its original Oak destinations do not establish Engraph
-repository, release or deployment authority.
+potentially reusable material remain OCE. The original accepted record below stands
+where ADR-233 retains it and is historical evidence where ADR-233 supersedes it.
 
 - **Status:** Accepted (2026-09-03, the owner's word "Ratify all thirteen" over
   the numbered list of the pull request that landed it, item 1). This record
