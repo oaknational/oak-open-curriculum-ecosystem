@@ -66,6 +66,18 @@ create a plan for resolving it, then execute it
 /oak-start-right-team you are an Implementer, the Director will tell you what to do.
 ```
 
+For existing threads, prefer a pointer to the thread continuation record rather than restating
+live state in the prompt:
+
+```text
+/oak-start-right-team continue agentic-engineering-enhancements from
+.agent/memory/operational/threads/agentic-engineering-enhancements.next-session.md.
+Treat this opener as a hypothesis until live grounding confirms it.
+```
+
+In team sessions, `oak-start-right-team` should name the closeout owner; only that owner runs
+the full handoff, while other team members leave boundary-scoped closeout notes.
+
 Note that the agents have names; use them to help teammates know which agent you are referring to.
 
 Habits worth forming:

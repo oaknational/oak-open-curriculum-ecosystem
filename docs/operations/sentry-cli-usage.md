@@ -70,8 +70,8 @@ For the three currently Sentry-using workspaces (`apps/oak-curriculum-mcp-stream
 - `packages/libs/sentry-node` keeps its scoping-only `.sentryclirc`
   for operator ad-hoc use against the shared adapter package.
 
-The dev `sentry` CLI is listed in the root [README.md](../../README.md)
-prerequisites for humans and agents who want Seer, `sentry issue list`,
+The dev `sentry` CLI is listed in the
+[setup guide's prerequisites](../engineering/setup.md#prerequisites) for humans and agents who want Seer, `sentry issue list`,
 or `sentry api`.
 
 ## Side-by-side matrix

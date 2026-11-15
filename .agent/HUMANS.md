@@ -117,8 +117,8 @@ text in both.
   [ADR-119](../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md),
   the learning loop that makes it self-improving is
   [ADR-131](../docs/architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md),
-  and the root [README](../README.md#engineering-practice) has a
-  plain-language overview; the sibling estate received the lineage by
+  and [How the Agentic Engineering System Works](../docs/foundation/agentic-engineering-system.md)
+  has a plain-language overview; the sibling estate received the lineage by
   transplant on 2026-09-12.
 - The adapter directories rendered here are `.claude/`, `.cursor/`, `.codex/`,
   `.gemini/` and `.agents/`; the entry files are `CLAUDE.md`, `AGENTS.md`,
