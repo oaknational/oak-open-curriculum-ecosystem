@@ -42,8 +42,9 @@ Durations, computed from the table:
   seconds of scan.
 - Launched but not running: 37 hours 33 minutes (11-13 18:27 to 11-15 08:00).
 - Request to the first mention of a local run: 25 hours 11 minutes.
-- Probes: 26, each a SonarCloud analysis of a pull request. Twenty ran in 71 minutes on the first
-  day and six in 16 minutes on the second.
+- Probes: 26, each a SonarCloud analysis of a pull request. Twenty were committed over 71 minutes on
+  the first day and six over 16 minutes on the second; these are spans between commits, and no
+  analysis start or end time was recorded.
 
 How to recompute the probe figures. The probe branch is deleted; the closed pull request keeps its
 commits. `gh pr view 406 --json commits` lists 26 commits, each headed "chore(sonar): probe N for
@@ -107,9 +108,11 @@ owner's, stated in the choice. It cost 4 hours 27 minutes of the arc and is reco
 price, with no finding against it.
 
 **Meta root.** An act that needs the owner's permission was treated as more expensive than an act
-that does not, without either being priced. The probe lane cost 26 analyses and 87 minutes of probe
-time and was free to start. The local run cost 13 minutes and one question. The seat compared
-"start now" with "ask first" where it should have compared 13 minutes with 87. The estate already
+that does not, without either being priced. The probe lane cost 26 analyses, committed across at least 87 minutes,
+and was free to start. The local run cost at most 13 minutes and one question. The seat compared
+"start now" with "ask first" where it should have compared one run with 26 analyses. The two times
+are measured differently (commit spans against a scan's own total), so the comparison is of order,
+and the order is not in doubt. The estate already
 has the words for the trial (the Direct Trial Gate). It does not have a line for the case where
 the trial is cheap and only authority is missing, and that is the layer where the next "why" leaves
 the estate's control.
@@ -126,7 +129,8 @@ the seat's own estimate put single files 50 minutes away. The method would then 
 reading of two short files to see what they share; whether the seat would have seen three string
 literals as the common factor is not known.
 
-The uncured cost per unit: each probe was about four minutes for one bit of information. The cured
+The uncured cost per unit: the probes were committed one every three to four minutes (19 intervals
+in 71 minutes, 5 in 16), each for one bit of information. The cured
 cost: one run for the whole answer.
 
 ## Honest credit
