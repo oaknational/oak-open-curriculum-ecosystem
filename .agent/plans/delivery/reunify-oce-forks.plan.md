@@ -134,9 +134,11 @@ and it reads the two live configuration files only, because this record names th
   Oak is built from the fetched `engraph` ref, so a working-tree edit cannot reach it unless
   someone commits it.
 - **Not a fork value:** the `enabledPlugins` and `skillOverrides` blocks in
-  `.claude/settings.json` name no organisation or project. On `engraph` they match Oak's `main`
-  (seven official plugins, the owner's choice of 2026-11-15), so the merge changes neither block
-  for Oak.
+  `.claude/settings.json` name no organisation or project. On `engraph` the `enabledPlugins`
+  block matches Oak's `main` (seven official plugins, the owner's choice of 2026-11-15), so the
+  merge leaves it unchanged for Oak. The merge removes the `skillOverrides` block from Oak: all
+  seventeen of its entries name Sentry or Vercel plugin skills, which the setting cannot affect,
+  and the owner chose on 2026-11-15 to delete it.
 - **Names in test data and records, not live configuration:** `engraph` and `engraphcode` in
   agent-tools tests, the pull-request tally fixtures and the operator-profile scope key
   `engraphcode--open-curriculum-ecosystem`.
