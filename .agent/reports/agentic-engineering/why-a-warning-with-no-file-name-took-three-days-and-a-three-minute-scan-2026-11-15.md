@@ -11,6 +11,26 @@ requests, the scan log and the session transcript at writing time, never from me
 The owner's word, 2026-11-15 at 16:50Z, after the closeout report offered it: "run the retro
 please".
 
+## Review contract
+
+- **Purpose and intended impact.** To say why this investigation took 68 hours when the act that
+  ended it took minutes, so that one sentence can be proposed for the Direct Trial Gate in the
+  `reason` skill.
+- **What a review should test.** Whether each instant and count follows from the source named
+  beside it; whether each layer of the causal stack is supported by the timeline; whether each
+  proposal has a warrant and a condition that would show it wrong.
+- **Evidence standard and authority boundary.** The pull requests on GitHub are the only sources a
+  reader can re-read. The session transcript and the scan log are not tracked; what this record
+  takes from them is quoted, with its instant or line number, and is the author's reading of its
+  own session. The reasons given for the seat's acts are reconstruction and are marked as such in
+  "What this record cannot see".
+- **Non-goals.** The record applies no proposal, edits no rule or skill, and authorises no act.
+  It does not assess the owner's choices; where the owner's ordering cost time, it states the
+  time and makes no finding.
+- **A successful review.** One that reports a figure that does not follow from its source, a
+  causal claim the timeline does not carry, or a proposal without a real falsifier. Evidence the
+  record cannot supply because its source is not tracked is reported as a limit of the record.
+
 ## Timeline, from primary sources
 
 Instants are UTC. Commit times are from pull request 406's commit list; owner and seat messages are
@@ -39,9 +59,13 @@ Durations, computed from the table:
 
 - Request to cause: 68 hours 33 minutes. Request to merged cure: 71 hours 2 minutes.
 - The direct trial, once begun: at most 10 minutes of setup (18:17 to 18:27) and 2 minutes 52
-  seconds of scan.
+  seconds of scan. The setup used a token the Sonar command-line tool had put in the keychain
+  earlier that day (its sign-in ran between 12:49 and 12:57); a trial on the first day would have
+  needed that sign-in too.
 - Launched but not running: 37 hours 33 minutes (11-13 18:27 to 11-15 08:00).
-- Request to the first mention of a local run: 25 hours 11 minutes.
+- Request to the first mention of a local run: 25 hours 11 minutes, to the reply of 11-13 12:44.
+  "First" is by a search of the seat's replies in the transcript for a local or scanner run; the
+  11:45 status mentions scanner logs and no run.
 - Probes: 26, each a SonarCloud analysis of a pull request. Twenty were committed over 71 minutes on
   the first day and six over 16 minutes on the second; these are spans between commits, and no
   analysis start or end time was recorded.
@@ -108,21 +132,21 @@ owner's, stated in the choice. It cost 4 hours 27 minutes of the arc and is reco
 price, with no finding against it.
 
 **Meta root.** An act that needs the owner's permission was treated as more expensive than an act
-that does not, without either being priced. The probe lane cost 26 analyses, committed across at least 87 minutes,
-and was free to start. The local run cost at most 13 minutes and one question. The seat compared
-"start now" with "ask first" where it should have compared one run with 26 analyses. The two times
-are measured differently (commit spans against a scan's own total), so the comparison is of order,
-and the order is not in doubt. The estate already
-has the words for the trial (the Direct Trial Gate). It does not have a line for the case where
-the trial is cheap and only authority is missing, and that is the layer where the next "why" leaves
-the estate's control.
+that does not, without either being priced. The probe lane cost 26 analyses, committed across at
+least 87 minutes, and was free to start. The local run cost at most 13 minutes, a sign-in and one
+question. The seat compared "start now" with "ask first" where it should have compared one run with
+26 analyses. The two times are measured differently (commit spans against a scan's own total), so
+the comparison is of order, and the order is not in doubt. The estate already has the words for the
+trial (the Direct Trial Gate). It does not have a line for the case where the trial is cheap and
+only authority is missing, and that is the layer where the next "why" leaves the estate's control.
 
 ## The counterfactual test
 
-The strongest counterfactual is inside the arc. The cured segment is the local run: 10 minutes of
-setup, 2 minutes 52 seconds of scan, and both files named on the first pass, with a reproduction
-logged one minute later. Had the seat asked for it in the 11:45 status on the first day, the cause
-was reachable by about 12:00 that day: 27 minutes after the request against 68 hours 33 minutes.
+The strongest counterfactual is inside the arc. The cured segment is the local run: at most 10 minutes
+of setup, 2 minutes 52 seconds of scan, and both files named on the first pass, with a reproduction
+logged one minute later. Had the seat asked for it in the 11:45 status on the first day, and had
+the owner agreed at once, the cause was reachable within the hour, allowing for the sign-in: against
+68 hours 33 minutes.
 
 A second counterfactual needs no local run. Had the bisection continued at 12:58 on the first day,
 the seat's own estimate put single files 50 minutes away. The method would then have needed a
@@ -130,15 +154,15 @@ reading of two short files to see what they share; whether the seat would have s
 literals as the common factor is not known.
 
 The uncured cost per unit: the probes were committed one every three to four minutes (19 intervals
-in 71 minutes, 5 in 16), each for one bit of information. The cured
-cost: one run for the whole answer.
+in 71 minutes, 5 in 16), each for one bit of information. The cured cost:
+one run for the whole answer.
 
 ## Honest credit
 
 - The bisection was correct. Its two groups contained both files, and that agreement is why the
   seat could say at 08:06 that the log's two files were the whole set.
-- The static studies found real, unrelated defects: stale `bin` includes in four workspaces and
-  redundant bundler externals in `logger`. Pull requests 421 and 422 removed them.
+- The static studies found real, unrelated defects: stale `bin` includes in `logger` and four other
+  workspaces, and redundant bundler externals in `logger`. Pull requests 421 and 422 removed them.
 - Reading the fallback chain that held one of the literals exposed a design fault the owner then
   named: a value that is not an `Error` can reach the logger as an error. It is ticketed as MCP-880.
 - The session now holds a tested recipe for a local SonarCloud scan with a throwaway project, and
@@ -153,31 +177,39 @@ None of this needed three days. The first two items were by-products of looking 
    meets every precondition except authority, the first act is to ask for that authority, stating
    the trial's price and what it will observe; a proxy may run while the answer is awaited, and its
    running cost is compared with the trial's price at each report. **Warrant**: this arc; the trial
-   was known at minute 12, priced at 13 minutes once somebody priced it, and asked for at hour 25.
+   was known at minute 12, priced at no more than 13 minutes once somebody priced it, and asked for at hour 25.
    **Falsifier**: the next three investigations that meet this case ask first and the owner
    declines each time (the sentence only adds a question); or a seat asks, runs the trial, and the
    trial does not answer (the lesson was particular to this tool). **Prediction**: the next
    unlocated tool warning in this estate reaches its cause in the session it is raised.
    **Carrier**: the next doctrine pull request; the owner has the proposal in this session's report.
-2. **A launch is reported as launched until its first output is read** (no new doctrine). This is
-   an instance of `verify-dont-trust` and `silence-is-never-liveness`, and one instance is an
-   observation. **Warrant**: 37 hours 33 minutes behind the words "running now". **Falsifier**: a
-   second seat reports a background launch as running without reading its output; that makes two
-   instances and a line for the background-work guidance. **Lane**: the napkin, through the seat's
-   closeout record.
-3. **Say when a requested study cannot converge** (no new doctrine). An instance of
-   `present-verdicts-not-menus`: the seat answered two requests for static study without stating
-   that the method could not find the fault, and at 12:44 on the second day offered two options
-   where it held a preference. **Falsifier**: none proposed; recorded as an instance. **Lane**: the
-   napkin, through the seat's closeout record.
+2. **A launch is reported as launched until its first output is read** (fast lane, the napkin; no
+   new doctrine proposed). The claim is that reading one line of output before reporting would
+   have caught the stall. It is an instance of `verify-dont-trust` and `silence-is-never-liveness`,
+   and one instance is an observation. **Warrant**: 37 hours 33 minutes behind the words "running
+   now". **Falsifier**: the cause of the stall, once known, is one that a first-output read at
+   launch would not have caught (for example the process wrote its first lines and then
+   waited); the lesson would then be about watching a run, not about reporting a launch.
+   **Lane**: the napkin, through the seat's closeout record.
+3. **Say when a requested study cannot converge** (fast lane, the napkin; no new doctrine
+   proposed). The claim is that had the seat said the static studies could not find this fault,
+   the bisection or the local run would have started sooner. It is an instance of
+   `present-verdicts-not-menus`: the seat answered two requests for static study without that
+   statement, and at 12:44 on the second day offered two options where it held a preference.
+   **Warrant**: the two pauses at 11-12 13:00 and 11-13 12:25 and the replies to them.
+   **Falsifier**: the owner, reading this record, says the studies were wanted for their own sake
+   and would have been asked for whatever the seat said; the pauses would then be the owner's
+   informed choice and no lesson for the seat. **Lane**: the napkin, through the seat's closeout
+   record.
 4. **Keep the local scan recipe where the next seat finds it** (fast lane, operational). The
    recipe lives in the seat's closeout record, which is not tracked. Its home is
    `.agent/rules/sonarqube-mcp-instructions.md` or the engineering documentation beside the
    SonarQube setup: the scanner command with `sonar.verbose=true`, the throwaway project's creation
-   and deletion, and the two log strings to search for. **Warrant**: the recipe took 10 minutes to
-   assemble the first time and would take the same again from nothing. **Falsifier**: no second
-   unlocated Sonar warning arrives within a year (the recipe was written for a case that does not
-   recur). **Carrier**: unassigned; the owner has it in this session's report.
+   and deletion, and the two log strings to search for. **Warrant**: the recipe took up to 10 minutes to
+   assemble the first time and would take the same again from nothing. **Falsifier**: the next
+   seat to meet an unlocated Sonar warning has the recipe and still does not reach the scanner log
+   in its first session (the recipe was not what was missing). **Carrier**: unassigned; the owner
+   has it in this session's report.
 
 ## What this record cannot see
 
@@ -185,8 +217,8 @@ The transcript before 2026-11-13 reached the author through two summaries; the i
 words above were read from the transcript file itself, but the author's reasons at each point are
 reconstructed from what was written, and a reason that was never written is absent. The formation
 letter of the same date tells this arc as a story and says the seat stayed away from the local run
-because of the arrangement it needed. This record sharpens that: the arrangement was 10 minutes,
-and what was missing was a question to the owner.
+because of the arrangement it needed. This record sharpens that: the arrangement was at most 10
+minutes and a sign-in, and what was missing was a question to the owner.
 
 No free-play pass was run.
 

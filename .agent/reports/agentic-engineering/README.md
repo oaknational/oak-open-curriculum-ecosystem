@@ -99,6 +99,12 @@ argue; they do not decide anything.
   day in both estates, the causal stack (one text against two gate sets; the hunk-times-lifecycle
   unit; the inherited frame), the counterfactual inside the arc, five proposals with lanes and the
   predecessor's proposals read against the arc
+- [why-a-warning-with-no-file-name-took-three-days-and-a-three-minute-scan-2026-11-15.md](./why-a-warning-with-no-file-name-took-three-days-and-a-three-minute-scan-2026-11-15.md)
+  — a seat's retrospective on the SonarCloud architecture-warning investigation of 2026-11-12 to
+  2026-11-15: the timeline from the pull requests, the scan log and the transcript, the causal
+  stack (evidence gathered in the reverse of the Direct Trial Gate's order; a direct trial that
+  lacked only authority ranked last; a launch reported as a run), the counterfactual inside the
+  arc and four proposals with lanes
 
 ### Cricket suite tallies
 
