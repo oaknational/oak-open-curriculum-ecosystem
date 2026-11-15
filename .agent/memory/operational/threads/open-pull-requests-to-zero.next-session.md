@@ -878,7 +878,8 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
   never merged.
 - **A second lane opened at the owner's word, 2026-11-13.** The public pages: the strategic node
   `public-explanatory-system` and the delivery node `public-pages-to-standard`. Its todo 2 waits
-  on the owner's seven answers. After the owner's merge its pull requests go to Oak's repository
+  on the owner's read of the rendered branch. After the owner's merge its pull requests go to Oak's repository
   as Oak's bot.
-- **Put to the owner, unanswered.** ADR-233 calls itself "This Engraph development line" and will
-  read as Oak's accepted decision on Oak.
+- **Answered by the owner, 2026-11-15.** No decision record names Engraph as a party; ADR-233's
+  scope is "This repository." The seven README answers are in the delivery node
+  `public-pages-to-standard`. Oak's seven-plugin block is restored in `.claude/settings.json`.
