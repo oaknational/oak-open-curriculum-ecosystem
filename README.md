@@ -10,8 +10,7 @@ to AI assistants and to developers: the Oak Curriculum MCP server, a TypeScript 
 curriculum API, semantic search, and the engineering practice we use to build them.
 
 If you teach and want Oak in the AI tool you already use, go to
-[Bring Oak's curriculum into your AI tools](https://www.thenational.academy/ai-plugin). You
-don't need this repository.
+[Bring Oak's curriculum into your AI tools](https://www.thenational.academy/ai-plugin).
 
 ## What's here
 
@@ -131,17 +130,6 @@ We aren't accepting external contributions at the moment. You're free to read, f
 from the code. Oak team members: see [CONTRIBUTING.md](CONTRIBUTING.md). If you find a security
 issue, follow the [security policy](SECURITY.md).
 
-## Credits and Attribution
-
-This repository brings together work from multiple contributors and open
-education organisations. See [ATTRIBUTION.md](ATTRIBUTION.md) for full
-details, citations, and licence terms for each source.
-
-- **[Education Endowment Foundation](https://educationendowmentfoundation.org.uk/)** — Teaching and Learning Toolkit data. Citation: Higgins, S., Katsipataki, M., Kokotsaki, D., Coleman, R., Major, L.E., & Coe, R. _Teaching and Learning Toolkit_. Education Endowment Foundation.
-- **Mark Hodierne** — [Oak Curriculum Ontology](https://github.com/oaknational/oak-curriculum-ontology), primary author
-- **John Roberts** — EEF MCP server prototype
-- **Heather W** — Oak Curriculum Hub demo web UI (`demos/oak-curriculum-hub`)
-
 ## Licence
 
 The code is released under the [MIT licence](LICENCE). Curriculum content is under the Open
@@ -149,6 +137,9 @@ Government Licence v3.0, except where otherwise stated, and needs attribution to
 Academy: see [LICENCE-DATA.md](LICENCE-DATA.md) and the
 [register of data sources](docs/governance/DATA-SOURCES.md). Oak's branding is copyright: see
 [BRANDING.md](BRANDING.md).
+
+[ATTRIBUTION.md](ATTRIBUTION.md) gives the attribution requirements and credits for the external
+sources this repository uses.
 
 ## Get in touch
 

@@ -374,9 +374,8 @@ Both must hold in every mode:
   the public Oak site is authoritative for *Oak's*.
 - **No personal data, ever.** Never surface or record a person's name, email, or
   other identifying detail — not from a fetched Oak page (cite the page, never its
-  named people), and **not from the repo's own docs either: `README.md` (Credits)
-  and `ATTRIBUTION.md` carry contributor and citation names** — relay credit as
-  "documented in `ATTRIBUTION.md` / the Credits section" and cite the source, never
+  named people), and **not from the repo's own docs either: `ATTRIBUTION.md` carries
+  citation names** — relay credit as "documented in `ATTRIBUTION.md`" and cite the source, never
   reproduce the personal names. This is an absolute organisational instruction.
 
 ## The Primer Edge (PDR-112)
