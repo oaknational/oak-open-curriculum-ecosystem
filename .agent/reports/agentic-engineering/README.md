@@ -103,7 +103,7 @@ argue; they do not decide anything.
   — a seat's retrospective on the SonarCloud architecture-warning investigation of 2026-11-12 to
   2026-11-15: the timeline from the pull requests, the scan log and the transcript, the causal
   stack (evidence gathered in the reverse of the Direct Trial Gate's order; a direct trial that
-  lacked only authority ranked last; a launch reported as a run), the counterfactual inside the
+  failed only preconditions the owner can lift ranked last; a launch reported as a run), the counterfactual inside the
   arc and four proposals with lanes
 
 ### Cricket suite tallies

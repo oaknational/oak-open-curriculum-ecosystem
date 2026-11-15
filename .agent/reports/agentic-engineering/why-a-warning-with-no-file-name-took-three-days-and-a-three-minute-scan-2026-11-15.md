@@ -15,7 +15,7 @@ please".
 
 - **Purpose and intended impact.** To say why this investigation took 68 hours when the act that
   ended it took minutes, so that one sentence can be proposed for the Direct Trial Gate in the
-  `reason` skill.
+  `reason` skill, on the warrant of this one arc.
 - **What a review should test.** Whether each instant and count follows from the source named
   beside it; whether each layer of the causal stack is supported by the timeline; whether each
   proposal has a warrant and a condition that would show it wrong.
@@ -108,12 +108,25 @@ static analysis (three studies of the suspect files), and the real execution las
 11:45 on the first day that a scanner log names the failing file: its first status cites the
 threads that show it. It did not name a local run as an option until 25 hours later.
 
-**Why was that possible?** The local run failed one of the gate's preconditions: it was not within
-the seat's current authority. It needed a new project in the owner's SonarCloud organisation and the
-token in the owner's keychain. The gate says a missing approval never becomes permission, and it
-says to run, stop or escalate once inquiry has cost as much as the trial would. The seat did
-neither of the two things that follow. It never estimated the trial's cost, so the threshold could
-not fire. It did not ask for the authority. It began the proxy that needed no asking.
+**Why was that possible?** Read against the gate's five preconditions, the local run met three and
+failed two:
+
+- _Within current authority_: failed. It needed a new project in the owner's SonarCloud
+  organisation and the token in the owner's keychain.
+- _A two-way door_: met. The throwaway project was deleted afterwards.
+- _Contained away from production, third parties and irreplaceable data_: failed in part. It left
+  the production project untouched, but it wrote to SonarCloud, a third party: a new project, and
+  an upload of source that the same service already analyses from the public repository.
+- _Bounded, with a kill path and cleanup_: met in design (one scan, one project to delete). The
+  seat set no time bound on the launch, which is how process root 3 went unseen.
+- _Directly observable_: met. The scanner log is the observation.
+
+Both failures are ones only the owner can lift: permission to act in the organisation, and
+acceptance of a write to an outside service. So the gate's default verdict of RUN did not apply,
+and the gate says a missing approval never becomes permission. It also says to run, stop or
+escalate once inquiry has cost as much as the trial would. The seat did neither of the two things
+that follow. It never estimated the trial's cost, so the threshold could not fire. It did not put
+the trial to the owner. It began the proxy that needed no asking.
 
 **Process root 2: a converging proxy was traded for studies that were not converging, and the seat
 did not say so.** The bisection was working. Twenty probes took 4,597 files to 247, and both true
@@ -143,7 +156,7 @@ one question. The seat compared "start now" with "ask first" where it should hav
 26 analyses. The two times are measured differently (commit spans against a scan's own total), so
 the comparison is of order only. The estate already has the words for the
 trial (the Direct Trial Gate). It does not have a line for the case where the trial is cheap and
-only authority is missing, and that is the layer where the next "why" leaves the estate's control.
+what it lacks is the owner's to give, and that is the layer where the next "why" leaves the estate's control.
 
 ## The counterfactual test
 
@@ -177,12 +190,14 @@ None of this needed three days. The first two items were by-products of looking 
 
 ## Proposals, each with warrant, falsifier and lane
 
-1. **Ask for the trial's authority first** (fast lane, operational). The Direct Trial Gate in
+1. **Put the trial to the owner first** (fast lane, operational). The Direct Trial Gate in
    `.agent/skills/cognition/reason/SKILL-CANONICAL.md` gains one sentence: where the direct trial
-   meets every precondition except authority, the first act is to ask for that authority, stating
-   the trial's price and what it will observe; a proxy may run while the answer is awaited, and its
-   running cost is compared with the trial's price at each report. **Warrant**: this arc; the trial
-   was known at minute 12, priced at no more than 21 minutes once somebody priced it, and asked for at hour 25.
+   fails only preconditions the owner can lift (authority, or a bounded and reversible write to a
+   third party the owner may accept), the first act is to put it to the owner, stating which
+   preconditions fail, the trial's price and what it will observe; a proxy may run while the answer is awaited, and its
+   running cost is compared with the trial's price at each report. **Warrant**: this arc, one
+   instance, in which the trial failed the authority and third-party preconditions and no other; the
+   trial was known at minute 12, priced at no more than 21 minutes once somebody priced it, and asked for at hour 25.
    **Falsifier**: the next three investigations that meet this case ask first and the owner
    declines each time (the sentence only adds a question); or a seat asks, runs the trial, and the
    trial does not answer (the lesson was particular to this tool). **Prediction**: the next
@@ -230,6 +245,6 @@ No free-play pass was run.
 
 ## Success test
 
-The record names a mechanism the estate had no line for: a cheap direct trial that fails only the
-authority precondition is silently ranked last. Proposal 1 is routed to a named surface with a
+The record names a mechanism the estate had no line for: a cheap direct trial that fails only
+preconditions the owner can lift is silently ranked last. Proposal 1 is routed to a named surface with a
 prediction. If no doctrine pull request takes it, this record is a eulogy.
