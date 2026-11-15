@@ -90,8 +90,11 @@ timeline.
 
 SonarQube Architecture Analysis 3.8.0.13073 cannot load the graph file of a TypeScript file that
 passes `'constructor'`, `'__proto__'` or `'toString'` as a call argument. Two files did so. The code
-was correct. No study of the files' structure could find this, because the property is three
-particular words in one syntactic position, and nothing about the files' shape.
+was correct. The trigger is visible in the source: three particular words in one syntactic
+position. A search for it finds it at once, given the hypothesis. The studies the seat ran had no
+such hypothesis: they compared the suspect groups (247 files, then 162) with the clean files on
+structure, syntax features, imports and configuration, and none of those comparisons separates
+files by the value of a string argument.
 
 ## The causal stack
 
@@ -112,14 +115,16 @@ says to run, stop or escalate once inquiry has cost as much as the trial would. 
 neither of the two things that follow. It never estimated the trial's cost, so the threshold could
 not fire. It did not ask for the authority. It began the proxy that needed no asking.
 
-**Process root 2: a converging proxy was traded for a non-converging one, and the seat did not say
-so.** The bisection was working. Twenty probes took 4,597 files to 247, and the seat's estimate of
-fourteen more probes and 50 minutes to reach single files was sound: both true files lay inside the
-two groups. The owner twice paused the probes and asked for a study of the files (11-12 13:00 and
+**Process root 2: a converging proxy was traded for studies that were not converging, and the seat
+did not say so.** The bisection was working. Twenty probes took 4,597 files to 247, and both true
+files lay inside the two groups; the seat estimated fourteen more probes and 50 minutes to reach
+single files, an estimate that was never tested. The owner twice paused the probes and asked for a study of the files (11-12 13:00 and
 11-13 12:25). Those were reasonable questions from someone who could not see what the seat knew.
 The seat answered them and reported that reading the code named no cause. It did not give the
-verdict it held: that static study cannot converge on a fault the files "don't visibly share" (its
-own words at 12:58), and that either instrument which does converge should run first.
+verdict it held: that comparing the groups without a hypothesis had found nothing three times,
+that the fault was "something the files don't visibly share" (its own words at 12:58), and that
+an instrument which narrows with each run should go first. This record does not claim that static
+study could never have found the cause; reading two isolated files might have.
 
 **Process root 3: a launch was reported as a run.** At 18:27 the seat wrote that the scan "is
 running now". The scan wrote nothing until 08:00 two days later. The seat did not read a first log
@@ -136,7 +141,7 @@ that does not, without either being priced. The probe lane cost 26 analyses, com
 least 87 minutes, and was free to start. The local run cost at most 21 minutes, sign-in included, and
 one question. The seat compared "start now" with "ask first" where it should have compared one run with
 26 analyses. The two times are measured differently (commit spans against a scan's own total), so
-the comparison is of order, and the order is not in doubt. The estate already has the words for the
+the comparison is of order only. The estate already has the words for the
 trial (the Direct Trial Gate). It does not have a line for the case where the trial is cheap and
 only authority is missing, and that is the layer where the next "why" leaves the estate's control.
 
@@ -191,8 +196,9 @@ None of this needed three days. The first two items were by-products of looking 
    launch would not have caught (for example the process wrote its first lines and then
    waited); the lesson would then be about watching a run, not about reporting a launch.
    **Lane**: the napkin, through the seat's closeout record.
-3. **Say when a requested study cannot converge** (fast lane, the napkin; no new doctrine
-   proposed). The claim is that had the seat said the static studies could not find this fault,
+3. **Say when a requested study is not narrowing the search** (fast lane, the napkin; no new doctrine
+   proposed). The claim is that had the seat said the comparisons it was running were not narrowing the
+   search,
    the bisection or the local run would have started sooner. It is an instance of
    `present-verdicts-not-menus`: the seat answered two requests for static study without that
    statement, and at 12:44 on the second day offered two options where it held a preference.
