@@ -278,7 +278,7 @@ is done or make all search operation a prerequisite for unrelated CF delivery.
 
 ## Desk scenarios and intended software acceptance
 
-The current observations below come from Engraph
+The current observations below come from this repository at
 `efe69ff66182832dabe7f667ea0fa0ea021bc2ba`, inspected on 10 October 2026.
 They are bounded static observations, not runtime tests, deployment observations
 or measurements of people. “Target check” means a future technical acceptance

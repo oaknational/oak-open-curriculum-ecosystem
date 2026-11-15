@@ -21,11 +21,12 @@ is installed inside WSL, never in PowerShell.
   and Sentry Seer) — install only when you need local Sentry operator tooling;
   see [Sentry CLI usage](../operations/sentry-cli-usage.md) for the
   `sentry-cli` vs dev-`sentry` split and workspace invocation details.
-- **Claude Code plugins** (Claude Code users) — on first launch Claude Code offers to
-  install the plugins enabled under `enabledPlugins` in the tracked
-  [`.claude/settings.json`](../../.claude/settings.json); accept the prompt. Install any others you
-  use from the sanctioned set, Linear included, in
-  [MCP servers for contributors](mcp-servers-for-contributors.md).
+- **Claude Code plugins** (Claude Code users) — the tracked
+  [`.claude/settings.json`](../../.claude/settings.json) enables the project's plugins under
+  `enabledPlugins`, and enabling a plugin does not install it. Install each one you use once, with
+  `claude plugin install <plugin>@claude-plugins-official --scope project`;
+  [MCP servers for contributors](mcp-servers-for-contributors.md) names the plugin for each
+  sanctioned server.
 - **MCPJam** (optional, for MCP server development and validation only) —
   inspects, runs conformance checks, and authors/runs evals against the MCP
   server; backs the optional `mcpjam` entry in `.mcp.json`. Installed
