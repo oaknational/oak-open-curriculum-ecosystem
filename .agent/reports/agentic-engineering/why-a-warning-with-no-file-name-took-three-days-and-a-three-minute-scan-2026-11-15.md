@@ -200,8 +200,9 @@ first one did.
 ## Observations
 
 One arc is one instance, and the mechanism behind the main delay is not established, so this
-record proposes nothing. It records two observations. Their lane is the fast one: the napkin, by
-way of the seat's closeout record, which the continuity commit that carries that record lifts.
+record proposes nothing. It records two observations. Their lane is the fast one: both are written to the
+napkin's block of 2026-11-15 for this seat in the same change as this record, which also corrects
+that block's first line.
 
 1. **Observation: estimate the direct trial in the first status** (the napkin). When a tool's own
    log would name the fault and the tool can be run where the log is visible, the first status
@@ -244,7 +245,8 @@ nothing was. No free-play pass was run.
 ## Success test
 
 The retrospective skill asks that a record change a decision or name a mechanism. This one names
-no mechanism. It changes a decision: the lesson the seat had written for the napkin ("ask for the
-trial's authority first", stated as the cause of a three-day delay) is withdrawn and replaced by
-the two observations above, and a proposal the first draft made for the Direct Trial Gate is
-dropped as resting on one instance and an unestablished cause.
+no mechanism. It changes what the napkin says: the line that landed there from the seat's closeout
+record ("two days of comparing files by structure found nothing") is corrected in the same change
+as this record and joined by the two observations above. A lesson in the seat's untracked closeout
+record ("ask for the authority first") is withdrawn there, and a proposal the first draft made for
+the Direct Trial Gate is dropped as resting on one instance and an unestablished cause.

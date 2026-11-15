@@ -2379,9 +2379,21 @@ outside the repository. One instance each; scope is this session.
 Observations from one seat's work on pull requests #406 and #420 to #425, 13 to 15 November 2026.
 Each is one instance; none is doctrine.
 
-- **The architecture warning's files were found by a local scan, not by reading code.** Two days
-  of comparing files by structure found nothing; one local scan with `sonar.verbose=true` named
-  both files in its first run (#406, #420).
+- **The architecture warning's files were found by a local scan with `sonar.verbose=true`** (#406,
+  #420). Corrected on 2026-11-15 by the seat's retrospective
+  (`.agent/reports/agentic-engineering/why-a-warning-with-no-file-name-took-three-days-and-a-three-minute-scan-2026-11-15.md`):
+  this line first said that two days of comparing files found nothing. From request to cause was
+  68 hours 33 minutes, of which 60 hours 32 minutes were two stretches with no session activity;
+  the seat worked for about two and a quarter hours before it first offered the local scan, and
+  why it was not offered sooner is not established.
+- **The direct trial was not estimated in the first status.** The seat knew at its first status
+  that a scanner log names the failing file, named no local run and no price for one, and first
+  offered the run after 26 probes. Naming the run and a rough price in the first status, even
+  when it needs the owner's word, puts the trial forward before a second batch of probes.
+- **A background launch was reported as running with no output read.** "The local scan is running
+  now" was written seconds after the command was issued; the scan's first log line came 37 hours
+  later, for a cause that is not known. A launch is reported as launched until its first output
+  is read.
 - **A false claim a reviewer found on one page was also on a second page.** #424's second round
   was the same sentence in `docs/engineering/setup.md`; a search of `docs/` after round one
   would have found it.
