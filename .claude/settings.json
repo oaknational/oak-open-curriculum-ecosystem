@@ -244,25 +244,6 @@
       "Bash(rm --force --recursive:*)"
     ]
   },
-  "skillOverrides": {
-    "sentry-android-sdk": "off",
-    "sentry-cocoa-sdk": "off",
-    "sentry-dotnet-sdk": "off",
-    "sentry-elixir-sdk": "off",
-    "sentry-flutter-sdk": "off",
-    "sentry-go-sdk": "off",
-    "sentry-php-sdk": "off",
-    "sentry-ruby-sdk": "off",
-    "sentry-svelte-sdk": "off",
-    "sentry-react-native-sdk": "off",
-    "sentry-tanstack-start-sdk": "off",
-    "sentry-nestjs-sdk": "off",
-    "sentry-sdk-skill-creator": "off",
-    "chat-sdk": "off",
-    "next-forge": "off",
-    "ai-gateway": "off",
-    "ai-sdk": "off"
-  },
   "hooks": {
     "SessionStart": [
       {
