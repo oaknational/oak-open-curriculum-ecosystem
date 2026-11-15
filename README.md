@@ -5,12 +5,18 @@
 [![SonarCloud quality gate status](https://sonarcloud.io/api/project_badges/measure?project=oaknational_oak-open-curriculum-ecosystem&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=oaknational_oak-open-curriculum-ecosystem)
 [![SonarCloud AI code assurance](https://sonarcloud.io/api/project_badges/ai_code_assurance?project=oaknational_oak-open-curriculum-ecosystem)](https://sonarcloud.io/summary/new_code?id=oaknational_oak-open-curriculum-ecosystem)
 
+We’re Oak, helping schools deliver a world-class curriculum for every pupil. We are creating an
+openly licensed, fully resourced and AI-enabled curriculum for teachers and pupils, as a
+not-for-profit and independent arm's-length body of the UK government.
+
 Oak National Academy is a public body sponsored by the Department for Education. We provide a
 free, optional, fully sequenced curriculum aligned with the national curriculum for England,
-created with teachers and subject experts. This repository turns that curriculum into
-AI-native infrastructure, for teachers and for the wider ecosystem that builds with it. The
-code is open source, the curriculum content is openly licensed, and the work is new and still
-in development.
+created with teachers and subject experts.
+
+This repository is a collection of tools for working with Oak's open curriculum data, via API,
+SDK and MCP app. It serves two audiences: teachers, by putting Oak inside the AI assistants they
+already use; and the wider sector, with open tools to build with. The code is open source, the
+curriculum content is openly licensed, and the work is new and still in development.
 
 ## Find what you need
 
@@ -59,11 +65,9 @@ The apps, SDKs, core packages and libraries are summarised in the
 
 ### Sector reusable components
 
-Beyond Oak-hosted products, we publish a deliberate set of reusable sector components — the
-OpenAPI-to-MCP pipeline, SDK-generation patterns, hybrid-search tooling, MCP and MCP App
-scaffolds, graph projection conventions, and the openly documented Practice — so other
-organisations can lower the cost of building curriculum-aware applications without starting
-from scratch.
+We also publish reusable components, so other organisations can build curriculum-aware
+applications without starting from scratch. The
+[engineering tools strategy](docs/strategy/stream-engineering-tools.md) sets out what they are.
 
 ## Build with it
 
@@ -91,7 +95,7 @@ schema, so a change to the schema reaches all of them by running one command. Se
 [OpenAPI pipeline](docs/architecture/openapi-pipeline.md) and the
 [architectural decision records](docs/architecture/architectural-decisions/README.md).
 
-**Agent-directed.** The code is written by AI agents, directed and reviewed by Oak's
+**Written by agents, directed by engineers.** The code is written by AI agents, directed and reviewed by Oak's
 engineers. The engineers design the system the agents work in: the guardrails, the
 architectural constraints, the quality gates and the review workflows. See
 [how the agentic engineering system works](docs/foundation/agentic-engineering-system.md) and,
