@@ -882,4 +882,4 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
   as Oak's bot.
 - **Answered by the owner, 2026-11-15.** No decision record names Engraph as a party; ADR-233's
   scope is "This repository." The seven README answers are in the delivery node
-  `public-pages-to-standard`. Oak's seven-plugin block is restored in `.claude/settings.json`.
+  `public-pages-to-standard`. The owner chose Oak's seven-plugin block for `.claude/settings.json`; #424 restores it.
