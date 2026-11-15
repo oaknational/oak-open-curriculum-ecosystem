@@ -170,7 +170,7 @@ recited from memory):
   portable `working-with-agentic-ai` primer: a short, repo-independent
   introduction to working with AI coding agents. In a checkout of this
   repository, offer it as a one-step declinable prelude; then continue here.
-- **Strategy and impact** order naturally as the README's "Find what you need" list →
+- **Strategy and impact** order naturally as the README's "Start here" list →
   `VISION.md` → `docs/domain/curriculum-guide.md` → the newest progress report
   (resolved live), with a pointer to where future reports land.
 - **The planning corpus** starts at `.agent/plans/README.md` — the planning

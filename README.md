@@ -5,99 +5,93 @@
 [![SonarCloud quality gate status](https://sonarcloud.io/api/project_badges/measure?project=oaknational_oak-open-curriculum-ecosystem&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=oaknational_oak-open-curriculum-ecosystem)
 [![SonarCloud AI code assurance](https://sonarcloud.io/api/project_badges/ai_code_assurance?project=oaknational_oak-open-curriculum-ecosystem)](https://sonarcloud.io/summary/new_code?id=oaknational_oak-open-curriculum-ecosystem)
 
-We’re Oak, helping schools deliver a world-class curriculum for every pupil. We are creating an
-openly licensed, fully resourced and AI-enabled curriculum for teachers and pupils, as a
-not-for-profit and independent arm's-length body of the UK government.
+We’re Oak, helping schools deliver a world-class curriculum for every pupil. Our curriculum is
+free, openly licensed and fully sequenced, from key stage 1 to key stage 4, and this repository
+is where it meets AI. The tools here put it inside the AI assistants teachers already use, and
+let anyone build with it. The code is open source, and it's new and still in development.
 
-Oak National Academy is a public body sponsored by the Department for Education. We provide a
-free, optional, fully sequenced curriculum aligned with the national curriculum for England,
-created with teachers and subject experts.
+We're a public body sponsored by the Department for Education, and we make our curriculum with
+teachers and subject experts.
 
-This repository is a collection of tools for working with Oak's open curriculum data, via API,
-SDK and MCP app. It serves two audiences: teachers, by putting Oak inside the AI assistants they
-already use; and the wider sector, with open tools to build with. The code is open source, the
-curriculum content is openly licensed, and the work is new and still in development.
+## Start here
 
-## Find what you need
-
-- **You teach, and want Oak in the AI tool you already use:** go to
-  [Bring Oak's curriculum into your AI tools](https://www.thenational.academy/ai-plugin) on
-  Oak's website. You do not need anything on this page.
-- **You want to know what this is and why it matters:** read the [vision](VISION.md), then the
-  [strategy](docs/strategy/README.md). The [curriculum guide](docs/domain/curriculum-guide.md)
-  explains Oak's curriculum structure in plain language.
-- **You want to build with Oak's curriculum:** see [Build with it](#build-with-it).
-- **You want to know how it is built:** see [How it's built](#how-its-built).
-- **You want to run or change the code:** start at [Quick Start](#quick-start).
+- **You teach.** You don't need this page.
+  [Bring Oak's curriculum into your AI tools](https://www.thenational.academy/ai-plugin) walks
+  you through adding Oak to the AI tool you already use.
+- **You're deciding whether this matters.** Read the [vision](VISION.md): what we're doing and
+  why. The [strategy](docs/strategy/README.md) has the detail, and the
+  [curriculum guide](docs/domain/curriculum-guide.md) explains how Oak's curriculum is put
+  together.
+- **You want to build with Oak's curriculum.** Go to [Build with it](#build-with-it): connect an
+  AI tool, call the API or use the SDK.
+- **You want to know how it's made.** Go to [How it's built](#how-its-built): one schema,
+  generated code, and AI agents directed by our engineers.
+- **You want to run the code.** [Quick Start](#quick-start) takes you from a clone to passing
+  tests.
 
 ## Status
 
-Oak's website says what is available today:
+From [our website](https://www.thenational.academy/ai-plugin), read 15 November 2026:
 
 > Our curriculum plans are now available in ChatGPT and Claude, with Gemini, Copilot and
 > others to follow.
 >
 > This is new, and still in development.
 
-Source: [Oak National Academy plugin](https://www.thenational.academy/ai-plugin), read 15 November 2026.
-
-That page is the place to check which AI tools Oak supports. Versions of the code in this
-repository are listed under
-[Releases](https://github.com/oaknational/oak-open-curriculum-ecosystem/releases).
+That page lists the AI tools we support.
+[Releases](https://github.com/oaknational/oak-open-curriculum-ecosystem/releases) lists each
+version of the code here.
 
 ## What's here
 
-| What                          | What it does                                                                                                                                                                            | Where                                                                                                          |
-| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| **Oak Curriculum MCP server** | AI assistants and developer tools can search, browse and fetch curriculum data through the [Model Context Protocol](https://modelcontextprotocol.io/)                                   | [`apps/oak-curriculum-mcp-streamable-http`](apps/oak-curriculum-mcp-streamable-http/README.md)                 |
-| **Curriculum SDK**            | Typed TypeScript access to Oak's curriculum API for software developers (SDK: software development kit): types, validators and MCP tool metadata, all generated from the OpenAPI schema | [`packages/sdks/oak-curriculum-sdk`](packages/sdks/oak-curriculum-sdk/README.md)                               |
-| **Semantic search**           | Hybrid lexical and semantic retrieval across lessons, units and threads; lexical search of curriculum sequences                                                                         | [`apps/oak-search-cli`](apps/oak-search-cli/), [`packages/sdks/oak-search-sdk`](packages/sdks/oak-search-sdk/) |
-| **Demonstration apps**        | The Curriculum Hub, with live search and content, and the design-system showcase                                                                                                        | [`demos/`](demos/)                                                                                             |
-| **Design system**             | The design token pipeline and reusable design primitives                                                                                                                                | [`packages/design/`](packages/design/)                                                                         |
-| **The Practice**              | The openly documented way this repository is built with AI agents                                                                                                                       | [How the agentic engineering system works](docs/foundation/agentic-engineering-system.md)                      |
+| What                          | What it does                                                                                                                                 | Where                                                                                                          |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| **Oak Curriculum MCP server** | Lets an AI assistant search, browse and fetch Oak's curriculum, through the [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) | [`apps/oak-curriculum-mcp-streamable-http`](apps/oak-curriculum-mcp-streamable-http/README.md)                 |
+| **Curriculum SDK**            | Gives developers typed TypeScript access to Oak's curriculum API, generated from the API's own schema (SDK: software development kit)        | [`packages/sdks/oak-curriculum-sdk`](packages/sdks/oak-curriculum-sdk/README.md)                               |
+| **Semantic search**           | Finds lessons, units and learning threads by meaning as well as by keyword, and searches curriculum sequences by keyword                     | [`apps/oak-search-cli`](apps/oak-search-cli/), [`packages/sdks/oak-search-sdk`](packages/sdks/oak-search-sdk/) |
+| **Demonstration apps**        | The Curriculum Hub, with live search and content, and the design-system showcase                                                             | [`demos/`](demos/)                                                                                             |
+| **Design system**             | The colours, type and components our interfaces share                                                                                        | [`packages/design/`](packages/design/)                                                                         |
+| **The Practice**              | How we build all of this with AI agents, documented in the open                                                                              | [How the agentic engineering system works](docs/foundation/agentic-engineering-system.md)                      |
 
-The `.agent/` folder holds the working material of the Practice: the rules, plans and records
-the agents and engineers work from. It is public because the repository is public. It is not
-part of the product.
+You'll also see a large `.agent/` folder. It holds the rules, plans and records our agents and
+engineers work from. It's in the open with everything else, and it isn't part of the product.
 
 The apps, SDKs, core packages and libraries are summarised in the
 [architecture overview](docs/architecture/README.md#workspace-summaries).
 
-### Sector reusable components
-
-We also publish reusable components, so other organisations can build curriculum-aware
-applications without starting from scratch. The
-[engineering tools strategy](docs/strategy/stream-engineering-tools.md) sets out what they are.
-
 ## Build with it
 
-- **Connect an AI tool.** Oak can connect to any AI tool that supports Model Context Protocol
-  (MCP) connections. The server is at `https://mcp.thenational.academy/mcp`. Oak's
+- **Connect an AI tool.** AI tools that support Model Context Protocol (MCP) connections can
+  connect to Oak, at `https://mcp.thenational.academy/mcp`. Our
   [plugin repository](https://github.com/oaknational/oak-ai-plugins/blob/main/README.md) has
-  the instructions, and the [served tool table](apps/oak-curriculum-mcp-streamable-http/served-tool-table.md)
-  lists every tool the server offers.
+  the instructions, and the
+  [served tool table](apps/oak-curriculum-mcp-streamable-http/served-tool-table.md) lists
+  every tool the server offers.
 - **Call the curriculum API.** Request a free key from
   [Oak's Open Curriculum API](https://open-api.thenational.academy/docs/about-oaks-api/api-keys).
-- **Use the SDK.** The [Curriculum SDK](packages/sdks/oak-curriculum-sdk/README.md) gives typed
-  access to the API. It is not yet on the npm registry; until it is, use it from a clone of
-  this repository.
-- **Check the licences.** Code is under the [MIT licence](LICENCE). Curriculum content is
-  under the Open Government Licence v3.0, except where otherwise stated, and requires
-  attribution to Oak National Academy: see [LICENCE-DATA.md](LICENCE-DATA.md) and the
+- **Use the SDK.** The [Curriculum SDK](packages/sdks/oak-curriculum-sdk/README.md) gives you
+  typed access to the API. It isn't on the npm registry yet; until it is, use it from a clone
+  of this repository.
+- **Reuse the parts.** We build the components here to be reused; the
+  [engineering tools strategy](docs/strategy/stream-engineering-tools.md) sets out what they
+  are.
+- **Check the licences.** The code is under the [MIT licence](LICENCE). Curriculum content is
+  under the Open Government Licence v3.0, except where otherwise stated, and needs attribution
+  to Oak National Academy: see [LICENCE-DATA.md](LICENCE-DATA.md) and the
   [register of data sources](docs/governance/DATA-SOURCES.md).
 
 ## How it's built
 
-**Schema-first.** Everything flows from the OpenAPI schema of Oak's curriculum API. The
-TypeScript SDK, its types and validators, and the MCP tools are all generated from that one
-schema, so a change to the schema reaches all of them by running one command. See the
+**One schema, everything generated.** Everything flows from the OpenAPI schema that describes Oak's curriculum
+API. The SDK, its types and validators, and the MCP tools are all generated from that one
+schema, so when the API changes, one command regenerates them all. See the
 [architecture overview](docs/architecture/README.md), the
 [OpenAPI pipeline](docs/architecture/openapi-pipeline.md) and the
 [architectural decision records](docs/architecture/architectural-decisions/README.md).
 
-**Written by agents, directed by engineers.** The code is written by AI agents, directed and reviewed by Oak's
-engineers. The engineers design the system the agents work in: the guardrails, the
-architectural constraints, the quality gates and the review workflows. See
+**Written by AI agents, directed by our engineers.** AI agents write the code. Our engineers
+direct them, review what they write, and build the guardrails and quality gates they work
+within. It's documented in the open, so you can judge it for yourself: start with
 [how the agentic engineering system works](docs/foundation/agentic-engineering-system.md) and,
 for the practical side,
 [working with this repo](docs/engineering/working-with-this-repo-for-devs.md).
@@ -152,10 +146,11 @@ See [environment variables guide](docs/operations/environment-variables.md) for 
 - [Working with this repo](docs/engineering/working-with-this-repo-for-devs.md): how to direct
   the agents, including how to start a session.
 - [MCP servers for contributors](docs/engineering/mcp-servers-for-contributors.md): the
-  sanctioned set for Oak teammates using an AI coding agent.
+  approved set for Oak team members using an AI coding agent.
 - [Documentation index](docs/README.md): every section of the documentation.
-- AI agents: read the [start-right-quick workflow](.agent/skills/start-right-quick/shared/start-right.md),
-  then [AGENT.md](.agent/directives/AGENT.md).
+- AI agents: read the
+  [start-right-quick workflow](.agent/skills/start-right-quick/shared/start-right.md), then
+  [AGENT.md](.agent/directives/AGENT.md).
 
 ## Credits and Attribution
 
@@ -170,15 +165,14 @@ details, citations, and licence terms for each source.
 
 ## Licence and contact
 
-- **Licence.** Code: MIT, see [LICENCE](LICENCE). Curriculum data: see
-  [LICENCE-DATA.md](LICENCE-DATA.md). Branding is copyright Oak National Academy: see
-  [BRANDING.md](BRANDING.md).
-- **Contributing.** You are free to read, fork and learn from the code. At this time we are
-  not accepting external contributions; this may change, so watch the repository for updates.
-  Oak team members: see [CONTRIBUTING.md](CONTRIBUTING.md).
+- **Licence.** The code is [MIT-licensed](LICENCE); the curriculum has
+  [its own licence](LICENCE-DATA.md). Our branding is copyright: see [BRANDING.md](BRANDING.md).
+- **Contributing.** You're free to read, fork and learn from the code. We aren't accepting
+  external contributions at the moment. Oak team members: see
+  [CONTRIBUTING.md](CONTRIBUTING.md).
 - **Security.** If you find a security issue, please follow our [security policy](SECURITY.md).
-- **Privacy and accessibility.** Oak publishes its
+- **Privacy and accessibility.** Our
   [privacy policy](https://www.thenational.academy/legal/privacy-policy) and
-  [accessibility statement](https://www.thenational.academy/legal/accessibility-statement) on
-  its website.
-- **Contact.** Use [Oak's contact page](https://www.thenational.academy/contact-us).
+  [accessibility statement](https://www.thenational.academy/legal/accessibility-statement) are
+  on our website.
+- **Contact.** [Get in touch](https://www.thenational.academy/contact-us).
