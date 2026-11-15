@@ -3,8 +3,7 @@
 - **Status:** Accepted (as direction, 10 October 2026, from the owner's explicit
   architecture commission). The detailed designs and new delivery nodes remain
   proposals; this record does not ratify them or claim implementation.
-- **Scope:** This Engraph development line. Oak is a separate, read-only evidence
-  source. Eventual reconciliation does not determine its destination or timing.
+- **Scope:** This repository.
 - **Amends:** [ADR-227](227-oak-product-in-its-own-repository.md), on the scopes
   identified below. Preserves [ADR-230](230-own-built-algorithm-and-data-structure-foundations.md)
   and [ADR-231](231-organisational-identity-below-the-tree.md).
@@ -18,7 +17,7 @@ Subsequent direction strengthens that boundary and connects it with Capability
 Foundations (CF), layered data models and end-to-end integrity.
 
 The owner commissioned the complete desk-research and programme design, including
-Engraph documentary incorporation, on 10 October 2026. That authorises this
+its incorporation into this repository's documents, on 10 October 2026. That authorises this
 documentation change; application implementation, publication, migration and
 deployment are subsequent commissions. No team measurement or team studies form
 part of this programme's design or its acceptance requirements.
@@ -76,18 +75,18 @@ part of this programme's design or its acceptance requirements.
 | Earlier statement                                                                       | Current disposition                                                                                                                                         |
 | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ADR-227 permits product domain logic in the external repository                         | Superseded for executable mechanisms: instance configuration only; reusable domain logic and interpreters remain in OCE.                                    |
-| ADR-227 puts extraction before remaining estate relocation                              | Replaced in this Engraph programme by CF-first preference with actual dependency edges. Publication remains a prerequisite to external consumption.         |
+| ADR-227 puts extraction before remaining estate relocation                              | Replaced in this programme by CF-first preference with actual dependency edges. Publication remains a prerequisite to external consumption.                 |
 | ADR-227's success metric measures how often a squad visits OCE                          | Replaced by representative desk scenarios and subsequent technical contract checks. No measurement of teams is commissioned.                                |
 | ADR-227's initial MCP/search packaging                                                  | Historical selected product grouping; search service/index and repository decisions are now explicit separate questions. No new repository list is adopted. |
 | ADR-227's registry boundary, finish-before-handover, licences and consumer independence | Retained. Source custody does not prove publication or installed consumption.                                                                               |
 | One repository release version initially                                                | Retained as the initial release policy. Later lifecycle groups remain the release programme's work; this ADR selects no new release tool.                   |
-| Engraph ADR-230's owned algorithm/data-structure foundations                            | Retained at its declared scope. It does not mandate replacement of every runtime, protocol or managed service.                                              |
+| ADR-230's owned algorithm/data-structure foundations                                    | Retained at its declared scope. It does not mandate replacement of every runtime, protocol or managed service.                                              |
 | Standalone Practice direction                                                           | Retained as a distinct track. Reusable Practice, technology bindings and institutional policy must not become competing canonical copies.                   |
 
-Oak PR1000 is a proposed input, not the governing topology here. Its product and
+Pull request 1000 on Oak National Academy's repository is a proposed input, not the
+governing topology. Its product and
 distribution concerns can inform compatible instances and generated outputs;
-neither its five names nor its status wording supersedes this direction. No Oak
-repository or PR interaction is authorised by this record.
+neither its five names nor its status wording supersedes this direction.
 
 ## Consequences and evidence boundary
 

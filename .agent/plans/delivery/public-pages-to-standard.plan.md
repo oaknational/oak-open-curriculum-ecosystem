@@ -15,9 +15,9 @@ tickets: []
 depends_on: []
 owner_gates:
   - awaiting: owner-decision
-    clears_when: "The owner answers the seven numbered items under 'Owner inputs', which gate todo 2 only"
+    clears_when: "The owner reads the README branch as GitHub renders it, before todo 2's pull request opens"
     expires: 2026-12-04
-last_updated: 2026-11-13
+last_updated: 2026-11-15
 ---
 
 # Public pages to standard
@@ -138,16 +138,25 @@ Every other page the README links gets link and wording checks only.
 
 ## Owner inputs
 
-The first three are verdicts to confirm.
+The owner answered all seven on 2026-11-15.
 
-1. Teachers are sent to `https://www.thenational.academy/ai-plugin`.
+1. Teachers are sent to `https://www.thenational.academy/ai-plugin`. Confirmed.
 2. Oak is described as in the listing copy: "a public body sponsored by the Department for
-   Education".
+   Education". Confirmed.
 3. Privacy and accessibility link to Oak's own published pages; the repository writes neither.
-4. The status sentence, given the four go-live gates on the strategy page.
-5. The product's name on this page.
-6. The sentence about agents writing the code, and whether the directing engineer is named.
-7. What the front page says about what comes next, if anything.
+   Confirmed.
+4. Status: the README states no status of its own. It quotes Oak's page ("This is new, and still
+   in development.") and links there for what is available. The "Public Beta" sentence goes.
+5. Product name: "Oak National Academy plugin" where the page speaks to teachers and other
+   non-technical readers, matching Oak's site; "Oak Curriculum MCP server" in the sections for
+   people who build with it.
+6. How the code is written: AI agents write it, directed and reviewed by Oak's engineers, with a
+   link to the page that explains the method. No person is named. The "every line … written
+   entirely by agents" sentence goes.
+7. What comes next: the front page says nothing. ADR-227 stays linked from the architecture page.
+
+The same day the owner ruled that no decision record names Engraph as a party; package names and
+repository links that contain the word stay.
 
 ## Out of scope
 

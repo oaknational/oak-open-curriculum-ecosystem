@@ -523,7 +523,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
   (Accepted 2026-10-03 — this repository's applications of PDR-008 and PDR-132, paired in the
   practice index; a Core heading never names the host, and the `validate-no-host-names-in-core-headings`
   gate refuses the shape)
-- [ADR-233: Retained framework and configurable instances](233-retained-framework-and-configurable-instances.md) — current Engraph owner direction, 10 October 2026; detailed design remains proposed.
+- [ADR-233: Retained framework and configurable instances](233-retained-framework-and-configurable-instances.md) — owner direction, 10 October 2026; detailed design remains proposed.
 
 ## Key Architectural Decisions
 
@@ -575,7 +575,7 @@ For understanding the agentic engineering practice:
 - **[ADR-131](131-self-reinforcing-improvement-loop.md)** - Self-reinforcing improvement loop: knowledge flow, consolidation hub, self-referential governance, inter-repo propagation
 - **[ADR-231](231-organisational-identity-below-the-tree.md)** - Organisational identity is held below the tree: who runs this tree is never in the tree; mechanism names no organisation; the default branch derived, never a literal
 - **[ADR-232](232-host-side-adoption-of-practice-core-decisions.md)** - Host-side adoption of Practice Core decisions: this repository's applications of PDR-008 and PDR-132 live here, paired in the practice index; a Core heading never names the host
-- **[ADR-233](233-retained-framework-and-configurable-instances.md)** - Retained framework and configurable instances: current Engraph owner direction, 10 October 2026; detailed design remains proposed
+- **[ADR-233](233-retained-framework-and-configurable-instances.md)** - Retained framework and configurable instances: owner direction, 10 October 2026; detailed design remains proposed
 - **[ADR-135](135-agent-classification-taxonomy.md)** - Agent classification taxonomy: domain_expert, process_executor, specialist; operational modes; Practice domain trio
 - **[ADR-144](144-two-threshold-fitness-model.md)** - Three-zone fitness model: `healthy` / `soft` / `hard` / `critical` graduated scale with `CRITICAL_RATIO = 1.5`; `critical` is a loop-failure signal requiring a three-question post-mortem (§Loop Health)
 - **[ADR-146](146-assumptions-expert-meta-level-plan-assessment.md)** - Assumptions expert: independent proportionality and plan-assumption challenge with an inverted doctrine hierarchy
