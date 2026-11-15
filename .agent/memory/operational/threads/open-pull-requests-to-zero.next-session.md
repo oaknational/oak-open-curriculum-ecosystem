@@ -799,8 +799,9 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
     `export * from 'node:child_process'`.
   - Oak's SonarCloud project keeps the file-encoding analysis warning until the owner merges
     oaknational#1023; Engraph's lost it when #400 landed.
-  - "Architecture analysis executed with errors" remains on both SonarCloud projects. Hydra
-    investigates it next, at the owner's word.
+  - "Architecture analysis executed with errors" is gone from Engraph's SonarCloud project
+    since #420 (the analysis of 2026-11-15T10:43Z reported 0 warnings). The cause is recorded
+    under "Hydra's closeout of 2026-11-15" below.
 - **Taken over from Hydra (the owner, 2026-11-12, relayed by Hydra: "Hand all responsibilities
   other than the architecture investigation to Sandpiper").** This seat now holds:
   - Todo 6 of the reunify plan as merged in #405: its execution after the owner merges
@@ -813,7 +814,8 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
   - The binary globs in `sonar.exclusions` (#400). They rest on the policy sentence "a product
     image or font is an asset, not code"; if the owner disagrees, the globs narrow.
   - The `upstream` remote observation recorded earlier in this thread.
-  Hydra keeps only the SonarCloud "Architecture analysis executed with errors" investigation.
+  Hydra kept only the SonarCloud "Architecture analysis executed with errors" investigation,
+  finished it and closed on 2026-11-15.
 - **Docs-only definition (the owner, 2026-11-12, verbatim):** "docs only can be if the PR only
   changes markdown files and those files are only in the .agent, or root docs folder". The merge
   tool's records class (`agent-tools/src/merge-bot/change-class.ts`) is wider: it also takes
@@ -883,3 +885,116 @@ push; the owner approved the plan in plan mode and has not yet read the rechecke
 - **Answered by the owner, 2026-11-15.** No decision record names Engraph as a party; ADR-233's
   scope is "This repository." The seven README answers are in the delivery node
   `public-pages-to-standard`. The owner chose Oak's seven-plugin block for `.claude/settings.json`; #424 restores it.
+
+## Hydra's closeout of 2026-11-15
+
+Lifted by Sandpiper from Hydra holds Lightyear's (d827c5) closeout record, which is not tracked.
+Hydra landed #415, #420, #421, #422 and #425, took #424 to merged at the owner's word, closed the
+probe pull request #406 without merging, and holds no claim, branch or worktree.
+
+### The cause of the architecture warning
+
+- SonarQube Architecture Analysis 3.8.0.13073 cannot load a TypeScript file's graph file when the
+  file passes, as a call argument, a value whose type is a string literal naming an
+  `Object.prototype` member (`'constructor'`, `'__proto__'`, `'toString'`). The scanner log says
+  `Skipping load of file ... .udg` and `IllegalStateException: Value Attribute not found for key
+  function Object() { [native code] }`.
+- It is the analyser's fault, proven in a minimal project. Our code was correct. The effect was
+  two files' dependencies missing from the architecture graph; no rule, measure or gate result
+  changed.
+- Fails: the literal as a call argument; a template literal; an unannotated `const` then passed.
+  Loads: the string in a `return`; an ordinary string argument; a named predicate
+  `(key) => key === 'constructor'` passed as the argument; a `const` annotated `: string`;
+  property access; a `switch` case.
+- The two files were `agent-tools/src/codex-exec/pass-record.ts` and
+  `packages/libs/logger/src/error-normalisation-fields.ts` (helpers now in
+  `thrown-object-description.ts`). Each carries a comment naming the constraint.
+- knip, dependency-cruiser and ESLint cannot usefully detect it, because the code is correct.
+- A new file that passes such a literal to a call brings the warning back. The check is
+  `sonar.verbose=true` on a local scan and a search of the log for `Skipping load of file`.
+
+### Open items, each with its owner
+
+- **Sonar bug report: the owner files it** (owner, 2026-11-15: "I will take care of the bug
+  report"). The draft is below.
+- **MCP-880, backlog** (owner: "MCP-880 is fine for now"): make the logger's error boundary
+  strict, so only an `Error` is logged as an error. 24 external `normalizeError(...)` call sites.
+  `createThrownObjectFields` carries a comment saying why its fallback chain is bad practice.
+- **Not investigated:** the full scan logged "Failed to deserialize Protobuf message: Protocol
+  message had invalid UTF-8" twice. It raised no project warning. Nobody owns it.
+- **Plugin skill load is still unreduced.** The `skillOverrides` block was meant to hide skills
+  and hid none. No setting hides one plugin skill; Claude Code's page says to manage them through
+  `/plugin`. Nobody owns a replacement.
+- **A local branch `chore/sonar-findings-to-zero`** sits in the primary checkout, far behind
+  `engraph`. This seat did not create it in this stretch and did not examine it.
+- **A statement corrected.** #424's thread and #425's body say all seventeen `skillOverrides`
+  entries name Sentry or Vercel plugin skills. Four are verified as Vercel plugin skills; the
+  thirteen Sentry names exist nowhere on the machine and the plugin was inferred from the names.
+  The reunify plan's note carries the corrected sentence.
+
+### The Sonar bug report draft, for the owner to file
+
+Title: Architecture analysis fails to load a TS file that passes `'constructor'`, `'__proto__'` or `'toString'` as a call argument
+
+**Summary**
+
+On SonarQube Cloud, the TypeScript architecture sensor skips the dependency-graph file of any source file that passes, as a call argument, a value whose type is a string literal naming an `Object.prototype` member. The analysis then carries the warning "Architecture analysis executed with errors. Analysis results may be incomplete or invalid."
+
+**Versions**
+
+- SonarQube Cloud, scanner `@sonar/scan` 5.1.0
+- Architecture Analysis 3.8.0.13073 (`architecture`)
+- Architecture Rules for JavaScript and frontend 3.8.0.13073 (`architecturejavascriptfrontend`)
+- JavaScript/TypeScript analyser 14.4.0.46458
+
+**Scanner log (`sonar.verbose=true`)**
+
+```text
+[WARN] Skipping load of file: ".../architecture/ts/src_a-arg-constructor_ts.udg"
+[WARN] Error raised (IllegalStateException): Value Attribute not found for key function Object() { [native code] }
+[WARN] Skipping load of file: ".../architecture/ts/src_c-arg-proto_ts.udg"
+[WARN] Error raised (IllegalStateException): Value Attribute not found for key [object Object]
+[WARN] Skipping load of file: ".../architecture/ts/src_e-arg-tostring_ts.udg"
+[WARN] Error raised (IllegalStateException): Value Attribute not found for key function toString() { [native code] }
+```
+
+The key in each message is the stringified `Object.prototype` member of that name, which suggests the frontend looks the literal up in a plain object and receives the inherited member.
+
+**Minimal reproduction**
+
+Fails:
+
+```ts
+export function c(value: object): boolean {
+  return Object.hasOwn(value, '__proto__');
+}
+```
+
+Also fails: the same with `'constructor'` or `'toString'`; with a template literal; and with the literal held in an unannotated `const` and then passed.
+
+Loads cleanly:
+
+```ts
+// the same string outside a call argument
+export function b(): string {
+  return 'constructor';
+}
+
+// an ordinary string as the argument
+Object.getOwnPropertyDescriptor(value, 'message');
+
+// a const annotated as string
+const PROTO_KEY: string = '__proto__';
+Object.hasOwn(value, PROTO_KEY);
+
+// comparison inside a predicate
+Object.keys(value).some((key) => key === '__proto__');
+```
+
+**Expected**
+
+The file's graph loads, or the warning names the file. Under automatic analysis the scanner log is not visible, so the warning gives no way to find the cause.
+
+**Impact**
+
+The affected files' dependencies are missing from the architecture graph. No rule, measure or quality-gate result is affected.
