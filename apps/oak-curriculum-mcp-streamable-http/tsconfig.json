@@ -13,8 +13,7 @@
     "runtime-only-scripts/**/*.d.mts",
     "e2e-tests/**/*.ts",
     "*.config.ts",
-    "vitest.e2e.config.ts",
-    "bin/**/*.ts"
+    "vitest.e2e.config.ts"
   ],
   "exclude": ["node_modules", "dist", "temp-secrets", "../../.agent/reference/**"]
 }
