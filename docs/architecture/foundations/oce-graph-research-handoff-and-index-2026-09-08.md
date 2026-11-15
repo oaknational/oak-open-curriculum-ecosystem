@@ -10,7 +10,7 @@ last_reviewed: 2026-09-09
 
 8 September 2026 · Revision 2 · Current graph-specific guide to the foundations bundle
 
-**Purpose:** help Engraph OCE implement comprehensive graph capabilities as SMALL Reliable Atoms and layers of composition, informed by the best openly licensed examples. The [governing document](algorithms-and-data-structures-governance-2026-09-08.md) owns that current policy across graph and non-graph algorithms and data structures. The [bundle index](foundations-bundle-index-2026-09-08.md) owns the complete reading order and document map.
+**Purpose:** help OCE implement comprehensive graph capabilities as SMALL Reliable Atoms and layers of composition, informed by the best openly licensed examples. The [governing document](algorithms-and-data-structures-governance-2026-09-08.md) owns that current policy across graph and non-graph algorithms and data structures. The [bundle index](foundations-bundle-index-2026-09-08.md) owns the complete reading order and document map.
 
 The owner has established the broad capability investment. Implementation sequencing uses concrete journeys, while the full graph capability ledger remains required scope. Prior package investigations supply reference designs, adverse cases, semantic distinctions and evaluation methods. They do not select our implementation source or certify the code we will build.
 

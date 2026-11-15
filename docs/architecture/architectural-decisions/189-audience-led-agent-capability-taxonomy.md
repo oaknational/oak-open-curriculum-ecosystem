@@ -88,7 +88,7 @@ recorded independently.
 - **Amendment 2026-09-05 (owner corrections on a fork line).** On a line run as another
   organisation's fork, whether a distributable capability is listed or served is that line's
   own product decision and licence position; the canonical organisation's product gates do
-  not carry across by analogy — a report on the EngraphCode line had carried the canonical
+  not carry across by analogy — a report on one such line had carried the canonical
   connector-listing gate onto the fork, and the owner corrected it. For a distributable
   capability the surfaces that matter in this tree are the marketplace listing manifest
   (`.claude-plugin/marketplace.json`, which lists the plugin) and the plugin directory it
