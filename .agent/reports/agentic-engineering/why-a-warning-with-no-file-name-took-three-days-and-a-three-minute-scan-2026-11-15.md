@@ -45,6 +45,22 @@ Durations, computed from the table:
 - Probes: 26, each a SonarCloud analysis of a pull request. Twenty ran in 71 minutes on the first
   day and six in 16 minutes on the second.
 
+How to recompute the probe figures. The probe branch is deleted; the closed pull request keeps its
+commits. `gh pr view 406 --json commits` lists 26 commits, each headed "chore(sonar): probe N for
+the architecture warning [skip ci]", N from 1 to 26, with these commit times:
+
+| Batch         | First commit              | Last commit               | Span       |
+| ------------- | ------------------------- | ------------------------- | ---------- |
+| Probes 1-20   | `c4d9523f8`, 11-12 11:42Z | `1950851ba`, 11-12 12:53Z | 71 minutes |
+| Probes 21-26  | `4968daefb`, 11-13 12:02Z | `547d7f465`, 11-13 12:18Z | 16 minutes |
+
+The spans run from a batch's first commit to its last, so each leaves out the last probe's own
+analysis. The file counts (4,597, 247, 34 and 128) are the seat's, quoted from its replies of
+11-12 12:58Z and 11-13 12:22Z in the session transcript, which is not tracked: 62 and 185 files in
+the two groups after probe 20, and 34 and 16, 3, 10, 37, 10 and 52 after probe 26. The scan log
+and the transcript are not tracked either; the lines this record relies on are quoted in the
+timeline.
+
 ## What the cause was
 
 SonarQube Architecture Analysis 3.8.0.13073 cannot load the graph file of a TypeScript file that
