@@ -181,77 +181,77 @@ mcpjam --no-telemetry --format json compat --url <server> --credentials-file <fi
 ### Advertised surface
 
 Identical after masking the host: 38 tools with the same names, descriptions, input schemas,
-annotations and security schemes; 6 resources; no prompts; the same server instructions.
+annotations and security schemes; 6 resources; no prompts; the same server instructions. The normalised export of each server has the same SHA-256 digest, `a7ac28169dba…`.
 
 ### Tool behaviour
 
 62 calls per server: at least one for each of the 38 tools, with extra calls for tools that take
-different argument shapes, and 7 calls built to fail. Sizes are bytes of normalised output.
+different argument shapes, and 7 calls built to fail. Sizes are bytes of normalised output; each digest is the first 12 hexadecimal characters of the SHA-256 of that output. A result is identical when the two digests match.
 
-| #   | Tool | Arguments | Outcome | Production | Preview | Result |
-| --- | ---- | --------- | ------- | ---------- | ------- | ------ |
-| 1 | `get-key-stages` | `{}` | ok | 879 | 879 | Identical |
-| 2 | `get-subjects` | `{}` | ok | 980 | 980 | Identical |
-| 3 | `get-threads` | `{}` | ok | 40,187 | 40,187 | Identical |
-| 4 | `get-rate-limit` | `{}` | ok | 482 | 482 | Identical |
-| 5 | `get-curriculum-model` | `{}` | ok | 126,095 | 126,095 | Identical |
-| 6 | `oak-under-the-hood` | `{}` | ok | 37,102 | 37,364 | **Different** |
-| 7 | `browse-curriculum` | `{}` | ok | 740,732 | 740,732 | Identical |
-| 8 | `browse-curriculum` | `{"subject": "maths", "keyStage": "ks2"}` | ok | 30,853 | 30,853 | Identical |
-| 9 | `explore-topic` | `{"query": "volcanos"}` | ok | 49,420 | 49,420 | Identical |
-| 10 | `explore-topic` | `{"query": "fractions", "subject": "maths", "keyStage": "ks2"}` | ok | 57,557 | 57,557 | Identical |
-| 11 | `fetch` | `{"id": "lesson:add-fractions-with-the-same-denominator"}` | ok | 5,890 | 5,890 | Identical |
-| 12 | `fetch` | `{"id": "unit:comparing-fractions"}` | ok | 6,756 | 6,756 | Identical |
-| 13 | `fetch` | `{"id": "thread:number-fractions"}` | ok | 12,097 | 12,097 | Identical |
-| 14 | `fetch` | `{"id": "sequence:maths-primary"}` | ok | 146,112 | 146,112 | Identical |
-| 15 | `fetch` | `{"id": "subject:maths"}` | ok | 4,278 | 4,278 | Identical |
-| 16 | `download-asset` | `{"lesson": "add-fractions-with-the-same-denominator", "type": "slideDeck"}` | ok | 883 | 1,107 | **Different** |
-| 17 | `get-key-stages-subject-assets` | `{"keyStage": "ks1", "subject": "english", "unit": "word-class", "type": "slideDeck"}` | ok | 4,141 | 4,141 | Identical |
-| 18 | `get-key-stages-subject-lessons` | `{"keyStage": "ks1", "subject": "english", "limit": 10}` | ok | 4,300 | 4,300 | Identical |
-| 19 | `get-key-stages-subject-lessons` | `{"keyStage": "ks1", "subject": "english", "unit": "word-class"}` | ok | 2,554 | 2,554 | Identical |
-| 20 | `get-key-stages-subject-questions` | `{"keyStage": "ks1", "subject": "art", "limit": 10}` | ok | 621 | 621 | Identical |
-| 21 | `get-key-stages-subject-units` | `{"keyStage": "ks1", "subject": "art"}` | ok | 4,819 | 4,819 | Identical |
-| 22 | `get-key-stages-subject-units` | `{"keyStage": "ks4", "subject": "maths", "examBoard": "aqa"}` | ok | 424 | 424 | Identical |
-| 23 | `get-keyword-graph` | `{"subject": "maths", "keyStage": "ks2", "limit": 20}` | ok | 160,642 | 160,642 | Identical |
-| 24 | `get-keywords` | `{"keyStage": "ks1", "subject": "english", "limit": 20}` | ok | 26,025 | 26,025 | Identical |
-| 25 | `get-lessons-assets` | `{"lesson": "creating-a-new-word"}` | ok | 3,275 | 3,275 | Identical |
-| 26 | `get-lessons-quiz` | `{"lesson": "imagining-you-are-the-characters-the-three-billy-goats-gruff"}` | ok | 16,371 | 16,371 | Identical |
-| 27 | `get-lessons-summary` | `{"lesson": "using-vector-tools-to-draw-and-modify-shapes"}` | ok | 4,414 | 4,414 | Identical |
-| 28 | `get-lessons-transcript` | `{"lesson": "checking-understanding-of-basic-transformations"}` | ok | 107,808 | 107,808 | Identical |
-| 29 | `get-misconception-graph` | `{"threadSlug": "number-fractions"}` | ok | 152,710 | 152,710 | Identical |
-| 30 | `get-misconception-graph` | `{"unitSlugs": ["comparing-fractions"]}` | ok | 12,372 | 12,372 | Identical |
-| 31 | `get-misconception-graph` | `{"lessonSlugs": ["add-fractions-with-the-same-denominator"]}` | ok | 2,480 | 2,480 | Identical |
-| 32 | `get-prior-knowledge-graph` | `{"unitSlugs": ["comparing-fractions"]}` | ok | 1,556 | 1,556 | Identical |
-| 33 | `get-programmes` | `{"programme": "english-secondary-year-10-edexcel"}` | ok | 1,165 | 1,165 | Identical |
-| 34 | `get-programmes-assets` | `{"programme": "computing-secondary-year-7", "limit": 20}` | ok | 28,788 | 28,788 | Identical |
-| 35 | `get-programmes-questions` | `{"programme": "computing-secondary-year-7", "limit": 20}` | ok | 251,848 | 251,848 | Identical |
-| 36 | `get-programmes-units` | `{"programme": "english-secondary-year-10-edexcel"}` | ok | 4,738 | 4,738 | Identical |
-| 37 | `get-sequences` | `{"sequence": "english-secondary-aqa"}` | ok | 1,832 | 1,832 | Identical |
-| 38 | `get-sequences-assets` | `{"sequence": "maths-primary", "year": "1"}` | ok | 752,001 | 752,001 | Identical |
-| 39 | `get-sequences-questions` | `{"sequence": "maths-secondary", "limit": 20}` | ok | 346,258 | 346,258 | Identical |
-| 40 | `get-sequences-units` | `{"sequence": "english-primary", "year": "1"}` | ok | 26,080 | 26,080 | Identical |
-| 41 | `get-subject-detail` | `{"subject": "art"}` | ok | 3,447 | 3,447 | Identical |
-| 42 | `get-subjects-key-stages` | `{"subject": "art"}` | ok | 1,043 | 1,043 | Identical |
-| 43 | `get-subjects-programmes` | `{"subject": "english"}` | ok | 1,450 | 1,450 | Identical |
-| 44 | `get-subjects-years` | `{"subject": "cooking-nutrition"}` | ok | 526 | 526 | Identical |
-| 45 | `get-thread-progressions` | `{"threadSlug": "number-fractions"}` | ok | 49,513 | 49,513 | Identical |
-| 46 | `get-thread-progressions` | `{"subject": "maths", "keyStage": "ks2"}` | ok | 6,063 | 6,063 | Identical |
-| 47 | `get-threads-units` | `{"thread": "number-multiplication-and-division"}` | ok | 16,769 | 16,769 | Identical |
-| 48 | `get-units-summary` | `{"unit": "programming-subroutines"}` | ok | 6,808 | 6,808 | Identical |
-| 49 | `search` | `{"scope": "lessons", "query": "photosynthesis", "subject": "science", "keyStage": "ks3", "size": 5}` | ok | 28,280 | 28,280 | Identical |
-| 50 | `search` | `{"scope": "lessons", "query": "Romans", "year": "3", "size": 5, "highlight": true}` | ok | 29,810 | 29,810 | Identical |
-| 51 | `search` | `{"scope": "lessons", "query": "trigonometry", "keyStage": "ks4", "tier": "higher", "size": 5}` | ok | 26,519 | 26,519 | Identical |
-| 52 | `search` | `{"scope": "units", "query": "fractions", "subject": "maths", "keyStage": "ks2", "size": 5}` | ok | 23,666 | 23,666 | Identical |
-| 53 | `search` | `{"scope": "threads", "subject": "maths"}` | ok | 5,580 | 5,580 | Identical |
-| 54 | `search` | `{"scope": "sequences", "query": "science", "size": 5}` | ok | 58,827 | 58,827 | Identical |
-| 55 | `search` | `{"scope": "suggest", "query": "frac", "subject": "maths", "limit": 5}` | ok | 2,298 | 2,298 | Identical |
-| 56 | `get-lessons-summary` | `{"lesson": "this-lesson-does-not-exist-xyz"}` | error | 95 | 95 | Identical |
-| 57 | `search` | `{"scope": "bogus", "query": "x"}` | error | 256 | 256 | Identical |
-| 58 | `get-units-summary` | `{}` | error | 225 | 225 | Identical |
-| 59 | `fetch` | `{"id": "nonsense"}` | error | 112 | 112 | Identical |
-| 60 | `get-key-stages-subject-units` | `{"keyStage": "ks9", "subject": "maths"}` | error | 253 | 253 | Identical |
-| 61 | `search` | `{"scope": "suggest", "query": "frac"}` | error | 208 | 208 | Identical |
-| 62 | `get-prior-knowledge-graph` | `{"unitSlugs": ["no-such-unit-xyz"]}` | ok | 717 | 717 | Identical |
+| # | Tool | Arguments | Outcome | Bytes, production | Bytes, preview | SHA-256, production | SHA-256, preview | Result |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `get-key-stages` | `{}` | ok | 879 | 879 | `eb0c01152bd9` | `eb0c01152bd9` | Identical |
+| 2 | `get-subjects` | `{}` | ok | 980 | 980 | `a53ce0aea09a` | `a53ce0aea09a` | Identical |
+| 3 | `get-threads` | `{}` | ok | 40,187 | 40,187 | `e3b5f2f31391` | `e3b5f2f31391` | Identical |
+| 4 | `get-rate-limit` | `{}` | ok | 482 | 482 | `5bde383dda6c` | `5bde383dda6c` | Identical |
+| 5 | `get-curriculum-model` | `{}` | ok | 126,095 | 126,095 | `bee9f6c7f79c` | `bee9f6c7f79c` | Identical |
+| 6 | `oak-under-the-hood` | `{}` | ok | 37,102 | 37,364 | `a32627c405bc` | `ab8454000aa4` | **Different** |
+| 7 | `browse-curriculum` | `{}` | ok | 740,732 | 740,732 | `093c2f801a3d` | `093c2f801a3d` | Identical |
+| 8 | `browse-curriculum` | `{"subject": "maths", "keyStage": "ks2"}` | ok | 30,853 | 30,853 | `e0d44cb693c0` | `e0d44cb693c0` | Identical |
+| 9 | `explore-topic` | `{"query": "volcanos"}` | ok | 49,420 | 49,420 | `397c6fef5085` | `397c6fef5085` | Identical |
+| 10 | `explore-topic` | `{"query": "fractions", "subject": "maths", "keyStage": "ks2"}` | ok | 57,557 | 57,557 | `81b6a01e0aa0` | `81b6a01e0aa0` | Identical |
+| 11 | `fetch` | `{"id": "lesson:add-fractions-with-the-same-denominator"}` | ok | 5,890 | 5,890 | `56b254f03aaa` | `56b254f03aaa` | Identical |
+| 12 | `fetch` | `{"id": "unit:comparing-fractions"}` | ok | 6,756 | 6,756 | `e3926135872e` | `e3926135872e` | Identical |
+| 13 | `fetch` | `{"id": "thread:number-fractions"}` | ok | 12,097 | 12,097 | `4d8a922037f0` | `4d8a922037f0` | Identical |
+| 14 | `fetch` | `{"id": "sequence:maths-primary"}` | ok | 146,112 | 146,112 | `1f08a4b67e87` | `1f08a4b67e87` | Identical |
+| 15 | `fetch` | `{"id": "subject:maths"}` | ok | 4,278 | 4,278 | `4e2a42c2ab0c` | `4e2a42c2ab0c` | Identical |
+| 16 | `download-asset` | `{"lesson": "add-fractions-with-the-same-denominator", "type": "slideDeck"}` | ok | 883 | 1,107 | `93c41d950870` | `136cf67668af` | **Different** |
+| 17 | `get-key-stages-subject-assets` | `{"keyStage": "ks1", "subject": "english", "unit": "word-class", "type": "slideDeck"}` | ok | 4,141 | 4,141 | `1e7c8501a55c` | `1e7c8501a55c` | Identical |
+| 18 | `get-key-stages-subject-lessons` | `{"keyStage": "ks1", "subject": "english", "limit": 10}` | ok | 4,300 | 4,300 | `d33d5d02d2bf` | `d33d5d02d2bf` | Identical |
+| 19 | `get-key-stages-subject-lessons` | `{"keyStage": "ks1", "subject": "english", "unit": "word-class"}` | ok | 2,554 | 2,554 | `bd7ae0ca06fb` | `bd7ae0ca06fb` | Identical |
+| 20 | `get-key-stages-subject-questions` | `{"keyStage": "ks1", "subject": "art", "limit": 10}` | ok | 621 | 621 | `b6384d93ca3c` | `b6384d93ca3c` | Identical |
+| 21 | `get-key-stages-subject-units` | `{"keyStage": "ks1", "subject": "art"}` | ok | 4,819 | 4,819 | `0be4bcadbe06` | `0be4bcadbe06` | Identical |
+| 22 | `get-key-stages-subject-units` | `{"keyStage": "ks4", "subject": "maths", "examBoard": "aqa"}` | ok | 424 | 424 | `5d6590a303bc` | `5d6590a303bc` | Identical |
+| 23 | `get-keyword-graph` | `{"subject": "maths", "keyStage": "ks2", "limit": 20}` | ok | 160,642 | 160,642 | `1da5fc547368` | `1da5fc547368` | Identical |
+| 24 | `get-keywords` | `{"keyStage": "ks1", "subject": "english", "limit": 20}` | ok | 26,025 | 26,025 | `80d330ef4571` | `80d330ef4571` | Identical |
+| 25 | `get-lessons-assets` | `{"lesson": "creating-a-new-word"}` | ok | 3,275 | 3,275 | `c067248558b3` | `c067248558b3` | Identical |
+| 26 | `get-lessons-quiz` | `{"lesson": "imagining-you-are-the-characters-the-three-billy-goats-gruff"}` | ok | 16,371 | 16,371 | `01ef17bbd8e6` | `01ef17bbd8e6` | Identical |
+| 27 | `get-lessons-summary` | `{"lesson": "using-vector-tools-to-draw-and-modify-shapes"}` | ok | 4,414 | 4,414 | `47f089bf7689` | `47f089bf7689` | Identical |
+| 28 | `get-lessons-transcript` | `{"lesson": "checking-understanding-of-basic-transformations"}` | ok | 107,808 | 107,808 | `83236b21a398` | `83236b21a398` | Identical |
+| 29 | `get-misconception-graph` | `{"threadSlug": "number-fractions"}` | ok | 152,710 | 152,710 | `98a19c0312f6` | `98a19c0312f6` | Identical |
+| 30 | `get-misconception-graph` | `{"unitSlugs": ["comparing-fractions"]}` | ok | 12,372 | 12,372 | `b8d27193558f` | `b8d27193558f` | Identical |
+| 31 | `get-misconception-graph` | `{"lessonSlugs": ["add-fractions-with-the-same-denominator"]}` | ok | 2,480 | 2,480 | `916f5684ddd3` | `916f5684ddd3` | Identical |
+| 32 | `get-prior-knowledge-graph` | `{"unitSlugs": ["comparing-fractions"]}` | ok | 1,556 | 1,556 | `37b585163859` | `37b585163859` | Identical |
+| 33 | `get-programmes` | `{"programme": "english-secondary-year-10-edexcel"}` | ok | 1,165 | 1,165 | `86ffcc79ea64` | `86ffcc79ea64` | Identical |
+| 34 | `get-programmes-assets` | `{"programme": "computing-secondary-year-7", "limit": 20}` | ok | 28,788 | 28,788 | `3aafcd749088` | `3aafcd749088` | Identical |
+| 35 | `get-programmes-questions` | `{"programme": "computing-secondary-year-7", "limit": 20}` | ok | 251,848 | 251,848 | `53682332a325` | `53682332a325` | Identical |
+| 36 | `get-programmes-units` | `{"programme": "english-secondary-year-10-edexcel"}` | ok | 4,738 | 4,738 | `076364f566e2` | `076364f566e2` | Identical |
+| 37 | `get-sequences` | `{"sequence": "english-secondary-aqa"}` | ok | 1,832 | 1,832 | `307611bc28f8` | `307611bc28f8` | Identical |
+| 38 | `get-sequences-assets` | `{"sequence": "maths-primary", "year": "1"}` | ok | 752,001 | 752,001 | `46fd678ecea0` | `46fd678ecea0` | Identical |
+| 39 | `get-sequences-questions` | `{"sequence": "maths-secondary", "limit": 20}` | ok | 346,258 | 346,258 | `b03c62814da0` | `b03c62814da0` | Identical |
+| 40 | `get-sequences-units` | `{"sequence": "english-primary", "year": "1"}` | ok | 26,080 | 26,080 | `bd1b4752bfea` | `bd1b4752bfea` | Identical |
+| 41 | `get-subject-detail` | `{"subject": "art"}` | ok | 3,447 | 3,447 | `a77939014ab3` | `a77939014ab3` | Identical |
+| 42 | `get-subjects-key-stages` | `{"subject": "art"}` | ok | 1,043 | 1,043 | `1c867744ab90` | `1c867744ab90` | Identical |
+| 43 | `get-subjects-programmes` | `{"subject": "english"}` | ok | 1,450 | 1,450 | `272320c4a696` | `272320c4a696` | Identical |
+| 44 | `get-subjects-years` | `{"subject": "cooking-nutrition"}` | ok | 526 | 526 | `025b96c28218` | `025b96c28218` | Identical |
+| 45 | `get-thread-progressions` | `{"threadSlug": "number-fractions"}` | ok | 49,513 | 49,513 | `73335e3f8621` | `73335e3f8621` | Identical |
+| 46 | `get-thread-progressions` | `{"subject": "maths", "keyStage": "ks2"}` | ok | 6,063 | 6,063 | `beff2cb04474` | `beff2cb04474` | Identical |
+| 47 | `get-threads-units` | `{"thread": "number-multiplication-and-division"}` | ok | 16,769 | 16,769 | `a38dc52f5515` | `a38dc52f5515` | Identical |
+| 48 | `get-units-summary` | `{"unit": "programming-subroutines"}` | ok | 6,808 | 6,808 | `70bd6049e2b2` | `70bd6049e2b2` | Identical |
+| 49 | `search` | `{"scope": "lessons", "query": "photosynthesis", "subject": "science", "keyStage": "ks3", "size": 5}` | ok | 28,280 | 28,280 | `005f8d00dd5e` | `005f8d00dd5e` | Identical |
+| 50 | `search` | `{"scope": "lessons", "query": "Romans", "year": "3", "size": 5, "highlight": true}` | ok | 29,810 | 29,810 | `a9698c11f16e` | `a9698c11f16e` | Identical |
+| 51 | `search` | `{"scope": "lessons", "query": "trigonometry", "keyStage": "ks4", "tier": "higher", "size": 5}` | ok | 26,519 | 26,519 | `c33bea3b4a83` | `c33bea3b4a83` | Identical |
+| 52 | `search` | `{"scope": "units", "query": "fractions", "subject": "maths", "keyStage": "ks2", "size": 5}` | ok | 23,666 | 23,666 | `7a0534ad427e` | `7a0534ad427e` | Identical |
+| 53 | `search` | `{"scope": "threads", "subject": "maths"}` | ok | 5,580 | 5,580 | `848fbd6fbaad` | `848fbd6fbaad` | Identical |
+| 54 | `search` | `{"scope": "sequences", "query": "science", "size": 5}` | ok | 58,827 | 58,827 | `a3542c658ed4` | `a3542c658ed4` | Identical |
+| 55 | `search` | `{"scope": "suggest", "query": "frac", "subject": "maths", "limit": 5}` | ok | 2,298 | 2,298 | `c2ae93852600` | `c2ae93852600` | Identical |
+| 56 | `get-lessons-summary` | `{"lesson": "this-lesson-does-not-exist-xyz"}` | error | 95 | 95 | `7adf0d6c787d` | `7adf0d6c787d` | Identical |
+| 57 | `search` | `{"scope": "bogus", "query": "x"}` | error | 256 | 256 | `59d3fa603899` | `59d3fa603899` | Identical |
+| 58 | `get-units-summary` | `{}` | error | 225 | 225 | `639dd277e4c0` | `639dd277e4c0` | Identical |
+| 59 | `fetch` | `{"id": "nonsense"}` | error | 112 | 112 | `5b7869d034b6` | `5b7869d034b6` | Identical |
+| 60 | `get-key-stages-subject-units` | `{"keyStage": "ks9", "subject": "maths"}` | error | 253 | 253 | `71aa37feee0f` | `71aa37feee0f` | Identical |
+| 61 | `search` | `{"scope": "suggest", "query": "frac"}` | error | 208 | 208 | `dd638b01a5c1` | `dd638b01a5c1` | Identical |
+| 62 | `get-prior-knowledge-graph` | `{"unitSlugs": ["no-such-unit-xyz"]}` | ok | 717 | 717 | `016db38f7ec4` | `016db38f7ec4` | Identical |
 
 The two different results:
 
@@ -272,19 +272,19 @@ returns the same well-formed result on both, without an error flag.
 
 All 6 resources were read from both servers and are identical after masking the host.
 
-| Resource                                      | Bytes   |
-| --------------------------------------------- | ------- |
-| `curriculum://model`                          | 52,088  |
-| `docs://oak/getting-started.md`               | 1,213   |
-| `docs://oak/guidance/explore-curriculum.md`   | 1,016   |
-| `docs://oak/guidance/find-lessons.md`         | 1,146   |
-| `docs://oak/guidance/learning-progression.md` | 1,474   |
-| `ui://widget/oak-curriculum-app-v1.html`      | 610,129 |
+| Resource | Bytes | SHA-256, production | SHA-256, preview |
+| --- | --- | --- | --- |
+| `curriculum://model` | 52,190 | `f98317a25335` | `f98317a25335` |
+| `docs://oak/getting-started.md` | 1,217 | `1074324f3ec9` | `1074324f3ec9` |
+| `docs://oak/guidance/explore-curriculum.md` | 1,020 | `d56f07ae1a74` | `d56f07ae1a74` |
+| `docs://oak/guidance/find-lessons.md` | 1,150 | `86a445b20152` | `86a445b20152` |
+| `docs://oak/guidance/learning-progression.md` | 1,476 | `b213060b9191` | `b213060b9191` |
+| `ui://widget/oak-curriculum-app-v1.html` | 628,928 | `2c4439669dfd` | `2c4439669dfd` |
 
 ### Host compatibility
 
 `mcpjam compat` (host catalogue version 31) judges a server against 28 client hosts. The two
-reports are identical after masking hosts and timings: 6 hosts "works", 22 "degraded", none
+reports are identical after masking hosts and timings (SHA-256 `f9048dc46beb…` on both): 6 hosts "works", 22 "degraded", none
 "blocked". The degraded verdicts describe what each client supports, not a server fault: 10
 clients show the plain-text result where `get-curriculum-model` offers an interactive view, and
 others lack one or more capabilities the view uses, such as file download.
@@ -372,6 +372,4 @@ same on the preview, so the merge neither causes nor cures them.
 
 The calls above, in table order, with the arguments shown, against the two addresses in
 [What was compared](#what-was-compared), using `@mcpjam/cli` 6.3.1 and an account that can sign
-in to each server. Normalise as described in [Method](#method) step 3 and compare by byte. The
-raw outputs of this run were held in a session scratch directory and are not kept; the table
-records each result's size on both sides.
+in to each server. Normalise as described in [Method](#method) step 3 and compare by byte. The raw outputs of this run were held in a session scratch directory and are not kept. The tables record each normalised output's size and SHA-256 digest on both sides, so a re-run can be checked against this one result by result. Both addresses serve whatever is deployed at the time: a re-run after either changes compares different builds.
