@@ -248,6 +248,7 @@ budget, and #146 exempted syncs only. No weight changes; the CI-cure reading wai
 | 2026-11-15 | #422 | 0 | 0 / 40 | within | not recorded | not recorded | stale `bin` includes removed from six config files; no findings (Hydra holds Lightyear's reading, lifted from the seat's closeout record by Sandpiper) |
 | 2026-11-15 | #424 | 3 | 12.88 / 40 | within | not recorded | not recorded | the plugin block restored; three valid findings, one per push: the same false claim on two pages, then the inert block; rounds two and three were one search of `docs/` away from round one (Hydra holds Lightyear's reading, lifted from the seat's closeout record by Sandpiper) |
 | 2026-11-15 | #425 | 0 | 0 / 40 | within | not recorded | not recorded | the `skillOverrides` block deleted; no findings (Hydra holds Lightyear's reading, lifted from the seat's closeout record by Sandpiper) |
+| 2026-11-15 | #426 | 9 | 110.45 / 40 | exhausted | not recorded | fired | a retrospective, records-class; twelve findings over nine rounds, eleven valid, mostly one per push, each a claim stronger than its evidence; the gate fired at the third push and the seat overrode it seven times, each with a recorded line in `.agent/state/collaboration/review-rebudgets.md`; an independent adversarial read before the first push found about forty points in one pass (Hydra holds Lightyear's reading, lifted from the seat's closeout record by Sandpiper) |
 
 ## Weight changes
 
