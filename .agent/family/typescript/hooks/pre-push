@@ -20,7 +20,8 @@ if ! command -v gitleaks >/dev/null 2>&1; then
   echo "❌ gitleaks is not installed."
   echo "Install it before running pre-push:"
   echo "  - macOS: brew install gitleaks"
-  echo "  - Linux and WSL: the pinned release, docs/engineering/setup.md (Windows via WSL, step 3)"
+  echo "  - Debian, Ubuntu and WSL: the pinned release, docs/engineering/setup.md (Windows via WSL, step 3)"
+  echo "  - other Linux: unpack the gitleaks binary from its GitHub release into /usr/local/bin"
   # The scan runs gitleaks by absolute path, never from PATH
   # (agent-tools/src/core/trusted-gitleaks.ts), so an install anywhere else,
   # such as go install's ~/go/bin, passes this check and is then refused.

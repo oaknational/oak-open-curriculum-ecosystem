@@ -398,7 +398,10 @@ If you hit a push failure due to missing `gitleaks`, install it first:
 
 - `brew install gitleaks` (macOS)
 - the pinned release, as in the
-  [setup guide](docs/engineering/setup.md#windows-via-wsl) (Linux and WSL)
+  [setup guide](docs/engineering/setup.md#windows-via-wsl) (Debian, Ubuntu and WSL)
+- the `gitleaks` binary from its
+  [GitHub release](https://github.com/gitleaks/gitleaks/releases), unpacked into
+  `/usr/local/bin` (other Linux)
 
 The secret scan runs `gitleaks` by absolute path, never from `PATH`, and accepts
 it only at `/opt/homebrew/bin`, `/usr/local/bin` or `/usr/bin`. If yours is
