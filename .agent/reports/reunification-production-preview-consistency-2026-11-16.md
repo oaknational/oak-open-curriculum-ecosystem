@@ -32,8 +32,8 @@ and not user-facing.
 
 | #   | Difference                                           | Severity   | Deliberate | Affects the product's user experience | Suggested action |
 | --- | ---------------------------------------------------- | ---------- | ---------- | ------------------------------------- | ---------------- |
-| 1   | Orientation text from `oak-under-the-hood`           | P4 (minor) | Yes        | No                                    | Accept           |
-| 2   | Unknown addresses return JSON in place of an HTML page | P4 (minor) | Yes        | No                                    | Accept           |
+| 1 | Orientation text from `oak-under-the-hood` | P4 (minor) | Yes | No: the tool answers questions about the repository, not the curriculum | Accept |
+| 2 | Unknown addresses return JSON in place of an HTML page | P4 (minor) | Yes | No: seen only by a developer requesting an address the server does not serve | Accept |
 
 1. **The orientation text returned by `oak-under-the-hood` changes in 10 places.** This tool
    answers questions about the repository and the service, not about the curriculum. The changes
@@ -61,7 +61,7 @@ What stays the same, as observed:
   content, quizzes, transcripts, the curriculum graphs and every error tested. The two that
   differ are the orientation text above and a preview-only address in download links.
 - **The interactive view.** The widget is byte-for-byte the same.
-- **Downloads.** A slide deck downloaded through each server is the same size and type.
+- **Downloads.** A slide deck downloaded through each server is the same file, by SHA-256 digest.
 - **Which assistants it works with.** The compatibility check gives the same verdict for each of
   28 client hosts.
 - **Sign-in.** The flow has the same steps and the same metadata fields. The preview signs in
@@ -72,24 +72,32 @@ What stays the same, as observed:
 
 Changes for the better that the merge brings, as measured or observed on 2026-11-16.
 
-- **SonarCloud quality gate: failed on `main`, passed on the pull request.** Read from Oak's
-  SonarCloud project (`oaknational_oak-open-curriculum-ecosystem`):
+- **SonarCloud: 148 of the 161 open issues on `main` are in files this pull request changes, and
+  the analysis of those files on the pull request reports 1.** Read from Oak's SonarCloud project
+  (`oaknational_oak-open-curriculum-ecosystem`). The two analyses have different scopes: `main`
+  is analysed whole; a pull request is analysed on the files it changes.
 
-  | Measure                    | `main` (analysed 2026-11-09) | Pull request 1023 |
-  | -------------------------- | ---------------------------- | ----------------- |
-  | Quality gate               | Failed                       | Passed            |
-  | Bugs                       | 1                            | 0                 |
-  | Reliability rating         | C                            | A                 |
-  | Vulnerabilities            | 0                            | 0                 |
-  | Security hotspots          | 0                            | 0                 |
-  | Code smells                | 160                          | 1                 |
-  | Technical debt (minutes)   | 871                          | 0                 |
-  | Duplicated lines           | 0.7%                         | 0.6%              |
-  | Lines of code analysed     | 376,589                      | 199,618           |
+  | Measure                  | `main`, whole project (analysed 2026-11-09) | Pull request 1023, changed files |
+  | ------------------------ | ------------------------------------------- | -------------------------------- |
+  | Quality gate             | Failed                                      | Passed                           |
+  | Bugs                     | 1                                           | 0                                |
+  | Reliability rating       | C                                           | A                                |
+  | Vulnerabilities          | 0                                           | 0                                |
+  | Security hotspots        | 0                                           | 0                                |
+  | Code smells              | 160                                         | 1                                |
+  | Technical debt (minutes) | 871                                         | 0                                |
+  | Lines of code analysed   | 376,589                                     | 199,618                          |
 
-  The two analyses do not cover the same set of lines, as the last row shows, so the counts are
-  not a strict like-for-like comparison. The gate result and the ratings are each analysis's own
-  verdict.
+  What the two analyses support together:
+  - `main`'s one open bug (`packages/libs/logger/src/node.ts`) is in a file the branch changes,
+    and the pull request's analysis reports no bug.
+  - 148 of `main`'s 161 open issues are in 110 files the branch changes or removes; the pull
+    request's analysis reports 1 open issue across the files it changes, at the lowest severity.
+  - 13 of `main`'s open issues are in 6 files the branch does not change. The merge leaves those
+    as they are.
+  - The quality gate judges new code. It fails on `main` on one condition (maintainability of
+    new code) and passes on the pull request. Whether `main` passes after the merge is settled by
+    its first analysis after the merge, not by this report.
 
 - **Unknown addresses answer in JSON.** A client that expects JSON from the server now receives
   it on a 404 (difference 2 above; production note 2).
@@ -104,9 +112,9 @@ Changes for the better that the merge brings, as measured or observed on 2026-11
 | Tool behaviour                               | 62 calls: all 38 tools, 7 bad calls | 60 identical; 2 different, both explained        |
 | Resource contents                            | 6 resources, including the widget  | Identical                                        |
 | Host compatibility (`mcpjam compat`)         | 28 client hosts                    | Identical                                        |
-| Asset download                               | 1 signed link per server, fetched  | Identical (HTTP 200, same type, 8,782,614 bytes) |
+| Asset download | 1 signed link per server, fetched | Identical (HTTP 200, same type, 8,782,614 bytes, same SHA-256) |
 | Unauthenticated endpoints and OAuth metadata | 12 paths                           | Same shape; 2 differences, both explained         |
-| Response headers                             | Health path                        | 4 headers differ; cause is the hosting, not the source |
+| Response headers | Health path | 5 headers differ; cause is the hosting, not the source |
 
 No unexplained difference was found. Every difference found, with its cause. "Source" differences
 reach production with the merge; "Environment" differences belong to the preview deployment and
@@ -256,7 +264,7 @@ The two different results:
   link is on `poc-oak-open-curriculum-c1yg9j7l3.vercel.thenational.academy`, the address of the
   deployment for that commit, although the call went to the branch address. The rest of the
   result is identical. Both links were fetched: each returned HTTP 200 and a PowerPoint file of
-  8,782,614 bytes.
+  8,782,614 bytes, and the two files have the same SHA-256 digest (`b01e989c…870ff9f3`).
 
 Calls 56 to 61 return the same errors on both servers. Call 62 (a unit that does not exist)
 returns the same well-formed result on both, without an error flag.
@@ -299,7 +307,8 @@ branch's OAuth proxy code against a development identity provider, not productio
 
 ### Response headers
 
-On `/healthz`, 4 headers differ.
+On `/healthz`, 5 headers differ: the 4 in the table, and `x-robots-tag: noindex`, which only the
+preview sends.
 
 | Header                    | Production                                    | Preview                                    |
 | ------------------------- | --------------------------------------------- | ------------------------------------------ |
@@ -308,7 +317,7 @@ On `/healthz`, 4 headers differ.
 | `referrer-policy`         | `strict-origin-when-cross-origin`             | `no-referrer`                              |
 | `permissions-policy`      | `camera=(), geolocation=(), microphone=()`    | Not sent                                   |
 
-The preview also sends `x-robots-tag: noindex`. The file that sets these headers,
+The file that sets these headers,
 `apps/oak-curriculum-mcp-streamable-http/src/security-headers.ts`, is the same on `main` and on
 the branch, and the preview's values are the ones that file sets. Production's values are not
 the ones the file sets. Both hosts answer through Cloudflare (`server: cloudflare`). The
