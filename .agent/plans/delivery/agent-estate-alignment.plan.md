@@ -13,7 +13,7 @@ impact_areas:
 tickets: []
 depends_on: []
 owner_gates: []
-last_updated: 2026-07-31
+last_updated: 2026-11-16
 ---
 
 # Agent-estate alignment — agents as knowledge nodes
@@ -92,3 +92,11 @@ Agent-dispatch machinery itself; the knowledge-curation expert
 
 Sliced at pickup by the implementer — slices 1–6 above are the
 pickup-order map, each a single-story step or smaller.
+
+## Review dispositions
+
+One dated row per routed finding (PDR-140 ledger surface).
+
+| Date | Source | Finding | Routing |
+| --- | --- | --- | --- |
+| 2026-11-16 | A read of the plans on skills, rules and sub-agents together, 2026-11-16 | Sub-agent descriptions are listed at the start of a session: 31 Claude adapters, 10,699 characters as parsed. PDR-124 owns the budget for that listing, with a guide of about 500 bytes a description, and no build check holds a number for it. The delivery node `rules-and-skills-system-design` sets checked budgets for skills and rules and leaves sub-agents alone | Recorded for the pickup read of the metadata migration. This sketch is unchanged |
