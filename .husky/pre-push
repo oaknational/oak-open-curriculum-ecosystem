@@ -20,9 +20,13 @@ if ! command -v gitleaks >/dev/null 2>&1; then
   echo "❌ gitleaks is not installed."
   echo "Install it before running pre-push:"
   echo "  - macOS: brew install gitleaks"
-  # gitleaks' go.mod declares the zricethezav module path; the
-  # github.com/gitleaks/gitleaks form makes `go install` refuse the mismatch.
-  echo "  - Go: go install github.com/zricethezav/gitleaks/v8@latest"
+  echo "  - Debian, Ubuntu and WSL: the pinned release, docs/engineering/setup.md (Windows via WSL, step 3)"
+  echo "  - other Linux: unpack the gitleaks binary from its GitHub release into /usr/local/bin"
+  # The scan runs gitleaks by absolute path, never from PATH
+  # (agent-tools/src/core/trusted-gitleaks.ts), so an install anywhere else,
+  # such as go install's ~/go/bin, passes this check and is then refused.
+  echo "The scan accepts gitleaks only at /opt/homebrew/bin, /usr/local/bin or /usr/bin;"
+  echo "symlink an install from anywhere else into one of those."
   echo "Then retry your push."
   exit 1
 fi

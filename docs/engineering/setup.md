@@ -111,11 +111,10 @@ steps below were run end to end on Windows 11 in August 2026.
      sudo tar -C /usr/local/bin -xzf "$asset" gitleaks && rm "$asset"
    ```
 
-   (If you already have Go, the `go install` fallback in
-   [CONTRIBUTING.md §5](../../CONTRIBUTING.md#5-push-and-create-pr) also works — it
-   uses gitleaks' declared `zricethezav` module path — but these steps do not
-   install Go, and `~/go/bin` must then be on your `PATH` for the pre-push hook
-   to find it.) Second, the repo's PR and agent
+   (The push secret scan runs gitleaks by absolute path and accepts it only at
+   `/opt/homebrew/bin`, `/usr/local/bin` or `/usr/bin`, so an install anywhere
+   else, such as `go install`'s `~/go/bin`, has to be symlinked into one of
+   those.) Second, the repo's PR and agent
    tooling uses `gh` (the GitHub CLI), which installs from
    [GitHub's apt repository](https://github.com/cli/cli/blob/trunk/docs/install_linux.md).
 
