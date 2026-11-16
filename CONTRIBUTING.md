@@ -397,9 +397,13 @@ git push origin feat/your-feature-name
 If you hit a push failure due to missing `gitleaks`, install it first:
 
 - `brew install gitleaks` (macOS)
-- `go install github.com/zricethezav/gitleaks/v8@latest` (Go — gitleaks'
-  go.mod declares the `zricethezav` module path, and `go install` refuses
-  the `github.com/gitleaks/...` form as a path mismatch)
+- the pinned release, as in the
+  [setup guide](docs/engineering/setup.md#windows-via-wsl) (Linux and WSL)
+
+The secret scan runs `gitleaks` by absolute path, never from `PATH`, and accepts
+it only at `/opt/homebrew/bin`, `/usr/local/bin` or `/usr/bin`. If yours is
+installed anywhere else (for example by `go install`, in `~/go/bin`, or by
+Linuxbrew), symlink it into one of those paths.
 
 Then create a Pull Request on GitHub.
 
