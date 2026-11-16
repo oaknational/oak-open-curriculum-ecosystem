@@ -1024,3 +1024,22 @@ The affected files' dependencies are missing from the architecture graph. No rul
   and `CHANGELOG.md`; the setup guide gives the Playwright install only on the Windows path and
   names `.mcp.json` where `.mcp.json.example` is the tracked file; the repository pins
   `@mcpjam/cli` 3.19.0 and the latest is 6.3.1.
+
+### Update 2026-11-16 ~13:35Z (Sandpiper guards Wind, 690653)
+
+- oaknational#1023 is retitled "Reunify the OCE forks: merge the fork's default branch into
+  main" and marked ready for review at the owner's word; its description summarises the
+  consistency report. The merge stays the owner's alone.
+- The owner corrected the upgrade note on #1023 (2026-11-16), and the note now carries only the
+  first point:
+  1. A bot identity for the merge tool is optional. The default git identity is the default; a
+     bot identity is strongly preferred and not required.
+  2. CI on GitHub uses the Vercel Turbo cache consistently. The earlier lane states' request for
+     a Turborepo CLI OIDC policy is withdrawn; a local check without the token runs uncached, and
+     that is each developer's choice.
+  3. The SonarCloud S4036 criterion is configuration held in another system and needs no mention
+     on the pull request.
+- The owner confirmed that Oak's Cloudflare rewrites response headers for production, and
+  accepted that the branch's sign-in code has not run against the production identity provider.
+- The five faults seen on production are kept in
+  [the production snagging list](../../../../docs/operations/mcp-server-production-snagging.md).
