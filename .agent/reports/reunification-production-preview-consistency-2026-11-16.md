@@ -71,32 +71,32 @@ What stays the same, as observed:
 
 Changes for the better that the merge brings, as measured or observed on 2026-11-16.
 
-- **SonarCloud: 148 of the 161 open issues on `main` are in files this pull request changes, and
-  the analysis of those files on the pull request reports 1.** Read from Oak's SonarCloud project
-  (`oaknational_oak-open-curriculum-ecosystem`). The two analyses have different scopes: `main`
-  is analysed whole; a pull request is analysed on the files it changes.
+- **SonarCloud: the whole-project analysis of the branch's code reports 15 open issues and no
+  bug, where `main`'s reports 161 open issues and 1 bug.** Three analyses, each with its scope:
 
-  | Measure                  | `main`, whole project (analysed 2026-11-09) | Pull request 1023, changed files |
-  | ------------------------ | ------------------------------------------- | -------------------------------- |
-  | Quality gate             | Failed                                      | Passed                           |
-  | Bugs                     | 1                                           | 0                                |
-  | Reliability rating       | C                                           | A                                |
-  | Vulnerabilities          | 0                                           | 0                                |
-  | Security hotspots        | 0                                           | 0                                |
-  | Code smells              | 160                                         | 1                                |
-  | Technical debt (minutes) | 871                                         | 0                                |
-  | Lines of code analysed   | 376,589                                     | 199,618                          |
+  | Measure                  | `main`, whole project | The branch's code, whole project | Pull request 1023, new code |
+  | ------------------------ | --------------------- | -------------------------------- | --------------------------- |
+  | Analysed                 | 2026-11-09            | 2026-11-16, commit `e9abb2a83`   | commit `e9abb2a83`          |
+  | Quality gate             | Failed                | Passed                           | Passed                      |
+  | Bugs                     | 1                     | 0                                | 0                           |
+  | Reliability rating       | C                     | A                                | A                           |
+  | Vulnerabilities          | 0                     | 0                                | 0                           |
+  | Security hotspots        | 0                     | 0                                | 0                           |
+  | Code smells              | 160                   | 15                               | 1                           |
+  | Technical debt (minutes) | 871                   | 53                               | 0                           |
+  | Duplicated lines         | 0.7%                  | 0.6%                             | 0.6%                        |
+  | Lines of code analysed   | 376,589               | 429,524                          | 199,618                     |
 
-  What the two analyses support together:
-  - `main`'s one open bug (`packages/libs/logger/src/node.ts`) is in a file the branch changes,
-    and the pull request's analysis reports no bug.
-  - 148 of `main`'s 161 open issues are in 110 files the branch changes or removes; the pull
-    request's analysis reports 1 open issue across the files it changes, at the lowest severity.
-  - 13 of `main`'s open issues are in 6 files the branch does not change. The merge leaves those
-    as they are.
-  - The quality gate judges new code. It fails on `main` on one condition (maintainability of
-    new code) and passes on the pull request. Whether `main` passes after the merge is settled by
-    its first analysis after the merge, not by this report.
+  The first and third columns are from Oak's SonarCloud project
+  (`oaknational_oak-open-curriculum-ecosystem`). The middle column is the analysis of the same
+  commit as the default branch of the fork's own SonarCloud project; it is the like-for-like
+  comparison with `main`, because both analyse the whole project. The two projects sit in
+  different SonarCloud organisations, so their settings can differ; the analysis configuration in
+  the repository is the same file. A pull-request analysis judges new code only, so the third
+  column does not show that older issues are gone; the middle column does that.
+
+  The quality gate fails on `main` on one condition (maintainability of new code). Whether
+  `main` passes after the merge is settled by its first analysis after the merge.
 
 - **Unknown addresses answer in JSON.** A client that expects JSON from the server now receives
   it on a 404 (difference 2 above; production note 2).
