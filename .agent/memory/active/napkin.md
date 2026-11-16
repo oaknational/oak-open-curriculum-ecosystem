@@ -2373,3 +2373,44 @@ outside the repository. One instance each; scope is this session.
 - **Commitlint reads a body line that starts with a word and a colon as a footer.** Reflow the sentence.
 - **The door refuses a pull request behind its base**, so one seat's pull requests serialise: each
   merge costs the next a sync, a full check run and a fresh review.
+
+### 2026-11-15 (Hydra holds Lightyear, d827c5; lifted from the seat's closeout record by Sandpiper)
+
+Observations from one seat's work on pull requests #406 and #420 to #425, 13 to 15 November 2026.
+Each is one instance; none is doctrine.
+
+- **The architecture warning's files were found by a local scan with `sonar.verbose=true`** (#406,
+  #420). Corrected on 2026-11-15 by the seat's retrospective
+  (`.agent/reports/agentic-engineering/why-a-warning-with-no-file-name-took-three-days-and-a-three-minute-scan-2026-11-15.md`):
+  this line first said that two days of comparing files found nothing. From request to cause was
+  68 hours 33 minutes, of which 60 hours 32 minutes were two stretches with no session activity;
+  the seat worked for about two and a quarter hours before it first offered the local scan, and
+  why it was not offered sooner is not established.
+- **The direct trial was not estimated in the first status.** The seat knew at its first status
+  that a scanner log names the failing file, named no local run and no price for one, and first
+  offered the run after 26 probes. Naming the run and a rough price in the first status, even
+  when it needs the owner's word, puts the trial forward before a second batch of probes.
+- **A background launch was reported as running with no output read.** "The local scan is running
+  now" was written seconds after the command was issued; the scan's first log line came 37 hours
+  later, for a cause that is not known. A launch is reported as launched until its first output
+  is read.
+- **A false claim a reviewer found on one page was also on a second page.** #424's second round
+  was the same sentence in `docs/engineering/setup.md`; a search of `docs/` after round one
+  would have found it.
+- **A plugin was inferred from skill names and the inference was wrong.** The statement that all
+  seventeen `skillOverrides` entries named Sentry or Vercel plugin skills reached a review
+  thread, a pull request body and a plan before the plugin's cache was checked at the wrap; four
+  were verified and thirteen were not.
+- **The owner refused the removal of a guard for a refused value.** The seat proposed removing
+  the `__proto__` guard in `pass-record.ts` as unable to matter; the owner's answer was the
+  principles: incorrect values are surfaced and refused. The guard stayed, reshaped.
+- **On 2026-11-15 the door's open action was `merge-bot pull-request open`**, and a fresh
+  worktree's `agent-tools/dist` was stale until
+  `pnpm turbo run build --filter=@oaknational/agent-tools` ran.
+- **The "git add ." hook matched by substring** across a compound command: `add` and a later
+  space-then-dot anywhere on the line. Splitting the command and using absolute paths passed.
+- **`sonar api` reported "Not authenticated"** when `SONAR_TOKEN` or `SONAR_USER_HOME` was
+  exported in the same shell; it worked in a clean shell.
+- **The local scans used throwaway SonarCloud projects**, created with `/api/projects/create`
+  and deleted with `/api/projects/delete`. Both were deleted; the organisation then listed only
+  `EngraphCode_castr` and `EngraphCode_open-curriculum-ecosystem`.
