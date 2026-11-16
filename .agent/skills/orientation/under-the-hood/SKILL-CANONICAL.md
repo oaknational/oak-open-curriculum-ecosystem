@@ -156,7 +156,7 @@ Both the tour and the area-overview mode draw on these (each read live, never
 recited from memory):
 
 - **The Practice (working with agents)** answers four questions, one at a time:
-  *What is it?* (`README.md` §Engineering Practice, then
+  *What is it?* (`README.md` §How it's built, then
   `docs/foundation/agentic-engineering-system.md`); *How do quality and safety
   survive agent speed?* (the same explainer and `docs/governance/README.md` — the
   gates, reviewers, rules tier, and learning loop; relay that gates are blocking,
@@ -170,7 +170,7 @@ recited from memory):
   portable `working-with-agentic-ai` primer: a short, repo-independent
   introduction to working with AI coding agents. In a checkout of this
   repository, offer it as a one-step declinable prelude; then continue here.
-- **Strategy and impact** order naturally as the README audience-routing block →
+- **Strategy and impact** order naturally as the README's "Documentation" list →
   `VISION.md` → `docs/domain/curriculum-guide.md` → the newest progress report
   (resolved live), with a pointer to where future reports land.
 - **The planning corpus** starts at `.agent/plans/README.md` — the planning
@@ -266,7 +266,7 @@ docs, and never from memory.
 
 | Source document | What it holds for the lens |
 | --- | --- |
-| `README.md` | Audience routing, Quick Start (install and verify), package topology |
+| `README.md` | Routes by what the reader wants, status, what is here, Quick Start (install and verify) |
 | `docs/engineering/setup.md` | Prerequisites, the Windows (via WSL) path, key commands |
 | `docs/architecture/README.md` §Architectural invariants | The six ADR-backed invariants that make the repo distinctive (each links its authoritative doc, which wins) — the single source; never restate them |
 | `VISION.md` (repo root) | What we're changing, why it matters, and the map to how |
@@ -277,7 +277,7 @@ docs, and never from memory.
 | `docs/domain/curriculum-guide.md` | Curriculum structure in plain language |
 | `.agent/reports/README.md` | Reports index — resolve the newest progress report here; never assume a remembered filename is the latest, and **filter by the `oak-ecosystem-progress-*` family** — the index also carries audits and engineering reports |
 | `.agent/plans/README.md` and `.agent/plans/strategic/` | The planning estate — how plans are structured, and the strategic outcomes the work is aimed at |
-| `README.md` §Engineering Practice and `docs/foundation/agentic-engineering-system.md` | The Practice: how agent-first work happens without compromising quality or safety |
+| `README.md` §How it's built and `docs/foundation/agentic-engineering-system.md` | The Practice: how agent-first work happens without compromising quality or safety |
 | `.agent/HUMANS.md` | What the `.agent/` estate is, for human readers |
 | `docs/governance/README.md` | Governance orientation — why the guardrail volume exists |
 | `docs/engineering/mcp-servers-for-contributors.md` | Sanctioned MCP set (teammates) |
@@ -357,9 +357,9 @@ Both must hold in every mode:
   shipped one.
 - **Scope, accurately — this repo is one of Oak's AI efforts, not the whole of
   how Oak does AI.** Lead with its actual distinctive role: putting Oak's
-  curriculum *into* the third-party AI assistants teachers already use (ChatGPT,
-  Claude, Copilot, Gemini), plus open tools for the wider ecosystem and the agent-first
-  build practice. The README banner and `VISION.md` carry the precise framing —
+  curriculum *into* the third-party AI assistants teachers already use (Oak's page,
+  `https://www.thenational.academy/ai-plugin`, says which are available), plus open tools for the wider ecosystem and the agent-first
+  build practice. The README's opening paragraph and `VISION.md` carry the precise framing —
   follow them, and never inflate the repo to "this is how Oak does AI". Oak builds
   other user-facing AI products; this is complementary to them.
 - **No compliance claims.** Make no claims about Oak's compliance, assurance, or
@@ -374,9 +374,8 @@ Both must hold in every mode:
   the public Oak site is authoritative for *Oak's*.
 - **No personal data, ever.** Never surface or record a person's name, email, or
   other identifying detail — not from a fetched Oak page (cite the page, never its
-  named people), and **not from the repo's own docs either: `README.md` (Credits)
-  and `ATTRIBUTION.md` carry contributor and citation names** — relay credit as
-  "documented in `ATTRIBUTION.md` / the Credits section" and cite the source, never
+  named people), and **not from the repo's own docs either: `ATTRIBUTION.md` carries
+  citation names** — relay credit as "documented in `ATTRIBUTION.md`" and cite the source, never
   reproduce the personal names. This is an absolute organisational instruction.
 
 ## The Primer Edge (PDR-112)

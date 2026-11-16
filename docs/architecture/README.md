@@ -44,10 +44,10 @@ block in the ADR index:
 
 **Apps:**
 
-| Workspace                                                                              | Purpose                                                                                                                                                                                         |
-| -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`oak-curriculum-mcp-streamable-http`](../../apps/oak-curriculum-mcp-streamable-http/) | Canonical MCP server — Streamable HTTP transport, Vercel deployment, the full curriculum tool set (the workspace README is the authoritative inventory), resources, prompts, and MCP App widget |
-| [`oak-search-cli`](../../apps/oak-search-cli/)                                         | Search CLI — admin operations, bulk ingestion, blue/green index lifecycle ([ADR-130](./architectural-decisions/130-blue-green-index-swapping.md)), evaluation, and ground-truth benchmarking    |
+| Workspace                                                                              | Purpose                                                                                                                                                                                      |
+| -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`oak-curriculum-mcp-streamable-http`](../../apps/oak-curriculum-mcp-streamable-http/) | Canonical MCP server — Streamable HTTP transport, Vercel deployment, the full curriculum tool set (the workspace README is the authoritative inventory), resources, and MCP App widget       |
+| [`oak-search-cli`](../../apps/oak-search-cli/)                                         | Search CLI — admin operations, bulk ingestion, blue/green index lifecycle ([ADR-130](./architectural-decisions/130-blue-green-index-swapping.md)), evaluation, and ground-truth benchmarking |
 
 **SDKs:**
 
@@ -94,7 +94,7 @@ Six stable, ADR-backed properties make this repository what it is. Each links to
 1. **The SDK updates itself from the API spec** — when the upstream OpenAPI schema changes, regeneration brings every workspace into alignment with zero manual type work (the [Cardinal Rule](../../.agent/directives/principles.md#cardinal-rule-of-this-repository); [OpenAPI pipeline](./openapi-pipeline.md)).
 2. **Two data feeds, both deliberate** — the live API powers the SDK and MCP tools ([OpenAPI pipeline](./openapi-pipeline.md)), while bulk-downloaded curriculum data is the source of truth for search ingestion and graph derivation ([semantic search architecture](../agent-guidance/semantic-search-architecture.md)).
 3. **The curriculum graphs are derived from the bulk data** — prior knowledge, misconceptions, keywords, and progressions served as anchored graph tools ([graph-stack topology, ADR-173](./architectural-decisions/173-graph-stack-topology.md)).
-4. **EEF evidence grounds the pedagogy** — the Teaching and Learning Toolkit is integrated for evidence-based support ([Data Sources](../../README.md#data-sources)).
+4. **EEF evidence grounds the pedagogy** — the Teaching and Learning Toolkit is integrated for evidence-based support ([Data Sources](../governance/DATA-SOURCES.md)).
 5. **The bulk data populates the semantic search** — ingestion builds the search indices from it ([ingestion guide](../../apps/oak-search-cli/docs/INGESTION-GUIDE.md)).
 6. **The Search SDK serves both sides** — creating and operating search instances as well as querying them ([Search SDK](../../packages/sdks/oak-search-sdk/README.md)).
 

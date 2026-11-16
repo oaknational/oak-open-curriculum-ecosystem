@@ -1,7 +1,7 @@
 # Oak Curriculum MCP – Streamable HTTP (Vercel-ready)
 
-Status: private alpha
-Next status: public alpha
+Status: see [Oak's page for the plugin](https://www.thenational.academy/ai-plugin), which says
+what is available and where.
 
 > **New here?** Start at the
 > [repo root README](../../README.md) and the
