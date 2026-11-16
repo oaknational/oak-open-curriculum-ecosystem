@@ -328,13 +328,14 @@ entries in the
 [production snagging list](../../docs/operations/mcp-server-production-snagging.md). Notes 3 and 4 are the
 same on the preview, so the merge neither causes nor cures them.
 
-1. **Two issuers are advertised.** The protected-resource metadata names
-   `https://clerk.thenational.academy` as the authorisation server. The server's own
-   `/.well-known/oauth-authorization-server` gives the issuer as `https://mcp.thenational.academy`
-   with `/oauth/*` proxy endpoints. A client holding state from one route can fail against the
-   other: one client configuration in this exercise failed to sign in, reporting that it expected
+1. **A client holding older sign-in state can fail against the two-issuer layout.** The
+   protected-resource metadata names `https://clerk.thenational.academy` as the authorisation
+   server, and the server's own `/.well-known/oauth-authorization-server` gives the issuer as
+   `https://mcp.thenational.academy` with `/oauth/*` proxy endpoints. That layout is decided
+   ([ADR-115](../../docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md)).
+   One client configuration in this exercise failed to sign in, reporting that it expected
    `mcp.thenational.academy` and received `clerk.thenational.academy`, while a fresh connection
-   to the same address signed in.
+   to the same address signed in. The cause of that one failure was not established.
 2. **Unknown paths return an HTML page.** `Cannot GET /…` as HTML, where a JSON client expects
    JSON. The branch returns `{"error":"Not found"}`.
 3. **Some tools return very large results from small requests.** `get-sequences-assets`

@@ -10,15 +10,19 @@ takes it up.
 
 ## Open
 
-### 1. Two OAuth issuers are advertised
+### 1. A client holding older sign-in state can fail against the two-issuer layout
 
 - **Seen:** 2026-11-16.
-- **What:** `/.well-known/oauth-protected-resource` names `https://clerk.thenational.academy` as
-  the authorisation server. The server's own `/.well-known/oauth-authorization-server` gives the
-  issuer as `https://mcp.thenational.academy`, with `/oauth/*` proxy endpoints.
-- **Effect:** a client holding sign-in state from one route can fail against the other. One
-  client configuration failed to sign in, reporting that it expected `mcp.thenational.academy`
-  and received `clerk.thenational.academy`; a fresh connection to the same address signed in.
+- **What:** one client configuration failed to sign in, reporting that it expected
+  `mcp.thenational.academy` and received `clerk.thenational.academy`. A fresh connection to the
+  same address signed in.
+- **Context:** the layout itself is decided, not a fault.
+  [ADR-115](../architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md) has the
+  protected-resource metadata name the upstream authorisation server
+  (`https://clerk.thenational.academy`) while the server's own authorisation-server metadata uses
+  the server's origin for clients that discover by origin.
+- **Open question:** which client state fails, and whether a client can be told to discard it.
+  The cause of the one failure was not established.
 
 ### 2. Unknown addresses return an HTML page
 
