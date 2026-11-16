@@ -17,6 +17,8 @@
 - **Non-goals.** This report does not test load, release tooling, the repository's non-server
   workspaces or agent tooling, and it does not authorise the merge. The merge decision belongs to
   the repository owner.
+- **Suggested action.** The report labels each difference that reaches production with a
+  severity and a suggested action, at the repository owner's direction.
 - **A successful review** checks the method against the limits stated in
   [What this does not show](#what-this-does-not-show) and reports any difference this report
   missed or explained wrongly.
@@ -65,6 +67,34 @@ What stays the same, as observed:
 - **Sign-in.** The flow has the same steps and the same metadata fields. The preview signs in
   through a development identity provider, so the branch's sign-in code has not run against
   production's: see [What this does not show](#what-this-does-not-show).
+
+## Improvements
+
+Changes for the better that the merge brings, as measured or observed on 2026-11-16.
+
+- **SonarCloud quality gate: failed on `main`, passed on the pull request.** Read from Oak's
+  SonarCloud project (`oaknational_oak-open-curriculum-ecosystem`):
+
+  | Measure                    | `main` (analysed 2026-11-09) | Pull request 1023 |
+  | -------------------------- | ---------------------------- | ----------------- |
+  | Quality gate               | Failed                       | Passed            |
+  | Bugs                       | 1                            | 0                 |
+  | Reliability rating         | C                            | A                 |
+  | Vulnerabilities            | 0                            | 0                 |
+  | Security hotspots          | 0                            | 0                 |
+  | Code smells                | 160                          | 1                 |
+  | Technical debt (minutes)   | 871                          | 0                 |
+  | Duplicated lines           | 0.7%                         | 0.6%              |
+  | Lines of code analysed     | 376,589                      | 199,618           |
+
+  The two analyses do not cover the same set of lines, as the last row shows, so the counts are
+  not a strict like-for-like comparison. The gate result and the ratings are each analysis's own
+  verdict.
+
+- **Unknown addresses answer in JSON.** A client that expects JSON from the server now receives
+  it on a 404 (difference 2 above; production note 2).
+- **The orientation text no longer carries its own list of supported assistants.** It points to
+  Oak's page, so it stays true when that list changes.
 
 ## Summary of evidence
 
