@@ -2,9 +2,11 @@
 
 ## Review contract
 
-- **Purpose.** Show whether the MCP server built from the `reunify-oce-forks` branch
-  (oaknational#1023) behaves the same as the server in production, so the people deciding on the
-  merge can judge its effect on connected clients.
+- **Purpose.** Show what the merge of the `reunify-oce-forks` branch (oaknational#1023) changes
+  for the people who use the MCP server: teachers working through an AI assistant, developers
+  connecting to the server, and vendors assessing the connector or plugin for their store.
+  Changes to engineering and developer experience are in scope only where they change what those
+  people see.
 - **Question tested.** Does every difference observed between the two live servers trace to a
   known cause: a change in the branch's source, or a difference between the two hosting
   environments? An unexplained difference fails the test.
@@ -19,7 +21,42 @@
   [What this does not show](#what-this-does-not-show) and reports any difference this report
   missed or explained wrongly.
 
-## Summary
+## What changes for people who use the server
+
+Two things change. Nothing else that a connected client or its user can observe was found to
+differ for a reason the merge carries into production.
+
+1. **The orientation text returned by `oak-under-the-hood` changes in 10 places.** This tool
+   answers questions about the repository and the service, not about the curriculum. The changes
+   follow the repository's rewritten README:
+   - pointers into the README are updated to its new section names, and to
+     `docs/engineering/setup.md` and `docs/architecture/README.md` for content that moved there;
+   - where the text named the supported assistants ("ChatGPT, Claude, Copilot, Gemini"), it now
+     points to Oak's page, `https://www.thenational.academy/ai-plugin`, which says which are
+     available;
+   - the instruction on credit no longer mentions a README credits section or contributor names;
+     it points to `ATTRIBUTION.md` for citation names.
+2. **A request to an address the server does not serve returns JSON, not an HTML page.** The
+   status is 404 on both. A person using an assistant does not see this; a developer probing the
+   server does.
+
+What stays the same, as observed:
+
+- **What the server offers.** The same 38 tools, with the same names, descriptions, input
+  schemas, read-only annotations and sign-in requirements; the same 6 resources; the same
+  instructions to the assistant. A store reviewer reading the tool list sees no change.
+- **What the tools return.** 60 of 62 calls return identical results, including search, lesson
+  content, quizzes, transcripts, the curriculum graphs and every error tested. The two that
+  differ are the orientation text above and a preview-only address in download links.
+- **The interactive view.** The widget is byte-for-byte the same.
+- **Downloads.** A slide deck downloaded through each server is the same size and type.
+- **Which assistants it works with.** The compatibility check gives the same verdict for each of
+  28 client hosts.
+- **Sign-in.** The flow has the same steps and the same metadata fields. The preview signs in
+  through a development identity provider, so the branch's sign-in code has not run against
+  production's: see [What this does not show](#what-this-does-not-show).
+
+## Summary of evidence
 
 | Area                                         | Compared                           | Result                                           |
 | -------------------------------------------- | ---------------------------------- | ------------------------------------------------ |
@@ -31,7 +68,9 @@
 | Unauthenticated endpoints and OAuth metadata | 12 paths                           | Same shape; 2 differences, both explained         |
 | Response headers                             | Health path                        | 4 headers differ; cause is the hosting, not the source |
 
-No unexplained difference was found. The differences found, with their causes:
+No unexplained difference was found. Every difference found, with its cause. "Source" differences
+reach production with the merge; "Environment" differences belong to the preview deployment and
+do not.
 
 | #   | Difference                                                                 | Cause                                                              | Kind        |
 | --- | -------------------------------------------------------------------------- | ------------------------------------------------------------------ | ----------- |
