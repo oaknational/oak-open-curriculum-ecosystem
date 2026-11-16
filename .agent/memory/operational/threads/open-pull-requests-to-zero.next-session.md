@@ -998,3 +998,29 @@ The file's graph loads, or the warning names the file. Under automatic analysis 
 **Impact**
 
 The affected files' dependencies are missing from the architecture graph. No rule, measure or quality-gate result is affected.
+
+## Lane state (2026-11-16, #1023 ready and compared against production; Sandpiper guards Wind, 690653)
+
+- oaknational#1023 carries the fork's default branch through the README pull request (#428) and
+  the consistency report. All checks passed on `e9abb2a83`; the pull request is a draft. Only the
+  owner merges it (the owner's word of 2026-11-11); seats prepare and report ready.
+- Landed since the last lane state: #423 (no ADR names the fork), #424 and #425 (Oak's seven
+  plugins restored, `skillOverrides` removed), #426 and #427 (Hydra's retrospective and closeout
+  records), #428 (the README as a repository README; attribution names no individuals).
+- Owner rulings in this window: no ADR names the fork; requests to the owner go through question
+  prompts, not the output stream; a repository README says what the repository holds and does not
+  describe Oak; `mcpjam` is a CLI tool and the latest version is used; for the comparison,
+  "Our interest is consistency rather than correctness, however any issues on the prod server
+  must be noted."
+- The comparison of production against the branch preview is in
+  [the consistency report](../../../reports/reunification-production-preview-consistency-2026-11-16.md):
+  no unexplained difference; five production notes. The pull request's description summarises it.
+- A project `.mcp.json` entry at the plugin's address suppresses the plugin's own server: Claude
+  Code matches duplicate servers by endpoint.
+- After the owner's merge: the release watch, the fork back to a mirror (todo 6 of
+  `reunify-oce-forks.plan.md`), and a read of Oak's SonarCloud analysis for the file-encoding
+  warning. The public-pages lane's remaining steps then go to Oak's repository as Oak's bot.
+- Observed and not acted on: individuals are still named in `LICENCE-DATA.md`, the demos' READMEs
+  and `CHANGELOG.md`; the setup guide gives the Playwright install only on the Windows path and
+  names `.mcp.json` where `.mcp.json.example` is the tracked file; the repository pins
+  `@mcpjam/cli` 3.19.0 and the latest is 6.3.1.
