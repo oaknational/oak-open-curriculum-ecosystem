@@ -26,13 +26,12 @@
 ## What changes for people who use the server
 
 Two differences reach production with the merge. Both are minor (P4), both are deliberate
-changes made on the branch, and neither affects the user experience of the product: no curriculum
-tool, result, resource or sign-in step changes. Suggested action for both: accept as deliberate
+changes made on the branch, and neither affects the user experience of the product. One tool's result changes: the orientation text of `oak-under-the-hood`, which a developer or vendor asking about the repository can see. No curriculum tool, curriculum result, resource or sign-in step changes. Suggested action for both: accept as deliberate
 and not user-facing.
 
 | #   | Difference                                           | Severity   | Deliberate | Affects the product's user experience | Suggested action |
 | --- | ---------------------------------------------------- | ---------- | ---------- | ------------------------------------- | ---------------- |
-| 1 | Orientation text from `oak-under-the-hood` | P4 (minor) | Yes | No: the tool answers questions about the repository, not the curriculum | Accept |
+| 1 | Orientation text from `oak-under-the-hood` | P4 (minor) | Yes | No: the changed text is visible to someone asking about the repository; no curriculum result changes | Accept |
 | 2 | Unknown addresses return JSON in place of an HTML page | P4 (minor) | Yes | No: seen only by a developer requesting an address the server does not serve | Accept |
 
 1. **The orientation text returned by `oak-under-the-hood` changes in 10 places.** This tool
