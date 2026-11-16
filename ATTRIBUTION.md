@@ -60,7 +60,7 @@ listed: the work is a group effort.
 `contributors` field of the relevant `package.json`** — the npm metadata
 convention and the single sanctioned home. It MUST NOT be copied into prose,
 READMEs, ADRs, PDRs, plan bodies, rule files, or any other versioned document;
-those credit by name + public/org contact + the upstream URL. This keeps
+those cite the source and link to the upstream URL. This keeps
 personal data in one minimised, conventional home rather than scattered across
 the documentation surface. The policy is enforced as a clause of the
 [`documentation-hygiene`](.agent/rules/documentation-hygiene.md) rule
