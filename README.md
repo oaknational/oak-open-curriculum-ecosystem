@@ -49,9 +49,13 @@ version of the code. The Curriculum SDK isn't on the npm registry yet.
 - **Use the SDK.** The [Curriculum SDK](packages/sdks/oak-curriculum-sdk/README.md) gives you
   typed access to the API. Until it's on the npm registry, use it from a clone of this
   repository.
-- **Reuse the parts.** The components here are built to be reused; the
-  [engineering tools strategy](docs/strategy/stream-engineering-tools.md) sets out what they
-  are.
+
+### Sector reusable components
+
+The components here are built to be reused, so other organisations can build curriculum-aware
+applications without starting from scratch: the OpenAPI-to-MCP pipeline, SDK-generation
+patterns, hybrid-search tooling, MCP and MCP App scaffolds, graph projection conventions, and
+the Practice.
 
 ## Quick Start
 
