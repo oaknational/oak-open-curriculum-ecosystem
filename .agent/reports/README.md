@@ -45,6 +45,12 @@ matching one nesting depth missed two deeper directories and changed twelve rows
 
 ## Current Structure
 
+- [reunification-production-preview-consistency-2026-11-16.md](./reunification-production-preview-consistency-2026-11-16.md)
+  — consistency report for oaknational#1023: the MCP server in production against the
+  `reunify-oce-forks` preview on 2026-11-16 (surface, 62 tool calls, resources, host
+  compatibility, endpoints and headers), every difference with its cause, the limits of the
+  comparison, and the faults seen on production
+
 - [public-service-ai-tuition/pr-66-review-2026-09-06.md](./public-service-ai-tuition/pr-66-review-2026-09-06.md)
   — dated review of PR 66: faithful transfer, source authority, integration,
   evidence qualifications and seven bounded findings; the PR's landing is the owner's
