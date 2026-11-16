@@ -125,7 +125,7 @@ do not.
 | 2   | `download-asset` links on the preview use the per-commit deployment host   | Preview deployments resolve their own address per commit           | Environment |
 | 3   | Unknown paths: JSON `{"error":"Not found"}` on the preview, HTML in production | The branch adds a JSON not-found handler                       | Source      |
 | 4   | OAuth metadata names a different Clerk instance                            | The preview uses a development Clerk instance                      | Environment |
-| 5   | Security headers on the health path differ                                 | The header source is unchanged; the two hosts sit behind different edge configuration (inference) | Environment |
+| 5   | Security headers on the health path differ                                 | The header source is unchanged; Oak's Cloudflare rewrites production's headers | Environment |
 | 6   | The preview sends `x-robots-tag: noindex`                                  | Vercel adds it to preview deployments                              | Environment |
 
 ## What was compared
@@ -319,13 +319,13 @@ preview sends.
 The file that sets these headers,
 `apps/oak-curriculum-mcp-streamable-http/src/security-headers.ts`, is the same on `main` and on
 the branch, and the preview's values are the ones that file sets. Production's values are not
-the ones the file sets. Both hosts answer through Cloudflare (`server: cloudflare`). The
-inference: production's edge configuration rewrites these headers, the preview's does not, and
-the branch changes neither.
+the ones the file sets. Both hosts answer through Cloudflare (`server: cloudflare`). Oak's Cloudflare rewrites response headers for production (confirmed by the repository owner, 2026-11-16); the branch does not change them.
 
 ## Production notes
 
-Faults and shortcomings seen on the production server while comparing. Notes 3 and 4 are the
+Faults and shortcomings seen on the production server while comparing. They are kept as open
+entries in the
+[production snagging list](../../docs/operations/mcp-server-production-snagging.md). Notes 3 and 4 are the
 same on the preview, so the merge neither causes nor cures them.
 
 1. **Two issuers are advertised.** The protected-resource metadata names
@@ -347,15 +347,13 @@ same on the preview, so the merge neither causes nor cures them.
    ordinary error and do not start sign-in from it. All tools declare the OAuth scheme that
    relies on that behaviour.
 5. **The content security policy the code sets is not the one production serves.** See
-   [Response headers](#response-headers). Production serves a two-directive policy in place of
-   the application's. Whether that is intended is a question for whoever owns the edge
-   configuration.
+   [Response headers](#response-headers). Production serves a two-directive policy in place of the application's, set by Oak's Cloudflare.
 
 ## What this does not show
 
 - **Production's identity provider with the branch's code.** The preview signs in through a
   development Clerk instance. The branch changes authentication and OAuth-proxy source, and that
-  code has not run against `clerk.thenational.academy`.
+  code has not run against `clerk.thenational.academy`. The repository owner accepts this (2026-11-16): the production instance is in constant use and the mechanism is the same.
 - **Production's environment.** Environment variables, the edge configuration and the canonical
   host are production's own. Difference 2 shows that the preview resolves its own address per
   deployment; production's value for that address is set by its environment.
