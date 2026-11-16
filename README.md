@@ -25,8 +25,8 @@ If you teach and want Oak in the AI tool you already use, go to
 
 The apps, SDKs, core packages and libraries are summarised in the
 [architecture overview](docs/architecture/README.md#workspace-summaries). The `.agent/` folder
-holds the rules, plans and records our agents and engineers work from; it isn't part of the
-product.
+holds the rules, plans and records our agents and engineers work from. It isn't part of the
+product, with one exception: the orientation skill in it is generated into the MCP server.
 
 ## Status
 
