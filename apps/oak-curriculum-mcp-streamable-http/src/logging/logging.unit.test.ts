@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { UnifiedLogger, normalizeError } from '@oaknational/logger';
+import { UnifiedLogger, normalizeError, logLevelToSeverityNumber } from '@oaknational/logger';
 
 import { createHttpLogger, createChildLogger, extractCorrelationId } from './index.js';
 import type { RuntimeConfig } from '../runtime-config.js';
@@ -44,6 +44,40 @@ describe('createHttpLogger', () => {
     expect(() => {
       logger.error('test message', normalizeError(testError), testContext);
     }).not.toThrow();
+  });
+});
+
+describe('createHttpLogger production log level clamp', () => {
+  const DEBUG_SEVERITY = logLevelToSeverityNumber('DEBUG');
+  const INFO_SEVERITY = logLevelToSeverityNumber('INFO');
+
+  it('does not forward DEBUG when VERCEL_ENV is production and LOG_LEVEL is debug', () => {
+    const runtimeConfig = createRuntimeConfig({ VERCEL_ENV: 'production', LOG_LEVEL: 'debug' });
+    const logger = createHttpLogger(runtimeConfig);
+
+    expect(logger.isLevelEnabled?.(DEBUG_SEVERITY)).toBe(false);
+    expect(logger.isLevelEnabled?.(INFO_SEVERITY)).toBe(true);
+  });
+
+  it('still forwards DEBUG outside production when LOG_LEVEL is debug', () => {
+    const runtimeConfig = createRuntimeConfig({ VERCEL_ENV: 'preview', LOG_LEVEL: 'debug' });
+    const logger = createHttpLogger(runtimeConfig);
+
+    expect(logger.isLevelEnabled?.(DEBUG_SEVERITY)).toBe(true);
+  });
+
+  it('still forwards DEBUG with no VERCEL_ENV set and LOG_LEVEL is debug', () => {
+    const runtimeConfig = createRuntimeConfig({ LOG_LEVEL: 'debug' });
+    const logger = createHttpLogger(runtimeConfig);
+
+    expect(logger.isLevelEnabled?.(DEBUG_SEVERITY)).toBe(true);
+  });
+
+  it('does not loosen a stricter production LOG_LEVEL', () => {
+    const runtimeConfig = createRuntimeConfig({ VERCEL_ENV: 'production', LOG_LEVEL: 'warn' });
+    const logger = createHttpLogger(runtimeConfig);
+
+    expect(logger.isLevelEnabled?.(INFO_SEVERITY)).toBe(false);
   });
 });
 
