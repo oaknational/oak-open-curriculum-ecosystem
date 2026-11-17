@@ -133,7 +133,7 @@ export const APP_DELTA_REVIEWS: Readonly<Record<string, CurrentSourceDeltaReview
     IMPLEMENTATION_ONLY,
   ),
   'apps/oak-curriculum-mcp-streamable-http/src/logging/index.ts': excluded(
-    '2cfad19d9ebd98c1c417b7641c651ae271e399a3448d1b26fbc7da1bd11e6d2f',
+    'f84f29d215994d72facf08a414261ef5ee5206dba4d0c6a175d8785d41f17b56',
     IMPLEMENTATION_ONLY,
   ),
   // Landing-page removal: `createMcpHtmlNegotiation` is deleted and

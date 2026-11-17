@@ -1,11 +1,13 @@
 import {
   UnifiedLogger,
   parseLogLevel,
+  compareLogLevels,
   enrichError,
   buildResourceAttributes,
   logLevelToSeverityNumber,
   type Logger,
   type LogContextInput,
+  type LogLevel,
   type LogSink,
   type Timer,
 } from '@oaknational/logger';
@@ -14,9 +16,38 @@ import {
   getActiveSpanContextSnapshot,
   type ActiveSpanContextSnapshot,
 } from '@oaknational/observability';
+import { RELEASE_ENVIRONMENTS } from '@oaknational/build-metadata';
 import type { Response, ErrorRequestHandler } from 'express';
 
 import type { RuntimeConfig } from '../runtime-config.js';
+
+/**
+ * Most permissive level production will forward to any sink.
+ *
+ * @remarks `LOG_LEVEL` is one Vercel env var shared across development,
+ * preview and production (no per-environment override), so a developer
+ * turning on debug logging locally also turns it on in production unless
+ * something clamps it there. The Sentry log sink (`createLiveLogSink` in
+ * `@oaknational/sentry-node`) carries no threshold of its own — it
+ * forwards whatever `UnifiedLogger.minSeverity` admits — so this is the
+ * one chokepoint that keeps a standing owner ruling ("no debug logs in
+ * production") true regardless of what the env var says (MCP-648: debug
+ * logs were 76% of this project's Sentry log volume and the measured
+ * reason its ingest quota blocked unrelated monitoring work).
+ */
+const PRODUCTION_LOG_LEVEL_FLOOR: LogLevel = 'INFO';
+
+/** Resolves the effective minimum log level, clamped in production. */
+function resolveMinimumLogLevel(config: RuntimeConfig): LogLevel {
+  const requested = parseLogLevel(config.env.LOG_LEVEL?.toUpperCase(), 'INFO');
+  const isProduction = config.env.VERCEL_ENV === RELEASE_ENVIRONMENTS.production;
+
+  if (isProduction && compareLogLevels(requested, PRODUCTION_LOG_LEVEL_FLOOR) < 0) {
+    return PRODUCTION_LOG_LEVEL_FLOOR;
+  }
+
+  return requested;
+}
 
 interface HttpLoggingLocals {
   readonly correlationId?: string;
@@ -73,7 +104,7 @@ function resolveLoggerOptions(options?: HttpLoggerOptions): {
 }
 
 export function createHttpLogger(config: RuntimeConfig, options?: HttpLoggerOptions): Logger {
-  const level = parseLogLevel(config.env.LOG_LEVEL?.toUpperCase(), 'INFO');
+  const level = resolveMinimumLogLevel(config);
   const resolved = resolveLoggerOptions(options);
   // The logger's Environment contract is string-valued; the parsed
   // OBSERVABILITY_SINKS array is not a resource-attribute input.
