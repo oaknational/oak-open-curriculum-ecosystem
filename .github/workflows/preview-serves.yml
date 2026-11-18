@@ -199,6 +199,9 @@ jobs:
               echo "::error::unexpected environment_url host: ${TARGET_URL}" >&2
               exit 1
               ;;
+            *)
+              # A bare host: nothing to reject here; the suffix match below decides.
+              ;;
           esac
 
           # The only host family this job will egress to; also closes
