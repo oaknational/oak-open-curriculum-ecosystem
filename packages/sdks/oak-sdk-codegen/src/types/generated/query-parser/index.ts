@@ -5,7 +5,7 @@
  */
 
 import { z } from 'zod';
-import { PARSED_INTENT_ENUM, SearchParsedQuerySchema } from '../search/parsed-query.js';
+import { SearchParsedQuerySchema } from '../search/parsed-query.js';
 import type { SearchParsedIntent, SearchParsedQuery } from '../search/parsed-query.js';
 
 /** Request payload accepted by the natural language query parser. */
@@ -28,7 +28,7 @@ export type QueryParserResponse = SearchParsedQuery;
 export type QueryParserIntent = SearchParsedIntent;
 
 /** Enumerated intent literal tuple for parser responses. */
-export const QUERY_PARSER_INTENT_ENUM = PARSED_INTENT_ENUM;
+export { PARSED_INTENT_ENUM as QUERY_PARSER_INTENT_ENUM } from '../search/parsed-query.js';
 
 /** Runtime guard for query parser responses. */
 export function isQueryParserResponse(value: unknown): value is QueryParserResponse {

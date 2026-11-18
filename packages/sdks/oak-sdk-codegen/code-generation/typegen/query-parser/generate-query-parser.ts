@@ -10,7 +10,7 @@ function createQueryParserModule(): string {
   return (
     HEADER +
     `import { z } from 'zod';\n` +
-    `import { PARSED_INTENT_ENUM, SearchParsedQuerySchema } from '../search/parsed-query.js';\n` +
+    `import { SearchParsedQuerySchema } from '../search/parsed-query.js';\n` +
     `import type { SearchParsedIntent, SearchParsedQuery } from '../search/parsed-query.js';\n\n` +
     `/** Request payload accepted by the natural language query parser. */\n` +
     `export const QueryParserRequestSchema = z\n` +
@@ -27,7 +27,7 @@ function createQueryParserModule(): string {
     `/** Enumerated parser intent union. */\n` +
     `export type QueryParserIntent = SearchParsedIntent;\n\n` +
     `/** Enumerated intent literal tuple for parser responses. */\n` +
-    `export const QUERY_PARSER_INTENT_ENUM = PARSED_INTENT_ENUM;\n\n` +
+    `export { PARSED_INTENT_ENUM as QUERY_PARSER_INTENT_ENUM } from '../search/parsed-query.js';\n\n` +
     `/** Runtime guard for query parser responses. */\n` +
     `export function isQueryParserResponse(value: unknown): value is QueryParserResponse {\n` +
     `  return QueryParserResponseSchema.safeParse(value).success;\n` +
