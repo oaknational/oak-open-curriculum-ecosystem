@@ -1,3 +1,10 @@
+## [1.187.3](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.187.2...v1.187.3) (2026-11-18)
+
+
+### Bug Fixes
+
+* **sonar:** clear the three remaining minor findings on main ([25268ff](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/25268ff53bbbbadd135c5a88caa3218dea256c64))
+
 ## [1.187.2](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.187.1...v1.187.2) (2026-11-18)
 
 ## [1.187.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.187.0...v1.187.1) (2026-11-18)
