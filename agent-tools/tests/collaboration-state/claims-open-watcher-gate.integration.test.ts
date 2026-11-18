@@ -37,7 +37,7 @@ const claimer = {
   session_id_prefix: '8210d6',
 } as const;
 const claimerEnv = {
-  OAK_AGENT_IDENTITY_OVERRIDE: claimer.agent_name,
+  PRACTICE_AGENT_IDENTITY_OVERRIDE: claimer.agent_name,
   PRACTICE_AGENT_SESSION_ID_CLAUDE: claimer.session_id_prefix,
 } as const;
 
@@ -45,7 +45,7 @@ const other = deriveCollaborationIdentity({
   platform: 'codex',
   model: 'GPT-5',
   env: {
-    OAK_AGENT_IDENTITY_OVERRIDE: 'Woodland Creeping Petal',
+    PRACTICE_AGENT_IDENTITY_OVERRIDE: 'Woodland Creeping Petal',
     PRACTICE_AGENT_SESSION_ID_CODEX: '019dd3',
   },
 }).agentId;

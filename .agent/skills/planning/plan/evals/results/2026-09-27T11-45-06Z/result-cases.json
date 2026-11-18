@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "claudeVersion": "2.1.283",
+  "startedAt": "2026-09-27T11:45:07.349Z",
+  "durationSeconds": 48,
+  "costUsd": 0.255058,
+  "partial": false,
+  "suite": {
+    "root": "<plugin>",
+    "ablation": "with-without",
+    "judgeModel": "sonnet",
+    "caseFilter": "case-02",
+    "threshold": 0,
+    "concurrency": 1,
+    "plugins": [
+      {
+        "name": "oak-plan-evals",
+        "version": "0.0.0",
+        "path": "<plugin>"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "name": "case-02",
+      "dir": "evals/case-02",
+      "source": "mixed",
+      "promptMarkdown": "Plan the implementation of a stable priority queue for the scheduler. Everything is settled and written down here, in full. The contract: items are (priority, payload); pop returns the item with the lowest priority; among equal priorities the earliest pushed item is returned first; push and pop are O(log n); pop on an empty queue raises EmptyQueue. The consumer: the scheduler's dispatch loop, which calls push on job arrival and pop on each tick. The acceptance tests, already written: test_pop_lowest_priority, test_equal_priorities_fifo, test_interleaved_push_pop_keeps_fifo, test_empty_pop_raises. Nothing about its value is in question and there is no repository to read; plan from this statement.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 1500,
+      "maxTurns": 40,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A direct implementation plan: the settled contract is the input; steps, order, validation against the written acceptance tests and the landing; no mandatory user-value or specification pass, no persona, no ceremony.\n\nAssertions:\n1. No value-definition or specification pass is required for already-settled work\n2. The plan consumes the written contract and acceptance tests as its inputs and sequences implementation directly\n3. No fictional service user or outcome claim is introduced",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A direct implementation plan: the settled contract is the input; steps, order, validation against the written acceptance tests and the landing; no mandatory user-value or specification pass, no persona, no ceremony.\n\nAssertions:\n1. No value-definition or specification pass is required for already-settled work\n2. The plan consumes the written contract and acceptance tests as its inputs and sequences implementation directly\n3. No fictional service user or outcome claim is introduced",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-plan|oak-user-value|oak-specify|oak-specify-connection|oak-assess-specification)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-plan(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 3,
+            "costUsd": 0.1764304,
+            "judgeCostUsd": 0.011652000000000001,
+            "durationSeconds": 30,
+            "startedAt": "2026-09-27T11:45:07.391Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "# Plan: stable priority queue for the scheduler\n\nI kept this plan short to match the task. The `oak-plan` skill expects a plan-node estate (schema, templates, impact-areas registry, validator), and none exists here. So this is a delivery-node-shaped plan written in this chat. It hasn't been checked against a schema, and it stays `sketch` until you approve it. You said the value is settled, so I skipped the user-value pass. There's also no design fork to ask you about: a heap with a tie-breaker is the standard answer.\n\n**Assumption:** the test names suggest Python and pytest. If the scheduler uses another language, the approach stays the same and only the library calls change.\n\n## Goal\nThe dispatch loop always gets the most urgent job next. Among jobs of equal urgency, it gets them in arrival order. Push and pop stay O(log n) as the backlog grows.\n\n## Users and value\n- **The scheduler's dispatch loop** (the only consumer). It gets a predictable order, so jobs of equal priority can't starve each other or jump ahead of each other.\n\n## Mechanism\nA binary min-heap (`heapq`) holding entries of `(priority, seq, payload)`:\n- `seq` comes from a per-instance `itertools.count()` and goes up by one on every push.\n- The heap sorts entries as tuples, comparing `priority` first. Ties go to the lower `seq`, which is the earlier push, so equal priorities come out first-in first-out.\n- Every `seq` is unique, so the comparison never gets as far as `payload`. Payloads don't need to be comparable, and comparing two jobs can't raise `TypeError`.\n- `heappush` and `heappop` are both O(log n).\n- `seq` is never reset. Python ints don't overflow, and never resetting keeps order stable when pushes and pops are interleaved. That's what `test_interleaved_push_pop_keeps_fifo` checks.\n\nSketch:\n```python\nclass EmptyQueue(Exception):\n    \"\"\"Raised by pop() on an empty queue.\"\"\"\n\nclass StablePriorityQueue:\n    def __init__(self):\n        self._heap = []\n        self._seq = itertools.count()\n\n    def push(self, priority, payload):\n        heapq.heappush(self._heap, (priority, next(self._seq), payload))\n\n    def pop(self):\n        if not self._heap:\n            raise EmptyQueue\n        priority, _, payload = heapq.heappop(self._heap)\n        return priority, payload\n```\n\n## Acceptance criteria and proofs\nAll four can be proven in the repo, by the tests you already wrote:\n\n| Criterion | Proof |\n|---|---|\n| `pop` returns the lowest priority | `test_pop_lowest_priority` |\n| Equal priorities come out in push order | `test_equal_priorities_fifo` |\n| Order holds when pushes and pops are interleaved | `test_interleaved_push_pop_keeps_fifo` |\n| `pop` on an empty queue raises `EmptyQueue` | `test_empty_pop_raises` |\n\nThe heap operations give O(log n) by construction. None of the tests measure it, and I don't recommend adding a timing test because it would be flaky.\n\n## Todos (one small PR)\n1. **Read the imports in the existing test file first.** They fix the module path, the class name, the name and location of `EmptyQueue`, and whether `pop` returns `(priority, payload)` or only the payload. The code has to match the tests, not the sketch above. This is the only real unknown.\n2. Write the queue and `EmptyQueue` at that path.\n3. Run the four tests until they pass.\n4. Connect the dispatch loop: call `push` when a job arrives, and on each tick call `pop` and catch `EmptyQueue` as \"nothing to dispatch\". Doing this in the same PR is fine because it's only a few lines.\n\n## Out of scope\n- `peek`, `__len__`, changing a job's priority, removing a job. Add them only when the scheduler needs them.\n- Thread safety. I assumed the dispatch loop is single-threaded. If jobs arrive on another thread, wrap `push` and `pop` in a `threading.Lock`. That's the one change that would alter the plan.\n- Priorities that can't be ordered, such as NaN or mixed types. They're the caller's responsibility.\n\nIf you approve it, the next step is Todo 1: reading the test imports."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.0786276,
+            "judgeCostUsd": 0.010314000000000002,
+            "durationSeconds": 17,
+            "startedAt": "2026-09-27T11:45:37.616Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "# Plan: stable priority queue for the scheduler\n\nThe test names are snake_case, so I've assumed Python. The design works the same way in other languages.\n\n## Design\n\nA binary min-heap. Each entry is the tuple `(priority, seq, payload)`, where `seq` comes from a counter that only goes up and belongs to the queue.\n\n- **Lowest priority first:** the heap is ordered by `priority`.\n- **FIFO among equal priorities:** ties are broken by `seq`, which is the push order.\n- **O(log n):** `heapq.heappush` and `heapq.heappop` are both O(log n).\n- **The payload is never compared:** every entry has a different `seq`, so a tuple comparison never reaches the payload. Job objects don't need to be orderable, and equal priorities never raise a `TypeError`.\n\n## Interface\n\n```python\nclass EmptyQueue(Exception):\n    \"\"\"Raised by pop() on an empty queue.\"\"\"\n\nclass StablePriorityQueue:\n    def __init__(self):\n        self._heap = []\n        self._seq = itertools.count()\n\n    def push(self, priority, payload) -> None:\n        heapq.heappush(self._heap, (priority, next(self._seq), payload))\n\n    def pop(self):\n        if not self._heap:\n            raise EmptyQueue\n        priority, _, payload = heapq.heappop(self._heap)\n        return priority, payload\n\n    def __len__(self) -> int:\n        return len(self._heap)\n```\n\n`pop` returns `(priority, payload)`, which matches the contract's definition of an item. The tuple's middle `seq` value is internal and never returned.\n\n## Key decisions\n\n1. **The counter is never reset or reused.** This is what makes `test_interleaved_push_pop_keeps_fifo` pass. An item pushed after some pops still gets a higher `seq` than anything already waiting, so it goes behind older items with the same priority. Do not use `len(heap)` as the tiebreaker, because it repeats values after pops and breaks FIFO.\n2. **Check for empty explicitly and raise `EmptyQueue`.** Otherwise `heapq` raises its own `IndexError`, which the dispatch loop shouldn't have to know about.\n3. **Nothing beyond the contract.** No peek, decrease-key, removal or thread safety. The loop only calls push on arrival and pop on each tick. `__len__` is included so the loop can check for an empty queue without catching an exception on every idle tick. If you want the API strictly minimal, drop it.\n4. **Counter overflow isn't a concern** because Python integers have no size limit. In a language with fixed-size integers, use a 64-bit counter.\n\n## Steps\n\n1. Add `EmptyQueue` and `StablePriorityQueue` in the scheduler package, following the layout above.\n2. Run the four acceptance tests:\n   - `test_pop_lowest_priority`: covered by heap ordering.\n   - `test_equal_priorities_fifo`: covered by the `seq` tiebreak.\n   - `test_interleaved_push_pop_keeps_fifo`: covered by the counter never resetting (decision 1).\n   - `test_empty_pop_raises`: covered by the explicit check (decision 2).\n3. Connect the dispatch loop: call `push(priority, job)` when a job arrives. On each tick, call `pop()` when `len(q)` is nonzero, or catch `EmptyQueue`, whichever matches the loop's existing style.\n\n## Risk\n\nThe only real bug risk is the tiebreaker. If it's missing or repeats values, FIFO breaks and non-orderable payloads raise `TypeError` when priorities are equal. The equal-priority and interleaved tests both catch that."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 1,
+        "passRateWithout": 1,
+        "delta": 0
+      }
+    }
+  ],
+  "aggregates": {
+    "casesTotal": 1,
+    "casesPassed": 1,
+    "overallScore": 1,
+    "overallPassRate": 1,
+    "meanDelta": 0
+  }
+}

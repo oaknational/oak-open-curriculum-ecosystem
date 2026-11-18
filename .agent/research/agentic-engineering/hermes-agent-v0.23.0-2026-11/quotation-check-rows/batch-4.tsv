@@ -1,0 +1,5 @@
+E	evolution/skills/evolve_skill.py	183	183	optimized_module.skill_text
+E	evolution/skills/skill_module.py	104	113	skill_instructions=self.skill_text
+E	evolution/core/dataset_builder.py	96	128	ChainOfThought
+E	evolution/core/external_importers.py	430	446	ChainOfThought
+E	pyproject.toml	18	18	dspy>=3.0.0

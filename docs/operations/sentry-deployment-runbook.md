@@ -172,8 +172,14 @@ already deployed. Preview builds run on every commit pushed to a branch
 with an open PR.
 
 **Inside the Vercel Build Command** (§L-8, 2026-04-21 onwards): Vercel
-runs the workspace's default `build` script (no `vercel.json`
-`buildCommand` override). The script invokes
+runs the workspace's `build` script directly (no `vercel.json`
+`buildCommand`, so nothing enters the Turbo graph on this path). The
+script runs the never-cached `deploy-config-gate` step first (MCP-475):
+the server's own configuration resolution against the deploy
+environment, red before any release side effect when the function would
+not boot. (On a root Turbo build the gate is also its own task that
+`build` depends on, so a cached replay of the build still runs it.) The
+`build` script then invokes
 [`esbuild.config.ts`](../../apps/oak-curriculum-mcp-streamable-http/esbuild.config.ts)
 via `tsx`. The composition root reads `process.env`, asks
 `createSentryBuildPlugin` to map ADR-163 §3 / §4 policy onto the
@@ -263,8 +269,8 @@ contract for troubleshooting:
 2. Verify the deployment by issuing a `GET /healthz` (or equivalent
    liveness check exposed by the MCP server) against the deployment
    host and confirming a `200` response. Automated post-deploy
-   verification previously scripted via `pnpm smoke:remote` was retired
-   alongside the smoke-tests harness (see ADR-121 change log entry
+   verification was retired alongside the smoke-tests harness (see
+   ADR-121 change log entry
    2026-05-04). For preview deployments whose commit carries
    `.github/workflows/preview-serves.yml`, this verification is
    automated: that workflow publishes the `preview-serves` commit

@@ -325,3 +325,9 @@ above — archiving, folding, editing live-lane plans — is **not** in this lan
 scope without Director (Oyster spins Coral) coordination and owner steer, because
 several targets are referenced by live lanes (statusline via #250, the map is the
 Director's, the orientation plans are Peony's).
+
+_Record locations, 2026-09-06: of the thread records named above by their paths of the
+time, those the 2026-09-06 consolidation paused moved under
+`.agent/memory/operational/threads/paused/` (the threads README's lifecycle layout; the
+paused index in `repo-continuity.md` names each); a record still active keeps its root path
+under `.agent/memory/operational/threads/`; the paths here are the historical ones._

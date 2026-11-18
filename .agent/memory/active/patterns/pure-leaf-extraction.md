@@ -3,6 +3,7 @@ name: "Pure Leaf Module Extraction"
 polarity: pattern
 use_this_when: "Pure functions and I/O functions coexist in a module, and other modules need only the pure functions"
 category: code
+layer: general
 proven_in: "packages/sdks/oak-search-sdk/src/admin/lifecycle-version-identity.ts"
 proven_date: 2026-03-24
 barrier:

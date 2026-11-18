@@ -1,6 +1,6 @@
 ---
 name: cricket-judgement-low
-description: 'Fast low-effort conscience check using contextual judgement. Call directly for a second opinion, rubber duck, or design partnership when priority, proportion, or a wait/gate may be drifting; returns ON-TRACK, DRIFTING, or WRONG-PRIORITY with evidence and one redirection.'
+description: 'Fast low-effort conscience check using contextual judgement. Call directly for a second opinion, rubber duck, or design partnership when priority, proportion, or a wait/gate may be drifting; returns a work verdict (ON-TRACK, DRIFTING or WRONG-PRIORITY) and a frame verdict (SOUND, NARROWED or CONTRADICTED), with evidence and one redirection.'
 tools: Read
 disallowedTools: Write, Edit, Bash, Grep, Glob
 color: green

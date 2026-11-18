@@ -6,7 +6,7 @@ overview: "Rebuild search from the fresh bundle with a documented restricted-exc
 status: ratified
 ratified_by: Jim Cresswell
 ratified_date: 2026-08-12
-ratified_where: "Owner decision card 2026-08-12 (Wren calls Downdraft session 6b29b5): 'Ratify Bucket 1 only'; recorded in .agent/memory/operational/threads/upstream-api-alignment.next-session.md"
+ratified_where: "Owner decision card 2026-08-12 (Wren calls Downdraft session 6b29b5): 'Ratify Bucket 1 only'; recorded in .agent/memory/operational/threads/paused/upstream-api-alignment.next-session.md"
 serves: first-major-release
 impact_areas:
   - served-surface

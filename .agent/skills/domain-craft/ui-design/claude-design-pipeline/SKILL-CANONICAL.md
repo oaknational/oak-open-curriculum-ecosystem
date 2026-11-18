@@ -18,11 +18,11 @@ description: >-
 ## The pipeline at a glance
 
 **Convert** (the
-[conversion playbook](../../../../../docs/engineering/claude-design-conversion-playbook.md))
+[conversion playbook](../../../../reference/claude-design-conversion-playbook.md))
 → **refresh** the byte-sacred export via the claude-design MCP →
 **fidelity review** (this skill's core, below) → the tracked **divergence
 register** that ingestion tooling reads. The
-`@oaknational/fidelity-review` package is the machinery; this skill is the
+`fidelity-review` package (OCE's, at `packages/libs/fidelity-review`) is the machinery; this skill is the
 judgment workflow around it.
 
 ## Fidelity review
@@ -31,7 +31,7 @@ Compare a converted app against its canonical Claude Design export and leave
 **every divergence with a recorded judgment**. The diff is triage; the
 judgment is the deliverable. This is the agent-judged reconcile step of the
 Claude-Design ingestion pipeline
-([productionisation plan WS2](../../../../plans-backlog-2026-07/curriculum-hub-demo/current/productionisation-and-reuse.plan.md)
+(OCE's productionisation plan WS2
 — "there is likely no deterministic route"): tools surface differences, an
 agent or human decides what each one means.
 
@@ -52,20 +52,28 @@ agent or human decides what each one means.
    author (never a personal name), and a date.
 4. **The export is byte-sacred.** Never format, fix, or edit the canonical
    export; refresh it via the claude-design MCP
-   (see the [conversion playbook](../../../../../docs/engineering/claude-design-conversion-playbook.md)).
+   (see the [conversion playbook](../../../../reference/claude-design-conversion-playbook.md)).
+5. **Full reproduction, always.** Every page and every component of the export
+   is reproduced and visually matched to the canonical export; no stubs, no
+   placeholders, no representative subset (owner, 2026-07-01, standing for every
+   Claude Design project).
 
-## Worked instance — the Curriculum Hub demo
+## Worked instance — OCE's first conversion
+
+The fidelity tool below is OCE's instrument and is not ported to
+this repository; the shape is recorded so a port has a reference. In the
+lineage the converted workspace owned a `tool:fidelity` script:
 
 ```bash
 # Full run: serves the export, attaches to (or spawns) the dev server,
 # captures both sides at 1440 CSS px / 2x, diffs, writes the report:
-pnpm --filter @oaknational/oak-curriculum-hub tool:fidelity
+pnpm --filter <converted-workspace> tool:fidelity
 
 # Re-diff and re-render the report from existing evidence (no browsers):
-pnpm --filter @oaknational/oak-curriculum-hub tool:fidelity -- --report-only
+pnpm --filter <converted-workspace> tool:fidelity -- --report-only
 ```
 
-Then open `demos/oak-curriculum-hub/demo-evidence/fidelity-report/index.html`:
+Then open `<converted-workspace>/demo-evidence/fidelity-report/index.html`:
 each pair renders export | live | diff with its ratio, caveats
 (height-mismatch etc.), and its recorded dispositions. Unjudged pairs show a
 copy-ready JSON snippet — judge the pair, paste the entry into
@@ -95,7 +103,7 @@ target — absence is recorded, never silent).
 
 ## Porting to a new conversion
 
-The shared core lives in `@oaknational/fidelity-review`
+The shared core lives in OCE's `fidelity-review` package
 (`packages/libs/fidelity-review` — consolidated at its second consumer,
 2026-08-09; its README's §Modules is the authoritative enumeration).
 Porting means composing it, not copying it: declare the app's own PAIR
@@ -105,6 +113,6 @@ app-local capture arms and export server at matched geometry with the
 app's own default base and `SERVER_HINT`, and compose the package's
 `/orchestrator` in a `tools/fidelity-review.ts` that keeps only paths,
 capture arms, and `main`. The
-[conversion playbook](../../../../../docs/engineering/claude-design-conversion-playbook.md)
+[conversion playbook](../../../../reference/claude-design-conversion-playbook.md)
 §"Fidelity review and the divergence register" carries the method; this
 skill carries the workflow.

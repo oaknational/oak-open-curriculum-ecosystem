@@ -130,12 +130,17 @@ discipline is platform-portable.**
 ### Reference instance (Claude Code)
 
 - Wrapper: [`.claude/hooks/_lib/log-hook-errors.sh`](../../../.claude/hooks/_lib/log-hook-errors.sh)
-  — POSIX-compatible, executable, ~50 lines.
+  — a bash script (it uses `[[`, so it is not POSIX `sh`), executable,
+  ~50 lines.
 - Registration: [`.claude/settings.json`](../../../.claude/settings.json)
   hook commands prefixed with the wrapper invocation
-  (`${CLAUDE_PROJECT_DIR}/.claude/hooks/_lib/log-hook-errors.sh`)
-  followed by the wrapped hook script's path in the same
-  `${CLAUDE_PROJECT_DIR}/...`-rooted form as the next argument.
+  (`"${CLAUDE_PROJECT_DIR}/.claude/hooks/_lib/log-hook-errors.sh"`)
+  followed by the wrapped command, whose paths take the same
+  `${CLAUDE_PROJECT_DIR}/...`-rooted form. Every wrapper entry MUST
+  quote both paths, the wrapper's and the wrapped command's. The hooks
+  README's
+  [Quoted wrapper paths](../../../.agent/hooks/README.md#quoted-wrapper-paths)
+  gives the reasons, the residual caveat and the regression smoke.
 - Log file: `.claude/logs/hook-errors.log` (gitignored).
 
 ## Consequences
@@ -158,9 +163,10 @@ discipline is platform-portable.**
 
 ### Negative
 
-- A small per-hook overhead: one `mkdir -p`, one `mktemp`, one trap
-  installation, one fork-exec of the wrapped script. Dominated by the
-  wrapped hook's own work; not measurable in steady state.
+- A small per-hook overhead: one `mkdir -p`, one `touch`, one
+  `mktemp`, one trap installation, one fork-exec of the wrapped
+  script. Dominated by the wrapped hook's own work; not measurable in
+  steady state.
 - Wrapper-itself-not-found is still silent (the wrapper cannot log its
   own absence). Falls back to the harness's existing
   `hook_non_blocking_error` JSONL entry. See Limitations §1.
@@ -170,9 +176,11 @@ discipline is platform-portable.**
 
 ### Neutral
 
-- Successful hook execution writes nothing to the log; idempotent
-  `mkdir -p` of the log directory is the only side effect on
-  success-path. Steady-state filesystem footprint is bounded.
+- Successful hook execution writes nothing to the log. Its side
+  effects on the success path are the idempotent `mkdir -p` of the log
+  directory, the `touch` of the log file, and the `mktemp` stderr
+  capture, which the exit trap removes. Steady-state filesystem
+  footprint is bounded.
 - The discipline does not change hook semantics: blocking hooks still
   block, non-blocking hooks still degrade gracefully, decision-emitting
   hooks still emit decision JSON. The wrapper is transparent to the
@@ -248,8 +256,8 @@ This ADR is honest about what it does and does not cover:
    does not trigger the log. The contract is "non-zero exit is
    visible", not "every form of misbehaviour is visible". Output-shape
    validation belongs in the hook protocol layer, not the wrapper.
-   Two complementary exit-0 writers exist by design, both for exit-0
-   outcomes this wrapper is structurally blind to, and both writing a
+   Three complementary exit-0 writers exist by design, all for exit-0
+   outcomes this wrapper is structurally blind to, and all writing a
    deliberately simpler line format than this ADR's fixed block schema
    (which governs the wrapper's entries only):
 
@@ -265,11 +273,29 @@ This ADR is honest about what it does and does not cover:
      it exits 0 so its `additionalContext` diagnostic reaches the
      session, which this wrapper's non-zero-exit contract would
      swallow.
+   - The PreCompact observer
+     (`agent-tools/src/claude/pre-compact-observe/`, recorded
+     2026-09-25) appends a payload-free
+     `[<ISO timestamp>] pre-compact-observe fail-open` block, with
+     `step:` and `code:` lines naming the failed step and its error or
+     refusal code, when its own owner-only append of an observation
+     fails. It exits 0 and answers `continue: true`, naming the failure
+     in its `systemMessage`, because exit 2 would block the compaction.
+     The block goes through the same owner-only append, which holds
+     this log at 0o600. A thrown Error after its modules load writes
+     no hook-errors block, so its reason reaches only the transcript,
+     through the fail-open `systemMessage`. Throws are narrowed through
+     `failureAsError` (owner ruling, 2026-07-20). A non-Error narrowed
+     at an inner boundary (the stdin read, the append's file-system
+     edge) reaches the entry as a TypeError and is answered fail-open.
+     One that reaches the entry's catch un-narrowed crashes the hook
+     with exit 1, which the wrapper logs. No path exits 2.
 
-7. **`mkdir -p` of the log directory runs unconditionally on every
-   hook firing.** Idempotent and cheap, but it does mean
-   `.claude/logs/` exists even on a workspace where no hook has ever
-   failed. Cosmetic; the directory is gitignored.
+7. **`mkdir -p` of the log directory and `touch` of the log file run
+   unconditionally on every hook firing.** Idempotent and cheap, but
+   it does mean `.claude/logs/` and an empty
+   `.claude/logs/hook-errors.log` exist even on a workspace where no
+   hook has ever failed. Cosmetic; the directory is gitignored.
 
 ## Future Work
 
@@ -341,7 +367,7 @@ reference back to this ADR rather than re-deriving the rationale.
 ## Notes
 
 This ADR is host-specific in its toolchain choices (Claude Code's
-hook system, `${CLAUDE_PROJECT_DIR}`, POSIX `bash` for the wrapper)
+hook system, `${CLAUDE_PROJECT_DIR}`, `bash` for the wrapper)
 and is therefore an ADR rather than a PDR at this stage. The
 graduation path to a PDR is named in Future Work §1.
 

@@ -70,7 +70,7 @@ function exportKeywordStart(trimmed: string, braceOpen: number): number {
  * indentation): with the `m` flag, `^\s*` spans newlines and backtracks
  * super-linearly on adversarial whitespace runs (typescript:S8786).
  */
-const META_BINDING = /^[ \t]*(?:var|let|const|function)[ \t]+meta\b/m;
+const META_BINDING = /^[ \t]*(?:var|let|const|function|class)[ \t]+meta\b/m;
 
 /**
  * Remove esbuild's trailing export footer so the body is legal inside the harness's

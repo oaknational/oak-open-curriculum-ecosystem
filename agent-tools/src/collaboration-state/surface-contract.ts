@@ -2,12 +2,18 @@ import { err, mapErr, type Result } from '@oaknational/result';
 
 import { parseJsonTextResult } from '../core/json.js';
 import { type CollaborationSchemaId } from './collaboration-json-validation.js';
+import { parseCommitQueueIntentText } from './registry-entry-parser.js';
 import {
   parseClosedClaimsArchive,
   parseCollaborationRegistry,
   parseCommsEvent,
 } from './state-parsers.js';
-import { type ClosedClaimsArchive, type CollaborationRegistry, type CommsEvent } from './types.js';
+import {
+  type ClosedClaimsArchive,
+  type CollaborationCommitQueueEntry,
+  type CollaborationRegistry,
+  type CommsEvent,
+} from './types.js';
 
 /**
  * The ONE collaboration-state-owned surface-contract gate (ADR-088).
@@ -42,6 +48,7 @@ const CONTRACT_SCHEMA_IDS = [
   'active-claims.schema.json',
   'closed-claims.schema.json',
   'comms-event.schema.json',
+  'commit-queue-intent.schema.json',
 ] as const satisfies readonly CollaborationSchemaId[];
 
 export type ContractSchemaId = (typeof CONTRACT_SCHEMA_IDS)[number];
@@ -88,6 +95,7 @@ interface CollaborationSurfaceContracts {
   readonly 'active-claims.schema.json': CollaborationRegistry;
   readonly 'closed-claims.schema.json': ClosedClaimsArchive;
   readonly 'comms-event.schema.json': CommsEvent;
+  readonly 'commit-queue-intent.schema.json': CollaborationCommitQueueEntry;
 }
 
 // The per-key CONCRETE parser table (the Result retype this seam existed
@@ -106,6 +114,8 @@ const CONTRACT_PARSERS: ContractParsers = {
   'active-claims.schema.json': parseCollaborationRegistry,
   'closed-claims.schema.json': parseClosedClaimsArchive,
   'comms-event.schema.json': parseCommsEvent,
+  'commit-queue-intent.schema.json': (text) =>
+    parseCommitQueueIntentText(text, 'commit-queue intent'),
 };
 
 /**

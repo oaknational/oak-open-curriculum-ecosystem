@@ -133,6 +133,18 @@ function createTestConfig(): SearchSdkConfig {
   };
 }
 
+/** The observability suite's config: zero-hit persistence off, so no sink is touched. */
+const OBSERVABILITY_TEST_CONFIG: SearchSdkConfig = {
+  indexTarget: 'primary',
+  indexVersion: 'v-test',
+  zeroHit: { persistenceEnabled: false },
+};
+
+/** Builds an SDK over the fake Elasticsearch client with the given config. */
+function createTestSdk(config: SearchSdkConfig = createTestConfig()): SearchSdk {
+  return createSearchSdk({ deps: createTestDeps(), config });
+}
+
 function getLastSearchParams(client: Client): estypes.SearchRequest {
   const calls = vi.mocked(client.search).mock.calls;
   if (calls.length === 0) {
@@ -159,11 +171,11 @@ function extractSourceExcludes(client: Client): readonly string[] {
   }
   const excludes: unknown = source.excludes;
   if (!Array.isArray(excludes)) {
-    throw new Error('Expected _source.excludes to be an array');
+    throw new TypeError('Expected _source.excludes to be an array');
   }
   return excludes.map((field) => {
     if (typeof field !== 'string') {
-      throw new Error(`Expected _source.excludes entries to be strings, got ${typeof field}`);
+      throw new TypeError(`Expected _source.excludes entries to be strings, got ${typeof field}`);
     }
     return field;
   });
@@ -217,16 +229,9 @@ describe('createSearchSdk', () => {
 // ---------------------------------------------------------------------------
 
 describe('RetrievalService', () => {
-  function createSdk(): SearchSdk {
-    return createSearchSdk({
-      deps: createTestDeps(),
-      config: createTestConfig(),
-    });
-  }
-
   describe('searchLessons', () => {
     it('returns ok with a LessonsSearchResult containing scope, results, and metadata', async () => {
-      const { retrieval } = createSdk();
+      const { retrieval } = createTestSdk();
 
       const result = await retrieval.searchLessons({
         query: 'expanding brackets',
@@ -245,7 +250,7 @@ describe('RetrievalService', () => {
     });
 
     it('respects size and from parameters', async () => {
-      const { retrieval } = createSdk();
+      const { retrieval } = createTestSdk();
 
       const result = await retrieval.searchLessons({
         query: 'fractions',
@@ -260,7 +265,7 @@ describe('RetrievalService', () => {
     });
 
     it('supports KS4-specific filters', async () => {
-      const { retrieval } = createSdk();
+      const { retrieval } = createTestSdk();
 
       const result = await retrieval.searchLessons({
         query: 'organic chemistry',
@@ -291,7 +296,7 @@ describe('RetrievalService', () => {
 
   describe('searchUnits', () => {
     it('returns ok with a UnitsSearchResult containing scope, results, and metadata', async () => {
-      const { retrieval } = createSdk();
+      const { retrieval } = createTestSdk();
 
       const result = await retrieval.searchUnits({
         query: 'fractions',
@@ -310,7 +315,7 @@ describe('RetrievalService', () => {
 
   describe('searchSequences', () => {
     it('returns ok with a SequencesSearchResult containing scope, results, and metadata', async () => {
-      const { retrieval } = createSdk();
+      const { retrieval } = createTestSdk();
 
       const result = await retrieval.searchSequences({
         query: 'secondary maths',
@@ -326,7 +331,7 @@ describe('RetrievalService', () => {
     });
 
     it('supports includeFacets option', async () => {
-      const { retrieval } = createSdk();
+      const { retrieval } = createTestSdk();
 
       const result = await retrieval.searchSequences({
         query: 'science',
@@ -342,7 +347,7 @@ describe('RetrievalService', () => {
 
   describe('searchThreads', () => {
     it('returns ok with a ThreadsSearchResult containing scope, results, and metadata', async () => {
-      const { retrieval } = createSdk();
+      const { retrieval } = createTestSdk();
 
       const result = await retrieval.searchThreads({
         query: 'algebra equations progression',
@@ -360,7 +365,7 @@ describe('RetrievalService', () => {
     });
 
     it('works without a subject filter', async () => {
-      const { retrieval } = createSdk();
+      const { retrieval } = createTestSdk();
 
       const result = await retrieval.searchThreads({
         query: 'geometry shapes',
@@ -375,7 +380,7 @@ describe('RetrievalService', () => {
 
   describe('suggest', () => {
     it('returns ok with a SuggestionResponse containing suggestions and cache metadata', async () => {
-      const { retrieval } = createSdk();
+      const { retrieval } = createTestSdk();
 
       const result = await retrieval.suggest({
         prefix: 'expand',
@@ -395,7 +400,7 @@ describe('RetrievalService', () => {
 
   describe('fetchSequenceFacets', () => {
     it('returns ok with SearchFacets', async () => {
-      const { retrieval } = createSdk();
+      const { retrieval } = createTestSdk();
 
       const result = await retrieval.fetchSequenceFacets();
 
@@ -403,7 +408,7 @@ describe('RetrievalService', () => {
     });
 
     it('accepts optional subject and keyStage filters', async () => {
-      const { retrieval } = createSdk();
+      const { retrieval } = createTestSdk();
 
       const result = await retrieval.fetchSequenceFacets({
         subject: 'maths',
@@ -420,16 +425,9 @@ describe('RetrievalService', () => {
 // ---------------------------------------------------------------------------
 
 describe('AdminService', () => {
-  function createSdk(): SearchSdk {
-    return createSearchSdk({
-      deps: createTestDeps(),
-      config: createTestConfig(),
-    });
-  }
-
   describe('setup', () => {
     it('returns ok with a SetupResult containing synonym and index info', async () => {
-      const { admin } = createSdk();
+      const { admin } = createTestSdk();
 
       const result = await admin.setup();
 
@@ -444,7 +442,7 @@ describe('AdminService', () => {
 
   describe('reset', () => {
     it('returns ok with a SetupResult', async () => {
-      const { admin } = createSdk();
+      const { admin } = createTestSdk();
 
       const result = await admin.reset();
 
@@ -457,7 +455,7 @@ describe('AdminService', () => {
 
   describe('verifyConnection', () => {
     it('returns ok with cluster name and version when connected', async () => {
-      const { admin } = createSdk();
+      const { admin } = createTestSdk();
 
       const result = await admin.verifyConnection();
 
@@ -471,7 +469,7 @@ describe('AdminService', () => {
 
   describe('listIndexes', () => {
     it('returns ok with an array of IndexInfo', async () => {
-      const { admin } = createSdk();
+      const { admin } = createTestSdk();
 
       const result = await admin.listIndexes();
 
@@ -484,7 +482,7 @@ describe('AdminService', () => {
 
   describe('updateSynonyms', () => {
     it('returns ok with a SynonymsResult containing count', async () => {
-      const { admin } = createSdk();
+      const { admin } = createTestSdk();
 
       const result = await admin.updateSynonyms();
 
@@ -497,7 +495,7 @@ describe('AdminService', () => {
 
   describe('getIndexMeta', () => {
     it('returns ok with IndexMetaDoc or null', async () => {
-      const { admin } = createSdk();
+      const { admin } = createTestSdk();
 
       const result = await admin.getIndexMeta();
 
@@ -507,7 +505,7 @@ describe('AdminService', () => {
 
   describe('setIndexMeta', () => {
     it('returns ok indicating success', async () => {
-      const { admin } = createSdk();
+      const { admin } = createTestSdk();
 
       const result = await admin.setIndexMeta({
         version: 'v-test',
@@ -524,7 +522,7 @@ describe('AdminService', () => {
 
   describe('verifyDocCounts', () => {
     it('returns a result when called through the admin service', async () => {
-      const { admin } = createSdk();
+      const { admin } = createTestSdk();
 
       const result = await admin.verifyDocCounts({
         lessons: 1,
@@ -547,7 +545,7 @@ describe('AdminService', () => {
 
   describe('countDocs', () => {
     it('returns per-index parent document counts', async () => {
-      const { admin } = createSdk();
+      const { admin } = createTestSdk();
 
       const result = await admin.countDocs();
 
@@ -587,20 +585,9 @@ describe('AdminService', () => {
 // ---------------------------------------------------------------------------
 
 describe('ObservabilityService', () => {
-  function createSdk(): SearchSdk {
-    return createSearchSdk({
-      deps: createTestDeps(),
-      config: {
-        indexTarget: 'primary',
-        indexVersion: 'v-test',
-        zeroHit: { persistenceEnabled: false },
-      },
-    });
-  }
-
   describe('recordZeroHit', () => {
     it('returns ok when recording a zero-hit event', async () => {
-      const { observability } = createSdk();
+      const { observability } = createTestSdk(OBSERVABILITY_TEST_CONFIG);
 
       const result = await observability.recordZeroHit({
         scope: 'lessons',
@@ -615,7 +602,7 @@ describe('ObservabilityService', () => {
 
   describe('getRecentZeroHits', () => {
     it('returns an array of zero-hit events', () => {
-      const { observability } = createSdk();
+      const { observability } = createTestSdk(OBSERVABILITY_TEST_CONFIG);
 
       const recent = observability.getRecentZeroHits(10);
 
@@ -625,7 +612,7 @@ describe('ObservabilityService', () => {
 
   describe('getZeroHitSummary', () => {
     it('returns a summary with total and per-scope breakdown', () => {
-      const { observability } = createSdk();
+      const { observability } = createTestSdk(OBSERVABILITY_TEST_CONFIG);
 
       const summary = observability.getZeroHitSummary();
 
@@ -639,7 +626,7 @@ describe('ObservabilityService', () => {
 
   describe('persistZeroHitEvent', () => {
     it('returns ok when persistence is disabled', async () => {
-      const { observability } = createSdk();
+      const { observability } = createTestSdk(OBSERVABILITY_TEST_CONFIG);
 
       const result = await observability.persistZeroHitEvent({
         timestamp: Date.now(),
@@ -655,7 +642,7 @@ describe('ObservabilityService', () => {
 
   describe('fetchTelemetry', () => {
     it('returns ok with telemetry containing summary and recent events', async () => {
-      const { observability } = createSdk();
+      const { observability } = createTestSdk(OBSERVABILITY_TEST_CONFIG);
 
       const result = await observability.fetchTelemetry({
         limit: 50,

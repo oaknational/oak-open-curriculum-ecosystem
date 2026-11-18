@@ -46,6 +46,12 @@ interface CodexIdentityAuditInput {
   readonly closedText: string;
   readonly threadRecordText: string;
   readonly commsEvents: readonly CommsEvent[];
+  /**
+   * Live entries from the machine-local per-intent commit-queue store —
+   * injected like the comms events, since the queue left the claims file
+   * at registry schema 1.4.0.
+   */
+  readonly commitQueue: readonly CollaborationCommitQueueEntry[];
 }
 
 /**
@@ -60,6 +66,7 @@ export function auditCodexIdentityRecords(
 ): CodexIdentityAuditReport {
   const findings = [
     ...auditActiveText(input.activeText, input.nowIso),
+    ...input.commitQueue.flatMap((entry) => auditCommitQueueEntry(entry, input.nowIso)),
     ...auditClosedText(input.closedText),
     ...auditThreadRecord(input.threadRecordText),
     ...auditCommsEvents(input.commsEvents),
@@ -77,10 +84,7 @@ function auditActiveText(text: string, nowIso: string): readonly CodexIdentityAu
   // contract is anchored-pinned (an identity-losing wrap reddens it).
   const registry = unwrapOrThrow(parseCollaborationRegistry(text));
 
-  return [
-    ...registry.claims.flatMap((claim) => auditActiveClaim(claim, nowIso)),
-    ...registry.commit_queue.flatMap((entry) => auditCommitQueueEntry(entry, nowIso)),
-  ];
+  return registry.claims.flatMap((claim) => auditActiveClaim(claim, nowIso));
 }
 
 function auditActiveClaim(

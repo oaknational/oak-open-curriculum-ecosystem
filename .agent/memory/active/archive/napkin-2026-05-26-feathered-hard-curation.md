@@ -219,7 +219,7 @@ fitness_content_role: drainable-buffer
 
 - **`git stash` reach during closeout — worked instance**. I tried
   `git stash` to test a baseline ("what did knip flag before?").
-  Owner immediately rejected: "absolutely bloody not." Already
+  Owner immediately rejected: "absolutely blooming not." Already
   covered by `never-use-git-to-remove-work` rule but worth
   recording: the impulse to stash to test a counter-factual is the
   failure mode the rule names. Better cures for the same question:

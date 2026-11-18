@@ -51,7 +51,8 @@ export interface CreateMcpAuthClerkDeps {
  *
  * @param logger - Logger for authentication events
  * @param allowedHosts - Allowed hostnames for RFC 8707 resource validation
- * @param deps - Injectable dependencies (defaults to real Clerk SDK functions)
+ * @param deps - Injectable dependencies; each one omitted defaults to the real
+ * Clerk SDK function
  * @returns Express middleware that enforces Clerk OAuth authentication
  *
  * @example
@@ -62,17 +63,17 @@ export interface CreateMcpAuthClerkDeps {
 export function createMcpAuthClerk(
   logger: Logger,
   allowedHosts: readonly string[],
-  deps: CreateMcpAuthClerkDeps = {
-    getAuth: defaultGetAuth,
-    verifyClerkToken: defaultVerifyClerkToken,
-  },
+  {
+    getAuth = defaultGetAuth,
+    verifyClerkToken = defaultVerifyClerkToken,
+  }: Partial<CreateMcpAuthClerkDeps> = {},
   canonicalOrigin?: string,
 ): RequestHandler {
   // Create authentication middleware with Clerk token verification
   return mcpAuth(
     (token, request: Request) => {
       // Get Clerk auth context (must be called with oauth_token type)
-      const authData = deps.getAuth(request, { acceptsToken: 'oauth_token' });
+      const authData = getAuth(request, { acceptsToken: 'oauth_token' });
 
       // If not authenticated, return undefined (middleware will return 401)
       if (!authData.isAuthenticated) {
@@ -80,7 +81,7 @@ export function createMcpAuthClerk(
       }
 
       // Verify and format the token for MCP SDK
-      const rawAuthInfo = deps.verifyClerkToken(authData, token);
+      const rawAuthInfo = verifyClerkToken(authData, token);
       if (!rawAuthInfo) {
         return Promise.resolve(undefined);
       }

@@ -7,10 +7,10 @@ pdr_kind: governance
 **Status**: Accepted
 **Date**: 2026-06-15
 **Related**:
-ADR-131 §The Self-Referential Property
+the host's self-reinforcing improvement loop decision, §The Self-Referential Property
 (the Practice governs its own change-process; rules about rule-creation are
 subject to the same loop);
-ADR-144 §Loop Health
+the host's three-zone fitness model decision, §Loop Health
 (a fitness signal prompts a short reflection, not a mechanical response; "was the
 limit set incorrectly?" is the empirical-calibration question);
 [PDR-038](PDR-038-stated-principles-require-structural-enforcement.md)
@@ -75,8 +75,8 @@ fixed ceiling.**
 **Ratified** (deductive, and already operative at the repo tier): items 1 and 2 —
 the count prompts the reflection (it does not decide), and the absorbable rate
 scales with validation capacity. These follow from the definitions plus the
-already-ratified ADR-144 signal-prompts-reflection shape, and the repo-tier reframe
-is already committed in the `consolidate-docs` SKILL.
+already-ratified signal-prompts-reflection shape of the fitness-model decision,
+and the repo-tier reframe is already committed in the `consolidate-docs` SKILL.
 
 **Held as a falsifiable hypothesis, not a ratified finding**: item 3's specific
 causal claim that *observed stabilisation-vs-reversion tracks the change cadence*.
@@ -88,16 +88,16 @@ as-yet-untested choice of signal.
 
 ## Reconciliation
 
-- **ADR-131 §Self-Referential.** The Practice's own governance applies to itself;
+- **The improvement-loop decision's §Self-Referential.** The Practice's own governance applies to itself;
   this governor is that self-applicability turned on the Practice's *change rate*.
   The reflection-trigger is the loop governing how fast the loop may rewrite itself.
-- **ADR-144 §Loop Health.** A fitness signal reaching a zone prompts a short
-  post-mortem reflection (why didn't earlier zones fire? *was the limit set
-  incorrectly?* is the file a symptom of a missing graduation?), not a mechanical
-  response. This PDR is the same shape applied to the change-RATE signal: the count
-  is a zone-crossing that prompts a reflection, and "was the limit set incorrectly?"
-  is precisely the empirical-calibration question — answered by observed
-  stabilisation, not by re-guessing.
+- **The host's three-zone fitness model decision, §Loop Health.** A fitness signal
+  reaching a zone prompts a short post-mortem reflection (why didn't earlier zones
+  fire? *was the limit set incorrectly?* is the file a symptom of a missing
+  graduation?), not a mechanical response. This PDR is the same shape applied to the
+  change-RATE signal: the count is a zone-crossing that prompts a reflection, and
+  "was the limit set incorrectly?" is precisely the empirical-calibration question —
+  answered by observed stabilisation, not by re-guessing.
 
 ## Consequences
 

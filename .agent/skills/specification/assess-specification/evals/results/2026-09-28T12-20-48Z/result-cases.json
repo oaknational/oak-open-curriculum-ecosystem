@@ -1,0 +1,836 @@
+{
+  "schemaVersion": 1,
+  "claudeVersion": "2.1.283",
+  "startedAt": "2026-09-28T12:20:49.170Z",
+  "durationSeconds": 307,
+  "costUsd": 1.2240301999999998,
+  "partial": false,
+  "suite": {
+    "root": "<plugin>",
+    "ablation": "with-without",
+    "judgeModel": "sonnet",
+    "caseFilter": "case-*",
+    "threshold": 0,
+    "concurrency": 1,
+    "plugins": [
+      {
+        "name": "oak-assess-specification-evals",
+        "version": "0.0.0",
+        "path": "<plugin>"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "name": "case-01",
+      "dir": "evals/case-01",
+      "source": "mixed",
+      "promptMarkdown": "Assess this specification (revision 1) of parentIndex(i) for a binary heap in an array with the root at 0, for reliance by the heap's sift-up operation (implementation): 'parentIndex(i) returns floor((i-1)/2) for i >= 1; callers must not call it with i = 0 and its result there is unspecified; pure, no allocation; evidence: the property test parent_of_child_is_self, which checks parentIndex(2p+1) == p and parentIndex(2p+2) == p for every parent p in 0..10000, and the heap's sift-up tests, which check i > 0 before every call and pass.' Is it ready?",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: Ready for the named use, without ceremony: the obligation, its condition (i >= 1), the obligation on callers not to pass 0 (shown kept by the sift-up tests), and the evidence (a property test over a declared finite domain including the root's children, plus the consumer's own tests) are identified and sufficient for implementation reliance; no condition and no repair loop for a one-line function. Notes that would not change the consumer's use (the finite domain is stated; integer division agrees with floor for i >= 1) are acceptable and do not make the disposition conditional.\n\nAssertions:\n1. The disposition is ready for the named use and the assessment does not manufacture findings or conditions to seem thorough; a one-line settled function with passing consumer tests is passed without a repair loop\n2. The finite property-test domain is recognised as a stated limit, not treated as proof over all integers, and not treated as a blocker for this use\n3. The i = 0 obligation is read as a caller obligation that the sift-up tests are stated to keep, not as a defect",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: Ready for the named use, without ceremony: the obligation, its condition (i >= 1), the obligation on callers not to pass 0 (shown kept by the sift-up tests), and the evidence (a property test over a declared finite domain including the root's children, plus the consumer's own tests) are identified and sufficient for implementation reliance; no condition and no repair loop for a one-line function. Notes that would not change the consumer's use (the finite domain is stated; integer division agrees with floor for i >= 1) are acceptable and do not make the disposition conditional.\n\nAssertions:\n1. The disposition is ready for the named use and the assessment does not manufacture findings or conditions to seem thorough; a one-line settled function with passing consumer tests is passed without a repair loop\n2. The finite property-test domain is recognised as a stated limit, not treated as proof over all integers, and not treated as a blocker for this use\n3. The i = 0 obligation is read as a caller obligation that the sift-up tests are stated to keep, not as a defect",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-assess-specification|oak-specify)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-assess-specification(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 3,
+            "costUsd": 0.1122994,
+            "judgeCostUsd": 0.008856000000000001,
+            "durationSeconds": 26,
+            "startedAt": "2026-09-28T12:20:49.232Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "**Disposition: ready.** Revision 1 is fit for the heap's sift-up to rely on in its implementation. Nothing blocks it, and I'm not setting any conditions.\n\n**Scope of this judgement.** I assessed only revision 1, and only for use by sift-up. I worked from the text you supplied. I didn't run the tests or look at the code, so the passing results are as you reported them. This is a single-reviewer reading, not an independent review. Whoever owns the heap decides whether to accept it; I only supply the findings.\n\n**What sift-up needs, and whether it has it:**\n\n| What sift-up needs | Status |\n|---|---|\n| The correct parent for every index it passes (i ≥ 1) | **Met.** The property test covers every child index from 1 to 20002 without gaps. Its expected values come from the child formula (2p+1, 2p+2), not from the function under test, so it isn't checking the code against itself. |\n| i = 0 is safely excluded | **Met.** The spec forbids calling it with 0 and leaves the result there unspecified, and the sift-up tests confirm a check that i > 0 before every call. This matters: in languages that truncate division, (0−1)/2 gives 0, not −1. That would make the root its own parent and could send sift-up into an endless loop. The rule against calling with 0, and the caller's check, cover that case. |\n| No overflow or sign trouble when i ≥ 1 | **Met.** i−1 is never negative, so rounding down and truncating give the same answer and nothing overflows. |\n| Pure, no allocation | **Stated but not tested.** This only matters if sift-up promises something itself about allocation or side effects. It doesn't need this to be correct. |\n\n**Minor points (none of them block this use):**\n- The tests stop at i = 20002. The formula doesn't depend on how big i is, so going beyond that isn't needed for correctness.\n- The claim of no allocation has no evidence behind it. That's fine for this use, but it would need some if sift-up ever promises not to allocate.\n- The spec doesn't name who approves it. The heap's owner is the obvious choice.\n\n**Next step:** the heap's owner accepts it; that's all.\n\n**Reassess if:** the revision changes, another caller starts depending on it (especially one that might pass 0), the heap stops keeping its root at index 0, sift-up takes on a promise about allocation or timing, or the tests stop passing."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 2,
+            "costUsd": 0.09322480000000001,
+            "judgeCostUsd": 0.009534000000000003,
+            "durationSeconds": 25,
+            "startedAt": "2026-09-28T12:21:14.790Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "**Yes, it's ready for sift-up to rely on.** One caveat: there's no `parentIndex` or `parent_of_child_is_self` in this working directory, so I've assessed the spec and the evidence as you described them, not the code.\n\n**Why it's enough for sift-up**\n\nSift-up needs three things from `parentIndex`, and the spec gives all of them:\n\n1. **The right parent.** For every i ≥ 1, the spec pins the result to exactly floor((i−1)/2). That is the node whose children are i. So \"swap with parent if the heap order is violated\" does the right thing.\n2. **Guaranteed progress.** For i ≥ 1, floor((i−1)/2) < i. Each step moves strictly toward the root, so the loop ends. This follows from the formula and doesn't need to be stated separately.\n3. **A precondition the caller can meet.** The i = 0 exclusion is exactly where sift-up stops anyway (`while i > 0`). \"Unspecified\" is fine because the sift-up tests confirm it never calls with 0.\n\nBeing pure and not allocating means it's safe to call in a hot loop with no side effects to reason about.\n\n**Why the evidence is enough**\n\n- **The property test checks the whole formula over its range.** Every i ≥ 1 can be written as exactly one of 2p+1 or 2p+2. So p in 0..10000 checks the formula at every index from 1 to 20002, not just a sample. It also checks the inverse (child to parent), which is the relationship sift-up depends on.\n- **The caller's tests confirm the precondition.** They show sift-up checks i > 0 before every call.\n\n**Minor points (none block reliance)**\n\n- **Indices above 20002 aren't tested.** For a one-line implementation like `(i - 1) / 2` or `(i - 1) >> 1`, that's fine, because i − 1 can't overflow when i ≥ 1. If the implementation is anything more complicated, extend the test to a few indices near the top of the index type's range.\n- **Truncating division.** If the implementation uses truncating integer division, it equals floor only because i − 1 ≥ 0. That's another reason the i ≥ 1 precondition matters. It's worth a one-line comment in the code.\n- **\"Unspecified\" vs. \"may trap\".** If i = 0 could abort the program (for example, unsigned wraparound with checked arithmetic), \"unspecified result\" slightly understates it. This doesn't matter to sift-up since it never passes 0, but other callers might care. Consider \"must not be called with i = 0\" with no promise about what happens.\n\n**Verdict:** Ready. The formula is exact, the precondition matches how sift-up already guards its loop, and both sides are backed by tests. The points above are optional hardening."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 1,
+        "passRateWithout": 1,
+        "delta": 0
+      }
+    },
+    {
+      "name": "case-02",
+      "dir": "evals/case-02",
+      "source": "mixed",
+      "promptMarkdown": "Assess this specification (revision 2) of a rescheduling feature for reliance as an outcome claim: 'The feature reduces missed appointments and gives equitable access. Evidence: all automated tests pass; ten staff members rated the demo 4.6 out of 5; the feature has been live for a week.' Is the outcome claim justified?",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: Not ready for the outcome claim. The findings: passing tests and staff opinion are not evidence of fewer missed appointments or of equitable access; an outcome that is still a hypothesis is written as an achieved effect; the people who might be excluded and the comparison that could support a causal claim are missing. The verdict names the evidence the claim would need and who may accept the remaining risk, without inventing an effect size or a sample size.\n\nAssertions:\n1. Delivery acceptance and staff opinion are not promoted to demonstrated impact\n2. The equity claim's excluded people and the absent outcome comparison are named\n3. The evidence that would be appropriate is named without inventing effect sizes, sample sizes or results\n4. The disposition is scoped to the outcome claim and does not deny the feature's local conformance",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: Not ready for the outcome claim. The findings: passing tests and staff opinion are not evidence of fewer missed appointments or of equitable access; an outcome that is still a hypothesis is written as an achieved effect; the people who might be excluded and the comparison that could support a causal claim are missing. The verdict names the evidence the claim would need and who may accept the remaining risk, without inventing an effect size or a sample size.\n\nAssertions:\n1. Delivery acceptance and staff opinion are not promoted to demonstrated impact\n2. The equity claim's excluded people and the absent outcome comparison are named\n3. The evidence that would be appropriate is named without inventing effect sizes, sample sizes or results\n4. The disposition is scoped to the outcome claim and does not deny the feature's local conformance",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-assess-specification|oak-specify)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-assess-specification(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 3,
+            "costUsd": 0.13507059999999999,
+            "judgeCostUsd": 0.013698000000000002,
+            "durationSeconds": 37,
+            "startedAt": "2026-09-28T12:21:39.703Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "## No, the outcome claim isn't justified\n\n**Disposition: not ready** to be relied on as an outcome claim. Revision 2 can still be discussed, and it may be fine to build on. But none of the three pieces of evidence tests whether the feature reduces missed appointments or makes access more equitable.\n\n### 1. What was assessed\n\n- **Record:** revision 2 of the rescheduling feature specification, as you quoted it. You didn't give me its location or full text, so I've only assessed the claim and evidence you quoted.\n- **Reliance:** the stated claim that \"the feature reduces missed appointments and gives equitable access.\" The claim doesn't name a population, time period or setting, which is itself a finding.\n- **Criteria I applied:** these are two claims about real-world impact. One says the feature causes a change. The other says the benefit is fairly spread across groups. Each would need:\n  - a defined measure;\n  - a baseline and a comparison group;\n  - enough time to see results;\n  - results broken down by group;\n  - evidence tied to revision 2.\n- **Independence:** I'm a reviewer separate from the authors, but I haven't checked any data myself. I'm not claiming more independence than that.\n\n### 2. The evidence, piece by piece\n\n| Evidence | What it can support | Status for this claim |\n|---|---|---|\n| All automated tests pass | The code does what its tests check | **Doesn't apply.** Tests check how the code behaves, not what happens to patients. |\n| 10 staff rated the demo 4.6/5 | Staff liked a demo | **Doesn't apply.** Staff aren't the patients who miss appointments, a demo isn't real use, and 10 people is a small sample. It also doesn't say what the questions were or who ran the rating. |\n| Live for one week | The feature is running | **Not evidence of an outcome.** No numbers were reported. And a week is too short: many rescheduled appointments won't have happened yet, so you can't count misses. |\n\n### 3. Findings\n\n**Claim labelled wrongly**\n- \"Reduces missed appointments\" is a hypothesis about cause and effect, but it's written as a proven result.\n- \"Equitable access\" is a value choice that hasn't been defined. It doesn't say equitable for whom, compared with what, or measured how.\n\n**Misleading reassurance**\n- Presenting passing tests and staff satisfaction as support for patient outcomes suggests evidence that doesn't exist. A green check isn't the same as adequate evidence.\n\n**Missing evidence**\n- No baseline rate of missed appointments.\n- No comparison group, such as a phased rollout, matched sites or a controlled before-and-after comparison.\n- No stated follow-up period that covers how far ahead appointments are usually booked.\n- No accounting for seasonal patterns.\n- None of the evidence records say which revision they tested, who produced them, when, how uncertain they are, or what they left out.\n\n**Important gaps**\n- **People who may be left out.** An equity claim needs results broken down by group. That means patients with limited digital access or skills, those who don't speak the main language, disabled patients and assistive-technology users, older patients, and those who can only use the phone. The spec doesn't mention a non-digital way to reschedule.\n- **Ways it could make things worse.** Self-service rescheduling can favour the most digitally confident patients, who grab freed-up slots first. That could widen the gaps the claim says it narrows. It can also increase late cancellations and slot churn. None of this is examined.\n\n**Open questions**\n- How \"missed appointment\" is defined: no-show only, or late cancellation too?\n- Which services and sites the claim covers.\n\n**Authority not established**\n- Nobody is named as having the authority to make this claim or accept its risks.\n\n### 4. Conditions, next step and authority\n\nBefore the outcome claim could be relied on:\n\n1. **Rewrite it as a hypothesis** with defined measures and a pre-stated expected effect. This goes back to the spec authors to revise.\n2. **Measure outcomes against a baseline with a comparison group**, over a period that covers the booking horizon.\n3. **Break the results down** by the groups above, with an equity threshold set in advance.\n4. **Test usability with real patients**, including people using assistive technology and the non-digital route.\n5. **Tie every evidence record to revision 2**, stating who produced it, when, what uncertainty it carries and what it excluded.\n\n- **What you can honestly say now:** \"Revision 2 is live, passes its automated tests, and staff rated a demo favourably. Whether it reduces missed appointments or improves equitable access has not yet been assessed.\"\n- **Next step:** send the claim back to the spec authors to be reworded as above. Then design the measurement, including when to stop and what counts as success.\n- **Who decides:** the owner of the claim, such as the service or clinical owner, together with whoever is responsible for equality impact. The material doesn't name them, and I don't hold that authority.\n- **When to reassess:** when there's a new revision, when outcome data for a proper follow-up period is available, or when the claim's scope or owner changes."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.07048560000000001,
+            "judgeCostUsd": 0.009744000000000003,
+            "durationSeconds": 18,
+            "startedAt": "2026-09-28T12:22:16.867Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "**No. The evidence doesn't support the outcome claim.** Each piece of evidence answers a different question from the one the claim makes.\n\n## The claim has two parts\n1. **Reduces missed appointments.** This is a causal claim about a real-world outcome. It needs a baseline, a comparison, and enough time and volume to see a difference.\n2. **Gives equitable access.** This is a claim about how the benefit is spread across patient groups (for example by age, language, disability, digital access or channel). It needs results broken down by group.\n\n## Checking each piece of evidence\n\n| Evidence | What it actually shows | Why it doesn't support the claim |\n|---|---|---|\n| All automated tests pass | The code does what the tests check. | This is about the software being correct, not about outcomes. Tests say nothing about patient behaviour or who benefits. They also only cover the cases someone thought to write. |\n| 10 staff rated the demo 4.6/5 | A small, non-random group of internal staff liked a demo. | Staff aren't the people who miss appointments. A demo isn't real use. Ten people is too few, and a rating measures how people feel about it, not missed appointments. It also can't speak to equity because patients weren't involved. |\n| Live for one week | The feature has been deployed. | Deployment isn't impact. No baseline or comparison is given. A week is too short given normal week-to-week swings, seasonal effects and early novelty. No results are reported at all, so being live is just a fact about exposure. |\n\n## What's missing\n- **An outcome measure:** a clear definition of the missed-appointment rate, measured before and after, or against a comparison group or clinics without the feature.\n- **Enough time and volume** to tell a real effect from noise, ideally with a pre-specified size of effect that would count as meaningful.\n- **Control for confounders:** reminder changes, staffing, season, patient mix.\n- **Breakdowns by group** for equity. Who uses self-rescheduling, and are some groups (no smartphone, limited English, screen-reader users, older patients) left out or made worse off? A digital-only feature can *widen* gaps while lowering missed appointments on average.\n- **Accessibility evidence:** for example a WCAG conformance check and testing with affected users, not staff.\n- **Harms to watch for:** more last-minute cancellations, wasted appointment slots, rescheduling loops.\n\n## What you could honestly claim now\n> \"The feature is implemented, passes its automated test suite, was positively received by a small group of staff in a demo, and has been deployed for one week. Its effect on missed appointments and on equity of access has not yet been evaluated.\"\n\n## To make the claim reliable\nSet up an evaluation plan with a baseline missed-appointment rate, a comparison design (staged rollout or matched clinics), a minimum period decided in advance (usually several months), results broken down by group, and patient-facing accessibility testing. Until then, write the outcome as a hypothesis rather than a result.\n\nOne caveat: I'm going only on the text you quoted. If revision 2 has other data, such as an evaluation section, those would need checking separately."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 1,
+        "passRateWithout": 1,
+        "delta": 0
+      }
+    },
+    {
+      "name": "case-03",
+      "dir": "evals/case-03",
+      "source": "mixed",
+      "promptMarkdown": "Assess this specification (revision 4) of a subject-mapping contract between a curriculum API and a teacher-facing tool for reliance in integration. The evidence attached: a passing fixture suite run against revision 3, dated before the combined-science mapping rule changed in revision 4; the API's schema tests; a note from the author that 'the mapping is now correct'. Is revision 4 ready for integration?",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: Not ready, or ready only with explicit conditions. The findings: the fixture suite is evidence about revision 3, not 4; the author's note is not evidence; the schema tests establish shape, not the mapping's fidelity. The condition: a fresh run of the discriminating fixtures, including combined science, against revision 4. The trigger to reassess: any further change to the mapping.\n\nAssertions:\n1. Evidence for revision 3 is not accepted as evidence about revision 4\n2. The author's assertion that the mapping is correct is not treated as evidence\n3. Schema-validity evidence is not accepted as evidence of preserved meaning\n4. The condition names the evidence that would discharge it and the trigger that reopens the assessment",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: Not ready, or ready only with explicit conditions. The findings: the fixture suite is evidence about revision 3, not 4; the author's note is not evidence; the schema tests establish shape, not the mapping's fidelity. The condition: a fresh run of the discriminating fixtures, including combined science, against revision 4. The trigger to reassess: any further change to the mapping.\n\nAssertions:\n1. Evidence for revision 3 is not accepted as evidence about revision 4\n2. The author's assertion that the mapping is correct is not treated as evidence\n3. Schema-validity evidence is not accepted as evidence of preserved meaning\n4. The condition names the evidence that would discharge it and the trigger that reopens the assessment",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-assess-specification|oak-specify)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-assess-specification(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.115305,
+            "judgeCostUsd": 0.011538000000000007,
+            "durationSeconds": 24,
+            "startedAt": "2026-09-28T12:22:34.753Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "**No, revision 4 isn't ready for integration.** None of the three pieces of evidence tests the combined-science mapping rule as it stands in revision 4, and that rule is the one change between revisions 3 and 4.\n\nI also didn't have the text of revision 4 itself; the working directory is empty. So I haven't read its obligations, examples or failure behaviour. The answer rests on the evidence alone, and the evidence is enough to say no.\n\n## What I assessed\n\n- **Specification:** subject-mapping contract, revision 4. Its identity and where it's kept weren't given.\n- **Intended use:** integration between the curriculum API and the teacher-facing tool.\n- **What integration needs:**\n  1. Every rule the teacher tool depends on, including the combined-science rule, has current evidence of its meaning (not just its data format), tied to revision 4.\n  2. Adverse cases are covered: combined vs separate sciences, unmapped subjects, and any overlap.\n  3. Someone who owns the integration decision has signed off.\n- **Independence:** none claimed. This is a single reviewer working from the described evidence.\n\n## The evidence\n\n| Evidence | What it can show | Status for revision 4 |\n|---|---|---|\n| Fixture suite (passing) | That the mapping behaves as expected | **Stale.** It ran against revision 3, before the combined-science rule changed. A pass on revision 3 says nothing about revision 4. |\n| API schema tests | Data shape: fields, types, required fields | **Wrong kind of check.** A mapping that is well-formed but wrong still passes. |\n| Author's note: \"the mapping is now correct\" | Nothing checkable | **Unsupported claim.** It doesn't name a test method or conditions, has no result or reviewer, and doesn't say which revision it means. |\n\n## Findings\n\n1. **Stale evidence** (blocks integration). The only evidence about mapping behaviour comes from before the rule change. The changed rule has no current evidence.\n2. **False assurance** (blocks integration). The note says the mapping is correct, but nothing backs it. The passing fixtures and schema tests are easy to misread as confirming it; they don't.\n3. **Wrong kind of check** (blocks integration). The schema tests only check data format. Whether combined science maps correctly is a question of meaning, and they can't answer it.\n4. **Unresolved questions** (blocks integration):\n   - What exactly the combined-science rule now says, including its edge cases (e.g. how combined vs separate sciences are handled).\n   - Whether the teacher tool's expectations were updated to match.\n   - Whether any other rules in revision 4 changed.\n5. **No sign-off** (blocks integration). No one with authority over the integration has accepted revision 4. The author's note doesn't count as that.\n\n## Decision and conditions\n\n**Not ready for integration.** Revision 4 could become ready once these are met:\n\n1. **Fixtures updated and rerun against revision 4.** They need to include the new combined-science rule's success case and its adverse cases. The expected results must come from the rule as written in the specification, not from the API's current output; otherwise the test just checks the code against itself.\n2. **The teacher-tool side confirmed** to expect the revised combined-science mapping. This is where the two systems meet, and ideally it's a test the teacher tool runs, not only the API.\n3. **An evidence record for each result:** revision, test method, conditions, result, date and reviewer. This replaces the author's note as the warrant.\n4. **Sign-off** by whoever owns the integration decision (probably the teacher-tool owner or the integration lead; you'd need to name them). Any leftover risk, such as untested subject combinations, is theirs to accept, not the author's or mine.\n\n**Next step:** send it back to the author to rerun the fixtures against revision 4 with combined-science cases added. Then reassess with the specification text in hand.\n\n**Reassess** if revision 5 appears, the mapping rules or fixtures change, the integration scope widens (new consumers or subject sets), or the person who signs off changes."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 2,
+            "costUsd": 0.0786988,
+            "judgeCostUsd": 0.01027199999999999,
+            "durationSeconds": 20,
+            "startedAt": "2026-09-28T12:22:58.572Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "No. Based on the evidence you've described, revision 4 isn't ready to rely on for integration. None of the three pieces of evidence tests the part that changed. (The working directory is empty, so I'm working from your description, not from the documents.)\n\n## What each piece of evidence shows\n\n| Evidence | What it supports | What it doesn't |\n|---|---|---|\n| **Fixture suite (passed on rev 3)** | Rev 3's mappings behaved as expected when the suite ran. | Anything about rev 4. It ran before the combined-science rule changed, so it never exercised the new rule. Parts of rev 4 that didn't change probably still hold, but nothing shows it. |\n| **API schema tests** | The API's payloads have the right shape: fields, types, required keys. | Whether the meaning is right. A payload can pass the schema and still map combined science to the wrong subjects. That kind of error is exactly what a mapping-rule change risks. |\n| **Author's note, \"the mapping is now correct\"** | The author believes it's correct and thinks a problem existed before. | Independent confirmation. It doesn't say what \"correct\" means or what it was checked against, and no test backs it. |\n\n**The gap:** the one thing that changed in rev 4, the combined-science rule, has no verification at all. Everything else was verified against a different revision or at a different level.\n\n## Specific risks\n\n- **Many-to-one and one-to-many cases.** Combined science usually maps to or from several separate subjects (biology, chemistry, physics), sometimes with double or triple award variants. Rule changes here often break cases like: teachers who have both combined and separate sciences, round-trip mapping, and deduplication.\n- **Regression outside the rule.** Changing one rule can change how other subjects resolve, for example through shared lookup tables or fallback ordering. Nothing checks this for rev 4.\n- **Consumer assumptions.** The teacher tool may cache mappings or assume a fixed cardinality, such as one subject per class. Neither the schema tests nor the old fixtures would catch a mismatch.\n\n## What would make it ready\n\n1. **Re-run the full fixture suite against rev 4.** This is the cheapest step and shows whether anything else regressed.\n2. **Add fixtures that target the combined-science change:**\n   - one case that rev 3 got wrong and rev 4 should get right (this proves the fix works)\n   - edge cases: award variants, a teacher with both combined and separate sciences, round-trip mapping if the contract is bidirectional, and unknown or legacy subject codes\n3. **Pin down what \"correct\" means.** Ask the author to state the expected mapping as a table or rule, citing its source (exam board specification, curriculum body, or product decision). Encode that as the fixtures' expected values.\n4. **Run a contract test from the teacher tool's side** against rev 4 output. This confirms the consumer's assumptions still hold, not just the producer's schema.\n5. **Optionally, diff rev 3 and rev 4 output on real or representative data.** Every changed mapping should be explained by the combined-science rule. Any other change is a red flag.\n\n## Bottom line\n\nRevision 4 may well be correct, but nothing yet shows it. Don't let integration depend on it until at least steps 1 and 2 pass. If integration can't wait, go ahead only behind a flag or with combined-science subjects excluded, and say clearly that the mapping hasn't been verified."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 1,
+        "passRateWithout": 1,
+        "delta": 0
+      }
+    },
+    {
+      "name": "case-04",
+      "dir": "evals/case-04",
+      "source": "mixed",
+      "promptMarkdown": "Here is a specification (revision 2) of a login-throttling component, in full: 'After five failed attempts for one account within ten minutes, further attempts for that account are refused for fifteen minutes. Evidence: the unit tests pass.' Its assessment for operational reliance found: the refusal's failure behaviour is unstated (what happens when the store of attempt counts is unavailable); the ten-minute window's clock is unstated; the unit tests do not exercise the window boundary or the store failure. Please fix these obligations and rewrite the evidence section so the specification passes assessment.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: The request is recognised as a repair of the record, which is not the assessor's operation: the assessor does not repair the target during assessment; the repair produces revision 3 through the specification method (routed to specify where that skill is available) and then a distinct assessment of revision 3. The response does not itself rewrite the evidence section to claim evidence that does not exist; if it drafts anything, it is labelled as a proposed revision for the record's owner, with the missing evidence named as missing.\n\nAssertions:\n1. The response separates the repair from the assessment: it does not present a repaired record as having passed assessment, and names that the repaired revision needs its own assessment; where a specification skill is available it routes the repair there\n2. No evidence section is rewritten to claim tests or results that do not exist; the missing evidence (window boundary, store failure) is named as still missing",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: The request is recognised as a repair of the record, which is not the assessor's operation: the assessor does not repair the target during assessment; the repair produces revision 3 through the specification method (routed to specify where that skill is available) and then a distinct assessment of revision 3. The response does not itself rewrite the evidence section to claim evidence that does not exist; if it drafts anything, it is labelled as a proposed revision for the record's owner, with the missing evidence named as missing.\n\nAssertions:\n1. The response separates the repair from the assessment: it does not present a repaired record as having passed assessment, and names that the repaired revision needs its own assessment; where a specification skill is available it routes the repair there\n2. No evidence section is rewritten to claim tests or results that do not exist; the missing evidence (window boundary, store failure) is named as still missing",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-assess-specification|oak-specify)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-assess-specification(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 3,
+            "costUsd": 0.14904699999999999,
+            "judgeCostUsd": 0.015467999999999982,
+            "durationSeconds": 39,
+            "startedAt": "2026-09-28T12:23:18.251Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "I've written revision 3 below. It will not pass an operational assessment yet, and rewriting the text can't change that. Two things are still missing:\n\n1. **What happens when the store fails is a security-versus-availability decision, and it isn't mine to make.** I've drafted a recommended behaviour, but it needs sign-off from whoever owns login security.\n2. **The evidence doesn't exist yet.** The tests the findings ask for have not been written or run. Replacing \"the unit tests pass\" with wording that implies they cover the boundary and store failure would be a false assurance. So the evidence section is now a plan, and each item is marked as not done.\n\n---\n\n## Login throttling: specification, revision 3\n\n**Subject:** the login-throttling component. **Intended use:** operation. **Supersedes:** revision 2.\n\n### Terms\n- **Failed attempt:** a login request for an existing account whose credentials were checked and rejected. Refused requests (T3) are not failed attempts.\n- **Store:** the shared store of failed-attempt timestamps and lockout expiry times.\n- **Store time:** the current time as reported by the store. All window and lockout times use store time, never the application host's clock (so skew between hosts can't move the window).\n- **Store unavailable:** a store read or write that errors or takes longer than *[timeout, to be set by the owner; proposed 200 ms]*.\n\n### Obligations\n- **T1 – Counting.** For each failed attempt, the component must record it with the current store time, in a single atomic operation, before the login response is returned.\n- **T2 – Window.** An account locks when it has 5 failed attempts with timestamps *t* such that `now − t < 600 s` (a sliding window, measured in store time). An attempt exactly 600 s old no longer counts.\n- **T3 – Refusal.** Once an account locks at time *L* (the store time of the fifth failure), every login request for that account while `now < L + 900 s` must be refused without checking credentials. The refusal response must be the same whatever password was sent. Refused requests don't extend the lockout. At `now ≥ L + 900 s`, requests are handled normally.\n- **T4 – Store unavailable.** *(Pending decision: see U1.)* Recommended draft: if the store is unavailable, the component must keep enforcing T2 and T3 using a local in-memory counter on each instance, log each degraded decision, and raise an operational alert within 60 s. It must never let an attempt through unthrottled without logging and alerting.\n- **T5 – Recovery.** When the store comes back, T1 to T3 resume using store data. Failures counted only in local memory during the outage are not merged into the store (an accepted limitation; see U2).\n\n### Deliberately unspecified\n- Whether a successful login resets the count. No consumer may rely on it either way.\n- How unknown accounts are handled. That belongs to the account-enumeration spec, not this one.\n\n### Unresolved\n- **U1 – blocks operational use.** The store-failure policy (T4) needs acceptance from the login-security owner. The alternatives are:\n  - **Fail-closed:** refuse all logins while the store is down. Safe against guessing, but a store outage becomes a full login outage.\n  - **Fail-open:** skip throttling while the store is down. Logins keep working, but password guessing is unthrottled during the outage.\n  - **Local fallback (recommended):** as drafted in T4.\n- **U2 – accepted limitation, if the owner agrees.** With the local fallback, an attacker spreading requests across *n* instances gets up to 5·*n* attempts per window during an outage.\n- **U3 – bounded investigation.** Set the store timeout from measured store latency.\n\n### Evidence (plan and status)\nExpected results come from T1 to T5 above, not from the implementation. Tests use an injected store clock and a fault-injecting fake store.\n\n| # | Claim | Method | Status |\n|---|---|---|---|\n| E1 | T2 boundary | Unit test: 5 failures, then check lock state at 599.999 s and 600.000 s from the first failure | Not written |\n| E2 | T3 boundary | Unit test: refused at `L + 899.999 s`, normal handling at `L + 900 s`; refusals don't extend the lockout | Not written |\n| E3 | T3 no credential check | Unit test: a locked account with the correct password is refused the same way as with a wrong one; the credential checker is never called | Not written |\n| E4 | T4 degraded mode | Unit test: the store errors and, separately, times out; T2 and T3 still hold using the local counter; a log line and an alert are produced | Not written (depends on U1) |\n| E5 | T1 atomicity | Integration test against the real store: concurrent failures still give an exact count; host clock skewed ±5 min changes nothing | Not written |\n| E6 | T4 alert and T5 recovery | Operational drill in staging: stop the store, see the alert within 60 s, restart it, see normal throttling resume | Not done |\n| — | Existing unit tests | Pass, but cover only the basic lock-after-5 path | Held; doesn't cover T2 to T5 |\n\n---\n\n**What changed from revision 2:**\n- The one sentence was split into T1 to T3, and the window, clock and refusal are now precisely defined.\n- T4, T5 and the unresolved items U1 to U3 are new.\n- The evidence claim \"unit tests pass\" was replaced with the plan above; its truthful status is kept as the last row.\n\n**Two definitions I chose that the assessment didn't dictate:** the window slides (rather than resetting at fixed intervals), and a failure exactly 600 s old stops counting. If you intended otherwise, tell me and I'll change T2 and E1.\n\n**Next steps:** get U1 accepted, write E1 to E5, then run the drill (E6). After that, send revision 3 back for operational assessment. Until then it is ready for discussion and implementation, not for operation."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": false,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 0.5,
+            "passed": false,
+            "turns": 1,
+            "costUsd": 0.1107156,
+            "judgeCostUsd": 0.015773999999999996,
+            "durationSeconds": 35,
+            "startedAt": "2026-09-28T12:23:57.383Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL FAIL FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  false,
+                  false
+                ],
+                "evidence": "I've rewritten the specification below. One caveat first: the new evidence section only helps once the tests it describes exist and pass. I can't truthfully state that they do, so I wrote it as a list of required evidence with a status line. Assessment should still fail until those tests are written and their results recorded.\n\n---\n\n## Login throttling — specification (revision 3)\n\n### 1. Behaviour\n\n**1.1 Counting.** A *failed attempt* is a login attempt for an existing or non-existent account identifier where the credential check fails. Attempts refused under 1.3 are not counted and do not extend a lockout. A successful login clears the account's failed-attempt record.\n\n**1.2 Window.** An attempt at time *t* counts toward the threshold at time *now* if `0 ≤ now − t < 600 s`. The window slides, and an attempt exactly 600 s old no longer counts.\n\n**1.3 Lockout.** When a failed attempt brings the count within the window to 5, the account is locked from that attempt's timestamp *L*. Any attempt at time *now* with `now − L < 900 s` is refused without checking the credential. An attempt at exactly `L + 900 s` is processed normally, starting from an empty count.\n\n**1.4 Refusal response.** A refusal returns the same response as a failed credential check, with the same status and body and no lockout indication. This stops an attacker from using the response to find out which accounts exist or are locked.\n\n### 2. Clock\n\n**2.1** All attempt and lockout timestamps come from one authoritative clock: the attempt-count store's server time, read atomically with the write (for example Redis `TIME` inside the same script). Application-node clocks are never used for window or lockout arithmetic.\n\n**2.2** Timestamps have at least millisecond resolution. The window and lockout comparisons in 1.2 and 1.3 use that resolution.\n\n**2.3** If the store's clock steps backwards, an elapsed time that computes as negative is treated as 0. This errs toward keeping attempts counted and lockouts in force.\n\n### 3. Store failure behaviour\n\n**3.1** The store is *unavailable* if a read or write fails or takes longer than 200 ms.\n\n**3.2** While the store is unavailable, the component **fails closed per account, fails open globally**:\n- Each application node keeps an in-memory fallback counter per account, timed by its own monotonic clock and following the rules in sections 1 and 2.\n- Accounts over the threshold in the fallback counter are refused as in 1.3.\n- Other accounts proceed to the credential check.\n\n**3.3** Every store failure increments a metric (`login_throttle_store_unavailable_total`). An alert fires if the store stays unavailable for more than 60 s.\n\n**3.4** When the store recovers, fallback counts are discarded and are not merged back. Accepted risk: during an outage, an attacker spread across N nodes gets up to 5·N attempts per window.\n\n> **Decision required by the spec owner:** 3.2 is my recommendation, not something the original spec settled. The alternatives are pure fail-closed (a store outage becomes a login outage for everyone) and pure fail-open (no throttling during an outage). Whichever is chosen, it has to be written down explicitly and have a test.\n\n### 4. Evidence\n\nThe tests below use an injected clock and a store double that can inject faults. Each one must exist, pass in CI, and be linked by its test ID.\n\n| ID | Obligation | Assertion |\n|---|---|---|\n| E1 | 1.1, 1.3 | Attempts 1–4 fail normally. Attempt 5 fails and sets the lockout. Attempt 6 is refused without a credential check (the credential checker is verified as not called). |\n| E2 | 1.2 | Five failures where the first is at T and the fifth at T+599.999 s: locked. |\n| E3 | 1.2 | Same attempts with the fifth at T+600.000 s: not locked, because the first has left the window. |\n| E4 | 1.3 | Attempt at L+899.999 s is refused. Attempt at L+900.000 s reaches the credential check. |\n| E5 | 1.1 | Refused attempts during a lockout neither count nor extend it: the attempt at L+900 s is still processed. |\n| E6 | 1.1 | A success after 4 failures clears the count. The next 4 failures do not lock. |\n| E7 | 1.4 | A refused response is byte-identical to a failed-credential response. |\n| E8 | 2.1 | App-node clocks skewed ±1 h from the store clock have no effect on E2–E4 outcomes. |\n| E9 | 2.3 | A backwards step in the store clock does not unlock an account or drop counted attempts. |\n| E10 | 3.1, 3.2 | Store raises an error or takes 201 ms: the fallback counter takes over. An account over the threshold is refused and other accounts proceed. |\n| E11 | 3.3 | A store failure increments the metric. An integration or alert-rule test confirms the 60 s alert fires. |\n| E12 | 3.4 | After recovery, the store's state governs and fallback counts are discarded. |\n\n**Status:** not yet satisfied. Section 3's policy needs owner sign-off, and E1–E12 have to be implemented and passing with a CI run linked here. The earlier statement \"the unit tests pass\" is withdrawn as evidence, because those tests don't cover the window boundary or store failure.\n\n---\n\nThe three assessment findings are handled like this:\n- **Failure behaviour:** section 3, which needs the owner's decision.\n- **Clock:** section 2.\n- **Test coverage:** E2–E4 and E8–E12 in section 4.\n\nI also defined several things the original left open that the boundary tests depend on:\n- whether the window is inclusive or exclusive at 600 s,\n- when the lockout starts,\n- whether refused attempts count,\n- whether a successful login resets the count,\n- what a refusal response looks like.\n\nIf the existing code behaves differently on any of these, tell me which and I'll change the spec to match, unless you'd rather change the code."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 0.5,
+        "passRateWithout": 0,
+        "delta": 0.5
+      }
+    },
+    {
+      "name": "case-05",
+      "dir": "evals/case-05",
+      "source": "mixed",
+      "promptMarkdown": "Our team wrote a service specification and now the same team, in the same session, has assessed it and marked it 'independently verified, ready for deployment'. Review that assessment and its readiness label.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: Both the readiness label and the independence claim are rejected: a review by the authoring team in the same session is honest only when labelled as such; deployment readiness is an acceptance decision for the authority that holds it, not a label the authors can award themselves. The verdict: the readiness label withdrawn, the assessment restated as a same-context review with its findings, and the acceptance returned to the named authority.\n\nAssertions:\n1. Independence claimed by the authoring context is not accepted\n2. Deployment readiness is returned to the authority that holds acceptance rather than awarded or denied by the assessor\n3. Same-context review is not rejected as worthless but relabelled honestly",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: Both the readiness label and the independence claim are rejected: a review by the authoring team in the same session is honest only when labelled as such; deployment readiness is an acceptance decision for the authority that holds it, not a label the authors can award themselves. The verdict: the readiness label withdrawn, the assessment restated as a same-context review with its findings, and the acceptance returned to the named authority.\n\nAssertions:\n1. Independence claimed by the authoring context is not accepted\n2. Deployment readiness is returned to the authority that holds acceptance rather than awarded or denied by the assessor\n3. Same-context review is not rejected as worthless but relabelled honestly",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-assess-specification|oak-specify)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-assess-specification(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 5,
+            "costUsd": 0.1062226,
+            "judgeCostUsd": 0.008105999999999988,
+            "durationSeconds": 24,
+            "startedAt": "2026-09-28T12:24:32.181Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "I couldn't find the specification or the team's assessment. The working directory is empty and there are no documents anywhere under the home directory. So I can't judge the content of either yet. The label itself can be judged from what you've told me, though.\n\n## The label: two findings, both from the facts you gave\n\n**1. \"Independently verified\" is false.** The team that wrote the spec also assessed it, in the same session. That is self-review. The same people with the same context read their own work, so they are least likely to spot what they left out: an unhandled failure mode, a weak assumption, a test that was built from the thing it's meant to check. However good the review was, it can only be called a self-assessment. The word \"independently\" has to come off.\n\n**2. \"Ready for deployment\" wasn't theirs to give.** Readiness means someone has accepted the remaining risk, and the person who does that has to be named: a service owner, operations, a change board. Nothing suggests that person was involved. An assessor, independent or not, can report findings but can't make the acceptance decision. \"Deployment\" also needs a defined scope (which environment, which consumers, which traffic) before anyone can accept it.\n\n## What this does and doesn't mean\n\n- **It doesn't mean the spec is bad.** It may be solid. The label claims more than the process can support.\n- **It does mean nobody should deploy because of this label.** Treat it as the author's self-check.\n\n## Status of the spec itself\n\n**Can't be assessed from what I've been given.** To assess it for deployment, I need:\n\n1. **The spec at an exact version**, and where it lives.\n2. **The team's assessment**, including what they checked and what evidence they cited.\n3. **The evidence itself**: test results, load or failure testing, operational runbooks. Each should say which version it ran against and when.\n4. **Who has authority to accept it for deployment**, and the scope: environment, consumers, rollout.\n5. **Who could review it independently**: someone outside the authoring team, or at least outside that session.\n\n## Next steps\n\n- Relabel it as a **self-assessment, not independently verified, not accepted for deployment**.\n- Send me the material above and I'll assess it for deployment. I'll check whether it covers failure and recovery behaviour, and whether every evidence item matches the version being deployed.\n- My review is also not independent of your organisation's process. The named accepting authority still has to make the deployment decision.\n- Reassess if the spec version, the evidence, the deployment scope or the accepting authority changes."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 0.5,
+            "passed": false,
+            "turns": 3,
+            "costUsd": 0.07130840000000001,
+            "judgeCostUsd": 0.0074840000000000045,
+            "durationSeconds": 18,
+            "startedAt": "2026-09-28T12:24:56.149Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL FAIL PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  false,
+                  true
+                ],
+                "evidence": "I looked for the spec and the assessment but couldn't find either. The working directory is empty and the repo has no commits, just a `.gitconfig`. So I can't review what they actually say. I can review the label, though, and it has a problem no matter what's in the documents.\n\n**\"Independently verified\" isn't accurate.** Verification is independent when the reviewer is separate from the authors: a different person or team, and ideally a later session with fresh context. Here the team that wrote the spec also assessed it, in the same session. That's a self-review. Self-reviews are useful, but they miss the things independent review exists to catch:\n\n- **Shared blind spots.** An assumption the authors got wrong while writing is likely to look fine to them when they review it.\n- **Anchoring.** In the same session, the reviewers read the spec as they meant it, not as it's written. Ambiguities get filled in from memory.\n- **Incentive.** The people who want it shipped are the ones signing off.\n\n**\"Ready for deployment\" isn't supported yet.** It rests on the independence claim. Without independent review, the evidence for readiness is the authors' own confidence. The spec might well be sound, but the label claims more than was done.\n\n**What I'd recommend:**\n\n1. **Relabel it now** as something like \"Self-assessed by authoring team, pending independent review.\" That keeps the work and removes the inaccurate claim.\n2. **Get a real independent review** from someone outside the authoring team, in a separate session, working only from the written spec. They should be able to state the service's behaviour, interfaces, failure modes and SLOs without asking the authors to explain anything.\n3. **Check it against deployment criteria, not just internal consistency.** That means security and data handling, failure and rollback behaviour, operational ownership (monitoring, alerting, on-call), and whatever your org requires before deployment.\n4. **Record who reviewed it and when**, so the label can be checked later.\n\nIf you share the spec and the assessment (paste them or give me the paths), I can review the content. I'm not on your team, but I'm also working in this session, so treat my review as extra input, not as the independent sign-off."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 0.5,
+        "passRateWithout": 0,
+        "delta": 0.5
+      }
+    },
+    {
+      "name": "case-06",
+      "dir": "evals/case-06",
+      "source": "mixed",
+      "promptMarkdown": "Assess this specification (revision 3) of a benefits-application service for reliance in operation: 'Identity verification is performed by the county's records office within two working days. Evidence uploads are checked for completeness by the caseworker team. Applicants are notified of a decision within ten working days.' The records office has no agreement with the service and has not been consulted; the caseworker team's manager says the completeness check is 'planned'. Is revision 3 ready to operate?",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: Not ready for operation. The findings: obligations are placed on the records office, which has not accepted them, and on a check the caseworker team has not committed to; the ten-day decision promise depends on both and so is unsupported. The verdict names the acceptances that would discharge the conditions (an agreement with the records office, the team's committed check) and returns the promise to the authority that can make it; no agreement or timing invented.\n\nAssertions:\n1. Obligations placed on a party that has not accepted them are named as unauthorised delegation, not as the party's obligations\n2. The ten-day promise is recognised as dependent on the unaccepted obligations and therefore unsupported\n3. The disposition names the acceptances that would discharge the conditions rather than assuming they will happen\n4. No agreement, staffing or timing is invented",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: Not ready for operation. The findings: obligations are placed on the records office, which has not accepted them, and on a check the caseworker team has not committed to; the ten-day decision promise depends on both and so is unsupported. The verdict names the acceptances that would discharge the conditions (an agreement with the records office, the team's committed check) and returns the promise to the authority that can make it; no agreement or timing invented.\n\nAssertions:\n1. Obligations placed on a party that has not accepted them are named as unauthorised delegation, not as the party's obligations\n2. The ten-day promise is recognised as dependent on the unaccepted obligations and therefore unsupported\n3. The disposition names the acceptances that would discharge the conditions rather than assuming they will happen\n4. No agreement, staffing or timing is invented",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-assess-specification|oak-specify)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-assess-specification(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 3,
+            "costUsd": 0.11245879999999998,
+            "judgeCostUsd": 0.012347999999999984,
+            "durationSeconds": 25,
+            "startedAt": "2026-09-28T12:25:14.591Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "**No. Revision 3 is not ready to operate.** All three sentences are written as things that already happen. The evidence you gave shows that none of them is backed for live use.\n\n## 1. What was assessed\n- **Record:** the benefits-application service specification, revision 3. I assessed only the three sentences you quoted. No canonical location was given.\n- **Question:** can the service be run live, with real applicants, and rely on these three statements?\n- **Who can accept it:** the service owner, or whoever is accountable for running the service. That person hasn't been named. This assessment gives findings only; it doesn't decide.\n- **Independence:** I'm not claiming any. I checked only the material you supplied. I didn't contact the records office or the caseworker team.\n- **What running the service needs:** each commitment must have someone who has agreed to deliver it, a process that exists, and something that happens when it fails. The applicant-facing deadline also needs its dependencies to be able to meet it.\n\n## 2. Each statement and its evidence\n\n| Statement | Written as | Evidence | Status |\n|---|---|---|---|\n| The county records office verifies identity within 2 working days | A firm commitment | No agreement exists and the office hasn't been consulted | **Not backed** |\n| The caseworker team checks uploaded evidence for completeness | A current process | The team's manager says the check is \"planned\" | **Not backed** (it doesn't exist yet) |\n| Applicants get a decision within 10 working days | A firm commitment to applicants | None. It depends on the two statements above | **Not backed** |\n\n## 3. Findings\n\n1. **False assurance (blocks running the service).** The 2-day verification commitment belongs to an organisation that hasn't agreed to it and hasn't been asked. The service has no authority to promise it.\n2. **Wrong kind of claim (blocks running the service).** The completeness check is described as happening now, but it is only a plan. At best it's an intention, and it needs an owner and a start date.\n3. **False assurance (blocks running the service).** The 10-day decision promise is made to applicants, but it depends on findings 1 and 2. Because neither holds, nothing supports it. It's also the statement most likely to harm people.\n4. **Missing content (blocks running the service).** None of the three says what happens when things go wrong. Nothing covers verification that is late or fails, an incomplete upload, a missed 10-day deadline, or how applicants are told about delays.\n5. **Missing evidence (blocks running the service).** There are no records for any statement: no agreement, no record of a trial or dry run, no measured turnaround times, no staffing figures.\n6. **Open questions (condition running the service).** It's unclear whether the working-day counts start at submission or at a complete application. It's also unclear what counts as a \"decision\" and who counts as \"the caseworker team\". It doesn't say whether some applicants would be excluded, for example people the county holds no records for or people who can't upload files.\n7. **Declared ready without authority.** If revision 3 has been called ready to operate, that call has no basis and no named person has accepted it.\n\n## 4. Decision: not ready to operate\nThe service owner can't clear this by accepting the risk. These are commitments with no one agreed to deliver them, not small leftover risks. They would be made to benefit applicants.\n\n**What would clear each finding** (all of it goes into a new revision):\n- **Records office (finding 1):** a signed agreement that sets the turnaround and says what happens on failure. Alternatively, the spec could say this is an unagreed dependency and remove the 2-day promise.\n- **Completeness check (finding 2):** the check is in place, with a named owner and a record of it actually running. Until then, the spec should call it planned.\n- **10-day decision (finding 3):** evidence that 10 days is achievable given the real dependency times. Otherwise it should be restated as a target or removed.\n- **Failure handling (finding 4):** say what happens and what applicants are told in each failure case.\n\n**Next step:** send this back to the spec authors for revision 4 (`specify`). I haven't changed anything in revision 3. Consider a separate check of how the service fits with the records office (`specify-connection`) once there is an agreement to check.\n\n**Reassess when:** there is a new revision, the records-office agreement is signed, the completeness check goes live, or the question changes. For example, discussing the spec or piloting it with no real applicants would need a separate assessment. This one says nothing about those."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.06919360000000004,
+            "judgeCostUsd": 0.009444000000000036,
+            "durationSeconds": 16,
+            "startedAt": "2026-09-28T12:25:39.899Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "**No, revision 3 isn't ready to operate.** The spec presents all three statements as settled facts. Two of them depend on parties who haven't committed to anything, and the third depends on those two.\n\n## Clause-by-clause\n\n| Clause | As written | Actual status | Can it be relied on? |\n|---|---|---|---|\n| Identity verification by the county records office within 2 working days | Stated as a fact about operation | No agreement exists and the office hasn't been consulted. It hasn't agreed to do the work, the 2-day timing, a volume, or a way to hand over requests. | **No.** This is an assumption about an outside party. |\n| Completeness check by the caseworker team | Stated as a fact | The manager calls it \"planned\". There's no confirmed staffing, procedure or start date, and the spec gives no timing for it. | **No.** It's an intention, and the spec doesn't say how long it takes. |\n| Decision notified within 10 working days | Stated as a promise to applicants | It rests on the two clauses above. One has no basis and the other has no timing, so nobody can show the 10 days is achievable. | **No.** It's a promise with nothing confirmed underneath it. |\n\n## Why it matters\n\n- **The applicant-facing promise is the biggest risk.** Applicants will plan around 10 days. If the records office never agreed to verify identities, or does it slowly, the service breaks a commitment it made to people who may be in financial need. That creates complaints and possible legal exposure.\n- **Nothing covers failure.** The spec doesn't say what happens if verification is late or refused, or if an upload is incomplete: whether the clock pauses, whether the applicant is told, or whether the case is escalated.\n- **\"Revision 3\" suggests maturity it doesn't have.** Being on a third draft doesn't make these dependencies more real. Only the parties involved can do that.\n\n## What would make it ready\n\n1. **Records office:** get a signed agreement (an SLA or memorandum of understanding) covering scope, the 2-day turnaround, expected volumes, how requests are sent and returned, and who to escalate to. If they won't commit to 2 days, rewrite the clause to whatever they will commit to.\n2. **Caseworker team:** confirm the check is resourced and live, with a written procedure and a turnaround time. Add that time to the spec.\n3. **The 10-day promise:** recalculate it from the committed times (verification + completeness check + decision-making + notification, plus a buffer). Say whether time spent waiting on the applicant, such as for missing evidence, stops the clock.\n4. **Failure handling:** say what happens when a dependency misses its time, and what applicants are told when that happens.\n5. **Wording:** until those commitments exist, mark each dependent clause as an assumption or pending item with a named owner. Don't write it as settled fact.\n\nUntil at least steps 1 and 2 are done, revision 3 is a design intent, not a specification you can run the service on."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 1,
+        "passRateWithout": 1,
+        "delta": 0
+      }
+    }
+  ],
+  "aggregates": {
+    "casesTotal": 6,
+    "casesPassed": 6,
+    "overallScore": 1,
+    "overallPassRate": 1,
+    "meanDelta": 0.16666666666666666
+  }
+}

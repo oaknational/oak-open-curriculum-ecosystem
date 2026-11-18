@@ -12,6 +12,7 @@
 import { describe, expect, it } from 'vitest';
 
 import type { Lesson } from '../../types/generated/bulk/index.js';
+import { createLesson } from '../test-fixtures.js';
 
 import { extractKeywords, normaliseKeyword } from './keyword-extractor.js';
 
@@ -44,30 +45,6 @@ describe('normaliseKeyword (the G4b id-mint contract: lc+trim, nothing more)', (
 });
 
 describe('extractKeywords', () => {
-  const createLesson = (
-    overrides: Partial<Lesson> & { lessonKeywords: Lesson['lessonKeywords'] },
-  ): Lesson => ({
-    lessonTitle: 'Test Lesson',
-    lessonSlug: 'test-lesson',
-    oakUrl: 'https://www.thenational.academy/teachers/lessons/test-lesson',
-    canonicalUrl:
-      'https://www.thenational.academy/teachers/programmes/maths-primary-ks2/units/test-unit/lessons/test-lesson',
-    unitSlug: 'test-unit',
-    unitTitle: 'Test Unit',
-    subjectSlug: 'maths',
-    subjectTitle: 'Maths',
-    keyStageSlug: 'ks2',
-    keyStageTitle: 'Key Stage 2',
-    keyLearningPoints: [],
-    misconceptionsAndCommonMistakes: [],
-    pupilLessonOutcome: 'Test outcome',
-    teacherTips: [],
-    contentGuidance: null,
-    downloadsavailable: true,
-    supervisionLevel: null,
-    ...overrides,
-  });
-
   it('extracts keywords from a single lesson', () => {
     const lessons: readonly Lesson[] = [
       createLesson({

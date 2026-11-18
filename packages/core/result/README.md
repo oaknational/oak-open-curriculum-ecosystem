@@ -4,7 +4,12 @@ Result<T, E> type for explicit error handling without exceptions.
 
 ## Purpose
 
-Provides a type-safe way to handle errors without throwing exceptions. Forces explicit handling of both success and error cases at compile time, following the schema-first principle of making impossible states unrepresentable.
+Provides a way to handle errors without throwing exceptions. TypeScript rejects a read of
+`value` or `error` from a `Result<T, E>` until the union is narrowed to one arm; checking
+`ok`, directly or with `isOk` or `isErr`, narrows it. The type does not make a caller handle
+the failure: a caller can ignore a returned `Result`, substitute a default with `unwrapOr`
+or `unwrapOrElse`, or call `unwrap`, which throws on an `Err`. It follows the schema-first
+principle of making impossible states unrepresentable at the type level.
 
 ## Installation
 
@@ -77,6 +82,12 @@ const value = unwrapOr(result, 0);
 
 ## API
 
+### Types
+
+- `Result<T, E>` - The union `Ok<T> | Err<E>`
+- `Ok<T>` - The success arm, `{ ok: true, value: T }`
+- `Err<E>` - The failure arm, `{ ok: false, error: E }`
+
 ### Creating Results
 
 - `ok<T>(value: T): Ok<T>` - Create a successful result
@@ -92,6 +103,7 @@ const value = unwrapOr(result, 0);
 - `map<T, U, E>(result, fn)` - Transform Ok value
 - `flatMap<T, U, E>(result, fn)` - Chain Results
 - `mapErr<T, E, F>(result, fn)` - Transform Err value
+- `collect<T, E>(results)` - Combine an iterable of Results into one Result of the values, or the first Err
 
 ### Unwrapping
 
@@ -99,6 +111,11 @@ const value = unwrapOr(result, 0);
 - `unwrapErr<T, E>(result)` - Get error or throw (unwrap's inverse, for expected failures)
 - `unwrapOr<T, E>(result, defaultValue)` - Get value or default
 - `unwrapOrElse<T, E>(result, fn)` - Get value or compute default
+- `unwrapOrThrow<T>(result)` - Get value or throw the Err's own `Error` object unchanged (the Err payload must be an `Error`)
+
+### Exhaustiveness
+
+- `assertNeverResult<E>(value: never, makeError)` - Turn an unreachable branch into an Err at runtime, so an exhaustive switch over a discriminated union stays exhaustive at compile time
 
 ## Philosophy
 

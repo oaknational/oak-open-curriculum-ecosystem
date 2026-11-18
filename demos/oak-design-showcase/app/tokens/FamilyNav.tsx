@@ -1,5 +1,7 @@
 import type { ReactElement } from 'react';
 
+import { DISCLOSURE_WIDE_QUERY } from '../../components/canonical-widths';
+import { NarrowDisclosure } from '../../components/NarrowDisclosure';
 import { sectionId } from './craft-areas';
 import type { CraftAreaGroup } from './token-groups';
 
@@ -22,25 +24,32 @@ export function FamilyNav({
 }): ReactElement {
   return (
     <nav aria-label="Token families by craft area" className="tok-nav">
-      {groups.map((group) => {
-        const labelId = `tokens-nav-${group.area}`;
-        return (
-          <div key={group.area} className="tok-nav-group">
-            <p className="oak-body-3-bold tok-nav-label" id={labelId}>
-              {group.title}
-            </p>
-            <ul className="oak-cluster oak-cluster--s tok-nav-list" aria-labelledby={labelId}>
-              {group.families.map(({ family }) => (
-                <li key={family}>
-                  <a className="oak-link oak-code-3" href={`#${sectionId(group.area, family)}`}>
-                    --{family}-*
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        );
-      })}
+      {/* At narrow the whole list rides a slide-out disclosure (owner
+          ruling 2026-08-18) — closed, it is one honest line instead of a
+          capped scrolling box burying the tokens it points at; open, the
+          FULL list is visible with nothing behind an inner scrollbar. At
+          the rail seam the wrapper dissolves and the list renders inline. */}
+      <NarrowDisclosure summary="Jump to a family" wideQuery={DISCLOSURE_WIDE_QUERY}>
+        {groups.map((group) => {
+          const labelId = `tokens-nav-${group.area}`;
+          return (
+            <div key={group.area} className="tok-nav-group">
+              <p className="oak-body-3-bold tok-nav-label" id={labelId}>
+                {group.title}
+              </p>
+              <ul className="oak-cluster oak-cluster--s tok-nav-list" aria-labelledby={labelId}>
+                {group.families.map(({ family }) => (
+                  <li key={family}>
+                    <a className="oak-link oak-code-3" href={`#${sectionId(group.area, family)}`}>
+                      --{family}-*
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        })}
+      </NarrowDisclosure>
     </nav>
   );
 }

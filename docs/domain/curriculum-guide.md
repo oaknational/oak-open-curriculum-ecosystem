@@ -135,13 +135,6 @@ videos contain non-English speech that cannot be reliably transcribed. For these
 subjects, search relies on structured metadata (lesson titles, key learning
 points, keywords) rather than full-text transcript matching.
 
-### How well search works
-
-The semantic search system achieves an MRR (Mean Reciprocal Rank) of 0.983
-across its benchmark suite — it finds the right lesson 98% of the time
-(see [Vision](../../VISION.md) for methodology). This is the result of combining
-full-text search with semantic understanding and structured curriculum metadata.
-
 ## Three Ways People Use This Data
 
 ### Developers

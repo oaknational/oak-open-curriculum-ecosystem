@@ -17,16 +17,23 @@ export type { LoadedRuntime } from './runtime-config-from-validated-env.js';
 function resolveValidatedEnv(
   options: LoadRuntimeConfigOptions,
 ): Result<ValidatedHttpEnv, ConfigError> {
-  const envResult = resolveEnv({
-    schema: HttpEnvSchema,
-    processEnv: options.processEnv,
-    startDir: options.startDir,
-  });
+  const envResult = resolveEnv(
+    options.envFiles === 'none'
+      ? { schema: HttpEnvSchema, processEnv: options.processEnv, envFiles: 'none' }
+      : { schema: HttpEnvSchema, processEnv: options.processEnv, startDir: options.startDir },
+  );
 
   if (!envResult.ok) {
     return err({
       message: envResult.error.message,
       diagnostics: envResult.error.diagnostics,
+      failingKeys: [
+        ...new Set(
+          envResult.error.zodIssues
+            .map((issue) => issue.path[0])
+            .filter((segment): segment is string => typeof segment === 'string'),
+        ),
+      ],
     });
   }
 
@@ -43,7 +50,7 @@ function resolveValidatedEnv(
  * Returns a typed `Result` — callers handle the error case, this
  * function does not exit or throw.
  *
- * @param options - processEnv and startDir for the env resolution pipeline
+ * @param options - processEnv plus either startDir (env-file discovery) or envFiles: 'none'
  * @returns `Ok<LoadedRuntime>` or `Err<ConfigError>`
  */
 export function loadRuntimeConfig(

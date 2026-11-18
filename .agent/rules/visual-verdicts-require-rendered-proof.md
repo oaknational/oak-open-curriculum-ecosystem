@@ -1,3 +1,13 @@
+---
+classification: situational
+description: Any assessment of visual work (renders correctly, looks right, no visual regression, interaction-behaviour claims, cure sign-offs, owner-facing done) must be backed by a rendered artefact read first-hand, with a DOM-fact echo for interaction claims; red proof before a cure and green proof after; without an artefact the verdict is "unverified".
+trigger: surface:design — Issuing any assessment of visual work
+globs:
+  - apps/**/*.{ts,tsx,css,html}
+  - demos/**/*.{ts,tsx,css,html}
+  - packages/design/**
+---
+
 # Visual Verdicts Require Rendered Proof
 
 Owner-ruled (2026-08-13, in-chat, verbatim): "verdicts on visual design

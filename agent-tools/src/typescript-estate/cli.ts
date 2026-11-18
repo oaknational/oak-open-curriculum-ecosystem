@@ -61,8 +61,8 @@ export async function runTypeScriptEstateCli(
       stdout: `${JSON.stringify(result)}\n`,
       stderr: '',
     };
-  } catch (cause: unknown) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return errorResult(message);
   }
 }

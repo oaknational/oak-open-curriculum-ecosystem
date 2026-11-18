@@ -7,17 +7,17 @@ overview: >-
   durably with traceable authority, the volatile handoff section reduced to one
   live pointer-biased block, Director journalling moved to a thread record, and
   the accretion generator structurally cured.
-status: sketch
-ratified_by: null
-ratified_date: null
-ratified_where: null
+status: ratified
+ratified_by: Jim Cresswell (owner)
+ratified_date: 2026-09-08
+ratified_where: "PR #85 (2026-09-08), whose body quotes the owner's card answer verbatim: 'Ratify 22, 23 and 25; hold 21 and 24'"
 serves: coordination-substrate
 impact_areas:
   - practice-and-estate
 tickets: []
 depends_on: []
 owner_gates: []
-last_updated: 2026-08-13
+last_updated: 2026-10-02
 ---
 
 # Director continuity-surface redesign
@@ -128,6 +128,13 @@ inherited board and assumptions register A1–A15.
   block, size budget, red-first fixtures.
 - S6: Knowledge conservation of this arc itself: napkin capture of the
   design lessons and play seeds; consolidation-surface routing.
+- S7 (routed 2026-10-01): the homed-or-not check over the numbered owner
+  rulings (about 42) in
+  `archive/director-handoff-current-handoff-state-2026-09-08.md`, limited
+  to the rulings the S2 ledger does not already record as homed (verified
+  homes govern and are not re-read, per the out-of-scope line below), each
+  read against the rule, PDR or skill that should carry it, with one
+  rulings-ledger row per ruling; the archive stays as the literal record.
 
 ## Out of scope
 

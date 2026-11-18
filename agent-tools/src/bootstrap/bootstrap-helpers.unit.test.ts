@@ -1,3 +1,5 @@
+import { join } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -69,15 +71,17 @@ describe('interpretSpawnOutcome', () => {
 
 describe('binPathFromManifest', () => {
   it('resolves a string-shaped bin field relative to the package dir', () => {
+    // The product joins with host separators; the expectation derives the same
+    // host form so the assertion holds on every platform.
     expect(binPathFromManifest('/pkgs/tsup', { bin: './dist/cli-default.js' }, 'tsup')).toBe(
-      '/pkgs/tsup/dist/cli-default.js',
+      join('/pkgs/tsup', 'dist', 'cli-default.js'),
     );
   });
 
   it('resolves a record-shaped bin field by bin name', () => {
     expect(
       binPathFromManifest('/pkgs/tsup', { bin: { tsup: 'dist/cli-default.js' } }, 'tsup'),
-    ).toBe('/pkgs/tsup/dist/cli-default.js');
+    ).toBe(join('/pkgs/tsup', 'dist', 'cli-default.js'));
   });
 
   it('returns undefined for a missing bin name so the caller can fail loudly', () => {

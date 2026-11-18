@@ -1,7 +1,6 @@
-import { existsSync } from 'node:fs';
-import { readFile, writeFile } from 'node:fs/promises';
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
 
+import type { FileSystemPort } from '../src/io/file-system-port.js';
 import { validateOpenApiDocument } from './schema-validator.js';
 
 /**
@@ -24,12 +23,19 @@ function isOpenAPIObject(value: unknown): value is OpenAPIObject {
   return 'openapi' in value && 'info' in value && 'paths' in value;
 }
 
-export async function readSchemaCacheOrNull(cachePath: string): Promise<OpenAPIObject | null> {
-  if (!existsSync(cachePath)) {
-    return null;
-  }
+/**
+ * Reads the cached schema, or `null` when the cache is absent, unreadable or
+ * not an OpenAPI document.
+ *
+ * @param cachePath - Absolute path of the cache file
+ * @param fs - The file system to read through
+ */
+export async function readSchemaCacheOrNull(
+  cachePath: string,
+  fs: FileSystemPort,
+): Promise<OpenAPIObject | null> {
   try {
-    const raw = await readFile(cachePath, 'utf8');
+    const raw = await fs.readFile(cachePath);
     const parsed: unknown = JSON.parse(raw);
     if (!isOpenAPIObject(parsed)) {
       return null;
@@ -73,6 +79,7 @@ export async function readSchemaCacheOrNull(cachePath: string): Promise<OpenAPIO
  *   intentionally malformed input to exercise the rejection path.
  * @param log - Logger used to surface validation rejections. See
  *   {@link SchemaCacheLogger} for the structural contract.
+ * @param fs - The file system to read and write through
  *
  * @returns true if the cache was updated, false if unchanged or if
  *   validation rejected the input schema.
@@ -81,6 +88,7 @@ export async function writeSchemaCacheIfChanged(
   cachePath: string,
   schema: unknown,
   log: SchemaCacheLogger,
+  fs: FileSystemPort,
 ): Promise<boolean> {
   let validated: OpenAPIObject;
   try {
@@ -94,15 +102,15 @@ export async function writeSchemaCacheIfChanged(
   }
 
   const newContent = JSON.stringify(validated, undefined, 2);
-  const currentCachedSchema = await readSchemaCacheOrNull(cachePath);
+  const currentCachedSchema = await readSchemaCacheOrNull(cachePath, fs);
   if (currentCachedSchema === null) {
-    await writeFile(cachePath, newContent);
+    await fs.writeFile(cachePath, newContent);
     return true;
   }
   const currentContent = JSON.stringify(currentCachedSchema, undefined, 2);
   if (currentContent === newContent) {
     return false;
   }
-  await writeFile(cachePath, newContent);
+  await fs.writeFile(cachePath, newContent);
   return true;
 }

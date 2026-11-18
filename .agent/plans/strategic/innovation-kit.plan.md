@@ -3,10 +3,10 @@ id: innovation-kit
 node_type: strategic
 name: 'Oak Innovation Kit'
 overview: 'Oak can move a concept from idea to an excellent production-ready working experience and explicit evidence state quickly, with a bounded path to live-product obligations that preserves its unchanged semantic core.'
-status: sketch
-ratified_by: null
-ratified_date: null
-ratified_where: null
+status: ratified
+ratified_by: Jim Cresswell (owner)
+ratified_date: 2026-09-08
+ratified_where: "PR #85 (2026-09-08), whose body quotes the owner's card answer verbatim: 'Ratify all six'"
 serves: KIT-2
 impact_areas:
   - innovation-kit
@@ -14,18 +14,30 @@ gate_expiry_default: P21D
 depends_on: []
 owner_gates: []
 tickets: []
-last_updated: 2026-08-30
+last_updated: 2026-09-08
 ---
 
 # Oak Innovation Kit
+
+## OCE programme connection — 10 October 2026
+
+The existing outcome and ratification remain. `oce-framework-lifecycle-contracts`
+serves the Innovation Kit strategy and supplies one bounded composition/elevation
+profile to this architecture work. The
+[OCE programme](../../reports/repo-architecture/oce-rearchitecting/README.md)
+connects its retained mechanisms to CF, layered integrity and published instances.
+It does not reduce this programme to current MCP/search apps or move domain
+authority into the Kit. No team measurement is commissioned by that connection.
 
 ## Authority status
 
 The owner declared `innovation-kit` a first-class strategic node and the Oak Innovation Kit
 the fourth value stream on 2026-08-30. That establishes this node's identity and strategic
 altitude. The outcome, `KIT-2` edge, and success shape below are the repository's initial
-articulation of that direction and remain a sketch until the owner reviews and ratifies this
-plan shape.
+articulation of that direction and remained a sketch until the owner reviewed and ratified this
+plan shape — which the owner did on 2026-09-08 by the numbered card answer "Ratify all six"
+(the frontmatter stamp is the record); the sentences below that speak of a shape not yet
+ratified are history from before that word.
 
 ## Outcome
 
@@ -138,8 +150,10 @@ The
 [Eve + MCP agentic-chat investigation](../../research/innovation-kit/eve-mcp-agentic-chat-experience-2026-08-30.md)
 is one bounded research input to the portfolio model, claim ladder, and possible composition
 architecture. The owner declaration establishes this first-class node and settles the
-fourth-stream decision; it does not ratify this drafted plan shape, every recommendation in
-that report, or its unimplemented chat specimen as evidence that the outcome has been reached.
+fourth-stream decision; it did not by itself ratify this drafted plan shape, every recommendation
+in that report, or its unimplemented chat specimen as evidence that the outcome has been reached
+— the plan shape was ratified separately on 2026-09-08 ("Ratify all six"); the report and the
+specimen remain research inputs, not evidence of the outcome.
 
 The
 [dynamic, interactive graph-experience landscape](../../research/innovation-kit/dynamic-interactive-graph-experience-landscape-2026-08-30.md)

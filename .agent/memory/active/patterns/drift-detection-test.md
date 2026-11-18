@@ -3,6 +3,7 @@ name: "Drift Detection Test"
 polarity: pattern
 use_this_when: "A manually maintained list should match a canonical source but cannot be derived due to structural constraints, or repo-state drift needs detecting between maintained copies and canonical sources"
 category: code
+layer: general
 proven_in: "packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-help.unit.test.ts"
 proven_date: 2026-03-01
 barrier:

@@ -3,6 +3,7 @@ name: "Re-Derive Session-Persistent State Before Acting"
 polarity: pattern
 use_this_when: "Any resumed turn, shared-checkout git operation, or compose moment that relies on shell cwd, checked-out branch, the staged set, the clock, or a remembered in-flight action."
 category: agent
+layer: general
 proven_in: ".agent/memory/active/archive/ napkin window 2026-06-08 → 2026-06-12 (eight-plus worked instances across six seats)"
 proven_date: 2026-06-12
 barrier:

@@ -4,6 +4,7 @@ import { unwrapOrThrow } from '@oaknational/result';
 
 import { optional, type Options } from '../cli-options.js';
 import { cliIo, type CliRuntime, waitForCollaborationStateChange } from '../cli-runtime.js';
+import { commitQueueDirForActivePath } from '../commit-queue-store.js';
 
 import { CollaborationTuiApp } from './app.js';
 import { collaborationTuiConfig, type CollaborationTuiConfig } from './config.js';
@@ -51,11 +52,16 @@ async function loadCollaborationTuiSnapshot(
   const io = cliIo(runtime);
   const nowIso = config.nowIso ?? new Date().toISOString();
   const registry = unwrapOrThrow(await io.readActiveClaimsFile(config.activePath));
+  const commitQueue = await io.readCommitQueueEntries({
+    queueDir: commitQueueDirForActivePath(config.activePath),
+    nowIso,
+  });
   const closedArchive = unwrapOrThrow(await io.readClosedClaimsFile(config.closedPath));
   const events = await io.readCommsEvents(config.commsDir);
 
   return buildCollaborationTuiSnapshot({
     registry,
+    commitQueue,
     closedArchive,
     events,
     nowIso,

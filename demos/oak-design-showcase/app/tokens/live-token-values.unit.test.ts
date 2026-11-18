@@ -76,7 +76,9 @@ describe('createLiveTokenValueStore watching', () => {
     notified.mockClear();
 
     // No href: the store keys off `rel`, and giving this one an address
-    // would send the test environment out to fetch it.
+    // would make happy-dom attempt a stylesheet load — refused by the
+    // package's vitest config, which disables stylesheet file loading for
+    // this suite, but still a logged exception and an `error` event.
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     document.head.append(link);

@@ -2,13 +2,13 @@
 /**
  * CLI for the skills adapter generator.
  *
- * Usage (`--prefix` is REQUIRED — this estate's canonical value is `oak-`;
- * the root `pnpm skills:generate` / `pnpm skills:check` scripts pin it, and
- * an unpinned run would mint a second, unprefixed skill estate the pinned
- * checker never inspects):
- *   skills-adapter-generate --prefix=oak-            # generate adapters
- *   skills-adapter-generate --check --prefix=oak-    # exit non-zero on drift
- *   skills-adapter-generate --clear --prefix=oak-    # clear then generate
+ * Usage (`--prefix` is REQUIRED — the root `pnpm skills:generate` /
+ * `pnpm skills:check` scripts pin the estate's value, and an unpinned run
+ * would mint a second, unprefixed skill estate the pinned checker never
+ * inspects):
+ *   skills-adapter-generate --prefix=<prefix>            # generate adapters
+ *   skills-adapter-generate --check --prefix=<prefix>    # exit non-zero on drift
+ *   skills-adapter-generate --clear --prefix=<prefix>    # clear then generate
  */
 import { argv, exit, stderr, stdout } from 'node:process';
 

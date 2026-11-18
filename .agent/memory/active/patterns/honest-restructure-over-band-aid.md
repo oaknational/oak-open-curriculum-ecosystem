@@ -3,6 +3,7 @@ name: "Honest Restructure Over Band-aid"
 polarity: pattern
 use_this_when: "A quality gate fires mid-authoring and the first tempting fix is to bypass, guard, compress, or assert around the gate."
 category: agent
+layer: general
 status: proven
 discovered: 2026-05-22
 proven_in: "2026-05-22 → 2026-05-23 multi-agent gate-1a session (Foamy graph-view module split; Sparking binding-test deletion); promoted to proven 2026-06-28 by 5 further distinct cross-agent extractions of the max-lines-cap facet in the team-tooling session (Avocet, Ingot, Bandicoot, Quasar, Peregrine — the last on a test file)."
@@ -18,6 +19,14 @@ barrier:
 > **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
 >
 > See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
+
+## The owner's words on limits (2026-09-24)
+
+Asked whether a module had room under its line limit for one more function,
+the owner: the limits "enforce thoughtful code design and clear public APIs and
+proper encapsulation, not to ask if the bucket has enough room left". The
+redesign kept the digest inside the module that owns the argv, behind a private
+template, and the gateway review endorsed it.
 
 # Honest Restructure Over Band-aid
 

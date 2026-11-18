@@ -28,12 +28,18 @@ export interface CollaborationTuiSnapshot {
 
 export function buildCollaborationTuiSnapshot(input: {
   readonly registry: CollaborationRegistry;
+  readonly commitQueue: readonly CollaborationCommitQueueEntry[];
   readonly closedArchive?: ClosedClaimsArchive;
   readonly events: readonly CommsEvent[];
   readonly nowIso: string;
 }): CollaborationTuiSnapshot {
-  const reports = activeAgentReports(input.registry, input.nowIso, input.closedArchive);
-  const queue = queueEntries(input.registry.commit_queue, input.nowIso);
+  const reports = activeAgentReports(
+    input.registry,
+    input.commitQueue,
+    input.nowIso,
+    input.closedArchive,
+  );
+  const queue = queueEntries(input.commitQueue, input.nowIso);
   const directed = directedEntries(input.events);
 
   return {

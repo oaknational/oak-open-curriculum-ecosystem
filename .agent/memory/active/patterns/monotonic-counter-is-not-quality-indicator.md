@@ -4,6 +4,7 @@ name: "Monotonic Counter Is Not a Quality Indicator"
 polarity: anti-pattern
 use_this_when: "Comparing two versions of a document or artefact that each carry a sequence counter"
 category: process
+layer: general
 proven_in: ".agent/practice-core/provenance.yml"
 proven_date: 2026-04-02
 barrier:

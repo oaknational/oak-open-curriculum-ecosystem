@@ -77,7 +77,7 @@ describe('canonicalize (RDFC-1.0)', () => {
   });
 
   it('returns a DatasetCore whose Literal terms carry the canonical RDF/JS shape (direction: "")', async () => {
-    const dataset = createDataset([quad(namedNode('http://example/s'), name, literal('Alice'))]);
+    const dataset = createDataset([quad(namedNode('https://example/s'), name, literal('Alice'))]);
     const { dataset: canonicalDataset } = expectOk(await canonicalize(dataset));
 
     const onlyObject = onlyLiteralObject(canonicalDataset);

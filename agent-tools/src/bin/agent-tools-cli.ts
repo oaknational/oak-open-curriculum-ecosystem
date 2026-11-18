@@ -14,7 +14,10 @@ import {
   runPrWatchTopic,
   runSessionMetadataTopic,
   runSpawnTopic,
+  runReviewCostTopic,
+  runSkillEvalsTopic,
 } from './agent-tools-cli-topics.js';
+import { runArcMetricsTopic } from './arc-metrics-topic.js';
 import type {
   AgentToolsCliInput,
   AgentToolsCliResult,
@@ -123,6 +126,7 @@ type UniformTopicHandler = (
 ) => AgentToolsCliResult | Promise<AgentToolsCliResult>;
 
 const UNIFORM_TOPIC_HANDLERS: Readonly<Record<string, UniformTopicHandler>> = {
+  'arc-metrics': runArcMetricsTopic,
   'commit-queue': runCommitQueueTopic,
   'branch-touched-files': runBranchTouchedFilesTopic,
   'context-cost': runContextCostTopic,
@@ -132,6 +136,8 @@ const UNIFORM_TOPIC_HANDLERS: Readonly<Record<string, UniformTopicHandler>> = {
   'merge-bot': runMergeBotTopic,
   pr: runPrTopic,
   'pr-watch': runPrWatchTopic,
+  'review-cost': runReviewCostTopic,
+  'skill-evals': runSkillEvalsTopic,
   spawn: runSpawnTopic,
 };
 
@@ -224,6 +230,7 @@ function usage(): string {
     '',
     'Topics:',
     '  agent-identity',
+    '  arc-metrics',
     '  collaboration-state',
     '  commit-queue',
     '  branch-touched-files',
@@ -234,6 +241,8 @@ function usage(): string {
     '  merge-bot',
     '  pr',
     '  pr-watch',
+    '  review-cost',
+    '  skill-evals',
     '  spawn',
   ].join('\n');
 }

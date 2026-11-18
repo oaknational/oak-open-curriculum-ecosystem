@@ -69,7 +69,7 @@ export async function cruiseFixture(input: {
   // run the suite under DEFAULT options: the exact nullification class this
   // helper exists to expose. Only repo-anchored and terminal-state options
   // are dropped; rest-destructuring leaves them unused by design.
-  const enforcementOptions = { ...(real.options ?? {}) };
+  const enforcementOptions = { ...real.options };
   delete enforcementOptions.tsConfig;
   delete enforcementOptions.progress;
   delete enforcementOptions.reporterOptions;

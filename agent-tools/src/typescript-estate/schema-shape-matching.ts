@@ -3,7 +3,6 @@ import { err, ok, type Result } from '@oaknational/result';
 import type { SchemaShape, SchemaShapeEndpoint, SchemaShapeMatch } from './analysis-model.js';
 import { EstateReviewError } from './errors.js';
 import type { Provenance } from './file-vocabulary.js';
-import type { RepoPath } from './scalar-model.js';
 import { compareUtf16 } from './utf16-order.js';
 
 type CompleteSchemaShape = Extract<
@@ -12,13 +11,13 @@ type CompleteSchemaShape = Extract<
 >;
 
 export interface SchemaShapeFile {
-  readonly path: RepoPath;
+  readonly path: string;
   readonly provenance: Provenance;
   readonly schemaShapes: readonly SchemaShape[];
 }
 
 interface MatchableShape {
-  readonly path: RepoPath;
+  readonly path: string;
   readonly provenance: 'authored' | 'generated-confirmed';
   readonly shape: CompleteSchemaShape;
 }

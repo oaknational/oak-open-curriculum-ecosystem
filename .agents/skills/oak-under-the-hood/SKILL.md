@@ -5,4 +5,4 @@ description: The repository's orientation lens — one intent-discerning surface
 
 # Under The Hood (Cross-tool)
 
-Read and follow `.agent/skills/under-the-hood/SKILL-CANONICAL.md`.
+Read and follow `.agent/skills/orientation/under-the-hood/SKILL-CANONICAL.md`.

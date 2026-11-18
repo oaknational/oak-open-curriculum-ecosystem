@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+# Block accidental major-version bumps first, then enforce conventional commits
+# from the repo-pinned dependency graph. Strict mode: a warning fails the commit
+# (exit 2) as an error does (exit 3); a warning that passes is a warning that
+# ships (no-warning-toleration).
+pnpm agent-tools:prevent-accidental-major-version "$1" || exit 1
+pnpm exec commitlint --strict --edit "$1"

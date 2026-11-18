@@ -3,6 +3,7 @@ name: "A Throw That Only Narrows a Too-Wide Return Type → Strengthen the Type,
 polarity: pattern
 use_this_when: "Migrating a throw to a Result type (or auditing error handling) and the throw exists only to narrow a too-wide upstream return type — its error arm would be permanently unreachable."
 category: code
+layer: family
 proven_in: "redactTelemetryValue overload — observability redactText + logger redactStringValue, 2026-06-19 (Siren mends Rudder)."
 proven_date: 2026-06-19
 barrier:

@@ -3,6 +3,7 @@ name: check-code-invariants-before-designing-a-field
 use_this_when: "Adding a new field, enum, taxonomy, or discriminator to existing code — enumerate the invariants the surrounding code already maintains first, then choose the new shape's axis to preserve them (the invariant-safe axis is often non-obvious)."
 polarity: pattern
 category: architecture
+layer: general
 status: emerging
 discovered: 2026-06-09
 proven_by: "EEF answerType taxonomy: the obvious single-strand-vs-explicit-set split would have broken the landed D4 overlap invariant (inspectStrand(id) === evidenceForMove({strandIds:[id]})). The invariant-safe axis turned out to be coverage (strand-lookup vs context-subset) — discoverable only by reading the invariant the code already holds before choosing the field's axis."

@@ -3,6 +3,7 @@ name: "Reciprocal Cross-Agent Reviewer Dispatch"
 polarity: pattern
 use_this_when: "Two or more agents are landing substantive cycles in parallel on the same branch and can cheaply review each other's commits through directed comms."
 category: agent
+layer: general
 status: proven
 discovered: 2026-05-22
 proven_in: "2026-05-22 → 2026-05-23 multi-agent gate-1a substrate-floor team session (9 substantive review findings across three axes: SVW ↔ Sparking + SVW ↔ Foamy + Sparking ↔ Stormbound Spiralling Breeze; full enumeration below). Adjacent earlier instances on the same branch: t12-citation-shape cycle's pre-execution reviewer-dispatch chain (Mistbound + Stormbound + Cirrus reviewer-and-author symmetry, 2026-05-22)."

@@ -71,14 +71,14 @@ async function runCanonize(
       rejectURDNA2015: true,
     });
     return { ok: true, value: canonicalNQuads };
-  } catch (cause) {
+  } catch (error) {
     return {
       ok: false,
       error: {
         kind: 'canonize_failed',
         step: 'canonize',
         message: 'rdf-canonize canonize call rejected the input dataset',
-        cause: toError(cause),
+        cause: toError(error),
       },
     };
   }
@@ -87,14 +87,14 @@ async function runCanonize(
 function runParse(runtime: CanonizeRuntime, nquads: string): StepResult<readonly ParsedQuad[]> {
   try {
     return { ok: true, value: runtime.parseNQuads(nquads) };
-  } catch (cause) {
+  } catch (error) {
     return {
       ok: false,
       error: {
         kind: 'reparse_failed',
         step: 'parse_nquads',
         message: 'rdf-canonize NQuads.parse failed on canonical N-Quads output',
-        cause: toError(cause),
+        cause: toError(error),
       },
     };
   }

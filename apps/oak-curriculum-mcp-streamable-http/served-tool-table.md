@@ -3,8 +3,8 @@
 Generated from the live in-memory `tools/list` of the real composition root by
 `scripts/generate-served-tool-table.ts`. Do not edit by hand — regenerate with
 `pnpm --filter oak-curriculum-mcp-streamable-http generate:tool-table`; the
-served-tool-table artefact test pins this file to the canonical registration
-walk, so a drifted copy fails the suite.
+`validate-served-tool-table` check holds this file equal to a fresh rendering
+of the served surface, so a drifted copy fails the check chain.
 
 38 tools served.
 

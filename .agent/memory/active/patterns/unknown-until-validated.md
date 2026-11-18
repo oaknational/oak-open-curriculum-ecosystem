@@ -3,6 +3,7 @@ name: Unknown Until Validated
 polarity: pattern
 use_this_when: a function produces data whose type cannot be statically verified and a validation boundary exists downstream
 category: code
+layer: family
 proven_in: packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/emit-index.ts
 proven_date: 2026-02-27
 barrier:

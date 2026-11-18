@@ -54,8 +54,8 @@ const APPROVAL_MARKER_PATTERN = /--\s*jc:/iu;
  * described `@ts-expect-error` is still flagged by `ban-ts-comment` per
  * the strict config.
  *
- * Per the doctrine-enforcement-quick-wins plan §Issue 2 and PDR-044
- * §Innate immunity, two-rule defence is intentional: this custom rule
+ * Two-rule defence is intentional (both rules are innate-immunity surfaces
+ * in PDR-044's sense): this custom rule
  * covers the universal "no bare suppression" gate; the typescript-eslint
  * rule encodes the description-length contract that the broader
  * ecosystem expects.

@@ -153,8 +153,8 @@ deferred**: see the cross-lane note below.
 - **WS-A**: every distilled-buffer item carries a recorded disposition; the 5 new patterns and 4
   amendments land and are verified first-hand against the actual mechanism; the 4 already-covered
   verdicts are confirmed by reading the cited home (not trusted); the distilled buffer drains to
-  empty or owner-decision-gated. Proof: the curator-pass run-record + `git` evidence of the new/
-  amended files + a clean `distilled.md`.
+  empty or owner-decision-gated. Proof: `git` evidence of the new/amended files (the commits are
+  the pass's record) + a clean `distilled.md`.
 - **WS-B**: the rule fires (present in `RULES_INDEX.md`, always-on; `.claude` + `.cursor` adapters
   present; one commit); the body passes the new-rule-vs-pdr-clause test (it operationalises, it does
   not restate PDR-122). Proof: `subagents:check` / `portability:check` green; the RULES_INDEX entry.
@@ -170,7 +170,7 @@ deferred**: see the cross-lane note below.
 
 | Acceptance id | Proof level | Command / observation |
 | --- | --- | --- |
-| graduate-discovered-buffer | non-code | curator-pass run-record; `distilled.md` empty/gated; new+amended files in git |
+| graduate-discovered-buffer | non-code | the commits that homed the buffer; `distilled.md` empty/gated; new+amended files in git |
 | author-conserve-by-default-rule | integration | `pnpm subagents:check` + `pnpm portability:check` green; RULES_INDEX entry present |
 | promote-tooling (scripts) | unit | `pnpm agent-tools:test` green incl. new bin-script tests |
 | promote-tooling (skill) | value-proxy | skill drives a run end-to-end (or documented dry-run) and hands off to consolidate-until-done |
@@ -234,7 +234,8 @@ back into `consolidate-until-done`.
 ## Lifecycle triggers
 
 Per [`lifecycle-triggers`](../../../plans/templates/components/lifecycle-triggers.md): WS-A is itself a
-consolidation pass (curator-pass run-record); WS-B/WS-C completion sweep the discoverability
+consolidation pass (its record the commits that home the substance); WS-B/WS-C completion sweep
+the discoverability
 surfaces (WS-D); archival of this plan mines any residual into permanent homes per ADR-117.
 
 ## Lineage

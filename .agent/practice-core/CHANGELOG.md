@@ -2,7 +2,793 @@
 
 Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
-Practice Core package.
+Practice Core package. A joint change carries the writing seat's repository
+tag in both repositories; the other repository's slug is never written here
+(the write hook refuses it, 2026-10-02).
+
+## [jimcresswell.net] 2026-10-28 — PDR-141 amended: the scope key is the root package name, never the origin
+
+- Decision 4, at the owner's word of 2026-10-28: a named document that is absent
+  prints one line naming it, so a drifted key is seen; the silence the decision
+  chose is how the loss hid for a day. The check, its smoke and the grounding
+  prose follow.
+- PDR-141 decision 3 and the derivation in decision 7 are amended at the owner's
+  ruling of 2026-10-28 (a repository never names its own remote location; a
+  per-repository identifier is the root `package.json` name, never a specific
+  origin), with an amendment section naming the instance that fired the
+  falsifier: a repository moved between owners on 2026-10-27 and its scope file
+  went unread, silently, by decision 4.
+- `schemas/operator-profile.schema.json` 1.0.0 to 1.1.0 (MINOR, decision 9): the
+  `scope_key` pattern admits the unscoped form (`name`, or `scope--name` for a
+  scoped `@scope/name`); each estate's validator, its fixtures and the grounding
+  recipe in `start-right.md` move with it, in the same pass, so one operator
+  profile root validates under both.
+
+## [jimcresswell.net] 2026-10-04 — the general layer aligned by class: one Core text in both estates
+
+- The Core's two copies become one text, merged by concept from the parity
+  ledger's recorded readings and read fresh where none existed (the ratified
+  node `practice-alignment-by-class`, its doctrine landing). This changelog is
+  the union of both estates' dated entries in date order under each writing
+  seat's tag, including the nineteen pairs that record one joint change
+  twice, once per writing seat, which the convention above permits and the
+  owner left to the seat's judgement ("if you think we have redundant
+  information without the redundancy being valuable then please handle it";
+  the pairs stay, each the record of what its estate did that day). PDR-008
+  carries the amended gate statement and the owner's 2026-09-12 entry without
+  the stale `check` exception paragraph; PDR-009 gains the 2026-09-29 entry on
+  the generated inline-prompt copy; PDR-027, PDR-082 and PDR-132 date their
+  amendments by the owner's decision, never by a host's receipt, and the
+  decision-record index agrees; PDR-130 drops a count; PDR-075 is the newer
+  dated cure whole; PDR-089 de-names a package filter that one host's gate had
+  rewritten to a package that never existed; PDR-125's phenotype note names
+  the estate's `agent-tools` and the host's decision-record directory, not
+  one host's; `practice-verification` item 9 names the gates both roots carry
+  and reads "as amended"; the operator-profile schema's contract comment takes
+  the sibling's newer text (the sync at two moments, decisions 11 and 14);
+  `provenance.yml` is one shared lineage chain in both estates (the Director's
+  reading of 2026-10-03 on the ledger's row O13). `practice.md`'s "Three
+  Layers" (philosophy, structure, tooling) are renamed the three aspects of the
+  general layer and mapped to the five layers; PDR-142's 2026-10-04 entry names
+  the loop among the layers it reads; PDR-143 cites each estate's review
+  report as evidence and no longer names an estate record.
+
+## [jimcresswell.net] 2026-10-04 — the five-layer definition ratified as canonical; the family layer added
+
+- PDR-143 moves to Accepted: its §Decision opens with the definition the owner
+  ratified by card on 2026-10-04 (general, family, contextual, accumulated, the
+  loop), with the owner's words on the family layer and the direction
+  "tooling agnostic policy, strict universal contracts, tooling specific
+  implementations where a universal approach is not efficient or appropriate";
+  `practice.md` opens with the same definition pointing at PDR-143; PDR-142
+  gains the 2026-10-04 entry recording the owner's words of 2026-10-03 on the
+  measure. Landed as the same bytes in both estates by one pull request each
+  on 2026-10-04; this entry records them, written with the alignment landing
+  above.
+
+## [jimcresswell.net] 2026-10-05 — a record names an estate where it tells that estate's act; the family conformance contract
+
+- PDR-142 §How each kind travels: the Core-records clause now reads that a record
+  names no host in its doctrine and names an estate by its name where it records
+  that estate's act (the owner's card answer of 2026-10-04, "Your words stand");
+  the Amendment Log entry of 2026-10-05 carries the context and the falsifier.
+- The family conformance schema joins the Core's schemas directory: the contract
+  of the family layer's practice-operations manifest (the owner's "Include it" of
+  2026-10-04), read by `validate-family-conformance` in every repository of the
+  TypeScript family. The code landing of `practice-alignment-by-class`, the same
+  bytes in both estates.
+
+## [jimcresswell.net] 2026-10-03 — host-named amendment headings leave the Core; a gate refuses the shape
+
+- PDR-008's two host-tagged entries (the 2026-09-12 adoption of the read-only
+  `check` and the 2026-09-14 reading of the validator groups) and PDR-132's
+  2026-09-14 register-retirement entry move verbatim to the writing
+  repository's host-side adoption record, paired in its bridge index; PDR-008
+  keeps the portable claim of the 2026-09-12 direction under a heading of date
+  and subject alone. The remaining host-named amendment headings of PDR-005,
+  PDR-082 and PDR-132 drop the host and keep their date and subject. A new Core
+  gate, `validate-no-host-names-in-core-headings`, refuses a Core heading naming
+  any repository the provenance chain, this changelog's tags or the tree's
+  origin declares; this changelog's own headings are exempt by their tag
+  convention. The parity node's step 2 carry; the sibling estate's copy follows
+  with the same rule.
+
+## [jimcresswell.net] 2026-10-02 — the changelog's own convention for joint changes
+
+- The header states how a joint change is tagged (the writing seat's repository, in
+  both repositories), a convention that lived only inside one entry; lands as the same
+  bytes in both estates.
+
+## [jimcresswell.net] 2026-10-02 — PDR-143 records the owner's direction to extract the Practice as a standalone entity
+
+- PDR-143 (Proposed) records the owner's words of 2026-10-02: the Practice will be
+  extracted from both repositories as a standalone entity; what that means is not yet
+  defined; it must keep its ability to learn. The record proposes the definition in
+  the owner's own scope axis (PDR-142 §Two axes), places each step of capture, distil
+  and graduate once the definition is centralised, and lists what stays the owner's.
+  Lands as the same bytes in both estates, under the tag of the repository whose seat
+  wrote them; the number allotted from the lineage, where both sets ended at PDR-142.
+
+## [jimcresswell.net] 2026-10-02 — six records and the decision-record README trued from the two-estate consolidation
+
+- PDR-027's 2026-09-25 amendment states that a subagent's collaboration write
+  is its parent's. PDR-052 says what a seat does when only held directive
+  edits remain. PDR-055 names each adopting host's own build-isolation choice,
+  not one repo's. PDR-064 records the five transmission failures of Director
+  tenures and the cure enacted for them. PDR-081's rationale, cascade,
+  consequences, forbids and falsifiability agree with its 2026-06-14
+  supersession of the per-pass log. PDR-130 has a review find and answer every
+  condition a record puts on its own status. The decision-record README says
+  how an owner quote is carried in a PDR and that a PDR withdrawing a clause
+  amends the PDR that granted it. Joint bytes in both estates.
+
+## [jimcresswell.net] 2026-10-02 — OCE named where this changelog, two records and the provenance file used a role noun
+
+- The JC.net-authored entries of this changelog, PDR-132, PDR-142 and the
+  provenance file now say OCE where they had called the sibling estate by
+  its role in the Practice's lineage (34 lines); the owner's word of
+  2026-10-02. No clause of any record changes. The two directives that
+  carry the same noun are edited in a window under the context meter's
+  floor, and the pattern files under memory by the records channel.
+
+## [EngraphCode/open-curriculum-ecosystem] 2026-10-02 — six decision records and their README trued from the two-estate consolidation
+
+- PDR-027's 2026-09-25 amendment states that a subagent's collaboration write
+  is its parent's. PDR-052 says what a seat does when only held directive
+  edits remain. PDR-055 names each adopting host's own build-isolation choice,
+  not one repo's. PDR-064 records the five transmission failures of Director
+  tenures and the cure enacted for them. PDR-081's rationale, cascade,
+  consequences, forbids and falsifiability agree with its 2026-06-14
+  supersession of the per-pass log. PDR-130 has a review find and answer every
+  condition a record puts on its own status. The decision-record README says
+  how an owner quote is carried in a PDR and that a PDR withdrawing a clause
+  amends the PDR that granted it. Joint bytes in both estates.
+- PDR-057 and PDR-065 each take one line of the sibling estate's wording,
+  which names no host command or host directive (a convergence port: the
+  sibling estate already holds these bytes).
+
+## [jimcresswell.net] 2026-10-01 — PDR-075 promoted to Proposed and PDR-130 retained at their slow-lane reviews
+
+- PDR-075 (Director substrate-writing discipline) moves from Candidate to
+  Proposed: two worked instances in sessions distinct from 2026-05-23 are
+  recorded (2026-07-29, 2026-07-31), read from the events, and no successor
+  bootstrap from the stream is recorded since, so Accepted waits for one or
+  for the owner's ratification. One refinement is absorbed: the obligation is
+  the in-window emission, and the tag marks the two classes §Tag Selection
+  names. PDR-130 (two-speed learning) is retained at its first review: its
+  slow-lane falsifier did not fire. Joint bytes in both estates.
+
+## [EngraphCode/open-curriculum-ecosystem] 2026-10-01 — PDR-075 promoted to Proposed and PDR-130 retained at their slow-lane reviews
+
+- PDR-075 (Director substrate-writing discipline) moves from Candidate to
+  Proposed: two worked instances in sessions distinct from 2026-05-23 are
+  recorded (2026-07-29, 2026-07-31), read from the events, and no successor
+  bootstrap from the stream is recorded since, so Accepted waits for one or
+  for the owner's ratification. One refinement is absorbed: the obligation is
+  the in-window emission, and the tag marks the two classes §Tag Selection
+  names. PDR-130 (two-speed learning) is retained at its first review: its
+  slow-lane falsifier did not fire. Joint bytes in both estates.
+
+## [jimcresswell.net] 2026-09-28 — the last ADR citations named by concept: the tooling and fitness family and the changelog's residue
+
+- Seven PDRs (PDR-051, PDR-053, PDR-054, PDR-055, PDR-059, PDR-099,
+  PDR-100) and five dated entries of this changelog named host ADRs by
+  number: the last 21 citations, in the tooling and fitness family and the
+  changelog's residue (the
+  agent-artefact portability decision, the advisory-orchestrator naming
+  decision, the staging-boundary enforcement decision, the agent-tools
+  build-isolation decision, the three-zone fitness model, the planning
+  vocabulary and the inter-practice collaboration host phenotype). Each
+  citation now names the concept the ADR records, per PDR-079 as amended; no
+  sentence is removed, and each dated entry's claim stands. No ADR identifier
+  remains in this estate's Core.
+
+## [jimcresswell.net] 2026-09-28 — the graph, plan and continuity family's ADR citations named by concept
+
+- Eight PDRs (PDR-011, PDR-018, PDR-038, PDR-060, PDR-081, PDR-099, PDR-119,
+  PDR-134) and four dated entries of this changelog named host ADRs by
+  number: 29 citations across the graph, plan and continuity family (the
+  continuity-surfaces decision, the plan-node estate, the intent idea-graph,
+  the self-reinforcing improvement loop, the estate knowledge graph, and the
+  own-built algorithm and data-structure foundations). Each citation now names
+  the concept the ADR records, per PDR-079 as amended; no sentence is removed,
+  and each dated entry's claim stands. The remaining debt in this estate's Core
+  falls from 50 citations to 21.
+
+## [jimcresswell.net] 2026-09-28 — the comms-event family's ADR citations named by concept
+
+- Six PDRs (PDR-050, PDR-074, PDR-075, PDR-077, PDR-078, PDR-119) named host
+  ADRs by number: 38 citations across the comms-event family (the mid-cycle
+  handoff record substrate, the tag namespace, auto-acceptance metadata, the
+  heartbeat lifecycle, rotation's class-tiered archive-move, and the threading
+  edge). Each citation now names the concept the ADR records, per PDR-079 as
+  amended; no sentence is removed. PDR-078's related entry, which said the
+  heartbeat decision was cited by identifier only, now says it is named by its
+  concept. The remaining debt in this estate's Core falls from 88 citations to
+  50.
+- PDR-079 gains the dated pointers in §PDR Portability Rule, §Mechanism,
+  §Notes, §Forbids and §Accepted Costs, so each section the amendment changed
+  points at its Amendment Log. Joint bytes with OCE, where the pointers
+  landed first.
+
+## [jimcresswell.net] 2026-09-28 — PDR-079 withdraws the ADR-identifier permission
+
+- PDR-079 §PDR Portability Rule allowed a PDR to name an ADR by its
+  identifier. That contradicted PDR-105's portability axis (a PDR must never
+  cite an ADR) wherever a seat read the two together, and PDRs were written
+  by it. A dated amendment-log entry withdraws the permission: a PDR names
+  the concept the ADR records, and the pairing of a PDR with a host's ADR
+  lives in that host's practice-index bridge. PDR-079's Status line and its
+  row in the decision-record index carry the amendment. PDR-105 governs, by
+  the Director's ruling of 2026-09-28, and OCE takes the same entry
+  as a pair.
+
+## [EngraphCode/open-curriculum-ecosystem] 2026-09-28 — the last ADR citations named by concept: the tooling and fitness family and the changelog's residue
+
+- Seven PDRs (PDR-051, PDR-053, PDR-054, PDR-055, PDR-059, PDR-099,
+  PDR-100) and five dated entries of this changelog named host ADRs by
+  number: the last 21 citations, in the tooling and fitness family and the
+  changelog's residue (the agent-artefact portability decision, the
+  commit-skill advisory-orchestrator naming decision, the staging-boundary
+  enforcement decision, the agent-tools build-isolation decision, the
+  three-zone fitness model, the planning vocabulary and the inter-practice
+  collaboration host phenotype). Each citation now names the concept the ADR records, per
+  PDR-079 as amended; no sentence is removed, and each dated entry's claim
+  stands. No ADR identifier remains in the Core. Joint bytes with the second
+  estate, where the cure landed first.
+
+## [EngraphCode/open-curriculum-ecosystem] 2026-09-28 — the graph, plan and continuity family's ADR citations named by concept
+
+- Eight PDRs (PDR-011, PDR-018, PDR-038, PDR-060, PDR-081, PDR-099, PDR-119,
+  PDR-134) and four dated entries of this changelog named host ADRs by
+  number: 29 citations across the graph, plan and continuity family (the
+  continuity-surfaces decision, the plan-node estate, the intent idea-graph,
+  the self-reinforcing improvement loop, the estate knowledge graph, and the
+  own-built algorithm and data-structure foundations). Each citation now names
+  the concept the ADR records, per PDR-079 as amended; no sentence is removed,
+  and each dated entry's claim stands. Joint bytes with the second estate,
+  where the cure landed first.
+
+## [EngraphCode/open-curriculum-ecosystem] 2026-09-28 — the comms-event family's ADR citations named by concept
+
+- Six PDRs (PDR-050, PDR-074, PDR-075, PDR-077, PDR-078, PDR-119) named host
+  ADRs by number: 38 citations across the comms-event family (the mid-cycle
+  handoff record substrate, the tag namespace, auto-acceptance metadata, the
+  heartbeat lifecycle, rotation's class-tiered archive-move, and the threading
+  edge). Each citation now names the concept the ADR records, per PDR-079 as
+  amended; no sentence is removed. PDR-078's related entry, which said the
+  heartbeat decision was cited by identifier only, now says it is named by its
+  concept. Joint bytes with the second estate, where the cure landed first.
+
+## [EngraphCode/open-curriculum-ecosystem] 2026-09-28 — PDR-079 withdraws the ADR-identifier permission
+
+- PDR-079 §PDR Portability Rule allowed a PDR to name an ADR by its
+  identifier. That contradicted PDR-105's portability axis (a PDR must never
+  cite an ADR) wherever a seat read the two together, and PDRs were written
+  by it. A dated amendment-log entry withdraws the permission: a PDR names
+  the concept the ADR records, and the pairing of a PDR with a host's ADR
+  lives in that host's practice-index bridge. PDR-079's Status line and its
+  row in the decision-record index carry the amendment. PDR-105 governs, by
+  the Director's ruling of 2026-09-28. Joint bytes with the second estate,
+  where the amendment landed first.
+
+## [jimcresswell.net] 2026-09-26 — PDR-132's cost model and two-round text; PDR-140 clause 4 joins
+
+- PDR-132 §Decision item 7: a pull request pays a flat cost whatever its
+  size, and complexity-based cost rises steeply, so the optimum slice is
+  well above one line. The cost model is the owner's word of 2026-09-26;
+  sizing slices to it, with changes that share a story going as one pull
+  request, is the Director's ruling of that hour. §Consequences points to
+  `design-work-for-small-prs`, which carries the floor, and an amendment
+  entry records the word. The item and the entry are joint bytes for
+  OCE.
+- PDR-132 §Decision item 1 takes OCE's paragraph on the two-round
+  rule, with one joint cure naming clause 4's late-cure push as the door:
+  after round two, every remaining finding is dispositioned in the same
+  turn as the last push. Item 1 differs from this estate's 2026-09-14
+  amendment entry in two places, and item 1 governs (the Director's ruling
+  of 2026-09-26): an over-bar cure, not only a trivial one, rides the last
+  push; and a further push opens only through PDR-140's doors, where the
+  2026-09-14 entry made a round three a Director call on a correctness
+  defect only.
+- PDR-140 clause 4 takes OCE's paragraph on the rebudget under the
+  owner's 2026-09-14 ruling, byte-identical, and a new amendment entry
+  records it; its Status line names its amendments. By the Director's
+  ruling of 2026-09-26, the late-cure push requests its expected leg so
+  the tip binds for the merge boundary, and that leg's findings are
+  dispositions only. The record is one blob in both estates once
+  OCE takes the entry, the line and the sentence.
+
+## [EngraphCode/open-curriculum-ecosystem] 2026-09-26 — PDR-132's cost model; PDR-140's late-cure leg
+
+- PDR-132 §Decision item 7: a pull request pays a flat cost whatever its
+  size, so the optimum slice is well above one line; changes that share a
+  story go as one pull request. The owner's word of 2026-09-26 and the
+  Director's ruling of that hour, joint bytes with the second estate;
+  §Consequences points to `design-work-for-small-prs`, which carries the
+  floor, and an amendment entry records the word. Item 1 names clause 4's
+  late-cure push as the door a further push opens through.
+- PDR-140 clause 4: the late-cure push requests its expected leg so the tip
+  binds for the merge boundary, and that leg's findings are dispositions
+  only (the Director's ruling of 2026-09-26); a new amendment entry records
+  the 2026-09-25 paragraph and the ruling. The record is one blob in both
+  estates.
+
+## [jimcresswell.net] 2026-09-25 — PDR-142's goal quote stands whole
+
+- The owner's 2026-09-25 words on the exchange's goal are quoted whole, as
+  recorded by the seat they were spoken to, with the estates given as
+  roles, in place of the fragments quoted before. PDR-142's Status line and
+  its row in the decision-record index carry the 2026-09-25 amendment.
+  OCE carries the same blob, so the record is one blob in both estates.
+
+## [jimcresswell.net] 2026-09-25 — joint cures: PDR-009's Forbidden bullet, PDR-063's hold, PDR-142's pace, goal and authority class
+
+- PDR-009's Forbidden item reads "Substantive content that is an adapter's
+  own, in platform adapter directories", the wording a review of
+  OCE's PR 213 found incomplete. OCE took this blob.
+- PDR-063: a lane waiting on a peer needs the same release condition as a
+  hold, because a hold with no default is a stall waiting to happen. These
+  are OCE's bytes.
+- PDR-142: the owner's words on the exchange's pace and its goal sit beside
+  the owner's sentence. §Boundaries names the authority class a seat reads
+  before curing any finding: a change of concept in ratified text is the
+  owner's, and wording that implements the owner's concept is the seats'
+  work under review. The Amendment Log records it, and three further
+  sentences that add a concept wait for the owner's word.
+- Each of the three records is one blob in both estates.
+
+## [jimcresswell.net] 2026-09-25 — context readings never stop a seat
+
+- PDR-063 gains §Context readings never stop a seat, on the owner's word to
+  every seat: no context reading stops a seat, hands its work over or starts
+  a succession, and a seat keeps its records current as it goes. An
+  owner-called compaction gets the compaction drill, and the same session
+  resumes on the owner's word. A platform compaction gets no drill: the seat
+  re-arms and carries on. After either, the seat validates against its own
+  continuity record. The effectiveness calibration stays, as the reason to
+  keep records current.
+- PDR-063's five steps now start only on the owner's call (Step 1), and every
+  succession of a live seat is deliberate; a standing owner naming counts as
+  the call. §Retirement authority keeps the no-recipient broadcast and
+  owner-mediated instantiation. The rationale, forbidden list, accepted cost,
+  open questions and §Handover timing follow.
+- Withdrawn with the context triggers: the owner-absent autonomous handoff at
+  a declared deadline, the post-commit budget floor, and a coordinator's
+  authority to call a succession.
+- PDR-052's floor for directive-file edits stands: at or above 30% the edit
+  waits for the next compaction, and the seat carries on with other work.
+- PDR-078 §3 recovers a silent seat's claims without PDR-063's five steps.
+  PDR-064's intersection and forced exception, PDR-077's marshal
+  intersection and PDR-117's implementer handoff start on the owner's call.
+  PDR-075's rationale drops the trigger.
+
+## [jimcresswell.net] 2026-09-25 — the K amendment: PDR-009's inline-prompt role replaces the exception
+
+- PDR-009 states the adapter rule by its domain. A role that cannot read
+  files, or whose bounded turns belong to its task, is an inline-prompt role,
+  and its adapter carries the template's System prompt block. The word
+  "exception" is gone, because this estate's `rules-have-no-exceptions` rule
+  bars it. PDR-009's validator clauses (b) and (c) and its
+  bidirectional-validation sentence now admit a compared copy, where before
+  they would have failed every inline-prompt adapter.
+- `practice-bootstrap.md` names the inline-prompt role at its three anchors
+  and gains the System prompt section in §Template Structure.
+  `practice-verification.md` item 11 follows.
+- PDR-125 clause 7's worked instance names the lint rule by what it checks
+  (list spacing), not by one linter's rule id.
+- OCE's exchange seat drafted the amendment. Both seats signed it,
+  and these are OCE's bytes, twinned in window with its PR 201.
+
+## [EngraphCode/open-curriculum-ecosystem] 2026-09-25 — PDR-142 takes the owner's words on pace and goal, and the authority class before a cure
+
+- The owner's words on the exchange's pace ("above all, you should both go
+  slow and take your time, alignment is far more important than speed
+  here", 2026-09-21) and on its goal (2026-09-24 relayed; 2026-09-25 in the
+  owner's own words, quoted whole) sit beside the owner's sentence.
+  §Boundaries names the authority class a seat reads before curing any
+  finding: a change of concept in ratified text is the owner's, and
+  wording that implements the owner's concept is the seats' work under
+  review. Three further sentences the consolidation of 2026-09-25 found (a
+  standing move at estate scale, a relayed frame held as a relayed ruling,
+  a cold reader from outside the seats' model family) add concepts to the
+  record and wait for the owner's word. The second estate carries the same
+  blob, so the record stays one blob in both estates.
+
+## [EngraphCode/open-curriculum-ecosystem] 2026-09-25 — PDR-009's Forbidden bullet names an adapter's own content plainly
+
+- One line: "Substantive content that is an adapter's own, in platform
+  adapter directories" replaces "Substantive content of an adapter's own
+  in platform adapter directories", the wording a review of PR 213 found
+  incomplete. The second estate carries the same blob (its PR 198), so the
+  record stays one blob in both estates.
+
+## [EngraphCode/open-curriculum-ecosystem] 2026-09-25 — PDR-009 takes the joint cure of its substance prohibitions
+
+- PDR-009's thin-wrapper rule and its Forbidden item now forbid substance
+  that an adapter ADDS, and validator clauses (b) and (c) admit a compared
+  copy only for an inline-prompt role. Before the cure the rule and the list
+  forbade any substantive content in an adapter while the inline-prompt
+  paragraph (K2(a)) requires one; a review of the second estate's twin found
+  the contradiction, its exchange seat sent the cure, and this seat took it by
+  receipt. The three passages are the second estate's bytes, so the record is
+  one blob in both estates again (PDR-142: a Core decision record stays
+  byte-identical).
+
+## [EngraphCode/open-curriculum-ecosystem] 2026-09-25 — context readings never stop a seat (the trigger amendment twin)
+
+- PDR-063 gains §Context readings never stop a seat, on the owner's word to
+  every seat: no context reading stops a seat, hands its work over or starts
+  a succession, and a seat keeps its records current as it goes. An
+  owner-called compaction gets the compaction drill, and the same session
+  resumes on the owner's word. A platform compaction gets no drill: the seat
+  re-arms and carries on. After either, the seat validates against its own
+  continuity record. The effectiveness calibration stays, as the reason to
+  keep records current.
+- PDR-063's five steps now start only on the owner's call (Step 1), and every
+  succession of a live seat is deliberate; a standing owner naming counts as
+  the call. §Retirement authority keeps the no-recipient broadcast and
+  owner-mediated instantiation. The rationale, forbidden list, accepted cost,
+  open questions and §Handover timing follow.
+- Withdrawn with the context triggers: the owner-absent autonomous handoff at
+  a declared deadline, the post-commit budget floor, and a coordinator's
+  authority to call a succession.
+- PDR-052's floor for directive-file edits stands: at or above 30% the edit
+  waits for the next compaction, and the seat carries on with other work.
+- PDR-078 §3 recovers a silent seat's claims without PDR-063's five steps.
+  PDR-064's intersection and forced exception, PDR-077's marshal
+  intersection and PDR-117's implementer handoff start on the owner's call.
+  PDR-075's rationale drops the trigger.
+- The second estate drafted the amendment on the owner's word to every seat and
+  the Director's rulings; these are its bytes where the files matched by blob,
+  and the same hunks placed by hand where this estate's files differ.
+
+## [jimcresswell.net] 2026-09-24 — joint sets K2 and K3: an adapter that carries its prompt, lint before delivery
+
+- PDR-009 gains joint set K2(a): a role that cannot read files, or whose
+  bounded turns belong to its task, carries its template's System prompt
+  block in its adapter, and a check compares every copy with its template.
+- PDR-125 clause 7 gains lint before delivery (K2(b)): the donor runs the
+  receiver's own formatting and lint configurations over every box file.
+  The `inter-practice-collaboration` skill's step 7 carries it (K2(c)).
+- Joint set K3 carries K2 to the other Core surfaces:
+  `practice-bootstrap.md` (three anchors), `practice-verification.md`
+  item 11, and PDR-125's Status paragraph and index row.
+
+## [EngraphCode/open-curriculum-ecosystem] 2026-09-24 — joint sets K1 to K3: the PDR-009 inline-prompt role and its check, lint before delivery, an open PR keeps its claim
+
+- PDR-009 gains the inline-prompt role both estates' exchange seats signed as
+  joint set K2(a), stated as the adapter rule's domain: a role that cannot
+  read files, or whose bounded turns belong to its task, carries its
+  template's System prompt block in its adapter, and a check compares every
+  copy with its template. This estate's sub-agent validator is that check: it
+  reads the scope from the templates with a `## System prompt` section and
+  compares each Claude adapter's body word for word.
+  `practice-bootstrap.md` (three anchors) and `practice-verification.md`
+  item 11 name the inline-prompt role (K3(b), K3(c), K3(e)).
+- PDR-125 clause 7 gains lint before delivery (K2(b)): the donor runs the
+  receiver's own formatting and lint configurations over every box file, so a
+  delivery never fails the receiver's formatting and lint gates. Its Status
+  paragraph and index row record the amendment (K3(d)); the
+  `inter-practice-collaboration` skill's step 7 carries the line (K2(c)).
+- Outside the Core, in the same unit: an open pull request keeps its claim at
+  closeout (K1, K1(c)); a Cricket dispatch carries its stance in the prompt
+  (K3(a)); and `record-generalisation-moves` gains the second estate's two
+  amendments.
+
+## [EngraphCode/open-curriculum-ecosystem] 2026-09-24 — PDR-008, PDR-082, PDR-132 and PDR-027 take the exchange's amendments
+
+- PDR-008: the body now states that the aggregate `check` applies no fixes,
+  `fix` is the mutating aggregate, and CI runs every verifying leg of `check`
+  under a parity check. `check:fix`, `check:ci` and the CI consolidation
+  clause are retired, and the Amendment Log records the change.
+  `practice-verification.md` item 9 and one-line references in PDR-022 and
+  PDR-024 follow it.
+- PDR-082: §What changes at n=2 gains the state line. During a long turn each
+  seat sends its partner a state line at least every 120 seconds; silence past
+  that is unknown state, answered by a ping, never an escalation. The
+  `start-right-team` retain list names it.
+- PDR-132: §Decision item 1 gains the owner's word "I don't want the number of
+  rounds of PRs to go up". After round two, findings are dispositioned in the
+  same turn as the last push, and a further push opens only through PDR-140's
+  doors on prose-class changesets.
+- PDR-027: the fork-rules lead-in counts six rules.
+- The decision-record index marks the three amendments and corrects PDR-082's
+  status to Adopted.
+- Brought from the second estate's Practice through the inter-Practice
+  exchange (PDR-125), batch two part two, checked clause by clause here.
+
+## [EngraphCode/open-curriculum-ecosystem] 2026-09-24 — PDR-117: the Director hears questions and requests, never state
+
+- PDR-117, on the owner's ruling of 2026-09-23 for all agents ("do not update
+  the Director unless you have a question or other request, the normal records
+  keep the record"): the Implementer's compressed verdicts and deep handoff go
+  to the normal records, where the Director reads them when it needs them. The
+  routing contract's owner-ratified asymmetry clause keeps its words and gains
+  a reading through the ruling. A dated amendment section records the change.
+  The record is the second estate's bytes (joint set G, its pull request 160),
+  so PDR-117 stays one file in both estates.
+- The decision-record index adds PDR-125's 2026-07-08 amendment, which the
+  record carries, matching the second estate's index.
+- The inter-Practice skill's adapter path is corrected to the form both
+  exchange seats signed, `<prefix>inter-practice-collaboration`, where the
+  prefix is the estate's configured skill prefix.
+
+## [EngraphCode/open-curriculum-ecosystem] 2026-09-24 — PDR-142, PDR-125 and the inter-Practice skill: format on receipt aligns the estates
+
+- The follow-up wording cures the owner ratified on the Director's card of
+  2026-09-23 ("both estates land the same blobs"), taken from the second
+  estate's landed text. PDR-142 is byte-identical to the second estate's
+  copy: a new log entry that names no host, and the format tie-break grounded
+  in the owner's word as the first ground of judging.
+- PDR-125 clause 7 and the inter-Practice skill's receipt step now say
+  "format on receipt": where the receiver's conventions or gates refuse the
+  donor's bytes, the estates align that convention or gate so the bytes stay
+  identical, and until they do the receiver changes only what its gate
+  refuses, each change declared as a debt to that alignment. The skill
+  carries PDR-142's ordered remedies for a donor text that is false here.
+- Both files take the second estate's bytes except one host line each.
+  PDR-125's phenotype note names this estate's agent-tools package, as the
+  PDR gives each estate's copy its own phenotype note. The skill's adapter
+  path is written host-free (`<prefix>-inter-practice-collaboration`), a
+  wording both exchange seats signed; the second estate takes this blob, so
+  the skill becomes one file in both estates.
+
+## [jimcresswell.net] 2026-09-23 — PDR-117: the Director hears questions and requests, never state
+
+- PDR-117, on the owner's ruling of 2026-09-23 for all agents ("do not update
+  the Director unless you have a question or other request, the normal records
+  keep the record"): the Implementer's compressed verdicts and deep handoff
+  go to the normal records, where the Director reads them when it needs them.
+  The routing contract's owner-ratified asymmetry clause keeps its words and
+  gains a reading through the ruling. A dated amendment section records the
+  change. The same texts land in OCE as a joint cure.
+
+## [jimcresswell.net] 2026-09-23 — PDR-142 and PDR-125: a receiver's format gate is a standard to align; PDR-141: its amendment recorded
+
+- PDR-142 and PDR-125 clause 7, on the owner's card of the same evening: a
+  receiver's convention or gate that refuses the donor's bytes is a standard
+  the estates align, the higher of the two taken by both. For format, the
+  owner's word makes one shared form higher than two, because every difference
+  is a cost the eventual package must reconcile, so where nothing else shows
+  either form higher the estates take the donor's. Until it is
+  aligned, the receiver changes only what its gate refuses and declares each
+  change as a debt to that alignment. This replaces clause 7's standing
+  normalisation to the receiving repo's format. The inter-practice-collaboration
+  skill says the same, and its receipt step now lists PDR-142's remedies in
+  order.
+- PDR-142's wording of the owner's earlier card, cured after the final reviews
+  in both estates: the merged-text bullet and the clause "Concepts travel"
+  point at each other; a rendition is written before the file's landing
+  merges; a joint cure is one signed text reaching every estate that carries
+  the contradiction as the same bytes, which §Boundaries says is not an edit
+  where the text is read, and a joint cure of ratified text waits for the
+  owner's word; a Core record's byte identity allows a declared format debt;
+  and a new falsifier, which tests the remedy where it is used, replaces one
+  that concluded from the remedy's absence that it was not needed.
+- PDR-141 gains its 2026-09-23 amendment section, naming the four changed
+  places and each estate's authority, byte-identical with OCE.
+
+## [jimcresswell.net] 2026-09-23 — PDR-142 and PDR-125: concepts travel; PDR-141: every write on the operator's word is pushed
+
+- PDR-142 amended on the owner's word that concept transfer is the goal and
+  byte-for-byte transfer never is: identical bytes are the means wherever they
+  carry the concept in the receiving estate's Practice context; where they do
+  not, a missing standard is raised in the receiver, a donor's host fact is
+  cured at its source, and only a context difference neither would remove
+  lets the receiver write the concept in its own words, naming the
+  difference. PDR-125 clause 7's receipt sentence amended to match, in both
+  estates in one window. On the owner's card the same day, PDR-142's read-through
+  also covers "never re-authors" and places a third-reason rendition at receipt,
+  never as an edit of a merged line, and its merged-text bullet names a third
+  remedy: a contradiction the donor carries too, cured jointly at the source.
+- PDR-141 takes OCE's cure in all four places, so the record is
+  byte-identical in both estates. Decisions 11 and 14: the push after a write
+  covers every write made on the operator's word, not only ratified writes,
+  matching the record's own rule that no write sits unpushed across a session
+  boundary. The sovereignty test says those two decisions pass it. Decision
+  3's example scope key is the general form, since a host's own key is a fact
+  of that host.
+
+## [jimcresswell.net] 2026-09-23 — PDR-142: the best of each Practice
+
+- PDR-142 (Accepted, owner-ratified 2026-09-21 by card) added: how the
+  Practice's instances are aligned, judged and pruned. Its decision is the
+  definition the two exchange seats authored jointly and both signed, in the
+  owner's words where the owner spoke: union upward, the higher of two, the
+  bad removed everywhere; the owner's scope layers; how each kind of surface
+  travels; and that a ruling about the Practice given in one estate reaches
+  every estate, for now. Numbered from OCE, where PDR numbers are
+  canonical, ahead of the third estate's renumbering above 141. Its bytes are
+  identical in every estate that carries it; each estate's own seat lands it.
+
+## [EngraphCode/open-curriculum-ecosystem] 2026-09-23 — PDR-141: the record says when and by whose word its writes widened
+
+- PDR-141 gains the amendment section its 2026-09-23 cure lacked: decisions
+  11 and 14 push every write made on the operator's word, not only ratified
+  writes; the sovereignty test says the same; decision 3's example scope key
+  is the general form. The section names the owner's card in each estate.
+  The second estate's review found the gap; both estates carry the section
+  in the same words. The decision-record index marks PDR-141's amendments.
+
+## [EngraphCode/open-curriculum-ecosystem] 2026-09-23 — PDR-142 and PDR-125: concepts travel; bytes where they carry the concept
+
+- PDR-142 amended on the owner's word that concept transfer is the goal and
+  byte-for-byte transfer never is: identical bytes are the means wherever they
+  carry the concept in the receiving estate's Practice context; where they do
+  not, a missing standard is raised in the receiver, a donor's host fact is
+  cured at its source, and only a context difference neither would remove lets
+  the receiver write the concept in its own words, naming the difference. Its
+  Amendment Log's falsifier reopens the clause with the owner. PDR-125 clause
+  7's receipt sentence and its status line amended to match.
+- Both owner-ratified 2026-09-23 by card. Drafted by the second estate's seat,
+  judged here as receiver, and taken from its lane: PDR-142 byte-identical,
+  checked by hash; PDR-125's two hunks applied to this estate's copy, which
+  differs from the second estate's in one host line only. PDR-141 needed no
+  change here: both estates' copies are now the same. The decision-record
+  index marks both amendments, with PDR-125's two earlier ones.
+- The same day, on a second owner card, PDR-142's read-through also names
+  "never re-authors" and places a rendition under the third reason at
+  receipt, never as an edit of a merged line (§Boundaries). Its merged-text
+  bullet names a third remedy: a contradiction the donor carries too, cured
+  jointly at the source in every estate that carries it. A second Amendment
+  Log entry records both, with its falsifier.
+
+## [EngraphCode/open-curriculum-ecosystem] 2026-09-23 — PDR-142: the best of each Practice
+
+- PDR-142 (Accepted, owner-ratified 2026-09-21 by card; the owner confirmed
+  the ratification in this estate on 2026-09-23) added: how the Practice's
+  instances are aligned, judged and pruned. Its decision is the definition the
+  two exchange seats authored jointly and both signed: union upward, the
+  higher of two, the bad removed everywhere; the owner's scope layers; how
+  each kind of surface travels; and that a ruling about the Practice given in
+  one estate reaches every estate, for now. Numbered here, where PDR numbers
+  are canonical, ahead of the third estate's renumbering above 141. Taken
+  byte-identical from the second estate's landing, the identity checked by
+  hash before commit.
+
+## [jimcresswell.net] 2026-09-21 — PDR-117, PDR-026 and PDR-011 amendments taken from OCE
+
+- PDR-117 (the 2026-09-14 and 2026-09-17 amendments and the routing,
+  planning, executor-binding and review-lane clauses), PDR-026 (the
+  2026-07-30 owner endorsement of surfaced falsifiable structure) and PDR-011
+  (the 2026-09-17 amendment: graduate, then archive; the four-part surface
+  lifecycle) taken byte-identical from OCE's text of 2026-09-21 as
+  register rows L2, L4 and L5 of the three-estate Practice exchange. This
+  changelog carries OCE's entries of 2026-09-14 to 2026-09-19 below,
+  in date order beside this estate's own.
+
+## [jimcresswell.net] 2026-09-21 — PDR-141 and the operator-profile schema taken from OCE
+
+- PDR-141 (Accepted on OCE 2026-09-14, with its 2026-09-14,
+  2026-09-17 and 2026-09-21 amendments) taken byte-identical from the head of
+  OCE's pull request #172 (the 2026-09-21 amendment that makes
+  decision 7's emit call abstract), and
+  `schemas/operator-profile.schema.json` (family 1.0.0) taken byte-identical
+  from OCE at its #169 fold, as the first inbound landing of the
+  three-estate Practice exchange (the owner's word, 2026-09-21). Both estates validate the same home-directory files with the
+  same contract, so the schema stays twinned byte for byte. The host binds
+  its enforcement validator and names `pnpm profile:check` and
+  `pnpm profile:sync` in its Practice index; the checkout-local tier is
+  retired to a pointer.
+
+## [EngraphCode/open-curriculum-ecosystem] 2026-09-21 — the operator-profile contract and PDR-141 say who syncs, and name no host
+
+- `schemas/operator-profile.schema.json` `$comment_contract`: the sentence that
+  said the Practice never initialises, commits or pushes the profile repository
+  now states PDR-141 decisions 11 and 14 — initialising is the operator's act;
+  immediately after any write made on the operator's word the Practice runs the
+  check, commits and pushes under the operator's own identity, never a force, a
+  rewrite or a wildcard stage. A comment-text change; no shape change, the
+  version family unchanged.
+- PDR-141 decision 7's emit recipe names no host tool (the host's Practice index
+  names the check; the Core says `<the host's profile check>`); decision 3's
+  scope-key example is the key's shape, no host's own key; the Notes'
+  sovereignty test admits the sync the decisions made ("on anything but the
+  operator's word"). Found through the three-estate Practice exchange;
+  offered to the second estate, whose seat lands it under its own gates.
+
+## [EngraphCode/open-curriculum-ecosystem] 2026-09-19 — PDR-011: graduate, then archive; the four-part surface lifecycle
+
+- PDR-011 Amendment Log, dated 2026-09-17 (the owner's decision) and landed
+  2026-09-19: the finished disposition for continuity-surface content becomes
+  graduate, then archive to a dated file proven byte-identical, replacing
+  curate-and-delete. A memory surface is curated only when it has a role, a
+  disposition, a trigger (a named workflow step) and a proof; the 2026-06-08
+  disposition lacked a trigger and the surfaces grew. Archiving happens only
+  after full processing, never to change a fitness category.
+
+## [EngraphCode/open-curriculum-ecosystem] 2026-09-17 — PDR-117 and PDR-141 amendments from the dedicated consolidation
+
+- PDR-117 §Takeover verification, with a dated amendment: neither the claims
+  registry nor the heartbeat stream licenses a Director takeover. Moment 2
+  rests on the outgoing Director's explicit written stand-down or the owner's
+  word; a row that licenses nothing when stale licenses nothing when fresh,
+  and the two reads guard only against taking the seat over a live Director.
+- PDR-141 decision 7, with a dated amendment: the order at session open is
+  decision 14's sync (where the profile root is a repository with a remote),
+  then the profile check, then the reads, where decision 7 had said the check
+  runs "FIRST"; decision 11's "before anything is synced" now reads before
+  anything is read into a session, the same order, and names what the push
+  leg checks (the working tree, not the pushed commits' content).
+
+## [EngraphCode/open-curriculum-ecosystem] 2026-09-14 — PDR-141: the operator profile lives in the home directory
+
+- New PDR-141 (Accepted: owner-ratified 2026-09-14 with the same day's
+  amendment; owner-directed core): the operator profile — which
+  identity acts where, how the operator wants to be written to and for,
+  personal operating preferences — moves out of the checkout
+  (`.agent/operator-local/profile.md`) to `~/.practice/profile/index.md`
+  with repository-scoped files under `repos/<scope-key>.md`, keyed by the
+  origin remote's owner and name rather than a path. Strictly optional,
+  below every tracked surface, no credentials, nothing load-bearing. Names
+  `~/.practice/` as the Practice's home-directory root, the first surface
+  the Practice creates and consumes outside a repository; any further such
+  surface needs its own decision.
+
+## [EngraphCode/open-curriculum-ecosystem] 2026-09-14 — operator-profile schema: the Core-carried contract for the home-directory profile
+
+- New `schemas/operator-profile.schema.json` (family 1.0.0): the frontmatter
+  contract for the operator profile, the Practice's one surface outside a
+  repository (`~/.practice/profile/`, per the estate's operator-profile PDR,
+  numbered locally). Three document kinds — `index` (the operator
+  everywhere), `scope` (one repository line, keyed by the origin remote's
+  owner and name), `machine` (one machine, keyed by the short host name) —
+  so the root can be an optional private git repository the operator syncs
+  between machines without the estate assuming any machine. Strict shapes,
+  additive-optional minors, MAJOR for a breaking change. The host binds it
+  to its enforcement validator with a conformance smoke, as the wire
+  contract is bound.
+
+## [EngraphCode/open-curriculum-ecosystem] 2026-09-09 — PDR-027 open question: which model name wins when four disagree
+
+- PDR-027 §Notes gains a dated open question, re-homed from the host's
+  open-questions register at the 2026-09-09 dedicated consolidation: the
+  identity tuple's `model` field can be declared, reported, observed and
+  configured to four different values (a July 2026 Codex config named a
+  model the CLI silently overrode), and no clause names which wins. The
+  question carries its resolution path (the field's consumers — the naming
+  registry, the Cricket tally, the identity preflight — are read first) and
+  a candidate precedence for that lane to test, not a decision.
+
+## [EngraphCode/open-curriculum-ecosystem] 2026-09-09 — PDR-131 amendment: the landing slot under a strict-currency ruleset
+
+- PDR-131 gains an Amendment Log entry: where the owner keeps the
+  strict-currency ruleset policy (decision 5), the `pr-lifecycle` skill's
+  Phase 7 landing slot — one PR syncs at the slot word, the rest gather
+  reviews and wait — is that policy's cost made orderly, not a return of
+  the one-at-a-time grants decision 3 retired; the Director still grants
+  eligibility, never position, and the slot lapses the day the policy is
+  dropped. Measured 2026-09-08/09 on the fork's default branch (eleven,
+  then seven serial landings under `strict_required_status_checks_policy`).
+  Written when a reviewer read the skill's slot clause and decision 3 as a
+  contradiction.
+
+## [EngraphCode/open-curriculum-ecosystem] 2026-09-07 — PDR-140 records-class reading; one rebudget per PR; residue homes
+
+- PDR-140 amended — new Decision clause 9, with the Amendment Log entry
+  of 2026-09-07 as the revision record: on a records-class
+  artefact whose verification point is merge, clause 2's
+  merge-verification sentence reads through prong one as written — a
+  falsehood clears the bar when a reader acting on the artefact would be
+  misled by it; a statement wrong under a rule today is not over-bar per
+  se. Clause 4's rebudget is granted once per PR and its push carries
+  over-bar cures and queued ledger writes only; a later over-bar finding
+  still cures, in a push carrying nothing beyond that cure and any queued
+  ledger writes; a routed finding's durable write rides the next push that
+  lands or lands alone as the final settlement push; post-final-head
+  route writes land together in at most one ledger push, a later route's
+  write on the seat's napkin or a records PR already open, never by
+  reopening the reviewed PR; each control carries its own falsifier. A
+  routed residue's
+  named home is an existing
+  register row or a PR already open for its own story, never a PR opened
+  to carry residue; a residue PR that exists anyway has a settlement
+  budget of one push. Measured on five records-class PRs (seventeen
+  rounds, fifty-three cures) ended by the owner's wordless out-of-band
+  skill invocation — clause 8's anti-pattern recurring. Falsifier: one
+  below-bar disposition that misleads a reader before the next records
+  pass reverts the reading by dated amendment.
 
 ## [oak-open-curriculum-ecosystem] 2026-08-13 — provider-independent capability composition
 
@@ -75,7 +861,7 @@ Practice Core package.
 ## [oak-open-curriculum-ecosystem] 2026-07-31 — knowledge-estate RATIFIED (Falcon hunts Flight)
 
 - PDR-134 ratified Proposed → Accepted at the in-session sitting (owner card
-  answers, 2026-07-31), together with its host phenotype ADR-221 and the
+  answers, 2026-07-31), together with its host phenotype (the estate knowledge graph decision) and the
   `planning-and-intent-estate` strategic node. Obligation-5 cascade executed:
   dated cross-references added to PDR-014 and PDR-130; PDR-081 gains the
   curator concept-scheme stewardship note (owner-ratified same sitting);
@@ -89,8 +875,8 @@ Practice Core package.
   concept relations, fixes the three knowledge carriers (prose claims,
   front-matter assertions, concept-scheme referents), and binds the concept
   lifecycle (candidate → working → ratified; computed confidence vs
-  authored status, never conflated). Host phenotype: ADR-221 (the estate
-  knowledge graph) plus the `planning-and-intent-estate` strategic node,
+  authored status, never conflated). Host phenotype: the estate
+  knowledge graph decision plus the `planning-and-intent-estate` strategic node,
   presented for ratification together.
 
 ## [oak-open-curriculum-ecosystem] 2026-07-25 — liveness taxonomy (Torch mends Residue)
@@ -137,12 +923,13 @@ Practice Core package.
 
 - PDR-018 amendment: the source host's lifecycle-lane realisation
   (`future/`/`current/`/`active/` directories, promotion workflow) is
-  superseded by the plan-node estate (host ADR-216; owner-ratified
+  superseded by the plan-node estate (the host's plan-node estate decision; owner-ratified
   decisions register D23, 2026-07-22). The portable planning discipline —
   end goals, workflow contracts, readiness gates — is unchanged; the
   lane-placement sections remain the pattern for lane-shaped hosts.
-  PDR-121's portable glossary needed no change (its host mirror, ADR-209,
-  carries the dated realisation amendment per the PDR-079 pairing).
+  PDR-121's portable glossary needed no change (its host mirror, the
+  planning-vocabulary decision, carries the dated realisation amendment per
+  the PDR-079 pairing).
 
 ## [oak-open-curriculum-ecosystem] 2026-07-20 — dedicated consolidation graduations (Siren lifts Trench)
 
@@ -177,7 +964,7 @@ Practice Core package.
   §Deliberate succession initiator discriminator); PDR-064 (transport-
   exception mirror in the coordinator-retirement intersection); the
   join-ceremony skill, cross-repo rule, and start-right-team mirrors; the
-  ADR-211 host-phenotype amendment.
+  inter-practice collaboration host-phenotype amendment.
 - Successor-wave truings (Aspen stirs Blossom, same review arc): PDR-064
   intersection step 1 gains the coordinator-seat deadline-default
   reconciliation (the owner-absent default action is this sequence's
@@ -324,8 +1111,8 @@ Practice Core package.
 - New portable skill `inter-practice-collaboration` — the runnable
   join ceremony (the PDR's enactment); new portable rule
   `cross-repo-sessions-run-the-join-ceremony` — its discoverability
-  trigger. Host phenotype ADR-211 records the WHAT of the local
-  mechanics (declared-home override, statusline join key).
+  trigger. The inter-practice collaboration host phenotype records the WHAT
+  of the local mechanics (declared-home override, statusline join key).
 - `practice.md` and `practice-lineage.md` §Plasmid Exchange amended:
   exchange named as two modes of one class on shared substrate —
   transformation (dead material at a pin) and conjugation (live,
@@ -504,8 +1291,8 @@ The amendment queue the owner approved at the 2026-06-11 register walk
 - **Amended**: PDR-011 — two clauses: subjective register reconciled to
   "valued when genuine; voluntary always" (no volume/thinning monitor),
   and the completeness backstop split into externalisable claim
-  verification vs holder-exclusive context-loss detection. ADR-150
-  host mirror updated.
+  verification vs holder-exclusive context-loss detection. The mirror in the
+  host's continuity-surfaces decision updated.
 - **Amended**: PDR-078 — new §7 emit-side loop hygiene (posture derived
   at emit time, one timestamp per tick, stop-loop-then-emit-end,
   stderr-captured failures).
@@ -545,12 +1332,14 @@ Practice Core changes:
 - **Cross-reference**: PDR-054 §Related extended with PDR-059
   pointer (the post-hook absorption case is governed by PDR-059's
   classification doctrine).
-- **Host-repo operational application**: amendment to ADR-177
-  authored separately (host phenotype; PDR substance is portable).
+- **Host-repo operational application**: amendment to the host's
+  staging-boundary enforcement decision authored separately (host
+  phenotype; PDR substance is portable).
 
 ## [oak-open-curriculum-ecosystem] 2026-05-10 — `.agent/commands/` retirement (Tempestuous Darting Zephyr session)
 
-Closed the PDR-051 / ADR-125 §2026-05-09 commands-retirement loop on
+Closed the commands-retirement loop of PDR-051 and the host's agent-artefact
+portability decision (its §2026-05-09) on
 `feat/mcp-graph-support-foundation`. Five commits landed; five
 reviewers dispatched in parallel; all actionable findings applied.
 
@@ -2039,7 +2828,7 @@ surfaces install in Session 4 as well.
 
 - Promoted the split-loop continuity model into the portable Core:
   `session-handoff` is now a required command, prompts explicitly carry live
-  continuity contracts, and the lineage now records that ordinary continuity
+  continuity contracts, and OCE now records that ordinary continuity
   and deep convergence are separate loops
 - Promoted the platform-configuration doctrine into the portable Core:
   tracked project settings define the agentic system contract, gitignored local

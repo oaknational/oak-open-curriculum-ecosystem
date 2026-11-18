@@ -45,7 +45,7 @@ function extractWwwAuthHeader(result: { _meta?: Record<string, unknown> }): stri
   }
   const first: unknown = wwwAuth[0];
   if (typeof first !== 'string') {
-    throw new Error('Expected first www_authenticate header to be a string');
+    throw new TypeError('Expected first www_authenticate header to be a string');
   }
   return first;
 }
@@ -54,14 +54,14 @@ const baseAuthEnabledEnv: AuthEnabledRuntimeConfig['env'] = {
   OAK_API_KEY: 'test',
   CLERK_PUBLISHABLE_KEY: 'pk_test',
   CLERK_SECRET_KEY: 'sk_test',
-  ELASTICSEARCH_URL: 'http://fake:9200',
+  ELASTICSEARCH_URL: 'https://fake:9200',
   ELASTICSEARCH_API_KEY: 'fake-key',
   SENTRY_MODE: 'off',
 };
 
 const baseAuthDisabledEnv: AuthDisabledRuntimeConfig['env'] = {
   OAK_API_KEY: 'test',
-  ELASTICSEARCH_URL: 'http://fake:9200',
+  ELASTICSEARCH_URL: 'https://fake:9200',
   ELASTICSEARCH_API_KEY: 'fake-key',
   SENTRY_MODE: 'off',
 };

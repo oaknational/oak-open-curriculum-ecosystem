@@ -39,6 +39,12 @@
  */
 import { readFileSync } from 'node:fs';
 
+import { hasCustomPropertyDeclaration } from '../../../../../../../demos/oak-design-showcase/tools/css-declarations.js';
+import {
+  dataThemeRules,
+  quotedAttributeValues,
+} from '../../../../../../../demos/oak-design-showcase/tools/theme-markup.js';
+
 const PALETTE_THEMES = ['light', 'dark', 'high-contrast', 'colour-safe'] as const;
 const REQUIRED_SELECTIONS = [...PALETTE_THEMES, 'system'] as const;
 
@@ -64,8 +70,8 @@ function stripComments(text: string): string {
 function offeredSelections(code: string): ReadonlySet<string> {
   const found = new Set<string>();
   for (const tag of code.matchAll(/<(?:option|button|input|a|li)\b([^>]*)>/gi)) {
-    for (const attr of tag[1].matchAll(/[\w-]+\s*=\s*["']([a-z-]+)["']/gi)) {
-      const value = attr[1].toLowerCase();
+    for (const attributeValue of quotedAttributeValues(tag[1])) {
+      const value = attributeValue.toLowerCase();
       if ((REQUIRED_SELECTIONS as readonly string[]).includes(value)) {
         found.add(value);
       }
@@ -137,19 +143,19 @@ function cssPaletteTrees(code: string): readonly string[] {
   const insideResolution = (at: number) =>
     mediaResolutionRanges.some(([start, end]) => at >= start && at <= end);
 
-  for (const rule of code.matchAll(/([^{}]*\[data-theme=["']([a-z-]+)["']\][^{}]*)\{([^{}]*)\}/gi)) {
-    const value = rule[2].toLowerCase();
+  for (const rule of dataThemeRules(code)) {
+    const value = rule.theme.toLowerCase();
     if ((PALETTE_THEMES as readonly string[]).includes(value)) continue;
-    if (!/--[a-z0-9-]+\s*:/i.test(rule[3])) continue; // no custom properties: not a tree
-    if (insideResolution(rule.index!)) continue; // resolution, not an independent palette
+    if (!hasCustomPropertyDeclaration(rule.body)) continue; // no custom properties: not a tree
+    if (insideResolution(rule.index)) continue; // resolution, not an independent palette
     // The captured prefix runs from the previous `}` (or file start), so in
     // an HTML artefact it swallows the markup before a <style> block — the
     // first evidence slice printed `</select>` ahead of the selector.
     // Stripping through the last complete HTML tag leaves the selector
     // itself; a CSS child combinator (`a > b`) contains no `<`, so real
     // selectors survive intact.
-    const selector = rule[1].replace(/^[\s\S]*<[^<>]*>/, '').replace(/\s+/g, ' ').trim();
-    const body = rule[3].replace(/\s+/g, ' ').trim();
+    const selector = rule.prelude.replace(/^[\s\S]*<[^<>]*>/, '').replace(/\s+/g, ' ').trim();
+    const body = rule.body.replace(/\s+/g, ' ').trim();
     offenders.push(`${selector.slice(0, 60)} { ${body.slice(0, 60)} }`);
   }
   return offenders;

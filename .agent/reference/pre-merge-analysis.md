@@ -1,0 +1,322 @@
+# Pre-Merge Divergence Analysis
+
+**Last Updated**: 2026-03-31
+**Status**: Active guidance
+
+When a feature branch and its target branch have diverged significantly (tens
+of commits, hundreds of files on either side), a standard `git merge` is not
+enough. Text-level conflict resolution misses type-system breaks, deleted-file
+cascades, numbering collisions, and signature mismatches in auto-merged files.
+Here "not enough" means necessary but insufficient: the integration still
+starts from a real git merge operation and should land as a merge commit when
+preserving branch topology is required. The analysis below adds semantic checks
+on top of Git's merge machinery; it does not replace it.
+
+This guide codifies a systematic analysis process that surfaces those hidden
+risks before the merge begins.
+
+For an agent-executable workflow wrapping this guide, see the
+[complex-merge skill](../../.agent/skills/change-custody/complex-merge/SKILL-CANONICAL.md).
+
+## When to Use This Guide
+
+Use this guide when **any** of the following are true:
+
+- Either branch has changed more than ~100 files
+- A dry-run merge (`git merge --no-commit`) produces more than ~10 conflicts
+- The other branch refactored core interfaces that your branch consumes
+- The other branch deleted files that your branch imports
+- Both branches touched the same workspace's production code
+
+For routine merges (a few files, a handful of conflicts), standard conflict
+resolution is sufficient.
+
+## Phase 1: Measure the Divergence
+
+```bash
+git fetch origin main
+git merge-base HEAD origin/main          # find the fork point
+git rev-list HEAD..origin/main --count   # commits behind
+git rev-list origin/main..HEAD --count   # commits ahead
+git diff --stat HEAD..origin/main | tail -3  # files changed on main
+```
+
+Understand the scale before planning. A 10-file merge and a 700-file merge
+need different levels of rigour.
+
+## Phase 2: Identify All Conflicts (Text and Structural)
+
+### 2a. Dry-run merge for text conflicts
+
+```bash
+git merge --no-commit --no-ff origin/main 2>&1
+git diff --name-only --diff-filter=U      # list conflicting files
+git merge --abort                          # clean up
+```
+
+Capture the full output — it shows both content conflicts and
+modify/delete conflicts.
+
+### 2b. Find files changed on both sides
+
+```bash
+git diff --name-only $(git merge-base HEAD origin/main)..HEAD > tmp/branch.txt
+git diff --name-only $(git merge-base HEAD origin/main)..origin/main > tmp/main.txt
+comm -12 <(sort tmp/branch.txt) <(sort tmp/main.txt)
+```
+
+Files in this intersection are the risk zone — even if they auto-merge, they
+may have semantic conflicts.
+
+### 2c. Find files the other branch deleted
+
+```bash
+git diff --name-only --diff-filter=D \
+  $(git merge-base HEAD origin/main)..origin/main \
+  -- 'path/to/workspace/src/'
+```
+
+For each deleted file, grep your branch for imports of it. Files that
+auto-merge cleanly but import a deleted module will fail at type-check time
+— Git cannot detect this.
+
+### 2d. Find files both branches added (add/add conflicts)
+
+```bash
+git diff --name-only --diff-filter=A $(git merge-base HEAD origin/main)..HEAD > tmp/branch-added.txt
+git diff --name-only --diff-filter=A $(git merge-base HEAD origin/main)..origin/main > tmp/main-added.txt
+comm -12 <(sort tmp/branch-added.txt) <(sort tmp/main-added.txt)
+```
+
+Watch for numbering collisions (e.g. both branches creating ADR-141 with
+different content but different filenames — Git merges both silently).
+
+## Phase 3: Categorise Each Conflict
+
+Assign every conflicting file to one of these categories:
+
+| Category          | Description                                   | Risk   | Resolution                                  |
+| ----------------- | --------------------------------------------- | ------ | ------------------------------------------- |
+| **Trivial**       | Only one side's changes matter                | Low    | Accept one side                             |
+| **Mechanical**    | Both sides changed different hunks            | Low    | Accept both hunks                           |
+| **Semantic**      | Both sides changed the same logic differently | High   | Manual merge — read both versions           |
+| **Modify/delete** | One side modified, other deleted              | Medium | Usually accept the deletion + check imports |
+| **Structural**    | Directory vs file, symlink vs real            | Medium | Accept the canonical form                   |
+
+## Phase 4: Gap Analysis — Find Silent Breaks
+
+This is the most important phase. Text-level conflict resolution only catches
+half the problems. The other half are **auto-merged files that compile on their
+own but break when combined**.
+
+### 4a. Deleted-file import cascade
+
+For every file the other branch deleted, grep your branch for imports:
+
+```bash
+for deleted in $(git diff --name-only --diff-filter=D \
+  $(git merge-base HEAD origin/main)..origin/main -- 'src/'); do
+  basename=$(basename "$deleted" .ts)
+  grep -rn "$basename" src/ --include='*.ts' | grep import
+done
+```
+
+Any match is a type-check failure waiting to happen after merge.
+
+### 4b. Interface signature changes in auto-merged files
+
+When the other branch changes a function signature in a file your branch
+didn't touch, Git auto-merges their version. But your branch's callers
+still use the old signature. Check:
+
+- What functions did the other branch change signatures for?
+- Does your branch call any of them?
+- Do the call sites pass the right parameters?
+
+### 4c. Required parameter additions
+
+If your branch adds a required parameter to a shared interface (e.g.
+`observability` on `RegisterHandlersOptions`), every caller on the other
+branch's new test files will fail type-check — even though those files
+auto-merge cleanly from the other branch.
+
+List the other branch's new files that call your changed interfaces:
+
+```bash
+git diff --name-only --diff-filter=A \
+  $(git merge-base HEAD origin/main)..origin/main -- 'src/' |
+while read f; do
+  git show origin/main:"$f" | grep -l 'yourFunction' && echo "$f"
+done
+```
+
+### 4d. Numbering and naming collisions
+
+Check for ADRs, plan files, or generated files where both branches used
+the same number or name for different content. Git merges these silently
+because the filenames differ.
+
+Across lineages (a fork integrating its upstream) the rule is fixed so
+that it never needs deciding: upstream's sequence is authoritative; the
+fork's colliding record is renumbered to the next free number in the
+same commit as the sync, with every citation updated and the index rows
+confirmed; the fork never reserves a block of numbers, because a block
+is estate identity carried in the tree (ADR-228).
+
+### 4e. Dependency version conflicts
+
+Compare `package.json` changes on both sides. If both branches updated
+the same dependency to different versions, the auto-merge may pick the
+wrong one (or produce an invalid `package.json`).
+
+### 4f. Observability gap analysis
+
+Trace wrapping mechanisms (Sentry spans, structured logging, correlation IDs)
+across all protocol surfaces (HTTP, MCP, SDK). If the other branch added
+observability wrappers to handlers, verify that your branch's new handlers
+also have them. Auto-merge will not add wrappers to files that only exist on
+your branch.
+
+Concrete pattern: do not just "add the parameter" — wrap the handler body in
+the same observability pattern used by existing handlers. Read the other
+branch's wrapped handlers for the canonical pattern.
+
+### 4g. Call-chain contract verification
+
+For each auto-merged file, verify that callers match the post-merge function
+signatures. The pattern: "this file auto-merged from main, but my branch
+calls functions in it with the old signature."
+
+Trace through the call chain from entry point to leaf. If any intermediate
+function gained a new required parameter on the other branch, the auto-merged
+callers on your branch still pass the old argument count.
+
+### 4h. Characterisation test inventory
+
+Before writing new characterisation tests (Phase 5), inventory existing tests
+that guard integration seams. Many seams are already covered — creating
+duplicates wastes effort and creates maintenance burden.
+
+Check: which existing tests exercise the integration boundary between your
+branch's changes and the other branch's changes? Run them against both
+branches independently to confirm they pass. These are your existing safety
+net — new characterisation tests should cover gaps, not duplicate coverage.
+
+### 4i. Premise cascades in prose
+
+The other branch changes a fact — a served shape, a published field, a
+version, a count — that documents and plans on your branch state as a
+premise. Their text merges untouched, because the other branch never
+edited them, and their meaning is now false. Type-check proves code and a
+generator's own check proves generated pages; nothing proves prose, so this
+gap is closed by reading.
+
+Derive the sweep terms from the change's claims, never from its file list:
+the wording the other branch retracted (its ADR amendments, changelog,
+thread record, PR body), the new facts it introduces, and the old facts
+those replace (the negations — "unordered", "not yet", "published on no
+surface", the previous version string). Enumerate every document that
+differs between the two tips (`git diff --name-only <other-tip> <your-tip>
+-- '*.md' '*.json'`) — the files only your branch holds (plans, runbooks,
+research and report records, executive memory, generated pages whose
+generator lives only on your branch) AND every shared file both branches
+edited, since git auto-merges a runbook whose two paragraphs now
+contradict each other. The keyword search is discovery; completeness is
+reading the enumerated files' claims. Give every hit one disposition and record it in the pull
+request — re-true a permanent document; narrow a plan whose scope is
+partly overtaken; archive a plan whose whole premise the other branch
+delivered; add a dated section to a dated record, never rewrite it. The
+sweep is complete when a second pass over the same terms finds nothing
+new. For a lineage sync (a fork integrating its upstream) the
+cross-fork-integration skill runs this step as §6.
+
+## Phase 5: Create Characterisation Tests
+
+Before starting the merge, write tests that capture the behaviour your branch
+adds at the **integration seams** — the points where your code meets code the
+other branch changed.
+
+These tests serve as a safety net: if the merge accidentally drops your
+wiring, the characterisation tests fail.
+
+Good characterisation tests for a merge:
+
+- Test that your branch's parameters are threaded through to the right
+  call sites (e.g. observability passed to handlers)
+- Test that your branch's wrappers are applied (e.g. tool handlers are
+  wrapped with observability)
+- Test boundary behaviour that depends on both branches' code working
+  together
+
+Commit these tests **before** starting the merge so they exist on both
+sides of the merge commit.
+
+## Phase 6: Execute the Merge
+
+Start the real merge operation:
+
+```bash
+git merge --no-commit --no-ff origin/main
+```
+
+Resolve conflicts inside that in-progress merge. Do not turn the analysis into
+a hand-built content snapshot, cherry-pick substitute, or copy-file
+reconstruction; Git's parent links and merge-base data are part of the result.
+
+Work in dependency order:
+
+1. **Trivial and structural conflicts first** — fast, low risk, clears noise
+2. **Mechanical conflicts** — accept both hunks
+3. **Semantic conflicts in dependency order** — start with the keystone file
+   (the one other files depend on), then work outwards
+4. **Test file conflicts** — after production code is correct
+5. **Non-conflicting adaptations** — auto-merged files that need your new
+   parameters added
+6. **Stale file cleanup** — delete files, fix imports, renumber collisions
+7. **Regenerate lockfile** — `pnpm install`
+8. **Verify** — `pnpm type-check` first (catches most merge errors), then
+   full `pnpm check`
+
+## Phase 7: Verify and Review
+
+1. Run `pnpm type-check` immediately after resolving all conflicts — this
+   catches the silent breaks that gap analysis predicted
+2. Run `pnpm lint:fix` — catches structural issues
+3. Run `pnpm test` — catches behavioural regressions
+4. Run characterisation tests — confirms your branch's wiring survived
+5. Run `pnpm check` — full clean rebuild + verification
+6. Invoke specialist reviewers on the merge result
+7. Verify merge topology: `git show --no-patch --pretty=raw HEAD` shows the
+   expected two parents and `git merge-base --is-ancestor origin/main HEAD`
+   exits 0
+
+## Checklist
+
+Use this checklist to ensure nothing is missed:
+
+- [ ] Measured divergence (commits, files, insertions on both sides)
+- [ ] Ran dry-run merge, captured full conflict list
+- [ ] Identified files changed on both sides (intersection)
+- [ ] Identified files deleted by the other branch
+- [ ] Grepped for imports of deleted files on your branch
+- [ ] Identified files added by both branches (add/add collisions)
+- [ ] Checked for numbering collisions (ADRs, plans)
+- [ ] Swept documents and plans for refuted premises (§4i) and recorded each disposition
+- [ ] Categorised every conflict (trivial/mechanical/semantic/structural)
+- [ ] Checked for auto-merged files that call changed interfaces
+- [ ] Checked for auto-merged files that import deleted modules
+- [ ] Checked for new files on the other branch that call your new required params
+- [ ] Compared dependency version changes on both sides
+- [ ] Traced observability wrappers across protocol surfaces
+- [ ] Verified call-chain contracts in auto-merged files
+- [ ] Inventoried existing characterisation tests at integration seams
+- [ ] Created new characterisation tests for uncovered seams
+- [ ] Committed characterisation tests before starting the merge
+- [ ] Started from `git merge --no-commit --no-ff <target-ref>`
+- [ ] Resolved conflicts in dependency order
+- [ ] Adapted non-conflicting files that need new parameters
+- [ ] Cleaned up stale files, imports, and numbering
+- [ ] Regenerated lockfile
+- [ ] Ran full verification suite
+- [ ] Invoked specialist reviewers on the merge result
+- [ ] Verified merge commit parent shape and target-branch ancestry

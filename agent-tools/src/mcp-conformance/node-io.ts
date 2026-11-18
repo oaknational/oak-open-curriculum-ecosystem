@@ -1,167 +1,71 @@
 /**
- * Node IO for `agent-tools mcp-conformance` (MCP-189): the real spawn seam
- * over the lockfile-installed `@mcpjam/cli` bin, and raw-report retention
- * under a caller-chosen directory (absolute, or relative to the repo root).
+ * Node IO for `agent-tools mcp-conformance` (MCP-189): raw-report retention
+ * under a caller-chosen directory (absolute, or relative to the repo root),
+ * and the assembly of the IO port the orchestration is handed.
  *
- * Bin resolution: the bare `@mcpjam/cli` specifier is resolved with a
- * `createRequire` anchored at the repo root — resolution-only, matching the
- * bootstrap precedent — which today yields `dist/index.js`, the same file
- * the package's `bin` entry names (verified 3.15.2; a future main/bin split
- * would fail loudly at the parse boundary). The child runs under the
- * current Node executable; no `npx`, no PATH lookup, no network at
- * install-drift risk.
+ * Launching the vendor CLI lives next door in `mcpjam-runner.ts`: reaching
+ * out to another process and writing artefacts are different concerns, and
+ * this file is the second.
  */
-import { spawnSync } from 'node:child_process';
-import { closeSync, fchmodSync, mkdirSync, openSync, writeFileSync } from 'node:fs';
-import { createRequire } from 'node:module';
 import { dirname, join, resolve } from 'node:path';
 
-import { err, ok, type Result } from '@oaknational/result';
-
-import { boundedExcerpt } from './bounded-excerpt.js';
 import { type McpConformanceIo, type RetentionOutcome } from './io-port.js';
-import { type McpjamSpawnResult } from './runner.js';
+import { resolveMcpjamBin, spawnMcpjam, type McpjamBinResolver } from './mcpjam-runner.js';
+import { nodeOwnerOnlyWriteOps, type OwnerOnlyWriteOps } from './owner-only-write-ops.js';
+import { assertOwnerOnlyEstablishable, writeOwnerOnly } from './owner-only-write.js';
 import { type ConformanceSuite } from './types.js';
 
 /**
- * Generous per-suite ceiling: observed suite durations against the deployed
- * alpha are 1–4 s (2026-07-26); the ceiling exists so a hung SSE stream
- * cannot hold a CI job to the runner's own timeout.
- */
-const SUITE_TIMEOUT_MS = 120_000;
-
-/** Raw json-summary documents are single-digit KiB; 16 MiB is unreachable headroom. */
-const MAX_STDOUT_BYTES = 16 * 1024 * 1024;
-
-function resolveMcpjamBin(repoRoot: string): Result<string, Error> {
-  try {
-    return ok(createRequire(join(repoRoot, 'package.json')).resolve('@mcpjam/cli'));
-  } catch (error) {
-    return err(
-      new Error(
-        `@mcpjam/cli did not resolve from the repo root — run pnpm install (lockfile-declared devDependency): ${
-          error instanceof Error ? error.message : String(error)
-        }`,
-      ),
-    );
-  }
-}
-
-function spawnMcpjam(
-  repoRoot: string,
-  binPath: string,
-  args: readonly string[],
-): Result<McpjamSpawnResult, Error> {
-  const child = spawnSync(process.execPath, [binPath, ...args], {
-    cwd: repoRoot,
-    encoding: 'utf8',
-    timeout: SUITE_TIMEOUT_MS,
-    // SIGKILL, not the default SIGTERM: SIGTERM is ignorable, so a child
-    // that traps it (or is wedged inside an uninterruptible await) would
-    // outlive the ceiling and the advertised timeout would not be real.
-    killSignal: 'SIGKILL',
-    maxBuffer: MAX_STDOUT_BYTES,
-  });
-  if (child.error !== undefined) {
-    // A timeout sets BOTH `error` (ETIMEDOUT) and `signal`, so this branch
-    // fires first — the captured streams must ride the error here too, or
-    // the timeout case (where diagnostics matter most) loses them.
-    return err(
-      new Error(
-        `${child.error.message}` +
-          `${boundedExcerpt('partial stdout', child.stdout ?? '')}` +
-          `${boundedExcerpt('stderr', child.stderr ?? '')}`,
-      ),
-    );
-  }
-  if (child.signal !== null) {
-    // A signal death (typically the timeout ceiling) is a LAUNCH FAILURE to
-    // the orchestration: retention never runs on this path, so no evidence
-    // artefact survives it — bounded DIAGNOSTICS of both streams ride the
-    // error instead, so the operator still sees what the child said.
-    return err(
-      new Error(
-        `mcpjam died on signal ${child.signal} (timeout ceiling ${String(SUITE_TIMEOUT_MS)}ms)` +
-          `${boundedExcerpt('partial stdout', child.stdout)}${boundedExcerpt('stderr', child.stderr)}`,
-      ),
-    );
-  }
-  return ok({ exitCode: child.status ?? undefined, stdout: child.stdout, stderr: child.stderr });
-}
-
-// Writes resolve against the repo root; an absolute reportDir stands as
-// given. The REPORTED path preserves the caller's own form (relative in,
-// repo-root-relative out; absolute in, absolute out) so the emitted
-// report never names a path that does not exist.
-// OWNER-ONLY, established BEFORE any content lands. Attended runs retain
-// AUTHENTICATED vendor output here, and the report shapes constrain none
-// of `error`, `output`, `details` or the captured stderr — a bearer or
-// refresh token reaching any of them lands in this file, so the process
-// default (0644 under a 022 umask) would expose it to every other user on
-// a shared host.
-//
-// ORDER IS THE WHOLE POINT, and write-then-chmod gets it wrong: the `mode`
-// argument applies only when the file is CREATED, so re-writing a report
-// left 0644 by an older build would put the authenticated payload on disk
-// world-readable and only tighten it afterwards — and if the chmod then
-// failed, the content would stay exposed while retention reported failure.
-//
-// Opening with 'w' truncates to zero length first, so the file is EMPTY at
-// this point; `fchmodSync` then tightens it (on the descriptor, so no path
-// can be swapped underneath us); only then does content land. A chmod
-// failure throws before the write, leaving an empty file and a loud
-// retention failure rather than an exposed one. Every throw propagates to
-// the caller's catch — including a close failure (EBADF/EIO — the write
-// may not have flushed), which is why the success-path close sits INSIDE
-// the try and the finally is error-path best-effort only (the caller's
-// outcome already carries the true cause; a second throw here would
-// replace it with the less useful close error).
-function writeOwnerOnly(filePath: string, content: string): void {
-  let handle: number | undefined;
-  try {
-    handle = openSync(filePath, 'w', 0o600);
-    fchmodSync(handle, 0o600);
-    writeFileSync(handle, content, { encoding: 'utf8' });
-    closeSync(handle);
-    handle = undefined;
-  } finally {
-    if (handle !== undefined) {
-      try {
-        closeSync(handle);
-      } catch {
-        // Descriptor leak at worst — the true failure is already propagating.
-      }
-    }
-  }
-}
-
-/**
- * Owner-only write of one file under a directory (created if absent),
- * resolving relative paths against the repo root. Shared by the suites'
- * retention here and the drive's per-tool evidence retention
- * (`drive-node-io.ts`) — every retained artefact can embed authed vendor
- * output, so all of them get the 0600 discipline above.
+ * Owner-only write of one file under a directory (created if absent).
+ * Relative paths resolve against the repo root; an absolute `reportDir`
+ * stands as given. The REPORTED path preserves the caller's own form
+ * (relative in, repo-root-relative out; absolute in, absolute out) so the
+ * emitted report never names a path that does not exist.
+ *
+ * Shared by the suites' retention here and the drive's per-tool evidence
+ * retention (`drive-node-io.ts`) — every retained artefact can embed authed
+ * vendor output, so all of them are OWNER-ONLY, established before any
+ * content lands; the full rationale and ordering discipline live with
+ * {@link writeOwnerOnly} in `owner-only-write.ts`. `platform` defaults to
+ * the running host; a Windows host yields a failed outcome naming that
+ * owner-only retention is unavailable there, and nothing is written.
  */
 export function writeUnder(
   repoRoot: string,
   reportDir: string,
   fileName: string,
   content: string,
+  ops?: OwnerOnlyWriteOps,
+  platform?: NodeJS.Platform,
 ): RetentionOutcome {
   const writeDir = resolve(repoRoot, reportDir);
   const reportedPath = join(reportDir, fileName);
+  // Directory creation goes through the SAME seam as the write. Tests are not
+  // permitted filesystem access, so every call on this path is injectable by
+  // construction; a direct `mkdirSync` here would put the code after it out of
+  // reach of any permitted test.
+  const edge = ops ?? nodeOwnerOnlyWriteOps;
   try {
-    mkdirSync(writeDir, { recursive: true });
-    writeOwnerOnly(join(writeDir, fileName), content);
+    // A refusal leaves nothing behind: the platform check precedes `mkdir`, or a
+    // Windows host would create the caller's report directory on its way to
+    // reporting that it wrote nothing.
+    assertOwnerOnlyEstablishable(platform ?? process.platform);
+    edge.mkdir(writeDir);
+    writeOwnerOnly(join(writeDir, fileName), content, edge, platform);
     return { ok: true, reportedPath };
   } catch (error) {
     return { ok: false, error: error instanceof Error ? error.message : String(error) };
   }
 }
 
-function retainUnder(repoRoot: string, reportDir: string) {
+function retainUnder(
+  repoRoot: string,
+  reportDir: string,
+  ops?: OwnerOnlyWriteOps,
+  platform?: NodeJS.Platform,
+) {
   return (suite: ConformanceSuite, content: string): RetentionOutcome =>
-    writeUnder(repoRoot, reportDir, `${suite}.json`, content);
+    writeUnder(repoRoot, reportDir, `${suite}.json`, content, ops, platform);
 }
 
 /**
@@ -187,8 +91,10 @@ export function writeRunSummary(
   repoRoot: string,
   reportDir: string,
   reportJson: string,
+  ops?: OwnerOnlyWriteOps,
+  platform?: NodeJS.Platform,
 ): RetentionOutcome {
-  return writeUnder(repoRoot, reportDir, 'summary.json', reportJson);
+  return writeUnder(repoRoot, reportDir, 'summary.json', reportJson, ops, platform);
 }
 
 /**
@@ -196,17 +102,31 @@ export function writeRunSummary(
  *
  * @param repoRoot - Absolute repository root (worktree-safe, from `resolveRepoRoot`).
  * @param reportDir - Raw-report directory: absolute, or relative to the repo root.
+ * @param ops - Owner-only write operations; production callers omit it and
+ *   get the real `node:fs` edge. Injectable so the owner-only ordering
+ *   contract is provable THROUGH this production entry point.
+ * @param platform - Defaults to the running host; a Windows host yields the
+ *   owner-only refusal on every retention (see `owner-only-write.ts`).
+ * @param resolveBin - Module-resolution edge; production callers omit it. It is
+ *   injectable for the same reason `ops` is: `resolve` walks `node_modules` on
+ *   disk, so the resolution-failure branch is only describable through a seam.
  */
-export function buildMcpConformanceNodeIo(repoRoot: string, reportDir: string): McpConformanceIo {
+export function buildMcpConformanceNodeIo(
+  repoRoot: string,
+  reportDir: string,
+  ops?: OwnerOnlyWriteOps,
+  platform?: NodeJS.Platform,
+  resolveBin?: McpjamBinResolver,
+): McpConformanceIo {
   return {
     runMcpjam: (args) => {
-      const bin = resolveMcpjamBin(repoRoot);
+      const bin = resolveMcpjamBin(repoRoot, resolveBin);
       if (bin.ok) {
         return spawnMcpjam(repoRoot, bin.value, args);
       }
       return bin;
     },
-    retainRawReport: retainUnder(repoRoot, reportDir),
+    retainRawReport: retainUnder(repoRoot, reportDir, ops, platform),
   };
 }
 
@@ -215,12 +135,26 @@ export function buildMcpConformanceNodeIo(repoRoot: string, reportDir: string): 
  * same write-then-never-expose discipline as `writeUnder`, for artefacts
  * whose destination the caller has already resolved (the reviewer pack via
  * `--pack-out`): the pack embeds vendor failure text from authed runs, the
- * same content class the summary protects at 0600.
+ * same content class the summary protects owner-only. `ops` is the same
+ * injectable seam as everywhere else on this surface, so the ordering
+ * contract is provable through this entry point too, as is the Windows
+ * refusal (`platform` defaults to the running host).
  */
-export function retainOwnerOnlyAt(absolutePath: string, content: string): RetentionOutcome {
+export function retainOwnerOnlyAt(
+  absolutePath: string,
+  content: string,
+  ops?: OwnerOnlyWriteOps,
+  platform?: NodeJS.Platform,
+): RetentionOutcome {
+  // The same seam as `writeUnder`: no filesystem call on a retention path sits
+  // outside it, so every one of them is reachable by a test that may not do IO.
+  const edge = ops ?? nodeOwnerOnlyWriteOps;
   try {
-    mkdirSync(dirname(absolutePath), { recursive: true });
-    writeOwnerOnly(absolutePath, content);
+    // As in `writeUnder`: refuse the platform before creating any directory, so
+    // a refused retention mutates nothing at the caller-selected path.
+    assertOwnerOnlyEstablishable(platform ?? process.platform);
+    edge.mkdir(dirname(absolutePath));
+    writeOwnerOnly(absolutePath, content, edge, platform);
     return { ok: true, reportedPath: absolutePath };
   } catch (error) {
     return { ok: false, error: error instanceof Error ? error.message : String(error) };

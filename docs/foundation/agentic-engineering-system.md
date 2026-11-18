@@ -16,8 +16,8 @@ lanes, evidence surfaces, and formal report lanes — use the
 
 ## What This System Does
 
-Every line of code, configuration, and documentation in this repository is
-written by AI agents. Humans provide direction, design guardrails, and
+The code in this repository is written by AI agents, directed and reviewed by
+Oak's engineers. Humans provide direction, design guardrails, and
 corrective feedback. The **Agentic Engineering Practice** — "the Practice" —
 is the interconnected system that makes this safe, high-quality, and
 self-improving. It is a reusable plain-text framework for agentic-first

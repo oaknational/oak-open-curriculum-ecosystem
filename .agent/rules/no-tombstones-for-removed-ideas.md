@@ -1,3 +1,8 @@
+---
+classification: core
+description: When a wrong idea is removed, state the correct design in the positive and stop; write so a reader who never saw the mistake cannot reconstruct it. The rule is about prose describing the present design; removing code is ordinary work, and the story of a change lives in the history surfaces.
+---
+
 # No Tombstones for Removed Ideas
 
 Operationalises [`principles.md` §Strict and Complete](../directives/principles.md#strict-and-complete)
@@ -33,6 +38,13 @@ governance doc, rule, README, or code comment stating what the system *is* and
 2. State the design that replaces the wrong idea; its description goes with it.
 3. Read the result as a first-time reader. If the dead idea is still
    reconstructable from the prose, it is not yet removed.
+
+The same holds for a manifest or inventory: it declares what is present and
+its lifecycle (a surface created at first write is declared
+`runtime-created`), and a surface doctrine has superseded gets no entry at
+all; "must never exist" rows are tombstones, and absence-by-supersession
+lives in the superseding record (the substrate contract's §Lifecycle
+Declarations is the worked form).
 
 Two things you write carry their own subject — an action, or a change — and
 read positively on their own terms:

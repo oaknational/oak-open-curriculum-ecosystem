@@ -7,21 +7,20 @@ import { TEST_UPSTREAM_METADATA } from './test-helpers/upstream-metadata-fixture
 import { SCOPES_SUPPORTED } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { getScratchStaticRoot } from './test-helpers/static-root-fixture.js';
 
-describe('OAuth Protected Resource Metadata (Integration)', () => {
-  const createTestApp = async (
-    allowedHosts = 'localhost,127.0.0.1,example.com,api.example.com',
-  ) => {
-    const runtimeConfig = createMockRuntimeConfig({ env: { ALLOWED_HOSTS: allowedHosts } });
-    const observability = createFakeHttpObservability();
-    return await createApp({
-      staticRoot: await getScratchStaticRoot(),
-      runtimeConfig,
-      observability,
-      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
-      upstreamMetadata: TEST_UPSTREAM_METADATA,
-    });
-  };
+/** An auth-enabled app whose allowed hosts default to the suite's four names. */
+const createTestApp = async (allowedHosts = 'localhost,127.0.0.1,example.com,api.example.com') => {
+  const runtimeConfig = createMockRuntimeConfig({ env: { ALLOWED_HOSTS: allowedHosts } });
+  const observability = createFakeHttpObservability();
+  return await createApp({
+    staticRoot: await getScratchStaticRoot(),
+    runtimeConfig,
+    observability,
+    getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
+    upstreamMetadata: TEST_UPSTREAM_METADATA,
+  });
+};
 
+describe('OAuth Protected Resource Metadata (Integration)', () => {
   describe('resource URL generation', () => {
     it('returns resource URL identifying the /mcp endpoint as the protected resource', async () => {
       const app = await createTestApp();

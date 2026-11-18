@@ -1,0 +1,51 @@
+# Instructions judged to bear on each task
+
+Every instruction not listed under a task was marked N for all six answers to that task.
+
+## Task 1: handle a Copilot comment (rename a helper, add a fallback value)
+
+Answers: A01, A05, A20, A22, A25, A26
+
+- **precedence-is-not-approval**: a reviewer's verdict is exactly the kind of prior verdict the instruction says is never authority by itself.
+- **verify-dont-trust**: the instruction names reviewer statements as claims to check against concrete artefacts (here the callers and types) before acting.
+- **replace-dont-bridge**: a rename can leave an alias for the old name, and a fallback value is a fallback path, both of which the instruction forbids.
+
+## Task 2: plan a new always-on rule about double-checking a file path
+
+Answers: A02, A09, A17, A18, A21, A29
+
+- **one-instance-is-an-observation**: a new rule is a named rule derived from observed incidents, so the instance count governs whether it can be written.
+- **re-apply-first-question-at-elaboration-boundaries**: the plan must ask whether a cheaper home (a clause in an existing rule) would do the same job.
+- **compute-dont-hope**: the rule index and platform adapter files restate facts held in the canonical rule file, so the plan must generate them, not hand-keep them.
+- **verify-dont-trust**: the plan makes claims about where files go and what tooling does, which need checking against the repository or flagging as unchecked.
+- **scope-from-goal-before-approach**: a plan is the moment the instruction asks for a restated goal and an In/Out surface set.
+- **design-work-for-small-prs**: the instruction places PR sizing at plan-shaping time, which this is.
+- **present-verdicts-not-menus**: the analysis ends in a choice between a new rule and an amendment, so the answer must give a recommendation, not hand the choice back.
+
+## Task 3: short plan for a new lesson-transcript MCP tool
+
+Answers: A03, A07, A10, A12, A23, A27
+
+- **verify-data-supports-shape-before-building**: the task proposes a build, so the answer must check what exists and what is served before fixing its shape.
+- **read-before-asking**: any question to the owner about what is missing must follow a read of the code, with the read result given as information.
+- **re-apply-first-question-at-elaboration-boundaries**: the simplest plan (use the existing tool) has to be considered before a build plan.
+- **scope-from-goal-before-approach**: a plan is the moment the instruction asks for a restated goal and an In/Out surface set.
+- **design-work-for-small-prs**: the instruction places PR sizing at plan-shaping time, which this is.
+
+## Task 4: draft a commit message and git commands for a one-line README fix
+
+Answers: A04, A08, A11, A14, A15, A19
+
+- **no-speed-pressure**: a one-line change invites skipping the commit ceremony, and the instruction says the ceremony is the deliverable.
+- **verify-dont-trust**: the sequence must check state (diff, staged set, identity, default branch) and must not assert unchecked values.
+
+## Task 5: confirm the search SDK tests pass, none are skipped, and the suite is complete
+
+Answers: A06, A13, A16, A24, A28, A30
+
+- **verify-dont-trust**: the owner's claim must be checked against concrete artefacts before it is reported as confirmed.
+- **validate-full-target-estate**: the test config excludes a file pattern, so "none skipped" needs a check of what that exclusion leaves out.
+
+## One exception to the per-task sets
+
+- **capture-practice-tool-feedback**: judged not to bear on any task, because the agent could not write files. A29 invoked it by name and flagged the uncaptured friction, so marks.tsv carries one S row for A29 only; no A rows were written for the other answers.

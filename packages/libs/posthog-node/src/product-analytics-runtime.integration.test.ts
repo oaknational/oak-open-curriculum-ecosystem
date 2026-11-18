@@ -55,6 +55,22 @@ interface TransportObserverCreation {
   >[1];
 }
 
+function noop(): void {
+  /* A placeholder the promise executor replaces synchronously. */
+}
+
+/**
+ * Distinct function identities for the snapshot test: the runtime must hold
+ * the original by reference after the config is mutated to the replacement.
+ */
+const ORIGINAL_WAIT_UNTIL = (): undefined => undefined;
+const REPLACEMENT_WAIT_UNTIL = (): undefined => undefined;
+const ORIGINAL_REPORTER = (): undefined => undefined;
+const REPLACEMENT_REPORTER = (): undefined => undefined;
+
+/** The event policy that admits every event unchanged. */
+const identityEventPolicy = (event: EventMessage | null): EventMessage | null => event;
+
 function createActorProjector(): ActivePostHogActorProjector {
   return {
     project: () =>
@@ -86,7 +102,7 @@ function createDeferredShutdown(): {
   readonly promise: Promise<void>;
   readonly resolve: () => void;
 } {
-  let resolvePromise: () => void = () => undefined;
+  let resolvePromise: () => void = noop;
   const promise = new Promise<void>((resolve) => {
     resolvePromise = resolve;
   });
@@ -179,10 +195,6 @@ function expectClosedRuntimeSurface(subject: ReturnType<typeof createRuntimeHarn
 }
 
 function createMutableConfigFixture() {
-  const originalWaitUntil = () => undefined;
-  const replacementWaitUntil = () => undefined;
-  const originalReporter = () => undefined;
-  const replacementReporter = () => undefined;
   const originalProjector = createActorProjector();
   const replacementProjector = createActorProjector();
   const release: {
@@ -200,15 +212,15 @@ function createMutableConfigFixture() {
     activeActorProjector: originalProjector,
     toolNames,
     resourceNames,
-    waitUntil: originalWaitUntil,
-    reportOperationalError: originalReporter,
+    waitUntil: ORIGINAL_WAIT_UNTIL,
+    reportOperationalError: ORIGINAL_REPORTER,
   } satisfies PostHogProductAnalyticsConfig;
 
   return {
     config,
     originalProjector,
-    originalReporter,
-    originalWaitUntil,
+    originalReporter: ORIGINAL_REPORTER,
+    originalWaitUntil: ORIGINAL_WAIT_UNTIL,
     mutate: () => {
       config.projectApiKey = 'mutated-project-key';
       config.serverVersion = 'mutated-version';
@@ -217,8 +229,8 @@ function createMutableConfigFixture() {
       toolNames.splice(0, toolNames.length, 'mutated-tool');
       resourceNames.splice(0, resourceNames.length, 'mutated-resource');
       config.activeActorProjector = replacementProjector;
-      config.waitUntil = replacementWaitUntil;
-      config.reportOperationalError = replacementReporter;
+      config.waitUntil = REPLACEMENT_WAIT_UNTIL;
+      config.reportOperationalError = REPLACEMENT_REPORTER;
     },
   };
 }
@@ -226,9 +238,8 @@ function createMutableConfigFixture() {
 describe('createPostHogClientOptions', () => {
   it('returns the exact closed, EU, minimal-person delivery configuration', () => {
     const config = createConfig();
-    const finalOakEventPolicy = (event: EventMessage | null): EventMessage | null => event;
 
-    const result = createPostHogClientOptions(config, finalOakEventPolicy);
+    const result = createPostHogClientOptions(config, identityEventPolicy);
 
     expect(result).toStrictEqual({
       host: POSTHOG_EU_INGESTION_HOST,
@@ -251,7 +262,7 @@ describe('createPostHogClientOptions', () => {
       waitUntilDebounceMs: 50,
       waitUntilMaxWaitMs: 500,
       isServer: true,
-      before_send: finalOakEventPolicy,
+      before_send: identityEventPolicy,
     });
     expect(result).not.toHaveProperty('personalApiKey');
     expect(result).not.toHaveProperty('secretKey');

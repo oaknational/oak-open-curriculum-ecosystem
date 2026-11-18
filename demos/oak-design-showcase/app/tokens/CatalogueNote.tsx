@@ -36,6 +36,11 @@ export function CatalogueNote({
         current theme gives it.
       </p>
       <p className="oak-body-3">
+        Rows marked <span className="oak-body-4 tok-flag">primitive</span> are tier-1 literals:
+        reference them inside a token definition, never at the point of use. Every unmarked token is
+        one to use directly.
+      </p>
+      <p className="oak-body-3">
         Icon URL properties (<span className="oak-code-3">--i-*</span> and the{' '}
         <span className="oak-code-3">--ic-*</span> roles) are excluded. They are
         environment-relative asset paths rather than design decisions, so the kit&rsquo;s export

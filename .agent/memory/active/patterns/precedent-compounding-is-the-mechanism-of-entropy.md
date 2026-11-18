@@ -3,6 +3,7 @@ name: "Precedent Compounding Is the Mechanism of Entropy"
 polarity: anti-pattern
 use_this_when: "You (or a reviewer) are about to justify a shape because a landed artefact already uses it — a precedent test, a prior disposition, an allowlist entry, an established exception. Check the precedent's recorded rationale and the governing principle before reusing the shape."
 category: agent
+layer: general
 proven_in: "Four instances in one arc (2026-07-07/08): (1) a COMPLETION_KEYWORDS_V1 pin test added mirroring a landed NET_C precedent test — a reviewer even recommended it — owner-corrected as an audit-shaped test both times (cure: a recomputing validator; BOTH pin tests deleted); (2) an io-allowlist union performed in a merge and rated PASS by a six-seat gateway — every step procedurally correct, every step entropy (owner: 'there should never have been an IO allowlist — the creep is entropy'); (3) a Sonar S4036 WONTFIX lean copied from a precedent that had NO recorded rationale and a different site shape — first-principles review fixed it in code instead; (4) the remediation bot's PR fixing findings by generic convention against the estate's documented local decisions — precedent-compounding embodied in a tool."
 proven_date: 2026-07-08
 barrier:

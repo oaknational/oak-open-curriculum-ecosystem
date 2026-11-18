@@ -25,8 +25,7 @@ function parseRegistry(text: string) {
 
 function registryWithClaim(agentId: unknown): string {
   return JSON.stringify({
-    schema_version: '1.3.0',
-    commit_queue: [],
+    schema_version: '1.4.0',
     claims: [
       {
         claim_id: 'claim-one',

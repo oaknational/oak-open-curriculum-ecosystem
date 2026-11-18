@@ -278,6 +278,15 @@ acceptance redefined against the validated zero.
 - **D-R5 — D6 (convert-every-throw) is REOPENED** and decided at WS4 on evidence. Until
   then, the defensive/structural and result-return classes are NOT executed.
 
+**Owner ruling, 2026-09-08 (applied 2026-09-25):** "Turn the rule off for now, we can't fix
+it without creating incredible churn, so that needs to wait until the Engraph fork is merged
+back into the upstream. However, in any workspace with no current warnings and in any new
+workspace, leave it on as an error." The plugin's recommended preset holds the rule at
+`error`; each workspace that held throw debt when this was applied turns it `off` in its own
+flat config, citing this ruling. Lint therefore no longer prints the live count for those
+workspaces: WS0's survey captures it from a run with the overrides lifted, not from the gate.
+Remediation resumes after the merge-back.
+
 ## Prerequisites
 
 - **Blocking**: WS0 before WS2/WS3 (the survey is the trustworthy landscape). The F-74

@@ -9,6 +9,7 @@ import {
   type JsonValue,
 } from '@oaknational/observability';
 import { typeSafeEntries, typeSafeKeys } from '@oaknational/type-helpers';
+import { describeThrownObject, readConstructorName } from './thrown-object-description.js';
 import type { LogContext } from './types.js';
 
 const RESERVED_ERROR_KEYS = new Set([
@@ -55,6 +56,17 @@ export function createNativeErrorFields(error: Error): ErrorNormalisationFields 
 
 /**
  * Extracts normalisation fields from an arbitrary thrown object.
+ *
+ * Bad practice, kept until the logger's error boundary is made strict
+ * (MCP-880). This function accepts a value that is not an `Error` and guesses
+ * a name and a message for it through a chain of fallbacks (a `name` field,
+ * then the class name; a `message` field, then the JSON form, then a custom
+ * `toString`). A fallback chain hides the incorrect value where it should
+ * surface it. The
+ * estate is typed at every point, so a non-`Error` should be unable to reach
+ * the logger as an error: the boundary takes an `Error`, and whatever catches
+ * an `unknown` reports a value that is not an `Error` as a failure of its own
+ * through `Result<T, E>`.
  *
  * @param value - Unknown thrown value
  * @returns Structured fields when the value is a non-array object
@@ -157,93 +169,4 @@ function cleanMetadata(metadata: LogContext | undefined): LogContext | undefined
   }
 
   return metadata;
-}
-
-function readPrototypeDescriptorValue(value: unknown, key: string): unknown {
-  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
-    return undefined;
-  }
-
-  const prototype: unknown = Object.getPrototypeOf(value);
-  if (typeof prototype !== 'object' || prototype === null) {
-    return undefined;
-  }
-
-  return Object.getOwnPropertyDescriptor(prototype, key)?.value;
-}
-
-function readConstructorName(value: unknown): string | undefined {
-  const constructorValue = readPrototypeDescriptorValue(value, 'constructor');
-  if (typeof constructorValue !== 'function') {
-    return undefined;
-  }
-
-  return constructorValue.name !== 'Object' ? constructorValue.name : undefined;
-}
-
-function describeThrownObject(value: unknown, sanitisedObject: JsonObject | undefined): string {
-  const serialised = serialiseSanitisedObject(sanitisedObject);
-  if (serialised) {
-    return serialised;
-  }
-
-  const customToString = readCustomToString(value);
-  if (!customToString) {
-    return '[object Object]';
-  }
-
-  const stringValue = customToString();
-  return stringValue === '[object Object]' ? '[object Object]' : JSON.stringify(stringValue);
-}
-
-function serialiseSanitisedObject(sanitisedObject: JsonObject | undefined): string | undefined {
-  if (!sanitisedObject) {
-    return undefined;
-  }
-
-  const serialised = JSON.stringify(sanitisedObject);
-  return serialised && serialised !== '{}' ? serialised : undefined;
-}
-
-function readCustomToString(value: unknown): (() => string) | undefined {
-  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
-    return undefined;
-  }
-
-  const ownToString = readDescriptorFunction(Object.getOwnPropertyDescriptor(value, 'toString'));
-  if (ownToString) {
-    return () => ownToString.call(value);
-  }
-
-  const inheritedToString = readDescriptorFunctionFromValue(
-    readPrototypeDescriptorValue(value, 'toString'),
-  );
-  if (!inheritedToString) {
-    return undefined;
-  }
-
-  return () => inheritedToString.call(value);
-}
-
-function readDescriptorFunctionFromValue(
-  descriptorValue: unknown,
-): ((this: unknown) => string) | undefined {
-  if (!isDescriptorFunction(descriptorValue) || descriptorValue === Object.prototype.toString) {
-    return undefined;
-  }
-
-  return function descriptorFunction(this: unknown): string {
-    const result = descriptorValue.call(this);
-    return typeof result === 'string' ? result : String(result);
-  };
-}
-
-function isDescriptorFunction(value: unknown): value is (this: unknown) => unknown {
-  return typeof value === 'function';
-}
-
-function readDescriptorFunction(
-  descriptor: PropertyDescriptor | undefined,
-): ((this: unknown) => string) | undefined {
-  return readDescriptorFunctionFromValue(descriptor?.value);
 }

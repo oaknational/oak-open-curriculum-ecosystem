@@ -9,6 +9,11 @@ interface TestResponse {
   readonly writes: string[];
 }
 
+/** The deployed handler under test: writes each request's path to its response. */
+const echoPathHandler = (request: TestRequest, response: TestResponse): void => {
+  response.writes.push(request.path);
+};
+
 describe('createDeployEntryHandler', () => {
   it('loads the deployed handler once and reuses it across requests', async () => {
     let loads = 0;
@@ -16,9 +21,7 @@ describe('createDeployEntryHandler', () => {
     const handler = createDeployEntryHandler<TestRequest, TestResponse>({
       loadHandler: async () => {
         loads += 1;
-        return (request, response) => {
-          response.writes.push(request.path);
-        };
+        return echoPathHandler;
       },
     });
 
@@ -55,9 +58,7 @@ describe('createDeployEntryHandler', () => {
 
     expect(loads).toBe(1);
 
-    resolveHandler?.((request, response) => {
-      response.writes.push(request.path);
-    });
+    resolveHandler?.(echoPathHandler);
 
     await Promise.all([firstRequest, secondRequest]);
 
@@ -76,9 +77,7 @@ describe('createDeployEntryHandler', () => {
           throw new Error('bootstrap failed');
         }
 
-        return (request, response) => {
-          response.writes.push(request.path);
-        };
+        return echoPathHandler;
       },
     });
 

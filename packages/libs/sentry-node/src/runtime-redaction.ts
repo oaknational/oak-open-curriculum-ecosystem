@@ -9,8 +9,44 @@ import { typeSafeEntries } from '@oaknational/type-helpers';
 
 type SentryErrorEvent = Parameters<NonNullable<NodeOptions['beforeSend']>>[0];
 type SentryLogPayload = Parameters<NonNullable<NodeOptions['beforeSendLog']>>[0];
-type SentrySpanPayload = Parameters<NonNullable<NodeOptions['beforeSendSpan']>>[0];
 type SentryTransactionEvent = Parameters<NonNullable<NodeOptions['beforeSendTransaction']>>[0];
+
+/*
+ * The event fields the barrier redacts, named without the `undefined` their
+ * optionality adds, so an optional property of these types is written once
+ * (`?:`) rather than twice (`?: T | undefined`).
+ */
+type SentryEventContexts = NonNullable<SentryErrorEvent['contexts']>;
+type SentryEventException = NonNullable<SentryErrorEvent['exception']>;
+type SentryEventExtra = NonNullable<SentryErrorEvent['extra']>;
+type SentryEventLogEntry = NonNullable<SentryErrorEvent['logentry']>;
+
+/**
+ * The fields the error and transaction event shapes share and the barrier
+ * redacts; either event is assignable to it.
+ */
+interface RedactableEventFields {
+  readonly breadcrumbs?: readonly Breadcrumb[];
+  readonly contexts?: SentryEventContexts;
+  readonly exception?: SentryEventException;
+  readonly extra?: SentryEventExtra;
+  readonly logentry?: SentryEventLogEntry;
+  readonly message?: string;
+  readonly request?: RequestEventData;
+  readonly transaction?: string;
+}
+
+/** The redacted counterpart of {@link RedactableEventFields}, spread back over the event. */
+interface RedactedEventFields {
+  readonly breadcrumbs?: Breadcrumb[];
+  readonly contexts?: SentryEventContexts;
+  readonly exception?: SentryEventException;
+  readonly extra?: SentryEventExtra;
+  readonly logentry?: SentryEventLogEntry;
+  readonly message?: string;
+  readonly request?: RequestEventData;
+  readonly transaction?: string;
+}
 
 function redactQueryString(
   queryString: RequestEventData['query_string'] | undefined,
@@ -75,8 +111,8 @@ function redactException(exception: Exception): Exception {
 }
 
 function redactLogEntry(
-  logEntry: SentryErrorEvent['logentry'],
-): SentryErrorEvent['logentry'] | undefined {
+  logEntry: SentryEventLogEntry | undefined,
+): SentryEventLogEntry | undefined {
   if (!logEntry) {
     return undefined;
   }
@@ -92,25 +128,7 @@ function redactLogEntry(
   };
 }
 
-function redactCommonEventFields(event: {
-  readonly breadcrumbs?: readonly Breadcrumb[];
-  readonly contexts?: SentryErrorEvent['contexts'];
-  readonly exception?: SentryErrorEvent['exception'];
-  readonly extra?: SentryErrorEvent['extra'];
-  readonly logentry?: SentryErrorEvent['logentry'];
-  readonly message?: string;
-  readonly request?: RequestEventData;
-  readonly transaction?: string;
-}): {
-  readonly breadcrumbs?: Breadcrumb[];
-  readonly contexts?: SentryErrorEvent['contexts'];
-  readonly exception?: SentryErrorEvent['exception'];
-  readonly extra?: SentryErrorEvent['extra'];
-  readonly logentry?: SentryErrorEvent['logentry'];
-  readonly message?: string;
-  readonly request?: RequestEventData;
-  readonly transaction?: string;
-} {
+function redactCommonEventFields(event: RedactableEventFields): RedactedEventFields {
   const contexts = redactContexts(event.contexts);
   const breadcrumbs = redactBreadcrumbs(event.breadcrumbs);
   const extra = redactJsonObject(event.extra);
@@ -137,13 +155,13 @@ function redactCommonEventFields(event: {
 }
 
 function redactContexts(
-  contexts: SentryErrorEvent['contexts'],
-): SentryErrorEvent['contexts'] | undefined {
+  contexts: SentryEventContexts | undefined,
+): SentryEventContexts | undefined {
   if (!contexts) {
     return undefined;
   }
 
-  const redacted: NonNullable<SentryErrorEvent['contexts']> = {};
+  const redacted: SentryEventContexts = {};
 
   for (const [key, context] of typeSafeEntries(contexts)) {
     const redactedContext = redactJsonObject(context);
@@ -156,68 +174,29 @@ function redactContexts(
   return redacted;
 }
 
-function isStringSpanArray(
-  value: SentrySpanPayload['data'][string],
-): value is (string | null | undefined)[] {
-  return (
-    Array.isArray(value) &&
-    value.every((entry) => entry === null || entry === undefined || typeof entry === 'string')
-  );
-}
-
-function redactSpanAttributeValue(
-  key: string,
-  value: SentrySpanPayload['data'][string],
-): SentrySpanPayload['data'][string] {
-  if (value === undefined || typeof value === 'number' || typeof value === 'boolean') {
-    return value;
-  }
-
-  if (typeof value === 'string') {
-    return redactText(value, key);
-  }
-
-  if (isStringSpanArray(value)) {
-    return value.map((entry) => (typeof entry === 'string' ? redactText(entry, key) : entry));
-  }
-
-  return value;
-}
-
-function redactSpanData(data: SentrySpanPayload['data']): SentrySpanPayload['data'] {
-  const redacted: SentrySpanPayload['data'] = {};
-
-  for (const [key, value] of typeSafeEntries(data)) {
-    redacted[key] = redactSpanAttributeValue(key, value);
-  }
-
-  return redacted;
-}
-
-export function redactSentryEvent(event: SentryErrorEvent): SentryErrorEvent {
+/**
+ * Redact the fields the error and transaction events share, keeping the
+ * event's own shape: the one implementation behind both public entry points.
+ */
+function redactEvent<TEvent extends RedactableEventFields>(event: TEvent): TEvent {
   return {
     ...event,
     ...redactCommonEventFields(event),
   };
+}
+
+/** Redact an error event before it leaves the process (ADR-160's barrier). */
+export function redactSentryEvent(event: SentryErrorEvent): SentryErrorEvent {
+  return redactEvent(event);
 }
 
 export function redactSentryBreadcrumb(breadcrumb: Breadcrumb): Breadcrumb {
   return redactBreadcrumb(breadcrumb);
 }
 
+/** Redact a transaction event before it leaves the process (ADR-160's barrier). */
 export function redactSentryTransaction(event: SentryTransactionEvent): SentryTransactionEvent {
-  return {
-    ...event,
-    ...redactCommonEventFields(event),
-  };
-}
-
-export function redactSentrySpan(span: SentrySpanPayload): SentrySpanPayload {
-  return {
-    ...span,
-    data: redactSpanData(span.data),
-    ...(span.description ? { description: redactText(span.description) } : {}),
-  };
+  return redactEvent(event);
 }
 
 export function redactSentryLog(log: SentryLogPayload): SentryLogPayload {

@@ -6,10 +6,86 @@
       "demo": "oak-design-showcase",
       "verdict": "FAIL",
       "qualitiesJudged": ["content-relevance", "styling-delivery"],
-      "cellsCovered": [{ "identity": "oak", "theme": "light" }],
+      "cellsCovered": [
+        {
+          "identity": "oak",
+          "theme": "light"
+        }
+      ],
       "ownerStatementDate": "2026-08-05",
       "rowClass": "pre-read",
-      "source": ".agent/reports/design/design-sitting-records-2026-08-05.md §Verdict 1 — owner verbatim via Director relay (comms event 2026-08-05T14:56:30Z); migrated at the register's minting (design-review/records/2026-08-08-register-minting.md)"
+      "source": ".agent/reports/design/design-sitting-records-2026-08-05.md \u00a7Verdict 1 \u2014 owner verbatim via Director relay (comms event 2026-08-05T14:56:30Z); migrated at the register's minting (design-review/records/2026-08-08-register-minting.md)"
+    },
+    {
+      "page": "/identity-switchboard",
+      "demo": "oak-design-showcase",
+      "verdict": "PASS",
+      "qualitiesJudged": ["wow"],
+      "cellsCovered": [
+        {
+          "identity": "oak",
+          "theme": "light"
+        },
+        {
+          "identity": "oak",
+          "theme": "dark"
+        },
+        {
+          "identity": "oak",
+          "theme": "system"
+        },
+        {
+          "identity": "oak",
+          "theme": "high-contrast"
+        },
+        {
+          "identity": "oak",
+          "theme": "colour-safe"
+        },
+        {
+          "identity": "emc2",
+          "theme": "light"
+        },
+        {
+          "identity": "emc2",
+          "theme": "dark"
+        },
+        {
+          "identity": "emc2",
+          "theme": "system"
+        },
+        {
+          "identity": "emc2",
+          "theme": "high-contrast"
+        },
+        {
+          "identity": "emc2",
+          "theme": "colour-safe"
+        },
+        {
+          "identity": "pds",
+          "theme": "light"
+        },
+        {
+          "identity": "pds",
+          "theme": "dark"
+        },
+        {
+          "identity": "pds",
+          "theme": "system"
+        },
+        {
+          "identity": "pds",
+          "theme": "high-contrast"
+        },
+        {
+          "identity": "pds",
+          "theme": "colour-safe"
+        }
+      ],
+      "ownerStatementDate": "2026-09-06",
+      "rowClass": "pre-read",
+      "source": "Owner verbatim at the lead seat (Flounder turns Estuary, c5cc2c), 2026-09-06: \"The switchboard is wow enough for today. It will need to be more wow in future.\" and, on coverage, \"obviously I looked at all the combinations of identity and theme\" \u2014 every identity \u00d7 theme cell; recorded on the design-system-integration thread record and comms the same day"
     }
   ]
 }

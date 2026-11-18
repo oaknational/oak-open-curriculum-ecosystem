@@ -132,7 +132,10 @@ to unrelated sessions is names-only.
 Compose a bounded frame — reuse Cricket's field vocabulary, do not
 re-mint it:
 
-1. **OBJECTIVE FRAME** — the controlling objective and its source.
+1. **OBJECTIVE FRAME** — Cricket's field 1: a `SOURCES:` block quoted
+   verbatim, then your `READING:` of it. The dialogue returns no frame
+   verdict, but the verbatim sources let the counterpart see where your
+   reading narrows them.
 2. **INTENT** — what you are doing and why the fork matters now.
 3. **QUESTION** — the uncertainty, stated neutrally, with your
    pre-registered position and confidence.
@@ -173,9 +176,9 @@ or personal data.
 - **Close**: conserve the synthesis, QUOTING Codex's final position
   verbatim (direct mode holds the raw turns, so fidelity is by
   construction), then compose and append the close event, then append
-  the same canonical `key=value;` line as a row to the tracked trial
-  tally
-  ([`the-codex-dialogues-trial-tally-2026-08.md`](../../reports/agentic-engineering/the-codex-dialogues-trial-tally-2026-08.md))
+  the same canonical `key=value;` line as a row to the host's tracked
+  trial tally (OCE keeps it under its agentic-engineering reports as the dialogues'
+  trial tally of 2026-08; a host without one creates it at the first close)
   in the same close sequence — the comms event is transport; the
   tally row is the durable copy the trial window reads, and it is
   conserved only when it LANDS (committed and pushed with the close,
@@ -198,7 +201,7 @@ perturbation to be tested, never authority to be obeyed.
 One canonical comms event at dialogue close carries the analysis
 record, and the same line is conserved at close time as a row in the
 tracked trial tally (the Protocol's Close step): comms events are
-instance-tier transport, untracked by design (ADR-199 / PDR-094), so
+instance-tier transport, untracked by design (OCE's ADR-199 / PDR-094), so
 the tally row — which resolves from any checkout — is the durable
 copy. The event is a NARRATIVE event — the strict comms schemas are
 untouched; every dialogue field rides in the body as the canonical
@@ -228,7 +231,7 @@ Field rules:
 - `synthesis_ref` must resolve from a DURABLE SHARED surface — a
   tracked report path, a repo-tier record surface, or the PR record.
   Never a machine-local path, and never an untracked comms event id
-  (instance-tier under ADR-199 / PDR-094 — it does not resolve from
+  (instance-tier under OCE's ADR-199 / PDR-094 — it does not resolve from
   another checkout): the pointer must outlive the trial rollouts'
   deletion and resolve from any checkout. A URL ref is
   a BARE permalink — v1 values carry no `=` or `;`, so a query-string
@@ -315,7 +318,7 @@ transcript, embraced rather than fought, under three clauses:
   bytes are not. The tracked trial tally (each close line conserved at
   occurrence — the Protocol's Close step) and the conserved syntheses
   remain the durable record; the close events themselves are untracked
-  instance-tier transport (ADR-199 / PDR-094) and are never the only
+  instance-tier transport (OCE's ADR-199 / PDR-094) and are never the only
   copy.
 
 ## Trial window (pre-committed at ratification — the decision rule)
@@ -412,7 +415,7 @@ this evidence; the interlocutor's refusal self-report is recorded
 verbatim as corroboration, not proof of the sandbox's internals). The `codex` tool schema ACCEPTS
 per-call `sandbox` values including `danger-full-access` — the
 broadening surface exists; whether launch pins cap it is OPEN. The
-broadening negative control is OWNER-HELD per ADR-180: explicit owner
+broadening negative control is OWNER-HELD per OCE's ADR-180: explicit owner
 authorisation per invocation, externally isolated disposable workspace
 outside every estate checkout, bounded sentinel write target. Never
 self-start that leg; its recorded outcome, not any source reading, is

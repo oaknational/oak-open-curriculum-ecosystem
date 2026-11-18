@@ -2,6 +2,7 @@
 name: destructive-path-preconditions
 polarity: pattern
 category: code
+layer: general
 use_this_when: >-
   Authoring or reviewing any code path that deletes, clears, overwrites, or
   irreversibly mutates state — especially a --clear/reset mode, a preflight

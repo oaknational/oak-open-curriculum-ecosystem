@@ -116,9 +116,13 @@ export function createGraphBaseConfig(
           tsconfigRootDir: thisDir,
         },
       },
+      // Boundary coverage for config files (previously absent — the old
+      // 'off' lines here suppressed rules that never bound to these
+      // paths): a workspace's config reaching outside the workspace by
+      // relative path is the violation class the root-base convention
+      // normalised. Imports cross packages only via declared dependencies.
       rules: {
-        'import-x/no-relative-packages': 'off',
-        'import-x/no-relative-parent-imports': 'off',
+        'import-x/no-relative-packages': 'error',
       },
     },
   );

@@ -16,6 +16,8 @@
  * Options value; the runtime resolver is injected so the resolution is proven
  * without a repository.
  */
+import { join } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -27,7 +29,9 @@ import { createCapturingCoordinationHomeResolver } from './fake-collaboration-ru
 
 const PRIMARY = '/workspace/oak';
 const LINKED = '/workspace/oak-worktrees/lane-b';
-const ACTIVE_IN_PRIMARY = `${PRIMARY}/.agent/state/collaboration/active-claims.json`;
+// The default is host-joined onto the home, so the expectation is derived in
+// host form (identical to the POSIX literal on POSIX).
+const ACTIVE_IN_PRIMARY = join(PRIMARY, '.agent/state/collaboration/active-claims.json');
 
 describe('resolveActivePath (F-85 claims --active default)', () => {
   it('defaults an omitted --active to the coordination home active-claims.json', () => {
@@ -62,7 +66,7 @@ describe('resolveActivePath (F-85 claims --active default)', () => {
         cwd: LINKED,
         resolveCoordinationHome: resolver.resolve,
       }),
-    ).toBe('/repo/root/.agent/state/collaboration/active-claims.json');
+    ).toBe(join('/repo/root', '.agent/state/collaboration/active-claims.json'));
     expect(resolver.calls).toStrictEqual([]);
   });
 });

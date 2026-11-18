@@ -1,4 +1,4 @@
-import { execSync, spawnSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { existsSync, lstatSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { basename, join } from 'node:path';
 import type { SessionEntry, SubagentSummary } from './session-tools.js';
@@ -37,7 +37,11 @@ const maxDirectoryFilesRead = 200;
 const maxFileBytesRead = 256 * 1024;
 export function repoRoot(): string {
   try {
-    return execSync('git rev-parse --show-toplevel', { encoding: 'utf8' }).trim();
+    // git by name, with PATH as the trust root (the Sonar disposition
+    // policy's S4036 section).
+    return execFileSync('git', ['rev-parse', '--show-toplevel'], {
+      encoding: 'utf8',
+    }).trim();
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
     throw new Error(`Unable to determine repository root from '${process.cwd()}': ${message}`, {
@@ -102,7 +106,7 @@ export function subagentSummaries(sessionDir: string): SubagentSummary[] {
   }
   const result: SubagentSummary[] = [];
   const metaFiles = readdirSync(subagentsDir).filter((name) => name.endsWith('.meta.json'));
-  for (const metaFile of metaFiles.sort((a, b) => a.localeCompare(b))) {
+  for (const metaFile of metaFiles.toSorted((a, b) => a.localeCompare(b))) {
     const agentId = metaFile.replace('.meta.json', '');
     if (shouldSkipCompactAgent(agentId)) {
       continue;
@@ -119,6 +123,9 @@ export function subagentSummaries(sessionDir: string): SubagentSummary[] {
   return result;
 }
 export function targetNeedles(root: string, targetFile: string): string[] {
+  // Same separator translation as `core/git-relative-path.ts`'s `toGitPath`
+  // (host form → git's forward-slash form), inlined here because the inputs
+  // are already strings of mixed provenance, not host-relative paths.
   const normalized = targetFile.replaceAll('\\', '/');
   const values = new Set<string>([normalized, basename(normalized)]);
   const prefix = `${root.replaceAll('\\', '/')}/`;
@@ -127,6 +134,11 @@ export function targetNeedles(root: string, targetFile: string): string[] {
   }
   return [...values];
 }
+/**
+ * Run a git subcommand in `repoPath` and return its trimmed stdout, or the
+ * empty string when git does not answer: a non-zero exit, or a git that
+ * could not start.
+ */
 export function runGit(repoPath: string, args: string[]): string {
   const result = spawnSync('git', ['-C', repoPath, ...args], {
     encoding: 'utf8',

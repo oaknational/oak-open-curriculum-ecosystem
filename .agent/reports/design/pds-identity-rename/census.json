@@ -20,7 +20,7 @@
       ]
     },
     {
-      "file": ".agent/memory/operational/director-handoff.md",
+      "file": ".agent/memory/operational/archive/director-handoff-current-handoff-state-2026-09-08.md",
       "kind": "content",
       "countByVariant": {
         "name": 2,
@@ -37,7 +37,7 @@
       ]
     },
     {
-      "file": ".agent/plans/delivery/design-system-completion.plan.md",
+      "file": ".agent/plans/delivery/archive/design-system-completion.plan.md",
       "kind": "content",
       "countByVariant": {
         "name": 2,
@@ -241,7 +241,7 @@
       ]
     },
     {
-      "file": ".agent/memory/operational/threads/design-system-integration.next-session.md",
+      "file": ".agent/memory/operational/archive/design-system-integration-thread-2026-09-20.md",
       "kind": "content",
       "countByVariant": {
         "name": 0,

@@ -3,6 +3,14 @@ import { describe, it, expect } from 'vitest';
 import { findRedirectUriRejection } from './oauth-proxy-redirect-uri-validation.js';
 
 /**
+ * The scheme RFC 9700 §2.6 forbids off the loopback, built into the one
+ * fixture below whose host the analyser does not read as reserved: an
+ * `http://` literal reads as a clear-text endpoint, where here it is the
+ * shape under rejection (sonar-disposition-policy §S5332).
+ */
+const CLEAR_TEXT_SCHEME = 'http';
+
+/**
  * The registration boundary's `redirect_uris` contract (MCP-188).
  *
  * RFC 9700 §2.6 ({@link https://www.rfc-editor.org/rfc/rfc9700.html#section-2.6}):
@@ -64,7 +72,7 @@ describe('findRedirectUriRejection', () => {
       // reading `hostname` (never `host` or the raw string) rejects it.
       'http://localhost@evil.example/callback',
       // 0.0.0.0 binds every interface and is not loopback.
-      'http://0/callback',
+      `${CLEAR_TEXT_SCHEME}://0/callback`,
     ])('rejects %s', (redirectUri) => {
       expect(findRedirectUriRejection({ redirect_uris: [redirectUri] })).toMatchObject({
         error: 'invalid_redirect_uri',

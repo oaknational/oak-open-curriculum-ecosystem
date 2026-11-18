@@ -3,71 +3,159 @@ boundary: B1-Governance
 doc_role: policy
 authority: sonar-disposition
 status: active
-last_reviewed: 2026-11-04
+last_reviewed: 2026-11-11
 ---
 
 # Sonar Disposition Policy
 
 ## Purpose
 
-This document codifies class-level dispositions for SonarCloud security
-hotspots and security-class issues (severity HIGH and MAJOR). It exists so that the same disposition reasoning is
-not re-derived per site by every reviewer. Future hotspots in known classes
-apply this policy by reference; only sites that fall outside a documented
-class require fresh per-site judgement.
+This document codifies how findings from the code-quality analyser and the
+code-scanning analyser — security hotspots, security-class issues and
+quality issues alike — are resolved, so that the same reasoning is not
+re-derived per site by every reviewer. Since the owner's ruling of
+2026-09-08 (§[One-Outcome Rule](#one-outcome-rule-owner-ruled-2026-09-08))
+that resolution is a fix in the tree, with two named exceptions; the
+documented classes below carry what each rule sees and which change clears
+it, so a finding in a known class is cured by reference and only a site
+outside every documented class needs fresh judgement.
 
-The policy composes with the per-site evidence trail in SonarCloud (each
-hotspot still carries a site-specific `SAFE` rationale citing the policy
-class). Together they give an auditable record: _what the pattern is_, _why
-it is safe_, and _which sites instantiate it_.
+The policy composes with the analysers' own records: a cured finding closes
+on the next analysis of the corrected code, the first exception's query is
+excluded by tracked CodeQL configuration, explained by ADR-219 and the
+route comments, and a site within §S4036's class is resolved under the
+second exception: under `agent-tools/` by one project criterion on each
+analyser project, and elsewhere by a mark at the site.
+Together they give an auditable record: _what the pattern is_, _what
+clears it_, and, outside `agent-tools/`, _which sites instantiate it_.
 
 ## Authority and Doctrine
 
 - [`principles.md`][principles] §Strict and Complete and §Architectural
   Excellence Over Expediency.
 - [`safety-and-security.md`][safety] — repository security baseline.
-- [`never-disable-checks`][no-disable] — quality gates stay on; this policy
-  does not weaken Sonar, it documents the substantive judgement Sonar's
-  hotspot model defers to a human.
+- [`never-disable-checks`][no-disable] — quality gates stay on. The one rule
+  this policy lets an analyser project ignore is S4036 under `agent-tools/`
+  (the second exception); beyond it the policy documents the substantive
+  judgement Sonar's hotspot model defers to a human.
 
 [principles]: ../../.agent/directives/principles.md
 [safety]: ./safety-and-security.md
 [no-disable]: ../../.agent/rules/never-disable-checks.md
 
-## Two-Outcome Rule
+## One-Outcome Rule (owner-ruled 2026-09-08)
 
-Every Sonar finding resolves to **exactly one of two outcomes**. The
-`ACCEPTED` (issue) and `ACKNOWLEDGED` (hotspot) dispositions are excluded —
-they accept residual risk without a corrective and so are not architectural
-positions. They are permitted only with explicit owner authorisation
-recording the residual-risk acceptance.
+Owner ruling, 2026-09-08, verbatim: **"We don't dismiss issues, we fix
+them."** Every finding from either analyser resolves to **one outcome**:
+`FIXED` — a change in the tree after which the finding no longer fires,
+closed by the next analysis. `FALSE_POSITIVE`, `SAFE`, `ACCEPTED` and
+`ACKNOWLEDGED` are analyser-side states this policy grants only under the
+second exception below (§S4036), whose `agent-tools/` criterion is the one
+act this policy allows in an analyser's settings. Every other finding that
+is genuinely wrong about a site is still cured by a change that stops it
+firing (a literal removed, a shape restructured, a value sourced
+differently), never by an act in the analyser's console. Precedent
+in the analyser (a site marked before the ruling) licenses nothing at the
+next site.
 
-| Finding type | Permitted outcomes                                                                                                                             |
-| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Issue**    | `FIXED` (code change resolves the defect) **or** `FALSE_POSITIVE` (the defect described is genuinely not present at this site)                 |
-| **Hotspot**  | `FIXED` (code change removes the security-sensitive use) **or** `SAFE` (the use is verified safe in this context with site-specific rationale) |
+**The first exception, owner-ruled the same day, verbatim:** "in regard to
+the rate limiting work, we are going to pause that for now, and leave
+comments in the code that recognise that additional in-process rate
+limiting would provide defence in depth, but that we regard the two sets of
+edge WAFs to be sufficient for safety for now. And in this ONE case we can
+dismiss the findings in Sonar, and preferably find a way to keep them
+dismissed instead of revisiting this same issue every few weeks." The
+exception is the CodeQL query **`js/missing-rate-limiting`** and nothing
+else, and ADR-219 (rate limiting at the edge, no in-process limiter) is its
+ground. Its mechanism was ruled on 2026-09-17, when two records disagreed —
+the rules tier described one dismissal per alert (`41235118c`) and the
+tracked CodeQL configuration excluded the query (`bd7a3509e`) — owner,
+verbatim: "a permanent exclusion is allowed, but ONLY for that one issue".
+The mechanism is the `query-filters` entry in
+`.github/codeql/codeql-config.yml`, which excludes the query for every file
+the analysis scans, so a new route anywhere raises no alert and ADR-219's
+edge rule is the control for it. No other query is excluded or filtered,
+and no other finding class is dismissed or admitted beyond the second
+exception below. The analysers' path
+exclusions are scope rules, not finding-class exceptions: the studio-source
+preservation tier (§2026-07-19 amendment, ADR-213), the binary file-type
+globs (§2026-11-11 amendment on binary files) and the duplication
+globs under §Expansion discipline. The owner's 2026-09-08 word also asked
+for comments in the code recognising the defence-in-depth option:
+at this amendment's date the route comments (`auth-routes.ts`,
+`oauth-proxy-routes.ts`, `bootstrap-helpers.ts`) name the edge control and
+cite ADR-219 but do not yet recognise it (the `code-scanning-alerts-to-zero`
+plan's unit 6). The exclusion is tracked in the tree, so it is never
+re-litigated by hand.
 
-Per-site rationales must name a concrete reason — never a generic
-"reviewed and considered safe". When a class-level reason applies, the
-rationale cites this policy and adds the site path + line.
+**The second exception, owner-ruled 2026-11-05, verbatim:** "adopt the
+by-name ruling on engraph". It carries the owner's S4036 ruling of
+2026-11-03 (§[S4036](#s4036--os-commands-resolved-via-path)): tooling invokes
+each binary by name, with `PATH` as the trust root. No change in the tree
+cures a site within that class without choosing a binary's path, which the
+ruling rejects, so such a site is marked `FALSE_POSITIVE` (an issue) or
+`SAFE` (a hotspot) with the class's canonical rationale. A site outside the
+class is cured like any other finding.
+
+Under `agent-tools/` the class takes no per-site mark. The owner chose one
+project setting instead on 2026-11-11, verbatim: "we are not removing
+automatic analysis for one issue. What setting do I need to change in
+Sonar?" It is set on both analyser projects, Oak's
+(`oaknational_oak-open-curriculum-ecosystem`) and Engraph's
+(`EngraphCode_open-curriculum-ecosystem`): Administration → General
+Settings → Analysis scope → Issues → Ignore Issues on Multiple Criteria,
+with one criterion, rule key pattern `typescript:S4036` and file path pattern
+`agent-tools/**/*`. Automatic analysis reads no rule-ignore configuration
+from the tree, so the criterion lives in each project's server-side
+settings. A class site outside `agent-tools/` keeps the per-site mark. The
+criterion's cost is known: it also silences S4036 at an
+`agent-tools/` site outside the class, where external input reaches a shell.
+CodeQL's command-injection queries do not cover such a site when the input
+is a command-line argument or an environment variable: the CodeQL workflow
+leaves the threat model at its default, remote, under which neither is a
+taint source.
+
+The substitute check, owner-chosen on 2026-11-12, is the lint rule
+`@oaknational/no-shell-form-process-launch`, on for every file the
+`agent-tools` workspace lints. It fails on `exec` and `execSync` from
+`child_process`, which always run a shell, and on a `shell` option that is
+not the literal `false`, so a process there launches with an argv array and
+no shell. That is stricter than §S4036's criteria, which allow a wholly
+literal shell string. The rule reads syntax only: a shell reached by its
+command name (`spawn('sh', ['-c', text])`), or through an options object
+built where the rule cannot see it, is left to review against §S4036's
+decision criteria. The criterion is reopened if the repository moves to
+CI-based analysis, where a tracked configuration can take the place of the
+server-side setting, or if that lint rule is relaxed or removed.
 
 ## Disposition Workflow
 
-1. **Match the rule key** to a documented class below.
-2. **Match the site shape** against the class's decision criteria.
-3. If both match, follow the **class's stated outcome** under the
-   Two-Outcome Rule. `SAFE` (hotspot classes) and `FALSE_POSITIVE`
-   (issue classes whose criteria establish the defect is not present)
-   are server-side dispositions, set with a comment of the form
-   `<OUTCOME> per Sonar Disposition Policy §<rule>: <file>:<line> — <one-line site note>`.
-   FIX-only classes have **no server-side action**: `FIXED` is assigned
-   by analysis once the corrected code lands — make the code change and
-   let the next analysis close the finding.
-4. If the rule is documented but the site shape does not match: do per-site
-   review, document the rationale fully, and consider whether the class needs
-   a sub-clause amendment.
-5. If the rule is not yet documented: do per-site review and add the class
-   to this document at the next consolidation pass.
+1. **Is the finding the excepted query?** `js/missing-rate-limiting` is
+   excluded in `.github/codeql/codeql-config.yml`, so it should never
+   appear. If it does, the tracked exclusion has regressed: restore the
+   configuration, never an act in the analyser's console. It is not a class
+   in the catalogue below.
+2. **Is the finding S4036 at a site within §S4036's class?** A site under
+   `agent-tools/` raises no finding in the analyser, because the second
+   exception's project criterion ignores it. An issue there from an analysis
+   that ran before the criterion was saved closes at the next analysis. If
+   a later analysis raises one, the criterion has been lost: the owner, who
+   holds the project setting, restores it, and the site is never marked.
+   Mark a class site anywhere else, `FALSE_POSITIVE` for an
+   issue or `SAFE` for a hotspot, with the class's canonical rationale: the
+   second exception, and the only per-site server-side act in this
+   workflow. A site outside the class continues below.
+3. Otherwise **match the rule key** to a documented class below.
+4. **Match the site shape** against the class's shape criteria; they say
+   what the analyser is seeing, which is what tells you the cure.
+5. Apply the class's **cure**: make the change and let the next analysis
+   close the finding. There is no server-side action here; a `FIXED` state
+   is assigned by analysis, never by hand.
+6. If the rule is documented but the site shape does not match: do per-site
+   review, cure it, and consider whether the class needs a sub-clause
+   amendment recording the new shape and its cure.
+7. If the rule is not yet documented: cure the site and add the class to
+   this document at the next consolidation pass.
 
 ## General Disposition Principles
 
@@ -77,30 +165,34 @@ These govern _how_ a finding is dispositioned, beneath the per-class catalogue:
   _this_ site a false-positive — verify the defect's presence or absence
   first-hand at each site. (A 12×-dismissed `incomplete-sanitization` rule still
   flagged a real backslash-escaping bug; the fix was genuine.)
-- **A lens-resolvable disposition is not an owner decision.** When the
-  [decision lenses][principles] (LTAE first) decisively resolve fix-vs-dismiss,
-  decide it — framing a lens-resolved call as an owner-fork is analysis-passback.
-  Escalate only when all lenses genuinely fail or the scope is product/feature.
-  (The outward _act_ of marking a `SAFE` / `FALSE_POSITIVE` in the UI still needs owner
-  authorisation — the disposition _determination_ does not.)
+- **A lens-resolvable cure is not an owner decision.** When the
+  [decision lenses][principles] (LTAE first) decisively resolve which change
+  cures a site, decide it — framing a lens-resolved call as an owner-fork is
+  analysis-passback. Escalate only when all lenses genuinely fail or the
+  scope is product/feature. (The exceptions, the tracked exclusion of
+  `js/missing-rate-limiting` and the S4036 by-name class, were the owner's
+  rulings; the cure _determination_ at a site never is.)
 - **A deliberately-adopted profile's findings are a worklist, not noise.** When
-  the owner activates an analyser profile on purpose, the target is zero
-  (fix-or-genuine-FP). Do NOT frame the resulting backlog as an activation-wave
+  the owner activates an analyser profile on purpose, the target is zero,
+  by cure. Do NOT frame the resulting backlog as an activation-wave
   to "wait out" via push-and-reanalyse — that lesson is for STALE / zombie
   analysis against a moving target, never a fresh deliberate profile.
-- **CodeQL posture is fix-first with zero dismissals** (owner reversal,
-  2026-07-29 — _"why should I dismiss issues detected by CodeQL?"_). CodeQL
-  dismissals are per-instance and do not survive refactors (alerts #83–86
-  recurred as #226–229 after the code moved), so a dismissal buys silence,
-  not absence: cure structurally in the code instead. The posture was
-  vindicated when a flagged pattern proved to be a real
-  super-linear-backtracking ReDoS vector. Agents never dismiss CodeQL
-  alerts on their own PRs; where a genuine false positive needs a
-  server-side dismissal, that act is the owner's.
+- **The posture is fix-first with zero dismissals, for both analysers.**
+  It began as the CodeQL posture (owner reversal, 2026-07-29 — _"why should
+  I dismiss issues detected by CodeQL?"_) and became the rule for every
+  finding on 2026-09-08. Dismissals are per-instance and do not survive
+  refactors (alerts #83–86 recurred as #226–229 after the code moved), so a
+  dismissal buys silence, not absence: cure structurally in the code
+  instead. The posture was vindicated when a flagged pattern proved to be a
+  real super-linear-backtracking ReDoS vector. Agents never dismiss alerts;
+  the One-Outcome Rule's first exception is a tracked query exclusion, not a
+  dismissal, and its second resolves an S4036 site within §S4036's class,
+  by the project criterion under `agent-tools/` and by a per-site mark
+  everywhere else.
 - **Triage by cause-class, but a class splits by disposition-route.** A rule
   class (e.g. a regex backlog) does not resolve uniformly: generated output →
   fix at the generator; generator source → fix in place + regen; hand-written →
-  consolidate to the rule's home; vendored/standard → refactor-to-import or FP;
+  consolidate to the rule's home; vendored/standard → refactor-to-import;
   runtime-only → fix in place. An owner's "do X to all of them" applies cleanly
   only to the class it actually fits.
 
@@ -122,12 +214,29 @@ work.
 
 ## Documented Classes
 
+Each class below records what the analyser sees, the shape criteria that
+identify the class at a site, and the cure. The criteria were written, before
+the 2026-09-08 ruling, as the conditions under which a site could be marked
+`SAFE` or `FALSE_POSITIVE` in the analyser, and the canonical rationales
+were the comments those marks carried; under the
+[One-Outcome Rule](#one-outcome-rule-owner-ruled-2026-09-08) they identify
+the class and license no mark. Every class below records its **cure** —
+the change that makes the pattern absent at a site that meets the
+criteria, alongside the FIX path its failing sites always took — so this
+policy is complete on its own, and any plan that applies these cures to
+sites references this policy, never the reverse. Sites marked before the
+ruling keep their record; the ruling binds every finding
+from its date, and any re-disposition of the earlier marks is the owner's
+call (§[Maintenance](#maintenance)).
+
 ### S5443 — Publicly writable directories
 
 **Pattern**: `/tmp` (or other publicly-writable paths) appears as a path
 argument in test code.
 
-**Decision criteria**: SAFE if and only if all hold:
+**Identification** — the class is present at a site when all hold (before
+the 2026-09-08 ruling these were the conditions for a `SAFE` mark; they
+license none now):
 
 - Site is in a file matching `**/*.test.ts`, `**/*.unit.test.ts`,
   `**/*.integration.test.ts`, `**/*.e2e.test.ts`, or `e2e-tests/**` /
@@ -143,13 +252,21 @@ filesystem use; no production runtime exposure".
 `tmp/test.log` passed alongside vi.fn() mocked `fs`. No real filesystem
 touch.
 
+**Cure** (every site): a per-run directory from `fs.mkdtemp` under
+`os.tmpdir()` — or the test runner's own temporary directory — in place of
+a fixed publicly writable path literal; a mocked filesystem takes a
+non-public fixture path. The rule fires on the literal, and the literal is
+never needed.
+
 ### S5332 — Clear-text protocols (`http://`)
 
 **Pattern**: `http://` URL in code, typically `http://localhost:<port>`,
 `http://fake-<service>:<port>`, `http://example.com`, or RFC-2606 reserved
 test domains.
 
-**Decision criteria**: SAFE if and only if all hold:
+**Identification** — the class is present at a site when all hold (before
+the 2026-09-08 ruling these were the conditions for a `SAFE` mark; they
+license none now):
 
 - Site is in a test file (same glob set as S5443) or in a test-runner
   config (`playwright.config.ts`, `vitest.config.ts`, etc.) or a
@@ -162,12 +279,20 @@ test domains.
 **Canonical rationale**: "test-fixture URL; synthetic/localhost/test-domain
 target; production runtime uses `https://` env var".
 
+**Cure** (every site): `https://` for every URL that names a real host; a
+test that needs a clear-text loopback endpoint builds the URL at runtime
+from the runner-assigned address and a scheme constant instead of carrying
+an `http://` literal in source (the worked example under the 2026-09-08
+amendment is this class's).
+
 ### S1313 — Hardcoded IP addresses
 
 **Pattern**: IP literal (RFC 1918 private, RFC 3849 documentation,
 loopback, or synthetic) in code.
 
-**Decision criteria**: SAFE if and only if all hold:
+**Identification** — the class is present at a site when all hold (before
+the 2026-09-08 ruling these were the conditions for a `SAFE` mark; they
+license none now):
 
 - Site is in a test file (same glob set as S5443).
 - The IP is a fixture value driving a test of header-redaction,
@@ -178,12 +303,19 @@ loopback, or synthetic) in code.
 **Canonical rationale**: "test-fixture IP literal; drives input-handling
 test; not a production-runtime value".
 
+**Cure** (every site): a named host or a configuration value in place of
+the literal; a test of address-handling code builds its input at runtime
+(from octets, or from the parsed form the code under test consumes) so no
+address literal sits in source.
+
 ### S5852 — Slow regular expressions
 
 **Pattern**: Regex with super-linear complexity flagged by Sonar's regex
 analyser.
 
-**Decision criteria**: SAFE if and only if all hold:
+**Identification** — the class is present at a site when all hold (before
+the 2026-09-08 ruling these were the conditions for a `SAFE` mark; they
+license none now):
 
 - Site runs at codegen time (`pnpm sdk-codegen`), build time
   (`pnpm build`), or in a data-pipeline / admin CLI —
@@ -198,9 +330,10 @@ analyser.
 controlled input; anchored or character-class-bounded; not a request-
 handler path".
 
-**FIX path**: when a regex is in a request-handler path, rewrite to use
+**FIX path and cure** (every site, request-handler or not): rewrite to
 linear constructs (negated character classes, anchored alternations,
-bounded quantifiers) per the rule's documented strategies.
+bounded quantifiers) or plain string operations, per the rule's documented
+strategies; on a request-handler path the rewrite is urgent.
 
 ### S4036 — OS commands resolved via PATH
 
@@ -229,14 +362,20 @@ bounded quantifiers) per the rule's documented strategies.
 - No external input reaches a shell. Either the arguments pass as an argv
   array with no `shell` option, or the call's shell string is wholly literal.
   With `shell: true`, Node joins an argv array into one shell string, so an
-  array alone does not keep input from the shell.
+  array alone does not keep input from the shell. Under `cross-spawn` on
+  Windows, a `.cmd` or `.bat` target runs under `cmd.exe`, and a shim such as
+  `pnpm.cmd` reads its arguments a second time, where a double quote in one
+  can end its quoting. There an argv array keeps input from the shell only
+  when no argument can hold that character: the repository's own literals,
+  and paths to files that exist, since Windows forbids it in a file name.
 
 **Outcome for a site within the class**, by the finding's type:
 
-- In this project the rule raises a vulnerability **issue**. It is
-  `FALSE_POSITIVE`: the defect it describes, a command resolved through a
-  `PATH` the operator does not control, is not present, because `PATH` is the
-  trust root.
+- The rule raises a vulnerability **issue**. It is `FALSE_POSITIVE`: the
+  defect it describes, a command resolved through a `PATH` the operator does
+  not control, is not present, because `PATH` is the trust root. Under
+  `agent-tools/` neither analyser project raises it (the second exception's
+  criterion), so the mark is made only at a class site elsewhere.
 - Where the rule raised a **hotspot** (it did before 2026-07), the hotspot is
   `SAFE`.
 
@@ -251,9 +390,11 @@ bounded quantifiers) per the rule's documented strategies.
 **Canonical rationale**: "repository-required binary invoked by name; `PATH`
 is the trust root (§S4036 ruling); no external input reaches a shell".
 
-**Worked example**: `packages/sdks/oak-sdk-codegen/code-generation/run-typedoc.ts:56`.
-`spawn('typedoc', args, …)` runs the workspace's own TypeDoc by name with an
-argv array.
+**Worked example**: `realPnpmRunner` in `agent-tools/src/spawn/build-runner.ts`
+runs the repository's pnpm by name with an argv array and no `shell` option.
+It launches through `cross-spawn`, which on Windows runs a `pnpm.cmd` shim
+under `cmd.exe` with its own argument escaping; the arguments are the
+repository's own, so no external input reaches that shell.
 
 **Delta from the prior class**: S4036 was FIX-only, cured by an absolute path
 chosen from a fixed list of directories. The ruling gives a site within the
@@ -267,13 +408,16 @@ under this class needs re-disposition:
   literal shell string.
 - The one issue the rule has raised, on the `gitleaks` call in
   `agent-tools/src/secret-scan/run-push-secret-scan.ts`, was accepted in
-  2026-07 and stays resolved.
+  2026-07. That file sits under `agent-tools/`, where the second exception's
+  criterion now ignores the rule.
 
 ### S2245 — Pseudorandom number generator (`Math.random()`)
 
 **Pattern**: `Math.random()` used in code.
 
-**Decision criteria**: SAFE if and only if the use is one of:
+**Identification** — the class is present when the use is one of the
+following (before the 2026-09-08 ruling these were the conditions for a
+`SAFE` mark; they license none now):
 
 - **Non-security identifier generation** combined with a uniqueness
   primitive (timestamp, monotonic counter): correlation IDs, request
@@ -294,14 +438,19 @@ state, or any cryptographic property.
 - Backoff: "AWS-style full-jitter retry backoff; spreads retry timing
   against thundering-herd; not a security context".
 
-**FIX path**: any cryptographic, session, or token use must use
-`crypto.randomUUID()`, `crypto.randomBytes()`, or `crypto.getRandomValues()`.
+**FIX path and cure** (every site): `crypto.randomUUID()`,
+`crypto.randomInt()`, `crypto.randomBytes()` or `crypto.getRandomValues()`
+in place of `Math.random()` — for identifiers, jitter and sampling as much
+as for any cryptographic, session or token use; the cryptographic source
+costs nothing at those sites and the rule stops firing.
 
 ### S1523 — Dynamic code execution (`eval`, `Function`, `javascript:`)
 
 **Pattern**: `eval()`, `new Function(...)`, or `javascript:` URL.
 
-**Decision criteria**: SAFE if and only if all hold:
+**Identification** — the class is present at a site when all hold (before
+the 2026-09-08 ruling these were the conditions for a `SAFE` mark; they
+license none now):
 
 - Site is in test code AND the input to `Function` / `eval` is a string
   literal or a value derived synchronously from a same-file string literal
@@ -313,15 +462,19 @@ state, or any cryptographic property.
 over same-file literal-derived input; no untrusted source; not in any
 production code path".
 
-**FIX path**: any production use of `eval`/`Function` constructor with
-runtime-composed input is a real defect. Replace with parser, switch,
-schema-driven dispatch, or static lookup.
+**FIX path and cure** (every site): replace with a parser, a switch,
+schema-driven dispatch, or a static lookup; a test that validates syntax
+parses with the TypeScript compiler API or a parser package instead of
+`Function`/`eval`. A production use with runtime-composed input is a real
+defect and takes the same replacement.
 
 ### S4790 — Weak hash algorithm (MD5, SHA-1)
 
 **Pattern**: `createHash('md5')`, `createHash('sha1')`, or equivalent.
 
-**Decision criteria**: SAFE if and only if all hold:
+**Identification** — the class is present at a site when all hold (before
+the 2026-09-08 ruling these were the conditions for a `SAFE` mark; they
+license none now):
 
 - Hash output is used purely for **format conversion** or **cache key
   derivation** from a non-secret input — never for integrity verification,
@@ -334,8 +487,10 @@ schema-driven dispatch, or static lookup.
 conversion to derive [target schema] from non-secret input; not used in
 integrity/authentication/signing context".
 
-**FIX path**: any security use must move to SHA-256 / SHA-512 / HMAC /
-bcrypt / argon2 as appropriate to the use case.
+**FIX path and cure** (every site): SHA-256 (truncated to the required
+length where a fixed-width identifier or an external schema's width is the
+property wanted) for format conversion and cache keys; SHA-256 / SHA-512 /
+HMAC / bcrypt / argon2 as appropriate for any security use.
 
 ### S5689 — Framework version disclosure
 
@@ -343,8 +498,9 @@ bcrypt / argon2 as appropriate to the use case.
 default, emits a framework-identifying response header (`X-Powered-By`,
 `Server`, etc.).
 
-**Decision criteria**: SAFE if and only if **a runtime test asserts the
-header is absent** at the application layer. Static analysis cannot see
+**Identification** — the class is present when **a runtime test asserts
+the header is absent** at the application layer (before the 2026-09-08
+ruling this was the condition for a `SAFE` mark; it licenses none now). Static analysis cannot see
 downstream middleware (e.g., helmet's `hidePoweredBy`); the test pins the
 property regardless of implementation detail.
 
@@ -353,11 +509,13 @@ runtime by `<test path:line>`; downstream middleware (helmet
 `hidePoweredBy` or equivalent) strips the header globally; test acts as
 regression guard".
 
-**FIX path** (when no test exists or the test fails): add
-`app.disable('x-powered-by')` (Express) or equivalent, AND add a test
-that asserts the header's absence. The test is mandatory; the disable
-call alone is insufficient because future config changes can silently
-re-enable the disclosure.
+**FIX path and cure** (every site, including one whose runtime test
+already passes): add `app.disable('x-powered-by')` (Express) or helmet's
+`hidePoweredBy` AT THE INSTANTIATION SITE ITSELF, where static analysis
+can see it — downstream middleware in another module leaves the site
+firing — AND keep the test that asserts the header's absence. The test is
+mandatory; the disable call alone is insufficient because future config
+changes can silently re-enable the disclosure.
 
 ### S6505 — Dependency installation lifecycle scripts
 
@@ -365,7 +523,9 @@ re-enable the disclosure.
 `yarn install`) without an explicit `--ignore-scripts`, flagged because
 dependency lifecycle scripts can execute arbitrary code at install time.
 
-**Decision criteria**: FALSE_POSITIVE if and only if all hold:
+**Identification** — the class is present at a site when all hold (before
+the 2026-09-08 ruling these were the conditions for a `FALSE_POSITIVE`
+mark; they license none now):
 
 - The installer is **pnpm at major version ≥ 10** — pnpm 10 removed
   automatic execution of dependency lifecycle scripts
@@ -407,8 +567,14 @@ pnpm ≥ 10 executes dependency lifecycle scripts only for the reviewed
 `pnpm-workspace.yaml`); arbitrary dependencies cannot execute install
 scripts at the flagged site".
 
-**FIX path** (all non-pnpm installers, and any pnpm < 10) — the flag is
-installer-specific: `--ignore-scripts` for npm and Yarn Classic (1.x);
+**FIX path and cure** — for a pnpm ≥ 10 site the finding describes a
+shape that cannot exhibit the defect, and the analyser-clearing change is
+the flag it reads plus pnpm's documented complement: `pnpm install
+--frozen-lockfile --ignore-scripts` followed by `pnpm rebuild --pending`
+(which builds the packages that were not built during an `--ignore-scripts`
+install — `pnpm rebuild --help`, pnpm 11.20.0 — and the reviewed allowlist
+still governs which of them execute scripts). Never a mark. For all
+non-pnpm installers, and any pnpm < 10, the flag is installer-specific: `--ignore-scripts` for npm and Yarn Classic (1.x);
 `--mode=skip-build` for Yarn Berry (2–4, whose `install` rejects
 `--ignore-scripts`); `--ignore-scripts` for pnpm < 10. npm and yarn
 execute dependency lifecycle scripts by default at every major version,
@@ -447,7 +613,9 @@ under a path matching `**/src/types/generated/**` — primarily output of
 `openapi-typescript` consumed by `packages/sdks/oak-sdk-codegen/` and
 downstream MCP tool/stub generators.
 
-**Decision criteria**: FALSE_POSITIVE if and only if all hold:
+**Identification** — the class is present at a site when all hold (before
+the 2026-09-08 ruling these were the conditions for a `FALSE_POSITIVE`
+mark; they license none now):
 
 - Site is in a path matching `**/src/types/generated/**`.
 - The file is overwritten on `pnpm sdk-codegen` (or equivalent) from an
@@ -464,15 +632,16 @@ generator or the OpenAPI schema, not at this site".
 
 **Worked example**: A type-alias usage shape (rule S4323) raised against a
 file under `packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/`
-is disposed FALSE_POSITIVE under this class. The flagged shape is
-mechanically chosen by `openapi-typescript`; the human-edited corpus does
-not exhibit it, and the file is regenerated on each `pnpm sdk-codegen`
-run.
+is identified under this class. The flagged shape is mechanically chosen
+by `openapi-typescript`; the human-edited corpus does not exhibit it, and
+the file is regenerated on each `pnpm sdk-codegen` run.
 
-**FIX path**: if a generator-output finding represents a real defect
-(security, correctness, runtime hazard), the fix is upstream — adjust the
-OpenAPI schema, update the generator, or post-process the output in the
-codegen pipeline. Never hand-edit a generated file.
+**FIX path**: the cure is in the codegen pipeline, never at the site and
+never a mark — adjust the OpenAPI schema, update the generator, or
+post-process the output so the flagged shape is no longer emitted; a
+generator-output finding that represents a real defect (security,
+correctness, runtime hazard) takes the same upstream route. Never hand-edit
+a generated file.
 
 ## Duplications (cpd.exclusions)
 
@@ -572,13 +741,12 @@ reason must be substantive — "the gate is failing" is not a reason. See
 ## Issue Classes
 
 Issue-class policies are added as they are codified. The same shape
-applies: per-rule decision criteria, canonical rationale, FIX path. The
-default is `FIXED` via code change; `FALSE_POSITIVE` is the alternative
-when the defect described is genuinely not present at the site — either a
-zombie finding against stale main-branch analysis where the code has
-already been fixed (the durable cure is to push so SonarCloud re-analyses),
-or a rule that mis-fires on a shape that cannot exhibit the defect it
-describes.
+applies: per-rule shape criteria, the rationale the class once carried, and
+the FIX path. The outcome is `FIXED` via code change. A zombie finding
+against stale main-branch analysis where the code has already been fixed is
+cured by pushing so the analyser re-analyses; a rule that mis-fires on a
+shape that cannot exhibit the defect it describes is cured by changing the
+shape so the rule no longer fires, never by marking the finding.
 
 ### S8786 — Super-linear regular expressions
 
@@ -588,7 +756,9 @@ of the [§S5852](#s5852--slow-regular-expressions) security hotspot: same
 underlying concern (a regex whose worst case is super-linear in input length),
 surfaced as a maintainability issue rather than a security hotspot.
 
-**Decision criteria**: FALSE_POSITIVE if and only if all hold:
+**Identification** — the class is present at a site when all hold (before
+the 2026-09-08 ruling these were the conditions for a `FALSE_POSITIVE`
+mark; they license none now):
 
 - Site runs at lint/validation time, codegen time, build time, or in a
   data-pipeline / admin CLI — never inside a request handler.
@@ -600,20 +770,22 @@ surfaced as a maintainability issue rather than a security hotspot.
   input shape (for example, an end-anchored match over a negated character
   class, where the negated class and the following literal cannot overlap).
 
-When any criterion fails — most importantly when the regex is on a
-request-handler path — the disposition is **FIXED**, not FALSE_POSITIVE.
+Whether or not the criteria hold, the outcome is the rewrite below; when
+the regex is on a request-handler path the rewrite is urgent, not optional.
 
 **Canonical rationale**: "validation/build-time regex; repo-internal input;
 end-anchored over a negated character class so the flagged super-linear
 backtracking cannot occur; not a request-handler path".
 
-**FIX path**: when a flagged regex is on a request-handler path, rewrite it
+**FIX path**: rewrite the flagged regex
 to linear constructs (negated character classes, anchored alternations,
 bounded quantifiers) or to plain string operations, per the rule's
 documented strategies.
 
 **Worked examples** (all in agent-tooling validators, repo-internal markdown
-input, end-anchored over negated classes — disposed FALSE_POSITIVE):
+input, end-anchored over negated classes — identified under this class and
+marked before the ruling; since 2026-09-08 such a site is rewritten to the
+linear form so the rule stops firing):
 
 - `agent-tools/src/validators/markdown-links/validate-markdown-links-helpers.ts`
   — `/\s+"[^"]*"$/` strips a trailing markdown link title.
@@ -625,9 +797,10 @@ input, end-anchored over negated classes — disposed FALSE_POSITIVE):
 **Delta from prior**: this is the first Issue class codified beyond the
 placeholder. It mirrors the established §S5852 hotspot class one-for-one in
 decision shape (build/validation-time + controlled input + anchored/bounded
-⇒ safe; request-handler ⇒ FIX), differing only in finding type (Issue vs
-hotspot) and therefore disposition verb (`FALSE_POSITIVE` vs `SAFE`). It
-does not relax any standard: a request-handler regex still fails the gate.
+⇒ the class; request-handler ⇒ urgent), differing only in finding type
+(Issue vs hotspot); under the One-Outcome Rule neither finding type takes a
+mark. It does not relax any standard: a request-handler regex still fails
+the gate.
 
 ## File-Based Configuration (`.sonarcloud.properties`)
 
@@ -641,27 +814,39 @@ The only file-based analysis config is:
 
 - `sonar.sourceEncoding=UTF-8` — pins source decoding so the analyser cannot fall
   back to a host JVM encoding and misdecode the repo's UTF-8.
+- `sonar.exclusions` — the analysis scope: the studio-source preservation tier
+  (§2026-07-19 amendment) and, by extension, the binary file types `.png`,
+  `.gif`, `.ico`, `.ttf`, `.pdf`, `.xlsx` and `.zip` (§2026-11-11 amendment on
+  binary files). Binaries are not source; the globs are a scope rule that
+  disables no rule and removes no source file from analysis.
 - `sonar.cpd.exclusions` — the duplication-analyser denominator scope documented
   in [§Duplications](#duplications-cpdexclusions) above. It narrows only the cpd
   denominator; it disables no rule.
 
-**There is no file-based rule-ignore mechanism, by design.**
-`sonar.issue.ignore.multicriteria` (per-rule × glob disables) is a
-sonar-scanner-CLI feature that automatic analysis does not read, _and_ a
-forbidden anti-pattern under [`never-disable-checks`][no-disable] regardless: it
-suppresses a rule across every current and future matching file, blind to
-per-site context. A dead copy of such a block once lived in the unread
+**There is no file-based rule-ignore mechanism.**
+`sonar.issue.ignore.multicriteria` (per-rule × glob disables) is read from
+no file in the tree: the scanner CLI reads it from
+`sonar-project.properties`, which automatic analysis ignores. Automatic
+analysis applies it only as the server-side project setting Ignore Issues on
+Multiple Criteria. Wherever it is set, it suppresses a rule across every current and future matching
+file, blind to per-site context, so it is forbidden under
+[`never-disable-checks`][no-disable] with one owner-chosen exception: the
+S4036 criterion for `agent-tools/`, set on both analyser projects
+(§One-Outcome Rule, the second exception). No other rule-ignore criterion may
+be set on either analyser project. A dead copy of such a block once lived in the unread
 `sonar-project.properties` and never took effect; it has been removed.
 
-**Every per-issue and per-hotspot disposition is therefore made per-site,
-server-side in SonarCloud** — `FALSE_POSITIVE` for issues, `SAFE` for hotspots —
-citing the relevant policy class per [§Disposition Workflow](#disposition-workflow).
-This is the single disposition path for **all** documented classes, including
-S5443 / S5332 / S1313 in test fixtures (previously, and ineffectively, expressed
-as a glob-ignore block): a reviewer applies the class's decision criteria to the
-individual finding and dispositions it in the UI with a comment citing this
-policy. The class definitions above are the shared decision criteria for those
-per-site calls.
+**Every other finding is resolved in the tree**, per
+[§Disposition Workflow](#disposition-workflow): the class definitions above
+say what the analyser sees and which change clears it, and the next analysis
+closes the finding. The S4036 criterion aside, the absence of a file-based
+ignore is not a gap to be filled by a server-side mark or setting — since the 2026-09-08 ruling there is no mark
+to make, for S5443 / S5332 / S1313 in test fixtures as for every other
+class but S4036's (the second exception: the criterion under
+`agent-tools/`, a mark at a class site elsewhere). The first exception, the
+rate-limiting query, is no per-site record either: it is the tracked `query-filters` entry in
+`.github/codeql/codeql-config.yml`, which knowingly silences that query for
+every route (§One-Outcome Rule).
 
 ### Expansion discipline (`.sonarcloud.properties`)
 
@@ -673,6 +858,10 @@ enact; (3) the `.sonarcloud.properties` update. The reason must be substantive �
 path range is functionally a gate-scope change, so it goes through the same
 discipline as any [`never-disable-checks`][no-disable]-adjacent decision.
 
+A glob added to `sonar.exclusions` goes through the same three steps. A
+binary file-type glob names an extension only, never a directory and never a
+text or source type.
+
 [sonar-config]: ../../.sonarcloud.properties
 
 ## Maintenance
@@ -682,7 +871,11 @@ discipline as any [`never-disable-checks`][no-disable]-adjacent decision.
   is reclassified.
 - Amendments must include a worked example and a clear delta-from-prior
   rationale. Removing a permitted shape requires re-disposition of any
-  sites previously SAFE-d under the removed shape.
+  sites previously SAFE-d under the removed shape. The 2026-09-08 ruling
+  removed every permitted mark at once; whether the sites marked before it
+  are re-opened and cured, and in what order, is the owner's decision,
+  recorded on whatever plan carries it when given — this policy binds
+  forward from the ruling and does not re-open them by itself.
 - The policy is a living document. Reviewers should challenge stale
   rationales at consolidation time.
 
@@ -707,13 +900,145 @@ Implementation:
   library, print layer, `brand.css` (it is on the package export surface, so
   it is product code and back in scope), `oak-icons.css`, `oak-theme.js`,
   `dtcg/`, `assets/`, docs — under the standard gate including the
-  duplication metric. Their findings resolve per-site under the two-outcome
-  rule (e.g. `brand.css`'s commented-template findings are per-site
-  FALSE_POSITIVE adjudications, never a scope carve-out).
+  duplication metric. Their findings resolve per-site in the tree (at this
+  amendment's date `brand.css`'s commented-template findings were per-site
+  FALSE_POSITIVE adjudications; since 2026-09-08 such a site is changed so
+  the finding no longer fires), never a scope carve-out.
 - **Movement rule**: if any studio-source file becomes consumed by product
   code, it moves out of `studio-source/` and under the full gate in the same
   change. Expansion of the studio-source scope follows the §Duplications
   discipline: policy amendment first, owner authorisation, then config.
+
+## 2026-09-08 amendment: one outcome, one exception, owner-ruled
+
+Owner ruling (2026-09-08, verbatim): "We don't dismiss issues, we fix
+them." Given on the code-scanning lane's two owner-reserved acts as then
+planned — `SAFE` marks for localhost literals in test helpers, and four
+false-positive dismissals of missing-rate-limiting alerts citing ADR-219 —
+and binding on every finding from either analyser from that date.
+
+The same day, the one exception (verbatim in
+§[One-Outcome Rule](#one-outcome-rule-owner-ruled-2026-09-08)): the
+rate-limiting work is paused; the routes carry comments recognising the
+defence-in-depth option and the edge controls relied on; and in this ONE
+case the findings are dismissed, kept dismissed rather than revisited. An
+earlier pre-ruling the same morning ("amend ADR-219: edge primary,
+in-process permitted") is superseded by it: ADR-219 stands unchanged.
+
+Delta from prior: the Two-Outcome Rule (fix, or a class-criteria mark in
+the analyser) becomes the One-Outcome Rule (fix), and the class catalogue's
+criteria change role from licence to identification. Worked example: a
+clear-text `http://localhost` literal in a test helper met S5332's
+criteria and would have taken a `SAFE` mark; under this amendment the
+helper is changed so no clear-text literal is present (the code-scanning
+lane's unit for the class), and the finding closes on the next analysis.
+Worked example of the exception: a route handler the analyser flags for
+missing rate limiting takes a comment naming the edge control and the
+defence-in-depth option, and its one finding is dismissed once in the
+analyser's record citing ADR-219 — never a path exclusion or a query
+filter, which would silence the rule for every route to come.
+
+## 2026-09-17 amendment: the exception's mechanism is the tracked exclusion
+
+The 2026-09-08 worked example above prescribed one dismissal per alert and
+forbade a query filter. On 2026-09-10 the rules tier recorded that per-alert
+shape (`41235118c`), and the same day `.github/codeql/codeql-config.yml`
+gained a `query-filters` exclusion of `js/missing-rate-limiting`
+(`bd7a3509e`), whose comment attributes it to the 2026-09-08 ruling. Asked
+which mechanism the ruling meant, the owner answered on 2026-09-17,
+verbatim: "a permanent exclusion is allowed, but ONLY for that one issue".
+
+Delta from prior: the exception's mechanism is the tracked exclusion, and
+the §One-Outcome Rule text and Disposition Workflow step 1 are amended to
+it. The cost the worked example named is accepted knowingly: the query is
+silenced for every route to come, and ADR-219's edge rule is the control
+for them. The scope does not widen: no other query or finding class is
+excluded or dismissed, and the path scope rules (the studio-source tier of
+the 2026-07-19 amendment, the duplication globs) are unchanged by this one.
+
+## 2026-11-05 amendment: S4036 by name, the second exception, owner-ruled
+
+Owner ruling (2026-11-05, verbatim): "adopt the by-name ruling on engraph".
+Given when the upstream carrier at release 1.186.8 met this estate's opposite
+cure. Upstream invokes `pnpm`, `gh` and `gitleaks` by name under the owner's
+S4036 ruling of 2026-11-03, and this estate resolved each binary to an
+absolute path from a platform-partitioned allowlist.
+
+Delta from prior: §S4036 takes the upstream text whole except its worked
+example, and the §One-Outcome Rule gains its second exception, so a site
+within the class is marked rather than cured. The Disposition Workflow gains
+the step that marks it. The first exception's scope is unchanged. The
+§S4036 delta's counts are the upstream analyser project's; this estate's
+analyser raises S4036 at each by-name site, and each is marked under the
+second exception.
+
+The worked example is this estate's own. Upstream's names `run-typedoc.ts`,
+which here runs TypeDoc through the package's own entry under
+`process.execPath`, never by name. At this amendment's date `git`,
+`gitleaks` and the smokes' shell still resolve through the absolute-path
+resolvers in `agent-tools/src/core/` (`trusted-git.ts`,
+`trusted-gitleaks.ts`, `trusted-shell.ts`); each moves to by-name in its own
+change.
+
+## 2026-11-11 amendment: the S4036 criterion for `agent-tools/`, owner-chosen
+
+Owner ruling (2026-11-11, verbatim): "we are not removing automatic analysis
+for one issue. What setting do I need to change in Sonar?" Given when the
+reunification pull request's first analysis on Oak's project raised the
+S4036 class at 30 by-name sites carrying no mark on Oak's project, and a
+tracked configuration was found to need CI-based analysis, which the owner
+declined. The owner set the criterion on both analyser projects the same day.
+
+Delta from prior: the second exception's mechanism for `agent-tools/` is one
+project criterion on each analyser project, Ignore Issues on Multiple
+Criteria with rule key pattern `typescript:S4036` and file path pattern
+`agent-tools/**/*`, in place of a mark at each site. The per-site mark stands
+for a class site outside `agent-tools/`, and the issues already marked under
+`agent-tools/` need no re-disposition. The §There is no file-based rule-ignore
+mechanism block names this criterion as the one exception to its ban, and
+Disposition Workflow step 2 treats an S4036 finding under `agent-tools/`, raised
+after the criterion was saved, as a lost criterion for the owner to restore. The cost is accepted knowingly, as the first
+exception's was: an `agent-tools/` site outside the class is silenced too.
+Its control is the lint rule `@oaknational/no-shell-form-process-launch`,
+which the owner chose as the substitute check on 2026-11-12, with review
+against §S4036's decision criteria for what that rule cannot see. The second
+exception states the reopen condition.
+
+Worked example: the pull request's first analysis raised 30 S4036 issues in
+18 files, all under `agent-tools/`: 11 files under
+`agent-tools/smoke-tests/` (nine smoke tests and two fixtures) and 7 tooling
+sources, among them the two `git` calls in
+`agent-tools/src/secret-scan/run-push-secret-scan.ts`. With the
+criterion in place the analyser raises none of them, and a new by-name site
+under `agent-tools/` raises nothing either. A class site under `apps/` or
+`packages/` still raises its issue and takes the per-site mark with the
+canonical rationale.
+
+## 2026-11-11 amendment: binary files excluded from analysis scope, owner-authorised
+
+Owner authorisation (2026-11-11, verbatim): "yes, make it as its own small
+PR". Given on a proposal to test one hypothesis about the analysis warning
+both analyser projects show: "There are problems with file encoding in the
+source code. Please check the scanner logs for more details." Automatic
+analysis exposes no scanner log.
+
+Delta from prior: `sonar.exclusions` gains seven by-extension globs beside
+the studio-source path — `**/*.png`, `**/*.gif`, `**/*.ico`, `**/*.ttf`,
+`**/*.pdf`, `**/*.xlsx`, `**/*.zip`. These are the extensions of every
+tracked file outside `studio-source/` that is not valid UTF-8, at this
+amendment's date: 37 files, all binary. Every tracked text file decodes as
+UTF-8 with no byte-order mark. A binary file is not source, so this is a
+scope rule: no rule is disabled and no source file leaves analysis. The
+2026-07-19 ruling on product code is unchanged; a product image or font is
+an asset, not code, and every source file beside it stays fully analysed.
+
+The cause is a hypothesis, not a finding: that the scanner, run over the
+whole tree, reads these binaries as UTF-8 and raises the warning. The check
+is the analysis-warning banner on each analyser project after the next
+analysis of the default branch. If the warning persists, the hypothesis is
+false and the globs are reconsidered. Worked example: `favicon.ico` under an
+app's `public/` directory is no longer indexed, and the app's source files
+are analysed as before.
 
 ## Cross-references
 

@@ -4,7 +4,7 @@ fitness_line_limit: 1100
 fitness_char_limit: 70000
 fitness_line_length: 100
 fitness_content_role: reference
-overflow_disposition: 'leave-if-live; else conserve-insight-and-delete — never archive/split/rotate/shard (see continuity-practice.md §Disposition of Continuity Surfaces)'
+overflow_disposition: 'leave-if-live; else graduate, then archive to a dated file proven byte-identical — never before full processing, never split/shard (see continuity-practice.md §Disposition of Continuity Surfaces)'
 merge_class: index-narrative-tables
 ---
 # Next-Session Record — `eef` thread
@@ -15,220 +15,43 @@ merge_class: index-narrative-tables
 > transformed into a **later, more useful investigation** when this thread is reactivated. No
 > active next step; reactivation is owner-directed.
 
-## Current Continuation
+## Where the current state is
 
-- **2026-06-11 evening (Dawnlit Glimmering Orbit / cursor Fable 5, `50c2d1`,
-  oak-prod-live-mcp-exercise, solo)** *(recovered 2026-07-15 from `SHA:c9ff6bb49` on
-  `docs/graph-team-direction-2026-06-10` after PR #383 closed unmergeable; landed via the
-  batched continuity PR)* — the live oak-prod MCP
-  (`curriculum-mcp-alpha.oaknational.dev`, app v1.26.1, Cursor OAuth client) was exercised
-  end-to-end against the working-with-graphs checklist: orientation, all four graph tools
-  (positive + negative probes), search, fetch, `eef://interpretation`. **Every graph response
-  satisfied the doctrine** — bounded complete subgraphs, anchors echoed, honest windows, typed
-  refusals/well-formed empties, no soft stubs; cross-provenance consistency held (fetch's
-  live-API lesson text byte-matches the bulk-corpus graph responses). **One material finding,
-  owner/Director decision needed** *(at the time — RESOLVED 2026-06-12: PR #191 landed the
-  owner-decided dual shape, released 1.28.0 and production-verified; see the snagging-arc
-  entry below)*: `get-eef-evidence` success payloads render `(omitted)` in
-  the Cursor MCP client — the owner-ratified `content: []` + structuredContent-only success
-  shape is dropped by clients that render only `content` blocks (typed refusals and all graph
-  tools render fine; root cause source-grounded in `aggregated-eef-evidence.ts`). The D7
-  teacher-value path is dead in such clients while contract behaviour stays correct. Evidence +
-  disposition options in
-  [`oak-prod-live-mcp-exercise-2026-06-11.md`](../../../../reports/oak-prod-live-mcp-exercise-2026-06-11.md)
-  (also: two corpus-data observations — cross-subject keyword description leakage on
-  `keyword:convert`, one prior-knowledge typo; prompts not agent-invocable from the Cursor
-  harness — user slash-command invocation works — named as a coverage gap).
-- **2026-06-12 (Forge turns Basalt / claude-code Fable 5, `c4b882`) — EEF DATA SURFACING-GAP
-  RESEARCH LANDED.** Read-only research: corpus-vs-surfaced inventory, verified first-hand
-  (full surfacing stack read; three live oak-prod probes; 24-agent workflow with adversarial
-  verify). The report is the conservation home:
-  [`eef-data-surfacing-gap-research-2026-06-12.md`](../../../../plans-backlog-2026-07/sector-engagement/eef/reference/eef-data-surfacing-gap-research-2026-06-12.md)
-  (committed by the Director in `32bcd9d1b`; owner roadmap item 7 owns organising its
-  follow-ons). Load-bearing for the next EEF session: report §8 lists the ten unowned items
-  (no recorded decision anywhere) — headline: EEF absent from `get-curriculum-model`
-  orientation; methodology sub-fields exported but rendered nowhere; the unowned EEF
-  provenance/refresh outreach (report §6), which also gates the corpus-backfill opportunity
-  (report §7). Sibling artefacts: the
-  [DfE data SDK seed](../../../../plans-backlog-2026-07/sector-engagement/future/dfe-data-sdk.plan.md)
-  (sector-engagement thread) — DfE EES statistics as a COMPLEMENTARY source, never a
-  replacement (owner posture 2026-06-12); the EEF corpus stays whole and authoritative for
-  EEF evidence — and the owner-commissioned
-  [executive briefing](../../../../plans-backlog-2026-07/sector-engagement/eef/reference/oak-eef-executive-briefing-2026-06-12.md)
-  (standalone, C-suite Oak + EEF): the outreach vehicle for the report-§6 partnership
-  conversation (dataset depth, update route, licence terms).
-- **THIS SESSION (2026-06-11→12, Cosmos turns Equinox / claude Fable 5, `1bc763`,
-  snagging-execution successor per PDR-063 handoff from Dusky Passing Mist) — 🟢 SNAGGING ARC
-  LANDED.** The 2026-06-11 snagging plan's three-PR arc is fully merged: PR #190 (outbound
-  token health metric, merge `8f1cc49c0`, released 1.27.0), PR #191 (EEF dual-shape — the
-  owner-decided reversal of D6/D7 structuredContent-only, merge `1b02b70b4`, released 1.28.0,
-  including the E3 docs supersession sweep across the EEF plans / output-schemas plan /
-  ADR-058 / ADR-195 / D3 contract), PR #192 (keyword-graph `limit` schema bounds, merge
-  `f4e8da260`), plus PR #193 (S4 closure + arc record + replay-recipe correction, merge
-  `9686adba3`). Post-merge verified: the write-up's Shape-B replay against a local 1.28.0
-  build returns the dual shape; production serves 1.28.0; the metric's spans + "MCP response
-  size" logs are arriving in production Sentry — with one named caveat: span-ATTRIBUTE
-  searchability in the Sentry explorer is unconfirmed (`has:oak.mcp.response.body_bytes`
-  finds nothing while the spans exist; the logs dataset carries `bodyBytes`/`tokensEst`), so
-  check attribute indexing before wiring the threshold follow-on to span queries. All review
-  verdicts adjudicated first-hand on the PRs. **Next safe steps for this lane (queued by
-  design, recorded in the
-  [snagging plan](../../../../plans-backlog-2026-07/sdk-and-mcp-enhancements/current/oak-prod-mcp-snagging-2026-06-11.plan.md)):**
-  (1) S3 corpus-typo routing — refresh bulk downloads, regenerate, then route (needs a
-  network/regen window); (2) the S2 cure — keyword identity-model design decision
-  (per-placement descriptions belong on edges; evidence in the plan); (3) the outbound-token
-  threshold follow-on (trigger: baselines visible in Sentry; note the searchability caveat);
-  (4) optional annex — Codex/Gemini client probes, and a fresh-session Claude Code re-probe
-  of `get-eef-evidence` against deployed 1.28.0 to complete the client matrix.
-- **2026-06-11 evening (Dawnlit Glimmering Orbit / cursor Fable 5, `50c2d1`,
-  oak-prod-live-mcp-exercise + snagging, solo).** *(Discharge note, 2026-07-15: the
-  reconcile-on-merge instruction below is DISCHARGED — the June branch's substance was
-  re-homed via PR #384 with `SHA:c9ff6bb49` provenance and the branch's disposition was
-  owner-ruled in the residue sweep. The snag register's S1 owner decision was made and
-  landed 2026-06-12 via PR #191, so the "S0 probe → S1 to owner" next step is superseded;
-  see the snagging-arc entry above.)* **NOTE this branch lags the eef arc** — the
-  TRACK-G completion narrative and this session's first-wave artefacts (verification record +
-  thread-record entry) live on branch `docs/graph-team-direction-2026-06-10` (commits
-  `ae5372e2c` + `c9ff6bb49`, pushed); reconcile on merge. This branch carries the session's
-  second wave, owner-directed: **write-up before fixes, successor will not be a Cursor
-  instance**. Landed here (swept into peer commit `3de15f01a`, content verified conserved):
-  the self-contained
-  [cursor-visibility write-up](../../../../reports/oak-prod-mcp-cursor-visibility-writeup-2026-06-11.md)
-  (server wire shapes pinned to source; Cursor delivers ONLY `content` blocks to the model —
-  decoration-key fingerprint proof; the ratified `content: []` + structuredContent-only
-  `get-eef-evidence` success is fully invisible to the Cursor agent, shape-based not
-  size-based; prompt layer = user slash commands yes / agent invocation no, results loop back
-  as injected command context; replay recipe for non-Cursor successors) and the
-  [snag register](../../../../plans-backlog-2026-07/sdk-and-mcp-enhancements/current/oak-prod-mcp-snagging-2026-06-11.plan.md)
-  (S0 client-population probe → S1 owner decision on the EEF shape; S2 keyword description
-  leakage; S3 corpus typo; S4 `limit` schema bounds; S5 prompt-UX observation). **Next safe
-  step for this lane**: S0 — probe how non-Cursor clients surface the Shape-B response (one
-  call each per the write-up's §6 replay recipe), then put S1 to the owner.
-- **PRIOR ARC (2026-06-10 → 2026-06-11): the graph implementation team — seven Director
-  holders, ~38 agent seats, Track-G + the re-proof + ARC reliability delivered IN FULL;
-  the team dissolved cleanly with zero open PRs (arc PRs #142–#187 merged).** The durable
-  homes for the arc narrative: the
-  [session operations + experience report](../../../../reports/graph-team-session-operations-and-experience-2026-06-10-11.md)
-  (owner-directed synthesis; central finding: reading doctrine does not fire it — mechanism
-  does), the
-  [graph plan](../../../../plans-backlog-2026-07/connecting-oak-resources/knowledge-graph-integration/current/graph-tools-value-redesign.plan.md)
-  todos (per-deliverable authority), the preserved comms-event corpus, the handoff records
-  under `.agent/state/collaboration/handoffs/`, and git history (per the identity-table
-  contract below). Live carries from the arc: owner items HELD AS-IS (principles-prompt
-  attribution validation, gating the S3 principles follow-on; bulk-export-lags-live); the
-  Director-queue agent-tools lanes (register-recorded); w3-c1 + next product tranche shaped
-  by observed alpha use, not design momentum (owner doctrine, 2026-06-11). PR #187 merged
-  the coordination home back to main — the end-of-arc step the forward-only model never
-  specified (gap captured in the generalisation plan todo x6, which is the live carrier).
-- **PRIOR SESSION (2026-06-09, Fragrant Spreading Sapling / claude Fable 5, branches
-  `feat/graph-migration-part-1` → `feat/graph-migration-part-2`) — graph-tools readiness →
-  🟢 DECISION-COMPLETE.** The review-and-readiness session the entry below queued. Owner overturned
-  the surface/graph split (find the real membranes); seam analysis + data grounding
-  ([report](../../../../reports/graph-tools-readiness-seam-analysis-2026-06-09.md)) → owner-ratified
-  deliverables (S1, S2, G1–G3, G4, U1 — each one small PR); `get-keywords` provenance falsified
-  (live-API tool; kept; U1 upstream request + G4 additional bounded tool, bulk-parity gated);
-  mechanisms settled R1-unanimous (B = new `./graph-corpus` subpath; NO substrate change —
-  per-view `GraphView` construction; factory + unit test deleted at G3); misconception anchors
-  ratified (unit+lesson core, thread bounded heavy-tail); R2 conditions all applied
-  (anchor-threading prompt rewrites; emission-ownership table; G4 Gate-1 rule) →
-  **DECISION-COMPLETE** with proof contract. Delivered + MERGED (2026-06-10): PR #143 (analysis +
-  restructure), #144 (R2 + flip + continuity), #145 (owner corrections — S3 live deliverable, no
-  unagreed holding states; stale fired-trigger facts fixed), #146 (indefinite-deferral
-  vocabulary → trip-list + regression test, shipped in v1.18.0; all Copilot comments adjudicated
-  first-hand), #147 (deep handoff/consolidation + loss-scan closures), #148 (upstream
-  schema-hash sync). **Next: the IMPLEMENTATION PHASE — pick any unblocked deliverable
-  (S1/S2/S3-c0/U1/G1) from the plan, execute its cycles per the proof contract, ship as one
-  small PR; re-verify the pinned data facts against the tree at execution start.**
-- **PRIOR SESSION (2026-06-09, Brazen Roasting Cinder / claude Opus 4.8, branch
-  `assess/evidence_workflows`, PR #142) — A-i/C deferred reviews + graph-tools-plan promotion.**
-  The deferred A-i/C specialist reviews ran (5 reviewers via a workflow; every finding adjudicated
-  FIRST-HAND — code/types/tests SOUND, no real defects; two over-escalations refuted). Verified
-  findings landed + **PUSHED**: `4f15d7df` test(eef) coverage, `747023fd` docs(eef) comment/plan
-  accuracy (`eef-evidence.ts` stale "open question" → ADR-193; output-schemas type-tie/count fixes),
-  `836d7d85` docs(memory) napkin capture. Estate gap/decision-completeness check done.
-  **`graph-tools-value-redesign.plan.md` PROMOTED future/→current/** (owner-decided): stale
-  substrate facts corrected (the landed `GraphView` is subgraph-only + edge-type-agnostic — the
-  views need an edge-type-selective extension), inbound links repointed, KG README row moved to Live
-  Work. It is **NOT yet decision-complete** — the mechanism settle (A/B/D/E + node/edge model + the
-  `GraphView` extension) + executable TDD cycles + architecture/assumptions review remain for the
-  NEXT SESSION on a NEW branch (see the plan's §Remaining promotion work). The fitness-driven
-  curation
-  pass was NOT done (owner directed not to act on fitness limits this session).
-- **PRIOR SESSION (2026-06-09, Incandescent Smouldering Brazier / claude Opus 4.8, branch
-  `assess/evidence_workflows`) — post-D7 evidence-workflow enhancements + the product principle.
-  All three commits landed (full gate green each); pushed (PR #142):**
-  - **`80dd642d` feat(eef): A-i + C on `get-eef-evidence`.** A self-describing `answerType`
-    (`'strand-lookup' | 'context-subset'`) on the evidence envelope (a complete by-id result vs a
-    non-exhaustive corpus-curated axis subset), and a `detail: 'headline'` option on
-    `evidence-for-move` (the `evidenceForMoveHeadlines` projection in the new
-    `graph-corpus-sdk/src/eef-strands/eef-headline-view.ts`). answerType preserves the D4
-    inspect/explicit-id overlap; the headline view preserves edges/frontier/provenance.
-    Behaviour-tested + **exercised LIVE over MCP HTTP**; types by tsc. **NOT specialist-reviewed**
-    — code/type/test experts were NOT invoked (gates + self-review + live proof only).
-  - **`20105837` docs(adr): ADR-194 Teacher-as-Expert Product Boundary (Accepted).** The product
-    principle — Oak's surfaces inform and may present evidenced options, but never make the
-    teacher's pedagogical decision; the teacher is the expert and authority. ADR-191 is its
-    server-side engineering corollary. Propagated to the ADR index, ADR-191, VISION, the
-    curriculum-tools playbook, and EEF R7. Assessment reports in `.agent/reports/`
-    (`eef-evidence-workflow-live-value-assessment-2026-06-09.md`, `…design-directions…`).
-  - **`f95a051d` docs(plans): output-schema estate integrated.** The composition approach +
-    my EEF reconciliation — `answerType` + the full/headline member union threaded through the
-    output-schemas plan's W0-cycle-3 / W2 / §Relationship clauses.
-- **NEXT SAFE STEP — reviews + completeness checks, THEN push/PR (owner-directed
-  2026-06-09). ✅ COMPLETED 2026-06-09 (Brazen Roasting Cinder; see the top entry —
-  reviews ran, findings landed + pushed, completeness check done, graph plan
-  promoted).**
-  The original next-session checklist was:
-  1. **Carry out the deferred reviews** — `code-expert` / `type-expert` / `test-expert` on the
-     A-i/C code (`80dd642d`); `docs-adr-expert` coherence pass on the integrated
-     `output-schemas-for-mcp-tools.plan.md`.
-  2. **Critically assess ALL reviewer feedback first-hand.** Reviewers over-escalate / misdiagnose
-     (a parallel agent flagged a type-reviewer over-escalation on a wrong Zod signature this
-     session — see the `agentic-engineering-enhancements` thread record Lane E, the specialist
-     sub-agent design overhaul); ground every finding
-     against the real code/data before acting (`validate-specialist-findings-before-acting`,
-     `first-hand-means-me-not-subagents`). Verdict-not-relay.
-  3. Run a **gap analysis**, an **underspecified-items check**, and a **decision-completeness
-     check** across the ADR-194 + A-i/C + output-schema estate.
-  - (Push `assess/evidence_workflows` + open the PR are this session's final steps; if already
-    done, the next session opens with reviews.)
-- **Prior arc (D0–D7) DELIVERED + SHIPPED.** The EEF build arc shipped to production 2026-06-08
-  (PR #131 → `v1.16.0`); the surface is live by default at `curriculum-mcp-alpha.oaknational.dev`.
-  The A-i/C above are post-ship enhancements on a new branch. The
-  [`graph-tools-value-redesign`](../../../../plans-backlog-2026-07/connecting-oak-resources/knowledge-graph-integration/current/graph-tools-value-redesign.plan.md)
-  promotion trigger (EEF D6 + D7 green) is fired; its output-schema work is gated behind
-  `output-schemas-for-mcp-tools.plan.md`.
-- **Acceptance bar carried**: every tool/resource/prompt is real graph-derived logic with
-  tests, or it is absent; strict types (no widening on finite-domain `z.enum`); A-i/C are
-  information about the result, never a recommendation (ADR-194); source attribution never
-  filtered; no `--no-verify`.
+The pause banner above is the current state: nothing below it is actionable without the owner's
+reactivation. Landed: the D0–D7 build (PR #131, v1.16.0); the graph implementation team arc
+(PRs #142 to #187, 2026-06-10/11); the snagging arc (PRs #190 to #193, releases 1.27.0 and
+1.28.0); the docs-branch recovery (PRs #383 and #384). The doctrine the thread produced is in
+ADR-191, ADR-193 and ADR-194 and in the standing decisions below.
 
-> **🤝 EXERCISE RECIPE — verified live 2026-06-08 (Briny Charting Lagoon). The next session
-> exercises the running app via the standard MCP tools; this is the grounded path.**
->
-> **Start the server (no auth, local):**
-> `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http dev:observe:noauth`
-> → listens on **port 3333**, `DANGEROUSLY_DISABLE_AUTH=true`, MCP endpoint
-> `http://localhost:3333/mcp`. (Root `pnpm app:mcp` is the WITH-auth variant; `qa:oauth` runs
-> the built server with auth.) The EEF flag is unset in dev env → kill-switch → **ON**.
->
-> **Call shape** (streamable HTTP, stateless — no initialize handshake needed): POST JSON-RPC
-> with header `Accept: application/json, text/event-stream`; the reply is SSE — parse the
-> `data:` line (`grep '^data:' | sed 's/^data: //' | jq`).
->
-> **The four surfaces (all confirmed working):**
->
-> - `tools/list` → `get-eef-evidence` is present (position ~7).
-> - `tools/call` `get-eef-evidence` `{function:'inspect-strand', strandId:'eef-tl-feedback'}`
->   → envelope: Feedback +6mo / Very Low / Extensive, `frontier`, full `provenance.source`
->   (name/url/organisation/**original_authors**), caveats.
-> - `tools/call` `get-eef-evidence` `{function:'evidence-for-move', phase:'primary'}` → axis
->   query; **no selector → `isError:true`** ("requires at least one selector…").
-> - `resources/read` `{uri:'eef://interpretation'}` → `text/markdown` guide.
-> - `prompts/get` `adapt-lesson` `{topic, yearGroup}` → workflow messages.
->
-> **Stop:** `lsof -ti:3333 | xargs kill`. Strand ids/axes are the corpus finite domains
-> (`EEF_STRAND_IDS` / observed phase·keyStage·priority); an unknown key → `isError`.
+The items the record listed as open at the pause, in its words, for the reactivation: (1) S3
+corpus-typo routing — refresh bulk downloads, regenerate, then route (needs a network/regen
+window); (2) the S2 cure — the keyword identity-model design decision (per-placement descriptions
+belong on edges; evidence in the plan); (3) the outbound-token threshold follow-on (trigger:
+baselines visible in Sentry; span-attribute searchability in the Sentry explorer is unconfirmed —
+check attribute indexing before wiring it to span queries); (4) an optional annex — Codex and
+Gemini client probes, and a fresh-session Claude Code re-probe of `get-eef-evidence` against the
+deployed 1.28.0 to complete the client matrix; the ten unowned items of the data-surfacing gap
+report §8 (headline: EEF absent from `get-curriculum-model` orientation; methodology sub-fields
+exported but rendered nowhere) and the unowned EEF provenance/refresh outreach of its §6, which
+also gates the corpus-backfill opportunity of §7 (the report is
+`plans-backlog-2026-07/sector-engagement/eef/reference/eef-data-surfacing-gap-research-2026-06-12.md`);
+the owner items held as-is from the graph-team arc (principles-prompt attribution validation,
+gating the S3 principles follow-on; bulk export lags live); the curation pass for the
+`graph-tools-value-redesign` promotion (the owner directed not to act on fitness limits that
+session); and prompts not agent-invocable from the Cursor harness (user slash-command invocation
+only), a coverage gap.
+
+The journal from 2026-04-30 to 2026-06-12 (the Current Continuation: the graph implementation
+team's seven Director tenures, the reliability micro-queue, the live MCP exercise and snagging,
+the data-surfacing gap research, the executive briefing) was curated on 2026-09-20 by graduate,
+then archive. The whole pre-curation record is preserved at
+`.agent/memory/operational/archive/eef-thread-2026-09-20.md`, byte-identical to the record
+committed at `SHA:c5e49a10b` (blob `067f3581c`). It was read by the split method (one analyst, the
+join by grep). Its lessons were found homed before the move: the deterministic-data and membrane
+decisions in ADR-191 and ADR-193; the result-not-recommendation boundary in ADR-194; reviewer
+findings grounded against the real code before acting in `verify-dont-trust` and
+`subagent-practice-core-protection`; verdict-not-relay in `present-verdicts-not-menus`; the
+attribution and no-widening rulings in the standing decisions below.
 
 ## Standing Decisions (pointers — the cited homes are authoritative)
 

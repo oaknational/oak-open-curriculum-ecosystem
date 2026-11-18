@@ -8,8 +8,12 @@ import {
 } from './client-categories.js';
 import type { ClientIdentityHeaders, OakClientProduct } from './event-policy-contract.js';
 
+/** Orders products by their string value, so a derived set compares as a sorted list. */
 function compareProducts(left: OakClientProduct, right: OakClientProduct): number {
-  return left < right ? -1 : left > right ? 1 : 0;
+  if (left < right) {
+    return -1;
+  }
+  return left > right ? 1 : 0;
 }
 
 /** A readable header container carrying exactly these values. */

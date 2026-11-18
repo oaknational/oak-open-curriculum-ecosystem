@@ -123,6 +123,14 @@ export function runDriveFromCli(state: CliState, target: string): 0 | 1 {
  * per-tool evidence must survive the pack write, or a green run is missing
  * the evidence its own pack points at.
  */
+/**
+ * A path as the filesystem stores it, compared case-folded: default macOS and
+ * Windows filesystems open Summary.json and summary.json as the same file.
+ */
+function storageKey(value: string): string {
+  return value.toLowerCase();
+}
+
 function writePack(
   repoRoot: string,
   reportDir: string,
@@ -132,9 +140,6 @@ function writePack(
   const packPath = resolve(repoRoot, packOut ?? join(reportDir, 'reviewer-pack.md'));
   const summaryPath = resolve(repoRoot, join(reportDir, 'summary.json'));
   const evidenceDir = resolve(repoRoot, join(reportDir, 'tools'));
-  // Compared as case-folded storage keys: default macOS/Windows filesystems
-  // open Summary.json and summary.json as the same file.
-  const storageKey = (value: string): string => value.toLowerCase();
   if (
     storageKey(packPath) === storageKey(summaryPath) ||
     storageKey(packPath).startsWith(storageKey(evidenceDir + sep))

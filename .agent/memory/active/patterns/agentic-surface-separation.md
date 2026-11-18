@@ -3,6 +3,7 @@ name: "Agentic Surface Separation"
 polarity: pattern
 use_this_when: "Designing or refactoring agent infrastructure that spans skills, rules, commands, subagents, or platform adapters"
 category: agent
+layer: general
 proven_in: "Cross-platform skills review plus local Practice integration (2026-03-20, algo-experiments)"
 proven_date: 2026-03-20
 barrier:

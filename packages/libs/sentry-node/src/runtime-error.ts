@@ -136,9 +136,11 @@ export function mapFlushError(error: SentryFlushError): ObservabilityFlushError 
       return { kind: 'observability_flush_timeout', timeoutMs: error.timeoutMs };
     case 'sentry_flush_failed':
       return { kind: 'observability_flush_failed', message: error.message };
+    default: {
+      const exhaustive: never = error;
+      throw new Error(`Unhandled flush error kind: ${String(exhaustive)}`);
+    }
   }
-  const exhaustive: never = error;
-  throw new Error(`Unhandled flush error kind: ${String(exhaustive)}`);
 }
 
 /**
@@ -155,7 +157,9 @@ export function mapCloseError(error: SentryCloseError): ObservabilityCloseError 
       return { kind: 'observability_close_timeout', timeoutMs: error.timeoutMs };
     case 'sentry_close_failed':
       return { kind: 'observability_close_failed', message: error.message };
+    default: {
+      const exhaustive: never = error;
+      throw new Error(`Unhandled close error kind: ${String(exhaustive)}`);
+    }
   }
-  const exhaustive: never = error;
-  throw new Error(`Unhandled close error kind: ${String(exhaustive)}`);
 }

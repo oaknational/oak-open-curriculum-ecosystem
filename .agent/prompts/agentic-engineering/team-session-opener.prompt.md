@@ -69,7 +69,7 @@ handoff record describes (never re-create over a worktree holding recorded state
 ```bash
 git worktree add <worktrees-root>/wt-<seat> -b feat/<first-deliverable> origin/main
 # per worktree, once (required for gates):
-cd <worktrees-root>/wt-<seat> && pnpm install && pnpm build
+cd <worktrees-root>/wt-<seat> && pnpm install && pnpm build && .agent/setup/install-shellcheck.sh
 ```
 
 Branches rotate inside a worktree per deliverable (one small PR per deliverable, always based on

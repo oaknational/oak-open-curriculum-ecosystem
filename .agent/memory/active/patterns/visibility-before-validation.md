@@ -3,6 +3,7 @@ name: Visibility Before Validation
 polarity: pattern
 use_this_when: About to build a validator, guard, or scanner over a surface whose current shape accumulated organically rather than by deliberate design
 category: process
+layer: general
 proven_in: .agent/memory/active/napkin.md (2026-07-09, mcp-agent-facing-content audit)
 proven_date: 2026-07-09
 barrier:

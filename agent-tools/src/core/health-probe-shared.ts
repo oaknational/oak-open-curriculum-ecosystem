@@ -11,8 +11,6 @@ export const CLAUDE_HOOK_COMMAND =
  * have to reproduce exactly.
  */
 export const CLAUDE_HOOK_ARTEFACT = 'agent-tools/dist/src/hook-policy/pre-tool-use-dispatch.js';
-export const CURSOR_AGENTS_DIR = '.cursor/agents';
-export const CLAUDE_AGENTS_DIR = '.claude/agents';
 export const CODEX_AGENTS_DIR = '.codex/agents';
 export const HOOK_POLICY_PATH = '.agent/hooks/policy.json';
 export const CLAUDE_SETTINGS_PATH = '.claude/settings.json';
@@ -73,13 +71,13 @@ export function readNestedString(value: unknown, path: readonly string[]): strin
 }
 
 export function readFrontmatterValue(content: string, key: string): string | null {
-  const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---/u);
+  const match = /^---\r?\n([\s\S]*?)\r?\n---/u.exec(content);
   if (!match?.[1]) {
     return null;
   }
 
   const escapedKey = key.replaceAll(/[.*+?^${}()|[\]\\]/gu, String.raw`\$&`);
-  const valueMatch = match[1].match(new RegExp(String.raw`^${escapedKey}:\s*(.+)$`, 'mu'));
+  const valueMatch = new RegExp(String.raw`^${escapedKey}:\s*(.+)$`, 'mu').exec(match[1]);
   return valueMatch?.[1]?.trim().replaceAll(/^['"]|['"]$/gu, '') ?? null;
 }
 

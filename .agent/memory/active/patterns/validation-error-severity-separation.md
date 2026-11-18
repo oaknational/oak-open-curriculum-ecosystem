@@ -3,6 +3,7 @@ name: "Validation Error Severity Separation"
 polarity: pattern
 use_this_when: "A schema validation error message lists all absent fields alongside actually failing fields, making operators debug the wrong variables"
 category: code
+layer: general
 proven_in: "packages/libs/env-resolution/src/resolve-env.ts"
 proven_date: 2026-02-28
 barrier:

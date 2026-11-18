@@ -127,5 +127,3 @@ they remain background risk rather than new entries.
   read before routing candidates.
 - `pnpm practice:fitness:strict-hard` passed before report writing with
   0 hard and 0 critical findings.
-- Final validation is recorded in
-  `.agent/memory/operational/curator-passes/2026-05-31-codex-napkin-longitudinal-review.md`.

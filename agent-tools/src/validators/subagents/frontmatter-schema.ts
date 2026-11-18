@@ -1,6 +1,7 @@
 /**
- * Per-platform subagent frontmatter schemas — the enforced single source of
- * truth for valid Claude and Cursor wrapper frontmatter.
+ * Per-platform subagent frontmatter schemas — the conformance gate `pnpm subagents:check`
+ * runs over the rendered Claude and Cursor adapters (the declaration they are rendered from
+ * is `subagent-declarations/subagent-declaration.ts`).
  *
  * Field sets and value enums were verified first-hand against current official
  * documentation (2026-06-28); see {@link FRONTMATTER_SOURCES}. Codex adapter

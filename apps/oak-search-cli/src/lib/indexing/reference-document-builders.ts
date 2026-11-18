@@ -175,7 +175,7 @@ function toTermSlug(term: string): string {
     .toLowerCase()
     .replaceAll(/['\u2018\u2019`]/g, '') // Remove apostrophes
     .replaceAll(/[^a-z0-9]+/g, '-') // Replace non-alphanumeric with hyphens
-    .replaceAll(/^-+|-+$/g, ''); // Trim leading/trailing hyphens
+    .replaceAll(/^-|-$/g, ''); // Trim the single hyphen the collapse can leave at each end
 }
 
 /**

@@ -12,6 +12,10 @@ import {
 const ENTRY = (status: string): string =>
   `- **a candidate title**\n  \`[captured: 2026-06-16 | source: a napkin entry | target: a rule | trigger: a second instance | size: S | status: ${status}]\``;
 
+/** A register front matter designated for concept-counting, with the given keys spliced in. */
+const DESIGNATED = (extra: string): string =>
+  `---\nfitness_item_count: required\n${extra}\n---\n# register`;
+
 describe('classifyDiscreteZone', () => {
   // The engine is axis-agnostic and tested with injected ceiling thresholds —
   // never the register's own owner-tunable values. Ceilings: healthy ≤ target,
@@ -110,8 +114,6 @@ describe('isConceptCounted', () => {
 });
 
 describe('decisionDebtConfigurationFinding', () => {
-  const DESIGNATED = (extra: string): string =>
-    `---\nfitness_item_count: required\n${extra}\n---\n# register`;
   const COUNT_TRIO =
     'fitness_item_count_target: 0\nfitness_item_count_soft: 2\nfitness_item_count_hard: 3';
   const DWELL_TRIO =

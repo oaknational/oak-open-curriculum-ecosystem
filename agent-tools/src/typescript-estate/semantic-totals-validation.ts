@@ -4,11 +4,10 @@ import type { ConstructCount, ConstructDefinition, TypeTruthCount } from './anal
 import type { ConstructTotal } from './document-model.js';
 import { EstateReviewError } from './errors.js';
 import { TYPE_TRUTH_IDS, type DeliveryState, type Provenance } from './file-vocabulary.js';
-import type { RepoPath } from './scalar-model.js';
 import { compareUtf16 } from './utf16-order.js';
 
 export interface TotalsFileState {
-  readonly path: RepoPath;
+  readonly path: string;
   readonly parseStatus: 'parsed' | 'parsed-with-diagnostics' | 'not-attempted';
   readonly provenance: Provenance;
   readonly verificationOnly: DeliveryState;

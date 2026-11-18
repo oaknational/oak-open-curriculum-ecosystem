@@ -1,7 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
 import { auditCodexIdentityRecords, type CommsEvent } from '../../src/collaboration-state';
-import { collaborationAgentIdSchema } from '../../src/collaboration-state/types';
+import {
+  collaborationAgentIdSchema,
+  collaborationAgentIdWriteSchema,
+  type CollaborationCommitQueueEntry,
+} from '../../src/collaboration-state/types';
 
 const nowIso = '2026-04-28T11:05:00Z';
 
@@ -24,26 +28,32 @@ const namedAgent = collaborationAgentIdSchema.parse({
 
 describe('auditCodexIdentityRecords', () => {
   it('reports anonymous Codex records across all four sources', () => {
+    // The queue lives in the per-intent store since registry 1.4.0, so the
+    // audit takes its live entries as an injected input, like comms events.
+    const commitQueue: readonly CollaborationCommitQueueEntry[] = [
+      {
+        intent_id: 'queued-anonymous',
+        claim_id: 'claim-queued',
+        // Anonymity (name/prefix) is orthogonal to the PDR-076a routing
+        // id: intents REQUIRE id at parse, and an anonymous seat still
+        // carries one. The id-less-intent rejection is covered by
+        // state-parsers.unit.test.ts.
+        agent_id: collaborationAgentIdWriteSchema.parse({
+          ...anonymousAgent,
+          id: 'a3c81f5e-7d2b-5c49-8e16-4f0a9d3b7c25',
+        }),
+        files: ['.agent/plans/example.md'],
+        commit_subject: 'docs(agent): anonymous queue',
+        queued_at: '2026-04-28T11:00:00Z',
+        updated_at: '2026-04-28T11:00:00Z',
+        expires_at: '2026-04-28T11:15:00Z',
+        phase: 'queued',
+        queued_seq: 0,
+      },
+    ];
     const activeText = JSON.stringify(
       {
-        schema_version: '1.3.0',
-        commit_queue: [
-          {
-            intent_id: 'queued-anonymous',
-            claim_id: 'claim-queued',
-            // Anonymity (name/prefix) is orthogonal to the PDR-076a routing
-            // id: intents REQUIRE id at parse, and an anonymous seat still
-            // carries one. The id-less-intent rejection is covered by
-            // state-parsers.unit.test.ts.
-            agent_id: { ...anonymousAgent, id: 'a3c81f5e-7d2b-5c49-8e16-4f0a9d3b7c25' },
-            files: ['.agent/plans/example.md'],
-            commit_subject: 'docs(agent): anonymous queue',
-            queued_at: '2026-04-28T11:00:00Z',
-            updated_at: '2026-04-28T11:00:00Z',
-            expires_at: '2026-04-28T11:15:00Z',
-            phase: 'queued',
-          },
-        ],
+        schema_version: '1.4.0',
         claims: [
           {
             claim_id: 'fresh-active-anonymous',
@@ -179,6 +189,7 @@ describe('auditCodexIdentityRecords', () => {
       closedText,
       threadRecordText,
       commsEvents,
+      commitQueue,
     });
 
     expect(report.summary).toStrictEqual({
@@ -246,9 +257,10 @@ describe('auditCodexIdentityRecords', () => {
   it('does not report an anonymous addressee on a directed message', () => {
     const report = auditCodexIdentityRecords({
       nowIso,
-      activeText: JSON.stringify({ schema_version: '1.3.0', commit_queue: [], claims: [] }),
+      activeText: JSON.stringify({ schema_version: '1.4.0', claims: [] }),
       closedText: JSON.stringify({ schema_version: '1.3.0', claims: [] }),
       threadRecordText: '',
+      commitQueue: [],
       commsEvents: [
         {
           schema_version: '2.0.0',
@@ -267,25 +279,15 @@ describe('auditCodexIdentityRecords', () => {
     expect(report.findings).toStrictEqual([]);
   });
 
-  it('throws at parse on a legacy id-less intent instead of reporting on it (PDR-076a boundary)', () => {
-    // Behaviour change landed with the intent read-boundary tightening: an
-    // id-less intent is registry corruption, so the report-only audit now
-    // fails loudly naming the row rather than including it in the report.
+  it('throws at parse on a legacy flat-queue registry text instead of auditing it', () => {
+    // The runtime readers migrate a legacy 1.3.0 file BEFORE any audit sees
+    // it; text that still carries the flat queue reaching this pure audit is
+    // therefore a wiring defect, and the version pin fails it loudly. The
+    // id-less-intent rejection now lives at the per-intent store boundary
+    // (state-parsers.unit.test.ts pins it on parseCommitQueueIntentText).
     const activeText = JSON.stringify({
       schema_version: '1.3.0',
-      commit_queue: [
-        {
-          intent_id: 'queued-anonymous',
-          claim_id: 'claim-queued',
-          agent_id: anonymousAgent,
-          files: ['.agent/plans/example.md'],
-          commit_subject: 'docs(agent): anonymous queue',
-          queued_at: '2026-04-28T11:00:00Z',
-          updated_at: '2026-04-28T11:00:00Z',
-          expires_at: '2026-04-28T11:15:00Z',
-          phase: 'queued',
-        },
-      ],
+      commit_queue: [],
       claims: [],
     });
 
@@ -295,8 +297,9 @@ describe('auditCodexIdentityRecords', () => {
         activeText,
         closedText: JSON.stringify({ schema_version: '1.3.0', claims: [] }),
         threadRecordText: '',
+        commitQueue: [],
         commsEvents: [],
       }),
-    ).toThrow(/^commit_queue entry queued-anonymous carries an invalid agent_id/);
+    ).toThrow('active claims registry must use schema_version 1.4.0');
   });
 });

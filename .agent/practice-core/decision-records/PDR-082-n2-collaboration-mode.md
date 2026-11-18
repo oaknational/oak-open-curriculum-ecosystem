@@ -4,7 +4,7 @@ pdr_kind: governance
 
 # PDR-082: n=2 Collaboration Mode (Lightweight Protocol for Two-Agent Teams)
 
-**Status**: Adopted
+**Status**: Adopted (amended 2026-09-24 — see Amendment Log)
 **Date**: 2026-05-25
 **Adopted**: 2026-06-15
 **Related**:
@@ -87,6 +87,17 @@ participants both visible in the same owner-chat surface (or one
 chat-relayed via the owner). It exits to full SKILL protocol when
 a third agent joins, or terminates when both agents close out.
 
+### Operating default: open at two, widen on measured throughput
+
+A multi-seat arc opens at n=2 and widens only when measured throughput
+says the work is seat-bound: the route records seat-hours per merge at
+the current shape, and a third seat is added on that figure, never on a
+task count or a sense of urgency. The mode below is therefore the
+starting shape of every team, not a fallback from a larger one (owner's
+card, 2026-09-16, adopting the transplant arc's retrospective proposal
+6: four seats ran at 3.8 seat-hours per merge against 0.95 at two, and
+two of the four lanes handed most of their items back).
+
 ### What stays at n=2
 
 The following substrate is retained because its value is
@@ -118,9 +129,20 @@ below the overhead cost:
 
 ### What changes at n=2
 
-- **Liveness ≡ owner-chat responsiveness.** The heartbeat substrate
-  is replaced by the agent's chat responsiveness. An agent silent
-  in chat is presumed unavailable; the owner observes directly.
+- **Liveness ≡ owner-chat responsiveness and the state line.** The
+  heartbeat substrate is replaced by the agent's chat responsiveness,
+  which the owner observes directly. During a long turn each seat
+  sends its partner one state line at least every 120 seconds, by
+  the channel the `comms-channels` skill names for a message to one
+  live reader; the line names the current state, any blocker and the
+  next action. State lines are liveness, not coordination, so the
+  comms-event budget below does not count them. The team-cadence sweep that §What
+  drops at n=2 removes read and broadcast state; a seat's own report
+  to its partner is not part of it. A seat reads its partner's
+  silence past that interval as unknown state, never as work in
+  progress and never as a block, and answers with a ping by the same
+  channel after `ping-before-escalate`'s cross-check, never with an
+  escalation to the owner.
 - **Coordination surface ≡ owner-chat + minimal comms events.**
   Cross-agent gates (tree-green, push-landed, gate-state) remain on
   comms. Substantive owner-class direction (verdict surfacing,
@@ -140,6 +162,14 @@ below the overhead cost:
   **retains** substantive cross-agent broadcasts (tree-green, push-landed,
   gate-state, merge-ready, blocker) because they carry information the
   owner-chat does not — the refined retain-set supersedes that raw point.
+- **Dialogue channel ≡ native session messaging where both seats can use it**
+  (amended 2026-09-13, owner-directed). The pairwise dialogue this mode
+  routed through an ARC channel travels by the harness's session-to-session
+  send when both seats are on one machine and platform; ARC keeps its place
+  for cross-platform pairs and for a dialogue whose transcript is itself the
+  record. What must still land on comms — the retain-set above — is unchanged;
+  the channel rule and its conservation clause live in
+  `.agent/rules/channel-by-audience-lifetime-and-consumer.md`.
 
 ### Trigger / exit
 
@@ -355,3 +385,38 @@ pending-graduations — is the substrate-preservation surface. The
 falsifiability section above recorded the second-instance trigger; the
 consumer-presence generalisation reached two instances and graduated as
 described under Adoption.
+
+## Amendment Log
+
+### 2026-09-30 — open at two seats, widen on measured throughput
+
+Owner card (2026-09-16, adopting proposal 6 of the transplant arc's
+retrospective). §Decision gains the operating default: an arc opens at
+n=2 and widens only on measured seat-hours per merge. `start-right-team`
+§Choose Temporary Responsibilities carries the operational form.
+
+### 2026-09-14 — the 120-second state line is the n=2 liveness convention
+
+Owner card (2026-09-14, the morning cards; proposal E of the session 2
+synthesis, presented with the register pull request #63 and recorded in the
+closure record's item 78 as "adopted as a PDR-082 amendment by card"). The
+proposal, as the synthesis record states it under the heading "a state line
+every 120 seconds of a long turn at n=2": "a seat in a long turn sends a
+one-line state at the team cadence, and the lead reads silence as unknown,
+never as work."
+
+What changes. §What drops at n=2 still drops the team-cadence message-sweep
+and the heartbeat substrate; the seat's own outgoing progress report
+(`start-right-team` §5) is not dropped with them. During a long turn each seat
+sends its partner one state line at least every 120 seconds, on the dialogue
+channel §What changes at n=2 names (native session messaging where both seats
+can use it, otherwise the ARC channel); the line names the current state, any
+blocker and the next action. The lead reads silence past that interval as
+unknown state, never as work in progress. This entry's ruling on the remedy
+(the proposal offered it only for the declined case): the lead's response to
+such a silence is the native liveness probe and a ping
+(`ping-before-escalate`), never an escalation to the owner. Worked instance,
+the proposal's source: on 2026-09-13 the Implementer seat was silent for 80
+minutes in a long turn, the silence was read as a block and escalated to the
+owner, and the seat was fine. The `start-right-team` n=2 overlay points here
+for the state line.

@@ -4,7 +4,8 @@ pdr_kind: governance
 
 # PDR-077: Commit Marshal As Cycle-Discipline Role
 
-**Status**: Accepted
+**Status**: Accepted (amended 2026-09-25 — the PDR-063 intersection
+starts on the owner's call, never on a context reading)
 **Date**: 2026-05-23
 **Adopted**: 2026-05-24
 **Related**:
@@ -29,7 +30,7 @@ principle);
 [PDR-075](PDR-075-director-substrate-writing-discipline.md)
 (Director substrate-writing discipline — Commit Marshal cycle landings
 emit substrate events into the same stream the Director writes into);
-ADR-185
+the host repository's auto-acceptance metadata decision
 (comms-event auto-acceptance metadata — composes with this PDR's
 empirical-cure observation: throughput improves on multiple axes at once,
 of which marshal-as-role is one).
@@ -188,8 +189,8 @@ window PDR-064 names.
 
 ### Intersection With PDR-063 (Mid-Cycle Retirement)
 
-When the Commit Marshal must retire mid-cycle under context-budget
-pressure, BOTH PDR-063 and this PDR fire:
+When the owner calls the Commit Marshal's handoff mid-cycle (PDR-063
+Step 1), BOTH PDR-063 and this PDR fire:
 
 - **PDR-063 governs the per-cycle handoff**: the open cycle claim
   freezes to a handoff record under PDR-063 step 2; the receiving
@@ -216,7 +217,7 @@ disciplines to operate within their proper bounds:
   and substrate-writing (per PDR-074 and PDR-075). Without a
   separable marshal, every commit competes with routing context for
   the Director's bounded budget.
-- The comms-event auto-acceptance metadata discipline (per ADR-185,
+- The comms-event auto-acceptance metadata discipline (per the host's auto-acceptance metadata decision,
   when landed) reduces the marshal's per-cycle ratification cost on
   mechanical events. Without auto-acceptance, the marshal would need
   to re-derive ratification for every mechanical event, undoing the
@@ -292,7 +293,7 @@ forty-five minutes**; the causal attribution is more modest —
 one of N compositional cures observed in this window**, not the sole
 cause of the throughput delta. The other observed cures composing
 include substrate-writing discipline (PDR-075) firing for the first
-time, auto-acceptance metadata schema (ADR-185, when landed),
+time, auto-acceptance metadata schema (the host's decision, when landed),
 substrate-pointer-staleness pattern landing, and owner-direct
 unblock authorisation on a long-carried structural blocker.
 
@@ -346,10 +347,10 @@ throughput is still materially higher than the single-role baseline.
    undefined**. What counts as accumulated coordination substrate?
    What threshold triggers a hygiene cycle? Without a trigger, the
    standing duty becomes a non-falsifiable obligation.
-8. **ADR-185 composition is load-bearing for the throughput cure but
+8. **Composition with the auto-acceptance metadata decision is load-bearing for the throughput cure but
    not yet landed in Accepted form**. The doctrine's empirical claim
    depends on auto-acceptance metadata reducing per-cycle ratification
-   cost. Until ADR-185 lands, marshal cycles verify by manual diff-
+   cost. Until that decision lands, marshal cycles verify by manual diff-
    inspection, and the throughput claim is materially weaker.
 9. **Vocabulary discipline**: the role MUST be named **Commit Marshal**
    consistent with prior owner-direction and handoff-record usage.
@@ -500,11 +501,11 @@ Without these reciprocal additions, the doctrine graph carries one-way
 edges, which is the recurring documentation-completeness failure mode
 in this repo's PDR network.
 
-**Deferred to ADR-185 Accepted landing**: the reciprocal-reference
-addition to **ADR-185 §"verification"** naming the Commit Marshal
-seat as verifier-of-record is intentionally deferred. ADR-185 is
+**Deferred to the auto-acceptance metadata decision's Accepted landing**: the reciprocal-reference
+addition to **that decision's §"verification"** naming the Commit Marshal
+seat as verifier-of-record is intentionally deferred. That decision is
 currently Proposed (not Accepted); adding the reference now creates
-a pointer to an unstable target. The reference lands at ADR-185's
+a pointer to an unstable target. The reference lands at that decision's
 Accepted landing, not at this PDR's first landing. This reduces the
 companion-edit bundle from five to four for the first landing.
 

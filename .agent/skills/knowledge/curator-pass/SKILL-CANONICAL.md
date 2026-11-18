@@ -11,8 +11,8 @@ description: Run one curator pass on the repo's knowledge substrate. Use when al
 Run one curator pass under PDR-081: survey the knowledge substrate,
 route durable knowledge to permanent homes, surface home-gaps and
 structural defects as routing events, drain graduation buffers,
-and record the pass via its commit plus a close-of-pass comms broadcast (the
-per-pass log surface is superseded — see §Per-Pass Log).
+and record the pass in its commit; a close-of-pass comms broadcast
+notifies peers and is never the record.
 
 The canonical role key is `curator`; `Knowledge Curator` is the
 descriptive session label for the same substrate-care responsibility.
@@ -53,8 +53,7 @@ substance to stale homes.
 
 Open a normal active claim on the substrate-care lane
 (`register-active-areas-at-session-open`) before substantive work begins —
-that claim, not a per-pass log file, is the observable claim on the lane.
-(The per-pass log surface is superseded — see §Per-Pass Log; do not author one.)
+that claim is the observable claim on the lane.
 
 ### Step 2 — Survey
 
@@ -124,10 +123,11 @@ of curation work and not records of what graduated, leave them; the
 buffer is allowed to hold trigger-and-home-gated candidates.
 
 Where the buffer carries records of curation work or records of
-what graduated, migrate those out (the buffer is buffer only).
-Substance moves to the curator-passes directory (for curation-work
-records, metadata only) or to the archive (for graduation records,
-preserved as historical capture).
+what graduated, remove them (the buffer is buffer only). The commit
+that routed the substance and the substance's permanent home are the
+record (`permanent-doc-is-the-consolidation-record`), so no file is
+authored to hold a graduation record or a record of the curation
+work.
 
 ### Step 7 — Owner-decisions
 
@@ -145,20 +145,8 @@ Emit a single comms broadcast naming the pass. The broadcast carries the
 substance the pass surfaced (defect descriptions, adoption-gap findings,
 home-gap proposals) plus any carry-forward for the next pass and the
 substrate-care signals (what changed health-wise). The commit(s) plus the
-homed substance are the durable record — do **not** author a per-pass log
-file (see §Per-Pass Log).
-
-## Per-Pass Log — Superseded
-
-The former per-pass log file (a "surfaces surveyed → disposition" /
-"concept → home" pointer index) is **superseded** by
-[`permanent-doc-is-the-consolidation-record`](../../../rules/permanent-doc-is-the-consolidation-record.md)
-(comms-research closeout consolidation, 2026-06-14; PDR-081 §Amendment Log):
-the commit plus the homed substance are the curator's record, and git history
-is the pass-navigation index. The pass's observable claim is a normal active
-claim (`register-active-areas-at-session-open`); its surfaced substance rides
-the close-of-pass comms broadcast and lands in its permanent home. **Do not
-author a per-pass disposition-pointer log file.**
+homed substance are the durable record
+(`permanent-doc-is-the-consolidation-record`).
 
 ## Forbidden moves
 
@@ -175,9 +163,9 @@ A curator pass MUST NOT:
   upward.
 - Author principle-class changes without owner approval. The
   curator surfaces the proposal; the owner ratifies.
-- Carry substance in the pass record instead of homing it.
-  Substance has one permanent home; the commit and the
-  close-of-pass broadcast point at it.
+- Author a record of the pass. Substance has one permanent home;
+  the commit that homed it and the close-of-pass broadcast point at
+  it (`permanent-doc-is-the-consolidation-record`).
 
 ## Closeout
 

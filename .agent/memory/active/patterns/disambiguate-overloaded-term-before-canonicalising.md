@@ -3,6 +3,7 @@ name: "Disambiguate an Overloaded Term Before Canonicalising or Sweeping"
 polarity: pattern
 use_this_when: "Defining a canonical list for a term, running a find-and-replace sweep, or collapsing a classification axis — any time one label is about to be treated as one thing."
 category: process
+layer: general
 proven_in: "MCP-app 'platform' canonicalisation (2026-06-26, Bonfire guards Temper); the memory/repo-state/local-state substrate-tracking axis (2026-06-25, Zephyr mends Bluff)"
 proven_date: 2026-06-26
 barrier:

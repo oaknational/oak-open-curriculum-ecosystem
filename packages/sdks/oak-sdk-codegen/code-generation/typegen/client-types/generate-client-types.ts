@@ -1,7 +1,7 @@
 /**
  * Generates the `client-types.ts` module that defines `OakApiPathBasedClient`.
  *
- * This type is `PathBasedClient<paths>` — derivable entirely from the
+ * This type is `PathBasedClient<Paths>` — derivable entirely from the
  * upstream schema plus `openapi-fetch`. Generating it here keeps the
  * `generated/` directory self-contained and safe to wipe via `generate:clean`.
  */
@@ -17,8 +17,8 @@ export function generateClientTypes(): string {
   return `${HEADER}
 import type { PathBasedClient } from 'openapi-fetch';
 
-import type { paths } from './api-paths-types.js';
+import type { Paths } from './api-paths-types.js';
 
-export type OakApiPathBasedClient = PathBasedClient<paths>;
+export type OakApiPathBasedClient = PathBasedClient<Paths>;
 `;
 }

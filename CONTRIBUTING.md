@@ -181,10 +181,13 @@ Before making changes, follow the install and verify steps in the
 
 1. **Node.js 24.x**
 2. **pnpm**
-3. Service credentials for the areas you are touching (Oak Curriculum API keys,
+3. **bash 5.2 or later**: the repository's bash scripts, the shellcheck
+   installer among them, stop on an older bash with install advice. See the
+   [setup guide](docs/engineering/setup.md#prerequisites).
+4. Service credentials for the areas you are touching (Oak Curriculum API keys,
    Elasticsearch Serverless API keys). See workspace READMEs for details.
-4. Some scripts require additional external tools (`bun`, `jq`, `lsof`) that are
-   not managed via `package.json`. See [README prerequisites](README.md#prerequisites).
+5. Some scripts require additional external tools (`bun`, `jq`, `lsof`) that are
+   not managed via `package.json`. See the [setup guide](docs/engineering/setup.md#prerequisites).
    Scripts that require these commands emit installation instructions when they
    are missing.
 
@@ -203,7 +206,16 @@ Before making changes, follow the install and verify steps in the
    pnpm install
    ```
 
-3. Set up environment (skip for Level 1 contributions — no env vars needed):
+3. Check the pinned shellcheck, which the commit hooks, `pnpm lint` and
+   `pnpm check` run. `pnpm install` puts it in the ignored `.tools/bin`; if the
+   install warned that it could not, run the installer yourself (it does
+   nothing when the pinned version is already there):
+
+   ```bash
+   .agent/setup/install-shellcheck.sh
+   ```
+
+4. Set up environment (skip for Level 1 contributions — no env vars needed):
 
    ```bash
    # HTTP MCP server
@@ -221,7 +233,7 @@ Before making changes, follow the install and verify steps in the
    Keep workspace `.env.example` files as placeholders only; do not copy
    secrets into them.
 
-4. Run tests to verify setup:
+5. Run tests to verify setup:
 
    ```bash
    pnpm test
@@ -247,6 +259,7 @@ You can contribute immediately by:
 
 ```bash
 pnpm install
+.agent/setup/install-shellcheck.sh  # The pinned shellcheck the commit hooks run
 pnpm test           # All unit tests run without API keys
 pnpm type-check     # Type checking works without env vars
 pnpm lint:fix       # Linting works without env vars
@@ -339,13 +352,16 @@ This single command runs every quality gate in the correct order. If it
 fails and you need to isolate the issue, run the individual steps:
 
 ```bash
-pnpm build             # Build all workspaces
-pnpm type-check        # Check types
-pnpm lint:fix          # Lint code (with auto-fix)
-pnpm format:root       # Format code
-pnpm test              # Run tests
-pnpm secrets:scan:all  # Secret scan (branches + tags + full history)
+pnpm build                    # Build all workspaces
+pnpm type-check               # Check types
+pnpm lint                     # Lint code (verify only)
+pnpm format-check:root        # Check formatting (verify only)
+pnpm markdownlint-check:root  # Check Markdown (verify only)
+pnpm test                     # Run tests
+pnpm secrets:scan:all         # Secret scan (branches + tags + full history)
 ```
+
+Repair what they report with `pnpm fix`, then run `pnpm check` again.
 
 Pre-push hook also runs the secret scan; pushes are blocked if secrets are
 detected.
@@ -381,9 +397,16 @@ git push origin feat/your-feature-name
 If you hit a push failure due to missing `gitleaks`, install it first:
 
 - `brew install gitleaks` (macOS)
-- `go install github.com/zricethezav/gitleaks/v8@latest` (Go — gitleaks'
-  go.mod declares the `zricethezav` module path, and `go install` refuses
-  the `github.com/gitleaks/...` form as a path mismatch)
+- the pinned release, as in the
+  [setup guide](docs/engineering/setup.md#windows-via-wsl) (Debian, Ubuntu and WSL)
+- the `gitleaks` binary from its
+  [GitHub release](https://github.com/gitleaks/gitleaks/releases), unpacked into
+  `/usr/local/bin` (other Linux)
+
+The secret scan runs `gitleaks` by absolute path, never from `PATH`, and accepts
+it only at `/opt/homebrew/bin`, `/usr/local/bin` or `/usr/bin`. If yours is
+installed anywhere else (for example by `go install`, in `~/go/bin`, or by
+Linuxbrew), symlink it into one of those paths.
 
 Then create a Pull Request on GitHub.
 
@@ -511,6 +534,9 @@ detailed solutions. Quick fixes:
 - **Type errors** — use generated SDK types, not manual definitions; no `any`
   or `as`
 - **Test failures** — ensure test fakes match SDK types exactly
+- **`lint:shell` cannot run the pinned shellcheck** — run
+  `.agent/setup/install-shellcheck.sh` in that checkout; each linked worktree
+  has its own `.tools/bin`
 
 ## Release Process
 

@@ -380,14 +380,15 @@ describe('shouldSkipClerkMiddleware — the surface fork on /mcp', () => {
  * case for every path the suite exercises. A predicate that cured `/MCP` by
  * spelling `/MCP` would pass the enumerated cases and fail that one.
  */
-describe('shouldSkipClerkMiddleware — case variants of the public surface', () => {
-  const browserGet = (path: string): SkipCheckArg =>
-    createMockRequest(path, undefined, {
-      method: 'GET',
-      accept: BROWSER_ACCEPT,
-      secFetchDest: 'document',
-    });
+/** A browser's top-level document GET of `path`. */
+const browserGet = (path: string): SkipCheckArg =>
+  createMockRequest(path, undefined, {
+    method: 'GET',
+    accept: BROWSER_ACCEPT,
+    secFetchDest: 'document',
+  });
 
+describe('shouldSkipClerkMiddleware — case variants of the public surface', () => {
   const PAGE_VARIANTS = ['/MCP', '/Mcp', '/mCP', '/MCP/', '/Mcp/'];
 
   it.each(PAGE_VARIANTS)('skips Clerk for a browser document GET of %s', (path) => {

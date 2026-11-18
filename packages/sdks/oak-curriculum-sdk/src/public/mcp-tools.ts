@@ -28,7 +28,6 @@ export {
   type ToolDescriptorForName,
   type ToolDescriptorForOperationId,
   type ToolDescriptor,
-  type ToolMap,
   type ToolName,
   type ToolNameForOperationId,
   type ToolArgs,

@@ -1,6 +1,6 @@
 ---
 paths:
-  - '**/*.test.ts'
+  - "**/*.test.ts"
 ---
 
 Read and follow `.agent/rules/test-immediate-fails.md`.

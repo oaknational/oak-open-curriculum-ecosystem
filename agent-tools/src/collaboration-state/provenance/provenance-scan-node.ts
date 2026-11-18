@@ -48,22 +48,22 @@ export function createNodeProvenanceScanIo(): ProvenanceScanIo {
     listEventFilenames(eventDir) {
       try {
         return ok(readdirSync(eventDir));
-      } catch (cause) {
-        return err(errorMessage(cause));
+      } catch (error) {
+        return err(errorMessage(error));
       }
     },
     listDocPaths(docRoot) {
       try {
         return ok(listMarkdownFilesRecursive(docRoot));
-      } catch (cause) {
-        return err(errorMessage(cause));
+      } catch (error) {
+        return err(errorMessage(error));
       }
     },
     readText(path) {
       try {
         return ok(readFileSync(path, 'utf8'));
-      } catch (cause) {
-        return err(errorMessage(cause));
+      } catch (error) {
+        return err(errorMessage(error));
       }
     },
     exists: (path) => existsSync(path),

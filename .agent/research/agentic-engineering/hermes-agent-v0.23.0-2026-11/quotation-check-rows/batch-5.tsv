@@ -1,0 +1,16 @@
+H	website/docs/index.mdx	153	153	RL training with Atropos
+H	website/docs/getting-started/learning-path.md	113	113	RL training pipeline
+H	Dockerfile	254	254	[rl]
+H	website/docs/developer-guide/architecture.md	280	280	environments/
+H	tools/AGENTS.md	72	75	rl,
+E	PLAN.md	72	73	dspy.GEPA
+E	PLAN.md	588	594	auto-trigger GEPA
+E	PLAN.md	592	592	Wire up to Hermes cron scheduler
+E	PLAN.md	762	762	This plan IS the implementation of #337
+E	PLAN.md	258	258	we may stop at Phase 1 or 2
+E	PLAN.md	15	15	GEPA is the star
+E	PLAN.md	213	213	environments/benchmarks/tblite
+E	generate_report.py	269	269	DSPy BootstrapFewShot
+E	generate_report.py	371	371	simplest DSPy optimizer (BootstrapFewShot)
+E	generate_report.py	472	472	larger improvements than BootstrapFewShot
+E	evolution/skills/evolve_skill.py	156	158	max_steps=iterations

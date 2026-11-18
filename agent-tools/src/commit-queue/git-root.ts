@@ -34,14 +34,14 @@ export function resolveInvokingGitRoot(cwd: string, runGit: GitRunner = defaultR
   let topLevel: string;
   try {
     topLevel = runGit(['rev-parse', '--show-toplevel'], cwd);
-  } catch (cause) {
+  } catch (error) {
     throw new Error(
       `Unable to resolve the invoking git worktree root: git could not resolve a working tree from '${cwd}' ` +
-        `(${describeGitFailure(cause)}). ` +
+        `(${describeGitFailure(error)}). ` +
         `Commit-queue staged reads and the inner commit operate against the INVOKING worktree's index; ` +
         `there is no fallback to the coordination home. Run the command from inside the worktree that ` +
         `holds the staged files.`,
-      { cause },
+      { cause: error },
     );
   }
 

@@ -4,6 +4,7 @@ name: "ADR by Reusability, Not Diff Size"
 polarity: pattern
 use_this_when: "closing a small implementation lane and deciding whether the decision it encoded deserves to be promoted to an ADR"
 category: process
+layer: general
 proven_in: ".agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md (hygiene closure, 2026-04-17)"
 proven_date: 2026-04-17
 barrier:
@@ -66,7 +67,7 @@ narrow follow-up (one devDep, one config file, one script rewrite).
 Reviewer feedback reframed it: the per-workspace CLI ownership
 pattern it applied is exactly the shape the planned Clerk CLI
 adoption will take, and any subsequent vendor CLI after that.
-Promoting to [ADR-159](../../../../docs/architecture/architectural-decisions/159-per-workspace-vendor-cli-ownership.md)
+Promoting to ADR-159 (`159-per-workspace-vendor-cli-ownership.md`, a file OCE holds)
 made the decision discoverable, linked it back through ADR-143 /
 ADR-010 / ADR-154, and unblocked the Clerk adoption plan from
 citing a concrete authority. The ADR itself is ~200 lines — larger

@@ -45,6 +45,33 @@ describe('deriveSubjects — the mechanical subject predicate', () => {
     expect(plugin?.sources).toContain('plugin-manifest-parent');
   });
 
+  it('includes the parent of a tracked .codex-plugin/plugin.json manifest (source ii-b: the second listed manifest format)', () => {
+    const subjects = deriveSubjects({
+      members: [...MEMBERS],
+      trackedFiles: ['plugins/oak-open-curriculum-chatgpt/.codex-plugin/plugin.json'],
+    });
+    const plugin = subjectByDir(subjects, 'plugins/oak-open-curriculum-chatgpt');
+    expect(plugin).toBeDefined();
+    expect(plugin?.sources).toContain('plugin-manifest-parent');
+  });
+
+  it('does NOT surface the parent of a plugin.json under a manifest directory the arm does not list', () => {
+    const subjects = deriveSubjects({
+      members: [...MEMBERS],
+      trackedFiles: ['plugins/x/.other-plugin/plugin.json'],
+    });
+    expect(subjectByDir(subjects, 'plugins/x')).toBeUndefined();
+    expect(subjectByDir(subjects, 'plugins')).toBeUndefined();
+  });
+
+  it('does NOT surface a plugin manifest nested under a member directory as its own subject', () => {
+    const subjects = deriveSubjects({
+      members: [...MEMBERS],
+      trackedFiles: ['agent-tools/tests/fixtures/sample/.codex-plugin/plugin.json'],
+    });
+    expect(subjectByDir(subjects, 'agent-tools/tests/fixtures/sample')).toBeUndefined();
+  });
+
   it('includes the parent of a tracked package.json outside the member set (source ii)', () => {
     const subjects = deriveSubjects({
       members: [...MEMBERS],

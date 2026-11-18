@@ -4,14 +4,16 @@
  * @remarks
  * Maps raw occupancy onto the owner-taught effectiveness curve in five bands:
  * healthy (under 40%), peak (40 to 50%), past-peak (50 to 65%), mistake-prone
- * (65 to 80%), degraded (80% and above). The zone is ADVISORY — a self-awareness
- * hint, never a forced action. Pure: no IO, no global state.
+ * (65 to 80%), degraded (80% and above). The zone is INFORMATION: every zone's
+ * advice is to carry on, with records current past the peak (PDR-063 §Context
+ * readings never stop a seat). From 30% the advice adds PDR-052's deferral of
+ * directive-file edits to the next compaction. Pure: no IO, no global state.
  *
  * @packageDocumentation
  */
 
 /**
- * Advisory effectiveness zone derived from context occupancy. Module-private:
+ * Effectiveness zone derived from context occupancy, as information. Module-private:
  * it surfaces structurally through {@link SessionContextMetadata.zone}; no
  * external consumer names it directly yet (re-export when one does).
  */
@@ -38,18 +40,20 @@ interface ZoneAdvice {
  *
  * @param input - `usedTokens` (current occupancy) and `windowTokens` (model window).
  * @returns Structured metadata including remaining tokens, percentages, and the
- *   advisory effectiveness zone.
+ *   effectiveness zone with its advice.
  */
 export function computeMetadata(input: {
   readonly usedTokens: number;
   readonly windowTokens: number;
 }): SessionContextMetadata {
   const remainingTokens = Math.max(0, input.windowTokens - input.usedTokens);
-  const pctUsed = roundTo1(percentage(input.usedTokens, input.windowTokens));
+  const exactPctUsed = percentage(input.usedTokens, input.windowTokens);
+  const pctUsed = roundTo1(exactPctUsed);
   // Derive from the floored remaining so the two never disagree when occupancy
   // exceeds the window (a caller can pass a smaller window than the real one).
   const pctRemaining = roundTo1(percentage(remainingTokens, input.windowTokens));
-  const { zone, advice } = classifyZone(pctUsed);
+  // Classify on the exact figure: rounding 29.95% up to 30.0 must not cross a floor.
+  const { zone, advice } = classifyZone(exactPctUsed);
 
   return {
     usedTokens: input.usedTokens,
@@ -66,20 +70,30 @@ function percentage(used: number, window: number): number {
   return window <= 0 ? 0 : (used / window) * 100;
 }
 
+/** PDR-052's floor: directive-file edits wait for the next compaction from here. */
+const DIRECTIVE_EDIT_FLOOR_PCT = 30;
+
 function classifyZone(pctUsed: number): ZoneAdvice {
+  const { zone, advice } = zoneAdvice(pctUsed);
+  return pctUsed < DIRECTIVE_EDIT_FLOOR_PCT
+    ? { zone, advice }
+    : { zone, advice: `${advice}; directive edits wait for the next compaction` };
+}
+
+function zoneAdvice(pctUsed: number): ZoneAdvice {
   if (pctUsed < 40) {
     return { zone: 'healthy', advice: 'full capacity; carry on' };
   }
   if (pctUsed < 50) {
-    return { zone: 'peak', advice: 'best work; start eyeing a handover point' };
+    return { zone: 'peak', advice: 'best work; carry on' };
   }
   if (pctUsed < 65) {
-    return { zone: 'past-peak', advice: 'past peak; pre-position a successor and hand off soon' };
+    return { zone: 'past-peak', advice: 'past peak; carry on with records current' };
   }
   if (pctUsed < 80) {
-    return { zone: 'mistake-prone', advice: 'hand off now; reflect before acting' };
+    return { zone: 'mistake-prone', advice: 'mistake odds rising; carry on with records current' };
   }
-  return { zone: 'degraded', advice: 'stop; hand off immediately' };
+  return { zone: 'degraded', advice: 'degraded; carry on with records current' };
 }
 
 function roundTo1(value: number): number {

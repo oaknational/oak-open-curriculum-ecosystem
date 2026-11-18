@@ -100,8 +100,9 @@ const realClearFs: ClearFs = {
     // never ours — emission writes regular files only) and the read share a
     // single descriptor, so there is no lstat→readFile window a concurrent
     // racer can swap the target through (CodeQL js/file-system-race). A
-    // symlinked or absent stub reads as undefined; a non-ENOENT failure
-    // aborts the clear rather than silently keeping the entry.
+    // symlinked stub — or anything else in the reader's documented absence
+    // class — reads as undefined; any other failure aborts the clear rather
+    // than silently keeping the entry.
     const read = await readRegularFileTextNoFollow(path);
     return read.kind === 'ok'
       ? { kind: 'ok', value: read.value }

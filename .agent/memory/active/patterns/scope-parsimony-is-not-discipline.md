@@ -3,6 +3,7 @@ name: "Scope Parsimony Is Not Discipline"
 polarity: anti-pattern
 use_this_when: "You are about to justify deferring, narrowing, or working around something by citing a scoping rule (YAGNI, consolidate-at-second-consumer, don't-extract-single-consumer, plan-scope hygiene, an external constraint) — check the rule's actual warrant before applying it, and ask the corrective question: does this thing have an independent identity worth defining, describing, and testing in isolation?"
 category: agent
+layer: general
 proven_in: "Three same-direction owner corrections in ONE session (2026-07-08, PR #328 deep review): (1) estate workspaces (observability/logger) treated as frozen — real defects routed away as 'not this plan's prerequisite' when the owner's direction was to enhance the estate in support of the work; (2) our own MCP app's auth treated as an external constraint — a persisted-human-refresh-token workaround designed around it, when adding first-class machine identity to our own app dissolved the store, the refresh machinery, and the identity liability at once; (3) an ai-gateway model-layer extraction called 'premature' via consolidate-at-second-consumer — wrong warrant: that rule prevents SPECULATIVE abstraction, and the layer had a present, crisp identity (contract + isolation tests). Each instance cited a REAL rule with the WRONG warrant."
 proven_date: 2026-07-08
 barrier:
@@ -11,6 +12,12 @@ barrier:
   prevents_recurring_mistake: "Optimising for the smallest defensible diff and mistaking it for discipline — using scoping doctrine as cost-avoidance justification, so the estate freezes around whatever exists and excellence quietly degrades to expediency."
   stable: true
 ---
+
+> **POLARITY: ANTI-PATTERN.** This entry names a *failure mode to avoid*,
+> not a shape to repeat.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern)
+> for the polarity discipline.
 
 # Scope Parsimony Is Not Discipline
 
@@ -61,6 +68,7 @@ simpler if the system changed?) before fitting the work to it.
   landed shape *because it landed*; scope-parsimony refuses a right shape *because the
   narrower one is defensible*. Both substitute procedural legitimacy for
   principle-compliance.
-- `configure-checks-not-blindly-obey` (napkin lesson, 2026-07-08) — the boundary-config
-  instance of the same regime at lint altitude; this pattern generalises it to plans,
+- [`never-disable-checks`](../../../rules/never-disable-checks.md) §Configuring a check
+  to express the architecture is not disabling it — the boundary-config instance of the
+  same regime at lint altitude (2026-07-08); this pattern generalises it to plans,
   workspaces, and auth surfaces.

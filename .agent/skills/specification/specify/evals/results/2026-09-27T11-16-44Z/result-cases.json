@@ -1,0 +1,970 @@
+{
+  "schemaVersion": 1,
+  "claudeVersion": "2.1.283",
+  "startedAt": "2026-09-27T11:16:44.793Z",
+  "durationSeconds": 551,
+  "costUsd": 2.0256096,
+  "partial": false,
+  "suite": {
+    "root": "<plugin>",
+    "ablation": "with-without",
+    "judgeModel": "sonnet",
+    "caseFilter": "case-*",
+    "threshold": 0,
+    "concurrency": 1,
+    "plugins": [
+      {
+        "name": "oak-specify-evals",
+        "version": "0.0.0",
+        "path": "<plugin>"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "name": "case-01",
+      "dir": "evals/case-01",
+      "source": "mixed",
+      "promptMarkdown": "Write the specification for a function parentIndex(i) that returns the parent index of node i in a binary heap stored in an array with the root at index 0. The heap lives in another repository you cannot read; its behaviour is settled and its tests (heap.sift-up.test and heap.sift-down.test, which call parentIndex on every non-root index) pass. Write the record from this statement alone; do not look for files. Keep it as short as the subject deserves.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A dozen-line record: what the function is, who calls it (the heap's sift operations), the admissible inputs (i >= 1) with the behaviour for i = 0 stated explicitly, the definition floor((i-1)/2), determinism and no mutation, and the evidence (the existing tests, named by reference). No human journey, no service context, no persona; nothing beyond what the unit needs.\n\nAssertions:\n1. The record contains only what the unit needs: no service context, persona, journey or template sections beyond the function's own obligations, and the omission is not belaboured\n2. The behaviour for i = 0 is stated explicitly rather than left as an implicit permission\n3. No fictional human user, national outcome or theory of change is introduced\n4. The evidence names the heap's existing tests by reference and proposes only checks derivable from the definition; no test results or heap details are invented",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A dozen-line record: what the function is, who calls it (the heap's sift operations), the admissible inputs (i >= 1) with the behaviour for i = 0 stated explicitly, the definition floor((i-1)/2), determinism and no mutation, and the evidence (the existing tests, named by reference). No human journey, no service context, no persona; nothing beyond what the unit needs.\n\nAssertions:\n1. The record contains only what the unit needs: no service context, persona, journey or template sections beyond the function's own obligations, and the omission is not belaboured\n2. The behaviour for i = 0 is stated explicitly rather than left as an implicit permission\n3. No fictional human user, national outcome or theory of change is introduced\n4. The evidence names the heap's existing tests by reference and proposes only checks derivable from the definition; no test results or heap details are invented",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-specify)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-specify(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 0.5,
+            "passed": false,
+            "turns": 3,
+            "costUsd": 0.10353640000000001,
+            "judgeCostUsd": 0.008706,
+            "durationSeconds": 20,
+            "startedAt": "2026-09-27T11:16:44.853Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL FAIL FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  false,
+                  false
+                ],
+                "evidence": "# parentIndex: specification\n\n**Status:** Adopted. It describes existing behaviour and proposes nothing new.\n**Source:** Written only from the task statement. I have not read the heap repository or its tests.\n\nThis subject is close to the size where no specification is needed, because the implementation and its tests already say what it does. Since you asked for one, here is the smallest record that captures what relies on it.\n\n## Case\nIn a heap with 7 elements:\n- `parentIndex(1) = 0` and `parentIndex(2) = 0`\n- `parentIndex(5) = 2` and `parentIndex(6) = 2`\n\n## Obligation\n**P1.** For any integer `i` with `1 ≤ i < n`, where `n` is the heap's size, `parentIndex(i)` must return `⌊(i − 1) / 2⌋`.\n\nEquivalently, it returns the unique `p` with `0 ≤ p < i` such that `i = 2p + 1` or `i = 2p + 2`. This is the inverse of the child-index functions `2p + 1` and `2p + 2`, and sift-up and sift-down depend on that relationship.\n\nThe function has no side effects and depends only on `i`.\n\n## Deliberately unspecified (callers must not rely on these)\n- **The result for `i = 0`.** The root has no parent, and the tests never call it with 0. Truncating division would return 0 there, while floor division would return −1. Callers must check for the root themselves.\n- **The result for `i < 0`, non-integer `i`, or `i ≥ n`.** Whether it returns a value, raises an error, or behaves undefined is not specified.\n- **How it is computed.** Shift or division is the implementation's choice.\n\n## Evidence\n- **What exists:** `heap.sift-up.test` and `heap.sift-down.test` call `parentIndex` on every non-root index and pass. That covers P1 for the heap sizes those tests use.\n- **What that does not cover:** Heap sizes the tests don't use, and very large `i` where overflow could occur. I also can't tell whether the tests' expected values were worked out independently or taken from the implementation.\n- **Treatment:** I've accepted these as residual gaps because the behaviour is settled. The overflow question reopens only if a heap could get close to the integer limit.\n\n## Seams and handoffs\nThe sift-up and sift-down routines depend on this function, but only through the root check. One sentence covers that, so it doesn't need a separate connection specification, and nothing else needs to be handed on."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 0.5,
+            "passed": false,
+            "turns": 1,
+            "costUsd": 0.058365600000000004,
+            "judgeCostUsd": 0.006732,
+            "durationSeconds": 9,
+            "startedAt": "2026-09-27T11:17:04.395Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL FAIL FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  false,
+                  false
+                ],
+                "evidence": "## `parentIndex(i)`\n\n**Purpose:** Returns the index of the parent of node `i` in a binary heap stored in an array, with the root at index 0.\n\n**Signature:** `parentIndex(i: integer) → integer`\n\n**Precondition:** `i` is an integer and `i ≥ 1`, meaning any node except the root.\n\n**Returns:** `⌊(i − 1) / 2⌋`\n\n**Postconditions:**\n- `0 ≤ parentIndex(i) < i`\n- `i` is one of the parent's two children: `i = 2·parentIndex(i) + 1` or `i = 2·parentIndex(i) + 2`\n\n**Examples:**\n\n| `i` | 1 | 2 | 3 | 4 | 5 | 6 |\n|---|---|---|---|---|---|---|\n| `parentIndex(i)` | 0 | 0 | 1 | 1 | 2 | 2 |\n\n**Out of scope:** What happens when `i = 0` (the root) or `i` is negative isn't specified. `heap.sift-up.test` and `heap.sift-down.test` only call `parentIndex` on non-root indices, so nothing establishes that behaviour. Callers must not rely on it. This matters because a plain `(i − 1) / 2` with integer division gives 0 in some languages and −1 in others when `i = 0`.\n\n**Verification:** `heap.sift-up.test` and `heap.sift-down.test`, which cover every non-root index they reach."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 0.5,
+        "passRate": 0,
+        "scoreWithout": 0.5,
+        "passRateWithout": 0,
+        "delta": 0
+      }
+    },
+    {
+      "name": "case-02",
+      "dir": "evals/case-02",
+      "source": "mixed",
+      "promptMarkdown": "A public repair-reporting service lets a resident report a broken streetlight. The council forwards reports to the utility that owns the light. We want to specify the service. What we have, in full: (1) a two-page proposal, which says residents will report online with a location and a photo, the council will forward each report to the owning utility within one working day, and residents will be able to see their report's status; (2) one observed session, in which one resident took eleven minutes to submit a report on a phone, gave up on the photo step twice and asked afterwards whether anyone would tell her when it was fixed; (3) the utility's published response times: acknowledge receipt within one working day, make safe within two working days, repair within ten working days. There is nothing else; do not look for files. Write the specification, marking what is known and what is not.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A specification of the service that covers the people it serves and the resident's experience as well as the council's obligations; the forwarding to the utility treated as a handoff with the utility's commitments (acknowledge receipt, make safe, repair within the published times, a route to correct a wrong report) stated separately from the council's; the single observed session treated as one observation, not user research; the published response times treated as the utility's commitment, not the council's guarantee; the unknowns (whether residents can see the repair's completion, residents who cannot or will not use the online route) each given a treatment rather than left blank.\n\nAssertions:\n1. A forwarded report is not treated as accepted responsibility or as a completed repair\n2. The single observed session is not promoted to user research, and no participant quotations are invented\n3. The utility's obligations and the council's are stated separately, with the seam named\n4. Every unknown carries one of the three treatments rather than a blank\n5. Residents who cannot or will not use the online route are named somewhere in the record (as an affected party, an adverse case or an unknown) and given a treatment",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A specification of the service that covers the people it serves and the resident's experience as well as the council's obligations; the forwarding to the utility treated as a handoff with the utility's commitments (acknowledge receipt, make safe, repair within the published times, a route to correct a wrong report) stated separately from the council's; the single observed session treated as one observation, not user research; the published response times treated as the utility's commitment, not the council's guarantee; the unknowns (whether residents can see the repair's completion, residents who cannot or will not use the online route) each given a treatment rather than left blank.\n\nAssertions:\n1. A forwarded report is not treated as accepted responsibility or as a completed repair\n2. The single observed session is not promoted to user research, and no participant quotations are invented\n3. The utility's obligations and the council's are stated separately, with the seam named\n4. Every unknown carries one of the three treatments rather than a blank\n5. Residents who cannot or will not use the online route are named somewhere in the record (as an affected party, an adverse case or an unknown) and given a treatment",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-specify)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-specify(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 3,
+            "costUsd": 0.2075944,
+            "judgeCostUsd": 0.026723999999999998,
+            "durationSeconds": 66,
+            "startedAt": "2026-09-27T11:17:13.416Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "# Specification: Streetlight Fault Reporting Service\n\n**Revision:** 0.1 (draft, created 2026-09-27)\n**Location:** this response only. Nothing has been saved to a file.\n**Ready for:** discussion. It is **not ready for implementation**, because three blocking unknowns remain (§6).\n\n---\n\n## 1. Subject, scope and sources\n\n**Subject:** a public online service where a resident reports a broken streetlight. The council forwards the report to the utility that owns the light, and the resident can see how the report is progressing.\n\n**In scope:** the report from the resident, the council's forwarding, what the resident sees, and where the council's part meets the utility's.\n**Out of scope:** how the utility actually repairs the light.\n\nEach source says a different kind of thing, and the labels used below follow from that:\n\n| Label | Source | What kind of claim it is | Limits |\n|---|---|---|---|\n| **[P]** | Two-page proposal | What the council intends | We don't know if it has been approved. Its statements are intentions, not adopted obligations. |\n| **[S]** | One observed session | Something one person did | One resident, on a phone. It shows problems can happen, not how often. |\n| **[U]** | Utility's published response times | The utility's own public commitments | They bind the utility, not the council. Published targets aren't the same as achieved times. We don't know when each clock starts. |\n| **[I]** | Inference in this spec | Something the sources imply or require | Needs confirming. |\n| **[?]** | None | Unknown | Handled in §6. |\n\n---\n\n## 2. Cases\n\n**C1: success.** A resident sees a light that is out. On a phone, they give the location and a photo, and get a report reference [I]. Within one working day the council sends the report to the owning utility [P]. The utility acknowledges within one working day of receiving it [U], makes the light safe within two working days [U] and repairs it within ten [U]. At any point the resident can see the report's status [P], and they learn that it has been fixed [? whether by being told or by checking].\n\n**Adverse cases:**\n\n- **C2: photo fails.** The upload fails or the resident can't manage it. This was seen twice in one session [S]. What happens next is unknown: does the report go without a photo, or is it abandoned?\n- **C3: slow submission.** Submitting takes 11 minutes [S]. There is no target, so we can't say whether that's acceptable.\n- **C4: resident expects to be told.** The resident thinks they'll be notified when the light is fixed, but the service only lets them look up status [P vs S].\n- **C5: owner can't be identified.** The light belongs to the council, is private, or its owner is unknown [?].\n- **C6: dangerous fault.** For example, exposed wiring or a fallen column. The report arrives out of hours and waits up to one working day before it is forwarded [? safety].\n- **C7: many reports of one fault.** Several residents report the same light [?].\n- **C8: forwarding fails.** The channel to the utility is down, or the utility never acknowledges [?].\n- **C9: no online access.** The resident can't use an online service [?].\n- **C10: stale status.** The utility has fixed the light but the council's status still says \"forwarded\" [? no feed back from the utility is known].\n\n---\n\n## 3. Obligations\n\nEach obligation reads: *condition → responsible party → behaviour → bounds → failure behaviour → evidence*.\n\n**O1. Accept a report** [P, challenged by S]\nWhen a resident submits a report, the service must record a location that is precise enough for the utility to find the light [bound ?]. It must also record a photo if the photo is required.\n- **Open design choice (not resolved here; both options kept):**\n  - (a) Photo required, as the proposal says.\n  - (b) Photo optional, because C2 shows it can block a report.\n  - What would settle it: whether utilities need photos to find or sort faults, and how many people drop out at the photo step.\n- **If submission fails:** the resident is told the report wasn't submitted, and what they have entered is kept [I].\n- **Evidence:** usability testing on phones with more than one participant, and drop-out counts at each step once the service is live.\n\n**O2. Give the resident a reference** [I]\nWhen a report is accepted, the service must show the resident a reference and confirm receipt. \"See their report's status\" [P] only works if the report can be identified. Whether residents give contact details is unknown (§6, U4).\n\n**O3. Forward within one working day** [P]\nThe council must forward each accepted report to the owning utility within one working day. None of the key terms are defined yet:\n- when the clock starts (submission time?)\n- whose working-day calendar applies\n- whether \"forwarded\" means sent or received by the utility\n- what counts as a breach, and who acts on it\n\n**If forwarding fails (C8):** the service keeps trying and escalates to named council staff [? who]. The resident's status must not say \"forwarded\" until the report has actually been sent [I].\n\n**Evidence:** timestamps from submission to forwarding across all reports, with results reported by percentile against the one-day limit.\n\n**O4. Identify the owner** [?]\nThe council must identify the owning utility for each report. How it does this is unknown. For C5, what happens is unknown. It must not be silently dropped.\n\n**O5. Show status** [P]\nWhen a resident has a reference, they must be able to see the report's current status. The list of statuses is undefined. The council can only honestly show \"received\" and \"forwarded\". Showing any later status (acknowledged, made safe, repaired) depends on the utility sending updates back, which no source mentions (§5).\n- **Must not:** show a status the council hasn't received from the utility, or show an expected date as if the council had promised it [I].\n\n**O6. Tell the resident when it's fixed** [? not in proposal]\nThe proposal only lets residents look up status. The observed resident asked to be told [S], but that is one request. Adding notification changes the proposal, needs council authority, and depends on U4 and on the utility sending updates back.\n\n**O7. Utility response times** [U, belong to the utility]\n\n| Stage | Limit | When the clock starts |\n|---|---|---|\n| Acknowledge | 1 working day | Utility receives the report [?, assumed] |\n| Make safe | 2 working days | Unknown: receipt or acknowledgement? |\n| Repair | 10 working days | Unknown |\n\n- If the clocks run one after another from the utility receiving the report, a resident could wait up to about 11 working days from submitting to repair. It could be more if \"make safe\" and \"repair\" are counted separately. This is not known.\n- \"Make safe\" isn't defined for an unlit streetlight. For a light that is simply out, it may mean nothing.\n- The council may *display* these as the utility's published targets. It must not present them as council commitments.\n\n**O8. Dangerous faults** [? absent from all sources]\nThe service must not be the only route for a dangerous fault (C6). What the alternative is, is unknown. **This blocks deployment** (U1).\n\n---\n\n## 4. What is left open, and what no one may rely on\n\n- **Left open:** the interface design, the technology, how the council sends reports to the utility, and how many steps the form has. None is fixed by any source.\n- **No one may rely on:**\n  - the service notifying residents (unless O6 is adopted)\n  - the displayed status being more current than the latest update from the utility\n  - utility times being council guarantees\n  - submission taking any particular time, since there is no target\n\n---\n\n## 5. The council–utility boundary (the main dependency)\n\n| Side | What we know |\n|---|---|\n| Council → utility | Forward within 1 working day [P]. Format and channel unknown. |\n| Utility → council | Acknowledgement is published [U], but **who it goes to is unknown**. Any update on \"made safe\" or \"repaired\" going back to the council is **unknown and not in any source**. |\n\nO5 (status beyond \"forwarded\"), O6 (notification) and C10 (stale status) all depend on the utility sending updates back. **Recommend handing this off to `specify-connection`**, with both sides named and the intended use: \"the resident sees accurate status through to repair\".\n\n---\n\n## 6. Unknowns and how each is handled\n\n| # | Unknown | Handling | What it affects |\n|---|---|---|---|\n| U1 | Route for dangerous faults (C6, O8) | **Blocks** deployment | Public safety |\n| U2 | Whether the utility sends status updates back (§5) | **Blocks** implementation of O5 beyond \"forwarded\" | O5, O6, C10 |\n| U3 | How the owner is identified, and what happens for lights no utility owns (O4, C5) | **Blocks** implementation of O3 | Every report |\n| U4 | Contact details: collected, optional, or none | Short investigation with the council, as a design decision | O2, O6, privacy |\n| U5 | Photo required or optional (O1) | Short investigation: ask utilities if they use photos, and test with 5+ phone users | Drop-outs |\n| U6 | When each clock starts, and whose working-day calendar applies (O3, O7) | Short investigation: ask the utility and the council | What residents are told about timing |\n| U7 | Duplicate reports (C7) | Short investigation | Utility workload, status per resident |\n| U8 | Non-online channel (C9) | Council decision; may be an equality duty | Who is excluded |\n| U9 | Keeping and deleting photos and locations, and the privacy of people in photos | Council decision (data protection) | O1 |\n| U10 | Whether the proposal has been approved | Confirm with the council | Whether [P] items are obligations or proposals |\n| U11 | Target time to submit a report | Accept as an unknown for now, if the council agrees. Measure once live before setting a target. | C3 |\n\nI've accepted no unknown on the council's behalf. Only the council can accept U8, U9 and U11.\n\n---\n\n## 7. Evidence we have and evidence we need\n\n- **Have:**\n  - one observed session (shows problems exist, not how often)\n  - the utility's published targets (not how it actually performs)\n  - the proposal's stated intent\n- **Need:**\n  - Phone usability testing with several residents, including people with access needs, recording where they drop out. Expected results must come from what residents need, not from how the build behaves.\n  - Forwarding timestamps checked against O3.\n  - The utility's actual response-time performance, not just its published targets.\n  - A check comparing the status the council shows against the utility's records (C10).\n- **Won't prove:** none of this shows the service is worth having for residents. That is a separate question (`user-value`).\n\n---\n\n## Summary\n\n**Known from sources:**\n- the report contents, the one-day forwarding limit and status lookup (from the proposal, though we don't know if it was approved)\n- the utility's three published times (utility commitments, and we don't know when the clocks start)\n- one resident's trouble with the photo step, and their wish to be told when it's fixed\n\n**Inferred:** the report reference, the rule against showing status the council hasn't received, and keeping what a resident has entered when submission fails.\n\n**Unknown and blocking:**\n- a route for dangerous faults\n- whether the utility sends status updates back\n- how the owner is identified\n\n**Handoffs:**\n- the council–utility boundary → `specify-connection`\n- once U1–U3 are resolved → `assess-specification`, for implementation readiness\n- whether residents would use and value it → `user-value`"
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.17078959999999999,
+            "judgeCostUsd": 0.027468,
+            "durationSeconds": 59,
+            "startedAt": "2026-09-27T11:18:19.647Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "# Specification: Streetlight Repair Reporting Service\n\n**Status:** Draft 0.1, based on three sources only\n**Date:** 2026-09-27\n\n## 0. How to read this document\n\nEvery statement carries one of these tags:\n\n| Tag | Meaning | How much weight it bears |\n|---|---|---|\n| **[P]** | The proposal says so | It's what someone intends. Nobody has checked it can be done. |\n| **[O]** | Seen in the one observed session | One person. It proves something can happen, not how often it happens. |\n| **[U]** | In the utility's published response times | It's what the utility commits to. We don't know what it actually achieves. |\n| **[I]** | My inference from the above | Needs confirming. |\n| **[?]** | Unknown | An open question. Section 9 ranks them. |\n| **[R]** | My recommendation | Not a requirement until someone agrees to it. |\n\nWhere no source covers a point, it's marked [?]. I haven't filled gaps with assumptions and presented them as fact.\n\n---\n\n## 1. Purpose\n\nA resident reports a broken streetlight. The council forwards the report to the utility that owns the light. The resident can see what's happening to their report. **[P]**\n\n**Out of scope, as far as we know:** the utility doing the repair itself, and any fault type other than streetlights. **[I]** The proposal only mentions streetlights. Whether the service should later cover other faults is **[?]**.\n\n## 2. Actors\n\n| Actor | What we know | What we don't |\n|---|---|---|\n| **Resident** | Reports online with a location and a photo **[P]**. At least one uses a phone **[O]**. | Whether they have to identify themselves or give contact details. Whether any non-online channel exists (phone, in person). Accessibility needs. **[?]** |\n| **Council** | Receives reports and forwards each one to the owning utility within one working day **[P]**. | Whether forwarding is manual or automatic. Who does it. What happens if the council can't tell who owns the light. **[?]** |\n| **Utility** | Owns lights. Publishes response times **[U]**. | Whether there is one utility or several. The proposal says \"the owning utility\", which suggests more than one could be involved **[I]**. Whether the utility sends status updates back to the council. **[?]** |\n\n## 3. Evidence and its limits\n\n1. **Proposal (2 pages).** Sets out intent. It gives no user research, volumes, costs or technical design, and doesn't say what \"status\" means.\n2. **One observed session.** One resident, on a phone:\n   - Took **11 minutes** to submit. **[O]**\n   - **Gave up on the photo step twice.** **[O]** We don't know why: the interface, the camera or upload permissions, the connection, file size, or something else. **[?]** We also don't know if the report she finally submitted included a photo. **[?]**\n   - Afterwards she **asked whether anyone would tell her when it was fixed.** **[O]** That fits two readings: she didn't notice or understand that she could check status, or she wants to be notified rather than having to check. Which one applies is **[?]**.\n   - We can't tell if 11 minutes is typical. We don't know what she was trying to report, or anything about her circumstances.\n3. **Utility response times [U].** Acknowledge within 1 working day, make safe within 2, repair within 10. We don't know:\n   - when each clock starts (probably when the utility receives the report **[I]**)\n   - how often the utility meets these times\n   - what \"make safe\" means for a streetlight\n   - whether these times apply to reports that come through the council.\n\n## 4. Functional requirements\n\n### FR-1 Submit a report\n- **FR-1.1** A resident can submit a report online. **[P]**\n- **FR-1.2** Submission must work on a phone. **[O]** One resident used one, so it's a real case. How big a share phones are is **[?]**.\n- **FR-1.3** Target time to submit: **[?]**. The proposal gives none. The one observation (11 min) is a data point, not a baseline. **[R]** Measure it on a larger sample before setting a target. Eleven minutes is probably much longer than necessary for reporting one light, but that's an untested judgement.\n- **FR-1.4** Whether a resident must identify themselves or can report anonymously: **[?]**. This determines whether FR-5 (notification) is possible at all.\n\n### FR-2 Location\n- **FR-2.1** A report includes a location. **[P]**\n- **FR-2.2** How location is captured (GPS, map pin, address, a pole or asset number) is **[?]**.\n- **FR-2.3** The location must be precise enough to identify the light and its owner. **[I]** The required precision, and whether the council has data that maps location to owner, are **[?]**. See FR-4.2.\n\n### FR-3 Photo\n- **FR-3.1** A report includes a photo. **[P]** Whether the photo is **mandatory** is **[?]**. The proposal's wording (\"with a location and a photo\") could be read either way.\n- **FR-3.2** The photo step has caused failure at least once, twice in one session. **[O]**\n- **FR-3.3** **[R]** Make the photo optional. Never let a failed photo upload block submission. Keep the rest of the report if the upload fails. Rationale: the photo's value to the utility is **[?]** and its cost to the resident has been observed **[O]**. Confirm the photo's value with the utility before deciding.\n- **FR-3.4** What the utility uses photos for (confirming the fault, identifying the light, checking safety) is **[?]**.\n\n### FR-4 Forwarding to the utility\n- **FR-4.1** The council forwards each report to the owning utility **within one working day**. **[P]**\n- **FR-4.2** How the council determines the owner is **[?]**. So is what happens when the owner is unknown, disputed, or the council itself.\n- **FR-4.3** The forwarding channel (email, API, the utility's own portal) is **[?]**.\n- **FR-4.4** Handling of duplicate reports of the same light is **[?]**. **[R]** Decide this before launch, because it affects status for every resident who reported that light.\n- **FR-4.5** Whether reports are triaged (for example, lights down or exposed wiring treated as emergencies) is **[?]**. **[R]** Provide an urgent-hazard route that doesn't wait for the one-working-day forwarding window, even if that route is simply \"call this number\".\n\n### FR-5 Status and notification\n- **FR-5.1** A resident can see their report's status. **[P]**\n- **FR-5.2** Which statuses exist is **[?]**. **[I]** The utility's milestones suggest these candidates: *Submitted → Forwarded → Acknowledged by utility → Made safe → Repaired* (plus *Rejected / Duplicate / Not a council or utility matter*).\n- **FR-5.3** **Critical dependency:** statuses after *Forwarded* can only be shown if the utility sends updates back to the council. Whether it does, and in what form, is **[?]**. If it doesn't, the proposal's status feature can show at most *Submitted* and *Forwarded*. **[I]**\n- **FR-5.4** Whether residents are **notified** when status changes (push) or must look it up (pull) is **[?]**. The proposal only says residents can \"see\" status. The observed resident expected to be told. **[O]** **[R]** Treat \"notify on repair\" as a likely requirement, subject to FR-1.4 (contact details) and FR-5.3 (updates from the utility).\n- **FR-5.5** How a resident finds their report again (reference number, account, link) is **[?]**.\n\n## 5. Timing\n\nAssuming the utility's clocks start when it receives the forwarded report **[I]**, a report could run as follows. Day 0 is the day of submission.\n\n| Milestone | Source | Latest (working days after submission) |\n|---|---|---|\n| Council forwards | [P] | 1 |\n| Utility acknowledges | [U] | 2 |\n| Utility makes safe | [U] | 3 |\n| Utility repairs | [U] | 11 |\n\n- **[I]** From the resident's point of view, **nothing can be confirmed as received by the owner for up to two working days**, and repair can take **over two calendar weeks**. What status the resident sees during that gap matters.\n- Several questions are open **[?]**:\n  - Whose working-day calendar applies (the council's or the utility's)?\n  - How are reports submitted out of hours or on non-working days counted?\n  - Do the utility's times run from its receipt or from the original report?\n- Whether the council will monitor the utility against these times, or publish performance, is **[?]**.\n- Whether the council's one-day forwarding target is itself monitored, and what happens when it's missed, is **[?]**.\n\n## 6. Data held about a report\n\n| Field | Status |\n|---|---|\n| Location | Required **[P]** |\n| Photo | Required or optional: **[?]**. See FR-3 |\n| Fault description | **[?]**. Not mentioned |\n| Resident contact | **[?]**. See FR-1.4 |\n| Owning utility | Derived by the council **[I]**. Method **[?]** |\n| Status and timestamps | Implied by FR-5 and section 5 **[I]** |\n| Retention period, privacy basis, who can see photos (which may show people or homes) | **[?]** |\n\n## 7. Non-functional requirements\n\n- **Works on a phone.** **[O]** Must.\n- **Accessibility.** No source mentions it. **[?]** **[R]** A public service will need to meet the applicable accessibility standard. Confirm which one.\n- **Poor connectivity.** Unknown whether it contributed to the photo failures **[?]**. **[R]** Design so a partly completed report isn't lost.\n- **Volumes, availability, cost:** all **[?]**.\n- **Languages:** **[?]**.\n\n## 8. Tensions and risks visible now\n\n1. **Photo is in the proposal, and photo is where the observed resident failed.** Either the photo step becomes optional or much more robust, or completion rates may suffer. **[I]** from n=1.\n2. **The proposal promises status, but the council may not have status after forwarding.** This depends entirely on the utility sending updates (FR-5.3).\n3. **The proposal offers a status page to look at; the observed resident expected to be told.** If this holds more widely, the proposed feature doesn't meet the need. **[I]** from n=1.\n4. **The published times are commitments, not measurements.** If status or notifications quote them to residents, missed targets become visible and attributable.\n\n## 9. Open questions, in priority order\n\n1. Does the utility send status updates back to the council, and in what form? (Blocks FR-5.)\n2. Is there one utility or several, and how does the council determine ownership from a location? (Blocks FR-4.)\n3. Is the photo required, and what does the utility actually use it for? (Decides FR-3.)\n4. Will residents give contact details, and will they be notified? (Decides FR-1.4 and FR-5.4.)\n5. How are urgent hazards handled?\n6. How are duplicates handled?\n7. What do \"make safe\" and the start of each clock mean in practice, and how often are the published times met?\n8. What are typical submission time and completion rate? This needs more than one observed session. Several more sessions, including attempts at the photo step on different phones, would be the cheapest way to settle FR-1.3 and FR-3.\n9. Is there a non-online channel, and what accessibility, language and privacy requirements apply?\n\nQuestions 1 to 4 need answers from the utility and the council before the design can be fixed. The rest can be settled during design."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 1,
+        "passRateWithout": 1,
+        "delta": 0
+      }
+    },
+    {
+      "name": "case-03",
+      "dir": "evals/case-03",
+      "source": "mixed",
+      "promptMarkdown": "Here is revision 3 of the specification of a data pipeline, in full. 'PIPE-LC-R3. Subject: the nightly job that publishes a table of lesson counts per subject per day. Consumers: the reporting dashboard (reads the latest table each morning) and the finance export (copies each day's row once, the morning after). Obligations: O1 the table has one row per (day, subject) with columns day, subject, lesson_count; O2 a row is final once published; O3 corrections to source events arriving within 7 days of the event are applied to the event's day before that day's row is published; O4 corrections arriving later are discarded and counted in a discard log. Evidence: the fixture suite pipe-lc-fixtures (days 1 to 10 with corrections on days 3 and 8) and the finance export's own reconciliation test. Authority: the data platform lead.' The change: corrections now arrive up to 30 days after the source event and must be applied. The schema of the published table does not change. Revise the specification to revision 4; do not look for files.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A revision 4 that keeps revision 3's identity and retains revision 3; the changed condition (7 days to 30) identified with its consequence: the table's shape is unchanged but a published row is no longer final for 30 days, which is a change of meaning; the consumers that relied on finality (the finance export's copy-once, the dashboard) traced and the affected obligations (O2, O3, O4) and evidence (the fixture suite's 7-day corrections) marked as changed or stale; the event's day, the correction's arrival and the row's publication distinguished; a transition rule stated; unrelated claims (O1) left as they are.\n\nAssertions:\n1. The unchanged schema is not taken to mean unchanged meaning: a published row's finality is identified as what changed\n2. Revision 3 is retained and revision 4 identified, with each of revision 3's obligations marked kept, changed or retired\n3. The finance export's copy-once reliance and the stale 7-day fixture evidence are traced as affected; O1 is not reopened\n4. The event's day, the correction's arrival time and the row's publication are distinguished",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A revision 4 that keeps revision 3's identity and retains revision 3; the changed condition (7 days to 30) identified with its consequence: the table's shape is unchanged but a published row is no longer final for 30 days, which is a change of meaning; the consumers that relied on finality (the finance export's copy-once, the dashboard) traced and the affected obligations (O2, O3, O4) and evidence (the fixture suite's 7-day corrections) marked as changed or stale; the event's day, the correction's arrival and the row's publication distinguished; a transition rule stated; unrelated claims (O1) left as they are.\n\nAssertions:\n1. The unchanged schema is not taken to mean unchanged meaning: a published row's finality is identified as what changed\n2. Revision 3 is retained and revision 4 identified, with each of revision 3's obligations marked kept, changed or retired\n3. The finance export's copy-once reliance and the stale 7-day fixture evidence are traced as affected; O1 is not reopened\n4. The event's day, the correction's arrival time and the row's publication are distinguished",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-specify)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-specify(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 3,
+            "costUsd": 0.14935239999999997,
+            "judgeCostUsd": 0.015551999999999983,
+            "durationSeconds": 41,
+            "startedAt": "2026-09-27T11:19:18.293Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "I've revised the specification to R4 below, but it can't be adopted as a single text yet. Applying corrections that arrive up to 30 days late breaks O2 (\"a row is final once published\") for every row published the morning after its day. Both consumers depend on O2 in different ways, so the data platform lead has to choose how to resolve it (D1). I've kept both options in the text rather than picking one.\n\n---\n\n## PIPE-LC-R4 (draft, pending decision D1)\n\n**Subject.** The nightly job that publishes a table of lesson counts per subject per day.\n\n**Consumers.**\n- **Reporting dashboard:** reads the latest table each morning.\n- **Finance export:** copies each day's row once, the morning after. Under option B this timing changes (see D1).\n\n**Definitions (new in R4).**\n- *Event day:* the day of the source event that a correction applies to.\n- *Correction age:* the time from the event day to when the correction arrives at the job.\n- *Correction window:* a correction age of 30 days or less. Whether \"30 days\" is counted inclusively, and in which timezone, is unresolved (U2).\n- *Final:* the row will not change again.\n\n**Obligations.**\n- **O1 (unchanged).** The table has one row per (day, subject), with columns day, subject and lesson_count.\n- **O2 (changed, depends on D1).**\n  - *Option A (hold publication):* the job publishes the row for day D only after D's correction window has closed. A published row is final.\n  - *Option B (restate within the window):* the job publishes the row for day D the morning after D, as it does now. Until D's correction window closes, the row may be restated in place. After that it is final. Because the schema is unchanged, the table itself cannot show whether a row is still open. Consumers work it out from the day column and the window rule, which the job must publish.\n- **O3 (changed).** The job applies every correction inside the window to its event day.\n  - Under A, this happens before the row is published.\n  - Under B, it happens by the next nightly run after the correction arrives, which restates the row.\n  - If a correction moves a lesson between subjects, the job updates both rows in the same run.\n- **O4 (changed).** The job discards corrections that arrive after the 30-day window and counts them in the discard log. Corrections aged 8 to 30 days are no longer discarded.\n- **O5 (new, option B only).** Every restatement is recorded outside the published table, with the day, the subject, the old count, the new count and the run. This lets finance reconcile rows it has already copied.\n\n**Deliberately unspecified.** Whether the job reprocesses whole days or applies corrections incrementally is left open. No consumer may rely on that choice.\n\n**Evidence.**\n- The current fixture suite (days 1 to 10, corrections on days 3 and 8) cannot exercise a 30-day window. **Replace it with pipe-lc-fixtures-r4**, which should:\n  - cover at least 45 event days\n  - include corrections aged 1, 7, 8, 29, 30, 31 and 45 days, testing the window boundary and the old 7-day boundary\n  - include a correction that moves a lesson between subjects\n  - include several corrections to the same event\n  - under option B, check that restatements match the O5 records\n- The expected counts must come from hand-derived fixture tables, not from the job's own output.\n- The finance export's reconciliation test must be rerun against R4. Under option B it has to be changed so it catches restated rows.\n\n**Authority.** The data platform lead. Any change to the finance export's copy timing or behaviour also needs the finance export owner's agreement.\n\n---\n\n### What changed from R3 to R4\n\n| R3 | R4 | Why |\n|---|---|---|\n| O1 | Kept | The schema doesn't change |\n| O2 | Changed, depends on D1 | Late corrections and \"final once published\" can't both hold if rows are still published the next morning |\n| O3 (7 days, before publication) | Changed (30 days, timing depends on D1) | This is the requested change |\n| O4 (discard after 7 days) | Changed (discard after 30 days) | Follows from the new window |\n| — | O5 added (option B only) | Finance needs a record of restatements, and the schema can't carry one |\n| Fixture evidence | Replaced | The old suite spans only 10 days |\n\n### Unresolved issues\n\n- **D1 (blocks adoption).** Choose between A and B.\n  - **A** keeps finance unchanged but makes each row appear about 31 days late, which defeats the dashboard's morning read.\n  - **B** keeps the dashboard current, but finance's \"copy once, the morning after\" would lock in counts that are later corrected. Finance would need to copy at finality (day + 31) or reconcile using the O5 records.\n  - **My recommendation is B**, with finance copying at finality. That decision rests with the data platform lead and the finance export owner.\n- **U1 (needs a short investigation).** Corrections aged 8 to 30 days that R3 discarded shortly before R4 goes live may now fall inside the new window. The discard log only counts them, so they may not be recoverable. Decide whether to backfill them (if their content still exists somewhere) or accept the gap as a residual, which the authority would need to accept.\n- **U2 (carried over from R3, now more significant).** Which clock and timezone define \"day\" and \"arrival\", and whether the window boundary is inclusive. At the 30-day edge, this determines which corrections are applied and which are discarded.\n\n### Next steps\n\n- **The job ↔ finance export seam** needs to be specified jointly, with both owners. This is where reliance changes under either option.\n- **Once D1 is decided,** the chosen O2 text replaces the two options and R4 is ready for implementation planning."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 0.5,
+            "passed": false,
+            "turns": 1,
+            "costUsd": 0.0905636,
+            "judgeCostUsd": 0.010901999999999995,
+            "durationSeconds": 28,
+            "startedAt": "2026-09-27T11:19:59.158Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL FAIL FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  false,
+                  false
+                ],
+                "evidence": "# PIPE-LC-R4\n\n**Subject:** the nightly job that publishes a table of lesson counts per subject per day.\n\n**Consumers:** the reporting dashboard, which reads the latest table each morning, and the finance export, which copies each day's row once, on the morning after that row is published.\n\n**Obligations:**\n- **O1.** The table has one row per (day, subject), with columns day, subject and lesson_count. *(unchanged)*\n- **O2.** A row is final once published. *(unchanged)*\n- **O3.** A correction to a source event that arrives up to and including 30 days after the event is applied to the event's day. That day's rows are published only after its 30-day correction window has closed. *(was 7 days)*\n- **O4.** A correction that arrives more than 30 days after the event is discarded and counted in the discard log. *(was more than 7 days)*\n- **O5 (transition).** Rows published under R3 stay final. If a correction for one of those days arrives between 8 and 30 days after its event, it is discarded and counted in the discard log with the reason \"published under R3\". It is not applied. When R4 goes live, no new day becomes publishable for about 23 days: every unpublished day then waits for its full 30-day window. Both consumers must be told before cutover.\n\n**Evidence:**\n- An extended fixture suite, pipe-lc-fixtures-r4:\n  - It covers days 1 to 45, which gives day 10 its full window.\n  - It keeps the corrections on days 3 and 8.\n  - It adds corrections that arrive 8, 29, 30 and 31 days after their events. These test the old boundary, the new boundary and the discard case.\n  - It adds one case of a correction arriving for a day already published under R3.\n- The finance export's own reconciliation test, rerun against the R4 publication schedule.\n\n**Authority:** the data platform lead.\n\n---\n\n## What you need to decide before approving this\n\n**1. I had to pick between keeping O2 and keeping data fresh, and I kept O2.** You can't have all three: corrections applied up to 30 days late, rows that never change after publishing, and the same publication delay as today. I delayed publication to 30 days after each day. That keeps O2, keeps the schema unchanged, and keeps finance's \"copy each row once\" working. The cost is that the dashboard and finance will see each day's numbers about 30 days late instead of about 7.\n\nThe other option is to publish on the current schedule and revise rows when late corrections arrive. That would mean dropping O2 and rewriting how finance works. Finance copies each row only once, so it would miss revisions. With no schema change, there's also no column the export could use to spot a revised row. If the lead wants that option instead, O2, O3 and the finance consumer text all need rewriting, not just the numbers.\n\n**2. I inferred today's schedule from R3.** R3 applies 7-day corrections before a day's row is published, so I read it as publishing each day about 7 days after the fact. If publication actually works another way, the 23-day gap in O5 changes.\n\n**3. I tightened some wording.** \"Up to and including 30 days\" and \"more than 30 days\" now set a clear boundary. R3's \"within 7 days\" left it unclear which side day 7 fell on.\n\n**4. I extended the evidence because the R3 fixtures can't test the new rule.** They stop at day 10, so no correction in them can arrive 30 days late."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 0.5,
+        "passRateWithout": 0,
+        "delta": 0.5
+      }
+    },
+    {
+      "name": "case-04",
+      "dir": "evals/case-04",
+      "source": "mixed",
+      "promptMarkdown": "Our API returns curriculum lessons keyed by subject slug. A consuming tool maps our subject slugs to its own subject taxonomy before showing lessons to teachers. Teachers say results are wrong for combined-science subjects. Specify the subject-mapping contract between the API and the tool so both sides know what they owe. Neither side's existing schema changes.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A specification of the mapping as a transforms/represents relation with a named owner: what is preserved (subject identity, the combined-science membership), what loss is permitted and declared, the rejection conditions for an unmappable slug, the source and target taxonomy versions, both sides' obligations, the evidence (discriminating fixtures for combined science), and a note that schema validity on either side does not establish the mapping's fidelity. The consequential seam is handed to specify-connection by name.\n\nAssertions:\n1. The mapping has a named owner and the API is not blamed by default\n2. Preserved meaning and permitted loss are stated, and the combined-science case appears as a discriminating fixture\n3. Schema validity on either side is not treated as evidence that the mapping preserves meaning\n4. The seam is handed to specify-connection rather than fully analysed here",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A specification of the mapping as a transforms/represents relation with a named owner: what is preserved (subject identity, the combined-science membership), what loss is permitted and declared, the rejection conditions for an unmappable slug, the source and target taxonomy versions, both sides' obligations, the evidence (discriminating fixtures for combined science), and a note that schema validity on either side does not establish the mapping's fidelity. The consequential seam is handed to specify-connection by name.\n\nAssertions:\n1. The mapping has a named owner and the API is not blamed by default\n2. Preserved meaning and permitted loss are stated, and the combined-science case appears as a discriminating fixture\n3. Schema validity on either side is not treated as evidence that the mapping preserves meaning\n4. The seam is handed to specify-connection rather than fully analysed here",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-specify)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-specify(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 8,
+            "costUsd": 0.2662747999999999,
+            "judgeCostUsd": 0.024370000000000003,
+            "durationSeconds": 69,
+            "startedAt": "2026-09-27T11:20:26.972Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: FAIL PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  true,
+                  true
+                ],
+                "evidence": "I wrote the contract as a spec below. I couldn't check it against real data: the working directory is empty and I have no write access, so I haven't seen either schema, the actual slug list, the tool's subject list, or any of the teacher reports. Slugs like `combined-science` are examples only, and the missing facts are listed as open questions in §7 rather than guessed. The spec is returned here rather than saved to a file.\n\n---\n\n# SMC-1: Subject-mapping contract, curriculum API ↔ consuming tool\n\n**Revision:** 0.1 · **Status:** Proposed. Neither side has agreed to it yet · **Subject kind:** A contract on meaning between two systems. It adds no fields to either schema.\n**Where it should live (proposed):** One versioned document, plus a machine-readable mapping file and test cases that both teams own. It links to each side's schema and never copies it.\n\n## 1. Purpose and parties\n\n- **Purpose:** A teacher who picks a subject in the tool should see exactly the lessons that belong to that subject, even though the API and the tool group subjects differently.\n- **Parties:** the API team (supplies lessons keyed by subject slug) and the tool team (turns our slugs into its own subjects).\n- **Affected people:** teachers, who can't see the mapping and decide what to teach based on what they're shown.\n- **Why this is the pain point:** Neither schema says what a slug *means*. Combined science is where the two subject lists stop lining up one-to-one: one combined course covers three separate sciences, and \"science\" can mean different things at different school stages.\n\n## 2. Scope\n\n- **Covers:** what each slug means, the set of slugs, how slugs map to the tool's subjects (including one slug mapping to several subjects), unmapped and changed slugs, duplicate lessons, and how changes are announced.\n- **Excludes:** the shape of either schema, how lessons are fetched or paged, whether the lessons themselves are any good, and how the tool ranks them.\n\n## 3. Example cases\n\nEvery rule in §4 has to decide each of these cases.\n\n**Success case:** The API returns lesson L1 under `combined-science` (secondary, ages 14–16). The mapping file says `combined-science` → tool subject *Combined Science*. A teacher filters by *Combined Science* and sees L1 exactly once. A teacher filtering by *Physics* only sees L1 if the mapping says so explicitly.\n\n**Failure cases:**\n\n| # | Case | What exposes it |\n|---|---|---|\n| F1 | The tool files `combined-science` under a broad *Science* bucket, alongside science for younger pupils | The school stage is lost |\n| F2 | The tool matches on text, so `computer-science` or `social-science` land in *Science* | Guessing from the name instead of an agreed list |\n| F3 | A combined-science lesson on a physics topic is mapped to *Biology* because the whole slug is mapped to one science | One slug covering several subjects is collapsed wrongly |\n| F4 | The API adds a new slug (e.g. a higher-tier variant) and the tool drops those lessons without saying so | An unmapped slug leads to missing results |\n| F5 | L2 comes back under both `physics` and `combined-science`, both map to *Physics*, and the teacher sees it twice | No rule for duplicates |\n| F6 | The API quietly narrows what `combined-science` covers | The meaning changes without a new version |\n| F7 | The two sides disagree about whether L3 belongs in *Chemistry* | There's no named way to settle a dispute |\n\nWhich of these teachers are actually hitting is **unknown** (see U1).\n\n## 4. Obligations\n\n**API side**\n\n- **A1: Definition for every slug.** For every slug it can return, the API team must publish a definition in the contract document: the subject, the school stages covered, and whether it is a combined subject (and if so, which separate sciences it covers). A combined slug must list its separate sciences. *How to check:* a domain reviewer confirms each definition against the curriculum.\n- **A2: Complete slug list.** The API must never return a slug that isn't on the published list. *If it does:* the tool applies T3, and the API team treats it as a contract defect.\n- **A3: Rule for lessons under several slugs.** The API team must state whether a lesson can appear under more than one slug. For combined science specifically, it must say whether combined-science lessons also appear under `biology`, `chemistry` or `physics`. *Currently unknown (U2).*\n- **A4: Notice of changes.** Any new, removed or renamed slug, or a changed definition, must come with a new contract version. The tool team gets it at least **[N days — both sides to agree]** before the change reaches production. The old meaning is never reused under the same slug.\n\n**Tool side**\n\n- **T1: Map only by the agreed table.** The tool must map slugs using only the versioned mapping file. It must not guess from slug text, prefixes or name similarity (this rules out F2).\n- **T2: One slug can feed several subjects.** The mapping may send one slug to several tool subjects, or several slugs to one. The tool must not collapse a combined slug into one separate science, or into a subject that spans other school stages, unless the table says so explicitly (this rules out F1 and F3).\n- **T3: Unmapped slugs are reported, not dropped.** For a slug with no entry in the table, the tool must not assign a subject by guessing. It must keep those lessons out of subject-filtered results, log the slug and how many lessons it affected, and alert the tool team. Whether teachers also see an \"Unmapped\" section is the tool team's choice (see §5).\n- **T4: No duplicates within a subject.** If one lesson reaches the same tool subject through several slugs, the tool shows it once. Lessons are matched by their API lesson ID (this rules out F5).\n- **T5: Keep the API slug.** The tool must keep each lesson's original API slug alongside its mapped subject, so any wrong placement can be traced back to a specific row in the table.\n\n**Shared**\n\n- **S1: The mapping file is the only source.** Each row reads: slug → one or more tool subjects, plus stage limits if any. Changes to the file are versioned and need approval from both sides (see §6). Neither side keeps its own private copy.\n- **S2: Agreed test cases.** Both sides keep a test set that covers F1–F6 and at least one real lesson per combined-science slug. The expected answer for each case comes from a science curriculum reviewer, never from running the tool's current mapping.\n\n## 5. Left open deliberately (don't rely on these)\n\n- How the tool orders lessons, and what it calls its subjects.\n- Whether teachers can see an \"Unmapped\" section (T3 only requires that nothing is guessed or silently lost).\n- What order the API returns slugs or lessons in.\n- Whether the tool shows the API slug to teachers (T5 only requires that it's kept).\n\n## 6. Who decides what\n\n| Decision | Holder |\n|---|---|\n| What a slug means (A1–A4) | API team |\n| The tool's subject list | Tool team |\n| Mapping file rows (S1) | Both teams, with a named reviewer from each |\n| Disagreements about where a lesson belongs (F7) | **Unknown (U4).** Proposed: a science curriculum lead |\n\n## 7. Open questions and how each is handled\n\n| # | Unknown | Treatment | Consequence |\n|---|---|---|---|\n| U1 | Which failure cases teachers are actually hitting | **Investigate first:** collect 3–5 teacher reports with lesson IDs, the tool subject shown, and the API slug. Limit: diagnosis only, no mapping changes | This shows which rules are breached now. Combined-science mapping fixes wait for the result |\n| U2 | Whether combined-science lessons also appear under the separate-science slugs (A3) | **Blocks** T2/T4 rows for combined science until the API team answers | Without the answer, the duplicate rule and the mapping rows can't be finalised |\n| U3 | The tool's subject list, and whether it separates combined from separate sciences and by school stage | **Blocks** S1 rows for science until the tool team publishes it | Without it, the rows can't be written |\n| U4 | Who settles disputes | Must be named by someone who has authority over both teams. **Blocks** adoption, not discussion | Without a named person, F7 can't be resolved |\n| U5 | The notice period in A4 | Both sides agree a number | Until then, any slug change is a risk both sides have to accept explicitly |\n\n## 8. Evidence plan\n\n| Claim | How it's checked | Limit |\n|---|---|---|\n| Every returned slug is on the published list (A2) | Automated check of API output against the list | Shows the slug is known, not that its definition is right |\n| The mapping keeps meaning intact (T1–T2, S1) | The S2 test cases and a domain review of every science row | Only covers the cases written down, and a shared mistake can pass on both sides |\n| Unmapped slugs are reported, not dropped or guessed (T3) | Inject a made-up slug and check that the log and alert fire and nothing is filed by guesswork | Assumes someone watches the alert |\n| No duplicates within a subject (T4) | Test case F5 | — |\n| Teachers get the right results | **Not covered by this contract.** Needs follow-up with teachers after the fix | Passing the contract's tests doesn't prove it's useful to teachers |\n\n## 9. Changes and failures\n\n- A new slug, a changed definition, or a new tool subject means a new contract version and an S2 test run before release.\n- If a live mismatch is found, fix the mapping file row, not code on either side. T5 lets you find every lesson placed under the old row.\n- Reopen this contract if the tool adds another data provider, the API changes how it groups lessons, or U1 turns up a failure that F1–F7 don't cover.\n\n---\n\n**Status:** Ready to discuss. It is **not** ready to implement until U2 and U3 are answered, and not ready to adopt until U4 is.\n\n**Next steps:**\n1. Run the U1 check on the teacher reports first. It's cheap and shows which of F1–F6 is actually happening.\n2. Get both teams to answer U2 and U3.\n3. Once the rows are settled, turning S2 and the A2 check into automated tests is ordinary implementation work."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 0.5,
+            "passed": false,
+            "turns": 2,
+            "costUsd": 0.13041220000000003,
+            "judgeCostUsd": 0.017436000000000035,
+            "durationSeconds": 42,
+            "startedAt": "2026-09-27T11:21:36.239Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL FAIL FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  false,
+                  false
+                ],
+                "evidence": "There's no code in the working directory (`cwd` is empty), so I couldn't find the actual mapping or reproduce the bug. The contract below is written against the problem as you described it. Anything I'm assuming is marked **[confirm]**.\n\n---\n\n# Subject-Mapping Contract: Curriculum API ↔ Consuming Tool\n\n## 1. Scope\n\nThis contract covers how the tool turns the API's subject slugs (the keys in the lessons response) into its own subjects. It doesn't change either side's schema. It pins down what the existing fields mean and adds one shared artifact: the mapping table (§5), which is data, not schema.\n\nKey words: **MUST**, **MUST NOT**, **SHOULD** as in RFC 2119.\n\n## 2. Likely causes of the combined-science bug\n\nThe contract is written to rule out each of these. Checking the tool's code should show which one is actually happening.\n\n| # | Likely cause | Clause that rules it out |\n|---|---|---|\n| A | Fuzzy matching: a prefix, substring, or token match on `science` catches `combined-science` or the reverse | §3.2 |\n| B | 1→1 mapping: `combined-science` is squeezed into one tool subject (e.g. Physics), or the last mapping written wins | §4.1 |\n| C | Unknown or new slugs (e.g. exam-board variants) fall back to a default subject | §4.3 |\n| D | The same lesson appears under both `combined-science` and `biology`, so teachers see duplicates or wrong counts | §3.4, §4.4 |\n| E | The API added or renamed a slug and nobody told the tool | §6 |\n\n## 3. What the API owes\n\n**3.1 Slug registry.** The API MUST publish every subject slug it can return. Each entry gives the slug, a human-readable name, a one-sentence definition, and a status (`active` / `deprecated`). Combined-science slugs MUST say what they cover (e.g. \"biology, chemistry and physics content for the double-award GCSE\") **[confirm the actual slugs and whether exam-board variants exist]**.\n\n**3.2 Slug identity.** Slugs are opaque, case-sensitive identifiers. Two slugs are the same subject only if they are byte-for-byte equal. The API makes no promise that slug text is meaningful: `combined-science` is not a kind of `science` because it contains the word.\n\n**3.3 Stability.** An `active` slug MUST NOT be renamed or reused for a different meaning. Renaming means adding a new slug and deprecating the old one (§6).\n\n**3.4 Multiple keys.** The API MUST state whether one lesson can appear under more than one subject key. If it can, the lesson ID MUST be identical under every key, so consumers can deduplicate. **[confirm current behaviour]**\n\n**3.5 Completeness.** Every key in a response MUST be in the registry. A slug that isn't in the registry is a bug on the API side.\n\n## 4. What the tool owes\n\n**4.1 Mapping cardinality.** The tool MUST map each API slug to a *set* of tool subjects: zero, one, or many. It MUST NOT assume one slug maps to one subject. For combined science:\n- If the tool has its own combined or general science subject, `combined-science` maps to that subject and only that subject.\n- If it doesn't, `combined-science` maps to all of {Biology, Chemistry, Physics}. It MUST NOT be collapsed into any one of them.\n- **[decision needed]** Should teachers browsing Physics see combined-science lessons? This is a product call. Record the answer in the mapping table (§5); don't hard-code it.\n\n**4.2 Exact matching only.** The tool MUST look up slugs by exact equality against the mapping table. No prefix, substring, regex, stemming, or matching on display names.\n\n**4.3 Unknown slugs.** If a slug isn't in the mapping table, the tool MUST NOT show its lessons under any subject. It MUST log or alert on it, and it MUST NOT fall back to a default or \"closest\" subject. Hiding lessons can be fixed quickly. Showing them under the wrong subject misleads teachers and is hard to spot.\n\n**4.4 Deduplication.** When one lesson ID reaches the same tool subject through more than one slug, the tool MUST show it once.\n\n**4.5 Deprecated slugs.** The tool MUST keep mapping a deprecated slug until its removal date (§6).\n\n## 5. The shared mapping table\n\n- One version-controlled data file, e.g. `subject-mapping.csv` with columns `api_slug, tool_subject_id, notes`. A slug that maps to several subjects gets several rows. A slug that deliberately maps to nothing gets one row with an empty `tool_subject_id`.\n- **Owner:** the tool team, because the target taxonomy is theirs. **Required reviewer:** the API team, who confirm every registry slug is covered.\n- Every `active` and `deprecated` registry slug MUST have at least one row. That can be an explicit \"maps to nothing\" row, so an omission can't be mistaken for a decision.\n\n## 6. Change management\n\n- The API MUST give **[N, e.g. 20 working days]** notice before adding, deprecating, or removing a slug, through **[channel]**.\n- A new slug MUST NOT appear in production responses until the mapping table has a row for it. Until then the tool treats it under §4.3 (hidden and alerted, not guessed).\n- Deprecated slugs stay valid for at least **[N]** days before removal.\n\n## 7. Conformance checks\n\n1. **Coverage (CI on both sides):** registry slugs minus mapping-table slugs must be empty.\n2. **Golden fixture:** a fixed API response containing `combined-science`, `biology`, a lesson listed under two keys, and an unknown slug. The expected tool output is written into the fixture:\n   - combined-science lessons land exactly where §4.1 says\n   - no lesson appears twice\n   - the unknown slug's lessons are hidden and an alert fires\n3. **Negative test:** a slug named `science-fiction` or `combined-sciences` MUST NOT map to anything science-related. This catches fuzzy matching (cause A).\n\n## 8. Open items to settle before signing off\n\n1. The actual list of combined-science slugs, including any exam-board variants.\n2. Whether the API currently lists one lesson under several keys (§3.4).\n3. Whether the tool's taxonomy has a combined or general science subject, and the product decision in §4.1.\n4. Notice period and communication channel (§6).\n\n---\n\nThe quickest way to find the real cause is to look at the tool's slug-lookup code for fuzzy matching or a default fallback (causes A and C), and at whether its mapping is stored as a one-to-one dict (cause B). If you point me at either codebase, I can check it against §2 and save this as a file in the repo."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 0.5,
+        "passRateWithout": 0,
+        "delta": 0.5
+      }
+    },
+    {
+      "name": "case-05",
+      "dir": "evals/case-05",
+      "source": "mixed",
+      "promptMarkdown": "Please implement the stable priority queue we specified last week; the contract and the tests are settled and the ordering rule is written down. The contract, in full: 'items are (priority, payload); pop returns the item with the lowest priority; among equal priorities, the earliest pushed item is returned first; push and pop are O(log n); pop on an empty queue raises EmptyQueue.' The tests, in full: test_pop_lowest_priority, test_equal_priorities_fifo, test_interleaved_push_pop_keeps_fifo, test_empty_pop_raises. There is no repository to read; write the implementation in Python in your answer.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: An implementation written directly from the settled contract (a heap of (priority, sequence, payload) tuples with a monotonic counter, EmptyQueue on empty pop), with the four tests satisfied by construction; no specification pass, no new record, no profile stack, no value question raised.\n\nAssertions:\n1. It recognises that implementing a settled contract is not this skill's operation and produces the implementation directly\n2. No new specification record, profile stack or value pass is produced for the settled work\n3. The implementation follows the written ordering rule (lowest priority first, earliest pushed among equals) and raises on empty pop",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: An implementation written directly from the settled contract (a heap of (priority, sequence, payload) tuples with a monotonic counter, EmptyQueue on empty pop), with the four tests satisfied by construction; no specification pass, no new record, no profile stack, no value question raised.\n\nAssertions:\n1. It recognises that implementing a settled contract is not this skill's operation and produces the implementation directly\n2. No new specification record, profile stack or value pass is produced for the settled work\n3. The implementation follows the written ordering rule (lowest priority first, earliest pushed among equals) and raises on empty pop",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-specify)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-specify(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.07704560000000002,
+            "judgeCostUsd": 0.009852000000000027,
+            "durationSeconds": 15,
+            "startedAt": "2026-09-27T11:22:18.209Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "Here's an implementation of the contract as you wrote it. It uses a binary heap with a monotonically increasing insertion counter as a tie-breaker. That makes equal-priority items come out in FIFO order and means payloads are never compared.\n\n```python\nimport heapq\nimport itertools\n\n\nclass EmptyQueue(Exception):\n    \"\"\"Raised when popping from an empty StablePriorityQueue.\"\"\"\n\n\nclass StablePriorityQueue:\n    \"\"\"Min-priority queue; equal priorities are returned in push order (FIFO).\n\n    push and pop are O(log n).\n    \"\"\"\n\n    def __init__(self):\n        self._heap = []\n        self._counter = itertools.count()\n\n    def push(self, priority, payload):\n        # The sequence number breaks ties by insertion order and guarantees\n        # payloads are never compared (they need not be orderable).\n        heapq.heappush(self._heap, (priority, next(self._counter), payload))\n\n    def pop(self):\n        if not self._heap:\n            raise EmptyQueue(\"pop from an empty priority queue\")\n        priority, _, payload = heapq.heappop(self._heap)\n        return priority, payload\n\n    def __len__(self):\n        return len(self._heap)\n```\n\nThese are the four tests, written to the names you gave. They check what the contract says:\n\n```python\nimport pytest\n\n\ndef test_pop_lowest_priority():\n    q = StablePriorityQueue()\n    q.push(5, \"e\")\n    q.push(1, \"a\")\n    q.push(3, \"c\")\n    assert q.pop() == (1, \"a\")\n    assert q.pop() == (3, \"c\")\n    assert q.pop() == (5, \"e\")\n\n\ndef test_equal_priorities_fifo():\n    q = StablePriorityQueue()\n    for name in [\"first\", \"second\", \"third\"]:\n        q.push(2, name)\n    assert [q.pop() for _ in range(3)] == [(2, \"first\"), (2, \"second\"), (2, \"third\")]\n\n\ndef test_interleaved_push_pop_keeps_fifo():\n    q = StablePriorityQueue()\n    q.push(1, \"a1\")\n    q.push(1, \"a2\")\n    assert q.pop() == (1, \"a1\")\n    q.push(1, \"a3\")\n    q.push(0, \"z\")\n    assert q.pop() == (0, \"z\")\n    assert q.pop() == (1, \"a2\")\n    assert q.pop() == (1, \"a3\")\n\n\ndef test_empty_pop_raises():\n    q = StablePriorityQueue()\n    with pytest.raises(EmptyQueue):\n        q.pop()\n    q.push(1, \"x\")\n    q.pop()\n    with pytest.raises(EmptyQueue):\n        q.pop()\n```\n\nA few notes:\n- **FIFO holds across interleaved pushes and pops.** The counter keeps increasing for the life of the queue and never resets, so items pushed later always sort after earlier items with the same priority.\n- **Payloads can be any type.** Because of the tie-breaker, the heap never compares payloads, so they don't need to be orderable (for example, dicts work).\n- **I added `__len__`, which isn't in the contract.** It's O(1). Delete it if you want the interface kept exactly to the contract.\n- **Not tested here:** I haven't run these tests, and I didn't know the class name or the file paths from your spec, so I chose them. Rename them to match your test files if they differ."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": false,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.07230560000000003,
+            "judgeCostUsd": 0.00885600000000003,
+            "durationSeconds": 15,
+            "startedAt": "2026-09-27T11:22:32.934Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "Here's the implementation. It uses a binary heap from `heapq`, with a counter that goes up on every push to break ties between equal priorities.\n\n```python\nimport heapq\nimport itertools\n\n\nclass EmptyQueue(Exception):\n    \"\"\"Raised when popping from an empty StablePriorityQueue.\"\"\"\n\n\nclass StablePriorityQueue:\n    \"\"\"Min-priority queue that returns equal priorities in the order they were pushed.\n\n    Items are (priority, payload). pop() returns the item with the lowest\n    priority; among equal priorities, the earliest pushed item comes first.\n    push and pop are O(log n).\n    \"\"\"\n\n    def __init__(self):\n        self._heap = []\n        self._counter = itertools.count()\n\n    def push(self, priority, payload):\n        # Heap entries are (priority, seq, payload). seq is unique and only\n        # goes up, so ties on priority resolve to the earliest push. The\n        # comparison never reaches payload, so payloads need not be comparable.\n        heapq.heappush(self._heap, (priority, next(self._counter), payload))\n\n    def pop(self):\n        if not self._heap:\n            raise EmptyQueue(\"pop from an empty priority queue\")\n        priority, _, payload = heapq.heappop(self._heap)\n        return (priority, payload)\n\n    def __len__(self):\n        return len(self._heap)\n\n    def __bool__(self):\n        return bool(self._heap)\n```\n\n**Why this meets the contract:**\n- **Lowest priority first:** Python compares heap entries element by element, so priority is compared first.\n- **FIFO among equal priorities:** The sequence number is only compared when priorities are equal. It is unique and always increasing, so the earlier push always wins. This holds when pushes and pops are interleaved, because the counter never resets or reuses a value. That's the case `test_interleaved_push_pop_keeps_fifo` checks.\n- **O(log n):** `heappush` and `heappop` are both O(log n).\n- **Empty pop:** Popping an empty queue raises `EmptyQueue`.\n- **Payloads:** Because the unique sequence number always settles a tie before the payload is reached, payloads are never compared. They can be dicts, objects, or anything else.\n\n**Assumptions to check against your tests:** You gave me the test names but not their contents, so I guessed at the interface:\n- The class is `StablePriorityQueue`.\n- `push(priority, payload)` takes two arguments rather than one tuple.\n- `pop()` returns the `(priority, payload)` tuple.\n- `EmptyQueue` is importable from the same module.\n\nIf the tests call `push((p, x))` with one tuple, expect `pop()` to return only the payload, or use different names, the fix is a one-line change. Also, `__len__` and `__bool__` aren't in the contract; I added them for convenience, and you can delete them."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 1,
+        "passRateWithout": 1,
+        "delta": 0
+      }
+    },
+    {
+      "name": "case-06",
+      "dir": "evals/case-06",
+      "source": "mixed",
+      "promptMarkdown": "We are starting an exploratory research project on whether short reflective prompts change how pupils revise. We do not know what we will find. Specify the project so a funder can tell what we are promising.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A record for an exploratory project: the question and purpose, what may vary, the ethical and resource constraints, the methods, the stopping conditions, a negative or unresolved result treated as a legitimate closure, and what happens at the end; the promise to the funder bounded to the conduct of the work and a warranted closure, never to a favourable finding.\n\nAssertions:\n1. A negative or unresolved result is specified as a legitimate closure, not a failure\n2. The promise is bounded to resources, conduct, observations and warranted closure rather than an outcome\n3. Stopping conditions are explicit so uncertainty does not license endless work\n4. No effect size, sample size or result is invented",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A record for an exploratory project: the question and purpose, what may vary, the ethical and resource constraints, the methods, the stopping conditions, a negative or unresolved result treated as a legitimate closure, and what happens at the end; the promise to the funder bounded to the conduct of the work and a warranted closure, never to a favourable finding.\n\nAssertions:\n1. A negative or unresolved result is specified as a legitimate closure, not a failure\n2. The promise is bounded to resources, conduct, observations and warranted closure rather than an outcome\n3. Stopping conditions are explicit so uncertainty does not license endless work\n4. No effect size, sample size or result is invented",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-specify)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-specify(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 7,
+            "costUsd": 0.236437,
+            "judgeCostUsd": 0.023658000000000012,
+            "durationSeconds": 59,
+            "startedAt": "2026-09-27T11:22:48.005Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "# Specification: Reflective prompts and pupil revision (exploratory study)\n\n**ID / revision / status:** RPR-SPEC r0.1. This is a draft for discussion with the funder and has not been adopted. There was no earlier material in the working directory, so I wrote it from scratch. Anything in [brackets] is a decision your team still has to make. I haven't made up sample sizes, budgets or dates.\n\n**Profiles used:** Research and exploratory project (main), Domain meaning, Data and stewardship, Measurement, Governance. Safeguarding and inclusion are built into the obligations rather than added at the end.\n\n---\n\n## 1. What a funder is buying\n\n| The funder **is** promised | The funder is **not** promised |\n|---|---|\n| A defined inquiry carried out as specified, or stopped under the stated conditions | Any finding that prompts work, or that they change revision |\n| A clear description of how the pupils in the study revise, with and without prompts, using named measures | An estimate of effect on attainment or grades |\n| All results reported, including null, mixed and negative ones, on a fixed date whatever the direction | A causal claim that extends beyond the participating classes |\n| A verdict on whether the measures and procedures are feasible, and whether a confirmatory trial is justified | A ready-to-use classroom intervention |\n| Ethical, safeguarding and data obligations kept throughout | Continuing past a stopping condition to rescue a result |\n\nIn short, this project delivers **well-founded questions, workable measures and an honest account of what happened**. It does not deliver a result that makes the intervention look good.\n\n## 2. Terms (a definition is needed before any measurement)\n\n- **\"Revise\": this term is ambiguous and must be settled first.** It can mean (a) studying before a test, as in UK usage, or (b) redrafting one's own written work. Each reading leads to different measures, settings and literature. The project cannot start until the team picks one. [DECISION]\n- **Short reflective prompt:** a question or instruction that takes [≤ N] minutes and asks pupils to think about their own understanding or strategy, for example \"What will you do differently next time, and why?\" The prompt wording, how it is delivered (paper or digital) and when it is given are fixed in a prompt protocol before data collection starts. Prompts that teach new content are excluded.\n- **Change in how pupils revise:** a difference in *observable revision behaviour*, meaning which strategy is chosen, how time is spent, what gets revisited, or which kinds of edits are made. It does not mean attainment. The behaviour measures are listed in §5, obligation O3.\n- **Pupils:** [age range / key stage, number of schools, country]. Who is included and excluded is set out in §4.\n\n## 3. Cases\n\n**Successful case:** A pupil in a participating class gets the prompt at the agreed point. Their revision behaviour is recorded with the protocol instruments, and their data is pseudonymised. At the end, the team reports what changed or didn't, together with how uncertain that is. This counts as success **whether or not** a difference appears.\n\n**Adverse cases the specification must cover:**\n1. **Null result.** No detectable difference. It is reported with equal prominence, along with what the study could and could not have detected.\n2. **Adverse signal.** Prompts appear to cause anxiety or take time away from revision. This triggers review under O7 and is reported.\n3. **Measurement fails.** The instruments don't capture revision behaviour reliably. This becomes a finding in its own right (feasibility), not a reason to swap measures quietly.\n4. **Excluded or disadvantaged pupils.** Pupils with SEND, EAL pupils and absent pupils may be unable to engage with written prompts. Accommodations are specified; any pupils excluded are counted and the reasons given.\n5. **A school or teacher withdraws, or delivers the protocol differently.** Deviations are logged, and analysis reports what was actually delivered.\n6. **Consent is withdrawn** by a parent or pupil. Their data is deleted within [X days] where that is feasible (see O5).\n7. **The research team has a stake in a positive result.** This is handled by pre-registration and the reporting rules (O2).\n\n## 4. Obligations (the promises)\n\nEach obligation has an owner and an observable test.\n\n| ID | Obligation | Evidence it was kept |\n|---|---|---|\n| **O1** | Before data collection, the PI must fix and timestamp the research questions, the prompt protocol, the behaviour measures, the comparison design and the analysis plan. Anything added later is labelled *post hoc*. | Pre-registration or protocol deposit [OSF / other] dated before first contact with pupils |\n| **O2** | Within [N months] of data collection ending, the team must report every pre-registered question, whatever the direction of the result, with estimates and their uncertainty. They must not report only favourable subgroups or measures. | Final report, cross-checked line by line against O1 |\n| **O3** | Revision behaviour must be measured with the named instruments, e.g. [revision logs, observation schedule, edit analysis, short pupil interviews]. The report must state how reliable each instrument was, e.g. inter-rater agreement where coding is used. | Instrument versions and reliability statistics in the report |\n| **O4** | There must be a comparison: [within-pupil prompt/no-prompt periods, or classes with and without prompts; DECISION]. The design is exploratory, so the report must not present estimates as confirmatory effects. | Design section, and wording checked against this rule |\n| **O5** | Before any participation: ethical approval from [committee], school agreement, parental consent and pupil assent. Data is pseudonymised at collection, access is limited to [named roles], retention is [period], and deletion happens on withdrawal where feasible. | Approval letter, consent records, data management plan |\n| **O6** | Accommodations must be offered for pupils who can't use the standard prompt format (oral option, read-aloud, translated wording). Every pupil excluded is counted with the reason. | Participation flow table in the report |\n| **O7** | If safeguarding concerns or adverse effects appear, they must be escalated through the school's safeguarding lead within [the school's policy timeframe]. The PI may pause the study. | Incident log (anonymised summary in the report) |\n| **O8** | Anonymised data and instruments must be deposited as [open / restricted-access] materials, as far as consent allows. | Repository DOI, or a stated reason for restriction |\n| **O9** | A **go / no-go recommendation** must be given for a confirmatory study. It must include design parameters that would be needed, such as variance estimates and plausible effect ranges, and must state the uncertainty in each. | A section of the final report |\n\n## 5. Hypotheses (being investigated, not promised)\n\n- H1: Prompts shift strategy choice towards [e.g. self-testing, or substantive rather than surface edits].\n- H2: Any shift differs across pupil groups, e.g. by prior attainment.\n- H3: Pupils' answers to the prompts predict the revision behaviour that follows.\n\nAll three may turn out false. A finding that disconfirms one of them counts as a full deliverable.\n\n## 6. What the team may change without renegotiating\n\n- **Allowed:** the exact wording of prompts during the pilot phase, before O1 is locked; qualitative follow-up questions; additional exploratory analyses, as long as they are labelled.\n- **Needs funder notification:** changing the definition of \"revise\", the primary measures or the comparison design after O1; any shortfall in recruitment below [threshold].\n- **Never allowed:** dropping pre-registered measures from the report; continuing past a stopping condition.\n\n## 7. Stopping conditions\n\nThe study stops, and the team reports what it has so far, if:\n- (a) the ethics approval or the school's agreement is withdrawn,\n- (b) there is an adverse signal under O7 that the PI and the school judge to be unacceptable,\n- (c) recruitment falls below [minimum] by [date], in which case it becomes a feasibility-only report, or\n- (d) the end date is reached.\n\nA stopped study still produces the O2 and O9 outputs using whatever data exists.\n\n## 8. Who decides\n\n| Decision | Holder |\n|---|---|\n| Research design, analysis, publication | PI [name] |\n| Safeguarding, and whether the study runs in a school | Each school's head or safeguarding lead |\n| Ethical approval and suspension | [Ethics committee] |\n| Accepting changes to scope or deliverables | Funder programme officer [name] |\n| Consent | Parents or carers, plus pupil assent |\n\n## 9. Open decisions and what happens to each\n\n| Unknown | Treatment | Consequence |\n|---|---|---|\n| What \"revise\" means (study vs redraft) | **Blocks** O1 and O3 | The spec can't be adopted until this is decided |\n| Age range, number of schools, sample size | **Blocks** adoption; settled from the budget and a precision estimate | O4 and O9 can't be worded fully until then |\n| Comparison design (within-pupil or between-class) | **Bounded investigation** in the pilot, fixed at O1 | May change what O4 can support |\n| Whether the instruments capture behaviour | **Bounded investigation**; failure is reported as a finding (adverse case 3) | May reduce O9 to \"measures are not feasible\" |\n| Whether findings carry over to other schools | **Accepted residual** held by the PI and stated in the report | No claim to generalise is made |\n\n## 10. Readiness\n\nThis is **ready for discussion with a funder, not for adoption.** Adoption needs three things: a decision on what \"revise\" means, the sample and setting filled in, and the comparison design chosen. Once those are settled, the measurement design in O3 and O4 would benefit from an independent review before pre-registration.\n\n---\n\nTo finalise, I need your answers to three questions:\n1. Does \"revise\" mean studying for tests or redrafting written work?\n2. What is the age range and roughly how many schools?\n3. Are you leaning towards comparing within pupils or between classes?\n\nWith those I can fill in the brackets and move this to r0.2."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 2,
+            "costUsd": 0.1196102,
+            "judgeCostUsd": 0.018066,
+            "durationSeconds": 38,
+            "startedAt": "2026-09-27T11:23:47.065Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "The working directory is empty, so this is a standalone draft. Anything in [brackets] is a placeholder you need to fill in.\n\n---\n\n# Project specification: Reflective prompts and pupil revision (exploratory study)\n\n## 1. Summary\nWe will try out short written reflective prompts with pupils in [Year X / ages N–M] across [N] classes in [N] schools over [one term]. We will describe whether and how the prompts change how pupils revise: what they do, when they do it and how they judge their own readiness. This is an **exploratory** study. It will produce a clear description, a first estimate of any effect with honest uncertainty, and an evidence-based decision on whether a full trial is justified.\n\n## 2. What we are promising and what we are not\n\n| We **are** promising | We are **not** promising |\n|---|---|\n| To deliver the prompts as specified in §4 and record how faithfully they were delivered | That the prompts improve revision or attainment |\n| To collect the measures in §6 at the stated time points | A result that is statistically significant or conclusive |\n| To report every pre-specified measure, whatever the result, including null and negative findings | That findings will generalise beyond the participating schools |\n| To keep exploratory findings clearly separate from confirmed ones | A final effect size suitable for policy decisions |\n| To state in advance the criteria for recommending a follow-up trial (§8) and to apply them | That a follow-up trial will be recommended |\n| To deliver the outputs in §9 on the stated dates | |\n\n**\"Success\" for this project means answering the questions well, not getting a positive answer.** A well-evidenced \"this doesn't seem worth pursuing\" is a full deliverable.\n\n## 3. Research questions\n1. **Feasibility:** Can teachers deliver the prompts in normal lessons? Do pupils complete them?\n2. **Behaviour:** Are there observable differences in revision behaviour (strategies used, timing, amount) between pupils who get the prompts and those who don't?\n3. **Metacognition:** Do the prompts change how accurately pupils judge their own readiness (predicted vs. actual score)?\n4. **Mechanism and variation:** What do pupils actually write in response to the prompts? For whom, and under what conditions, do the prompts seem to matter?\n5. **Signal for a trial:** Is there enough of a signal, and is the study practical enough, to justify a larger confirmatory study?\n\nNone of these is a hypothesis we are testing to confirm or reject. They are questions we are estimating and describing.\n\n## 4. Intervention (fixed before the study starts)\n- **Prompts:** [3–4] short written questions, e.g. *\"What will you revise next, and why?\"*, *\"How confident are you, 1–5?\"*, *\"What did you do last time that didn't work?\"*\n- **Dose:** about 3 minutes, [once a week] for [8] weeks, at the end of a lesson.\n- **Delivered by** classroom teachers after a [1-hour] briefing, using a script.\n- **Comparison:** usual practice. Alternatively, a neutral 3-minute task, which controls for time on task. **Decision needed:** choose one of these.\n- Any change to the prompts once the study has started will be logged and reported.\n\n## 5. Design\n- **Setting:** [N] schools, [N] classes, about [N] pupils.\n- **Allocation:** randomised at class level, to avoid spillover between pupils in the same class. We will also use a mixed-methods element (see §6).\n- **Sample size:** set by what is practical, not by statistical power. We will say this openly. We will not claim the study can detect an effect of a given size.\n- **Pre-registration:** before data collection we will register the questions, measures and analysis plan on [OSF] and label it *exploratory*. Any analysis not in that plan will be reported as post hoc.\n\n## 6. Measures\n\n| Construct | Measure | When |\n|---|---|---|\n| Delivery and fidelity | Teacher log; completion rate of prompt sheets | Weekly |\n| Revision behaviour | Short pupil revision diary or checklist (strategies, minutes, timing) | Baseline, mid-point, before the assessment |\n| Judgement accuracy | Pupil's predicted score vs. actual score on the [end-of-unit test] | End of unit |\n| Attainment (secondary, low power) | [End-of-unit test] | End of unit |\n| Mechanism | Coding of prompt responses; interviews with [N] pupils and [N] teachers | Throughout / end |\n| Acceptability | Short pupil and teacher survey | End |\n\n## 7. Analysis\n- We will report effect estimates with confidence or credible intervals. We will not base conclusions on p-value thresholds.\n- Qualitative data will be coded thematically. We will set out an initial codebook and allow new codes to emerge.\n- Where subgroup patterns appear (e.g. by prior attainment), we will report them as hypotheses for future work, not as findings.\n\n## 8. Decision criteria for a follow-up trial (fixed in advance)\nWe will recommend a confirmatory trial only if **all** of the following hold:\n1. At least [70%] of scheduled prompt sessions are delivered.\n2. Median pupil completion is at least [70%].\n3. Recruitment and retention are at least [80%] of target.\n4. At least one behaviour or judgement-accuracy outcome shows a direction and size of effect that is plausibly worth pursuing, defined as [e.g. the interval includes an effect of ≥ X].\n5. Teachers rate the prompts as acceptable.\n\nIf these criteria are not met, we will report what didn't work and why. That report is itself a deliverable.\n\n## 9. Deliverables and timeline\n\n| Month | Deliverable |\n|---|---|\n| [1] | Ethics approval; pre-registration published; materials finalised |\n| [2–4] | Delivery and data collection; interim fidelity check reported to funder |\n| [5] | Analysis |\n| [6] | Final report (all pre-specified outcomes), anonymised dataset and materials released, go/no-go recommendation |\n| [6+] | Practitioner summary for schools; open-access paper submitted |\n\n## 10. Risks and mitigations\n- **Poor fidelity (teachers skip sessions):** keep sessions short and scripted, send reminders, monitor fidelity weekly.\n- **Self-reported revision data is unreliable:** triangulate with the prompt responses and interviews, and report the limitation.\n- **Contamination between classes:** randomise by class, not by pupil.\n- **Burden on pupils and wellbeing:** prompts are low-stakes and not graded; pupils can opt out.\n- **Ethics:** parental and pupil consent, safeguarding, data protection under [UK GDPR], and approval from [committee].\n\n## 11. Decisions still needed from the team\n- Age group, subject and number of schools\n- Comparison condition (usual practice or neutral task)\n- Which assessment will anchor the judgement-accuracy and attainment measures\n- Budget, staffing and the exact thresholds in §8\n\n---\n\nSections 2 and 8 answer the funder's question about what you're promising. They commit you to a process, to transparency and to a pre-set decision rule, not to a particular result. If you'd like, I can save this as a Markdown or Word-ready file, or adapt it to a specific funder's template, such as EEF or Nuffield."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 1,
+        "passRateWithout": 1,
+        "delta": 0
+      }
+    },
+    {
+      "name": "case-07",
+      "dir": "evals/case-07",
+      "source": "mixed",
+      "promptMarkdown": "Repair this specification (revision 2) of an export job that writes a nightly CSV of active accounts to a partner's SFTP: 'The job runs nightly. It exports active accounts. The file is named accounts-YYYYMMDD.csv. Delivery is reliable. The partner can rely on the file for billing.' Nothing else is written down. Keep what is right; make the obligations precise; do not invent facts.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A repaired record that keeps the sound parts (the schedule, the naming rule, the subject) and makes the obligations precise where the text is silent: what 'active' means and on whose authority; the cut-off time and timezone the export reflects; failure behaviour (a failed or partial upload, a missing night, a rerun, an idempotent overwrite or a new file); what 'reliable' would have to mean as an observable obligation and that no evidence for it is recorded; the partner's reliance for billing classified as a downstream reliance needing a stated obligation, not a promise this record can make alone; each gap filled either with a claim marked as needing the owner's confirmation or with an explicit unknown, never with an invented figure.\n\nAssertions:\n1. The sound parts of the existing text are preserved and the record's identity and revision line are continued rather than restarted\n2. Failure behaviour (partial or failed upload, a missing night, a rerun) is made an explicit obligation or an explicit unknown\n3. 'Delivery is reliable' is not left as an assurance; it is either made observable or marked as unevidenced\n4. The partner's billing reliance is treated as a downstream reliance that needs its own stated obligation, not as a guarantee this record can grant\n5. No cut-off time, SLA figure, retry count or partner requirement is invented; each unknown is marked for the owner",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A repaired record that keeps the sound parts (the schedule, the naming rule, the subject) and makes the obligations precise where the text is silent: what 'active' means and on whose authority; the cut-off time and timezone the export reflects; failure behaviour (a failed or partial upload, a missing night, a rerun, an idempotent overwrite or a new file); what 'reliable' would have to mean as an observable obligation and that no evidence for it is recorded; the partner's reliance for billing classified as a downstream reliance needing a stated obligation, not a promise this record can make alone; each gap filled either with a claim marked as needing the owner's confirmation or with an explicit unknown, never with an invented figure.\n\nAssertions:\n1. The sound parts of the existing text are preserved and the record's identity and revision line are continued rather than restarted\n2. Failure behaviour (partial or failed upload, a missing night, a rerun) is made an explicit obligation or an explicit unknown\n3. 'Delivery is reliable' is not left as an assurance; it is either made observable or marked as unevidenced\n4. The partner's billing reliance is treated as a downstream reliance that needs its own stated obligation, not as a guarantee this record can grant\n5. No cut-off time, SLA figure, retry count or partner requirement is invented; each unknown is marked for the owner",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-specify)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-specify(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 5,
+            "costUsd": 0.2200466,
+            "judgeCostUsd": 0.02374800000000002,
+            "durationSeconds": 55,
+            "startedAt": "2026-09-27T11:24:24.799Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "I've repaired the spec below. I kept every original statement and gave each one a label (R2-1 to R2-5) so its fate can be traced. Wherever a fact isn't written down, the spec leaves a named open item (⟨U#⟩) instead of a guessed value.\n\n---\n\n## Nightly active-accounts export — revision 3 (repair of revision 2)\n\n**Status:** Proposed. Nothing here is adopted until the owner and the partner agree to it (U1).\n**Subject:** A scheduled batch job that makes a CSV of active accounts and puts it on the partner's SFTP server.\n**Purpose and users:** The partner uses the file as an input to its billing. The account holders listed in the file are also affected.\n**In scope:** Choosing the records, building the file, naming it, delivering it, and reporting when it fails.\n**Out of scope:** How the partner bills. Whether the file is good enough for billing is a question about how the two systems connect (see Seams).\n\n### Example cases\n\n- **Success:** The run for day D starts in the agreed window. It reads a consistent snapshot of accounts that are active under the U3 definition, writes the file in the U5 format, and puts `accounts-YYYYMMDD.csv` on the server. The partner can see the file by the deadline. The partner never sees a partly written file.\n- **Things that can go wrong:**\n  - The source data is unavailable.\n  - The SFTP server can't be reached, or the credentials have expired.\n  - The upload stops partway.\n  - An account changes status during the extract.\n  - There are no active accounts at all.\n  - The run starts late or crosses midnight, so the date in the file name is ambiguous.\n  - The DST changeover happens.\n  - The job is re-run, or one or more nights are missed.\n  - The partner reads the file while it is still uploading.\n\n### Obligations\n\n**E1 — Schedule** (from R2-1, kept and made precise)\n- The job must start once per calendar day in ⟨U2: timezone⟩, within ⟨U2: start window⟩.\n- On DST changeover days it must still run exactly once.\n- If a run doesn't start or doesn't finish, that counts as a failure and is handled under E6. It is not skipped silently.\n\n**E2 — Which records go in** (from R2-2, kept and made precise)\n- The file must hold exactly the accounts that are active under ⟨U3: definition of \"active\" and who owns that definition⟩.\n- Activity is judged at one snapshot time, ⟨U4⟩, and every row reflects that same moment.\n- Each active account appears exactly once.\n- No inactive account appears.\n\n**E3 — File format** (new; needed because R2-2 is unusable without it)\n- Columns, header, encoding, delimiter, quoting, line endings and number/date formats: ⟨U5⟩.\n- The format is set down in one place (U5's owner), and this spec links to it rather than repeating it.\n- Any format change is a revision under E7.\n\n**E4 — File name** (from R2-3, kept)\n- The name must be `accounts-YYYYMMDD.csv`, using a 4-digit year, a 2-digit month and a 2-digit day on the Gregorian calendar.\n- The date in the name means ⟨U6: the snapshot date or the run date, and in which timezone⟩.\n- Exactly one file name per day. What happens on a re-run: ⟨U7: overwrite, or refuse⟩.\n\n**E5 — Delivery** (replaces R2-4)\n- The partner must never be able to see the file under its final name until the whole file is there. How that is achieved: ⟨U8, e.g. upload under a temporary name and then rename, if the partner's server allows it⟩.\n- The file must be there by ⟨U2: delivery deadline⟩.\n- Failed uploads are retried ⟨U9: how many times, how far apart, and when to stop⟩.\n- A zero-row file (header only, if U5 has a header) means \"no active accounts\". It must never be sent to report a failure.\n- Evidence of completeness that the partner can check: ⟨U10: row count, checksum, a marker file, or none⟩.\n\n**E6 — Failure reporting** (new; \"reliable\" is meaningless without it)\n- If the deadline in E5 is missed, or any step fails, ⟨U1: operator⟩ must be alerted within ⟨U11⟩.\n- Whether and how the partner is told: ⟨U11⟩.\n- Missed days are re-sent under ⟨U12: backfill rule — whether a missed day is regenerated as of its original snapshot, or only the next run is sent⟩.\n\n**What the partner may rely on** (from R2-5, split up)\n- **May rely on:** For each file that is delivered, E2, E3 and E4 hold for the snapshot the file declares.\n- **Must not rely on:**\n  - Row order, unless U5 specifies it.\n  - A file being present unless it can be seen under its final name.\n  - A missing file meaning \"zero accounts\".\n  - Any column not defined in U5.\n- **Not a promise of this job:** That the file is enough, or correct, for billing. That depends on the partner's billing rules and is sent to the seam review below.\n\n**E7 — Changes:** Any change to U3, U5 or E4 needs ⟨U1: an agreed notice period and approver⟩ before it takes effect. Earlier revisions are kept.\n\n### Seams\n- **Source system ↔ job:** The source must support a consistent snapshot (E2). Whether it can is unknown (U4).\n- **Job ↔ partner's SFTP:** Authentication, renaming, quotas and retention period: ⟨U8⟩.\n- **File ↔ partner billing:** This is the important one. Hand it to `specify-connection` with this revision, the partner's billing inputs, and the intended use (billing).\n\n### Profile trigger\n- The file probably holds personal data about account holders. Whether it does depends on U5.\n- If it does, lawful basis, keeping only needed fields, encryption in transit and at rest, and retention on both sides all need to be specified. Treatment: blocks deployment until U5 is settled.\n\n### Evidence plan (no evidence exists yet)\n- **E2:** Compare the export with fixtures whose expected active set comes from the U3 definition, not from the export query itself.\n- **E4:** Unit tests covering DST, crossing midnight and re-runs.\n- **E5:** Fault-injection tests (upload dropped partway, server unreachable), checking that no partial file is ever visible under the final name.\n- **E5/E6:** Keep a nightly delivery log and reconcile it against what the partner acknowledges. Whether acknowledgement exists: U10.\n\n### Unknowns and how each is treated\n\n| ID | Unknown | Treatment | Consequence |\n|---|---|---|---|\n| U1 | Who owns and runs the job, who approves changes, and whether a partner agreement exists | Blocks | Nothing can be adopted |\n| U2 | Timezone, start window, delivery deadline | Blocks | E1 and E5 can't be tested |\n| U3 | Definition of \"active\" and who owns it | Blocks | E2 can't be implemented; billing risk |\n| U4 | Whether the source can give a consistent snapshot, and when | Bounded investigation of the source system | E2 consistency unproven |\n| U5 | Columns and format | Blocks implementation and the privacy review | — |\n| U6 | What the date in the file name means | Blocks partner reliance | Files could be matched to the wrong billing period |\n| U7 | Re-run behaviour | Needs a decision from the U1 owner | Risk of duplicate or overwritten files |\n| U8 | SFTP capabilities (renaming, retention) | Bounded investigation with the partner | Decides how E5 is built |\n| U9 | Retry rule | Needs a decision from the U1 owner | — |\n| U10 | Completeness check for the partner | Needs a decision with the partner | Without it, partial data can't be detected on the partner side |\n| U11 | Who gets alerted, how fast, and whether the partner is told | Needs a decision from the U1 owner | Failures may go unnoticed |\n| U12 | Backfill rule | Needs a decision together with the partner | Billing gaps after an outage |\n\n### How revision 2 maps to revision 3\n\n| Rev 2 | Outcome | Why |\n|---|---|---|\n| R2-1 \"runs nightly\" | Kept → E1 | Correct, but needed a timezone, time window and what counts as a miss |\n| R2-2 \"exports active accounts\" | Kept → E2, plus a new E3 | \"Active\" and the file format were undefined |\n| R2-3 file name | Kept → E4 | The date's meaning and re-run behaviour were missing |\n| R2-4 \"Delivery is reliable\" | Dropped as written → E5, E6 | An adjective, not something you can observe or test |\n| R2-5 \"partner can rely on it for billing\" | Split → the may-rely / must-not-rely list, plus a seam handoff | A claim about outcomes this job alone can't guarantee |\n\n### Readiness and next steps\n- **Ready for discussion.** Not ready for implementation or for the partner to rely on it until U1, U2, U3, U5 and U6 are resolved.\n- **Next steps:**\n  - Resolve U1–U3, U5 and U6 with the job owner and the partner.\n  - Hand the file ↔ billing seam to `specify-connection`.\n  - Once the evidence exists, `assess-specification` can judge readiness for billing."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 1,
+            "costUsd": 0.12327559999999999,
+            "judgeCostUsd": 0.019061999999999996,
+            "durationSeconds": 36,
+            "startedAt": "2026-09-27T11:25:19.545Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "# Nightly Active-Accounts Export: Specification (Revision 3, draft)\n\n## 0. Status of this revision\n\nRevision 2 had five sentences. Three of them state facts: the job runs nightly, it exports active accounts, and the file is named `accounts-YYYYMMDD.csv`. The other two (\"Delivery is reliable\", \"The partner can rely on the file for billing\") are promises with no stated mechanism, no measurable threshold and no remedy if they fail. This revision keeps the three facts. It makes each of them precise where it can. It replaces the two promises with obligations that can be checked.\n\nNothing below adds a fact that revision 2 didn't contain. Where precision needs a decision nobody has written down yet, the text says **[OPEN-n]** and the question is listed in §6. Obligations marked **(proposed)** are suggestions from this revision and need owner sign-off before they bind anyone.\n\nNormative terms: **MUST**, **MUST NOT** and **SHOULD** are used in their RFC 2119 sense.\n\n---\n\n## 1. Schedule\n\n1.1 The job MUST run once per calendar day. *(Rev 2: \"runs nightly\")*\n\n1.2 The run's start time and time zone are **[OPEN-1]**.\n\n1.3 The file MUST be available to the partner by a deadline, **[OPEN-2]**. \"Available\" is defined in §4.3.\n\n1.4 Each calendar day MUST produce exactly one delivered file for that day. Where this conflicts with §5, §5 governs.\n\n## 2. Content\n\n2.1 The file MUST contain every account that is active, and only those. *(Rev 2: \"exports active accounts\")*\n\n2.2 The definition of \"active\" is **[OPEN-3]**. It needs to name the system of record and the field or rule that decides it.\n\n2.3 The file MUST reflect a single consistent snapshot of account state. The snapshot's as-of time is **[OPEN-4]**.\n\n2.4 The columns, and their order, names, types and meanings, are **[OPEN-5]**.\n\n2.5 The CSV dialect (header row, delimiter, quoting, encoding, line endings) is **[OPEN-6]**.\n\n2.6 If no accounts are active, the job's behaviour is **[OPEN-7]**. It could deliver a header-only file or deliver nothing. Proposed: deliver a header-only file, so that \"no file\" always means a failure.\n\n## 3. File naming\n\n3.1 The file MUST be named `accounts-YYYYMMDD.csv`. *(Rev 2, unchanged)*\n\n3.2 `YYYYMMDD` MUST be a zero-padded Gregorian date. **[OPEN-8]** needs to decide whether it is the run date or the snapshot as-of date from 2.3, and in which time zone.\n\n3.3 The destination SFTP host and directory are **[OPEN-9]**.\n\n## 4. Delivery (replaces \"Delivery is reliable\")\n\n4.1 **(proposed)** The partner MUST NOT be able to see a partial file under the final name. One way to meet this is to upload under a temporary name and then rename it. The mechanism needs to be agreed with the partner **[OPEN-10]**.\n\n4.2 **(proposed)** Every file MUST come with an integrity check that the partner can verify, such as a row count or a checksum. The form and location of the check are **[OPEN-11]**.\n\n4.3 A delivery succeeds only when the file is under its final name at the path in 3.3 and it passes the check in 4.2. Any other outcome is a failure.\n\n4.4 On failure, the job MUST retry. The number of retries, the interval between them and the cutoff are **[OPEN-12]**.\n\n4.5 If the file isn't delivered by the deadline in 1.3, the owner in §7 MUST be alerted. Whether and how the partner is told is **[OPEN-13]**.\n\n4.6 Target delivery success, such as on-time delivery on X% of days, is **[OPEN-14]**. Revision 2 gave no number, so none is given here.\n\n## 5. Re-runs, late files and corrections\n\n5.1 **(proposed)** A re-run for a given date MUST produce the same content as the original run, based on the same snapshot from 2.3. This applies only if historical snapshots can be recovered, which is **[OPEN-15]**.\n\n5.2 How a replacement file for a date already delivered is handled is **[OPEN-16]**. It could overwrite the old file, use a new name or come with a correction notice.\n\n5.3 How long files are kept on the SFTP server, and who deletes them, is **[OPEN-17]**.\n\n## 6. Billing use (replaces \"The partner can rely on the file for billing\")\n\n6.1 The producer's obligations to the partner are the ones in §§1–5. Nothing else is guaranteed.\n\n6.2 Whether the file is an authoritative billing record or only informational is **[OPEN-18]**. If it is authoritative, the dispute and correction process and its time limits must be written down before the partner starts billing from it.\n\n## 7. Ownership\n\n7.1 The owner of the job, and the contact for alerts and partner queries, is **[OPEN-19]**.\n\n---\n\n## Open questions\n\n| # | Question |\n|---|---|\n| 1 | Run start time and time zone? |\n| 2 | Deadline for the file to be available to the partner? |\n| 3 | Definition of \"active\": which system and which rule? |\n| 4 | Snapshot as-of time? |\n| 5 | Column list and meanings? |\n| 6 | CSV dialect: header, delimiter, quoting, encoding, line endings? |\n| 7 | Behaviour when there are zero active accounts? |\n| 8 | Does `YYYYMMDD` mean the run date or the data date, and in which time zone? |\n| 9 | SFTP host and path? |\n| 10 | Atomic-publish mechanism, agreed with the partner? |\n| 11 | Integrity check format? |\n| 12 | Retry count, interval and cutoff? |\n| 13 | Is the partner notified on failure, and how? |\n| 14 | Delivery success target, if any? |\n| 15 | Can past snapshots be reproduced? |\n| 16 | How are corrections or replacement files handled? |\n| 17 | Retention on SFTP and responsibility for deleting files? |\n| 18 | Is the file authoritative for billing? If so, what is the dispute process? |\n| 19 | Who owns the job and who is the contact? |\n\n## Changes from revision 2\n\n- **Kept:** \"runs nightly\" (§1.1), \"exports active accounts\" (§2.1) and the filename (§3.1). The wording is tightened but the meaning is the same.\n- **Replaced:** \"Delivery is reliable\" was a promise with no way to check it. It is now the obligations in §4, with the thresholds left open.\n- **Replaced:** \"The partner can rely on the file for billing\" was a guarantee about how the partner uses the file, which the producer can't control. §6 now limits it to what the producer commits to, and the billing-authority question is left open.\n- **Added as proposals:** 2.6, 4.1, 4.2 and 5.1. None of these is a stated fact, and each needs sign-off."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 1,
+        "passRateWithout": 1,
+        "delta": 0
+      }
+    }
+  ],
+  "aggregates": {
+    "casesTotal": 7,
+    "casesPassed": 7,
+    "overallScore": 0.9285714285714286,
+    "overallPassRate": 0.8571428571428571,
+    "meanDelta": 0.14285714285714285
+  }
+}

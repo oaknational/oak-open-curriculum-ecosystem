@@ -20,7 +20,7 @@ that primitive.
 [`agent-collaboration.md`](../../../directives/agent-collaboration.md);
 [`active-claims.schema.json`](../../../../agent-tools/src/collaboration-state/schemas/active-claims.schema.json);
 [`closed-claims.schema.json`](../../../../agent-tools/src/collaboration-state/schemas/closed-claims.schema.json);
-[`commit/SKILL.md`](../../../skills/commit/SKILL-CANONICAL.md);
+[`commit/SKILL-CANONICAL.md`](../../../skills/change-custody/commit/SKILL-CANONICAL.md);
 [`register-active-areas-at-session-open.md`](../../../rules/register-active-areas-at-session-open.md);
 `consolidate-docs.md § 7e` (`../../../commands/consolidate-docs.md`);
 [`napkin.md`](../../../memory/active/napkin.md);
@@ -514,8 +514,8 @@ When promoted, update propagation surfaces:
    `.agent/skills/start-right-thorough/shared/start-right-thorough.md`
    — surface open queue entries; register counter-increment steps only if
    that primitive lands.
-8. `.agent/skills/commit/SKILL.md` — add the post-intent / clear-intent
-   protocol.
+8. `.agent/skills/change-custody/commit/SKILL-CANONICAL.md` — add the post-intent /
+   clear-intent protocol.
 9. `.agent/commands/consolidate-docs.md` — extend § 7e with the
    intent-snapshot report.
 

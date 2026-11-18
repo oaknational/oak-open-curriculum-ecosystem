@@ -3,6 +3,7 @@ name: Audit Rule Body When Extending With a New Prohibition
 polarity: pattern
 use_this_when: Adding a new "X is forbidden" / "X must not appear" / "do not Y" clause to an existing rule, ADR, governance doc, or directive
 category: agent
+layer: general
 proven_in: .agent/rules/no-moving-targets-in-permanent-docs.md
 proven_date: 2026-05-06
 barrier:

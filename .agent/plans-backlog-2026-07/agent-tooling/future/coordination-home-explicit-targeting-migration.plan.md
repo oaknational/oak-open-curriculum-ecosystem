@@ -21,7 +21,7 @@ related_doctrine:
   - ".agent/practice-core/decision-records/PDR-055-cli-affordance-set-discipline.md"
   - ".agent/rules/no-machine-local-paths.md"
   - ".agent/rules/comms-all-channels-watcher.md"
-  - ".agent/skills/commit/SKILL-CANONICAL.md"
+  - ".agent/skills/change-custody/commit/SKILL-CANONICAL.md"
 landed_predecessor: "commits b5408291d (B1 consolidation) + c90150ffa (git-resolved home)"
 last_updated: 2026-06-21
 isProject: false

@@ -1,5 +1,5 @@
 ---
-description: Coordination branches live at most 24 hours — day-stamped name at the cut, convergence due at session-open on an overdue branch, converge-and-rotate shape, work products stay in worktrees.
+description: Coordination branches fold at 12:00Z and at the UTC rollover as the guide clock (owner, 2026-09-26); the 24 hours is a rough guide whose actual need varies with how much work the branch is carrying, and a fold on the clock alone, with nothing else happening, is not run (owner, 2026-10-19) — day-stamped name at the cut, converge-and-rotate shape, work products stay in worktrees.
 alwaysApply: false
 ---
 

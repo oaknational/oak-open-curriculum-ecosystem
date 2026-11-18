@@ -1,0 +1,203 @@
+[
+  {
+    "session": "T1-A",
+    "model": "claude-opus-5-5",
+    "first_call_input_tokens": 39335,
+    "reads": [
+      ".agent/rules/never-commit-to-main.md",
+      ".agent/rules/stage-by-explicit-pathspec.md",
+      ".agent/skills/change-custody/commit/SKILL-CANONICAL.md",
+      ".agent/rules/identify-as-agent-under-shared-credentials.md",
+      ".agent/claude-harness-integrations/cloud-environment.md",
+      ".agent/rules/bot-identity-on-third-party-systems.md"
+    ],
+    "skills": [],
+    "greps": 3,
+    "globs": 1,
+    "cost_usd": 0.7740147999999999,
+    "turns": 11,
+    "duration_ms": 52252,
+    "end": "success",
+    "final_answer": "I've read the repo's commit, staging, branch and cloud-hook rules, and here's the draft. I haven't run anything. You didn't say what the README wording fix is, so `<…>` marks the parts you need to fill in.\n\n## Commit message\n\n```text\ndocs(readme): correct wording of <the phrase being fixed>\n\nReplace \"<old wording>\" with \"<new wording>\" in the root README so the\nsentence says what the repository actually does. Wording only, nothing\nelse changes.\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/<session-id>\n```\n\nThis follows the repo's commitlint setup (`@commitlint/config-conventional`, strict mode). The first line must be 100 characters or fewer and start lower-case, with no full stop at the end. When you re-wrap the body, make sure no line begins with a single word and a colon (like `note:`), because commitlint reads that as a footer and rejects the commit.\n\n## Commands\n\n```bash\n# 1. Check where you are\ngit fetch origin\ngit branch --show-current\ngit status --short\n\n# 2. Make a branch first. Commits never go on main; the edit comes along with the switch\ngit switch -c docs/readme-wording-fix\n\n# 3. Run the branch guard, because HUSKY=0 below skips the hook that normally runs it\nbash -c 'GUARD_BRANCH=\"\" GUARD_HINT=\"branch first\" . .husky/refuse-commit-on-main.sh'\n\n# 4. Write the message file in its own step, inside the real git directory\nMSGFILE=\"$(git rev-parse --absolute-git-dir)/COMMIT_MSG_readme-wording-fix\"\ncat > \"$MSGFILE\" <<'EOF'\n<message above>\nEOF\n\n# 5. Check the message the same way the commit-msg hook would\npnpm agent-tools:check-commit-message -F \"$MSGFILE\" && \\\n  pnpm exec tsx agent-tools/src/version-guard/prevent-accidental-major-version.ts \"$MSGFILE\"\n\n# 6. Stage only README.md, after checking the diff and what's already staged\ngit diff -- README.md\ngit add -- README.md\ngit diff --cached --name-only\n\n# 7. Commit by path, with the owner as author (the configured user.* stays the bot committer)\nHUSKY=0 git commit --author=\"<owner name> <owner noreply address>\" -F \"$MSGFILE\" -- README.md\n\n# 8. Scan the outgoing commit for secrets before it leaves the machine (first push of this branch)\ngitleaks detect --redact=100 --source . --log-opts=\"HEAD --not --remotes=origin\"\n\n# 9. Push\nHUSKY=0 git push -u origin docs/readme-wording-fix\n```\n\nThen open a PR right away so CI checks the push. A branch pushed without a PR has nothing checking it.\n\n## Things to check before running this\n\n- **Repo setup isn't finished.** The session-start hook couldn't work out the agent's identity because `agent-tools/dist` hasn't been built. That means the `pnpm agent-tools:*` commands in step 5 won't run until you've run `pnpm install` at the repo root.\n- **Commit author.** In step 7, the author is the owner's GitHub noreply address from the repo's identity setup, not a personal email. I couldn't find the exact value written down in the repo, so I left it as a placeholder.\n- **Shared checkout.** If this is the main shared checkout rather than a separate worktree, the repo also expects you to open a `git:index/head` claim and use the commit-queue steps around steps 6–7, as the commit skill describes. In its own worktree, the path-based commit above is enough.\n- **Batching.** The repo prefers to group small changes into one commit per working session. If more changes are coming, hold this commit and include them."
+  },
+  {
+    "session": "T1-B",
+    "model": "claude-opus-5-5",
+    "first_call_input_tokens": 39593,
+    "reads": [
+      ".agent/skills/start-right-quick/SKILL-CANONICAL.md",
+      ".agent/rules/never-commit-to-main.md",
+      ".agent/rules/stage-by-explicit-pathspec.md",
+      ".agent/skills/change-custody/commit/SKILL-CANONICAL.md",
+      ".agent/rules/identify-as-agent-under-shared-credentials.md",
+      ".git/HEAD",
+      ".agent/claude-harness-integrations/cloud-environment.md",
+      ".agent/rules/bot-identity-on-third-party-systems.md",
+      ".agent/skills/set-up-worktree-lane/SKILL-CANONICAL.md"
+    ],
+    "skills": [],
+    "greps": 4,
+    "globs": 0,
+    "cost_usd": 0.8604186,
+    "turns": 14,
+    "duration_ms": 68129,
+    "end": "success",
+    "final_answer": "Below are the message and the commands. I haven't run anything. I read the start-right workflow plus the commit, branch, staging and bot-identity rules before drafting.\n\n**Repository rules these commands follow:**\n- Never commit on `main`.\n- Stage and commit only `README.md`, named explicitly.\n- In Claude cloud sessions, commit and push with `HUSKY=0`. Because that skips the git hooks, four replacement checks run by hand: the branch guard, the commit-message check, the major-version guard, and a secret scan before the push.\n- The bot is the committer and the owner is the author, passed with `--author` on each commit.\n- Changes land through a draft PR.\n\n## Commit message\n\n```text\ndocs(readme): correct wording in <section name>\n\nFix a one-line wording error in the root README so the sentence reads as\nintended. No behaviour or link changes.\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/<session-id>\n```\n\nThe header is under 100 characters, starts lower-case and has no full stop. No body line starts with a `word:` or `token #ref` shape, which the repo's message checker would reject. Put the real section name in place of `<section name>`.\n\n## Commands\n\n```bash\n# 0. Prerequisite: agent-tools isn't built in this checkout (the session-start hook reported it)\npnpm install\n\n# 1. Ground and branch: one PR per leaf, so cut a fresh branch rather than reusing\n#    the current claude/hermes-agent-brief-a0kjw3 branch\ngit fetch origin\ngit status --short\ngit switch -c docs/readme-wording-fix origin/main\n\n# 2. Make the one-line edit to README.md, then read the diff\ngit diff -- README.md\n\n# 3. Branch guard (replaces the pre-commit hook's check)\nbash -c 'GUARD_BRANCH=\"\" GUARD_HINT=\"branch first\" . .husky/refuse-commit-on-main.sh'\n\n# 4. Write the message file in its own command, inside the real git dir\nMSGFILE=\"$(git rev-parse --absolute-git-dir)/COMMIT_MSG_readme-wording-fix\"\ncat > \"$MSGFILE\" <<'EOF'\ndocs(readme): correct wording in <section name>\n\nFix a one-line wording error in the root README so the sentence reads as\nintended. No behaviour or link changes.\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/<session-id>\nEOF\n\n# 5. Message checks (replace the commit-msg hook), before staging\npnpm agent-tools:check-commit-message -F \"$MSGFILE\"\npnpm exec tsx agent-tools/src/version-guard/prevent-accidental-major-version.ts \"$MSGFILE\"\n\n# 6. Stage by explicit path and read the staged set in full\ngit add -- README.md\ngit diff --cached --name-only\n\n# 7. Commit by pathspec: bot as committer (shared local config), owner as author\nHUSKY=0 git commit --author=\"<owner name> <owner noreply address>\" -F \"$MSGFILE\" -- README.md\n\n# 8. Secret-scan only the outgoing commits (first push, so no remote branch exists yet)\ngitleaks detect --redact=100 --source . --log-opts=\"HEAD --not --remotes=origin\"\n\n# 9. Push, then open the draft PR straight away so the push has a CI gate\nHUSKY=0 git push -u origin docs/readme-wording-fix\ngh pr create --draft --base main --head docs/readme-wording-fix \\\n  --title \"docs(readme): correct wording in <section name>\" \\\n  --body-file <pr-body-file>\n```\n\n**Before running it:**\n- **Exit codes:** run each check on its own and read its exit code directly, not through a pipe. Any non-zero exit stops the sequence.\n- **Author placeholder:** fill in the owner's name and GitHub noreply address yourself. I left them as placeholders.\n- **PR body:** it needs the session's agent-identity marker on its last line. The identity hook couldn't run, so I can't give you the name yet. After step 0, `pnpm agent-tools:agent-identity --platform claude-code --format display` prints it.\n- **Keeping the draft:** leave the PR as a draft until the `run-quality-gates` check passes on its latest commit.\n- **GitHub connection:** the GitHub MCP server failed to connect this session, so step 9 relies on the `gh` CLI, which is set up to work through the proxy."
+  },
+  {
+    "session": "T2-A",
+    "model": "claude-opus-5-5",
+    "first_call_input_tokens": 39324,
+    "reads": [
+      ".agent/rules/review-feedback-defaults-to-triage.md",
+      ".agent/rules/pr-comments-resolve-and-recheck.md",
+      ".agent/directives/principles.md",
+      ".agent/directives/principles.md"
+    ],
+    "skills": [],
+    "greps": 1,
+    "globs": 0,
+    "cost_usd": 0.40882700000000005,
+    "turns": 6,
+    "duration_ms": 31057,
+    "end": "success",
+    "final_answer": "I'd triage the comment as two separate findings. Copilot's review is input to check, not an instruction to follow (`.agent/rules/review-feedback-defaults-to-triage.md:14-16`). I'd verify each part myself before deciding anything.\n\n**1. The rename: check it, and probably accept it.**\n- I'd read the helper and every place it's called. Does the current name actually mislead someone about what it does? If it does, that's a real defect and the rename goes in.\n- A rename covers every occurrence: callers, tests, TSDoc, log keys (`principles.md:357-359`). Leaving an alias for the old name isn't allowed.\n- If the name is merely a matter of taste, I'd only make the change if it's cheaper than writing up why I'm declining. Otherwise I'd decline with a reason (`review-feedback-defaults-to-triage.md:121-124`).\n- The change would go into the next batched push, not a push of its own.\n\n**2. The fallback value: verify the case, but expect to decline.**\n- The repo's principles rule out invented fallbacks: \"don't add fallback options\", \"no fallbacks… no 'just in case' branches\" (`principles.md:103`, `principles.md:360-369`). A default value would hide a missing input instead of failing on it.\n- First I'd work out whether the input can actually be missing at runtime. I'd trace the types and call sites, or write a small reproduction.\n  - **If it can't be missing:** I'd decline, quoting that evidence.\n  - **If it can be missing:** the problem is real, but the fix still isn't a default. The fix is strict validation where the input enters, or a typed error, plus a test that reproduces the gap. A fix only counts once a check guards it (`pr-comments-resolve-and-recheck.md:134-143`).\n- I wouldn't reject it just because \"another layer handles that\". The rule bans that kind of reasoning. The rejection has to rest on a scenario I've verified can't happen.\n\n**3. Closing the thread out:**\n- I'd reply to the thread with both decisions and the evidence for each, and say in the reply that I'm an agent, since the replies post under shared credentials.\n- I'd resolve the thread only once it's settled. If a fix shipped, the reply goes up after I've confirmed the commit is on the remote.\n- After the push, I'd fetch every comment again (review threads, reviews, comments, bots included). Copilot often comments again on the new lines. I wouldn't call the PR ready until a fresh fetch shows nothing unresolved and `mergeStateStatus` is `CLEAN`.\n\nThe GitHub connection failed to connect this session, so I haven't seen the actual comment or code. Once it's reconnected, or with the PR number for `gh`, I can work through this on the real thread."
+  },
+  {
+    "session": "T2-B",
+    "model": "claude-opus-5-5",
+    "first_call_input_tokens": 39579,
+    "reads": [
+      ".agent/skills/start-right-quick/SKILL-CANONICAL.md",
+      ".agent/rules/review-feedback-defaults-to-triage.md",
+      ".agent/rules/pr-comments-resolve-and-recheck.md",
+      ".agent/skills/start-right-quick/shared/start-right.md",
+      ".agent/directives/principles.md",
+      ".agent/directives/principles.md",
+      ".agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md"
+    ],
+    "skills": [],
+    "greps": 4,
+    "globs": 0,
+    "cost_usd": 0.6568244000000001,
+    "turns": 12,
+    "duration_ms": 55709,
+    "end": "success",
+    "final_answer": "I've read the grounding docs and the review-handling rules, and the answer is below.\n\n**Grounding status:** I followed the review-handling path. That covers `start-right-quick`, `review-feedback-defaults-to-triage`, `pr-comments-resolve-and-recheck`, `pr-lifecycle` Phase 4 and `principles.md`. I didn't run the live-state steps (claims, comms, git status), and I didn't register an identity. The identity tool isn't built in this clone (`agent-tools/dist` is missing, so `pnpm install` is needed). The GitHub MCP server also failed to connect, so I haven't seen the PR or the comment. Everything below is how I'd handle it, not a ruling on the real code.\n\nNo-landing session — reason: you asked how I would handle the comment, not for a change. Suggested title: `/rename <display-name> - triage Copilot rename/fallback comment`. The display name can't be worked out until the identity tool is built.\n\n## How I'd handle the comment\n\n**0. Treat it as information.** The repo's rule is that a Copilot comment is something to evaluate, never an order. First I'd pull every comment on the PR with `gh`: review threads with their resolved state, reviews, inline comments and issue comments. That way I'm working from the full list, not just this one comment.\n\n**1. Split it in two.** The comment holds two separate findings, and each gets exactly one outcome: reject, fix, or ticket and close. For each one I set the suggested fix aside and check it against the PR's declared scope first. Then I check whether the underlying observation is actually true.\n\n**2. The rename: decide on the facts.**\n- **Is the current name actually wrong?** The test is the repo's naming rules: name things by why they exist, not how they work, and one concept gets one name. If the name is fine, I reject it with that reason.\n- **The PR introduced the helper and the name really is poor:** fix it in this PR. Renaming costs less than writing the reasoning for leaving it. I'd rename it everywhere: call sites, tests, TSDoc, log keys. No alias left behind for the old name.\n- **The helper predates the PR:** that's a valid point but outside the PR's story. I'd raise a pointer ticket, reply with the ticket reference and resolve the thread.\n\n**3. The fallback: the suggested fix is almost certainly rejected, but the observation gets checked.** `principles.md` rules out fallbacks directly (\"no fallbacks… no 'just in case' branches\"; \"Fail FAST… never silently\"). A default value would hide bad input. I'd still describe a concrete case where the input is missing and check it against the code:\n- **It can't happen** (the types and callers make missing input impossible): reject, citing the type or call path as evidence.\n- **It can happen:** that's a real defect, but the fix is not a default. I'd tighten the type or validate where the data enters, with a clear error. A test that reproduces the missing-input case goes in with the fix, because a real issue only counts as fixed when a check guards it.\n\n**4. Reply and resolve properly.**\n- Each reply says whether its reasoning came from reading the code or from running it.\n- Each reply identifies me as the agent, since the gh credentials are shared.\n- If the outcome is a fix, the reply goes out only after the pushed commit can be read back from the remote.\n- I resolve only that thread, by its id, and then check the count of unresolved threads.\n\n**5. Check again after pushing.** Copilot usually re-reviews, so I'd pull all comments again after any push. I wouldn't call the PR ready until a fresh check right before saying so shows `mergeStateStatus: CLEAN` and no unresolved threads.\n\nA helper function is code, so the rule's batching budget doesn't apply; that's for prose changes. Fixes would still go together in one push, not one push per finding.\n\nIf you share the PR number, I can do this against the real comment once the GitHub connection is fixed or with `gh`."
+  },
+  {
+    "session": "T3-A",
+    "model": "claude-opus-5-5",
+    "first_call_input_tokens": 39313,
+    "reads": [
+      ".agent/rules/new-rule-vs-pdr-clause.md",
+      ".agent/rules/lint-after-edit.md",
+      ".agent/rules/verify-dont-trust.md",
+      ".cursor/rules/lint-after-edit.mdc",
+      ".agent/rules/worktree-residency.md",
+      ".cursor/rules/verify-dont-trust.mdc",
+      ".agents/rules/verify-dont-trust.md"
+    ],
+    "skills": [],
+    "greps": 6,
+    "globs": 0,
+    "cost_usd": 0.7067186000000001,
+    "turns": 14,
+    "duration_ms": 70867,
+    "end": "success",
+    "final_answer": "I'd advise against a standalone rule. The repo's own routing rule points somewhere cheaper. Here is that recommendation, then the full plan in case you still want a new rule.\n\n## Recommendation: add a clause to existing rules\n\n`.agent/rules/new-rule-vs-pdr-clause.md:71-76` says to try a pattern file first, then a clause in an existing rule or PDR, and only then a new rule. Most of what you describe is already written down:\n\n- **`verify-dont-trust.md:42-43`** lists \"file paths and current file contents\" as things to inspect rather than trust.\n- **`worktree-residency.md:19-21`** says an agent not working inside its worktree \"reads and writes worktrees by absolute path and `git -C`\". That is the case where editing the wrong path is most likely: the same file in the primary checkout and in a lane worktree.\n\nThe gap is narrow: nothing says \"re-check the target right before you edit it\". The cheapest fix is one bullet in the **Apply This Before** list in `verify-dont-trust.md` (lines 122-131):\n\n> - writing to any file: the edit target is checked against its absolute path, the checkout it resolves to (`git -C <dir> rev-parse --show-toplevel` and the branch), and a read of its contents this session. An adapter or generated file is never the target when a canonical source exists.\n\nThat rule is already always-on (`classification: core`, and its Cursor adapter has `alwaysApply: true`), so no new adapters or index rows are needed.\n\nTwo more of the repo's own checks argue against a new rule:\n- **\"Could a lower-powered seat comply without recalling this lesson?\"** (`new-rule-vs-pdr-clause.md:110-121`). A reminder fails that test. The real fix would be a PreToolUse hook that refuses an Edit/Write outside the agent's own worktree, or on an adapter file under `.claude/rules/`, `.cursor/rules/` or `.agents/rules/`. That deserves its own ticket.\n- **Scope to the incident** (`:78-96`). If a specific wrong-path edit prompted this, the rule should be scoped to that situation, not written as a general \"always double-check\" rule.\n\n## If you still want a new rule\n\n**Where it goes (4 files plus 1 index row):**\n\n| File | Content |\n|---|---|\n| `.agent/rules/confirm-edit-target-path.md` | The rule itself (below) |\n| `.claude/rules/confirm-edit-target-path.md` | `` Read and follow `.agent/rules/confirm-edit-target-path.md`. `` |\n| `.cursor/rules/confirm-edit-target-path.mdc` | Frontmatter with the same `description` and `alwaysApply: true`, then the same \"Read and follow\" line |\n| `.agents/rules/confirm-edit-target-path.md` | The \"Read and follow\" line only |\n| `RULES_INDEX.md` | Row `` \\| `.agent/rules/confirm-edit-target-path.md` \\| core \\| — \\| `` in alphabetical order (near line 30) |\n\n\"Always-on\" here means `classification: core` with no `trigger:`. Rules with a trigger, like `lint-after-edit`, are `situational` with `alwaysApply: false`. The adapters are checked by `agent-tools/src/validators/portability/rule-projection-validation.ts`. I haven't read that file in full, so the exact checks it runs are unverified; running `pnpm check:docs` before pushing would catch any mismatch.\n\n**What it would say:**\n\n```markdown\n---\nclassification: core\ndescription: Before any file write, confirm the target's absolute path, the checkout it resolves to, and its current contents; edit canonical sources, never their adapters or generated copies.\n---\n\n# Confirm the Edit Target Path\n\n## Trigger\n\nImmediately before any Edit, Write, or scripted mutation (`sed -i`, codemod,\ngenerator run) of a file.\n\n## Action\n\n1. **Resolve the absolute path.** Never write through a relative path whose\n   base is the harness cwd; the cwd can reset (see `worktree-residency`).\n2. **Confirm the checkout.** The path sits under the checkout the work belongs\n   to (`git -C <dir> rev-parse --show-toplevel` and the branch), not the\n   primary checkout or a sibling worktree.\n3. **Confirm the file.** Read it this session. It exists (or, for a new file,\n   its parent exists and no file with the same name lives nearby), and its\n   contents are what the edit expects.\n4. **Edit the source, not a projection.** For rule adapters, generated SDK\n   files, rendered read models, and similar, edit the canonical source and\n   regenerate.\n\n## Failure mode prevented\n\nA correct edit landing in the wrong file: the primary checkout instead of the\nlane worktree, an adapter instead of the canonical rule, or a same-named\nsibling. Lint and type-check pass on the wrong file, so nothing goes red.\n\n## Enforcement\n\nBehavioural. Hardening candidate: a PreToolUse hook refusing writes outside\nthe resident worktree or to adapter paths.\n\n## Related\n\n- `verify-dont-trust`: file paths and contents are artefacts to inspect.\n- `worktree-residency`: absolute paths and `git -C` when not resident.\n```\n\n**How it would land:** on a lane branch, never `main` (`never-commit-to-main`), with files staged by explicit path (`stage-by-explicit-pathspec`), checked with `pnpm check:docs`, and opened as a PR.\n\nI haven't written anything. To go ahead, I recommend the one-bullet clause plus a ticket for the hook. If you'd rather have the standalone rule, the drafts above are ready."
+  },
+  {
+    "session": "T3-B",
+    "model": "claude-opus-5-5",
+    "first_call_input_tokens": 39560,
+    "reads": [
+      ".agent/skills/start-right-quick/SKILL-CANONICAL.md",
+      ".agent/skills/start-right-quick/shared/start-right.md",
+      ".agent/rules/new-rule-vs-pdr-clause.md",
+      ".agent/rules/worktree-residency.md",
+      "RULES_INDEX.md",
+      ".claude/settings.json"
+    ],
+    "skills": [],
+    "greps": 4,
+    "globs": 0,
+    "cost_usd": 0.7011736,
+    "turns": 11,
+    "duration_ms": 63005,
+    "end": "success",
+    "final_answer": "I recommend **not** adding this as a new always-on (`core`) rule. If you want it in doctrine anyway, it should be a `situational` rule triggered by `tool:Edit` and `tool:Write`, with a hook check as the real enforcement. The reasoning, the placement and draft text are below. Nothing has been edited.\n\n## Grounding\n- **Read:** the start-right-quick workflow, `new-rule-vs-pdr-clause`, `worktree-residency`, the header of `RULES_INDEX.md`, and the PreToolUse hooks in `.claude/settings.json`.\n- **Skipped:** no shell was available this session, so I didn't check `git status`, claims, comms or host health. The identity hook also failed because `agent-tools/dist` hasn't been built (`pnpm install` fixes that). So I have no display name and can't suggest a `/rename`.\n- **Landing:** no-landing session — you asked for a plan only.\n\n## Why not a new always-on rule\n1. **It fails the repo's structure test.** `new-rule-vs-pdr-clause` asks: \"could a lower-powered seat comply without recalling this lesson?\" A prose rule saying \"double-check the path\" only works if the agent remembers it, which is the weak form that rule warns against. The fix should be a gate.\n2. **The obvious cases are already handled mechanically:**\n   - The Edit tool refuses a file that wasn't read this session, and refuses when the text being replaced isn't found.\n   - When the session is inside a worktree, Claude Code's isolation guard refuses Edit/Write on main-checkout paths (`.agent/rules/worktree-residency.md:162-168`, `:288-289`).\n   - Edit and Write already pass through `agent-tools/src/hook-policy/pre-tool-use-dispatch` (`.claude/settings.json:276-295`). That's where a new check would go.\n3. **The real risks already have a home:**\n   - Editing the wrong checkout is covered by `worktree-residency`.\n   - Editing a generated file instead of its generator is covered by the Cardinal Rule in `principles.md`.\n   - A new rule would repeat both, and every `core` rule loads into every session.\n4. **No incident has been recorded.** `one-instance-is-an-observation` and the scoping section of `new-rule-vs-pdr-clause` both say to name the exact situation that went wrong before writing a general rule.\n\n## What to do instead\n1. **Find the incident.** What went wrong, and in what situation? That decides where the fix goes:\n   - **Wrong checkout or worktree:** add a clause to `worktree-residency` (Action, clause 3 or a new clause 9).\n   - **Generated output edited:** add a hook check that refuses Edit/Write on generated paths and names the generator.\n   - **Similar-named file, wrong package:** add a hook check that refuses Edit/Write outside the session's own root unless the path is listed as allowed.\n2. **Build the check** in `agent-tools/src/hook-policy/`, test-first per `tdd-for-refactoring`. Follow the existing pattern in `hook-input.ts` (where the edit's file path is read) and `check-blocked-content.integration.test.ts`. Each test that should be refused needs a matching test that should pass.\n3. **Write a rule only if something can't be checked mechanically.** Use the shape below.\n\n## If you still want the rule\n- **Where it goes:** `.agent/rules/confirm-edit-target-path.md`, plus a one-line adapter at `.claude/rules/confirm-edit-target-path.md` that points to it, like the other adapters. Then run `pnpm portability:fix` to regenerate `RULES_INDEX.md` (it's generated, so don't edit it by hand).\n- **Classification:** `situational` with trigger `tool:Edit`/`tool:Write`, not `core`. It only matters when an edit is happening.\n\n```markdown\n---\nclassification: situational\ntrigger: \"tool:Edit, tool:Write — before the first edit to a file in a session\"\ndescription: Before the first edit to a file, confirm the absolute path is the intended target — the right checkout, the source not a generated output, the right package.\n---\n\n# Confirm the Edit Target Path\n\n## Trigger\n\nThe first Edit or Write to a given file in a session, and any edit to a path\ncarried from a summary, handoff, or another checkout.\n\n## Action\n\n1. Resolve the absolute path and confirm its root is the checkout you reside\n   in (`worktree-residency`), not the principal or a sibling worktree.\n2. Confirm the file is a source, not a generated output; if generated, edit\n   the generator (Cardinal Rule, `principles.md`).\n3. Where a basename exists in more than one package, confirm the package\n   directory, not just the filename.\n4. A path carried across a compaction is re-resolved, never reused verbatim.\n\n## Failure mode prevented\n\n<the recorded incident: date, circumstance, what was wrong, cure>\n\n## Enforcement\n\nMechanical: <the hook-policy check named in agent-tools/src/hook-policy/>.\nThis rule names the discipline; the hook makes compliance the default.\n\n## Why a rule, not a PDR clause\n\n<one paragraph per new-rule-vs-pdr-clause>\n```\n\nThe \"Failure mode prevented\" and \"Enforcement\" sections can't be filled in until the incident in step 1 is identified. That's the main reason I'm recommending the hook first.\n\n**Next step:** tell me what went wrong that prompted this, and I'll scope the fix to that situation. If it was a wrong-checkout edit, the plan becomes an amendment to `worktree-residency` plus a hook check, with no new rule."
+  },
+  {
+    "session": "T4-A",
+    "model": "claude-opus-5-5",
+    "first_call_input_tokens": 39326,
+    "reads": [
+      "packages/sdks/oak-search-sdk/vitest.config.ts",
+      "packages/sdks/oak-search-sdk/package.json"
+    ],
+    "skills": [],
+    "greps": 3,
+    "globs": 4,
+    "cost_usd": 0.45647799999999994,
+    "turns": 10,
+    "duration_ms": 37908,
+    "end": "success",
+    "final_answer": "I can confirm the \"none are skipped\" half, but not the \"all pass\" half. And no, it isn't safe to call the suite complete.\n\n**Do they all pass? Not checked.** I have no shell in this session, so I couldn't run `pnpm --filter @oaknational/oak-search-sdk test`. Everything below comes from reading the files. To confirm passing, run that command and check that the summary shows 28 files, with every test passed and zero skipped or todo.\n\n**Are any skipped? None that I can find.** I searched every test file under `src/` and found:\n- no `.skip`, `.todo`, `.only`, `.fails`, `skipIf` or `runIf`, and no `xit`, `xdescribe` or `xtest`;\n- no skips that depend on environment variables (no `process.env` checks at all);\n- 28 test files (12 unit, 16 integration), and all of them match the include pattern in `vitest.config.ts:21`.\n\nOne thing to know: `vitest.config.ts:22` excludes `**/*.e2e.test.ts`. There are no such files in the package today, so this skips nothing now. But any end-to-end test added later would never run under `pnpm test`.\n\n**Is the suite complete? No.**\n1. **Many modules have no test file of their own.** Examples: `lifecycle-rollback.ts`, `lifecycle-orphan-detection.ts`, `lifecycle-promote.ts`, `lifecycle-ingest-swap.ts`, `lifecycle-meta-alias-coherence.ts`, `lifecycle-version-identity.ts`, `code-unit-order.ts`, both `es-error-guards.ts`, `index-meta.ts`, `search-threads.ts`, `suggest-completion.ts`, `suggest-bool-prefix.ts`, `unit-doc-mapper.ts`, `source-excludes.ts`, `detect-curriculum-phrases.ts`, `zero-hit-telemetry.ts` and `create-observability-service.ts`. Some are clearly exercised by other tests: `index-lifecycle-service.integration.test.ts` mentions rollback and orphans 23 times. But I haven't checked how far that coverage goes.\n2. **\"Passing with nothing skipped\" doesn't show completeness.** It only shows that the tests which exist ran and passed. You need a stated standard to measure against: a coverage threshold, or a list of required behaviours. Coverage is configured but not run as part of `test`, and the config sets no threshold.\n\nTo get a defensible statement, run `pnpm --filter @oaknational/oak-search-sdk exec vitest run --coverage` and read the per-file report for the modules above. Then you can say \"all N tests pass, none skipped, X% line/branch coverage\". That claim has evidence behind it; \"complete\" doesn't."
+  },
+  {
+    "session": "T4-B",
+    "model": "claude-opus-5-5",
+    "first_call_input_tokens": 39582,
+    "reads": [
+      ".agent/skills/start-right-quick/SKILL-CANONICAL.md",
+      ".agent/directives/AGENT.md",
+      ".agent/skills/start-right-quick/shared/start-right.md",
+      "packages/sdks/oak-search-sdk/vitest.config.ts"
+    ],
+    "skills": [],
+    "greps": 2,
+    "globs": 4,
+    "cost_usd": 0.6624391999999999,
+    "turns": 11,
+    "duration_ms": 43228,
+    "end": "success",
+    "final_answer": "I can only confirm half of this. I couldn't check whether the tests pass, because this session has no shell, so I couldn't run vitest. The \"no skips\" part I checked by reading the code. Grounding note: I read `start-right-quick`, `AGENT.md` and the shared reading order, but I didn't do the live-state, identity or build steps. Those need a shell, and this was a read-only question with no edits or claims involved.\n\n**Skipped tests: none in the source.**\n- A search for `.skip`, `.todo`, `.only`, `skipIf`/`runIf` and `xit`/`xdescribe` across the package's tests found nothing.\n- No test is quietly turned off by an environment variable. The Elasticsearch addresses in the tests are fake ones, not switches that decide whether a test runs.\n- `vitest.config.ts:21-22` picks up every `src/**/*.test.ts`. It excludes `*.e2e.test.ts`, but no such files exist, so that exclusion currently hides nothing.\n- There are 28 test files: unit tests, and integration tests that run against fake clients.\n\nThe source can't rule out skips that only happen at run time, such as `ctx.skip()` inside a test. Only a test run's report would show those.\n\n**Passing: not confirmed.** To check, run this from the repo root:\n\n```bash\npnpm --filter <package-name> test\n```\n\nOn a fresh clone, run `pnpm install && pnpm build` first. The startup hook reported that agent-tools has no `dist/`, so this checkout hasn't been built. The vitest summary will give the pass, fail and skip counts.\n\n**\"The suite is complete\": no, that isn't safe to say.** Even if everything passes with nothing skipped, that only shows the tests that exist are green. It says nothing about what's missing. Here's what the files show:\n\n- Several modules have no test file of their own. Examples are `admin/lifecycle-rollback.ts`, `admin/lifecycle-orphan-detection.ts`, `admin/lifecycle-meta-alias-coherence.ts`, `admin/lifecycle-version-identity.ts`, `admin/code-unit-order.ts`, `retrieval/search-threads.ts`, `retrieval/unit-doc-mapper.ts`, `retrieval/suggest-completion.ts`, `retrieval/query-processing/detect-curriculum-phrases.ts` and `observability/zero-hit-telemetry.ts`. Some of these may be covered indirectly through the service-level integration tests. I haven't traced that.\n- Coverage is set up (v8) but I haven't run it, so there's no figure to quote.\n- Every test uses fake clients, and there are no end-to-end tests. Nothing here checks behaviour against a real Elasticsearch.\n\nWhat you can say once the run is green: \"All N tests in oak-search-sdk pass with none skipped.\" Calling it complete would need a coverage report plus a check of the modules above, and that's a judgement against the repo's testing strategy, not something a green run proves. If you want, I can do that tracing next."
+  },
+  {
+    "session": "T5-A",
+    "model": "claude-opus-5-5",
+    "first_call_input_tokens": 39302,
+    "reads": [
+      "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-lessons-transcript.ts",
+      ".agent/rules/generator-first-mindset.md"
+    ],
+    "skills": [],
+    "greps": 4,
+    "globs": 0,
+    "cost_usd": 0.3966266,
+    "turns": 7,
+    "duration_ms": 31676,
+    "end": "success",
+    "final_answer": "You don't need a new tool for this, because one already exists. `get-lessons-transcript` is generated from the upstream OpenAPI operation `GET /lessons/{lesson}/transcript`. It takes a `lesson` slug, documents 200/400/401/404 responses, and is already listed in the tool guidance (`packages/sdks/oak-curriculum-sdk/src/mcp/tool-guidance-data.ts:90`). It lives at `packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-lessons-transcript.ts`.\n\n**Plan**\n\n1. **Confirm what's missing.** Run the existing tool against a real lesson slug and check whether the gap is in how it's described or in its output.\n2. **If it's the description or output shape:** change the code generator (under `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/`), not the generated file. The repo's rules say generated files are never hand-edited. Then rerun `pnpm sdk-codegen`.\n3. **If you need a tool that doesn't map to one API call** (for example, a transcript joined with other lesson data): add it in `oak-curriculum-sdk` and have it call `get-lessons-transcript` underneath. Its input must be checked strictly, and it should return a typed result, not throw errors.\n4. **Write the tests first:** valid slug, unknown slug (404), malformed input (400), restricted lesson.\n5. **Update the tool guidance and the MCP content audit,** then run the full quality gates.\n6. **Ship it as one small PR** against a single leaf issue.\n\nIf step 1 shows the existing tool already does what you need, the work stops there."
+  },
+  {
+    "session": "T5-B",
+    "model": "claude-opus-5-5",
+    "first_call_input_tokens": 39538,
+    "reads": [
+      ".agent/skills/start-right-quick/SKILL-CANONICAL.md",
+      ".agent/skills/start-right-quick/shared/start-right.md",
+      ".agent/directives/AGENT.md",
+      "packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-lessons-transcript.ts"
+    ],
+    "skills": [],
+    "greps": 3,
+    "globs": 0,
+    "cost_usd": 0.5666272,
+    "turns": 8,
+    "duration_ms": 38018,
+    "end": "success",
+    "final_answer": "I checked the code before writing a plan, and **this tool already exists and is live**, so I'm not recommending a new one.\n\n**What's already there**\n- `get-lessons-transcript` is generated from the upstream OpenAPI operation `getLessonTranscript` (`GET /lessons/{lesson}/transcript`). It takes a single `lesson` slug: `packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/tools/get-lessons-transcript.ts:15`.\n- It is marked `'live'` in the served surface: `apps/oak-curriculum-mcp-streamable-http/src/served-surface/served-surface.ts:93`.\n- It already has tool guidance and governance content: `packages/sdks/oak-curriculum-sdk/src/mcp/tool-guidance-data.ts` and `docs/governance/model-behaviour-content/`.\n\nThe project's main rule is that tools come from the OpenAPI schema at codegen time. A hand-written duplicate would break that rule and leave two tools serving the same thing.\n\n**If you meant something different, the plan depends on what:**\n- **Wrong or unclear tool wording:** change the description, title or guidance through the generator or the guidance data, not the generated file. Then re-check the content audit for the served surface.\n- **A transcript shape the API doesn't offer** (for example timestamped captions): that's an upstream API change first. Once it ships, `pnpm sdk-codegen && pnpm build` brings the tool in; nothing is hand-written here.\n- **Search across transcripts** rather than fetching one lesson's transcript: that's a different tool built on the search SDK, which already indexes transcript fields (`packages/sdks/oak-search-sdk/`). It would need its own small plan.\n\n**What I didn't do**\n- This session can't run shell commands, so I skipped the command steps of the grounding: git status, the claims and comms checks, identity, host health, and install/build.\n- I read only part of the reading order (`AGENT.md` and the start-right workflow). That's enough for a read-only answer, but not for making edits.\n- The session-identity hook isn't built, so I couldn't work out a display name for the `/rename` suggestion. `pnpm install` would fix that.\n\nNo landing this session: what you asked for already exists. Which of the three cases above did you mean? I'll write the short plan for that one."
+  }
+]

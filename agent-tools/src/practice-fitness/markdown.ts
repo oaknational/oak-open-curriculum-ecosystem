@@ -105,7 +105,7 @@ export function measurableProseWidth(text: string): number {
   // `.../Foo_(bar)`) and an optional `"title"`; the optional leading `!`
   // (image marker) is consumed so it leaves no stray character.
   const withoutInlineLinkTargets = text.replaceAll(
-    /!?\[([^\]]*)\]\((?:[^()]|\([^()]*\))*\)/g,
+    /!?\[([^\][]*)\]\((?:[^()]|\([^()]*\))*\)/g,
     '$1',
   );
   // Autolinked URLs — `<https://…>`.

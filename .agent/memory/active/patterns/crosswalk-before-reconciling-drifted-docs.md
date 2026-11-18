@@ -3,6 +3,7 @@ name: Crosswalk Before Reconciling Drifted Docs
 polarity: pattern
 use_this_when: Two documents appear to conflict (an older brief vs a ratified plan, two doctrine surfaces describing one mechanism) and the tempting move is a bulk rewrite of one to match the other
 category: process
+layer: general
 status: emerging
 discovered: 2026-06-05
 proven_in: The 2026-06-05 EEF strategy-brief reconciliation (owner-corrected surgical outcome) — see §Worked Instance
@@ -12,6 +13,10 @@ barrier:
   proven_by_implementation: true
   prevents_recurring_mistake: "Bulk-rewriting an apparently-conflicting document to match the newer model, destroying still-valid shared-intent content and deleting orthogonal work that only looked like conflict"
 ---
+
+> **POLARITY: PATTERN.** This entry names a *shape to repeat*, not a failure mode to avoid.
+>
+> See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 ## Principle
 

@@ -11,7 +11,7 @@
  * child exit) results in exit 0 with no stdout, so the statusline never
  * disrupts the session.
  *
- * Diagnosis: set `OAK_STATUSLINE_LOG_FILE=/path/to/statusline.log` (must end
+ * Diagnosis: set `PRACTICE_STATUSLINE_LOG_FILE=/path/to/statusline.log` (must end
  * `.log`) before launching the session and the adapter appends each
  * invocation's raw stdin payload there, one timestamped line per
  * invocation (malformed and noop payloads included).
@@ -33,8 +33,13 @@ if (!existsSync(adapterPath)) {
   process.exit(0);
 }
 
+// The adapter resolves a relative PRACTICE_STATUSLINE_LOG_FILE against the
+// project directory, never its working directory (which is the session's and
+// moves), so the project directory travels with it whichever harness version
+// launched this shim.
 const child = spawn(process.execPath, [adapterPath], {
   stdio: 'inherit',
+  env: { ...process.env, CLAUDE_PROJECT_DIR: repoRoot },
 });
 
 child.on('error', () => {

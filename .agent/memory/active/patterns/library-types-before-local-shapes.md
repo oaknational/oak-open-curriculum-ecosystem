@@ -3,6 +3,7 @@ name: "Library Types Before Local Shapes"
 polarity: pattern
 use_this_when: "An integration parses third-party SDK responses or errors and custom local `*Like` shapes are being considered."
 category: code
+layer: general
 proven_in: "apps/oak-search-cli/src/lib/elasticsearch/index-meta.ts"
 proven_date: 2026-03-13
 barrier:

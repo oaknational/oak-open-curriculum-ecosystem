@@ -1,21 +1,25 @@
 # Invoke Specialist Experts
 
 After non-trivial changes, invoke `code-expert` plus all specialist experts
-required by the change profile. Until the taxonomy rename lands,
-`code-expert` remains the current gateway reviewer.
+required by the change profile. `code-expert` is the gateway reviewer. The
+general-layer roster below is the same in every Practice instance; each host
+adds its own domain reviewers and its path triggers in the last section of
+this file, §This host's reviewers and triggers.
 
 Documentation drift (`docs-adr-expert`) applies whenever behaviour or
 architecture changes, even if no docs are explicitly edited. `docs-adr-expert`
 owns documentation **structure and accuracy** (drift, ADR completeness,
-cross-references, and the ADR-127 §5 design lens — SSOT, DRY, god-documents,
-decoupling, stable indexes); `prose-expert` owns the **craft and voice** of the
-writing. The two compose on one document and do not overlap.
+cross-references, and the documentation-as-infrastructure design lens of
+`principles.md` §Documentation Is Infrastructure — SSOT, DRY, god-documents,
+decoupling, stable indexes); `prose-expert` owns the **craft** of the writing.
+The two compose on one document and do not overlap.
 
-Prose craft (`prose-expert`) applies to the writing of any authored document;
-the Oak outward editorial voice (also `prose-expert`) applies only to
-outward-facing copy, per `editorial-tone.md` scope. Invoke `prose-expert`
-proportionately — for outward copy and significant authored prose, not every
-trivial doc touch.
+Prose craft (`prose-expert`) applies to the writing of any authored document.
+A host that defines an editorial voice (PDR-102) names its voice reviewer in
+§This host's reviewers and triggers: voice, positioning and audience fit on the
+content that voice covers belong to that reviewer, craft stays with
+`prose-expert`. Invoke `prose-expert` proportionately — for significant
+authored prose, not every trivial doc touch.
 
 AGENT.md intentionally points here rather than carrying reviewer rosters or
 timing detail. Reviewers can review intentions before code exists, and long or
@@ -45,37 +49,37 @@ Ask what kind of change this is:
 
 Then route by domain:
 
-1. Auth, secrets, PII, or OAuth -> `security-expert`
-2. Clerk middleware, token verification, OAuth proxy, PRM,
-   `@clerk/mcp-tools`, or Clerk SDK usage -> `clerk-expert`
-3. MCP protocol, tool/resource/prompt definitions, MCP Apps Extension
-   widgets, transport/session patterns, or MCP Apps migration work ->
-   `mcp-expert`
-4. Sentry SDK usage, OpenTelemetry trace/log correlation, telemetry
-   redaction, MCP Insights, or Sentry env/config wiring ->
-   `sentry-expert`
-5. Elasticsearch mappings, queries, analysers, synonyms, ELSER, RRF,
-   reranking, ingest, or Elastic Serverless capabilities ->
-   `elasticsearch-expert`
-6. Plans marked decision-complete, 3+ agents, asserted blocking
-   relationships, or technology commitments before research ->
-   `assumptions-expert`
-7. Onboarding flows, start-right entrypoints, or ADR discoverability ->
+1. Secrets, credentials, PII, authentication or authorisation, HTTP headers
+   and the content security policy, middleware or a proxy, third-party
+   scripts, external input at a trust boundary, or a dependency upgrade with
+   a security bearing -> `security-expert`
+2. The reviewer estate: sub-agent templates, platform adapters, the
+   reviewer-invocation rule, skills, or the platform entry points ->
+   `subagent-architect`
+3. Plans marked decision-complete, 3+ agents, asserted blocking
+   relationships, a third-party vendor integration, or technology
+   commitments before research -> `assumptions-expert`
+4. Onboarding flows, start-right entrypoints, or ADR discoverability ->
    `onboarding-expert`
-8. Rendered UI, CSS, design tokens, or React components -> UI/Frontend
+5. Rendered UI, CSS, design tokens, or React components -> UI/Frontend
    cluster: `accessibility-expert`, `design-system-expert`,
    `react-component-expert`
-9. Outward-facing copy (`VISION.md`, strategy, public README narrative) or
-   significant authored prose whose readability matters -> `prose-expert`
+6. Significant authored prose whose readability matters -> `prose-expert`
+7. The host's own domain signals (its data model, its product's protocol,
+   its vendors, its editorial voice) -> the host's domain reviewers, listed
+   with their triggers in §This host's reviewers and triggers
 
 ### Layer 3 — Cross-Cutting Concerns
 
 Always check these regardless of category:
 
-1. Module boundaries, imports, or public APIs -> architecture expert(s)
+1. Module structure, import direction, workspace boundaries, dependency
+   injection, or public APIs -> the architecture reviewers (the structural
+   reviewer and the persona for the lens or lane the change touches; the host
+   section names how its personas are dispatched)
 2. Test additions, modifications, or TDD concerns -> `test-expert`
 3. Type complexity, generics, or schema flow -> `type-expert`
-4. Tooling configs or quality gates -> `config-expert`
+4. Tooling configs, the lockfile, or quality gates -> `config-expert`
 5. README, TSDoc, ADR, docs drift, or documentation structure (SSOT/DRY/
    god-documents, decoupling, stable indexes) -> `docs-adr-expert`
 
@@ -122,34 +126,44 @@ framing or premise converge by amplification, not corroboration — panels
 systematically amplify the premise in the brief and approve artefacts that
 violate always-on rules (the same corpus proves both polarities). Convergence
 counts only when the lenses were genuinely distinct and the brief non-leading
-(`non-leading-reviewer-prompts`); convergence on a shared handed premise
+([PDR-012](../../practice-core/decision-records/PDR-012-review-findings-routing-discipline.md)
+§Non-leading reviewer prompts); convergence on a shared handed premise
 counts for nothing.
 
 **Conflicting verdicts resolve by authority scope, not reviewer tier.** A
-domain specialist (`sentry-expert`, `mcp-expert`, `elasticsearch-expert`,
-`clerk-expert`, ...) has final say over generalist architecture reviewers on
-the domain's SDK/vendor semantics — the generalists stay authoritative on repo
+domain specialist (a host's data-model or protocol reviewer on its domain's
+semantics, `accessibility-expert` on WCAG conformance, `security-expert` on
+exploitability) has final say over the generalist architecture reviewers on
+the domain's semantics — the generalists stay authoritative on repo
 boundaries and structure. When two generalists give opposite *lens-correct*
-verdicts (strict-decision-record compliance vs simplification), the conflict
-usually lives in the governing ADR/PDR, not the reviewers: amend the decision
-record to the position the evidence supports, then re-review against it. An
-always-applied Practice rule outranks any reviewer verdict
-(`rules-have-no-exceptions`). And when opposing verdicts can be settled by a
+verdicts, the conflict usually lives in the governing ADR/PDR, not the
+reviewers: amend the decision record to the position the evidence supports,
+then re-review against it. An always-applied Practice rule outranks any
+reviewer verdict (`rules-have-no-exceptions`). And when opposing verdicts can be settled by a
 cheap first-hand check, run the check before adjudicating — reviewer
 contradiction is a gift (a 2026-07-02 panel's opposite claims about an
 exported function were settled by one direct read of the source).
 
 ## Reviewer Reports Arrive Only on Request
 
-Reviewer subagents deliver their reports ONLY on an explicit SendMessage
-request — a summary-less idle notification means NO report was emitted
-(6/6 instances, late July 2026): request the report, never infer one from
-the idle. And a long-silent consult (~12 minutes) is a DEFECTIVE dispatch —
-kill it and re-dispatch; a seat idling on a dead consult is the failure,
-not patience. Known mechanism (MCP-386, until cured): the Agent tool's
+Two reviewer shapes, two procedures — read the dispatched definition's
+tool list before choosing. A reviewer that CARRIES a message tool delivers
+its report ONLY on an explicit SendMessage request — a summary-less idle
+notification means NO report was emitted (6/6 instances, late July 2026):
+request the report, never infer one from the idle. A reviewer that carries
+NO message tool (the expert reviewers declared with Read/Grep/Glob/Bash,
+`assumptions-expert` with WebFetch and WebSearch added, and the Cricket legs
+declared with Read) cannot send anything: its idle IS the finish and the
+transcript is the report — the two harvest routes at the end of this section
+are authoritative for that shape, and re-dispatching such a reviewer on its
+idle discards a verdict already written. `prose-expert` declares no tool list
+and inherits the session's tools, so treat it as the message-capable shape.
+For the message-capable shape, a long-silent consult (~12 minutes) is a
+DEFECTIVE dispatch — kill it and re-dispatch; a seat idling on a dead
+consult is the failure, not patience. Known mechanism, recorded in the
+OCE under its ticket MCP-386: the Agent tool's
 `name` parameter correlates with dark dispatches — named dispatches went
-dark 10/10 while unnamed ones reported; prefer unnamed reviewer dispatches
-while the ticket is open.
+dark 10/10 while unnamed ones reported; prefer unnamed reviewer dispatches.
 
 Harvest on the FIRST idle: reviewers and Crickets that finished idle with
 no report delivered cost a resend round each (six in one session,
@@ -161,6 +175,20 @@ mailbox (or the transcript) once more at resume before declaring a review
 lost — a stopped code-expert's verdict arrived on the first
 post-compaction turn carrying two findings that would have sunk the last
 settlement push (2026-09-01).
+
+Two harvest routes when no message can arrive. (a) A reviewer declared
+without a message tool (above) has no SendMessage tool at all, so it emits
+its report as its final
+long assistant text and then idles: the idle IS the finish, never "stuck"
+(read that way by the owner on 2026-08-06), and the report is the last long
+assistant text block of the newest transcript under the project's
+directory. Stand the agent down afterwards; it cannot answer the shutdown
+either. (b) A NAMED teammate agent that reports "delivered via SendMessage"
+may have reached nothing (TaskOutput by name answered "No task found"): its
+full report is the SendMessage tool-use payload in its own transcript under
+the session's subagents directory, and the last plain-text turn is only a
+summary — three Opus code-expert reports were harvested that way in one
+pass on 2026-09-04.
 
 ## Doctrine and Plan Artefacts Get the Panel Before They Are Public
 
@@ -178,8 +206,8 @@ restatement — at four agents for ~4 minutes wall each, against eleven
 post-push review waves the same morning (2026-08-31). An author's or a
 Director's critical pass is ONE lens; a doctrine record, plan node, or PDR
 gets the panel BEFORE the merge glide or the public push. Point the panel
-at the misinforming-surface class as well
-(`patterns/surface-that-misinforms-without-failing.md`): the seat that
+at the misinforming-surface class as well — a surface that misinforms
+its readers while every check it carries passes: the seat that
 has just diagnosed the class rebuilds it inside its own cure (two
 independent instances), so the external lens is the working instrument.
 
@@ -250,23 +278,35 @@ Brief-construction disciplines (per PDR-015 reviewer authority):
   explicitly owner-settled artefact sections) — plan-authored elaborations
   remain refutable. Protecting a whole sweep wholesale suppresses the legitimate
   findings the owner's own settlement would surface.
-- **The dispatch names the governing decision records; the reviewer cites what
-  it read.** At sites with house doctrine (type-guard idioms → ADR-153; Result
-  vs throw → ADR-088; and so on), a dispatch that omits the governing ADR/PDR
-  invites an approval of the common idiom over the repo's own decision — a
-  code-expert approved an ADR-153-violating "fix" exactly because the dispatch
-  never named it (PR #308, 2026-07-06). Grep the ADR estate for the flagged
-  construct while composing the brief, name what governs, and require the
-  reviewer's verdict to cite the doctrine it read. Absorb the verdict per
-  `verify-dont-trust` §Reviewer output is evidence to test — never adopt a
-  load-bearing claim unverified.
+- **The dispatch names the governing doctrine; the reviewer cites what it
+  read.** At sites with house doctrine (type predicates →
+  `validation-strategy.md`; Result vs throw → `use-result-pattern`; and so
+  on), a dispatch that omits the governing doctrine invites an approval of the
+  common idiom over the repo's own decision — an OCE code-expert approved a
+  "fix" that broke OCE's type-guard decision exactly because the
+  dispatch never named it (2026-07-06). Grep the ADRs, PDRs, rules and
+  directives for the flagged construct while composing the brief, name what
+  governs, and require the reviewer's verdict to cite the doctrine it read.
+  Absorb the verdict per `verify-dont-trust` §Rule (reviewer output is
+  evidence to test) — never adopt a load-bearing claim unverified.
+- **Make the evidence shape cheap to verify.** A locator or verifier brief asks
+  for each result as `path:line` with a short quoted fragment and, for a
+  finding, the command and an output excerpt that shows it; then checking a
+  claim is one read of one line. It also asks for a coverage statement (what was
+  read, roughly how many claims were checked) and says "no findings is a valid
+  result" so nothing is manufactured. Worked instances: four locators proposed
+  homes for about 150 items from the napkin, the comms stream and the experience
+  letters, and their best yield was the contradictions
+  found beside those homes (2026-09-16); four context-free verifiers checked
+  about 415 claims on a records fold, and all 31 findings survived the seat's
+  own check at their sources (2026-09-17).
 
 ## Reviewer Dispatch vs Peer Collaboration
 
 Reviewer dispatch is a fork-blocking-rejoin channel inside one agent's
 session. It does not replace peer collaboration state. Agents doing
 non-trivial overlapping work still use the shared communication log,
-active-claims registry, and WS3A decision threads per
+active-claims registry, and decision threads per
 `agent-collaboration.md`; reviewers do not register active claims unless
 the owner explicitly gives them implementation ownership.
 
@@ -296,8 +336,9 @@ Minor changes (single typo/comment-only edits with no behaviour impact) may use 
 end.** Reviewers split by what they challenge, and each class has a
 correct phase:
 
-- **Plan-time, pre-ExitPlanMode** — `assumptions-expert`, a
-  build-vs-buy challenger, an ADR intent-vs-implementation reviewer.
+- **Plan-time, pre-ExitPlanMode** — `assumptions-expert` (including its
+  build-vs-buy gate) and `docs-adr-expert` on decision-record intent versus
+  implementation.
   These challenge *solution class* and are free to act on before code
   has weight.
 - **Mid-cycle, during execution** — `test-expert`, `type-expert`, the
@@ -321,36 +362,46 @@ Always invoke:
 
 - `code-expert` (gateway — also responsible for flagging when specialists are missing, recommending review depth, and checking coverage)
 
-Invoke additional specialists when applicable:
+Invoke additional specialists when applicable. These rows are the general
+layer; the host's own rows (its voice reviewer and its domain reviewers) follow
+in §This host's reviewers and triggers.
 
 | Change Category | Required Specialist(s) |
 |---|---|
-| Structural/boundary changes | `architecture-expert-barney` and/or `architecture-expert-fred` and/or `architecture-expert-betty` and/or `architecture-expert-wilma` |
+| Module structure, import direction, workspace boundaries, dependency injection, public APIs | the architecture reviewers (the host section names the personas and how they are dispatched) |
 | Test changes or TDD concerns | `test-expert` |
 | Type-system complexity or assertion pressure | `type-expert` |
-| Tooling/config quality-gate changes | `config-expert` |
-| Auth/authz, OAuth, secrets, PII, injection, security-sensitive logic | `security-expert` |
+| Tooling/config quality-gate changes, the lockfile | `config-expert` |
+| Secrets, credentials, PII, authentication or authorisation, HTTP headers and the content security policy, middleware or a proxy, third-party scripts, external input at a trust boundary, dependency upgrades with a security bearing | `security-expert` |
 | README/TSDoc/ADR/docs updates, documentation structure (SSOT/DRY/god-documents), or expected documentation drift | `docs-adr-expert` |
-| Outward-facing copy (`VISION.md`, strategy, public README narrative) or significant authored prose | `prose-expert` (craft for any doc; Oak voice only where `editorial-tone.md` applies) |
-| Rendered UI, CSS, design tokens, React components | UI/Frontend cluster: `accessibility-expert`, `design-system-expert`, `react-component-expert` (ADR-149) |
+| Significant authored prose whose readability matters | `prose-expert` (craft for any doc) |
+| Rendered UI, CSS, design tokens, React components | UI/Frontend cluster: `accessibility-expert`, `design-system-expert`, `react-component-expert` |
+| Sub-agent templates, platform adapters, the reviewer-invocation rule, skills, platform entry points | `subagent-architect` |
 
 Specialist on-demand (not standard roster -- situational trigger only):
 
 - `release-readiness-expert` for release go/no-go checks at release boundaries
-- `ground-truth-designer` for semantic-search ground-truth design/review work
-- `subagent-architect` for sub-agent definition design/migration work
 - `onboarding-expert` for onboarding-path audits (accuracy, efficacy, readability, consistency, stale info, and gap detection)
-- `mcp-expert` for MCP protocol compliance, tool/resource/prompt definition validation, or transport/session pattern checks
-- `elasticsearch-expert` for Elasticsearch mappings, queries, analysers, synonyms, ELSER, RRF, reranking, ingest, evaluation, or Elastic Serverless capability assessments
-- `clerk-expert` for Clerk middleware, token verification, OAuth proxy, PRM, `@clerk/mcp-tools`, or Clerk SDK usage assessments
-- `sentry-expert` for Sentry SDK configuration, OpenTelemetry observability integration, trace/log correlation, telemetry redaction, MCP Insights, and release/source-map observability assessments
-- `assumptions-expert` for plan-level proportionality, assumption validity, blocking legitimacy, and simplification assessments — invoke when plans are marked decision-complete, propose 3+ agents, or assert blocking relationships
+- `assumptions-expert` for plan-level proportionality, assumption validity, blocking legitimacy, and simplification assessments — invoke when plans are marked decision-complete, propose 3+ agents, assert blocking relationships, integrate a third-party vendor, or commit to technology choices before research
+
+Two further classes of sub-agent serve other purposes, and
+[practice-index.md §Experts](../../practice-index.md#experts-sub-agents) names
+their roles:
+
+- the Cricket panel roles give a priority-and-framing conscience check through
+  the [`cricket` skill](../../skills/cognition/cricket/SKILL-CANONICAL.md),
+  and never substitute for the reviewers above;
+- the corpus-analysis roles run inside the corpus-analysis workflows in
+  `agent-tools`, which dispatch them.
 
 ## Worked Examples
 
-**Auth/OAuth/secrets change**: Invoke `code-expert` + `security-expert` immediately. If the change is also structural (new middleware, route reorganisation), add the relevant architecture expert(s).
+The host's own worked examples (its domain reviewers and voice reviewer in
+play) follow in §This host's reviewers and triggers.
 
-**Architecture refactor**: Invoke `code-expert` + relevant architecture expert(s) immediately. Add `type-expert` if generics or schema flow are affected. Add `docs-adr-expert` if boundaries or ADRs change.
+**Security-surface change** (headers, the content security policy, secrets, environment variables, auth, a proxy or middleware): Invoke `code-expert` + `security-expert` immediately. Add `config-expert` when the change rewires configuration. If the change is also structural (new middleware, a route reorganisation), add the architecture reviewer for the lens or lane it touches.
+
+**Architecture refactor**: Invoke `code-expert` + the architecture reviewers immediately (the structural reviewer and the persona for the lens or lane the refactor touches). Add `type-expert` if generics or schema flow are affected. Add `docs-adr-expert` if boundaries or ADRs change.
 
 **Test-only change**: Invoke `code-expert` + `test-expert` immediately.
 
@@ -359,36 +410,24 @@ Specialist on-demand (not standard roster -- situational trigger only):
 a narrative doc); `docs-adr-expert` reviews structure and accuracy, `prose-expert`
 reviews craft.
 
-**Outward copy change** (`VISION.md`, strategy, public README narrative,
-partner-facing material): Invoke `prose-expert` immediately — both its layers
-apply (universal craft plus the Oak voice per `editorial-tone.md`). Add
-`docs-adr-expert` if the change also touches documentation structure or
-cross-references, and `accessibility-expert` if a plain-language WCAG conformance
-verdict is needed (`prose-expert` defers conformance to it).
-
 **Onboarding docs/path update**: Invoke `code-expert` + `docs-adr-expert` immediately. Add `onboarding-expert` when the change affects onboarding journeys (human and/or AI), `start-right` discoverability, or ADR progressive disclosure.
 
-**Significant documentation or Practice change**: Per
-[`invoke-doc-and-onboarding-experts-on-significant-changes`](../../rules/invoke-doc-and-onboarding-experts-on-significant-changes.md),
+**Significant documentation or Practice change**: Per the reviewer-invocation
+rule ([`invoke-code-experts`](../../rules/invoke-code-experts.md), the
+significant-change clause under its roster),
 significant doc/Practice changes always pair `docs-adr-expert` with `onboarding-expert`
 (both reviewers, in parallel) — neither alone covers the failure surface the other catches.
 "Significant" includes: any new ADR/PDR/governance doc/rule; any rename or restructure
 across permanent doctrine surfaces; any change to onboarding entry points
-(`README.md`, `CONTRIBUTING.md`, platform memory files, `.agent/practice-index.md`).
+(`README.md`, `CONTRIBUTING.md`, the platform entry files, `.agent/practice-index.md`).
 
 **Release go/no-go**: Invoke `release-readiness-expert` (on-demand, situational trigger).
 
-**Elasticsearch/search change**: Invoke `code-expert` + `elasticsearch-expert` immediately. Add `type-expert` if schema or mapping types are affected.
+**Reviewer estate change** (sub-agent templates, platform adapters, the reviewer-invocation rule, skills, platform entry points): Invoke `code-expert` + `subagent-architect` immediately, plus the architecture persona whose lens or lane covers Practice governance; a significant change also takes the `docs-adr-expert` and `onboarding-expert` pair above.
 
-**Clerk/OAuth change**: Invoke `code-expert` + `clerk-expert` immediately. Add `security-expert` if the change has exploitability implications. Add `mcp-expert` if MCP auth spec compliance is in question.
+**UI/Frontend change**: Invoke `code-expert` + relevant UI/Frontend cluster specialist(s) immediately. Add an architecture reviewer when routes, navigation or layout composition change.
 
-**MCP protocol/tool/Apps change**: Invoke `code-expert` + `mcp-expert` immediately. Add `security-expert` if the MCP auth model is affected. Add `clerk-expert` if Clerk integration with MCP auth is in question. Add the relevant architecture expert(s) if MCP tool layering or transport boundaries change. For active MCP planning or implementation support, use the `mcp-expert` skill.
-
-**Sentry/OTel change**: Invoke `code-expert` + `sentry-expert` immediately. Add `security-expert` if redaction, secrets, or PII boundaries change. Add `mcp-expert` if MCP wrapping or Insights could affect protocol behaviour.
-
-**UI/Frontend change**: Invoke `code-expert` + relevant UI/Frontend cluster specialist(s) immediately. For MCP App views, add `mcp-expert` (owns `_meta.ui*`, resource registration, CSP, host bridge). UI specialists own DOM, accessibility, tokens, and React structure *inside* the view.
-
-**Plan finalisation**: Invoke `assumptions-expert` when a plan is marked decision-complete or ready for execution. Also invoke when a plan proposes 3+ new agents, asserts blocking relationships, or commits to technology choices before research phases complete. For active assumption auditing during planning, use the `assumptions-expert` skill.
+**Plan finalisation**: Invoke `assumptions-expert` when a plan is marked decision-complete or ready for execution. Also invoke when a plan proposes 3+ new agents, asserts blocking relationships, integrates a third-party vendor, or commits to technology choices before research phases complete. For active assumption auditing during planning, dispatch `assumptions-expert` in its active-workflow mode.
 
 ## Coverage Tracking
 
@@ -398,10 +437,13 @@ Before marking the work complete, record:
 - which specialists were not needed and why
 - which reviewers ran `focused` versus `deep`
 - whether any delegated review result still needs reintegration
+- whether any required review could not run (an owner's stop on new subagents, a reviewer out
+  of credit, a missing tool): that gate is not obtained, never discharged, and the record says
+  so (one instance, 2026-09-25: an assumptions pass went unrun under a stop and the handoff
+  named it as the cheapest outside check not made)
 - whether each new capability has an observability loop across each
   applicable axis (engineering, product, usability, accessibility,
-  security) per [ADR-162](../../../docs/architecture/architectural-decisions/162-observability-first.md).
-  Omission is explicit and justified, not incidental.
+  security). Omission is explicit and justified, not incidental.
 
 ## Invocation
 
@@ -447,7 +489,13 @@ get **mechanical UNSOUND tripwires** (explicit per-item criteria whose
 failure forces an UNSOUND verdict, since frame-rejection cannot be expected
 of the tier); and the fleet author's own deliverable carries arithmetic
 closure proofs (the table author sits in the Sonnet position with respect
-to their own frame). Composes with the frame clause below: specialist
+to their own frame). Before any lens is dispatched, the coordinator reads
+the material first-hand and states the purpose question — what are these
+files FOR, and why do they exist in this form now — and treats lenses run
+on one model from one brief as correlated evidence, never as independent
+confirmations (owner corrections at one reviewer seat, 2026-09-09: a
+fan-out interrupted twice, first for the coordinator's own read, then for
+the purpose question). Composes with the frame clause below: specialist
 review validates correctness WITHIN a frame — tier choice decides whether
 anyone in the fleet can reject the frame at all.
 
@@ -465,6 +513,14 @@ artefact gap seven deeper seats graded ON-TRACK. Depth buys frame
 judgement; literalness buys stratum coverage — neither substitutes for
 the other, and a cheap instrument's dissent from an expensive consensus
 is a signal to investigate, never noise to average away.
+
+### Cursor Reviewer Invocation
+
+On Cursor, invoke a reviewer through the Task tool with `readonly: true` and the
+reviewer's `subagent_type` (the canonical template's name, for example
+`subagent_type: code-expert`). The reviewer-invocation rules' Cursor adapters
+carried this line by hand until the adapters became generated pointers; this is
+its one home.
 
 ### Codex Reviewer Adapter Preflight
 
@@ -603,3 +659,130 @@ standing requirement, 2026-06-10):
   re-review; Copilot threads need manual GraphQL `resolveReviewThread`.
   Verify zero-unresolved via GraphQL (REST does not expose resolved state)
   before merge.
+
+## This host's reviewers and triggers
+
+The reviewers and triggers this host adds to the general layer above, for this
+host (OCE). The sibling estate's copy of this file carries its own section
+here; everything above it is the same text in both. The triggers were carried
+by one `invoke-*` rule per reviewer until the rules collapsed into the one
+reviewer-invocation rule; this section is their home.
+
+### The voice reviewer (P20)
+
+Oak's outward editorial voice is `prose-expert`'s second layer, applied only to
+outward-facing copy (`VISION.md`, strategy, the public README narrative,
+partner-facing material) per `editorial-tone.md`'s scope; there is no separate
+voice reviewer. Universal craft applies to any authored document.
+
+### The domain reviewers
+
+Each is a host-local instance of the domain-specialist pattern (the ledger's
+O11); the pattern is Practice-wide, the five rows are this host's.
+
+| Reviewer | Fires on | File surfaces |
+| --- | --- | --- |
+| `clerk-expert` | Clerk middleware configuration (`clerkMiddleware()`, `requireAuth()`, `getAuth()`); token verification (`verifyToken()`, `authenticateRequest()`); OAuth proxy endpoints (register, authorise, token exchange); protected resource metadata (PRM) or authorisation server (AS) metadata generation or rewriting; `@clerk/mcp-tools` usage or PRM helpers; Clerk environment variables (`CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`); social connection or allowlist configuration; Clerk SDK upgrades or migration; auth error detection touching Clerk error patterns | `**/*clerk*`, `**/auth/**`, `apps/oak-curriculum-mcp-streamable-http/**` |
+| `mcp-expert` | MCP tool definitions (annotations, input schemas, descriptions, metadata); server transport or session management; resource or prompt definitions; MCP Apps Extension widgets, resources or capability negotiation; `@modelcontextprotocol/ext-apps` usage (`registerAppTool`, `registerAppResource`, `getUiCapability`); `_meta.ui` fields (resourceUri, csp, domain, permissions); widget HTML, iframe communication or postMessage bridges; OpenAI App to MCP Apps migration; MCP auth patterns at the protocol level (OAuth 2.1, PRM, AS metadata); MCP SDK upgrades; reviewer briefs that make host-support, resource-surfacing, tool-resource allocation, prompt-resource allocation or fallback-contract claims | `apps/oak-curriculum-mcp-streamable-http/**`, `**/*mcp*` |
+| `sentry-expert` | `@sentry/node` configuration or initialisation; Sentry environment-variable contracts (`SENTRY_MODE`, DSN, release, sampling, logs, debug, PII flags); log sinks, handled-error capture, breadcrumb policy; OpenTelemetry span helpers or active trace-context correlation in logging; shared telemetry redaction; Sentry MCP wrapping, MCP Insights, capture-policy changes; release resolution, source-map wiring, alerting and evidence flows; the observability and sentry-node packages | `packages/libs/sentry-node/**`, `**/*sentry*` |
+| `elasticsearch-expert` | Index mappings or field definitions; analysers, tokenizers, synonyms; query DSL, retrievers, retriever composition; ELSER deployment, inference or embedding configuration; RRF, hybrid retrieval, reranking; ingest pipelines or enrichment processors; search observability or evaluation; Elastic Serverless capability questions; bulk indexing or retry strategies | `apps/oak-search-cli/**`, `packages/sdks/oak-search-sdk/**`, `packages/libs/search-contracts/**` |
+| `ground-truth-designer` | Semantic-search ground-truth design and review work (on demand) | — |
+
+**The Clerk MCP access constraint (standing owner grant conditions).** The
+Clerk MCP access grant carries two binding conditions (owner, 2026-07-21,
+granting the access: "it is READ ONLY unless I say otherwise and we ONLY EVER
+touch the MCP app project, not any of the other projects"): every Clerk MCP
+call is a read, and any write requires the owner's explicit fresh word naming
+the write; before any call, confirm the target is the MCP app project, and
+where a tool defaults to another project or lists across projects, constrain
+the call or do not make it. The Clerk workspace is shared Oak infrastructure;
+other projects belong to other streams and production identity systems. The
+constraint survives sessions and does not lapse with silence.
+
+**Target-host briefing for `mcp-expert`.** For Oak MCP work, pin the target
+host set from the live plan. When the controlling plan names Claude.ai and
+ChatGPT, say so explicitly in the brief and reject hypothetical, legacy, or
+resource-less-host findings unless the reviewer cites current evidence that a
+named target has that limitation. Findings that require a tool fallback for a
+resource, an optional argument for a closed prompt, or a handler bridge for an
+invented host capability are design-shape findings: verify the governing plan
+and host evidence before absorbing them.
+
+### The architecture personas (P21)
+
+The four personas are generic lenses over one shared brief: Barney
+(simplification and dependency/boundary cartography), Fred (rigorous
+ADR/boundary enforcement and standards discipline), Betty (system coherence,
+coupling and change-cost trade-offs) and Wilma (failure-mode resilience and
+adversarial edge-case pressure testing). Each is dispatched as
+`architecture-expert-<persona>` from the one `architecture-expert` template
+with the persona component; a structural change takes one or more of them by
+lens. `architecture-expert-wilma` is the resilience lens the domain reviewers
+hand off to (OAuth proxy timeouts and retries, bulk-operation retry logic,
+transport lifecycle); `architecture-expert-fred` the package-boundary and
+ADR-compliance lens.
+
+### Path triggers for the general-layer reviewers
+
+| Reviewer | Fires on | File surfaces |
+| --- | --- | --- |
+| `accessibility-expert` | Rendered HTML/JSX; ARIA; keyboard navigation, focus, tab order; colour and contrast-sensitive or theme-aware CSS; form inputs, labels, errors, validation feedback; interactive widgets; MCP App view files (`widget/`, `*.view.tsx`, `index.html`); touch targets and pointer interaction; animation, motion, transitions | `**/*.tsx`, `**/*.html`, `**/*.css` |
+| `design-system-expert` | DTCG JSON token definitions or schema; CSS custom property definitions, naming, scoping; the token build pipeline; three-tier referencing (palette → semantic → component); theme structure and switching; style containment; token consumption in views or components; contrast metadata or colour token pairs; `packages/design/` files; visual consistency | `packages/design/**`, `**/*.css` |
+| `react-component-expert` | Component structure, responsibility, decomposition; hooks; prop API design; composition patterns; server/client boundaries (`'use client'` placement); render performance; form state; error boundaries; MCP App view components (`widget/`, `*.view.tsx`); component-level accessibility integration | `**/*.tsx` |
+| `assumptions-expert` | Plan authoring; "DECISION-COMPLETE" or "READY FOR EXECUTION" marks; blocking claims over other workstreams; 3+ new specialist agents; new workspace categories or package topology changes; technology commitments before research; a related PDR, ADR or plan set drafted in one session (review the set boundary, not each document alone); a requested assumption audit or proportionality check | — |
+
+For MCP App views the UI cluster and `mcp-expert` divide the surface:
+`accessibility-expert` owns DOM accessibility inside the view,
+`design-system-expert` token usage inside the view, `react-component-expert`
+component architecture inside the view; `mcp-expert` owns packaging,
+`_meta.ui*`, resource registration, the CSP and the host bridge lifecycle
+around it.
+
+### Domain signals in this host (Layer 2)
+
+1. Clerk middleware, token verification, OAuth proxy, PRM,
+   `@clerk/mcp-tools`, or Clerk SDK usage -> `clerk-expert`
+2. MCP protocol, tool/resource/prompt definitions, MCP Apps Extension
+   widgets, transport/session patterns, or MCP Apps migration work ->
+   `mcp-expert`
+3. Sentry SDK usage, OpenTelemetry trace/log correlation, telemetry
+   redaction, MCP Insights, or Sentry env/config wiring ->
+   `sentry-expert`
+4. Elasticsearch mappings, queries, analysers, synonyms, ELSER, RRF,
+   reranking, ingest, or Elastic Serverless capabilities ->
+   `elasticsearch-expert`
+5. Outward-facing copy (`VISION.md`, strategy, public README narrative) ->
+   `prose-expert` (both layers)
+
+### This host's matrix rows
+
+| Change Category | Required Specialist(s) |
+|---|---|
+| Structural/boundary changes | `architecture-expert-barney` and/or `architecture-expert-fred` and/or `architecture-expert-betty` and/or `architecture-expert-wilma` |
+| Outward-facing copy (`VISION.md`, strategy, public README narrative) | `prose-expert` (craft plus the Oak voice where `editorial-tone.md` applies) |
+| MCP protocol compliance, tool/resource/prompt definition validation, transport/session patterns | `mcp-expert` |
+| Elasticsearch mappings, queries, analysers, synonyms, ELSER, RRF, reranking, ingest, evaluation, Elastic Serverless capability | `elasticsearch-expert` |
+| Clerk middleware, token verification, OAuth proxy, PRM, `@clerk/mcp-tools`, Clerk SDK usage | `clerk-expert` |
+| Sentry SDK configuration, OpenTelemetry observability integration, trace/log correlation, telemetry redaction, MCP Insights, release/source-map observability | `sentry-expert` |
+| Semantic-search ground-truth design or review | `ground-truth-designer` (on demand) |
+
+### This host's worked examples
+
+**Outward copy change** (`VISION.md`, strategy, public README narrative,
+partner-facing material): Invoke `prose-expert` immediately — both its layers
+apply (universal craft plus the Oak voice per `editorial-tone.md`). Add
+`docs-adr-expert` if the change also touches documentation structure or
+cross-references, and `accessibility-expert` if a plain-language WCAG conformance
+verdict is needed (`prose-expert` defers conformance to it).
+
+**Elasticsearch/search change**: Invoke `code-expert` + `elasticsearch-expert` immediately. Add `type-expert` if schema or mapping types are affected, `architecture-expert-wilma` when bulk operations or retry logic have resilience implications, and `mcp-expert` when search MCP tool definitions are involved.
+
+**Clerk/OAuth change**: Invoke `code-expert` + `clerk-expert` immediately. Add `security-expert` if the change has exploitability implications. Add `mcp-expert` if MCP auth spec compliance is in question (WWW-Authenticate headers, RFC 9728/8414 structure). Add `architecture-expert-wilma` when OAuth proxy resilience (timeouts, retries, circuit breaking) is involved.
+
+**MCP protocol/tool/Apps change**: Invoke `code-expert` + `mcp-expert` immediately. Add `security-expert` if the MCP auth model is affected. Add `clerk-expert` if Clerk integration with MCP auth is in question. Add `architecture-expert-fred` if MCP tool layering or package boundaries change, and `architecture-expert-wilma` when transport lifecycle or retry patterns have resilience implications. For active MCP planning or implementation support, use the `mcp-expert` skill.
+
+**Sentry/OTel change**: Invoke `code-expert` + `sentry-expert` immediately. Add `security-expert` if redaction, secrets, or PII boundaries change. Add `mcp-expert` if MCP wrapping or Insights could affect protocol behaviour. Add the architecture reviewers when the logger foundation, package boundaries or dependency direction change.
+
+**UI/Frontend change, MCP App views**: add `mcp-expert` (owns `_meta.ui*`, resource registration, CSP, host bridge). UI specialists own DOM, accessibility, tokens, and React structure *inside* the view.
+
+**Reviewer estate change**: the Practice-governance persona is the lens the change needs; `architecture-expert-fred` for ADR compliance of the adapter shapes.

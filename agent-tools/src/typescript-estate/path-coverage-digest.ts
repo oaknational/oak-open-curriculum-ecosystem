@@ -5,7 +5,6 @@ import { err, isErr, ok, type Result } from '@oaknational/result';
 
 import { EstateReviewError } from './errors.js';
 import { lengthFrame } from './length-framing.js';
-import type { RepoPath, Sha256 } from './scalar-model.js';
 import { compareUtf16 } from './utf16-order.js';
 
 const PATHS_DOMAIN = Buffer.from('typescript-estate-paths-v1\0', 'utf8');
@@ -16,7 +15,7 @@ const PATHS_DOMAIN = Buffer.from('typescript-estate-paths-v1\0', 'utf8');
  * Refusing duplicates and ordering defects prevents this proof helper from
  * silently giving a malformed denominator a stable but misleading identity.
  */
-export function digestOrderedPaths(paths: readonly RepoPath[]): Result<Sha256, EstateReviewError> {
+export function digestOrderedPaths(paths: readonly string[]): Result<string, EstateReviewError> {
   const orderingFailure = findOrderingFailure(paths);
   if (orderingFailure !== undefined) {
     return err(
@@ -43,7 +42,7 @@ export function digestOrderedPaths(paths: readonly RepoPath[]): Result<Sha256, E
   return ok(hash.digest('hex'));
 }
 
-function findOrderingFailure(paths: readonly RepoPath[]): string | undefined {
+function findOrderingFailure(paths: readonly string[]): string | undefined {
   for (let index = 1; index < paths.length; index += 1) {
     const previous = paths[index - 1];
     const current = paths[index];

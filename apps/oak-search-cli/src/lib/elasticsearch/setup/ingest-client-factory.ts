@@ -46,27 +46,23 @@ function buildCacheRequiredMessage(enabled: boolean): string {
   );
 }
 
-/** Log cache status after client creation. */
-function logCacheStatus(
-  connected: boolean,
-  enabled: boolean,
-  keyCount: number,
-  ignoreCached404: boolean,
-): void {
-  if (connected) {
-    ingestLogger.info('Oak client created with Redis caching', {
-      cachedEntries: keyCount,
-      ignoreCached404,
-      note: 'API responses will be cached - subsequent runs will be faster',
-    });
-  } else {
-    const reason = enabled ? 'Redis not available' : 'caching disabled';
-    ingestLogger.warn('Oak client created WITHOUT caching', {
-      bypassCache: true,
-      warning: 'All API requests will be made fresh - slower and may hit rate limits',
-      reason,
-    });
-  }
+/** Log that the client was created over a connected Redis cache. */
+function logCachedClientCreated(keyCount: number, ignoreCached404: boolean): void {
+  ingestLogger.info('Oak client created with Redis caching', {
+    cachedEntries: keyCount,
+    ignoreCached404,
+    note: 'API responses will be cached - subsequent runs will be faster',
+  });
+}
+
+/** Log that the client was created without a cache, and why the cache was unavailable. */
+function logUncachedClientCreated(cacheEnabled: boolean): void {
+  const reason = cacheEnabled ? 'Redis not available' : 'caching disabled';
+  ingestLogger.warn('Oak client created WITHOUT caching', {
+    bypassCache: true,
+    warning: 'All API requests will be made fresh - slower and may hit rate limits',
+    reason,
+  });
 }
 
 /**
@@ -89,7 +85,11 @@ export async function createIngestionClient(options: IngestionClientOptions): Pr
   }
 
   const client = await createOakClient({ env, caching: { ignoreCached404 } });
-  logCacheStatus(cacheStatus.connected, cacheStatus.enabled, cacheStatus.keyCount, ignoreCached404);
+  if (cacheStatus.connected) {
+    logCachedClientCreated(cacheStatus.keyCount, ignoreCached404);
+  } else {
+    logUncachedClientCreated(cacheStatus.enabled);
+  }
 
   return client;
 }

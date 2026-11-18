@@ -95,7 +95,7 @@ backgrounded** (grounded fact from this session).
 
 **Commit D2 — merge-gate correction (pr-lifecycle skill):**
 
-- `.agent/skills/pr-lifecycle/SKILL-CANONICAL.md` Phase 7 (~lines 130–144): refine the merge-gate model
+- `.agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md` Phase 7 (~lines 130–144): refine the merge-gate model
   — the gate is *merge-button-active-for-a-non-admin* = all checks green AND all review threads resolved
   (fixed or rejected-as-incorrect); a truly-green PR merges via a normal non-admin `gh pr merge`.
   Correct any "a clean agent merge is prohibited" wording; KEEP `--admin`-forbidden and the

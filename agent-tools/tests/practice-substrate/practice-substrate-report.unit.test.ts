@@ -10,6 +10,11 @@ import {
   evaluateMigrationLedgerSnapshot,
 } from '../../src/practice-substrate/report-evaluators';
 
+/** A report executor the CLI must never reach: it throws when called. */
+const unreachableReport = (): never => {
+  throw new Error('report should not execute');
+};
+
 describe('practice substrate report-mode argument parsing', () => {
   it('parses the read-only report-mode check command', () => {
     expect(parsePracticeSubstrateCliArgs(['check', '--mode', 'report'])).toStrictEqual({
@@ -229,15 +234,11 @@ describe('practice substrate report aggregation', () => {
   });
 
   it('maps CLI parse failures to usage exit code 2 without running the report', async () => {
-    const executeReport = () => {
-      throw new Error('report should not execute');
-    };
-
     await expect(
       runPracticeSubstrateCli({
         argv: ['status', '--mode', 'report'],
         repoRoot: '/repo',
-        executeReport,
+        executeReport: unreachableReport,
       }),
     ).resolves.toStrictEqual({
       exitCode: 2,
@@ -249,7 +250,7 @@ describe('practice substrate report aggregation', () => {
       runPracticeSubstrateCli({
         argv: ['check', '--mode', 'report', '--unknown', 'value'],
         repoRoot: '/repo',
-        executeReport,
+        executeReport: unreachableReport,
       }),
     ).resolves.toStrictEqual({
       exitCode: 2,
@@ -261,7 +262,7 @@ describe('practice substrate report aggregation', () => {
       runPracticeSubstrateCli({
         argv: ['check', '--mode'],
         repoRoot: '/repo',
-        executeReport,
+        executeReport: unreachableReport,
       }),
     ).resolves.toStrictEqual({
       exitCode: 2,

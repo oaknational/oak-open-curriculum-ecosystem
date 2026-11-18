@@ -6,7 +6,8 @@ overview: >-
   Re-architect the estate around the toolkit/oak seam so machinery is
   generic by construction, Oak products are thin and extractable, and
   the toolkit can build any digital service.
-status: ratified
+status: superseded
+superseded_by: oce-rearchitecting-programme
 ratified_by: "Jim Cresswell"
 ratified_date: 2026-08-19
 ratified_where: >-
@@ -23,12 +24,23 @@ impact_areas:
 gate_expiry_default: P21D
 depends_on: []
 owner_gates: []
-tickets:
-  - MCP-619
-last_updated: 2026-09-03
+last_updated: 2026-10-10
 ---
 
 # Toolkit re-architecture
+
+## Supersession — 10 October 2026
+
+This historical ratified record is superseded by `oce-rearchitecting-programme` under
+[ADR-233](../../../docs/architecture/architectural-decisions/233-retained-framework-and-configurable-instances.md).
+Its original stamp and body below are conserved as history, not current instructions.
+Full framework retention, CF-first preference, complete integrity and supported configuration replace the extraction-first route and blanket adopt-first foundation rule. No fixed directory count or team-speed proxy defines success.
+The [programme source/disposition report](../../reports/repo-architecture/oce-rearchitecting/source-dispositions.md)
+records retained mechanisms, replaced criteria and receiving nodes. Historical
+team-measurement instructions, app-local implementation allowances and expired
+decision gates below do not govern current work.
+
+## Historical record
 
 ## Outcome
 

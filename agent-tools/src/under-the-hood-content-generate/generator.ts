@@ -2,7 +2,7 @@
  * Under-the-hood MCP content generator.
  *
  * Reads the canonical orientation skill
- * (`.agent/skills/under-the-hood/SKILL-CANONICAL.md`), classifies every
+ * (`.agent/skills/orientation/under-the-hood/SKILL-CANONICAL.md`), classifies every
  * section against the total allow/exclude lists in `sections.ts`, and emits
  * the served digest as a committed generated module in the MCP app
  * (`apps/oak-curriculum-mcp-streamable-http/src/generated/oak-under-the-hood-content.ts`).
@@ -20,6 +20,8 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 import { err, isErr, ok, type Result } from '@oaknational/result';
+
+import { toLfText } from '../core/lf-text.js';
 
 import {
   CANONICAL_SKILL_PATH,
@@ -152,7 +154,10 @@ export interface GeneratorFileIo {
 export const NODE_FILE_IO: GeneratorFileIo = {
   readTextFile: async (path: string): Promise<string | undefined> => {
     try {
-      return await readFile(path, 'utf8');
+      // LF-normalised at the read edge (see toLfText) so generation and
+      // staleness checks judge CONTENT — the generated module is composed
+      // and written LF regardless.
+      return toLfText(await readFile(path, 'utf8'));
     } catch {
       return undefined;
     }

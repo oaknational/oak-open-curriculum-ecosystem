@@ -104,9 +104,11 @@ describe('runContextCostCli', () => {
 
   it('excludes symlinked files from production glob expansion', async () => {
     const cwd = await createContextCostFixture(tmpDirs);
-    await createContextCostSymlink(cwd);
+    await createContextCostSymlink(tmpDirs, cwd);
 
-    const result = await runContextCostCli({ argv: ['--glob', '*.md'], cwd });
+    // '**/*.md' would surface the linked directory's markdown if the glob
+    // followed symlinks; the totals below prove it never does.
+    const result = await runContextCostCli({ argv: ['--glob', '**/*.md'], cwd });
 
     expect(result.exitCode).toBe(0);
     expect(result.stdout).not.toContain('linked.md');

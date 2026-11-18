@@ -66,58 +66,69 @@ function expectConfigured(
   return result.value.inputs;
 }
 
-describe('createSentryBuildPlugin — production environment, main branch', () => {
-  const productionMain = (): SentryBuildEnvironment =>
-    env({ VERCEL_ENV: 'production', VERCEL_GIT_COMMIT_REF: 'main' });
+/** The production build of `main`: the release-publishing context. */
+function productionMainEnvironment(): SentryBuildEnvironment {
+  return env({ VERCEL_ENV: 'production', VERCEL_GIT_COMMIT_REF: 'main' });
+}
 
+/** A preview build of a feature branch, carrying the branch URL Vercel assigns it. */
+function previewEnvironment(): SentryBuildEnvironment {
+  return env({
+    VERCEL_ENV: 'preview',
+    VERCEL_GIT_COMMIT_REF: 'feat/otel_sentry_enhancements',
+    VERCEL_BRANCH_URL: BRANCH_URL,
+  });
+}
+
+describe('createSentryBuildPlugin — production environment, main branch', () => {
   it('emits a configured intent', () => {
-    const result = createSentryBuildPlugin(productionMain());
+    const result = createSentryBuildPlugin(productionMainEnvironment());
     expectConfigured(result);
   });
 
   it('uses APP_VERSION as the release name', () => {
-    const inputs = expectConfigured(createSentryBuildPlugin(productionMain()));
+    const inputs = expectConfigured(createSentryBuildPlugin(productionMainEnvironment()));
     expect(inputs.release.name).toBe(APP_VERSION);
   });
 
   it('binds setCommits.commit to VERCEL_GIT_COMMIT_SHA', () => {
-    const inputs = expectConfigured(createSentryBuildPlugin(productionMain()));
+    const inputs = expectConfigured(createSentryBuildPlugin(productionMainEnvironment()));
     expect(inputs.release.setCommits.commit).toBe(COMMIT_SHA);
   });
 
   it('binds setCommits.repo to the resolved identity repoSlug', () => {
-    const inputs = expectConfigured(createSentryBuildPlugin(productionMain()));
+    const inputs = expectConfigured(createSentryBuildPlugin(productionMainEnvironment()));
     expect(inputs.release.setCommits.repo).toBe(FULL_REPO_SLUG);
   });
 
   it('sets deploy.env to "production"', () => {
-    const inputs = expectConfigured(createSentryBuildPlugin(productionMain()));
+    const inputs = expectConfigured(createSentryBuildPlugin(productionMainEnvironment()));
     expect(inputs.release.deploy.env).toBe('production');
   });
 
   it('disables vendor telemetry', () => {
-    const inputs = expectConfigured(createSentryBuildPlugin(productionMain()));
+    const inputs = expectConfigured(createSentryBuildPlugin(productionMainEnvironment()));
     expect(inputs.telemetry).toBe(false);
   });
 
   it('targets dist sourcemaps for post-upload deletion', () => {
-    const inputs = expectConfigured(createSentryBuildPlugin(productionMain()));
+    const inputs = expectConfigured(createSentryBuildPlugin(productionMainEnvironment()));
     expect(inputs.sourcemaps.filesToDeleteAfterUpload).toEqual(['dist/server.js.map']);
   });
 
   it('passes through SENTRY_AUTH_TOKEN to the plugin inputs', () => {
-    const inputs = expectConfigured(createSentryBuildPlugin(productionMain()));
+    const inputs = expectConfigured(createSentryBuildPlugin(productionMainEnvironment()));
     expect(inputs.authToken).toBe(AUTH_TOKEN);
   });
 
   it('passes through identity (org, project) from the env boundary', () => {
-    const inputs = expectConfigured(createSentryBuildPlugin(productionMain()));
+    const inputs = expectConfigured(createSentryBuildPlugin(productionMainEnvironment()));
     expect(inputs.org).toBe(SENTRY_ORG);
     expect(inputs.project).toBe(SENTRY_PROJECT);
   });
 
   it('exposes the resolved release on the configured intent for persistence', () => {
-    const result = createSentryBuildPlugin(productionMain());
+    const result = createSentryBuildPlugin(productionMainEnvironment());
     expect(result.ok).toBe(true);
     if (!result.ok) {
       return;
@@ -132,7 +143,7 @@ describe('createSentryBuildPlugin — production environment, main branch', () =
   });
 
   it('exposes the resolved gitSha on the configured intent for persistence', () => {
-    const result = createSentryBuildPlugin(productionMain());
+    const result = createSentryBuildPlugin(productionMainEnvironment());
     expect(result.ok).toBe(true);
     if (!result.ok) {
       return;
@@ -148,20 +159,13 @@ describe('createSentryBuildPlugin — production environment, main branch', () =
 });
 
 describe('createSentryBuildPlugin — preview environment', () => {
-  const preview = (): SentryBuildEnvironment =>
-    env({
-      VERCEL_ENV: 'preview',
-      VERCEL_GIT_COMMIT_REF: 'feat/otel_sentry_enhancements',
-      VERCEL_BRANCH_URL: BRANCH_URL,
-    });
-
   it('emits configured intent with deploy.env="preview"', () => {
-    const inputs = expectConfigured(createSentryBuildPlugin(preview()));
+    const inputs = expectConfigured(createSentryBuildPlugin(previewEnvironment()));
     expect(inputs.release.deploy.env).toBe('preview');
   });
 
   it('derives release name as the leftmost label of VERCEL_BRANCH_URL hostname', () => {
-    const inputs = expectConfigured(createSentryBuildPlugin(preview()));
+    const inputs = expectConfigured(createSentryBuildPlugin(previewEnvironment()));
     expect(inputs.release.name).toBe(BRANCH_URL_LABEL);
   });
 });

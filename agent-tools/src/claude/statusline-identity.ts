@@ -9,9 +9,9 @@
  * the model, context % and working branch, the working location, and — in a team
  * checkout with linked worktrees — the shared coordination branch on its own row.
  *
- * The logo style is read from `OAK_STATUSLINE_LOGO` (`braille-sharp` default;
+ * The logo style is read from `PRACTICE_STATUSLINE_LOGO` (`braille-sharp` default;
  * `braille`/`quad`/`sextant` alternatives; `none` for the two-line layout).
- * Setting `OAK_STATUSLINE_LOG_FILE` to a `*.log` path appends each invocation's
+ * Setting `PRACTICE_STATUSLINE_LOG_FILE` to a `*.log` path appends each invocation's
  * raw stdin payload there for diagnosis (see `statusline-debug-log.ts`). The
  * agent-identity name (PDR-027) comes from the built `agent-identity` CLI. Git
  * facts come from {@link gatherGitFacts} against the working directory in the
@@ -38,7 +38,7 @@ import { fileURLToPath } from 'node:url';
 import { sessionIdPrefix } from '../collaboration-state/identity.js';
 import { parseCollaborationRegistry } from '../collaboration-state/state-parsers.js';
 import { type CollaborationRegistry } from '../collaboration-state/types.js';
-import { resolveLogoStyle } from './oak-logo.js';
+import { resolveLogoStyle } from './logo.js';
 import { appendDebugLogEntry } from './statusline-debug-log.js';
 import { emitStatusline, type RenderInputs } from './statusline-emit.js';
 import { createFsFrameStore, LOGO_FRAME_STATE_DIR } from './statusline-frame-store.js';
@@ -77,7 +77,7 @@ function renderFromInputs(inputs: RenderInputs): string {
   const cwd = inputs.cwd ?? process.cwd();
   const identity = deriveIdentity(inputs.seed);
   const git = gatherGitFacts(cwd);
-  const logo = resolveLogoStyle(process.env.OAK_STATUSLINE_LOGO);
+  const logo = resolveLogoStyle(process.env.PRACTICE_STATUSLINE_LOGO);
   return renderStatusline(
     {
       identity,
@@ -134,7 +134,7 @@ function resolveLogoFrame(
   if (logo !== 'braille-sharp' || sessionId === undefined) {
     return 0;
   }
-  if (isMotionDisabled(process.env.OAK_STATUSLINE_MOTION)) {
+  if (isMotionDisabled(process.env.PRACTICE_STATUSLINE_MOTION)) {
     return 0;
   }
   return readAndAdvanceFrame(createFsFrameStore(LOGO_FRAME_STATE_DIR), sessionId);

@@ -713,7 +713,8 @@ know before applying Part VII:
    permanent documentation, archive complete plans, extract-and-archive
    completed work from partial plans, rewrite survivors to a common
    standard, pull scattered concepts into new plans, delete with
-   disposition", with new plan boundaries derived FROM `docs/strategy/`.
+   disposition", with new plan boundaries derived FROM the estate's strategy
+   layer (in OCE, `docs/strategy/`).
    Its named prerequisites (the plan standard = `plan-node-schema.v0.md`
    under ADR-200, and a fresh deep survey) map directly onto this
    guide's P1 (taxonomy + instrument calibration) and P0 (inventory).

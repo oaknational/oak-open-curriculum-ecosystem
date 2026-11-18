@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { sanitiseTerminalLine } from './terminal-output.js';
 
-const ESC = String.fromCharCode(0x1b);
+const ESC = String.fromCodePoint(0x1b);
 
 describe('sanitiseTerminalLine', () => {
   it('strips ANSI escape sequences an attacker-controllable string could smuggle', () => {
@@ -13,17 +13,17 @@ describe('sanitiseTerminalLine', () => {
   it('strips C0, DEL, and C1 controls while keeping tab and newline', () => {
     const mixed = [
       'a',
-      String.fromCharCode(0x00),
+      String.fromCodePoint(0x00),
       'b',
-      String.fromCharCode(0x08),
+      String.fromCodePoint(0x08),
       'c',
       '\t',
       'd',
       '\n',
       'e',
-      String.fromCharCode(0x7f),
+      String.fromCodePoint(0x7f),
       'f',
-      String.fromCharCode(0x9b),
+      String.fromCodePoint(0x9b),
       'g',
     ].join('');
     expect(sanitiseTerminalLine(mixed)).toBe('abc\td\nefg');

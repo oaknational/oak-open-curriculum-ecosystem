@@ -43,6 +43,12 @@ describe('run data contracts', () => {
     expect(isErr(parseMapRunData({ windows: [{ window: 'w01', files: [] }] }))).toBe(true);
   });
 
+  it('refuses a partition window whose file names a place outside the repository', () => {
+    expect(isErr(parseMapRunData({ windows: [{ window: 'w01', files: ['../secrets.md'] }] }))).toBe(
+      true,
+    );
+  });
+
   it('accepts reduce leaves and rejects a leaf missing grounding', () => {
     expect(isOk(parseReduceRunData({ leaves: [leaf] }))).toBe(true);
     expect(isErr(parseReduceRunData({ leaves: [{ ...leaf, grounding: [] }] }))).toBe(true);

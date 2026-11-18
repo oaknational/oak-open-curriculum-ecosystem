@@ -199,6 +199,10 @@ describe('buildAdapterFrontmatter', () => {
   });
 });
 
+/** The index of the line on which the given frontmatter key is emitted, or -1. */
+const lineIndex = (content: string, key: string): number =>
+  content.split('\n').findIndex((line) => line.startsWith(`${key}:`));
+
 describe('renderAdapter spec-portable pass-through', () => {
   const carrier: ParsedCanonical = {
     id: 'parallax-design-experiment',
@@ -214,9 +218,6 @@ describe('renderAdapter spec-portable pass-through', () => {
     canonicalPath: '/repo/.agent/skills/cognition/parallax-design-experiment/SKILL-CANONICAL.md',
     canonicalFilename: 'SKILL-CANONICAL.md',
   };
-
-  const lineIndex = (content: string, key: string): number =>
-    content.split('\n').findIndex((line) => line.startsWith(`${key}:`));
 
   it.each(['claude', 'agents'] as const)(
     're-parses to the canonical values on the %s surface',

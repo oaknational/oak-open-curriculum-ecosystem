@@ -21,15 +21,16 @@ that case directly.
 
 ## Helpers
 
-| Helper                         | Replaces                       | Returns                      |
-| ------------------------------ | ------------------------------ | ---------------------------- |
-| `typeSafeKeys(obj)`            | `Object.keys(obj)`             | `Extract<keyof T, string>[]` |
-| `typeSafeValues(obj)`          | `Object.values(obj)`           | `T[keyof T][]`               |
-| `typeSafeEntries(obj)`         | `Object.entries(obj)`          | `[K, T[K]][]`                |
-| `typeSafeGet(obj, key)`        | `Reflect.get(obj, key)`        | `T[K]`                       |
-| `typeSafeSet(obj, key, value)` | `Reflect.set(obj, key, value)` | `void`                       |
-| `typeSafeHas(obj, key)`        | `Reflect.has(obj, key)`        | `key is keyof T`             |
-| `typeSafeHasOwn(obj, key)`     | `Object.hasOwn(obj, key)`      | `key is keyof T`             |
+| Helper                            | Replaces                       | Returns                      |
+| --------------------------------- | ------------------------------ | ---------------------------- |
+| `typeSafeKeys(obj)`               | `Object.keys(obj)`             | `Extract<keyof T, string>[]` |
+| `typeSafeValues(obj)`             | `Object.values(obj)`           | `T[keyof T][]`               |
+| `typeSafeEntries(obj)`            | `Object.entries(obj)`          | `[K, T[K]][]`                |
+| `typeSafeGet(obj, key)`           | `Reflect.get(obj, key)`        | `T[K]`                       |
+| `typeSafeSet(obj, key, value)`    | `Reflect.set(obj, key, value)` | `void`                       |
+| `typeSafeHas(obj, key)`           | `Reflect.has(obj, key)`        | `key is keyof T`             |
+| `typeSafeHasOwn(obj, key)`        | `Object.hasOwn(obj, key)`      | `key is keyof T`             |
+| `typeSafeIncludes(values, value)` | `values.includes(value)`       | `value is T`                 |
 
 **`keyof` over a union is the INTERSECTION of keys, not the union.** For a
 union type `U`, `keyof U` yields only the keys present on _every_ member, so

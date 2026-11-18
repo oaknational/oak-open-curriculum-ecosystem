@@ -30,10 +30,12 @@ const WIRE_PROPERTIES = z.object({
 
 /**
  * The per-property wire view of a flat input shape, exactly as agents read
- * it from `tools/list` after `z.toJSONSchema` conversion.
+ * it from `tools/list` after `z.toJSONSchema` conversion — in the SDK's own
+ * `io: 'input'` mode, which drops metadata chained onto a transforming
+ * wrapper; the default output mode would report examples the wire lacks.
  */
 export function wireProperties(shape: z.ZodRawShape): Record<string, { examples?: unknown[] }> {
-  return WIRE_PROPERTIES.parse(z.toJSONSchema(z.object(shape))).properties;
+  return WIRE_PROPERTIES.parse(z.toJSONSchema(z.object(shape), { io: 'input' })).properties;
 }
 
 /**

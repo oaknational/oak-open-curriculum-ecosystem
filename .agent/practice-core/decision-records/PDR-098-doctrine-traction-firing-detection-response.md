@@ -162,3 +162,30 @@ mechanically fired).
   via recall-gated ritual, not a mechanical fire. The existence proof that cognitive
   detection can be bound to a defined action-moment at all; the design lane's task is
   to give that binding a *mechanical* firing cadence.
+
+## Evidence (2026-09-06) — recurrence despite verified homes, measured
+
+Two consolidation measurements over the napkin corpus put a rate on the cost of the
+recall-dependent quadrant. The 2026-08-07 quorum kept nineteen mechanisms, each with a
+verified home; the 2026-09-02 historical synthesis found sixteen of them recurring within
+four weeks of those homes, and the three that did not were actuators that had gone quiet,
+not classes shown extinguished. One class, the piped exit code
+(`exit-codes-in-band-never-piped`), recurred six times after 2026-08-07 at four seats while
+its cure text gained a fourth generation — hardened after each recurrence, never before one
+— and a seventh time on 2026-09-06 (a queue guard's refusal read through a pipe inside a
+commit script). An owner re-raise of an already-homed rule is the same signal read from the
+owner's side: "please remind everyone that visual work must be validated visually as well
+as by other means" (2026-08-18), against `visual-verdicts-require-rendered-proof`, already
+in the rule estate. A napkin corpus measures recurrence and cannot measure extinction — a
+cured class leaves no entry when it stops firing — so the rate is a floor. These
+measurements select no mechanism (§Scope); they price the empty quadrant.
+
+The shortest measured interval: the PR-open intake declaration and tally, on the default
+branch in
+`review-feedback-defaults-to-triage` §Trigger since 2026-08-31, went unbuilt at the next
+shepherded PR carrying prose (a fold PR of 2026-09-02; the host repository's
+doctrine-traction plan names it); the loop was cured at round three by seat
+judgement and the owner invoked pr-lifecycle and proportionality mid-loop — the defect
+PDR-140 clause 8 names. The rule text was intact and read; the cure landed 2026-09-06 as a
+PR-open step in the delivery-plan template, a shape-entry binding installed where the PR is
+authored rather than a further sentence in the rule.

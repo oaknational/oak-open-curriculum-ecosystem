@@ -42,7 +42,7 @@ if (
   // otherwise pair the first opening tag with the LAST closing tag and
   // inject the extra root as geometry; trailing non-whitespace after the
   // close is the same class.
-  wordmarkRaw.indexOf('<svg', rootTagStart + 1) !== -1 ||
+  wordmarkRaw.includes('<svg', rootTagStart + 1) ||
   wordmarkRaw.slice(rootClose + '</svg>'.length).trim() !== ''
 ) {
   throw new Error(

@@ -3,6 +3,7 @@ name: "Production Factories In Tests Are Ceremony Unless They ARE The Subject"
 polarity: anti-pattern
 use_this_when: "Writing or reviewing a test that imports a production factory (config loader, observability factory, SDK initialiser) to satisfy a downstream call's signature"
 category: test-architecture
+layer: general
 proven_in: "apps/oak-curriculum-mcp-streamable-http — `loadRuntimeConfig` + `createHttpObservabilityOrThrow` pulled into 16+ tests as incidental infrastructure; surfaced via MaxListenersExceededWarning; commits 276ea9bd + follow-up"
 proven_date: 2026-04-18
 barrier:
@@ -82,7 +83,7 @@ relaxations.
 
 ## Enforcement
 
-`@oaknational/eslint-plugin-standards` `testRules` enforces this
+OCE's `eslint-plugin-standards` package's `testRules` enforces this
 structurally:
 
 - `no-restricted-imports` (error) on known production-factory paths

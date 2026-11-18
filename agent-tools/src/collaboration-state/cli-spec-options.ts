@@ -24,7 +24,6 @@ export const commsSendOptions = [
   'platform',
   'model',
   'comms-dir',
-  'output',
   'active',
   'repo-root',
   'now',

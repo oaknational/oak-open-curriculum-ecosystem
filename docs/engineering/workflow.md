@@ -1,6 +1,6 @@
 # Development Workflow
 
-**Last Updated**: 2026-04-11  
+**Last Updated**: 2026-09-28  
 **Status**: Active workflow guide
 
 The complete development lifecycle for this repository, from branch creation to release.
@@ -36,7 +36,11 @@ When changing system behaviour, update tests at the same level first:
 | ----------------------- | ------------------------------------------- |
 | Pure function behaviour | Unit tests (`*.unit.test.ts`)               |
 | Integration behaviour   | Integration tests (`*.integration.test.ts`) |
-| System behaviour        | E2E tests (`*.e2e.test.ts`)                 |
+| System behaviour        | E2E checks (validators, not tests)          |
+
+An E2E check today is a `*.e2e.test.ts` file that the `test:e2e` runner reaches. Both
+names are defects under the IO invariant that the recovery plan retires; until it does, a new
+check goes where that live runner sees it.
 
 See [Testing Strategy](../../.agent/directives/testing-strategy.md) for full details.
 
@@ -87,6 +91,11 @@ git commit -m "refactor: extract validation helper from tool executor"
 
 Common prefixes: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`, `ci`.
 
+The pre-commit hook runs `lint:shell`, the pinned shellcheck over every tracked
+shell script outside the vendored skills. If the hook cannot run the pinned version, the commit fails —
+run `.agent/setup/install-shellcheck.sh`, which installs it into the
+checkout's ignored `.tools/bin`.
+
 ## 5. Push
 
 The pre-push hook runs `gitleaks detect` to scan for secrets. If gitleaks is not installed, the push will fail — install from [gitleaks releases](https://github.com/gitleaks/gitleaks/releases).
@@ -120,8 +129,8 @@ reference table.
 indicates an environmental or configuration issue, not a missing check. Both
 surfaces cover secrets, build, formatting, markdown, sub-agents, portability,
 knip (unused code detection), depcruise (circular deps, orphans, layer
-violations), workspace-owned repo validators, lint, type-check, unit tests,
-E2E, UI, and smoke tests. `pnpm check` adds widget tests, a11y tests,
+violations), workspace-owned repo validators, lint, type-check, unit and
+integration tests, and the E2E, UI and smoke checks. `pnpm check` adds widget tests, a11y tests,
 clean rebuild, and fix-mode commands.
 
 ## 8. AI Sub-Agent Review
@@ -216,7 +225,7 @@ verified output, not in the green exit code.
 
 Package scripts that wrap a test runner sometimes pick up extra suite
 selection, parallelism flags, or filter rewrites that broaden the run
-beyond what a focused proof needs. When a `pnpm test:unit <file>`
+beyond what a focused proof needs. When a package's `pnpm test <file>`
 invocation starts running the broader suite or hangs on unrelated
 work, drop to the runner directly:
 `pnpm --dir <package> exec vitest run <file>`. The literal vitest

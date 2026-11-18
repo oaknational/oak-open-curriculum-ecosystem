@@ -5,10 +5,10 @@
  * SDK documentation under stable, descriptive names.
  */
 
-import type { paths as ApiPaths, Subject, KeyStage } from '@oaknational/sdk-codegen/api-schema';
+import type { Paths as ApiPaths, Subject, KeyStage } from '@oaknational/sdk-codegen/api-schema';
 
 /**
- * OpenAPI `paths` map used by the Oak API clients.
+ * The OpenAPI document's `paths` object as a type, used by the Oak API clients.
  */
 export type DocPaths = ApiPaths;
 

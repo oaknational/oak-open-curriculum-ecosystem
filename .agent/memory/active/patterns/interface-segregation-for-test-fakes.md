@@ -3,6 +3,7 @@ name: "Interface Segregation for Test Fakes"
 polarity: pattern
 use_this_when: "Test fakes cannot satisfy a complex generated type without type assertions"
 category: testing
+layer: general
 proven_in: "apps/oak-curriculum-mcp-streamable-http (widget renderer contracts, tool execution tests)"
 proven_date: 2026-02-22
 barrier:
@@ -64,5 +65,5 @@ definition (not scattered across dozens of test files).
 
 ## Related
 
-- [ADR-078: Dependency Injection for Testability](../../../../docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md)
-- [TypeScript Practice: Interface Segregation for Testability](../../../../docs/governance/typescript-practice.md)
+- ADR-078: Dependency Injection for Testability (`078-dependency-injection-for-testability.md`, a file OCE holds)
+- TypeScript Practice: Interface Segregation for Testability (`typescript-practice.md`, a file OCE holds)

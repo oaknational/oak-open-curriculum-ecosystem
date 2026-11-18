@@ -47,14 +47,18 @@ pnpm agent-tools:collaboration-state -- identity preflight --platform codex --mo
    refresh `heartbeat_at`.
 4. Before staging or committing, open a short-lived `git:index/head`
    claim with `freshness_seconds: 900`, append a shared-log note when
-   useful, post a `commit_queue` entry for the intended bundle, and close it
+   useful, post a commit-queue intent for the intended bundle
+   (`pnpm agent-tools commit-queue enqueue`), and close it
    immediately after success, failure, or abort.
 
 ## Commit Queue
 
-`active-claims.json` v1.3.0 carries a root `commit_queue` array. The array is
-FIFO and advisory: agents use it to decide whose commit turn is next, but it
-does not mechanically refuse work. PDR-029 defines the queue as the
+Since registry schema 1.4.0 the queue is a per-intent, machine-local store
+beside `active-claims.json` (`commit-queue/`, one file per intent with a
+one-hour TTL from its last write; `commit-queue list` is the view; owner
+ruling QUEUE-LOCAL, 2026-08-17 — the queue is never in version control). The
+queue is FIFO by `queued_seq` and advisory: agents use it to decide whose
+commit turn is next, but it does not mechanically refuse work. PDR-029 defines the queue as the
 observable artefact for the shared git transaction / authorial-bundle
 tripwire; this file records the operational recipe.
 
@@ -73,10 +77,12 @@ Use `pnpm agent-tools:commit-queue --` through the commit skill:
    clears the claim pointer. A successful git commit is the durable record.
 6. `phase --phase abandoned` if the attempt stops before success.
 
-`expires_at` is the wall-clock **expired**-reporting timestamp (per the
-four-term vocabulary in conventions.md). Expiry never auto-removes a queue
-entry and never blocks another agent by itself.
-`session_counter` is intentionally absent from v1.3.0.
+`expires_at` is the derived wall-clock expiry, `updated_at` plus the
+one-hour TTL (the **expired** term of the four-term vocabulary in
+conventions.md). Since 1.4.0 an expired intent is read as absent and swept
+by the next queue write — ephemera by the QUEUE-LOCAL owner ruling, not
+inspectable after expiry — and expiry never blocks another agent by itself.
+`session_counter` is intentionally absent from the intent schema.
 
 Commit-queue mutations reuse the same JSON transaction helper as active
 claims so parallel enqueue/phase/complete operations re-read current state

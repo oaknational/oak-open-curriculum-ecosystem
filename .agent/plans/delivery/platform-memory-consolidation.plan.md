@@ -233,3 +233,12 @@ need is a new owner word. S4 runs once.
 - The in-repo buffers (napkin, distilled, pending-graduations) are
   consolidate-docs' ordinary scope, NOT this plan's; a full pass over
   them is its own session if triggered.
+
+- The Codex per-user store was sized on 2026-08-07: `~/.codex/memories` held `MEMORY.md`
+  (1,421 lines), `raw_memories.md` (3,120 lines), 46 rollout summaries and a skills
+  directory, locally git-versioned; the Cursor and Gemini per-user stores on the same
+  machine were verified empty the same day (session logs only; `GEMINI.md` zero lines), so
+  the Codex corpus is the one execution the first follow-on names. A Claude-standard
+  graduation audit over it was priced as fleet-scale and routed to the Director on
+  2026-08-07 as one seat-session with a disposition record as its deliverable; it had not
+  run as of the 2026-09-07 consolidation.

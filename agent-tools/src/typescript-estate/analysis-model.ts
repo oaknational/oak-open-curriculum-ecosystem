@@ -6,12 +6,7 @@ import type {
   SchemaShapeUnsupportedReason,
   TypeTruthId,
 } from './file-vocabulary.js';
-import type {
-  AtLeastThreeReadonly,
-  NonEmptyReadonlyArray,
-  RepoPath,
-  Sha256,
-} from './scalar-model.js';
+import type { AtLeastThreeReadonly, NonEmptyReadonlyArray } from './scalar-model.js';
 
 export type ConstructClass =
   'runtime-value-structure' | 'type-model-structure' | 'algorithmic-operation';
@@ -42,8 +37,8 @@ export type ModuleResolutionRecord =
   | (ResolutionBase & {
       readonly status: 'resolved-file';
       readonly resolver: 'typescript-module-resolution';
-      readonly target: RepoPath;
-      readonly configPath: RepoPath;
+      readonly target: string;
+      readonly configPath: string;
       readonly typescriptVersion: string;
     })
   | (ResolutionBase & {
@@ -57,7 +52,7 @@ export type ModuleResolutionRecord =
       readonly status: 'workspace-package';
       readonly resolver: 'workspace-package-map';
       readonly target: string;
-      readonly configPath: RepoPath;
+      readonly configPath: string;
       readonly typescriptVersion: null;
     })
   | (ResolutionBase & {
@@ -71,7 +66,7 @@ export type ModuleResolutionRecord =
       readonly status: 'unresolved-literal';
       readonly resolver: 'typescript-module-resolution';
       readonly target: null;
-      readonly configPath: RepoPath | null;
+      readonly configPath: string | null;
       readonly typescriptVersion: string;
     })
   | (ResolutionBase & {
@@ -110,7 +105,7 @@ interface SchemaShapeBase {
 export type SchemaShape =
   | (SchemaShapeBase & {
       readonly propertyNames: AtLeastThreeReadonly<string>;
-      readonly fingerprint: Sha256;
+      readonly fingerprint: string;
       readonly completeness: 'complete-static-key-set';
       readonly unsupportedReasons: readonly [];
     })
@@ -122,7 +117,7 @@ export type SchemaShape =
     });
 
 export interface SchemaShapeEndpoint {
-  readonly path: RepoPath;
+  readonly path: string;
   readonly kind: SchemaShape['kind'];
   readonly startLine: number;
   readonly endLine: number;
@@ -131,7 +126,7 @@ export interface SchemaShapeEndpoint {
 }
 
 export interface SchemaShapeMatch {
-  readonly fingerprint: Sha256;
+  readonly fingerprint: string;
   readonly propertyNames: AtLeastThreeReadonly<string>;
   readonly authored: SchemaShapeEndpoint;
   readonly generated: SchemaShapeEndpoint;
@@ -139,7 +134,7 @@ export interface SchemaShapeMatch {
 }
 
 export interface CloneMember {
-  readonly path: RepoPath;
+  readonly path: string;
   readonly kind: RepetitionRegionKind;
   readonly startOffset: number;
   readonly endOffset: number;
@@ -151,7 +146,7 @@ export interface CloneMember {
 }
 
 export interface CloneGroup {
-  readonly fingerprint: Sha256;
+  readonly fingerprint: string;
   readonly candidateEligibility: 'candidate-eligible' | 'verification-observation-only';
   readonly members: readonly [CloneMember, CloneMember, ...CloneMember[]];
 }

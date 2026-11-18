@@ -1,6 +1,6 @@
 # PDR-008: Canonical Quality-Gate Naming
 
-**Status**: Accepted
+**Status**: Accepted (amended 2026-09-24 — see Amendment Log)
 **Date**: 2026-04-18
 **Related**:
 [PDR-006](PDR-006-dev-tooling-per-ecosystem.md)
@@ -68,9 +68,9 @@ the commands are reinvented per repo.
 named quality gates at the package-manager script level. The
 canonical set is the minimum; additional ecosystem-specific gates
 are permitted. Names follow a consistent verify/apply convention
-(verify is default; mutation is explicit) and a consistent
-CI-variant convention. Underlying tool invocations adapt to each
-ecosystem.**
+(verify is default; mutation is explicit), and CI runs the
+aggregate gate's verifying legs under a parity check. Underlying
+tool invocations adapt to each ecosystem.**
 
 ### The canonical minimum set
 
@@ -87,51 +87,36 @@ Every repo provides these named scripts:
 | `lint:fix` | yes | Apply lints with auto-fix. |
 | `typecheck` | no | Verify types across the repo. No `:fix` variant — type errors are source changes, not tool-fixable. |
 | `test` | no | Run the repo's tests. No `:fix` variant — test failures are source changes, not tool-fixable. |
-| `check` | yes | **Ergonomic alias for `check:fix`.** The short name carries the most-typed aggregate gate. This is the one deliberate exception to Rule 1 (see Convention Rules below). |
-| `check:fix` | yes | Aggregate local gate: runs every verify-type gate plus every `:fix` sub-gate. Mutating; brings the tree into a state where `check:ci` would pass. |
-| `check:ci` | no | CI-safe aggregate gate. Non-mutating; runs every verify-type gate only. Its exit code is the authoritative CI gate answer. |
-| `fix` | yes | Aggregate apply: runs every `:fix` sub-gate so a developer can bring the repo into a state that `check:ci` passes. At minimum runs `format:fix` + `lint:fix`; ecosystem-appropriate additions welcome (e.g. `markdownlint:fix`, `knip:fix`). |
+| `check` | source: no | Aggregate gate: runs every verify-type gate and applies no fixes. The action legs it runs (`clean`, a build, code generation) may rewrite derived output, never source. Its clean exit is the merge criterion, locally and in CI. |
+| `fix` | yes | Aggregate apply: runs every `:fix` sub-gate so a developer can bring the repo into a state that `check` passes. At minimum runs `format:fix` + `lint:fix`; ecosystem-appropriate additions welcome (e.g. `markdownlint:fix`, `knip:fix`). |
 
 ### Convention rules
 
-Five rules govern the naming:
+Four rules govern the naming:
 
 1. **Bare name = verify; `:fix` suffix = apply.** The safe default
-   is non-mutating. Mutation requires an explicit `:fix` suffix.
-   `format` verifies, `format:fix` applies. `lint` verifies,
-   `lint:fix` applies. Running a bare-name gate cannot change the
-   working tree.
+   is non-mutating. `format` verifies, `format:fix` applies. `lint`
+   verifies, `lint:fix` applies. The aggregate apply is `fix` (and
+   `fix:docs` for the documentation subset). Running a verify gate
+   cannot change source.
 2. **Inherently-action commands keep bare names.** `clean`,
    `build`, `dev` have no verify counterpart — they are actions,
    not assertions about state. They use bare names. An action
    command's implicit verify form, where one exists, uses a
    different name (`build`'s implicit verify is `typecheck`).
-3. **`:ci` suffix = non-mutating CI form.** `check:ci` is the CI
-   version of the aggregate gate — equivalent in verify coverage
-   to `check:fix` minus the `:fix` sub-gates. Its exit code is
-   the authoritative CI answer.
-4. **`check` is the one deliberate exception to Rule 1.** `check`
-   is defined as an alias for `check:fix` — the mutating local
-   aggregate. The exception is ergonomic: the aggregate gate is
-   typed tens of times per day in active development, and
-   imposing the `:fix` suffix on every invocation is friction
-   the ergonomics do not justify. Under the exception:
-   - `check` = `check:fix` (mutating; applies fixes; local form)
-   - `check:fix` = canonical name for the mutating aggregate
-     (explicit form; the script body)
-   - `check:ci` = non-mutating aggregate (CI form)
-
-   The exception is scoped: it applies only to `check` as an
-   alias for `check:fix`. No other bare gate aliases a mutating
-   form. `format` does not alias `format:fix`; `lint` does not
-   alias `lint:fix`.
-5. **Additional gates are permitted.** The canonical set is the
+3. **CI runs the aggregate's verifying legs.** CI runs every
+   verifying leg of `check`, and a parity validator fails a
+   verifying leg that CI does not run, so a local `check` and CI
+   cannot drift apart.
+4. **Additional gates are permitted.** The canonical set is the
    minimum. Ecosystem-specific gates (`knip`, `depcruise`,
    `secrets:scan`, `practice:fitness`, `portability:check`,
    `subagents:check`) may be added freely; they follow Rule 1.
    `knip` verifies unused exports; `knip:fix` applies knip's
    fixes. `depcruise` verifies dependency constraints; it has no
-   `:fix` variant because violations are source changes.
+   `:fix` variant because violations are source changes. A
+   documentation subset, where a repo has one, is `check:docs`
+   (verify) and `fix:docs` (apply).
 
 ### Per-ecosystem adaptation
 
@@ -168,33 +153,28 @@ The adaptation obligation is:
 
 ### The aggregate gate semantics
 
-`check` / `check:fix`, `check:ci`, and `fix` have specific
-coverage requirements:
+`check` and `fix` have specific coverage requirements:
 
-- **`check:fix`** (and its alias `check`) is the local aggregate.
-  It MUST run every verify-type gate in the repo — at minimum
-  `format`, `lint`, `typecheck`, `test`, and a build probe
-  (either the full build or a verify-equivalent check that would
-  fail for the same reasons) — plus every `:fix` sub-gate so the
-  tree is brought into a state where `check:ci` passes.
-  Repositories with additional verify-type gates (`knip`,
-  `depcruise`, `secrets:scan`, `practice:fitness`) MUST include
-  those too. A repo where `check` passes but a bespoke gate
-  fails has a broken `check` contract.
-- **`check:ci`** MUST have equivalent verify coverage to
-  `check:fix` minus the `:fix` sub-gates. Its exit code is the
-  authoritative CI gate answer. It MUST be non-mutating: a CI
-  run cannot rewrite the checked-out tree. Any
-  conceptually-must-verify gate available only in mutating form
-  is wrapped so it verifies (e.g. run a mutating pass against a
-  scratch copy; fail if it differs from the source).
+- **`check`** is the aggregate gate. It MUST run every
+  verify-type gate in the repo — at minimum `format`, `lint`,
+  `typecheck`, `test`, and a build probe (either the full build
+  or a verify-equivalent check that would fail for the same
+  reasons) — and it applies no fixes. Repositories with
+  additional verify-type gates (`knip`, `depcruise`,
+  `secrets:scan`, `practice:fitness`) MUST include those too. A
+  repo where `check` passes but a bespoke gate fails has a
+  broken `check` contract. Any conceptually-must-verify gate
+  available only in mutating form is wrapped so it verifies
+  (e.g. run a mutating pass against a scratch copy; fail if it
+  differs from the source).
+- **CI** runs every verifying leg of `check`, and a parity
+  validator fails a verifying leg that CI does not run. A CI run
+  never rewrites the checked-out source.
 - **`fix`** MUST run every `:fix` sub-gate the repo exposes. A
   `fix` that omits an available `:fix` gate leaves developers
-  with a false "I ran fix, now check:ci should pass" expectation.
-  `fix` is a subset of `check:fix`: `check:fix` includes the
-  verify gates, `fix` is only the mutating sub-gates. A
-  developer who has typed `fix` still needs to run `check` (or
-  `check:ci`) to confirm the verify bar.
+  with a false "I ran fix, now check should pass" expectation.
+  A developer who has typed `fix` still runs `check` to confirm
+  the verify bar.
 
 ## Rationale
 
@@ -228,18 +208,13 @@ imposing uniformity where uniformity is not useful. The script
 API is stable; the implementation adapts. Verify-by-default
 matches the Practice's broader safety posture.
 
-The one deliberate exception to verify-by-default is `check` as
-an alias for `check:fix`. This exception is ergonomic, not
-accidental: the aggregate gate is the single most-typed command
-in the day-to-day quality loop (invoked tens of times per day
-during active work). Forcing the `:fix` suffix on every
-invocation imposes friction that the ergonomics do not justify,
-and the CI-safe non-mutating form remains available as
-`check:ci`. The exception is scoped narrowly to `check`; the
-rest of the convention is uniform.
+Verify-by-default holds for the aggregate too: the most-typed
+command in the daily loop, `check`, verifies, and a repair is
+always the explicit `fix`. A contributor or agent can run it at
+any time without rewriting source.
 
 The convention's specific shape — bare/noun for verify, `:fix`
-for apply, `:ci` for CI-variant — draws on existing ecosystem
+for apply — draws on existing ecosystem
 patterns rather than inventing new ones. `prettier --check` vs
 `prettier --write` maps naturally to `format` vs `format:fix`.
 The convention formalises a de-facto practice rather than
@@ -256,11 +231,8 @@ introducing unfamiliar patterns.
   its ecosystem adaptation — the mapping from canonical names
   to underlying commands — in its `docs/dev-tooling.md` (or
   discoverable equivalent per PDR-006).
-- CI configurations MUST invoke `check:ci` (or `check` if no
-  CI-specific tuning is needed) as the aggregate gate.
-  Hand-rolled CI sequences that duplicate what the aggregate
-  should cover are a drift vector and MUST be consolidated into
-  the script.
+- CI configurations MUST run every verifying leg of `check`, and a
+  parity validator MUST fail a verifying leg that CI does not run.
 - Reviewer prompts, automation tools, git hooks, and
   documentation that reference quality gates MUST use the
   canonical names. This preserves portability across the
@@ -270,15 +242,11 @@ introducing unfamiliar patterns.
 
 - Using canonical names with non-canonical semantics. A `lint`
   script that applies fixes is a contract violation; rename to
-  `lint:fix` and add a real `lint` that verifies. The `check`
-  alias-for-`check:fix` exception is the only permitted
-  bare-name-maps-to-mutating alias; no other gate follows that
-  pattern.
-- `check:ci`, `check:fix`, or `check` with incomplete coverage.
-  If a bespoke gate exists in the repo, it MUST be in the
-  aggregate.
-- `check:ci` that mutates the working tree. A CI-form
-  invocation MUST leave the tree byte-identical.
+  `lint:fix` and add a real `lint` that verifies.
+- `check` with incomplete coverage. If a bespoke gate exists in
+  the repo, it MUST be in the aggregate.
+- `check` that applies fixes. The aggregate gate MUST leave
+  source unchanged; repairs belong to `fix`.
 - Canonical names at a non-script layer (e.g. a Makefile target
   named `check` that is not also exposed as a package-manager
   script). The package manager's script surface is the canonical
@@ -300,12 +268,11 @@ introducing unfamiliar patterns.
   naming obligation in addition to the stack-documentation
   obligation. The two PDRs compose: reference repos name the
   stack and expose the canonical gates against that stack.
-- Existing repos that had `check` running mutating sub-steps
-  (common pattern: `check` includes `lint:fix` so a local run
-  auto-corrects) keep their `check` largely intact — the
-  mutating aggregate is now canonically named `check:fix` with
-  `check` as its alias. The new surface obligation is adding
-  `check:ci` as the non-mutating CI form.
+- Existing repos whose `check` runs mutating sub-steps (a
+  common pattern: `check` includes `lint:fix` so a local run
+  auto-corrects) move those steps to `fix` and keep `check`
+  verifying. A local run that should auto-correct is `fix`, then
+  `check`.
 
 ## Notes
 
@@ -335,18 +302,17 @@ The distilled-memory rule "the quality-gate criterion is always
 `pnpm check` from the repo root, with no filtering, green"
 carries forward in substance. Under PDR-008 the phrasing sharpens:
 
-- Local authors type `pnpm check` (the short, mutating-aggregate
-  alias); its clean exit proves the repo is in a state where
-  CI would also pass.
-- CI invokes `pnpm check:ci` (the non-mutating CI form); its
-  clean exit is the authoritative merge gate.
+- Local authors type `pnpm check` (the aggregate gate, which
+  applies no fixes); its clean exit proves the repo is in a state
+  where CI would also pass.
+- CI runs every verifying leg of `check`, under a parity
+  validator.
 
-Both forms share verify coverage. The distinction is mutation
-scope: local form may auto-correct; CI form leaves the tree
-unchanged. The merge criterion is `check:ci` green; the local
-proof-of-merge-readiness is `check` (= `check:fix`) green.
+The merge criterion is `check` green, locally and in CI. A repair
+is always an explicit `fix` (or `fix:docs`), followed by `check`
+again; a mutating command is never the proof.
 
-### Why verify-by-default matters (and why `check` breaks it)
+### Why verify-by-default matters
 
 A contributor new to a repo, an agent hydrating for the first
 time, or an automation tool running `pnpm <something>` without
@@ -356,14 +322,21 @@ explicit suffix. This matches how the Practice treats other
 default-safe concerns: quality gates always blocking, strict
 validation at boundaries, no ambient state, injected
 dependencies over globals. Verify-by-default extends the
-pattern to script names.
+pattern to script names, the aggregate gate included.
 
-The `check` exception is a conscious trade-off. The aggregate
-gate is the single most-invoked command in the daily loop; the
-four characters of `:fix` multiplied by tens of invocations per
-day per developer across the network is a real ergonomic cost.
-The risk surface of the exception is narrow: `check` is nearly
-always run by someone who understands they are running the
-local gate, and the CI-safe form (`check:ci`) remains one suffix
-away. The exception is worth its cost; it is not an invitation
-to add further aliases.
+## Amendment Log
+
+### 2026-09-12 — `check` applies no fixes; `check:fix` and `check:ci` retired
+
+Owner direction (2026-09-12), adopting the convention the Practice's skills
+and rules already assume of the repositories that carry it. The body is read
+through this entry: `check` is the aggregate gate and applies no
+fixes, `fix` is the mutating aggregate, and CI runs every verifying leg of
+`check` under a parity validator, which gives the guarantee a separate CI form
+was for. Retired with it: `check` as an ergonomic alias of a mutating
+`check:fix`, the non-mutating `check:ci`, and the requirement to consolidate
+CI into one aggregate script. A host repository enumerates its live gate and
+validator sets in its own scripts and gates skill, never here (the
+no-moving-targets rule); which scripts it names and how its validators are
+grouped are the host's own record, paired with this record in its bridge
+index.

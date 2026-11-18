@@ -4,6 +4,7 @@ name: "Comments About External Behaviour Degrade"
 polarity: anti-pattern
 use_this_when: "Code comments describe the behaviour of an external library, SDK, or service, especially when they assert what the library does NOT support"
 category: process
+layer: general
 proven_in: "apps/oak-curriculum-mcp-streamable-http/src/preserve-schema-examples.ts (line 49 — claimed MCP SDK does not honour .meta(); it does)"
 proven_date: 2026-04-05
 barrier:

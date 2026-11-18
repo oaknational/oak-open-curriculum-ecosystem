@@ -3,6 +3,7 @@ name: Cure-Edge Residue
 polarity: anti-pattern
 use_this_when: Curing any finding on an invariant the estate states in more than one place, or executing a deletion cure whose disposition claims the content was re-homed
 category: agent
+layer: general
 proven_in: .agent/memory/active/napkin.md 2026-08-06 wrap captures (Saffron guards Hedgerow, round-2 structural diagnosis, Director-endorsed)
 proven_date: 2026-08-06
 related_pattern: eager-rounding-off-on-partial-structures

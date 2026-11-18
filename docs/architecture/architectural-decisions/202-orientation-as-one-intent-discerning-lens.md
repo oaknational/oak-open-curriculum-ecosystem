@@ -70,6 +70,9 @@ skills.**
    the lens points to that single source rather than restating it. Where the skill would otherwise bake a
    repo fact, the fact is moved to the appropriate doc and the skill links to it.
 
+   _Clarification: on 2026-11-13 the invariants moved to
+   `docs/architecture/README.md` §Architectural invariants; they are still authored once._
+
 6. **Clean break — no compatibility shim** (`principles.md` §Architectural Excellence Over Expediency, the
    always-applied `replace-dont-bridge` rule). The retired lens names (`onboard-me`, `explain-repo`) and
    their slash commands are **removed, not aliased**; every live reference is migrated to the one lens in the
@@ -88,7 +91,7 @@ setup distinct; seam unchanged); the skill is the source of truth for how that s
   surface, and it routes rather than restates.
 - The host now carries one repo-bound orientation lens behind the PDR-112 edge instead of two. The portable
   pattern's three-context generality is unaffected; this is a host-count change, recorded as phenotype.
-- The decision is operationalised in the skill canonical (`.agent/skills/under-the-hood/`), its generated
+- The decision is operationalised in the skill canonical (`.agent/skills/orientation/under-the-hood/`), its generated
   adapters (ADR-125), and the AGENT.md §Orientation Requests routing block. Validation is behavioural:
   simulated orientation conversations plus a live owner walkthrough, recorded on the onboarding-simulations
   register.

@@ -29,6 +29,8 @@ import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { hasCssDeclaration } from '../../../../../../../demos/oak-design-showcase/tools/css-declarations.js';
+import { cssFenceBodies } from '../../../../../../../demos/oak-design-showcase/tools/css-fences.js';
 import { findLiteralDesignValues } from '../../../../../../../demos/oak-design-showcase/tools/css-literal-values.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -96,16 +98,14 @@ function authoredCssParts(text: string): readonly string[] {
   for (const inline of text.matchAll(/style\s*=\s*["']([^"']*)["']/g)) {
     parts.push(`.inline-style-attribute { ${inline[1]} }`);
   }
-  for (const fence of text.matchAll(/```(?:css|CSS)\s*\n([\s\S]*?)```/g)) {
-    parts.push(fence[1]);
-  }
+  parts.push(...cssFenceBodies(text));
   return parts;
 }
 
 /** Declaration count in the artefact's own CSS — the ad-hoc-CSS measure. */
 function adHocDeclarationCount(css: string): number {
   const withoutComments = css.replace(/\/\*[\s\S]*?\*\//g, '');
-  return withoutComments.split(';').filter((part) => /[a-z-]+\s*:/i.test(part)).length;
+  return withoutComments.split(';').filter(hasCssDeclaration).length;
 }
 
 type Mode = 'page' | 'response';

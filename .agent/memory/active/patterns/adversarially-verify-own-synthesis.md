@@ -3,6 +3,7 @@ name: "Adversarially Verify Your Own Synthesis in Long Analytical Work"
 polarity: pattern
 use_this_when: "Deep, multi-turn analytical / research / survey work where you are building a synthesis over many sources and about to present conclusions as settled."
 category: process
+layer: general
 proven_in: "2026-06-15 plan-estate survey (Baobab lifts Topsoil): a self-run refuter pass overturned 4 of 6 synthesis claims; the drift took ~5 owner re-framings to catch in-flight."
 proven_date: 2026-06-16
 barrier:

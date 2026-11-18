@@ -13,16 +13,25 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
+import { toLfText } from '../../core/lf-text.js';
+
 /**
  * Reads the UTF-8 text content of a file at `<repoRoot>/<relPath>`.
  *
+ * @remarks
+ * Line endings are normalised to LF at this shared read edge: committed
+ * blobs are LF, but a Windows checkout under Git's default autocrlf=true
+ * presents them CRLF on disk, and every validator built on this surface
+ * judges CONTENT (frontmatter shapes, index equality, rendered
+ * comparisons), never checkout presentation.
+ *
  * @param repoRoot - Absolute path to the repository root.
  * @param relPath  - Repo-relative path to the file.
- * @returns The full text content of the file.
+ * @returns The full text content of the file, LF line endings.
  * @throws When the file cannot be read.
  */
 export async function readText(repoRoot: string, relPath: string): Promise<string> {
-  return fs.readFile(path.join(repoRoot, relPath), 'utf8');
+  return toLfText(await fs.readFile(path.join(repoRoot, relPath), 'utf8'));
 }
 
 /**
@@ -32,19 +41,19 @@ export async function readText(repoRoot: string, relPath: string): Promise<strin
  * @param repoRoot          - Absolute path to the repository root.
  * @param relPath           - Repo-relative destination path.
  * @param content           - Text content to write.
- * @param writtenWrappers   - Mutable array that collects all paths written
+ * @param writtenPaths   - Mutable array that collects all paths written
  *   during a `--fix` run; the path is appended on success.
  */
 export async function writeText(
   repoRoot: string,
   relPath: string,
   content: string,
-  writtenWrappers: string[],
+  writtenPaths: string[],
 ): Promise<void> {
   const absPath = path.join(repoRoot, relPath);
   await fs.mkdir(path.dirname(absPath), { recursive: true });
   await fs.writeFile(absPath, content, 'utf8');
-  writtenWrappers.push(relPath);
+  writtenPaths.push(relPath);
 }
 
 /**
@@ -180,14 +189,4 @@ export function getFrontmatterValue(frontmatter: string, key: string): string {
   const escapedKey = key.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
   const match = new RegExp(String.raw`^${escapedKey}:\s*(.+)$`, 'm').exec(frontmatter);
   return match?.[1]?.trim().replaceAll(/^['"]|['"]$/g, '') ?? '';
-}
-
-/**
- * Strips a YAML frontmatter block from the start of a Markdown document.
- *
- * @param content - Full text of the Markdown document.
- * @returns The document text with the frontmatter block removed.
- */
-export function stripFrontmatter(content: string): string {
-  return content.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/u, '');
 }

@@ -1,0 +1,187 @@
+name: Upstream carrier
+
+# Opens one draft carrier pull request into this repository's default branch
+# at the mirror branch's tip whenever the mirror carries commits the default
+# branch lacks and no carrier is open. It never merges, moves or duplicates a
+# carrier: the integration is a seat's work on the carrier, and so is replacing
+# a carrier the mirror has moved past (the cross-fork skill's step 1: the seat
+# taking it up closes it on its record and dispatches this workflow). This
+# workflow closes and deletes nothing, so it can never act on a carrier a seat
+# is taking up. Off by default:
+# the job runs only where the repository variable UPSTREAM_CARRIER_ENABLED is
+# the string 'true', so a copy inherited by the parent at a merge-back is
+# inert there. No repository, organisation or branch is named here: the
+# default branch and the mirror branch (this repository's branch of the
+# parent's default name) are read from the API at run time.
+#
+# The compare reports from the HEAD side (the mirror): `ahead` or `diverged`
+# with ahead_by > 0 means the mirror carries commits the default branch lacks.
+
+on:
+  schedule:
+    # Thirty minutes after the mirror workflow's slots, UTC, Monday to Friday.
+    - cron: '30 0,6,12,18 * * 1-5'
+  workflow_dispatch:
+
+concurrency:
+  group: upstream-carrier
+  cancel-in-progress: false
+
+permissions: {}
+
+jobs:
+  carrier:
+    name: Open one draft carrier from the mirror branch into the default branch
+    if: vars.UPSTREAM_CARRIER_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      CARRIER_PREFIX: automation/upstream-carrier-
+      CARRIER_MARKER: '<!-- upstream-carrier -->'
+    steps:
+      # The bot app's installation token: the run's own token cannot open a
+      # pull request here, and a pull request opened by the app is authored
+      # by the estate's bot identity.
+      - name: Mint the bot app token
+        id: app-token
+        uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3.1.1
+        with:
+          client-id: ${{ secrets.UPSTREAM_CARRIER_APP_CLIENT_ID }}
+          private-key: ${{ secrets.UPSTREAM_CARRIER_APP_PRIVATE_KEY }}
+          # Only what this run writes with: a reference (contents) and a pull
+          # request with its comment (pull-requests). The installation may hold
+          # more; the token does not.
+          permission-contents: write
+          permission-pull-requests: write
+
+      - name: Compare the default branch with the mirror branch
+        id: compare
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          set -euo pipefail
+          repo="$(gh api "repos/${GITHUB_REPOSITORY}")"
+          if [ "$(jq -r '.fork' <<<"$repo")" != "true" ]; then
+            echo "::notice title=Not a fork::${GITHUB_REPOSITORY} has no parent; nothing to carry."
+            echo "mirror_ahead_by=0" >>"$GITHUB_OUTPUT"
+            exit 0
+          fi
+          default_branch="$(jq -r '.default_branch' <<<"$repo")"
+          parent="$(jq -r '.parent.full_name' <<<"$repo")"
+          # The mirror is this repository's branch of the parent's default name.
+          MIRROR_BRANCH="$(jq -r '.parent.default_branch' <<<"$repo")"
+          comparison="$(gh api "repos/${GITHUB_REPOSITORY}/compare/${default_branch}...${MIRROR_BRANCH}")"
+          mirror_tip="$(gh api "repos/${GITHUB_REPOSITORY}/branches/${MIRROR_BRANCH}" --jq '.commit.sha')"
+          {
+            echo "default_branch=${default_branch}"
+            echo "mirror_branch=${MIRROR_BRANCH}"
+            echo "parent=${parent}"
+            echo "status=$(jq -r '.status' <<<"$comparison")"
+            echo "mirror_ahead_by=$(jq -r '.ahead_by' <<<"$comparison")"
+            echo "default_ahead_by=$(jq -r '.behind_by' <<<"$comparison")"
+            echo "merge_base=$(jq -r '.merge_base_commit.sha' <<<"$comparison")"
+            echo "default_tip=$(jq -r '.base_commit.sha' <<<"$comparison")"
+            echo "mirror_tip=${mirror_tip}"
+          } >>"$GITHUB_OUTPUT"
+          echo "compare ${default_branch}...${MIRROR_BRANCH} => $(jq -r '.status' <<<"$comparison") (mirror ahead by $(jq -r '.ahead_by' <<<"$comparison"))"
+
+      - name: Report when the mirror is already integrated
+        if: steps.compare.outputs.mirror_ahead_by == '0'
+        env:
+          MIRROR_BRANCH: ${{ steps.compare.outputs.mirror_branch }}
+        run: |
+          echo "Nothing to carry: ${MIRROR_BRANCH} holds no commit the default branch lacks."
+
+      - name: Find an open carrier
+        id: existing
+        if: steps.compare.outputs.mirror_ahead_by != '0'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          DEFAULT_BRANCH: ${{ steps.compare.outputs.default_branch }}
+          MIRROR_AHEAD_BY: ${{ steps.compare.outputs.mirror_ahead_by }}
+          MIRROR_TIP: ${{ steps.compare.outputs.mirror_tip }}
+        run: |
+          set -euo pipefail
+          # Every page: --paginate alone would run a --jq program once per page,
+          # and gh refuses --slurp beside --jq, so the pages are gathered into one
+          # array and the filter runs in jq over them flat.
+          carriers="$(gh api --paginate --slurp "repos/${GITHUB_REPOSITORY}/pulls?state=open&base=${DEFAULT_BRANCH}&per_page=100" \
+            | jq '[.[][] | select(.head.repo.full_name == env.GITHUB_REPOSITORY and (.head.ref | test("^automation/.*upstream"))) | {number, head_sha: .head.sha}]')"
+          count="$(jq 'length' <<<"$carriers")"
+          if [ "$count" = "0" ]; then
+            echo "number=" >>"$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [ "$count" != "1" ]; then
+            echo "::error title=More than one open carrier::$(jq -r '[.[].number] | map("#" + tostring) | join(", ")' <<<"$carriers") are all open carriers; the skill calls a second carrier a defect to close on the record. Nothing is written."
+            exit 1
+          fi
+          number="$(jq -r '.[0].number' <<<"$carriers")"
+          head_sha="$(jq -r '.[0].head_sha' <<<"$carriers")"
+          echo "number=${number}" >>"$GITHUB_OUTPUT"
+          # Reported, never acted on, and never judged: a head that differs
+          # from the mirror's tip is a stale unworked carrier or a seat's own
+          # commits, and only the seat reading the carrier can tell which.
+          if [ "$head_sha" = "$MIRROR_TIP" ]; then
+            echo "::notice title=Carrier already open::PR #${number} is the open carrier at the mirror's tip ${MIRROR_TIP:0:7}; the mirror is ${MIRROR_AHEAD_BY} commit(s) ahead of the default branch."
+          else
+            echo "::notice title=Carrier already open::PR #${number} is the open carrier with head ${head_sha:0:7}; the mirror's tip is now ${MIRROR_TIP:0:7}, ${MIRROR_AHEAD_BY} commit(s) ahead of the default branch. This workflow leaves it either way: a seat's commits move the head too, and only an unworked carrier is ever replaced, by the seat that takes it up (cross-fork skill, step 1)."
+          fi
+
+      - name: Cut the carrier branch and open the draft pull request
+        if: >-
+          steps.compare.outputs.mirror_ahead_by != '0'
+          && steps.existing.outputs.number == ''
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          DEFAULT_BRANCH: ${{ steps.compare.outputs.default_branch }}
+          MIRROR_BRANCH: ${{ steps.compare.outputs.mirror_branch }}
+          DEFAULT_TIP: ${{ steps.compare.outputs.default_tip }}
+          MIRROR_TIP: ${{ steps.compare.outputs.mirror_tip }}
+          MERGE_BASE: ${{ steps.compare.outputs.merge_base }}
+          MIRROR_AHEAD_BY: ${{ steps.compare.outputs.mirror_ahead_by }}
+          DEFAULT_AHEAD_BY: ${{ steps.compare.outputs.default_ahead_by }}
+          PARENT: ${{ steps.compare.outputs.parent }}
+        run: |
+          set -euo pipefail
+          branch="${CARRIER_PREFIX}${MIRROR_TIP}"
+          # Idempotent: a branch left by an earlier run whose pull-request step
+          # failed is reused, so the workflow self-heals instead of answering
+          # 422 on the same name at every later slot.
+          if existing_sha="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/${branch}" --jq '.object.sha' 2>/dev/null)"; then
+            if [ "$existing_sha" != "$MIRROR_TIP" ]; then
+              echo "::error title=Carrier branch at the wrong commit::${branch} exists at ${existing_sha}, not ${MIRROR_TIP}. Delete or move it by hand; this run writes nothing."
+              exit 1
+            fi
+            echo "Reusing ${branch} at ${MIRROR_TIP}."
+          else
+            gh api --method POST "repos/${GITHUB_REPOSITORY}/git/refs" \
+              -f "ref=refs/heads/${branch}" -f "sha=${MIRROR_TIP}" --jq '.ref'
+          fi
+
+          body="$(printf '%s\n' \
+            "${CARRIER_MARKER}" \
+            "" \
+            "## Receipt" \
+            "" \
+            "- Parent: ${PARENT}" \
+            "- Mirror: \`${MIRROR_BRANCH}\` at \`${MIRROR_TIP}\`" \
+            "- Default branch: \`${DEFAULT_BRANCH}\` at \`${DEFAULT_TIP}\`" \
+            "- Merge base: \`${MERGE_BASE}\`" \
+            "- Exclusive counts: mirror ahead by ${MIRROR_AHEAD_BY}, default branch ahead by ${DEFAULT_AHEAD_BY}" \
+            "- Producer: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" \
+            "" \
+            "The head is the mirror's tip exactly, upstream's snapshot. A seat integrates it under the" \
+            "cross-fork-integration skill: a two-parent merge of the default branch into this branch at" \
+            "the slot word, the generated surfaces regenerated, the premise sweep recorded here, then the" \
+            "review round and the front door. Merge by merge commit only; never squash or rebase, so the" \
+            "snapshot stays in the default branch's ancestry. At pickup, read the mirror's tip: where it has" \
+            "moved past this head and no seat has worked this carrier, the seat replaces it by the skill's" \
+            "step 1. This workflow opens the carrier and does nothing else: it never merges, moves," \
+            "closes or duplicates it.")"
+
+          number="$(gh api --method POST "repos/${GITHUB_REPOSITORY}/pulls" \
+            -f "title=chore(upstream): carry the mirror at ${MIRROR_TIP:0:7} into ${DEFAULT_BRANCH}" \
+            -f "head=${branch}" -f "base=${DEFAULT_BRANCH}" -f "body=${body}" -F draft=true --jq '.number')"
+          echo "::notice title=Draft carrier opened::PR #${number} at ${branch} (mirror ahead by ${MIRROR_AHEAD_BY})."

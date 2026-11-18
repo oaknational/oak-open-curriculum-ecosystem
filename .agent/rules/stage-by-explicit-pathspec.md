@@ -1,3 +1,9 @@
+---
+classification: situational
+description: "Stage by naming each path — git status --short, then git add each path — and commit by pathspec (git commit -- <paths>) when a shared index carries peer work. The Bash hook blocks only three literals (git add -A, --all, .); git add -u, :/, <dir>/ and git commit -a pass the hook yet still violate it, so the discipline is yours, not the hook's. Failure shape: wildcard staging sweeps a peer's in-flight napkin, claims, or plan edits into your commit (recorded 372-line incident). Not a bar on running fix commands over a peer's dirty tree — protect peers at the staging step, not the reformat."
+trigger: ceremony:commit
+---
+
 # Stage By Explicit Pathspec
 
 We stage files for commit by naming them explicitly. Wildcard staging
@@ -56,10 +62,27 @@ tree:
    (2026-08-02 instance: a contract violation rode two commits on
    origin).
 
+Two further instances landed on 2026-08-19 with this section already in the rule: a lane
+seat's commit carried a peer's staged renames, and a Director commit swept the
+shared index the same day, independently. Both seats held the cure text in context and the
+mechanism did not fire at either action moment — recurrence despite a verified home
+(PDR-098), the traction gap that PDR's design lane exists to close.
+
 ## The Index Is What Ships — Verify It, and Re-stage After Every Cure
 
 The pre-commit gate reads the WORKING TREE; the commit captures the
-INDEX. Four seats paid for that gap in one window (2026-08-14 →
+INDEX. And the gate reads the whole working tree while it runs: a worktree is
+frozen for the duration of its commit gate, so the next cycle's edits are
+staged as a script in scratch and applied after the gate exits (a later cycle's
+red tests failed the earlier cycle's gate, 2026-09-24). A pathspec commit runs
+the hooks over a temporary index holding only its paths while the link validator
+reads the whole working tree, with two consequences: two halves whose gates read
+each other (a record and the script that names it) land as one commit, and a
+tracked file that links a not-yet-tracked file is BLOCKING at every commit while
+both sit uncommitted, so the new file lands first or with its riders; on a
+shared primary a report and its index row are committed together before anyone
+pushes (three refusals in one night, 2026-10-03; a partner's push failed on a
+README row linking an untracked report, 2026-10-10). Four seats paid for that gap in one window (2026-08-14 →
 2026-09-02): a `git mv` staged the pre-cure blobs and left later
 Edit-tool edits unstaged at the destination paths, so the first commit
 shipped stale archive copies and thread replies cited cures the commit
@@ -114,6 +137,14 @@ Three concrete consequences:
 | "Stage every file in this directory" | `git add packages/foo/.` | `git add packages/foo/file-a.ts packages/foo/file-b.ts` |
 | "I already added too much; I want only these paths in this commit" | `git reset` then re-stage | `git commit -F <msg> -- path/to/file` (commit-by-pathspec is the cleanest cure when peer-staged work sits in the index) |
 | "I need to stage MY hunk in a file that also carries a peer's uncommitted WIP" | `git add <file>` (sweeps their WIP) or discarding their edits | `git apply --cached <patch>` with a matching-HEAD-context patch of your hunk — stages your change into the index while leaving the peer's working-tree WIP untouched |
+| "Stage a large set of my own changes without listing each path by hand" | `git add -u -- . ':!path'` (the exclusion pathspec trips the wildcard-staging guard, and the refused command aborts the rest of its `&&` chain silently) | `git diff --name-only -z \| xargs -0 git add --` in a worktree where every dirty path is this seat's (an explicit list, computed; NUL-delimited, so a path with a space stays one path), and `git ls-files --others --exclude-standard -z \| xargs -0 git add --` for the seat's new files, which `git diff` does not list; in a shared checkout that list holds every seat's unstaged edits, a peer's in-flight work among them, so name the owned paths there instead; then the message file written in its own command, checked with `pnpm agent-tools:check-commit-message -F <file>`, then `git commit -F <file>` |
+
+A refused guarded command aborts the rest of its chain, so never write the
+commit-message file after a guarded command in the same chain: on 2026-09-12
+a refused `git add` skipped the heredoc that followed, the next `git commit -F`
+ran on a missing file, and the continuity commit swallowed the bundle. The
+message-file write is its own command; the commit skill's message-file step
+carries the same order.
 
 An owner exclusion ("commit everything except X's work") is **semantic, not
 path-based**: a shared append-only file that is normally yours to commit can
@@ -131,11 +162,22 @@ the rest stays staged, untouched — or commit the bundle and acknowledge
 the deliberate extras in the commit body. Do not over-engineer index
 isolation or block on index purity.
 
-The discipline cuts one way only: it never justifies refusing to **run** the
-canonical fix commands (`pnpm format:root`, `pnpm lint:fix`, markdownlint
-fix) in a shared dirty tree. Reformatting a peer's uncommitted file is
-cosmetic and safe — the footgun is *staging* it, and this rule is the cure.
-Run the fix freely; protect peers at the staging step.
+The discipline cuts one way only: it never justifies refusing to fix
+formatting in a shared dirty tree. Reformatting a peer's settled uncommitted
+file is cosmetic and safe — the footgun is *staging* it, and this rule is the
+cure. The canonical fix commands rewrite every file they cover
+(`pnpm format:root` and `pnpm markdownlint:root` every tracked file,
+`pnpm lint:fix` the linted workspaces' sources), so each runs while no live
+peer's in-flight file it covers is dirty on the shared primary. While one
+is, fix the settled files by name (`pnpm exec prettier --write --ignore-unknown --
+<files>`, `pnpm exec markdownlint-cli2 --fix --no-globs -- <files>`) and
+route the live file to its owner (`coordination-fold` precondition 2), since
+a fixer's rewrite races the peer's next write. Protect peers at the staging
+step.
+
+Records under `.agent/memory/` and `.agent/state/` are shared substrate: any seat may
+stage and commit them whatever seat or hook last wrote them (owner norm, 2026-06-30).
+The pathspec still names them; the sweep caution above never applies to them.
 
 ## Pre-Stage Re-Ground for Long Sessions
 

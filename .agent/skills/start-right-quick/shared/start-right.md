@@ -3,7 +3,7 @@ prompt_id: start-right-quick
 title: 'Start Right (Quick)'
 type: workflow
 status: active
-last_updated: 2026-07-29
+last_updated: 2026-09-29
 ---
 
 # Start Right (Quick)
@@ -11,7 +11,55 @@ last_updated: 2026-07-29
 Ground yourself before beginning work. Read in the order below; each
 step leads to the surfaces the next step assumes.
 
+## Environment Classification
+
+Before any command in this workflow, use the tri-state classification in
+`.agent/directives/cloud-environment-routing.md`. When it selects ChatGPT Work,
+that non-execution profile governs every command-bearing step below: retain all
+reading and static inspection, but skip package, build, test, hook, identity and
+repo-owned collaboration-CLI execution. Platform-native coordination remains
+available. Detector error is a stop, not a fall-through.
+
 ## Ground First (reading order)
+
+Ground with the proper instruments. Dumping a corpus into context (whole
+files, whole diffs) is unreadable at the altitude the work needs and forces
+compaction; the instruments are the operations each platform provides for
+them — a bounded read at an offset, a content search, a file-pattern match,
+and a read-only explorer that returns a conclusion rather than the corpus —
+with the plan visible before the first mutation (owner correction 2026-09-01,
+verbatim: "Use the proper tools for finding content, and generally sort out
+the discipline here, this is serious work. What is the plan?").
+A second instance, 2026-09-06 (owner verbatim: "stick to using standard tools
+rather than complex bash scripts which confuse the permissions agent"): the
+file-editing instruments are the platform's native per-file editing operation
+(each platform adapter names its own) and one plain command per shell call; the
+compound heredoc that rewrote two files was the instrument the owner refused,
+though the work inside it was right.
+
+Regrounding has TWO legs, and the second is the one skipped. After a
+compaction or a handoff, verifying mechanical state — PRs, claims, comms,
+git, the board — is not being up to speed; the governing corpus (the plans
+README, the strategic node, the live plans, recent closeout records) carries
+the intent those states serve, and a proposal reasoned from a summary and
+memory fragments re-opens decisions already made (owner, 2026-07-24, after a
+"drain the plans backlog" recommendation that the corpus reset had
+deliberately frozen: "I think you need to spend more time understanding the
+history rather than trying to make sensible guesses about next steps").
+Before any scope proposal or card, cite the governing document read THIS
+session that grounds it; no citation, not ready to propose. And read
+inherited letters and records critically — drift accumulates, so their
+claims are checked against the artefacts, never assumed.
+
+A command shape carried across a compaction is not the command. At a resume
+after a compaction or a handoff: the rules that govern the tool boundary are
+re-read before the first command (every Bash call compound against the
+tool-boundary rule, found by reading an old handoff, 2026-10-02); a command's
+help is read before its first attempt, since a shape carried in a summary is
+not the command (a direct-message command refused twice on a shape carried in
+a summary, 2026-10-03); and the context meter is read twice, a few calls
+apart, before anything is priced on it (its first read after a compaction
+described another moment, twice, 2026-10-02).
 
 ### 1. Durable directives
 
@@ -30,31 +78,31 @@ is the plan-body first-principles-check rule).**
    describes a system state, product code is the path that guides the system
    into it
 5. @.agent/directives/testing-strategy.md — test-type taxonomy and shape rules
-6. @.agent/directives/schema-first-execution.md — types flow from schema
-7. @.agent/directives/orientation.md — layering contract and authority order
+6. @.agent/directives/orientation.md — layering contract and authority order
 
 For Codex, Gemini, or any other platform that does not auto-load canonical
 rules, read every canonical `.agent/rules/*.md` file listed in
 `RULES_INDEX.md` before substantive work. Treat `RULES_INDEX.md` as the live
 inventory rather than copying the rule list here.
 
-### 2. Start-here ADRs
+### 2. ADRs for the workstream
 
-Scan the [Start Here: 5 ADRs in 15 Minutes](../../../../docs/architecture/architectural-decisions/README.md#start-here-5-adrs-in-15-minutes)
-block in the ADR index. Open any ADR whose slug matches your current
-workstream from the [full ADR index](../../../../docs/architecture/architectural-decisions/README.md).
+Open any ADR whose slug matches your current workstream from the
+the host's ADR index (the decision-record directory under `docs/architecture/`); the
+Cardinal Rule's records (ADR-020, ADR-021) apply to any work that touches a
+rendered surface.
 
 ### 3. Learning-loop surfaces (active memory)
 
 - @.agent/memory/active/distilled.md — refined cross-session lessons
 - @.agent/memory/active/napkin.md — current session observations
-- @.agent/memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md —
-  constraint at tripwire-design time (passive guidance needs an active
-  layer to fire under context pressure)
+- @.agent/memory/active/patterns/README.md — the pattern index (passive
+  guidance needs an active layer to fire under context pressure; check it
+  at tripwire-design time)
 - Your own platform's per-user memory and session logs. Scan the
   surface for the platform you are running on:
   - Claude Code: `~/.claude/projects/<project>/memory/`
-  - Cursor: `~/.cursor/chats/`, `~/.cursor/prompt_history.json`; Composer may inject deterministic identity from `.cursor/hooks/oak-session-identity.mjs` (`sessionStart`; see `agent-tools/docs/agent-identity.md` and [Cursor Hooks](https://cursor.com/docs/hooks))
+  - Cursor: `~/.cursor/chats/`, `~/.cursor/prompt_history.json`; Composer may inject deterministic identity from `.cursor/hooks/practice-session-identity.mjs` (`sessionStart`; see `agent-tools/docs/agent-identity.md` and [Cursor Hooks](https://cursor.com/docs/hooks))
   - Codex: `~/.codex/memories/`, `~/.codex/history.jsonl`
 
   Read only the surface that matches your current platform at
@@ -63,23 +111,54 @@ workstream from the [full ADR index](../../../../docs/architecture/architectural
   activity, not a session-open one — see `consolidate-docs`
   step 3.
 
-### 3a. Operator profile (machine-local; absence is normal)
+### 3a. Operator profile (home directory; absence is normal)
 
 Read the operator profile if this machine has one. It carries facts about the
 human you are working with that cannot be tracked: which credential identity
 performs which action class on third-party systems, their tone-of-voice and
 communication preferences, and personal operating preferences. The contract,
 including what must never be stored there, is
-[`.agent/operator-local/README.md`](../../../operator-local/README.md).
+[PDR-141](../../../practice-core/decision-records/PDR-141-operator-profile-in-the-home-directory.md).
 
-It is machine-local, so it does not travel through git and a linked worktree
-holds no copy. Resolve it in the **primary checkout**:
+It lives in the operator's home directory, shared by every Practice
+repository, linked worktree and clone on the machine, and it may be a git
+repository the operator syncs between machines. Pull the profile first,
+then run the check — it exits 0 and says so when nothing is there, and it
+refuses a document carrying a credential-shaped line before anything is
+read into the session — asking it to emit the index, the current
+repository's scope file (keyed by the root package.json name, `name` or
+`scope--name` for a scoped name, never a remote or a path) and this machine's
+file (keyed by the short host name); a named document that is absent
+prints one line naming it, and no document prints unless all conformed.
+
+The check and the sync need the host's tooling (agent-tools, installed and
+built): on a cold clone run this step after the install and build below,
+never before; the grounding never blocks on the profile.
 
 ```bash
-PRIMARY="$(git worktree list --porcelain | head -1 | sed 's/^worktree //')"
-[ -f "$PRIMARY/.agent/operator-local/profile.md" ] \
-  && cat "$PRIMARY/.agent/operator-local/profile.md"
+# First the host's profile sync, pull side (PDR-141 decisions 13 to 16), as the
+# Practice index names it: a no-op that says so unless the root is a repository
+# with a remote. A refused pull (a conflict, no network) is surfaced and the
+# grounding continues; the check below then reports the sync state.
+pnpm profile:sync pull || echo "profile not pulled: read the line above — a conflict is the operator's to resolve by union (PDR-141 decision 15); the check still runs"
+# The check prints the documents it validated from the same reads it checked
+# (--emit), so nothing reopens a path after the check: a file replaced by a
+# link between a check and a read would otherwise enter the session unread.
+SCOPE="$(cd "$(git rev-parse --show-toplevel 2>/dev/null || pwd)" && node -p 'const n = (require("./package.json").name ?? "").trim(); const m = /^(?:@([^/]+)\/)?([^/@]+)$/.exec(n); const k = m ? [m[1], m[2]].filter(Boolean).join("--").toLowerCase() : ""; /^[a-z0-9][a-z0-9._-]*(?:--[a-z0-9][a-z0-9._-]*)?$/.test(k) ? k : ""' 2>/dev/null)"
+MACHINE="$(hostname -s | tr '[:upper:]' '[:lower:]')"
+pnpm profile:check --emit index.md ${SCOPE:+--emit repos/$SCOPE.md} --emit "machines/$MACHINE.md" \
+  || echo "profile not read: the check refused it or the tooling is not built yet — fix, or return here after install and build"
 ```
+
+A present profile that fails the check is fixed at once, never read around:
+the contract is `.agent/practice-core/schemas/operator-profile.schema.json`. When a
+session writes the profile on the operator's word, it runs the host's
+profile sync, push side, in the same breath (PDR-141 decisions 13 to 16;
+the Practice index names the command once the host binds one): the check
+runs first, the commit is the operator's with a message naming the seat and
+the fact, and no write sits unpushed across a session boundary. The sync is
+a no-op on a profile that is not a repository, and both absence and a
+non-repository profile stay first-class.
 
 **A missing profile is the expected condition, not a defect** (`principles.md`
 §Any User, Any Machine): proceed on tracked defaults and say nothing. Never
@@ -100,7 +179,8 @@ Read in order; stop at whichever answers your next-step question:
 2. @.agent/memory/operational/threads/README.md — thread convention + identity discipline (PDR-027)
 3. `.agent/memory/operational/threads/<slug>.next-session.md` — the thread record for any thread the session will touch (carries identity, next-session landing, _and lane state_)
 4. `.agent/state/collaboration/active-claims.json` — active-claims
-   registry and ordered advisory `commit_queue`
+   registry (the advisory commit queue is machine-local per-intent
+   state; read it with `pnpm agent-tools:commit-queue -- list`)
 5. `.agent/state/collaboration/shared-comms-log.md` — generated recent
    free-form collaboration context
 6. `.agent/state/collaboration/conversations/*.json` — open decision
@@ -109,10 +189,10 @@ Read in order; stop at whichever answers your next-step question:
 7. `.agent/state/collaboration/escalations/*.json` — active owner-facing
    escalation cases for the touched thread or area
 
-When reading `active-claims.json`, surface any fresh `commit_queue` entries
-alongside active claims: `intent_id`, `agent_id`, `files`, `commit_subject`,
-`phase`, and `expires_at`. Queue entries are discovery and ordering signals,
-not mechanical refusals.
+Alongside active claims, surface any fresh advisory commit-queue intents
+(`pnpm agent-tools:commit-queue -- list`): `intent_id`, `agent_id`,
+`files`, `commit_subject`, `phase`, and `expires_at`. Queue entries are
+discovery and ordering signals, not mechanical refusals.
 
 If a dirty slice has no matching active claim or recent comms event, do not
 classify it as orphaned until `repo-continuity.md` Next Safe Steps, the touched
@@ -130,8 +210,9 @@ consulted. When the session is playing a named coordination role
 `--role <role>` on `claims open` so peers and glance surfaces (such as
 the statusline session-shape indicators) can resolve the team shape from
 the registry; the vocabulary is open and honest-by-convention. If no
-entries other than your own exist, log "no other agents
-present" through an immutable comms event and proceed (bootstrap fast-path).
+entries other than your own exist and the comms log shows no live peer,
+the session is solo: record your claim and proceed without broadcasts
+(`use-agent-comms-log` §Scale ceremony to the audience; bootstrap fast-path).
 On overlap, consult the shared communication log and any
 open decision-thread and escalation files before deciding whether to
 proceed, ping, append a decision thread, request a sidebar, record a
@@ -139,24 +220,30 @@ joint decision, open or close an escalation, or ask the owner.
 
 When registering your PDR-027 identity row, use an existing owner-assigned
 `agent_name` if one matches. Otherwise derive a session display name with
-`pnpm agent-tools:agent-identity --format display`. The CLI reads (in order)
-`PRACTICE_AGENT_SESSION_ID_CLAUDE`, `PRACTICE_AGENT_SESSION_ID_CURSOR`,
-`PRACTICE_AGENT_SESSION_ID_CODEX`, then the harness-native `CODEX_THREAD_ID`.
-Platform hooks set the platform-suffixed Practice variable: the Claude Code
-`SessionStart` hook (`.claude/hooks/practice-session-identity.mjs`) appends
-`PRACTICE_AGENT_SESSION_ID_CLAUDE` to `$CLAUDE_ENV_FILE`, and the Cursor
-`sessionStart` hook (`.cursor/hooks/oak-session-identity.mjs`) injects
+`pnpm agent-tools:agent-identity --platform <label> --format display`, the label
+your platform (`claude-code`, `cursor`, `codex` or `gemini`). The CLI reads (in
+order) `PRACTICE_AGENT_SESSION_ID_CLAUDE`, `PRACTICE_AGENT_SESSION_ID_CURSOR`,
+`PRACTICE_AGENT_SESSION_ID_GEMINI`, `PRACTICE_AGENT_SESSION_ID_CODEX`, the
+cloud seat's `CLAUDE_CODE_REMOTE_SESSION_ID`, then the harness-native
+`CLAUDE_CODE_SESSION_ID` (present in every Claude Code Bash tool shell) and
+`CODEX_THREAD_ID`; the Claude seeds count only on a Claude platform, so a seat
+opened from a Claude shell keeps its own identity. Platform hooks set the platform-suffixed Practice
+variable: the Claude Code `SessionStart` hook
+(`.claude/hooks/practice-session-identity.mjs`) appends
+`PRACTICE_AGENT_SESSION_ID_CLAUDE` to `$CLAUDE_ENV_FILE` for shells created
+after the write, and the Cursor `sessionStart` hook
+(`.cursor/hooks/practice-session-identity.mjs`) injects
 `PRACTICE_AGENT_SESSION_ID_CURSOR`. If none of these is set in your shell
 (e.g. the hook artefact has not been built yet), pass
 `--seed "<stable-session-seed>"` explicitly. Do not use personal-email
 fallback.
 
-Before any Codex thread registration or shared collaboration-state write,
-run the PDR-027 identity preflight with the current platform and model values.
-For this repo's Codex GPT-5 sessions the command is:
+Before any thread registration or shared collaboration-state write, run the
+PDR-027 identity preflight with the current platform and model values, for
+example:
 
 ```bash
-pnpm agent-tools:collaboration-state -- identity preflight --platform codex --model GPT-5
+pnpm agent-tools:collaboration-state -- identity preflight --platform claude --model <model-id>
 ```
 
 Codex sessions with `CODEX_THREAD_ID` available must not write new thread rows
@@ -164,10 +251,13 @@ or collaboration state as `Codex` / `unknown`; use the derived `agent_name` and
 `session_id_prefix`. Codex `SessionStart` hooks may inject the same block as
 developer context, but the preflight command remains the correctness check.
 
-Before staging or committing, use the always-active commit skill. It
-checks for fresh `commit_queue` entries and `git:index/head` commit-window
-claims, enqueues your intended bundle before staging, verifies the staged
-bundle exactly before `git commit`, and clears the queue entry after success.
+Before staging or committing, use the always-active commit skill. On the
+shared primary checkout it checks for fresh commit-queue intents and
+`git:index/head` commit-window claims, enqueues your intended bundle before
+staging, verifies the staged bundle exactly before `git commit`, and clears
+the queue entry after success; in a linked worktree it commits by plain
+pathspec with an audit line and no queue or window claim (owner ruling
+2026-09-07; the skill's scope paragraph).
 
 ### 5. Active plans
 
@@ -201,9 +291,9 @@ git config user.name && git config user.email
    and it is config, not authentication, so treat it as a default,
    never proof.
 2. **A per-user-authenticated service is the authoritative
-   cross-check** where one is connected — e.g. the Linear MCP viewer
-   (`get_user("me")`): it is real auth, resolved on this machine, for
-   this user.
+   cross-check** where one is connected — e.g. the GitHub CLI
+   (`gh api user --jq .login`): it is real auth, resolved on this
+   machine, for this user.
 3. **Ask the human only as the residue**: both sources absent,
    bot-shaped, or disagreeing with each other.
 
@@ -212,31 +302,6 @@ renders (owner-attention cards, per-user register renders, handoff
 records) instead of a remembered name. Memory and collaboration state
 name people historically — they are records of who acted, never
 resolution sources for who is here now.
-
-**Temporary — a clear run for Matt (owner-directed, 2026-08-03; remove
-when the owner declares the first-submission window closed — that
-declaration is the removal trigger, no other signal).** The easiest
-reliable signal that the collaborating human is Matt is his GitHub
-handle: `gh api user --jq .login` returning `mantagen` (owner-named
-detection route); the resolution order above applies where that signal
-is absent or bot-shaped. When — and only when — Matt is the identified
-user:
-
-- Open with a warm welcome that reflects the fleet's CURRENT quiet
-  state, derived from the live surfaces this workflow already loads
-  (open pull requests and their draft flags, active claims) — the
-  standing owner intent is that agent lanes stay parked in draft pull
-  requests so nothing churns under his work, with only the upstream
-  spec-update lane allowed near his surfaces and always tagged to him.
-  Say what is true at session open, never a remembered snapshot.
-- Treat his work as the repository's first priority for the session:
-  support what he is doing ahead of any agent-side backlog, keep
-  answers plain and practical, and route around his lane, never
-  through it.
-- Pass on the team's encouragement, plainly and warmly: Jim and the
-  whole fleet cleared this run for him on purpose, everyone is glad he
-  is making it, and he should ask any session for whatever he needs —
-  that is exactly what the agents are here for.
 
 ### 7. Host health
 
@@ -271,14 +336,19 @@ substantial work — not only the primary checkout:
 ```bash
 pnpm install
 pnpm build
+.agent/setup/install-shellcheck.sh
 ```
 
-`type-check` and `vitest` pass on install alone, so the gap stays silent until
-`lint` runs: ESLint's flat config imports the internal
-`@oaknational/eslint-plugin-standards`, whose package `exports` resolve to
-`dist/`. Unbuilt, bare `eslint` exits 2 (`No exports main defined`). The primary
-checkout is usually already built, which masks this in the main tree only — so a
-worktree-based lane must run the build itself before trusting any gate.
+`type-check` and `vitest` pass on install alone, and the install's bootstrap
+builds every package agent-tools reaches that has built entry points, including
+the internal ESLint standards plugin (the estate's `eslint-plugin-standards`
+package) whose package `exports` resolve to `dist/`, so ESLint's flat config
+loads on install alone too. What install does not write, the build does: the
+generated outputs a gate reads (a site's route types its `type-check`
+includes; a workspace's `dist/` that dependency-cruiser, knip and typed lint
+read). The primary checkout is usually already built, which masks this in the
+main tree only — so a worktree-based lane runs the build itself before
+trusting any gate.
 
 It also matters beyond gates: a worktree session shows **no statusline** unless the
 worktree was built **before the session started** (a known primary-checkout
@@ -290,12 +360,26 @@ not after.
 worktree's pre-push `test:ui`/`test:e2e` legs die with "Executable doesn't
 exist at …chrome-headless-shell" until you run
 `pnpm --filter <app> exec playwright install chromium-headless-shell` once in
-the worktree. Read the log before assuming a known flake — this failure is
-not the oauth-proxy concurrency flake. Full fresh-worktree setup is install,
-build, AND the Playwright browser install before the browser-test gates run.
+the worktree. Read the log before assuming a known flake, and read the failing
+job's own error lines before calling any check a defect or a flake: the fan-in
+job goes red with any failed leg and names no cause of its own (a font-loader
+flake read as the diff's fault, 2026-09-25).
+
+The pinned shellcheck lives in the worktree's ignored `.tools/bin`, where the
+shell lint gate looks before `PATH`; `.agent/setup/install-shellcheck.sh` puts
+it there at a new clone or worktree's first setup (where the estate's
+`pnpm install` runs the installer from its `postinstall`, by that; otherwise by
+hand, the lane-setup skill's fourth line). Without it the gate falls back to
+the shellcheck on `PATH`, which passes only while that one is the pinned
+version, so every worktree without its own `.tools/bin` fails at once when the
+`PATH` copy is upgraded.
+
+Full fresh-worktree setup is install, build, the pinned shellcheck before the
+first push, AND the Playwright browser install before the browser-test gates
+run.
 
 The collaboration substrate is also unseeded on a fresh checkout: the
-instance-tier state files are untracked-by-design (ADR-199 / PDR-094). The
+instance-tier state files are untracked by design (`.agent/state/README.md`). The
 pieces differ in who creates them: `active-claims.json`,
 `closed-claims.archive.json` require EXPLICIT seeding — the first claims read
 fails loud with seeding instructions rather than creating them. The
@@ -338,7 +422,7 @@ else
   # lockstep is PINNED: state-file-seeds.integration.test.ts reddens when
   # these literals drift from the constants — fix both in the same change.
   mkdir -p "$COORD_HOME/.agent/state/collaboration" \
-  && { ( set -C; printf '%s\n' '{ "schema_version": "1.3.0", "claims": [], "commit_queue": [] }' \
+  && { ( set -C; printf '%s\n' '{ "schema_version": "1.4.0", "claims": [] }' \
     > "$COORD_HOME/.agent/state/collaboration/active-claims.json" ) 2>/dev/null \
     || [ -f "$COORD_HOME/.agent/state/collaboration/active-claims.json" ]; } \
   && { ( set -C; printf '%s\n' '{ "schema_version": "1.3.0", "claims": [] }' \
@@ -352,7 +436,7 @@ fi
 
 Check `.agent/practice-core/incoming/` for practice-core files. If
 present, alert the user — incoming material may carry learnings from
-another repo. Full integration happens during `/oak-consolidate-docs`.
+another repo. Full integration happens during the `consolidate-docs` skill.
 
 ## Per-Session Landing Commitment
 
@@ -422,11 +506,6 @@ artefact whose size matches the work:
 This is a work-shape declaration, not a repo plan file for every edit.
 It operationalises PDR-026 without turning small fixes into plan theatre.
 
-For observability work specifically: if the landing moves a matrix
-cell in
-[`what-the-system-emits-today.md`](../../../plans-backlog-2026-07/observability/what-the-system-emits-today.md)
-from empty to populated, update the artefact in the same commit.
-
 ## Session Priority
 
 Apply session priority ordering:
@@ -477,14 +556,12 @@ and developer experience. Choose architectural correctness over
 short-term expediency. This requires critical and _long-term_
 thinking.
 
-## Schema-First Nuance
-
-Schema-first is absolute for SDK code calling the upstream API or
-extracting from the OpenAPI spec. It is acceptable to add additional
-metadata (e.g., MCP tool descriptions) at sdk-codegen time.
+## Generated Files
 
 When analysing generated files, always analyse the generator code that
-produced them — the generator is the source of truth.
+produced them — the generator is the source of truth. Here that means the
+entity graph (`content/entities.json`) and the build that derives every
+rendered surface from it (the Cardinal Rule in `principles.md`).
 
 ## Sub-agent Reviews
 
@@ -501,33 +578,42 @@ first.
 
 ## Quality Gates
 
-Run after making changes. Note: some gates trigger earlier ones;
-caching prevents duplicate work. See @docs/engineering/build-system.md
-and ADR-065 for caching details.
+The hooks are the gates. The pre-commit hook runs the light gate (the staged
+formatting and markdown checks, then the lint of the workspaces the commit
+changes); the pre-push hook runs the full aggregate, `pnpm check`, under a
+host gate slot, then the host's product legs; CI composes the same legs
+(owner, 2026-10-04: light commit, full push, in both estates). So never run
+these gates before, beside or after a commit or push (owner, 2026-09-14,
+verbatim: "the commit triggers the gates, there is no point and a fair amount
+of cost running the gates separately as well, never, ever do that"). Running
+one test file while a change is red is development, not a gate run; the ban
+is on running the suites the hooks run. The
+[gates skill](../../change-custody/gates/SKILL-CANONICAL.md) unrolls `check`
+one leg per line; the host's list below names the commands outside `check`,
+for reading a failure and for curing one: a command marked "cure" mutates the
+tree and is run only when a hook has refused and named it, never as a gate.
+Shell lint runs inside `check` with the pinned shellcheck from the checkout's
+`.tools/bin` (§8 says how it gets there); without it the gate falls back to
+the `PATH` copy, which passes only while that one is the pinned version. A
+cloud profile follows `cloud-environment-routing.md`. Some gates trigger
+earlier ones and caching prevents duplicate work: see
+@docs/engineering/build-system.md.
 
 ```bash
-# From repo root, one at a time
-pnpm sdk-codegen        # Makes changes
-pnpm build              # Makes changes
-pnpm type-check
-pnpm lint:fix           # Makes changes
-pnpm format:root        # Makes changes
-pnpm markdownlint:root  # Makes changes
-pnpm subagents:check    # After sub-agent definition changes
-pnpm portability:check  # After platform surface or hook changes
-pnpm repo-validators:check  # Workspace-owned repo validators
-pnpm test
-pnpm test:widget
-pnpm test:e2e
-pnpm test:ui
-pnpm test:a11y
-pnpm test:widget:ui
-pnpm test:widget:a11y
+# OCE: the push hook runs the secret scan and the review-cost gate, then
+# `pnpm check`; the commit hook runs the light gate. Never run them separately.
+pnpm fix                      # cure: format, markdownlint and lint:fix together
+pnpm lint:fix                 # cure: when the lint gate refuses
+pnpm format:root              # cure: when the format gate refuses
+pnpm markdownlint:root        # cure: when the markdown gate refuses
+pnpm sdk-codegen              # inside check; regenerates the SDK (a cure when the schema-drift check refuses)
+pnpm check:profile --dry-run  # outside the hooks: the gate profile a push would run, without running it
+# The pull request's checks run CodeQL, Sonar, the Windows and browser jobs.
 
 # Practice health — three-zone model, ADR-144
-pnpm practice:fitness:informational  # Four-zone report (always exit 0)
-# Consolidation-closure signal (run via oak-consolidate-docs):
+pnpm practice:fitness:informational  # four-zone report (always exit 0)
+# Consolidation-closure signal (run via the consolidate-docs skill):
 #   pnpm practice:fitness:strict-hard
-# Vocabulary consistency (ADR-144 §Key Principles #1):
+# Vocabulary consistency:
 #   pnpm practice:vocabulary
 ```

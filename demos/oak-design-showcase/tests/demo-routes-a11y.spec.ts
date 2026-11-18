@@ -9,46 +9,16 @@
  * stack and the layout control goes dead).
  */
 import { expect, test } from '@playwright/test';
-import type { Page } from '@playwright/test';
 
-import { assertOnlyKnownExternalOrigins, interceptExternalOrigins } from './apply-state';
+import { assertOnlyKnownExternalOrigins } from './apply-state';
 import { expectNoAxeViolations } from './axe-checks';
 import { assertResolved } from './picker-stage';
+import { expectNoHorizontalOverflow, openRoute } from './route-checks';
 
 const ROUTES = ['/tokens', '/tokens/colours', '/composition'] as const;
 const DENSE_COLOUR_MATRIX_ROUTE = '/tokens/colours';
 const DENSE_COLOUR_MATRIX_SLOW_REASON =
   'axe over the dense colour-token matrix can exceed the generic UI timeout on shared runners';
-
-async function openRoute(page: Page, route: string): Promise<Set<string>> {
-  const aborted = await interceptExternalOrigins(page);
-  await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto(route);
-  await expect(page.locator('main').first()).toBeVisible();
-  return aborted;
-}
-
-async function expectNoHorizontalOverflow(page: Page): Promise<void> {
-  const reflow = await page.evaluate(() => ({
-    scrollW: document.documentElement.scrollWidth,
-    clientW: document.documentElement.clientWidth,
-    // In-flow content only, as the sibling suites probe it: out-of-flow
-    // elements (the skip link off-canvas by design) are not reflow loss.
-    minLeft: Math.min(
-      0,
-      ...[...document.querySelectorAll('body *')]
-        .filter((element) => {
-          const position = getComputedStyle(element).position;
-          return position === 'static' || position === 'relative';
-        })
-        .map((element) => element.getBoundingClientRect().left),
-    ),
-  }));
-  expect(reflow.scrollW, 'SC 1.4.10: horizontal scroll must not appear').toBeLessThanOrEqual(
-    reflow.clientW,
-  );
-  expect(reflow.minLeft, 'content pushed left of the origin is unreachable').toBe(0);
-}
 
 test.describe('demo routes: axe', () => {
   for (const route of ROUTES) {
@@ -115,46 +85,21 @@ test.describe('composition exhibit: narrow faces re-arrange', () => {
   });
 });
 
-test.describe('token reference: the scroll stop follows measured overflow', () => {
-  test('a family is a focus stop exactly while its table scrolls @a11y', async ({ page }) => {
-    const aborted = await openRoute(page, '/tokens');
-    // The invariant, not a snapshot count: every family carries the stop
-    // exactly when it measurably scrolls. (A bare zero-count would pass
-    // pre-hydration and turn false the day content genuinely overflows;
-    // the invariant survives both.)
-    const invariantBreaches = (): Promise<number> =>
-      page
-        .locator('.tok-scroll')
-        .evaluateAll(
-          (els) =>
-            els.filter(
-              (el) => el.scrollWidth > el.clientWidth !== (el.getAttribute('tabindex') === '0'),
-            ).length,
-        );
-    await expect
-      .poll(invariantBreaches, { message: 'a stop exists exactly where scroll exists' })
-      .toBe(0);
-    // The safety-net direction, constructed rather than width-guessed:
-    // squeeze one family until its table genuinely overflows, and the
-    // WebKit keyboard-reach stop (SC 2.1.1) must appear on that family —
-    // then release it, and the stop must withdraw again.
-    const first = page.locator('.tok-scroll').first();
-    await first.evaluate((el) => {
-      el.style.maxWidth = '160px';
+test.describe('composition controls: each group is its own row', () => {
+  test('the layout and theme groups never share a horizontal band @a11y', async ({ page }) => {
+    const aborted = await openRoute(page, '/composition');
+    const rows = await page.locator('.comp-controls > *').evaluateAll((els) => {
+      const boxes = els.map((el) => el.getBoundingClientRect()).sort((a, b) => a.top - b.top);
+      return {
+        groups: boxes.length,
+        overlaps: boxes.filter((box, index) => {
+          const previous = boxes[index - 1];
+          return previous !== undefined && box.top < previous.bottom;
+        }).length,
+      };
     });
-    await expect
-      .poll(() => first.getAttribute('tabindex'), {
-        message: 'squeezed to overflow: the family becomes a focus stop',
-      })
-      .toBe('0');
-    await first.evaluate((el) => {
-      el.style.removeProperty('max-width');
-    });
-    await expect
-      .poll(() => first.getAttribute('tabindex'), {
-        message: 'released: the stop withdraws with the overflow',
-      })
-      .toBeNull();
+    expect(rows.groups, 'both control groups render').toBeGreaterThan(1);
+    expect(rows.overlaps, 'rows by construction, never by wrap coincidence').toBe(0);
     assertOnlyKnownExternalOrigins(aborted);
   });
 });

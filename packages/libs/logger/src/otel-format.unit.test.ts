@@ -58,6 +58,15 @@ describe('otel-format', () => {
     it('returns undefined for missing correlation IDs', () => {
       expect(correlationIdToTraceId(undefined)).toBeUndefined();
     });
+
+    it('derives the trace id as the first 32 hex characters of SHA-256 over the correlation id', () => {
+      // Vector computed outside the suite with
+      // `printf '%s' 'req_1699123456789_a3f2c9' | shasum -a 256`:
+      // 301b8e35c4724243e6165a8c9eb3e00d43697727785f0cb256ec13812a846c32.
+      expect(correlationIdToTraceId('req_1699123456789_a3f2c9')).toBe(
+        '301b8e35c4724243e6165a8c9eb3e00d',
+      );
+    });
   });
 
   describe('formatOtelLogRecord', () => {

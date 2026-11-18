@@ -15,6 +15,18 @@ interface AuthInstrumentationLocals {
 type AuthInstrumentationResponse = Response<unknown, AuthInstrumentationLocals>;
 
 /**
+ * One instrumented middleware run: its scoped logger, the middleware's name,
+ * when it started and the pending-operation timer armed for it. The
+ * completion, early-close and throw paths all report against the same run.
+ */
+interface InstrumentedRun {
+  readonly log: Logger;
+  readonly name: string;
+  readonly startedAt: number;
+  readonly timer: NodeJS.Timeout;
+}
+
+/**
  * Creates a child logger with auth-specific context.
  */
 function createAuthScopedLogger(
@@ -49,26 +61,12 @@ function startPendingTimer(log: Logger, name: string, startedAt: number): NodeJS
 }
 
 /**
- * Clears a pending timer.
- */
-function clearPendingTimer(timer: NodeJS.Timeout | undefined): void {
-  if (timer !== undefined) {
-    clearTimeout(timer);
-  }
-}
-
-/**
  * Wraps the next() callback to log when middleware completes or errors.
  */
-function createWrappedNext(
-  downstreamNext: NextFunction,
-  log: Logger,
-  name: string,
-  startedAt: number,
-  timer: NodeJS.Timeout | undefined,
-): NextFunction {
+function createWrappedNext(downstreamNext: NextFunction, run: InstrumentedRun): NextFunction {
+  const { log, name, startedAt, timer } = run;
   return (maybeError?: unknown) => {
-    clearPendingTimer(timer);
+    clearTimeout(timer);
     const durationMs = Date.now() - startedAt;
 
     if (maybeError === undefined) {
@@ -98,18 +96,13 @@ function createWrappedNext(
 /**
  * Logs if response closes before middleware calls next().
  */
-function logEarlyResponseClose(
-  res: AuthInstrumentationResponse,
-  log: Logger,
-  name: string,
-  startedAt: number,
-  timer: NodeJS.Timeout | undefined,
-): void {
+function logEarlyResponseClose(res: AuthInstrumentationResponse, run: InstrumentedRun): void {
+  const { log, name, startedAt, timer } = run;
   res.once('close', () => {
     if (res.headersSent) {
       return;
     }
-    clearPendingTimer(timer);
+    clearTimeout(timer);
     log.debug(`${name} response closed before next`, {
       durationMs: Date.now() - startedAt,
       statusCode: res.statusCode,
@@ -125,15 +118,13 @@ function executeMiddleware(
   req: Request,
   res: AuthInstrumentationResponse,
   next: NextFunction,
-  log: Logger,
-  name: string,
-  startedAt: number,
-  timer: NodeJS.Timeout | undefined,
+  run: InstrumentedRun,
 ): void {
+  const { log, name, startedAt, timer } = run;
   try {
     middleware(req, res, next);
   } catch (error) {
-    clearPendingTimer(timer);
+    clearTimeout(timer);
     const durationMs = Date.now() - startedAt;
 
     if (error instanceof Error) {
@@ -178,10 +169,15 @@ export function instrumentMiddleware(
     const startedAt = Date.now();
     log.debug(`${name} start`);
 
-    const pendingTimer = startPendingTimer(log, name, startedAt);
-    const wrappedNext = createWrappedNext(next, log, name, startedAt, pendingTimer);
+    const run: InstrumentedRun = {
+      log,
+      name,
+      startedAt,
+      timer: startPendingTimer(log, name, startedAt),
+    };
+    const wrappedNext = createWrappedNext(next, run);
 
-    logEarlyResponseClose(res, log, name, startedAt, pendingTimer);
-    executeMiddleware(middleware, req, res, wrappedNext, log, name, startedAt, pendingTimer);
+    logEarlyResponseClose(res, run);
+    executeMiddleware(middleware, req, res, wrappedNext, run);
   };
 }

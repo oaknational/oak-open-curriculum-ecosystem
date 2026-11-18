@@ -19,6 +19,9 @@ debugging the system.
   Production diagnostics and incident response workflow
 - [Troubleshooting](./troubleshooting.md) - Common failure modes and practical
   fixes
+- [MCP Server Production Snagging List](./mcp-server-production-snagging.md) -
+  Faults and shortcomings seen on the production MCP server and not yet fixed
+  or accepted
 - [Elasticsearch Ingest Lifecycle](./elasticsearch-ingest-lifecycle.md) -
   Blue/green index lifecycle validation and ingest procedure
 - [MCP Server UAT Validation Runbook](../../apps/oak-curriculum-mcp-streamable-http/docs/manual-uat-guide.md) -

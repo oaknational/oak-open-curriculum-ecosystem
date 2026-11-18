@@ -14,7 +14,7 @@ graduate/enforce edge and the buffer's lifecycle);
 (buffer surfaces are flow-control; fitness pressure is a rate signal);
 [PDR-068](PDR-068-pipeline-back-pressure-as-structural-cure-signal.md)
 (back-pressure routes to a pipeline diagnostic, never an envelope raise);
-ADR-144
+the host's three-zone fitness model decision
 (the decision-debt count metric is the substrate sensor this PDR makes
 first-class).
 
@@ -56,11 +56,11 @@ accumulated residue are all the same failure at different points.
    gated on a human is not the goal; a fast, visible, self-correcting loop is.
 
 3. **Decision-debt is a first-class pillar.** It is measured **directly** — the
-   decision-debt count metric (ADR-144 §Decision-Debt Count Extension), a
-   flow-rate reading of whether graduation keeps pace with capture — and is
-   surfaced with full weight as a first-class prioritisation signal like any other
-   fitness reading (report-only, never a build gate — ADR-144). A buffer's defining
-   health is its queue depth, not its byte size.
+   decision-debt count metric (the fitness-model decision's §Decision-Debt Count
+   Extension), a flow-rate reading of whether graduation keeps pace with capture —
+   and is surfaced with full weight as a first-class prioritisation signal like any
+   other fitness reading (report-only, never a build gate — the fitness-model
+   decision). A buffer's defining health is its queue depth, not its byte size.
 
 4. **The count falls only by deciding (the inversion guard).** Lowering the count
    by deleting an undecided item, annotating its status, or raising a limit is the

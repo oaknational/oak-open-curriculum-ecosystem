@@ -2,16 +2,18 @@
 
 Git-tracked **provenance survivor** for comms events cited by 8-hex id in
 permanent records, per [PDR-094](../practice-core/decision-records/PDR-094-coordination-event-rotation-is-class-tiered-archive-not-delete.md)
-Invariant 3 and [ADR-199](../../docs/architecture/architectural-decisions/199-comms-event-rotation-phenotype.md)
-§"Provenance survivor". When the WS7 rotation moves a comms event out of the
+Invariant 3 and the comms-event rotation phenotype's provenance-survivor
+clause (in OCE, ADR-199). When the WS7 rotation moves a comms event out of the
 git-tracked live stream (`.agent/state/collaboration/comms/`) into the untracked
 archive — or once `.agent/state/` is untracked-by-design — the raw event no
 longer resolves from a clean checkout. This digest preserves, in a tracked file
 outside `.agent/state/`, enough of each cited event (author identity, emission
 timestamp, verbatim excerpt) to verify the claim its citation anchors.
 
-**Machine check.** `pnpm --filter @oaknational/agent-tools comms-provenance-check`
-(the runner over `runProvenanceCheck`, ADR-199's "script in the curator pass")
+**Machine check.** The agent-tools workspace's `comms-provenance-check` script
+(`pnpm --filter <the host's agent-tools package> comms-provenance-check`; the
+runner over `runProvenanceCheck`, the "script in the curator pass" of OCE's
+ADR-199, the comms-event rotation phenotype)
 scans the permanent records for 8-hex event-id tokens, intersects them with the
 known event set, and **refuses to archive-move any cited event this digest does
 not cover** (fail-closed). A rotation pass runs it first; a non-empty violation

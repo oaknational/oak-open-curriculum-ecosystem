@@ -52,6 +52,13 @@ the app still boots — the search route returns `503` and the UI shows a
   `127.0.0.1` (the latter never hydrates here), and wait on
   `domcontentloaded`, never `networkidle` (the HMR websocket keeps
   networkidle from firing).
+- **`next build` fetches Lexend at build time through `next/font/google`, and turbopack's
+  native fetcher ignores the proxy and CA environment the pnpm shim injects** — observed
+  2026-09-02 in a restricted cloud runner: the build failed on the font fetch while a `curl`
+  through the same session proxy returned HTTP 200. The build passes where egress is open or
+  the turbo cache replays it, so the pre-push gate did not catch it. Candidate cure for the
+  hub lane: self-host the face via `next/font/local` — the kit ships
+  `Lexend-VariableFont_wght.ttf` under `packages/design/oak-design-system/fonts/`.
 
 ## Pages
 

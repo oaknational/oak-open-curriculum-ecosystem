@@ -3,6 +3,7 @@ name: "Guard the Parse Before a Threshold Classification"
 polarity: pattern
 use_this_when: "Classifying external or parsed data by a numeric threshold (age buckets, liveness states, severity bands) — gate the value's validity before any comparison, because a NaN or missing value makes every < and > false and silently selects the last/worst branch."
 category: code
+layer: family
 proven_in: "agent-tools comms peer-liveness classifier — classifyState false-`retired` on a malformed created_at (2026-06-28)"
 proven_date: 2026-06-28
 related_pattern: "explicit-missing-resource-state (the sibling: a missing/invalid value must not be confused with a valid extreme)"

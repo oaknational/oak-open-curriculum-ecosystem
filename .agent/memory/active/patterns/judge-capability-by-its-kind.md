@@ -3,6 +3,7 @@ name: "Judge a Capability by Its KIND's Criterion; Your Own Position Is a Posses
 polarity: pattern
 use_this_when: "Evaluating whether a capability, tool, rule, or guard 'works' — especially one you built or one you are the loudest critic of."
 category: process
+layer: general
 proven_in: "evaluating oak-reason (2026-06-22, Orbit rides Horizon)"
 proven_date: 2026-06-22
 barrier:

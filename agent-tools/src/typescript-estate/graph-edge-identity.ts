@@ -12,7 +12,6 @@ import {
   type GraphProducerFor,
 } from './graph-vocabulary.js';
 import { lengthFrame } from './length-framing.js';
-import type { RepoPath } from './scalar-model.js';
 
 const EDGE_DOMAIN = Buffer.from('typescript-estate-graph-edge-v1\0', 'utf8');
 
@@ -22,7 +21,7 @@ export interface RawGraphEdgeObservation {
   readonly kind: GraphEdgeKind;
   readonly status: GraphEdge['status'];
   readonly producer: string;
-  readonly evidencePath: RepoPath;
+  readonly evidencePath: string;
 }
 
 interface MutableEdge {
@@ -33,7 +32,7 @@ interface MutableEdge {
   readonly status: GraphEdge['status'];
   readonly producer: string;
   occurrenceCount: number;
-  readonly evidencePaths: Set<RepoPath>;
+  readonly evidencePaths: Set<string>;
 }
 
 /** Aggregate equal raw relationship occurrences into frozen graph edges. */
@@ -139,7 +138,7 @@ function freezeEdge(edge: MutableEdge): Result<GraphEdge, EstateReviewError> {
   if (first === undefined) {
     return err(new EstateReviewError('VALIDATION_FAILED', 'graph edge has no evidence path'));
   }
-  const evidencePaths: readonly [RepoPath, ...RepoPath[]] = [first, ...rest];
+  const evidencePaths: readonly [string, ...string[]] = [first, ...rest];
   return isPrimaryKind(edge.kind)
     ? freezePrimaryEdge(edge, evidencePaths)
     : freezeSecondaryEdge(edge, evidencePaths);
@@ -147,7 +146,7 @@ function freezeEdge(edge: MutableEdge): Result<GraphEdge, EstateReviewError> {
 
 function freezePrimaryEdge(
   edge: MutableEdge,
-  evidencePaths: readonly [RepoPath, ...RepoPath[]],
+  evidencePaths: readonly [string, ...string[]],
 ): Result<GraphEdge, EstateReviewError> {
   switch (edge.kind) {
     case 'import':
@@ -165,7 +164,7 @@ function freezePrimaryEdge(
 
 function freezeSecondaryEdge(
   edge: MutableEdge,
-  evidencePaths: readonly [RepoPath, ...RepoPath[]],
+  evidencePaths: readonly [string, ...string[]],
 ): Result<GraphEdge, EstateReviewError> {
   switch (edge.kind) {
     case 'script':
@@ -186,7 +185,7 @@ function freezeSecondaryEdge(
 function freezeTypedEdge<K extends GraphEdgeKind>(
   edge: MutableEdge,
   kind: K,
-  evidencePaths: readonly [RepoPath, ...RepoPath[]],
+  evidencePaths: readonly [string, ...string[]],
 ): Result<GraphEdgeFor<K>, EstateReviewError> {
   const producer = producerForKind(kind, edge.producer);
   return isErr(producer)

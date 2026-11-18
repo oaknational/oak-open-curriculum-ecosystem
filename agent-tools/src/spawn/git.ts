@@ -17,7 +17,7 @@ import { err, ok, type Result } from '@oaknational/result';
 export const realGitRunner = (args: readonly string[], cwd: string): Result<string, Error> => {
   try {
     return ok(execFileSync('git', [...args], { cwd, encoding: 'utf8' }));
-  } catch (cause) {
-    return err(cause instanceof Error ? cause : new Error(String(cause)));
+  } catch (error) {
+    return err(error instanceof Error ? error : new Error(String(error)));
   }
 };

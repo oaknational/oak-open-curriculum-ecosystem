@@ -20,6 +20,11 @@ function emptySequenceResponse(): EsSearchResponse<SearchSequenceIndexDoc> {
   };
 }
 
+/** A search port that fails the way a refused Elasticsearch connection does. */
+function failingSearch(): Promise<never> {
+  return Promise.reject(new Error('connection refused'));
+}
+
 function createMockSearch(response = emptySequenceResponse()) {
   const calls: EsSearchRequest[] = [];
   const search = (body: EsSearchRequest) => {
@@ -344,8 +349,6 @@ describe('searchSequences', () => {
     });
 
     it('returns error when search throws', async () => {
-      const failingSearch = () => Promise.reject(new Error('connection refused'));
-
       const result = await searchSequences({ query: 'maths' }, failingSearch, stubResolveIndex);
 
       expect(result.ok).toBe(false);

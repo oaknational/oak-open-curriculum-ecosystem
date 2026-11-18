@@ -46,17 +46,17 @@ interface RunOAuthAndAuthContextDeps {
 export async function runOAuthAndAuthContextPhases(
   deps: RunOAuthAndAuthContextDeps,
 ): Promise<void> {
-  await setupOAuthAndCaching(
-    deps.app,
-    deps.runtimeConfig,
-    deps.log,
-    deps.bootstrapTimer,
-    deps.appId,
-    deps.allowedHosts,
-    deps.observability,
-    deps.upstreamMetadata,
-    deps.canonicalOrigin,
-  );
+  await setupOAuthAndCaching({
+    app: deps.app,
+    runtimeConfig: deps.runtimeConfig,
+    log: deps.log,
+    bootstrapTimer: deps.bootstrapTimer,
+    appCounter: deps.appId,
+    allowedHosts: deps.allowedHosts,
+    observability: deps.observability,
+    injectedMetadata: deps.upstreamMetadata,
+    canonicalOrigin: deps.canonicalOrigin,
+  });
 
   runBootstrapPhase(
     deps.log,

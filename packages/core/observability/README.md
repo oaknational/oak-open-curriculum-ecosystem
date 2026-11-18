@@ -17,7 +17,7 @@ This workspace owns six shared concerns:
 
 ## Browser safety
 
-This workspace is browser-safe by construction: no `@sentry/*` imports, no `node:*` imports in runtime source. Enforced structurally by `src/no-node-only-imports.unit.test.ts`. The future `@sentry/browser` widget adapter (Wave 4 L-12) will compose these primitives directly; no intermediate extraction is required.
+This workspace is browser-safe by construction: no `@sentry/*` imports and no Node core module (`node:*` or bare) in runtime source. The repository's dependency-cruiser gate (`pnpm depcruise`) holds the boundary through the `observability-no-node-core-modules` and `observability-no-sentry` forbidden rules in the root `.dependency-cruiser.mjs`. The future `@sentry/browser` widget adapter (Wave 4 L-12) will compose these primitives directly; no intermediate extraction is required.
 
 ## Boundaries
 

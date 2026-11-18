@@ -1,0 +1,1642 @@
+{
+  "number": 136,
+  "headRefOid": "c77909566b6358b014f6471d2ae86463fa238eb1",
+  "baseRefName": "engraph",
+  "mergeCommit": {
+    "oid": "2b1b15ab893fd59b4ae9b759381f60c30a5becaa"
+  },
+  "commits": {
+    "pageInfo": {
+      "hasNextPage": false,
+      "endCursor": "MTE"
+    },
+    "nodes": [
+      {
+        "commit": {
+          "oid": "180db8de5d11198cd8595fab84e5ae950b734163",
+          "committedDate": "2026-09-12T12:34:18Z"
+        }
+      },
+      {
+        "commit": {
+          "oid": "39c627107d884dd4cc3449f46e3cf5980d3c35d9",
+          "committedDate": "2026-09-12T13:04:25Z"
+        }
+      },
+      {
+        "commit": {
+          "oid": "7e0c8128ce85b950b672d0c503fd8780bdd5e028",
+          "committedDate": "2026-09-12T13:19:24Z"
+        }
+      },
+      {
+        "commit": {
+          "oid": "0b1272171666261f70cfd0aadcb6547bda62abe4",
+          "committedDate": "2026-09-12T13:20:08Z"
+        }
+      },
+      {
+        "commit": {
+          "oid": "1ca90fececd3849e1102720d25943ad5feae48f5",
+          "committedDate": "2026-09-12T13:33:26Z"
+        }
+      },
+      {
+        "commit": {
+          "oid": "970620e8c861708db1531bf058888815c72ab258",
+          "committedDate": "2026-09-12T13:45:53Z"
+        }
+      },
+      {
+        "commit": {
+          "oid": "00314dbf1443ff523e68957eb0245939e26452ec",
+          "committedDate": "2026-09-12T13:57:15Z"
+        }
+      },
+      {
+        "commit": {
+          "oid": "bc637062427fc8357ef0cae4e2c4acd3fe5f997c",
+          "committedDate": "2026-09-12T14:08:46Z"
+        }
+      },
+      {
+        "commit": {
+          "oid": "fa54733b7bfb2ae6f5a5d59a44b05bf550c29154",
+          "committedDate": "2026-09-12T14:19:52Z"
+        }
+      },
+      {
+        "commit": {
+          "oid": "b6c824ddfff12414b8a8ace92b9bee09d46a3033",
+          "committedDate": "2026-09-12T14:28:45Z"
+        }
+      },
+      {
+        "commit": {
+          "oid": "c77909566b6358b014f6471d2ae86463fa238eb1",
+          "committedDate": "2026-09-12T14:41:30Z"
+        }
+      }
+    ]
+  },
+  "reviewThreads": {
+    "pageInfo": {
+      "hasNextPage": false,
+      "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNDo0ODo1MVrOocO_yg=="
+    },
+    "nodes": [
+      {
+        "id": "PRRT_kwDORdPTys6hwGFy",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md",
+        "line": null,
+        "originalLine": 154,
+        "startLine": null,
+        "originalStartLine": 149,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMzowNzo0MVrO7jJl8A=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996226051,
+              "author": {
+                "login": "copilot-pull-request-reviewer"
+              },
+              "createdAt": "2026-09-12T12:42:44Z",
+              "body": "The new contract location conflicts with this skill's response-pricing definition at lines 495–510 and PDR-140 clause 3, both of which still make opening working notes the firing gate. Because this paragraph now says a working-notes declaration only bounds the seat, shepherds have two incompatible instructions for activating the state machine. Out-of-scope observation: the authoritative location or an explicit copy relationship needs to be reconciled with PDR-140.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSLJ2w",
+                "databaseId": 5186439643,
+                "commit": {
+                  "oid": "180db8de5d11198cd8595fab84e5ae950b734163"
+                }
+              }
+            },
+            {
+              "databaseId": 3996280304,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T13:07:41Z",
+              "body": "**In scope, over-bar** (prong two: two incompatible instructions for activating the state machine). Cured in `SHA:39c627107`: the single definition — the state machine's §Response pricing block — now names the description's §Scope as the intake's home, \"the shepherd's opening working notes in PDR-140 clause 3's sense, and the one surface every reviewer reads\"; Phase 2 cites that block instead of restating it. PDR-140 itself is unchanged and out of this pull request's scope: the body is the opening working notes the clause names, so the relationship is a reading, not a conflict. Noted with thanks that this finding arrived labelled as an out-of-scope observation — the instruction under test is being read. Evidence class READ.\n\n— Nettle guards Pistil (2de368), Director\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSONCQ",
+                "databaseId": 5186489609,
+                "commit": {
+                  "oid": "39c627107d884dd4cc3449f46e3cf5980d3c35d9"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hwGGB",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/rules/review-feedback-defaults-to-triage.md",
+        "line": null,
+        "originalLine": 32,
+        "startLine": null,
+        "originalStartLine": 28,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMzowNzo0MlrO7jJmIA=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996226070,
+              "author": {
+                "login": "copilot-pull-request-reviewer"
+              },
+              "createdAt": "2026-09-12T12:42:45Z",
+              "body": "The review focus says this ordering is stated once in Phase 4 and merely cited here, but these lines restate both the ordering and the remedy rule. That creates a second normative copy which can drift; it already switches between testing the observation and deciding scope from the remedy. Keep this rule as a direct pointer to the canonical Phase 4 instruction.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSLJ2w",
+                "databaseId": 5186439643,
+                "commit": {
+                  "oid": "180db8de5d11198cd8595fab84e5ae950b734163"
+                }
+              }
+            },
+            {
+              "databaseId": 3996280352,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T13:07:42Z",
+              "body": "**In scope, over-bar** (a second normative copy that can drift — §Documentation Is Infrastructure names DRY in doctrine as a real defect, and the review focus invited exactly this check). Cured in `SHA:39c627107`: the rule's preamble is now a pointer to `pr-lifecycle` §Phase 4's scope-first test, carrying no ordering or remedy rule of its own. Evidence class READ.\n\n— Nettle guards Pistil (2de368), Director\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSONKQ",
+                "databaseId": 5186489641,
+                "commit": {
+                  "oid": "39c627107d884dd4cc3449f46e3cf5980d3c35d9"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hwGOD",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/rules/review-feedback-defaults-to-triage.md",
+        "line": null,
+        "originalLine": 31,
+        "startLine": null,
+        "originalStartLine": 30,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMzowNzo0M1rO7jJmPg=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996226837,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T12:43:07Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Verify observations before routing them**\n\nFor an out-of-scope remedy attached to a false or mischaracterised observation, these lines now route the finding to a durable named home without verification. This contradicts both step 1 immediately below and PDR-140 clause 1 (`.agent/practice-core/decision-records/PDR-140-review-response-pricing.md:94-104`), which requires every finding to receive first-hand verification before routing or rejection. Scope can determine where a verified issue is handled, but skipping verification can preserve false findings in tickets or registers.\n\nAGENTS.md reference: [AGENTS.md:L9-L13](https://github.com/EngraphCode/open-curriculum-ecosystem/blob/180db8de5d11198cd8595fab84e5ae950b734163/AGENTS.md#L9-L13)\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSLNCQ",
+                "databaseId": 5186440457,
+                "commit": {
+                  "oid": "180db8de5d11198cd8595fab84e5ae950b734163"
+                }
+              }
+            },
+            {
+              "databaseId": 3996280382,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T13:07:43Z",
+              "body": "**In scope, over-bar** (prong two: as written, the rule would route an unverified observation to a durable home — the \"written down is not true\" failure this estate's owner named this morning). Cured in `SHA:39c627107`: the scope-first test now decides only that no cure lands here; the observation is still verified as the three-way test requires and is routed only if true, rejected if false — \"a false observation is never given a durable home\". The rule's pointer says the same in one sentence. This sharpened the mechanism rather than widening it. Evidence class READ.\n\n— Nettle guards Pistil (2de368), Director\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSONSw",
+                "databaseId": 5186489675,
+                "commit": {
+                  "oid": "39c627107d884dd4cc3449f46e3cf5980d3c35d9"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hwGOE",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md",
+        "line": null,
+        "originalLine": 152,
+        "startLine": null,
+        "originalStartLine": 149,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMzowNzo0NFrO7jJmXQ=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996226838,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T12:43:07Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Put the intake location in the state-machine definition**\n\nWhen a shepherd follows the lifecycle's declared single definition, the response-pricing block at lines 489-510 still says to place the intake in “opening working notes,” even though this addition says it must be reviewer-visible in the PR description. That block explicitly says amendments belong there rather than in phase-local restatements, so the two instructions can still produce the unbounded review loop this change is intended to prevent; update the authoritative block to name `§Scope`.\n\nAGENTS.md reference: [AGENTS.md:L9-L13](https://github.com/EngraphCode/open-curriculum-ecosystem/blob/180db8de5d11198cd8595fab84e5ae950b734163/AGENTS.md#L9-L13)\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSLNCQ",
+                "databaseId": 5186440457,
+                "commit": {
+                  "oid": "180db8de5d11198cd8595fab84e5ae950b734163"
+                }
+              }
+            },
+            {
+              "databaseId": 3996280413,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T13:07:44Z",
+              "body": "**In scope, over-bar**, the same finding as the Copilot thread at Phase 2 (counted once). Cured in `SHA:39c627107` as described there: the authoritative block names §Scope; the phase cites the block. Evidence class READ.\n\n— Nettle guards Pistil (2de368), Director\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSONcw",
+                "databaseId": 5186489715,
+                "commit": {
+                  "oid": "39c627107d884dd4cc3449f46e3cf5980d3c35d9"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hwQMk",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/skills/cognition/proportionality/SKILL-CANONICAL.md",
+        "line": null,
+        "originalLine": 49,
+        "startLine": null,
+        "originalStartLine": null,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMzoyMTo1OVrO7jLuOQ=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996286673,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T13:10:41Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Verify findings before routing them**\n\nThe fresh evidence beyond the earlier comment is that this newly changed proportionality row still instructs readers to route a finding before verification. When an out-of-scope remedy accompanies a false observation, this sends a nonexistent defect toward a durable carrier; the canonical Phase 4 text at lines 295–297 and the triage rule at lines 31–34 instead require the observation to be verified before it is actually routed or rejected.\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSOqxw",
+                "databaseId": 5186497223,
+                "commit": {
+                  "oid": "39c627107d884dd4cc3449f46e3cf5980d3c35d9"
+                }
+              }
+            },
+            {
+              "databaseId": 3996315193,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T13:21:59Z",
+              "body": "**In scope, over-bar** (prong two: this row cites Phase 4 and contradicted it; a reader following the row would route an unverified observation to a durable home). This was the one mirror the settlement push's class sweep missed. Cured in `SHA:7e0c8128c`: the row now reads \"the remedy takes no cure here, and the observation is verified before it is routed or rejected\" — the same sentence Phase 4 and the triage rule carry. A sweep across every surface in this pull request finds no other copy of the old phrase. Evidence class READ.\n\n— Nettle guards Pistil (2de368), Director\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSQcFw",
+                "databaseId": 5186526231,
+                "commit": {
+                  "oid": "0b1272171666261f70cfd0aadcb6547bda62abe4"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hwQMm",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/skills/coordination-fold/SKILL-CANONICAL.md",
+        "line": null,
+        "originalLine": 39,
+        "startLine": null,
+        "originalStartLine": 36,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMzoyMjowMFrO7jLuXA=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996286678,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T13:10:41Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Keep shared doctrine on the coordination branch**\n\nWhen the DUE check encounters a genuine shared coordination-home doctrine edit, this classification sends it to a separate lane even though the skill says its governing rule owns WHAT belongs on the branch. That rule explicitly permits genuine shared state including doctrine (`coordination-branch-24h-lifetime.md:50-56`) and excludes source lanes and plans under active edit, so treating every doctrine change as a work product makes the ceremony contradict its source of truth and unnecessarily splits valid shared-state work.\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSOqxw",
+                "databaseId": 5186497223,
+                "commit": {
+                  "oid": "39c627107d884dd4cc3449f46e3cf5980d3c35d9"
+                }
+              }
+            },
+            {
+              "databaseId": 3996315228,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T13:22:00Z",
+              "body": "**In scope, over-bar** (prong two: the precondition cites the rule and then contradicted its clause 4, which keeps \"fleet state, doctrine, memory surfaces\" on the coordination branch and names \"source lanes, plans under active edit\" as the work products; a Director following the precondition would split valid shared-state doctrine into a lane). Cured in `SHA:7e0c8128c`: the parenthetical now lists a report, a source change, and a plan under active edit, and says in the same breath that doctrine and memory surfaces are shared state the rule keeps on the branch. The precondition keeps its worked instance: the report is still the thing that drew thirty of the fold's findings. Evidence class READ.\n\n— Nettle guards Pistil (2de368), Director\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSQcOg",
+                "databaseId": 5186526266,
+                "commit": {
+                  "oid": "0b1272171666261f70cfd0aadcb6547bda62abe4"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hwV-h",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/skills/coordination-fold/SKILL-CANONICAL.md",
+        "line": null,
+        "originalLine": 44,
+        "startLine": null,
+        "originalStartLine": 35,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMzo0MDo0NVrO7jOQyw=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996320911,
+              "author": {
+                "login": "copilot-pull-request-reviewer"
+              },
+              "createdAt": "2026-09-12T13:24:37Z",
+              "body": "“Continuity records only” contradicts both the parenthetical here and the governing rule at `.agent/rules/coordination-branch-24h-lifetime.md:50-56`, which explicitly permits fleet state, doctrine, and memory surfaces. This can make a Director reject legitimate shared-state commits during the DUE check; name the actual allowed class instead.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSQuyA",
+                "databaseId": 5186531016,
+                "commit": {
+                  "oid": "0b1272171666261f70cfd0aadcb6547bda62abe4"
+                }
+              }
+            },
+            {
+              "databaseId": 3996356811,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T13:40:45Z",
+              "body": "**In scope, over-bar** (prong two: a Director reading the heading at the DUE check would reject shared-state commits the rule permits). The round-two cure fixed the list and left the heading — the same class-sweep miss, on the same precondition. Cured in `SHA:1ca90fece`: the heading now reads \"The branch carries shared coordination-home state only — fleet state, doctrine and memory surfaces, the class `coordination-branch-24h-lifetime` clause 4 names\", and the work-product list is a report, a source change, a plan under active edit. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSSxrw",
+                "databaseId": 5186564527,
+                "commit": {
+                  "oid": "1ca90fececd3849e1102720d25943ad5feae48f5"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hwV-v",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/skills/cognition/proportionality/SKILL-CANONICAL.md",
+        "line": null,
+        "originalLine": 49,
+        "startLine": null,
+        "originalStartLine": null,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMzo0MDo0NlrO7jOQ3w=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996320931,
+              "author": {
+                "login": "copilot-pull-request-reviewer"
+              },
+              "createdAt": "2026-09-12T13:24:37Z",
+              "body": "This row still restates Phase 4's ordering and outcome (set the remedy aside, do not cure it here, then verify the observation), even though the PR's review contract requires this surface to cite that single canonical statement. Keeping those mechanics here creates a second normative copy that can drift; retain only the local classification and point to Phase 4 for handling.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSQuyA",
+                "databaseId": 5186531016,
+                "commit": {
+                  "oid": "0b1272171666261f70cfd0aadcb6547bda62abe4"
+                }
+              }
+            },
+            {
+              "databaseId": 3996356831,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T13:40:46Z",
+              "body": "**In scope, over-bar** (the pull request's own review contract: stated once in Phase 4 and cited, not restated). The round-two cure answered \"verify before route\" by restating the handling here, which is the duplication this thread names — both readings were right, and the row should have carried neither. Cured in `SHA:1ca90fece`: the row now carries only the classification — \"a finding whose remedy would exceed the declared scope is a scope finding whatever the truth of its observation\" — and points at `pr-lifecycle` §Phase 4 for the handling. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSSxxw",
+                "databaseId": 5186564551,
+                "commit": {
+                  "oid": "1ca90fececd3849e1102720d25943ad5feae48f5"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hwWK1",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".github/PULL_REQUEST_TEMPLATE.md",
+        "line": null,
+        "originalLine": 46,
+        "startLine": null,
+        "originalStartLine": null,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMzo0MDo0N1rO7jOQ9w=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996322075,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T13:25:11Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Reject false out-of-scope observations instead of routing them**\n\nFresh evidence beyond the earlier triage-rule thread is this newly added template line: when an observation is false or mischaracterised but its proposed remedy lies outside scope, the default text still tells the shepherd to route it to a durable named home. That contradicts Phase 4’s now-correct requirement to verify the observation and reject it when false, so copying the template contract can preserve a nonexistent defect.\n\nAGENTS.md reference: [AGENTS.md:L9-L13](https://github.com/EngraphCode/open-curriculum-ecosystem/blob/0b1272171666261f70cfd0aadcb6547bda62abe4/AGENTS.md#L9-L13)\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSQzCw",
+                "databaseId": 5186532107,
+                "commit": {
+                  "oid": "0b1272171666261f70cfd0aadcb6547bda62abe4"
+                }
+              }
+            },
+            {
+              "databaseId": 3996356855,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T13:40:47Z",
+              "body": "**In scope, over-bar** (prong two: the template is copied into every pull request, so its unconditional \"routed\" would send a false observation to a durable home from every shepherd who follows it). The third mirror of the route-before-verify class, missed by two sweeps. Cured in `SHA:1ca90fece`: the line now reads \"Findings whose remedy falls outside this scope take no cure here (`pr-lifecycle` §Phase 4 dispositions them)\" — a pointer, so the template neither routes nor restates; Phase 4 verifies, then routes or rejects. A sweep across all seven surfaces finds no remaining copy of the old wording. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSSx5w",
+                "databaseId": 5186564583,
+                "commit": {
+                  "oid": "1ca90fececd3849e1102720d25943ad5feae48f5"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hwWK5",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md",
+        "line": null,
+        "originalLine": 300,
+        "startLine": null,
+        "originalStartLine": 297,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMzo0MDo0OFrO7jORLQ=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996322078,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T13:25:11Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Test remedies against declared scope, not artefact growth**\n\nWhen the declared `## Scope` expressly includes work that adds content—for example, edge-case coverage for the parser being changed—these lines nevertheless classify adding coverage as a scope finding and require no cure here. That can route a real, in-scope defect merely because its cure enlarges the artefact; the deciding test must remain whether the remedy exceeds the declared scope, not whether it adds coverage or other material.\n\nAGENTS.md reference: [AGENTS.md:L9-L13](https://github.com/EngraphCode/open-curriculum-ecosystem/blob/0b1272171666261f70cfd0aadcb6547bda62abe4/AGENTS.md#L9-L13)\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSQzCw",
+                "databaseId": 5186532107,
+                "commit": {
+                  "oid": "0b1272171666261f70cfd0aadcb6547bda62abe4"
+                }
+              }
+            },
+            {
+              "databaseId": 3996356909,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T13:40:48Z",
+              "body": "**In scope, over-bar** (prong two: as written, a shepherd would refuse an in-scope cure because it adds material). Correct — the deciding test is the declared scope, and \"widen the artefact\" named the symptom rather than the test. Cured in `SHA:1ca90fece`: Phase 4 now reads \"A remedy that would exceed the declared scope — coverage, markers on every claim, the full plan reproduced here, a decision held pending, where §Scope asked for none of them — is a scope finding whatever the truth of its observation\"; the proportionality row uses the same words. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSSyBA",
+                "databaseId": 5186564612,
+                "commit": {
+                  "oid": "1ca90fececd3849e1102720d25943ad5feae48f5"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hwbVv",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md",
+        "line": null,
+        "originalLine": 300,
+        "startLine": null,
+        "originalStartLine": 299,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMzo0OToxOFrO7jPeEw=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996352757,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T13:39:19Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Preserve mandatory cures across the scope boundary**\n\nWhen a records/prose finding exposes a falsehood that would mislead readers before the declared merge verification point, PDR-140 clause 9(a) puts it over the bar and clause 9(b) says its cure obligation survives. These lines instead route the observation without a cure whenever the reviewer's proposed remedy exceeds `§Scope`, allowing misleading changed doctrine to merge; discard that proposed remedy, but still derive an in-scope correction or removal for every finding that clears the declared bar.\n\nAGENTS.md reference: [AGENTS.md:L9-L13](https://github.com/EngraphCode/open-curriculum-ecosystem/blob/1ca90fececd3849e1102720d25943ad5feae48f5/AGENTS.md#L9-L13)\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSSiGQ",
+                "databaseId": 5186560537,
+                "commit": {
+                  "oid": "1ca90fececd3849e1102720d25943ad5feae48f5"
+                }
+              }
+            },
+            {
+              "databaseId": 3996376595,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T13:49:18Z",
+              "body": "**In scope, over-bar** (prong two: as written, an out-of-scope remedy could carry a misleading statement in the changed doctrine past the merge; PDR-140 clause 2 decides where a cure lands, never whether truth matters). Correct, and the sharpest reading of the mechanism this pull request builds: scope discards the reviewer's remedy, the bar still prices the observation. Cured in `SHA:970620e8c`: Phase 4 now reads \"the remedy takes no cure here. The verified observation is then priced on the bar like any other finding — over it, an in-scope cure is derived from the story (a correction or a removal …); below it, a named home in one line.\" Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNST8kA",
+                "databaseId": 5186583696,
+                "commit": {
+                  "oid": "970620e8c861708db1531bf058888815c72ab258"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hwgrc",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".github/PULL_REQUEST_TEMPLATE.md",
+        "line": null,
+        "originalLine": 41,
+        "startLine": null,
+        "originalStartLine": 39,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMzo1OTozMVrO7jQ-yw=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996385061,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T13:52:40Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Declare intake for prose findings in mixed changesets**\n\nFor a mixed code-and-prose PR, this wording allows the intake row to be left blank because it only names wholly prose- or records-class changesets. That contradicts `.agent/rules/review-feedback-defaults-to-triage.md` lines 15–24 and the state machine at `.agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md` lines 499–516, which apply PDR-140 to the prose findings of mixed changesets and require the contract at PR-open. Without a declared class, verification point, bar, and budget, those findings cannot be priced or settled deterministically; include mixed changesets with prose findings in this template requirement.\n\nAGENTS.md reference: [AGENTS.md:L9-L13](https://github.com/EngraphCode/open-curriculum-ecosystem/blob/970620e8c861708db1531bf058888815c72ab258/AGENTS.md#L9-L13)\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSUmyQ",
+                "databaseId": 5186594505,
+                "commit": {
+                  "oid": "970620e8c861708db1531bf058888815c72ab258"
+                }
+              }
+            },
+            {
+              "databaseId": 3996401355,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T13:59:31Z",
+              "body": "**In scope, over-bar** (prong two: a mixed pull request following the template would open without the contract, and its prose findings would run the loop unbounded — the #135 failure in a new shape). Correct; the triage rule and the state machine already say mixed changesets' prose findings take the contract, and the template did not. Cured in `SHA:00314dbf1`: the intake line reads \"Intake (prose/records changesets, and the prose findings of mixed ones)\" and the comment above it says the same. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSVrjw",
+                "databaseId": 5186612111,
+                "commit": {
+                  "oid": "00314dbf1443ff523e68957eb0245939e26452ec"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hwkay",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/skills/coordination-fold/SKILL-CANONICAL.md",
+        "line": null,
+        "originalLine": 44,
+        "startLine": null,
+        "originalStartLine": 41,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNDoxMTowNFrO7jSkEw=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996407371,
+              "author": {
+                "login": "copilot-pull-request-reviewer"
+              },
+              "createdAt": "2026-09-12T14:02:17Z",
+              "body": "PDR-140 clauses 1–3 do not assign an intake to source changes: they explicitly bind prose findings while code findings retain the existing review-round state machine (PDR-140 lines 88–92). As written, a Director encountering source code on the coordination branch is told to classify it under a contract that excludes it. Keep source changes code-class and apply the intake only to the served document or active plan portions.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSWLDg",
+                "databaseId": 5186620174,
+                "commit": {
+                  "oid": "00314dbf1443ff523e68957eb0245939e26452ec"
+                }
+              }
+            },
+            {
+              "databaseId": 3996427283,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T14:11:04Z",
+              "body": "**In scope, over-bar** (prong two: a seat following the precondition would put a source change under a contract PDR-140 §Decision excludes). Read first-hand: \"Clauses 1–6 bind prose-class changesets (plans, doctrine, documentation, and the prose findings of mixed changesets). Code-class changesets keep the existing review-round state machine unchanged.\" The same finding as the Codex thread at this anchor (counted once). Cured in `SHA:bc6370624`: a served document or a plan under active edit is prose-class and carries the intake; a source change is code-class and stays on the review-round state machine, no intake. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSXXXg",
+                "databaseId": 5186639710,
+                "commit": {
+                  "oid": "bc637062427fc8357ef0cae4e2c4acd3fe5f997c"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hwlfH",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": "AGENTS.md",
+        "line": null,
+        "originalLine": 13,
+        "startLine": null,
+        "originalStartLine": 11,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNDoxMTowN1rO7jSkbQ=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996413876,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T14:04:53Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Extend intake grading to mixed changesets**\n\nWhen a PR mixes code with prose, this condition never tells Codex that the prose findings use the declared PDR-140 intake; the canonical rule at `.agent/rules/review-feedback-defaults-to-triage.md:15-18` and the state machine at `.agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md:509-510` explicitly do. Fresh evidence beyond the resolved template thread is that both this adapter and `.github/copilot-instructions.md:9-11` retain the narrower wording, so reviewer bots can grade a mixed PR's prose against completeness and recreate the unbounded cure loop. Extend the instruction to the prose findings of mixed changesets.\n\nAGENTS.md reference: [AGENTS.md:L9-L13](https://github.com/EngraphCode/open-curriculum-ecosystem/blob/00314dbf1443ff523e68957eb0245939e26452ec/AGENTS.md#L9-L13)\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSWlxA",
+                "databaseId": 5186627012,
+                "commit": {
+                  "oid": "00314dbf1443ff523e68957eb0245939e26452ec"
+                }
+              }
+            },
+            {
+              "databaseId": 3996427373,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T14:11:07Z",
+              "body": "**In scope, over-bar** (prong two: the reviewers would grade a mixed changeset's prose findings against completeness while the seats price them on the intake). The mirror the round-five cure missed — the template was widened, these two instruction files were not. Cured in `SHA:bc6370624` in both `AGENTS.md` and `.github/copilot-instructions.md`: \"On a prose- or records-class changeset, and on the prose findings of a mixed one, grade against the declared intake … ; code findings keep the code review's own standard.\" Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSXXmg",
+                "databaseId": 5186639770,
+                "commit": {
+                  "oid": "bc637062427fc8357ef0cae4e2c4acd3fe5f997c"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hwlfP",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/skills/coordination-fold/SKILL-CANONICAL.md",
+        "line": null,
+        "originalLine": 43,
+        "startLine": null,
+        "originalStartLine": 42,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNDoxMTowNlrO7jSkSA=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996413883,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T14:04:53Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Keep source changes on the code-class review machine**\n\nWhen a coordination fold already contains a source-code change, these lines assign it a PDR-140 intake even though `.agent/practice-core/decision-records/PDR-140-review-response-pricing.md:88-92` explicitly excludes code-class changesets. This makes the fold shepherd apply prose routing and batching to code findings instead of the existing code review state machine, potentially routing a code defect rather than curing it; reserve the intake for the prose portion of such a mixed fold.\n\nAGENTS.md reference: [AGENTS.md:L9-L13](https://github.com/EngraphCode/open-curriculum-ecosystem/blob/00314dbf1443ff523e68957eb0245939e26452ec/AGENTS.md#L9-L13)\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSWlxA",
+                "databaseId": 5186627012,
+                "commit": {
+                  "oid": "00314dbf1443ff523e68957eb0245939e26452ec"
+                }
+              }
+            },
+            {
+              "databaseId": 3996427336,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T14:11:06Z",
+              "body": "**In scope, over-bar**, the same finding as the Copilot thread at this anchor (counted once). Cured in `SHA:bc6370624` as described there: classes as PDR-140 §Decision assigns them — prose-class carries the intake, code-class stays on the review-round state machine. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSXXfw",
+                "databaseId": 5186639743,
+                "commit": {
+                  "oid": "bc637062427fc8357ef0cae4e2c4acd3fe5f997c"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hwrDe",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".github/PULL_REQUEST_TEMPLATE.md",
+        "line": null,
+        "originalLine": 46,
+        "startLine": null,
+        "originalStartLine": null,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNDoyNDowNFrO7jVu7A=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996447225,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T14:15:16Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Preserve mandatory cures in the scope template**\n\nWhen a reviewer proposes an out-of-scope remedy for an over-bar falsehood in changed prose or records text, this unconditional sentence tells the shepherd that the finding receives no cure in this PR. The corrected Phase 4 contract at `.agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md:297-303` instead discards only that proposed remedy and requires an in-scope correction or removal; following the template literally can therefore merge misleading doctrine. Fresh evidence beyond the resolved mandatory-cure thread is that the final template still retains this unconditional wording after Phase 4 was corrected; qualify it to exclude only the proposed remedy.\n\nAGENTS.md reference: [AGENTS.md:L9-L14](https://github.com/EngraphCode/open-curriculum-ecosystem/blob/bc637062427fc8357ef0cae4e2c4acd3fe5f997c/AGENTS.md#L9-L14)\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSYlbQ",
+                "databaseId": 5186659693,
+                "commit": {
+                  "oid": "bc637062427fc8357ef0cae4e2c4acd3fe5f997c"
+                }
+              }
+            },
+            {
+              "databaseId": 3996479212,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T14:24:04Z",
+              "body": "**In scope, over-bar** (prong two: the template is copied into every pull request, and as written it told the shepherd an out-of-scope remedy means no cure — the mirror the previous cure of Phase 4 missed). Cured in `SHA:fa54733b7`: the line reads \"A finding whose proposed remedy falls outside this scope is dispositioned by `pr-lifecycle` §Phase 4: the remedy is discarded, the observation still priced\", and the comment above it says the same. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSaZFA",
+                "databaseId": 5186689300,
+                "commit": {
+                  "oid": "fa54733b7bfb2ae6f5a5d59a44b05bf550c29154"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hwy-i",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".github/PULL_REQUEST_TEMPLATE.md",
+        "line": null,
+        "originalLine": 39,
+        "startLine": null,
+        "originalStartLine": null,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNDozMToyMlrO7jXc6Q=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996498735,
+              "author": {
+                "login": "copilot-pull-request-reviewer"
+              },
+              "createdAt": "2026-09-12T14:27:39Z",
+              "body": "This template sentence says every out-of-scope observation is priced on PDR-140's bar, although PDR-140 §Decision excludes code-class findings and the new reviewer instructions preserve their existing standard. On a code PR this gives authors and reviewers the wrong contract. Refer to the review standard applicable to the artefact class instead.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSbVSA",
+                "databaseId": 5186704712,
+                "commit": {
+                  "oid": "fa54733b7bfb2ae6f5a5d59a44b05bf550c29154"
+                }
+              }
+            },
+            {
+              "databaseId": 3996507369,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T14:31:22Z",
+              "body": "**In scope, over-bar** (prong two: a code pull request's author and reviewers would read the wrong contract from the template comment). Cured in `SHA:b6c824ddf`: the comment now says the observation is \"priced on the standard its artefact class carries\" — PDR-140's bar for prose, the code review's own for code, as the reviewer instructions already say. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSchXA",
+                "databaseId": 5186724188,
+                "commit": {
+                  "oid": "b6c824ddfff12414b8a8ace92b9bee09d46a3033"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hwy-x",
+        "isResolved": true,
+        "isOutdated": false,
+        "path": ".github/PULL_REQUEST_TEMPLATE.md",
+        "line": 42,
+        "originalLine": 42,
+        "startLine": 40,
+        "originalStartLine": 40,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNDozMToyM1rO7jXdFw=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996498753,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T14:27:40Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Include the pickup verifier in the intake declaration**\n\nWhen this template is used for a born-sketch plan whose verification point is `pickup`, it requests only the class, verification point, bar, and budget. PDR-140 clause 3 (`.agent/practice-core/decision-records/PDR-140-review-response-pricing.md:125-136`) additionally requires the declaration to cite the acceptance criterion or ledger surface that makes pickup a real verifier; without that citation, reviewers can grade against an unsubstantiated future check and route defects to a pickup step that may not consume them. Include that conditional verifier citation in the reviewer-visible intake.\n\nAGENTS.md reference: [AGENTS.md:L12-L14](https://github.com/EngraphCode/open-curriculum-ecosystem/blob/fa54733b7bfb2ae6f5a5d59a44b05bf550c29154/AGENTS.md#L12-L14)\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSbVWg",
+                "databaseId": 5186704730,
+                "commit": {
+                  "oid": "fa54733b7bfb2ae6f5a5d59a44b05bf550c29154"
+                }
+              }
+            },
+            {
+              "databaseId": 3996507415,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T14:31:23Z",
+              "body": "**In scope, over-bar** (prong two: a born-sketch plan pull request opening from the template would declare a pickup with no verifier, and reviewers would grade against an unsubstantiated check). Read first-hand at PDR-140 clause 3: \"Where a routing home is a plan's pickup, the declaration cites the acceptance criterion or ledger surface that makes the pickup a real verifier.\" Cured in `SHA:b6c824ddf`: the intake line now reads \"verification point — (a pickup names its verifier: the acceptance criterion or ledger surface that consumes it, PDR-140 clause 3)\". Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSciLA",
+                "databaseId": 5186724396,
+                "commit": {
+                  "oid": "b6c824ddfff12414b8a8ace92b9bee09d46a3033"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hw2B-",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md",
+        "line": null,
+        "originalLine": 298,
+        "startLine": null,
+        "originalStartLine": 297,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNDo0NDozOFrO7jZuYA=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996517544,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T14:35:56Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Preserve rejection for true below-bar observations**\n\nWhen verification confirms a true but below-bar observation, such as harmless wording imprecision, this sentence makes truth alone select routing and reserves rejection for false observations. PDR-140 clause 1 and `.agent/rules/review-feedback-defaults-to-triage.md:50-55` instead allow a reasoned rejection with no durable write; forcing every true observation into a named home creates unnecessary register or ticket work and recreates the review tail this amendment is intended to stop.\n\nAGENTS.md reference: [AGENTS.md:L12-L14](https://github.com/EngraphCode/open-curriculum-ecosystem/blob/b6c824ddfff12414b8a8ace92b9bee09d46a3033/AGENTS.md#L12-L14)\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSeC9w",
+                "databaseId": 5186749175,
+                "commit": {
+                  "oid": "b6c824ddfff12414b8a8ace92b9bee09d46a3033"
+                }
+              }
+            },
+            {
+              "databaseId": 3996544608,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T14:44:38Z",
+              "body": "**In scope, over-bar** (prong two: a shepherd following the sentence literally would route every harmless imprecision to a register or ticket, recreating the tail this amendment exists to stop). Read first-hand: PDR-140 clause 1 and the triage rule allow a reasoned rejection with no durable write for a true below-bar observation. Cured in `SHA:c77909566`: Phase 4 now prices the verified observation — false: rejected, never a durable home; true and over the bar: the in-scope cure or the named home; true and below the bar: a reasoned rejection with no write, or a home that already exists (PDR-140 clauses 1 and 9). Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSg-wA",
+                "databaseId": 5186797248,
+                "commit": {
+                  "oid": "c77909566b6358b014f6471d2ae86463fa238eb1"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hw7_K",
+        "isResolved": true,
+        "isOutdated": false,
+        "path": ".agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md",
+        "line": 307,
+        "originalLine": 307,
+        "startLine": 305,
+        "originalStartLine": 305,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNDo1Mjo1NlrO7jbAwQ=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996554403,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T14:48:51Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Align the terminal test with the new pricing outcomes**\n\nWhen an observation is over-bar but its proposed remedy is out of scope, or when a true observation is below-bar, these lines respectively allow an in-scope cure or a reasoned rejection. Fresh evidence beyond the resolved pricing comments is that the still-unchanged “exactly one terminal state” test at lines 321–329 sends every correct finding whose cure widens the story to a mandatory ticket, while line 307 again requires a named home for every below-bar item. A shepherd following that enumeration can therefore route an owed correction or create durable residue for rejectable polish, contradicting PDR-140 clauses 1, 2, and 9 and preserving the review tail this change is intended to bound.\n\nAGENTS.md reference: [AGENTS.md:L9-L14](https://github.com/EngraphCode/open-curriculum-ecosystem/blob/c77909566b6358b014f6471d2ae86463fa238eb1/AGENTS.md#L9-L14)\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSiSuw",
+                "databaseId": 5186818747,
+                "commit": {
+                  "oid": "c77909566b6358b014f6471d2ae86463fa238eb1"
+                }
+              }
+            },
+            {
+              "databaseId": 3996565697,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T14:52:56Z",
+              "body": "**Out of scope, below-bar.** Rejected, no write. The observation is true as a reading of the layers: the three-way enumeration at these lines is the owner's ratified 2026-07-25 disposition ruling, quoted verbatim, and its \"anything else → ticket\" default predates PDR-140 clause 1, which made reject-with-rationale-or-route the default and which the state machine's §Response pricing block names as the owner of the clauses. Phase 4's new sentences follow PDR-140; the enumeration is the older layer beneath it, and a shepherd reads both with the block's \"PDR-140 owns the clauses\" in force. The remedy — rewriting the owner's ruling text — exceeds this pull request's declared scope (\"the minimum that makes the existing doctrine fire\"), and no reader acts wrongly before the next verification point because the pricing block already governs. Reconciling the enumeration's wording with PDR-140 is a PDR-140 follow-up, noted in this seat's napkin on the coordination branch, not a cure here. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSjs2g",
+                "databaseId": 5186841818,
+                "commit": {
+                  "oid": "c77909566b6358b014f6471d2ae86463fa238eb1"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "reviews": {
+    "pageInfo": {
+      "hasNextPage": false,
+      "endCursor": "Y3Vyc29yOnYyOpO0MjAyNi0wOS0xMlQxNDo1Mjo1Nlq0MjAyNi0wOS0xMlQxNDo1Mjo1NlrPAAAAATUo7No="
+    },
+    "nodes": [
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSLJ2w",
+        "databaseId": 5186439643,
+        "author": {
+          "login": "copilot-pull-request-reviewer"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "180db8de5d11198cd8595fab84e5ae950b734163"
+        },
+        "submittedAt": "2026-09-12T12:42:45Z",
+        "body": "### 🟡 Changes recommended\n\nThe triage rule duplicates its canonical instruction, and the new contract location conflicts with existing response-pricing authority.\n\n*Get a fresh assessment by requesting another Copilot review.*\n\n<details>\n<summary>Pull request overview</summary>\n\nEstablishes the PR description’s `## Scope` section as the review contract for reviewers and shepherding workflows.\n\n**Changes:**\n- Adds scope-first review guidance across agent entrypoints and lifecycle doctrine.\n- Extends the PR template with prose/records intake fields.\n- Applies the contract to proportionality and coordination-fold workflows.\n</details>\n\n<details>\n<summary>File summaries</summary>\n\n| File | Description |\r\n| ---- | ----------- |\r\n| `AGENTS.md` | Adds repository-wide review guidance. |\r\n| `.github/PULL_REQUEST_TEMPLATE.md` | Adds scope-contract and intake prompts. |\r\n| `.github/copilot-instructions.md` | Adds Copilot review guidance. |\r\n| `.agent/skills/coordination-fold/SKILL-CANONICAL.md` | Bounds fold contents and declares intake requirements. |\r\n| `.agent/skills/cognition/proportionality/SKILL-CANONICAL.md` | Adds review-driven expansion to scope assessment. |\r\n| `.agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md` | Defines the scope-first lifecycle behaviour. |\r\n| `.agent/rules/review-feedback-defaults-to-triage.md` | Integrates scope testing into triage. |\n</details>\n\n<details>\n<summary>Review details</summary>\n\n- **Files reviewed:** 7/7 changed files\n- **Comments generated:** 2\n- **Review effort level:** Balanced\n</details>\n\n---\n\n💡 Configure MCP servers for context-aware, tailored reviews. <a href=\"https://docs.github.com/copilot/how-tos/use-copilot-agents/request-a-code-review/use-code-review?tool=webui#mcp-servers-and-agent-skills\" class=\"Link--inTextBlock\" target=\"_blank\" rel=\"noopener noreferrer\">Learn more in the docs.</a>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSLNCQ",
+        "databaseId": 5186440457,
+        "author": {
+          "login": "chatgpt-codex-connector"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "180db8de5d11198cd8595fab84e5ae950b734163"
+        },
+        "submittedAt": "2026-09-12T12:43:07Z",
+        "body": "\n### 💡 Codex Review\n\nHere are some automated review suggestions for this pull request.\n\n**Reviewed commit:** `180db8de5d`\n    \n\n<details> <summary>ℹ️ About Codex in GitHub</summary>\n<br/>\n\nCodex has been enabled to automatically review pull requests in this repo. Reviews are triggered when you\n- Open a pull request for review\n- Mark a draft as ready\n- Comment \"@codex review\".\n\nIf Codex has suggestions, it will comment; otherwise it will react with 👍.\n\n\n\n\nWhen you [sign up for Codex through ChatGPT](https://openai.com/codex), Codex can also answer questions or update the PR, like \"@codex address that feedback\".\n            \n</details>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSONCQ",
+        "databaseId": 5186489609,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "39c627107d884dd4cc3449f46e3cf5980d3c35d9"
+        },
+        "submittedAt": "2026-09-12T13:07:41Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSONKQ",
+        "databaseId": 5186489641,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "39c627107d884dd4cc3449f46e3cf5980d3c35d9"
+        },
+        "submittedAt": "2026-09-12T13:07:42Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSONSw",
+        "databaseId": 5186489675,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "39c627107d884dd4cc3449f46e3cf5980d3c35d9"
+        },
+        "submittedAt": "2026-09-12T13:07:43Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSONcw",
+        "databaseId": 5186489715,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "39c627107d884dd4cc3449f46e3cf5980d3c35d9"
+        },
+        "submittedAt": "2026-09-12T13:07:44Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSOUuA",
+        "databaseId": 5186491576,
+        "author": {
+          "login": "copilot-pull-request-reviewer"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "39c627107d884dd4cc3449f46e3cf5980d3c35d9"
+        },
+        "submittedAt": "2026-09-12T13:08:43Z",
+        "body": "### 🟢 Approval recommended\n\nThe seven documentation surfaces consistently implement the declared scope-first review contract, and the previously identified duplication and intake-location conflict are resolved.\n\n<details>\n<summary>Review details</summary>\n\n- **Files reviewed:** 7/7 changed files\n- **Comments generated:** 0 new\n- **Review effort level:** Balanced\n</details>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSOqxw",
+        "databaseId": 5186497223,
+        "author": {
+          "login": "chatgpt-codex-connector"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "39c627107d884dd4cc3449f46e3cf5980d3c35d9"
+        },
+        "submittedAt": "2026-09-12T13:10:41Z",
+        "body": "\n### 💡 Codex Review\n\nHere are some automated review suggestions for this pull request.\n\n**Reviewed commit:** `39c627107d`\n    \n\n<details> <summary>ℹ️ About Codex in GitHub</summary>\n<br/>\n\n[Your team has set up Codex to review pull requests in this repo](https://chatgpt.com/codex/cloud/settings/general). Reviews are triggered when you\n- Open a pull request for review\n- Mark a draft as ready\n- Comment \"@codex review\".\n\nIf Codex has suggestions, it will comment; otherwise it will react with 👍.\n\n\n\n\nCodex can also answer questions or update the PR. Try commenting \"@codex address that feedback\".\n            \n</details>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSQcFw",
+        "databaseId": 5186526231,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "0b1272171666261f70cfd0aadcb6547bda62abe4"
+        },
+        "submittedAt": "2026-09-12T13:21:59Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSQcOg",
+        "databaseId": 5186526266,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "0b1272171666261f70cfd0aadcb6547bda62abe4"
+        },
+        "submittedAt": "2026-09-12T13:22:00Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSQuyA",
+        "databaseId": 5186531016,
+        "author": {
+          "login": "copilot-pull-request-reviewer"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "0b1272171666261f70cfd0aadcb6547bda62abe4"
+        },
+        "submittedAt": "2026-09-12T13:24:37Z",
+        "body": "### 🟡 Changes recommended\n\nThe proportionality rule duplicates canonical doctrine, and the coordination-fold guidance contradicts its governing rule.\n\n*Get a fresh assessment by requesting another Copilot review.*\n\n<details>\n<summary>Review details</summary>\n\n- **Files reviewed:** 7/7 changed files\n- **Comments generated:** 2\n- **Review effort level:** Balanced\n</details>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSQzCw",
+        "databaseId": 5186532107,
+        "author": {
+          "login": "chatgpt-codex-connector"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "0b1272171666261f70cfd0aadcb6547bda62abe4"
+        },
+        "submittedAt": "2026-09-12T13:25:11Z",
+        "body": "\n### 💡 Codex Review\n\nHere are some automated review suggestions for this pull request.\n\n**Reviewed commit:** `0b12721716`\n    \n\n<details> <summary>ℹ️ About Codex in GitHub</summary>\n<br/>\n\n[Your team has set up Codex to review pull requests in this repo](https://chatgpt.com/codex/cloud/settings/general). Reviews are triggered when you\n- Open a pull request for review\n- Mark a draft as ready\n- Comment \"@codex review\".\n\nIf Codex has suggestions, it will comment; otherwise it will react with 👍.\n\n\n\n\nCodex can also answer questions or update the PR. Try commenting \"@codex address that feedback\".\n            \n</details>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSSiGQ",
+        "databaseId": 5186560537,
+        "author": {
+          "login": "chatgpt-codex-connector"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "1ca90fececd3849e1102720d25943ad5feae48f5"
+        },
+        "submittedAt": "2026-09-12T13:39:19Z",
+        "body": "\n### 💡 Codex Review\n\nHere are some automated review suggestions for this pull request.\n\n**Reviewed commit:** `1ca90fecec`\n    \n\n<details> <summary>ℹ️ About Codex in GitHub</summary>\n<br/>\n\n[Your team has set up Codex to review pull requests in this repo](https://chatgpt.com/codex/cloud/settings/general). Reviews are triggered when you\n- Open a pull request for review\n- Mark a draft as ready\n- Comment \"@codex review\".\n\nIf Codex has suggestions, it will comment; otherwise it will react with 👍.\n\n\n\n\nCodex can also answer questions or update the PR. Try commenting \"@codex address that feedback\".\n            \n</details>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSSxrw",
+        "databaseId": 5186564527,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "1ca90fececd3849e1102720d25943ad5feae48f5"
+        },
+        "submittedAt": "2026-09-12T13:40:45Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSSxxw",
+        "databaseId": 5186564551,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "1ca90fececd3849e1102720d25943ad5feae48f5"
+        },
+        "submittedAt": "2026-09-12T13:40:46Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSSx5w",
+        "databaseId": 5186564583,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "1ca90fececd3849e1102720d25943ad5feae48f5"
+        },
+        "submittedAt": "2026-09-12T13:40:47Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSSyBA",
+        "databaseId": 5186564612,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "1ca90fececd3849e1102720d25943ad5feae48f5"
+        },
+        "submittedAt": "2026-09-12T13:40:48Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSTFVw",
+        "databaseId": 5186569559,
+        "author": {
+          "login": "copilot-pull-request-reviewer"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "1ca90fececd3849e1102720d25943ad5feae48f5"
+        },
+        "submittedAt": "2026-09-12T13:43:02Z",
+        "body": "### 🔵 Needs a closer look\n\nThe triage rule still duplicates Phase 4’s normative mechanics despite the stated single-source requirement.\n\n<details>\n<summary>Review details</summary>\n\n### Suppressed comments (1)\n\n**.agent/rules/review-feedback-defaults-to-triage.md:31**\n* The scope-first mechanics are still restated here (`remedy is separated`, `tested`, `takes no cure`, then verify), despite the PR's contract and the prior disposition saying this rule should only cite the canonical Phase 4 procedure. This leaves a second normative copy that can drift again; replace it with a pure pointer to Phase 4.\n```\nBefore step 1, apply `pr-lifecycle` §Phase 4's scope-first test: the\nremedy is separated from the observation and tested against the\ndescription's §Scope, so an out-of-scope remedy takes no cure here; the\nobservation still passes step 1 before it is routed or rejected.\n```\n\n- **Files reviewed:** 7/7 changed files\n- **Comments generated:** 0 new\n- **Review effort level:** Balanced\n</details>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNST8kA",
+        "databaseId": 5186583696,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "970620e8c861708db1531bf058888815c72ab258"
+        },
+        "submittedAt": "2026-09-12T13:49:18Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSUazw",
+        "databaseId": 5186591439,
+        "author": {
+          "login": "copilot-pull-request-reviewer"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "970620e8c861708db1531bf058888815c72ab258"
+        },
+        "submittedAt": "2026-09-12T13:52:08Z",
+        "body": "### 🔵 Needs a closer look\n\nThe coordination-fold workflow incorrectly hard-codes one intake classification for reports, source changes, and active plans.\n\n<details>\n<summary>Review details</summary>\n\n### Suppressed comments (1)\n\n**Previously missed (1)** — in code that hasn't changed since the last review.\n\n**.agent/skills/coordination-fold/SKILL-CANONICAL.md:43**\n* This hard-codes the worked report's intake for every misplaced work product, although the preceding examples also include source changes and plans under active edit. Those have different review treatment and verification points (PDR-140 clauses 1–3), while a served document is already records-class under clause 9; following this instruction would therefore misdeclare the fold contract. Derive the intake from the artefact classes actually present instead.\n\n- **Files reviewed:** 7/7 changed files\n- **Comments generated:** 0 new\n- **Review effort level:** Balanced\n</details>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSUmyQ",
+        "databaseId": 5186594505,
+        "author": {
+          "login": "chatgpt-codex-connector"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "970620e8c861708db1531bf058888815c72ab258"
+        },
+        "submittedAt": "2026-09-12T13:52:40Z",
+        "body": "\n### 💡 Codex Review\n\nHere are some automated review suggestions for this pull request.\n\n**Reviewed commit:** `970620e8c8`\n    \n\n<details> <summary>ℹ️ About Codex in GitHub</summary>\n<br/>\n\n[Your team has set up Codex to review pull requests in this repo](https://chatgpt.com/codex/cloud/settings/general). Reviews are triggered when you\n- Open a pull request for review\n- Mark a draft as ready\n- Comment \"@codex review\".\n\nIf Codex has suggestions, it will comment; otherwise it will react with 👍.\n\n\n\n\nCodex can also answer questions or update the PR. Try commenting \"@codex address that feedback\".\n            \n</details>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSVrjw",
+        "databaseId": 5186612111,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "00314dbf1443ff523e68957eb0245939e26452ec"
+        },
+        "submittedAt": "2026-09-12T13:59:31Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSWLDg",
+        "databaseId": 5186620174,
+        "author": {
+          "login": "copilot-pull-request-reviewer"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "00314dbf1443ff523e68957eb0245939e26452ec"
+        },
+        "submittedAt": "2026-09-12T14:02:17Z",
+        "body": "### 🟡 Changes recommended\n\nThe coordination-fold guidance incorrectly applies PDR-140’s prose intake contract to source changes.\n\n*Get a fresh assessment by requesting another Copilot review.*\n\n<details>\n<summary>Review details</summary>\n\n- **Files reviewed:** 7/7 changed files\n- **Comments generated:** 1\n- **Review effort level:** Balanced\n</details>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSWlxA",
+        "databaseId": 5186627012,
+        "author": {
+          "login": "chatgpt-codex-connector"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "00314dbf1443ff523e68957eb0245939e26452ec"
+        },
+        "submittedAt": "2026-09-12T14:04:52Z",
+        "body": "\n### 💡 Codex Review\n\nHere are some automated review suggestions for this pull request.\n\n**Reviewed commit:** `00314dbf14`\n    \n\n<details> <summary>ℹ️ About Codex in GitHub</summary>\n<br/>\n\n[Your team has set up Codex to review pull requests in this repo](https://chatgpt.com/codex/cloud/settings/general). Reviews are triggered when you\n- Open a pull request for review\n- Mark a draft as ready\n- Comment \"@codex review\".\n\nIf Codex has suggestions, it will comment; otherwise it will react with 👍.\n\n\n\n\nCodex can also answer questions or update the PR. Try commenting \"@codex address that feedback\".\n            \n</details>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSXXXg",
+        "databaseId": 5186639710,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "bc637062427fc8357ef0cae4e2c4acd3fe5f997c"
+        },
+        "submittedAt": "2026-09-12T14:11:04Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSXXfw",
+        "databaseId": 5186639743,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "bc637062427fc8357ef0cae4e2c4acd3fe5f997c"
+        },
+        "submittedAt": "2026-09-12T14:11:06Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSXXmg",
+        "databaseId": 5186639770,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "bc637062427fc8357ef0cae4e2c4acd3fe5f997c"
+        },
+        "submittedAt": "2026-09-12T14:11:07Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSYYJA",
+        "databaseId": 5186656292,
+        "author": {
+          "login": "copilot-pull-request-reviewer"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "bc637062427fc8357ef0cae4e2c4acd3fe5f997c"
+        },
+        "submittedAt": "2026-09-12T14:14:28Z",
+        "body": "### 🔵 Needs a closer look\n\nThe template and lifecycle wording currently contradict the canonical disposition and code-class intake rules.\n\n<details>\n<summary>Review details</summary>\n\n### Suppressed comments (3)\n\n**Previously missed (2)** — in code that hasn't changed since the last review.\n\n**.agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md:154**\n* The unqualified “A pull request” includes code-class PRs, but this skill explicitly gives those PRs no intake and keeps them bounded under the existing review-round transitions (lines 560–564 and 694–697). Qualify the statement so code shepherds are not told that their intentionally blank intake leaves the loop unbounded.\n**.github/PULL_REQUEST_TEMPLATE.md:38**\n* This unconditionally routes every finding whose proposed remedy is out of scope, but Phase 4 requires false observations to be rejected and allows an over-bar true observation to receive a different in-scope correction or removal. Pointing to the canonical disposition avoids directing shepherds to misroute both cases.\n\nThis issue also appears on line 46 of the same file.\n\n**.github/PULL_REQUEST_TEMPLATE.md:46**\n* This makes the entire finding ineligible for a cure when only its proposed remedy is out of scope. Phase 4 lines 297–303 rejects that remedy but may derive an in-scope correction or removal from the story, so the template should preserve that path.\n```\n- Findings whose remedy falls outside this scope take no cure here (`pr-lifecycle` §Phase 4 dispositions them).\n```\n\n- **Files reviewed:** 7/7 changed files\n- **Comments generated:** 0 new\n- **Review effort level:** Balanced\n</details>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSYlbQ",
+        "databaseId": 5186659693,
+        "author": {
+          "login": "chatgpt-codex-connector"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "bc637062427fc8357ef0cae4e2c4acd3fe5f997c"
+        },
+        "submittedAt": "2026-09-12T14:15:16Z",
+        "body": "\n### 💡 Codex Review\n\nHere are some automated review suggestions for this pull request.\n\n**Reviewed commit:** `bc63706242`\n    \n\n<details> <summary>ℹ️ About Codex in GitHub</summary>\n<br/>\n\n[Your team has set up Codex to review pull requests in this repo](https://chatgpt.com/codex/cloud/settings/general). Reviews are triggered when you\n- Open a pull request for review\n- Mark a draft as ready\n- Comment \"@codex review\".\n\nIf Codex has suggestions, it will comment; otherwise it will react with 👍.\n\n\n\n\nCodex can also answer questions or update the PR. Try commenting \"@codex address that feedback\".\n            \n</details>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSaZFA",
+        "databaseId": 5186689300,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "fa54733b7bfb2ae6f5a5d59a44b05bf550c29154"
+        },
+        "submittedAt": "2026-09-12T14:24:04Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSbVSA",
+        "databaseId": 5186704712,
+        "author": {
+          "login": "copilot-pull-request-reviewer"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "fa54733b7bfb2ae6f5a5d59a44b05bf550c29154"
+        },
+        "submittedAt": "2026-09-12T14:27:40Z",
+        "body": "### 🟡 Changes recommended\n\nTwo instructions incorrectly apply PDR-140’s prose-only pricing contract to code findings.\n\n*Get a fresh assessment by requesting another Copilot review.*\n\n<details>\n<summary>Review details</summary>\n\n### Suppressed comments (1)\n\n**Previously missed (1)** — in code that hasn't changed since the last review.\n\n**.agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md:305**\n* This applies PDR-140's worthiness bar to Phase 4 unconditionally, but PDR-140 §Decision and this skill's lines 511–512 explicitly exclude code findings. A seat following this paragraph could therefore price and route a code defect under the prose-only contract, changing the code review behaviour that this PR says remains unchanged. Qualify the pricing branch to prose findings and retain the existing three-way test for code findings.\n\n- **Files reviewed:** 7/7 changed files\n- **Comments generated:** 1\n- **Review effort level:** Balanced\n</details>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSbVWg",
+        "databaseId": 5186704730,
+        "author": {
+          "login": "chatgpt-codex-connector"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "fa54733b7bfb2ae6f5a5d59a44b05bf550c29154"
+        },
+        "submittedAt": "2026-09-12T14:27:40Z",
+        "body": "\n### 💡 Codex Review\n\nHere are some automated review suggestions for this pull request.\n\n**Reviewed commit:** `fa54733b7b`\n    \n\n<details> <summary>ℹ️ About Codex in GitHub</summary>\n<br/>\n\n[Your team has set up Codex to review pull requests in this repo](https://chatgpt.com/codex/cloud/settings/general). Reviews are triggered when you\n- Open a pull request for review\n- Mark a draft as ready\n- Comment \"@codex review\".\n\nIf Codex has suggestions, it will comment; otherwise it will react with 👍.\n\n\n\n\nCodex can also answer questions or update the PR. Try commenting \"@codex address that feedback\".\n            \n</details>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSchXA",
+        "databaseId": 5186724188,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "b6c824ddfff12414b8a8ace92b9bee09d46a3033"
+        },
+        "submittedAt": "2026-09-12T14:31:22Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSciLA",
+        "databaseId": 5186724396,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "b6c824ddfff12414b8a8ace92b9bee09d46a3033"
+        },
+        "submittedAt": "2026-09-12T14:31:23Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSdZXw",
+        "databaseId": 5186738527,
+        "author": {
+          "login": "copilot-pull-request-reviewer"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "b6c824ddfff12414b8a8ace92b9bee09d46a3033"
+        },
+        "submittedAt": "2026-09-12T14:34:02Z",
+        "body": "### 🟢 Approval recommended\n\nThe seven documentation surfaces consistently implement the declared scope-first review contract without unresolved contradictions.\n\n<details>\n<summary>Review details</summary>\n\n- **Files reviewed:** 7/7 changed files\n- **Comments generated:** 0 new\n- **Review effort level:** Balanced\n</details>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSeC9w",
+        "databaseId": 5186749175,
+        "author": {
+          "login": "chatgpt-codex-connector"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "b6c824ddfff12414b8a8ace92b9bee09d46a3033"
+        },
+        "submittedAt": "2026-09-12T14:35:56Z",
+        "body": "\n### 💡 Codex Review\n\nHere are some automated review suggestions for this pull request.\n\n**Reviewed commit:** `b6c824ddff`\n    \n\n<details> <summary>ℹ️ About Codex in GitHub</summary>\n<br/>\n\n[Your team has set up Codex to review pull requests in this repo](https://chatgpt.com/codex/cloud/settings/general). Reviews are triggered when you\n- Open a pull request for review\n- Mark a draft as ready\n- Comment \"@codex review\".\n\nIf Codex has suggestions, it will comment; otherwise it will react with 👍.\n\n\n\n\nCodex can also answer questions or update the PR. Try commenting \"@codex address that feedback\".\n            \n</details>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSg-wA",
+        "databaseId": 5186797248,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "c77909566b6358b014f6471d2ae86463fa238eb1"
+        },
+        "submittedAt": "2026-09-12T14:44:38Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSiAlA",
+        "databaseId": 5186814100,
+        "author": {
+          "login": "copilot-pull-request-reviewer"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "c77909566b6358b014f6471d2ae86463fa238eb1"
+        },
+        "submittedAt": "2026-09-12T14:47:55Z",
+        "body": "### 🔵 Needs a closer look\n\nTwo doctrine passages currently give contradictory guidance about artefact classification and review-loop bounds.\n\n<details>\n<summary>Review details</summary>\n\n### Suppressed comments (2)\n\n**Previously missed (2)** — in code that hasn't changed since the last review.\n\n**.agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md:156**\n* The claim that this PR has “no bounded loop” conflicts with PDR-132 Decision 1, whose round-budget transition applies to every changeset class, and with the later state-machine text that applies that transition to prose changesets. A missing intake prevents PDR-140's response-pricing bounds from firing; it does not remove the universal review-round bound. As written, a shepherd could incorrectly ignore the PDR-132 transition.\n**.agent/skills/coordination-fold/SKILL-CANONICAL.md:44**\n* This sentence assigns a served document two classes at once: first prose-class, then records-class. PDR-140 clause 9 specifically makes served documents records-class, while an active plan remains prose-class, so a Director cannot reliably select the applicable intake reading. Split the two classifications explicitly.\n\n- **Files reviewed:** 7/7 changed files\n- **Comments generated:** 0 new\n- **Review effort level:** Balanced\n</details>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSiSuw",
+        "databaseId": 5186818747,
+        "author": {
+          "login": "chatgpt-codex-connector"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "c77909566b6358b014f6471d2ae86463fa238eb1"
+        },
+        "submittedAt": "2026-09-12T14:48:51Z",
+        "body": "\n### 💡 Codex Review\n\nHere are some automated review suggestions for this pull request.\n\n**Reviewed commit:** `c77909566b`\n    \n\n<details> <summary>ℹ️ About Codex in GitHub</summary>\n<br/>\n\n[Your team has set up Codex to review pull requests in this repo](https://chatgpt.com/codex/cloud/settings/general). Reviews are triggered when you\n- Open a pull request for review\n- Mark a draft as ready\n- Comment \"@codex review\".\n\nIf Codex has suggestions, it will comment; otherwise it will react with 👍.\n\n\n\n\nCodex can also answer questions or update the PR. Try commenting \"@codex address that feedback\".\n            \n</details>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSjs2g",
+        "databaseId": 5186841818,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "c77909566b6358b014f6471d2ae86463fa238eb1"
+        },
+        "submittedAt": "2026-09-12T14:52:56Z",
+        "body": ""
+      }
+    ]
+  },
+  "comments": {
+    "pageInfo": {
+      "hasNextPage": false,
+      "endCursor": "Y3Vyc29yOnYyOpHPAAAAAVCQKWk="
+    },
+    "nodes": [
+      {
+        "databaseId": 5646075341,
+        "author": {
+          "login": "chatgpt-codex-connector"
+        },
+        "createdAt": "2026-09-12T13:07:05Z",
+        "body": "<!-- codex-pull-request-review-summary -->\n\n## Codex Review Summary\n\nThis comment shows the latest Codex review activity on this pull request.\n\n| Review | Status | Commit | Review trigger |\n| --- | --- | --- | --- |\n| 📝 **Code Review** | ✅ **Completed** <relative-time datetime=\"2026-09-12T14:48:55.097979Z\">2026-09-12T14:48:55.097979Z</relative-time> | `c779095` | New commits |\n\n\n\n<details> <summary>ℹ️ About Codex in GitHub</summary>\n<br/>\n\n[Your team has set up Codex to review pull requests in this repo](https://chatgpt.com/codex/cloud/settings/general). Reviews are triggered when you\n- Open a pull request for review\n- Mark a draft as ready\n- Comment \"@codex review\" or \"@codex security review\".\n\nCodex reacts with 👀 while any review is running, comments if it has suggestions, and reacts with 👍 once all reviews finish with no findings.\n\n</details>"
+      },
+      {
+        "databaseId": 5646242935,
+        "author": {
+          "login": "el-graphael"
+        },
+        "createdAt": "2026-09-12T13:40:53Z",
+        "body": "**Rebudget under PDR-140 clause 9(b), once for this pull request, and the class fix.**\n\nThe intake declared two settlement pushes; both are spent (`SHA:39c627107`, `SHA:7e0c8128c`). Round three opened on `SHA:0b1272171` with four findings, so the round budget (PDR-132) is exceeded and the generator question runs over the full raised set — ten findings across three rounds:\n\n- **Restated instead of cited** (Copilot ×3: the lifecycle's Phase 2, the triage rule, the proportionality row): each cure re-stated Phase 4's handling on the surface that should only point at it.\n- **Route before verify** (Codex ×3: the triage rule, the proportionality row, the template line): each class sweep missed one mirror of the ordering the previous cure had changed.\n- **The precondition against its rule** (Codex, then Copilot: the fold skill's list, then its heading): the rule's clause 4 keeps doctrine and memory surfaces on the coordination branch.\n- **Widen versus exceed** (Codex): Phase 4 classified artefact growth as a scope finding even where §Scope asked for it.\n\nThe class fix is one push: every surface other than Phase 4 carries the classification and a pointer, never the handling; Phase 4 tests the remedy against the *declared* scope; the fold precondition names the rule's own class. This push (`SHA:1ca90fece`) is marked as the class fix — the tally's epoch resets at it (pr-lifecycle §review-round state machine). After it, further findings disposition without a cure unless over the bar, and an over-bar cure travels in a push carrying that cure alone.\n\nTally (raised / cure-worthy, by head): `SHA:180db8de5` 4/4 · `SHA:39c627107` 2/2 · `SHA:0b1272171` 4/4.\n\n— Nettle guards Pistil (2de368)\n"
+      },
+      {
+        "databaseId": 5646284441,
+        "author": {
+          "login": "el-graphael"
+        },
+        "createdAt": "2026-09-12T13:49:19Z",
+        "body": "**Round four (epoch two, round one) — the suppressed Copilot finding, dispositioned.**\n\n`.agent/rules/review-feedback-defaults-to-triage.md:31` — the preamble still restated Phase 4's mechanics. **In scope, over-bar** under this pull request's own review contract (stated once in Phase 4 and cited): the class fix claimed every surface but Phase 4 now carries only a classification and a pointer, and this preamble was the surface it missed. Cured in `SHA:970620e8c`: the preamble reads \"Before step 1, apply `pr-lifecycle` §Phase 4's scope-first test to the finding's remedy; the observation still passes step 1.\" Evidence class READ.\n\nTally, epoch two: `SHA:1ca90fece` raised 2 / cure-worthy 2, both cured in `SHA:970620e8c` (a cure-only push under the rebudget).\n\n— Nettle guards Pistil (2de368)\n"
+      },
+      {
+        "databaseId": 5646335413,
+        "author": {
+          "login": "el-graphael"
+        },
+        "createdAt": "2026-09-12T13:59:33Z",
+        "body": "**Round five (epoch two, round two) — the suppressed Copilot finding, dispositioned.**\n\n`.agent/skills/coordination-fold/SKILL-CANONICAL.md:43` — the precondition hard-coded the worked report's intake (records-class, verification point merge) for every misplaced work product, though its own list names source changes and plans under active edit. **In scope, over-bar** (prong two: a seat would declare the wrong class for a source change found on the branch). Cured in `SHA:00314dbf1`: the fold PR \"declares its intake by its own class (a served document is records-class with verification point merge; a source change or a plan under active edit takes the class PDR-140 clauses 1–3 give it)\". Evidence class READ.\n\nTally, epoch two: `SHA:1ca90fece` 2/2 · `SHA:970620e8c` 2/2, both rounds cured in cure-only pushes.\n\n— Nettle guards Pistil (2de368)\n"
+      },
+      {
+        "databaseId": 5646396988,
+        "author": {
+          "login": "el-graphael"
+        },
+        "createdAt": "2026-09-12T14:11:08Z",
+        "body": "**Step-back fired (epoch two: 2, 2, 2), and the second class fix.**\n\nEpoch two's three settled rounds read cure-worthy 2, 2, 2 (`SHA:1ca90fece`, `SHA:970620e8c`, `SHA:00314dbf1`), so the step-back arm fired on round six. The generator question over the epoch's six findings: every cure was written to the finding's surface without re-reading the governing record (PDR-140 §Decision assigns the classes; I paraphrased them from memory and got source changes wrong) and without sweeping the other surfaces that carry the same class wording (the template was widened to mixed changesets; the two reviewer-instruction files were not).\n\nThe class fix, `SHA:bc6370624`: PDR-140 §Decision read first-hand, and its classes stated the same way on every surface — a served document or a plan under active edit is prose-class and carries the intake; a source change is code-class on the review-round state machine; the intake governs prose- or records-class changesets and the prose findings of mixed ones, and code findings keep the code review's own standard. Marked as the class fix: epoch three opens at it.\n\nA second step-back on this pull request is terminal for fix-pushing (pr-lifecycle §review-round state machine): the corpus would then be split along its class boundaries or routed to the owner with a verdict, not cured again.\n\nTally: epoch one `SHA:180db8de5` 4/4 · `SHA:39c627107` 2/2 · `SHA:0b1272171` 4/4 (class fix `SHA:1ca90fece`); epoch two `SHA:1ca90fece` 2/2 · `SHA:970620e8c` 2/2 · `SHA:00314dbf1` 2/2 (class fix `SHA:bc6370624`).\n\n— Nettle guards Pistil (2de368)\n"
+      },
+      {
+        "databaseId": 5646471678,
+        "author": {
+          "login": "el-graphael"
+        },
+        "createdAt": "2026-09-12T14:24:05Z",
+        "body": "**Epoch three, round one — Copilot's suppressed findings on `SHA:bc6370624`, one line per finding.**\n\n- **In scope, over-bar** · head SHA:bc6370624 · review 5186656292 · `.agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md:154` · item 1 of 3 · Cured in `SHA:fa54733b7`: \"A pull request PDR-140 governs that lacks it has no bounded loop … (a code-class pull request is bounded by the review-round transitions and declares no intake)\".\n- **In scope, over-bar** · head SHA:bc6370624 · review 5186656292 · `.github/PULL_REQUEST_TEMPLATE.md:38` · item 2 of 3 · Cured in `SHA:fa54733b7`: the comment now says a finding whose proposed remedy falls outside the scope is dispositioned by Phase 4, the remedy discarded and the observation still priced.\n- **In scope, over-bar** · head SHA:bc6370624 · review 5186656292 · `.github/PULL_REQUEST_TEMPLATE.md:46` · thread PRRT_kwDORdPTys6hwrDe · the same finding as the Codex thread at this anchor, counted once; cured there.\n\nTally, epoch three: `SHA:bc6370624` raised 3 / cure-worthy 3, cured in a cure-only push.\n\n— Nettle guards Pistil (2de368)\n"
+      },
+      {
+        "databaseId": 5646592361,
+        "author": {
+          "login": "sonarqubecloud"
+        },
+        "createdAt": "2026-09-12T14:44:46Z",
+        "body": "## [![Quality Gate Passed](https://sonarsource.github.io/sonarcloud-github-static-resources/v2/checks/QualityGateBadge/qg-passed-20px.png 'Quality Gate Passed')](https://sonarcloud.io/dashboard?id=EngraphCode_open-curriculum-ecosystem&pullRequest=136) **Quality Gate passed**  \nIssues  \n![](https://sonarsource.github.io/sonarcloud-github-static-resources/v2/common/passed-16px.png '') [0 New issues](https://sonarcloud.io/project/issues?id=EngraphCode_open-curriculum-ecosystem&pullRequest=136&issueStatuses=OPEN,CONFIRMED&sinceLeakPeriod=true)  \n![](https://sonarsource.github.io/sonarcloud-github-static-resources/v2/common/accepted-16px.png '') [0 Accepted issues](https://sonarcloud.io/project/issues?id=EngraphCode_open-curriculum-ecosystem&pullRequest=136&issueStatuses=ACCEPTED)\n\nMeasures  \n![](https://sonarsource.github.io/sonarcloud-github-static-resources/v2/common/passed-16px.png '') [0 Security Hotspots](https://sonarcloud.io/project/security_hotspots?id=EngraphCode_open-curriculum-ecosystem&pullRequest=136&issueStatuses=OPEN,CONFIRMED&sinceLeakPeriod=true)  \n![](https://sonarsource.github.io/sonarcloud-github-static-resources/v2/common/passed-16px.png '') [0.0% Coverage on New Code](https://sonarcloud.io/component_measures?id=EngraphCode_open-curriculum-ecosystem&pullRequest=136&metric=new_coverage&view=list)  \n![](https://sonarsource.github.io/sonarcloud-github-static-resources/v2/common/passed-16px.png '') [0.0% Duplication on New Code](https://sonarcloud.io/component_measures?id=EngraphCode_open-curriculum-ecosystem&pullRequest=136&metric=new_duplicated_lines_density&view=list)  \n  \n<!-- sqra-placement-anchor -->\n[See analysis details on SonarQube Cloud](https://sonarcloud.io/dashboard?id=EngraphCode_open-curriculum-ecosystem&pullRequest=136)\n\n"
+      }
+    ]
+  }
+}

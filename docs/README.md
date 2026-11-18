@@ -54,7 +54,8 @@ last_reviewed: 2026-08-30
 
 ### Development
 
-- [Root README Quick Start](../README.md#quick-start) — install, verify, and key commands for new contributors
+- [Root README Quick Start](../README.md#quick-start) — install and verify for new contributors
+- [Setup](engineering/setup.md) — prerequisites, the Windows (via WSL) path, and key commands
 - [CONTRIBUTING.md](../CONTRIBUTING.md) — development process, conventions, and quality expectations
 - [Development Workflow](engineering/workflow.md) - Complete lifecycle: branching, TDD, CI, review, merge, release
 - [Environment Variables](operations/environment-variables.md) - Complete setup guide
@@ -95,6 +96,7 @@ last_reviewed: 2026-08-30
   authoritative per-app guide: auto-instrumentation, per-request span, scope enrichment, Express error handler DI wiring, redaction barrier entry points, source-map upload
 - [Sentry Node Library](../packages/libs/sentry-node/README.md) —
   package-level reference for `@oaknational/sentry-node`: modes, shared delegates (hook registry), fixture store, redaction barrier closure
+- [MCP Server Production Snagging List](operations/mcp-server-production-snagging.md) — faults and shortcomings seen on the production MCP server and not yet fixed or accepted
 - [Runbook Index](operations/README.md#runbook-index) — all operational runbooks (ES index lifecycle, deploy, release, UAT, ingest), wherever they live; PDR-120
 - [Sentry Deployment Runbook](operations/sentry-deployment-runbook.md) — deployment-side runbook
 - [Sentry CLI Usage](operations/sentry-cli-usage.md) — `sentry-cli` adoption and `.sentryclirc` composition

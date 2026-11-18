@@ -54,14 +54,14 @@ delete, generate, or route an owner-visible follow-up.
 
 The system covers these scales:
 
-| Scale            | Canonical owner                       | Current enforcement             | Overrun meaning                               | Required response                                         |
-| ---------------- | ------------------------------------- | ------------------------------- | --------------------------------------------- | --------------------------------------------------------- |
-| Function         | ESLint shared config                  | Blocking lint                   | One function owns too many decisions          | Extract named, tested responsibilities                    |
-| File             | ESLint shared config                  | Blocking lint                   | One module owns too much behaviour            | Split by responsibility with clear exports                |
-| Directory        | `max-files-per-dir` child plan        | Future enforcement candidate    | One intra-layer area may hide sub-domains     | Extract cohesive intra-layer directories                  |
-| Workspace        | ADR-154 and workspace audit           | Visible now, future enforcement | One workspace may host multiple layers        | Split by layer, move code down, or thin the leaf          |
-| Package API      | Package manifests and boundary checks | Future enforcement candidate    | Public surface may hide coupling or internals | Narrow `exports`; remove deep imports and proxy barrels   |
-| Dependency graph | ADR-041 and dependency-cruiser        | Blocking graph checks           | Direction, cycle, or orphan invariant failed  | Remove the edge, cycle, orphan, or wrong layer dependency |
+| Scale            | Canonical owner                                            | Current enforcement                                                                                      | Overrun meaning                               | Required response                                         |
+| ---------------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | --------------------------------------------- | --------------------------------------------------------- |
+| Function         | ESLint shared config                                       | Blocking lint                                                                                            | One function owns too many decisions          | Extract named, tested responsibilities                    |
+| File             | ESLint shared config                                       | Blocking lint                                                                                            | One module owns too much behaviour            | Split by responsibility with clear exports                |
+| Directory        | Repository validator framework (see §Amendment 2026-09-14) | Planned: a blocking validator for the Reliable Atoms workspace class, not yet landed; no check elsewhere | One intra-layer area may hide sub-domains     | Extract cohesive intra-layer directories                  |
+| Workspace        | ADR-154 and workspace audit                                | Visible now, future enforcement                                                                          | One workspace may host multiple layers        | Split by layer, move code down, or thin the leaf          |
+| Package API      | Package manifests and boundary checks                      | Future enforcement candidate                                                                             | Public surface may hide coupling or internals | Narrow `exports`; remove deep imports and proxy barrels   |
+| Dependency graph | ADR-041 and dependency-cruiser                             | Blocking graph checks                                                                                    | Direction, cycle, or orphan invariant failed  | Remove the edge, cycle, orphan, or wrong layer dependency |
 
 Directory decomposition is only an intra-layer response. It never satisfies
 framework/consumer separation, lifecycle separation, or context-specificity
@@ -156,11 +156,47 @@ are not acceptable terminal states.
 
 ## Implementation Status
 
-| Surface                       | Status                  | Owner                           |
-| ----------------------------- | ----------------------- | ------------------------------- |
-| Concept and vocabulary        | Accepted in this ADR    | Architecture doctrine           |
-| Directory-cardinality rollout | Planned child execution | Developer experience            |
-| Workspace layer matrix        | Queued audit            | Architecture and infrastructure |
-| Visibility layer              | Strategic future plan   | Architecture and infrastructure |
-| Enforcement layer             | Strategic future plan   | Architecture and infrastructure |
-| Quality-gate matrix           | Not changed by this ADR | ADR-121 and build-system docs   |
+| Surface                       | Status                                                                                                                                                                  | Owner                                                               |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| Concept and vocabulary        | Accepted in this ADR                                                                                                                                                    | Architecture doctrine                                               |
+| Directory-cardinality rollout | Blocking validator for the Reliable Atoms workspace class, planned in that programme's delivery node; the estate-wide report-only signal remains an unratified proposal | Reliable Atoms programme (class); architecture doctrine (elsewhere) |
+| Workspace layer matrix        | Queued audit                                                                                                                                                            | Architecture and infrastructure                                     |
+| Visibility layer              | Strategic future plan                                                                                                                                                   | Architecture and infrastructure                                     |
+| Enforcement layer             | Strategic future plan                                                                                                                                                   | Architecture and infrastructure                                     |
+| Quality-gate matrix           | Not changed by this ADR                                                                                                                                                 | ADR-121 and build-system docs                                       |
+
+## Amendment — 2026-09-14 (owner-ruled): class-scoped budgets and the directory scale's instrument
+
+The owner ruled three things for the Reliable Atoms programme (the strategic
+node quotes the words; ADR-230 §Repository interpretation records the
+programme-side consequence):
+
+1. **The directory scale's instrument is a repository validator**, in the
+   estate's validator framework, recomputed from the tracked tree — never an
+   ESLint rule and never a test. A per-file AST rule can only see a
+   directory through an injected inventory and is silent without one; a test
+   proves product behaviour, and a directory's shape is a structural
+   invariant of the repository, not behaviour of any product. The
+   unregistered `max-files-per-dir` rule in the shared ESLint package is
+   retired; because the replacement is a different instrument, the earlier
+   condition that retirement wait for replacement-equivalence proof no longer
+   applies.
+2. **A budget may bind at a stricter value for a declared workspace
+   class.** Workspaces that hold Reliable Atoms declare the class on their
+   manifest (declared membership, never a name or path pattern); inside the
+   class the directory budget is blocking, and the function-, file- and
+   clarity-scale budgets bind at stricter values than the estate's strict
+   tier. Outside the class nothing changes: the estate-wide report-only
+   directory signal proposed in July 2026 remains an unratified proposal.
+   The values live in the class's executable configuration and the
+   programme's delivery node, per §Trade-offs above.
+3. **A new class has an empty baseline by construction.** The rollout order
+   in §Rollout Doctrine assumes an existing population that needs a
+   visibility baseline before enforcement. A class whose first workspace is
+   built to fit its parameters has no such population; enforcement from the
+   first workspace is the rollout, and the visibility step is vacuous. A
+   workspace outside the class that does not fit the class's parameters is
+   not evidence about the class: it is outside the class until reshaped, and
+   its non-fit is recorded as its own fact. §Anti-Gaming Rules bind inside
+   the class in full — a breach is cured by reshaping or by a recorded
+   edge case routed to the owner, never by an exemption or a raised value.

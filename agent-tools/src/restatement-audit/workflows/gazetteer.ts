@@ -19,8 +19,6 @@ import { typeSafeValues } from '@oaknational/type-helpers';
 
 import type { Gazetteer } from './gazetteer-schema.js';
 
-export type { Gazetteer };
-
 /** Every canonical subject id across every category, deduplicated, in category order. */
 export function flattenGazetteerSubjects(gazetteer: Gazetteer): string[] {
   const seen = new Set<string>();
@@ -35,3 +33,5 @@ export function flattenGazetteerSubjects(gazetteer: Gazetteer): string[] {
   }
   return flattened;
 }
+
+export type { Gazetteer } from './gazetteer-schema.js';

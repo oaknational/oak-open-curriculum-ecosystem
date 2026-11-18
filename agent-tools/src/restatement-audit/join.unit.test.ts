@@ -87,7 +87,7 @@ describe('joinInstances', () => {
     const clusters = joinInstances(instances);
     expect(clusters).toHaveLength(1);
     expect(clusters[0]?.verdict).toBe('conflict');
-    expect(clusters[0]?.distinctValueNorms.sort((a, b) => a.localeCompare(b))).toEqual([
+    expect(clusters[0]?.distinctValueNorms.toSorted((a, b) => a.localeCompare(b))).toEqual([
       'completed',
       'in progress',
     ]);

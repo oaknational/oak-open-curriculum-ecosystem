@@ -28,8 +28,11 @@ Four-term taxonomy used across this surface family:
 - **orphaned** — a fresh-but-quiet claim whose owning session is known or
   suspected to have ended. Cleanup ethics in
   [`agent-collaboration.md`][directive] §d.
-- **expired** — wall-clock past `expires_at` (commit_queue entries and
-  sidebars). Stale-reporting only; never auto-resolves.
+- **expired** — wall-clock past `expires_at`. For sidebars: stale-reporting
+  only; never auto-resolves. For commit-queue intents (the per-intent
+  `commit-queue/` store since 1.4.0): read as absent and swept by the next
+  queue write — ephemera by the QUEUE-LOCAL owner ruling (2026-08-17), not
+  inspectable after expiry.
 
 `closure.kind: "stale"` is the archive label for any claim leaving through
 staleness, including orphan archival.
@@ -44,7 +47,7 @@ canonical value for staleness and freshness calculations and durable state.
 | --------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | [`comms-events/`][comms-events]                     | One immutable JSON file per communication event          | Exclusive-create append; render into the shared log; archive old rendered history rather than deleting it                                                                  | CSW                       |
 | [`shared-comms-log.md`][log]                        | Generated markdown read model                            | Human/agent discovery surface rendered from comms events; legacy rendered history remains preserved during migration                                                       | WS0 + CSW                 |
-| [`active-claims.json`][active-claims]               | Structured JSON; queryable registry plus `commit_queue`  | Mutate through the collaboration-state transaction helper; remove claims after durable close; remove successful queue entries after commit; stale-archive by consolidation | WS1 + queue + CSW         |
+| [`active-claims.json`][active-claims]               | Structured JSON; queryable claims registry (the commit queue is the per-intent `commit-queue/` store beside it since 1.4.0) | Mutate through the collaboration-state transaction helper; remove claims after durable close; remove successful queue entries after commit; stale-archive by consolidation | WS1 + queue + CSW         |
 | [`active-claims.schema.json`][active-claims-schema] | JSON Schema (Draft 2020-12)                              | Versioned; additive-only within major; major bump = field reduction or breaking shape change                                                                               | WS1/WS3A                  |
 | [`closed-claims.schema.json`][closed-claims-schema] | JSON Schema (Draft 2020-12)                              | Versioned; additive-only within major; major bump = field reduction or breaking shape change                                                                               | WS3A                      |
 | [`closed-claims.archive.json`][closed-claims]       | JSON archive preserving claim body plus closure metadata | Append-on-explicit-close, stale archive, or owner-forced close; never deleted; permanent reference for `claim_id` citations                                                | WS1/WS3A                  |
@@ -79,6 +82,9 @@ one; editing scope or intent in place rewrites history and breaks the
 `claim_id` citation chain that closed-claims archiving exists to preserve.
 `claims adopt` is the one sanctioned in-place identity rewrite (mid-cycle
 pickup, PDR-063), and it deliberately preserves the undertaking unchanged.
+Every `claims` action names the claim by its full `claim_id` (the UUID); the
+eight-character prefix the records cite is a citation form, and `claims heartbeat`
+given it answers "no active claim matches" (2026-10-14).
 
 ## Write-Safety Contract
 
@@ -175,7 +181,7 @@ This file keeps the operational index compact.
 | Action                       | State surface                            | Durable outcome                                                                                             |
 | ---------------------------- | ---------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | Open / refresh active work   | `active-claims.json`                     | Fresh claim with `claimed_at`, optional `heartbeat_at`, and visible areas                                   |
-| Queue commit intent          | `active-claims.json` root `commit_queue` | FIFO advisory entry with files, subject, phase, expiry, and staged-bundle fingerprint                       |
+| Queue commit intent          | `commit-queue/` per-intent store         | FIFO (by `queued_seq`) advisory entry with files, subject, phase, expiry, and staged-bundle fingerprint      |
 | Close active work            | `closed-claims.archive.json`             | Claim copied with `closure.kind: "explicit"` and evidence refs                                              |
 | Archive stale work           | `closed-claims.archive.json`             | Stale claim preserved with `closure.kind: "stale"`                                                          |
 | Open structured coordination | `conversations/<id>.json`                | Decision-thread event list with concrete entries and evidence                                               |

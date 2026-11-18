@@ -13,6 +13,11 @@ function expectJsonObjectValue(value: JsonValue): JsonObject {
   return value;
 }
 
+/** A function value: the one JavaScript value JSON has no form for. */
+const NON_SERIALISABLE_FUNCTION = (): void => {
+  /* The body is irrelevant; only the value's type is under test. */
+};
+
 describe('sanitiseForJson', () => {
   it('should pass through string values unchanged', () => {
     expect(sanitiseForJson('hello')).toBe('hello');
@@ -92,10 +97,7 @@ describe('sanitiseForJson', () => {
   });
 
   it('should convert unserializable values to placeholder string', () => {
-    const func = (): void => {
-      // Test function
-    };
-    const result = sanitiseForJson(func);
+    const result = sanitiseForJson(NON_SERIALISABLE_FUNCTION);
     expect(result).toBe('[unserializable]');
   });
 });
@@ -113,10 +115,7 @@ describe('isJsonValue', () => {
   });
 
   it('should return false for functions', () => {
-    const sampleFunction = (): void => {
-      return;
-    };
-    expect(isJsonValue(sampleFunction)).toBe(false);
+    expect(isJsonValue(NON_SERIALISABLE_FUNCTION)).toBe(false);
   });
 
   it('should return true for valid JSON objects', () => {

@@ -1,0 +1,42 @@
+[
+  {
+    "query": "Rework these proposed user stories into needs, journeys, acceptance criteria and evidence of value.",
+    "should_trigger": true
+  },
+  {
+    "query": "Our service backlog is a feature list. Find what value each item offers and what user research is missing.",
+    "should_trigger": true
+  },
+  {
+    "query": "Define the proposed journey for people who cannot complete the online application, including support staff.",
+    "should_trigger": true
+  },
+  {
+    "query": "Explore an innovative service proposition without pretending we have proven demand.",
+    "should_trigger": true
+  },
+  {
+    "query": "Implement the settled binary heap contract and its tests.",
+    "should_trigger": false
+  },
+  {
+    "query": "Calculate sample size for the already defined randomised trial.",
+    "should_trigger": false
+  },
+  {
+    "query": "Schedule the approved implementation tasks for the next fortnight.",
+    "should_trigger": false
+  },
+  {
+    "query": "Compare two research reports' incompatible effect estimates and shared datasets.",
+    "should_trigger": false
+  },
+  {
+    "query": "Define what use value this reusable queue offers its consuming scheduler, and how its guarantees connect to wider capabilities.",
+    "should_trigger": true
+  },
+  {
+    "query": "Trace the value of an API through consumer capabilities, contracts and implementation without assuming technical correctness proves user benefit.",
+    "should_trigger": true
+  }
+]

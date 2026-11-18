@@ -29,6 +29,14 @@ function event(overrides: Partial<ClassifiableEvent> = {}): ClassifiableEvent {
   };
 }
 
+/** A heartbeat-tagged, heartbeat-shaped event created at the given time. */
+const heartbeatAt = (createdAt: string) =>
+  event({ tags: ['heartbeat'], isHeartbeatShaped: true, createdAt, bodyLength: 90 });
+
+/** A coordination-tier event (a status title) created at the given time. */
+const coordinationAt = (createdAt: string, bodyLength = 120) =>
+  event({ titleOrSubject: 'WS7 status', createdAt, bodyLength });
+
 function dispositionInput(overrides: Partial<DispositionInput> = {}): DispositionInput {
   return {
     event: event(),
@@ -165,12 +173,9 @@ describe('decideDisposition — research-precious (until graduated, never age-tr
 });
 
 describe('decideDisposition — heartbeat tier (48h, aggregate-gated)', () => {
-  const heartbeat = (createdAt: string) =>
-    event({ tags: ['heartbeat'], isHeartbeatShaped: true, createdAt, bodyLength: 90 });
-
   it('keeps a within-window heartbeat live', () => {
     const decision = decideDisposition(
-      dispositionInput({ event: heartbeat('2026-06-13T18:00:00Z') }),
+      dispositionInput({ event: heartbeatAt('2026-06-13T18:00:00Z') }),
     );
     expect(decision.action).toBe('keep-live');
     expect(decision.reason).toBe('within-window');
@@ -179,7 +184,7 @@ describe('decideDisposition — heartbeat tier (48h, aggregate-gated)', () => {
   it('blocks a past-window heartbeat until the cadence aggregate is extracted', () => {
     const decision = decideDisposition(
       dispositionInput({
-        event: heartbeat('2026-06-10T00:00:00Z'),
+        event: heartbeatAt('2026-06-10T00:00:00Z'),
         heartbeatAggregateExtracted: false,
         recordedDisposition: 'routine',
       }),
@@ -191,7 +196,7 @@ describe('decideDisposition — heartbeat tier (48h, aggregate-gated)', () => {
   it('keeps a past-window heartbeat live when the aggregate is extracted but no disposition is recorded', () => {
     const decision = decideDisposition(
       dispositionInput({
-        event: heartbeat('2026-06-10T00:00:00Z'),
+        event: heartbeatAt('2026-06-10T00:00:00Z'),
         heartbeatAggregateExtracted: true,
         recordedDisposition: null,
       }),
@@ -203,7 +208,7 @@ describe('decideDisposition — heartbeat tier (48h, aggregate-gated)', () => {
   it('archive-moves a past-window heartbeat once the aggregate is extracted and a disposition is recorded', () => {
     const decision = decideDisposition(
       dispositionInput({
-        event: heartbeat('2026-06-10T00:00:00Z'),
+        event: heartbeatAt('2026-06-10T00:00:00Z'),
         heartbeatAggregateExtracted: true,
         recordedDisposition: 'routine',
       }),
@@ -214,12 +219,9 @@ describe('decideDisposition — heartbeat tier (48h, aggregate-gated)', () => {
 });
 
 describe('decideDisposition — coordination tier (7d, absorption + body-read gated)', () => {
-  const coordination = (createdAt: string, bodyLength = 120) =>
-    event({ titleOrSubject: 'WS7 status', createdAt, bodyLength });
-
   it('keeps a within-window coordination event live', () => {
     const decision = decideDisposition(
-      dispositionInput({ event: coordination('2026-06-10T00:00:00Z') }),
+      dispositionInput({ event: coordinationAt('2026-06-10T00:00:00Z') }),
     );
     expect(decision.action).toBe('keep-live');
     expect(decision.reason).toBe('within-window');
@@ -227,7 +229,10 @@ describe('decideDisposition — coordination tier (7d, absorption + body-read ga
 
   it('keeps a past-window coordination event live while its disposition is unrecorded', () => {
     const decision = decideDisposition(
-      dispositionInput({ event: coordination('2026-06-01T00:00:00Z'), recordedDisposition: null }),
+      dispositionInput({
+        event: coordinationAt('2026-06-01T00:00:00Z'),
+        recordedDisposition: null,
+      }),
     );
     expect(decision.action).toBe('keep-live');
     expect(decision.reason).toBe('awaiting-disposition');
@@ -236,7 +241,7 @@ describe('decideDisposition — coordination tier (7d, absorption + body-read ga
   it('blocks a routine disposition on a long body that was not read (the 3cc1fb93 falsifier)', () => {
     const decision = decideDisposition(
       dispositionInput({
-        event: coordination('2026-06-01T00:00:00Z', 900),
+        event: coordinationAt('2026-06-01T00:00:00Z', 900),
         recordedDisposition: 'routine',
         bodyReadConfirmed: false,
       }),
@@ -249,7 +254,7 @@ describe('decideDisposition — coordination tier (7d, absorption + body-read ga
   it('archive-moves a routine disposition on a long body once the body read is confirmed', () => {
     const decision = decideDisposition(
       dispositionInput({
-        event: coordination('2026-06-01T00:00:00Z', 900),
+        event: coordinationAt('2026-06-01T00:00:00Z', 900),
         recordedDisposition: 'routine',
         bodyReadConfirmed: true,
       }),
@@ -261,7 +266,7 @@ describe('decideDisposition — coordination tier (7d, absorption + body-read ga
   it('archive-moves a past-window short-body coordination event on a routine disposition without a body-read flag', () => {
     const decision = decideDisposition(
       dispositionInput({
-        event: coordination('2026-06-01T00:00:00Z', 120),
+        event: coordinationAt('2026-06-01T00:00:00Z', 120),
         recordedDisposition: 'routine',
         bodyReadConfirmed: false,
       }),
@@ -273,7 +278,7 @@ describe('decideDisposition — coordination tier (7d, absorption + body-read ga
   it('archive-moves a past-window coordination event with an absorbed disposition', () => {
     const decision = decideDisposition(
       dispositionInput({
-        event: coordination('2026-06-01T00:00:00Z'),
+        event: coordinationAt('2026-06-01T00:00:00Z'),
         recordedDisposition: 'absorbed' satisfies RecordedDisposition,
       }),
     );
@@ -287,7 +292,7 @@ describe('decideDisposition — coordination tier (7d, absorption + body-read ga
     // suspect); like `absorbed` it permits the move and needs no body-read gate.
     const decision = decideDisposition(
       dispositionInput({
-        event: coordination('2026-06-01T00:00:00Z'),
+        event: coordinationAt('2026-06-01T00:00:00Z'),
         recordedDisposition: 'quarantined' satisfies RecordedDisposition,
       }),
     );

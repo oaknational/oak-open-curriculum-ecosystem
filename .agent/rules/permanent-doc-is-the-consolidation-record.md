@@ -1,10 +1,14 @@
+---
+classification: core
+description: When consolidation homes knowledge, the permanent doc plus the git commit ARE the record that the work happened. Do not create disposition ledgers, closeout narratives, before/after counts, consolidation-status logs, or provenance pointers — the accounting is not the value; the impact is. A skill instruction mandating such a record is itself the anti-pattern, not license.
+---
+
 # The Permanent Doc Is the Consolidation Record
 
 Operationalises PDR-011 (capture → distil → graduate → enforce; the permanent
 home is the endpoint, the buffer just empties) and generalises
 [`collaboration-is-value-contingent`](collaboration-is-value-contingent.md) from
-collaboration to knowledge-recording. Graduates the standing owner principle
-captured in auto-memory `feedback_no_provenance_pointers`.
+collaboration to knowledge-recording. Graduates a standing owner principle.
 
 ## The principle
 
@@ -33,7 +37,14 @@ durable"):
    they close, archive, and stop being read. They carry the WORK.
 3. **Permanent documentation — ADRs, rules, PDRs, `docs/` — is the only
    durable tier.** Knowledge that must persist lands there AT OCCURRENCE,
-   not at a later consolidation.
+   not at a later consolidation. A running fold or gate holds the working
+   tree (`lint-after-edit`): a decision that arrives while a gate runs is
+   written into its permanent home the moment the gate ends, as a new file or
+   an edit, linted, and committed after the successor cut; the stream carries
+   the pointer and is never the home (the
+   owner, 2026-10-08: "comms events are not considered durable, they are
+   ephemeral, that is why we created editorial decision records for this
+   repo").
 
 Never call any of the temporary tiers "the durable record"; if one is,
 that is the defect to fix. Worked instance: a security finding lived only
@@ -55,7 +66,7 @@ Do **not** create, append to, or accumulate any of these:
   accumulate; none is read for value.
 - **Provenance pointers** — tombstones, "moved verbatim to X", "see ledger Y",
   "GRADUATED → home", "(N graduated, see …)" count-line citations. The commit and
-  the home are the provenance (`feedback_no_provenance_pointers`).
+  the home are the provenance.
 
 A single **functional** navigation reference is not accounting: a fresh napkin
 noting "prior capture in archive/" so it is findable, an ADR index entry, a
@@ -85,8 +96,7 @@ that mandates one.
 ## Why a rule, not a clause
 
 The owner has corrected this repeatedly ("many times") and it "keeps turning up
-in various guises". It lived only in auto-memory (`feedback_no_provenance_pointers`,
-`feedback_useful_work_over_ceremony`), which is passive — under the gravity of
+in various guises". It lived only in per-user auto-memory, which is passive — under the gravity of
 skill instructions that mandate ledgers and closeout proof, the guidance did not
 fire (the
 `passive-guidance-loses-to-artefact-gravity`

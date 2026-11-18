@@ -1,4 +1,5 @@
 import { Buffer } from 'node:buffer';
+import { join } from 'node:path';
 
 import { err, ok, unwrapErr, unwrapOrThrow } from '@oaknational/result';
 import { describe, expect, it } from 'vitest';
@@ -123,7 +124,9 @@ describe('publishRawExtraction', () => {
   it('returns the canonical bytes and fixed final target after every phase succeeds', () => {
     const result = unwrapOrThrow(publish(ACCEPTING_PUBLICATION));
 
-    expect(result.outputPath).toBe(`/repo/evidence/${RAW_EXTRACTION_FILE_NAME}`);
+    // outputPath is a real filesystem path handed back to callers, so it is
+    // host-joined; the expectation derives the same form.
+    expect(result.outputPath).toBe(join('/repo', 'evidence', RAW_EXTRACTION_FILE_NAME));
     expect(Buffer.from(result.bytes).toString()).toBe(
       '{\n  "a": {\n    "a": true,\n    "z": false\n  },\n  "array": [\n    {\n      "a": 1,\n      "z": 2\n    },\n    3\n  ],\n  "z": 1\n}\n',
     );

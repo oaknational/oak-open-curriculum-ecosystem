@@ -1,3 +1,5 @@
+import { join } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -90,6 +92,21 @@ describe('runCollaborationStateCli', () => {
     const result = await runCollaborationStateCli({
       argv: ['--', 'identity', 'preflight', '--platform', 'codex', '--model', 'GPT-5'],
       env: { CODEX_THREAD_ID: codexThreadId },
+    });
+
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout).toContain('"session_id_prefix": "019dd3"');
+  });
+
+  it('a Codex seat preflighting from a Claude shell keeps its thread id: the Claude seeds do not count', async () => {
+    const result = await runCollaborationStateCli({
+      argv: ['identity', 'preflight', '--platform', 'codex', '--model', 'GPT-5'],
+      env: {
+        PRACTICE_AGENT_SESSION_ID_CLAUDE: 'claude-seed-appended-to-the-shared-env-file',
+        CLAUDE_CODE_REMOTE_SESSION_ID: 'cse_01FV6rZz5BjSkApAUL6FAj72',
+        CLAUDE_CODE_SESSION_ID: 'claude-cli-session',
+        CODEX_THREAD_ID: codexThreadId,
+      },
     });
 
     expect(result.exitCode).toBe(0);
@@ -219,7 +236,7 @@ describe('runCollaborationStateCli', () => {
         'GPT-5.5',
       ],
       env: {
-        OAK_AGENT_IDENTITY_OVERRIDE: 'Moonlit Transiting Prism',
+        PRACTICE_AGENT_IDENTITY_OVERRIDE: 'Moonlit Transiting Prism',
         PRACTICE_AGENT_SESSION_ID_CURSOR: 'e86710',
       },
     });
@@ -307,7 +324,7 @@ describe('runCollaborationStateCli', () => {
         'GPT-5.5',
       ],
       env: {
-        OAK_AGENT_IDENTITY_OVERRIDE: 'Moonlit Transiting Prism',
+        PRACTICE_AGENT_IDENTITY_OVERRIDE: 'Moonlit Transiting Prism',
         PRACTICE_AGENT_SESSION_ID_CURSOR: 'e86710',
       },
     });
@@ -327,7 +344,7 @@ describe('runCollaborationStateCli', () => {
 
     expect(result.exitCode).toBe(0);
     expect(result.stdout).toContain('PRACTICE_AGENT_SESSION_ID_CURSOR');
-    expect(result.stdout).toContain('OAK_AGENT_IDENTITY_OVERRIDE');
+    expect(result.stdout).toContain('PRACTICE_AGENT_IDENTITY_OVERRIDE');
   });
 
   it('documents heartbeat-mode typed state args in comms append help', async () => {
@@ -481,19 +498,19 @@ describe('claim CLI reports', () => {
     expect(
       commsSendDefaults(options({ 'repo-root': '/repo' }), nowIso, 'event-one', {}),
     ).toStrictEqual({
-      'comms-dir': '/repo/.agent/state/collaboration/comms',
-      active: '/repo/.agent/state/collaboration/active-claims.json',
+      // Defaults are host-joined from the repo root, so the expectations are
+      // derived in host form (identical to the POSIX literals on POSIX).
+      'comms-dir': join('/repo', '.agent/state/collaboration/comms'),
+      active: join('/repo', '.agent/state/collaboration/active-claims.json'),
       now: nowIso,
       'created-at': nowIso,
       'event-id': 'event-one',
-      output: '/repo/.agent/state/collaboration/shared-comms-log.md',
     });
   });
 
   it('does not resolve a coordination home when every send path is explicit', () => {
     const explicitPaths = options({
       'comms-dir': '/custom/comms',
-      output: '/custom/shared-comms-log.md',
       active: '/custom/active-claims.json',
     });
 
@@ -505,16 +522,13 @@ describe('claim CLI reports', () => {
   });
 
   it('formats comms send output from resolved write paths', () => {
-    expect(
-      formatCommsSendResult(
-        options({ 'comms-dir': '/custom/comms', output: '/custom/shared-comms-log.md' }),
-        'event-one',
-      ),
-    ).toBe(
+    expect(formatCommsSendResult(options({ 'comms-dir': '/custom/comms' }), 'event-one')).toBe(
+      // Both paths are host-joined from the comms dir, so their JSON forms are
+      // derived: the event beneath it, the shared log beside it.
       '{\n' +
         '  "event_id": "event-one",\n' +
-        '  "event_path": "/custom/comms/event-one.json",\n' +
-        '  "shared_log_path": "/custom/shared-comms-log.md"\n' +
+        `  "event_path": ${JSON.stringify(join('/custom/comms', 'event-one.json'))},\n` +
+        `  "shared_log_path": ${JSON.stringify(join('/custom', 'shared-comms-log.md'))}\n` +
         '}\n',
     );
   });
@@ -574,8 +588,7 @@ describe('createCommsEvent', () => {
 describe('archiveStaleClaims', () => {
   it('archives stale claims without marking work successful', () => {
     const active: CollaborationRegistry = {
-      schema_version: '1.3.0',
-      commit_queue: [],
+      schema_version: '1.4.0',
       claims: [
         claim({
           claimed_at: '2026-04-28T08:00:00Z',

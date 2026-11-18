@@ -18,7 +18,7 @@ import { type CommandRunner } from '../core/command-runner.js';
 export const realGhRunner: CommandRunner<string> = (args, cwd) => {
   try {
     return ok(execFileSync('gh', [...args], { cwd, encoding: 'utf8' }));
-  } catch (cause) {
-    return err(cause instanceof Error ? cause : new Error(String(cause)));
+  } catch (error) {
+    return err(error instanceof Error ? error : new Error(String(error)));
   }
 };

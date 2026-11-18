@@ -53,13 +53,23 @@ if (!result.ok) {
 }
 ```
 
+Pass `envFiles: 'none'` instead of `startDir` to validate `processEnv` alone
+— no root discovery, no `.env` file read — for a deployment rehearsal that
+must see exactly what the platform injects.
+
+The root markers and `.env` files are read through an `EnvFileSystem` port
+(`exists`, `readText`). The real filesystem is the default; pass `fileSystem`
+beside `startDir` to compose another, which is how the package's own tests
+prove resolution against an in-memory tree and never a disk.
+
 ### Contract types
 
-| Type                         | Purpose                                      |
-| ---------------------------- | -------------------------------------------- |
-| `ResolveEnvOptions<TSchema>` | Input: `{ schema, processEnv, startDir }`    |
-| `EnvResolutionError`         | Error: `{ message, diagnostics, zodIssues }` |
-| `EnvKeyDiagnostic`           | Per-key: `{ key: string, present: boolean }` |
+| Type                         | Purpose                                                                                              |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `ResolveEnvOptions<TSchema>` | Input: `{ schema, processEnv, startDir, fileSystem? }` or `{ schema, processEnv, envFiles: 'none' }` |
+| `EnvFileSystem`              | Port: `{ exists(path): boolean, readText(path): string \| undefined }`                               |
+| `EnvResolutionError`         | Error: `{ message, diagnostics, zodIssues }`                                                         |
+| `EnvKeyDiagnostic`           | Per-key: `{ key: string, present: boolean }`                                                         |
 
 ## findRepoRoot
 

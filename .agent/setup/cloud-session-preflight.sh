@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Session-hook PREFLIGHT — the read-only twin of cloud-session-setup.sh
 # under the hook-preflight contract (cloud-environment.md § Validating and
 # diagnosing): this repo's session hook downloads the pinned Playwright
@@ -6,6 +6,13 @@
 # download contacts, without downloading anything. Invoked as a probe by
 # cloud-environment-preflight.sh; non-zero exit fails that probe with this
 # output as the finding.
+
+# The bash floor: the shellcheck gate holds it once and requires this guard first.
+if ((BASH_VERSINFO[0] < 5 || (BASH_VERSINFO[0] == 5 && BASH_VERSINFO[1] < 2))); then
+  echo "bash 5.2 or later is required, found ${BASH_VERSION}: install it (brew install bash on macOS, apt-get install bash on Debian 12 or Ubuntu 24.04 and later) and put it first on PATH" >&2
+  exit 1
+fi
+
 set -uo pipefail
 
 # These are host-root probes: the real download paths are version-bound

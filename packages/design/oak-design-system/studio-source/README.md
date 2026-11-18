@@ -27,8 +27,9 @@ None of it is used as production code in this repository:
 **The quality-gate boundary follows this directory** (owner ruling
 2026-07-19): production code gets no Sonar exclusions for any reason —
 including generated product code — no quality-gate exceptions, nothing; the
-scope exclusions in `.sonarcloud.properties` bind exactly `studio-source/**`
-and only because this material is not production code. If any file here ever
+path exclusions in `.sonarcloud.properties` bind exactly `studio-source/**`
+and only because this material is not production code (the only other scope
+exclusion is binary file types by extension, which are not code). If any file here ever
 becomes consumed by product code, it moves out of `studio-source/` and under
 the full strict gate in the same change.
 

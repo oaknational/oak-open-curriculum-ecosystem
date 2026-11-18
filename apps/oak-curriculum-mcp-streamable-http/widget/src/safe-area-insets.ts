@@ -14,6 +14,13 @@ import type { McpUiHostContext } from '@modelcontextprotocol/ext-apps';
 import type { CSSProperties } from 'react';
 
 /**
+ * The host's safe-area insets when it reports them: the present shape of
+ * `McpUiHostContext['safeAreaInsets']`, shared by the style builder below and
+ * the app view's prop so neither restates the host's type.
+ */
+export type SafeAreaInsets = NonNullable<McpUiHostContext['safeAreaInsets']>;
+
+/**
  * Inline style carrying host safe-area insets as CSS custom properties.
  *
  * @remarks
@@ -36,9 +43,7 @@ export type SafeAreaInsetStyle = CSSProperties &
  * Values carry explicit `px` units because React appends no unit to
  * custom properties (the host reports insets as pixel numbers).
  */
-export function safeAreaInsetStyle(
-  safeAreaInsets: NonNullable<McpUiHostContext['safeAreaInsets']>,
-): SafeAreaInsetStyle {
+export function safeAreaInsetStyle(safeAreaInsets: SafeAreaInsets): SafeAreaInsetStyle {
   return {
     '--oak-safe-area-inset-top': `${safeAreaInsets.top}px`,
     '--oak-safe-area-inset-right': `${safeAreaInsets.right}px`,

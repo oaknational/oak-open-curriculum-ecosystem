@@ -1,3 +1,9 @@
+---
+classification: situational
+description: "Count the unique files the branch has touched since main — pnpm agent-tools:branch-touched-files — at session start on a feature branch, after merging main, before broadening scope, and before a large commit or PR handoff. Thresholds are a scope-shape signal: soft at 50 confirm one coherent outcome, hard at 100 pause expansion, critical at 150 produce an owner-visible split plan. The failure shape is reading the number and continuing to implement; at hard or critical the next action is split analysis, never more code. Not a mechanical block: owner direction can override."
+trigger: ceremony:commit ∪ session:open
+---
+
 # Monitor Branch Touched Files
 
 ## Rule

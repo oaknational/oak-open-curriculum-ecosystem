@@ -97,3 +97,34 @@ export function temporalCoverageReport(
       };
     });
 }
+
+/** What the post-run close checks before trusting a run's aggregates. */
+export interface PostRunVerdictInput {
+  readonly integrityViolations: number;
+  readonly recomputeMismatches: number;
+  readonly mapComplete: boolean;
+}
+
+/**
+ * The post-run close verdict: green only with a complete map, an empty recall-integrity
+ * set and a zero-diff disposition recompute; each failing check is named, a map envelope
+ * carrying `mapComplete: false` among them.
+ */
+export function postRunVerdict(input: PostRunVerdictInput): {
+  readonly ok: boolean;
+  readonly reasons: readonly string[];
+} {
+  const reasons: string[] = [];
+  if (!input.mapComplete) {
+    reasons.push(
+      'the map is incomplete (mapComplete false), so the aggregates cover a partial corpus',
+    );
+  }
+  if (input.integrityViolations > 0) {
+    reasons.push(`${String(input.integrityViolations)} recall integrity violation(s)`);
+  }
+  if (input.recomputeMismatches > 0) {
+    reasons.push(`${String(input.recomputeMismatches)} disposition recompute mismatch(es)`);
+  }
+  return { ok: reasons.length === 0, reasons };
+}

@@ -573,8 +573,8 @@ carry polarity from authoring time.
 same consolidation pass that lands this amendment, completing the host
 operational backfill.
 
-**Reviewer**. `docs-adr-expert` + `onboarding-expert` per
-`invoke-doc-and-onboarding-experts-on-significant-changes`
+**Reviewer**. `docs-adr-expert` + `onboarding-expert` per the
+significant-change pairing of the reviewer roster (`invoke-code-experts`)
 (this amendment is a Practice-governance change to the pattern-graduation
 contract).
 
@@ -652,8 +652,8 @@ question for each entry before deciding the entry's graduation
 target. If applying the question changes the target for ≥1 entry,
 the discipline is firing usefully.
 
-**Reviewer**. `docs-adr-expert` per
-`invoke-doc-and-onboarding-experts-on-significant-changes`
+**Reviewer**. `docs-adr-expert` per the
+significant-change pairing of the reviewer roster (`invoke-code-experts`)
 (Practice-governance amendment). Owner-direction-evidenced (Mistbound
 reframing worked instance).
 

@@ -3,6 +3,7 @@ name: "Many Pairwise Links Mean One Unnamed Lever"
 polarity: pattern
 use_this_when: "You notice yourself drawing a third (or later) pairwise cross-link between insights, artefacts, or plans in the same analysis."
 category: process
+layer: general
 proven_in: "Agent-naming deep-dive 2026-06-30: pairwise links (v3↔substrate, naming↔statusline↔work-state, registry↔ADR-200) accumulated until the owner pushed 'reach the underlying lever'; they collapsed into ONE lever — the graph-substrate convergence (typed schema-governed graph; derived-not-authored; render-not-cache; per-consumer views) with registry+validation as its governance face."
 proven_date: 2026-06-30
 barrier:

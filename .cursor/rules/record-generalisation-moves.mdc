@@ -1,0 +1,7 @@
+---
+description: Record every change that makes an element of the Practice more general or more portable with a Practice-Generalisation trailer in the commit that makes it, naming the element and saying in one sentence what became more general and why (owner direction 2026-09-13). Use when a change under agent-tools/, the Practice Core, rules, skills, directives or the platform adapters derives what it used to list, stops naming its host, replaces a host record's number with the concept, states a general form, or takes a sibling estate's more general text (marked received from that estate). Not for fixes to this repository's own product or paths, and never added later from memory. Failure shapes — a register file beside the commits that stopped getting rows after ten days while qualifying moves kept landing; a list rebuilt from commit subjects that keeps the changes but loses the reasons.
+globs: agent-tools/**,.agent/practice-core/**,.agent/rules/**,.agent/skills/**,.agent/directives/**,.claude/**,.cursor/**,.agents/**,.gemini/**
+alwaysApply: false
+---
+
+Read and follow `.agent/rules/record-generalisation-moves.md`.

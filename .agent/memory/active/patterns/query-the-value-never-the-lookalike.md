@@ -3,6 +3,7 @@ name: Query the Value, Never the Lookalike
 polarity: anti-pattern
 use_this_when: About to use an identifier, timestamp, ref, config value, or state reading that you constructed, inherited, defaulted into, or read from a copy — rather than derived from the thing that owns it, at the moment of use
 category: agent
+layer: general
 proven_in: .agent/memory/active/archive/napkin-2026-08-06.md (nine distinct shapes across ~six seats, 2026-07-31→2026-08-04); cited as doctrine by PDR-027 § field-role home
 proven_date: 2026-08-04
 related_pattern: observation-that-does-not-bear-on-the-claim
@@ -81,6 +82,20 @@ on arrives fluently as *the* contract.
 **9. A grep hit standing in for a consumer.** A text match proves presence, never
 participation; the engaged code path has to be settled separately.
 
+**10. A liveness verdict from a name mismatch.** Thirty-one links to a fork's
+former repository name were typed "dead by construction" without a request
+(2026-09-06, the PR 66 review); GitHub redirects the former name, so every one
+resolved, and the verdict was retracted on the PR. A "dead link" verdict needs
+one request against the URL (or the API's redirect-following read); a name
+mismatch alone is an observation.
+
+**11. A compaction summary standing in for the read.** A curator read four archived napkins
+into its context, compacted, and afterwards held them only as a paragraph of "emerging arcs"
+— right-typed, plausible, unverifiable (2026-09-02); the owner named the reads compromised,
+and the synthesis report discarded them as evidence and cited the engine's committed
+checkpoints instead. Post-compaction recollection of a source is a lookalike of having read
+it; re-derive from the artefact at the moment of use.
+
 ## The cure
 
 > **Derive the value from the thing that OWNS it, at the moment of use.**
@@ -131,7 +146,7 @@ this chosen or defaulted" has moved its own ambiguity into every caller, and eac
 caller pays for it separately and invisibly. The same reasoning is why
 [`validators-must-recompute-not-just-record`](../../../rules/validators-must-recompute-not-just-record.md)
 prefers a computed answer to a stored one, and why
-[`generator-first-mindset`](../../../rules/generator-first-mindset.md) fixes the
+`generator-first-mindset` (`generator-first-mindset.md`, a file OCE holds) fixes the
 generator rather than its output.
 
 ## Falsifier

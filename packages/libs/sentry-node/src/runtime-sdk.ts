@@ -21,9 +21,9 @@ import {
   redactSentryBreadcrumb,
   redactSentryEvent,
   redactSentryLog,
-  redactSentrySpan,
   redactSentryTransaction,
 } from './runtime-redaction.js';
+import { redactSentrySpan } from './runtime-redaction-span.js';
 import { applyFingerprint } from './runtime-fingerprint.js';
 
 /**

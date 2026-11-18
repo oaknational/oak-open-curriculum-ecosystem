@@ -20,8 +20,6 @@ import {
   type SearchRetrievalFactories,
 } from '@oaknational/oak-search-sdk';
 
-export type { SearchRetrievalFactories };
-
 /**
  * Creates a SearchRetrievalService from validated environment credentials.
  *
@@ -59,3 +57,5 @@ export function createSearchRetrieval(
   logger.info('Search retrieval service configured (lazy connection — no startup ping)');
   return retrieval;
 }
+
+export type { SearchRetrievalFactories } from '@oaknational/oak-search-sdk';

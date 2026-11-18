@@ -3,6 +3,7 @@ name: "When \"Don't Fragment\" Meets New-in-Kind Work, the New Vessel Is the Non
 polarity: pattern
 use_this_when: "The \"consolidate the estate / don't fragment the plan estate\" reflex points at folding new work into an existing plan, doc, or artefact — check first whether the work differs in KIND before folding."
 category: process
+layer: general
 proven_in: "2026-06-17 owner correction (Phobos turns Singularity); refines consolidate-estate-decouple-execution against no-plan-fragmentation."
 proven_date: 2026-06-17
 barrier:

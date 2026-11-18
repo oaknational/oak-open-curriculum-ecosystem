@@ -7,6 +7,12 @@
 
 import type { IncomingHttpHeaders, OutgoingHttpHeaders } from 'node:http';
 
+/** One header's value as Node's header bags carry it. */
+type HeaderValue = string | string[] | number | undefined;
+
+/** The header bags this module redacts: Node's incoming and outgoing shapes, or a plain record. */
+type HeaderBag = IncomingHttpHeaders | OutgoingHttpHeaders | Record<string, HeaderValue>;
+
 /**
  * Headers that should be completely redacted (replaced with [REDACTED])
  */
@@ -38,7 +44,7 @@ const PARTIALLY_REDACTED_HEADERS = new Set([
  * @param value - Header value
  * @returns Redacted value safe for logging
  */
-function redactHeaderValue(name: string, value: string | string[] | number | undefined): string {
+function redactHeaderValue(name: string, value: HeaderValue): string {
   if (value === undefined) {
     return '[undefined]';
   }
@@ -80,12 +86,7 @@ function redactHeaderValue(name: string, value: string | string[] | number | und
  * logger.debug('Request received', { headers: safeHeaders });
  * ```
  */
-export function redactHeaders(
-  headers:
-    | IncomingHttpHeaders
-    | OutgoingHttpHeaders
-    | Record<string, string | string[] | number | undefined>,
-): Record<string, string> {
+export function redactHeaders(headers: HeaderBag): Record<string, string> {
   const redacted: Record<string, string> = {};
 
   for (const name in headers) {
@@ -102,12 +103,7 @@ export function redactHeaders(
  * @param headers - Headers object
  * @returns Compact redacted headers object for logging
  */
-export function redactHeadersSummary(
-  headers:
-    | IncomingHttpHeaders
-    | OutgoingHttpHeaders
-    | Record<string, string | string[] | number | undefined>,
-): Record<string, string> {
+export function redactHeadersSummary(headers: HeaderBag): Record<string, string> {
   const interestingHeaders = [
     'accept',
     'authorization',

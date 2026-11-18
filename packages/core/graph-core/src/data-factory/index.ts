@@ -70,9 +70,10 @@ export function defaultGraph(): DefaultGraph {
  * language-tagged literal; a NamedNode second argument creates a datatype
  * literal; omitting the second argument creates an xsd:string literal.
  *
- * TODO(WS1.6): decide whether vocabulary-registry ergonomics need a separate
- * datatype-IRI helper. WS1.3 deliberately treats string modifiers as language
- * tags only; pass `namedNode(datatypeIri)` for datatype literals.
+ * A string second argument is a language tag only, never a datatype IRI: a
+ * datatype literal takes a `NamedNode`, from `namedNode(datatypeIri)` or a
+ * vocabulary-registry term (`../vocab`). The registry landed without a
+ * separate datatype-IRI helper; the `NamedNode` form is the datatype contract.
  */
 export function literal<Value extends string>(
   value: Value,

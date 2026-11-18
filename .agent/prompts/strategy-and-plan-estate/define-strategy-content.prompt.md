@@ -39,7 +39,7 @@ questions, and structure; the **owner shapes the product-strategy substance**.
    "we" editorial voice (vision / strategy / public-README scope), **not** plain dev-doc prose.
    Leadership audience.
 7. Thread record
-   [`strategy-and-plan-estate-holistic-review.next-session.md`](../../memory/operational/threads/strategy-and-plan-estate-holistic-review.next-session.md).
+   [`strategy-and-plan-estate-holistic-review.next-session.md`](../../memory/operational/threads/paused/strategy-and-plan-estate-holistic-review.next-session.md).
 
 ## What the strategy is (decided)
 

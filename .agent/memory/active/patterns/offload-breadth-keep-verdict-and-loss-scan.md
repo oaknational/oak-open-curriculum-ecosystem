@@ -3,6 +3,7 @@ name: "Under Context Pressure, Offload the Breadth; Keep the Design Verdict and 
 polarity: pattern
 use_this_when: "A deep-context session is running low on budget but still has high-value work to land — reviewing, drafting, mechanical edits, gate runs."
 category: process
+layer: general
 proven_in: "worktree-pilot team closeout (2026-06-25, Thyme lifts Compost)"
 proven_date: 2026-06-25
 barrier:

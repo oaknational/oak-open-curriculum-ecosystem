@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 # UserPromptSubmit hook: Scan prompt for secrets before sending
 
+# The bash floor: the shellcheck gate holds it once and requires this guard first.
+if ((BASH_VERSINFO[0] < 5 || (BASH_VERSINFO[0] == 5 && BASH_VERSINFO[1] < 2))); then
+  echo "{\"decision\":\"block\",\"reason\":\"bash 5.2 or later is required, found ${BASH_VERSION}: install it (brew install bash on macOS, apt-get install bash on Debian 12 or Ubuntu 24.04 and later) and put it first on PATH, so the prompt can be scanned for secrets\"}"
+  exit 0
+fi
+
 if ! command -v sonar &> /dev/null; then
   exit 0
 fi
@@ -22,7 +28,7 @@ fi
 
 # Create temporary file with prompt content (stdin is already occupied by hook input)
 temp_file=$(mktemp -t 'sonarqube-cli-hook.XXXXXX')
-trap "rm -f $temp_file" EXIT
+trap 'rm -f "$temp_file"' EXIT
 
 echo -n "$prompt" > "$temp_file"
 

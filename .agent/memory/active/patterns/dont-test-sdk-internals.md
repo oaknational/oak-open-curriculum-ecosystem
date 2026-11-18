@@ -2,6 +2,7 @@
 title: "Don't test SDK internals"
 polarity: pattern
 category: testing
+layer: general
 barrier_met: true
 source_sessions:
   - "2026-04-06b: legacy _meta['ui/resourceUri'] test deleted"

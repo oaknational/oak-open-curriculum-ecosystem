@@ -12,7 +12,8 @@ This directory contains engineering workflow and implementation documentation fo
 
 ## Contents
 
-- [Root README Quick Start](../../README.md#quick-start) - Architecture, setup, and key commands for new developers
+- [Root README Quick Start](../../README.md#quick-start) - Install and verify for new developers
+- [Setup](./setup.md) - Prerequisites, the Windows (via WSL) path, and key commands
 - [Working with this Repo for Devs](./working-with-this-repo-for-devs.md) - The practical guide for developers: how you direct the work, what the agents do around you, and what keeps the quality honest
 - [Developer Experience](./developer-experience.md) - The surfaces and feedback loops a developer works through, including the statusline deep-dive
 - [Sibling Repositories](./sibling-repos.md) - Related Oak repos a teammate may need to clone
@@ -41,6 +42,6 @@ These documents help developers:
 
 ## Getting Started
 
-New developers should start with the [root README Quick Start](../../README.md#quick-start), which covers prerequisites, install/verify, and key commands. Continue with [CONTRIBUTING.md](../../CONTRIBUTING.md) for the development process.
+New developers should start with the [root README Quick Start](../../README.md#quick-start), after installing the prerequisites from the [setup guide](./setup.md), which also carries the key commands. Continue with [CONTRIBUTING.md](../../CONTRIBUTING.md) for the development process.
 
 For quick solutions to common problems, check the [Troubleshooting](../operations/troubleshooting.md) guide.

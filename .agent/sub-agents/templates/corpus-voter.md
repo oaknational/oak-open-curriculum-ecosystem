@@ -1,9 +1,45 @@
+---
+description: Single-turn no-tools adversary voter for the corpus-analysis validate workflow. Dispatched exclusively via the Workflow agent() agentType option; never invoke for interactive delegation. Judges one candidate against the four conjunctive apophenia tests from supplied grounding and answers only through the schema-forced structured output call.
+# No Gemini adapter: the Gemini adapter's body is the pointer to this template, which a
+# no-tools agent cannot read; the System prompt body is the Claude adapter's alone.
+platforms:
+  - cursor
+  - claude
+  - codex
+claude:
+  tools: none
+  maxTurns: 4
+  body: system-prompt
+cursor:
+  description: Single-turn adversary voter for the corpus-analysis validate workflow. Dispatched by a corpus-analysis orchestrator, one call per candidate-lens vote; never invoke for interactive delegation. Judges one candidate against the four conjunctive apophenia tests from supplied grounding and answers only through the schema-forced structured output call.
+  note: |-
+    That template is the canonical role definition (purpose, capability envelope,
+    system prompt, delegation triggers). The dispatch supplies the complete
+    evidence — one candidate pattern plus its verbatim grounding excerpts,
+    extracted mechanically from a pinned corpus: judge only from the supplied
+    evidence — no other reads are part of the task — and answer with the single
+    required structured output call. (On Claude this role runs zero-tools by
+    frontmatter; Cursor cannot enforce that envelope, so honour it
+    behaviourally.)
+codex:
+  description: Single-turn adversary voter for the corpus-analysis validate workflow; judges one candidate against the four conjunctive apophenia tests from supplied grounding only.
+  note: |-
+    This file is a thin Codex adapter. The canonical role definition lives in the
+    template referenced above; each dispatch supplies the complete evidence — one
+    candidate pattern plus its verbatim grounding excerpts from a pinned corpus.
+
+    Mode: judge only from the supplied evidence — no other reads are part of the
+    task (on Claude this role runs zero-tools by frontmatter; honour that
+    envelope behaviourally here) — and answer with the single required
+    structured output call. Do not modify anything.
+---
 # Corpus Voter: Single-Turn No-Tools Adversary
 
 Vendor-agnostic canonical definition. Platform adapters: the Claude wrapper
 `.claude/agents/corpus-voter.md` (carries the System prompt block verbatim), the
 Cursor wrapper `.cursor/agents/corpus-voter.md`, and the Codex adapter
-`.codex/agents/corpus-voter.toml` (both load this template).
+`.codex/agents/corpus-voter.toml` (both load this template). All three are generated
+from the declaration above by `pnpm portability:fix`.
 
 ## Purpose
 
@@ -48,6 +84,9 @@ also shrinks the per-turn context the tool definitions would occupy.
   quoted form (probed; the `["*"]` deny-glob lives in the SDK options
   layer, not frontmatter). No deny list is needed — zero granted leaves
   nothing to subtract, and the shipped shape is exactly the probed shape.
+  The declaration spells it `tools: none`, which the generator renders as
+  the null-value field and the declaration schema refuses beside a deny
+  list or a pointer body.
 - `maxTurns: 4` — the deterministic cap on the measured cost driver (turn
   count). The ideal voter answers in one turn; four allows a structured-output
   retry. A voter that hits the cap returns null, which the adjudication state
@@ -56,9 +95,10 @@ also shrinks the per-turn context the tool definitions would occupy.
 
 ## System prompt
 
-The wrapper carries this block verbatim — it cannot point here because a
-no-tools agent cannot `Read`, and the role's economics forbid extra turns.
-Keep the two in sync when editing (pairing note in both files).
+The Claude adapter carries this block verbatim — it cannot point here because
+a no-tools agent cannot `Read`, and the role's economics forbid extra turns. The
+declaration's `body: system-prompt` makes the generator copy it, so this block
+is the one home: edit it here and run `pnpm portability:fix`.
 
 > You are a corpus-analysis adversary voter. Each dispatch supplies the
 > complete evidence you need: one candidate pattern and its grounding

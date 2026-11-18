@@ -13,7 +13,7 @@
  */
 
 import { vi } from 'vitest';
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { McpServer, type ResourceTemplate } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { registerHandlers } from '../handlers.js';
 import type { ServedSurfaceDefinition } from '../served-surface/served-surface.js';
 import {
@@ -35,6 +35,17 @@ export interface RegistrationWalk {
    * name/registrar pairing cannot hide inside set semantics.
    */
   readonly resourceNameList: readonly string[];
+}
+
+/**
+ * The URI a `registerResource` call registered. Every runtime registration
+ * passes a string; the spy's tuple type also admits the SDK's
+ * `ResourceTemplate` overload, which is rendered to its pattern so that a
+ * template registration fails a membership assertion loudly instead of
+ * passing as `[object Object]`.
+ */
+function registeredResourceUri(uriOrTemplate: string | ResourceTemplate): string {
+  return typeof uriOrTemplate === 'string' ? uriOrTemplate : uriOrTemplate.uriTemplate.toString();
 }
 
 /**
@@ -62,12 +73,9 @@ export function walkCanonicalRegistration(
     toolConfigs: new Map<string, unknown>(
       registerToolSpy.mock.calls.map((call) => [String(call[0]), call[1]]),
     ),
-    // String(call[1]): the spy's tuple resolves to the SDK's last
-    // registerResource overload (ResourceTemplate) while every runtime call
-    // passes a string — the coercion is the honest bridge, and a real
-    // template would stringify to '[object Object]' and fail membership
-    // assertions loudly rather than falsely pass.
-    resourceUris: new Set(registerResourceSpy.mock.calls.map((call) => String(call[1]))),
+    resourceUris: new Set(
+      registerResourceSpy.mock.calls.map((call) => registeredResourceUri(call[1])),
+    ),
     resourceNames: new Set(registerResourceSpy.mock.calls.map((call) => String(call[0]))),
     resourceNameList: registerResourceSpy.mock.calls.map((call) => String(call[0])),
   };

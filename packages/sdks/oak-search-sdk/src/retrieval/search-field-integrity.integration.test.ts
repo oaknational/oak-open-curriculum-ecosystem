@@ -22,6 +22,9 @@ function createMockSearch(response = emptySequenceResponse()) {
   return { search, calls };
 }
 
+/** Resolves every sequence search to the one test index. */
+const resolveTestIndex = (): string => 'oak_sequences_test';
+
 function getFirstRequest(calls: readonly EsSearchRequest[]): EsSearchRequest {
   const request = calls[0];
   if (!request) {
@@ -62,7 +65,7 @@ function getBoolFilterClauses(filterClause: unknown): readonly unknown[] {
   }
   const clauses = boolClause.filter;
   if (!Array.isArray(clauses)) {
-    throw new Error('Expected bool.filter clause in sequence request');
+    throw new TypeError('Expected bool.filter clause in sequence request');
   }
   return clauses;
 }
@@ -95,7 +98,6 @@ function findCategoryClause(filterClause: unknown): { match_phrase: { category_t
 describe('search field integrity integration contracts', () => {
   it('aligns sequence category filter semantics with shared inventory contracts', async () => {
     const { search, calls } = createMockSearch();
-    const resolveIndex = () => 'oak_sequences_test';
 
     await searchSequences(
       {
@@ -106,7 +108,7 @@ describe('search field integrity integration contracts', () => {
         category: 'physics',
       },
       search,
-      resolveIndex,
+      resolveTestIndex,
     );
 
     const categoryInventoryField = SEARCH_FIELD_INVENTORY.find(

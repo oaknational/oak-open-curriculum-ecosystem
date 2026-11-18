@@ -57,7 +57,11 @@ export const parseBankedFreetoolVerdicts = (
  */
 const FULL_ENSEMBLE_SIZE = adversaryLensSchema.options.length;
 
-/** One candidate's replayed quorum: complete ensembles carry the frozen keep verdict. */
+/**
+ * One candidate's replayed quorum: a full-size ensemble that settles to a terminal keep, kill
+ * or reroute carries the frozen keep verdict; an undersized ensemble and a held one (a
+ * duplicated lens, a dead tie, the retry cap) are both incomplete.
+ */
 export type QuorumOutcome =
   { readonly complete: true; readonly keep: boolean } | { readonly complete: false };
 
@@ -96,11 +100,15 @@ export function opusQuorumOutcomes(
       outcomes.set(candidateId, { complete: false });
       continue;
     }
+    // A full-size panel finalises to a terminal keep, kill or reroute, or to a hold (a
+    // duplicated lens, a dead tie, the retry cap); only the settled result is complete, the
+    // hold is reported as incomplete so the salvage summary never reads it as a decision.
     const step = finaliseQuorum(verdicts);
-    outcomes.set(candidateId, {
-      complete: true,
-      keep: step.kind === 'terminal' && step.disposition === 'keep',
-    });
+    const settled = step.kind === 'terminal' && step.disposition !== 'held-for-review';
+    outcomes.set(
+      candidateId,
+      settled ? { complete: true, keep: step.disposition === 'keep' } : { complete: false },
+    );
   }
   return outcomes;
 }

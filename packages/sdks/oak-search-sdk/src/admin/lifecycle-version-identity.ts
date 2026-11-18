@@ -23,8 +23,8 @@ export interface OrphanedVersion {
  * @returns The version string (e.g. `v2026-03-07-143022`) or `null` if not found
  */
 export function extractVersionFromIndexName(indexName: string): string | null {
-  const match = indexName.match(/_(v\d{4}-\d{2}-\d{2}-\d{6})$/);
-  return match ? match[1] : null;
+  const match = /_(v\d{4}-\d{2}-\d{2}-\d{6})$/.exec(indexName);
+  return match?.[1] ?? null;
 }
 
 /**

@@ -8,6 +8,7 @@ use_this_when: >-
   Capturing, distilling, graduating, or writing learning into files that
   have size/fitness limits
 category: process
+layer: general
 proven_in: .agent/practice-core/practice.md
 proven_date: 2026-04-05
 barrier:

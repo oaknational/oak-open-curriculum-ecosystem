@@ -13,17 +13,16 @@ import type {
   RegularBlobTreeEntry,
 } from './git-snapshot-model.js';
 import type { TreeEntry } from './file-model.js';
-import type { RepoPath, Sha256 } from './scalar-model.js';
 
 /** Exact captured TypeScript bytes that can be reused without auxiliary charge. */
 export interface CapturedAuxiliarySource {
   readonly bytes: Uint8Array;
-  readonly contentSha256: Sha256;
+  readonly contentSha256: string;
 }
 
 /** One internally owned, successful non-TypeScript auxiliary read. */
 export interface AuxiliaryBlobCacheEntry extends CapturedAuxiliarySource {
-  readonly path: RepoPath;
+  readonly path: string;
   readonly treeEntry: RegularBlobTreeEntry;
 }
 
@@ -35,7 +34,7 @@ export interface AuxiliaryBlobCacheState {
 }
 
 export interface AuxiliaryBlobReadDecisionInput {
-  readonly path: RepoPath;
+  readonly path: string;
   readonly trackedEntry: TreeEntry | undefined;
   readonly isTypescriptPath: boolean;
   readonly capturedSource: CapturedAuxiliarySource | undefined;
@@ -44,7 +43,7 @@ export interface AuxiliaryBlobReadDecisionInput {
 }
 
 export interface AuxiliaryBlobFetchAction {
-  readonly path: RepoPath;
+  readonly path: string;
   readonly treeEntry: RegularBlobTreeEntry;
   readonly maxBytes: number;
 }
@@ -109,7 +108,7 @@ export function decideAuxiliaryBlobRead(
 
 /** Decide a TypeScript path's read from the snapshot's already-captured bytes. */
 function decideCapturedSourceRead(
-  path: RepoPath,
+  path: string,
   trackedEntry: RegularBlobTreeEntry,
   capturedSource: CapturedAuxiliarySource | undefined,
 ): AuxiliaryBlobReadDecision {
@@ -208,7 +207,7 @@ function failedTransition(
 }
 
 function preflightBudget(
-  path: RepoPath,
+  path: string,
   size: number,
   chargedBytes: number,
   limits: GitSnapshotLimits,

@@ -5,82 +5,89 @@ import {
 } from './current-source-additions.js';
 import type { RegistrationSourceEvidence } from './current-source-model.js';
 
+/**
+ * The lastModified a guidance resource carries: the three resources revised
+ * for the stated-statements contract carry their revision date; the rest keep
+ * the original capture date.
+ */
+const guidanceLastModified = (slug: string): string =>
+  ['learning-progression', 'curriculum-mapping', 'adapt-lesson'].includes(slug)
+    ? '2026-09-02T00:00:00Z'
+    : '2026-07-23T00:00:00Z';
+
+/** A guidance resource's source file as a [path, text] pair, keyed by slug. */
+const guidanceFixture = (slug: string): readonly [string, string] => [
+  `packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/${slug}.ts`,
+  [
+    `name: 'guidance-${slug}'`,
+    `uri: 'docs://oak/guidance/${slug}.md'`,
+    "mimeType: 'text/markdown'",
+    "annotations: { priority: 0.4, audience: ['assistant'] }",
+    `lastModified: '${guidanceLastModified(slug)}'`,
+    ...(slug === 'curriculum-mapping'
+      ? [
+          'provenance:',
+          "      'Derived from the oak-curriculum-mapper skill (oaknational/oak-skills); keep the two in step.'",
+        ]
+      : []),
+  ].join('\n'),
+];
+
+/** A guidance resource's registration evidence as a [path, evidence] pair, in the given state. */
+const guidanceRegistrationFixture = (
+  slug: string,
+  state: 'live' | 'dormant',
+): readonly [string, RegistrationSourceEvidence] => [
+  `packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/${slug}.ts`,
+  {
+    rootId: 'oak-curriculum-http',
+    state,
+    primitive: 'resource',
+    selector: `docs://oak/guidance/${slug}.md`,
+    surfaces: [
+      {
+        locus: 'resource-metadata',
+        field: 'name',
+        value: `guidance-${slug}`,
+      },
+      {
+        locus: 'resource-metadata',
+        field: 'uri',
+        value: `docs://oak/guidance/${slug}.md`,
+      },
+      {
+        locus: 'resource-metadata',
+        field: 'mimeType',
+        value: 'text/markdown',
+      },
+      {
+        locus: 'resource-metadata',
+        field: 'annotations',
+        value: '{"priority":0.4,"audience":["assistant"]}',
+      },
+      {
+        locus: 'resource-contents',
+        field: 'uri',
+        value: `docs://oak/guidance/${slug}.md`,
+      },
+      {
+        locus: 'resource-contents',
+        field: 'mimeType',
+        value: 'text/markdown',
+      },
+      {
+        locus: 'resource-contents',
+        field: '_meta.lastModified',
+        value: guidanceLastModified(slug),
+      },
+    ],
+    channels: state === 'live' ? ['resources/list.resources[]', 'resources/read.contents[]'] : [],
+  },
+];
+
 describe('buildCurrentSourceAdditions', () => {
   it('builds distinct evidence for every reviewed post-baseline item', () => {
     expect(currentSourceAdditionFiles()).toHaveLength(11);
-    // The three resources revised for the stated-statements contract carry
-    // their revision date; the rest keep the original capture date.
-    const guidanceLastModified = (slug: string): string =>
-      ['learning-progression', 'curriculum-mapping', 'adapt-lesson'].includes(slug)
-        ? '2026-09-02T00:00:00Z'
-        : '2026-07-23T00:00:00Z';
-    const guidanceFixture = (slug: string): readonly [string, string] => [
-      `packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/${slug}.ts`,
-      [
-        `name: 'guidance-${slug}'`,
-        `uri: 'docs://oak/guidance/${slug}.md'`,
-        "mimeType: 'text/markdown'",
-        "annotations: { priority: 0.4, audience: ['assistant'] }",
-        `lastModified: '${guidanceLastModified(slug)}'`,
-        ...(slug === 'curriculum-mapping'
-          ? [
-              'provenance:',
-              "      'Derived from the oak-curriculum-mapper skill (oaknational/oak-skills); keep the two in step.'",
-            ]
-          : []),
-      ].join('\n'),
-    ];
-    const guidanceRegistrationFixture = (
-      slug: string,
-      state: 'live' | 'dormant',
-    ): readonly [string, RegistrationSourceEvidence] => [
-      `packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/${slug}.ts`,
-      {
-        rootId: 'oak-curriculum-http',
-        state,
-        primitive: 'resource',
-        selector: `docs://oak/guidance/${slug}.md`,
-        surfaces: [
-          {
-            locus: 'resource-metadata',
-            field: 'name',
-            value: `guidance-${slug}`,
-          },
-          {
-            locus: 'resource-metadata',
-            field: 'uri',
-            value: `docs://oak/guidance/${slug}.md`,
-          },
-          {
-            locus: 'resource-metadata',
-            field: 'mimeType',
-            value: 'text/markdown',
-          },
-          {
-            locus: 'resource-metadata',
-            field: 'annotations',
-            value: '{"priority":0.4,"audience":["assistant"]}',
-          },
-          {
-            locus: 'resource-contents',
-            field: 'uri',
-            value: `docs://oak/guidance/${slug}.md`,
-          },
-          {
-            locus: 'resource-contents',
-            field: 'mimeType',
-            value: 'text/markdown',
-          },
-          {
-            locus: 'resource-contents',
-            field: '_meta.lastModified',
-            value: guidanceLastModified(slug),
-          },
-        ],
-        channels:
-          state === 'live' ? ['resources/list.resources[]', 'resources/read.contents[]'] : [],
-      },
-    ];
     const contents = new Map<string, string>([
       [
         'apps/oak-curriculum-mcp-streamable-http/src/served-surface/served-surface.ts',

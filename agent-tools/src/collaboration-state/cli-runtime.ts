@@ -1,6 +1,3 @@
-import { watch } from 'node:fs';
-import { dirname } from 'node:path';
-
 import { err, ok, unwrapOrThrow, type Result } from '@oaknational/result';
 
 import { type CollaborationStateCliIo, productionIo } from './cli-io-production.js';
@@ -108,8 +105,8 @@ export function productionCollaborationStateRuntime(
   return {
     stdout: input.stdout,
     io: productionIo,
-    waitForCommsChange: waitForDirectoryChange,
-    waitForCollaborationStateChange: waitForCollaborationStateChangeFromFiles,
+    waitForCommsChange: waitOnePollInterval,
+    waitForCollaborationStateChange: waitOnePollInterval,
     processIsAlive: processIsAliveBySignalZero,
     watcherStalenessIo: productionWatcherStalenessIo,
     cwd: input.cwd ?? process.cwd(),
@@ -125,96 +122,12 @@ export function productionCollaborationStateRuntime(
   };
 }
 
-function waitForDirectoryChange(input: {
-  readonly directory: string;
-  readonly pollMs: number;
-}): Promise<void> {
-  return waitForAnyDirectoryChange({ directories: [input.directory], pollMs: input.pollMs });
-}
-
-function waitForCollaborationStateChangeFromFiles(input: {
-  readonly activePath: string;
-  readonly closedPath: string;
-  readonly commsDir: string;
-  readonly pollMs: number;
-}): Promise<void> {
-  return waitForAnyDirectoryChange({
-    directories: [input.commsDir, dirname(input.activePath), dirname(input.closedPath)],
-    pollMs: input.pollMs,
-  });
-}
-
 /**
- * Subscribes `onChange` to a directory's change events, returning a closable
- * handle or `null` when the platform cannot watch the path. Injectable so the
- * poll-bound invariant below is unit-testable without real FS events — which
- * are non-deterministic, especially the dropped-subscription case this guards.
- *
- * The real `node:fs` watch callback always fires asynchronously. A factory
- * that fires `onChange` synchronously during subscription is tolerated (the
- * wait settles immediately and no further directories are subscribed), but a
- * handle returned by such a factory cannot be closed — it has not been
- * registered yet — so asynchronous firing remains the supported contract.
+ * The production wait between passes of the comms watch and the TUI: resolve
+ * after one `pollMs` interval.
  */
-export type DirectoryWatchFactory = (
-  directory: string,
-  onChange: () => void,
-) => { readonly close: () => void } | null;
-
-const fsDirectoryWatchFactory: DirectoryWatchFactory = (directory, onChange) => {
-  try {
-    const watcher = watch(directory, { persistent: false }, onChange);
-    watcher.on('error', onChange);
-    return watcher;
-  } catch {
-    return null;
-  }
-};
-
-/**
- * Resolve when ANY watched directory changes — OR after `pollMs`, whichever
- * comes first. The `setTimeout(pollMs)` fallback is armed ALONGSIDE the watch
- * subscriptions, so a dropped FSEvents subscription (the macOS hang suspect)
- * delays a wake by at most `pollMs` instead of stalling the watcher forever.
- * This poll-bound is the invariant pinned by `cli-runtime.unit.test.ts`.
- */
-export function waitForAnyDirectoryChange(input: {
-  readonly directories: readonly string[];
-  readonly pollMs: number;
-  readonly watchFactory?: DirectoryWatchFactory;
-}): Promise<void> {
-  const watchFactory = input.watchFactory ?? fsDirectoryWatchFactory;
+function waitOnePollInterval(input: { readonly pollMs: number }): Promise<void> {
   return new Promise((resolve) => {
-    let settled = false;
-    const watchers: ({ readonly close: () => void } | null)[] = [];
-    let timer: ReturnType<typeof setTimeout> | undefined;
-
-    const done = (): void => {
-      if (settled) {
-        return;
-      }
-      settled = true;
-      if (timer !== undefined) {
-        clearTimeout(timer);
-      }
-      for (const watcher of watchers) {
-        watcher?.close();
-      }
-      resolve();
-    };
-
-    // `watchers` and `done` are initialised before any factory call, so a
-    // synchronous callback settles cleanly instead of hitting a temporal dead
-    // zone. A sync-settle also stops subscribing further directories.
-    for (const directory of input.directories) {
-      if (settled) {
-        break;
-      }
-      watchers.push(watchFactory(directory, done));
-    }
-    // Arm the poll fallback alongside the still-open subscriptions.
-    if (!settled) {
-      timer = setTimeout(done, input.pollMs);
-    }
+    setTimeout(resolve, input.pollMs);
   });
 }

@@ -17,6 +17,8 @@
  * Options value; the runtime resolver is injected so the resolution is proven
  * without a repository.
  */
+import { join } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -28,7 +30,9 @@ import { createCapturingCoordinationHomeResolver } from './fake-collaboration-ru
 
 const PRIMARY = '/workspace/oak';
 const LINKED = '/workspace/oak-worktrees/lane-b';
-const CLOSED_IN_PRIMARY = `${PRIMARY}/.agent/state/collaboration/closed-claims.archive.json`;
+// The default is host-joined onto the home, so the expectation is derived in
+// host form (identical to the POSIX literal on POSIX).
+const CLOSED_IN_PRIMARY = join(PRIMARY, '.agent/state/collaboration/closed-claims.archive.json');
 
 describe('resolveClosedPath (F-108 claims --closed default)', () => {
   it('defaults an omitted --closed to the coordination home closed-claims.archive.json', () => {
@@ -63,7 +67,7 @@ describe('resolveClosedPath (F-108 claims --closed default)', () => {
         cwd: LINKED,
         resolveCoordinationHome: resolver.resolve,
       }),
-    ).toBe('/repo/root/.agent/state/collaboration/closed-claims.archive.json');
+    ).toBe(join('/repo/root', '.agent/state/collaboration/closed-claims.archive.json'));
     expect(resolver.calls).toStrictEqual([]);
   });
 });

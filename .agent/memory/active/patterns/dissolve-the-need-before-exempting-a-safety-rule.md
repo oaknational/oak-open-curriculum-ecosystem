@@ -3,6 +3,7 @@ name: "Dissolve the Need Before Exempting a Safety Rule"
 polarity: pattern
 use_this_when: "A fix appears to require an exemption from a hard safety rule (never-use-git-to-remove-work, the verify-skip flag, a destructive-op guard) — before self-ratifying or escalating the exemption, seek a redesign that dissolves the need for the dangerous operation entirely."
 category: process
+layer: general
 proven_in: "agent-tools spawn-flow T1 — orphan-worktree-on-build-failure (2026-06-28); the never-use-git-to-remove-work exemption it seemed to need was dissolved by an idempotent-retry redesign"
 proven_date: 2026-06-28
 adjacent: ".agent/rules/never-use-git-to-remove-work.md and .agent/rules/rules-have-no-exceptions.md (the safety rules this protects); the cowpath anti-pattern (this is its constructive inverse — redesign so the constraint never binds, instead of designing around it)"

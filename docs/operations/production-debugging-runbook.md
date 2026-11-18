@@ -888,15 +888,15 @@ pnpm prod:requests
 
 ### Comparing Dev Server vs Built Harness
 
-| Aspect      | Dev Server (`pnpm dev`)       | Built Harness (`pnpm prod:harness`) |
-| ----------- | ----------------------------- | ----------------------------------- |
-| Purpose     | Active development            | Pre-deployment validation           |
-| Build       | TypeScript via tsx (no build) | Production bundle (dist/)           |
-| Speed       | Fast (hot reload)             | Slower (requires build)             |
-| Environment | Development                   | Production-like                     |
-| Auth        | Usually disabled              | Configurable scenarios              |
-| Logs        | Debug level, verbose          | Production format (JSON)            |
-| Use case    | Feature development           | Deployment diagnosis                |
+| Aspect      | Dev Server (`pnpm dev`)       | Built Harness (the `prod:harness` script) |
+| ----------- | ----------------------------- | ----------------------------------------- |
+| Purpose     | Active development            | Pre-deployment validation                 |
+| Build       | TypeScript via tsx (no build) | Production bundle (dist/)                 |
+| Speed       | Fast (hot reload)             | Slower (requires build)                   |
+| Environment | Development                   | Production-like                           |
+| Auth        | Usually disabled              | Configurable scenarios                    |
+| Logs        | Debug level, verbose          | Production format (JSON)                  |
+| Use case    | Feature development           | Deployment diagnosis                      |
 
 ### Available Configuration Scenarios
 
@@ -970,6 +970,8 @@ The harness emits structured JSON logs. Key patterns to look for:
 **Diagnosis workflow:**
 
 ```bash
+cd apps/oak-curriculum-mcp-streamable-http
+
 # Step 1: Build locally
 pnpm build
 
@@ -1007,6 +1009,8 @@ If the harness reproduces the hang:
 **Workflow:**
 
 ```bash
+cd apps/oak-curriculum-mcp-streamable-http
+
 # Build and run with debug logging
 pnpm build
 ENV_FILE=.env.harness.auth-disabled pnpm prod:harness 2>&1 | tee validation.log
@@ -1040,6 +1044,8 @@ grep '"level":"ERROR"' validation.log
 **Workflow:**
 
 ```bash
+cd apps/oak-curriculum-mcp-streamable-http
+
 # Create custom environment file
 cp config/harness-auth-disabled.env .env.harness.custom
 
@@ -1064,11 +1070,13 @@ pnpm prod:requests
 
 ### Integration with Automated Request Testing
 
-The request runner (`pnpm prod:requests`) sends a sequence of test requests:
+The request runner (the `prod:requests` script) sends a sequence of test requests:
 
 **Usage:**
 
 ```bash
+cd apps/oak-curriculum-mcp-streamable-http
+
 # Terminal 1: Start harness
 ENV_FILE=.env.harness.auth-disabled pnpm prod:harness
 
@@ -1129,6 +1137,8 @@ Exit code: `0` = all tests passed, `1` = one or more tests failed
 **Background execution with log capture:**
 
 ```bash
+cd apps/oak-curriculum-mcp-streamable-http
+
 # Run harness in background, capture logs
 ENV_FILE=.env.harness.auth-disabled pnpm prod:harness 2>&1 > harness.log &
 HARNESS_PID=$!
@@ -1146,6 +1156,8 @@ cat harness.log | jq 'select(.message | contains("bootstrap"))'
 **Custom port to avoid conflicts:**
 
 ```bash
+cd apps/oak-curriculum-mcp-streamable-http
+
 # Edit env file to use different port
 cp config/harness-auth-disabled.env .env.harness.custom
 echo "PORT=4000" >> .env.harness.custom
@@ -1160,6 +1172,8 @@ BASE_URL=http://localhost:4000 pnpm prod:requests
 **Comparing multiple configurations:**
 
 ```bash
+cd apps/oak-curriculum-mcp-streamable-http
+
 # Run tests for each scenario, capture results
 for scenario in auth-disabled auth-enabled missing-clerk; do
   echo "Testing $scenario..."

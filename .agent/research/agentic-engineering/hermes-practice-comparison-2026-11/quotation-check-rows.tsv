@@ -1,0 +1,89 @@
+.agent/skills/knowledge/consolidate-docs/SKILL-CANONICAL.md	676	676	capture → distil → **graduate → enforce**
+docs/architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md	65	65	Without consolidation, the loop stalls at refinement
+.agent/skills/knowledge/napkin/SKILL-CANONICAL.md	158	158	`start-right` loads it whole into every session
+.agent/skills/knowledge/napkin/SKILL-CANONICAL.md	78	79	Capture is sacred; fitness is a signal that consolidation or graduation is overdue
+.agent/skills/knowledge/napkin/SKILL-CANONICAL.md	232	232	When the napkin exceeds ~500 lines
+.agent/skills/knowledge/consolidate-docs/SKILL-CANONICAL.md	576	597	Process before archive
+.agent/memory/active/distilled.md	25	27	second sighting; we promote it and trust the Practice to invalidate a wrong promotion through experience
+.agent/practice-core/decision-records/PDR-101-graduation-requires-quorum.md	56	56	This is **not an owner gate.**
+.agent/practice-core/decision-records/PDR-101-graduation-requires-quorum.md	48	49	The deciding vote stays with the primary
+.agent/practice-core/decision-records/PDR-098-doctrine-traction-firing-detection-response.md	30	31	Authoring a rule installs *text*, not a *tripwire*
+.agent/practice-core/decision-records/PDR-130-two-speed-learning.md	53	54	every graduation at either speed carries a prediction
+.agent/practice-core/decision-records/PDR-130-two-speed-learning.md	69	70	the gate at which it MUST be decided
+.agent/practice-core/decision-records/PDR-130-two-speed-learning.md	73	74	There is no third outcome and no undated holding state
+.agent/plans/strategic/outcome-informed-practice-learning.plan.md	132	132	This node does not claim that the learning loop is already observable
+.agent/skills/knowledge/consolidate-docs/SKILL-CANONICAL.md	618	619	a napkin corpus measures recurrence and cannot measure extinction
+.agent/memory/operational/pending-graduations.md	7	12	fitness_item_dwell_hard: 7
+.agent/memory/operational/pending-graduations.md	269	270	2026-10-19
+.agent/memory/operational/pending-graduations.md	269	270	2026-10-26
+.agent/practice-core/decision-records/PDR-130-two-speed-learning.md	56	62	expected observable effect and its falsifier
+.agent/practice-core/decision-records/PDR-130-two-speed-learning.md	123	124	nobody has counted the graduations that landed without a prediction line
+.agent/skills/knowledge/consolidate-docs/SKILL-CANONICAL.md	620	621	surface-signature census per window, never an absence read
+.agent/skills/knowledge/consolidate-docs/SKILL-CANONICAL.md	636	644	persisted marker ledger
+.agent/research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-09-02.md	62	63	5.25M subagent tokens
+.agent/practice-core/decision-records/PDR-098-doctrine-traction-firing-detection-response.md	98	110	deliberately leaves open
+.agent/practice-core/decision-records/PDR-098-doctrine-traction-firing-detection-response.md	180	181	they price the empty quadrant
+.agent/memory/operational/review-cost-ledger.md	19	21	change only against this ledger
+.agent/research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-09-02.md	114	115	Sixteen of nineteen prior-kept mechanisms recurred within four weeks of the run that kept them
+.agent/research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-09-02.md	123	124	mechanisms whose actuator went quiet, not classes shown extinguished
+.agent/reports/agentic-engineering/why-written-lessons-kept-needing-the-owner-2026-09-16.md	52	53	Prose cures do not move recurrence; only interface changes do — now measured, not asserted
+.agent/reports/agentic-engineering/why-written-lessons-kept-needing-the-owner-2026-09-16.md	299	317	the doctrine did not change the rate, and the instrument did
+.agent/research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-09-02.md	280	282	A cured class leaves no entry when it stops firing, so no pass over napkins can show a cure worked
+.agent/research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-09-02.md	210	211	napkins over-record owner corrections
+.agent/practice-core/decision-records/PDR-130-two-speed-learning.md	115	117	on computed evidence
+.agent/memory/operational/pending-graduations.md	232	238	PROMOTED
+.agent/reports/agentic-engineering/why-written-lessons-kept-needing-the-owner-2026-09-16.md	81	83	the napkin has become a journal
+.agent/reports/agentic-engineering/why-written-lessons-kept-needing-the-owner-2026-09-16.md	81	83	of 708 mapped
+.agent/memory/operational/pending-graduations.md	270	270	agents calibrate to the most salient blame signal (accreted caution, or the last correction), not the standing policy
+.agent/reports/agentic-engineering/why-written-lessons-kept-needing-the-owner-2026-09-16.md	259	260	a rule-dense corpus always offers a licensing rule for more activity
+.agent/reports/agentic-engineering/why-written-lessons-kept-needing-the-owner-2026-09-16.md	145	157	What actually stopped a class
+.agent/research/agent-capacities-2026-09-09/report.md	9	9	An arrangement can remember without learning
+.agent/research/agent-capacities-2026-09-09/report.md	560	560	detection latency, authorised-revision latency, representation-propagation latency and behavioural-change latency
+.agent/research/agent-capacities-2026-09-09/report.md	568	577	later evaluation of the learning process
+.agent/research/agent-capacities-2026-09-09/report.md	525	525	governance choices, not calibrated statistical tests
+.agent/research/agent-capacities-2026-09-09/report.md	1029	1040	Rule and regulator retirement
+.agent/skills/distillation/SKILL-CANONICAL.md	109	109	Information loss is unacceptable
+.agent/reports/agentic-engineering/why-written-lessons-kept-needing-the-owner-2026-09-16.md	74	74	+29.9 %
+.agent/practice-core/decision-records/PDR-130-two-speed-learning.md	108	110	the lane is theatre
+.agent/practice-core/decision-records/PDR-098-doctrine-traction-firing-detection-response.md	172	176	recurred six times
+.agent/practice-core/decision-records/PDR-130-two-speed-learning.md	112	113	the obligation has no traction and needs a mechanical check or retirement
+.agent/practice-core/decision-records/PDR-130-two-speed-learning.md	122	124	not yet measured as a rate
+.agent/practice-core/decision-records/PDR-130-two-speed-learning.md	62	62	the register row that promoted it
+.agent/research/agentic-engineering/hermes-agent-v0.23.0-2026-11/memory-learning-architecture.md	456	458	No time, usage or score input exists in code
+.agent/research/agentic-engineering/hermes-agent-v0.23.0-2026-11/synthesis.md	164	165	most sessions produce at least one skill update
+.agent/research/agentic-engineering/hermes-agent-v0.23.0-2026-11/synthesis.md	73	75	One runs automatically in every installation and measures nothing. The other defines a measure and runs only when a person starts a script, with no code path back to the runtime
+.agent/research/agentic-engineering/hermes-agent-v0.23.0-2026-11/memory-learning-architecture.md	611	611	the hoarding library: one references/ file per session, incident narration instead of rules
+.agent/research/agentic-engineering/hermes-agent-v0.23.0-2026-11/memory-learning-architecture.md	612	612	become persistent self-imposed constraints that bite you later when the environment changes
+.agent/research/agentic-engineering/hermes-agent-v0.23.0-2026-11/memory-learning-architecture.md	624	624	A large library can therefore look fully curated while most of it is untouchable.
+.agent/research/agentic-engineering/hermes-agent-v0.23.0-2026-11/memory-learning-architecture.md	623	623	57 gone in one startup tick
+.agent/research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-09-02.md	280	280	The napkin measures recurrence, never extinction.
+.agent/practice-core/decision-records/PDR-130-two-speed-learning.md	96	98	which of our own changes worked?
+.agent/memory/operational/pending-graduations.md	258	272	Slow lane (PDR-130
+.agent/practice-core/decision-records/PDR-130-two-speed-learning.md	115	122	five slow-lane rows were decided on 2026-10-01
+.agent/skills/knowledge/consolidate-docs/SKILL-CANONICAL.md	271	282	recurred despite its home
+.agent/memory/operational/review-cost-ledger.md	15	16	an experiment, not a constant
+.agent/research/agentic-engineering/continuity-memory-and-knowledge-flow/historical-napkin-synthesis-2026-09-02.md	73	79	35 kept
+.agent/reports/agentic-engineering/why-written-lessons-kept-needing-the-owner-2026-09-16.md	299	317	weaker after 2026-09-12
+.agent/memory/active/napkin.md	1029	1030	0 of 8 behavioural cases passed, with the skill and without it, delta 0. The suite settled the land-or-close question the prose read could not
+.agent/memory/active/napkin.md	1038	1043	the suite cannot distinguish a weak skill from over-strict fixtures or judge
+.agent/memory/active/napkin.md	1038	1044	a null result needs a baseline that passes something
+.agent/memory/active/napkin.md	852	854	**The consolidation gate**: due — a lane closed with 356, the napkin is at critical and its rotation is unblocked, the register holds six due entries. Not bounded for this close; a curator seat's, after the partial plans by the owner's ordering
+.agent/memory/operational/pending-graduations.md	121	129	read whole
+.agent/practice-core/decision-records/PDR-130-two-speed-learning.md	85	86	a dedicated consolidation passes it by unless its date has arrived
+.agent/memory/operational/review-cost-ledger.md	229	229	#375
+.agent/memory/active/napkin.md	1032	1033	dollars, not seat-hours
+.agent/memory/operational/pending-graduations.md	198	199	ceremony has been invented, and then declared a blocker
+.agent/practice-core/decision-records/PDR-098-doctrine-traction-firing-detection-response.md	172	174	gained a fourth generation — hardened after each recurrence, never before one
+.agent/research/agentic-engineering/hermes-agent-v0.23.0-2026-11/memory-learning-architecture.md	620	620	wiped the other facts in multi-fact entries
+.agent/research/agentic-engineering/hermes-agent-v0.23.0-2026-11/memory-learning-architecture.md	625	625	a per-review denial storm
+.agent/plans/strategic/outcome-informed-practice-learning.plan.md	44	45	maintaining the learning substrate
+.agent/plans/strategic/outcome-informed-practice-learning.plan.md	93	93	Doctrine disposition reviews
+.agent/plans-backlog-2026-07/agentic-engineering-enhancements/future/action-time-structural-interrupt-design-space.plan.md	871	874	run over the archive
+.agent/skills/cognition/retrospective/SKILL-CANONICAL.md	37	37	The owner commissions a retrospective on a completed arc
+.agent/skills/knowledge/consolidate-docs/SKILL-CANONICAL.md	63	79	the owner requests historical synthesis
+.agent/skills/knowledge/napkin/SKILL-CANONICAL.md	18	18	This skill is always active
+.agent/plans/delivery/consolidation-induction.plan.md	60	61	a signal never starts a session by itself — owner/Director word does
+.agent/plans/delivery/consolidation-signal.plan.md	1	6	a noticer, never a nag
+.agent/plans/delivery/consolidation-induction.plan.md	1	6	a single agent-inducible action
+.agent/plans/delivery/consolidation-signal.plan.md	53	56	Automation that starts sessions from the signal
+.agent/plans/delivery/consolidation-ledger.plan.md	76	80	any processing automation

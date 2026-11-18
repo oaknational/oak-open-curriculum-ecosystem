@@ -11,6 +11,8 @@ export interface ParsedAgentIdentityArgs {
   readonly helpRequested: boolean;
   /** Explicit seed supplied with `--seed`, when present. */
   readonly seed?: string;
+  /** Seat platform label supplied with `--platform`, when present. */
+  readonly platform?: string;
   /** Output format requested by the operator. */
   readonly format: AgentIdentityFormat;
 }
@@ -44,6 +46,7 @@ export type SeedResult =
 interface MutableParsedAgentIdentityArgs {
   helpRequested: boolean;
   seed: string | undefined;
+  platform: string | undefined;
   format: AgentIdentityFormat;
 }
 
@@ -58,6 +61,7 @@ export function parseAgentIdentityArgs(argv: readonly string[]): ParseResult {
   const parsed: MutableParsedAgentIdentityArgs = {
     helpRequested: false,
     seed: undefined,
+    platform: undefined,
     format: 'kebab',
   };
 
@@ -76,16 +80,10 @@ export function parseAgentIdentityArgs(argv: readonly string[]): ParseResult {
 }
 
 function toParsedArgs(parsed: MutableParsedAgentIdentityArgs): ParsedAgentIdentityArgs {
-  if (parsed.seed === undefined) {
-    return {
-      helpRequested: parsed.helpRequested,
-      format: parsed.format,
-    };
-  }
-
   return {
     helpRequested: parsed.helpRequested,
-    seed: parsed.seed,
+    ...(parsed.seed === undefined ? {} : { seed: parsed.seed }),
+    ...(parsed.platform === undefined ? {} : { platform: parsed.platform }),
     format: parsed.format,
   };
 }
@@ -105,6 +103,9 @@ function handleArgument(
   if (current === '--seed') {
     return handleSeedFlag(values, parsed);
   }
+  if (current === '--platform') {
+    return handlePlatformFlag(values, parsed);
+  }
   if (current === '--format') {
     return handleFormatFlag(values, parsed);
   }
@@ -115,6 +116,14 @@ function handleSeedFlag(values: string[], parsed: MutableParsedAgentIdentityArgs
   const value = readFlagValue(values, '--seed');
   if (value.kind === 'ok') {
     parsed.seed = value.value;
+  }
+  return value;
+}
+
+function handlePlatformFlag(values: string[], parsed: MutableParsedAgentIdentityArgs): SeedResult {
+  const value = readFlagValue(values, '--platform');
+  if (value.kind === 'ok') {
+    parsed.platform = value.value;
   }
   return value;
 }

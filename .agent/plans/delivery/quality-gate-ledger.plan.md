@@ -18,7 +18,7 @@ tickets:
   - MCP-491
 depends_on: []
 owner_gates: []
-last_updated: 2026-08-04
+last_updated: 2026-09-10
 ---
 
 # Quality-gate ledger — a register that recomputes
@@ -250,6 +250,35 @@ out, or accepted with reasons — and none is silently absorbed to keep a step t
 Where a finding is a live gate defect, it routes to its own ticket rather than
 widening this lane; that routing IS the discipline, not an evasion of it.
 
+Findings recorded ahead of the inventory (dated; each a disposition for step 1):
+
+- **2026-09-08 — a lint gate reads a transient build artefact.** The
+  `eslint-plugin-standards` package's lint task (`eslint .`) failed with ENOENT on
+  `tsup.config.bundled_<random>.mjs`, the file tsup writes and deletes while
+  bundling its config, because ESLint's glob caught it mid-life while the package's
+  build ran in parallel under turbo (PR #93's guard head; a second CI cycle on
+  #89). Disposition: a gate defect — the package's ESLint ignores gain
+  `tsup.config.bundled_*.mjs`, or its lint task depends on its build; one-line
+  config change, config-expert reviewed; until it lands every PR the race bites
+  pays an empty-commit re-trigger. The inventory records the gate's ordering
+  dependency as part of its description.
+- **2026-09-10 — the transient-artefact race cured at its level; the shared ignore
+  list over-reaches.** The race bit again on #116 (`workspace-config:lint`, run
+  34459013126). First-hand: the shared ESLint ignores already excluded
+  `**/tsup.config.*` and `**/*.bundled_*.mjs`; the two packages that fail are the
+  two self-bootstrap configs (`workspace-config`, `oak-eslint`) that cannot import
+  the shared list. #117 (SHA:9a34c82f3) restated `**/*.bundled_*.mjs` in both —
+  the one pattern the transient file needs — after the config-expert review showed
+  that `**/tsup.config.*` also hides the hand-written
+  `packages/core/workspace-config/src/tsup.config.base.ts` module (the
+  `createLibConfig`/`createSdkConfig`/`createAppConfig` source every tsup config
+  imports) from lint. Disposition, open: the SHARED list's `**/tsup.config.*`
+  (`packages/core/oak-eslint/src/shared.ts`, since 2026-05-22) hides that same
+  module from the root lint today — narrow it to the transient pattern at the
+  generator in its own config-expert-reviewed PR and record the restored coverage;
+  falsifier: `eslint --print-config` on the module from the repo root printing
+  `undefined` after that PR lands.
+
 ## Falsifiers held open
 
 - If the inventory finds most gates are **not** mechanically discoverable, the
@@ -316,7 +345,7 @@ were taken with evidence in that plan; D7 has since been superseded (see
 - D14 precision: 22 test files sit under script directories; 21 are matched by
   some glob and exactly one was orphaned (the Vercel guard suite, since moved
   and running via PR #751's branch).
-- D15: `.agent/skills/gates/SKILL-CANONICAL.md` hand-lists a check sequence
+- D15: `.agent/skills/change-custody/gates/SKILL-CANONICAL.md` hand-lists a check sequence
   already drifted from the live scripts. D16: `docs/engineering/workflow.md`
   points at a build-system quick-reference table that does not exist and names
   retired smoke tests. Both are hand-maintained duplicates for step 6's

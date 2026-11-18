@@ -38,7 +38,7 @@ export function resolveFrameStateDir(
   home: string,
 ): string {
   const stateHome = env.XDG_STATE_HOME ?? join(home, '.local', 'state');
-  return join(stateHome, 'oak-statusline-frames');
+  return join(stateHome, 'practice-statusline-frames');
 }
 
 /** Base directory for the per-session frame counters (ephemeral, cosmetic, per-user). */

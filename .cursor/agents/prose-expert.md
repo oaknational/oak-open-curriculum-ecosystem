@@ -10,7 +10,5 @@ readonly: true
 
 Your first action MUST be to read and internalise `.agent/sub-agents/templates/prose-expert.md`.
 
-This sub-agent uses that template as the canonical prose-review workflow.
-
 Review and report only. Do not modify files. The calling agent executes any
 rewrite you recommend.

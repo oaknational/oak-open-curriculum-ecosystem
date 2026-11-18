@@ -3,6 +3,7 @@ name: "PR Delivery: Monitor to Merge, Flat Stacks, Pure Diffs"
 polarity: pattern
 use_this_when: "Opening a pull request, choosing the base for a dependent change, or resolving merge conflicts that touch shared registry state."
 category: process
+layer: general
 proven_in: "PR arc #152–#198 (2026-06-10 → 2026-06-12); owner-shaped 2026-06-10"
 proven_date: 2026-06-10
 barrier:

@@ -146,7 +146,7 @@ The owner had to correct each of these. They are the real reason this was handed
    explicitly rejected ("the primary is not special"). Build-at-spawn + the existing soft-fail.
    (§B2 = the proposed statusline-operability fix to pin the statusline *binary/adapter* to the primary
    checkout root so an unbuilt linked worktree still finds the built adapter — defined at
-   `.agent/memory/operational/threads/statusline-enhancements.next-session.md:69`. Build-at-spawn makes
+   `.agent/memory/operational/threads/paused/statusline-enhancements.next-session.md:69`. Build-at-spawn makes
    every spawned worktree built, so the pin is unneeded; manual worktrees soft-fail gracefully.)
    (Memory: `feedback_cowpath_anti_pattern`.)
 5. **The spawn brief invokes `/oak-start-right-team`; it does not re-implement it.** Re-authoring the

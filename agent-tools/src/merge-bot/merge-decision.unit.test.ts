@@ -1,7 +1,138 @@
 import { describe, expect, it } from 'vitest';
 
 import { PR_VERDICT_STATES, type PrVerdict } from '../pr-watch/state-types.js';
-import { decideMergeAction, verdictAwaitsSettlement } from './merge-decision.js';
+import {
+  decideMergeAction,
+  RECORDS_CLASS_MERGE_STATES,
+  verdictAwaitsSettlement,
+  verdictMergesRecordsClass,
+} from './merge-decision.js';
+
+describe('the records class at the door', () => {
+  const owedLeg: PrVerdict = {
+    state: 'SILENT-WAIT-NO-REVIEWER',
+    evidence: ['copilot-pull-request-reviewer: OWED — no review binds the current tip'],
+  };
+  const records = { kind: 'records', pathCount: 4 } as const;
+  const code = { kind: 'code', offenders: ['.claude/settings.json'] } as const;
+
+  it('merges a records-class pull request on every verdict that differs from settled only by the vendor leg', () => {
+    for (const state of RECORDS_CLASS_MERGE_STATES) {
+      const decision = decideMergeAction({
+        verdict: { state, evidence: [] },
+        allowMergeCommit: true,
+        expectedDeclared: true,
+        declaredEmpty: false,
+        botAuthored: true,
+        changeClass: records,
+      });
+      expect(decision.kind, state).toBe('merge');
+    }
+  });
+
+  it('names the ground when the class, not the verdict, opened the door, and stays silent on SETTLE-READY', () => {
+    const byClass = decideMergeAction({
+      verdict: owedLeg,
+      allowMergeCommit: true,
+      expectedDeclared: true,
+      declaredEmpty: false,
+      botAuthored: true,
+      changeClass: records,
+    });
+    expect(byClass.kind).toBe('merge');
+    if (byClass.kind === 'merge') {
+      expect(byClass.ground).toContain('records-class (4 changed paths');
+      expect(byClass.ground).toContain('SILENT-WAIT-NO-REVIEWER');
+      expect(byClass.ground).toContain('harvested after the merge');
+    }
+
+    const settled = decideMergeAction({
+      verdict: { state: 'SETTLE-READY', evidence: [] },
+      allowMergeCommit: true,
+      expectedDeclared: true,
+      declaredEmpty: false,
+      botAuthored: true,
+      changeClass: records,
+    });
+    expect(settled).toStrictEqual({ kind: 'merge' });
+  });
+
+  it('keeps a code-class pull request at the door on the same verdict and names the code paths', () => {
+    const decision = decideMergeAction({
+      verdict: owedLeg,
+      allowMergeCommit: true,
+      expectedDeclared: true,
+      declaredEmpty: false,
+      botAuthored: true,
+      changeClass: code,
+    });
+
+    expect(decision).toStrictEqual({
+      kind: 'refuse',
+      reason:
+        'verdict SILENT-WAIT-NO-REVIEWER — only SETTLE-READY merges; a records-class pull request would merge here, but the diff is code-class (.claude/settings.json)',
+      awaitsSettlement: false,
+    });
+  });
+
+  it('never lets the records class past a red check, an open thread, unclassified evidence or a draft', () => {
+    for (const state of [
+      'CHECKS-RED',
+      'CHECKS-RUNNING',
+      'THREADS-OPEN',
+      'UNCLASSIFIED-EVIDENCE',
+      'DRAFT',
+      'BEHIND-BASE',
+      'CONFLICT-DIRTY',
+      'ARMED-BEHIND-RED',
+      'CLOSED',
+    ] as const) {
+      const decision = decideMergeAction({
+        verdict: { state, evidence: [] },
+        allowMergeCommit: true,
+        expectedDeclared: true,
+        declaredEmpty: false,
+        botAuthored: true,
+        changeClass: records,
+      });
+      expect(decision, state).toStrictEqual({
+        kind: 'refuse',
+        reason: `verdict ${state} — only SETTLE-READY merges`,
+        // Only running checks resolve by time; every other state here is terminal.
+        awaitsSettlement: state === 'CHECKS-RUNNING',
+      });
+      expect(verdictMergesRecordsClass(state), state).toBe(false);
+    }
+  });
+
+  it('still refuses a defaulted expected set and disallowed merge commits for the records class', () => {
+    expect(
+      decideMergeAction({
+        verdict: owedLeg,
+        allowMergeCommit: true,
+        expectedDeclared: false,
+        declaredEmpty: false,
+        botAuthored: true,
+        changeClass: records,
+      }).kind,
+    ).toBe('refuse');
+    expect(
+      decideMergeAction({
+        verdict: owedLeg,
+        allowMergeCommit: false,
+        expectedDeclared: true,
+        declaredEmpty: false,
+        botAuthored: true,
+        changeClass: records,
+      }),
+    ).toStrictEqual({
+      kind: 'refuse',
+      reason:
+        'repo settings no longer allow merge commits (allow_merge_commit is false) — the never-squash ruling stands; restore the setting rather than changing method',
+      awaitsSettlement: false,
+    });
+  });
+});
 
 /**
  * The verdict→action mapping is the heart of `merge-bot merge`: it acts only
@@ -19,6 +150,8 @@ const baseInput = {
   verdict: SETTLE_READY,
   allowMergeCommit: true,
   expectedDeclared: true,
+  declaredEmpty: false,
+  botAuthored: true,
 } as const;
 
 describe('decideMergeAction', () => {
@@ -97,6 +230,8 @@ describe('verdictAwaitsSettlement', () => {
     'ARMED-BEHIND-RED': false,
     'QUOTA-SKIPPED': false,
     'SETTLED-NO-REVIEW': false,
+    // A refused near-miss resolves by an operator act (a re-request), never by time.
+    'UNCLASSIFIED-EVIDENCE': false,
     MERGED: false,
     CLOSED: false,
     'CONFLICT-DIRTY': false,
@@ -121,5 +256,69 @@ describe('decideMergeAction — the timeout-skip settled round (security D1)', (
     if (decision.kind === 'refuse') {
       expect(decision.reason).toContain('SETTLED-NO-REVIEW');
     }
+  });
+});
+
+describe('the code-class suffix on an empty change set', () => {
+  it('names the absence of any changed path rather than an empty list', () => {
+    const decision = decideMergeAction({
+      verdict: { state: 'SILENT-WAIT-NO-REVIEWER', evidence: [] },
+      allowMergeCommit: true,
+      expectedDeclared: true,
+      declaredEmpty: false,
+      botAuthored: true,
+      changeClass: { kind: 'code', offenders: [] },
+    });
+
+    expect(decision).toStrictEqual({
+      kind: 'refuse',
+      reason:
+        'verdict SILENT-WAIT-NO-REVIEWER — only SETTLE-READY merges; a records-class pull request would merge here, but the diff is code-class (no changed path)',
+      awaitsSettlement: false,
+    });
+  });
+});
+
+describe("decideMergeAction — a set declared empty merges the bot's own pull requests only", () => {
+  const settled: PrVerdict = { state: 'SETTLE-READY', evidence: [] };
+
+  it("refuses a person's pull request on an empty set, naming the ruling", () => {
+    const decision = decideMergeAction({
+      verdict: settled,
+      allowMergeCommit: true,
+      expectedDeclared: true,
+      declaredEmpty: true,
+      botAuthored: false,
+    });
+    expect(decision.kind).toBe('refuse');
+    if (decision.kind === 'refuse') {
+      expect(decision.reason).toContain('--expect none');
+      expect(decision.reason).toContain('2026-09-03');
+      expect(decision.awaitsSettlement).toBe(false);
+    }
+  });
+
+  it("refuses a person's pull request on an empty set while its checks run as a terminal refusal: no poll outwaits an author the set does not admit", () => {
+    const decision = decideMergeAction({
+      verdict: { state: 'CHECKS-RUNNING', evidence: [] },
+      allowMergeCommit: true,
+      expectedDeclared: true,
+      declaredEmpty: true,
+      botAuthored: false,
+    });
+    expect(decision).toMatchObject({ kind: 'refuse', awaitsSettlement: false });
+    expect(decision.kind === 'refuse' ? decision.reason : '').toContain('did not author');
+  });
+
+  it("merges the bot's own pull request on an empty set once settled", () => {
+    expect(
+      decideMergeAction({
+        verdict: settled,
+        allowMergeCommit: true,
+        expectedDeclared: true,
+        declaredEmpty: true,
+        botAuthored: true,
+      }),
+    ).toStrictEqual({ kind: 'merge' });
   });
 });

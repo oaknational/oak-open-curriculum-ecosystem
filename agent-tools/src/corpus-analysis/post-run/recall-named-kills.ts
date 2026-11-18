@@ -1,3 +1,4 @@
+import { escapeRegExp } from '../../core/escape-reg-exp.js';
 import type { MetaOutput } from '../recall-schemas.js';
 
 /**
@@ -14,13 +15,45 @@ import type { MetaOutput } from '../recall-schemas.js';
  */
 
 /**
- * Whole-id candidate mentions in recall notes (word-boundaried, so C18 never bleeds into
- * C185). The `C<digits>` shape is this run's candidate-id convention, which the candidate
- * schema's plain non-empty-string id does not constrain — a future id-format change must
- * revisit this heuristic (a mismatch is a miss, never a corruption: mentions are
- * intersected with the real candidate-id set).
+ * Whole-id mention matchers built from the run's own candidate ids, since the candidate schema
+ * constrains no id shape: each id matches as a whole token, with no ASCII id character (a
+ * letter, a digit, `_` or `-`) on either side, so C18 never bleeds into C185 and an id such as
+ * `candidate-1` is found. Longest ids come first, for {@link mentionedCandidateIds}.
  */
-const CANDIDATE_MENTION = /\bC\d+\b/gu;
+function mentionMatchers(
+  candidateIds: ReadonlySet<string>,
+): readonly (readonly [string, RegExp])[] {
+  return [...candidateIds]
+    .toSorted((a, b) => b.length - a.length)
+    .map((candidateId) => [
+      candidateId,
+      new RegExp(`(?<![A-Za-z0-9_-])${escapeRegExp(candidateId)}(?![A-Za-z0-9_-])`, 'gu'),
+    ]);
+}
+
+/**
+ * The candidate ids a note mentions. A `.` or any other character outside the id class reads
+ * as a boundary, so one id can match inside another's mention (C1 inside C1.1); the longer id
+ * claims its span first and a match inside a claimed span names nothing.
+ */
+function mentionedCandidateIds(
+  note: string,
+  matchers: readonly (readonly [string, RegExp])[],
+): readonly string[] {
+  const claimed: (readonly [number, number])[] = [];
+  const named: string[] = [];
+  for (const [candidateId, matcher] of matchers) {
+    for (const match of note.matchAll(matcher)) {
+      const start = match.index;
+      const end = start + match[0].length;
+      if (claimed.every(([from, to]) => end <= from || to <= start)) {
+        claimed.push([start, end]);
+        named.push(candidateId);
+      }
+    }
+  }
+  return named;
+}
 
 /** How the recall judgments name one killed candidate, and which baselines name it. */
 export interface RecallNamedKill {
@@ -40,6 +73,7 @@ export function recallNamedKills(
   killIds: ReadonlySet<string>,
 ): ReadonlyMap<string, RecallNamedKill> {
   const records = new Map<string, MutableRecallNamedKill>();
+  const matchers = mentionMatchers(candidateIds);
   const add = (
     candidateId: string,
     source: RecallNamedKill['source'],
@@ -59,14 +93,14 @@ export function recallNamedKills(
     if (match.matchedCandidateId !== undefined && killIds.has(match.matchedCandidateId)) {
       add(match.matchedCandidateId, 'recall-matched', match.baselineId);
     }
-    for (const mention of match.note.matchAll(CANDIDATE_MENTION)) {
-      const mentionedId = mention[0];
-      if (
-        mentionedId !== match.matchedCandidateId &&
-        candidateIds.has(mentionedId) &&
-        killIds.has(mentionedId)
-      ) {
-        add(mentionedId, 'note-named', match.baselineId);
+    // The note-named route applies to a MISSED baseline only: its note says where the
+    // substance lives; a re-found baseline's note names its match, not a salvage.
+    if (match.verdict !== 'missed') {
+      continue;
+    }
+    for (const candidateId of mentionedCandidateIds(match.note, matchers)) {
+      if (killIds.has(candidateId)) {
+        add(candidateId, 'note-named', match.baselineId);
       }
     }
   }

@@ -35,9 +35,9 @@ function compile<T>(
       validate: (value: string) => z.iso.datetime({ offset: true }).safeParse(value).success,
     });
     return ok(ajv.compile<T>(schema));
-  } catch (cause: unknown) {
+  } catch (error: unknown) {
     return err(
-      new EstateReviewError('CONFIG_INVALID', `${label} schema did not compile`, { cause }),
+      new EstateReviewError('CONFIG_INVALID', `${label} schema did not compile`, { cause: error }),
     );
   }
 }

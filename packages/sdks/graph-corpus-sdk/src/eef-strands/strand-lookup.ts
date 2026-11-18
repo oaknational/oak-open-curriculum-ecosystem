@@ -8,6 +8,7 @@
  * type-predicate. They live in this gate-checked module as derived logic; the
  * raw data lives in the duplication-excluded `*.external-data.ts` snapshot.
  */
+import { typeSafeIncludes } from '@oaknational/type-helpers';
 import { EEF_TOOLKIT_DATA } from './eef-toolkit.external-data.js';
 
 /** The whole toolkit snapshot's static type, inferred from the `as const` literal. */
@@ -99,11 +100,10 @@ export const EEF_STRAND_IDS: readonly EefStrandId[] = EEF_TOOLKIT_DATA.strands.m
  * @returns `true` iff `value` is a string that is a real corpus strand id.
  */
 export function isValidStrandKey(value: unknown): value is EefStrandId {
-  // `.some` with an explicit `===`, not `.includes(value)`: `includes` expects
-  // an `EefStrandId` argument, so passing `unknown` would not typecheck without
-  // an `as` cast — the one widening this module exists to avoid. The predicate
-  // form compares `unknown` against each exactly-typed id soundly.
-  return EEF_STRAND_IDS.some((id) => id === value);
+  // `typeSafeIncludes`, not `.includes(value)`: `includes` expects an
+  // `EefStrandId` argument, so passing `unknown` would not typecheck without an
+  // `as` cast — the one widening this module exists to avoid.
+  return typeSafeIncludes(EEF_STRAND_IDS, value);
 }
 
 /**
@@ -152,3 +152,22 @@ export function strandById<const Id extends EefStrandId>(id: Id): EefStrandById[
   }
   return found;
 }
+
+/**
+ * The string keys of every member of a union of object types. `keyof` over a
+ * union yields only the keys every member shares, so a union of strand shapes
+ * loses every optional section under plain `keyof`; this distributes first.
+ */
+export type KeysOfUnion<T> = T extends unknown ? Extract<keyof T, string> : never;
+
+/**
+ * The strand union members that carry a given key, and so the exact type of
+ * that section across the strands that have it. `Extract` selects exactly the
+ * members with the key; the constraint rejects a key no strand carries rather
+ * than resolving it silently to `never`. A union `K` selects the members that
+ * carry every key in it, not any.
+ */
+export type StrandCarrying<K extends KeysOfUnion<EefStrand>> = Extract<
+  EefStrand,
+  Record<K, unknown>
+>;

@@ -16,7 +16,7 @@ durable comparison; the skill body carries the operational rules.
 
 | | s2s (SendMessage) | ARC (rapid-comms channel files) | Stream (comms events) | Slack-via-Watcher |
 | --- | --- | --- | --- | --- |
-| Latency | seconds (wakes the receiver) | seconds (~15s tail worst case, per the ARC protocol) | event-driven delivery to watching seats; pickup waits on the receiving harness's wake | minutes — the Watcher's stated tick cadence |
+| Latency | seconds (wakes the receiver) | seconds (~15s tail worst case, per the ARC protocol) | delivery on the watcher's next pass (the remainder of any pass in flight, one `--poll-ms` wait, 500 ms by default, and the next pass's run time; a backlog above the per-pass cap takes more passes) to watching seats; pickup waits on the receiving harness's wake | minutes — the Watcher's stated tick cadence |
 | Durability | none — receiver's transcript only | thread-durable until folded | event files, folded to durable homes | channel history durable on Slack's side; conserves NOTHING into the estate without the mirroring obligation |
 | Audience | one live Claude session — local by default, other machines when Remote Control connects them | named seats on a shared thread | whole estate, including absent and FUTURE agents (gap sweep) | the owner and humans natively; agents via the Watcher |
 | Platform | Claude Code only | any agent that writes files | any agent (CLI) | any agent with the Slack MCP; humans with Slack |

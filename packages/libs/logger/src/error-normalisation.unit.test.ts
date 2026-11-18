@@ -59,6 +59,23 @@ describe('normalizeError', () => {
     });
   });
 
+  it('renders boolean and bigint primitives as their string forms', () => {
+    expect(normalizeError(true)).toMatchObject({ name: 'Error', message: 'true' });
+    expect(normalizeError(false)).toMatchObject({ name: 'Error', message: 'false' });
+    expect(normalizeError(9_007_199_254_740_993n)).toMatchObject({
+      name: 'Error',
+      message: '9007199254740993',
+    });
+  });
+
+  it('names a thrown symbol by its description', () => {
+    expect(normalizeError(Symbol('token'))).toMatchObject({
+      name: 'SymbolError',
+      message: 'token',
+    });
+    expect(normalizeError(Symbol())).toMatchObject({ name: 'SymbolError', message: 'Symbol' });
+  });
+
   it('handles nullish values as Unknown error', () => {
     expect(normalizeError(null)).toMatchObject({
       name: 'Error',
@@ -90,6 +107,37 @@ describe('normalizeError', () => {
         name: 'Error',
         message: 'nested failure',
       },
+    });
+  });
+
+  it('names a thrown class instance by its class when it carries no name', () => {
+    class QuotaExceeded {
+      readonly limit = 3;
+    }
+
+    expect(normalizeError(new QuotaExceeded())).toMatchObject({
+      name: 'QuotaExceeded',
+      message: '{"limit":3}',
+    });
+  });
+
+  it('describes a thrown object with no fields by its own toString', () => {
+    const thrown = { toString: (): string => 'own description' };
+    Object.defineProperty(thrown, 'toString', { enumerable: false });
+
+    expect(normalizeError(thrown)).toMatchObject({ name: 'Error', message: '"own description"' });
+  });
+
+  it('describes a thrown class instance with no fields by its inherited toString', () => {
+    class Described {
+      toString(): string {
+        return 'inherited description';
+      }
+    }
+
+    expect(normalizeError(new Described())).toMatchObject({
+      name: 'Described',
+      message: '"inherited description"',
     });
   });
 

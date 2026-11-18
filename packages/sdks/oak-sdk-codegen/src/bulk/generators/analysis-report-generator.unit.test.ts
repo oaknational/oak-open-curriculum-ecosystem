@@ -193,6 +193,35 @@ describe('generateAnalysisReport', () => {
       expect(fractionCandidate).toBeDefined();
       expect(fractionCandidate?.synonyms).toContain('rational number');
     });
+
+    it('counts a nested parenthetical once and separate parentheticals each', () => {
+      const extractedData = createTestExtractedData({
+        keywords: [
+          {
+            term: 'median',
+            displayTerm: 'median',
+            definition: 'The middle value (the central (or midpoint) value) of an ordered set',
+            frequency: 3,
+            subjects: ['maths'],
+            firstYear: 5,
+            lessonSlugs: ['lesson-7'],
+          },
+          {
+            term: 'mode',
+            displayTerm: 'mode',
+            definition: 'The most frequent value (the commonest) in a set (of any size)',
+            frequency: 2,
+            subjects: ['maths'],
+            firstYear: 5,
+            lessonSlugs: ['lesson-8'],
+          },
+        ],
+      });
+
+      const report = generateAnalysisReport(extractedData);
+
+      expect(report.synonymPatterns.parentheticalCount).toBe(3);
+    });
   });
 
   describe('misconceptionDensity', () => {

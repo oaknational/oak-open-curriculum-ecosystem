@@ -82,16 +82,17 @@ served pages.
   architecture; keep it current when you do.
 - `CHANGELOG.md` — semver history + public-surface definition.
 - `KNOWN-ISSUES.md` — understood gotchas, read before debugging.
-- `docs/consuming-nextjs.md` — install, theme wiring, identity,
+- `packages/design/oak-design-system/docs/consuming-nextjs.md` — install, theme wiring, identity,
   §5b behaviour-library chooser, §7 new-component recipe.
-- `docs/pairing-base-ui.md` (default) / `docs/pairing-react-aria.md`
-  (dates + conformance) / `docs/pairing-ark-ui.md` (non-React) — the
+- `packages/design/oak-design-system/docs/pairing-base-ui.md` (default) / `packages/design/oak-design-system/docs/pairing-react-aria.md`
+  (dates + conformance) / `packages/design/oak-design-system/docs/pairing-ark-ui.md` (non-React) — the
   behaviour-library pairing guides.
-- `docs/wrapped-widget-a11y-checklist.md`, `docs/console-tui-tones.md`,
-  `docs/integration-oak-curriculum-hub.md` (the live consumer's migration
-  plan), `docs/nextjs-theme-switcher.tsx.txt`.
-- `docs/one-html-many-css-compositions.md` — the white-label composition
-  doctrine.
+- `packages/design/oak-design-system/docs/wrapped-widget-a11y-checklist.md`, `packages/design/oak-design-system/docs/console-tui-tones.md`,
+  `packages/design/oak-design-system/docs/integration-oak-curriculum-hub.md` (the live consumer's migration
+  plan), `packages/design/oak-design-system/docs/nextjs-theme-switcher.tsx.txt`.
+- `packages/design/oak-design-system/docs/one-html-many-css-compositions.md` — a pointer to the canonical white-label
+  composition doctrine, which lives outside this root at the repository-root path
+  `docs/governance/one-html-many-css-compositions.md` (four directories up from here).
 
 ## Generated and integration surfaces
 

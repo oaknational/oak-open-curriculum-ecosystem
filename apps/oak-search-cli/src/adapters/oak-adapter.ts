@@ -11,15 +11,14 @@ import { createOakBaseClient } from '@oaknational/curriculum-sdk';
 import { createRedisClient, withRedisConnection } from './sdk-cache';
 import { cacheLogger } from '../lib/logger';
 import { createUncachedClient, createCachedClient, buildClientConfig } from './sdk-client-factory';
-import type {
+import type { OakClient } from './oak-adapter-types';
+
+export type {
+  OakClient,
   LessonGroupResponse,
   LessonsPaginationOptions,
   SubjectSequenceEntry,
-  OakClient,
 } from './oak-adapter-types';
-
-export type { LessonGroupResponse, LessonsPaginationOptions, SubjectSequenceEntry };
-export type { OakClient } from './oak-adapter-types';
 export type { ThreadEntry } from './oak-adapter-threads';
 
 /** Environment config required to create an Oak client. */

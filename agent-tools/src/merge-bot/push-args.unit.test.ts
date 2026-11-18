@@ -1,6 +1,18 @@
+import { unwrapErr } from '@oaknational/result';
 import { describe, expect, it } from 'vitest';
 
 import { parsePushArgs } from './push-args.js';
+import {
+  gitRefFormatOracle,
+  RefFormatOracleUnavailableError,
+  type CheckRefFormatRun,
+} from './ref-format.js';
+
+/** A check-ref-format run that never starts, as with no git on `PATH`. */
+const gitCannotStart = (): CheckRefFormatRun => ({
+  status: null,
+  error: new Error('spawnSync git ENOENT'),
+});
 
 /**
  * The `merge-bot push` argv contract — pure parsing, no fakes: the surface is
@@ -55,7 +67,7 @@ describe('parsePushArgs', () => {
 
   it('requires --branch to be a git branch name', () => {
     // Blank, flag-shaped, option-shaped and ref-illegal values all fail: the
-    // value lands inside a `HEAD:<branch>` refspec in git's OWN argv, so it
+    // value lands inside a `<commit>:refs/heads/<branch>` refspec in git's OWN argv, so it
     // must never be able to read as anything but a branch name.
     for (const bad of ['', ' ', '--json', '-x', '--upload-pack=evil', 'a..b', 'feat/', 'x.lock']) {
       const parsed = parsePushArgs(['--branch', bad]);
@@ -93,6 +105,35 @@ describe('parsePushArgs', () => {
     for (const good of ['main', 'jimcresswell/mcp-508-merge-bot-merge', 'release-1.2.3', 'x_y']) {
       expect(parsePushArgs(['--branch', good]).ok).toBe(true);
     }
+  });
+
+  it('RETURNS the failure of a git that cannot run rather than throwing it through the Result', () => {
+    // git's real oracle runs here, with a run that never starts, as with no
+    // git on PATH: this parser's whole contract is its Result, so the failure
+    // is returned and typed rather than read as an illegal branch name.
+    const parsed = parsePushArgs(['--branch', 'lane'], {
+      refFormatOracle: gitRefFormatOracle(gitCannotStart),
+    });
+
+    expect(parsed.ok).toBe(false);
+    if (!parsed.ok) {
+      // Typed, so the front door can answer it as operational (exit 1) rather
+      // than as a mistyped argument (exit 2 plus a usage dump).
+      expect(parsed.error).toBeInstanceOf(RefFormatOracleUnavailableError);
+      // git's own remedy survives; the usage text does not drown it.
+      expect(parsed.error.message).toContain('install git or put it on PATH');
+      expect(parsed.error.message).not.toContain('--json puts EXACTLY');
+    }
+  });
+
+  it('RETURNS a git that ends without an exit status as operational, never an illegal name', () => {
+    const error = unwrapErr(
+      parsePushArgs(['--branch', 'lane'], {
+        refFormatOracle: gitRefFormatOracle(() => ({ status: null })),
+      }),
+    );
+
+    expect(error).toBeInstanceOf(RefFormatOracleUnavailableError);
   });
 
   it('refuses a repeated --branch rather than letting argv order pick the target', () => {

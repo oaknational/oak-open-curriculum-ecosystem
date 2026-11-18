@@ -48,7 +48,7 @@ The semantic search system uses Elasticsearch Serverless with ELSER embeddings.
 1. **Define the index mapping** — Create a mapping generator in the SDK that produces Elasticsearch mappings from the curriculum data model
 2. **Create the ingestion pipeline** — Add ingestion logic in `apps/oak-search-cli/` that transforms curriculum data into indexable documents
 3. **Add ground truths** — Design ground truth queries using the known-answer-first methodology (see [Ground Truth Protocol](../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md))
-4. **Run benchmarks** — Use `pnpm benchmark` to evaluate search quality (MRR, NDCG@10)
+4. **Run benchmarks** — Use `pnpm --filter @oaknational/search-cli benchmark` to evaluate search quality (MRR, NDCG@10)
 5. **Wire into search dispatch** — Add the new index to the search dispatch configuration
 
 **Key files**:
@@ -110,10 +110,51 @@ User-facing plugin packages are outside this recipe: they are product
 deliverables (ADR-125 §Skill classes and validation jurisdiction), built and
 released in [oaknational/oak-ai-plugins](https://github.com/oaknational/oak-ai-plugins).
 
-**Always create the canonical file first** under `.agent/`, then add platform
-adapters, then run `pnpm portability:check`. Every canonical rule must cite
-the ADR(s) it operationalises with a leading "Operationalises ADR-NNN" line
-(ADR-131 §Self-Referential Property).
+**Always create the canonical file first** under `.agent/`, then generate the
+platform adapters (`pnpm portability:fix` for a rule or a sub-agent,
+`pnpm skills:generate` for a skill); the pre-push hook runs `pnpm portability:check` over the set. A
+canonical rule names the ADR(s) or PDR(s) it operationalises in an
+"Operationalises …" line under its title (ADR-131's loop: new rules cite their
+source decision). A new rule is one authored file: the canonical
+`.agent/rules/<name>.md` with its frontmatter declaration —
+`classification: core` or `situational`; a one-line `description` that meets
+`skill-naming-and-description-quality`; and for a situational rule its
+`trigger` and, where the trigger is a file-surface match, its `globs` (the
+closed shape is `agent-tools/src/rule-declarations/rule-declaration.ts`).
+`pnpm portability:fix` renders its `RULES_INDEX.md` row and its
+`.cursor/rules/<name>.mdc`, `.claude/rules/<name>.md` and
+`.agents/rules/<name>.md` adapters from the declaration, and
+`pnpm portability:check` recomputes them byte for byte: none of the four is
+edited by hand, and a hand edit reads as drift (2026-09-09: one push refused for
+the two adapter pieces the seat had not authored; the generator retires that
+class).
+
+A `trigger` is one token from the four families a loader can recognise —
+`surface:<name or glob>` (a file surface; `globs` names its patterns),
+`tool:<name>` (a tool call or command class), `session:<shape>` (a session
+shape known at bootstrap) or `ceremony:<step>` (a named workflow step) —
+optionally followed by `—` and a short gloss; `globs` is a YAML list, empty
+when the trigger is not file-shaped. A core rule carries only
+`classification: core` and `description`. For example:
+
+```yaml
+---
+classification: situational
+description: One sentence of what the rule is for.
+trigger: surface:test-authoring — Authoring or editing a test
+globs:
+  - '**/*.test.ts'
+---
+```
+
+Classify `core` when in doubt; a rule is `situational` only when its trigger
+is precisely nameable as one of the four tokens and its substance would
+otherwise inflate the baseline directive load (`directive-file-context-budget`).
+Moving a rule between classifications is a `new-rule-vs-pdr-clause`-style
+decision with a commit explaining the change. Put the load-bearing compliance
+mechanics — the command, the ordering constraint, the thing that must be
+true — in the rule's trigger-first opening, where a truncated or non-loader
+read still reaches them; worked instances and rationale go below.
 
 **Landing a new skill is a two-gate operation, and the second gate may be
 owner-keyed.** Gate one: the canonical file plus its generated platform adapters

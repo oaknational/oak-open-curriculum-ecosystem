@@ -1,7 +1,8 @@
-import { spawn } from 'node:child_process';
 import { closeSync, mkdtempSync, openSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+
+import { spawn as crossSpawn } from 'cross-spawn';
 
 /**
  * Destinations for the replayed child streams. Defaults to the parent's
@@ -41,6 +42,15 @@ export interface FileBackedChildOptions {
    * merged transcript (the merge-bot push).
    */
   readonly combinedOutput?: boolean;
+  /**
+   * Aborting kills the child (Node's own spawn option, SIGTERM). Passed
+   * through verbatim so callers can bound a child's lifetime; also the seam
+   * that lets the signal-reporting contract be proven on every platform — a
+   * PARENT-initiated kill is the one termination Windows reports with the
+   * signal named (a child terminating itself surfaces there as a plain
+   * exit, carrying no signal at all).
+   */
+  readonly abortSignal?: AbortSignal;
 }
 
 /**
@@ -56,6 +66,17 @@ export interface FileBackedChildResult {
   readonly exitCode: number;
   readonly signal: NodeJS.Signals | null;
   readonly stderr: string;
+}
+
+/**
+ * An abort-kill is a NORMAL termination for this runner: the close event
+ * still fires with the signal, and the F-112 contract (128 sentinel + named
+ * signal) reports it — rejecting on the accompanying `AbortError` would
+ * replace that structured outcome with a throw. Discriminates on Node's
+ * stable `code` (`ABORT_ERR`), with the `name` as a fallback.
+ */
+function isAbortKill(error: Error): boolean {
+  return ('code' in error && error.code === 'ABORT_ERR') || error.name === 'AbortError';
 }
 
 /**
@@ -83,6 +104,11 @@ export interface FileBackedChildResult {
  * The replay ceiling is the capture buffer (`readFileSync` materialises
  * each stream), orders of magnitude above any gate chain's output —
  * spawnSync's 1 MiB default was the ceiling this replaced.
+ *
+ * The child launches through `cross-spawn`, so a command named without a
+ * path (the commit workflow's `pnpm`) launches on Windows even where it is a
+ * `.cmd` shim, which a shell-less Node spawn cannot run. Elsewhere, and for
+ * an `.exe` or an absolute path, it is Node's own spawn.
  */
 export async function runFileBackedChild(
   options: FileBackedChildOptions,
@@ -100,13 +126,17 @@ export async function runFileBackedChild(
     return await new Promise((resolve, reject) => {
       let settled = false;
 
-      const child = spawn(options.command, options.args, {
+      const child = crossSpawn(options.command, options.args, {
         cwd: options.cwd,
         env: options.env,
         stdio: ['ignore', files.stdoutFd, files.stderrFd],
+        signal: options.abortSignal,
       });
 
       child.on('error', (error) => {
+        if (settled || isAbortKill(error)) {
+          return;
+        }
         settled = true;
         reject(error);
       });

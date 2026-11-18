@@ -113,11 +113,11 @@ plan of record:
 
 ## Deliverable 1 — pr-lifecycle skill amendments
 
-File: `.agent/skills/pr-lifecycle/SKILL-CANONICAL.md` (wrapper
+File: `.agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md` (wrapper
 `.claude/skills/oak-pr-lifecycle/SKILL.md` is a pointer, unchanged). House amendment
 convention: inline dated parentheticals at the phase they modify + a failure-modes bullet.
 The binding contract is the amended skill itself
-(`.agent/skills/pr-lifecycle/SKILL-CANONICAL.md`, landing via PR #392 and shepherded
+(`.agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md`, landing via PR #392 and shepherded
 under the very discipline it adds); this plan does not restate the skill's mechanics
 (cite-not-restate — the error class this plan remediates). Stable acceptance criteria:
 a persisted per-round tally over BOTH finding surfaces (review threads AND review

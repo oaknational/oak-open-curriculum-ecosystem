@@ -1,3 +1,8 @@
+---
+classification: core
+description: Follow the agent-human collaboration model.
+---
+
 # Follow Collaboration Practice (User)
 
 Read and follow `.agent/directives/user-collaboration.md`.

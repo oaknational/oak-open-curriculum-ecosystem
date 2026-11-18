@@ -1,3 +1,8 @@
+---
+classification: core
+description: Every piece of collaboration functionality (monitor, heartbeat, broadcast, claim, commit-queue ceremony, directed event) is justified only by the value it provides in the current context. Monitors are awareness — keep them; repetitive low-value emission is ceremony — drop it. Name the consumer that relies on the output before reaching for the mechanism.
+---
+
 # Collaboration Functionality Is Value-Contingent
 
 Every piece of collaboration functionality — a monitor, a heartbeat, a
@@ -37,7 +42,10 @@ current context. No consumer means no value; do not do it.
 
 - Awareness monitors almost always have a consumer (you, needing to respond
   in time) — keep them. Do NOT mis-file a monitor as ceremony and drop it;
-  that blinds the role.
+  that blinds the role. Keeping one assumes work it serves: the owner,
+  2026-08-14, to OCE's Director, "any agent that has no active work for an
+  hour should go into cold pause. This is to prevent the monitors draining
+  tokens for no value".
 - Outgoing periodic emission is the contingent surface. A liveness
   heartbeat's consumer is async retirement-detection (silence drives claim
   auto-rebalance). When a live owner-conductor detects retirement directly,

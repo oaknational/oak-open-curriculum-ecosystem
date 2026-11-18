@@ -186,11 +186,12 @@ describe('robots.txt (Integration)', () => {
 
   it('answers without the request ever reaching the auth vendor', async () => {
     const reachedClerk = vi.fn<(label: string) => void>();
+    const recordingClerkMiddleware: RequestHandler = (req, _res, next) => {
+      reachedClerk(`${req.method} ${req.path}`);
+      next();
+    };
     const app = await createTestApp({
-      clerkMiddlewareFactory: (): RequestHandler => (req, _res, next) => {
-        reachedClerk(`${req.method} ${req.path}`);
-        next();
-      },
+      clerkMiddlewareFactory: () => recordingClerkMiddleware,
     });
 
     const res = await request(app).get(ROBOTS_PATH);

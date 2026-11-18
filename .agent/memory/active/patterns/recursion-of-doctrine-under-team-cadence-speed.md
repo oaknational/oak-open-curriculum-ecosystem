@@ -3,6 +3,7 @@ name: "Recursion-of-Doctrine Under Team-Cadence Speed"
 polarity: anti-pattern
 use_this_when: "Multi-agent team operating at high comms-event cadence (events arriving every ~30-60s); doctrine corrections firing in close temporal proximity; agents authoring under live coordination pressure."
 category: agent
+layer: general
 status: emerging
 discovered: 2026-05-23
 proven_in: "2026-05-23 sixth-Director window (12:52Z–13:27Z by Incandescent Banking Flame). Five worked instances of the same anti-pattern firing in ~30 minutes: Seaworthy 12:54Z, Secret 12:55Z (mirror 18s after Seaworthy's correction), Twilit Scattering Twilight 12:57Z (auto-fix before reading correction), Incandescent 13:16Z (Shape F allocation 19s after own pivot to Shape S), Incandescent 13:24Z (directed event to closed Pearly session 64s after Pearly's closeout broadcast). All five had each agent holding the relevant rule in memory; each was caught by a peer (or owner) rather than self-caught."

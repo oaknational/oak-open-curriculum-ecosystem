@@ -4,13 +4,35 @@ import type { CurrentItemEvidenceTarget, TokenAnchor } from './current-source-mo
 const TOKEN_PATTERN = /[\p{L}\p{N}_]+|[^\s\p{L}\p{N}_]/gu;
 const WORD_TOKEN_PATTERN = /[\p{L}\p{N}_]/u;
 
+/** A token paired with its half-open span in the normalised content. */
+interface OffsetToken {
+  readonly token: string;
+  readonly start: number;
+  readonly end: number;
+}
+
+/**
+ * Normalises content so neither Unicode form nor source escaping becomes part
+ * of item identity. Offsets returned by {@link tokenizeItemEvidenceWithOffsets}
+ * index into this normalised string, not the raw file.
+ */
+function normaliseItemEvidence(content: string): string {
+  return content.normalize('NFC').replaceAll(/\\(?=[`'"])/g, '');
+}
+
+/** Tokenises normalised content, keeping each token's span. */
+function tokenizeItemEvidenceWithOffsets(normalised: string): readonly OffsetToken[] {
+  return [...normalised.matchAll(TOKEN_PATTERN)].map((match) => ({
+    token: match[0],
+    start: match.index,
+    end: match.index + match[0].length,
+  }));
+}
+
 /** Tokenises content without making source formatting part of item identity. */
 function tokenizeItemEvidence(content: string): readonly string[] {
-  return (
-    content
-      .normalize('NFC')
-      .replaceAll(/\\(?=[`'"])/g, '')
-      .match(TOKEN_PATTERN) ?? []
+  return tokenizeItemEvidenceWithOffsets(normaliseItemEvidence(content)).map(
+    (offsetToken) => offsetToken.token,
   );
 }
 
@@ -90,6 +112,41 @@ function tokenAnchorMatchStarts(
     }
   }
   return starts;
+}
+
+/**
+ * Locate the current source text one reviewed anchor covers.
+ *
+ * @remarks
+ * The content workspace renders what an item says *today* rather than its
+ * 2026-07-09 baseline snippet, and this is how it gets there: the anchor
+ * already proves which token run is the item, so the same match yields the
+ * text. It lives beside the tokeniser deliberately — a second, drifting copy
+ * of the tokenisation would silently mis-quote reviewed content.
+ *
+ * The returned text is a slice of the *normalised* content (NFC, source
+ * escaping before a backtick or quote removed), so it is the item's words
+ * rather than its exact file bytes.
+ *
+ * @returns The covered text, or `null` when the anchor no longer matches.
+ */
+export function locateAnchoredText(anchor: TokenAnchor, content: string): string | null {
+  const normalised = normaliseItemEvidence(content);
+  const offsetTokens = tokenizeItemEvidenceWithOffsets(normalised);
+  const starts = tokenAnchorMatchStarts(
+    anchor,
+    offsetTokens.map((offsetToken) => offsetToken.token),
+  );
+  const start = starts[0];
+  if (start === undefined) {
+    return null;
+  }
+  const firstToken = offsetTokens[start];
+  const lastToken = offsetTokens[start + anchor.tokenCount - 1];
+  if (firstToken === undefined || lastToken === undefined) {
+    return null;
+  }
+  return normalised.slice(firstToken.start, lastToken.end);
 }
 
 function anchorsHaveDistinctMatches(

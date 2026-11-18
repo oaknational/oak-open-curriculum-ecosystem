@@ -563,6 +563,28 @@ portable Practice Core, not in a repo-local surface.
   from inside the session can't distinguish activity from progress.
   External structure is required.
 
+## Owner endorsement of surfaced falsifiable structure (2026-07-30)
+
+After a morning of worked instances — verdicts carrying falsifier
+invitations, per-slice falsifiers named in plans, adversarial conscience
+stances, reasoned declines with evidence — the owner confirmed the whole
+surface-thinking family, verbatim: "It seems like attaching falsifiable
+conceptual structure is working well everywhere, I am glad we collectively
+explored structured thinking as a skill, I know a lot of it is already
+internal to models, but having it at the layers nearer the surface as well
+has proven valuable." The mechanism the morning demonstrated: externalised
+structure lets wrongness be corrected cheaply by whoever holds better
+evidence — a Director verdict wrong on both destinations converged in
+minutes because its structure carried the correction path; a plan slice
+named its own shrink condition; fire-signal vocabulary was caught before
+commit. Internal model reasoning alone cannot be declined by a peer. The
+standing consequence: keep attaching the structure at the surface, never
+only thinking it — verdicts carry falsifier invitations, plans name
+per-slice falsifiers, claims name their producing commands, explorations
+end with a warrant and a falsifier per proposal. A verdict that needs its
+author to be right is unfinished; a verdict that carries its own correction
+path is structure.
+
 ## Notes
 
 ### Graduation intent

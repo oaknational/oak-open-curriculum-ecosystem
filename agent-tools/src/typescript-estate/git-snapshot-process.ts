@@ -31,8 +31,8 @@ export function runGit(
   let result: ProcessResult;
   try {
     result = context.process.run(invocation);
-  } catch (cause: unknown) {
-    return err(new EstateReviewError(code, `${label} failed`, { cause }));
+  } catch (error: unknown) {
+    return err(new EstateReviewError(code, `${label} failed`, { cause: error }));
   }
   if (result.stdout.byteLength > maxStdoutBytes || result.stderr.byteLength > context.stderrLimit) {
     return err(new EstateReviewError('RESOURCE_LIMIT', `${label} exceeded its byte limit`));
@@ -82,8 +82,10 @@ export function decodeUtf8(bytes: Uint8Array, label: string): Result<string, Est
     return bytesEqual(bytes, encoded)
       ? ok(value)
       : err(new EstateReviewError('SNAPSHOT_INVALID', `${label} failed UTF-8 round trip`));
-  } catch (cause: unknown) {
-    return err(new EstateReviewError('SNAPSHOT_INVALID', `${label} is not valid UTF-8`, { cause }));
+  } catch (error: unknown) {
+    return err(
+      new EstateReviewError('SNAPSHOT_INVALID', `${label} is not valid UTF-8`, { cause: error }),
+    );
   }
 }
 

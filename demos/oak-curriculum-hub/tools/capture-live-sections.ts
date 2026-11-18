@@ -34,6 +34,7 @@ import {
 import { assertServerUp } from '@oaknational/fidelity-review/dev-server';
 import { APP_SENTINEL, DEFAULT_BASE, SERVER_HINT } from './capture-checks';
 import { FIDELITY_PAIRS, type FidelityPair } from './fidelity-pairs';
+import { sectionCaptureLooksBlank, type RegionMeasure } from './section-capture-blank';
 import { describeThrown, runTool } from '@oaknational/fidelity-review/support';
 
 const TOOLS_DIR = path.dirname(fileURLToPath(import.meta.url));
@@ -41,21 +42,6 @@ const DEMO_DIR = path.resolve(TOOLS_DIR, '..');
 
 /** The live course player's content region (CourseShell renders it). */
 const CONTENT_REGION = 'section[aria-label="Course content"]';
-
-interface RegionMeasure {
-  readonly boxHeight: number;
-  readonly textLength: number;
-}
-
-/** A captured region that is collapsed, textless, or absent is a bad
- *  capture: the deep link never swapped the section in, or the shot ran
- *  pre-hydration. Pure policy — the drive measures, this decides. */
-export function sectionCaptureLooksBlank(measure: RegionMeasure | undefined): boolean {
-  if (measure === undefined) {
-    return true;
-  }
-  return measure.boxHeight < 100 || measure.textLength < 50;
-}
 
 async function measureRegion(page: Page): Promise<RegionMeasure | undefined> {
   const region = page.locator(CONTENT_REGION);

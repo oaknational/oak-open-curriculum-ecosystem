@@ -16,6 +16,8 @@
 
 import { z } from 'zod';
 
+import { parseJsonLine } from '../core/parse-json-line.js';
+
 /** A session's current context occupancy. */
 export interface SessionUsage {
   /** input + cache_creation + cache_read tokens of the latest assistant turn. */
@@ -63,12 +65,4 @@ export function parseLatestUsage(transcript: string): SessionUsage | undefined {
   }
 
   return undefined;
-}
-
-function parseJsonLine(line: string): unknown {
-  try {
-    return JSON.parse(line);
-  } catch {
-    return undefined;
-  }
 }

@@ -221,7 +221,7 @@ captures the substantive distinction.
 
 **Why narrow fast-bootstrap eligibility.** Errors of
 under-grounding cost real correctness (an agent that skips
-schema-first-execution writes manual types at an SDK boundary;
+a host's schema-first directive writes manual types at a generated boundary;
 an agent that skips testing-strategy writes audit-shaped tests).
 The eligibility constraints are deliberately conservative: any
 ambiguity routes to Mode A. The cost of Mode A is paid in

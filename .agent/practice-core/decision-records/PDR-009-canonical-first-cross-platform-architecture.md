@@ -129,10 +129,23 @@ containing thin wrappers. A thin wrapper contains ONLY:
   cannot express a platform's native mechanism (e.g. `@file` mentions,
   argument-substitution placeholders, skill-invocation syntax).
 
-A thin wrapper MUST NOT contain substantive instructions, workflow
-steps, or logic that does not exist in the canonical source. The
-canonical content describes **what** to do; the wrapper describes
+A thin wrapper MUST NOT add substantive instructions, workflow steps,
+or logic of its own: whatever substance it carries is the canonical
+source's text, as an inline-prompt role's compared copy (below) is.
+The canonical content describes **what** to do; the wrapper describes
 **how** to invoke it on a specific platform.
+
+An adapter carries what its role needs to reach the canonical prompt.
+For a role that reads files and has turns to spare, that is a pointer.
+A role that cannot read files, or whose turns are bounded and belong
+to its task, is an inline-prompt role: the first cannot follow a
+pointer, and the second would spend on it the turns its task needs,
+so its adapter carries the prompt. The prompt's one home stays the
+canonical template. The adapter copies the template's System prompt
+block verbatim, nothing else in the adapter is substantive, and a
+check compares every copy with its template; a generator that writes
+the copy from the template is that check. The ~10-line red flag below
+measures what an adapter adds, so it does not count the copied block.
 
 Concretely: a wrapper file longer than ~10 content lines (excluding
 frontmatter) is a red flag that substance has leaked into the wrapper.
@@ -146,7 +159,8 @@ copy with a thin wrapper.
 
 Validation must be bidirectional: every canonical artefact has the
 required adapters, and every platform adapter points back to an
-existing canonical artefact. It must also validate wrapper form, not
+existing canonical artefact or, for an inline-prompt role, is compared
+with it. It must also validate wrapper form, not
 only presence. Existence-only checks allow full-content drift to hide
 inside platform directories.
 
@@ -208,6 +222,19 @@ rules and triggers while keeping the layer count at three.
 Specialised rules are retained when they have unique activation
 metadata (e.g. a file-scoped glob) that cannot be expressed by the
 consolidated trigger.
+
+Consolidation runs one way. A projection from canonical roles to
+adapters preserves role multiplicity: where a canonical declaration
+names several roles of one template (a panel of four conscience roles
+at different efforts), the adapter set carries every role, one adapter
+per role per platform, and a generator that emits one wrapper per
+template has flattened the declaration (2026-09-13: four pinned roles
+became two generic wrappers, found only by a computed census). The
+census against the source of truth is the proof: count the roles the
+declaration names, count the adapters each platform carries, and read
+the difference; the per-platform omissions the declaration itself
+records (a platform that omits one role by design) are the only
+permitted gap.
 
 ### Command and skill naming discipline
 
@@ -307,22 +334,33 @@ Layer-2 artefact types.
   policy file.
 - Portability validation (automated) checks: (a) every canonical
   artefact has the required adapters; (b) every adapter is thin
-  (content-line count under the threshold; no substantive prose);
-  (c) every platform adapter points back to an existing canonical
-  artefact; (d) every platform's tracked configuration grants the
-  permissions wrappers need to activate.
+  (content-line count under the threshold; no substantive prose), or,
+  for an inline-prompt role, carries exactly its template's System
+  prompt block and is compared with it; (c) every platform adapter
+  points back to an existing canonical artefact or, for an
+  inline-prompt role, is compared with it; (d) every platform's tracked
+  configuration grants the permissions wrappers need to activate.
 - Cross-platform probes use platform-neutral inputs by default, or
   explicitly provide parity across the platforms they claim to verify.
 - Tripwire installs should include at least one self-applying
   acceptance check against the installing session.
 - Canonical artefact IDs are stable across platforms. Aliases are
   forbidden; platform-native renaming is not.
+- A generator that produces a tracked artefact family (the adapter set,
+  a rules index, a projection) lands as a tracked tool before the
+  artefacts it produces, and every later regeneration runs it. A
+  generator that exists only in the session that first ran it is the
+  largest loss class a transplant meets: its artefacts are on disk with
+  no way to regenerate them (2026-09-12, two generators; the adapter
+  generator landed as an agent-tools bin at the closure).
 
 ### Forbidden
 
-- Substantive content in platform adapter directories. Policy
-  prose, workflow steps, or decision logic in a wrapper is a
-  contract violation.
+- Substantive content that is an adapter's own, in platform adapter
+  directories. Policy prose, workflow steps, or decision logic that
+  a wrapper adds is a contract violation; an inline-prompt role's
+  System prompt block is its template's text, copied verbatim and
+  compared with it.
 - Canonical rules that duplicate authoritative-source content rather
   than pointing at it. A canonical rule is itself a pointer layer in
   the three-layer model; its own substance should be minimal.
@@ -398,6 +436,28 @@ hydrations, the graduation would mark this PDR as `Superseded by
 <Core section>` and retain it as provenance.
 
 ## Amendment Log
+
+### 2026-09-29 — The inline-prompt copy is generated on this estate
+
+The check the 2026-09-24 amendment names as "a generator, or a comparison of
+each hand-kept copy with its template" is the generator: the sub-agent adapters
+are rendered from each template's declaration and recomputed byte for byte,
+the hand-copy comparison retires, and the template stays the prompt's one home
+(the host's record of the surfaces is its agent-artefact portability decision).
+
+### 2026-09-24 — A role that cannot read files, or whose bounded turns belong to its task, carries its template's prompt
+
+A review of the corpus-analysis adapters found the thin-wrapper rule
+silent on two cases: a role with no file access, and a role whose
+bounded turns belong to its task. A pointer to its template is an
+instruction the first cannot follow and the second would spend its
+turns on, so both estates' adapters for those roles already carried
+the prompt inline: one set generated, one
+kept by hand under a "keep both in sync" note. The inline-prompt role
+above, joint set K2, is signed by both estates' exchange seats. It names the
+case and keeps the canonical-first decision: the template stays the
+prompt's one home, and a check (a generator, or a comparison of each
+hand-kept copy with its template) keeps every copy true.
 
 ### 2026-04-24 — Cross-platform standard directories are adapters
 

@@ -3,6 +3,7 @@ name: Scope-Bound Negative-Existence Claims
 polarity: anti-pattern
 use_this_when: About to accept a "does not exist" / "nothing to update" / "no matches" verdict — from your own search, a peer's search, or a reviewer's clearance — before treating the absence as settled, check what scope the verdict actually swept
 category: process
+layer: general
 proven_in: .agent/memory/active/napkin.md (two instances, 2026-07-08 and 2026-07-14)
 proven_date: 2026-07-08
 barrier:

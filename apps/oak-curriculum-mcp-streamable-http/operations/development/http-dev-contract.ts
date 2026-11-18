@@ -1,3 +1,4 @@
+import { typeSafeIncludes } from '@oaknational/type-helpers';
 import { join } from 'node:path';
 import { err, ok, type Result } from '@oaknational/result';
 
@@ -61,6 +62,11 @@ export interface ResolveHttpDevExecutionPlanOptions {
   readonly workspaceRoot: string;
   readonly parentEnv: NodeJS.ProcessEnv;
   readonly now: Date;
+  /**
+   * Selects the platform's binary shims. Injected so both branches are
+   * provable from any host; defaults to `process.platform`.
+   */
+  readonly platform?: NodeJS.Platform;
 }
 
 const LOCAL_ALLOWED_HOSTS = 'localhost,127.0.0.1,::1';
@@ -93,33 +99,37 @@ export function resolveHttpDevExecutionPlan({
   workspaceRoot,
   parentEnv,
   now,
+  platform = process.platform,
 }: ResolveHttpDevExecutionPlanOptions): HttpDevExecutionPlan {
+  const vite = resolveWorkspaceBinary(workspaceRoot, 'vite', platform);
+  const tsx = resolveWorkspaceBinary(workspaceRoot, 'tsx', platform);
+
   return {
     mode,
     initialWidgetBuild: {
       label: 'initial-widget-build',
-      command: resolveWorkspaceBinary(workspaceRoot, 'vite'),
-      args: ['build', '--config', 'widget/vite.config.ts'],
+      command: vite.command,
+      args: [...vite.leadingArgs, 'build', '--config', 'widget/vite.config.ts'],
       cwd: workspaceRoot,
       env: parentEnv,
       output: { kind: 'inherit' },
     },
     widgetWatch: {
       label: 'widget-watch',
-      command: resolveWorkspaceBinary(workspaceRoot, 'vite'),
-      args: ['build', '--config', 'widget/vite.config.ts', '--watch'],
+      command: vite.command,
+      args: [...vite.leadingArgs, 'build', '--config', 'widget/vite.config.ts', '--watch'],
       cwd: workspaceRoot,
       env: parentEnv,
       output: { kind: 'inherit' },
     },
     server: {
       label: 'http-dev-server',
-      command: resolveWorkspaceBinary(workspaceRoot, 'tsx'),
+      command: tsx.command,
       // --import @sentry/node/preload: required Node.js ESM hook for Sentry
       // auto-instrumentation. Registers import-in-the-middle loader hooks
       // BEFORE application modules load. See scripts/start-server.sh for
       // the full rationale and Sentry doc references.
-      args: ['--import', '@sentry/node/preload', 'src/index.ts'],
+      args: [...tsx.leadingArgs, '--import', '@sentry/node/preload', 'src/index.ts'],
       cwd: workspaceRoot,
       env: resolveServerEnv(parentEnv, mode),
       output: resolveServerOutput(mode, workspaceRoot, now),
@@ -143,7 +153,7 @@ export function formatLogTimestamp(date: Date): string {
 }
 
 function isHttpDevMode(input: string): input is HttpDevMode {
-  return HTTP_DEV_MODES.some((mode) => mode === input);
+  return typeSafeIncludes(HTTP_DEV_MODES, input);
 }
 
 function resolveServerEnv(parentEnv: NodeJS.ProcessEnv, mode: HttpDevMode): NodeJS.ProcessEnv {
@@ -176,6 +186,49 @@ function resolveServerOutput(mode: HttpDevMode, workspaceRoot: string, now: Date
   };
 }
 
-function resolveWorkspaceBinary(workspaceRoot: string, binaryName: 'tsx' | 'vite'): string {
-  return join(workspaceRoot, 'node_modules', '.bin', binaryName);
+/**
+ * The module entry each workspace binary exposes, relative to the workspace
+ * root. Used on win32 only — see {@link resolveWorkspaceBinary}.
+ */
+const WORKSPACE_BINARY_ENTRIES = {
+  tsx: ['node_modules', 'tsx', 'dist', 'cli.mjs'],
+  vite: ['node_modules', 'vite', 'bin', 'vite.js'],
+} as const;
+
+/**
+ * How to launch a workspace-local binary: the executable to spawn, plus any
+ * arguments that must precede the command's own.
+ */
+interface WorkspaceBinaryInvocation {
+  readonly command: string;
+  readonly leadingArgs: readonly string[];
+}
+
+/**
+ * Resolve a launchable invocation for a workspace-local binary.
+ *
+ * pnpm writes two shims per binary: an extensionless shell script for POSIX
+ * and a `.CMD` batch wrapper for Windows. Neither is directly spawnable on
+ * win32 — the shell script is not an executable, and Node refuses to spawn
+ * `.cmd`/`.bat` without a shell (the CVE-2024-27980 argument-injection fix),
+ * which surfaces as `EINVAL`. Rather than reintroduce a shell, win32 launches
+ * the binary's own module entry through the running Node — a fixed absolute
+ * path by definition. This mirrors the pnpm resolution elsewhere in the
+ * estate, which returns a launchable invocation for the same reason.
+ *
+ * @param platform - injected so both branches are provable from any host.
+ */
+function resolveWorkspaceBinary(
+  workspaceRoot: string,
+  binaryName: 'tsx' | 'vite',
+  platform: NodeJS.Platform,
+): WorkspaceBinaryInvocation {
+  if (platform === 'win32') {
+    return {
+      command: process.execPath,
+      leadingArgs: [join(workspaceRoot, ...WORKSPACE_BINARY_ENTRIES[binaryName])],
+    };
+  }
+
+  return { command: join(workspaceRoot, 'node_modules', '.bin', binaryName), leadingArgs: [] };
 }

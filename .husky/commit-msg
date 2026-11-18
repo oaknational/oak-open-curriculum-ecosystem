@@ -1,7 +1,8 @@
 #!/usr/bin/env sh
 
-# Check for breaking changes first, we want to block accidental major version bumps
+# Block accidental major-version bumps first, then enforce conventional commits
+# from the repo-pinned dependency graph. Strict mode: a warning fails the commit
+# (exit 2) as an error does (exit 3); a warning that passes is a warning that
+# ships (no-warning-toleration).
 pnpm agent-tools:prevent-accidental-major-version "$1" || exit 1
-
-# Then run commitlint from the repo-pinned dependency graph.
-pnpm exec commitlint --edit "$1"
+pnpm exec commitlint --strict --edit "$1"

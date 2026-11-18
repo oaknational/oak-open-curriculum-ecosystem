@@ -3,6 +3,7 @@ name: Adversarial-Verify Plus a Self-Pass Over the Verifier's Own Downgrades
 polarity: pattern
 use_this_when: Running a multi-agent verification or triage round (fleet review, adversarial-verify, open-question triage) and about to accept the verifier's/triage-agent's confirmed set as the complete result
 category: agent
+layer: general
 proven_in: .agent/memory/active/napkin.md (PR #328 deep review, 2026-07-08)
 proven_date: 2026-07-08
 barrier:

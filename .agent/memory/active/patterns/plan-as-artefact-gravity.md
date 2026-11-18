@@ -3,6 +3,7 @@ name: "Plan-as-Artefact Gravity; Archive and Replace When the Plan Body Becomes 
 polarity: anti-pattern
 use_this_when: "A remediation plan has accumulated multiple session-history sections, re-grounding tables, and re-classification amendments while the gates it targets remain red"
 category: process
+layer: general
 proven_in: ".agent/plans/architecture-and-infrastructure/archive/superseded/pr-87-architectural-cleanup.plan.md → pr-87-codeql-alerts.plan.md (2026-04-28)"
 proven_date: 2026-04-28
 barrier:

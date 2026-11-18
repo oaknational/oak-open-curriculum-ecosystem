@@ -1,8 +1,16 @@
+---
+classification: core
+description: Main is the sole integration point; branches are short-lived, single-ticket, and die at merge. One sanctioned rolling coordination branch only, kept current by re-merging main.
+---
+
 # No Parallel Long-Lived Branches
 
 `main` is the sole integration point and the only place code is real. Branches
 exist to carry ONE small change to `main` and die; a branch that lives long
-enough to diverge is a defect, not a workflow.
+enough to diverge is a defect, not a workflow. Throughout this rule, `main`
+reads as the repository's default branch — derived at the moment of use,
+never a literal (`downstream-checkout-never-writes-upstream-surfaces`); on a
+downstream checkout it is whatever the remote's HEAD names.
 
 ## Trigger
 
@@ -12,16 +20,27 @@ day or any second coordination-shaped branch.
 ## Action
 
 - **Every work branch is short-lived and single-ticket**: created from current
-  `main`, carrying one Linear-ticketed atomic change (small diff, few commits),
+  `main` — or, for a build-ahead lane only, from the parent lane branch it
+  builds on, the one start point this rule admits (below) — carrying one ticketed atomic change (small diff, few commits),
   PR'd to `main`, merged or closed within hours — never days. If work outgrows
   the ticket, STOP and split; never let the branch absorb a second story.
 - **`main` is the target of every PR.** No branch targets another branch; no
-  stacked long-lived chains.
+  stacked long-lived chains. A build-ahead worktree cut from a parent lane
+  branch (`worktree-hygiene` §1) is inside this rule, not outside it: its PR
+  targets `main` from its first push (which waits for a free slot under the
+  work-in-progress limit, owner 2026-10-02, the branch holding local commits
+  meanwhile; a waiting branch's working day runs from the slot's opening, not
+  from its cut, and a count that stays full past a working day is routed to
+  the Director as a throughput question, never absorbed by the branch that
+  waits), its base advances to `main` by one merge
+  or a re-cut when the parent lands, and it lives no longer than the parent's
+  landing plus its own — a short-lived single-story branch whose start point
+  happens to be a sibling's tip, never a chain.
 - **Exactly ONE sanctioned rolling branch exists**: the current coordination
   branch (`coordination/<name>`), which carries the live coordination-surface
   estate (session records, continuity documents, reports) to `main` through
   normal PRs. It is kept CURRENT, not divergent: after every `main` update it
-  merges `main` back in (`git merge origin/main`, conflicts resolved as
+  merges `main` back in (`git merge origin/<default-branch>`, conflicts resolved as
   semantic unions — pure addition, both lineages conserved). A second
   coordination-shaped branch is a defect; supersede or merge it the day it is
   noticed. PDR-127 (the team-branch coordination protocol) governs how work
@@ -60,7 +79,8 @@ metrics, ticket-first) is the standing cure this rule pins.
 ## Enforcement
 
 Behavioural at branch/PR creation, plus mechanical layers as they land:
-AIP-128 (Linear-ID branch gate in the shared hooks), AIP-129 (`pr-contract`
-required CI status: ticket link + size bounds). The stray-code register
-pattern (`.agent/reports/agentic-engineering/stray-code-register-2026-07-16.md`)
+a ticket-ID branch gate in the shared hooks and a `pr-contract` required CI
+status (ticket link + size bounds) as they land (OCE's means-home for the two
+is its tickets AIP-128 and AIP-129). The stray-code register
+pattern (OCE, 2026-07-16)
 is the audit shape when drift is suspected: enumerate, commit, PR, adjudicate.

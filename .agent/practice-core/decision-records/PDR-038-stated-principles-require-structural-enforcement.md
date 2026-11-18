@@ -225,8 +225,8 @@ The economy constraint is binding: intent expression must be
 **generative, not enumerative**. The cure for illegible intent is a
 compact system-level generator from which the mechanisms are
 derivable (the Decision Lenses in the host's principles directive
-are the proof shape; the host's intent-as-idea-graph architecture,
-ADR-200, is the structural home), never a per-mechanism essay — the
+are the proof shape; the host's intent-as-idea-graph architecture
+is the structural home), never a per-mechanism essay — the
 per-mechanism Why layer already
 exists, and context budgets are themselves owner-ratified doctrine.
 The observational counterpart pattern is

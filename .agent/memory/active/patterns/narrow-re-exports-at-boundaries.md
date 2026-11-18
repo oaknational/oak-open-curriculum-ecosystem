@@ -3,6 +3,7 @@ name: "Narrow re-exports at package boundaries"
 polarity: pattern
 use_this_when: "A wrapper library re-exports types from an underlying SDK"
 category: code
+layer: family
 proven_in: "packages/libs/sentry-node/src/index.ts"
 ---
 

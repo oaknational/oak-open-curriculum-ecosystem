@@ -1,3 +1,8 @@
+---
+classification: core
+description: Before any edit in a session, register the session's agent identity on every thread it will touch by updating or adding the identity row in the thread's next-session record per the additive-identity rule.
+---
+
 # Register Identity On Thread Join
 
 Before any edit in this session, list every thread this session will touch.
@@ -26,7 +31,7 @@ When no owner-assigned `agent_name` is already available, derive a
 descriptive default with the portable agent-tools CLI:
 
 ```bash
-pnpm agent-tools:agent-identity --format display
+pnpm agent-tools:agent-identity --platform <claude-code|cursor|codex|gemini> --format display
 ```
 
 For Codex thread registration and collaboration-state writes, prefer the
@@ -46,18 +51,19 @@ Use the platform-provided seed when available
 `PRACTICE_AGENT_SESSION_ID_CODEX`, or `CODEX_THREAD_ID`). **Cursor
 (Composer)** sets `PRACTICE_AGENT_SESSION_ID_CURSOR` from the
 composer `session_id` via the project `sessionStart` hook
-(`.cursor/hooks/oak-session-identity.mjs`; see
+(`.cursor/hooks/practice-session-identity.mjs`; see
 [`agent-tools/docs/agent-identity.md`](../../agent-tools/docs/agent-identity.md)
 and [Cursor Hooks](https://cursor.com/docs/hooks)). The same hook injects the
 derived display name and `session_id_prefix` (first six characters of
 `session_id`) into `additional_context` for thread registration when the
 integrated terminal does not see the Practice variable. A gitignored
-`.cursor/oak-composer-session.local.json` mirror (when agent-tools is built)
+`.cursor/practice-composer-session.local.json` mirror (when agent-tools is built)
 carries the same derived name and a suggested Composer tab title for
 copy/paste — Cursor hooks cannot set the tab label programmatically per
 [Hooks](https://cursor.com/docs/hooks). If the hook is disabled or
-the name line is missing, run `pnpm agent-tools:agent-identity --format display`
-with `--seed` or a Practice session variable, or ask the owner for an override.
+the name line is missing, run `pnpm agent-tools:agent-identity --platform <label>
+--format display` with a Practice session variable, or with `--seed`, or ask the
+owner for an override.
 If the platform does not expose a stable session seed and no hook context is
 present, pass `--seed` explicitly or ask the owner for an override. Do **not**
 fall back to `git config user.email`; personal-email fallback is intentionally
@@ -70,7 +76,7 @@ malformed input intentionally produce no context and do not block startup.
 Treat title/statusline text as an optional display convenience, not the
 identity source of truth.
 
-`OAK_AGENT_IDENTITY_OVERRIDE` remains an explicit operator escape hatch for
+`PRACTICE_AGENT_IDENTITY_OVERRIDE` remains an explicit operator escape hatch for
 memorable owner-assigned names. Derived names from session-id seeds are
 deterministic session display names; persistent PDR-027 identity across
 sessions requires a deliberately persistent seed or explicit override.
@@ -102,7 +108,7 @@ The complementary layers are, per PDR-029's 2026-04-21 Amendment Log
   on any platform performs the same walkthrough by reading the same
   markdown.
 - **Stale-identity audit** — a six-check documentation walkthrough in
-  [`/oak-consolidate-docs § Thread-register freshness`](../skills/knowledge/consolidate-docs/SKILL-CANONICAL.md#thread-register-freshness)
+  [`consolidate-docs` § Thread-register freshness](../skills/knowledge/consolidate-docs/SKILL-CANONICAL.md#thread-register-freshness)
   that the agent performs at consolidation time: stale `last_session`,
   orphan threads, missing fields, duplicate identity rows,
   active-threads ↔ next-session-file correspondence, and retired-record
@@ -176,10 +182,9 @@ name the divergence in any reply or coordination decision rather than
 rounding it off — and when archiving or closing claims for a "gone"
 identity whose `id` is unavailable (a historical id-less row), cite the
 **prefix** (stable) over the name (which may have wiped) so audit trails
-remain durable. Source: Claude per-user memory
-`feedback_identity_routing_uses_name_and_prefix_pair` (owner stated
-2026-05-05 after the Twilit→Ashen drift and Asteroid identity-wipe);
-reconciled to PDR-076a `(name, id)` routing 2026-05-29.
+remain durable. Source: the owner, 2026-05-05, after the Twilit→Ashen
+drift and Asteroid identity-wipe; reconciled to PDR-076a `(name, id)`
+routing 2026-05-29.
 
 ## Self-application
 

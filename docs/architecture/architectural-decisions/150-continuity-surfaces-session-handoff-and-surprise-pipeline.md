@@ -1,6 +1,6 @@
 # ADR-150: Continuity Surfaces, Session Handoff, and Surprise Pipeline
 
-**Status**: Accepted (amended 2026-04-20, 2026-04-21, 2026-05-29, 2026-06-07, 2026-06-08, 2026-06-12, 2026-06-19, 2026-07-28)
+**Status**: Accepted (amended 2026-04-20, 2026-04-21, 2026-05-29, 2026-06-07, 2026-06-08, 2026-06-12, 2026-06-19, 2026-07-28, 2026-09-17)
 **Date**: 2026-04-02 (amended 2026-04-20 — §3 abstracted from
 prompt-host to canonical repo-local surface; §4 generalised; Rationale
 and Consequences language aligned to the amendment per OAC Phase 4.3;
@@ -152,6 +152,18 @@ doctrine carried forward in the parallel PDR-011 amendment)
   Realised in the host `wrap` and `session-handoff` skills, `continuity-practice.md`, the
   `start-right-team` closeout contract, and the MCP-297 human-facing surfaces (README,
   CONTRIBUTING, the dev guide, the orientation lens); ticket MCP-299.
+- **2026-09-17 — finished continuity history is graduated, then archived.** Owner decision
+  ("Graduate, then archive"), landed 2026-09-19. Mirrors the portable PDR-011 amendment
+  ([PDR-011 §Amendment Log 2026-09-17](../../../.agent/practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md#amendment-log))
+  and supersedes the 2026-06-08 entry's second disposition and its "never archive" clause:
+  behaviour-changing finished entries are written into their permanent homes and read back,
+  then the finished history moves whole to a dated archive beside the surface, proven
+  byte-identical, and the live surface keeps its live state and a pointer. Archiving happens
+  only after full processing (owner, 2026-09-19), never to change a fitness category. The
+  repo realisation is
+  [`continuity-practice.md` §Disposition of Continuity Surfaces](../../../.agent/directives/continuity-practice.md),
+  the `consolidate-docs` skill's step 6b (the trigger the surfaces lacked), and the
+  `overflow_disposition` note on each continuity surface.
 
 ## Context
 

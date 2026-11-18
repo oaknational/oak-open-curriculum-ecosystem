@@ -2,7 +2,6 @@ import type { SourceFile } from 'typescript';
 
 import type { CloneMember } from './analysis-model.js';
 import type { DeliveryState, RepetitionRegionKind, SourceExtension } from './file-vocabulary.js';
-import type { RepoPath, Sha256 } from './scalar-model.js';
 
 export interface ExecutableRepetitionConfig {
   readonly minimumAstNodes: number;
@@ -15,7 +14,7 @@ export interface ExecutableRepetitionConfig {
 }
 
 export interface RepetitionSource {
-  readonly path: RepoPath;
+  readonly path: string;
   readonly extension: SourceExtension;
   readonly sourceFile: SourceFile;
   readonly verificationOnly: DeliveryState;
@@ -24,8 +23,8 @@ export interface RepetitionSource {
 export interface EncodedRegionObservation {
   readonly member: CloneMember;
   readonly verificationOnly: DeliveryState;
-  readonly exactFingerprint: Sha256;
+  readonly exactFingerprint: string;
   readonly exactEncoding: string;
-  readonly structuralFingerprint: Sha256;
+  readonly structuralFingerprint: string;
   readonly structuralEncoding: readonly string[];
 }

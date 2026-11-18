@@ -19,8 +19,6 @@ export {
   UndocumentedResponseError,
 } from './types/generated/api-schema/mcp-tools/index.js';
 export type {
-  ToolDescriptorMap,
-  ToolMap,
   ToolDescriptorForName,
   ToolDescriptorForOperationId,
   ToolEntry,

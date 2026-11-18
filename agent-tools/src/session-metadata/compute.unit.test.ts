@@ -11,8 +11,24 @@ describe('computeMetadata', () => {
       pctUsed: 37.2,
       pctRemaining: 62.8,
       zone: 'healthy',
-      advice: 'full capacity; carry on',
+      advice: 'full capacity; carry on; directive edits wait for the next compaction',
     });
+  });
+
+  it('adds the directive-edit deferral to the advice from 30% (PDR-052)', () => {
+    const below = computeMetadata({ usedTokens: 299_000, windowTokens: 1_000_000 });
+    const at = computeMetadata({ usedTokens: 300_000, windowTokens: 1_000_000 });
+
+    expect(at.zone).toBe(below.zone);
+    expect(at.advice).toBe(`${below.advice}; directive edits wait for the next compaction`);
+  });
+
+  it('judges the 30% floor on the unrounded figure, not the one-decimal report', () => {
+    const below = computeMetadata({ usedTokens: 299_000, windowTokens: 1_000_000 });
+    const justBelow = computeMetadata({ usedTokens: 299_950, windowTokens: 1_000_000 });
+
+    expect(justBelow.pctUsed).toBe(30);
+    expect(justBelow.advice).toBe(below.advice);
   });
 
   it('rounds percentages to one decimal', () => {

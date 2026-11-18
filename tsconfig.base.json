@@ -2,6 +2,7 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
     "target": "ES2023",
     "module": "ESNext",
     "lib": ["ES2023"],
@@ -16,7 +17,10 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
+    "noImplicitOverride": true,
     "noFallthroughCasesInSwitch": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
     "skipLibCheck": true
   }
 }

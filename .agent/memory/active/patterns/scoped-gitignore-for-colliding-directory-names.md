@@ -3,6 +3,7 @@ name: "Scoped Gitignore for Colliding Directory Names"
 polarity: pattern
 use_this_when: "Adding or tightening `.gitignore` rules for a generically named directory (`reference`, `data`, `output`, `tmp`) and more than one subtree uses that name for different purposes"
 category: process
+layer: general
 proven_in: ".gitignore (scoped `packages/sdks/oak-sdk-codegen/reference/*.json`); .agent/reference/README.md (where-this-fits table)"
 proven_date: 2026-04-06
 barrier:

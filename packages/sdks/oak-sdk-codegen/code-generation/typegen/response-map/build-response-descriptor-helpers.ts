@@ -101,5 +101,5 @@ function compareStatuses(left: string, right: string): number {
 }
 
 function formatStatusKey(status: string): string {
-  return /^[0-9]+$/.test(status) ? String(Number(status)) : `'${status}'`;
+  return /^\d+$/.test(status) ? String(Number(status)) : `'${status}'`;
 }

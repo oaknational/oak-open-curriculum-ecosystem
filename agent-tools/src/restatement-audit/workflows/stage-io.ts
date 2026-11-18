@@ -18,6 +18,7 @@
 import type { Result } from '@oaknational/result';
 import { z } from 'zod';
 
+import { repoRelativeFileSchema } from '../../core/repo-relative-file.js';
 import { parseWithSchema } from '../../core/schema-parse.js';
 import { ledgerRowSchema } from '../ledger-rows.js';
 import {
@@ -32,10 +33,10 @@ import { validateSuccessSchema } from './validate-result.js';
 const nonEmptyString = z.string().min(1);
 const countInt = z.number().int().nonnegative();
 
-/** One T3 corpus file a finder agent must read in full. */
+/** One T3 corpus window: its id and the repository-relative files a finder agent reads in full. */
 const partitionWindowSchema = z.strictObject({
   window: nonEmptyString,
-  files: z.array(nonEmptyString).min(1),
+  files: z.array(repoRelativeFileSchema).min(1),
 });
 export type PartitionWindow = z.infer<typeof partitionWindowSchema>;
 

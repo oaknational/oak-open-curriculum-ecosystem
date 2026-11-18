@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-09 · **Delta-refreshed 2026-07-22** (MCP-103 phase a — see [§12](#12-delta-refresh--workspace-shape-recommendation-2026-07-22--mcp-103-phase-a))
 **Status:** Historical audit baseline plus generated current-source projection.
-**Companion files:** [`registry.md`](./registry.md) (historical human index) · [`registry.json`](./registry.json) (phase-(a) audit registry as maintained on main, 717 items) · [`current-source.json`](./current-source.json) (generated current source, additions, lineage, custody, word authority, item-evidence summary, and HTTP registration evidence) · [`current-source-anchors.json`](./current-source-anchors.json) (machine-verifiable evidence for each current baseline item) · [`current-source-delta-inventory.json`](./current-source-delta-inventory.json) (recomputed post-baseline file-and-item inventory, including explicit reviewed exclusions) · [`rendered-wholes.md`](./rendered-wholes.md) (historical assembled surfaces) · [`content-registry.html`](./content-registry.html) (historical filterable browser).
+**Companion files:** [`registry.md`](./registry.md) (historical human index) · [`registry.json`](./registry.json) (phase-(a) audit registry as maintained on main, 717 items) · [`current-source.json`](./current-source.json) (generated current source, additions, lineage, custody, word authority, item-evidence summary, and HTTP registration evidence) · [`current-source-anchors.json`](./current-source-anchors.json) (machine-verifiable evidence for each current baseline item) · [`rendered-wholes.md`](./rendered-wholes.md) (historical assembled surfaces) · [`content-registry.html`](./content-registry.html) (historical filterable browser).
 
 ---
 
@@ -189,11 +189,9 @@ Presented as *candidates for the relevant expert*, not verdicts. The registry as
 Start with [`current-source.json`](./current-source.json) for present source
 custody, word authority, lifecycle, revision state, and the HTTP registration
 snapshot. [`current-source-anchors.json`](./current-source-anchors.json) is the
-technical evidence ledger behind baseline dispositions, while
-[`current-source-delta-inventory.json`](./current-source-delta-inventory.json)
-detects changed and newly added governed source and binds it to current item ids
-or an explicit no-content review. Reviewers do not need to read the hashes, but
-any source edit must still satisfy them. The older
+technical evidence ledger behind baseline dispositions: each served item is
+anchored on its content-bearing text, and a change to that text is refused until
+the item is reviewed again. The older
 [`rendered-wholes.md`](./rendered-wholes.md), `registry.md`, and filterable
 HTML are phase-(a) visibility artefacts: useful for historical meaning and
 review-domain classification, but not evidence of what the app serves now.

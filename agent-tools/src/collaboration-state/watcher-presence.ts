@@ -10,7 +10,9 @@
  * `claims open` precondition. Path derivation lives here too so the two surfaces
  * resolve a session's heartbeat path identically.
  */
-import { resolve } from 'node:path';
+import { join, resolve } from 'node:path';
+
+import { isFilesystemRoot, trimTrailingSeparators } from '../core/path-separators.js';
 
 import { sameAgentRoutingKey } from './active-agent-routing.js';
 import { type CollaborationAgentId } from './types.js';
@@ -44,7 +46,24 @@ export function commsSeenFileForCodename(codename: string, commsSeenDir: string)
   ) {
     throw new Error(`agent codename is not a safe path segment: ${JSON.stringify(codename)}`);
   }
-  const trimmedDir = commsSeenDir.endsWith('/') ? commsSeenDir.slice(0, -1) : commsSeenDir;
+  // Reject a filesystem ROOT before trimming, not after. On win32 the root
+  // has a drive prefix (`C:\`), and trimming it leaves `C:` — which `join`
+  // treats as drive-RELATIVE, resolving against whatever the current
+  // directory on that drive happens to be. The old order only caught the
+  // POSIX root (`/` trims to empty) while the error message promised that
+  // roots are refused, so a `C:\` caller got a heartbeat path somewhere
+  // unpredictable instead of the refusal it was told to expect.
+  if (isFilesystemRoot(commsSeenDir)) {
+    throw new Error(
+      `comms-seen dir must be a non-empty path that is not the filesystem root, not ` +
+        `${JSON.stringify(commsSeenDir)} (an empty or root dir would derive a root-absolute ` +
+        `heartbeat path); absolute paths under a real directory are accepted`,
+    );
+  }
+  // Trim trailing separators of BOTH flavours before joining: a caller
+  // handing `...\comms-seen\` or `.../comms-seen/` must compose the same
+  // host-joined file path, never a mixed-separator one.
+  const trimmedDir = trimTrailingSeparators(commsSeenDir);
   if (trimmedDir.length === 0) {
     throw new Error(
       `comms-seen dir must be a non-empty path that is not the filesystem root, not ` +
@@ -52,7 +71,7 @@ export function commsSeenFileForCodename(codename: string, commsSeenDir: string)
         `heartbeat path); absolute paths under a real directory are accepted`,
     );
   }
-  return `${trimmedDir}/${codename}.json`;
+  return join(trimmedDir, `${codename}.json`);
 }
 
 /** Heartbeat path derived from a watcher's seen-file (`<seen-file>.heartbeat.json`). */

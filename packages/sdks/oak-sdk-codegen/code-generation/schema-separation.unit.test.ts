@@ -90,7 +90,7 @@ describe('schema separation', () => {
       validatedSchema.components = {
         ...validatedSchema.components,
         schemas: {
-          ...(validatedSchema.components?.schemas ?? {}),
+          ...validatedSchema.components?.schemas,
           LessonResponse: {
             type: 'object',
             properties: {
@@ -124,7 +124,7 @@ describe('schema separation', () => {
       validatedSchema.components = {
         ...validatedSchema.components,
         schemas: {
-          ...(validatedSchema.components?.schemas ?? {}),
+          ...validatedSchema.components?.schemas,
           LessonResponse: {
             type: 'object',
             properties: {

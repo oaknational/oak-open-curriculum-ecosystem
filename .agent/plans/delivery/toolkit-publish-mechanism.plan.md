@@ -6,14 +6,10 @@ overview: >-
   Make the existing release workflow publish every workspace whose manifest
   is publishable, at the repository's release version, from a validated tip,
   installable under a real package-store layout — with no human step.
-status: ratified
-ratified_by: "Jim Cresswell"
-ratified_date: 2026-09-03
-ratified_where: >-
-  In-session owner decision card at the MCP-673 implementing seat (Chinook seeks Cloud,
-  661556), 2026-09-03 ~11:4xZ, answer verbatim "Ratify all thirteen" over PR #959's
-  numbered list (item 13 names this node); recorded in the pull request body and in the estate-coordination
-  thread record's entry of the same day.
+status: sketch
+ratified_by: null
+ratified_date: null
+ratified_where: null
 serves: public-packages-release
 impact_areas:
   - packaging-and-distribution
@@ -22,36 +18,49 @@ tickets:
   - MCP-661
 depends_on: []
 owner_gates: []
-last_updated: 2026-09-03
+last_updated: 2026-10-10
 ---
 
 # Publish the toolkit from this repository at one version
 
+## Engraph scope amendment — 10 October 2026
+
+The original 3 September ratification by Jim Cresswell, PR #959 item 13,
+is preserved as historical authority for the publication mechanism. Binding
+that mechanism to Engraph's current namespace, branch, rights and complete
+eligible closure is a scope change, so this node returns to sketch pending
+re-ratification. The 10 October commission designs this work; it does not publish.
+[ADR-233](../../../docs/architecture/architectural-decisions/233-retained-framework-and-configurable-instances.md)
+and `oce-package-consumption-closure` supply the current responsibility boundary.
+Design and local-registry rehearsal can proceed before closure; **first live
+publish requires the proved complete eligible closure**. Engraph's observed
+default branch is `engraph`; inherited `main`/Oak scope assumptions must be
+rebound by the Engraph release owner. No configured publisher rights are inferred.
+One version per repository remains the initial policy. Source/manifest existence
+does not establish registry availability.
+
 ## Goal
 
-A releasable merge to the default branch publishes every workspace whose
-manifest is publishable to the `@oaknational` scope at the repository's
+After Engraph release binding and required publication authority, a releasable merge to the default branch publishes every workspace whose
+manifest is publishable to the explicitly authorised package scope at the repository's
 release version, in one automatic step of the existing release workflow, from
 a tip whose CI run succeeded, and every published package installs and
-imports under a real pnpm store layout. Nothing publishes today. This is the
+imports under a real pnpm store layout. The inspected release configuration disables npm publication; no first-publish success is claimed. This is the
 "first-publish behind the manifest gate" step of `public-packages-release`'s
 banked order, deliverable against the single-version estate (the owner's
 ruling for now, recorded in ADR-227: one release version per repository),
-and the mechanism the extraction plan `oak-open-curriculum-mcp-extraction`
-depends on. ADR-227 is the durable home of the rulings this node executes:
-the boundary between the two repositories is the published `@oaknational`
-packages, code MIT and content OGL, published from here at this
-repository's release version.
+and the mechanism `oce-app-handover` depends on. ADR-227 supplies historical
+publication direction; ADR-233 and the Engraph binding control this work. Verify
+code, content and identity-asset licences/redistribution for the exact eligible set;
+the historical MIT/OGL distinction does not establish rights for every new asset.
+Use the explicitly authorised scope and repository release version.
 
 ## User groups and value
 
-- **The extraction plan and the product squad it serves.** The product
-  repository installs the toolkit from the registry; a release here reaches
-  it as a version. Without this mechanism nothing below the line can leave
-  this repository.
-- **Agents in this repository.** Publishing costs nothing per release: a
-  workspace becomes public by flipping its manifest, and the workflow does
-  the rest.
+- **Receiving instance owners.** The external instance installs a supported
+  published closure; a release reaches it as a version. No handover is complete
+  while dependencies require an OCE checkout.
+- **Agents in this repository.** Publishing requires no routine manual release step: a workspace becomes eligible only after its full closure, rights and consumed-form evidence pass; the workflow performs the authorised release.
 - **Future non-Oak builders.** The packages exist on the registry with
   provenance. Offered value only; no consumer beyond the product is claimed.
 
@@ -70,8 +79,8 @@ repository's release version.
   successful run releases it together with the fix, and a broken tip
   releasing nothing is the correct outcome, not a dropped release.
 - **Stamping.** The release configuration bumps two manifests today (the root
-  and the curriculum SDK) and every other package sits at
-  `0.0.0-development`. A stamping step writes the release version into every
+  and the curriculum SDK) while most other packages remain at
+  `0.0.0-development` (some tooling manifests already have other versions). A stamping step writes the release version into every
   publishable manifest before publish and replaces the curriculum SDK's own
   release entry, so one mechanism covers all; the release's git assets cover
   every stamped manifest or none.
@@ -80,8 +89,7 @@ repository's release version.
   treats each package's publish as idempotent, re-runs to completion after a
   partial failure, and marks the release done only when the whole published
   set resolves from a clean store. Provenance is required for a public
-  publish: the release job grants `id-token: write` (it does not today) and
-  publishes with provenance, and AC1 checks the attestation on the registry.
+  publish: the release job already grants `id-token: write` for Turbo OIDC; bind the actual npm trusted-publisher/provenance path before publishing, and AC1 checks the attestation on the registry.
   Nothing publishes live until the installability smoke below is green for
   every package in the set.
 - **Installability.** The packed-form smoke the curriculum SDK already runs
@@ -89,7 +97,7 @@ repository's release version.
   store layout, not only from a tarball: module-load path arithmetic that
   reaches the monorepo root passes a tarball check and fails an install.
 - **Consumers and the release-age floor.** A consumer keeps its
-  minimum-release-age floor in force for the `@oaknational` scope — a
+  minimum-release-age floor in force for the authorised scope — a
   compromised first-party publish is exactly what the floor's detection
   window is for — so a release here is installable the following day; a
   genuinely urgent fix is allow-listed for that one package at the owner's
@@ -101,9 +109,7 @@ repository's release version.
 - **AC1 — automatic publish.** A releasable merge publishes every publishable
   workspace at the release version with no human step, every published
   package carries a registry provenance attestation, and a clean-store
-  install of the whole set resolves. Proof: `repo-safe` — the release run,
-  the attestation read back from the registry per package, and the resolve
-  check the run ends with.
+  install of the whole set resolves. Proof: `owner-held` — the Engraph release owner verifies the exact registry release, per-package provenance and clean-store resolution in the release acceptance record; workflow/rehearsal checks remain `repo-safe` evidence of their own scope.
 - **AC2 — the validated tip.** A run where the default branch advanced during
   CI exits without releasing; the next run releases; a run that cannot find
   a CI result for the tip fails. Proof: `repo-safe` — the three workflow
@@ -125,8 +131,7 @@ repository's release version.
 1. **P1** The validated-tip assertion on the release job. Proof: AC2.
 2. **P2** The packed-form smoke generalised to every publishable package
    under a pnpm store layout, run in CI on every change; green is the
-   precondition of any live publish, because a published version cannot be
-   withdrawn. Proof: AC3.
+   precondition of any live publish, because consumers may already hold a published version and the supported correction is a new release. Proof: AC3.
 3. **P3** The stamping step, topological publish with provenance,
    clean-store resolve check and convergent re-run, proven as a dry run
    listing the set and as the AC4 rehearsal against the local test
@@ -146,13 +151,10 @@ repository's release version.
 
 ## Out of scope
 
-- Deciding which workspaces are publishable — the extraction plan's design
-  slice and the seam's manifest gate decide; this plan publishes whatever
-  carries a publishable manifest.
+- Deciding which workspaces are publishable — `oce-reusable-core-contracts` and `oce-package-consumption-closure` decide the finite set; a manifest flag alone does not; this plan publishes only the verified eligible set after complete closure and rights checks.
 - Version-config refinement (releases minted only by changes that reach a
   published surface) — `public-packages-release`'s wager 2, its own slice.
-- Clock-group version streams — `public-packages-release`'s wager 3, at the
-  split.
+- Clock-group version streams — a separate justified release-policy decision; not automatically triggered by a repository split.
 - A second versioning or publishing tool — admitted only on the evidence the
   strategic node names.
 

@@ -1,3 +1,8 @@
+---
+classification: core
+description: At design, shaping, or constraint-writing moments, state the impact first and design from it — never build inside or preserve the existing system's shape because it exists (the cowpath). Discriminate artifact gravity (negative) from revealed usage (desire path, positive at the right altitude); treat existing artefacts as malleable design surface; an inherited separation may be the bug; attribute system properties to the system, not the owner.
+---
+
 # Design From Impact, Not the Cowpath
 
 Operationalises [`principles.md` §Decision Lenses](../directives/principles.md#decision-lenses--order-of-resolution)
@@ -49,6 +54,13 @@ Any of these in your own output is a trigger to stop and re-project:
   *satisfy or keep* rather than malleable evidence to subsume
 - listing a current-shape artefact as "residual to retain" rather than
   a *need served by the one model*
+- converting every input into an action (a gate run, an elaborated
+  framing, a task): reactivity is being unmoored from the impact, and most
+  inputs need a judgment against "what are we for", often no action at
+  all (owner, 2026-07-01, stopping a Director twice). A move that arrives
+  smoothly ("gates won't pass, so bypass", an inherited "the owner said")
+  is grounded first-hand before it is propagated, hardest exactly when it
+  conveniently licenses the act
 
 NOT a cowpath: using a low-level primitive (git, a CLI, an env var) as
 a building block; recording that a current-shape problem *dissolves*;
@@ -59,6 +71,39 @@ The tells are semantic, not lexical — "keep" is ubiquitous in
 legitimate prose — so this is an agent self-scan at write and
 consolidation moments, not a hook substring
 ([`hook-policy-substring-discipline`](hook-policy-substring-discipline.md)).
+
+## A Lane Closes on Its Value Statement
+
+Owner, 2026-09-10, after a lane was reported in terms of legs, analyser
+rules, `continue-on-error` and a refinement: "well that sounds like
+convoluted nonsense! Mechanisms aren't purpose, design is not impact. What
+is the work trying to achieve and why, what is the value, to whom, when.
+That is all that matters." Open every lane report with the value statement
+— what, why, to whom, when — and close the lane when that statement holds at
+the landed head. The front door's settlement (green by name, the quiet
+window, threads dispositioned) is the SAFETY condition, necessary and never
+sufficient; a prose-review tail on the lane's records is terminated by
+declaration at its budget, never chased. And at a handover, confirm the
+boundary of "done" in the owner's own words before writing the record (a
+seat read two PRs as outside the lane; the owner read them as its two
+halves).
+
+## Precedent Is Not Correctness
+
+That an existing component chose X — a framework, a pattern, a library — is
+evidence about THAT component's use case, never a justification for the same
+choice elsewhere (owner, 2026-07-08, after a Slack-app design leaned on the
+repository's Express MCP server as a reason to choose Express: "Precedent is
+NOT correctness … the Express MCP is sensible for THAT use case, not this
+one"; the Slack adapter was Web-Request-native and wanted a different
+runtime). Reasoning from precedent is a fluency trap — it arrives smoothly
+and skips the fit check. When about to justify a choice with "the existing
+module does X", stop and re-derive from this use case's actual constraints;
+reuse genuinely shared packages freely, never inherit framework or
+architecture choices by precedent; state the fit-for-use-case warrant, not
+the precedent. The same rule reads the current tooling configuration as a
+hypothesis about the right design, never a law (`never-disable-checks`
+§Configuring a check to express the architecture).
 
 ## Re-Apply at Every Altitude
 
@@ -79,7 +124,7 @@ carefully PRESERVES it — that is the cowpath wearing a
 "non-entangling" costume. Ask: (a) is the boundary itself the problem?
 (b) what is the ONE smallest change that delivers the impact? (Worked
 instance 2026-06-28: an orientation tool invisible because a
-curriculum/orientation separation was taken too far; the proposed
+domain/orientation separation was taken too far; the proposed
 multi-workstream isolation-preserving precursor was wrong, the owner's
 one pointer sentence deliberately relaxing the over-separation was
 right.) An owner-sanctioned sticking-plaster precursor is valid —
@@ -118,6 +163,25 @@ Like tombstones: (1) **name** suspected instances "cowpath"; (2)
 and your own context for the tells; (4) **re-project** each through
 impact — the existing artefact becomes a view or flow on the one
 model, or it dissolves.
+
+## No Design by Review in Pull Requests
+
+A review bot sees a diff, never the vision, so a finding that argues design
+INTENT — what the system should allow, what a demonstration should show — is
+outside its visibility. Owner, 2026-09-06, verbatim, on a proposal to narrow
+a reading-order exemption: "We do NOT allow design by review in PRs, we have
+a vision that PR bots have no visibility of. Of course visual design should
+be [...] coherent, that is not in question, but the fact that the
+mechanism is capable of producing incoherent designs is not a failure, it
+is power, that must be used appropriately and well, the reviewer is mixing
+concerns myopically." Capability and use are separate concerns: coherence
+is enforced where designs are made and judged (the vision, the rubric's
+owner-held rows), never by narrowing the mechanism. On design surfaces a
+review finding that proposes a design-policy narrowing is dispositioned by
+reference to the vision and the standing rulings — never cured, never
+carded to the owner as a refinement, never carried as residue. Findings
+about falsifiable facts (a wrong count, a broken link, a rule violation)
+remain cures.
 
 ## Related Surfaces
 

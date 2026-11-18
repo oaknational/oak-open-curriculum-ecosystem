@@ -1,0 +1,6 @@
+---
+description: Before a written record — a ledger row, a plan, a memory, a thread record, a pull request comment, a decision record — names a pattern, class, tendency, category or rule derived from observations, the same sentence states the number of independent instances and the comparator; fewer than three independent instances is recorded as an observation and introduces no class or category; a weight or rule fit on a set of instances is not evidenced by them; every named pattern carries its falsifier.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/one-instance-is-an-observation.md`.

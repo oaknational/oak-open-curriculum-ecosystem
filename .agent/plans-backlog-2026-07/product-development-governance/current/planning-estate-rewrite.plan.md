@@ -233,7 +233,7 @@ waiting for the graph, and WS6's harvest then runs over a clean corpus whose reg
 provenance, and typed state make the harvest mechanical.
 
 - **The refounding runs under its own executable plan**:
-  [`plan-corpus-refounding.plan.md`](../active/plan-corpus-refounding.plan.md) (protocol invariants
+  `plan-corpus-refounding.plan.md` (protocol invariants
   P1–P14, placed-judgement map, worker roles, consolidated owner-gate register, economics);
   design provenance in the
   [design record](../../../reports/agentic-engineering/plan-estate-refounding-design-2026-07-06.md).

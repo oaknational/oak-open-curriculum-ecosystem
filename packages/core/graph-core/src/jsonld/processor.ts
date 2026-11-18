@@ -24,6 +24,7 @@ import type {
 type JsonLdScalar = string | number | boolean | null;
 
 export type {
+  JsonLdProcessorErrorKind,
   ExpandedJsonLdDocument,
   JsonLdContext,
   JsonLdDocument,
@@ -33,8 +34,7 @@ export type {
   JsonLdProcessorOperation,
   JsonLdProcessorResult,
   JsonLdValue,
-};
-export type { JsonLdProcessorErrorKind } from './processor-types.js';
+} from './processor-types.js';
 
 export interface JsonLdProcessorImplementation {
   readonly name: 'jsonld.js';
@@ -158,8 +158,8 @@ async function runProcessor<T>(
       return err(invalidOutput(operation));
     }
     return ok(value);
-  } catch (cause) {
-    return err(processorFailure(operation, cause));
+  } catch (error) {
+    return err(processorFailure(operation, error));
   }
 }
 

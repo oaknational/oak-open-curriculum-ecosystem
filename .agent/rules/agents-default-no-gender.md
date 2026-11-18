@@ -1,3 +1,8 @@
+---
+classification: core
+description: Use they/them for agents unless an agent has explicitly self-declared another pronoun set; agent names and codenames do not encode gender.
+---
+
 # Agents Default to No Gender Unless Self-Declared
 
 Operationalises

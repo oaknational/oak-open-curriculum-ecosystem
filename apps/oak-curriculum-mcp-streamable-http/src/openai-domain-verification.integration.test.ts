@@ -22,20 +22,21 @@ const CHALLENGE_PATH = '/.well-known/openai-apps-challenge';
 /** The token the plugin submission portal issued, recorded on MCP-700. */
 const EXPECTED_TOKEN = 'zc9V349cLHm9igIbhHavPlwHsEuWnBD7Hzbp0hTi75g';
 
-describe('OpenAI domain-verification challenge (Integration)', () => {
-  const createTestApp = async (dangerouslyDisableAuth = false) => {
-    const runtimeConfig = dangerouslyDisableAuth
-      ? createMockRuntimeConfig({ dangerouslyDisableAuth: true })
-      : createMockRuntimeConfig();
-    return await createApp({
-      staticRoot: await getScratchStaticRoot(),
-      runtimeConfig,
-      observability: createFakeHttpObservability(),
-      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
-      upstreamMetadata: TEST_UPSTREAM_METADATA,
-    });
-  };
+/** An app in either auth mode, with the upstream metadata injected so no fetch leaves the process. */
+const createTestApp = async (dangerouslyDisableAuth = false) => {
+  const runtimeConfig = dangerouslyDisableAuth
+    ? createMockRuntimeConfig({ dangerouslyDisableAuth: true })
+    : createMockRuntimeConfig();
+  return await createApp({
+    staticRoot: await getScratchStaticRoot(),
+    runtimeConfig,
+    observability: createFakeHttpObservability(),
+    getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
+    upstreamMetadata: TEST_UPSTREAM_METADATA,
+  });
+};
 
+describe('OpenAI domain-verification challenge (Integration)', () => {
   it('answers an unauthenticated GET with the bare token as text/plain', async () => {
     const app = await createTestApp();
 

@@ -3,6 +3,7 @@ name: "A Sweep Filter Is Part of the Claim — Audit It Against the Live Referen
 polarity: pattern
 use_this_when: "Arming any filter that decides what a sweep sees — a grep/rg pattern, a watcher branch-name match, an exclusion glob, a monitor alternation — and you will act on its result (especially a quiet or green one)."
 category: process
+layer: general
 proven_in: "Three 2026-06-11→12 instances: rg single-line missed a multi-line Zod/fluent chain (needed rg -U); a `-v .test.ts` exclusion hid a real importer; a PR-merge watcher matched a hyphenated branch-name guess against an underscored real branch and silently never fired."
 proven_date: 2026-06-16
 barrier:

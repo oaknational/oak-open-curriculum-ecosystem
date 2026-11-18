@@ -149,8 +149,9 @@ orchestrator failure even though they know the rule.
 
 ## Implementation
 
-The host-repo implementation lands as ADR-176 (orchestrator-vs-advisory
-script naming). The skill-doctrine surface is the commit skill's
+The host-repo implementation lands as the host's commit-skill
+advisory-orchestrator naming decision (orchestrator-vs-advisory script
+naming and surface polarity). The skill-doctrine surface is the commit skill's
 `SKILL-CANONICAL.md`. The filename is renamed
 `scripts/check-commit-skill-gates.ts` →
 `scripts/check-commit-skill-advisories.ts` (and the unit-test file

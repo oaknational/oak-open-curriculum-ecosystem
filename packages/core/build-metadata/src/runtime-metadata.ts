@@ -1,7 +1,8 @@
 import { ROOT_PACKAGE_VERSION } from '@oaknational/env';
 import { err, ok, type Result } from '@oaknational/result';
 
-import { NO_DIAGNOSTICS, trimToUndefined, type RuntimeMetadataError } from './git-sha.js';
+import { NO_DIAGNOSTICS, type RuntimeMetadataError } from './git-sha.js';
+import { trimToUndefined } from './trim-to-undefined.js';
 import { isValidSemver } from './semver.js';
 
 export type ApplicationVersionSource = 'APP_VERSION_OVERRIDE' | 'root_package_json';

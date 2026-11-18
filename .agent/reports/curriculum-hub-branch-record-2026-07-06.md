@@ -250,3 +250,9 @@ merge run-in, and fidelity mechanism all landed single-seat.
   exist on the branch; first-hand verification shows it does (the triple-implementer-closeout
   continuity commit, 2026-07-02). The claim was a subagent tooling error, caught by the
   critically-assess-all-subagent-results discipline before it could falsify this record.
+
+_Record locations, 2026-09-06: of the thread records named above by their paths of the
+time, those the 2026-09-06 consolidation paused moved under
+`.agent/memory/operational/threads/paused/` (the threads README's lifecycle layout; the
+paused index in `repo-continuity.md` names each); a record still active keeps its root path
+under `.agent/memory/operational/threads/`; the paths here are the historical ones._

@@ -1,3 +1,9 @@
+---
+classification: situational
+description: Run the inter-Practice join ceremony before cross-estate collaboration — fires when the worktree repo and the coordination home differ, or before writing into, registering presence in, or claiming work in any sibling Practice estate's substrate; read-only estate looks are unceremonied.
+trigger: surface:cross-repo — Worktree repo ≠ coordination home, or sibling-estate write/registration
+---
+
 # Cross-Repo Sessions Run the Join Ceremony
 
 A session whose worktree repo and coordination home are different

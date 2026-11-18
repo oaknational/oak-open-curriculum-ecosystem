@@ -40,7 +40,7 @@ describe('generatePathParametersHeader', () => {
     const result = generatePathParametersHeader();
 
     expect(result).toContain('GENERATED FILE - DO NOT EDIT');
-    expect(result).toContain('import type { paths as Paths }');
+    expect(result).toContain('import type { Paths }');
     expect(result).toContain('import type { SchemaBase as Schema }');
     expect(result).toContain('import { schemaBase as schema }');
   });

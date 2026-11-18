@@ -34,9 +34,9 @@ function toSentryLoggerLevel(level: LogEvent['level']): SentryLoggerLevel {
       return 'error';
     case 'FATAL':
       return 'fatal';
+    default:
+      throw new Error(`Unsupported log level: ${String(level)}`);
   }
-
-  throw new Error(`Unsupported log level: ${level}`);
 }
 
 export function createSentryTags(

@@ -1,3 +1,14 @@
+---
+classification: situational
+description: Any work whose acceptance is "matches a reference" opens by rendering the reference and capturing it at the canonical measurement widths (DDR-009); every fidelity claim cites the captured reference, and comparison runs from the first buildable slice, never only at the end.
+trigger: surface:design — Beginning or reviewing work whose acceptance is likeness to a reference artefact
+globs:
+  - apps/**/*.{ts,tsx,css,html}
+  - demos/**/*.{ts,tsx,css,html}
+  - packages/design/**
+  - docs/design/**
+---
+
 # Render the Reference Before Reproducing
 
 Reproduction work builds against pixels it has seen. Any work whose

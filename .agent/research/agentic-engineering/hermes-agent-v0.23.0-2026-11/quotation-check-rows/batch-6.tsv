@@ -1,0 +1,8 @@
+E	generate_report.py	228	228	star engine
+E	generate_report.py	391	391	rewrite the skill
+E	generate_report.py	324	324	keyword overlap
+E	generate_report.py	271	271	Validation Examples
+E	generate_report.py	470	470	Run GEPA optimizer
+E	generate_report.py	177	178	Manual authoring
+E	PLAN.md	592	594	auto-trigger GEPA
+E	evolution/skills/evolve_skill.py	206	226	improvement = avg_evolved - avg_baseline

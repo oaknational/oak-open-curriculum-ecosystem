@@ -50,13 +50,16 @@ artefacts, the hydrating agent MUST:
 
 Four artefact types follow the canonical-first model. Canonical content in
 `.agent/` is the single source of truth; thin platform adapters contain only
-activation metadata and a pointer to the canonical source.
+activation metadata and a pointer to the canonical source. An inline-prompt
+role's adapter (PDR-009: the role cannot read files, or its bounded turns belong
+to its task) carries its template's System prompt block verbatim in place of the
+pointer.
 
 | Type                    | Canonical                          | Adapter contract                                                                                                                                                         |
 | ----------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **Skills**              | `.agent/skills/*/SKILL.md`         | Generated thin adapters for supported platforms. The host bridge or surface matrix records emitted names, prefixes, and unsupported states.                              |
 | **Rules**               | `.agent/rules/*.md`                | Thin activation wrappers or an entry-point chain. Each wrapper identifies one canonical source and carries no substantive policy.                                         |
-| **Sub-agent templates** | `.agent/sub-agents/templates/*.md` | Thin platform adapters that point to canonical templates. Unsupported platforms stay explicit in the local matrix.                                                       |
+| **Sub-agent templates** | `.agent/sub-agents/templates/*.md` | Thin platform adapters that point to canonical templates; an inline-prompt role's adapter (PDR-009) carries the template's System prompt block verbatim. Unsupported platforms stay explicit in the local matrix.                                                       |
 | **Hooks**               | `.agent/hooks/` (policy + README)  | Tracked platform config activates hooks; local overrides stay machine-specific. Runtime lives in the host's documented tool/script surface.                               |
 
 Canonical rules are short operational reinforcements of policy. Each
@@ -350,7 +353,9 @@ layer is not yet installed, make that status explicit in `AGENT.md` and
 the Practice bridge.
 
 Platform adapters contain only activation metadata and a pointer to the
-canonical template (see Artefact Model table for paths). Unsupported
+canonical template (see Artefact Model table for paths). An inline-prompt role
+(PDR-009: it cannot read files, or its bounded turns belong to its task) carries
+its template's System prompt block verbatim in place of the pointer. Unsupported
 platforms stay explicit in the local matrix.
 
 ### Template Structure
@@ -370,6 +375,11 @@ A sub-agent template requires these sections (in order):
 7. **Output Format**: Scope, Verdict (APPROVED / APPROVED WITH
    SUGGESTIONS / CHANGES REQUESTED), Critical Issues, Important
    Improvements, Suggestions, Positive Observations
+
+An inline-prompt role (PDR-009: it cannot read files, or its bounded
+turns belong to its task) adds a **System prompt** section: the role's
+full prompt as one blockquote, which its adapter copies verbatim and a
+check compares with this block.
 
 ### Core Review Agents
 

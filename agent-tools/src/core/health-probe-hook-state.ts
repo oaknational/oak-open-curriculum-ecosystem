@@ -86,7 +86,7 @@ export function evaluatePracticeBoxState(practiceBoxFileCount: number): HealthCh
     status: 'warn',
     summary: `${practiceBoxFileCount} incoming Practice artefact${practiceBoxFileCount === 1 ? ' is' : 's are'} waiting for integration.`,
     details: [
-      'Use oak-consolidate-docs or a dedicated integration session before the incoming box drifts from local doctrine.',
+      'Use the consolidate-docs skill or a dedicated integration session before the incoming box drifts from local doctrine.',
       `Incoming Practice artefacts live in ${PRACTICE_BOX_DIR}.`,
     ],
   };

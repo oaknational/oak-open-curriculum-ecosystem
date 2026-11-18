@@ -34,7 +34,7 @@ never guess one from history.
 ## 1. Identity before anything else
 
 Derive your PDR-027 Practice identity before posting: use this repo's
-identity tooling (`pnpm agent-tools:agent-identity --format display`,
+identity tooling (`pnpm agent-tools:agent-identity --platform <label> --format display`,
 supplying `--seed` with the session UUID when no hook exported it). Every
 post you make as the Watcher leads with an explicit agent marker carrying
 the shared-credential rule's three attribution facts — that the post is
@@ -214,7 +214,8 @@ on what it is: a valid intro or relief newer than your own intro means
 a successor took the mantle mid-teardown — run the handover above
 (sign-off reply, baseline `ts`, owner notified, status final-edit) and
 post no vacancy; a
-valid vacancy, or nothing newer, means the mantle is yours to vacate —
+valid vacancy newer than your intro means the tenure is already closed —
+post nothing; nothing newer means the mantle is yours to vacate —
 post the vacancy sign-off, naming your own intro's `ts` as the tenure
 it closes (step 2's tenure binding) and your last-processed baseline
 `ts` as the boundary successors sweep from, and final-edit the tenure

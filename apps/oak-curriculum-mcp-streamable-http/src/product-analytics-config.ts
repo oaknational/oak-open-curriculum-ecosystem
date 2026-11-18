@@ -79,10 +79,25 @@ const KeyringWireSchema = z.array(KeyringEntryWireSchema).min(1);
  * configuration, so a diagnostic that echoed them would move secrets into
  * logs and error transports.
  */
+/**
+ * The variables the product-analytics configuration reads — the value-free
+ * diagnostic surface a refusal names (the reason strings above stay
+ * content-free; the names say where to look).
+ */
+export const PRODUCT_ANALYTICS_ENV_KEYS: readonly string[] = [
+  'OBSERVABILITY_SINKS',
+  'POSTHOG_PROJECT_API_KEY',
+  'POSTHOG_HOST',
+  'POSTHOG_CAPTURE_MODE',
+  'POSTHOG_PSEUDONYM_ACTIVE_KEY_ID',
+  'POSTHOG_PSEUDONYM_KEYRING',
+];
+
 function configurationError(reason: string): Result<never, ConfigError> {
   return err({
     message: `invalid PostHog product-analytics configuration: ${reason}`,
     diagnostics: [],
+    failingKeys: PRODUCT_ANALYTICS_ENV_KEYS,
   });
 }
 

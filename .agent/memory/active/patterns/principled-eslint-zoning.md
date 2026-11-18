@@ -3,6 +3,7 @@ name: "Principled ESLint Zoning for Build Tooling and Generated Artefacts"
 polarity: pattern
 use_this_when: "A workspace's build tooling (generators, extractors) or generated artefacts collide with app-strict lint rules and the reflex is to disable rules or contort the tooling into app-runtime idioms."
 category: architecture
+layer: family
 proven_in: "curriculum-hub-demo eslint.config.ts (2026-07-01, config-expert PASS): the course extractor/generator needed fail-loud throw + deep JSON walks; the zoning mirrored the pre-existing oak-sdk-codegen precedent. Held through the strict-everywhere ruling (2026-07-02) which removed demo-tier EXEMPTIONS while keeping principled per-rule zoning intact."
 proven_date: 2026-07-06
 barrier:

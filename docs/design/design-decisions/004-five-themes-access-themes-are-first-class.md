@@ -31,6 +31,18 @@ surface that offers theme choice offers all five selections, and every
 palette theme is a full peer in token coverage, contrast machinery, and
 testing.
 
+## Dated pointer (2026-08-17)
+
+[DDR-003](003-theme-state-is-the-choice-never-the-applied-value.md)'s
+2026-08-11 owner-ruled amendment adds a SIXTH control value, **"Identity
+default"** — the selectable no-choice state that clears the stored choice
+and returns the page to the identity's own polarity. It is a clear, never a
+theme: it carries no token tree and joins the five selections above as a
+superset, so a control offering all six is conformant (nothing in the five
+is withheld). The shipped switchboard control has offered it since PR #846.
+This pointer discharges the review-found gap where the shipped control
+read as non-conformant against this record's subset rule.
+
 ## Consequences
 
 - A consumer control that lists a subset of themes is non-conformant.

@@ -38,11 +38,11 @@ export { createOakClient as createApiClient } from './client/index.js';
 // Generated Types from OpenAPI Schema
 // ============================================================================
 
-export type { paths, components } from './types/index.js';
+export type { Paths, Components } from './types/index.js';
 
 /** Public aliases for documentation clarity */
 export type {
-  paths as OakApiPaths,
+  Paths as OakApiPaths,
   Subject as OakSubject,
   KeyStage as OakKeyStage,
 } from '@oaknational/sdk-codegen/api-schema';

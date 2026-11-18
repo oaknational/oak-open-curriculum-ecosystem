@@ -6,7 +6,7 @@ description: >-
   direct-trial-first gate, a decision-relevant value-of-information stop gate, and five firing
   moves (name the kind, frame the problem not the solution, surface the warrant, decide for
   reversibility, stress-test) that point to the full grammar of thinking for depth. The outward
-  pair to oak-metacognition's inward reflection. Use when facing a gnarly problem, choice, or
+  pair to metacognition's inward reflection. Use when facing a gnarly problem, choice, or
   analysis; especially when investigation or options keep proliferating and you must decide
   whether to build and observe, keep analysing, stop, or escalate.
 ---
@@ -26,7 +26,7 @@ and PDR-035 (agent-work capabilities are Practice substance).
 
 You are structuring a problem, argument, analysis, plan, or decision and want it to come out
 well. Distinct from its neighbours: not reflecting on whether you are about to do the right
-thing (`metacognition`), and not authoring a repo plan artefact (`oak-plan`, which *uses* these
+thing (`metacognition`), and not authoring a repo plan artefact (`plan`, which *uses* these
 moves). Fires on analysis / decision / diagnosis / design work — not every turn.
 
 ## The Direct Trial Gate
@@ -94,7 +94,7 @@ Force the comparison with four questions:
 If there is no named decision or decision-flipping result, the impact is immaterial, or a safe
 probe is cheaper than more analysis, **stop investigating**. Act on the sufficient evidence or run
 the probe. If the owner's purpose is genuinely to understand an unshaped concept rather than make
-a live decision, route to `oak-concept-exploration` with its own bounded purpose; do not disguise
+a live decision, route to `concept-exploration` with its own bounded purpose; do not disguise
 open exploration as decision research. This combines value of information and decision
 sensitivity with bounded-rationality satisficing and real-options logic: seek enough evidence for
 the next safe reversible move, not certainty about every branch.
@@ -129,7 +129,10 @@ not a box to tick.
    statement already contains a solution ("we need X"), you have skipped the problem.
 3. **Surface the warrant — and its falsifier.** For the key claim or chosen option, what unstated
    assumption carries the weight? What observation would surprise you if it were wrong? The real
-   disagreement and the real risk both live in the warrant. The commonest warrant gap at
+   disagreement and the real risk both live in the warrant. A warrant resting on observations
+   states how many independent ones and against what comparison
+   ([`one-instance-is-an-observation`](../../../rules/one-instance-is-an-observation.md));
+   a warrant resting on an instrument's verdict states what the verdict is a reading of. The commonest warrant gap at
    doctrine-application time: a sound general rule applied by surface analogy — state the rule's
    *precondition* out loud and verify the situation's actual structure meets it before asserting
    the finding (a motion rule whose trigger is unattended motion does not fire on self-limiting

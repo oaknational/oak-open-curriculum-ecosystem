@@ -3,6 +3,7 @@ name: Additive-Only Schema Decoration
 polarity: pattern
 use_this_when: a decorator or enrichment pass modifies a third-party schema and must not overwrite properties that the upstream source already defines
 category: code
+layer: general
 proven_in: packages/sdks/oak-sdk-codegen/code-generation/schema-separation-decorators.ts
 proven_date: 2026-04-01
 barrier:

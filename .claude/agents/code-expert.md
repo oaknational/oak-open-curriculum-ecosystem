@@ -7,10 +7,13 @@ color: orange
 permissionMode: plan
 ---
 
-# Code Reviewer
+# Code Expert
 
 All file paths are relative to the repository root.
 
 Your first action MUST be to read and internalise `.agent/sub-agents/templates/code-expert.md`.
 
-Review and report only. Do not modify code.
+This file is a thin Claude Code adapter. The canonical reviewer instructions live in the
+template referenced above.
+
+Mode: Observe, analyse and report. Do not modify code.

@@ -10,7 +10,7 @@ pdr_kind: governance
 sitting)**: the curator role formally stewards the concept scheme —
 minting candidates from consolidation passes, proposing promotions at
 second consumer, and maintaining the concept-maturity board (PDR-134
-§The concept layer; ADR-221 obligation 5).
+§The concept layer; the host's estate knowledge graph decision, obligation 5).
 **Related**:
 [PDR-014](PDR-014-consolidation-and-knowledge-flow-discipline.md)
 (capture, distil, graduate, enforce);
@@ -38,6 +38,10 @@ operationalises).
   references the superseded surface and aligns to a commit-plus-broadcast record on next
   use). If pass-coverage tracking ever
   proves needed in use, it is a substrate state/fitness concern, not a disposition ledger.
+- **2026-10-02** (two-estate consolidation): the body is made to agree with the amendment
+  above. Rationale, Cascade, Consequences, Forbids and Falsifiability still described the
+  superseded per-pass log as live; they now state the operative record, the commit plus the
+  homed substance. No decision changes.
 
 ## Context
 
@@ -212,11 +216,12 @@ vision. A session-bounded role (the existing `consolidator`) sees one
 window; the curator sees the substrate's trajectory across windows
 and can name patterns that no single session would expose.
 
-The metadata-only log contract prevents the new log surface from
-becoming the next buffer that needs a curator. Substance has one
-permanent home; the log lists where each substance went. If a
-substance does not yet have a home, the log records the home-gap as
-a structural-cure proposal pointer, not the substance itself.
+The curator keeps no log of its own: its record is the commit and the
+homed substance (Amendment Log, 2026-06-14). A per-pass log would have
+been the next buffer that needs a curator. Substance has one permanent
+home; where a substance has no home yet, the home-gap is routed as a
+proposal for a structural cure, and the substance is not copied anywhere
+to wait.
 
 Rejected alternatives:
 
@@ -230,17 +235,17 @@ Rejected alternatives:
 - **Treat curation as a sub-mode of implementation**: collapses
   PDR-072's two-axis output accounting back into one; recreates the
   failure mode PDR-072 cured.
-- **Log substance in the pass file**: re-creates a buffer the
-  curator would then need to drain. The metadata-only contract is
-  load-bearing.
+- **Keep a per-pass log file** (this record's own first proposal,
+  superseded 2026-06-14): even as metadata only it is a disposition
+  ledger kept beside the commit history, and a log that carried
+  substance would be a buffer the curator then had to drain.
 
 ## Cascade
 
-This PDR names the role and the log contract. The host repo's
-substrate implementation (where the per-pass log files live, what
-filename convention they use, whether the workflow is a SKILL or a
-directive, how the curator interacts with the host's quality-gate
-machinery) is a separate concern. Adopting repos land their own
+This PDR names the role and its record (the commit plus the homed
+substance). The host repo's substrate implementation (whether the
+workflow is a SKILL or a directive, how the curator interacts with the
+host's quality-gate machinery) is a separate concern. Adopting repos land their own
 substrate; this PDR is the portable doctrine those substrates
 implement.
 
@@ -261,27 +266,28 @@ the role that owns the lane.
 - Cross-session patterns (adoption gaps, accumulating buffer
   residue, recurring autonomic-curation defects) get cross-session
   vision applied to them.
-- The per-pass log becomes a navigation index for substrate
-  evolution: any reader can scan curator passes to see what work
-  was done, what was routed where, what gaps remain.
+- Git history is the navigation index for substrate evolution: a
+  reader scans the curator's commits to see what was routed where,
+  and the homes hold the substance.
 
 **Costs**:
 
-- Adopting repos must author or adopt the substrate (where the
-  per-pass log lives, what the workflow looks like).
+- Adopting repos must author or adopt the substrate (what the
+  workflow looks like).
 - The curator role adds another label to the team-start role list.
   Mitigation: the label is opt-in; teams that do not need
   substrate-care this session do not allocate the role.
-- The metadata-only contract requires discipline. Mitigation: the
-  contract is short and the reasons are recorded here; pass-file
-  drift toward substance is a recurrent-failure-mode candidate
+- Keeping no log requires discipline. Mitigation: the reasons are
+  recorded here and in `permanent-doc-is-the-consolidation-record`;
+  drift back toward a pass file is a recurrent-failure-mode candidate
   worth a future check.
 
 **Forbids**:
 
 - Treating substrate-care as ad-hoc work that happens when context
   permits.
-- Putting substance in the per-pass log file.
+- Authoring a per-pass log file, or any ledger of what was surveyed
+  and where it went.
 - Allowing the graduation buffer to accumulate records of curation
   work or records of what graduated.
 - Deleting primary-source streams reserved for separate mining.
@@ -296,8 +302,9 @@ This PDR is falsified if any of:
 - Curator passes accumulate without measurable change in the
   substrate's health signals (graduation buffer envelope, autonomic-
   curation defect rate, adoption gaps on landed substrate).
-- The metadata-only contract is repeatedly violated, suggesting
-  the contract shape is wrong for how agents actually do the work.
+- Seats keep authoring pass logs or disposition ledgers despite the
+  record rule, suggesting the rule's shape is wrong for how agents
+  actually do the work.
 - The role's boundary versus `consolidator` proves indistinguishable
   in practice, suggesting one role suffices and this PDR collapsed
   back into PDR-072 plus existing taxonomy.

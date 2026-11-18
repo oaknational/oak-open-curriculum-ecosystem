@@ -3,6 +3,7 @@ name: "A North-Star Doc Conserves Sprawl Instead of Delegating"
 polarity: anti-pattern
 use_this_when: "Authoring or raising the standard of a vision, charter, strategy, or other north-star document whose job is to orient, not to explain everything."
 category: process
+layer: general
 proven_in: "2026-06-17 vision rewrite (Ocelot binds Curfew): the first 'up to standard' pass kept the old doc's kitchen-sink shape; the owner: 'it is not a vision, it is a meandering set of explanations and commitments.' The knowledge-preservation instinct conserved the sprawl."
 proven_date: 2026-06-18
 barrier:

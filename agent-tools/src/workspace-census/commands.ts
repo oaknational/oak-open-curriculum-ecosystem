@@ -167,9 +167,12 @@ export async function runCheck(context: CommandContext): Promise<number> {
   return 1;
 }
 
+/** The parts joined by a comma, or `(none)` when there are none. */
+function orNone(parts: readonly string[]): string {
+  return parts.length === 0 ? '(none)' : parts.join(', ');
+}
+
 function renderDeltaText(legacyCount: number, delta: DeltaResult): string {
-  const orNone = (parts: readonly string[]): string =>
-    parts.length === 0 ? '(none)' : parts.join(', ');
   const changed = delta.changed.map((row) => `${row.dirPath} (${row.from} -> ${row.to})`);
   const renamed = delta.renamed.map((row) => `${row.fromDirPath} -> ${row.toDirPath}`);
   const dangling = delta.danglingRenames.map((row) => `${row.dirPath} (from ${row.renamedFrom})`);

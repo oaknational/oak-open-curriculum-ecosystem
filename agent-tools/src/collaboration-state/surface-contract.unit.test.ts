@@ -34,10 +34,14 @@ const IDLESS_INTENT_ROW = {
   updated_at: '2026-04-27T07:20:00Z',
   expires_at: '2026-04-27T07:35:00Z',
   phase: 'queued',
+  queued_seq: 0,
 };
 
-function registryText(commitQueue: readonly unknown[]): string {
-  return JSON.stringify({ schema_version: '1.3.0', commit_queue: commitQueue, claims: [] });
+const INTENT_PATH =
+  '.agent/state/collaboration/commit-queue/33333333-3333-4333-8333-333333333333.json';
+
+function registryText(): string {
+  return JSON.stringify({ schema_version: '1.4.0', claims: [] });
 }
 
 describe('checkCollaborationSurfaceContract', () => {
@@ -45,12 +49,25 @@ describe('checkCollaborationSurfaceContract', () => {
     const result = checkCollaborationSurfaceContract({
       schemaId: 'active-claims.schema.json',
       path: REGISTRY_PATH,
-      text: registryText([]),
+      text: registryText(),
     });
 
     const checked = unwrapOrThrow(result);
-    expect(checked.schema_version).toBe('1.3.0');
+    expect(checked.schema_version).toBe('1.4.0');
     expect(checked.claims).toEqual([]);
+  });
+
+  it('passes a contract-satisfying commit-queue intent file — the store surface has its own contract', () => {
+    const result = checkCollaborationSurfaceContract({
+      schemaId: 'commit-queue-intent.schema.json',
+      path: INTENT_PATH,
+      text: JSON.stringify({
+        ...IDLESS_INTENT_ROW,
+        agent_id: { ...IDLESS_INTENT_ROW.agent_id, id: 'e2e793c7-923e-5baa-97f0-2bedfb9b6b50' },
+      }),
+    });
+
+    expect(unwrapOrThrow(result).intent_id).toBe('33333333-3333-4333-8333-333333333333');
   });
 
   it('passes the other two contract surfaces on satisfying text', () => {
@@ -85,9 +102,9 @@ describe('checkCollaborationSurfaceContract', () => {
 
   it('classifies a contract violation with kind, path-labelled message, and the ORIGINAL error as causeError', () => {
     const result = checkCollaborationSurfaceContract({
-      schemaId: 'active-claims.schema.json',
-      path: REGISTRY_PATH,
-      text: registryText([IDLESS_INTENT_ROW]),
+      schemaId: 'commit-queue-intent.schema.json',
+      path: INTENT_PATH,
+      text: JSON.stringify(IDLESS_INTENT_ROW),
     });
 
     const failure = unwrapErr(result);
@@ -96,7 +113,7 @@ describe('checkCollaborationSurfaceContract', () => {
       /^commit_queue entry 33333333-3333-4333-8333-333333333333 carries an invalid agent_id/,
     );
     expect(failure.message).toBe(
-      `${REGISTRY_PATH} does not satisfy its surface contract: ${failure.causeError.message}`,
+      `${INTENT_PATH} does not satisfy its surface contract: ${failure.causeError.message}`,
     );
   });
 

@@ -7,6 +7,6 @@
 
 import type { PathBasedClient } from 'openapi-fetch';
 
-import type { paths } from './api-paths-types.js';
+import type { Paths } from './api-paths-types.js';
 
-export type OakApiPathBasedClient = PathBasedClient<paths>;
+export type OakApiPathBasedClient = PathBasedClient<Paths>;

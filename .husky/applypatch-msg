@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-# Refuse mailbox applies (git am) on main BEFORE the patch is applied —
+# Refuse mailbox applies (git am) on a default branch BEFORE the patch is applied —
 # applypatch-msg is the first git-am hook and fires while the tree is still
 # untouched, so the guard that runs is always the committed one (a mailbox
 # patch cannot edit its own guard first; pre-applypatch would run AFTER

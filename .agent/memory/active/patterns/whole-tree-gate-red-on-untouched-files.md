@@ -3,6 +3,7 @@ name: "A Whole-Tree Gate Red on Files You Didn't Touch (and Your Commits Just Pa
 polarity: pattern
 use_this_when: "A whole-tree gate (type-check, lint, full pnpm check) fails on a surface you never changed, in a shared checkout or multi-agent window."
 category: process
+layer: general
 proven_in: "2026-06-23 (Blazar) — shared-checkout transient red from a peer's in-flight feature (F-83)"
 proven_date: 2026-06-23
 barrier:

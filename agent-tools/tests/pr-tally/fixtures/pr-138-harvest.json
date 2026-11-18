@@ -1,0 +1,1835 @@
+{
+  "number": 138,
+  "headRefOid": "fe81ac08693c88bb7eea5aafe12d52c3c986f7e0",
+  "baseRefName": "engraph",
+  "mergeCommit": {
+    "oid": "e477e62f7e69d055a9d62d47c0ad16a77054438c"
+  },
+  "commits": {
+    "pageInfo": {
+      "hasNextPage": false,
+      "endCursor": "OA"
+    },
+    "nodes": [
+      {
+        "commit": {
+          "oid": "352ad0ee527e97d41cf9b8257eb34228cfafa879",
+          "committedDate": "2026-09-12T13:35:40Z"
+        }
+      },
+      {
+        "commit": {
+          "oid": "84dd6291b822c274adf6bdaaa4a032dac4784459",
+          "committedDate": "2026-09-12T13:52:37Z"
+        }
+      },
+      {
+        "commit": {
+          "oid": "db67da4d57475f7eb3b310c00639be4f24cddd63",
+          "committedDate": "2026-09-12T14:04:15Z"
+        }
+      },
+      {
+        "commit": {
+          "oid": "a1ec078e24c32c398ff3f2ac70e586c93f8e2d55",
+          "committedDate": "2026-09-12T14:23:18Z"
+        }
+      },
+      {
+        "commit": {
+          "oid": "33cca25bc71a0495ddb4701482f95aebdc991c0e",
+          "committedDate": "2026-09-12T14:37:32Z"
+        }
+      },
+      {
+        "commit": {
+          "oid": "ebf90ac3bdc811880b515d297b9a614ecf684d59",
+          "committedDate": "2026-09-12T14:53:39Z"
+        }
+      },
+      {
+        "commit": {
+          "oid": "6e2e74bf4d327d2bfbc034c94640c5a163135bc5",
+          "committedDate": "2026-09-12T15:04:34Z"
+        }
+      },
+      {
+        "commit": {
+          "oid": "fe81ac08693c88bb7eea5aafe12d52c3c986f7e0",
+          "committedDate": "2026-09-12T15:07:06Z"
+        }
+      }
+    ]
+  },
+  "reviewThreads": {
+    "pageInfo": {
+      "hasNextPage": false,
+      "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNToxNDo0MFrOocSGtA=="
+    },
+    "nodes": [
+      {
+        "id": "PRRT_kwDORdPTys6hwebM",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md",
+        "line": null,
+        "originalLine": 510,
+        "startLine": null,
+        "originalStartLine": 504,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMzo1NjoyN1rO7jQl4A=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996371453,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T13:46:59Z",
+              "body": "**<sub><sub>![P1 Badge](https://img.shields.io/badge/P1-orange?style=flat)</sub></sub>  Make body-only dispositions independently parseable**\n\nFor summary-only review findings, an issue comment has no parent thread or review binding, yet this format records only a bar marker and disposition verb—nothing identifies the originating body item or commit. The supplied fixture demonstrates the failure: comments `5645760733` and `5645946537` batch findings from multiple heads, open with headings rather than the required bold marker, and contain mixed per-row bar values. An implementation following this contract must therefore either infer associations from prose (contradicting the plan's recorded-field invariant) or report \"manual tally required\", so it cannot derive the promised per-round cure-worthy counts or terminal-zero verdict from this fixture. Require a machine-readable finding/round reference for each body-only disposition and make the fixture conform to that grammar.\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSTpug",
+                "databaseId": 5186578874,
+                "commit": {
+                  "oid": "352ad0ee527e97d41cf9b8257eb34228cfafa879"
+                }
+              }
+            },
+            {
+              "databaseId": 3996394976,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T13:56:27Z",
+              "body": "**In scope, over-bar** (prong two: todo 1's parser is built from this paragraph, and as written it could not bind a body-only disposition to its round or item without reading prose — the invariant the node forbids breaking). The observation is right on both counts: the format named no reference for body-only dispositions, and the fixture's two reconciliation comments batch several heads under prose headings. Cured in `SHA:84dd6291b` for the part in this pull request's scope: the paragraph now requires a body-only disposition to be an issue comment with one line per finding — the marker, the reference `head SHA:<sha> · <path>:<line>` (the review body's own anchor), the disposition sentence — and says that a comment without the reference, or batched under headings, reads as \"manual tally required\" for those items. The remedy's second half — making the fixture conform — is out of scope by the declaration (the fixture is a recording, not edited); instead the README names those two comments as the corpus's manual-tally case, which criterion 5 needs covered anyway, and the thread replies as its marked case. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSVSUg",
+                "databaseId": 5186605650,
+                "commit": {
+                  "oid": "84dd6291b822c274adf6bdaaa4a032dac4784459"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hwfZl",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md",
+        "line": null,
+        "originalLine": 511,
+        "startLine": null,
+        "originalStartLine": 509,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMzo1NjoyOFrO7jQmGw=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996377319,
+              "author": {
+                "login": "copilot-pull-request-reviewer"
+              },
+              "createdAt": "2026-09-12T13:49:39Z",
+              "body": "The recorded replies at `pr-135-harvest.json:552`, `:591`, and `:630` begin `Cured in `SHA:...`` with the SHA as an inline Markdown code span, not the literal `Cured in SHA:<sha>` form stated here. Because this fixture is the corpus the next parser consumes, the grammar needs to say whether code-wrapped SHA tokens are valid.\n\nThis issue also appears on line 516 of the same file.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNST_BQ",
+                "databaseId": 5186584325,
+                "commit": {
+                  "oid": "352ad0ee527e97d41cf9b8257eb34228cfafa879"
+                }
+              }
+            },
+            {
+              "databaseId": 3996395035,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T13:56:28Z",
+              "body": "**In scope, over-bar** (prong two: the parser reads this grammar and the corpus it must accept uses the code span). Cured in `SHA:84dd6291b`: the paragraph now says the SHA token is the `SHA:` prefix and seven to forty hex characters, bare or inside a code span, both valid. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSVSbw",
+                "databaseId": 5186605679,
+                "commit": {
+                  "oid": "84dd6291b822c274adf6bdaaa4a032dac4784459"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hwfZu",
+        "isResolved": true,
+        "isOutdated": false,
+        "path": "agent-tools/tests/pr-tally/fixtures/README.md",
+        "line": 39,
+        "originalLine": 37,
+        "startLine": 39,
+        "originalStartLine": null,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMzo1NjoyOVrO7jQmRw=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996377332,
+              "author": {
+                "login": "copilot-pull-request-reviewer"
+              },
+              "createdAt": "2026-09-12T13:49:39Z",
+              "body": "Every connection here is capped with `first: 50`, but the query selects no `pageInfo`/`endCursor` and provides no `after`-cursor procedure. A larger PR will therefore be silently truncated (including nested thread comments), despite the next paragraph saying it can be paged and the tally contract requiring pagination to exhaustion. Add the actual pagination shape/procedure rather than only mentioning cursors.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNST_BQ",
+                "databaseId": 5186584325,
+                "commit": {
+                  "oid": "352ad0ee527e97d41cf9b8257eb34228cfafa879"
+                }
+              }
+            },
+            {
+              "databaseId": 3996395079,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T13:56:29Z",
+              "body": "**In scope, over-bar** (prong one: a reader re-recording a larger pull request with this query would get a silently truncated fixture and trust it). Cured in `SHA:84dd6291b`: every connection in the query now selects `pageInfo { hasNextPage endCursor }`, and the README states the procedure — while any `hasNextPage` is true, re-query that connection with `after: \"<endCursor>\"` and concatenate its `nodes`, the nested thread `comments` connection included, before unwrapping; a truncated recording is not a fixture. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSVSkg",
+                "databaseId": 5186605714,
+                "commit": {
+                  "oid": "84dd6291b822c274adf6bdaaa4a032dac4784459"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hwkQJ",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md",
+        "line": null,
+        "originalLine": 517,
+        "startLine": null,
+        "originalStartLine": 516,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNDowODoyMFrO7jSODA=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996406277,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T14:01:47Z",
+              "body": "**<sub><sub>![P1 Badge](https://img.shields.io/badge/P1-orange?style=flat)</sub></sub>  Add an item key to body-only disposition references**\n\nWhen a review body contains two distinct findings at the same path and line—the case criterion 5 explicitly requires—or a body item duplicates an inline thread at that anchor, `head SHA + path:line` is identical for multiple logical items. The tally therefore cannot reliably determine which item an over-/below-bar line dispositions, which can mis-deduplicate the cure-worthy count or produce a false terminal-zero verdict. Fresh evidence in this revision is that the new reference adds only the head and anchor, not a stable finding ordinal, review ID, or substance key.\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSWHCg",
+                "databaseId": 5186619146,
+                "commit": {
+                  "oid": "84dd6291b822c274adf6bdaaa4a032dac4784459"
+                }
+              }
+            },
+            {
+              "databaseId": 3996421644,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T14:08:20Z",
+              "body": "**In scope, over-bar** (prong two: the parser is built from this grammar, and head plus anchor collides on exactly the two-findings-at-one-anchor case criterion 5 requires). Cured in `SHA:db67da4d5`: the reference is now `head SHA:<sha> · <path>:<line> · <item>`, where the item key is a Codex item's bold heading, a Copilot suppressed item's ordinal in its block (`item 3 of 6`), or `thread <id>` when the body item restates an inline thread at that anchor and is counted once. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSXCQg",
+                "databaseId": 5186634306,
+                "commit": {
+                  "oid": "db67da4d57475f7eb3b310c00639be4f24cddd63"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hwkQL",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": "agent-tools/tests/pr-tally/fixtures/README.md",
+        "line": null,
+        "originalLine": 128,
+        "startLine": null,
+        "originalStartLine": 127,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNDowODoyMlrO7jSOMA=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996406279,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T14:01:47Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Add a real Codex review-body finding to the fixture**\n\nThe fixture does not exercise the claimed Codex review-body parser path: every Codex `reviews.nodes[].body` contains only the standard review boilerplate, while all badge-and-heading findings are first comments under `reviewThreads`. An implementation can therefore completely fail to parse summary-only Codex body findings while still passing this purported end-to-end corpus; add an actual Codex body-only finding fixture or remove this coverage claim and cover the shape separately.\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSWHCg",
+                "databaseId": 5186619146,
+                "commit": {
+                  "oid": "84dd6291b822c274adf6bdaaa4a032dac4784459"
+                }
+              }
+            },
+            {
+              "databaseId": 3996421680,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T14:08:22Z",
+              "body": "**In scope, over-bar** (prong one: a reader trusting the coverage claim would believe the Codex body-only path exercised). Verified against the JSON: five Codex review bodies, none carrying a badge item; every Codex finding on #135 is a thread. The README's claim was mine and untested. Cured in `SHA:db67da4d5` for the in-scope half: the README now says there is no Codex body-only item in this corpus and that the shape takes a fixture of its own at todo 1. Adding a second recorded fixture here is outside the declared scope (the fixture is one recording of #135); it is named for todo 1, which consumes the fixtures. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSXCZw",
+                "databaseId": 5186634343,
+                "commit": {
+                  "oid": "db67da4d57475f7eb3b310c00639be4f24cddd63"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hwkQM",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": "agent-tools/tests/pr-tally/fixtures/README.md",
+        "line": null,
+        "originalLine": 12,
+        "startLine": null,
+        "originalStartLine": 11,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNDowODoyM1rO7jSOWg=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996406280,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T14:01:47Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Preserve pagination metadata in the recorded fixture**\n\nThe JSON does not match this provenance claim: `commits`, `reviewThreads`, every nested thread `comments`, `reviews`, and top-level `comments` contain only `nodes`, although the displayed recording query requests `pageInfo`. In the fixture-capture path this removes the only machine-readable evidence that each connection was exhausted, so a truncated capture has the same accepted shape despite the later requirement that truncation be rejected; retain the captured `pageInfo` values or document and enforce validation before normalization.\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSWHCg",
+                "databaseId": 5186619146,
+                "commit": {
+                  "oid": "84dd6291b822c274adf6bdaaa4a032dac4784459"
+                }
+              }
+            },
+            {
+              "databaseId": 3996421722,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T14:08:23Z",
+              "body": "**In scope, over-bar** (prong one: the provenance claim said the file came from a query the file did not match). Cured in `SHA:db67da4d5`: the fixture is re-recorded from the merged, unchanging #135 with `pageInfo` selected on every connection — the same 7/17/26/10 counts, twenty-one `pageInfo` objects, every `hasNextPage` false — so the README's query and the file agree and exhaustion is recorded in the file rather than asserted. Evidence class RUN (the re-recording) and READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSXClg",
+                "databaseId": 5186634390,
+                "commit": {
+                  "oid": "db67da4d57475f7eb3b310c00639be4f24cddd63"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hwksv",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": "agent-tools/tests/pr-tally/fixtures/README.md",
+        "line": null,
+        "originalLine": 134,
+        "startLine": null,
+        "originalStartLine": 132,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNDoyNjozM1rO7jWn8w=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996409114,
+              "author": {
+                "login": "copilot-pull-request-reviewer"
+              },
+              "createdAt": "2026-09-12T14:03:05Z",
+              "body": "The final wave is not a machine-readable terminal-success fixture under the new contract. `5645946537` contains two thread findings and eight suppressed body findings; only the thread replies have markers, while the eight batched body-only items are explicitly the “manual tally required” case. Describing all ten as below-bar/terminal-success contradicts the tally semantics and the following sentence.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSWR9Q",
+                "databaseId": 5186621941,
+                "commit": {
+                  "oid": "84dd6291b822c274adf6bdaaa4a032dac4784459"
+                }
+              }
+            },
+            {
+              "databaseId": 3996493811,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T14:26:33Z",
+              "body": "**In scope, over-bar** (prong one: a reader of the README, and todo 1's test, would assert terminal success from a corpus the contract reads as manual). Correct, and the same finding as the Codex thread at this anchor (counted once). Cured in `SHA:a1ec078e2`: the README now says the final head's two thread findings carry marked below-bar replies while its eight suppressed items are dispositioned only inside the batched comment `5645946537`, so the machine reading is \"manual tally required\" for those eight, not terminal success; a fixture test asserts the manual verdict. Evidence class READ, checked with `jq`.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSbFcw",
+                "databaseId": 5186700659,
+                "commit": {
+                  "oid": "a1ec078e24c32c398ff3f2ac70e586c93f8e2d55"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hwksy",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": "agent-tools/tests/pr-tally/fixtures/README.md",
+        "line": null,
+        "originalLine": 12,
+        "startLine": null,
+        "originalStartLine": 11,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNDoyNjozNFrO7jWoYA=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996409119,
+              "author": {
+                "login": "copilot-pull-request-reviewer"
+              },
+              "createdAt": "2026-09-12T14:03:05Z",
+              "body": "The committed JSON does not match the stated recording provenance: the query selects `pageInfo` on all four connections, but the fixture contains no `pageInfo`, `hasNextPage`, or `endCursor` fields. Either retain that metadata in the fixture or document its removal; otherwise “unedited apart from unwrapping” is inaccurate.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSWR9Q",
+                "databaseId": 5186621941,
+                "commit": {
+                  "oid": "84dd6291b822c274adf6bdaaa4a032dac4784459"
+                }
+              }
+            },
+            {
+              "databaseId": 3996493920,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T14:26:34Z",
+              "body": "**In scope, over-bar** (prong one: the provenance claim did not match the file). Cured in `SHA:db67da4d5`, the push before this thread was harvested: the fixture was re-recorded with `pageInfo` on every connection (twenty-one `pageInfo` objects, every `hasNextPage` false), so the query and the file agree. Evidence class RUN and READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSbFzQ",
+                "databaseId": 5186700749,
+                "commit": {
+                  "oid": "a1ec078e24c32c398ff3f2ac70e586c93f8e2d55"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hwks3",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": "agent-tools/tests/pr-tally/fixtures/README.md",
+        "line": null,
+        "originalLine": 140,
+        "startLine": null,
+        "originalStartLine": 137,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNDoyNjozNlrO7jWo-A=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996409127,
+              "author": {
+                "login": "copilot-pull-request-reviewer"
+              },
+              "createdAt": "2026-09-12T14:03:05Z",
+              "body": "This says there are only two body-only disposition comments, but comment `5645857878` also dispositions body-only findings (`report :194` and `report :206`) in its table; it is a third such comment alongside `5645760733` and `5645946537`. Omitting it makes the README understate the fixture's manual-tally cases.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSWR9Q",
+                "databaseId": 5186621941,
+                "commit": {
+                  "oid": "84dd6291b822c274adf6bdaaa4a032dac4784459"
+                }
+              }
+            },
+            {
+              "databaseId": 3996494072,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T14:26:36Z",
+              "body": "**In scope, over-bar** (prong one: the README understated the corpus's manual-tally cases). Verified with `jq`: comment `5645857878` carries a table dispositioning body-only findings including the report's `:194` and `:206`. Cured in `SHA:a1ec078e2`: the README names three body-only disposition comments (`5645760733`, `5645857878`, `5645946537`) and the three seat comments that disposition nothing. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSbGhA",
+                "databaseId": 5186700932,
+                "commit": {
+                  "oid": "a1ec078e24c32c398ff3f2ac70e586c93f8e2d55"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hwo1p",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md",
+        "line": null,
+        "originalLine": 508,
+        "startLine": null,
+        "originalStartLine": 505,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNDoyNjozN1rO7jWpag=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996433465,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T14:13:09Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Require exactly one unambiguous bar marker**\n\nWhen a disposition opens with text such as `**Not over-bar**` or `**Below-bar, not over-bar**`, the specified case-insensitive containment test accepts an unintended or conflicting marker, so the tally can classify the finding incorrectly and alter the terminal-zero or step-back verdict. Define a closed grammar that requires exactly one bar token rather than accepting any bold span containing either substring.\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSXvvA",
+                "databaseId": 5186645948,
+                "commit": {
+                  "oid": "db67da4d57475f7eb3b310c00639be4f24cddd63"
+                }
+              }
+            },
+            {
+              "databaseId": 3996494186,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T14:26:37Z",
+              "body": "**In scope, over-bar** (prong two: a containment test would let `**Not over-bar**` count as over-bar and move the verdict). Cured in `SHA:a1ec078e2`: the marker is a bold span whose text contains exactly one of the tokens `over-bar` or `below-bar` and no other bar token; `**Not over-bar**` and `**Below-bar, not over-bar**` read as no marker. Checked against the corpus: all seventeen recorded replies still satisfy the closed grammar. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSbG7A",
+                "databaseId": 5186701036,
+                "commit": {
+                  "oid": "a1ec078e24c32c398ff3f2ac70e586c93f8e2d55"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hwo1x",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md",
+        "line": null,
+        "originalLine": 519,
+        "startLine": null,
+        "originalStartLine": 516,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNDoyNjozOFrO7jWp6Q=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996433476,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T14:13:09Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Include the originating review ID in body-item references**\n\nWhen the same reviewer submits two reviews against one head—for example, after a review is re-requested without a push—the head and anchor remain identical, while `item 3 of 6` is only unique within each Copilot block and a Codex heading can recur. The parser therefore cannot tell which review-body item the disposition targets. Fresh evidence in this revision is that the added item key is scoped only to its review body while the reference still omits that body's review ID; include the review ID or another globally stable item identifier.\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSXvvA",
+                "databaseId": 5186645948,
+                "commit": {
+                  "oid": "db67da4d57475f7eb3b310c00639be4f24cddd63"
+                }
+              }
+            },
+            {
+              "databaseId": 3996494313,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T14:26:38Z",
+              "body": "**In scope, over-bar** (prong two: two reviews by one reviewer on one head — a re-request without a push, which this very pull request has done — leave head plus anchor plus ordinal ambiguous). Cured in `SHA:a1ec078e2`: the reference is `head SHA:<sha> · review <id> · <path>:<line> · <item>`, the review's own id first. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSbHRw",
+                "databaseId": 5186701127,
+                "commit": {
+                  "oid": "a1ec078e24c32c398ff3f2ac70e586c93f8e2d55"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hwo14",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": "agent-tools/tests/pr-tally/fixtures/README.md",
+        "line": null,
+        "originalLine": 138,
+        "startLine": null,
+        "originalStartLine": 136,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNDoyNjozOVrO7jWqVA=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996433484,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T14:13:09Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Do not claim terminal success for the manual-only fixture**\n\nWhen todo 1 consumes this corpus, the final head's eight suppressed body findings cannot produce a machine-derived cure-worthy zero: this README now explicitly classifies their disposition comments as the `manual tally required` case at lines 141–143. Fresh evidence in this revision is that acknowledgement, which directly contradicts the terminal-success claim here and could lead the fixture test to assert a verdict the documented parser must refuse; either add parseable per-item dispositions or describe the expected result as manual.\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSXvvA",
+                "databaseId": 5186645948,
+                "commit": {
+                  "oid": "db67da4d57475f7eb3b310c00639be4f24cddd63"
+                }
+              }
+            },
+            {
+              "databaseId": 3996494420,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T14:26:39Z",
+              "body": "**In scope, over-bar**, the same finding as the Copilot thread at this anchor (counted once). Cured in `SHA:a1ec078e2` as described there: the final head's machine reading is manual for its eight suppressed items; the terminal-success reading is the seat's human tally on the PR, and the fixture test asserts the manual verdict. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSbHkQ",
+                "databaseId": 5186701201,
+                "commit": {
+                  "oid": "a1ec078e24c32c398ff3f2ac70e586c93f8e2d55"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hwrEB",
+        "isResolved": true,
+        "isOutdated": false,
+        "path": "agent-tools/tests/pr-tally/fixtures/pr-135-harvest.json",
+        "line": 96,
+        "originalLine": 96,
+        "startLine": 96,
+        "originalStartLine": null,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNDoyNjo0MFrO7jWqqQ=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996447281,
+              "author": {
+                "login": "copilot-pull-request-reviewer"
+              },
+              "createdAt": "2026-09-12T14:15:17Z",
+              "body": "The recorded seat replies end their signature as `— Nettle guards Pistil (2de368), Director`, but the existing self-reply predicate requires the final line to end exactly in `(<six lowercase hex>)` (`agent-tools/src/pr-watch/reviewer-legs.ts:125-130`). Consequently these 17 replies are not recognised as signed self-replies and will not be excluded from the raised count/quiet-window as this fixture and the README claim. Either record the canonical bare-prefix signature or explicitly extend the parser and its tests to accept this exact role suffix while preserving the recorded corpus.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSYlog",
+                "databaseId": 5186659746,
+                "commit": {
+                  "oid": "db67da4d57475f7eb3b310c00639be4f24cddd63"
+                }
+              }
+            },
+            {
+              "databaseId": 3996494505,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T14:26:40Z",
+              "body": "**In scope, over-bar** (prong two: the README claimed the replies are excluded as signed self-replies, and under the ratified predicate they are not). Verified: all seventeen end `— Nettle guards Pistil (2de368), Director`, and `SIGNATURE_SUFFIX` requires the line to end with the six-hex prefix. Cured in `SHA:a1ec078e2` for what this pull request owns: the format paragraph names the signature as `reviewer-legs.ts` defines it (final line ends with the prefix, nothing after), the README states that every recorded reply carries the role suffix and therefore reads as NOT signed under the current code, and the node's ledger records the pickup question for todo 1 — widen the predicate by dated amendment or treat this corpus's replies as unsigned. The recording is not edited (it is a recording) and the parser is todo 1's, so neither of the thread's two alternatives is taken here. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSbH1w",
+                "databaseId": 5186701271,
+                "commit": {
+                  "oid": "a1ec078e24c32c398ff3f2ac70e586c93f8e2d55"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hw0vZ",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md",
+        "line": null,
+        "originalLine": 512,
+        "startLine": null,
+        "originalStartLine": 508,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNDo0MTowOVrO7jZNow=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996509767,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T14:32:29Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Define a marker grammar that rejects negation**\n\nWhen the implementer follows the stated containment test, `**Not over-bar**` contains exactly one recognised token and therefore classifies as over-bar, directly contradicting the next sentence. Fresh evidence in this revision is that the replacement grammar still defines validity through substring containment while using this negative form as a rejection example; a parser following the former can change cure-worthy counts and the terminal verdict. Define a genuinely closed accepted pattern rather than relying on unspecified detection of negation. [.agent/rules/agent-experience-review-lens.mdL18-L21](https://github.com/EngraphCode/open-curriculum-ecosystem/blob/a1ec078e24c32c398ff3f2ac70e586c93f8e2d55/.agent/rules/agent-experience-review-lens.md#L18-L21)\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSc4vw",
+                "databaseId": 5186730175,
+                "commit": {
+                  "oid": "a1ec078e24c32c398ff3f2ac70e586c93f8e2d55"
+                }
+              }
+            },
+            {
+              "databaseId": 3996536227,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T14:41:09Z",
+              "body": "**In scope, over-bar** (prong two: a parser built from a containment test would count a negated span). The same finding as the Copilot thread at this anchor (counted once). Cured in `SHA:33cca25bc`: the grammar is an accepted pattern, not a containment test — the span's ENTIRE text is an optional `In scope, ` / `Out of scope, ` prefix, then exactly `Over-bar` or `Below-bar`, then an optional ` on prong one` / ` on prong two`, then an optional full stop, and nothing else; `**Not over-bar**` and any span with other words read as no marker. Checked with `jq`: the corpus's seventeen spans are `Over-bar` (11), `Below-bar` (3), `Over-bar on prong one`, `Over-bar on prong two`, `Over-bar on prong two.` — all match. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSf6Vg",
+                "databaseId": 5186779734,
+                "commit": {
+                  "oid": "33cca25bc71a0495ddb4701482f95aebdc991c0e"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hw0vb",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md",
+        "line": null,
+        "originalLine": 507,
+        "startLine": null,
+        "originalStartLine": 505,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNDo0MToxMVrO7jZOLA=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996509770,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T14:32:29Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Match disposition signatures to the live predicate**\n\nWhen a seat signs with the visual-disambiguator form that `isSignedSelfReply` accepts, such as `(2de368-ABC)`, this new contract instead says the signature must end immediately after the six-hex prefix. If todo 1 follows this text, `pr-tally` and `pr-watch` will disagree about whether the same reply is self-authored, allowing the tally to count a disposition as a raised finding and move its quiet-window anchor; document the predicate's optional `-hex3` arm or change both surfaces together. [.agent/rules/documentation-hygiene.mdL11-L15](https://github.com/EngraphCode/open-curriculum-ecosystem/blob/a1ec078e24c32c398ff3f2ac70e586c93f8e2d55/.agent/rules/documentation-hygiene.md#L11-L15)\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSc4vw",
+                "databaseId": 5186730175,
+                "commit": {
+                  "oid": "a1ec078e24c32c398ff3f2ac70e586c93f8e2d55"
+                }
+              }
+            },
+            {
+              "databaseId": 3996536364,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T14:41:11Z",
+              "body": "**In scope, over-bar** (prong two: `pr-tally` and `pr-watch` would disagree on the same reply). Read first-hand: `SIGNATURE_SUFFIX` is `/\\([0-9a-f]{6}(?:-[0-9a-fA-F]{3})?\\)$/` and the unit tests accept `(92e9d6-9c1)` and `(22e835-DDA)`. The same finding as the Copilot thread at this anchor (counted once). Cured in `SHA:33cca25bc`: the paragraph names `isSignedSelfReply` as it stands, unchanged — the six-hex prefix or the token form with a three-hex tail of either case, nothing after — and the node's ledger row says the same. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSf6wA",
+                "databaseId": 5186779840,
+                "commit": {
+                  "oid": "33cca25bc71a0495ddb4701482f95aebdc991c0e"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hw0vc",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/plans/delivery/pr-tally.plan.md",
+        "line": null,
+        "originalLine": 156,
+        "startLine": null,
+        "originalStartLine": 154,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNDo0MToxNFrO7jZOpw=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996509771,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T14:32:29Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Keep todo 3 open until its fixture conforms**\n\nThe newly added status says todo 3 is landed and cites `pr-135-harvest.json` as its end-to-end workflow fixture, but that fixture's README states that every body-only disposition predates the new one-line format and therefore produces `manual tally required`. Fresh evidence in this revision is this `Landed 2026-09-12` declaration despite there being no workflow-produced example proving that ordinary body-only dispositions yield machine-readable counts; keep the todo open or add the conforming recorded fixture it requires. [.agent/rules/plan-body-first-principles-check.mdL3-L8](https://github.com/EngraphCode/open-curriculum-ecosystem/blob/a1ec078e24c32c398ff3f2ac70e586c93f8e2d55/.agent/rules/plan-body-first-principles-check.md#L3-L8)\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSc4vw",
+                "databaseId": 5186730175,
+                "commit": {
+                  "oid": "a1ec078e24c32c398ff3f2ac70e586c93f8e2d55"
+                }
+              }
+            },
+            {
+              "databaseId": 3996536487,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T14:41:14Z",
+              "body": "**In scope, over-bar** (prong two: the node would tell todo 1 its fixture obligation is met when the recorded corpus cannot prove that ordinary body-only dispositions yield counts). Correct by the node's own words — \"an end-to-end fixture produced by that workflow\". Cured in `SHA:33cca25bc`: todo 3 reads \"Partly landed\": the format and its projections are in, the skill step landed earlier, the fixture recorded so far predates the format and is the manual-tally corpus, and the conforming end-to-end fixture is STILL OWED before todo 1's first test — recorded from a pull request run under this format (#136 or #138, whose later dispositions already use the one-line form and the bare signature) once it merges. Recording it here would be a recording of an unmerged, moving pull request, so it is named as owed, not claimed. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSf7Jg",
+                "databaseId": 5186779942,
+                "commit": {
+                  "oid": "33cca25bc71a0495ddb4701482f95aebdc991c0e"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hw0zy",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md",
+        "line": null,
+        "originalLine": 512,
+        "startLine": null,
+        "originalStartLine": 508,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNDo0MToxMFrO7jZN8A=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996510199,
+              "author": {
+                "login": "copilot-pull-request-reviewer"
+              },
+              "createdAt": "2026-09-12T14:32:42Z",
+              "body": "The token-count rule is ambiguous/contradictory: `**Not over-bar**` contains exactly one of the named tokens, so the preceding rule would classify it as over-bar, while the example says it is unmarked. A parser cannot generalise this contract without guessing how negation, punctuation, or mixed tokens are handled; spell out that only a positive standalone token counts and that any `not`/second token invalidates the marker.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSc9ig",
+                "databaseId": 5186731402,
+                "commit": {
+                  "oid": "a1ec078e24c32c398ff3f2ac70e586c93f8e2d55"
+                }
+              }
+            },
+            {
+              "databaseId": 3996536304,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T14:41:10Z",
+              "body": "**In scope, over-bar**, the same finding as the Codex thread at this anchor (counted once). Cured in `SHA:33cca25bc` as described there: a positively closed accepted pattern; negation, a second token or any other words read as no marker. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSf6hw",
+                "databaseId": 5186779783,
+                "commit": {
+                  "oid": "33cca25bc71a0495ddb4701482f95aebdc991c0e"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hw0z8",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md",
+        "line": null,
+        "originalLine": 507,
+        "startLine": null,
+        "originalStartLine": null,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNDo0MToxM1rO7jZObw=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996510212,
+              "author": {
+                "login": "copilot-pull-request-reviewer"
+              },
+              "createdAt": "2026-09-12T14:32:43Z",
+              "body": "`reviewer-legs.ts` accepts more than the bare suffix described here: `SIGNATURE_SUFFIX` also permits the MCP-145 token form `(<six lowercase hex>-<three hex>)` (and its tests cover it at `reviewer-legs.unit.test.ts:296-304`). Because this paragraph defines the format the tally reads, a valid token-form self-reply should not be silently classified as nonconforming; document that optional suffix (including its case rules) or explicitly make the intake contract narrower than the detector.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSc9ig",
+                "databaseId": 5186731402,
+                "commit": {
+                  "oid": "a1ec078e24c32c398ff3f2ac70e586c93f8e2d55"
+                }
+              }
+            },
+            {
+              "databaseId": 3996536431,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T14:41:13Z",
+              "body": "**In scope, over-bar**, the same finding as the Codex thread at this anchor (counted once). Cured in `SHA:33cca25bc` as described there: the contract is the detector, token form and case rules included, not narrower than it. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSf69A",
+                "databaseId": 5186779892,
+                "commit": {
+                  "oid": "33cca25bc71a0495ddb4701482f95aebdc991c0e"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hw00F",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": "agent-tools/tests/pr-tally/fixtures/README.md",
+        "line": null,
+        "originalLine": 150,
+        "startLine": null,
+        "originalStartLine": 148,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNDo0MToxNVrO7jZO6w=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996510225,
+              "author": {
+                "login": "copilot-pull-request-reviewer"
+              },
+              "createdAt": "2026-09-12T14:32:43Z",
+              "body": "The JSON contains eight human-authored issue comments: the six listed `el-graphael` comments plus `jimCresswell`'s handback/correction comments `5644831605` and `5644834828`. Calling only six \"seat issue comments\" makes the corpus inventory ambiguous; qualify this as `el-graphael`'s six or account for the two additional seat comments.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSc9ig",
+                "databaseId": 5186731402,
+                "commit": {
+                  "oid": "a1ec078e24c32c398ff3f2ac70e586c93f8e2d55"
+                }
+              }
+            },
+            {
+              "databaseId": 3996536555,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T14:41:15Z",
+              "body": "**In scope, over-bar** (prong one: the inventory was wrong). Checked with `jq`: ten issue comments — six by `el-graphael`, two by `jimCresswell` (`5644831605`, `5644834828`), one Codex summary, one Sonar badge. Cured in `SHA:33cca25bc`: the README lists all ten and says which disposition anything. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSf76A",
+                "databaseId": 5186780136,
+                "commit": {
+                  "oid": "33cca25bc71a0495ddb4701482f95aebdc991c0e"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hw7Au",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md",
+        "line": null,
+        "originalLine": 536,
+        "startLine": null,
+        "originalStartLine": 533,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNDo1Nzo0OVrO7jcMlQ=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996547903,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T14:46:02Z",
+              "body": "**<sub><sub>![P1 Badge](https://img.shields.io/badge/P1-orange?style=flat)</sub></sub>  Exempt recognised boilerplate from the manual verdict**\n\nWhen Codex posts its ordinary no-finding summary, it produces a non-empty review body with no badge-and-heading item—the supplied corpus contains five such bodies. Treating every unmarked review body as `manual tally required` means that even after all actual findings receive parseable dispositions, routine Codex rounds can never produce the promised machine-derived terminal-zero verdict. Define the recognised zero-item boilerplate shape separately from genuinely unstructured finding prose. [.agent/rules/agent-experience-review-lens.mdL18-L21](https://github.com/EngraphCode/open-curriculum-ecosystem/blob/33cca25bc71a0495ddb4701482f95aebdc991c0e/.agent/rules/agent-experience-review-lens.md#L18-L21)\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNShapw",
+                "databaseId": 5186804391,
+                "commit": {
+                  "oid": "33cca25bc71a0495ddb4701482f95aebdc991c0e"
+                }
+              }
+            },
+            {
+              "databaseId": 3996585109,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T14:57:49Z",
+              "body": "**In scope, over-bar** (prong two: todo 1's implementer following the paragraph literally would read every routine Codex round as manual, and the instrument could never reach terminal zero — checked against the corpus, which carries five such Codex bodies). Cured in `SHA:ebf90ac3b`, alone: an unmarked body is one carrying finding prose without the reviewer's markers; a reviewer's no-finding boilerplate (Codex's ordinary summary, a Copilot review with zero generated comments) carries no item and raises zero, never manual. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSlN_g",
+                "databaseId": 5186866686,
+                "commit": {
+                  "oid": "ebf90ac3bdc811880b515d297b9a614ecf684d59"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hw7Aw",
+        "isResolved": true,
+        "isOutdated": false,
+        "path": "agent-tools/tests/pr-tally/fixtures/README.md",
+        "line": 61,
+        "originalLine": 61,
+        "startLine": 57,
+        "originalStartLine": 57,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNDo1Nzo1MFrO7jcMuw=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996547905,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T14:46:02Z",
+              "body": "**<sub><sub>![P1 Badge](https://img.shields.io/badge/P1-orange?style=flat)</sub></sub>  Preserve original anchors for outdated threads**\n\nWhen a later push makes an inline thread outdated, GitHub returns `line: null`; this recorded fixture already contains 11 such threads. Because the planned tally deduplicates body restatements against inline findings by anchor and substance, harvesting only `line` loses the anchor needed to match a body item such as `path:2332`, allowing one logical finding to be counted twice and potentially firing a false step-back verdict. Record `originalLine` and the corresponding start-line fields in the query and fixture. [.agent/rules/verify-data-supports-shape-before-building.mdL21-L25](https://github.com/EngraphCode/open-curriculum-ecosystem/blob/33cca25bc71a0495ddb4701482f95aebdc991c0e/.agent/rules/verify-data-supports-shape-before-building.md#L21-L25)\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNShapw",
+                "databaseId": 5186804391,
+                "commit": {
+                  "oid": "33cca25bc71a0495ddb4701482f95aebdc991c0e"
+                }
+              }
+            },
+            {
+              "databaseId": 3996585147,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T14:57:50Z",
+              "body": "**In scope, over-bar** on the observation, routed rather than cured: eleven of the seventeen recorded threads carry `line: null` (checked), and a harvest reading `line` alone would lose the anchor the deduplication needs. The remedy — widening the recording query and re-recording — is todo 1's harvest design, which this pull request's scope leaves to that lane. Routed to `.agent/plans/delivery/pr-tally.plan.md` §Review dispositions: todo 1's harvest reads `originalLine` and `originalStartLine` alongside `line` and re-records the corpus with the widened query at pickup. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSlOHw",
+                "databaseId": 5186866719,
+                "commit": {
+                  "oid": "ebf90ac3bdc811880b515d297b9a614ecf684d59"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hw7pQ",
+        "isResolved": true,
+        "isOutdated": false,
+        "path": "agent-tools/tests/pr-tally/fixtures/README.md",
+        "line": 160,
+        "originalLine": 160,
+        "startLine": 160,
+        "originalStartLine": null,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNDo1Nzo1MlrO7jcM4Q=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996552103,
+              "author": {
+                "login": "copilot-pull-request-reviewer"
+              },
+              "createdAt": "2026-09-12T14:47:51Z",
+              "body": "This claims a fixture test already asserts the manual verdict, but the README says nothing consumes these files yet and the plan still marks the conforming fixture/test as owed; the fixture directory contains only this README and the JSON. Change this to future-tense wording so the recording does not claim validation that has not landed.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSh-ww",
+                "databaseId": 5186813635,
+                "commit": {
+                  "oid": "33cca25bc71a0495ddb4701482f95aebdc991c0e"
+                }
+              }
+            },
+            {
+              "databaseId": 3996585185,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T14:57:52Z",
+              "body": "**Below-bar.** Rejected, no write. True: no test exists yet, and the README's first paragraph says so (\"nothing consumes them yet\"). The sentence names the assertion todo 1's test makes over this corpus; its reader is todo 1's implementer, who reads the first paragraph first and acts on neither sentence before that lane opens. PDR-140 clause 9(a): imprecision no reader acts on. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSlOQQ",
+                "databaseId": 5186866753,
+                "commit": {
+                  "oid": "ebf90ac3bdc811880b515d297b9a614ecf684d59"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hxC_i",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md",
+        "line": null,
+        "originalLine": 540,
+        "startLine": null,
+        "originalStartLine": 538,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNTowOTozNFrO7jeJJw=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996598002,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T15:02:52Z",
+              "body": "**<sub><sub>![P1 Badge](https://img.shields.io/badge/P1-orange?style=flat)</sub></sub>  Parse suppressed items before accepting Copilot zero**\n\nWhen todo 1 interprets Copilot's standard `Comments generated` footer, this exemption can erase real findings: fixture reviews `PRR_kwDORdPTys8AAAABNRryZQ` and `PRR_kwDORdPTys8AAAABNSJqzw` both report `0 new` while carrying suppressed-findings blocks containing 15 and 8 items respectively. Fresh evidence in this revision is that the supplied fixture directly contradicts the new zero-comments example; define no-finding boilerplate by proving that no suppressed items were parsed, otherwise either round can incorrectly produce terminal zero. [.agent/rules/verify-data-supports-shape-before-building.mdL18-L25](https://github.com/EngraphCode/open-curriculum-ecosystem/blob/ebf90ac3bdc811880b515d297b9a614ecf684d59/.agent/rules/verify-data-supports-shape-before-building.md#L18-L25)\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSmAAQ",
+                "databaseId": 5186879489,
+                "commit": {
+                  "oid": "ebf90ac3bdc811880b515d297b9a614ecf684d59"
+                }
+              }
+            },
+            {
+              "databaseId": 3996616999,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T15:09:34Z",
+              "body": "**In scope, over-bar** (prong two: todo 1 would accept Copilot's footer as zero and erase real findings; the corpus proves it — `PRR_kwDORdPTys8AAAABNRryZQ` and `PRR_kwDORdPTys8AAAABNSJqzw` say \"0 new\" and carry fifteen and eight suppressed items). My example was wrong against the file I had in front of me. Cured in `SHA:fe81ac086`, alone: boilerplate is proven by the reviewer's own marker parse yielding no item, never by a footer — Codex's ordinary summary has no badge-and-heading item; a Copilot body counts as boilerplate only when its suppressed-findings block is absent or empty. Evidence class READ, checked with `jq`.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSnILg",
+                "databaseId": 5186897966,
+                "commit": {
+                  "oid": "fe81ac08693c88bb7eea5aafe12d52c3c986f7e0"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hxIax",
+        "isResolved": true,
+        "isOutdated": false,
+        "path": ".agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md",
+        "line": 555,
+        "originalLine": 555,
+        "startLine": 553,
+        "originalStartLine": 553,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNToxNTo0NlrO7jfIvA=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996630552,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T15:14:39Z",
+              "body": "**<sub><sub>![P1 Badge](https://img.shields.io/badge/P1-orange?style=flat)</sub></sub>  Require a disposition before counting the marker**\n\nWhen a seat writes the bar assessment but omits or mistypes the required `Cured in SHA:`, `Routed to`, or `Rejected` disposition, this explicitly tells todo 1 to accept the marker anyway. For a body-only finding, that comment is the only disposition record, so a below-bar-only round can appear as cure-worthy zero and terminal even though PDR-140's required routing or reasoned rejection was never recorded; require a recognisable disposition field or classify the item as manual.\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSoF_w",
+                "databaseId": 5186913791,
+                "commit": {
+                  "oid": "fe81ac08693c88bb7eea5aafe12d52c3c986f7e0"
+                }
+              }
+            },
+            {
+              "databaseId": 3996633276,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T15:15:46Z",
+              "body": "**Below-bar.** Rejected, no write. The disposition PDR-140 requires is the signed reply or comment line itself: the marker is never posted bare — the format says \"with the rationale\" — and a `Below-bar` line carrying its reasons IS the reasoned rejection, whichever verb it uses (the two recorded replies `3996223154` and `3996223195` are exactly that: rationale, \"No write\", no verb). Making the count hinge on one of three exact verbs would make the instrument brittle to wording while adding no recorded fact the marker and its rationale do not already carry; the machine counts the marker, the reader reads the rationale, and a line that is only a marker with nothing after it is not a form this contract produces. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSoQQQ",
+                "databaseId": 5186916417,
+                "commit": {
+                  "oid": "fe81ac08693c88bb7eea5aafe12d52c3c986f7e0"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hxIa0",
+        "isResolved": true,
+        "isOutdated": false,
+        "path": ".agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md",
+        "line": 563,
+        "originalLine": 563,
+        "startLine": 561,
+        "originalStartLine": 561,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxNToxNTo0N1rO7jfI5A=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996630555,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T15:14:40Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Use a collision-free key for Codex body items**\n\nWhen one Codex review contains two distinct body findings with the same path, line, and bold heading, both references reduce to the same review ID and item key, so the tally cannot bind a disposition to the intended finding and can mis-deduplicate the count. Fresh evidence in the final text is that the replacement key is the unrestricted bold heading even though no uniqueness constraint exists; use a review-local ordinal or another collision-free identifier as is already done for Copilot items.\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSoF_w",
+                "databaseId": 5186913791,
+                "commit": {
+                  "oid": "fe81ac08693c88bb7eea5aafe12d52c3c986f7e0"
+                }
+              }
+            },
+            {
+              "databaseId": 3996633316,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T15:15:47Z",
+              "body": "**Below-bar.** Rejected, no write. The reference already carries the review id, the anchor and the item's heading; the collision needs two distinct Codex findings in one review at one path and line under one identical bold heading, a case no recorded round has produced and the corpus (which has no Codex body item at all) cannot exhibit. The node's mechanism owns deduplication by anchor AND substance, and todo 1 widens the key to an ordinal if that case ever appears; no reader acts wrongly before then (PDR-140 clause 9(a)). Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSoQYg",
+                "databaseId": 5186916450,
+                "commit": {
+                  "oid": "fe81ac08693c88bb7eea5aafe12d52c3c986f7e0"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "reviews": {
+    "pageInfo": {
+      "hasNextPage": false,
+      "endCursor": "Y3Vyc29yOnYyOpO0MjAyNi0wOS0xMlQxNToxNTo0N1q0MjAyNi0wOS0xMlQxNToxNTo0N1rPAAAAATUqEGI="
+    },
+    "nodes": [
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSTpug",
+        "databaseId": 5186578874,
+        "author": {
+          "login": "chatgpt-codex-connector"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "352ad0ee527e97d41cf9b8257eb34228cfafa879"
+        },
+        "submittedAt": "2026-09-12T13:46:59Z",
+        "body": "\n### 💡 Codex Review\n\nHere are some automated review suggestions for this pull request.\n\n**Reviewed commit:** `352ad0ee52`\n    \n\n<details> <summary>ℹ️ About Codex in GitHub</summary>\n<br/>\n\nCodex has been enabled to automatically review pull requests in this repo. Reviews are triggered when you\n- Open a pull request for review\n- Mark a draft as ready\n- Comment \"@codex review\".\n\nIf Codex has suggestions, it will comment; otherwise it will react with 👍.\n\n\n\n\nWhen you [sign up for Codex through ChatGPT](https://openai.com/codex), Codex can also answer questions or update the PR, like \"@codex address that feedback\".\n            \n</details>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNST_BQ",
+        "databaseId": 5186584325,
+        "author": {
+          "login": "copilot-pull-request-reviewer"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "352ad0ee527e97d41cf9b8257eb34228cfafa879"
+        },
+        "submittedAt": "2026-09-12T13:49:39Z",
+        "body": "### 🟡 Changes recommended\n\nUnresolved moderate findings remain in the disposition contract and fixture capture documentation.\n\n*Get a fresh assessment by requesting another Copilot review.*\n\n<details>\n<summary>Pull request overview</summary>\n\nDefines the `pr-tally` disposition format, adds a PR #135 harvest fixture, and records todo 3 completion.\n\n**Changes:**\n- Adds disposition grammar to `pr-lifecycle`.\n- Adds fixture JSON and capture documentation.\n- Updates the `pr-tally` delivery plan.\n\n**Review findings:**\n- `.agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md`: moderate findings (1–2 votes) concern signed comments, code-wrapped SHA syntax, and missing PDR-140 prong handling.\n- `agent-tools/tests/pr-tally/fixtures/README.md`: moderate findings (1–2 votes) concern the hard-coded PR number and incomplete pagination procedure.\n- `agent-tools/tests/pr-tally/fixtures/pr-135-harvest.json`: moderate finding (1 vote) concerns missing prong identification in over-bar replies.\n</details>\n\n<details>\n<summary>File summaries</summary>\n\n| File | Description |\r\n|---|---|\r\n| `agent-tools/tests/pr-tally/fixtures/README.md` | Documents the harvest structure and recording query. |\r\n| `agent-tools/tests/pr-tally/fixtures/pr-135-harvest.json` | Provides recorded PR #135 review data. |\r\n| `.agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md` | Defines machine-readable disposition formatting. |\r\n| `.agent/plans/delivery/pr-tally.plan.md` | Records todo 3 and fixture completion. |\n</details>\n\n<details>\n<summary>Review details</summary>\n\n### Suppressed comments (4)\n\n**.agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md:519**\n* The fixture is not wholly in the format claimed here. Besides the seventeen marked thread replies, its signed reconciliation issue comments start with headings and have no opening marker, and the final below-bar replies at `pr-135-harvest.json:669` and `:708` have no `Cured in`/`Routed to`/`Rejected` sentence. If these are the criterion-5 legacy/manual cases, say so here and scope the “every”/one-sentence claim to new dispositions; otherwise the contract and fixture disagree.\n```\nThe recorded corpus is the fixture at\n`agent-tools/tests/pr-tally/fixtures/pr-135-harvest.json`: every\ndisposition there opens with the marker; the disposition verbs postdate\nits rounds, whose rejections carry the rationale without the word.\n```\n**.agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md:515**\n* The tally mechanism reads issue comments as well as thread replies, and the fixture contains seat-authored issue comments; however, this exclusion only names signed replies. Without excluding signed comments too, the seat's own intake/reconciliation comments can be counted as findings or advance the quiet-window anchor. Align this sentence with the plan's replies-and-comments rule.\n```\nexactly as an unmarked review body does; the seat's signed replies are\nexcluded from the raised count and from the quiet-window anchor (item 2).\n```\n**.agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md:508**\n* The requirement that an over-bar disposition name the PDR-140 prong is not met by several recorded seat replies: the `**Over-bar**` replies at fixture lines 162, 201, 357, 591, and 630 do not identify prong one or two (some only say the finding is duplicated or describe the reader). Since the README presents all 17 replies as accepted examples, the contract cannot both require explicit prong recording and claim this corpus demonstrates the format. Mark these as pre-contract legacy/manual cases or adjust the grammar to match the accepted marker shape.\n```\nwith a bold span that contains `over-bar` or `below-bar` (case-insensitive;\n`**Over-bar**`, `**Below-bar**`, `**In scope, over-bar**` and `**Over-bar on\nprong two**` all read) and, for over-bar, names the PDR-140 prong met — then\n```\n**agent-tools/tests/pr-tally/fixtures/README.md:30**\n* This heading says the query is for a fresh capture of another PR, but `pullRequest(number: 135)` is hard-coded, so copying it silently records PR #135 again. Parameterise the number (and document the variables payload) before presenting this as the reusable recording query.\n```\nquery {\n  repository(owner: \"EngraphCode\", name: \"open-curriculum-ecosystem\") {\n    pullRequest(number: 135) {\n```\n\n- **Files reviewed:** 3/4 changed files\n- **Comments generated:** 2\n- **Review effort level:** Lite (auto)\n</details>\n\n> [!NOTE]\n> Copilot is running an experiment and ran this review at Lite.\n\n---\n\n💡 Configure MCP servers for context-aware, tailored reviews. <a href=\"https://docs.github.com/copilot/how-tos/use-copilot-agents/request-a-code-review/use-code-review?tool=webui#mcp-servers-and-agent-skills\" class=\"Link--inTextBlock\" target=\"_blank\" rel=\"noopener noreferrer\">Learn more in the docs.</a>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSVSUg",
+        "databaseId": 5186605650,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "84dd6291b822c274adf6bdaaa4a032dac4784459"
+        },
+        "submittedAt": "2026-09-12T13:56:27Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSVSbw",
+        "databaseId": 5186605679,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "84dd6291b822c274adf6bdaaa4a032dac4784459"
+        },
+        "submittedAt": "2026-09-12T13:56:28Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSVSkg",
+        "databaseId": 5186605714,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "84dd6291b822c274adf6bdaaa4a032dac4784459"
+        },
+        "submittedAt": "2026-09-12T13:56:29Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSWHCg",
+        "databaseId": 5186619146,
+        "author": {
+          "login": "chatgpt-codex-connector"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "84dd6291b822c274adf6bdaaa4a032dac4784459"
+        },
+        "submittedAt": "2026-09-12T14:01:47Z",
+        "body": "\n### 💡 Codex Review\n\nHere are some automated review suggestions for this pull request.\n\n**Reviewed commit:** `84dd6291b8`\n    \n\n<details> <summary>ℹ️ About Codex in GitHub</summary>\n<br/>\n\n[Your team has set up Codex to review pull requests in this repo](https://chatgpt.com/codex/cloud/settings/general). Reviews are triggered when you\n- Open a pull request for review\n- Mark a draft as ready\n- Comment \"@codex review\".\n\nIf Codex has suggestions, it will comment; otherwise it will react with 👍.\n\n\n\n\nCodex can also answer questions or update the PR. Try commenting \"@codex address that feedback\".\n            \n</details>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSWR9Q",
+        "databaseId": 5186621941,
+        "author": {
+          "login": "copilot-pull-request-reviewer"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "84dd6291b822c274adf6bdaaa4a032dac4784459"
+        },
+        "submittedAt": "2026-09-12T14:03:05Z",
+        "body": "### 🟡 Changes recommended\n\nUnresolved contract and fixture inconsistencies need correction before approval.\n\n*Get a fresh assessment by requesting another Copilot review.*\n\n<details>\n<summary>Review details</summary>\n\n### Suppressed comments (5)\n\n**Previously missed (2)** — in code that hasn't changed since the last review.\n\n**agent-tools/tests/pr-tally/fixtures/README.md:30**\n* This is labelled as a query for a fresh capture of another PR, but `number: 135` is hard-coded, so copying it silently re-harvests #135. Parameterise the pull-request number (or change the heading to say this query is only for the recorded fixture).\n**agent-tools/tests/pr-tally/fixtures/README.md:136**\n* The fixture does not support this description of the rejection syntax: the recorded thread reply at `pr-135-harvest.json:396` and the body-only comments at `:1093` and `:1101` explicitly contain `Rejected`. Describing the corpus as carrying rejection rationale “without the word” conflicts with both the JSON and the intake grammar introduced above.\n\n**.agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md:511**\n* The requirement that every over-bar disposition name its PDR-140 prong is not met by the fixture this paragraph says the grammar accepts: replies at `pr-135-harvest.json:162`, `:201`, `:357`, `:591`, and `:630` use only `**Over-bar**` plus a rationale or reference. The contract therefore rejects recorded examples unless implicit or inherited prong evidence is defined; please reconcile the grammar with the no-edit fixture.\n```\nprong two**` all read) and, for over-bar, names the PDR-140 prong met — then\none disposition sentence beginning `Cured in SHA:<sha>`, `Routed to <home>`\nor `Rejected`, with its rationale; the SHA token is the `SHA:` prefix and\nseven to forty hex characters, bare or inside a code span, both valid. A\n```\n**.agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md:505**\n* The scope of “Every reply or comment” conflicts with the fixture and with the manual-tally clause below: both body-only comments `5645760733` and `5645946537` disposition findings but do not open with a marker or use one line per finding. Make the new-format requirement explicitly prospective/conditional so readers know that the legacy body-only entries are an intentional manual case, not invalid fixture data.\n```\n`pr-tally` node's todo 3, 2026-09-12).** Every reply or comment that\ndispositions a finding is signed with the seat's identity tuple and OPENS\n```\n**agent-tools/tests/pr-tally/fixtures/README.md:20**\n* The Codex badge-and-heading findings are not in the `reviews[*].body` values in this fixture: those bodies are only the generic Codex review wrapper, while the findings are in the corresponding `reviewThreads[*].comments` entries (for example line 70). Describing them as review-body data can lead the tally implementation to search the wrong surface and miss every Codex finding.\n```\n- `reviews` — the paged reviews connection with each review's commit and\n  body (Copilot's suppressed-findings blocks and Codex's badge-and-heading\n  items live in these bodies);\n```\n\n- **Files reviewed:** 3/4 changed files\n- **Comments generated:** 3\n- **Review effort level:** Lite (auto)\n</details>\n\n> [!NOTE]\n> Copilot is running an experiment and ran this review at Lite."
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSXCQg",
+        "databaseId": 5186634306,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "db67da4d57475f7eb3b310c00639be4f24cddd63"
+        },
+        "submittedAt": "2026-09-12T14:08:21Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSXCZw",
+        "databaseId": 5186634343,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "db67da4d57475f7eb3b310c00639be4f24cddd63"
+        },
+        "submittedAt": "2026-09-12T14:08:22Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSXClg",
+        "databaseId": 5186634390,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "db67da4d57475f7eb3b310c00639be4f24cddd63"
+        },
+        "submittedAt": "2026-09-12T14:08:23Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSXvvA",
+        "databaseId": 5186645948,
+        "author": {
+          "login": "chatgpt-codex-connector"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "db67da4d57475f7eb3b310c00639be4f24cddd63"
+        },
+        "submittedAt": "2026-09-12T14:13:09Z",
+        "body": "\n### 💡 Codex Review\n\nHere are some automated review suggestions for this pull request.\n\n**Reviewed commit:** `db67da4d57`\n    \n\n<details> <summary>ℹ️ About Codex in GitHub</summary>\n<br/>\n\n[Your team has set up Codex to review pull requests in this repo](https://chatgpt.com/codex/cloud/settings/general). Reviews are triggered when you\n- Open a pull request for review\n- Mark a draft as ready\n- Comment \"@codex review\".\n\nIf Codex has suggestions, it will comment; otherwise it will react with 👍.\n\n\n\n\nCodex can also answer questions or update the PR. Try commenting \"@codex address that feedback\".\n            \n</details>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSYlog",
+        "databaseId": 5186659746,
+        "author": {
+          "login": "copilot-pull-request-reviewer"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "db67da4d57475f7eb3b310c00639be4f24cddd63"
+        },
+        "submittedAt": "2026-09-12T14:15:18Z",
+        "body": "### 🟡 Changes recommended\n\nThe fixture is incompatible with the existing self-reply parser, and the documented grammar does not match several recorded dispositions.\n\n*Get a fresh assessment by requesting another Copilot review.*\n\n<details>\n<summary>Review details</summary>\n\n### Suppressed comments (6)\n\n**.agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md:533**\n* The fixture does contain `Rejected`: the thread reply and both body-only reconciliation comments use that word. The historical exception is that those body-only entries are batched, while no `Routed to` example is recorded; this sentence should describe that shape rather than claiming the rejection word is missing.\n```\n\"manual tally required\" case; the disposition verbs postdate its rounds,\nwhose rejections carry the rationale without the word.\n```\n**.agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md:511**\n* The grammar also requires one disposition sentence beginning `Cured in`, `Routed to`, or `Rejected`, but the two final below-bar thread replies in the fixture (`3996223154` and `3996223195`) only give their rationale and end with `No write`; neither contains a disposition verb. These are thread replies, not the body-only legacy comments called out below, so the marked thread corpus still has two dispositions that do not satisfy the stated format. Document them as an explicit historical/manual exception or broaden the accepted grammar.\n```\none disposition sentence beginning `Cured in SHA:<sha>`, `Routed to <home>`\nor `Rejected`, with its rationale; the SHA token is the `SHA:` prefix and\nseven to forty hex characters, bare or inside a code span, both valid. A\n```\n**.agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md:508**\n* The new contract makes naming the PDR-140 prong mandatory for every over-bar disposition, but several of the fixture's marked replies do not provide one: for example, entries `3996143427` and `3996143456` are `**Over-bar**` and contain no `prong one` or `prong two` text. Because the fixture is presented as the marked corpus the tally must consume, a parser cannot both enforce this rule and accept those records. Please state an explicit historical exception/manual classification for these replies (or otherwise define how they are accepted).\n```\nwith a bold span that contains `over-bar` or `below-bar` (case-insensitive;\n`**Over-bar**`, `**Below-bar**`, `**In scope, over-bar**` and `**Over-bar on\nprong two**` all read) and, for over-bar, names the PDR-140 prong met — then\n```\n**agent-tools/tests/pr-tally/fixtures/README.md:138**\n* This claims the final head's ten findings form a terminal-success round, but the eight suppressed findings are only dispositioned in the batched issue comment `5645946537`. The new contract says a body-only disposition without one marker/reference per finding is `manual tally required`; only the two thread replies have machine-readable markers. Either make those body items follow the new one-line format or describe this round as partially manual rather than terminal-success.\n```\nfinal head raising ten findings, every one dispositioned below the bar — the\nterminal-success reading. The disposition\n```\n**agent-tools/tests/pr-tally/fixtures/README.md:140**\n* The JSON contradicts this sentence: the inline reply `3996143642` and both body-only reconciliation comments contain the literal `Rejected`; the body-only entries are batched, and the fixture has no `Routed to` example. Describe that historical shape instead of saying the rejection word is absent.\n```\nverbs (`Cured in`, `Routed to`, `Rejected`) were named after this corpus\nwas recorded: its rejections carry the rationale without the word. Its two body-only\n```\n**agent-tools/tests/pr-tally/fixtures/README.md:32**\n* This heading presents the query as a template for another PR, but `pullRequest(number: 135)` is hard-coded. Copying it for a different PR would silently harvest #135; parameterize the PR number (or label this as a PR-135-only query).\n```\n    pullRequest(number: 135) {\n```\n\n- **Files reviewed:** 3/4 changed files\n- **Comments generated:** 1\n- **Review effort level:** Lite (auto)\n</details>\n\n> [!NOTE]\n> Copilot is running an experiment and ran this review at Lite."
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSbFcw",
+        "databaseId": 5186700659,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "a1ec078e24c32c398ff3f2ac70e586c93f8e2d55"
+        },
+        "submittedAt": "2026-09-12T14:26:33Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSbFzQ",
+        "databaseId": 5186700749,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "a1ec078e24c32c398ff3f2ac70e586c93f8e2d55"
+        },
+        "submittedAt": "2026-09-12T14:26:34Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSbGhA",
+        "databaseId": 5186700932,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "a1ec078e24c32c398ff3f2ac70e586c93f8e2d55"
+        },
+        "submittedAt": "2026-09-12T14:26:36Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSbG7A",
+        "databaseId": 5186701036,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "a1ec078e24c32c398ff3f2ac70e586c93f8e2d55"
+        },
+        "submittedAt": "2026-09-12T14:26:37Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSbHRw",
+        "databaseId": 5186701127,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "a1ec078e24c32c398ff3f2ac70e586c93f8e2d55"
+        },
+        "submittedAt": "2026-09-12T14:26:38Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSbHkQ",
+        "databaseId": 5186701201,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "a1ec078e24c32c398ff3f2ac70e586c93f8e2d55"
+        },
+        "submittedAt": "2026-09-12T14:26:39Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSbH1w",
+        "databaseId": 5186701271,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "a1ec078e24c32c398ff3f2ac70e586c93f8e2d55"
+        },
+        "submittedAt": "2026-09-12T14:26:40Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSc4vw",
+        "databaseId": 5186730175,
+        "author": {
+          "login": "chatgpt-codex-connector"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "a1ec078e24c32c398ff3f2ac70e586c93f8e2d55"
+        },
+        "submittedAt": "2026-09-12T14:32:28Z",
+        "body": "\n### 💡 Codex Review\n\nHere are some automated review suggestions for this pull request.\n\n**Reviewed commit:** `a1ec078e24`\n    \n\n<details> <summary>ℹ️ About Codex in GitHub</summary>\n<br/>\n\n[Your team has set up Codex to review pull requests in this repo](https://chatgpt.com/codex/cloud/settings/general). Reviews are triggered when you\n- Open a pull request for review\n- Mark a draft as ready\n- Comment \"@codex review\".\n\nIf Codex has suggestions, it will comment; otherwise it will react with 👍.\n\n\n\n\nCodex can also answer questions or update the PR. Try commenting \"@codex address that feedback\".\n            \n</details>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSc9ig",
+        "databaseId": 5186731402,
+        "author": {
+          "login": "copilot-pull-request-reviewer"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "a1ec078e24c32c398ff3f2ac70e586c93f8e2d55"
+        },
+        "submittedAt": "2026-09-12T14:32:43Z",
+        "body": "### 🟡 Changes recommended\n\nUnresolved marker ambiguity and contract/documentation mismatches must be corrected before approval.\n\n*Get a fresh assessment by requesting another Copilot review.*\n\n<details>\n<summary>Review details</summary>\n\n### Suppressed comments (3)\n\n**.agent/plans/delivery/pr-tally.plan.md:98**\n* The canonical format introduced by this PR includes `Rejected` as a valid disposition (and fixture reply `3996143642` exercises it), but this mechanism description still defines a disposition only as a cure commit or named home at lines 87–90. A todo-1 implementation following the node literally could leave the marked rejection out of the disposition/cure-worthy path even though the intake contract says the marker is sufficient. Include all three disposition forms here.\n```\n  marker is in the intake contract (pr-lifecycle §Response pricing, the disposition format),\n```\n**.agent/plans/delivery/pr-tally.plan.md:194**\n* The ledger repeats the same signature mismatch: the current `SIGNATURE_SUFFIX` also accepts a trailing `-hex3` display token, so it is not accurate to describe the accepted form only as a line ending in the six-hex prefix. Qualify the canonical bare form versus the parser's defensive token form while retaining the conclusion that `, Director` is rejected.\n```\n| 2026-09-12 | PR #138 round three | The recorded corpus's seventeen seat replies end with a role suffix (\", Director\") that the ratified self-reply predicate (`reviewer-legs.ts` `SIGNATURE_SUFFIX`, final line ends with the six-hex prefix) rejects, so none reads as signed under the current code | Pickup: todo 1 decides by dated amendment whether the predicate accepts a trailing role suffix, or treats this corpus's replies as unsigned; the fixture is a recording and is not edited |\n```\n**agent-tools/tests/pr-tally/fixtures/README.md:5**\n* This README says tests read these files today, but this PR adds no `pr-tally` consumer and the delivery node says todo 1 is the first consumer. That overstates current coverage and can make a reader think the fixture has already been validated; describe these as future/todo-1 tests instead.\n```\nRecorded harvests for the `pr-tally` command's tests (the delivery node\n`.agent/plans/delivery/pr-tally.plan.md`, todo 3). Tests read these files;\nthey never call GitHub.\n```\n\n- **Files reviewed:** 3/4 changed files\n- **Comments generated:** 3\n- **Review effort level:** Lite (auto)\n</details>\n\n> [!NOTE]\n> Copilot is running an experiment and ran this review at Lite."
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSf6Vg",
+        "databaseId": 5186779734,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "33cca25bc71a0495ddb4701482f95aebdc991c0e"
+        },
+        "submittedAt": "2026-09-12T14:41:09Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSf6hw",
+        "databaseId": 5186779783,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "33cca25bc71a0495ddb4701482f95aebdc991c0e"
+        },
+        "submittedAt": "2026-09-12T14:41:10Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSf6wA",
+        "databaseId": 5186779840,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "33cca25bc71a0495ddb4701482f95aebdc991c0e"
+        },
+        "submittedAt": "2026-09-12T14:41:12Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSf69A",
+        "databaseId": 5186779892,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "33cca25bc71a0495ddb4701482f95aebdc991c0e"
+        },
+        "submittedAt": "2026-09-12T14:41:13Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSf7Jg",
+        "databaseId": 5186779942,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "33cca25bc71a0495ddb4701482f95aebdc991c0e"
+        },
+        "submittedAt": "2026-09-12T14:41:14Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSf76A",
+        "databaseId": 5186780136,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "33cca25bc71a0495ddb4701482f95aebdc991c0e"
+        },
+        "submittedAt": "2026-09-12T14:41:15Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNShapw",
+        "databaseId": 5186804391,
+        "author": {
+          "login": "chatgpt-codex-connector"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "33cca25bc71a0495ddb4701482f95aebdc991c0e"
+        },
+        "submittedAt": "2026-09-12T14:46:01Z",
+        "body": "\n### 💡 Codex Review\n\nHere are some automated review suggestions for this pull request.\n\n**Reviewed commit:** `33cca25bc7`\n    \n\n<details> <summary>ℹ️ About Codex in GitHub</summary>\n<br/>\n\n[Your team has set up Codex to review pull requests in this repo](https://chatgpt.com/codex/cloud/settings/general). Reviews are triggered when you\n- Open a pull request for review\n- Mark a draft as ready\n- Comment \"@codex review\".\n\nIf Codex has suggestions, it will comment; otherwise it will react with 👍.\n\n\n\n\nCodex can also answer questions or update the PR. Try commenting \"@codex address that feedback\".\n            \n</details>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSh-ww",
+        "databaseId": 5186813635,
+        "author": {
+          "login": "copilot-pull-request-reviewer"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "33cca25bc71a0495ddb4701482f95aebdc991c0e"
+        },
+        "submittedAt": "2026-09-12T14:47:52Z",
+        "body": "### 🟡 Changes recommended\n\nThree unresolved nit findings remain regarding fixture status, coverage wording, and test-validation claims.\n\n*Get a fresh assessment by requesting another Copilot review.*\n\n<details>\n<summary>Review details</summary>\n\n### Suppressed comments (2)\n\n**.agent/plans/delivery/pr-tally.plan.md:160**\n* The plan now explicitly says `pr-135-harvest.json` predates the new format and is only the manual-tally corpus, while todo 3 still requires a conforming end-to-end fixture before todo 1 and the PR description calls this harvest the end-to-end fixture. That leaves the promised first consumer without the fixture this change claims to provide. Either add a harvest recorded under the new one-line disposition format, or narrow the PR/plan wording and keep todo 3's fixture deliverable explicitly pending.\n```\n   `agent-tools/tests/pr-tally/fixtures/pr-135-harvest.json`, predates the format and is the\n   manual-tally corpus. STILL OWED before todo 1's first test: the conforming end-to-end\n   fixture, recorded from a pull request run under this format (#136 or #138) once it merges.\n```\n**agent-tools/tests/pr-tally/fixtures/README.md:141**\n* This sentence overstates what the tally can count. The contract defines the cure-worthy field as the over-bar subset (a below-bar-only round is terminal zero), and the next bullet says these role-suffixed replies fail `isSignedSelfReply`, so the current code cannot consume any of them as signed disposition state. Describe all 17 markers as present, but distinguish the 14 over-bar findings and the fixture's still-manual status.\n```\n  count reads the marker only, so all seventeen count;\n```\n\n- **Files reviewed:** 3/4 changed files\n- **Comments generated:** 1\n- **Review effort level:** Lite (auto)\n</details>\n\n> [!NOTE]\n> Copilot is running an experiment and ran this review at Lite."
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSlN_g",
+        "databaseId": 5186866686,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "ebf90ac3bdc811880b515d297b9a614ecf684d59"
+        },
+        "submittedAt": "2026-09-12T14:57:49Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSlOHw",
+        "databaseId": 5186866719,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "ebf90ac3bdc811880b515d297b9a614ecf684d59"
+        },
+        "submittedAt": "2026-09-12T14:57:50Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSlOQQ",
+        "databaseId": 5186866753,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "ebf90ac3bdc811880b515d297b9a614ecf684d59"
+        },
+        "submittedAt": "2026-09-12T14:57:52Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSmAAQ",
+        "databaseId": 5186879489,
+        "author": {
+          "login": "chatgpt-codex-connector"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "ebf90ac3bdc811880b515d297b9a614ecf684d59"
+        },
+        "submittedAt": "2026-09-12T15:02:52Z",
+        "body": "\n### 💡 Codex Review\n\nHere are some automated review suggestions for this pull request.\n\n**Reviewed commit:** `ebf90ac3bd`\n    \n\n<details> <summary>ℹ️ About Codex in GitHub</summary>\n<br/>\n\n[Your team has set up Codex to review pull requests in this repo](https://chatgpt.com/codex/cloud/settings/general). Reviews are triggered when you\n- Open a pull request for review\n- Mark a draft as ready\n- Comment \"@codex review\".\n\nIf Codex has suggestions, it will comment; otherwise it will react with 👍.\n\n\n\n\nCodex can also answer questions or update the PR. Try commenting \"@codex address that feedback\".\n            \n</details>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSmVkQ",
+        "databaseId": 5186885009,
+        "author": {
+          "login": "copilot-pull-request-reviewer"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "ebf90ac3bdc811880b515d297b9a614ecf684d59"
+        },
+        "submittedAt": "2026-09-12T15:04:42Z",
+        "body": "### 🟢 Approval recommended\n\nOnly minor documentation nits remain; no blocking issues were identified.\n\n<details>\n<summary>Review details</summary>\n\n### Suppressed comments (2)\n\n**.agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md:543**\n* The contract never states how the two marker values map to the cure-worthy count. The state machine defines that count as findings clearing the bar, so `Over-bar` contributes one and `Below-bar` contributes zero; otherwise an implementation can count every marked reply and miss terminal-zero rounds. Spell out the mapping here.\n```\ncure-worthy count reads the marker and nothing else (a below-bar finding\nand a build-changing one can both be routed to a home); signed replies and\ncomments are excluded from the raised count and from the quiet-window\n```\n**agent-tools/tests/pr-tally/fixtures/README.md:141**\n* Because this bullet is describing the cure-worthy count, “all seventeen count” is inaccurate: the three `Below-bar` replies are marked and dispositioned, but they contribute zero to that count; only the fourteen `Over-bar` replies contribute. Distinguish “all seventeen have a parseable marker” from the cure-worthy total.\n```\n  count reads the marker only, so all seventeen count;\n```\n\n- **Files reviewed:** 3/4 changed files\n- **Comments generated:** 0 new\n- **Review effort level:** Lite (auto)\n</details>\n\n> [!NOTE]\n> Copilot is running an experiment and ran this review at Lite."
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSnILg",
+        "databaseId": 5186897966,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "fe81ac08693c88bb7eea5aafe12d52c3c986f7e0"
+        },
+        "submittedAt": "2026-09-12T15:09:34Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSoF_w",
+        "databaseId": 5186913791,
+        "author": {
+          "login": "chatgpt-codex-connector"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "fe81ac08693c88bb7eea5aafe12d52c3c986f7e0"
+        },
+        "submittedAt": "2026-09-12T15:14:39Z",
+        "body": "\n### 💡 Codex Review\n\nHere are some automated review suggestions for this pull request.\n\n**Reviewed commit:** `fe81ac0869`\n    \n\n<details> <summary>ℹ️ About Codex in GitHub</summary>\n<br/>\n\n[Your team has set up Codex to review pull requests in this repo](https://chatgpt.com/codex/cloud/settings/general). Reviews are triggered when you\n- Open a pull request for review\n- Mark a draft as ready\n- Comment \"@codex review\".\n\nIf Codex has suggestions, it will comment; otherwise it will react with 👍.\n\n\n\n\nCodex can also answer questions or update the PR. Try commenting \"@codex address that feedback\".\n            \n</details>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSoHpw",
+        "databaseId": 5186914215,
+        "author": {
+          "login": "copilot-pull-request-reviewer"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "fe81ac08693c88bb7eea5aafe12d52c3c986f7e0"
+        },
+        "submittedAt": "2026-09-12T15:14:50Z",
+        "body": "### 🟢 Approval recommended\n\nNo blocking issues were identified; the remaining README item is a minor nit.\n\n<details>\n<summary>Review details</summary>\n\n### Suppressed comments (1)\n\n**agent-tools/tests/pr-tally/fixtures/README.md:140**\n* The two recorded replies do not literally end with `No write`: each continues with the evidence text and signature after that phrase. Please describe them as stating or containing `No write`, so the corpus summary matches the JSON.\n```\n  `Rejected` (`3996143642`); the two final below-bar replies carry no disposition verb and\n  end \"No write\" (`3996223154`, `3996223195`); no `Routed to` example is recorded. The\n```\n\n- **Files reviewed:** 3/4 changed files\n- **Comments generated:** 0 new\n- **Review effort level:** Lite (auto)\n</details>\n\n> [!NOTE]\n> Copilot is running an experiment and ran this review at Lite."
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSoQQQ",
+        "databaseId": 5186916417,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "fe81ac08693c88bb7eea5aafe12d52c3c986f7e0"
+        },
+        "submittedAt": "2026-09-12T15:15:46Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSoQYg",
+        "databaseId": 5186916450,
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "fe81ac08693c88bb7eea5aafe12d52c3c986f7e0"
+        },
+        "submittedAt": "2026-09-12T15:15:47Z",
+        "body": ""
+      }
+    ]
+  },
+  "comments": {
+    "pageInfo": {
+      "hasNextPage": false,
+      "endCursor": "Y3Vyc29yOnYyOpHPAAAAAVCSOqw="
+    },
+    "nodes": [
+      {
+        "databaseId": 5646321084,
+        "author": {
+          "login": "chatgpt-codex-connector"
+        },
+        "createdAt": "2026-09-12T13:56:34Z",
+        "body": "<!-- codex-pull-request-review-summary -->\n\n## Codex Review Summary\n\nThis comment shows the latest Codex review activity on this pull request.\n\n| Review | Status | Commit | Review trigger |\n| --- | --- | --- | --- |\n| 📝 **Code Review** | ✅ **Completed** <relative-time datetime=\"2026-09-12T15:14:42.739042Z\">2026-09-12T15:14:42.739042Z</relative-time> | `fe81ac0` | New commits |\n\n\n\n<details> <summary>ℹ️ About Codex in GitHub</summary>\n<br/>\n\n[Your team has set up Codex to review pull requests in this repo](https://chatgpt.com/codex/cloud/settings/general). Reviews are triggered when you\n- Open a pull request for review\n- Mark a draft as ready\n- Comment \"@codex review\" or \"@codex security review\".\n\nCodex reacts with 👀 while any review is running, comments if it has suggestions, and reacts with 👍 once all reviews finish with no findings.\n\n</details>"
+      },
+      {
+        "databaseId": 5646494978,
+        "author": {
+          "login": "el-graphael"
+        },
+        "createdAt": "2026-09-12T14:26:41Z",
+        "body": "**Step-back fired (3, 6, 10), the rebudget under PDR-140 clause 9(b), and the class fix.**\n\nThe intake declared two settlement pushes; both are spent (`SHA:84dd6291b`, `SHA:db67da4d5`). Round two's Copilot review landed after that round's Codex threads were harvested, so its three threads were carried into round three; round three read 3 + 7 on `SHA:db67da4d5`. The three settled counts 3, 6, 10 arm the step-back, and the round budget (PDR-132) is exceeded, so the generator question ran over all nineteen findings: the README asserted properties of the corpus (Codex body-only items, a terminal-success round, two body-only comments, rejections without the word) that were never checked against the JSON, and the grammar was written by containment rather than closed.\n\nThe class fix, `SHA:a1ec078e2`, rebudgeted once: the marker grammar is closed (exactly one bar token, no other); the signature is the one `reviewer-legs.ts` already defines; the prong and the verbs are conventions the count does not read; the body-only reference carries the review id; and every claim in the README's corpus section is rewritten from `jq` over the file. Marked as the class fix: the epoch resets here. A second step-back on this pull request is terminal for fix-pushing.\n\n**Copilot's suppressed findings on `SHA:db67da4d5`, one line per finding:**\n\n- **In scope, over-bar** · head SHA:db67da4d5 · review 5186659746 · `.agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md:533` · item 1 of 6 · Cured in `SHA:a1ec078e2`: the paragraph no longer claims the rejection word is absent; the README states which replies carry it.\n- **In scope, over-bar** · head SHA:db67da4d5 · review 5186659746 · `.agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md:511` · item 2 of 6 · Cured in `SHA:a1ec078e2`: the verbs are the convention; the machine reads the marker only, so `3996223154` and `3996223195` count without a verb, and the README names them.\n- **In scope, over-bar** · head SHA:db67da4d5 · review 5186659746 · `.agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md:508` · item 3 of 6 · Cured in `SHA:a1ec078e2`: the prong is stated where it applies and not read; the README lists the five over-bar replies that name none.\n- **In scope, over-bar** · head SHA:db67da4d5 · review 5186659746 · `agent-tools/tests/pr-tally/fixtures/README.md:138` · thread PRRT_kwDORdPTys6hwksv · the same finding as the threads at this anchor, counted once; cured there.\n- **In scope, over-bar** · head SHA:db67da4d5 · review 5186659746 · `agent-tools/tests/pr-tally/fixtures/README.md:140` · item 5 of 6 · Cured in `SHA:a1ec078e2`: the sentence is replaced by the checked list — one reply and two body comments carry `Rejected`, no `Routed to` is recorded.\n- **In scope, over-bar** · head SHA:db67da4d5 · review 5186659746 · `agent-tools/tests/pr-tally/fixtures/README.md:32` · item 6 of 6 · Cured in `SHA:a1ec078e2`: the query is labelled as PR #135's with the number hard-coded.\n\nTally: `SHA:352ad0ee5` 3/3 · `SHA:84dd6291b` 6/6 · `SHA:db67da4d5` 10/10 (class fix `SHA:a1ec078e2`).\n\n— Nettle guards Pistil (2de368)\n"
+      },
+      {
+        "databaseId": 5646574408,
+        "author": {
+          "login": "el-graphael"
+        },
+        "createdAt": "2026-09-12T14:41:16Z",
+        "body": "**Epoch two, round one — Copilot's suppressed findings on `SHA:a1ec078e2`, one line per finding.**\n\n- **In scope, over-bar** · head SHA:a1ec078e2 · review 5186731402 · `.agent/plans/delivery/pr-tally.plan.md:98` · item 1 of 3 · Cured in `SHA:33cca25bc`: the node's disposition forms read \"a cure commit, a named home, or a rejection with its rationale\".\n- **In scope, over-bar** · head SHA:a1ec078e2 · review 5186731402 · `.agent/plans/delivery/pr-tally.plan.md:194` · item 2 of 3 · Cured in `SHA:33cca25bc`: the ledger row names the six-hex prefix or its `-hex3` token form; the conclusion that \", Director\" is rejected stands.\n- **In scope, over-bar** · head SHA:a1ec078e2 · review 5186731402 · `agent-tools/tests/pr-tally/fixtures/README.md:5` · item 3 of 3 · Cured in `SHA:33cca25bc`: \"Todo 1's tests will read these files; nothing consumes them yet\".\n\nTally, epoch two: `SHA:a1ec078e2` raised 9 / distinct 6 / cure-worthy 6, cured in a cure-only push.\n\n— Nettle guards Pistil (2de368)\n"
+      },
+      {
+        "databaseId": 5646660811,
+        "author": {
+          "login": "el-graphael"
+        },
+        "createdAt": "2026-09-12T14:57:53Z",
+        "body": "**Epoch two, round two — Copilot's suppressed findings on `SHA:33cca25bc`, one line per finding.**\n\n- **In scope, over-bar** · head SHA:33cca25bc · review 5186813635 · `.agent/plans/delivery/pr-tally.plan.md:160` · item 1 of 2 · Cured in the pull request description, no file write: the summary no longer calls the #135 recording the end-to-end fixture; it is the manual-tally corpus, and the conforming fixture is owed before todo 1's first test, as the node now says.\n- **Below-bar** · head SHA:33cca25bc · review 5186813635 · `agent-tools/tests/pr-tally/fixtures/README.md:141` · item 2 of 2 · Rejected, no write: the very next bullet states that the role suffix fails `isSignedSelfReply` under the current code, so a reader has both facts on one screen; \"all seventeen count\" describes the marker grammar, which the bullet is about, and the over-bar/below-bar split is stated in the same bullet (fourteen and three).\n\nTally, epoch two: `SHA:a1ec078e2` 9 raised / 6 distinct / 6 cure-worthy · `SHA:33cca25bc` 5 raised / 5 distinct / 2 cure-worthy (one cured in a cure-only push, one cured in the description).\n\n— Nettle guards Pistil (2de368)\n"
+      },
+      {
+        "databaseId": 5646727852,
+        "author": {
+          "login": "sonarqubecloud"
+        },
+        "createdAt": "2026-09-12T15:10:27Z",
+        "body": "## [![Quality Gate Passed](https://sonarsource.github.io/sonarcloud-github-static-resources/v2/checks/QualityGateBadge/qg-passed-20px.png 'Quality Gate Passed')](https://sonarcloud.io/dashboard?id=EngraphCode_open-curriculum-ecosystem&pullRequest=138) **Quality Gate passed**  \nIssues  \n![](https://sonarsource.github.io/sonarcloud-github-static-resources/v2/common/passed-16px.png '') [0 New issues](https://sonarcloud.io/project/issues?id=EngraphCode_open-curriculum-ecosystem&pullRequest=138&issueStatuses=OPEN,CONFIRMED&sinceLeakPeriod=true)  \n![](https://sonarsource.github.io/sonarcloud-github-static-resources/v2/common/accepted-16px.png '') [0 Accepted issues](https://sonarcloud.io/project/issues?id=EngraphCode_open-curriculum-ecosystem&pullRequest=138&issueStatuses=ACCEPTED)\n\nMeasures  \n![](https://sonarsource.github.io/sonarcloud-github-static-resources/v2/common/passed-16px.png '') [0 Security Hotspots](https://sonarcloud.io/project/security_hotspots?id=EngraphCode_open-curriculum-ecosystem&pullRequest=138&issueStatuses=OPEN,CONFIRMED&sinceLeakPeriod=true)  \n![](https://sonarsource.github.io/sonarcloud-github-static-resources/v2/common/passed-16px.png '') [0.0% Coverage on New Code](https://sonarcloud.io/component_measures?id=EngraphCode_open-curriculum-ecosystem&pullRequest=138&metric=new_coverage&view=list)  \n![](https://sonarsource.github.io/sonarcloud-github-static-resources/v2/common/passed-16px.png '') [0.0% Duplication on New Code](https://sonarcloud.io/component_measures?id=EngraphCode_open-curriculum-ecosystem&pullRequest=138&metric=new_duplicated_lines_density&view=list)  \n  \n<!-- sqra-placement-anchor -->\n[See analysis details on SonarQube Cloud](https://sonarcloud.io/dashboard?id=EngraphCode_open-curriculum-ecosystem&pullRequest=138)\n\n"
+      }
+    ]
+  }
+}

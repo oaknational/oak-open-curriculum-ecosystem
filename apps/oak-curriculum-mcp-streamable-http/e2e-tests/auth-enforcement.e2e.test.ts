@@ -136,7 +136,7 @@ async function createAuthApp(): Promise<Express> {
       CLERK_SECRET_KEY: 'sk_test_123',
       NODE_ENV: 'test',
       LOG_LEVEL: 'debug',
-      ELASTICSEARCH_URL: 'http://fake-es:9200',
+      ELASTICSEARCH_URL: 'https://fake-es:9200',
       ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
     },
   });

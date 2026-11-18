@@ -3,6 +3,7 @@ name: "Reversing a Decision Recorded in Several Places Needs a Whole-Document Sw
 polarity: pattern
 use_this_when: "Dropping, reversing, or superseding a decision that a document (ADR, plan, README, spec) records or references in more than one place."
 category: process
+layer: general
 proven_in: "2026-06-22 (Orbit rides Horizon), reversing a recorded decision and leaving stale references"
 proven_date: 2026-06-22
 barrier:

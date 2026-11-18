@@ -170,7 +170,9 @@ export type {
 // Generators
 // ============================================================================
 
+export type { DirectoryEntry, DirectoryEntryKind, FileSystemPort } from './generators/index.js';
 export {
+  nodeFileSystem,
   generateAnalysisReport,
   serializeAnalysisReport,
   writeAnalysisReportFile,

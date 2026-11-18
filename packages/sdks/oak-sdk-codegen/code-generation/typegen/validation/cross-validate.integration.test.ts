@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
 
+import { errorResponseRef } from '../test-helpers/error-response-ref.js';
+
 import { buildResponseMapData } from '../response-map/build-response-map.js';
 import { crossValidateResponseMap } from './cross-validate.js';
 
@@ -11,15 +13,6 @@ import { crossValidateResponseMap } from './cross-validate.js';
  * cross-validator must accept both per-operation and wildcard entries.
  */
 function createRealisticErrorSchema(): OpenAPIObject {
-  const errorRef = (name: string) => ({
-    description: name,
-    content: {
-      'application/json': {
-        schema: { $ref: `#/components/schemas/${name}` },
-      },
-    },
-  });
-
   return {
     openapi: '3.0.0',
     info: { title: 'Realistic API', version: '0.6.0' },
@@ -36,9 +29,9 @@ function createRealisticErrorSchema(): OpenAPIObject {
                 },
               },
             },
-            '400': errorRef('error.BAD_REQUEST'),
-            '401': errorRef('error.UNAUTHORIZED'),
-            '404': errorRef('error.NOT_FOUND'),
+            '400': errorResponseRef('error.BAD_REQUEST'),
+            '401': errorResponseRef('error.UNAUTHORIZED'),
+            '404': errorResponseRef('error.NOT_FOUND'),
           },
         },
       },
@@ -54,9 +47,9 @@ function createRealisticErrorSchema(): OpenAPIObject {
                 },
               },
             },
-            '400': errorRef('error.BAD_REQUEST'),
-            '401': errorRef('error.UNAUTHORIZED'),
-            '404': errorRef('error.NOT_FOUND'),
+            '400': errorResponseRef('error.BAD_REQUEST'),
+            '401': errorResponseRef('error.UNAUTHORIZED'),
+            '404': errorResponseRef('error.NOT_FOUND'),
           },
         },
       },
@@ -72,9 +65,9 @@ function createRealisticErrorSchema(): OpenAPIObject {
                 },
               },
             },
-            '400': errorRef('error.BAD_REQUEST'),
-            '401': errorRef('error.UNAUTHORIZED'),
-            '404': errorRef('error.NOT_FOUND'),
+            '400': errorResponseRef('error.BAD_REQUEST'),
+            '401': errorResponseRef('error.UNAUTHORIZED'),
+            '404': errorResponseRef('error.NOT_FOUND'),
           },
         },
       },

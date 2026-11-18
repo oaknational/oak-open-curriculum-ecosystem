@@ -1,9 +1,0 @@
----
-description: Invoke mcp-expert when changes touch MCP protocol, MCP Apps Extension widgets, MCP tool/resource/prompt definitions, transport/session patterns, or MCP Apps migration work.
-globs: 'apps/oak-curriculum-mcp-streamable-http/**,**/*mcp*'
-alwaysApply: false
----
-
-Read and follow `.agent/rules/invoke-mcp-expert.md`.
-
-In Cursor, use the Task tool with `readonly: true` and `subagent_type: mcp-expert`.

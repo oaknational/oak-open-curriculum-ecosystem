@@ -3,6 +3,7 @@ name: "Process With No Committed Assets"
 polarity: anti-pattern
 use_this_when: "A stretch of work is producing deliberation, coordination, plans-about-plans, or doctrine-about-doctrine — and no committed product, test, or homed-knowledge asset has landed."
 category: process
+layer: general
 proven_in: "v2 large-corpus-analysis kept candidate C33 (2026-06-30), lived the same session it was discovered: the run proved its method and produced a verdict while the discovered knowledge sat un-homed until the owner asked 'have the napkins actually been processed?'"
 proven_date: 2026-06-30
 barrier:

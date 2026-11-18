@@ -8,16 +8,8 @@
 import { describe, expect, it, vi } from 'vitest';
 import { initialiseSentry } from './runtime.js';
 import { createSentryInitOptions, DEFAULT_TRACE_PROPAGATION_TARGETS } from './runtime-sdk.js';
+import { NOOP_LOGGER_SDK } from './test-helpers/noop-logger-sdk.js';
 import type { ParsedSentryConfig, SentryNodeRuntime, SentryNodeSdk } from './types.js';
-
-function createNoopLoggerSdk(): SentryNodeSdk['logger'] {
-  const noop = (): void => {
-    /* noop */
-  };
-  return { trace: noop, debug: noop, info: noop, warn: noop, error: noop, fatal: noop };
-}
-
-const noopLoggerSdk = createNoopLoggerSdk();
 
 function createFakeSdk(): {
   readonly sdk: SentryNodeSdk;
@@ -45,7 +37,7 @@ function createFakeSdk(): {
       setUser,
       setTag,
       setContext,
-      logger: noopLoggerSdk,
+      logger: NOOP_LOGGER_SDK,
     },
     close,
     setUser,

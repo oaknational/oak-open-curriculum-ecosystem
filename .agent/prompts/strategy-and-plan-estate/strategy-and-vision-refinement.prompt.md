@@ -36,7 +36,7 @@ owner's to shape.
 6. [`editorial-tone.md`](../../directives/editorial-tone.md) — the voice the vision and strategy are
    written in.
 7. Thread record
-   [`strategy-and-plan-estate-holistic-review.next-session.md`](../../memory/operational/threads/strategy-and-plan-estate-holistic-review.next-session.md).
+   [`strategy-and-plan-estate-holistic-review.next-session.md`](../../memory/operational/threads/paused/strategy-and-plan-estate-holistic-review.next-session.md).
 
 ## The work (scope-locked, owner-directed 2026-06-20), in order
 

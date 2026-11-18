@@ -3,6 +3,7 @@ name: A Description Is Not a Check
 polarity: anti-pattern
 use_this_when: "About to act on, transmit, or review a DESCRIPTION of an artefact — a commit message, a code comment, a handoff summary, a self-report, a probe's green output — instead of reading the artefact itself; and at review-routing time, deciding where to point external scrutiny"
 category: process
+layer: general
 status: stable
 discovered: 2026-07-25
 proven_in: >-

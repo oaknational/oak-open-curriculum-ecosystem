@@ -5,6 +5,7 @@ use_this_when: >-
   Scaffolding a package, public export, or sub-path barrel before all planned
   consumers exist.
 category: process
+layer: general
 proven_in: ".dependency-cruiser.mjs; .agent/plans/connecting-oak-resources/knowledge-graph-integration/active/graph-stack.plan.md"
 proven_date: 2026-05-12
 barrier:

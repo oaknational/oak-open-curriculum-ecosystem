@@ -39,8 +39,12 @@ todos:
 > therefore: the `@oaknational/no-real-io-in-tests` allowlist migrates to ZERO and the
 > **allowlist mechanism itself is deleted**; the rule escalates warn→error in the same
 > landing as conformance (never a standing warn tier). Tests that genuinely need a real
-> filesystem are category-moved (validator-script self-proofs or smoke tests), never
-> exempted. The ~13 refounding-suite entries (2026-07 additions) are in scope; no new
+> filesystem are category-moved (validator-script self-proofs or recorded observations;
+> no test tier admits IO, smoke included, by the owner's 2026-09-14 ruling now stated in
+> `testing-strategy.md` §Philosophy), never
+> exempted. Where this plan's body says "E2E tests" or "smoke tests", read E2E and
+> smoke checks (validation surfaces, not test tiers); its sentence that E2E tests use
+> only the system protocol channel describes those checks. The ~13 refounding-suite entries (2026-07 additions) are in scope; no new
 > entries may be added anywhere in the interim (recorded also in the R0-lane handoff
 > record 2026-07-07 and the napkin, with the generator-level lesson: a violation
 > allowlist is an escape hatch with paperwork; the portable form graduated as PDR-126,

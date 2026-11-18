@@ -1,3 +1,8 @@
+---
+classification: core
+description: Re-ask "could this be simpler without compromising quality or value?" at every elaboration boundary, not only at plan-time
+---
+
 # Re-Apply the First Question at Every Elaboration Boundary
 
 The first question — *could it be simpler without compromising
@@ -22,6 +27,14 @@ is a discipline that fires:
    question is *how do we adopt the new insight*, not *carry on
    with the now-known-bad approach* or *expand the now-known-bad
    approach to cover the new clause*.
+4. **Before approving spend or apparatus on any lane** — a fleet, a
+   ceremony, a queue, a merge mechanism: write the owner's end in
+   one sentence and re-ask whether the lane is still denominated
+   in it. A classification treated as a fact ("this is a
+   rate-limiting cure", "this needs the merge queue") is answered
+   by what the thing is FOR; seven owner corrections in one day
+   shared that shape, and each was cheaper than the ceremony that
+   preceded it (2026-09-06/07).
 
 Plan-following is **not** principle-following. A plan that was
 correct at authoring time can become principle-violating at
@@ -79,6 +92,50 @@ The cure: when surfacing options after doctrine sharpens, the
 question is always "how do we adopt the new doctrine?", never
 "do we adopt or do we carry on?". Carry-on is not on the table.
 
+## The Warrant Ladder and Its Provenance Rung
+
+The owner taught the re-derivation at three queue boundaries in two days
+(2026-08-11 twice, 2026-08-12): a ratified plan's remaining items are
+re-derived per item at every elaboration or queue boundary, adversarially,
+up the ladder *what does this serve → who consumes it → what breaks if it
+is never done → is the warrant owner word, a measured defect, or momentum
+and symmetry*. Ratification stamps a plan as of a moment; it owner-locks
+nothing. The shapes the questioning kept catching: symmetry with a landed
+cure posing as a warrant; instruments built to find nothing; preconditions
+masquerading as queued work; a partial re-affirmation silently carried
+whole (a verdict naming a sub-part re-affirms only that sub-part); and
+latent-defect polish over-served because the seat built the instrument.
+Owner-verbatim items survive; derived rulings survive while the ruling
+binds; momentum and symmetry items park; latent polish parks until
+evidence. The ladder runs on work already in flight too: a card-ratified
+PR whose framing never asked what impact the work buys is not settled by
+the card, because an answer inherits the quality of the framing it
+answered. Re-scopes land as dated plan amendments, never silent drops.
+
+The ladder is circular unless the problem statement itself is traced
+(2026-08-12, half an hour of the owner's time to surface). An item survived
+two adversarial re-derivations because each answered "what does this
+serve" FROM THE ITEM'S OWN DESCRIPTION; the chain that manufactured it ran
+sweep code claiming jurisdiction over external skills, a review that ruled
+the state acceptable with a disposition sentence appending "cure routed",
+exemption doctrine giving the routed cure a clock, a card whose either/or
+presupposed removal, one owner word, and a ticket calling itself
+"owner-ratified". Owner: "it might just be the opinion of a prior agent,
+redigested repeatedly until it gained authority." The rung BEFORE the
+ladder: trace the problem claim to an owner observation or to a first-hand
+reproduced defect in territory we own. A "problem" that exists only
+relative to our own machinery's assumptions (our validator flags it, our
+sweep needs an exemption for it) quarantines until the assumption is
+verified; the machinery may be the misconfiguration, and in that instance
+it was (our validation was adjudicating an external system, which
+`testing-strategy.md` already forbade). A queue item that defends itself in
+jargon is the self-signal (`no-hedging-vocabulary`).
+
+At an elaboration boundary, restate what a proxy stands for before acting on
+the proxy: a lane name read as one hierarchy of two use cases, a line limit
+read as a question of room, and a count sent before its returns were in were
+one generator (owner-corrected twice, 2026-09-24).
+
 ## Companion Discipline
 
 This rule pairs with `principles.md` §Architectural Excellence Over
@@ -98,7 +155,6 @@ sharpening: the question is never "should we adopt", only "how".
 
 ## Doctrinal Anchors
 
-- per-user feedback memory: `feedback_question_shape_known_bad_vs_adopt`
 - principles.md §First Question (the principle this rule
   operationalises)
 - principles.md §Architectural Excellence Over Expediency (the

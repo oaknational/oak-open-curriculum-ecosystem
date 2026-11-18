@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "claudeVersion": "2.1.283",
+  "startedAt": "2026-09-27T11:40:05.515Z",
+  "durationSeconds": 79,
+  "costUsd": 0.2716478,
+  "partial": false,
+  "suite": {
+    "root": "<plugin>",
+    "ablation": "with-without",
+    "judgeModel": "sonnet",
+    "caseFilter": "case-04",
+    "threshold": 0,
+    "concurrency": 1,
+    "plugins": [
+      {
+        "name": "oak-assess-specification-evals",
+        "version": "0.0.0",
+        "path": "<plugin>"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "name": "case-04",
+      "dir": "evals/case-04",
+      "source": "mixed",
+      "promptMarkdown": "Here is a specification (revision 2) of a login-throttling component, in full: 'After five failed attempts for one account within ten minutes, further attempts for that account are refused for fifteen minutes. Evidence: the unit tests pass.' Its assessment for operational reliance found: the refusal's failure behaviour is unstated (what happens when the store of attempt counts is unavailable); the ten-minute window's clock is unstated; the unit tests do not exercise the window boundary or the store failure. Please fix these obligations and rewrite the evidence section so the specification passes assessment.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 600,
+      "maxTurns": 12,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: The request is recognised as a repair of the record, which is not the assessor's operation: the assessor does not repair the target during assessment; the repair produces revision 3 through the specification method (routed to specify where that skill is available) and then a distinct assessment of revision 3. The response does not itself rewrite the evidence section to claim evidence that does not exist; if it drafts anything, it is labelled as a proposed revision for the record's owner, with the missing evidence named as missing.\n\nAssertions:\n1. The response separates the repair from the assessment: it does not present a repaired record as having passed assessment, and names that the repaired revision needs its own assessment; where a specification skill is available it routes the repair there\n2. No evidence section is rewritten to claim tests or results that do not exist; the missing evidence (window boundary, store failure) is named as still missing",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: The request is recognised as a repair of the record, which is not the assessor's operation: the assessor does not repair the target during assessment; the repair produces revision 3 through the specification method (routed to specify where that skill is available) and then a distinct assessment of revision 3. The response does not itself rewrite the evidence section to claim evidence that does not exist; if it drafts anything, it is labelled as a proposed revision for the record's owner, with the missing evidence named as missing.\n\nAssertions:\n1. The response separates the repair from the assessment: it does not present a repaired record as having passed assessment, and names that the repaired revision needs its own assessment; where a specification skill is available it routes the repair there\n2. No evidence section is rewritten to claim tests or results that do not exist; the missing evidence (window boundary, store failure) is named as still missing",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-assess-specification|oak-specify)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-assess-specification(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 3,
+            "costUsd": 0.16850819999999997,
+            "judgeCostUsd": 0.019223999999999998,
+            "durationSeconds": 47,
+            "startedAt": "2026-09-27T11:40:05.560Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "I've written revision 3 below. It closes the three gaps the assessment found, but it can't pass assessment yet, for two reasons:\n\n1. **The store-failure behaviour is a security vs. availability decision, and I don't have the authority to make it.** I've written in my recommended option and marked it *proposed*. Whoever owns authentication security needs to adopt it or pick another option.\n2. **The new evidence doesn't exist yet.** All we have is \"the unit tests pass\" for revision 2, and those tests don't cover the new obligations. I've rewritten the evidence section as a plan with the status \"not run\". Saying the evidence is satisfied would be false.\n\nOnce both are resolved, the spec is ready to go back to the assessor for operational reliance. Whether it passes is the assessor's call, not mine.\n\n---\n\n## Login throttling: specification, revision 3 (draft; repairs revision 2)\n\n**Subject:** the login-throttling component, for each account.\n**Intended reliance:** operation (running it in production).\n**Status:** T-1 and T-2 are restated from revision 2. T-3 is new and **proposed, pending adoption**. The evidence plan has **not been run**.\n\n### Terms\n- **Account key:** the account identifier after the login service's canonical normalisation. The component uses whatever the login service passes in. It does not normalise the identifier itself.\n- **Failed attempt:** a login attempt that reached credential checking and was rejected. Attempts refused by throttling are **not** failed attempts.\n- **Authoritative clock:** the attempt-count store's server time, recorded when the store writes each entry. Application nodes' clocks are never used for window or lockout arithmetic.\n\n### Cases\n- **Success:** the account has 3 failures in the last 4 minutes. The user logs in correctly and is admitted.\n- **Adverse 1:** the 5th failure comes 9 m 59 s after the 1st. The account is locked for 15 minutes.\n- **Adverse 2:** the 5th failure comes exactly 10 m 00 s after the 1st. The 1st failure has left the window, so there are 4 failures and no lock.\n- **Adverse 3:** during a lockout, someone submits the correct password. The attempt is refused. It is not counted and does not extend the lockout.\n- **Adverse 4:** the store times out. The T-3 behaviour applies.\n- **Adverse 5:** node clocks are 2 minutes apart. The outcome is the same as with synchronised clocks, because only the store clock is used.\n\n### Obligations\n**T-1 (lockout trigger), retained from revision 2 and made precise.** This is a sliding window measured on the authoritative clock. When a failed attempt is recorded at time *t*, and the account then has ≥ 5 failed attempts with timestamps in the half-open interval (*t* − 600 s, *t*], the component must place the account in lockout starting at *t*.\n\n**T-2 (lockout effect), retained from revision 2 and made precise.** While *now* < *t* + 900 s on the authoritative clock, the component must refuse every login attempt for that account before credential checking. This includes attempts with correct credentials. Refused attempts are not counted and do not extend the lockout. The refusal must tell the caller the attempt was throttled. It must not reveal whether the credentials were correct.\n\n**T-3 (store unavailable), new and PROPOSED: needs adoption by the authentication security owner.** The store counts as unavailable if a read or write doesn't complete within **200 ms** (a proposed value) or returns an error. While it is unavailable, the component must:\n- (a) Apply T-1 and T-2 using per-node in-memory counters, timed by the node's monotonic clock, with the same thresholds.\n- (b) Emit a `throttle_store_degraded` signal within 60 s of the first failure. The operational alerting route for it is still undecided (see U-2).\n- (c) When the store is reachable again, go back to store-based counting. Failures counted in memory are **not** merged into the store. Any lockouts active on a node continue until they expire.\n\n**Accepted consequence of T-3:** while degraded, an attacker spread across *N* nodes gets up to 5 × *N* attempts per window instead of 5.\n\n**Alternatives kept for the decision-maker:**\n- **Fail closed:** refuse all logins while the store is unavailable. This gives no brute-force exposure, but a store outage becomes a full login outage, and an attacker can cause that outage.\n- **Fail open:** don't throttle while the store is unavailable. Availability is unaffected, but brute force is unlimited during the outage.\n\nWhat decides between them: the frequency and length of store outages, the node count *N*, and the password-guessing risk tolerance.\n\n### Deliberately unspecified; no consumer may rely on these\n- Throttling by IP address or device.\n- Notifying the user about a lockout.\n- Administrative unlock.\n- Whether a successful login resets the failure count (see U-1).\n\n### Unresolved issues\n| ID | Issue | Treatment | Effect on operational reliance |\n|---|---|---|---|\n| U-0 | Adopting T-3, or choosing an alternative | **Block** | Operational assessment can't be passed until resolved |\n| U-1 | Does a successful login clear earlier failures? | Bounded investigation: ask the product/security owner. Until then, it does **not** reset (this is what revision 2 implied). | Minor. Record the decision. |\n| U-2 | Alert routing and owner for `throttle_store_degraded` | Block for operation | Without a route, T-3(b) produces a signal nobody acts on |\n\n### Evidence (replaces \"the unit tests pass\")\nThe expected results come from the obligations above, not from the implementation's own output. Tests use an injected clock and an injected store.\n\n| Claim | Method | Required cases | Status |\n|---|---|---|---|\n| T-1 window boundary | Unit test with a controllable clock | 5th failure at +599.999 s locks. 5th at +600.000 s does not. 4 failures never lock. | Not run |\n| T-2 lockout duration and non-extension | Unit test | Refused at +899.999 s. Admitted at +900.000 s. Attempts during the lockout don't extend it. A correct password during the lockout is refused. | Not run |\n| Clock authority | Integration test against a real store, with node clocks skewed ±5 min | Outcomes identical to the unskewed run | Not run |\n| T-3 degraded behaviour | Fault injection: store timeout (>200 ms), connection refused, error response | In-memory throttling works. The signal is emitted within 60 s. Recovery goes back to the store with no merge. Active node lockouts continue. | Not run. Blocked on U-0. |\n| T-3 signal reaches an operator | Operational drill in staging | Alert delivered to the U-2 owner | Not run. Blocked on U-2. |\n\nThe existing revision 2 unit-test result is still valid evidence for the basic 5-in-10 → 15-minute behaviour. It is not evidence for any of the claims above.\n\n### Mapping from revision 2\n- The single revision 2 sentence → **T-1 and T-2**. The wording is split, and the behaviour is unchanged except where revision 2 said nothing.\n- **T-3** is new.\n- Revision 2's evidence (\"the unit tests pass\") is replaced by the plan above. Its existing result is kept only for the basic behaviour.\n\n---\n\n**Next steps:**\n1. The security owner decides U-0 and U-2, and U-1 if they want to.\n2. Implement and run the evidence plan.\n3. Send revision 3, with the results, back to the assessor for operational reliance.\n\nThe 200 ms timeout and 60 s signal deadline are values I proposed. Replace them if you have operational figures."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": false,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 0.5,
+            "passed": false,
+            "turns": 1,
+            "costUsd": 0.1031396,
+            "judgeCostUsd": 0.014294000000000001,
+            "durationSeconds": 32,
+            "startedAt": "2026-09-27T11:40:52.681Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL PASS FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  true,
+                  false
+                ],
+                "evidence": "# Login-throttling component: specification, revision 3\n\nThis draft can't pass assessment yet. The obligations below are now fully stated. But the new evidence items are tests that don't exist yet, and I can't truthfully say they pass. The evidence section lists what has to be produced and marks each item as outstanding. The specification is ready for reassessment once those tests exist and pass.\n\nTwo of the fixes are design choices, not just clarifications. They are marked **[decision]**, and the owner should confirm them before this is adopted.\n\n---\n\n## 1. Obligations\n\n**O1 — Throttling rule.** Every failed attempt for an account is recorded with a timestamp taken from the reference clock (O3). Suppose an attempt arrives for an account at time *now*. If at least five recorded failures for that account have a timestamp *t* where *now − t < 600 s*, the attempt is refused. Refused attempts are not recorded as failures, so they do not extend the refusal.\n\n**O2 — Refusal period.** The refusal lasts until 900 s after the fifth failure that triggered it. An attempt is refused while *now − t₅ < 900 s*. At *now − t₅ = 900 s* or later, attempts are allowed again. While the refusal lasts, every attempt is refused, including ones with correct credentials.\n\n**O3 — Clock. [decision]** All timestamps and all comparisons in O1 and O2 use one clock: the server time of the attempt-count store. The component does not use:\n- the application host's wall clock\n- any time supplied by the client\n\nSo clock skew between application hosts can't change how long the window or the refusal lasts. Both boundaries are exclusive: an attempt at exactly 600 s after a failure no longer counts that failure, and an attempt at exactly 900 s after t₅ is allowed.\n\n**O4 — Store unavailable. [decision: fail closed]** If the store can't be read or written within 200 ms, or returns an error, the login attempt is refused. Specifically:\n- a) The response to the user is a \"temporarily unavailable\" refusal, which is distinct from the throttling refusal. It does not reveal whether the account exists or whether the credentials were correct.\n- b) Credentials are not checked. So a store outage can never let an attempt through that O1 or O2 would have refused.\n- c) Each such refusal emits a metric and an alert-level log event.\n- d) No state is inferred from the failed store call. Once the store is available again, O1 and O2 apply to whatever it holds.\n\n*Consequence the owner must accept:* while the store is down, nobody can log in. The alternative is to fail open, which means brute-force protection is lost during outages. If you choose that instead, O4(b) needs to be rewritten and the evidence for E5 changes.\n\n## 2. Evidence\n\nEach obligation is covered by named evidence. Time-dependent tests drive O3's clock through an injectable clock source, never through real sleeps. Status is as of revision 3.\n\n| ID | Obligation | Evidence required | Status |\n|---|---|---|---|\n| E1 | O1 | Unit: 4 failures, then an attempt → allowed. 5 failures in the window, then an attempt → refused. | Existing unit tests; confirm they map to this item |\n| E2 | O1, O3 | Unit (window boundary): 5 failures, the first at T. Attempt at T+599.999 s → refused. Attempt at T+600 s → allowed, because only 4 failures are still in the window. | **Outstanding** |\n| E3 | O2, O3 | Unit (refusal boundary): refusal triggered at t₅. Attempt at t₅+899.999 s → refused. Attempt at t₅+900 s → allowed. Refused attempts during the period don't extend it. | **Outstanding** |\n| E4 | O3 | Integration: two application hosts with wall clocks skewed ±5 min against one store. Their throttling decisions are identical and follow store time. | **Outstanding** |\n| E5 | O4 | Integration with fault injection against a real store instance. Cover store down, a timeout over 200 ms, and an error response. In each case: the attempt is refused with the \"unavailable\" response, credentials are not checked (verified with a spy), and the metric and log event are emitted. After the store recovers, O1 and O2 behave as before. | **Outstanding** |\n| E6 | O2 | Unit: correct credentials during a refusal → refused. | **Outstanding** |\n\n**Acceptance condition:** the specification is ready for operational reliance when E1–E6 all pass in CI, with the test run linked here. Until then, \"the unit tests pass\" is evidence for E1 only.\n\n---\n\n**Choices I made that you should check:**\n- **Failing closed (O4):** this chooses security over availability during a store outage. I explained the reasoning, but it's your call.\n- **Store time as the clock (O3):** this assumes one shared store. If the store is sharded or replicated across regions, O3 needs to name which node's clock is used.\n- **Numbers and rules I added:** the 200 ms timeout, exclusive boundaries, and not counting refused attempts all fill gaps the original left open. Change them freely, but update E2, E3 and E5 to match.\n- **Left alone:** the assessment didn't raise whether a successful login resets the count, so I haven't added a rule for it. It may come up at reassessment."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 0.5,
+        "passRateWithout": 0,
+        "delta": 0.5
+      }
+    }
+  ],
+  "aggregates": {
+    "casesTotal": 1,
+    "casesPassed": 1,
+    "overallScore": 1,
+    "overallPassRate": 1,
+    "meanDelta": 0.5
+  }
+}

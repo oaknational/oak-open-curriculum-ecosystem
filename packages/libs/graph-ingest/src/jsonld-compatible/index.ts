@@ -103,8 +103,8 @@ async function jsonldDocumentToNquads(
       });
     }
     return ok(rdf);
-  } catch (cause) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
     return err({ kind: 'jsonld-to-rdf-failed', message });
   }
 }
@@ -112,8 +112,8 @@ async function jsonldDocumentToNquads(
 function parseNquads(nquads: string): Result<readonly N3ParserQuad[], JsonLdParseError> {
   try {
     return ok(new N3Parser({ format: 'N-Quads' }).parse(nquads, null));
-  } catch (cause) {
-    const message = cause instanceof Error ? cause.message : String(cause);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
     return err({ kind: 'nquads-parse-failed', message });
   }
 }

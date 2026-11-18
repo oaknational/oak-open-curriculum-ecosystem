@@ -3,6 +3,7 @@ name: Awaited Verdicts Need Two Signals
 polarity: anti-pattern
 use_this_when: Arming any wait on an external verdict — a merge, a check settling, a ratification, a deploy going live — especially when the wait's wake condition is a single push notification
 category: process
+layer: general
 proven_in: >-
   Two worked instances: settle watches missing the Sonar-reported leg
   (2026-07-21, cured by the empty-commit re-fire); the MCP-101 lane's

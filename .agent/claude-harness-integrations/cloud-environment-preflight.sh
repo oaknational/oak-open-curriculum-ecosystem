@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Claude cloud environment PREFLIGHT — read-only probe harness.
 #
 # Falsifies every external assumption cloud-environment-setup.sh makes, in
@@ -26,6 +26,13 @@
 # machine-local-path invariant. Every external host the setup script contacts has a probe here;
 # adding a host to the setup script without adding its probe in the same
 # commit is drift (cloud-environment.md § Validating and diagnosing).
+
+# The bash floor: the shellcheck gate holds it once and requires this guard first.
+if ((BASH_VERSINFO[0] < 5 || (BASH_VERSINFO[0] == 5 && BASH_VERSINFO[1] < 2))); then
+  echo "bash 5.2 or later is required, found ${BASH_VERSION}: install it (brew install bash on macOS, apt-get install bash on Debian 12 or Ubuntu 24.04 and later) and put it first on PATH" >&2
+  exit 1
+fi
+
 set -uo pipefail # deliberately NOT -e: every probe must run to the summary
 shopt -s nullglob
 

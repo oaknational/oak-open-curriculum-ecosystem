@@ -1,3 +1,9 @@
+---
+classification: situational
+description: "Every /loop invocation, cron, scheduled wake-up, or repeating monitor prompt ships an explicit exit criterion at invocation — default: five consecutive no-op iterations trigger stand-down plus a closeout broadcast naming the loop, the criterion, and a one-line summary. Not for one-shot tasks, event-driven Monitor wake-ups (see use-monitor-for-event-driven-wake), or owner-driven manual prompts. Failure shapes — a loop firing for hours past its work horizon as ambient context-budget tax; an idle counter keyed to a condition that never occurs, leaving the stand-down structurally unreachable."
+trigger: tool:loop-cron-monitor
+---
+
 # Templated Loops Require Exit Criteria
 
 Every `/loop`, cron, scheduled wake-up, or other templated repeating
@@ -81,6 +87,13 @@ enough to prevent the ambient-tax failure mode. Loops with
 genuine periodic work continue past five iterations because
 their iterations produce work; loops without genuine periodic
 work stop quickly.
+
+A chain of review trips is a loop and has an exit of the same kind: a trip
+whose review brings no cure ends the chain, and the step-back predicate is
+the pull-request skill's review-round state machine, item 2 (two consecutive
+trips that do not shrink the cure count, or four settled rounds in the current
+epoch, while the latest count is non-zero), never a count read from one trip
+(one chain's counts ran eleven, then three; 2026-09-26).
 
 ## Composition
 

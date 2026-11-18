@@ -3,6 +3,7 @@ name: "Preprocess for Type-Preserving Coercion"
 polarity: pattern
 use_this_when: "A Zod schema needs to accept multiple input types but preserve a narrow output type, and z.union with .transform() would widen the output"
 category: code
+layer: family
 proven_in: "packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/build-zod-type.ts"
 proven_date: 2026-03-02
 barrier:

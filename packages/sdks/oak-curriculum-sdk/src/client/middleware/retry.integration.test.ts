@@ -68,7 +68,7 @@ describe('retry middleware integration', () => {
     );
 
     const wrappedFetch = createFetchWithRetry(mockFetch, config);
-    const client = createClient<TestPaths>({ baseUrl: 'http://test.local' });
+    const client = createClient<TestPaths>({ baseUrl: 'https://test.local' });
 
     const result = await client.GET('/test', { fetch: wrappedFetch });
 
@@ -89,7 +89,7 @@ describe('retry middleware integration', () => {
       .mockResolvedValueOnce(createJsonResponse({ message: 'success' }, 200));
 
     const wrappedFetch = createFetchWithRetry(mockFetch, config);
-    const client = createClient<TestPaths>({ baseUrl: 'http://test.local' });
+    const client = createClient<TestPaths>({ baseUrl: 'https://test.local' });
 
     const resultPromise = client.GET('/test', { fetch: wrappedFetch });
 
@@ -114,7 +114,7 @@ describe('retry middleware integration', () => {
       .mockResolvedValueOnce(createJsonResponse({ message: 'success' }, 200));
 
     const wrappedFetch = createFetchWithRetry(mockFetch, config);
-    const client = createClient<TestPaths>({ baseUrl: 'http://test.local' });
+    const client = createClient<TestPaths>({ baseUrl: 'https://test.local' });
 
     const resultPromise = client.GET('/test', { fetch: wrappedFetch });
 
@@ -139,7 +139,7 @@ describe('retry middleware integration', () => {
     );
 
     const wrappedFetch = createFetchWithRetry(mockFetch, config);
-    const client = createClient<TestPaths>({ baseUrl: 'http://test.local' });
+    const client = createClient<TestPaths>({ baseUrl: 'https://test.local' });
 
     const resultPromise = client.GET('/test', { fetch: wrappedFetch });
 
@@ -163,7 +163,7 @@ describe('retry middleware integration', () => {
     );
 
     const wrappedFetch = createFetchWithRetry(mockFetch, config);
-    const client = createClient<TestPaths>({ baseUrl: 'http://test.local' });
+    const client = createClient<TestPaths>({ baseUrl: 'https://test.local' });
 
     const result = await client.GET('/test', { fetch: wrappedFetch });
 
@@ -179,7 +179,7 @@ describe('retry middleware integration', () => {
     );
 
     const wrappedFetch = createFetchWithRetry(mockFetch, config);
-    const client = createClient<TestPaths>({ baseUrl: 'http://test.local' });
+    const client = createClient<TestPaths>({ baseUrl: 'https://test.local' });
 
     const result = await client.GET('/test', { fetch: wrappedFetch });
 
@@ -200,7 +200,7 @@ describe('retry middleware integration', () => {
     );
 
     const wrappedFetch = createFetchWithRetry(mockFetch, config);
-    const client = createClient<TestPaths>({ baseUrl: 'http://test.local' });
+    const client = createClient<TestPaths>({ baseUrl: 'https://test.local' });
 
     const resultPromise = client.GET('/test', { fetch: wrappedFetch });
 
@@ -226,7 +226,7 @@ describe('retry middleware integration', () => {
     );
 
     const wrappedFetch = createFetchWithRetry(mockFetch, config);
-    const client = createClient<TestPaths>({ baseUrl: 'http://test.local' });
+    const client = createClient<TestPaths>({ baseUrl: 'https://test.local' });
 
     const result = await client.GET('/test', { fetch: wrappedFetch });
 
@@ -250,7 +250,7 @@ describe('retry middleware integration', () => {
 
       const wrappedFetch = createFetchWithRetry(mockFetch, config);
 
-      const resultPromise = wrappedFetch('http://test.local/test');
+      const resultPromise = wrappedFetch('https://test.local/test');
 
       // Advance through retry delays: 10ms (first retry) + 20ms (second retry)
       await vi.advanceTimersByTimeAsync(10);
@@ -275,8 +275,8 @@ describe('retry middleware integration', () => {
 
       // Create promise and immediately capture any rejection
       let caughtError: Error | null = null;
-      const resultPromise = wrappedFetch('http://test.local/test').catch((e: Error) => {
-        caughtError = e;
+      const resultPromise = wrappedFetch('https://test.local/test').catch((error: Error) => {
+        caughtError = error;
       });
 
       // Run all timers to completion
@@ -296,7 +296,7 @@ describe('retry middleware integration', () => {
 
       const wrappedFetch = createFetchWithRetry(mockFetch, config);
 
-      await expect(wrappedFetch('http://test.local/test')).rejects.toThrow('fetch failed');
+      await expect(wrappedFetch('https://test.local/test')).rejects.toThrow('fetch failed');
       expect(mockFetch).toHaveBeenCalledTimes(1);
     });
 
@@ -314,8 +314,8 @@ describe('retry middleware integration', () => {
 
       // Create promise and immediately capture any rejection
       let caughtError: Error | null = null;
-      const resultPromise = wrappedFetch('http://test.local/test').catch((e: Error) => {
-        caughtError = e;
+      const resultPromise = wrappedFetch('https://test.local/test').catch((error: Error) => {
+        caughtError = error;
       });
 
       // Run all timers to completion
@@ -342,7 +342,7 @@ describe('retry middleware integration', () => {
 
       const wrappedFetch = createFetchWithRetry(mockFetch, config);
 
-      const resultPromise = wrappedFetch('http://test.local/test');
+      const resultPromise = wrappedFetch('https://test.local/test');
 
       // Advance through retry delays
       await vi.advanceTimersByTimeAsync(10);

@@ -23,6 +23,14 @@ const config = defineConfigArray(
 
   // Use recommended and strict configs from standards plugin
   configs.strict,
+  {
+    // The owner's ruling of 2026-09-08 on `no-throw-statement`: off where the
+    // throw debt lives (this workspace), error everywhere else and in every new
+    // workspace; the migration waits for the merge-back into the upstream. The
+    // ruling is quoted in the plugin's configs/recommended.ts; the
+    // no-throw-remediation plan owns the migration.
+    rules: { '@oaknational/no-throw-statement': 'off' },
+  },
 
   {
     files: ['**/*.ts'],

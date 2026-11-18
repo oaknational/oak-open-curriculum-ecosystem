@@ -28,7 +28,7 @@ const senderWithId = deriveCollaborationIdentity({
   platform: sender.platform,
   model: sender.model,
   env: {
-    OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+    PRACTICE_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
     PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
   },
 }).agentId;
@@ -46,7 +46,6 @@ function registryWithClaim(
 ): CollaborationRegistry {
   return {
     schema_version: ACTIVE_CLAIMS_SCHEMA_VERSION,
-    commit_queue: [],
     claims: [
       {
         claim_id: claimId,
@@ -91,7 +90,7 @@ describe('comms heartbeat mode — ADR-186 lifecycle shape (append/send emitter)
         sender.model,
       ],
       env: {
-        OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+        PRACTICE_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
         PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
       },
       io: fake.runtime.io,
@@ -132,7 +131,7 @@ describe('comms heartbeat mode — ADR-186 lifecycle shape (append/send emitter)
         sender.model,
       ],
       env: {
-        OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+        PRACTICE_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
         PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
       },
       io: fake.runtime.io,
@@ -170,7 +169,7 @@ describe('comms heartbeat mode — ADR-186 lifecycle shape (append/send emitter)
         sender.model,
       ],
       env: {
-        OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+        PRACTICE_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
         PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
       },
       io: fake.runtime.io,
@@ -223,7 +222,7 @@ describe('comms heartbeat mode — ADR-186 lifecycle shape (append/send emitter)
         sender.model,
       ],
       env: {
-        OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+        PRACTICE_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
         PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
       },
       io: fake.runtime.io,
@@ -289,7 +288,7 @@ describe('comms heartbeat mode — ADR-186 lifecycle shape (append/send emitter)
         sender.model,
       ],
       env: {
-        OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+        PRACTICE_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
         PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
       },
       io: fake.runtime.io,
@@ -340,7 +339,7 @@ describe('comms heartbeat mode — ADR-186 lifecycle shape (append/send emitter)
         sender.model,
       ],
       env: {
-        OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+        PRACTICE_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
         PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
       },
       io: fake.runtime.io,
@@ -358,7 +357,7 @@ describe('comms heartbeat mode — ADR-186 lifecycle shape (append/send emitter)
       platform: sender.platform,
       model: sender.model,
       env: {
-        OAK_AGENT_IDENTITY_OVERRIDE: 'Distant Roaming Peer',
+        PRACTICE_AGENT_IDENTITY_OVERRIDE: 'Distant Roaming Peer',
         PRACTICE_AGENT_SESSION_ID_CLAUDE: 'ffee12',
       },
     }).agentId;
@@ -397,7 +396,7 @@ describe('comms heartbeat mode — ADR-186 lifecycle shape (append/send emitter)
         sender.model,
       ],
       env: {
-        OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+        PRACTICE_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
         PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
       },
       io: fake.runtime.io,
@@ -447,7 +446,7 @@ describe('comms heartbeat mode — ADR-186 lifecycle shape (append/send emitter)
         sender.model,
       ],
       env: {
-        OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+        PRACTICE_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
         PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
       },
       io: fake.runtime.io,
@@ -495,7 +494,7 @@ describe('comms heartbeat mode — ADR-186 lifecycle shape (append/send emitter)
         sender.model,
       ],
       env: {
-        OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+        PRACTICE_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
         PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
       },
       io: fake.runtime.io,
@@ -508,10 +507,8 @@ describe('comms heartbeat mode — ADR-186 lifecycle shape (append/send emitter)
 
   it('derives thread from the active claim row named by --claim-id via comms send --tag heartbeat (mirrors append path)', async () => {
     const commsDir = 'state/comms';
-    const sharedLogPath = 'state/shared-log.md';
     const seededRegistry: CollaborationRegistry = {
       schema_version: ACTIVE_CLAIMS_SCHEMA_VERSION,
-      commit_queue: [],
       claims: [
         {
           claim_id: 'claim-send',
@@ -534,8 +531,6 @@ describe('comms heartbeat mode — ADR-186 lifecycle shape (append/send emitter)
         'state/active-claims.json',
         '--comms-dir',
         commsDir,
-        '--output',
-        sharedLogPath,
         '--now',
         '2026-05-24T10:18:00Z',
         '--title',
@@ -558,7 +553,7 @@ describe('comms heartbeat mode — ADR-186 lifecycle shape (append/send emitter)
         sender.model,
       ],
       env: {
-        OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+        PRACTICE_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
         PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
       },
       io: fake.runtime.io,

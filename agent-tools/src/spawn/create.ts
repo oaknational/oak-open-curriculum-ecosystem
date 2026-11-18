@@ -1,11 +1,9 @@
-import { dirname, join } from 'node:path';
+import { dirname, join, normalize } from 'node:path';
 
 import { err, isErr, ok, type Result } from '@oaknational/result';
 
 import { detectExistingWorktree, type SpawnGitRunner } from './existing-worktree.js';
 import { realGitRunner } from './git.js';
-
-export type { SpawnGitRunner };
 
 /** Inputs to {@link createSpawnWorktree}. */
 export interface CreateSpawnWorktreeOptions {
@@ -140,7 +138,11 @@ function deriveSpawnTarget(
 ): Result<SpawnTarget, Error> {
   const branch = `${validated.type}/${validated.slug}`;
   const worktreePath = join(dirname(coordinationHome), `oak-${validated.slug}`);
-  if (worktreePath === coordinationHome) {
+  // Normalised comparison: `coordinationHome` originates from git porcelain
+  // (forward slashes on every platform) while `worktreePath` is host-joined —
+  // a raw equality never fires on Windows and this guard exists precisely so
+  // spawn cannot run install/build on the main checkout.
+  if (normalize(worktreePath) === normalize(coordinationHome)) {
     return err(
       new Error(
         `spawn: computed worktree path '${worktreePath}' is the coordination home itself — ` +
@@ -203,3 +205,5 @@ export function createSpawnWorktree(
 
   return addSpawnWorktree(runGit, options.coordinationHome, worktree);
 }
+
+export type { SpawnGitRunner } from './existing-worktree.js';

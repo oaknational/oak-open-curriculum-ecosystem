@@ -3,6 +3,7 @@ name: commit-window-discipline-under-parallel-agents
 use_this_when: "Committing on a shared on-disk checkout where other agents may stage or commit concurrently — re-derive the staged set per chunk from a fresh git status, stage by explicit pathspec, and verify the staged set immediately before each commit; 'solo window' is a point-in-time read, not a session property."
 polarity: pattern
 category: process
+layer: general
 status: stable
 discovered: 2026-06-09
 proven_by: "Sustained multi-agent work on the shared feat/comms-research branch (2026-06-09→14): 6+ agents committed concurrently on one on-disk checkout with zero content loss and zero collisions by re-deriving the staged set per chunk, committing by explicit pathspec, and verifying the staged set immediately before each commit. Conserved from distilled.md (multi-session cross-checkout commit discipline, the interim home noted there)."

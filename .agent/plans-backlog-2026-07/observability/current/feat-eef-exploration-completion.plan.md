@@ -64,7 +64,7 @@ todos:
     status: pending
     depends_on: [09-pnpm-check-green]
   - id: 11-pre-merge-divergence-analysis
-    content: "Per .agent/rules/pre-merge-divergence-analysis.md: `git fetch origin main`; `git log --oneline origin/main..HEAD`; `git log --oneline HEAD..origin/main`; `git diff --stat origin/main...HEAD`. Inspect any cross-cutting changes (root config files, lockfile, CI surfaces) for conflict potential. If 100+ files diverged or 10+ conflicts predicted, follow .agent/skills/complex-merge/SKILL.md. Surface findings to owner before merge proposal."
+    content: "Per .agent/rules/pre-merge-divergence-analysis.md: `git fetch origin main`; `git log --oneline origin/main..HEAD`; `git log --oneline HEAD..origin/main`; `git diff --stat origin/main...HEAD`. Inspect any cross-cutting changes (root config files, lockfile, CI surfaces) for conflict potential. If 100+ files diverged or 10+ conflicts predicted, follow .agent/skills/change-custody/complex-merge/SKILL-CANONICAL.md. Surface findings to owner before merge proposal."
     status: pending
     depends_on: [10-mcp-server-live-exercise]
   - id: 12-merge-readiness-declaration
@@ -166,7 +166,7 @@ Branch state at refresh (`feat/eef_exploration` HEAD `b539c7c5`):
 ## Discipline (applies to every step)
 
 - **Commit-skill protocol**: every commit goes through
-  `.agent/skills/commit/SKILL.md` under
+  `.agent/skills/change-custody/commit/SKILL-CANONICAL.md` under
   `.agent/rules/no-speed-pressure.md`. The substrate is the deliverable;
   do not restate its mechanics here, the rule and skill are the
   authority.
@@ -895,7 +895,7 @@ step 10 todo body.
 | Step 10 surfaces a real test failure that did not show in iterative dev | Medium | Medium | Fix at source per never-disable-checks; if larger than mechanical, surface as named highest-priority recovery plan |
 | Step 11's MCP tool exercise reveals a regression in a tool's response shape | Low | High | Schema-validation against tool catalogue catches this; regression is a merge blocker; route to owner; either fix in-branch or revert the responsible commit |
 | Step 11 fails on Sentry-network unavailability (legacy SENTRY_MODE consumer hangs on DSN) | Low | Low | Boot-timeout guard at 10s; record as named operational-evidence note; not strictly merge-blocking |
-| Step 12 reveals unmergeable conflicts vs `main` | Low | Medium | Per `.agent/skills/complex-merge/SKILL.md`, structured workflow if 100+ files diverged or 10+ conflicts |
+| Step 12 reveals unmergeable conflicts vs `main` | Low | Medium | Per `.agent/skills/change-custody/complex-merge/SKILL-CANONICAL.md`, structured workflow if 100+ files diverged or 10+ conflicts |
 | The shared-index foreign-stage-absorption that damaged commit `8fa339f4` recurs | Low | Medium | Mandatory `git commit -- <pathspec>` filter on every commit per §Discipline; peer-index cure named in §Discipline |
 | Step 3 cross-platform adapter asymmetry (Claude/Cursor/Codex don't auto-load adapters) | Medium | Low | Post-commit verification of all four adapter paths (`.agent/`, `.claude/`, `.cursor/`, `.agents/`); §Discipline note that adapter loading is platform-cadence, not lint-gated |
 | `e2e-tests/helpers/test-config.ts` sits at intersection of capture-not-clean §IO Inventory AND paused rename's WS4–WS5 file list | Low | Low | If file appears on §IO Inventory at step 7, resumption of paused rename will consume the Inventory entry; record in paused plan's resumption preconditions if observed |

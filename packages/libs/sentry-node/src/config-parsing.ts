@@ -1,10 +1,6 @@
+import { trimToUndefined } from '@oaknational/build-metadata';
 import { err, ok, type Result } from '@oaknational/result';
 import type { ObservabilityConfigError, SentryBooleanFlagName } from './types.js';
-
-export function trimToUndefined(value: string | undefined): string | undefined {
-  const trimmed = value?.trim();
-  return trimmed ? trimmed : undefined;
-}
 
 export function parseOptionalBooleanFlag(
   name: SentryBooleanFlagName,

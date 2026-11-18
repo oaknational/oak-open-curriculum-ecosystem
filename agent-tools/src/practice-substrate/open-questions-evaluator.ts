@@ -1,3 +1,4 @@
+import { escapeRegExp } from '../core/escape-reg-exp.js';
 import { finding } from './finding.js';
 import { type OpenQuestionsSnapshot, type SubstrateFinding } from './types.js';
 
@@ -153,8 +154,4 @@ function readField(entryBody: string, field: (typeof REQUIRED_FIELDS)[number]): 
   const value = fieldPattern.exec(entryBody)?.[1]?.trim();
 
   return value === undefined || value.length === 0 ? undefined : value;
-}
-
-function escapeRegExp(value: string): string {
-  return value.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
 }

@@ -9,7 +9,19 @@ fitness_line_length: 100
 # The Practice
 
 The Practice is the self-reinforcing system of principles, structures, agents,
-and tooling that governs how work happens in a Practice-bearing repository. It
+and tooling that governs how work happens in a Practice-bearing repository: one
+system of engineering practice, in five layers, that governs how work is
+planned, decided, implemented, reviewed, delivered and learned from in every
+repository that carries it (the definition the owner ratified on 2026-10-04,
+recorded in PDR-143 §Decision). The general layer is tooling-agnostic policy
+and strict universal contracts; the family layer binds them to one tooling
+ecosystem, implemented per family only where a universal approach is not
+efficient or appropriate; the contextual layer binds them to one host; the
+accumulated layer is what an instance accrues and learns from, created empty
+elsewhere and never transmitted; the loop is how the accumulated becomes
+general, family or contextual, and how one instance's learning reaches
+another. An instance is all five layers in one repository; the Practice itself
+is the general layer, its family bindings and the loop. It
 is a philosophy and commitment before it is an implementation. Its
 specification aspect is a portability tool: it lets processes, flows,
 contracts, approaches, structures, and vocabularies travel without binding them
@@ -29,9 +41,16 @@ links to the host repo's directives, ADRs, and tools,
 see practice-index.md — the bridge between the portable Core and the
 host repo.
 
-## Three Layers
+## Three Aspects of the General Layer
 
-The Practice operates in three layers. Each builds on the one below.
+The general layer of the five-layer definition above has three aspects, each
+building on the one below: philosophy (why it works), structure (what it
+consists of) and tooling (how it is used). The first two are general-layer
+content wherever the Practice is instantiated; the tooling aspect is where the
+family layer (one ecosystem's adapters and scripts) and the contextual layer
+(a host's entry points and platform set) bind to the general layer. These
+aspects were once called the Practice's three layers; the layers are the five
+of PDR-143 §Decision, and the three below are aspects of the first.
 
 ```mermaid
 graph TB

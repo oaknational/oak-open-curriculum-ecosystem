@@ -30,7 +30,7 @@ const sender = {
 } as const;
 
 const senderEnv = {
-  OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+  PRACTICE_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
   PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
 } as const;
 
@@ -77,7 +77,11 @@ describe('comms write commands report their writes', () => {
     });
 
     expect(result.exitCode).toBe(0);
-    expect(result.stdout).toBe('wrote comms event loud-append to state/comms/loud-append.json\n');
+    // The reported event path is host-joined from the comms dir, so the
+    // expectation is derived in host form (the POSIX literal on POSIX).
+    expect(result.stdout).toBe(
+      `wrote comms event loud-append to ${join('state/comms', 'loud-append.json')}\n`,
+    );
   });
 
   it('comms append in heartbeat mode reports the written event id and path', async () => {
@@ -87,7 +91,6 @@ describe('comms write commands report their writes', () => {
     const fake = createFakeCollaborationRuntime({
       activeClaims: {
         schema_version: ACTIVE_CLAIMS_SCHEMA_VERSION,
-        commit_queue: [],
         claims: [
           {
             claim_id: seededClaimId,
@@ -139,7 +142,7 @@ describe('comms write commands report their writes', () => {
 
     expect(result.exitCode).toBe(0);
     expect(result.stdout).toBe(
-      'wrote comms event loud-heartbeat to state/comms/loud-heartbeat.json\n',
+      `wrote comms event loud-heartbeat to ${join('state/comms', 'loud-heartbeat.json')}\n`,
     );
   });
 
@@ -527,8 +530,7 @@ async function seedActiveClaim(
   overrides: { readonly claimed_at?: string; readonly freshness_seconds?: number } = {},
 ): Promise<void> {
   await writeJson(activePath, {
-    schema_version: '1.3.0',
-    commit_queue: [],
+    schema_version: '1.4.0',
     claims: [
       {
         claim_id: seededClaimId,

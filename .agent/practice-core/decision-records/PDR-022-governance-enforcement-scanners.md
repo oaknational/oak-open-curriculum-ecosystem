@@ -78,8 +78,7 @@ aspirational; a scanner without a claim is over-engineering.
 A governance-enforcement scanner:
 
 - Runs in CI on every PR touching governed surfaces.
-- Runs in the repo's aggregate quality gate (`check` / `check:ci`
-  per PDR-008).
+- Runs in the repo's aggregate quality gate (`check`, per PDR-008).
 - Produces structured output suitable for agent consumption
   (counts, specific violations with file:line).
 - Exits `0` when compliant, non-zero when any surface fails.

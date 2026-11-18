@@ -1,3 +1,18 @@
+---
+description: "Release go/no-go specialist. Synthesises quality-gate evidence, breaking-change risk, migration impact, and operational readiness into an explicit GO / GO WITH CONDITIONS / NO-GO recommendation. Use at release boundaries: before merging to a release branch, before a version bump, when a change set includes contract or schema changes, or when a prior NO-GO is being re-evaluated after fixes."
+platforms:
+  - cursor
+  - claude
+  - codex
+claude:
+  color: purple
+  note: Review and report only. Do not modify code.
+cursor:
+  description: Release go/no-go specialist. Use for release-critical changes to assess quality-gate status, migration risk, rollout safety, and final readiness recommendations.
+codex:
+  description: Release go/no-go readiness reviewer.
+---
+
 ## Delegation Triggers
 
 Invoke the release readiness reviewer at release boundaries — when a change set is being evaluated for merge to a release branch, a version bump is pending, or a go/no-go decision is needed before deployment. It synthesises quality-gate evidence, breaking-change risk, migration impact, and operational readiness into a single explicit recommendation. Do not invoke it for routine code review; it is a release-boundary specialist, not an ongoing quality reviewer.
@@ -37,7 +52,7 @@ Before assessing release readiness, you MUST also read and internalise these dom
 | Document | Purpose |
 |----------|---------|
 | `.agent/directives/testing-strategy.md` | Test expectations and TDD/BDD discipline |
-| `.agent/skills/gates/SKILL-CANONICAL.md` | Quality gate sequence and pass criteria |
+| `.agent/skills/change-custody/gates/SKILL-CANONICAL.md` | Quality gate sequence and pass criteria |
 | `.agent/sub-agents/components/principles/subagent-principles.md` | Scope and complexity guardrails |
 
 ## Core Philosophy
@@ -50,7 +65,7 @@ Before assessing release readiness, you MUST also read and internalise these dom
 
 ### Step 1: Gather Gate Status Evidence
 
-1. Check quality gate results (sdk-codegen, build, type-check, lint, format, test, E2E, UI, smoke)
+1. Check quality gate results (build, type-check, lint, format, test, end-to-end, visual regression)
 2. Record pass/fail status for each gate with evidence
 3. Note any gates that were not run and why
 
@@ -140,7 +155,8 @@ Structure your review as:
 | Issue Type | Recommended Specialist |
 |------------|------------------------|
 | Security blocker or risk | `security-expert` |
-| Structural reliability concern or boundary violation | `architecture-expert-barney` or `architecture-expert-wilma` |
+| Boundary violation | `architecture-expert` |
+| Build, caching or runtime reliability concern | `architecture-expert-fred` |
 | Missing documentation for rollout | `docs-adr-expert` |
 | Test coverage gaps blocking release | `test-expert` |
 | Type safety issues in changed contracts | `type-expert` |

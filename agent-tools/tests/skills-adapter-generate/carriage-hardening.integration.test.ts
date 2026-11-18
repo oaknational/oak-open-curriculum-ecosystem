@@ -1,6 +1,12 @@
+import { join } from 'node:path';
+
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { checkAdapters } from '../../src/skills-adapter-generate/checker';
+import {
+  checkAdapters,
+  defaultCheckerFs,
+  type CheckerFs,
+} from '../../src/skills-adapter-generate/checker';
 import { generateAdapters } from '../../src/skills-adapter-generate/generator';
 
 import {
@@ -50,7 +56,7 @@ describe('symlink safety over a real filesystem', () => {
     const linkPath = '.claude/skills/oak-parallax/references/orchestration.md';
     writeRepoFile(root, linkPath, ''); // ensure parent exists, then replace with a link
     removeRepoPath(root, `${linkPath}`);
-    symlinkRepoPath(root, linkPath, `${outside}/victim.txt`);
+    symlinkRepoPath(root, linkPath, `${outside}/victim.txt`, 'file');
 
     await generateAdapters({ repoRoot: root, prefix: 'oak-' });
 
@@ -69,7 +75,7 @@ describe('symlink safety over a real filesystem', () => {
 
     const linkPath = '.claude/skills/oak-parallax/scripts/render_graph.py';
     removeRepoPath(root, `${linkPath}`);
-    symlinkRepoPath(root, linkPath, `${outside}/hooks/pre-commit`);
+    symlinkRepoPath(root, linkPath, `${outside}/hooks/pre-commit`, 'file');
 
     await generateAdapters({ repoRoot: root, prefix: 'oak-' });
 
@@ -87,12 +93,14 @@ describe('symlink safety over a real filesystem', () => {
     writeRepoFile(outside, 'victim.txt', '# Orchestration\n'); // byte-identical: only link-awareness can catch it
     const linkPath = '.claude/skills/oak-parallax/references/orchestration.md';
     removeRepoPath(root, `${linkPath}`);
-    symlinkRepoPath(root, linkPath, `${outside}/victim.txt`);
+    symlinkRepoPath(root, linkPath, `${outside}/victim.txt`, 'file');
 
     const result = await checkAdapters({ repoRoot: root, prefix: 'oak-' });
 
+    // Product reports host-joined absolute paths; expectations compose the
+    // same way.
     const failing = [...result.orphaned, ...result.drifted, ...result.missing];
-    expect(failing).toContain(`${root}/${linkPath}`);
+    expect(failing).toContain(join(root, linkPath));
   });
 
   it('prunes a symlinked carried-root directory as the link: the external tree stays untouched and a real directory replaces it', async () => {
@@ -104,7 +112,7 @@ describe('symlink safety over a real filesystem', () => {
     await generateAdapters({ repoRoot: root, prefix: 'oak-' });
     writeRepoFile(outside, 'deep/existing.md', 'external tree stays\n');
     removeRepoPath(root, '.claude/skills/oak-parallax/references');
-    symlinkRepoPath(root, '.claude/skills/oak-parallax/references', outside);
+    symlinkRepoPath(root, '.claude/skills/oak-parallax/references', outside, 'dir');
 
     await generateAdapters({ repoRoot: root, prefix: 'oak-' });
 
@@ -123,7 +131,7 @@ describe('symlink safety over a real filesystem', () => {
     const outside = sandboxRepo();
     writeRepoFile(root, `${CANONICAL_DIR}/SKILL-CANONICAL.md`, canonicalBody);
     writeRepoFile(outside, 'secret.txt', 'SECRET-EXTERNAL-BYTES\n');
-    symlinkRepoPath(root, `${CANONICAL_DIR}/references`, outside);
+    symlinkRepoPath(root, `${CANONICAL_DIR}/references`, outside, 'dir');
 
     const generated = await generateAdapters({
       repoRoot: root,
@@ -142,7 +150,7 @@ describe('symlink safety over a real filesystem', () => {
     const outside = sandboxRepo();
     seedSkill(root);
     writeRepoFile(outside, 'skills/precious-external/KEEP.md', 'external tree stays\n');
-    symlinkRepoPath(root, '.claude', outside);
+    symlinkRepoPath(root, '.claude', outside, 'dir');
 
     const generated = await generateAdapters({
       repoRoot: root,
@@ -171,7 +179,12 @@ describe('symlink safety over a real filesystem', () => {
     const outside = sandboxRepo();
     seedSkill(root);
     writeRepoFile(outside, 'smuggled.md', 'external content\n');
-    symlinkRepoPath(root, `${CANONICAL_DIR}/references/smuggled.md`, `${outside}/smuggled.md`);
+    symlinkRepoPath(
+      root,
+      `${CANONICAL_DIR}/references/smuggled.md`,
+      `${outside}/smuggled.md`,
+      'file',
+    );
 
     const generated = await generateAdapters({
       repoRoot: root,
@@ -221,21 +234,68 @@ describe('shape transitions over a real filesystem', () => {
 });
 
 describe('executable-mode carriage over a real filesystem', () => {
-  it('reports executable-bit drift on a byte-identical carried copy, and regeneration restores the mode', async () => {
+  // On-disk mode bits are a POSIX observable NTFS cannot express (the
+  // owner-only write module's precedent): chmod is a no-op there and every
+  // file reads non-executable, so a divergent bit cannot be STAGED on the
+  // real filesystem of every host. The drift leg therefore injects the
+  // executable-bit facet over the otherwise-real checker binding — the walk,
+  // byte-compares, and reporting under test all run against the real sandbox
+  // on every platform — and the carriage leg asserts the two sides' AGREEMENT,
+  // the whole surface the host filesystem can express (bit-level restoration
+  // included wherever bits exist).
+  it('flags executable-bit drift through the checker when the two sides read differently (facet injected)', async () => {
     const root = sandboxRepo();
     seedSkill(root);
-    chmodRepoFile(root, `${CANONICAL_DIR}/scripts/render_graph.py`, 0o755);
+    await generateAdapters({ repoRoot: root, prefix: 'oak-' });
+
+    const canonicalScript = join(root, CANONICAL_DIR, 'scripts/render_graph.py');
+    const projected = '.claude/skills/oak-parallax/scripts/render_graph.py';
+    const fs: CheckerFs = {
+      ...defaultCheckerFs,
+      async isExecutableOrUndefined(path) {
+        const real = await defaultCheckerFs.isExecutableOrUndefined(path);
+        if (real.kind !== 'ok' || real.value === undefined) {
+          return real;
+        }
+        return { kind: 'ok', value: path === canonicalScript };
+      },
+    };
+
+    const flagged = await checkAdapters({ repoRoot: root, prefix: 'oak-' }, fs);
+
+    expect(flagged.drifted).toContain(join(root, projected));
+  });
+
+  it('keeps the projected copy’s executability agreeing with its canonical through generation and regeneration', async () => {
+    const root = sandboxRepo();
+    seedSkill(root);
+    const canonicalScript = `${CANONICAL_DIR}/scripts/render_graph.py`;
+    chmodRepoFile(root, canonicalScript, 0o755);
     await generateAdapters({ repoRoot: root, prefix: 'oak-' });
 
     const projected = '.claude/skills/oak-parallax/scripts/render_graph.py';
-    expect(repoFileIsExecutable(root, projected)).toBe(true);
+    expect(repoFileIsExecutable(root, projected)).toBe(repoFileIsExecutable(root, canonicalScript));
+
+    // A real divergence where bits exist; a no-op where they cannot — either
+    // way regeneration must land the two sides in agreement again.
     chmodRepoFile(root, projected, 0o644);
 
-    const flagged = await checkAdapters({ repoRoot: root, prefix: 'oak-' });
-    expect(flagged.drifted).toContain(`${root}/${projected}`);
+    // The REAL executable facet must agree with an independent stat reading
+    // on both sides — on POSIX these read true/false here, proving the facet
+    // reads genuine, divergent bits (the injected-facet drift test above
+    // cannot prove that); on NTFS both truthfully read false. Identical
+    // assertion set on every host.
+    expect(
+      await defaultCheckerFs.isExecutableOrUndefined(join(root, canonicalScript)),
+    ).toStrictEqual({ kind: 'ok', value: repoFileIsExecutable(root, canonicalScript) });
+    expect(await defaultCheckerFs.isExecutableOrUndefined(join(root, projected))).toStrictEqual({
+      kind: 'ok',
+      value: repoFileIsExecutable(root, projected),
+    });
 
     await generateAdapters({ repoRoot: root, prefix: 'oak-' });
-    expect(repoFileIsExecutable(root, projected)).toBe(true);
+
+    expect(repoFileIsExecutable(root, projected)).toBe(repoFileIsExecutable(root, canonicalScript));
   });
 });
 
@@ -249,8 +309,8 @@ describe('projection-root reconciliation over a real filesystem', () => {
 
     const flagged = await checkAdapters({ repoRoot: root, prefix: 'oak-' });
     expect(flagged.stale).toEqual([
-      `${root}/.agents/skills/oak-parallax`,
-      `${root}/.claude/skills/oak-parallax`,
+      join(root, '.agents/skills/oak-parallax'),
+      join(root, '.claude/skills/oak-parallax'),
     ]);
 
     await generateAdapters({ repoRoot: root, prefix: 'oak-' });
@@ -337,7 +397,7 @@ describe('same-length drift over a real filesystem', () => {
 
     const flagged = await checkAdapters({ repoRoot: root, prefix: 'oak-' });
 
-    expect(flagged.drifted).toEqual([`${root}/${projected}`]);
+    expect(flagged.drifted).toEqual([join(root, projected)]);
   });
 });
 
@@ -373,7 +433,7 @@ describe('validation jurisdiction: only recognised Practice projections are adju
     const root = sandboxRepo();
     seedSkill(root);
     writeRepoFile(root, '.agents/skills/clerk/SKILL.md', 'vendor canonical copy\n');
-    symlinkRepoPath(root, '.claude/skills/clerk', '../../.agents/skills/clerk');
+    symlinkRepoPath(root, '.claude/skills/clerk', '../../.agents/skills/clerk', 'dir');
 
     const flagged = await checkAdapters({ repoRoot: root, prefix: 'oak-' });
     expect(flagged.stale).toEqual([]);
@@ -410,7 +470,7 @@ describe('validation jurisdiction: only recognised Practice projections are adju
     const outside = sandboxRepo();
     seedSkill(root);
     writeRepoFile(outside, 'elsewhere/SKILL.md', 'external skill tree\n');
-    symlinkRepoPath(root, '.claude/skills/oak-linked-estate', `${outside}/elsewhere`);
+    symlinkRepoPath(root, '.claude/skills/oak-linked-estate', `${outside}/elsewhere`, 'dir');
 
     const flagged = await checkAdapters({ repoRoot: root, prefix: 'oak-' });
     expect(flagged.stale).toEqual([]);
@@ -430,8 +490,8 @@ describe('validation jurisdiction: only recognised Practice projections are adju
 
     const flagged = await checkAdapters({ repoRoot: root, prefix: 'oak2-' });
     expect(flagged.stale).toEqual([
-      `${root}/.agents/skills/oak-parallax`,
-      `${root}/.claude/skills/oak-parallax`,
+      join(root, '.agents/skills/oak-parallax'),
+      join(root, '.claude/skills/oak-parallax'),
     ]);
 
     await generateAdapters({ repoRoot: root, prefix: 'oak2-' });
@@ -462,7 +522,7 @@ describe('emission-target jurisdiction: a name-addressed write never crosses int
     seedSkill(root);
     writeRepoFile(outside, 'vendor-real/SKILL.md', 'vendor content stays\n');
     writeRepoFile(outside, 'vendor-real/scripts/vendor.sh', 'echo vendor\n');
-    symlinkRepoPath(root, '.claude/skills/oak-parallax', `${outside}/vendor-real`);
+    symlinkRepoPath(root, '.claude/skills/oak-parallax', `${outside}/vendor-real`, 'dir');
 
     const generated = await generateAdapters({ repoRoot: root, prefix: 'oak-' });
 
@@ -502,7 +562,7 @@ describe('emission-target jurisdiction: a name-addressed write never crosses int
     seedSkill(root);
     await generateAdapters({ repoRoot: root, prefix: 'oak-' });
     writeRepoFile(root, '.claude/skills/vendor-x/scripts/vendor.sh', 'echo vendor\n');
-    symlinkRepoPath(root, '.claude/skills/vendor-x/SKILL.md', '../oak-parallax/SKILL.md');
+    symlinkRepoPath(root, '.claude/skills/vendor-x/SKILL.md', '../oak-parallax/SKILL.md', 'file');
 
     const flagged = await checkAdapters({ repoRoot: root, prefix: 'oak-' });
     expect(flagged.stale).toEqual([]);

@@ -4,7 +4,7 @@ fitness_line_limit: 420
 fitness_char_limit: 30000
 fitness_line_length: 100
 fitness_content_role: reference
-overflow_disposition: 'leave-if-live; else conserve-insight-and-delete'
+overflow_disposition: 'leave-if-live; else graduate, then archive to a dated file proven byte-identical — never before full processing, never split/shard (see continuity-practice.md §Disposition of Continuity Surfaces)'
 merge_class: index-narrative-tables
 ---
 

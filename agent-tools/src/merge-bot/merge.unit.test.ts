@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { readEnv } from './merge.js';
+import { readEnv } from './merge-read-env.js';
 
 /**
  * Pure environment construction for the read-path gh executor — params in,

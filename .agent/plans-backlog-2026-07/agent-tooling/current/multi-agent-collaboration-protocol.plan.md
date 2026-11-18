@@ -1192,7 +1192,7 @@ in 2026-04-24/25 pre-protocol).
 - `.agent/plans/agentic-engineering-enhancements/current/practice-and-process-structural-improvements.plan.md` (WS0)
 - `.agent/plans/observability/active/gate-recovery-cadence.plan.md` (WS0 — bidirectional reference between gate-recovery and the new rule)
 - `.agent/rules/follow-collaboration-practice.md` (WS0 — re-pointed to user-collaboration.md)
-- `.agent/skills/commit/SKILL.md` and commit skill adapters (commit-window refinement)
+- `.agent/skills/change-custody/commit/SKILL-CANONICAL.md` and commit skill adapters (commit-window refinement)
 - `.agent/skills/start-right-quick/`, `start-right-thorough/`, `session-handoff/` and platform adapters (WS4A)
 - `.agent/commands/consolidate-docs.md` (WS1; WS3A; WS3B if promoted; WS4A)
 - `.agent/memory/executive/invoke-code-experts.md` (WS4A)

@@ -79,3 +79,19 @@ worked instance that day was a catch, not a miss.
   register's review is this record's falsification window.
 - The 2026-07-20 drive's serial-era latencies stand in the record as the
   measured cost of the retired model.
+
+## Amendment Log
+
+- **2026-09-09 — the landing slot under a strict-currency ruleset is decision
+  5's cost, not decision 3's machinery.** Where the owner keeps the
+  strict-currency policy (decision 5), every merge knocks every other open PR
+  BEHIND and each must sync and push again, and every push opens a review
+  round; the `pr-lifecycle` skill's Phase 7 landing slot (one PR syncs at the
+  slot word, the rest gather reviews and wait) is the order that policy's
+  cost imposes, not a return of one-at-a-time grants: the Director still
+  grants eligibility, never position, and the slot lapses the day the policy
+  is dropped. Measured on the fork's default branch, 2026-09-08/09: eleven
+  and then seven serial landings under `strict_required_status_checks_policy`,
+  each landing re-syncing the next. A reviewer read the skill's slot clause
+  and decision 3 as a contradiction; this entry names the condition that
+  reconciles them.

@@ -18,20 +18,21 @@ import { writeErrorLine, writeLine } from '../../core/terminal-output.js';
  *
  * @param stats            - A human-readable summary of the counts checked
  *   (skills, rules, adapters, triggers).
- * @param writtenWrappers  - Paths written during a `--fix` run.  When
- *   non-empty, a fix summary is printed before the issue list.
+ * @param writtenPaths     - Paths written during a `--fix` run (rule
+ *   projections, the rules index).  When non-empty, a fix summary is printed
+ *   before the issue list.
  * @param validationIssues - The collected issue strings.  An empty array
  *   means validation passed.
  * @returns `0` when validation passed, `1` when at least one issue was found.
  */
 export function reportPortabilityValidation(
   stats: string,
-  writtenWrappers: readonly string[],
+  writtenPaths: readonly string[],
   validationIssues: readonly string[],
 ): number {
-  if (writtenWrappers.length > 0) {
-    writeLine(`Portability --fix wrote ${writtenWrappers.length} wrapper file(s):`);
-    for (const writtenPath of writtenWrappers) {
+  if (writtenPaths.length > 0) {
+    writeLine(`Portability --fix wrote ${writtenPaths.length} file(s):`);
+    for (const writtenPath of writtenPaths) {
       writeLine(`  + ${writtenPath}`);
     }
   }

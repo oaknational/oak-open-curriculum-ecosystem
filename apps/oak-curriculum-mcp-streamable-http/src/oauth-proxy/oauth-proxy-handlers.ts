@@ -86,11 +86,14 @@ async function fetchUpstream(
   try {
     const response = await fetchFn(url, { ...init, signal: controller.signal });
     return ok(response);
-  } catch (e: unknown) {
-    if (e instanceof Error && e.name === 'AbortError') {
+  } catch (error: unknown) {
+    if (error instanceof Error && error.name === 'AbortError') {
       return err({ kind: 'timeout' });
     }
-    return err({ kind: 'network', cause: e instanceof Error ? e : new Error(String(e)) });
+    return err({
+      kind: 'network',
+      cause: error instanceof Error ? error : new Error(String(error)),
+    });
   } finally {
     clearTimeout(timer);
   }

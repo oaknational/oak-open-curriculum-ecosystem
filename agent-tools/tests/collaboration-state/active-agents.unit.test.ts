@@ -44,9 +44,9 @@ describe('activeAgentReports', () => {
     // Same id as woodland (id is the routing weight), different model — a
     // genuine routing collision within one group.
     const colliding: CollaborationAgentId = { ...woodland, model: 'GPT-5.1' };
+    const commitQueue = [queueEntry({ agent_id: moonlit })];
     const registry: CollaborationRegistry = {
-      schema_version: '1.3.0',
-      commit_queue: [queueEntry({ agent_id: moonlit })],
+      schema_version: '1.4.0',
       claims: [
         claim({ claim_id: 'fresh-claim', agent_id: woodland }),
         claim({ claim_id: 'collision-claim', agent_id: colliding }),
@@ -61,7 +61,7 @@ describe('activeAgentReports', () => {
 
     // Reports sort by formatRoutingKey ("name / id:..."): Driftwood, Moonlit,
     // Woodland.
-    expect(activeAgentReports(registry, nowIso)).toMatchObject([
+    expect(activeAgentReports(registry, commitQueue, nowIso)).toMatchObject([
       {
         routing_key: { agent_name: 'Driftwood Settling Bank', id: driftwood.id },
         collision_status: 'clear',
@@ -89,8 +89,7 @@ describe('activeAgentReports', () => {
 
   it('can include inactive agents from the closed claims archive', () => {
     const registry: CollaborationRegistry = {
-      schema_version: '1.3.0',
-      commit_queue: [],
+      schema_version: '1.4.0',
       claims: [],
     };
     const closedArchive: ClosedClaimsArchive = {
@@ -109,7 +108,7 @@ describe('activeAgentReports', () => {
       ],
     };
 
-    expect(activeAgentReports(registry, nowIso, closedArchive)).toMatchObject([
+    expect(activeAgentReports(registry, [], nowIso, closedArchive)).toMatchObject([
       {
         routing_key: { agent_name: 'Woodland Creeping Petal', id: woodland.id },
         collision_status: 'clear',
@@ -127,8 +126,7 @@ describe('activeAgentReports', () => {
 
   it('refuses live identity routing collisions but ignores stale history', () => {
     const registry: CollaborationRegistry = {
-      schema_version: '1.3.0',
-      commit_queue: [],
+      schema_version: '1.4.0',
       claims: [
         // Live: same routing id as woodland, different model.
         claim({ agent_id: { ...woodland, model: 'GPT-5.1' } }),
@@ -146,6 +144,7 @@ describe('activeAgentReports', () => {
     expect(() =>
       assertNoLiveIdentityRoutingCollision({
         registry,
+        commitQueue: [],
         nowIso,
         agentId: woodland,
         surface: 'claims open',
@@ -158,6 +157,7 @@ describe('activeAgentReports', () => {
     expect(() =>
       assertNoLiveIdentityRoutingCollision({
         registry,
+        commitQueue: [],
         nowIso,
         agentId: driftwood,
         surface: 'claims open',
@@ -192,6 +192,7 @@ function queueEntry(
     updated_at: '2026-04-28T09:30:00Z',
     expires_at: '2026-04-28T09:52:00Z',
     phase: 'queued',
+    queued_seq: 0,
     ...overrides,
   };
 }

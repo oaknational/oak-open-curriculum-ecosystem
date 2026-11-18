@@ -16,12 +16,10 @@ export interface NodeProcessRunnerOptions {
 /**
  * Creates the real child-process runner used by the CLI entrypoint.
  */
-export function createNodeProcessRunner(
-  { stdout, stderr }: NodeProcessRunnerOptions = {
-    stdout: process.stdout,
-    stderr: process.stderr,
-  },
-): ProcessRunner {
+export function createNodeProcessRunner({
+  stdout = process.stdout,
+  stderr = process.stderr,
+}: Partial<NodeProcessRunnerOptions> = {}): ProcessRunner {
   return {
     spawn(command) {
       return spawnCommand(command, stdout, stderr);

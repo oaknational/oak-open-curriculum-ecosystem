@@ -1,11 +1,11 @@
-import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import {
   CODEX_CONFIG_PATH,
   readCodexAgentRegistrations,
   resolveCodexAgentConfigFilePath,
 } from './codex-project-agent-registry.js';
-import type { CodexAgentRegistration } from './codex-project-agent-registry.js';
+import type { CodexAgentRegistration, RepoFiles } from './codex-project-agent-registry.js';
+import { nodeSyncFileSystem } from './sync-file-system.js';
 import {
   createTopLevelTomlBasicStringReader,
   readOptionalTopLevelTomlBasicString,
@@ -39,15 +39,22 @@ export interface CodexProjectAgent {
   referencedCanonicalFiles: string[];
 }
 
-export function listCodexProjectAgentNames(repoRoot: string): string[] {
-  return readCodexAgentRegistrations(repoRoot).map((registration) => registration.name);
+export function listCodexProjectAgentNames(
+  repoRoot: string,
+  files: RepoFiles = nodeSyncFileSystem,
+): string[] {
+  return readCodexAgentRegistrations(repoRoot, files).map((registration) => registration.name);
 }
 
-export function resolveCodexProjectAgent(repoRoot: string, agentName: string): CodexProjectAgent {
-  const registrations = readCodexAgentRegistrations(repoRoot);
+export function resolveCodexProjectAgent(
+  repoRoot: string,
+  agentName: string,
+  files: RepoFiles = nodeSyncFileSystem,
+): CodexProjectAgent {
+  const registrations = readCodexAgentRegistrations(repoRoot, files);
   const registration = findRegistrationOrThrow(registrations, agentName);
   const adapterPath = resolveCodexAgentConfigFilePath(registration.configFile);
-  const adapterContent = readAdapterContent(repoRoot, adapterPath, agentName);
+  const adapterContent = readAdapterContent(repoRoot, adapterPath, agentName, files);
   const readValue = createTopLevelTomlBasicStringReader(adapterContent);
   const adapterMetadata = readAdapterMetadata(registration, adapterPath, readValue, agentName);
   const developerInstructions = readDeveloperInstructions(readValue, adapterPath);
@@ -56,6 +63,7 @@ export function resolveCodexProjectAgent(repoRoot: string, agentName: string): C
     agentName,
     developerInstructions,
     adapterPath,
+    files,
   );
 
   return {
@@ -82,13 +90,18 @@ function findRegistrationOrThrow(
   );
 }
 
-function readAdapterContent(repoRoot: string, adapterPath: string, agentName: string): string {
+function readAdapterContent(
+  repoRoot: string,
+  adapterPath: string,
+  agentName: string,
+  files: RepoFiles,
+): string {
   const adapterAbsolutePath = join(repoRoot, adapterPath);
-  if (!existsSync(adapterAbsolutePath)) {
+  if (!files.exists(adapterAbsolutePath)) {
     throw new Error(`Codex project agent '${agentName}' points at missing adapter ${adapterPath}.`);
   }
 
-  return readFileSync(adapterAbsolutePath, 'utf8');
+  return files.readText(adapterAbsolutePath);
 }
 
 function readAdapterMetadata(
@@ -158,6 +171,7 @@ function readReferencedCanonicalFiles(
   agentName: string,
   developerInstructions: string,
   adapterPath: string,
+  files: RepoFiles,
 ): string[] {
   const referencedCanonicalFiles = extractCanonicalPaths(developerInstructions);
   if (referencedCanonicalFiles.length === 0) {
@@ -166,7 +180,7 @@ function readReferencedCanonicalFiles(
     );
   }
 
-  ensureCanonicalFilesExist(repoRoot, agentName, referencedCanonicalFiles);
+  ensureCanonicalFilesExist(repoRoot, agentName, referencedCanonicalFiles, files);
   return referencedCanonicalFiles;
 }
 
@@ -174,10 +188,11 @@ function ensureCanonicalFilesExist(
   repoRoot: string,
   agentName: string,
   referencedCanonicalFiles: readonly string[],
+  files: RepoFiles,
 ): void {
   for (const referencedFile of referencedCanonicalFiles) {
     const referencedAbsolutePath = join(repoRoot, referencedFile);
-    if (existsSync(referencedAbsolutePath)) {
+    if (files.exists(referencedAbsolutePath)) {
       continue;
     }
 

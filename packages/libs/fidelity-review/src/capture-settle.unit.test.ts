@@ -109,12 +109,15 @@ function routeOf(url: string, log: string[]): RouteLike {
   };
 }
 
-describe('createOriginGuard', () => {
-  const allowed = (url: string) => url.startsWith('http://localhost:3020');
+/** The origin predicate under guard: only the local showcase origin is allowed. */
+function allowsLocalShowcaseOrigin(url: string): boolean {
+  return url.startsWith('http://localhost:3020');
+}
 
+describe('createOriginGuard', () => {
   it('continues an allowed request and records nothing', async () => {
     const log: string[] = [];
-    const guard = createOriginGuard(allowed);
+    const guard = createOriginGuard(allowsLocalShowcaseOrigin);
 
     await guard.handleRoute(routeOf('http://localhost:3020/brands/oak/brand.css', log));
 
@@ -124,7 +127,7 @@ describe('createOriginGuard', () => {
 
   it('aborts a disallowed request and records it — never a silent pixel change', async () => {
     const log: string[] = [];
-    const guard = createOriginGuard(allowed);
+    const guard = createOriginGuard(allowsLocalShowcaseOrigin);
 
     await guard.handleRoute(routeOf('http://169.254.169.254/latest/meta-data', log));
 
@@ -133,7 +136,7 @@ describe('createOriginGuard', () => {
   });
 
   it('records a response that LANDED outside the allowlist (the redirect re-check)', () => {
-    const guard = createOriginGuard(allowed);
+    const guard = createOriginGuard(allowsLocalShowcaseOrigin);
 
     guard.noteResponseUrl('http://localhost:3020/ok.css');
     guard.noteResponseUrl('https://evil.example/hop');
@@ -143,7 +146,7 @@ describe('createOriginGuard', () => {
 
   it('deduplicates repeated violations', async () => {
     const log: string[] = [];
-    const guard = createOriginGuard(allowed);
+    const guard = createOriginGuard(allowsLocalShowcaseOrigin);
 
     await guard.handleRoute(routeOf('https://evil.example/x', log));
     await guard.handleRoute(routeOf('https://evil.example/x', log));

@@ -21,6 +21,21 @@ import {
 
 const ALLOWED_HOSTS = ['localhost'] as const;
 
+/** A verifier that accepts any credential it is shown: the control proving the guard sits upstream of it. */
+function alwaysVerifies(): () => Promise<AuthInfo> {
+  return vi.fn<() => Promise<AuthInfo>>().mockResolvedValue(createFakeAuthInfo());
+}
+
+/** One JWT segment: the base64url form of the JSON value. */
+function jwtSegment(value: unknown): string {
+  return Buffer.from(JSON.stringify(value)).toString('base64url');
+}
+
+/** A JWT-format token carrying a chosen `aud`; decoded by the middleware, never verified. */
+function tokenWithAudience(aud: string): string {
+  return `${jwtSegment({ alg: 'none', typ: 'JWT' })}.${jwtSegment({ aud })}.${jwtSegment('signature')}`;
+}
+
 describe('mcpAuth middleware (Integration)', () => {
   const logger = createFakeLogger();
 
@@ -75,9 +90,6 @@ describe('mcpAuth middleware (Integration)', () => {
    * proven in the challenge test below.
    */
   describe('no unverified request reaches next()', () => {
-    const alwaysVerifies = (): (() => Promise<AuthInfo>) =>
-      vi.fn<() => Promise<AuthInfo>>().mockResolvedValue(createFakeAuthInfo());
-
     it.each([
       { label: 'no Authorization header at all', headers: {}, verifier: alwaysVerifies },
       {
@@ -201,13 +213,6 @@ describe('mcpAuth middleware (Integration)', () => {
   });
 
   describe('audience mismatch challenge (RFC 8707, MCP-351)', () => {
-    /** A JWT-format token carrying a chosen `aud`; decoded, never verified. */
-    function tokenWithAudience(aud: string): string {
-      const part = (value: unknown): string =>
-        Buffer.from(JSON.stringify(value)).toString('base64url');
-      return `${part({ alg: 'none', typ: 'JWT' })}.${part({ aud })}.${part('signature')}`;
-    }
-
     it('keeps token-derived text out of the challenge, so one metadata pointer survives', async () => {
       // An `aud` shaped to close error_description and append a second
       // resource_metadata — the value an authorization server would echo from

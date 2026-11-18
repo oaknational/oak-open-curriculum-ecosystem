@@ -270,6 +270,9 @@ true`).
   [`README.md`](../../../README.md) prerequisite (optional,
   interactive use only).
 
+_Clarification: on 2026-11-13 the prerequisites block this record calls "the root README
+prerequisites" moved to [`docs/engineering/setup.md`](../../engineering/setup.md#prerequisites)._
+
 The planned Clerk CLI adoption
 (`.agent/plans/architecture-and-infrastructure/future/clerk-cli-adoption.plan.md`)
 is expected to apply this same pattern; that plan references this

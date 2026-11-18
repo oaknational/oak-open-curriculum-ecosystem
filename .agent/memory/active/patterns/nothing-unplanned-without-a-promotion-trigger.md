@@ -3,6 +3,7 @@ related_pdr: PDR-012
 name: "Nothing Unplanned Without a Promotion Trigger"
 polarity: pattern
 category: process
+layer: general
 status: proven
 discovered: 2026-04-18
 proven_in: "Observability strategy restructure (commit 2319a614) — fourteen previously-unplanned items each absorbed into a current/ plan (MVP) or a future/ plan with a named, testable promotion trigger"

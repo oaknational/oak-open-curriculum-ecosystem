@@ -1,10 +1,22 @@
+---
+classification: situational
+description: Where does a new capability land? Ordered decision procedure — audience set first, then payload shape × disclosure need, trigger recognisability, companion pairs, the family test, and the vendoring gate. Apply when landing, converting, or re-homing any skill, rule, subagent, hook, or validator; not for content edits within an already-landed home. Worked pair — complex-merge (skill) and pre-merge-divergence-analysis (rule) share one trigger; payload shape decides (invariant → rule, procedure → skill). Failure shapes it exists to prevent — two landing conventions authored concurrently; an improvised cross-lever binding outside the companion-pair pattern.
+trigger: surface:lever-authoring — Landing, converting, or re-homing a capability; not landed-home edits
+globs:
+  - .agent/rules/**
+  - .agent/skills/**
+  - .agent/sub-agents/**
+  - .claude/agents/**
+  - .agent/hooks/**
+---
+
 # Capability Landing Decision Procedure
 
 Where does a new capability land? This procedure answers at authoring
 time the question the estate used to answer by tacit knowledge — the
 consumer that runs at every landing is the landing decision itself.
 It is R2 of
-[the WS0 skills-estate recommendation](../reports/agentic-engineering/skills-estate-organisation-ws0-recommendation.md),
+the WS0 skills-estate recommendation (an OCE report, 2026-08-02),
 adopted at the owner's full ruling 2026-08-02; it succeeds the
 interim landing guidance, whose sunset fired at that ruling.
 
@@ -33,9 +45,10 @@ edits within an already-landed home.
 
 ## Source channels (owner ruling 2026-08-03)
 
-Verbatim: "no skills should be vendored, we have Oak skills, we have
-skills installed with `npx skills add` or `pnpm skills add` that is
-it." Exactly two legitimate skill channels exist: **Oak-authored
+Verbatim (given in OCE): "no skills should be vendored, we have Oak skills, we have
+skills installed with npx skills add or pnpm skills add that is
+it." (the commands as the owner typed them, in prose) Read host-neutrally: an estate's own skills, and skills the installer
+manages. Exactly two legitimate skill channels exist: **repo-authored
 skills in-repo**, and **installer-managed Vendor skills** via
 `pnpx skills add`, whose lifecycle (provenance, updates, drift)
 belongs to the external skills machinery. Content copied into the
@@ -66,11 +79,12 @@ while the procedure's substance homes in the skill.
 1. **Audience set first.** Which audience does this capability
    serve? `.agent/skills` is the Practice skills corpus — about
    creating the repo, its contents and mechanisms, and enabling
-   future mechanisms, not about pedagogy or Oak content (owner
-   partition, 2026-08-02). Curriculum- and teacher-facing capability
-   is a separate domain, audience, and delivery mechanism (first
-   version: plugins released from oaknational/oak-ai-plugins). A capability that
-   fits no existing audience set does not stretch one — a new set
+   future mechanisms, not about the product's content (owner
+   partition, 2026-08-02, given in OCE). Product- and end-user-facing
+   capability is a separate domain, audience, and delivery mechanism
+   (OCE's first version was its plugin marketplace manifest; since
+   2026-10-21 its plugins are released from oaknational/oak-ai-plugins). A
+   capability that fits no existing audience set does not stretch one — a new set
    lands deliberately, recorded in the audience-set registry in
    [the Practice skills corpus README](../skills/README.md).
 
@@ -144,10 +158,11 @@ while the procedure's substance homes in the skill.
   landing introduces (a directory shape, an annotation, an index
   entry) lands WITH its mechanical consumer in the same motion —
   organisations decay without consumers.
-- **Rules land whole**: a rule mint lands all four on-disk forms
-  plus its RULES_INDEX row in one commit (the index's
-  rule-authoring contract); a trigger-loaded landing with no loader
-  entry is a deleted rule.
+- **Rules land whole**: a rule mint lands its canonical file with
+  its frontmatter declaration and the four forms rendered from it
+  (the three platform adapters and its RULES_INDEX row,
+  `pnpm portability:fix`) in one commit; a trigger-loaded landing
+  with no loader entry is a deleted rule.
 
 ## Falsifier
 

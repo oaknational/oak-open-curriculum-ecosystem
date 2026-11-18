@@ -14,6 +14,7 @@ export const SCHEMA_FILENAMES = [
   'active-claims.schema.json',
   'closed-claims.schema.json',
   'comms-event.schema.json',
+  'commit-queue-intent.schema.json',
   'conversation.schema.json',
   'escalation.schema.json',
 ] as const;
@@ -96,8 +97,8 @@ export async function createCollaborationJsonSchemaValidator(
       let value: unknown;
       try {
         value = JSON.parse(text);
-      } catch (failure) {
-        return err(failureAsError(failure, 'the collaboration schema-validation JSON boundary'));
+      } catch (error) {
+        return err(failureAsError(error, 'the collaboration schema-validation JSON boundary'));
       }
       const validate = ajv.getSchema(schemaId);
       if (validate === undefined) {
@@ -136,6 +137,9 @@ function collaborationJsonSchemaId(filePath: string): string {
   const directory = basename(dirname(filePath));
   if (directory === 'comms') {
     return 'comms-event.schema.json';
+  }
+  if (directory === 'commit-queue') {
+    return 'commit-queue-intent.schema.json';
   }
   if (directory === 'conversations') {
     return 'conversation.schema.json';

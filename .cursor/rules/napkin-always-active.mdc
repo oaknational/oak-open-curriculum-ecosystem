@@ -1,6 +1,6 @@
 ---
-description: Read the napkin at session start and write to it continuously.
+description: Read distilled and napkin notes every session and keep them current
 alwaysApply: true
 ---
 
-Read and follow `.agent/skills/knowledge/napkin/SKILL-CANONICAL.md`.
+Read and follow `.agent/rules/napkin-always-active.md`.

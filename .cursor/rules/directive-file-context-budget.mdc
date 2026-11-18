@@ -1,6 +1,6 @@
 ---
-description: Editing any file under .agent/directives/ (AGENT.md, principles.md) requires session context-usage below 30%; at or above, finish the in-flight step, write a handoff, and queue directive work for a fresh session. Apply at consolidation open, not just when a directive file is touched — directives are the final step of the pass, and by the time one is open the budget is already spent. Not a bar on reading directives, only editing. Failure shape: "I'll just be careful" under context pressure — eager rounding-off that fills partial structures by inference and corrupts doctrine invisibly.
-globs: '.agent/directives/**,.agent/rules/**,CLAUDE.md,AGENTS.md'
+description: 'Editing any file under .agent/directives/ (AGENT.md, principles.md) requires session context-usage below 30%; at or above, finish the in-flight step, record the queued directive work in the continuity record, carry on with other work, and make the directive edit after the next compaction. Apply at consolidation open, not just when a directive file is touched — directives are the final step of the pass, and by the time one is open the budget is already spent. Not a bar on reading directives, only editing. Failure shape: "I''ll just be careful" under context pressure — eager rounding-off that fills partial structures by inference and corrupts doctrine invisibly.'
+globs: .agent/directives/**,.agent/rules/**,CLAUDE.md,AGENTS.md
 alwaysApply: false
 ---
 

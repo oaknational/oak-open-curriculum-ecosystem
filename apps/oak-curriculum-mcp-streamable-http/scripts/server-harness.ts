@@ -44,6 +44,16 @@ import { startConfiguredHttpServer } from '../src/server-runtime.js';
 const thisDir = dirname(fileURLToPath(import.meta.url));
 const rootDir = resolve(thisDir, '..');
 
+/**
+ * The named variable's value when it is set and non-empty, else `fallback`:
+ * an empty export means "not configured" to this harness, as it does to the
+ * server's own port reading.
+ */
+function envOrDefault(name: string, fallback: string): string {
+  const value = process.env[name];
+  return value !== undefined && value.length > 0 ? value : fallback;
+}
+
 type LogLevel = 'INFO' | 'ERROR' | 'DEBUG';
 type LogMeta = Readonly<Record<string, unknown>>;
 
@@ -92,7 +102,7 @@ function loadEnvFile(envFile: string): void {
       continue;
     }
 
-    const match = trimmed.match(/^([^=]+)=(.*)$/);
+    const match = /^([^=]+)=(.*)$/.exec(trimmed);
     if (!match) {
       continue;
     }
@@ -111,7 +121,7 @@ function loadEnvFile(envFile: string): void {
 
 function logConfigSnapshot() {
   log.info('Configuration snapshot', {
-    PORT: process.env.PORT || '3001',
+    PORT: envOrDefault('PORT', '3001'),
     NODE_ENV: process.env.NODE_ENV,
     LOG_LEVEL: process.env.LOG_LEVEL,
     DANGEROUSLY_DISABLE_AUTH: process.env.DANGEROUSLY_DISABLE_AUTH,
@@ -125,7 +135,7 @@ function logConfigSnapshot() {
 }
 
 async function main() {
-  const envFile = process.env.ENV_FILE || '.env.harness';
+  const envFile = envOrDefault('ENV_FILE', '.env.harness');
 
   log.info('Server harness starting', {
     harness: 'source-di',

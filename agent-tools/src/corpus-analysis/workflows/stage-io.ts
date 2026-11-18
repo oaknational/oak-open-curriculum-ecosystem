@@ -17,6 +17,7 @@
 import type { Result } from '@oaknational/result';
 import { z } from 'zod';
 
+import { repoRelativeFileSchema } from '../../core/repo-relative-file.js';
 import { parseWithSchema } from '../../core/schema-parse.js';
 import { candidateSchema, leafSignalSchema, voterOutcomeSchema } from '../judgment-schemas.js';
 import { metaOutputSchema } from '../recall-schemas.js';
@@ -27,7 +28,7 @@ const countInt = z.number().int().nonnegative();
 /** One time-contiguous corpus window: its id and the files a map agent must read. */
 const partitionWindowSchema = z.strictObject({
   window: nonEmptyString,
-  files: z.array(nonEmptyString).min(1),
+  files: z.array(repoRelativeFileSchema).min(1),
 });
 export type PartitionWindow = z.infer<typeof partitionWindowSchema>;
 

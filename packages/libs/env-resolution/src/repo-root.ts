@@ -1,15 +1,16 @@
-import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
+import { nodeEnvFileSystem } from './env-file-system.js';
+import type { PathExists } from './types.js';
 
 /**
  * Walks up from `startDir` looking for `markerFile`. Returns the
  * first directory containing it, or `undefined` if the filesystem
  * root is reached.
  */
-function walkUpTo(startDir: string, markerFile: string): string | undefined {
+function walkUpTo(startDir: string, markerFile: string, exists: PathExists): string | undefined {
   let current = startDir;
   for (;;) {
-    if (existsSync(join(current, markerFile))) {
+    if (exists(join(current, markerFile))) {
       return current;
     }
     const parent = dirname(current);
@@ -30,11 +31,15 @@ function walkUpTo(startDir: string, markerFile: string): string | undefined {
  * return value and fail with context-appropriate guidance.
  *
  * @param startDir - Directory to start searching from
+ * @param exists - Existence probe; defaults to the real filesystem
  * @returns Absolute path to the monorepo root, or `undefined` if
  *          the filesystem root is reached without finding a marker
  */
-export function findRepoRoot(startDir: string): string | undefined {
-  return walkUpTo(startDir, 'pnpm-workspace.yaml') ?? walkUpTo(startDir, '.git');
+export function findRepoRoot(
+  startDir: string,
+  exists: PathExists = nodeEnvFileSystem.exists,
+): string | undefined {
+  return walkUpTo(startDir, 'pnpm-workspace.yaml', exists) ?? walkUpTo(startDir, '.git', exists);
 }
 
 /**
@@ -45,8 +50,12 @@ export function findRepoRoot(startDir: string): string | undefined {
  * environments). Used by `resolveEnv` to discover app-level `.env` files.
  *
  * @param startDir - Directory to start searching from
+ * @param exists - Existence probe; defaults to the real filesystem
  * @returns Absolute path to the nearest app root, or `undefined`
  */
-export function findAppRoot(startDir: string): string | undefined {
-  return walkUpTo(startDir, 'package.json');
+export function findAppRoot(
+  startDir: string,
+  exists: PathExists = nodeEnvFileSystem.exists,
+): string | undefined {
+  return walkUpTo(startDir, 'package.json', exists);
 }

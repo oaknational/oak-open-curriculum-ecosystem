@@ -124,6 +124,29 @@ function resourceReadEvent(properties: Readonly<Record<string, unknown>>): Event
   };
 }
 
+/** The properties of a one-millisecond, successful tool call. */
+function toolProperties(toolName: string): Record<string, unknown> {
+  return {
+    $mcp_tool_name: toolName,
+    $mcp_duration_ms: 1,
+    $mcp_is_error: false,
+  };
+}
+
+/** A tool-call event for the named tool. */
+function toolEvent(toolName: string): EventMessage {
+  return nodeEvent('$mcp_tool_call', toolProperties(toolName));
+}
+
+/** A one-millisecond, successful resource-read event for the named resource. */
+function resourceEvent(resourceName: string): EventMessage {
+  return resourceReadEvent({
+    $mcp_resource_name: resourceName,
+    $mcp_duration_ms: 1,
+    $mcp_is_error: false,
+  });
+}
+
 describe('projectVerifiedIdentityAndRelease', () => {
   it('projects only the verified actor and release fields without retaining raw identity', () => {
     const project = vi.fn<ActivePostHogActorProjector['project']>(() =>
@@ -468,24 +491,6 @@ describe('policy configuration snapshots', () => {
     release.environment = 'preview';
     servedToolNames.splice(0, servedToolNames.length, 'private-tool');
     servedResourceNames.splice(0, servedResourceNames.length, 'private-resource');
-
-    function toolProperties(toolName: string): Record<string, unknown> {
-      return {
-        $mcp_tool_name: toolName,
-        $mcp_duration_ms: 1,
-        $mcp_is_error: false,
-      };
-    }
-    function toolEvent(toolName: string): EventMessage {
-      return nodeEvent('$mcp_tool_call', toolProperties(toolName));
-    }
-    function resourceEvent(resourceName: string): EventMessage {
-      return resourceReadEvent({
-        $mcp_resource_name: resourceName,
-        $mcp_duration_ms: 1,
-        $mcp_is_error: false,
-      });
-    }
 
     expect([
       policies.finalOakEventPolicy(toolEvent('search')),

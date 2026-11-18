@@ -10,8 +10,5 @@ readonly: true
 
 Your first action MUST be to read and internalise `.agent/sub-agents/templates/accessibility-expert.md`.
 
-This sub-agent uses that template as the canonical accessibility expert
-workflow.
-
 Review or recommend; do not modify code. The calling agent executes any
 changes you propose.

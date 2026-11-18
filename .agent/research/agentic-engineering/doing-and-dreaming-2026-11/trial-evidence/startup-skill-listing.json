@@ -1,0 +1,404 @@
+{
+  "names": [
+    "session-start-hook",
+    "clerk",
+    "clerk-backend-api",
+    "clerk-cli",
+    "clerk-nextjs-patterns",
+    "clerk-setup",
+    "clerk-testing",
+    "clerk-webhooks",
+    "mcp-inspector",
+    "oak-accessibility",
+    "oak-architecture",
+    "oak-assess-specification",
+    "oak-author-skills",
+    "oak-chatgpt-report-normalisation",
+    "oak-claude-design-pipeline",
+    "oak-codex-helper",
+    "oak-commit",
+    "oak-comms-channels",
+    "oak-complex-merge",
+    "oak-concept-exploration",
+    "oak-config",
+    "oak-consolidate-docs",
+    "oak-consolidate-until-done",
+    "oak-coordination-fold",
+    "oak-cricket",
+    "oak-cross-fork-integration",
+    "oak-curator-pass",
+    "oak-cut-coordination-branch",
+    "oak-dependency-currency",
+    "oak-design-system-usage",
+    "oak-deslop",
+    "oak-distillation",
+    "oak-docs-adr",
+    "oak-free-play",
+    "oak-gates",
+    "oak-go",
+    "oak-ground-truth-design",
+    "oak-ground-truth-evaluation",
+    "oak-inter-practice-collaboration",
+    "oak-knowledge-safety-sweep",
+    "oak-metacognition",
+    "oak-napkin",
+    "oak-parallax",
+    "oak-parallax-audit",
+    "oak-parallax-decide",
+    "oak-parallax-design-experiment",
+    "oak-parallax-design-inquiry",
+    "oak-parallax-frame",
+    "oak-parallax-learn",
+    "oak-parallax-product-experiment",
+    "oak-parallax-synthesise",
+    "oak-plan",
+    "oak-pr-lifecycle",
+    "oak-project-spec-creation",
+    "oak-proportionality",
+    "oak-quality-gates",
+    "oak-react-component",
+    "oak-reason",
+    "oak-retrospective",
+    "oak-security",
+    "oak-semantic-merge",
+    "oak-session-handoff",
+    "oak-set-up-worktree-lane",
+    "oak-sif",
+    "oak-slack-watcher",
+    "oak-specify",
+    "oak-specify-connection",
+    "oak-start-right-quick",
+    "oak-start-right-team",
+    "oak-start-right-thorough",
+    "oak-subagent-architecture",
+    "oak-talk-to-slack-watcher",
+    "oak-the-codex-dialogues",
+    "oak-ticket-management",
+    "oak-tsdoc",
+    "oak-ui-visual-design",
+    "oak-under-the-hood",
+    "oak-undo-change",
+    "oak-update-bulk-download-schema",
+    "oak-update-dependencies",
+    "oak-update-upstream-api-spec",
+    "oak-user-value",
+    "oak-visual-comparison",
+    "oak-visual-verification",
+    "oak-working-with-agentic-ai",
+    "oak-working-with-graphs",
+    "oak-wrap",
+    "skill-creator",
+    "deep-research",
+    "design",
+    "slides",
+    "design-sync",
+    "dataviz",
+    "artifact-diagramming",
+    "artifact-capabilities",
+    "update-config",
+    "verify",
+    "debug",
+    "code-review",
+    "simplify",
+    "batch",
+    "fewer-permission-prompts",
+    "doctor",
+    "loop",
+    "claude-api",
+    "workflow-authoring",
+    "run",
+    "run-skill-generator",
+    "plugin-authoring",
+    "anthropic-skills:docs",
+    "anthropic-skills:docx",
+    "anthropic-skills:google-workspace",
+    "anthropic-skills:import-memory",
+    "anthropic-skills:morning",
+    "anthropic-skills:pdf",
+    "anthropic-skills:pptx",
+    "anthropic-skills:skill-creator",
+    "anthropic-skills:xlsx"
+  ],
+  "sessions": [
+    {
+      "run": "delivery-run-1",
+      "session": "T1-A",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "delivery-run-1",
+      "session": "T1-B",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "delivery-run-1",
+      "session": "T2-A",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "delivery-run-1",
+      "session": "T2-B",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "delivery-run-1",
+      "session": "T3-A",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "delivery-run-1",
+      "session": "T3-B",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "delivery-run-1",
+      "session": "T4-A",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "delivery-run-1",
+      "session": "T4-B",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "delivery-run-1",
+      "session": "T5-A",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "delivery-run-1",
+      "session": "T5-B",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "delivery-run-2-control-1",
+      "session": "T1-A",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "delivery-run-2-control-1",
+      "session": "T1-B",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "delivery-run-2-control-1",
+      "session": "T2-A",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "delivery-run-2-control-1",
+      "session": "T2-B",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "delivery-run-2-control-1",
+      "session": "T3-A",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "delivery-run-2-control-1",
+      "session": "T3-B",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "delivery-run-2-control-1",
+      "session": "T4-A",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "delivery-run-2-control-1",
+      "session": "T4-B",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "delivery-run-2-control-1",
+      "session": "T5-A",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "delivery-run-2-control-1",
+      "session": "T5-B",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "habit-text-control-2",
+      "session": "T1-A",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "habit-text-control-2",
+      "session": "T1-B",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "habit-text-control-2",
+      "session": "T2-A",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "habit-text-control-2",
+      "session": "T2-B",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "habit-text-control-2",
+      "session": "T3-A",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "habit-text-control-2",
+      "session": "T3-B",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "habit-text-control-2",
+      "session": "T4-A",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "habit-text-control-2",
+      "session": "T4-B",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "habit-text-control-2",
+      "session": "T5-A",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "habit-text-control-2",
+      "session": "T5-B",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "habit-text-treatment",
+      "session": "T1-A",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "habit-text-treatment",
+      "session": "T1-B",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "habit-text-treatment",
+      "session": "T2-A",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "habit-text-treatment",
+      "session": "T2-B",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "habit-text-treatment",
+      "session": "T3-A",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "habit-text-treatment",
+      "session": "T3-B",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "habit-text-treatment",
+      "session": "T4-A",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "habit-text-treatment",
+      "session": "T4-B",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "habit-text-treatment",
+      "session": "T5-A",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    },
+    {
+      "run": "habit-text-treatment",
+      "session": "T5-B",
+      "listed": 118,
+      "distinct": 118,
+      "same_names_same_order": true
+    }
+  ]
+}

@@ -3,6 +3,7 @@ name: Feel-State of Completion Preceding Evidence of Completion
 polarity: anti-pattern
 use_this_when: About to mark a to-do completed, defer an item at session-handoff, raise a limit, install a tripwire, or report what landed — before the report, ask whether the evidence loop the doctrine requires has actually fired, or whether the agent's own sense of "done" is standing in for it
 category: agent
+layer: general
 proven_in: .agent/memory/active/napkin.md (three cross-session independent instances, 2026-04-21 / 2026-04-22; owner-adjudicated 3/3, 2026-04-22 Session 8 open)
 proven_date: 2026-04-22
 related_pdr: PDR-026
@@ -122,7 +123,7 @@ intervened mid-execution: *"failing to follow the plan is not
 confusion, it's a frack up"*; directed reset of four directive
 files to HEAD; only a narrow technical micro-fix survived. The
 incident is captured at length in
-[`../../../experience/2026-04-22-the-plan-was-not-the-conversation.md`](../../../experience/2026-04-22-the-plan-was-not-the-conversation.md).
+`../../../experience/2026-04-22-the-plan-was-not-the-conversation.md`.
 
 The Session 8 owner adjudication confirmed Instance 3 as the
 third independent instance, satisfying the trigger condition
@@ -223,7 +224,7 @@ entry.
   the routing rule that landed this pattern's graduation as
   *pattern-side* of an existing rule-side, not a new top-level
   artefact.
-- **[`../../../experience/2026-04-22-the-plan-was-not-the-conversation.md`](../../../experience/2026-04-22-the-plan-was-not-the-conversation.md)** —
+- **`../../../experience/2026-04-22-the-plan-was-not-the-conversation.md`** —
   the felt-sense narrative of Instance 3, written so a future
   agent can recognise the texture of the slide from "follow the
   plan" to "execute the recipe" before it happens again.

@@ -48,7 +48,7 @@ const senderWithId = deriveCollaborationIdentity({
   platform: sender.platform,
   model: sender.model,
   env: {
-    OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+    PRACTICE_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
     PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
   },
 }).agentId;
@@ -57,13 +57,13 @@ const recipientWithId = deriveCollaborationIdentity({
   platform: recipient.platform,
   model: recipient.model,
   env: {
-    OAK_AGENT_IDENTITY_OVERRIDE: recipient.agent_name,
+    PRACTICE_AGENT_IDENTITY_OVERRIDE: recipient.agent_name,
     PRACTICE_AGENT_SESSION_ID_CLAUDE: recipient.session_id_prefix,
   },
 }).agentId;
 
 const senderEnv = {
-  OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+  PRACTICE_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
   PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
 };
 
@@ -71,14 +71,21 @@ const senderEnv = {
 // for a generic UUID check, wrong for the agent-id contract.
 const V4_SHAPED_ID = '2f5a1c88-9d3e-4f6b-8a2c-0d1e2f3a4b5c';
 
+interface RegistryState {
+  readonly activeClaims: CollaborationRegistry;
+  readonly commitQueue: readonly CollaborationCommitQueueEntry[];
+}
+
 function registryWith(input: {
   readonly claims?: readonly CollaborationClaim[];
   readonly queue?: readonly CollaborationCommitQueueEntry[];
-}): CollaborationRegistry {
+}): RegistryState {
   return {
-    schema_version: '1.3.0',
-    commit_queue: input.queue ?? [],
-    claims: input.claims ?? [],
+    activeClaims: {
+      schema_version: '1.4.0',
+      claims: input.claims ?? [],
+    },
+    commitQueue: input.queue ?? [],
   };
 }
 
@@ -107,6 +114,7 @@ function recipientQueueEntry(
     updated_at: '2026-08-01T17:40:00Z',
     expires_at: '2026-08-01T19:00:00Z',
     phase: 'queued',
+    queued_seq: 0,
     ...overrides,
   };
 }
@@ -151,14 +159,17 @@ function directArgv(extra: readonly string[]): readonly string[] {
 }
 
 async function runDirect(input: {
-  readonly registry?: CollaborationRegistry;
+  readonly registry?: RegistryState;
   readonly extra: readonly string[];
 }): Promise<{
   readonly exitCode: number;
   readonly stderr: string;
   readonly fake: ReturnType<typeof createFakeCollaborationRuntime>;
 }> {
-  const fake = createFakeCollaborationRuntime({ activeClaims: input.registry });
+  const fake = createFakeCollaborationRuntime({
+    activeClaims: input.registry?.activeClaims,
+    commitQueue: input.registry?.commitQueue,
+  });
   const result = await runCollaborationStateCli({
     argv: [...directArgv(input.extra)],
     env: senderEnv,

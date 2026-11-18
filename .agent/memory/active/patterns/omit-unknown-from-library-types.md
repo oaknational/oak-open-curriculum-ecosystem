@@ -3,6 +3,7 @@ name: "Omit unknown-carrying fields from library types"
 polarity: pattern
 use_this_when: "Extending a library type that carries Record<string, unknown> or any on one or more fields, while the rest of the type is valuable."
 category: code
+layer: family
 proven_in: "packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/generate-tool-descriptor-file.ts"
 proven_date: 2026-04-11
 barrier:

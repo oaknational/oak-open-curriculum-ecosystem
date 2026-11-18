@@ -56,3 +56,16 @@ export function clearedCredentialConfig(): readonly string[] {
     `${arm.name}=`,
   ]);
 }
+
+/**
+ * Every config-sourced arm but `credential.helper`, as `-c <name>=` clears:
+ * for a command that reads under the operator's own credential and still
+ * refuses every prompt (`merge-bot retire`'s reads). The helper arm stays
+ * open on purpose, so the operator's keychain answers a private remote; the
+ * askpass arm is a prompt, and a prompt is never an unattended seat's.
+ */
+export function clearedAskPassConfig(): readonly string[] {
+  return GIT_CREDENTIAL_RESOLUTION_CHAIN.filter(
+    (arm) => arm.source === 'config' && arm.name !== 'credential.helper',
+  ).flatMap((arm) => ['-c', `${arm.name}=`]);
+}

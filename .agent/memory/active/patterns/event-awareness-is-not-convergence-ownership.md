@@ -3,6 +3,7 @@ name: "Event Awareness Is Not Convergence Ownership"
 polarity: anti-pattern
 use_this_when: "You are waiting on an external convergence loop (PR review rounds, CI, a deploy pipeline, a bot's async passes) with monitors or scheduled probes armed, and you are about to treat that awareness as owning the loop. Check whether your watch terminates only on the loop's genuine terminal states and whether anything can arrive while you sleep."
 category: agent
+layer: general
 proven_in: "Two owner corrections, two seats, one arc: (1) PR #317 (2026-07-07) — six asynchronous bot rounds; the agent declared at each zero-unresolved MOMENT and idled on event monitors between rounds; the owner spotted every new arrival ('why has this become a loop operated by me?'); (2) PR #324/#325 (2026-07-08) — a second seat, having READ the first seat's graduated lesson at session open, still ran scheduled 8.5-minute nap-probes while bot rounds landed in the gaps, three rounds running. Cure deployed live on #330: a supervised watch terminating only on MERGED/CLOSED."
 proven_date: 2026-07-08
 barrier:

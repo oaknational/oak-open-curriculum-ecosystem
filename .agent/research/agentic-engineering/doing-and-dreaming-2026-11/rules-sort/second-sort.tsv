@@ -1,0 +1,125 @@
+name	kind	alt_kind	marker	note
+agent-experience-review-lens	A	-	path	
+agent-state-observable	H	A	none	Team-context principle; no discrete trigger moment.
+agentic-judgment-conserve-by-default	A	-	none	Pipeline design activity; nothing mechanical marks it.
+agents-default-no-gender	H	-	none	
+apply-architectural-principles	H	M	none	Half pointer to principles, half general habit.
+bot-identity-on-third-party-systems	A	-	command	
+capability-landing-decision-procedure	A	-	path	
+capture-practice-tool-feedback	H	-	none	
+channel-by-audience-lifetime-and-consumer	A	-	command	Team session scopes it; each message send is the moment.
+check-singleton-per-window	A	-	command	
+closed-shape-design-optionality	H	A	none	Names code authoring, but reads as YAGNI habit.
+collaboration-is-value-contingent	H	A	none	Judgement about mechanisms; mechanism commands could mark it.
+comms-all-channels-watcher	A	-	session	
+compute-dont-hope	A	H	none	List authoring is content-keyed, no file kind.
+confident-seats-proceed-and-report	H	A	none	Disposition in team sessions; Director wait is unobservable.
+consolidate-at-second-consumer	H	A	none	
+continuity-surface-commits-as-orphans	A	-	command	Continuity file paths also mark it.
+coordination-branch-24h-lifetime	A	-	none	Trigger is a clock; no marker category fits.
+cross-estate-work-must-reduce-divergence	A	-	session	Shared-path edit also marks it.
+cross-repo-sessions-run-the-join-ceremony	A	M	session	Instruction is to run a ceremony defined elsewhere.
+design-from-impact-not-the-cowpath	H	A	none	Names design moments, but those are near-universal.
+design-values-come-from-the-system	A	-	path	
+design-work-for-small-prs	A	H	document	Plan or ticket shaping; habit-like at its edges.
+directed-routing-requires-absorption-ack	A	-	command	
+directive-file-context-budget	A	-	path	
+documentation-hygiene	M	A	none	Topic label only; states no imperative of its own.
+dont-break-build-without-fix-plan	H	A	none	Standing constraint; gate-recovery half is an activity.
+downstream-checkout-never-writes-upstream-surfaces	A	-	session	Repo-scoped calls also mark it.
+eef-corpus-grounding	A	-	none	Content-keyed claim; can sit in any file.
+executive-memory-drift-capture	H	A	none	Observation-triggered, not activity-triggered; narrow subject.
+exit-codes-in-band-never-piped	A	H	command	Pipe in a shell command is recognisable.
+fleet-design-review-before-expensive-fleets	A	-	command	
+follow-agent-collaboration-practice	M	-	none	
+follow-collaboration-practice	M	-	none	
+follow-the-practice	M	-	none	
+foreign-board-write-discipline	A	-	command	
+generator-first-mindset	A	-	path	
+handoff-messages-self-contained	A	-	document	
+hook-policy-substring-discipline	A	H	none	Content-keyed; hook refusal only tells after the fact.
+identify-as-agent-under-shared-credentials	A	-	command	
+important-state-not-in-temp-files	H	A	path	Temp-file path is a tell; rule itself general.
+invoke-code-experts	A	H	path	Roster keys on changed paths; moment is after change.
+knowledge-preservation-over-fitness-warnings	A	H	path	About an impulse; scoped to memory surface files.
+linear-mcp-team-and-project-hygiene	A	-	command	
+lint-after-edit	A	H	command	Any edit tool call; near-universal in coding tasks.
+liveness-heartbeat-cron	A	-	session	
+local-broken-code-never-leaves	A	H	command	
+lockfile-rebuild-survivability	A	-	path	
+loop-exit-criteria-required	A	-	command	
+markdown-code-blocks-must-have-language	A	-	path	
+monitor-branch-touched-files	A	-	command	Several moments: session start, merge, commit, PR.
+napkin-always-active	H	A	session	Session open is the tell; upkeep part has none.
+never-commit-to-main	A	-	command	
+never-disable-checks	H	A	none	Disable forms too varied for one marker.
+never-use-git-to-remove-work	A	H	command	
+new-rule-vs-pdr-clause	A	-	path	Doctrine file path; document also fits.
+no-conditional-tests	A	-	path	
+no-global-state-in-tests	A	-	path	
+no-hedging-vocabulary	A	-	path	
+no-moving-targets-in-permanent-docs	A	-	path	
+no-parallel-long-lived-branches	A	H	command	Branch creation marks it; lifetime is a state.
+no-speed-pressure	H	-	none	
+no-tombstones-for-removed-ideas	A	H	none	Prose revision after removal; nothing mechanical marks it.
+no-unbounded-host-load	A	H	command	Background spawn calls mark it; stated as standing constraint.
+no-verify-requires-fresh-authorisation	A	-	command	
+no-warning-toleration	H	-	none	
+notion-page-edits-update-ledger	A	-	command	
+notion-strategy-page-fence	A	-	command	Notion calls mark it; version-control half is content-keyed.
+oak-chrome-session-is-metered	A	-	command	
+one-instance-is-an-observation	H	A	none	Content-keyed across every record kind.
+one-pr-per-leaf-issue	A	-	document	
+owner-attention-at-action-moments	H	-	none	
+per-user-memory-is-a-buffer	A	H	document	Handoff marks the sweep; memory-store path also.
+permanent-doc-is-the-consolidation-record	A	-	command	Consolidation run inferred as command; ledger document also fits.
+ping-before-escalate	A	-	command	
+plan-body-first-principles-check	A	-	path	Plan is read, not written, so path.
+pr-comments-resolve-and-recheck	A	-	command	PR as document also fits; merge call is decisive.
+practice-core-portability	A	-	path	
+pre-execution-code-expert-review-per-loop-cycle	A	-	command	
+pre-merge-divergence-analysis	A	M	command	
+precedence-is-not-approval	H	-	none	
+present-verdicts-not-menus	H	A	command	AskUserQuestion call is a recognisable tell.
+re-apply-first-question-at-elaboration-boundaries	H	A	none	
+read-agent-md	M	A	session	Given example of M; session open, no particular shape.
+read-before-asking	H	A	none	
+read-diagnostic-artefacts-in-full	A	H	none	Diagnosis activity; no mechanical tell.
+read-nextjs-docs-before-coding	A	-	path	
+record-generalisation-moves	A	-	path	Commit command also marks it.
+records-are-technical-not-emotional	H	A	none	
+register-active-areas-at-session-open	A	H	session	Every session; first edit and commit also tells.
+register-identity-on-thread-join	A	-	session	
+render-the-reference-before-reproducing	A	-	none	Acceptance criterion is judgement, not an event.
+replace-dont-bridge	H	A	none	
+respect-active-agent-claims	A	H	path	Claims lookup on edited path; commit window also.
+review-feedback-defaults-to-triage	A	-	command	Feedback arrival is an event; PR read calls proxy.
+route-blocks-and-questions-to-director	A	H	session	Block arises mid-session; team shape scopes it.
+rules-have-no-exceptions	H	A	none	Rule-edit half has a path tell.
+scope-from-goal-before-approach	H	-	none	
+sha-prefix-in-collaboration-content	A	-	path	SHA content regex is the real tell.
+ship-independent-coordinate-dependent	A	-	command	
+silence-is-never-liveness	A	H	command	Watch-arming calls mark it; name reads as habit.
+skill-naming-and-description-quality	A	-	path	
+sonarqube-mcp-instructions	A	-	command	
+source-curriculum-content-via-api-not-cdn	A	-	command	
+source-is-typescript-esm-only	A	-	path	
+stage-by-explicit-pathspec	A	-	command	
+strict-validation-at-boundary	A	H	none	Content-keyed boundary code; file kind does not narrow.
+subagent-practice-core-protection	A	-	path	Terse; name implies subagent scope.
+tdd-for-refactoring	A	H	none	
+test-immediate-fails	A	M	path	Checklist itself lives elsewhere.
+third-party-skills-require-security-review	A	-	command	
+unattended-seats-never-prompt	A	-	session	
+use-agent-comms-log	A	-	session	
+use-built-agent-tools-cli	A	-	command	
+use-monitor-for-event-driven-wake	A	-	command	
+use-result-pattern	A	H	path	Any source file; convention more than habit.
+validate-full-target-estate	A	H	command	Validation command marks it; ignored-target part needs computing.
+validators-must-recompute-not-just-record	A	H	path	Assumes validator files are recognisable by path.
+verify-data-supports-shape-before-building	A	H	none	Design-time check; concrete action but no tell.
+verify-dont-trust	H	A	none	Lists moments, but they recur in every task.
+verify-vendor-call-shapes-at-plan-author-time	A	-	document	
+visual-verdicts-require-rendered-proof	A	-	none	Claim-keyed; UI paths only proxy.
+worktree-hygiene	A	-	command	
+worktree-residency	A	-	command	Lane session shape also fits.

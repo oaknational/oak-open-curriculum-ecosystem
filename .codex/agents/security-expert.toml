@@ -1,5 +1,5 @@
 name = "security-expert"
-description = "Security and privacy reviewer for auth, secrets, PII, and injection risks."
+description = "Security and privacy reviewer for auth, headers, secrets, PII, and injection risks."
 model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 approval_policy = "never"

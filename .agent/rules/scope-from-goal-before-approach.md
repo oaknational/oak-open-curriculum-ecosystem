@@ -1,3 +1,8 @@
+---
+classification: core
+description: Before approach and before declaring done, restate the goal and derive the full relevant surface set — emit a proportionate Goal/In/Out artefact; the pointer is evidence about the goal, not the task
+---
+
 # Scope From the Goal Before Approach
 
 Operationalises [PDR-103](../practice-core/decision-records/PDR-103-scope-from-goal-before-approach.md).
@@ -24,11 +29,41 @@ starting the approach, and before declaring an examination or verification done:
 
 4. **Walk the in-scope set** before claiming done.
 
+A value the owner set is always OUT of a "fix the nits" or "tidy the metadata"
+scope: a licence field, a package name, a description, an author line. Changing
+one is a decision, never a nit, and it happens only on the owner's explicit word
+(owner, 2026-09-29, after a seat rewrote `UNLICENSED` and four other fields it
+read as inconsistent metadata). The tell to stop at is writing "the owner can
+veto it in the summary": that sentence marks a decision being taken in the
+owner's place; the check is a diff against the owner's version, never against
+the seat's intent.
+
+**Standing capabilities are in the IN set.** Everything that observes, guards, or
+serves today — every third-party integration, sink, allowlist, CI leg, permission —
+is part of the goal state, not background. A proposal that adds X and silently
+narrows Y shifts the catch burden onto the owner (owner, 2026-07-29, after
+sink-selection proposals omitted Sentry while adding PostHog: "I shouldn't have to
+say things like 'Sentry needs to keep working'" — and the class-level form, "Sentry,
+Posthog, Elasticsearch and all third party integrations need to keep working in the
+production instance, obviously"). When proposing or altering configuration, diff the
+proposal against the capability baseline and carry every standing capability forward
+explicitly; an omission must be argued, never silent. Where the owner declares
+something non-negotiable, encode it as a validator the same day, so the sentence
+never needs saying again — the test is whether the correction could have been
+prevented by a mechanical check; if so, that check is the correction's real
+deliverable.
+
 The fire points: a task/owner-pointer arrives; an elaboration boundary; doctrine
 sharpens; **and the moment of declaring "done".**
 
 **Completeness criterion:** *no consumer arriving through any entry point meets a
 stale or wrong state, and nothing relevant to the goal is left unwalked.*
+
+Under an instruction to fix, or to fix the nits, a value the owner typed is out of scope unless
+the owner's explicit word puts it in: a licence, a name, a description. Leave it and say what was noticed
+(owner ruling, 2026-09-29, after a licence field the owner had set was changed to agree with
+another file). The check is a diff of the file against the owner's version, never against the
+seat's intent: the intent always agrees with itself.
 
 ## Proportionality (this is not plan-theatre)
 
@@ -36,9 +71,25 @@ stale or wrong state, and nothing relevant to the goal is left unwalked.*
 - **Bounded**: one `GOAL · IN · OUT` line.
 - **Multi-surface / governance / cross-cutting**: the set is the deliverable — name it.
 
-**Impact test** (per `feedback_metacognition_impact_test`): if producing the artefact
-never changes the approach, it is ceremony. Its job is to catch a too-narrow scope or
-an ungrounded gate *before* you act — not to decorate the turn.
+**Impact test**: if producing the artefact never changes the approach, it is
+ceremony. Its job is to catch a too-narrow scope or an ungrounded gate *before*
+you act — not to decorate the turn.
+
+**Depth is earned by the decision in front of you, never by the interestingness
+of what turns up.** Owner, 2026-07-25, after a dependency sweep grew into a
+security engagement: "this MCP is a means of putting free educational material in
+the hands of teachers, not preventing terrible things — I asked for an update of
+deps, not an overhaul of settled architecture." The drift is seductive because
+each step is individually defensible — an audit surfaces advisories, advisories
+invite exposure questions, those invite import-graph tracing and environment
+probing — and a defensible discovery is not a mandate to keep digging. The threat
+model is the product's own. Re-read the literal ask before each new investigative
+step; "update the deps" ends when the deps are updated; when something genuinely
+alarming turns up outside scope, state it in one sentence and route it — open no
+lane, probe no deployed environment, file no finding requiring disposition. Once a
+landing is in reach, every further edit to the records must change what a
+successor would DO (owner, 2026-09-02: "not important enough to spend a cycle
+on!") — a factual cure yes, a pointer or a heading date no.
 
 **Light-scan-before-deep applies to BUILD goals, not only to analysis.** Given a
 concrete build goal, the proportionate first move is the simplest working thing

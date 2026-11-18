@@ -2,7 +2,11 @@
 title: Editorial Tone of Voice
 type: directive
 status: active
-last_updated: 2026-08-11
+last_updated: 2026-09-19
+fitness_line_target: 240
+fitness_line_limit: 300
+fitness_char_limit: 18000
+fitness_line_length: 100
 ---
 
 # Editorial Tone of Voice
@@ -94,6 +98,26 @@ The audiences this repository writes for:
 
 Add others as a document needs them. The voice qualities and anti-patterns hold
 across every audience; only the emphasis and the entry point change.
+
+## Never invent public copy
+
+Public copy for a real organisation is brand, legal and factual surface, so a
+plausible draft is fabrication when it lands on a public page (owner,
+2026-07-23, on a landing-page candidate: "you can't make up copy like that,
+there is so much wrong with that page"; the candidate carried an invented
+product name, unverified factual claims, invented policy phrasing,
+self-contradicting phase labels and a dangling reference). Assemble copy from
+existing approved surfaces (the current production page's language, the public
+site's messaging, the licensing terms pages) with every factual claim traceable
+to a source. Never coin a product name, a number or a policy statement: product
+naming is an owner decision. Anything genuinely new (a phase notice, say) goes
+to the owner as small explicit options, rendered in the browser, before any
+build or pull request; owner-glance acceptance criteria on copy bind at draft
+time. The owner said it again two days later, of a plan that had decided the
+copy (2026-07-25): "the copy cannot be decided by AI" and "I will make changes
+to the copy." Render-verify a composed page before showing or shipping it, because
+self-contradictions show only in the render. Tone conformance is necessary and
+nowhere near sufficient.
 
 ## The first paragraph stands alone
 

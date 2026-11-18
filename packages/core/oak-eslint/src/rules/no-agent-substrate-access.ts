@@ -11,12 +11,12 @@ import { createMessage, type RuleWithReappraisingMessages } from '../reappraisin
  * `.agent/` is the agent operating substrate — plans, memory, rules,
  * sub-agents, state, reports, practice-core. It is shared, mutable,
  * relocatable knowledge, NOT application data and NOT a runtime input.
- * Application code (apps/, packages/) sits outside that substrate's
- * dependency surface and must never read from it: code coupled to the
- * substrate asserts configuration instead of proving behaviour and goes
- * stale the moment the substrate moves (worked instance: a gap-ledger test
- * read a plan JSON via `readFileSync` and silently broke when a plan-estate
- * relocation moved the file).
+ * Application code sits outside that substrate's dependency surface and
+ * must never read from it: code coupled to the substrate asserts
+ * configuration instead of proving behaviour and goes stale the moment the
+ * substrate moves (worked instance: a gap-ledger test read a plan JSON via
+ * `readFileSync` and silently broke when a plan-estate relocation moved the
+ * file).
  *
  * This is an architectural boundary that happens to apply to tests, not a
  * test-hygiene rule — it fires on product and test code alike. The sole

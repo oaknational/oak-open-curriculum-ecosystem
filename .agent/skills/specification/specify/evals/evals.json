@@ -1,0 +1,83 @@
+{
+  "skill_name": "specify",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write the specification for a function parentIndex(i) that returns the parent index of node i in a binary heap stored in an array with the root at index 0. The heap lives in another repository you cannot read; its behaviour is settled and its tests (heap.sift-up.test and heap.sift-down.test, which call parentIndex on every non-root index) pass. Write the record from this statement alone; do not look for files. Keep it as short as the subject deserves.",
+      "expected_output": "A dozen-line record: what the function is, who calls it (the heap's sift operations), the admissible inputs (i >= 1), the behaviour for i = 0 addressed explicitly (either a defined result, or declared unspecified with the caller's obligation not to pass it), the definition floor((i-1)/2), determinism and no mutation, and the evidence (the existing tests, named by reference). No human journey, no service context, no persona; nothing beyond what the unit needs.",
+      "assertions": [
+        "The record contains only what the unit needs: no service context, persona, journey or template sections beyond the function's own obligations, and the omission is not belaboured",
+        "The behaviour for i = 0 is addressed explicitly: either a defined result, or declared unspecified together with the caller's obligation not to pass it; it is not left as an implicit permission",
+        "No fictional human user, national outcome or theory of change is introduced",
+        "The evidence names the heap's existing tests by reference and proposes only checks derivable from the definition; no test results or heap details are invented"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "A public repair-reporting service lets a resident report a broken streetlight. The council forwards reports to the utility that owns the light. We want to specify the service. What we have, in full: (1) a two-page proposal, which says residents will report online with a location and a photo, the council will forward each report to the owning utility within one working day, and residents will be able to see their report's status; (2) one observed session, in which one resident took eleven minutes to submit a report on a phone, gave up on the photo step twice and asked afterwards whether anyone would tell her when it was fixed; (3) the utility's published response times: acknowledge receipt within one working day, make safe within two working days, repair within ten working days. There is nothing else; do not look for files. Write the specification, marking what is known and what is not.",
+      "expected_output": "A specification of the service that covers the people it serves and the resident's experience as well as the council's obligations; the forwarding to the utility treated as a handoff with the utility's commitments (acknowledge receipt, make safe, repair within the published times, a route to correct a wrong report) stated separately from the council's; the single observed session treated as one observation, not user research; the published response times treated as the utility's commitment, not the council's guarantee; the unknowns (whether residents can see the repair's completion, residents who cannot or will not use the online route) each given a treatment rather than left blank.",
+      "assertions": [
+        "A forwarded report is not treated as accepted responsibility or as a completed repair",
+        "The single observed session is not promoted to user research, and no participant quotations are invented",
+        "The utility's obligations and the council's are stated separately, with the seam named",
+        "Every unknown carries one of the three treatments rather than a blank",
+        "Residents who cannot or will not use the online route are named somewhere in the record (as an affected party, an adverse case or an unknown) and given a treatment"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Here is revision 3 of the specification of a data pipeline, in full. 'PIPE-LC-R3. Subject: the nightly job that publishes a table of lesson counts per subject per day. Consumers: the reporting dashboard (reads the latest table each morning) and the finance export (copies each day's row once, the morning after). Obligations: O1 the table has one row per (day, subject) with columns day, subject, lesson_count; O2 a row is final once published; O3 corrections to source events arriving within 7 days of the event are applied to the event's day before that day's row is published; O4 corrections arriving later are discarded and counted in a discard log. Evidence: the fixture suite pipe-lc-fixtures (days 1 to 10 with corrections on days 3 and 8) and the finance export's own reconciliation test. Authority: the data platform lead.' The change: corrections now arrive up to 30 days after the source event and must be applied. The schema of the published table does not change. Revise the specification to revision 4; do not look for files.",
+      "expected_output": "A revision 4 that keeps revision 3's identity and retains revision 3; the changed condition (7 days to 30) identified with its consequence: the table's shape is unchanged but a published row is no longer final for 30 days, which is a change of meaning; the consumers that relied on finality (the finance export's copy-once, the dashboard) traced and the affected obligations (O2, O3, O4) and evidence (the fixture suite's 7-day corrections) marked as changed or stale; the event's day, the correction's arrival and the row's publication distinguished; a transition rule stated; unrelated claims (O1) left as they are.",
+      "assertions": [
+        "The unchanged schema is not taken to mean unchanged meaning: a published row's finality is identified as what changed",
+        "Revision 3 is retained and revision 4 identified, with each of revision 3's obligations marked kept, changed or retired",
+        "The finance export's copy-once reliance and the stale 7-day fixture evidence are traced as affected; O1 is not reopened",
+        "The event's day, the correction's arrival time and the row's publication are distinguished"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Our API returns curriculum lessons keyed by subject slug. A consuming tool maps our subject slugs to its own subject taxonomy before showing lessons to teachers. Teachers say results are wrong for combined-science subjects. Specify the subject-mapping contract between the API and the tool so both sides know what they owe. Neither side's existing schema changes.",
+      "expected_output": "A specification of the mapping as a transforms/represents relation with a named owner: what is preserved (subject identity, the combined-science membership), what loss is permitted and declared, the rejection conditions for an unmappable slug, the source and target taxonomy versions, both sides' obligations, the evidence (discriminating fixtures for combined science), and a note that schema validity on either side does not establish the mapping's fidelity. The consequential seam is handed to specify-connection by name.",
+      "assertions": [
+        "The mapping has a named owner and the API is not blamed by default",
+        "Preserved meaning and permitted loss are stated, and the combined-science case appears as a discriminating fixture",
+        "Schema validity on either side is not treated as evidence that the mapping preserves meaning",
+        "The seam is handed to specify-connection rather than fully analysed here"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Please implement the stable priority queue we specified last week; the contract and the tests are settled and the ordering rule is written down. The contract, in full: 'items are (priority, payload); pop returns the item with the lowest priority; among equal priorities, the earliest pushed item is returned first; push and pop are O(log n); pop on an empty queue raises EmptyQueue.' The tests, in full: test_pop_lowest_priority, test_equal_priorities_fifo, test_interleaved_push_pop_keeps_fifo, test_empty_pop_raises. There is no repository to read; write the implementation in Python in your answer.",
+      "expected_output": "An implementation written directly from the settled contract (a heap of (priority, sequence, payload) tuples with a monotonic counter, EmptyQueue on empty pop), with the four tests satisfied by construction; no specification pass, no new record, no profile stack, no value question raised.",
+      "assertions": [
+        "It recognises that implementing a settled contract is not this skill's operation and produces the implementation directly",
+        "No new specification record, profile stack or value pass is produced for the settled work",
+        "The implementation follows the written ordering rule (lowest priority first, earliest pushed among equals) and raises on empty pop"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "We are starting an exploratory research project on whether short reflective prompts change how pupils revise. We do not know what we will find. Specify the project so a funder can tell what we are promising.",
+      "expected_output": "A record for an exploratory project: the question and purpose, what may vary, the ethical and resource constraints, the methods, the stopping conditions, a negative or unresolved result treated as a legitimate closure, and what happens at the end; the promise to the funder bounded to the conduct of the work and a warranted closure, never to a favourable finding.",
+      "assertions": [
+        "A negative or unresolved result is specified as a legitimate closure, not a failure",
+        "The promise is bounded to resources, conduct, observations and warranted closure rather than an outcome",
+        "Stopping conditions are explicit so uncertainty does not license endless work",
+        "No effect size, sample size or result is invented"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Repair this specification (revision 2) of an export job that writes a nightly CSV of active accounts to a partner's SFTP: 'The job runs nightly. It exports active accounts. The file is named accounts-YYYYMMDD.csv. Delivery is reliable. The partner can rely on the file for billing.' Nothing else is written down. Keep what is right; make the obligations precise; do not invent facts.",
+      "expected_output": "A repaired record that keeps the sound parts (the schedule, the naming rule, the subject) and makes the obligations precise where the text is silent: what 'active' means and on whose authority; the cut-off time and timezone the export reflects; failure behaviour (a failed or partial upload, a missing night, a rerun, an idempotent overwrite or a new file); what 'reliable' would have to mean as an observable obligation and that no evidence for it is recorded; the partner's reliance for billing classified as a downstream reliance needing a stated obligation, not a promise this record can make alone; each gap filled either with a claim marked as needing the owner's confirmation or with an explicit unknown, never with an invented figure.",
+      "assertions": [
+        "The sound parts of the existing text are preserved and the record's identity and revision line are continued rather than restarted",
+        "Failure behaviour (partial or failed upload, a missing night, a rerun) is made an explicit obligation or an explicit unknown",
+        "'Delivery is reliable' is not left as an assurance; it is either made observable or marked as unevidenced",
+        "The partner's billing reliance is treated as a downstream reliance that needs its own stated obligation, not as a guarantee this record can grant",
+        "No cut-off time, SLA figure, retry count or partner requirement is invented; each unknown is marked for the owner"
+      ]
+    }
+  ]
+}

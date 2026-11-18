@@ -16,7 +16,7 @@
  * It is generated from the API schema at build time.
  */
 import type {
-  paths as ApiPaths,
+  Paths as ApiPaths,
   Subject as GeneratedSubject,
   KeyStage as GeneratedKeyStage,
   AssetType as GeneratedAssetType,

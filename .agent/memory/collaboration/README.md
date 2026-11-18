@@ -11,7 +11,7 @@ split_strategy: "Each pattern entry is one file; this README is the index. As th
 Lessons-learned about **agent-to-agent collaboration patterns**, distinct
 from `.agent/memory/active/patterns/` (code/architecture/process patterns).
 This memory class was installed by WS2 of the
-[multi-agent-collaboration-protocol][p] plan as a sibling to
+multi-agent-collaboration-protocol plan as a sibling to
 the active-patterns class — same lifecycle (capture in napkin → distil →
 graduate to permanent file when the pattern earns it), different
 substance (cross-agent coordination patterns, not single-agent
@@ -82,5 +82,4 @@ related_rule: <optional path to .agent/rules/ entry>
 - [`active/patterns/README.md`](../active/patterns/README.md) — sibling
   class for single-agent engineering patterns.
 
-[p]: ../../plans-backlog-2026-07/agent-tooling/current/multi-agent-collaboration-protocol.plan.md
 [pdr-011]: ../../practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md

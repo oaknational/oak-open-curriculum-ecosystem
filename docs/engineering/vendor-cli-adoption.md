@@ -23,7 +23,7 @@ hydration, schema sync, and anything else invoked by scripts the repo owns.
 
 **Do not apply to purely interactive human-only CLIs** (e.g. the dev-time
 `sentry` CLI used for `sentry api` and Seer). Those stay user-global and get
-listed in the root README prerequisites instead.
+listed in the [setup guide's prerequisites](./setup.md#prerequisites) instead.
 
 ## The eight-point checklist
 
@@ -89,9 +89,9 @@ points. A worked Sentry example sits in
    the filesystem or the vendor API and fail loudly if the post-condition is
    not met.
 
-8. **Root README declares user-global prereqs explicitly.** The small set of
+8. **The setup guide declares user-global prereqs explicitly.** The small set of
    vendor CLIs that must remain user-global (interactive dev-only tools, not
-   CI pipeline tools) MUST be listed in the root README prerequisites block
+   CI pipeline tools) MUST be listed in the setup guide's prerequisites block
    alongside `jq`, `lsof`, `bun`, and `gitleaks`, with install instructions
    and a clear statement of scope.
 

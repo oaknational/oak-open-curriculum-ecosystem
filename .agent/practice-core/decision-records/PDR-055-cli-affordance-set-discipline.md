@@ -151,8 +151,8 @@ requirement, not a coordination-surface concern. All clauses are portable.
 
 **Host-architectural concerns**: the specific build-isolation mechanism
 (separate build step? watch-then-built dist? compiled binary?) is
-host-architectural and lives in a host ADR. ADR-178 carries this repo's
-choice.
+host-architectural and lives in a host ADR. Each adopting host records
+its own choice in its build-isolation decision.
 
 **Not in scope**: feature additions beyond the affordance triple
 (retention policies, analytics, archive views). Those are host concerns
@@ -218,15 +218,13 @@ again"*.
 
 ## Implementation
 
-The host-repo operational application lands as ADR-178 (agent-tools
-build isolation) plus a follow-on plan in `.agent/plans/agent-tooling/`
+The host-repo operational application lands as the host's build-isolation
+decision (a built artefact, not source on each invocation) plus a host plan
 that tracks the affordance-set implementation slices per surface. The
-clause-7–10 API-surface-design convention is instantiated for this repo by
-`agent-tools-cli-ergonomics.plan.md`,
-whose WS6 is the conformance guard required by clause 10. The
-existing CLI surfaces in `agent-tools/` are extended incrementally; the
-PDR's substance is the *requirement* shape, not the implementation
-sequence.
+clause-7–10 API-surface-design convention is instantiated by the host's
+CLI-ergonomics plan, whose conformance guard is the one clause 10 requires.
+The host's existing CLI surfaces are extended incrementally; the PDR's
+substance is the *requirement* shape, not the implementation sequence.
 
 User-memory references that reinforce specific corollaries (full-help
 discipline; built-CLI discipline) cite this PDR.

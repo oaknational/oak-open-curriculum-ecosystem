@@ -40,8 +40,7 @@ describe('identity preflight collision detection', () => {
       intent: 'Test collaboration-state write safety.',
     };
     const activeClaims: CollaborationRegistry = {
-      schema_version: '1.3.0',
-      commit_queue: [],
+      schema_version: '1.4.0',
       claims: [collidingClaim],
     };
     const fake = createFakeCollaborationRuntime({ activeClaims });

@@ -3,6 +3,7 @@ related_pdr: PDR-021
 name: test-claim-assertion-parity
 polarity: pattern
 category: testing
+layer: general
 proven_by: "Sentry wrapping-order test rewrite (2026-04-16)"
 summary: >
   A test's documentation and assertions must prove the same thing.

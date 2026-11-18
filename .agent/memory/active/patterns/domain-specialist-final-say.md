@@ -4,6 +4,7 @@ name: "Domain Specialist Has Final Say on SDK Semantics"
 polarity: pattern
 use_this_when: "Architecture reviewers make assumptions about SDK-specific behaviour (scope models, handler ordering, API semantics) that have not been verified against official documentation"
 category: process
+layer: general
 proven_in: ".agent/plans/architecture-and-infrastructure/archive/completed/sentry-canonical-alignment.plan.md"
 proven_date: 2026-04-12
 barrier:

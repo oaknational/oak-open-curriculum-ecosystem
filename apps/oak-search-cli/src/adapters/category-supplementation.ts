@@ -24,7 +24,7 @@
  */
 
 import { ok, err, type Result } from '@oaknational/result';
-import type { SdkFetchError } from '@oaknational/curriculum-sdk';
+import { formatSdkError, type SdkFetchError } from '@oaknational/curriculum-sdk';
 import type { SequenceUnitsResponse } from '../types/oak';
 import { ingestLogger } from '../lib/logger';
 
@@ -220,7 +220,7 @@ export async function fetchCategoryMapForSequences(
     const result = await deps.getSequenceUnits(slug);
     if (!result.ok) {
       return err(
-        new Error(`Category fetch failed for sequence '${slug}': ${String(result.error)}`),
+        new Error(`Category fetch failed for sequence '${slug}': ${formatSdkError(result.error)}`),
       );
     }
     const sequenceMap = buildCategoryMap(result.value);

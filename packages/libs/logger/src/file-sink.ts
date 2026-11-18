@@ -14,13 +14,13 @@ import type { LogEvent, LogSink } from './types.js';
 
 /**
  * Minimal write stream interface for file sink
+ *
+ * @remarks The port carries no encoding: the chunk is a pre-formatted text
+ * line, and how it is encoded on disk belongs to the adapter behind the port
+ * (the Node adapter writes UTF-8).
  */
 export interface SimpleWriteStream {
-  readonly write: (
-    chunk: string,
-    encoding?: string,
-    cb?: (error?: Error | null) => void,
-  ) => boolean;
+  readonly write: (chunk: string, cb?: (error?: Error | null) => void) => boolean;
   readonly end: (cb?: () => void) => SimpleWriteStream;
 }
 
@@ -80,7 +80,7 @@ export function createFileSink(config: FileSinkConfig, fs: FileSystem): FileSink
     return {
       write(event: LogEvent): void {
         try {
-          stream.write(event.line, 'utf8', (error?: Error | null) => {
+          stream.write(event.line, (error?: Error | null) => {
             if (error) {
               console.error('Failed to write log line to file', {
                 path: filePath,

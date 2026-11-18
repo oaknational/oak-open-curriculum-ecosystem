@@ -2,6 +2,7 @@
 name: Citation as Reasoning at the Moment of Verdict
 polarity: anti-pattern
 category: process
+layer: general
 status: provisional
 discovered: 2026-05-21
 proven_in: "Single owner-flagged instance 2026-05-21 during a multi-rule convergence on a verdict: three of four 'reasons' offered for the verdict were citations to plans / memory / prior agreements rather than substantive reasoning. Each citation was truthful but truthfulness is orthogonal to reasoning; reference closes inquiry by pointing at past closure, reasoning continues inquiry by pointing at current substance. Second instance in another agent's output or own work would strengthen the pattern."

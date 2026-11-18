@@ -2,19 +2,17 @@ import { lstat, readdir, readFile } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 
 import {
-  ACTIVE_CLAIMS_PATH,
   CANONICAL_COMMS_ROOT,
-  CLOSED_CLAIMS_PATH,
   LEGACY_COMMS_ROOTS,
   MANIFEST_PATH,
   SHARED_COMMS_LOG,
   absolutePath,
-  isJsonFieldMap,
   isString,
   readOptionalString,
   type ManifestDocument,
 } from './live-types.js';
 import { evaluateRetiredPathReferences } from './path-evaluators.js';
+import { retiredPathLifecycle } from './live-retired-path-lifecycle.js';
 import { type SubstrateFinding } from './types.js';
 
 const TEXT_EXTENSIONS = new Set(['.json', '.md', '.txt']);
@@ -123,33 +121,6 @@ function surfaceForPath(manifest: ManifestDocument, path: string): string {
   return readOptionalString(surface ?? {}, 'id') ?? path;
 }
 
-function retiredPathLifecycle(
-  manifest: ManifestDocument,
-  path: string,
-  text: string,
-): 'live' | 'archived' | 'historical' {
-  if (isKnownHistoricalPath(path, text)) {
-    return path === CLOSED_CLAIMS_PATH ? 'archived' : 'historical';
-  }
-  if (matchesAnyRoot(path, manifest.discovery?.historical_roots ?? [])) {
-    return 'archived';
-  }
-  if (isHistoricalDiscussion(text)) {
-    return 'historical';
-  }
-
-  return 'live';
-}
-
-function isKnownHistoricalPath(path: string, text: string): boolean {
-  return (
-    path === CLOSED_CLAIMS_PATH ||
-    path.includes('/archive/') ||
-    LEGACY_COMMS_ROOTS.some((root) => path.startsWith(root)) ||
-    (path === ACTIVE_CLAIMS_PATH && activeClaimMentionsAreAbandonedEvidence(text))
-  );
-}
-
 function isTextFile(path: string): boolean {
   return path.endsWith('.schema.json') || TEXT_EXTENSIONS.has(path.slice(path.lastIndexOf('.')));
 }
@@ -170,10 +141,6 @@ function isExcluded(path: string, exclusions: readonly string[]): boolean {
   });
 }
 
-function matchesAnyRoot(path: string, roots: readonly string[]): boolean {
-  return roots.some((root) => path === root || path.startsWith(root));
-}
-
 function slashTerminated(path: string): string {
   return path.endsWith('/') ? path : `${path}/`;
 }
@@ -184,67 +151,4 @@ function normalisePath(path: string): string {
 
 function orEmpty(values: readonly string[] | undefined): readonly string[] {
   return values ?? [];
-}
-
-function activeClaimMentionsAreAbandonedEvidence(text: string): boolean {
-  const parsed: unknown = JSON.parse(text);
-  if (!isJsonFieldMap(parsed)) {
-    return false;
-  }
-
-  const claims = parsed.claims;
-  if (containsRetiredPath(claims)) {
-    return false;
-  }
-
-  const matchingQueueEntries = Array.isArray(parsed.commit_queue)
-    ? parsed.commit_queue.filter(containsRetiredPath)
-    : [];
-  return (
-    matchingQueueEntries.length > 0 &&
-    matchingQueueEntries.every((entry) => isJsonFieldMap(entry) && entry.phase === 'abandoned')
-  );
-}
-
-function isHistoricalDiscussion(text: string): boolean {
-  const contexts = retiredPathContexts(text);
-  return contexts.length > 0 && contexts.every(isHistoricalContext);
-}
-
-const HISTORICAL_CONTEXT_PATTERN =
-  /historical|legacy|migration|migrated|source evidence|provenance/;
-
-function isHistoricalContext(context: string): boolean {
-  return !context.includes('.gitkeep') && HISTORICAL_CONTEXT_PATTERN.test(context);
-}
-
-function retiredPathContexts(text: string): readonly string[] {
-  const contexts: string[] = [];
-  for (const root of LEGACY_COMMS_ROOTS) {
-    let index = text.indexOf(root);
-    while (index >= 0) {
-      contexts.push(text.slice(Math.max(0, index - 1000), index + root.length + 1000));
-      index = text.indexOf(root, index + root.length);
-    }
-  }
-
-  return contexts;
-}
-
-function containsRetiredPath(value: unknown): boolean {
-  if (typeof value === 'string') {
-    return LEGACY_COMMS_ROOTS.some((root) => value.includes(root));
-  }
-  if (Array.isArray(value)) {
-    return value.some(containsRetiredPath);
-  }
-  if (isJsonFieldMap(value)) {
-    for (const key in value) {
-      if (containsRetiredPath(value[key])) {
-        return true;
-      }
-    }
-  }
-
-  return false;
 }

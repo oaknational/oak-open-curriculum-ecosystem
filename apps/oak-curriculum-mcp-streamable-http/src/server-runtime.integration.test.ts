@@ -90,23 +90,15 @@ function createFakeLogger(): ServerHarness['logger'] {
   const errorCalls: LogCall[] = [];
   const debugCalls: LogCall[] = [];
 
-  function errorMethod(message: string, context?: LogContextInput): void;
-  function errorMethod(message: string, error: NormalizedError, context?: LogContextInput): void;
-  function errorMethod(
+  // `error` and `fatal` both land in `errorCalls`: to the shutdown path this
+  // harness describes, the two levels are one failure signal.
+  function recordErrorLevelCall(message: string, context?: LogContextInput): void;
+  function recordErrorLevelCall(
     message: string,
-    errorOrContext?: LogContextInput | NormalizedError,
+    error: NormalizedError,
     context?: LogContextInput,
-  ): void {
-    if (errorOrContext !== undefined && isNormalizedError(errorOrContext)) {
-      errorCalls.push({ message, error: errorOrContext, context });
-      return;
-    }
-    errorCalls.push({ message, context: errorOrContext });
-  }
-
-  function fatalMethod(message: string, context?: LogContextInput): void;
-  function fatalMethod(message: string, error: NormalizedError, context?: LogContextInput): void;
-  function fatalMethod(
+  ): void;
+  function recordErrorLevelCall(
     message: string,
     errorOrContext?: LogContextInput | NormalizedError,
     context?: LogContextInput,
@@ -129,14 +121,14 @@ function createFakeLogger(): ServerHarness['logger'] {
     warn(message: string, context?: LogContextInput): void {
       warnCalls.push({ message, context });
     },
-    error: errorMethod,
+    error: recordErrorLevelCall,
     debug(message: string, context?: LogContextInput): void {
       debugCalls.push({ message, context });
     },
     trace(): void {
       // Not used in this test.
     },
-    fatal: fatalMethod,
+    fatal: recordErrorLevelCall,
     child(): Logger {
       return logger;
     },

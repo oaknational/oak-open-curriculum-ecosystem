@@ -80,8 +80,8 @@ function parseEntriesFile(text: string): Result<EntriesFile, Error> {
   let parsed: unknown;
   try {
     parsed = JSON.parse(text);
-  } catch (failure) {
-    return err(failureAsError(failure, 'the conversation-file JSON boundary'));
+  } catch (error) {
+    return err(failureAsError(error, 'the conversation-file JSON boundary'));
   }
   if (!isJsonObject(parsed)) {
     return err(new Error('conversation file must contain entries array'));

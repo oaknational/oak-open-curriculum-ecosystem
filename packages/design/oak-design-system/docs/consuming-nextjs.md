@@ -182,7 +182,7 @@ The kit is not a behaviour library — and the answer to "do we need one?" is: *
 
 - **Version watch.** Pin what you vet, per guide: Base UI pinned at **v1.3** (behaviour changes in v1.x point releases — 1.3 changed Checkbox/Switch unchecked form submission and Tabs `keepMounted`); React Aria Components and Ark UI pinned at adoption (record in their pairing guides). Read release notes on every bump and re-run `docs/wrapped-widget-a11y-checklist.md` on upgraded widgets. Date/time pickers are React Aria's territory — don't hand-roll one, and don't force them out of Base UI.
 - **Clash — pre-styled libraries** (MUI, Chakra, Mantine, shadcn defaults, Bootstrap): they ship a second styling system — their own tokens, focus indicators, motion and density — which forks the tier-3 contract, and their focus/target/motion defaults silently replace the invariants this system deliberately keeps off the override surface. "Accessible" claims don't transfer either: their AA is against their palette, not yours, and not across our five themes.
-- Whatever you add, the charter split still applies: a library gives you correct _widgets_; page structure, labels, reflow, reading level and the per-theme contrast audit remain the app's obligations (§9). Per-widget screen-reader spot-checks are enumerated in `docs/wrapped-widget-a11y-checklist.md` — a wrapped widget isn't done until its class's checks pass with a real SR.
+- Whatever you add, the charter split still applies: a library gives you correct _widgets_; page structure, labels, reflow, reading level and the per-theme contrast audit remain the app's obligations (§9). Per-widget screen-reader spot-checks are enumerated in `docs/wrapped-widget-a11y-checklist.md` — a wrapped widget isn't done until its class's checks that need no screen reader pass; a pass with a real SR is an ambition, not a requirement (ADR-213, owner gate 3).
 
 ## 6. Building pages
 
@@ -320,7 +320,7 @@ export function SubjectCombobox({ subjects }: { subjects: string[] }) {
 }
 ```
 
-The three checks that make it done: the double focus ring is on the input AND visible on the highlighted item (headless parts are invisibly focusable until you style them); the `--cb-item-selected-bg`/`--text-primary` pairing is in the contrast audit ×4 themes; the combobox section of `docs/wrapped-widget-a11y-checklist.md` passes with a real screen reader. Verify part/prop names against the pinned Base UI version's docs (§5b version watch) — they shift in v1.x point releases.
+The three checks that make it done: the double focus ring is on the input AND visible on the highlighted item (headless parts are invisibly focusable until you style them); the `--cb-item-selected-bg`/`--text-primary` pairing is in the contrast audit ×4 themes; the checks in the combobox section of `docs/wrapped-widget-a11y-checklist.md` that need no screen reader pass (a real screen-reader pass is an ambition, not a requirement: ADR-213, owner gate 3). Verify part/prop names against the pinned Base UI version's docs (§5b version watch) — they shift in v1.x point releases.
 
 ## 8. What not to do
 

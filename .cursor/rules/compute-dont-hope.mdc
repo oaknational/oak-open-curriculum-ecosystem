@@ -1,0 +1,6 @@
+---
+description: Never keep a list by hand when its truth lives elsewhere (owner ruling 2026-09-13, "compute don't hope") — derive it at the point of use from what the repository declares (manifests, ignore rules, directories, frontmatter, imports), or land it with a validator that recomputes it and fails on drift. Use when writing or editing any list, allow-list, exclusion list, index or table whose entries restate facts held elsewhere. Not for declarations that are themselves the source (a package manifest, an ignore rule, a validator's declared scope, a plan node's frontmatter). Failure shapes — a hand-kept bootstrap package list, its gap masked by a warm local build until CI's cold checkout failed; three validators each carrying a copy of one exclusion list; a "keep this in sync with X" comment.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/compute-dont-hope.md`.

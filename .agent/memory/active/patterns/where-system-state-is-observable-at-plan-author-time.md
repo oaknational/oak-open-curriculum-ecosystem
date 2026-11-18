@@ -2,6 +2,7 @@
 name: Where the System State Is Observable at Plan-Author Time
 polarity: pattern
 category: planning
+layer: general
 status: provisional
 discovered: 2026-05-22
 proven_in: "Single-arc origin: commit-queue-intent-scope-discipline plan (cycles 1.1, 1.2, 1.3). Metacognition pass at Cycle 1.3 surfaced that the inherited three-cycle decomposition (each describing an internal seam) was the load-bearing shape needing examination. Reshape produced workflow-seam invariants in a single test file and retired two scaffolding test files. Second-instance from a different plan/author would strengthen the pattern; current evidence is one author, one arc, ratified by owner correction *\"avoiding improving systems because it creates work in tests is a terrible trend — drive excellence, not avoid work\"*."

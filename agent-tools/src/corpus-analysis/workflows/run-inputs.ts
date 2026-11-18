@@ -6,6 +6,8 @@
  * The structural gates that used to be operator discipline live here as code:
  *
  * - a PARTIAL map (any zero-leaf window) cannot seed reduce or validate;
+ * - an EMPTY reduce result (no candidates) cannot seed validate: the run ends at reduce with
+ *   a no-findings result, refused by name rather than by a downstream schema;
  * - validate's grounding leaves are the size-capped projection, never full leaves;
  * - resume ids derive from the prior validate results' actual terminal dispositions,
  *   never a hand-maintained list;
@@ -81,7 +83,7 @@ export function reduceRunDataFrom(mapResult: MapResult): Result<ReduceRunData, E
 /**
  * Derive the validate stage's run data: candidates from reduce, the grounding-leaf
  * projection from map, resume ids from the prior validate results, and the explicit
- * token ceiling.
+ * token ceiling. A partial map, a failed prior and an empty reduce result are each refused.
  */
 export function validateRunDataFrom(input: {
   readonly mapResult: MapResult;
@@ -100,6 +102,13 @@ export function validateRunDataFrom(input: {
   const priors = successfulValidates(input.priorValidateResults);
   if (!priors.ok) {
     return priors;
+  }
+  if (reduce.value.candidates.length === 0) {
+    return err(
+      new Error(
+        'the reduce stage found no candidates, so there is nothing for validate or meta to judge and nothing to seed: the run ends at reduce with a no-findings result (the reduce stage did not fail; the builder stops here).',
+      ),
+    );
   }
   return ok({
     candidates: reduce.value.candidates,

@@ -1,7 +1,13 @@
+---
+classification: core
+description: Before committing to the shape of a build (tool, feature, schema, migration, refactor), verify the data actually supports it — trace value end-to-end and fingerprint the corpus before building, not after.
+---
+
 # Verify the Data Supports the Shape Before Building
 
-Operationalises [ADR-038 (Compilation-Time Revolution)](../../docs/architecture/architectural-decisions/038-compilation-time-revolution.md)
-— the data is the source of truth for what can be built — and
+Operationalises the host's record that the data is the source of truth for
+what can be built (jimcresswell.net: ADR-020, the entity model as the source
+of truth for shared atoms; OCE: ADR-038, the compilation-time revolution) and
 [PDR-085 (Definition of Delivery)](../practice-core/decision-records/PDR-085-definition-of-delivery.md)
 — value reaches a beneficiary or it has not been delivered. It is the design-time
 face of [`verify-dont-trust`](verify-dont-trust.md): a design premise is a claim
@@ -26,14 +32,12 @@ Recurring faces:
 - **Fingerprint the data before deciding the shape of a fix or migration.** Run a
   cheap scan of the actual corpus to test the premise the fix rests on *before*
   code lands. A premise the data refutes is redirected at the source, not
-  engineered around. Fingerprint the **source**, not a projection: for Oak
-  curriculum data the ground truth is the in-repo bulk export
-  (`apps/oak-search-cli/bulk-downloads/schema.json` plus `manifest.json`); the
-  generated vocab corpora are lossy projections that routinely flatten away
-  structure the source carries. Check the bulk schema before declaring a
-  relationship "must be sourced" / "deferred" / "not present" (verified worked
-  instance 2026-06-04: the flat misconception corpus dropped unit/thread
-  linkage the bulk source carries in full).
+  engineered around. Fingerprint the **source**, not a projection: in
+  jimcresswell.net the ground truth is the entity model, and in OCE the in-repo
+  bulk export of its curriculum data; rendered surfaces, generated corpora,
+  JSON-LD and a PDF are projections that can flatten away structure the source
+  carries. Check the source before declaring a relationship "must be sourced"
+  / "deferred" / "not present".
 - **Cite the governing assignment before adding a design surface.** Every
   contract, tool, resource, prompt, envelope field, or reviewer condition must
   cite the plan text, ADR, PDR, schema, or data fact that assigns that role. If
@@ -45,9 +49,9 @@ Recurring faces:
   merely observed in the current snapshot — observed-unique is the trap, since
   the model then corrupts silently on the rare multi-placement case. Separate
   entity identity (a stable, authoritative id) from placement or membership,
-  which is a relationship/edge, never part of identity (worked instance
-  2026-06-04: a lesson can be placed in more than one unit, so a lesson slug
-  is not a guaranteed identity and unit-membership is an edge).
+  which is a relationship/edge, never part of identity (worked instance from the
+  lineage, 2026-06-04: an item placed in more than one container has no
+  guaranteed identity in its slug; membership is an edge).
 
 If the data, contract, or governing plan does not support the shape, the shape
 is wrong — correct it at the data contract, governing plan, or design; do not
@@ -59,15 +63,20 @@ not silently reshaped.
 
 ## Failure mode this prevents
 
-The EEF tools as first envisioned keyed on a curriculum subject/topic axis the
-EEF corpus does not carry; months of data-shape engineering went into a join the
-data never supported — the data-shape work was the tail wagging the dog. A
-separate migration plan rested on a data premise a cheap corpus fingerprint
-refuted before any code landed. Both are the same failure: committing to a shape
-on an unverified data premise. The check is cheap; the rebuild is not.
+In OCE (2026-06), a tool family keyed on an axis its corpus did
+not carry; months of data-shape engineering went into a join the data never
+supported. A separate migration plan rested on a premise a cheap corpus
+fingerprint refuted before any code landed. Both are the same failure:
+committing to a shape on an unverified data premise. The check is cheap; the
+rebuild is not. A third instance justified a design surface by an invented host
+class the governing plan had already assigned elsewhere; the correction was to
+delete the surface, not to add optional fields or bridges around the fabricated
+premise.
 
-The 2026-06-03 EEF D3 audit caught a third MCP tool function justified by
-invented "resource-less hosts" while the governing plan had already assigned
-that capability to resources for the real target hosts. The correction was to
-delete the unsupported design surface, not to add optional fields, handler
-bridges, or reviewer rationale around the fabricated premise.
+A fourth instance (JC.net, 2026-09-13): a curator-passes README was imported
+because a report listed the directory as a register the curation loop writes to;
+the writer's own doctrine (PDR-081 and the curator-pass skill) says the loop
+writes no such register, and the directory was history OCE kept. Before creating
+a surface because a document says something writes to it, read the writer: a
+report's inventory is a projection, and only the writer's contract is the
+source.

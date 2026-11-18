@@ -8,4 +8,4 @@ lane promotion).
 
 A brief lands here when a later intent needs strategic shape before its
 promotion trigger fires (see the
-[plan skill §Strategic Plan Requirements](../../../skills/plan/SKILL-CANONICAL.md)).
+[plan skill §Strategic Plan Requirements](../../../skills/planning/plan/SKILL-CANONICAL.md)).

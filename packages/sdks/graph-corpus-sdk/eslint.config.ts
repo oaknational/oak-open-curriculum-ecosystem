@@ -41,6 +41,14 @@ const config = defineConfigArray(
   },
 
   configs.strict,
+  {
+    // The owner's ruling of 2026-09-08 on `no-throw-statement`: off where the
+    // throw debt lives (this workspace), error everywhere else and in every new
+    // workspace; the migration waits for the merge-back into the upstream. The
+    // ruling is quoted in the plugin's configs/recommended.ts; the
+    // no-throw-remediation plan owns the migration.
+    rules: { '@oaknational/no-throw-statement': 'off' },
+  },
 
   {
     files: ['**/*.ts'],
@@ -54,9 +62,11 @@ const config = defineConfigArray(
   },
 
   // SDK runtime boundary rules (ADR-108): block deep imports into the
-  // generation workspace; permit single-level subpath exports only.
+  // generation workspace; permit single-level subpath exports only. The
+  // writer script under scripts/ imports this package's own src and is held
+  // to the same boundary.
   {
-    files: ['src/**/*.ts'],
+    files: ['src/**/*.ts', 'scripts/**/*.ts'],
     rules: {
       ...createSdkBoundaryRules('runtime'),
     },

@@ -2,7 +2,8 @@
  * Explicit revision verdicts for aggregated-tool, app, and widget items whose
  * reviewed anchors point at intentionally modified (or added) current
  * fragments. Paired with the reviewed anchors in
- * `current-aggregated-item-anchor-overrides.ts`; composed into
+ * `current-aggregated-item-anchor-overrides.ts` and
+ * `current-app-item-anchor-overrides.ts`; composed into
  * `CURRENT_ITEM_REVISION_OVERRIDES` alongside the generated-item and
  * generated-description revision maps.
  */
@@ -65,4 +66,9 @@ export const CURRENT_AGGREGATED_ITEM_REVISION_OVERRIDES = {
   // unchanged.
   C708: 'modified',
   C717: 'added',
+  // 2026-11-01 lint pass: the catch parameter inside each baseline fragment was
+  // renamed to `error`; the served wording is byte-identical, so the truthful
+  // verdict is unchanged.
+  C111: 'unchanged',
+  C426: 'unchanged',
 } as const;

@@ -53,6 +53,7 @@ export {
   extractLearningPoints,
   extractTeacherTips,
   processBulkData,
+  nodeFileSystem,
   generateAnalysisReport,
   serializeAnalysisReport,
   writeAnalysisReportFile,

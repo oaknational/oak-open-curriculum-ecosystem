@@ -15,22 +15,25 @@ function isStructuredContent(value: unknown): value is StructuredContent {
 }
 
 /**
- * Creates a stub tool executor that returns pre-defined responses.
+ * Answers a tool call from the pre-defined stub responses.
  *
  * Returns both `content` (JSON text for MCP clients/model) and `structuredContent`
  * (object for MCP Apps-compliant hosts to deliver to widgets as structured content).
  */
+function executeStubbedTool(name: string): Promise<CallToolResult> {
+  if (!isStubbedToolName(name)) {
+    return Promise.resolve({ isError: true, content: [{ type: 'text', text: `Stub not found for ${name}` }] });
+  }
+  const payload = stubbedToolResponses[name]();
+  const structuredContent: StructuredContent = isStructuredContent(payload)
+    ? payload
+    : { data: payload };
+  return Promise.resolve({ content: [{ type: 'text', text: JSON.stringify(payload) }], structuredContent });
+}
+
+/** Creates a stub tool executor that returns pre-defined responses. */
 export function createStubToolExecutor(): (name: string) => Promise<CallToolResult> {
-  return (name: string) => {
-    if (!isStubbedToolName(name)) {
-      return Promise.resolve({ isError: true, content: [{ type: 'text', text: `Stub not found for ${name}` }] });
-    }
-    const payload = stubbedToolResponses[name]();
-    const structuredContent: StructuredContent = isStructuredContent(payload)
-      ? payload
-      : { data: payload };
-    return Promise.resolve({ content: [{ type: 'text', text: JSON.stringify(payload) }], structuredContent });
-  };
+  return executeStubbedTool;
 }
 
 export { stubbedToolResponses } from './tools/index.js';

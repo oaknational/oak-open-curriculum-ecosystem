@@ -3,6 +3,7 @@ name: A Real Observation That Does Not Bear on the Claim
 polarity: anti-pattern
 use_this_when: About to cite a first-hand observation as evidence for a config, mechanism, or state claim — especially when the surface you read reports a DERIVED value, or when the observation was made some time before the action it licenses
 category: agent
+layer: general
 proven_in: .agent/state/collaboration/comms/ (seven instances, four seats, 2026-08-05); conserved at .agent/memory/active/archive/napkin-2026-08-06.md (2026-08-05 entries)
 proven_date: 2026-08-05
 related_pattern: referent-narrowing

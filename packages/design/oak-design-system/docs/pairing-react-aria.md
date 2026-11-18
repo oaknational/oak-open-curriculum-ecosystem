@@ -76,7 +76,7 @@ export function LessonDateField() {
 } /* colour + decoration */
 ```
 
-Done-criteria: segments announce role/value with a real SR; keyboard steps segments and spins values; the `--ra-seg-focus-bg`/`--text-primary` pairing is in the contrast audit ×4 themes; invalid state visible without colour.
+Done-criteria: segments carry the role and value an SR announces (checking with a real SR is an ambition, not a requirement: ADR-213, owner gate 3); keyboard steps segments and spins values; the `--ra-seg-focus-bg`/`--text-primary` pairing is in the contrast audit ×4 themes; invalid state visible without colour.
 
 ## Gotchas
 

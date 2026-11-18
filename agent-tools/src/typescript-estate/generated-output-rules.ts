@@ -3,7 +3,7 @@ import { err, ok, type Result } from '@oaknational/result';
 import type { GeneratedOutputRule } from './config-classification-model.js';
 import { EstateReviewError } from './errors.js';
 import type { TrackedTreeEntry } from './git-snapshot-model.js';
-import type { NonEmptyReadonlyArray, RepoPath } from './scalar-model.js';
+import type { NonEmptyReadonlyArray } from './scalar-model.js';
 import { compareUtf16 } from './utf16-order.js';
 
 const RULE_ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
@@ -49,7 +49,7 @@ export function preflightGeneratedOutputRules(
 /** Find the sole preflighted rule whose exact prefix contains the path. */
 export function findGeneratedOutputRule(
   rules: readonly GeneratedOutputRule[],
-  path: RepoPath,
+  path: string,
 ): GeneratedOutputRule | undefined {
   return rules.find((rule) => path.startsWith(rule.pathPrefix));
 }
@@ -57,7 +57,7 @@ export function findGeneratedOutputRule(
 function validateRule(
   rule: GeneratedOutputRule,
   ids: ReadonlySet<string>,
-  treeByPath: ReadonlyMap<RepoPath, TrackedTreeEntry['treeEntry']>,
+  treeByPath: ReadonlyMap<string, TrackedTreeEntry['treeEntry']>,
 ): EstateReviewError | undefined {
   const identityError = validateRuleIdentity(rule, ids);
   if (identityError !== undefined) {
@@ -81,13 +81,13 @@ function validateRuleIdentity(
 
 function validateEvidence(
   rule: GeneratedOutputRule,
-  treeByPath: ReadonlyMap<RepoPath, TrackedTreeEntry['treeEntry']>,
+  treeByPath: ReadonlyMap<string, TrackedTreeEntry['treeEntry']>,
 ): EstateReviewError | undefined {
   if (rule.producerEvidence.length === 0) {
     return configInvalid(`generated-output rule '${rule.id}' has no producer evidence`);
   }
 
-  const evidence = new Set<RepoPath>();
+  const evidence = new Set<string>();
   for (const path of rule.producerEvidence) {
     const invalid = validateEvidencePath(rule.id, path, evidence, treeByPath);
     if (invalid !== undefined) {
@@ -100,9 +100,9 @@ function validateEvidence(
 
 function validateEvidencePath(
   ruleId: string,
-  path: RepoPath,
-  seen: ReadonlySet<RepoPath>,
-  treeByPath: ReadonlyMap<RepoPath, TrackedTreeEntry['treeEntry']>,
+  path: string,
+  seen: ReadonlySet<string>,
+  treeByPath: ReadonlyMap<string, TrackedTreeEntry['treeEntry']>,
 ): EstateReviewError | undefined {
   if (!isNormalisedFilePath(path) || seen.has(path)) {
     return configInvalid(
@@ -120,7 +120,7 @@ function isRegularTreeEntry(entry: TrackedTreeEntry['treeEntry'] | undefined): b
 
 function findOverlappingPrefixes(
   rules: readonly GeneratedOutputRule[],
-): readonly [RepoPath, RepoPath] | undefined {
+): readonly [string, string] | undefined {
   for (const [index, leftRule] of rules.entries()) {
     for (const rightRule of rules.slice(index + 1)) {
       if (prefixesOverlap(leftRule.pathPrefix, rightRule.pathPrefix)) {
@@ -131,22 +131,22 @@ function findOverlappingPrefixes(
   return undefined;
 }
 
-function prefixesOverlap(left: RepoPath, right: RepoPath): boolean {
+function prefixesOverlap(left: string, right: string): boolean {
   return left.startsWith(right) || right.startsWith(left);
 }
 
-function sortedEvidence(values: NonEmptyReadonlyArray<RepoPath>): NonEmptyReadonlyArray<RepoPath> {
+function sortedEvidence(values: NonEmptyReadonlyArray<string>): NonEmptyReadonlyArray<string> {
   const [first, ...remaining] = values;
-  const sorted: [RepoPath, ...RepoPath[]] = [first, ...remaining];
+  const sorted: [string, ...string[]] = [first, ...remaining];
   sorted.sort(compareUtf16);
   return sorted;
 }
 
-function isNormalisedPrefix(path: string): path is RepoPath {
+function isNormalisedPrefix(path: string): boolean {
   return path.endsWith('/') && isNormalisedSegments(path.slice(0, -1));
 }
 
-function isNormalisedFilePath(path: string): path is RepoPath {
+function isNormalisedFilePath(path: string): boolean {
   return !path.endsWith('/') && isNormalisedSegments(path);
 }
 

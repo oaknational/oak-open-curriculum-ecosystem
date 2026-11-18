@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "claudeVersion": "2.1.283",
+  "startedAt": "2026-09-27T11:45:57.537Z",
+  "durationSeconds": 72,
+  "costUsd": 0.28743,
+  "partial": false,
+  "suite": {
+    "root": "<plugin>",
+    "ablation": "with-without",
+    "judgeModel": "sonnet",
+    "caseFilter": "case-03",
+    "threshold": 0,
+    "concurrency": 1,
+    "plugins": [
+      {
+        "name": "oak-plan-evals",
+        "version": "0.0.0",
+        "path": "<plugin>"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "name": "case-03",
+      "dir": "evals/case-03",
+      "source": "mixed",
+      "promptMarkdown": "Plan the integration of our curriculum API with a partner's teacher tool. Settled and written down here, in full: the value (teachers need to find lessons by subject; three observed sessions and the partner's request record it) and the API's contract (lessons keyed by subject slug; slugs biology, chemistry, physics, combined-science; schema versioned; a slug never renamed within a major version). Unresolved: the subject-mapping contract between the API's slugs and the tool's taxonomy, which has no combined-science subject; the partner says the mapping is the API's to define and our team says it is the tool's, and no one with authority over both has ruled. There is no repository to read; plan from this statement.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 1500,
+      "maxTurns": 40,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A plan that sequences the settled parts and routes the unresolved seam to specify (the mapping contract) and specify-connection (the seam analysis) before the dependent integration steps, preserving the ownership dispute as an open item for the authority that holds it; the settled steps are not blocked and the unresolved one is not invented.\n\nAssertions:\n1. The unresolved mapping contract is routed to the specification skills rather than planned around or invented\n2. The settled steps proceed and the dependent steps wait on the returned obligation\n3. The ownership dispute is preserved for its authority rather than resolved by the plan",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A plan that sequences the settled parts and routes the unresolved seam to specify (the mapping contract) and specify-connection (the seam analysis) before the dependent integration steps, preserving the ownership dispute as an open item for the authority that holds it; the settled steps are not blocked and the unresolved one is not invented.\n\nAssertions:\n1. The unresolved mapping contract is routed to the specification skills rather than planned around or invented\n2. The settled steps proceed and the dependent steps wait on the returned obligation\n3. The ownership dispute is preserved for its authority rather than resolved by the plan",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-plan|oak-user-value|oak-specify|oak-specify-connection|oak-assess-specification)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-plan(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 0.5,
+            "passed": false,
+            "turns": 3,
+            "costUsd": 0.19741840000000002,
+            "judgeCostUsd": 0.016356000000000002,
+            "durationSeconds": 46,
+            "startedAt": "2026-09-27T11:45:57.578Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL FAIL FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  false,
+                  false
+                ],
+                "evidence": "# Plan sketch: curriculum API ↔ partner teacher tool integration\n\nThere's no repository, so I couldn't check this against the plan schema, the impact-areas list or the templates. Fields that depend on them are marked **⟨unverified⟩**. The plan is `status: sketch` and doesn't authorise any work until an owner ratifies it.\n\n## The key point\n\nThe open decision isn't the combined-science mapping itself. It's **who owns the mapping contract.** Both sides have a reasonable claim, and neither can settle it alone:\n\n- **API side:** we publish the slugs and promise they stay stable within a major version.\n- **Tool side:** the partner owns the taxonomy that teachers actually browse.\n\nA mapping written by one side can be broken by a change on the other side. So whoever owns it also has to watch for changes on both sides. Choosing an owner means choosing who carries that duty, and only someone with authority over both parties can make that choice.\n\nI haven't built an answer into the plan. The ownership question is an owner gate. Work that doesn't depend on it goes ahead. Work that does is blocked.\n\n## Frontmatter (draft)\n\n```yaml\ntype: delivery\nstatus: sketch\nserves: ⟨unverified: name the strategic node this integration serves⟩\nimpact_areas: ⟨unverified: from the closed registry, likely the curriculum API's public contract⟩\ndepends_on:\n  - mapping-ownership ruling: blocking (for AC3–AC5 only)\nowner_gates:\n  - id: mapping-contract-owner\n    awaiting: ruling by a party with authority over both our API and the partner tool\n    clears_when: a named owner of the slug-to-taxonomy mapping contract is recorded, with the ruler's word at a traceable pointer\n    expires: ⟨absolute date needed. Set it from the strategic node's gate_expiry_default. I don't have that value and haven't invented one⟩\n```\n\nI checked for an existing ruling that would make this gate unnecessary. The statement doesn't give one: the API contract covers slugs, not how they map onto a consumer's taxonomy. If an ADR or agreement exists that does cover it, it replaces the gate. If the gate expires with no ruling, nothing is shipped by default. Expiry leads to escalation, not a decision.\n\n## Goal\nTeachers using the partner tool can find curriculum lessons by subject.\n\n## Users and value\n- **Teachers:** find lessons by subject without leaving the tool. This is the settled value, backed by three observed sessions and the partner's request.\n- **Partner developers:** build against a stable, versioned API and can trust that the slugs they rely on won't change within a major version.\n- **Our API team:** the integration uses the published contract as it stands, with no special-case changes for this partner.\n\n## Mechanism\nLessons are keyed by subject slug, and slugs never change within a major version. A consumer that pins a major version and translates slugs into its own subjects can therefore offer subject browsing that stays correct over time. What remains is that translation step, and whoever owns it.\n\n## What the mapping owner must define (whoever it is)\n\nThis is the content the ruling unlocks. I list it so the owner knows what they're taking on, not to answer it early:\n\n1. **The three single-science slugs:** confirm which tool subject each maps to. This is probably one-to-one, but I've assumed that, not verified it.\n2. **`combined-science`:** the tool has no matching subject. The options change what teachers see:\n   - Show combined-science lessons under biology, chemistry *and* physics. They're easy to find but duplicated, and the lesson's real subject is hidden.\n   - Show them under a broader parent subject, if the tool has one.\n   - Add the subject to the tool. That means a taxonomy change on the partner's side.\n   - Leave them out. Teachers can't find those lessons at all, which directly undercuts the settled value.\n3. **How change is handled:** what happens when we add a slug, release a new major version, or the partner changes their taxonomy.\n4. **What happens with an unmapped slug:** the lessons are hidden, shown under a fallback subject, or cause an error. It must be observable, never a silent drop.\n\n## Acceptance criteria and proofs\n\n| # | Criterion | Proof |\n|---|---|---|\n| AC1 | The tool's client pins an API major version and gets lessons by each of the four slugs | `repo-safe`: contract test against the versioned schema |\n| AC2 | A slug the mapping doesn't know about is handled as the contract specifies and is observable | `repo-safe`: test with a made-up fifth slug |\n| AC3 | The mapping contract exists, has the owner named in the ruling, and covers items 1–4 above | `owner-held`: the ruling party confirms; record where their confirmation lives |\n| AC4 | The chosen combined-science outcome is tested | `repo-safe`: fixture-based test; the case must be decided under AC3 first |\n| AC5 | Teachers find lessons by subject in the live tool, including combined-science lessons if the ruling keeps them visible | `owner-held`: the partner observes this in their deployment; record the dated observation |\n\n## Out of scope\n- Renaming or splitting `combined-science`. That breaks the major-version promise and would need a new major version, which nobody has authorised.\n- Changing the partner's taxonomy, unless the ruling says to.\n- Other subjects, search beyond subject, and any integration features that go beyond the settled value.\n\n## Order of work\n1. **Now, not blocked:** the versioned client plus AC1 and AC2. The unknown-slug test uses a placeholder behaviour, clearly labelled as a placeholder until AC3 is done.\n2. **Now:** send the ownership question to someone with authority over both sides, as one decision with the four items above attached.\n3. **After the ruling:** the mapping owner writes the mapping contract (AC3). The contract's own content is a separate specification job.\n4. **Then:** implement and test the mapping (AC4) and get the partner's observation (AC5).\n\nEach step becomes a single-PR slice when an implementer picks it up. The review dispositions ledger is empty.\n\n## Still needed before ratification\n- The strategic node for `serves` and its gate-expiry default.\n- Impact areas from the registry.\n- **Who has authority over both sides.** Nobody has been identified yet. If nobody holds that authority, the gate can't clear, and the fix is to set up a joint agreement, not to wait longer.\n- Once a repository exists, this sketch needs to be committed there as a self-contained node so a fresh session can work from it."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 0.5,
+            "passed": false,
+            "turns": 1,
+            "costUsd": 0.0900116,
+            "judgeCostUsd": 0.012762000000000003,
+            "durationSeconds": 26,
+            "startedAt": "2026-09-27T11:46:43.454Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL FAIL FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  false,
+                  false
+                ],
+                "evidence": "# Plan: Curriculum API ↔ Partner Teacher Tool\n\n## What's settled (not reopened here)\n\n- **Value:** teachers need to find lessons by subject. Three observed sessions and the partner's request back this up.\n- **API contract:** lessons are keyed by subject slug. The slugs are `biology`, `chemistry`, `physics` and `combined-science`. The schema is versioned, and no slug is renamed within a major version.\n\n## What's open, and blocks one part of the plan\n\nThe subject mapping between our slugs and the tool's taxonomy has no agreed owner. The partner says we should define it; our team says the tool should. That's a disagreement over who owns the mapping, not a technical question. Nobody with authority over both sides has ruled, so this plan doesn't assume an answer. Instead it keeps the mapping in one place so that either answer fits without rework.\n\n---\n\n## Phase 0: Get the ownership decision (start now, alongside Phase 1)\n\n1. **Find the decider.** Name someone with authority over both sides: a joint product lead, whoever signs the partnership agreement, or an escalation to both sides' sponsors. Until that person exists, the dispute can't close.\n2. **Write a one-page decision brief** with both positions stated neutrally:\n   - **API owns it:** one canonical mapping that every consumer shares. But we'd be encoding knowledge of a taxonomy we don't control, and every taxonomy change on their side would need a release from us.\n   - **Tool owns it:** the mapping sits next to the taxonomy it targets, and our API stays consumer-agnostic. But each future partner has to solve `combined-science` again, possibly in inconsistent ways.\n   - **Third option:** a mapping document that we publish and they approve, versioned separately from the API schema.\n3. **Ask the decider two questions:**\n   - Who owns the mapping?\n   - How should `combined-science` resolve in a taxonomy that doesn't have it? The choices are listed under Phase 2.\n4. **Set a deadline** that falls before Phase 2 has to ship, so the gap can't quietly turn into whatever someone happens to implement.\n\nMy recommendation to put in the brief: the tool owns the mapping, and we publish the slug list plus a plain description of what `combined-science` contains. This keeps the API's contract consumer-agnostic, which is what its versioning rules are designed to protect. It's still only a recommendation, not a ruling.\n\n## Phase 1: Build everything that doesn't depend on the mapping\n\n- **Connection:** auth, rate limits, environments, and pinning the tool to the API's current major version.\n- **Lesson retrieval by slug:** for `biology`, `chemistry` and `physics`, a straight 1:1 mapping is very likely. Build and test these end to end, but still route them through the mapping layer described next rather than hardcoding them.\n- **Mapping layer as its own component:** a small, versioned table of the form `api_slug → [tool_subject_ids]`, with an explicit \"unmapped\" state. Where the table lives (our API, the tool, or a shared config) is a deployment choice made once Phase 0 decides ownership. The code that reads it doesn't change.\n- **Contract tests** against the published slug list, so a new slug in a later major version fails loudly instead of silently vanishing.\n\n## Phase 2: Resolve `combined-science` (after the Phase 0 decision)\n\nWhichever option the decider picks goes into the mapping table:\n\n| Option | Effect for teachers | Risk |\n|---|---|---|\n| Map to biology + chemistry + physics | Combined lessons show up under all three | Duplicates in results; possibly the wrong level for single-science teachers |\n| Map to a parent \"Science\" subject, if the tool has one or adds one | A clean single home | Requires a change to the tool's taxonomy |\n| Leave unmapped and show under a separate filter | No misclassification | Teachers may not find these lessons, which undercuts the stated value |\n\nBefore launch, check the chosen option against the three observed sessions: would those teachers have found what they were looking for?\n\n## Phase 3: Launch and maintain\n\n- A pilot with a small group of teachers, tracking whether searches return results, broken down by subject.\n- Mapping changes are versioned and owned according to the Phase 0 decision, with a named contact on each side.\n- Major-version upgrades of the API trigger a review of the mapping, since that's the only point where slugs can change.\n\n---\n\n**Critical path:** Phases 0 and 1 run in parallel. Only Phase 2 waits on the decision. If Phase 0 stalls, the integration can still launch for the three single sciences with `combined-science` explicitly unmapped. That's a partial release, and it has to be agreed as one rather than left as the default outcome."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 0.5,
+        "passRate": 0,
+        "scoreWithout": 0.5,
+        "passRateWithout": 0,
+        "delta": 0
+      }
+    }
+  ],
+  "aggregates": {
+    "casesTotal": 1,
+    "casesPassed": 1,
+    "overallScore": 0.5,
+    "overallPassRate": 0,
+    "meanDelta": 0
+  }
+}

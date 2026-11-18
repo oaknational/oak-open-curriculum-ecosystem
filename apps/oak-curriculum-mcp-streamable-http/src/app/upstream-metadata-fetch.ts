@@ -158,9 +158,9 @@ export async function fetchUpstreamMetadata(
           span,
         );
         return ok(metadata);
-      } catch (caught) {
-        lastError = toError(caught);
-        if (shouldRetry(caught, attempt === maxRetries - 1)) {
+      } catch (error) {
+        lastError = toError(error);
+        if (shouldRetry(error, attempt === maxRetries - 1)) {
           await new Promise((resolve) => setTimeout(resolve, retryDelayMs * 2 ** attempt));
           continue;
         }

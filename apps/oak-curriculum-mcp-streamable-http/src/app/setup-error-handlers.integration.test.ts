@@ -36,6 +36,16 @@ function createFakeObservability(): Pick<HttpObservability, 'captureHandledError
   };
 }
 
+/** A Sentry handler setup that fails at registration, as a misconfigured SDK would. */
+const throwingSentrySetup: SentryExpressErrorHandlerSetup = () => {
+  throw new Error('Sentry registration boom');
+};
+
+/** A Sentry handler setup that registers without incident. */
+const noopSentrySetup: SentryExpressErrorHandlerSetup = () => {
+  /* noop */
+};
+
 describe('setupErrorHandlers', () => {
   it('registers enriched error logger when no Sentry handler is provided', () => {
     const app = express();
@@ -75,10 +85,6 @@ describe('setupErrorHandlers', () => {
     const log = createFakeLogger();
     const observability = createFakeObservability();
 
-    const throwingSentrySetup: SentryExpressErrorHandlerSetup = () => {
-      throw new Error('Sentry registration boom');
-    };
-
     setupErrorHandlers(app, log, observability, throwingSentrySetup);
 
     expect(useSpy).toHaveBeenCalledTimes(1);
@@ -88,10 +94,6 @@ describe('setupErrorHandlers', () => {
     const app = express();
     const log = createFakeLogger();
     const observability = createFakeObservability();
-
-    const throwingSentrySetup: SentryExpressErrorHandlerSetup = () => {
-      throw new Error('Sentry registration boom');
-    };
 
     setupErrorHandlers(app, log, observability, throwingSentrySetup);
 
@@ -107,10 +109,6 @@ describe('setupErrorHandlers', () => {
     const app = express();
     const log = createFakeLogger();
     const observability = createFakeObservability();
-
-    const noopSentrySetup: SentryExpressErrorHandlerSetup = () => {
-      /* noop */
-    };
 
     setupErrorHandlers(app, log, observability, noopSentrySetup);
 

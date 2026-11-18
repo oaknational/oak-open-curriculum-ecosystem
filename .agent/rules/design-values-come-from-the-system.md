@@ -1,3 +1,13 @@
+---
+classification: situational
+description: Every design value on a consumer surface resolves through the design system (token, role class, or custom property) — no hardcoded values; kit-internal literals are the definitions; retained consumer literals need the owner's named word with a recorded disposition.
+trigger: surface:design — Authoring or reviewing a design value on a consumer surface
+globs:
+  - apps/**/*.{ts,tsx,css,html}
+  - demos/**/*.{ts,tsx,css,html}
+  - packages/design/**
+---
+
 # Design Values Come From the System
 
 Owner-ruled (2026-07-29, in-chat, verbatim): "everywhere we use a value it
@@ -7,7 +17,9 @@ surfaces; kit-internal literals ARE the definitions and are exempt;
 infrastructure values (ports, timeouts, URLs) are not design values.
 
 Provenance: this rule operationalises that owner ruling directly (recorded
-as ruling 20 in the Director sitting block, `director-handoff.md`), routed
+as ruling 20 in the Director sitting block of 2026-07-29, archived verbatim
+at `.agent/memory/operational/archive/director-handoff-current-handoff-state-2026-09-08.md`
+since 2026-09-08), routed
 through [`new-rule-vs-pdr-clause`](new-rule-vs-pdr-clause.md) at minting —
 a standing behavioural rule, not a PDR clause, because it binds every
 authoring/review act on consumer surfaces rather than a governance
@@ -59,8 +71,8 @@ compliant shape.
 - The design-showcase programme ticket and the hub true-up ticket
   (historical anchors, 2026-07-29: MCP-371 and MCP-372) — the enforcement
   carriers when this rule was minted.
-- [`invoke-design-system-expert`](invoke-design-system-expert.md) — the
-  reviewer dispatch that carries this axis.
+- [`invoke-code-experts`](invoke-code-experts.md) — the reviewer roster whose
+  `design-system-expert` row carries this axis.
 - [`no-moving-targets-in-permanent-docs`](no-moving-targets-in-permanent-docs.md)
   — the same single-source-of-truth principle applied to prose.
 

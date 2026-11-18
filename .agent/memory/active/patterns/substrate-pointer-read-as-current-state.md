@@ -3,6 +3,7 @@ name: "Substrate-Pointer Read as Current State"
 polarity: anti-pattern
 use_this_when: "Multi-agent team with rotating roles, multiple substrate surfaces (durable files + comms-event lifecycle fields + identity-tuple fields + roster snapshots) recording state. An agent acts on a value read from one of those surfaces. Check whether the value was current at the moment of the read, or was a pointer whose freshness was last guaranteed at some earlier moment."
 category: agent
+layer: general
 status: stable
 discovered: 2026-05-23
 proven_in: "2026-05-23 Scorched Director window (13:46Z onwards). Five worked instances of the same anti-pattern firing in ~30 minutes, across three distinct substrate surface types (durable file prose; comms-event lifecycle state; identity-tuple field) and in two structural directions (stale-says-active when reality is closed; stale-says-closed when reality is active)."

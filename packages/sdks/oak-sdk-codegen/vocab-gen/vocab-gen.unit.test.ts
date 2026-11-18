@@ -124,8 +124,9 @@ describe('createPipelineConfig', () => {
   });
 });
 
-describe('formatPipelineResult', () => {
-  const createResult = (overrides: Partial<PipelineResult> = {}): PipelineResult => ({
+/** A successful pipeline result with representative counts. */
+function createPipelineResult(overrides: Partial<PipelineResult> = {}): PipelineResult {
+  return {
     success: true,
     filesProcessed: 30,
     totalLessons: 10000,
@@ -141,11 +142,13 @@ describe('formatPipelineResult', () => {
     outputFiles: [],
     durationMs: 5000,
     ...overrides,
-  });
+  };
+}
 
+describe('formatPipelineResult', () => {
   it('renders a failed result as the failure, never as a zeroed clean run', () => {
     const formatted = formatPipelineResult(
-      createResult({
+      createPipelineResult({
         success: false,
         error: 'includeRestricted is not permitted for corpus-producing runs (ADR-224).',
       }),
@@ -158,14 +161,14 @@ describe('formatPipelineResult', () => {
   });
 
   it('reports the restricted-lesson exclusion with its decision provenance', () => {
-    const formatted = formatPipelineResult(createResult());
+    const formatted = formatPipelineResult(createPipelineResult());
 
     expect(formatted).toContain('250 restricted lessons excluded');
     expect(formatted).toContain('MCP-204');
   });
 
   it('formats successful result with all extraction stats', () => {
-    const result = createResult({
+    const result = createPipelineResult({
       outputFiles: ['prerequisite-graph', 'vocabulary-graph'],
     });
 
@@ -184,7 +187,7 @@ describe('formatPipelineResult', () => {
   });
 
   it('formats dry run result', () => {
-    const result = createResult({
+    const result = createPipelineResult({
       dryRun: true,
       durationMs: 1000,
     });
@@ -196,7 +199,7 @@ describe('formatPipelineResult', () => {
   });
 
   it('lists output files when present', () => {
-    const result = createResult({
+    const result = createPipelineResult({
       outputFiles: ['file1.ts', 'file2.ts'],
     });
 

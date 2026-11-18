@@ -1,7 +1,6 @@
 ---
-description: Any potentially expensive fleet (over the default workflow size guideline or ~500k estimated tokens) has its design reviewed by a smaller adversarial fleet before the owner prices it; the review's verdicts travel with the plan to the ratification ask.
-globs: '.agent/plans/**,.agent/skills/**'
-alwaysApply: false
+description: Any fleet or workflow fan-out, whatever its size — the ahead-of-time cost estimate from a pilot leg per phase, the hand yield sample, the tier per phase and the enforced budget fire before every launch; a potentially expensive fleet (over the default workflow size guideline or ~500k estimated tokens) also has its design reviewed by a smaller adversarial fleet before the owner prices it, and the review's verdicts travel with the plan to the ratification ask.
+alwaysApply: true
 ---
 
 Read and follow `.agent/rules/fleet-design-review-before-expensive-fleets.md`.

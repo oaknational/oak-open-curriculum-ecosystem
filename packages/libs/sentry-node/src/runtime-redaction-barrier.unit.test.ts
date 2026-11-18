@@ -7,9 +7,9 @@ import {
   redactSentryBreadcrumb,
   redactSentryEvent,
   redactSentryLog,
-  redactSentrySpan,
   redactSentryTransaction,
 } from './runtime-redaction.js';
+import { redactSentrySpan } from './runtime-redaction-span.js';
 import type {
   ParsedSentryConfig,
   SentryBreadcrumb,
@@ -329,6 +329,11 @@ function buildPiiSpan(): SentrySpanPayload {
 
 // --- Part 1: composition presence ---------------------------------------
 
+/** Locale-aware string order, so two name lists compare as sorted lists. */
+function compareByLocale(a: string, b: string): number {
+  return a.localeCompare(b);
+}
+
 describe('ADR-160 Part 1: composition presence', () => {
   it('wires every BARRIER_HOOKS name as a function on createSentryInitOptions output', () => {
     const options = buildInitOptions();
@@ -623,9 +628,8 @@ describe('ADR-160 bypass validation: omitting a redactor leaves PII visible', ()
     type KeysOfSentryRedactionHooks = keyof SentryRedactionHooks;
     const registryMatchesHookType = (hookName: BarrierHookName): KeysOfSentryRedactionHooks =>
       hookName;
-    const byLocale = (a: string, b: string): number => a.localeCompare(b);
-    expect(BARRIER_HOOKS.map(registryMatchesHookType).toSorted(byLocale)).toEqual(
-      [...BARRIER_HOOKS].toSorted(byLocale),
+    expect(BARRIER_HOOKS.map(registryMatchesHookType).toSorted(compareByLocale)).toEqual(
+      [...BARRIER_HOOKS].toSorted(compareByLocale),
     );
   });
 });

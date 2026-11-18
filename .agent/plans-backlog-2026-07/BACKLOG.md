@@ -27,17 +27,6 @@ Admitted to the reborn corpus in the same PR, under the admission rule:
 | `templates/` (whole directory) | `.agent/plans/templates/` |
 | `agent-tooling/current/pr-state-instrumentation.plan.md` | `.agent/plans/practice/pr-state-instrumentation.plan.md` |
 
-## Path mapping for the paused refounding
-
-`.agent/plans-refounding/` (untouched by this move) carries path
-strings that name the old root — `freeze-rule.json` globs,
-`denominator.v1.json`, ledger path strings, and the g1/g2/g3 packet
-files. These are **deliberately not rewritten** (never rewrite frozen
-history): when the refounding resumes, it re-baselines against this
-mapping — every `.agent/plans/<x>` string in those artefacts resolves
-to `.agent/plans-backlog-2026-07/<x>`, except the four founding-member
-paths above, which resolve to their new-corpus homes.
-
 Live-state pointers (comms events, handoff records, claim intents)
 that name old paths are historical records and stay as written; the
 claims registry was swept at the S2 landing so no OPEN claim points at

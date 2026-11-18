@@ -4,6 +4,7 @@ name: "Route Reviewers by Abstraction Layer, Not File Scope"
 polarity: pattern
 use_this_when: "dispatching specialist reviewers on a finishing pass over a mixed code + docs + ADR lane and choosing which reviewers to invoke"
 category: agent
+layer: general
 proven_in: ".agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md (hygiene closure finishing pass, 2026-04-17)"
 proven_date: 2026-04-17
 barrier:

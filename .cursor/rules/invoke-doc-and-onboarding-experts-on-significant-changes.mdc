@@ -1,6 +1,0 @@
----
-description: On any significant documentation or Practice change — doctrine added, renamed, or rewritten (.agent/directives, practice-core, rules, ADRs/PDRs, governance), onboarding entry points (README, CONTRIBUTING.md, CLAUDE.md), or cross-file renames of commands, skills, or agents — dispatch BOTH docs-adr-expert AND onboarding-expert in parallel before the work is complete. Not for typo fixes, frontmatter-only edits, citation insertions, or source-only changes with auto-generated docs; when in doubt, it is significant. Failure shape — one reviewer alone: each misses a class the other catches.
-alwaysApply: false
----
-
-Read and follow `.agent/rules/invoke-doc-and-onboarding-experts-on-significant-changes.md`.

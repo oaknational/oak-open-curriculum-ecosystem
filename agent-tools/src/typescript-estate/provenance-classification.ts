@@ -9,11 +9,11 @@ import { EstateReviewError } from './errors.js';
 import type { ProvenanceSignal } from './file-model.js';
 import type { Provenance } from './file-vocabulary.js';
 import { findGeneratedOutputRule } from './generated-output-rules.js';
-import type { NonEmptyReadonlyArray, RepoPath } from './scalar-model.js';
+import type { NonEmptyReadonlyArray } from './scalar-model.js';
 import { compareUtf16 } from './utf16-order.js';
 
 export interface ProvenanceClassificationInput {
-  readonly path: RepoPath;
+  readonly path: string;
   readonly sourceText: string | null;
 }
 export interface ProvenanceClassificationResult {
@@ -71,9 +71,9 @@ function compileHeaderMatcher(
       id: configured.id,
       pattern: new RegExp(configured.source, configured.flags),
     };
-  } catch (cause: unknown) {
+  } catch (error: unknown) {
     return new EstateReviewError('CONFIG_INVALID', 'generated-header matcher is invalid', {
-      cause,
+      cause: error,
     });
   }
 }
@@ -115,7 +115,7 @@ function collectSignals(
 }
 
 function pathMatcherMatches(
-  path: RepoPath,
+  path: string,
   matcher: ProvenanceClassificationConfig['generatedPathMatchers'][number],
 ): boolean {
   if (matcher.kind === 'complete-path-segment') {
@@ -185,7 +185,7 @@ function signalId(signal: ProvenanceSignal): string {
   return 'matcherId' in signal ? signal.matcherId : signal.ruleId;
 }
 
-function signalEvidencePath(signal: ProvenanceSignal): RepoPath | undefined {
+function signalEvidencePath(signal: ProvenanceSignal): string | undefined {
   return 'evidencePath' in signal ? signal.evidencePath : undefined;
 }
 
@@ -196,7 +196,7 @@ function signalOffset(
   return signal.kind === 'generated-header' ? signal[field] : undefined;
 }
 
-function signalProducerPaths(signal: ProvenanceSignal): readonly RepoPath[] {
+function signalProducerPaths(signal: ProvenanceSignal): readonly string[] {
   return signal.kind === 'producer-output-rule' ? signal.producerEvidencePaths : [];
 }
 

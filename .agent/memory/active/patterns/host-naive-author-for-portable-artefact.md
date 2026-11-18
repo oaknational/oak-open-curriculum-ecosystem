@@ -3,6 +3,7 @@ name: "To Author a Host-Free Portable Artefact, Choose a Host-Naive Author"
 polarity: pattern
 use_this_when: "Authoring an artefact whose value depends on containing NO host/repo-specific concepts — a portable primer, a Practice-Core doc, a vendor-neutral spec."
 category: architecture
+layer: general
 proven_in: "the working-with-agentic-ai portable primer (2026-06-22, Orbit rides Horizon)"
 proven_date: 2026-06-22
 barrier:

@@ -3,6 +3,7 @@ name: "Test Complexity Signals Wrong Level"
 polarity: anti-pattern
 use_this_when: "A test requires elaborate scaffolding (type predicate hacks, mock capture arrays, wrapper functions, eslint-disable) to reach the code under test"
 category: testing
+layer: general
 proven_in: "apps/oak-curriculum-mcp-streamable-http — handlers-observability setTag test required CapturedTool interface, isToolHandler type predicate, mockImplementation bridge, all to prove a single setTag call. Deleted."
 proven_date: 2026-04-14
 barrier:

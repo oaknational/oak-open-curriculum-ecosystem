@@ -1,7 +1,7 @@
 # Plan-estate refounding — design-panel record (2026-07-06)
 
 **What this is.** The durable record of the design exploration that produced
-[`plan-corpus-refounding.plan.md`](../../plans-backlog-2026-07/product-development-governance/active/plan-corpus-refounding.plan.md):
+`plan-corpus-refounding.plan.md`:
 a six-facet independent design panel plus a four-lens adversarial critic pass (PDR-123
 shape; 10 agents, ~1.28M subagent tokens, zero errors), run against an owner commission
 and the Practice donor estate's live exchange input. Working files were ephemeral

@@ -20,6 +20,10 @@ function recording(): { readonly run: PnpmRunner; readonly calls: Call[] } {
   return { run, calls };
 }
 
+/** A {@link PnpmRunner} that fails the build step and passes every other. */
+const pnpmFailingAtBuild: PnpmRunner = (args) =>
+  args[0] === 'build' ? err(new Error('build boom')) : ok(undefined);
+
 describe('buildWorktree', () => {
   it('runs pnpm install then pnpm build in the worktree, in that order', () => {
     const { run, calls } = recording();
@@ -53,10 +57,7 @@ describe('buildWorktree', () => {
   });
 
   it('returns err naming the path when pnpm build fails', () => {
-    const run: PnpmRunner = (args) =>
-      args[0] === 'build' ? err(new Error('build boom')) : ok(undefined);
-
-    const result = buildWorktree({ worktreePath: WT, runPnpm: run });
+    const result = buildWorktree({ worktreePath: WT, runPnpm: pnpmFailingAtBuild });
 
     expect(isErr(result)).toBe(true);
     if (isErr(result)) {

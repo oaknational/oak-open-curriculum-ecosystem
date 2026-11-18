@@ -8,7 +8,7 @@
   integration, not vendoring; §2 amended 2026-07-19 — overlay completeness model and
   colour-value grammar, evidence-driven; §2 amended 2026-07-20 — dual-gate window,
   comparand filter, fixpoint resolution, ratified gate levels (PR3 cycle 3); §3 amended
-  2026-07-23 — the owned React component tier (owner substance at the sitting); AIP-137.
+  2026-07-23 — the owned React component tier (owner substance at the sitting); AIP-137; §3 amended 2026-09-05 — the region contract's first shipped binding named. Owner gate 3 amended 2026-11-12 — screen-reader checks are an ambition, not a requirement.
 - **Supersedes in part:** [ADR-148](148-design-token-architecture.md) §Source Format (the
   source-of-truth direction only; the three-tier model, contrast gate, and delivery format
   stand)
@@ -331,11 +331,13 @@ Standing rules:
   new hard widgets; grandfathered widgets migrate only when next materially touched —
   "material touch" includes the intra-hub behaviour consolidation and the grandfather-patch
   class convergence above. Grandfathered code is **candidate evidence, not gate-passing
-  evidence**: its current proof (jsdom axe, light-only, no screen-reader records) sits below
-  the estate's own bar until it passes the same checklist as every other path.
+  evidence**: its current proof (jsdom axe, light-only) sits below the estate's own bar
+  until it passes the same checklist as every other path.
 - **The audit doctrine is symmetric.** The wrapped-widget checklist obligation binds every
   construction path — library wrap, hand-rolled APG module, and platform primitive alike;
-  the browser is a vendor too. No path ships on asserted accessibility. **Sequencing
+  the browser is a vendor too. No path ships on asserted accessibility. The checklist's
+  real screen-reader pass is the one part that is an ambition, not a ship condition (owner
+  gate 3, amended 2026-11-12); every check that needs no screen reader binds. **Sequencing
   precondition**: the ADR-147 gate extension (owner-ratified theme cardinality, per-theme
   axe runs, a forced-colors render check, CI promotion) lands **before** the first Base UI
   widget ships — a ship condition without an executor is discharged by assertion, which is
@@ -429,9 +431,11 @@ work uses semantic utilities or `.oak-*` classes, and the component-level arbitr
 
 **Page composition** follows the region contract from the composition doctrine
 (one-html-many-css-compositions.md): page shells are sibling regions with stable identities;
-composition is theme CSS, never markup churn. The contract currently binds no shipped
-surface; its first named binding is the hub shell at the hub's convergence lane (until then
-it is recorded as future-surfaces doctrine — owner fork if that binding should differ).
+composition is theme CSS, never markup churn. The contract's first shipped binding is
+the showcase's composition demonstration (landed 2026-08-18): `demos/oak-design-showcase/app/composition`
+and its frame route `/composition/frame` render `.oak-region` boxes under `.oak-main` once, in
+one order, and re-arrange them by composition map — theme CSS, never markup churn. The hub shell
+binds at the hub's convergence lane (owner fork if that binding should differ).
 
 ### 4. Dependency direction (recorded in the ADR-041 amendment)
 
@@ -485,9 +489,13 @@ kill).
    The implementer's AAA reading was ratified 2026-07-20: high-contrast gates at AAA
    thresholds, light/dark/colour-safe at the AA floor (§2 amendment of 2026-07-20). The
    full verbatim ruling is recorded in the implementing plan's gate table.
-3. **SR audit operator — RULED (owner, 2026-07-19)**: owner-run VoiceOver/Safari at each
-   widget ship, NVDA/Firefox alternating per widget class, batched with pin-bump re-audits,
-   operator named in every checklist record.
+3. **SR audit operator — RULED (owner, 2026-07-19), amended 2026-11-12**: a screen-reader
+   check of a web app (VoiceOver/Safari, NVDA/Firefox) is an ambition, not a requirement,
+   and the work is not scheduled. No widget ship and no pull request waits on one. A change
+   that affects what assistive technology reads lands on its source evidence, its automated
+   checks and its rendered proof, and says what was not proved. The ruling of 2026-07-19
+   (owner-run VoiceOver/Safari at each widget ship, NVDA/Firefox alternating per widget
+   class, batched with pin-bump re-audits) proved unworkable in practice.
 
 ## Alternatives considered
 

@@ -6,7 +6,7 @@
 import { err, ok, isErr, type Result } from '@oaknational/result';
 
 /** Repo-relative path of the canonical skill the digest derives from. */
-export const CANONICAL_SKILL_PATH = '.agent/skills/under-the-hood/SKILL-CANONICAL.md';
+export const CANONICAL_SKILL_PATH = '.agent/skills/orientation/under-the-hood/SKILL-CANONICAL.md';
 
 /** One markdown section: its exact heading line and verbatim body lines. */
 export interface CanonicalSection {

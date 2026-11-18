@@ -1,5 +1,7 @@
 import { isJsonObject } from '../core/json.js';
 
+import { matchesArgvPatternInSegments } from './argument-matcher.js';
+import { segmentCommand, type ShellWord } from '../shell/shell-words.js';
 import {
   PRE_TOOL_USE_EVENT_NAME,
   type BlockedPatternEntry,
@@ -61,8 +63,9 @@ function compileRegexPattern(pattern: string): RegExp | null {
 /**
  * Match a blocked pattern against a command — by token subsequence by
  * default, by case-insensitive substring for entries with
- * `match: 'substring'`, or by case-insensitive regex over the raw command for
- * entries with `match: 'regex'`.
+ * `match: 'substring'`, by case-insensitive regex over the raw command for
+ * entries with `match: 'regex'`, or by the invocation's parsed options for
+ * entries with `match: 'argv'`.
  *
  * Token subsequence catches reordered Git arguments such as
  * `git push origin HEAD --force` for the policy pattern `git push --force`;
@@ -83,11 +86,18 @@ export function findBlockedPattern(
   // Substring probes are whitespace-stripped on BOTH sides so spacing cannot
   // smuggle a shape past the trip (`for (;;)` vs `for(;;)`).
   const strippedCommand = command.toLowerCase().replaceAll(/\s+/gu, '');
+  // Argv mode segments the command once, on first use, however many argv
+  // entries the policy carries.
+  let segments: readonly (readonly ShellWord[])[] | null = null;
+  const segmentsOf = (): readonly (readonly ShellWord[])[] => {
+    segments ??= segmentCommand(command);
+    return segments;
+  };
 
   for (const blockedPattern of blockedPatterns) {
     const entry = normaliseEntry(blockedPattern);
 
-    if (entryMatchesCommand(entry, command, strippedCommand, commandTokens)) {
+    if (entryMatchesCommand(entry, command, strippedCommand, commandTokens, segmentsOf)) {
       return entry;
     }
   }
@@ -101,6 +111,7 @@ function entryMatchesCommand(
   command: string,
   strippedCommand: string,
   commandTokens: readonly string[],
+  segmentsOf: () => readonly (readonly ShellWord[])[],
 ): boolean {
   // Substring mode exists because token equality cannot see inside quoted
   // arguments: the 2026-06-11 founding DOS command carried its busy-loop as
@@ -113,6 +124,16 @@ function entryMatchesCommand(
   // boundary-anchored fingerprints, so no stripping here.
   if (entry.match === 'regex') {
     return compileRegexPattern(entry.pattern)?.test(command) === true;
+  }
+
+  // Argv mode reads the invocation the way the command's own parser does
+  // and matches on the resolved options, so one entry names a destructive
+  // MODE rather than one spelling of it (PR #100's rounds: `--h`, `-Rf`,
+  // `-r --force`, the flag after the operand). A pattern the tables cannot
+  // parse matches nothing (fail-open, like an invalid regex); the
+  // canonical-policy integration test makes that a commit-time failure.
+  if (entry.match === 'argv') {
+    return matchesArgvPatternInSegments(entry.pattern, segmentsOf());
   }
 
   return matchesTokenSubsequence(entry.pattern, commandTokens);

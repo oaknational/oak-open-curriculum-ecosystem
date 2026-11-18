@@ -3,12 +3,21 @@ prompt_id: start-right-thorough
 title: "Start Right (Thorough)"
 type: workflow
 status: active
-last_updated: 2026-04-26
+last_updated: 2026-09-08
 ---
 
 # Start Right (Thorough)
 
 Ground yourself rigorously before beginning significant work.
+
+## Environment Classification
+
+Before any command in this workflow, use the tri-state classification in
+`.agent/directives/cloud-environment-routing.md`. When it selects ChatGPT Work,
+that non-execution profile governs every command-bearing step below: retain all
+reading and static inspection, but skip package, build, test, hook, identity and
+repo-owned collaboration-CLI execution. Platform-native coordination remains
+available. Detector error is a stop, not a fall-through.
 
 ## Foundation Documents
 
@@ -22,11 +31,10 @@ Read and internalise these documents:
    describes a system state, product code is the path that guides the system
    into it
 5. @.agent/directives/testing-strategy.md — test-type taxonomy and shape rules
-6. @.agent/directives/schema-first-execution.md — types flow from schema
+6. @.agent/directives/orientation.md — layering contract and authority order
 7. @.agent/memory/operational/threads/README.md — thread convention + identity discipline (PDR-027)
-8. Scan the [Start Here: 5 ADRs in 15 Minutes](../../../../docs/architecture/architectural-decisions/README.md#start-here-5-adrs-in-15-minutes)
-   block in the ADR index. Open any ADR whose slug matches your current
-   work area from the [full ADR index](../../../../docs/architecture/architectural-decisions/README.md).
+8. Open any ADR whose slug matches your current work area from the
+   the host's ADR index (the decision-record directory under `docs/architecture/`).
 
 **Plans must include regularly re-reading and re-committing to these foundation documents.**
 
@@ -51,7 +59,9 @@ rule. Also scan `.agent/state/collaboration/shared-comms-log.md`, any open
 `.agent/state/collaboration/conversations/*.json` files, and any active
 `.agent/state/collaboration/escalations/*.json` files for the thread
 or areas you will touch. Bootstrap fast-path: if no entries other than
-your own exist, append a "no other agents present" comms event and proceed.
+your own exist and the comms log shows no live peer, the session is solo:
+record your claim and proceed without broadcasts (`use-agent-comms-log`
+§Scale ceremony to the audience).
 On overlap, consult the generated log and decision
 threads before deciding how to coordinate (proceed with caution, ping,
 append/open a decision thread, request a sidebar, record a joint
@@ -59,22 +69,24 @@ decision, open or close an escalation, or ask the owner). Then register
 your own claim covering the areas you intend to touch, using the
 collaboration-state helper when available.
 
-When reading `active-claims.json`, surface any fresh root `commit_queue`
-entries as advisory commit-ordering signals: `intent_id`, `agent_id`, files,
-subject, phase, and expiry. Queue entries are discovery and ordering signals,
-not mechanical refusals.
+Alongside the claims read, surface any fresh advisory commit-queue intents
+(`pnpm agent-tools:commit-queue -- list`) as commit-ordering signals:
+`intent_id`, `agent_id`, files, subject, phase, and expiry. Queue entries
+are discovery and ordering signals, not mechanical refusals.
 
 When writing the thread identity row, prefer an existing owner-assigned
-`agent_name` if it matches this identity. For Codex, derive the full PDR-027
-identity block before both thread registration and shared-state writes:
+`agent_name` if it matches this identity. Derive the full PDR-027 identity
+block before both thread registration and shared-state writes, with the
+platform and model the harness reports:
 
 ```bash
-pnpm agent-tools:collaboration-state -- identity preflight --platform codex --model GPT-5
+pnpm agent-tools:collaboration-state -- identity preflight --platform <platform> --model <model-id>
 ```
 
 For non-Codex platforms or name-only display, use
-`pnpm agent-tools:agent-identity --format display` when a
-`PRACTICE_AGENT_SESSION_ID_*` variable or `CODEX_THREAD_ID` is available; pass
+`pnpm agent-tools:agent-identity --platform <label> --format display` when a
+`PRACTICE_AGENT_SESSION_ID_*` variable, the Claude Code shell's
+`CLAUDE_CODE_SESSION_ID`, or `CODEX_THREAD_ID` is available; pass
 `--seed "<stable-session-seed>"` explicitly when no platform seed is exposed.
 Do not use personal-email fallback.
 
@@ -84,7 +96,7 @@ Codex sessions with `CODEX_THREAD_ID` available must use the derived
 preflight command remains the correctness check.
 
 Before staging or committing, use the always-active commit skill. It
-checks for fresh `commit_queue` entries and `git:index/head` commit-window
+checks for fresh commit-queue intents and `git:index/head` commit-window
 claims, enqueues your intended bundle before staging, verifies the staged
 bundle exactly before `git commit`, and clears the queue entry after success.
 
@@ -94,7 +106,7 @@ Before engaging with the work, scan the active-memory capture surfaces:
 
 - `.agent/memory/active/distilled.md` — refined cross-session lessons
 - `.agent/memory/active/napkin.md` — current session observations
-- `.agent/memory/active/patterns/` — reusable patterns (ADR-150 §Interaction Points)
+- `.agent/memory/active/patterns/` — reusable patterns (the index README lists them)
 - Your own platform's per-user memory and session logs. Scan the
   surface for the platform you are running on:
   - Claude Code: `~/.claude/projects/<project>/memory/`
@@ -137,21 +149,20 @@ that the work shape and validation path are visible before mutation.
 
 ## Practice Box
 
-Check `.agent/practice-core/incoming/` for practice-core files. If present, alert the user — incoming material may carry learnings from another repo. Full integration happens during `/oak-consolidate-docs`.
+Check `.agent/practice-core/incoming/` for practice-core files. If present, alert the user — incoming material may carry learnings from another repo. Full integration happens during the `consolidate-docs` skill.
 
 ## Commit
 
 **Commit** to excellence in systems architecture, software engineering, and developer experience. Choose architectural correctness over short-term expediency. This requires critical and _long-term_ thinking.
 
-## Schema-First Nuance
+## Generated Files
 
-Schema-first is absolute for SDK code calling the upstream API or extracting from the OpenAPI spec. It is acceptable to add additional metadata (e.g., MCP tool descriptions) at sdk-codegen time.
-
-When analysing generated files, always analyse the generator code that produced them — the generator is the source of truth.
+When analysing generated files, always analyse the generator code that produced them — the generator is the source of truth. Here that means the entity graph (`content/entities.json`) and the build that derives every rendered surface from it (the Cardinal Rule in `principles.md`).
 
 ## After Each Piece of Work
 
-1. **Run the full quality gate suite** one gate at a time
+1. **Let the hooks run the full quality gate suite** at commit and push; never run it by
+   hand beside them
 2. **Wait for all gates to complete** before analysing issues
 3. **Analysis must include**: Are there fundamental architectural issues or opportunities for improvement?
 
@@ -173,31 +184,22 @@ Invoke sub-agent reviewers per the `invoke-code-experts` rule after making chang
 
 ## Quality Gates
 
-Run after making changes. Note: some gates trigger earlier ones; caching prevents duplicate work. See @docs/engineering/build-system.md and ADR-065 for caching details.
+The hooks run the gates: the commit hook the light gate, the push hook the
+full aggregate `pnpm check` and then the host's product legs, CI the same
+legs (owner, 2026-10-04: light commit, full push, in both estates). Never run
+them by hand beside the hooks (owner, 2026-09-14, verbatim: "the commit
+triggers the gates, there is no point and a fair amount of cost running the
+gates separately as well, never, ever do that"). The sequence is the
+[gates skill](../../change-custody/gates/SKILL-CANONICAL.md): `pnpm check`
+unrolled one leg per line, then the host's gates outside it; read a failure
+there. Caching details are in @docs/engineering/build-system.md.
+
+Practice health, informational and never a gate:
 
 ```bash
-# From repo root, one at a time, with no filters
-pnpm sdk-codegen        # Makes changes
-pnpm build              # Makes changes
-pnpm type-check
-pnpm lint:fix           # Makes changes
-pnpm format:root        # Makes changes
-pnpm markdownlint:root  # Makes changes
-pnpm subagents:check    # After sub-agent definition changes
-pnpm portability:check  # After platform surface or hook changes
-pnpm repo-validators:check  # Workspace-owned repo validators
-pnpm test
-pnpm test:widget
-pnpm test:e2e
-pnpm test:ui
-pnpm test:a11y
-pnpm test:widget:ui
-pnpm test:widget:a11y
-
-# Practice health — three-zone model, ADR-144
-pnpm practice:fitness:informational  # Four-zone report (always exit 0)
-# Consolidation-closure signal (used by oak-consolidate-docs):
+pnpm practice:fitness:informational  # four-zone report (always exit 0)
+# Consolidation-closure signal (used by the consolidate-docs skill):
 #   pnpm practice:fitness:strict-hard
-# Vocabulary consistency (ADR-144 §Key Principles #1):
+# Vocabulary consistency:
 #   pnpm practice:vocabulary
 ```

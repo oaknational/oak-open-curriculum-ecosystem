@@ -65,5 +65,5 @@ The test: a genuine open question names a *fork in future direction nobody can
 close yet* — not a task to schedule, not a decision the owner has effectively
 already made, not a lesson already learned.
 
-The register is currently empty. New entries append below as `## Q-NNN — <title>` sections;
-continue the Q-numbering from the git history (Q-013 was the last minted).
+New entries append below as `## Q-NNN — <title>` sections; continue the Q-numbering from
+the git history.

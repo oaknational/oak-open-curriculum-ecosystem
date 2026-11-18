@@ -6,6 +6,7 @@
  * This graph helps curriculum planners ensure NC coverage and identify gaps.
  */
 import type { Logger } from '@oaknational/logger';
+import type { FileSystemPort } from '../../io/file-system-port.js';
 import type { ExtractedNCStatement } from '../extractors/index.js';
 import {
   serializeDatasetToJson,
@@ -225,11 +226,12 @@ export function serializeNCCoverageGraph(graph: NCCoverageGraph): string {
 export async function writeNCCoverageGraphAsJson(
   graph: NCCoverageGraph,
   outputDir: string,
+  fs: FileSystemPort,
   logger?: Logger,
 ): Promise<string> {
   logger?.info('bulk.writer.write_nc_coverage_graph', {
     outputDir,
     sourceVersion: graph.sourceVersion,
   });
-  return writeJsonDataset(ncCoverageGraphDescriptor, graph, outputDir, logger);
+  return writeJsonDataset(ncCoverageGraphDescriptor, graph, outputDir, fs, logger);
 }

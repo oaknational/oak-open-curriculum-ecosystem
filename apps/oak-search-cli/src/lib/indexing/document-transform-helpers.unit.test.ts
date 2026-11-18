@@ -9,6 +9,7 @@ import {
   extractLessonDocumentFields,
   extractRollupDocumentFields,
 } from './document-transform-helpers';
+import { normaliseYears } from './document-transform-utils';
 
 /**
  * Builds a typed unit summary fixture.
@@ -128,11 +129,10 @@ describe('document-transform-helpers', () => {
   describe('extractRollupDocumentFields', () => {
     it('extracts all rollup document fields', () => {
       const summary = buildUnitSummary();
-      const normaliseYears = (year: string | number, yearSlug: string) =>
-        yearSlug ? [String(year)] : [String(year)];
       const fields = extractRollupDocumentFields(summary, normaliseYears);
 
       expect(fields.unitSlug).toBe('unit-slug');
+      expect(fields.years).toEqual(['Year 6']);
       expect(fields.unitTitle).toBe('Unit Title');
       expect(fields.oakUrl).toBe(
         'https://www.thenational.academy/teachers/curriculum/maths-primary/units/unit-slug',

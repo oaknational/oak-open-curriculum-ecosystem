@@ -90,21 +90,21 @@ async function loadJson(root: string, fileName: string): Promise<unknown> {
 
 function parseKeyStages(value: unknown): KeyStage[] {
   if (!Array.isArray(value)) {
-    throw new Error('key-stages fixture must be an array');
+    throw new TypeError('key-stages fixture must be an array');
   }
   return value.map((entry) => ensureKeyStage(entry, 'Invalid key stage in sandbox fixture'));
 }
 
 function parseSubjects(value: unknown): SearchSubjectSlug[] {
   if (!Array.isArray(value)) {
-    throw new Error('subjects fixture must be an array');
+    throw new TypeError('subjects fixture must be an array');
   }
   return value.map((entry) => ensureSubject(entry, 'Invalid subject in sandbox fixture'));
 }
 
 function parseUnits(value: unknown): FixtureUnitDescriptor[] {
   if (!Array.isArray(value)) {
-    throw new Error('units fixture must be an array');
+    throw new TypeError('units fixture must be an array');
   }
   return value.map((entry) => parseUnitDescriptor(entry));
 }
@@ -121,7 +121,7 @@ function parseUnitDescriptor(value: unknown): FixtureUnitDescriptor {
 
 function parseLessonGroups(value: unknown): FixtureLessonGroup[] {
   if (!Array.isArray(value)) {
-    throw new Error('lessons fixture must be an array');
+    throw new TypeError('lessons fixture must be an array');
   }
   return value.map((entry) => parseLessonGroup(entry));
 }
@@ -130,7 +130,7 @@ function parseLessonGroup(value: unknown): FixtureLessonGroup {
   const record = parseStringKeyedObject(value, 'lesson group entries must be objects');
   const lessonsValue = record.lessons;
   if (!Array.isArray(lessonsValue)) {
-    throw new Error('lessons must be an array within lesson groups');
+    throw new TypeError('lessons must be an array within lesson groups');
   }
   return {
     keyStage: ensureKeyStage(record.keyStage, 'Invalid lesson group keyStage'),

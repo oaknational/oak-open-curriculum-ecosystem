@@ -8,17 +8,11 @@ import {
   BASELINE_COMMIT,
   BASELINE_REGISTRY_SHA256,
   CURRENT_SOURCE_ANCHORS,
-  CURRENT_SOURCE_DELTA_INVENTORY,
 } from './current-source-config.js';
 import {
   buildCurrentSourceAdditions,
   currentSourceAdditionFiles,
 } from './current-source-additions.js';
-import {
-  buildCurrentSourceDeltaInventory,
-  deriveCurrentDeltaFiles,
-  readDeltaContent,
-} from './current-source-delta-inventory.js';
 import { buildAnchoredDispositions } from './current-source-dispositions.js';
 import {
   currentTargetsByAuditId,
@@ -48,7 +42,6 @@ type RegistrationWalk = Awaited<ReturnType<typeof walkHttpRegistrationRoot>>;
 export interface RecomputedCurrentSource {
   readonly serialised: string;
   readonly anchorSerialised: string | null;
-  readonly deltaInventorySerialised: string;
   readonly reportSerialised: string;
   readonly itemCount: number;
 }
@@ -111,13 +104,12 @@ function buildTruthSet(
       currentEvidence: [
         registrationRoot.rootRef,
         registrationRoot.registrationRef,
-        CURRENT_SOURCE_DELTA_INVENTORY,
         'apps/oak-curriculum-mcp-streamable-http/src/served-surface/served-surface.ts',
         'packages/sdks/oak-curriculum-sdk/src/mcp/guidance-resources/agent-guidance-resources.ts',
       ],
       evidenceCeiling: [
         'Every immutable phase-(a) id has reviewed item-level token anchors, not source-file existence alone.',
-        'Post-baseline additions are source-owned review entries; governed source deltas are recomputed against a file-and-item inventory.',
+        'Post-baseline additions are source-owned review entries.',
         'Workspace scope and word authority are independent: scope follows workspace_scope; authority follows source_locus.',
         'The HTTP registration root is recomputed over an in-memory MCP transport; allowlist policy alone is not proof of liveness.',
         'Exact channel bindings cover the prompt-to-guidance replacements; later migration slices add bindings for other rows.',
@@ -198,21 +190,12 @@ export async function recomputeCurrentSource(
     context.additions,
     context.registrationWalk.root,
   );
-  const changedFiles = deriveCurrentDeltaFiles(repoRoot, BASELINE_COMMIT);
-  const deltaInventory = buildCurrentSourceDeltaInventory({
-    baselineCommit: BASELINE_COMMIT,
-    changedFiles,
-    contentByFile: readDeltaContent(repoRoot, BASELINE_COMMIT, changedFiles),
-    current: context.dispositions.current,
-    additions: context.additions,
-  });
   const report = normaliseLineEndings(await readFile(path.join(repoRoot, AUDIT_REPORT), 'utf8'));
   return {
     serialised: `${JSON.stringify(truthSet, null, 2)}\n`,
     anchorSerialised: refreshAnchors
       ? `${JSON.stringify(context.anchorManifest, null, 2)}\n`
       : null,
-    deltaInventorySerialised: `${JSON.stringify(deltaInventory, null, 2)}\n`,
     reportSerialised: updateCurrentSourceReportSummary(report, truthSet.summary),
     itemCount: truthSet.summary.itemCount,
   };

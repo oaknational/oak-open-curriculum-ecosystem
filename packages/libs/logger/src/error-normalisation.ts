@@ -77,17 +77,14 @@ function normaliseSymbol(error: symbol): NormalizedError {
   });
 }
 
+/**
+ * Normalises a thrown primitive; its message is the primitive's string form
+ * (`'true'`, `'42'`, a bigint's decimal digits).
+ */
 function normalisePrimitive(error: string | number | boolean | bigint): NormalizedError {
   return createNormalizedError({
     name: 'Error',
-    message:
-      typeof error === 'boolean'
-        ? error
-          ? 'true'
-          : 'false'
-        : typeof error === 'bigint'
-          ? error.toString()
-          : String(error),
+    message: String(error),
   });
 }
 
@@ -96,11 +93,12 @@ function normalizeNullishError(error: unknown): NormalizedError | undefined {
 }
 
 function normalizePrimitiveError(error: unknown): NormalizedError | undefined {
-  if (typeof error === 'string' || typeof error === 'number' || typeof error === 'boolean') {
-    return normalisePrimitive(error);
-  }
-
-  if (typeof error === 'bigint') {
+  if (
+    typeof error === 'string' ||
+    typeof error === 'number' ||
+    typeof error === 'boolean' ||
+    typeof error === 'bigint'
+  ) {
     return normalisePrimitive(error);
   }
 

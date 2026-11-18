@@ -120,31 +120,91 @@
           "reappraisal": "Stage by explicit pathspec so a commit never bundles parallel-thread or unrelated work; name the exact files."
         },
         {
+          "pattern": "rm -rf",
+          "concept": "filesystem-destruction",
+          "citation": ".agent/rules/unattended-seats-never-prompt.md",
+          "reappraisal": "Nothing in the estate is removed by force: a scratch directory is session-local and needs no force, a worktree is removed by `git worktree remove` whose dirty-refusal is a safety net, and work is never removed with git or the shell. A forced removal that seems necessary is a routed request to the Director, never a prompt for an absent owner."
+        },
+        {
+          "pattern": "rm -fr",
+          "concept": "filesystem-destruction",
+          "citation": ".agent/rules/unattended-seats-never-prompt.md",
+          "reappraisal": "Nothing in the estate is removed by force: a scratch directory is session-local and needs no force, a worktree is removed by `git worktree remove` whose dirty-refusal is a safety net, and work is never removed with git or the shell. A forced removal that seems necessary is a routed request to the Director, never a prompt for an absent owner."
+        },
+        {
+          "pattern": "rm -Rf",
+          "concept": "filesystem-destruction",
+          "citation": ".agent/rules/unattended-seats-never-prompt.md",
+          "reappraisal": "Nothing in the estate is removed by force: a scratch directory is session-local and needs no force, a worktree is removed by `git worktree remove` whose dirty-refusal is a safety net, and work is never removed with git or the shell. A forced removal that seems necessary is a routed request to the Director, never a prompt for an absent owner."
+        },
+        {
+          "pattern": "rm -fR",
+          "concept": "filesystem-destruction",
+          "citation": ".agent/rules/unattended-seats-never-prompt.md",
+          "reappraisal": "Nothing in the estate is removed by force: a scratch directory is session-local and needs no force, a worktree is removed by `git worktree remove` whose dirty-refusal is a safety net, and work is never removed with git or the shell. A forced removal that seems necessary is a routed request to the Director, never a prompt for an absent owner."
+        },
+        {
+          "pattern": "rm -r -f",
+          "concept": "filesystem-destruction",
+          "citation": ".agent/rules/unattended-seats-never-prompt.md",
+          "reappraisal": "Nothing in the estate is removed by force: a scratch directory is session-local and needs no force, a worktree is removed by `git worktree remove` whose dirty-refusal is a safety net, and work is never removed with git or the shell. A forced removal that seems necessary is a routed request to the Director, never a prompt for an absent owner."
+        },
+        {
+          "pattern": "rm -f -r",
+          "concept": "filesystem-destruction",
+          "citation": ".agent/rules/unattended-seats-never-prompt.md",
+          "reappraisal": "Nothing in the estate is removed by force: a scratch directory is session-local and needs no force, a worktree is removed by `git worktree remove` whose dirty-refusal is a safety net, and work is never removed with git or the shell. A forced removal that seems necessary is a routed request to the Director, never a prompt for an absent owner."
+        },
+        {
+          "pattern": "rm --recursive --force",
+          "concept": "filesystem-destruction",
+          "citation": ".agent/rules/unattended-seats-never-prompt.md",
+          "reappraisal": "Nothing in the estate is removed by force: a scratch directory is session-local and needs no force, a worktree is removed by `git worktree remove` whose dirty-refusal is a safety net, and work is never removed with git or the shell. A forced removal that seems necessary is a routed request to the Director, never a prompt for an absent owner."
+        },
+        {
+          "pattern": "rm --force --recursive",
+          "concept": "filesystem-destruction",
+          "citation": ".agent/rules/unattended-seats-never-prompt.md",
+          "reappraisal": "Nothing in the estate is removed by force: a scratch directory is session-local and needs no force, a worktree is removed by `git worktree remove` whose dirty-refusal is a safety net, and work is never removed with git or the shell. A forced removal that seems necessary is a routed request to the Director, never a prompt for an absent owner."
+        },
+        {
+          "pattern": "git worktree remove --force",
+          "concept": "worktree-destruction",
+          "citation": ".agent/rules/worktree-hygiene.md",
+          "reappraisal": "The dirty-refusal of `git worktree remove` is a safety net: read the status, prove or move what it names, then remove plainly. Force discards in-flight work beyond recovery."
+        },
+        {
+          "pattern": "git worktree remove -f",
+          "concept": "worktree-destruction",
+          "citation": ".agent/rules/worktree-hygiene.md",
+          "reappraisal": "The dirty-refusal of `git worktree remove` is a safety net: read the status, prove or move what it names, then remove plainly. Force discards in-flight work beyond recovery."
+        },
+        {
           "pattern": "for(;;)",
           "concept": "host-dos-unbounded-load",
           "citation": ".agent/rules/no-unbounded-host-load.md",
-          "reappraisal": "The host is a shared substrate \u2014 unbounded load is a denial of service against the owner and every session. Provoke effects in-process (fake timers, injected delays); if load is truly needed it must be timeout-bounded, niced, announced, and reaped with a verified census.",
+          "reappraisal": "The host is a shared substrate — unbounded load is a denial of service against the owner and every session. Provoke effects in-process (an injected clock or scheduler, injected delays); if load is truly needed it must be timeout-bounded, niced, announced, and reaped with a verified census.",
           "match": "substring"
         },
         {
           "pattern": "while(1)",
           "concept": "host-dos-unbounded-load",
           "citation": ".agent/rules/no-unbounded-host-load.md",
-          "reappraisal": "The host is a shared substrate \u2014 unbounded load is a denial of service against the owner and every session. Provoke effects in-process (fake timers, injected delays); if load is truly needed it must be timeout-bounded, niced, announced, and reaped with a verified census.",
+          "reappraisal": "The host is a shared substrate — unbounded load is a denial of service against the owner and every session. Provoke effects in-process (an injected clock or scheduler, injected delays); if load is truly needed it must be timeout-bounded, niced, announced, and reaped with a verified census.",
           "match": "substring"
         },
         {
           "pattern": ":(){ :|:&",
           "concept": "host-dos-forkbomb",
           "citation": ".agent/rules/no-unbounded-host-load.md",
-          "reappraisal": "The host is a shared substrate \u2014 unbounded load is a denial of service against the owner and every session. Provoke effects in-process (fake timers, injected delays); if load is truly needed it must be timeout-bounded, niced, announced, and reaped with a verified census.",
+          "reappraisal": "The host is a shared substrate — unbounded load is a denial of service against the owner and every session. Provoke effects in-process (an injected clock or scheduler, injected delays); if load is truly needed it must be timeout-bounded, niced, announced, and reaped with a verified census.",
           "match": "substring"
         },
         {
           "pattern": "stress-ng",
           "concept": "host-dos-unbounded-load",
           "citation": ".agent/rules/no-unbounded-host-load.md",
-          "reappraisal": "The host is a shared substrate \u2014 unbounded load is a denial of service against the owner and every session. Provoke effects in-process (fake timers, injected delays); if load is truly needed it must be timeout-bounded, niced, announced, and reaped with a verified census.",
+          "reappraisal": "The host is a shared substrate — unbounded load is a denial of service against the owner and every session. Provoke effects in-process (an injected clock or scheduler, injected delays); if load is truly needed it must be timeout-bounded, niced, announced, and reaped with a verified census.",
           "match": "substring"
         },
         {
@@ -155,7 +215,7 @@
           "match": "regex"
         }
       ],
-      "description": "Block shell commands that destroy history, bypass safety gates, overwrite live working-tree edits, discard stashed work, or stage by wildcard. Each entry carries a `concept` (the pattern family it is a fingerprint of), a `citation` (the doctrinal anchor), and a `reappraisal` (the positive direction the firing signals) so the deny message TEACHES: it names a concept to reappraise and steers the agent away from reaching for a sibling destructive command, rather than only refusing (PDR-044 \u00a7Innate immunity, as amended; the doctrine that an enforcement surface must carry the advisory-response content, not only a refusal). The concepts: `history-destruction` (`git push --force` / `-f`, `git rebase -i`); `gate-bypass` (`git --no-verify`, `git --no-gpg-sign`); `worktree-destruction` (`git reset --hard`, `git clean -fd`, checkout/restore variants \u2014 these silently throw away in-flight edits, including peer-agent edits in parallel sessions, and `git fsck --lost-found` cannot recover them); `stash-discard` (`git stash drop` / `clear`); `wildcard-staging` (`git add -A` / `--all` / `.`, blocked under the explicit-pathspec discipline so a commit cannot accidentally bundle parallel-thread or unrelated work); `host-dos-unbounded-load` / `host-dos-forkbomb` (inline busy-loops, fork bombs, load tools \u2014 the host is a shared substrate and unbounded load is a denial of service against the owner and every session; see `.agent/rules/no-unbounded-host-load.md`); `silent-output-mangling` (ripgrep's short replace flag \u2014 a clustered flag string starting with r parses as replace-with-remainder and silently rewrites match output; spell flags separately, or use the explicit long form when replacement is genuinely intended). We never use git to remove work; forward-going filesystem changes only. Entries may be bare strings (legacy) or objects; `concept` and `reappraisal` are optional at load time so a missing value never fails the guard closed (which would brick the worktree on a stale-dist/new-policy mismatch \u2014 a stale Bash guard blocks every command including the rebuild), and the `validate-policy-reappraisal` repo validator enforces their presence on object entries at commit-time. See `.agent/rules/never-use-git-to-remove-work.md`, `.agent/rules/no-verify-requires-fresh-authorisation.md`, and `.agent/rules/stage-by-explicit-pathspec.md`."
+      "description": "Block shell commands that destroy history, bypass safety gates, overwrite live working-tree edits, discard stashed work, or stage by wildcard. Each entry carries a `concept` (the pattern family it is a fingerprint of), a `citation` (the doctrinal anchor), and a `reappraisal` (the positive direction the firing signals) so the deny message TEACHES: it names a concept to reappraise and steers the agent away from reaching for a sibling destructive command, rather than only refusing (PDR-044 \u00a7Innate immunity, as amended; the doctrine that an enforcement surface must carry the advisory-response content, not only a refusal). The concepts: `history-destruction` (`git push --force` / `-f`, `git rebase -i`); `gate-bypass` (`git --no-verify`, `git --no-gpg-sign`); `worktree-destruction` (`git reset --hard`, `git clean -fd`, checkout/restore variants \u2014 these silently throw away in-flight edits, including peer-agent edits in parallel sessions, and `git fsck --lost-found` cannot recover them); `stash-discard` (`git stash drop` / `clear`); `wildcard-staging` (`git add -A` / `--all` / `.`, blocked under the explicit-pathspec discipline so a commit cannot accidentally bundle parallel-thread or unrelated work); `host-dos-unbounded-load` / `host-dos-forkbomb` (inline busy-loops, fork bombs, load tools \u2014 the host is a shared substrate and unbounded load is a denial of service against the owner and every session; see `.agent/rules/no-unbounded-host-load.md`); `silent-output-mangling` (ripgrep's short replace flag \u2014 a clustered flag string starting with r parses as replace-with-remainder and silently rewrites match output; spell flags separately, or use the explicit long form when replacement is genuinely intended); `filesystem-destruction` (`rm -rf` / `rm -fr`, with the forced worktree removal under `worktree-destruction` — nothing in the estate is removed by force, and a forced removal that seems necessary is a routed request to the Director, never a prompt for an absent owner; see `.agent/rules/unattended-seats-never-prompt.md`). We never use git to remove work; forward-going filesystem changes only. Entries may be bare strings (legacy) or objects; `concept` and `reappraisal` are optional at load time so a missing value never fails the guard closed (which would brick the worktree on a stale-dist/new-policy mismatch \u2014 a stale Bash guard blocks every command including the rebuild), and the `validate-policy-reappraisal` repo validator enforces their presence on object entries at commit-time. See `.agent/rules/never-use-git-to-remove-work.md`, `.agent/rules/no-verify-requires-fresh-authorisation.md`, and `.agent/rules/stage-by-explicit-pathspec.md`."
     },
     "preToolUseContent": {
       "blocked_patterns": [
@@ -348,7 +408,7 @@
           ],
           "exclude_paths": [
             "important-state-not-in-temp-files.md",
-            "hooks/policy.json",
+            "./.agent/hooks/policy.json",
             "validate-no-machine-local-paths"
           ],
           "citation": "principles.md \u00a7No machine-local paths; docs/governance/safety-and-security.md \u00a7Machine-local paths; org policy \u2014 no PII (a user-home absolute path leaks a username)",
@@ -371,7 +431,7 @@
     "claude_code": {
       "status": "supported",
       "native_surface": ".claude/settings.json hooks.PreToolUse (Bash, Edit, and Write matchers via the verdict shim .claude/hooks/run-pretooluse-guard.mjs)",
-      "notes": "The Bash command guard and the Edit/Write content guard (owner-approval marker plus concept-grouped doctrine blocks) are natively activated through the shared prebuilt dispatcher artefact. Read and UserPromptSubmit run separate best-effort secrets scans. sessionStart and preCommit remain documented-only because grounding and quality-gate reminders already live in rules, skills, and onboarding flows.",
+      "notes": "The Bash command guard and the Edit/Write content guard (owner-approval marker plus concept-grouped doctrine blocks) are natively activated through the shared prebuilt dispatcher artefact. Read and UserPromptSubmit run separate best-effort secrets scans. PreCompact registers an observer, not a guard: it has no key under hooks, answers continue on every path it controls, and records the compaction payload to a machine-local owner-only log (see .agent/hooks/README.md, PreCompact observer). sessionStart and preCommit remain documented-only because grounding and quality-gate reminders already live in rules, skills, and onboarding flows.",
       "grounded_at": "2026-08-03",
       "pin": {
         "kind": "pinned",

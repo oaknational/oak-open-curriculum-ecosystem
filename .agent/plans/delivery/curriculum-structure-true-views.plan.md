@@ -18,7 +18,7 @@ depends_on:
   - plan: prerequisite-claim-removal
     kind: blocking
 owner_gates: []
-last_updated: 2026-08-31
+last_updated: 2026-09-09
 ---
 
 # Curriculum structure true views
@@ -33,11 +33,15 @@ already serve the true relationships: `get-programmes-units` and
 programme factors; `get-units-summary` returns a unit's prior-knowledge
 requirement statements, threads, national-curriculum statements, and
 its lessons in order; `get-threads-units` returns a thread's unit
-membership (its response carries no order field — the authoritative
-within-thread order `thread_units.order` is published on no surface,
-which is `upstream-curriculum-data-exposure`'s first request);
-`get-thread-progressions` serves the year-derived thread progression
-with its derivation honestly stated.
+membership (its response carries no order field, and the endpoint's
+own `unitOrder` advertisement is an overclaim — the exposure of
+`thread_units.order` itself is `upstream-curriculum-data-exposure`'s
+first request); `get-thread-progressions` serves each thread's units
+in Oak's authored curriculum order, one run per subject — years
+ascending, the bulk sequence array's authored order within a year,
+"All years" units last — with its derivation and its KS4 boundary
+(several programmes sharing one array) stated (upstream MCP-681,
+incorporated 2026-09-09).
 Rebuilding any of those from bulk data would create competing surfaces
 that can drift (first question: simpler without compromise — reuse).
 When this lands, the served guidance points structural questions at
@@ -97,9 +101,11 @@ fields; nothing serves inferred relationships.
    a real bulk file. Proof: `repo-safe` — unit/integration tests.
 3. Post-removal served guidance points sequence-order, lesson-order,
    thread-membership, and per-unit prior-knowledge questions at the
-   existing generated tools by name, states that authoritative
-   within-thread order is published on no surface (the claim boundary
-   until upstream exposure lands), and no served view built by this
+   existing generated tools by name, states the served thread order's
+   derivation and its boundary (the bulk sequence array's authored
+   within-year order; a merged order for the KS4 years where several
+   programmes share one array; no order on the per-thread REST
+   endpoint until upstream exposure lands), and no served view built by this
    plan duplicates the existing tools. Proof: `repo-safe` — review of
    the served guidance and contracts plus the existing tools' own
    tests.

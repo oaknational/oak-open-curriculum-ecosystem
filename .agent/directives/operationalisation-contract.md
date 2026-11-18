@@ -25,8 +25,8 @@ has to climb upward to grasp the load-bearing claim.
 | Level | Surface | What lives here |
 | --- | --- | --- |
 | **1. Principles** | `.agent/directives/principles.md` | The generative WHY — short, load-bearing claims that generate everything below. |
-| **2. Operationalisation Mechanisms** | `.agent/rules/`, `.agent/hooks/`, `.agent/sub-agents/`, `.agent/skills/`, ESLint plugins, ADRs, PDRs, governance docs, patterns library | The HOW — focused per-mechanism files that enforce, encode, or elaborate one principle. |
-| **3. Worked Examples + Recipes** | Per-instance files indexed at the parent mechanism (e.g. patterns library entries, recipe pages in governance docs) | The *what-it-looks-like* — small focused per-instance files. |
+| **2. Operationalisation Mechanisms** | `.agent/rules/`, `.agent/hooks/`, `.agent/sub-agents/`, `.agent/skills/`, ESLint plugins, ADRs, PDRs, reference docs, patterns library | The HOW — focused per-mechanism files that enforce, encode, or elaborate one principle. |
+| **3. Worked Examples + Recipes** | Per-instance files indexed at the parent mechanism (e.g. patterns library entries, recipe pages under `.agent/reference/`) | The *what-it-looks-like* — small focused per-instance files. |
 
 A principle may have **zero or more** Level 2 mechanisms. Layered
 defences — a principle enforced by both a hook AND a rule AND a
@@ -44,13 +44,13 @@ Mechanisms by firing moment:
 | --- | --- | --- |
 | Rules | `.agent/rules/*.md` | Passive, every session |
 | Hooks | `.agent/hooks/policy.json` | Write-time (innate immunity) |
-| Sub-agents / specialist reviewers | `.claude/agents/`, `.cursor/`, `.agents/` | Review-time (adaptive immunity) |
-| ESLint custom plugins | `packages/core/oak-eslint/` | Lint-time |
+| Sub-agents / specialist reviewers | `.agent/sub-agents/`, rendered to the host's platform adapters (P1) | Review-time (adaptive immunity) |
+| ESLint custom plugins | the host's ESLint standards plugin (P19) | Lint-time |
 | Quality gates | `pnpm check`, `pnpm test`, etc. | Pre-commit + CI |
 | Skills | `.agent/skills/*` | Workflow-time |
-| ADRs | `docs/architecture/architectural-decisions/` | Architectural-decision record |
+| ADRs | the host's decision-record directory (P7) | Architectural-decision record |
 | PDRs | `.agent/practice-core/decision-records/` | Practice-decision record |
-| Governance docs | `docs/governance/*.md` | Detailed elaboration |
+| Reference docs | `.agent/reference/*.md` | Detailed elaboration |
 | Patterns library | `.agent/memory/active/patterns/*.md` | Recurring solutions / failures |
 | Distilled / pending-graduations | `.agent/memory/active/`, `operational/` | Learning-loop staging |
 
@@ -102,9 +102,8 @@ to its candidate parent. Below either threshold, inline is fine.
 | Level 3 | <80 lines | 120 | One scenario per file |
 
 Limits are advisory targets for the contract. Per-file fitness
-frontmatter is the binding mechanism; setting frontmatter on each
-file is its own graduation pass tracked under the fitness-frontmatter
-manifest sweep work.
+frontmatter is the binding mechanism, and every file in the directives
+tier carries it (OCE's tier completed 2026-09-19).
 
 ## Index Discipline
 
@@ -129,7 +128,7 @@ mechanism.
 
 Without the upward link, drift accumulates silently — a rule's
 meaning shifts without the principle moving, or vice versa.
-`/oak-consolidate-docs` audits this alignment at consolidation time.
+The `consolidate-docs` skill audits this alignment at consolidation time.
 
 ## Citation Directionality
 

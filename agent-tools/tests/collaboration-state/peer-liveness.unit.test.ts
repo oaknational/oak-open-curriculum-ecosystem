@@ -250,30 +250,31 @@ describe('peerHeartbeatLiveness — peer heartbeat-silence classification over t
   });
 });
 
-describe('peerHeartbeatLiveness — ADR-186 lifecycle-shaped heartbeats (dual-filter consumer contract)', () => {
-  function lifecycleHeartbeatAt(
-    author: CollaborationAgentId,
-    ageMs: number,
-    branch = 'feat/lifecycle-lane',
-  ): CommsEvent {
-    eventCounter += 1;
-    return {
-      schema_version: '2.0.0',
-      event_id: `evt-${eventCounter}`,
-      created_at: new Date(NOW_MS - ageMs).toISOString(),
-      kind: 'lifecycle',
-      event_type: 'heartbeat',
-      occurred_at: new Date(NOW_MS - ageMs).toISOString(),
-      author,
-      agent_id: author,
-      thread: 'estate-coordination',
-      claim_id: 'claim-1',
-      title: `Heartbeat: ${author.agent_name}`,
-      subject: `Heartbeat: ${author.agent_name}`,
-      body: `active; claim=x; intent=x; branch=${branch}; cycle=c`,
-    };
-  }
+/** An untagged lifecycle-shaped heartbeat by the author, the given age before NOW_MS. */
+function lifecycleHeartbeatAt(
+  author: CollaborationAgentId,
+  ageMs: number,
+  branch = 'feat/lifecycle-lane',
+): CommsEvent {
+  eventCounter += 1;
+  return {
+    schema_version: '2.0.0',
+    event_id: `evt-${eventCounter}`,
+    created_at: new Date(NOW_MS - ageMs).toISOString(),
+    kind: 'lifecycle',
+    event_type: 'heartbeat',
+    occurred_at: new Date(NOW_MS - ageMs).toISOString(),
+    author,
+    agent_id: author,
+    thread: 'estate-coordination',
+    claim_id: 'claim-1',
+    title: `Heartbeat: ${author.agent_name}`,
+    subject: `Heartbeat: ${author.agent_name}`,
+    body: `active; claim=x; intent=x; branch=${branch}; cycle=c`,
+  };
+}
 
+describe('peerHeartbeatLiveness — ADR-186 lifecycle-shaped heartbeats (dual-filter consumer contract)', () => {
   it('classifies a peer from an UNTAGGED lifecycle-shaped heartbeat — the lifecycle clause alone carries it', () => {
     const reports = peerHeartbeatLiveness({
       events: [lifecycleHeartbeatAt(peerA, 60_000)],

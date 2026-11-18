@@ -62,7 +62,7 @@ has not begun.
 noun-agentive wordlists under the v2 curation gates; (3) register v3 as a
 digest-pinned era in `agent-tools/src/core/agent-identity/` and activate it
 under owner taste review.
-**Thread**: [`agent-naming`](../../../memory/operational/threads/agent-naming.next-session.md)
+**Thread**: [`agent-naming`](../../../memory/operational/threads/paused/agent-naming.next-session.md)
 **Source decision**: [`naming-v3-shape-sample-sheets-2026-06-12.md`](../../../reports/agentic-engineering/naming-v3-shape-sample-sheets-2026-06-12.md)
 (shape **C — noun + agentive**, owner-chosen 2026-06-12)
 **Predecessor**: `agent-naming-schema-v2.plan.md` (`../../../plans-old-archive/agent-tooling/archive/completed/agent-naming-schema-v2.plan.md`)

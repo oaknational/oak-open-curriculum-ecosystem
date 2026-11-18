@@ -140,7 +140,7 @@ chars).
 **Graduation candidates** (`due` items ready to land at Layer 2):
 
 1. **Commit-queue `record-staged` self-modification recursion** —
-   CLI hint or doc note in `.agent/skills/commit/SKILL.md`. Single-
+   CLI hint or doc note in `.agent/skills/change-custody/commit/SKILL-CANONICAL.md`. Single-
    step landing; small.
 2. **Hook tightening for `no-moving-targets-in-permanent-docs`** —
    prose-narrative vs code-block backtick context distinction.

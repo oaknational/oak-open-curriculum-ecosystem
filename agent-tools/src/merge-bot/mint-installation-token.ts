@@ -7,7 +7,7 @@ import { err, ok, type Result } from '@oaknational/result';
 import type { TokenPermissions } from './token-scopes.js';
 
 /**
- * GitHub App installation-token minting for the oak merge bot (AIP-158).
+ * GitHub App installation-token minting for the merge bot (AIP-158).
  *
  * The merge bot is deliberately NOT a ruleset bypass actor: merges executed
  * with its installation token physically bind to required checks and thread
@@ -97,10 +97,10 @@ export async function sendGithubRequest(
 ): Promise<Result<Awaited<ReturnType<GithubApiFetch>>, Error>> {
   try {
     return ok(await fetchImpl(url, init));
-  } catch (cause) {
+  } catch (error) {
     return err(
       new Error(
-        `${label} request failed: ${cause instanceof Error ? cause.message : String(cause)}`,
+        `${label} request failed: ${error instanceof Error ? error.message : String(error)}`,
       ),
     );
   }
@@ -113,10 +113,10 @@ export async function readJsonBody(
 ): Promise<Result<unknown, Error>> {
   try {
     return ok(await response.json());
-  } catch (cause) {
+  } catch (error) {
     return err(
       new Error(
-        `${label} returned a non-JSON body: ${cause instanceof Error ? cause.message : String(cause)}`,
+        `${label} returned a non-JSON body: ${error instanceof Error ? error.message : String(error)}`,
       ),
     );
   }
@@ -127,26 +127,29 @@ export async function readJsonBody(
  * body is absent, non-JSON, or not the documented error shape. Never throws
  * and never masks the caller's status-derived failure — it only enriches it.
  *
- * This matters most for `422` on a token mint: GitHub answers "the
- * permissions requested are not granted to this installation", which names
- * the whole fix, while a bare status code sends the reader hunting.
+ * This matters most for `422` on a token mint, where GitHub's message names
+ * the whole fix and a bare status sends the reader hunting; `github-rest.ts`
+ * and `github-graphql.ts` enrich their failures the same way.
  */
-async function githubErrorDetail(response: {
+export async function githubErrorDetail(response: {
   readonly json: () => Promise<unknown>;
 }): Promise<string> {
   const body = await readJsonBody(response, 'error body');
-  if (!body.ok) {
-    return '';
-  }
-  const parsed = GITHUB_ERROR_BODY_SCHEMA.safeParse(body.value);
+  return body.ok ? githubErrorDetailOf(body.value) : '';
+}
+
+/** {@link githubErrorDetail} for a body already read. */
+export function githubErrorDetailOf(body: unknown): string {
+  const parsed = GITHUB_ERROR_BODY_SCHEMA.safeParse(body);
   return parsed.success ? ` — ${parsed.data.message}` : '';
 }
 
-function githubHeaders(bearer: string): Readonly<Record<string, string>> {
+/** The headers every bot call to GitHub's API sends: the media type, the bearer, a user agent, the pinned API version. */
+export function githubHeaders(bearer: string): Readonly<Record<string, string>> {
   return {
     accept: 'application/vnd.github+json',
     authorization: `Bearer ${bearer}`,
-    'user-agent': 'oak-merge-bot',
+    'user-agent': 'practice-merge-bot',
     'x-github-api-version': '2022-11-28',
   };
 }

@@ -1,6 +1,10 @@
 sandbox_mode = "workspace-write"
+approval_policy = "on-request"
 
 project_doc_fallback_filenames = ["RULES_INDEX.md"]
+
+[sandbox_workspace_write]
+network_access = true
 
 [features]
 hooks = true
@@ -15,129 +19,6 @@ command = 'node "$(git rev-parse --show-toplevel)/.codex/hooks/practice-session-
 timeout = 10
 statusMessage = "Loading Practice agent identity"
 
-[agents."code-expert"]
-description = "Gateway reviewer for non-trivial changes."
-config_file = "agents/code-expert.toml"
-
-[agents."test-expert"]
-description = "Carrier of the foundational TDD doctrine: describes-vs-audits screen, atomic-landing invariant, and structural compliance."
-config_file = "agents/test-expert.toml"
-
-[agents."type-expert"]
-description = "TypeScript type-safety reviewer."
-config_file = "agents/type-expert.toml"
-
-[agents."config-expert"]
-description = "Tooling configuration reviewer (ESLint, TypeScript, Vitest, Prettier, Turbo)."
-config_file = "agents/config-expert.toml"
-
-[agents."security-expert"]
-description = "Security and privacy reviewer for auth, secrets, PII, and injection risks."
-config_file = "agents/security-expert.toml"
-
-[agents."docs-adr-expert"]
-description = "Documentation and ADR quality reviewer."
-config_file = "agents/docs-adr-expert.toml"
-
-[agents."prose-expert"]
-description = "Prose craft and Oak editorial-voice reviewer for universal writing clarity and scoped outward-copy voice."
-config_file = "agents/prose-expert.toml"
-
-[agents."elasticsearch-expert"]
-description = "Elasticsearch specialist for both read-only review and active-workflow planning around mappings, queries, ELSER, RRF, ingest, and Elastic Serverless capabilities."
-config_file = "agents/elasticsearch-expert.toml"
-
-[agents."clerk-expert"]
-description = "Clerk specialist for both read-only review and active-workflow planning around middleware, token verification, OAuth proxy, PRM, @clerk/mcp-tools, and Clerk SDK usage."
-config_file = "agents/clerk-expert.toml"
-
-[agents."sentry-expert"]
-description = "Sentry and OpenTelemetry specialist for both read-only review and active-workflow planning around SDK init, logging, tracing, MCP Insights, and telemetry redaction."
-config_file = "agents/sentry-expert.toml"
-
-[agents."mcp-expert"]
-description = "MCP protocol specification and implementation expert for both read-only review and active-workflow planning."
-config_file = "agents/mcp-expert.toml"
-
-[agents."onboarding-expert"]
-description = "Onboarding documentation quality reviewer."
-config_file = "agents/onboarding-expert.toml"
-
-[agents."release-readiness-expert"]
-description = "Release go/no-go readiness reviewer."
-config_file = "agents/release-readiness-expert.toml"
-
-[agents."ground-truth-designer"]
-description = "Ground truth query designer for semantic search evaluation."
-config_file = "agents/ground-truth-designer.toml"
-
-[agents."subagent-architect"]
-description = "Sub-agent creation, review, and optimisation specialist."
-config_file = "agents/subagent-architect.toml"
-
-[agents."architecture-expert-fred"]
-description = "Principles-first architecture reviewer — ADR compliance and boundary discipline."
-config_file = "agents/architecture-expert-fred.toml"
-
-[agents."architecture-expert-barney"]
-description = "Simplification-first architecture reviewer — boundary and dependency mapping."
-config_file = "agents/architecture-expert-barney.toml"
-
-[agents."architecture-expert-betty"]
-description = "Systems-thinking architecture reviewer — cohesion, coupling, and change-cost trade-offs."
-config_file = "agents/architecture-expert-betty.toml"
-
-[agents."architecture-expert-wilma"]
-description = "Adversarial architecture reviewer — resilience, failure modes, and hidden coupling risks."
-config_file = "agents/architecture-expert-wilma.toml"
-
-[agents."assumptions-expert"]
-description = "Meta-level plan specialist for both read-only review and active-workflow planning support, focused on proportionality, assumption validity, and blocking legitimacy."
-config_file = "agents/assumptions-expert.toml"
-
-[agents."accessibility-expert"]
-description = "Accessibility specialist for both read-only review and active-workflow planning around WCAG 2.2 AA, WAI-ARIA, keyboard interaction, colour contrast, and focus management in UI-shipping workspaces."
-config_file = "agents/accessibility-expert.toml"
-
-[agents."design-system-expert"]
-description = "Design token and visual consistency specialist for both read-only review and active-workflow planning around DTCG JSON, CSS custom properties, three-tier token model, and theming in UI-shipping workspaces."
-config_file = "agents/design-system-expert.toml"
-
-[agents."react-component-expert"]
-description = "React component specialist for both read-only review and active-workflow planning around hooks, render performance, prop API design, and composition patterns in UI-shipping workspaces."
-config_file = "agents/react-component-expert.toml"
-
-[agents."corpus-mapper"]
-description = "Read-only leaf-signal extractor for the corpus-analysis map workflow stage; one agent per corpus window, answering only via the schema-forced structured output."
-config_file = "agents/corpus-mapper.toml"
-
-[agents."corpus-reducer"]
-description = "Clustering synthesist for the corpus-analysis reduce workflow stage; clusters inlined leaf signals into mechanism-grained candidates via the schema-forced structured output."
-config_file = "agents/corpus-reducer.toml"
-
-[agents."cricket-judgement-low"]
-description = "Fast low-effort conscience check using contextual judgement. Call directly for a second opinion, rubber duck, or design partnership when priority, proportion, or a wait/gate may be drifting; returns ON-TRACK, DRIFTING, or WRONG-PRIORITY with evidence and one redirection."
-config_file = "agents/cricket-judgement-low.toml"
-
-[agents."cricket-judgement-medium"]
-description = "Fast medium-effort conscience check using contextual judgement. Call directly for a second opinion, rubber duck, or design partnership when priority, proportion, or a wait/gate may be drifting; returns ON-TRACK, DRIFTING, or WRONG-PRIORITY with evidence and one redirection."
-config_file = "agents/cricket-judgement-medium.toml"
-
-[agents."cricket-procedure-xhigh"]
-description = "Fast xhigh-effort conscience check using a compiled decision procedure with quote-anchored evidence and a mechanical verdict table. Call directly for a reproducible second opinion when priority, proportion, or a wait/gate may be drifting; returns ON-TRACK, DRIFTING, or WRONG-PRIORITY with one redirection."
-config_file = "agents/cricket-procedure-xhigh.toml"
-
-[agents."corpus-voter"]
-description = "Single-turn adversary voter for the corpus-analysis validate workflow; judges one candidate against the four conjunctive apophenia tests from supplied grounding only."
-config_file = "agents/corpus-voter.toml"
-
-[agents."corpus-meta"]
-description = "Read-only recall-calibration synthesist for the corpus-analysis meta workflow stage; judges per-baseline matches and verifies corroboration paths, emitting per-item judgments only."
-config_file = "agents/corpus-meta.toml"
-
-[sandbox_workspace_write]
-network_access = true
-
 [mcp_servers.codex-sentry-ooc-mcp]
 url = "https://mcp.sentry.dev/mcp/oak-national-academy/oak-open-curriculum-mcp"
 auth = "oauth"
@@ -147,3 +28,123 @@ default_tools_approval_mode = "writes"
 url = "https://mcp.sentry.dev/mcp/oak-national-academy/oak-open-curriculum-search-cli"
 auth = "oauth"
 default_tools_approval_mode = "writes"
+
+[agents."accessibility-expert"]
+description = "Accessibility specialist for both read-only review and active-workflow planning around WCAG 2.2 AA, WAI-ARIA, keyboard interaction, colour contrast, and focus management in UI-shipping workspaces."
+config_file = "agents/accessibility-expert.toml"
+
+[agents."architecture-expert-barney"]
+description = "Simplification-first architecture reviewer — boundary and dependency mapping."
+config_file = "agents/architecture-expert-barney.toml"
+
+[agents."architecture-expert-betty"]
+description = "Systems-thinking architecture reviewer — cohesion, coupling, and change-cost trade-offs."
+config_file = "agents/architecture-expert-betty.toml"
+
+[agents."architecture-expert-fred"]
+description = "Principles-first architecture reviewer — ADR compliance and boundary discipline."
+config_file = "agents/architecture-expert-fred.toml"
+
+[agents."architecture-expert-wilma"]
+description = "Adversarial architecture reviewer — resilience, failure modes, and hidden coupling risks."
+config_file = "agents/architecture-expert-wilma.toml"
+
+[agents."assumptions-expert"]
+description = "Meta-level plan specialist for both read-only review and active-workflow planning support, focused on proportionality, assumption validity, and blocking legitimacy."
+config_file = "agents/assumptions-expert.toml"
+
+[agents."clerk-expert"]
+description = "Clerk specialist for both read-only review and active-workflow planning around middleware, token verification, OAuth proxy, PRM, @clerk/mcp-tools, and Clerk SDK usage."
+config_file = "agents/clerk-expert.toml"
+
+[agents."code-expert"]
+description = "Gateway reviewer for non-trivial changes."
+config_file = "agents/code-expert.toml"
+
+[agents."config-expert"]
+description = "Tooling configuration reviewer (TypeScript, ESLint, Vitest, Prettier, Turbo, knip, dependency-cruiser, Husky)."
+config_file = "agents/config-expert.toml"
+
+[agents."corpus-mapper"]
+description = "Read-only leaf-signal extractor for the corpus-analysis map workflow stage; one agent per corpus window, answering only via the schema-forced structured output."
+config_file = "agents/corpus-mapper.toml"
+
+[agents."corpus-meta"]
+description = "Read-only recall-calibration synthesist for the corpus-analysis meta workflow stage; judges per-baseline matches and verifies corroboration paths, emitting per-item judgments only."
+config_file = "agents/corpus-meta.toml"
+
+[agents."corpus-reducer"]
+description = "Clustering synthesist for the corpus-analysis reduce workflow stage; clusters inlined leaf signals into mechanism-grained candidates via the schema-forced structured output."
+config_file = "agents/corpus-reducer.toml"
+
+[agents."corpus-voter"]
+description = "Single-turn adversary voter for the corpus-analysis validate workflow; judges one candidate against the four conjunctive apophenia tests from supplied grounding only."
+config_file = "agents/corpus-voter.toml"
+
+[agents."cricket-judgement-low"]
+description = "Fast low-effort conscience check using contextual judgement. Call directly for a second opinion, rubber duck, or design partnership when priority, proportion, or a wait/gate may be drifting; returns a work verdict (ON-TRACK, DRIFTING or WRONG-PRIORITY) and a frame verdict (SOUND, NARROWED or CONTRADICTED), with evidence and one redirection."
+config_file = "agents/cricket-judgement-low.toml"
+
+[agents."cricket-judgement-medium"]
+description = "Fast medium-effort conscience check using contextual judgement. Call directly for a second opinion, rubber duck, or design partnership when priority, proportion, or a wait/gate may be drifting; returns a work verdict (ON-TRACK, DRIFTING or WRONG-PRIORITY) and a frame verdict (SOUND, NARROWED or CONTRADICTED), with evidence and one redirection."
+config_file = "agents/cricket-judgement-medium.toml"
+
+[agents."cricket-procedure-xhigh"]
+description = "Fast xhigh-effort conscience check using a compiled decision procedure with quote-anchored evidence and a mechanical verdict table. Call directly for a reproducible second opinion when priority, proportion, or a wait/gate may be drifting; returns a work verdict (ON-TRACK, DRIFTING or WRONG-PRIORITY) and a mechanically derived frame verdict (SOUND, NARROWED or CONTRADICTED), with one redirection."
+config_file = "agents/cricket-procedure-xhigh.toml"
+
+[agents."design-system-expert"]
+description = "Design token and visual consistency specialist for both read-only review and active-workflow planning around the host's token model, CSS custom properties, tier discipline, and theming in UI-shipping workspaces."
+config_file = "agents/design-system-expert.toml"
+
+[agents."docs-adr-expert"]
+description = "Documentation and ADR quality reviewer."
+config_file = "agents/docs-adr-expert.toml"
+
+[agents."elasticsearch-expert"]
+description = "Elasticsearch specialist for both read-only review and active-workflow planning around mappings, queries, ELSER, RRF, ingest, and Elastic Serverless capabilities."
+config_file = "agents/elasticsearch-expert.toml"
+
+[agents."ground-truth-designer"]
+description = "Ground truth query designer for semantic search evaluation."
+config_file = "agents/ground-truth-designer.toml"
+
+[agents."mcp-expert"]
+description = "MCP protocol specification and implementation expert for both read-only review and active-workflow planning."
+config_file = "agents/mcp-expert.toml"
+
+[agents."onboarding-expert"]
+description = "Onboarding documentation quality reviewer."
+config_file = "agents/onboarding-expert.toml"
+
+[agents."prose-expert"]
+description = "Prose craft and Oak editorial-voice reviewer for universal writing clarity and scoped outward-copy voice."
+config_file = "agents/prose-expert.toml"
+
+[agents."react-component-expert"]
+description = "React component specialist for both read-only review and active-workflow planning around hooks, render performance, prop API design, and composition patterns in UI-shipping workspaces."
+config_file = "agents/react-component-expert.toml"
+
+[agents."release-readiness-expert"]
+description = "Release go/no-go readiness reviewer."
+config_file = "agents/release-readiness-expert.toml"
+
+[agents."security-expert"]
+description = "Security and privacy reviewer for auth, headers, secrets, PII, and injection risks."
+config_file = "agents/security-expert.toml"
+
+[agents."sentry-expert"]
+description = "Sentry and OpenTelemetry specialist for both read-only review and active-workflow planning around SDK init, logging, tracing, MCP Insights, and telemetry redaction."
+config_file = "agents/sentry-expert.toml"
+
+[agents."subagent-architect"]
+description = "Sub-agent creation, review, and optimisation specialist."
+config_file = "agents/subagent-architect.toml"
+
+[agents."test-expert"]
+description = "Carrier of the foundational TDD doctrine: describes-vs-audits screen, atomic-landing invariant, and structural compliance."
+config_file = "agents/test-expert.toml"
+
+[agents."type-expert"]
+description = "TypeScript type-safety reviewer."
+config_file = "agents/type-expert.toml"

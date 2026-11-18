@@ -20,7 +20,7 @@ function toColon(path: string): string {
 }
 
 function toCurly(path: string): string {
-  return path.replaceAll(/:([A-Za-z0-9_]+)/g, '{$1}');
+  return path.replaceAll(/:(\w+)/g, '{$1}');
 }
 
 function validatePathTransform(p: string): void {

@@ -2,7 +2,7 @@
 
 > **Execution home (2026-06-13):** this decision is now carried by
 > [`agent-naming-schema-v3.plan.md`](../../plans-backlog-2026-07/agent-tooling/current/agent-naming-schema-v3.plan.md)
-> (thread [`agent-naming`](../../memory/operational/threads/agent-naming.next-session.md)).
+> (thread [`agent-naming`](../../memory/operational/threads/paused/agent-naming.next-session.md)).
 > Sheet C is WS2's curation target. This report remains the decision record for
 > *why* C; the plan owns *how*.
 

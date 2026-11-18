@@ -2,6 +2,24 @@
 
 **Status**: Accepted
 **Date**: 2026-03-04
+**Amended**: 2026-09-29 — the sub-agent adapters under `.cursor/agents/`,
+`.claude/agents/` and `.codex/agents/`, with the `[agents."<name>"]` tail of
+`.codex/config.toml`, are projections of each template's frontmatter declaration
+(`.agent/sub-agents/README.md` §Declarations; the shape is
+`agent-tools/src/subagent-declarations/subagent-declaration.ts`): `pnpm portability:fix`
+renders them and `pnpm portability:check` recomputes them byte for byte, so none is
+hand-edited; the hand-kept parity and inline-prompt comparisons retire with it. The
+field lists the surface rows below give are what the generator writes.
+
+**Amended**: 2026-09-29 — the archived Claude sub-agent wrapper lives at
+`.agent/sub-agents/archive/`, outside every rendered surface; `.claude/agents/`
+holds only rendered files.
+
+**Amended**: 2026-09-28 — rule adapters and `RULES_INDEX.md` are projections of each
+canonical rule's frontmatter declaration, rendered by `pnpm portability:fix` and recomputed
+byte for byte by `pnpm portability:check`; skill-targeting triggers are retired
+(`napkin-always-active` and `use-start-right-skills` are canonical rules that point onward to
+their skills); every rule has a Claude adapter, path-scoped when it declares globs.
 **Amended**: 2026-05-09 — vendor-agnostic two-surface skills contract per [PDR-051](../../../.agent/practice-core/decision-records/PDR-051-vendor-agnostic-skills-standardisation.md). Skill adapters are retired from `.cursor/skills/`, `.gemini/skills/`, `.codex/skills/`, and `.windsurf/skills/`; only `.agents/skills/` (cross-tool alias) and `.claude/skills/` (Claude-native) remain. Canonical skill body filename is `SKILL-CANONICAL.md` (non-discoverable). Custom command surfaces (`.agent/commands/`, `.cursor/commands/`, `.claude/commands/`, `.gemini/commands/`) are a transition target for retirement, but cleanup is not complete while those directories still exist in the repo. Canonical command behaviour is being subsumed into skills. The thin-wrapper contract, three-layer model, and rules/sub-agent surfaces are unchanged.
 **Amended**: 2026-05-10 — clarified that Gemini `review-*.toml` files are
 transitional sub-agent invocation adapters only while Gemini lacks native
@@ -82,25 +100,25 @@ Each platform has thin wrappers that reference canonical content. Skill adapters
 | ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
 | `.agents/skills/*/SKILL.md`                     | Generated thin wrapper with spec-portable frontmatter (`name`, `description`, `license`, `compatibility`, `metadata`, `allowed-tools`) -> the skill's canonical body under `.agent/skills/` (any of the three ratified depths: flat, concern, or concern/domain) | Cursor, Copilot CLI, Codex, Gemini CLI, Amp |
 | `.agents/skills/*/{references,scripts,assets}/` | Bytewise copies of canonical supporting files                                                                                                                                                                                                                    | Same                                        |
-| `.agents/rules/*.md`                            | Thin wrapper -> `.agent/rules/`                                                                                                                                                                                                                                  | Portable rule surface                       |
+| `.agents/rules/*.md`                            | Generated thin wrapper -> `.agent/rules/`                                                                                                                                                                                                                        | Portable rule surface                       |
 | `.agents/agents/README.md`                      | Documents intentional absence of `.agents/` sub-agent wrappers                                                                                                                                                                                                   | —                                           |
 
 #### Claude Code (`.claude/`)
 
-| Location                                        | Format                                                                                                                                                                                                                                                                                                                                                                                                                                                               | Read by            |
-| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| `.claude/skills/*/SKILL.md`                     | Generated thin wrapper with spec-portable frontmatter PLUS Claude top-level fields (`when_to_use`, `argument-hint`, `arguments`, `disable-model-invocation`, `user-invocable`, `context`, `agent`, `model`) derived from `metadata.claude-*` keys in canonical -> the skill's canonical body under `.agent/skills/` (any of the three ratified depths: flat, concern, or concern/domain)                                                                             | Claude Code (only) |
-| `.claude/skills/*/{references,scripts,assets}/` | Bytewise copies of canonical supporting files                                                                                                                                                                                                                                                                                                                                                                                                                        | Same               |
-| `.claude/rules/*.md`                            | Thin wrappers -> `.agent/rules/`                                                                                                                                                                                                                                                                                                                                                                                                                                     | Claude Code        |
-| `.claude/agents/*.md`                           | Markdown with YAML frontmatter (`name`, `description`, `tools`, `disallowedTools`, `model`, `permissionMode`, `color`). All wrappers require a `color` field and ≥2 `<example>` blocks in `description`; **`model` is optional** — omitted by default so the invoking agent's model is inherited (owner-directed inherit policy, 2026-06-28; the per-platform subagent frontmatter schema `agent-tools/src/validators/subagents/frontmatter-schema.ts` is the SSOT). | Claude Code        |
-| `.claude/agents/archive/*.md`                   | Archived wrappers — superseded or retired agents. Preserved for reference. Not validated by `pnpm subagents:check`.                                                                                                                                                                                                                                                                                                                                                  | —                  |
+| Location                                        | Format                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | Read by            |
+| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `.claude/skills/*/SKILL.md`                     | Generated thin wrapper with spec-portable frontmatter PLUS Claude top-level fields (`when_to_use`, `argument-hint`, `arguments`, `disable-model-invocation`, `user-invocable`, `context`, `agent`, `model`) derived from `metadata.claude-*` keys in canonical -> the skill's canonical body under `.agent/skills/` (any of the three ratified depths: flat, concern, or concern/domain)                                                                                                                                                                                                                                                                                                           | Claude Code (only) |
+| `.claude/skills/*/{references,scripts,assets}/` | Bytewise copies of canonical supporting files                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | Same               |
+| `.claude/rules/*.md`                            | Generated thin wrappers (`paths`-scoped when the rule declares globs) -> `.agent/rules/`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | Claude Code        |
+| `.claude/agents/*.md`                           | Markdown with YAML frontmatter rendered from the template's declaration (`agent-tools/src/subagent-declarations/subagent-declaration.ts`, `claude-fields.ts`: `name`, `description`, then `tools`, `disallowedTools`, `color`, `permissionMode`, `model`, `effort`, `maxTurns` where declared or defaulted); `agent-tools/src/validators/subagents/frontmatter-schema.ts` is the `pnpm subagents:check` gate over the rendered output. **`model` is optional** — omitted by default so the invoking agent's model is inherited (owner-directed inherit policy, 2026-06-28; the per-platform subagent frontmatter schema `agent-tools/src/validators/subagents/frontmatter-schema.ts` is the SSOT). | Claude Code        |
+| `.agent/sub-agents/archive/*.md`                | Archived sub-agent adapters — superseded or retired, kept for reference outside every rendered surface (moved from `.claude/agents/archive/` on 2026-09-29: a rendered surface holds only rendered files). Not validated.                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | —                  |
 
 #### Cursor (`.cursor/`) — sub-agents and rules only
 
-| Location              | Format                                                                                                                                                                                                               | Count |
-| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `.cursor/rules/*.mdc` | Markdown with `alwaysApply`/`globs`/`description` frontmatter                                                                                                                                                        | live  |
-| `.cursor/agents/*.md` | Markdown with `name`/`description`/`model` (optional, inherit)/`readonly`; the `tools` frontmatter field is non-functional and dropped (Cursor sub-agent tools are not frontmatter-configurable per the schema SSOT) | live  |
+| Location              | Format                                                                                                                                                                                                                                                                                      | Count |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `.cursor/rules/*.mdc` | Generated; `alwaysApply`/`globs`/`description` frontmatter rendered from the rule's declaration                                                                                                                                                                                             | live  |
+| `.cursor/agents/*.md` | Markdown with `name`/`description`/`readonly`, rendered from the template's declaration (the Cursor block admits a `description` and prose only); the `tools` frontmatter field is non-functional and dropped (Cursor sub-agent tools are not frontmatter-configurable per the schema SSOT) | live  |
 
 Cursor reads skills from `.agents/skills/` per its current docs. The
 previously-emitted `.cursor/skills/` adapters are retired per the 2026-05-09
@@ -125,11 +143,11 @@ fresh verification and adapter design lands.
 
 #### Codex (`.codex/`)
 
-| Location               | Format                                                         | Count |
-| ---------------------- | -------------------------------------------------------------- | ----- |
-| `.codex/agents/*.toml` | Codex project-agent adapters -> `.agent/sub-agents/templates/` | 22    |
-| `.codex/hooks/*.mjs`   | Soft Codex hook adapters -> canonical Practice tooling         | —     |
-| `.codex/config.toml`   | Tracked Codex project configuration                            | 1     |
+| Location               | Format                                                                                                                                                  | Count |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `.codex/agents/*.toml` | Codex project-agent adapters -> `.agent/sub-agents/templates/`, rendered from the template's declaration with the registry tail of `.codex/config.toml` | live  |
+| `.codex/hooks/*.mjs`   | Soft Codex hook adapters -> canonical Practice tooling                                                                                                  | —     |
+| `.codex/config.toml`   | Tracked Codex project configuration                                                                                                                     | 1     |
 
 Codex reads skills from `.agents/skills/` per its current docs (with parent-walk
 to repo root); `.codex/skills/` is not used.
@@ -243,6 +261,8 @@ A thin wrapper contains ONLY:
 
 A thin wrapper MUST NOT contain substantive instructions, workflow steps, or logic that does not exist in the canonical source. The canonical content describes **what** to do; the wrapper describes **how** to invoke it on a specific platform.
 
+An inline-prompt role's adapter (PDR-009: the role cannot read files, or its bounded turns belong to its task) carries its template's System prompt block verbatim in place of the pointer; the template declares `claude.body: system-prompt`, `pnpm portability:fix` renders the block into the adapter and `pnpm portability:check` recomputes it byte for byte.
+
 ### Owned-Skill Naming Convention
 
 Every canonical under `.agent/skills/` is a Practice-class skill, and its
@@ -272,13 +292,13 @@ adapter emission; canonical identity is unprefixed.
 
 Each platform uses its native mechanism for sub-agent-equivalent functionality:
 
-| Platform                 | Mechanism                                                  | Key fields                                                                                                           |
-| ------------------------ | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| Cursor                   | `.cursor/agents/*.md`                                      | `name`, `description`, `model`, `tools`, `readonly`                                                                  |
-| Claude Code              | `.claude/agents/*.md`                                      | `name`, `description`, `tools`, `disallowedTools`, `model`, `permissionMode`, `color`                                |
-| Gemini / Antigravity CLI | `.gemini/commands/review-*.toml`; native `/agents` unwired | Transitional reviewer invocation adapter plus native platform capability                                             |
-| Codex                    | `.codex/agents/*.toml`                                     | TOML roster and developer instructions loaded from canonical templates                                               |
-| GitHub Copilot CLI       | `.github/agents/*.agent.md` (ratified target)              | Generated cloud-safe metadata, tool aliases, MCP selection, inherited model, and explicit auto-selection disposition |
+| Platform                 | Mechanism                                                  | Key fields                                                                                                                                             |
+| ------------------------ | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Cursor                   | `.cursor/agents/*.md`                                      | `name`, `description`, `readonly` (rendered from the template's declaration)                                                                           |
+| Claude Code              | `.claude/agents/*.md`                                      | `name`, `description`, `tools`, `disallowedTools`, `color`, `permissionMode`, `model`, `effort`, `maxTurns` (rendered from the template's declaration) |
+| Gemini / Antigravity CLI | `.gemini/commands/review-*.toml`; native `/agents` unwired | Transitional reviewer invocation adapter plus native platform capability                                                                               |
+| Codex                    | `.codex/agents/*.toml`                                     | TOML roster and developer instructions loaded from canonical templates                                                                                 |
+| GitHub Copilot CLI       | `.github/agents/*.agent.md` (ratified target)              | Generated cloud-safe metadata, tool aliases, MCP selection, inherited model, and explicit auto-selection disposition                                   |
 
 Read-only reviewers on Claude Code use `permissionMode: plan` and `disallowedTools: Write, Edit` to enforce read-only behaviour at the platform level, not just via instructions.
 
@@ -290,7 +310,7 @@ Rules have two conceptually distinct layers:
 
 2. **Activation triggers** (`.cursor/rules/*.mdc`, entry-point chains) — platform-specific mechanisms that determine _when_ and _how_ policies surface during a session. These are not thin wrappers for `principles.md` in the way command wrappers point at commands. They are a separate artefact type: a trigger mechanism that activates specific policies, directives, or skills at the right moment.
 
-Some triggers activate policies from `principles.md` via a canonical rule (e.g., `apply-architectural-principles.mdc` → `.agent/rules/apply-architectural-principles.md` → `principles.md`). Others activate standalone directives (e.g., `invoke-code-experts.mdc` → `.agent/memory/executive/invoke-code-experts.md`). Others activate skills at their canonical bodies directly (e.g., `napkin-always-active.mdc` → `.agent/skills/knowledge/napkin/SKILL-CANONICAL.md`) — the portability validator requires trigger targets under `.agent/rules/` or `.agent/skills/`; generated adapter files are projections for platform discovery, never trigger targets (trued 2026-08-11 — the prior adapter-target example here contradicted the enforced contract). The trigger is not the policy — it is the mechanism that surfaces the policy.
+Some triggers activate policies from `principles.md` via a canonical rule (e.g., `apply-architectural-principles.mdc` → `.agent/rules/apply-architectural-principles.md` → `principles.md`). Others activate standalone directives (e.g., `invoke-code-experts.mdc` → `.agent/rules/invoke-code-experts.md` → `.agent/memory/executive/invoke-code-experts.md`). Every trigger targets its canonical rule under `.agent/rules/`; a rule may itself point onward to a skill (e.g., `napkin-always-active.mdc` → `.agent/rules/napkin-always-active.md` → `.agent/skills/knowledge/napkin/SKILL-CANONICAL.md`). Generated adapter files are projections for platform discovery, never trigger targets.
 
 #### Many-to-One Consolidation Pattern
 
@@ -326,7 +346,7 @@ canonical rules and triggers, not the number of layers.
 | File-scoped    | `globs: '**/*.{ts,tsx,mts}'` | `use-result-pattern.mdc`, `generator-first-mindset.mdc`    |
 | Agent-selected | `description: "..."`         | Agent decides based on relevance                           |
 
-**Claude Code** has two activation mechanisms: always-on policies via the entry-point chain (`CLAUDE.md` → `AGENT.md` → `principles.md`), and path-scoped rules via `.claude/rules/*.md` with `paths` frontmatter. Path-scoped rules only load when Claude opens matching files, reducing context consumption for domain-specific policies (e.g., test rules only when editing test files). Only glob-scoped triggers have Claude rule equivalents — always-on triggers are already covered by the entry-point chain.
+**Claude Code** has two activation mechanisms: always-on policies via the entry-point chain (`CLAUDE.md` → `AGENT.md` → `principles.md`), and the rule adapters under `.claude/rules/*.md`. Every canonical rule has a Claude adapter: a plain pointer, carrying a `paths` list when the rule declares globs, so a scoped rule loads only when a matching file is touched.
 
 **Gemini CLI and Codex** receive policies via the entry-point chain:
 `GEMINI.md` / `AGENTS.md` -> `.agent/directives/AGENT.md` ->
@@ -339,30 +359,23 @@ portable thin-wrapper rule surface for platforms that scan `.agents/` directly.
 
 **Triggers that activate skills or directives:**
 
-| Trigger                          | What it activates                                                                                                                                                       |
-| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `apply-architectural-principles` | All architectural principles via `.agent/rules/apply-architectural-principles.md`                                                                                       |
-| `napkin-always-active`           | `.agent/skills/knowledge/napkin/SKILL-CANONICAL.md` directly (canonical-direct per the trigger contract)                                                                |
-| `use-start-right-skills`         | The three start-right canonicals directly (`.agent/skills/start-right-quick/`, `-thorough/`, `-team/` `SKILL-CANONICAL.md`) — canonical-direct per the trigger contract |
-| `follow-the-practice`            | Practice reading, which leads to skills                                                                                                                                 |
-| `invoke-code-experts`            | All registered reviewers via `.agent/memory/executive/invoke-code-experts.md`                                                                                           |
-| `lint-after-edit`                | Lint checking (file-scoped to `*.ts`)                                                                                                                                   |
+| Trigger                          | What it activates                                                                                                                                 |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `apply-architectural-principles` | All architectural principles via `.agent/rules/apply-architectural-principles.md`                                                                 |
+| `napkin-always-active`           | `.agent/rules/napkin-always-active.md`, a canonical rule that points onward to `.agent/skills/knowledge/napkin/SKILL-CANONICAL.md`                |
+| start-right at session open      | `AGENT.md`'s sentence ("All work MUST start with" a start-right skill), always loaded through `read-agent-md`; the former rule retired 2026-10-04 |
+| `follow-the-practice`            | Practice reading, which leads to skills                                                                                                           |
+| `invoke-code-experts`            | All registered reviewers via `.agent/memory/executive/invoke-code-experts.md`                                                                     |
+| `lint-after-edit`                | Lint checking (file-scoped to `**/*.ts`)                                                                                                          |
 
 #### Trigger Content Contract
 
-A trigger file (`.cursor/rules/*.mdc`) MUST:
-
-- Include `alwaysApply`/`globs`/`description` frontmatter (activation metadata)
-- Include a reference to its canonical source (`.agent/directives/*.md`, `.agent/skills/*/SKILL-CANONICAL.md`, an ADR, or `docs/`)
-
-A trigger file MAY:
-
-- Include a concise summary (max 5 lines) for immediate LLM context
-
-A trigger file MUST NOT:
-
-- Contain the full canonical policy — the canonical source is authoritative
-- Exceed 10 content lines (excluding frontmatter) without review — if exceeded, consider whether the content belongs in the canonical source instead
+A trigger file (`.cursor/rules/*.mdc`) is rendered from its rule's frontmatter declaration
+(`classification`, `description`, `trigger`, `globs`) by `pnpm portability:fix` and recomputed
+byte for byte by `pnpm portability:check`: `description`, `globs` where declared, an explicit
+`alwaysApply`, and the one-line pointer to `.agent/rules/<name>.md`, nothing else. A hand edit
+reads as drift. Platform-specific guidance a trigger once carried beside its pointer lives in
+the canonical rule or the surface it points at.
 
 ### Skills Structure Contract (per PDR-051)
 
@@ -761,8 +774,16 @@ platforms.
 ### 2026-07-24 — Local Copilot CLI adapter family
 
 The owner ratified local GitHub Copilot CLI as an equal first-class citizen of
-the repository Practice. The adapter family follows the existing
-canonical-first boundary:
+the repository Practice. Citizenship never varies by integration depth (owner,
+2026-07-24, verbatim: "Codex and Antigravity and Claude and Copilot are all
+first class citizens, although the integration into the agent tools and the
+Practice and rules and skills etc is more complete for some than for others"):
+a thinner-integrated platform's agent is never a lesser class of fleet member,
+work routes to any platform's agent on capability and remit, and where the
+tooling does not yet reach a platform the gap is named as integration debt —
+bridged by proxy through the Director, with remits recorded and the platform's
+native surface as its voice — never as a status tier. The adapter family
+follows the existing canonical-first boundary:
 
 - `.agent/` remains the source of doctrine and behaviour;
 - `.agents/skills/` remains the selected Copilot skill home under GitHub's

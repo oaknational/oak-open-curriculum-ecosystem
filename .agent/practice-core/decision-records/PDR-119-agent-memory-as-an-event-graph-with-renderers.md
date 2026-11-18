@@ -16,7 +16,7 @@ source; PDR-049 named the root cause this PDR closes);
 [PDR-050](PDR-050-state-memory-substrate-contracts.md)
 (state/memory substrate contracts — the surface-contract doctrine this evolves);
 [PDR-094](PDR-094-coordination-event-rotation-is-class-tiered-archive-not-delete.md)
-and ADR-199
+and the host repository's comms-event rotation decision
 (the comms event-log phenotype this generalises — the proven in-repo system that
 never needs a semantic merge; host ADRs resolved via the practice-index bridge,
 not linked from this portable body per PDR-079 / PDR-105);
@@ -25,11 +25,11 @@ not linked from this portable body per PDR-079 / PDR-105);
 render-time curation here);
 [PDR-027](PDR-027-threads-sessions-and-agent-identity.md)
 (the unit-of-coordination ≠ unit-of-git-history gap PDR-049 named);
-ADR-200
+the host repository's intent idea-graph decision
 (intent as a living idea-graph — the same documents-as-projections-of-a-graph-SSOT
 move; the convergence point for the index-narrative tail).
 Phenotype skill superseded for one class: `semantic-merge`
-(`.agent/skills/semantic-merge/SKILL-CANONICAL.md`).
+(`.agent/skills/change-custody/semantic-merge/SKILL-CANONICAL.md`).
 
 ## Context
 
@@ -69,7 +69,7 @@ inbox are projections. The rendered markdown is a view, never a source. The
 ## Decision
 
 **Model append-only-narrative agent memory as a graph of immutable events with
-renderers** — generalising the comms event-log phenotype (ADR-199 / PDR-094) from
+renderers** — generalising the comms event-log phenotype (the host's comms-event rotation decision and PDR-094) from
 coordination state to memory. An *entry* becomes an immutable event file; the
 *document* (napkin.md, distilled.md, a register) becomes a deterministic **render**
 (projection) over the live event set. Concurrent sessions append disjoint event
@@ -88,15 +88,15 @@ resolves the edges (supersession ordering, duplicate folding), which is what mak
 the projection coherent rather than a raw concatenation.
 
 **This is a member of the Practice's graph systems, not a standalone scheme.** It
-is the *same architecture* as ADR-200
-(intent as a living idea-graph — note: ADR-200 is an **ADR**, the repo phenotype;
+is the *same architecture* as the host's intent idea-graph decision
+(intent as a living idea-graph — note: that decision is an **ADR**, the repo phenotype;
 its portable doctrine layer is the strategy/plan-estate work): a machine-readable
 graph is the SSOT and the human-readable documents are co-equal **projections**
-connected by typed edges. ADR-200 covers the *intent / planning* graph; this PDR
+connected by typed edges. The intent idea-graph decision covers the *intent / planning* graph; this PDR
 covers the *memory / learning* graph; both build on `graph-core`. Memory-events are
 the append-only special case of the same idea, and the two graphs **converge at the
 index-narrative tail** (repo-continuity is already a hand-maintained projection over
-thread, claim, and PR state — exactly an ADR-200-shaped surface). Treating them as
+thread, claim, and PR state — exactly the shape the intent idea-graph decision describes). Treating them as
 one family is a design constraint: a shared **renderer/projection pattern** (the
 *substrate* is a per-member choice — see §Sequencing), not two parallel projection
 engines. The shared thing is the event→render shape, not necessarily `graph-core`'s
@@ -116,7 +116,7 @@ from it.
 
 - **Event.** One immutable file per entry — `napkin/<utc-timestamp>-<slug>.md` (or
   uuid), with frontmatter: author identity tuple (PDR-027), created-at, tags
-  (ADR-183 namespace reused where it fits), and typed edges to other events.
+  (the host's comms-event tag namespace reused where it fits), and typed edges to other events.
   Body = the entry prose. Never edited after write; corrections are new events
   with a `supersedes`/`refines` edge.
 - **Renderer.** A deterministic per-class projector (`agent-tools memory render
@@ -125,7 +125,7 @@ from it.
   source. **Render invariant:** every live source event appears in the render
   (the completeness check is mechanical — no concept-understanding — and is the
   loss-detector PDR-049's skill lacked).
-- **Rotation = ADR-199 archive-move.** Fitness/size handled by archive-moving old
+- **Rotation = the comms-event class-tiered archive-move.** Fitness/size handled by archive-moving old
   events (process-then-archive, never delete), not by trimming a file. This
   **dissolves the recurring fitness-vs-preservation tension** in the napkin: the
   render shows the live set; rotation moves events out of it without loss.
@@ -145,11 +145,12 @@ from it.
   `curation-ledger`): intermediate.** Mostly-append; the shard class is the
   half-step made whole.
 - **`index-narrative-tables` (repo-continuity, director-handoff): the hard tail —
-  deferred, converges with ADR-200.** These are *maintained current-state
+  deferred, converges with the intent idea-graph.** These are *maintained current-state
   indexes* with cross-entry mutation (a next-safe-step gains "DONE", table rows
   update). Immutability — the load-bearing assumption — does not hold in place, so
-  a naïve event log fragments their coherence. Their cure is the fuller ADR-200
-  projection (render the index over thread records, the claims registry, git/PR
+  a naïve event log fragments their coherence. Their cure is the fuller projection
+  the intent idea-graph decision describes (render the index over thread records, the
+  claims registry, git/PR
   state, plus a thin continuity-note event stream), or a deliberate decision that
   they stay hand-curated docs and keep `semantic-merge`. **Do not fold these in
   early.**
@@ -186,20 +187,20 @@ practice, that falsifies the direction cheaply.
 This PDR records the **decision and a rough design**; it does not authorise the
 build. The repo phenotype (the concrete `.agent/memory` event layout + the render
 CLI + migration) lands as an **ADR + executable plan** when built, owner-sequenced
-against ADR-200 (with which the index-narrative tail converges) and product work.
+against the intent idea-graph (with which the index-narrative tail converges) and product work.
 
 Three decisions the build must settle, named here (not made):
 
 1. **Class adoption order** — append-only-narrative first (napkin pilot), then
-   registers; the index-narrative tail deferred to the ADR-200 convergence or kept
+   registers; the index-narrative tail deferred to the convergence with the intent idea-graph or kept
    as curated docs.
 2. **Distilled.md treatment** — curated synthesis needs `supersedes`/`refines`
    edges, not plain union; confirm the edge model carries it before migrating.
 3. **Shared pattern, per-member substrate** (refined 2026-06-27 with Beluga rides
    Wave). The family shares the renderer/projection PATTERN (derive an authoritative
-   read from immutable sources — the ADR-199 event→render shape); the SUBSTRATE is a
+   read from immutable sources — the comms event log's event→render shape); the SUBSTRATE is a
    per-member choice. `graph-core` (RDF/JSON-LD: jsonld/vocab/term/canon/dataset)
-   fits the *semantic* members (the curriculum ontology, the ADR-200 intent
+   fits the *semantic* members (the curriculum ontology, the host's intent
    idea-graph). The *operational/narrative* members — agent-work-state (PDR-118,
    derived from `git worktree list` + claims + event-recency) and the napkin
    event-graph (whose `[[links]]`/`supersedes` edges are lightweight narrative

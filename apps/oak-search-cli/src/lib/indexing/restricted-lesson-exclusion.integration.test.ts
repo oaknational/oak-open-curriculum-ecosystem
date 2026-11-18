@@ -19,6 +19,17 @@ import type { SearchLessonsIndexDoc } from '../../types/oak';
 import { collectPhaseResults } from './bulk-ingestion-phases.js';
 import { prepareBulkIngestion, type BulkIngestionDeps } from './bulk-ingestion.js';
 
+/** The lesson slugs among the produced operations, sorted for a stable comparison. */
+function producedLessonSlugs(operations: readonly unknown[]): string[] {
+  return operations
+    .filter(
+      (entry): entry is SearchLessonsIndexDoc =>
+        typeof entry === 'object' && entry !== null && 'lesson_slug' in entry,
+    )
+    .map((doc) => doc.lesson_slug)
+    .toSorted((a, b) => a.localeCompare(b));
+}
+
 const RESTRICTED_TRANSCRIPT_SENTINEL = 'SENTINEL-RESTRICTED-TRANSCRIPT-TEXT';
 const RESTRICTED_KEYWORD_SENTINEL = 'sentinelrestrictedkeyword';
 
@@ -147,13 +158,7 @@ describe('bulk ingestion excludes restricted lessons from every produced operati
   it('produces lesson documents for exactly the unrestricted lessons', async () => {
     const result = await runIngestionOverFixture();
 
-    const lessonSlugs = result.operations
-      .filter(
-        (entry): entry is SearchLessonsIndexDoc =>
-          typeof entry === 'object' && entry !== null && 'lesson_slug' in entry,
-      )
-      .map((doc) => doc.lesson_slug);
-    expect(lessonSlugs.sort((a, b) => a.localeCompare(b))).toEqual([
+    expect(producedLessonSlugs(result.operations)).toEqual([
       'maths-kept-1',
       'science-kept-1',
       'science-kept-2',
@@ -186,13 +191,7 @@ describe('bulk ingestion retains restricted lessons when includeRestricted is tr
   it('produces lesson documents for every lesson, restricted included', async () => {
     const result = await runIngestionOverFixture({ includeRestricted: true });
 
-    const lessonSlugs = result.operations
-      .filter(
-        (entry): entry is SearchLessonsIndexDoc =>
-          typeof entry === 'object' && entry !== null && 'lesson_slug' in entry,
-      )
-      .map((doc) => doc.lesson_slug);
-    expect(lessonSlugs.sort((a, b) => a.localeCompare(b))).toEqual([
+    expect(producedLessonSlugs(result.operations)).toEqual([
       'maths-hidden-1',
       'maths-hidden-2',
       'maths-kept-1',

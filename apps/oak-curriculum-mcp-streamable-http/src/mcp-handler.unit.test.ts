@@ -19,22 +19,21 @@ import type { McpServerFactory } from './mcp-request-context.js';
 import type { HttpObservability, HttpSpanOptions } from './observability/http-observability.js';
 import type { ByteCountableResponse } from './observability/response-byte-counter.js';
 
-function createFakeMcpFactory(): McpServerFactory {
-  return () => {
-    const transport = {
-      handleRequest: vi.fn().mockResolvedValue(undefined),
-      close: vi.fn().mockResolvedValue(undefined),
-    };
-    return {
-      server: {
-        connect: vi.fn().mockResolvedValue(undefined),
-        close: vi.fn().mockResolvedValue(undefined),
-      },
-      transport,
-      connectTransport: transport,
-    };
+/** Yields a server and transport whose connect, handle and close all resolve: the handler's collaborators, inert. */
+const fakeMcpFactory: McpServerFactory = () => {
+  const transport = {
+    handleRequest: vi.fn().mockResolvedValue(undefined),
+    close: vi.fn().mockResolvedValue(undefined),
   };
-}
+  return {
+    server: {
+      connect: vi.fn().mockResolvedValue(undefined),
+      close: vi.fn().mockResolvedValue(undefined),
+    },
+    transport,
+    connectTransport: transport,
+  };
+};
 
 function createFakeRequest(overrides?: Partial<McpHandlerRequest>): McpHandlerRequest {
   return {
@@ -69,7 +68,7 @@ describe('createMcpHandler enrichment', () => {
     const setTag = vi.fn();
     const observability = { ...createFakeHttpObservability(), setTag };
 
-    const handler = createMcpHandler(createFakeMcpFactory(), observability);
+    const handler = createMcpHandler(fakeMcpFactory, observability);
     await handler(
       createFakeRequest({ body: { method: 'tools/call', jsonrpc: '2.0', id: 1 } }),
       createFakeResponse(),
@@ -82,7 +81,7 @@ describe('createMcpHandler enrichment', () => {
     const setTag = vi.fn();
     const observability = { ...createFakeHttpObservability(), setTag };
 
-    const handler = createMcpHandler(createFakeMcpFactory(), observability);
+    const handler = createMcpHandler(fakeMcpFactory, observability);
     await handler(createFakeRequest({ body: {} }), createFakeResponse());
 
     expect(setTag).not.toHaveBeenCalled();
@@ -92,7 +91,7 @@ describe('createMcpHandler enrichment', () => {
     const setUser = vi.fn();
     const observability = { ...createFakeHttpObservability(), setUser };
 
-    const handler = createMcpHandler(createFakeMcpFactory(), observability);
+    const handler = createMcpHandler(fakeMcpFactory, observability);
     await handler(
       createFakeRequest({
         auth: {
@@ -112,7 +111,7 @@ describe('createMcpHandler enrichment', () => {
     const setUser = vi.fn();
     const observability = { ...createFakeHttpObservability(), setUser };
 
-    const handler = createMcpHandler(createFakeMcpFactory(), observability);
+    const handler = createMcpHandler(fakeMcpFactory, observability);
     await handler(createFakeRequest({ auth: undefined }), createFakeResponse());
 
     expect(setUser).not.toHaveBeenCalled();
@@ -122,7 +121,7 @@ describe('createMcpHandler enrichment', () => {
     const setUser = vi.fn();
     const observability = { ...createFakeHttpObservability(), setUser };
 
-    const handler = createMcpHandler(createFakeMcpFactory(), observability);
+    const handler = createMcpHandler(fakeMcpFactory, observability);
     await handler(
       createFakeRequest({
         auth: {
@@ -142,7 +141,7 @@ describe('createMcpHandler enrichment', () => {
     const setUser = vi.fn();
     const observability = { ...createFakeHttpObservability(), setUser };
 
-    const handler = createMcpHandler(createFakeMcpFactory(), observability);
+    const handler = createMcpHandler(fakeMcpFactory, observability);
     await handler(
       createFakeRequest({
         auth: {
@@ -240,7 +239,7 @@ describe('createMcpHandler outbound size observability', () => {
     const recorder = createRecordingWithSpan();
     const observability = { ...createFakeHttpObservability(), withSpan: recorder.withSpan };
 
-    const handler = createMcpHandler(createFakeMcpFactory(), observability);
+    const handler = createMcpHandler(fakeMcpFactory, observability);
     await handler(
       createFakeRequest({ body: { method: 'tools/list', jsonrpc: '2.0', id: 1 } }),
       createFakeResponse(),
@@ -256,7 +255,7 @@ describe('createMcpHandler outbound size observability', () => {
     const recorder = createRecordingWithSpan();
     const observability = { ...createFakeHttpObservability(), withSpan: recorder.withSpan };
 
-    const handler = createMcpHandler(createFakeMcpFactory(), observability);
+    const handler = createMcpHandler(fakeMcpFactory, observability);
     await handler(
       createFakeRequest({
         body: { method: 'tools/call', params: { name: 'search' }, jsonrpc: '2.0', id: 1 },
@@ -273,7 +272,7 @@ describe('createMcpHandler outbound size observability', () => {
     const recorder = createRecordingWithSpan();
     const observability = { ...createFakeHttpObservability(), withSpan: recorder.withSpan };
 
-    const handler = createMcpHandler(createFakeMcpFactory(), observability);
+    const handler = createMcpHandler(fakeMcpFactory, observability);
     await handler(
       createFakeRequest({ body: { method: 'tools/list', jsonrpc: '2.0', id: 1 } }),
       createFakeResponse(),

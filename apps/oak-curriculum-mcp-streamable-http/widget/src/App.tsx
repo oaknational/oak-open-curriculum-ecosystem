@@ -35,7 +35,7 @@ import {
   type AppRuntimeAction,
 } from './app-runtime-state.js';
 import { BrandBanner } from './BrandBanner.js';
-import { safeAreaInsetStyle } from './safe-area-insets.js';
+import { safeAreaInsetStyle, type SafeAreaInsets } from './safe-area-insets.js';
 
 /**
  * Applies host-provided visual styling to the document.
@@ -112,7 +112,7 @@ export function AppView({
   safeAreaInsets,
 }: {
   readonly onOpenLink: (url: string, event: React.MouseEvent) => void;
-  readonly safeAreaInsets?: McpUiHostContext['safeAreaInsets'];
+  readonly safeAreaInsets?: SafeAreaInsets;
 }): React.JSX.Element {
   return (
     <div

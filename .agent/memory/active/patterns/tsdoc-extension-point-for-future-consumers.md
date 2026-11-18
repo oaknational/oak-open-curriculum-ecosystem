@@ -2,6 +2,7 @@
 name: "TSDoc Extension Point for Future Consumers"
 polarity: pattern
 category: architecture
+layer: family
 status: proven
 discovered: 2026-04-17
 proven_in: "Sentry maximisation plan L-10 (feature-flag scaffolding) and L-11 (AI instrumentation scaffolding) — both resolved as TSDoc-only extension points after reviewer pushback on barrel-re-export commitments"

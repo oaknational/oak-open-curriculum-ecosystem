@@ -1,3 +1,8 @@
+---
+classification: core
+description: Do not break the build without a fix plan; cross-agent gate-recovery discipline.
+---
+
 # Don't Break the Build Without a Fix Plan
 
 Owns the green-gate invariant for the cross-agent context introduced by

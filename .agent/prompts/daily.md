@@ -80,8 +80,7 @@ take some time to use the concept exploration workflow to check that you are wor
 
 ## Closeout
 
-perform a session handoff , tell the Director when
-  you are done, ultrathink /oak-metacognition
+perform a session handoff, ultrathink /oak-metacognition
   /oak-reason /oak-session-handoff
   /oak-consolidate-docs
   

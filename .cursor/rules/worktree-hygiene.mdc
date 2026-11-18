@@ -1,5 +1,5 @@
 ---
-description: Every worktree carries an open (at least draft) PR; main is the only durable home — a surviving branch is not preservation; retire by content-check, not commit-check.
+description: Every worktree carries an open (at least draft) PR; the repository's default branch is the only durable home — a surviving branch is not preservation; retire by content-check, not commit-check.
 alwaysApply: true
 ---
 

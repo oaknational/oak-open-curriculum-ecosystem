@@ -39,7 +39,7 @@ is unset, ask the owner — never hard-code or guess.
    posted via the shared account (e.g. `<Name> (agent <prefix>, via
    <account holder>'s Slack):`) — never the name alone, or the account
    holder is silently credited with your words. Derive the name via
-   `pnpm agent-tools:agent-identity --format display`, supplying
+   `pnpm agent-tools:agent-identity --platform <label> --format display`, supplying
    `--seed "<your session UUID>"` when no platform hook exported a
    `PRACTICE_AGENT_SESSION_ID_*` seed — without a seed the CLI exits 2
    rather than guessing.

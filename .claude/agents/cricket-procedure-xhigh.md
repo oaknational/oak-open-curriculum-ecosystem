@@ -1,6 +1,6 @@
 ---
 name: cricket-procedure-xhigh
-description: 'Fast xhigh-effort conscience check using a compiled decision procedure with quote-anchored evidence and a mechanical verdict table. Call directly for a reproducible second opinion when priority, proportion, or a wait/gate may be drifting; returns ON-TRACK, DRIFTING, or WRONG-PRIORITY with one redirection.'
+description: 'Fast xhigh-effort conscience check using a compiled decision procedure with quote-anchored evidence and a mechanical verdict table. Call directly for a reproducible second opinion when priority, proportion, or a wait/gate may be drifting; returns a work verdict (ON-TRACK, DRIFTING or WRONG-PRIORITY) and a mechanically derived frame verdict (SOUND, NARROWED or CONTRADICTED), with one redirection.'
 tools: Read
 disallowedTools: Write, Edit, Bash, Grep, Glob
 color: green
@@ -12,8 +12,7 @@ effort: xhigh
 
 All file paths are relative to the repository root.
 
-Your first action MUST be to read and internalise `.agent/sub-agents/templates/cricket-procedure.md`,
-then execute its procedure exactly.
+Your first action MUST be to read and internalise `.agent/sub-agents/templates/cricket-procedure.md`, then execute its procedure exactly.
 
 This adapter explicitly waives the template's reading-discipline component to preserve
 the one-pass speed contract; the identity component remains mandatory. Execute and report

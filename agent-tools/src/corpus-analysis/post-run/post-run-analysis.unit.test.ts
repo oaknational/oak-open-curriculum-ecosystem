@@ -2,7 +2,11 @@ import { describe, expect, it } from 'vitest';
 
 import type { Candidate, VoterOutcome } from '../judgment-schemas.js';
 import type { ValidateResult } from '../workflows/stage-io.js';
-import { recomputeDispositions, temporalCoverageReport } from './post-run-analysis.js';
+import {
+  recomputeDispositions,
+  temporalCoverageReport,
+  postRunVerdict,
+} from './post-run-analysis.js';
 
 /**
  * The recompute leg proves recorded dispositions against the deterministic state
@@ -129,5 +133,33 @@ describe('temporalCoverageReport', () => {
 
   it('ignores non-longitudinal kinds', () => {
     expect(temporalCoverageReport([{ ...base, kind: 'recurrence' }])).toEqual([]);
+  });
+});
+
+describe('postRunVerdict', () => {
+  it('passes a complete map with no integrity violation and no recompute mismatch', () => {
+    expect(
+      postRunVerdict({ integrityViolations: 0, recomputeMismatches: 0, mapComplete: true }),
+    ).toEqual({ ok: true, reasons: [] });
+  });
+
+  it('fails an incomplete map alone, naming the map check', () => {
+    const verdict = postRunVerdict({
+      integrityViolations: 0,
+      recomputeMismatches: 0,
+      mapComplete: false,
+    });
+    expect(verdict.ok).toBe(false);
+    expect(verdict.reasons).toHaveLength(1);
+    expect(verdict.reasons[0]).toContain('mapComplete false');
+  });
+
+  it('fails integrity violations and recompute mismatches on a complete map, naming each with its count', () => {
+    expect(
+      postRunVerdict({ integrityViolations: 2, recomputeMismatches: 1, mapComplete: true }),
+    ).toEqual({
+      ok: false,
+      reasons: ['2 recall integrity violation(s)', '1 disposition recompute mismatch(es)'],
+    });
   });
 });

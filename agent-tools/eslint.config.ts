@@ -18,6 +18,22 @@ const config = defineConfigArray(
   },
   configs.strict,
   {
+    // The owner's ruling of 2026-09-08 on `no-throw-statement`: off where the
+    // throw debt lives (this workspace), error everywhere else and in every new
+    // workspace; the migration waits for the merge-back into the upstream. The
+    // ruling is quoted in the plugin's configs/recommended.ts; the
+    // no-throw-remediation plan owns the migration.
+    rules: { '@oaknational/no-throw-statement': 'off' },
+  },
+  {
+    // Every file this workspace lints. The Sonar disposition policy §S4036
+    // decision criteria accept a command invoked by name only when no external
+    // input reaches a shell, and the analyser's S4036 rule is not applied to
+    // this workspace, so this rule checks the shell half of that criterion
+    // here: a process launches with an argv array and no shell.
+    rules: { '@oaknational/no-shell-form-process-launch': 'error' },
+  },
+  {
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
       globals: {

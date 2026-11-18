@@ -127,5 +127,5 @@ This ADR is the host-repo operational application of PDR-055 (CLI
 Affordance-Set Discipline). The substance of build-isolation discipline
 is portable; the host-specific choice (drop the `pnpm -s build`
 prefix from invocation scripts; require explicit build) is the
-operational form. User-memory `feedback_use_built_agent_tools_only`
-references this ADR.
+operational form. The `use-built-agent-tools-cli` rule is its
+behavioural form.

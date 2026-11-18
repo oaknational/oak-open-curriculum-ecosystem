@@ -18,7 +18,7 @@ tickets:
   - MCP-154
   - MCP-155
   - MCP-156
-last_updated: 2026-08-01
+last_updated: 2026-11-12
 ---
 
 # Agent-platform Practice citizenship
@@ -66,6 +66,23 @@ modes serve this node:
 - **2026-08-01** — Widened to all agent platforms (owner card; see
   ratified_where). The Copilot-specific bet, success criteria, and
   execution state are retained unchanged below as the first instance.
+- **2026-09-28** — The owner's word to the Director, relayed by the Director
+  (event decbef38), verbatim: "I am deprioritising Codex support for now, we
+  have made progress, we will come back to it later." The Director's record of
+  the same day reads the Codex goal as paused until the owner returns to it,
+  its nodes unseated: codex-queue-wake-bridge (ratified), and
+  codex-pretooluse-guard-parity and codex-live-acceptance-seat (sketches,
+  not ratified; a pause authorises nothing in them). One instance.
+- **2026-11-12** — The owner's word in a Claude cloud session (seat Swift
+  holds Aether, pull request 397), verbatim: "I don't care about Cursor at
+  all, the repo should be functional in Cursor agent. That is all. Claude
+  Code is the main concern, Codex is the secondary concern, every else is
+  reasonable efforts only". And, asked whether this node should carry that
+  ordering: "Yes, update the platform citizenship ordering". So effort is
+  ordered: Claude Code first, Codex second, and every other platform is
+  kept working with reasonable efforts and no more. The ordering governs
+  where work is spent. It does not withdraw the principle that a capable
+  platform may join as a citizen through its own native surfaces.
 
 ## The first fully-worked instance: GitHub Copilot CLI
 

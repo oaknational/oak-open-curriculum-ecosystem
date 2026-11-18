@@ -12,7 +12,6 @@ import { z } from 'zod';
 import type { WorkspaceAttributionConfig } from './config-classification-model.js';
 import { EstateReviewError } from './errors.js';
 import { decodeUtf8 } from './git-snapshot-process.js';
-import type { RepoPath, WorkspacePackageName } from './scalar-model.js';
 
 const packageManifestSchema = z.looseObject({ name: z.string() });
 
@@ -21,20 +20,20 @@ export function compileWorkspacePackageNamePattern(
 ): Result<RegExp, EstateReviewError> {
   try {
     return ok(new RegExp(config.packageNamePattern, 'u'));
-  } catch (cause: unknown) {
+  } catch (error: unknown) {
     return err(
       new EstateReviewError('CONFIG_INVALID', 'workspace package-name grammar is invalid', {
-        cause,
+        cause: error,
       }),
     );
   }
 }
 
 export function parseWorkspacePackageName(
-  path: RepoPath,
+  path: string,
   bytes: Uint8Array,
   packageNamePattern: RegExp,
-): Result<WorkspacePackageName, EstateReviewError> {
+): Result<string, EstateReviewError> {
   const decoded = decodeUtf8(bytes, `workspace package manifest '${path}'`);
   if (isErr(decoded)) {
     return decoded;
@@ -59,10 +58,10 @@ export function parseWorkspacePackageName(
 }
 
 function validatePackageName(
-  path: RepoPath,
+  path: string,
   value: unknown,
   packageNamePattern: RegExp,
-): Result<WorkspacePackageName, EstateReviewError> {
+): Result<string, EstateReviewError> {
   const manifest = packageManifestSchema.safeParse(value);
   if (!manifest.success || !packageNamePattern.test(manifest.data.name)) {
     return invalidPackageManifest(path, 'has no valid top-level package name');
@@ -70,14 +69,14 @@ function validatePackageName(
   return ok(manifest.data.name);
 }
 
-function parseStrictJson(path: RepoPath, source: string): Result<unknown, EstateReviewError> {
+function parseStrictJson(path: string, source: string): Result<unknown, EstateReviewError> {
   try {
     const value: unknown = JSON.parse(source);
     return ok(value);
-  } catch (cause: unknown) {
+  } catch (error: unknown) {
     return err(
       new EstateReviewError('SNAPSHOT_INVALID', `workspace package manifest '${path}' is invalid`, {
-        cause,
+        cause: error,
       }),
     );
   }
@@ -113,7 +112,7 @@ function duplicateInObject(properties: readonly Node[]): string | null {
   return null;
 }
 
-function invalidPackageManifest(path: RepoPath, message: string): Result<never, EstateReviewError> {
+function invalidPackageManifest(path: string, message: string): Result<never, EstateReviewError> {
   return err(
     new EstateReviewError('SNAPSHOT_INVALID', `workspace package manifest '${path}' ${message}`),
   );

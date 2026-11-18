@@ -9,7 +9,7 @@ fitness_line_length_rationale: >-
   chronic-cosmetic (99% of breaches were ≤120; median 104) and manual reflow is a
   transient non-cure; 115 clears the noise while still flagging genuine over-runs.
 fitness_content_role: reference
-overflow_disposition: 'leave-if-live; else conserve-insight-and-delete — never archive/split/rotate/shard (see continuity-practice.md §Disposition of Continuity Surfaces)'
+overflow_disposition: 'leave-if-live; else graduate, then archive to a dated file proven byte-identical — never before full processing, never split/shard (see continuity-practice.md §Disposition of Continuity Surfaces)'
 merge_class: index-narrative-tables
 ---
 # Next-Session Record — `agent-collaboration-research` thread

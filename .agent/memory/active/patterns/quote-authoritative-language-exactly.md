@@ -3,6 +3,7 @@ name: "Quote Authoritative Language Exactly"
 polarity: anti-pattern
 use_this_when: "Restating mission, vision, licence, owner-stated, or other protected / authoritative source language in a doc, summary, or prose passage."
 category: process
+layer: general
 proven_in: "2026-06-17 vision rewrite (Ocelot binds Curfew): paraphrasing Oak's mission 'supporting teachers to teach' -> 'helping teachers teach' for prose flow lost the teacher-as-agent precision and rephrased a protected source; the owner caught it."
 proven_date: 2026-06-18
 barrier:

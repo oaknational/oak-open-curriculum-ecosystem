@@ -6,6 +6,7 @@ import {
   type ExpressWithAppId,
 } from './bootstrap-helpers.js';
 import { setupErrorHandlers } from './bootstrap-error-handlers.js';
+import { mountNotFound } from './not-found.js';
 import { registerDiagnosticRoutesIfEnabled } from '../test-error/register-diagnostic-routes.js';
 import type { CreateAppOptions } from './create-app-options.js';
 
@@ -28,8 +29,9 @@ function logBootstrapSummary(
 
 /**
  * Runs everything that must register AFTER all routes: the optional
- * diagnostic routes, the error handlers (Sentry's documented ordering
- * requirement), and the bootstrap summary.
+ * diagnostic routes, the terminal not-found refusal (so no unmatched path
+ * reaches the framework's HTML document), the error handlers (Sentry's
+ * documented ordering requirement), and the bootstrap summary.
  *
  * Kept out of the composition root so that ordering requirement is stated
  * once, in one place, rather than implied by statement order among the
@@ -51,6 +53,7 @@ export function finalizeApp(deps: {
     observability,
     log,
   });
+  mountNotFound(app);
   setupErrorHandlers(app, log, observability, options.setupSentryErrorHandler);
   logBootstrapSummary(app, log, appId, bootstrapTimer);
 }

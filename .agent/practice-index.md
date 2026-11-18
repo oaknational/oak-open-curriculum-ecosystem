@@ -1,38 +1,38 @@
 # Practice Index
 
-This file bridges the portable Practice Core files and this repo's local
-artefacts. It is **not** part of the travelling Practice Core package — it is
-created during hydration and stays in the repo. The baseline content model is
-specified by `practice-core/practice-bootstrap.md`, but local sections can be
-split more explicitly when that improves discoverability.
+This file bridges the portable Practice Core and this repo's local artefacts.
+It is **not** part of the travelling Practice Core package — it is host-local
+and stays in the repo. The format is specified by
+`practice-core/practice-bootstrap.md`.
 
-In this repo, the Practice is the reusable plain-text framework, philosophy,
-and commitment that lets agents from major vendors collaborate on Oak's open
-curriculum infrastructure, learn from each session, and keep institutional and
-operational knowledge in the repository where future agents and humans can use
-it. Its specification layer is a portability tool: Practice Core carries
-implementation-agnostic concepts, while this bridge points to the repo-local
-bindings and instances.
-
-For the Practice Core files and their roles, see [practice-core/index.md](practice-core/index.md).
+For the Practice Core files and their roles, see
+[practice-core/index.md](practice-core/index.md). In this repo (OCE), the
+Practice is the reusable plain-text framework, philosophy and commitment that
+lets agents from major vendors collaborate on the open curriculum
+infrastructure, learn from each session, and keep institutional and
+operational knowledge in the repository where future agents and humans can
+use it; the Practice originated here, and the sibling estate received the
+lineage by transplant on 2026-09-12.
 
 ## Directives
 
-| Directive                                                         | Purpose                                                   |
-| ----------------------------------------------------------------- | --------------------------------------------------------- |
-| [AGENT.md](directives/AGENT.md)                                   | Operational entry point for agents                        |
-| [principles.md](directives/principles.md)                         | Authoritative rules — must be followed at all times       |
-| [user-collaboration.md](directives/user-collaboration.md)         | Agent-to-owner working model                              |
-| [agent-collaboration.md](directives/agent-collaboration.md)       | Agent-to-agent working model                              |
-| [testing-strategy.md](directives/testing-strategy.md)             | TDD at all levels                                         |
-| [schema-first-execution.md](directives/schema-first-execution.md) | Types flow from the OpenAPI schema                        |
-| [metacognition.md](directives/metacognition.md)                   | Reflective thinking before planning                       |
-| [orientation.md](directives/orientation.md)                       | Layering contract: directives / memory / reference / practice-core; authority order |
-| [definition-of-delivery.md](directives/definition-of-delivery.md) | What counts as delivered — value received by a named beneficiary; LANDED vs RELEASED |
-
-(The reviewer invocation matrix previously listed here has moved to
-[`memory/executive/invoke-code-experts.md`](memory/executive/invoke-code-experts.md)
-as executive memory — it is operational reference, not doctrine.)
+| Directive                                                                   | Purpose                                                      |
+| --------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| [AGENT.md](directives/AGENT.md)                                             | Operational entry point for agents                           |
+| [principles.md](directives/principles.md)                                   | Authoritative rules and decision lenses                      |
+| [testing-strategy.md](directives/testing-strategy.md)                       | TDD at all levels; test types and naming                     |
+| [tdd-as-design.md](directives/tdd-as-design.md)                             | Tests as the design instrument                               |
+| [validation-strategy.md](directives/validation-strategy.md)                 | Runtime validation and boundary discipline                   |
+| [definition-of-delivery.md](directives/definition-of-delivery.md)           | What "delivered" means                                       |
+| [operationalisation-contract.md](directives/operationalisation-contract.md) | How doctrine becomes an operational surface                  |
+| [continuity-practice.md](directives/continuity-practice.md)                 | Continuity surfaces and session resume                       |
+| [metacognition.md](directives/metacognition.md)                             | Reflect before planning; friction and fluency                |
+| [orientation.md](directives/orientation.md)                                 | Grounding before acting                                      |
+| [agent-collaboration.md](directives/agent-collaboration.md)                 | Multi-seat collaboration doctrine                            |
+| [user-collaboration.md](directives/user-collaboration.md)                   | Working with the owner                                       |
+| [cloud-environment-routing.md](directives/cloud-environment-routing.md)     | Cloud-session routing                                        |
+| [schema-first-execution.md](directives/schema-first-execution.md)           | Types flow from the OpenAPI schema                           |
+| [editorial-tone.md](directives/editorial-tone.md)                           | The outward editorial voice and its scope                    |
 
 ### Architecture Guidance (docs/agent-guidance/)
 
@@ -40,78 +40,18 @@ as executive memory — it is operational reference, not doctrine.)
 | ----------------------------------------------------------------------------------------- | ---------------------------------------------------- |
 | [semantic-search-architecture.md](../docs/agent-guidance/semantic-search-architecture.md) | Structure is the foundation, transcripts are a bonus |
 
-### Rules and Hooks Surface
+## Reference
 
-The governance layer is larger than a single file:
-
-- The canonical rules live in [`.agent/rules/`](rules/) (the
-  authoritative count is `RULES_INDEX.md`; this file does not
-  duplicate it to avoid drift)
-- Thin platform adapters live in [`.cursor/rules/`](../.cursor/rules/) and
-  [`.claude/rules/`](../.claude/rules/) plus portable wrappers in
-  [`.agents/rules/`](../.agents/rules/)
-- The canonical hook policy lives in [`.agent/hooks/policy.json`](hooks/policy.json)
-- The narrative hook explainer lives in [`.agent/hooks/README.md`](hooks/README.md)
-- The live platform-support map lives in
-  [`.agent/memory/executive/cross-platform-agent-surface-matrix.md`](memory/executive/cross-platform-agent-surface-matrix.md)
-
-Representative rules:
-
-| Rule                                                       | Purpose                                               |
-| ---------------------------------------------------------- | ----------------------------------------------------- |
-| [follow-the-practice.md](rules/follow-the-practice.md)     | Keep work aligned with the full Practice system       |
-| [follow-collaboration-practice.md](rules/follow-collaboration-practice.md) | Follow the agent-human working model |
-| [follow-agent-collaboration-practice.md](rules/follow-agent-collaboration-practice.md) | Follow the agent-to-agent working model |
-| [use-agent-comms-log.md](rules/use-agent-comms-log.md) | Announce non-trivial intent in the shared communication log |
-| [capture-practice-tool-feedback.md](rules/capture-practice-tool-feedback.md) | Capture Practice and host-local tooling feedback in the napkin |
-| [register-active-areas-at-session-open.md](rules/register-active-areas-at-session-open.md) | Register active work areas before edits and commit-window claims before staging/commit |
-| [respect-active-agent-claims.md](rules/respect-active-agent-claims.md) | Consult, decide, and log before overlapping another active claim or commit window |
-| [validate-full-target-estate.md](rules/validate-full-target-estate.md) | Validate ignored or excluded estates completely |
-| [read-diagnostic-artefacts-in-full.md](rules/read-diagnostic-artefacts-in-full.md) | Read complete diagnostic output before hypothesising |
-| [consolidate-at-second-consumer.md](rules/consolidate-at-second-consumer.md) | Canonicalise duplicated shapes at the second consumer |
-| [tdd-for-refactoring.md](rules/tdd-for-refactoring.md)     | Enforce RED → GREEN → REFACTOR during refactoring     |
-| [invoke-code-experts.md](rules/invoke-code-experts.md) | Require the reviewer matrix after non-trivial changes |
-
-### Collaboration State Surface
-
-Collaboration state lives under
-[`state/collaboration/`](state/collaboration/). It is this repo's local
-operational instance of Practice-owned coordination concepts: shared log
-entries, active claims, the root `commit_queue`, closed claim history,
-decision threads, sidebars, joint decisions, and escalations. The
-at-a-glance channel register lives in
-[`memory/executive/agent-collaboration-channels.md`](memory/executive/agent-collaboration-channels.md).
-`start-right` reads collaboration state before edits, the commit skill
-opens/closes `git:index/head` claims before staging or committing,
-`session-handoff` closes the agent's own active state, and
-`consolidate-docs` audits stale or unresolved entries.
-
-Operational questions that are non-urgent, not cheaply answerable, and not
-already owned by a plan, ADR, or PDR route to
-[`memory/operational/open-questions.md`](memory/operational/open-questions.md).
-That register is sibling to pending-graduations: pending-graduations captures
-candidate doctrine or patterns, while open-questions captures unresolved
-decision-shapes for consolidation-time drain or owner surfacing.
-
-PDR-049 keeps the portable merge semantics in Practice Core. This host's
-concrete active-claims registry is `state/collaboration/active-claims.json`;
-the tracked [state contract](state/README.md) describes its lifecycle.
-If per-file `merge_class` metadata stops being sufficient, the host-local
-merge policy surface belongs under operational memory and must be linked from
-this bridge index and the substrate contract, not from Practice Core.
-
-Hook support:
-
-| Surface                       | Location                                                                                                      | Current status                                                                                                          |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| Canonical hook policy         | [`.agent/hooks/policy.json`](hooks/policy.json)                                                               | Source of truth                                                                                                         |
-| Hook explainer                | [`.agent/hooks/README.md`](hooks/README.md)                                                                   | Human-readable scope and porting notes                                                                                  |
-| Native Claude activation      | [`.claude/settings.json`](../.claude/settings.json)                                                           | Tracked Claude Code project settings; wires `PreToolUse` on fresh checkout, with additive local overrides in `.claude/settings.local.json` |
-| Cross-platform support matrix | [`.agent/memory/executive/cross-platform-agent-surface-matrix.md`](memory/executive/cross-platform-agent-surface-matrix.md) | Records supported vs unsupported surfaces                                                                               |
+| Reference                                                                                                          | Purpose                                                      |
+| ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------ |
+| [memory/executive/cross-platform-agent-surface-matrix.md](memory/executive/cross-platform-agent-surface-matrix.md) | Supported and unsupported platform surfaces (executive memory) |
+| [memory/executive/artefact-inventory.md](memory/executive/artefact-inventory.md)                                   | Canonical-vs-adapter taxonomy                                |
+| [memory/executive/invoke-code-experts.md](memory/executive/invoke-code-experts.md)                                 | Expert catalogue and triage ladder; this host's reviewers and triggers in its last section |
 
 ## Architectural Decisions
 
-ADRs referenced by the Practice Core files. The full index is at `docs/architecture/architectural-decisions/`.
+ADRs referenced by the Practice Core files. The full index is at
+[`docs/architecture/architectural-decisions/`](../docs/architecture/architectural-decisions/).
 
 | ADR                                                                                                              | Subject                                                                            |
 | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
@@ -130,6 +70,7 @@ ADRs referenced by the Practice Core files. The full index is at `docs/architect
 | [ADR-165](../docs/architecture/architectural-decisions/165-agent-work-practice-phenotype-boundary.md)             | Agent-work Practice phenotype boundary for this repo's local implementation surfaces |
 | [ADR-169](../docs/architecture/architectural-decisions/169-pin-github-actions-to-maintainer-latest-sha.md)       | Pin GitHub Actions to maintainer-Latest SHA — host-side adoption of portable PDR-040 |
 | [ADR-172](../docs/architecture/architectural-decisions/172-rush-impulse-three-structural-cues-adoption.md)       | Rush-impulse three structural cues — host-side adoption of portable PDR-043 |
+| [ADR-232](../docs/architecture/architectural-decisions/232-host-side-adoption-of-practice-core-decisions.md)     | Host-side adoption of Practice Core decisions (PDR-008's gate names, PDR-132's review-cost ledger) |
 
 ### Practice-Core concept ↔ ADR map
 
@@ -167,6 +108,7 @@ evidence.
 
 | PDR (portable principle) | Phenotype (host substrate) |
 | --- | --- |
+| [PDR-008](practice-core/decision-records/PDR-008-canonical-quality-gate-naming.md) — canonical quality-gate naming (the portable gate set and its script-level exposure) | [ADR-232](../docs/architecture/architectural-decisions/232-host-side-adoption-of-practice-core-decisions.md) — this repository's gate scripts and validator groups, the host-side adoption record a Core heading never carries (the `validate-no-host-names-in-core-headings` gate) |
 | [PDR-063](practice-core/decision-records/PDR-063-mid-cycle-retirement-protocol.md) — mid-cycle retirement protocol for token-bounded agents | [ADR-182](../docs/architecture/architectural-decisions/182-mid-cycle-handoff-record-substrate.md) — mid-cycle handoff record substrate (handoffs directory, handoff-record JSON schema, active-claim pointer field, comms-event discriminator value, landing-tranche plan) |
 | [PDR-064](practice-core/decision-records/PDR-064-coordinator-handoff-two-moments.md) — coordinator handoff: pre-positioning vs active-acknowledgement | No phenotype ADR. Substrate is an amendment to the [`start-right-team`](skills/start-right-team/SKILL-CANONICAL.md) SKILL §Closeout / handoff sections; the two-moments boundary lives in the SKILL surface, not in a separate substrate file |
 | [PDR-065](practice-core/decision-records/PDR-065-grounding-cost-amortisation-under-rotation.md) — grounding-cost amortisation under rotating-cast operation (Mode A / Mode B) | Phenotype **explicitly deferred** to first-instance evidence. Both load-bearing mechanisms — see PDR-065 §"Doctrine-change visibility under Mode B (deferred mechanism)" and §"Eligibility-signal carriage (deferred)" — are pending the first observed rotating-cast Round 1 instance. A substrate ADR will be authored only when the deferred mechanisms graduate |
@@ -186,6 +128,7 @@ evidence.
 | [PDR-136](practice-core/decision-records/PDR-136-quality-gates-are-a-registered-corpus.md) — quality gates are a registered lever corpus (registration is the membership condition and an unregistered gate is the defect, not the register's; derived facts recomputed rather than maintained, bidirectional drift failing; a gate may report only what it verified — verified-pass, verified-fail and could-not-check never collapsed; registration records reachability at every binding grain, not invocation alone, with stated-contract and checked-contract as separate fields whose gap is the finding; three derivability tiers; Accepted 2026-08-04) | Phenotype ADR **pending** — step 3 of the ratified `quality-gate-ledger` delivery node (MCP-491; named without linking, since the plan node has not yet reached this branch's base), which carries the ledger artefact and its schema, the recomputing validator, and the supersession of the existing coverage matrix by a generated view |
 | [PDR-138](practice-core/decision-records/PDR-138-visual-verification-for-design-verdicts.md) — visual verification for design verdicts (a verdict on visual work carries rendered proof read first-hand; proof classes — full-page render, interaction-state render, DOM-fact echo; red-then-green pairs at cures; proof regenerated on demand, never archived; the probe is estate tooling; Accepted 2026-08-13) | [DDR-011](../docs/design/design-decisions/011-design-verdicts-are-proven-on-rendered-pixels.md) — design verdicts are proven on rendered pixels; enforcement rule [`visual-verdicts-require-rendered-proof`](rules/visual-verdicts-require-rendered-proof.md); skill `visual-verification`; instrument `demos/oak-design-showcase/tools/visual-probe.ts` |
 | [PDR-139](practice-core/decision-records/PDR-139-provider-independent-capability-composition.md) — provider-independent capability composition: semantic contracts precede bindings; omission is capability-specific; behaviour and state portability are separate; every named provider has an exercised independent composition | [ADR-225](../docs/architecture/architectural-decisions/225-provider-independent-capability-contracts.md) — repository phenotype for provider-backed runtime capabilities, including the PostgreSQL/Neon boundary and the per-provider independence floor |
+| [PDR-132](practice-core/decision-records/PDR-132-changeset-health-round-budgets-bind-at-authoring-time.md) — changeset health: round budgets bind at authoring time | [ADR-232](../docs/architecture/architectural-decisions/232-host-side-adoption-of-practice-core-decisions.md) — this repository's review-cost ledger and survey, the host-side adoption record |
 
 ### Rules cited by Practice Core
 
@@ -248,7 +191,142 @@ witnesses for the portable doctrine. Experience records live under
 | --- | --- | --- |
 | [`2026-04-30-briny-the-frame-was-the-fix.md`](experience/2026-04-30-briny-the-frame-was-the-fix.md) | PDR-041 §Evidence + PDR-042 §Evidence | Subjective-experience witness for composition-obscurity investigation methodology and the signal-distinguishing pre-action gate |
 
-## Agentic Corpus Hub
+## Practice Decision Records
+
+The portable Practice governance decisions are PDRs under
+[`practice-core/decision-records/`](practice-core/decision-records/); the
+directory and its README are the inventory. A PDR names no host; this repo's
+applications of PDR-008 (its quality-gate script names and validator groups)
+and PDR-132 (its review-cost ledger and survey) are recorded in ADR-232, the
+host-side adoption record, and this paragraph is the pairing (the
+decision-records README §Portability Constraint). Those most load-bearing for
+this repo's day-to-day:
+
+| PDR                                                                                              | Subject                                                  |
+| ------------------------------------------------------------------------------------------------ | -------------------------------------------------------- |
+| [PDR-005](practice-core/decision-records/PDR-005-wholesale-practice-transplantation.md)          | Wholesale Practice transplantation (the sibling estate's genesis) |
+| [PDR-009](practice-core/decision-records/PDR-009-canonical-first-cross-platform-architecture.md) | Canonical-first cross-platform architecture              |
+| [PDR-014](practice-core/decision-records/PDR-014-consolidation-and-knowledge-flow-discipline.md) | Consolidation and knowledge-flow discipline              |
+| [PDR-018](practice-core/decision-records/PDR-018-planning-discipline.md)                         | Planning discipline                                      |
+| [PDR-049](practice-core/decision-records/PDR-049-memory-and-state-file-merge-semantics.md)       | Memory and state file merge semantics                    |
+| [PDR-072](practice-core/decision-records/PDR-072-knowledge-curation-as-autonomic-learning.md)    | Knowledge curation as autonomic learning                 |
+| [PDR-101](practice-core/decision-records/PDR-101-graduation-requires-quorum.md)                  | Graduation requires a review quorum                      |
+| [PDR-130](practice-core/decision-records/PDR-130-two-speed-learning.md)                          | Two-speed learning                                       |
+
+## Tools and Workflows
+
+### Skills
+
+Canonical skills live under [`skills/`](skills/), each at
+`skills/<name>/SKILL-CANONICAL.md`. Platform adapters are generated by
+`pnpm skills:generate` and checked by `pnpm skills:check`.
+
+| Skill family              | Skills                                                                                                                                                                                                              |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Session entry and exit    | `start-right-quick`, `start-right-thorough`, `start-right-team`, `go`, `session-handoff`, `wrap`                                                                                                                    |
+| Cognition                 | `cognition/metacognition`, `reason`, `concept-exploration`, `free-play`, `proportionality`, `retrospective`, `cricket`, `parallax` and its siblings                                                                 |
+| Knowledge                 | `knowledge/napkin`, `consolidate-docs`, `consolidate-until-done`, `curator-pass`, `knowledge-safety-sweep`; `distillation`, `chatgpt-report-normalisation`                                                          |
+| Change custody            | `change-custody/commit`, `gates`, `pr-lifecycle`, `semantic-merge`, `undo-change`, `complex-merge`, `cross-fork-integration`, `deslop`; `quality-gates`                                                             |
+| Planning                  | `planning/plan`, `planning/ticket-management`, `planning/user-value`                                                                                                                                                |
+| Specification             | `specification/specify`, `specification/specify-connection`, `specification/assess-specification`                                                                                                                   |
+| Collaboration             | `comms-channels`, `coordination-fold`, `cut-coordination-branch`, `set-up-worktree-lane`, `inter-practice-collaboration`, `sif`, `slack-watcher`, `talk-to-slack-watcher`, `the-codex-dialogues`, `codex-helper`    |
+| Craft                     | `domain-craft/ui-design/*`, `domain-craft/project-spec-creation`, `tsdoc`, `dependency-currency`, `update-dependencies`, `working-with-graphs`, `orientation/working-with-agentic-ai`, `orientation/under-the-hood` |
+| Reviewer companions       | `reviewer-companions/accessibility`, `architecture`, `config`, `docs-adr`, `react-component`, `security`, `subagent-architecture`                                                                                   |
+| Lever authoring           | `lever-authoring/author-skills`                                                                                                                                                                                     |
+| Product domain (local)    | `ground-truth-design`, `ground-truth-evaluation`, `update-bulk-download-schema`, `update-upstream-api-spec`                                                                                                         |
+
+### Rules
+
+Canonical rules live under [`rules/`](rules/); the directory and its generated
+`RULES_INDEX.md` are the inventory, never a count kept here. The one
+reviewer-invocation rule, `invoke-code-experts`, carries the general-layer
+roster; this host's reviewers and their triggers live in the executive
+catalogue's last section, §This host's reviewers and triggers. The canonical
+hook policy lives in [`.agent/hooks/policy.json`](hooks/policy.json) with its
+narrative explainer in [`.agent/hooks/README.md`](hooks/README.md).
+
+### Experts (sub-agents)
+
+| Expert                                                                           | Purpose                                                  |
+| -------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| [code-expert](sub-agents/templates/code-expert.md)                               | Gateway reviewer — quality, correctness, triage          |
+| [test-expert](sub-agents/templates/test-expert.md)                               | TDD compliance and test quality                          |
+| [type-expert](sub-agents/templates/type-expert.md)                               | TypeScript type safety                                   |
+| [architecture-expert](sub-agents/templates/architecture-expert.md)               | Structural review; dispatched as `architecture-expert-<persona>` with one of the four lenses (Barney, Betty, Fred, Wilma) |
+| [clerk-expert](sub-agents/templates/clerk-expert.md)                             | Clerk middleware, token verification, OAuth proxy, PRM   |
+| [mcp-expert](sub-agents/templates/mcp-expert.md)                                 | MCP protocol, tools, resources, prompts, Apps            |
+| [sentry-expert](sub-agents/templates/sentry-expert.md)                           | Sentry and OpenTelemetry observability                   |
+| [elasticsearch-expert](sub-agents/templates/elasticsearch-expert.md)             | Elasticsearch mappings, queries, retrieval               |
+| [ground-truth-designer](sub-agents/templates/ground-truth-designer.md)           | Semantic-search ground-truth design                      |
+| [accessibility-expert](sub-agents/templates/accessibility-expert.md)             | Accessibility and assistive flows                        |
+| [design-system-expert](sub-agents/templates/design-system-expert.md)             | Tokens, spacing, and responsive rhythm                   |
+| [react-component-expert](sub-agents/templates/react-component-expert.md)         | React hooks and component boundaries                     |
+| [config-expert](sub-agents/templates/config-expert.md)                           | Build and configuration surfaces                         |
+| [docs-adr-expert](sub-agents/templates/docs-adr-expert.md)                       | Docs and decision records                                |
+| [security-expert](sub-agents/templates/security-expert.md)                       | Security and defensive surfaces                          |
+| [subagent-architect](sub-agents/templates/subagent-architect.md)                 | Reviewer architecture and dispatch                       |
+| [assumptions-expert](sub-agents/templates/assumptions-expert.md)                 | Adversarial assumptions check; PDR-101 graduation quorum |
+| [prose-expert](sub-agents/templates/prose-expert.md)                             | Prose craft; the outward voice per `editorial-tone.md`   |
+| [onboarding-expert](sub-agents/templates/onboarding-expert.md)                   | Cold-start readability of docs and handoffs              |
+| [release-readiness-expert](sub-agents/templates/release-readiness-expert.md)     | Release gates                                            |
+| `corpus-mapper`, `corpus-meta`, `corpus-reducer`, `corpus-voter`                 | Parallax corpus roles                                    |
+| `cricket-judgement-low`, `cricket-judgement-medium`, `cricket-judgement-high`, `cricket-procedure-xhigh` | Cricket panel roles (the effort-inversion quartet) |
+
+### Validation
+
+Practice validators live in [`agent-tools`](../agent-tools/README.md) and run
+from the root:
+
+| Command                           | Purpose                                                 |
+| --------------------------------- | ------------------------------------------------------- |
+| `pnpm portability:check` / `:fix` | Canonical ↔ adapter parity; `:fix` regenerates adapters |
+| `pnpm subagents:check`            | Expert adapter coverage across platforms                |
+| `pnpm practice:fitness`           | Four-field fitness frontmatter on governed files        |
+| `pnpm practice:vocabulary`        | Canonical fitness frontmatter keys                      |
+| `pnpm skills:check`               | Skill adapter drift                                     |
+| `pnpm practice:substrate:check`   | The memory and state substrate manifest                 |
+
+## Repo-Specific Clusters
+
+### Collaboration state surface
+
+Collaboration state lives under
+[`state/collaboration/`](state/collaboration/). It is this repo's local
+operational instance of Practice-owned coordination concepts: shared log
+entries, active claims, the per-intent commit-queue store beside them
+(machine-local since registry schema 1.4.0), closed claim history,
+decision threads, sidebars, joint decisions, and escalations. The
+at-a-glance channel register lives in
+[`memory/executive/agent-collaboration-channels.md`](memory/executive/agent-collaboration-channels.md).
+`start-right` reads collaboration state before edits, the commit skill
+opens/closes `git:index/head` claims before staging or committing,
+`session-handoff` closes the agent's own active state, and
+`consolidate-docs` audits stale or unresolved entries.
+
+Operational questions that are non-urgent, not cheaply answerable, and not
+already owned by a plan, ADR, or PDR route to
+[`memory/operational/open-questions.md`](memory/operational/open-questions.md).
+That register is sibling to pending-graduations: pending-graduations captures
+candidate doctrine or patterns, while open-questions captures unresolved
+decision-shapes for consolidation-time drain or owner surfacing.
+
+PDR-049 keeps the portable merge semantics in Practice Core. This host's
+concrete active-claims registry is `state/collaboration/active-claims.json`;
+the tracked [state contract](state/README.md) describes its lifecycle.
+If per-file `merge_class` metadata stops being sufficient, the host-local
+merge policy surface belongs under operational memory and must be linked from
+this bridge index and the substrate contract, not from Practice Core.
+
+Hook support:
+
+| Surface                       | Location                                                                                                      | Current status                                                                                                          |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Canonical hook policy         | [`.agent/hooks/policy.json`](hooks/policy.json)                                                               | Source of truth                                                                                                         |
+| Hook explainer                | [`.agent/hooks/README.md`](hooks/README.md)                                                                   | Human-readable scope and porting notes                                                                                  |
+| Native Claude activation      | [`.claude/settings.json`](../.claude/settings.json)                                                           | Tracked Claude Code project settings; wires `PreToolUse` on fresh checkout, with additive local overrides in `.claude/settings.local.json` |
+| Cross-platform support matrix | [`.agent/memory/executive/cross-platform-agent-surface-matrix.md`](memory/executive/cross-platform-agent-surface-matrix.md) | Records supported vs unsupported surfaces                                                                               |
+
+### Agentic corpus hub
 
 For concept-driven routing across canon, research, evidence, plans, reflective
 sources, and deep dives, use
@@ -259,26 +337,7 @@ reference-research-notes-rehoming plan (`./plans-old-archive/agentic-engineering
 it routes back to the authoritative ADRs, Practice Core, `/docs/**`
 surfaces, and supporting source lanes.
 
-## Skills and Prompts
-
-The execution surface is intentionally split by role:
-
-- **Canonical skills** in [`.agent/skills/`](skills/) (live count
-  surfaces in the directory listing — counts in this index drift;
-  treat the directory as authoritative). Skills are the sole
-  user-and-model-invokable workflow surface; custom command surfaces
-  have been retired.
-- **Prompt library** in [`.agent/prompts/`](prompts/) with the active index at
-  [`.agent/prompts/README.md`](prompts/README.md)
-
-Representative execution surfaces:
-
-| Surface               | Canonical location                                      | Representative entries                                                                                                                                                                                                                                                                                                                                                                          | Purpose                                                       |
-| --------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| Skills                | [`.agent/skills/`](skills/)                             | [`start-right-quick`](skills/start-right-quick/SKILL-CANONICAL.md), [`start-right-thorough`](skills/start-right-thorough/SKILL-CANONICAL.md), [`go`](skills/go/SKILL-CANONICAL.md), [`session-handoff`](skills/session-handoff/SKILL-CANONICAL.md), [`gates`](skills/gates/SKILL-CANONICAL.md), [`plan`](skills/plan/SKILL-CANONICAL.md), [`consolidate-docs`](skills/knowledge/consolidate-docs/SKILL-CANONICAL.md), [`metacognition`](skills/cognition/metacognition/SKILL-CANONICAL.md), [`napkin`](skills/knowledge/napkin/SKILL-CANONICAL.md), [`commit`](skills/commit/SKILL-CANONICAL.md), [`chatgpt-report-normalisation`](skills/chatgpt-report-normalisation/SKILL-CANONICAL.md) | User-invoked workflows and on-demand expertise                |
-| Session prompts       | [`.agent/prompts/`](prompts/)                           | Domain-specific handover briefs only (e.g. `gt-review.md` (`./prompts/archive/gt-review.md`), `semantic-search/semantic-search.prompt.md` (`prompts/semantic-search/semantic-search.prompt.md`)). General session orientation is no longer prompt-hosted — see [`orientation.md`](directives/orientation.md) and [`start-right-quick`](skills/start-right-quick/SKILL-CANONICAL.md).                                                     | Stateful session entry points tied to active plans or domains |
-
-## Memory and Patterns
+### Memory and patterns
 
 Institutional memory accumulates across sessions and distils into
 reusable knowledge:
@@ -289,13 +348,14 @@ reusable knowledge:
 | Collaboration channels | [`memory/executive/agent-collaboration-channels.md`](memory/executive/agent-collaboration-channels.md) | Register of communication options and when to use each |
 | Pattern library | [`memory/active/patterns/`](memory/active/patterns/README.md) | Abstract solutions to recurring design problems (live count surfaces in the directory listing) |
 | Session napkin | [`memory/active/napkin.md`](memory/active/napkin.md) | Current session observations, written continuously |
+| Operator profile | `~/.practice/profile/index.md` (home directory, not in this repository; may not exist) | The operator's own facts — identities, writing preferences, machine notes — shared by every Practice repository on the machine; `repos/<scope-key>.md` for this line, `machines/<machine-key>.md` for the host. Contract: [`practice-core/schemas/operator-profile.schema.json`](practice-core/schemas/operator-profile.schema.json); check with `pnpm profile:check`. Sync (PDR-141 decisions 13 to 16): `pnpm profile:sync pull` at session open, before the profile is read; `pnpm profile:sync push --message "<seat>: <the fact>"` immediately after a write on the operator's word. Both are no-ops that say so when the root is absent, not a repository, or has no remote. Absence is the expected condition |
 | Napkin archive | [`memory/active/archive/`](memory/active/archive/) | Rotated napkins (historical record) |
 | Operational continuity | [`memory/operational/repo-continuity.md`](memory/operational/repo-continuity.md) | Repo-wide active-thread register, standing decisions, pending-graduations |
 
 The agent directive teaches agents to check the pattern library before
 inventing new approaches.
 
-### Pattern instances cited by Practice Core
+#### Pattern instances cited by Practice Core
 
 Practice Core PDRs routinely cite host-local pattern instances that
 prove the portable doctrine. The instances live under
@@ -342,15 +402,35 @@ example in this repo:
 | [`test-claim-assertion-parity.md`](memory/active/patterns/test-claim-assertion-parity.md) | PDR-021 (host adoption) | Test description and assertion must measure the same thing |
 | [`agent-experience-review-lens.md`](rules/agent-experience-review-lens.md) | PDR-111 (host adoption) | Weigh agent-experience impact when designing or reviewing agent-facing substrate (CLIs, watchers, comms/claims/state, gates, hooks); cures prefer structural class-retirement |
 
+### Skills and prompts
+
+The execution surface is intentionally split by role:
+
+- **Canonical skills** in [`.agent/skills/`](skills/) (live count
+  surfaces in the directory listing — counts in this index drift;
+  treat the directory as authoritative). Skills are the sole
+  user-and-model-invokable workflow surface; custom command surfaces
+  have been retired.
+- **Prompt library** in [`.agent/prompts/`](prompts/) with the active index at
+  [`.agent/prompts/README.md`](prompts/README.md)
+
+Representative execution surfaces:
+
+| Surface               | Canonical location                                      | Representative entries                                                                                                                                                                                                                                                                                                                                                                          | Purpose                                                       |
+| --------------------- | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| Skills                | [`.agent/skills/`](skills/)                             | [`start-right-quick`](skills/start-right-quick/SKILL-CANONICAL.md), [`start-right-thorough`](skills/start-right-thorough/SKILL-CANONICAL.md), [`go`](skills/go/SKILL-CANONICAL.md), [`session-handoff`](skills/session-handoff/SKILL-CANONICAL.md), [`gates`](skills/change-custody/gates/SKILL-CANONICAL.md), [`plan`](skills/planning/plan/SKILL-CANONICAL.md), [`consolidate-docs`](skills/knowledge/consolidate-docs/SKILL-CANONICAL.md), [`metacognition`](skills/cognition/metacognition/SKILL-CANONICAL.md), [`napkin`](skills/knowledge/napkin/SKILL-CANONICAL.md), [`commit`](skills/change-custody/commit/SKILL-CANONICAL.md), [`chatgpt-report-normalisation`](skills/chatgpt-report-normalisation/SKILL-CANONICAL.md) | User-invoked workflows and on-demand expertise                |
+| Session prompts       | [`.agent/prompts/`](prompts/)                           | Domain-specific handover briefs only (e.g. `gt-review.md` (`./prompts/archive/gt-review.md`), `semantic-search/semantic-search.prompt.md` (`prompts/semantic-search/semantic-search.prompt.md`)). General session orientation is no longer prompt-hosted — see [`orientation.md`](directives/orientation.md) and [`start-right-quick`](skills/start-right-quick/SKILL-CANONICAL.md).                                                     | Stateful session entry points tied to active plans or domains |
+
 ## Artefact Directories
 
 | Location                                                                                      | What lives there                                                            |
 | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| [`.agent/practice-core/`](practice-core/)                                                     | Portable Practice Core package — trinity + entry points + CHANGELOG + provenance + `decision-records/` (PDRs, including universal patterns with `pdr_kind: pattern`) + `incoming/` (Practice Box). Previous `patterns/` Core directory and `practice-context/` peer companion retired 2026-04-29 (PDR-007 amendment). |
-| [`.agent/directives/`](directives/)                                                           | Doctrine — read-and-internalise; sets stance (AGENT.md, principles, collaboration, testing-strategy, schema-first-execution, metacognition, orientation) |
-| [`.agent/plans/`](plans/)                                                                     | The plan-node estate (ADR-216) — strategic, delivery, and runbook nodes, born-sketch until owner-ratified, with the schema contract and per-type templates |
-| [`.agent/memory/`](memory/)                                                                   | Three-mode memory: [`active/`](memory/active/) (learning loop — napkin, distilled, patterns, archive), [`operational/`](memory/operational/) (continuity — repo-continuity, workstreams, tracks), [`executive/`](memory/executive/) (contracts — artefact inventory, reviewer catalogue, platform-adapter matrix). See [`memory/README.md`](memory/README.md). |
-| [`.agent/state/`](state/)                                                                     | Live coordination state — shared communication log, active claims + `commit_queue`, closed claims, decision threads, sidebars, joint decisions, and escalations |
+| [`.agent/practice-core/`](practice-core/)                                                     | Portable Practice Core package — trinity + entry points + CHANGELOG + provenance + `schemas/` + `decision-records/` (PDRs, including universal patterns with `pdr_kind: pattern`) + `incoming/` (Practice Box) |
+| [`.agent/directives/`](directives/)                                                           | Doctrine — read-and-internalise; sets stance (AGENT.md, principles, collaboration, testing-strategy, schema-first-execution, metacognition, orientation, and the rest of the table above) |
+| `~/.practice/profile/` (home directory, not in this repository; may not exist)               | The operator profile: `index.md` for the operator everywhere, `repos/<scope-key>.md` for this line, `machines/<machine-key>.md` for the host. Contract: [`practice-core/schemas/operator-profile.schema.json`](practice-core/schemas/operator-profile.schema.json); check with `pnpm profile:check`; sync with `pnpm profile:sync pull` at session open and `pnpm profile:sync push --message` after any write made on the operator's word ([PDR-141](practice-core/decision-records/PDR-141-operator-profile-in-the-home-directory.md)) |
+| [`.agent/plans/`](plans/)                                                                     | The plan-node estate (ADR-216) — strategic, delivery, and runbook nodes, born-sketch until owner-ratified, with the schema contract and per-type templates; completed nodes under `archive/` |
+| [`.agent/memory/`](memory/)                                                                   | Three-mode memory: [`active/`](memory/active/) (learning loop — napkin, distilled, patterns, archive), [`operational/`](memory/operational/) (continuity — repo-continuity, registers, threads), [`executive/`](memory/executive/) (contracts — artefact inventory, reviewer catalogue, platform-adapter matrix). See [`memory/README.md`](memory/README.md). |
+| [`.agent/state/`](state/)                                                                     | Live coordination state — shared communication log, active claims + the per-intent `commit-queue/` store, closed claims, decision threads, sidebars, joint decisions, and escalations |
 | [`.agent/experience/`](experience/)                                                           | Experiential records across sessions                                        |
 | [`.agent/prompts/`](prompts/)                                                                 | Domain-specific handover prompts — stateful session context                 |
 | [`.agent/sub-agents/`](sub-agents/)                                                           | Reviewer prompt architecture (components, templates)                        |
@@ -358,10 +438,12 @@ example in this repo:
 | [`.agent/research/`](research/)                                                               | Research documents and analysis                                             |
 | [`.agent/analysis/`](analysis/)                                                               | Investigations and evidence                                                 |
 | [`.agent/reports/`](reports/)                                                                 | Promoted formal audits and syntheses                                        |
-| [`.agent/reference/`](reference/)                                                             | Supporting reference material, including the cross-platform surface matrix  |
+| [`.agent/reference/`](reference/)                                                             | The Practice's reference documents                                          |
+| [`.agent/collaboration/`](collaboration/)                                                     | Rapid-comms channels                                                        |
 | [`.cursor/`](../.cursor/)                                                                     | Cursor platform adapters (thin wrappers)                                    |
 | [`.claude/`](../.claude/)                                                                     | Claude Code platform adapters (thin wrappers)                               |
 | [`.gemini/`](../.gemini/)                                                                     | Gemini CLI platform adapters (thin wrappers)                                |
-| [`.agents/`](../.agents/)                                                                     | Portable skill, command, and rule adapters (thin wrappers)                  |
+| [`.agents/`](../.agents/)                                                                     | Portable skill and rule adapters (thin wrappers)                            |
 | [`.codex/`](../.codex/)                                                                       | Codex project-agent configuration (reviewer sub-agents)                     |
+| [`agent-tools/`](../agent-tools/)                                                             | The Practice tooling: validators, collaboration state, comms, commit queue  |
 | [`docs/architecture/architectural-decisions/`](../docs/architecture/architectural-decisions/) | Permanent architectural decision records                                    |

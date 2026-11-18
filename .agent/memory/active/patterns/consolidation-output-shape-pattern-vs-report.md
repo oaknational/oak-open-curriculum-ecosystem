@@ -3,6 +3,7 @@ name: Consolidation Output Shape — Contract for One Pattern, Report for N Inde
 polarity: pattern
 use_this_when: A consolidation, audit, or deep-exploration pass has produced N findings and you are choosing the shape of the output artefact — a single contract, a per-finding remediation list, an ADR, a PDR, or a free-form report
 category: process
+layer: general
 proven_in: .agent/memory/executive/collaboration-state-placement-contract.md
 proven_date: 2026-05-06
 barrier:

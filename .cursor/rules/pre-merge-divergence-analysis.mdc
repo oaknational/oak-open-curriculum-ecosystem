@@ -1,5 +1,5 @@
 ---
-description: Follow the pre-merge divergence analysis guide when merging branches with 100+ files changed on either side or 10+ conflicts in a dry-run merge.
+description: Loads for EVERY merge. Any merge that changes a fact a document states as a premise owes the premise sweep (guide §4i) whatever its size; merges with 100+ files changed on either side, 10+ conflicts in a dry-run merge, or a core-interface refactor follow the full pre-merge divergence analysis guide.
 alwaysApply: false
 ---
 

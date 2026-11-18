@@ -251,16 +251,18 @@ working-tree write surface is portable Practice governance.
 ## Implementation
 
 This PDR's host-repo operational application is an amendment to
-ADR-177 (Asymmetric-Cure Enforcement at the Staging Boundary). The
+the host's staging-boundary enforcement decision. The
 amendment names the post-hook classification gate as the trailing
 complement to the pre-hook `verify-staged` fingerprint check and
 records the host-specific implementation surface (commit-skill
 extension, manifest location, producer enumeration).
 
-The PDR-054 §Implementation reference to ADR-177 is extended in a
+The PDR-054 §Implementation reference to the host's staging-boundary
+enforcement decision is extended in a
 companion §Related cross-reference noting that the post-hook
 absorption case is governed by this PDR's classification doctrine
-and the ADR-177 amendment, not by the PDR-054 verify-staged framing.
+and that decision's amendment, not by the PDR-054 verify-staged
+framing.
 
 ## Source
 
@@ -268,8 +270,9 @@ This PDR graduates the substance of the `pending-graduations.md`
 entry *"Hook-chain re-staging absorbs files post-verify-staged"*
 (captured 2026-05-10 by Quiet Lurking Mask after the second observed
 instance of post-hook absorption; target named in the entry as
-"amendment to PDR-054 + ADR-177 OR new PDR for post-hook-verify-
-staged"; trigger named as "second-instance OR owner-direction"). The
+"amendment to PDR-054 + [the host's staging-boundary enforcement
+decision] OR new PDR for post-hook-verify-staged"; trigger named as
+"second-instance OR owner-direction"). The
 owner-direction trigger fired 2026-05-11 in the
 graduation-candidates-drain session; the cure-shape decision (option
 iii — classification by intent) was owner-selected at session open

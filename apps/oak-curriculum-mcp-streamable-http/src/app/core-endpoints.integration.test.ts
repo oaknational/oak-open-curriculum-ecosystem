@@ -55,22 +55,23 @@ describe('native Sentry MCP wrapping is inert without Sentry.init', () => {
   });
 });
 
-describe('per-request transport observation (MCP-241)', () => {
-  function initialize(transportObserver?: McpTransportObserver<Transport>) {
-    const app = express();
-    return initializeCoreEndpoints(
-      app,
-      {
-        runtimeConfig: createMockRuntimeConfig(),
-        observability: createFakeHttpObservability(),
-        resourceUrl: 'https://probe.test/mcp',
-        getWidgetHtml: () => '<!doctype html><html><body>test</body></html>',
-        ...(transportObserver ? { transportObserver } : {}),
-      },
-      createFakeLogger(),
-    );
-  }
+/** Initialises the core endpoints on a fresh app over fakes, observed by `transportObserver` when given. */
+function initialize(transportObserver?: McpTransportObserver<Transport>) {
+  const app = express();
+  return initializeCoreEndpoints(
+    app,
+    {
+      runtimeConfig: createMockRuntimeConfig(),
+      observability: createFakeHttpObservability(),
+      resourceUrl: 'https://probe.test/mcp',
+      getWidgetHtml: () => '<!doctype html><html><body>test</body></html>',
+      ...(transportObserver ? { transportObserver } : {}),
+    },
+    createFakeLogger(),
+  );
+}
 
+describe('per-request transport observation (MCP-241)', () => {
   it('off mode: connectTransport is the exact concrete transport reference', () => {
     const { mcpFactory } = initialize();
 

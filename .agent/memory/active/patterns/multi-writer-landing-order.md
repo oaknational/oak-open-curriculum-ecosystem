@@ -3,6 +3,7 @@ name: "Multi-Writer Landing Order: Deletion-Bearing Bundles Commit First"
 polarity: pattern
 use_this_when: "Multiple lanes share one checkout (or one estate gate) and any lane's work-in-progress DELETES a tracked file — and commits are queuing."
 category: process
+layer: general
 proven_in: "curriculum-hub-demo 2026-07-02 (multi-agent window): a hygiene lane's tracked-file deletions blocked every estate commit until the deleting lane's cycle committed first; the one-index multi-cycle commit-train technique landed three cycles from one mixed tree. Recorded in the Director #7 handoff record's operating protocol."
 proven_date: 2026-07-06
 barrier:

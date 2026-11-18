@@ -2,6 +2,7 @@
 name: timing-artefact-read-as-state
 polarity: anti-pattern
 category: agent
+layer: general
 use_this_when: >-
   About to mint instrument lore, a failure diagnosis, or a drop/hang/dead
   verdict from a read of an asynchronous or eventually-consistent surface —

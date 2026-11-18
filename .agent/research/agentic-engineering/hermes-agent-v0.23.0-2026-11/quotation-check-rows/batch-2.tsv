@@ -1,0 +1,44 @@
+H	hermes_cli/config_defaults.py	1998	2008	"defer": [
+H	agent/context_compressor_prompt_rules.py	11	21	UNVERIFIED
+H	website/docs/developer-guide/agent-loop.md	213	213	child
+H	website/docs/developer-guide/multiplexing-gateway.md	8	8	One gateway process can serve every profile
+H	website/docs/developer-guide/gateway-local-sessions.md	8	8	can create fresh local
+H	website/docs/developer-guide/context-compression-and-caching.md	333	333	parent_session_id
+H	tools/registry.py	23	23	hermes_constants
+H	tools/registry.py	126	126	safe_worker_policy
+H	tools/registry.py	334	334	secret_scope
+H	tools/registry.py	450	450	toolsets
+H	tools/registry.py	985	985	model_tools
+H	gateway/platforms/base.py	3842	3842	_process_message_background
+H	gateway/platforms/base.py	4481	4481	_message_handler(event)
+H	gateway/platforms/base.py	4533	4533	_send_final_text
+H	gateway/run_adapters.py	1542	1542	_handle_message(event)
+H	gateway/run_inbound.py	1352	1352	_handle_message_with_agent
+H	gateway/run_turn.py	252	252	_run_agent(
+H	gateway/run_turn.py	1005	1005	TurnRunner(self, turn_ctx)
+H	gateway/run_turn_runner.py	1034	1034	run_conversation(api_message
+H	gateway/session_execution.py	161	161	AIAgent(
+H	agent/turn_facade.py	148	148	run_conversation(
+H	agent/turn_context.py	1205	1205	restore_or_build_system_prompt
+H	agent/conversation_loop.py	1605	1605	finalize_turn
+H	agent/turn_tool_round.py	171	171	_execute_tool_calls
+H	agent/tool_executor.py	1680	1680	INLINE_TOOL_EXECUTORS
+H	agent/tool_executor.py	1713	1713	handle_function_call
+H	model_tools.py	852	852	registry.dispatch
+H	model_tools.py	151	151	discover_builtin_tools()
+H	model_tools.py	541	543	tool_search
+H	agent/turn_finalizer.py	613	613	_spawn_background_review
+H	agent/turn_finalizer.py	705	705	_save_trajectory
+H	website/docs/developer-guide/architecture.md	139	139	25,000 tests
+H	website/docs/developer-guide/architecture.md	147	147	process_input
+H	website/docs/developer-guide/architecture.md	274	274	no deps
+H	website/docs/developer-guide/architecture.md	238	238	Three discovery sources
+H	website/docs/developer-guide/prompt-assembly.md	33	33	skills index
+H	website/docs/developer-guide/prompt-assembly.md	38	38	skills are part of the **stable** tier
+H	website/docs/user-guide/features/tool-search.md	12	24	opt-in
+H	pyproject.toml	586	589	hermes-acp
+H	hermes_cli/plugins.py	1325	1336	_scan_entry_points
+H	hermes_cli/plugins.py	75	75	plugins
+H	AGENTS.md	108	108	Find code by topic
+H	tools/AGENTS.md	55	55	check_fn
+H	agent/AGENTS.md	90	91	sanctioned

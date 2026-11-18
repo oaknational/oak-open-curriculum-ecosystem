@@ -31,26 +31,26 @@ const cursorAgent = deriveOverrideCollaborationIdentity({
 describe('buildCollaborationTuiSnapshot', () => {
   it('projects collaboration state into stable panes for the TUI', () => {
     const registry: CollaborationRegistry = {
-      schema_version: '1.3.0',
+      schema_version: '1.4.0',
       claims: [
         claim({
           claim_id: 'codex-claim',
           intent: 'Implement collaboration TUI primitives.',
         }),
       ],
-      commit_queue: [
-        queueEntry({
-          intent_id: 'expired-intent',
-          expires_at: '2026-05-12T13:50:00Z',
-        }),
-        queueEntry({
-          intent_id: 'active-intent',
-          agent_id: cursorAgent,
-          commit_subject: 'docs(agent): hand off graph plan',
-          expires_at: '2026-05-12T14:20:00Z',
-        }),
-      ],
     };
+    const commitQueue = [
+      queueEntry({
+        intent_id: 'expired-intent',
+        expires_at: '2026-05-12T13:50:00Z',
+      }),
+      queueEntry({
+        intent_id: 'active-intent',
+        agent_id: cursorAgent,
+        commit_subject: 'docs(agent): hand off graph plan',
+        expires_at: '2026-05-12T14:20:00Z',
+      }),
+    ];
     const closedArchive: ClosedClaimsArchive = {
       schema_version: '1.3.0',
       claims: [claim({ claim_id: 'closed-codex-claim' })],
@@ -58,6 +58,7 @@ describe('buildCollaborationTuiSnapshot', () => {
 
     const snapshot = buildCollaborationTuiSnapshot({
       registry,
+      commitQueue,
       closedArchive,
       events: [
         narrative({
@@ -124,7 +125,8 @@ describe('buildCollaborationTuiSnapshot', () => {
     });
 
     const snapshot = buildCollaborationTuiSnapshot({
-      registry: { schema_version: '1.3.0', claims: [], commit_queue: [] },
+      registry: { schema_version: '1.4.0', claims: [] },
+      commitQueue: [],
       closedArchive: {
         schema_version: '1.3.0',
         claims: [claim({ agent_id: closedOnlyAgent, claim_id: 'closed-only' })],
@@ -173,7 +175,7 @@ describe('buildCollaborationTuiSnapshot', () => {
 
     const snapshot = buildCollaborationTuiSnapshot({
       registry: {
-        schema_version: '1.3.0',
+        schema_version: '1.4.0',
         claims: [
           claim({
             agent_id: conflictingAgentA,
@@ -192,19 +194,19 @@ describe('buildCollaborationTuiSnapshot', () => {
             freshness_seconds: 60,
           }),
         ],
-        commit_queue: [
-          queueEntry({
-            intent_id: 'active-intent',
-            agent_id: conflictingAgentA,
-            expires_at: '2026-05-12T14:20:00Z',
-          }),
-          queueEntry({
-            intent_id: 'expired-intent',
-            agent_id: staleAgent,
-            expires_at: '2026-05-12T13:30:00Z',
-          }),
-        ],
       },
+      commitQueue: [
+        queueEntry({
+          intent_id: 'active-intent',
+          agent_id: conflictingAgentA,
+          expires_at: '2026-05-12T14:20:00Z',
+        }),
+        queueEntry({
+          intent_id: 'expired-intent',
+          agent_id: staleAgent,
+          expires_at: '2026-05-12T13:30:00Z',
+        }),
+      ],
       closedArchive: {
         schema_version: '1.3.0',
         claims: [claim({ agent_id: closedOnlyAgent, claim_id: 'closed-only' })],
@@ -318,7 +320,7 @@ describe('buildCollaborationTuiSnapshot', () => {
 
     const snapshot = buildCollaborationTuiSnapshot({
       registry: {
-        schema_version: '1.3.0',
+        schema_version: '1.4.0',
         claims: [
           claim({ agent_id: conflictingAgentA, claim_id: 'collision-a1' }),
           claim({ agent_id: conflictingAgentB, claim_id: 'collision-a2' }),
@@ -337,19 +339,19 @@ describe('buildCollaborationTuiSnapshot', () => {
             freshness_seconds: 60,
           }),
         ],
-        commit_queue: [
-          queueEntry({
-            intent_id: 'expired-a',
-            agent_id: staleAgentA,
-            expires_at: '2026-05-12T13:30:00Z',
-          }),
-          queueEntry({
-            intent_id: 'expired-b',
-            agent_id: staleAgentB,
-            expires_at: '2026-05-12T13:31:00Z',
-          }),
-        ],
       },
+      commitQueue: [
+        queueEntry({
+          intent_id: 'expired-a',
+          agent_id: staleAgentA,
+          expires_at: '2026-05-12T13:30:00Z',
+        }),
+        queueEntry({
+          intent_id: 'expired-b',
+          agent_id: staleAgentB,
+          expires_at: '2026-05-12T13:31:00Z',
+        }),
+      ],
       events: [
         directed({ event_id: 'directed-a' }),
         directed({ event_id: 'directed-b', subject: 'Second directed note' }),
@@ -404,6 +406,7 @@ function queueEntry(
     updated_at: '2026-05-12T13:00:00Z',
     expires_at: '2026-05-12T14:30:00Z',
     phase: 'queued',
+    queued_seq: 0,
     ...overrides,
   };
 }

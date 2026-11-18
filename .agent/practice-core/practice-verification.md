@@ -46,19 +46,22 @@ After creating all files, validate:
 7. The `start-right-quick` skill references all foundation documents and
    the collaboration-state consultation surfaces used before mutation.
 8. The napkin rule points to a napkin skill that exists.
-9. **Canonical quality gates** (per PDR-008) are wired in
-   `package.json` (or the host ecosystem's script-layer equivalent):
-   `clean`, `build`, `dev`, `format`, `format:fix`, `lint`, `lint:fix`,
-   `typecheck`, `test`, `check` (alias for `check:fix`), `check:fix`,
-   `check:ci`, `fix`. Semantics follow PDR-008: bare = verify, `:fix`
-   = apply, `:ci` = non-mutating CI form. Per-ecosystem adaptations
-   wrap the ecosystem's idiomatic invocations under these canonical
-   names.
+9. **Canonical quality gates** (per PDR-008 as amended) are wired
+   in `package.json` (or the host ecosystem's script-layer equivalent):
+   `clean`, `build`, `dev`, `format-check:root`, `format:root`,
+   `markdownlint-check:root`, `markdownlint:root`, `lint`, `lint:fix`,
+   `type-check`, `test`, `check` (the read-only aggregate), `fix` (the
+   mutating aggregate), `check:docs`, `fix:docs`. Semantics: bare `check`
+   verifies, `fix` applies; CI runs the same legs as `check` under a parity
+   validator rather than a separate `:ci` form. Per-ecosystem adaptations
+   wrap the ecosystem's idiomatic invocations under these canonical names.
 10. The project builds.
 11. **Artefact portability** (per PDR-009): canonical skills,
     commands, rules, and sub-agents live in `.agent/`; all platform
     adapters are thin wrappers with activation metadata + pointer +
-    invocation syntax only. Validate adapter-to-canonical consistency
+    invocation syntax only; an inline-prompt role's adapter (PDR-009)
+    carries its template's System prompt block verbatim and is compared
+    with it. Validate adapter-to-canonical consistency
     AND authorisation parity in tracked project config — a portability
     check (per PDR-022 scanner discipline) that walks every canonical
     surface and confirms platform coverage.
@@ -278,6 +281,13 @@ workflows look plausible but no host surface exists.
 After hydration, verify every referenced local surface actually exists.
 Fail validation when activation exists without canonical source — the
 missing source is the defect, not a condition that bypasses the check.
+Judge completeness by function, never by a green gate: green means the
+checks that exist pass, not that the estate is whole. Enumerate what the
+Practice must do for this repository, and for each function exercise the
+estate's own claims — every backticked path and cited script in live
+doctrine resolves (a cited-paths check is the cheapest instrument) — before
+any survey of the source Practice, which cannot show what its surveys
+missed (PDR-005 §Audit close; jimcresswell.net, 2026-09-13).
 Treat optional local surfaces as feature flags, not assumptions: if a
 repo does not install prompts, continuity workflows must point to the
 real local surface instead of hardcoding a path that does not exist.

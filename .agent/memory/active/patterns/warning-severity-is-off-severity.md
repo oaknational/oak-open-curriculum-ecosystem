@@ -3,6 +3,7 @@ name: "Warning Severity Is Off Severity"
 polarity: anti-pattern
 use_this_when: "Setting or reviewing lint rule severity, especially when considering 'warn' as a transitional step toward 'error'"
 category: process
+layer: general
 proven_in: "packages/core/oak-eslint — testRules had consistent-type-assertions at warn, allowing 13 violations to accumulate across 4 workspaces unnoticed"
 proven_date: 2026-04-14
 barrier:

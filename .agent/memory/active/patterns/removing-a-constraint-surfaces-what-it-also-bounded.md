@@ -3,6 +3,7 @@ name: "Removing a Constraint Surfaces What It Was Also Bounding"
 polarity: pattern
 use_this_when: "About to delete or relax a constraint (a count cap, a size limit, a timeout, a gate) because it causes one visible problem."
 category: process
+layer: general
 proven_in: "Corpus-analysis WS1 grain-probe 2026-06-30: deleting the reduce stage's candidate count-cap (to stop over-merging) produced unbounded candidate JSON that truncated at ~51KB into invalid JSON and a retry loop — the cap had been load-bearing for OUTPUT SIZE, not just merge-pressure."
 proven_date: 2026-06-30
 barrier:

@@ -21,7 +21,7 @@ describe('identity audit CLI', () => {
     const fake = createFakeCollaborationRuntime();
     fake.seedTextFile(
       'state/active-claims.json',
-      JSON.stringify({ schema_version: '1.3.0', commit_queue: [], claims: [] }),
+      JSON.stringify({ schema_version: '1.4.0', claims: [] }),
     );
     fake.seedTextFile(
       'state/closed-claims.json',
@@ -59,6 +59,10 @@ describe('identity audit CLI', () => {
     });
 
     expect(result.exitCode).toBe(0);
+    // The audit consults the migrating claims reader before it parses the raw
+    // text, so a legacy flat-queue file migrates on this first contact like
+    // every other path instead of meeting the version pin.
+    expect(fake.readActiveClaimsPaths()).toStrictEqual(['state/active-claims.json']);
     expect(JSON.parse(result.stdout)).toMatchObject({
       summary: {
         total: 1,

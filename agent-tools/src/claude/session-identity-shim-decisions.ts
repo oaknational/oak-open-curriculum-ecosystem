@@ -174,7 +174,7 @@ export function planShimFailOpen(input: {
     'The session seed WAS persisted: PRACTICE_AGENT_SESSION_ID_CLAUDE is exported via ' +
     '$CLAUDE_ENV_FILE, so identity-dependent tools resolve it as soon as the build exists. ' +
     'Recover with `pnpm install` at the repo root (the postinstall bootstrap builds ' +
-    'agent-tools/dist), then confirm with `pnpm agent-tools:agent-identity --format display`.';
+    'agent-tools/dist), then confirm with `pnpm agent-tools:agent-identity --platform claude-code --format display`.';
 
   const notPersistedRecovery =
     'The seed could NOT be persisted — the hook received no shell-safe session_id seed, held ' +
@@ -182,7 +182,7 @@ export function planShimFailOpen(input: {
     'later shell calls, so there is no retry surface. Recover with `pnpm install` at the repo root (the ' +
     'postinstall bootstrap builds agent-tools/dist), then supply the seed inline on each ' +
     'identity-dependent command: ' +
-    `\`PRACTICE_AGENT_SESSION_ID_CLAUDE='${seed}' pnpm agent-tools:agent-identity --format display\`` +
+    `\`PRACTICE_AGENT_SESSION_ID_CLAUDE='${seed}' pnpm agent-tools:agent-identity --platform claude-code --format display\`` +
     seedNote +
     '.';
 

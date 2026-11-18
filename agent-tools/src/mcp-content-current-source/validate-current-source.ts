@@ -10,7 +10,6 @@ import {
   AUDIT_REPORT,
   CURRENT_SOURCE_ANCHORS,
   CURRENT_SOURCE_ARTIFACT,
-  CURRENT_SOURCE_DELTA_INVENTORY,
 } from './current-source-config.js';
 import { normaliseLineEndings } from './normalise-line-endings.js';
 import { publishCurrentSourceArtifacts } from './publish-artifacts.js';
@@ -44,10 +43,7 @@ async function staleGeneratedArtifacts(
 function supportingArtifacts(
   expected: RecomputedCurrentSource,
 ): readonly { readonly path: string; readonly content: string }[] {
-  return [
-    { path: CURRENT_SOURCE_DELTA_INVENTORY, content: expected.deltaInventorySerialised },
-    { path: AUDIT_REPORT, content: expected.reportSerialised },
-  ];
+  return [{ path: AUDIT_REPORT, content: expected.reportSerialised }];
 }
 
 async function publishRefresh(expected: RecomputedCurrentSource): Promise<void> {
@@ -57,10 +53,6 @@ async function publishRefresh(expected: RecomputedCurrentSource): Promise<void> 
   await publishCurrentSourceArtifacts([
     { path: path.join(repoRoot, CURRENT_SOURCE_ANCHORS), content: expected.anchorSerialised },
     { path: path.join(repoRoot, CURRENT_SOURCE_ARTIFACT), content: expected.serialised },
-    {
-      path: path.join(repoRoot, CURRENT_SOURCE_DELTA_INVENTORY),
-      content: expected.deltaInventorySerialised,
-    },
     { path: path.join(repoRoot, AUDIT_REPORT), content: expected.reportSerialised },
   ]);
   writeLine(`validate-current-source: wrote ${CURRENT_SOURCE_ANCHORS}`);

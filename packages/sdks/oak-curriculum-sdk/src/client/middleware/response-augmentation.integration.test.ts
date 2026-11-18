@@ -73,7 +73,7 @@ async function invokeOnResponse(
     },
   });
   if (!(result instanceof Response)) {
-    throw new Error('Expected onResponse to return a Response');
+    throw new TypeError('Expected onResponse to return a Response');
   }
   return result;
 }

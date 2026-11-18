@@ -3,6 +3,7 @@ name: Multi-Layer Schema Synchronisation
 polarity: pattern
 use_this_when: a code generator produces multiple schema representations (JSON schema, Zod, transforms) from a single source and a change to input handling must be reflected across all layers
 category: architecture
+layer: family
 proven_in: packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/build-zod-type.ts
 proven_date: 2026-02-28
 barrier:

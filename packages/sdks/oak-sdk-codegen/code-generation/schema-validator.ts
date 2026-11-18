@@ -87,7 +87,7 @@ function isPathItemObject(value: unknown): value is PathsObject[string] {
     }
   }
   const methodEntries = Object.entries(value);
-  const methodNames: readonly string[] = [
+  const methodNames: ReadonlySet<string> = new Set([
     'delete',
     'get',
     'head',
@@ -96,9 +96,9 @@ function isPathItemObject(value: unknown): value is PathsObject[string] {
     'post',
     'put',
     'trace',
-  ];
+  ]);
   for (const [methodName, candidate] of methodEntries) {
-    if (!methodNames.includes(methodName)) {
+    if (!methodNames.has(methodName)) {
       continue;
     }
     if (candidate === undefined) {

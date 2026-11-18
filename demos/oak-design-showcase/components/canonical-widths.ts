@@ -28,3 +28,11 @@ export const DEFAULT_VIEWPORT_WIDTH = 1440;
  *  two demos read identically side by side (DDR-009 dated amendment,
  *  2026-08-10: a same-width pair is the only fair visual comparison). */
 export const SWITCHBOARD_CANVAS_WIDTH = 1280;
+
+/** The kit's documented md seam (960px), as the media query the narrow
+ *  disclosures dissolve at. One owner for a value that must stay in
+ *  lockstep across the TSX call sites AND the CSS bands that style the
+ *  same seam (tokens.css and specimen.css write the literal in their
+ *  `@media` prelude — CSS cannot consume this constant, so those two
+ *  name THIS export in their comments and drift is a review catch). */
+export const DISCLOSURE_WIDE_QUERY = '(min-width: 960px)';

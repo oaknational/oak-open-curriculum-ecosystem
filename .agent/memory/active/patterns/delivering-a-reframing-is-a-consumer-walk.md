@@ -3,6 +3,7 @@ name: "Delivering a Reframing Is a Consumer-Walk, Not a Phrase-Sweep"
 polarity: pattern
 use_this_when: "Delivering a reframing, supersession, rename, or any conceptual change across a documentation / plan estate — especially after a foundational doc moves or a controlling decision changes."
 category: process
+layer: general
 proven_in: "2026-06-17/18 strategy-and-plan-estate reconception (Tempest spins Spire, Ocelot binds Curfew): a reframing declared 'purged' by phrase-grep three times still had residue — a differently-worded 'Step A (align on impact)', a vestigial 2A/2B/2C structure (not a phrase), a stale duplicate continuity bullet, the old 'modular building blocks' goal on the docs entry page; the owner found each. A foundational-doc move (git mv of the root vision doc) touched dozens of referrers."
 proven_date: 2026-06-18
 related_pdr: PDR-103

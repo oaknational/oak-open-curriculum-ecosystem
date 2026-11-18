@@ -918,7 +918,7 @@ soft-surface-is-a-tested-guarantee lesson, rotate the napkin, and move this plan
 **Blocking**: none — all inputs are in-repo and grounded.
 
 **Related Plans** (the unified `statusline-enhancements` lane — hub:
-[thread record](../../../memory/operational/threads/statusline-enhancements.next-session.md)):
+[thread record](../../../memory/operational/threads/paused/statusline-enhancements.next-session.md)):
 
 - [`session-and-team-state-statusline-icons.plan.md`](session-and-team-state-statusline-icons.plan.md)
   — sibling in the same lane: the session-state foundation, team-state

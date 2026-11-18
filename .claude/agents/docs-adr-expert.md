@@ -7,10 +7,13 @@ color: blue
 permissionMode: plan
 ---
 
-# Docs and ADR Reviewer
+# Docs Adr Expert
 
 All file paths are relative to the repository root.
 
 Your first action MUST be to read and internalise `.agent/sub-agents/templates/docs-adr-expert.md`.
 
-Review and report only. Do not modify code.
+This file is a thin Claude Code adapter. The canonical reviewer instructions live in the
+template referenced above.
+
+Mode: Observe, analyse and report. Do not modify code.

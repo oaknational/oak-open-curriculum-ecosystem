@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { renderSharedCommsLog } from '../../src/collaboration-state/comms';
 import { deriveOverrideCollaborationIdentity } from '../../src/collaboration-state/identity';
 import {
   createDirectedCommsMessage,
@@ -48,8 +49,9 @@ const recipientWrite = deriveOverrideCollaborationIdentity({
 });
 
 describe('comms use cases', () => {
-  it('writes a directed event through an explicit event store', async () => {
+  it('writes a directed event through an explicit event store and renders the shared log from the readback', async () => {
     const store = createMemoryEventStore();
+    const writes: string[] = [];
     const event = createDirectedCommsMessage({
       eventId: 'message-one',
       createdAt: '2026-05-13T09:46:00Z',
@@ -64,9 +66,43 @@ describe('comms use cases', () => {
       event,
       nowIso: '2026-05-13T09:46:00Z',
       store,
+      output: {
+        writeText: async (text) => {
+          writes.push(text);
+        },
+      },
     });
 
     expect(store.events()).toStrictEqual([event]);
+    expect(writes).toStrictEqual([renderSharedCommsLog({ events: [event] })]);
+  });
+
+  it('renders nothing when the readback does not find the written event', async () => {
+    const event = createDirectedCommsMessage({
+      eventId: 'message-lost',
+      createdAt: '2026-05-13T09:46:00Z',
+      messageKind: 'coordination-request',
+      from: senderWrite,
+      to: recipientWrite,
+      subject: 'Never lands',
+      body: 'The store drops this write.',
+    });
+
+    await expect(
+      writeCommsEventWithReadback({
+        event,
+        nowIso: '2026-05-13T09:46:00Z',
+        store: {
+          write: async () => undefined,
+          read: async () => [],
+        },
+        output: {
+          writeText: async () => {
+            throw new Error('the shared log must not be rendered from a failed readback');
+          },
+        },
+      }),
+    ).rejects.toThrow('comms event readback failed for message-lost');
   });
 
   it('includes tags on a directed event when supplied (ADR-183 tag namespace)', () => {

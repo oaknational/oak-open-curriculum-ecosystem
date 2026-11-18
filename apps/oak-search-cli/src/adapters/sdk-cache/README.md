@@ -42,21 +42,32 @@ flowchart TB
 
 The module provides two cache wrapper functions that add caching to Result-returning functions:
 
+Each takes the function to wrap and an options object: the cache operations,
+the key prefix, the base TTL in days, the stats object, the cached-value type
+guard and the TTL calculator. The negative-caching wrapper adds the cached-404
+bypass flag.
+
 ```typescript
 // Basic caching - only caches successful results
-const cachedFn = withCache(originalFn, ops, 'prefix', ttlDays, stats, validator, ttlCalc);
+const cachedFn = withCache(originalFn, {
+  ops,
+  cacheKeyPrefix: 'prefix',
+  baseTtlDays: ttlDays,
+  stats,
+  isValidCached: validator,
+  ttlCalculator: ttlCalc,
+});
 
 // With negative caching - also caches 404 responses
-const cachedFn = withCacheAndNegative(
-  originalFn,
+const cachedFn = withCacheAndNegative(originalFn, {
   ops,
-  'prefix',
-  ttlDays,
+  cacheKeyPrefix: 'prefix',
+  baseTtlDays: ttlDays,
   stats,
-  validator,
-  ignore404,
-  ttlCalc,
-);
+  isValidCached: validator,
+  ttlCalculator: ttlCalc,
+  ignoreCached404: ignore404,
+});
 ```
 
 ### Transcript Cache Categorization
@@ -127,15 +138,14 @@ const ops: CacheOperations = {
   setex: (key, ttl, value) => redis.setex(key, ttl, value).then(() => {}),
 };
 
-const cachedGetSummary = withCache(
-  getSummary,
+const cachedGetSummary = withCache(getSummary, {
   ops,
-  'lesson-summary',
-  7, // 7 days base TTL
+  cacheKeyPrefix: 'lesson-summary',
+  baseTtlDays: 7,
   stats,
-  isLessonSummary,
-  calculateTtlWithJitter,
-);
+  isValidCached: isLessonSummary,
+  ttlCalculator: calculateTtlWithJitter,
+});
 ```
 
 ### Using Transcript Cache Types

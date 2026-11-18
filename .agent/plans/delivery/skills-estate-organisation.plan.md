@@ -18,7 +18,7 @@ impact_areas:
 tickets: []
 depends_on: []
 owner_gates: []
-last_updated: 2026-09-03
+last_updated: 2026-10-02
 ---
 
 # Skills-estate organisation
@@ -215,6 +215,15 @@ pairing discoverable).
   pointer lines — the conservation instrument #731 proved (wording
   amended 2026-08-09 per WS6 note (e)).
 
+### Amendment 2026-08-17 (owner word, direct to the Director, recorded in the Director rulings ledger as SKILLS-FIRST)
+
+"finish the skill work first, including getting to the point where all
+Practice skills have evals". The owner trued its scope the same day ("ONLY
+about `.agent/skills`"). WS8's per-skill evals are therefore the bar for every
+Practice skill, not an option. The queue-head order in the same word was
+superseded that day by XPLAT-4. Recorded here on 2026-10-01 from the Director
+records; one instance.
+
 ## Why this shape (first principles, not cowpath)
 
 The estate ratified the machinery already: ADR-221 §6 (concepts as
@@ -350,7 +359,14 @@ a core owner value).
 7. **WS7 — Estate migration.** One PR per concern group moving the
    flat canonicals into their concern, each proven conservation-clean
    per the WS6-proven instrument (clause amended 2026-08-09,
-   discharging note (e)): adapter directory names + frontmatter
+   discharging note (e); amended again 2026-09-04 for wave 1: the three
+   mechanical groups — change-custody, planning, orientation — land in
+   ONE PR of three atomic commits, the shape the 2026-08-17
+   pre-execution review chose because concurrent group PRs conflict at
+   hunk level in `practice-bootstrap.md` and on one `practice-index.md`
+   row, and sequential PRs would serialise on those same hunks for no
+   review benefit; the per-group proof obligations below hold per
+   commit, and later groups return to one PR each): adapter directory names + frontmatter
    byte-identical, the moved group's adapter bodies differing ONLY in
    the canonical-pointer line, every other skill's adapters
    byte-identical; plus `portability:check` green, full gates green.
@@ -418,6 +434,10 @@ the standing ruling, recorded here as the affected artifact's stamp).
   plan. (The apparent rhyme between concern groups and export
   boundaries is a noted association, not a design input — portability
   is the stratum axis's job.)
+- Skills outside the Practice corpus: every workstream's quantifier ranges
+  over `.agent/skills` only (the owner, 2026-08-17, direct to the Director,
+  verbatim: "ONLY about `.agent/skills` and not at all about
+  `plugins/oak-open-curriculum`").
 
 ## Review dispositions
 
@@ -426,3 +446,4 @@ One dated row per routed finding (PDR-140 ledger surface).
 | Date | Source | Finding | Routing |
 | --- | --- | --- | --- |
 | 2026-09-03 | Owner card (the MCP-673 implementing session) | The WS2 annotated corpus, presented for ratification | Ratified — owner verbatim: "Ratify the annotated corpus"; WS4's validators are unblocked; the gate row is removed |
+| 2026-09-09 | The dedicated consolidation (two seats' free-play seeds, 2026-09-07 and 2026-09-09) | The rules tier's three adapters and its index row are hand-carried while the skills tier's adapters are generated; a new rule is four files plus an index row, and the portability validator refused a push for the two pieces a seat had not authored (2026-09-09). Sibling seed: `RULES_INDEX.md` generated from rule frontmatter, since the index classification test already encodes its invariants (the widest-cell, em-dash and trigger-vocabulary classes) | Routed here as a candidate WS9 (WS8 is the supporting-directories workstream above), not started: a rules-adapter generator on the skills generator's pattern, so a rule is one canonical file and `portability:check` proves nothing is hand-carried; the index generator rides the same unit. Falsifier: the generator's projections differ from the hand-carried adapters for any live rule, or the index test's invariants cannot be derived from frontmatter |

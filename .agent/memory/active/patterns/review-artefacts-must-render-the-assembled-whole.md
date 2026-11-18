@@ -3,6 +3,7 @@ name: Review Artefacts Must Render the Assembled Whole, Machine-Rendered
 polarity: pattern
 use_this_when: Authoring a review artefact (an audit, a registry snapshot, a "here is what the system produces" report) over content that is delivered as a cohesive assembled whole (composed server instructions, rendered UI, a built document) rather than as independent fragments
 category: process
+layer: general
 proven_in: .agent/memory/active/napkin.md (two instances, 2026-07-09, mcp-agent-facing-content audit)
 proven_date: 2026-07-09
 barrier:

@@ -25,8 +25,6 @@ import { ingestLogger } from '../logger';
 import { collectPhaseResults } from './bulk-ingestion-phases.js';
 import { buildIngestionStats, type BulkIngestionStats } from './bulk-ingestion-stats.js';
 
-export type { BulkIngestionStats };
-
 /** Result from bulk ingestion preparation. */
 export interface BulkIngestionResult {
   readonly operations: BulkOperationEntry[];
@@ -190,3 +188,5 @@ export async function prepareBulkIngestion(
   });
   return { operations: phases.operations, stats };
 }
+
+export type { BulkIngestionStats } from './bulk-ingestion-stats.js';

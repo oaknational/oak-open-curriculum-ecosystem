@@ -1,3 +1,8 @@
+---
+classification: core
+description: No hedging vocabulary on doctrine surfaces. The trip-list (carve out, exception to, cheap cure, good enough, quick fix, etc.) is blocked at write-time per PDR-044.
+---
+
 # No Hedging Vocabulary on Doctrine Surfaces
 
 Operationalises [PDR-044 §Carve-out vocabulary](../practice-core/decision-records/PDR-044-memetic-immune-system.md)
@@ -86,6 +91,36 @@ as observations and owner corrections are quoted verbatim — the same
 recursive-exclusion logic that exempts this file as the cataloguing
 home.
 
+## Advocacy Register Is a Self-Signal
+
+The trip-list catches the literal shapes; the wider family is any prose that
+argues FOR a decision instead of describing its evidence — *warranted*,
+*justified*, *acceptable because*, *carve-out*. The owner reads these as
+near-proof the agent did something wrong and knows it (2026-08-10, verbatim:
+"carve-out and warranted are danger words, in the same sentence they near
+guarantee that the agent did something wrong and knows it"). The instance
+that drew it: a sentence defending an instrument disable that rested on the
+agent's own probe alone; the cure was a vendor citation, not a rewording.
+Advocacy prose marks a decision that has not yet earned a neutral
+restatement — usually one made alone, without a source or ruling. On
+catching a defending word in your own record or report, do not rephrase: go
+and get the missing evidence (vendor source, measurement, owner word) or
+reverse the decision.
+
+*Residue* belongs to the same family from the storage side (owner,
+2026-08-11, on a plan's follow-up register presented as "residue …
+recorded follow-ups, not silent gaps": "residue is another danger word, it
+is a bucket that unfinished work goes in. It needs critical assessment,
+sequencing or rejecting"). A register row held without a disposition reads
+as diligence while storing unfinished work — one such row was already
+implemented and tested on the default branch yet still listed as owed. At
+creation or first revisit every register or backlog row takes exactly one
+disposition: sequenced (a named single-story slot), rejected (with the
+reason), reshaped (restated with the right instrument), folded (into a
+named sibling), or closed (already done, or a condition rather than work).
+A register presented to the owner carries dispositions, never inventory;
+"recorded" alone is not a state.
+
 ## Indefinite-Deferral Vocabulary (regex family, added 2026-06-10)
 
 Owner-directed graduation: language that puts work into an
@@ -95,6 +130,33 @@ the removal decision. Work is either a live deliverable with named
 dependencies and an owner-agreed gate, or it is removed by owner
 decision. There is no third state, and an owner ratification of a
 bundle does not ratify a holding-state clause embedded inside it.
+
+The positive form is the owner's triage taxonomy (2026-07-25, verbatim in
+substance: "if it matters we fix it, if not we get rid of it, on rare
+occasion we sequence it in a plan, and we never, ever say 'later' without
+a mechanism because that is the same as just ignoring it"). Every finding
+takes exactly one of three verbs: FIX now; DELETE (out of scope is removal,
+never an open gap); or SEQUENCE, rarely, where a real plan position or
+blocking relation IS the mechanism. "Defer", "later", "follow-up" and
+"revisit" standing alone are ignoring with extra steps, and a Director
+hearing "deferred" asks which of the three verbs it actually is. "Owed" is
+the same word in another coat: of a register's count of rows labelled owed,
+the owner asked on 2026-09-28, "What does owed mean? That sounds liked
+parked, which is forbidden for very good reason." A row so labelled names no
+owner, position or mechanism until it takes one of the three verbs. Three
+sharpenings the owner paid for (2026-07-23/27): "until X lands" is not a
+schedule but an assignment to endless limbo — a cure that rides a condition
+has no owner and no sequence position, so any sentence shaped "A is
+acceptable until B" is rewritten as "B blocks A" or the plan is wrong; a
+trigger without a READER ("the second specimen mints the ticket") is a
+smuggled drop one hop removed, and only a mechanical trigger (a blocked-by
+relation, a merge event) has force; and pinning a known defect as a tested
+"documented bound" RATIFIES it — a test asserting the gap converts an open
+question into intentional behaviour every future reader treats as
+considered and closed. A stopgap is a known-wrong landed state plus a
+cleanup promise, and promises are the currency drift is paid in ("no stop
+gaps, we do everything properly, *everything*", 2026-07-23): staging is
+fine only when every landed state is fully correct on its own terms.
 
 The hook group (`concept: indefinite-deferral`) matches with
 word-boundary regex — not literal substrings — so words *containing*
@@ -119,7 +181,7 @@ This group's in-scope surfaces are wider than the literal trip-list's
 (the `## In-Scope Surfaces` section below applies to the literal
 group): `.agent/practice-core/`, `.agent/plans/`, `.agent/reports/`,
 `.agent/memory/operational/`, `docs/architecture/`,
-`docs/governance/`, and any `**/*.plan.md` — continuity and thread
+and any `**/*.plan.md` — continuity and thread
 records are where holding-state language hides. Inline code is NOT
 excluded for this group (a backticked family member in a table row
 would otherwise dodge the block); fenced code blocks remain skipped.
@@ -131,10 +193,9 @@ names the plan, gate, or owner decision that resolves the work — see
 `agent-tools/tests/hook-policy/scoped-blocks-indefinite-deferral.unit.test.ts`.
 
 **Rejected patterns (design-time, 2026-06-10) — do not "complete" the
-family with these.** Bare `\bpark\b` is excluded: curriculum content
-legitimately names parks ("Hyde Park", "visiting the park"), and the
-inflected forms cover the deferral usage. `on ice` is excluded:
-skating/science lesson content uses it literally. `defer`/`deferred`
+family with these.** Bare `\bpark\b` is excluded: content prose
+legitimately names parks, and the inflected forms cover the deferral usage.
+`on ice` is excluded: content prose can use it literally. `defer`/`deferred`
 are excluded deliberately — a *sequenced deferral to a named gate* is
 legitimate repo vocabulary (PDR-026 deferral-honesty); the pathogen is
 deferral-to-nowhere, not deferral itself. Adding any of these would
@@ -142,11 +203,16 @@ trade a known false-positive flood for no real coverage gain.
 
 ## In-Scope Surfaces
 
+The hook's own scope is the source of truth: the `scoped_blocks` entry for the
+literal group in `.agent/hooks/policy.json` names the surfaces, and this list
+restates it for the reader. In jimcresswell.net:
+
 - `.agent/practice-core/`
 - `.agent/plans/`
 - `docs/architecture/`
-- `docs/governance/`
 - any `**/*.plan.md` anywhere in the tree
+
+OCE's hook scopes its governance documents directory as well, its elaboration-docs home.
 
 ## Excluded Surfaces (Why)
 
@@ -172,7 +238,7 @@ PDR-047 §Test 3 hedge-as-substance.
 Per PDR-044 §Innate immunity, the broad-fast layer "produces some
 false positives by design; it never silently misses a known
 pathogen." Technical-term references to ADR-documented architectural
-exceptions (composition-root carve-outs per ADR-078, NO-TRACER
+exceptions (composition-root carve-outs per the testing strategy, NO-TRACER
 carve-outs in graph-query plans, etc.) trip the surface and are
 dispositioned by the agent — usually by recognising that the term
 is naming a previously-ratified structural decision and proceeding

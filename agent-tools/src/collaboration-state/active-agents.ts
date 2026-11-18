@@ -50,12 +50,13 @@ interface ClosedClaimSummary {
 
 export function activeAgentReports(
   registry: CollaborationRegistry,
+  commitQueue: readonly CollaborationCommitQueueEntry[],
   nowIso: string,
   closedArchive?: ClosedClaimsArchive,
 ): readonly ActiveAgentReport[] {
   const groups = new Map<string, MutableActiveAgentReport>();
   addClaimGroups(groups, registry, nowIso);
-  addCommitQueueGroups(groups, registry, nowIso);
+  addCommitQueueGroups(groups, commitQueue, nowIso);
   addClosedClaimGroups(groups, closedArchive);
   return sortedReports(groups);
 }
@@ -81,10 +82,10 @@ function addClaimGroups(
 
 function addCommitQueueGroups(
   groups: Map<string, MutableActiveAgentReport>,
-  registry: CollaborationRegistry,
+  commitQueue: readonly CollaborationCommitQueueEntry[],
   nowIso: string,
 ): void {
-  for (const entry of registry.commit_queue) {
+  for (const entry of commitQueue) {
     const queueStatus = queueStatusFor(entry, nowIso);
     if (queueStatus === 'abandoned') {
       continue;
@@ -166,11 +167,12 @@ function visibilityStatus(
 
 export function assertNoLiveIdentityRoutingCollision(input: {
   readonly registry: CollaborationRegistry;
+  readonly commitQueue: readonly CollaborationCommitQueueEntry[];
   readonly nowIso: string;
   readonly agentId: CollaborationAgentId;
   readonly surface: string;
 }): void {
-  for (const identity of liveAgentIdentities(input.registry, input.nowIso)) {
+  for (const identity of liveAgentIdentities(input.registry, input.commitQueue, input.nowIso)) {
     if (!sameAgentRoutingKey(identity, input.agentId)) {
       continue;
     }
@@ -225,11 +227,12 @@ function queueStatusFor(
 
 export function liveAgentIdentities(
   registry: CollaborationRegistry,
+  commitQueue: readonly CollaborationCommitQueueEntry[],
   nowIso: string,
 ): readonly CollaborationAgentId[] {
   return [
     ...liveClaimIdentities(registry.claims, nowIso),
-    ...registry.commit_queue
+    ...commitQueue
       .filter((entry) => queueStatusFor(entry, nowIso) === 'active')
       .map((entry) => entry.agent_id),
   ];

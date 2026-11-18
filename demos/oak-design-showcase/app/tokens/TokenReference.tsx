@@ -33,7 +33,7 @@ import { IDENTITY_LABELS, type IdentitySlug } from '../../components/useIdentity
 import { THEME_LABELS, THEME_OPTIONS } from '../../components/theme-vocabulary';
 
 import { FamilyNav } from './FamilyNav';
-import { TokenTable, type IdentityDeltaSets } from './TokenTable';
+import { TokenRows, type IdentityDeltaSets } from './TokenRows';
 import { liveTokenValues, type LiveValues } from './live-token-values';
 import type { CraftAreaGroup } from './token-groups';
 
@@ -89,9 +89,10 @@ function TokenControls({
   );
 }
 
-/** The tables themselves: craft area, then prefix family. The families of
- *  one area flow into columns where the window is wide enough for two, and
- *  a family never splits across them. */
+/** The families themselves: craft area, then prefix family. Each family
+ *  stacks full width and its ROWS flow into two columns at monitor
+ *  widths under the spanning header — the row, never the family, is the
+ *  fragmentation unit (owner ruling 2026-08-18). */
 function TokenSections({
   groups,
   values,
@@ -111,7 +112,7 @@ function TokenSections({
           <p className="oak-body-3 tok-area-note">{group.note}</p>
           <div className="tok-area-families">
             {group.families.map(({ family, tokens }) => (
-              <TokenTable
+              <TokenRows
                 key={family}
                 area={group.area}
                 family={family}

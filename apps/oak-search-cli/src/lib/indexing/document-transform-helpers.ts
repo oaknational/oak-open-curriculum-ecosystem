@@ -7,14 +7,8 @@
  */
 
 import type { SearchLessonSummary, SearchUnitSummary } from '../../types/oak';
-import {
-  extractThreadInfo,
-  extractPedagogicalData,
-  createEnrichedRollupText,
-} from './thread-and-pedagogical-extractors';
+import { extractThreadInfo } from './thread-and-pedagogical-extractors';
 import type { AggregatedUnitContext } from './ks4-context-builder';
-
-export { extractPedagogicalData, createEnrichedRollupText };
 
 /**
  * KS4 fields for Elasticsearch documents derived from sequence responses.
@@ -224,3 +218,8 @@ export function extractUnitEnrichmentFields(summary: SearchUnitSummary): UnitEnr
     national_curriculum_content: summary.nationalCurriculumContent,
   };
 }
+
+export {
+  extractPedagogicalData,
+  createEnrichedRollupText,
+} from './thread-and-pedagogical-extractors';

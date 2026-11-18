@@ -164,7 +164,9 @@ async function main(): Promise<void> {
   console.log(`✓ Complete in ${((Date.now() - startTime) / 1000).toFixed(1)}s`);
 }
 
-main().catch((error: unknown) => {
+try {
+  await main();
+} catch (error: unknown) {
   console.error('Fatal:', error);
   process.exit(1);
-});
+}

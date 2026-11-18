@@ -57,7 +57,7 @@ export type ValidPathGroupings = {
  * Generate the VALID_PATHS_BY_PARAMETERS constant entries
  */
 export function generateValidCombinations(validCombinations: ValidCombinations): string {
-  const sortedGroupKeys = [...Object.keys(validCombinations)].sort((a, b) => a.localeCompare(b));
+  const sortedGroupKeys = Object.keys(validCombinations).sort((a, b) => a.localeCompare(b));
   return sortedGroupKeys
     .map((pathGroupingKey, index) => {
       const group = validCombinations[pathGroupingKey];

@@ -103,6 +103,19 @@ const baseLesson: ExtractedLesson = {
   keyStage: 'ks2',
 };
 
+/** A year-4 maths unit at the given sequence position, for within-year ordering proofs. */
+function year4MathsUnit(unitSlug: string, sequenceIndex: number): ThreadUnit {
+  return {
+    unitSlug,
+    unitTitle: unitSlug,
+    sequenceSlug: 'maths-primary',
+    sequenceIndex,
+    subject: 'maths',
+    keyStage: 'ks2',
+    year: 4,
+  };
+}
+
 const baseMisconception: ExtractedMisconception = {
   misconception: 'A bigger denominator means a bigger fraction',
   response: 'Use bar models to show that more parts means smaller parts.',
@@ -111,6 +124,13 @@ const baseMisconception: ExtractedMisconception = {
   lessonSlug: 'comparing-fractions',
   lessonTitle: 'Comparing fractions',
 };
+
+/** The base lesson with the given misconceptions, for churn-semantics proofs. */
+function inputWithMisconceptions(
+  misconceptions: readonly ExtractedMisconception[],
+): GraphCorpusInput {
+  return makeInput({ lessons: [baseLesson], misconceptions });
+}
 
 describe('generateGraphCorpusData — G2 stability contract', () => {
   describe('G2 contract — order-independence (deterministic emission)', () => {
@@ -305,22 +325,13 @@ describe('generateGraphCorpusData — G2 stability contract', () => {
       // bulk sequence array's order within a year is upstream curriculum
       // data, so swapping two same-year units' sequence positions must
       // change the emitted sequence.
-      const sameYear = (unitSlug: string, sequenceIndex: number): ThreadUnit => ({
-        unitSlug,
-        unitTitle: unitSlug,
-        sequenceSlug: 'maths-primary',
-        sequenceIndex,
-        subject: 'maths',
-        keyStage: 'ks2',
-        year: 4,
-      });
       const authored: ExtractedThread = {
         ...baseThread,
-        units: [sameYear('first-y4', 3), sameYear('second-y4', 8)],
+        units: [year4MathsUnit('first-y4', 3), year4MathsUnit('second-y4', 8)],
       };
       const swapped: ExtractedThread = {
         ...baseThread,
-        units: [sameYear('first-y4', 8), sameYear('second-y4', 3)],
+        units: [year4MathsUnit('first-y4', 8), year4MathsUnit('second-y4', 3)],
       };
 
       const original = generateGraphCorpusData(makeInput({ threads: [authored] }));
@@ -385,13 +396,10 @@ describe('generateGraphCorpusData — G2 stability contract', () => {
   });
 
   describe('G2 contract — churn semantics (honest churn, no silent re-pointing)', () => {
-    const inputWith = (misconceptions: readonly ExtractedMisconception[]) =>
-      makeInput({ lessons: [baseLesson], misconceptions });
-
     it('a text edit mints a NEW id and the old id is absent (no silent re-pointing)', () => {
-      const before = generateGraphCorpusData(inputWith([baseMisconception]));
+      const before = generateGraphCorpusData(inputWithMisconceptions([baseMisconception]));
       const after = generateGraphCorpusData(
-        inputWith([
+        inputWithMisconceptions([
           { ...baseMisconception, misconception: 'A bigger denominator makes a bigger fraction' },
         ]),
       );
@@ -411,7 +419,7 @@ describe('generateGraphCorpusData — G2 stability contract', () => {
 
     it('a response edit preserves the id and updates the payload', () => {
       const after = generateGraphCorpusData(
-        inputWith([{ ...baseMisconception, response: 'A fully reworded response.' }]),
+        inputWithMisconceptions([{ ...baseMisconception, response: 'A fully reworded response.' }]),
       );
 
       const id = mintMisconceptionId(
@@ -423,13 +431,13 @@ describe('generateGraphCorpusData — G2 stability contract', () => {
     });
 
     it('inserting a new misconception leaves every existing id unchanged (no renumber cascade)', () => {
-      const before = generateGraphCorpusData(inputWith([baseMisconception]));
+      const before = generateGraphCorpusData(inputWithMisconceptions([baseMisconception]));
       const inserted: ExtractedMisconception = {
         ...baseMisconception,
         misconception: 'All fractions are smaller than one',
         response: 'Show improper fractions on a number line.',
       };
-      const after = generateGraphCorpusData(inputWith([inserted, baseMisconception]));
+      const after = generateGraphCorpusData(inputWithMisconceptions([inserted, baseMisconception]));
 
       const beforeIds = before.nodes.filter((n) => n.kind === 'misconception').map((n) => n.id);
       const afterIds = new Set(
@@ -442,7 +450,7 @@ describe('generateGraphCorpusData — G2 stability contract', () => {
     });
 
     it('a lesson-slug rename churns the ids and edges honestly (old absent, new minted)', () => {
-      const before = generateGraphCorpusData(inputWith([baseMisconception]));
+      const before = generateGraphCorpusData(inputWithMisconceptions([baseMisconception]));
       const renamedLesson: ExtractedLesson = { ...baseLesson, lessonSlug: 'comparing-fractions-2' };
       const renamedMisconception: ExtractedMisconception = {
         ...baseMisconception,

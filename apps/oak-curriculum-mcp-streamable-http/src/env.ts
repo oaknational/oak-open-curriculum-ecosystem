@@ -1,3 +1,4 @@
+import { typeSafeKeys } from '@oaknational/type-helpers';
 import { z } from 'zod';
 import {
   BuildEnvSchema,
@@ -13,10 +14,10 @@ import { refineClerkKeyLocality } from './env-clerk-guards.js';
 
 const ModeSchema = z.enum(['stateless', 'session']).default('stateless');
 
-const LOOPBACK_HOSTNAMES: readonly string[] = ['localhost', '127.0.0.1', '::1'];
+const LOOPBACK_HOSTNAMES: ReadonlySet<string> = new Set(['localhost', '127.0.0.1', '::1']);
 
 function isLoopbackHostname(value: string): boolean {
-  return LOOPBACK_HOSTNAMES.includes(value.toLowerCase());
+  return LOOPBACK_HOSTNAMES.has(value.toLowerCase());
 }
 
 /**
@@ -203,9 +204,6 @@ export type AuthEnabledEnv = Env & {
   readonly CLERK_SECRET_KEY: string;
 };
 
-/** Environment with auth disabled — Clerk keys may be absent */
-export type AuthDisabledEnv = Env;
-
 export type Env = z.input<typeof BaseEnvSchema>;
 
 /** The parsed shape the validation pipeline produces (post-transform). */
@@ -220,3 +218,14 @@ export function parseCsv(value: string | undefined): string[] | undefined {
     .map((s) => s.trim())
     .filter((s) => s.length > 0);
 }
+
+/**
+ * The variable names the HTTP env schema validates — the deploy-config
+ * gate's filter and pass-through surface (MCP-475): the gate process sees
+ * exactly these and nothing more, and the build orchestration passes
+ * exactly these through to it. Derived from the schema so the two cannot
+ * drift; the gate's contract test holds the orchestration side in step.
+ */
+export const HTTP_ENV_KEYS: readonly string[] = typeSafeKeys(BaseEnvSchema.shape).sort(
+  (left, right) => left.localeCompare(right),
+);

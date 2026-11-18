@@ -3,6 +3,7 @@ name: "Untracked WIP Whole-Tree Lint Blocker"
 polarity: anti-pattern
 use_this_when: "A multi-agent workspace has untracked work-in-progress and another agent's commit or push is blocked by whole-tree quality gates."
 category: agent
+layer: general
 status: proven
 discovered: 2026-05-23
 proven_in: >-

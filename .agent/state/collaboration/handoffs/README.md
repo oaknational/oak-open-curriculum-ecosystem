@@ -1,9 +1,10 @@
 # Mid-Cycle Handoff Records
 
 This directory holds one JSON file per mid-cycle handoff record produced
-under the mid-cycle retirement protocol. The protocol fires only when a
-token-bounded agent must retire before the natural boundary they were
-working toward; natural-boundary closeouts continue to use the existing
+under the mid-cycle retirement protocol. The protocol fires when the
+owner calls a handoff of a seat's in-flight work to a successor before
+the natural boundary it was heading for; natural-boundary closeouts
+continue to use the existing
 `start-right-team` SKILL §Closeout Contract unchanged.
 
 The genotype (portable principle) is

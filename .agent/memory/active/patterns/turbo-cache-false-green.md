@@ -3,6 +3,7 @@ name: "Turbo / Pre-Commit Cache False-Green"
 polarity: anti-pattern
 use_this_when: "A gate result disagrees with observed behaviour, a hook finds drift a task reported clean, or you are about to cite a cached gate run as evidence."
 category: build-system
+layer: family
 proven_in: "v2 large-corpus-analysis kept candidate C23 (2026-06-30): recurring class — cached results masking real failures and broken tests, remote-cache poisoning replaying stale errors, cached format:root reporting clean while the pre-commit hook found drift."
 proven_date: 2026-06-30
 barrier:

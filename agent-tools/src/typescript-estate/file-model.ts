@@ -11,14 +11,7 @@ import type {
   Provenance,
   SourceExtension,
 } from './file-vocabulary.js';
-import type {
-  NonEmptyReadonlyArray,
-  RepoPath,
-  Sha256,
-  WorkspacePackageName,
-} from './scalar-model.js';
-
-export type { RepoPath, Sha256 } from './scalar-model.js';
+import type { NonEmptyReadonlyArray } from './scalar-model.js';
 
 export interface TreeEntry {
   readonly mode: string;
@@ -29,7 +22,7 @@ export interface TreeEntry {
 
 export interface ReadSuccess {
   readonly status: 'read';
-  readonly contentSha256: Sha256;
+  readonly contentSha256: string;
   readonly byteCount: number;
   readonly lineCount: number;
 }
@@ -38,7 +31,7 @@ export interface InvalidUtf8Read {
   readonly status: 'invalid-utf8';
   readonly code: 'SOURCE_INVALID_UTF8';
   readonly message: string;
-  readonly contentSha256: Sha256;
+  readonly contentSha256: string;
   readonly byteCount: number;
   readonly lineCount: null;
 }
@@ -55,33 +48,33 @@ export interface UnsupportedModeRead {
 export type SourceRead = ReadSuccess | InvalidUtf8Read | UnsupportedModeRead;
 
 export interface WorkspaceRecord {
-  readonly root: RepoPath;
-  readonly name: WorkspacePackageName;
-  readonly manifestPath: RepoPath;
+  readonly root: string;
+  readonly name: string;
+  readonly manifestPath: string;
 }
 
 export type ProvenanceSignal =
   | {
       readonly kind: 'generated-path';
       readonly matcherId: 'generated-directory-segment' | 'generated-ts-basename-suffix';
-      readonly evidencePath: RepoPath;
+      readonly evidencePath: string;
     }
   | {
       readonly kind: 'generated-header';
       readonly matcherId: 'leading-generated-banner';
-      readonly evidencePath: RepoPath;
+      readonly evidencePath: string;
       readonly startOffset: number;
       readonly endOffset: number;
     }
   | {
       readonly kind: 'producer-output-rule';
       readonly ruleId: string;
-      readonly producerEvidencePaths: NonEmptyReadonlyArray<RepoPath>;
+      readonly producerEvidencePaths: NonEmptyReadonlyArray<string>;
     }
   | {
       readonly kind: 'imported-reference-path';
       readonly ruleId: string;
-      readonly evidencePath: RepoPath;
+      readonly evidencePath: string;
     };
 
 export type DeliveryVector = Readonly<Record<DeliveryDimension, DeliveryState>>;
@@ -90,11 +83,11 @@ export interface DeliverySignal {
   readonly dimension: DeliveryDimension;
   readonly state: DeliveryState;
   readonly basis: string;
-  readonly evidencePaths: readonly RepoPath[];
+  readonly evidencePaths: readonly string[];
 }
 
 interface FileRecordBase {
-  readonly path: RepoPath;
+  readonly path: string;
   readonly treeEntry: TreeEntry;
   readonly extension: SourceExtension;
   readonly workspace: WorkspaceRecord | null;

@@ -46,9 +46,37 @@ shrinks things is expediency with better manners.
 
 | Axis | Question | Findings |
 |---|---|---|
-| **Scope** | Is this one thing, or several wearing one name? | **Too big** → narrow; home the remainder as pointers with named carriers. **Too small** → widen; the real work is larger than the ask implies |
+| **Scope** | Is this one thing, or several wearing one name? | **Too big** → narrow; home the remainder as pointers with named carriers — including expansion BY REVIEW: a finding whose remedy would exceed the declared scope is a scope finding whatever the truth of its observation; [`pr-lifecycle`](../../change-custody/pr-lifecycle/SKILL-CANONICAL.md) §Phase 4 handles it. **Too small** → widen; the real work is larger than the ask implies |
 | **Instrument** | Is the tool matched to the question? | **Too heavy** → re-tier (an inline check over a fleet; a cheaper model tier; a probe over a plan). **Too light** → escalate the instrument; a cheap check on an irreversible call is false economy |
 | **Level** | Whose decision is this? | **Wrong level** → route it: owner, Director, or resolve at the seat. A decision already covered by standing word is not an escalation |
+
+A plan written under a "finish" word makes its value step the first todo and lets the measure
+serve it: instruments (a survey, a ledger, a records pass) placed before the first value step
+are meta-work, and the instrument axis reads them as too heavy for the question (four
+corrections on one plan, 2026-10-02).
+
+### Step back and be sensible
+
+The owner's own phrasing of the instrument axis (2026-07-19, after a session
+whose deliverables landed well under an apparatus that had grown heavy: a
+twenty-two-agent audit, a three-agent fleet to verify a deterministic script,
+paired conscience checks plus a mid-session adjudication of their divergence,
+in a session opened with "absolute minimum of comms ceremony"): "please
+remember: step back and be sensible." Standing mandates and effort flags
+license scale; they never require it. Before dispatching any fleet, cron,
+paired check or formal record: name the cheapest instrument that would settle
+the question (a deterministic result needs a spot-check, not a verification
+fleet; a divergent conscience check needs a one-line note; a status update
+needs the few sentences the reader will act on); use it unless the stakes, a
+legal, destructive or owner-facing gate, genuinely warrant redundancy.
+
+The scope axis has the same owner form (2026-07-25, a dependency-update lane
+that grew into reachability forensics, a deployed-environment card and an
+implied threat posture the product never had): "I asked for an update of
+deps, not an overhaul of settled architecture." A remit licenses its remit;
+security work inherits the PRODUCT's actual threat model, never a generic
+maximal one, and settled architecture, deliberate testing affordances
+included, is not a finding.
 
 ### The non-override clause
 
@@ -82,14 +110,19 @@ violation [§Documentation Is Infrastructure](../../../directives/principles.md#
 names as a real defect.
 
 - **Review loops** —
-  [`pr-lifecycle`](../../pr-lifecycle/SKILL-CANONICAL.md) §"The review-round state machine"
+  [`pr-lifecycle`](../../change-custody/pr-lifecycle/SKILL-CANONICAL.md) §"The review-round state machine"
   item 2 owns convergence: the tally store, the mechanical step-back predicate, the epoch
   reset, and the generator-recurrence classification. It is the fully-worked instrument;
   build the tally, or the trigger cannot fire. Response-side economics — what answering a
   finding costs and when it is paid — are owned by
   [PDR-140](../../../practice-core/decision-records/PDR-140-review-response-pricing.md)
   (feedback defaults to triage; cures batch into declared settlement pushes), whose intake
-  contract binds at PR-open exactly as PDR-132's budgets bind at authoring.
+  contract binds at PR-open exactly as PDR-132's budgets bind at authoring. The in-loop
+  re-pricing checkpoint — the review cost gate's `warn` and the three answers it admits,
+  where the estate carries that gate (OCE's `agent-tools review-cost`) — is
+  `pr-lifecycle`'s (§Response pricing), as PDR-140 clause 8 requires of every in-loop
+  checkpoint; the gate is cited there and never invoked out of band to correct a running
+  loop. The wrap's survey and the review-cost ledger audit every answer with hindsight.
 - **Changeset size** —
   [PDR-132](../../../practice-core/decision-records/PDR-132-changeset-health-round-budgets-bind-at-authoring-time.md)
   owns the round budget and binds it at authoring time.
@@ -110,6 +143,15 @@ names as a real defect.
 - **Assurance rigour** —
   [§Agentic Quality](../../../directives/principles.md#agentic-quality) risk-tiers assurance to
   the harm of getting it wrong, *"never uniform"*.
+- **Private instruments** — a wrong-instrument-weight instance. A tool the owner uses alone on
+  his machine takes the basest working version: one observation, one pull request, and no
+  reviewer fleet unless he asks. Reviewer and accessibility depth is sized by the audience: a
+  public service gets it, a private instrument does not. When he says a thing is SIMPLE, the
+  measure is what he must attend to, never the estate's doctrine. The owner, 2026-10-08, on a
+  local editor that had drawn six reviewers and a Cricket suite, verbatim: "you are building an
+  MVP editing app, which requires the basest ability to be read then changed... and you are
+  applying the a11y requirements of a public service, and thus wasting my time, my money, and
+  your attention."
 
 **When a domain instance exists, run it.** This skill does not substitute for the
 mechanical instrument; it is the reason to reach for one, and the fallback when a domain
@@ -149,6 +191,24 @@ owner's to answer.
 Read the failure precisely: **not an absent framework, but an unbuilt instrument and an
 unasked sizing question.** That is the generator this gate exists to catch, and it is why
 the gate runs before the work rather than as a review of it.
+
+## Worked instance — the dependency sweep that became an audit
+
+A dependency-update lane grew, step by defensible step, into a security
+engagement: an audit surfaced advisories, advisories invited exposure
+questions, exposure questions invited import-graph tracing, deployment
+checks and an environment question routed to the owner. The owner's word
+(2026-07-25, verbatim in substance): **"this MCP is a means of putting free
+educational material in the hands of teachers, not preventing terrible
+things — I asked for an update of deps, not an overhaul of settled
+architecture."** The threat model is the product's own, and a defensible
+discovery is not a mandate to keep digging: "update the deps" ends when the
+deps are updated, and anything alarming found outside the ask is stated in
+one sentence and routed, never opened as a lane. The same pricing from the
+other side, 2026-09-02 ("not important enough to spend a cycle on!"): once a
+landing is in reach, a further edit to its records earns a cycle only if it
+changes what a successor would DO — a factual cure yes, a pointer or a
+heading date no.
 
 ## The success test
 

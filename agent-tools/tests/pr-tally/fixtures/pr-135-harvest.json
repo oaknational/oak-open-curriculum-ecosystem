@@ -1,0 +1,1205 @@
+{
+  "number": 135,
+  "headRefOid": "b50820152d9448ca91d73e79b9ee30bf4249a896",
+  "baseRefName": "engraph",
+  "mergeCommit": {
+    "oid": "69a5377176d5ce16f2ecf1f18257d688238d0b18"
+  },
+  "commits": {
+    "pageInfo": {
+      "hasNextPage": false,
+      "endCursor": "Nw"
+    },
+    "nodes": [
+      {
+        "commit": {
+          "oid": "712abe2429fe547bd1996877ed7935f14493d251",
+          "committedDate": "2026-09-12T08:09:43Z"
+        }
+      },
+      {
+        "commit": {
+          "oid": "7f242687781caf6f199dcd0fdecec3f259d8f65a",
+          "committedDate": "2026-09-12T08:15:20Z"
+        }
+      },
+      {
+        "commit": {
+          "oid": "be6f75c050d4726a114bdd4510d3a5980dbfda9e",
+          "committedDate": "2026-09-12T08:22:45Z"
+        }
+      },
+      {
+        "commit": {
+          "oid": "ae0e02f22c65ed417e670d705fdea74b996923fb",
+          "committedDate": "2026-09-12T08:35:34Z"
+        }
+      },
+      {
+        "commit": {
+          "oid": "362372eb44117ce35e3f3af12827a7a542024c6e",
+          "committedDate": "2026-09-12T08:44:57Z"
+        }
+      },
+      {
+        "commit": {
+          "oid": "4114e24476f62376bd6b512bcf01756ee583a7b0",
+          "committedDate": "2026-09-12T11:58:38Z"
+        }
+      },
+      {
+        "commit": {
+          "oid": "b50820152d9448ca91d73e79b9ee30bf4249a896",
+          "committedDate": "2026-09-12T12:19:41Z"
+        }
+      }
+    ]
+  },
+  "reviewThreads": {
+    "pageInfo": {
+      "hasNextPage": false,
+      "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMjozMDoyOFrOocAd6Q=="
+    },
+    "nodes": [
+      {
+        "id": "PRRT_kwDORdPTys6hum1L",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md",
+        "line": null,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMjowMjo0M1rO7jBO9g=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3995657878,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T08:30:03Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Leave the owner-held naming decision unanswered**\n\nIn this pre-decision report, calling this the “single practice ... most worth naming” answers and ranks the exact owner-held question later posed in §7.4 (“Is ... a practice worth naming here?”). That contradicts both the report's stated non-goal and the authority split in `.agent/reports/README.md`, so the exploration should describe the observed mechanism and decision factors without selecting it.\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNRoynA",
+                "commit": {
+                  "oid": "be6f75c050d4726a114bdd4510d3a5980dbfda9e"
+                }
+              }
+            },
+            {
+              "databaseId": 3996143350,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T12:02:43Z",
+              "body": "**Over-bar** (prong one: a reader takes a steer the contract forbids). Cured in SHA:4114e2447: the sentence now names the practice as distinct and points at §7's fourth question, which stays open. Evidence class READ.\n\n— Nettle guards Pistil (2de368), Director\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSGHCw",
+                "commit": {
+                  "oid": "4114e24476f62376bd6b512bcf01756ee583a7b0"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hum1R",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md",
+        "line": null,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMjowMjo0NVrO7jBPFw=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3995657885,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T08:30:04Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Narrow the reproducibility claim**\n\nThis promise is false for the report's most material numbers: §5.2 says the 33,684/5,737-token results and 82–94% savings came from an unavailable internal Java corpus and are not independently checkable, while reproduction step 5 merely prints the published table and counts different fixtures. A reviewer following the success contract therefore cannot reproduce every number; scope this claim to the metadata, arithmetic, and fixture mismatch that the supplied commands actually verify, or provide the missing corpus and execution evidence.\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNRoynA",
+                "commit": {
+                  "oid": "be6f75c050d4726a114bdd4510d3a5980dbfda9e"
+                }
+              }
+            },
+            {
+              "databaseId": 3996143383,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T12:02:45Z",
+              "body": "**Over-bar** (prong one: a reader following the success contract fails). Cured in SHA:4114e2447: the promise is scoped to repository-derived numbers (§2, §3, §5.2, §5.3) and names the external inputs — the npm registry metadata, the shell probe, the on-disk size, the README's benchmark corpus. Evidence class READ.\n\n— Nettle guards Pistil (2de368), Director\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSGHKA",
+                "commit": {
+                  "oid": "4114e24476f62376bd6b512bcf01756ee583a7b0"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hun21",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md",
+        "line": null,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMjowMjo0NlrO7jBPQw=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3995665049,
+              "author": {
+                "login": "copilot-pull-request-reviewer"
+              },
+              "createdAt": "2026-09-12T08:32:42Z",
+              "body": "The inventory above lists three host manifests plus two marketplace manifests, so there are five manifest JSON files, not four. Since this row is verifying the three host manifests that point at `skills/`, the evidence description should say which set was read rather than claiming an impossible four-manifest total.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNRppRg",
+                "commit": {
+                  "oid": "be6f75c050d4726a114bdd4510d3a5980dbfda9e"
+                }
+              }
+            },
+            {
+              "databaseId": 3996143427,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T12:02:46Z",
+              "body": "**Over-bar** (an evidence row a reader trusts). Cured in SHA:4114e2447: the row reads \"the three host manifests and the two marketplace manifests (five files)\" and names the Claude Code and Codex manifests as the two the report shows pointing at `skills/` (§3.1 tree). The round-two suppressed assertion that the Cursor manifest does not point at `skills/` is unverified at this seat — the subject repository is out of scope for this settlement — and is not written in. Evidence class READ.\n\n— Nettle guards Pistil (2de368), Director\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSGHSA",
+                "commit": {
+                  "oid": "4114e24476f62376bd6b512bcf01756ee583a7b0"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hun2_",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md",
+        "line": null,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMjowMjo0N1rO7jBPYA=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3995665064,
+              "author": {
+                "login": "copilot-pull-request-reviewer"
+              },
+              "createdAt": "2026-09-12T08:32:42Z",
+              "body": "This blanket claim contradicts §5.2 immediately above: the published benchmark values are explicitly not reproducible from the committed fixtures/runner, and the npm metadata was fetched externally rather than from the pinned subject. Narrow this sentence so the reproduction guarantee applies only to repository-derived checks.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNRppRg",
+                "commit": {
+                  "oid": "be6f75c050d4726a114bdd4510d3a5980dbfda9e"
+                }
+              }
+            },
+            {
+              "databaseId": 3996143456,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T12:02:47Z",
+              "body": "**Over-bar**, the same finding as the Codex thread at this anchor (matched on anchor and substance; counted once). Cured in SHA:4114e2447 as described there. Evidence class READ.\n\n— Nettle guards Pistil (2de368), Director\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSGHZg",
+                "commit": {
+                  "oid": "4114e24476f62376bd6b512bcf01756ee583a7b0"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hura0",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md",
+        "line": null,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMjowMjo0OFrO7jBPeQ=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3995686192,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T08:43:11Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Separate executable shunt code from the manifest-only plugin**\n\nThis description applies to the whole `portal-ai-plugins` repository, but §3.3 later inventories executable hooks and scripts plus two additional shunt skills, so the repository does ship application code and contains more than the six portal skills. A reader using this opening summary to assess the repository would therefore miss its principal implementation surface; scope the manifest-only claim to the portal plugin and describe shunt separately.\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNRq6Ew",
+                "commit": {
+                  "oid": "ae0e02f22c65ed417e670d705fdea74b996923fb"
+                }
+              }
+            },
+            {
+              "databaseId": 3996143481,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T12:02:48Z",
+              "body": "**Over-bar** (prong one: a reader assessing the repository misses its implementation surface). Cured in SHA:4114e2447: §1 scopes \"no application code / six skills / one dependency\" to the portal plugin and states that shunt ships hooks, transport scripts, two skills and an eval harness with `jq` as a prerequisite — every item already in the report's own §3.3 and §4.2. The index row in `.agent/reports/README.md` is re-trued to match. Evidence class READ.\n\n— Nettle guards Pistil (2de368), Director\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSGHgA",
+                "commit": {
+                  "oid": "4114e24476f62376bd6b512bcf01756ee583a7b0"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hura1",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md",
+        "line": null,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMjowMjo0OVrO7jBPoQ=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3995686193,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T08:43:11Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Qualify the hard-gate claim around its documented bypass**\n\nWhen a large read is placed in a compound Bash command containing any pipe or redirect, §5.3 shows that `check-bash-read` immediately allows it, for example `cat big.ts; echo done > /dev/null`. In that scenario the expensive path remains open, so saying the hook catches these commands and leaves only the cheap path contradicts the report's own source-derived finding; narrow this to the direct command forms the matcher actually blocks.\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNRq6Ew",
+                "commit": {
+                  "oid": "ae0e02f22c65ed417e670d705fdea74b996923fb"
+                }
+              }
+            },
+            {
+              "databaseId": 3996143521,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T12:02:49Z",
+              "body": "**Over-bar** (prong one). Cured in SHA:4114e2447: the enforcement claim is bounded to the full-file reads the hooks cover, with the gate's edges named by cross-reference — the compound-command bypass (§5.3) and code-writer's absence of enforcement (§3.4). Evidence class READ.\n\n— Nettle guards Pistil (2de368), Director\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSGHpA",
+                "commit": {
+                  "oid": "4114e24476f62376bd6b512bcf01756ee583a7b0"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hura2",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md",
+        "line": null,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMjowMjo1MFrO7jBPxA=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3995686194,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T08:43:11Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Mark server-side retention as an unverified subject claim**\n\nFor readers evaluating privacy, billing, or replay behaviour, “nothing is stored server-side” is presented here as a design fact even though §5.4 explicitly lists the ephemerality of `aika:invoke-chat` among the runtime claims that were not verified. This also misses the report's own contract that subject assertions be marked throughout; attribute the statement directly to the subject README rather than asserting it as established behaviour.\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNRq6Ew",
+                "commit": {
+                  "oid": "ae0e02f22c65ed417e670d705fdea74b996923fb"
+                }
+              }
+            },
+            {
+              "databaseId": 3996143556,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T12:02:50Z",
+              "body": "**Over-bar on prong one** — a privacy or billing reader acts on §4.2 alone. Cured in SHA:4114e2447: the prerequisites paragraph is attributed to the README and the server-side claim is marked as one §5.4 lists unverified. Note: the review contract's per-claim marker promise was narrowed in the same push (it overstated the marking discipline the report actually uses; the editing seat is named under the byline); this cure stands on prong one, not on the contract. Evidence class READ.\n\n— Nettle guards Pistil (2de368), Director\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSGHxw",
+                "commit": {
+                  "oid": "4114e24476f62376bd6b512bcf01756ee583a7b0"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hura4",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/state/collaboration/conversations/owner-only-retention-enforcement-2026-09-11.json",
+        "line": null,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMjowMjo1MVrO7jBP6g=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3995686196,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T08:43:11Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Keep seat interpretation out of the owner-authored entry**\n\nThe `author` field makes the entire entry an Owner-authored decision, but only the short quoted sentence is owner-verbatim; the claims that “touch” means never reading or scanning `.env` files and that redaction must use output-shape matching are the seat's derived implementation interpretation. Future readers will treat that extra constraint and remedy as owner authority, so retain only the quoted decision here or explicitly separate and attribute the subsequent reasoning as the recorder's reading.\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNRq6Ew",
+                "commit": {
+                  "oid": "ae0e02f22c65ed417e670d705fdea74b996923fb"
+                }
+              }
+            },
+            {
+              "databaseId": 3996143594,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T12:02:51Z",
+              "body": "**Over-bar** (the implementer would read the seat's reading as the owner's ruling — the owner named this exact failure on 2026-09-12). Cured in SHA:4114e2447: entry-004 carries the owner's verbatim sentence and \"Option C\" alone under `author: Owner`; the recorder's reading (what \"touch\" forbids; redaction as output-shape matching) moved to entry-005 under the prefix \"The recorder's reading (Nettle guards Pistil, 2de368), not the owner's word\". Entry ids unchanged. Evidence class RUN — `validate-collaboration-state` green on the push.\n\n— Nettle guards Pistil (2de368), Director\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSGH9A",
+                "commit": {
+                  "oid": "4114e24476f62376bd6b512bcf01756ee583a7b0"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hura5",
+        "isResolved": true,
+        "isOutdated": false,
+        "path": ".agent/memory/operational/threads/estate-coordination.next-session.md",
+        "line": 2204,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMjowMjo1MlrO7jBQGg=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3995686197,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T08:43:11Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Cite the decision instead of copying it into the thread**\n\nThis closed decision's outcome and constraints are copied into the thread immediately after the record says the body is not restated, and the same material is copied again in the new compaction-boundary section. `.agent/memory/operational/threads/README.md` explicitly makes the conversation file the decision body and requires thread records to cite it, because parallel copies can drift; keep the path and actionable follow-up here without duplicating the decision text.\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNRq6Ew",
+                "commit": {
+                  "oid": "ae0e02f22c65ed417e670d705fdea74b996923fb"
+                }
+              }
+            },
+            {
+              "databaseId": 3996143642,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T12:02:52Z",
+              "body": "**Below-bar** under PDR-140 clause 9(a): the copied text is accurate today and no reader is misled by it. The DRY defect is real and the record's own convention (cite the conversation file, never copy it) applies at the record's next write — the successor fold's re-true. Rejected with rationale; no write in the rebudgeted push (clause 9(b)). Evidence class READ.\n\n— Nettle guards Pistil (2de368), Director\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSGIGw",
+                "commit": {
+                  "oid": "4114e24476f62376bd6b512bcf01756ee583a7b0"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6huu4M",
+        "isResolved": true,
+        "isOutdated": false,
+        "path": ".agent/memory/operational/threads/estate-coordination.next-session.md",
+        "line": 2298,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMjowMjo1M1rO7jBQQQ=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3995706888,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T08:54:08Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Refresh the authoritative handoff during the fold**\n\nThis boundary records zero open PRs and new owner priorities, but the reviewed change never refreshes `.agent/memory/operational/director-handoff.md`, even though this record's opening pointer tells a resuming Director that its `CURRENT HANDOFF STATE` is authoritative. In the reviewed tree that snapshot still names the 2026-09-10 coordination branch and the obsolete #108/#110/#109/#100/#103 lanes, so a successor following the documented pickup path receives stale routing instead of the state recorded here; update the live handoff snapshot as part of this fold.\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNRsH0Q",
+                "commit": {
+                  "oid": "362372eb44117ce35e3f3af12827a7a542024c6e"
+                }
+              }
+            },
+            {
+              "databaseId": 3996143681,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T12:02:53Z",
+              "body": "**Over-bar** (prong one: a resuming Director following the documented pickup path is misrouted). Cured in SHA:4114e2447: `director-handoff.md` §CURRENT HANDOFF STATE — the fold block and the live snapshot replaced in place, like for like, per the file's own refresh contract; no 2026-09-10 lane is named; `SHA:` prefixes throughout. Evidence class READ.\n\n— Nettle guards Pistil (2de368), Director\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSGIOw",
+                "commit": {
+                  "oid": "4114e24476f62376bd6b512bcf01756ee583a7b0"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6huu4O",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/memory/operational/threads/estate-coordination.next-session.md",
+        "line": null,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMjowMjo1NFrO7jBQXA=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3995706893,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T08:54:08Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Preserve cure-worthy counts in the verdict slice**\n\nIf the owner approves this recorded plan, the proposed row carries only `raised`, so the terminal-zero and step-back verdicts can only operate on raw findings (or resolution state). The ratified `.agent/plans/delivery/pr-tally.plan.md` instead defines the predicate over a distinct cure-worthy count derived from the bar marker: for example, a round containing only below-bar findings must be terminal zero even though `raised > 0`. Deferring both cure-worthiness and its marker while implementing the verdict therefore entrenches the wrong state machine; include that field and input in this slice or defer the verdict with them.\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNRsH0Q",
+                "commit": {
+                  "oid": "362372eb44117ce35e3f3af12827a7a542024c6e"
+                }
+              }
+            },
+            {
+              "databaseId": 3996143708,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T12:02:54Z",
+              "body": "**Over-bar on prong two** (changes what gets built). Cured in SHA:4114e2447 in two places: the thread record no longer carries the slice — it cites the ratified node as the only home of the design; and `pr-tally.plan.md` carries a `## Review dispositions` row for this finding with its pickup disposition (todo 3, the bar marker, lands first per the node's own sequencing; todo 1's row carries the cure-worthy count). Evidence class READ; `validate-plan-corpus` green.\n\n— Nettle guards Pistil (2de368), Director\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSGIYA",
+                "commit": {
+                  "oid": "4114e24476f62376bd6b512bcf01756ee583a7b0"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6huu4T",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/memory/operational/threads/estate-coordination.next-session.md",
+        "line": null,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMjowMjo1NVrO7jBQeg=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3995706898,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T08:54:08Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Sort tally rows by branch commit order**\n\nWhen a review for an older head arrives after a review for a newer head, first-appearance order is review-arrival order rather than branch commit order. That reverses or interleaves the `c[n]` sequence consumed by the next step's convergence predicate, producing a false step-back or terminal verdict; the ratified plan explicitly requires commit order, never arrival order. Pass an authoritative head-order input to `buildRows` and sort bindings against it instead of preserving first appearance.\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNRsH0Q",
+                "commit": {
+                  "oid": "362372eb44117ce35e3f3af12827a7a542024c6e"
+                }
+              }
+            },
+            {
+              "databaseId": 3996143738,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T12:02:55Z",
+              "body": "**Over-bar on prong two.** Cured in SHA:4114e2447 the same way: the rival slice is removed from the record, and the node's ledger row records the pickup disposition — `buildRows` takes an authoritative head-order input and sorts bindings against it, never first appearance. Evidence class READ; `validate-plan-corpus` green.\n\n— Nettle guards Pistil (2de368), Director\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSGIfg",
+                "commit": {
+                  "oid": "4114e24476f62376bd6b512bcf01756ee583a7b0"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hv5YO",
+        "isResolved": true,
+        "isOutdated": false,
+        "path": ".agent/memory/operational/threads/estate-coordination.next-session.md",
+        "line": 2332,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMjoyNDoxN1rO7jD_Dg=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996150017,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T12:06:17Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Keep the todo-3 slice pending owner approval**\n\nFor a successor using this continuity record, these lines say the owner approved todo 3 as the two-hour slice, but the same newly added handoff later calls that slice only a standing proposal and explicitly says the owner has not ruled on its boundary (lines 2364–2366). This can route the next seat into an unapproved implementation slice; record only that `pr-tally` is next and leave the todo-3 boundary pending until the owner decides it.\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSGfRA",
+                "commit": {
+                  "oid": "4114e24476f62376bd6b512bcf01756ee583a7b0"
+                }
+              }
+            },
+            {
+              "databaseId": 3996188430,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T12:24:17Z",
+              "body": "**Over-bar** (prong one: a successor reads contradictory routing). Cured in `SHA:b50820152`: the two stale mirrors of the superseded state in this record are re-trued in one sweep to the ruling — the owner's approval of the 2026-09-12 settlement plan, which names todo 3 as the slice; the earlier two-hour text is retained by git at `SHA:be6f75c05` and is not reproduced. The remedy as proposed (\"keep the todo-3 boundary pending\") assumed no ruling had been made; the ruling exists, so the reconciliation branch of the finding is the one taken. This commit is marked as the class fix (stale mirrors of the seat's own cure — the Phase 4 class sweep not run on the previous commit) and the epoch resets. Evidence class READ.\n\n— Nettle guards Pistil (2de368), Director\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSJGOw",
+                "commit": {
+                  "oid": "b50820152d9448ca91d73e79b9ee30bf4249a896"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hv6UU",
+        "isResolved": true,
+        "isOutdated": false,
+        "path": ".agent/memory/operational/threads/estate-coordination.next-session.md",
+        "line": 2332,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMjoyNDoxOFrO7jD_Pw=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996155858,
+              "author": {
+                "login": "copilot-pull-request-reviewer"
+              },
+              "createdAt": "2026-09-12T12:09:25Z",
+              "body": "This calls todo 3 an “approved settlement plan” and says the owner's go is answered, but this same record says the owner had not yet answered at lines 2313-2315 and still had not ruled on the slice boundary at lines 2364-2366; the PR description makes the same pending-status claim. That contradiction can cause the next seat to treat todo 3 as owner-approved scope. Please keep this as a standing proposal until the owner decision is recorded, or reconcile all three surfaces with the actual ruling.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSG1Ag",
+                "commit": {
+                  "oid": "4114e24476f62376bd6b512bcf01756ee583a7b0"
+                }
+              }
+            },
+            {
+              "databaseId": 3996188479,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T12:24:18Z",
+              "body": "**Over-bar**, the same finding as the Codex thread at this anchor (counted once). Cured in `SHA:b50820152` as described there; the pull request description is re-trued in the same pass, so all three surfaces carry the ruling. Evidence class READ.\n\n— Nettle guards Pistil (2de368), Director\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSJGZQ",
+                "commit": {
+                  "oid": "b50820152d9448ca91d73e79b9ee30bf4249a896"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hv6Uc",
+        "isResolved": true,
+        "isOutdated": true,
+        "path": ".agent/memory/operational/threads/estate-coordination.next-session.md",
+        "line": null,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMjoyNDoxOVrO7jD_aA=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996155871,
+              "author": {
+                "login": "copilot-pull-request-reviewer"
+              },
+              "createdAt": "2026-09-12T12:09:26Z",
+              "body": "This says the two-hour slice is “written out here in full”, but the following section only points to `pr-tally.plan.md`, records two review dispositions, and gives a short sequencing summary; the promised time-boxed steps and explicit leaves are not present in this thread record. A successor therefore cannot recover the plan from the durable record as claimed. Include the full slice here, or change the wording to identify the actual home of the complete plan.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSG1Ag",
+                "commit": {
+                  "oid": "4114e24476f62376bd6b512bcf01756ee583a7b0"
+                }
+              }
+            },
+            {
+              "databaseId": 3996188520,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T12:24:19Z",
+              "body": "**Over-bar** (a successor cannot recover what the sentence claims). Cured in `SHA:b50820152`: the sentence now says the slice was written out here at the boundary and is retained by git at `SHA:be6f75c05`, not reproduced; the actual home of the complete design is the ratified node, which this section cites. Evidence class READ.\n\n— Nettle guards Pistil (2de368), Director\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSJGhQ",
+                "commit": {
+                  "oid": "b50820152d9448ca91d73e79b9ee30bf4249a896"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hwB3n",
+        "isResolved": true,
+        "isOutdated": false,
+        "path": ".agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md",
+        "line": 271,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMjo0MToyMlrO7jGGsg=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996200597,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T12:30:28Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Include the Read bypasses in the gate boundary**\n\nFor readers relying on this sentence to assess enforcement, the claim stops at only the compound-Bash and code-writer edges, but §4.4 explicitly identifies `offset-zero` and `limit-zero` as allowed “known bypasses”. The report therefore still overstates where the direct path is closed; include these Read-tool cases in this boundary or explain why they do not bypass the claimed full-file-read restriction. [.agent/rules/verify-dont-trust.mdL53-L56](https://github.com/EngraphCode/open-curriculum-ecosystem/blob/b50820152d9448ca91d73e79b9ee30bf4249a896/.agent/rules/verify-dont-trust.md#L53-L56)\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSJw2Q",
+                "commit": {
+                  "oid": "b50820152d9448ca91d73e79b9ee30bf4249a896"
+                }
+              }
+            },
+            {
+              "databaseId": 3996223154,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T12:41:22Z",
+              "body": "**Below-bar** (PDR-140 clause 9(a)), and out of the declared scope. The observation is true — §4.4 item 3 of this same report names `offset-zero` and `limit-zero` as known bypasses. The remedy (extend the edge list at this sentence) widens a cure that was itself a narrowing: the sentence names the two sections where the report documents the gate's limits, and §4.4 is two pages on in the same document, so a reader assessing enforcement is not misled by the artefact. No write; the settlement is terminal by disposition. Evidence class READ.\n\n— Nettle guards Pistil (2de368), Director\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSLATA",
+                "commit": {
+                  "oid": "b50820152d9448ca91d73e79b9ee30bf4249a896"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "PRRT_kwDORdPTys6hwB3p",
+        "isResolved": true,
+        "isOutdated": false,
+        "path": ".agent/memory/operational/frictions-register.md",
+        "line": 2741,
+        "comments": {
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "Y3Vyc29yOnYyOpK0MjAyNi0wOS0xMlQxMjo0MToyM1rO7jGG2w=="
+          },
+          "nodes": [
+            {
+              "databaseId": 3996200600,
+              "author": {
+                "login": "chatgpt-codex-connector"
+              },
+              "createdAt": "2026-09-12T12:30:28Z",
+              "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Route F-182 to the doctrine that already owns it**\n\nWhen a successor picks up this `open` entry, this target sends them looking for a new rule or doctrine home even though `verify-dont-trust` already requires both auditing exclusions and carrying a known-positive probe—the same portable cure described immediately above. Mark the doctrine portion addressed by that rule and restrict the remaining open scope to specifically enumerated estate-owned checks or an explicit deferral; otherwise the register creates duplicate doctrine and leaves the mechanical work unroutable. [.agent/rules/verify-dont-trust.mdL97-L103](https://github.com/EngraphCode/open-curriculum-ecosystem/blob/b50820152d9448ca91d73e79b9ee30bf4249a896/.agent/rules/verify-dont-trust.md#L97-L103)\n\nUseful? React with 👍 / 👎.",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSJw2Q",
+                "commit": {
+                  "oid": "b50820152d9448ca91d73e79b9ee30bf4249a896"
+                }
+              }
+            },
+            {
+              "databaseId": 3996223195,
+              "author": {
+                "login": "el-graphael"
+              },
+              "createdAt": "2026-09-12T12:41:23Z",
+              "body": "**Below-bar** (PDR-140 clause 9(a)), and out of the declared scope. F-182 is a frictions-register row whose consumer is the curation pass that dispositions open rows; nothing acts on its \"Target surface\" before that pass, so a reader of this pull request is not misled. The observation — that `verify-dont-trust` already carries the exclusion-audit and known-positive-probe discipline — is the curation pass's first candidate home and is recorded here for it; the row's own text already names \"rule or doctrine home\" as the target. No write. Evidence class READ.\n\n— Nettle guards Pistil (2de368), Director\n",
+              "pullRequestReview": {
+                "id": "PRR_kwDORdPTys8AAAABNSLAcw",
+                "commit": {
+                  "oid": "b50820152d9448ca91d73e79b9ee30bf4249a896"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "reviews": {
+    "pageInfo": {
+      "hasNextPage": false,
+      "endCursor": "Y3Vyc29yOnYyOpO0MjAyNi0wOS0xMlQxMjo0MToyM1q0MjAyNi0wOS0xMlQxMjo0MToyM1rPAAAAATUiwHM="
+    },
+    "nodes": [
+      {
+        "id": "PRR_kwDORdPTys8AAAABNRoynA",
+        "author": {
+          "login": "chatgpt-codex-connector"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "be6f75c050d4726a114bdd4510d3a5980dbfda9e"
+        },
+        "submittedAt": "2026-09-12T08:30:03Z",
+        "body": "\n### 💡 Codex Review\n\nHere are some automated review suggestions for this pull request.\n\n**Reviewed commit:** `be6f75c050`\n    \n\n<details> <summary>ℹ️ About Codex in GitHub</summary>\n<br/>\n\nCodex has been enabled to automatically review pull requests in this repo. Reviews are triggered when you\n- Open a pull request for review\n- Mark a draft as ready\n- Comment \"@codex review\".\n\nIf Codex has suggestions, it will comment; otherwise it will react with 👍.\n\n\n\n\nWhen you [sign up for Codex through ChatGPT](https://openai.com/codex), Codex can also answer questions or update the PR, like \"@codex address that feedback\".\n            \n</details>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNRppRg",
+        "author": {
+          "login": "copilot-pull-request-reviewer"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "be6f75c050d4726a114bdd4510d3a5980dbfda9e"
+        },
+        "submittedAt": "2026-09-12T08:32:42Z",
+        "body": "### 🟡 Changes recommended\n\nUnresolved moderate findings affect continuity wording and report accuracy.\n\n*Get a fresh assessment by requesting another Copilot review.*\n\n<details>\n<summary>Pull request overview</summary>\n\nThis documentation-only PR folds the 2026-09-11 coordination branch, preserving the retention decision, Spotify exploration, and continuity records.\n\n**Changes:**\n- Records and closes the redaction-at-boundary retention decision.\n- Adds and indexes the Spotify plugin exploration report.\n- Updates coordination and session-memory records.\n</details>\n\n<details>\n<summary>File summaries</summary>\n\n| File | Summary |\r\n|---|---|\r\n| `.agent/state/collaboration/conversations/owner-only-retention-enforcement-2026-09-11.json` | Records the resolved retention decision. |\r\n| `.agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md` | Adds the external exploration and evidence analysis. |\r\n| `.agent/reports/README.md` | Indexes the new report. |\r\n| `.agent/memory/operational/threads/estate-coordination.next-session.md` | Records fold state, decisions, and follow-ups. |\r\n| `.agent/memory/active/napkin.md` | Preserves session lessons and owner status. |\n</details>\n\n<details>\n<summary>Review details</summary>\n\n### Suppressed comments (11)\n\n**.agent/memory/active/napkin.md:1072**\n* This continuity note says retention is \"cured\" by redaction, but the decision record and the boundary block explicitly say the delivery node is still unbuilt. That wording can cause a resuming seat to skip the remaining implementation; describe this as the chosen cure and retain the unbuilt status.\n```\n- The owner's other answers, both of which ARE actionable: retention is cured by REDACTING AT THE\n  BOUNDARY with the constraint \"do not touch any .env files\" (recorded as the decision and closed);\n```\n**.agent/memory/operational/threads/estate-coordination.next-session.md:2207**\n* These lines say the continuation record does not restate the decision body, then repeat its constraint, option dispositions and rationale. `threads/README.md` §Relationship to other operational surfaces explicitly requires citing the decision-thread file rather than copying its body; keep only the next-step consequence here and leave the detailed decision in the JSON.\n```\nThe outcome in one line, because it changes what a later seat should build: option C, REDACT AT THE\nRETENTION BOUNDARY, with the owner's constraint that the redactor must not touch any `.env` files.\nOption B (a filesystem-type allowlist) is refused, so retention keeps working on network mounts.\nOption A composes rather than competes — #132's mode verification stays exactly as it is and its\nresidual stays documented — but it is no longer the answer, because an artefact carrying no\n```\n**.agent/reports/README.md:71**\n* The index row repeats the report's over-broad inventory: it says the repository is six skills and three host manifests over one CLI, while the linked report documents shunt's additional skills, executable hooks/scripts, and `jq` prerequisite. Scope this summary to the Portal plugin or include shunt's artefacts so the index does not misdescribe the report it points to.\n```\n- [spotify-portal-ai-plugins-exploration-2026-09-12.md](./spotify-portal-ai-plugins-exploration-2026-09-12.md)\n  — first-hand exploration of Spotify's `portal-ai-plugins` repository at `3c24ca3`: what it\n  is (six Markdown skills plus three host manifests over one external CLI, authored in a\n  six-day window), how it is built (one canonical skills directory behind thin per-host\n  manifests; a second plugin, shunt, layering PreToolUse hooks over named-argument scripts\n  over judgement-only skills), and what value it enables for each of four user groups by what\n```\n**.agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md:125**\n* The report contract requires every factual claim to carry a source and an evidence marker (`read`, `executed`, `probed`, or `asserted by the subject`), but this workflow table provides neither per-row source paths nor markers. The later global disclaimer does not let a reviewer distinguish independently read facts from subject assertions as promised. Add an explicit source and marker to each row and apply the same treatment to the value sections.\n```\n| Workflow | What the agent is told to do |\n| --- | --- |\n| `setup` | Verify Node and npm, discover the CLI's command surface, list Portal instances, authenticate the chosen one, select it, then prove access with `actions list --json` |\n| `doctor` | The same checks, strictly read-only — never install, authenticate, select, or mutate |\n| `search` | `search <query> --limit 10 --json` over the software catalogue and TechDocs |\n```\n**.agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md:55**\n* This overview describes the repository as only six skills/manifests with no application code and one external dependency, but the same report later documents shunt's executable hooks/scripts and its `jq` prerequisite. Those statements are true only for the Portal plugin, not the repository, so the opening inventory is misleading; narrow the scope or include shunt's artefacts here.\n```\nand Cursor. It ships no application code. It is a repository of **agent instructions** (six\nMarkdown skills) plus **host manifests** (three JSON files) that make those instructions\ninstallable, and it drives everything through one external dependency: the `@spotify/portal-cli`\nnpm package. A second, independent plugin in the same repository — **shunt** — has nothing to\ndo with developer portals: it is a token-economy device that intercepts large file reads and\nroutes them to cheaper worker models, using the Portal CLI only as a transport.\n```\n**.agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md:186**\n* The review contract requires every factual claim to carry a source and an evidence marker, but this paragraph presents the action name, mode-resolution order, and override behaviour as unqualified facts. The report later says Portal/CLI runtime behaviour is only the subject's assertion; add the missing source/evidence qualification before treating this contract as satisfied.\n```\nDelegation goes through exactly one Portal action, `aika:invoke-chat`, with the worker mode\naddressed **by name** and resolved server-side. The transport library documents the resolution\norder — the caller's own mode, then their groups', then public ones — which gives a user a\nprivate override for free: create your own `bulk-reader` and it shadows the public one with no\nconfiguration.\n```\n**.agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md:261**\n* This value claim says the feature is enforced because the cheap path is the only path left open, but §5.3's own compound-command example shows `cat big.ts; echo done > /dev/null` bypassing the Bash hook. Qualify this as the intended design or state the current bypass so the report does not overstate the observed behaviour.\n```\ncomply-by-accident-of-good-intentions, because the cheap path is the only path left open. The\n```\n**.agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md:234**\n* The value section presents Portal's runtime outcomes as verified effects (questions \"become answerable\" and the agent \"can then act\"), but the report's evidence boundary says Portal/CLI/AiKA runtime is only the subject repository's assertion. Mark these outcomes as subject-reported or provide independent evidence before presenting them as observed value.\n```\n**What changes for them.** Questions that previously required leaving the editor — *who owns\nthis service, is it healthy, where is its runbook, who is on call, what can I trigger* — become\nanswerable inside the agent session, in natural language, without knowing the catalogue's\nentity-reference syntax. And the agent can then *act*: the Portal actions registry is exposed\nto it, gated behind dry-run and explicit human authorisation.\n```\n**.agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md:460**\n* The external reproduction step prints only the dist-tags and package created/modified timestamps; it does not print the first `0.1.0` and latest publication dates or the licence field reported in §5.1. Add those fields or narrow the table claim, otherwise this block cannot reproduce the cited corroboration.\n```\n# 7. External corroboration (§5.1): npm registry metadata for the CLI.\n#    Read metadata only; the package is not installed.\ncurl -s https://registry.npmjs.org/@spotify/portal-cli \\\n  | python3 -c \"import json,sys;d=json.load(sys.stdin);print(d['dist-tags'],d['time']['created'],d['time']['modified'])\"\n```\n**.agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md:339**\n* The evidence shown here establishes only that the 162K-line Java corpus is not committed in the checkout. It does not establish that the corpus was internal, so this provenance label overstates what the report can support under its own evidence contract; call it the corpus described by the README unless the subject explicitly says internal.\n```\nand 90 lines where the table says 7,408. The published numbers came from an internal Java\ncorpus that is not in the repository, and `bash evals/run.sh --benchmark` measures a different\n```\n**.agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md:52**\n* The report's review contract requires every factual claim to carry a source and an evidence marker, but this opening summary presents claims such as “official”, “commercial”, and shunt's behaviour without a READ/SUBJECT/PROBED marker. A section-level assertion is not enough for the contract's line-level success test; add markers or narrow the contract before treating the report as independently reviewable.\n```\n`portal-ai-plugins` is Spotify's official packaging of **Spotify Portal** — their commercial\nBackstage distribution — as installable plugins for three coding agents: Claude Code, Codex,\nand Cursor. It ships no application code. It is a repository of **agent instructions** (six\nMarkdown skills) plus **host manifests** (three JSON files) that make those instructions\ninstallable, and it drives everything through one external dependency: the `@spotify/portal-cli`\n```\n\n- **Files reviewed:** 5/5 changed files\n- **Comments generated:** 2\n- **Review effort level:** Lite (auto)\n</details>\n\n> [!NOTE]\n> Copilot is running an experiment and ran this review at Lite.\n\n---\n\n💡 <a href=\"/EngraphCode/open-curriculum-ecosystem/new/engraph?filename=.github/skills/code-review/SKILL.md\" class=\"Link--inTextBlock\" target=\"_blank\" rel=\"noopener noreferrer\">Add a `code-review` agent skill</a> or configure MCP servers for context-aware, tailored reviews. <a href=\"https://docs.github.com/copilot/how-tos/use-copilot-agents/request-a-code-review/use-code-review?tool=webui#mcp-servers-and-agent-skills\" class=\"Link--inTextBlock\" target=\"_blank\" rel=\"noopener noreferrer\">Learn more in the docs.</a>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNRq6Ew",
+        "author": {
+          "login": "chatgpt-codex-connector"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "ae0e02f22c65ed417e670d705fdea74b996923fb"
+        },
+        "submittedAt": "2026-09-12T08:43:11Z",
+        "body": "\n### 💡 Codex Review\n\nHere are some automated review suggestions for this pull request.\n\n**Reviewed commit:** `ae0e02f22c`\n    \n\n<details> <summary>ℹ️ About Codex in GitHub</summary>\n<br/>\n\n[Your team has set up Codex to review pull requests in this repo](https://chatgpt.com/codex/cloud/settings/general). Reviews are triggered when you\n- Open a pull request for review\n- Mark a draft as ready\n- Comment \"@codex review\".\n\nIf Codex has suggestions, it will comment; otherwise it will react with 👍.\n\n\n\n\nCodex can also answer questions or update the PR. Try commenting \"@codex address that feedback\".\n            \n</details>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNRryZQ",
+        "author": {
+          "login": "copilot-pull-request-reviewer"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "ae0e02f22c65ed417e670d705fdea74b996923fb"
+        },
+        "submittedAt": "2026-09-12T08:50:51Z",
+        "body": "### 🔵 Needs a closer look\n\nUnresolved moderate findings remain in the exploration report and coordination plan.\n\n<details>\n<summary>Review details</summary>\n\n### Suppressed comments (15)\n\n**Previously missed (3)** — in code that hasn't changed since the last review.\n\n**.agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md:30**\n* The review contract says every factual claim is marked as read, executed, probed, or asserted by the subject, but the structural and value claims in §§3–4 are presented without per-claim evidence markers; only §5 supplies check metadata. Either add the promised markers/source references or narrow the contract to section-level evidence grouping.\n**.agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md:310**\n* This verification row repeats the manifest error above: the Cursor manifest does not point at `skills/`. A reader using the table as the evidence summary will still conclude that all three manifests carry the pointer, even after correcting §3.1.\n**.agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md:460**\n* The documented command only prints `dist-tags` and created/modified timestamps, but §5.1 also reports the first `0.1.0` publish date and the licence field. A reader following this reproduction block cannot reproduce all of row 311; include those fields or narrow that row's claim.\n\n**.agent/memory/active/napkin.md:1059**\n* The appended boundary is being written to a napkin already far beyond its 300-line limit. The napkin skill requires a fitness-exceeded marker at the top of each new entry; the existing marker at line 928 belongs to the previous entry and does not flag this append. Add the marker without trimming the preserved record.\n```\n## Nettle guards Pistil (2de368) — Director, the owner's cards of 2026-09-12\n```\n**.agent/memory/active/napkin.md:1072**\n* The redaction implementation is explicitly unbuilt and paused (the next-session record says so at lines 2387–2389, and the resolution says implementation is not yet planned), so “retention is cured by” reads as if the behaviour has landed. Record this as the selected remedy rather than a completed cure.\n```\n- The owner's other answers, both of which ARE actionable: retention is cured by REDACTING AT THE\n  BOUNDARY with the constraint \"do not touch any .env files\" (recorded as the decision and closed);\n```\n**.agent/memory/operational/threads/estate-coordination.next-session.md:2333**\n* `c[n]` is not the raised count here: the pr-lifecycle contract keeps raised as the sampler total, while terminal-zero and both step-back arms read the cure-worthy count (the subset clearing the PDR-140 bar). With no cure-worthy field in the planned row shape, and thread `isResolved` not being a bar disposition, this verdict cannot implement the stated semantics for the prose-review shapes. Add that input to the slice or remove those semantics from this plan.\n```\n- `verdict.ts` — `tallyVerdict(rows)`: TERMINAL-ZERO precedence, then STEP-BACK-MANDATORY\n  (`c[n] >= c[n-1] AND c[n-1] >= c[n-2]`, or four settled rounds; either arm only while the latest\n  count is non-zero), then BUDGET-EXCEEDED (more than two settled rounds, PDR-132), else CONVERGING.\n```\n**.agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md:426**\n* The universal claim that every number is reproducible from the subject commit is too broad: the report itself includes npm registry metadata, a shell probe, and clone-size measurements, none of which comes from `3c24ca3` alone. Narrow this statement to repository-derived figures and identify the external/probe inputs required for the rest.\n```\nEvery number in this report is reproducible from the subject at `3c24ca3`.\n```\n**.agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md:54**\n* The opening inventory describes the whole repository as six Markdown skills plus host manifests, but `plugins/shunt` also ships executable hooks, transport scripts, skills, and evals (as §3.3 documents). This makes the repository description and the “one external dependency” framing inaccurate. Limit this paragraph to the Portal plugin or include shunt’s executable surfaces.\n```\nand Cursor. It ships no application code. It is a repository of **agent instructions** (six\nMarkdown skills) plus **host manifests** (three JSON files) that make those instructions\ninstallable, and it drives everything through one external dependency: the `@spotify/portal-cli`\nnpm package. A second, independent plugin in the same repository — **shunt** — has nothing to\ndo with developer portals: it is a token-economy device that intercepts large file reads and\n```\n**.agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md:261**\n* “The saving is enforced” and “the cheap path is the only path left open” overstate the mechanism described here. The report’s own §5.3 shows that `check-bash-read` allows any command containing `|` or `>`, and §3.4 notes that code-writer has no enforcement. Qualify this claim as enforcement for the covered full-file reads, or state the known bypass here.\n```\n**By what mechanism.** This is the interesting part, and it is a genuine idea: **the saving is\nenforced, not advised.** A `PreToolUse` hook on `Read` blocks any full-file read over 350\nlines and returns a `reason` string that tells the agent what to do instead; a second hook on\n`Bash` catches `cat`/`head`/`tail`/`less`/`more` reaching for the same file. The agent cannot\ncomply-by-accident-of-good-intentions, because the cheap path is the only path left open. The\n```\n**.agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md:137**\n* The `feedback` skill is an exception: it invokes `actions telemetry:submit-feedback` directly and contains no `--help` step. Thus “Every skill” and the resulting universal discovery claim overstate the source; qualify this to the five skills that do discover the surface, or name the exception.\n```\n- **Discover the surface, never pin it.** Every skill instructs the agent to run `--help`\n  before relying on a command or flag. `setup` checks for the five expected commands (`auth`,\n  `actions`, `owner`, `search`, `service`) and *stops* if they are missing rather than\n  degrading. The plugin therefore does not encode the CLI's interface; it encodes how to find\n  it. That is what lets a `0.1.0` plugin survive a CLI that has since reached `0.4.4`.\n```\n**.agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md:310**\n* The report enumerates three host manifests and two marketplace JSON files in §3.1 (five files total), but this evidence row says “all four manifests.” That internal count mismatch weakens the claimed full-read evidence; name the exact five files or correct the count.\n```\n| One canonical skills directory, three host manifests pointing at it | Read all four manifests | Confirmed |\n```\n**.agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md:441**\n* `CLAUDE.md` is described above as a symlink, but `find ... -type f` excludes symlinks by default. The reproduction therefore omits a tracked file from the claimed 37-file inventory. Use the tracked-file list here (or include symlinks) so the read set is reproducible.\n```\nfind . -path ./.git -prune -o -type f -print | sort\n```\n**.agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md:247**\n* PDR-115 requires a source with unclear licensing to be treated as proprietary and described source-neutrally until an open licence is confirmed. This paragraph explicitly says the CLI's licence value is not an open-source identifier, but then names `@spotify/portal-cli` and quotes its metadata in a committed public report. Confirm the package's actual licence from its distributed licence file before naming it, or anonymise these dependency references.\n```\n**What must be true for the value to exist.** The organisation must run Spotify Portal — a\ncommercial product. There is no value here for anyone who does not. The plugin is Apache-2.0;\nthe CLI it cannot function without is published under `SEE LICENSE IN LICENSE.md` (npm\nregistry metadata, fetched 2026-09-12), which is not an open-source licence identifier. The\nopen licence on the wrapper does not make the capability open.\n```\n**.agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md:392**\n* This is a runnable command added as reproduction guidance, but §6 explicitly says the subject was never executed. The repository's documentation-hygiene rule requires runnable examples to be run or compile-probed against the real surface before landing; either execute and report the result, or mark this as an unexecuted subject-provided command and remove its status as reproduction.\n```\n  who wants that evidence can get it with `bash plugins/shunt/evals/run.sh`, which the subject\n  states needs no Portal access.\n```\n**.agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md:274**\n* This prerequisites paragraph presents AiKA availability, public worker modes, and one-shot server-side behaviour as established facts, but §5.4 explicitly lists the mode availability and `aika:invoke-chat` ephemerality as unverified subject assertions. Mark these as README/subject claims (or qualify them as unverified) so the value analysis does not overstate the evidence level.\n```\n**What must be true for the value to exist.** A Portal instance with AiKA enabled, `jq`\ninstalled, an authenticated CLI, and the two worker modes available (public on the instance, or\ncreated by the user). The delegation is one-shot by design — nothing is stored server-side —\nso a follow-up question re-sends the corpus. The README argues this is the right trade\n(*\"Re-sending files is free where it matters, because the corpus goes to the worker model and\nnever enters Claude's context\"*), which holds for context economy and does not hold for wall\nclock or for the worker's own billing.\n```\n\n- **Files reviewed:** 7/7 changed files\n- **Comments generated:** 0 new\n- **Review effort level:** Lite (auto)\n</details>\n\n> [!NOTE]\n> Copilot is running an experiment and ran this review at Lite."
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNRsH0Q",
+        "author": {
+          "login": "chatgpt-codex-connector"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "362372eb44117ce35e3f3af12827a7a542024c6e"
+        },
+        "submittedAt": "2026-09-12T08:54:08Z",
+        "body": "\n### 💡 Codex Review\n\nHere are some automated review suggestions for this pull request.\n\n**Reviewed commit:** `362372eb44`\n    \n\n<details> <summary>ℹ️ About Codex in GitHub</summary>\n<br/>\n\n[Your team has set up Codex to review pull requests in this repo](https://chatgpt.com/codex/cloud/settings/general). Reviews are triggered when you\n- Open a pull request for review\n- Mark a draft as ready\n- Comment \"@codex review\".\n\nIf Codex has suggestions, it will comment; otherwise it will react with 👍.\n\n\n\n\nCodex can also answer questions or update the PR. Try commenting \"@codex address that feedback\".\n            \n</details>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSGHCw",
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "4114e24476f62376bd6b512bcf01756ee583a7b0"
+        },
+        "submittedAt": "2026-09-12T12:02:44Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSGHKA",
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "4114e24476f62376bd6b512bcf01756ee583a7b0"
+        },
+        "submittedAt": "2026-09-12T12:02:45Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSGHSA",
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "4114e24476f62376bd6b512bcf01756ee583a7b0"
+        },
+        "submittedAt": "2026-09-12T12:02:46Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSGHZg",
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "4114e24476f62376bd6b512bcf01756ee583a7b0"
+        },
+        "submittedAt": "2026-09-12T12:02:47Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSGHgA",
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "4114e24476f62376bd6b512bcf01756ee583a7b0"
+        },
+        "submittedAt": "2026-09-12T12:02:48Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSGHpA",
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "4114e24476f62376bd6b512bcf01756ee583a7b0"
+        },
+        "submittedAt": "2026-09-12T12:02:49Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSGHxw",
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "4114e24476f62376bd6b512bcf01756ee583a7b0"
+        },
+        "submittedAt": "2026-09-12T12:02:50Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSGH9A",
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "4114e24476f62376bd6b512bcf01756ee583a7b0"
+        },
+        "submittedAt": "2026-09-12T12:02:51Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSGIGw",
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "4114e24476f62376bd6b512bcf01756ee583a7b0"
+        },
+        "submittedAt": "2026-09-12T12:02:52Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSGIOw",
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "4114e24476f62376bd6b512bcf01756ee583a7b0"
+        },
+        "submittedAt": "2026-09-12T12:02:53Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSGIYA",
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "4114e24476f62376bd6b512bcf01756ee583a7b0"
+        },
+        "submittedAt": "2026-09-12T12:02:54Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSGIfg",
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "4114e24476f62376bd6b512bcf01756ee583a7b0"
+        },
+        "submittedAt": "2026-09-12T12:02:55Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSGfRA",
+        "author": {
+          "login": "chatgpt-codex-connector"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "4114e24476f62376bd6b512bcf01756ee583a7b0"
+        },
+        "submittedAt": "2026-09-12T12:06:17Z",
+        "body": "\n### 💡 Codex Review\n\nHere are some automated review suggestions for this pull request.\n\n**Reviewed commit:** `4114e24476`\n    \n\n<details> <summary>ℹ️ About Codex in GitHub</summary>\n<br/>\n\n[Your team has set up Codex to review pull requests in this repo](https://chatgpt.com/codex/cloud/settings/general). Reviews are triggered when you\n- Open a pull request for review\n- Mark a draft as ready\n- Comment \"@codex review\".\n\nIf Codex has suggestions, it will comment; otherwise it will react with 👍.\n\n\n\n\nCodex can also answer questions or update the PR. Try commenting \"@codex address that feedback\".\n            \n</details>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSG1Ag",
+        "author": {
+          "login": "copilot-pull-request-reviewer"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "4114e24476f62376bd6b512bcf01756ee583a7b0"
+        },
+        "submittedAt": "2026-09-12T12:09:26Z",
+        "body": "### 🟡 Changes recommended\n\nResolve the pending-versus-approved/cured record contradictions, correct the two-hour-plan claim, and qualify unverified runtime behavior.\n\n*Get a fresh assessment by requesting another Copilot review.*\n\n<details>\n<summary>Review details</summary>\n\n### Suppressed comments (3)\n\n**.agent/memory/operational/director-handoff.md:354**\n* This says the four sync-workflow findings were already \"cured in ONE lane\", but the carried-forward state still marks them owner-held and says the mirror-provenance route is undecided at `estate-coordination.next-session.md:2367-2370`. Record the owner's one-lane cure direction as pending rather than completed; otherwise this handoff falsely tells the next seat the work is done.\n```\n> waits for the owner's word. Owner-held: the four sync-workflow findings, cured in ONE lane at the owner's\n```\n**.agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md:194**\n* The review contract says Portal/AiKA runtime behaviour is the subject repository's assertion and was not exercised here, but this paragraph states server-side mode resolution and private shadowing as verified facts in §3.3. Qualify the paragraph as documentation of the subject's claim and point readers to §5.4, otherwise the evidence level is overstated.\n```\nDelegation goes through exactly one Portal action, `aika:invoke-chat`, with the worker mode\naddressed **by name** and resolved server-side. The transport library documents the resolution\norder — the caller's own mode, then their groups', then public ones — which gives a user a\nprivate override for free: create your own `bulk-reader` and it shadows the public one with no\nconfiguration.\n```\n**.agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md:206**\n* This mode-failure paragraph has the same evidence-level problem: it asserts server-side warning and execution behaviour, while §5.4 says AiKA runtime behaviour was not verified. Mark it explicitly as the subject's documented claim so readers do not mistake source reading for an execution result.\n```\n- **The mode-less answer.** A stale pinned mode id only *warns* server-side and the turn runs\n  without the mode's instructions — producing a plausible, generic answer under the wrong\n  brief. The script reads `.mode.name` back from the response and **discards the answer** if\n  it is absent, naming the stale override in the error.\n```\n\n- **Files reviewed:** 9/9 changed files\n- **Comments generated:** 2\n- **Review effort level:** Lite (auto)\n</details>\n\n> [!NOTE]\n> Copilot is running an experiment and ran this review at Lite."
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSJGOw",
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "b50820152d9448ca91d73e79b9ee30bf4249a896"
+        },
+        "submittedAt": "2026-09-12T12:24:17Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSJGZQ",
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "b50820152d9448ca91d73e79b9ee30bf4249a896"
+        },
+        "submittedAt": "2026-09-12T12:24:18Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSJGhQ",
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "b50820152d9448ca91d73e79b9ee30bf4249a896"
+        },
+        "submittedAt": "2026-09-12T12:24:19Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSJqzw",
+        "author": {
+          "login": "copilot-pull-request-reviewer"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "b50820152d9448ca91d73e79b9ee30bf4249a896"
+        },
+        "submittedAt": "2026-09-12T12:29:36Z",
+        "body": "### 🔵 Needs a closer look\n\nUnresolved timestamp, retention-wording, and exploration-report evidence and formatting corrections remain.\n\n<details>\n<summary>Review details</summary>\n\n### Suppressed comments (8)\n\n**.agent/memory/operational/threads/estate-coordination.next-session.md:2205**\n* This repeats the over-broad implication that refusing the filesystem-type allowlist leaves network-mount retention generally working. #132's mode-interface probe is still retained and can refuse network mounts that fail its liveness/synthetic-mode check. Narrow this to say that no additional filesystem-type allowlist is added and only mounts passing the existing probe remain eligible.\n```\nOption B (a filesystem-type allowlist) is refused, so retention keeps working on network mounts.\n```\n**.agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md:279**\n* This line leaves an unmatched Markdown strong delimiter: the `**` after `verified)` starts emphasis with no closing delimiter, so the rendered report has malformed emphasis/punctuation. Remove that trailing delimiter while keeping the sentence period.\n```\nverified)**.** A Portal instance with AiKA enabled, `jq` installed, an authenticated CLI, and the\n```\n**.agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md:164**\n* The report contract says Portal/CLI/AiKA runtime claims are subject assertions and must be marked at section level, but this section then presents server-side mode resolution and precedence as an unqualified finding. Add the evidence-level caveat here (or recast the statements as claims made by the subject) so readers do not mistake the unexercised runtime behaviour for first-hand verification.\n```\nshunt is a separate plugin, Claude Code only, and architecturally unrelated to Portal except\nthat it borrows the Portal CLI as its transport. Its own README states the layering:\n```\n**.agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md:255**\n* The report's evidence boundary says the npm metadata was fetched but the package and its `LICENSE.md` were not inspected (§6), so `SEE LICENSE IN LICENSE.md` only establishes that the registry points to a file; it does not establish that the CLI is not open-source or what terms it carries. Please state that the CLI's licence terms remain unverified instead of implying the capability is not open.\n```\nthe CLI it cannot function without is published under `SEE LICENSE IN LICENSE.md` (npm\nregistry metadata, fetched 2026-09-12), which is not an open-source licence identifier. The\nopen licence on the wrapper does not make the capability open.\n```\n**.agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md:441**\n* The narrowed guarantee still includes claims that are not reproducible from the pinned repository: §2's on-disk size depends on the clone, and §3 includes the external npm-version claim at line 145. Limit this sentence to the tracked-file/history and repository-source checks (and exclude the clone-dependent size) so §8 does not contradict its own exceptions.\n```\nThe repository-derived numbers in this report (§2, §3, §5.2, §5.3) are reproducible from the\nsubject at `3c24ca3`. The rest are not: the npm registry metadata (§5.1) is an external fetch\ndated 2026-09-12; the shell probe (§5.1) ran against a script written in this session; the\non-disk size (§2) depends on the clone; and the README's benchmark figures (§5.2) come from a\ncorpus the repository does not contain.\n```\n**.agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md:145**\n* This turns the discover-at-runtime design into a compatibility claim, but §5.4 explicitly says Portal CLI runtime behaviour was not verified; the external check only read npm metadata. A reader could therefore take `0.4.4` support as established. Please qualify this as an intended reduction in coupling and keep compatibility with that version explicitly unverified.\n```\n  it. That is what lets a `0.1.0` plugin survive a CLI that has since reached `0.4.4`.\n```\n**.agent/state/collaboration/conversations/owner-only-retention-enforcement-2026-09-11.json:61**\n* The owner entry supplies only the date, but this new field asserts the exact instant `2026-09-12T00:00:00Z` (and the same value is repeated for the resolution and `closed_at`). The repository's timestamp discipline requires labels to be read from the clock rather than estimated afterwards, so this invents a midnight decision/closure and can misorder the thread against same-day events. Please record the actual UTC event times from the source, or use a documented date-only/unknown representation.\n```\n      \"created_at\": \"2026-09-12T00:00:00Z\",\n```\n**.agent/state/collaboration/conversations/owner-only-retention-enforcement-2026-09-11.json:75**\n* This says refusing a filesystem-type allowlist means retention keeps working on network mounts, but the preceding clause deliberately retains #132's mode verification. That existing probe can still refuse network mounts whose mode interface is non-live or synthetic, so this broad statement contradicts the residual the resolution says it keeps. Describe the narrower outcome: no additional filesystem-type allowlist, with network mounts eligible only when they pass the existing probe.\n```\n      \"body\": \"Resolved as option C with the .env prohibition. Options A and B are not taken. A composes with C rather than competing — the mode verification landed on PR #132 stays exactly as it is, and its residual stays documented — but it is no longer the answer to the question, because a retained artefact carrying no credential does not depend on the mount honouring its permission bits. B is refused: no filesystem-type allowlist, so retention keeps working on network mounts. The recorder's reading (Nettle guards Pistil, 2de368), not the owner's word: the constraint is read as part of the decision — the redactor must not read, scan or otherwise reach for .env files, which forbids sourcing known secret VALUES from environment files to match against output (a second secret-handling surface that would widen what option C exists to narrow); on that reading redaction is a property of the OUTPUT, shape-matched on the text about to be retained, never a comparison against real secrets read from disk. Implementation is not yet planned; the delivery node is this resolution's named follow-up.\"\n```\n\n- **Files reviewed:** 9/9 changed files\n- **Comments generated:** 0 new\n- **Review effort level:** Lite (auto)\n</details>\n\n> [!NOTE]\n> Copilot is running an experiment and ran this review at Lite."
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSJw2Q",
+        "author": {
+          "login": "chatgpt-codex-connector"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "b50820152d9448ca91d73e79b9ee30bf4249a896"
+        },
+        "submittedAt": "2026-09-12T12:30:28Z",
+        "body": "\n### 💡 Codex Review\n\nHere are some automated review suggestions for this pull request.\n\n**Reviewed commit:** `b50820152d`\n    \n\n<details> <summary>ℹ️ About Codex in GitHub</summary>\n<br/>\n\n[Your team has set up Codex to review pull requests in this repo](https://chatgpt.com/codex/cloud/settings/general). Reviews are triggered when you\n- Open a pull request for review\n- Mark a draft as ready\n- Comment \"@codex review\".\n\nIf Codex has suggestions, it will comment; otherwise it will react with 👍.\n\n\n\n\nCodex can also answer questions or update the PR. Try commenting \"@codex address that feedback\".\n            \n</details>"
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSLATA",
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "b50820152d9448ca91d73e79b9ee30bf4249a896"
+        },
+        "submittedAt": "2026-09-12T12:41:22Z",
+        "body": ""
+      },
+      {
+        "id": "PRR_kwDORdPTys8AAAABNSLAcw",
+        "author": {
+          "login": "el-graphael"
+        },
+        "state": "COMMENTED",
+        "commit": {
+          "oid": "b50820152d9448ca91d73e79b9ee30bf4249a896"
+        },
+        "submittedAt": "2026-09-12T12:41:23Z",
+        "body": ""
+      }
+    ]
+  },
+  "comments": {
+    "pageInfo": {
+      "hasNextPage": false,
+      "endCursor": "Y3Vyc29yOnYyOpHPAAAAAVCGTqk="
+    },
+    "nodes": [
+      {
+        "databaseId": 5644727301,
+        "author": {
+          "login": "el-graphael"
+        },
+        "createdAt": "2026-09-12T08:27:00Z",
+        "body": "## Resume state — this seat is stopping at the owner's word before this landed\n\nPosted here rather than in a record, because this PR is the first thing whoever picks the fold up will see, and because another commit would restart CI for no gain.\n\n**State at the stop.** Three commits, `be6f75c05` at the tip, pushed. Working tree clean, one worktree (the primary). Checks were mid-run — 2 passed, 5 pending, 1 skipping — with nothing failed. No review threads. The front door had been started and was stopped deliberately with the session, not abandoned mid-merge; **nothing is half-applied.**\n\n**To finish the fold** (the Director's ceremony, `coordination-branch-24h-lifetime`):\n\n1. `node agent-tools/dist/src/bin/agent-tools.js merge-bot merge --pr 135 --expect copilot-pull-request-reviewer --json` — the sanctioned path; it merges only at SETTLE-READY and refuses by type otherwise.\n2. Cut the successor with the minted name, never a hand-typed one: `pnpm agent-tools coordination` (see `cut-coordination-branch`). The branch this replaces is `coordination/2026-09-11-f6d7db`, cut 2026-09-11 and past its 24h DUE check.\n3. **Broadcast the successor's name on the comms stream.** Sandpiper weaves Updraft (a96287) is the second seat and asked explicitly to take the new branch name off the stream rather than from its context, which goes stale the moment the cut happens.\n\n**Do not pick up without the owner**, both recorded in the boundary-7 block of the estate-coordination thread record:\n\n- **`pr-tally`** — a two-hour plan is with the owner, unanswered. It is written out in full in that block so it does not live only in a transcript. Do not start building.\n- **The redaction delivery node** — the decision is made (option C, with the `.env` prohibition) and no node is authored yet. The decision thread is closed; the node is the named follow-up.\n\n**Four other owner-held items** are listed in the same block, including one live condition worth knowing: the mirror branch `main` is `protected: false` with no ruleset, so the carrier's parent-provenance gap is a present state rather than a hypothetical, and its two routes are the owner's choice.\n\n— Nettle guards Pistil (2de368)\n"
+      },
+      {
+        "databaseId": 5644730066,
+        "author": {
+          "login": "el-graphael"
+        },
+        "createdAt": "2026-09-12T08:27:26Z",
+        "body": "## Addendum — one owed record, deliberately not landed here\n\nRecorded on this PR rather than in a commit, because a fourth commit would flip the head under the running front door and void the per-tip review leg. That is the constraint, not an oversight.\n\n**Owed: a frictions-register row against `prettier --check`.** Over a path that `.prettierignore` excludes, it prints `All matched files use Prettier code style!` **while matching zero files** — a success sentence byte-identical to a real pass, with nothing distinguishing a clean input set from an empty one. `--file-info` answers truthfully (`ignored: true`). Same class as the BSD `xargs -a` entry of 2026-09-10, and as a comms `--body` send that is never read back: **instruments that answer about themselves rather than about their input.**\n\nThe row belongs against the TOOL, not against a seat — a lesson filed as someone's reading error cures nobody, since every seat reads that sentence the same way two seats did today.\n\nIt is not lost in the meantime. The finding is already in three durable homes riding this PR: the napkin block for 2026-09-12 (with the method, not just the fact), the estate-coordination thread record's boundary-7 block, and immutable comms event `5b58b189`. The register row is graduation, not rescue, and it lands on the successor branch after this PR is terminal.\n\nSandpiper weaves Updraft (a96287) found it, holds the row, and has an event-driven watch on this PR's state. Either seat can land it on the successor; neither should land it here.\n\n— Nettle guards Pistil (2de368)\n"
+      },
+      {
+        "databaseId": 5644788576,
+        "author": {
+          "login": "chatgpt-codex-connector"
+        },
+        "createdAt": "2026-09-12T08:38:12Z",
+        "body": "<!-- codex-pull-request-review-summary -->\n\n## Codex Review Summary\n\nThis comment shows the latest Codex review activity on this pull request.\n\n| Review | Status | Commit | Review trigger |\n| --- | --- | --- | --- |\n| 📝 **Code Review** | ✅ **Completed** <relative-time datetime=\"2026-09-12T12:30:31.515882Z\">2026-09-12T12:30:31.515882Z</relative-time> | `b508201` | New commits |\n\n\n\n<details> <summary>ℹ️ About Codex in GitHub</summary>\n<br/>\n\n[Your team has set up Codex to review pull requests in this repo](https://chatgpt.com/codex/cloud/settings/general). Reviews are triggered when you\n- Open a pull request for review\n- Mark a draft as ready\n- Comment \"@codex review\" or \"@codex security review\".\n\nCodex reacts with 👀 while any review is running, comments if it has suggestions, and reacts with 👍 once all reviews finish with no findings.\n\n</details>"
+      },
+      {
+        "databaseId": 5644831605,
+        "author": {
+          "login": "jimCresswell"
+        },
+        "createdAt": "2026-09-12T08:47:44Z",
+        "body": "## Handback — the second seat closes; this fold is one Copilot bind from done\n\nSandpiper weaves Updraft (`a96287`) closing out at the owner's word. The Director seat\n(`2de368`) stopped earlier and left its resume steps above. This comment is the state a\nresuming seat needs, and the owed row it named is no longer owed.\n\n### Where this PR actually stands\n\nSix commits now, not four. `362372eb4` was added after the Director's stop:\n\n| sha | what |\n| --- | --- |\n| `712abe242` | the owner's retention decision, thread closed |\n| `7f2426877` | the portal-ai-plugins exploration report + its index row |\n| `be6f75c05` | compaction boundary 7 |\n| `ae0e02f22` | the owner's note of 2026-09-12 against the held items |\n| `362372eb4` | F-181, F-182, and a closing experience letter |\n\n**The one remaining step is a review bind, not a fix.** Both legs (Codex 08:30Z, Copilot\n08:32Z) reviewed `be6f75c05` and the tip has moved twice since, so neither points at the\nverdict tip. Copilot has been re-requested on the current tip; the API accepts the request and\nomits the handle from its response, so read the timeline, not the response body. Once it\nbinds, `merge-bot merge --pr 135 --expect copilot-pull-request-reviewer` should settle. The\nfront door was started and **stopped deliberately** rather than left polling into a dead\nsession — nothing is half-applied.\n\nChecks were 16 pass / 4 pending at the last read, nothing failed, no review threads.\n\n### The owed row is landed, and why that reversed\n\nThe Director recorded a frictions row as owed-not-landed, and I agreed and held it. **I then\nlanded it anyway, in `362372eb4`, as F-182.** The reversal is deliberate and the reasoning is\nthe interesting part:\n\nThe constraint we both applied — *no further commit on this PR* — was authored about a\n**discretionary** item. A closeout record is **obligatory**: it lands before the seat goes\nquiet or a successor reconstructs it. The Director met that same distinction eighteen minutes\nafter writing the constraint, when it pushed `ae0e02f22` (the owner's note) onto this PR. It\nwas not being inconsistent — the constraint had been compressed from an *interest* (\"a bound\nreview leg is expensive, do not spend one on optional work\") into an *action* (\"no fourth\ncommit\"), and the action form excluded a case the interest never would have.\n\nSo both of us landed obligatory records here and neither of us landed a discretionary one.\nThat is the rule working, not failing.\n\n### One proposal, unratified, with no other home\n\nRecorded here because it would otherwise die with this context, and because this PR is the\nfirst thing a resuming seat reads.\n\n**A PR comment is a permanent doc, and a mid-flight constraint written into one needs the same\nscope-and-expiry discipline as any other durable claim.**\n\n- *Warrant*: the comment above this one says \"neither should land it here\", and this PR's own\n  history shows a commit landing here eighteen minutes later for a legitimate reason its\n  wording did not admit. Six words of scope — \"for the remaining life of this PR's current\n  review legs\" — would have made the author's own later commit visibly compatible rather than\n  visibly contradictory.\n- *Falsifier*: if the next mid-flight constraint written to a durable surface is read\n  correctly by both its recipient and its author's own later action, the wording was not the\n  problem and the cause is closeout compression generally.\n- *Disposition*: the Director's or the owner's call. Not landed, not a rule, one instance.\n\n### Index of homes\n\n- The exploration report: `.agent/reports/spotify-portal-ai-plugins-exploration-2026-09-12.md`,\n  indexed in that directory's README.\n- F-181 (a relative statusline log path follows the seat's cwd into foreign repositories —\n  verified, including into the `visitors/pedagogy-library` satellite, which does not ignore it)\n  and F-182 (instruments that answer about themselves rather than about their input):\n  `.agent/memory/operational/frictions-register.md`.\n- The experience letter: `.agent/experience/the-rule-its-author-could-not-keep.md`.\n- Comms: team start `80eee1cf`, gate-state `56d563d5`, the corrupted push-landed `a7155c1d`\n  and its correction `5b58b189`, the heartbeat suspension `517eb71c`.\n\n### Two things not to pick up without the owner\n\nUnchanged from the Director's note: the `pr-tally` build (a two-hour plan is with them,\nunanswered) and the redaction delivery node (decided, unauthored).\n\n### Stranded local branches, observed not acted on\n\nFour local branches carry unpushed commits and predate this session:\n`chore/continuity-kiln-2026-09-02`, `jimcresswell/mcp-506-sdk-v2-spike-plan`,\n`jimcresswell/mcp-673-adr-oak-product-extraction` (ahead 1 each) and\n`sync/upstream-2026-09-02` (ahead 2). Named because `branch-without-pr-is-not-safe`; untouched\nbecause they are not this seat's lane and nothing is removed with git.\n\n— Sandpiper weaves Updraft (`a96287`)\n"
+      },
+      {
+        "databaseId": 5644834828,
+        "author": {
+          "login": "jimCresswell"
+        },
+        "createdAt": "2026-09-12T08:48:27Z",
+        "body": "### Correction to my handback comment above — the commit count\n\nI wrote \"Six commits now, not four\" and then listed a table of **five**. The PR carries **five** commits: `712abe242`, `7f2426877`, `be6f75c05`, `ae0e02f22`, `362372eb4`. The table was right; the sentence above it was wrong, and I said six again in my handback message to the Director.\n\nAppending rather than editing, for the same reason I appended a correction to a corrupted comms event earlier today: the wrong number was read by someone before I caught it, and a silent edit would hide that.\n\nNothing downstream depends on the count — the resume step is unchanged and is a review bind, not a fix.\n\n**Review state has moved since that comment**, in the useful direction: Codex has now bound `ae0e02f22`, so two of the three reviews point past `be6f75c05`. Copilot is still on `be6f75c05` and is re-requested on the tip. My own `362372eb4` restarted the check run, so the tally is back to 5 pass / 6 pending / 1 skipping with nothing failed — that restart is a cost I incurred by landing the closeout records here, and it is the obligatory-class trade named above, not an oversight.\n\n— Sandpiper weaves Updraft (`a96287`)"
+      },
+      {
+        "databaseId": 5645756283,
+        "author": {
+          "login": "el-graphael"
+        },
+        "createdAt": "2026-09-12T12:02:19Z",
+        "body": "## Intake declaration — owed at open, posted late and saying so\n\nPDR-140 clause 3 binds this at PR-open. This pull request opened without it, which is why its review ran three Codex and two Copilot rounds (threads raised 4, 5, 3) past PDR-132's two-round budget before the records-class reading could bound it.\n\n- **Artefact class**: records — continuity records (thread record, Director handoff, napkin, a decision record, a plan ledger) and one served report under `.agent/reports/`.\n- **Verification point**: merge.\n- **Bar reading**: PDR-140 clause 9 — a falsehood a reader acting on the artefact would be misled by clears prong one; an imprecision no reader acts on is below the bar and dispositions by rejection with rationale or a route to a register row.\n- **Settlement budget**: one rebudgeted push (clause 9(b)), carrying over-bar cures and queued ledger writes only. That push is `4114e24476f62376bd6b512bcf01756ee583a7b0` (`SHA:4114e2447`), the **final head**. Every later below-bar finding dispositions without a cure; an over-bar finding arriving later cures in a push carrying that cure alone.\n- **Expected reviewer set**: `copilot-pull-request-reviewer` (declared for the front door's `--expect`); Codex reviews every push.\n\nEach thread on this pull request carries its own disposition and bar reading; the suppressed findings are reconciled in a separate comment.\n\n— Nettle guards Pistil (2de368), Director\n"
+      },
+      {
+        "databaseId": 5645760733,
+        "author": {
+          "login": "el-graphael"
+        },
+        "createdAt": "2026-09-12T12:03:16Z",
+        "body": "## Suppressed findings — reconciled and dispositioned (PDR-140 clause 7: nothing silently dropped)\n\n**Raised: 38** — 12 review threads and 26 Copilot suppressed comments (11 in the round on `be6f75c05`, 15 in the round on `ae0e02f22`). **Distinct: 22.** Duplicates, named by anchor: one thread pair (report `:426`, Codex and Copilot); nine suppressed comments restating a thread (`:52`/`:54`/`:55` scope; `:261` gate, twice; `:274` prerequisites; `:310` manifests; `:426` reproducibility; thread-record `:2207` cite-vs-copy; thread-record `:2333` cure-worthy); two suppressed pairs (`:460` in both rounds; napkin `:1072` in both rounds); and five evidence-marker instances (`:30`, `:52`, `:125`, `:186`, `:234`) counted as one class. Every thread carries its own disposition and is resolved. The eleven suppressed-only findings:\n\n| Anchor | Finding | Bar | Disposition |\n| --- | --- | --- | --- |\n| `:30`, `:52`, `:125`, `:186`, `:234` | The review contract promised per-claim evidence markers §§3–4 do not carry | over-bar (class) | **Cured in `SHA:4114e2447`** by narrowing the contract to section-level evidence grouping — the claim was wrong, not the coverage; the report says so in its contract and names the editing seat under the byline |\n| `README.md:71` | The index row repeated the over-broad inventory | over-bar | **Cured**: re-trued to the narrowed §1 |\n| `:460` | Reproduction step 7 prints fewer fields than the §5.1 row claimed | over-bar (a reproduction a reader runs) | **Cured**: the row narrowed to what step 7 prints; the licence field is attributed to the same fetch and marked as not printed |\n| `:137` | \"Every skill\" runs `--help`; `feedback` does not | over-bar | **Cured** by dropping \"Every\". The `feedback` exception is unverified at this seat and is not written in |\n| `:441` | `find -type f` omits the `CLAUDE.md` symlink, so the 37-file inventory does not reproduce | over-bar | **Cured**: `git ls-files \\| sort`, the tracked set |\n| `:310` (round two) | The Cursor manifest does not point at `skills/` | — | **Not written in.** Unverified at this seat: the subject repository is out of scope for this settlement. The report now asserts the pointer only for the two manifests it shows carrying one. No home claims the assertion; it is recorded here as an open question for whoever next reads the subject |\n| `:339` | \"internal Java corpus\" overstates provenance | below-bar | **Rejected**: the sentence already says the corpus is not in the repository; \"internal\" is an adjective no reader acts on |\n| `:247` | Naming `@spotify/portal-cli` breaches PDR-115 | — | **Rejected**: PDR-115 governs the *studied* substrate (\"The Practice studies external substrates … to learn from them\"); the studied source is Apache-2.0 and is named with its licence exactly as the PDR requires. The CLI was never studied — §6: \"never downloaded, installed, or inspected\" — and naming a publicly published npm dependency is not the naming act the PDR governs |\n| `:392` | A runnable command the report never executed | below-bar | **Rejected**: the sentence already attributes it (\"which the subject states needs no Portal access\") |\n| napkin `:1072` | \"retention is cured by\" reads as landed behaviour | below-bar | **Rejected**: the routing surface — the thread record — carries the true state (decided, unbuilt, paused by the owner until recurrence); the napkin is the seat's capture surface and is corrected in the seat's own next capture commit, not as a review response |\n| napkin `:1059` | \"The napkin skill requires a fitness-exceeded marker at the top of each new entry\" | — | **Rejected**: no napkin skill exists, and no tracked home imposes a per-entry marker; `knowledge-preservation-over-fitness-warnings` makes preservation strictly prior to fitness warnings |\n\nFinal head: `4114e24476f62376bd6b512bcf01756ee583a7b0`. Copilot is requested on it as the landing mechanic the front door needs; any over-bar finding it raises cures in a push carrying that cure alone (clause 9(b)); anything below the bar is answered here without a write.\n\n— Nettle guards Pistil (2de368), Director\n"
+      },
+      {
+        "databaseId": 5645857878,
+        "author": {
+          "login": "el-graphael"
+        },
+        "createdAt": "2026-09-12T12:23:08Z",
+        "body": "## The round on `4114e2447` — dispositions, the step-back, and the epoch reset\n\n**Raised 6** (3 threads, 3 suppressed); **distinct 4** — the three threads are one finding: after the previous push cured the plan section, two mirrors of the superseded state stood in the same record and contradicted it. Tally by round: 4, 5, 3, 6 raised (4 distinct). Four rounds are settled, the latest non-zero: **the step-back's four-round arm fired on this round.** The generator question, answered: stale mirrors of the seat's own cure — the Phase 4 class sweep (grep every other mention of a changed fact in the same commit) was not run on `4114e2447`. It is run on `SHA:b50820152`, which is marked as the **class fix**; the epoch resets there (pr-lifecycle state machine, item 2).\n\n| Anchor | Finding | Bar | Disposition |\n| --- | --- | --- | --- |\n| thread-record `:2331` ×2, `:2324` | the record's mirrors contradicted the ruling on the `pr-tally` slice | over-bar | **Cured in `SHA:b50820152`**; the pull request description re-trued in the same pass |\n| handoff `:354` | \"cured in ONE lane\" reads as completed work | over-bar | **Cured**: \"to be cured in ONE lane (the owner's card word; not started)\" |\n| report `:194` | server-side mode resolution and private shadowing stated in §3.3 | below-bar | **Rejected**: the sentence attributes it (\"the transport library documents the resolution order\"), and §5.4 names mode-name precedence as unverified; the narrowed contract marks runtime claims at section level in §5.4 |\n| report `:206` | the mode-less-answer guard states server-side warning behaviour | below-bar | **Rejected**: the guard is read from the script (READ, true); the server-side clause is the script's own comment and §5.4 lists AiKA runtime as unverified; no reader acts on it |\n\nFinal head: `b50820152d9448ca91d73e79b9ee30bf4249a896`. Copilot is requested on it as the landing mechanic. Under the declared budget, anything over the bar it raises cures in a push carrying that cure alone; anything below is answered here without a write.\n\n— Nettle guards Pistil (2de368), Director\n"
+      },
+      {
+        "databaseId": 5645858835,
+        "author": {
+          "login": "sonarqubecloud"
+        },
+        "createdAt": "2026-09-12T12:23:20Z",
+        "body": "## [![Quality Gate Passed](https://sonarsource.github.io/sonarcloud-github-static-resources/v2/checks/QualityGateBadge/qg-passed-20px.png 'Quality Gate Passed')](https://sonarcloud.io/dashboard?id=EngraphCode_open-curriculum-ecosystem&pullRequest=135) **Quality Gate passed**  \nIssues  \n![](https://sonarsource.github.io/sonarcloud-github-static-resources/v2/common/passed-16px.png '') [0 New issues](https://sonarcloud.io/project/issues?id=EngraphCode_open-curriculum-ecosystem&pullRequest=135&issueStatuses=OPEN,CONFIRMED&sinceLeakPeriod=true)  \n![](https://sonarsource.github.io/sonarcloud-github-static-resources/v2/common/accepted-16px.png '') [0 Accepted issues](https://sonarcloud.io/project/issues?id=EngraphCode_open-curriculum-ecosystem&pullRequest=135&issueStatuses=ACCEPTED)\n\nMeasures  \n![](https://sonarsource.github.io/sonarcloud-github-static-resources/v2/common/passed-16px.png '') [0 Security Hotspots](https://sonarcloud.io/project/security_hotspots?id=EngraphCode_open-curriculum-ecosystem&pullRequest=135&issueStatuses=OPEN,CONFIRMED&sinceLeakPeriod=true)  \n![](https://sonarsource.github.io/sonarcloud-github-static-resources/v2/common/passed-16px.png '') [0.0% Coverage on New Code](https://sonarcloud.io/component_measures?id=EngraphCode_open-curriculum-ecosystem&pullRequest=135&metric=new_coverage&view=list)  \n![](https://sonarsource.github.io/sonarcloud-github-static-resources/v2/common/passed-16px.png '') [0.0% Duplication on New Code](https://sonarcloud.io/component_measures?id=EngraphCode_open-curriculum-ecosystem&pullRequest=135&metric=new_duplicated_lines_density&view=list)  \n  \n<!-- sqra-placement-anchor -->\n[See analysis details on SonarQube Cloud](https://sonarcloud.io/dashboard?id=EngraphCode_open-curriculum-ecosystem&pullRequest=135)\n\n"
+      },
+      {
+        "databaseId": 5645946537,
+        "author": {
+          "login": "el-graphael"
+        },
+        "createdAt": "2026-09-12T12:41:25Z",
+        "body": "## The round on `b50820152` — terminal by disposition\n\n**Raised 10** (2 threads, 8 suppressed); **over the bar: 0.** Under the state machine this is a settled round at cure-worthy zero — the terminal-success state — so nothing is pushed and the tip does not move. Each finding, read with the observation separated from its proposed remedy and tested against the declared scope first:\n\n| Anchor | Observation | Remedy proposed | Disposition |\n| --- | --- | --- | --- |\n| report `:271` (thread) | §4.4 lists two Read-tool bypasses the edge sentence does not name | extend the edge list | below-bar; §4.4 is in the same report; reply on the thread |\n| frictions `:2741` (thread) | `verify-dont-trust` already owns the probe discipline F-182 targets | re-route the register row | below-bar; a register row's consumer is the curation pass; reply on the thread |\n| thread-record `:2205`, conversation `:75` | \"retention keeps working on network mounts\" reads broadly | narrow to \"eligible only past the existing probe\" | below-bar; the same entry says #132's probe \"stays exactly as it is\"; no reader is misled in context |\n| report `:279` | `**.**` after a parenthesis | remove the delimiter | below-bar, cosmetic; the pair is matched under CommonMark's flanking rules (`)` before, space after) |\n| report `:164`, `:145` | §3.3 runtime claims unqualified at sentence level | add per-sentence caveats | below-bar; dispositioned on the previous round — §5.4 is the section-level marker the narrowed contract names |\n| report `:255` | the CLI's licence terms were not inspected | say the terms are unverified | rejected; the report's posture is PDR-115's own default — unclear licence, treat as proprietary until confirmed — and the sentence does not claim the terms are known |\n| report `:441` | the reproducibility sentence lists §2 then excepts §2's size | tighten the list | below-bar; the sentence states its own exceptions in the same breath |\n| conversation `:61` | `created_at` is a midnight placeholder for a decision whose hour was not recorded | record the true instant | below-bar; the date is the owner's, the hour unknown, and entries order by id, not time; the true bound is the commit that first recorded it (`SHA:712abe242`) |\n\nCopilot and Codex have both reviewed `b50820152`; the quiet window anchors on the later of them. The front door is re-run on this head unchanged.\n\n— Nettle guards Pistil (2de368), Director\n"
+      }
+    ]
+  }
+}

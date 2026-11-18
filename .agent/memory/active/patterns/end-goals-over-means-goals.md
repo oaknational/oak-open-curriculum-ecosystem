@@ -3,6 +3,7 @@ related_pdr: PDR-018
 name: end-goals-over-means-goals
 polarity: pattern
 category: process
+layer: general
 barrier_met: true
 proven_by: "Sentry canonical alignment session 2026-04-13 — 15-item plan produced busywork when framed as 'close gaps' (means goal) vs 'developers can debug errors' (end goal)"
 ---

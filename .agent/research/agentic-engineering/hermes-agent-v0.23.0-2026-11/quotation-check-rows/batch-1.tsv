@@ -1,0 +1,122 @@
+H	agent/background_review.py	375	376	facts about the ENVIRONMENT
+H	agent/background_review.py	372	374	who the user is
+H	agent/background_review.py	383	384	Save only facts GROUNDED
+H	agent/background_review.py	457	459	Be ACTIVE
+H	agent/background_review.py	478	478	UPDATE A CURRENTLY-LOADED SKILL
+H	agent/background_review.py	1001	1001	_memory_write_origin
+H	agent/background_review.py	1031	1031	_cached_system_prompt
+H	agent/background_review.py	1119	1127	review_toolsets
+H	agent/background_review.py	1119	1121	consolidate now
+H	agent/background_review.py	1124	1126	denial storm
+H	agent/background_review.py	398	400	hoarding library
+H	agent/background_review.py	432	439	harden into refusals
+H	agent/background_review.py	444	448	untested
+H	agent/background_review.py	381	387	trait guesses
+H	agent/background_review.py	234	238	finite_turn_required
+H	agent/background_review.py	173	173	_REVIEW_MAX_ITERATIONS = 16
+H	tools/memory_tool_store.py	371	371	dict.fromkeys
+H	tools/memory_tool_store.py	50	60	Refusing to write
+H	tools/memory_tool_store.py	29	32	poisoned entry persists
+H	tools/memory_tool_store.py	649	652	Frozen load-time snapshot
+H	tools/memory_tool_store.py	725	734	bak
+H	hermes_cli/config_defaults.py	1455	1458	guard_agent_created
+H	hermes_cli/config_defaults.py	1306	1307	nudge_interval
+H	hermes_cli/config_defaults.py	1492	1496	57 gone in one
+H	hermes_cli/config_defaults.py	1492	1492	suppression list
+H	hermes_cli/config_defaults.py	796	796	background_review
+H	hermes_cli/config_defaults.py	672	672	"in_place": True
+H	hermes_cli/config_defaults.py	1303	1303	write_approval
+H	hermes_cli/config_defaults.py	1467	1467	write_approval
+H	hermes_cli/config_defaults.py	1476	1476	ledger_max_bytes
+H	hermes_cli/config_defaults.py	1484	1499	archive_ttl_days
+H	hermes_cli/config_defaults.py	1308	1310	"provider": ""
+H	tools/skill_manager_tool.py	776	778	record_created
+H	tools/skill_manager_tool.py	776	781	forget(name)
+H	tools/skill_manager_tool.py	751	760	record_mutation
+H	tools/skill_manager_tool.py	761	763	clear_skills_system_prompt_cache
+H	tools/skill_manager_tool.py	768	772	RECOVERABLE
+H	tools/skill_manager_tool.py	789	800	_apply_skill_write_gate
+H	tools/skill_manager_tool.py	609	609	shutil.rmtree(skill_dir)
+H	tools/skill_manager_tool.py	686	686	stage_write
+H	agent/curator.py	957	985	last_report_path
+H	agent/curator.py	927	946	snapshot_skills
+H	agent/curator.py	962	969	_consolidation_pass
+H	agent/curator.py	194	202	set_ledger_actor("curator")
+H	agent/curator.py	231	231	row.get("pinned")
+H	agent/curator.py	244	260	archive_cutoff
+H	agent/curator.py	1204	1209	should_run_now()
+H	agent/curator.py	32	32	14, 30
+H	tools/skill_usage.py	497	508	reuse_after_patch
+H	tools/skill_usage.py	232	237	prune_builtins
+H	tools/skill_usage.py	290	297	created_by
+H	tools/skill_usage.py	545	547	mark_agent_created
+H	agent/turn_finalizer.py	594	597	_sync_external_memory_for_turn
+H	agent/turn_finalizer.py	599	600	AFTER delivery
+H	agent/turn_finalizer.py	605	616	skip_background_review
+H	agent/turn_finalizer.py	863	869	_iters_since_skill
+H	agent/turn_context.py	765	774	_tick_memory_nudge
+H	agent/turn_context.py	757	762	prior_user_turns
+H	agent/tool_executor.py	736	739	_turns_since_memory = 0
+H	agent/system_prompt.py	765	766	Pinned skills are per-agent constants
+H	agent/system_prompt.py	791	793	volatile_parts: list[str] = [skills_prompt
+H	agent/system_prompt.py	818	830	reloads memory from disk
+H	agent/system_prompt.py	535	546	_ext_mem_block
+H	agent/prompt_refresh.py	88	89	_invalidate_system_prompt
+H	cli-config.yaml.example	1209	1209	Nudge the agent to create skills
+H	cli-config.yaml.example	1210	1210	tool-calling iterations
+H	cli-config.yaml.example	1045	1045	N user turns
+H	cli-config.yaml.example	1212	1212	creation_nudge_interval: 15
+H	website/docs/user-guide/features/curator.md	180	180	ledger_max_bytes
+H	website/docs/user-guide/features/curator.md	254	254	permanently invisible
+H	website/docs/user-guide/features/curator.md	264	265	look fully curated
+H	website/docs/user-guide/features/curator.md	291	293	policy flag
+H	website/docs/user-guide/features/curator.md	204	205	explicitly marked
+H	website/docs/user-guide/features/curator.md	212	214	every 10
+H	website/docs/user-guide/features/curator.md	311	311	90d unused
+H	website/docs/user-guide/features/curator.md	173	173	telemetry, never a gate
+H	website/docs/user-guide/features/curator.md	322	322	Pinning protects
+H	website/docs/user-guide/features/skills.md	641	644	never block a write
+H	website/docs/user-guide/features/skills.md	631	632	lessons, not logs
+H	website/docs/user-guide/features/skills.md	177	179	Level 0
+H	website/docs/user-guide/features/memory.md	366	370	consent-aware learning loop
+H	website/docs/user-guide/features/memory.md	396	397	main chat model
+H	website/docs/user-guide/features/memory.md	352	354	wrong assumption about me
+H	website/docs/user-guide/features/memory.md	271	271	learning signal
+H	website/docs/user-guide/features/memory.md	98	98	no `read` action
+H	website/docs/developer-guide/prompt-assembly.md	110	113	Skills (mandatory)
+H	website/docs/developer-guide/prompt-assembly.md	278	278	current-turn user message
+H	website/docs/developer-guide/prompt-assembly.md	286	286	rebuild path
+H	AGENTS.md	49	49	islands on purpose
+H	plugins/AGENTS.md	20	21	plugin catalog
+H	tools/write_approval.py	76	76	background_review
+H	tools/write_approval.py	208	210	SKILLS
+H	tools/skill_lock.py	3	5	locked: true
+H	tools/terminal_tool_guards.py	373	375	Local backend only
+H	tools/file_tools_write_guards.py	174	174	path_refusal
+H	skills/AGENTS.md	31	33	skill_manage` rejects
+H	skills/AGENTS.md	79	79	never deletes
+H	tools/skill_manager_guards.py	143	144	Pin only guards DELETION
+H	tools/memory_tool.py	181	186	never applied unattended
+H	tools/memory_tool.py	62	66	FULL entry
+H	agent/learning_mutations.py	85	92	cross-process lock
+H	agent/agent_init.py	1286	1288	creation_nudge_interval
+H	hermes_cli/config.py	512	517	the way the installers do
+H	agent/memory_caller_scope.py	7	10	explicitly names the profile
+H	agent/verification_evidence.py	22	25	_MAX_EVIDENCE_AGE_DAYS = 30
+H	agent/review_idle_queue.py	1	11	Idle deferral
+H	tests/AGENTS.md	134	134	change-detector fails
+H	run_agent.py	244	244	save_trajectories: bool = False
+H	agent/turn_iteration_prep.py	166	167	_iters_since_skill += 1
+E	evolution/skills/evolve_skill.py	61	66	find_skill
+E	evolution/skills/evolve_skill.py	144	144	SkillModule(skill["body"])
+E	evolution/skills/evolve_skill.py	155	176	MIPROv2
+E	evolution/skills/evolve_skill.py	224	226	improvement = avg_evolved - avg_baseline
+E	evolution/skills/evolve_skill.py	287	289	Review the diff
+E	evolution/skills/evolve_skill.py	76	76	create PR
+E	README.md	23	23	PR against hermes-agent
+E	README.md	45	45	real session history
+E	README.md	71	72	Full test suite
+E	README.md	76	76	PR review
+E	evolution/core/fitness.py	121	136	keyword overlap
+E	evolution/core/external_importers.py	334	346	SESSION_DIR
+E	PLAN.md	90	99	batch_runner.py

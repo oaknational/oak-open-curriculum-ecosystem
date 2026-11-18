@@ -3,6 +3,7 @@ name: "Glanceable Surfaces: Show a Token Only When It Diverges"
 polarity: pattern
 use_this_when: "Designing or editing a status surface (statusline, dashboard, badge row) that shows two related facts side by side."
 category: process
+layer: general
 proven_in: "Two-set statusline divergence-only dedup (2026-06-26, PR #235)"
 proven_date: 2026-06-26
 barrier:

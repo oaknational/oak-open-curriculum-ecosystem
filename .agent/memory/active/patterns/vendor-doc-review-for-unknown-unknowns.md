@@ -7,6 +7,7 @@ use_this_when: >-
   or reviewing substantive implementation choices that interact with
   a vendor's API contract.
 category: process
+layer: general
 proven_in: .agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md
 proven_date: 2026-04-26
 barrier:

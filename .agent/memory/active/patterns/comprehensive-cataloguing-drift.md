@@ -3,6 +3,7 @@ name: Comprehensive-Cataloguing Drift
 polarity: anti-pattern
 use_this_when: Authoring a spine plan, dispatching a reviewer pass, extending a rule, or otherwise scoping any artefact whose substance crosses a "what's in vs what's adjacent" boundary
 category: process
+layer: general
 proven_in: |
   .agent/plans/connecting-oak-resources/knowledge-graph-integration/current/
   graph-mvp-arc.plan.md (spine instance, 2026-05-07);

@@ -5,8 +5,10 @@ import { join } from 'node:path';
 import { err, ok, type Result } from '@oaknational/result';
 
 /**
- * The push credential file's lifecycle: a fresh private directory, one 0600
- * exclusive-create write, one removal — and the two translations that keep
+ * The push credential file's lifecycle: a fresh private directory, one
+ * exclusive-create write at mode 0600 (owner-only on POSIX; Windows has no
+ * POSIX mode bits, so protection there rests on the per-user temp
+ * directory's ACL), one removal — and the two translations that keep
  * filesystem failures off the CLI's usage-error path. Split from
  * `push-git.ts` at the size gate; the two files together are the whole
  * credential discipline (`push-git.ts` owns the helper, the environment, and
@@ -41,7 +43,7 @@ export function realTokenFileStore(): TokenFileStore {
   };
 }
 
-/** The token file, staged: the private directory and the 0600 file inside it. */
+/** The token file, staged: the private directory and the file inside it (0600 on POSIX). */
 export interface StagedToken {
   readonly dir: string;
   readonly tokenPath: string;
@@ -49,7 +51,7 @@ export interface StagedToken {
 
 /**
  * Stage the token file, translating the filesystem's throws to a value
- * (ADR-088): a full or unwritable temp root is an operational failure, and an
+ * (the Result pattern): a full or unwritable temp root is an operational failure, and an
  * escaping throw would land it on the CLI's usage-error exit instead. A
  * half-staged directory is removed before reporting.
  */
@@ -60,13 +62,13 @@ export function stageTokenFile(store: TokenFileStore, token: string): Result<Sta
     const tokenPath = join(dir, 'token');
     store.writeFile(tokenPath, token, 0o600);
     return ok({ dir, tokenPath });
-  } catch (cause) {
+  } catch (error) {
     if (dir !== undefined) {
       removeQuietly(store, dir);
     }
     return err(
       new Error(
-        `cannot stage the push credential file: ${cause instanceof Error ? cause.message : String(cause)}`,
+        `cannot stage the push credential file: ${error instanceof Error ? error.message : String(error)}`,
       ),
     );
   }
@@ -83,7 +85,7 @@ export function removeQuietly(store: TokenFileStore, dir: string): string | unde
   try {
     store.remove(dir);
     return undefined;
-  } catch (cause) {
-    return `warning: push credential directory not removed (${dir}): ${cause instanceof Error ? cause.message : String(cause)}`;
+  } catch (error) {
+    return `warning: push credential directory not removed (${dir}): ${error instanceof Error ? error.message : String(error)}`;
   }
 }

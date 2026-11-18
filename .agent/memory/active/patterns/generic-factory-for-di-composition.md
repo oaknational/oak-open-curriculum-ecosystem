@@ -3,6 +3,7 @@ name: "Generic Factory for DI Composition"
 polarity: pattern
 use_this_when: "A DI interface exposes multiple factory functions that callers always compose in the same order"
 category: code
+layer: general
 proven_in: "apps/oak-curriculum-mcp-streamable-http (ToolHandlerDependencies 5→2 members)"
 proven_date: 2026-03-28
 barrier:

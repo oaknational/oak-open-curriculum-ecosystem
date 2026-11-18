@@ -87,6 +87,17 @@ function lifecycle(input: {
   };
 }
 
+/** A heartbeat-tagged narrative from the peer at the given time. */
+function peerHeartbeat(eventId: string, createdAt: string): NarrativeCommsEvent {
+  return narrative({
+    eventId,
+    author: peer,
+    title: `Heartbeat: ${eventId}`,
+    createdAt,
+    tags: ['heartbeat'],
+  });
+}
+
 describe('classifyEventForAgent — view classification per the all-channels-matter principle', () => {
   it('classifies a narrative with no addressing as a broadcast view', () => {
     expect(
@@ -472,19 +483,9 @@ describe('drainRelevantEvents — full event stream surfacing with self-exclusio
 describe('drainRelevantEvents — sanctioned excludeTags mechanism (F-146)', () => {
   const excludeHeartbeat: ReadonlySet<CommsEventTag> = new Set(['heartbeat']);
 
-  function heartbeat(eventId: string, createdAt: string): NarrativeCommsEvent {
-    return narrative({
-      eventId,
-      author: peer,
-      title: `Heartbeat: ${eventId}`,
-      createdAt,
-      tags: ['heartbeat'],
-    });
-  }
-
   it('drops a heartbeat-tagged broadcast from output but returns its id as excluded for seen-marking', async () => {
     const drained = await drainRelevantEvents({
-      messages: [heartbeat('hb-1', '2026-05-21T08:01:00Z')],
+      messages: [peerHeartbeat('hb-1', '2026-05-21T08:01:00Z')],
       seenIds: new Set(),
       self,
       excludeTags: excludeHeartbeat,
@@ -632,7 +633,7 @@ describe('drainRelevantEvents — sanctioned excludeTags mechanism (F-146)', () 
 
   it('excludes without consuming the batchLimit slice and marks excluded ids beyond the slice horizon', async () => {
     const messages: readonly CommsEvent[] = [
-      heartbeat('hb-early', '2026-05-21T08:00:30Z'),
+      peerHeartbeat('hb-early', '2026-05-21T08:00:30Z'),
       narrative({
         eventId: 'sub-one',
         author: peer,
@@ -645,7 +646,7 @@ describe('drainRelevantEvents — sanctioned excludeTags mechanism (F-146)', () 
         title: 'Substantive two',
         createdAt: '2026-05-21T08:02:00Z',
       }),
-      heartbeat('hb-late', '2026-05-21T08:03:00Z'),
+      peerHeartbeat('hb-late', '2026-05-21T08:03:00Z'),
     ];
     const drained = await drainRelevantEvents({
       messages,
@@ -662,7 +663,7 @@ describe('drainRelevantEvents — sanctioned excludeTags mechanism (F-146)', () 
 
   it('passes the corpus pass/leak count: N heartbeats excluded, M substantive emitted, N+M markable', async () => {
     const heartbeats = Array.from({ length: 5 }, (_, index) =>
-      heartbeat(`hb-${String(index)}`, `2026-05-21T08:0${String(index)}:00Z`),
+      peerHeartbeat(`hb-${String(index)}`, `2026-05-21T08:0${String(index)}:00Z`),
     );
     const substantive = Array.from({ length: 3 }, (_, index) =>
       narrative({
@@ -687,7 +688,7 @@ describe('drainRelevantEvents — sanctioned excludeTags mechanism (F-146)', () 
 
   it('returns an empty excludedEventIds when no excludeTags are supplied', async () => {
     const drained = await drainRelevantEvents({
-      messages: [heartbeat('hb-1', '2026-05-21T08:01:00Z')],
+      messages: [peerHeartbeat('hb-1', '2026-05-21T08:01:00Z')],
       seenIds: new Set(),
       self,
     });

@@ -1,0 +1,299 @@
+{
+  "schema_version": "1.2.0",
+  "started_at": "2026-09-27T11:36:08.588Z",
+  "repo_head": "ae21c5a3373f41ff292721ef838d63bd52b20e59",
+  "worktree_clean": false,
+  "agent_tools_version": "0.1.0",
+  "host_skill": "oak-plan",
+  "canonical_dir": ".agent/skills/planning/plan",
+  "canonical_files": [
+    {
+      "path": "SKILL-CANONICAL.md",
+      "blob": "cddedc8a03c1c9c0f8423800b6d7e09417925692"
+    },
+    {
+      "path": "evals/evals.json",
+      "blob": "9458c55704fed4b2af5a711bc9bc2f0e626db124"
+    },
+    {
+      "path": "evals/trigger-validation.json",
+      "blob": "95abdd4e7ff8f9033ca0be7a0adaf084f2653470"
+    }
+  ],
+  "adapter_files": [
+    {
+      "path": "SKILL.md",
+      "blob": "1c51ceb9acb7c00cdc174378bdd1796cdf30e80a"
+    }
+  ],
+  "carried_skills": [
+    {
+      "host_skill": "oak-user-value",
+      "canonical_dir": ".agent/skills/planning/user-value",
+      "canonical_files": [
+        {
+          "path": "SKILL-CANONICAL.md",
+          "blob": "b2e066e5f91b608aac2b7ef7ef600c69af410cf4"
+        },
+        {
+          "path": "evals/evals.json",
+          "blob": "116bbb9bf76f86a61c29caebe78440b6fcc06de5"
+        },
+        {
+          "path": "evals/trigger-validation.json",
+          "blob": "d5189f7edb8014f47c991e126cafbe65781c00ce"
+        },
+        {
+          "path": "references/journeys-and-stories.md",
+          "blob": "6d05603c0d45bab711536a52cbac52a7bd2bb079"
+        },
+        {
+          "path": "references/levels-and-implementation.md",
+          "blob": "fe51adc61ed53a9c874218042a664b88380e6e26"
+        },
+        {
+          "path": "references/value-model.md",
+          "blob": "9f3f4f754a63cab96f688cec846adbeba37f3101"
+        }
+      ],
+      "adapter_files": [
+        {
+          "path": "SKILL.md",
+          "blob": "2bb00dbce2ecbb7933f0fb621565013cb4eab9f6"
+        },
+        {
+          "path": "references/journeys-and-stories.md",
+          "blob": "6d05603c0d45bab711536a52cbac52a7bd2bb079"
+        },
+        {
+          "path": "references/levels-and-implementation.md",
+          "blob": "fe51adc61ed53a9c874218042a664b88380e6e26"
+        },
+        {
+          "path": "references/value-model.md",
+          "blob": "9f3f4f754a63cab96f688cec846adbeba37f3101"
+        }
+      ]
+    },
+    {
+      "host_skill": "oak-specify",
+      "canonical_dir": ".agent/skills/specification/specify",
+      "canonical_files": [
+        {
+          "path": "SKILL-CANONICAL.md",
+          "blob": "b856a77b1cff7dd97e6281254206066331ef8578"
+        },
+        {
+          "path": "evals/evals.json",
+          "blob": "3819f678e3c387e640de13b46ee27da911d260b7"
+        },
+        {
+          "path": "evals/trigger-validation.json",
+          "blob": "8ce0bab9f825f2f3afe25a586ffc1abe7448716d"
+        },
+        {
+          "path": "references/assurance.md",
+          "blob": "42dee1c0f14aee113eaa46416b737195051cb65a"
+        },
+        {
+          "path": "references/lifecycle-and-change.md",
+          "blob": "695e0d4f657b51d78e104504b0b5dd9c4d89acbc"
+        },
+        {
+          "path": "references/profiles.md",
+          "blob": "424622f504032a595a426b8d3ebc2b02d6ea4c1b"
+        },
+        {
+          "path": "references/specification-record.md",
+          "blob": "6b76fed72b846023be3345d9af5861c475e91aba"
+        }
+      ],
+      "adapter_files": [
+        {
+          "path": "SKILL.md",
+          "blob": "f36dffd8d38b094dafdfb36e412690f5acd0f6be"
+        },
+        {
+          "path": "references/assurance.md",
+          "blob": "42dee1c0f14aee113eaa46416b737195051cb65a"
+        },
+        {
+          "path": "references/lifecycle-and-change.md",
+          "blob": "695e0d4f657b51d78e104504b0b5dd9c4d89acbc"
+        },
+        {
+          "path": "references/profiles.md",
+          "blob": "424622f504032a595a426b8d3ebc2b02d6ea4c1b"
+        },
+        {
+          "path": "references/specification-record.md",
+          "blob": "6b76fed72b846023be3345d9af5861c475e91aba"
+        }
+      ]
+    },
+    {
+      "host_skill": "oak-specify-connection",
+      "canonical_dir": ".agent/skills/specification/specify-connection",
+      "canonical_files": [
+        {
+          "path": "SKILL-CANONICAL.md",
+          "blob": "7b48d74616abb8e59265c6174af121e571ba177d"
+        },
+        {
+          "path": "evals/evals.json",
+          "blob": "9183055abfef5ffed7cda904c9639944fee0964a"
+        },
+        {
+          "path": "evals/trigger-validation.json",
+          "blob": "d1ed3eee698f9278553cf0f19df046b536cc3143"
+        },
+        {
+          "path": "references/connection-method.md",
+          "blob": "7ae1c20b4b91ae5a60a54e52c1f0f48609df7c4b"
+        }
+      ],
+      "adapter_files": [
+        {
+          "path": "SKILL.md",
+          "blob": "8aec1aeffb417f56e1807a6918e213b479ba6549"
+        },
+        {
+          "path": "references/connection-method.md",
+          "blob": "7ae1c20b4b91ae5a60a54e52c1f0f48609df7c4b"
+        }
+      ]
+    },
+    {
+      "host_skill": "oak-assess-specification",
+      "canonical_dir": ".agent/skills/specification/assess-specification",
+      "canonical_files": [
+        {
+          "path": "SKILL-CANONICAL.md",
+          "blob": "5b88e6c66d372fbae85014bbcd23249e6c2d5ac5"
+        },
+        {
+          "path": "evals/evals.json",
+          "blob": "ecf396a76a68782cd7408339ea44e2c728d9f980"
+        },
+        {
+          "path": "evals/trigger-validation.json",
+          "blob": "165941b150c040b127cb136f151ea1e02adcefd9"
+        },
+        {
+          "path": "references/assessment-criteria.md",
+          "blob": "6aec306d9cbd98a71738ff5209323118dfbe604c"
+        }
+      ],
+      "adapter_files": [
+        {
+          "path": "SKILL.md",
+          "blob": "ec5d1c29801acd446cfa62ec7b2c9989e6099819"
+        },
+        {
+          "path": "references/assessment-criteria.md",
+          "blob": "6aec306d9cbd98a71738ff5209323118dfbe604c"
+        }
+      ]
+    }
+  ],
+  "plugin_skill_form": "the adapter's frontmatter over the canonical body, references carried beside; nothing placed in the workspace",
+  "runner": {
+    "command": "claude",
+    "model": "the runner default",
+    "judge_model": "sonnet"
+  },
+  "suites": [
+    {
+      "suite": "cases",
+      "ablation": "with-without",
+      "runs": 1,
+      "cases": [
+        "case-01",
+        "case-02",
+        "case-03",
+        "case-04"
+      ],
+      "ran": [
+        "case-01",
+        "case-02",
+        "case-03",
+        "case-04"
+      ],
+      "command": [
+        "claude",
+        "plugin",
+        "eval",
+        "<plugin>",
+        "--keep-temp",
+        "--no-publish",
+        "--trust-plugin",
+        "--threshold",
+        "0",
+        "--ablation",
+        "with-without",
+        "--runs",
+        "1",
+        "--case",
+        "case-*",
+        "--json",
+        "<plugin>/result-cases.json",
+        "--max-cost-usd",
+        "40",
+        "--judge-model",
+        "sonnet"
+      ],
+      "resultFile": "result-cases.json",
+      "costUsd": 1.3927432000000002,
+      "claudeVersion": "2.1.283",
+      "partial": false
+    },
+    {
+      "suite": "triggers",
+      "ablation": "none",
+      "runs": 1,
+      "cases": [
+        "trigger-01-fires",
+        "trigger-02-fires",
+        "trigger-03-fires",
+        "trigger-04-silent",
+        "trigger-05-silent",
+        "trigger-06-silent"
+      ],
+      "ran": [
+        "trigger-01-fires",
+        "trigger-02-fires",
+        "trigger-03-fires",
+        "trigger-04-silent",
+        "trigger-05-silent",
+        "trigger-06-silent"
+      ],
+      "command": [
+        "claude",
+        "plugin",
+        "eval",
+        "<plugin>",
+        "--keep-temp",
+        "--no-publish",
+        "--trust-plugin",
+        "--threshold",
+        "0",
+        "--ablation",
+        "none",
+        "--runs",
+        "1",
+        "--case",
+        "trigger-*",
+        "--json",
+        "<plugin>/result-triggers.json",
+        "--max-cost-usd",
+        "40",
+        "--judge-model",
+        "sonnet"
+      ],
+      "resultFile": "result-triggers.json",
+      "costUsd": 0.6714966,
+      "claudeVersion": "2.1.283",
+      "partial": false
+    }
+  ]
+}

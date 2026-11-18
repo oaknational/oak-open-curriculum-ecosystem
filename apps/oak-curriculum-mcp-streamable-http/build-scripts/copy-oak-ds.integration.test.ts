@@ -57,15 +57,41 @@ async function collectImportClosure(packageRoot: string, entry: string): Promise
   return seen;
 }
 
+/**
+ * Reads the argument of each `url(...)` in a stylesheet: quoted or bare, with
+ * any whitespace inside the parentheses dropped. A quoted argument runs to its
+ * closing quote, so a data URI carrying parentheses reads whole; a bare one
+ * runs to the closing parenthesis. A character walk rather than one pattern
+ * with optional quotes at both ends, which backtracks (sonarjs/super-linear-regex).
+ */
+function urlArguments(source: string): string[] {
+  const found: string[] = [];
+  let from = source.indexOf('url(');
+  while (from !== -1) {
+    let cursor = from + 'url('.length;
+    while (source.charAt(cursor) === ' ') {
+      cursor += 1;
+    }
+    const quote = source.charAt(cursor);
+    const quoted = quote === '"' || quote === "'";
+    const end = source.indexOf(quoted ? quote : ')', quoted ? cursor + 1 : cursor);
+    if (end === -1) {
+      break;
+    }
+    found.push(source.slice(quoted ? cursor + 1 : cursor, end).trim());
+    from = source.indexOf('url(', end);
+  }
+  return found;
+}
+
 /** Collects `url('x')` targets from a stylesheet, resolved package-relative. */
 function collectUrlReferences(stylesheetRelativePath: string, source: string): string[] {
   const references: string[] = [];
   // Quote-optional for the same reason as the @import walk: `url(x.svg)` is
   // valid CSS, and a pattern that only matches `url('x.svg')` asks the manifest
   // about fewer assets than the stylesheet actually loads.
-  for (const match of source.matchAll(/url\(\s*['"]?([^'")]+?)['"]?\s*\)/g)) {
-    const target = match[1];
-    if (target === undefined || target.startsWith('data:') || /^https?:/.test(target)) {
+  for (const target of urlArguments(source)) {
+    if (target.length === 0 || target.startsWith('data:') || /^https?:/.test(target)) {
       continue;
     }
     references.push(resolveRelative(stylesheetRelativePath, target));

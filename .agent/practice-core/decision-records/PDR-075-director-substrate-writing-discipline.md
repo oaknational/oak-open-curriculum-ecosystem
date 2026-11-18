@@ -4,7 +4,8 @@ pdr_kind: governance
 
 # PDR-075: Director Substrate-Writing Discipline During The Role Authority Window
 
-**Status**: Candidate
+**Status**: Proposed (2026-10-01, promoted from Candidate at its slow-lane
+review; see §Status Review)
 **Date**: 2026-05-23
 **Related**:
 [PDR-027](PDR-027-threads-sessions-and-agent-identity.md)
@@ -21,13 +22,13 @@ extends the same substrate to broader Director-role observations);
 (Director value model — broad-awareness-as-substrate-cognition; this
 PDR names the discipline by which that cognition emits substrate in
 real-time);
-ADR-183
+the host repository's comms-event tag namespace decision
 (tag namespace substrate — `failure-mode` + `behaviour-note` are the
 namespaces this discipline writes into);
-ADR-185
+the host repository's comms-event auto-acceptance metadata decision
 (auto-acceptance metadata, when landed — complementary axis: PDR-075
-specifies when the Director emits substrate events, ADR-185 specifies
-how downstream consumers triage them).
+specifies when the Director emits substrate events, the auto-acceptance
+decision specifies how downstream consumers triage them).
 
 ## Status Review
 
@@ -36,9 +37,33 @@ found that later Director-transition and substrate-writing evidence
 strengthens the case for this PDR, but does not by itself authorize a
 status promotion. The promotion trigger below still requires fourth-
 instance worked validation in a distinct session, with refinements
-absorbed, or explicit owner ratification. Until that happens, agents
-should cite PDR-075 as Candidate doctrine with useful evidence, not as
-Proposed or Accepted doctrine.
+absorbed, or explicit owner ratification. Until the review of 2026-10-01
+below, agents cited PDR-075 as Candidate doctrine with useful evidence; from
+that review they cite it as Proposed.
+
+**2026-10-01 — Proposed.** Decided at this record's slow-lane review
+(PDR-130) by the curating seat of the second two-estate consolidation. The
+trigger below asks for worked instances in sessions distinct from 2026-05-23:
+one (its "fourth") moves the record to Proposed, a second (its "fifth") to
+Accepted. The instances headed sixth and seventh under §Worked Instances are
+those two sessions (2026-07-29 and 2026-07-31), each read from the event
+itself; they follow the five recorded on 2026-05-23. One refinement is absorbed
+with the promotion. The review found the `behaviour-note` and `failure-mode`
+tags on Director events only in the week of 2026-07-28 to 2026-08-01, while
+Directors wrote rulings and owner-decision answers to the stream as they
+occurred through 2026-09-29, most as untagged decision events. The obligation
+is the in-window emission. The tag is still required where one of the two
+classes §Tag Selection names fits; a tag alone is not evidence that the
+discipline held, and an event of another class carries none. Both new
+instances show emission. The
+fifth instance says ratification hinges on a successor's bootstrap from the
+stream alone being repeatable, and none has been recorded since 2026-05-23 (a
+search of both estates' comms stores at this review found none). The record
+therefore moves to Proposed and no further: Accepted waits for a recorded
+successor bootstrap or the owner's ratification. Prediction (PDR-130): a
+Director's successor finds the window's rulings on the stream without opening
+a handoff record; a successor who has to reconstruct a ruling from a handoff
+record or a napkin shows the discipline is not holding.
 
 ## Context
 
@@ -53,9 +78,9 @@ The cost shape was O(session) per handoff: each outgoing Director
 synthesised the entire window's substrate at the boundary, into a
 one-off prose document that the incoming Director then re-read
 end-to-end. Under rotating-cast Director operation, this cost
-concentrates at exactly the moment of context-budget pressure
-(PDR-063 trigger), making the synthesis adversarial to the role it
-is supposed to serve.
+concentrated at the handoff, where the seat's context was fullest,
+making the synthesis adversarial to the role it is supposed to
+serve.
 
 The architectural alternative: enrich the comms-event stream DURING
 the window so the substrate is generated incrementally on the
@@ -81,9 +106,9 @@ Moment 1 of role-release).
 
 ### What Must Be Emitted
 
-During the authority window, the Director MUST emit tagged
-comms-events for the following substrate-worthy observations as
-they occur:
+During the authority window, the Director MUST emit comms-events,
+tagged where §Tag Selection names a class that fits, for the
+following substrate-worthy observations as they occur:
 
 - **Routing-blockage observations**: doctrine-failing-author worked
   instances, idle-detection methodology errors, ceremony-over-
@@ -109,7 +134,7 @@ they occur:
 
 ### Tag Selection
 
-Substrate-writing uses the existing ADR-183 tag namespace:
+Substrate-writing uses the host's existing comms-event tag namespace:
 
 - `failure-mode` — substantive substrate gaps (the Director observed
   doctrine-failing-author, a known autonomy gap, a substrate defect
@@ -119,9 +144,9 @@ Substrate-writing uses the existing ADR-183 tag namespace:
   classification. Reframe-class observations typically land here.
 
 Namespace expansion (e.g. a `director-substrate` namespace) is
-deferred to the ADR-183 amendment process; this PDR does not
+deferred to the tag-namespace decision's amendment process; this PDR does not
 introduce new namespaces. If future evidence surfaces a category that
-neither existing tag fits, ADR-183 amendment is the right home and
+neither existing tag fits, amending the tag-namespace decision is the right home and
 PDR-075 remains stable.
 
 ### Cadence
@@ -162,7 +187,7 @@ role-handoff substrate:
 
 The handoff record does NOT re-narrate team state, in-flight routes,
 landed commits, or owner-decisions answered. Those live in the
-comms stream as tagged events; the handoff record points at them.
+comms stream as events; the handoff record points at them.
 
 ### Anti-Pattern Named
 
@@ -171,9 +196,8 @@ emission.** The Director who absorbs substrate-worthy observations
 into agent-private notes through the window, then synthesises a
 comprehensive handoff record at closeout, has:
 
-- concentrated O(session) authoring cost at exactly the boundary
-  where context-budget pressure is highest (the PDR-063 trigger
-  surface);
+- concentrated O(session) authoring cost at the handoff boundary,
+  where the seat's context is fullest;
 - deprived peers of real-time substrate visibility
   (broad-awareness-as-substrate-cognition per PDR-074 cannot
   operate on substrate the Director is hoarding);
@@ -191,7 +215,7 @@ surface with its access patterns makes the substrate's lifecycle
 match the substrate's consumers.
 
 **Why existing tag namespaces, not a new `director-substrate`
-namespace.** ADR-183 keeps the namespace small by design; adding
+namespace.** The tag-namespace decision keeps the namespace small by design; adding
 tags requires second-instance evidence and ADR amendment. The two
 existing tags (`failure-mode` + `behaviour-note`) cover the
 Director substrate-writing categories. Introducing a new namespace
@@ -212,12 +236,12 @@ priority action is a verdict, not a stream observation). The
 reduced handoff record preserves this minimal substrate while
 delegating session synthesis to the stream.
 
-**Why this composes with ADR-185 (auto-acceptance metadata).**
-ADR-185 (in draft at PDR-075 authoring time) names metadata on
+**Why this composes with the auto-acceptance metadata decision.**
+That decision (in draft at PDR-075 authoring time) names metadata on
 which comms-events are deterministic-mechanical (auto-acceptable
 by downstream consumers) versus events requiring active
 absorption. PDR-075 names when the Director emits substrate
-events and what categories the events cover; ADR-185 names how
+events and what categories the events cover; the auto-acceptance decision names how
 downstream consumers triage the emissions. The two are
 complementary axes operating on the same substrate.
 
@@ -237,16 +261,18 @@ worked validation under rotating-cast Director operation. The
 third worked instance is named below (the metacognition reframe
 broadcast immediately preceding Incandescent → Secret handoff). On
 fourth-instance worked validation in a session distinct from this
-one, with any refinements absorbed, PDR-075 moves to Proposed; on
-fifth instance, to Accepted.
+one, with any refinements absorbed, PDR-075 moves to Proposed. It
+moves to Accepted on a further instance that shows what the fifth
+worked instance says ratification hinges on, a successor's bootstrap
+from the stream alone, or on the owner's ratification.
 
 ## Consequences
 
 ### Required
 
-- The Director emits tagged comms-events at coherence-moments
-  through the window, using `failure-mode` and `behaviour-note`
-  per ADR-183 namespace.
+- The Director emits comms-events at coherence-moments through
+  the window, tagged `failure-mode` or `behaviour-note` per the
+  tag-namespace decision where one of those classes fits.
 - Director handoff records reduce to the minimum-irreducible
   substrate (Moment 1 metadata, lineage chain, single-highest-
   priority action, comms-event range pointer).
@@ -266,7 +292,7 @@ fifth instance, to Accepted.
 - Accumulating substrate-worthy observations in agent-private
   notes through the window then dump-at-handoff.
 - Introducing a new tag namespace (e.g. `director-substrate`)
-  without first amending ADR-183 with second-instance evidence.
+  without first amending the tag-namespace decision with second-instance evidence.
 
 ### Accepted Cost
 
@@ -366,6 +392,29 @@ bootstrap cleanly from substrate-rich streams alone, the
 comprehensive handoff record's load-bearing role can dissolve as
 PDR-075 specifies.
 
+### Sixth instance — a routing-blockage diagnosis in a distinct session
+
+`narrative` broadcast tagged `behaviour-note` at 2026-07-29T09:43:41Z by Lynx
+guards Whisper, the seated Director, titled "BEHAVIOUR-NOTE (Director): the
+F-75 active->offline flicker is structural — 240s cadence vs the <4m window;
+read retired-only as signal". The event gives the observation (healthy seats,
+the Director's own among them, flagged offline by liveness polls), the
+diagnosis (a four-minute threshold read against a four-minute heartbeat
+cadence flickers by construction) and the cure applied at the seat. It is the
+routing-blockage class of §What Must Be Emitted, written when it surfaced and
+not at session close, sixty-seven days after the first five instances.
+
+### Seventh instance — owner-decision answers broadcast at the moment
+
+Three `behaviour-note` events by Falcon hunts Flight, the seated Director, on
+2026-07-31 and 2026-08-01, their titles beginning "Director stand-down at
+owner word: monitors stopping; heartbeat silence is intentional", "Director
+resumed at owner word: monitors re-armed, gap swept, residency rule re-true
+landing", and "Director stand-down (sixth boundary): monitors stopping; fold
+merge is first act at resume". Each names the owner's decision, what it changes for the team's
+reading of the stream, and the first act at the next coherence-moment: the
+owner-decision-answer class, emitted at the boundary itself.
+
 ### Anti-pattern surface — comprehensive synthesis cost (this session)
 
 Four Director handoff records authored on 2026-05-23 prior to
@@ -422,16 +471,12 @@ record reduced to under 2k tokens.
    they contain is read-only audit history; future records adopt
    the reduced shape from PDR-075 forward.
 
-6. **CLI ergonomics for tag emission.** Substrate-writing requires
-   agents to author tagged events from the CLI; ADR-183 substrate
-   is live but the agent-tools CLI does not yet expose a `--tags`
-   flag on `comms append` / `comms direct` / `comms send`. The
-   first PDR-075 worked instances wrote tags via direct JSON
-   authoring or by titling the event with a `(behaviour-note)`
-   parenthetical rather than via canonical tag-array. The `--tags`
-   CLI flag is a paired follow-on implementation slice; it is not
-   part of this PDR's atomic landing but is named here as the
-   visible ergonomics gap PDR-075 surfaces.
+6. **CLI ergonomics for tag emission (resolved; read 2026-10-01).**
+   When this record was written the agent-tools CLI had no tag flag,
+   so the first worked instances wrote tags via direct JSON authoring
+   or by titling the event with a `(behaviour-note)` parenthetical.
+   The repeatable `--tag` flag has since landed on `comms append`,
+   `comms direct` and `comms send`.
 
 7. **Owner-direct designation of substrate-population requests.**
    On 2026-05-23 the owner-direction to the incoming Director at
@@ -443,4 +488,5 @@ record reduced to under 2k tokens.
    request is implicit? Hypothesis: the request becomes implicit
    once PDR-075 is Accepted; under Candidate / Proposed status,
    surfacing the request explicitly is the cure for the
-   transitional ratification window.
+   transitional ratification window. The record is Proposed from
+   2026-10-01, so the explicit request stays the cure until it is Accepted.

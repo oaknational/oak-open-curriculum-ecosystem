@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "commit-queue-intent.schema.json",
+  "$merge_class": "machine-local-ephemera",
+  "title": "Commit Queue Intent",
+  "description": "One machine-local commit-queue intent file at .agent/state/collaboration/commit-queue/<intent-id>.json. Commit queues are machine-local ephemera by owner ruling (2026-08-17, rulings ledger row QUEUE-LOCAL): never in version control (the collaboration-state ignore file covers the directory), one JSON file per intent like the comms event store, a 1-hour TTL measured from updated_at, expired files swept lazily by queue writes and treated as absent by reads.",
+  "$comment_compatibility": "Extracted from active-claims.schema.json $defs/intent_to_commit at the 1.4.0 registry split (the registry's commit_queue array moved to this per-intent store). The filename is <intent_id>.json; readers reject a file whose name disagrees with its intent_id. expires_at is stored for view parity and always derives as updated_at plus exactly the 1-hour TTL.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "intent_id",
+    "claim_id",
+    "agent_id",
+    "files",
+    "commit_subject",
+    "queued_at",
+    "updated_at",
+    "expires_at",
+    "phase",
+    "queued_seq"
+  ],
+  "properties": {
+    "intent_id": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "description": "Unique identifier for this queued commit intent; also the file's basename. Lowercase-only (the pattern, not the case-insensitive uuid format, is what enforces it — mirroring agent_id.id): the id IS the filename, so an uppercase variant aliases the lowercase file on a case-insensitive filesystem, silently replacing a live peer's intent and then failing every read of the directory against the store's filename/id equality check."
+    },
+    "claim_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Active claim this queue entry belongs to."
+    },
+    "agent_id": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["agent_name", "platform", "model", "session_id_prefix", "id"],
+      "$comment_provenance": "Per PDR-027 agent identity as amended by PDR-076a: intents require the UUID v5 id (every live writer emits it via collaborationAgentIdWriteSchema; the read boundary enforces the same shape).",
+      "description": "Identity of the agent that queued this intent. The routing key is (agent_name, id).",
+      "properties": {
+        "agent_name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Persistent descriptive name for this agent on this thread."
+        },
+        "platform": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Platform identifier: claude-code, cursor, codex, gemini, etc."
+        },
+        "model": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Canonical model id, e.g. claude-opus-4-7-1m."
+        },
+        "session_id_prefix": {
+          "type": "string",
+          "description": "First 6 characters of the PDR-027 seed (the untagged platform session id on cloud seats; the harness session id otherwise); 'unknown' if not exposed."
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-5[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "description": "PDR-076a deterministic UUID v5 derived from the stable session seed; the canonical routing disambiguator."
+        },
+        "naming_schema_version": {
+          "enum": ["v1-adjective-verb-noun", "v2-noun-verb-noun", "override"],
+          "description": "Name provenance: the registered naming-schema era that derived agent_name, or 'override' for operator-specified names."
+        }
+      }
+    },
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Repository-relative file paths the agent intends to stage."
+    },
+    "commit_subject": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Draft commit subject so peers can see the intended durable history label before it lands."
+    },
+    "queued_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Refreshed by the owning agent on commit-queue phase changes. The TTL clock: the entry expires exactly one hour after this timestamp."
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Derived view-parity timestamp: always updated_at plus the 1-hour TTL. Reads treat a file past this moment as absent; queue writes sweep it."
+    },
+    "phase": {
+      "type": "string",
+      "enum": ["queued", "staging", "pre_commit", "abandoned"],
+      "description": "Advisory lifecycle phase. Successful commits remove their intent file rather than preserving phase=complete."
+    },
+    "queued_seq": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Queue order key: the store's SOLE ordering field, carrying the arrival order the pre-1.4.0 flat array expressed as its element position. Assigned under the claims-file transaction lock as max-over-LIVE-entries + 1, so values are REUSED as the queue drains — correct for relative order, and never a global counter or an identity. queued_at cannot serve: two agents enqueueing inside one millisecond tie, and breaking that tie on intent_id hands the queue to whoever drew the lower random UUID."
+    },
+    "staged_bundle_fingerprint": {
+      "type": "string",
+      "description": "SHA-256 fingerprint over git diff --cached --name-status and git diff --cached --full-index --binary."
+    },
+    "staged_name_status": {
+      "type": "string",
+      "description": "Recorded git diff --cached --name-status output for staged-bundle inspection."
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional free-form coordination note for this queued commit intent."
+    }
+  }
+}

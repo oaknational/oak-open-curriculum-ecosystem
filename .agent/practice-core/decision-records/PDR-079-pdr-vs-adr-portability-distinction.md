@@ -4,7 +4,8 @@ pdr_kind: governance
 
 # PDR-079: PDR-vs-ADR Portability Distinction
 
-**Status**: Accepted
+**Status**: Accepted; amended 2026-09-28 (the ADR-identifier permission
+withdrawn: see the Amendment Log)
 **Date**: 2026-05-24
 **Adopted**: 2026-05-24
 **Related**:
@@ -81,7 +82,8 @@ A PDR body MAY contain:
   decision-records directory (sibling-PDR markdown links).
 - Named references to ADRs by their ADR identifier
   (the ADR-### form is portable vocabulary; the ADR file path is
-  not, and MUST NOT appear as a markdown link).
+  not, and MUST NOT appear as a markdown link). Withdrawn on
+  2026-09-28: see the Amendment Log.
 
 ### ADR Repo-Boundedness Rule
 
@@ -119,7 +121,8 @@ evidence), not in a PDR. The same applies to repo paths, event
 identifiers, and the other content classes named under the
 portability rule above. The cure is to move the substance to an ADR
 and leave a portable claim in the PDR that references the ADR by
-ADR identifier (not by path).
+ADR identifier (not by path). Amended on 2026-09-28: the claim names
+the concept the ADR records, never its number (see the Amendment Log).
 
 ## Cascade
 
@@ -138,6 +141,9 @@ authority.
 ## Notes
 
 ### Cross-reference discipline between PDRs and ADRs
+
+Amended on 2026-09-28: the permission in this subsection is withdrawn,
+and a PDR names the concept instead (see the Amendment Log).
 
 PDRs may cite ADRs by ADR identifier in prose, in §Related sections,
 and in cascade items. PDRs may NOT use markdown-link syntax to
@@ -202,7 +208,8 @@ operates under the constraint that matches its purpose.
   vocabulary to *appear* PDR-like.
 - A markdown link from a PDR body to an ADR file path
   (the link target is itself a repo-path; cite ADR by ADR
-  identifier instead).
+  identifier instead; amended on 2026-09-28 to name the concept
+  instead, see the Amendment Log).
 
 ### Accepted Costs
 
@@ -212,7 +219,8 @@ operates under the constraint that matches its purpose.
 - PDRs that previously embedded repo paths or commit identifiers
   must be migrated by extracting the repo-bound substance into an
   ADR and leaving a portable claim with an ADR-identifier
-  reference in the PDR.
+  reference in the PDR (amended on 2026-09-28: the portable claim
+  names the concept; see the Amendment Log).
 
 ## Falsifiability
 
@@ -249,3 +257,34 @@ governing concern was that the moving-targets-in-permanent-docs
 rule had inadvertently extended its scope to ADRs, where repo-bound
 evidence is appropriate. The cure is the scope-sharpening codified
 here, not a relaxation of the rule on the PDR side.
+
+## Amendment Log
+
+### 2026-09-28 — the ADR-identifier permission is withdrawn
+
+PDR-105 (reference-direction invariants) states the portability axis this
+record anticipated: a PDR must never cite an ADR, because the PDR travels to
+repositories where that ADR does not exist. An ADR's number travels no
+better than its path. In an adopting repository the number names nothing, or
+it names a different decision that happens to carry the same number. This
+record's permission of the number contradicted PDR-105 wherever a seat read
+the two together, and PDRs were written by it.
+
+What changes, read through this entry (each section named below
+carries a dated pointer here):
+
+- §PDR Portability Rule: the last item a PDR body MAY contain (named
+  references to ADRs by their ADR identifier) is withdrawn. A PDR body MUST
+  NOT contain an ADR identifier in any form.
+- §Mechanism: the portable claim left in the PDR names the concept the ADR
+  records, never the ADR's number.
+- §Notes, cross-reference discipline: a PDR names the concept, and the entry
+  shape "ADR-### (one-line gloss)" is withdrawn. The pairing of a PDR with
+  the ADR that adopts it in a given repository lives in that repository's
+  practice-index bridge. This record already names the bridge as the
+  canonical surface for PDR-to-phenotype-ADR cross-references.
+- §Forbids and §Accepted Costs: "cite ADR by ADR identifier" and "an
+  ADR-identifier reference" now read "name the concept".
+
+PDRs written under the withdrawn permission are cured by the same rule:
+each number becomes the concept it stood for, and no sentence is deleted.

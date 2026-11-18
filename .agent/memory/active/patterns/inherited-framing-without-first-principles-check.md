@@ -3,6 +3,7 @@ name: Inherited Framing Without First-Principles Check
 polarity: anti-pattern
 use_this_when: About to execute a plan body, rewrite an existing artefact, or translate an "old X to new X" — before writing code, tests, or doctrine, check whether the inherited shape is the right shape for the behaviour being proven
 category: process
+layer: general
 proven_in: .agent/memory/active/napkin.md (six instances, 2026-04-20/21)
 proven_date: 2026-04-21
 barrier:
@@ -15,6 +16,8 @@ barrier:
 > **POLARITY: ANTI-PATTERN.** This entry names a *failure mode to avoid*, not a shape to repeat. The name is the diagnostic: when the failure mode is about to fire, recognising the shape is the first move in not repeating it.
 >
 > See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
+
+Imported from OCE at pin `e477e62f7` on 2026-09-13 (practice-completion todo 1). The worked instances and measurements are OCE's; local divergence is recorded where it exists.
 
 ## Principle
 
@@ -35,7 +38,7 @@ doctrine prescribed by a plan body. Any clause that fails must be
 surfaced to the owner before code or doctrine is written.
 
 1. **Shape clause.** Is the test-shape (or implementation-shape,
-   or doctrine-shape) right for the **Oak-authored behaviour**
+   or doctrine-shape) right for the **repository-authored behaviour**
    being proven, or is it a vendor / configuration / framework
    assertion in disguise? If the shape proves "the vendor did its
    job" or "the config is set", the shape is wrong.
@@ -83,11 +86,11 @@ sessions, paired against the clause each instance invalidated.
 ### 2026-04-21 (2026-04-21 session, three further instances)
 
 4. **Instance 4 — §L-8 WS1 three-test spec asserted vendor /
-   configuration behaviour, not Oak-authored behaviour.** The
+   configuration behaviour, not repository-authored behaviour.** The
    plan prescribed three integration tests at the build-config
-   boundary; the Oak-authored logic worth testing was a single
+   boundary; the repository-authored logic worth testing was a single
    env-to-plugin-config translator. The three-test shape
-   proved "the vendor did its job" not "Oak's translator is
+   proved "the vendor did its job" not "the repository's translator is
    correct". (Clause 1, shape.) Caught in-flight during
    reading-the-spec-against-testing-strategy; no code written.
    Subsequent mitigation — invent a `buildMcpAppEsbuildOptions`

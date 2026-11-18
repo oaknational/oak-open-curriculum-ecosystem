@@ -4,7 +4,7 @@ pdr_kind: governance
 
 # PDR-011: Continuity Surfaces and the Surprise Pipeline
 
-**Status**: Accepted (amended 2026-04-20, amended 2026-04-21, amended 2026-04-25, amended 2026-05-29, amended 2026-06-07, amended 2026-06-08, amended 2026-06-12, amended 2026-07-28)
+**Status**: Accepted (amended 2026-04-20, amended 2026-04-21, amended 2026-04-25, amended 2026-05-29, amended 2026-06-07, amended 2026-06-08, amended 2026-06-12, amended 2026-07-28, amended 2026-09-17)
 **Date**: 2026-04-18 (amended 2026-04-20 — contract host abstracted
 from "primary session-continuation prompt" to "canonical repo-local
 surface set"; field set split into portable minimum plus optional
@@ -150,7 +150,7 @@ unit).
   and a session with no genuine shift correctly records nothing. The three
   types and the capture→distil→graduate→enforce pipeline are unchanged;
   what changes is the *standing* of the subjective register. The repo-bound
-  twin (ADR-150) mirrors this in its Amendment Log; the host
+  twin (the host's continuity-surfaces decision) mirrors this in its Amendment Log; the host
   `session-handoff` §6c capture edge is reframed from "reflective surplus
   (optional)" to foundational standing.
 - **2026-06-07 — grounded execution knowledge named as a second capture
@@ -169,7 +169,7 @@ unit).
   consumer's durable home and backed by an adversarial completeness sweep so
   the conservation fires structurally rather than on recall. The host
   `session-handoff` realises it as two capture edges (§6a.2 categorical +
-  §6e backstop); the repo-bound twin (ADR-150) mirrors this in its
+  §6e backstop); the repo-bound twin (the host's continuity-surfaces decision) mirrors this in its
   Amendment Log.
 - **2026-06-07 — a handoff author cannot self-verify its completeness; both
   cures are universal to every handoff** (owner direction 2026-06-07: "make all
@@ -182,7 +182,7 @@ unit).
   context-less reader's state (externalised by default). Evidenced by the EEF D6
   handoff session whose own banner's "branch unpushed" was false and whose
   inherited peer "all gates green" was knip-red. Realised in host `session-handoff`
-  §6e (extended); ADR-150 mirrors. Pipeline and continuity types unchanged.
+  §6e (extended); the host's continuity-surfaces decision mirrors. Pipeline and continuity types unchanged.
 - **2026-06-12 — two-clause amendment (owner-approved 2026-06-11 walk).**
   Clause (a): §"Subjective experience is foundational substrate" reconciled to
   the owner's strictly-voluntary direction (2026-06-06) — the closing
@@ -196,7 +196,7 @@ unit).
   context-isolated reader; never delegated). Evidenced by a 2026-06-07 session
   whose loss-scan was outsourced to a context-isolated sub-agent per the prior
   "externalise by default" wording, inverting the scan's ownership. The
-  repo-bound twin (ADR-150) mirrors both clauses.
+  repo-bound twin (the host's continuity-surfaces decision) mirrors both clauses.
 - **2026-06-08 — disposition of continuity-surface content under fitness pressure named**
   (owner direction 2026-06-08: a continuity surface's fitness pressure is a routing signal,
   never a trim or archive trigger; the only dispositions are leave-live-verbatim or
@@ -206,7 +206,7 @@ unit).
   continuity contract". The three continuity types, the surprise pipeline, and the contract's
   fields are unchanged; what is added is the lifecycle discipline for continuity-surface
   *content* under fitness pressure. The host realises it in its continuity directive's
-  disposition section plus the fitness apparatus; the repo-bound twin (ADR-150) mirrors this in
+  disposition section plus the fitness apparatus; the repo-bound twin (the host's continuity-surfaces decision) mirrors this in
   its Amendment Log. Graduated from the host pending-graduations register, whose trigger — a
   dedicated continuity-curation session — fired 2026-06-08.
 - **2026-07-28 — the session-close entry point is the host's deep-closeout programme; the
@@ -223,8 +223,26 @@ unit).
   "routine closeouts stay lightweight" reads at component grain (the continuity update
   stays lightweight; the programme is the close), and §Forbidden's bundling ban is
   satisfied because the consolidation gate survives inside the programme. The repo-bound
-  twin (ADR-150) carries the same amendment with body revision. Realised in the origin
+  twin (the host's continuity-surfaces decision) carries the same amendment with body revision. Realised in the origin
   host's `wrap` and `session-handoff` skills and its continuity directive.
+- **2026-09-17 — the finished disposition becomes "graduate, then archive", and a
+  surface's lifecycle is named as four parts.** Owner decision in the origin estate,
+  choosing "Graduate, then archive" over curate-and-delete: three months under the
+  2026-06-08 disposition showed that a disposition and a runbook no skill step invoked
+  left the continuity surfaces growing, while the capture surface, which had a trigger
+  and a proof, stayed curated. Under this amendment §Decision's disposition 2 reads:
+  every behaviour-changing finished entry is written into its permanent home and the
+  home is read back; then the finished history moves whole to a dated archive beside the
+  surface, proven byte-identical; the live surface keeps its live state and a pointer.
+  A memory surface is curated only when it has all four parts: a role, a disposition
+  for finished content, a trigger (a named workflow step), and a proof that nothing was
+  lost. The 2026-06-08 prohibition survives in its purpose: an archive, split, shard or
+  rename made to change a fitness category is still not curation, and archiving happens
+  only after full processing (owner, 2026-09-19, verbatim: "archiving happens ONLY after
+  full processing, not as a means to tick a box"). §Decision body text is retained
+  verbatim as the historical record per PDR convention. Realised in the origin host's
+  continuity directive and its consolidation skill's continuity-archive step; the
+  repo-bound twin (the host's continuity-surfaces decision) mirrors this in its Amendment Log.
 
 ## Context
 

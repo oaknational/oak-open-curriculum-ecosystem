@@ -64,7 +64,7 @@ describe('runSessionMetadataCli', () => {
         'model      claude-opus-4-8[1m]',
         'context    372025 / 1000000 tokens (37.2% used, 62.8% remaining)',
         'zone       healthy',
-        'advice     full capacity; carry on',
+        'advice     full capacity; carry on; directive edits wait for the next compaction',
         '',
       ].join('\n'),
     );
@@ -98,7 +98,7 @@ describe('runSessionMetadataCli', () => {
       pctUsed: 37.2,
       pctRemaining: 62.8,
       zone: 'healthy',
-      advice: 'full capacity; carry on',
+      advice: 'full capacity; carry on; directive edits wait for the next compaction',
     };
     expect(result.exitCode).toBe(0);
     expect(JSON.parse(result.stdout)).toStrictEqual(expected);

@@ -1,3 +1,8 @@
+---
+classification: core
+description: When authoring or reviewing code or schema, author the closed shape the known instances need; do not add configurable/optional/extensible surface for an unnameable future second instantiation. Defer the configurable shape until a real second instance forces the decomposition (then consolidate-at-second-consumer governs extraction).
+---
+
 # Closed-Shape Design Optionality
 
 Operationalises [PDR-058 §Surface 2 — Design Optionality](../practice-core/decision-records/PDR-058-three-tier-optionality-decomposition.md).

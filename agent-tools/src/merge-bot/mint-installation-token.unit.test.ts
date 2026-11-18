@@ -76,14 +76,14 @@ describe('resolveInstallationId', () => {
     const calls: { url: string; method: string; authorization: string }[] = [];
     const result = await resolveInstallationId({
       appJwt: 'the-jwt',
-      owner: 'oaknational',
-      repo: 'oak-open-curriculum-ecosystem',
+      owner: 'jimCresswell',
+      repo: 'jimcresswell.net',
       fetchImpl: fakeFetch([{ status: 200, body: { id: 987 } }], calls),
     });
 
     expect(result).toEqual({ ok: true, value: 987 });
     expect(calls[0].url).toBe(
-      'https://api.github.com/repos/oaknational/oak-open-curriculum-ecosystem/installation',
+      'https://api.github.com/repos/jimCresswell/jimcresswell.net/installation',
     );
     expect(calls[0].method).toBe('GET');
     expect(calls[0].authorization).toBe('Bearer the-jwt');
@@ -114,7 +114,7 @@ describe('mintInstallationToken', () => {
     const result = await mintInstallationToken({
       appJwt: 'the-jwt',
       installationId: 987,
-      repoName: 'oak-open-curriculum-ecosystem',
+      repoName: 'widgets',
       permissions: TOKEN_SCOPES['code-scanning-alerts'],
       fetchImpl: fakeFetch(
         [{ status: 201, body: { token: 'ghs_abc', expires_at: '2026-07-21T07:30:00Z' } }],
@@ -132,7 +132,7 @@ describe('mintInstallationToken', () => {
     // the 2026-07-21 repository scoping, and unlike a property check it also
     // catches a field being ADDED to the mint request.
     expect(JSON.parse(calls[0].body ?? '{}')).toEqual({
-      repositories: ['oak-open-curriculum-ecosystem'],
+      repositories: ['widgets'],
       permissions: { security_events: 'read' },
     });
   });

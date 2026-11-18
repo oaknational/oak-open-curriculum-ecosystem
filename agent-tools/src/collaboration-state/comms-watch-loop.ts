@@ -18,10 +18,10 @@ export { WatcherTimeoutError, type WatcherErrorKind } from './comms-watch-errors
  * lifecycle. `maxEventsPerDrain` bounds each individual drain pass (so
  * EVERY pass advances the seen-file cursor) and never the loop's lifetime:
  * the watcher runs until its supervisor dies, a step is ruled fatal, or a
- * step deadline fires. The unconditional wait between passes paces a
- * backlog dump to at most `maxEventsPerDrain` events per `pollMs`; it does
- * not bound live traffic (a fresh write resolves the wait immediately), but
- * every emission stays chunked to one bounded batch.
+ * step deadline fires. The watcher waits one `pollMs` interval between
+ * passes, so it paces a backlog dump and live traffic alike to at most
+ * `maxEventsPerDrain` events per pass, and every emission stays chunked to
+ * one bounded batch.
  *
  * The drain function MUST return event IDs in `result.eventIds`; the pass
  * marks them seen only AFTER emit succeeds, so a crash between drain and

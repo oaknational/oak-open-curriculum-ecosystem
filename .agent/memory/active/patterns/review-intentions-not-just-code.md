@@ -3,6 +3,7 @@ related_pdr: PDR-015
 name: "Review Intentions, Not Just Code"
 polarity: pattern
 category: process
+layer: general
 status: proven
 discovered: 2026-04-04
 proven_in: "WS3 Phase 4 brand banner — 5 specialist reviewers before implementation"

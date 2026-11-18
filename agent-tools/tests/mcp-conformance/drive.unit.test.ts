@@ -158,7 +158,7 @@ describe('runDrive — every advertised tool is driven with advertised examples'
         .map((w) => w.toolName)
         .sort((a, b) => a.localeCompare(b)),
     ).toEqual(['download-asset', 'get-keyword-graph', 'get-prior-knowledge-graph']);
-    expect(outcome.witnesses.filter((w) => w.outcome === 'called-ok').length).toBe(37);
+    expect(outcome.witnesses.filter((w) => w.outcome === 'called-ok')).toHaveLength(37);
     const witness = outcome.witnesses.find((w) => w.toolName === 'download-asset');
     expect(witness?.detail).toContain('no example');
   });
@@ -197,7 +197,7 @@ describe('runDrive — every advertised tool is driven with advertised examples'
     const refused = outcome.witnesses.find((w) => w.toolName === 'get-subjects');
     expect(refused?.outcome).toBe('not-read-only');
     expect(refused?.detail).toContain('readOnlyHint');
-    expect(outcome.witnesses.filter((w) => w.outcome === 'called-ok').length).toBe(37);
+    expect(outcome.witnesses.filter((w) => w.outcome === 'called-ok')).toHaveLength(37);
   });
 
   it('a non-zero list exit is a loud list failure carrying the vendor stderr, never a parse complaint', () => {

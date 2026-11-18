@@ -3,6 +3,7 @@ name: "State the Positive Understanding the Reader Needs, Not Your Own Correctio
 polarity: pattern
 use_this_when: "Authoring or revising any artefact (doc, comment, copy, message) after you were corrected or changed your mind about it."
 category: process
+layer: general
 proven_in: "the over-unification/tombstone window (2026-06-22, Skipper tracks Reef); recurs as the 'legitimate'/defensive-hedge tell (2026-06-27, owner-flagged)"
 proven_date: 2026-06-22
 barrier:

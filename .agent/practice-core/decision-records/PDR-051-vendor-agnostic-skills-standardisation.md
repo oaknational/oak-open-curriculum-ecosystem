@@ -349,7 +349,8 @@ against its own testing doctrine), and **User-facing skills** (product
 deliverables assured as product). In the Oak host the lock apparatus
 was never fully exercised (`metadata.owned` was enforced nowhere; the
 lock's recorded hashes reconciled against nothing) and is now removed —
-host phenotype: ADR-125 §Skill classes and validation jurisdiction.
+host phenotype: the agent-artefact portability decision, §Skill classes
+and validation jurisdiction.
 This section's lock-file model stands as the record of the superseded
 shape; portable adopters should classify by recorded derivation, never
 by registries of content another system owns.

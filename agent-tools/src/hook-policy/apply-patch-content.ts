@@ -95,10 +95,12 @@ function parseUpdateSection(section: PatchFileSection): Result<ContentChange, Er
     state = lineResult.value;
   }
 
+  const moved = state.filePath === section.filePath ? {} : { movedFromPath: section.filePath };
   return ok({
     newContent: state.additions.join('\n'),
     priorContent: state.deletions.join('\n'),
     filePath: state.filePath,
+    ...moved,
   });
 }
 

@@ -1,3 +1,5 @@
+import { join } from 'node:path';
+
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { checkAdapters } from '../../src/skills-adapter-generate/checker';
@@ -96,7 +98,7 @@ describe('generateAdapters carriage over a real filesystem', () => {
     const result = await checkAdapters({ repoRoot: root, prefix: 'oak-' });
 
     expect(result.drifted).toEqual([
-      `${root}/.claude/skills/oak-parallax/references/orchestration.md`,
+      join(root, '.claude/skills/oak-parallax/references/orchestration.md'),
     ]);
   });
 
@@ -110,8 +112,8 @@ describe('generateAdapters carriage over a real filesystem', () => {
 
     const flagged = await checkAdapters({ repoRoot: root, prefix: 'oak-' });
     expect([...flagged.orphaned].sort((a, b) => a.localeCompare(b, 'en'))).toEqual([
-      `${root}/.agents/skills/oak-parallax/scripts/render_graph.py`,
-      `${root}/.claude/skills/oak-parallax/scripts/render_graph.py`,
+      join(root, '.agents/skills/oak-parallax/scripts/render_graph.py'),
+      join(root, '.claude/skills/oak-parallax/scripts/render_graph.py'),
     ]);
 
     const regenerated = await generateAdapters({
@@ -119,8 +121,8 @@ describe('generateAdapters carriage over a real filesystem', () => {
       prefix: 'oak-',
     });
     expect([...regenerated.pruned].sort((a, b) => a.localeCompare(b, 'en'))).toEqual([
-      `${root}/.agents/skills/oak-parallax/scripts/render_graph.py`,
-      `${root}/.claude/skills/oak-parallax/scripts/render_graph.py`,
+      join(root, '.agents/skills/oak-parallax/scripts/render_graph.py'),
+      join(root, '.claude/skills/oak-parallax/scripts/render_graph.py'),
     ]);
     expect(repoPathExists(root, '.claude/skills/oak-parallax/scripts')).toBe(false);
     expect(repoPathExists(root, '.agents/skills/oak-parallax/scripts')).toBe(false);

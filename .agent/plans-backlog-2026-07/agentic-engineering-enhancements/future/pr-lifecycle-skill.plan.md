@@ -1,6 +1,6 @@
 # Pull Request Lifecycle Skill — Strategic Plan
 
-**Status**: FIRST SLICE EXECUTED (2026-07-02) — the documentation skill is live at .agent/skills/pr-lifecycle/SKILL-CANONICAL.md with generated adapters; the promotion trigger fired on PR #296 (owner-requested shepherding + the repeated comment/CI/Sonar feedback pattern in one session). Remaining scope: the optional command wrapper and surface cross-links, promotion-gated on repeated manual steps.
+**Status**: FIRST SLICE EXECUTED (2026-07-02) — the documentation skill is live at .agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md with generated adapters; the promotion trigger fired on PR #296 (owner-requested shepherding + the repeated comment/CI/Sonar feedback pattern in one session). Remaining scope: the optional command wrapper and surface cross-links, promotion-gated on repeated manual steps.
 **Domain**: Agentic Engineering Enhancements
 **Pattern**: Practice-owned agent-work capability
 
@@ -54,7 +54,7 @@ The skill must enforce these constraints:
 
 ## Candidate Deliverables
 
-1. Canonical skill: `.agent/skills/pr-lifecycle/SKILL.md`
+1. Canonical skill: `.agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md`
 2. Optional command wrapper for repo-local PR closeout if repeated manual steps
    justify one.
 3. Documentation updates in the reviewer/commit/finishing-branch surfaces that

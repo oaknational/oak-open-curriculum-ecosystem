@@ -1,9 +1,6 @@
 ---
 name: cricket-procedure-xhigh
-description: >-
-  Cursor adapter for the xhigh compiled-procedure role; Cursor does not pin reasoning effort.
-  Call directly for a reproducible second opinion when priority, proportion, or a wait/gate may
-  be drifting; returns ON-TRACK, DRIFTING, or WRONG-PRIORITY with one redirection.
+description: 'Cursor adapter for the xhigh compiled-procedure role; Cursor does not pin reasoning effort. Call directly for a reproducible second opinion when priority, proportion, or a wait/gate may be drifting; returns a work verdict (ON-TRACK, DRIFTING or WRONG-PRIORITY) and a mechanically derived frame verdict (SOUND, NARROWED or CONTRADICTED), with one redirection.'
 readonly: true
 ---
 

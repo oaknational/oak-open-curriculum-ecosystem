@@ -15,9 +15,11 @@ import { getSkillPermissionIssues, selectPracticeSkillDirs } from './skill-permi
 import { CLAUDE_SETTINGS_PATH } from './portability-constants.js';
 
 /**
- * The filesystem seam the census reads through. Every method carries the
- * ENOENT-only-absence posture (`carriage-fs.ts`): a non-ENOENT failure is a
- * typed `failure` the census surfaces as an issue, NEVER swallowed as "no
+ * The filesystem seam the census reads through. Every method distinguishes
+ * absence from failure: absence is classified per each read's own contract
+ * (ENOENT for the listings, `readRegularFileTextNoFollow`'s documented
+ * absence class for stub reads), while any other failure is a typed
+ * `failure` the census surfaces as an issue, NEVER swallowed as "no
  * Practice skills" (the false-green review round 2026-08-12 defect 4 closed).
  * Injectable so the fail-closed behaviour is testable without a root-only
  * chmod fixture.

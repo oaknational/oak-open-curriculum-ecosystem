@@ -7,14 +7,26 @@
 # wrapper makes those failures auditable by appending to .claude/logs/hook-errors.log
 # whenever the wrapped command exits non-zero.
 #
-# Usage in settings.json:
-#   "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/_lib/log-hook-errors.sh \
-#               ${CLAUDE_PROJECT_DIR}/.claude/hooks/<your>/<script>.sh"
+# Usage in settings.json (quote both paths, so a project path with a space
+# cannot split them):
+#   "command": "\"${CLAUDE_PROJECT_DIR}/.claude/hooks/_lib/log-hook-errors.sh\" \
+#               \"${CLAUDE_PROJECT_DIR}/.claude/hooks/<your>/<script>.sh\""
 #
 # Stdin (the hook payload from Claude Code) is passed through unchanged.
 # Stdout (any hook decision JSON) is passed through unchanged.
 # Stderr is captured to the log on failure AND re-emitted so the harness's
 # own session log still receives it.
+
+# The bash floor: the shellcheck gate holds it once and requires this guard first.
+if ((BASH_VERSINFO[0] < 5 || (BASH_VERSINFO[0] == 5 && BASH_VERSINFO[1] < 2))); then
+  # Hand straight to the wrapped command, unlogged. A wrapped bash hook carries
+  # the floor itself, so the secrets hooks still answer with their block
+  # decision; exiting here would be a non-blocking failure and let them through.
+  echo "log-hook-errors: bash 5.2 or later is required, found ${BASH_VERSION}; running the hook unlogged" >&2
+  exec "$@"
+  # Reached only with no command to hand to: exec with no arguments returns.
+  exit 1
+fi
 
 set -u
 
@@ -23,6 +35,7 @@ log_dir="${project_dir}/.claude/logs"
 log_file="${log_dir}/hook-errors.log"
 
 mkdir -p "$log_dir"
+# agent-tools/smoke-tests/hook-wrapper-quoting.smoke.ts reads this empty log as proof the wrapper ran.
 touch "$log_file"
 
 stderr_capture="$(mktemp)"

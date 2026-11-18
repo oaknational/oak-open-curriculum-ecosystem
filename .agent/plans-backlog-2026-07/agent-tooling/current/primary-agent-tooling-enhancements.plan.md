@@ -319,7 +319,7 @@ Target files:
 - [`agent-tools/tests/commit-queue.integration.test.ts`](/agent-tools/tests/commit-queue.integration.test.ts)
 - [`agent-tools/tests/commit-queue.unit.test.ts`](/agent-tools/tests/commit-queue.unit.test.ts)
 - [`agent-tools/README.md`](/agent-tools/README.md)
-- [`.agent/skills/commit/SKILL-CANONICAL.md`](/.agent/skills/commit/SKILL-CANONICAL.md)
+- [`.agent/skills/change-custody/commit/SKILL-CANONICAL.md`](/.agent/skills/change-custody/commit/SKILL-CANONICAL.md)
 
 TDD cycles:
 

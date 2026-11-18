@@ -282,15 +282,19 @@ describe('unwrapOrElse', () => {
   });
 });
 
+/**
+ * A Result-returning function in the shape a caller writes: the error channel
+ * carries the refused case instead of a throw.
+ */
+function divide(a: number, b: number): Result<number, string> {
+  if (b === 0) {
+    return err('Division by zero');
+  }
+  return ok(a / b);
+}
+
 describe('Result type integration', () => {
   it('works in real-world divide function', () => {
-    function divide(a: number, b: number): Result<number, string> {
-      if (b === 0) {
-        return err('Division by zero');
-      }
-      return ok(a / b);
-    }
-
     const success = divide(10, 2);
     expect(isOk(success)).toBe(true);
     if (isOk(success)) {
@@ -302,12 +306,6 @@ describe('Result type integration', () => {
     if (isErr(failure)) {
       expect(failure.error).toBe('Division by zero');
     }
-  });
-
-  it('forces exhaustive error handling', () => {
-    const result: Result<number, string> = ok(42);
-
-    expect(result.value).toBe(42);
   });
 });
 

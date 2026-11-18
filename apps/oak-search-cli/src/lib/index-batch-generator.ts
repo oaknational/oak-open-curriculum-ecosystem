@@ -24,13 +24,13 @@ export type { BatchGranularity, IngestionBatch, BatchGeneratorOptions } from './
 import type { IngestionBatch, BatchGeneratorOptions } from './index-batch-types';
 
 /** Curriculum index kinds that require subject/keystage traversal. */
-const CURRICULUM_INDEX_KINDS: readonly SearchIndexKind[] = [
+const CURRICULUM_INDEX_KINDS: ReadonlySet<SearchIndexKind> = new Set([
   'lessons',
   'units',
   'unit_rollup',
   'sequences',
   'sequence_facets',
-];
+]);
 
 /**
  * Async generator that yields ingestion batches sequentially.
@@ -75,7 +75,7 @@ export async function* generateIndexBatches(
   const filteredKeyStages = filterKeyStages(keyStages);
 
   const doCurriculum =
-    indexes.length === 0 || indexes.some((idx) => CURRICULUM_INDEX_KINDS.includes(idx));
+    indexes.length === 0 || indexes.some((idx) => CURRICULUM_INDEX_KINDS.has(idx));
   const doThreads = indexes.length === 0 || indexes.includes('threads');
 
   ingestLogger.debug('Starting batch generation', {

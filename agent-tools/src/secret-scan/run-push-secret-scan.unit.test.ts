@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import type { ConfiguredRemote } from './compute-push-scan-ranges.js';
 import { runPushSecretScan } from './run-push-secret-scan.js';
 
 /**
@@ -15,20 +16,24 @@ const LOCAL = '1111111111111111111111111111111111111111';
 const REMOTE = '2222222222222222222222222222222222222222';
 const ZERO = '0000000000000000000000000000000000000000';
 
-/**
- * What `merge-bot push` actually hands the hook. git passes the push
- * destination through verbatim, so a push to a URL arrives as the URL — never
- * as an empty string — and `push-cli.ts` builds exactly this shape for every
- * bot push.
- */
-const BARE_URL = 'https://github.com/oaknational/oak-open-curriculum-ecosystem.git';
+/** The configured remotes, each with the one URL it fetches from. */
+const ORIGIN_URL = 'https://github.com/acme/gizmos.git';
+const CONFIGURED: readonly ConfiguredRemote[] = [
+  { name: 'origin', fetchUrl: ORIGIN_URL },
+  { name: 'upstream', fetchUrl: 'https://github.com/acme-upstream/gizmos.git' },
+];
 
-const CONFIGURED = ['origin', 'upstream'] as const;
+/**
+ * A destination that names a repository no configured remote fetches from.
+ * git passes the push destination through verbatim, so a push to a URL
+ * arrives as the URL — never as an empty string.
+ */
+const UNKNOWN_URL = 'https://github.com/someone-else/gizmos.git';
 
 function run(args: {
   remoteName: string;
   refsText: string;
-  configuredRemotes?: readonly string[];
+  configuredRemotes?: readonly ConfiguredRemote[];
 }): {
   exit: number;
   scanned: string[];
@@ -48,14 +53,14 @@ function run(args: {
 }
 
 describe('runPushSecretScan', () => {
-  it('warns loudly when a bare-URL destination turns the incremental scan into a full-history walk', () => {
-    // The destination names no configured remote, so there are no
-    // remote-tracking refs to scope the exclusion against. Scoping to the URL
-    // is worse than useless: `--remotes=<URL>` is a glob matched against
-    // refs/remotes/*, it matches nothing, and the walk excludes nothing —
-    // 5,014 commits against 0 for the unscoped form.
+  it('warns loudly when the destination URL names a repository no remote fetches from, turning the incremental scan into a full-history walk', () => {
+    // The destination names no configured remote and no repository one
+    // fetches from, so there are no remote-tracking refs to scope the
+    // exclusion against. Scoping to the URL is worse than useless:
+    // `--remotes=<URL>` is a glob matched against refs/remotes/*, it matches
+    // nothing, and the walk excludes nothing.
     const result = run({
-      remoteName: BARE_URL,
+      remoteName: UNKNOWN_URL,
       refsText: `refs/heads/lane ${LOCAL} refs/heads/lane ${ZERO}`,
     });
 
@@ -64,14 +69,14 @@ describe('runPushSecretScan', () => {
     // The operator is told WHAT was lost and WHAT it costs, and the message
     // names the destination that cost it.
     expect(result.warnings[0]).toContain('not a configured remote');
-    expect(result.warnings[0]).toContain(BARE_URL);
+    expect(result.warnings[0]).toContain(UNKNOWN_URL);
     // The range never carries the URL as a ref glob.
     expect(result.scanned).toEqual([`${LOCAL} --not --remotes`]);
   });
 
   it('warns for a filesystem-path destination too — no scheme, still no tracking refs', () => {
-    // A path destination carries neither "://" nor "@", so recognising it
-    // rests on it naming no configured remote, never on its spelling.
+    // A path destination names no configured remote and parses to no host
+    // repository, so nothing can scope it.
     const result = run({
       remoteName: '/srv/mirrors/oak.git',
       refsText: `refs/heads/lane ${LOCAL} refs/heads/lane ${ZERO}`,
@@ -103,6 +108,19 @@ describe('runPushSecretScan', () => {
   it('keeps a new ref scoped to its named destination remote without warning', () => {
     const result = run({
       remoteName: 'origin',
+      refsText: `refs/heads/lane ${LOCAL} refs/heads/lane ${ZERO}`,
+    });
+
+    expect(result.warnings).toEqual([]);
+    expect(result.scanned).toEqual([`${LOCAL} --not --remotes=origin`]);
+  });
+
+  // The shape `merge-bot push` hands the hook: a new branch pushed to the
+  // configured repository's URL, which origin fetches from. The push's
+  // destination is known, so the scan says nothing.
+  it('stays silent when the destination is the URL of the repository a configured remote fetches from', () => {
+    const result = run({
+      remoteName: ORIGIN_URL,
       refsText: `refs/heads/lane ${LOCAL} refs/heads/lane ${ZERO}`,
     });
 

@@ -1,3 +1,9 @@
+---
+classification: situational
+description: "Before creating or changing Notion page content from a repository, resolve the [AI Managed] title designation from live Notion state — own title or an ancestor's; Human Managed and unmarked pages stay fenced: refuse and route to the Director. Append one Change ledger line per change set (date, repository, summary) plus a collapsed Agent traceability toggle carrying agent name, bare session-id prefix, and credentials. The owner strategy page keeps its stricter fence. Failure shapes — pages drifting under shared credentials without provenance; one ledger row per API call instead of per change set."
+trigger: tool:notion
+---
+
 # Notion Page Edits Update the Page Ledger
 
 **Operationalises:**

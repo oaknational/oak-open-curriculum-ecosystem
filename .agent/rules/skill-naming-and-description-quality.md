@@ -1,3 +1,9 @@
+---
+classification: situational
+description: Every skill needs a semantically useful name and a description optimised for discovery, applicability determination (use-when and do-not-use-when), and best/bad-practice examples — apply when creating, renaming, or editing any skill or its description.
+trigger: ceremony:skill-authoring — Creating/renaming/editing any skill or its description; vendoring gate
+---
+
 # Skill Naming and Description Quality
 
 Every skill carries a semantically useful name and a high-quality
@@ -14,7 +20,7 @@ routing defect with the same standing as a broken link.
 ## Trigger
 
 Fires whenever a skill is created, renamed, or its description edited
-or reviewed — Oak-authored canonicals first, and at the vendoring gate
+or reviewed — repo-authored canonicals first, and at the vendoring gate
 for external skills (a vendored skill with an unusable description is
 a routing defect to record, not silently accept).
 
@@ -47,7 +53,8 @@ The contract binds SKILLS, RULES, and SUBAGENTS alike — "they are all
 aspects of an underlying descriptive framework" (owner verbatim).
 Every agentic lever exposes a name and a description to the one
 constant consumer, the what-applies-now routing decision: a rule's
-trigger line in RULES_INDEX and its platform-adapter description, and
+declared description and trigger (rendered into RULES_INDEX and its
+platform adapters), and
 a subagent's description (the high-stakes case — proactive
 auto-dispatch clauses fire from it), are routing surfaces exactly as
 a skill description is. All carry the same three optimisation

@@ -41,7 +41,7 @@ them (signals are verdicts).
 5. `.agent/reference/resonance-practice-knowledge.md` §2 (recomputable state) and the
    incoming box synthesis `.agent/practice-core/incoming/resonance-plan-estate-refounding-synthesis-2026-07-06.md`
    (the ten-item kit — kit 1/3/4/9 bind R0 directly).
-6. The thread record `threads/strategy-and-plan-estate-holistic-review.next-session.md`
+6. The thread record `threads/paused/strategy-and-plan-estate-holistic-review.next-session.md`
    §Where We Are (2026-07-06).
 
 ## The work (R0, in dependency order)

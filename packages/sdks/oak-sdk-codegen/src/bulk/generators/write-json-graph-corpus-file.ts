@@ -14,6 +14,7 @@
  */
 import type { Logger } from '@oaknational/logger';
 
+import type { FileSystemPort } from '../../io/file-system-port.js';
 import { graphCorpusIndexModuleLines } from './graph-corpus-emitted-index-lines.js';
 import { graphCorpusTypesModuleLines } from './graph-corpus-emitted-types-lines.js';
 import type { GraphCorpus } from './graph-corpus-generator.js';
@@ -37,16 +38,19 @@ export const graphCorpusDescriptor: JsonDatasetDescriptor = {
  *
  * @param corpus - Graph corpus to write
  * @param outputDir - Parent output directory
+ * @param fs - The file system to write through
+ * @param logger - Optional logger for the write event
  * @returns Path to the created `graph-corpus` directory
  */
 export async function writeGraphCorpusAsJson(
   corpus: GraphCorpus,
   outputDir: string,
+  fs: FileSystemPort,
   logger?: Logger,
 ): Promise<string> {
   logger?.info('bulk.writer.write_graph_corpus_json', {
     outputDir,
     sourceVersion: corpus.sourceVersion,
   });
-  return writeJsonDataset(graphCorpusDescriptor, corpus, outputDir, logger);
+  return writeJsonDataset(graphCorpusDescriptor, corpus, outputDir, fs, logger);
 }

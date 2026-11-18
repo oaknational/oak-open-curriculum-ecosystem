@@ -4,8 +4,8 @@ import { err, isErr, type Result } from '@oaknational/result';
 export function invokePublicationOperation<T>(operation: () => Result<T, Error>): Result<T, Error> {
   try {
     return operation();
-  } catch (cause: unknown) {
-    return err(cause instanceof Error ? cause : new Error(String(cause)));
+  } catch (error: unknown) {
+    return err(error instanceof Error ? error : new Error(String(error)));
   }
 }
 

@@ -1,4 +1,4 @@
-import { BRAILLE_SHARP_FRAMES, OAK_LOGO_ROWS } from '../../src/claude/oak-logo';
+import { BRAILLE_SHARP_FRAMES, LOGO_ROWS } from '../../src/claude/logo';
 import { renderStatusline, type StatuslineParts } from '../../src/claude/statusline-render';
 
 const RESET = '\x1b[0m';
@@ -35,8 +35,12 @@ const lineWith = (out: string, needle: string): string =>
 const lineIndexOf = (out: string, needle: string): number =>
   out.split('\n').findIndex((line) => line.includes(needle));
 /** Strip ANSI colour codes to assert on the visible text, not the colouring. */
-const ANSI_CODE = new RegExp(String.raw`${String.fromCharCode(27)}\[[0-9;]*m`, 'g');
+const ANSI_CODE = new RegExp(String.raw`${String.fromCodePoint(27)}\[[0-9;]*m`, 'g');
 const stripAnsi = (text: string): string => text.replaceAll(ANSI_CODE, '');
+
+/** The first rendered row of the braille-sharp layout at the given logo frame. */
+const firstRowAtFrame = (logoFrame: number | undefined): string =>
+  renderStatusline({ ...base, dir: 'repo' }, { logo: 'braille-sharp', logoFrame }).split('\n')[0];
 
 describe('renderStatusline — usage on the model row', () => {
   // Usage reads beside WHAT is doing the work (owner direction 2026-07-20,
@@ -331,7 +335,7 @@ describe('renderStatusline — Oak logo column mechanism', () => {
       },
       { logo: 'sextant' },
     );
-    for (const row of OAK_LOGO_ROWS.sextant) {
+    for (const row of LOGO_ROWS.sextant) {
       expect(out).toContain(row);
     }
     expect(out).toContain('coord:');
@@ -342,7 +346,7 @@ describe('renderStatusline — Oak logo column mechanism', () => {
     for (const style of ['sextant', 'braille'] as const) {
       const lines = renderStatusline({ ...base, dir: 'repo' }, { logo: style }).split('\n');
       const ruleRow = (lines.at(-1) ?? '').replaceAll('\x1b[2m', '').replaceAll(RESET, '');
-      expect([...ruleRow]).toHaveLength([...OAK_LOGO_ROWS[style][0]].length);
+      expect([...ruleRow]).toHaveLength([...LOGO_ROWS[style][0]].length);
     }
   });
 
@@ -354,7 +358,7 @@ describe('renderStatusline — Oak logo column mechanism', () => {
     ).split('\n');
     const ruleRow = (lines.at(-1) ?? '').replaceAll('\x1b[2m', '').replaceAll(RESET, '');
     expect([...ruleRow]).toEqual(
-      Array.from({ length: [...OAK_LOGO_ROWS.sextant[0]].length }, () => probe),
+      Array.from({ length: [...LOGO_ROWS.sextant[0]].length }, () => probe),
     );
   });
 
@@ -363,7 +367,7 @@ describe('renderStatusline — Oak logo column mechanism', () => {
       { ...base, dir: 'repo' },
       { logo: 'sextant', logoSeparator: '' },
     ).split('\n');
-    expect(lines).toHaveLength(OAK_LOGO_ROWS.sextant.length);
+    expect(lines).toHaveLength(LOGO_ROWS.sextant.length);
     expect(lines.join('\n')).toContain('repo');
   });
 
@@ -377,18 +381,14 @@ describe('renderStatusline — Oak logo column mechanism', () => {
     const out = renderStatusline({ ...base, dir: 'repo', model: 'Opus 4.8' }, { logo: 'none' });
     expect(out).toContain('Opus 4.8');
     expect(out).toContain('repo');
-    expect(out).not.toContain(OAK_LOGO_ROWS.sextant[0]);
+    expect(out).not.toContain(LOGO_ROWS.sextant[0]);
   });
 
   it('selects the braille-sharp frame named by logoFrame, defaulting to and wrapping at frame 0', () => {
-    const firstRow = (logoFrame: number | undefined): string =>
-      renderStatusline({ ...base, dir: 'repo' }, { logo: 'braille-sharp', logoFrame }).split(
-        '\n',
-      )[0];
-    expect(firstRow(undefined)).toContain(BRAILLE_SHARP_FRAMES[0][0]);
-    expect(firstRow(1)).toContain(BRAILLE_SHARP_FRAMES[1][0]);
-    expect(firstRow(3)).toContain(BRAILLE_SHARP_FRAMES[3][0]);
-    expect(firstRow(4)).toContain(BRAILLE_SHARP_FRAMES[0][0]);
+    expect(firstRowAtFrame(undefined)).toContain(BRAILLE_SHARP_FRAMES[0][0]);
+    expect(firstRowAtFrame(1)).toContain(BRAILLE_SHARP_FRAMES[1][0]);
+    expect(firstRowAtFrame(3)).toContain(BRAILLE_SHARP_FRAMES[3][0]);
+    expect(firstRowAtFrame(4)).toContain(BRAILLE_SHARP_FRAMES[0][0]);
   });
 });
 

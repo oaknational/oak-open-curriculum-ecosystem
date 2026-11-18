@@ -17,7 +17,9 @@ description: >-
   an unreviewed major; loosening or removing a floor to make install
   pass; crossing a held major (live hold list in build-system.md);
   hand-editing pnpm-lock.yaml; trusting one advisory instrument's
-  count as the whole picture.
+  count as the whole picture. For a `package.json` project outside
+  this estate, the bundled multi-manager script reports and applies
+  safe upgrades.
 ---
 
 # Update Dependencies
@@ -28,13 +30,14 @@ description: >-
 lift conditions, the `minimumReleaseAge` mechanism. This skill is the
 summonable routing: the decision tree, the verification tail, and the
 failure shapes, applied at the moment a trigger fires. The override
-comment discipline is modelled by `pnpm-workspace.yaml`'s MCP-549-era
-floors — reachability, bound rationale, and a lift condition on each;
+comment discipline is modelled by `pnpm-workspace.yaml`'s commented
+floors (the shape set by OCE's MCP-549 wave) — reachability, bound rationale, and a lift condition on each;
 the pre-lane floors converge to that shape through the routed
 bounds-and-comments sweep, so read the commented floors as the
-pattern, not every entry as already compliant. Sibling maintenance skills:
-[`update-upstream-api-spec`](../update-upstream-api-spec/SKILL-CANONICAL.md),
-[`update-bulk-download-schema`](../update-bulk-download-schema/SKILL-CANONICAL.md).
+pattern, not every entry as already compliant. Sibling maintenance skills,
+where the host carries them (OCE: `update-upstream-api-spec`,
+`update-bulk-download-schema`); the `dependency-currency` skill runs the
+whole-estate pass in both estates.
 
 ## Use When
 
@@ -55,19 +58,20 @@ skill STOPS at them and surfaces).
    outdated — in-band signal, not failure).
 2. **Instruments disagree by design**: Dependabot alerts, `pnpm audit`
    full scope, and `--prod` scope each see different sets (worked
-   instance 2026-08-11: Dependabot 8 vs audit 12/11 — audit saw two
+   instance, OCE 2026-08-11: Dependabot 8 vs audit 12/11 — audit saw two
    highs Dependabot lagged on). Reconcile counts; done-when is EVERY
    FINDING RECONCILED on every instrument — cured, or documented as an
    explicitly owner-accepted residual with its lift condition (step 8).
    For HIGH/CRITICAL findings in production-reachable dependencies,
-   ADR-174 sets the acceptance bar above that: a TIME-BOUNDED owner
+   OCE's ADR-174 sets the acceptance bar above that (the same bar in
+   both estates): a TIME-BOUNDED owner
    disposition with named compensating controls — an event-based lift
    condition alone is below policy, and the finding stays a release
    blocker until that disposition exists.
    One instrument's zero is never done, and forcing an incompatible
    version to make a census read zero is the failure, not the cure.
 3. **Diff the live advisory set against the existing override floors.**
-   Floors drift silently between sweeps (worked instance 2026-08-11:
+   Floors drift silently between sweeps (worked instance, OCE 2026-08-11:
    three floors sat one micro-version below freshly-patched releases).
    This drift-check is the standing refresh loop; it fires on every
    summon, whichever door opened it.
@@ -107,7 +111,7 @@ the selected version, never the floor:
    tree-wide: a direct-parent bump creates a fresh node whose subtree
    resolves newest-in-range, but TRANSITIVE instances of the same
    parent keep their old pins and their vulnerable subtrees (worked
-   instance 2026-08-11: a direct postcss bump left transitive postcss
+   instance, OCE 2026-08-11: a direct postcss bump left transitive postcss
    nodes still carrying vulnerable nanoid).
 3. **Transitive, no full parent route** → `pnpm-workspace.yaml`
    override floor. There is NO name-targeted transitive refresh:
@@ -125,7 +129,7 @@ the selected version, never the floor:
    silences the peer conflict that should have blocked it. Bound below
    the next major when one exists; bound to the consumed line when
    consumers declare `^` ranges an open floor would drag across an
-   incompatible major (worked near-miss 2026-08-11: an unbounded
+   incompatible major (worked near-miss, OCE 2026-08-11: an unbounded
    nanoid floor would have coerced postcss's `^3.x` onto ESM-only
    majors). Bound even when the next major does not yet exist
    (`<N+1`): a dated no-next-major note does not constrain the
@@ -181,7 +185,7 @@ the selected version, never the floor:
 8. **The advisory's patched version does not exist for the resolved
    line** → verify before promising a cure: `pnpm audit`'s
    `patched_versions` can be a SYNTHETIC above-range rendering (the
-   GitHub advisory's `first_patched_version` is NULL; worked instance:
+   GitHub advisory's `first_patched_version` is NULL; worked instance, OCE:
    ">=3.0.98" printed for a line ending at 3.0.31). Do not force. Try
    the parent-bump route, else surface the residue honestly with the
    evidence and route the acceptance decision to the owner.
@@ -241,14 +245,33 @@ a zero-match sweep reads as a confirmed negative.
   "production dependency"; PRODUCTION-REACHABLE additionally requires
   the RUNTIME call path (which import runs, on which route) — a
   dependency edge into code the app never executes is not runtime
-  reachability (worked instance 2026-08-11: express-rate-limit lives
+  reachability (worked instance, OCE 2026-08-11: express-rate-limit lives
   only in SDK OAuth handlers the app bypasses). A reachability verdict
   is dated evidence about one resolution and one estate shape, never a
   property of the package: re-verify the resolved version and the
-  estate before reusing one (worked instance: a 2026-07-24
+  estate before reusing one (worked instance, OCE: a 2026-07-24
   "next unreachable / defer sharp" verdict pair was invalidated within
   three weeks — a demo became a deployed Next surface, and sharp
   resolved past the advisory floor on the ordinary patch sweep).
+
+## External `package.json` projects
+
+For a project outside this estate (any `package.json`, any manager), the
+bundled script detects the package manager (`packageManager` field, then
+lockfile, then the CLI on `PATH`), reports outdated dependencies, and applies
+manager-appropriate semver-safe upgrades:
+
+```bash
+python3 .agent/skills/update-dependencies/scripts/check-package-deps.py <project-path>
+```
+
+`--json` gives structured output; `--apply` applies semver-safe upgrades
+(`npm update`, `pnpm up`, `yarn upgrade`); `--apply --major` only when
+major-version drift is intentionally accepted. Re-run after applying, then run
+the target's quality gates. `references/manager-commands.md` holds the
+manager-specific commands and caveats. Inside this estate `pnpm` is mandatory
+and the mechanism-decision tree above governs; the script never replaces it
+here.
 
 ## Failure shapes this skill exists to prevent
 

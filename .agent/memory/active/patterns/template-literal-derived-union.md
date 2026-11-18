@@ -3,6 +3,7 @@ name: "Template Literal Derived Union with Builder"
 polarity: pattern
 use_this_when: "A string union type is the cross-product of two smaller unions joined by a separator, and code constructs members at runtime via template literals"
 category: code
+layer: family
 proven_in: "apps/oak-search-cli/src/lib/indexing/curriculum-pattern-config.ts"
 proven_date: 2026-03-01
 barrier:

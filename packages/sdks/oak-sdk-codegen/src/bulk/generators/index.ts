@@ -7,6 +7,13 @@
 
  */
 
+export type {
+  DirectoryEntry,
+  DirectoryEntryKind,
+  FileSystemPort,
+} from '../../io/file-system-port.js';
+export { nodeFileSystem } from '../../io/node-file-system.js';
+
 export {
   generateAnalysisReport,
   serializeAnalysisReport,

@@ -28,7 +28,7 @@ import {
  * Matches patterns like `field_name: z.` at the start of lines.
  */
 function extractZodFieldNames(schemaCode: string): string[] {
-  const fieldPattern = /^\s+(\w+): (?:z\.|SearchCompletionSuggestPayloadSchema)/gm;
+  const fieldPattern = /^[ \t]+(\w+): (?:z\.|SearchCompletionSuggestPayloadSchema)/gm;
   const matches: string[] = [];
   let match;
 

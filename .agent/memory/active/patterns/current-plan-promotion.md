@@ -4,6 +4,7 @@ name: "Current Plan Promotion"
 polarity: pattern
 use_this_when: "A review or planning pass has resolved 'what comes next' and the repo needs a concrete next-session entry point rather than a mere intended future direction"
 category: process
+layer: general
 proven_in: "Statistical roadmap review plus observational tranche promotion (2026-03-22, algo-experiments)"
 proven_date: 2026-03-22
 barrier:

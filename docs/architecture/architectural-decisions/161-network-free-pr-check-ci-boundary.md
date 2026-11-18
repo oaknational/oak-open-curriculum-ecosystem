@@ -6,7 +6,27 @@ the same PR-check boundary. Amended 2026-06-26 to state the boundary's scope
 precisely — it concerns **third-party-vendor** networks — so a call to GitHub's
 own dependency-graph API via the run's own `GITHUB_TOKEN`, on the same instance
 the workflow already depends on, is permitted (see §Third-party-vendor scope:
-GitHub's own APIs).
+GitHub's own APIs). Amended 2026-09-19 for the testing taxonomy's IO invariant
+(owner, 2026-09-14: tests never use or create IO): wherever this ADR says "E2E
+tests" or "smoke tests", read E2E and smoke **checks**, which are validation
+surfaces outside the test suites
+([`testing-strategy.md`](../../../.agent/directives/testing-strategy.md)
+§Out-of-process checks); the sentence "E2E tests CAN trigger STDIO IO" it quotes
+from that directive no longer stands there. Three sentences below read
+differently under it: an E2E check drives a separately running system over its
+protocol channel (stdio, or HTTP on the local host), so "in-process" no longer
+describes it, and "never network" means never a third-party network; consequence
+2's "test that would need to reach the network" is a check, never a test; and
+the "smoke tests" this ADR keeps off the PR-check path are the network-reaching
+ones, while the artefact-viability smoke checks of the directive's §Smoke Checks
+reach no third-party network (process and filesystem IO and a server's local
+protocol or health channel are theirs to use) and run from CI-gated tasks. The
+§Decision sentence, its table and consequences 2 and 3 are re-worded below to
+match. The PR-check pipeline runs unit and
+integration tests (no IO) and the validation checks it is configured to run; its
+network-free boundary is unchanged. Amended 2026-09-28, in lockstep with
+ADR-121, to record that provisioning the tools the checks run is outside the
+boundary when the tool is pinned by content (see §Provisioning is not a check).
 **Date**: 2026-04-17
 **Related**: [ADR-078](078-dependency-injection-for-testability.md) — the DI
 discipline that makes in-process tests deterministic;
@@ -65,34 +85,37 @@ Each one will re-raise the same question unless the rule is captured.
 ## Decision
 
 **PR-check CI is network-free. Deploy-pipeline CI is network-capable.
-Smoke tests are on-demand with full IO. E2E tests run in-process with
-stdio IO only, never network.**
+Smoke checks that reach a third-party network are on-demand. E2E checks
+drive a separately running system over its own protocol channel, never a
+third-party network.**
 
 In pipeline terms:
 
 | Pipeline                                              | What runs                                                                                                      | Network calls permitted?                                                                                                 |
 | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | GitHub Actions PR / push checks                       | `pnpm check` → unit + integration tests + type-check + lint + format + knip + depcruise + build + fitness gate | **No.** Unit + integration tests are in-process, no IO. No vendor CLI invocations.                                       |
-| GitHub Actions PR / push checks                       | E2E tests (`*.e2e.test.ts`) when run by the PR-check workflow                                                  | **No** (stdio IO only, per testing-strategy.md).                                                                         |
+| GitHub Actions PR / push checks                       | E2E checks (files still named `*.e2e.test.ts`) when run by the PR-check workflow                               | **No** third-party network (the system's own protocol channel only, per testing-strategy.md).                            |
 | Vercel deploy pipeline (predeploy / postdeploy hooks) | Source-map upload, release-commit linkage, deploy registration, any operational vendor-CLI invocation          | **Yes.** This is the correct home for deploy-time network side effects. Secrets supplied via Vercel project environment. |
-| Smoke tests (`smoke:*` scripts)                       | A fully running local or deployed system, all IO types                                                         | **Yes**, explicitly triggered by a human or a scheduled workflow that is NOT the PR-check path.                          |
+| Network-reaching smoke checks (`smoke:*` scripts)     | A fully running local or deployed system, all IO types                                                         | **Yes**, explicitly triggered by a human or a scheduled workflow that is NOT the PR-check path.                          |
 | Local operator-initiated scripts                      | Evidence generation, debugging, one-off vendor-CLI invocations                                                 | **Yes**, operator context.                                                                                               |
 
 Consequences:
 
 1. Any `sentry-cli`, `clerk`, or analogous vendor CLI invocation that
    reaches the network MUST run in the Vercel deploy pipeline, a smoke
-   test, or a local operator context — **never** in a PR-check
+   check, or a local operator context — **never** in a PR-check
    GitHub Actions workflow.
-2. Any test that would need to reach the network to prove its claim
-   MUST be named `*.smoke.*` (or similar on-demand discriminant) and
-   MUST NOT be wired into the PR-check workflow's test runs.
-3. An E2E test (`*.e2e.test.ts`) that reaches the network is a
-   category error: it is a smoke test wearing the wrong name, and
-   either the test moves to smoke or the network reach is mocked at
-   the E2E seam. This is the correct reading of
-   `testing-strategy.md`'s "E2E tests CAN trigger STDIO IO but NOT
-   filesystem or network IO" clause.
+2. Any check that would need to reach a third-party network to prove
+   its claim MUST be named `*.smoke.*` (or similar on-demand
+   discriminant) and MUST NOT be wired into the PR-check workflow's
+   runs. No test reaches any network.
+3. An E2E check (a file still named `*.e2e.test.ts`) that reaches a
+   third-party network is a category error: it is a network-reaching
+   smoke check wearing the wrong name, and either it moves to smoke or
+   the network reach is faked at the E2E seam. (As first written this
+   consequence read `testing-strategy.md`'s "E2E tests CAN trigger
+   STDIO IO but NOT filesystem or network IO" clause, which the
+   2026-09-19 amendment records as withdrawn.)
 4. CI workflow files (`.github/workflows/*.yml`) are themselves
    subject to this rule. A code review or a lint rule that greps for
    vendor-CLI invocations in those files is a future enforcement
@@ -142,6 +165,19 @@ The permission is bounded precisely:
 
 ADR-121's coverage matrix and §Network-free PR-check boundary are amended in
 lockstep, as consequence #5 requires.
+
+### Provisioning is not a check (amended 2026-09-28)
+
+This boundary governs what a PR check reaches to prove its claim, and vendor
+side-effect calls. It does not govern provisioning: installing the dependencies
+and tools the checks run, before any check runs. The pnpm dependency install
+(`pnpm install --frozen-lockfile`), and the gitleaks and shellcheck binaries
+fetched at a pinned version and checked against a pinned sha256
+([ADR-121](121-quality-gate-surfaces.md) §Pinned system binaries), are
+provisioning. The pin fixes what arrives, so no check's verdict depends on the
+network, and the tool then runs without it. A download that is not pinned by
+content, or a tool that reaches a third-party network while it checks, stays
+inside this boundary.
 
 ## Consequences
 
@@ -193,10 +229,13 @@ lockstep, as consequence #5 requires.
    scopes by reusability, not diff size"
    (`patterns/adr-by-reusability-not-diff-size.md`).
 4. **Permit E2E tests to reach the network as long as they are
-   marked `@slow`.** Rejected: `testing-strategy.md` already names
-   E2E as stdio-only. Remarking an E2E test as `@slow` reopens the
-   IO boundary and collides with the existing taxonomy. The correct
-   move is to name it a smoke test.
+   marked `@slow`.** Rejected: when this was written
+   `testing-strategy.md` named E2E as stdio-only; under the
+   2026-09-19 amendment an E2E check drives a running system over
+   its own protocol channel and never a third-party network, so the
+   rejection stands. Marking one `@slow` reopens the network boundary
+   and collides with the taxonomy. The correct move is to name it a
+   network-reaching smoke check.
 
 ## Enforcement
 

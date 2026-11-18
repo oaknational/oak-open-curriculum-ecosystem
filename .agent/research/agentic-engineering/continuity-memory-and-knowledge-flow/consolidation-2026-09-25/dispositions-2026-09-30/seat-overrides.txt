@@ -1,0 +1,17 @@
+# seat overrides after first-hand verification (row | verdict | note)
+B-16 | OWNER-CARD | a Director ruling for PDR-117 §The Director role; the owner's card
+B-19 | SESSION-SCOPED | described a unit mapping that never landed and a Director's board of a closed tenure
+B-22 | HOMED | the plan-node schema's born-sketch contract carries it (plan-node-schema.md:91-93); the two seats' readings stay unreconciled
+B-24 | OWNER-CARD | a Director ruling for PDR-064 §Moment 1; the owner's card
+B-38 | OWNER-CARD | a relayed ruling for PDR-125 §Decision; the owner's card
+B-39 | OWNER-CARD | a relayed ruling for PDR-125 §Decision; the owner's card
+B-32 | SESSION-SCOPED | a Director's fifteen-minute reading on one day; the standing ten-minute threshold in liveness-heartbeat-cron governs
+C-35 | OWED | a candidate second detector for the absorption-dark shape, a frictions-register candidate rather than a lesson
+D-16 | OWED | the plan skill's node-type table reconciliation with ADR-216, routed to a follow-on skills PR on 2026-09-06 and not landed
+C-61 | HOMED | directive-file-context-budget §Reading the Figure carries the stale first post-compaction reading (69 % then 11 %, 2026-09-19); a second instance, not a new lesson
+C-93 | OWED | a TSDoc line on repository-paths.ts PROBE_ARGS (the probe runs without --no-index on purpose); a code-comment slice for the agent-tools lane, both estates
+D-33 | SUPERSEDED | the event's settled reading (never a path exclusion or query filter) was voided by the owner's 2026-09-17 word at sonar-disposition-policy.md §Permanent exclusions; the retrospective's verifier leg
+C-77 | OWED | the hazard (unpushed commits and a pull request body living only in a worktree under the machine temp directory) has no home; owed as one clause in important-state-not-in-temp-files §2 or set-up-worktree-lane; the verifier leg
+B-22 | OWED | the plan-node schema's stamp semantics and two ratified nodes' "Ratified in advance of authoring" stamps contradict; owed as a re-true of the two stamps or the schema, an owner question
+D-42 | OWED | the Sif annex correction is owed to the Codex lane's plan node while the owner has parked Codex (2026-09-28); the seat's insert of 2026-09-30 was withdrawn the same day
+D-43 | OWED | the idle-wake finding is owed to the Codex lane's plan node while the owner has parked Codex; the use-monitor rule keeps its stated position until a decision re-trues it; the insert was withdrawn

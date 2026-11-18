@@ -216,6 +216,12 @@ tier, its name settled at this landing per ADR-213 §3. Edges:
   is deliberately excluded from the tuple and carries its own structural
   leg; see the directory row above.)_
 
+**Adding a top-level tier** is an upstream-owned admission: the census root constant, the
+two dependency-cruiser regexes, the workspace list and a row in this ADR — and the
+single-level isolation validator does not see a two-level workspace glob (measured
+2026-09-06 on a refuted fork-only tier; the dated narrative lives with that
+measurement's plan record, which cites this ADR).
+
 ## Links
 
 - Plan (completed): `.agent/plans/archive/completed/architectural-refinements-plan.md`

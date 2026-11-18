@@ -7,6 +7,7 @@
  * with cross-subject term identification and first-year tracking.
  */
 import type { Logger } from '@oaknational/logger';
+import type { FileSystemPort } from '../../io/file-system-port.js';
 import type { ExtractedKeyword } from '../extractors/index.js';
 import {
   serializeDatasetToJson,
@@ -224,16 +225,19 @@ export function serializeVocabularyGraph(graph: VocabularyGraph): string {
  *
  * @param graph - The graph data to write
  * @param outputDir - Directory to write the file to
+ * @param fs - The file system to write through
+ * @param logger - Optional logger for the write event
  * @returns Path to the created `vocabulary-graph` directory
  */
 export async function writeVocabularyGraphAsJson(
   graph: VocabularyGraph,
   outputDir: string,
+  fs: FileSystemPort,
   logger?: Logger,
 ): Promise<string> {
   logger?.info('bulk.writer.write_vocabulary_graph', {
     outputDir,
     sourceVersion: graph.sourceVersion,
   });
-  return writeJsonDataset(vocabularyGraphDescriptor, graph, outputDir, logger);
+  return writeJsonDataset(vocabularyGraphDescriptor, graph, outputDir, fs, logger);
 }

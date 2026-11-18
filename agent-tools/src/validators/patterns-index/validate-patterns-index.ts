@@ -101,7 +101,7 @@ async function reconcileIndex(entries: readonly PatternEntry[]): Promise<void> {
   writeLine(
     `validate-patterns-index: the Pattern Index is out of sync with the ${count} pattern files ` +
       `(missing entries, stale counts, or a hand-edit). ` +
-      `Run \`pnpm --filter @oaknational/agent-tools validate-patterns-index:fix\`.`,
+      `Run \`pnpm --filter ./agent-tools validate-patterns-index:fix\`.`,
   );
   process.exitCode = 1;
 }

@@ -3,8 +3,8 @@
 **Type**: Reasoning-discipline reference (portable Practice substance)
 **Origin**: promoted from research and re-aimed for the agent-as-thinker (2026-06-22)
 
-This is the deep reference behind the `oak-reason` skill — the outward, structured-thinking
-pair to `oak-metacognition`'s inward reflection. `oak-reason` carries the few moves that fire
+This is the deep reference behind the `reason` skill — the outward, structured-thinking
+pair to `metacognition`'s inward reflection. `reason` carries the few moves that fire
 on everyday analysis and decisions; this document is the full grammar those moves point to, and
 the yardstick to read against for complex rewrites and high-stakes planning.
 
@@ -62,14 +62,14 @@ The warrant is often where the real argument lives. It contains the values, thre
 
 A disciplined thinker asks:
 
-* What exactly is being claimed?
-* What would make that claim true, false, stronger, weaker, or irrelevant?
-* What reasons are being offered?
-* Are the reasons independent, or are they the same reason repeated in different language?
-* What assumptions connect the reasons to the conclusion?
-* What scope does the claim have?
-* What exceptions would I accept?
-* What would I change my mind about?
+- What exactly is being claimed?
+- What would make that claim true, false, stronger, weaker, or irrelevant?
+- What reasons are being offered?
+- Are the reasons independent, or are they the same reason repeated in different language?
+- What assumptions connect the reasons to the conclusion?
+- What scope does the claim have?
+- What exceptions would I accept?
+- What would I change my mind about?
 
 The goal is not to make everything formal. The goal is to prevent fog from masquerading as depth.
 
@@ -92,13 +92,13 @@ Those are different claims.
 
 When thinking feels stuck, ask which mode you are in:
 
-* Are we describing the situation?
-* Explaining causes?
-* Evaluating quality?
-* Predicting future behaviour?
-* Choosing an action?
-* Persuading people to coordinate?
-* Creating shared meaning?
+- Are we describing the situation?
+- Explaining causes?
+- Evaluating quality?
+- Predicting future behaviour?
+- Choosing an action?
+- Persuading people to coordinate?
+- Creating shared meaning?
 
 Each mode has different standards.
 
@@ -127,12 +127,12 @@ Observations are not pure. They depend on instruments, categories, context, atte
 
 Ask:
 
-* Who observed it?
-* With what instrument or method?
-* Under what conditions?
-* Was it recorded?
-* Could it be independently checked?
-* What was excluded by the measurement?
+- Who observed it?
+- With what instrument or method?
+- Under what conditions?
+- Was it recorded?
+- Could it be independently checked?
+- What was excluded by the measurement?
 
 ### Data
 
@@ -142,12 +142,12 @@ Data is not reality. It is reality after selection, compression, formatting, and
 
 Ask:
 
-* What was counted?
-* What was not counted?
-* What is the unit?
-* What is the denominator?
-* What changed in collection method?
-* What incentives shaped the data?
+- What was counted?
+- What was not counted?
+- What is the unit?
+- What is the denominator?
+- What changed in collection method?
+- What incentives shaped the data?
 
 ### Interpretation
 
@@ -157,10 +157,10 @@ Interpretation is where patterns are named. This is often useful, but also dange
 
 Ask:
 
-* What else could this pattern mean?
-* Is this signal, noise, bias, delay, or selection effect?
-* Does the interpretation survive disaggregation?
-* Would someone with different incentives interpret it differently?
+- What else could this pattern mean?
+- Is this signal, noise, bias, delay, or selection effect?
+- Does the interpretation survive disaggregation?
+- Would someone with different incentives interpret it differently?
 
 ### Model
 
@@ -170,12 +170,12 @@ A model may be verbal, mathematical, visual, procedural, or embodied in software
 
 Ask:
 
-* What does this model include?
-* What does it ignore?
-* What scale is it valid at?
-* What failure modes does it hide?
-* What does it predict?
-* What would falsify or weaken it?
+- What does this model include?
+- What does it ignore?
+- What scale is it valid at?
+- What failure modes does it hide?
+- What does it predict?
+- What would falsify or weaken it?
 
 ### Judgement
 
@@ -185,12 +185,12 @@ Judgement combines evidence, values, models, timing, constraints, risk tolerance
 
 Ask:
 
-* What decision does this judgement support?
-* What uncertainty remains?
-* What is the cost of being wrong?
-* Is the judgement reversible?
-* Who bears the downside?
-* What would trigger reconsideration?
+- What decision does this judgement support?
+- What uncertainty remains?
+- What is the cost of being wrong?
+- Is the judgement reversible?
+- Who bears the downside?
+- What would trigger reconsideration?
 
 ### Action
 
@@ -200,11 +200,11 @@ Action is where thought becomes consequential. It creates new evidence, but also
 
 Ask:
 
-* What do we expect to happen?
-* How will we know?
-* What should we monitor?
-* What is the rollback path?
-* What did reality teach us?
+- What do we expect to happen?
+- How will we know?
+- What should we monitor?
+- What is the rollback path?
+- What did reality teach us?
 
 The ladder matters because many failures come from climbing too quickly. A few observations become a story. A story becomes a model. A model becomes identity. Identity resists correction.
 
@@ -363,18 +363,18 @@ A problem is not merely an undesirable situation. A problem is an undesirable si
 
 Bad problem statements smuggle in solutions:
 
-* “We need a new platform.”
-* “We need AI.”
-* “We need better communication.”
-* “We need to move faster.”
-* “We need more process.”
+- “We need a new platform.”
+- “We need AI.”
+- “We need better communication.”
+- “We need to move faster.”
+- “We need more process.”
 
 Better problem statements identify a gap, context, and consequence:
 
-* “Teachers cannot reliably find appropriate material within the time available, causing avoidable planning burden.”
-* “The current architecture makes small changes require cross-cutting coordination, reducing our ability to adapt safely.”
-* “Our planning artefacts encode intent inconsistently, so agents and humans cannot reliably recover why work exists.”
-* “The organisation is optimising local delivery while losing global learning.”
+- “Teachers cannot reliably find appropriate material within the time available, causing avoidable planning burden.”
+- “The current architecture makes small changes require cross-cutting coordination, reducing our ability to adapt safely.”
+- “Our planning artefacts encode intent inconsistently, so agents and humans cannot reliably recover why work exists.”
+- “The organisation is optimising local delivery while losing global learning.”
 
 A strong problem frame has these parts:
 
@@ -579,11 +579,11 @@ Altitude 5 — Values, identity, legitimacy, future
 
 Then ask:
 
-* At what altitude is the current disagreement?
-* Does the lower-level decision preserve the higher-level intent?
-* Does the higher-level vision constrain actual implementation?
-* What information is lost when moving upward?
-* What intent is lost when moving downward?
+- At what altitude is the current disagreement?
+- Does the lower-level decision preserve the higher-level intent?
+- Does the higher-level vision constrain actual implementation?
+- What information is lost when moving upward?
+- What intent is lost when moving downward?
 
 Good thinking moves up to find meaning and down to preserve contact with reality.
 
@@ -605,10 +605,10 @@ Balancing feedback stabilises change. A thermostat corrects temperature. A team 
 
 Ask:
 
-* What loops are present?
-* Which loops reinforce?
-* Which loops stabilise?
-* Which loops dominate under stress?
+- What loops are present?
+- Which loops reinforce?
+- Which loops stabilise?
+- Which loops dominate under stress?
 
 ### Delay
 
@@ -618,9 +618,9 @@ A decision may look successful before its costs appear. A system may look stable
 
 Ask:
 
-* When will the consequences appear?
-* Are we rewarding early signals while ignoring late costs?
-* What slow variables are changing?
+- When will the consequences appear?
+- Are we rewarding early signals while ignoring late costs?
+- What slow variables are changing?
 
 ### Stocks and Flows
 
@@ -630,10 +630,10 @@ Knowledge, trust, technical debt, morale, soil fertility, public legitimacy, use
 
 Ask:
 
-* What stock are we drawing down?
-* What replenishes it?
-* What depletes it?
-* Are we mistaking flow for stock?
+- What stock are we drawing down?
+- What replenishes it?
+- What depletes it?
+- Are we mistaking flow for stock?
 
 ### Boundaries
 
@@ -643,10 +643,10 @@ If you draw the boundary around code, the problem may look technical. Around the
 
 Ask:
 
-* What is inside the model?
-* What is outside?
-* Who benefits from this boundary?
-* What becomes invisible?
+- What is inside the model?
+- What is outside?
+- Who benefits from this boundary?
+- What becomes invisible?
 
 ### Emergence
 
@@ -656,10 +656,10 @@ Culture, traffic, markets, ecosystems, software maintainability, and public trus
 
 Ask:
 
-* What behaviour emerges from the relationships?
-* What local incentives produce global dysfunction?
-* What simple rules generate the observed complexity?
-* What would change the interaction pattern?
+- What behaviour emerges from the relationships?
+- What local incentives produce global dysfunction?
+- What simple rules generate the observed complexity?
+- What would change the interaction pattern?
 
 ### Leverage
 
@@ -699,10 +699,10 @@ A model that explains everything explains too much. Good models take risks. They
 
 Ask:
 
-* What does this model predict?
-* What would it not predict?
-* What would make it fail?
-* Is it compatible with every possible outcome?
+- What does this model predict?
+- What would it not predict?
+- What would make it fail?
+- Is it compatible with every possible outcome?
 
 ### Use Anomalies Carefully
 
@@ -710,11 +710,11 @@ An anomaly is not automatically a refutation. It may be measurement error, edge 
 
 Ask:
 
-* Is the anomaly real?
-* Is it important?
-* Does it undermine the model or only narrow its scope?
-* Are anomalies accumulating?
-* Are we inventing excuses to protect the model?
+- Is the anomaly real?
+- Is it important?
+- Does it undermine the model or only narrow its scope?
+- Are anomalies accumulating?
+- Are we inventing excuses to protect the model?
 
 ### Distinguish Normal Work from Paradigm Change
 
@@ -724,11 +724,11 @@ But sometimes the frame itself becomes the problem. The signs include repeated a
 
 In organisations, the equivalent might be:
 
-* The process works only by exception.
-* The architecture works only through heroic effort.
-* The strategy works only by ignoring reality.
-* The metrics work only by distorting behaviour.
-* The plan works only if nothing changes.
+- The process works only by exception.
+- The architecture works only through heroic effort.
+- The strategy works only by ignoring reality.
+- The metrics work only by distorting behaviour.
+- The plan works only if nothing changes.
 
 At that point, better thinking may require reframing, not optimisation.
 
@@ -744,12 +744,12 @@ A claim becomes stronger when others can inspect the evidence, method, assumptio
 
 A strong experiment states:
 
-* We believe X causes Y.
-* We will change X.
-* We expect Y to change in this way.
-* We will monitor Z guardrails.
-* If we see A, we will update toward this model.
-* If we see B, we will update away from it.
+- We believe X causes Y.
+- We will change X.
+- We expect Y to change in this way.
+- We will monitor Z guardrails.
+- If we see A, we will update toward this model.
+- If we see B, we will update away from it.
 
 Experimentation without theory produces activity. Theory without experiment produces insulation. Good inquiry needs both.
 
@@ -759,7 +759,7 @@ Experimentation without theory produces activity. Theory without experiment prod
 
 Rhetoric is often misused to mean empty persuasion. That is too narrow. At its best, rhetoric is the art of making thought available to an audience.
 
-For you, the audience is the owner, peer agents, and reviewers, and the medium is comms, plans, and handoff. Making your reasoning *travel* — survive the crossing into another mind that does not hold your context — is the exact problem the continuity substrate exists to solve.
+For you, the audience is the owner, peer agents, and reviewers, and the medium is comms, plans, and handoff. Making your reasoning _travel_ — survive the crossing into another mind that does not hold your context — is the exact problem the continuity substrate exists to solve.
 
 Reasoning does not complete itself inside one mind. It has to travel. It has to survive differences in knowledge, attention, incentives, emotion, and trust.
 
@@ -773,11 +773,11 @@ This includes claims, arguments, examples, analogies, definitions, distinctions,
 
 Invention asks:
 
-* What are the available arguments?
-* What matters to this audience?
-* What values are in play?
-* What examples make the structure visible?
-* What objections must be addressed?
+- What are the available arguments?
+- What matters to this audience?
+- What values are in play?
+- What examples make the structure visible?
+- What objections must be addressed?
 
 ### Arrangement
 
@@ -839,16 +839,16 @@ Criticise the claim without humiliating the person. This is not softness. It imp
 
 Disagreements may occur at different levels:
 
-* Facts: what is true?
-* Definitions: what do terms mean?
-* Causality: what produces what?
-* Values: what matters most?
-* Thresholds: how much is enough?
-* Risk: what downside is acceptable?
-* Trust: whose testimony counts?
-* Scope: where does this apply?
-* Timing: when should action happen?
-* Authority: who gets to decide?
+- Facts: what is true?
+- Definitions: what do terms mean?
+- Causality: what produces what?
+- Values: what matters most?
+- Thresholds: how much is enough?
+- Risk: what downside is acceptable?
+- Trust: whose testimony counts?
+- Scope: where does this apply?
+- Timing: when should action happen?
+- Authority: who gets to decide?
 
 Many arguments persist because people debate one level while disagreeing at another.
 
@@ -866,14 +866,14 @@ Together:
 
 Useful questions include:
 
-* What would make this view wrong?
-* What is the strongest objection to your position?
-* What are you most uncertain about?
-* What trade-off are you accepting?
-* What risk worries you least, and why?
-* What are you protecting with this view?
-* What would you do if you had to own the downside?
-* What would change if we extended the time horizon?
+- What would make this view wrong?
+- What is the strongest objection to your position?
+- What are you most uncertain about?
+- What trade-off are you accepting?
+- What risk worries you least, and why?
+- What are you protecting with this view?
+- What would you do if you had to own the downside?
+- What would change if we extended the time horizon?
 
 Good questions are not ornamental. They are cognitive tools.
 
@@ -962,13 +962,13 @@ It is harmful when it suppresses relevant differences or invents false similarit
 
 Good categorisation asks:
 
-* What is the purpose of this category?
-* What distinctions does it preserve?
-* What distinctions does it erase?
-* Who is helped by this grouping?
-* Who is harmed?
-* What edge cases reveal its limits?
-* Is this a natural kind, a practical grouping, a legal category, a moral category, a measurement convenience, or a political frame?
+- What is the purpose of this category?
+- What distinctions does it preserve?
+- What distinctions does it erase?
+- Who is helped by this grouping?
+- Who is harmed?
+- What edge cases reveal its limits?
+- Is this a natural kind, a practical grouping, a legal category, a moral category, a measurement convenience, or a political frame?
 
 For example, “technical debt” can be a useful category if it means “future cost incurred by present design choices.” It becomes harmful if it becomes a vague label for all disliked code.
 
@@ -1004,10 +1004,10 @@ Waiting is also a decision. Delay can preserve optionality, but it can also cons
 
 Ask:
 
-* What is the cost of acting now?
-* What is the cost of waiting?
-* Does waiting produce useful information?
-* Or does it merely postpone responsibility?
+- What is the cost of acting now?
+- What is the cost of waiting?
+- Does waiting produce useful information?
+- Or does it merely postpone responsibility?
 
 ### Expected Value and Downside
 
@@ -1015,11 +1015,11 @@ A decision may have positive average value but unacceptable downside.
 
 Ask:
 
-* What is the best case?
-* What is the likely case?
-* What is the worst credible case?
-* Who bears the worst case?
-* Can we cap the downside?
+- What is the best case?
+- What is the likely case?
+- What is the worst credible case?
+- Who bears the worst case?
+- Can we cap the downside?
 
 ### Information Value
 
@@ -1027,10 +1027,10 @@ Some uncertainty is worth reducing. Some is not.
 
 Ask:
 
-* What would we do differently if we knew?
-* How expensive is it to find out?
-* How long would it take?
-* Can we run a cheap probe?
+- What would we do differently if we knew?
+- How expensive is it to find out?
+- How long would it take?
+- Can we run a cheap probe?
 
 ### Option Value
 
@@ -1044,10 +1044,10 @@ Regret is not always irrational. It can encode values.
 
 Ask:
 
-* Which mistake would we regret more?
-* Which mistake is recoverable?
-* Which mistake violates our responsibilities?
-* Which mistake merely embarrasses us?
+- Which mistake would we regret more?
+- Which mistake is recoverable?
+- Which mistake violates our responsibilities?
+- Which mistake merely embarrasses us?
 
 ### Decision Record
 
@@ -1344,18 +1344,18 @@ Be humble, but not passive.
 The mature thinker does not merely ask, “Is this argument valid?”
 They ask:
 
-* What kind of thing is this?
-* What level am I reasoning at?
-* What problem is being solved?
-* What system produces this behaviour?
-* What assumptions carry the weight?
-* What values are active?
-* What evidence would matter?
-* What alternatives exist?
-* What would failure look like?
-* What should be preserved?
-* What should change?
-* What can be learned next?
+- What kind of thing is this?
+- What level am I reasoning at?
+- What problem is being solved?
+- What system produces this behaviour?
+- What assumptions carry the weight?
+- What values are active?
+- What evidence would matter?
+- What alternatives exist?
+- What would failure look like?
+- What should be preserved?
+- What should change?
+- What can be learned next?
 
 The deepest discipline is not cleverness. It is contact: contact with reality, with consequence, with other minds, with uncertainty, with history, with future possibility.
 

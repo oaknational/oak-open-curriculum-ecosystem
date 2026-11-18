@@ -1,7 +1,7 @@
 # Oak Curriculum MCP – Streamable HTTP (Vercel-ready)
 
-Status: private alpha
-Next status: public alpha
+Status: see [Oak's page for the plugin](https://www.thenational.academy/ai-plugin), which says
+what is available and where.
 
 > **New here?** Start at the
 > [repo root README](../../README.md) and the
@@ -180,8 +180,8 @@ Tokens live in `packages/design/oak-design-tokens/src/tokens/`:
 Dark mode is CSS-only via `@media (prefers-color-scheme: dark)` — no
 JavaScript theme switching. The build pipeline generates
 `dist/contrast-report.json` validating all declared pairings against
-WCAG AA thresholds. Violations fail the build (unless `OAK_TOKEN_DEV=1`
-is set for iterative development).
+WCAG AA thresholds. Violations fail the build, except under the `--dev`
+flag the widget dev server's token watcher passes for iterative development.
 
 The widget loads **Google Fonts (Lexend)** via `@import` from
 `fonts.googleapis.com` and `fonts.gstatic.com`. These domains are
@@ -516,6 +516,7 @@ pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:widget:a11y
 - [MCP primitives: intention and intended audience](docs/mcp-primitives-intention-and-audience.md) - Internal guide to tool/resource boundaries (zero prompts), control model, and UAT expectations
 - [MCP Registry publication](docs/mcp-registry-publication.md) — how the `server.json` entry is composed from the deployment and proved before publishing, the namespace decision and its ownership proofs, and how the entry stays true
 - [Observability](docs/observability.md) — Sentry instrumentation, per-request span, scope enrichment, redaction barrier, release metadata, source-map upload
+- [Production snagging list](../../docs/operations/mcp-server-production-snagging.md) — faults and shortcomings seen on the production server and not yet fixed or accepted
 - [Operational Debugging](docs/operational-debugging.md) — request tracing, timing, diagnostics, error debugging, production logging
 - [Widget Rendering](docs/widget-rendering.md) — widget dispatch, rendering architecture, and sandbox details
 

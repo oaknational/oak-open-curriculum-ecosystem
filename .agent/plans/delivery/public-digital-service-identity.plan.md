@@ -21,10 +21,20 @@ owner_gates: []
 # §2026-08-07 amendment, PR #817), so the gate DISCHARGED 2026-08-07
 # with tickets left [] — a visibility ticket remains optional working
 # practice.
-last_updated: 2026-08-07
+last_updated: 2026-09-05
 ---
 
 # Public Digital Service identity — total naming replacement
+
+**Landed state (re-trued 2026-09-05, records-truth pass MCP-613).** The
+rename landed across the design surfaces (`a967f8979` and the arc around
+it), and the census-driven validator
+(`agent-tools/src/validators/identity-naming/`) holds every remaining
+occurrence to its census row in ratchet mode. Open, and the reason this
+plan stays ratified rather than archived: PR5's tail — the archive
+value-parity audit and removal, the census emptied and deleted, the
+validator flipped to strict — is AC4, and the census still carries rows,
+all under `.agent/` records. Archival follows AC4.
 
 **Dated note (2026-08-03).** Authored, ratified, and taken to DECISION-COMPLETE
 in one sitting at the owner's word by the executing design seat (Corsair hunts

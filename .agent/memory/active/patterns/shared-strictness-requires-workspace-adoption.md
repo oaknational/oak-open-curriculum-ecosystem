@@ -3,6 +3,7 @@ name: "Shared Strictness Requires Workspace Adoption"
 polarity: pattern
 use_this_when: "A repo has landed a root strictness or gate foundation and it is tempting to treat the shared config itself as completion before every claimed participant actually composes it and passes under it"
 category: process
+layer: general
 proven_in: "agent-tools/package.json"
 proven_date: 2026-04-05
 barrier:

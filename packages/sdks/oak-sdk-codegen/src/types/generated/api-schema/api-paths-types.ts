@@ -1,4 +1,143 @@
-export interface paths {
+/**
+ * Union types the schema declares inline at three or more sites, each
+ * declared once here and referenced by name where openapi-typescript
+ * emitted it (sonarjs/use-type-alias).
+ */
+type AssetsType = "slideDeck" | "exitQuiz" | "exitQuizAnswers" | "starterQuiz" | "starterQuizAnswers" | "supplementaryResource" | "video" | "worksheet" | "worksheetAnswers";
+type Subject = "art" | "citizenship" | "computing" | "cooking-nutrition" | "design-technology" | "english" | "french" | "geography" | "german" | "history" | "maths" | "music" | "physical-education" | "religious-education" | "rshe-pshe" | "science" | "spanish";
+type QuizItem = {
+                /** The question text */
+                question: string;
+
+                questionType: "multiple-choice";
+                questionImage?: {
+                    url: string;
+                    width: number;
+                    height: number;
+                    alt?: string;
+                    /** Supplementary text for the image, if any */
+                    text?: string;
+                    attribution?: string;
+                };
+                answers: ({
+                    /**
+                     * The format of the quiz answer
+                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+
+                     */
+                    type: "text";
+                    /** Quiz question answer */
+                    content: string;
+                    /** Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
+                    distractor: boolean;
+                } | {
+
+                    type: "image";
+                    content: {
+                        url: string;
+                        width: number;
+                        height: number;
+                        alt?: string;
+                        /** Supplementary text for the image, if any */
+                        text?: string;
+                        attribution?: string;
+                    };
+                    /** Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
+                    distractor: boolean;
+                })[];
+            } | {
+                /** The question text */
+                question: string;
+
+                questionType: "short-answer";
+                questionImage?: {
+                    url: string;
+                    width: number;
+                    height: number;
+                    alt?: string;
+                    /** Supplementary text for the image, if any */
+                    text?: string;
+                    attribution?: string;
+                };
+                answers: {
+                    /**
+                     * The format of the quiz answer
+                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+
+                     */
+                    type: "text";
+                    /** Quiz question answer */
+                    content: string;
+                }[];
+            } | {
+                /** The question text */
+                question: string;
+
+                questionType: "match";
+                questionImage?: {
+                    url: string;
+                    width: number;
+                    height: number;
+                    alt?: string;
+                    /** Supplementary text for the image, if any */
+                    text?: string;
+                    attribution?: string;
+                };
+                answers: {
+                    /** Matching options (LHS) */
+                    matchOption: {
+                        /**
+                         * The format of the quiz answer
+                         *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+
+                         */
+                        type: "text";
+                        /** Quiz question answer */
+                        content: string;
+                    };
+                    /** Matching options (RHS), indicating the correct choice */
+                    correctChoice: {
+                        /**
+                         * The format of the quiz answer
+                         *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+
+                         */
+                        type: "text";
+                        /** Quiz question answer */
+                        content: string;
+                    };
+                }[];
+            } | {
+                /** The question text */
+                question: string;
+
+                questionType: "order";
+                questionImage?: {
+                    url: string;
+                    width: number;
+                    height: number;
+                    alt?: string;
+                    /** Supplementary text for the image, if any */
+                    text?: string;
+                    attribution?: string;
+                };
+                answers: ({
+                    /** Indicates the correct ordering of the response */
+                    order: number;
+                } & {
+                    /**
+                     * The format of the quiz answer
+                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+
+                     */
+                    type: "text";
+                    /** Quiz question answer */
+                    content: string;
+                })[];
+            };
+type ChildSubjectSlug = "biology" | "chemistry" | "combined-science" | "physics";
+type KeyStage = "ks1" | "ks2" | "ks3" | "ks4";
+export interface Paths {
     "/sequences/{sequence}": {
         parameters: {
             query?: never;
@@ -14,7 +153,7 @@ export interface paths {
          *
          *     Example: sequence=maths-primary or science-secondary-aqa.
          */
-        get: operations["getSequences-getSubjectSequence"];
+        get: Operations["getSequences-getSubjectSequence"];
         put?: never;
         post?: never;
         delete?: never;
@@ -38,7 +177,7 @@ export interface paths {
          *
          *     Example: sequence=science-secondary-aqa or maths-primary.
          */
-        get: operations["getSequences-getSequenceUnits"];
+        get: Operations["getSequences-getSequenceUnits"];
         put?: never;
         post?: never;
         delete?: never;
@@ -60,7 +199,7 @@ export interface paths {
          *
          *     Not for: searching across transcripts (GET /search/transcripts); the video file itself (GET /lessons/\{lesson\}/assets/\{type\} with type=video); lesson metadata (GET /lessons/\{lesson\}/summary).
          */
-        get: operations["getLessonTranscript-getLessonTranscript"];
+        get: Operations["getLessonTranscript-getLessonTranscript"];
         put?: never;
         post?: never;
         delete?: never;
@@ -84,7 +223,7 @@ export interface paths {
          *
          *     Example queries: the mitochondria are the powerhouse, to be or not to be, carry the one.
          */
-        get: operations["searchTranscripts-searchTranscripts"];
+        get: Operations["searchTranscripts-searchTranscripts"];
         put?: never;
         post?: never;
         delete?: never;
@@ -106,7 +245,7 @@ export interface paths {
          *
          *     Not for: assets in a single programme (GET /programmes/\{programme\}/assets); a single lesson's downloads (GET /lessons/\{lesson\}/assets); streaming one file (GET /lessons/\{lesson\}/assets/\{type\}); assets for a key stage + subject without programme structure (GET /key-stages/\{keyStage\}/subject/\{subject\}/assets).
          */
-        get: operations["getAssets-getSequenceAssets"];
+        get: Operations["getAssets-getSequenceAssets"];
         put?: never;
         post?: never;
         delete?: never;
@@ -128,7 +267,7 @@ export interface paths {
          *
          *     Not for: assets across a sequence (GET /sequences/\{sequence\}/assets); assets in one programme (GET /programmes/\{programme\}/assets); a single lesson's downloads (GET /lessons/\{lesson\}/assets); streaming one file (GET /lessons/\{lesson\}/assets/\{type\}).
          */
-        get: operations["getAssets-getSubjectAssets"];
+        get: Operations["getAssets-getSubjectAssets"];
         put?: never;
         post?: never;
         delete?: never;
@@ -150,7 +289,7 @@ export interface paths {
          *
          *     Not for: streaming the file itself (GET /lessons/\{lesson\}/assets/\{type\}); bulk asset retrieval across a key stage + subject (GET /key-stages/\{keyStage\}/subject/\{subject\}/assets), a sequence (GET /sequences/\{sequence\}/assets), or one programme (GET /programmes/\{programme\}/assets); lesson metadata (GET /lessons/\{lesson\}/summary).
          */
-        get: operations["getAssets-getLessonAssets"];
+        get: Operations["getAssets-getLessonAssets"];
         put?: never;
         post?: never;
         delete?: never;
@@ -172,7 +311,7 @@ export interface paths {
          *
          *     Not for: assets across a whole sequence (GET /sequences/\{sequence\}/assets); assets for a key stage + subject without programme structure (GET /key-stages/\{keyStage\}/subject/\{subject\}/assets); a single lesson's downloads (GET /lessons/\{lesson\}/assets); streaming one file (GET /lessons/\{lesson\}/assets/\{type\}).
          */
-        get: operations["getAssets-getProgrammeAssets"];
+        get: Operations["getAssets-getProgrammeAssets"];
         put?: never;
         post?: never;
         delete?: never;
@@ -194,7 +333,7 @@ export interface paths {
          *
          *     Not for: listing which asset types a lesson has (GET /lessons/\{lesson\}/assets); fetching the transcript (GET /lessons/\{lesson\}/transcript).
          */
-        get: operations["getAssets-getLessonAsset"];
+        get: Operations["getAssets-getLessonAsset"];
         put?: never;
         post?: never;
         delete?: never;
@@ -216,7 +355,7 @@ export interface paths {
          *
          *     Not for: a single subject (GET /subjects/\{subject\}); the key stages or year groups for a subject (GET /subjects/\{subject\}/key-stages or GET /subjects/\{subject\}/years); lessons or units inside a subject (GET /key-stages/\{keyStage\}/subject/\{subject\}/lessons or GET /key-stages/\{keyStage\}/subject/\{subject\}/units); the detail of one sequence (GET /sequences/\{sequence\}).
          */
-        get: operations["getSubjects-getAllSubjects"];
+        get: Operations["getSubjects-getAllSubjects"];
         put?: never;
         post?: never;
         delete?: never;
@@ -240,7 +379,7 @@ export interface paths {
          *
          *     Example: subject=maths.
          */
-        get: operations["getSubjects-getSubject"];
+        get: Operations["getSubjects-getSubject"];
         put?: never;
         post?: never;
         delete?: never;
@@ -264,7 +403,7 @@ export interface paths {
          *
          *     Example: 'subject=history'.
          */
-        get: operations["getSubjects-getSubjectKeyStages"];
+        get: Operations["getSubjects-getSubjectKeyStages"];
         put?: never;
         post?: never;
         delete?: never;
@@ -288,7 +427,7 @@ export interface paths {
          *
          *     Example: 'subject=english'.
          */
-        get: operations["getSubjects-getSubjectYears"];
+        get: Operations["getSubjects-getSubjectYears"];
         put?: never;
         post?: never;
         delete?: never;
@@ -310,7 +449,7 @@ export interface paths {
          *
          *     Not for: key stages restricted to a subject (GET /subjects/\{subject\}/key-stages).
          */
-        get: operations["getKeyStages-getKeyStages"];
+        get: Operations["getKeyStages-getKeyStages"];
         put?: never;
         post?: never;
         delete?: never;
@@ -334,7 +473,7 @@ export interface paths {
          *
          *     Example: keyStage=ks3, subject=maths, unit=perimeter-and-area.
          */
-        get: operations["getKeyStageSubjectLessons-getKeyStageSubjectLessons"];
+        get: Operations["getKeyStageSubjectLessons-getKeyStageSubjectLessons"];
         put?: never;
         post?: never;
         delete?: never;
@@ -356,7 +495,7 @@ export interface paths {
          *
          *     Not for: all units across a sequence (GET /sequences/\{sequence\}/units); units in one programme (GET /programmes/\{programme\}/units); a single unit (GET /units/\{unit\}/summary); lessons rather than units (GET /key-stages/\{keyStage\}/subject/\{subject\}/lessons); units in a thread (GET /threads/\{threadSlug\}/units).
          */
-        get: operations["getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits"];
+        get: Operations["getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits"];
         put?: never;
         post?: never;
         delete?: never;
@@ -378,7 +517,7 @@ export interface paths {
          *
          *     Not for: the metadata of one programme (GET /programmes/\{programme\}); the units, questions, or assets of one programme (GET /programmes/\{programme\}/units, GET /programmes/\{programme\}/questions, or GET /programmes/\{programme\}/assets); the sequence-level summary (GET /sequences/\{sequence\}).
          */
-        get: operations["getAllProgrammesForSubject-getAllProgrammesForSubject"];
+        get: Operations["getAllProgrammesForSubject-getAllProgrammesForSubject"];
         put?: never;
         post?: never;
         delete?: never;
@@ -400,7 +539,7 @@ export interface paths {
          *
          *     Not for: the units, questions, or assets of one programme (GET /programmes/\{programme\}/units, GET /programmes/\{programme\}/questions, or GET /programmes/\{programme\}/assets); the sequence-level summary (GET /sequences/\{sequence\}); all programmes for a subject (GET /subjects/\{subject\}/programmes).
          */
-        get: operations["getAllProgrammesForSubject-getProgramme"];
+        get: Operations["getAllProgrammesForSubject-getProgramme"];
         put?: never;
         post?: never;
         delete?: never;
@@ -422,7 +561,7 @@ export interface paths {
          *
          *       Not for: every unit across the whole sequence (GET /sequences/\{sequence\}/units); a flat list of units for a key stage + subject without programme structure (GET /key-stages/\{keyStage\}/subject/\{subject\}/units); a single unit (GET /units/\{unit\}/summary); units in a thread (GET /threads/\{threadSlug\}/units).
          */
-        get: operations["getAllProgrammesForSubject-getProgrammeUnits"];
+        get: Operations["getAllProgrammesForSubject-getProgrammeUnits"];
         put?: never;
         post?: never;
         delete?: never;
@@ -446,7 +585,7 @@ export interface paths {
          *
          *     - At least one of subject, keyStage, phase, unit or lesson must be provided - note that they are all the slug form of the values (e.g. "ks2" for key stage 2, "science" for the science subject, and "forces-and-magnets" for the forces and magnets unit), and that casing is important (always lowercase).
          */
-        get: operations["getKeywords-getKeywords"];
+        get: Operations["getKeywords-getKeywords"];
         put?: never;
         post?: never;
         delete?: never;
@@ -468,7 +607,7 @@ export interface paths {
          *
          *     Not for: quiz questions across a sequence (GET /sequences/\{sequence\}/questions); quiz questions in one programme (GET /programmes/\{programme\}/questions); across a key stage + subject (GET /key-stages/\{keyStage\}/subject/\{subject\}/questions); lesson metadata or assets (GET /lessons/\{lesson\}/summary or GET /lessons/\{lesson\}/assets).
          */
-        get: operations["getQuestions-getQuestionsForLessons"];
+        get: Operations["getQuestions-getQuestionsForLessons"];
         put?: never;
         post?: never;
         delete?: never;
@@ -490,7 +629,7 @@ export interface paths {
          *
          *     Not for: questions in a single programme (GET /programmes/\{programme\}/questions); a single lesson's quiz (GET /lessons/\{lesson\}/quiz); questions for a key stage + subject without programme structure (GET /key-stages/\{keyStage\}/subject/\{subject\}/questions).
          */
-        get: operations["getQuestions-getQuestionsForSequence"];
+        get: Operations["getQuestions-getQuestionsForSequence"];
         put?: never;
         post?: never;
         delete?: never;
@@ -512,7 +651,7 @@ export interface paths {
          *
          *     Not for: a single lesson's quiz (GET /lessons/\{lesson\}/quiz); questions across a sequence (GET /sequences/\{sequence\}/questions); questions in one programme (GET /programmes/\{programme\}/questions).
          */
-        get: operations["getQuestions-getQuestionsForKeyStageAndSubject"];
+        get: Operations["getQuestions-getQuestionsForKeyStageAndSubject"];
         put?: never;
         post?: never;
         delete?: never;
@@ -534,7 +673,7 @@ export interface paths {
          *
          *     Not for: questions in a single lesson (GET /lessons/\{lesson\}/quiz); questions across a whole sequence (GET /sequences/\{sequence\}/questions); questions for a key stage + subject without programme structure (GET /key-stages/\{keyStage\}/subject/\{subject\}/questions).
          */
-        get: operations["getQuestions-getQuestionsForProgramme"];
+        get: Operations["getQuestions-getQuestionsForProgramme"];
         put?: never;
         post?: never;
         delete?: never;
@@ -558,7 +697,7 @@ export interface paths {
          *
          *     Example slug: imagining-you-are-the-characters-the-three-billy-goats-gruff.
          */
-        get: operations["getLessons-getLesson"];
+        get: Operations["getLessons-getLesson"];
         put?: never;
         post?: never;
         delete?: never;
@@ -582,7 +721,7 @@ export interface paths {
          *
          *     Example queries: KS3 science photosynthesis, fractions year 5, Macbeth soliloquy.
          */
-        get: operations["getLessons-searchByTextSimilarity"];
+        get: Operations["getLessons-searchByTextSimilarity"];
         put?: never;
         post?: never;
         delete?: never;
@@ -604,7 +743,7 @@ export interface paths {
          *
          *     Not for: listing every unit in a key stage + subject (GET /key-stages/\{keyStage\}/subject/\{subject\}/units); all units across a sequence (GET /sequences/\{sequence\}/units); units in one programme (GET /programmes/\{programme\}/units); units in a thread (GET /threads/\{threadSlug\}/units); lessons inside the unit (GET /key-stages/\{keyStage\}/subject/\{subject\}/lessons with unit=\{unit\}).
          */
-        get: operations["getUnits-getUnit"];
+        get: Operations["getUnits-getUnit"];
         put?: never;
         post?: never;
         delete?: never;
@@ -626,7 +765,7 @@ export interface paths {
          *
          *     Not for: the units inside a thread (GET /threads/\{threadSlug\}/units).
          */
-        get: operations["getThreads-getAllThreads"];
+        get: Operations["getThreads-getAllThreads"];
         put?: never;
         post?: never;
         delete?: never;
@@ -650,7 +789,7 @@ export interface paths {
          *
          *     Example: 'threadSlug=number-and-place-value'.
          */
-        get: operations["getThreads-getThreadUnits"];
+        get: Operations["getThreads-getThreadUnits"];
         put?: never;
         post?: never;
         delete?: never;
@@ -670,7 +809,7 @@ export interface paths {
          * Current rate-limit status
          * Use when you need rate-limit status as a JSON body — e.g. for a quota indicator. Returns limit, remaining, and reset. The same data sits on the 'X-RateLimit-*' headers of every response, so this endpoint is rarely needed directly. Does not count against your quota.
          */
-        get: operations["getRateLimit-getRateLimit"];
+        get: Operations["getRateLimit-getRateLimit"];
         put?: never;
         post?: never;
         delete?: never;
@@ -680,8 +819,8 @@ export interface paths {
         trace?: never;
     };
 }
-export type webhooks = Record<string, never>;
-export interface components {
+export type Webhooks = Record<string, never>;
+export interface Components {
     schemas: {
         /**
          * @example \{
@@ -1380,7 +1519,7 @@ export interface components {
                  * @example slideDeck
 
                  */
-                type: "slideDeck" | "exitQuiz" | "exitQuizAnswers" | "starterQuiz" | "starterQuizAnswers" | "supplementaryResource" | "video" | "worksheet" | "worksheetAnswers";
+                type: AssetsType;
                 /** The label for the asset */
                 label: string;
                 /** The download endpoint for the asset. */
@@ -1432,7 +1571,7 @@ export interface components {
                  * @example slideDeck
 
                  */
-                type: "slideDeck" | "exitQuiz" | "exitQuizAnswers" | "starterQuiz" | "starterQuizAnswers" | "supplementaryResource" | "video" | "worksheet" | "worksheetAnswers";
+                type: AssetsType;
                 /** The label for the asset */
                 label: string;
                 /** The download endpoint for the asset. */
@@ -1486,7 +1625,7 @@ export interface components {
                  * @example slideDeck
 
                  */
-                type: "slideDeck" | "exitQuiz" | "exitQuizAnswers" | "starterQuiz" | "starterQuizAnswers" | "supplementaryResource" | "video" | "worksheet" | "worksheetAnswers";
+                type: AssetsType;
                 /** The label for the asset */
                 label: string;
                 /** The download endpoint for the asset. */
@@ -1527,7 +1666,7 @@ export interface components {
                  * @example slideDeck
 
                  */
-                type: "slideDeck" | "exitQuiz" | "exitQuizAnswers" | "starterQuiz" | "starterQuizAnswers" | "supplementaryResource" | "video" | "worksheet" | "worksheetAnswers";
+                type: AssetsType;
                 /** The label for the asset */
                 label: string;
                 /** The download endpoint for the asset. */
@@ -1549,7 +1688,7 @@ export interface components {
          *       "english"
          *     ]
          */
-        AllSubjectsResponseSchema: ("art" | "citizenship" | "computing" | "cooking-nutrition" | "design-technology" | "english" | "french" | "geography" | "german" | "history" | "maths" | "music" | "physical-education" | "religious-education" | "rshe-pshe" | "science" | "spanish")[];
+        AllSubjectsResponseSchema: Subject[];
         /**
          * @example \{
          *       "subjectTitle": "Science",
@@ -2230,136 +2369,7 @@ export interface components {
              *       \}
              *     ]
              */
-            starterQuiz: ({
-                /** The question text */
-                question: string;
-
-                questionType: "multiple-choice";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: ({
-                    /**
-                     * The format of the quiz answer
-                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                     */
-                    type: "text";
-                    /** Quiz question answer */
-                    content: string;
-                    /** Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
-                    distractor: boolean;
-                } | {
-
-                    type: "image";
-                    content: {
-                        url: string;
-                        width: number;
-                        height: number;
-                        alt?: string;
-                        /** Supplementary text for the image, if any */
-                        text?: string;
-                        attribution?: string;
-                    };
-                    /** Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
-                    distractor: boolean;
-                })[];
-            } | {
-                /** The question text */
-                question: string;
-
-                questionType: "short-answer";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: {
-                    /**
-                     * The format of the quiz answer
-                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                     */
-                    type: "text";
-                    /** Quiz question answer */
-                    content: string;
-                }[];
-            } | {
-                /** The question text */
-                question: string;
-
-                questionType: "match";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: {
-                    /** Matching options (LHS) */
-                    matchOption: {
-                        /**
-                         * The format of the quiz answer
-                         *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                         */
-                        type: "text";
-                        /** Quiz question answer */
-                        content: string;
-                    };
-                    /** Matching options (RHS), indicating the correct choice */
-                    correctChoice: {
-                        /**
-                         * The format of the quiz answer
-                         *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                         */
-                        type: "text";
-                        /** Quiz question answer */
-                        content: string;
-                    };
-                }[];
-            } | {
-                /** The question text */
-                question: string;
-
-                questionType: "order";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: ({
-                    /** Indicates the correct ordering of the response */
-                    order: number;
-                } & {
-                    /**
-                     * The format of the quiz answer
-                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                     */
-                    type: "text";
-                    /** Quiz question answer */
-                    content: string;
-                })[];
-            })[];
+            starterQuiz: QuizItem[];
             /**
              * The exit quiz questions - which test on the knowledge learned in the lesson
              * @example [
@@ -2391,136 +2401,7 @@ export interface components {
              *       \}
              *     ]
              */
-            exitQuiz: ({
-                /** The question text */
-                question: string;
-
-                questionType: "multiple-choice";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: ({
-                    /**
-                     * The format of the quiz answer
-                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                     */
-                    type: "text";
-                    /** Quiz question answer */
-                    content: string;
-                    /** Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
-                    distractor: boolean;
-                } | {
-
-                    type: "image";
-                    content: {
-                        url: string;
-                        width: number;
-                        height: number;
-                        alt?: string;
-                        /** Supplementary text for the image, if any */
-                        text?: string;
-                        attribution?: string;
-                    };
-                    /** Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
-                    distractor: boolean;
-                })[];
-            } | {
-                /** The question text */
-                question: string;
-
-                questionType: "short-answer";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: {
-                    /**
-                     * The format of the quiz answer
-                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                     */
-                    type: "text";
-                    /** Quiz question answer */
-                    content: string;
-                }[];
-            } | {
-                /** The question text */
-                question: string;
-
-                questionType: "match";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: {
-                    /** Matching options (LHS) */
-                    matchOption: {
-                        /**
-                         * The format of the quiz answer
-                         *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                         */
-                        type: "text";
-                        /** Quiz question answer */
-                        content: string;
-                    };
-                    /** Matching options (RHS), indicating the correct choice */
-                    correctChoice: {
-                        /**
-                         * The format of the quiz answer
-                         *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                         */
-                        type: "text";
-                        /** Quiz question answer */
-                        content: string;
-                    };
-                }[];
-            } | {
-                /** The question text */
-                question: string;
-
-                questionType: "order";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: ({
-                    /** Indicates the correct ordering of the response */
-                    order: number;
-                } & {
-                    /**
-                     * The format of the quiz answer
-                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                     */
-                    type: "text";
-                    /** Quiz question answer */
-                    content: string;
-                })[];
-            })[];
+            exitQuiz: QuizItem[];
             /**
              * Format: uri
              * The Oak URL for this resource — a direct, slug-based URL generated by the SDK. Distinct from canonicalUrl, which encodes full curriculum context.
@@ -2593,267 +2474,9 @@ export interface components {
             /** The title of the lesson */
             lessonTitle: string;
             /** The starter quiz questions - which test prior knowledge */
-            starterQuiz: ({
-                /** The question text */
-                question: string;
-
-                questionType: "multiple-choice";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: ({
-                    /**
-                     * The format of the quiz answer
-                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                     */
-                    type: "text";
-                    /** Quiz question answer */
-                    content: string;
-                    /** Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
-                    distractor: boolean;
-                } | {
-
-                    type: "image";
-                    content: {
-                        url: string;
-                        width: number;
-                        height: number;
-                        alt?: string;
-                        /** Supplementary text for the image, if any */
-                        text?: string;
-                        attribution?: string;
-                    };
-                    /** Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
-                    distractor: boolean;
-                })[];
-            } | {
-                /** The question text */
-                question: string;
-
-                questionType: "short-answer";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: {
-                    /**
-                     * The format of the quiz answer
-                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                     */
-                    type: "text";
-                    /** Quiz question answer */
-                    content: string;
-                }[];
-            } | {
-                /** The question text */
-                question: string;
-
-                questionType: "match";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: {
-                    /** Matching options (LHS) */
-                    matchOption: {
-                        /**
-                         * The format of the quiz answer
-                         *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                         */
-                        type: "text";
-                        /** Quiz question answer */
-                        content: string;
-                    };
-                    /** Matching options (RHS), indicating the correct choice */
-                    correctChoice: {
-                        /**
-                         * The format of the quiz answer
-                         *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                         */
-                        type: "text";
-                        /** Quiz question answer */
-                        content: string;
-                    };
-                }[];
-            } | {
-                /** The question text */
-                question: string;
-
-                questionType: "order";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: ({
-                    /** Indicates the correct ordering of the response */
-                    order: number;
-                } & {
-                    /**
-                     * The format of the quiz answer
-                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                     */
-                    type: "text";
-                    /** Quiz question answer */
-                    content: string;
-                })[];
-            })[];
+            starterQuiz: QuizItem[];
             /** The exit quiz questions - which test on the knowledge learned in the lesson */
-            exitQuiz: ({
-                /** The question text */
-                question: string;
-
-                questionType: "multiple-choice";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: ({
-                    /**
-                     * The format of the quiz answer
-                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                     */
-                    type: "text";
-                    /** Quiz question answer */
-                    content: string;
-                    /** Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
-                    distractor: boolean;
-                } | {
-
-                    type: "image";
-                    content: {
-                        url: string;
-                        width: number;
-                        height: number;
-                        alt?: string;
-                        /** Supplementary text for the image, if any */
-                        text?: string;
-                        attribution?: string;
-                    };
-                    /** Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
-                    distractor: boolean;
-                })[];
-            } | {
-                /** The question text */
-                question: string;
-
-                questionType: "short-answer";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: {
-                    /**
-                     * The format of the quiz answer
-                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                     */
-                    type: "text";
-                    /** Quiz question answer */
-                    content: string;
-                }[];
-            } | {
-                /** The question text */
-                question: string;
-
-                questionType: "match";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: {
-                    /** Matching options (LHS) */
-                    matchOption: {
-                        /**
-                         * The format of the quiz answer
-                         *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                         */
-                        type: "text";
-                        /** Quiz question answer */
-                        content: string;
-                    };
-                    /** Matching options (RHS), indicating the correct choice */
-                    correctChoice: {
-                        /**
-                         * The format of the quiz answer
-                         *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                         */
-                        type: "text";
-                        /** Quiz question answer */
-                        content: string;
-                    };
-                }[];
-            } | {
-                /** The question text */
-                question: string;
-
-                questionType: "order";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: ({
-                    /** Indicates the correct ordering of the response */
-                    order: number;
-                } & {
-                    /**
-                     * The format of the quiz answer
-                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                     */
-                    type: "text";
-                    /** Quiz question answer */
-                    content: string;
-                })[];
-            })[];
+            exitQuiz: QuizItem[];
             /**
              * Format: uri
              * The Oak URL for this resource — a direct, slug-based URL generated by the SDK. Distinct from canonicalUrl, which encodes full curriculum context.
@@ -2991,267 +2614,9 @@ export interface components {
             /** The title of the lesson */
             lessonTitle: string;
             /** The starter quiz questions - which test prior knowledge */
-            starterQuiz: ({
-                /** The question text */
-                question: string;
-
-                questionType: "multiple-choice";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: ({
-                    /**
-                     * The format of the quiz answer
-                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                     */
-                    type: "text";
-                    /** Quiz question answer */
-                    content: string;
-                    /** Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
-                    distractor: boolean;
-                } | {
-
-                    type: "image";
-                    content: {
-                        url: string;
-                        width: number;
-                        height: number;
-                        alt?: string;
-                        /** Supplementary text for the image, if any */
-                        text?: string;
-                        attribution?: string;
-                    };
-                    /** Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
-                    distractor: boolean;
-                })[];
-            } | {
-                /** The question text */
-                question: string;
-
-                questionType: "short-answer";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: {
-                    /**
-                     * The format of the quiz answer
-                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                     */
-                    type: "text";
-                    /** Quiz question answer */
-                    content: string;
-                }[];
-            } | {
-                /** The question text */
-                question: string;
-
-                questionType: "match";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: {
-                    /** Matching options (LHS) */
-                    matchOption: {
-                        /**
-                         * The format of the quiz answer
-                         *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                         */
-                        type: "text";
-                        /** Quiz question answer */
-                        content: string;
-                    };
-                    /** Matching options (RHS), indicating the correct choice */
-                    correctChoice: {
-                        /**
-                         * The format of the quiz answer
-                         *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                         */
-                        type: "text";
-                        /** Quiz question answer */
-                        content: string;
-                    };
-                }[];
-            } | {
-                /** The question text */
-                question: string;
-
-                questionType: "order";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: ({
-                    /** Indicates the correct ordering of the response */
-                    order: number;
-                } & {
-                    /**
-                     * The format of the quiz answer
-                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                     */
-                    type: "text";
-                    /** Quiz question answer */
-                    content: string;
-                })[];
-            })[];
+            starterQuiz: QuizItem[];
             /** The exit quiz questions - which test on the knowledge learned in the lesson */
-            exitQuiz: ({
-                /** The question text */
-                question: string;
-
-                questionType: "multiple-choice";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: ({
-                    /**
-                     * The format of the quiz answer
-                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                     */
-                    type: "text";
-                    /** Quiz question answer */
-                    content: string;
-                    /** Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
-                    distractor: boolean;
-                } | {
-
-                    type: "image";
-                    content: {
-                        url: string;
-                        width: number;
-                        height: number;
-                        alt?: string;
-                        /** Supplementary text for the image, if any */
-                        text?: string;
-                        attribution?: string;
-                    };
-                    /** Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
-                    distractor: boolean;
-                })[];
-            } | {
-                /** The question text */
-                question: string;
-
-                questionType: "short-answer";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: {
-                    /**
-                     * The format of the quiz answer
-                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                     */
-                    type: "text";
-                    /** Quiz question answer */
-                    content: string;
-                }[];
-            } | {
-                /** The question text */
-                question: string;
-
-                questionType: "match";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: {
-                    /** Matching options (LHS) */
-                    matchOption: {
-                        /**
-                         * The format of the quiz answer
-                         *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                         */
-                        type: "text";
-                        /** Quiz question answer */
-                        content: string;
-                    };
-                    /** Matching options (RHS), indicating the correct choice */
-                    correctChoice: {
-                        /**
-                         * The format of the quiz answer
-                         *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                         */
-                        type: "text";
-                        /** Quiz question answer */
-                        content: string;
-                    };
-                }[];
-            } | {
-                /** The question text */
-                question: string;
-
-                questionType: "order";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: ({
-                    /** Indicates the correct ordering of the response */
-                    order: number;
-                } & {
-                    /**
-                     * The format of the quiz answer
-                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                     */
-                    type: "text";
-                    /** Quiz question answer */
-                    content: string;
-                })[];
-            })[];
+            exitQuiz: QuizItem[];
             /**
              * Format: uri
              * The Oak URL for this resource — a direct, slug-based URL generated by the SDK. Distinct from canonicalUrl, which encodes full curriculum context.
@@ -3314,267 +2679,9 @@ export interface components {
             /** The title of the lesson */
             lessonTitle: string;
             /** The starter quiz questions - which test prior knowledge */
-            starterQuiz: ({
-                /** The question text */
-                question: string;
-
-                questionType: "multiple-choice";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: ({
-                    /**
-                     * The format of the quiz answer
-                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                     */
-                    type: "text";
-                    /** Quiz question answer */
-                    content: string;
-                    /** Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
-                    distractor: boolean;
-                } | {
-
-                    type: "image";
-                    content: {
-                        url: string;
-                        width: number;
-                        height: number;
-                        alt?: string;
-                        /** Supplementary text for the image, if any */
-                        text?: string;
-                        attribution?: string;
-                    };
-                    /** Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
-                    distractor: boolean;
-                })[];
-            } | {
-                /** The question text */
-                question: string;
-
-                questionType: "short-answer";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: {
-                    /**
-                     * The format of the quiz answer
-                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                     */
-                    type: "text";
-                    /** Quiz question answer */
-                    content: string;
-                }[];
-            } | {
-                /** The question text */
-                question: string;
-
-                questionType: "match";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: {
-                    /** Matching options (LHS) */
-                    matchOption: {
-                        /**
-                         * The format of the quiz answer
-                         *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                         */
-                        type: "text";
-                        /** Quiz question answer */
-                        content: string;
-                    };
-                    /** Matching options (RHS), indicating the correct choice */
-                    correctChoice: {
-                        /**
-                         * The format of the quiz answer
-                         *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                         */
-                        type: "text";
-                        /** Quiz question answer */
-                        content: string;
-                    };
-                }[];
-            } | {
-                /** The question text */
-                question: string;
-
-                questionType: "order";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: ({
-                    /** Indicates the correct ordering of the response */
-                    order: number;
-                } & {
-                    /**
-                     * The format of the quiz answer
-                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                     */
-                    type: "text";
-                    /** Quiz question answer */
-                    content: string;
-                })[];
-            })[];
+            starterQuiz: QuizItem[];
             /** The exit quiz questions - which test on the knowledge learned in the lesson */
-            exitQuiz: ({
-                /** The question text */
-                question: string;
-
-                questionType: "multiple-choice";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: ({
-                    /**
-                     * The format of the quiz answer
-                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                     */
-                    type: "text";
-                    /** Quiz question answer */
-                    content: string;
-                    /** Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
-                    distractor: boolean;
-                } | {
-
-                    type: "image";
-                    content: {
-                        url: string;
-                        width: number;
-                        height: number;
-                        alt?: string;
-                        /** Supplementary text for the image, if any */
-                        text?: string;
-                        attribution?: string;
-                    };
-                    /** Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
-                    distractor: boolean;
-                })[];
-            } | {
-                /** The question text */
-                question: string;
-
-                questionType: "short-answer";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: {
-                    /**
-                     * The format of the quiz answer
-                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                     */
-                    type: "text";
-                    /** Quiz question answer */
-                    content: string;
-                }[];
-            } | {
-                /** The question text */
-                question: string;
-
-                questionType: "match";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: {
-                    /** Matching options (LHS) */
-                    matchOption: {
-                        /**
-                         * The format of the quiz answer
-                         *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                         */
-                        type: "text";
-                        /** Quiz question answer */
-                        content: string;
-                    };
-                    /** Matching options (RHS), indicating the correct choice */
-                    correctChoice: {
-                        /**
-                         * The format of the quiz answer
-                         *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                         */
-                        type: "text";
-                        /** Quiz question answer */
-                        content: string;
-                    };
-                }[];
-            } | {
-                /** The question text */
-                question: string;
-
-                questionType: "order";
-                questionImage?: {
-                    url: string;
-                    width: number;
-                    height: number;
-                    alt?: string;
-                    /** Supplementary text for the image, if any */
-                    text?: string;
-                    attribution?: string;
-                };
-                answers: ({
-                    /** Indicates the correct ordering of the response */
-                    order: number;
-                } & {
-                    /**
-                     * The format of the quiz answer
-                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-
-                     */
-                    type: "text";
-                    /** Quiz question answer */
-                    content: string;
-                })[];
-            })[];
+            exitQuiz: QuizItem[];
             /**
              * Format: uri
              * The Oak URL for this resource — a direct, slug-based URL generated by the SDK. Distinct from canonicalUrl, which encodes full curriculum context.
@@ -3706,7 +2813,7 @@ export interface components {
                          * The slug identifier for the science child subject
 
                          */
-                        slug: "biology" | "chemistry" | "combined-science" | "physics";
+                        slug: ChildSubjectSlug;
                         /** The title of the science child subject */
                         title: string;
                     };
@@ -4057,7 +3164,7 @@ export interface components {
                      * The slug identifier for the science child subject
 
                      */
-                    slug: "biology" | "chemistry" | "combined-science" | "physics";
+                    slug: ChildSubjectSlug;
                     /** The title of the science child subject */
                     title: string;
                 };
@@ -4191,8 +3298,8 @@ export interface components {
     headers: never;
     pathItems: never;
 }
-export type $defs = Record<string, never>;
-export interface operations {
+export type $Defs = Record<string, never>;
+export interface Operations {
     "getSequences-getSubjectSequence": {
         parameters: {
             query?: never;
@@ -4209,28 +3316,28 @@ export interface operations {
             200: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["SubjectSequenceResponseSchema"];
+                    "application/json": Components["schemas"]["SubjectSequenceResponseSchema"];
                 };
             };
             /** Bad request - e.g. "Content is blocked for copyright reasons" */
             400: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                    "application/json": Components["schemas"]["error.BAD_REQUEST"];
                 };
             };
             /** API token not provided or invalid */
             401: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                    "application/json": Components["schemas"]["error.UNAUTHORIZED"];
                 };
             };
             /** Detail of the request causing the 404, e.g. "Lesson not found" */
             404: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                    "application/json": Components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -4254,28 +3361,28 @@ export interface operations {
             200: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["SequenceUnitsResponseSchema"];
+                    "application/json": Components["schemas"]["SequenceUnitsResponseSchema"];
                 };
             };
             /** Bad request - e.g. "Content is blocked for copyright reasons" */
             400: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                    "application/json": Components["schemas"]["error.BAD_REQUEST"];
                 };
             };
             /** API token not provided or invalid */
             401: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                    "application/json": Components["schemas"]["error.UNAUTHORIZED"];
                 };
             };
             /** Detail of the request causing the 404, e.g. "Lesson not found" */
             404: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                    "application/json": Components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -4296,28 +3403,28 @@ export interface operations {
             200: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["TranscriptResponseSchema"];
+                    "application/json": Components["schemas"]["TranscriptResponseSchema"];
                 };
             };
             /** Bad request - e.g. "Content is blocked for copyright reasons" */
             400: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                    "application/json": Components["schemas"]["error.BAD_REQUEST"];
                 };
             };
             /** API token not provided or invalid */
             401: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                    "application/json": Components["schemas"]["error.UNAUTHORIZED"];
                 };
             };
             /** Detail of the request causing the 404, e.g. "Lesson not found" */
             404: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                    "application/json": Components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -4338,28 +3445,28 @@ export interface operations {
             200: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["SearchTranscriptResponseSchema"];
+                    "application/json": Components["schemas"]["SearchTranscriptResponseSchema"];
                 };
             };
             /** Bad request - e.g. "Content is blocked for copyright reasons" */
             400: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                    "application/json": Components["schemas"]["error.BAD_REQUEST"];
                 };
             };
             /** API token not provided or invalid */
             401: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                    "application/json": Components["schemas"]["error.UNAUTHORIZED"];
                 };
             };
             /** Detail of the request causing the 404, e.g. "Lesson not found" */
             404: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                    "application/json": Components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -4374,7 +3481,7 @@ export interface operations {
                  *
                  *     Available values: slideDeck, exitQuiz, exitQuizAnswers, starterQuiz, starterQuizAnswers, supplementaryResource, video, worksheet, worksheetAnswers
                  */
-                type?: "slideDeck" | "exitQuiz" | "exitQuizAnswers" | "starterQuiz" | "starterQuizAnswers" | "supplementaryResource" | "video" | "worksheet" | "worksheetAnswers";
+                type?: AssetsType;
             };
             header?: never;
             path: {
@@ -4389,28 +3496,28 @@ export interface operations {
             200: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["SequenceAssetsResponseSchema"];
+                    "application/json": Components["schemas"]["SequenceAssetsResponseSchema"];
                 };
             };
             /** Bad request - e.g. "Content is blocked for copyright reasons" */
             400: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                    "application/json": Components["schemas"]["error.BAD_REQUEST"];
                 };
             };
             /** API token not provided or invalid */
             401: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                    "application/json": Components["schemas"]["error.UNAUTHORIZED"];
                 };
             };
             /** Detail of the request causing the 404, e.g. "Lesson not found" */
             404: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                    "application/json": Components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -4419,16 +3526,16 @@ export interface operations {
         parameters: {
             query?: {
                 /** Use this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/\{slug\}/assets/\{type\} endpoint */
-                type?: "slideDeck" | "exitQuiz" | "exitQuizAnswers" | "starterQuiz" | "starterQuizAnswers" | "supplementaryResource" | "video" | "worksheet" | "worksheetAnswers";
+                type?: AssetsType;
                 /** Optional unit slug to additionally filter by */
                 unit?: string;
             };
             header?: never;
             path: {
                 /** Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase */
-                keyStage: "ks1" | "ks2" | "ks3" | "ks4";
+                keyStage: KeyStage;
                 /** Subject slug to search by, e.g. 'science' - note that casing is important here (always lowercase) */
-                subject: "art" | "citizenship" | "computing" | "cooking-nutrition" | "design-technology" | "english" | "french" | "geography" | "german" | "history" | "maths" | "music" | "physical-education" | "religious-education" | "rshe-pshe" | "science" | "spanish";
+                subject: Subject;
             };
             cookie?: never;
         };
@@ -4438,28 +3545,28 @@ export interface operations {
             200: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["SubjectAssetsResponseSchema"];
+                    "application/json": Components["schemas"]["SubjectAssetsResponseSchema"];
                 };
             };
             /** Bad request - e.g. "Content is blocked for copyright reasons" */
             400: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                    "application/json": Components["schemas"]["error.BAD_REQUEST"];
                 };
             };
             /** API token not provided or invalid */
             401: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                    "application/json": Components["schemas"]["error.UNAUTHORIZED"];
                 };
             };
             /** Detail of the request causing the 404, e.g. "Lesson not found" */
             404: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                    "application/json": Components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -4472,7 +3579,7 @@ export interface operations {
                  *
                  *     Available values: slideDeck, exitQuiz, exitQuizAnswers, starterQuiz, starterQuizAnswers, supplementaryResource, video, worksheet, worksheetAnswers
                  */
-                type?: "slideDeck" | "exitQuiz" | "exitQuizAnswers" | "starterQuiz" | "starterQuizAnswers" | "supplementaryResource" | "video" | "worksheet" | "worksheetAnswers";
+                type?: AssetsType;
             };
             header?: never;
             path: {
@@ -4487,28 +3594,28 @@ export interface operations {
             200: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["LessonAssetsResponseSchema"];
+                    "application/json": Components["schemas"]["LessonAssetsResponseSchema"];
                 };
             };
             /** Bad request - e.g. "Content is blocked for copyright reasons" */
             400: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                    "application/json": Components["schemas"]["error.BAD_REQUEST"];
                 };
             };
             /** API token not provided or invalid */
             401: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                    "application/json": Components["schemas"]["error.UNAUTHORIZED"];
                 };
             };
             /** Detail of the request causing the 404, e.g. "Lesson not found" */
             404: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                    "application/json": Components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -4521,7 +3628,7 @@ export interface operations {
                 /** Limit the number of lessons, e.g. return a maximum of 300 lessons */
                 limit?: number;
                 /** Use this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/\{slug\}/assets/\{type\} endpoint */
-                type?: "slideDeck" | "exitQuiz" | "exitQuizAnswers" | "starterQuiz" | "starterQuizAnswers" | "supplementaryResource" | "video" | "worksheet" | "worksheetAnswers";
+                type?: AssetsType;
             };
             header?: never;
             path: {
@@ -4536,28 +3643,28 @@ export interface operations {
             200: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["ProgrammeAssetsResponseSchema"];
+                    "application/json": Components["schemas"]["ProgrammeAssetsResponseSchema"];
                 };
             };
             /** Bad request - e.g. "Content is blocked for copyright reasons" */
             400: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                    "application/json": Components["schemas"]["error.BAD_REQUEST"];
                 };
             };
             /** API token not provided or invalid */
             401: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                    "application/json": Components["schemas"]["error.UNAUTHORIZED"];
                 };
             };
             /** Detail of the request causing the 404, e.g. "Lesson not found" */
             404: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                    "application/json": Components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -4570,7 +3677,7 @@ export interface operations {
                 /** The lesson slug */
                 lesson: string;
                 /** Use this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/\{slug\}/assets/\{type\} endpoint */
-                type: "slideDeck" | "exitQuiz" | "exitQuizAnswers" | "starterQuiz" | "starterQuizAnswers" | "supplementaryResource" | "video" | "worksheet" | "worksheetAnswers";
+                type: AssetsType;
             };
             cookie?: never;
         };
@@ -4580,28 +3687,28 @@ export interface operations {
             200: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["LessonAssetResponseSchema"];
+                    "application/json": Components["schemas"]["LessonAssetResponseSchema"];
                 };
             };
             /** Bad request - e.g. "Content is blocked for copyright reasons" */
             400: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                    "application/json": Components["schemas"]["error.BAD_REQUEST"];
                 };
             };
             /** API token not provided or invalid */
             401: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                    "application/json": Components["schemas"]["error.UNAUTHORIZED"];
                 };
             };
             /** Detail of the request causing the 404, e.g. "Lesson not found" */
             404: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                    "application/json": Components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -4619,28 +3726,28 @@ export interface operations {
             200: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["AllSubjectsResponseSchema"];
+                    "application/json": Components["schemas"]["AllSubjectsResponseSchema"];
                 };
             };
             /** Bad request - e.g. "Content is blocked for copyright reasons" */
             400: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                    "application/json": Components["schemas"]["error.BAD_REQUEST"];
                 };
             };
             /** API token not provided or invalid */
             401: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                    "application/json": Components["schemas"]["error.UNAUTHORIZED"];
                 };
             };
             /** Detail of the request causing the 404, e.g. "Lesson not found" */
             404: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                    "application/json": Components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -4651,7 +3758,7 @@ export interface operations {
             header?: never;
             path: {
                 /** The slug identifier for the subject */
-                subject: "art" | "citizenship" | "computing" | "cooking-nutrition" | "design-technology" | "english" | "french" | "geography" | "german" | "history" | "maths" | "music" | "physical-education" | "religious-education" | "rshe-pshe" | "science" | "spanish";
+                subject: Subject;
             };
             cookie?: never;
         };
@@ -4661,28 +3768,28 @@ export interface operations {
             200: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["SubjectResponseSchema"];
+                    "application/json": Components["schemas"]["SubjectResponseSchema"];
                 };
             };
             /** Bad request - e.g. "Content is blocked for copyright reasons" */
             400: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                    "application/json": Components["schemas"]["error.BAD_REQUEST"];
                 };
             };
             /** API token not provided or invalid */
             401: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                    "application/json": Components["schemas"]["error.UNAUTHORIZED"];
                 };
             };
             /** Detail of the request causing the 404, e.g. "Lesson not found" */
             404: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                    "application/json": Components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -4693,7 +3800,7 @@ export interface operations {
             header?: never;
             path: {
                 /** The subject slug identifier */
-                subject: "art" | "citizenship" | "computing" | "cooking-nutrition" | "design-technology" | "english" | "french" | "geography" | "german" | "history" | "maths" | "music" | "physical-education" | "religious-education" | "rshe-pshe" | "science" | "spanish";
+                subject: Subject;
             };
             cookie?: never;
         };
@@ -4703,28 +3810,28 @@ export interface operations {
             200: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["SubjectKeyStagesResponseSchema"];
+                    "application/json": Components["schemas"]["SubjectKeyStagesResponseSchema"];
                 };
             };
             /** Bad request - e.g. "Content is blocked for copyright reasons" */
             400: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                    "application/json": Components["schemas"]["error.BAD_REQUEST"];
                 };
             };
             /** API token not provided or invalid */
             401: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                    "application/json": Components["schemas"]["error.UNAUTHORIZED"];
                 };
             };
             /** Detail of the request causing the 404, e.g. "Lesson not found" */
             404: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                    "application/json": Components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -4735,7 +3842,7 @@ export interface operations {
             header?: never;
             path: {
                 /** Subject slug to filter by */
-                subject: "art" | "citizenship" | "computing" | "cooking-nutrition" | "design-technology" | "english" | "french" | "geography" | "german" | "history" | "maths" | "music" | "physical-education" | "religious-education" | "rshe-pshe" | "science" | "spanish";
+                subject: Subject;
             };
             cookie?: never;
         };
@@ -4745,28 +3852,28 @@ export interface operations {
             200: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["SubjectYearsResponseSchema"];
+                    "application/json": Components["schemas"]["SubjectYearsResponseSchema"];
                 };
             };
             /** Bad request - e.g. "Content is blocked for copyright reasons" */
             400: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                    "application/json": Components["schemas"]["error.BAD_REQUEST"];
                 };
             };
             /** API token not provided or invalid */
             401: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                    "application/json": Components["schemas"]["error.UNAUTHORIZED"];
                 };
             };
             /** Detail of the request causing the 404, e.g. "Lesson not found" */
             404: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                    "application/json": Components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -4784,28 +3891,28 @@ export interface operations {
             200: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["KeyStageResponseSchema"];
+                    "application/json": Components["schemas"]["KeyStageResponseSchema"];
                 };
             };
             /** Bad request - e.g. "Content is blocked for copyright reasons" */
             400: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                    "application/json": Components["schemas"]["error.BAD_REQUEST"];
                 };
             };
             /** API token not provided or invalid */
             401: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                    "application/json": Components["schemas"]["error.UNAUTHORIZED"];
                 };
             };
             /** Detail of the request causing the 404, e.g. "Lesson not found" */
             404: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                    "application/json": Components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -4823,9 +3930,9 @@ export interface operations {
             header?: never;
             path: {
                 /** Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase */
-                keyStage: "ks1" | "ks2" | "ks3" | "ks4";
+                keyStage: KeyStage;
                 /** Subject slug to filter by, e.g. 'english' - note that casing is important here, and should be lowercase */
-                subject: "art" | "citizenship" | "computing" | "cooking-nutrition" | "design-technology" | "english" | "french" | "geography" | "german" | "history" | "maths" | "music" | "physical-education" | "religious-education" | "rshe-pshe" | "science" | "spanish";
+                subject: Subject;
             };
             cookie?: never;
         };
@@ -4835,28 +3942,28 @@ export interface operations {
             200: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["KeyStageSubjectLessonsResponseSchema"];
+                    "application/json": Components["schemas"]["KeyStageSubjectLessonsResponseSchema"];
                 };
             };
             /** Bad request - e.g. "Content is blocked for copyright reasons" */
             400: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                    "application/json": Components["schemas"]["error.BAD_REQUEST"];
                 };
             };
             /** API token not provided or invalid */
             401: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                    "application/json": Components["schemas"]["error.UNAUTHORIZED"];
                 };
             };
             /** Detail of the request causing the 404, e.g. "Lesson not found" */
             404: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                    "application/json": Components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -4870,9 +3977,9 @@ export interface operations {
             header?: never;
             path: {
                 /** Key stage slug to filter by, e.g. 'ks2' */
-                keyStage: "ks1" | "ks2" | "ks3" | "ks4";
+                keyStage: KeyStage;
                 /** Subject slug to search by, e.g. 'science' - note that casing is important here (always lowercase) */
-                subject: "art" | "citizenship" | "computing" | "cooking-nutrition" | "design-technology" | "english" | "french" | "geography" | "german" | "history" | "maths" | "music" | "physical-education" | "religious-education" | "rshe-pshe" | "science" | "spanish";
+                subject: Subject;
             };
             cookie?: never;
         };
@@ -4882,28 +3989,28 @@ export interface operations {
             200: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["AllKeyStageAndSubjectUnitsResponseSchema"];
+                    "application/json": Components["schemas"]["AllKeyStageAndSubjectUnitsResponseSchema"];
                 };
             };
             /** Bad request - e.g. "Content is blocked for copyright reasons" */
             400: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                    "application/json": Components["schemas"]["error.BAD_REQUEST"];
                 };
             };
             /** API token not provided or invalid */
             401: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                    "application/json": Components["schemas"]["error.UNAUTHORIZED"];
                 };
             };
             /** Detail of the request causing the 404, e.g. "Lesson not found" */
             404: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                    "application/json": Components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -4914,7 +4021,7 @@ export interface operations {
             header?: never;
             path: {
                 /** The subject slug identifier */
-                subject: "art" | "citizenship" | "computing" | "cooking-nutrition" | "design-technology" | "english" | "french" | "geography" | "german" | "history" | "maths" | "music" | "physical-education" | "religious-education" | "rshe-pshe" | "science" | "spanish";
+                subject: Subject;
             };
             cookie?: never;
         };
@@ -4924,28 +4031,28 @@ export interface operations {
             200: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["SubjectProgrammesResponseSchema"];
+                    "application/json": Components["schemas"]["SubjectProgrammesResponseSchema"];
                 };
             };
             /** Bad request - e.g. "Content is blocked for copyright reasons" */
             400: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                    "application/json": Components["schemas"]["error.BAD_REQUEST"];
                 };
             };
             /** API token not provided or invalid */
             401: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                    "application/json": Components["schemas"]["error.UNAUTHORIZED"];
                 };
             };
             /** Detail of the request causing the 404, e.g. "Lesson not found" */
             404: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                    "application/json": Components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -4966,28 +4073,28 @@ export interface operations {
             200: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["ProgrammeResponseSchema"];
+                    "application/json": Components["schemas"]["ProgrammeResponseSchema"];
                 };
             };
             /** Bad request - e.g. "Content is blocked for copyright reasons" */
             400: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                    "application/json": Components["schemas"]["error.BAD_REQUEST"];
                 };
             };
             /** API token not provided or invalid */
             401: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                    "application/json": Components["schemas"]["error.UNAUTHORIZED"];
                 };
             };
             /** Detail of the request causing the 404, e.g. "Lesson not found" */
             404: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                    "application/json": Components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -5008,28 +4115,28 @@ export interface operations {
             200: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["ProgrammeUnitsResponseSchema"];
+                    "application/json": Components["schemas"]["ProgrammeUnitsResponseSchema"];
                 };
             };
             /** Bad request - e.g. "Content is blocked for copyright reasons" */
             400: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                    "application/json": Components["schemas"]["error.BAD_REQUEST"];
                 };
             };
             /** API token not provided or invalid */
             401: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                    "application/json": Components["schemas"]["error.UNAUTHORIZED"];
                 };
             };
             /** Detail of the request causing the 404, e.g. "Lesson not found" */
             404: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                    "application/json": Components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -5038,9 +4145,9 @@ export interface operations {
         parameters: {
             query?: {
                 /** Subject slug to search by, e.g. 'science' - note that casing is important here (always lowercase) */
-                subject?: "art" | "citizenship" | "computing" | "cooking-nutrition" | "design-technology" | "english" | "french" | "geography" | "german" | "history" | "maths" | "music" | "physical-education" | "religious-education" | "rshe-pshe" | "science" | "spanish";
+                subject?: Subject;
                 /** Key stage slug to filter by, e.g. 'ks2' */
-                keyStage?: "ks1" | "ks2" | "ks3" | "ks4";
+                keyStage?: KeyStage;
                 /** Phase to filter by, e.g. 'primary' or 'secondary'. Cannot be combined with keyStage. */
                 phase?: "primary" | "secondary";
                 /** Unit slug to search by, e.g. 'forces-and-magnets' - note that casing is important here (always lowercase) */
@@ -5062,7 +4169,7 @@ export interface operations {
             200: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["KeywordsResponseSchema"];
+                    "application/json": Components["schemas"]["KeywordsResponseSchema"];
                 };
             };
         };
@@ -5086,28 +4193,28 @@ export interface operations {
             200: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["QuestionForLessonsResponseSchema"];
+                    "application/json": Components["schemas"]["QuestionForLessonsResponseSchema"];
                 };
             };
             /** Bad request - e.g. "Content is blocked for copyright reasons" */
             400: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                    "application/json": Components["schemas"]["error.BAD_REQUEST"];
                 };
             };
             /** API token not provided or invalid */
             401: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                    "application/json": Components["schemas"]["error.UNAUTHORIZED"];
                 };
             };
             /** Detail of the request causing the 404, e.g. "Lesson not found" */
             404: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                    "application/json": Components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -5137,28 +4244,28 @@ export interface operations {
             200: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["QuestionsForSequenceResponseSchema"];
+                    "application/json": Components["schemas"]["QuestionsForSequenceResponseSchema"];
                 };
             };
             /** Bad request - e.g. "Content is blocked for copyright reasons" */
             400: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                    "application/json": Components["schemas"]["error.BAD_REQUEST"];
                 };
             };
             /** API token not provided or invalid */
             401: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                    "application/json": Components["schemas"]["error.UNAUTHORIZED"];
                 };
             };
             /** Detail of the request causing the 404, e.g. "Lesson not found" */
             404: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                    "application/json": Components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -5176,9 +4283,9 @@ export interface operations {
             header?: never;
             path: {
                 /** Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase */
-                keyStage: "ks1" | "ks2" | "ks3" | "ks4";
+                keyStage: KeyStage;
                 /** Subject slug to search by, e.g. 'science' - note that casing is important here */
-                subject: "art" | "citizenship" | "computing" | "cooking-nutrition" | "design-technology" | "english" | "french" | "geography" | "german" | "history" | "maths" | "music" | "physical-education" | "religious-education" | "rshe-pshe" | "science" | "spanish";
+                subject: Subject;
             };
             cookie?: never;
         };
@@ -5188,28 +4295,28 @@ export interface operations {
             200: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["QuestionsForKeyStageAndSubjectResponseSchema"];
+                    "application/json": Components["schemas"]["QuestionsForKeyStageAndSubjectResponseSchema"];
                 };
             };
             /** Bad request - e.g. "Content is blocked for copyright reasons" */
             400: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                    "application/json": Components["schemas"]["error.BAD_REQUEST"];
                 };
             };
             /** API token not provided or invalid */
             401: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                    "application/json": Components["schemas"]["error.UNAUTHORIZED"];
                 };
             };
             /** Detail of the request causing the 404, e.g. "Lesson not found" */
             404: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                    "application/json": Components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -5237,28 +4344,28 @@ export interface operations {
             200: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["QuestionsForProgrammeResponseSchema"];
+                    "application/json": Components["schemas"]["QuestionsForProgrammeResponseSchema"];
                 };
             };
             /** Bad request - e.g. "Content is blocked for copyright reasons" */
             400: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                    "application/json": Components["schemas"]["error.BAD_REQUEST"];
                 };
             };
             /** API token not provided or invalid */
             401: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                    "application/json": Components["schemas"]["error.UNAUTHORIZED"];
                 };
             };
             /** Detail of the request causing the 404, e.g. "Lesson not found" */
             404: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                    "application/json": Components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -5279,28 +4386,28 @@ export interface operations {
             200: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["LessonSummaryResponseSchema"];
+                    "application/json": Components["schemas"]["LessonSummaryResponseSchema"];
                 };
             };
             /** Bad request - e.g. "Content is blocked for copyright reasons" */
             400: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                    "application/json": Components["schemas"]["error.BAD_REQUEST"];
                 };
             };
             /** API token not provided or invalid */
             401: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                    "application/json": Components["schemas"]["error.UNAUTHORIZED"];
                 };
             };
             /** Detail of the request causing the 404, e.g. "Lesson not found" */
             404: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                    "application/json": Components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -5311,9 +4418,9 @@ export interface operations {
                 /** Search query text snippet */
                 q: string;
                 /** Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase */
-                keyStage?: "ks1" | "ks2" | "ks3" | "ks4";
+                keyStage?: KeyStage;
                 /** Subject slug to filter by, e.g. 'english' - note that casing is important here, and should be lowercase */
-                subject?: "art" | "citizenship" | "computing" | "cooking-nutrition" | "design-technology" | "english" | "french" | "geography" | "german" | "history" | "maths" | "music" | "physical-education" | "religious-education" | "rshe-pshe" | "science" | "spanish";
+                subject?: Subject;
                 /** Optional unit slug to additionally filter by */
                 unit?: string;
             };
@@ -5327,28 +4434,28 @@ export interface operations {
             200: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["LessonSearchResponseSchema"];
+                    "application/json": Components["schemas"]["LessonSearchResponseSchema"];
                 };
             };
             /** Bad request - e.g. "Content is blocked for copyright reasons" */
             400: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                    "application/json": Components["schemas"]["error.BAD_REQUEST"];
                 };
             };
             /** API token not provided or invalid */
             401: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                    "application/json": Components["schemas"]["error.UNAUTHORIZED"];
                 };
             };
             /** Detail of the request causing the 404, e.g. "Lesson not found" */
             404: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                    "application/json": Components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -5363,7 +4470,7 @@ export interface operations {
                 /** Optional tier slug to narrow the unit to a specific programme variant, e.g. 'foundation'. */
                 tier?: "core" | "foundation" | "higher";
                 /** Optional science child subject slug to narrow the unit to a specific programme variant. Only available for science units, e.g. 'biology'. */
-                childSubject?: "biology" | "chemistry" | "combined-science" | "physics";
+                childSubject?: ChildSubjectSlug;
             };
             header?: never;
             path: {
@@ -5378,28 +4485,28 @@ export interface operations {
             200: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["UnitSummaryResponseSchema"];
+                    "application/json": Components["schemas"]["UnitSummaryResponseSchema"];
                 };
             };
             /** Bad request - e.g. "Content is blocked for copyright reasons" */
             400: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                    "application/json": Components["schemas"]["error.BAD_REQUEST"];
                 };
             };
             /** API token not provided or invalid */
             401: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                    "application/json": Components["schemas"]["error.UNAUTHORIZED"];
                 };
             };
             /** Detail of the request causing the 404, e.g. "Lesson not found" */
             404: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                    "application/json": Components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -5417,28 +4524,28 @@ export interface operations {
             200: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["AllThreadsResponseSchema"];
+                    "application/json": Components["schemas"]["AllThreadsResponseSchema"];
                 };
             };
             /** Bad request - e.g. "Content is blocked for copyright reasons" */
             400: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                    "application/json": Components["schemas"]["error.BAD_REQUEST"];
                 };
             };
             /** API token not provided or invalid */
             401: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                    "application/json": Components["schemas"]["error.UNAUTHORIZED"];
                 };
             };
             /** Detail of the request causing the 404, e.g. "Lesson not found" */
             404: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                    "application/json": Components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -5459,28 +4566,28 @@ export interface operations {
             200: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["ThreadUnitsResponseSchema"];
+                    "application/json": Components["schemas"]["ThreadUnitsResponseSchema"];
                 };
             };
             /** Bad request - e.g. "Content is blocked for copyright reasons" */
             400: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                    "application/json": Components["schemas"]["error.BAD_REQUEST"];
                 };
             };
             /** API token not provided or invalid */
             401: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                    "application/json": Components["schemas"]["error.UNAUTHORIZED"];
                 };
             };
             /** Detail of the request causing the 404, e.g. "Lesson not found" */
             404: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                    "application/json": Components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };
@@ -5498,28 +4605,28 @@ export interface operations {
             200: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["RateLimitResponseSchema"];
+                    "application/json": Components["schemas"]["RateLimitResponseSchema"];
                 };
             };
             /** Bad request - e.g. "Content is blocked for copyright reasons" */
             400: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.BAD_REQUEST"];
+                    "application/json": Components["schemas"]["error.BAD_REQUEST"];
                 };
             };
             /** API token not provided or invalid */
             401: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
+                    "application/json": Components["schemas"]["error.UNAUTHORIZED"];
                 };
             };
             /** Detail of the request causing the 404, e.g. "Lesson not found" */
             404: {
                 headers?: never;
                 content: {
-                    "application/json": components["schemas"]["error.NOT_FOUND"];
+                    "application/json": Components["schemas"]["error.NOT_FOUND"];
                 };
             };
         };

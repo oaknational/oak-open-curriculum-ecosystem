@@ -169,6 +169,20 @@ It becomes evidence theatre when the capability is staged or when excitement is 
 into a claim about utility, adoption, teacher practice, or pupil impact that the demo cannot
 support.
 
+### The Curriculum Hub carries three co-equal value streams
+
+The owner set these on 2026-07-02, direct to the implementing seat, and none is a rider on
+another. First, **visibility for user testing**: the Curriculum Hub on the web so that it can be
+used for user testing, a sharper purpose than showing people. Second, a **reusable ingestion
+pipeline**, skill and agent-tools driven, that turns Claude Design export archives into
+standards-compliant web apps with no loss of functionality or visual fidelity, for new demos
+and for pulling updates into existing ones; update integration is agent-judged, since no
+deterministic route is expected. Third, **rapid user-facing web-app development** beside the
+MCP apps, APIs and SDKs, so that product exploration through user-facing experimentation is
+highly productive at production standard. The owner's open question, whether the Kit is a
+fourth strategic stream distinct from engineering tools, stands unresolved; the routed
+assessment of 2026-07-02 placed it in the capabilities tier for now.
+
 ## What we won't do
 
 - Won't treat polished mock behaviour, a curated golden path, or visual impact as proof of

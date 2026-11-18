@@ -16,6 +16,6 @@ describe('generatePathUtilsFile', () => {
     // Inner class excludes `{` as well as `}` to keep the scan linear:
     // `{([^}]+)}` is polynomial (js/polynomial-redos) on `{`-flooded input.
     expect(code).toContain("path.replaceAll(/{([^{}]+)}/g, ':$1')");
-    expect(code).toContain("path.replaceAll(/:([A-Za-z0-9_]+)/g, '{$1}')");
+    expect(code).toContain(String.raw`path.replaceAll(/:(\w+)/g, '{$1}')`);
   });
 });

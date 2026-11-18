@@ -13,6 +13,15 @@ import { createMcpRouter } from './mcp-router.js';
 import { RETIRED_WIDGET_URIS, WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools';
 import { createMockExpressRequest, createMockExpressResponse } from './test-helpers/fakes.js';
 
+/** An Express request carrying `body` as its parsed JSON-RPC envelope. */
+function createMockRequest(body: {
+  method?: string;
+  params?: { name?: string; uri?: string };
+  [key: string]: unknown;
+}): Request {
+  return createMockExpressRequest({ body });
+}
+
 describe('createMcpRouter (Integration)', () => {
   let mockAuthMw: RequestHandler;
   let mockNext: NextFunction;
@@ -27,14 +36,6 @@ describe('createMcpRouter (Integration)', () => {
     mockNext = vi.fn();
     mockRes = createMockExpressResponse();
   });
-
-  function createMockRequest(body: {
-    method?: string;
-    params?: { name?: string; uri?: string };
-    [key: string]: unknown;
-  }): Request {
-    return createMockExpressRequest({ body });
-  }
 
   describe('discovery methods (auth required per MCP 2025-11-25)', () => {
     it('requires auth for tools/list', () => {

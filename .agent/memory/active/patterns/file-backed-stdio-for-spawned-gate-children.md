@@ -3,6 +3,7 @@ name: "File-Backed Stdio for Spawned Gate-Running Children"
 polarity: pattern
 use_this_when: "Spawning git commit or any hook/gate-running child from Node and its output truncates or the chain dies silently mid-hook"
 category: code
+layer: family
 proven_in: "agent-tools/src/core/file-backed-child.ts"
 proven_date: 2026-07-03
 barrier:

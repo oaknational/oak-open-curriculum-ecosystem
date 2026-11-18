@@ -15,7 +15,7 @@ related:
   - ../../high-level-plan.md
   - ../../good-first-issues.md
   - ../../completed-plans.md
-  - ../../../memory/operational/threads/strategy-and-plan-estate-holistic-review.next-session.md
+  - ../../../memory/operational/threads/paused/strategy-and-plan-estate-holistic-review.next-session.md
   - ../../../../VISION.md
   - ../../../../README.md
 source_threads:

@@ -68,3 +68,21 @@ export function typeSafeHas<T>(obj: T, key: PropertyKey): key is keyof T {
 export function typeSafeHasOwn<T>(obj: T, key: PropertyKey): key is keyof T {
   return Object.hasOwn(Object(obj), key);
 }
+
+/**
+ * Membership check against a readonly tuple or array of literals (instead of
+ * `Array.prototype.includes`, whose argument must already have the element
+ * type, so it cannot narrow). Accepts `unknown` and narrows it to the element
+ * type on success, with no type assertion.
+ *
+ * @example
+ * ```ts
+ * const MODES = ['dev', 'observe'] as const;
+ * function isMode(input: string): input is (typeof MODES)[number] {
+ *   return typeSafeIncludes(MODES, input);
+ * }
+ * ```
+ */
+export function typeSafeIncludes<T>(values: readonly T[], value: unknown): value is T {
+  return new Set<unknown>(values).has(value);
+}

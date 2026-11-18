@@ -9,28 +9,11 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import type { Unit } from '../../types/generated/bulk/index.js';
+import { createUnit } from '../test-fixtures.js';
 
 import { extractThreads } from './thread-extractor.js';
 
 describe('extractThreads', () => {
-  const createUnit = (overrides: Partial<Unit>): Unit => ({
-    unitSlug: 'test-unit',
-    unitTitle: 'Test Unit',
-    canonicalUrl:
-      'https://www.thenational.academy/teachers/programmes/maths-primary-ks2/units/test-unit/lessons',
-    subjectSlug: 'maths',
-    threads: [],
-    priorKnowledgeRequirements: [],
-    nationalCurriculumContent: [],
-    description: '',
-    yearSlug: 'year-4',
-    year: 4,
-    keyStageSlug: 'ks2',
-    unitLessons: [],
-    ...overrides,
-  });
-
   it('extracts threads from units', () => {
     const units = [
       {

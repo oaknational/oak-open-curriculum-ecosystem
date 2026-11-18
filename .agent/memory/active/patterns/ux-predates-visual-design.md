@@ -3,6 +3,7 @@ name: "UX predates visual design"
 polarity: pattern
 description: "User experience decisions accumulate silently in CLIs, SDKs, APIs, documentation, and error messages long before any visual UI exists. Name the discipline early."
 category: process
+layer: general
 proven_in: "oak-mcp-ecosystem WS3 design-token prerequisite — first visual UI session revealed years of unnamed UX work"
 anti_pattern: "Treating UX as synonymous with visual design, and only recognising it when pixels appear"
 ---

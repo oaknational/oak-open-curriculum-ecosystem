@@ -1,0 +1,128 @@
+{
+  "family": "typescript",
+  "scripts": {
+    "agent-tools:build": "pnpm --filter {scope}/agent-tools build",
+    "agent-tools:gate-slot": "pnpm --fail-if-no-match --filter {scope}/agent-tools gate-slot",
+    "agent-tools:prevent-accidental-major-version": "pnpm --filter {scope}/agent-tools prevent-accidental-major-version",
+    "agent-tools:repo-check": "pnpm --fail-if-no-match --filter {scope}/agent-tools repo-check",
+    "agent-tools:review-cost": "pnpm --fail-if-no-match --filter {scope}/agent-tools review-cost",
+    "agent-tools:secret-scan": "pnpm --filter {scope}/agent-tools secret-scan",
+    "build": "turbo run --continue build",
+    "clean": "turbo run --continue clean",
+    "depcruise": "pnpm agent-tools:repo-check depcruise-gate",
+    "dev": "turbo run --continue dev",
+    "encoding:check": "pnpm agent-tools:build && node agent-tools/dist/src/encoding/check-encoding.js --fail-on critical",
+    "format-check:root": "pnpm agent-tools:repo-check prettier-tracked",
+    "knip:gate": "pnpm agent-tools:repo-check knip-gate",
+    "lint": "turbo run --continue lint",
+    "lint:fix": "turbo run --continue lint:fix",
+    "lint:runtime-only": "eslint --max-warnings 0 --config eslint.runtime-only.config.mjs \"runtime-only-scripts/**/*.mjs\"",
+    "lint:shell": "pnpm agent-tools:repo-check shellcheck-tracked",
+    "markdownlint-check:root": "pnpm agent-tools:repo-check markdownlint-tracked",
+    "plan-gates:check": "pnpm --filter {scope}/agent-tools check-plan-gate-drift",
+    "portability:check": "pnpm --filter {scope}/agent-tools validate-portability",
+    "practice:substrate:check": "pnpm --filter {scope}/agent-tools practice-substrate check",
+    "profile:check": "pnpm --filter {scope}/agent-tools validate-operator-profile",
+    "secrets:scan": "GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=diff.renameLimit GIT_CONFIG_VALUE_0=3000 gitleaks detect --redact=100 --source . --log-opts=\"--branches --tags\"",
+    "skills:check": "pnpm agent-tools:build && node agent-tools/dist/src/bin/skills-adapter-generate.js --check --prefix={skill_prefix}",
+    "skills:generate": "pnpm agent-tools:build && node agent-tools/dist/src/bin/skills-adapter-generate.js --prefix={skill_prefix}",
+    "subagents:check": "pnpm --filter {scope}/agent-tools validate-subagents",
+    "test": "turbo run --continue test",
+    "test:e2e": "turbo run --continue test:e2e",
+    "type-check": "turbo run --continue type-check",
+    "agent-tools:context-cost": "pnpm --filter {scope}/agent-tools context-cost"
+  },
+  "check": {
+    "head": [
+      "pnpm secrets:scan",
+      "pnpm format-check:root",
+      "pnpm markdownlint-check:root",
+      "pnpm lint:shell",
+      "pnpm lint:runtime-only"
+    ],
+    "slot_before_build": "host",
+    "gates": [
+      "turbo run --continue build type-check lint test test:e2e"
+    ],
+    "slot_after_tests": "host",
+    "tail": [
+      "pnpm knip:gate",
+      "pnpm depcruise",
+      "pnpm portability:check",
+      "pnpm subagents:check",
+      "pnpm skills:check",
+      "pnpm encoding:check",
+      "pnpm repo-validators:check",
+      "pnpm docs-validators:check"
+    ]
+  },
+  "aggregates": {
+    "docs-validators:check": [
+      "pnpm --filter {scope}/agent-tools validate-reference-direction",
+      "pnpm --filter {scope}/agent-tools validate-no-machine-local-paths",
+      "pnpm --filter {scope}/agent-tools validate-no-lineage-names",
+      "pnpm --filter {scope}/agent-tools validate-core-adr-citations",
+      "pnpm --filter {scope}/agent-tools validate-no-host-names-in-core-headings",
+      "pnpm --filter {scope}/agent-tools validate-markdown-links",
+      "pnpm --filter {scope}/agent-tools validate-cited-scripts",
+      "pnpm --filter {scope}/agent-tools validate-cited-paths",
+      "pnpm --filter {scope}/agent-tools validate-patterns-index"
+    ],
+    "repo-validators:check": [
+      "pnpm --filter {scope}/agent-tools validate-check-ci-parity",
+      "pnpm --filter {scope}/agent-tools validate-claim-freshness",
+      "pnpm --filter {scope}/agent-tools validate-pretooluse-guard-routing",
+      "pnpm --filter {scope}/agent-tools validate-policy-reappraisal",
+      "pnpm --filter {scope}/agent-tools validate-lifecycle-scripts",
+      "pnpm --filter {scope}/agent-tools validate-no-stale-script-invocations",
+      "pnpm --filter {scope}/agent-tools validate-collaboration-state",
+      "pnpm --filter {scope}/agent-tools validate-identity-naming",
+      "pnpm --filter {scope}/agent-tools validate-workspace-config-isolation",
+      "pnpm --filter {scope}/agent-tools validate-plan-corpus",
+      "pnpm --filter {scope}/agent-tools validate-protocol-wire-contract",
+      "pnpm --filter {scope}/agent-tools validate-family-conformance",
+      "pnpm practice:substrate:check"
+    ]
+  },
+  "hooks": [
+    "applypatch-msg",
+    "commit-msg",
+    "pre-commit",
+    "pre-merge-commit",
+    "pre-push",
+    "pre-rebase",
+    "prepare-commit-msg",
+    "refuse-commit-on-main.sh",
+    "turbo-remote-cache-notice.sh"
+  ],
+  "ci": {
+    "workflow": ".github/workflows/ci.yml",
+    "fan_in_job": "run-quality-gates"
+  },
+  "compiler_base_flags": {
+    "strict": true,
+    "verbatimModuleSyntax": true,
+    "noImplicitOverride": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "erasableSyntaxOnly": true
+  },
+  "formatter": {
+    "config_file": "prettier.config.ts",
+    "forbidden": [
+      ".prettierrc",
+      ".prettierrc.json",
+      ".prettierrc.js",
+      ".prettierrc.cjs",
+      ".prettierrc.yaml"
+    ]
+  },
+  "package_manager": {
+    "name": "pnpm",
+    "major": 12
+  }
+}

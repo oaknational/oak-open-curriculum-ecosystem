@@ -105,6 +105,23 @@ is trued accordingly. This sense is unrelated to ADR-117's retired
 lifecycle lanes (`future/`/`current/`/`active/`), which this ADR
 already superseded.
 
+## The boundary of certainty (dated note, 2026-09-08, owner-ruled)
+
+The repository attests completion with certainty up to its own boundary —
+a merged commit, a proven `repo-safe` acceptance criterion, an archived
+node's recorded disposition (criteria proven, or a sketch abandoned with
+its note; archival is terminal, not by itself proof of completion). The
+state of any instance of the repository's code (a deployment, a
+dashboard, a console, a schedule system) is one-to-many with the tree and
+is never recorded or inferred in the planning corpus: a plan records the
+desired external outcome and its `owner-held` proof, and the external
+system is the only record of its own state. The sorting test above is one
+instance of this boundary in its Linear phrasing; the boundary holds on a
+checkout with no schedule system at all. This note amends nothing in the
+ratified structure; it names the principle the structure rests on, in the
+owner's terms (quoted in the plan-node schema's amendment of the same
+date).
+
 ## Consequences
 
 - Doctrine, skills, and templates that taught the lane model (the plan

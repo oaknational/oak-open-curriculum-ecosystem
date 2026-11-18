@@ -1,3 +1,9 @@
+---
+classification: situational
+description: 'Opening or taking over a pull request binds the session: no merge and no "ready" report until every comment on every surface — GraphQL reviewThreads, reviews, review and issue comments, bots and humans — is fixed in code or explicitly rejected with rationale, replied to, and resolved, re-fetched after every push and at the merge instant. mergeable means possible, never ready; readiness is mergeStateStatus CLEAN. Binds even when the pr-lifecycle skill is not running: the named failure (OCE PR #315) declared "fully green" from the checks table while a High-severity thread sat unresolved.'
+trigger: ceremony:pr-lifecycle
+---
+
 # Every PR comment is addressed, and every push is re-checked for new comments
 
 A pull request is not done — not ready to merge, not to be reported as ready — until
@@ -16,14 +22,13 @@ a PR "mergeable" as if that meant ready — the two words are different claims.
 **Binding moment: opening (or taking over) a PR binds that session to this rule.** The
 first "merge-ready" / "ready for merge" claim to the owner or a peer is itself a step-5
 declaration and must follow a fresh full-surface harvest run in that same turn — **a CI
-checks table is not a harvest**. Worked instance (2026-07-06, PR #315): "fully green —
+checks table is not a harvest**. Worked instance (2026-07-06, OCE PR #315): "fully green —
 ready for your merge" was declared from the checks table alone while a High-Severity
 Bugbot thread sat unresolved; the owner caught it, not the author. Per §"A real issue is
 fixed only when a check guards it", this class's guarding check is a mechanical
 merge-ready verifier (checks green AND zero unresolved threads AND zero pending bot
-reviews, recomputed at the declaration instant) — registered as F-130 in the frictions
-register; until it lands, the harvest queries below ARE the check and must be cited in
-the declaration.
+reviews, recomputed at the declaration instant) — not yet built here; until it lands, the harvest queries below ARE the check
+and must be cited in the declaration.
 
 "Every comment" spans every surface and every author — pull the full set first-hand, never
 from memory of what you think was raised:
@@ -46,7 +51,7 @@ The loop is:
 1. Pull all comments (every surface above).
 2. For each: fix in code, or reject explicitly with verified rationale, or — per the
    pr-lifecycle Phase 4 three-way ruling — ticket-and-close a correct-but-out-of-story
-   finding (Director notified, ticket referenced in the reply); reply; resolve the
+   finding (the ticket, referenced in the reply, tells the Director); reply; resolve the
    thread. PDR-140's pickup-home ROUTE disposition additionally exists only in its
    lane — bot-reviewed findings on prose-class artefacts; excluded lanes keep exactly
    the Phase 4 dispositions, with no pickup routing.
@@ -92,6 +97,17 @@ cited — never apply a suggestion that violates the file's declared contract. R
 edit script that mutates a register without post-condition asserts is a claim, not a change:
 one inverted-slice register edit spawned three bot findings across two rounds; mutation
 scripts carry their own asserts.
+
+**A resolver script resolves the one thread it is given.** A scratch script
+called for one thread resolved every open thread on the pull request, and the
+thread of a true finding had to be reopened by hand (2026-09-21). Pass the
+thread's id, resolve that id, and read the unresolved count back afterwards.
+
+**A reply waits for its push.** A reply that says "cured in" a commit is
+posted after that commit is read back from the remote, never chained after the
+push command: replies posted early named a commit the remote did not hold
+(2026-09-27), and again when a refused push was followed by its replies
+(2026-10-01).
 
 ## Dispositions are grounded in verified failure scenarios
 

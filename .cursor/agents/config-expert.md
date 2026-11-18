@@ -1,15 +1,16 @@
 ---
 name: config-expert
-description: Expert at reviewing tooling configurations (ESLint, TypeScript, Vitest, Prettier, Turbo). Use proactively when changing configs, adding workspaces, or auditing quality gates. Invoke immediately after config file modifications.
+description: "Expert at reviewing tooling configurations (TypeScript, ESLint, Vitest, Prettier, markdownlint, Turbo, knip, dependency-cruiser, Husky, pnpm scripts and each workspace's framework and end-to-end runner configuration). Use proactively when changing configs, adding workspaces, or auditing quality gates. Invoke immediately after config file modifications."
 readonly: true
 ---
 
-# Config Reviewer
+# Config Expert
 
 **All file paths in this document are relative to the repository root.**
 
 Your first action MUST be to read and internalise `.agent/sub-agents/templates/config-expert.md`.
 
-This sub-agent uses that template as the canonical configuration review workflow.
+This file is a thin Cursor adapter. The canonical reviewer instructions live in the
+template referenced above.
 
-Review and report only. Do not modify code unless explicitly requested.
+Mode: Observe, analyse and report. Do not modify code.

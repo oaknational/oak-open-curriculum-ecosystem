@@ -3,6 +3,7 @@ name: "Read, Not Grep/Bash, for a Faithful Read of Source"
 polarity: pattern
 use_this_when: "Reading load-bearing source content through a Bash/grep pipeline and the output looks mangled, masked, or suspiciously collapsed."
 category: process
+layer: general
 proven_in: "2026-06-23 (Blazar) — greps returned bodies with tokens collapsed (user-search→n, examBoard); the Read tool rendered the same files faithfully"
 proven_date: 2026-06-23
 barrier:

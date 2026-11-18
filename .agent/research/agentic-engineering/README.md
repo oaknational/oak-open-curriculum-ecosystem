@@ -92,6 +92,62 @@ sources without turning research notes into a second canon.
 
 ## Cross-Lane Notes
 
+- [codex-support-concept-exploration-2026-09-23.md](./codex-support-concept-exploration-2026-09-23.md)
+  — current Codex Practice tooling census, latest-CLI experiments, and proposals.
+- [codex-official-docs-follow-up-2026-09-23.md](./codex-official-docs-follow-up-2026-09-23.md)
+  — official interface documentation, role and authority questions, and bounded
+  follow-up proposals for the Codex tooling work.
+- [idea-to-merge-process-design-notes-2026-11-07.md](./idea-to-merge-process-design-notes-2026-11-07.md)
+  — design notes for the Attendant Workflow, a new idea-to-merge process with
+  three fixed owner checkpoints, defined as the `attendant` skill and its
+  `attendant-*` sub-skills: the owner's user story as a ten-step sequence with
+  internal reviews and the PR review set apart, and a doubt point at each stage
+  asking whether the work is worth doing; input to the design session's brief.
+- [loop-engineering-governance-2026-11/findings.md](./loop-engineering-governance-2026-11/findings.md)
+  — own-terms baseline of the field's writing on loops in agentic systems
+  (loop engineering, the harness and enforcement outside the loop, the inner
+  and outer loop, light and dark factories, swarms and verification gates,
+  Kimi K3's licence), prompted by the preview of Linas Beliūnas's "Loops at
+  Scale" and read through direct reads and two commissioned web-session
+  reports; status provisional; no comparison with the Practice. A second
+  report in the same folder,
+  [paper-readings.md](./loop-engineering-governance-2026-11/paper-readings.md),
+  reads six of the field's papers in depth and reconciles them, and a third,
+  [doing-and-dreaming-reading.md](./loop-engineering-governance-2026-11/doing-and-dreaming-reading.md),
+  reads the owner's proposal for periodic agent learning against that evidence.
+- [attendant-creation-plan-working-notes.md](./attendant-creation-plan-working-notes.md)
+  — the design session's working notes for the Attendant creation plan: the
+  session's impact and value, how it delivers them, and the review of the brief
+  (disposition, ranked doubts, requests for the owner's direction).
+- [hermes-agent-v0.23.0-2026-11/](./hermes-agent-v0.23.0-2026-11/synthesis.md)
+  — read-only study of Hermes Agent v0.23.0 in its own terms: architecture map,
+  memory and learning mechanisms, evidence log with permalinks at the pinned
+  commit, and a synthesis whose status is provisional; the footing for a later
+  comparison, which it does not contain.
+- [hermes-practice-comparison-2026-11/brief.md](./hermes-practice-comparison-2026-11/brief.md)
+  — entry brief for the session that compares the Hermes study with the Practice: the owner's
+  words, the inputs on both sides, and proposals for the session to test. It does not begin
+  the comparison.
+- [hermes-practice-comparison-2026-11/comparison.md](./hermes-practice-comparison-2026-11/comparison.md)
+  — the comparison itself: what each system keeps, what starts each refinement step, the six
+  records the Practice keeps of whether a lesson worked, and the proposal that led to the
+  strategic node `self-starting-practice-refinement`.
+- [doing-and-dreaming-2026-11/](./doing-and-dreaming-2026-11/README.md)
+  — the work that followed the comparison, and the review of the whole collection that the
+  strategic node `self-starting-practice-refinement` waits on. Start at
+  [the review](./doing-and-dreaming-2026-11/review-of-the-collection.md). Beside it: a
+  reflection on the owner's report "Doing and Dreaming" and a reading of the loop-engineering
+  baseline; two trials of how rules reach a session; a sort of the 124 rules, the patterns
+  directory and the skills; and how Claude Code loads rules and skills. The report itself is
+  kept once, in the loop-engineering directory.
+- [rules-and-skills-system-design-2026-11/](./rules-and-skills-system-design-2026-11/pipeline-audit.md)
+  — the work of the delivery node `rules-and-skills-system-design`. So far: an audit, against
+  the code, of how canonical rules and skills become the files each platform loads and of
+  what the build refuses, facts only; parts 1 to 3 of the design (`design.md`: the unit
+  model, the contracts and the budgets); each threshold re-read at its vendor page
+  (`threshold-reread.md`); what each platform reads from its directories below the
+  repository root (`nested-directories.md`); and the open items of those parts through the
+  decision lenses (`open-items.md`).
 - [cross-lane-direction-survey.md](./cross-lane-direction-survey.md) —
   Slice C umbrella: re-reads direction-of-travel evidence (Slice A
   governance projects, Slice B practice-methodology primitives,

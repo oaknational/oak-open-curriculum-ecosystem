@@ -4,6 +4,7 @@ name: "Cross-Session Pattern Emergence"
 polarity: pattern
 use_this_when: "Running consolidation after multiple sessions on the same workstream, or when a user observes that insights from separate sessions form a larger picture"
 category: process
+layer: general
 proven_in: "WS3 SDK adoption (4 sessions: investigation → planning → Phase 1 → Phase 2) — the 'workaround debt compounds' pattern was only visible across all four"
 proven_date: 2026-04-05
 barrier:
@@ -18,6 +19,8 @@ barrier:
 > See [`patterns/README.md` § Polarity](README.md#polarity-required-every-pattern) for the polarity discipline.
 
 # Cross-Session Pattern Emergence
+
+Imported from OCE at pin `e477e62f7` on 2026-09-14 (practice-completion closure item 4, row 6). The worked instances and measurements are OCE's; local divergence is recorded where it exists.
 
 ## Problem
 

@@ -3,6 +3,7 @@ name: "Platform configuration is infrastructure"
 polarity: pattern
 description: "AI platform settings (permissions, hooks, plugin state) that define the agentic system contract must be tracked in version control, not gitignored as user preferences."
 category: agent
+layer: general
 proven_in: "oak-mcp-ecosystem — 5 Claude Code skills silently blocked because .claude/settings.json was gitignored"
 anti_pattern: "Gitignoring all platform settings because they contain some user-specific paths"
 ---

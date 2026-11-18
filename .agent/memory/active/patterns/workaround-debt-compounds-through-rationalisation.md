@@ -4,6 +4,7 @@ name: "Workaround Debt Compounds Through Rationalisation"
 polarity: anti-pattern
 use_this_when: "A workaround exists in the codebase and someone is explaining why it's justified, necessary, or acceptable — especially when the explanation invokes 'different purposes' or 'separate concerns'"
 category: architecture
+layer: general
 proven_in: "packages/sdks/oak-curriculum-sdk — triple schema representation (JSON Schema + validation Zod + registration Zod) rationalised as 'different purposes' when all three described the same input contract"
 proven_date: 2026-04-05
 barrier:

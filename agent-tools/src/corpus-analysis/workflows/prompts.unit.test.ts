@@ -176,6 +176,12 @@ describe('metaPrompt', () => {
     expect(prompt).toContain('claimedHomePaths');
   });
 
+  it('names the two corroboration roots the post-run check counts a claimed home under', () => {
+    expect(prompt).toContain(
+      'on-disk file paths under .agent/memory/active/patterns/ or .agent/rules/ that encode this pattern',
+    );
+  });
+
   it('directs the meta agent to verify claimed homes with its read-only search tools', () => {
     expect(prompt).toContain('Verify with Glob/Grep/Read before naming');
   });

@@ -132,7 +132,31 @@ the first comms write, claim, or registration).
    governance binds writes and merges to each estate's gates, while
    authorship is unrestricted under this ceremony. The founding
    violation: a join event that named the host's Practice-donor repo
-   directly, tripping the host's neutrality doctrine.
+   directly, tripping the host's neutrality doctrine. A twin of a text the
+   other estate already carries starts from THAT estate's bytes: a
+   rename-mapped diff against its default branch comes before any write,
+   shows which files differ only by host content, and shared text travels
+   as bytes; a row re-authored in the seat's own words cost a settlement
+   push and a review round to converge (2026-09-26). Before authoring a
+   NEW Core file (a pattern, a rule), list the other estate for the same
+   name: a same-named file with different substance is a divergence only
+   `git apply --check` finds, and the cure is one merged file carrying
+   both instances, the same bytes in both estates (2026-09-30). Before
+   bringing to one estate what only the other holds, search the history of
+   the estate that lacks it (`git log --all -m -S'<a distinctive line of its content>'`,
+   and for a named file `git log --all -m --diff-filter=D -- <path>`, since a file's
+   name is often not in its content): it may have been removed
+   on purpose, with the reason in the commit (one instance, 2026-10-01: a
+   port made from a diff met a deletion made two days earlier on four
+   reviewers' verdicts). A slice prepared
+   for both estates is applied by one script in each estate's lane, committed on a
+   local branch in each, and opened one estate at a time; the second copy carries
+   the first review's cures as a second commit before it opens, and a cure to bytes
+   the other estate has already merged travels back as its own small slice (three
+   instances, 2026-10-01 to 02). A napkin or register entry is the capture of an
+   observation at the estate where it arose (one made in both estates is captured in
+   both) and is never copied across as a capture; the knowledge it yields lands as the
+   same bytes in both estates' homes.
 2. **Declare the coordination home.** One substrate owns the
    arrangement's coordination state. Resolution order: explicit CLI
    flag, then `PRACTICE_COORDINATION_HOME`, then git-native
@@ -187,6 +211,14 @@ the first comms write, claim, or registration).
    SELF-CONTAINED concept payloads (no SHAs, no dereferences, no
    moving targets); the paired comms event carries the time-bound
    layer (provenance pins, identity, sequencing, the box path).
+   **Lint before delivery**: a box file lands in the receiver's
+   working tree, where its whole-tree gates read it before any
+   receipt, so the donor runs the receiver's own formatting and lint
+   configurations over every box file and delivers only bytes they
+   pass (PDR-125 clause 7). Run the receiver's format check and
+   markdown lint, with the receiver's configuration files, over the
+   box paths before posting the delivery event (one file linted with
+   the home estate's config failed the receiver's gate, 2026-09-24).
    When a ported artefact is a DETECTOR (a validator, a conformance
    twin, a gate), its first live run on the receiving estate is a
    detector test: porting ports the authoring estate's lexical
@@ -203,11 +235,38 @@ the first comms write, claim, or registration).
    an improvement with no disposition is drift waiting for the next
    exchange turn.
    Lifecycle threads on the comms stream: delivered → acknowledged →
-   integrated or rejected — every bundle receipted both ways.
-   **Normalise on receipt**: integrate inbound material in the
-   RECEIVING repo's format (markdown conventions, heading shapes,
-   gate-satisfying style), declaring the normalisation in the
-   integrating commit body — concepts travel, never bytes.
+   integrated or rejected — every bundle receipted both ways. After joint
+   text lands, the receipt names the merge commit and each joint file's blob
+   id in that commit's tree (`git rev-parse <merge>:<path>`; `git hash-object`
+   hashes the working-tree file, which may have moved), so the receiving estate
+   byte-checks a wholly joint file and diff-checks one where only pieces are
+   joint (the exchange seats' practice on three receipts, 2026-09-26; a
+   convention, not a ruling). A twin found divergent after such a receipt
+   is read first for a later change to either copy (a correction, or the
+   receiver's own formatting, which PDR-125 lets a finished receipt
+   survive), and only then for a check that was not run.
+   **Format on receipt**: where the RECEIVING repo's conventions or
+   gates refuse the donor's bytes (markdown conventions, heading
+   shapes, gate-satisfying style), the estates align that convention or
+   gate so the bytes stay identical, taking the higher of the two forms
+   (a form is higher on the owner's word, or on a recorded failure it
+   prevents together with that form shown firing; PDR-142 §How we
+   judge) and, where nothing else shows either higher, the donor's,
+   because by the owner's word one shared form is higher than two;
+   until they do, change only what the gate refuses and
+   declare each change in the integrating commit body as a debt to that
+   alignment. A migration of a local file to the shared format states,
+   before it runs, the exact local invariant it preserves (which values,
+   in which order, read by which consumers), and its diff is judged against
+   that sentence rather than against the migrator's memory of the file
+   (2026-08-12). Where the donor's text is false
+   here, take the remedies in PDR-142's order: raise the standard the
+   receiver lacks, cure a donor-local fact at its source, cure a shared
+   contradiction jointly, and write the concept in the receiver's words
+   only for a context difference none of those removes.
+   Concepts travel; identical bytes are fine wherever they carry the
+   concept in the receiving repo's Practice context, and a receipt is
+   finished when the concept reads true there (PDR-125 clause 7).
    **Corrections are new events** threading to their antecedent;
    never rewrite an exchange artefact or lifecycle event in place.
 8. **Verify, never trust** (the host's adversarial-verification
@@ -216,9 +275,24 @@ the first comms write, claim, or registration).
    search; version or schema mismatches are typed refusals to
    surface, never best-effort parses.
 
+**Porting and joint text, five lessons.** A port is cut from a diff of normalised files (the
+package scope renamed, host anchors set aside), never from the other estate's raw patch: a
+lenient `patch` run reversed a hunk the target already held (2026-10-02). Estate-local
+self-references are rewritten, with the source attributed so it stays checkable. Before
+amending a peer's joint text, open your own estate's home for the same concept: a sentence
+about fakes was tightened from memory against a section that said the opposite (2026-09-24).
+Where both copies are open at once, hold each door until both copies' review legs have
+settled: where one copy merged at round two and the other was then reviewed, seven further
+findings landed on shared bytes and the merged copy had to be re-taken (2026-09-26). Where
+one seat's single slot makes the copies sequential, the second estate's review is a second
+reading of the first estate's bytes, so plan the first estate's follow-up before the twin
+opens (2026-10-02: one estate's review found five true defects in a slice, the other's found
+three more in the same text).
+
 ## Leaving
 
-Close claims you opened, stand the watcher down cleanly (a
+Close claims you opened (an open pull request's claim stays active until
+it merges), stand the watcher down cleanly (a
 final-heartbeat-end event, so the home team reads intent rather than
 silence), and leave a closeout event naming what remains and where the
 lane resumes. An orphaned guest watcher emits false liveness into a
@@ -226,6 +300,18 @@ foreign estate — supervise it (`--supervisor-pid` or the home's
 equivalent) so it dies with your session.
 
 ## Worked instances
+
+- **2026-09-25 — a joint cure of a Core record**: one estate drafts the cure
+  on a draft PR and offers named blob hashes; the other lands those bytes or
+  refuses a named sentence; the drafting side merges after that receipt, so
+  the record stays one blob (the exchange seats' convention on three cures,
+  beside PDR-142's same-bytes rule). A Core record found as two blobs after
+  a cure conveyed this way would show it failing.
+- **2026-09-25 — an anchor pass is not a reading**: a scripted pass found
+  every cited anchor in a batch of 21 notes, and an independent verification
+  read then found 26 defects (wrong facts, framing, unsupported claims) in 16
+  of them, all cured before delivery. The pass showed each citation existed,
+  and nothing about whether a claim was right (one batch).
 
 - **2026-07-05 — the first live bidirectional exchange**: one session
   with a per-estate name on each of two estates, a second repo as
@@ -240,6 +326,6 @@ equivalent) so it dies with your session.
 ## Platform Adapters
 
 The generated Claude Code adapter lives at
-`.claude/skills/oak-inter-practice-collaboration/SKILL.md`.
+`.claude/skills/<prefix>inter-practice-collaboration/SKILL.md`, where `<prefix>` is the estate's configured skill prefix.
 Regenerate with
 `pnpm skills:generate` and verify with `pnpm skills:check`.

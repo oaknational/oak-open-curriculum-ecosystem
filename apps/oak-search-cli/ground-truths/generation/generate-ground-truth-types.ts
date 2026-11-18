@@ -109,11 +109,11 @@ function readBulkDataFiles(
     }
 
     return ok(results);
-  } catch (e) {
+  } catch (error) {
     return err({
       kind: 'io_error',
-      message: `Failed to read bulk data files: ${e instanceof Error ? e.message : String(e)}`,
-      cause: e,
+      message: `Failed to read bulk data files: ${error instanceof Error ? error.message : String(error)}`,
+      cause: error,
     });
   }
 }
@@ -125,11 +125,11 @@ function ensureOutputDir(outputDir: string, fs: GeneratorFs): Result<void, Gener
   try {
     fs.mkdirSync(outputDir);
     return ok(undefined);
-  } catch (e) {
+  } catch (error) {
     return err({
       kind: 'io_error',
-      message: `Failed to create output directory: ${e instanceof Error ? e.message : String(e)}`,
-      cause: e,
+      message: `Failed to create output directory: ${error instanceof Error ? error.message : String(error)}`,
+      cause: error,
     });
   }
 }
@@ -147,12 +147,12 @@ function writeOutputFile(
   try {
     fs.writeFileSync(filepath, content);
     return ok(filepath);
-  } catch (e) {
+  } catch (error) {
     return err({
       kind: 'io_error',
-      message: `Failed to write ${filename}: ${e instanceof Error ? e.message : String(e)}`,
+      message: `Failed to write ${filename}: ${error instanceof Error ? error.message : String(error)}`,
       file: filepath,
-      cause: e,
+      cause: error,
     });
   }
 }
@@ -473,8 +473,10 @@ async function main(): Promise<void> {
 // template literal gets wrong for paths with spaces or non-ASCII characters.
 const isMainModule = import.meta.url === pathToFileURL(process.argv[1] ?? '').href;
 if (isMainModule) {
-  main().catch((e) => {
-    console.error('Unexpected error:', e);
+  try {
+    await main();
+  } catch (error: unknown) {
+    console.error('Unexpected error:', error);
     process.exit(1);
-  });
+  }
 }

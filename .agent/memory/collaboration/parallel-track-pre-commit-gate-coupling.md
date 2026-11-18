@@ -11,7 +11,7 @@ related_rule: ../../rules/dont-break-build-without-fix-plan.md
 # Parallel-Track Pre-Commit Gate Coupling
 
 The pattern that motivated the entire
-[`multi-agent-collaboration-protocol`](../../plans-backlog-2026-07/agent-tooling/current/multi-agent-collaboration-protocol.plan.md)
+`multi-agent-collaboration-protocol`
 plan. Founding entry of the collaboration-patterns memory class.
 
 ## Failure shape
@@ -74,7 +74,7 @@ response is:
 ## Structural fix
 
 This pattern is the motivating evidence for the entire
-[`multi-agent-collaboration-protocol`](../../plans-backlog-2026-07/agent-tooling/current/multi-agent-collaboration-protocol.plan.md)
+`multi-agent-collaboration-protocol`
 plan. The protocol's WS0 installed:
 
 - the [`agent-collaboration.md`](../../directives/agent-collaboration.md)
@@ -131,7 +131,7 @@ plus napkin entries.
   Break the Build Without a Fix Plan.
 - [`dont-break-build-without-fix-plan.md`](../../rules/dont-break-build-without-fix-plan.md)
   — the rule operationalising cross-agent gate-recovery.
-- [`gate-recovery-cadence.plan.md`](../../plans-backlog-2026-07/observability/active/gate-recovery-cadence.plan.md)
+- `gate-recovery-cadence.plan.md`
   — the active plan whose `## Intent` and `## Recovery Sequence` point 2
   the rule cites verbatim.
 - [`no-verify-requires-fresh-authorisation.md`](../../rules/no-verify-requires-fresh-authorisation.md)

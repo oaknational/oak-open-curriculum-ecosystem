@@ -14,9 +14,10 @@
  * @see write-json-graph-corpus-file.ts for the graph-corpus descriptor
  * that uses this pattern.
  */
-import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import type { Logger } from '@oaknational/logger';
+
+import type { FileSystemPort } from '../../io/file-system-port.js';
 
 /**
  * Descriptor for a JSON dataset's three-file output.
@@ -52,12 +53,15 @@ export function serializeDatasetToJson(data: unknown): string {
  * @param descriptor - Dataset descriptor with directory name and module content
  * @param data - Data to serialise as `data.json`
  * @param outputDir - Parent output directory
+ * @param fs - The file system to write through
+ * @param logger - Optional logger for the write event
  * @returns Path to the created subdirectory
  */
 export async function writeJsonDataset(
   descriptor: JsonDatasetDescriptor,
   data: unknown,
   outputDir: string,
+  fs: FileSystemPort,
   logger?: Logger,
 ): Promise<string> {
   logger?.info('bulk.writer.write_json_dataset', {
@@ -65,12 +69,12 @@ export async function writeJsonDataset(
     outputDir,
   });
   const dirPath = join(outputDir, descriptor.directoryName);
-  await mkdir(dirPath, { recursive: true });
+  await fs.mkdir(dirPath);
 
   await Promise.all([
-    writeFile(join(dirPath, 'data.json'), serializeDatasetToJson(data), 'utf-8'),
-    writeFile(join(dirPath, 'types.ts'), descriptor.typesModuleContent, 'utf-8'),
-    writeFile(join(dirPath, 'index.ts'), descriptor.indexModuleContent, 'utf-8'),
+    fs.writeFile(join(dirPath, 'data.json'), serializeDatasetToJson(data)),
+    fs.writeFile(join(dirPath, 'types.ts'), descriptor.typesModuleContent),
+    fs.writeFile(join(dirPath, 'index.ts'), descriptor.indexModuleContent),
   ]);
 
   return dirPath;

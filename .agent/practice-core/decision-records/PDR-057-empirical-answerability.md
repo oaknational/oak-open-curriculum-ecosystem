@@ -68,7 +68,7 @@ The discipline has three load-bearing parts:
    canonical list:
    - Source code in this repo (including tests, fixtures, generator
      code, schema files).
-   - Generated outputs (`pnpm sdk-codegen`, `pnpm doc-gen`, etc.)
+   - Generated outputs (codegen and build stages, whatever the host names them)
      and the configuration that drives them.
    - Vendor documentation (Clerk, Sentry, Vercel, Elasticsearch,
      MCP, Anthropic SDK), authoritative for the vendor's behaviour.

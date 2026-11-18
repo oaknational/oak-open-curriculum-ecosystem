@@ -2,6 +2,7 @@
 name: Structurally-Identical New Function Drops at Pre-Authoring
 polarity: pattern
 category: planning
+layer: general
 status: provisional
 discovered: 2026-05-22
 proven_in: "Two instances in one plan (commit-queue-intent-scope-discipline Cycles 1.1 + 1.2). Both proposed NEW *scoped* variants of existing functions (createScopedStagedBundleFingerprint, verifyScopedStagedBundle). Pre-authoring reviewer dispatch in both cycles converged on 'structurally identical to the existing function — migration is on the read seam, not on the downstream function'. Both new-function proposals dropped at pre-authoring; both cycles landed simpler than planned. Third instance from a different author/plan would strengthen the pattern."

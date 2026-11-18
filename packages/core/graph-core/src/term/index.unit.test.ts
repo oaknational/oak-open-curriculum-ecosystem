@@ -25,9 +25,9 @@ const rdfLangString: NamedNode = {
   value: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#langString',
 };
 
-const exA: NamedNode = { termType: 'NamedNode', value: 'http://example/a' };
-const exB: NamedNode = { termType: 'NamedNode', value: 'http://example/b' };
-const exP: NamedNode = { termType: 'NamedNode', value: 'http://example/p' };
+const exA: NamedNode = { termType: 'NamedNode', value: 'https://example/a' };
+const exB: NamedNode = { termType: 'NamedNode', value: 'https://example/b' };
+const exP: NamedNode = { termType: 'NamedNode', value: 'https://example/p' };
 
 const plainHello: Literal = {
   termType: 'Literal',
@@ -39,7 +39,7 @@ const plainHello: Literal = {
 
 describe('equals — NamedNode', () => {
   it('returns true for IRI-equal NamedNodes', () => {
-    const a: NamedNode = { termType: 'NamedNode', value: 'http://example/a' };
+    const a: NamedNode = { termType: 'NamedNode', value: 'https://example/a' };
     expect(equals(a, exA)).toBe(true);
   });
 
@@ -120,9 +120,9 @@ describe('equals — TripleTerm', () => {
     const b: TripleTerm = {
       termType: 'TripleTerm',
       value: '',
-      subject: { termType: 'NamedNode', value: 'http://example/a' },
-      predicate: { termType: 'NamedNode', value: 'http://example/p' },
-      object: { termType: 'NamedNode', value: 'http://example/b' },
+      subject: { termType: 'NamedNode', value: 'https://example/a' },
+      predicate: { termType: 'NamedNode', value: 'https://example/p' },
+      object: { termType: 'NamedNode', value: 'https://example/b' },
     };
     expect(equals(a, b)).toBe(true);
   });
@@ -176,9 +176,9 @@ describe('equals — Quad', () => {
   it('returns true for structurally identical quads', () => {
     const copy: Quad = {
       termType: 'Quad',
-      subject: { termType: 'NamedNode', value: 'http://example/a' },
-      predicate: { termType: 'NamedNode', value: 'http://example/p' },
-      object: { termType: 'NamedNode', value: 'http://example/b' },
+      subject: { termType: 'NamedNode', value: 'https://example/a' },
+      predicate: { termType: 'NamedNode', value: 'https://example/p' },
+      object: { termType: 'NamedNode', value: 'https://example/b' },
       graph: { termType: 'DefaultGraph', value: '' },
     };
     expect(equals(baseQuad, copy)).toBe(true);

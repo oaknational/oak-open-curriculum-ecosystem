@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Claude cloud environment setup script — REFERENCE COPY.
 #
 # The live copy runs from the claude.ai cloud-environment configuration
@@ -22,6 +22,13 @@
 #   repos declare the same major, and a mixed-major set is unsupported
 #   (a fail-on-conflict check is a candidate future slice; any
 #   behavioural change here lands with its dialog re-paste step).
+
+# The bash floor: the shellcheck gate holds it once and requires this guard first.
+if ((BASH_VERSINFO[0] < 5 || (BASH_VERSINFO[0] == 5 && BASH_VERSINFO[1] < 2))); then
+  echo "bash 5.2 or later is required, found ${BASH_VERSION}: install it (brew install bash on macOS, apt-get install bash on Debian 12 or Ubuntu 24.04 and later) and put it first on PATH" >&2
+  exit 1
+fi
+
 set -euo pipefail
 set -E
 shopt -s nullglob

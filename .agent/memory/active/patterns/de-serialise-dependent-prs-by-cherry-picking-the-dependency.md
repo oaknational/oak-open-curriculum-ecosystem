@@ -2,6 +2,7 @@
 name: "De-serialise a Dependent PR by Cherry-picking the Dependency's Exact Commit"
 polarity: pattern
 category: process
+layer: general
 use_this_when: "One open PR is paused behind another because it needs a fix the other carries, and the dependency is an ORDER (wait for a merge), not content the paused branch would author differently."
 proven_in: "PR #945 was paused behind the MCP-655 fix on PR #946; at owner word (\"option 2\", 2026-09-02) the exact fix commit was cherry-picked onto the paused branch, its preview rebuilt and validated in parallel with the fix PR's own proofs, and the second merge of main reconciled the identical hunks trivially — only the four files the fix line moved AFTER the pick needed a decision, all resolved to main's side because the dependent branch had no edits of its own there. Conserved in .agent/memory/active/archive/napkin-2026-09-02.md."
 proven_date: 2026-09-02

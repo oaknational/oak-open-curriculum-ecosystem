@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { parseCliFlags } from '../../src/skills-adapter-generate/cli-flags';
+import { CLI_USAGE, parseCliFlags } from '../../src/skills-adapter-generate/cli-flags';
 
 describe('parseCliFlags', () => {
   it('parses the pinned generate and check invocations', () => {
@@ -37,10 +37,19 @@ describe('parseCliFlags', () => {
     }
   });
 
+  it('names the root scripts as the prefix pin in its usage, never an estate value', () => {
+    expect(CLI_USAGE).toContain('--prefix=<prefix>');
+    expect(CLI_USAGE).toContain('pnpm skills:generate');
+    expect(CLI_USAGE).toContain('pnpm skills:check');
+    expect(CLI_USAGE).not.toContain('oak-');
+  });
+
   it('refuses a missing or empty prefix with the pinned-script guidance', () => {
     const missing = parseCliFlags([]);
     expect(missing.kind).toBe('error');
     expect(missing.kind === 'error' && missing.message).toContain('skills:generate');
+    expect(missing.kind === 'error' && missing.message).toContain('skills:check');
+    expect(missing.kind === 'error' && missing.message).not.toContain('oak-');
     const empty = parseCliFlags(['--prefix=']);
     expect(empty.kind).toBe('error');
   });

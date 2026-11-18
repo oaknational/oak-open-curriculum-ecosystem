@@ -4,6 +4,10 @@
  * Provides a standard way to wire existing scripts as CLI subcommands.
  * The child process inherits the full environment by default (Node.js
  * behaviour when `env` is not specified in `execFileSync` options).
+ *
+ * The script runs under the Node binary running this CLI (`process.execPath`,
+ * a fixed absolute path) with `tsx` as its loader, so no `PATH` entry chooses
+ * which binary executes (`docs/governance/sonar-disposition-policy.md` §S4036).
  */
 
 import { execFileSync } from 'node:child_process';
@@ -61,7 +65,7 @@ function executePassThroughScript(
     timeout: PASS_THROUGH_TIMEOUT_MS,
     ...(cliEnv && { env: { ...process.env, ...envToProcessEnv(cliEnv) } }),
   };
-  execFileSync('pnpm', ['exec', 'tsx', script, ...args], execOptions);
+  execFileSync(process.execPath, ['--import', 'tsx', script, ...args], execOptions);
 }
 
 function loadPassThroughCliEnv(
@@ -94,9 +98,10 @@ function handlePassThroughError(error: unknown): void {
 /**
  * Register a pass-through command that delegates to an existing script.
  *
- * The command forwards all arguments to the script via `pnpm exec tsx`,
- * inheriting stdio for interactive output. The script handles its
- * own argument parsing and env loading.
+ * The command forwards all arguments to the script, run under this
+ * process's Node binary with the `tsx` loader, inheriting stdio for
+ * interactive output. The script handles its own argument parsing and
+ * env loading.
  *
  * When `options.cliEnv` is provided, the child process receives the
  * validated environment merged over process.env, so scripts receive

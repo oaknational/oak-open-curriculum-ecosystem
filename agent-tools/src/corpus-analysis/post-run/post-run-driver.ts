@@ -9,8 +9,9 @@
  * additive temporal-coverage report → corroboration of claimed on-disk homes →
  * recompute of every disposition by replaying the real `adjudicate` (the diff must be
  * zero) → the deterministic strength-of-evidence triage of every survivor (see
- * `./triage.ts` for the documented banding). Exits non-zero on integrity violations or
- * recompute mismatches; a recall MISS is reported, not failed.
+ * `./triage.ts` for the documented banding). Exits non-zero on an incomplete map (an
+ * envelope carrying `mapComplete: false`), integrity violations or recompute mismatches,
+ * naming each failing check (`postRunVerdict`); a recall MISS is reported, not failed.
  *
  * Usage (cwd = the agent-tools workspace):
  *
@@ -26,10 +27,9 @@
  * @packageDocumentation
  */
 
-import { parseArgs } from 'node:util';
-
 import { err, ok, type Result } from '@oaknational/result';
 
+import { parseFlags } from '../../core/parse-flags.js';
 import { resolveRepoRoot } from '../../core/repo-root.js';
 
 import { checkMapCoverage } from '../cost-and-coverage.js';
@@ -49,13 +49,19 @@ import {
 import type { MapResult, MetaResult, ReduceResult, ValidateResult } from '../workflows/stage-io.js';
 import { makeCheckpointReader } from './checkpoint-io.js';
 import { existingClaimedHomePaths } from './claimed-home-existence.js';
-import { recomputeDispositions, temporalCoverageReport } from './post-run-analysis.js';
+import {
+  postRunVerdict,
+  recomputeDispositions,
+  temporalCoverageReport,
+} from './post-run-analysis.js';
 import { triageDispositions } from './triage.js';
 
 /** The Choice-B graduate gate (owner-confirmed). */
 const CHOICE_B = { minStrictWithinRemit: 0.6, minLooseWithinRemit: 0.85 } as const;
 
-const repoRoot = resolveRepoRoot(import.meta.url);
+// projectDir is explicitly disabled: this driver reads checkpoints and claimed homes from
+// the checkout it runs in, never from the harness project directory.
+const repoRoot = resolveRepoRoot(import.meta.url, { projectDir: undefined });
 const readCheckpoint = makeCheckpointReader(repoRoot);
 
 interface Checkpoints {
@@ -65,8 +71,16 @@ interface Checkpoints {
   readonly metaResult: MetaResult;
 }
 
-async function readCheckpoints(): Promise<Result<Checkpoints, Error>> {
-  const { values } = parseArgs({
+interface CliFlags {
+  readonly 'map-result'?: string;
+  readonly 'reduce-result'?: string;
+  readonly 'validate-result'?: readonly string[];
+  readonly 'meta-result'?: string;
+}
+
+/** An unknown or malformed flag is an input error on the concise stderr path. */
+function parseCliFlags(): Result<CliFlags, Error> {
+  return parseFlags({
     options: {
       'map-result': { type: 'string' },
       'reduce-result': { type: 'string' },
@@ -74,6 +88,9 @@ async function readCheckpoints(): Promise<Result<Checkpoints, Error>> {
       'meta-result': { type: 'string' },
     },
   });
+}
+
+async function readCheckpoints(values: CliFlags): Promise<Result<Checkpoints, Error>> {
   const mapResult = await readCheckpoint(values['map-result'], '--map-result', parseMapResult);
   if (!mapResult.ok) {
     return mapResult;
@@ -130,7 +147,8 @@ function requireSuccess(checkpoints: Checkpoints): Result<undefined, Error> {
     : ok(undefined);
 }
 
-const checkpoints = await readCheckpoints();
+const flags = parseCliFlags();
+const checkpoints = flags.ok ? await readCheckpoints(flags.value) : flags;
 if (checkpoints.ok) {
   const successes = requireSuccess(checkpoints.value);
   if (!successes.ok) {
@@ -157,8 +175,8 @@ if (checkpoints.ok) {
     const temporal = temporalCoverageReport(reduceResult.candidates);
     const corroboration = corroborateAgainstHomes({
       claims: meta.corroborationClaims,
-      // Claimed homes are repo-relative; anchor them at the repo root (a bare
-      // existsSync would resolve against the agent-tools cwd and miss every one).
+      // Claimed homes are repo-relative or absolute; anchor them at the repo root (a bare
+      // existsSync would resolve a relative one against the agent-tools cwd and miss it).
       existingHomePaths: existingClaimedHomePaths({
         claims: meta.corroborationClaims,
         repoRoot,
@@ -194,14 +212,19 @@ if (checkpoints.ok) {
       )}\n`,
     );
 
-    if (integrity.length > 0 || recomputeMismatches.length > 0) {
+    const verdict = postRunVerdict({
+      integrityViolations: integrity.length,
+      recomputeMismatches: recomputeMismatches.length,
+      mapComplete: mapResult.mapComplete,
+    });
+    if (!verdict.ok) {
       process.stderr.write(
-        `POST-RUN FAILURE: ${integrity.length} integrity violations, ${recomputeMismatches.length} recompute mismatches — do not trust this run's aggregates.\n`,
+        `POST-RUN FAILURE: ${verdict.reasons.join('; ')} — do not trust this run's aggregates.\n`,
       );
       process.exitCode = 1;
     } else {
       process.stdout.write(
-        `post-run close green: integrity empty, dispositions recompute to zero diff, Choice-B ${choiceB ? 'PASS' : 'MISS (reported, not failed — assess whether the tuning gap cost real discovery)'}\n`,
+        `post-run close green: map complete, integrity empty, dispositions recompute to zero diff, Choice-B ${choiceB ? 'PASS' : 'MISS (reported, not failed — assess whether the tuning gap cost real discovery)'}\n`,
       );
     }
   }

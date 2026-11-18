@@ -14,7 +14,8 @@ import {
   type ScopedContentBlockGroup,
 } from './types.js';
 
-const REPO_ROOT = resolveRepoRoot(import.meta.url);
+/** The repository root the hook policy belongs to; anchors the policy's root-anchored path scopes. */
+export const REPO_ROOT = resolveRepoRoot(import.meta.url);
 
 /** URL of the canonical hook policy file, used by all loaders by default. */
 export const POLICY_URL = pathToFileURL(path.resolve(REPO_ROOT, '.agent/hooks/policy.json'));

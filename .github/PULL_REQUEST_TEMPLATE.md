@@ -32,10 +32,25 @@ References LINEAR-ID
 
 ## Scope
 
-<!-- State what is deliberately in and out of this PR. -->
+<!--
+State what is deliberately in and out of this PR. This section is the review contract:
+reviewers test findings against it, and a finding whose proposed remedy falls outside it is
+dispositioned by pr-lifecycle §Phase 4 (the remedy is discarded; the observation is still
+priced on the standard its artefact class carries).
+On a prose- or records-class changeset, and on a mixed one whose prose findings PDR-140
+governs, also declare the intake: the artefact class, its next verification point, the
+worthiness-bar reading that follows, and the settlement-push budget.
+Write the budget as a digit after the intake line's dash. The review-cost gate takes the first
+line anywhere in the body, comments included, whose "budget" and dash are followed by a digit: a
+worded number ("three") is skipped, so a later numeric line or the default of 2 wins. Remove this
+comment block.
+-->
 
 - In scope:
 - Out of scope:
+- A finding whose proposed remedy falls outside this scope is dispositioned by `pr-lifecycle` §Phase 4: the remedy is discarded, the observation still priced.
+- Intake (prose/records changesets, and the prose findings of mixed ones): class — ; verification point — (a pickup names its verifier: the acceptance criterion or ledger surface that consumes it, PDR-140 clause 3); bar — ; budget —
+- Specification and budget (code changesets, and the code findings of mixed ones): the tests and recorded fixtures this PR carries are the specification — a case no tested or recorded input exercises is an observation, not a finding; settlement-push budget — 2 (the default; a digit); once spent, this line is updated to say so and items on code unchanged since the reviewer's last review are observations
 
 ## Validation
 

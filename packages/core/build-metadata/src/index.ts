@@ -26,6 +26,8 @@ export {
 
 export { buildBuildInfo, serialiseBuildInfo, type BuildInfo } from './build-info.js';
 
+export { trimToUndefined } from './trim-to-undefined.js';
+
 export {
   isLessThanOrEqual,
   isValidSemver,

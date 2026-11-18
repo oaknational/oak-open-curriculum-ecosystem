@@ -33,6 +33,25 @@ function buildLessonSummary(overrides: Partial<SearchLessonSummary> = {}): Searc
   return lessonSummarySchema.parse(base);
 }
 
+/** Builds a minimal unit summary fixture. */
+function buildUnitSummary(overrides: Partial<SearchUnitSummary> = {}): SearchUnitSummary {
+  return {
+    unitSlug: 'fractions-unit',
+    unitTitle: 'Understanding Fractions',
+    yearSlug: 'year-4',
+    year: '4',
+    phaseSlug: 'primary',
+    subjectSlug: 'maths',
+    keyStageSlug: 'ks2',
+    priorKnowledgeRequirements: ['Understanding of whole numbers'],
+    nationalCurriculumContent: ['Recognise and show fractions'],
+    unitLessons: [
+      { lessonSlug: 'lesson-1', lessonTitle: 'What is a fraction?', state: 'published' },
+    ],
+    ...overrides,
+  };
+}
+
 describe('generateLessonSemanticSummary', () => {
   it('generates a semantic summary with all available fields', () => {
     const summary = buildLessonSummary({
@@ -153,25 +172,6 @@ describe('generateUnitSemanticSummary', () => {
 });
 
 describe('generateSequenceSemanticSummary', () => {
-  /** Builds a minimal unit summary fixture. */
-  function buildUnitSummary(overrides: Partial<SearchUnitSummary> = {}): SearchUnitSummary {
-    return {
-      unitSlug: 'fractions-unit',
-      unitTitle: 'Understanding Fractions',
-      yearSlug: 'year-4',
-      year: '4',
-      phaseSlug: 'primary',
-      subjectSlug: 'maths',
-      keyStageSlug: 'ks2',
-      priorKnowledgeRequirements: ['Understanding of whole numbers'],
-      nationalCurriculumContent: ['Recognise and show fractions'],
-      unitLessons: [
-        { lessonSlug: 'lesson-1', lessonTitle: 'What is a fraction?', state: 'published' },
-      ],
-      ...overrides,
-    };
-  }
-
   it('constructs deterministic summary from sequence metadata and ordered unit summaries', () => {
     const unitSummary1 = buildUnitSummary({
       unitSlug: 'fractions-y4',

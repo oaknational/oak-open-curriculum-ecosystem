@@ -8,10 +8,10 @@
  * yields ZERO rejections under calibration. Deterministic throughout:
  * the distribution cells drive a seeded LCG, never Math.random.
  */
-import { describe, expect, it } from 'vitest';
+import { assert, describe, expect, it } from 'vitest';
 
 import { inverseNormalCdf } from './inverse-normal-cdf.js';
-import { analysePair } from './visual-stats.js';
+import { analysePair, type PairAnalysis } from './visual-stats.js';
 import {
   calibrateAnalysis,
   renderCalibratedHeatmap,
@@ -58,23 +58,21 @@ function twoBandImage(
   return rgba;
 }
 
-describe('calibrateAnalysis — the exact rank contract', () => {
-  // A 32×32 single-window pair with a uniform 2-level difference gives
-  // one full window with meanAbsDiff = 2 to rank against a chosen null.
-  function analysisWithMeanDiff(level: number) {
-    const a = greyImage(32, 32, 100);
-    const b = greyImage(32, 32, 100 + level);
-    const analysis = analysePair(a, b, 32, 32);
-    expect(analysis.ok).toBe(true);
-    return analysis.ok ? analysis.value : undefined;
-  }
+/**
+ * A 32×32 single-window pair with a uniform `level` difference: one full
+ * window with meanAbsDiff = level to rank against a chosen null.
+ */
+function analysisWithMeanDiff(level: number): PairAnalysis {
+  const a = greyImage(32, 32, 100);
+  const b = greyImage(32, 32, 100 + level);
+  const analysis = analysePair(a, b, 32, 32);
+  assert(analysis.ok, 'analysePair refused a well-formed 32×32 pair');
+  return analysis.value;
+}
 
+describe('calibrateAnalysis — the exact rank contract', () => {
   it('computes the continuity-corrected p with ties counting against rejection', () => {
     const analysis = analysisWithMeanDiff(2);
-    expect(analysis).toBeDefined();
-    if (analysis === undefined) {
-      return;
-    }
     // Null [1, 2, 3]: #{null ≥ 2} = 2 (the tie counts), p = (1+2)/(3+1).
     const calibrated = calibrateAnalysis(analysis, [1, 2, 3]);
     expect(calibrated.ok).toBe(true);
@@ -88,10 +86,6 @@ describe('calibrateAnalysis — the exact rank contract', () => {
 
   it('rejects beyond the null maximum, ordered by exceedance, with the floor stated', () => {
     const analysis = analysisWithMeanDiff(10);
-    expect(analysis).toBeDefined();
-    if (analysis === undefined) {
-      return;
-    }
     const nullScores = [0.1, 0.2, 0.3, 0.4, 0.5];
     const calibrated = calibrateAnalysis(analysis, nullScores);
     expect(calibrated.ok).toBe(true);
@@ -106,10 +100,6 @@ describe('calibrateAnalysis — the exact rank contract', () => {
 
   it('saturates calibratedSigma at the null resolution and says where', () => {
     const analysis = analysisWithMeanDiff(10);
-    expect(analysis).toBeDefined();
-    if (analysis === undefined) {
-      return;
-    }
     const nullScores = Array.from({ length: 999 }, (_, i) => i / 1000);
     const calibrated = calibrateAnalysis(analysis, nullScores);
     expect(calibrated.ok).toBe(true);

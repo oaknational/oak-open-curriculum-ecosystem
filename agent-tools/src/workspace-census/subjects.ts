@@ -5,9 +5,12 @@
  * (ii)  the parent directory of every tracked `package.json` that is
  *       neither a member directory nor nested under one (surfaces the
  *       member list cannot see);
- * (ii-b) the parent directory of every tracked `.claude-plugin/plugin.json`
- *       manifest (owner-approved amendment, 2026-08-14 — plugin surfaces
- *       carry no package.json and no code-extension files);
+ * (ii-b) the parent directory of every tracked plugin manifest outside
+ *       the member directories, one suffix per manifest format:
+ *       `.claude-plugin/plugin.json` and `.codex-plugin/plugin.json`
+ *       (owner-approved amendment, 2026-08-14, widened 2026-09-20 —
+ *       plugin surfaces carry no package.json and no code-extension
+ *       files);
  * (iii) every top-level path segment holding tracked code files (the
  *       declared code-extension set) that are not themselves inside a
  *       directory covered by (i), (ii), or (ii-b) — a segment with a
@@ -83,15 +86,20 @@ function collectPackageJsonParents(drafts: DraftMap, input: DeriveSubjectsInput)
   }
 }
 
-const PLUGIN_MANIFEST_SUFFIX = '/.claude-plugin/plugin.json';
+/** One suffix per plugin manifest format the tree packages (one format can serve several hosts). */
+const PLUGIN_MANIFEST_SUFFIXES: readonly string[] = [
+  '/.claude-plugin/plugin.json',
+  '/.codex-plugin/plugin.json',
+];
 
 function collectPluginManifestParents(drafts: DraftMap, input: DeriveSubjectsInput): void {
   const memberPaths = input.members.map((member) => member.path);
   for (const filePath of input.trackedFiles) {
-    if (!filePath.endsWith(PLUGIN_MANIFEST_SUFFIX)) {
+    const suffix = PLUGIN_MANIFEST_SUFFIXES.find((candidate) => filePath.endsWith(candidate));
+    if (suffix === undefined) {
       continue;
     }
-    const dir = filePath.slice(0, filePath.length - PLUGIN_MANIFEST_SUFFIX.length);
+    const dir = filePath.slice(0, filePath.length - suffix.length);
     if (dir === '' || memberPaths.some((memberPath) => isUnder(dir, memberPath))) {
       continue;
     }

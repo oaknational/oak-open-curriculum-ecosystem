@@ -3,6 +3,7 @@ name: "ChatGPT report normalisation"
 polarity: pattern
 use_this_when: "Recovering an LLM-exported report from markdown, DOCX, and PDF copies into durable repo-quality markdown"
 category: process
+layer: general
 proven_in: >-
   pythonic-algo-approaches clean-up, Oak multi-export report consolidation,
   and architecture reference report normalisation (2026-03-20 to 2026-04-10)

@@ -4,6 +4,7 @@ polarity: pattern
 related_pdr: PDR-011
 use_this_when: "Completing a plan, writing a handoff record, or graduating work to a permanent home — any point where served user-stories or design intent are about to be summarised."
 category: process
+layer: general
 proven_in: "prior-session owner correction, promoted from the per-user buffer; the general form of PDR-011's grounded-execution-knowledge capture edge"
 proven_date: 2026-06-21
 barrier:

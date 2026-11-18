@@ -48,6 +48,26 @@ async function applySpecimenThemeAttribute(page: Page, theme: string): Promise<v
   }, theme);
 }
 
+/** The rendered sticky stack at wide — strip plus masthead — beside the
+ *  reserve the stylesheet declares for it. */
+async function measureStickyStack(page: Page): Promise<{
+  readonly mastPosition: string;
+  readonly stickyStack: number;
+  readonly scrollPadding: string;
+}> {
+  return page.evaluate(() => {
+    const mast = document.querySelector('[data-region="masthead"]');
+    const strip = document.querySelector('.util');
+    return {
+      mastPosition: mast === null ? '' : getComputedStyle(mast).position,
+      stickyStack:
+        (mast === null ? 0 : mast.getBoundingClientRect().height) +
+        (strip === null ? 0 : strip.getBoundingClientRect().height),
+      scrollPadding: getComputedStyle(document.documentElement).scrollPaddingTop,
+    };
+  });
+}
+
 test.describe('specimen: identity is server-applied and in effect at first paint', () => {
   test('each counter-brand changes computed style relative to the base', async ({ page }) => {
     const aborted = await interceptExternalOrigins(page);
@@ -111,20 +131,21 @@ test.describe('specimen: keyboard and state semantics', () => {
 
   test('sticky masthead carries its focus-not-obscured cure', async ({ page }) => {
     await interceptExternalOrigins(page);
+    await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto(`/identity-switchboard/specimen?brand=${BASE_IDENTITY}`);
     // Adopting the reference's sticky masthead adopts WCAG 2.2 2.4.11 with
-    // it: the scroll container must pad by the bar's height so a focused
-    // control is never revealed underneath it.
-    const cure = await page.evaluate(() => {
-      const mast = document.querySelector('[data-region="masthead"]');
-      return {
-        mastPosition: mast === null ? '' : getComputedStyle(mast).position,
-        scrollPadding: getComputedStyle(document.documentElement).scrollPaddingTop,
-      };
-    });
+    // it: the scroll container must pad by the bars' height so a focused
+    // control is never revealed underneath them. Recomputed, not merely
+    // present: above the seam the strip AND the masthead stick, so the
+    // reserve must cover their rendered stacked height (a reserve sized
+    // for the mast alone left the strip's band over a revealed control —
+    // review on the fork). Measured once the wide face has dissolved.
+    await page.locator('.narrow-disclosure-dissolved').waitFor({ state: 'attached' });
+    const cure = await measureStickyStack(page);
     expect(cure.mastPosition).toBe('sticky');
     expect(cure.scrollPadding).not.toBe('auto');
-    expect(Number.parseFloat(cure.scrollPadding)).toBeGreaterThan(0);
+    expect(cure.stickyStack).toBeGreaterThan(0);
+    expect(Number.parseFloat(cure.scrollPadding)).toBeGreaterThanOrEqual(cure.stickyStack);
   });
 
   test('the strip carries the real identity control: one radio group, exactly one checked', async ({

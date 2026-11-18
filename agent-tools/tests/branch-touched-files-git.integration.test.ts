@@ -3,6 +3,11 @@ import { describe, expect, it } from 'vitest';
 import { readBranchTouchedFileReport, readGitStdout } from '../src/branch-touched-files/git';
 import type { GitCommandExecutor } from '../src/branch-touched-files/git';
 
+/** A git executor whose every call fails. */
+const failingGit: GitCommandExecutor = () => {
+  throw new Error('git failed');
+};
+
 describe('branch touched files git boundary', () => {
   it('runs the given git arguments in the inherited environment, returning trimmed stdout', () => {
     const calls: {
@@ -29,15 +34,11 @@ describe('branch touched files git boundary', () => {
   });
 
   it('propagates git command failures', () => {
-    const execFileSync: GitCommandExecutor = () => {
-      throw new Error('git failed');
-    };
-
     expect(() =>
       readGitStdout({
         repoRoot: 'repo-root',
         args: ['merge-base', 'origin/main', 'HEAD'],
-        execFileSync,
+        execFileSync: failingGit,
       }),
     ).toThrow('git failed');
   });

@@ -1311,6 +1311,30 @@
       ]
     },
     {
+      "dirPath": "plugins/oak-open-curriculum-chatgpt",
+      "publishedName": null,
+      "disposition": "classified",
+      "classification": "oak-leaf",
+      "leakage": [],
+      "evidence": [
+        {
+          "kind": "static-structure",
+          "pointer": "plugins/oak-open-curriculum-chatgpt \u2014 24 tracked files: a README, 22 files under skills/ and .codex-plugin/plugin.json, which names Oak National Academy as author and developer with Oak branding; the skills it shares with plugins/oak-open-curriculum have their shipped files held byte-equal by the validate-plugin-skill-copies validator (each skill's evals/ directory is excluded and exists only in the sibling), and two skills (audit-sequence, find-misconceptions) exist only in this package"
+        },
+        {
+          "kind": "doctrine-record",
+          "pointer": "plugins/oak-open-curriculum-chatgpt/.codex-plugin/plugin.json license field declares the ratified tri-licence verbatim: MIT code, OGL v3.0 curriculum content, Oak branding reserved (BRANDING.md); ADR-125's 2026-09-08 amendment records the second plugin package"
+        }
+      ],
+      "targetState": "Hold as the Oak agent-platform plugin leaf for the ChatGPT and Codex hosts, sibling of plugins/oak-open-curriculum (subject derived by the manifest arm ii-b as widened 2026-09-20 to the .codex-plugin suffix); shared skill content stays a validated copy of the sibling package, never an independent fork.",
+      "tranche": "none-assigned",
+      "licence": [
+        "code-mit",
+        "content-ogl",
+        "brand-reserved"
+      ]
+    },
+    {
       "dirPath": "runtime-only-scripts",
       "publishedName": null,
       "disposition": "classified",

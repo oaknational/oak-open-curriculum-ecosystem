@@ -4,6 +4,7 @@ name: "Governance Claim Needs a Scanner"
 polarity: pattern
 use_this_when: "An ADR or governance document asserts that some property holds 'everywhere' across a set of live surfaces (one vocabulary, a required citation, a mandatory field, a platform-adapter parity), and prose alone is the only enforcement."
 category: agent
+layer: general
 proven_in: "scripts/validate-fitness-vocabulary.mjs"
 proven_date: 2026-04-17
 barrier:

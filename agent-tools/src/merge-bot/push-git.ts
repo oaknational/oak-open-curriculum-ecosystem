@@ -1,7 +1,7 @@
-import { err, ok, type Result } from '@oaknational/result';
+import { ok, type Result } from '@oaknational/result';
 
 import { clearedCredentialConfig, scrubbedCredentialEnv } from './git-credential-chain.js';
-import type { GitCommandResult, GitExecutor } from './git-executor.js';
+import { realGitExecutor, type GitCommandResult, type GitExecutor } from './git-executor.js';
 import {
   realTokenFileStore,
   removeQuietly,
@@ -25,9 +25,19 @@ import {
  * token ACCIDENTALLY (an env dump prints a path, not a credential). A hook
  * descendant that names the path can still read the file — same-user access
  * is not a boundary this transport can draw.
+ *
+ * The file also holds the read port the push settles its target with
+ * (`PushGitReads`): four token-free git reads, answered raw, so the
+ * decisions stay in `push-target-branch.ts`.
  */
 
 export type { TokenFileStore } from './push-token-file.js';
+
+/** A resolved git binary plus the executor that runs it. */
+export interface GitContext {
+  readonly file: string;
+  readonly exec: GitExecutor;
+}
 
 /**
  * The one credential helper, as a static literal: it echoes the app-token
@@ -41,6 +51,19 @@ export type { TokenFileStore } from './push-token-file.js';
  */
 const CREDENTIAL_HELPER =
   '!f() { echo username=x-access-token; echo "password=$(cat "$GH_PUSH_TOKEN_FILE")"; }; f';
+
+/**
+ * The git a command runs: `git` by name, with `PATH` as the trust root (the
+ * Sonar disposition policy's S4036 section), unless a test names the binary.
+ * Nothing here can fail, so the context is returned directly; a git that
+ * cannot start fails at its first call, through the executor.
+ */
+export function resolveGitContext(seams: {
+  readonly gitExecutor?: GitExecutor;
+  readonly gitPath?: string;
+}): GitContext {
+  return { file: seams.gitPath ?? 'git', exec: seams.gitExecutor ?? realGitExecutor() };
+}
 
 /**
  * The child environment for the push: the base WHOLESALE, any stale
@@ -72,44 +95,66 @@ function pushEnv(
  * must never answer for the bot), then the one static helper — last, so the
  * clear it follows cannot disarm it. The token is NOT here — argv is visible
  * in the process list to anything that can read it — and neither is any
- * bypass: no force flag, no `--no-verify`.
+ * bypass: no force flag, no `--no-verify`. The push writes exactly one ref:
+ * the destination is always the full branch ref, so git infers nothing from
+ * the name and the refusals in `push-target-branch.ts` compare exactly the
+ * branch that is written, and a configured `push.followTags` or submodule
+ * recursion never adds another. The source is the commit settled before the
+ * mint, never `HEAD`, so every attempt pushes the same commit however long
+ * the retry waits. It is spelled `<commit>^{commit}`, which no ref name can
+ * be, so a local ref named like the commit never stands in for it.
  */
-function pushArgv(remote: string, branch: string): readonly string[] {
+function pushArgv(remote: string, commit: string, branch: string): readonly string[] {
   return [
     ...clearedCredentialConfig(),
     '-c',
     `credential.helper=${CREDENTIAL_HELPER}`,
     'push',
+    '--no-follow-tags',
+    '--recurse-submodules=no',
     remote,
-    `HEAD:${branch}`,
+    `${commit}^{commit}:refs/heads/${branch}`,
   ];
 }
 
 /**
- * Ask git which branch HEAD is on — never inferred from the environment. No
- * output sink: a branch name is output this tool controls, so capturing it is
- * a fact about the call rather than an unexamined buffer.
+ * The reads `merge-bot push` makes before it mints, one per question, each
+ * answering git's raw result so every decision stays in pure code. No output
+ * sink: each answer is output this tool controls, so capturing it is a fact
+ * about the call rather than an unexamined buffer.
  */
-export async function currentBranch(
-  exec: GitExecutor,
-  options: { readonly cwd: string; readonly env: Readonly<Record<string, string | undefined>> },
-): Promise<Result<string, Error>> {
-  const result = await exec('git', ['rev-parse', '--abbrev-ref', 'HEAD'], options);
-  if (result.status !== 0) {
-    return err(
-      new Error(
-        `cannot read the current branch (git rev-parse ${describeGitChildEnd(result)}): ${result.stderr.trim()}`,
-      ),
-    );
-  }
-  const branch = result.stdout.trim();
-  return branch === ''
-    ? err(new Error('cannot read the current branch: git rev-parse printed nothing'))
-    : ok(branch);
+export interface PushGitReads {
+  /** The checked-out branch, unabbreviated; empty output when HEAD is detached. */
+  readonly currentBranch: () => Promise<GitCommandResult>;
+  /** The full object name of the commit HEAD names. */
+  readonly headCommit: () => Promise<GitCommandResult>;
+  /** Every URL origin fetches from, one per line, with `insteadOf` applied. */
+  readonly originUrls: () => Promise<GitCommandResult>;
+  /** The ref `refs/remotes/origin/HEAD` points at: origin's default branch. */
+  readonly originHead: () => Promise<GitCommandResult>;
 }
 
 /**
- * Hand the whole transfer to git. The token reaches it only through a 0600
+ * The reads, answered by the git binary. `branch --show-current` prints the
+ * branch name whole, where `rev-parse --abbrev-ref` would print
+ * `heads/<name>` when a tag shares the branch's name.
+ */
+export function gitReadsFrom(
+  git: GitContext,
+  options: { readonly cwd: string; readonly env: Readonly<Record<string, string | undefined>> },
+): PushGitReads {
+  const read = (args: readonly string[]) => async (): Promise<GitCommandResult> =>
+    git.exec(git.file, args, options);
+  return {
+    currentBranch: read(['branch', '--show-current']),
+    headCommit: read(['rev-parse', '--verify', 'HEAD^{commit}']),
+    originUrls: read(['remote', 'get-url', '--all', 'origin']),
+    originHead: read(['symbolic-ref', '--quiet', 'refs/remotes/origin/HEAD']),
+  };
+}
+
+/**
+ * Hand the whole transfer of the settled commit to git. The token reaches it only through a 0600
  * file in a fresh private directory whose path rides the environment; the
  * directory is removed whatever the push's outcome — even a git seam that
  * throws in breach of its value-returning contract — so the token outlives
@@ -122,11 +167,13 @@ export async function currentBranch(
  * pipe (R1; F-112). A long gate run is silent until it settles; the
  * transcript arrives whole, kernel-interleaved as a terminal would show it.
  */
-export async function pushHead(
-  exec: GitExecutor,
+export async function pushCommit(
+  git: GitContext,
   input: {
     readonly remote: string;
     readonly branch: string;
+    /** The full object name of the commit pushed, settled before the mint. */
+    readonly commit: string;
     readonly cwd: string;
     readonly token: string;
     readonly baseEnv: Readonly<Record<string, string | undefined>>;
@@ -142,7 +189,7 @@ export async function pushHead(
   let result: GitCommandResult;
   let warning: string | undefined;
   try {
-    result = await exec('git', pushArgv(input.remote, input.branch), {
+    result = await git.exec(git.file, pushArgv(input.remote, input.commit, input.branch), {
       cwd: input.cwd,
       env: pushEnv(staged.value.tokenPath, input.baseEnv),
       ...(input.onOutput === undefined ? {} : { onOutput: input.onOutput }),

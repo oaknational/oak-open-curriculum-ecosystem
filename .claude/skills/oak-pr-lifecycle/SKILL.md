@@ -5,4 +5,4 @@ description: "Open a pull request and shepherd it to merge-ready: reviewer-facin
 
 # Pr Lifecycle (Claude Code)
 
-Read and follow `.agent/skills/pr-lifecycle/SKILL-CANONICAL.md`.
+Read and follow `.agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md`.

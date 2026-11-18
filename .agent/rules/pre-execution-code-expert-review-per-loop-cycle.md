@@ -1,3 +1,9 @@
+---
+classification: situational
+description: "Every /loop cycle: dispatch code-expert twice — pre-execution, before the implementer fan-out (per-site FIX/FALSE_POSITIVE/DEFER/SPLIT dispositions or scope feedback the fan-out brief absorbs), and post-execution as the gateway before commit. Plan names the reviewer set: fan-from-brief, specialists parallel from cycle-open. Set unknown: fan-from-verdict, code-expert routes first. Not for edits outside /loop cadence — invoke-code-experts covers those. Failure shapes: fanning out implementers with no returned pre-execution review; serialising a named-set cycle through code-expert as router."
+trigger: ceremony:loop-cycle
+---
+
 # Pre-Execution Code-Expert Review Per /loop Cycle
 
 Composes with [`invoke-code-experts.md`](invoke-code-experts.md) and the

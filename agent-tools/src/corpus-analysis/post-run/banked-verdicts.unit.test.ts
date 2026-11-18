@@ -31,7 +31,7 @@ const opusEntry = (
 ): BankedFreetoolEntry => ({ candidateId, regime: 'opus-freetool', lens, verdict });
 
 describe('opusQuorumOutcomes', () => {
-  it('holds a full-size ensemble whose lenses collide, never counting it as a keep', () => {
+  it('holds a full-size ensemble whose lenses collide as incomplete: a held quorum is no terminal disposition and never a keep', () => {
     const outcomes = opusQuorumOutcomes([
       opusEntry('C1', 'base-rate', keepVerdict()),
       opusEntry('C1', 'base-rate', keepVerdict()),
@@ -39,7 +39,7 @@ describe('opusQuorumOutcomes', () => {
     ]);
     // The frozen quorum's lens-collision hold: three unanimous keeps with a duplicated
     // lens are correlated votes and never license a keep.
-    expect(outcomes.get('C1')).toEqual({ complete: true, keep: false });
+    expect(outcomes.get('C1')).toEqual({ complete: false });
   });
 });
 

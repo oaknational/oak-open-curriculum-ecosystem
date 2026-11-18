@@ -41,7 +41,7 @@ const senderWithId = deriveCollaborationIdentity({
   platform: sender.platform,
   model: sender.model,
   env: {
-    OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+    PRACTICE_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
     PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
   },
 }).agentId;
@@ -52,7 +52,7 @@ const recipientWithId = deriveCollaborationIdentity({
   platform: recipient.platform,
   model: recipient.model,
   env: {
-    OAK_AGENT_IDENTITY_OVERRIDE: recipient.agent_name,
+    PRACTICE_AGENT_IDENTITY_OVERRIDE: recipient.agent_name,
     CODEX_THREAD_ID: replyRecipientCodexThreadId,
   },
 }).agentId;
@@ -108,14 +108,18 @@ describe('collaboration-state comms integration', () => {
         sender.model,
       ],
       env: {
-        OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+        PRACTICE_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
         PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
       },
       io: fake.runtime.io,
     });
 
     expect(result.exitCode).toBe(0);
-    expect(result.stdout).toBe('wrote comms event message-one to state/comms/message-one.json\n');
+    // The reported event path is host-joined from the comms dir, so the
+    // expectation is derived in host form (the POSIX literal on POSIX).
+    expect(result.stdout).toBe(
+      `wrote comms event message-one to ${pathJoin(commsDir, 'message-one.json')}\n`,
+    );
     expect(fake.readCommsEvents(commsDir)).toStrictEqual([
       directedMessage({
         event_id: 'message-one',
@@ -171,7 +175,7 @@ describe('collaboration-state comms integration', () => {
         sender.model,
       ],
       env: {
-        OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+        PRACTICE_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
         PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
       },
       io: fake.runtime.io,
@@ -232,7 +236,7 @@ describe('collaboration-state comms integration', () => {
         sender.model,
       ],
       env: {
-        OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+        PRACTICE_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
         PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
       },
       io: fake.runtime.io,
@@ -278,7 +282,7 @@ describe('collaboration-state comms integration', () => {
         sender.model,
       ],
       env: {
-        OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+        PRACTICE_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
         PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
       },
       io: fake.runtime.io,
@@ -328,7 +332,7 @@ describe('collaboration-state comms integration', () => {
         sender.model,
       ],
       env: {
-        OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+        PRACTICE_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
         PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
       },
       io: fake.runtime.io,
@@ -374,7 +378,7 @@ describe('collaboration-state comms integration', () => {
         sender.model,
       ],
       env: {
-        OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+        PRACTICE_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
         PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
       },
       io: fake.runtime.io,
@@ -422,7 +426,7 @@ describe('collaboration-state comms integration', () => {
         sender.model,
       ],
       env: {
-        OAK_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
+        PRACTICE_AGENT_IDENTITY_OVERRIDE: sender.agent_name,
         PRACTICE_AGENT_SESSION_ID_CLAUDE: sender.session_id_prefix,
       },
       io: fake.runtime.io,
@@ -480,13 +484,15 @@ describe('collaboration-state comms integration', () => {
       ],
       env: {
         CODEX_THREAD_ID: replyRecipientCodexThreadId,
-        OAK_AGENT_IDENTITY_OVERRIDE: recipient.agent_name,
+        PRACTICE_AGENT_IDENTITY_OVERRIDE: recipient.agent_name,
       },
       io: fake.runtime.io,
     });
 
     expect(result.exitCode).toBe(0);
-    expect(result.stdout).toBe('wrote comms event message-two to state/comms/message-two.json\n');
+    expect(result.stdout).toBe(
+      `wrote comms event message-two to ${pathJoin(commsDir, 'message-two.json')}\n`,
+    );
     expect(fake.readCommsEvents(commsDir)).toContainEqual(
       directedMessage({
         event_id: 'message-two',

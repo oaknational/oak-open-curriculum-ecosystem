@@ -58,4 +58,5 @@ the emptier-but-emptied register. Three different costumes on the same temptatio
 The reusable lessons (verification-report unreliability; drain-of-an-owner-gated-
 register means substance-eval not emptying; the dead-but-metric-fresh claim) are
 captured in `napkin.md` for graduation via `consolidate-docs`; the per-item
-verdicts live in `curator-passes/2026-05-28-sunlit-waxing-moon.md`.
+verdicts are in that day's pass record as committed at `63b300496` (the
+per-pass records were retired afterwards, so the commit is their home).

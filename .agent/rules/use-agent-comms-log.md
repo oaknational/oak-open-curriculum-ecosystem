@@ -1,3 +1,9 @@
+---
+classification: situational
+description: "Team sessions: before non-trivial work, append a schema-valid comms event (pnpm agent-tools:collaboration-state -- comms append) naming what you will touch, PDR-027-signed, UTC timestamps; read active-claims.json and the newest log slice first. Three comms checkpoints only — before the first non-trivial edit, before delegating or touching peer-claimed paths, at turn-close after mutating collaboration state — never a wall-clock loop. Not for solo sessions. Failure shape: editing the rendered shared-comms-log.md directly — the next render overwrites it, leaving a false handoff claim."
+trigger: session:team
+---
+
 # Use the Shared Communication Log
 
 Before starting work on any non-trivial edit, append a timestamped comms
@@ -47,6 +53,11 @@ If those responsibilities start to blur, capture that as a domain-model
 signal in the napkin or an active plan rather than adding another
 ad-hoc field to an existing surface.
 
+Which channel a message travels by — native session messaging, an ARC channel, or a comms
+event — is decided by
+[`channel-by-audience-lifetime-and-consumer`](channel-by-audience-lifetime-and-consumer.md);
+this rule governs what must land on the comms log regardless of how the conversation travelled.
+
 ## Event Authoring Contract
 
 The rendered `shared-comms-log.md` is a generated view, not an authoring
@@ -55,6 +66,13 @@ valid event under `.agent/state/collaboration/comms/`, normally through
 `pnpm agent-tools:collaboration-state -- comms append`, then render the shared
 log from those events. A direct markdown append can be overwritten by the next
 render and may create a false handoff claim that no peer can actually read.
+
+A comms body is passed as a file: "any comms body carrying code spans, paths, or globs goes through
+--body-file, never --body; and read the stored body back after any --body send", because zsh
+evaluated backtick spans in an inline body as command substitution and the event landed with four
+spans missing, and inline bodies through the pnpm wrapper "failed twice today with a bare exit 2"
+(Sandpiper weaves Updraft's correction of 2026-09-12 and Cricket weaves Burrow's handoff of
+2026-09-07, events 5b58b189 and 3b3ee187).
 
 ## Coordinated-session comms cadence (non-blocking)
 
@@ -92,13 +110,13 @@ announce intent per the write-minimum in item 3 below.
    delegating work to another agent, opening a commit or staging window outside
    your claim bundle, or editing paths another peer names in a fresh log
    heading or active claim; **(c)** at turn-close **only when** this turn
-   mutated collaboration state (claims, comms events, `commit_queue`,
+   mutated collaboration state (claims, comms events, commit-queue intents,
    conversations, escalations) or chose overlap-risk paths. Do **not** insert a
    pass after every tool batch during uninterrupted work inside your declared
    scope.
 
-2. **Read order (every pass)** — (1) `active-claims.json`
-   (includes advisory root `commit_queue`); (2) the newest slice of
+2. **Read order (every pass)** — (1) `active-claims.json` and the advisory
+   per-intent commit-queue store beside it (`commit-queue list`); (2) the newest slice of
    `shared-comms-log.md` until
    recent peer intent is clear (typically the latest handful of headings,
    expanding into bodies only when overlap is plausible); (3) **only if** the
@@ -115,7 +133,7 @@ announce intent per the write-minimum in item 3 below.
 
 4. **Coordinator vs worker** — workers follow 1–3. An agent claiming the
    coordinator role uses the same checkpoints but **also** posts
-   bounded-deadline comms and ordering signals (`commit_queue`, pause/resume
+   bounded-deadline comms and ordering signals (commit-queue intents, pause/resume
    notes) as defined in [`agent-collaboration.md`](../directives/agent-collaboration.md)
    §Coordinator Role; workers respond once when addressed, then resume unless a
    deadline pause applies.
@@ -155,6 +173,20 @@ worker takes the implementation slice only after the verdict lands.
   — owner-escalation schema authority.
 - `collaboration-state-write-safety.plan.md`
   — current comms-event and transaction-helper implementation plan.
+
+## Scale ceremony to the audience
+
+The comms-event protocol — session-open, pause and closeout broadcasts,
+heartbeat-end — exists for coordination between live agents. In an n=1
+session, with zero peers, there is no audience: the napkin, the continuity
+surfaces, the thread records, the PRs and git history already carry the
+record, and emitting the events anyway is ritual that costs owner
+wall-clock (owner, 2026-07-18, at a closeout: "this is an n=1 session, stop
+messaging ceremony and do the session close out"). Verify the peer state
+first (the claims registry and the comms log); when solo, write the tracked
+record and skip the broadcasts. Multi-agent windows keep the full protocol.
+This scales ceremony; it never lifts a gate — an n=1 session treats its goal
+as direction, never as permission to skip checks.
 
 ## Identity
 

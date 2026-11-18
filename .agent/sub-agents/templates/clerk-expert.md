@@ -1,3 +1,27 @@
+---
+description: Clerk specialist for both read-only review and active-workflow planning, grounded in current official Clerk documentation with Vercel (Express) + shared Clerk instance as the default deployment context. Invoke for Clerk middleware, token verification, OAuth proxy, PRM, @clerk/mcp-tools, or Clerk SDK usage — review or planning support.
+platforms:
+  - cursor
+  - claude
+  - codex
+claude:
+  tools: Read, Grep, Glob, Bash, WebFetch, WebSearch
+  disallowedTools: Write, Edit, NotebookEdit
+  color: blue
+  note: Review or recommend; do not modify code. The calling agent executes any changes you propose.
+cursor:
+  description: Clerk specialist for both read-only review and active-workflow planning, grounded in current official Clerk documentation with Vercel (Express) + shared Clerk instance as the default deployment context. Use for Clerk middleware, token verification, OAuth proxy, PRM, @clerk/mcp-tools, or Clerk SDK usage — review or planning support.
+  note: Review or recommend; do not modify code. The calling agent executes any changes you propose.
+codex:
+  description: Clerk specialist for both read-only review and active-workflow planning around middleware, token verification, OAuth proxy, PRM, @clerk/mcp-tools, and Clerk SDK usage.
+  note: |-
+    This file is a thin Codex adapter. The canonical expert instructions live in
+    the template referenced above.
+
+    Mode: Review or recommend. Do not modify code. The calling agent executes any
+    changes you propose.
+---
+
 ## Delegation Triggers
 
 Invoke this expert when work touches Clerk middleware, token verification,

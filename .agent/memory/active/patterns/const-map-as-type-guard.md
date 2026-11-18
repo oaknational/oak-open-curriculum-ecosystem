@@ -3,6 +3,7 @@ name: Const Map as Type Guard
 polarity: pattern
 use_this_when: a runtime conversion mirrors a compile-time type transformation and all possible values are known at generation or build time
 category: code
+layer: family
 proven_in: packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/emit-index.ts
 proven_date: 2026-02-27
 barrier:

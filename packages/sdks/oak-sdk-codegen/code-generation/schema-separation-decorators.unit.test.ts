@@ -152,6 +152,57 @@ function getSchemaProperties(
   return properties;
 }
 
+function buildSchemaWithAllOfComposite(): OpenAPIObject {
+  return {
+    openapi: '3.1.0',
+    info: { title: 'Test', version: '1.0.0' },
+    paths: {},
+    components: {
+      schemas: {
+        CompositeResponseSchema: {
+          allOf: [
+            {
+              type: 'object',
+              properties: {
+                itemTitle: { type: 'string' },
+              },
+            },
+            {
+              type: 'object',
+              properties: {
+                itemSlug: { type: 'string' },
+              },
+            },
+          ],
+        },
+      },
+    },
+  };
+}
+
+function buildKeywordsSchema(extraSchemas: Record<string, SchemaObject> = {}): OpenAPIObject {
+  return {
+    openapi: '3.1.0',
+    info: { title: 'Test', version: '1.0.0' },
+    paths: {},
+    components: {
+      schemas: {
+        KeywordsResponseSchema: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              keyword: { type: 'string' },
+              description: { type: 'string' },
+            },
+          },
+        },
+        ...extraSchemas,
+      },
+    },
+  };
+}
+
 describe('decorateOakUrls', () => {
   describe('when upstream defines oakUrl', () => {
     it('preserves the upstream oakUrl definition unchanged', () => {
@@ -237,34 +288,6 @@ describe('decorateOakUrls', () => {
   });
 
   describe('when schema uses allOf composite (no top-level properties)', () => {
-    function buildSchemaWithAllOfComposite(): OpenAPIObject {
-      return {
-        openapi: '3.1.0',
-        info: { title: 'Test', version: '1.0.0' },
-        paths: {},
-        components: {
-          schemas: {
-            CompositeResponseSchema: {
-              allOf: [
-                {
-                  type: 'object',
-                  properties: {
-                    itemTitle: { type: 'string' },
-                  },
-                },
-                {
-                  type: 'object',
-                  properties: {
-                    itemSlug: { type: 'string' },
-                  },
-                },
-              ],
-            },
-          },
-        },
-      };
-    }
-
     it('handles schemas without a top-level properties key gracefully', () => {
       const input = buildSchemaWithAllOfComposite();
       expect(() => decorateOakUrls(input)).not.toThrow();
@@ -289,29 +312,6 @@ describe('decorateOakUrls', () => {
   });
 
   describe('non-resource response schemas', () => {
-    function buildKeywordsSchema(extraSchemas: Record<string, SchemaObject> = {}): OpenAPIObject {
-      return {
-        openapi: '3.1.0',
-        info: { title: 'Test', version: '1.0.0' },
-        paths: {},
-        components: {
-          schemas: {
-            KeywordsResponseSchema: {
-              type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  keyword: { type: 'string' },
-                  description: { type: 'string' },
-                },
-              },
-            },
-            ...extraSchemas,
-          },
-        },
-      };
-    }
-
     it('does not advertise oakUrl on keyword records', () => {
       const result = decorateOakUrls(buildKeywordsSchema());
       const schema = result.components?.schemas?.KeywordsResponseSchema;

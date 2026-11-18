@@ -3,6 +3,7 @@ name: "Guarded Fire-and-Forget Cleanup"
 polarity: pattern
 use_this_when: "You have async cleanup (close, flush, disconnect) that runs after the response is sent and cannot be awaited by the caller"
 category: code
+layer: family
 proven_in: "apps/oak-curriculum-mcp-streamable-http/src/mcp-handler.ts"
 proven_date: 2026-03-30
 barrier:

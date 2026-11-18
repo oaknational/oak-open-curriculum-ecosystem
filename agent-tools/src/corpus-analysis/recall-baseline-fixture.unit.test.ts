@@ -4,6 +4,9 @@ import { findRecallIntegrityViolations } from './aggregation-recall.js';
 import { RECALL_BASELINES } from './recall-baseline-fixture.js';
 import { baselineSchema } from './recall-schemas.js';
 
+/** A locale-aware comparator ordering baseline ids by name. */
+const byName = (a: string, b: string): number => a.localeCompare(b);
+
 describe('RECALL_BASELINES fixture', () => {
   it('parses every baseline through the strict schema', () => {
     for (const baseline of RECALL_BASELINES) {
@@ -29,7 +32,6 @@ describe('RECALL_BASELINES fixture', () => {
     // These eight are the structural defects the v1 proving run assessed first-hand as
     // out-of-remit (no cross-window recurrence for an emergence pass to surface). A drift
     // here changes the headline-recall denominator and must be a deliberate recalibration.
-    const byName = (a: string, b: string): number => a.localeCompare(b);
     const singleWindowIds = RECALL_BASELINES.filter(
       (baseline) => baseline.population === 'single-window',
     )

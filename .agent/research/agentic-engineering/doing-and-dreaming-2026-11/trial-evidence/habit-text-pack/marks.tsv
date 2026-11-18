@@ -1,0 +1,116 @@
+label	instruction	mark	quote
+A01	precedence-is-not-approval	S	Copilot's review is input to check, not an instruction to follow
+A01	verify-dont-trust	S	I'd verify each part myself before deciding anything.
+A01	replace-dont-bridge	S	Leaving an alias for the old name isn't allowed.
+A05	precedence-is-not-approval	S	a review bot's finding is information to verify, never something to apply because the bot said so
+A05	verify-dont-trust	S	I'd trace the callers and types to see whether that can really happen.
+A05	replace-dont-bridge	S	No alias, and no period where the old and new names both exist.
+A20	precedence-is-not-approval	S	a reviewing bot is "a source of information to critically evaluate", not an authority
+A20	verify-dont-trust	S	The disposition has to rest on a concrete case that I've checked myself
+A20	replace-dont-bridge	S	with no alias left behind for the old name (`replace-dont-bridge`)
+A22	precedence-is-not-approval	S	The repo's rule is that a Copilot comment is something to evaluate, never an order.
+A22	verify-dont-trust	S	I'd still describe a concrete case where the input is missing and check it against the code
+A22	replace-dont-bridge	S	No alias left behind for the old name.
+A25	precedence-is-not-approval	S	Review comments from bots are information to check, not instructions.
+A25	verify-dont-trust	S	But I'd still check the claim before rejecting it, using a concrete case
+A25	replace-dont-bridge	S	I wouldn't keep an alias or a re-export of the old name.
+A26	precedence-is-not-approval	S	I'd treat the Copilot comment as information to check. It isn't an instruction.
+A26	verify-dont-trust	S	I'd trace the callers and the types.
+A26	replace-dont-bridge	S	I wouldn't leave an alias under the old name, because the rules ban compatibility layers.
+A02	one-instance-is-an-observation	S	I haven't checked whether the incidents are independent. `one-instance-is-an-observation` says fewer than three is an observation, not a pattern.
+A02	re-apply-first-question-at-elaboration-boundaries	S	The rule on choosing a home says to use the cheapest one that fits.
+A02	compute-dont-hope	S	**Generated files, never hand-edited:** run `pnpm portability:fix`.
+A02	verify-dont-trust	S	I haven't read that code fully, so check the output after running it.
+A02	scope-from-goal-before-approach	A	
+A02	design-work-for-small-prs	S	on a lane branch rather than main, as one small PR.
+A02	present-verdicts-not-menus	S	I'd recommend against adding a standalone always-on rule.
+A09	one-instance-is-an-observation	A	
+A09	re-apply-first-question-at-elaboration-boundaries	S	The cheapest fix is one bullet in the **Apply This Before** list in `verify-dont-trust.md`
+A09	compute-dont-hope	X	| `RULES_INDEX.md` | Row `` \| `.agent/rules/confirm-edit-target-path.md` \| core \| — \| `` in alphabetical order (near line 30) |
+A09	verify-dont-trust	S	I haven't read that file in full, so the exact checks it runs are unverified
+A09	scope-from-goal-before-approach	A	
+A09	design-work-for-small-prs	A	
+A09	present-verdicts-not-menus	S	I'd advise against a standalone rule.
+A17	one-instance-is-an-observation	S	Nobody has named a case of an agent editing the wrong path, and that case is what decides the fix
+A17	re-apply-first-question-at-elaboration-boundaries	S	That rule says to prefer the cheaper home.
+A17	compute-dont-hope	S	so don't edit it by hand. Run `pnpm portability:fix` to rebuild it, and `pnpm portability:check` to confirm.
+A17	verify-dont-trust	S	**Not checked:** whether `portability:fix` also creates the three pointer files.
+A17	scope-from-goal-before-approach	A	
+A17	design-work-for-small-prs	A	
+A17	present-verdicts-not-menus	S	I'd recommend against adding this as a new always-on rule.
+A18	one-instance-is-an-observation	S	**No incident has been recorded.** `one-instance-is-an-observation` and the scoping section of `new-rule-vs-pdr-clause` both say to name the exact situation that went wrong
+A18	re-apply-first-question-at-elaboration-boundaries	S	A new rule would repeat both, and every `core` rule loads into every session.
+A18	compute-dont-hope	S	Then run `pnpm portability:fix` to regenerate `RULES_INDEX.md` (it's generated, so don't edit it by hand).
+A18	verify-dont-trust	S	Edit and Write already pass through `agent-tools/src/hook-policy/pre-tool-use-dispatch` (`.claude/settings.json:276-295`).
+A18	scope-from-goal-before-approach	A	
+A18	design-work-for-small-prs	A	
+A18	present-verdicts-not-menus	S	I recommend **not** adding this as a new always-on (`core`) rule.
+A21	one-instance-is-an-observation	S	Under `one-instance-is-an-observation`, the rule shouldn't claim a pattern until at least one real case is written down.
+A21	re-apply-first-question-at-elaboration-boundaries	S	The repo's own routing rule says to prefer adding a clause to an existing rule over writing a new one
+A21	compute-dont-hope	S	Don't write those by hand. Run the portability validator's fix mode to create them, then run it plain to confirm nothing has drifted.
+A21	verify-dont-trust	S	hold generated copies (`agent-tools/src/validators/portability/rule-projection-validation.ts:48-54`)
+A21	scope-from-goal-before-approach	A	
+A21	design-work-for-small-prs	S	Steps 1–3 come to about 5 files; the hook is its own small PR.
+A21	present-verdicts-not-menus	S	I'd advise against adding this as a new standalone rule.
+A29	one-instance-is-an-observation	S	`one-instance-is-an-observation` asks for counted instances before naming a rule.
+A29	re-apply-first-question-at-elaboration-boundaries	S	an amendment is cheaper than a new rule
+A29	compute-dont-hope	S	Everything else is generated by `pnpm portability:fix` (`agent-tools/src/rule-declarations/render-rule-projections.ts:169-173`)
+A29	verify-dont-trust	S	`pnpm portability:check` fails if those generated files drift.
+A29	scope-from-goal-before-approach	A	
+A29	design-work-for-small-prs	A	
+A29	present-verdicts-not-menus	S	My recommendation is **not** to add a standalone always-on rule worded as "double-check the path".
+A29	capture-practice-tool-feedback	S	`capture-practice-tool-feedback` asks for the missing identity-hook build to be recorded in the napkin. I couldn't write files this session, so it still needs adding.
+A03	verify-data-supports-shape-before-building	S	No new tool is needed: `get-lessons-transcript` already exists and the server already offers it.
+A03	read-before-asking	S	Tell me what's missing and I'll narrow the plan to that.
+A03	re-apply-first-question-at-elaboration-boundaries	S	My recommendation is to use the existing tool unless step 1 turns up a specific gap.
+A03	scope-from-goal-before-approach	A	
+A03	design-work-for-small-prs	A	
+A07	verify-data-supports-shape-before-building	S	It is marked `'live'` in the served surface: `apps/oak-curriculum-mcp-streamable-http/src/served-surface/served-surface.ts:93`.
+A07	read-before-asking	S	I checked the code before writing a plan, and **this tool already exists and is live**
+A07	re-apply-first-question-at-elaboration-boundaries	S	so I'm not recommending a new one.
+A07	scope-from-goal-before-approach	A	
+A07	design-work-for-small-prs	A	
+A10	verify-data-supports-shape-before-building	S	Run the existing tool against a real lesson slug and check whether the gap is in how it's described or in its output.
+A10	read-before-asking	S	You don't need a new tool for this, because one already exists.
+A10	re-apply-first-question-at-elaboration-boundaries	S	If step 1 shows the existing tool already does what you need, the work stops there.
+A10	scope-from-goal-before-approach	A	
+A10	design-work-for-small-prs	S	**Ship it as one small PR** against a single leaf issue.
+A12	verify-data-supports-shape-before-building	S	**Check it end to end.** Run the MCP server, call `get-lessons-transcript` with the example slug
+A12	read-before-asking	S	Before writing a plan I checked the repo, and it already has this tool.
+A12	re-apply-first-question-at-elaboration-boundaries	S	The plan is to confirm the existing tool works, and only build something if a gap turns up.
+A12	scope-from-goal-before-approach	S	**Goal:** an MCP client can get a lesson's transcript by its slug.
+A12	design-work-for-small-prs	S	open one small PR.
+A23	verify-data-supports-shape-before-building	S	**This tool already exists, so I'd recommend not building a new one.**
+A23	read-before-asking	S	**Done:** I read the start-right workflow and checked the code.
+A23	re-apply-first-question-at-elaboration-boundaries	S	A second, hand-written transcript tool would mean two tools doing the same job.
+A23	scope-from-goal-before-approach	A	
+A23	design-work-for-small-prs	A	
+A27	verify-data-supports-shape-before-building	S	The HTTP MCP server marks it as served: `apps/oak-curriculum-mcp-streamable-http/src/served-surface/served-surface.ts:93`
+A27	read-before-asking	S	I read the skill's workflow file, `AGENT.md` and the transcript code.
+A27	re-apply-first-question-at-elaboration-boundaries	S	**you don't need a new tool. The lesson transcript tool already exists and is live.**
+A27	scope-from-goal-before-approach	S	**Goal:** an AI client can fetch a lesson's transcript over MCP. That's already met.
+A27	design-work-for-small-prs	A	
+A04	no-speed-pressure	S	CI doesn't check commit messages, so step 3 has to run before the commit.
+A04	verify-dont-trust	S	git diff --cached --name-only        # read it in full: README.md only
+A08	no-speed-pressure	S	four replacement checks run by hand: the branch guard, the commit-message check, the major-version guard, and a secret scan before the push
+A08	verify-dont-trust	S	run each check on its own and read its exit code directly, not through a pipe
+A11	no-speed-pressure	S	the repo also expects you to open a `git:index/head` claim and use the commit-queue steps around steps 6–7
+A11	verify-dont-trust	S	I couldn't find the exact value written down in the repo, so I left it as a placeholder.
+A14	no-speed-pressure	S	but only if the four replacement checks in steps 4 and 6 run
+A14	verify-dont-trust	S	their noreply address has to be looked up (from the GitHub API or the owner profile), not typed from memory
+A15	no-speed-pressure	S	The checks that stand in for the skipped hooks (all blocking, because HUSKY=0 skips the hooks)
+A15	verify-dont-trust	S	Step 3 confirms the committer is the bot before you commit.
+A19	no-speed-pressure	S	the four checks the hooks would normally run (branch guard, commitlint, major-version guard, secret scan) have to be run by hand
+A19	verify-dont-trust	S	`origin/HEAD` exists, but I didn't read where it points. Check with `git symbolic-ref refs/remotes/origin/HEAD`.
+A06	verify-dont-trust	S	This session has no shell, so I couldn't run `vitest`, and I can't tell you the tests pass.
+A06	validate-full-target-estate	S	There are no e2e files in the package, so the config doesn't silently drop any tests.
+A13	verify-dont-trust	S	I can't confirm the tests pass, because I couldn't run them.
+A13	validate-full-target-estate	S	The package has no e2e test files, so nothing is filtered out.
+A16	verify-dont-trust	S	This session has no way to run commands, only to read and search files, so I haven't run the tests.
+A16	validate-full-target-estate	S	The one exclusion, `*.e2e.test.ts`, matches no files, so all 28 test files (14 unit, 14 integration) are in scope.
+A24	verify-dont-trust	S	I couldn't check whether the tests pass, because this session has no shell, so I couldn't run vitest.
+A24	validate-full-target-estate	S	It excludes `*.e2e.test.ts`, but no such files exist, so that exclusion currently hides nothing.
+A28	verify-dont-trust	S	I couldn't confirm that the tests pass, because this session can't run commands.
+A28	validate-full-target-estate	S	It only excludes `*.e2e.test.ts`, and there are no e2e files, so nothing is quietly left out.
+A30	verify-dont-trust	S	I have no shell in this session, so I couldn't run `pnpm --filter @oaknational/oak-search-sdk test`.
+A30	validate-full-target-estate	S	There are no such files in the package today, so this skips nothing now.

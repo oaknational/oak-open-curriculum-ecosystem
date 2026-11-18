@@ -57,8 +57,8 @@ describe('loopback request helper (MCP-403)', () => {
   });
 
   it('refuses to swap apps while a different app has requests in flight', async () => {
-    let releaseHandler: () => void = () => undefined;
-    let handlerEntered: () => void = () => undefined;
+    let releaseHandler: (() => void) | undefined;
+    let handlerEntered: (() => void) | undefined;
     const entered = new Promise<void>((resolve) => {
       handlerEntered = resolve;
     });
@@ -69,12 +69,12 @@ describe('loopback request helper (MCP-403)', () => {
     // an unreleased handler wedges afterAll on the live connection and
     // masks the real failure behind a hook timeout.
     onTestFinished(() => {
-      releaseHandler();
+      releaseHandler?.();
     });
 
     const slowApp = express();
     slowApp.get('/slow', (_req, res) => {
-      handlerEntered();
+      handlerEntered?.();
       void gate.then(() => {
         res.send('released');
       });
@@ -92,7 +92,7 @@ describe('loopback request helper (MCP-403)', () => {
     // Same-app swap stays allowed while in flight.
     expect(() => request(slowApp)).not.toThrow();
 
-    releaseHandler();
+    releaseHandler?.();
     const res = await settled;
     expect(res.text).toBe('released');
 

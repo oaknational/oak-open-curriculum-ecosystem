@@ -20,7 +20,7 @@ export function generatePathParametersHeader(): string {
  */
 
 // Link to the processed schema for use with the OpenAPI-Fetch client.
-import type { paths as Paths } from "./api-paths-types";
+import type { Paths } from "./api-paths-types";
 // Link to the schema runtime object file.
 /**
  * The Schema["paths"] keys are the same as the Paths type keys, but the types are different.

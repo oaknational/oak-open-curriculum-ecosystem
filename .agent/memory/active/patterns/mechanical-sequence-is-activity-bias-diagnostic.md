@@ -3,6 +3,7 @@ name: Mechanical Sequence Is the Activity-Bias Diagnostic, Not Its Justification
 polarity: anti-pattern
 use_this_when: A sequence of tool calls, edits, dispositions, or commits has become procedurally identical and the impulse is to continue because each step is "easy"
 category: process
+layer: general
 proven_in: |
   docs/governance/sonar-disposition-policy.md
   (Sonar bulk-disposition arc — Stormy 2026-05-06);

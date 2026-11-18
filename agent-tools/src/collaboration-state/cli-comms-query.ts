@@ -68,7 +68,7 @@ function parseSince(raw: string | undefined): number | undefined {
   }
   const sinceMs = Date.parse(raw);
   if (Number.isNaN(sinceMs)) {
-    throw new Error(`--since must be an ISO-8601 timestamp (got: ${raw})`);
+    throw new TypeError(`--since must be an ISO-8601 timestamp (got: ${raw})`);
   }
   return sinceMs;
 }
@@ -140,7 +140,7 @@ function parseNow(raw: string | undefined): number {
   }
   const nowMs = Date.parse(raw);
   if (Number.isNaN(nowMs)) {
-    throw new Error(`--now must be an ISO-8601 timestamp (got: ${raw})`);
+    throw new TypeError(`--now must be an ISO-8601 timestamp (got: ${raw})`);
   }
   return nowMs;
 }

@@ -184,3 +184,8 @@ Tranche A first — the manual lane's needs; tranche B never blocks it.
   so a fresh clone's documented verify sequence builds dependencies at
   its first step — no README change needed; this record answers the
   corresponding Copilot suppressed finding on #888.
+
+## Review dispositions
+
+- 2026-09-10 — from the docs-adr-expert and onboarding-expert legs on PR #121 (the Windows-via-WSL README path): (a) the gitleaks version and digest are pinned in two places (the README section and `.github/workflows/ci.yml`) with no drift check — give gitleaks one install home or add a repo-validator asserting the two digests are equal (MEDIUM); (b) the 120-line WSL runbook is most of the README's Quick Start — extract to `docs/engineering/windows-wsl-setup.md` with a three-line pointer, the owner's call on the README's shape (MEDIUM); (c) one sentence naming WSL as the supported Windows route so a native-Windows contributor can tell unsupported from undocumented (INFO). Routed here, not cured on #121.
+- 2026-09-10 — from the onboarding-expert leg on PR #121: (d) step 3 packs four installs into one 45-line step — one step per install, renumbered, when the runbook is extracted (P2); (e) the orientation skill `under-the-hood` promises machine setup and has no Windows branch — add the section to its map row and one routing sentence in §Setup (P3); (f) the corepack rule is best stated as "the launcher must sit at a trusted absolute path or set `PNPM_HOME`" wherever the install-version-guard's remedy text is re-trued (P3). Routed here.

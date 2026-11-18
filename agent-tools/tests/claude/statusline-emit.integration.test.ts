@@ -30,7 +30,7 @@ describe('emitStatusline', () => {
     const { deps, appended } = fakeDeps();
     const out = emitStatusline('not json {{{', {
       ...deps,
-      env: { OAK_STATUSLINE_LOG_FILE: '/d/s.log' },
+      env: { PRACTICE_STATUSLINE_LOG_FILE: '/d/s.log' },
     });
     expect(appended).toEqual([
       { path: '/d/s.log', payload: 'not json {{{', nowIso: '2026-08-12T09:00:00.000Z' },
@@ -40,8 +40,11 @@ describe('emitStatusline', () => {
 
   it('emits the misconfiguration warning alone on a noop payload — silence must never read as "nothing arrived"', () => {
     const { deps } = fakeDeps();
-    const out = emitStatusline('{}', { ...deps, env: { OAK_STATUSLINE_LOG_FILE: '/d/notes.txt' } });
-    expect(out).toContain('OAK_STATUSLINE_LOG_FILE');
+    const out = emitStatusline('{}', {
+      ...deps,
+      env: { PRACTICE_STATUSLINE_LOG_FILE: '/d/notes.txt' },
+    });
+    expect(out).toContain('PRACTICE_STATUSLINE_LOG_FILE');
     expect(out.endsWith('\n')).toBe(true);
   });
 
@@ -49,25 +52,27 @@ describe('emitStatusline', () => {
     const { deps } = fakeDeps();
     const out = emitStatusline('{"session_id":"c32a7d1d-a40b-4864-b4cd-bc4332a3e362"}', {
       ...deps,
-      env: { OAK_STATUSLINE_LOG_FILE: '/d/notes.txt' },
+      env: { PRACTICE_STATUSLINE_LOG_FILE: '/d/notes.txt' },
     });
-    expect(out).toContain('OAK_STATUSLINE_LOG_FILE');
+    expect(out).toContain('PRACTICE_STATUSLINE_LOG_FILE');
     expect(out).toContain('RENDERED');
-    expect(out.indexOf('OAK_STATUSLINE_LOG_FILE')).toBeLessThan(out.indexOf('RENDERED'));
+    expect(out.indexOf('PRACTICE_STATUSLINE_LOG_FILE')).toBeLessThan(out.indexOf('RENDERED'));
   });
 
   it('keeps the warning when rendering throws — the fault token joins it, never replaces it', () => {
     const { deps } = fakeDeps();
     const out = emitStatusline('{"session_id":"c32a7d1d-a40b-4864-b4cd-bc4332a3e362"}', {
       ...deps,
-      env: { OAK_STATUSLINE_LOG_FILE: '/d/notes.txt' },
+      env: { PRACTICE_STATUSLINE_LOG_FILE: '/d/notes.txt' },
       render: () => {
         throw new Error('render exploded');
       },
     });
-    expect(out).toContain('OAK_STATUSLINE_LOG_FILE');
+    expect(out).toContain('PRACTICE_STATUSLINE_LOG_FILE');
     expect(out).toContain('render exploded');
-    expect(out.indexOf('OAK_STATUSLINE_LOG_FILE')).toBeLessThan(out.indexOf('render exploded'));
+    expect(out.indexOf('PRACTICE_STATUSLINE_LOG_FILE')).toBeLessThan(
+      out.indexOf('render exploded'),
+    );
   });
 
   it('renders cleanly with no logging and no warning under an unset environment', () => {

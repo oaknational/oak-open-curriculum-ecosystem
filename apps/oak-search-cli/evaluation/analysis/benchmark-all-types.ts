@@ -2,6 +2,8 @@
  * Shared types and utilities for the unified benchmark CLI.
  */
 
+import { typeSafeIncludes } from '@oaknational/type-helpers';
+
 export interface BenchmarkMetrics {
   readonly mrr: number;
   readonly ndcg10: number;
@@ -19,7 +21,7 @@ export const VALID_INDEXES = ['lessons', 'units', 'threads', 'sequences'] as con
 export type IndexName = (typeof VALID_INDEXES)[number];
 
 export function isValidIndex(value: string): value is IndexName {
-  return VALID_INDEXES.some((v) => v === value);
+  return typeSafeIncludes(VALID_INDEXES, value);
 }
 
 /** Compute average metrics from a collection of per-query metrics. */

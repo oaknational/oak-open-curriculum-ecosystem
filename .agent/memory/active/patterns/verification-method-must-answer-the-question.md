@@ -3,6 +3,7 @@ name: Verification Method Must Answer the Question
 polarity: anti-pattern
 use_this_when: About to declare content conserved/absent/landed, a capture branch safe to merge, or a review surface fully read, on the strength of a diff, grep, or bounded API read
 category: process
+layer: general
 proven_in: .agent/memory/active/archive/napkin-2026-07-20.md (2026-07-14 false-orphan retractions; 2026-07-16 pagination blindness; 2026-07-17 substance-probe adjudications; 2026-07-20 omission-blind licence review)
 proven_date: 2026-07-20
 barrier:

@@ -144,8 +144,6 @@ let globalCollector: IngestionErrorCollector | null = null;
 
 /** Get or create the global error collector. */
 export function getIngestionErrorCollector(): IngestionErrorCollector {
-  if (!globalCollector) {
-    globalCollector = createIngestionErrorCollector();
-  }
+  globalCollector ??= createIngestionErrorCollector();
   return globalCollector;
 }

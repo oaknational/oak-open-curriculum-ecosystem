@@ -3,6 +3,7 @@ name: "Indexed-access sub-type derivation from generated unions"
 polarity: pattern
 use_this_when: "You need to process elements of a generated union type and the existing code uses hand-rolled local types that approximate the schema"
 category: code
+layer: family
 proven_in: "apps/oak-search-cli/src/adapters/category-supplementation.ts"
 proven_date: 2026-03-21
 barrier:

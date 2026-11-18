@@ -1,25 +1,30 @@
 #!/usr/bin/env sh
 
-# Refuse a rebase that would rewrite main — git fires this hook before any
+# Refuse a rebase that would rewrite a default branch — git fires this hook before any
 # rewrite; $1 is the upstream, $2 names the branch being rebased and is
 # absent when rebasing the checked-out branch. Mechanics live in the shared
 # guard (never-commit-to-main rule).
 GUARD_BRANCH="${2:-}"
-GUARD_HINT="Rebase on a branch instead — main advances only via pull requests."
+GUARD_HINT="Rebase on a branch instead — a default branch advances only via pull requests."
 . .husky/refuse-commit-on-main.sh
 
-# Also refuse when main points INTO the range being rewritten ($1..tip):
-# --update-refs (or rebase.updateRefs=true) force-moves every branch whose
-# tip sits inside that range — main included — without main being the
-# branch under rebase; and main sitting inside a topic's range means local
-# main carries commits that are not on the upstream, itself the state the
-# rule exists to prevent. The flag is invisible to this hook, so the state
-# is refused rather than the flag detected.
+# Also refuse when a protected default (main, master, or the branch the origin
+# HEAD names; the guard above read it into guard_default_branch) points INTO
+# the range being rewritten ($1..tip): --update-refs (or
+# rebase.updateRefs=true) force-moves every branch whose tip sits inside that
+# range — the default included — without the default being the branch under
+# rebase; and a default sitting inside a topic's range means the local default
+# carries commits that are not on the upstream, itself the state the rule
+# exists to prevent. The flag is invisible to this hook, so the state is
+# refused rather than the flag detected.
 rebased_tip="${2:-HEAD}"
-if git rev-parse --verify --quiet refs/heads/main >/dev/null 2>&1 \
-  && git merge-base --is-ancestor refs/heads/main "$rebased_tip" 2>/dev/null \
-  && ! git merge-base --is-ancestor refs/heads/main "$1" 2>/dev/null; then
-  echo "❌ Refusing this rebase — local 'main' points into the range being rewritten, so the rebase could move 'main' (e.g. via --update-refs)."
-  echo "💡 If main carries unpushed commits, preserve then re-home it first: git switch -c <branch> main && git fetch origin && git branch -f main origin/main. If your range simply reaches past the branch point, rebase from the branch point instead (e.g. git rebase -i main)."
-  exit 1
-fi
+for guard_protected in main master "$guard_default_branch"; do
+  [ -n "$guard_protected" ] || continue
+  if git rev-parse --verify --quiet "refs/heads/$guard_protected" >/dev/null 2>&1 \
+    && git merge-base --is-ancestor "refs/heads/$guard_protected" "$rebased_tip" 2>/dev/null \
+    && ! git merge-base --is-ancestor "refs/heads/$guard_protected" "$1" 2>/dev/null; then
+    echo "❌ Refusing this rebase — local '$guard_protected' points into the range being rewritten, so the rebase could move '$guard_protected' (e.g. via --update-refs)."
+    echo "💡 If '$guard_protected' carries unpushed commits, preserve then re-home it first: git switch -c <branch> $guard_protected && git fetch origin && git branch -f $guard_protected origin/$guard_protected. If your range simply reaches past the branch point, rebase from the branch point instead (e.g. git rebase -i $guard_protected)."
+    exit 1
+  fi
+done

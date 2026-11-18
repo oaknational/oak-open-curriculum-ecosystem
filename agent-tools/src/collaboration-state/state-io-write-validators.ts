@@ -35,6 +35,10 @@ export function commsEventWriteValidator(path: string): WriteValidator {
   return (text) => contractThenSchema('comms-event.schema.json', path, text);
 }
 
+export function commitQueueIntentWriteValidator(path: string): WriteValidator {
+  return (text) => contractThenSchema('commit-queue-intent.schema.json', path, text);
+}
+
 async function contractThenSchema(
   schemaId: ContractSchemaId,
   path: string,

@@ -127,7 +127,24 @@ describe('runFileBackedChild (F-112 invariants)', () => {
   });
 
   it('reports a signal-killed child distinctly, never as a bare 128', async () => {
-    const result = await run(`process.kill(process.pid, 'SIGTERM');`);
+    // The kill comes from the PARENT via the runner's abort seam: that is
+    // the one termination every platform reports with the signal named — a
+    // child terminating itself surfaces on Windows as a plain exit carrying
+    // no signal at all, so a self-kill fixture could never prove this
+    // contract there.
+    const controller = new AbortController();
+    const pending = runFileBackedChild({
+      command: node,
+      args: ['-e', 'setTimeout(() => {}, 60000);'],
+      cwd,
+      replaySinks: collectReplay().sinks,
+      abortSignal: controller.signal,
+    });
+    setTimeout(() => {
+      controller.abort();
+    }, 200);
+
+    const result = await pending;
 
     expect(result.signal).toBe('SIGTERM');
     expect(result.exitCode).toBe(128);

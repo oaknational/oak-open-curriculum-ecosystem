@@ -1,5 +1,5 @@
 ---
-description: Work is DESIGNED to deliver as small, safe PRs — decomposition happens at plan/ticket/stack shaping time, not at PR-open. Owner sizing bands (2026-07-27, permanent doctrine): ~5 files changed normal, 10 acceptable, 20 a problem. Purpose is reviewer-comment complexity; one mechanism among several, never a substitute for review triage or round convergence.
+description: 'Work is DESIGNED to deliver as small, safe PRs — decomposition happens at plan/ticket/stack shaping time, not at PR-open. Owner sizing bands (2026-07-27, permanent doctrine): ~5 files changed normal, 10 acceptable, 20 a problem. Purpose is reviewer-comment complexity; one mechanism among several, never a substitute for review triage or round convergence. The bands have a floor: every PR pays a flat cost, so changes that share a story go as one PR inside the bands (PDR-132 item 7).'
 alwaysApply: true
 ---
 

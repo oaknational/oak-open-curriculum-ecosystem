@@ -3,6 +3,7 @@ name: "Explicit DI Over Ambient State"
 polarity: pattern
 use_this_when: "You are tempted to use AsyncLocalStorage, module-level singletons, or thread-local context to propagate request-scoped data through a call chain"
 category: code
+layer: general
 proven_in: "apps/oak-curriculum-mcp-streamable-http/src/handlers.ts"
 proven_date: 2026-03-30
 barrier:

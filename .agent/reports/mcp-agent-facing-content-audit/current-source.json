@@ -6,7 +6,6 @@
     "baselineArtifact": ".agent/reports/mcp-agent-facing-content-audit/registry.json",
     "baselineSha256": "be4ca4382113515c3358e5711827db2165305ca65ec37f7180bd3dfa509729cf",
     "currentEvidence": [
-      ".agent/reports/mcp-agent-facing-content-audit/current-source-delta-inventory.json",
       "apps/oak-curriculum-mcp-streamable-http/src/app/core-endpoints.ts",
       "apps/oak-curriculum-mcp-streamable-http/src/handlers.ts",
       "apps/oak-curriculum-mcp-streamable-http/src/served-surface/served-surface.ts",
@@ -14,7 +13,7 @@
     ],
     "evidenceCeiling": [
       "Every immutable phase-(a) id has reviewed item-level token anchors, not source-file existence alone.",
-      "Post-baseline additions are source-owned review entries; governed source deltas are recomputed against a file-and-item inventory.",
+      "Post-baseline additions are source-owned review entries.",
       "Workspace scope and word authority are independent: scope follows workspace_scope; authority follows source_locus.",
       "The HTTP registration root is recomputed over an in-memory MCP transport; allowlist policy alone is not proof of liveness.",
       "Exact channel bindings cover the prompt-to-guidance replacements; later migration slices add bindings for other rows.",
@@ -2403,7 +2402,7 @@
         "evidence": {
           "revision": "unchanged",
           "anchorTargetCount": 1,
-          "anchorCount": 1
+          "anchorCount": 2
         }
       },
       "lineage": {

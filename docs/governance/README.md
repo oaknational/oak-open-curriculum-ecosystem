@@ -34,6 +34,7 @@ If this is your first time here, the 5-minute reading path is:
 - [MCP App Styling](./mcp-app-styling.md) — CSS custom properties, SDK variable bridges, font loading, CSP declarations
 - [Sonar Disposition Policy](./sonar-disposition-policy.md) — class-level disposition policies for SonarCloud security hotspots and HIGH issues
 - [Data Sources](./DATA-SOURCES.md) — register of the external data sources the MCP and semantic-search apps surface, with adoption dates, licence/attribution, and the review/removal governance policy (policy half owner-ratification-pending)
+- [Model-Behaviour Content](./model-behaviour-content/README.md) — generated review workspace holding every piece of writing this repository puts in front of an AI agent, in per-domain views with provenance and live/dormant status, so non-engineer reviewers can read and challenge it without reading code
 
 ## Key Principles
 

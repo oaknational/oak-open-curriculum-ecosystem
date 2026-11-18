@@ -1,0 +1,5 @@
+{
+  "appSlug": "some-github-app-slug",
+  "appId": "1234567",
+  "repo": "your-username/your-fork-name"
+}

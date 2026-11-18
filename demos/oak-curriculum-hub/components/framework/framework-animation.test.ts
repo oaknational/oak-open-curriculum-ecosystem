@@ -48,7 +48,10 @@ describe('chevronPath', () => {
       endDeg: -107.5,
       pointDeg: 18,
     });
-    expect(/\d+\.\d{3,}/.test(d)).toBe(false);
+    // One digit, the point, three digits: a run of three or more decimals
+    // always contains this, and the bounded form cannot backtrack
+    // (sonarjs/super-linear-regex on the earlier `\d+\.\d{3,}`).
+    expect(/\d\.\d{3}/.test(d)).toBe(false);
   });
 });
 

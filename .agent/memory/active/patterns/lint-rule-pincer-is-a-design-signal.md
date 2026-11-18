@@ -3,6 +3,7 @@ name: "A Lint-Rule Pincer Is a Design Signal, Not an Obstacle"
 polarity: pattern
 use_this_when: "Two (or more) lint rules jointly ban every shape you can think of for an in-component or in-function implementation, and the reflex is to disable one rule or contort past them."
 category: code
+layer: general
 proven_in: "curriculum-hub-demo 2026-07-02 (Galago), twice in one session: react-hooks/refs + react/no-set-state-in-effect jointly banned every in-component shape for hash stickiness — the escape was moving the state OUT of React (a useSyncExternalStore store owning the state machine), which was the better architecture; and max-lines forcing the quiz state/presentation split."
 proven_date: 2026-07-02
 barrier:

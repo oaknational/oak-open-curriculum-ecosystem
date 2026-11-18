@@ -3,6 +3,7 @@ name: "Closed Union + No-Throw Forces an Exhaustive Total-Function Renderer"
 polarity: pattern
 use_this_when: "Rendering (or otherwise dispatching over) a closed discriminated union — content blocks, event kinds, state variants — under the repo's no-throw and no-silent-skip disciplines."
 category: code
+layer: family
 proven_in: "curriculum-hub-demo block-render spine (2026-07-01): BlockRenderer.tsx dispatches all 18 block variants of the closed Block union; the definite-assignment pattern makes the compiler prove completeness. Survived the whole branch uncorrected through the full 214-block corpus and every later styling pass."
 proven_date: 2026-07-06
 barrier:

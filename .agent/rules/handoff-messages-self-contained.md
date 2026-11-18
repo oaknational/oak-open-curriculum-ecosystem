@@ -1,8 +1,11 @@
+---
+classification: core
+description: Every handoff message must be self-contained — the receiver cannot read your transcript.
+---
+
 # Handoff Messages Must Be Self-Contained
 
 Operationalises
-[ADR-150 (Continuity Surfaces, Session Handoff, and Surprise Pipeline)](../../docs/architecture/architectural-decisions/150-continuity-surfaces-session-handoff-and-surprise-pipeline.md)
-and
 [PDR-011 (Continuity Surfaces and the Surprise Pipeline)](../practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md).
 Composes with [PDR-027 (Threads, Sessions, and Agent Identity)](../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md)
 identity-disclosure shape and [PDR-063 (Mid-Cycle Retirement Protocol)](../practice-core/decision-records/PDR-063-mid-cycle-retirement-protocol.md)
@@ -11,6 +14,10 @@ handoff-record shape.
 ## Rule
 
 **Every handoff message — directed comms-event, mid-cycle handoff record, continuation-pointer note, or any inter-agent transfer of work — MUST be self-contained. The receiver cannot read the sender's transcript; the message IS the entire information transfer.**
+
+A later, more specific message from the same author settles an earlier ambiguous line, and the
+receiver acknowledges its reading back before acting on it (2026-10-02: the ack was asked for
+and confirmed before the line was acted on).
 
 ## Why this rule exists
 
@@ -36,11 +43,35 @@ A handoff message MUST name:
 
 A receiver should be able to act WITHOUT a clarifying question back to the sender. If they need to ask, the message was incomplete.
 
+A handoff's next-step list names the credential route beside each write
+(the merge-bot's push command, the minted token), since a pickup reads the
+steps, not the rule: steps that said "merge", "push", "request Copilot" with
+the credential implicit produced three writes under the owner's credential in
+one day (2026-09-24).
+
+A handoff's content is of two kinds, and the receiver treats them differently. Owner rulings,
+deliberate oddities and recorded mistakes are inherited as written: nothing in the tree can
+recompute them. Lane state, branch state and pull-request state are recomputed from the live
+surfaces before any act rests on them; the handoff says where to look, never what will be found.
+
+A recorded decision names who will do it. Where nobody will, the record says "nobody": that
+word is what gets the work staffed (2026-09-25, an owner decision recorded as routed through a
+role no seat then held).
+
 ## Forbidden patterns
 
 - *"See our earlier discussion"* — the receiver has no earlier discussion.
 - *"Remember the decision we made"* — the receiver was not there.
 - *"The usual approach"* — the receiver does not know the usual.
+- *"As before"* for a method whose safety rests on an exact value — paste the
+  value. "As before" carries the shape and drops the safety: a probe relayed
+  without its deliberately invalid string came back with a valid one and
+  created four production OAuth clients (2026-09-03).
+- A constraint without the interest it protects — hand over the interest
+  beside the rule. A rule compressed from its purpose ("no fourth commit" for
+  "a bound review leg is expensive; spend none on something discretionary")
+  misfires at the first case its author did not imagine, and the receiver
+  cannot reason with it (2026-09-12).
 - *"As I mentioned"* — the receiver did not hear it.
 - *"The relevant plan / docs"* — the receiver cannot guess which.
 - *"You know what to do next"* — the receiver does not.
@@ -52,7 +83,23 @@ After compaction, your future self IS a new receiver. Compaction-boundary handof
 If runtime monitors, cron jobs, watchers, or loop instructions matter after the
 compaction, flush their exact commands and intended state into the handoff and
 verify them on first wake-up. Do not rely on the compaction summary or the
-runtime process table to preserve that contract reliably.
+runtime process table to preserve that contract reliably. A summary keeps the
+what and drops the where: resume from the handover a seat wrote, never from the
+summary's line about it (2026-09-15: nine suppressed review findings went
+unanswered because a resume read "the last settlement push" from the summary,
+not the handover naming where they lived).
+
+A handover transmits INTENT with authority and MECHANISM without it: the
+receiver takes the intent as binding and re-derives the mechanism against the
+live rules, running the cheapest oracle that can falsify it (a parser, the
+command's `--help`, the rule the step would break) before following it
+(2026-09-11: a succession record's forbidden `it.skipIf` and unparseable
+workflow YAML). A handover to a lower-capability seat carries commands and
+stop conditions, never "use judgement": every judgement already made becomes
+a rule with its warrant, and every judgement not made goes to the owner's
+list. Where a later message from the same author narrows an earlier
+ambiguous line, the later governs: ask once, confirm, and proceed, rather
+than re-running the frame (2026-10-02).
 
 ## Handoff artefacts teach by their form
 
@@ -97,6 +144,12 @@ credentials-expiry "hard bound" rode five compaction boundaries unexamined
 until the owner priced the cure — re-minting is "the work of seconds". A
 handoff that transmits "hard" without the cure cost manufactures urgency
 the facts never carried.
+
+A constraint's breadth is repriced at the handoff as its hardness is: Sandpiper weaves Updraft found
+that a peer's constraint "turned out on the second look not to be a broken rule but an over-broad
+one" and had been "compressed from an interest into an action under closeout pressure", so the
+receiver reads the interest behind an inherited action before obeying it (the seat's lesson of
+2026-09-12, event 780b1462).
 
 ## Cross-references
 

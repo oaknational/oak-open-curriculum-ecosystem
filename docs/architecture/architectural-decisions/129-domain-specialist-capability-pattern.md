@@ -86,7 +86,7 @@ New domain specialists follow a standard rollout sequence:
 1. **Baseline audit** — confirm no equivalent artefacts exist; freeze the authority stack.
 2. **Canonical artefacts** — create the reviewer template, skill, and situational rule in `.agent/`.
 3. **Coordination updates** — add the specialist to the AGENT.md roster and the invocation guidance.
-4. **Platform adapters** — create thin wrappers per ADR-125 across supported platforms.
+4. **Platform adapters** — declare them in the template's frontmatter and render them with `pnpm portability:fix` per ADR-125.
 5. **Discoverability** — update collection indexes, roadmaps, and session-entry guidance.
 6. **Review and propagation** — specialist review pass; documentation propagation.
 

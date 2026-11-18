@@ -25,7 +25,7 @@ const OAK_LESSON_URL = 'https://www.thenational.academy/teachers/lessons/my-less
 /** Throw-guard: names the wrong content type instead of silently passing. */
 function textOf(result: CallToolResult): string {
   const first = result.content[0];
-  if (!first || first.type !== 'text') {
+  if (first?.type !== 'text') {
     throw new Error(`expected text content, got ${first?.type ?? 'nothing'}`);
   }
   return first.text;

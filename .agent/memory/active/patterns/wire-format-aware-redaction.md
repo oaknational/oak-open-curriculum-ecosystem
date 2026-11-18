@@ -3,6 +3,7 @@ name: "Wire-Format-Aware Redaction"
 polarity: pattern
 use_this_when: "Telemetry redaction protects structured objects or URLs, but secrets can also travel through raw encoded strings such as application/x-www-form-urlencoded request bodies."
 category: architecture
+layer: general
 proven_in: "packages/core/observability/src/redaction.ts"
 proven_date: 2026-04-02
 barrier:

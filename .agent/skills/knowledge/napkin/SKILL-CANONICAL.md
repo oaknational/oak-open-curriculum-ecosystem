@@ -110,6 +110,13 @@ too. Write to it whenever you learn something worth recording:
 - **You re-read the napkin mid-task** because you are about to
   do something you have gotten wrong before. Good. Do this.
 
+On a primary checkout that several seats share, capture stays immediate
+(the file is the buffer) and the commit stays batched: a candidate rides
+whichever seat's records commit next stages the file by pathspec, and
+that commit's message names the blocks it carries with their authors,
+the committing seat's own and its peers' alike. Lint the append before a
+push (one unlinted append stopped a fold's push, 2026-09-27).
+
 ## What to Log
 
 Log anything that would change your behaviour if you read it
@@ -128,6 +135,12 @@ next session:
   equivalent local implementation surface.
 - **Positive surprises**: cases where a simpler or stronger approach
   worked better than expected.
+- **Delight and shared excitement**, with the same discipline as
+  corrections. A note that only memorialises corrections re-derives a
+  compliance crouch at every waking; the owner's "I am very excited about
+  the bell" was an instruction about what to build more of. Joy is
+  steering data, never ambience (a three-descent reflection the owner
+  insisted on, 2026-07-24).
 - **Preferences**: how the user likes things done.
 - **What worked**: approaches that succeeded, especially
   non-obvious ones.
@@ -138,6 +151,14 @@ next session:
 Be specific. "Made an error" is useless. "Assumed the API
 returns a list but it returns a paginated object with `.items`"
 is actionable.
+
+The napkin is a lesson log, not a state log. Check-ins, cadence ticks,
+"where things are" blocks and landing lists go on the comms stream and the
+thread record; the napkin takes behaviour-changing lessons only, because
+`start-right` loads it whole into every session. At 876 KB (2026-09-27) it
+passed the Read tool's cap so no reviewer could read it, and two days after
+its rotation it held 5,161 lines, mostly check-ins. Rotate it at its
+trigger, never as relief.
 
 Append-discipline note for this hot file: anchor edits on the shortest
 unique stable text, and verify the entry's heading line survived after
@@ -212,6 +233,10 @@ When the napkin exceeds ~500 lines, follow step 6 of the
 [`consolidate-docs` skill](../consolidate-docs/SKILL-CANONICAL.md) to
 extract high-signal content into `distilled.md`, archive the
 napkin, and start fresh.
+
+An entry marked blocking or deferred carries a resolution annotation before the napkin
+rotates: what resolved it and where, or where it is now carried. An open marker that rotates
+into an archive is a promise nobody will read again.
 
 ## Example
 

@@ -4,6 +4,7 @@ name: "Check Driven Development"
 polarity: pattern
 use_this_when: "Writing TDD RED-phase assertions in a codebase with multiple quality gates"
 category: process
+layer: general
 proven_in: "packages/sdks/oak-curriculum-sdk/src/mcp/canonical-descriptor.unit.test.ts"
 proven_date: 2026-03-26
 barrier:

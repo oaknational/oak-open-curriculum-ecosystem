@@ -2,6 +2,7 @@
 name: warm-masks-cold
 polarity: anti-pattern
 category: architecture
+layer: general
 use_this_when: >-
   Declaring a dist-consumed package, install-time hook, or environment-touching
   surface "proven" from a long-lived local tree — or diagnosing a failure that

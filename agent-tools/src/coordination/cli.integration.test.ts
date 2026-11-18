@@ -171,3 +171,38 @@ describe('runCoordinationCli', () => {
     expect(stderr.text).toContain('--base requires a value');
   });
 });
+
+describe('runCoordinationCli — the fold-clock action', () => {
+  const reading = {
+    prNumber: 326,
+    headSha: '6c340d864683792c36e12fb43f71cddafac58bbb',
+    createdAt: '2026-10-09T13:34:15Z',
+    readyMarks: ['2026-10-10T11:18:20Z'],
+    mergedAt: '2026-10-10T11:33:09Z',
+    requests: [],
+    reviews: [],
+    requiredChecks: [],
+    headCheckRuns: [],
+    successor: undefined,
+  };
+
+  it('dispatches fold-clock to its own parser and prints the clock line', () => {
+    const { exit, stdout, stderr } = run(['fold-clock', '--pr', '326'], {
+      readFoldClock: () => ok(reading),
+      resolveRef: () => err(new Error('the resolver must not run for fold-clock')),
+    });
+
+    expect(exit).toBe(0);
+    expect(stdout.text).toBe(
+      'fold-clock PR 326 tip 6c340d86: ready 2026-10-10T11:18:20Z; checks: none required on the base; rounds 0; merged +14.8 min\n',
+    );
+    expect(stderr.text).toBe('');
+  });
+
+  it('names both actions in the topic usage', () => {
+    const { stdout } = run(['--help']);
+
+    expect(stdout.text).toContain('successor-name');
+    expect(stdout.text).toContain('fold-clock');
+  });
+});

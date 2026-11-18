@@ -3,6 +3,7 @@ name: "Actuate a Large Reference With a Thin Firing Skill, Not by Making the Doc
 polarity: pattern
 use_this_when: "Making a large valuable reference (a long doctrine doc, a grammar, a deep guide) actually fire for agents at the moment of work."
 category: process
+layer: general
 proven_in: "grammar-of-thinking → oak-reason; the working-with-agentic-ai primer; the orientation lens (2026-06-22 Orbit)"
 proven_date: 2026-06-22
 barrier:

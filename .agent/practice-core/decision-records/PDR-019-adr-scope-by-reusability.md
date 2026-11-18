@@ -4,7 +4,7 @@ pdr_kind: governance
 
 # PDR-019: ADR Scope by Reusability, Not Diff Size
 
-**Status**: Accepted (amended 2026-04-21)
+**Status**: Accepted (amended 2026-04-21; amended 2026-10-02)
 **Date**: 2026-04-18 (amended 2026-04-21 — ADR contents discipline
 added: an ADR records the **WHAT** of a decision (the choice, the
 rejected alternatives, the trade-off rationale) and not the **HOW**
@@ -37,6 +37,19 @@ discoverability discipline).
   standing-decisions register entry `adrs-state-what-not-how`;
   graduated to this PDR amendment in 2026-04-21 Session 5 per the
   decomposition arc.
+- **2026-10-02** (Accepted): the contents discipline extended from
+  ADRs to PDRs — **a decision record, PDR or ADR, carries the
+  decision, its context and its consequences (the what and the
+  why); a plan node carries sequence, size and proof (the how and
+  the when).** Planning content found in a record moves to a plan.
+  The owner's words, heard first-hand by the Director seat
+  Crucible binds Slag on 2026-10-02, verbatim: "PDR carry
+  decisions, not plans, if there is planning in a PDR it is in the
+  wrong place. The Practice should make that definition clear, as
+  it should define ADRs". Carried by §"Records carry decisions;
+  plans carry planning" and by the Forbidden bullet in
+  §Consequences; the decision-records README §Shape of a PDR
+  points here.
 
 ## Context
 
@@ -172,6 +185,19 @@ when the surrounding code changes and the HOW-section is observed
 to have drifted (per the `Misleading docs are blocking` principle
 in the Practice's principles directive, Code Quality section).
 
+### Records carry decisions; plans carry planning (2026-10-02 amendment)
+
+The discipline above applies to PDRs as it applies to ADRs. A
+decision record, PDR or ADR, carries the decision, its context
+and its consequences: the what and the why. A plan node carries
+sequence, size and proof: the how and the when. Planning content
+found in a record (an order of steps, a size or an estimate, the
+proof that a step is done, the mechanics of a rollout) moves to
+the plan node that governs the work; the record keeps the
+decision the plan executes. A record trimmed under this clause
+says so in its amendment log and names where the moved text is
+held, so nothing is lost before a plan takes it.
+
 ## Rationale
 
 **Why reusability, not diff size.** Diff size is a local author-time
@@ -227,6 +253,10 @@ Alternatives rejected:
   caller recipes — per §"ADRs state WHAT, not HOW" (2026-04-21
   amendment). Implementation belongs in code with TSDoc, in plan
   bodies, or in runbooks.
+- Planning content in a PDR body — sequence, sizing, proof steps,
+  the mechanics of a rollout — per §"Records carry decisions;
+  plans carry planning" (2026-10-02 amendment). It moves to the
+  plan node that governs the work.
 
 ### Accepted cost
 

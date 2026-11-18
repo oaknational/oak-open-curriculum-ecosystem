@@ -43,8 +43,8 @@ export interface SpawnCliInput {
 function defaultResolveHome(cwd: string): Result<string, Error> {
   try {
     return ok(resolveCoordinationHome(cwd));
-  } catch (cause) {
-    return err(cause instanceof Error ? cause : new Error(String(cause)));
+  } catch (error) {
+    return err(error instanceof Error ? error : new Error(String(error)));
   }
 }
 

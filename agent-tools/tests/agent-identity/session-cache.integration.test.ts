@@ -21,7 +21,7 @@ describe('agent identity session cache', () => {
     });
 
     const result = runAgentIdentityCli({
-      argv: ['--format', 'json'],
+      argv: ['--platform', 'cursor', '--format', 'json'],
       env: plan.output.env,
     });
 

@@ -48,7 +48,7 @@ not claimed as a cap (see the authority observation below).
   exists at the schema level, and the probe asserts every property and
   both enums exactly so drift fails a re-probe. Disciplined calls never pass any of
   these; whether launch pins cap a per-call broadening override is
-  OPEN, and its negative control is owner-held per ADR-180.
+  OPEN, and its negative control is owner-held per OCE's ADR-180.
 - `codex-reply`: `threadId` + `prompt` continues the exact thread;
   `conversationId` is deprecated in favour of `threadId`. Only `prompt`
   is schema-required (`threadId` stays schema-optional for
@@ -90,7 +90,7 @@ this leg on every run.
 
 The per-call broadening negative control (`sandbox:
 danger-full-access` on a call, recording which layer wins) is
-owner-held per ADR-180: explicit owner authorisation per invocation,
+owner-held per OCE's ADR-180: explicit owner authorisation per invocation,
 externally isolated disposable workspace, bounded sentinel write
 target. This record deliberately carries no evidence for that leg;
 until it runs, the launch-pin-vs-per-call-override question stays OPEN

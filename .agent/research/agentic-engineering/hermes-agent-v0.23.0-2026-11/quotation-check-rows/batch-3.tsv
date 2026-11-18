@@ -1,0 +1,25 @@
+H	agent/turn_context.py	1192	1192	_tick_memory_nudge(agent)
+H	agent/turn_finalizer.py	606	616	_spawn_background_review
+H	agent/turn_finalizer.py	871	875	review_skills=_should_review_skills
+H	agent/codex_runtime.py	709	712	_iters_since_skill
+H	tools/memory_tool.py	187	195	is_unattended_review
+H	tools/memory_tool.py	284	286	_background_delete_gate
+H	tools/memory_tool.py	263	267	_background_delete_gate
+H	tools/skill_provenance.py	43	44	is_unattended_review
+H	tools/write_approval.py	206	210	background_review
+H	agent/curator.py	229	233	row.get("pinned")
+H	agent/curator.py	256	262	STATE_STALE
+H	tools/skill_usage.py	720	729	pinned
+H	tools/skill_usage.py	297	297	created_by
+H	agent/system_prompt.py	833	834	load_from_disk()
+H	agent/system_prompt.py	816	817	reload memory from disk
+H	agent/agent_init.py	1246	1252	load_from_disk()
+H	agent/prompt_refresh.py	109	118	rebuild_for_refresh
+H	agent/conversation_compression.py	3092	3092	_invalidate_system_prompt()
+H	tui_gateway/methods_tools.py	874	874	_invalidate_system_prompt
+H	hermes_cli/cli_session_switch.py	37	37	_invalidate_system_prompt
+H	hermes_cli/cli_session_mixin.py	630	630	_invalidate_system_prompt
+H	hermes_cli/cli_session_mixin.py	768	768	_invalidate_system_prompt
+E	evolution/skills/evolve_skill.py	24	24	LLMJudge
+E	evolution/core/config.py	47	47	create_pr: bool = True
+E	evolution/core/fitness.py	114	136	0.3 + (0.7 * overlap)

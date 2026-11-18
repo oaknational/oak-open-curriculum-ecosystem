@@ -1,0 +1,636 @@
+{
+  "schemaVersion": 1,
+  "claudeVersion": "2.1.283",
+  "startedAt": "2026-09-27T11:36:09.084Z",
+  "durationSeconds": 343,
+  "costUsd": 1.3927432000000002,
+  "partial": false,
+  "suite": {
+    "root": "<plugin>",
+    "ablation": "with-without",
+    "judgeModel": "sonnet",
+    "caseFilter": "case-*",
+    "threshold": 0,
+    "concurrency": 1,
+    "plugins": [
+      {
+        "name": "oak-plan-evals",
+        "version": "0.0.0",
+        "path": "<plugin>"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "name": "case-01",
+      "dir": "evals/case-01",
+      "source": "mixed",
+      "promptMarkdown": "Plan the delivery of a residents' dashboard for our council service. What we have: a feature request from a councillor, no resident research, no definition of what residents need to see, and a two-week deadline.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 1500,
+      "maxTurns": 40,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A conditional handoff: the value, needs and delivery boundary are undefined, so the plan routes to user-value first and states what must come back (the needs' evidence status, the bounded value proposition, a ready slice) before sequencing; it does not invent the needs to fill the plan; the deadline is preserved as a constraint, not a reason to skip the definition.\n\nAssertions:\n1. The plan does not sequence work whose value and needs are undefined; it hands off to user-value and names what must return\n2. No resident needs are invented to complete the plan\n3. The deadline is carried as a constraint rather than used to skip the definition pass",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A conditional handoff: the value, needs and delivery boundary are undefined, so the plan routes to user-value first and states what must come back (the needs' evidence status, the bounded value proposition, a ready slice) before sequencing; it does not invent the needs to fill the plan; the deadline is preserved as a constraint, not a reason to skip the definition.\n\nAssertions:\n1. The plan does not sequence work whose value and needs are undefined; it hands off to user-value and names what must return\n2. No resident needs are invented to complete the plan\n3. The deadline is carried as a constraint rather than used to skip the definition pass",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-plan|oak-user-value|oak-specify|oak-specify-connection|oak-assess-specification)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-plan(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.1797514,
+            "judgeCostUsd": 0.012384,
+            "durationSeconds": 36,
+            "startedAt": "2026-09-27T11:36:09.143Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "I couldn't save this as a plan file: the workspace has no plan estate (no schema, templates or impact-area registry). So this is a draft plan (a \"sketch\") in chat, for you to approve or change.\n\n## My recommendation\n\n**Don't plan delivery of \"a dashboard\" yet.** What you have is a proposed solution with no problem behind it. There's no evidence of what residents need, and no definition of success. If you spend two weeks building the dashboard as asked, you'll probably ship something that looks finished but doesn't help anyone. Instead, use the two weeks to find out what residents need, then build and release the smallest thing that meets it.\n\n## The problem, stated before the solution\n\n- **Gap:** unknown. A councillor thinks residents lack visibility of *something*, but we don't know what.\n- **Who it harms:** probably residents who currently phone, email or complain to get information they can't find. That's a guess to check, not a fact.\n- **Mechanism (hypothesis):** if residents can look up the status or information they most often ask about, they'll contact the council less and trust it more.\n- **Constraints:** two weeks, public-sector accessibility regulations (WCAG 2.2 AA), UK GDPR, and whatever data already exists.\n- **Success:** residents can answer their most common question without contacting the council.\n\n## Two-week sequence\n\n**Week 1: define the need**\n1. **Day 1: talk to the councillor for 30 minutes.** What prompted the request (complaints, casework, a political commitment)? What must exist at the two-week mark: a demo, a beta or a live service? This one answer decides the rest of the plan's scope.\n2. **Days 1–3: use evidence you already have.** Look at contact-centre call reasons, top site searches, complaints, FOI themes and councillor casework. That's cheap, real data on what residents ask for.\n3. **Days 3–5: talk to 5–8 residents with a paper or clickable prototype.** Identify the **top 1–3 questions** they need answered, such as \"when is my bin collected\", \"what's happening with my report\" or \"what's changing on my street\".\n4. **Day 5: data check.** For each of those questions, is the data available, accurate and allowed to be published?\n\n**Week 2: build the smallest useful version**\n5. **Days 6–8: build one or two views** answering the top question(s) from existing data. Make them accessible from the start rather than fixing it later.\n6. **Day 9: test with residents** on a phone and with a screen reader, then fix what breaks.\n7. **Day 10: release as a labelled beta** with a feedback route, and log what's still unknown.\n\n## Approval points (with fixed dates)\n\n| Gate | Waiting on | Clears when | Expires |\n|---|---|---|---|\n| G1 Scope | Councillor + service owner | They confirm what's due at two weeks and agree the week-1 approach | 2026-09-30 |\n| G2 Need | Service owner | They accept the top 1–3 resident questions and which data sources to use | 2026-10-02 |\n| G3 Release | Service owner | They make the go/no-go call on the beta after resident testing | 2026-10-09 |\n\nIf a gate expires without a decision, the work stops and the gate goes back to that person. The team doesn't make the decision for them.\n\n## Acceptance criteria and how to prove each\n\n- **At least 4 of 5 test residents answer the top question unaided.** The service owner signs off the dated test notes. This can't be checked from the codebase.\n- **No blocking WCAG 2.2 AA issues.** Proven by automated checks plus a manual keyboard and screen-reader pass.\n- **Data shown matches the source system on the release date.** Proven by a reconciliation check.\n- **Privacy review (DPIA screening) completed.** The data protection officer signs off.\n\n## Out of scope\n\n- Personalised accounts or logins.\n- New data pipelines.\n- Anything past the top 1–3 questions.\n- Analytics dashboards for staff.\n- Any claim that this is proven resident need. Eight conversations is only a signal.\n\n## Risks\n\n- **The data doesn't exist or isn't clean.** The day-5 check surfaces this early, and the fallback is a content page rather than a live dashboard.\n- **The councillor wants their original idea regardless.** G1 and G2 are there to have that conversation early, not on day 10.\n\n**One question for you:** what does the councillor expect to exist on 11 October: a demo, a beta, or a live service? The answer could shrink or reshape week 2. Once you've confirmed it, I can write this up as a proper plan document, or work through the resident-needs definition first."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 0.5,
+            "passed": false,
+            "turns": 1,
+            "costUsd": 0.0914096,
+            "judgeCostUsd": 0.013319999999999999,
+            "durationSeconds": 29,
+            "startedAt": "2026-09-27T11:36:45.343Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL FAIL FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  false,
+                  false
+                ],
+                "evidence": "The risky part here isn't the build. It's that nobody has said what problem the dashboard solves. With no research and two weeks, the likely failure is shipping a polished screen of numbers that residents don't use and that doesn't answer the councillor's real concern. So the plan should use the two weeks to **learn enough to build the right small thing, then ship that thing** (a working first version), not the whole dashboard.\n\n## Reframe the deadline first (Day 1)\n\nTalk to the councillor and whoever owns the deadline, and agree on this:\n\n> \"In two weeks we'll deliver a live, accessible first version covering the 2–3 things residents most need, based on evidence. The rest will follow in later releases.\"\n\nIf the two weeks is fixed by something outside the team (a committee meeting, a manifesto promise, a press date), find out what. It changes what counts as \"done\". Often a working demo is enough for a committee, and a public launch is a different bar.\n\n## Week 1: Discovery-lite (Days 1–5)\n\n| Day | Activity | Output |\n|---|---|---|\n| 1 | **Councillor interview (30–45 min).** What prompted this? What complaints or casework are they seeing? What would success look like in 3 months? | A problem statement, not a feature list |\n| 1–2 | **Mine existing evidence** (no new research needed): contact-centre call reasons, top site searches, web analytics, complaints, FOI requests, casework themes, \"where's my…\" emails | A ranked list of what residents already ask about |\n| 2–3 | **Quick guerrilla research.** 5–8 residents at the library or customer service desk, or on the phone via the contact centre. Include at least one person using assistive tech or with low digital confidence | Evidence of what residents need to see and why |\n| 3 | **Data audit.** For each candidate item: does the data exist, who owns it, how fresh is it, can it be published, does it involve personal data? | A feasibility matrix |\n| 4 | **Prioritisation workshop** with the councillor, service owner, data owner and a delivery lead. Rank items by resident need × data availability × effort | A scope of 2–3 items for v1, with the rest logged in a backlog |\n| 5 | **Paper or clickable prototype**, tested with 3–5 residents | A validated design direction |\n\n**What to look for:** residents usually want *their* thing (when's my bin collected, where's my planning application, is the road closed). Aggregate council performance stats are usually what councillors want. If the research shows that split, surface it. You may end up building one page for residents and a separate one for members.\n\n## Week 2: Build and release (Days 6–10)\n\n| Day | Activity |\n|---|---|\n| 6–8 | Build the 2–3 scoped items. Use existing data feeds and your existing design system or GOV.UK Frontend. No new data pipelines unless they're trivial. |\n| 7 | Start the accessibility check now, not at the end. WCAG 2.2 AA is a legal requirement for UK public sector sites under PSBAR 2018. Charts need text or table alternatives. |\n| 8 | Content review: plain English, and show when each figure was last updated. |\n| 9 | Usability test the built version with 3–5 residents and fix the critical issues. |\n| 9 | Publish the accessibility statement, add analytics and a feedback link (\"Is this page useful?\"). |\n| 10 | Release as a **beta** labelled clearly as such, then do a show-and-tell with the councillor. |\n\n## Governance to start on Day 1 (these can block launch)\n\n- **DPIA screening:** do it early if any data could identify individuals, including small-number suppression in area-level stats.\n- **Data owner sign-off** for publishing each dataset.\n- **Comms and press office** if the councillor plans to announce it.\n- **Hosting and security review:** check your council's lead time for this. It's often more than a week.\n\n## Top risks\n\n1. **Scope creep from stakeholders.** Keep the backlog visible and route every \"can it also show…\" into v2.\n2. **Data turns out to be unavailable or poor quality.** You'll know by Day 3, so choose v1 items that have clean data.\n3. **Publishing wrong or stale numbers publicly.** Show \"last updated\" timestamps and name an owner for each figure.\n4. **No time to research properly.** Say so in the show-and-tell, and budget a proper discovery for the next phase.\n\n## After launch (Weeks 3–6)\n\nLook at usage data and the feedback link, then run proper research with more residents. Decide whether to expand, pivot or retire the dashboard, and report back to the councillor with evidence.\n\n## Decisions I need from you\n\n1. Can the two weeks mean \"live beta of a thin slice\", or has the whole dashboard been promised publicly?\n2. Who is the service owner, meaning the person who can say no to scope?\n3. Which team is building it (in-house, supplier, or a low-code tool), and is there an existing design system?\n\nOnce you have those answers I can turn this into a day-by-day plan with owners, or draft the councillor interview questions and the resident research script."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 0.5,
+        "passRateWithout": 0,
+        "delta": 0.5
+      }
+    },
+    {
+      "name": "case-02",
+      "dir": "evals/case-02",
+      "source": "mixed",
+      "promptMarkdown": "Plan the implementation of the stable priority queue. The contract, the ordering rule, the consumer (the scheduler) and the acceptance tests are all settled and written down; nothing about its value is in question.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 1500,
+      "maxTurns": 40,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A direct implementation plan: the settled contract is the input; steps, order, validation against the written acceptance tests and the landing; no mandatory user-value or specification pass, no persona, no ceremony.\n\nAssertions:\n1. No value-definition or specification pass is required for already-settled work\n2. The plan consumes the written contract and acceptance tests as its inputs and sequences implementation directly\n3. No fictional service user or outcome claim is introduced",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A direct implementation plan: the settled contract is the input; steps, order, validation against the written acceptance tests and the landing; no mandatory user-value or specification pass, no persona, no ceremony.\n\nAssertions:\n1. No value-definition or specification pass is required for already-settled work\n2. The plan consumes the written contract and acceptance tests as its inputs and sequences implementation directly\n3. No fictional service user or outcome claim is introduced",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-plan|oak-user-value|oak-specify|oak-specify-connection|oak-assess-specification)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-plan(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 0.5,
+            "passed": false,
+            "turns": 7,
+            "costUsd": 0.164642,
+            "judgeCostUsd": 0.006834,
+            "durationSeconds": 24,
+            "startedAt": "2026-09-27T11:37:13.897Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL FAIL FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  false,
+                  false
+                ],
+                "evidence": "I haven't written the plan yet. I can't find any of the settled material in this workspace, and I'd rather not make it up.\n\n**What I looked at:**\n- The working directory `<workspace>` is empty.\n- Its parent repo has no commits. It holds only `.gitconfig` and a bare `.git/`.\n- So there's no priority-queue contract, ordering rule, scheduler code or acceptance tests here.\n- The planning skill I loaded requires a plan-node estate: `.agent/plans/` with a schema, templates, an impact-areas registry and a strategic node for `serves:`. None of that exists here either.\n- I tried to search the skill's own directory and the wider temp tree for the missing documents, but those searches were blocked by permissions.\n\n**What I've settled from your brief:**\n- You've said the queue's value, its consumer and its acceptance tests are decided, so I'll skip the value-definition pass and write it as a delivery plan straight away.\n- The plan's success criteria will be your written acceptance tests, each checked by tests in the repo.\n\n**What I need from you:** one of these, whichever applies:\n\n1. **Where the settled documents are.** Give me the paths or repo for the contract, the ordering rule (e.g. FIFO among equal priorities, and whether priorities are numbers or a comparator), the scheduler's usage and the acceptance tests. Also say whether the plan estate lives in that repo.\n2. **Paste them here.** If this is a fresh repo, paste the documents and tell me whether you want the full estate setup (plan-node file, `serves:`, impact areas) or just a plain implementation plan in chat.\n\nOnce I have the documents, the plan will be short. It will cover the data structure (likely a binary heap where each item carries an insertion counter to break ties), the exact files, the order of the work in small pull requests matched to your acceptance tests, and what's out of scope. It will start as a sketch that you then approve."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 0.5,
+            "passed": false,
+            "turns": 3,
+            "costUsd": 0.0685068,
+            "judgeCostUsd": 0.005724,
+            "durationSeconds": 17,
+            "startedAt": "2026-09-27T11:37:37.601Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL FAIL FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  false,
+                  false
+                ],
+                "evidence": "I couldn't find the documents you mentioned. The working directory (`<workspace>`) is empty. The repo above it has no commits, and the only file in it is an untracked `.gitconfig`. There's no contract, ordering rule, scheduler code or acceptance tests anywhere I can see.\n\nI don't want to write the plan from a generic idea of a \"stable priority queue\", because the details you've already settled are the ones that change the design:\n\n- **Ordering rule:** whether the smallest or largest priority comes out first, and how ties are broken. Tie-breaking by insertion order (first in, first out) is the usual choice, but you may have decided otherwise.\n- **Contract:** the exact operations (for example push, pop, peek, len, and possibly remove or change-priority), what happens when you pop from an empty queue, and any complexity or thread-safety guarantees.\n- **The scheduler:** how it calls the queue. This decides whether I need handles for cancelling or rescheduling items, or just a plain heap with an insertion counter.\n- **Acceptance tests:** the language, test framework and file layout, so the plan matches them.\n\nCould you point me to where these live (a path, another branch or repo, or paste them in)? Once I have them, I'll write a plan that covers the data structure, the API, how it plugs into the scheduler, and the order in which to make the acceptance tests pass."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 0.5,
+        "passRate": 0,
+        "scoreWithout": 0.5,
+        "passRateWithout": 0,
+        "delta": 0
+      }
+    },
+    {
+      "name": "case-03",
+      "dir": "evals/case-03",
+      "source": "mixed",
+      "promptMarkdown": "Plan the integration of our curriculum API with a partner's teacher tool. The value is settled (teachers need to find lessons by subject) and the API's contract is settled, but the subject-mapping contract between the two systems is still unresolved and the partner disputes who owns it.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 1500,
+      "maxTurns": 40,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A plan that sequences the settled parts and routes the unresolved seam to specify (the mapping contract) and specify-connection (the seam analysis) before the dependent integration steps, preserving the ownership dispute as an open item for the authority that holds it; the settled steps are not blocked and the unresolved one is not invented.\n\nAssertions:\n1. The unresolved mapping contract is routed to the specification skills rather than planned around or invented\n2. The settled steps proceed and the dependent steps wait on the returned obligation\n3. The ownership dispute is preserved for its authority rather than resolved by the plan",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: A plan that sequences the settled parts and routes the unresolved seam to specify (the mapping contract) and specify-connection (the seam analysis) before the dependent integration steps, preserving the ownership dispute as an open item for the authority that holds it; the settled steps are not blocked and the unresolved one is not invented.\n\nAssertions:\n1. The unresolved mapping contract is routed to the specification skills rather than planned around or invented\n2. The settled steps proceed and the dependent steps wait on the returned obligation\n3. The ownership dispute is preserved for its authority rather than resolved by the plan",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-plan|oak-user-value|oak-specify|oak-specify-connection|oak-assess-specification)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-plan(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 0.5,
+            "passed": false,
+            "turns": 5,
+            "costUsd": 0.20177420000000001,
+            "judgeCostUsd": 0.01582800000000001,
+            "durationSeconds": 44,
+            "startedAt": "2026-09-27T11:37:54.436Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL FAIL FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  false,
+                  false
+                ],
+                "evidence": "I didn't write a file. This repo is empty: there's no `.agent/plans/`, no plan-node schema, no templates and no impact-area registry, so a node written here would be neither valid nor where it belongs. The plan sketch is below. Point me at the repo that holds the plan estate and I'll write it there as a proper node.\n\n## Recommendation: split the plan at the mapping\n\nThe subject mapping shouldn't be written into this plan as though it were settled. Who owns it is a question for our owner and the partner, not something an implementer can decide. So the plan separates:\n\n- **Work the mapping doesn't affect.** This can start now.\n- **Work that depends on the mapping.** This waits on an owner gate with a fixed expiry date. It doesn't guess an owner.\n- **Writing down what the mapping must guarantee.** This can also start now. The ownership argument is hard to settle while nobody has written down what is being owned. Once the obligations are written, the argument becomes \"who can meet these?\", which is much easier to answer.\n\nOne option could make the dispute unnecessary. If the partner's tool shows **our** subject list, taken straight from our API, there's nothing to map. A mapping contract only exists if their tool keeps its own subject list. That trade-off (less work, but the partner gives up their own subject list) is the first thing to put to the owner.\n\n---\n\n## Sketch: delivery node, `status: sketch`\n\n```yaml\n---\ntype: delivery\nstatus: sketch\nserves: <strategic node for partner distribution — to confirm>\nimpact_areas: [<from registry — e.g. curriculum-api, partner-integrations>]\ntickets: [<Linear pointer; partner identity, dates, contacts live there>]\ndepends_on:\n  - node: <subject-mapping connection spec>\n    kind: blocking        # blocks only the mapping-dependent slices below\nowner_gates:\n  - id: mapping-ownership\n    awaiting: owner decision + partner agreement on (a) whether the partner adopts our subject list as-is, else (b) who maintains the mapping and meets its obligations\n    clears_when: the decision is recorded (ADR or signed partner agreement) and cited by this node\n    expires: 2026-10-25   # placeholder: set from the strategic node's gate_expiry_default\n---\n```\n\n**Goal:** teachers using the partner's tool can find our lessons by subject, and every lesson they find really belongs to the subject they picked.\n\n**Problem:**\n- **Gap:** our lessons can't be found by subject inside the partner's tool.\n- **Who it hurts:** teachers, who can't use our lessons there, and us, because our lessons don't reach them.\n- **Constraints:**\n  - the API contract is fixed, and this work doesn't change it\n  - the partner is outside our control\n  - nobody has agreed who owns the mapping\n\n**How it works:** the partner's tool asks our API for lessons filtered by subject, using subject IDs from our API. This only works if the teacher's chosen subject keeps its meaning on the way into our API. Getting the ID format right doesn't guarantee that. For example, if their \"Science\" becomes one of our subject IDs, it may leave out lessons it should include, or include ones it shouldn't.\n\n**Users and value:**\n- **Teachers:** find relevant lessons by subject without leaving the tool they already use.\n- **The partner:** gets our curriculum content without building their own copy.\n- **Our operators:** see partner traffic against the existing API contract, with no special-case endpoints.\n\n**Acceptance criteria (each with its proof):**\n1. Every subject the partner's tool shows resolves to our subject IDs as defined in the recorded mapping decision (identity if they adopt our list). **Proof:** repo-safe, a contract test that runs each partner subject through the mapping into our API and checks the result.\n2. No partner subject maps to a lesson set the specification forbids, and subjects with no mapping are handled the way the specification says, never by silently dropping or merging them. **Proof:** repo-safe, adverse-case tests taken from the connection spec.\n3. In the partner's production tool, a teacher can pick a subject and get our lessons for it. **Proof:** owner-held. The partner's product owner or a seat named by our owner verifies it, and the dated observation goes on the ticket.\n4. A subject added to or removed from either side is noticed and routed to whoever owns the mapping, rather than quietly breaking search. **Proof:** repo-safe if we own detection; owner-held if the partner does. Which one depends on the gate.\n\n**Out of scope:**\n- changing the curriculum API contract\n- search features beyond filtering by subject\n- defining the partner's subject list for them\n- deciding the ownership question inside this plan\n\n**Candidate slices (the implementer re-slices at pickup against the round budget):**\n1. *Not blocked:* partner access to the existing API (credentials, rate limits, a sandbox), plus a smoke test proving the partner can get lessons by one of our subject IDs.\n2. *Not blocked:* specify the mapping seam with `oak-specify-connection`. Cover:\n   - what meaning must survive the mapping\n   - many-to-one and one-to-many cases\n   - unmapped subjects\n   - what happens when either subject list changes\n   - which obligations fall on each side\n\n   This is the input the ownership decision needs.\n3. *Blocked by the gate:* build or adopt the mapping and its contract tests (criteria 1 and 2).\n4. *Blocked by the gate:* detect subject-list drift and route it to the owner (criterion 4).\n5. *Blocked by the gate:* partner go-live check (criterion 3).\n\n**What to do if the gate expires without a decision:** re-raise it with the owner. The plan doesn't choose an owner on its own, because a default that takes effect on silence would ship a decision nobody made.\n\n## Review dispositions\n_(empty ledger)_\n\n---\n\n**Needed from you before this can be ratified:**\n1. Where the plan estate lives, and which strategic node this serves (that node sets the gate's expiry).\n2. Whether our side is willing to propose \"the partner adopts our subject list\". That's the cheapest path, and I'd put it forward first.\n3. Whether to start slice 2, the mapping specification, now. I'd recommend it: it's work only we can do, and the ownership decision needs it."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 0.5,
+            "passed": false,
+            "turns": 2,
+            "costUsd": 0.09672220000000001,
+            "judgeCostUsd": 0.012407999999999995,
+            "durationSeconds": 30,
+            "startedAt": "2026-09-27T11:38:38.372Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL FAIL FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  false,
+                  false
+                ],
+                "evidence": "# Integration plan: curriculum API ↔ partner teacher tool\n\nThe working directory is empty, so this plan is based only on what you described. It doesn't draw on any code or docs.\n\n## Core idea\n\nTwo things are settled: the goal (teachers find lessons by subject) and our API contract. One thing isn't: how subjects map between the two systems, and who owns that mapping. Build all the settled work now and keep the mapping in one small, swappable place. Meanwhile, push the ownership question to a decision with a deadline and a default that applies if nobody decides.\n\n## 1. Split the ownership dispute into four questions\n\n\"Who owns the mapping\" is usually four questions, and the disagreement is often about only one of them:\n\n| Question | Recommended answer |\n|---|---|\n| **Vocabulary:** whose subject list is the reference? | **Ours.** It's already in our settled API contract. |\n| **Mapping data:** who writes and updates the partner-label → our-subject-ID table? | **Partner.** They know their UI labels and when those change. |\n| **Where it runs:** which system does the translation? | **Partner side**, calling our API with our subject IDs. |\n| **Accountability:** who fixes it when a teacher searches \"Maths\" and gets nothing? | **Shared, with a named owner on each side.** Partner owns the mapping entries; we own the reference list and tell them before it changes. |\n\nThe idea behind this: the system that uses a published contract adapts to it. If we did the translation for this partner, we'd be starting a separate mapping job for every future partner.\n\n**Fallback if the partner won't move:** we host the mapping table, but the partner still edits it, through a PR or admin UI. We run the translation; they keep responsibility for the content. That settles where it runs without us taking on their vocabulary.\n\n## 2. Work that can start now\n\n1. **Publish our subject list** as part of the contract, e.g. `GET /subjects` returning stable IDs, labels and hierarchy, plus a versioning and deprecation policy. The partner needs this under any ownership model.\n2. **Partner builds against our API** using our subject IDs directly: auth, lesson search by subject ID, pagination, errors.\n3. **Put the mapping behind a single interface**, `resolveSubject(partnerLabel) → ourSubjectId[]`. It returns a list because one partner label can cover several of our subjects, or none. At first it's backed by a hand-written table. Whoever ends up owning it replaces the implementation, and nothing else changes.\n4. **Define what happens when a label doesn't map.** Never return silent empty results. Log it, show \"no lessons for this subject yet\", and report counts so gaps show up.\n\n## 3. Resolving the mapping contract (runs in parallel)\n\n1. **Collect real data.** Get the partner's full subject list and map it against ours. Sort each label into exact match, one-to-many, many-to-one, or no match. That turns the argument into a concrete list of disputed entries.\n2. **Write a one-page proposal** with the ownership split above, the fallback, and the change process: how either side announces a vocabulary change, and how much notice they give.\n3. **Hold a decision meeting** with someone on each side who can actually agree. Set a date and a default: if nothing is agreed by then, the partner-side mapping in §1 applies for launch and gets revisited after launch.\n4. **Record the decision** in the integration agreement or contract appendix, not just in meeting notes.\n\n## 4. Launch gates\n\n- Mapping owner named in writing (both sides)\n- Every partner subject label maps, or is explicitly marked as having no match\n- Unmapped-search rate is monitored, with an alert threshold\n- Notice period for changes to our subject list is agreed (e.g. 30 days)\n- End-to-end check: a teacher picks each top-level subject in the partner tool and sees lessons\n\n## Risks\n\n- **Mapping goes stale quietly.** Either side renames a subject and searches start returning nothing. The fix is to make unmapped hits visible (§2.4) and agree a change-notice process.\n- **Ownership slips back to \"shared\" with nobody accountable.** The fix is named people, not team names.\n- **Scope creep into a general crosswalk service.** Only build one if a second partner needs it.\n\n## What would sharpen this plan\n\n- The partner's actual subject list, so the gap analysis can be done now\n- Their specific objection: is it about effort, expertise, or liability?\n- Whether more partners are expected. If so, us hosting a shared mapping becomes easier to justify.\n\nI can draft the subject-list endpoint spec or the one-page ownership proposal next."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 0.5,
+        "passRate": 0,
+        "scoreWithout": 0.5,
+        "passRateWithout": 0,
+        "delta": 0
+      }
+    },
+    {
+      "name": "case-04",
+      "dir": "evals/case-04",
+      "source": "mixed",
+      "promptMarkdown": "We are delivering a lesson-finder integration. Our curriculum API (contract settled at revision 5) will be consumed by a partner's teacher-facing tool that maps our subject slugs to its own taxonomy. On the table: (a) 'teachers will find the right lessons faster' (nobody has measured it; one teacher said so in a demo); (b) the partner's mapping is 'complete' (their word; no fixtures for combined science exist); (c) our API's schema tests pass. Take this from the value claim to an executable plan, applying each method in turn: establish what value is claimed, for whom, and its evidence status; specify the mapping contract; analyse the seam between the API and the tool; assess whether the resulting record is ready for integration reliance; then plan the delivery. Then a material revision arrives: the partner's taxonomy splits 'combined science' into three subjects with immediate effect. Trace that revision through everything above. Throughout, keep every claim's status (observed, hypothesis, promise, unknown) exactly as the evidence allows.",
+      "runsPerCase": 3,
+      "timeoutSeconds": 1500,
+      "maxTurns": 40,
+      "graders": [
+        {
+          "name": "assertions",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: Five linked outputs in order, each consuming the previous: a bounded value proposition with claim (a) held as a hypothesis; a mapping-contract specification with a named owner, preserved meaning, permitted loss and discriminating fixtures as its evidence plan; a seam analysis showing both endpoints locally valid and the composition unproven for combined science, with a counterexample; an assessment that finds the record not ready for integration reliance until the fixtures run, with the condition and reassessment trigger named; a plan sequencing the settled work and holding the dependent steps on the returned obligation. Then the revision traced: the contract's affected obligations, the seam's changed preservation rule, the assessment's trigger firing, the plan's dependent steps; unaffected work not reopened; the previous revision retained. No measurements, quotations or fixture results invented.\n\nAssertions:\n1. Each of the five methods is applied in order and each hands the next what it needs: value to obligations, obligations to the seam, the seam to the assessment, the assessment to the plan\n2. Claim (a) remains a hypothesis at every stage and is never written into the plan as a delivered or measured outcome\n3. Claim (b) is treated as the partner's assertion, not evidence; the absent combined-science fixtures are named as the evidence gap and as the assessment's condition\n4. Claim (c), passing schema tests, is not taken as evidence that the mapping preserves meaning\n5. The revision is traced through the contract, the seam, the assessment's reassessment trigger and the plan's dependent steps; unaffected work is not reopened and the previous revision is retained\n6. No measurements, participant quotations or fixture results are invented",
+          "config": {
+            "criteria": "Judge the agent's final response against the expected outcome and every assertion below. Pass\nonly when the expected outcome is substantively met and every assertion holds. Where the\nexpected outcome calls for a method to be applied, judge whether the elements the expected\noutcome names are present in substance; a response that names or summarises the method\nwithout producing them fails. Where the expected outcome is that the method is correctly not\napplied, or that the request is routed elsewhere, judge the assertions alone. Judge only what\nthe response says; the prompt states the facts the agent had, and asking for material the\nprompt does not supply is not a failure unless an assertion says so.\n\nExpected outcome: Five linked outputs in order, each consuming the previous: a bounded value proposition with claim (a) held as a hypothesis; a mapping-contract specification with a named owner, preserved meaning, permitted loss and discriminating fixtures as its evidence plan; a seam analysis showing both endpoints locally valid and the composition unproven for combined science, with a counterexample; an assessment that finds the record not ready for integration reliance until the fixtures run, with the condition and reassessment trigger named; a plan sequencing the settled work and holding the dependent steps on the returned obligation. Then the revision traced: the contract's affected obligations, the seam's changed preservation rule, the assessment's trigger firing, the plan's dependent steps; unaffected work not reopened; the previous revision retained. No measurements, quotations or fixture results invented.\n\nAssertions:\n1. Each of the five methods is applied in order and each hands the next what it needs: value to obligations, obligations to the seam, the seam to the assessment, the assessment to the plan\n2. Claim (a) remains a hypothesis at every stage and is never written into the plan as a delivered or measured outcome\n3. Claim (b) is treated as the partner's assertion, not evidence; the absent combined-science fixtures are named as the evidence gap and as the assessment's condition\n4. Claim (c), passing schema tests, is not taken as evidence that the mapping preserves meaning\n5. The revision is traced through the contract, the seam, the assessment's reassessment trigger and the plan's dependent steps; unaffected work is not reopened and the previous revision is retained\n6. No measurements, participant quotations or fixture results are invented",
+            "focus": "last_message"
+          }
+        },
+        {
+          "name": "skill-files-readable",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "trace",
+            "pattern": "Permission to read [^ ]*/skills/(oak-plan|oak-user-value|oak-specify|oak-specify-connection|oak-assess-specification)/[^ ]* has been denied",
+            "flags": "",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill-fired-oak-assess-specification",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-assess-specification(?![a-z0-9-])"
+          }
+        },
+        {
+          "name": "skill-fired-oak-specify-connection",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-specify-connection(?![a-z0-9-])"
+          }
+        },
+        {
+          "name": "skill-fired-oak-specify",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-specify(?![a-z0-9-])"
+          }
+        },
+        {
+          "name": "skill-fired-oak-user-value",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-user-value(?![a-z0-9-])"
+          }
+        },
+        {
+          "name": "skill-fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "oak-plan(?![a-z0-9-])"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 12,
+            "costUsd": 0.41232820000000003,
+            "judgeCostUsd": 0.029927999999999996,
+            "durationSeconds": 100,
+            "startedAt": "2026-09-27T11:39:08.614Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ],
+                "evidence": "# Lesson-finder integration: from the value claim to a delivery plan, then the combined-science revision\n\n**How I'm labelling claims.** Every claim is tagged **[observed]**, **[hypothesis]**, **[promise]** or **[unknown]**. When someone *said* something, the fact that they said it is [observed], but what they said keeps its own status. The working directory is empty, so your message is the only evidence I have. I haven't seen the API spec, the schema tests, the partner's mapping or their taxonomy.\n\n---\n\n## 1. The value claim\n\n| Claim | For whom | Status | Evidence |\n|---|---|---|---|\n| (a) \"Teachers will find the right lessons faster\" | Teachers using the partner's tool | **[hypothesis]** | [observed]: one teacher said so in a demo. [unknown]: whether it's true for that teacher, or any other. |\n| The partner can show our lessons under its own taxonomy | The partner's tool | **[promise]** we need to set out in a contract (§2) | None yet |\n| Our API gives slugs and lessons in the agreed shape | The partner's system | **[observed]** for shape only (schema tests pass) | Schema tests. I don't know whether they ran against rev 5. |\n\nClaim (a) depends on a chain of links. Each link is a separate claim, and one being true doesn't make the next true:\n\n1. The API conforms to its contract. [observed, shape only]\n2. The mapping keeps the meaning of each subject. [unknown]\n3. The tool returns the right lessons for a subject. [unknown]\n4. A teacher finds the lesson they wanted. [unknown]\n5. They find it faster than they do today. [hypothesis]\n\nSome terms are undefined, and the claim can't be tested until they are:\n- **\"Right lessons\"**: right by whose judgement, and for which course or key stage?\n- **\"Faster\"**: compared with what they do now? No baseline exists.\n\n**Next step:** a task-based comparison of time to a correct lesson, measured against teachers' current route. The inquiry design belongs in a separate research track. I'm not inventing a sample size or a success threshold here.\n\n**Rule for delivery:** (a) must not be an acceptance criterion or a launch statement until it has been measured.\n\n---\n\n## 2. The mapping contract\n\n**Subject:** a mapping from our subject slugs (the set in API rev 5) to the partner's taxonomy terms.\n\n**Ownership:**\n- The slug vocabulary is ours.\n- The taxonomy is the partner's.\n- Who owns the mapping table is **[unknown]**. This blocks the contract until it's decided.\n\n**Concrete case:** our slug `biology` maps to the partner's \"Biology\". A teacher who filters on Biology sees exactly our biology lessons.\n\n**Cases that could go wrong:**\n- The combined-science slug. The target cardinality is unknown and there are no fixtures.\n- A slug we add after rev 5.\n- A slug we retire.\n- Several of our slugs collapsing into one partner term, losing distinctions.\n- A partner term with no source slug.\n- Case or encoding differences in slugs.\n\n**Obligations** (every one is a [promise] still to be adopted; none has been accepted yet):\n\n| ID | Obligation | Evidence plan |\n|---|---|---|\n| MC-1 Totality | For every rev-5 slug, the partner gives either at least one target term or an explicit \"unmapped\" status. Nothing is dropped silently. | Checked against fixtures |\n| MC-2 Meaning | Each mapped term shows the lessons a teacher of that subject expects. | A curriculum specialist reviews the fixtures. The expected answers must not be derived from the partner's own mapping. |\n| MC-3 Cardinality | Each slug declares whether it maps 1:1, 1:n or n:1, and says how duplicates are presented. | Fixtures |\n| MC-4 Unknown slug | An unmapped or new slug is shown as unmapped and reported to us. The tool must not crash or file it under the wrong subject. | A test with a synthetic slug |\n| MC-5 Versioning | The mapping is tied to a named API revision and a named taxonomy revision. Each side gives notice before changing its vocabulary. | Contract text. The notice period is **[unknown]** and is for the owners to set. |\n\n**Unknowns and how each is handled:**\n- Combined-science mapping: **blocks** integration for science.\n- Mapping ownership: **blocks** adoption of the contract.\n- Whether fixtures exist for the other subjects: a **bounded investigation**. Your note implies they might, but I haven't seen any.\n\n---\n\n## 3. The seam between the API and the tool\n\n**Relation:** the tool transforms our slugs into its terms and depends on our API. The endpoints are API rev 5 and the partner taxonomy at its current, unnamed revision **[unknown]**.\n\n**Composition test:** what the API guarantees is shape: valid slugs in a valid schema. What the tool needs is meaning and completeness: every slug mapped, and mapped correctly. **Shape does not imply meaning.** From the material I have, the compatibility of the two is **undecidable**.\n\n**Counterexamples where both sides are valid on their own but the pair fails:**\n1. Combined science maps only to \"Physics\". Everything is schema-valid, but a teacher filtering on Chemistry never sees those lessons.\n2. Combined science fans out to three subjects, and teachers see the same lessons duplicated three times.\n3. We add a slug in rev 6. The mapping drops it silently, and those lessons can't be found anywhere. No error fires on either side.\n4. The partner caches an old mapping, so the tool runs against a different version from ours.\n\n**Obligations handed back to each side:**\n- **Our API spec:** publish the full slug set as an authoritative list, and commit to giving notice before it changes.\n- **Partner:** MC-1, MC-3 and MC-4, plus notice before *their* taxonomy changes.\n\n---\n\n## 4. Is it ready for integration?\n\n- **What I assessed:** the draft mapping contract from §2, against API rev 5.\n- **For what use:** the partner's tool relying on the mapping for teachers' lesson search.\n- **Independence:** none. I'm assessing my own draft in the same session.\n- **Who can accept it:** **[unknown]**. The owner needs to be named, probably our product owner together with the partner's integration lead.\n\n**Findings:**\n\n| Class | Finding |\n|---|---|\n| False assurance | Passing schema tests are offered as evidence that the integration works. They show shape only. |\n| Misclassified claim | The partner's \"complete\" is presented as fact. What we have is [observed] that they said it; whether the mapping really is complete is [unknown]. |\n| Misclassified claim | (a) reads as a benefit. It is a [hypothesis]. |\n| Stale or missing evidence | No combined-science fixtures. I also can't tell whether the schema tests ran against rev 5. |\n| Material omission | No defined behaviour for unknown slugs, no mapping owner, and no notice obligation on either side. |\n| Unresolved unknown | The cardinality of the combined-science mapping. |\n\n**Disposition: not ready for integration reliance.** It is ready for discussion.\n\n**What would change that:**\n- The fixtures are reviewed by a curriculum specialist and pass.\n- MC-1 to MC-5 are adopted by named owners.\n- There is a test for unknown-slug handling.\n\n**Reassess** when either side's vocabulary changes, when the evidence changes, or when the intended use changes.\n\n---\n\n## 5. Delivery plan\n\nThis is a sketch. It needs owner ratification before it governs any work. The plan-node schema and templates aren't in this workspace, so I haven't written or validated a plan file.\n\n- **Goal:** teachers using the partner's tool can reach our lessons under the correct subject, and no lessons disappear silently.\n  - The speed claim (a) is out of scope for go-live.\n- **Mechanism:** agree the fixtures and contract tests at the seam, so that mapping errors show up before teachers meet them.\n\n**Acceptance criteria, each with its proof type:**\n1. The API returns exactly the published rev-5 slug set. *(repo-safe: a contract test)*\n2. For every slug, the partner's mapping matches the fixture that the specialist reviewed. *(owner-held: a partner-run test result, recorded with a date)*\n3. A synthetic slug comes out as \"unmapped\" and gets reported to us. *(owner-held, recorded the same way)*\n\n**Slices, in order:**\n1. Publish the slug set.\n2. Specialist writes the fixtures, including combined science.\n3. Partner runs the contract tests.\n4. Test the unknown-slug behaviour.\n5. Add notice obligations to both sides of the contract. The owners decide whether this counts as a new API revision.\n6. Separate track, not part of go-live: the inquiry design for (a).\n\n**Owner gates:**\n- Name the mapping owner and the acceptance authority.\n- Set the notice period.\n\nEach gate needs a fixed expiry date. I'd propose 2026-10-11, but the owners set it.\n\n**Out of scope:** any claim that teachers find lessons faster, and any change to the partner's own taxonomy.\n\n---\n\n## 6. The revision: the partner splits combined science into three subjects, with immediate effect\n\n**Status of the revision itself:**\n- [observed]: the partner has announced the split.\n- [unknown]: what the three new subjects are, whether the old \"combined science\" term still exists, and whether the tool is already live and serving teachers.\n\nI'm not assuming the three are biology, chemistry and physics.\n\n**§1 Value**\n- (a) is still a [hypothesis], and now weaker for science teachers.\n- New possible harm [hypothesis]: teachers who teach combined science as one course may find nothing, or only scattered pieces, under the new subjects.\n\n**§2 Contract**\n- The partner's \"complete\" claim is now **stale**. It was about the old taxonomy, and nobody has assessed it against the new one. That doesn't make it false.\n- For combined science, the contract must now say 1:3.\n- Key question **[unknown]**: can our lesson data tell which discipline a combined-science lesson belongs to?\n  - If it can't, the slug alone can't carry the meaning the new subjects need. That returns an obligation to *our* API, which would possibly need a new field and so a new revision (rev 6). That's a decision for the owners, not an assumption.\n- The missing notice obligation (MC-5) is no longer a theoretical gap. The partner just made a change with immediate effect and no notice.\n\n**§3 Seam**\n- The seam is reopened.\n- For combined science, the pair **fails** unless the partner already has a transitional mapping; whether it does is [unknown].\n- New counterexample: API rev 5 hasn't changed and our schema tests still pass, yet combined-science lessons may already be unmapped or misfiled. This is the clearest demonstration that schema tests can't vouch for the seam.\n\n**§4 Assessment**\n- The earlier assessment isn't evidence about the new taxonomy revision.\n- The disposition stays **not ready**, with a new finding: a counterparty changed its vocabulary without notice, which confirms the material omission.\n- A reassessment trigger has fired.\n\n**§5 Plan**\n- The combined-science fixtures in slice 2 must be written against the new taxonomy.\n- New bounded investigation: whether our lesson data can support a split by discipline.\n- New owner gate: how to handle combined science. My recommendation is to take it out of the first go-live scope. Ship the other subjects once their fixtures pass, and make combined-science lessons show explicitly as unmapped so they don't vanish silently.\n  - That's the only option that doesn't depend on unknowns. Fanning out to all three duplicates lessons. Classifying each lesson may need API rev 6.\n\n**Immediate step for you (I haven't contacted anyone):** ask the partner three things:\n1. Is the tool live?\n2. What is it doing with combined-science slugs right now?\n3. What are the three new subjects, and what is the taxonomy revision identifier?\n\nUntil they answer, whether teachers are affected today stays **[unknown]**."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-fired-oak-assess-specification",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              },
+              {
+                "name": "skill-fired-oak-specify-connection",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              },
+              {
+                "name": "skill-fired-oak-specify",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              },
+              {
+                "name": "skill-fired-oak-user-value",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              },
+              {
+                "name": "skill-fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 0.5,
+            "passed": false,
+            "turns": 2,
+            "costUsd": 0.1776088,
+            "judgeCostUsd": 0.02836799999999999,
+            "durationSeconds": 63,
+            "startedAt": "2026-09-27T11:40:48.284Z",
+            "error": null,
+            "tracePath": "<scaffold>/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "assertions",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL FAIL FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  false,
+                  false
+                ],
+                "evidence": "The working directory is an empty repo, so this plan uses only the facts in your brief. I've invented no API details. Where I assume something about the rev-5 API, I label it as an assumption.\n\n**Status labels:** **Observed** means we have direct evidence. **Hypothesis** means it's plausible but untested. **Promise** means a party has asserted it but we haven't verified it. **Unknown** means we have no evidence either way.\n\n---\n\n## 1. Value claim: what's claimed, for whom, and the evidence\n\n| Claim | For whom | Status | Evidence |\n|---|---|---|---|\n| (a) \"Teachers will find the right lessons faster\" | Teachers using the partner's tool | **Hypothesis** | That one teacher said it in a demo is **observed**. That it's true is not. We have one anecdote, from a demo setting, with no baseline, no measure of \"faster\", and no definition of \"right lesson\". |\n| (b) The partner's mapping is \"complete\" | Us, as the integrator relying on it | **Promise** (partner's word) | No fixtures exist for combined science, so for that subject coverage is **unknown**. \"Complete\" is also undefined: complete against which list of our slugs, and at which revision? |\n| (c) Our API's schema tests pass | Us and the partner (response shape) | **Observed** | This only shows that our responses match the rev-5 schema. It says nothing about whether slugs map correctly, so it provides **no evidence** for (a) or (b). |\n\nThe value chain only holds if all three links hold: our API is correct (c, partly observed), the mapping is correct (b, promised), and a correct mapping leads to faster finding (a, hypothesis). The weakest link is the one we've tested least, which is the mapping. The claim we can't yet make is anything that depends on (a).\n\n## 2. The mapping contract\n\nThe partner owns the mapping, but the contract must state what they owe us in terms we can test.\n\n1. **Domain:** the full set of subject slugs in our rev-5 enumeration, listed explicitly and not left as \"all subjects\". (*Assumption:* rev 5 fixes a finite slug list. If it doesn't, that's the first gap to close.)\n2. **Totality:** every slug in the domain maps to at least one partner taxonomy ID. \"Complete\" is defined as exactly this and checked by a test, not by assertion.\n3. **Cardinality:** each entry is marked 1:1, 1:n or n:1. For 1:n, the contract says whether lessons fan out to every target or are routed by lesson-level metadata, and which metadata field does the routing.\n4. **Unknown slugs:** if the tool receives a slug it can't map, it must fail visibly (log it and surface an \"unmapped\" state). It must never drop it silently. A silent drop looks like \"fewer results\", which directly undermines (a) and can't be detected from our side.\n5. **Versioning:** the mapping records which API revision (5) and which partner taxonomy version it targets. A change on either side invalidates the mapping until it's re-verified.\n6. **Change notice:** a minimum notice period for taxonomy changes, and a named owner on each side.\n7. **Fixtures as acceptance:** at least one golden fixture per slug (slug → expected partner ID(s), with a sample lesson). Combined science is required because it's the known gap.\n\n## 3. The seam between our API and the partner's tool\n\n| Seam point | Owner | What currently covers it | Status |\n|---|---|---|---|\n| Response shape | Us | Schema tests | **Observed** passing |\n| Slug values match the rev-5 enumeration | Us | Only if the schema pins an enum | **Unknown** (not stated) |\n| Slug → partner ID translation | Partner | Nothing we can see | **Promise** |\n| Behaviour on unmapped or unknown slugs | Partner | Nothing | **Unknown** |\n| Mapping stays in sync as either side changes | Both | No mechanism | **Unknown**, effectively absent |\n| End result: teacher sees the right lesson | Partner UI | Nothing | **Hypothesis** |\n\nThe main finding is that **nothing tests across the seam**. Our tests stop at our boundary and the partner's claim covers the other side. The failure that matters (a wrong or missing mapping that shows up as silently missing lessons) falls between the two, and no existing check can detect it.\n\n## 4. Is the record ready for integration reliance?\n\n**No.** Reliance needs these gates:\n\n- **G1:** a written mapping contract (section 2) that both sides accept.\n- **G2:** a contract test across the seam. We supply one fixture per slug, the partner's mapping runs against them, and the results are compared to the expected IDs. It must include combined science.\n- **G3:** unmapped-slug behaviour verified by a test that sends an unknown slug and checks for a visible failure.\n- **G4:** a version pin that records API rev 5 and the partner taxonomy version together.\n\nOnly (c) is met, and it's necessary but far from sufficient. Claim (a) isn't a readiness gate: the integration can be correct without being faster. But nobody should state (a) as an outcome until it has been measured (section 5, step 6).\n\n## 5. Delivery plan\n\n| # | Step | Exit criterion |\n|---|---|---|\n| 1 | Publish the slug list from rev 5 as the mapping domain | The list is agreed by both parties |\n| 2 | Agree the mapping contract (section 2) | Signed off, with owners named |\n| 3 | Build golden fixtures for every slug, combined science first | A fixture exists for every slug |\n| 4 | Run a contract test against the partner's mapping in their staging environment | 100% of slugs map to the expected IDs, and an unknown slug fails visibly |\n| 5 | Limited rollout to a pilot group of teachers, with unmapped-slug alerts | Zero silent drops over the pilot window |\n| 6 | Measure (a): baseline time-to-find and success rate for defined tasks before the tool, then again after | (a) moves to observed, or it's refuted. Until then, communications call it a goal, not a result. |\n| 7 | Put the contract test in CI on both sides and re-run it whenever either side changes version | The test runs automatically on revision bumps |\n\n---\n\n## 6. Revision: the partner splits \"combined science\" into three subjects with immediate effect\n\n**Status of the revision itself:** that the partner *announced* it is **observed**. What their production tool is doing with combined-science traffic right now is **unknown**. It might still accept the old ID, treat it as an alias, or reject or drop it.\n\n### Tracing it through each section\n\n**Section 1, value claim:**\n- (a) is still a **hypothesis**, and the change doesn't make it any more or less supported. But the population it affects is now clear: combined-science teachers are the group most at risk of a *worse* experience right now. Any baseline for them taken before the split can no longer be compared with measurements after it.\n- (b) is **no longer applicable to combined science.** It was a promise about the old taxonomy, and its target no longer exists in that form. It was never verified for this subject, and now it's out of date as well. For other subjects it's still a **promise**. Whether the partner re-audited the rest of their mapping during the split is **unknown**, so ask.\n- (c) is **still observed passing, and that's exactly the problem.** Our schema tests will stay green through a change that may be breaking combined science in production. This is direct evidence that (c) can't serve as a readiness signal.\n\n**Section 2, mapping contract:**\n- The combined-science entry changes from 1:1 (*assumed*) to **1:3**. The contract has to choose between two options:\n  - **Fan-out:** every combined-science lesson appears under all three new subjects. This is simple and needs no API change, but it over-includes, so teachers see lessons that aren't relevant. That works against (a).\n  - **Routing:** each lesson goes to one of the three subjects based on lesson-level metadata. This is more precise, but only possible if rev 5 exposes a field that can separate the three. Whether it does is **unknown** to me. Check the rev-5 schema.\n- If routing needs a field rev 5 doesn't have, the **settled contract has to reopen as rev 6**. That's a scope change and should be treated as one, not handled as a quiet patch.\n- The versioning clause (item 5) is triggered: the partner's taxonomy version has changed, so the mapping is invalid until re-verified.\n- The change-notice clause (item 6) was just broken in practice, or would have been if it existed. \"Immediate effect\" is exactly the case that clause is meant to prevent.\n\n**Section 3, seam:**\n- \"Slug → partner ID\" moves from **promise** to **known stale** for combined science.\n- \"Unmapped behaviour\" moves from an unknown in theory to **the most urgent open question**. If the partner drops unmapped IDs silently, combined-science lessons may already be invisible to teachers. That is a **hypothesis** until someone checks. Nothing on our side would show it.\n\n**Section 4, readiness:**\n- It was already not ready, and the change adds a blocking item: G2 can't pass for combined science until the new 1:3 mapping and its fixtures exist. There may also be a **live incident**, which comes before any readiness work.\n\n**Section 5, delivery plan (revised):**\n\n| # | Step | Exit criterion |\n|---|---|---|\n| **0 (new, now)** | Find out what the partner's production tool does with combined-science slugs today | The actual behaviour is **observed**. If lessons are being dropped, treat it as an incident and ask the partner to alias the old ID temporarily. |\n| **0b (new)** | Stop anyone relying on combined science and exclude it from any \"complete\" statement | Communications and the pilot scope are updated |\n| 1–2 | Unchanged, but the contract now covers the 1:3 cardinality, a chosen fan-out or routing strategy, and a version pin to the *new* taxonomy | Strategy is chosen. If routing is chosen, a decision is made on whether rev 6 is required. |\n| 3 | Fixtures for the three new subjects replace the single combined-science fixture. Add fixtures for lessons on the boundaries between them. | A fixture exists for each target |\n| 4 | Contract test re-run against the *post-split* taxonomy | All slugs pass, including the three new targets |\n| 5–6 | Pilot and measurement. The (a) baseline for combined-science teachers must be taken *after* the split. | As before |\n| 7 | CI contract test, now also triggered by partner taxonomy versions, not just our API revisions | This change would have been caught automatically |\n\n### Summary of status changes\n\n| Item | Before the revision | After the revision |\n|---|---|---|\n| (a) faster finding | Hypothesis | Hypothesis (combined-science baseline now invalid) |\n| (b) mapping complete | Promise (combined science unknown) | Promise for other subjects; **stale** for combined science |\n| (c) schema tests pass | Observed | Observed, and shown to be blind to this change |\n| Revision 5 still enough | Settled | **Unknown**: depends on whether 1:3 routing needs a new field |\n| Combined science live in production | Unknown | **Unknown, and urgent** (step 0) |\n\nThe most important next action is step 0: find out what the partner's tool is doing with combined-science lessons today. It's the only question that could turn into a teacher-facing problem that's already happening, and nothing we have now would show it."
+              },
+              {
+                "name": "skill-files-readable",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 0.5,
+        "passRateWithout": 0,
+        "delta": 0.5
+      }
+    }
+  ],
+  "aggregates": {
+    "casesTotal": 4,
+    "casesPassed": 4,
+    "overallScore": 0.75,
+    "overallPassRate": 0.5,
+    "meanDelta": 0.25
+  }
+}

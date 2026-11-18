@@ -180,7 +180,13 @@ async function writeJsonTextAtomically(
   await writeTextAtomically(filePath, text, options);
 }
 
-async function serializeJson(
+/**
+ * Serialise a JSON state value at the canonical two-space format and judge it
+ * with the caller's write gate, WITHOUT writing. Exported so a multi-file
+ * operation (the legacy migration) can judge its last document before its
+ * first write and publish nothing on a refusal.
+ */
+export async function serializeJson(
   value: unknown,
   validateText: (text: string) => Promise<Result<void, Error>>,
 ): Promise<string> {

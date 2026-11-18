@@ -122,6 +122,10 @@ for years if the sibling's tests all use a different extension
 
 ## Package Export Contracts
 
+- knip refuses an exported type whose only consumer is its own module,
+  however necessary the export looks (three refusals across two lanes,
+  2026-09-25 and 09-26). Keep the type local or inline it; export it
+  where its second consumer is.
 - **Exports resolve built `dist/` via standard conditions only**
   (`types`, `import`, `default`) — so a subpath whose `default`
   points at a file tsup never emits fails at first import instead
@@ -178,3 +182,20 @@ finding class ends rather than relocates.
   to the core `$ZodType`, discarding the per-field schema types the readers
   need. Export as `X.shape`, or constrain with `satisfies z.ZodRawShape` —
   never the widening annotation.
+
+## Schema and Lint Findings (2026-10-02 consolidation)
+
+- **Sonar S7765 (prefer `.includes`) against a value-is-X type guard**: rewriting
+  `values.some((v) => v === x)` as `values.includes(x)` fails where the argument is wider than
+  the element type (TS2345). Widening the array's annotation to satisfy it removes the
+  compiler's check that the list holds only members of the guard's union, so the guard is
+  then right by convention only. Keep `.some` in a guard, or widen only a list nothing else
+  can write to, and disposition the finding.
+- **zod 4 closes a plain object in a generated JSON schema only in output mode**:
+  `z.toJSONSchema(z.object({}))` emits `additionalProperties: false` for `io: 'output'` and
+  omits it for `io: 'input'`, where `z.object({}).strict()` is needed (measured on zod 4.4.3,
+  2026-10-02). Before relying on an empty raw shape to close an MCP tool's `inputSchema`, read
+  which mode the converting SDK uses.
+- **A `refine` over optional keys can pass keyless input in the unsafe direction**: where a
+  refinement relates two optional keys and both may be absent, an input with neither passes.
+  Make such keys required and nullable, so the caller states the absence.

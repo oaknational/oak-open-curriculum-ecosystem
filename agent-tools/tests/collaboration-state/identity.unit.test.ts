@@ -99,6 +99,70 @@ describe('deriveCollaborationIdentity', () => {
     expect(result.agentId.id).toMatch(uuidV5Pattern);
   });
 
+  it('counts the Claude seeds only on a Claude platform: a Codex seat in a Claude shell keeps its thread id', () => {
+    const result = deriveCollaborationIdentity({
+      platform: 'codex',
+      model: 'GPT-5',
+      env: {
+        PRACTICE_AGENT_SESSION_ID_CLAUDE: 'claude-seed-appended-to-the-shared-env-file',
+        CLAUDE_CODE_REMOTE_SESSION_ID: 'cse_01FV6rZz5BjSkApAUL6FAj72',
+        CLAUDE_CODE_SESSION_ID: 'claude-cli-session',
+        CODEX_THREAD_ID: codexThreadId,
+      },
+    });
+
+    expect(result.seed_source).toBe('CODEX_THREAD_ID');
+    expect(result.agentId.session_id_prefix).toBe(codexThreadId.slice(0, 6));
+  });
+
+  it('refuses a Codex seat whose only seeds are Claude seeds, naming the Codex seeds to set', () => {
+    expect(() =>
+      deriveCollaborationIdentity({
+        platform: 'codex',
+        model: 'GPT-5',
+        env: {
+          PRACTICE_AGENT_SESSION_ID_CLAUDE: 'claude-seed',
+          CLAUDE_CODE_SESSION_ID: 'claude-cli-session',
+        },
+      }),
+    ).toThrow(
+      'For codex, the primary Practice seed is PRACTICE_AGENT_SESSION_ID_CODEX or CODEX_THREAD_ID. ' +
+        'PRACTICE_AGENT_SESSION_ID_CLAUDE and CLAUDE_CODE_SESSION_ID are set but do not count on platform codex.',
+    );
+  });
+
+  it.each(['claude', 'claude-code', 'Claude-Code', ' claude-code '])(
+    'counts the Claude seeds on the Claude platform label %j, whatever its case or padding',
+    (platform) => {
+      const result = deriveCollaborationIdentity({
+        platform,
+        model: 'claude-fable-5-1',
+        env: { CLAUDE_CODE_SESSION_ID: 'claude-cli-session', CODEX_THREAD_ID: codexThreadId },
+      });
+
+      expect(result.seed_source).toBe('CLAUDE_CODE_SESSION_ID');
+    },
+  );
+
+  it('names the Claude Practice seed in the hint for every Claude platform label', () => {
+    expect(() =>
+      deriveCollaborationIdentity({ platform: 'claude-code', model: 'claude-fable-5-1', env: {} }),
+    ).toThrow('For claude-code, the primary Practice seed is PRACTICE_AGENT_SESSION_ID_CLAUDE');
+  });
+
+  it('keeps the Cursor Practice seed for a Cursor seat opened from a Claude shell', () => {
+    const result = deriveCollaborationIdentity({
+      platform: 'cursor',
+      model: 'GPT-5',
+      env: {
+        PRACTICE_AGENT_SESSION_ID_CLAUDE: 'claude-seed',
+        PRACTICE_AGENT_SESSION_ID_CURSOR: 'cursor-seed',
+      },
+    });
+
+    expect(result.seed_source).toBe('PRACTICE_AGENT_SESSION_ID_CURSOR');
+  });
+
   it('returns CollaborationAgentIdWrite (compile-time enforced via assignment)', () => {
     const result = deriveCollaborationIdentity({
       platform: 'codex',
@@ -128,7 +192,7 @@ describe('naming schema version on the identity tuple', () => {
     const result = deriveCollaborationIdentity({
       platform: 'codex',
       model: 'GPT-5',
-      env: { CODEX_THREAD_ID: codexThreadId, OAK_AGENT_IDENTITY_OVERRIDE: 'Frolicking Toast' },
+      env: { CODEX_THREAD_ID: codexThreadId, PRACTICE_AGENT_IDENTITY_OVERRIDE: 'Frolicking Toast' },
     });
 
     expect(result.agentId.naming_schema_version).toBe('override');
@@ -293,5 +357,67 @@ describe('every explicit Practice seed outranks the ambient platform session id'
     });
 
     expect(identity.seed_source).toBe('CLAUDE_CODE_REMOTE_SESSION_ID');
+  });
+});
+
+describe('Claude Code CLI session id seed (PDR-027, 2026-09-24)', () => {
+  const cliSessionId = '74fc02f6-0615-464a-a5d2-daa7d85a2334';
+
+  it('resolves the harness session id when no Practice seed or cloud id is set', () => {
+    const identity = deriveCollaborationIdentity({
+      platform: 'claude-code',
+      model: 'claude',
+      env: { CLAUDE_CODE_SESSION_ID: cliSessionId },
+    });
+
+    expect(identity.seed_source).toBe('CLAUDE_CODE_SESSION_ID');
+    expect(identity.agentId.session_id_prefix).toBe('74fc02');
+  });
+
+  it('derives the same tuple as the seed the SessionStart hook writes', () => {
+    const fromHarness = deriveCollaborationIdentity({
+      platform: 'claude-code',
+      model: 'claude',
+      env: { CLAUDE_CODE_SESSION_ID: cliSessionId },
+    });
+    const fromHook = deriveCollaborationIdentity({
+      platform: 'claude-code',
+      model: 'claude',
+      env: { PRACTICE_AGENT_SESSION_ID_CLAUDE: cliSessionId },
+    });
+
+    expect(fromHarness.agentId).toStrictEqual(fromHook.agentId);
+  });
+
+  it.each([
+    ['PRACTICE_AGENT_SESSION_ID_CLAUDE', { PRACTICE_AGENT_SESSION_ID_CLAUDE: 'claude-seed' }],
+    ['PRACTICE_AGENT_SESSION_ID_CURSOR', { PRACTICE_AGENT_SESSION_ID_CURSOR: 'cursor-seed' }],
+    ['PRACTICE_AGENT_SESSION_ID_GEMINI', { PRACTICE_AGENT_SESSION_ID_GEMINI: 'gemini-seed' }],
+    ['PRACTICE_AGENT_SESSION_ID_CODEX', { PRACTICE_AGENT_SESSION_ID_CODEX: 'codex-seed' }],
+    [
+      'CLAUDE_CODE_REMOTE_SESSION_ID',
+      { CLAUDE_CODE_REMOTE_SESSION_ID: 'cse_01FV6rZz5BjSkApAUL6FAj72' },
+    ],
+  ])('%s outranks the harness session id', (source, env) => {
+    const identity = deriveCollaborationIdentity({
+      platform: 'claude-code',
+      model: 'claude',
+      env: { ...env, CLAUDE_CODE_SESSION_ID: cliSessionId },
+    });
+
+    expect(identity.seed_source).toBe(source);
+  });
+
+  it('outranks the Codex thread id', () => {
+    const identity = deriveCollaborationIdentity({
+      platform: 'claude-code',
+      model: 'claude',
+      env: {
+        CODEX_THREAD_ID: '019dd34d-cb6a-74e0-a29d-6cb8a65ea14b',
+        CLAUDE_CODE_SESSION_ID: cliSessionId,
+      },
+    });
+
+    expect(identity.seed_source).toBe('CLAUDE_CODE_SESSION_ID');
   });
 });

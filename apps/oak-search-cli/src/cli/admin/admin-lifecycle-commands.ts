@@ -84,9 +84,9 @@ async function buildIngestService(
 async function disconnectOakClient(oakClient: { disconnect(): Promise<void> }): Promise<void> {
   try {
     await oakClient.disconnect();
-  } catch (disconnectErr: unknown) {
+  } catch (error: unknown) {
     ingestLogger.warn('OakClient disconnect failed', {
-      error: sanitiseForJson(disconnectErr),
+      error: sanitiseForJson(error),
     });
   }
 }

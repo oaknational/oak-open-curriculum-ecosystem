@@ -3,6 +3,7 @@ name: "Explicit Missing Resource State"
 polarity: pattern
 use_this_when: "A numeric or boolean result can be confused with a missing upstream resource, causing fail-open behaviour."
 category: architecture
+layer: general
 proven_in: "packages/sdks/oak-search-sdk/src/admin/create-admin-service.ts"
 proven_date: 2026-03-11
 barrier:

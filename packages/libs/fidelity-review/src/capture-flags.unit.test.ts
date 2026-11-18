@@ -116,7 +116,7 @@ describe('allowLoopbackOrigin', () => {
       'http://example.com',
       'http://localhost.evil.example',
       'http://169.254.169.254/latest/meta-data',
-      'http://10.0.0.5:3020',
+      'https://10.0.0.5:3020',
     ]) {
       const result = allowLoopbackOrigin(base);
 

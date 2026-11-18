@@ -7,11 +7,9 @@ import type { OperationObject, ParameterObject, PathItemObject } from 'openapi3-
 
 /**
  * Creates a minimal OperationObject for tests. OpenAPI 3.1 requires `responses`;
- * other fields are optional. Cast used so tests can pass partial shapes.
+ * other fields are optional, so a partial shape is completed with empty responses.
  */
-export function createFakeOperationObject(
-  partial: Partial<OperationObject> & { responses?: OperationObject['responses'] },
-): OperationObject {
+export function createFakeOperationObject(partial: Partial<OperationObject>): OperationObject {
   const out: OperationObject = { responses: partial.responses ?? {}, ...partial };
   return out;
 }

@@ -1,8 +1,6 @@
 import type { OperationObject } from 'openapi3-ts/oas31';
 import { emitHeader, emitSchema, emitIndex } from './emitters.js';
-import type { ParamMetadataMap, ParamMetadata } from './param-metadata.js';
-
-export type { ParamMetadata };
+import type { ParamMetadataMap } from './param-metadata.js';
 
 function buildImports(paginated: boolean): string {
   return [
@@ -47,3 +45,5 @@ export function generateToolFile(
   );
   return parts.join('\n');
 }
+
+export type { ParamMetadata } from './param-metadata.js';
