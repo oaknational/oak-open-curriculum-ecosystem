@@ -1,3 +1,10 @@
+## [1.187.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.187.0...v1.187.1) (2026-11-18)
+
+
+### Bug Fixes
+
+* clear two SonarCloud findings on main ([371f188](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/371f1881aa11c3c0ac4bceaf37ab7d6d4c4e4167))
+
 # [1.187.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.186.10...v1.187.0) (2026-11-18)
 
 
