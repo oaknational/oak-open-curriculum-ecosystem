@@ -8,7 +8,6 @@
  * bundle's graph — the shared constants live here, on the `src/` side of
  * that boundary, and the build script imports downward from it.
  */
-import { MCP_RESOURCE_PATH } from '../served-origin.js';
 
 /**
  * URL prefix every first-party asset reference sits beneath.
@@ -63,7 +62,7 @@ import { MCP_RESOURCE_PATH } from '../served-origin.js';
  * above rules out a 401, not a redirect. Both mounted copies of each tree are
  * named there — the routed one and the root one root-served deployments use.
  */
-export const ROUTED_ASSET_BASE = MCP_RESOURCE_PATH;
+export { MCP_RESOURCE_PATH as ROUTED_ASSET_BASE } from '../served-origin.js';
 
 /** Directory name the copied design system occupies under the served root. */
 export const OAK_DS_PUBLIC_DIRNAME = 'oak-ds';
