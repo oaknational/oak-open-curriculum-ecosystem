@@ -1524,7 +1524,11 @@ export function getResponseSchemaForEndpoint(method: ApiHttpMethod, path: ValidP
   }
   return getResponseSchemaByOperationIdAndStatus(operationId, 200);
 }
-const RESPONSE_DESCRIPTOR_JSON: Record<string, unknown | undefined> = Object.fromEntries(
+// Type debt, to be investigated: these values are JSON Schema objects known at
+// generation time, yet they are typed `unknown`. Loose types belong only at
+// incoming IO boundaries, where they are validated to a strict type at once
+// (principles.md, "Compiler Time Types and Runtime Validation").
+const RESPONSE_DESCRIPTOR_JSON: Record<string, unknown> = Object.fromEntries(
   Object.entries(RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS).map(([key, record]) => [
     key,
     record.jsonSchema,
