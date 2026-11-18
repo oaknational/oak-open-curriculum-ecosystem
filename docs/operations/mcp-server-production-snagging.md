@@ -24,15 +24,7 @@ takes it up.
 - **Open question:** which client state fails, and whether a client can be told to discard it.
   The cause of the one failure was not established.
 
-### 2. Unknown addresses return an HTML page
-
-- **Seen:** 2026-11-16.
-- **What:** a request to an address the server does not serve returns `Cannot GET /…` as HTML
-  with status 404. A client of the server expects JSON.
-- **Fix in hand:** the reunification pull request (oaknational#1023) returns
-  `{"error":"Not found"}`. Remove this entry when a release carrying it is in production.
-
-### 3. Some tools return very large results from small requests
+### 2. Some tools return very large results from small requests
 
 - **Seen:** 2026-11-16.
 - **What:** sizes of the normalised result:
@@ -46,7 +38,7 @@ takes it up.
 
 - **Effect:** a result of that size can exceed what a client or model accepts.
 
-### 4. Most clients do not start sign-in from a challenge carried in a tool result
+### 3. Most clients do not start sign-in from a challenge carried in a tool result
 
 - **Seen:** 2026-11-16, in the `mcpjam compat` report (`@mcpjam/cli` 6.3.1, host catalogue 31).
 - **What:** 24 of 28 client hosts show a tool result carrying `_meta["mcp/www_authenticate"]` as
@@ -55,7 +47,7 @@ takes it up.
 - **Effect:** on those clients, a user whose session has lapsed sees an error where a sign-in
   prompt was intended.
 
-### 5. The response headers clients receive are not the ones the application sets
+### 4. The response headers clients receive are not the ones the application sets
 
 - **Seen:** 2026-11-16, on `/healthz`.
 - **What:** `apps/oak-curriculum-mcp-streamable-http/src/security-headers.ts` sets a 13-directive
@@ -70,5 +62,5 @@ takes it up.
 
 ## Evidence
 
-Entries 1 to 5 come from the comparison recorded in
+Entries 1 to 4 come from the comparison recorded in
 [the consistency report of 2026-11-16](../../.agent/reports/reunification-production-preview-consistency-2026-11-16.md).
