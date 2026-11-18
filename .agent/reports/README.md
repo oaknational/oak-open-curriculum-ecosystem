@@ -45,6 +45,11 @@ matching one nesting depth missed two deeper directories and changed twelve rows
 
 ## Current Structure
 
+- [oak-agent-skills-review-2026-11-16.md](./oak-agent-skills-review-2026-11-16.md)
+  — read-only review of oaknational/oak-agent-skills at `aa4f22c` ahead of its first release:
+  what is already strong, eight items to settle before 0.1.0, improvements for the pilot, a
+  comparison with the Agent Skills specification, and a first eval layer
+
 - [reunification-production-preview-consistency-2026-11-16.md](./reunification-production-preview-consistency-2026-11-16.md)
   — consistency report for oaknational#1023: the MCP server in production against the
   `reunify-oce-forks` preview on 2026-11-16 (surface, 62 tool calls, resources, host

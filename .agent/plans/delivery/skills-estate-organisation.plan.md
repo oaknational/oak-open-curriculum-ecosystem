@@ -18,7 +18,7 @@ impact_areas:
 tickets: []
 depends_on: []
 owner_gates: []
-last_updated: 2026-10-02
+last_updated: 2026-11-16
 ---
 
 # Skills-estate organisation
@@ -447,3 +447,4 @@ One dated row per routed finding (PDR-140 ledger surface).
 | --- | --- | --- | --- |
 | 2026-09-03 | Owner card (the MCP-673 implementing session) | The WS2 annotated corpus, presented for ratification | Ratified — owner verbatim: "Ratify the annotated corpus"; WS4's validators are unblocked; the gate row is removed |
 | 2026-09-09 | The dedicated consolidation (two seats' free-play seeds, 2026-09-07 and 2026-09-09) | The rules tier's three adapters and its index row are hand-carried while the skills tier's adapters are generated; a new rule is four files plus an index row, and the portability validator refused a push for the two pieces a seat had not authored (2026-09-09). Sibling seed: `RULES_INDEX.md` generated from rule frontmatter, since the index classification test already encodes its invariants (the widest-cell, em-dash and trigger-vocabulary classes) | Routed here as a candidate WS9 (WS8 is the supporting-directories workstream above), not started: a rules-adapter generator on the skills generator's pattern, so a rule is one canonical file and `portability:check` proves nothing is hand-carried; the index generator rides the same unit. Falsifier: the generator's projections differ from the hand-carried adapters for any live rule, or the index test's invariants cannot be derived from frontmatter |
+| 2026-11-16 | A read of the plans on skills, rules and sub-agents together, 2026-11-16 | The later delivery node `rules-and-skills-system-design` overlaps WS4 and WS8, and neither node named the other. That node holds a description to 256 characters, where WS4's amendment of 2026-08-09 checks the specification's 1,024. The row above records a rule-adapter generator as not started; one has existed since 2026-09-28 | Recorded for the pickup read. No workstream is changed and no order of work is set |

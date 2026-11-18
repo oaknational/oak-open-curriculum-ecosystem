@@ -12,7 +12,7 @@ impact_areas:
   - practice-and-estate
 tickets: []
 owner_gates: []
-last_updated: 2026-08-12
+last_updated: 2026-11-16
 ---
 
 # Skill classes and validation jurisdiction
@@ -181,3 +181,11 @@ for "skills" as one pile. After this plan: the taxonomy is doctrine
 the boundary is mechanically guarded (the Vendor-fixture red-proof in the
 suite fails any future re-claim). A green `pnpm check` thereafter is
 evidence our validation exercised only our own territory.
+
+## Review dispositions
+
+One dated row per routed finding (PDR-140 ledger surface).
+
+| Date | Source | Finding | Routing |
+| --- | --- | --- | --- |
+| 2026-11-16 | A read of the plans on skills, rules and sub-agents together, 2026-11-16 | The delivery node `rules-and-skills-system-design` sets a budget for the skill listing, which Vendor skills share and this node's jurisdiction rule keeps unedited. Neither node named the other | Recorded for a later reader. This node is unchanged |

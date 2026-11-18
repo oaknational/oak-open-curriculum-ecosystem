@@ -13,7 +13,7 @@ impact_areas:
 tickets: []
 depends_on: []
 owner_gates: []
-last_updated: 2026-11-13
+last_updated: 2026-11-16
 ---
 
 # Design the rules and skills system
@@ -188,6 +188,9 @@ Each is one pull request.
    the decision it can change, is listed in `open-items.md`.
 4. **Write the projections, the build and validation, the processes and the measure of
    success**, revised by what the spike showed; have it read cold; put the owner's questions.
+   Inputs for these parts from a comparison with a second skills repository, 2026-11-16:
+   [`inputs-from-oak-agent-skills-review.md`](../../research/agentic-engineering/rules-and-skills-system-design-2026-11/inputs-from-oak-agent-skills-review.md).
+   Four candidates and one question, to take or decline; they decide nothing.
 
 ## Out of scope
 
@@ -239,6 +242,37 @@ Each is one pull request.
 - **The rule `capability-landing-decision-procedure`** already orders the estate's levers from
   always-loaded text to code that needs no context. The design builds on it and proposes its
   amendment where the evidence requires one.
+- **Sibling plans on the same three corpora.** Read on 2026-11-16; before then none of these
+  nodes named this one, and this one named none of them. Each line says what the sibling owns
+  and where it meets this design. These are observations for a reader. They set no order of
+  work and decide nothing.
+  - [`skills-estate-organisation`](skills-estate-organisation.plan.md) owns where a skill is
+    kept, its annotations, its validators and its evals. Its validator workstream, as amended
+    on 2026-08-09, runs `skills-ref validate` and the specification's limits over every
+    projection, and is not built. Part 5 of this design will say what the build refuses. The
+    two hold different numbers for one field: the specification's 1,024 characters for a
+    description, and this design's 256. Its evals are evidence part 7 can read: suites
+    exist for some of the 78 skills, not all. Its ledger row of 2026-09-09 records a
+    generator for rule adapters as not started; one has existed since 2026-09-28. Its
+    conservation criterion asks that a change to a lever's behaviour be owner-ruled; the
+    owner's decisions on this design are dated 2026-11-13.
+  - [`skill-classes-and-validation-jurisdiction`](skill-classes-and-validation-jurisdiction.plan.md)
+    scopes validation to Practice skills. It is why B5 does not shorten the nine installed
+    skills, and it covers any skill synced from another repository.
+  - [`adapter-prefix-configuration`](adapter-prefix-configuration.plan.md) is to make the
+    `oak-` prefix of generated adapters resolve from one point. Today it is a flag pinned in
+    the root scripts.
+  - [`copilot-cli-practice-projections`](copilot-cli-practice-projections.plan.md) projects
+    instructions, skills and agents to Copilot CLI. It meets part 4's account of other
+    platforms.
+  - [`rules-operationalises-line-enforcement`](rules-operationalises-line-enforcement.plan.md),
+    a sketch, would open every rule file with a line naming the decision behind it. This
+    design gives every unit a record of what stands behind it, which is the same reference.
+  - [`agent-estate-alignment`](agent-estate-alignment.plan.md), a sketch, owns the sub-agent
+    templates, which this design leaves alone. Their descriptions are listed at the start of
+    a session: 31 Claude adapters, 10,699 characters as parsed. PDR-124 owns the budget for
+    that listing, with a guide of about 500 bytes a description. No build check holds a
+    number for it.
 - **First-principles check.** Shape: the design extends a generator that exists and the first
   todo reads its code before anything is proposed. Landing path: research documents and a
   throwaway clone; nothing a session loads is changed. Vendor literals: every threshold is

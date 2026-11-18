@@ -17,7 +17,7 @@ impact_areas:
 tickets: []
 depends_on: []
 owner_gates: []
-last_updated: 2026-09-09
+last_updated: 2026-11-16
 ---
 
 # Every canonical rule names the decision it operationalises, and a scanner keeps it so
@@ -89,3 +89,11 @@ validator chain refuses a rule that does not.
   else; a rule whose authority cannot be named is surfaced, not edited.
 - Skills, directives and PDRs: the Operationalises contract binds the rules tier
   only (ADR-131); the other tiers have their own reference discipline.
+
+## Review dispositions
+
+One dated row per routed finding (PDR-140 ledger surface).
+
+| Date | Source | Finding | Routing |
+| --- | --- | --- | --- |
+| 2026-11-16 | A read of the plans on skills, rules and sub-agents together, 2026-11-16 | The delivery node `rules-and-skills-system-design`, ratified after this sketch, gives every unit a record of the decision and evidence behind it. The Operationalises line and that record are the same reference, and neither node named the other | Recorded for the pickup read. This sketch is unchanged |

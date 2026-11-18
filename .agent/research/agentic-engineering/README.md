@@ -146,8 +146,9 @@ sources without turning research notes into a second canon.
   what the build refuses, facts only; parts 1 to 3 of the design (`design.md`: the unit
   model, the contracts and the budgets); each threshold re-read at its vendor page
   (`threshold-reread.md`); what each platform reads from its directories below the
-  repository root (`nested-directories.md`); and the open items of those parts through the
-  decision lenses (`open-items.md`).
+  repository root (`nested-directories.md`); the open items of those parts through the
+  decision lenses (`open-items.md`); and candidate inputs for parts 4 to 7 from a review of
+  oaknational/oak-agent-skills (`inputs-from-oak-agent-skills-review.md`).
 - [cross-lane-direction-survey.md](./cross-lane-direction-survey.md) —
   Slice C umbrella: re-reads direction-of-travel evidence (Slice A
   governance projects, Slice B practice-methodology primitives,
