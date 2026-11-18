@@ -516,6 +516,7 @@ pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:widget:a11y
 - [MCP primitives: intention and intended audience](docs/mcp-primitives-intention-and-audience.md) - Internal guide to tool/resource boundaries (zero prompts), control model, and UAT expectations
 - [MCP Registry publication](docs/mcp-registry-publication.md) — how the `server.json` entry is composed from the deployment and proved before publishing, the namespace decision and its ownership proofs, and how the entry stays true
 - [Observability](docs/observability.md) — Sentry instrumentation, per-request span, scope enrichment, redaction barrier, release metadata, source-map upload
+- [Production snagging list](../../docs/operations/mcp-server-production-snagging.md) — faults and shortcomings seen on the production server and not yet fixed or accepted
 - [Operational Debugging](docs/operational-debugging.md) — request tracing, timing, diagnostics, error debugging, production logging
 - [Widget Rendering](docs/widget-rendering.md) — widget dispatch, rendering architecture, and sandbox details
 
