@@ -335,7 +335,8 @@ without reading a review body on 2026-11-16, with the pull-request lifecycle ski
 text ("BOTH harvest surfaces: review threads AND review bodies") loaded earlier in the arc.
 Neither has a literal surface signature a hook could match: both are a claim about an
 object's state made from a partial read of it. They belong to t2's inventory as semantic
-pathogens, and the first shows that a napkin entry does not carry across a compaction.
+pathogens. The first recurred after two context compactions; whether compaction contributed is
+not established.
 
 Two more from the same seat on 2026-11-19, during the consolidation that logged the two above.
 It dispatched a reader agent over one napkin window although the owner's ruling of 2026-10-11
@@ -372,9 +373,10 @@ script's):
 
 Two entries in the corpus name the mechanism in the seats' own words: "A lesson held in a
 buffer does not fire at the moment of a fluent verdict", and "'Has a home' and 'reached the
-agent' are two facts". One measured it: in a ten-session trial a session chose which rule files
-to open by words their names shared with the task, and a rule named for a habit of mind had no
-task that named it. That is t2's inventory stated from the delivery side, and it is why this
+agent' are two facts". One trial bears on it: across ten sessions, most of the rule files a
+session opened had names that shared words with its task. The trial's own record says it shows
+an association and did not measure name matching as the mechanism; three opened rules shared no
+word with their task. That is t2's inventory seen from the delivery side, and it is why this
 consolidation added little requirement text for these families.
 
 ## Relationship to Existing Plans (coordination, not duplication)

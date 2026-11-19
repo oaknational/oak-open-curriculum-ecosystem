@@ -880,9 +880,12 @@ Director's landing record of 2026-09-06, event f05a54da).
   first gate.
 - **Putting a file back without a blocked git command.** The hook refuses the git commands that
   overwrite a working-tree file from a commit (the path form of checkout, `restore`, and a
-  `show` redirected onto the same path). The forward route copies the in-flight file to the
-  scratchpad, writes `git cat-file -p HEAD:<path>` to a scratchpad file, then `cp`s it into
-  place (2026-10-28). A file the owner has changed is the owner's to put back (2026-11-18).
+  `show` redirected onto the same path). The sanctioned route is the standing grant for proven
+  paths in `.agent/rules/never-use-git-to-remove-work.md`: the path's content is first proved
+  on the freshly fetched base and the proof recorded per path; the committed content is then
+  written to a new sibling file and renamed over the path, never redirected or copied into the
+  existing file, which writes through its inode to any second hard link. A file the owner has
+  changed is the owner's to put back (2026-11-18).
 - **The hook matches a blocked command's words anywhere in a command's text**, a quoted
   sentence in a heredoc included (2026-10-29; 2026-11-19). Text that names such a command goes
   into a file written with the file tool, and the command runs the file.
