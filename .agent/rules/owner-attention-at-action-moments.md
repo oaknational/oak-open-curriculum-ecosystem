@@ -281,6 +281,15 @@ is never left as narrative only. At every freeze or handoff, sweep the
 owner's words against this test — any "at the owner's word" phrasing where
 the word already exists is a defect.
 
+## While something only the owner can do is missing, the lane stays the seat's
+
+Name the missing permission or act once, as the thing the seat needs, and
+settle every other condition meanwhile. Never arm a watch whose only exit is
+the owner's action: it reports the lane as someone else's. A constraint that
+blocks the work is asked about in one line before any effort is spent
+measuring around it. When the owner's instruction names an artefact, act on
+that artefact.
+
 ## Cross-references
 
 - Composes with [`present-verdicts-not-menus.md`](present-verdicts-not-menus.md)

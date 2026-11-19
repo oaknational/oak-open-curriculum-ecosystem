@@ -334,6 +334,18 @@ Read each acceptance criterion against the directives it must satisfy before the
 ratified. A criterion a directive forbids (a wall-clock ceiling in a gated test, for example)
 is otherwise found at review, after the work.
 
+### Search By The Object Before Claiming New Ground
+
+Before a node says nothing covers its ground, list the plan directory and read the names, and
+search the plans and the decision records for the node's central noun, not for the words the
+author would have used for the idea. Ratified nodes and accepted records on the same subject
+are read before the design starts.
+
+### A Runbook Of Acts On Live Settings
+
+For each ordered step that changes a live setting, ask before the first push: what forbids it,
+what races it, what does it leave behind, and what does its literal wording admit.
+
 ### Disposition Ledger For "Apply All Of X" Inputs
 
 When a plan's input is *"apply all of X"* — every audit finding, every

@@ -345,6 +345,38 @@ over 100 characters, a refusal the napkin records twice on 2026-10-02 and the co
 states in a table. The second has a literal signature (a message checker run before the
 commit); the first does not.
 
+**The napkin of 2026-09-29 to 2026-11-19, read whole (2026-11-19 consolidation).** Nineteen
+named seats wrote it. Read as one corpus, most of its behavioural lessons are not new: they are
+instances of doctrine `verify-dont-trust` already states, recorded as fresh lessons by seats
+that had the rule loaded as a pointer. The families, each with at least three dated instances
+in the archive `napkin-2026-11-19.md` (the counts below are the curating seat's reading, not a
+script's):
+
+- **A statement of absence written without its search**: "claims none", "the owner has not
+  said", "nobody looks at this", "one recorded run", "no review round", "no open threads", a
+  count that was a claim about the next item. At least four seats; at least two instances
+  were written within hours of the same seat recording the lesson.
+- **A quotation or figure taken from a relay**: reader agents' paraphrases inside quotation
+  marks (twice), a search digest, an abstract, a side agent's label, a line citation from a
+  windowed read, an owner quotation attached to a different object.
+- **A proxy read as the object**: threads for reviews (two seats, three instances), a merge-state badge for
+  what the bot may do, a green check for what its job runs, a gate number for its definition
+  (twice), a workspace's green for the lane's, "has a home" for "reached the agent".
+- **A wait or a gate the seat invented on the owner**: "merge at the owner's word" (at least
+  two seats), an owner check that had been stopped, a ratification the classifier already decided,
+  a "joint review", a watch that only the owner could end, records "owed" to a later session.
+- **A tool rule broken after it was written down**: tracked prose edited by script (five
+  entries over two months, then this consolidation), a commit joined to its check so the
+  refusal did not stop it (three seats), the zsh colon modifier (three times in one session),
+  no pilot leg before a fan-out (four seats).
+
+Two entries in the corpus name the mechanism in the seats' own words: "A lesson held in a
+buffer does not fire at the moment of a fluent verdict", and "'Has a home' and 'reached the
+agent' are two facts". One measured it: in a ten-session trial a session chose which rule files
+to open by words their names shared with the task, and a rule named for a habit of mind had no
+task that named it. That is t2's inventory stated from the delivery side, and it is why this
+consolidation added little requirement text for these families.
+
 ## Relationship to Existing Plans (coordination, not duplication)
 
 - [`closure-pressure-remediation-design-space.plan.md`](closure-pressure-remediation-design-space.plan.md)
