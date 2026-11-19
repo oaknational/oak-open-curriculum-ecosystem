@@ -133,6 +133,38 @@ barrier:
   entry by repeating the next entry's bracket line left a placeholder bullet and a duplicate
   bracket; grep the result before committing (2026-09-16).
 
+- **zsh ties the variable `path` to `PATH`**: `read -r path ...` or `path=...` replaces the
+  command search path, and every later command in that shell reads "command not found". `GID`
+  and `status` are read-only special parameters and an assignment to either fails. Name shell
+  variables anything else (2026-10-02; 2026-11-18).
+- **An unquoted `--include=*.md` is a glob to zsh** and fails with "no matches found"; quote it
+  (2026-11-18).
+- **Backticks inside an unquoted heredoc are command substitutions**: a heredoc that carries
+  Markdown code spans is written `<<'EOF'` (2026-11-16: zsh ran a branch name and two short
+  SHAs as commands).
+- **`open(p, 'w').write(compute())` truncates the file before `compute()` runs.** Python opens
+  first, so an exception in the argument leaves an empty file. Compute into a variable, assert
+  the anchors, then open (2026-10-02: a decision record was emptied this way).
+- **A new directory matched by an ignore line is silently untracked.** The local gate reads the
+  disk and passes; CI reads the commit and fails. After adding or carrying a directory, prove it
+  with `git ls-files <dir>` (2026-10-05: a bare `build` ignore line swallowed
+  `workflows/build/`).
+- **A reused worktree is not a clean one.** Ignored files from its earlier lane survive the
+  checkout, and a validator that walks the tree reads them (2026-10-28: an ignored `evals/`
+  directory failed the skills adapter check). Move them to the scratchpad before the first gate.
+- **`.agent/` is prettier-ignored at the repository root**, so prettier never reads those files
+  and "prettier passes" says nothing about them. Run from a sub-directory, prettier skips the
+  root ignore file and reformats them (2026-10-28: a plan node's whole table). Run from the
+  principal checkout on a worktree path, it matches nothing and exits 0 (2026-10-17). Format and
+  check from the root of the checkout that holds the file.
+- **Putting a file back without a blocked git command.** The hook refuses the git commands that
+  overwrite a working-tree file from a commit (the path form of checkout, `restore`, and a
+  `show` redirected onto the same path) as reversions. The forward route copies the in-flight
+  file to the scratchpad, writes `git cat-file -p HEAD:<path>` to a scratchpad file, then `cp`s
+  it into place (2026-10-28). A file the owner has changed is the owner's to put back
+  (2026-11-18). A command whose text merely quotes one of those commands is refused too: put
+  such text in a file with the file tool and run the file.
+
 ## See also (homed elsewhere, not duplicated)
 
 - Long `--body` strings / backticks → `--body-file` (frictions F-92/F-93;

@@ -2101,7 +2101,14 @@ allow_squash_merge, allow_rebase_merge}'`; `allow_merge_commit` has
   The goal is "aiming for zero while useful value is still created and
   merged", because "a static zero means no useful work is happening". A seat
   the owner names alone is its own Director: it routes and it executes, and
-  its limit is one open pull request across the repositories. The
+  its limit is one open pull request across the repositories. On a
+  repository where other people and their bots hold open pull requests, the
+  limit counts the seat's own (the owner, 2026-11-18, on Oak's repository with
+  nineteen open: "Count only my own"); those pull requests are not the team's
+  to take on. The merge tool still counts every open pull request that is not
+  Dependabot's, as the owner's word of 2026-10-17 had it for a repository where
+  every lane was the team's, so there a seat passes `--wip-limit` just above
+  the open count until the tool counts the caller's own. The
   operating steps:
   - No PR that starts new work opens while the count is at the limit or over
     it, other than a repository's one coordination PR. The reservation comes

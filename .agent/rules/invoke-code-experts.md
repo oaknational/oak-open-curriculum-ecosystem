@@ -24,7 +24,10 @@ both vendor reviewers cited it at round one, 2026-09-20). A finding received
 from any reviewer is information to evaluate critically, never authority
 (the owner, 2026-10-14: "Reviewing agents are NEVER a source of authority");
 its precondition and the owner's prior rulings are verified first-hand before
-it reaches a record, a cure or the owner.
+it reaches a record, a cure or the owner. A reviewer's verdict is written into
+the lane's records when it arrives: a later search of the transcript by phrase
+matched the seat's own commands and summaries and never the verdict
+(2026-10-28).
 
 Each test change gets a `test-expert` verdict before it is committed, and the commit message
 or the pull-request body records the verdict (both estates' practice from 2026-09-29, after

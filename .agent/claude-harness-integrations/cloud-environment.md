@@ -330,6 +330,13 @@ is the definition of record for the shared script (owner ruling
 2026-08-25); at the time of writing this document still carries a parallel
 definition rather than a reference to that copy.
 
+- **GitHub's GraphQL API is refused in Claude Code cloud sessions (2026-10-22).** A plain
+  `git push` ran the pre-push hook; its review-cost gate died at
+  `gh repo view --json nameWithOwner`, answered with HTTP 403: "GitHub GraphQL is not available
+  from Claude Code sessions; use the REST API". The cure belongs at the tool (a REST read of the
+  repository name), never a narrowing of the gate. Until then the push goes out under the
+  `HUSKY=0` ruling above with its substitute checks run first.
+
 ## Fail-fast contract
 
 The script exits non-zero on any failure and session creation then fails
