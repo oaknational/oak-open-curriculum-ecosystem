@@ -830,8 +830,7 @@ only the source: Bash reads a running script by offset, so an edit in place kill
 the running instance.
 
 **A message says what the change does, all of it.** A commit that restores text and also
-strengthens it says so: a restore described as "verbatim" that widened one phrase was caught by
-a reviewer, and the second commit's message disclosed it (2026-10-13).
+strengthens it says so; "verbatim" is written only when every restored line is unchanged.
 
 ## Stream truncation at the depcruise → turbo handover — workaround
 

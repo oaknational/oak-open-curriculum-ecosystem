@@ -743,9 +743,7 @@ contradicts (2026-10-02).
   every check on the tip. A watch whose filter is "newer than my start" can only report the
   future: whatever was present at arming stays unseen until a person asks. A comment-only
   review whose finding is outside the diff makes no thread; its finding sits in the review
-  body. On 2026-11-16 a seat called a pull request clean from its threads, checks and review
-  decision seven minutes after such a review arrived, armed a start-relative watch, and read
-  the review 7 hours 57 minutes later at the owner's request.
+  body, so threads, checks and the review decision can all read clean while a finding waits.
 
 - **Every PR-state read STARTS from the compound read — the review-round
   state machine's item 1, below — in ONE call.** This is a floor, not a
@@ -1834,12 +1832,11 @@ a grant was withheld until the in-session code-expert adjudication was
 posted, then fired within the minute — fully auditable). Then:
 
 - **A clean and green pull request merges by the door; the merge is never at the owner's
-  word.** The owner, 2026-10-17, verbatim: "Merge has never and will never be at my word, if
-  it is clean and green it gets merged". The owner's word decides content, never the merge
-  moment; a seat that writes "merge at the owner's word" in a plan, a thread record or a report
-  has invented a gate. The one pull request the owner named as his alone to merge
-  (2026-11-11) was, in his words, "a separate and special case", and is never cited as
-  precedent.
+  word.** The owner's words: "Merge has never and will never be at my word, if it is clean and
+  green it gets merged". The owner's word decides content, never the merge moment; a seat that
+  writes "merge at the owner's word" in a plan, a thread record or a report has invented a
+  gate. A pull request the owner names as his alone to merge is a special case by his own
+  word and is never cited as precedent.
 
 - **A PR the owner has named as the last carrier is not merge-at-green.**
   Before merging it, enumerate every in-flight output that needs the remote
@@ -2103,12 +2100,10 @@ allow_squash_merge, allow_rebase_merge}'`; `allow_merge_commit` has
   the owner names alone is its own Director: it routes and it executes, and
   its limit is one open pull request across the repositories. On a
   repository where other people and their bots hold open pull requests, the
-  limit counts the seat's own (the owner, 2026-11-18, on Oak's repository with
-  nineteen open: "Count only my own"); those pull requests are not the team's
-  to take on. The merge tool still counts every open pull request that is not
-  Dependabot's, as the owner's word of 2026-10-17 had it for a repository where
-  every lane was the team's, so there a seat passes `--wip-limit` just above
-  the open count until the tool counts the caller's own. The
+  limit counts the seat's own (the owner's words: "Count only my own"); those
+  pull requests are not the team's to take on. The merge tool counts every
+  open pull request that is not Dependabot's, so on such a repository a seat
+  passes `--wip-limit` just above the open count. The
   operating steps:
   - No PR that starts new work opens while the count is at the limit or over
     it, other than a repository's one coordination PR. The reservation comes

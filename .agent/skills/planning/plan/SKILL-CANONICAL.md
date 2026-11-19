@@ -330,10 +330,9 @@ every other surface the old boundary touched.
 
 ### A Criterion Is Checked Against The Directives At Authoring
 
-An acceptance criterion that a directive forbids is found at review, after the work. A plan
-asked for adversarial-input tests with a one-second wall-clock ceiling; the testing directive
-allows no wall-clock ceiling; the ceilings went and the criterion was re-trued (2026-10-28).
-Read each criterion against the directives it must satisfy before the node is ratified.
+Read each acceptance criterion against the directives it must satisfy before the node is
+ratified. A criterion a directive forbids (a wall-clock ceiling in a gated test, for example)
+is otherwise found at review, after the work.
 
 ### Disposition Ledger For "Apply All Of X" Inputs
 

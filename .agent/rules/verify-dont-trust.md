@@ -677,9 +677,9 @@ plan-state refusal read green through `| head`, `check-commit | tail`,
   failure — pass literal args or `${=VAR}`, and never trust a captured
   variable through a quiet pipe.
 - State what an instrument can discriminate before reading its number. A null
-  result needs a baseline that passes something: a skill's evaluation that
-  scored 0 of 8 with the skill and 0 of 8 without it cannot tell a weak skill
-  from over-strict fixtures (2026-10-27).
+  result needs a baseline that passes something: an evaluation that scores
+  zero with the thing under test and zero without it cannot tell a weak
+  subject from over-strict fixtures.
 
 Any broadcast asserting a remote-state change (pushed / merged / deployed)
 quotes POST-action ground truth (`git status -sb`, `gh pr view`) captured

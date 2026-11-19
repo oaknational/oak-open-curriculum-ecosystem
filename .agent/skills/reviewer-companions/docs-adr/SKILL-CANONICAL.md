@@ -31,10 +31,8 @@ reviewer for the independent truthfulness and cross-reference pass.
 
 ## Decision records change in conversation with the owner
 
-The owner, 2026-10-14, verbatim: "Your job is NOT to be altering ADRs or PDRs independently of
-a conversation with me. Architecture design is a precise business, one ambiguous or
-contradictory statement and we could build the wrong thing." A seat correcting a pull request
-wrote new architecture into an ADR and a pipeline page under the name of fixing; one sentence
-"would have broken everything", in the owner's words, and all of it was stripped. A seat makes
-a decision record true to what was decided and stops; a sentence that decides something new is
-put to the owner first.
+The owner's words: "Your job is NOT to be altering ADRs or PDRs independently of a
+conversation with me. Architecture design is a precise business, one ambiguous or
+contradictory statement and we could build the wrong thing." A seat makes a decision record
+true to what was decided and stops; a sentence that decides something new is put to the owner
+first, including one written under the name of a fix.
