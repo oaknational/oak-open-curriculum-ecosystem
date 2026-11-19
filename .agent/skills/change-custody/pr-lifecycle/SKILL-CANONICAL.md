@@ -738,6 +738,13 @@ contradicts (2026-10-02).
   review, since a review of an unmergeable tip is a round spent on nothing
   (2026-09-15).
 
+- **A wait on a pull request starts with a full harvest, then watches for change.** Before
+  arming any watch, read every review (its body as well as its threads), every comment and
+  every check on the tip. A watch whose filter is "newer than my start" can only report the
+  future: whatever was present at arming stays unseen until a person asks. A comment-only
+  review whose finding is outside the diff makes no thread; its finding sits in the review
+  body, so threads, checks and the review decision can all read clean while a finding waits.
+
 - **Every PR-state read STARTS from the compound read — the review-round
   state machine's item 1, below — in ONE call.** This is a floor, not a
   ceiling: the Phase 3 harvest and the compound watch loop are consumers and
@@ -1824,6 +1831,13 @@ future audit; post it as a PR comment first (worked instance 2026-08-07:
 a grant was withheld until the in-session code-expert adjudication was
 posted, then fired within the minute — fully auditable). Then:
 
+- **A clean and green pull request merges by the door; the merge is never at the owner's
+  word.** The owner's words: "Merge has never and will never be at my word, if it is clean and
+  green it gets merged". The owner's word decides content, never the merge moment; a seat that
+  writes "merge at the owner's word" in a plan, a thread record or a report has invented a
+  gate. A pull request the owner names as his alone to merge is a special case by his own
+  word and is never cited as precedent.
+
 - **A PR the owner has named as the last carrier is not merge-at-green.**
   Before merging it, enumerate every in-flight output that needs the remote
   and hold the merge until each has ridden or been released by name (owner
@@ -2084,7 +2098,12 @@ allow_squash_merge, allow_rebase_merge}'`; `allow_merge_commit` has
   The goal is "aiming for zero while useful value is still created and
   merged", because "a static zero means no useful work is happening". A seat
   the owner names alone is its own Director: it routes and it executes, and
-  its limit is one open pull request across the repositories. The
+  its limit is one open pull request across the repositories. On a
+  repository where other people and their bots hold open pull requests, the
+  limit counts the seat's own (the owner's words: "Count only my own"); those
+  pull requests are not the team's to take on. The merge tool counts every
+  open pull request that is not Dependabot's, so on such a repository a seat
+  passes `--wip-limit` just above the open count. The
   operating steps:
   - No PR that starts new work opens while the count is at the limit or over
     it, other than a repository's one coordination PR. The reservation comes

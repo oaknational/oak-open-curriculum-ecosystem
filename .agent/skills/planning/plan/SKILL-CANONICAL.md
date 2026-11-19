@@ -328,6 +328,12 @@ report the blast radius transparently when the ask named only one
 section. Editing only the named section leaves live contradictions on
 every other surface the old boundary touched.
 
+### A Criterion Is Checked Against The Directives At Authoring
+
+Read each acceptance criterion against the directives it must satisfy before the node is
+ratified. A criterion a directive forbids (a wall-clock ceiling in a gated test, for example)
+is otherwise found at review, after the work.
+
 ### Disposition Ledger For "Apply All Of X" Inputs
 
 When a plan's input is *"apply all of X"* — every audit finding, every

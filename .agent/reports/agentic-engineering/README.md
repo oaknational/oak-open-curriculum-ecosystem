@@ -109,7 +109,9 @@ argue; they do not decide anything.
   — a seat's retrospective on bringing the fork's default branch back into Oak's `main`
   (2026-11-03 to 2026-11-18): where the fifteen days went, the causal stack (two lines under
   opposite rulings; a class cured one issue at a time; two lessons whose homes were not read at
-  the act), the counterfactual inside the arc and three routed proposals
+  the act), the counterfactual inside the arc and three routed proposals; its two reading ledgers are
+  [the arc](./why-the-reunification-took-fifteen-days-2026-11-19-arc-ledger.md) and
+  [the last window](./why-the-reunification-took-fifteen-days-2026-11-19-window-ledger.md)
 
 ### Cricket suite tallies
 

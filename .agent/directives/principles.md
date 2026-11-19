@@ -662,6 +662,11 @@ paths, setup files) don't apply.
   check is an incomplete disposition. Operationalised in
   [testing-strategy.md §When a Defect Is Found](testing-strategy.md)
   and [`pr-comments-resolve-and-recheck.md`](../rules/pr-comments-resolve-and-recheck.md).
+- **The change carries the what, the commit carries the why** - No per-change justification
+  ledger is kept beside the code. Major decisions belong in ADRs and PDRs. Where a governed
+  text needs re-review when it moves, the instrument is an anchor on that text which a
+  validator refuses until the item is reviewed again; a review ledger is kept only where it
+  proves what the diff and the commit cannot.
 - **The cure stops recurrence; symptom removal is hygiene** - The cure is the action that stops
   the issue happening again, never the one that removes the symptom (the owner, 2026-10-07: "the
   cure is the action that stops it from happening again, not the action the removes the

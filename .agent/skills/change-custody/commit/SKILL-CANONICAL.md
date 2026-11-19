@@ -829,6 +829,9 @@ path included: a chain that exited on a hook refusal left a hold line standing
 only the source: Bash reads a running script by offset, so an edit in place kills
 the running instance.
 
+**A message says what the change does, all of it.** A commit that restores text and also
+strengthens it says so; "verbatim" is written only when every restored line is unchanged.
+
 ## Stream truncation at the depcruise → turbo handover — workaround
 
 **Scope**: Cursor Shell tool sessions only, since 2026-07-03. The

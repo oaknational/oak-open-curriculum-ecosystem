@@ -28,3 +28,11 @@ reviewer for the independent truthfulness and cross-reference pass.
    throughout.
 4. Hand off to `docs-adr-expert` once the draft is coherent, or sooner if the
    change touches both permanent docs and Practice governance.
+
+## Decision records change in conversation with the owner
+
+The owner's words: "Your job is NOT to be altering ADRs or PDRs independently of a
+conversation with me. Architecture design is a precise business, one ambiguous or
+contradictory statement and we could build the wrong thing." A seat makes a decision record
+true to what was decided and stops; a sentence that decides something new is put to the owner
+first, including one written under the name of a fix.

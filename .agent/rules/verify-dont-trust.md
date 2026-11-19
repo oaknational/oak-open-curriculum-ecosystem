@@ -676,6 +676,10 @@ plan-state refusal read green through `| head`, `check-commit | tail`,
   ONE argv word, the tool fails as invalid usage, and a quiet pipe masks the
   failure — pass literal args or `${=VAR}`, and never trust a captured
   variable through a quiet pipe.
+- State what an instrument can discriminate before reading its number. A null
+  result needs a baseline that passes something: an evaluation that scores
+  zero with the thing under test and zero without it cannot tell a weak
+  subject from over-strict fixtures.
 
 Any broadcast asserting a remote-state change (pushed / merged / deployed)
 quotes POST-action ground truth (`git status -sb`, `gh pr view`) captured

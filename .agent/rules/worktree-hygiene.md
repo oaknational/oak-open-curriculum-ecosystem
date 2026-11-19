@@ -406,6 +406,19 @@ completion half is his to name, per session, with its reason, as he named this
 one; none was named for the recording half. The 2026-09-24 words above are the
 same rule in his earlier form.
 
+**Merged branches and settled worktrees go.** The owner's words: "all merged work branches
+should be deleted locally and remotely, and all worktrees where work is safe in the default
+branch, or where we have decided not to merge it, should be removed." Take the worktree and
+branch inventory at the start of a drain, not its end: unlanded commits can sit, with no remote
+and no pull request, in a worktree a seat uses every hour.
+
+**A branch that is not an ancestor of the default branch is proved by content, in three
+steps**, before it is called of no use: every added line checked byte for byte against the
+default branch's copy of the same file; the remainder checked by five-word windows against the
+whitespace-normalised file and the wider tree, for rewrapped or reworded landings; each line
+still unmatched read by hand against the decision that superseded it. A line count alone
+misleads in both directions, and adopting such a branch can revert a reviewed decision.
+
 System residue (`.DS_Store` and its kind) is gitignored, and is deleted where it is found
 (owner, 2026-08-02). It is not work, and no seat's claim covers it.
 
