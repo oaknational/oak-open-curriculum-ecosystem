@@ -738,6 +738,15 @@ contradicts (2026-10-02).
   review, since a review of an unmergeable tip is a round spent on nothing
   (2026-09-15).
 
+- **A wait on a pull request starts with a full harvest, then watches for change.** Before
+  arming any watch, read every review (its body as well as its threads), every comment and
+  every check on the tip. A watch whose filter is "newer than my start" can only report the
+  future: whatever was present at arming stays unseen until a person asks. A comment-only
+  review whose finding is outside the diff makes no thread; its finding sits in the review
+  body. On 2026-11-16 a seat called a pull request clean from its threads, checks and review
+  decision seven minutes after such a review arrived, armed a start-relative watch, and read
+  the review 7 hours 57 minutes later at the owner's request.
+
 - **Every PR-state read STARTS from the compound read — the review-round
   state machine's item 1, below — in ONE call.** This is a floor, not a
   ceiling: the Phase 3 harvest and the compound watch loop are consumers and
@@ -1823,6 +1832,14 @@ that lives only in a session is invisible to the morning reader and to any
 future audit; post it as a PR comment first (worked instance 2026-08-07:
 a grant was withheld until the in-session code-expert adjudication was
 posted, then fired within the minute — fully auditable). Then:
+
+- **A clean and green pull request merges by the door; the merge is never at the owner's
+  word.** The owner, 2026-10-17, verbatim: "Merge has never and will never be at my word, if
+  it is clean and green it gets merged". The owner's word decides content, never the merge
+  moment; a seat that writes "merge at the owner's word" in a plan, a thread record or a report
+  has invented a gate. The one pull request the owner named as his alone to merge
+  (2026-11-11) was, in his words, "a separate and special case", and is never cited as
+  precedent.
 
 - **A PR the owner has named as the last carrier is not merge-at-green.**
   Before merging it, enumerate every in-flight output that needs the remote

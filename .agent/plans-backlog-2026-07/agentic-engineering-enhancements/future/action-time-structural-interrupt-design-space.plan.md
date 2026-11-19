@@ -325,6 +325,18 @@ gate/push command shape), so its candidate mechanism is the PDR-044 innate
 hook layer (advisory-response, per PDR-029's constraint), not the empty
 quadrant — t2's inventory should classify it accordingly.
 
+**Recurrence evidence, two instances at one seat (2026-11-19 consolidation).** Both are
+recorded with their sources in the retrospective
+`why-the-reunification-took-fifteen-days-and-repeated-two-written-lessons-2026-11-19.md`
+under `.agent/reports/agentic-engineering/`. A seat wrote "read a gate metric's definition
+before sizing the cure to it" in the napkin on 2026-11-12 and misread the same metric the same
+way on 2026-11-18, across two context compactions. The same seat called a pull request clean
+without reading a review body on 2026-11-16, with the pull-request lifecycle skill's harvest
+text ("BOTH harvest surfaces: review threads AND review bodies") loaded earlier in the arc.
+Neither has a literal surface signature a hook could match: both are a claim about an
+object's state made from a partial read of it. They belong to t2's inventory as semantic
+pathogens, and the first shows that a napkin entry does not carry across a compaction.
+
 ## Relationship to Existing Plans (coordination, not duplication)
 
 - [`closure-pressure-remediation-design-space.plan.md`](closure-pressure-remediation-design-space.plan.md)
