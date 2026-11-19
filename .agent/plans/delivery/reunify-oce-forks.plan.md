@@ -15,9 +15,9 @@ tickets: []
 depends_on: []
 owner_gates:
   - awaiting: owner-decision
-    clears_when: "The owner ends the exploratory status of oaknational#1023, so it is marked ready; the owner alone executes the merge (owner, 2026-11-11), never a seat, the door or any automation"
-    expires: 2026-11-30
-last_updated: 2026-11-12
+    clears_when: "The owner gives the word for todo 6 steps 5 and 6: deleting the fork's 'integration branches' ruleset and its engraph branch, and the Oak pull request that drops engraph from the workflow triggers"
+    expires: 2026-12-18
+last_updated: 2026-11-19
 ---
 
 # Reunify the OCE forks
@@ -83,8 +83,10 @@ back to being a plain mirror of Oak: one line of development again.
    Oak's CI reaches the Turbo cache through the `TURBO_TEAM` variable and its OIDC policy, not a
    `TURBO_TOKEN` secret. The note is posted as a comment on the pull request (2026-11-11), and
    every required check passes (2026-11-12). The seat reports it ready; the owner alone executes the merge (owner,
-   2026-11-11), never a seat, the door or any automation.
-5. Watch Oak's release and the deployed service.
+   2026-11-11), never a seat, the door or any automation. Done: marked ready on 2026-11-16 and
+   merged on 2026-11-18 as `dae303661`; GitHub records the merge by another Oak account.
+5. Watch Oak's release and the deployed service. Done: v1.187.0 was released on 2026-11-18 at
+   13:23Z and the deployed service answered healthy; criteria 1 to 3 are met.
 6. Return the fork to a mirror, in this order. Each step is the owner's or a seat's at the owner's
    word; the fork's settings were read through the API on 2026-11-12.
    1. Prove `engraph`'s tip is an ancestor of Oak's `main` (criterion 1) and that the mirror
@@ -107,6 +109,11 @@ back to being a plain mirror of Oak: one line of development again.
       each job is gated on its variable and exits on a repository that is not a fork.
    7. Each local checkout is re-pointed on the owner's word: its remotes, its default branch and
       the commit identity it uses. Those bindings belong in the operator profile.
+
+   State at 2026-11-19: steps 1 to 4 were done on 2026-11-18 at the owner's word, with one
+   difference from step 2 (no carrier pull request or branch was open to close). Step 7 is done
+   for the owner's primary checkout. Steps 5 and 6 wait on the owner's word, so criterion 4 is
+   met except that `engraph` and its ruleset still exist on the fork.
 
 ## Fork-only values that must not reach Oak
 
