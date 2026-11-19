@@ -225,9 +225,11 @@ worktree has no `.husky/_` until install runs, so a merge commit made before
 it is created with no commit-msg or pre-commit hook and reads as if the gate
 passed. Merge the default branch INTO the carrier, `--no-ff`, with a message
 that names the situation without spelling the CI-skip token anywhere in the
-message: `git merge --no-ff -F <message-file> <fork-default-tip>`. Author and
-committer are both the owner, from the clone's shared identity, on the merge
-and on the command that completes a conflicted one. In every case the pair
+message: `git merge --no-ff -F <message-file> <fork-default-tip>`. The identity
+follows `bot-identity-on-third-party-systems`: where the clone commits as the
+bot, the bot is the committer and the owner is the author, passed as
+`GIT_AUTHOR_NAME` and `GIT_AUTHOR_EMAIL` on the merge command (`git merge` has
+no author flag) and on the command that completes a conflicted one. In every case the pair
 is read back off the commit (`git log -1 --format='%an <%ae> / %cn <%ce>'`)
 before the push. The CI-skip token matters because the host scans the whole
 head message, and a head that is upstream's release commit runs no workflow

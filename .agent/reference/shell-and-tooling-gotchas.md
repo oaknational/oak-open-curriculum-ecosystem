@@ -959,6 +959,26 @@ Director's landing record of 2026-09-06, event f05a54da).
 - **The decision-card tool can be closed by a worker restart**: the call returns "not
   completed" with no answer and no refusal. That is not a decline. Record that no answer
   exists, and card the question again when the owner is present (2026-11-12, three times).
+- **A path and a name are different values even when both run the same binary.** Swapping a
+  resolved absolute path for the bare name at every call site handed the name to a shim that
+  sits first on `PATH` and execs "the real one"; it found itself and ran until the smoke run
+  timed out. Before a mechanical swap, read what each consumer does with the value, not only
+  its type (2026-11-06).
+- **A property stated for one call site does not cover a change to four.** Four launchers moved
+  to `cross-spawn` on a claim checked for one; a generic one forwarded a commit subject to
+  Windows' `cmd.exe`. Trace every caller's arguments before stating a property of a change to
+  a shared launcher (2026-11-06).
+- **Capturing a child's stderr moves the diagnostic; it does not remove the need to show it.**
+  A resolver that stopped echoing git's stderr then reported "not inside a git working tree"
+  for a dubious-ownership failure. Fold the child's own words into the refusal (2026-11-05).
+- **A frozen file is hashed after every formatter has run**: stamp it last, once the whole
+  member set is final, then recompute every hash and pinned revision those bytes feed
+  (2026-11-05).
+- **A lint twin's parity is per shape, not per rule**: `unicorn/prefer-string-starts-ends-with`
+  catches the regex form and not `a.charAt(0) === b.charAt(0)`, which the analyser then found
+  (2026-11-03).
+- **A heartbeat loop with a fixed title broadcasts stale state**; re-arm it with a current
+  title at each change of lane state, or have it read the title from a file (2026-11-05).
 - **A browser print of a web page can hide a figure behind a fixed overlay while the figure is
   still in the PDF**: `pdfimages -list` missed an inline image that PyMuPDF's
   `page.get_text("dict")` image blocks returned whole. An attached PDF is not the document it

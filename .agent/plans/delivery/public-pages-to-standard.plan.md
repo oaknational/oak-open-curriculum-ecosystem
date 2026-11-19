@@ -107,7 +107,10 @@ the fork's programme notice and fork wording left the entry pages.
    and the "seven files" count move then. The reviewer briefs
    (`.agent/sub-agents/templates/onboarding-expert.md`, `docs-adr-expert.md`) name paths in the
    sibling estate's layout; that is its own observation, not a README coupling.
-2. **The README's opening and outline**, after the owner's answers and read.
+2. **The README's opening and outline**, after the owner's answers and read. Done: the README
+   is a repository README of 153 lines on the outline above, landed as fork pull request 428
+   (`e9abb2a83`, 2026-11-16) and carried to Oak by the reunification merge. It names no
+   individual contributors and does not describe Oak, at the owner's rulings of 2026-11-15.
 3. **The other public pages**, after the owner's read: the table below.
 4. **The check.** `agent-tools/src/validators/reference-direction/` polices the public pages,
    test-first, landed blocking; `agent-tools/src/merge-bot/change-class.ts` stops classing

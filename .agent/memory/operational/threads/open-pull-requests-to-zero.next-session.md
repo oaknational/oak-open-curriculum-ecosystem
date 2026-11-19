@@ -1138,8 +1138,9 @@ inside a rule name).
   found. Parked at the owner's word.
 - Fifty-nine TypeScript rules exist only in SonarCloud's comprehensive profile and are not
   enforced on Oak; the owner left the configuration as it is.
-- The public-pages lane's steps 5 to 7. Its plan body is held outside the repository; the
-  strategic node is `public-explanatory-system`. Step 5 needs splitting to fit the bounded rule.
+- The public-pages lane: todos 3 to 5 of the ratified delivery node
+  `public-pages-to-standard` (the other public pages, the reference-direction check, the close).
+  Todo 3 needs splitting to fit the bounded rule.
 - The merge tool's work-in-progress limit counts every open pull request in the repository;
   on Oak a seat passes a limit just above the open count until the tool counts the caller's own.
 - The operator profile's SonarCloud entry and the Sonar tool server's sign-in still name the
