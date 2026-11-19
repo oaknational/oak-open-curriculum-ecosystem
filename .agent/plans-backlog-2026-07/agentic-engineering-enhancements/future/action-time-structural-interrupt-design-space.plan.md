@@ -337,6 +337,14 @@ Neither has a literal surface signature a hook could match: both are a claim abo
 object's state made from a partial read of it. They belong to t2's inventory as semantic
 pathogens, and the first shows that a napkin entry does not carry across a compaction.
 
+Two more from the same seat on 2026-11-19, during the consolidation that logged the two above.
+It dispatched a reader agent over one napkin window although the owner's ruling of 2026-10-11
+("Consolidation sessions are single agent only") is in the consolidation skill it had loaded;
+the reader's own report pointed the ruling out. And three commits were refused for a body line
+over 100 characters, a refusal the napkin records twice on 2026-10-02 and the commit skill
+states in a table. The second has a literal signature (a message checker run before the
+commit); the first does not.
+
 ## Relationship to Existing Plans (coordination, not duplication)
 
 - [`closure-pressure-remediation-design-space.plan.md`](closure-pressure-remediation-design-space.plan.md)
