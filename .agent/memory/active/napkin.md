@@ -501,7 +501,7 @@ Written from the home estate, jimcresswell.net, working this estate non-resident
   a directive already stale on one surface, a hypothesis to verify there first. The repository
   README wears two identities on one page after #356, Oak's badges above an Engraph programme
   section, a seed for the integration question. Discarded visibly: a pairing of the four expired
-  gates with the four-hour sittings; a musical reading of the names Clef and Castr.
+  gates with the four-hour sittings; a musical reading of two project names.
 - **Loss scan**: the 3,600 lines of #356 read whole do not survive the compaction; the
   decision-sufficient compression is the thread record's discovery section and its held hypotheses,
   and the three reviewer findings stay on the pull request itself. Promises: none to peers; to the
@@ -548,7 +548,7 @@ Written from the home estate, jimcresswell.net, working this estate non-resident
   the lock; 33 manifests, 32 private, the curriculum SDK alone `access: restricted`; the served
   surface file exists; the adapter's `z.unknown()` fallback at endpoint-transformers.ts:82-84.
   None false.
-- **Hypotheses settled**: Dait, Clef and TAB appear nowhere at baseline and are undefined in the
+- **Hypotheses settled**: the two exploratory project names and a third label appear nowhere at baseline and are undefined in the
   PR (owner's call whether they belong on a public surface). The strategic node's `serves:
   TOOLS-2` resolves (strategy stream page, "Open by default"); inherited from the superseded
   node; not a finding. The Cardinal Rule is already stale on one surface: ADR-222 (2026-08-03)
@@ -561,7 +561,7 @@ Written from the home estate, jimcresswell.net, working this estate non-resident
   boundary" paragraph, the only home of the API-only boundary (no Hasura, PostgreSQL,
   materialised views or Elasticsearch indices from this repository; the 2026-04-26 RCA's
   pending item was to elevate it to a rule), replacing it with "this design does not authorise a
-  new connection to Oak internal systems", while the integrity document's Clef profile admits a
+  new connection to Oak internal systems", while the integrity document's profile for the curriculum infrastructure consumer admits a
   "Source → acquisition copy" seam. A boundary change without an ADR line. (3) The permanent CF
   reconstruction page names plan ids only in a provenance table pinned to a SHA: the
   moving-target rule's trigger (a living surface) is absent, so it does not fire; checked, no
@@ -573,7 +573,7 @@ Written from the home estate, jimcresswell.net, working this estate non-resident
   correction). Discarded visibly: a reading of the mermaid-for-ASCII diagram swap as doctrine;
   a pairing of the "Eight words" letter with today's one-line question.
 - **Decisions prepared for the owner, not taken**: Cardinal Rule amendment (A) versus I07
-  narrowing (B); restore the consumer-data boundary with the Clef acquisition named as separately
+  narrowing (B); restore the consumer-data boundary with the consumer's acquisition named as separately
   authorised, versus record the loosening in ADR-233; the three programme names on public
   surfaces; the reading of "adoption" (plan ratification and implementation, the seat's reading)
   versus also the ADR's acceptance; the strategy index dated line; the refrain trim.
@@ -589,7 +589,7 @@ Written from the home estate, jimcresswell.net, working this estate non-resident
   (residency by `EnterWorktree` after install and build); commit `SHA:382433094`, unpushed:
   the pipeline page's "Consumer data boundary" paragraph restored verbatim from `SHA:efe69ff66`
   with the bulk artefacts named under ADR-222 and the 2026-10-13 restatement added; the integrity
-  page's Clef profile, seam preamble and acquisition seam fenced to the published API; ADR-233's
+  page's consumer profile, seam preamble and acquisition seam fenced to the published API; ADR-233's
   preserved-obligations table carries the boundary as a retained row. Three files; the rest of the
   stat is prettier realigning tables.
 - **Fleet launch record** (fleet-design-review rule): warrant: measured, whether the commit closes
@@ -626,8 +626,8 @@ Written from the home estate, jimcresswell.net, working this estate non-resident
   public GitHub repository under ADR-157 and ADR-173, which the seat verified is an accepted
   non-API Oak source); the raw CDN named as forbidden even for API-returned URLs; the
   self-contradicting escape clause replaced by one release phrase; the universal claim made
-  normative; ADR-233's scope line limited to Oak GitHub; the Clef profile fenced before its
-  acquisition clause and its topology marked as Clef's own; the identity bullet, the Castr C-1
+  normative; ADR-233's scope line limited to Oak GitHub; the consumer profile fenced before its
+  acquisition clause and its topology marked as the consumer's own; the identity bullet, the Castr C-1
   input and the mirror citation de-presupposed; invariant I22 added so every plan reaches the
   boundary; the wider, configuration and index pages, three sketches and the dispositions report
   fenced; the page's Key Principle and the schema-first bullet returned to the directive's
@@ -646,8 +646,7 @@ Written from the home estate, jimcresswell.net, working this estate non-resident
 ## 2026-10-14T0xZ — The owner's rulings on the decision list; reviewing agents are information, never authority (Walrus seeks Maelstrom, 9585cc)
 
 - **Owner, verbatim, 2026-10-14**: "Oak GitHub is read only, until I say otherwise, obviously you
-  can use GitHub"; "Cardinal rule changes, what are you talking about?"; "Dait, Base Clef and TAB
-  Clef, what about them?"; "what the fuck is an 'owner gate' -- ceremony has been invented, and
+  can use GitHub"; "Cardinal rule changes, what are you talking about?"; "[the three project names], what about them?" (names replaced at his word of 2026-11-19); "what the fuck is an 'owner gate' -- ceremony has been invented, and
   then declared a blocker"; "PR 1000 is not some external authority we need to obey, it is part
   of a discussion"; and, on the Codex review comment the seat had carried as a directive
   collision: "Reviewing agents are NEVER a source of authority, they are ALWAYS a source of
@@ -658,9 +657,9 @@ Written from the home estate, jimcresswell.net, working this estate non-resident
   decision; the rule's trigger is the OpenAPI schema changing, its test is codegen-then-build
   sufficiency, its subject is API-origin shapes; ADR-222 (owner, 2026-08-03) and ADR-157 already
   establish other authorities for other surfaces without touching the directive; an owned domain
-  model is a declared authority under I07 with generated bindings. No directive change. Dait and
-  Clef are defined in the integrity page's profile table; Base Clef and TAB Clef are the owner's
-  names for Clef's two forms. Owner gates: PDR-100 (2026-06-16) abolished owner-gating; the plan
+  model is a declared authority under I07 with generated bindings. No directive change. The two
+  projects are defined in the integrity page's profile table; the other two labels are the
+  owner's names for the consumer's two forms. Owner gates: PDR-100 (2026-06-16) abolished owner-gating; the plan
   schema reinvented it on 2026-07-22 with an expiry clock and a session-open alert; it dies under
   the owner's own ruling. PR 1000: ADR-233 already reads it as "a proposed input, not the
   governing topology"; the seat's proposed crosswalk would have promoted it. Adoption: ADR-233's
@@ -708,7 +707,7 @@ Written from the home estate, jimcresswell.net, working this estate non-resident
   nothing about, I cannot distinguish fiction from misunderstanding. What I can say is that ALL
   Practice repos practice 'strict, everywhere, all the time' and 'never disable checks, never
   disable safeguards', and I would never argue to add complexity or 'special cases'"; on the
-  re-examined work list, "Agree to all"; on the two project names, "Don't name Clef or Dait, not
+  re-examined work list, "Agree to all"; on the two project names, "Don't name [the two projects], not
   yet, if you need a label you can say something like 'exploratory pedagogy project' which is
   accurate but neutral"; on merging, "Merge has never and will never be at my word, if it is
   clean and green it gets merged"; on numbering, "When we have an ADR numbering clash, or

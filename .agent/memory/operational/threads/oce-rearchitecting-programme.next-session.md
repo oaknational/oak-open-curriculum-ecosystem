@@ -90,7 +90,7 @@ session title he set is "Rearchitecting Plan Review and Integration". The claim 
   about, I cannot distinguish fiction from misunderstanding. What I can say is that ALL Practice
   repos practice 'strict, everywhere, all the time' and 'never disable checks, never disable
   safeguards', and I would never argue to add complexity or 'special cases'"; on the names:
-  "Don't name Clef or Dait, not yet, if you need a label you can say something like 'exploratory
+  "Don't name [the two projects], not yet, if you need a label you can say something like 'exploratory
   pedagogy project' which is accurate but neutral"; on merging: "Merge has never and will never be
   at my word, if it is clean and green it gets merged"; on numbering: "When we have an ADR
   numbering clash, or anything similar, the numbering from the Oak branch wins and the Engraph
@@ -136,7 +136,7 @@ session title he set is "Rearchitecting Plan Review and Integration". The claim 
   search operations separately scoped; the invariant set open.
 - It adds five architecture documents (architecture and invariants I01–I21; configuration
   contracts; CF reconstruction with the ten-workspace disposition and the unratified N01–N12
-  proposals; integrity and Castr with the Clef C-DATA and C-PRIV obligations; wider capabilities
+  proposals; integrity and Castr with the consumer's C-DATA and C-PRIV obligations; wider capabilities
   B01–B16 with four contract records), an instance guide, three reports (route, review record,
   source dispositions), one strategic node and fourteen `oce-*` delivery sketches.
 - It supersedes the extraction-first route: `toolkit-re-architecture` and
@@ -164,7 +164,7 @@ session title he set is "Rearchitecting Plan Review and Integration". The claim 
 
 ## Hypotheses held for the review (unverified at this block)
 
-- Dait, Clef and TAB appear nowhere in the repository before this pull request and are never
+- The two exploratory project names and a third label appear nowhere in the repository before this pull request and are never
   defined in it; whether those names belong on a public surface is the owner's to say.
 - The pull request removes every measured-rate and size instrument from the CF delivery node by the
   brief's "no team measurement"; the estate prices rounds and sizes at routing (PDR-132, PDR-140).
@@ -210,7 +210,7 @@ The corrections as re-landed on 2026-10-17 from the pull request's own head, eac
    authored (`SHA:289fde234`).
 5. The names: the two projects appear under "the exploratory pedagogy project" and "the
    curriculum infrastructure consumer" on every surface, at the owner's word (`SHA:8f894503c`).
-   The owner's naming of 2026-10-14 (Base Clef, TAB Clef, Dait) is held in the napkin only.
+   The owner's naming of 2026-10-14 was held in the napkin only; the names were replaced there at his word of 2026-11-19.
 6. `public-packages-release`: title and overview match its own amendment; status stands
    (`SHA:aa230f5e8`).
 7. ADR-233 in numeric order in both indexes with the pull request's entry text (`SHA:4188ed7fa`);
