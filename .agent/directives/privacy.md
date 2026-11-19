@@ -151,6 +151,14 @@ live pull request, regenerated CI and the absence of sensitive path families. A 
 reduces ordinary reachability; it is not proof of server-side erasure. The exact recovery
 inventory belongs only in a private custody record.
 
+## Identifying a person
+
+A person is never identified, or linked across sites, by a photograph or a
+face. Identity is established only by links the person or a publisher has
+stated (a profile address on an author card, a site, an organisation). When
+those run out, the answer is "not established", reported to the owner in the
+session; a match by name alone stays out of every tracked record.
+
 ## This host's bindings
 
 None recorded yet; the host records its own here.

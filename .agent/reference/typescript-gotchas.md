@@ -204,3 +204,11 @@ finding class ends rather than relocates.
 - **A `refine` over optional keys can pass keyless input in the unsafe direction**: where a
   refinement relates two optional keys and both may be absent, an input with neither passes.
   Make such keys required and nullable, so the caller states the absence.
+- **`export { type X } from './y.js'` is kept by esbuild as a side-effect import of `./y.js`**;
+  the erased form is `export type { X } from './y.js'`. The `unicorn/prefer-export-from` fixer
+  emits the first form: a type-only re-export pulled a schema module, and with it Zod, into
+  every workflow bundle (570 KB against 22 KB, 2026-11-01). After an autofix pass, search for
+  `^export { .*type` and convert; the lint gate does not see bundle contents.
+- **`unicorn/prefer-includes` rewrites a `.some((x) => x === value)` type guard to
+  `.includes(value)`, which does not type-check against an `as const` tuple.** Use
+  `typeSafeIncludes` from `@oaknational/type-helpers` (2026-11-01).

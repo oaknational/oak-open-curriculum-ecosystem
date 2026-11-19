@@ -121,7 +121,7 @@ and Forge herds Vapor, event 5c30f92a of 2026-09-24).
    (founding instance: a closeout claimed "all pushed" over a stranded
    local commit, caught only by first-hand verification; this estate's
    `exit-codes-in-band-never-piped` rule is the same discipline at command
-   grain). The wrap's records go to the primary checkout's day-stamped
+   grain). The wrap's records go, from whichever worktree has it checked out, to the day-stamped
    coordination branch, by pathspec, and ride its fold: no seat mints a
    private records branch or proposes a records-only pull request (owner,
    2026-09-15, verbatim: "the whole point of coordination branches is to

@@ -296,6 +296,9 @@ A skill change is complete when:
 
 - Creating a new skill when an existing one only needs a
   sharper description or a new section
+- Writing history into a skill: a skill states current requirements, not
+  the incidents or rulings that led to them (the landing rule's
+  "Current requirements only" check)
 - Hand-writing a platform adapter instead of generating it
 - Using fragile relative markdown links from skill files
 - Adding placeholder folders or unused resources

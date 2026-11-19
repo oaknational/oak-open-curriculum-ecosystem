@@ -335,7 +335,23 @@ definition rather than a reference to that copy.
   `gh repo view --json nameWithOwner`, answered with HTTP 403: "GitHub GraphQL is not available
   from Claude Code sessions; use the REST API". The cure belongs at the tool (a REST read of the
   repository name), never a narrowing of the gate. Until then the push goes out under the
-  `HUSKY=0` ruling above with its substitute checks run first.
+  `HUSKY=0` ruling above with its substitute checks run first. `agent-tools review-cost
+  survey` fails the same way.
+- **What a cloud session can reach (2026-11-06 to 2026-11-12).** The hosted GitHub proxy sends
+  every write under the owner's token. The REST `users/{login}` path is refused ("sessions are
+  bound to their configured repositories") while the search routes answer. Of 22 research
+  hosts probed with `curl`, 20 returned a proxy 403; `github.com` and
+  `raw.githubusercontent.com` answered. The fetch tool and `curl` disagree about the network,
+  so probe hosts with `curl` in one command before concluding one is closed.
+- **A fresh cloud checkout has no claims registry (2026-11-07).** `commit-queue list` refuses
+  until `.agent/state/collaboration/active-claims.json` is seeded with the tool's own seed
+  line. `claims open --area-kind` takes `files`, not `path`.
+- **The cloud stop hook asks for a push whenever commits are unpushed (2026-11-12)**, while the
+  repository's cadence is one push per concluded required check. A seat that obeys the hook
+  breaks the cadence; hold, say why, and let a background wait re-invoke the session.
+- **Two cloud sessions can share a six-character session-id prefix (2026-11-08).** Read a
+  shared prefix as a possible collision before reading it as tooling drift; the full session id
+  in the commit trailers settles it.
 
 ## Fail-fast contract
 
