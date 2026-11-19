@@ -23,7 +23,7 @@ the writes it lacked; then start the analyser plan's units. Owning plans:
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
 | Smelter herds Basalt | claude-code | claude-fable-5-1 | 871ba4 | solo seat (its own Director): the analyser triage and plan, the drain of the open pull requests, the merge-bot write command; delegated three bounded implementer agents and one security read in-session; then the analyser plan's remainder as one lint pull request, six lane agents' cures verified and corrected by the seat (2026-11-01 to 2026-11-02) | 2026-10-27 | 2026-11-02 |
-| Sandpiper guards Wind | claude-code | claude-opus-5-5 | 690653 | solo seat (its own Director), implementer on the lint lane: assessed the unpushed series, pushed it, landed items 13 and 14 and merged 375; archived the two expired-gate plans; ran the Oak 1.186.4 sync through carrier 376 (2026-11-03) | 2026-11-03 | 2026-11-03 |
+| Sandpiper guards Wind | claude-code | claude-opus-5-5 | 690653 | solo seat (its own Director), implementer on the lint lane: assessed the unpushed series, pushed it, landed items 13 and 14 and merged 375; archived the two expired-gate plans; ran the Oak 1.186.4 sync through carrier 376 (2026-11-03); the later carriers, oaknational#1023 to its merge, the fork to a mirror and the first Oak pull requests as Oak's bot (to 2026-11-19; claude-fable-5-2 from 2026-11-18) | 2026-11-03 | 2026-11-19 |
 
 ## Lane state at 2026-10-27 (the owner's compaction word; the 2026-10-28 state below supersedes it where they differ)
 
@@ -1043,3 +1043,104 @@ The affected files' dependencies are missing from the architecture graph. No rul
   accepted that the branch's sign-in code has not run against the production identity provider.
 - The five faults seen on production are kept in
   [the production snagging list](../../../../docs/operations/mcp-server-production-snagging.md).
+
+## Lane state (2026-11-19, #1023 merged, the checkout an Oak checkout; Sandpiper guards Wind, 690653)
+
+This state supersedes the 2026-11-16 state where they differ. Its timeline was rebuilt on
+2026-11-19 from GitHub and the session transcript; the full causal account is in
+[the retrospective](../../../reports/agentic-engineering/why-the-reunification-took-fifteen-days-and-repeated-two-written-lessons-2026-11-19.md).
+
+### What landed
+
+- **oaknational#1023 merged** on 2026-11-18 at 13:07:12Z as `dae303661`, by the GitHub account
+  `mantagen`, 21 seconds after that account's approval. The standing word was that the owner
+  alone executes this merge; no record says how the merge by another account came about, and
+  the owner did not raise it. The merge's tree equals the fork tip's (`fc45609c8`).
+- Before it, on the fork: 430 (the production snagging list, `6a99eb399`) and 431 (the
+  gitleaks install advice, `fc45609c8`), each pushed on to `reunify-oce-forks`.
+- After it, on Oak, as Oak's bot, one concern each: 1026 (`c18317eac`, a default `case` and a
+  direct re-export), 1027 (`98084eb9a`, the resolved snagging entry and the Figma plugin line),
+  1028 (`81917a322`, the skills review of 2026-11-16, another seat's commit), 1029
+  (`8ca6e1881`, the three remaining minor Sonar findings).
+- Releases v1.187.0 to v1.187.3. SonarCloud's gate on Oak's `main` reads OK with no open
+  finding at `8ca6e1881` (read through the public API on 2026-11-18).
+
+### The fork, as it stands
+
+- The fork's default branch is `main`, fast-forwarded by the mirror workflow. The variable
+  `UPSTREAM_CARRIER_ENABLED` is `false`; the carrier workflow itself is still active and its
+  runs conclude skipped.
+- The ruleset "integration branches" now targets `refs/heads/engraph` only. The `engraph`
+  branch and both rulesets still exist.
+- Todo 6 of `reunify-oce-forks.plan.md` has steps 5 and 6 left: delete that ruleset and then
+  `engraph`; one Oak pull request dropping `engraph` from the triggers in `ci.yml`, `codeql.yml`
+  and `dependency-review.yml`. Each waits on the owner's word.
+- A push to the fork's `main` from the owner's account on 2026-11-18 at 15:15Z started a
+  Release run there, which failed at "Generate release token". The mirror workflow's own pushes
+  start only the code-quality run.
+
+### This checkout, since 2026-11-18
+
+- `origin` is Oak; `engraph-fork` is the fork; there is no `upstream`. The default branch is
+  `main`. Commits are made as Oak's bot, and the untracked `.github/merge-bot.json` names it.
+- The operator profile's repository scope carries these bindings in a dated section that the
+  owner has not yet ratified; the rest of that file still describes the fork line.
+
+### Owner rulings in this window
+
+- 2026-11-16: "We are now waiting for feedback. Please subscribe to the PR"; "it may take
+  several days. Do not bother to re-arm between 5pm and 9am London time".
+- 2026-11-18: "stop the carrier, make sure Engraph main is up to date, merge, make sure the
+  engraph branch is an ancester of the main branch, make the main branch the default branch,
+  change the local remotes to be origin oak engraph engraph and no upstream."
+- 2026-11-18: "Oak is now the default origin, and this checkout is once more an Oak OCE
+  checkout"; then "rename the engraph remote to engraph-fork" and "the Oak hold is lifted".
+- 2026-11-18: "From now on, we keep the PRs well defined, bounded and tight ... we want other
+  agents and humans to be able to review them accurately with the least amount of effort.
+  Small, focussed, _bounded_". On the merge tool's work-in-progress limit: "Count only my own".
+- 2026-11-18, on SonarCloud: "note that Github itself also supports reporting on code coverage,
+  and that automatic Sonar analysis removes both maintenance cost and an error surface";
+  "leave it on sonar way for ai code". The project stays on "Sonar way for Agentic AI" with
+  automatic analysis; the seat read the second sentence as "change nothing" and said so.
+- 2026-11-18, on the eight `!important` findings: accept them in SonarCloud. On the rest:
+  "mark the other issues as accepted or false positives as appropriate".
+- 2026-11-18: "the removal of figma is deliberate. Bundle that change with the next PR".
+- 2026-11-18, on types: "we should not be using loose types anywhere except incoming IO
+  boundaries, and at those we should immediately validate to a strict type."
+- 2026-11-19: the consolidation covers both drainable buffers, in at most three pull requests.
+
+### SonarCloud dispositions on Oak's project
+
+Made on 2026-11-18 through the owner's sign-in, each with a comment saying an agent made it at
+the owner's word: eight `css:S9423` in the hub demo's `globals.css` accepted (a reduced-motion
+floor); `typescript:S7764` at `oak-theme.ts:242` accepted (`window.oakTheme` is the seam the
+integration test injects); `typescript:S1135` at `strict.ts:17` false positive (the word is
+inside a rule name).
+
+### Corrections to what this seat reported
+
+- It reported #1023 as having no open review threads at 13:54Z on 2026-11-16 while a
+  `claude[bot]` review, posted seven minutes earlier with its finding in the review body, was
+  unread. The owner's request for all comments found it eight hours later.
+- It told the owner that 1026 needed a human reviewer before the merge tool would take it. It
+  did not: Oak's bot is a bypass actor on the code-owner ruleset, and 1027 to 1029 merged with
+  no human approval. The owner approved 1026 at 15:02Z.
+- It described the gate condition `new_code_smells_severity` as a sum in a question prompt and
+  corrected that within the hour: the value is the highest severity among new findings.
+- It recommended a gate condition on security hotspots; the owner pointed out that hotspots are
+  deprecated, and the recommendation was withdrawn.
+
+### Still open
+
+- The fork's last two steps, above.
+- The type debt marked in 1029: the response descriptor map is `Record<string, unknown>`; the
+  generator holds the value as a schema object and two readers return `unknown` with no caller
+  found. Parked at the owner's word.
+- Fifty-nine TypeScript rules exist only in SonarCloud's comprehensive profile and are not
+  enforced on Oak; the owner left the configuration as it is.
+- The public-pages lane's steps 5 to 7. Its plan body is held outside the repository; the
+  strategic node is `public-explanatory-system`. Step 5 needs splitting to fit the bounded rule.
+- The merge tool's work-in-progress limit counts every open pull request in the repository;
+  on Oak a seat passes a limit just above the open count until the tool counts the caller's own.
+- Carried from the 2026-11-16 state and still unacted on: individuals named in
+  `LICENCE-DATA.md`, the demos' READMEs and `CHANGELOG.md`; the pinned `@mcpjam/cli`.
