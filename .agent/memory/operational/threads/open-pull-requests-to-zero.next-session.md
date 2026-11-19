@@ -1142,5 +1142,8 @@ inside a rule name).
   strategic node is `public-explanatory-system`. Step 5 needs splitting to fit the bounded rule.
 - The merge tool's work-in-progress limit counts every open pull request in the repository;
   on Oak a seat passes a limit just above the open count until the tool counts the caller's own.
+- The operator profile's SonarCloud entry and the Sonar tool server's sign-in still name the
+  fork's organisation; Oak's project was reached through `sonar api` under
+  `sonar auth org oaknational`.
 - Carried from the 2026-11-16 state and still unacted on: individuals named in
   `LICENCE-DATA.md`, the demos' READMEs and `CHANGELOG.md`; the pinned `@mcpjam/cli`.
