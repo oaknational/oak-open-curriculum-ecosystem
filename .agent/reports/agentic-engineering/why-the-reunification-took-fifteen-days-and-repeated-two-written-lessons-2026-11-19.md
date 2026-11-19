@@ -195,3 +195,33 @@ Observed, and not proposals:
 The record pays its way if proposal 2 or 3 lands, or if the two instances change what the
 doctrine-traction lane decides. It names one mechanism the arc demonstrated twice: a lesson with
 a home is not thereby present at the act.
+
+## Addendum, 2026-11-19: what reading the napkin whole added
+
+Written the same day, after the author read the napkin from its first line to its last for the
+consolidation that followed. Nothing above is changed.
+
+- **The review-body miss was at least the third recorded instance, not the first.** Two napkin
+  entries of 2026-10-02, by other seats, record a watch that counted threads firing READY under
+  a review whose body carried findings, and a "Findings: None" review whose overview held a
+  true finding. The class had been written down six weeks before this arc met it.
+- **One observation is withdrawn as stated.** "Oak's bot cannot re-run a workflow job" rested on
+  one HTTP 403. The shell-and-tooling reference has said since September that a re-run needs a
+  token minted at the `workflow-dispatch` scope and that the pull-request scope answers exactly
+  that 403. Which scope the seat minted on 2026-11-16 is not established, and whether Oak's
+  installation holds the Actions permission was not checked. What the record supports: the
+  seat's attempt failed, and the documented route was not tried.
+- **The seat repeated five more written lessons during the consolidation itself**, each caught
+  by something outside its own attention: it dispatched a reader agent against the owner's
+  single-agent ruling (the reader's report named the ruling); three commits were refused for a
+  body line over 100 characters; it edited tracked prose by script all day against the owner's
+  "Use the proper tools only" (found on reading the napkin entries that record four earlier
+  breaches); it wrote dated incidents into rules and skills against the owner's ruling of
+  2026-11-12 that they hold current requirements only (found the same way, before the pull
+  request merged); and it ran rule names as shell commands from an unquoted heredoc minutes
+  after writing that hazard into the reference.
+- **Proposals 2 and 3 landed as requirement text**, in the Sonar rule and the lifecycle skill.
+  A napkin entry of 2026-11-12 by another seat sets the bound on what that achieves: on this
+  platform a rule reaches a session as a one-line pointer, and "has a home" and "reached the
+  agent" are two facts. The design work that owns the difference is the delivery node
+  `rules-and-skills-system-design`.
