@@ -105,6 +105,11 @@ argue; they do not decide anything.
   transcript; where the 68 hours went (two idle stretches hold most of them); what the record
   does and does not establish about why the local scan came late; a correction of the seat's
   earlier accounts; two observations, and the local scan's commands
+- [why-the-reunification-took-fifteen-days-and-repeated-two-written-lessons-2026-11-19.md](./why-the-reunification-took-fifteen-days-and-repeated-two-written-lessons-2026-11-19.md)
+  — a seat's retrospective on bringing the fork's default branch back into Oak's `main`
+  (2026-11-03 to 2026-11-18): where the fifteen days went, the causal stack (two lines under
+  opposite rulings; a class cured one issue at a time; two lessons whose homes were not read at
+  the act), the counterfactual inside the arc and three routed proposals
 
 ### Cricket suite tallies
 

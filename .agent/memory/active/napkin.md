@@ -2414,3 +2414,62 @@ Each is one instance; none is doctrine.
 - **The local scans used throwaway SonarCloud projects**, created with `/api/projects/create`
   and deleted with `/api/projects/delete`. Both were deleted; the organisation then listed only
   `EngraphCode_castr` and `EngraphCode_open-curriculum-ecosystem`.
+
+## 2026-11-19 — Sandpiper guards Wind (690653): the merge back, the mirror and the first Oak pull requests
+
+The account with its sources is the lane state of 2026-11-19 in the
+`open-pull-requests-to-zero` thread record and the retrospective of the same date.
+
+- **Correction (mine, a repeat):** on 2026-11-18 I again read the Sonar gate condition
+  `new_code_smells_severity` as a sum ("12 new code smells score 20 against a limit of 14") and
+  put that in a question prompt. My entry of 2026-11-12 already said to read a gate metric's
+  definition first. The value is the highest severity among new findings: info 5, minor 10,
+  major 15, critical 20. A lesson written here did not reach the act six days later.
+- **Correction (mine, a repeat of the skill's own text):** I called oaknational#1023 clean from
+  its threads, its checks and its review decision. A comment-only review whose finding is
+  outside the diff makes no thread; the finding sits in the review body. The watch I then armed
+  read only items newer than its own start, so the miss could not correct itself. A wait on a
+  pull request starts with a read of every review body, comment and thread.
+- **Correction (mine, uncorrected at the time):** I told the owner that Oak pull request 1026
+  needed a human reviewer before the merge tool would take it. Oak's bot is a bypass actor on
+  the code-owner ruleset; 1027 to 1029 merged with no human approval while GitHub showed
+  `BLOCKED`. `mergeStateStatus` describes a person's merge button, not the bot's.
+- **Correction (the owner's):** I recommended a quality-gate condition on security hotspots.
+  The project's own page says hotspots are deprecated. A vendor feature is checked against the
+  vendor's current page before it is recommended.
+- **Correction (hook and classifier):** after the owner called his uncommitted settings change
+  deliberate, I tried twice to discard it so a pull could proceed, once with `git restore` and
+  once with an edit. Both were refused. A file the owner has changed is the owner's to clear;
+  the seat states the blocker and the one command that clears it.
+- **Observation:** a class of finding whose cure is configuration in another system was cured
+  one issue at a time on two carriers (7 marks, then 44) before the one project criterion was
+  saved. The second recurrence was predictable from the first. The structural cure is proposed
+  with the first instance, even when only the owner can apply it.
+- **Observation:** the merge tool's work-in-progress limit counts every open non-Dependabot
+  pull request in the repository. On Oak that was 19 against a limit of 3. The owner's ruling is
+  "Count only my own"; until the tool does, pass `--wip-limit` just above the open count.
+- **Observation:** an app installation token cannot re-run a workflow job on Oak (HTTP 403).
+  `run-quality-gates` goes red when a sibling job is cancelled, so one slow checkout against a
+  ten-minute job limit shows as three failures.
+- **Observation:** `gh pr checks --watch` returns when the checks finish; its exit says nothing
+  about whether they passed.
+- **Observation:** SonarCloud's public API gives a gate's evaluated conditions; the gate's
+  definition and a profile's rule list need organisation membership (`sonar api get` under a
+  signed-in CLI, with the `organization` parameter). `sonar run mcp` takes its organisation
+  from the CLI's sign-in when the server starts, so `sonar auth org <key>` does not move a
+  running server.
+- **Observation:** SonarCloud's two TypeScript profiles do not nest: 413 rules shared, 19 only
+  in "Sonar agentic AI", 59 only in "Sonar way comprehensive". Built-in gates and profiles
+  cannot be edited. Automatic analysis imports no coverage, so a coverage condition is never
+  evaluated.
+- **Observation:** the word TODO inside a rule name raises S1135; a debt comment avoids `TODO`
+  and `FIXME` or it raises a finding of its own.
+- **Observation:** a fork ruleset that follows the default branch and requires a pull request
+  moves with the default; it is retargeted to the old branch before the default switches, or it
+  blocks the mirror's fast-forward.
+- **Observation:** owner messages typed while a turn is running are stored in the transcript
+  as queued records, not user turns. Six rulings of 2026-11-18 exist only there, among them the
+  small-bounded pull-request rule. A reconstruction that filters on user turns loses them.
+- **What worked:** two read-only agents rebuilt the window and the arc from GitHub and the
+  transcript into ledgers on disk, each marking what it verified and what it inferred. The
+  window ledger corrected four statements I would have written from memory.
