@@ -676,10 +676,6 @@ plan-state refusal read green through `| head`, `check-commit | tail`,
   ONE argv word, the tool fails as invalid usage, and a quiet pipe masks the
   failure — pass literal args or `${=VAR}`, and never trust a captured
   variable through a quiet pipe.
-- An evidence line names only checks that read the file. `.agent/` is in
-  `.prettierignore`, so "prettier passes" on a records change is a claim about
-  nothing; the checks that read those files are markdownlint and the docs
-  validators (eight pull-request bodies cited prettier this way, 2026-10-02).
 - State what an instrument can discriminate before reading its number. A null
   result needs a baseline that passes something: a skill's evaluation that
   scored 0 of 8 with the skill and 0 of 8 without it cannot tell a weak skill

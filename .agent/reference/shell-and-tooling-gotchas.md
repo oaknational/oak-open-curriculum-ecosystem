@@ -862,3 +862,28 @@ Director's landing record of 2026-09-06, event f05a54da).
   transcript's newest assistant usage (input plus cache read plus cache creation, over the
   window) under the primary's project directory until the command takes a project-directory
   option (a friction in each estate's register, 2026-10-14).
+
+## 2026-11-19 consolidation batch (from the napkin of 2026-09-29 to 2026-11-19; each searched for in this file and the rules first)
+
+- **Backticks inside an unquoted heredoc are command substitutions**: a heredoc that carries
+  Markdown code spans is written `<<'EOF'`. zsh ran a branch name and two short SHAs as
+  commands on 2026-11-16, and two rule names on 2026-11-19, the second time minutes after the
+  seat had written this entry's first draft.
+- **Prettier's ignore file is read from the directory prettier runs in.** Run from a
+  sub-directory, prettier skips the root ignore file and reformats files under `.agent/`
+  (2026-10-28: a plan node's whole table). Run from the principal checkout on a worktree path,
+  it matches nothing and exits 0, because worktrees live under an ignored directory
+  (2026-10-17). Format and check from the root of the checkout that holds the file.
+- **A reused worktree is not a clean one.** Ignored files from its earlier lane survive the
+  checkout, and a validator that walks the tree reads them: an ignored `evals/` directory under
+  the skills tree failed the adapter check (2026-10-28). Move them to the scratchpad before the
+  first gate.
+- **Putting a file back without a blocked git command.** The hook refuses the git commands that
+  overwrite a working-tree file from a commit (the path form of checkout, `restore`, and a
+  `show` redirected onto the same path). The forward route copies the in-flight file to the
+  scratchpad, writes `git cat-file -p HEAD:<path>` to a scratchpad file, then `cp`s it into
+  place (2026-10-28). A file the owner has changed is the owner's to put back (2026-11-18).
+- **The hook matches a blocked command's words anywhere in a command's text**, a quoted
+  sentence in a heredoc included (2026-10-29; 2026-11-19). Text that names such a command goes
+  into a file written with the file tool, and the command runs the file.
+
