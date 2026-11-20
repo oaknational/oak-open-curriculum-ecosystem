@@ -1,8 +1,7 @@
 name: CI
 
-# Quality-gate pipeline for PRs targeting main or engraph, and pushes to
-# either branch. Parallel jobs let each gate report independently, while superseded PR runs
-# cancel. A final `run-quality-gates` fan-in job is the single required status
+# Quality-gate pipeline for PRs targeting main, and pushes to it. Parallel jobs
+# let each gate report independently, while superseded PR runs cancel. A final `run-quality-gates` fan-in job is the single required status
 # check: it fails unless EVERY gate succeeded (so a failed, cancelled, or skipped
 # gate all block, except the two skips the fan-in names as by design), so the
 # branch ruleset and the Release workflow's `workflow_run: [CI]` trigger need no
@@ -32,9 +31,9 @@ name: CI
 
 on:
   push:
-    branches: [main, engraph]
+    branches: [main]
   pull_request:
-    branches: [main, engraph]
+    branches: [main]
   # Inert: no merge queue is configured (ADR-204), so GitHub never dispatches a
   # `merge_group` event and this trigger is a no-op. Kept as zero-cost readiness
   # should a merge queue ever be reconsidered; do not rely on it to gate.

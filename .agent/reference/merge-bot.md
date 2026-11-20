@@ -70,16 +70,9 @@ NOT apply ruleset bypass grants — yet the bot's code-owner-gate bypass IS
 honoured at the REST layer. So at genuinely-settled the command merges via
 `PUT /repos/{owner}/{repo}/pulls/{n}/merge` (merge-commit method, never
 squash), recomputing the whole settlement verdict — checks, threads,
-suppressed body findings (a tip-bound review body's suppressed count holds
-the merge until each finding is cured or rejected by a signed disposition
-line from the repository owner or the pull request's author, or a later
-review on a later tip carries none; the fourth
-measured-state clause, `SUPPRESSED-FINDINGS-OPEN`, owner card item 78,
-2026-09-14; the hold lifts on ONE signed comment posted after the latest
-tip-bound review, carrying one line per finding in the ratified format, the
-marker, the finding's reference, "item N of M" and the verb, followed by a
-bot poll and no push, since a push would move the tip and start a new
-round), per-reviewer legs, outstanding requests, live runs — inside the same invocation, because a
+per-reviewer legs, outstanding requests, live runs — inside the same
+invocation (the merging seat reads and dispositions a review body's
+suppressed findings before it calls the command), because a
 bot review can land in the seconds between (caught twice in forty
 minutes, #570/#574).
 

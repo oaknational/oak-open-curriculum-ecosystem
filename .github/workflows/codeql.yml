@@ -19,9 +19,9 @@ name: CodeQL
 
 on:
   push:
-    branches: [main, engraph]
+    branches: [main]
   pull_request:
-    branches: [main, engraph]
+    branches: [main]
   schedule:
     # Weekly, mirroring the retired default-setup cadence.
     - cron: '31 4 * * 1'
