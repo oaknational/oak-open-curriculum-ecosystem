@@ -70,10 +70,9 @@ NOT apply ruleset bypass grants — yet the bot's code-owner-gate bypass IS
 honoured at the REST layer. So at genuinely-settled the command merges via
 `PUT /repos/{owner}/{repo}/pulls/{n}/merge` (merge-commit method, never
 squash), recomputing the whole settlement verdict — checks, threads,
-per-reviewer legs, outstanding requests, live runs (a review body's
-suppressed findings are not part of it: the command does not read them, and
-the merging seat reads and dispositions them before it calls the command) —
-inside the same invocation, because a
+per-reviewer legs, outstanding requests, live runs — inside the same
+invocation (the merging seat reads and dispositions a review body's
+suppressed findings before it calls the command), because a
 bot review can land in the seconds between (caught twice in forty
 minutes, #570/#574).
 

@@ -319,13 +319,12 @@ it; the leg is OWED only while a review of that tip is due and has not
 bound (§merge boundary). Suppressed findings are Copilot's own low-confidence
 bucket: the burden of proof is REPRODUCTION before cure — a non-reproducing
 finding gets a reasoned decline with the falsifier recorded, never a
-speculative cure or a silent skip. **The merge tool does not hold on them**:
-no `pr-watch` state reads a review body's suppressed count, and `merge-bot
-merge` merges without it. Reading the suppressed block and giving each
-finding a disposition in the §Disposition format below is the merging
-seat's own act, done before it calls the tool (the owner: "if they are low
-confidence findings then ignoring them is a valid approach", so a reasoned
-decline is a complete disposition). Two scope facts: the Copilot-review
+speculative cure or a silent skip. Reading the suppressed block and giving
+each finding a disposition in the §Disposition format below is the merging
+seat's own act, done before it calls `merge-bot merge`, which reads checks,
+threads and reviewer legs (the owner: "if they are low confidence findings
+then ignoring them is a valid approach", so a reasoned decline is a
+complete disposition). Two scope facts: the Copilot-review
 ruleset does NOT bind `.design-sync/`, `.agent/plans/`, or
 `packages/design` doc paths (confirmed on PR #536's timeline — zero review
 fired), so absence there is configuration, not a skipped reviewer; and a
@@ -907,13 +906,13 @@ sentence: `Cured in SHA:<sha>` (the `SHA:` prefix and seven to forty
 lowercase hex characters, bare or inside a code span), `Routed to <home>`, or
 `Rejected` with the rationale — the convention for a reader; the raised
 count reads the marker only, so a disposition whose sentence lacks the verb
-is still counted there. No tool reads the verb: on a body-only line the
-sentence is everything after the first ` — ` (space, em dash, space)
-following the item, and it is written for the reader. A reply on a review thread inherits the thread's head and
+is still counted there. On a body-only line a ` · ` closes the item and the
+disposition sentence follows it, as in `· item 1 of 3 · Cured in SHA:<sha>`;
+`pr tally` keys the line by its reference. A reply on a review thread inherits the thread's head and
 anchor from the harvest. A finding that lives only in a review body (a
 Copilot suppressed item, a Codex body item) has no thread, so its
 disposition is an issue comment carrying ONE LINE PER FINDING: the marker,
-then the reference `head SHA:<sha> · review <id> · <path>:<line> · <item>`
+then the reference `head SHA:<sha> · review <id> · <path>:<line> · <item> ·`
 — the review's own id (two reviews by one reviewer can bind one head), the
 body's anchor for the item, and an item key that survives two findings at
 one anchor: a Codex item's bold heading, a Copilot suppressed item's
@@ -1481,14 +1480,12 @@ create` on such a branch exits non-zero with "a pull request for branch …
    door is `pnpm agent-tools merge-bot merge --pr <n> --expect <reviewer>`
    (MCP-508): it recomputes the LEG-DRIVEN settlement verdict itself,
    merges only on SETTLE-READY with the verdicted tip's sha pinned, and
-   refuses by verdict name. It does not consume the body tally or the
-   disposition lines: the tool reads checks, threads and reviewer legs.
-   The zero-undispositioned and cure-worthy-zero legs above, a review
-   body's suppressed findings among them, are the MERGING SEAT'S own
-   recomputation at the boundary, because the tool never reads a review
-   body's findings, a rejection's rationale, the cure SHA's presence on
-   the branch, a thread resolved without a disposition, or prose findings
-   a summary carries — including SETTLED-NO-REVIEW, the timeout-settled round
+   refuses by verdict name. The tool reads checks, threads and reviewer
+   legs. The zero-undispositioned and cure-worthy-zero legs above are the
+   MERGING SEAT'S own recomputation at the boundary: the seat reads each
+   review body's findings, suppressed ones among them, each rejection's
+   rationale, the cure SHA's presence on the branch, any thread resolved
+   without a disposition, and prose findings a summary carries — including SETTLED-NO-REVIEW, the timeout-settled round
    this SKILL's item 4 anchor describes, which is watch-endable but NEVER
    merge-eligible — EXCEPT for the class the owner ruled on 2026-09-03
    ("Change the merge policy instead"): a bot-authored pull request that
