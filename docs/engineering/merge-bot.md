@@ -36,58 +36,49 @@ split and the standing no-approving-review practice.)
 **The sanctioned bot-merge path is the front-door command** (MCP-508):
 
 ```bash
-pnpm agent-tools merge-bot merge --pr <n> --expect <reviewer>
+pnpm agent-tools merge-bot merge --pr <n>
 ```
 
 It mints its own least-privilege token (`pull-request-merge`), reads the
 settlement verdict, and merges ONLY on SETTLE-READY — merge-commit method
 always, the VERDICTED tip's sha pinned in the call (a moved tip answers
-409), refusing by verdict name on everything else with exit 3. `--expect`
-is required and takes each reviewer's GraphQL login without the `[bot]`
-suffix (`copilot-pull-request-reviewer`, `chatgpt-codex-connector`); with the
-suffix no review matches and every leg reads OWED (three refused runs,
-2026-09-14). `--expect none` declares the set EMPTY: the seat has judged, by
-the owner's one question of 2026-10-27 ("do we need a review in order for this
-work to be safe and effective?"), that the work needs no pull-request review;
-the quiet window then runs from checks green and the merge evidence names the
-declaration. Otherwise source it from the repository's automatic-review
-configuration, declaring the reviewers AVAILABLE — a vendor declared
-unavailable on the stream (an outage, such as the Codex connector's
-2026-09-10 usage-limit notice) is not declared, and a subagent review
-posted on the pull request stands as its leg, bound to the sha it reviewed
-as the vendor leg is bound per tip — the premises record that sha and the
-pushes since, which carry only cures of its findings, the tip sync (a
-pure one, pr-lifecycle item 3) and landing-defect cures, else a fresh leg on the new head (owner ruling
-2026-09-10; pr-lifecycle §review-round state machine item 3); a defaulted
-set never merges. A review with an EMPTY body satisfies no leg and never
-anchors the quiet window — the API creates one per thread reply, so a pull
-request whose author dispositioned findings carries its own — and the leg's
-detail counts the empties it ignored. A reviewer's result has two
-transports and the tool reads both: the review object, and a completion
-comment on the conversation naming the commit reviewed (the Codex
-connector's zero-findings transport; a positive result by the owner's
-ruling of 2026-09-16). A declared reviewer's comment that fails a
-precondition on a leg the tip has not answered — edited, naming no
-reviewed commit or more than one, naming a prefix that matches no commit
-of the pull request or more than one, or naming a commit that does not
-bind the tip (exactly or by content, pr-lifecycle item 3) — refuses as `UNCLASSIFIED-EVIDENCE` with the precondition named and
-the comment quoted, never as silence; the cure is a fresh result on the
-tip. On a leg the tip satisfies, such a comment is a past round and is not
-reported. The refusal is the verdict when the round is otherwise settled or
-when it belongs to the blocking reviewer; a refusal on another reviewer rides
-in the evidence beside the blocking leg's own state, and a live run outranks
-it. A summary whose Code Review row is **Failed** is the connector's failed
-run on the commit it names (the decision note's amendment of 2026-10-27): an
-error review, which satisfies no leg, is counted in the leg's detail, and
-proves an `--unavailable` declaration on that head; without one the leg
-times out to `SETTLED-NO-REVIEW`. The connector's usage-limits comment is a
-vendor notice the evidence prints; neither is a refusal.
-The tool verifies only the vendor legs declared to it and refuses
-an empty set: the availability rule and the posted subagent leg are the
-merging seat's own recomputation, recorded on the landing premises (a
-machine-checked subagent-leg input is the named follow-up on the
-agent-tools-watch-commands node). `merge-bot merge --help` carries the
-tool's own contract — the declared vendor set and the verdict names.
+409), refusing by verdict name on everything else with exit 3. The command
+takes no reviewer list. It reads the reviews from the pull request:
+
+- **A review in progress is waited for.** A running review check holds the
+  checks; a live agent run, or a round asked of a bot reviewer, holds that
+  bot's leg. A pending request of a person is not waited for.
+- **One review of any commit of the pull request exists.** A reviewer who
+  reviewed an earlier commit owes nothing on a later tip until a round is
+  asked of them. A skip notice, a vendor's failed-run body and an
+  empty-bodied review (the API creates one per thread reply, so a pull
+  request whose author dispositioned findings carries its own) are not
+  reviews, and none anchors the quiet window. With no review the verdict is
+  `SILENT-WAIT-NO-REVIEWER` and the command refuses; request a review.
+- **Every review is dealt with.** Every review thread is resolved, and the
+  merging seat reads and dispositions a review body's findings before it
+  calls the command.
+
+A reviewer's result has two transports and the tool reads both: the review
+object, and a completion comment on the conversation naming the commit
+reviewed (the Codex connector's zero-findings transport). The connector is
+read as a reviewer once it has commented on the pull request. A reviewer's
+comment that fails a precondition on a leg the tip has not answered (edited
+by another account, naming no reviewed commit or more than one, or naming a
+prefix that matches no commit of the pull request or more than one) refuses
+as `UNCLASSIFIED-EVIDENCE` with the precondition named and the comment
+quoted; the cure is a fresh result. The refusal is the verdict when the
+round is otherwise settled or when it belongs to the blocking reviewer; a
+refusal on another reviewer rides in the evidence beside the blocking leg's
+own state, and a live run outranks it. A summary whose Code Review row is
+**Failed** is the connector's failed run on the commit it names: an error
+review, which satisfies no leg and is counted in the leg's detail. The
+connector's usage-limits comment is a vendor notice the evidence prints;
+neither is a refusal.
+
+A bot asked for a round that never answers reads `SETTLED-NO-REVIEW`, which
+refuses, until a round is asked again and answered. `merge-bot merge --help`
+carries the tool's own contract and the verdict names.
 
 **Why the REST endpoint, not the `gh pr merge` client** (the command does
 this for you): client-side `gh pr merge` refuses on a

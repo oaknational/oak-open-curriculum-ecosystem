@@ -131,7 +131,6 @@ describe('readPrStateReading — the completion-comment transport', () => {
       readPrStateReading({
         target: { number: 461 },
         ...ghSeam,
-        expectedReviewers: [CODEX],
         execFileSync: executor(WITH_TIP, calls),
       });
 
@@ -142,11 +141,10 @@ describe('readPrStateReading — the completion-comment transport', () => {
     },
   );
 
-  it("reads an expected reviewer's completion comment as a review bound to the commit it names", () => {
+  it("reads the connector's completion comment as a review bound to the commit it names: its comment makes it a reviewer", () => {
     const reading = readPrStateReading({
       target: { number: 461 },
       ...ghSeam,
-      expectedReviewers: [CODEX],
       execFileSync: executor(WITH_TIP, []),
     });
 
@@ -161,7 +159,6 @@ describe('readPrStateReading — the completion-comment transport', () => {
     const reading = readPrStateReading({
       target: { number: 461 },
       ...ghSeam,
-      expectedReviewers: [CODEX],
       execFileSync: executor(
         { comments: [CODEX_CLEAN_COMMENT], commitPages: [[OLDER], [HEAD]] },
         [],
@@ -175,29 +172,10 @@ describe('readPrStateReading — the completion-comment transport', () => {
     });
   });
 
-  it('a DEFAULTED expected set that holds the commenter (an outstanding request) reads its comment', () => {
-    const reading = readPrStateReading({
-      target: { number: 461 },
-      ...ghSeam,
-      execFileSync: executor(
-        { ...WITH_TIP, reviewRequests: [{ __typename: 'User', login: CODEX }] },
-        [],
-      ),
-    });
-
-    expect(reading.expectedDeclared).toBe(false);
-    expect(reading.completionComments).toStrictEqual({
-      reviews: [BOUND_TO_HEAD],
-      refused: [],
-      notices: [],
-    });
-  });
-
   it("reads an expected reviewer's comment it edited itself as a review of the commit it names, timed at the edit", () => {
     const reading = readPrStateReading({
       target: { number: 461 },
       ...ghSeam,
-      expectedReviewers: [CODEX],
       execFileSync: executor(
         {
           ...WITH_TIP,
@@ -224,7 +202,6 @@ describe('readPrStateReading — the completion-comment transport', () => {
     const reading = readPrStateReading({
       target: { number: 461 },
       ...ghSeam,
-      expectedReviewers: [CODEX],
       execFileSync: executor(
         {
           ...WITH_TIP,
@@ -255,15 +232,17 @@ describe('readPrStateReading — the completion-comment transport', () => {
     });
   });
 
-  it('a completion comment never widens a DEFAULTED expected set: a comment by an author outside it reads as none', () => {
+  it('a comment in the connector’s wording by any other account makes nobody a reviewer and reads as no review', () => {
     const reading = readPrStateReading({
       target: { number: 461 },
       ...ghSeam,
-      execFileSync: executor(WITH_TIP, []),
+      execFileSync: executor(
+        { ...WITH_TIP, comments: [{ ...CODEX_CLEAN_COMMENT, author: { login: 'a-person' } }] },
+        [],
+      ),
     });
 
-    expect(reading.expectedDeclared).toBe(false);
-    expect(reading.expectedReviewers).not.toContain(CODEX);
+    expect(reading.expectedReviewers).toEqual([]);
     expect(reading.completionComments).toStrictEqual({ reviews: [], refused: [], notices: [] });
   });
 });

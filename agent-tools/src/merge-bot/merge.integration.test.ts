@@ -398,19 +398,17 @@ describe('runMergeExecution — target grammar (security H2)', () => {
   });
 });
 
-describe('runMergeExecution — a set declared empty (the owner, 2026-10-27)', () => {
-  it('merges a tip whose expected set was declared none, the evidence naming the declaration', async () => {
-    // The seat judged this work needs no pull-request review to be safe and
-    // effective and declared so; the door reads the declaration, waits out
-    // the quiet window from checks green (08:00 against 09:00) and merges,
-    // carrying the judgement in the merge record.
-    // A bot-authored tip proves the required contexts by name before the PUT,
-    // so the port serves the base branch's rules; the diff is code-class.
+describe('runMergeExecution — a pull request nobody has reviewed', () => {
+  it.each([
+    ['the bot’s own code-class pull request', 'app/acme-bot'],
+    ['a person’s pull request', 'a-person'],
+  ])('refuses %s with green checks and no review, and names the cause', async (_whose, author) => {
+    // Checks have been green for an hour (08:00 against 09:00); with nobody
+    // having reviewed and no bot reviewing, no length of wait settles it.
     const { fetchImpl, calls } = makeClassPort(CODE_FILES);
-    const declaredNone = makeReading({
-      author: 'app/acme-bot',
+    const unreviewed = makeReading({
+      author,
       expectedReviewers: [],
-      expectedDeclared: true,
       reviews: [],
       namedChecks: [
         { name: 'run-quality-gates', bucket: 'passed' },
@@ -419,41 +417,17 @@ describe('runMergeExecution — a set declared empty (the owner, 2026-10-27)', (
       checks: { total: 2, passed: 2, failed: 0, pending: 0 },
     });
 
-    const outcome = await runMergeExecution(
-      makeInput(declaredNone, fetchImpl, { expectedReviewers: [] }),
-    );
+    const outcome = await runMergeExecution(makeInput(unreviewed, fetchImpl));
 
-    expect(outcome.ok).toBe(true);
-    if (outcome.ok) {
-      expect(outcome.value.kind).toBe('merged');
-      if (outcome.value.kind === 'merged') {
-        expect(outcome.value.evidence.join('\n')).toContain('--expect none');
-      }
-    }
-    expect(calls.some((call) => call.url.endsWith('/pulls/42/merge'))).toBe(true);
-  });
-
-  it("refuses a person's pull request on a set declared none: reviewed, never merged on an empty set", async () => {
-    const { fetchImpl, calls } = makeFetchPort({});
-    const personsPr = makeReading({
-      author: 'jimcresswell',
-      expectedReviewers: [],
-      expectedDeclared: true,
-      reviews: [],
+    expect(outcome).toMatchObject({
+      ok: true,
+      value: {
+        kind: 'refused',
+        verdictState: 'SILENT-WAIT-NO-REVIEWER',
+        awaitsSettlement: false,
+      },
     });
-
-    const outcome = await runMergeExecution(
-      makeInput(personsPr, fetchImpl, { expectedReviewers: [] }),
-    );
-
-    expect(outcome.ok).toBe(true);
-    if (outcome.ok) {
-      expect(outcome.value.kind).toBe('refused');
-      if (outcome.value.kind === 'refused') {
-        expect(outcome.value.reason).toContain('--expect none');
-        expect(outcome.value.reason).toContain('2026-09-03');
-      }
-    }
+    expect(outcome.ok ? outcome.value.evidence.join('\n') : '').toContain('no review');
     expect(calls.some((call) => call.url.endsWith('/pulls/42/merge'))).toBe(false);
   });
 });

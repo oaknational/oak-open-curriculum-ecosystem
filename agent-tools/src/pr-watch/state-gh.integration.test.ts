@@ -437,39 +437,16 @@ describe('readPrStateReading', () => {
     });
   });
 
-  it('defaults the expected set from the observed surface and marks it undeclared', () => {
+  it('reads the reviewers from the pull request: the author of its review, and not the person a request is pending of', () => {
+    // The view lists a pending request of a person; the harvest carries one
+    // bot's review. A request of a person is not a review in progress.
     const reading = readPrStateReading({
       target: { number: 461 },
       ...ghSeam,
       execFileSync: makeExecutor({}, []),
     });
-    expect(reading.expectedDeclared).toBe(false);
-    expect([...reading.expectedReviewers].sort((a, b) => a.localeCompare(b))).toEqual([
-      'copilot-pull-request-reviewer',
-      'jimCresswell',
-    ]);
-  });
-
-  it('a declared expected set wins and marks declared', () => {
-    const reading = readPrStateReading({
-      target: { number: 461 },
-      ...ghSeam,
-      expectedReviewers: ['copilot-pull-request-reviewer'],
-      execFileSync: makeExecutor({}, []),
-    });
-    expect(reading.expectedDeclared).toBe(true);
     expect(reading.expectedReviewers).toEqual(['copilot-pull-request-reviewer']);
-  });
-
-  it('a set declared EMPTY (--expect none) is declared, never defaulted from the observed surface', () => {
-    const reading = readPrStateReading({
-      target: { number: 461 },
-      ...ghSeam,
-      expectedReviewers: [],
-      execFileSync: makeExecutor({}, []),
-    });
-    expect(reading.expectedDeclared).toBe(true);
-    expect(reading.expectedReviewers).toEqual([]);
+    expect(reading.reviewRequests).toEqual([]);
   });
 
   it('degrades the runs leg to a typed unavailable when gh agent-task fails', () => {

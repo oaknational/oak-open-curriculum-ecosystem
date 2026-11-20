@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import type { ReviewConfiguration } from './review-configuration.js';
 
 import { mostBlockingLeg } from './most-blocking-leg.js';
 import { computeReviewerLegs, isSignedSelfReply } from './reviewer-legs.js';
@@ -35,19 +34,11 @@ const base: {
   content: ContentLeg;
   checksGreenAt: string | null;
   roundRequests: readonly RoundRequest[];
-  reviewConfiguration: ReviewConfiguration;
 } = {
   headRefOid: TIP,
   content: NO_CONTENT,
   checksGreenAt: '2026-07-21T11:50:00Z',
   roundRequests: [],
-  reviewConfiguration: { kind: 'unread', reason: 'the test reading declares none' },
-};
-
-const NO_REVIEW_ON_PUSH: ReviewConfiguration = {
-  kind: 'configured',
-  reviewOnPush: false,
-  reviewDraft: false,
 };
 
 describe('computeReviewerLegs', () => {
@@ -400,13 +391,12 @@ describe('isSignedSelfReply', () => {
   });
 });
 
-describe('computeReviewerLegs — the base branch reviews no later push (review_on_push false)', () => {
+describe('computeReviewerLegs — a later tip, for a reviewer whose review of an earlier commit is in', () => {
   const earlier = review({ commitOid: OLD, submittedAt: '2026-07-21T11:00:00Z' });
 
   it('UNOWED on a later tip once the vendor reviewed an earlier one and nothing is requested', () => {
     const legs = computeReviewerLegs({
       ...base,
-      reviewConfiguration: NO_REVIEW_ON_PUSH,
       expectedReviewers: ['copilot-pull-request-reviewer'],
       reviews: [earlier],
       reviewRequests: [],
@@ -421,7 +411,6 @@ describe('computeReviewerLegs — the base branch reviews no later push (review_
   it('OWED while a request is outstanding on the tip: a hand-made request makes the leg owed again', () => {
     const legs = computeReviewerLegs({
       ...base,
-      reviewConfiguration: NO_REVIEW_ON_PUSH,
       expectedReviewers: ['copilot-pull-request-reviewer'],
       reviews: [earlier],
       reviewRequests: ['copilot-pull-request-reviewer'],
@@ -433,7 +422,6 @@ describe('computeReviewerLegs — the base branch reviews no later push (review_
   it('OWED while a round asked of the vendor after its standing review stands in the pull request history: the pending surface lists no bot here', () => {
     const legs = computeReviewerLegs({
       ...base,
-      reviewConfiguration: NO_REVIEW_ON_PUSH,
       expectedReviewers: ['copilot-pull-request-reviewer'],
       reviews: [earlier],
       reviewRequests: [],
@@ -446,7 +434,6 @@ describe('computeReviewerLegs — the base branch reviews no later push (review_
   it('UNOWED when the only round asked of the vendor was answered by its standing review', () => {
     const legs = computeReviewerLegs({
       ...base,
-      reviewConfiguration: NO_REVIEW_ON_PUSH,
       expectedReviewers: ['copilot-pull-request-reviewer'],
       reviews: [earlier],
       reviewRequests: [],
@@ -459,7 +446,6 @@ describe('computeReviewerLegs — the base branch reviews no later push (review_
   it('OWED before the vendor has reviewed any tip: the configured first review is awaited, never raced', () => {
     const legs = computeReviewerLegs({
       ...base,
-      reviewConfiguration: NO_REVIEW_ON_PUSH,
       expectedReviewers: ['copilot-pull-request-reviewer'],
       reviews: [],
       reviewRequests: [],
@@ -468,16 +454,57 @@ describe('computeReviewerLegs — the base branch reviews no later push (review_
     expect(legs[0]?.state).toBe('OWED');
   });
 
-  it('binds the Copilot leg only: another expected reviewer stays OWED on the same tip', () => {
+  it('still owes nothing when the reviewer’s only word on the tip is an empty-bodied thread reply', () => {
+    // The API creates an empty review for every thread reply; it says nothing
+    // about the tip, so the earlier review stands as it would without it.
     const legs = computeReviewerLegs({
       ...base,
-      reviewConfiguration: NO_REVIEW_ON_PUSH,
+      expectedReviewers: ['copilot-pull-request-reviewer'],
+      reviews: [earlier, review({ body: '', submittedAt: '2026-07-21T11:58:00Z' })],
+      reviewRequests: [],
+      now: T0,
+    });
+    expect(legs[0]?.state).toBe('UNOWED');
+  });
+
+  it('holds for every reviewer: one who reviewed an earlier commit owes nothing on a later one until a round is asked', () => {
+    const legs = computeReviewerLegs({
+      ...base,
       expectedReviewers: ['copilot-pull-request-reviewer', 'chatgpt-codex-connector'],
       reviews: [earlier, review({ author: 'chatgpt-codex-connector', commitOid: OLD })],
       reviewRequests: [],
       now: T0,
     });
-    expect(legs.map((leg) => leg.state)).toEqual(['UNOWED', 'OWED']);
+    expect(legs.map((leg) => leg.state)).toEqual(['UNOWED', 'UNOWED']);
+  });
+
+  it('holds whatever the base branch configures: a review in progress is read from a round asked, never from the configuration', () => {
+    const settled = computeReviewerLegs({
+      ...base,
+      expectedReviewers: ['claude'],
+      reviews: [review({ author: 'claude', commitOid: OLD, submittedAt: '2026-07-21T11:00:00Z' })],
+      reviewRequests: [],
+      now: T0,
+    });
+    expect(settled[0]?.state).toBe('UNOWED');
+
+    const unread = computeReviewerLegs({
+      ...base,
+      expectedReviewers: ['claude'],
+      reviews: [review({ author: 'claude', commitOid: OLD, submittedAt: '2026-07-21T11:00:00Z' })],
+      reviewRequests: [],
+      now: T0,
+    });
+    expect(unread[0]?.state).toBe('UNOWED');
+
+    const asked = computeReviewerLegs({
+      ...base,
+      expectedReviewers: ['claude'],
+      reviews: [review({ author: 'claude', commitOid: OLD, submittedAt: '2026-07-21T11:00:00Z' })],
+      reviewRequests: ['claude'],
+      now: T0,
+    });
+    expect(asked[0]?.state).toBe('OWED');
   });
 
   it('a failed review of this tip is never UNOWED: a tip-bound unevaluable marker keeps the leg OWED and the timeout arm ends it', () => {
@@ -491,7 +518,6 @@ describe('computeReviewerLegs — the base branch reviews no later push (review_
     });
     const inside = computeReviewerLegs({
       ...base,
-      reviewConfiguration: NO_REVIEW_ON_PUSH,
       expectedReviewers: ['copilot-pull-request-reviewer'],
       reviews: [earlier, bounce],
       reviewRequests: [],
@@ -500,7 +526,6 @@ describe('computeReviewerLegs — the base branch reviews no later push (review_
     expect(inside[0]?.state).toBe('OWED');
     const past = computeReviewerLegs({
       ...base,
-      reviewConfiguration: NO_REVIEW_ON_PUSH,
       expectedReviewers: ['copilot-pull-request-reviewer'],
       reviews: [earlier, bounce],
       reviewRequests: [],
@@ -525,28 +550,8 @@ describe('computeReviewerLegs — the base branch reviews no later push (review_
     (_case, earlierBody) => {
       const legs = computeReviewerLegs({
         ...base,
-        reviewConfiguration: NO_REVIEW_ON_PUSH,
         expectedReviewers: ['copilot-pull-request-reviewer'],
         reviews: [earlierBody],
-        reviewRequests: [],
-        now: T0,
-      });
-      expect(legs[0]?.state).toBe('OWED');
-    },
-  );
-
-  it.each<ReviewConfiguration>([
-    { kind: 'unread', reason: 'the test reading declares none' },
-    { kind: 'absent' },
-    { kind: 'configured', reviewOnPush: true, reviewDraft: false },
-  ])(
-    'keeps the leg OWED under a configuration that is not a read review_on_push=false: %o',
-    (reviewConfiguration) => {
-      const legs = computeReviewerLegs({
-        ...base,
-        reviewConfiguration,
-        expectedReviewers: ['copilot-pull-request-reviewer'],
-        reviews: [earlier],
         reviewRequests: [],
         now: T0,
       });

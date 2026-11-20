@@ -88,15 +88,23 @@ describe('parseStateView', () => {
     ).toBe(true);
   });
 
-  it('maps review requests to logins (User) and slugs (Team)', () => {
+  it('keeps the pending request of a bot and sets aside those of a person and a team', () => {
+    // A review in progress is a bot's; a request of a person is not waited for.
     const parsed = parseStateView({
       ...stateViewFixture(),
       reviewRequests: [
-        { __typename: 'User', login: 'jimCresswell' },
+        { __typename: 'User', login: 'a-person' },
         { __typename: 'Team', name: 'platform', slug: 'platform-team' },
+        { __typename: 'Bot', login: 'a-review-bot' },
       ],
     });
-    expect(parsed.reviewRequests).toEqual(['jimCresswell', 'platform-team']);
+    expect(parsed.reviewRequests).toEqual(['a-review-bot']);
+  });
+
+  it('still refuses a request with no identity, of whatever kind', () => {
+    expect(() =>
+      parseStateView({ ...stateViewFixture(), reviewRequests: [{ __typename: 'User' }] }),
+    ).toThrow();
   });
 
   it('normalises null rollup and null requests to empty (no-checks PRs parse)', () => {

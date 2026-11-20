@@ -98,15 +98,10 @@ function github(harvests: Harvests, view: StateViewSeed): GhCommandExecutor {
   };
 }
 
-function reading(
-  harvests: Harvests,
-  expectedReviewers: readonly string[],
-  view: StateViewSeed = OPEN_VIEW,
-) {
+function reading(harvests: Harvests, view: StateViewSeed = OPEN_VIEW) {
   return readPrStateReading({
     target: { number: 7, repo: 'acme/widgets' },
     execFileSync: github(harvests, view),
-    expectedReviewers,
     patchIdOf: textHasher,
   });
 }
@@ -121,7 +116,7 @@ describe('readPrStateReading — the content leg', () => {
   };
 
   it("reads a reviewed commit's content against the view's base, for the named repository", () => {
-    expect(reading({ reviews: [review], comments: [] }, [COPILOT]).content).toStrictEqual({
+    expect(reading({ reviews: [review], comments: [] }).content).toStrictEqual({
       kind: 'read',
       head: HEAD_PATCH,
       reviewed: [{ oid: BEFORE_SYNC, content: { kind: 'id', id: BEFORE_PATCH } }],
@@ -138,7 +133,7 @@ describe('readPrStateReading — the content leg', () => {
       lastEditedAt: null,
       editor: null,
     };
-    expect(reading({ reviews: [], comments: [comment] }, [CODEX]).content).toMatchObject({
+    expect(reading({ reviews: [], comments: [comment] }).content).toMatchObject({
       kind: 'read',
       reviewed: [{ oid: BEFORE_SYNC, content: { kind: 'id', id: BEFORE_PATCH } }],
     });
@@ -146,7 +141,7 @@ describe('readPrStateReading — the content leg', () => {
 
   it('reads no content for a pull request that is not open', () => {
     const merged = { ...OPEN_VIEW, state: 'MERGED' };
-    expect(reading({ reviews: [review], comments: [] }, [COPILOT], merged).content).toStrictEqual({
+    expect(reading({ reviews: [review], comments: [] }, merged).content).toStrictEqual({
       kind: 'unread',
       reason: 'the pull request is not open',
     });
@@ -172,23 +167,22 @@ describe('readPrStateReading — the rounds asked of each reviewer', () => {
       lastEditedAt: null,
       editor: null,
     };
-    const rounds = reading({ reviews: [], comments: [trigger], requests }, [
-      COPILOT,
-      CODEX,
-    ]).roundRequests;
-    expect(rounds).toHaveLength(3);
-    expect(rounds).toEqual(
+    const read = reading({ reviews: [], comments: [trigger], requests });
+    expect(read.roundRequests).toHaveLength(3);
+    expect(read.roundRequests).toEqual(
       expect.arrayContaining([
         { reviewer: COPILOT, at: '2026-07-21T12:20:00Z' },
-        { reviewer: CODEX, at: '2026-07-21T11:00:00Z' },
+        { reviewer: CODEX, at: '2026-07-21T11:00:00Z', implied: true },
         { reviewer: CODEX, at: '2026-07-21T12:30:00Z' },
       ]),
     );
+    // Both bots are asked, so both are reviewers the reading waits for.
+    expect(read.expectedReviewers).toEqual([COPILOT, CODEX]);
   });
 
   it('fails the reading when the request events cannot be read, never reading no round', () => {
     const unreadable = [{ __typename: 'ReviewRequestedEvent', requestedReviewer: null }];
-    expect(() => reading({ reviews: [], comments: [], requests: unreadable }, [COPILOT])).toThrow(
+    expect(() => reading({ reviews: [], comments: [], requests: unreadable })).toThrow(
       /review requests harvest failed/,
     );
   });

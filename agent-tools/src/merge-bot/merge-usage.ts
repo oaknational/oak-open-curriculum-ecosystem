@@ -14,7 +14,7 @@ export const DEFAULT_MAX_POLLS = 90;
 /** 50 minutes: the whole budget must end well inside GitHub's one-hour installation-token TTL. */
 export const MAX_BUDGET_SECONDS = 3000;
 
-export const MERGE_USAGE = `merge-bot merge --pr <number> --expect <reviewer>|none [--expect <reviewer> ...] [--unavailable <reviewer>=<comment-url> ...] [--json] [--interval <seconds>] [--max-polls <n>]
+export const MERGE_USAGE = `merge-bot merge --pr <number> [--json] [--interval <seconds>] [--max-polls <n>]
   Merges the PR via the sanctioned REST path: a code-class PR when — and only
   when — the settlement verdict is SETTLE-READY; merge-commit method always
   (refusing when repo settings disallow merge commits, never a squash
@@ -36,16 +36,12 @@ export const MERGE_USAGE = `merge-bot merge --pr <number> --expect <reviewer>|no
   naming the deadline) once the wall clock reaches five minutes before the
   minted token's own stated expiry — no merge call is ever fired in a round
   that could straddle it.
-  --expect declares the expected reviewer set (repeatable; REQUIRED here —
-  source it from the repository's automatic-review configuration; a
-  defaulted or blank set never merges). --expect none declares the set
-  EMPTY: the seat has judged that this work needs no pull-request review to
-  be safe and effective (the owner's word of 2026-10-27); it combines with
-  no login and no --unavailable, and the merge evidence names it.
-  --unavailable declares an expected reviewer down, naming the bot's own
-  comment on the pull request; it stands in for that reviewer's review only
-  on the pull request's own proof (pr-watch/declared-unavailable.ts), and a
-  refused declaration refuses the merge at once (repeatable).
+  The reviews are read from the pull request, and the command is told
+  none: a review in progress is waited for (a running review check, a live
+  agent run, a round asked of a bot reviewer; a request of a person is not
+  waited for), one review of any commit of the pull request must exist (a
+  skip notice is not a review), and every review thread must be resolved.
+  With no review the command refuses and says so; request one.
   --json puts EXACTLY the outcome object on stdout; progress moves to
   stderr.
   Exit map: 0 merged, 1 operational failure, 2 usage, 3 typed refusal —

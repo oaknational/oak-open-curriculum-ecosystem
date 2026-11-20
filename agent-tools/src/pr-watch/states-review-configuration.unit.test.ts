@@ -4,13 +4,13 @@ import { computePrVerdict } from './states.js';
 import { COPILOT, LATE_NOW, OLD_TIP, settledReading } from './state-reading-fixture.js';
 
 /**
- * The `pr state` surface of the configuration-derived owing (the owner's
- * word of 2026-10-16): a tip the base branch does not review settles with its
- * leg named UNOWED and the rule in evidence; an unread configuration keeps
- * the leg owed and the blocking verdict names the gap.
+ * The `pr state` surface of a later tip whose reviewer has reviewed an
+ * earlier commit: the leg reads UNOWED and the round settles, whatever the
+ * base branch's review configuration reads. The configuration stays in the
+ * evidence.
  */
 
-describe('computePrVerdict — what a tip is owed is read from the review configuration', () => {
+describe('computePrVerdict — a later tip owes a reviewer nothing once their earlier review is in', () => {
   const NO_REVIEW_ON_PUSH = {
     kind: 'configured',
     reviewOnPush: false,
@@ -24,7 +24,7 @@ describe('computePrVerdict — what a tip is owed is read from the review config
     submittedAt: '2026-07-21T12:05:00Z',
   };
 
-  it('a later tip the base branch does not review settles with the UNOWED leg and the rule named', () => {
+  it('a later tip settles with the UNOWED leg, and the configuration read is in the evidence', () => {
     const verdict = computePrVerdict(
       settledReading({ reviews: [earlierTipReview], reviewConfiguration: NO_REVIEW_ON_PUSH }),
       LATE_NOW,
@@ -35,12 +35,55 @@ describe('computePrVerdict — what a tip is owed is read from the review config
     expect(evidence).toContain('review_on_push=false');
   });
 
-  it('the same tip under an unread configuration stays owed, and the blocking verdict says why', () => {
+  it.each([
+    ['a reviewer whose earlier review is in', [earlierTipReview]],
+    ['a reviewer whose review binds the tip', undefined],
+  ])(
+    'waits while a review run is live for the pull request, beside %s: a review in progress is waited for whoever it is by',
+    (_whose, reviews) => {
+      // The run maps to no pending request, so no leg carries it.
+      const verdict = computePrVerdict(
+        settledReading({
+          ...(reviews === undefined ? {} : { reviews }),
+          reviewRuns: {
+            kind: 'read',
+            runs: [
+              { id: 'run-1', name: 'Review', createdAt: '2026-07-21T12:50:00Z', completedAt: null },
+            ],
+          },
+        }),
+        LATE_NOW,
+      );
+      expect(verdict.state).toBe('WAITING-REVIEW-RUN-LIVE');
+      expect(verdict.evidence.join('\n')).toContain('a review run is live');
+    },
+  );
+
+  it('waits while a review run is live before anyone has reviewed: the first review is in progress', () => {
+    const verdict = computePrVerdict(
+      settledReading({
+        expectedReviewers: [],
+        reviews: [],
+        reviewRuns: {
+          kind: 'read',
+          runs: [
+            { id: 'run-1', name: 'Review', createdAt: '2026-07-21T12:50:00Z', completedAt: null },
+          ],
+        },
+      }),
+      LATE_NOW,
+    );
+    expect(verdict.state).toBe('WAITING-REVIEW-RUN-LIVE');
+  });
+
+  it('the same tip under an unread configuration owes nothing either: the configuration is evidence and decides no leg', () => {
     const verdict = computePrVerdict(
       settledReading({ reviews: [earlierTipReview], checksGreenAt: '2026-07-21T12:55:00Z' }),
       LATE_NOW,
     );
-    expect(verdict.state).toBe('SILENT-WAIT-NO-REVIEWER');
-    expect(verdict.evidence.join('\n')).toContain('review configuration unread');
+    expect(verdict.state).toBe('SETTLING-QUIET-WINDOW');
+    const evidence = verdict.evidence.join('\n');
+    expect(evidence).toContain(`${COPILOT}: UNOWED`);
+    expect(evidence).toContain('review configuration unread');
   });
 });

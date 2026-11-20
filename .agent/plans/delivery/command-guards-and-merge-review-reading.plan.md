@@ -125,3 +125,36 @@ Part B was found to run through about 45 files of `pr state`, `pr tally`, `merge
 - Building a hold on Copilot's suppressed findings as a separate mechanism; they are body
   findings and fall under reading 3.
 - GitHub's review configuration, which the owner has said is correct.
+
+## Part B as built: the design, and what is done
+
+Written while building, so a seat that picks this up reads the design here.
+
+The set of reviewers is read from the pull request by `expected-reviewers.ts`. It is the
+authors of real reviews, plus the bot reviewers a round is asked of. Nothing declares it.
+
+- **A review in progress is a bot's.** The owner, 2026-11-20, by question prompt: a pending
+  request to a person is not waited for (code owners can be requested on every pull request). A running review check is waited for by the checks ladder; a live agent run and a
+  round asked of a bot are waited for by that bot's leg.
+- **The Codex round implied by a ready-for-review event** joins no set: on an estate without
+  the connector it would be owed for ever. An `@codex review` comment still asks a round.
+- **A reviewer whose review of an earlier commit is in owes nothing on a later tip** until a
+  round is asked of them (the leg state `UNOWED`, for every reviewer, whatever the base branch
+  configures). Done.
+- **A skip notice or a failed-run body is not a review**, so its author joins no set. Done.
+- **A timed-out or quota-skipped bot leg still refuses the merge**, as it did (the security
+  ruling of 2026-08-06: one satisfied leg never covers another reviewer timing out). With
+  `--unavailable` gone, a bot asked for a round that never answers holds that pull request
+  until the round is asked again and answered. A seat asks a bot only for a reason, so this
+  arises only after a hand request.
+- **A review connector that has commented on the pull request is a reviewer.** The Codex
+  connector reports by comment and posts no review object, so its comment is how the pull
+  request shows it is reviewing.
+- **Removed, in the first pull request of Part B:** `--expect <login>`, `--expect none`,
+  `--unavailable` and the declared-set refusals at the door.
+- **Still to do, as its own pull request:** the records-class door
+  (`RECORDS_CLASS_MERGE_STATES` in `merge-decision.ts`, and the narrowing in
+  `merge-records-checks.ts` that sets aside a pending check the base branch does not
+  require). It still merges a bot's documentation-only pull request with no review and past a
+  running review check. The owner's answer is that every pull request needs one review.
+- **Left as it is:** `review-cost`'s own `--expect`, which prices rounds and gates no merge.

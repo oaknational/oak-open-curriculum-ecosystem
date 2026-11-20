@@ -33,13 +33,15 @@ const namedRollupItemSchema = z
   })
   .loose();
 
-// A review request names a User (`login`) or a Team (`slug`, with `name` as a
-// fallback). An entry with NO identity field is misshapen external input and
-// fails loud at the boundary (strict-validation-at-boundary): transforming it
-// to 'unknown' would mint a real reviewer identifier that drives leg
-// verdicts.
+// A review request names a User or a Bot (`login`) or a Team (`slug`, with
+// `name` as a fallback). An entry with NO identity field is misshapen external
+// input and fails loud at the boundary (strict-validation-at-boundary):
+// transforming it to 'unknown' would mint a real reviewer identifier that
+// drives leg verdicts. The kind travels with the identity: only a bot's
+// pending request is a review in progress.
 const reviewRequestSchema = z
   .object({
+    __typename: z.string().optional(),
     login: z.string().optional(),
     slug: z.string().optional(),
     name: z.string().optional(),
@@ -48,7 +50,10 @@ const reviewRequestSchema = z
   .refine((value) => (value.login ?? value.slug ?? value.name) !== undefined, {
     message: 'review request carries no User/Team identity field (login/slug/name)',
   })
-  .transform((value) => value.login ?? value.slug ?? value.name ?? 'unknown');
+  .transform((value) => ({
+    identity: value.login ?? value.slug ?? value.name ?? 'unknown',
+    bot: value.__typename === 'Bot',
+  }));
 
 const stateViewSchema = z.object({
   number: z.number(),
@@ -78,10 +83,14 @@ const stateViewSchema = z.object({
     .loose()
     .nullish()
     .transform((value) => value !== null && value !== undefined),
+  // A pending request of a person or a team is validated and then set aside:
+  // it is not waited for.
   reviewRequests: z
     .array(reviewRequestSchema)
     .nullish()
-    .transform((value) => value ?? []),
+    .transform((value) =>
+      (value ?? []).filter((request) => request.bot).map((request) => request.identity),
+    ),
 });
 
 /** The exact `--json` field set the `pr state` gh call requests: the fields the view schema parses. */
@@ -103,6 +112,7 @@ export interface ParsedStateView {
   readonly namedChecks: readonly NamedCheck[];
   readonly checksGreenAt: string | null;
   readonly autoMergeArmed: boolean;
+  /** The bots GitHub lists a pending review request of. */
   readonly reviewRequests: readonly string[];
 }
 

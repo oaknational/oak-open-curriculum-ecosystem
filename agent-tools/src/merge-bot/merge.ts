@@ -1,14 +1,13 @@
 import { err, ok, type Result } from '@oaknational/result';
 
 import { parsePrTarget, type PrTarget } from '../pr-watch/gh.js';
-import type { UnavailableInput } from '../pr-watch/state-compose.js';
 import { readPrStateReading, type ReadPrStateOptions } from '../pr-watch/state-gh.js';
 import type { PrStateReading, PrVerdict } from '../pr-watch/state-types.js';
 import { decideMergeAction, type MergeDecision } from './merge-decision.js';
 import { realFetch } from './github-fetch.js';
 import { readMergeSettings, putMerge } from './merge-github-api.js';
 import { readExecutor } from './merge-read-env.js';
-import { isBotAuthored, resolveVerdict } from './merge-records-checks.js';
+import { resolveVerdict } from './merge-records-checks.js';
 import { mintForConfig, type MintedToken, type MintSeams } from './mint-for-config.js';
 import type { GithubApiFetch } from './mint-installation-token.js';
 import type { BotIdentity } from './resolve-identity.js';
@@ -53,10 +52,7 @@ export interface MergeExecutionInput {
   /** The bot's app slug: the only author the records door admits (`app/<slug>`). */
   readonly appSlug: string;
   readonly prNumber: number;
-  /** DECLARED expected reviewer set — required; empty only when declared `none` (expect-flag.ts). */
-  readonly expectedReviewers: readonly string[];
   readonly nowIso: string;
-  readonly unavailable?: UnavailableInput;
   readonly seams: MergeExecutionSeams;
 }
 
@@ -102,11 +98,7 @@ export async function runMergeExecution(
     return target;
   }
   const readReading = input.seams.readReading ?? defaultReadReading(input.seams.baseEnv);
-  const reading = readReading({
-    target: target.value,
-    expectedReviewers: input.expectedReviewers,
-    ...(input.unavailable === undefined ? {} : { unavailable: input.unavailable }),
-  });
+  const reading = readReading({ target: target.value });
   if (!reading.ok) {
     return reading;
   }
@@ -202,9 +194,6 @@ async function gateAndMerge(context: {
     decideMergeAction({
       verdict,
       allowMergeCommit,
-      expectedDeclared: reading.expectedDeclared,
-      declaredEmpty: reading.expectedReviewers.length === 0,
-      botAuthored: isBotAuthored(reading.author, input.appSlug),
       changeClass,
     });
 
