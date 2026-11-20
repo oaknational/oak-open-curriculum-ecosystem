@@ -5,7 +5,7 @@ name: 'Remove owner gates from the plan schema'
 overview: >-
   Take the owner_gates field, its expiry clock and its session-open alert out of the plan
   schema and its tooling, and turn each existing gate into a plain note in its plan.
-status: ratified
+status: archived
 ratified_by: owner
 ratified_date: 2026-11-19
 ratified_where: "The owner's answer to a question prompt in the session of Sandpiper guards Wind (690653), 2026-11-19: 'Remove them'"
@@ -14,8 +14,12 @@ impact_areas:
   - practice-and-estate
 tickets: []
 depends_on: []
-last_updated: 2026-11-19
+last_updated: 2026-11-20
 ---
+
+Completed by oaknational#1035, merged 2026-11-20. Tooling and corpus changed in one pull
+request, because the strict schema would have refused the corpus otherwise. ADR-200, ADR-216,
+ADR-221 and ADR-227 still mention owner gates and were left for the owner.
 
 # Remove owner gates from the plan schema
 
