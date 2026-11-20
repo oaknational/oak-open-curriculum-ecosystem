@@ -54,3 +54,31 @@ The account with its sources is the addendum to the reunification retrospective 
   recorded as new by seat after seat; they are listed in the action-time design plan. Two
   entries there say why: a lesson in a buffer does not fire at a fluent verdict, and having a
   home is not reaching the agent.
+
+## 2026-11-20 — Sandpiper guards Wind (690653): six pull requests at the owner's word
+
+- **Correction (owner):** "telling the tool to expect certain reviews is backwards". I had
+  merged oaknational#1033 on a final commit no review covered, passing `--expect claude`, and
+  was about to do the same on 1036 while its "Claude Code Review" check was still pending.
+  Before a merge I now read the pull request: a pending review check is waited for, one review
+  at least exists, every finding has a disposition. Recorded as friction F-298 and planned.
+- **Correction (owner):** request a reviewer only for a reason (no review yet, a sensitive
+  area), never for ceremony. I had requested none that day; the reviews were the automatic ones.
+- **Mistake (mine):** I wrote a commit subject with the breaking-change marker (`refactor!`) on
+  the owner-gates removal. The local `prevent-accidental-major-version` hook passed it. I
+  reworded it before the push. Whether the hook should have refused it is unchecked.
+- **Mistake (mine):** two edits to the operator profile failed (the file was unread) and the
+  commit in the same batch went ahead, so the pushed commit's message said "ratified" before the
+  text did. A second commit fixed the text. Dependent calls do not go in one batch.
+- **Mistake (mine):** I ran a wildcard stage and the guard refused it, correctly. The staged
+  list for a 190-file change was then built from `git status`, read, and passed as paths.
+- **Reviewer finding upheld:** my first correction of the merge-hold text said what the tool
+  does not do, at five sites. That is the negation form the no-tombstones rule forbids. A
+  removal is written as what is, with nothing about what was.
+- **Surprise:** the upstream API has had a v1 since before this was looked at; v0 calls itself
+  frozen. The cache is at 0.7.0. The advisory schema-drift check has reported drift on every
+  pull request and passes, so nobody acted on it.
+- **Surprise:** `review-cost survey` counted no round on 1033 although a review raised two
+  findings that were cured by a push. The ledger row says so.
+- **What worked:** a background loop on `gh pr checks` that exits when nothing is pending wakes
+  the seat when the review check finishes, with no reviewer list.
