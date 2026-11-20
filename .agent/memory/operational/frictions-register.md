@@ -4866,9 +4866,9 @@ Observed twice on 2026-09-29 by the Director: `.agent/rules/.logs` refused by th
 - **Expected**, in the owner's terms: the tool takes no declared reviewer set. It reads the pull
   request: at least one review exists; a review in progress is waited for; every review is
   dealt with, where declining to act is a way of dealing with it.
-- **Candidate cure**: none designed. How "dealt with" is read by a machine, and how this meets
-  the records-class rule that merges at green checks, are open and are the owner's to settle
-  with the seat that takes the work.
+- **Candidate cure**: the delivery node `command-guards-and-merge-review-reading`, Part B. Two
+  readings in it are for the owner to confirm: whether the one review must cover the final
+  commit, and whether a records-class pull request also needs one.
 - **Target surface**: agent-tools CLI (`merge-bot`, `pr-watch`).
 - **Status**: open.
 - **Owner direction status**: owner-directed (2026-11-20). Until the tool changes, a seat

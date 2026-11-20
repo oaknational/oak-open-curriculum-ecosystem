@@ -1212,3 +1212,30 @@ inside a rule name).
   planned, not built.
 - **The review bot has credit again.** `claude[bot]` reviewed 1033, 1034 and 1035 on
   2026-11-20.
+- **Later on 2026-11-20, at the owner's word.** The decision records are trued: ADR-216 carries
+  a dated amendment withdrawing owner gates, and ADR-221 and ADR-227 no longer use the term for
+  the schema field. ADR-200's one mention is left: it is a dated amendment of 2026-07-06 about
+  a past plan's stages and predates the field. Three plan nodes are written:
+  `upstream-api-currency` (strategic, a sketch awaiting ratification, serves TOOLS-1) with its
+  delivery node `migrate-to-curriculum-api-v1` (a sketch); and
+  `command-guards-and-merge-review-reading`, which supersedes the guard-only node and adds the
+  merge tool reading reviews from the pull request (friction F-298). The owner's order: the
+  guard and merge-tool work is one pull request, after the decision-record work.
+- **The owner on reviewers, 2026-11-20.** "Only invoke PR reviewers if there is a good reason,
+  such as no review yet, or work in a sensitive area, do not do it just for ceremony, it's too
+  expensive for that". The automatic review at open is correct configuration.
+- **Resume here (written at the owner's compaction word, 2026-11-20).** In order:
+  1. oaknational#1037 carries the decision-record amendments alone. Wait for its review check,
+     deal with the review, merge it by the merge tool, cut the successor coordination branch.
+  2. The three plan nodes, the superseded guard node, friction F-298's cure line, this record
+     and the napkin entry are committed on the coordination branch and deliberately not pushed:
+     pushed, they would join 1037 and make it two concerns. They go up as the next pull request
+     once 1037 has merged.
+  3. Ask the owner, by question prompt: to ratify `upstream-api-currency` and
+     `migrate-to-curriculum-api-v1` (both sketches); and the two readings in
+     `command-guards-and-merge-review-reading` (whether the one review must cover the final
+     commit; whether a records-class pull request also needs one).
+  4. Then the guard and merge-tool work, one pull request, in a lane worktree cut from
+     `origin/main`.
+  5. Ledger rows for 1036 and 1037 are owed at the next wrap.
+  Unchecked: whether `prevent-accidental-major-version` should refuse a `!` subject.
