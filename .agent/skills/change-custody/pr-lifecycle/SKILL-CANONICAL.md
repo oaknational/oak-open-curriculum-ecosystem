@@ -312,9 +312,9 @@ has read and tested, and the passing of a round are never reasons.
 Copilot's absence never blocks a merge on a docs-only bot-authored pull
 request (the owner's 2026-09-03 exception, §merge boundary item 5;
 `merge-bot merge` reads the class from the diff and merges it at green, the
-review harvested after the merge); on a code pull request the configured
-Copilot leg reads UNOWED on a tip the configuration does not review and
-nothing was requested on (state machine item 3), and the round settles on
+review harvested after the merge); on a code pull request a
+reviewer's leg reads UNOWED on a tip after the commit they reviewed, with no
+round asked of them since (state machine item 3), and the round settles on
 it; the leg is OWED only while a review of that tip is due and has not
 bound (§merge boundary). Suppressed findings are Copilot's own low-confidence
 bucket: the burden of proof is REPRODUCTION before cure — a non-reproducing
@@ -944,7 +944,8 @@ corpus is recorded at its first tallied pull request.
    (items 1 and 3: ANY Phase 3-harvested review binding the current tip —
    the per-author `latestReviews` pointer below can point BACKWARDS when an
    older-tip review job completes after a newer push) and the expected
-   reviewer set (item 3: from repository configuration). The selection:
+   reviewer set (item 3: read from the pull request's reviews and request
+   history). The selection:
    `headRefOid` (the current tip every review binding is compared
    against) + `mergeStateStatus` + unresolved `reviewThreads` count +
    `statusCheckRollup` + `latestReviews(first:20){totalCount
@@ -1475,11 +1476,11 @@ create` on such a branch exits non-zero with "a pull request for branch …
    the draft/ready toggle, which fires nothing on a pull request already
    undrafted once. After a push, read `pr state` on the new tip: a leg it
    reads SATISFIED, exactly or by content (state machine item 3), needs
-   nothing; a leg it reads UNOWED (the configuration reviews no later push
-   and nothing is requested) settles, and is requested only for a stated
+   nothing; a leg it reads UNOWED (the reviewer reviewed an earlier commit
+   and no round is asked of them since) settles, and is requested only for a stated
    reason; a leg it reads OWED (a review of this tip is due and has not
    bound) waits for it. A CODE pull request lands only through the front
-   door with every configured leg as the tool reads it on the tip —
+   door with every reviewer's leg as the tool reads it on the tip —
    SATISFIED or UNOWED, or the posted subagent review where a vendor is
    unavailable and a review was wanted (item 3's owner ruling of
    2026-09-10) — never by the REST merge below. The exception stands for
@@ -1672,7 +1673,8 @@ grep -E "^-" | grep -v "^---"` and read every printed line — each is an
   does not re-request, and a request on the new tip is made only for a stated
   reason (Phase 2's review request policy, 2026-10-27), never to fill the
   leg; a leg `pr state` reads
-  UNOWED (the configuration reviews no later push, item 3) needs no request
+  UNOWED (the reviewer reviewed an earlier commit and no round is asked of
+  them since, item 3) needs no request
   and settles, so request it only when a review of that tip is wanted, and
   once a request is made the merge is not attempted until the request is read
   back on the `reviewRequests` surface: a request not yet registered reads as

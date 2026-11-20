@@ -316,18 +316,15 @@ the review at most once per push that settles a round (a cure, a shape change), 
 only for a stated reason; a pure sync push (main merged in, a rebase with no content change) requests
 nothing, and the declared intake on the pull request body bounds the loop.
 
-**What is owed is read from the repository's review configuration.** `pr
-state` reads the base branch's rules (`GET
+**What is owed is read from the pull request.** A reviewer who has reviewed an
+earlier commit of the pull request, has said nothing with a body on the tip,
+and has no round asked of them since reads `UNOWED` and settles; a round whose
+threads are all resolved then merges with no request made. A request makes the
+leg owed again, so the round stays the seat's to spend. This holds for every
+reviewer. `pr state` still reads the base branch's rules (`GET
 /repos/{owner}/{repo}/rules/branches/{base}`, the `copilot_code_review` rule;
 Metadata read suffices) with every reading and names the result in its
-evidence. Where the rule reviews no later push (`review_on_push` false, the
-owner's setting of 2026-10-15), a tip nothing is requested on, once the vendor
-has reviewed an earlier tip of the pull request, reads `UNOWED` and settles; a
-round whose threads are all resolved then merges with no request made. A
-request by hand makes the leg owed again, so the round stays the seat's to
-spend. An unread or absent configuration keeps every expected leg owed, named
-as such in the evidence (the owner's word of 2026-10-16: derive what is owed
-from the configuration, never from an assumed review on every push).
+evidence, as information; the configuration does not decide what is owed.
 
 ## Verifying the bot's signatures locally
 

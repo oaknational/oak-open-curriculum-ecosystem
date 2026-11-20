@@ -172,7 +172,8 @@ function noReviewVerdict(reading: PrStateReading): PrVerdict {
 /** Resolve the reviewer-leg half of the verdict for an otherwise-green PR. */
 export function reviewerLegVerdict(reading: PrStateReading, now: string): PrVerdict {
   if (reading.expectedReviewers.length === 0) {
-    return noReviewVerdict(reading);
+    // A run in flight before anyone has reviewed is the first review in progress.
+    return liveRunVerdict(reading, []) ?? noReviewVerdict(reading);
   }
   const legs = computeReviewerLegs({
     headRefOid: reading.headRefOid,
