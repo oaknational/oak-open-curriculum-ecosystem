@@ -14,7 +14,6 @@ impact_areas:
   - served-surface
 tickets: []
 depends_on: []
-owner_gates: []
 last_updated: 2026-11-05
 ---
 

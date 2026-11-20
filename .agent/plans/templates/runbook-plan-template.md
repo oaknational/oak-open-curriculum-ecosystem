@@ -19,7 +19,6 @@ impact_areas:
   - <area from impact-areas.md>
 tickets: []
 depends_on: []
-owner_gates: []
 last_updated: <YYYY-MM-DD>
 ---
 

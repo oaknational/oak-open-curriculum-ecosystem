@@ -10,9 +10,7 @@ ratified_where: "PR #529 owner ratification record (the Copilot CLI instance): h
 serves: FRAME-1
 impact_areas:
   - practice-and-estate
-gate_expiry_default: P21D
 depends_on: []
-owner_gates: []
 tickets:
   - MCP-150
   - MCP-154

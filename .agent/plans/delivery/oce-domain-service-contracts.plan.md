@@ -19,7 +19,6 @@ depends_on:
     kind: beneficial
   - plan: oce-framework-lifecycle-contracts
     kind: beneficial
-owner_gates: []
 last_updated: 2026-10-10
 ---
 

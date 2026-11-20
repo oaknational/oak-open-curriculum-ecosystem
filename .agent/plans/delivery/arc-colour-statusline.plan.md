@@ -12,7 +12,6 @@ impact_areas:
   - practice-and-estate
 tickets: []
 depends_on: []
-owner_gates: []
 # The former mechanical gate (its record, conserved): the SUBSTANCE was
 # owner-ratified (direction 2026-07-20; re-asked and re-affirmed
 # 2026-08-03, both recorded in §Direction); the gate held only the

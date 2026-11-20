@@ -63,7 +63,6 @@ const STRATEGIC_LINES = [
   'serves: FRAME-1',
   'impact_areas:',
   '  - served-surface',
-  'gate_expiry_default: P3D',
   'last_updated: 2026-07-23',
 ];
 
@@ -215,40 +214,19 @@ describe('validatePlanFile — the D23 contract', () => {
     expect(result.error.messages.join('\n')).toContain('superseded_by');
   });
 
-  it('requires gate_expiry_default on strategic nodes and forbids it elsewhere', () => {
-    const missing = validatePlanFile(
-      's.plan.md',
-      planDoc(dropLine(STRATEGIC_LINES, 'gate_expiry_default:')),
-    );
-    if (isOk(missing)) {
-      expect.fail('strategic without tempo should reject');
-    }
-    expect(missing.error.messages.join('\n')).toContain('gate_expiry_default');
-
-    const forbidden = validatePlanFile(
-      'd.plan.md',
-      planDoc([...DELIVERY_LINES, 'gate_expiry_default: P3D']),
-    );
-    if (isOk(forbidden)) {
-      expect.fail('delivery with tempo should reject');
-    }
-    expect(forbidden.error.messages.join('\n')).toContain('gate_expiry_default');
+  it('accepts a strategic node that declares no gate tempo', () => {
+    const result = validatePlanFile('s.plan.md', planDoc(STRATEGIC_LINES));
+    expect(isOk(result)).toBe(true);
   });
 
-  it('rejects a malformed gate_expiry_default duration', () => {
-    const result = validatePlanFile(
-      's.plan.md',
-      planDoc(replaceLine(STRATEGIC_LINES, 'gate_expiry_default:', 'gate_expiry_default: 3 days')),
-    );
-    expect(isErr(result)).toBe(true);
-  });
-
-  it('rejects a sub-day gate_expiry_default (the grammar is day-scale by design)', () => {
-    const result = validatePlanFile(
-      's.plan.md',
-      planDoc(replaceLine(STRATEGIC_LINES, 'gate_expiry_default:', 'gate_expiry_default: PT12H')),
-    );
-    expect(isErr(result)).toBe(true);
+  it('rejects gate_expiry_default as an unknown key on every node type', () => {
+    for (const lines of [STRATEGIC_LINES, DELIVERY_LINES]) {
+      const result = validatePlanFile('p.plan.md', planDoc([...lines, 'gate_expiry_default: P3D']));
+      if (isOk(result)) {
+        expect.fail('a gate tempo should reject');
+      }
+      expect(result.error.messages.join('\n')).toContain('gate_expiry_default');
+    }
   });
 
   it('requires serves on strategic and delivery nodes', () => {
@@ -283,34 +261,23 @@ describe('validatePlanFile — the D23 contract', () => {
     expect(isOk(result)).toBe(true);
   });
 
-  it('rejects an owner gate without an absolute expiry', () => {
-    const result = validatePlanFile(
-      'd.plan.md',
-      planDoc([
-        ...DELIVERY_LINES,
+  it('rejects owner_gates as an unknown key, empty or not', () => {
+    const gateLines = [
+      ['owner_gates: []'],
+      [
         'owner_gates:',
         '  - awaiting: owner-decision',
         '    clears_when: The protocol is agreed',
-      ]),
-    );
-    if (isOk(result)) {
-      expect.fail('should reject');
-    }
-    expect(result.error.messages.join('\n')).toContain('expires');
-  });
-
-  it('rejects an unknown owner-gate awaiting value (closed enum)', () => {
-    const result = validatePlanFile(
-      'd.plan.md',
-      planDoc([
-        ...DELIVERY_LINES,
-        'owner_gates:',
-        '  - awaiting: vibes',
-        '    clears_when: Never',
         '    expires: 2026-07-26',
-      ]),
-    );
-    expect(isErr(result)).toBe(true);
+      ],
+    ];
+    for (const lines of gateLines) {
+      const result = validatePlanFile('d.plan.md', planDoc([...DELIVERY_LINES, ...lines]));
+      if (isOk(result)) {
+        expect.fail('an owner gate should reject');
+      }
+      expect(result.error.messages.join('\n')).toContain('owner_gates');
+    }
   });
 
   it('fails closed on a file with no frontmatter block', () => {

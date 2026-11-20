@@ -19,7 +19,6 @@
     "lint:runtime-only": "eslint --max-warnings 0 --config eslint.runtime-only.config.mjs \"runtime-only-scripts/**/*.mjs\"",
     "lint:shell": "pnpm agent-tools:repo-check shellcheck-tracked",
     "markdownlint-check:root": "pnpm agent-tools:repo-check markdownlint-tracked",
-    "plan-gates:check": "pnpm --filter {scope}/agent-tools check-plan-gate-drift",
     "portability:check": "pnpm --filter {scope}/agent-tools validate-portability",
     "practice:substrate:check": "pnpm --filter {scope}/agent-tools practice-substrate check",
     "profile:check": "pnpm --filter {scope}/agent-tools validate-operator-profile",

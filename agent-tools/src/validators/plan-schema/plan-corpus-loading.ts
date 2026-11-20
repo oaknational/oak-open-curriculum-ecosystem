@@ -2,12 +2,10 @@
  * Shared corpus-loading plumbing for the plan-schema instruments.
  *
  * @remarks
- * Both composition roots — `validate-plan-corpus.ts` (blocking
- * conformance gate) and `check-plan-gate-drift.ts` (non-blocking
- * persistent alert) — walk the same corpus root and parse the same
- * `*.plan.md` files; this module is that shared walk, extracted at the
- * second consumer. It owns file discovery and per-file parsing only;
- * what each instrument does with the parsed corpus stays its own.
+ * The composition root `validate-plan-corpus.ts` (the blocking
+ * conformance gate) walks the corpus root and parses its `*.plan.md`
+ * files through this module. It owns file discovery and per-file
+ * parsing only; what the gate does with the parsed corpus stays its own.
  *
  * @packageDocumentation
  */

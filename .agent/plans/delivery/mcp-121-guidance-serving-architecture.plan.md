@@ -16,7 +16,6 @@ tickets:
 depends_on:
   - plan: mcp-101-visible-surface-allowlist
     kind: beneficial
-owner_gates: []
 last_updated: 2026-07-23
 ---
 

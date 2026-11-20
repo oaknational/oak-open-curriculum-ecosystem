@@ -9,7 +9,6 @@ serves: best-of-each-practice
 impact_areas:
   - practice-and-estate
 tickets: []
-owner_gates: []
 last_updated: 2026-10-02
 ---
 

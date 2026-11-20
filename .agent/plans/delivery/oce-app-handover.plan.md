@@ -18,7 +18,6 @@ depends_on:
     kind: blocking
   - plan: oce-package-consumption-closure
     kind: blocking
-owner_gates: []
 last_updated: 2026-10-10
 ---
 

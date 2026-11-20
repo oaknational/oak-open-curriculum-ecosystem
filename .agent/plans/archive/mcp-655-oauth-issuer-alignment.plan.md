@@ -14,7 +14,6 @@ impact_areas:
 tickets:
   - MCP-655
 depends_on: []
-owner_gates: []
 last_updated: 2026-09-02
 ---
 

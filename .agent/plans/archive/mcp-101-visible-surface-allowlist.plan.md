@@ -13,7 +13,6 @@ impact_areas:
 tickets:
   - MCP-101
 depends_on: []
-owner_gates: []
 last_updated: 2026-07-24
 ---
 

@@ -10,9 +10,7 @@ ratified_where: "In-session word, Claude cloud session session_01DuocjT6NUndtf6a
 serves: FRAME-1
 impact_areas:
   - practice-and-estate
-gate_expiry_default: P21D
 depends_on: []
-owner_gates: []
 tickets: []
 last_updated: 2026-11-12
 ---

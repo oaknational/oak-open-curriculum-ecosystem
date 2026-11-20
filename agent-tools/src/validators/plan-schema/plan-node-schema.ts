@@ -18,10 +18,6 @@
  *   (`ratified_by` + `ratified_date` + `ratified_where`) is complete.
  * - Closed shapes throughout: the key set is strict and every enum is
  *   closed — new members arrive by reviewed, additive change.
- * - Owner gates always carry an absolute `expires` (no open-ended
- *   holding states); the default horizon is strategy-scoped data
- *   (`gate_expiry_default` on strategic nodes), never a schema
- *   constant.
  *
  * Cross-FILE rules (serves resolution, `impact_areas` registry
  * membership, `depends_on` resolution, and corpus non-emptiness)
@@ -44,14 +40,6 @@ const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 /** A Linear ticket reference, e.g. `MCP-101`. */
 const TICKET_ID = /^[A-Z][A-Z0-9]*-\d+$/;
 
-/**
- * Day-scale ISO-8601 duration, e.g. `P3D`, `P21D`. Deliberately narrow
- * (closed-additive): gate horizons are day-scale by design; finer or
- * coarser grammars arrive by reviewed change when a real tempo needs
- * one — never speculatively (also keeps the pattern simple, S5843).
- */
-const DAY_SCALE_DURATION = /^P\d+D$/;
-
 const kebabSlug = z.string().regex(KEBAB_SLUG, 'expected a kebab-case slug');
 const isoDate = z.string().regex(ISO_DATE, 'expected an ISO date (YYYY-MM-DD)');
 const nonEmpty = z.string().min(1);
@@ -59,13 +47,6 @@ const nonEmpty = z.string().min(1);
 /** A stamp field: a value once given, `null` while the plan is a sketch. */
 const stampText = nonEmpty.nullable();
 const stampDate = isoDate.nullable();
-
-/** An expiring owner gate — never an open holding state. */
-const ownerGateSchema = z.strictObject({
-  awaiting: z.enum(['owner-decision', 'external-input']),
-  clears_when: nonEmpty,
-  expires: isoDate.describe('expires: an absolute date is mandatory on every gate'),
-});
 
 /** A `depends_on` edge entry, typed on the edge. */
 const dependsOnSchema = z.strictObject({
@@ -89,12 +70,7 @@ const basePlanNodeSchema = z.strictObject({
     .array(z.string().regex(TICKET_ID, 'expected a ticket reference like MCP-101'))
     .optional(),
   depends_on: z.array(dependsOnSchema).optional(),
-  owner_gates: z.array(ownerGateSchema).optional(),
   superseded_by: kebabSlug.optional(),
-  gate_expiry_default: z
-    .string()
-    .regex(DAY_SCALE_DURATION, 'expected a day-scale ISO-8601 duration (e.g. P3D)')
-    .optional(),
   last_updated: isoDate,
 });
 
@@ -135,31 +111,11 @@ function refineSupersededCoupling(value: BasePlanNode, ctx: z.RefinementCtx): vo
 /** The per-type requirement matrix: [field, mustBePresent, message]. */
 const TYPE_RULES: Record<
   BasePlanNode['node_type'],
-  readonly [field: 'serves' | 'gate_expiry_default', present: boolean, message: string][]
+  readonly [field: 'serves', present: boolean, message: string][]
 > = {
-  strategic: [
-    ['serves', true, 'strategic nodes require serves (a published strategic-choice ID)'],
-    [
-      'gate_expiry_default',
-      true,
-      'strategic nodes require gate_expiry_default (the subtree tempo)',
-    ],
-  ],
-  delivery: [
-    ['serves', true, 'delivery plans require serves (a strategic node id)'],
-    [
-      'gate_expiry_default',
-      false,
-      'gate_expiry_default is strategy-scoped data: forbidden on delivery plans',
-    ],
-  ],
-  runbook: [
-    [
-      'gate_expiry_default',
-      false,
-      'gate_expiry_default is strategy-scoped data: forbidden on runbooks',
-    ],
-  ],
+  strategic: [['serves', true, 'strategic nodes require serves (a published strategic-choice ID)']],
+  delivery: [['serves', true, 'delivery plans require serves (a strategic node id)']],
+  runbook: [],
 };
 
 /** Per-type dispatch over the requirement matrix. */

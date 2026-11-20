@@ -8,7 +8,6 @@ serves: engineering-directions
 impact_areas:
   - practice-and-estate
 tickets: []
-owner_gates: []
 last_updated: 2026-09-24
 ---
 

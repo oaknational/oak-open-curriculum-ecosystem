@@ -17,12 +17,6 @@ tickets: []
 depends_on:
   - plan: innovation-kit-capability-architecture-definition
     kind: beneficial
-owner_gates:
-  - awaiting: owner-decision
-    clears_when: >-
-      The owner reviews this plan shape and the Stage-0 composition declaration (proposition,
-      claim boundary, activated and omitted capabilities, decision-budget seed) and says build.
-    expires: 2026-10-10
 last_updated: 2026-11-03
 ---
 

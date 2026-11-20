@@ -26,7 +26,6 @@ depends_on:
     kind: blocking
   - plan: lesson-search-freshness-and-error-envelope
     kind: beneficial
-owner_gates: []
 last_updated: 2026-08-19
 ---
 

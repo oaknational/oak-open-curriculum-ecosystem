@@ -68,7 +68,6 @@
     "validate-claim-freshness": "cd .. && pnpm exec tsx agent-tools/src/validators/claim-freshness/validate-claim-freshness.ts",
     "validate-check-ci-parity": "cd .. && pnpm exec tsx agent-tools/src/validators/check-ci-parity/validate-check-ci-parity.ts",
     "validate-plan-corpus": "cd .. && pnpm exec tsx agent-tools/src/validators/plan-schema/validate-plan-corpus.ts",
-    "check-plan-gate-drift": "cd .. && pnpm exec tsx agent-tools/src/validators/plan-schema/check-plan-gate-drift.ts",
     "validate-notion-fence": "cd .. && pnpm exec tsx agent-tools/src/validators/notion-fence/validate-notion-fence.ts",
     "validate-reference-direction": "cd .. && pnpm exec tsx agent-tools/src/validators/reference-direction/validate-reference-direction.ts",
     "validate-no-machine-local-paths": "cd .. && pnpm exec tsx agent-tools/src/validators/machine-local-paths/validate-no-machine-local-paths.ts",

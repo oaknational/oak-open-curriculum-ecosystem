@@ -12,7 +12,6 @@ impact_areas:
   - practice-and-estate
 tickets: []
 depends_on: []
-owner_gates: []
 # The former mechanical gate (its record, conserved): the substance was
 # RATIFIED by owner word 2026-08-01 (decision cards, Director session
 # 52841f) — the direct-first v1 shape, the close-event record, the

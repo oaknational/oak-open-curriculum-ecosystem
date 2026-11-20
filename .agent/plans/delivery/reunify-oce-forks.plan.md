@@ -13,10 +13,6 @@ impact_areas:
   - served-surface
 tickets: []
 depends_on: []
-owner_gates:
-  - awaiting: owner-decision
-    clears_when: "The owner gives the word for todo 6 steps 5 and 6: deleting the fork's 'integration branches' ruleset and its engraph branch, and the Oak pull request that drops engraph from the workflow triggers"
-    expires: 2026-12-18
 last_updated: 2026-11-19
 ---
 
@@ -101,9 +97,8 @@ back to being a plain mirror of Oak: one line of development again.
       default moved first it would land on `main` and block the mirror workflow's direct
       fast-forward. The ruleset "mirror branch: fast-forward only" already covers `main`.
    4. Switch the fork's default branch to `main`.
-   5. Once no open pull request has `engraph` as its base (deleting a base branch closes its pull
-      requests), delete the "integration branches" ruleset, then `engraph` on the fork. The
-      ruleset restricts deletion of the branch it covers, so the branch cannot go first.
+   5. Not done, by the owner's decision of 2026-11-20: "leave the engraph branch on the engraph
+      fork". The fork keeps `engraph` and the "integration branches" ruleset that covers it.
    6. One Oak pull request, as Oak's bot, drops `engraph` from the triggers in `ci.yml`,
       `codeql.yml` and `dependency-review.yml`. The carrier and mirror workflows stay in the tree:
       each job is gated on its variable and exits on a repository that is not a fork.

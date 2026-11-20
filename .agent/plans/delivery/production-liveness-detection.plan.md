@@ -12,7 +12,6 @@ tickets:
 depends_on:
   - plan: boot-failure-observability
     kind: beneficial
-owner_gates: []
 last_updated: 2026-09-03
 ---
 

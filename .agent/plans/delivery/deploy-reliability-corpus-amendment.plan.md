@@ -16,7 +16,6 @@ tickets:
   - MCP-480
   - MCP-481
 depends_on: []
-owner_gates: []
 last_updated: 2026-08-11
 ---
 

@@ -16,7 +16,6 @@ tickets: []
 depends_on:
   - plan: reliable-atoms-workspace-shape
     kind: beneficial
-owner_gates: []
 last_updated: 2026-10-10
 ---
 

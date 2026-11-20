@@ -14,7 +14,6 @@ tickets:
   - MCP-476
   - MCP-477
 depends_on: []
-owner_gates: []
 last_updated: 2026-10-02
 ---
 

@@ -12,9 +12,7 @@ ratified_where: "PR #85 (2026-09-08), whose body quotes the owner's card answer 
 serves: APP-2
 impact_areas:
   - served-surface
-gate_expiry_default: P3D
 depends_on: []
-owner_gates: []
 tickets: []
 last_updated: 2026-09-08
 ---

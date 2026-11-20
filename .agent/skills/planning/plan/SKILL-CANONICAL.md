@@ -159,16 +159,10 @@ stamp rebuilds a gate on the owner that the ruling forbids (2026-10-02 and
 - `depends_on` — each dependency classified `blocking` or `beneficial`;
   for each `beneficial` dependency, the body states the minimum
   shippable shape without it.
-- `owner_gates` — every gate names `awaiting`, `clears_when`, and an
-  absolute `expires` date. No open-ended holding states; the default
-  expiry horizon is set by the governing strategic node
-  (`gate_expiry_default`), not by a schema constant. Before writing
-  `awaiting: owner-decision`, name the standing ruling, ADR or lens that
-  would resolve the gate; if one exists the plan carries the enforcement
-  story instead of a gate (the design plan's item-14 gate, 2026-09-03:
-  expired, carded, and found to be a missing enforcement of a 2026-07-26
-  ruling). The "stated default on expiry" idiom is retired: no schema field
-  authorises it, and it converts owner silence into a shipped decision.
+A decision the plan awaits from the owner is a sentence in the plan's body
+that names the decision. Before writing one, name the standing ruling, ADR or
+lens that would resolve it; if one exists the plan carries the enforcement
+story instead. Owner silence is never converted into a shipped decision.
 
 ## Body Requirements
 
@@ -310,8 +304,7 @@ triggers ("when X ships", "tripwire fires on Z"). Conditional-trigger
 soup creates the illusion of activation flow while quietly stalling;
 work happens on definite ordering, not imagined event chains. Where
 genuine schedule uncertainty exists, name it as a real owner decision
-needing resolution now — that is what `owner_gates` with absolute
-expiries are for. Automatic firing conditions for maintenance/meta items
+needing resolution now, and put it to the owner as a question. Automatic firing conditions for maintenance/meta items
 whose timing no owner should own, and `depends_on` ordering (which IS
 the definite-sequence shape), remain legitimate. A step that needs an
 obligation not yet returned from a specification handoff is sequenced

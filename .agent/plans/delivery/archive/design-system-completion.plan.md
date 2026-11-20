@@ -26,7 +26,6 @@ depends_on: []
 # obligation removed by the plan-node schema §2026-08-07 amendment,
 # PR #817), so the gate DISCHARGED 2026-08-07 with tickets left [] — a
 # visibility ticket remains optional working practice.
-owner_gates: []
 # Both former gates RETIRED 2026-08-17 (owner ruling at the records-truth
 # pass, MCP-613: an unratified sketch holds no decisions on the owner's
 # clock). Their records, conserved: (1) the KNOWN-ISSUES item-14

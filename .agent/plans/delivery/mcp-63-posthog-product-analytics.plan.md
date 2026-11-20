@@ -29,7 +29,6 @@ tickets:
   - MCP-243
   - MCP-244
 depends_on: []
-owner_gates: []
 last_updated: 2026-07-27
 ---
 

@@ -14,7 +14,6 @@ tickets: []
 depends_on:
   - plan: lesson-search-freshness-and-error-envelope
     kind: blocking
-owner_gates: []
 last_updated: 2026-08-12
 ---
 

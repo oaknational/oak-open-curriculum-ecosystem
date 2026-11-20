@@ -10,9 +10,7 @@ ratified_where: "Owner word, Director session Petrel holds Turbulence (a0892f), 
 serves: TOOLS-2
 impact_areas:
   - design-system
-gate_expiry_default: P21D
 depends_on: []
-owner_gates: []
 tickets: []
 last_updated: 2026-08-05
 ---

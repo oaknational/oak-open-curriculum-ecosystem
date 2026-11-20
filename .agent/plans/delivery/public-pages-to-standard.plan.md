@@ -13,10 +13,6 @@ impact_areas:
   - packaging-and-distribution
 tickets: []
 depends_on: []
-owner_gates:
-  - awaiting: owner-decision
-    clears_when: "The owner reads the README branch as GitHub renders it, before todo 2's pull request opens"
-    expires: 2026-12-04
 last_updated: 2026-11-15
 ---
 

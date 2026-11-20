@@ -31,7 +31,6 @@ impact_areas:
 tickets:
   - MCP-661
 depends_on: []
-owner_gates: []
 last_updated: 2026-10-10
 ---
 

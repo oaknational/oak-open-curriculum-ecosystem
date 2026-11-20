@@ -14,7 +14,6 @@ impact_areas:
 tickets:
   - MCP-128
 depends_on: []
-owner_gates: []
 last_updated: 2026-07-26
 ---
 

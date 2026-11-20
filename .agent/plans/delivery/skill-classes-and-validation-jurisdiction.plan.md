@@ -11,7 +11,6 @@ serves: agent-platform-citizenship
 impact_areas:
   - practice-and-estate
 tickets: []
-owner_gates: []
 last_updated: 2026-11-16
 ---
 
