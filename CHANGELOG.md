@@ -1,3 +1,13 @@
+## [1.187.13](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.187.12...v1.187.13) (2026-11-20)
+
+## [1.187.12](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.187.11...v1.187.12) (2026-11-20)
+
+
+### Bug Fixes
+
+* **hook-policy:** keep both guards enforced by a build that predates the change ([36c5283](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/36c5283d61a36b66320e2ca953488a2a8526ca32))
+* **hook-policy:** match staging and forced-push guards on the invocation ([8aa7e3a](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/8aa7e3a0a2f59176aa23d048ce87ec36398a26dd))
+
 ## [1.187.11](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.187.10...v1.187.11) (2026-11-20)
 
 ## [1.187.10](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.187.9...v1.187.10) (2026-11-20)
