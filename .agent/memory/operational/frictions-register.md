@@ -4485,8 +4485,12 @@ Observed twice on 2026-09-29 by the Director: `.agent/rules/.logs` refused by th
 - **Candidate cure**: port JC.net's hold (`suppressed-hold.ts`, the pr-watch state and its
   tests) and the skill sentence to OCE.
 - **Target surface**: agent-tools CLI (`pr-watch`, `merge-bot`, OCE).
-- **Status**: open.
-- **Owner direction status**: standing
+- **Status**: closed 2026-11-20, not built. Between 2026-10-01 and 2026-11-19 the lifecycle
+  skill and `.agent/reference/merge-bot.md` came to describe the hold as present here; no such
+  code exists in this repository. Asked whether to build it or correct the text, the owner
+  chose "correct the docs". Both now say the merge tool does not read suppressed findings and
+  the merging seat dispositions them before it calls the tool.
+- **Owner direction status**: decided (2026-11-20)
 
 ### F-278 — nothing stops a commit or a push after the owner's stop word (2026-09-29)
 
