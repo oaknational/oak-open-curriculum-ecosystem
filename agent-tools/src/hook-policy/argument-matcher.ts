@@ -1,7 +1,7 @@
 import { GIT_GLOBAL_OPTIONS_WITH_ARGUMENT } from '../shell/git-global-options.js';
 import type { OptionSpec } from './argv-option-spec.js';
 import { interpreterScriptInSegment, substitutionInSegment } from './argv-nested.js';
-import { collectPresentOptions } from './argv-options.js';
+import { collectInvocationArguments } from './argv-options.js';
 import {
   findCommandTable,
   findSubcommandTable,
@@ -127,8 +127,14 @@ function invocationMatches(
   if (located === null) {
     return false;
   }
-  const present = collectPresentOptions(words.slice(located.argumentsStart), located.options);
-  return spec.required.every((name) => present.has(name));
+  const { present, operands } = collectInvocationArguments(
+    words.slice(located.argumentsStart),
+    located.options,
+  );
+  return (
+    spec.required.every((name) => present.has(name)) &&
+    (spec.operands ?? []).every((operand) => operands.includes(operand))
+  );
 }
 
 /**

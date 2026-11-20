@@ -152,6 +152,11 @@ export const BLOCKED_PATTERN_MATCH_KINDS = [
   'substring',
   'regex',
   'argv',
+  // The argument-aware matcher at the grammar that reads operands and the
+  // `git add` table. A build that predates this kind degrades the entry to the
+  // default mode, so an entry carrying it is still enforced before a rebuild;
+  // an `argv` entry such a build cannot parse would match nothing there.
+  'invocation',
 ] as const;
 
 /**

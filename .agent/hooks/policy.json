@@ -6,12 +6,14 @@
       "blocked_patterns": [
         {
           "pattern": "git push --force",
+          "match": "invocation",
           "concept": "history-destruction",
           "citation": ".agent/rules/never-use-git-to-remove-work.md",
           "reappraisal": "History here is append-only \u2014 never overwrite or rewrite it; integrate forward with new commits and reconcile branches without force-pushing or interactive rebase."
         },
         {
           "pattern": "git push -f",
+          "match": "invocation",
           "concept": "history-destruction",
           "citation": ".agent/rules/never-use-git-to-remove-work.md",
           "reappraisal": "History here is append-only \u2014 never overwrite or rewrite it; integrate forward with new commits and reconcile branches without force-pushing or interactive rebase."
@@ -103,18 +105,21 @@
         },
         {
           "pattern": "git add -A",
+          "match": "invocation",
           "concept": "wildcard-staging",
           "citation": ".agent/rules/stage-by-explicit-pathspec.md",
           "reappraisal": "Stage by explicit pathspec so a commit never bundles parallel-thread or unrelated work; name the exact files."
         },
         {
           "pattern": "git add --all",
+          "match": "invocation",
           "concept": "wildcard-staging",
           "citation": ".agent/rules/stage-by-explicit-pathspec.md",
           "reappraisal": "Stage by explicit pathspec so a commit never bundles parallel-thread or unrelated work; name the exact files."
         },
         {
           "pattern": "git add .",
+          "match": "invocation",
           "concept": "wildcard-staging",
           "citation": ".agent/rules/stage-by-explicit-pathspec.md",
           "reappraisal": "Stage by explicit pathspec so a commit never bundles parallel-thread or unrelated work; name the exact files."

@@ -889,15 +889,6 @@ Director's landing record of 2026-09-06, event f05a54da).
 - **The hook matches a blocked command's words anywhere in a command's text**, a quoted
   sentence in a heredoc included (2026-10-29; 2026-11-19). Text that names such a command goes
   into a file written with the file tool, and the command runs the file.
-- **The staging guard matches `add` followed later by a space and a dot anywhere on one
-  command line**: `git worktree add ... .claude/...`, an explicit-path `git add` followed by a
-  dot-sourced script, and a later `cp ... .` were each refused as wildcard staging (seven
-  recorded instances, 2026-11-04 to 2026-11-18). Give the path in absolute form and run the
-  `add` as its own command. The guard's pattern is not anchored to a `git add` invocation; no
-  lane has taken that fix.
-- **The force-push guard matches `-f` anywhere on a line that also pushes**: a later
-  `gh api graphql -f` on the same line was refused. Use `--raw-field`, or separate commands
-  (2026-11-12).
 - **The tracked-file gates read `git ls-files`.** A new file that is still untracked is
   invisible to `prettier-tracked` and the path validators, and a link to it reads as broken
   (`tracked-source-to-untracked-target`); a tracked file removed with `rm` is still in the index

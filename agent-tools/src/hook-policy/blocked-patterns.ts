@@ -132,7 +132,9 @@ function entryMatchesCommand(
   // `-r --force`, the flag after the operand). A pattern the tables cannot
   // parse matches nothing (fail-open, like an invalid regex); the
   // canonical-policy integration test makes that a commit-time failure.
-  if (entry.match === 'argv') {
+  // `invocation` is the same matcher under the kind name an older build does
+  // not know, so that build reads the entry in the default mode (`types.ts`).
+  if (entry.match === 'argv' || entry.match === 'invocation') {
     return matchesArgvPatternInSegments(entry.pattern, segmentsOf());
   }
 

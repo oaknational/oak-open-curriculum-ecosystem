@@ -56,12 +56,43 @@ describe('canonical policy: explicit-pathspec staging discipline (WS6)', () => {
     for (const command of ['git add -A', 'git add --all', 'git add .']) {
       const entry = findBlockedPattern(command, patterns);
       expect(entry).toMatchObject({
-        pattern: command,
         concept: 'wildcard-staging',
         citation: expectedCitation,
       });
       // The block must TEACH, not only refuse: a non-empty reappraisal travels to the agent.
       expect(entry?.reappraisal?.trim()).toBeTruthy();
+    }
+  });
+
+  it('blocks wildcard staging in every position the command can take', async () => {
+    const patterns = await loadBlockedPatterns();
+
+    for (const command of [
+      'git -C ../other add .',
+      'git add . -v',
+      'git add -- .',
+      'git add src/a.ts -A',
+      'pnpm test && git add .',
+      'pnpm test; git add --all',
+      'git add -Av',
+    ]) {
+      expect(findBlockedPattern(command, patterns)).toMatchObject({ concept: 'wildcard-staging' });
+    }
+  });
+
+  it('allows the commands the whole-line match refused although none stages by wildcard', async () => {
+    const patterns = await loadBlockedPatterns();
+
+    for (const command of [
+      'git worktree add -q --no-track -b lane .claude/worktrees/lane origin/main && ls .',
+      'git worktree add ../lane origin/main && cd ../lane && pnpm install && cp ../.env.local .',
+      'git add agent-tools/src/a.ts && . ./scripts/env.sh',
+      'git add docs/a.md && cp docs/a.md .',
+      'git add docs/a.md && git commit -q -F msg.txt -- docs/a.md && ls -A',
+      'git add -- a.ts b.ts; find . -name "*.orig"',
+      'git worktree add --detach ../probe HEAD; git -C ../probe status .',
+    ]) {
+      expect(findBlockedPattern(command, patterns)).toBeNull();
     }
   });
 
@@ -71,6 +102,76 @@ describe('canonical policy: explicit-pathspec staging discipline (WS6)', () => {
     expect(findBlockedPattern('git add packages/core/foo.ts', patterns)).toBeNull();
     expect(findBlockedPattern('git add ./packages/core/foo.ts', patterns)).toBeNull();
     expect(findBlockedPattern('git add .gitignore', patterns)).toBeNull();
+  });
+});
+
+describe('canonical policy: forced push', () => {
+  it('blocks a forced push under each spelling and in any segment', async () => {
+    const patterns = await loadBlockedPatterns();
+
+    for (const command of [
+      'git push --force',
+      'git push -f',
+      'git push origin HEAD -f',
+      'pnpm test && git -C ../other push -f origin main',
+    ]) {
+      expect(findBlockedPattern(command, patterns)).toMatchObject({
+        concept: 'history-destruction',
+      });
+    }
+  });
+
+  it('allows a push followed by another command that takes a short f option', async () => {
+    const patterns = await loadBlockedPatterns();
+    const command =
+      'git push origin HEAD && gh api graphql -f query=@q.graphql -f owner=o -f name=n';
+
+    expect(findBlockedPattern(command, patterns)).toBeNull();
+  });
+});
+
+describe('canonical policy: a build that predates the invocation match kind', () => {
+  it('still refuses the plain staging and forced-push commands, reading those entries in the default mode', async () => {
+    // A checkout whose built guard predates a match kind reads the new policy
+    // until it is rebuilt, and the schema degrades a kind it does not know to
+    // the default mode. Each spelling keeps its own entry so that reading
+    // refuses what it refused before.
+    const patterns = await loadBlockedPatterns();
+    const asAnOlderBuildReadsThem = patterns.map((raw) =>
+      typeof raw !== 'string' && raw.match === 'invocation'
+        ? { ...raw, match: 'token-subsequence' as const }
+        : raw,
+    );
+
+    for (const command of [
+      'git add -A',
+      'git add --all',
+      'git add .',
+      'git push --force',
+      'git push -f',
+    ]) {
+      expect(findBlockedPattern(command, asAnOlderBuildReadsThem)).toMatchObject({
+        pattern: command,
+      });
+    }
+  });
+
+  it('carries both guard families on the invocation match kind', async () => {
+    const patterns = await loadBlockedPatterns();
+    const kindOf = (pattern: string): string | undefined =>
+      patterns.flatMap((raw) =>
+        typeof raw !== 'string' && raw.pattern === pattern ? [raw.match] : [],
+      )[0];
+
+    for (const pattern of [
+      'git add -A',
+      'git add --all',
+      'git add .',
+      'git push --force',
+      'git push -f',
+    ]) {
+      expect(kindOf(pattern)).toBe('invocation');
+    }
   });
 });
 
@@ -245,7 +346,7 @@ describe('canonical policy: ripgrep clustered-replace fingerprint', () => {
         // silently dead policy entry.
         expect(() => new RegExp(raw.pattern, 'iu')).not.toThrow();
       }
-      if (typeof raw !== 'string' && raw.match === 'argv') {
+      if (typeof raw !== 'string' && (raw.match === 'argv' || raw.match === 'invocation')) {
         // The same bargain for argv mode: a pattern the option tables cannot
         // parse matches nothing at run time, so it fails HERE instead.
         expect(parseArgvPattern(raw.pattern)).not.toBeNull();
