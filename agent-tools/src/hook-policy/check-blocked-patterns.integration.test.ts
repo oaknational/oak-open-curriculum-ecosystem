@@ -130,6 +130,51 @@ describe('canonical policy: forced push', () => {
   });
 });
 
+describe('canonical policy: a build that predates the invocation match kind', () => {
+  it('still refuses the plain staging and forced-push commands, reading those entries in the default mode', async () => {
+    // A checkout whose built guard predates a match kind reads the new policy
+    // until it is rebuilt, and the schema degrades a kind it does not know to
+    // the default mode. Each spelling keeps its own entry so that reading
+    // refuses what it refused before.
+    const patterns = await loadBlockedPatterns();
+    const asAnOlderBuildReadsThem = patterns.map((raw) =>
+      typeof raw !== 'string' && raw.match === 'invocation'
+        ? { ...raw, match: 'token-subsequence' as const }
+        : raw,
+    );
+
+    for (const command of [
+      'git add -A',
+      'git add --all',
+      'git add .',
+      'git push --force',
+      'git push -f',
+    ]) {
+      expect(findBlockedPattern(command, asAnOlderBuildReadsThem)).toMatchObject({
+        pattern: command,
+      });
+    }
+  });
+
+  it('carries both guard families on the invocation match kind', async () => {
+    const patterns = await loadBlockedPatterns();
+    const kindOf = (pattern: string): string | undefined =>
+      patterns.flatMap((raw) =>
+        typeof raw !== 'string' && raw.pattern === pattern ? [raw.match] : [],
+      )[0];
+
+    for (const pattern of [
+      'git add -A',
+      'git add --all',
+      'git add .',
+      'git push --force',
+      'git push -f',
+    ]) {
+      expect(kindOf(pattern)).toBe('invocation');
+    }
+  });
+});
+
 describe('canonical policy: a matched command teaches a reappraisal end-to-end', () => {
   it('frames a destructive command as a concept to reappraise, carrying its citation', async () => {
     const patterns = await loadBlockedPatterns();
@@ -301,7 +346,7 @@ describe('canonical policy: ripgrep clustered-replace fingerprint', () => {
         // silently dead policy entry.
         expect(() => new RegExp(raw.pattern, 'iu')).not.toThrow();
       }
-      if (typeof raw !== 'string' && raw.match === 'argv') {
+      if (typeof raw !== 'string' && (raw.match === 'argv' || raw.match === 'invocation')) {
         // The same bargain for argv mode: a pattern the option tables cannot
         // parse matches nothing at run time, so it fails HERE instead.
         expect(parseArgvPattern(raw.pattern)).not.toBeNull();
