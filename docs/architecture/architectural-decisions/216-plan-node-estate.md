@@ -63,10 +63,6 @@ validator:
   drawn from the closed, additive
   registry (`.agent/plans/impact-areas.md`). The repo owns impact
   structure (durable intent); Linear owns delivery grouping.
-- **Expiring owner-gates**: every gate names what clears it and carries
-  an absolute expiry. The default horizon is strategy-scoped data — the
-  governing strategic node sets the tempo for its subtree
-  (`gate_expiry_default`), not a schema constant.
 - **One template per node type**, each opening with its ratification
   block (`.agent/plans/templates/README.md`). The
   ADR-117 component library is retired with the lane model; the schema
@@ -121,6 +117,18 @@ checkout with no schedule system at all. This note amends nothing in the
 ratified structure; it names the principle the structure rests on, in the
 owner's terms (quoted in the plan-node schema's amendment of the same
 date).
+
+## Owner gates withdrawn (dated amendment, 2026-11-20, owner-ruled)
+
+As accepted, this decision gave every plan an optional list of owner gates,
+each naming what cleared it and carrying an absolute expiry, with the default
+horizon set by the governing strategic node. The owner withdrew that part on
+2026-11-19 ("Remove them"): PDR-100 had already abolished owner-gating, and
+his word on first meeting the mechanism was "ceremony has been invented, and
+then declared a blocker". The plan-node contract has no gate field and no
+expiry clock, and the estate validator rejects both former fields as unknown
+keys. A decision a plan awaits from the owner is a sentence in the plan's
+body. The rest of this decision stands.
 
 ## Consequences
 

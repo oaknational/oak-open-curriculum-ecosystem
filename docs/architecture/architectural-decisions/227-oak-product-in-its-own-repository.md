@@ -139,9 +139,9 @@ in this record.
   repository's service or its indexes is required neither way (ruling 13).
 - **Validation maturity.** Decided is not validated: at this record's date
   nothing has moved, nothing is published, and the product repository does
-  not exist. Acceptance binds the shape; the lane's owner gates — the
-  ratified design record, the repository's creation and its name, publish
-  rights for the scope — bind the execution. The means (order, slices,
+  not exist. Acceptance binds the shape; the decisions the owner holds for
+  the lane — the ratified design record, the repository's creation and its
+  name, publish rights for the scope — bind the execution. The means (order, slices,
   criteria, instruments) live in the plan estate, which cites this record
   and whose nodes are safe to archive when their work is done.
 
