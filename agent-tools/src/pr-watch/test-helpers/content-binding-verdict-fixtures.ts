@@ -47,7 +47,8 @@ export function verdictOf(overrides: Partial<PrStateReading>): PrVerdict {
 export function legLine(verdict: PrVerdict, reviewer: string): string {
   return (
     verdict.evidence.find(
-      (line) => /^\S+: (SATISFIED|OWED|SKIPPED)/u.test(line) && line.startsWith(`${reviewer}: `),
+      (line) =>
+        /^\S+: (SATISFIED|OWED|UNOWED|SKIPPED)/u.test(line) && line.startsWith(`${reviewer}: `),
     ) ?? ''
   );
 }

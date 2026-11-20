@@ -46,4 +46,26 @@ describe('defaultExpectedReviewers', () => {
     ];
     expect(defaultExpectedReviewers([], reviews)).toEqual([]);
   });
+
+  it('drops an author whose every review says that no review occurred', () => {
+    // A skip notice or a vendor's failed-run body is not a review, so its
+    // author is awaited for nothing; a round asked of them is what awaits them.
+    const reviews = [
+      review('claude', 'Code review skipped: your organization has no extra usage available.'),
+      review(
+        'copilot-pull-request-reviewer',
+        'Copilot encountered an error and was unable to review this pull request. You can try again by re-requesting a review.',
+      ),
+    ];
+    expect(defaultExpectedReviewers([], reviews)).toEqual([]);
+    expect(defaultExpectedReviewers(['claude'], reviews)).toEqual(['claude']);
+  });
+
+  it('keeps an author with one real review beside a skip notice', () => {
+    const reviews = [
+      review('claude', 'Code review skipped: your organization has no extra usage available.'),
+      review('claude', 'Code review found no issues.'),
+    ];
+    expect(defaultExpectedReviewers([], reviews)).toEqual(['claude']);
+  });
 });

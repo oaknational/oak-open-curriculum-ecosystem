@@ -6,16 +6,14 @@
  * `latestReviews` pointer, which moves BACKWARDS when an older-tip review job
  * completes after a newer push (the false-silent-wait class).
  *
- * The expected reviewer set is a DECLARED input (SKILL: read from the
- * repository's automatic-review configuration, declared by the shepherd) —
- * the caller supplies it; this module never infers it from who happened to
- * review.
+ * The expected reviewer set is read from the pull request
+ * (`expected-reviewers.ts`): the reviewers a round is asked of and the
+ * authors of its reviews. No caller declares it.
  */
 
 import { bindingNote, reviewBinds, standingReviews, unboundNote } from './content-binding.js';
 import type { BindingHead } from './content-binding.js';
 import { normaliseLogin } from './logins.js';
-import { COPILOT_REVIEWER_LOGIN, type ReviewConfiguration } from './review-configuration.js';
 import { roundAwaiter, type RoundRequest } from './round-requests.js';
 import { isScopeDeclaredSkip, isSkipMarker } from './skip-markers.js';
 import { isVendorErrorReview, vendorErrorNote } from './vendor-error-reviews.js';
@@ -42,7 +40,7 @@ export interface HarvestedReview {
 export type ReviewerLeg =
   | {
       readonly reviewer: string;
-      /** UNOWED: the configuration reviews no later push and nothing is requested on this tip. */
+      /** UNOWED: the reviewer reviewed an earlier commit and no round is asked of them on this tip. */
       readonly state: 'SATISFIED' | 'OWED' | 'UNOWED';
       readonly detail: string;
     }
@@ -63,8 +61,6 @@ export interface ComputeReviewerLegsInput extends BindingHead {
   readonly checksGreenAt: string | null;
   /** Injected clock (ISO) — the quiet-window and timeout legs are time-bound. */
   readonly now: string;
-  /** The base branch's automatic-review configuration; `unread` keeps every leg owed. */
-  readonly reviewConfiguration: ReviewConfiguration;
 }
 
 /** SKILL item 3/4: the checks-green timeout and settled quiet window (more than 10 min). */
@@ -110,33 +106,28 @@ export function isSignedSelfReply(body: string): boolean {
 }
 
 /**
- * A tip the configuration does not review: the base branch's Copilot rule
- * reviews no later push (`review_on_push` false), the vendor has already
- * reviewed an earlier tip of this pull request (its one configured review
- * happened; before it, the leg stays owed so the first review is awaited
- * rather than raced), and no round is asked of it since that review: not a
- * pending request GitHub lists, and not a round asked at or after the
- * standing review landed, read from the pull request's history
- * (`round-requests.ts`), since this estate's pending-request surface never
- * lists a bot. The leg then settles as UNOWED, and a round whose threads are
- * all resolved settles; a review wanted on such a tip is requested by hand,
- * and the request makes the leg owed again. Binds Copilot's leg only: the
- * rule is Copilot's. Applies only to a tip the vendor has said nothing
- * about: any body bound to this tip (a substantive review, a quota marker,
- * an unevaluable marker after a failed request) is classified by the arms
- * built for it, never by the configuration's silence.
+ * A tip no review is in progress on, for a reviewer whose review is already
+ * in: the reviewer has reviewed an earlier commit of this pull request, and
+ * no round is asked of them since that review: not a pending request GitHub
+ * lists, and not a round asked at or after the standing review landed, read
+ * from the pull request's history (`round-requests.ts`), since this estate's
+ * pending-request surface never lists a bot. The leg then settles as UNOWED:
+ * one review of any commit meets the rule that a pull request is reviewed
+ * (the owner, 2026-11-20), and a review in progress is read from a round
+ * asked, never inferred from what the base branch is configured to review. A
+ * review wanted on such a tip is requested, and the request makes the leg
+ * owed again. Applies only to a tip the reviewer has said nothing about: any
+ * body bound to this tip (a substantive review, a quota marker, an
+ * unevaluable marker after a failed request) is classified by the arms built
+ * for it.
  */
-function unowedByConfiguration(
+function unowedOnLaterTip(
   input: ComputeReviewerLegsInput,
   reviewer: string,
   tipBound: readonly HarvestedReview[],
   awaits: (review: { readonly submittedAt: string }) => boolean,
 ): ReviewerLeg | undefined {
-  const configuration = input.reviewConfiguration;
-  if (tipBound.length > 0 || configuration.kind !== 'configured' || configuration.reviewOnPush) {
-    return undefined;
-  }
-  if (normaliseLogin(reviewer) !== COPILOT_REVIEWER_LOGIN) {
+  if (tipBound.length > 0) {
     return undefined;
   }
   const standing = input.reviews
@@ -144,7 +135,8 @@ function unowedByConfiguration(
       (review) =>
         normaliseLogin(review.author) === normaliseLogin(reviewer) &&
         hasLanded(review) &&
-        !isSkipMarker(review.body) &&
+        isSubstantive(review) &&
+        !isVendorErrorReview(review.body) &&
         review.commitOid !== '',
     )
     .sort((left, right) => left.submittedAt.localeCompare(right.submittedAt))
@@ -155,8 +147,7 @@ function unowedByConfiguration(
   return {
     reviewer,
     state: 'UNOWED',
-    detail:
-      'not owed on this tip: the base branch reviews no later push (copilot_code_review review_on_push=false), the vendor reviewed an earlier tip of this pull request, and no round is asked of it since; request a review by hand when one is wanted',
+    detail: `not owed on this tip: reviewed an earlier commit of this pull request (${standing.commitOid.slice(0, 9)}) and no round is asked of it since; request a review when one of this tip is wanted`,
   };
 }
 
@@ -208,7 +199,7 @@ function legFor(input: ComputeReviewerLegsInput, reviewer: string): ReviewerLeg 
       detail: `tip-bound quota/skip marker (scope-declared; owner ruling 2026-07-21)${bindingNote(quota, input)}${note}`,
     };
   }
-  const unowed = unowedByConfiguration(input, reviewer, tipBound, awaits);
+  const unowed = unowedOnLaterTip(input, reviewer, tipBound, awaits);
   if (unowed !== undefined) {
     return unowed;
   }

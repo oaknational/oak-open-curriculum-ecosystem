@@ -186,7 +186,6 @@ export function reviewerLegVerdict(reading: PrStateReading, now: string): PrVerd
     roundRequests: reading.roundRequests,
     checksGreenAt: reading.checksGreenAt,
     now,
-    reviewConfiguration: reading.reviewConfiguration,
   });
   const blocking = mostBlockingLeg({
     legs,

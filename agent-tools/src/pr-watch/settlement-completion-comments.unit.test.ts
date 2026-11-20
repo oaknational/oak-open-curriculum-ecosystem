@@ -116,7 +116,7 @@ describe('computePrVerdict — the completion-comment transport', () => {
     );
   });
 
-  it('a completion comment bound to an older commit, on a leg the tip does not satisfy, is refused by name and quoted — never read as no comment', () => {
+  it('a completion comment naming an earlier commit is that reviewer’s review of an earlier commit: the leg owes nothing and nothing is refused', () => {
     const verdict = computePrVerdict(
       settledReading({
         ...both,
@@ -125,10 +125,10 @@ describe('computePrVerdict — the completion-comment transport', () => {
       LATE_NOW,
     );
 
-    expect(verdict.state).toBe('UNCLASSIFIED-EVIDENCE');
-    expect(verdict.evidence).toContain(
-      `${CODEX}: completion comment IC_1 at 2026-07-21T12:10:00Z refused — names commit bbbbbbbbbb, which does not bind the current tip; "Codex Review: Didn't find any major issues."`,
-    );
+    expect(verdict.state).toBe('SETTLE-READY');
+    const evidence = verdict.evidence.join('\n');
+    expect(evidence).toContain(`${CODEX}: UNOWED`);
+    expect(evidence).not.toContain('refused');
   });
 
   it("a declared reviewer's comment that failed a precondition is refused by that precondition, quoted", () => {
@@ -263,7 +263,7 @@ describe('computePrVerdict — the completion-comment transport', () => {
     expect(verdict.evidence.join('\n')).not.toContain('refused');
   });
 
-  it("a refusal on a reviewer that is not the blocking one rides in the evidence; the blocking leg's own state names the reader's next act", () => {
+  it("one reviewer's review of an earlier commit never masks another reviewer's stalled round", () => {
     const verdict = computePrVerdict(
       settledReading({
         ...both,
@@ -276,9 +276,7 @@ describe('computePrVerdict — the completion-comment transport', () => {
 
     expect(verdict.state).toBe('SILENT-WAIT-RUN-DEAD');
     expect(verdict.evidence).toContain(`most blocking reviewer leg: ${COPILOT}`);
-    expect(verdict.evidence.join('\n')).toContain(
-      `${CODEX}: completion comment IC_1 at 2026-07-21T12:10:00Z refused — names commit bbbbbbbbbb`,
-    );
+    expect(verdict.evidence.join('\n')).not.toContain('refused');
   });
 
   it('a tip-bound completion comment satisfying one leg is named in the evidence while another leg blocks', () => {

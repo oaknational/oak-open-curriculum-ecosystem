@@ -216,7 +216,7 @@ describe('computePrVerdict — per-reviewer legs (the collapsed-legs r2 class)',
     expect(verdict.state).toBe('SETTLE-READY');
   });
 
-  it('a stale-tip-only review leaves the leg owed', () => {
+  it('a review of an earlier commit, with no round asked since, meets the rule: the leg owes nothing and the round settles through its quiet window', () => {
     const verdict = computePrVerdict(
       settledReading({
         checksGreenAt: '2026-07-21T12:56:00Z',
@@ -232,7 +232,8 @@ describe('computePrVerdict — per-reviewer legs (the collapsed-legs r2 class)',
       }),
       '2026-07-21T13:00:00Z',
     );
-    expect(verdict.state).toBe('SILENT-WAIT-NO-REVIEWER');
+    expect(verdict.state).toBe('SETTLING-QUIET-WINDOW');
+    expect(verdict.evidence.join('\n')).toContain(`${COPILOT}: UNOWED`);
   });
 
   it('an empty commitOid never proves tip binding; the timeout settles the WATCH but the round is not merge-eligible', () => {

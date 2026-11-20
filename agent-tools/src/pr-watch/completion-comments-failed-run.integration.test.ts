@@ -111,7 +111,6 @@ function legsAt(now: string) {
     roundRequests: [],
     checksGreenAt: CHECKS_GREEN_AT,
     now,
-    reviewConfiguration: { kind: 'unread', reason: 'the test reading declares none' },
   });
 }
 
