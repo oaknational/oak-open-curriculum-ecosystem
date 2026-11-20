@@ -82,3 +82,20 @@ The account with its sources is the addendum to the reunification retrospective 
   findings that were cured by a push. The ledger row says so.
 - **What worked:** a background loop on `gh pr checks` that exits when nothing is pending wakes
   the seat when the review check finishes, with no reviewer list.
+- **Reviewer finding upheld (oaknational#1039):** a policy entry in a match mode the built
+  guard cannot parse matches nothing, and nothing rebuilds the guard after a pull. My change
+  would have left wildcard staging unrefused in every checkout until its next build. The cure
+  used what the schema already does: a match kind a build does not know is read in the default
+  mode. A policy change is read by the build that is already installed, not only by the new one.
+- **Mistake (mine):** I edited a test file with a script whose text held a forced-push command
+  as test data. The guard refused the script, correctly. Tracked files are edited with the
+  edit tool; I had the owner's rule on that and reached for a script anyway.
+- **Surprise:** the plan sized the merge-tool change as half of one pull request. Reading the
+  code found the declared reviewer set in about 45 files. The owner split it into two pull
+  requests when told. I had written the plan without counting the consumers.
+- **Mistake (mine):** I carried two unpushed commits to a successor branch by cherry-pick, so
+  the old local branch no longer proves as merged and the retire tool refuses it. Cutting the
+  successor from the old tip and merging `main` in keeps the proof.
+- **Observation:** a stale `.git/index.lock` in the shared primary checkout sat for 35 minutes
+  on 2026-11-20 with no git process alive. Another session reading there with plain
+  `git status` is the likely source; it now passes `--no-optional-locks`.

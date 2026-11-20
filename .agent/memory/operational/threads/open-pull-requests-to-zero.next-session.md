@@ -1224,18 +1224,32 @@ inside a rule name).
 - **The owner on reviewers, 2026-11-20.** "Only invoke PR reviewers if there is a good reason,
   such as no review yet, or work in a sensitive area, do not do it just for ceremony, it's too
   expensive for that". The automatic review at open is correct configuration.
-- **Resume here (written at the owner's compaction word, 2026-11-20).** In order:
-  1. oaknational#1037 carries the decision-record amendments alone. Wait for its review check,
-     deal with the review, merge it by the merge tool, cut the successor coordination branch.
-  2. The three plan nodes, the superseded guard node, friction F-298's cure line, this record
-     and the napkin entry are committed on the coordination branch and deliberately not pushed:
-     pushed, they would join 1037 and make it two concerns. They go up as the next pull request
-     once 1037 has merged.
-  3. Ask the owner, by question prompt: to ratify `upstream-api-currency` and
-     `migrate-to-curriculum-api-v1` (both sketches); and the two readings in
-     `command-guards-and-merge-review-reading` (whether the one review must cover the final
-     commit; whether a records-class pull request also needs one).
-  4. Then the guard and merge-tool work, one pull request, in a lane worktree cut from
-     `origin/main`.
-  5. Ledger rows for 1036 and 1037 are owed at the next wrap.
+- **Landed later on 2026-11-20.** oaknational#1037 (the decision-record amendments), #1038
+  (the three plan nodes and the day's records) and #1039 (the staging and forced-push guards
+  matched on the invocation, Part A of `command-guards-and-merge-review-reading`). The owner
+  ratified `upstream-api-currency` and `migrate-to-curriculum-api-v1` by question prompt, the
+  migration as one pull request straight to v1, and said of it: "do not start the migration
+  to v1, just plan it".
+- **The owner's answers on the merge tool, 2026-11-20, by question prompt.** One review of any
+  commit meets the rule; a review in progress is waited for. A records-class pull request
+  follows the same rule. The guard fix and the merge-tool change are two pull requests.
+  `--expect none` and `--unavailable` are removed with `--expect <login>`. All four are in the
+  plan node.
+- **Three seats, three repositories, 2026-11-20.** Ingot binds Patina (194219) works in Castr
+  and Blazar binds Gloom (259a47) in the knowledge library; both sessions have OCE's primary
+  checkout as their working directory and read there without writing. The owner's word: the
+  seats may coordinate by direct message or on OCE's comms stream. This seat's team-start
+  event is 5d8788df.
+- **Resume here.** In order:
+  1. Part B of `command-guards-and-merge-review-reading`: the merge tool and `pr state` read
+     review state from the pull request and take no `--expect`, `--expect none` or
+     `--unavailable`. It is its own pull request, in a lane worktree cut from `origin/main`,
+     tests first. What was read before the split: the expected set already defaults from the
+     pull request when undeclared (`expected-reviewers.ts`, `state-compose.ts`), and the door
+     refuses that default (`merge-decision.ts`); a reviewer whose only review binds an earlier
+     commit reads as owed and then timed out (`reviewer-legs.ts`), which the owner's "any
+     commit" answer changes; the records-class door (`RECORDS_CLASS_MERGE_STATES`) merges with
+     no review, which the owner's answer removes. About 45 files name the declared set.
+  2. The plan update recording those answers is committed on the coordination branch with
+     this record; it goes up as the next records pull request.
   Unchecked: whether `prevent-accidental-major-version` should refuse a `!` subject.
