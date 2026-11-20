@@ -56,12 +56,43 @@ describe('canonical policy: explicit-pathspec staging discipline (WS6)', () => {
     for (const command of ['git add -A', 'git add --all', 'git add .']) {
       const entry = findBlockedPattern(command, patterns);
       expect(entry).toMatchObject({
-        pattern: command,
         concept: 'wildcard-staging',
         citation: expectedCitation,
       });
       // The block must TEACH, not only refuse: a non-empty reappraisal travels to the agent.
       expect(entry?.reappraisal?.trim()).toBeTruthy();
+    }
+  });
+
+  it('blocks wildcard staging in every position the command can take', async () => {
+    const patterns = await loadBlockedPatterns();
+
+    for (const command of [
+      'git -C ../other add .',
+      'git add . -v',
+      'git add -- .',
+      'git add src/a.ts -A',
+      'pnpm test && git add .',
+      'pnpm test; git add --all',
+      'git add -Av',
+    ]) {
+      expect(findBlockedPattern(command, patterns)).toMatchObject({ concept: 'wildcard-staging' });
+    }
+  });
+
+  it('allows the commands the whole-line match refused although none stages by wildcard', async () => {
+    const patterns = await loadBlockedPatterns();
+
+    for (const command of [
+      'git worktree add -q --no-track -b lane .claude/worktrees/lane origin/main && ls .',
+      'git worktree add ../lane origin/main && cd ../lane && pnpm install && cp ../.env.local .',
+      'git add agent-tools/src/a.ts && . ./scripts/env.sh',
+      'git add docs/a.md && cp docs/a.md .',
+      'git add docs/a.md && git commit -q -F msg.txt -- docs/a.md && ls -A',
+      'git add -- a.ts b.ts; find . -name "*.orig"',
+      'git worktree add --detach ../probe HEAD; git -C ../probe status .',
+    ]) {
+      expect(findBlockedPattern(command, patterns)).toBeNull();
     }
   });
 
@@ -71,6 +102,31 @@ describe('canonical policy: explicit-pathspec staging discipline (WS6)', () => {
     expect(findBlockedPattern('git add packages/core/foo.ts', patterns)).toBeNull();
     expect(findBlockedPattern('git add ./packages/core/foo.ts', patterns)).toBeNull();
     expect(findBlockedPattern('git add .gitignore', patterns)).toBeNull();
+  });
+});
+
+describe('canonical policy: forced push', () => {
+  it('blocks a forced push under each spelling and in any segment', async () => {
+    const patterns = await loadBlockedPatterns();
+
+    for (const command of [
+      'git push --force',
+      'git push -f',
+      'git push origin HEAD -f',
+      'pnpm test && git -C ../other push -f origin main',
+    ]) {
+      expect(findBlockedPattern(command, patterns)).toMatchObject({
+        concept: 'history-destruction',
+      });
+    }
+  });
+
+  it('allows a push followed by another command that takes a short f option', async () => {
+    const patterns = await loadBlockedPatterns();
+    const command =
+      'git push origin HEAD && gh api graphql -f query=@q.graphql -f owner=o -f name=n';
+
+    expect(findBlockedPattern(command, patterns)).toBeNull();
   });
 });
 

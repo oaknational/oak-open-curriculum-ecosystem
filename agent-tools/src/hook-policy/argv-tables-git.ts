@@ -46,6 +46,31 @@ export const gitRevert: readonly OptionSpec[] = [
   { name: 'abort' },
 ];
 
+export const gitAdd: readonly OptionSpec[] = [
+  { name: 'dry-run', short: 'n' },
+  { name: 'verbose', short: 'v' },
+  { name: 'force', short: 'f' },
+  { name: 'sparse' },
+  { name: 'interactive', short: 'i' },
+  { name: 'patch', short: 'p' },
+  { name: 'edit', short: 'e' },
+  { name: 'update', short: 'u' },
+  // `--all` and `--no-all` each cancel the other, last on the line wins.
+  { name: 'all', short: 'A', overrides: ['no-all'] },
+  { name: 'no-ignore-removal', implies: ['all'], overrides: ['no-all'] },
+  { name: 'no-all', overrides: ['all'] },
+  { name: 'ignore-removal', implies: ['no-all'], overrides: ['all'] },
+  { name: 'intent-to-add', short: 'N' },
+  { name: 'refresh' },
+  { name: 'ignore-errors' },
+  { name: 'ignore-missing' },
+  { name: 'no-warn-embedded-repo' },
+  { name: 'renormalize' },
+  { name: 'chmod', arg: 'required' },
+  { name: 'pathspec-from-file', arg: 'required' },
+  { name: 'pathspec-file-nul' },
+];
+
 export const gitPush: readonly OptionSpec[] = [
   { name: 'all' },
   { name: 'branches' },

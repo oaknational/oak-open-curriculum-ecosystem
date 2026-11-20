@@ -179,6 +179,85 @@ describe('matchesArgvPattern — git push and git clean', () => {
   });
 });
 
+describe('parseArgvPattern — operands', () => {
+  it('reads a word that is not an option as an operand the invocation must carry', () => {
+    expect(parseArgvPattern('git add .')).toStrictEqual({
+      command: 'git',
+      subcommand: ['add'],
+      required: [],
+      operands: ['.'],
+    });
+  });
+});
+
+describe('matchesArgvPattern — git add', () => {
+  const all = 'git add --all';
+  const dot = 'git add .';
+
+  it('matches staging everything under each spelling of the option', () => {
+    expect(matchesArgvPattern(all, 'git add -A')).toBe(true);
+    expect(matchesArgvPattern(all, 'git add --all')).toBe(true);
+    expect(matchesArgvPattern(all, 'git add --no-ignore-removal')).toBe(true);
+    expect(matchesArgvPattern(all, 'git add -Av')).toBe(true);
+    expect(matchesArgvPattern(all, 'git add docs -A')).toBe(true);
+    expect(matchesArgvPattern(all, 'git -C ../other add -A')).toBe(true);
+    expect(matchesArgvPattern(all, 'git status && git add -A; git commit -m x')).toBe(true);
+  });
+
+  it('matches the lone dot operand wherever it sits among the arguments', () => {
+    expect(matchesArgvPattern(dot, 'git add .')).toBe(true);
+    expect(matchesArgvPattern(dot, 'git add -v .')).toBe(true);
+    expect(matchesArgvPattern(dot, 'git add -- .')).toBe(true);
+    expect(matchesArgvPattern(dot, 'git add src/a.ts .')).toBe(true);
+    expect(matchesArgvPattern(dot, "git add '.'")).toBe(true);
+    expect(matchesArgvPattern(dot, 'git -C ../other add .')).toBe(true);
+    expect(matchesArgvPattern(dot, 'cd pkg && git add .')).toBe(true);
+  });
+
+  it('allows staging by explicit path', () => {
+    expect(matchesArgvPattern(dot, 'git add packages/core/foo.ts')).toBe(false);
+    expect(matchesArgvPattern(dot, 'git add ./packages/core/foo.ts')).toBe(false);
+    expect(matchesArgvPattern(dot, 'git add .gitignore')).toBe(false);
+    expect(matchesArgvPattern(all, 'git add packages/core/foo.ts')).toBe(false);
+  });
+
+  it('reads a dot or an option that belongs to another command as not staging', () => {
+    // The shapes the whole-line match refused although none stages by wildcard.
+    expect(matchesArgvPattern(dot, 'git worktree add -b lane ../lane origin/main && ls .')).toBe(
+      false,
+    );
+    expect(matchesArgvPattern(dot, 'git worktree add .claude/worktrees/lane origin/main')).toBe(
+      false,
+    );
+    expect(matchesArgvPattern(dot, 'git add src/a.ts && . ./scripts/env.sh')).toBe(false);
+    expect(matchesArgvPattern(dot, 'git add src/a.ts && cp dist/a.js .')).toBe(false);
+    expect(matchesArgvPattern(dot, 'git add src/a.ts; git commit -m "tidy ." -- src/a.ts')).toBe(
+      false,
+    );
+    expect(matchesArgvPattern(all, 'git add src/a.ts && ls -A')).toBe(false);
+    expect(matchesArgvPattern(all, 'git worktree add ../lane && git branch -A')).toBe(false);
+  });
+
+  it('reads a value taken by an option as that value, never as the operand', () => {
+    expect(matchesArgvPattern(dot, 'git add --pathspec-from-file . src/a.ts')).toBe(false);
+  });
+});
+
+describe('matchesArgvPattern — an option on a later command is not the push’s', () => {
+  it('allows a push followed by another command’s short f option', () => {
+    const command =
+      'git push origin HEAD && gh api graphql -f query=@q.graphql -f owner=o -f name=n';
+    expect(matchesArgvPattern('git push --force', command)).toBe(false);
+  });
+
+  it('still matches a forced push in a later segment', () => {
+    expect(matchesArgvPattern('git push --force', 'pnpm test && git push -f')).toBe(true);
+    expect(matchesArgvPattern('git push --force', 'pnpm test; git -C ../x push origin -f')).toBe(
+      true,
+    );
+  });
+});
+
 describe('matchesArgvPattern — git branch', () => {
   it('meets a spelling that is two options on the same canonical set', () => {
     const deleteForce = 'git branch -D';

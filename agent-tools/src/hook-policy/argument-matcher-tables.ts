@@ -1,4 +1,5 @@
 import {
+  gitAdd,
   gitBranch,
   gitClean,
   gitPush,
@@ -70,6 +71,7 @@ export const ARGV_COMMAND_TABLES: readonly CommandTable[] = [
   {
     command: 'git',
     subcommands: [
+      { words: ['add'], options: gitAdd },
       { words: ['reset'], options: gitReset },
       { words: ['revert'], options: gitRevert },
       { words: ['push'], options: gitPush },

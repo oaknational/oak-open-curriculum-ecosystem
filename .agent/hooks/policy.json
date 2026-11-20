@@ -6,12 +6,7 @@
       "blocked_patterns": [
         {
           "pattern": "git push --force",
-          "concept": "history-destruction",
-          "citation": ".agent/rules/never-use-git-to-remove-work.md",
-          "reappraisal": "History here is append-only \u2014 never overwrite or rewrite it; integrate forward with new commits and reconcile branches without force-pushing or interactive rebase."
-        },
-        {
-          "pattern": "git push -f",
+          "match": "argv",
           "concept": "history-destruction",
           "citation": ".agent/rules/never-use-git-to-remove-work.md",
           "reappraisal": "History here is append-only \u2014 never overwrite or rewrite it; integrate forward with new commits and reconcile branches without force-pushing or interactive rebase."
@@ -102,19 +97,15 @@
           "reappraisal": "Never stash to park, hide, or discard work - bare git stash silently reverts the working tree. Keep in-progress work as live working-tree edits; the recovery commands (git stash pop, git stash apply) remain permitted."
         },
         {
-          "pattern": "git add -A",
-          "concept": "wildcard-staging",
-          "citation": ".agent/rules/stage-by-explicit-pathspec.md",
-          "reappraisal": "Stage by explicit pathspec so a commit never bundles parallel-thread or unrelated work; name the exact files."
-        },
-        {
           "pattern": "git add --all",
+          "match": "argv",
           "concept": "wildcard-staging",
           "citation": ".agent/rules/stage-by-explicit-pathspec.md",
           "reappraisal": "Stage by explicit pathspec so a commit never bundles parallel-thread or unrelated work; name the exact files."
         },
         {
           "pattern": "git add .",
+          "match": "argv",
           "concept": "wildcard-staging",
           "citation": ".agent/rules/stage-by-explicit-pathspec.md",
           "reappraisal": "Stage by explicit pathspec so a commit never bundles parallel-thread or unrelated work; name the exact files."
