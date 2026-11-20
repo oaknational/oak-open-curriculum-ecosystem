@@ -1,6 +1,5 @@
 import { quoteOf, type CompletionCommentReview } from './completion-comments.js';
 import { bindingNote, reviewBinds } from './content-binding.js';
-import { declaredStandInEvidence } from './declared-evidence.js';
 import { normaliseLogin } from './logins.js';
 import type { BlockingLegVerdict } from './most-blocking-leg.js';
 import type { HarvestedReview, ReviewerLeg } from './reviewer-legs.js';
@@ -22,13 +21,9 @@ import { isVendorErrorReview } from './vendor-error-reviews.js';
 
 /** Every transport of a reviewer's reported result, as the legs read them. */
 export function allReviews(
-  reading: Pick<PrStateReading, 'reviews' | 'completionComments' | 'declaredUnavailable'>,
+  reading: Pick<PrStateReading, 'reviews' | 'completionComments'>,
 ): readonly HarvestedReview[] {
-  return [
-    ...reading.reviews,
-    ...reading.completionComments.reviews,
-    ...reading.declaredUnavailable.standIns,
-  ];
+  return [...reading.reviews, ...reading.completionComments.reviews];
 }
 
 // A completed run is read as a review of the tip; a failed run (an error
@@ -41,14 +36,11 @@ function completionLine(review: CompletionCommentReview, reading: PrStateReading
   return `${review.author}: completion comment ${review.id} at ${review.submittedAt} ${read} (transport: completion-comment)`;
 }
 
-/** One line per result bound to the tip that arrived by comment or declaration, naming the transport. */
+/** One line per result bound to the tip that arrived by comment, naming the transport. */
 export function transportEvidence(reading: PrStateReading): string[] {
-  return [
-    ...reading.completionComments.reviews
-      .filter((review) => reviewBinds(review, reading))
-      .map((review) => completionLine(review, reading)),
-    ...declaredStandInEvidence(reading),
-  ];
+  return reading.completionComments.reviews
+    .filter((review) => reviewBinds(review, reading))
+    .map((review) => completionLine(review, reading));
 }
 
 /** One line per vendor notice an expected reviewer posted: printed on every reviewer-leg verdict, deciding none. */

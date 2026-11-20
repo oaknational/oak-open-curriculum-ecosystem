@@ -187,7 +187,7 @@ the first hop. Confirm the id from the API, never from prose:
   token and merges only at the settlement verdict:
 
   ```bash
-  pnpm agent-tools merge-bot merge --pr <n> --expect <reviewer>
+  pnpm agent-tools merge-bot merge --pr <n>
   ```
 
 - **Pushes** go through the transport the estate's identity contract names.

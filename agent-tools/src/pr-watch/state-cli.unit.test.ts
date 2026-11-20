@@ -3,7 +3,6 @@ import { describe, expect, it } from 'vitest';
 import { runPrStateCli } from './state-cli.js';
 import type { ReadReadingInput } from './state-cli.js';
 import { NO_CONTENT } from './content-binding.js';
-import { NO_DECLARATIONS } from './declared-unavailable.js';
 import type { PrStateReading } from './state-types.js';
 
 /** CLI tests for `pr state` with an injected reading and clock — no gh. */
@@ -30,10 +29,8 @@ function reading(overrides: Partial<PrStateReading> = {}): PrStateReading {
     reviewRequests: [],
     roundRequests: [],
     expectedReviewers: ['copilot-pull-request-reviewer'],
-    expectedDeclared: true,
     reviews: [],
     completionComments: { reviews: [], refused: [], notices: [] },
-    declaredUnavailable: NO_DECLARATIONS,
     reviewRuns: { kind: 'read', runs: [] },
     reviewConfiguration: { kind: 'unread', reason: 'the test reading declares none' },
     content: NO_CONTENT,
@@ -86,44 +83,22 @@ describe('runPrStateCli', () => {
     });
   });
 
-  it('passes repeatable --expect through to the reading seam', () => {
-    const capture: ReadReadingInput[] = [];
-    const { exit } = run(
-      ['state', '461', '--expect', 'copilot-pull-request-reviewer', '--expect', 'claude'],
-      {
-        capture,
-      },
-    );
-    expect(exit).toBe(0);
-    expect(capture[0]?.expectedReviewers).toEqual(['copilot-pull-request-reviewer', 'claude']);
-  });
-
-  it('passes --expect none through as the DECLARED empty set', () => {
-    const capture: ReadReadingInput[] = [];
-    const { exit } = run(['state', '461', '--expect', 'none'], { capture });
-    expect(exit).toBe(0);
-    expect(capture[0]?.expectedReviewers).toEqual([]);
-  });
-
-  it('leaves the set undeclared when --expect is absent, so the reading defaults it and says so', () => {
+  it('asks the reading seam for the pull request alone: the reviewers are read from it', () => {
     const capture: ReadReadingInput[] = [];
     const { exit } = run(['state', '461'], { capture });
     expect(exit).toBe(0);
-    expect(capture[0]).not.toHaveProperty('expectedReviewers');
+    expect(Object.keys(capture[0] ?? {})).toEqual(['target']);
   });
 
-  it('refuses --expect none beside a login as a usage error', () => {
-    const { exit, stderr } = run(['state', '461', '--expect', 'none', '--expect', 'claude']);
-    expect(exit).toBe(2);
-    expect(stderr.text).toContain('--expect none');
-  });
-
-  it('refuses a non-login --expect value with the usage text, like every other usage error', () => {
-    const { exit, stderr } = run(['state', '461', '--expect', '$(whoami)']);
-    expect(exit).toBe(2);
-    expect(stderr.text).toContain('--expect must be a GitHub login or none');
-    expect(stderr.text).toContain('pr state <pr-number|github-pull-url>');
-  });
+  it.each(['--expect', '--unavailable'])(
+    'takes no %s flag: a reviewer list or an unavailability is refused as an unknown option',
+    (flag) => {
+      const { exit, stderr } = run(['state', '461', flag, 'copilot-pull-request-reviewer']);
+      expect(exit).toBe(2);
+      expect(stderr.text).toContain(`unknown option: ${flag}`);
+      expect(stderr.text).toContain('pr state <pr-number|github-pull-url>');
+    },
+  );
 
   it('rejects an unknown action with usage on stderr and exit 2', () => {
     const { exit, stderr } = run(['status', '461']);

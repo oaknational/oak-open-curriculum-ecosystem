@@ -770,12 +770,9 @@ contradicts (2026-10-02).
   review-round state machine's item 1 at a 60-second interval (not the tight
   polling F-110 forbids), until the `ws6-pr-watch-compound-floor` item below
   gives it a tool form. For a single verdict,
-  `pnpm agent-tools pr state <n> --expect <login> [--expect <login> ...]`,
-  with one `--expect` per available configured reviewer as for the merge
-  (the flag declares the whole expected set; `--expect none` declares it
-  empty when the seat has judged the work needs no pull-request review to be
-  safe and effective — the owner's one question, 2026-10-27), computes the front door's
-  reading once and never merges. Do NOT use
+  `pnpm agent-tools pr state <n>` computes the front door's reading once and
+  never merges; it reads the reviewers from the pull request, as the merge
+  does. Do NOT use
   `pnpm agent-tools:pr-watch <n> --watch --interval 60` as the watch: run
   through the unified entrypoint, that path buffers every line until exit, so
   a Monitor on it reads silence; it was silent across head and check
@@ -1276,17 +1273,9 @@ c[n-1] >= c[n-2]` (two consecutive non-decreasing transitions across
    completes. The refusal decides the verdict when the round is
    otherwise settled or when it is the blocking reviewer's; a live run
    outranks it, and a refusal on another reviewer rides in the evidence
-   beside the blocking leg's own state. A declared STAND-IN takes a vendor's
-   place when it cannot review: `--unavailable <login>=<comment-url>` names
-   the bot's own comment on the pull request, opening with
-   `**<login> leg unavailable on head SHA:<40-hex>.**`, and it stands in for
-   that vendor's review of the named head only on the pull request's own
-   evidence (OCE's `pr-watch/declared-unavailable.ts`): the bot posted it and no
-   other account edited it; the timeline shows the outage (an error review
-   from the vendor on that head, or a round asked of it over sixty minutes
-   ago with no review since; the ruling of 2026-09-28); and the vendor has not
-   reviewed since. A declaration that fails, or names a head that does not
-   bind the tip, is `UNCLASSIFIED-EVIDENCE` at once, before the checks ladder.
+   beside the blocking leg's own state. A vendor asked for a round that
+   cannot review leaves its leg to the timeout; the tool takes no declaration
+   that a vendor is down.
    **SKIPPED** — via a tip-scoped marker, or via the timeout. The MARKER
    leg: an explicit skip marker in a review body satisfies SKIPPED only
    when its review binds to the current tip, OR when its body declares a
@@ -1369,17 +1358,12 @@ c[n-1] >= c[n-2]` (two consecutive non-decreasing transitions across
    conversation. The Codex connector's completion comment for a
    zero-findings run ("Didn't find any major issues", naming the commit it
    read) is a positive result, not missing evidence (owner ruling,
-   2026-09-16). **Review legs are desirable, never required; the front
-   door declares the configured reviewers AVAILABLE, and a subagent
-   review posted on the pull request stands as a leg** (owner ruling
-   2026-09-10). Concretely: `--expect` once per available configured
-   reviewer, or `--expect none` when the seat has answered the owner's one
-   question (2026-10-27: "do we need a review in order for this work to be
-   safe and effective?") with no — never the set that happened to bind the tip, never a
-   reviewer declared unavailable, and a running door carries the set declared
-   when it was armed (when the ruling an `--expect` set rests on changes
-   mid-poll, stop the poll before any merge call, read the pull request
-   first-hand and re-arm with the new set; one instance, 2026-09-28); a
+   2026-09-16). **The front door reads the reviewers from the pull request
+   and is told none: a review in progress is waited for, one review of any
+   commit exists, and every review is dealt with.** A reviewer is a bot a
+   round is asked of, or the author of a real review; a pending request of a
+   person is not waited for. A reviewer whose review of an earlier commit is
+   in owes nothing on a later tip until a round is asked of them. A
    subagent review of any kind,
    adversarial included, posted on the pull request with every finding
    dispositioned and reported back to the seat is a review leg, BOUND TO
@@ -1391,18 +1375,12 @@ c[n-1] >= c[n-2]` (two consecutive non-decreasing transitions across
    check) — a push carrying any other content needs a fresh leg on the new
    head (#117 and #113 landed that way on 2026-09-10, each with a posted
    Opus review and Copilot; #116's adversarial leg read 39e9cc36f and the
-   four pushes after it were its cures, the sync and one landing defect). The tool verifies only the vendor legs declared to it
-   (`computeReviewerLegs` reads the `--expect` logins; `parseMergeArgs`
-   refuses an UNDECLARED set, and `--expect none` declares it empty), so the
-   subagent leg is the MERGING SEAT's own
-   recomputation — the posted review and its dispositions named on the
-   landing premises, the same seat-side check item 5 names for the tally
-   state — and with NO configured vendor available the seat answers the
-   owner's one question (2026-10-27): a review the work needs for its safety
-   or effectiveness is a subagent review posted on the pull request and
-   recomputed by the seat; a review it does not need is `--expect none`,
-   which the door reads as the declaration it is; a machine-checked
-   subagent-leg input is the named
+   four pushes after it were its cures, the sync and one landing defect). The tool counts the reviews the pull
+   request shows (`expected-reviewers.ts`), so the subagent leg is the
+   MERGING SEAT's own recomputation — the posted review and its dispositions
+   named on the landing premises, the same seat-side check item 5 names for
+   the tally state. With no review the door refuses, and the seat requests
+   one; a machine-checked subagent-leg input is the named
    follow-up on the agent-tools-watch-commands node. **A reviewer silent
    on EVERY pull request at once is that
    vendor's availability, never a pull-request shape**: read its own
@@ -1477,7 +1455,7 @@ create` on such a branch exits non-zero with "a pull request for branch …
    cycle PDR-140 retires), plus every Phase 7 gate leg.
 5. **The merge boundary.** Merging takes exactly three sanctioned shapes,
    all issued at a freshly RECOMPUTED full gate. For BOT merges the front
-   door is `pnpm agent-tools merge-bot merge --pr <n> --expect <reviewer>`
+   door is `pnpm agent-tools merge-bot merge --pr <n>`
    (MCP-508): it recomputes the LEG-DRIVEN settlement verdict itself,
    merges only on SETTLE-READY with the verdicted tip's sha pinned, and
    refuses by verdict name. The tool reads checks, threads and reviewer
@@ -1492,9 +1470,7 @@ create` on such a branch exits non-zero with "a pull request for branch …
    touches only documentation and Practice surfaces merges at checks green
    by name, zero unresolved threads, every finding dispositioned, with the
    Claude Code Review's standing verdict and NO Copilot leg expected; for
-   that class a timeout-settled round IS merge-eligible. Grounds: the
-   Claude review posts no review on a clean tip, so the leg never
-   satisfies. The Copilot leg, when a review of the tip is wanted for a
+   that class a timeout-settled round IS merge-eligible. The Copilot leg, when a review of the tip is wanted for a
    stated reason (Phase 2's review request policy; never by default), is
    obtained by a review request on the tip,
    `POST repos/{owner}/{repo}/pulls/{n}/requested_reviewers` with

@@ -1,5 +1,4 @@
 import { NO_CONTENT } from './content-binding.js';
-import { NO_DECLARATIONS } from './declared-unavailable.js';
 import type { PrStateReading } from './state-types.js';
 
 /**
@@ -40,7 +39,6 @@ export function settledReading(overrides: Partial<PrStateReading> = {}): PrState
     reviewRequests: [],
     roundRequests: [],
     expectedReviewers: [COPILOT],
-    expectedDeclared: true,
     reviews: [
       {
         author: COPILOT,
@@ -51,7 +49,6 @@ export function settledReading(overrides: Partial<PrStateReading> = {}): PrState
       },
     ],
     completionComments: { reviews: [], refused: [], notices: [] },
-    declaredUnavailable: NO_DECLARATIONS,
     reviewRuns: { kind: 'read', runs: [] },
     reviewConfiguration: { kind: 'unread', reason: 'the test reading declares none' },
     content: NO_CONTENT,

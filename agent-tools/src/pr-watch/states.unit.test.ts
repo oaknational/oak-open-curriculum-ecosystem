@@ -378,127 +378,34 @@ describe('computePrVerdict — base currency and vacuous sets', () => {
     expect(verdict.state).toBe('BEHIND-BASE');
   });
 
-  it('an EMPTY expected set can never settle (first-round rule holds vacuously nowhere)', () => {
+  it('a pull request nobody has reviewed and no bot is reviewing never settles, however long checks have been green', () => {
     const verdict = computePrVerdict(
-      settledReading({ expectedReviewers: [], expectedDeclared: false, reviews: [] }),
+      settledReading({ expectedReviewers: [], reviews: [] }),
       LATE_NOW,
     );
     expect(verdict.state).toBe('SILENT-WAIT-NO-REVIEWER');
-    expect(verdict.evidence.join('\n')).toContain('EMPTY');
+    expect(verdict.evidence.join('\n')).toContain('no review');
+    expect(verdict.evidence.join('\n')).toContain('request one');
   });
 
-  it('a set DECLARED empty (--expect none) settles once the quiet window after checks green elapses, naming the declaration', () => {
-    // The owner's word of 2026-10-27: the one question is whether the work
-    // needs a review to be safe and effective; a seat that judged it does
-    // not says so, and the verdict carries that judgement into the record.
-    const verdict = computePrVerdict(
-      settledReading({ expectedReviewers: [], expectedDeclared: true, reviews: [] }),
-      LATE_NOW,
-    );
-    expect(verdict.state).toBe('SETTLE-READY');
-    expect(verdict.evidence.join('\n')).toContain('--expect none');
-    expect(verdict.evidence.join('\n')).toContain('safe and effective');
-    expect(verdict.evidence.join('\n')).toContain("this one's author is app/el-graphael");
-  });
-
-  it('a set DECLARED empty still waits out the quiet window after checks green', () => {
-    // Checks green at 12:00 in the fixture; 12:05 is inside the window.
-    const verdict = computePrVerdict(
-      settledReading({ expectedReviewers: [], expectedDeclared: true, reviews: [] }),
-      '2026-07-21T12:05:00Z',
-    );
-    expect(verdict.state).toBe('SETTLING-QUIET-WINDOW');
-  });
-
-  it('a set DECLARED empty anchors its window on checks green, not on a review that landed before it', () => {
-    // Checks green at 12:00; a review landed at 11:50; 12:07 is seven minutes
-    // after checks green, so the window is open whatever the review's age.
+  it('a pull request whose only review bodies are skip notices reads as not reviewed', () => {
+    // The reviewers the reading shows are empty: a skip notice makes nobody one.
     const verdict = computePrVerdict(
       settledReading({
         expectedReviewers: [],
-        expectedDeclared: true,
         reviews: [
           {
-            author: COPILOT,
+            author: 'claude',
             state: 'COMMENTED',
-            body: 'Reviewed.',
+            body: 'Code review skipped: your organization has no extra usage available.',
             commitOid: TIP,
-            submittedAt: '2026-07-21T11:50:00Z',
+            submittedAt: '2026-07-21T12:02:00Z',
           },
         ],
       }),
-      '2026-07-21T12:07:00Z',
-    );
-    expect(verdict.state).toBe('SETTLING-QUIET-WINDOW');
-    expect(verdict.evidence.join('\n')).toContain('after 2026-07-21T12:00:00Z');
-  });
-
-  it('a set DECLARED empty does not extend its window for a review that lands after checks green', () => {
-    // The declaration waits for no reviewer: a review at 12:08 leaves the
-    // window measured from checks green at 12:00, elapsed by 12:11.
-    const verdict = computePrVerdict(
-      settledReading({
-        expectedReviewers: [],
-        expectedDeclared: true,
-        reviews: [
-          {
-            author: COPILOT,
-            state: 'COMMENTED',
-            body: 'Reviewed.',
-            commitOid: TIP,
-            submittedAt: '2026-07-21T12:08:00Z',
-          },
-        ],
-      }),
-      '2026-07-21T12:11:00Z',
-    );
-    expect(verdict.state).toBe('SETTLE-READY');
-  });
-
-  it('a set DECLARED empty settles beside an outstanding request and a live run, and names both', () => {
-    // The declaration is the seat's judgement, so neither holds the round;
-    // the record of the irreversible act must still say what was in flight.
-    const verdict = computePrVerdict(
-      settledReading({
-        expectedReviewers: [],
-        expectedDeclared: true,
-        reviews: [],
-        reviewRequests: [COPILOT],
-        reviewRuns: {
-          kind: 'read',
-          runs: [
-            { id: 'run-1', name: 'Review', createdAt: '2026-07-21T12:01:00Z', completedAt: null },
-          ],
-        },
-      }),
       LATE_NOW,
     );
-    expect(verdict.state).toBe('SETTLE-READY');
-    const evidence = verdict.evidence.join('\n');
-    expect(evidence).toContain(`${COPILOT}: review requested on this tip and not expected`);
-    expect(evidence).toContain('review run is live');
-  });
-
-  it('a set DECLARED empty does not override a refused unavailability declaration', () => {
-    const verdict = computePrVerdict(
-      settledReading({
-        expectedReviewers: [],
-        expectedDeclared: true,
-        reviews: [],
-        declaredUnavailable: {
-          standIns: [],
-          refused: [
-            {
-              login: COPILOT,
-              url: 'https://github.com/acme/widgets/pull/999#issuecomment-1',
-              refusal: 'names a reviewer that is not expected',
-            },
-          ],
-        },
-      }),
-      LATE_NOW,
-    );
-    expect(verdict.state).toBe('UNCLASSIFIED-EVIDENCE');
+    expect(verdict.state).toBe('SILENT-WAIT-NO-REVIEWER');
   });
 
   it('a missing quiet-window anchor holds the window open, never silently settles', () => {
@@ -597,11 +504,6 @@ describe('computePrVerdict — quiet window and settlement (SKILL item 4)', () =
       '2026-07-21T13:02:00Z',
     );
     expect(verdict.state).toBe('SETTLE-READY');
-  });
-
-  it('an undeclared expected set is named in evidence, never silent', () => {
-    const verdict = computePrVerdict(settledReading({ expectedDeclared: false }), LATE_NOW);
-    expect(verdict.evidence.join('\n')).toContain('DEFAULTED from the observed surface');
   });
 });
 

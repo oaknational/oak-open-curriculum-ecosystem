@@ -7,9 +7,10 @@ import { CODEX_CONNECTOR_LOGIN, normaliseLogin } from './logins.js';
  * content (`content-binding.ts` `standingReviews`). GitHub's pending
  * `reviewRequests` lists a request of a user or a team, never of a bot, and
  * a Codex round is asked by a comment, so the rounds are read from the pull
- * request's history instead: every review-request event (the Copilot request
- * among them), every ready-for-review event (the Codex connector reviews a
- * pull request marked ready), and every `@codex review` comment. A review
+ * request's history instead: every review-request event that names a bot (the
+ * Copilot request among them), every ready-for-review event (the Codex
+ * connector reviews a pull request marked ready), and every `@codex review`
+ * comment. A review
  * bound only by content stands for the head unless a round was asked of its
  * reviewer at or after it landed.
  */
@@ -18,6 +19,12 @@ import { CODEX_CONNECTOR_LOGIN, normaliseLogin } from './logins.js';
 export interface RoundRequest {
   readonly reviewer: string;
   readonly at: string;
+  /**
+   * The round was not asked by anyone: a ready-for-review event, which the
+   * Codex connector takes as its cue where it is installed. It holds that
+   * connector's earlier review as any round does, and makes nobody a reviewer.
+   */
+  readonly implied?: true;
 }
 
 /** A top-level comment as the comments harvest reads it: who, what, and when. */
@@ -66,14 +73,14 @@ const requestsPagesSchema = z
 
 function roundOf(node: z.infer<typeof timelineNodeSchema>): RoundRequest[] {
   if (node.__typename === 'ReadyForReviewEvent') {
-    return [{ reviewer: CODEX_CONNECTOR_LOGIN, at: node.createdAt }];
+    return [{ reviewer: CODEX_CONNECTOR_LOGIN, at: node.createdAt, implied: true }];
   }
-  // Only a user or a bot is one reviewer: a team names no one, a mannequin is
-  // an imported placeholder that never reviews, and null is a deleted account.
+  // A round is asked of a bot: a review in progress is a bot's, and a request
+  // of a person is not waited for (a repository's code owners can be requested
+  // on every pull request). A team names no one, a mannequin is an imported
+  // placeholder that never reviews, and null is a deleted account.
   const reviewer = node.requestedReviewer;
-  return reviewer?.__typename === 'User' || reviewer?.__typename === 'Bot'
-    ? [{ reviewer: reviewer.login, at: node.createdAt }]
-    : [];
+  return reviewer?.__typename === 'Bot' ? [{ reviewer: reviewer.login, at: node.createdAt }] : [];
 }
 
 /**

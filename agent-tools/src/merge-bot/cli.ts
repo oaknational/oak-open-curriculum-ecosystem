@@ -31,7 +31,7 @@ import type { MergeBotResolveInput } from './resolve-identity.js';
  * squash, the verdicted tip's sha pinned in the call:
  *
  * ```bash
- * pnpm agent-tools merge-bot merge --pr <n> --expect <reviewer>
+ * pnpm agent-tools merge-bot merge --pr <n>
  * ```
  *
  * `merge-bot push` pushes the invoking worktree's HEAD under the bot

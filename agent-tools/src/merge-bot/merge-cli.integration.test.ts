@@ -101,14 +101,15 @@ function runMerge(input: {
   out: () => string;
   errText: () => string;
   sleeps: number[];
-  expectSeen: (readonly string[])[];
+  /** The option names each reading was asked with. */
+  readOptionsSeen: string[][];
   urls: string[];
   bodies: { url: string; body: string }[];
 } {
   const out = capture();
   const errSink = capture();
   const sleeps: number[] = [];
-  const expectSeen: (readonly string[])[] = [];
+  const readOptionsSeen: string[][] = [];
   const { fetchImpl, urls, bodies } = input.fetch ?? mergeFetch();
   const readings = [...input.readings];
   const exit = runMergeBotCli({
@@ -124,7 +125,7 @@ function runMerge(input: {
     runGitImpl: () => 'worktree /repo\n',
     nowEpochSeconds: () => 1_800_000_000,
     readReadingImpl: (options) => {
-      expectSeen.push(options.expectedReviewers ?? []);
+      readOptionsSeen.push(Object.keys(options));
       const next = readings.length > 1 ? readings.shift() : readings[0];
       return ok(next ?? input.readings[0]);
     },
@@ -135,14 +136,14 @@ function runMerge(input: {
     nowIsoImpl: () => '2026-08-06T09:00:00Z',
     ...input.overrides,
   });
-  return { exit, out: out.text, errText: errSink.text, sleeps, expectSeen, urls, bodies };
+  return { exit, out: out.text, errText: errSink.text, sleeps, readOptionsSeen, urls, bodies };
 }
 
-const EXPECT_ARGS = ['--pr', '42', '--expect', 'copilot-pull-request-reviewer'] as const;
+const PR_ARGS = ['--pr', '42'] as const;
 
 describe('runMergeBotCli merge', () => {
   it('merges a settled PR: exit 0, sha on stdout, sweep note and grounds on stderr, token in neither stream', async () => {
-    const run = runMerge({ args: [...EXPECT_ARGS], readings: [settledReading()] });
+    const run = runMerge({ args: [...PR_ARGS], readings: [settledReading()] });
 
     expect(await run.exit).toBe(0);
     expect(run.out()).toContain('mergesha1');
@@ -160,7 +161,7 @@ describe('runMergeBotCli merge', () => {
   });
 
   it('mints the merge-only scope — never workflows write (security D3)', async () => {
-    const run = runMerge({ args: [...EXPECT_ARGS], readings: [settledReading()] });
+    const run = runMerge({ args: [...PR_ARGS], readings: [settledReading()] });
 
     expect(await run.exit).toBe(0);
     const mint = run.bodies.find((call) => call.url.endsWith('/access_tokens'));
@@ -171,18 +172,15 @@ describe('runMergeBotCli merge', () => {
     });
   });
 
-  it('passes the declared --expect set through to the reading', async () => {
-    const run = runMerge({
-      args: ['--pr', '42', '--expect', 'rev-a', '--expect', 'rev-b'],
-      readings: [settledReading()],
-    });
+  it('asks the reading for the pull request alone: the reviewers are read from it', async () => {
+    const run = runMerge({ args: ['--pr', '42'], readings: [settledReading()] });
 
     await run.exit;
-    expect(run.expectSeen[0]).toEqual(['rev-a', 'rev-b']);
+    expect(run.readOptionsSeen[0]).toEqual(['target']);
   });
 
   it('emits the structured outcome with its grounds under --json', async () => {
-    const run = runMerge({ args: [...EXPECT_ARGS, '--json'], readings: [settledReading()] });
+    const run = runMerge({ args: [...PR_ARGS, '--json'], readings: [settledReading()] });
 
     expect(await run.exit).toBe(0);
     const outcome: unknown = JSON.parse(run.out());
@@ -196,7 +194,7 @@ describe('runMergeBotCli merge', () => {
       namedChecks: [{ name: 'lint', bucket: 'failed' }],
       checksGreenAt: null,
     });
-    const run = runMerge({ args: [...EXPECT_ARGS], readings: [red] });
+    const run = runMerge({ args: [...PR_ARGS], readings: [red] });
 
     expect(await run.exit).toBe(3);
     expect(run.errText()).toContain('CHECKS-RED');
@@ -207,7 +205,7 @@ describe('runMergeBotCli merge', () => {
 
   it('exits 3 on MERGED — another actor merging is never this invocation succeeding', async () => {
     const run = runMerge({
-      args: [...EXPECT_ARGS],
+      args: [...PR_ARGS],
       readings: [settledReading({ state: 'MERGED' })],
     });
 
@@ -217,7 +215,7 @@ describe('runMergeBotCli merge', () => {
 
   it('polls through a wait verdict under ONE minted token, then merges', async () => {
     const run = runMerge({
-      args: [...EXPECT_ARGS],
+      args: [...PR_ARGS],
       readings: [runningChecksReading(), settledReading()],
     });
 
@@ -229,7 +227,7 @@ describe('runMergeBotCli merge', () => {
 
   it('keeps --json stdout pure on a polled run: progress to stderr, outcome alone on stdout', async () => {
     const run = runMerge({
-      args: [...EXPECT_ARGS, '--json'],
+      args: [...PR_ARGS, '--json'],
       readings: [runningChecksReading(), settledReading()],
     });
 
@@ -240,7 +238,7 @@ describe('runMergeBotCli merge', () => {
 
   it('exhausts the poll budget on a persistent wait verdict as a typed refusal', async () => {
     const run = runMerge({
-      args: [...EXPECT_ARGS, '--max-polls', '2'],
+      args: [...PR_ARGS, '--max-polls', '2'],
       readings: [runningChecksReading()],
     });
 
@@ -256,7 +254,7 @@ describe('runMergeBotCli merge', () => {
     // five-minute margin, and the clock reaches 09:56 on the second poll.
     const clock = ['2026-08-06T09:00:00Z', '2026-08-06T09:56:00Z'];
     const run = runMerge({
-      args: [...EXPECT_ARGS],
+      args: [...PR_ARGS],
       readings: [runningChecksReading(), settledReading()],
       overrides: { nowIsoImpl: () => clock.shift() ?? '2026-08-06T09:56:00Z' },
     });
@@ -274,7 +272,7 @@ describe('runMergeBotCli merge', () => {
     // check, so guarding it from poll 2 onwards left a token already inside
     // its expiry margin free to merge on the reading it opened with.
     const run = runMerge({
-      args: [...EXPECT_ARGS],
+      args: [...PR_ARGS],
       readings: [settledReading()],
       overrides: { nowIsoImpl: () => '2026-08-06T09:56:00Z' },
     });
@@ -288,7 +286,7 @@ describe('runMergeBotCli merge', () => {
 
   it('refuses to poll at all when the minted token expiry is unparseable — no deadline, no merge call', async () => {
     const run = runMerge({
-      args: [...EXPECT_ARGS],
+      args: [...PR_ARGS],
       readings: [settledReading()],
       fetch: mergeFetch({ tokenExpiresAt: 'whenever' }),
     });
@@ -300,7 +298,7 @@ describe('runMergeBotCli merge', () => {
 
   it('reports a refusal machine-readably under --json', async () => {
     const run = runMerge({
-      args: [...EXPECT_ARGS, '--json'],
+      args: [...PR_ARGS, '--json'],
       readings: [settledReading({ isDraft: true })],
     });
 
@@ -316,7 +314,7 @@ describe('runMergeBotCli merge', () => {
 
   it('fails fast on a FIRST-poll reading failure — a broken environment never burns the budget', async () => {
     const run = runMerge({
-      args: [...EXPECT_ARGS],
+      args: [...PR_ARGS],
       readings: [settledReading()],
       overrides: {
         readReadingImpl: () => err(new ReadingUnavailableError('gh not found')),
@@ -335,7 +333,7 @@ describe('runMergeBotCli merge', () => {
       ok(settledReading()),
     ];
     const run = runMerge({
-      args: [...EXPECT_ARGS],
+      args: [...PR_ARGS],
       readings: [settledReading()],
       overrides: {
         readReadingImpl: () => sequence.shift() ?? ok(settledReading()),
@@ -349,7 +347,7 @@ describe('runMergeBotCli merge', () => {
 
   it('surfaces a moved tip as an operational failure without leaking the token', async () => {
     const run = runMerge({
-      args: [...EXPECT_ARGS],
+      args: [...PR_ARGS],
       readings: [settledReading()],
       fetch: mergeFetch({ mergeStatus: 409, mergeBody: { message: 'Head branch was modified.' } }),
     });
@@ -360,17 +358,20 @@ describe('runMergeBotCli merge', () => {
     expect(run.errText()).not.toContain(TOKEN);
   });
 
-  it('rejects a missing --expect as a usage error before any call', async () => {
-    const run = runMerge({ args: ['--pr', '42'], readings: [settledReading()] });
+  it('rejects a reviewer list as a usage error before any call', async () => {
+    const run = runMerge({
+      args: ['--pr', '42', '--expect', 'copilot-pull-request-reviewer'],
+      readings: [settledReading()],
+    });
 
     expect(await run.exit).toBe(2);
-    expect(run.errText()).toContain('--expect');
+    expect(run.errText()).toContain('unknown flag "--expect"');
     expect(run.urls).toEqual([]);
   });
 
   it('fails as usage when the repo config authority is unreadable', async () => {
     const run = runMerge({
-      args: [...EXPECT_ARGS],
+      args: [...PR_ARGS],
       readings: [settledReading()],
       overrides: {
         // An unparseable authority file fails the same authority-naming path
@@ -388,7 +389,7 @@ describe('runMergeBotCli merge', () => {
 
     expect(await run.exit).toBe(0);
     expect(run.out()).toContain('merge --pr');
-    expect(run.out()).toContain('--expect declares');
+    expect(run.out()).toContain('The reviews are read from the pull request');
     expect(run.urls).toEqual([]);
   });
 
@@ -414,23 +415,15 @@ describe('runMergeBotCli merge', () => {
   });
 });
 
-describe('runMergeBotCli merge — the author fence under an empty set', () => {
-  it("refuses a person's pull request under --expect none on the first poll, even while checks run: the author fence is terminal", async () => {
+describe('runMergeBotCli merge — a pull request nobody has reviewed', () => {
+  it('refuses on the first poll with green checks and no review: no wait settles it, so none is spent', async () => {
     const run = runMerge({
-      args: ['--pr', '42', '--expect', 'none'],
-      readings: [
-        settledReading({
-          checks: { total: 3, passed: 2, failed: 0, pending: 1 },
-          namedChecks: [{ name: 'e2e', bucket: 'pending' }],
-          checksGreenAt: null,
-          expectedReviewers: [],
-          expectedDeclared: true,
-        }),
-      ],
+      args: ['--pr', '42'],
+      readings: [settledReading({ author: 'a-person', expectedReviewers: [], reviews: [] })],
     });
 
     expect(await run.exit).toBe(3);
-    expect(run.errText()).toContain('did not author');
+    expect(run.errText()).toContain('SILENT-WAIT-NO-REVIEWER');
     expect(run.sleeps).toEqual([]);
   });
 });

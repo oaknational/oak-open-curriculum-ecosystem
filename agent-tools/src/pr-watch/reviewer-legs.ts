@@ -112,9 +112,9 @@ export function isSignedSelfReply(body: string): boolean {
  * lists, and not a round asked at or after the standing review landed, read
  * from the pull request's history (`round-requests.ts`), since this estate's
  * pending-request surface never lists a bot. The leg then settles as UNOWED:
- * one review of any commit meets the rule that a pull request is reviewed
- * (the owner, 2026-11-20), and a review in progress is read from a round
- * asked, never inferred from what the base branch is configured to review. A
+ * one review of any commit meets the rule that a pull request is reviewed,
+ * and a review in progress is read from a round asked, never inferred from
+ * what the base branch is configured to review. A
  * review wanted on such a tip is requested, and the request makes the leg
  * owed again. Applies only to a tip the reviewer has said nothing about: any
  * body bound to this tip (a substantive review, a quota marker, an
