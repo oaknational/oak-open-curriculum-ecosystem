@@ -5,10 +5,10 @@ name: 'Upstream API currency — generated from the API Oak currently publishes'
 overview: >-
   The SDK, and every surface generated from it, is generated from the current major of the Oak
   Curriculum API and stays within a known distance of its latest published schema.
-status: sketch
-ratified_by: null
-ratified_date: null
-ratified_where: null
+status: ratified
+ratified_by: owner
+ratified_date: 2026-11-20
+ratified_where: "The owner's answer to a question prompt in the session of Sandpiper guards Wind (690653), 2026-11-20: 'Ratify'."
 serves: TOOLS-1
 impact_areas:
   - served-surface

@@ -3,12 +3,12 @@ id: migrate-to-curriculum-api-v1
 node_type: delivery
 name: 'Migrate to the Oak Curriculum API v1'
 overview: >-
-  Bring the cached schema up to the published one, then move the generator, the SDK, the MCP
-  app and the search CLI from /api/v0 to /api/v1.
-status: sketch
-ratified_by: null
-ratified_date: null
-ratified_where: null
+  Move the generator, the SDK, the MCP app and the search CLI from /api/v0 to /api/v1 and bring
+  the cached schema up to the published v1 schema, in one pull request.
+status: ratified
+ratified_by: owner
+ratified_date: 2026-11-20
+ratified_where: "The owner's answer to a question prompt in the session of Sandpiper guards Wind (690653), 2026-11-20: 'Go straight to v1'."
 serves: upstream-api-currency
 impact_areas:
   - served-surface
@@ -51,22 +51,22 @@ Read from `https://open-api.thenational.academy` and the cached schema; re-read 
   `api-helpers.ts` in the search CLI's evaluation code. Tests, READMEs and UAT reports name it
   too.
 
-So the work is two separate changes. Almost all the risk is in the first, which is a v0 refresh
-this repository owes whatever happens to v1. The second is small because v1 equals current v0.
+So the change has two parts of unequal risk. Almost all the risk is in the schema differences,
+which this repository owes on either major. The address change is small because v1 equals
+current v0.
 
 ## Mechanism
 
-Two pull requests, in this order.
+One pull request, straight to v1 (the owner, 2026-11-20: "Go straight to v1"). Its commits keep
+the two parts apart so each can be read alone.
 
-1. **Refresh the cache to the published schema, still on v0.** Follow the
-   `update-upstream-api-spec` skill and its runbooks: characterise the drift first-hand, refresh,
-   regenerate, treat each failing correction-layer test as a signal about that correction's life,
-   re-attest the MCP content audit, and verify the served tool descriptions. An upstream
-   falsehood found on the way is reported upstream, never absorbed by loosening validation.
-2. **Move to v1.** Change the four source addresses and the SDK's configuration key, regenerate,
-   and true the tests and documents that name v0. With step 1 landed the regenerated output
-   differs only in the address and the version string; any other difference stops the step and
-   is characterised first.
+1. **Move to v1.** Change the four source addresses and the SDK's configuration key, and true the
+   tests and documents that name v0.
+2. **Refresh the cache to the published v1 schema.** Follow the `update-upstream-api-spec` skill
+   and its runbooks: characterise the drift first-hand, refresh, regenerate, treat each failing
+   correction-layer test as a signal about that correction's life, re-attest the MCP content
+   audit, and verify the served tool descriptions. An upstream falsehood found on the way is
+   reported upstream, never absorbed by loosening validation.
 
 ## Acceptance criteria
 
@@ -82,14 +82,14 @@ Two pull requests, in this order.
 5. The MCP content audit is re-attested against the regenerated surface. Proof: `repo-safe`, the
    audit record in the same pull request.
 6. Each correction-layer entry is either still needed, with its test passing, or removed with its
-   test. Proof: `repo-safe`, the diff of step 1.
+   test. Proof: `repo-safe`, the diff of step 2.
 
 ## Todos
 
 1. Re-read the catalogue and both schemas; record the versions and whether a sunset date exists.
 2. Characterise the 221 differences by kind: additive, consumer-breaking, document-only.
-3. Step 1: refresh, regenerate, work through the correction layer and the content audit.
-4. Step 2: the address change, regenerated output compared with step 1's.
+3. Step 1: the address change and the configuration key.
+4. Step 2: refresh, regenerate, work through the correction layer and the content audit.
 5. Run the served tools on the preview deployment against v1.
 6. True the READMEs and the SDK documents that name v0.
 

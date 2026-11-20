@@ -27,7 +27,7 @@ when its reviews, as GitHub reports them, are in and dealt with.
 
 ## User groups and value
 
-- **The owner** gets merges that follow his rule for reviews without a seat having to guess a
+- **The owner** gets merges that follow the owner's rule for reviews without a seat having to guess a
   reviewer list, and keeps both guard protections unchanged for the commands they name.
 - **Seats** stop splitting command lines to get past a misfiring guard, and stop passing a
   reviewer list that is, in the owner's words, "often wrong".
@@ -73,14 +73,12 @@ The tool reads three things from the pull request and takes no reviewer list:
 3. **Every review is dealt with.** No unresolved review thread, and no body finding without a
    disposition line (`pr tally` already keys these). A reasoned decline is a disposition.
 
-Two readings here are the implementing seat's to confirm with the owner before building, because
-his words do not settle them:
+The owner settled two readings by question prompt on 2026-11-20:
 
-- Whether "at least one review" must cover the final commit, or any commit of the pull request.
-  This plan assumes any commit, with the later commits' content the seat's responsibility.
-- The records-class rule (owner, 2026-09-03) merges a documentation-only pull request at green
-  checks without a review. This plan assumes his word of 2026-11-20 is the later and wider one,
-  so a records-class pull request also needs one review and waits for one in progress.
+- "At least one review" is met by a review of any commit of the pull request. A review in
+  progress on the final commit is still waited for and dealt with under readings 1 and 3.
+- A records-class pull request follows the same rule: it needs one review and waits for one in
+  progress.
 
 ## Acceptance criteria
 
@@ -103,14 +101,13 @@ his words do not settle them:
 
 ## Todos
 
-1. Put the two readings above to the owner and record his answers in this node.
-2. Part A: read the argv tables; write the failing tests; move the entries; run the guard over
+1. Part A: read the argv tables; write the failing tests; move the entries; run the guard over
    the seven recorded commands.
-3. Part B: read `settlement.ts`, `reviewer-legs.ts`, `merge-decision.ts` and `review-runs.ts`;
+2. Part B: read `settlement.ts`, `reviewer-legs.ts`, `merge-decision.ts` and `review-runs.ts`;
    list every consumer of the declared set, `review-cost` among them, in this node.
-4. Part B: write the failing tests for the three readings, then replace the declared legs with
+3. Part B: write the failing tests for the three readings, then replace the declared legs with
    them and remove the flag.
-5. True the lifecycle skill, the merge-bot reference and the gotchas reference.
+4. True the lifecycle skill, the merge-bot reference and the gotchas reference.
 
 ## Out of scope
 
