@@ -454,6 +454,19 @@ describe('computeReviewerLegs — a later tip, for a reviewer whose review of an
     expect(legs[0]?.state).toBe('OWED');
   });
 
+  it('still owes nothing when the reviewer’s only word on the tip is an empty-bodied thread reply', () => {
+    // The API creates an empty review for every thread reply; it says nothing
+    // about the tip, so the earlier review stands as it would without it.
+    const legs = computeReviewerLegs({
+      ...base,
+      expectedReviewers: ['copilot-pull-request-reviewer'],
+      reviews: [earlier, review({ body: '', submittedAt: '2026-07-21T11:58:00Z' })],
+      reviewRequests: [],
+      now: T0,
+    });
+    expect(legs[0]?.state).toBe('UNOWED');
+  });
+
   it('holds for every reviewer: one who reviewed an earlier commit owes nothing on a later one until a round is asked', () => {
     const legs = computeReviewerLegs({
       ...base,

@@ -17,6 +17,7 @@ import {
 } from './completion-evidence.js';
 import type { CompletionRefusal } from './completion-evidence.js';
 import { bindingNote, reviewBinds } from './content-binding.js';
+import { liveRunVerdict } from './live-run-verdict.js';
 import { liveRunReviewers, unmappedLiveRunEvidence } from './run-evidence.js';
 import type { PrStateReading, PrVerdict } from './state-types.js';
 import { isVendorErrorReview } from './vendor-error-reviews.js';
@@ -198,7 +199,7 @@ export function reviewerLegVerdict(reading: PrStateReading, now: string): PrVerd
     return unclassifiedVerdict(reading, legs, refusals);
   }
   if (blocking.kind === 'settled') {
-    return settledVerdict({ reading, legs, now });
+    return liveRunVerdict(reading, legs) ?? settledVerdict({ reading, legs, now });
   }
   return blockedVerdict({ reading, legs, blocking, refusals });
 }

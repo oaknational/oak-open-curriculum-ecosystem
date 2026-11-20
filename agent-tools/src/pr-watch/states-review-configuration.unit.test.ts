@@ -35,6 +35,30 @@ describe('computePrVerdict — a later tip owes a reviewer nothing once their ea
     expect(evidence).toContain('review_on_push=false');
   });
 
+  it.each([
+    ['a reviewer whose earlier review is in', [earlierTipReview]],
+    ['a reviewer whose review binds the tip', undefined],
+  ])(
+    'waits while a review run is live for the pull request, beside %s: a review in progress is waited for whoever it is by',
+    (_whose, reviews) => {
+      // The run maps to no pending request, so no leg carries it.
+      const verdict = computePrVerdict(
+        settledReading({
+          ...(reviews === undefined ? {} : { reviews }),
+          reviewRuns: {
+            kind: 'read',
+            runs: [
+              { id: 'run-1', name: 'Review', createdAt: '2026-07-21T12:50:00Z', completedAt: null },
+            ],
+          },
+        }),
+        LATE_NOW,
+      );
+      expect(verdict.state).toBe('WAITING-REVIEW-RUN-LIVE');
+      expect(verdict.evidence.join('\n')).toContain('a review run is live');
+    },
+  );
+
   it('the same tip under an unread configuration owes nothing either: the configuration is evidence and decides no leg', () => {
     const verdict = computePrVerdict(
       settledReading({ reviews: [earlierTipReview], checksGreenAt: '2026-07-21T12:55:00Z' }),

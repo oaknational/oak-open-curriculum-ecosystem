@@ -127,7 +127,9 @@ function unowedOnLaterTip(
   tipBound: readonly HarvestedReview[],
   awaits: (review: { readonly submittedAt: string }) => boolean,
 ): ReviewerLeg | undefined {
-  if (tipBound.length > 0) {
+  // An empty-bodied review bound to the tip is a thread reply's artefact and
+  // says nothing about the tip; any other body is the reviewer's word on it.
+  if (tipBound.some(hasBody)) {
     return undefined;
   }
   const standing = input.reviews

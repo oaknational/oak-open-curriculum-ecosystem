@@ -13,15 +13,20 @@ export function runsEvidence(reading: PrStateReading): string[] {
   return reading.reviewRuns.note === undefined ? [] : [reading.reviewRuns.note];
 }
 
+/** Whether a review run scoped to the pull request is in flight. */
+export function hasLiveReviewRun(reading: PrStateReading): boolean {
+  return (
+    reading.reviewRuns.kind === 'read' &&
+    reading.reviewRuns.runs.some((run) => run.completedAt === null)
+  );
+}
+
 // Bounded vendor mapping: `gh agent-task` runs carry no reviewer identity, so
 // a live PR-scoped run backs the legs of reviewers with an OUTSTANDING
 // request (the run IS the requested round in flight); it cannot distinguish
 // which of several requested reviewers it serves.
 export function liveRunReviewers(reading: PrStateReading): readonly string[] {
-  const hasLiveRun =
-    reading.reviewRuns.kind === 'read' &&
-    reading.reviewRuns.runs.some((run) => run.completedAt === null);
-  return hasLiveRun ? reading.reviewRequests : [];
+  return hasLiveReviewRun(reading) ? reading.reviewRequests : [];
 }
 
 // A live run that maps to no outstanding request (app-style reviews) cannot
@@ -30,8 +35,7 @@ export function unmappedLiveRunEvidence(reading: PrStateReading, blockingKind: s
   const hasUnmappedLiveRun =
     blockingKind === 'SILENT-WAIT-NO-REVIEWER' &&
     liveRunReviewers(reading).length === 0 &&
-    reading.reviewRuns.kind === 'read' &&
-    reading.reviewRuns.runs.some((run) => run.completedAt === null);
+    hasLiveReviewRun(reading);
   return hasUnmappedLiveRun
     ? ['note: a review run IS live for this PR, unmapped to any request']
     : [];
