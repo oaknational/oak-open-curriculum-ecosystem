@@ -1180,3 +1180,26 @@ inside a rule name).
   2026-11-19, with 34 paths against 32. Asked by the owner as an aside; nobody holds it as work.
 - **Owner gates.** The owner decided on 2026-11-19 that plan-schema owner gates come out; the
   work is the delivery node `remove-plan-schema-owner-gates`.
+
+### Update 2026-11-20, the owner's answers to the items above (Sandpiper guards Wind, 690653)
+
+- **The merge safeguard: "correct the docs".** The lifecycle skill and
+  `.agent/reference/merge-bot.md` now say the merge tool does not read a review body's
+  suppressed findings; friction F-277 is closed as not built.
+- **The staging guard: "plan and route a fix".** The delivery node is
+  `anchor-command-guards-to-their-invocation`. The cause is the guard's default token-subsequence
+  match across the whole command line; the forced-push misfire has the same cause and is in the
+  node.
+- **The fork: "leave the engraph branch on the engraph fork, but do remove engraph workflow
+  triggers from Oak".** The fork's `engraph` branch and its ruleset stay. The triggers are in
+  `ci.yml`, `codeql.yml` and `dependency-review.yml`.
+- **The review bots.** "It's fine that the claude bot is out of credit, use Copilot, but only
+  invoke where useful".
+- **The operator profile's bindings section** is ratified by the owner (2026-11-20).
+- **The schema, corrected.** The line above compared the cache with upstream's `/api/v0`. Read
+  on 2026-11-20: upstream publishes two majors. `/api/v0` is at 0.11.2 and describes itself as
+  "frozen: it continues to receive fixes, but new endpoints and fields land in `/api/v1`".
+  `/api/v1` is at 1.1.1, "the current major". Both list the same 32 paths. The cache is v0 at
+  0.7.0 with 34 paths; the two extra are `/changelog` and `/changelog/latest`, which upstream no
+  longer lists. Nothing in this repository targets `/api/v1`. The owner's word: "We are going to
+  need to migrate to V1 soon if not already done". It is not done and no plan node holds it.
