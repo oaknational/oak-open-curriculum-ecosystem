@@ -1240,16 +1240,30 @@ inside a rule name).
   checkout as their working directory and read there without writing. The owner's word: the
   seats may coordinate by direct message or on OCE's comms stream. This seat's team-start
   event is 5d8788df.
+- **Landed later still on 2026-11-20.** oaknational#1040 (the plan's two extra owner answers
+  and the day's records).
+- **The owner on instance state, 2026-11-20.** "this is a repo, it will be cloned, forked,
+  modified... state that is particular to _this_ instance of the repo **should never be in
+  version control**... imagine, someone forks it, and they have a rule about _my_ username:
+  1. that is not useful, 2. you have put my PII into a repo". The owner asked for a cleanup
+  plan: `remove-instance-state-and-personal-names-from-tracked-files`, serving
+  `organisational-identity-below-the-tree`, committed on the coordination branch.
+- **The owner on people, 2026-11-20, by question prompt.** A pending review request of a person
+  is not a review in progress; the merge tool waits for bots only.
 - **Resume here.** In order:
-  1. Part B of `command-guards-and-merge-review-reading`: the merge tool and `pr state` read
-     review state from the pull request and take no `--expect`, `--expect none` or
-     `--unavailable`. It is its own pull request, in a lane worktree cut from `origin/main`,
-     tests first. What was read before the split: the expected set already defaults from the
-     pull request when undeclared (`expected-reviewers.ts`, `state-compose.ts`), and the door
-     refuses that default (`merge-decision.ts`); a reviewer whose only review binds an earlier
-     commit reads as owed and then timed out (`reviewer-legs.ts`), which the owner's "any
-     commit" answer changes; the records-class door (`RECORDS_CLASS_MERGE_STATES`) merges with
-     no review, which the owner's answer removes. About 45 files name the declared set.
-  2. The plan update recording those answers is committed on the coordination branch with
-     this record; it goes up as the next records pull request.
+  1. The first pull request of Part B is pushed from the lane worktree
+     `.claude/worktrees/merge-review-reading`, branch
+     `fix/merge-tool-reads-reviews-from-the-pull-request`: `merge-bot merge` and `pr state`
+     read the reviewers from the pull request and take no `--expect`, `--expect none` or
+     `--unavailable`. Open its pull request if it is not open, wait for its checks and
+     review, deal with the review, merge it. Until it merges and the primary checkout's
+     `agent-tools` is rebuilt, the installed merge tool still requires `--expect <login>`.
+     The design as built is in the plan node's last section.
+  2. The second pull request of Part B: the records-class door (`RECORDS_CLASS_MERGE_STATES`
+     in `merge-decision.ts`; the narrowing in `merge-records-checks.ts`). It still merges a
+     bot's documentation-only pull request with no review, and past a pending check the base
+     branch does not require, which is how a running review check was nearly merged past on
+     oaknational#1036.
+  3. The cleanup plan and this record go up as the next records pull request.
+  4. Close friction F-298 when both pull requests of Part B have merged.
   Unchecked: whether `prevent-accidental-major-version` should refuse a `!` subject.
