@@ -16,7 +16,7 @@ name: Dependency Review
 
 on:
   pull_request:
-    branches: [main, engraph]
+    branches: [main]
 
 # Cancel superseded runs for the same PR ref. A per-workflow group (not shared
 # with CI) so this advisory gate runs in parallel with the CI workflow rather
