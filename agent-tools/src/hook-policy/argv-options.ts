@@ -107,32 +107,44 @@ function isOptionWord(word: ShellWord): boolean {
   return word.text.startsWith('-') && word.text !== '-';
 }
 
+/** What one invocation carries: its options by canonical name, and its operands as the command receives them. */
+export interface InvocationArguments {
+  readonly present: ReadonlySet<string>;
+  readonly operands: readonly string[];
+}
+
 /**
  * Walk the words after the command (or subcommand) and collect the canonical
- * names of the options present, consuming option values so they are never
- * read as flags. Options may appear in any position; `--` ends option
- * parsing.
+ * names of the options present and the operands, consuming option values so
+ * they are read as neither. Options may appear in any position; `--` ends
+ * option parsing, and every word after it is an operand.
  */
-export function collectPresentOptions(
+export function collectInvocationArguments(
   words: readonly ShellWord[],
   table: readonly OptionSpec[],
-): ReadonlySet<string> {
+): InvocationArguments {
   const present = new Set<string>();
+  const operands: string[] = [];
   let index = 0;
   while (index < words.length) {
     const word = words[index];
     index += 1;
-    if (word === undefined || !isOptionWord(word)) {
+    if (word === undefined) {
+      continue;
+    }
+    if (!isOptionWord(word)) {
+      operands.push(word.text);
       continue;
     }
     if (word.text === '--') {
+      operands.push(...words.slice(index).map((rest) => rest.text));
       break;
     }
     index = word.text.startsWith('--')
       ? parseLongWord(word.text, index, table, present)
       : parseShortCluster(word.text, index, table, present);
   }
-  return present;
+  return { present, operands };
 }
 
 function resolveShortLetters(

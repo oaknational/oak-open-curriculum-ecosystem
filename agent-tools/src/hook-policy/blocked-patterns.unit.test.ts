@@ -161,6 +161,19 @@ describe('findBlockedPattern', () => {
     expect(findBlockedPattern('rm -r build', patterns)).toBeNull();
   });
 
+  it('carries an invocation entry through the policy load boundary into an argument-aware match', () => {
+    const patterns = parseBlockedPatternPolicy({
+      hooks: { preToolUse: { blocked_patterns: [{ pattern: 'git add .', match: 'invocation' }] } },
+    });
+
+    expect(findBlockedPattern('git -C ../other add -v .', patterns)).toStrictEqual({
+      pattern: 'git add .',
+      match: 'invocation',
+    });
+    // The default mode would refuse this line; the invocation kind reads the add alone.
+    expect(findBlockedPattern('git add src/a.ts && cp dist/a.js .', patterns)).toBeNull();
+  });
+
   it('argv-mode fails open on a pattern the tables cannot parse instead of bricking the guard', () => {
     const unknown = { pattern: 'git frobnicate --hard', match: 'argv' as const };
 
