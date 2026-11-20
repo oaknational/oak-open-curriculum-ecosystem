@@ -3,9 +3,9 @@ id: command-guards-and-merge-review-reading
 node_type: delivery
 name: 'Anchor the command guards, and make the merge tool read reviews from the pull request'
 overview: >-
-  Two corrections to agent-tools in one pull request: the staging and force-push guards match
-  only their own git invocation, and the merge tool reads review state from the pull request
-  instead of being told which reviewers to expect.
+  Two corrections to agent-tools, one pull request each: the staging and force-push guards
+  match only their own git invocation, and the merge tool reads review state from the pull
+  request instead of being told which reviewers to expect.
 status: ratified
 ratified_by: owner
 ratified_date: 2026-11-20
@@ -79,6 +79,15 @@ The owner settled two readings by question prompt on 2026-11-20:
   progress on the final commit is still waited for and dealt with under readings 1 and 3.
 - A records-class pull request follows the same rule: it needs one review and waits for one in
   progress.
+
+The owner settled two more by question prompt later the same day, once Part A was built and
+Part B was found to run through about 45 files of `pr state`, `pr tally`, `merge-bot merge` and
+`review-cost`:
+
+- The two parts land as two pull requests, the guard fix first.
+- `--expect none` (no review needed) and `--unavailable <reviewer>=<comment-url>` (a vendor is
+  down) are also the seat telling the tool what to expect, and both are removed with
+  `--expect <login>`. With no review the tool refuses.
 
 ## Acceptance criteria
 
