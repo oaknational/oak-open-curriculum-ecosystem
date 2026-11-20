@@ -14,7 +14,6 @@ tickets: []
 depends_on:
   - plan: pr-tally
     kind: beneficial
-owner_gates: []
 last_updated: 2026-09-20
 ---
 

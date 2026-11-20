@@ -13,7 +13,6 @@ impact_areas:
 tickets:
   - MCP-508
 depends_on: []
-owner_gates: []
 last_updated: 2026-10-02
 ---
 

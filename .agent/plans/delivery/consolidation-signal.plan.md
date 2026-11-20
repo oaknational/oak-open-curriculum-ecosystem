@@ -14,7 +14,6 @@ tickets: []
 depends_on:
   - plan: consolidation-ledger
     kind: blocking
-owner_gates: []
 last_updated: 2026-09-08
 ---
 

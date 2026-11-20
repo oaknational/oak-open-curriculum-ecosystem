@@ -11,7 +11,6 @@ tickets: []
 depends_on:
   - plan: workspace-classification-census
     kind: beneficial
-owner_gates: []
 last_updated: 2026-09-03
 ---
 

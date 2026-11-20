@@ -4,10 +4,9 @@
  * composition root speaks.
  *
  * @remarks
- * Homed here at the second consumer: the finding-mechanism modules
- * (`plan-gate-drift.ts`) and the corpus
- * helpers all need these shapes, and leaving them in the helpers put a
- * cycle in the module graph. `plan-node-schema.ts` stays the public
+ * Homed apart from the corpus helpers so the rule modules and the
+ * composition root share these shapes without a cycle in the module
+ * graph. `plan-node-schema.ts` stays the public
  * contract transcription and deliberately knows nothing about file
  * paths.
  *
@@ -27,17 +26,3 @@ export interface ParsedPlanFile {
   readonly path: string;
   readonly node: PlanNode;
 }
-
-/**
- * The status partition every status-sensitive corpus rule shares:
- * `live` plans still demand and prove; `terminal` plans do neither.
- * Expressed as an exhaustive `Record` so adding a status to the schema
- * enum breaks the build here instead of silently classifying the new
- * status.
- */
-export const PLAN_STATUS_PARTITION: Record<PlanNode['status'], 'live' | 'terminal'> = {
-  sketch: 'live',
-  ratified: 'live',
-  archived: 'terminal',
-  superseded: 'terminal',
-};

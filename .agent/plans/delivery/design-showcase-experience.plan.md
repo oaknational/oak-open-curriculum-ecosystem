@@ -15,7 +15,6 @@ depends_on: []
 # The former beneficial edge to design-system-completion was removed
 # 2026-08-18 (MCP-613 review round 1): that sketch is archived as a
 # knowledge store; nothing here ever waited on it (see §Relationships).
-owner_gates: []
 # The R14/R15 re-cut gate CLEARED 2026-08-13 evening: owner word "ratified,
 # please proceed" at the successor seat (Skua binds Leeward, e2b222), given
 # against the compare view 76a0d9e13...8c23be9a0. The re-cut's former

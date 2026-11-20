@@ -19,7 +19,6 @@ impact_areas:
 tickets:
   - MCP-528
 depends_on: []
-owner_gates: []
 last_updated: 2026-08-07
 ---
 

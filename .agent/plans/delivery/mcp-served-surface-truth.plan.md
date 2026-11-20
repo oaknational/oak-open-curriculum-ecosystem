@@ -22,7 +22,6 @@ tickets:
   - MCP-630
   - MCP-653
 depends_on: []
-owner_gates: []
 last_updated: 2026-09-02
 ---
 

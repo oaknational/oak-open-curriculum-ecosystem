@@ -12,7 +12,6 @@ impact_areas:
   - design-system
 tickets: []
 depends_on: []
-owner_gates: []
 # The former mechanical gate (its record, conserved): it held ONLY the
 # tickets field — substance is the owner's 2026-08-03 instruction,
 # quoted verbatim in §Direction, with the ratification stamp complete

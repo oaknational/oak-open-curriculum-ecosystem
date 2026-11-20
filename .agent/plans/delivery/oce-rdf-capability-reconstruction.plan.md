@@ -17,7 +17,6 @@ depends_on:
     kind: beneficial
   - plan: oce-cf-assurance-binding
     kind: beneficial
-owner_gates: []
 last_updated: 2026-10-10
 ---
 

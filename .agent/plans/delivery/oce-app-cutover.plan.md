@@ -16,7 +16,6 @@ tickets: []
 depends_on:
   - plan: oce-app-handover
     kind: blocking
-owner_gates: []
 last_updated: 2026-10-10
 ---
 

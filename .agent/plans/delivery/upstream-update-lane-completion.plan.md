@@ -19,7 +19,6 @@ tickets:
   - MCP-462
   - MCP-463
 depends_on: []
-owner_gates: []
 # The truing co-design gate was CLEARED by owner word 2026-08-03 ~11:00Z
 # ("clear all wait for owner legs now, I don't want to be blocking on any
 # of this work from this moment on") — the lane executes autonomously

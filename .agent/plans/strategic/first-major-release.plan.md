@@ -16,9 +16,7 @@ impact_areas:
   - conformance-and-standards
   - packaging-and-distribution
   - content-workspace
-gate_expiry_default: P3D
 depends_on: []
-owner_gates: []
 tickets: []
 last_updated: 2026-10-02
 ---

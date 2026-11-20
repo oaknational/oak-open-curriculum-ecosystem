@@ -17,7 +17,6 @@ depends_on:
     kind: blocking
   - plan: copilot-cli-practice-projections
     kind: beneficial
-owner_gates: []
 last_updated: 2026-10-02
 ---
 

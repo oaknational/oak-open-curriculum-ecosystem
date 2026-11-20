@@ -15,7 +15,6 @@ impact_areas:
   - analytics-and-observability
 tickets: []
 depends_on: []
-owner_gates: []
 last_updated: 2026-08-08
 ---
 

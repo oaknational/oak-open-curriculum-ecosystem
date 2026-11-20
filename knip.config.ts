@@ -135,7 +135,6 @@ const config: KnipConfig = {
         'src/validators/identity-naming/validate-identity-naming.ts',
         'src/validators/check-ci-parity/validate-check-ci-parity.ts',
         'src/validators/plan-schema/validate-plan-corpus.ts',
-        'src/validators/plan-schema/check-plan-gate-drift.ts',
         'src/validators/workspace-config-isolation/validate-workspace-config-isolation.ts',
         'src/validators/notion-fence/validate-notion-fence.ts',
         'src/validators/reference-direction/validate-reference-direction.ts',

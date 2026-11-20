@@ -10,11 +10,9 @@ ratified_where: "Owner cards 2026-09-08 via the Director seat (Flounder turns Es
 serves: TOOLS-2
 impact_areas:
   - practice-and-estate
-gate_expiry_default: P21D
 depends_on:
   - plan: survey-machinery-deconstruction
     kind: beneficial
-owner_gates: []
 tickets: []
 last_updated: 2026-10-10
 ---

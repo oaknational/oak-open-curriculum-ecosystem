@@ -21,9 +21,7 @@ serves: TOOLS-2
 impact_areas:
   - practice-and-estate
   - packaging-and-distribution
-gate_expiry_default: P21D
 depends_on: []
-owner_gates: []
 last_updated: 2026-10-10
 ---
 

@@ -19,9 +19,7 @@ serves: APP-1
 impact_areas:
   - served-surface
   - conformance-and-standards
-gate_expiry_default: P3D
 depends_on: []
-owner_gates: []
 tickets: []
 last_updated: 2026-08-19
 ---

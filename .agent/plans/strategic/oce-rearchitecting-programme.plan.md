@@ -12,9 +12,7 @@ impact_areas:
   - innovation-kit
   - practice-and-estate
   - packaging-and-distribution
-gate_expiry_default: P21D
 depends_on: []
-owner_gates: []
 tickets: []
 last_updated: 2026-10-10
 ---

@@ -27,12 +27,6 @@ depends_on: []
 # depends_on:
 #   - plan: <plan-id>
 #     kind: blocking | beneficial
-owner_gates: []
-# owner_gates:
-#   - awaiting: owner-decision | external-input
-#     clears_when: <the named condition or person that resolves it>
-#     expires: <YYYY-MM-DD — absolute, mandatory; horizon inherits from
-#       the governing strategic node's gate_expiry_default>
 last_updated: <YYYY-MM-DD>
 ---
 

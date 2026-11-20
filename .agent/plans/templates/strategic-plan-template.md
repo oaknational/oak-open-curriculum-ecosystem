@@ -19,9 +19,7 @@ ratified_where: null
 serves: <published strategic-choice ID from docs/strategy>
 impact_areas:
   - <area from impact-areas.md>
-gate_expiry_default: <ISO-8601 duration, e.g. P21D — the tempo this node sets for its subtree>
 depends_on: []
-owner_gates: []
 tickets: []
 last_updated: <YYYY-MM-DD>
 ---

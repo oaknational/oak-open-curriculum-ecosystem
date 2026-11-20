@@ -14,7 +14,6 @@ tickets: []
 depends_on:
   - plan: workspace-config-isolation
     kind: beneficial
-owner_gates: []
 last_updated: 2026-08-12
 ---
 

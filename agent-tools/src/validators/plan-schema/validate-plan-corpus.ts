@@ -28,9 +28,7 @@ import { validateCorpus } from './validate-plan-corpus-helpers.js';
  *
  * This gate is a deterministic function of repo content — no clock,
  * by design: re-running it on any historical commit reproduces that
- * commit's verdict. The time-dependent sibling concern (expired owner
- * gates) is deliberately NOT here: it alerts without blocking via
- * `check-plan-gate-drift.ts` (owner ruling 2026-07-31).
+ * commit's verdict.
  *
  * **Scan root is the admission rule drawn as a directory boundary**:
  * only `.agent/plans/` is scanned. The conserved backlog

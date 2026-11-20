@@ -19,7 +19,6 @@ tickets:
   - MCP-441
   - MCP-442
 depends_on: []
-owner_gates: []
 last_updated: 2026-07-31
 ---
 

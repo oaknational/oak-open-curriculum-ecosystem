@@ -12,7 +12,6 @@ impact_areas:
   - practice-and-estate
 tickets: []
 depends_on: []
-owner_gates: []
 last_updated: 2026-09-11
 ---
 

@@ -11,11 +11,9 @@ ratified_where: "Owner decision card direct to the lane seat (Nautilus calls Pla
 serves: TOOLS-2
 impact_areas:
   - practice-and-estate
-gate_expiry_default: P21D
 depends_on:
   - plan: workspace-classification-census
     kind: beneficial
-owner_gates: []
 tickets: []
 last_updated: 2026-08-19
 ---

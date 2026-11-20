@@ -14,7 +14,6 @@ tickets: []
 depends_on:
   - plan: code-quality-binding-per-checkout
     kind: beneficial
-owner_gates: []
 last_updated: 2026-09-06
 ---
 

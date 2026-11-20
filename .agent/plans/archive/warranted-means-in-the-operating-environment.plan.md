@@ -12,12 +12,6 @@ impact_areas:
   - practice-and-estate
 tickets: []
 depends_on: []
-owner_gates:
-  - awaiting: owner-decision
-    clears_when: >-
-      The owner answers the one card that mechanism step 3 puts after the enumeration's count
-      exists: nothing further, or the environment contract and the warrant clause.
-    expires: 2026-10-11
 last_updated: 2026-11-03
 ---
 

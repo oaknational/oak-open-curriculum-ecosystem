@@ -17,7 +17,6 @@ tickets:
 depends_on:
   - plan: mutation-testing-core-canary
     kind: blocking
-owner_gates: []
 last_updated: 2026-08-11
 ---
 

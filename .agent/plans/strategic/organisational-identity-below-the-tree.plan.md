@@ -11,9 +11,7 @@ serves: FRAME-2
 impact_areas:
   - practice-and-estate
   - design-system
-gate_expiry_default: P21D
 depends_on: []
-owner_gates: []
 tickets: []
 last_updated: 2026-09-08
 ---

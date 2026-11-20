@@ -15,7 +15,6 @@ tickets:
 depends_on:
   - plan: copilot-cli-identity-and-practice-join
     kind: beneficial
-owner_gates: []
 last_updated: 2026-07-25
 ---
 

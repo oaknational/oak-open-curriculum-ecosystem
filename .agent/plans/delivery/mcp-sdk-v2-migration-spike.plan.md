@@ -11,7 +11,6 @@ impact_areas:
 tickets:
   - MCP-506
 depends_on: []
-owner_gates: []
 last_updated: 2026-08-05
 ---
 

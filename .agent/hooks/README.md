@@ -71,8 +71,7 @@ The hook layer follows a small Policy Spine. The layers are not peers.
    Tracked project config may activate only supported canonical policy. It
    does not redefine the policy. Hooks that activate no policy are
    registered here without a policy key: the `SessionStart` identity
-   adapters (Claude Code, Codex and Cursor) and the Claude Code plan-gate
-   drift alert, which add session context; the Read and `UserPromptSubmit`
+   adapters (Claude Code, Codex and Cursor), which add session context; the Read and `UserPromptSubmit`
    secrets scans, which block a read or a prompt that holds a secret; and
    the `PreCompact` observer, which observes and never decides.
 3. **Workspace-owned runtime** — the single prebuilt

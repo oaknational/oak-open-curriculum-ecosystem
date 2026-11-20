@@ -19,7 +19,6 @@ tickets: []
 depends_on:
   - plan: skill-standard-pilot
     kind: beneficial
-owner_gates: []
 last_updated: 2026-08-11
 ---
 

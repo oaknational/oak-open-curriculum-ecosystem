@@ -17,7 +17,6 @@ tickets: []
 depends_on:
   - plan: prerequisite-claim-removal
     kind: blocking
-owner_gates: []
 last_updated: 2026-09-09
 ---
 

@@ -75,9 +75,7 @@ Two consequences are load-bearing:
 | `impact_areas` | list from the registry | all | Which product areas this plan changes — [`impact-areas.md`](impact-areas.md), closed and additive |
 | `tickets` | list of Linear issue IDs | optional, always (see the 2026-08-07 plan-validity amendment below) | Visibility metadata only — when Oak's Linear tracks the work, the linkage projects it there; validity never depends on it |
 | `depends_on` | list of `{ plan, kind: blocking \| beneficial }` | optional | A `blocking` edge clears when its target archives |
-| `owner_gates` | list of `{ awaiting, clears_when, expires }` | optional | See gates below |
 | `superseded_by` | node id | when `status: superseded` | No plan leaves the estate without naming its successor |
-| `gate_expiry_default` | day-scale ISO-8601 duration (`PnD`) | strategic only | The tempo this node sets for its subtree |
 | `last_updated` | ISO date | all | Housekeeping |
 
 All enums are **closed and additive**: new members are added
@@ -105,25 +103,6 @@ Transitions:
   with its first member), or an abandoned sketch is archived with a
   one-line disposition note.
 
-## Owner gates — expiring, never open-ended
-
-A gate records that a plan waits on a decision no other plan's
-completion can clear:
-
-- `awaiting` — `owner-decision | external-input` (closed, additive).
-- `clears_when` — the named condition or person that resolves it.
-- `expires` — an **absolute date, mandatory**. A gate with no expiry is
-  invalid; an expired gate is surfaced as drift demanding a decision
-  (renew, resolve, or archive the plan) — expiry never auto-cancels
-  anything.
-
-**The default expiry horizon is strategy-scoped data, not a schema
-constant.** The governing strategic node sets the tempo for its subtree
-via `gate_expiry_default`; a plan whose gate omits its own horizon
-inherits it down the `serves` edge. Absent any setting, the fallback is
-**P21D**. (The current release strategic node sets **P3D**, matching
-its delivery timescales — that fact lives in the node, not here.)
-
 ## Per-type contracts
 
 Common to **every** plan type (owner ruling 2026-08-31): the body names
@@ -142,7 +121,7 @@ dated-amendment discipline above).
 ### Strategic
 
 The why and the what: the outcome sought, the bet it rests on, what
-success looks like, and the tempo (`gate_expiry_default`). It carries
+success looks like. It carries
 **no implementation detail** and no todos. Its delivery plans declare
 `serves: <this-id>` — enumerate them by search, never by a hand-kept
 list.
@@ -190,19 +169,9 @@ of Oak's strategy stays on internal surfaces.
 The estate validator (re-cut to this contract in its own lane,
 red-first) refuses: an incomplete ratification stamp on a `ratified`
 plan; open-enum drift; an `impact_areas` entry absent from the
-registry; a gate without an
-absolute expiry; `superseded` without `superseded_by`; and an empty corpus
-(zero plans is a failure, never a vacuous green).
-
-**Gate-expiry drift (dated amendment 2026-07-31, owner-ruled)**: expired
-owner gates on live plans (`sketch`, `ratified`) are surfaced by a
-dedicated NON-BLOCKING instrument, `check-plan-gate-drift` (run as
-`pnpm plan-gates:check`; an in-repo session-open hook shim projects the
-alert into sessions on platforms where the operator has registered it),
-which repeats persistently, with resolution instructions, until the
-gate rows change. It never blocks commits or CI; the conformance
-validator above stays a deterministic function of repo content, with no
-clock input.
+registry; `superseded` without `superseded_by`; and an empty corpus
+(zero plans is a failure, never a vacuous green). The validator is a
+deterministic function of repo content, with no clock input.
 
 **Dated amendment (2026-08-07, owner-ruled): plan validity is
 repo-internal.** The owner's verbatim ruling: "Work does NOT require a

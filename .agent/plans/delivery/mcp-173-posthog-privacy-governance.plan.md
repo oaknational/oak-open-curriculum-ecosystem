@@ -16,7 +16,6 @@ tickets:
 depends_on:
   - plan: mcp-63-posthog-product-analytics
     kind: blocking
-owner_gates: []
 last_updated: 2026-07-26
 ---
 

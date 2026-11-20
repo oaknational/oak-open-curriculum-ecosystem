@@ -10,11 +10,9 @@ ratified_where: "PR #85 (2026-09-08), whose body quotes the owner's card answer 
 serves: FRAME-1
 impact_areas:
   - practice-and-estate
-gate_expiry_default: P21D
 depends_on:
   - plan: agent-platform-citizenship
     kind: beneficial
-owner_gates: []
 tickets: []
 last_updated: 2026-09-08
 ---

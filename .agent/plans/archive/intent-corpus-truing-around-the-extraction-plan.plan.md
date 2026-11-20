@@ -22,7 +22,6 @@ impact_areas:
 tickets:
   - MCP-673
 depends_on: []
-owner_gates: []
 last_updated: 2026-09-03
 ---
 
