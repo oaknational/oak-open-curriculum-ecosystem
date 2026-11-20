@@ -335,7 +335,8 @@ without reading a review body on 2026-11-16, with the pull-request lifecycle ski
 text ("BOTH harvest surfaces: review threads AND review bodies") loaded earlier in the arc.
 Neither has a literal surface signature a hook could match: both are a claim about an
 object's state made from a partial read of it. They belong to t2's inventory as semantic
-pathogens, and the first shows that a napkin entry does not carry across a compaction.
+pathogens. The first recurred after two context compactions; whether compaction contributed is
+not established.
 
 Two more from the same seat on 2026-11-19, during the consolidation that logged the two above.
 It dispatched a reader agent over one napkin window although the owner's ruling of 2026-10-11
@@ -344,6 +345,39 @@ the reader's own report pointed the ruling out. And three commits were refused f
 over 100 characters, a refusal the napkin records twice on 2026-10-02 and the commit skill
 states in a table. The second has a literal signature (a message checker run before the
 commit); the first does not.
+
+**The napkin of 2026-09-29 to 2026-11-19, read whole (2026-11-19 consolidation).** Nineteen
+named seats wrote it. Read as one corpus, most of its behavioural lessons are not new: they are
+instances of doctrine `verify-dont-trust` already states, recorded as fresh lessons by seats
+that had the rule loaded as a pointer. The families, each with at least three dated instances
+in the archive `napkin-2026-11-19.md` (the counts below are the curating seat's reading, not a
+script's):
+
+- **A statement of absence written without its search**: "claims none", "the owner has not
+  said", "nobody looks at this", "one recorded run", "no review round", "no open threads", a
+  count that was a claim about the next item. At least four seats; at least two instances
+  were written within hours of the same seat recording the lesson.
+- **A quotation or figure taken from a relay**: reader agents' paraphrases inside quotation
+  marks (twice), a search digest, an abstract, a side agent's label, a line citation from a
+  windowed read, an owner quotation attached to a different object.
+- **A proxy read as the object**: threads for reviews (two seats, three instances), a merge-state badge for
+  what the bot may do, a green check for what its job runs, a gate number for its definition
+  (twice), a workspace's green for the lane's, "has a home" for "reached the agent".
+- **A wait or a gate the seat invented on the owner**: "merge at the owner's word" (at least
+  two seats), an owner check that had been stopped, a ratification the classifier already decided,
+  a "joint review", a watch that only the owner could end, records "owed" to a later session.
+- **A tool rule broken after it was written down**: tracked prose edited by script (five
+  entries over two months, then this consolidation), a commit joined to its check so the
+  refusal did not stop it (three seats), the zsh colon modifier (three times in one session),
+  no pilot leg before a fan-out (four seats).
+
+Two entries in the corpus name the mechanism in the seats' own words: "A lesson held in a
+buffer does not fire at the moment of a fluent verdict", and "'Has a home' and 'reached the
+agent' are two facts". One trial bears on it: across ten sessions, most of the rule files a
+session opened had names that shared words with its task. The trial's own record says it shows
+an association and did not measure name matching as the mechanism; three opened rules shared no
+word with their task. That is t2's inventory seen from the delivery side, and it is why this
+consolidation added little requirement text for these families.
 
 ## Relationship to Existing Plans (coordination, not duplication)
 

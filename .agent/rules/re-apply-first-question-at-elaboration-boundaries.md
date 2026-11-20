@@ -36,6 +36,11 @@ is a discipline that fires:
    shared that shape, and each was cheaper than the ceremony that
    preceded it (2026-09-06/07).
 
+A cure that grows is an elaboration boundary. When a fix expands
+beyond the size it was first given (more entries, more files, a module
+split), stop and re-ask what the fix is for before sizing the larger
+version.
+
 Plan-following is **not** principle-following. A plan that was
 correct at authoring time can become principle-violating at
 execution time as understanding deepens; the principle wins.

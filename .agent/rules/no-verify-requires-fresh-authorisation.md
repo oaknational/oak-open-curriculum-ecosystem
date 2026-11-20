@@ -74,6 +74,11 @@ full CI round on the critical path of a three-PR merge train: the cure was
 one line, the cost was the round. When an authorised skip is weighed, weigh
 the round, not the minute.
 
+A series committed with the hooks off under such an authorisation is closed
+by hand before its last commit: the accidental-major-version guard run on
+every message, every new file staged, then the full gate over the tracked
+tree. The last hooked commit's own checks see only its own chunk.
+
 ## Why this rule exists
 
 Quality-gate hooks are the operational arm of the principles in `.agent/directives/principles.md` § Code Quality. The principle prohibits `--no-verify` in foundational language. This rule converts the prohibition from passive guidance into an owner-initiated per-invocation gate: the agent has no authority to skip a hook or solicit a skip, regardless of how confident it is that the skip is harmless.

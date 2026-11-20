@@ -117,7 +117,8 @@ Supply every role with the same six fields:
 1. **OBJECTIVE FRAME** — the controlling objective, in two labelled blocks: `SOURCES:`,
    the owner's latest words on it and the governing plan node's todo lines, quoted verbatim
    with the file and commit they were read at, with a todo's status only where a source
-   states it, attributed to that source (a plan node stores no execution state); and
+   states it, attributed to that source (a plan node stores no execution state), and every
+   hold the owner has placed quoted verbatim, never summarised as "no holds"; and
    `READING:`, the invoker's reading of them (the goal; one measure per direction or part of
    the goal, each with its method line; each owner word mapped to its owning todo, status
    and receiver; the order, the holds, the status it acts on). The work verdict judges

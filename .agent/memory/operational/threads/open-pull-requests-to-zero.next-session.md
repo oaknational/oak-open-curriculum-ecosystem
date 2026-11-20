@@ -1138,8 +1138,9 @@ inside a rule name).
   found. Parked at the owner's word.
 - Fifty-nine TypeScript rules exist only in SonarCloud's comprehensive profile and are not
   enforced on Oak; the owner left the configuration as it is.
-- The public-pages lane's steps 5 to 7. Its plan body is held outside the repository; the
-  strategic node is `public-explanatory-system`. Step 5 needs splitting to fit the bounded rule.
+- The public-pages lane: todos 3 to 5 of the ratified delivery node
+  `public-pages-to-standard` (the other public pages, the reference-direction check, the close).
+  Todo 3 needs splitting to fit the bounded rule.
 - The merge tool's work-in-progress limit counts every open pull request in the repository;
   on Oak a seat passes a limit just above the open count until the tool counts the caller's own.
 - The operator profile's SonarCloud entry and the Sonar tool server's sign-in still name the
@@ -1147,3 +1148,35 @@ inside a rule name).
   `sonar auth org oaknational`.
 - Carried from the 2026-11-16 state and still unacted on: individuals named in
   `LICENCE-DATA.md`, the demos' READMEs and `CHANGELOG.md`; the pinned `@mcpjam/cli`.
+
+### Update 2026-11-19, from the consolidation's reading of the napkin (Sandpiper guards Wind, 690653)
+
+- **A correction to this lane state.** "An app installation token cannot re-run a workflow job"
+  is stronger than the evidence. The shell-and-tooling reference says a re-run needs a token
+  minted at the `workflow-dispatch` scope and that the pull-request scope answers the 403 the
+  seat met on 2026-11-16. The scope the seat used is not established, and whether Oak's
+  installation holds the Actions permission is unchecked.
+- **The lifecycle skill describes a merge safeguard the tool here does not have.** The skill
+  (its suppressed-findings passage and its merge-boundary item) and
+  `.agent/reference/merge-bot.md` say a review body's suppressed findings hold the bot's merge
+  under a state named `SUPPRESSED-FINDINGS-OPEN`, read by `disposition-lines.ts` and
+  `suppressed-hold.ts`, at the owner's card "block on any finding" (2026-09-14). In this
+  repository `agent-tools/src/pr-watch/states.ts` has no such state, neither module exists, and
+  `git log -S` finds no history of them. The tool prints a line asking the seat to tally body
+  findings and merges. A napkin entry of 2026-11-06 first noticed it. Building the hold or
+  correcting the text is the owner's choice; neither is done.
+- **The staging guard's false positive has seven recorded instances and no fix.** The pattern
+  matches `add` followed later by a space and a dot anywhere on a command line, so worktree
+  creation and unrelated copies are refused. Each seat recorded it as tooling feedback
+  (2026-11-04 to 2026-11-18) and none routed it. The fix is to anchor the entry in
+  `.agent/hooks/policy.json` to a `git add` invocation.
+- **The merge tool's work-in-progress count** still includes every open pull request that is
+  not Dependabot's; the owner's ruling for Oak is "Count only my own".
+- **The review bot is out of usage credit on Oak.** `claude[bot]` skipped 1030 and 1031; both
+  merged on the records-class rule with no vendor review. The owner's word of 2026-11-19:
+  Copilot reviews can be requested.
+- **The live service's schema.** The served code is generated from the cached Oak Curriculum
+  API schema `0.7.0-3b4b01e6`, last refreshed on 2026-08-03; upstream reported 0.11.2 on
+  2026-11-19, with 34 paths against 32. Asked by the owner as an aside; nobody holds it as work.
+- **Owner gates.** The owner decided on 2026-11-19 that plan-schema owner gates come out; the
+  work is the delivery node `remove-plan-schema-owner-gates`.

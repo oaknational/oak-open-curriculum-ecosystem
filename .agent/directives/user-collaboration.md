@@ -327,6 +327,11 @@ Verification questions need direct answers:
 - present anything meant for copy-paste (commands, prompts, re-entry text) as a
   fenced code block, never quoted prose — blockquotes pick up `>` markers and
   reflow on paste
+- never send the owner a term the seat coined: a name given to one of the
+  owner's steps carries the owner's own words beside it wherever the owner
+  will read it, or it is not used; and when something waits on a word of the
+  owner's that has two readings, ask which is meant at the moment the wait is
+  written down
 - never label a required structured statement (a landing commitment, a
   session-open declaration) as "ritual" in user-facing text — the word frames
   substance as ceremony; state the target, criteria, and evidence without

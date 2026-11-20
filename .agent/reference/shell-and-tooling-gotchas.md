@@ -880,10 +880,111 @@ Director's landing record of 2026-09-06, event f05a54da).
   first gate.
 - **Putting a file back without a blocked git command.** The hook refuses the git commands that
   overwrite a working-tree file from a commit (the path form of checkout, `restore`, and a
-  `show` redirected onto the same path). The forward route copies the in-flight file to the
-  scratchpad, writes `git cat-file -p HEAD:<path>` to a scratchpad file, then `cp`s it into
-  place (2026-10-28). A file the owner has changed is the owner's to put back (2026-11-18).
+  `show` redirected onto the same path). The sanctioned route is the standing grant for proven
+  paths in `.agent/rules/never-use-git-to-remove-work.md`: the path's content is first proved
+  on the freshly fetched base and the proof recorded per path; the committed content is then
+  written to a new sibling file and renamed over the path, never redirected or copied into the
+  existing file, which writes through its inode to any second hard link. A file the owner has
+  changed is the owner's to put back (2026-11-18).
 - **The hook matches a blocked command's words anywhere in a command's text**, a quoted
   sentence in a heredoc included (2026-10-29; 2026-11-19). Text that names such a command goes
   into a file written with the file tool, and the command runs the file.
+- **The staging guard matches `add` followed later by a space and a dot anywhere on one
+  command line**: `git worktree add ... .claude/...`, an explicit-path `git add` followed by a
+  dot-sourced script, and a later `cp ... .` were each refused as wildcard staging (seven
+  recorded instances, 2026-11-04 to 2026-11-18). Give the path in absolute form and run the
+  `add` as its own command. The guard's pattern is not anchored to a `git add` invocation; no
+  lane has taken that fix.
+- **The force-push guard matches `-f` anywhere on a line that also pushes**: a later
+  `gh api graphql -f` on the same line was refused. Use `--raw-field`, or separate commands
+  (2026-11-12).
+- **The tracked-file gates read `git ls-files`.** A new file that is still untracked is
+  invisible to `prettier-tracked` and the path validators, and a link to it reads as broken
+  (`tracked-source-to-untracked-target`); a tracked file removed with `rm` is still in the index
+  and the validators refuse a path they cannot open. Stage new files and record deletions
+  (`git rm`) before running the gate (2026-11-02; 2026-11-10; 2026-11-19).
+- **The commit hook lints workspaces by turbo's `...[HEAD]`**, which compares the working tree
+  with HEAD and includes dependents, so a commit of three unrelated files still lints a
+  workspace that carries uncommitted changes. `turbo run lint --filter='...[HEAD]'
+  --dry-run=json` shows the plan (2026-11-02).
+- **After a failed commit its files stay staged** and ride into the next commit unless that
+  commit names its paths. Read `git diff --cached --name-only` before the next commit
+  (2026-11-09).
+- **A second push minutes after the first cancels the first's CI run**, which the gate then
+  reports as a failure (2026-11-12).
+- **A pnpm "Command not found" under `ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL` for a root-only
+  script means the working directory drifted into a workspace**, not that the script is
+  missing (2026-11-02).
+- **A command started with no path argument inside a compound command or a `while read` loop
+  reads standard input**: `rg PATTERN -g GLOB` hung to the tool timeout, and five of ten
+  `claude -p` sessions started inside a read loop took the rest of the task list as their
+  prompt. Give `rg` an explicit path, and give any command inside a read loop `< /dev/null`
+  (2026-11-10; 2026-11-12).
+- **`grep -c PATTERN || echo 0` prints two lines when the count is zero**: grep prints `0` and
+  exits 1 (2026-11-05).
+- **A worktree directory whose git metadata is gone is invisible to `git worktree list`.**
+  Inventory `.claude/worktrees/` by listing the directory as well (2026-11-02).
+- **A fresh worktree's `agent-tools/dist` is stale until it is built**
+  (`pnpm turbo run build --filter=@oaknational/agent-tools`), and the pre-push gate rebuilds it
+  from whatever tree is checked out, so a merge door run from a shared build can run another
+  branch's code (2026-10-28; 2026-11-15).
+- **The Read tool is refused by the secrets hook on a diff whose test fixtures look like
+  secrets**; read such a file with `sed -n` in chunks (2026-11-02).
+- **`sonar api` reports "Not authenticated" when `SONAR_TOKEN` or `SONAR_USER_HOME` is exported
+  in the same shell**; it works in a clean shell (2026-11-15). SonarCloud's public API gives a
+  gate's evaluated conditions only; the gate's definition and a profile's rule list need a
+  signed-in CLI and the `organization` parameter. `sonar run mcp` takes its organisation from
+  the CLI's sign-in when the server starts, so `sonar auth org <key>` does not move a running
+  server (2026-11-18).
+- **The word `TODO` inside a rule name raises Sonar's S1135**, so a debt comment that uses
+  `TODO` or `FIXME` raises a finding of its own (2026-11-18).
+- **On GitHub a comment-only review whose findings are all outside the diff makes no review
+  thread**; the finding sits in the review body. `gh pr checks --watch` returns when the checks
+  finish and its exit says nothing about whether they passed. `mergeStateStatus: BLOCKED`
+  describes a person's merge button: a bot that is a bypass actor on the ruleset merges through
+  it. `run-quality-gates` goes red when a sibling job is cancelled, so one slow checkout
+  against a job's time limit shows as three failures (2026-11-16; 2026-11-18).
+- **A ruleset that follows the default branch moves when the default changes.** Retarget it to
+  the old branch by name before switching the default, or a rule that requires a pull request
+  lands on the new default and blocks a mirror's fast-forward (2026-11-18).
+- **The merge tool's `--wip-limit` counts every open pull request that is not Dependabot's**,
+  whoever opened it. Its merge holds a quiet window and can outrun a 300-second tool timeout;
+  the merge then completes in the background (2026-11-16; 2026-11-18).
+- **The review-cost gate reads its decision file relative to the pushing worktree**, and a line
+  there starts with the bare pull request number, no `#` (2026-11-12).
+- **A sub-agent in this repository carries about 107,000 tokens of fixed load before it reads
+  its unit** (one pilot: 121,367 tokens for a 54,463-character unit; three later readers used
+  196,000 to 316,000 each). A fan-out's cost is set by the number of legs far more than by
+  what they read (2026-11-12; 2026-11-19).
+- **Owner messages typed while a turn is running are stored in the session transcript as queued
+  records, not user turns.** A reconstruction that filters on user turns loses them
+  (2026-11-19: six rulings of one afternoon).
+- **The decision-card tool can be closed by a worker restart**: the call returns "not
+  completed" with no answer and no refusal. That is not a decline. Record that no answer
+  exists, and card the question again when the owner is present (2026-11-12, three times).
+- **A path and a name are different values even when both run the same binary.** Swapping a
+  resolved absolute path for the bare name at every call site handed the name to a shim that
+  sits first on `PATH` and execs "the real one"; it found itself and ran until the smoke run
+  timed out. Before a mechanical swap, read what each consumer does with the value, not only
+  its type (2026-11-06).
+- **A property stated for one call site does not cover a change to four.** Four launchers moved
+  to `cross-spawn` on a claim checked for one; a generic one forwarded a commit subject to
+  Windows' `cmd.exe`. Trace every caller's arguments before stating a property of a change to
+  a shared launcher (2026-11-06).
+- **Capturing a child's stderr moves the diagnostic; it does not remove the need to show it.**
+  A resolver that stopped echoing git's stderr then reported "not inside a git working tree"
+  for a dubious-ownership failure. Fold the child's own words into the refusal (2026-11-05).
+- **A frozen file is hashed after every formatter has run**: stamp it last, once the whole
+  member set is final, then recompute every hash and pinned revision those bytes feed
+  (2026-11-05).
+- **A lint twin's parity is per shape, not per rule**: `unicorn/prefer-string-starts-ends-with`
+  catches the regex form and not `a.charAt(0) === b.charAt(0)`, which the analyser then found
+  (2026-11-03).
+- **A heartbeat loop with a fixed title broadcasts stale state**; re-arm it with a current
+  title at each change of lane state, or have it read the title from a file (2026-11-05).
+- **A browser print of a web page can hide a figure behind a fixed overlay while the figure is
+  still in the PDF**: `pdfimages -list` missed an inline image that PyMuPDF's
+  `page.get_text("dict")` image blocks returned whole. An attached PDF is not the document it
+  is a print of: read its pages and state its extent before planning around it (2026-11-06;
+  2026-11-12).
 

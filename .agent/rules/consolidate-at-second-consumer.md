@@ -50,6 +50,9 @@ shape. Plan the cures for the reclassification when consolidating, not
 just the move (worked instance 2026-08-09: the fidelity-review extraction
 fired both classes on unchanged code).
 
+The rule applies inside one diff. A change that cures the same thing in two
+places writes the shared function once, not two copies.
+
 ## See Also
 
 [PDR-058 §Surface 2 (design optionality)](../practice-core/decision-records/PDR-058-three-tier-optionality-decomposition.md)

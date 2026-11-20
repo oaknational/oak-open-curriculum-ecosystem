@@ -804,6 +804,8 @@ Universal testing principles:
 - test behaviour through public interfaces, not implementation details;
 - assert effects, not internal constants or configuration collections;
 - each proof happens once and must prove product code;
+- a change that edits a mirror and the test that pins it proves nothing by
+  passing: read the test's own diff;
 - unit tests are pure, in-process, and mock-free;
 - integration tests import code directly and use only simple DI fakes;
 - in-process tests never use or create IO other than stdio, at any level, and no

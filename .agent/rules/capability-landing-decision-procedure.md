@@ -148,6 +148,13 @@ while the procedure's substance homes in the skill.
 - **Name and description** meet
   [skill-naming-and-description-quality](skill-naming-and-description-quality.md)
   — the bar binds skills, rules, and subagents alike.
+- **Current requirements only**: a rule or a skill describes what is
+  required now, never how the requirement came about. The owner's
+  words: "Regarding history in rules, there should be none of that,
+  same for skills, they must describe current requirements, not the
+  evolution that arrived at them." Dated incidents, worked instances
+  and the record of earlier rulings belong in the napkin, a report or
+  a decision record, not in the payload.
 - **Status-independence**: the payload's operative prose must not
   depend on a terminal status that can die silently (a ticket state,
   a "current" pointer, an in-force marker). Restate it
