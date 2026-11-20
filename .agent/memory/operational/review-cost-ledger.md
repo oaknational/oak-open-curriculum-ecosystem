@@ -254,6 +254,12 @@ budget, and #146 exempted syncs only. No weight changes; the CI-cure reading wai
 | 2026-11-19 | oaknational#1027 | 0 | 0 / 40 | within | 0 | agreed | a resolved snagging entry and one settings line; no findings |
 | 2026-11-19 | oaknational#1028 | 0 | 0 / 40 | within | 0 | agreed | the skills review, records-class; no findings |
 | 2026-11-19 | oaknational#1029 | 0 | 0 / 40 | within | 0 | agreed | three minor Sonar findings; no findings |
+| 2026-11-19 | oaknational#1030 | 0 | 0 / 40 | within | 0 | agreed | the lane's close and retrospective, records-class; `claude[bot]` skipped for want of credit |
+| 2026-11-19 | oaknational#1031 | 1 | 0 / 40 | within | 0 | agreed | the consolidation's first half, records-class; one Copilot finding arrived after the merge and was cured in 1032 |
+| 2026-11-20 | oaknational#1032 | 1 | 0 / 40 | within | 0 | agreed | the consolidation's second half, records-class; one Copilot finding, cured in one push |
+| 2026-11-20 | oaknational#1033 | 0 | 0 / 40 | within | 0 | agreed | the merge-hold text and the guard-fix plan, records-class; the survey counts no round, yet `claude[bot]` raised two findings, both upheld and cured in one push |
+| 2026-11-20 | oaknational#1034 | 0 | 0 / 40 | within | 0 | agreed | workflow triggers on `main` only; `claude[bot]` found nothing |
+| 2026-11-20 | oaknational#1035 | 0 | 0 / 40 | within | 0 | agreed | owner gates removed from the plan schema, 191 files; `claude[bot]` found nothing |
 
 ## Weight changes
 

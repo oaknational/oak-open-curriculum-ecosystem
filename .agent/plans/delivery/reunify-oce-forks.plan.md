@@ -107,8 +107,11 @@ back to being a plain mirror of Oak: one line of development again.
 
    State at 2026-11-19: steps 1 to 4 were done on 2026-11-18 at the owner's word, with one
    difference from step 2 (no carrier pull request or branch was open to close). Step 7 is done
-   for the owner's primary checkout. Steps 5 and 6 wait on the owner's word, so criterion 4 is
-   met except that `engraph` and its ruleset still exist on the fork.
+   for the owner's primary checkout.
+
+   State at 2026-11-20: step 6 is done (oaknational#1034). Step 5 is closed by the owner's
+   decision recorded in it, so `engraph` and its ruleset remain on the fork by intent and
+   criterion 4 is met with that difference.
 
 ## Fork-only values that must not reach Oak
 
