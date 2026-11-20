@@ -1203,3 +1203,12 @@ inside a rule name).
   0.7.0 with 34 paths; the two extra are `/changelog` and `/changelog/latest`, which upstream no
   longer lists. Nothing in this repository targets `/api/v1`. The owner's word: "We are going to
   need to migrate to V1 soon if not already done". It is not done and no plan node holds it.
+- **What landed on 2026-11-20.** oaknational#1033 (the merge-hold text and the guard-fix plan
+  node), oaknational#1034 (the workflows trigger on `main` only) and oaknational#1035 (owner
+  gates removed from the plan schema, its tooling, the session-open alert and 170 plans). The
+  operator profile's bindings section is pushed to its own repository.
+- **Left for the owner from that work.** ADR-200, ADR-216, ADR-221 and ADR-227 still mention
+  owner gates; decision records change only in conversation with the owner. The guard fix is
+  planned, not built.
+- **The review bot has credit again.** `claude[bot]` reviewed 1033, 1034 and 1035 on
+  2026-11-20.
