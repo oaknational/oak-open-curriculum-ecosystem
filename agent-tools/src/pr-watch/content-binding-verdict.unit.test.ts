@@ -4,6 +4,7 @@ import type { ContentLeg } from './content-binding.js';
 import type { HarvestedReview } from './reviewer-legs.js';
 import { COPILOT, OLD_TIP, TIP } from './state-reading-fixture.js';
 import {
+  AFTER_THE_WINDOW,
   beforeTheSync,
   CODEX,
   completionComment,
@@ -45,24 +46,23 @@ describe('computePrVerdict — reviews bound by content', () => {
     ).toBe(true);
   });
 
-  it.each<[string, ContentLeg, string]>([
-    [
-      'the sync changed the content the review saw',
-      synced(OTHER_PATCH),
-      'carries content that differs from the head',
-    ],
+  it.each<[string, ContentLeg]>([
+    ['the sync changed the content the review saw', synced(OTHER_PATCH)],
     [
       'the head’s content could not be read',
       { kind: 'unread', reason: 'the compare diff could not be read' },
-      'is not bound by content: the compare diff could not be read',
     ],
-  ])('leaves the leg owed, and says why, when %s', (_why, content, why) => {
-    const verdict = verdictOf({ reviews: [beforeTheSync], content });
-    expect(verdict.state).toBe('SILENT-WAIT-NO-REVIEWER');
-    expect(legLine(verdict, COPILOT)).toBe(
-      `${COPILOT}: OWED — no substantive review binds the current tip; the review at ${OLD_TIP.slice(0, 10)} ${why}`,
-    );
-  });
+  ])(
+    'reads the review as one of an earlier commit, owing nothing on the tip, when %s',
+    (_why, content) => {
+      const verdict = verdictOf({ reviews: [beforeTheSync], content });
+      // No review binds the tip, so the quiet window runs from checks green.
+      expect(verdict.state).toBe('SETTLING-QUIET-WINDOW');
+      expect(legLine(verdict, COPILOT)).toBe(
+        `${COPILOT}: UNOWED — not owed on this tip: reviewed an earlier commit of this pull request (${OLD_TIP.slice(0, 9)}) and no round is asked of it since; request a review when one of this tip is wanted`,
+      );
+    },
+  );
 
   it.each<[string, string]>([
     ['a substantive review', 'Reviewed 2 of 2 files.'],
@@ -133,7 +133,8 @@ describe('computePrVerdict — reviews bound by content', () => {
       ...beforeTheSync,
       body: 'Review skipped: the spend limit was reached.',
     };
-    const verdict = verdictOf({ reviews: [marker], content: synced(PATCH) });
+    // A skip notice anchors no quiet window, so the window runs from checks green.
+    const verdict = verdictOf({ reviews: [marker], content: synced(PATCH) }, AFTER_THE_WINDOW);
     expect(verdict.state).toBe('QUOTA-SKIPPED');
     expect(namesTheInference(legLine(verdict, COPILOT))).toBe(true);
   });
@@ -152,7 +153,11 @@ describe('computePrVerdict — completion comments bound by content', () => {
       ),
     ).toBe(true);
     expect(refusalLinesOf(bound, 'IC_1')).toStrictEqual([]);
-    expect(refusalLinesOf(verdictWithComment(clean, synced(OTHER_PATCH)), 'IC_1')).toHaveLength(1);
+    // A comment that names a commit whose content differs is a review of an
+    // earlier commit: its leg owes nothing, so nothing is refused.
+    expect(refusalLinesOf(verdictWithComment(clean, synced(OTHER_PATCH)), 'IC_1')).toStrictEqual(
+      [],
+    );
   });
 
   it('holds a completion comment bound by content when a round was asked of Codex after it', () => {

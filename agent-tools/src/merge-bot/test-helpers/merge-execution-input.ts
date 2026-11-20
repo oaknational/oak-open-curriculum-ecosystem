@@ -20,7 +20,6 @@ export function makeInput(
     identity: { appId: '1', keyPath: '/dev/null', owner: 'acme', repoName: 'widgets' },
     appSlug: 'acme-bot',
     prNumber: 42,
-    expectedReviewers: ['copilot-pull-request-reviewer'],
     nowIso: '2026-08-06T09:00:00Z',
     seams: {
       mint: () =>

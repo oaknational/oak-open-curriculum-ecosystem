@@ -1,5 +1,4 @@
 import { NO_CONTENT } from '../../pr-watch/content-binding.js';
-import { NO_DECLARATIONS } from '../../pr-watch/declared-unavailable.js';
 import type { PrStateReading } from '../../pr-watch/state-types.js';
 
 /**
@@ -33,7 +32,6 @@ export function settledReading(overrides: Partial<PrStateReading> = {}): PrState
     reviewRequests: [],
     roundRequests: [],
     expectedReviewers: ['copilot-pull-request-reviewer'],
-    expectedDeclared: true,
     reviews: [
       {
         author: 'copilot-pull-request-reviewer',
@@ -44,7 +42,6 @@ export function settledReading(overrides: Partial<PrStateReading> = {}): PrState
       },
     ],
     completionComments: { reviews: [], refused: [], notices: [] },
-    declaredUnavailable: NO_DECLARATIONS,
     reviewRuns: { kind: 'read', runs: [] },
     reviewConfiguration: { kind: 'unread', reason: 'the test reading declares none' },
     content: NO_CONTENT,

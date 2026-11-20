@@ -1,4 +1,3 @@
-import { declaredRefusalVerdict } from './declared-evidence.js';
 import { reviewerLegVerdict } from './settlement.js';
 import type { PrStateReading, PrVerdict } from './state-types.js';
 
@@ -123,9 +122,7 @@ const checksAndThreadsRules: readonly VerdictRule[] = [
  *   time-bound (SKILL items 3–4)
  */
 export function computePrVerdict(reading: PrStateReading, nowIso: string): PrVerdict {
-  // A refused unavailability declaration decides at once, before the checks
-  // ladder: the door must refuse it, never poll through it.
-  for (const rule of [...terminalRules, declaredRefusalVerdict, ...checksAndThreadsRules]) {
+  for (const rule of [...terminalRules, ...checksAndThreadsRules]) {
     const verdict = rule(reading);
     if (verdict !== undefined) {
       return verdict;

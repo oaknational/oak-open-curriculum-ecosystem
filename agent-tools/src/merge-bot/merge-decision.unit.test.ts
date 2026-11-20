@@ -21,9 +21,6 @@ describe('the records class at the door', () => {
       const decision = decideMergeAction({
         verdict: { state, evidence: [] },
         allowMergeCommit: true,
-        expectedDeclared: true,
-        declaredEmpty: false,
-        botAuthored: true,
         changeClass: records,
       });
       expect(decision.kind, state).toBe('merge');
@@ -34,9 +31,6 @@ describe('the records class at the door', () => {
     const byClass = decideMergeAction({
       verdict: owedLeg,
       allowMergeCommit: true,
-      expectedDeclared: true,
-      declaredEmpty: false,
-      botAuthored: true,
       changeClass: records,
     });
     expect(byClass.kind).toBe('merge');
@@ -49,9 +43,6 @@ describe('the records class at the door', () => {
     const settled = decideMergeAction({
       verdict: { state: 'SETTLE-READY', evidence: [] },
       allowMergeCommit: true,
-      expectedDeclared: true,
-      declaredEmpty: false,
-      botAuthored: true,
       changeClass: records,
     });
     expect(settled).toStrictEqual({ kind: 'merge' });
@@ -61,9 +52,6 @@ describe('the records class at the door', () => {
     const decision = decideMergeAction({
       verdict: owedLeg,
       allowMergeCommit: true,
-      expectedDeclared: true,
-      declaredEmpty: false,
-      botAuthored: true,
       changeClass: code,
     });
 
@@ -90,9 +78,6 @@ describe('the records class at the door', () => {
       const decision = decideMergeAction({
         verdict: { state, evidence: [] },
         allowMergeCommit: true,
-        expectedDeclared: true,
-        declaredEmpty: false,
-        botAuthored: true,
         changeClass: records,
       });
       expect(decision, state).toStrictEqual({
@@ -105,24 +90,11 @@ describe('the records class at the door', () => {
     }
   });
 
-  it('still refuses a defaulted expected set and disallowed merge commits for the records class', () => {
-    expect(
-      decideMergeAction({
-        verdict: owedLeg,
-        allowMergeCommit: true,
-        expectedDeclared: false,
-        declaredEmpty: false,
-        botAuthored: true,
-        changeClass: records,
-      }).kind,
-    ).toBe('refuse');
+  it('still refuses disallowed merge commits for the records class', () => {
     expect(
       decideMergeAction({
         verdict: owedLeg,
         allowMergeCommit: false,
-        expectedDeclared: true,
-        declaredEmpty: false,
-        botAuthored: true,
         changeClass: records,
       }),
     ).toStrictEqual({
@@ -149,13 +121,10 @@ const SETTLE_READY: PrVerdict = {
 const baseInput = {
   verdict: SETTLE_READY,
   allowMergeCommit: true,
-  expectedDeclared: true,
-  declaredEmpty: false,
-  botAuthored: true,
 } as const;
 
 describe('decideMergeAction', () => {
-  it('merges a settled verdict when merge commits are allowed and the expected set was declared', () => {
+  it('merges a settled verdict when merge commits are allowed, told no reviewer', () => {
     const decision = decideMergeAction(baseInput);
 
     expect(decision).toEqual({ kind: 'merge' });
@@ -194,15 +163,6 @@ describe('decideMergeAction', () => {
     if (decision.kind === 'refuse') {
       expect(decision.reason).toContain('merge commits');
       expect(decision.reason).not.toContain('squash instead');
-    }
-  });
-
-  it('refuses when the expected reviewer set was defaulted rather than declared', () => {
-    const decision = decideMergeAction({ ...baseInput, expectedDeclared: false });
-
-    expect(decision.kind).toBe('refuse');
-    if (decision.kind === 'refuse') {
-      expect(decision.reason).toContain('--expect');
     }
   });
 });
@@ -264,9 +224,6 @@ describe('the code-class suffix on an empty change set', () => {
     const decision = decideMergeAction({
       verdict: { state: 'SILENT-WAIT-NO-REVIEWER', evidence: [] },
       allowMergeCommit: true,
-      expectedDeclared: true,
-      declaredEmpty: false,
-      botAuthored: true,
       changeClass: { kind: 'code', offenders: [] },
     });
 
@@ -276,49 +233,5 @@ describe('the code-class suffix on an empty change set', () => {
         'verdict SILENT-WAIT-NO-REVIEWER — only SETTLE-READY merges; a records-class pull request would merge here, but the diff is code-class (no changed path)',
       awaitsSettlement: false,
     });
-  });
-});
-
-describe("decideMergeAction — a set declared empty merges the bot's own pull requests only", () => {
-  const settled: PrVerdict = { state: 'SETTLE-READY', evidence: [] };
-
-  it("refuses a person's pull request on an empty set, naming the ruling", () => {
-    const decision = decideMergeAction({
-      verdict: settled,
-      allowMergeCommit: true,
-      expectedDeclared: true,
-      declaredEmpty: true,
-      botAuthored: false,
-    });
-    expect(decision.kind).toBe('refuse');
-    if (decision.kind === 'refuse') {
-      expect(decision.reason).toContain('--expect none');
-      expect(decision.reason).toContain('2026-09-03');
-      expect(decision.awaitsSettlement).toBe(false);
-    }
-  });
-
-  it("refuses a person's pull request on an empty set while its checks run as a terminal refusal: no poll outwaits an author the set does not admit", () => {
-    const decision = decideMergeAction({
-      verdict: { state: 'CHECKS-RUNNING', evidence: [] },
-      allowMergeCommit: true,
-      expectedDeclared: true,
-      declaredEmpty: true,
-      botAuthored: false,
-    });
-    expect(decision).toMatchObject({ kind: 'refuse', awaitsSettlement: false });
-    expect(decision.kind === 'refuse' ? decision.reason : '').toContain('did not author');
-  });
-
-  it("merges the bot's own pull request on an empty set once settled", () => {
-    expect(
-      decideMergeAction({
-        verdict: settled,
-        allowMergeCommit: true,
-        expectedDeclared: true,
-        declaredEmpty: true,
-        botAuthored: true,
-      }),
-    ).toStrictEqual({ kind: 'merge' });
   });
 });

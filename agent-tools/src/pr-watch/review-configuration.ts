@@ -25,9 +25,6 @@ import { parseWithSchema } from '../core/schema-parse.js';
  * @packageDocumentation
  */
 
-/** The login GitHub's Copilot reviewer carries on reviews, requests and check-runs. */
-export const COPILOT_REVIEWER_LOGIN = 'copilot-pull-request-reviewer';
-
 /**
  * Three states, each named: the rules were not read (why), no Copilot rule
  * binds the branch, or the rule's two switches. `unread` keeps the legs

@@ -36,32 +36,31 @@ split and the standing no-approving-review practice.)
 **The sanctioned bot-merge path is the front-door command** (MCP-508):
 
 ```bash
-pnpm agent-tools merge-bot merge --pr <n> --expect <reviewer>
+pnpm agent-tools merge-bot merge --pr <n>
 ```
 
 It mints its own least-privilege token (`pull-request-merge`), reads the
 settlement verdict, and merges ONLY on SETTLE-READY — merge-commit method
 always, the VERDICTED tip's sha pinned in the call (a moved tip answers
-409), refusing by verdict name on everything else with exit 3. `--expect`
-is required (`--expect none` declares the set EMPTY: the seat has judged, by
-the owner's one question of 2026-10-27 — "do we need a review in order for
-this work to be safe and effective?" — that the work needs no pull-request
-review, and the merge evidence names the declaration); otherwise source it
-from the repository's automatic-review
-configuration, declaring the reviewers AVAILABLE — a vendor declared
-unavailable on the stream (an outage, such as the Codex connector's
-2026-09-10 usage-limit notice) is not declared, and a subagent review
-posted on the pull request stands as its leg, bound to the sha it reviewed
-as the vendor leg is bound per tip — the premises record that sha and the
-pushes since, which carry only cures of its findings, the tip sync and
-landing-defect cures, else a fresh leg on the new head (owner ruling
-2026-09-10; pr-lifecycle §review-round state machine item 3); a defaulted
-set never merges. The tool verifies only the vendor legs declared to it and refuses
-an empty set: the availability rule and the posted subagent leg are the
-merging seat's own recomputation, recorded on the landing premises (a
-machine-checked subagent-leg input is the named follow-up on the
-agent-tools-watch-commands node). `merge-bot merge --help` carries the
-tool's own contract — the declared vendor set and the verdict names.
+409), refusing by verdict name on everything else with exit 3. The command
+takes no reviewer list. It reads the reviews from the pull request:
+
+- **A review in progress is waited for.** A running review check holds the
+  checks; a live agent run, or a round asked of a bot reviewer, holds that
+  bot's leg. A pending request of a person is not waited for.
+- **One review of any commit of the pull request exists.** A reviewer who
+  reviewed an earlier commit owes nothing on a later tip until a round is
+  asked of them. A skip notice, a vendor's failed-run body and an
+  empty-bodied review (the API creates one per thread reply) are not
+  reviews. With no review the verdict is `SILENT-WAIT-NO-REVIEWER` and the
+  command refuses; request a review.
+- **Every review is dealt with.** Every review thread is resolved, and the
+  merging seat reads and dispositions a review body's findings before it
+  calls the command.
+
+A bot asked for a round that never answers reads `SETTLED-NO-REVIEW`, which
+refuses, until a round is asked again and answered. `merge-bot merge --help`
+carries the tool's own contract and the verdict names.
 
 **Why the REST endpoint, not the `gh pr merge` client** (the command does
 this for you): client-side `gh pr merge` refuses on a
@@ -317,18 +316,15 @@ the review at most once per push that settles a round (a cure, a shape change), 
 only for a stated reason; a pure sync push (main merged in, a rebase with no content change) requests
 nothing, and the declared intake on the pull request body bounds the loop.
 
-**What is owed is read from the repository's review configuration.** `pr
-state` reads the base branch's rules (`GET
+**What is owed is read from the pull request.** A reviewer who has reviewed an
+earlier commit of the pull request, has said nothing with a body on the tip,
+and has no round asked of them since reads `UNOWED` and settles; a round whose
+threads are all resolved then merges with no request made. A request makes the
+leg owed again, so the round stays the seat's to spend. This holds for every
+reviewer. `pr state` still reads the base branch's rules (`GET
 /repos/{owner}/{repo}/rules/branches/{base}`, the `copilot_code_review` rule;
 Metadata read suffices) with every reading and names the result in its
-evidence. Where the rule reviews no later push (`review_on_push` false, the
-owner's setting of 2026-10-15), a tip nothing is requested on, once the vendor
-has reviewed an earlier tip of the pull request, reads `UNOWED` and settles; a
-round whose threads are all resolved then merges with no request made. A
-request by hand makes the leg owed again, so the round stays the seat's to
-spend. An unread or absent configuration keeps every expected leg owed, named
-as such in the evidence (the owner's word of 2026-10-16: derive what is owed
-from the configuration, never from an assumed review on every push).
+evidence, as information; the configuration does not decide what is owed.
 
 ## Verifying the bot's signatures locally
 

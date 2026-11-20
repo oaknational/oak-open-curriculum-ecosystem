@@ -5,9 +5,9 @@
  * of its own.
  */
 
-// GitHub logins are case-insensitive; compare through one casing so a declared
-// `--expect jimcresswell` matches the API's `jimCresswell` (display keeps the
-// declared form).
+// GitHub logins are case-insensitive; compare through one casing so a login
+// read from one surface matches its spelling on another (display keeps the
+// form first read).
 /** The one login comparison every reader of a reviewer's result shares. */
 export function normaliseLogin(login: string): string {
   return login.toLowerCase();

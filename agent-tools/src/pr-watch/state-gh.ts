@@ -19,7 +19,7 @@ import { parseReviewThreadPages } from './review-threads.js';
 import { readReviewConfigurationLeg } from './review-configuration-leg.js';
 import { readReviewRunsLeg } from './review-runs.js';
 import { parseRequestsHarvest } from './round-requests.js';
-import { composeReading, type UnavailableInput } from './state-compose.js';
+import { composeReading } from './state-compose.js';
 import { parseCommentsHarvest, parseCommitsHarvest } from './state-conversation.js';
 import { parseReviewsHarvest, parseStateView, PR_STATE_VIEW_JSON_FIELDS } from './state-fields.js';
 import type { PrStateReading } from './state-types.js';
@@ -32,10 +32,8 @@ import type { PrStateReading } from './state-types.js';
  * the request events (the rounds a review bound by content waits for) — and
  * the `gh agent-task` review-run legs, composed into one {@link PrStateReading}.
  *
- * The expected reviewer set is a DECLARED input (`expectedReviewers`); when
- * undeclared it defaults to the observed surface (requests ∪ harvest authors)
- * and the reading marks `expectedDeclared: false` so the verdict names the
- * first-round-guarantee gap instead of silently passing it.
+ * The reviewers are read from the pull request (`expected-reviewers.ts`):
+ * the bots a round is asked of and the authors of its reviews.
  *
  * The `gh agent-task` review-run leg (bounded run→PR mapping, typed
  * degradation) lives in `review-runs.ts`. The content leg (`content-reader.ts`)
@@ -46,16 +44,8 @@ import type { PrStateReading } from './state-types.js';
 export interface ReadPrStateOptions {
   readonly target: PrTarget;
   readonly execFileSync?: GhCommandExecutor;
-  /**
-   * The declared expected reviewer set (`--expect`, repeatable): absent, the
-   * set is undeclared and defaults; empty, it was declared `none`
-   * (expect-flag.ts).
-   */
-  readonly expectedReviewers?: readonly string[];
   /** Hashes a diff to its patch-id; git's `patch-id` by default. */
   readonly patchIdOf?: PatchIdOf;
-  /** Vendors declared unavailable (`--unavailable`), the bot that may declare, and the clock. */
-  readonly unavailable?: UnavailableInput;
 }
 
 // `mergeable: UNKNOWN` means GitHub has not computed mergeability yet — a
@@ -190,8 +180,6 @@ export function readPrStateReading(options: ReadPrStateOptions): PrStateReading 
         reviewRuns,
         // The base branch's configuration, from the view the reading composes from.
         reviewConfiguration: readReviewConfigurationLeg({ run, repo, view: confirm }),
-        declared: options.expectedReviewers ?? null,
-        ...(options.unavailable === undefined ? {} : { unavailable: options.unavailable }),
         readContent: contentReaderFor({ run, repo, view: confirm, patchIdOf }),
       });
     }

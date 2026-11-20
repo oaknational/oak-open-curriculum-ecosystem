@@ -3,7 +3,6 @@ import { describe, expect, it } from 'vitest';
 import { readCompletionComments } from './completion-comments.js';
 import type { CompletionComment } from './completion-comments.js';
 import { NO_CONTENT } from './content-binding.js';
-import { readDeclaredStandIns } from './declared-unavailable.js';
 import { computeReviewerLegs } from './reviewer-legs.js';
 import { COPILOT, settledReading } from './state-reading-fixture.js';
 import { computePrVerdict } from './states.js';
@@ -11,12 +10,11 @@ import { isVendorErrorReview } from './vendor-error-reviews.js';
 
 /**
  * The door over a Codex run that failed while the connector was over its
- * usage quota: the reader, the classifier, the legs, the declared stand-in
- * and the verdict composed, with no gh. The connector posts no review
- * object; it rewrites its summary's Code Review row to **Failed**, naming
- * the head it tried, and posts a usage-limits notice. The row is the
- * vendor's failed run on that head (an error review: it satisfies no leg,
- * is counted, and proves a declaration of unavailability), and the notice
+ * usage quota: the reader, the classifier, the legs and the verdict
+ * composed, with no gh. The connector posts no review object; it rewrites
+ * its summary's Code Review row to **Failed**, naming the head it tried, and
+ * posts a usage-limits notice. The row is the vendor's failed run on that
+ * head (an error review: it satisfies no leg and is counted), and the notice
  * is printed, never a refusal. Fixtures: the summary and the notice the
  * connector posted on pull request 362, whole, as read on 2026-10-27
  * (summary created 2026-10-22T09:19:04Z, last edited by the connector at
@@ -25,7 +23,6 @@ import { isVendorErrorReview } from './vendor-error-reviews.js';
  */
 
 const CODEX = 'chatgpt-codex-connector';
-const BOT = 'el-graphael';
 const HEAD = '8f2b7fd38f2ae98898b7c23c3edfcacfd1694ed8';
 const OLD = '6123105a51fdfabb37e39ff45361d0136ac51317';
 const FAILED_AT = '2026-10-27T15:05:57Z';
@@ -82,15 +79,6 @@ const COPILOT_REVIEW = {
   commitOid: HEAD,
   submittedAt: '2026-10-27T15:00:13Z',
 };
-const DECLARATION_URL = 'https://github.com/acme/widgets/pull/362#issuecomment-9';
-const DECLARATION = {
-  id: 'IC_9',
-  url: DECLARATION_URL,
-  author: BOT,
-  body: `**${CODEX} leg unavailable on head SHA:${HEAD}.**\n\nThe connector is over its usage quota.`,
-  createdAt: '2026-10-27T15:20:00Z',
-  lastEdit: null,
-};
 const CHECKS_GREEN_AT = '2026-10-27T15:10:00Z';
 const INSIDE_THE_WINDOW = '2026-10-27T15:15:00Z';
 const AFTER_THE_WINDOW = '2026-10-27T16:00:00Z';
@@ -111,29 +99,16 @@ function legsAt(now: string) {
     roundRequests: [],
     checksGreenAt: CHECKS_GREEN_AT,
     now,
-    reviewConfiguration: { kind: 'unread', reason: 'the test reading declares none' },
   });
 }
 
-const declared = readDeclaredStandIns({
-  declarations: [{ login: CODEX, url: DECLARATION_URL }],
-  comments: [DECLARATION],
-  poster: BOT,
-  expectedReviewers: [COPILOT, CODEX],
-  reviews: [COPILOT_REVIEW, ...reading.reviews],
-  requests: [],
-  isErrorReview: isVendorErrorReview,
-  now: AFTER_THE_WINDOW,
-});
-
-function verdictAt(now: string, declaredUnavailable = declared) {
+function verdictAt(now: string) {
   return computePrVerdict(
     settledReading({
       headRefOid: HEAD,
       expectedReviewers: [COPILOT, CODEX],
       reviews: [COPILOT_REVIEW],
       completionComments: reading,
-      declaredUnavailable,
       checksGreenAt: CHECKS_GREEN_AT,
     }),
     now,
@@ -198,18 +173,9 @@ describe('the Codex leg over the failed run alone', () => {
   });
 });
 
-describe('a declaration of the connector’s unavailability on that head', () => {
-  it('is proven by the failed run, timed at the summary’s rewrite', () => {
-    expect(declared.refused).toStrictEqual([]);
-    expect(declared.standIns.map((standIn) => standIn.proof)).toStrictEqual([
-      { kind: 'error-review', at: FAILED_AT },
-    ]);
-  });
-});
-
 describe('the verdict over the failed run and the notice', () => {
   it('waits on the Codex leg inside the window, printing the failed run and the notice beside the blocking leg', () => {
-    const verdict = verdictAt(INSIDE_THE_WINDOW, { standIns: [], refused: [] });
+    const verdict = verdictAt(INSIDE_THE_WINDOW);
 
     expect(verdict.state).toBe('SILENT-WAIT-NO-REVIEWER');
     expect(verdict.evidence).toContain(`most blocking reviewer leg: ${CODEX}`);
@@ -222,7 +188,7 @@ describe('the verdict over the failed run and the notice', () => {
   });
 
   it('settles NO-REVIEW after the window, never UNCLASSIFIED-EVIDENCE: the failed run is the vendor’s answer', () => {
-    const verdict = verdictAt(AFTER_THE_WINDOW, { standIns: [], refused: [] });
+    const verdict = verdictAt(AFTER_THE_WINDOW);
 
     expect(verdict.state).toBe('SETTLED-NO-REVIEW');
     expect(verdict.evidence.join('\n')).not.toContain('refused');
@@ -231,18 +197,6 @@ describe('the verdict over the failed run and the notice', () => {
     );
     expect(verdict.evidence.join('\n')).toContain(
       `${CODEX}: vendor notice at 2026-10-27T15:06:00Z`,
-    );
-  });
-
-  it('is SETTLE-READY with the connector declared unavailable on that head: the stand-in answers the leg the failed run proves', () => {
-    const verdict = verdictAt(AFTER_THE_WINDOW);
-
-    expect(verdict.state).toBe('SETTLE-READY');
-    expect(verdict.evidence).toContain(
-      `${CODEX}: SATISFIED — substantive review binds current tip${ERROR_NOTE}`,
-    );
-    expect(verdict.evidence).toContain(
-      `${CODEX}: declared unavailable at 2026-10-27T15:20:00Z by ${DECLARATION_URL} (proof: error-review at ${FAILED_AT}) read as a review of the tip (transport: declared-stand-in)`,
     );
   });
 });

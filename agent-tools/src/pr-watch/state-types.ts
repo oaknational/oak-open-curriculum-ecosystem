@@ -1,6 +1,5 @@
 import type { ReviewConfiguration } from './review-configuration.js';
 import type { CompletionCommentReading } from './completion-comments.js';
-import type { DeclaredUnavailableReading } from './declared-unavailable.js';
 import type { BindingHead } from './content-binding.js';
 import type { CheckBucket, ChecksSummary } from './index.js';
 import type { ReviewThreadsSummary } from './review-threads.js';
@@ -78,7 +77,7 @@ export interface PrStateReading extends BindingHead {
   readonly checksGreenAt: string | null;
   readonly reviewThreads: ReviewThreadsSummary;
   readonly autoMergeArmed: boolean;
-  /** Logins with an outstanding review request. */
+  /** Bot logins with an outstanding review request; a request of a person or a team is not waited for. */
   readonly reviewRequests: readonly string[];
   /**
    * Every round asked of a reviewer, and when: the review-request and
@@ -88,14 +87,11 @@ export interface PrStateReading extends BindingHead {
    */
   readonly roundRequests: readonly RoundRequest[];
   /**
-   * The DECLARED expected reviewer set (SKILL item 3: sourced from the
-   * repository's automatic-review configuration, declared by the operator —
-   * `--expect`). The gh seam defaults it from the observed surface when
-   * undeclared, and the verdict names that gap in evidence.
+   * The reviewers the pull request shows (`expected-reviewers.ts`): the bots
+   * a round is asked of and the authors of its real reviews. Empty when
+   * nobody has reviewed and no bot is reviewing.
    */
   readonly expectedReviewers: readonly string[];
-  /** Whether the expected set was declared or defaulted from observation. */
-  readonly expectedDeclared: boolean;
   /** The FULL paginated review harvest — never the latestReviews pointer. */
   readonly reviews: readonly HarvestedReview[];
   /**
@@ -108,12 +104,6 @@ export interface PrStateReading extends BindingHead {
    * timed out.
    */
   readonly completionComments: CompletionCommentReading;
-  /**
-   * The third transport: a vendor declared unavailable, read as a stand-in
-   * for its review of the head it names, or refused by name
-   * (`declared-unavailable.ts`). Empty when nothing is declared.
-   */
-  readonly declaredUnavailable: DeclaredUnavailableReading;
   readonly reviewRuns: ReviewRunsLeg;
   /**
    * The base branch's automatic-review configuration (the `copilot_code_review`

@@ -391,33 +391,25 @@ background settle watch is a process the host may kill (several times across
 two seats on 2026-09-10, under its memory heuristic), and the typed verdict is
 the record either way.
 Merge by MERGE COMMIT as the bot through the one sanctioned front
-door, `pnpm agent-tools merge-bot merge --pr <n> --expect <reviewer>
-[--expect <reviewer> ...]` — `--expect` is repeated once per AVAILABLE
-reviewer in the repository's automatic-review configuration (or is
-`--expect none` when the seat has answered the owner's one question of
-2026-10-27, "do we need a review in order for this work to be safe and
-effective?", with no: upstream's own release, read first-hand in the sweep,
-its conflict resolutions under the full gate), the set
-pr-lifecycle's Phase 1 declares as the state machine's input for every round,
-never narrowed to the reviewers that happen to have bound the tip and never
-widened to a vendor declared unavailable: a reviewer left undeclared is
-invisible to the tool's recomputation, and a declared leg that never reviews
-the tip (Copilot reviews the first push and any tip the bot requests it on)
-settles through the timeout to SETTLED-NO-REVIEW, which the front door
-refuses by name — the docs-only bot-authored class then lands through the
-sanctioned REST endpoint under the owner's exception below; any other pull
-request lands with each configured leg as the tool reads it on the tip,
-SATISFIED or UNOWED (the configuration reviews no later push and nothing was
-requested: a review is requested on a tip only for a stated reason, never to
-fill a leg — the owner, 2026-10-27; where a review is wanted of a
-vendor that is unavailable, a subagent review of any kind posted on the pull
-request and reported back stands as the leg — owner ruling 2026-09-10,
-pr-lifecycle §review-round state machine item 3 — bound to the sha it
-reviewed: the premises record that sha and every push since, and those
+door, `pnpm agent-tools merge-bot merge --pr <n>`. The command is told no
+reviewer: it reads the reviews from the pull request
+(`.agent/reference/merge-bot.md`). A review in progress is waited for, one
+review of any commit of the pull request must exist, and every review is
+dealt with. A bot asked for a round that never reviews settles through the
+timeout to SETTLED-NO-REVIEW, which the front door refuses by name; the
+docs-only bot-authored class then lands through the sanctioned REST endpoint
+under the owner's exception below. Any other pull request lands with each
+reviewer's leg as the tool reads it on the tip, SATISFIED or UNOWED (the
+reviewer reviewed an earlier commit and no round is asked of them since). A
+review is requested on a tip only for a stated reason, never to fill a leg.
+Where a review is wanted of a vendor that is unavailable, a subagent review of
+any kind posted on the pull request and reported back is the review the seat
+relies on (pr-lifecycle §review-round state machine item 3), bound to the sha
+it reviewed: the premises record that sha and every push since, and those
 pushes carry only cures of its findings, the tip sync and landing-defect
-cures, else a fresh leg on the new head; a leg the MERGING SEAT verifies
-and records on the landing premises, because the tool checks only the
-vendors declared to it) and runs the front door
+cures, else a fresh review of the new head. The MERGING SEAT verifies that
+review and records it on the landing premises; the tool counts the reviews
+the pull request shows. The seat then runs the front door
 again (pr-lifecycle §merge boundary;
 `.agent/reference/merge-bot.md`): it recomputes
 the settlement verdict itself, merges only on SETTLE-READY, and pins the

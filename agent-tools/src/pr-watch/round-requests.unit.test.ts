@@ -35,27 +35,31 @@ function comment(overrides: Partial<CompletionComment>): CompletionComment {
 }
 
 describe('parseRequestsHarvest', () => {
-  it('reads a request of a bot and of a user, across pages, as a round asked of each', () => {
+  it('reads a request of a bot, across pages, as a round asked of it', () => {
     const rounds = parseRequestsHarvest([
       page([requested({ __typename: 'Bot', login: COPILOT })]),
-      page([requested({ __typename: 'User', login: 'jimCresswell' }, '2026-07-21T11:41:00Z')]),
+      page([requested({ __typename: 'Bot', login: 'second-bot' }, '2026-07-21T11:41:00Z')]),
     ]);
     expect(rounds).toEqual([
       { reviewer: COPILOT, at: '2026-07-21T11:40:00Z' },
-      { reviewer: 'jimCresswell', at: '2026-07-21T11:41:00Z' },
+      { reviewer: 'second-bot', at: '2026-07-21T11:41:00Z' },
     ]);
   });
 
-  it('reads a ready-for-review event as a round asked of the Codex connector', () => {
+  it('reads a ready-for-review event as a round the Codex connector takes unasked, marked as implied', () => {
     const rounds = parseRequestsHarvest([
       page([{ __typename: 'ReadyForReviewEvent', createdAt: '2026-07-21T11:45:00Z' }]),
     ]);
-    expect(rounds).toEqual([{ reviewer: CODEX_CONNECTOR_LOGIN, at: '2026-07-21T11:45:00Z' }]);
+    expect(rounds).toEqual([
+      { reviewer: CODEX_CONNECTOR_LOGIN, at: '2026-07-21T11:45:00Z', implied: true },
+    ]);
   });
 
-  it('parses a request of a team, a mannequin or a deleted account, and asks no reviewer by it', () => {
+  it('parses a request of a person, a team, a mannequin or a deleted account, and asks no round by it', () => {
+    // A review in progress is a bot's: a request of a person is not waited for.
     const rounds = parseRequestsHarvest([
       page([
+        requested({ __typename: 'User', login: 'a-person' }),
         requested({ __typename: 'Team', slug: 'maintainers' }),
         requested({ __typename: 'Mannequin', login: 'imported' }),
         requested(null),

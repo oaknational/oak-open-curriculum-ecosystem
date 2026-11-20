@@ -28,7 +28,6 @@ function review(overrides: Partial<HarvestedReview>): HarvestedReview {
 
 function legsOver(reviews: readonly HarvestedReview[], checksGreenAt: string) {
   return computeReviewerLegs({
-    reviewConfiguration: { kind: 'unread', reason: 'the test reading declares none' },
     headRefOid: TIP,
     content: NO_CONTENT,
     checksGreenAt,

@@ -86,7 +86,7 @@ export async function runMergeAction(
     input.stderr.write(`merge-bot merge: ${parsed.error.message}\n`);
     return 2;
   }
-  const bot = resolveBot(parsed.value, input.identityInput);
+  const bot = resolveBot(input.identityInput);
   if (!bot.ok) {
     input.stderr.write(`merge-bot merge: ${bot.error.message}\n`);
     return 2;
@@ -101,15 +101,10 @@ export async function runMergeAction(
 }
 
 // The identity and the bot's login (its app slug): the records door admits
-// only the bot's own pull requests (merge-records-checks.ts), and a
-// declaration stands only as the bot's own comment (declared-unavailable.ts).
+// only the bot's own pull requests (merge-records-checks.ts).
 function resolveBot(
-  parsed: MergeArgs,
   identityInput: MergeBotResolveInput,
-): Result<
-  { readonly identity: BotIdentity; readonly appSlug: string; readonly poster: string | null },
-  Error
-> {
+): Result<{ readonly identity: BotIdentity; readonly appSlug: string }, Error> {
   const identity = resolveBotIdentity({}, identityInput);
   if (!identity.ok) {
     return identity;
@@ -118,11 +113,7 @@ function resolveBot(
   if (!appSlug.ok) {
     return appSlug;
   }
-  return ok({
-    identity: identity.value,
-    appSlug: appSlug.value,
-    poster: parsed.unavailable.length === 0 ? null : appSlug.value,
-  });
+  return ok({ identity: identity.value, appSlug: appSlug.value });
 }
 
 /** The ONE minted token and the wall-clock deadline derived from ITS expiry. */
@@ -169,7 +160,6 @@ async function pollUntilActionable(context: {
   readonly parsed: MergeArgs;
   readonly identity: BotIdentity;
   readonly appSlug: string;
-  readonly poster: string | null;
   readonly run: MintedRun;
   readonly input: MergeActionInput;
 }): Promise<number> {
@@ -197,12 +187,7 @@ async function pollUntilActionable(context: {
       identity: context.identity,
       appSlug: context.appSlug,
       prNumber: parsed.prNumber,
-      expectedReviewers: parsed.expect,
       nowIso: at,
-      // Each poll judges the declarations at its own clock.
-      ...(context.poster === null
-        ? {}
-        : { unavailable: { declarations: parsed.unavailable, poster: context.poster, now: at } }),
       seams,
     });
     const retry = retryLabel(outcome, poll, parsed.maxPolls);

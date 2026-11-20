@@ -7,7 +7,7 @@ import {
 import type { ReviewerLeg } from './reviewer-legs.js';
 import { mostBlockingLeg } from './most-blocking-leg.js';
 import type { BlockingLegVerdict } from './most-blocking-leg.js';
-import { declaredEmptyEvidence, readingEvidence, settledLead } from './settlement-evidence.js';
+import { readingEvidence, SETTLED_LEAD } from './settlement-evidence.js';
 import {
   allReviews,
   completionRefusals,
@@ -17,8 +17,10 @@ import {
 } from './completion-evidence.js';
 import type { CompletionRefusal } from './completion-evidence.js';
 import { bindingNote, reviewBinds } from './content-binding.js';
-import { liveRunReviewers, runsEvidence, unmappedLiveRunEvidence } from './run-evidence.js';
+import { liveRunVerdict } from './live-run-verdict.js';
+import { liveRunReviewers, unmappedLiveRunEvidence } from './run-evidence.js';
 import type { PrStateReading, PrVerdict } from './state-types.js';
+import { isSkipMarker } from './skip-markers.js';
 import { isVendorErrorReview } from './vendor-error-reviews.js';
 
 /**
@@ -43,17 +45,14 @@ function legLine(leg: ReviewerLeg): string {
 // instance 2026-09-15, #147: the anchor sat on the seat's own empty-bodied
 // reply seven minutes after the round's last real review, which no signature
 // could catch); nor is a vendor error review activity. With no
-// tip-bound review (every leg SKIPPED, or none expected), it anchors on checks-green.
-// A set DECLARED empty awaits no reviewer: its window is the settle period after
-// checks green alone, and a review that lands neither opens nor extends it.
+// tip-bound review (every leg SKIPPED or UNOWED), it anchors on checks-green.
 function quietWindowAnchor(reading: PrStateReading): string | null {
-  if (reading.expectedDeclared && reading.expectedReviewers.length === 0) {
-    return reading.checksGreenAt;
-  }
   const tipBound = allReviews(reading)
     .filter((review) => reviewBinds(review, reading))
     .filter((review) => review.state !== 'PENDING' && !isSignedSelfReply(review.body))
-    .filter((review) => review.body.trim() !== '' && !isVendorErrorReview(review.body));
+    .filter((review) => review.body.trim() !== '' && !isVendorErrorReview(review.body))
+    // A skip notice says no review occurred: nobody is composing behind it.
+    .filter((review) => !isSkipMarker(review.body));
   // An eligible review whose submittedAt gh omitted could be NEWER than
   // every timestamped one — anchoring past it would settle inside its
   // window, so the anchor is unknowable (null routes to the held-open path).
@@ -95,7 +94,6 @@ function settledVerdict(input: {
   const { reading, legs, now } = input;
   const shared = [
     ...legs.map((leg) => legLine(leg)),
-    ...declaredEmptyEvidence(reading),
     ...transportEvidence(reading),
     ...noticeEvidence(reading),
     ...bodyTallyEvidence(reading),
@@ -122,7 +120,7 @@ function settledVerdict(input: {
   if (skipped !== undefined) {
     return skipped;
   }
-  return { state: 'SETTLE-READY', evidence: [settledLead(reading), ...shared] };
+  return { state: 'SETTLE-READY', evidence: [SETTLED_LEAD, ...shared] };
 }
 
 /**
@@ -157,25 +155,25 @@ function skippedRoundVerdict(
   return undefined;
 }
 
-// An UNDECLARED empty expected set can never settle (SKILL CRITICAL first-round
-// rule: an initial tip must not read merge-ready before the first bot round).
-// Fires when --expect is undeclared and nothing is observable yet; a set
-// DECLARED empty (`--expect none`, expect-flag.ts) is the seat's judgement that
-// the work needs no review, and settles through the quiet window instead.
-function emptyExpectedSetVerdict(reading: PrStateReading): PrVerdict {
+// A pull request nobody has reviewed and nobody is asked to review never
+// settles: there is always at least one review. The
+// set is read from the pull request, so it is empty exactly then; a skip
+// notice or a failed-run body is not a review (`expected-reviewers.ts`).
+function noReviewVerdict(reading: PrStateReading): PrVerdict {
   return {
     state: 'SILENT-WAIT-NO-REVIEWER',
     evidence: [
-      'expected reviewer set is EMPTY (undeclared and nothing observed on an initial tip) — declare --expect, a login per configured reviewer or none when the work needs no review; the first-round guarantee cannot hold vacuously',
-      ...runsEvidence(reading),
+      'no review: nobody has reviewed any commit of this pull request and no review is requested or in progress — a pull request is merged with at least one review; request one',
+      ...readingEvidence(reading),
     ],
   };
 }
 
 /** Resolve the reviewer-leg half of the verdict for an otherwise-green PR. */
 export function reviewerLegVerdict(reading: PrStateReading, now: string): PrVerdict {
-  if (reading.expectedReviewers.length === 0 && !reading.expectedDeclared) {
-    return emptyExpectedSetVerdict(reading);
+  if (reading.expectedReviewers.length === 0) {
+    // A run in flight before anyone has reviewed is the first review in progress.
+    return liveRunVerdict(reading, []) ?? noReviewVerdict(reading);
   }
   const legs = computeReviewerLegs({
     headRefOid: reading.headRefOid,
@@ -186,7 +184,6 @@ export function reviewerLegVerdict(reading: PrStateReading, now: string): PrVerd
     roundRequests: reading.roundRequests,
     checksGreenAt: reading.checksGreenAt,
     now,
-    reviewConfiguration: reading.reviewConfiguration,
   });
   const blocking = mostBlockingLeg({
     legs,
@@ -206,7 +203,7 @@ export function reviewerLegVerdict(reading: PrStateReading, now: string): PrVerd
     return unclassifiedVerdict(reading, legs, refusals);
   }
   if (blocking.kind === 'settled') {
-    return settledVerdict({ reading, legs, now });
+    return liveRunVerdict(reading, legs) ?? settledVerdict({ reading, legs, now });
   }
   return blockedVerdict({ reading, legs, blocking, refusals });
 }
