@@ -416,15 +416,15 @@ load-bearing choice:
   public schema hard-requiring one is a stratum leak. The implied
   schema amendment — the anchor requirement becomes operator policy,
   not a public-schema constant — is **recommended to the ratification
-  sitting**; the strategic node's owner gate records it beside the
+  sitting**; the strategic node records it beside the
   owner's alternative (a revised tracking ruling), and the choice is
   the owner's.
   - **Resolved (2026-07-31, owner-ratified at the ratification
     sitting).** The owner took the recommendation: the delivery-ticket
     requirement is operator policy, not a public-schema constant, and
     the plan-node contract now carries it as a dated amendment (the
-    plan-node schema's §Enforcement); the strategic node's owner gate
-    cleared at the same sitting. The realisation holds the stratum boundary this lens drew:
+    plan-node schema's §Enforcement); the strategic node's open choice
+    closed at the same sitting. The realisation holds the stratum boundary this lens drew:
     a declared list of operator-tracked subtrees would itself be
     operator-stratum content left standing in the public base by an
     overlay strip (PDR-134 §1/§6), so the estate validator derives
