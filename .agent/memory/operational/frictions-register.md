@@ -4848,3 +4848,28 @@ Observed twice on 2026-09-29 by the Director: `.agent/rules/.logs` refused by th
 - **Target surface**: agent-tools commit-queue (both estates).
 - **Status**: open.
 - **Owner direction status**: unsolicited (a seat's tool friction).
+
+### F-298 — the merge tool is told which reviewers to expect, instead of reading the pull request (2026-11-20)
+
+- **Source**: the owner, 2026-11-20, verbatim: "telling the tool to expect certain reviews is
+  backwards, reviews should be dealt with (this can include deciding not to act on them), there
+  should always be at least one review, reviews in progress must be waited for (that state can
+  be derived from the Github PR state). Telling the tool what to expect is backwards, and often
+  wrong".
+- **Surface**: `agent-tools merge-bot merge` and `pr-watch` (`--expect`, required at least once;
+  `merge-args.ts`, `expect-flag.ts`).
+- **Observed**: the seat names the reviewer set on every merge. On 2026-11-20 the tool merged
+  oaknational#1032 after timing out a reviewer the seat had named, and merged oaknational#1033
+  on a tip no review bound, while reading its own declared reviewer as owed. On
+  oaknational#1036 the review in progress was visible as a pending check named "Claude Code
+  Review".
+- **Expected**, in the owner's terms: the tool takes no declared reviewer set. It reads the pull
+  request: at least one review exists; a review in progress is waited for; every review is
+  dealt with, where declining to act is a way of dealing with it.
+- **Candidate cure**: none designed. How "dealt with" is read by a machine, and how this meets
+  the records-class rule that merges at green checks, are open and are the owner's to settle
+  with the seat that takes the work.
+- **Target surface**: agent-tools CLI (`merge-bot`, `pr-watch`).
+- **Status**: open.
+- **Owner direction status**: owner-directed (2026-11-20). Until the tool changes, a seat
+  waits for a review in progress and deals with every review before it calls the merge.
