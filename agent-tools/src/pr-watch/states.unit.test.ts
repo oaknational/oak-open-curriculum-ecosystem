@@ -464,6 +464,26 @@ describe('computePrVerdict — quiet window and settlement (SKILL item 4)', () =
     expect(verdict.evidence.join('\n')).toContain('claude: SKIPPED');
   });
 
+  it('a skip notice never re-opens the quiet window: it says no review occurred, so nobody is composing', () => {
+    const verdict = computePrVerdict(
+      settledReading({
+        reviews: [
+          ...settledReading().reviews,
+          {
+            author: 'another-review-bot',
+            state: 'COMMENTED',
+            body: 'Code review skipped: your organization has no extra usage available.',
+            commitOid: TIP,
+            submittedAt: '2026-07-21T12:58:00Z',
+          },
+        ],
+      }),
+      // 4 minutes after the skip notice but more than 10 after the real 12:05 review.
+      '2026-07-21T13:02:00Z',
+    );
+    expect(verdict.state).toBe('SETTLE-READY');
+  });
+
   it('a signed self-authored reply never re-opens the quiet window (SKILL anchoring exclusion)', () => {
     const verdict = computePrVerdict(
       settledReading({

@@ -15,7 +15,20 @@ import { isVendorErrorReview } from './vendor-error-reviews.js';
  * @packageDocumentation
  */
 
+/**
+ * One account under the spellings its surfaces use: `gh pr view` spells an
+ * App author `app/<slug>`, and a review by the same App carries the slug,
+ * with or without a `[bot]` suffix.
+ */
+function accountOf(login: string): string {
+  return normaliseLogin(login)
+    .replace(/^app\//u, '')
+    .replace(/\[bot\]$/u, '');
+}
+
 export interface ExpectedReviewersInput {
+  /** The pull request's author, as `gh pr view` spells it. */
+  readonly author: string;
   /** The bots GitHub lists a pending review request of. */
   readonly pending: readonly string[];
   /** Every round asked of a bot, from the pull request's history. */
@@ -37,7 +50,8 @@ export interface ExpectedReviewersInput {
  * implies for the Codex connector makes nobody a reviewer by itself: on an
  * estate without the connector it is never answered. Where the connector
  * has commented, it is a reviewer and that round holds its leg like any
- * other. An empty set is a pull request nobody has reviewed and no bot is
+ * other. The pull request's own author is never among the review authors.
+ * An empty set is a pull request nobody has reviewed and no bot is
  * reviewing.
  */
 export function expectedReviewersOf(input: ExpectedReviewersInput): string[] {
@@ -54,7 +68,10 @@ export function expectedReviewersOf(input: ExpectedReviewersInput): string[] {
     .filter((review) => review.body.trim() !== '')
     .filter((review) => !isSkipMarker(review.body) && !isVendorErrorReview(review.body))
     .map((review) => review.author)
-    .filter((author) => author !== 'unknown');
+    .filter((author) => author !== 'unknown')
+    // A review is by someone other than the author: what the author writes
+    // on their own pull request reviews nothing.
+    .filter((author) => accountOf(author) !== accountOf(input.author));
   const seen = new Set<string>();
   return [...input.pending, ...asked, ...input.connectors, ...authors].filter((login) => {
     const key = normaliseLogin(login);

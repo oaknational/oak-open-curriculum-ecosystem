@@ -13,11 +13,38 @@ import type { RoundRequest } from './round-requests.js';
 
 const TIP = 'a'.repeat(40);
 const COPILOT = 'copilot-pull-request-reviewer';
-const NONE = { pending: [], rounds: [], connectors: [] };
+const NONE = { author: 'app/a-merge-bot', pending: [], rounds: [], connectors: [] };
 
 function review(author: string, body: string, state = 'COMMENTED'): HarvestedReview {
   return { author, state, body, commitOid: TIP, submittedAt: '2026-07-21T12:00:00Z' };
 }
+
+describe('expectedReviewersOf — the author of the pull request', () => {
+  it.each([
+    ['a person', 'a-person', 'a-person'],
+    ['a person, in another casing', 'A-Person', 'a-person'],
+    ['an app, spelled app/<slug> on the pull request', 'app/a-merge-bot', 'a-merge-bot'],
+    ['an app, spelled with the [bot] suffix on the review', 'app/a-merge-bot', 'a-merge-bot[bot]'],
+  ])('is no reviewer of their own pull request: %s', (_whose, pullRequestAuthor, reviewAuthor) => {
+    expect(
+      expectedReviewersOf({
+        ...NONE,
+        author: pullRequestAuthor,
+        reviews: [review(reviewAuthor, 'I have read this and it is fine.')],
+      }),
+    ).toEqual([]);
+  });
+
+  it('leaves another account’s review standing beside the author’s own', () => {
+    expect(
+      expectedReviewersOf({
+        ...NONE,
+        author: 'a-person',
+        reviews: [review('a-person', 'Mine.'), review(COPILOT, 'Reviewed.')],
+      }),
+    ).toEqual([COPILOT]);
+  });
+});
 
 describe('expectedReviewersOf', () => {
   it('unions the bots a round is asked of with the authors of landed reviews, once each', () => {

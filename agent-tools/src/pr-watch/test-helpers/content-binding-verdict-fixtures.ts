@@ -38,9 +38,12 @@ export const beforeTheSync: HarvestedReview = {
   submittedAt: '2026-07-21T11:30:00Z',
 };
 
-/** The verdict over the settled reading with the given overrides, at first green. */
-export function verdictOf(overrides: Partial<PrStateReading>): PrVerdict {
-  return computePrVerdict(settledReading(overrides), FIRST_GREEN);
+/** One quiet window and more after checks went green on the sync merge. */
+export const AFTER_THE_WINDOW = '2026-07-21T12:11:00Z';
+
+/** The verdict over the settled reading with the given overrides, at first green unless told a later time. */
+export function verdictOf(overrides: Partial<PrStateReading>, now = FIRST_GREEN): PrVerdict {
+  return computePrVerdict(settledReading(overrides), now);
 }
 
 /** The reviewer's leg line: its state, then its detail. */

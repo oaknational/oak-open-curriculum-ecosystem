@@ -20,6 +20,7 @@ import { bindingNote, reviewBinds } from './content-binding.js';
 import { liveRunVerdict } from './live-run-verdict.js';
 import { liveRunReviewers, unmappedLiveRunEvidence } from './run-evidence.js';
 import type { PrStateReading, PrVerdict } from './state-types.js';
+import { isSkipMarker } from './skip-markers.js';
 import { isVendorErrorReview } from './vendor-error-reviews.js';
 
 /**
@@ -49,7 +50,9 @@ function quietWindowAnchor(reading: PrStateReading): string | null {
   const tipBound = allReviews(reading)
     .filter((review) => reviewBinds(review, reading))
     .filter((review) => review.state !== 'PENDING' && !isSignedSelfReply(review.body))
-    .filter((review) => review.body.trim() !== '' && !isVendorErrorReview(review.body));
+    .filter((review) => review.body.trim() !== '' && !isVendorErrorReview(review.body))
+    // A skip notice says no review occurred: nobody is composing behind it.
+    .filter((review) => !isSkipMarker(review.body));
   // An eligible review whose submittedAt gh omitted could be NEWER than
   // every timestamped one — anchoring past it would settle inside its
   // window, so the anchor is unknowable (null routes to the held-open path).

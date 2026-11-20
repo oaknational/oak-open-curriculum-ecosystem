@@ -1232,9 +1232,8 @@ c[n-1] >= c[n-2]` (two consecutive non-decreasing transitions across
    REPLIER's identity, so a pull request whose author dispositioned
    findings carries tip-bound empty reviews of its own (seven on #142's
    tip 92018c1f1, 2026-09-12; seven on #147's tip 15de4bc69, 2026-09-15),
-   and the declared set may name the seat's own posting identity under the
-   vendor-outage ruling above — so the hole is reachable by design, not
-   only by accident. The empties are COUNTED in the leg's detail, never
+   and those must never read as a review. The pull request's own author is
+   no reviewer of it either, whatever they write. The empties are COUNTED in the leg's detail, never
    dropped silently: a predicate over a filtered set says how many items
    it filtered and why, or an empty result set reads the same as a
    satisfied one. The leg's SATISFIED reads the LATEST LANDED review
@@ -1313,30 +1312,21 @@ c[n-1] >= c[n-2]` (two consecutive non-decreasing transitions across
    permanently unsatisfiable the moment a reviewer stops reviewing — on
    #390, claude[bot] posted a spend-limit skip review on the first commit
    and nothing on any later tip, so every subsequent tip would read owed
-   forever with no tip-specific marker obtainable). **UNOWED** — the base
-   branch's `copilot_code_review` rule reviews no later push (`review_on_push`
-   false, read from the rules API with every reading), the vendor has reviewed
-   an earlier tip of this pull request, and nothing is requested on this tip:
-   the configuration owes this tip no review, the leg settles, and a request
-   made by hand makes it OWED again (the owner's word of 2026-10-16: the tooling
-   derives what is owed from the repository's review configuration, never from
-   an assumed review on every push; binds Copilot's leg only, the rule is
-   Copilot's). **OWED** — otherwise. The gate never waits more than one timeout
+   forever with no tip-specific marker obtainable). **UNOWED** — the reviewer has
+   reviewed an earlier commit of this pull request, has said nothing with a
+   body on this tip, and no round is asked of them since that review: one
+   review of any commit meets the rule that a pull request is reviewed, the
+   leg settles, and a request makes it OWED again. It holds for every
+   reviewer, whatever the base branch is configured to review. **OWED** —
+   otherwise. The gate never waits more than one timeout
    for any single reviewer.
-   CRITICAL first-round rule: the EXPECTED reviewer set is not just "bots
-   that previously reviewed this PR" — on a repo whose ruleset configures
-   bot review on push, the first round is ALWAYS expected, so before any
-   bot has reviewed, every configured bot is OWED until it posts or the
-   checks-green timeout fires. A leg is standing BY
-   CONFIGURATION, never assumed by doctrine (owner, 2026-08-09: "route
-   through the rules process, not assumed"): Phase 1 reads the set from
-   the repository's live automatic-review configuration at each PR-open,
-   and a dated example is not an input to the state machine — Copilot on
-   push, and on one line the Codex connector (`chatgpt-codex-connector`),
-   declared in every PDR-140 intake since 2026-09-06 (owner rating
-   2026-08-09; graduated through the rules process 2026-09-07), were the
-   configured set the day this was written; PDR-140's loop discipline
-   governs each leg's rounds like any other's. How a configured leg binds
+   CRITICAL first-round rule: before anyone has reviewed and with no round
+   asked of a bot, the EXPECTED reviewer set is empty, and an empty set
+   never settles: the tool reads SILENT-WAIT-NO-REVIEWER and refuses. A bot
+   the repository reviews with automatically joins the set when its round
+   is asked or its review lands, and is OWED from the request until it
+   posts or the checks-green timeout fires. PDR-140's loop discipline
+   governs each leg's rounds like any other's. How a reviewer's leg binds
    a tip, first-hand on 2026-09-09/10 across nine landings: Copilot
    reviews the FIRST push and any tip the bot explicitly requests it on
    (below); the Codex connector's own text lists its triggers as open,
@@ -1403,17 +1393,15 @@ create` on such a branch exits non-zero with "a pull request for branch …
    options are not available, and development still needs to happen. Note
    that you can always have a subagent perform any kind of review,
    including adversarial, and post findings both back to the calling agent
-   and to the PR." A declared leg that never reviewed the tip settles by
+   and to the PR." A bot asked for a round that never reviewed settles by
    timeout to SETTLED-NO-REVIEW, which the tool refuses by name, and item
-   5 below names that verdict's two exits. This closes the
-   vacuous-predicate hole where an initial tip could read merge-ready
-   before the first bot round ever lands. The expected set's SOURCE is explicit,
-   never inferred from the compound read (`latestReviews` only names
-   authors who have already reviewed — empty on an initial tip): the
-   shepherd DECLARES it in the working notes at Phase 1, read from the
-   repository's automatic-review configuration (the ruleset / review-app
-   config that fires bot reviews on push), and that declaration is the
-   state machine's input for every round.
+   5 below names that verdict's two exits. The expected set's SOURCE is the
+   pull request itself (`expected-reviewers.ts`): the bots a round is asked
+   of, a review connector that has commented, and the authors of real
+   reviews other than the pull request's own author. It is read from the
+   full review harvest and the request history, never from `latestReviews`.
+   An initial tip nobody has reviewed and no bot is reviewing has an empty
+   set, which reads SILENT-WAIT-NO-REVIEWER and never merge-ready.
 4. **Round settled; merge-ready.** A round is SETTLED when every expected
    reviewer leg reads SATISFIED or SKIPPED for the current tip AND the
    round's boundary reads closed from MEASURED state: no expected reviewer

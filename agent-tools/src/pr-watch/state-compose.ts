@@ -42,6 +42,7 @@ export function composeReading(input: ComposeReadingInput): PrStateReading {
     (comment) => normaliseLogin(comment.author) === CODEX_CONNECTOR_LOGIN,
   );
   const expectedReviewers = expectedReviewersOf({
+    author: input.view.author,
     pending: input.view.reviewRequests,
     rounds: roundRequests,
     connectors: connectorCommented ? [CODEX_CONNECTOR_LOGIN] : [],

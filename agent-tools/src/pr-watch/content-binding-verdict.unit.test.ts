@@ -4,6 +4,7 @@ import type { ContentLeg } from './content-binding.js';
 import type { HarvestedReview } from './reviewer-legs.js';
 import { COPILOT, OLD_TIP, TIP } from './state-reading-fixture.js';
 import {
+  AFTER_THE_WINDOW,
   beforeTheSync,
   CODEX,
   completionComment,
@@ -132,7 +133,8 @@ describe('computePrVerdict — reviews bound by content', () => {
       ...beforeTheSync,
       body: 'Review skipped: the spend limit was reached.',
     };
-    const verdict = verdictOf({ reviews: [marker], content: synced(PATCH) });
+    // A skip notice anchors no quiet window, so the window runs from checks green.
+    const verdict = verdictOf({ reviews: [marker], content: synced(PATCH) }, AFTER_THE_WINDOW);
     expect(verdict.state).toBe('QUOTA-SKIPPED');
     expect(namesTheInference(legLine(verdict, COPILOT))).toBe(true);
   });
